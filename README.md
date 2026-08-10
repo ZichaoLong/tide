@@ -39,14 +39,14 @@ HB-Line、HB-Lattice、一般空间 DAG 和一般动态 Graph 是远期研究方
 
 ### 2.1 原生 dense checkpoint
 
-近期实现从一个 pre-norm、decoder-only、开放权重 Transformer 开始。省略 dropout、位置编码和 cache 细节，一个标准 block 可以直白写成：
+近期实现从一个 pre-norm、decoder-only、开放权重 Transformer 开始。省略 dropout、位置编码和 cache 细节，记 $\mathcal N$、$\mathcal A$、$\mathcal F$ 分别表示 Norm、Attention 和 FFN，一个标准 block 可以直白写成：
 
 $$
-h'=h+\operatorname{Attention}(\operatorname{Norm}(h)),
+h'=h+\mathcal A(\mathcal N(h)),
 $$
 
 $$
-h^+=h'+\operatorname{FFN}(\operatorname{Norm}(h')).
+h^+=h'+\mathcal F(\mathcal N(h')).
 $$
 
 residual stream 是始终存在的公共接口；Attention 和 FFN 是在该接口上增加的计算分支。若新增 residual 分支的末端贡献初始化为零，扩展模型可以在初始点精确保持原 checkpoint 的函数。原生模型还已经提供成熟的 causal `prefill/decode`、训练配方和稠密 kernel，因此它是所有增量实验的 correctness 与质量基线。
@@ -150,14 +150,10 @@ Graph 收缩线可以用 correctness、复杂度或训练风险否决某些过�
 
 ### 4.1 为什么从固定 merge 分支开始
 
-考虑一个父模块，其输入和输出空间相同。父模块包含 always-on 主分支 $B_0$ 和有限个候选 residual 分支 $B_1,\ldots,B_N$。selector 为输入 $x$ 选择集合 $A(x)\subseteq\{1,\ldots,N\}$，固定 merge 为：
+考虑一个父模块，其输入和输出空间相同。父模块包含 always-on 主分支 $B_0$ 和有限个候选 residual 分支 $B_1,\ldots,B_N$。selector 为输入 $x$ 选择集合 $A(x)\subseteq\lbrace 1,\ldots,N\rbrace$，固定 merge 为：
 
 $$
-T(x)
-=
-B_0(x)
-+
-\sum_{j\in A(x)}g_j(x)B_j(x).
+T(x)=B_0(x)+\sum_{j\in A(x)}g_j(x)B_j(x).
 $$
 
 “固定”表示分支的入口、出口、merge 位置和 merge 算子在模型结构中预先确定；动态变化的只有激活集合和可选权重。短分支不能越过 merge 提前修改外层状态，长分支也不能在 merge 后追赶并改写同一个输出。
@@ -261,9 +257,7 @@ active sender
 一个一般 score 接口可以写成：
 
 $$
-s_{v,t}
-=
-G_\theta(c_{v,t},q_{v,t}^{+},\ell_{v,t},\lambda_v),
+s_{v,t}=G_\theta(c_{v,t},q_{v,t}^{+},\ell_{v,t},\lambda_v),
 \qquad v\in J.
 $$
 
@@ -296,9 +290,7 @@ score 之后的决策规则也可以独立变化：
 为避免名称暗中绑定其他机制，每个具体模型至少用下面五个坐标描述：
 
 $$
-\mathcal C
-=
-(\text{门控范围},\ \text{传播 profile},\ \text{状态生命周期},
+\mathcal C=(\text{门控范围},\ \text{传播 profile},\ \text{状态生命周期},
 \ \text{selector 输入},\ \text{selector 决策}).
 $$
 
@@ -413,7 +405,7 @@ S_{v,t}^{+}=U_v(S_{v,t},M_{v,t}),
 $$
 
 $$
-a_{v,t}\in\{0,1\},
+a_{v,t}\in\lbrace 0,1\rbrace,
 \qquad
 a_{v,t}=1
 \Longrightarrow
@@ -578,9 +570,9 @@ E3b 仍不让 selector 读取更新后的语义状态或历史负载；否则无
 
 随后才在同一 Receiver-Gated 拓扑上复用 E3b 已定义的传播/状态组合：
 
-- **E4a：**`selected-dispatch` 与无延迟私有状态；隔离非叶门控本身。
-- **E4b：**`broadcast-observe`，但更新不在以后 Token 读出；隔离内部广播与更新成本。
-- **E4c：**持久 KV/SSM/accumulator；仅在对应 Leaf-Gated 状态变体已有可解释结果后加入。
+- **E4a**：`selected-dispatch` 与无延迟私有状态；隔离非叶门控本身。
+- **E4b**：`broadcast-observe`，但更新不在以后 Token 读出；隔离内部广播与更新成本。
+- **E4c**：持久 KV/SSM/accumulator；仅在对应 Leaf-Gated 状态变体已有可解释结果后加入。
 
 每个 E4 变体都必须有传播 profile、状态生命周期、selector 输入和 selector 决策完全相同的 Leaf-Gated 对照。E4c 还需要明确 BPTT、detach、chunk boundary 和状态生命周期策略。
 
