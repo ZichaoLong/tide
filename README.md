@@ -1,4 +1,4 @@
-# Tide 实验仓库启动文档
+# Tide Checkpoint 生长实验仓库启动文档
 
 > 状态：项目启动草案
 >
@@ -6,13 +6,17 @@
 >
 > 目标读者：即将开始实现、训练与验证 Tide 的研究和工程人员
 >
-> 上游研究总入口：[ObsidianVault / TIDE](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)
+> 仓库定位：以 checkpoint 生长线为当前实验主线；本文同时保存一眼可读的研究逻辑纲要和可执行的实验政策，不要求读者先跳转到外部笔记才能理解为什么做这些实验。
 >
-> 当前 checkpoint 生长实验契约：[ObsidianVault @ c3548d1](https://github.com/ZichaoLong/ObsidianVault/blob/c3548d18330a84bba95243bc8852861c9561554e/20-tide-decentralized-neural-network/tide-checkpoint-growth-experiment-contract.md)
+> 当前实验入口：本 README 是 `fractal-latcarf` 分支当前工作流、配置坐标、验收 gate 与首个交付的概念入口；ObsidianVault 只沉淀可泛化的研究动机、正式理论和跨实验结论，不镜像这里的易变政策。
+>
+> 上游研究总入口：[ObsidianVault / TIDE](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)
+
+快速阅读：只想一眼看懂研究理由，读第 1.1、1.2 节；想检查完整推导，继续读第 2.3 节；准备实现和训练，直接进入第 6 至第 10 节。
 
 ## 1. 研究逻辑总览
 
-Tide 暂沿用全称 `Token Inference Decentralized Engine`。本仓库研究的是模型架构、训练语义和可执行实验，不把名称中的 `Engine` 限定为某一个既有 runtime。本文把能够接收局部上游消息、并拥有自身参数或状态的下游模块称为 `receiver`；把 Attention readout、FFN、大型 SSM 更新等主体计算称为“昂贵计算”，以区别于较轻的消息观察和状态写入。为使以下推导既可读又不把猜测写成事实，本文使用五类判断：
+Tide 暂沿用全称 `Token Inference Decentralized Engine`。本仓库以 checkpoint 生长线为当前主线，研究模型架构、训练语义和可执行实验，不把名称中的 `Engine` 限定为某一个既有 runtime。本文把能够接收局部上游消息、并拥有自身参数或状态的下游模块称为 `receiver`；把 Attention readout、FFN、大型 SSM 更新等主体计算称为“昂贵计算”，以区别于较轻的消息观察和状态写入。为使以下推导既可读又不把猜测写成事实，本文使用五类判断：
 
 | 类型 | 在本文中的含义 |
 | --- | --- |
@@ -1194,7 +1198,7 @@ Tide 的早期动机来自 LH。LH 尝试把模型组织为局部连接的空间
 
 ## 15. 上游研究笔记与外部参考
 
-本启动文档整理自 ObsidianVault 中更完整的研究笔记；正式理论成熟后再选择性复制到本仓库。后续 agent 若需要一般定义、证明、历史或实现背景，应从下列 GitHub 文档读取，而不是依赖本机绝对路径：
+本启动文档在仓库内自足保存 checkpoint 生长线的逻辑纲要、当前实验选择和执行边界；读者理解第 1 至第 13 节不需要先打开 ObsidianVault。一般定义、完整证明、长期历史和跨实验研究结论仍由 ObsidianVault 维护，后续 agent 需要这些背景时应从下列 GitHub 文档读取，而不是依赖本机绝对路径：
 
 - [Tide 研究线总入口](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)：战略路线、文档地图、当前主张边界与阅读顺序。
 - [Tide 模型架构与训练](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-model-architecture-and-training.md)：checkpoint 生长、递归分支、HB-Sliced/HB-Line、selector 与训练稳定性。
