@@ -1,4 +1,4 @@
-# Tide Checkpoint 生长实验仓库启动文档
+# TIDE Checkpoint 生长实验仓库启动文档
 
 > 状态：项目启动草案
 >
@@ -16,9 +16,24 @@
 
 ## 1. 研究逻辑总览
 
-Tide 当前采用全称 `Topology-Invariant Degree-bounded Expansion`。其中，`Degree-bounded` 不是额外增加的底层要求，而是“固定空间拓扑 + 单节点成本有界”在本文成本口径下的直接推论：每条直接连接都会占用节点的接口、状态、候选处理或通信资源，因此节点度不能随着模型总容量一直增长；`Expansion` 则表示通过多跳或空间扩展，让可达容量继续增长。
+TIDE 的完整项目表述是：`TIDE: A Topology-Invariant Degree-bounded Expansion Architecture for Autoregressive Token Inference`。
 
-本仓库以 checkpoint 生长线为当前主线，研究模型架构、训练语义和可执行实验，不把这个名称限定为某一种已有架构或 runtime。
+中文表述是：**TIDE：面向自回归 Token 推理的拓扑固定、度有界容量扩展架构。**
+
+- `Topology-Invariant Degree-bounded Expansion`：TIDE 的核心结构创新。其中，`Degree-bounded` 不是额外增加的底层要求，而是“固定空间拓扑 + 单节点成本有界”在本文成本口径下的直接推论：每条直接连接都会占用节点的接口、状态、候选处理或通信资源，因此节点度不能随着模型总容量一直增长；`Expansion` 表示通过多跳或空间扩展，让可达容量继续增长。
+- `for Autoregressive Token Inference`：项目的应用范围。
+- `Architecture`：当前仓库实际研究的对象。
+- `TIDE Engine`：执行 TIDE Model 的训练或推理 runtime；当前仓库不预设某一种具体 Engine 实现。
+
+本文统一使用以下对象名称：
+
+| 名称 | 含义 |
+| --- | --- |
+| `TIDE Architecture` / `TIDE Network` | 模型结构与 reference semantics |
+| `TIDE Model` | 训练得到的具体模型 |
+| `TIDE Engine` | 执行 TIDE Model 的训练或推理 runtime |
+
+本仓库以 checkpoint 生长线为当前主线，研究 TIDE Architecture、训练语义和可执行实验。
 
 本文把“去中心化”和“局部通信”分开讨论。去中心化描述控制、决策、状态或部署是否依赖全局中心；局部通信描述节点沿什么空间拓扑交换信息。两者可以同时存在，但不能互相推出。
 
@@ -1135,13 +1150,13 @@ Tide 的早期动机来自 LH。LH 尝试把模型组织为局部连接的空间
 
 本启动文档在仓库内自足保存 checkpoint 生长线的逻辑纲要、当前实验选择和执行边界；读者理解第 1 至第 13 节不需要先打开 ObsidianVault。一般定义、完整证明、长期历史和跨实验研究结论仍由 ObsidianVault 维护，后续 agent 需要这些背景时应从下列 GitHub 文档读取，而不是依赖本机绝对路径：
 
-- [Tide 研究线总入口](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)：战略路线、文档地图、当前主张边界与阅读顺序。
-- [Tide 模型架构与训练](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-model-architecture-and-training.md)：checkpoint 生长、递归分支、HB-Sliced/HB-Line、selector 与训练稳定性。
-- [Tide 数学基础](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-mathematical-foundations.md)：`StepTransition`、`prefill = decode`、logical event DAG、一般空间 DAG 与函数保持生长。
+- [TIDE 研究线总入口](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)：正式命名、对象边界、战略路线、文档地图、当前主张边界与阅读顺序。
+- [TIDE Architecture / Network：模型架构与训练](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-model-architecture-and-training.md)：checkpoint 生长、递归分支、HB-Sliced/HB-Line、selector 与训练稳定性。
+- [TIDE 数学基础](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-mathematical-foundations.md)：`StepTransition`、`prefill = decode`、logical event DAG、一般空间 DAG 与函数保持生长。
 - [Adaptive routing prefill lower bound](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/adaptive-routing-prefill-lower-bound.md)：不可组合自适应路由链的反向复杂度边界。
-- [Tide 背景、历史谱系与参考](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-background-history-and-references.md)：ISA/编译器/dataflow 谱系和完整人脑传播调查。
-- [Tide runtime 验证与状态](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-runtime-validation-and-status.md)：runtime contract、LH 映射、artifact equality 与工程状态。
-- [Tide 统计力学与信息动力学](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-statistical-mechanics-and-information-dynamics.md)：粗粒化、路径相关性和统计力学类比及其边界。
+- [TIDE 背景、历史谱系与参考](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-background-history-and-references.md)：ISA/编译器/dataflow 谱系和完整人脑传播调查。
+- [TIDE Engine：runtime 验证与状态](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-runtime-validation-and-status.md)：Engine/runtime contract、LH 映射、artifact equality 与工程状态。
+- [TIDE 统计力学与信息动力学](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-statistical-mechanics-and-information-dynamics.md)：粗粒化、路径相关性和统计力学类比及其边界。
 
 先进模型与 MoE：
 
