@@ -7,6 +7,8 @@
 > 目标读者：即将开始实现、训练与验证 Tide 的研究和工程人员
 >
 > 上游研究总入口：[ObsidianVault / TIDE](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)
+>
+> 当前 checkpoint 生长实验契约：[ObsidianVault @ c3548d1](https://github.com/ZichaoLong/ObsidianVault/blob/c3548d18330a84bba95243bc8852861c9561554e/20-tide-decentralized-neural-network/tide-checkpoint-growth-experiment-contract.md)
 
 ## 1. 研究逻辑总览
 
