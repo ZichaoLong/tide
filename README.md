@@ -16,77 +16,64 @@
 
 ## 1. 研究逻辑总览
 
-Tide 暂沿用全称 `Token Inference Decentralized Engine`。本仓库以 checkpoint 生长线为当前主线，研究模型架构、训练语义和可执行实验，不把名称中的 `Engine` 限定为某一个既有 runtime。本文把能够接收局部上游消息、并拥有自身参数或状态的下游模块称为 `receiver`；把 Attention readout、FFN、大型 SSM 更新等主体计算称为“昂贵计算”，以区别于较轻的消息观察和状态写入。为使以下推导既可读又不把猜测写成事实，本文使用五类判断：
+Tide 暂沿用全称 `Token Inference Decentralized Engine`。本仓库以 checkpoint 生长线为当前主线，研究模型架构、训练语义和可执行实验，不把名称中的 `Engine` 限定为某一个既有 runtime。
 
-| 类型 | 在本文中的含义 |
-| --- | --- |
-| **已有证据** | 来自成熟模型、公开规模实验或本仓库可形式检查的性质 |
-| **条件性刚需** | 在明确接受一组目标约束以后才能推出；不表示具体实现已经有效 |
-| **工程护栏** | 为降低 checkpoint 生长和训练风险主动采用的约束；不声称是所有 Tide Graph 的唯一解 |
-| **研究赌注** | 有明确动机、值得优先正面验证，但当前没有本仓库可靠实验结论的机制假设 |
-| **可选干预** | 在完整候选中可以预先采用，或在观察到相应问题后引入的结构工具 |
+本文把一个能够接收上游消息、并拥有自身参数或状态的下游模块称为 `receiver`；把 Attention readout、FFN、大型 SSM 更新等主体计算称为“昂贵计算”，以区别于较轻的消息接收和状态更新。
 
-> **当前证据状态：** 本仓库尚未产生足以证明 Tide learning value、scaling value 或系统收益的可靠训练结果。Flat MoE 的现实成功、checkpoint 函数保持和若干有界图性质可以作为已有依据；`broadcast-observe`、私有状态、多次局部选择和交叉会聚的净收益仍是待验证内容。
+> **当前状态：** Flat MoE 已经提供了可靠的外部正面证据；本仓库自身尚无可靠训练结果。`broadcast-observe`、私有状态、层次递归和多次局部选择是否有效，都仍需实验回答。
 
 ### 1.1 一眼看懂的两条逻辑链
 
-第一条是从终极目标到可推进结构的**目标约束链**：
+第一条回答：**为什么 Tide 最终需要层次化的局部网络，而不能停留在 flat MoE？**
 
 ```text
-【已有证据】Flat MoE 已证明：很大的潜在参数容量
-             可以与每 Token 少量昂贵激活同时成立
-        ↓ 但它没有验证固定有界的局部传播和长期本地状态
-【目标约束】容量继续随节点数增长 + 连接度不随总规模增长
-             + 不依赖全局 router + 输入自适应 + 全局昂贵计算超稀疏
-        ↓
-【条件性刚需】有界度、多跳、逐级的局部容量扩展
-             + 多次有界局部选择或等价的分布式路由
-             + 对活跃前沿、昂贵计算和传播深度的显式预算
-        ↓
-【新增风险】早期选择持续影响更长路径，带来路径输入漂移、
-             更长控制信用链，以及私有状态可能引入的延迟信用链
-        ↓
-【工程护栏】从正面 checkpoint 生长，保留 always-on backbone，
-             使用有界局部 selector、函数保持接口和 fixed merge
+Flat MoE 已证明：大量参数可以与每 Token 少量计算同时存在
+    ↓
+但标准 flat MoE 仍要从一个很大的平铺专家池中选择，并把 Token 发送给专家，
+不满足 Tide 所追求的“每个节点只连接少量固定邻居”
+    ↓
+如果模型容量还要继续增长，而每个节点可直接连接的下游数量始终有限，
+网络就必须通过多级、逐步的局部发散来接触更多模块
+    ↓
+如果每个 Token 同时还只能执行极少模块，
+就需要在传播过程中做多次局部选择，并限制总激活量
+    ↓
+多级选择会带来更复杂的路径漂移和长路径信用分配
+    ↓
+因此先从已有 checkpoint 出发，保留始终开启的原模型主干，
+并在固定位置及时收拢分支，
+寻找一个能够训练的完整候选，再根据失败逐步调整结构
 ```
 
-严格推出的是“有界度的多跳局部扩展”，不限定它必须是一棵规则树。规则层次化递归是本仓库优先采用的工程前置：它离已有 checkpoint 最近，便于控制发散、收拢和证据变量；随后可以逐步进入 line、lattice、mesh、多尺度 backbone 和其他局部 DAG。
+这里真正由目标牵引出来的是“多级的局部扩展”，不限定必须是一棵规则树。规则的层次递归最接近已有 checkpoint，也最容易控制发散和收拢，因此适合作为进入 line、lattice、mesh、多尺度 backbone 和其他局部 DAG 之前的第一步。
 
-第二条是解释为何重点研究 `broadcast-observe` 的**机制假设链**：
+第二条回答：**为什么工作流 B 优先验证 `broadcast-observe`（下文简称 BO）？**
 
 ```text
-【结构事实】多级 selected-dispatch 使固定 receiver 只看到
-             与自身路径前缀相符的消息历史
-        ↓
-【待验证风险】receiver 的历史暴露变薄、私有状态彼此碎片化，
-             可能削弱局部上下文记忆和后续处理
-        ↓
-【研究赌注 A】broadcast-observe + 私有状态 + Update/Compute 分离：
-               直接 children 即使本次不做昂贵计算，也获得观察和写入机会
-【研究赌注 B】有界的多父局部会聚或交叉传播：
-               不同路径交换已经处理过的局部摘要
-        ↓
-【最终待验证】这些机制能否产生真实 learning/scaling value，
-             并覆盖新增状态、通信、selector 和调度成本
+多级 selected-dispatch 只把消息发给当次选中的下游
+    ↓
+经过多次分叉后，每个深层分支的私有 KV/SSM 可能只见过一小部分历史，
+从而形成“分支记忆变薄”的问题
+    ↓
+broadcast-observe 把“收到并更新状态”与“执行昂贵计算”分开：
+所有固定的局部下游都收到消息，只有少数下游做昂贵计算并继续传播
+    ↓
+私有状态可以保留本次没有激活时收到的信息；
+必要时还可以让不同分支交叉会聚，互相借用已经处理过的信息
+    ↓
+最终验证：这些机制是否真的改善学习和规模扩展，
+以及收益是否大于新增的状态、通信和调度成本
 ```
 
-这里的“历史暴露变薄”不表示每次分叉都会把当前 hidden 中的信息机械地除掉一部分。一个 child 仍可能收到已经整合完整前缀的 parent hidden；真正由结构直接造成的是某个 receiver 的私有状态只记录了它实际收到的 route-conditioned 历史。该差异是否伤害任务相关记忆，以及 BO 或交叉会聚是否值得成本，才是实验问题。
+“分支记忆变薄”目前是待验证的核心猜测，不是既有结论。当前 hidden 可能已经整合了完整上下文；BO 也只让 active sender 的直接下游都看到消息，不能自动让所有深层节点看到全部历史。工作流 B 的目标正是判断这个问题是否真实、BO 是否有用，而不是预先宣布 BO 是唯一答案。
 
-两条链不能互相替代：第一条说明为何最终需要探索多跳局部扩展；第二条说明为何本仓库主动把 BO 选为首要正面假设，但没有证明 BO 是实现 TIDE 目标的唯一必要机制。
+### 1.2 当前研究选择
 
-### 1.2 当前组件在逻辑中的位置
-
-| 组件 | 当前定位 |
-| --- | --- |
-| 统一有界的局部入度/出度、多跳扩展 | 在上述终极目标约束下的条件性刚需 |
-| 多次局部选择与全局 active budget（每 Token 的总激活预算） | 在“无全局 router、输入自适应、昂贵计算超稀疏”前提下的条件性刚需 |
-| 规则层次化递归 | 从 checkpoint 进入 line/lattice/mesh 和一般局部 DAG 的首选工程与证据前置，不是唯一数学形式 |
-| `broadcast-observe` | 工作流 B 的定义性核心和当前首要研究赌注，不是已证明的唯一解 |
-| 私有持久状态与 later readout（以后真正读出） | 验证“未激活期间积累的局部记忆以后有用”这一命题的必要部件 |
-| post-Update selector（先更新 receiver 状态、再选择昂贵计算） | 只在验证“当次 Observe 改变当次选择”时需要；BO 也可以使用 pre-Update/content-only selector |
-| always-on backbone、fixed merge（固定位置收拢） | 首个 checkpoint-growth 完整候选的强工程契约；分别保留稳定主路径、限制显式控制寿命 |
-| 多父交叉会聚、不等长路径和更一般空间化 | 可进入完整候选，也可由实际失败牵引的可选干预 |
-| 纯 FFN 递归 | 不充分检验私有序列记忆，但仍是区分条件计算收益与状态收益的重要对照 |
+- **从目标推出来的结构要求**：最终需要有界的局部连接、多级扩展、多次局部选择，以及明确的每 Token 总激活预算。
+- **近期工程起点**：从已有 checkpoint 生长规则的层次递归，用始终开启的原模型主干（always-on backbone）保住原模型能力，用固定收拢（fixed merge）及时结束分支。
+- **工作流 B 的核心赌注**：所有固定局部下游都先收到消息并更新私有状态，再只选择少数下游做昂贵计算。
+- **按需加入的结构**：多父交叉会聚、不等长路径，以及更一般的 line、lattice、mesh 或局部 DAG。它们可以从首个完整候选开始使用，也可以由具体失败牵引。
+- **Head-Wise MoE 的位置**：它主要研究如何把 flat MoE 拆成多个较小的组内 MoE，当前放在工作流 A 作为可选后续，不要求与工作流 B 强行合并。
 
 ### 1.3 本仓库要回答的问题
 
@@ -154,109 +141,64 @@ MoE 已经经验性证明了一种重要平衡：总参数容量可以随专家�
 
 因此，标准 MoE 必须成为 Tide 的主要对照组，而不是只与 dense Transformer 比较。
 
-### 2.3 输入性逻辑链：从目标约束到工作流 B
+### 2.3 从目标到工作流 B：当前推理
 
-本节把第 1 节的两条短链展开为一份用于产生实验候选的输入性推导。它允许使用外部经验、条件推导和有方向的工程直觉，但每一步都说明自己属于“已有证据、条件性刚需、工程护栏还是研究赌注”。它的作用是解释为什么值得做当前实验，不是提前宣布实验结论。
+下面记录的是本仓库设计实验时采用的起始逻辑，而不是已经得到的结论。其中，第 1 条来自成熟模型的经验；第 2、3 条由 Tide 的目标牵引；第 4 条是对训练困难的预期；第 5 至 7 条是优先采用的工程办法；第 8 条以后是围绕 `broadcast-observe` 的核心待验证假设。
 
-#### 2.3.1 从 MoE 现实基线到有界多跳扩展
+#### 从 MoE 到逐级局部扩展
 
-**1. Flat MoE 给出了重要的正面起点【已有证据】。** 标准 flat MoE 已经经验性验证，大量潜在参数可以与每 Token 少量昂贵激活同时规模化成立。它因此是 Tide 的强基线，而不是需要先被否定的旧方案。它没有直接验证的是固定有界的局部邻接、多跳局部传播和 receiver 私有状态；分组、复制、静态放置或局部 router 可以让 MoE 更局部，但也会改变标准 flat MoE 的候选范围、路由和成本结构。
+1. **Flat MoE 是已经得到正面验证的起点。** 它证明了很大的潜在参数量可以和每 Token 少量昂贵计算同时成立。但标准 flat MoE 仍要从较大的平铺专家池中选择，并在选择后迅速 merge；它没有验证 Tide 希望得到的固定局部连接、多步传播和模块私有状态。
 
-**2. 有界度、多跳、逐级的局部扩展是条件性刚需【条件性刚需】。** 若希望潜在容量随模块数持续增长，同时固定入口数量、要求节点入度和出度具有不随总规模增长的统一上界，不允许一个全局 router 直接访问任意远端节点，并希望输入仍有机会自适应访问随规模增长的潜在容量，那么不断增长的候选容量只能通过某种多跳、逐级或空间局部的方式到达。若最大 fan-out 为 $\Delta$，半径 $D$ 内至多经过 $1+\Delta+\cdots+\Delta^D$ 个可达槽位；当 $\Delta>1$ 时约为 $O(\Delta^D)$，当 $\Delta=1$ 时则随 $D$ 线性增长。容量继续扩展时，传播深度、空间直径或入口数量中至少一项必须增长。
+2. **如果要同时追求去中心化和持续增长的参数容量，就需要逐级的局部扩展。** 当每个节点只能连接少量固定邻居时，一个入口不能直接访问任意多的模块，只能通过多步传播逐渐到达更大的容量。本文把这个方向广义地称为“有界递归”。规则层次递归不是唯一形式，但它规则、容易从 checkpoint 生长，也适合作为进入 line、lattice、mesh、多尺度 backbone 和一般局部 DAG 之前的工程起点。
 
-严格推出的是“有界度的多跳局部扩展”，不是某一种规则树。Line、lattice、mesh、多尺度 backbone 和其他局部 DAG 都可以满足这一结构方向。本文仍把规则层次化递归视为 checkpoint 生长线的工程与证据前置，因为它能在保留原 backbone、接口和 fixed merge 的情况下，逐级验证多跳传播、路径长度、稀疏预算和信用分配，再放开更多拓扑自由度：
+3. **如果还要求超稀疏，就需要在逐级展开时反复做局部选择。** 每个局部 selector 只面对少量候选，但整个模型仍需限制每 Token 激活多少昂贵模块、发送多少消息以及传播多深。否则单个节点的 fan-out 虽然有界，总计算仍可能随着路径展开快速增长。
 
-```text
-规则层次化递归与局部 fixed merge
--> line / 重复空间切片
--> lattice / mesh
--> 多尺度 backbone 与更一般局部 DAG
-```
+因此，“有界递归 + 多次局部选择”不是一个已经验证成功的具体架构，而是从 Tide“去中心化的大容量 + 超稀疏计算”目标得到的基本结构方向。
 
-这不是严格的数学包含序，也不要求未来机械地依次实现每一项。越向后，邻接、放置、路径长度、merge、状态所有权和调度的自由度越大，结构通常也离已有 checkpoint 更远，正面验证、失败归因和工程推进都更困难。规则递归的价值正在于用一个较规则的局部 DAG 先摸清这些问题。
+#### 预期困难与起步护栏
 
-**3. 输入自适应的超稀疏执行需要多次局部决定和显式总预算【条件性刚需】。** 在“不使用全局 router、候选只能局部访问、选择又要随输入变化”的前提下，一次全局 $N$ 选 $M$ 会自然分解为多次有界局部选择，或语义等价的分布式路由协议。这里的 selector 可以共享参数，也可以由 receiver proposal 和局部 sibling arbitration 组成，不要求每个物理节点拥有完全独立的网络。
+4. **多级局部选择可能比 flat MoE 更难训练。** Flat MoE 也有路由漂移、专家饥饿和信用分配问题，但一次选择通常很快 merge。Tide 中较早的选择可能继续影响后续多步路径；如果模块还有私有状态，一次写入也可能在以后才产生作用。因此，路径变化和信用分配问题可能被放大。不过，MoE 的成功也说明稀疏离散选择并非天然不可训练。
 
-局部候选变少可以降低单次打分和协调范围，但不会让选择困难消失：早期决定可能级联，远端候选的信息也不再一次可见。静态 fan-out 有界更不自动等于全局超稀疏；还必须显式限制每层或每 region 的 active budget、每 Token 昂贵计算总量、Emit 边数和最大传播深度，并把 Observe / Update 成本一并入账。
+5. **固定收拢（fixed merge）是最直接的缓解手段。** 它让分支在已知位置重新回到共同接口，避免一次局部选择无限期决定后续可达路径。
 
-#### 2.3.2 相对 flat MoE 新增的训练风险与近期护栏
+6. **始终开启的原模型主干（always-on backbone）是从 checkpoint 生长时的稳定锚点。** 原模型主路径始终保留，新增模块通过初始中性的 residual 接口接入。这样可以从一个已经可用的模型出发，而不是一开始就把全部能力押在尚未训练好的稀疏路径上。它只能保证稳定起点，不能保证新增机制会被模型真正使用。
 
-**4. 多级选择可能放大路径漂移和信用分配困难【风险判断】。** Flat MoE 已经存在 hard Top-K、selected-only feedback、router drift 和专家饥饿，但通常在一个子层内立即 merge。Tide 若让早期选择继续限制后续若干节点的可达集合，就延长了显式控制路径的寿命；若再加入私有状态，还会出现一次写入在以后 Token 才被读出的延迟信用链。这些结构差异使风险更值得警惕，但并不预先证明模型一定不可训练。成熟 MoE 的正面结果也提供了间接信心：离散稀疏选择本身并非不可克服。
+7. **局部 selector 有很大的设计空间。** 局部候选较少，可能比一次全局 $N$ 选 $M$ 更容易；但选择需要重复发生，早期错误也可能影响更远的下游，因此也可能更难。负载均衡、历史激活、receiver 自身信号和 shared expert 等已有 MoE 经验都可作为参考，具体设计则由实验问题决定。
 
-**5. Fixed merge 是限制控制寿命的直接办法【工程护栏】。** 固定收拢点使旧分支身份在已知位置结束，并恢复共同接口。它可以限制一次选择继续约束未来候选的距离；若 merge 使用归一化、小 residual 或稳定槽位，还可能减小换路造成的表示跳变。它不会自动降低 route churn，也不会删除已经写入 private state 的跨 Token 影响。
+#### 为什么关注分支记忆与 broadcast-observe
 
-**6. Always-on backbone 是 checkpoint 生长的稳定锚点【工程护栏】。** 保留原 checkpoint 主路径、让新增分支以中性 residual 方式接入，可以在起点保持原函数，并保证至少存在一条不被 selector 切断的前向和反向拓扑路径。它不保证新分支具有足够梯度，也可能掩盖新机制没有被真正使用，因此必须配合 mechanism-use 检验。Fixed merge 在一般结构上并不要求 backbone；二者在 checkpoint 生长中组合使用，是因为一个提供稳定锚点，另一个限制局部控制寿命。
+8. **多级 `selected-dispatch` 可能让下游模块拥有的局部历史越来越少。** 一个模块若只在被选中时收到消息，它自己的 KV、SSM 或其他状态就只记录路由到它的那部分历史。本文把这个可能的问题简称为“上下文记忆稀释”。这里的“稀释”指模块自己的历史覆盖变少，不表示当前 hidden 被机械地切成了几份。它是否真的损害模型，是工作流 B 要验证的假设。
 
-**7. 局部 selector 既可能更容易，也可能更困难【研究赌注】。** 候选集合变小可以降低单次打分、Top-K 和局部通信协调成本，并允许参考成熟 MoE 的语义路由、负载均衡、shared expert 和通信优化经验；但多级决定会带来串行控制、早期错误累积、局部视野和更长归因链。当前不预设哪一方向占优。Selector 可以读取当前内容、pre/post-Update semantic state 和可选的逐序列历史激活状态；任何改变模型输出的历史状态都必须成为可重放的 reference state，而不能偷用实时设备负载。
+9. **纯 FFN 递归不会遇到同一种私有状态问题。** FFN 每次处理当前 hidden，本身没有跨 Token 的私有 KV 或 SSM 状态。纯 FFN 路径仍可能增加参数容量、条件深度和非线性计算，因此应保留为对照；但它不能充分检验“局部有状态计算介质”是否有价值，当前优先级可以较低。
 
-#### 2.3.3 路径相关历史暴露：结构事实与待验证伤害
+10. **如果局部历史不足确实成为问题，首先有两类改善思路。** 第一类是私有状态与 Update/Compute 分离：模块收到消息时可以先更新状态，是否执行昂贵计算另行决定。第二类是分支间交叉会聚：不同路径在最终 fixed merge 之前交换已经处理过的局部信息。
 
-**8. 多级 selected-dispatch 会造成路径相关的历史暴露变薄【结构事实 + 研究赌注】。** 一个固定 receiver 的私有 KV/SSM/summary state，只能记录实际路由到该节点的消息；不同 receiver 因而可能保存不同的历史子集。建议把三个容易混用的问题分开：
+11. **第一类思路最直接地引出了 `broadcast-observe`。** 已激活的上游把消息发给全部固定下游；所有下游都可以接收并更新自己的状态，但只有少量下游执行昂贵计算并继续发送。私有状态并非只能用 BO 实现，但如果希望所有直接下游都持续获得写入机会，BO 就是最直接的传播方式，也是工作流 B 主动选择验证的核心机制。BO 还允许先更新状态，再让 selector 根据更新后的状态决定本次激活，这是 `selected-dispatch` 没有的设计空间。
 
-- **历史暴露变薄**：一个 receiver 实际看过多少 Token 或父消息。
-- **私有状态碎片化**：不同 receiver 保存了哪些不同的 route-conditioned 历史。
-- **表示压缩或任务相关信息损失**：当前 fixed-width hidden 是否仍保留完成任务所需的前缀信息。
+12. **BO 首先缓解的是一跳范围内的历史缺失。** 一个 active parent 的所有直接 children 都能看到当前消息，不再因为这一跳没有被选中而完全错过它。但 BO 不会自动绕过更早没有激活的祖先，也不保证写入的状态一定有用。
 
-前两项由传播结构直接造成；第三项及其质量伤害需要实验。一个 active child 通常收到完整的 parent hidden，而不是因为有 $B$ 个 siblings 就只拿到 $1/B$ 的信息。选择性历史也可能促进专门化，所以这里要验证的是“路径相关私有历史是否成为瓶颈”，而不是预设所有分叉都会丢失上下文。
+13. **交叉会聚可能进一步扩大不同分支之间的信息交换。** 多个父节点可以把各自处理过的信息送到同一局部节点；反复加入这类连接，会使规则递归逐渐接近 lattice 或 line 一类局部 DAG。它可能更充分地缓解分支隔离，但不能免费保证每个末端都获得全部无损历史。
 
-在一个简化的均匀 $B$ 叉、每级选择 $K$ 个 child 的树中，深度 $d$ 的固定节点在 `selected-dispatch` 下收到消息的比例约为：
+14. **首个候选可以优先在完整的 `Attention/SSM -> FFN` 之后借出消息。** 这样较贴近已有 block 的接口和 checkpoint，也保持“先读取上下文、再处理信息”的常见结构。是否应该在 Attention/SSM 后、FFN 前更早交换信息，可以作为后续对照，不必在起步时展开全部接口组合。
 
-$$
-\left(\frac{K}{B}\right)^d.
-$$
+15. **会聚对训练的影响可能是双向的。** Fixed merge 明确地结束旧路径，因而有助于限制一次选择影响多远。分支间的交叉会聚还可能提供更多、更短的信息和梯度路径，从而缓解对单一路由的依赖；但它也会增加动态输入组合和多路归因的复杂度。因此，“交叉会聚能够缓解路径漂移和信用分配”是值得验证的正面假设，不是已有结论。
 
-这个量刻画 receiver exposure，不刻画当前 hidden 的信息量。
+16. **多父节点会增加消息聚合和状态更新的接口复杂度。** BO 与这种固定的局部接收方式较为自然，但多父 DAG 并不排斥 `selected-dispatch`：每个父节点仍可只向选中的下游发送。因此，同一拓扑上的 `selected-dispatch` 仍应保留为直接对照。
 
-**9. 纯 FFN 递归不会产生同一种私有历史碎片化，但不能据此淘汰【重要对照】。** Stateless FFN 每次变换当前 parent hidden，没有 branch-private 的跨 Token KV/SSM 历史，因此不直接承担上述状态暴露问题；它也不能重新读取当前 hidden 之外的序列历史。不过，纯 FFN 仍可增加条件深度、参数容量和非线性计算，并非没有意义的重复加工。`Attention/SSM -> FFN` 的常见配比是很强的 checkpoint 工程先验，不是架构定理。纯 FFN 路径不必成为第三条主线，但应保留为区分“条件计算收益”和“私有状态收益”的结构对照。
+#### 工作流 B 要验证什么
 
-**10. 若历史暴露确实形成瓶颈，有两类优先补救方向【研究赌注】。** 第一类是私有状态与 Update/Compute 分离：receiver 即使本次不执行昂贵 readout/FFN，也可以保存已经到达的消息。第二类是有界的多父局部会聚或交叉传播：不同路径在 fixed merge 前后交换经过处理的摘要，扩大 receiver 的局部 source coverage。Shared regional memory、周期性 backbone reinjection、merge 后重新发散、较大 $K$、soft routing 和状态同步也都是替代或互补机制，因此历史暴露问题即使成立，也不会只剩一种解法。
+17. **工作流 B 的核心任务，是找到一个包含 BO 的完整成功候选。** 当前候选至少应包含：
 
-#### 2.3.4 为什么仍把 broadcast-observe 选为工作流 B 核心
+    - 固定、有界的局部下游；
+    - 所有直接下游都能 Observe / Update；
+    - 可在以后真正读出的私有状态；
+    - 只激活少量昂贵计算的局部 selector 和总预算；
+    - always-on checkpoint backbone；
+    - 明确且有界的 fixed merge。
 
-**11. 私有状态与 Update/Compute 分离不在一般意义上推出 BO，但工作流 B 主动采用一个更强 profile【项目选择】。** `selected-dispatch` 也可以让选中节点维护持久状态，模型也可以使用共享区域状态或周期写入。只有增加“active sender 的全部固定直接 receivers，无论本次是否做昂贵计算，都应获得观察和私有状态写入机会”这一要求时，`broadcast-observe` 才按定义成为必要的传播 profile。本仓库选择正面验证这一更强机制，因为它直接表达“消息可见性与昂贵激活分离”的局部计算介质。
+有界递归可以从首个候选开始加入，也可以先用浅层结构验证 BO；但若要证明 Tide 的多跳容量扩展，后续必须进入递归和 scaling 实验。多父交叉会聚是可选增强项，可以预先用于一个完整候选，也可以在实测到分支历史不足后再引入。
 
-BO 有两条必须分开归因的作用路径：当次 Observe / Update 可以改变 receiver proposal 或当前 selector；未激活时的写入也可以在以后真正 readout。前者不要求跨 Token 持久状态，后者才检验延迟模块记忆。若从旧 checkpoint 或 selected 模型迁移，新增状态必须先不被输出读取或通过零 residual 隔离，才能声称初始函数保持。
-
-**12. BO 直接改善的是当前 active parent 下一跳的 exposure【结构性质】。** 在上面的均匀模型中，若 active parent 向全部 $B$ 个 children 发送、只有 $K$ 个执行昂贵计算并继续 Emit，则深度 $d$ 的固定 receiver 收到消息的比例约为：
-
-$$
-\left(\frac{K}{B}\right)^{d-1}.
-$$
-
-因此 BO 消除了本节点这一层 child selection 造成的 exposure loss；它没有绕过从未激活的祖先，也不保证写入内容有用。若 inactive receiver 继续廉价转发到更深处，覆盖会进一步增加，但消息和 Update 成本也可能迅速接近稠密传播。
-
-**13. 多父交叉会聚可能更广泛地恢复局部 source coverage，但不保证完整无损记忆【研究赌注】。** 有界 fan-in、有限消息宽度、有限传播 hop 和稀疏 Emit 决定了末端不能免费获得所有原始历史；若要求无损保留任意多路输入，相应带宽或状态容量也必须增长。交叉边可以把递归树逐步变成 lattice/line-like 的局部 DAG，但不会仅因“多次会聚”就自动成为具有特定切片、邻接和状态语义的 HB-Line。
-
-**14. 优先在完整 `Attention/SSM -> FFN` 之后借出消息，是合理的首个接口选择【工程偏好】。** 这样一个 receiver 对应一个完整旧 block，较容易复用 checkpoint、保持清楚的 Update/readout/compute/emit 边界，也避免连续堆叠多个 memory readout 而没有中间信息处理。它携带的是经过上下文读取和 FFN 加工后的表示；在 Attention/SSM 后、FFN 前接入则更早交换 memory readout。两者优劣尚无结论，可以把后者和低秩摘要接口作为对照，而不把“Attention 与 FFN 必须 1:1”写成定理。
-
-#### 2.3.5 会聚的双向作用与多父语义
-
-**15. “会聚缓解路径漂移和信用分配”只对一部分会聚形式方向明确【双向假设】。** 需要区分：
-
-- **交叉耦合（cross-coupling）**：不同分支交换消息，但各自的路径身份继续存在。它扩大 receptive field，也可能把一路漂移传播给更多节点，增加动态 fan-in、输入组合变化和归因歧义。
-- **固定会聚（fixed convergence/reset）**：多路分支进入共同、规范化接口，旧路径身份在此终止。它可以缩短控制寿命、提供冗余或更短的梯度路径，并在归一化或小 residual 条件下减小换路跳变。
-
-因此，“会聚可能缓解路径漂移和信用分配”的直觉对第二类更成立：fixed convergence 有理由缓解控制寿命和单一路由敏感性；普通 cross-coupling 的净效果则必须实测。会聚本身通常不降低 selector 的 route churn，私有状态的跨 Token 写读链也不会因一次数值 merge 自动消失。
-
-**16. 多父局部 DAG 与 `selected-dispatch` 可以兼容【接口事实】。** 每个 parent 可以只向自己选中的 children dispatch，receiver 再确定性聚合实际收到的零到多条消息。它需要额外声明 inbox 何时完整、消息顺序或结合归约、重复消息、state commit、空消息和多个父节点之间的预算仲裁。BO 与固定局部多父接口可能更自然，也更符合本仓库希望检验的消息可见性，但不是由“多父节点”在数学上强迫出来的；相同多父拓扑上的 selected control 仍应保留为反事实。
-
-#### 2.3.6 工作流 B 的最终落点
-
-**17. 工作流 B 的核心任务是寻找一个 BO 完整成功候选，而不是预先证明 BO 唯一必要【最终待验证】。** 当前首个候选的设计契约是：
-
-```text
-完整保留的 checkpoint / always-on backbone
-+ 固定、有界的局部 receivers
-+ broadcast-observe
-+ 可延迟读出的 receiver-private state
-+ 局部 selector 与显式 active budget
-+ 少量 receiver 的昂贵 Compute / Emit
-+ 声明清楚且有界的 fixed merge
-```
-
-规则递归可以从首个候选开始联合使用，并且最终必须进入多跳容量扩展的 scaling 验证；多父交叉会聚则可以预先进入一个有充分设计理由的候选，也可以在实测到路径历史隔离后作为干预。一个组合候选成功只证明“存在这个组合可以工作”，不单独证明每个部件必要。
-
-最终主张按五层递进：先证明 reference semantics 和 checkpoint 生长正确；再证明 Observe/proposal 或未激活状态写入确实被使用；再证明相对 matched `selected-dispatch` 和成熟 flat MoE 具有 learning value；然后证明容量增长时昂贵激活、消息与状态成本仍保持稀疏可控；最后才证明物理通信和端到端时间、能耗具有系统收益。
+工作流 B 最终需要依次回答四个直白问题：这个完整候选能否稳定训练；BO 和私有状态是否真的被使用；它是否优于匹配的 `selected-dispatch` 对照；容量扩大以后，质量收益是否仍大于新增的计算、状态和通信成本。具体证据门见第 8 节。
 
 ## 3. 与上游 Graph 收缩线的关系
 
@@ -297,7 +239,8 @@ Checkpoint 生长线从已有预训练 Transformer/Mamba 出发：
 ├── 工作流 A：dense / flat MoE 基线与校准
 │     ├── dense continued-pretraining
 │     ├── 成熟 flat MoE reference recipe / 原生实现复现
-│     └── 函数保持的 checkpoint-grown flat / Group-receiver 对照
+│     ├── 函数保持的 checkpoint-grown flat MoE
+│     └── 可选后续：Head-Wise MoE
 └── 工作流 B：函数保持的 residual growth
       -> broadcast-observe 局部计算介质候选
          ├── 有界局部 fan-out 与递归分支
@@ -656,51 +599,29 @@ Receiver-Gated 与延迟私有状态同时启用时，控制距离、状态写�
 
 always-on backbone 可以为模型保留短而连续的主梯度路径，但不能保证稀疏分支本身获得足够梯度。固定 merge 可以限制控制寿命，但不会删除已经写入 node state 的潜在语义影响。
 
-### 5.5 Head/Group-wise：一种规则的局部发散—收拢骨架
+### 5.5 Head-Wise MoE：工作流 A 的可选后续
 
-这里需要区分三种容易被统称为 Head-wise 的设计：
-
-| 设计 | 发散与候选范围 | 状态 | 收拢 | 与 `broadcast-observe` 的关系 |
-| --- | --- | --- | --- | --- |
-| 原始 Group-wise FFN MoE | 将 hidden channel 分组；所有 groups 参与，每组从私有 FFN expert pool 中选择 $K_e$ 个 experts | FFN 没有天然持久状态 | group 内 expert merge，随后 concat / mixer | expert 级仍是 `selected-dispatch`；group 级没有稀疏门控，不等于 `broadcast-observe` |
-| Attention head-group | 将 Attention heads 组织为固定 groups | 可以定义或复用与 group 关联的 K/V；私有程度取决于 MHA、GQA、MLA 等参数化 | 固定 head slots 与输出投影 | 普通 Attention 默认所有 groups 都 readout；receiver 化以后才成为候选 BO 载体 |
-| Tide Group-receiver cell | 固定、有界的 group receivers；可由 Attention、SSM、FFN branch 或其组合实现 | receiver 私有 semantic state；共享 selector 可另有 sibling-level load/history state | fixed merge、region mixer 或分层收拢 | 明确分离 group 级 Observe / Update、昂贵激活和 Emit |
-
-原始 Head-wise MoE 提议更准确地说是一种新的 Group-wise FFN 算子：它同时改变输入因子化、每组算子宽度、全局 active expert 数和跨组表达耦合，并不是把同一个全局 `N 选 M` 原样拆成几个等价的局部选择。它提供的关键启发，是固定的 group layout、私有候选池、输出 slots 和 mixer 所组成的规则发散—收拢骨架。若每个 group 对每个 Token 都执行自己的 expert Top-K，则 group 层面并不稀疏，也没有验证“未激活 group 仍能观察并积累状态”。
-
-在该骨架上再增加 group 级 selector，得到一个新的 **Group-receiver BO** 设计。需要把 group 级预算 $K_g$ 与 active group 内部可选的 expert 级预算 $K_e$ 分开记录：
+Head-Wise MoE 把 hidden 按 Attention Head 或 Head Group 切开，每组拥有自己的小型 FFN expert pool，并在组内独立选择少数 experts，最后把各组输出 concat 或通过 mixer 重新混合。它主要想验证：能否把一个大的 flat MoE 拆成多个较小、可以随 Head/Group 本地放置的 MoE，从而减少 expert-parallel dispatch/combine 通信。
 
 ```text
-parent produces message
--> fixed projection/slice into G receiver slots
--> every receiver observes, updates private semantic state, and produces a proposal
--> one shared local selector, optionally with sibling-level history, chooses K_g active groups
--> only active groups run expensive Attention / SSM readout / FFN
-   or run K_e experts from a private local pool
--> active groups emit and may continue recursively; inactive groups stop after Update
--> fixed slots -> region mixer / fixed merge -> stable backbone or next region
+完整 hidden
+-> 按 Head / Group 切片
+-> 每组在自己的 expert pool 内做 Top-K
+-> 各组输出 concat / mixer
+-> 完整 hidden
 ```
 
-在这个组合中：
+它与 Tide 有一层启发性关系：二者都把一次较大范围的选择拆成较小范围的局部选择，也都有规则的发散—收拢结构。但原始 Head-Wise MoE 中，每个 group 对每个 Token 都会参与，稀疏只发生在组内 expert 选择；它没有验证工作流 B 最关心的三件事：
 
-- Head/Group layout 决定如何发散、receiver 与局部候选如何分区，以及参数和 private semantic state 放在哪里。
-- `broadcast-observe` 决定所有固定 receivers 都能看到消息，并可在没有执行昂贵计算时更新 private state。
-- shared local selector 只在有界 sibling/neighbor 集合中分配 $K_g$ 个昂贵激活和继续传播预算；历史负载若启用，属于这个共享 selector 的逐序列 state，而不是每个 receiver 的 private semantic state。
-- fixed merge 或 mixer 决定信号在哪里收拢，并为 checkpoint 生长提供稳定接口和较短的显式控制路径。
-- 层次化递归使潜在容量可以在单次局部候选规模有界时继续增长，并容纳不同传播深度的路径。
+- 未激活的下游是否仍应收到消息并更新状态；
+- 私有状态是否会在以后被读出并产生作用；
+- 多级局部传播和递归选择能否训练。
 
-Attention head-group 只有在明确 group 与 K/V 的所有权后才能充当独立有状态 receiver；GQA/MQA/MLA 中的共享 K/V 不能自动视为 group-private state。K/V projection、写入带宽和显存都属于 Observe / Update 成本，不能预先假定为轻量。
+因此，Head-Wise MoE 当前放在工作流 A，作为 flat MoE 基线可靠之后的可选后续，而不是工作流 B 的必需骨架或直接反事实。它主要比较 flat MoE 与局部因子化 MoE，并检查：切分粒度是否损害全局语义、私有 expert pool 是否形成有效专门化、小 GEMM 是否高效、concat/mixer 是否恢复跨组表达，以及理论上的通信减少能否变成端到端收益。
 
-为使 Head/Group-wise 真正进入两条工作流，而不只是名义上的可选项，本仓库建立一对共享骨架的配置：
+实验至少需要对齐总参数、active FLOPs、训练 Token 和硬件资源，并记录 Group 数、每组宽度、每组 expert 数与 Top-K、mixer 成本、实际通信和吞吐。Head-Wise 的名称本身不保证等资源，也不保证通信收益一定成立。
 
-1. **工作流 A：Group-receiver selected control。** 使用 group-level `selected-dispatch`，只有 active groups 收到消息并执行同一 Update；递归拓扑和 merge 位置与配对的 B 配置一致。
-2. **工作流 B：Group-receiver BO candidate。** 在同一骨架上使用 `broadcast-observe`，让 inactive groups 也收到消息和执行同一 Update；其他执行语义与配对的 A 配置一致。
-
-这两个配置必须保持 group 数、input slice/projection、固定 slots、昂贵算子类型与宽度、Update/readout 函数、state 形状与生命周期、$K_g$、递归拓扑、mixer/merge 位置与范围和物理放置一致，才能作为传播与状态 profile 的直接反事实；核心差异只是 inactive receiver 是否 Receive / Update。最简单的配对版本中两边都立即 merge；带额外递归的 BO 可以作为完整组合候选，但要归因于传播 profile 时，必须同步建立相同递归拓扑的 selected control。核心 matched pair 的 selector 应只读取 parent/current content 或 pre-Update state，必要时 replay 同一 route；读取 post-Update proposal/state 的 BO 变体在组内另做“读取 vs 忽略”对照。若一边使用 FFN、另一边改用 Attention/SSM，或同时改变 group layout 与 mixer，它们只能是两个组合候选，不能称为 matched pair。原始“所有 groups 都执行、每组内部 expert Top-K”的 Group-wise FFN MoE 仍可在工作流 A 中作为辅助结构对照，用于单独判断因子化、私有 expert pool 和 mixer 的作用。
-
-Head/Group-wise 只描述逻辑结构，不自动保证物理局部。receiver、私有参数和状态还需要静态共置，parent 只能向固定邻近 region 发送，selector 只能协调局部候选。全维 dense mixer 可以在 checkpoint 生长初期作为表达恢复接口；但若每次收拢都依赖跨全部设备的全局 collective，它只能证明局部分支或稀疏计算有效，不能证明完整的去中心化通信有效。后续可以比较 region 内 dense mixer、低秩连接、tree/hierarchical mixer、邻居 mixer 和低频全局 merge。
-
-只有当研究问题独立变成“即使 `broadcast-observe`、持久状态和递归传播无效，原始 Group-wise FFN MoE 是否仍能在质量或系统效率上替代 flat MoE”时，才把它升级为第三条并行线。所有参数与 FLOPs 对照都必须按 group 数、expert width、$K_g$、$K_e$、router、state、mixer 和 Observe / Update 成本重新计算；Head-wise 的命名本身不保证等参数、等 active FLOPs 或通信清零。
+未来工作流 B 如果恰好使用 Head/Group 来组织 receivers，那只是 BO 候选的一种实现方式，需要重新定义 group 级 Receive、Update、Activate 和 Emit，并在相同 receiver 拓扑上比较 `selected-dispatch` 与 `broadcast-observe`。这个新候选不能反过来算作原始 Head-Wise MoE 已经合入 Tide。
 
 ## 6. 两条并行实验工作流与问题驱动闭环
 
@@ -720,9 +641,9 @@ Head/Group-wise 只描述逻辑结构，不自动保证物理局部。receiver�
 - **诊断实验**：针对已经观察到的问题做直接 knockout、paired counterfactual 或局部修改。
 - **确认实验**：冻结结构和训练配方，用新 seed、数据切片、硬件或规模复现结论。
 
-### 6.2 工作流 A：dense / flat MoE 基线与 Head/Group 校准
+### 6.2 工作流 A：dense / flat MoE 基线与可选 Head-Wise 后续
 
-工作流 A 内部包含三个相互服务的对象：原生 dense correctness 与 continued-training oracle、成熟 flat MoE 强基线，以及和工作流 B 共用骨架的 Group-receiver selected control。它们属于同一基线与校准工作流，不是工作流 B 之前必须串行完成的三个阶段。
+工作流 A 有两个基础对象：原生 dense correctness 与 continued-training oracle，以及成熟 flat MoE 强基线。在这两项可靠以后，可以继续做 Head-Wise MoE，验证局部因子化的 MoE 是否具有独立的质量或系统价值。Head-Wise 是可选后续，不是工作流 B 启动前必须完成的阶段。
 
 #### 6.2.1 原生 checkpoint 与 dense 训练校准
 
@@ -758,11 +679,11 @@ flat MoE 强基线首先应复现一套成熟 reference recipe 或兼容的原�
 
 flat MoE 的作用不是证明 MoE 最优，而是建立成熟条件计算对照，测量普通 routing drift、负载、梯度覆盖和系统开销。若 Tide 只优于尚未调好的 checkpoint-grown MoE，不能据此声称优于 flat MoE 强基线。成熟 reference、matched control 与 dense 校准共同为工作流 B 提供参考区间。
 
-#### 6.2.3 Group-receiver selected control
+#### 6.2.3 Head-Wise MoE（可选后续）
 
-按照第 5.5 节的共同骨架，工作流 A 同步建立只有 active groups Receive / Update 的 group-level `selected-dispatch` control。它与工作流 B 的 Group-receiver BO candidate 共享 group layout、input slice/projection、固定 slots、昂贵算子、Update/readout、state 生命周期、$K_g$、递归拓扑、mixer/merge 和物理放置，并使用相同或 replay route 来建立最干净的传播反事实；最简单版本两边都立即 merge。
+在 flat MoE 基线可靠后，可以按第 5.5 节实现 Head-Wise MoE，并扫描 Head/Group 切分粒度、每组私有 expert pool、组内 Top-K 和 concat/mixer。主要对照是等容量、等 active FLOPs 和等资源的 flat MoE；主要结果是训练质量、路由专门化、小 GEMM 利用率、实际通信量和端到端吞吐。
 
-原始 Group-wise FFN MoE 也可以作为辅助结构对照复现，但它让所有 groups 参与、只在 group 内做 expert Top-K，不能替代上述 group-level matched control。
+这个实验不承担工作流 B 的 `selected-dispatch` control。工作流 B 应在自己的 receiver 拓扑上保留完全匹配的 `selected-dispatch` 开关。
 
 ### 6.3 工作流 B：`broadcast-observe` 完整候选
 
@@ -770,7 +691,6 @@ flat MoE 的作用不是证明 MoE 最优，而是建立成熟条件计算对照
 
 - 完整保留的 checkpoint / always-on backbone。
 - 通过中性 residual 接口生长的有界 fan-out 分支。
-- 至少一组与工作流 A 共享布局和昂贵算子的 Group-receiver BO candidate，形成 Head/Group-wise 的跨工作流直接反事实。
 - active sender 向全部固定局部 children 发送；所有实际 receivers 执行声明的轻量 Observe / Update。
 - 能在未执行昂贵计算时写入、并在以后真正读出的私有 KV、SSM 或 summary state。
 - 读取当前内容、语义状态和可选逐序列激活历史的局部 selector。
@@ -901,9 +821,7 @@ soft mixture、hard Top-K、语义候选后负载筛选和负载准入后语义�
 | state clear / shuffle / no-read / reset knockout | 已写入状态是否以预期的时间、节点和内容关系影响输出 |
 | fixed/hash route | learned selector 是否真正有价值 |
 | matched Leaf-Gated 配置 | 内部 receiver 门控和后续子树裁剪是否有独立贡献 |
-| ungrouped vs 原始 Group-wise FFN MoE | 输入因子化、私有 expert pools 和跨组 mixer 是否有结构收益 |
-| matched Group-receiver `selected-dispatch` vs `broadcast-observe` | 相同 group 骨架下传播与未选状态写入是否有额外价值 |
-| 相同 Group-receiver、不同 mixer/merge 范围 | 收拢方式与通信中心化风险的独立作用 |
+| flat MoE vs Head-Wise MoE（工作流 A 可选） | 输入切片、私有 expert pools 和跨组 mixer 是否有独立质量或系统收益 |
 | matched stateless FFN 路径 vs 有状态 Attention/SSM receiver | 收益来自条件计算深度/容量，还是私有序列记忆 |
 | 相同多父拓扑、关闭 vs 开启交叉边或周期会聚 | 扩大局部 source coverage 是否改善记忆和质量，以及是否加剧输入漂移 |
 
@@ -918,12 +836,11 @@ soft mixture、hard Top-K、语义候选后负载筛选和负载准入后语义�
 - stateless、selected-only persistent state 与 receive-always persistent state。
 - content-only、semantic-state-aware 与 load-aware selector 输入。
 - soft mixture、hard Top-K 与两级语义/负载决策规则。
-- Head/Group 划分、局部 expert pool 和 mixer 范围。
 - shared expert / always-on backbone 比例。
 - fixed merge 间隔、范围和最大控制寿命。
 - 单父 vs 多父、cross-coupling vs fixed convergence，以及消息接入点。
 
-每个实验表至少把 branch grammar、门控范围、传播 profile、状态更新与生命周期、selector 输入与决策、Head/Group 结构、active budget、merge/backbone 和物理放置列成独立字段。一个配置同时改变多个字段时，它可以支持“完整候选有效”的存在性结论，但不能单独支持任一部件的因果结论。
+每个工作流 B 实验表至少把 branch grammar、门控范围、传播 profile、状态更新与生命周期、selector 输入与决策、active budget、merge/backbone 和物理放置列成独立字段。Head-Wise 实验另行记录 Head/Group 切分、私有 expert pool 和 mixer。一个配置同时改变多个字段时，它可以支持“完整候选有效”的存在性结论，但不能单独支持任一部件的因果结论。
 
 ## 8. 验收指标
 
@@ -974,7 +891,7 @@ inactive receiver receives a message
 - 每个 node 的消息接收次数、状态更新次数、昂贵激活次数、继续发送次数和有效梯度次数；五者不得合并成一个“使用次数”。
 - 梯度范数、梯度覆盖率和长期未更新参数比例。
 - node 输入分布漂移、状态数值稳定性和 write-to-read 延迟分布。
-- 按 selector input profile、Head/Group 和递归层级分组的负载、route churn、状态利用与梯度覆盖。
+- 按 selector input profile 和递归层级分组的负载、route churn、状态利用与梯度覆盖。
 - always-on backbone、局部递归、长短路径和 merge 频率的贡献消融。
 - 多个 seed、数据切片或后续规模上的复现情况。
 
@@ -994,7 +911,7 @@ inactive receiver receives a message
 
 ### 8.5 系统 gate
 
-- 总参数、active parameters 和实际 active FLOPs，按 node、Head/Group、expert 和 backbone 分项统计。
+- 总参数、active parameters 和实际 active FLOPs，按 node、expert 和 backbone 分项统计。
 - 消息投递、`Observe / Update`、selector、状态读写、昂贵激活、继续发送、packing 与 merge/mixer 的单独成本。
 - 端到端训练吞吐、`prefill` 吞吐和 `decode` latency。
 - 峰值显存、KV/SSM/private state 大小和 optimizer state。
@@ -1027,7 +944,7 @@ MessageProjection
     把 sender 输出映射到固定、有界的 receiver slots；声明局部拓扑和消息形状
 
 ReceiverCell
-    分离 Observe、Update、ExpensiveCompute 与 Emit；可承载 Head/Group、Attention、SSM 或 FFN branch
+    分离 Observe、Update、ExpensiveCompute 与 Emit；可承载 Attention、SSM 或 FFN branch
 
 PropagationProfile
     执行 selected-dispatch 或 broadcast-observe，并产生 receive、update、active 与 emit mask
@@ -1048,7 +965,7 @@ SelectorState
     sibling selector 共享的逐序列 load/history state；与 ReceiverState 分开保存
 
 RouteArtifact
-    记录每个 Token、父模块、Head/Group 和递归层级的 receive、update、active、read 与 emit artifact
+    记录每个 Token、父模块、receiver 和递归层级的 receive、update、active、read 与 emit artifact
 
 ExperimentLedger
     记录模型谱系、配置、参数/FLOPs、数据、checkpoint 和指标
@@ -1076,9 +993,9 @@ tide/
 └── docs/
 ```
 
-这套底座必须能够在同一拓扑上切换两种 propagation profile，保存和恢复持久状态，执行 state knockout，并分开统计轻量更新和昂贵计算。两条工作流共享的 Group-receiver 配对配置使用同一种 `ReceiverCell` 规则布局和执行器，只切换声明清楚的传播与状态 profile。
+这套底座必须能够在同一 receiver 拓扑上切换两种 propagation profile，保存和恢复持久状态，执行 state knockout，并分开统计轻量更新和昂贵计算。工作流 B 的 `selected-dispatch` 对照与 BO 候选使用同一种 `ReceiverCell` 布局和执行器，只切换声明清楚的传播与状态 profile。
 
-函数保持接入需要显式实现 identity-compatible 或 residual-isolated 接口。任意 Head/Group 切分并不天然保持原函数；需要复制/拆分旧权重、恒等 mixer，或者先让新分支对输出严格中性。若采用零 gate 或零输出投影，还要验证哪些新参数在起点能够获得梯度，并定义可复现的 gate 开启方式。
+函数保持接入需要显式实现 identity-compatible 或 residual-isolated 接口。若采用零 gate 或零输出投影，还要验证哪些新参数在起点能够获得梯度，并定义可复现的 gate 开启方式。Head-Wise 若从 dense checkpoint 生长，也需要单独说明如何拆分旧权重、设置 mixer 或保持新分支初始中性；Head/Group 切分本身并不自动保持原函数。
 
 近期底座不需要实现 HB-Line executor、一般 event IR、跨设备 allocator 或有环 Graph。
 
@@ -1089,8 +1006,8 @@ tide/
 1. 选定一个适合快速重复实验的 pre-norm decoder-only 开放权重 checkpoint、训练数据、框架和目标硬件。
 2. 完成原生模型的 equality oracle、continued-pretraining 校准和 fresh save/reload 测试。
 3. 实现第 9 节的统一接口，使相同局部拓扑能够切换 `selected-dispatch` / `broadcast-observe`、持久/无延迟状态和各类 knockout。
-4. 在工作流 A 中建立 dense continued-pretraining、成熟 FFN flat MoE 强基线和第 5.5 节定义的 Group-receiver selected control；原始 Group-wise FFN MoE 可作为辅助结构对照。
-5. 在工作流 B 中实现一个最小但机制完整的候选：保留 always-on checkpoint，通过中性 residual 接口加入固定有界 receivers、`broadcast-observe`、可延迟读出的私有状态、局部稀疏昂贵激活和声明清楚的 fixed merge；其中至少一组使用与工作流 A control 完全匹配的 Group-receiver 骨架，其他候选的 Leaf/Receiver 门控和一层或多层递归由具体命题说明。
+4. 在工作流 A 中建立 dense continued-pretraining 和成熟 FFN flat MoE 强基线；Head-Wise MoE 在基线可靠后作为可选后续。
+5. 在工作流 B 中实现一个最小但机制完整的候选：保留 always-on checkpoint，通过中性 residual 接口加入固定有界 receivers、`broadcast-observe`、可延迟读出的私有状态、局部稀疏昂贵激活和声明清楚的 fixed merge；Leaf/Receiver 门控和一层或多层递归由具体命题说明。
 6. 为该候选同时保留 matched `selected-dispatch` 开关，以及 inactive-state freeze/clear/shuffle/no-read/reset 等直接反事实。
 7. 完成短程训练并输出 correctness、mechanism-use、质量、路由、梯度、状态利用、路径分布和分项系统成本报告。
 
@@ -1124,7 +1041,7 @@ HB-Line/HB-Lattice 可以进一步把递归或局部分支映射到重复空间�
 - 一个联合使用递归、私有状态、selector 和 fixed merge 的候选成功，就分别证明了这些部件都必要。
 - 规则层次化递归是一般 Graph 的唯一扩展方式，或它已经解决路径漂移和长路径信用分配。
 - fixed merge、always-on backbone 或某一种 mixer 是所有局部 Graph 必需或最优的收拢方式。
-- Head/Group-wise 已经成功融合进 Tide，或仅凭分组和全维 mixer 就得到了去中心化通信。
+- Head-Wise MoE 已经优于 flat MoE、已经消除了端到端通信瓶颈，或者已经自然合入工作流 B。
 - 人脑结构证明了 Tide 可训练或高效。
 - 收到即更新自动消除了节点饥饿和信用分配问题。
 - 只有叶子稀疏就无条件与 MoE 具有相同信用距离。
@@ -1142,9 +1059,9 @@ HB-Line/HB-Lattice 可以进一步把递归或局部分支映射到重复空间�
 1. 选择首个 checkpoint、训练框架、共享训练数据与目标硬件，并定义两条工作流共同使用的成本口径。
 2. 明确原生 equality oracle 和函数保持生长的逐项比较对象，包括 logits、原 cache/state、prefill/decode、chunk continuation、主要梯度和 save/reload。
 3. 定义 `broadcast-observe` reference contract：固定局部邻接、receive/update/active/read/emit 的顺序、空消息规则、状态生命周期和 merge 范围。
-4. 选定工作流 B 的首个完整候选，包括 branch grammar、Group-receiver 布局、门控范围、私有状态、selector 输入与决策、active budget、递归深度和收拢方式；另有非 Group 候选时也用同一字段记录。
-5. 定义共享 group layout 的工作流 A `selected-dispatch` control、inactive-state knockout 和必要的 Leaf/Receiver 直接反事实。
-6. 定义 dense、flat MoE，以及可选 Group-wise FFN MoE 的 capacity/compute/resource-matched 配置。
+4. 选定工作流 B 的首个完整候选，包括 branch grammar、receiver 拓扑、门控范围、私有状态、selector 输入与决策、active budget、递归深度和收拢方式。
+5. 在同一 receiver 拓扑上定义工作流 B 的 `selected-dispatch` control、inactive-state knockout 和必要的 Leaf/Receiver 直接反事实。
+6. 定义 dense、flat MoE，以及可选 Head-Wise MoE 的 capacity/compute/resource-matched 配置。
 7. 确定 `BranchModule`、`MessageProjection`、`ReceiverCell`、`PropagationProfile`、`SiblingSelector`、`StateUpdater`、`ReceiverState`、`SelectorState`、`FixedMerge`、`RouteArtifact` 和 `ExperimentLedger` 的最小接口。
 8. 建立第一批单元测试、短程 continued-pretraining 协议，以及“正面信号、失败定位、确认复现”各自允许主张什么的报告模板。
 
