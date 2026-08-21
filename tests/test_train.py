@@ -146,7 +146,7 @@ def test_random_training_milestone_end_to_end(tmp_path: pathlib.Path) -> None:
         "micro_batch_size": 1,
         "gradient_accumulation": 1,
         "evaluation_batch_size": 2,
-        "max_tokens": 8,
+        "max_tokens": 16,
         "max_steps": None,
         "validation_tokens": 16,
         "backbone_lr": 1e-3,
@@ -161,9 +161,10 @@ def test_random_training_milestone_end_to_end(tmp_path: pathlib.Path) -> None:
         "minimum_lr_ratio": 0.1,
         "lr_schedule": "warmup-stable",
         "warmup_tokens": 8,
-        "milestone_tokens": [8],
+        "milestone_tokens": [8, 16],
         "diagnostic_tokens": 16,
         "checkpoint_every": 0,
+        "checkpoint_keep_last": 1,
         "log_every": 1,
         "tracking": "off",
         "trackio_project": "test",
@@ -178,8 +179,21 @@ def test_random_training_milestone_end_to_end(tmp_path: pathlib.Path) -> None:
         resolve_runtime(RuntimeRequest("cpu", 0, "float32", 67)),
         arguments,
     )
-    assert result["tokens"] == 8
-    assert (output_dir / "checkpoints" / "token-0000000008-step-000001.pt").is_file()
+    assert result["tokens"] == 16
+    checkpoint_dir = output_dir / "checkpoints"
+    assert not (checkpoint_dir / "token-0000000008-step-000001.pt").exists()
+    assert (checkpoint_dir / "token-0000000016-step-000002.pt").is_file()
+    latest = json.loads((checkpoint_dir / "latest.json").read_text())
+    assert latest["path"] == "token-0000000016-step-000002.pt"
+    assert latest["retention"] == {"keep_last": 1}
+    retention = [
+        json.loads(line)
+        for line in (checkpoint_dir / "retention.jsonl").read_text().splitlines()
+    ]
+    assert [event["path"] for event in retention] == [
+        "token-0000000008-step-000001.pt"
+    ]
     assert (output_dir / "diagnostics" / "probe-token-0000000008.pt").is_file()
+    assert (output_dir / "diagnostics" / "probe-token-0000000016.pt").is_file()
     assert json.loads((output_dir / "tracking.json").read_text())["status"] == "disabled"
     assert json.loads((output_dir / "manifest.json").read_text())["status"] == "completed"

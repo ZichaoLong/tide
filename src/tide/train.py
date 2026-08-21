@@ -7,6 +7,7 @@ import math
 import os
 import pathlib
 import random
+import re
 import time
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
@@ -17,6 +18,9 @@ from .manifest import atomic_write_json, base_manifest, model_identity, sha256_f
 
 
 CHECKPOINT_SCHEMA = "tide-training-v1"
+CHECKPOINT_NAME_PATTERN = re.compile(
+    r"(?:step-\d+|token-\d+-step-\d+)\.pt\Z"
+)
 
 
 def _jsonable_metrics(metrics: Mapping[int, Mapping[str, Any]]) -> dict[str, Any]:
@@ -444,9 +448,75 @@ def _save_checkpoint(
             "step": step,
             "tokens": tokens,
             "milestone_tokens": milestone_tokens,
+            "retention": {
+                "keep_last": configuration["checkpoint_keep_last"],
+            },
         },
     )
+    _prune_superseded_checkpoints(
+        output_dir=output_dir,
+        latest_checkpoint=path,
+        keep_last=configuration["checkpoint_keep_last"],
+    )
     return path
+
+
+def _prune_superseded_checkpoints(
+    *,
+    output_dir: pathlib.Path,
+    latest_checkpoint: pathlib.Path,
+    keep_last: int,
+) -> None:
+    """Retain full resume state for the newest checkpoints in one run."""
+
+    if keep_last < 0:
+        raise ValueError("checkpoint-keep-last must be nonnegative")
+    if keep_last == 0:
+        return
+
+    checkpoint_dir = output_dir / "checkpoints"
+    latest_checkpoint = latest_checkpoint.resolve()
+    candidates = [
+        candidate
+        for candidate in checkpoint_dir.iterdir()
+        if candidate.is_file()
+        and not candidate.is_symlink()
+        and CHECKPOINT_NAME_PATTERN.fullmatch(candidate.name)
+    ]
+    if latest_checkpoint not in [candidate.resolve() for candidate in candidates]:
+        raise RuntimeError("latest checkpoint is not a regular managed checkpoint")
+    ordered = sorted(
+        candidates,
+        key=lambda candidate: (candidate.stat().st_mtime_ns, candidate.name),
+        reverse=True,
+    )
+    retained = {latest_checkpoint}
+    for candidate in ordered:
+        resolved = candidate.resolve()
+        if resolved != latest_checkpoint and len(retained) < keep_last:
+            retained.add(resolved)
+
+    audit_path = checkpoint_dir / "retention.jsonl"
+    for candidate in ordered:
+        resolved = candidate.resolve()
+        if resolved in retained:
+            continue
+        stat = candidate.stat()
+        candidate.unlink()
+        event = {
+            "schema_version": 1,
+            "event": "checkpoint_pruned",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "path": candidate.name,
+            "bytes": stat.st_size,
+            "reason": "superseded_by_latest",
+            "latest": latest_checkpoint.name,
+            "keep_last": keep_last,
+        }
+        with audit_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
 
 
 def _run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
@@ -454,6 +524,10 @@ def _run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     from .qwen3 import load_qwen3_model
     from .tracking import TrackioProjection
 
+    arguments = {**arguments}
+    arguments.setdefault("checkpoint_keep_last", 1)
+    if arguments["checkpoint_keep_last"] < 0:
+        raise ValueError("checkpoint-keep-last must be nonnegative")
     output_dir = pathlib.Path(arguments["output_dir"]).resolve()
     resume_path = arguments.get("resume")
     init_path = arguments.get("init_from")

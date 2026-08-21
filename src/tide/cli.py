@@ -153,6 +153,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="fixed validation prefix used for route and state diagnostics",
     )
     train.add_argument("--checkpoint-every", type=_nonnegative_int, default=100)
+    train.add_argument(
+        "--checkpoint-keep-last",
+        type=_nonnegative_int,
+        default=1,
+        help="keep this many newest full checkpoints per run; 0 disables pruning",
+    )
     train.add_argument("--log-every", type=_positive_int, default=1)
     train.add_argument(
         "--tracking",
