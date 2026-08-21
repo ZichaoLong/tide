@@ -75,8 +75,25 @@
       "backend": "cpu",
       "host_arch": "aarch64",
       "policy": "required",
-      "status": "implemented",
-      "required_tiers": ["cpu-semantic"]
+      "status": "verified",
+      "required_tiers": ["cpu-semantic"],
+      "evidence": [
+        {
+          "date": "2026-08-21",
+          "commit": "561fa090794db4542dc5d996a2792d6f197ce8d5",
+          "scope": "CPU FP32 receiver and tiny-Qwen forward/backward, optimizer step, chunk continuation, and checkpoint round trip",
+          "tiers": ["static-cli", "cpu-semantic", "checkpoint-handoff"],
+          "test_command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src pytest -q",
+          "result": "passed",
+          "environment_manifest": {
+            "host_arch": "aarch64",
+            "os": "Huawei Cloud EulerOS 2.0",
+            "python": "3.11.15",
+            "torch": "2.10.0+cpu",
+            "tests": "10 passed"
+          }
+        }
+      ]
     },
     {
       "id": "python-cpu-x86_64",
@@ -93,8 +110,29 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "required",
-      "status": "implemented",
-      "required_tiers": ["backend-smoke"]
+      "status": "verified",
+      "required_tiers": ["backend-smoke"],
+      "evidence": [
+        {
+          "date": "2026-08-21",
+          "commit": "561fa090794db4542dc5d996a2792d6f197ce8d5",
+          "scope": "Single-device BF16 packed/reference and EMA backward gate; full-backbone one-layer train/resume and four-layer micro-batch-4 short-train smokes with Qwen3-0.6B",
+          "tiers": ["static-cli", "backend-smoke", "feature", "checkpoint-handoff", "short-train"],
+          "test_command": "ASCEND_RT_VISIBLE_DEVICES=<selected> PYTHONPATH=src python -m tide.cli probe --device npu:0 --dtype bfloat16 --profile bo --layer-index 13 --batch-size 1 --sequence-length 16 --model-path <Qwen3-0.6B-Base> --output-dir <new-output-dir>; then tide train smokes recorded in experiments/2026-08-21.md",
+          "result": "passed",
+          "environment_manifest": {
+            "host_arch": "aarch64",
+            "device": "Ascend910_9392",
+            "logical_device": "npu:0",
+            "python": "3.11.15",
+            "torch": "2.10.0+cpu",
+            "torch_npu": "2.10.0",
+            "cann": "9.0.0",
+            "dtype": "bfloat16",
+            "checkpoint_sha256": "cd2a512003e2f9f3cd3c32a9c3573f820bb28c940f73c57b1ddaa983d9223eba"
+          }
+        }
+      ]
     },
     {
       "id": "python-cuda-x86_64",
