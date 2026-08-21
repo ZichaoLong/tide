@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Tokenized corpora and run artifacts are identified by manifests, not tracked.
+data/
+runs/
+artifacts/

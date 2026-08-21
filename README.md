@@ -300,6 +300,8 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 这个交付首先要求实验可重放、候选语义完整、问题可观测、主要验证轴能够配对比较；不要求首轮结果已经证明 TIDE 有效。
 
+首轮 v0 已有可运行的 PyTorch reference implementation，位于 [`src/tide`](src/tide)。当天实际采用的模型、公式、命令、运行状态和结果统一记入 [每日实验记录](experiments/README.md)，避免把易变的运行细节继续堆进 README。
+
 近期底座不需要 HB-Line executor、一般 event IR、跨设备 allocator 或有环 Graph。
 
 ## 7. 当前不能主张的结论

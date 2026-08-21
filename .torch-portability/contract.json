@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "TIDE reference experiments",
+    "repository": "."
+  },
+  "contract": {
+    "path": ".torch-portability/contract.json",
+    "entrypoints": {
+      "train": {
+        "requires_explicit_device": true,
+        "supports_init_from": true,
+        "supports_resume": true
+      },
+      "probe": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
+      },
+      "prepare-data": {
+        "requires_explicit_device": false,
+        "supports_init_from": false,
+        "supports_resume": false
+      }
+    },
+    "cpu_reference": {
+      "dtype": "float32",
+      "commands": {
+        "forward": "PYTHONPATH=src pytest -q tests/test_receiver.py tests/test_qwen3.py",
+        "backward": "PYTHONPATH=src pytest -q tests/test_receiver.py tests/test_qwen3.py",
+        "optimizer_step": "PYTHONPATH=src pytest -q tests/test_receiver.py::test_neutral_initialization_then_inner_gradient_and_round_trip",
+        "checkpoint_round_trip": "PYTHONPATH=src pytest -q tests/test_receiver.py::test_neutral_initialization_then_inner_gradient_and_round_trip tests/test_qwen3.py"
+      },
+      "applicable": {
+        "backward": true,
+        "optimizer_step": true,
+        "checkpoint_round_trip": true
+      },
+      "tolerances": {
+        "atol": 0.000003,
+        "rtol": 0.000003
+      }
+    },
+    "required_capabilities": [
+      "forward",
+      "backward",
+      "optimizer-step",
+      "checkpoint-round-trip",
+      "topk-routing",
+      "gather-scatter",
+      "ema-prefix-scan"
+    ],
+    "validation_tiers": [
+      "static-cli",
+      "cpu-semantic",
+      "backend-smoke",
+      "parity",
+      "checkpoint-handoff",
+      "short-train",
+      "workload"
+    ],
+    "checkpoint": {
+      "enabled": true,
+      "schema": "tide-training-v1",
+      "init_from": "strict model state only; starts new progress and optimizer",
+      "resume": "model, optimizer, progress, data cursor, and RNG state",
+      "portable_handoff": true,
+      "exact_resume": "same-stack-only"
+    }
+  },
+  "targets": [
+    {
+      "id": "python-cpu-aarch64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "implemented",
+      "required_tiers": ["cpu-semantic"]
+    },
+    {
+      "id": "python-cpu-x86_64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "x86_64",
+      "policy": "optional",
+      "status": "planned",
+      "required_tiers": ["cpu-semantic"]
+    },
+    {
+      "id": "python-npu-aarch64",
+      "language": "python",
+      "backend": "npu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "implemented",
+      "required_tiers": ["backend-smoke"]
+    },
+    {
+      "id": "python-cuda-x86_64",
+      "language": "python",
+      "backend": "cuda",
+      "host_arch": "x86_64",
+      "policy": "optional",
+      "status": "planned",
+      "required_tiers": ["backend-smoke"]
+    }
+  ]
+}
