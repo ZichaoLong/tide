@@ -77,7 +77,7 @@ def build_parser() -> argparse.ArgumentParser:
     probe.add_argument("--sequence-length", type=_positive_int, default=16)
     probe.add_argument("--attention-implementation", choices=["eager", "sdpa"], default="sdpa")
 
-    train = subparsers.add_parser("train", help="run one D0, S1, or B1 experiment")
+    train = subparsers.add_parser("train", help="run one dense, upcycled-MoE, SD, or BO experiment")
     _add_runtime(train)
     train.add_argument("--model-path", required=True)
     train.add_argument("--data-dir", required=True)
@@ -85,9 +85,14 @@ def build_parser() -> argparse.ArgumentParser:
     checkpoint = train.add_mutually_exclusive_group()
     checkpoint.add_argument("--init-from", default=None)
     checkpoint.add_argument("--resume", default=None)
-    train.add_argument("--profile", choices=["d0", "selected-dispatch", "bo"], required=True)
+    train.add_argument(
+        "--profile",
+        choices=["d0", "upcycled-moe", "selected-dispatch", "bo"],
+        required=True,
+    )
     train.add_argument("--layer-indices", type=_layer_indices, default=[6, 13, 20, 27])
     train.add_argument("--receiver-count", type=_positive_int, default=4)
+    train.add_argument("--expert-count", type=_positive_int, default=8)
     train.add_argument("--state-size", type=_positive_int, default=128)
     train.add_argument(
         "--implementation",
@@ -110,6 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--weight-decay", type=float, default=0.1)
     train.add_argument("--gradient-clip", type=float, default=1.0)
     train.add_argument("--balance-coefficient", type=float, default=0.01)
+    train.add_argument("--router-z-coefficient", type=float, default=0.001)
     train.add_argument("--warmup-ratio", type=float, default=0.05)
     train.add_argument("--minimum-lr-ratio", type=float, default=0.1)
     train.add_argument("--checkpoint-every", type=_nonnegative_int, default=100)

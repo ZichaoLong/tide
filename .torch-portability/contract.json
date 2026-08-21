@@ -26,9 +26,9 @@
     "cpu_reference": {
       "dtype": "float32",
       "commands": {
-        "forward": "PYTHONPATH=src pytest -q tests/test_receiver.py tests/test_qwen3.py",
-        "backward": "PYTHONPATH=src pytest -q tests/test_receiver.py tests/test_qwen3.py",
-        "optimizer_step": "PYTHONPATH=src pytest -q tests/test_receiver.py::test_neutral_initialization_then_inner_gradient_and_round_trip",
+        "forward": "PYTHONPATH=src pytest -q tests/test_moe.py tests/test_receiver.py tests/test_qwen3.py",
+        "backward": "PYTHONPATH=src pytest -q tests/test_moe.py tests/test_receiver.py tests/test_qwen3.py",
+        "optimizer_step": "PYTHONPATH=src pytest -q tests/test_moe.py tests/test_receiver.py::test_neutral_initialization_then_inner_gradient_and_round_trip",
         "checkpoint_round_trip": "PYTHONPATH=src pytest -q tests/test_receiver.py::test_neutral_initialization_then_inner_gradient_and_round_trip tests/test_qwen3.py"
       },
       "applicable": {

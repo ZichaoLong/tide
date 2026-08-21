@@ -63,3 +63,28 @@ def test_qwen_neutral_injection_backward_and_state_dict_round_trip() -> None:
         implementation="packed",
     )
     restored.load_state_dict(torch.load(payload, weights_only=True), strict=True)
+
+
+def test_qwen_upcycled_moe_preserves_initial_logits_and_has_router_gradient() -> None:
+    torch.manual_seed(41)
+    baseline = _tiny_model().eval()
+    expanded = TideQwen3ForCausalLM(
+        copy.deepcopy(baseline),
+        layer_indices=[1],
+        profile="upcycled-moe",
+        expert_count=4,
+    ).eval()
+    input_ids = torch.randint(0, 64, (4, 8))
+    attention_mask = torch.ones_like(input_ids)
+    with torch.no_grad():
+        expected = baseline(input_ids=input_ids, attention_mask=attention_mask).logits
+        actual = expanded(input_ids=input_ids, attention_mask=attention_mask).logits
+    torch.testing.assert_close(actual, expected, atol=2e-6, rtol=2e-6)
+
+    expanded.train()
+    output = expanded(input_ids=input_ids, attention_mask=attention_mask, labels=input_ids)
+    assert output.loss is not None
+    output.loss.backward()
+    router_gradient = expanded.moe_layers[1].router.weight.grad
+    assert router_gradient is not None
+    assert router_gradient.norm() > 0

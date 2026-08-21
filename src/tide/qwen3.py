@@ -9,6 +9,7 @@ from typing import Any
 import torch
 from torch import nn
 
+from .moe import MoEOutput, Top1UpcycledMoE
 from .receiver import ReceiverOutput, TideReceiverGroup
 
 
@@ -17,11 +18,12 @@ class TideCausalLMOutput:
     loss: torch.Tensor | None
     lm_loss: torch.Tensor | None
     balance_loss: torch.Tensor
+    router_z_loss: torch.Tensor
     logits: torch.Tensor
     past_key_values: Any
     states: dict[int, torch.Tensor]
     metrics: dict[int, dict[str, torch.Tensor]]
-    artifacts: dict[int, ReceiverOutput]
+    artifacts: dict[int, ReceiverOutput | MoEOutput]
 
 
 class TideWrappedDecoderLayer(nn.Module):
@@ -78,22 +80,38 @@ class TideQwen3ForCausalLM(nn.Module):
         layer_indices: Sequence[int],
         profile: str,
         receiver_count: int = 4,
+        expert_count: int = 8,
         state_size: int = 128,
         implementation: str = "packed",
         scan_implementation: str = "vectorized",
         balance_coefficient: float = 0.01,
+        router_z_coefficient: float = 0.001,
     ) -> None:
         super().__init__()
         self.base_model = base_model
         self.profile = profile
         self.balance_coefficient = balance_coefficient
+        self.router_z_coefficient = router_z_coefficient
         self.layer_indices = tuple(sorted(set(layer_indices)))
         self.wrapped_layers: dict[int, TideWrappedDecoderLayer] = {}
+        self.moe_layers: dict[int, Top1UpcycledMoE] = {}
 
         layers = self.base_model.model.layers
         for layer_index in self.layer_indices:
             if layer_index < 0 or layer_index >= len(layers):
                 raise ValueError(f"layer index {layer_index} is outside 0..{len(layers) - 1}")
+            if profile == "upcycled-moe":
+                moe = Top1UpcycledMoE(
+                    layers[layer_index].mlp,
+                    hidden_size=base_model.config.hidden_size,
+                    expert_count=expert_count,
+                    router_init_std=base_model.config.initializer_range,
+                )
+                layers[layer_index].mlp = moe
+                self.moe_layers[layer_index] = moe
+                continue
+            if profile not in {"selected-dispatch", "bo"}:
+                raise ValueError(f"unknown non-dense profile: {profile}")
             group = TideReceiverGroup(
                 hidden_size=base_model.config.hidden_size,
                 intermediate_size=base_model.config.intermediate_size,
@@ -114,11 +132,25 @@ class TideQwen3ForCausalLM(nn.Module):
         return self.base_model.config
 
     def extension_parameter_ids(self) -> set[int]:
-        return {
+        receiver_ids = {
             id(parameter)
             for wrapped in self.wrapped_layers.values()
             for parameter in wrapped.receiver_group.parameters()
         }
+        router_ids = {
+            id(parameter)
+            for moe in self.moe_layers.values()
+            for parameter in moe.router.parameters()
+        }
+        return receiver_ids | router_ids
+
+    def added_parameter_count(self) -> int:
+        receiver_count = sum(
+            parameter.numel()
+            for wrapped in self.wrapped_layers.values()
+            for parameter in wrapped.receiver_group.parameters()
+        )
+        return receiver_count + sum(moe.added_parameter_count() for moe in self.moe_layers.values())
 
     def forward(
         self,
@@ -140,13 +172,16 @@ class TideQwen3ForCausalLM(nn.Module):
                 clear_positions=clear_positions.get(layer_index, ()),
                 return_artifacts=tide_return_artifacts,
             )
+        for moe in self.moe_layers.values():
+            moe.configure_call(attention_mask)
 
         kwargs["return_dict"] = True
         outputs = self.base_model(*args, **kwargs)
         states: dict[int, torch.Tensor] = {}
         metrics: dict[int, dict[str, torch.Tensor]] = {}
-        artifacts: dict[int, ReceiverOutput] = {}
+        artifacts: dict[int, ReceiverOutput | MoEOutput] = {}
         losses: list[torch.Tensor] = []
+        router_z_losses: list[torch.Tensor] = []
         for layer_index, wrapped in self.wrapped_layers.items():
             if wrapped.last_output is None:
                 raise RuntimeError(f"TIDE layer {layer_index} did not execute")
@@ -156,17 +191,33 @@ class TideQwen3ForCausalLM(nn.Module):
             if tide_return_artifacts:
                 artifacts[layer_index] = wrapped.last_output
 
+        for layer_index, moe in self.moe_layers.items():
+            if moe.last_output is None:
+                raise RuntimeError(f"upcycled MoE layer {layer_index} did not execute")
+            metrics[layer_index] = moe.last_output.metrics
+            losses.append(moe.last_output.balance_loss)
+            router_z_losses.append(moe.last_output.router_z_loss)
+            if tide_return_artifacts:
+                artifacts[layer_index] = moe.last_output
+
         if losses:
             balance_loss = torch.stack(losses).mean()
         else:
             balance_loss = outputs.logits.new_zeros((), dtype=torch.float32)
+        if router_z_losses:
+            router_z_loss = torch.stack(router_z_losses).mean()
+        else:
+            router_z_loss = outputs.logits.new_zeros((), dtype=torch.float32)
         total_loss = outputs.loss
         if total_loss is not None and losses:
             total_loss = total_loss + self.balance_coefficient * balance_loss
+        if total_loss is not None and router_z_losses:
+            total_loss = total_loss + self.router_z_coefficient * router_z_loss
         return TideCausalLMOutput(
             loss=total_loss,
             lm_loss=outputs.loss,
             balance_loss=balance_loss,
+            router_z_loss=router_z_loss,
             logits=outputs.logits,
             past_key_values=outputs.past_key_values,
             states=states,
@@ -182,10 +233,12 @@ def load_qwen3_model(
     layer_indices: Sequence[int],
     profile: str,
     receiver_count: int,
+    expert_count: int,
     state_size: int,
     implementation: str,
     scan_implementation: str,
     balance_coefficient: float,
+    router_z_coefficient: float,
     attention_implementation: str,
     local_files_only: bool = True,
 ) -> TideQwen3ForCausalLM:
@@ -205,8 +258,10 @@ def load_qwen3_model(
         layer_indices=layer_indices,
         profile=profile,
         receiver_count=receiver_count,
+        expert_count=expert_count,
         state_size=state_size,
         implementation=implementation,
         scan_implementation=scan_implementation,
         balance_coefficient=balance_coefficient,
+        router_z_coefficient=router_z_coefficient,
     )

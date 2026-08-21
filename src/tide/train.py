@@ -100,6 +100,12 @@ def _gradient_coverage(model: Any) -> dict[str, Any]:
             gradient = receiver.down_proj.weight.grad
             receiver_values.append(None if gradient is None else float(gradient.float().norm().detach().cpu()))
         result[str(layer_index)] = receiver_values
+    for layer_index, moe in model.moe_layers.items():
+        expert_values = []
+        for expert in moe.experts:
+            gradient = expert.down_proj.weight.grad
+            expert_values.append(None if gradient is None else float(gradient.float().norm().detach().cpu()))
+        result[str(layer_index)] = expert_values
     return result
 
 
@@ -204,12 +210,14 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
         arguments["model_path"],
         dtype=runtime.dtype,
         layer_indices=layer_indices,
-        profile="bo" if profile == "d0" else profile,
+        profile=profile,
         receiver_count=arguments["receiver_count"],
+        expert_count=arguments["expert_count"],
         state_size=arguments["state_size"],
         implementation=arguments["implementation"],
         scan_implementation=arguments["scan_implementation"],
         balance_coefficient=arguments["balance_coefficient"],
+        router_z_coefficient=arguments["router_z_coefficient"],
         attention_implementation=arguments["attention_implementation"],
     )
     model.to(runtime.device)
@@ -268,6 +276,7 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                 "effective_tokens_per_step": effective_tokens,
                 "parameter_count": sum(parameter.numel() for parameter in model.parameters()),
                 "extension_parameter_count": sum(parameter.numel() for parameter in extension_parameters),
+                "architectural_added_parameter_count": model.added_parameter_count(),
                 "resume_contract": "same-stack exact trajectory when deterministic operators permit",
             },
         }
@@ -300,7 +309,7 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     optimizer.zero_grad(set_to_none=True)
     while step < planned_steps and tokens < arguments["max_tokens"]:
         step_started = time.monotonic()
-        loss_sum = lm_loss_sum = balance_sum = 0.0
+        loss_sum = lm_loss_sum = balance_sum = router_z_sum = 0.0
         last_metrics: dict[int, dict[str, Any]] = {}
         for _ in range(arguments["gradient_accumulation"]):
             input_ids, consumed_sequences = next(batches)
@@ -313,6 +322,7 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
             loss_sum += float(output.loss.detach().float().cpu())
             lm_loss_sum += float(output.lm_loss.detach().float().cpu())
             balance_sum += float(output.balance_loss.detach().float().cpu())
+            router_z_sum += float(output.router_z_loss.detach().float().cpu())
             last_metrics = output.metrics
             tokens += input_ids.numel()
             del output
@@ -342,6 +352,7 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                     "loss": loss_sum / arguments["gradient_accumulation"],
                     "lm_loss": lm_loss_sum / arguments["gradient_accumulation"],
                     "balance_loss": balance_sum / arguments["gradient_accumulation"],
+                    "router_z_loss": router_z_sum / arguments["gradient_accumulation"],
                     "gradient_norm": float(gradient_norm.detach().float().cpu()),
                     "gradient_coverage": coverage,
                     "learning_rates": [group["lr"] for group in optimizer.param_groups],
@@ -489,10 +500,12 @@ def run_probe(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
         layer_indices=(arguments["layer_index"],),
         profile=arguments["profile"],
         receiver_count=4,
+        expert_count=8,
         state_size=128,
         implementation="packed",
         scan_implementation="vectorized",
         balance_coefficient=0.01,
+        router_z_coefficient=0.001,
         attention_implementation=arguments["attention_implementation"],
     )
     extension_ids = model.extension_parameter_ids()
