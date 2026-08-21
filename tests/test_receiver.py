@@ -10,6 +10,7 @@ import torch
 from tide.receiver import (
     TideReceiverGroup,
     ema_scan_reference,
+    ema_scan_segmented,
     ema_scan_vectorized,
 )
 
@@ -33,6 +34,34 @@ def test_vectorized_scan_matches_reference_and_chunks() -> None:
     first = ema_scan_vectorized(observations[:, :4], receive[:, :4], decay, initial)
     second = ema_scan_vectorized(observations[:, 4:], receive[:, 4:], decay, first[:, -1])
     torch.testing.assert_close(torch.cat([first, second], dim=1), expected, atol=2e-6, rtol=2e-6)
+
+
+def test_segmented_scan_clear_and_shuffle_semantics() -> None:
+    torch.manual_seed(5)
+    observations = torch.randn(3, 9, 4, 5)
+    receive = torch.rand(3, 9, 4) > 0.4
+    decay = torch.sigmoid(torch.randn(4, 5) + 3.0)
+    initial = torch.randn(3, 4, 5)
+
+    actual = ema_scan_segmented(
+        observations,
+        receive,
+        decay,
+        initial,
+        clear_positions=(3,),
+        shuffle_positions=(6,),
+    )
+    state = initial
+    expected = []
+    for position in range(observations.shape[1]):
+        if position == 3:
+            state = torch.zeros_like(state)
+        if position == 6:
+            state = torch.roll(state, shifts=1, dims=0)
+        candidate = decay.unsqueeze(0) * state + (1.0 - decay).unsqueeze(0) * observations[:, position]
+        state = torch.where(receive[:, position].unsqueeze(-1), candidate, state)
+        expected.append(state)
+    torch.testing.assert_close(actual, torch.stack(expected, dim=1), atol=2e-6, rtol=2e-6)
 
 
 def test_bo_and_selected_dispatch_receive_semantics() -> None:

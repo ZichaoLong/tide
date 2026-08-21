@@ -40,6 +40,16 @@ def _layer_indices(value: str) -> list[int]:
     return result
 
 
+def _token_milestones(value: str) -> list[int]:
+    try:
+        result = sorted({int(item.strip()) for item in value.split(",") if item.strip()})
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("milestones must be comma-separated integers") from exc
+    if any(item < 1 for item in result):
+        raise argparse.ArgumentTypeError("milestones must be positive")
+    return result
+
+
 def _add_runtime(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--device",
@@ -80,6 +90,12 @@ def build_parser() -> argparse.ArgumentParser:
     train = subparsers.add_parser("train", help="run one dense, upcycled-MoE, SD, or BO experiment")
     _add_runtime(train)
     train.add_argument("--model-path", required=True)
+    train.add_argument(
+        "--initialization",
+        choices=["pretrained", "random"],
+        default="pretrained",
+        help="load checkpoint weights or use only its config/tokenizer",
+    )
     train.add_argument("--data-dir", required=True)
     train.add_argument("--output-dir", required=True)
     checkpoint = train.add_mutually_exclusive_group()
@@ -118,8 +134,33 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--router-z-coefficient", type=float, default=0.001)
     train.add_argument("--warmup-ratio", type=float, default=0.05)
     train.add_argument("--minimum-lr-ratio", type=float, default=0.1)
+    train.add_argument(
+        "--lr-schedule",
+        choices=["warmup-cosine", "warmup-stable"],
+        default="warmup-cosine",
+    )
+    train.add_argument("--warmup-tokens", type=_nonnegative_int, default=0)
+    train.add_argument(
+        "--milestone-tokens",
+        type=_token_milestones,
+        default=[],
+        help="comma-separated Token targets for validation, diagnostics, and checkpoints",
+    )
+    train.add_argument(
+        "--diagnostic-tokens",
+        type=_nonnegative_int,
+        default=0,
+        help="fixed validation prefix used for route and state diagnostics",
+    )
     train.add_argument("--checkpoint-every", type=_nonnegative_int, default=100)
     train.add_argument("--log-every", type=_positive_int, default=1)
+    train.add_argument(
+        "--tracking",
+        choices=["best-effort", "required", "off"],
+        default="best-effort",
+    )
+    train.add_argument("--trackio-project", default="tide")
+    train.add_argument("--run-name", default=None)
     train.add_argument(
         "--no-initial-validation",
         action="store_false",
@@ -134,6 +175,7 @@ def _as_arguments(args: argparse.Namespace) -> dict[str, Any]:
     values = vars(args).copy()
     values.pop("command", None)
     values["layer_indices"] = list(values.get("layer_indices", []))
+    values["milestone_tokens"] = list(values.get("milestone_tokens", []))
     return values
 
 

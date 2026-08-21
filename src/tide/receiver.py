@@ -70,6 +70,55 @@ def ema_scan_vectorized(
     return prefix * (initial_state.unsqueeze(1) + accumulated)
 
 
+def ema_scan_segmented(
+    observations: torch.Tensor,
+    receive_mask: torch.Tensor,
+    decay: torch.Tensor,
+    initial_state: torch.Tensor,
+    *,
+    clear_positions: Sequence[int] = (),
+    shuffle_positions: Sequence[int] = (),
+) -> torch.Tensor:
+    """Vectorized scan split only where a probe intervenes on the state.
+
+    An intervention happens immediately before the Token at its position.  A
+    shuffle rotates state between batch rows, so it is a no-op for batch size
+    one.  The normal training path has no boundaries and remains one scan.
+    """
+
+    sequence_length = observations.shape[1]
+    clear = set(clear_positions)
+    shuffle = set(shuffle_positions)
+    invalid = sorted((clear | shuffle) - set(range(sequence_length)))
+    if invalid:
+        raise ValueError(f"state intervention positions are outside the sequence: {invalid}")
+    boundaries = sorted(clear | shuffle)
+    if not boundaries:
+        return ema_scan_vectorized(observations, receive_mask, decay, initial_state)
+
+    state = initial_state
+    parts: list[torch.Tensor] = []
+    start = 0
+    for boundary in [*boundaries, sequence_length]:
+        if boundary > start:
+            part = ema_scan_vectorized(
+                observations[:, start:boundary],
+                receive_mask[:, start:boundary],
+                decay,
+                state,
+            )
+            parts.append(part)
+            state = part[:, -1]
+        if boundary == sequence_length:
+            break
+        if boundary in clear:
+            state = torch.zeros_like(state)
+        if boundary in shuffle:
+            state = torch.roll(state, shifts=1, dims=0)
+        start = boundary
+    return torch.cat(parts, dim=1) if parts else observations[:, :0]
+
+
 class SwiGLUFFN(nn.Module):
     def __init__(self, hidden_size: int, intermediate_size: int) -> None:
         super().__init__()
@@ -167,9 +216,10 @@ class TideReceiverGroup(nn.Module):
         receive_mask: torch.Tensor,
         initial_state: torch.Tensor,
         clear_positions: Sequence[int],
+        shuffle_positions: Sequence[int],
     ) -> torch.Tensor:
         decay = torch.sigmoid(self.decay_logits)
-        if self.scan_implementation == "reference" or clear_positions:
+        if self.scan_implementation == "reference" and not shuffle_positions:
             return ema_scan_reference(
                 observations,
                 receive_mask,
@@ -177,7 +227,14 @@ class TideReceiverGroup(nn.Module):
                 initial_state,
                 clear_positions=clear_positions,
             )
-        return ema_scan_vectorized(observations, receive_mask, decay, initial_state)
+        return ema_scan_segmented(
+            observations,
+            receive_mask,
+            decay,
+            initial_state,
+            clear_positions=clear_positions,
+            shuffle_positions=shuffle_positions,
+        )
 
     def _dense_masked(
         self,
@@ -244,6 +301,7 @@ class TideReceiverGroup(nn.Module):
         valid_tokens: torch.Tensor | None = None,
         read_state: bool = True,
         clear_positions: Sequence[int] = (),
+        shuffle_positions: Sequence[int] = (),
         return_artifacts: bool = False,
     ) -> ReceiverOutput:
         if hidden.ndim != 3 or hidden.shape[-1] != self.hidden_size:
@@ -278,7 +336,13 @@ class TideReceiverGroup(nn.Module):
             [torch.tanh(observer(message)) for observer in self.observers],
             dim=2,
         )
-        states = self._scan(observations, receive_mask, initial_state, clear_positions)
+        states = self._scan(
+            observations,
+            receive_mask,
+            initial_state,
+            clear_positions,
+            shuffle_positions,
+        )
 
         if self.implementation == "dense-masked-reference":
             delta = self._dense_masked(message, states, routes, probabilities, read_state)

@@ -35,6 +35,7 @@ class TideWrappedDecoderLayer(nn.Module):
         self._valid_tokens: torch.Tensor | None = None
         self._read_state = True
         self._clear_positions: tuple[int, ...] = ()
+        self._shuffle_positions: tuple[int, ...] = ()
         self._return_artifacts = False
         self.last_output: ReceiverOutput | None = None
 
@@ -45,12 +46,14 @@ class TideWrappedDecoderLayer(nn.Module):
         valid_tokens: torch.Tensor | None,
         read_state: bool,
         clear_positions: Sequence[int],
+        shuffle_positions: Sequence[int],
         return_artifacts: bool,
     ) -> None:
         self._initial_state = initial_state
         self._valid_tokens = valid_tokens
         self._read_state = read_state
         self._clear_positions = tuple(clear_positions)
+        self._shuffle_positions = tuple(shuffle_positions)
         self._return_artifacts = return_artifacts
         self.last_output = None
 
@@ -65,6 +68,7 @@ class TideWrappedDecoderLayer(nn.Module):
             valid_tokens=valid_tokens,
             read_state=self._read_state,
             clear_positions=self._clear_positions,
+            shuffle_positions=self._shuffle_positions,
             return_artifacts=self._return_artifacts,
         )
         return self.last_output.hidden
@@ -158,18 +162,21 @@ class TideQwen3ForCausalLM(nn.Module):
         tide_states: Mapping[int, torch.Tensor] | None = None,
         tide_read_state: bool = True,
         tide_clear_positions: Mapping[int, Sequence[int]] | None = None,
+        tide_shuffle_positions: Mapping[int, Sequence[int]] | None = None,
         tide_return_artifacts: bool = False,
         **kwargs: Any,
     ) -> TideCausalLMOutput:
         attention_mask = kwargs.get("attention_mask")
         initial_states = {} if tide_states is None else tide_states
         clear_positions = {} if tide_clear_positions is None else tide_clear_positions
+        shuffle_positions = {} if tide_shuffle_positions is None else tide_shuffle_positions
         for layer_index, wrapped in self.wrapped_layers.items():
             wrapped.configure_call(
                 initial_state=initial_states.get(layer_index),
                 valid_tokens=attention_mask,
                 read_state=tide_read_state,
                 clear_positions=clear_positions.get(layer_index, ()),
+                shuffle_positions=shuffle_positions.get(layer_index, ()),
                 return_artifacts=tide_return_artifacts,
             )
         for moe in self.moe_layers.values():
@@ -240,16 +247,27 @@ def load_qwen3_model(
     balance_coefficient: float,
     router_z_coefficient: float,
     attention_implementation: str,
+    initialization: str = "pretrained",
     local_files_only: bool = True,
 ) -> TideQwen3ForCausalLM:
-    from transformers import AutoModelForCausalLM
+    from transformers import AutoConfig, AutoModelForCausalLM
 
-    base_model = AutoModelForCausalLM.from_pretrained(
-        model_path,
-        dtype=dtype,
-        attn_implementation=attention_implementation,
-        local_files_only=local_files_only,
-    )
+    if initialization == "pretrained":
+        base_model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            dtype=dtype,
+            attn_implementation=attention_implementation,
+            local_files_only=local_files_only,
+        )
+    elif initialization == "random":
+        config = AutoConfig.from_pretrained(model_path, local_files_only=local_files_only)
+        base_model = AutoModelForCausalLM.from_config(
+            config,
+            dtype=dtype,
+            attn_implementation=attention_implementation,
+        )
+    else:
+        raise ValueError(f"unknown initialization: {initialization}")
     if base_model.config.model_type != "qwen3":
         raise ValueError(f"expected a Qwen3 checkpoint, found {base_model.config.model_type}")
     base_model.config.use_cache = False

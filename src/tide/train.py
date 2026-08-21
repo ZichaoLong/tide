@@ -1,4 +1,4 @@
-"""Training and live-device probes for the v0 TIDE experiment."""
+"""Training, milestone diagnostics, and live-device probes for TIDE experiments."""
 
 from __future__ import annotations
 
@@ -8,7 +8,8 @@ import os
 import pathlib
 import random
 import time
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
+from datetime import datetime, timezone
 from typing import Any
 
 from .data import TokenSequenceDataset, deterministic_batches, load_data_manifest
@@ -92,20 +93,65 @@ def _learning_rate_scale(step: int, total_steps: int, warmup_ratio: float, minim
     return minimum_ratio + (1.0 - minimum_ratio) * cosine
 
 
+def _scheduled_learning_rate_scale(
+    *,
+    schedule: str,
+    step: int,
+    tokens: int,
+    total_steps: int,
+    warmup_ratio: float,
+    warmup_tokens: int,
+    minimum_ratio: float,
+) -> float:
+    if schedule == "warmup-cosine":
+        return _learning_rate_scale(step, total_steps, warmup_ratio, minimum_ratio)
+    if schedule == "warmup-stable":
+        return 1.0 if warmup_tokens == 0 else min(1.0, tokens / warmup_tokens)
+    raise ValueError(f"unknown learning-rate schedule: {schedule}")
+
+
+def _parameter_gradient_summary(parameters: Sequence[Any]) -> dict[str, Any]:
+    import torch
+
+    gradients = [parameter.grad.detach() for parameter in parameters if parameter.grad is not None]
+    if not gradients:
+        return {"norm": None, "parameter_tensors": len(parameters), "tensors_with_grad": 0}
+    norms = torch.stack([gradient.norm().float() for gradient in gradients])
+    return {
+        "norm": float(norms.norm().cpu()),
+        "parameter_tensors": len(parameters),
+        "tensors_with_grad": len(gradients),
+    }
+
+
 def _gradient_coverage(model: Any) -> dict[str, Any]:
     result: dict[str, Any] = {}
     for layer_index, wrapped in model.wrapped_layers.items():
-        receiver_values = []
-        for receiver in wrapped.receiver_group.ffns:
-            gradient = receiver.down_proj.weight.grad
-            receiver_values.append(None if gradient is None else float(gradient.float().norm().detach().cpu()))
-        result[str(layer_index)] = receiver_values
+        group = wrapped.receiver_group
+        result[str(layer_index)] = {
+            "router": _parameter_gradient_summary(list(group.router.parameters())),
+            "observe": _parameter_gradient_summary(
+                [parameter for observer in group.observers for parameter in observer.parameters()]
+            ),
+            "state": _parameter_gradient_summary(
+                [group.decay_logits]
+                + [
+                    parameter
+                    for projection in group.state_projections
+                    for parameter in projection.parameters()
+                ]
+            ),
+            "ffn_output": _parameter_gradient_summary(
+                [receiver.down_proj.weight for receiver in group.ffns]
+            ),
+        }
     for layer_index, moe in model.moe_layers.items():
-        expert_values = []
-        for expert in moe.experts:
-            gradient = expert.down_proj.weight.grad
-            expert_values.append(None if gradient is None else float(gradient.float().norm().detach().cpu()))
-        result[str(layer_index)] = expert_values
+        result[str(layer_index)] = {
+            "router": _parameter_gradient_summary(list(moe.router.parameters())),
+            "expert_output": _parameter_gradient_summary(
+                [expert.down_proj.weight for expert in moe.experts]
+            ),
+        }
     return result
 
 
@@ -143,6 +189,222 @@ def evaluate(
     }
 
 
+def _entropy(probabilities: Any) -> float:
+    positive = probabilities[probabilities > 0]
+    if positive.numel() == 0:
+        return 0.0
+    return float((-(positive * positive.log()).sum()).cpu())
+
+
+def _jensen_shannon(left: Any, right: Any) -> float:
+    middle = 0.5 * (left + right)
+
+    def divergence(value: Any) -> Any:
+        positive = value > 0
+        return (value[positive] * (value[positive] / middle[positive]).log()).sum()
+
+    return float((0.5 * divergence(left) + 0.5 * divergence(right)).cpu())
+
+
+def _diagnostic_scalar_metrics(report: Mapping[str, Any]) -> dict[str, float]:
+    metrics = {
+        "diagnostic/normal_loss": float(report["normal_loss"]),
+    }
+    path = report.get("path")
+    if isinstance(path, Mapping):
+        metrics.update(
+            {
+                "diagnostic/path_entropy": float(path["entropy"]),
+                "diagnostic/effective_paths": float(path["effective_count"]),
+                "diagnostic/path_churn_from_initial": float(path["churn_from_initial"]),
+            }
+        )
+    for name, values in report.get("state_interventions", {}).items():
+        metrics[f"diagnostic/{name}_delta_loss"] = float(values["delta_loss"])
+    return metrics
+
+
+def run_fixed_diagnostics(
+    *,
+    model: Any,
+    runtime: Any,
+    dataset: TokenSequenceDataset,
+    batch_size: int,
+    max_tokens: int,
+    output_dir: pathlib.Path,
+    label: str,
+) -> dict[str, Any]:
+    """Measure fixed-prefix routes and causal state interventions."""
+
+    torch = runtime.torch
+    maximum_sequences = min(len(dataset), max_tokens // dataset.sequence_length)
+    if maximum_sequences < 1:
+        raise ValueError("diagnostic token budget must contain at least one complete sequence")
+    layer_indices = sorted([*model.wrapped_layers, *model.moe_layers])
+    route_chunks: dict[int, list[Any]] = {index: [] for index in layer_indices}
+    probability_sums: dict[int, Any] = {}
+    total_loss = 0.0
+    total_sequences = 0
+    intervention_loss = {name: 0.0 for name in ("no_read", "clear", "shuffle")}
+    intervention_layers = {
+        index: (dataset.sequence_length // 2,) for index in model.wrapped_layers
+    }
+    started = time.monotonic()
+    model.eval()
+    with torch.no_grad():
+        for start in range(0, maximum_sequences, batch_size):
+            indices = range(start, min(start + batch_size, maximum_sequences))
+            input_ids = torch.stack([dataset[index] for index in indices]).to(runtime.device)
+            attention_mask = torch.ones_like(input_ids)
+            output = model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                labels=input_ids,
+                tide_return_artifacts=True,
+            )
+            batch_sequences = input_ids.shape[0]
+            total_loss += float(output.lm_loss.float().cpu()) * batch_sequences
+            total_sequences += batch_sequences
+            for layer_index in layer_indices:
+                artifact = output.artifacts[layer_index]
+                routes = artifact.routes
+                probabilities = artifact.probabilities
+                if routes is None or probabilities is None:
+                    raise RuntimeError(f"layer {layer_index} omitted requested route artifacts")
+                route_chunks[layer_index].append(routes.to(device="cpu", dtype=torch.int16))
+                probability_sum = probabilities.float().sum(dim=(0, 1)).cpu()
+                probability_sums[layer_index] = (
+                    probability_sum
+                    if layer_index not in probability_sums
+                    else probability_sums[layer_index] + probability_sum
+                )
+
+            if intervention_layers:
+                variants = {
+                    "no_read": {"tide_read_state": False},
+                    "clear": {"tide_clear_positions": intervention_layers},
+                    "shuffle": {"tide_shuffle_positions": intervention_layers},
+                }
+                for name, extra in variants.items():
+                    changed = model(
+                        input_ids=input_ids,
+                        attention_mask=attention_mask,
+                        labels=input_ids,
+                        **extra,
+                    )
+                    intervention_loss[name] += (
+                        float(changed.lm_loss.float().cpu()) * batch_sequences
+                    )
+    runtime.synchronize()
+
+    normal_loss = total_loss / total_sequences
+    routes = {index: torch.cat(chunks, dim=0) for index, chunks in route_chunks.items()}
+    token_count = total_sequences * dataset.sequence_length
+    mean_probabilities = {
+        index: probability_sums[index] / token_count for index in layer_indices
+    }
+    diagnostics_dir = output_dir / "diagnostics"
+    diagnostics_dir.mkdir(parents=True, exist_ok=True)
+    artifact_path = diagnostics_dir / f"probe-{label}.pt"
+    _atomic_torch_save(
+        torch,
+        {
+            "schema": "tide-fixed-probe-v1",
+            "label": label,
+            "tokens": token_count,
+            "routes": routes,
+            "mean_probabilities": mean_probabilities,
+        },
+        artifact_path,
+    )
+
+    layer_reports: dict[str, Any] = {}
+    for layer_index in layer_indices:
+        receiver_count = int(mean_probabilities[layer_index].numel())
+        route_distribution = torch.bincount(
+            routes[layer_index].reshape(-1).long(), minlength=receiver_count
+        ).float()
+        route_distribution /= route_distribution.sum()
+        entropy = _entropy(route_distribution)
+        layer_reports[str(layer_index)] = {
+            "route_distribution": route_distribution.tolist(),
+            "mean_probability": mean_probabilities[layer_index].tolist(),
+            "route_entropy": entropy,
+            "effective_receivers": math.exp(entropy),
+        }
+
+    report: dict[str, Any] = {
+        "label": label,
+        "tokens": token_count,
+        "normal_loss": normal_loss,
+        "seconds": time.monotonic() - started,
+        "artifact": str(artifact_path),
+        "layers": layer_reports,
+        "state_interventions": {
+            name: {
+                "loss": value / total_sequences,
+                "delta_loss": value / total_sequences - normal_loss,
+            }
+            for name, value in intervention_loss.items()
+        }
+        if intervention_layers
+        else {},
+    }
+    if layer_indices:
+        current_path = torch.stack(
+            [routes[index].reshape(-1).long() for index in layer_indices], dim=1
+        )
+        _, path_counts = torch.unique(current_path, dim=0, return_counts=True)
+        path_distribution = path_counts.float() / path_counts.sum()
+        path_entropy = _entropy(path_distribution)
+        initial_path = diagnostics_dir / "probe-initial.pt"
+        if label == "initial":
+            churn = 0.0
+            layer_churn = {str(index): 0.0 for index in layer_indices}
+            distribution_drift = {str(index): 0.0 for index in layer_indices}
+        else:
+            if not initial_path.is_file():
+                raise FileNotFoundError("initial fixed-probe routes are missing")
+            initial = torch.load(initial_path, map_location="cpu", weights_only=False)
+            initial_routes = initial["routes"]
+            initial_complete_path = torch.stack(
+                [initial_routes[index].reshape(-1).long() for index in layer_indices], dim=1
+            )
+            if initial_complete_path.shape != current_path.shape:
+                raise ValueError("fixed-probe route shape changed")
+            churn = float((current_path != initial_complete_path).any(dim=1).float().mean())
+            layer_churn = {
+                str(index): float(
+                    (routes[index] != initial_routes[index]).float().mean()
+                )
+                for index in layer_indices
+            }
+            distribution_drift = {}
+            for index in layer_indices:
+                receiver_count = int(mean_probabilities[index].numel())
+                current_distribution = torch.bincount(
+                    routes[index].reshape(-1).long(), minlength=receiver_count
+                ).float()
+                current_distribution /= current_distribution.sum()
+                original_distribution = torch.bincount(
+                    initial_routes[index].reshape(-1).long(), minlength=receiver_count
+                ).float()
+                original_distribution /= original_distribution.sum()
+                distribution_drift[str(index)] = _jensen_shannon(
+                    original_distribution, current_distribution
+                )
+        report["path"] = {
+            "layer_order": layer_indices,
+            "unique_count": int(path_counts.numel()),
+            "entropy": path_entropy,
+            "effective_count": math.exp(path_entropy),
+            "churn_from_initial": churn,
+            "layer_churn_from_initial": layer_churn,
+            "route_distribution_js_from_initial": distribution_drift,
+        }
+    return report
+
+
 def _save_checkpoint(
     *,
     model: Any,
@@ -153,9 +415,14 @@ def _save_checkpoint(
     tokens: int,
     consumed_sequences: int,
     configuration: dict[str, Any],
+    milestone_tokens: int | None = None,
 ) -> pathlib.Path:
     torch = runtime.torch
-    path = output_dir / "checkpoints" / f"step-{step:06d}.pt"
+    if milestone_tokens is None:
+        name = f"step-{step:06d}.pt"
+    else:
+        name = f"token-{milestone_tokens:010d}-step-{step:06d}.pt"
+    path = output_dir / "checkpoints" / name
     payload = {
         "schema": CHECKPOINT_SCHEMA,
         "configuration": configuration,
@@ -171,14 +438,21 @@ def _save_checkpoint(
     _atomic_torch_save(torch, payload, path)
     atomic_write_json(
         output_dir / "checkpoints" / "latest.json",
-        {"schema": CHECKPOINT_SCHEMA, "path": path.name, "step": step, "tokens": tokens},
+        {
+            "schema": CHECKPOINT_SCHEMA,
+            "path": path.name,
+            "step": step,
+            "tokens": tokens,
+            "milestone_tokens": milestone_tokens,
+        },
     )
     return path
 
 
-def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
+def _run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     torch = runtime.torch
     from .qwen3 import load_qwen3_model
+    from .tracking import TrackioProjection
 
     output_dir = pathlib.Path(arguments["output_dir"]).resolve()
     resume_path = arguments.get("resume")
@@ -204,6 +478,27 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
         data_dir / data_manifest["files"]["validation"]["path"], sequence_length
     )
 
+    effective_tokens = (
+        arguments["micro_batch_size"] * arguments["gradient_accumulation"] * sequence_length
+    )
+    planned_steps = arguments.get("max_steps") or math.ceil(
+        arguments["max_tokens"] / effective_tokens
+    )
+    planned_tokens = planned_steps * effective_tokens
+    milestones = list(arguments["milestone_tokens"])
+    if milestones and milestones[-1] > arguments["max_tokens"]:
+        raise ValueError("a milestone exceeds max-tokens")
+    if arguments["diagnostic_tokens"] and arguments["diagnostic_tokens"] < sequence_length:
+        raise ValueError("diagnostic-tokens must contain at least one complete sequence")
+    if (
+        arguments["initialization"] == "random"
+        and len(train_dataset) * sequence_length < planned_tokens
+    ):
+        raise ValueError(
+            "random pretraining data is smaller than the rounded training budget; "
+            "prepare enough data to avoid repeating sequences"
+        )
+
     profile = arguments["profile"]
     layer_indices = () if profile == "d0" else tuple(arguments["layer_indices"])
     model = load_qwen3_model(
@@ -219,6 +514,7 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
         balance_coefficient=arguments["balance_coefficient"],
         router_z_coefficient=arguments["router_z_coefficient"],
         attention_implementation=arguments["attention_implementation"],
+        initialization=arguments["initialization"],
     )
     model.to(runtime.device)
     model.train()
@@ -261,34 +557,69 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     if not resume_path:
         output_dir.mkdir(parents=True, exist_ok=False)
     log_path = output_dir / "metrics.jsonl"
-    effective_tokens = arguments["micro_batch_size"] * arguments["gradient_accumulation"] * sequence_length
-    planned_steps = arguments.get("max_steps") or math.ceil(arguments["max_tokens"] / effective_tokens)
     manifest = base_manifest(runtime=runtime, arguments=arguments)
     manifest.update(
         {
-            "model": model_identity(arguments["model_path"]),
+            "status": "running",
+            "model": {
+                **model_identity(
+                    arguments["model_path"],
+                    include_weights=arguments["initialization"] == "pretrained",
+                ),
+                "initialization": arguments["initialization"],
+                "source_contract": (
+                    "checkpoint weights, config, and tokenizer"
+                    if arguments["initialization"] == "pretrained"
+                    else "config and tokenizer only; checkpoint weights were not loaded"
+                ),
+            },
             "data": {
                 "manifest_sha256": sha256_file(data_dir / "manifest.json"),
                 "manifest": data_manifest,
             },
             "training": {
                 "planned_steps": planned_steps,
+                "rounded_planned_tokens": planned_tokens,
                 "effective_tokens_per_step": effective_tokens,
                 "parameter_count": sum(parameter.numel() for parameter in model.parameters()),
                 "extension_parameter_count": sum(parameter.numel() for parameter in extension_parameters),
                 "architectural_added_parameter_count": model.added_parameter_count(),
                 "resume_contract": "same-stack exact trajectory when deterministic operators permit",
             },
+            "tracking": {
+                "mode": arguments["tracking"],
+                "project": arguments["trackio_project"],
+                "status_artifact": "tracking.json",
+                "authority": "manifest.json + metrics.jsonl + result.json",
+            },
         }
     )
     atomic_write_json(output_dir / "manifest.json", manifest)
 
-    def log(event: dict[str, Any]) -> None:
+    run_name = arguments.get("run_name") or output_dir.name
+    tracker = TrackioProjection(
+        output_dir,
+        mode=arguments["tracking"],
+        project=arguments["trackio_project"],
+        run_name=run_name,
+        config=arguments,
+        resume=bool(resume_path),
+    )
+
+    def log(
+        event: dict[str, Any],
+        *,
+        trackio_metrics: Mapping[str, int | float] | None = None,
+    ) -> None:
         encoded = json.dumps(event, sort_keys=True)
         with log_path.open("a", encoding="utf-8") as handle:
             handle.write(encoded + "\n")
         print(encoded, flush=True)
+        if trackio_metrics:
+            tracker.log(trackio_metrics, step=int(event.get("step", 0)))
 
+    last_validation_step: int | None = None
+    last_diagnostic_step: int | None = None
     if arguments["run_initial_validation"] and step == 0:
         validation = evaluate(
             model=model,
@@ -297,7 +628,30 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
             batch_size=arguments["evaluation_batch_size"],
             max_tokens=arguments["validation_tokens"],
         )
-        log({"event": "validation", "phase": "initial", "step": step, **validation})
+        log(
+            {"event": "validation", "phase": "initial", "step": step, **validation},
+            trackio_metrics={
+                "validation/loss": validation["loss"],
+                "validation/perplexity": validation["perplexity"],
+            },
+        )
+        last_validation_step = step
+        model.train()
+    if arguments["diagnostic_tokens"] and step == 0:
+        diagnostics = run_fixed_diagnostics(
+            model=model,
+            runtime=runtime,
+            dataset=validation_dataset,
+            batch_size=arguments["evaluation_batch_size"],
+            max_tokens=arguments["diagnostic_tokens"],
+            output_dir=output_dir,
+            label="initial",
+        )
+        log(
+            {"event": "diagnostic", "phase": "initial", "step": step, **diagnostics},
+            trackio_metrics=_diagnostic_scalar_metrics(diagnostics),
+        )
+        last_diagnostic_step = step
         model.train()
 
     batches = deterministic_batches(
@@ -307,6 +661,9 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
         consumed_sequences=consumed_sequences,
     )
     optimizer.zero_grad(set_to_none=True)
+    pending_milestones = [target for target in milestones if target > tokens]
+    last_checkpoint: pathlib.Path | None = None
+    last_checkpoint_step: int | None = None
     while step < planned_steps and tokens < arguments["max_tokens"]:
         step_started = time.monotonic()
         loss_sum = lm_loss_sum = balance_sum = router_z_sum = 0.0
@@ -328,24 +685,27 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
             del output
 
         next_step = step + 1
-        scale = _learning_rate_scale(
-            next_step,
-            planned_steps,
-            arguments["warmup_ratio"],
-            arguments["minimum_lr_ratio"],
+        scale = _scheduled_learning_rate_scale(
+            schedule=arguments["lr_schedule"],
+            step=next_step,
+            tokens=tokens,
+            total_steps=planned_steps,
+            warmup_ratio=arguments["warmup_ratio"],
+            warmup_tokens=arguments["warmup_tokens"],
+            minimum_ratio=arguments["minimum_lr_ratio"],
         )
         for group, base_lr in zip(optimizer.param_groups, base_lrs, strict=True):
             group["lr"] = base_lr * scale
         gradient_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), arguments["gradient_clip"])
-        coverage = _gradient_coverage(model)
+        should_log = next_step == 1 or next_step % arguments["log_every"] == 0
+        coverage = _gradient_coverage(model) if should_log else None
         optimizer.step()
         optimizer.zero_grad(set_to_none=True)
         runtime.synchronize()
         step = next_step
         elapsed = time.monotonic() - step_started
-        if step % arguments["log_every"] == 0:
-            log(
-                {
+        if should_log:
+            train_event = {
                     "event": "train",
                     "step": step,
                     "tokens": tokens,
@@ -361,8 +721,26 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                     "peak_memory_bytes": runtime.memory_allocated(),
                     "receiver_metrics": _jsonable_metrics(last_metrics),
                 }
-            )
-        if arguments["checkpoint_every"] and step % arguments["checkpoint_every"] == 0:
+            trackio_train = {
+                "train/loss": train_event["loss"],
+                "train/lm_loss": train_event["lm_loss"],
+                "train/balance_loss": train_event["balance_loss"],
+                "train/router_z_loss": train_event["router_z_loss"],
+                "train/gradient_norm": train_event["gradient_norm"],
+                "progress/tokens": tokens,
+                "performance/tokens_per_second": train_event["tokens_per_second"],
+            }
+            for group in optimizer.param_groups:
+                trackio_train[f"learning_rate/{group['name']}"] = group["lr"]
+            if train_event["peak_memory_bytes"] is not None:
+                trackio_train["performance/peak_memory_bytes"] = train_event[
+                    "peak_memory_bytes"
+                ]
+            log(train_event, trackio_metrics=trackio_train)
+
+        milestone_saved = False
+        while pending_milestones and tokens >= pending_milestones[0]:
+            target = pending_milestones.pop(0)
             checkpoint_path = _save_checkpoint(
                 model=model,
                 optimizer=optimizer,
@@ -372,27 +750,127 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                 tokens=tokens,
                 consumed_sequences=consumed_sequences,
                 configuration=arguments,
+                milestone_tokens=target,
             )
-            log({"event": "checkpoint", "step": step, "path": str(checkpoint_path)})
+            last_checkpoint = checkpoint_path
+            last_checkpoint_step = step
+            milestone_saved = True
+            log(
+                {
+                    "event": "checkpoint",
+                    "phase": "milestone",
+                    "step": step,
+                    "tokens": tokens,
+                    "milestone_tokens": target,
+                    "path": str(checkpoint_path),
+                }
+            )
+            validation = evaluate(
+                model=model,
+                runtime=runtime,
+                dataset=validation_dataset,
+                batch_size=arguments["evaluation_batch_size"],
+                max_tokens=arguments["validation_tokens"],
+            )
+            log(
+                {
+                    "event": "validation",
+                    "phase": "milestone",
+                    "milestone_tokens": target,
+                    "step": step,
+                    **validation,
+                },
+                trackio_metrics={
+                    "validation/loss": validation["loss"],
+                    "validation/perplexity": validation["perplexity"],
+                },
+            )
+            last_validation_step = step
+            if arguments["diagnostic_tokens"]:
+                diagnostics = run_fixed_diagnostics(
+                    model=model,
+                    runtime=runtime,
+                    dataset=validation_dataset,
+                    batch_size=arguments["evaluation_batch_size"],
+                    max_tokens=arguments["diagnostic_tokens"],
+                    output_dir=output_dir,
+                    label=f"token-{target:010d}",
+                )
+                log(
+                    {
+                        "event": "diagnostic",
+                        "phase": "milestone",
+                        "milestone_tokens": target,
+                        "step": step,
+                        **diagnostics,
+                    },
+                    trackio_metrics=_diagnostic_scalar_metrics(diagnostics),
+                )
+                last_diagnostic_step = step
+            model.train()
 
-    final_validation = evaluate(
-        model=model,
-        runtime=runtime,
-        dataset=validation_dataset,
-        batch_size=arguments["evaluation_batch_size"],
-        max_tokens=arguments["validation_tokens"],
-    )
-    log({"event": "validation", "phase": "final", "step": step, **final_validation})
-    final_checkpoint = _save_checkpoint(
-        model=model,
-        optimizer=optimizer,
-        runtime=runtime,
-        output_dir=output_dir,
-        step=step,
-        tokens=tokens,
-        consumed_sequences=consumed_sequences,
-        configuration=arguments,
-    )
+        if (
+            not milestone_saved
+            and arguments["checkpoint_every"]
+            and step % arguments["checkpoint_every"] == 0
+        ):
+            last_checkpoint = _save_checkpoint(
+                model=model,
+                optimizer=optimizer,
+                runtime=runtime,
+                output_dir=output_dir,
+                step=step,
+                tokens=tokens,
+                consumed_sequences=consumed_sequences,
+                configuration=arguments,
+            )
+            last_checkpoint_step = step
+            log({"event": "checkpoint", "step": step, "path": str(last_checkpoint)})
+
+    if last_validation_step == step:
+        final_validation = validation
+    else:
+        final_validation = evaluate(
+            model=model,
+            runtime=runtime,
+            dataset=validation_dataset,
+            batch_size=arguments["evaluation_batch_size"],
+            max_tokens=arguments["validation_tokens"],
+        )
+        log(
+            {"event": "validation", "phase": "final", "step": step, **final_validation},
+            trackio_metrics={
+                "validation/loss": final_validation["loss"],
+                "validation/perplexity": final_validation["perplexity"],
+            },
+        )
+    if arguments["diagnostic_tokens"] and last_diagnostic_step != step:
+        diagnostics = run_fixed_diagnostics(
+            model=model,
+            runtime=runtime,
+            dataset=validation_dataset,
+            batch_size=arguments["evaluation_batch_size"],
+            max_tokens=arguments["diagnostic_tokens"],
+            output_dir=output_dir,
+            label="final",
+        )
+        log(
+            {"event": "diagnostic", "phase": "final", "step": step, **diagnostics},
+            trackio_metrics=_diagnostic_scalar_metrics(diagnostics),
+        )
+    if last_checkpoint_step == step and last_checkpoint is not None:
+        final_checkpoint = last_checkpoint
+    else:
+        final_checkpoint = _save_checkpoint(
+            model=model,
+            optimizer=optimizer,
+            runtime=runtime,
+            output_dir=output_dir,
+            step=step,
+            tokens=tokens,
+            consumed_sequences=consumed_sequences,
+            configuration=arguments,
+        )
     result = {
         "status": "complete",
         "step": step,
@@ -402,6 +880,51 @@ def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     }
     atomic_write_json(output_dir / "result.json", result)
     log({"event": "complete", **result})
+    tracker.finish()
+    return result
+
+
+def run_training(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
+    """Run training while keeping the durable manifest lifecycle truthful."""
+
+    output_dir = pathlib.Path(arguments["output_dir"]).resolve()
+    output_preexisted = output_dir.exists()
+    try:
+        result = _run_training(runtime, arguments)
+    except BaseException as error:
+        from .tracking import finish_active_projection
+
+        try:
+            finish_active_projection()
+        except BaseException:
+            pass
+        if output_dir.is_dir() and (arguments.get("resume") or not output_preexisted):
+            status = "interrupted" if isinstance(error, KeyboardInterrupt) else "failed"
+            failure = {
+                "status": status,
+                "ended_utc": datetime.now(timezone.utc).isoformat(),
+                "error_type": type(error).__name__,
+            }
+            atomic_write_json(output_dir / "failure.json", failure)
+            manifest_path = output_dir / "manifest.json"
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                manifest = {}
+            manifest.update(failure)
+            atomic_write_json(manifest_path, manifest)
+        raise
+
+    manifest_path = output_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest.update(
+        {
+            "status": "completed",
+            "ended_utc": datetime.now(timezone.utc).isoformat(),
+            "result_artifact": "result.json",
+        }
+    )
+    atomic_write_json(manifest_path, manifest)
     return result
 
 

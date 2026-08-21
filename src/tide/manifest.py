@@ -42,17 +42,40 @@ def repository_identity(root: str | pathlib.Path = ".") -> dict[str, Any]:
         return {"commit": None, "dirty": None, "status_lines": []}
 
 
-def model_identity(model_path: str | pathlib.Path) -> dict[str, Any]:
+def model_identity(
+    model_path: str | pathlib.Path,
+    *,
+    include_weights: bool = True,
+) -> dict[str, Any]:
     root = pathlib.Path(model_path)
-    candidates = sorted(root.glob("*.safetensors")) + sorted(root.glob("pytorch_model*.bin"))
+    candidates = []
+    if include_weights:
+        candidates = sorted(root.glob("*.safetensors")) + sorted(root.glob("pytorch_model*.bin"))
     files = [
         {"name": path.name, "bytes": path.stat().st_size, "sha256": sha256_file(path)}
         for path in candidates
     ]
+    tokenizer_candidates = [
+        root / name
+        for name in (
+            "tokenizer.json",
+            "tokenizer_config.json",
+            "vocab.json",
+            "merges.txt",
+            "special_tokens_map.json",
+        )
+        if (root / name).is_file()
+    ]
+    tokenizer_files = [
+        {"name": path.name, "bytes": path.stat().st_size, "sha256": sha256_file(path)}
+        for path in tokenizer_candidates
+    ]
     config = root / "config.json"
     return {
         "path_hint": str(root),
+        "weights_loaded": include_weights,
         "weight_files": files,
+        "tokenizer_files": tokenizer_files,
         "config_sha256": sha256_file(config) if config.is_file() else None,
     }
 
