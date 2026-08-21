@@ -10,7 +10,7 @@
 >
 > 上游研究总入口：[ObsidianVault / TIDE](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)
 
-快速阅读：想一眼看懂研究理由，读第 1.2 节；想逐条检查完整推理，读第 2.3 节；想了解当前任务，读第 3 节；准备实现时读第 5、6 节和 [实验协议](docs/experiment-protocol.md)。
+快速阅读：想一眼看懂研究理由，读第 1.2 节；想逐条检查完整推理，读第 2.3 节；想了解当前任务，读第 3 节；准备实现时读第 5、6 节和 [实验协议](docs/experiment-protocol.md)；实际采用的每日设置与结果见 [实验记录](experiments/README.md)。
 
 ## 1. 项目目标与当前状态
 
@@ -338,3 +338,4 @@ Graph 收缩线继续负责定义、证明、反例和更一般拓扑；本仓�
 
 - [TIDE 候选设计空间](docs/candidate-design-space.md)
 - [TIDE Checkpoint 生长实验协议](docs/experiment-protocol.md)
+- [TIDE 每日实验设置与结果](experiments/README.md)
