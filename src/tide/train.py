@@ -1116,6 +1116,7 @@ def run_probe(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
     optimizer = torch.optim.AdamW(extension_parameters, lr=1e-4)
     qwen_losses: list[float] = []
     inner_gradient_after_second_step = 0.0
+    state_gradient_tensors_after_second_step = 0
     for probe_step in range(2):
         input_ids = torch.randint(
             low=0,
@@ -1137,11 +1138,21 @@ def run_probe(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                 if parameter.grad is not None and "down_proj" not in name
             ]
             inner_gradient_after_second_step = float(torch.stack(gradients).sum().cpu()) if gradients else 0.0
+            state_parameters = [group.decay_logits] + [
+                parameter
+                for module in [*group.observers, *group.state_projections]
+                for parameter in module.parameters()
+            ]
+            state_gradient_tensors_after_second_step = sum(
+                parameter.grad is not None for parameter in state_parameters
+            )
         optimizer.step()
         optimizer.zero_grad(set_to_none=True)
     runtime.synchronize()
     if inner_gradient_after_second_step <= 0.0:
         raise AssertionError("receiver inner parameters did not obtain gradient after leaving zero init")
+    if arguments["profile"] == "stateless" and state_gradient_tensors_after_second_step:
+        raise AssertionError("stateless receiver unexpectedly propagated a state gradient")
 
     report = base_manifest(runtime=runtime, arguments=arguments)
     report.update(
@@ -1154,6 +1165,9 @@ def run_probe(runtime: Any, arguments: dict[str, Any]) -> dict[str, Any]:
                 "vectorized_scan_forward_max_abs": scan_error,
                 "qwen_losses": qwen_losses,
                 "inner_gradient_after_second_step": inner_gradient_after_second_step,
+                "state_gradient_tensors_after_second_step": (
+                    state_gradient_tensors_after_second_step
+                ),
                 "peak_memory_bytes": runtime.memory_allocated(),
             },
             "model": model_identity(arguments["model_path"]),

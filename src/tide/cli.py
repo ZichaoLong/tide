@@ -81,13 +81,19 @@ def build_parser() -> argparse.ArgumentParser:
     _add_runtime(probe)
     probe.add_argument("--model-path", required=True)
     probe.add_argument("--output-dir", required=True)
-    probe.add_argument("--profile", choices=["selected-dispatch", "bo"], default="bo")
+    probe.add_argument(
+        "--profile",
+        choices=["stateless", "selected-dispatch", "bo"],
+        default="bo",
+    )
     probe.add_argument("--layer-index", type=_nonnegative_int, default=13)
     probe.add_argument("--batch-size", type=_positive_int, default=1)
     probe.add_argument("--sequence-length", type=_positive_int, default=16)
     probe.add_argument("--attention-implementation", choices=["eager", "sdpa"], default="sdpa")
 
-    train = subparsers.add_parser("train", help="run one dense, upcycled-MoE, SD, or BO experiment")
+    train = subparsers.add_parser(
+        "train", help="run one dense, MoE, stateless, SD, or BO experiment"
+    )
     _add_runtime(train)
     train.add_argument("--model-path", required=True)
     train.add_argument(
@@ -103,7 +109,7 @@ def build_parser() -> argparse.ArgumentParser:
     checkpoint.add_argument("--resume", default=None)
     train.add_argument(
         "--profile",
-        choices=["d0", "upcycled-moe", "selected-dispatch", "bo"],
+        choices=["d0", "upcycled-moe", "stateless", "selected-dispatch", "bo"],
         required=True,
     )
     train.add_argument("--layer-indices", type=_layer_indices, default=[6, 13, 20, 27])

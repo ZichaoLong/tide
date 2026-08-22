@@ -79,6 +79,49 @@ def test_bo_and_selected_dispatch_receive_semantics() -> None:
     assert not torch.equal(bo_output.final_state, selected_output.final_state)
 
 
+def test_stateless_control_matches_bo_no_read_and_disconnects_state() -> None:
+    torch.manual_seed(7)
+    stateless = TideReceiverGroup(16, 32, state_size=6, profile="stateless")
+    torch.manual_seed(7)
+    bo = TideReceiverGroup(16, 32, state_size=6, profile="bo")
+    for name, value in stateless.state_dict().items():
+        assert torch.equal(value, bo.state_dict()[name])
+
+    _randomize_down(bo)
+    stateless.load_state_dict(bo.state_dict(), strict=True)
+    hidden = torch.randn(2, 7, 16, requires_grad=True)
+    initial_state = torch.randn(2, 4, 6)
+    expected = bo(hidden, initial_state=initial_state, read_state=False)
+    actual = stateless(
+        hidden,
+        initial_state=initial_state,
+        clear_positions=(3,),
+        shuffle_positions=(5,),
+        return_artifacts=True,
+    )
+    torch.testing.assert_close(actual.hidden, expected.hidden)
+    assert actual.metrics["receive_counts"].tolist() == [0, 0, 0, 0]
+    assert actual.metrics["state_norm"].item() == 0.0
+    assert torch.count_nonzero(actual.final_state).item() == 0
+    assert actual.states is not None
+    assert torch.count_nonzero(actual.states).item() == 0
+
+    actual.hidden.square().mean().backward()
+    assert stateless.router.weight.grad is not None
+    assert stateless.router.weight.grad.norm() > 0
+    assert all(
+        parameter.grad is None
+        for observer in stateless.observers
+        for parameter in observer.parameters()
+    )
+    assert stateless.decay_logits.grad is None
+    assert all(
+        parameter.grad is None
+        for projection in stateless.state_projections
+        for parameter in projection.parameters()
+    )
+
+
 def test_packed_matches_dense_forward_backward() -> None:
     torch.manual_seed(11)
     dense = TideReceiverGroup(

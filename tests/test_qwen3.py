@@ -114,8 +114,53 @@ def test_random_initialization_uses_config_without_checkpoint_weights(
     selected = load_qwen3_model(str(tmp_path), **arguments)
     torch.manual_seed(53)
     bo = load_qwen3_model(str(tmp_path), **{**arguments, "profile": "bo"})
+    torch.manual_seed(53)
+    stateless = load_qwen3_model(
+        str(tmp_path), **{**arguments, "profile": "stateless"}
+    )
     for left, right in zip(selected.parameters(), bo.parameters(), strict=True):
         assert torch.equal(left, right)
+    for left, right in zip(stateless.parameters(), bo.parameters(), strict=True):
+        assert torch.equal(left, right)
+
+
+def test_qwen_stateless_control_ignores_state_interventions() -> None:
+    torch.manual_seed(57)
+    expanded = TideQwen3ForCausalLM(
+        _tiny_model(),
+        layer_indices=[1],
+        profile="stateless",
+        state_size=8,
+        implementation="packed",
+    ).eval()
+    group = expanded.wrapped_layers[1].receiver_group
+    extension_ids = expanded.extension_parameter_ids()
+    assert id(group.router.weight) in extension_ids
+    assert id(group.ffns[0].down_proj.weight) in extension_ids
+    assert id(group.observers[0].weight) not in extension_ids
+    assert id(group.decay_logits) not in extension_ids
+    assert id(group.state_projections[0].weight) not in extension_ids
+    with torch.no_grad():
+        for receiver in group.ffns:
+            receiver.down_proj.weight.normal_(std=0.03)
+    input_ids = torch.randint(0, 64, (2, 8))
+    attention_mask = torch.ones_like(input_ids)
+    with torch.no_grad():
+        normal = expanded(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            tide_return_artifacts=True,
+        )
+        changed = expanded(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            tide_read_state=False,
+            tide_clear_positions={1: (4,)},
+            tide_shuffle_positions={1: (4,)},
+        )
+    assert torch.equal(normal.logits, changed.logits)
+    assert torch.count_nonzero(normal.states[1]).item() == 0
+    assert normal.metrics[1]["receive_counts"].sum().item() == 0
 
 
 def test_qwen_state_interventions_reach_receiver_scan() -> None:

@@ -114,7 +114,7 @@ class TideQwen3ForCausalLM(nn.Module):
                 layers[layer_index].mlp = moe
                 self.moe_layers[layer_index] = moe
                 continue
-            if profile not in {"selected-dispatch", "bo"}:
+            if profile not in {"stateless", "selected-dispatch", "bo"}:
                 raise ValueError(f"unknown non-dense profile: {profile}")
             group = TideReceiverGroup(
                 hidden_size=base_model.config.hidden_size,
@@ -140,6 +140,7 @@ class TideQwen3ForCausalLM(nn.Module):
             id(parameter)
             for wrapped in self.wrapped_layers.values()
             for parameter in wrapped.receiver_group.parameters()
+            if parameter.requires_grad
         }
         router_ids = {
             id(parameter)

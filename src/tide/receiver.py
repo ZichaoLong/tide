@@ -11,7 +11,7 @@ from torch import nn
 from torch.nn import functional as F
 
 
-PROFILES = {"selected-dispatch", "bo"}
+PROFILES = {"stateless", "selected-dispatch", "bo"}
 IMPLEMENTATIONS = {"dense-masked-reference", "packed"}
 SCAN_IMPLEMENTATIONS = {"reference", "vectorized"}
 
@@ -142,7 +142,7 @@ class ReceiverOutput:
 
 
 class TideReceiverGroup(nn.Module):
-    """Four fixed receivers with content routing and per-sequence EMA state."""
+    """Fixed receivers with content routing and an optional per-sequence EMA state."""
 
     def __init__(
         self,
@@ -195,6 +195,16 @@ class TideReceiverGroup(nn.Module):
         )
         for ffn in self.ffns:
             nn.init.zeros_(ffn.down_proj.weight)
+        if self.profile == "stateless":
+            # Keep the same parameter creation order and state-dict layout as
+            # SD/BO so shared router/FFN initialization remains exactly
+            # matched.  The unused state parameters are frozen and bypassed in
+            # forward; they are placeholders, not trainable capacity.
+            for observer in self.observers:
+                observer.requires_grad_(False)
+            self.decay_logits.requires_grad_(False)
+            for projection in self.state_projections:
+                projection.requires_grad_(False)
 
     def zero_state(self, batch_size: int, device: torch.device) -> torch.Tensor:
         return torch.zeros(
@@ -246,10 +256,13 @@ class TideReceiverGroup(nn.Module):
     ) -> torch.Tensor:
         result = torch.zeros_like(message, dtype=self.ffns[0].down_proj.weight.dtype)
         for receiver_index in range(self.receiver_count):
-            state_delta = self.state_projections[receiver_index](states[:, :, receiver_index])
-            if not read_state:
-                state_delta = torch.zeros_like(state_delta)
-            ffn_input = (message + state_delta).to(self.ffns[receiver_index].down_proj.weight.dtype)
+            ffn_input = message
+            if read_state:
+                state_delta = self.state_projections[receiver_index](
+                    states[:, :, receiver_index]
+                )
+                ffn_input = message + state_delta
+            ffn_input = ffn_input.to(self.ffns[receiver_index].down_proj.weight.dtype)
             delta = self.ffns[receiver_index](ffn_input)
             weight = probabilities[:, :, receiver_index] * (routes == receiver_index)
             result = result + delta * weight.unsqueeze(-1).to(delta.dtype)
@@ -277,14 +290,13 @@ class TideReceiverGroup(nn.Module):
             if positions.numel() == 0:
                 continue
             selected_message = torch.index_select(flat_message, 0, positions)
-            flat_state = states[:, :, receiver_index].reshape(-1, self.state_size)
-            selected_state = torch.index_select(flat_state, 0, positions)
-            state_delta = self.state_projections[receiver_index](selected_state)
-            if not read_state:
-                state_delta = torch.zeros_like(state_delta)
-            ffn_input = (selected_message + state_delta).to(
-                self.ffns[receiver_index].down_proj.weight.dtype
-            )
+            ffn_input = selected_message
+            if read_state:
+                flat_state = states[:, :, receiver_index].reshape(-1, self.state_size)
+                selected_state = torch.index_select(flat_state, 0, positions)
+                state_delta = self.state_projections[receiver_index](selected_state)
+                ffn_input = selected_message + state_delta
+            ffn_input = ffn_input.to(self.ffns[receiver_index].down_proj.weight.dtype)
             delta = self.ffns[receiver_index](ffn_input)
             selected_probability = torch.index_select(flat_probabilities, 0, positions)[
                 :, receiver_index
@@ -327,22 +339,32 @@ class TideReceiverGroup(nn.Module):
             )
         else:
             valid_tokens = valid_tokens.to(device=hidden.device, dtype=torch.bool)
-        if self.profile == "bo":
+        if self.profile == "stateless":
+            receive_mask = torch.zeros_like(one_hot_routes)
+            states = initial_state.new_zeros(
+                batch_size,
+                sequence_length,
+                self.receiver_count,
+                self.state_size,
+            )
+            read_state = False
+        elif self.profile == "bo":
             receive_mask = valid_tokens.unsqueeze(-1).expand(-1, -1, self.receiver_count)
         else:
             receive_mask = one_hot_routes & valid_tokens.unsqueeze(-1)
 
-        observations = torch.stack(
-            [torch.tanh(observer(message)) for observer in self.observers],
-            dim=2,
-        )
-        states = self._scan(
-            observations,
-            receive_mask,
-            initial_state,
-            clear_positions,
-            shuffle_positions,
-        )
+        if self.profile != "stateless":
+            observations = torch.stack(
+                [torch.tanh(observer(message)) for observer in self.observers],
+                dim=2,
+            )
+            states = self._scan(
+                observations,
+                receive_mask,
+                initial_state,
+                clear_positions,
+                shuffle_positions,
+            )
 
         if self.implementation == "dense-masked-reference":
             delta = self._dense_masked(message, states, routes, probabilities, read_state)
