@@ -338,6 +338,7 @@ Graph 收缩线继续负责定义、证明、反例和更一般拓扑；本仓�
 
 仓库内细节：
 
+- [TIDE 实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)
 - [TIDE 候选设计空间](docs/candidate-design-space.md)
 - [TIDE Checkpoint 生长实验协议](docs/experiment-protocol.md)
 - [TIDE 每日实验设置与结果](experiments/README.md)
