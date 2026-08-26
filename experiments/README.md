@@ -2,7 +2,7 @@
 
 本目录按自然日记录真正采用的实验设置、结果和结论。理论理由与长期政策仍由仓库 README 和 `docs/` 维护；这里回答“当天到底准备怎样跑、实际跑出了什么”。
 
-新实验的 placement、profile、R/I/H、状态类型和统一数学符号，遵循 [实验语义、命名与数学符号规范](../docs/experiment-semantics-and-naming.md)。旧实验保留原名称，并在该规范中列出不改变历史记录的解释别名。
+实验的 placement、profile、R/I/H、状态类型和统一数学符号，遵循 [实验语义、命名与数学符号规范](../docs/experiment-semantics-and-naming.md)；每份每日记录仍须自包含地写清实际设置。
 
 ## 记录规则
 

@@ -2,7 +2,7 @@
 
 > 状态：近期实验政策与验收口径。
 >
-> 项目目标和当前主线见 [README](../README.md)；结构与机制的详细含义见 [候选设计空间](candidate-design-space.md)。
+> 项目目标和当前主线见 [README](../README.md)；结构与机制的详细含义见 [实验语义、命名与数学符号](experiment-semantics-and-naming.md)。
 
 ## 1. 总原则
 

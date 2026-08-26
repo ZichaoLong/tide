@@ -165,7 +165,7 @@ TIDE 要研究的是：能否沿固定空间图逐步接触更多容量，使单
 
 第一轮探索要回答：在固定局部拓扑和明确预算下，能否从 checkpoint 中性生长出一个稳定训练、真实使用新增机制并优于匹配对照的完整候选。浅层实验可以先判断机制是否有 learning value；要支持 TIDE 的长期主张，还必须进一步进入有界度多跳或空间 scaling，验证容量增长时单节点成本、总工作和系统成本仍然可控。
 
-更详细的候选语义见 [TIDE 候选设计空间](docs/candidate-design-space.md)。
+更详细的候选语义见 [TIDE 实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。
 
 ## 3. 当前核心任务
 
@@ -225,7 +225,7 @@ Checkpoint 生长线近期并行推进两个工作流：
 
 ## 4. 候选技术地图
 
-README 只保留每项技术的角色，具体 reference semantics、公式和配置坐标见 [候选设计空间](docs/candidate-design-space.md)。
+README 只保留每项技术的角色，具体 reference semantics、公式和配置坐标见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。
 
 | 技术 | 当前作用 | 主要风险 |
 | --- | --- | --- |
@@ -339,6 +339,5 @@ Graph 收缩线继续负责定义、证明、反例和更一般拓扑；本仓�
 仓库内细节：
 
 - [TIDE 实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)
-- [TIDE 候选设计空间](docs/candidate-design-space.md)
 - [TIDE Checkpoint 生长实验协议](docs/experiment-protocol.md)
 - [TIDE 每日实验设置与结果](experiments/README.md)
