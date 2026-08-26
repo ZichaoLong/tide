@@ -33,7 +33,9 @@
 | \(u_{\ell,t}\) | 当前 block 完成 Attention residual merge 后的表示 |
 | \(v_{\ell,t}\) | 当前 block 完成原 dense MLP residual merge 后的表示，即完整 base block 输出 |
 | \(y_{\ell,t}\) | 当前 block（包括可选的 GraphBranch merge）最终送往下一个 base block 的表示 |
-| \(m_{j,t}\) | site \(j\) 接收并交给 router 的归一化消息 |
+| \(\mu_{j,t}\) | site \(j\) 的 selector 从 GraphBranch 输入得到的公共归一化消息 |
+| \(m_{j,t}^{(i)}\) | receiver \(i\) 在本地归一化 GraphBranch 输入后得到的入口消息 |
+| \(m_{j,t}\) | 标准 MoE site \(j\) 交给 router 和 experts 的公共归一化消息 |
 | \(a_{j,t}\) | site \(j\) 的 router 在 softmax 之前产生的 logits |
 | \(p_{j,t}^{(i)}\) | site \(j\) 的 router 分给候选 \(i\) 的 soft 概率 |
 | \(\mathcal A_{j,t}\) | site \(j\) 为当前 Token 激活的候选集合 |
@@ -41,7 +43,7 @@
 | \(\operatorname{Score}\) | 产生全部 router logits 的打分操作；具体输入由 selector 语义决定 |
 | \(s_{j,t}^{(i)}\) | site \(j\) 中 receiver \(i\) 的私有状态 |
 | \(S_{j,t}\) | site \(j\) 的 receiver group 的全部私有状态 |
-| \(r_{j,t,\tau}^{\mathrm{sel},(i)}\) | receiver \(i\) 在 \(\tau\in\{\mathrm{pre},\mathrm{post}\}\) 时刻局部产生的轻量 selector 读出 |
+| \(r_{j,t,\tau}^{\mathrm{sel},(i)}\) | receiver \(i\) 在 \(\tau\in\{\mathrm{content},\mathrm{pre},\mathrm{post}\}\) 时刻局部产生的轻量 selector 读出 |
 | \(\rho_{j,t}^{(i)}\) | active receiver \(i\) 在状态提交后局部读出的 hidden residual |
 | \(u_{j,t}^{(i)}\) | receiver branch \(i\) 完成状态/上下文 residual merge 后的表示 |
 | \(z_{j,t}^{(i)}\) | receiver branch 或 MoE candidate \(i\) 的昂贵 FFN 实际输入 |
@@ -50,7 +52,7 @@
 | \(\beta_{j,t}^{(i)}\) | `ActiveBranchAggregate` 分给 active branch \(i\) 的合并系数 |
 | \(\Delta_{\mathcal G,j,t}\) | GraphBranch 相对其输入产生、发往 placement merge 的 residual |
 
-本文按“作用”统一基本符号，具体实现只在对应小节内部展开：各类归一化都写成 \(N\)，私有状态始终写成 \(s/S\)，状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)，receiver 与标准 MoE 都用 \(m\) 表示 router 收到的消息、用 \(a,p,\mathcal A,c\) 表示路由、用 \(z\) 表示昂贵 FFN 的输入、用 \(E\) 表示昂贵 routed FFN。TIDE receiver 用 \(\rho\) 表示状态/上下文读出的 hidden residual，用 \(u\) 表示该 residual merge 后的表示；TIDE 分支用 \(\widehat b\) 表示完整候选输出，用 \(\beta\) 表示唯一的聚合权重。只有 GraphBranch 与 placement 的边界才对外暴露 \(\Delta_{\mathcal G}\)。相同基本符号表示它们在框架中承担相同作用，并不表示共享参数或采用相同算法；下标说明位置或候选，EMA、GDN 等实现标签只在展开内部做法时出现。下面会省略 batch 下标 \(b\) 和部分不影响理解的下标。
+本文按“作用”统一基本符号，具体实现只在对应小节内部展开：各类归一化都写成 \(N\)，私有状态始终写成 \(s/S\)，状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)。TIDE 用 \(\mu\) 表示 selector 的公共消息、用 \(m^{(i)}\) 表示 receiver \(i\) 的本地入口消息；标准 MoE 继续用 \(m\) 表示 router 与 experts 的公共输入。两者都用 \(a,p,\mathcal A,c\) 表示路由、用 \(z\) 表示昂贵 FFN 的输入、用 \(E\) 表示昂贵 routed FFN。TIDE receiver 用 \(\rho\) 表示状态/上下文读出的 hidden residual，用 \(u\) 表示该 residual merge 后的表示；TIDE 分支用 \(\widehat b\) 表示完整候选输出，用 \(\beta\) 表示唯一的聚合权重。只有 GraphBranch 与 placement 的边界才对外暴露 \(\Delta_{\mathcal G}\)。相同基本符号表示它们在框架中承担相同作用，并不表示共享参数或采用相同算法；下标说明位置或候选，EMA、GDN 等实现标签只在展开内部做法时出现。下面会省略 batch 下标 \(b\) 和部分不影响理解的下标。
 
 ### 1.2 Base Qwen3 block
 
@@ -87,10 +89,21 @@ $$
 
 ### 1.3 一个单层 receiver group
 
-令 \(h_t\) 表示当前单层 receiver group 收到的完整 hidden，\(N_R\) 表示 receiver group 输入处的归一化操作。交给 router 和状态模块的消息为：
+令 \(h_t\) 表示当前单层 receiver group 收到的完整 hidden。selector 使用自己的归一化 \(N_{\mathrm{sel}}\)，receiver \(i\) 使用自己独立的入口归一化 \(N_{R,i}\)：
 
 $$
-m_{j,t}=N_R(h_t).
+\mu_{j,t}=N_{\mathrm{sel}}(h_t),
+\qquad
+m_{j,t}^{(i)}=N_{R,i}(h_t),
+\quad i=0,1,\ldots,R-1.
+$$
+
+各 receiver 只在本地使用 \(m_{j,t}^{(i)}\)，并只向 selector 发送第 1.3.1 节定义的轻量 \(\operatorname{Read}^{\mathrm{sel}}\)；selector 不读取所有 receiver 的完整入口消息。使用相同 \(\epsilon\) 的 RMSNorm 时，各归一化的无参数 RMS 统计相同，可以只计算一次 \(\bar h_t=h_t/\operatorname{RMS}(h_t)\)，再分别应用互不共享的可学习 scale：
+
+$$
+\mu_{j,t}=g_{\mathrm{sel}}\odot\bar h_t,
+\qquad
+m_{j,t}^{(i)}=g_{R,i}\odot\bar h_t.
 $$
 
 对于有状态的 SD 和 BO，在处理 Token \(t\) 之前，把该 receiver group 的完整私有状态统一记为：
@@ -113,23 +126,28 @@ selector 在什么时刻读取状态有三种可能语义：
 
 | Selector 语义 | 打分时可读取 | SD | BO |
 | --- | --- | --- | --- |
-| **Content-only** | 当前消息 \(m_{j,t}\) | 自然兼容 | 自然兼容 |
-| **Pre-update state** | \(m_{j,t}\) 与 receivers 从旧状态发出的消息 | 自然兼容；选完后只更新 active receivers | 自然兼容；选完后更新全部 receivers |
-| **Post-update state** | \(m_{j,t}\) 与 receivers 从更新后状态发出的消息 | 严格 SD 不兼容 | 天然兼容；全部更新后再选择 |
+| **Content-only** | 公共消息 \(\mu_{j,t}\) 与各 receiver 从当前本地消息发出的轻量读出 | 自然兼容 | 自然兼容 |
+| **Pre-update state** | \(\mu_{j,t}\) 与 receivers 从旧状态发出的轻量读出 | 自然兼容；选完后只更新 active receivers | 自然兼容；选完后更新全部 receivers |
+| **Post-update state** | \(\mu_{j,t}\) 与 receivers 从更新后状态发出的轻量读出 | 严格 SD 不兼容 | 天然兼容；全部更新后再选择 |
 
-对 pre/post state，先定义当前消息更新后的临时状态和两个时刻的 receiver 读出：
+先定义当前本地消息更新后的临时状态，以及三种时刻的轻量 receiver 读出：
 
 $$
 \widetilde s_{j,t}^{(i)}
-=\operatorname{Update}_i(s_{j,t-1}^{(i)},m_{j,t}),
+=\operatorname{Update}_i(s_{j,t-1}^{(i)},m_{j,t}^{(i)}),
+$$
+
+$$
+r_{j,t,\mathrm{content}}^{\mathrm{sel},(i)}
+=\operatorname{Read}_i^{\mathrm{sel}}(m_{j,t}^{(i)}),
 $$
 
 $$
 r_{j,t,\mathrm{pre}}^{\mathrm{sel},(i)}
-=\operatorname{Read}_i^{\mathrm{sel}}(s_{j,t-1}^{(i)},m_{j,t}),
+=\operatorname{Read}_i^{\mathrm{sel}}(s_{j,t-1}^{(i)},m_{j,t}^{(i)}),
 \qquad
 r_{j,t,\mathrm{post}}^{\mathrm{sel},(i)}
-=\operatorname{Read}_i^{\mathrm{sel}}(\widetilde s_{j,t}^{(i)},m_{j,t}).
+=\operatorname{Read}_i^{\mathrm{sel}}(\widetilde s_{j,t}^{(i)},m_{j,t}^{(i)}).
 $$
 
 三种打分统一写成：
@@ -138,15 +156,18 @@ $$
 a_{j,t}
 =
 \begin{cases}
-\operatorname{Score}(m_{j,t}),
+\operatorname{Score}\!\left(
+\mu_{j,t},
+\left(r_{j,t,\mathrm{content}}^{\mathrm{sel},(k)}\right)_{k=0}^{R-1}
+\right),
 & \text{content-only},\\[4pt]
 \operatorname{Score}\!\left(
-m_{j,t},
+\mu_{j,t},
 \left(r_{j,t,\mathrm{pre}}^{\mathrm{sel},(k)}\right)_{k=0}^{R-1}
 \right),
 & \text{pre-update state},\\[4pt]
 \operatorname{Score}\!\left(
-m_{j,t},
+\mu_{j,t},
 \left(r_{j,t,\mathrm{post}}^{\mathrm{sel},(k)}\right)_{k=0}^{R-1}
 \right),
 & \text{post-update state}.
@@ -168,7 +189,7 @@ c_{j,t}=\arg\max_i p_{j,t}^{(i)},
 \mathcal A_{j,t}=\{c_{j,t}\}.
 $$
 
-每个直接 receiver 在局部执行 \(\operatorname{Read}^{\mathrm{sel}}\)，只向 selector 提供小向量、范数或历史激活统计等少量标量；\(\operatorname{Score}\) 一次输出全部 logits，可以逐候选独立打分，也可以联合处理这些轻量读出。\(\widetilde s\) 是同一个 \(s\) 在“已经 Observe 当前消息、尚未完成本次选择”阶段的值。Pre 与 Post 不是包含关系：如果 \(\operatorname{Update}\) 会覆盖、压缩或遗忘旧状态，post-update state 未必还能恢复 pre-update state；若 selector 同时读取二者，应另行明确声明。
+每个直接 receiver 在局部执行 \(N_{R,i}\) 和 \(\operatorname{Read}^{\mathrm{sel}}\)，只向 selector 提供小向量、范数或历史激活统计等少量标量；\(\operatorname{Score}\) 一次输出全部 logits，可以逐候选独立打分，也可以联合处理这些轻量读出。\(\widetilde s\) 是同一个 \(s\) 在“已经 Observe 当前消息、尚未完成本次选择”阶段的值。Pre 与 Post 不是包含关系：如果 \(\operatorname{Update}\) 会覆盖、压缩或遗忘旧状态，post-update state 未必还能恢复 pre-update state；若 selector 同时读取二者，应另行明确声明。
 
 历史激活也可以作为 \(s\) 的内部内容。当前 Token 的激活结果只能影响以后 Token，因此会形成时间维上的因果递归；这不妨碍在一个 chunk 内用 scan、Torch 算子或专用 kernel 执行，但实现必须保持 `prefill = decode`。
 
@@ -188,7 +209,7 @@ $$
 s_{j,t}^{(i)}
 =
 \begin{cases}
-\operatorname{Update}_i\!\left(s_{j,t-1}^{(i)},m_{j,t}\right),
+\operatorname{Update}_i\!\left(s_{j,t-1}^{(i)},m_{j,t}^{(i)}\right),
 & i\in\mathcal O_{j,t},\\[4pt]
 s_{j,t-1}^{(i)},
 & i\notin\mathcal O_{j,t}.
@@ -221,7 +242,7 @@ $$
 $$
 \rho_{j,t}^{(i)}
 =\operatorname{Read}_{i}^{\mathrm{ffn}}\!\left(
-s_{j,t}^{(i)},m_{j,t}
+s_{j,t}^{(i)},m_{j,t}^{(i)}
 \right),
 \qquad
 \rho_{j,t}^{(i)}\in\mathbb R^{d_{\mathrm{model}}}.
@@ -252,7 +273,7 @@ $$
 \qquad i\in\mathcal A_{j,t}.
 $$
 
-\(N_R\) 是 group 公共的消息归一化，\(N_{F,i}\) 是 receiver branch \(i\) 自己的 FFN 前归一化；它们不彼此共享，也不与其他 receiver branches 或 base block 共享参数。因此一个标准 receiver branch 包含“状态/上下文 residual → FFN residual”两个串行子层；这两个子层合计仍只算一个 receiver group 层级。只有当其完整输出继续进入下一层 receiver group 时，H 才增加。\(\widehat b_{j,t}^{(i)}\) 始终是当前汇合点之前的完整 hidden。单层 group 对每个 active branch 执行一次较大读出和一次昂贵 FFN；N 省略较大状态读出，更深子树另计。
+\(N_{\mathrm{sel}}\)、各 \(N_{R,i}\) 与各 \(N_{F,i}\) 的可学习参数互不共享，也不与 base block 共享。因此一个标准 receiver branch 包含“本地入口归一化与状态/上下文 residual → FFN 前归一化与 FFN residual”两个串行子层；这两个子层合计仍只算一个 receiver group 层级。只有当其完整输出继续进入下一层 receiver group 时，H 才增加。这里的“独立 branch”是指 split 与 merge 之间的可学习变换独立；它们仍共享 parent 输入、selector 决策和汇合操作。\(\widehat b_{j,t}^{(i)}\) 始终是当前汇合点之前的完整 hidden。单层 group 的全部直接 receivers 都执行本地入口归一化和轻量 \(\operatorname{Read}^{\mathrm{sel}}\)；每个 active branch 再执行一次较大读出和一次昂贵 FFN，N 省略较大状态读出，更深子树另计。
 
 后文把上述 router、Observe、Update、状态读取和候选分支计算合并记为 receiver group 操作，但不在 \(\mathcal R_j\) 内使用 router 概率缩放或合并候选。对有状态的 SD 和 BO：
 
@@ -287,7 +308,7 @@ router 概率怎样影响最终输出只在第 2.1 节的 `ActiveBranchAggregate
 
 ### 1.4 Receiver 状态样例
 
-第 1.3 节中的 \(s\)、\(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\) 是稳定接口。本节列出有代表性的内部实现，目的是建立设计空间，不表示它们已经通过 TIDE 实验，也不预设哪一种必然最好。状态实现与 selector 时序是两个独立坐标：content-only 不调用 \(\operatorname{Read}^{\mathrm{sel}}\)，pre/post state 则在对应时刻调用它；\(\operatorname{Read}^{\mathrm{ffn}}\) 不受这一选择影响。
+第 1.3 节中的 \(s\)、\(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\) 是稳定接口。本节列出有代表性的内部实现，目的是建立设计空间，不表示它们已经通过 TIDE 实验，也不预设哪一种必然最好。状态实现与 selector 时序是两个独立坐标：content-only 的 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取当前本地消息，pre/post state 则额外读取对应时刻的状态；\(\operatorname{Read}^{\mathrm{ffn}}\) 不受这一选择影响。
 
 #### 1.4.1 一览
 
@@ -314,19 +335,19 @@ $$
 s_{j,t}^{(i)}\in\mathbb R^D,
 \qquad
 o_{j,t}^{(i)}
-=\tanh\!\left(W_i^{\mathrm{obs}}m_{j,t}+b_i^{\mathrm{obs}}\right).
+=\tanh\!\left(W_i^{\mathrm{obs}}m_{j,t}^{(i)}+b_i^{\mathrm{obs}}\right).
 $$
 
 它对统一接口的实现为：
 
 $$
-\operatorname{Update}_i^{\mathrm{EMA}}(s_{j,t-1}^{(i)},m_{j,t})
+\operatorname{Update}_i^{\mathrm{EMA}}(s_{j,t-1}^{(i)},m_{j,t}^{(i)})
 =\lambda_i\odot s_{j,t-1}^{(i)}
 +(1-\lambda_i)\odot o_{j,t}^{(i)},
 $$
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,EMA}}(s_{j,t}^{(i)},m_{j,t})
+\operatorname{Read}_i^{\mathrm{ffn,EMA}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
 =W_i^{\mathrm{out}}s_{j,t}^{(i)}.
 $$
 
@@ -342,24 +363,24 @@ $$
 
 这里先抽取 gated delta-rule 的核心状态语义，不默认复制完整开放模型 block 中的短卷积、输出门或其他外围结构；若实验加入这些部件，必须单独声明。
 
-调用 \(\operatorname{Update}\) 或 \(\operatorname{Read}^{\mathrm{ffn}}\) 时，按需从 \(m_{j,t}\) 生成归一化的 query/key、value 和写入门：
+调用 \(\operatorname{Update}\) 或 \(\operatorname{Read}^{\mathrm{ffn}}\) 时，receiver \(i\) 从本地消息 \(m_{j,t}^{(i)}\) 生成归一化的 query/key、value 和写入门：
 
 $$
-q_{j,t}^{(i)}=N_q(W_i^q m_{j,t}),
+q_{j,t}^{(i)}=N_q(W_i^q m_{j,t}^{(i)}),
 \qquad
-k_{j,t}^{(i)}=N_k(W_i^k m_{j,t}),
+k_{j,t}^{(i)}=N_k(W_i^k m_{j,t}^{(i)}),
 \qquad
-\nu_{j,t}^{(i)}=W_i^\nu m_{j,t},
+\nu_{j,t}^{(i)}=W_i^\nu m_{j,t}^{(i)},
 $$
 
 $$
 \eta_{j,t}^{(i)}
-=\sigma\!\left((w_i^\eta)^\top m_{j,t}+b_i^\eta\right),
+=\sigma\!\left((w_i^\eta)^\top m_{j,t}^{(i)}+b_i^\eta\right),
 \qquad
 \gamma_{j,t}^{(i)}
 =\exp\!\left[
 -\exp(\alpha_i)\,
-\operatorname{softplus}\!\left((w_i^\gamma)^\top m_{j,t}+b_i^\gamma\right)
+\operatorname{softplus}\!\left((w_i^\gamma)^\top m_{j,t}^{(i)}+b_i^\gamma\right)
 \right].
 $$
 
@@ -377,13 +398,13 @@ e_{j,t}^{(i)}
 $$
 
 $$
-\operatorname{Update}_i^{\mathrm{GDN}}(s_{j,t-1}^{(i)},m_{j,t})
+\operatorname{Update}_i^{\mathrm{GDN}}(s_{j,t-1}^{(i)},m_{j,t}^{(i)})
 =s_{j,t,\mathrm{decay}}^{(i)}
 +\eta_{j,t}^{(i)}k_{j,t}^{(i)}(e_{j,t}^{(i)})^\top,
 $$
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,GDN}}(s_{j,t}^{(i)},m_{j,t})
+\operatorname{Read}_i^{\mathrm{ffn,GDN}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
 =W_i^{\mathrm{out}}
 \left[(q_{j,t}^{(i)})^\top s_{j,t}^{(i)}\right].
 $$
@@ -395,6 +416,14 @@ $$
 #### 1.4.5 Attention 状态
 
 Attention receiver 可以把实际 Observe 到的 key/value 作为状态 \(s\)，再用当前 query 执行普通 Attention。下面以保留最近 \(W\) 次 Observe 为例：
+
+$$
+q_{j,t}^{(i)}=N_q(W_i^q m_{j,t}^{(i)}),
+\qquad
+k_{j,t}^{(i)}=N_k(W_i^k m_{j,t}^{(i)}),
+\qquad
+\nu_{j,t}^{(i)}=W_i^\nu m_{j,t}^{(i)}.
+$$
 
 $$
 \mathcal H_{j,t}^{(i)}
@@ -413,7 +442,7 @@ $$
 令 \(\mathbf K_{j,t}^{(i)}\) 和 \(\mathbf V_{j,t}^{(i)}\) 分别表示状态中按时间堆叠的 key 和 value，key 维度记为 \(d_k\)，则：
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,Attn}}(s_{j,t}^{(i)},m_{j,t})
+\operatorname{Read}_i^{\mathrm{ffn,Attn}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
 =W_i^{\mathrm{out}}
 \left[
 \operatorname{softmax}\!\left(
@@ -922,7 +951,7 @@ PT-PARMLP-BO-R4-I4-H2-GDN-K32-V32-SEL-CONTENT-AGG-T1-SOFTP
 | SELECTOR | SEL-CONTENT / SEL-PRE / SEL-POST | 第 1.3.1 节定义的 selector 输入时序 |
 | AGG | AGG-T1-SOFTP / AGG-T1-HST / AGG-K2-MEAN / AGG-K2-ROUTER / AGG-K2-LEARNED / AGG-VAR | 第 2.1 节定义的内部 MIX policy；K2 表示 Top-2，其他 K 值同理 |
 
-**SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 content-only、pre-update state 和 post-update state。它们只说明 selector 在哪个阶段调用 \(\operatorname{Read}^{\mathrm{sel}}\)，不说明 \(\operatorname{Score}\) 内部采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
+**SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取 receiver 当前本地消息、额外读取旧状态或额外读取更新后状态。三者的 \(\operatorname{Score}\) 都同时接收公共 selector 消息 \(\mu\)，但名称不限定其内部采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
 
 如果历史激活记录会影响 selector 或输出，它就是模型前向语义的一部分，不能隐藏在同一个纯 EMA/GDN 条件名下。具体实现确定后，应在 **STATE** 中增加明确的复合状态标签；记录维度、衰减、写回规则等细节再放入 manifest。
 
@@ -988,14 +1017,14 @@ MOE 的精确插入 block、Top-K、capacity、token-drop、shared expert 和路
 - 精确插入 block 编号；
 - 不同 sites 和递归层级之间不共享参数；
 - GraphBranch 内部的固定拓扑、逐层 Top-K、`ActiveBranchAggregate` policy 与权重、平台期、交叉边和收拢规则；
-- \(N_R\) 与 \(N_{F,i}\) 的精确实现和初始化；
+- \(N_{\mathrm{sel}}\)、\(N_{R,i}\) 与 \(N_{F,i}\) 的精确实现和初始化；
 - \(\operatorname{Read}^{\mathrm{sel}}\)、\(\operatorname{Read}^{\mathrm{ffn}}\) 与 \(\operatorname{Score}\) 的精确公式、输出维度以及是否包含历史激活记录；
 - Observe、selector、状态提交和历史激活写回的精确顺序；
 - GraphBranch 与 backbone 的 RESIDUAL_ADD 公式以及任何额外缩放；
 - 各辅助 loss 的系数；
 - 状态初始化、有效 Token mask、跨 chunk 的 carry/reset 与梯度 detach 规则；
 - 辅助 loss 的 Token 范围、site/router 聚合范围以及是否跨 micro-batch 或设备统计；
-- 每个 Token 实际执行多少次 Observe / Update、较大状态读出和昂贵 FFN；
+- 每个 Token 实际执行多少次本地入口归一化、轻量 selector 读出、Observe / Update、较大状态读出和昂贵 FFN；
 - 初始化怎样保持或改变 base 函数；
 - MOE 是否有 expert capacity、token drop 或 reroute。
 

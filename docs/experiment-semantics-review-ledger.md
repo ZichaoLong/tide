@@ -49,6 +49,7 @@
 | **ESN-014** | P2 | 已修改 | 1.4.4、1.4.6、4.2 备注 | 外部模型事实基本正确，但负载均衡表缺少官方出处；“公认有效”偏强，“KDA 是 GDN 的近期改进”也容易被理解为严格继承关系。 | 为模型/报告名加入官方链接；把 z-loss 改成“常用的可选稳定项”；把 KDA 表述为 delta-rule 家族中采用更细粒度门控的后续路线。 |
 | **ESN-015** | P1 | 部分对齐 | 5.1、6 | 名称之外的必填语义仍缺少几项容易改变实验含义的内容：参数是否跨 site/层级共享、递归 topology/branch grammar、SelectorState 生命周期、状态跨 chunk 的梯度处理、loss 聚合范围和 branch aggregate policy。 | 补入第 6 节；若 ESN-002/003/005/007 已分别解决，这一项只负责检查清单完整性，避免重复解释。 |
 | **ESN-016** | P0 | 已修改 | 1.1、1.3.2、1.4、2.1、5.2、6 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的标准节点。 | `Read^ffn` 统一返回 hidden residual；receiver branch 依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
+| **ESN-017** | P0 | 关闭 | 1.1、1.3、1.4、5.1、6 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
 
 ## 3. 对齐记录
 
@@ -67,6 +68,7 @@
 | 2026-08-26 | ESN-002、015 | GraphBranch 内部边统一传递完整 hidden 并始终使用 MIX；只有 GraphBranch 与 backbone 的边界使用 RESIDUAL_ADD。具体 H2 topology 仍待对齐。 | 本次提交（部分） |
 | 2026-08-26 | ESN-002、007、015 | receiver group 只产生完整候选；Soft-P、Hard-ST、Top-K 和 RESIDUAL_ADD 统一由一个 \(\beta\) 公式表达，router 概率不再被重复使用；GATE 名称字段改为 AGG。 | 本次提交 |
 | 2026-08-26 | ESN-016 | 标准 receiver branch 先把 `Read^ffn` 的 hidden residual 加回输入，再执行 Pre-Norm FFN；N 的该 residual 为零；Attention/EMA/GDN output projection 收入 `Read^ffn`；H 只计算 receiver group 深度。 | 本次提交 |
+| 2026-08-26 | ESN-017 | selector 公共消息与 receiver 本地消息分离；receiver-local `N_R,i`、状态模块、`N_F,i` 和 FFN 组成独立 branch，selector 只接收轻量本地读出。 | 未提交 |
 
 ## 4. 已核验、修改时应保持的部分
 
@@ -83,6 +85,7 @@
 | **OK-007** | Qwen3-Next/Qwen3.5 使用 Gated DeltaNet、Kimi K3 使用 Quantile Balancing 且推理时冻结最终 bias、GLM-5.2 配置使用 `noaux_tc`，这些事实未发现硬错误。 |
 | **OK-008** | 文档标题编号连续，数学与代码围栏成对，基线通过 `git diff --check`。 |
 | **OK-009** | 标准 receiver branch、N 退化、`Read^ffn` 输出维度和 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
+| **OK-010** | `N_sel`、receiver-local `N_R,i`、三种 `Read^sel` 时序、状态样例和计算量说明使用同一套独立入口语义。 |
 
 ## 5. 建议对齐顺序
 
