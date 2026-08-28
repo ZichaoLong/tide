@@ -52,7 +52,8 @@
 | **ESN-016** | P0 | 已修改 | 2.1、2.4、2.5、2.7、3.4、6.2、7 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的默认节点模板。 | `Read^ffn` 统一返回 hidden residual；默认模板依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
 | **ESN-017** | P0 | 关闭 | 2.1、2.2—2.4、2.7、6.1、7 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver node 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
 | **ESN-018** | P1 | 已修改 | 2.1、2.2、2.4、3.2、3.4、7 | receiver node 的稳定外部契约不应等同于当前 Pre-Norm 双 residual 实现。 | 拓扑只依赖轻量读出、状态提交和完整 hidden 输出；内部状态模块、昂贵计算、归一化与 residual 由可替换的 `ReceiverNodeTemplate` 定义。 |
-| **ESN-019** | P1 | 已修改 | 文首、1—3 | H1、HB-Lattice、selector、receiver node 和传播 profile 在读者建立全局图景前交叉出现，主干与可选样例也未分开。 | 文首先定义完整数据流与核心角色；第 2 节只从 H1 推导通用局部语义，第 3 节先定义 Line / region / 波前再引入执行接口。 |
+| **ESN-019** | P1 | 已修改 | 文首、1—3 | 单层特例、HB-Lattice、selector、receiver node 和传播 profile 在读者建立全局图景前交叉出现，主干与可选样例也未分开。 | 文首先定义完整数据流与核心角色；第 2 节用单层特例讲解局部语义，第 3 节先定义 Line / region / 波前再引入执行接口。 |
+| **ESN-020** | P1 | 已修改 | 文首、2、3、5—7 | `receiver group` 与固定单层结构重合，H1/H2 又被同时当作结构名和深度字段；K 还被重复编码进 AGG。 | 删除 `receiver group`；H 只在命名节作为派生深度摘要；K 独立表示 active 数，AGG 只表示显式 fork-join 汇合。 |
 
 ## 3. 对齐记录
 
@@ -77,6 +78,7 @@
 | 2026-08-28 | ESN-001、005、007、015 | HB selector 概率在 sender 的 delta Hard-ST `EmitPolicy` 进入主任务梯度；多父 `ParentAggregate` 独立使用均值；region balance 采用 availability-conditioned soft 目标，并单列诊断量与命名字段。 | 本次提交（待逐项核验） |
 | 2026-08-28 | ESN-018 | receiver node 的稳定输入、轻量 selector 读出、状态提交和完整 hidden 输出与内部模板分离；当前默认模板仍为 Pre-Norm 双 residual。 | 本次修改 |
 | 2026-08-28 | ESN-019 | 增加自包含阅读入口，重写 H1 主线并重排 HB-Lattice 的概念顺序；状态实现样例标为可选参考。 | 本次修改 |
+| 2026-08-28 | ESN-020 | 删除 `receiver group`、`MIX` 和重复的选择事件类型；正文用单层特例教学，H/T 只在命名节出现；Observe 明确为状态 commit，K 与 AGG 分离。 | 本次修改 |
 
 ## 4. 已核验、修改时应保持的部分
 
@@ -87,12 +89,12 @@
 | **OK-001** | Base Qwen3 block 正确表达了 Pre-Norm 与 causal prefix 依赖。 |
 | **OK-002** | 第 1.3、1.4 节中，POST、PARBLK、PARATTN、PARMLP 四种 placement 共享同一个 GraphBranch 契约；其公式与 RESIDUAL_ADD 一致。 |
 | **OK-003** | 第 2.3、2.4 节中，content-only/pre/post 的选择、active set、状态提交、`Read^sel` 和默认模板的 `Read^ffn` 顺序自洽。 |
-| **OK-004** | 第 2.5 节的 H1 `ActiveBranchAggregate` 只使用一次 \(\beta\)；Soft-P 与 Hard-ST 公式正确，Hard-ST 前向为 1、对被选概率的导数为 1，离散 Top-1 本身不反传。 |
-| **OK-005** | 第 5.1、5.3 节的 H1 receiver balance loss、M8 Switch-style balance loss、stop-gradient 和 router z-loss 与当前代码一致。 |
+| **OK-004** | 第 2.5 节单层特例的 `ActiveBranchAggregate` 只使用一次 \(\beta\)；Soft-P 与 Hard-ST 公式正确，Hard-ST 前向为 1、对被选概率的导数为 1，离散 Top-1 本身不反传。 |
+| **OK-005** | 第 5.1、5.3 节的单层 receiver balance loss、M8 Switch-style balance loss、stop-gradient 和 router z-loss 与当前代码一致。 |
 | **OK-006** | 第 5.4 节对训练期 balance loss 与推理期负载感知 selector 的区分正确。 |
 | **OK-007** | Qwen3-Next/Qwen3.5 使用 Gated DeltaNet、Kimi K3 使用 Quantile Balancing 且推理时冻结最终 bias、GLM-5.2 配置使用 `noaux_tc`，这些事实未发现硬错误。 |
 | **OK-008** | 文档标题编号连续，数学与代码围栏成对，基线通过 `git diff --check`。 |
-| **OK-009** | 第 2.4、2.5 节的默认 receiver node 模板、N 退化、`Read^ffn` 输出维度和 H1 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
+| **OK-009** | 第 2.4、2.5 节的默认 receiver node 模板、N 退化、`Read^ffn` 输出维度和单层 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
 | **OK-010** | 第 2.2—2.4、2.7 节的 `N_sel`、receiver-local `N_R,i`、三种 `Read^sel` 时序、状态样例和计算量说明使用同一套独立入口语义。 |
 
 ## 5. 建议对齐顺序
@@ -113,6 +115,6 @@
 | **HB-001** | 第一层是受限 `HBLatticePlan + HBLatticeExecutionConfig + WavefrontExecutor`，第二层是一个或多个 `TopologyBuilder`；不实现一般 DAG。 | 待核验 |
 | **HB-002** | Plan 只允许相邻 Line 普通边和逐节点声明的镜像直通；平台各 Line 共享坐标集合，每对 Line 邻接可分别指定。 | 待核验 |
 | **HB-003** | 多父消息在目标 Line 一次聚合；region 只在 reached nodes 中选择；BO 更新全部 reached nodes，SD 只更新 active nodes。 | 待核验 |
-| **HB-004** | `ParentAggregate` 与共享 parent 的 `ActiveBranchAggregate` 分开；首个多父基线使用归一化平均。 | 待核验 |
+| **HB-004** | `ParentAggregate` 与显式 fork-join 的 `ActiveBranchAggregate` 分开；首个多父基线使用归一化平均。 | 待核验 |
 | **HB-005** | 首个设置使用 EMIT-HST、PAGG-MEAN 和 BAL-AVAIL-SOFT；同一次 selector 概率不在多父聚合中重复使用。 | 待核验 |
 | **HB-006** | 非平凡 HB-Lattice 使用 `TOPO_ID` 指向已展开 Plan；R/H/K 只作可读摘要。 | 待核验 |
