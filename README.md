@@ -281,14 +281,17 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 - `CheckpointAdapter`：原生装载、状态映射和 equality oracle；
 - `GraphBranchBoundary`：单入口、单出口以及与 checkpoint backbone 的唯一 merge；
 - `HBLatticePlan`：已展开的 Lines、节点、边、regions 和镜像直通；
+- `HBLatticeExecutionConfig`：propagation profile、receiver/state、selector、Emit、多父聚合和训练期均衡；
 - `TopologyBuilder`：由规则树、逐坐标混合或空间 Graph 生成 Plan；
 - `WavefrontExecutor`：严格逐 Line 结算受限 HB-Lattice；
 - `MessageProjection`：固定、有界的 receiver slots；
-- `ReceiverCell`：分离 Observe、Update、ExpensiveCompute 与 Emit；
+- `ReceiverCell`：分离 Observe、Update、状态读出与 ExpensiveCompute；
 - `PropagationProfile`：切换 `selected-dispatch` / BO；
 - `RegionSelector`：在一个 Line 的固定有界区域内选择 reached nodes；
 - `ReceiverState`：保存节点私有状态及可选的轻量选择历史；
+- `EmitPolicy`：把 active 节点的完整输出变成发往固定 children 的消息；
 - `ParentAggregate` / `BoundaryMerge`：分别处理多父 inbox 与 GraphBranch 外部 merge；
+- `BalancePolicy`：仅在训练时根据 routing events 产生辅助均衡 loss；
 - `RouteArtifact` / `ExperimentLedger`：保存行为、成本与实验谱系。
 
 首个交付包括：
