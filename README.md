@@ -30,7 +30,9 @@ TIDE 当前有三个最底层的结构要求：
 
 如果每个 Token 还只能执行少量昂贵模块，就要在逐级传播中做局部选择，并对消息、传播深度和总激活量设置明确预算。
 
-本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。**branch** 只表示从一次 fork 到对应 join 的计算路径，不是另一个参数或状态单元。Attention readout、FFN、大型 SSM 更新等主体计算统称为“昂贵计算”，以区别于消息投影和轻量状态更新。
+本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。**branch** 只表示从一次 fork 到对应 join 的计算路径，不是另一个参数或状态单元。
+
+receiver node 接收一个完整 hidden，状态只在节点本地 proposal / commit，只把轻量 selector 读出和 active 时的完整 hidden 交给外部；selector 与汇聚位于节点外部。当前默认 node 模板由可选记忆/状态模块和昂贵计算组成，并采用 Pre-Norm 双 residual，后续可以在保持外部契约不变的前提下替换内部模板。Attention readout、FFN、大型 SSM 更新等主体计算统称为“昂贵计算”，以区别于消息投影和轻量状态更新。
 
 > **当前状态：** Flat MoE 已经提供可靠的外部正面证据；本仓库自身尚无可靠训练结果。层次递归、私有状态、`broadcast-observe`（BO）、交叉汇聚和多次局部选择是否有效，都需要实验回答。
 
@@ -193,6 +195,8 @@ Checkpoint 生长线近期并行推进两个工作流：
 
 工作流 B 不把 BO 当作由结构目标自动推出的结论，但把它作为主要验证轴。当前候选空间分成四层：
 
+面向以后的一般 Graph，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 自然延伸出的 matched controls。这个定位不预先代表 BO 已被证明更优。
+
 | 类别 | 内容 |
 | --- | --- |
 | 必须面对的 TIDE 约束 | 固定空间拓扑、单节点成本有界、可达容量增长、稀疏预算 |
@@ -281,14 +285,15 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 - `CheckpointAdapter`：原生装载、状态映射和 equality oracle；
 - `GraphBranchBoundary`：单入口、单出口以及与 checkpoint backbone 的唯一 merge；
 - `HBLatticePlan`：已展开的 Lines、节点、边、regions 和镜像直通；
-- `HBLatticeExecutionConfig`：propagation profile、receiver/state、selector、Emit、多父聚合和训练期均衡；
+- `HBLatticeExecutionConfig`：propagation profile、node template/state、selector、Emit、多父聚合和训练期均衡；
 - `TopologyBuilder`：由规则树、逐坐标混合或空间 Graph 生成 Plan；
 - `WavefrontExecutor`：严格逐 Line 结算受限 HB-Lattice；
 - `MessageProjection`：固定、有界的 receiver slots；
-- `ReceiverCell`：实现单个 receiver node，分离 Observe、Update、状态读出与 ExpensiveCompute；
+- `ReceiverCell`：实现单个 receiver node 的稳定输入、轻量读出、状态提交和完整输出契约；
+- `ReceiverNodeTemplate`：组合状态模块、昂贵计算、归一化和 residual；当前默认是 Pre-Norm 双 residual；
 - `PropagationProfile`：切换 `selected-dispatch` / BO；
 - `RegionSelector`：在一个 Line 的固定有界区域内选择 reached nodes；
-- `ReceiverState`：保存节点私有状态及可选的轻量选择历史；
+- `ReceiverState`：保存节点私有状态，并实现 Update 与供 selector / node compute 使用的局部读出；
 - `EmitPolicy`：把 active 节点的完整输出变成发往固定 children 的消息；
 - `ParentAggregate` / `BoundaryMerge`：分别处理多父 inbox 与 GraphBranch 外部 merge；
 - `BalancePolicy`：仅在训练时根据 routing events 产生辅助均衡 loss；
@@ -298,7 +303,7 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 1. 选定 checkpoint、数据、框架和目标硬件；
 2. 完成原生 equality、continued-training 和 save/reload；
-3. 建立统一 receiver、传播、状态和 instrumentation 接口；
+3. 建立统一 receiver contract、node template、传播、状态和 instrumentation 接口；
 4. 完成 dense 与成熟 flat MoE 强基线；
 5. 实现一个保留 always-on backbone、具有有界局部连接、BO、可实际读出的私有状态、稀疏昂贵激活和 fixed merge 的首轮完整候选；
 6. 同时保留 matched `selected-dispatch`、状态 knockout 和交叉边开关；

@@ -67,6 +67,8 @@ Head-Wise MoE 可以在这些基线可靠后作为可选后续，用来检验局
 
 工作流 B 把 `broadcast-observe`（BO）作为主要验证轴。第一轮候选会围绕下面两条可能作用路径设计：
 
+面向以后的一般 Graph，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 出发的 matched controls。这个定位不预先代表 BO 已被证明更优。
+
 ```text
 当次 Observe / Proposal：
 receiver 看到当前消息并更新摘要
@@ -221,14 +223,15 @@ Observe / Update 或交叉消息发生
 | `CheckpointAdapter` | 原生装载、状态映射和 equality oracle |
 | `GraphBranchBoundary` | 单入口、单出口以及与 checkpoint backbone 的唯一 merge |
 | `HBLatticePlan` | 保存已展开的 Lines、节点、边、regions 和镜像直通 |
-| `HBLatticeExecutionConfig` | 配置 propagation profile、receiver/state、selector、Emit、多父聚合和训练期均衡 |
+| `HBLatticeExecutionConfig` | 配置 propagation profile、node template/state、selector、Emit、多父聚合和训练期均衡 |
 | `TopologyBuilder` | 由规则树、逐坐标混合或空间 Graph 生成 Plan |
 | `WavefrontExecutor` | 严格逐 Line 结算受限 HB-Lattice |
 | `MessageProjection` | 固定、有界 receiver slots 和消息形状 |
-| `ReceiverCell` | 实现单个 receiver node，分离 Observe、Update、状态读出与 ExpensiveCompute |
+| `ReceiverCell` | 实现单个 receiver node 的稳定输入、轻量读出、状态提交和完整输出契约 |
+| `ReceiverNodeTemplate` | 组合状态模块、昂贵计算、归一化和 residual；当前默认是 Pre-Norm 双 residual |
 | `PropagationProfile` | 切换 `selected-dispatch` / BO 并产生各类 mask |
 | `RegionSelector` | 在一个 Line 的固定有界区域内选择 reached nodes |
-| `ReceiverState` | 保存节点私有状态及可选的轻量选择历史 |
+| `ReceiverState` | 保存节点私有状态，并实现 Update 与供 selector / node compute 使用的局部读出 |
 | `EmitPolicy` | 把 active 节点的完整输出变成发往固定 children 的消息 |
 | `ParentAggregate` / `BoundaryMerge` | 分别处理多父 inbox 与 GraphBranch 外部 merge |
 | `BalancePolicy` | 仅在训练时根据 routing events 产生辅助均衡 loss |
@@ -241,7 +244,7 @@ Observe / Update 或交叉消息发生
 
 1. 选定开放权重 checkpoint、训练数据、框架和目标硬件。
 2. 完成原生 equality oracle、continued-training 校准与 save/reload 测试。
-3. 建立统一 `ReceiverCell`、传播 profile、状态和 instrumentation 接口。
+3. 建立统一 `ReceiverCell` contract、`ReceiverNodeTemplate`、传播 profile、状态和 instrumentation 接口。
 4. 在工作流 A 建立 dense 与成熟 flat MoE 强基线。
 5. 在工作流 B 实现一个保留 always-on backbone、具有有界局部连接、BO、可实际读出的私有状态、稀疏昂贵激活和 fixed merge 的首轮完整候选。
 6. 同时保留 matched `selected-dispatch`、状态 knockout 和交叉边开关。
