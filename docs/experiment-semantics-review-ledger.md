@@ -52,6 +52,7 @@
 | **ESN-016** | P0 | 已修改 | 2.1、2.4、2.5、2.7、3.4、6.2、7 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的默认节点模板。 | `Read^ffn` 统一返回 hidden residual；默认模板依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
 | **ESN-017** | P0 | 关闭 | 2.1、2.2—2.4、2.7、6.1、7 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver node 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
 | **ESN-018** | P1 | 已修改 | 2.1、2.2、2.4、3.2、3.4、7 | receiver node 的稳定外部契约不应等同于当前 Pre-Norm 双 residual 实现。 | 拓扑只依赖轻量读出、状态提交和完整 hidden 输出；内部状态模块、昂贵计算、归一化与 residual 由可替换的 `ReceiverNodeTemplate` 定义。 |
+| **ESN-019** | P1 | 已修改 | 文首、1—3 | H1、HB-Lattice、selector、receiver node 和传播 profile 在读者建立全局图景前交叉出现，主干与可选样例也未分开。 | 文首先定义完整数据流与核心角色；第 2 节只从 H1 推导通用局部语义，第 3 节先定义 Line / region / 波前再引入执行接口。 |
 
 ## 3. 对齐记录
 
@@ -75,6 +76,7 @@
 | 2026-08-28 | ESN-002、005、007 | 增加 reached set、region selector、一次性多父 `ParentAggregate` 和波前 barrier；HB balance loss 与 selector 概率进入主任务梯度的位置继续保留为待对齐项。 | 本次提交（部分） |
 | 2026-08-28 | ESN-001、005、007、015 | HB selector 概率在 sender 的 delta Hard-ST `EmitPolicy` 进入主任务梯度；多父 `ParentAggregate` 独立使用均值；region balance 采用 availability-conditioned soft 目标，并单列诊断量与命名字段。 | 本次提交（待逐项核验） |
 | 2026-08-28 | ESN-018 | receiver node 的稳定输入、轻量 selector 读出、状态提交和完整 hidden 输出与内部模板分离；当前默认模板仍为 Pre-Norm 双 residual。 | 本次修改 |
+| 2026-08-28 | ESN-019 | 增加自包含阅读入口，重写 H1 主线并重排 HB-Lattice 的概念顺序；状态实现样例标为可选参考。 | 本次修改 |
 
 ## 4. 已核验、修改时应保持的部分
 
