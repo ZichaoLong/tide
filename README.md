@@ -279,13 +279,16 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 近期实现少量稳定抽象，不先完成一般 Graph runtime：
 
 - `CheckpointAdapter`：原生装载、状态映射和 equality oracle；
-- `BranchModule`：atomic、serial 或 recursive 分支；
+- `GraphBranchBoundary`：单入口、单出口以及与 checkpoint backbone 的唯一 merge；
+- `HBLatticePlan`：已展开的 Lines、节点、边、regions 和镜像直通；
+- `TopologyBuilder`：由规则树、逐坐标混合或空间 Graph 生成 Plan；
+- `WavefrontExecutor`：严格逐 Line 结算受限 HB-Lattice；
 - `MessageProjection`：固定、有界的 receiver slots；
 - `ReceiverCell`：分离 Observe、Update、ExpensiveCompute 与 Emit；
 - `PropagationProfile`：切换 `selected-dispatch` / BO；
-- `SiblingSelector`：在有界兄弟集合内选择；
-- `ReceiverState` / `SelectorState`：分开保存语义与 selector 状态；
-- `FixedMerge`：声明固定槽位、范围和 merge；
+- `RegionSelector`：在一个 Line 的固定有界区域内选择 reached nodes；
+- `ReceiverState`：保存节点私有状态及可选的轻量选择历史；
+- `ParentAggregate` / `BoundaryMerge`：分别处理多父 inbox 与 GraphBranch 外部 merge；
 - `RouteArtifact` / `ExperimentLedger`：保存行为、成本与实验谱系。
 
 首个交付包括：
@@ -300,9 +303,9 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 这个交付首先要求实验可重放、候选语义完整、问题可观测、主要验证轴能够配对比较；不要求首轮结果已经证明 TIDE 有效。
 
-首轮 v0 已有可运行的 PyTorch reference implementation，位于 [`src/tide`](src/tide)。当天实际采用的模型、公式、命令、运行状态和结果统一记入 [每日实验记录](experiments/README.md)，避免把易变的运行细节继续堆进 README。
+首轮 v0 已有可运行的浅层 PyTorch reference implementation，位于 [`src/tide`](src/tide)；上面的 HB-Lattice Plan 与波前执行器是后续实现边界，不表示 v0 已经具备。当天实际采用的模型、公式、命令、运行状态和结果统一记入 [每日实验记录](experiments/README.md)，避免把易变的运行细节继续堆进 README。
 
-近期底座不需要 HB-Line executor、一般 event IR、跨设备 allocator 或有环 Graph。
+近期需要受限的 HB-Lattice 波前执行器，但不需要一般 event IR、任意 DAG 调度器、跨设备 allocator 或有环 Graph executor。
 
 ## 7. 当前不能主张的结论
 

@@ -9,12 +9,13 @@
 1. base 权重的初始化类别与训练阶段；
 2. GraphBranch 接在 base block 的什么位置；
 3. 使用 N、SD 还是 BO；
-4. 每个局部 group 有多少 receivers；
+4. 每个局部 group 或 selector region 有多少 receivers；
 5. 模型中有多少个顺序插入位置；
-6. 每个插入位置内部递归多少层；
+6. 每个插入位置内部的最大 receiver-node 深度；
 7. 使用什么状态结构；
 8. selector 使用 content-only、pre-update state 还是 post-update state；
-9. 多个 active branches 使用什么聚合策略。
+9. 多个 active branches 使用什么聚合策略；
+10. 非平凡 HB-Lattice 使用哪一份已展开 topology Plan。
 
 ## 1. 统一数学符号
 
@@ -29,19 +30,27 @@
 | \(j\) | routed insertion site 编号；site \(j\) 所在的 base block 记为 \(\ell(j)\) |
 | \(t\) | 序列中的 Token 位置 |
 | \(i\) | 当前 routed module 中的候选编号；候选可以是 receiver 或 MoE expert |
+| \(d\) | GraphBranch 内部的波前 Line 编号 |
+| \(u,v\) | HB-Lattice 中的父节点与当前节点；每个节点只属于一个 Line |
+| \(r\) | 一个 Line 内的 selector region 编号 |
+| \(Q\) | 平台期每个 Line 共享的空间坐标集合 |
 | \(x_{\ell,t}\) | 实际送入第 \(\ell\) 个 base block 的 hidden；对 \(\ell>0\)，有 \(x_{\ell,t}=y_{\ell-1,t}\) |
 | \(u_{\ell,t}\) | 当前 block 完成 Attention residual merge 后的表示 |
 | \(v_{\ell,t}\) | 当前 block 完成原 dense MLP residual merge 后的表示，即完整 base block 输出 |
 | \(y_{\ell,t}\) | 当前 block（包括可选的 GraphBranch merge）最终送往下一个 base block 的表示 |
-| \(\mu_{j,t}\) | site \(j\) 的 selector 从 GraphBranch 输入得到的公共归一化消息 |
-| \(m_{j,t}^{(i)}\) | receiver \(i\) 在本地归一化 GraphBranch 输入后得到的入口消息 |
+| \(\mu_{j,t}\) | H1 中 selector 从共享 parent hidden 得到的公共归一化消息 |
+| \(m_{j,t}^{(i)}\) | H1 receiver \(i\) 在本地归一化共享 parent hidden 后得到的入口消息 |
+| \(\operatorname{Inbox}_{v,t}\) | HB-Lattice 节点 \(v\) 在当前 Token 实际收到的父消息集合 |
+| \(q_{v,t}\) | 节点 \(v\) 是否收到至少一条父消息的 reached 标记 |
+| \(h_{v,t}\) | 节点 \(v\) 对当前 inbox 执行 `ParentAggregate` 后的完整 hidden |
+| \(g_{v,t}\) | active 节点 \(v\) 完整计算后向固定 children 发送的 hidden |
 | \(m_{j,t}\) | 标准 MoE site \(j\) 交给 router 和 experts 的公共归一化消息 |
 | \(a_{j,t}\) | site \(j\) 的 router 在 softmax 之前产生的 logits |
 | \(p_{j,t}^{(i)}\) | site \(j\) 的 router 分给候选 \(i\) 的 soft 概率 |
 | \(\mathcal A_{j,t}\) | site \(j\) 为当前 Token 激活的候选集合 |
 | \(c_{j,t}\) | Top-1 时唯一的激活候选，即 \(\mathcal A_{j,t}=\{c_{j,t}\}\) |
 | \(\operatorname{Score}\) | 产生全部 router logits 的打分操作；具体输入由 selector 语义决定 |
-| \(s_{j,t}^{(i)}\) | site \(j\) 中 receiver \(i\) 的私有状态 |
+| \(s_{j,t}^{(i)}\) | H1 site \(j\) 中 receiver \(i\) 的私有状态；HB-Lattice 对应写成 \(s_{j,v,t}\) |
 | \(S_{j,t}\) | site \(j\) 的 receiver group 的全部私有状态 |
 | \(r_{j,t,\tau}^{\mathrm{sel},(i)}\) | receiver \(i\) 在 \(\tau\in\{\mathrm{content},\mathrm{pre},\mathrm{post}\}\) 时刻局部产生的轻量 selector 读出 |
 | \(\rho_{j,t}^{(i)}\) | active receiver \(i\) 在状态提交后局部读出的 hidden residual |
@@ -52,7 +61,7 @@
 | \(\beta_{j,t}^{(i)}\) | `ActiveBranchAggregate` 分给 active branch \(i\) 的合并系数 |
 | \(\Delta_{\mathcal G,j,t}\) | GraphBranch 相对其输入产生、发往 placement merge 的 residual |
 
-本文按“作用”统一基本符号，具体实现只在对应小节内部展开：各类归一化都写成 \(N\)，私有状态始终写成 \(s/S\)，状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)。TIDE 用 \(\mu\) 表示 selector 的公共消息、用 \(m^{(i)}\) 表示 receiver \(i\) 的本地入口消息；标准 MoE 继续用 \(m\) 表示 router 与 experts 的公共输入。两者都用 \(a,p,\mathcal A,c\) 表示路由、用 \(z\) 表示昂贵 FFN 的输入、用 \(E\) 表示昂贵 routed FFN。TIDE receiver 用 \(\rho\) 表示状态/上下文读出的 hidden residual，用 \(u\) 表示该 residual merge 后的表示；TIDE 分支用 \(\widehat b\) 表示完整候选输出，用 \(\beta\) 表示唯一的聚合权重。只有 GraphBranch 与 placement 的边界才对外暴露 \(\Delta_{\mathcal G}\)。相同基本符号表示它们在框架中承担相同作用，并不表示共享参数或采用相同算法；下标说明位置或候选，EMA、GDN 等实现标签只在展开内部做法时出现。下面会省略 batch 下标 \(b\) 和部分不影响理解的下标。
+本文按“作用”统一基本符号，具体实现只在对应小节内部展开：各类归一化都写成 \(N\)，私有状态始终写成 \(s/S\)，状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)。共享 parent 的 H1 用 \(\mu\) 表示 selector 公共消息、用 \(m^{(i)}\) 表示 receiver 本地入口消息；HB-Lattice 改由每个节点自己的 \(h_{v,t}\) 产生本地消息。标准 MoE 继续用 \(m\) 表示 router 与 experts 的公共输入。各结构都用 \(a,p,\mathcal A,c\) 表示路由、用 \(z\) 表示昂贵 FFN 的输入、用 \(E\) 表示昂贵 routed FFN。TIDE receiver 用 \(\rho\) 表示状态/上下文读出的 hidden residual，用 \(u\) 表示该 residual merge 后的表示；显式 fork-join 用 \(\widehat b\) 表示完整候选输出、用 \(\beta\) 表示聚合权重。只有 GraphBranch 与 placement 的边界才对外暴露 \(\Delta_{\mathcal G}\)。相同基本符号表示它们在框架中承担相同作用，并不表示共享参数或采用相同算法；下标说明位置或候选，EMA、GDN 等实现标签只在展开内部做法时出现。下面会省略 batch 下标 \(b\) 和部分不影响理解的下标。
 
 ### 1.2 Base Qwen3 block
 
@@ -87,9 +96,11 @@ $$
 y_{\ell,t}=v_{\ell,t}.
 $$
 
-### 1.3 一个单层 receiver group
+### 1.3 一个共享 parent 的单层 receiver group
 
-令 \(h_t\) 表示当前单层 receiver group 收到的完整 hidden。selector 使用自己的归一化 \(N_{\mathrm{sel}}\)，receiver \(i\) 使用自己独立的入口归一化 \(N_{R,i}\)：
+本节定义 H1 和显式 fork-join 中最简单的特例：同一 group 的 receivers 共享一个 parent hidden \(h_t\)，选择后在当前 group 出口汇合。第 2.1 节再把它推广到多父、不同节点可有不同入口消息的 HB-Lattice。
+
+selector 使用自己的归一化 \(N_{\mathrm{sel}}\)，receiver \(i\) 使用自己独立的入口归一化 \(N_{R,i}\)：
 
 $$
 \mu_{j,t}=N_{\mathrm{sel}}(h_t),
@@ -203,6 +214,8 @@ $$
 | **SD** | \(\mathcal A_{j,t}\) | \(\mathcal A_{j,t}\) |
 | **BO** | 当前 parent 的全部固定直接 receivers | \(\mathcal A_{j,t}\) |
 
+这张表中的“当前 parent 的全部固定直接 receivers”只描述共享 parent 的 H1 group；在 HB-Lattice 中，BO 的提交集合改为当前 Token 实际收到至少一条父消息的全部 reached nodes，见第 2.1 节。
+
 Content-only 和 pre-update state 都先完成选择，再按上表提交状态：
 
 $$
@@ -273,7 +286,7 @@ $$
 \qquad i\in\mathcal A_{j,t}.
 $$
 
-\(N_{\mathrm{sel}}\)、各 \(N_{R,i}\) 与各 \(N_{F,i}\) 的可学习参数互不共享，也不与 base block 共享。因此一个标准 receiver branch 包含“本地入口归一化与状态/上下文 residual → FFN 前归一化与 FFN residual”两个串行子层；这两个子层合计仍只算一个 receiver group 层级。只有当其完整输出继续进入下一层 receiver group 时，H 才增加。这里的“独立 branch”是指 split 与 merge 之间的可学习变换独立；它们仍共享 parent 输入、selector 决策和汇合操作。\(\widehat b_{j,t}^{(i)}\) 始终是当前汇合点之前的完整 hidden。单层 group 的全部直接 receivers 都执行本地入口归一化和轻量 \(\operatorname{Read}^{\mathrm{sel}}\)；每个 active branch 再执行一次较大读出和一次昂贵 FFN，N 省略较大状态读出，更深子树另计。
+\(N_{\mathrm{sel}}\)、各 \(N_{R,i}\) 与各 \(N_{F,i}\) 的可学习参数互不共享，也不与 base block 共享。因此一个标准 receiver branch 包含“本地入口归一化与状态/上下文 residual → FFN 前归一化与 FFN residual”两个串行子层；这两个子层合计仍只算一个 receiver group 层级。只有当其完整输出继续进入下一层 receiver group 时，H 才增加。在本节的 H1 特例中，各 branches 共享 parent 输入、selector 决策和汇合操作；HB-Lattice 中同一 region 的节点可以拥有不同 parent 和不同入口消息。\(\widehat b_{j,t}^{(i)}\) 始终是当前汇合点之前的完整 hidden。单层 group 的全部直接 receivers 都执行本地入口归一化和轻量 \(\operatorname{Read}^{\mathrm{sel}}\)；每个 active branch 再执行一次较大读出和一次昂贵 FFN，N 省略较大状态读出，更深子树另计。
 
 后文把上述 router、Observe、Update、状态读取和候选分支计算合并记为 receiver group 操作，但不在 \(\mathcal R_j\) 内使用 router 概率缩放或合并候选。对有状态的 SD 和 BO：
 
@@ -298,7 +311,7 @@ p_{j,t},
 =\mathcal R_j(h_t).
 $$
 
-router 概率怎样影响最终输出只在第 2.1 节的 `ActiveBranchAggregate` 中定义。
+本节 H1 中，router 概率怎样影响最终输出只在第 2.2 节的 `ActiveBranchAggregate` 中定义；HB-Lattice 的概率使用位置仍按第 2.1 节另行记录。
 
 #### 1.3.3 状态边界
 
@@ -461,7 +474,7 @@ SSM / Mamba-2 是另一类重要的固定状态候选，开放权重的 [Falcon-
 
 当前更合适的定位是：历史激活用于最轻量的 selector 控制，EMA 作为简单内容基线，GDN 作为第一种先进关联记忆锚点，Attention 保留为可按预算选择的宽泛设计族；KDA 和 Mamba/SSD 则是增强或跨家族候选。这只是帮助建立全局观，不是固定实验顺序。维度和状态量必须在名称中明确，例如 **GDN-K32-V32** 有 \(32\times32=1024\) 个状态标量，不能与 EMA128 当作等状态量对照。
 
-## 2. GraphBranch 内部合并与四种插入位置
+## 2. GraphBranch 的 HB-Lattice 拓扑、内部合并与四种插入位置
 
 以下令 site \(j\) 插在 base block \(\ell=\ell(j)\)。每个 site 在原有 base computation 之外只接入一个单入口、单出口的主旁路，记为 \(\mathcal G_j\)。它接收完整 hidden \(h\)，内部始终传递完整 hidden，最终返回一个同维表示：
 
@@ -471,11 +484,196 @@ b_{\mathcal G,j,t}(h)=\mathcal G_j(h),
 \Delta_{\mathcal G,j,t}(h)=b_{\mathcal G,j,t}(h)-h.
 $$
 
-递归、Top-K、`ActiveBranchAggregate`、可选平台期、可选交叉汇聚和最终收拢都封装在 \(\mathcal G_j\) 内；外层 placement 只决定 \(h\) 从哪里取得，以及唯一的 \(\Delta_{\mathcal G}\) 在哪里合并。为突出这个边界，本节省略 GraphBranch 内各 receiver 的状态输入和输出；其 Observe、Update 与 Read 顺序仍按第 1.3 节执行。
+递归、局部选择、平台传播、多父汇聚和最终收拢都封装在 \(\mathcal G_j\) 内；外层 placement 只决定 \(h\) 从哪里取得，以及唯一的 \(\Delta_{\mathcal G}\) 在哪里合并。
 
-这里先固定 GraphBranch 的内外接口；H2 及更深结构的固定拓扑、Top-K 日程和交叉边规则仍需另行明确。
+### 2.1 受限 HB-Lattice 与波前执行
 
-H1 可以是只含一个 receiver group 的最简单 GraphBranch：
+H>1 的标准执行对象是手动规定波前的 **HB-Lattice**，不是一般 DAG。数学上它是一个分层 DAG，但执行器只处理下面这类受限结构：
+
+- GraphBranch 只有一个入口和一个出口；
+- 节点被静态分配到有序 Line \(L_0,L_1,\ldots,L_D\)，每个节点只属于一个 Line；
+- Line 内没有消息依赖，普通边只连接相邻 Line；
+- 递归扩展节点可以沿显式声明的镜像直通边连接到对应收拢节点；
+- 平台期各 Line 使用相同的空间坐标集合，每对相邻平台 Line 的连接可以分别指定；
+- 每个 Line 被划分为固定、不重叠的 selector regions，每个节点只有一个 activation owner；
+- 同一 Token 在一个节点只聚合一次父消息、更新一次状态并至多执行一次昂贵计算。
+
+因此近期实现不需要任意拓扑排序、同层依赖、异步 event queue、有环执行或一般 DAG 接口。
+
+#### 2.1.1 两层拓扑接口
+
+第一层由规范化的 `HBLatticePlan` 和逐 Line 执行它的 `WavefrontExecutor` 组成。一个 Plan 至少完整列出：
+
+~~~text
+HBLatticePlan
+├── Lines：每层的 phase、节点、坐标和 selector regions
+├── adjacent edges：扩展、平台和收拢的相邻 Line 边
+├── mirror map / edges：扩展与收拢节点的对应关系及逐节点直通开关
+├── entry / sink
+├── node、selector 与 ParentAggregate 配置
+└── edge class：tree / local / shortcut / mirror
+~~~
+
+扩展树和收拢树可以采用不均匀但有界的分支结构；平台期每对 Line 的邻接也可以不同。`WavefrontExecutor` 只消费展开后的 Plan，不负责猜测树形、空间邻接或镜像关系。
+
+Plan 载入时必须检查 Line 顺序、region 唯一归属、边类型与端点、entry 到 sink 的静态可达性、镜像对应关系，以及声明的 fan-in/fan-out 和 region-size 上界。
+
+第二层由一个或多个 `TopologyBuilder` 组成：
+
+~~~text
+TopologyBuilder(config) → HBLatticePlan
+~~~
+
+builder 可以生成规则树、逐坐标混合、重复空间 Graph 或其他 HB-Lattice 模板。每个正式实验同时保存最终 Plan 的规范化内容与哈希，以及 builder 名称、版本和配置；真正决定前向语义的是最终 Plan，而不是生成器名称。
+
+#### 2.1.2 一个 Token 的波前语义
+
+设节点 \(v\in L_d\) 的固定父节点集合为 \(P(v)\)。当前 Token 上，只有已经激活并执行的父节点才会发送完整 hidden。节点 \(v\) 的实际 inbox 为：
+
+$$
+\operatorname{Inbox}_{v,t}
+=\left\{
+(u,g_{u,t})
+\mid u\in P(v),\ u\text{ 在 Token }t\text{ 已激活并 Emit}
+\right\}.
+$$
+
+GraphBranch 输入 \(h_t\) 作为 entry node 的一条外部消息，因此入口不依赖图内父节点也能 reached；最终 sink 的完整输出就是 \(b_{\mathcal G,j,t}\)。
+
+镜像直通消息可以在较早的 Line 产生，但只保存在目标 inbox 中；目标 Line 到来、所有可能父节点都已经结算后，才把“未到达”和“尚未到达”区分开。令：
+
+$$
+q_{v,t}=\mathbf 1[\operatorname{Inbox}_{v,t}\ne\varnothing]
+$$
+
+表示节点是否 reached。若 \(q_{v,t}=0\)，节点不参加当前选择，不更新状态，也不输出；若收到一条或多条消息，则先执行一次与消息到达顺序无关的 `ParentAggregate`：
+
+$$
+h_{v,t}
+=\operatorname{ParentAggregate}_v(\operatorname{Inbox}_{v,t})
+=\sum_{(u,g_{u,t})\in\operatorname{Inbox}_{v,t}}
+\alpha_{u\to v,t}g_{u,t},
+$$
+
+$$
+\alpha_{u\to v,t}\ge0,
+\qquad
+\sum_{(u,g_{u,t})\in\operatorname{Inbox}_{v,t}}\alpha_{u\to v,t}=1.
+$$
+
+首个简单设置对实际到达的父消息取均匀平均，并把到达数量或有界 parent-presence mask 作为额外轻量信息。归一化聚合不会因父消息数量变化而重复放大公共 hidden，也能在各节点初始化为 identity 时保持 identity。学习型局部聚合可以后续单独实验。
+
+节点 \(v\) 用自己的入口归一化产生本地消息：
+
+$$
+m_{v,t}=N_{R,v}(h_{v,t}),
+$$
+
+再按 content-only、pre-update 或 post-update 语义产生轻量 \(\operatorname{Read}^{\mathrm{sel}}\)。同一 region 的节点可能拥有不同的 \(h_{v,t}\)，因此一般 HB-Lattice 不要求存在第 1.3 节那样由共同 parent hidden 产生的单一 \(\mu\)；region selector 只联合处理各 reached nodes 发来的轻量读出和 presence 信息。
+
+对 region \(\mathcal R_{d,r}\subseteq L_d\)，当前候选集合为：
+
+$$
+\mathcal C_{d,r,t}
+=\{v\in\mathcal R_{d,r}\mid q_{v,t}=1\}.
+$$
+
+region selector 可以联合处理本 region 的轻量读出，但只为 reached nodes 产生有效概率：
+
+$$
+a_{v,t}
+=\left[
+\operatorname{Score}_{d,r}
+\left((r_{w,t,\tau}^{\mathrm{sel}},q_{w,t})_{w\in\mathcal R_{d,r}}\right)
+\right]_v,
+\qquad v\in\mathcal C_{d,r,t},
+$$
+
+$$
+(p_{v,t})_{v\in\mathcal C_{d,r,t}}
+=\operatorname{softmax}
+\left((a_{v,t})_{v\in\mathcal C_{d,r,t}}\right).
+$$
+
+不同 regions 的 selector 参数默认不共享；若实验共享，必须在 Plan 中声明。
+
+若 \(\mathcal C_{d,r,t}=\varnothing\)，该 region 选择空集；否则必须满足：
+
+$$
+1\le |\mathcal A_{d,r,t}|
+\le \min(K_{d,r}^{\max},|\mathcal C_{d,r,t}|).
+$$
+
+全激活只是令所有 reached nodes 都进入 \(\mathcal A_{d,r,t}\) 的特例。入口和最终 sink 可以在 Plan 中声明为 forced-active。
+
+传播 profile 在 HB-Lattice 中统一解释为：
+
+- **N**：无状态，只有 active nodes 执行完整节点计算；
+- **SD**：只有 active nodes 提交 Update 并执行完整节点计算；
+- **BO**：全部 reached nodes 提交 Update，只有 active nodes 执行较大读出和昂贵计算。
+
+因此 BO + post-update state 的顺序是“全部 reached nodes 聚合并 Update → 各 region 选择 → active nodes 执行”；SD 仍只自然兼容 content-only 和 pre-update state。一个节点即使收到多个父消息，也只在 `ParentAggregate` 后 Update 一次。
+
+active 节点沿用第 1.3 节的完整 block-like 计算，只把共享输入 \(h_t\) 换成本节点入口 \(h_{v,t}\)：
+
+$$
+u_{v,t}=h_{v,t}+\rho_{v,t},
+$$
+
+$$
+g_{v,t}
+=u_{v,t}+E_v\!\left(N_{F,v}(u_{v,t})\right).
+$$
+
+节点随后把完整 \(g_{v,t}\) 发送到 Plan 声明的全部固定 children。只有当前 Line 的 inbox、选择、状态提交、完整节点计算和 Emit 全部结算后，才开始下一个 Line。实现可以做等价的批处理或流水线，但不得改变这个 reference semantics。
+
+`ParentAggregate` 是目标节点入口处的多父合并；它不要求各父消息具有共同输入。`ActiveBranchAggregate` 则描述共享 parent 的显式 fork-join 或 GraphBranch 与 backbone 的边界，二者不能因为都叫“汇聚”而混用。
+
+HB-Lattice 中 selector 概率怎样进入主任务梯度仍需逐项对齐：可以在 sender 端缩放节点相对入口的变化，也可以把概率作为目标节点 `ParentAggregate` 的权重。首个 Plan 必须明确选择其中一种，或明确只使用 hard active set 与辅助 loss；不能把 H1 的 `AGG` 名称自动解释成某种 HB-Lattice message weight。`AGG-NONE` 只表示没有显式 fork-join，不表示没有 `ParentAggregate`。
+
+#### 2.1.3 两类标准 TopologyBuilder
+
+第一类 builder 使用 \(B\) 叉扩展、逐坐标平台混合和镜像收拢。设扩展深度为 \(D_{\mathrm{up}}\)，平台 hop 数为 \(P\)，最大宽度为 \(W=B^{D_{\mathrm{up}}}\)，Line 宽度为：
+
+$$
+1,B,\ldots,B^{D_{\mathrm{up}}},
+\underbrace{B^{D_{\mathrm{up}}},\ldots,B^{D_{\mathrm{up}}}}_{P\text{ 个额外 Line}},
+B^{D_{\mathrm{up}}-1},\ldots,B,1.
+$$
+
+例如 \(B=2,D_{\mathrm{up}}=2,P=2\) 时，可以用二进制空间地址写成：
+
+~~~text
+L0:  ε
+L1:  0, 1
+L2:  00, 01, 10, 11
+L3:  00', 01', 10', 11'       # 混合第一位
+L4:  00'', 01'', 10'', 11''   # 混合第二位
+L5:  0', 1'
+L6:  ε'
+~~~
+
+扩展时追加一位；第一个平台 hop 令 \((a,b)\to(0,b),(1,b)\)，第二个 hop 令 \((a,b)\to(a,0),(a,1)\)；收拢时删除一位。\(L_0\to L_6\)、\(L_1\to L_5\) 的对应节点可以逐个开启镜像直通。样例可以把 \(L_1\) 和 \(L_5\) 各划成一个二节点 region，把每个宽度为 4 的 Line 划成 \(\{00,01\}\)、\(\{10,11\}\) 两个 regions；入口和 sink 强制激活。相同地址出现在不同 Line 时仍表示不同节点，默认不共享参数或状态。
+
+对称 \(B\) 叉模板中，扩展节点最多连接 \(B\) 个 children 和一个镜像节点，平台节点的入度、出度为 \(B\)，收拢节点最多接收 \(B\) 个深层 parents 和一个镜像 parent；这些上界不随平台宽度或长度增长。
+
+第二类 builder 使用统一空间有向 Graph。设平台坐标集合为 \(Q\)，空间图为 \(G_{\mathrm{space}}=(Q,E_{\mathrm{space}})\)，则每个相邻平台 hop 生成：
+
+$$
+E_d
+=\left\{
+((d,q),(d+1,q'))
+\mid(q,q')\in E_{\mathrm{space}}
+\right\}.
+$$
+
+同一空间图可以在所有平台 hop 重复，也可以由 builder 为不同 hop 产生不同 \(E_d\)。即使 \(G_{\mathrm{space}}\) 自身有环，逐 Line 展开后的 HB-Lattice 仍然无环。
+
+一个空间图可以同时包含固定大小的局部邻域和每节点固定数量的长程 shortcut。长程边宜采用置换或其他入度、出度同时有界的规则，避免宽度增长时形成高入度枢纽。平台 shortcut 只跨一个逻辑 Line、但跨越较远空间坐标；镜像直通则跨越多个逻辑 Line。两类边必须分别标记、记录成本并支持独立消融。
+
+### 2.2 共享 parent 的 fork-join 与 ActiveBranchAggregate
+
+H1 可以是只含一个共享 parent receiver group 的最简单 GraphBranch：
 
 $$
 \left(
@@ -499,16 +697,14 @@ $$
 
 对于 N，省略上式的状态输入和输出。
 
-### 2.1 内部分支与 ActiveBranchAggregate
-
-GraphBranch 内的分支还可以继续递归分支。设一次分支的共同输入为 \(h\)，当前激活分支集合为 \(\mathcal A\)，每个分支或子树始终返回未经当前汇合点加权的完整 hidden：
+更深 GraphBranch 也可以包含显式的共享 parent fork-join。设一次分支的共同输入为 \(h\)，当前激活分支集合为 \(\mathcal A\)，每个分支或已经收拢的子结构返回未经当前汇合点加权的完整 hidden：
 
 $$
 \widehat b_i=\mathcal B_i(h),
 \qquad i\in\mathcal A.
 $$
 
-这里的 \(\mathcal B_i\) 可以是一个 receiver 节点，也可以是已经完成更深层递归与收拢的子树。
+这里的 \(\mathcal B_i\) 可以是一个 receiver 节点，也可以是已经完成内部波前传播与收拢的子结构。这是 HB-Lattice 可以表达的一种局部结构，不代表所有 active nodes 都必须立即汇合。
 
 `ActiveBranchAggregate` 接收共同输入、若干完整分支输出及其系数，返回一个完整 hidden。统一定义为：
 
@@ -524,7 +720,7 @@ $$
 
 | 合并位置 | Policy | 语义 |
 | --- | --- | --- |
-| GraphBranch 内部的兄弟分支 | **MIX** | 用一组 \(\beta_i\) 从 active branches 中选择或混合出一个后继表示 |
+| GraphBranch 内部的显式 fork-join | **MIX** | 用一组 \(\beta_i\) 从共享 parent 的 active branches 中选择或混合出一个后继表示 |
 | GraphBranch 与 always-on base 的边界 | **RESIDUAL_ADD** | 保留 base 输出，再叠加 GraphBranch 相对共同输入产生的变化 |
 
 内部 **MIX** 的主要候选是：
@@ -590,9 +786,9 @@ $$
 =b_0+(b_{\mathcal G}-h).
 $$
 
-这正是后面四种 placement 的 merge；POST 中 \(b_0=h=v\)，结果直接退化为 \(\mathcal G(v)\)。GraphBranch 内部始终使用 **MIX**，包括由 selector 始终放行的 always-on branches；**RESIDUAL_ADD** 只用于 GraphBranch 与 backbone 的边界。
+这正是后面四种 placement 的 merge；POST 中 \(b_0=h=v\)，结果直接退化为 \(\mathcal G(v)\)。显式 fork-join 使用 **MIX**，HB-Lattice 多父入口使用第 2.1 节的 `ParentAggregate`；**RESIDUAL_ADD** 只用于 GraphBranch 与 backbone 的边界。
 
-### 2.2 POST：完整 block 后串联 GraphBranch
+### 2.3 POST：完整 block 后串联 GraphBranch
 
 先完整执行原 block：
 
@@ -626,7 +822,7 @@ x → Attention → u → 原 dense MLP → v → TIDE GraphBranch → y
 
 POST 与 base block 串行执行。GraphBranch 能看到当前 block 的 Attention 和原 MLP 结果；其内部可以包含一层或多层 receiver 节点。
 
-### 2.3 PARBLK：与完整 block 并列
+### 2.4 PARBLK：与完整 block 并列
 
 对位置 \(t\)，GraphBranch 与完整 base block 都从当前层输入开始，只在 block 末尾合并；base Attention 仍按第 1.2 节读取因果前缀 \(X_{\ell,\le t}\)：
 
@@ -655,7 +851,7 @@ x ────────┤                            + → y
 
 GraphBranch 看不到当前 block 的 Attention 或 MLP 结果，也不改变它们的输入。PARBLK 可以让 base block 与 GraphBranch 并行执行。
 
-### 2.4 PARATTN：与 Attention 并列
+### 2.5 PARATTN：与 Attention 并列
 
 GraphBranch 读取 \(x_{\ell,t}\)，在 Attention residual 位置返回唯一 residual；原 dense MLP 再读取合并后的表示：
 
@@ -678,7 +874,7 @@ x ────────┤                   + → u' → 原 dense MLP → y
 
 PARATTN 只说明 GraphBranch residual 在 Attention merge 位置接入，不限制 GraphBranch 内部只能包含 Attention。
 
-### 2.5 PARMLP：与 MLP 并列
+### 2.6 PARMLP：与 MLP 并列
 
 当前 Attention 先完成 residual merge；原 dense MLP 和 GraphBranch 都读取 \(u\)，最后在 MLP residual 位置合并：
 
@@ -704,7 +900,7 @@ GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 
 原 dense MLP 可以理解为 always-on shared branch，GraphBranch 是与它并列的稀疏有状态主旁路。两条分支的未归一化输入必须是同一个 \(u\)，才能称为 PARMLP。
 
-### 2.6 四种位置的直接比较
+### 2.7 四种位置的直接比较
 
 | Placement | GraphBranch 读取 | 看见当前 Attention 结果 | 看见当前原 MLP 结果 | 改变当前原 MLP 输入 | 逻辑关系 |
 | --- | --- | ---: | ---: | ---: | --- |
@@ -782,7 +978,7 @@ $$
 
 每个 site 独立计算 balance loss，再在 sites 间等权平均。统计范围是当前 micro-batch；梯度累积只累积各 micro-batch 的梯度，不预先把多个 micro-batches 合并成 global-batch balance loss。
 
-### 4.1 N、SD、BO 的 receiver balance loss
+### 4.1 H1 中 N、SD、BO 的 receiver balance loss
 
 对 site \(j\) 的 \(R\) 个 receivers，平均 softmax 概率为：
 
@@ -792,7 +988,7 @@ $$
 \sum_{(b,t)\in\mathcal V}p_{j,b,t}^{(i)}.
 $$
 
-当前 N、SD、BO 共同使用：
+当前 H1 的 N、SD、BO 共同使用：
 
 $$
 \mathcal L_{\mathrm{bal}}^{\mathrm{receiver}}
@@ -814,9 +1010,26 @@ $$
 }.
 $$
 
-\(\omega_{\mathrm{receiver}}\ge0\) 由实验设置记录；本文定义的 receiver 目标不含 router z-loss。
+\(\omega_{\mathrm{receiver}}\ge0\) 由实验设置记录；本文定义的 H1 receiver 目标不含 router z-loss。
 
-### 4.2 标准 MoE（M8）的 balance loss 与 router z-loss
+### 4.2 HB-Lattice 的 region balance loss
+
+HB-Lattice 中每个 region 只处理实际 reached 的节点。对 site \(j\)、Line \(d\)、region \(r\)，令：
+
+$$
+\mathcal V_{j,d,r}
+=\left\{
+(b,t)\mid\mathcal C_{j,d,r,b,t}\ne\varnothing
+\right\}
+$$
+
+表示该 region 在当前 micro-batch 中真正发生选择的 Token 事件。selector 只在 \(\mathcal C_{j,d,r,b,t}\) 内做 masked softmax；未 reached 节点不进入当前候选集合，也不能被 balance loss 当作本次本应选择的候选。
+
+这里的 \(\mathcal C_{j,d,r,b,t}\) 就是第 2.1 节的 \(\mathcal C_{d,r,t}\) 补回 site \(j\) 和序列 \(b\) 下标。
+
+同一 region 的不同节点可能拥有不同的 reached 机会，因此 H1 中固定以 \(1/R\) 为目标的公式不能直接照搬。HB-Lattice 最终采用按当前 availability 条件化的目标，还是按一段时间内各节点的可达机会归一化，仍需结合具体 topology 逐项对齐。在此之前，任何 HB-Lattice 实验都必须记录 region 的 reached mask、实际选择次数和所用辅助 loss 公式，不能只写“沿用 H1 balance loss”。
+
+### 4.3 标准 MoE（M8）的 balance loss 与 router z-loss
 
 M8 使用不同的 Switch-style balance loss。令 \(p_{j,b,t}^{(i)}\) 为 MoE router 的 softmax 概率，\(c_{j,b,t}\) 为硬 Top-1 expert，定义：
 
@@ -886,11 +1099,11 @@ $$
 | **Router z-loss** | 常用的可选稳定项，但采用并不统一 | [ST-MoE](https://arxiv.org/abs/2202.08906) 推荐，OLMoE 使用 |
 | **其他负载均衡路线** | 用动态 bias、分位数校准或系统级 dispatch 替代或补充经典辅助损失 | [DeepSeek-V3/R1](https://arxiv.org/abs/2412.19437)：动态 expert bias；[Kimi K3](https://github.com/MoonshotAI/Kimi-K3)：Quantile Balancing；[GLM-5.2](https://huggingface.co/zai-org/GLM-5.2)/5.3：`noaux_tc`，5.3 沿用 5.2 base；[MiniMax-Text-01](https://huggingface.co/MiniMaxAI/MiniMax-Text-01)：GShard-style auxiliary loss + global token dispatch |
 
-这里的动态 expert bias 和 Quantile Balancing 都是训练期均衡；Kimi K3 的最终 bias 在推理时冻结，不等于第 4.3 节的推理期负载感知 selector。
+这里的动态 expert bias 和 Quantile Balancing 都是训练期均衡；Kimi K3 的最终 bias 在推理时冻结，不等于第 4.4 节的推理期负载感知 selector。
 
 DENSE 没有 router，实际目标只有 \(\mathcal L_{\mathrm{LM}}\)。训练日志中的 `loss` 是包含上述辅助项的总损失，`lm_loss` 只表示 Token 预测损失；跨架构比较模型质量时应使用验证集 `lm_loss` 或 perplexity，而不是直接比较总 `loss` 或两种定义不同的 `balance_loss`。
 
-### 4.3 训练期均衡与推理期负载感知
+### 4.4 训练期均衡与推理期负载感知
 
 | 机制 | 训练时 | 推理时 | 作用 |
 | --- | --- | --- | --- |
@@ -923,7 +1136,7 @@ $$
 
 ### 5.1 科学条件名
 
-TIDE 候选的科学条件名采用：
+共享 parent 的 H1 候选继续采用：
 
 ~~~text
 <TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-<STATE>-<SELECTOR>-<AGG>
@@ -934,8 +1147,15 @@ TIDE 候选的科学条件名采用：
 ~~~text
 CPT-PARMLP-BO-R8-I4-H1-EMA128-SEL-POST-AGG-T1-HST
 PT-POST-SD-R8-I4-H1-EMA128-SEL-PRE-AGG-T1-SOFTP
-PT-PARMLP-BO-R4-I4-H2-GDN-K32-V32-SEL-CONTENT-AGG-T1-SOFTP
 ~~~
+
+非平凡 HB-Lattice 在 **H** 后追加 `T<TOPO_ID>`，例如：
+
+~~~text
+PT-POST-BO-R2-I4-H7-THBL2D2P2CMIR-GDN-K32-V32-SEL-POST-AGG-NONE
+~~~
+
+`TOPO_ID` 是已展开 `HBLatticePlan` 的可读索引，不代替 manifest 中的完整 Plan 与规范化哈希。
 
 字段定义如下：
 
@@ -944,18 +1164,19 @@ PT-PARMLP-BO-R4-I4-H2-GDN-K32-V32-SEL-CONTENT-AGG-T1-SOFTP
 | TRAIN | PT / CPT / FT / SFT | 初始化与训练阶段 |
 | PLACEMENT | POST / PARBLK / PARATTN / PARMLP | GraphBranch 的输入与 residual 返回位置 |
 | PROFILE | N / SD / BO | 状态接收与稀疏计算语义 |
-| R | R4、R8、R16 等 | 每个局部 receiver group 的候选数 |
+| R | R4、R8、R16、RVAR 等 | H1 group 或 HB-Lattice region 的候选数；不统一时用 RVAR |
 | I | I1、I4、I8 等 | 一个 Token 顺序经过的插入位置数 |
-| H | H1、H2 等 | 每个插入位置内部的 receiver group 递归层数 |
+| H | H1、H2 等 | 每个插入位置内部从入口到出口的最大 receiver-node 深度 |
+| T | T\<TOPO_ID\> | 非平凡 HB-Lattice 的已展开 topology 索引；H1 可以省略 |
 | STATE | NONE、EMA128、GDN-K32-V32、ATTN-FULL、ATTN-W128、ATTN-COMP 等 | 状态结构和必要尺寸 |
 | SELECTOR | SEL-CONTENT / SEL-PRE / SEL-POST | 第 1.3.1 节定义的 selector 输入时序 |
-| AGG | AGG-T1-SOFTP / AGG-T1-HST / AGG-K2-MEAN / AGG-K2-ROUTER / AGG-K2-LEARNED / AGG-VAR | 第 2.1 节定义的内部 MIX policy；K2 表示 Top-2，其他 K 值同理 |
+| AGG | AGG-NONE / AGG-T1-SOFTP / AGG-T1-HST / AGG-K2-MEAN / AGG-K2-ROUTER / AGG-K2-LEARNED / AGG-VAR | 第 2.2 节定义的显式 fork-join MIX policy；没有显式 fork-join 时用 NONE |
 
-**SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取 receiver 当前本地消息、额外读取旧状态或额外读取更新后状态。三者的 \(\operatorname{Score}\) 都同时接收公共 selector 消息 \(\mu\)，但名称不限定其内部采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
+**SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取 receiver 当前本地消息、额外读取旧状态或额外读取更新后状态。H1 的 \(\operatorname{Score}\) 还读取由共享 parent 产生的公共 \(\mu\)；HB-Lattice region 不要求存在单一公共 \(\mu\)，只联合处理 reached nodes 的轻量读出和 presence 信息。名称不限定打分采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
 
 如果历史激活记录会影响 selector 或输出，它就是模型前向语义的一部分，不能隐藏在同一个纯 EMA/GDN 条件名下。具体实现确定后，应在 **STATE** 中增加明确的复合状态标签；记录维度、衰减、写回规则等细节再放入 manifest。
 
-**AGG** 只表示 GraphBranch 内部的 MIX；GraphBranch 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不重复进入名称。如果不同 sites 或层级使用不同的 active 数量或 policy，则写 **AGG-VAR**，并在 manifest 中列出完整设置。
+**AGG** 只表示显式 fork-join 的 MIX；HB-Lattice 节点入口的 `ParentAggregate` 由 topology Plan 单独记录，GraphBranch 与 backbone 的 RESIDUAL_ADD 已由 placement 固定。如果不同 regions、sites 或 Line 使用不同 active 数量或 policy，则写 **AGG-VAR**，并在 manifest 中列出完整设置。
 
 TRAIN 的含义必须严格区分：
 
@@ -970,16 +1191,16 @@ TRAIN 描述 base 权重与训练目标；新分支的初始化方式由实验�
 
 ### 5.2 R、I、H 与 K 不得混用
 
-- **R8** 只表示每个局部 group 有 8 个候选，不表示模型共有 8 个 receivers。
+- **R8** 只表示每个局部 group 或 region 有 8 个候选，不表示模型共有 8 个 receivers。
 - **I8** 表示每个 Token 顺序经过 8 个插入位置，不表示 Transformer 只有 8 个 blocks。
-- **H2** 表示一个插入位置内部递归两层，不表示模型中有两个插入位置。
+- **H2** 表示一个插入位置内部的最大 receiver-node 深度为 2，不表示模型中有两个插入位置，也不能唯一确定拓扑。
 - **AGG-K2** 表示对应局部 group 激活两个候选，不表示该 group 只有两个候选。
 
 receiver branch 内部串行的状态/上下文 residual 与 FFN residual 合计仍算一层；只有完整分支输出继续进入下一个 receiver group 时，H 才增加。
 
 例如 **R4-I8-H1** 表示 8 个顺序插入位置，每处只有一层局部 receiver group，每个 group 有 4 个候选。它不是 8 层递归。
 
-如果不同插入位置或递归层采用不同宽度，短名字中使用 **RVAR**，并在 manifest 和报告中列出完整宽度向量；不得用一个看似统一的 R 值掩盖异构拓扑。
+如果不同插入位置、Line 或 region 采用不同宽度，短名字中使用 **RVAR**，并在 manifest 和报告中列出完整宽度；不得用一个看似统一的 R 值掩盖异构拓扑。H>1、平台期、多父边或镜像直通不能只靠 R/H 推断，必须同时给出 **TOPO_ID** 和完整 Plan。
 
 ### 5.3 具体 run 实例名
 
@@ -1015,15 +1236,19 @@ MOE 的精确插入 block、Top-K、capacity、token-drop、shared expert 和路
 即使规范名称相同，每个正式设置仍要明确记录：
 
 - 精确插入 block 编号；
-- 不同 sites 和递归层级之间不共享参数；
-- GraphBranch 内部的固定拓扑、逐层 Top-K、`ActiveBranchAggregate` policy 与权重、平台期、交叉边和收拢规则；
+- 不同 sites、Lines 和节点之间是否共享参数；默认不共享；
+- 完整 `HBLatticePlan`、规范化哈希，以及 TopologyBuilder 的名称、版本和配置；
+- 每条 Line 的 phase、节点与 region 划分，每条边的端点和 tree/local/shortcut/mirror 类别，以及逐节点镜像直通开关；
+- 最大 fan-in/fan-out、region 大小、逐 region 的 \(K^{\max}\) 与 forced-active 节点；
+- `ParentAggregate`、parent-presence、selector 概率进入 Emit 或父消息聚合的精确公式；
+- 显式 fork-join 的 `ActiveBranchAggregate` policy 与权重；
 - \(N_{\mathrm{sel}}\)、\(N_{R,i}\) 与 \(N_{F,i}\) 的精确实现和初始化；
 - \(\operatorname{Read}^{\mathrm{sel}}\)、\(\operatorname{Read}^{\mathrm{ffn}}\) 与 \(\operatorname{Score}\) 的精确公式、输出维度以及是否包含历史激活记录；
 - Observe、selector、状态提交和历史激活写回的精确顺序；
 - GraphBranch 与 backbone 的 RESIDUAL_ADD 公式以及任何额外缩放；
 - 各辅助 loss 的系数；
 - 状态初始化、有效 Token mask、跨 chunk 的 carry/reset 与梯度 detach 规则；
-- 辅助 loss 的 Token 范围、site/router 聚合范围以及是否跨 micro-batch 或设备统计；
+- 辅助 loss 的 Token 范围、site/Line/region 聚合范围、reached mask 处理以及是否跨 micro-batch 或设备统计；
 - 每个 Token 实际执行多少次本地入口归一化、轻量 selector 读出、Observe / Update、较大状态读出和昂贵 FFN；
 - 初始化怎样保持或改变 base 函数；
 - MOE 是否有 expert capacity、token drop 或 reroute。
