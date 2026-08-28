@@ -8,7 +8,7 @@
 
 ## 阅读入口：先看完整图景
 
-本文只从更上层研究计划继承 **TIDE** 这个名字，其余内容均可独立阅读。本文研究插入现有 Transformer 的 **GraphBranch**：对每个 Token，消息沿固定边到达 AggregatePorts，receiver nodes 准备可选状态与轻量读出，局部 selector 和传播 profile 决定状态提交与 active nodes，active nodes 完成计算并经 `EmitPolicy` 继续发送，终端端口最终返回一个同维 hidden；它相对入口产生的变化再合入 base 的 always-on 路径。第 1 节定义外部边界，第 2 节定义共用组件，第 3、4 节分别组成单层特例和 HB-Lattice。
+本文只从更上层研究计划继承 **TIDE** 这个名字，其余内容均可独立阅读。本文研究插入现有 Transformer 的 **GraphBranch**：对每个 Token，消息沿固定边到达 AggregatePorts，receiver nodes 准备可选状态与轻量读出，局部 selector 和传播 profile 决定状态提交与 active nodes，active nodes 完成计算并经 `EmitPolicy` 继续发送，终端端口最终返回一个同维 hidden；它相对入口产生的变化再合入 base 的 always-on 路径。第 1 节定义外部边界，第 2 节定义共用组件与策略，第 3、4 节分别组成单层特例和 HB-Lattice。
 
 ## 1. Base block 与 GraphBranch 顶层边界
 
@@ -102,7 +102,7 @@ $$
 =b^0_{j,t}+\Delta_{\mathcal G,j,t}.
 $$
 
-它保留 always-on 路径，只叠加 GraphBranch 相对共同入口产生的变化。第 2.4、3.5 节会把这种外部边界与 GraphBranch 内部的消息聚合分开。
+它保留 always-on 路径，只叠加 GraphBranch 相对共同入口产生的变化。第 2.5、3.5 节会把这种外部边界与 GraphBranch 内部的消息聚合分开。
 
 ### 1.4 四种 placement
 
@@ -198,18 +198,31 @@ GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 
 若 GraphBranch 初始化为 identity，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，四种 placement 都保持原 base 函数不变。离开初始点后，它们的前向耦合、梯度路径和有效深度不同，不能视为同一架构。语义上保留四种 placement；实现可以先从 POST 开始。
 
-## 2. GraphBranch 内部的共用组件
+## 2. GraphBranch 内部的共用组件与策略接口
 
-GraphBranch 的拓扑只负责用固定边连接若干标准组件；单层特例和 HB-Lattice 使用同一套组件与接口，不各自发明一套计算语义。数据面始终传递 \(d_{\mathrm{model}}\) 维的**完整 hidden**。
+单层特例和 HB-Lattice 使用同一套组件与策略接口；具体拓扑只决定它们的数量、固定连接和配置映射。数据面始终传递 \(d_{\mathrm{model}}\) 维的**完整 hidden**。
 
-### 2.1 固定边、AggregatePort 与消息
+### 2.1 共用角色一览
 
-| 组件 | 输入 | 输出 | 职责 |
-| --- | --- | --- | --- |
-| `GraphInputPort` | GraphBranch 入口 \(h^{\mathrm{in}}\) | 同一个完整 hidden | 沿固定出边发送入口消息 |
-| `AggregatePort` | 固定 parents 实际送达的完整 hidden | 一个完整 hidden \(h_v\) | 用 `MessageAggregate` 完成局部多父汇合 |
-| `GraphOutputPort` | 最终实际送达的完整 hidden | GraphBranch 输出 \(b_{\mathcal G}\) | 作为终端 AggregatePort 完成最终汇合 |
-| 固定边 | sender 发出的完整 hidden | child 的 inbox 条目 | 静态规定消息可以从哪里传到哪里 |
+| 类别 | 共用角色 | 职责 |
+| --- | --- | --- |
+| 数据图 | `GraphInputPort` | 唯一入口端点；把 \(h^{\mathrm{in}}\) 沿固定出边发送 |
+| 数据图 | 固定边 | 静态规定完整 hidden 可以从哪个 sender 传到哪个端口 |
+| 数据图 | `AggregatePort` | 收集固定 parents 实际送达的消息，合成一个完整 hidden |
+| 数据图 | receiver node | 持有独立参数与可选私有状态，active 时产生完整 hidden |
+| 数据图 | `GraphOutputPort` | 唯一出口端点和终端 AggregatePort；聚合最终消息并返回 \(b_{\mathcal G}\) |
+| 执行策略 | `MessageAggregate` | 规定每个 AggregatePort 怎样合并实际收到的消息 |
+| 执行策略 | `ReceiverNodeTemplate` | 规定 receiver 内部的状态、昂贵计算、归一化和 residual |
+| 控制 | selector / region | 在一个固定局部 region 的 reached receivers 中选择 active set |
+| 控制 | propagation profile | 规定哪些 reached receivers 提交状态、哪些执行完整计算 |
+| 执行策略 | `EmitPolicy` | 把 active receiver 的完整输出变成沿固定出边发送的消息 |
+| 仅训练 | `BalancePolicy` | 根据选择事件产生辅助均衡 loss，不改变推理数据流 |
+
+这些都是两种拓扑共用的角色。`GraphInputPort` 和 `GraphOutputPort` 各只有一个，均不是 receiver node；`GraphOutputPort` 同时是一个 AggregatePort。第 1.3 节的 GraphBranch 单入口、单出口契约与 `BoundaryMerge` 也对所有内部拓扑一致，但位于 GraphBranch 与 base 的外部边界。
+
+### 2.2 边界端口、固定边与消息聚合
+
+`GraphInputPort` 是数据图的 source：它不聚合消息、不持有状态，直接把 GraphBranch 入口 \(h^{\mathrm{in}}\) 沿全部固定出边发送。
 
 每个 receiver node 前都有一个输入 AggregatePort。令端口 \(a\) 在 Token \(t\) 实际收到的非空消息集合为 \(\mathcal M_{a,t}\)，则：
 
@@ -222,7 +235,7 @@ $$
 
 AggregatePort 不持有 receiver 私有状态，不参加 selector，也不执行 `NodeCompute`。一个 receiver 向多个 children 发送消息只是固定边的 fan-out，不需要额外的“发散点”。
 
-### 2.2 Receiver node
+### 2.3 Receiver node
 
 **receiver node** 是固定拓扑上持有独立参数和可选私有状态的计算节点。它通常包含一个记忆/状态模块和一个昂贵计算模块；拓扑只依赖下面的稳定契约，不依赖节点内部采用 EMA、Gated DeltaNet、Attention 还是其他实现。
 
@@ -238,7 +251,7 @@ AggregatePort 不持有 receiver 私有状态，不参加 selector，也不执�
 
 当前默认 `ReceiverNodeTemplate` 采用 Pre-Norm 双 residual，但模板可以替换；只要继续满足轻量 selector 读出、状态提交和完整 hidden 输出契约，拓扑、selector 与消息聚合就不需要改变。
 
-### 2.3 Selector、传播 profile 与 EmitPolicy
+### 2.4 Selector、传播 profile 与 EmitPolicy
 
 **selector** 与一个固定的局部 receiver 集合（region）关联。对当前 Token，它只在其中已经 reached 的 receivers 中产生 soft probabilities \(p\) 和 hard active set \(\mathcal A\)。selector 读取当前内容、presence 标记以及 receivers 本地生成的低维向量、范数或历史统计，不读取 receiver 的完整私有状态，也不执行 receiver 的昂贵计算。
 
@@ -273,17 +286,19 @@ $$
 
 同一个 \(\widehat g_{v,t}\) 被复制到该 receiver 的全部固定出边。selector 概率对当前主任务前向或梯度的直接作用统一放在 `EmitPolicy`，不在 receiver 内部或 `MessageAggregate` 中重复使用。`BalancePolicy` 只根据选择事件产生训练期辅助 loss，不改变推理数据流。
 
-### 2.4 每个 Token 的共用数据流
+### 2.5 每个 Token 的共用数据流
 
 不论拓扑深浅，一个 Token 都重复下面的局部过程：
 
 ~~~text
-固定 parents 发来的消息
+GraphInputPort(h_in) → 固定边
   → AggregatePort / MessageAggregate → reached receiver 的完整入口 h
   → receiver 本地消息，以及当前 selector 时序所需的轻量 Read^sel / proposal
   → region selector + propagation profile → active set 与状态提交
   → active receiver 的 NodeCompute
-  → EmitPolicy → 固定 children 的 AggregatePorts
+  → EmitPolicy → 固定边
+      ├→ 后续 receiver 的 AggregatePorts（若有则重复上述局部过程）
+      └→ GraphOutputPort / MessageAggregate → b_G
 ~~~
 
 content-only、pre-update 和 post-update 只改变 selector 前的轻量阶段顺序；N、SD、BO 只改变状态提交范围。拓扑则决定端口、receivers、regions 和固定边怎样排列：
@@ -293,11 +308,11 @@ content-only、pre-update 和 post-update 只改变 selector 前的轻量阶段�
 | **单层特例** | 输入端口连接一层并列 receivers；一个 selector 处理这些候选；输出端口聚合 active receivers 的消息 |
 | **HB-Lattice** | receivers 放在有序 Lines 中；每个 Line 划分局部 regions；固定边支持多父、多子和受限跨 Line 直通 |
 
-第 3 节用单层特例展开 selector 时序、状态提交、节点模板和 Emit/聚合公式；第 4 节保持相同组件语义，只增加 Plan、Line、region、波前和多父消息。第 1.3 节的 `BoundaryMerge` 位于 GraphBranch 与 base 的外部边界，不属于 `MessageAggregate`。
+第 3 节用单层特例展开 selector 时序、状态提交、节点模板和 Emit/聚合公式；第 4 节保持上述角色与接口不变，只增加 Plan、Line、波前和多父消息。
 
 ## 3. 单层特例：用最小拓扑展开共用接口
 
-本节把第 2 节的共用组件放进一个最小拓扑，并给出完整公式。GraphBranch 输入端口连接一层并列 receiver nodes；一个 selector 负责这些候选；active nodes 的消息直接进入输出端口。
+本节不引入新组件，只把第 2 节的共用角色放进一个最小拓扑并给出完整公式：输入端口连接一层并列 receiver nodes，一个 selector 负责这些候选，active nodes 的消息直接进入输出端口。
 
 ### 3.1 拓扑与局部符号
 
@@ -558,7 +573,7 @@ $$
 
 这直接对标 Pre-Norm Transformer block：记忆模块的读出承担第一个 residual 子层，昂贵 FFN 承担第二个 residual 子层；\(N_{R,i}\) 和 \(N_{F,i}\) 分别是两个子层的入口归一化。记忆模块内部可以采用 EMA、GDN、Attention 等实现。N 没有第一个 residual 子层，节点输出退化为 \(h+E_i(N_{F,i}(h))\)，但仍可计算供 selector 使用的本地消息和轻量读出。
 
-Pre-Norm 双 residual 是当前默认 `ReceiverNodeTemplate`，不是 receiver node 的永久定义。以后可以替换状态模块、昂贵计算、执行顺序、归一化或 residual 组合；只要继续满足第 2.2 节的轻量读出、状态提交和完整 hidden 输出契约，selector、拓扑执行与外部汇聚语义都无需改变。每个实验必须记录模板的精确公式和初始化。
+Pre-Norm 双 residual 是当前默认 `ReceiverNodeTemplate`，不是 receiver node 的永久定义。以后可以替换状态模块、昂贵计算、执行顺序、归一化或 residual 组合；只要继续满足第 2.3 节的轻量读出、状态提交和完整 hidden 输出契约，selector、拓扑执行与外部汇聚语义都无需改变。每个实验必须记录模板的精确公式和初始化。
 
 \(N_{\mathrm{sel}}\)、各 \(N_{R,i}\) 与各 \(N_{F,i}\) 的可学习参数互不共享，也不与 base block 共享。这两个 residual 子层合计仍只算一个 receiver node；只有该节点的完整输出继续进入另一个 receiver node 时，拓扑才增加一层。
 
@@ -673,7 +688,7 @@ $$
 
 ### 3.7 可选参考：Receiver node 的状态模块样例
 
-第 2.2、3.3 和 3.4 节中的 \(s\)、\(\operatorname{Update}\) 和 \(\operatorname{Read}^{\mathrm{sel}}\) 是所有 receiver nodes 共用的状态交互接口；\(\operatorname{Read}^{\mathrm{ffn}}\) 是当前默认 node 模板使用的较大状态读出。本节只展开状态模块样例，昂贵 FFN \(E\) 保持不变。下面的样例用于建立设计空间，不表示它们已经通过 TIDE 实验，也不预设哪一种必然最好。状态实现与 selector 时序是两个独立坐标：content-only 的 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取当前本地消息，pre/post state 则额外读取对应时刻的状态；\(\operatorname{Read}^{\mathrm{ffn}}\) 不受这一选择影响。
+第 2.3、3.3 和 3.4 节中的 \(s\)、\(\operatorname{Update}\) 和 \(\operatorname{Read}^{\mathrm{sel}}\) 是所有 receiver nodes 共用的状态交互接口；\(\operatorname{Read}^{\mathrm{ffn}}\) 是当前默认 node 模板使用的较大状态读出。本节只展开状态模块样例，昂贵 FFN \(E\) 保持不变。下面的样例用于建立设计空间，不表示它们已经通过 TIDE 实验，也不预设哪一种必然最好。状态实现与 selector 时序是两个独立坐标：content-only 的 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取当前本地消息，pre/post state 则额外读取对应时刻的状态；\(\operatorname{Read}^{\mathrm{ffn}}\) 不受这一选择影响。
 
 #### 3.7.1 一览
 
@@ -830,7 +845,7 @@ SSM（state-space model）/ Mamba-2 是另一类重要的固定状态候选，�
 
 ## 4. HB-Lattice：多层固定波前
 
-**HB-Lattice** 是本文对一种受限多层拓扑的专名，不依赖外部文档定义。它复用第 2 节的 AggregatePort、receiver node、selector、`EmitPolicy` 和 propagation profile，只增加多层固定边与逐 Line 波前执行。
+**HB-Lattice** 是本文对一种受限多层拓扑的专名，不依赖外部文档定义。它完整复用第 2 节的两个边界端口、AggregatePort / `MessageAggregate`、receiver node / template、selector、propagation profile、`EmitPolicy` 和 `BalancePolicy`，只增加描述固定边排列的 Plan、多个 Lines 与逐 Line 波前执行。
 
 ### 4.1 Line、region 与波前
 
@@ -879,7 +894,7 @@ receiver 的输入 AggregatePort 由该 receiver 及其固定入边唯一确定�
 | receiver node 入口 | 每个输入 AggregatePort 只收到同一个 \(h^{\mathrm{in}}_{j,t}\) | 每个 reached node 的 AggregatePort 可收到不同父消息并得到 \(h_{v,t}\) |
 | 当前候选 | 固定的 \(R\) 个 receiver nodes | 当前 region 中实际 reached 的 receiver nodes |
 | selector | 一个 region 在共享入口的 reached nodes 中选择 | 每个 Line 的各 regions 分别在本地 reached nodes 中选择 |
-| 状态与节点计算 | 第 2.2、3.3、3.4 节的契约与模板 | 复用相同契约，只替换节点入口 |
+| 状态与节点计算 | 第 2.3、3.3、3.4 节的契约与模板 | 复用相同契约，只替换节点入口 |
 | receiver node 输出 | 经 `EmitPolicy` 发到 `GraphOutputPort` | 经 `EmitPolicy` 沿固定边发到下游端口 |
 | 消息聚合 | 输出 AggregatePort 使用 `MessageAggregate` | receiver 输入端口与输出端口使用同一接口 |
 | GraphBranch 出口 | `GraphOutputPort` 聚合后得到 \(b_{\mathcal G,j,t}\) | 完全相同 |
@@ -1029,7 +1044,7 @@ $$
 
 因此 BO + post-update state 的顺序是“全部 reached nodes 聚合并计算 Update proposal → 各 region 选择 → 全部 reached nodes commit / Observe → active nodes 执行”；SD 仍只自然兼容 content-only 和 pre-update state。一个节点即使收到多个父消息，也只在其输入端口完成一次 `MessageAggregate` 后计算一次 proposal。
 
-active 节点沿用第 2.2、3.4 节的完整输出契约，只把单层特例的共同入口 \(h^{\mathrm{in}}_{j,t}\) 换成本节点入口 \(h_{v,t}\)：
+active 节点沿用第 2.3、3.4 节的完整输出契约，只把单层特例的共同入口 \(h^{\mathrm{in}}_{j,t}\) 换成本节点入口 \(h_{v,t}\)：
 
 $$
 g_{v,t}

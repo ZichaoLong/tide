@@ -30,7 +30,7 @@ TIDE 当前有三个最底层的结构要求：
 
 如果每个 Token 还只能执行少量昂贵模块，就要在逐级传播中做局部选择，并对消息、传播深度和总激活量设置明确预算。
 
-本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。每个 receiver 前的 `AggregatePort` 负责聚合固定入边实际送达的消息；GraphBranch 的终端 `GraphOutputPort` 使用同一聚合接口，但后面不再接 receiver node。
+本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。所有 GraphBranch 拓扑共用唯一的 `GraphInputPort` 和 `GraphOutputPort`：前者沿固定边发送入口 hidden，后者作为终端 `AggregatePort` 聚合最终消息。每个 receiver 前也有一个 `AggregatePort`，负责聚合固定入边实际送达的消息。
 
 receiver node 接收聚合后的完整 hidden，状态只在节点本地 proposal / commit，只把轻量 selector 读出和 active 时的完整 hidden 交给外部；selector 与消息聚合都位于节点外部。selector 只在固定局部候选集中选择已经 reached 的 nodes，不是拓扑发散点。当前默认 node 模板由可选记忆/状态模块和昂贵计算组成，并采用 Pre-Norm 双 residual，后续可以在保持外部契约不变的前提下替换内部模板。Attention readout、FFN、大型 SSM 更新等主体计算统称为“昂贵计算”，以区别于消息投影和轻量状态更新。
 
@@ -283,7 +283,8 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 近期实现少量稳定抽象，不先完成一般 Graph runtime：
 
 - `CheckpointAdapter`：原生装载、状态映射和 equality oracle；
-- `GraphBranchBoundary`：单入口、单出口以及与 checkpoint backbone 的唯一 merge；
+- `GraphBranchBoundary`：GraphBranch 与 checkpoint backbone 的外部接口及唯一 merge；
+- `GraphInputPort` / `GraphOutputPort`：所有 GraphBranch 拓扑共用的唯一入口端点与终端聚合端点；
 - `HBLatticePlan`：已展开的边界端口、Lines、节点、边、regions 和镜像直通；
 - `HBLatticeExecutionConfig`：propagation profile、node template/state、selector、Emit、消息聚合和训练期均衡；
 - `TopologyBuilder`：由规则树、逐坐标混合或空间 Graph 生成 Plan；

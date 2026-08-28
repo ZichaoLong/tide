@@ -221,7 +221,8 @@ Observe / Update 或交叉消息发生
 | 抽象 | 职责 |
 | --- | --- |
 | `CheckpointAdapter` | 原生装载、状态映射和 equality oracle |
-| `GraphBranchBoundary` | 单入口、单出口以及与 checkpoint backbone 的唯一 merge |
+| `GraphBranchBoundary` | GraphBranch 与 checkpoint backbone 的外部接口及唯一 merge |
+| `GraphInputPort` / `GraphOutputPort` | 所有 GraphBranch 拓扑共用的唯一入口端点与终端聚合端点 |
 | `HBLatticePlan` | 保存已展开的边界端口、Lines、节点、边、regions 和镜像直通 |
 | `HBLatticeExecutionConfig` | 配置 propagation profile、node template/state、selector、Emit、消息聚合和训练期均衡 |
 | `TopologyBuilder` | 由规则树、逐坐标混合或空间 Graph 生成 Plan |
