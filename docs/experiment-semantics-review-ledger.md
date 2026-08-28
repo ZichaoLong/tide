@@ -49,8 +49,8 @@
 | **ESN-013** | P2 | 关闭 | 文首、2、2.7、5.3 | 若文档面向可独立阅读的领导或新读者，TIDE、N、SD、BO、M8、SSM、SSD、ST-MoE、`noaux_tc` 等首次出现时仍缺少展开或一句解释。EMA 的 \(\lambda_i\) 是标量还是向量、GDN 的 q/k/value 维度也被省略。 | 首次出现时补最短定义；补 \(\lambda_i\) 的取值范围/形状和 GDN 核心张量维度，不扩写成综述。 |
 | **ESN-014** | P2 | 已修改 | 2.7.4、2.7.6、5.3 备注 | 外部模型事实基本正确，但负载均衡表缺少官方出处；“公认有效”偏强，“KDA 是 GDN 的近期改进”也容易被理解为严格继承关系。 | 为模型/报告名加入官方链接；把 z-loss 改成“常用的可选稳定项”；把 KDA 表述为 delta-rule 家族中采用更细粒度门控的后续路线。 |
 | **ESN-015** | P1 | 已修改 | 6.1、7 | manifest 已覆盖 Plan、builder、边类别、region、ParentAggregate、EmitPolicy、BalancePolicy、参数共享和诊断范围。 | 核验 K、EMIT、PAGG、AGG、BAL 字段是否足够且没有职责重叠。 |
-| **ESN-016** | P0 | 已修改 | 1.1、2.4、2.5、2.7、3.4、6.2、7 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的标准节点。 | `Read^ffn` 统一返回 hidden residual；receiver branch 依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
-| **ESN-017** | P0 | 关闭 | 1.1、2.2—2.4、2.7、6.1、7 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
+| **ESN-016** | P0 | 已修改 | 2.1、2.4、2.5、2.7、3.4、6.2、7 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的标准节点。 | `Read^ffn` 统一返回 hidden residual；receiver node 依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
+| **ESN-017** | P0 | 关闭 | 2.1、2.2—2.4、2.7、6.1、7 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver node 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
 
 ## 3. 对齐记录
 
@@ -68,8 +68,8 @@
 | 2026-08-26 | ESN-002、015 | 四种 placement 统一接入单入口、单出口 GraphBranch；placement 只决定输入和一个 residual 的返回位置，内部递归、Top-K、聚合、平台期、交叉汇聚与收拢仍需继续对齐。 | 本次提交（部分） |
 | 2026-08-26 | ESN-002、015 | GraphBranch 内部边统一传递完整 hidden 并始终使用 MIX；只有 GraphBranch 与 backbone 的边界使用 RESIDUAL_ADD。具体 H2 topology 仍待对齐。 | 本次提交（部分） |
 | 2026-08-26 | ESN-002、007、015 | receiver group 只产生完整候选；Soft-P、Hard-ST、Top-K 和 RESIDUAL_ADD 统一由一个 \(\beta\) 公式表达，router 概率不再被重复使用；GATE 名称字段改为 AGG。 | 本次提交 |
-| 2026-08-26 | ESN-016 | 标准 receiver branch 先把 `Read^ffn` 的 hidden residual 加回输入，再执行 Pre-Norm FFN；N 的该 residual 为零；Attention/EMA/GDN output projection 收入 `Read^ffn`；H 只计算 receiver group 深度。 | 本次提交 |
-| 2026-08-26 | ESN-017 | selector 公共消息与 receiver 本地消息分离；receiver-local `N_R,i`、状态模块、`N_F,i` 和 FFN 组成独立 branch，selector 只接收轻量本地读出。 | `06dafb1` |
+| 2026-08-26 | ESN-016 | 标准 receiver node 先把 `Read^ffn` 的 hidden residual 加回输入，再执行 Pre-Norm FFN；N 的该 residual 为零；Attention/EMA/GDN output projection 收入 `Read^ffn`；H 只计算 receiver node 深度。 | 本次提交 |
+| 2026-08-26 | ESN-017 | selector 公共消息与 receiver 本地消息分离；receiver-local `N_R,i`、状态模块、`N_F,i` 和 FFN 组成独立 receiver node，selector 只接收轻量本地读出。 | `06dafb1` |
 | 2026-08-28 | ESN-001、002、015 | H>1 的执行边界改为手动规定 Line 的受限 HB-Lattice；执行器消费已展开 Plan，TopologyBuilder 只负责生成 Plan，不扩展为一般 DAG runtime。 | 本次提交（待逐项核验） |
 | 2026-08-28 | ESN-002、005、007 | 增加 reached set、region selector、一次性多父 `ParentAggregate` 和波前 barrier；HB balance loss 与 selector 概率进入主任务梯度的位置继续保留为待对齐项。 | 本次提交（部分） |
 | 2026-08-28 | ESN-001、005、007、015 | HB selector 概率在 sender 的 delta Hard-ST `EmitPolicy` 进入主任务梯度；多父 `ParentAggregate` 独立使用均值；region balance 采用 availability-conditioned soft 目标，并单列诊断量与命名字段。 | 本次提交（待逐项核验） |
@@ -88,7 +88,7 @@
 | **OK-006** | 第 5.4 节对训练期 balance loss 与推理期负载感知 selector 的区分正确。 |
 | **OK-007** | Qwen3-Next/Qwen3.5 使用 Gated DeltaNet、Kimi K3 使用 Quantile Balancing 且推理时冻结最终 bias、GLM-5.2 配置使用 `noaux_tc`，这些事实未发现硬错误。 |
 | **OK-008** | 文档标题编号连续，数学与代码围栏成对，基线通过 `git diff --check`。 |
-| **OK-009** | 第 2.4、2.5 节的标准 receiver branch、N 退化、`Read^ffn` 输出维度和 H1 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
+| **OK-009** | 第 2.4、2.5 节的标准 receiver node、N 退化、`Read^ffn` 输出维度和 H1 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
 | **OK-010** | 第 2.2—2.4、2.7 节的 `N_sel`、receiver-local `N_R,i`、三种 `Read^sel` 时序、状态样例和计算量说明使用同一套独立入口语义。 |
 
 ## 5. 建议对齐顺序

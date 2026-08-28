@@ -225,7 +225,7 @@ Observe / Update 或交叉消息发生
 | `TopologyBuilder` | 由规则树、逐坐标混合或空间 Graph 生成 Plan |
 | `WavefrontExecutor` | 严格逐 Line 结算受限 HB-Lattice |
 | `MessageProjection` | 固定、有界 receiver slots 和消息形状 |
-| `ReceiverCell` | 分离 Observe、Update、状态读出与 ExpensiveCompute |
+| `ReceiverCell` | 实现单个 receiver node，分离 Observe、Update、状态读出与 ExpensiveCompute |
 | `PropagationProfile` | 切换 `selected-dispatch` / BO 并产生各类 mask |
 | `RegionSelector` | 在一个 Line 的固定有界区域内选择 reached nodes |
 | `ReceiverState` | 保存节点私有状态及可选的轻量选择历史 |
