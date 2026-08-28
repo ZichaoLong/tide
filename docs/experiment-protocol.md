@@ -49,7 +49,7 @@ Head-Wise MoE 可以在这些基线可靠后作为可选后续，用来检验局
 - clone-and-split，并经代数验证保持旧模块贡献；
 - token-local Top-K 与立即 weighted merge；
 - 无 expert 私有跨 Token 状态；
-- 可配置 shared expert 或 always-on residual branch。
+- 可配置 shared expert 或 always-on residual path。
 
 如果 TIDE 只优于尚未调好的 checkpoint-grown MoE，不能据此声称优于 flat MoE 强基线。
 
@@ -222,18 +222,19 @@ Observe / Update 或交叉消息发生
 | --- | --- |
 | `CheckpointAdapter` | 原生装载、状态映射和 equality oracle |
 | `GraphBranchBoundary` | 单入口、单出口以及与 checkpoint backbone 的唯一 merge |
-| `HBLatticePlan` | 保存已展开的 Lines、节点、边、regions 和镜像直通 |
-| `HBLatticeExecutionConfig` | 配置 propagation profile、node template/state、selector、Emit、多父聚合和训练期均衡 |
+| `HBLatticePlan` | 保存已展开的边界端口、Lines、节点、边、regions 和镜像直通 |
+| `HBLatticeExecutionConfig` | 配置 propagation profile、node template/state、selector、Emit、消息聚合和训练期均衡 |
 | `TopologyBuilder` | 由规则树、逐坐标混合或空间 Graph 生成 Plan |
 | `WavefrontExecutor` | 严格逐 Line 结算受限 HB-Lattice |
 | `MessageProjection` | 固定、有界 receiver slots 和消息形状 |
 | `ReceiverCell` | 实现单个 receiver node 的稳定输入、轻量读出、状态提交和完整输出契约 |
 | `ReceiverNodeTemplate` | 组合状态模块、昂贵计算、归一化和 residual；当前默认是 Pre-Norm 双 residual |
 | `PropagationProfile` | 切换 `selected-dispatch` / BO 并产生各类 mask |
-| `RegionSelector` | 在一个 Line 的固定有界区域内选择 reached nodes |
+| `Selector` | 在一个 Line 的固定有界区域内选择 reached nodes；它不是拓扑发散点 |
 | `ReceiverState` | 保存节点私有状态，并实现 Update 与供 selector / node compute 使用的局部读出 |
 | `EmitPolicy` | 把 active 节点的完整输出变成发往固定 children 的消息 |
-| `ParentAggregate` / `BoundaryMerge` | 分别处理多父 inbox 与 GraphBranch 外部 merge |
+| `AggregatePort` / `MessageAggregate` | 统一处理 receiver 输入与 GraphBranch 输出的局部消息聚合 |
+| `BoundaryMerge` | 处理 GraphBranch 与 checkpoint backbone 的外部 residual merge |
 | `BalancePolicy` | 仅在训练时根据 routing events 产生辅助均衡 loss |
 | `RouteArtifact` | 记录每 Token 和每节点的 receive/update/active/read/emit |
 | `ExperimentLedger` | 保存谱系、配置、成本、数据、checkpoint 和指标 |
