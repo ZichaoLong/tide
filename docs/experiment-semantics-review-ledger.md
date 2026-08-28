@@ -6,6 +6,7 @@
 > [`experiment-semantics-and-naming.md`](experiment-semantics-and-naming.md)。
 >
 > 本台帐只记录问题、决定和处理状态，不替代规范正文。未经对齐，不据此预先修改正文。
+> “涉及章节”使用规范正文的当前章节号。
 
 ## 1. 使用方式
 
@@ -33,23 +34,23 @@
 
 | 编号 | 优先级 | 状态 | 涉及章节 | 审视意见 | 建议方向或完成标准 |
 | --- | --- | --- | --- | --- | --- |
-| **ESN-001** | P0 | 已修改 | 1.1、1.3、2.1、4、5.2 | base block、site、Token、Line、node、region 和 routing event 已分开编号。 | 保持 \(b,\ell,j,t,d,u/v,r\) 的职责分离；正文可省略不影响理解的下标。 |
-| **ESN-002** | P0 | 部分对齐 | 文首、1.3、2.1、5.1、5.2 | H>1 已收敛为手动规定波前的受限 HB-Lattice，不再强行解释成唯一树形 H2；具体实验由已展开 `HBLatticePlan` 与执行配置共同确定。 | 逐项核验 Plan grammar、波前顺序、镜像直通、region 与多父聚合；R/H/K 只作摘要。 |
-| **ESN-003** | P0 | 已修改 | 1.3.1、1.3.2、1.4.2、4.4、5.1 | `SEL-CONTENT` 被定义为只读当前消息，但历史负载等持久信息也可能影响 selector。 | 不设置独立集中式 SelectorState；节点把可选的轻量选择历史保存在 receiver state 中，并通过 `Read^sel` 发给 selector。 |
-| **ESN-004** | P0 | 已修改 | 1.4.5 | Attention state 的示例默认 receiver 保存窗口内每个 Token，但 SD 只能保存该 receiver 实际 Observe 的 Token；当前公式实际只自然对应 BO。key 维度 \(K\) 与 key 矩阵 \(K_{\ell,t}\) 也发生重名，堆叠的 key/value 矩阵未定义。 | 用“实际 Observe 的时间集合”定义历史；明确 Append/Evict 的 `Update`；定义堆叠矩阵并用 \(d_k\) 等符号表示维度；说明完整历史是否只在固定最大上下文下视为有界。 |
-| **ESN-005** | P0 | 已修改 | 4、4.1、4.2 | H1 使用固定候选的 soft balance；HB-Lattice 首个设置使用 availability-conditioned soft balance。 | 核验 \(\bar p,\bar p^{\mathrm{avail}},\bar f\) 与 region reduction；其他统计目标必须另行命名。 |
-| **ESN-006** | P1 | 关闭 | 1.3.1、1.3.2 | `Score_i(m,s_i)`只允许 logit \(i\) 读取本 receiver 的状态，无法表达联合打分。 | receivers 局部执行轻量 `Read^sel`；向量值 `Score` 输出全部 logits，可以逐候选独立打分，也可以联合处理这些读出。active receivers 另行执行较大的 `Read^ffn`。 |
-| **ESN-007** | P1 | 已修改 | 1.3.2、2.1、2.2、5.1、6 | H1 在 `ActiveBranchAggregate` 使用概率；HB-Lattice 在 sender `EmitPolicy` 使用 delta Hard-ST，`ParentAggregate` 不复用该概率。 | 核验 EMIT-HST 的前向、反向、\(\zeta^{\mathrm{ST}}\) 与 identity 初始化行为。 |
-| **ESN-008** | P1 | 关闭 | 1.3、5.1 | 允许值表没有阻止无定义组合，例如严格 SD + `SEL-POST`，以及没有 SelectorState 扩展时的 N + `SEL-PRE/POST`。broadcast-proposal 若进入实验，也不能继续冒充 SD 或 BO。 | 增加简短兼容表：N 仅 content、SD 支持 content/pre、BO 支持三者；SelectorState 和 broadcast-proposal 另行扩展并命名。 |
-| **ESN-009** | P1 | 已修改 | 3.2、4.3、5.4 | M8 在损失章节直接出现，也没有自包含地写出复制原 dense MLP、Top-1、无 capacity、无 token drop、无 reroute 和不乘 soft 概率的完整设置。 | 在 3.2 首次把 M8 定义为 MOE-R8 的简写并说明初始化/dispatch 语义；把不设 capacity、不丢 Token 等设置写清楚。 |
-| **ESN-010** | P1 | 关闭 | 1.3、1.4、6 | 公式从 \(S_{t-1}\) 开始，但没有定义序列首状态；也没有在核心语义中明确状态逐序列隔离、无效 Token 是否 Update、chunk 是继承还是清零、跨 chunk 是否截断梯度。`prefill = decode` 也未作通俗解释。 | 已定义空首状态、有效 Token 规则、逐序列隔离、跨 chunk carry 与默认 detach，并明确 `prefill = decode` 的判定。 |
-| **ESN-011** | P1 | 已修改 | 文首、5.1、5.3 | 文首称名称应说明“从什么权重开始训练”，但 TRAIN 只表达 PT/CPT/FT/SFT 类别，精确 checkpoint 和 revision 留在 manifest；表述承诺超过了名称实际承载的信息。 | 把文首改为“权重初始化类别与训练阶段”，或扩充名称；继续让精确 checkpoint 谱系由 manifest 保存。 |
-| **ESN-012** | P1 | 已修改 | 4、5、6 | `0.01`、`0.001` 和 Soft-P 等既像固定规范，又实际上可以由配置改变；当前实现、历史实验默认值和未来允许值的边界不够清楚。 | 对每项明确标注“当前历史实验值”“新实验默认值”或“规范固定值”；任何可配置且影响比较的值都必须进入 manifest，关键实验轴进入短名称。 |
-| **ESN-013** | P2 | 关闭 | 文首、1.3、1.4、4.3 | 若文档面向可独立阅读的领导或新读者，TIDE、N、SD、BO、M8、SSM、SSD、ST-MoE、`noaux_tc` 等首次出现时仍缺少展开或一句解释。EMA 的 \(\lambda_i\) 是标量还是向量、GDN 的 q/k/value 维度也被省略。 | 首次出现时补最短定义；补 \(\lambda_i\) 的取值范围/形状和 GDN 核心张量维度，不扩写成综述。 |
-| **ESN-014** | P2 | 已修改 | 1.4.4、1.4.6、4.3 备注 | 外部模型事实基本正确，但负载均衡表缺少官方出处；“公认有效”偏强，“KDA 是 GDN 的近期改进”也容易被理解为严格继承关系。 | 为模型/报告名加入官方链接；把 z-loss 改成“常用的可选稳定项”；把 KDA 表述为 delta-rule 家族中采用更细粒度门控的后续路线。 |
-| **ESN-015** | P1 | 已修改 | 5.1、6 | manifest 已覆盖 Plan、builder、边类别、region、ParentAggregate、EmitPolicy、BalancePolicy、参数共享和诊断范围。 | 核验 K、EMIT、PAGG、AGG、BAL 字段是否足够且没有职责重叠。 |
-| **ESN-016** | P0 | 已修改 | 1.1、1.3.2、1.4、2.1、2.2、5.2、6 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的标准节点。 | `Read^ffn` 统一返回 hidden residual；receiver branch 依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
-| **ESN-017** | P0 | 关闭 | 1.1、1.3、1.4、5.1、6 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
+| **ESN-001** | P0 | 已修改 | 1.1、2、3、5、6.2 | base block、site、Token、Line、node、region 和 routing event 已分开编号。 | 保持 \(b,\ell,j,t,d,w/v,r\) 的职责分离；正文可省略不影响理解的下标。 |
+| **ESN-002** | P0 | 部分对齐 | 文首、2、3、6.1、6.2 | H>1 已收敛为手动规定波前的受限 HB-Lattice，不再强行解释成唯一树形 H2；具体实验由已展开 `HBLatticePlan` 与执行配置共同确定。 | 逐项核验 Plan grammar、波前顺序、镜像直通、region 与多父聚合；R/H/K 只作摘要。 |
+| **ESN-003** | P0 | 已修改 | 2.3、2.4、2.7.2、5.4、6.1 | `SEL-CONTENT` 被定义为只读当前消息，但历史负载等持久信息也可能影响 selector。 | 不设置独立集中式 SelectorState；节点把可选的轻量选择历史保存在 receiver state 中，并通过 `Read^sel` 发给 selector。 |
+| **ESN-004** | P0 | 已修改 | 2.7.5 | Attention state 的示例默认 receiver 保存窗口内每个 Token，但 SD 只能保存该 receiver 实际 Observe 的 Token；当前公式实际只自然对应 BO。key 维度 \(K\) 与 key 矩阵 \(K_{\ell,t}\) 也发生重名，堆叠的 key/value 矩阵未定义。 | 用“实际 Observe 的时间集合”定义历史；明确 Append/Evict 的 `Update`；定义堆叠矩阵并用 \(d_k\) 等符号表示维度；说明完整历史是否只在固定最大上下文下视为有界。 |
+| **ESN-005** | P0 | 已修改 | 5、5.1、5.2 | H1 使用固定候选的 soft balance；HB-Lattice 首个设置使用 availability-conditioned soft balance。 | 核验 \(\bar p,\bar p^{\mathrm{avail}},\bar f\) 与 region reduction；其他统计目标必须另行命名。 |
+| **ESN-006** | P1 | 关闭 | 2.3、2.4 | `Score_i(m,s_i)`只允许 logit \(i\) 读取本 receiver 的状态，无法表达联合打分。 | receivers 局部执行轻量 `Read^sel`；向量值 `Score` 输出全部 logits，可以逐候选独立打分，也可以联合处理这些读出。active receivers 另行执行较大的 `Read^ffn`。 |
+| **ESN-007** | P1 | 已修改 | 2.4、2.5、3、6.1、7 | H1 在 `ActiveBranchAggregate` 使用概率；HB-Lattice 在 sender `EmitPolicy` 使用 delta Hard-ST，`ParentAggregate` 不复用该概率。 | 核验 EMIT-HST 的前向、反向、\(\zeta^{\mathrm{ST}}\) 与 identity 初始化行为。 |
+| **ESN-008** | P1 | 关闭 | 2.3、2.4、6.1 | 允许值表没有阻止无定义组合，例如严格 SD + `SEL-POST`，以及没有 SelectorState 扩展时的 N + `SEL-PRE/POST`。broadcast-proposal 若进入实验，也不能继续冒充 SD 或 BO。 | 增加简短兼容表：N 仅 content、SD 支持 content/pre、BO 支持三者；SelectorState 和 broadcast-proposal 另行扩展并命名。 |
+| **ESN-009** | P1 | 已修改 | 4.2、5.3、6.4 | M8 在损失章节直接出现，也没有自包含地写出复制原 dense MLP、Top-1、无 capacity、无 token drop、无 reroute 和不乘 soft 概率的完整设置。 | 在 4.2 首次把 M8 定义为 MOE-R8 的简写并说明初始化/dispatch 语义；把不设 capacity、不丢 Token 等设置写清楚。 |
+| **ESN-010** | P1 | 关闭 | 2.6、2.7、7 | 公式从 \(S_{t-1}\) 开始，但没有定义序列首状态；也没有在核心语义中明确状态逐序列隔离、无效 Token 是否 Update、chunk 是继承还是清零、跨 chunk 是否截断梯度。`prefill = decode` 也未作通俗解释。 | 已定义空首状态、有效 Token 规则、逐序列隔离、跨 chunk carry 与默认 detach，并明确 `prefill = decode` 的判定。 |
+| **ESN-011** | P1 | 已修改 | 文首、6.1、6.3 | 文首称名称应说明“从什么权重开始训练”，但 TRAIN 只表达 PT/CPT/FT/SFT 类别，精确 checkpoint 和 revision 留在 manifest；表述承诺超过了名称实际承载的信息。 | 把文首改为“权重初始化类别与训练阶段”，或扩充名称；继续让精确 checkpoint 谱系由 manifest 保存。 |
+| **ESN-012** | P1 | 已修改 | 5、6、7 | `0.01`、`0.001` 和 Soft-P 等既像固定规范，又实际上可以由配置改变；当前实现、历史实验默认值和未来允许值的边界不够清楚。 | 对每项明确标注“当前历史实验值”“新实验默认值”或“规范固定值”；任何可配置且影响比较的值都必须进入 manifest，关键实验轴进入短名称。 |
+| **ESN-013** | P2 | 关闭 | 文首、2、2.7、5.3 | 若文档面向可独立阅读的领导或新读者，TIDE、N、SD、BO、M8、SSM、SSD、ST-MoE、`noaux_tc` 等首次出现时仍缺少展开或一句解释。EMA 的 \(\lambda_i\) 是标量还是向量、GDN 的 q/k/value 维度也被省略。 | 首次出现时补最短定义；补 \(\lambda_i\) 的取值范围/形状和 GDN 核心张量维度，不扩写成综述。 |
+| **ESN-014** | P2 | 已修改 | 2.7.4、2.7.6、5.3 备注 | 外部模型事实基本正确，但负载均衡表缺少官方出处；“公认有效”偏强，“KDA 是 GDN 的近期改进”也容易被理解为严格继承关系。 | 为模型/报告名加入官方链接；把 z-loss 改成“常用的可选稳定项”；把 KDA 表述为 delta-rule 家族中采用更细粒度门控的后续路线。 |
+| **ESN-015** | P1 | 已修改 | 6.1、7 | manifest 已覆盖 Plan、builder、边类别、region、ParentAggregate、EmitPolicy、BalancePolicy、参数共享和诊断范围。 | 核验 K、EMIT、PAGG、AGG、BAL 字段是否足够且没有职责重叠。 |
+| **ESN-016** | P0 | 已修改 | 1.1、2.4、2.5、2.7、3.4、6.2、7 | receiver state 只条件化 FFN 输入，无法表达状态/Attention residual 后再接 Pre-Norm FFN 的标准节点。 | `Read^ffn` 统一返回 hidden residual；receiver branch 依次执行状态/上下文 residual 与 FFN residual；N 令该读出为零；两个子层合计仍算一个 H 层级。 |
+| **ESN-017** | P0 | 关闭 | 1.1、2.2—2.4、2.7、6.1、7 | group 公共入口 norm 让所有 receivers 共享同一个可学习输入适配器，也混合了 selector 公共输入与 receiver 本地消息两种角色。 | selector 使用独立 `N_sel`；每个 receiver 使用自己的 `N_R,i`，只向 selector 发送轻量 `Read^sel`；RMS 统计可复用，但可学习 scale 不共享。 |
 
 ## 3. 对齐记录
 
@@ -80,15 +81,15 @@
 | 编号 | 已核验内容 |
 | --- | --- |
 | **OK-001** | Base Qwen3 block 正确表达了 Pre-Norm 与 causal prefix 依赖。 |
-| **OK-002** | POST、PARBLK、PARATTN、PARMLP 四种 placement 共享同一个 GraphBranch 契约；其公式与 RESIDUAL_ADD 一致。 |
-| **OK-003** | 当前 H1 下，content-only/pre/post 的选择、active set、状态提交、`Read^sel` 和 `Read^ffn` 顺序自洽。 |
-| **OK-004** | H1 `ActiveBranchAggregate` 只使用一次 \(\beta\)；Soft-P 与 Hard-ST 公式正确，Hard-ST 前向为 1、对被选概率的导数为 1，离散 Top-1 本身不反传。 |
-| **OK-005** | H1 receiver balance loss、M8 Switch-style balance loss、stop-gradient 和 router z-loss 与当前代码一致。 |
-| **OK-006** | 训练期 balance loss 与推理期负载感知 selector 的区分正确。 |
+| **OK-002** | 第 1.3、1.4 节中，POST、PARBLK、PARATTN、PARMLP 四种 placement 共享同一个 GraphBranch 契约；其公式与 RESIDUAL_ADD 一致。 |
+| **OK-003** | 第 2.3、2.4 节中，content-only/pre/post 的选择、active set、状态提交、`Read^sel` 和 `Read^ffn` 顺序自洽。 |
+| **OK-004** | 第 2.5 节的 H1 `ActiveBranchAggregate` 只使用一次 \(\beta\)；Soft-P 与 Hard-ST 公式正确，Hard-ST 前向为 1、对被选概率的导数为 1，离散 Top-1 本身不反传。 |
+| **OK-005** | 第 5.1、5.3 节的 H1 receiver balance loss、M8 Switch-style balance loss、stop-gradient 和 router z-loss 与当前代码一致。 |
+| **OK-006** | 第 5.4 节对训练期 balance loss 与推理期负载感知 selector 的区分正确。 |
 | **OK-007** | Qwen3-Next/Qwen3.5 使用 Gated DeltaNet、Kimi K3 使用 Quantile Balancing 且推理时冻结最终 bias、GLM-5.2 配置使用 `noaux_tc`，这些事实未发现硬错误。 |
 | **OK-008** | 文档标题编号连续，数学与代码围栏成对，基线通过 `git diff --check`。 |
-| **OK-009** | 标准 receiver branch、N 退化、`Read^ffn` 输出维度和 H1 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
-| **OK-010** | H1 的 `N_sel`、receiver-local `N_R,i`、三种 `Read^sel` 时序、状态样例和计算量说明使用同一套独立入口语义。 |
+| **OK-009** | 第 2.4、2.5 节的标准 receiver branch、N 退化、`Read^ffn` 输出维度和 H1 `ActiveBranchAggregate` 展开采用同一套 block-like 语义。 |
+| **OK-010** | 第 2.2—2.4、2.7 节的 `N_sel`、receiver-local `N_R,i`、三种 `Read^sel` 时序、状态样例和计算量说明使用同一套独立入口语义。 |
 
 ## 5. 建议对齐顺序
 
