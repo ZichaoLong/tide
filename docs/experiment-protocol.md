@@ -10,8 +10,8 @@
 2. 探索实验可以同时引入一组有共同理由的机制，用来寻找完整候选的正面信号；任何单项因果结论都要补直接反事实。
 3. 总参数、active parameters、实际 FLOPs、训练 Token、优化器和数据尽量匹配。无法同时匹配时，分别报告 capacity-matched、compute-matched、resource-matched 和 quality-matched 结果。
 4. Correctness、机制使用、训练质量、容量扩展和系统性能使用彼此独立的证据门。
-5. Selector 的模型语义不能依赖 batch 组成、chunk 切分或实时设备负载。
-6. 每个实验完整记录静态拓扑、门控范围、传播 profile、状态生命周期、selector、预算、merge/backbone 和物理放置。
+5. Selector 的单 Token 前向决策语义不能依赖 batch 组成或 chunk 切分；训练期 balance loss 可以按 micro-batch 统计，推理期负载感知另行声明。
+6. 每个实验完整记录静态拓扑、selector 候选范围、传播 profile、状态生命周期、selector、预算、merge/backbone 和物理放置。
 7. 下一项机制由已观察问题牵引，不按预设阶段机械推进。
 
 实验分为三类：
@@ -43,11 +43,11 @@ Head-Wise MoE 可以在这些基线可靠后作为可选后续，用来检验局
 
 #### Flat MoE 强基线
 
-成熟强基线应包含合理调优的 router、load balancing、shared expert、expert packing 和训练超参数。Checkpoint-grown matched control 至少比较：
+成熟强基线应包含合理调优的 router、load balancing、shared expert、expert packing 和训练超参数。需要把带 router 权重的 canonical MoE 与本项目的硬 dispatch/no-gate M8 分开记录；二者都可以作为对照，但不是同一个计算语义。Checkpoint-grown matched control 至少比较：
 
 - 零 residual 或零输出投影，初始化函数等于原模型；
 - clone-and-split，并经代数验证保持旧模块贡献；
-- token-local Top-K 与立即 weighted merge；
+- token-local Top-K 与明确的 merge 规则（canonical weighted merge 或 M8 hard dispatch）；
 - 无 expert 私有跨 Token 状态；
 - 可配置 shared expert 或 always-on residual path。
 
@@ -63,11 +63,13 @@ Head-Wise MoE 可以在这些基线可靠后作为可选后续，用来检验局
 - 中性 residual growth；
 - fan-in 和 fan-out 具有统一上界的局部分支；
 - 明确 active/message budget 的稀疏昂贵计算；
-- 在声明位置使用 fan-in 有界的 fixed merge，或回到稳定 region/backbone 接口。
+- GraphBranch 内部用 fan-in 有界的 `AggregatePort`/`MessageAggregate` 汇合，外部再用稳定的 `BoundaryMerge` 合入 always-on backbone。
 
-工作流 B 把 `broadcast-observe`（BO）作为主要验证轴。第一轮候选会围绕下面两条可能作用路径设计：
+这里 fan-in/fan-out 分别指固定入边数和出边数。
 
-面向以后的一般 Graph，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 出发的 matched controls。这个定位不预先代表 BO 已被证明更优。
+工作流 B 把 `broadcast-observe`（BO；Observe 指把当前消息提交到状态）作为主要验证轴。第一轮候选会围绕下面两条可能作用路径设计：
+
+面向后续更深的固定拓扑，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 出发的 matched controls。这个定位不预先代表 BO 已被证明更优。
 
 ```text
 当次 Observe / Proposal：
@@ -125,7 +127,7 @@ receiver 看到当前消息并更新摘要
 | BO 但冻结未激活 state 或禁止延迟读出 | 收益是否来自未激活期间积累的状态 |
 | state clear / shuffle / no-read / reset | 已写状态是否按预期影响以后输出 |
 | fixed/hash route | Learned selector 是否真正有价值 |
-| matched Leaf-Gated 配置 | 内部 receiver 门控是否有独立作用 |
+| matched receiver 内部额外门控配置 | 内部 receiver 门控是否有独立作用 |
 | 无状态 FFN 路径 vs 有状态 Attention/SSM receiver | 收益来自条件计算，还是私有序列记忆 |
 | 相同多父拓扑关闭 vs 开启交叉边 | 扩大局部历史来源是否改善质量 |
 
@@ -216,22 +218,22 @@ Observe / Update 或交叉消息发生
 
 ## 7. 近期软件边界
 
-近期实现建立少量稳定抽象，不先完成一般 Graph runtime：
+近期实现建立少量稳定抽象，不先完成通用图 runtime：
 
 | 抽象 | 职责 |
 | --- | --- |
 | `CheckpointAdapter` | 原生装载、状态映射和 equality oracle |
-| `GraphBranchBoundary` | GraphBranch 与 checkpoint backbone 的外部接口及唯一 merge |
-| `GraphInputPort` / `GraphOutputPort` | 所有 GraphBranch 拓扑共用的唯一入口端点与终端聚合端点 |
+| `GraphBranchBoundary` | 语义文档第 1.3 节的 GraphBranch 外部封装；内部执行唯一 `BoundaryMerge` |
+| `GraphInputPort` / `GraphOutputPort` | 每个 GraphBranch 内唯一的入口端点与终端聚合端点 |
 | `HBLatticePlan` | 保存已展开的边界端口、Lines、节点、边、regions 和镜像直通 |
 | `HBLatticeExecutionConfig` | 配置 propagation profile、node template/state、selector、Emit、消息聚合和训练期均衡 |
-| `TopologyBuilder` | 由规则树、逐坐标混合或空间 Graph 生成 Plan |
+| `TopologyBuilder` | 由规则树、逐坐标混合或受限空间图模板生成 Plan |
 | `WavefrontExecutor` | 严格逐 Line 结算受限 HB-Lattice |
-| `MessageProjection` | 固定、有界 receiver slots 和消息形状 |
-| `ReceiverCell` | 实现单个 receiver node 的稳定输入、轻量读出、状态提交和完整输出契约 |
+| `MessageProjection` | 可选的固定形状、有限宽度消息适配；投影/恢复公式、是否有损及成本须记录 |
+| `ReceiverCell` | receiver node 的可选实现封装；稳定契约归属于 receiver node |
 | `ReceiverNodeTemplate` | 组合状态模块、昂贵计算、归一化和 residual；当前默认是 Pre-Norm 双 residual |
-| `PropagationProfile` | 切换 `selected-dispatch` / BO 并产生各类 mask |
-| `Selector` | 在一个 Line 的固定有界区域内选择 reached nodes；它不是拓扑发散点 |
+| `PropagationProfile` | 切换 `N`（无状态）/ `SD`（selected-dispatch）/ `BO` 并产生各类 mask；Observe 即状态 commit |
+| `Selector` | 在固定有界 region 内选择 reached nodes；它不是拓扑发散点 |
 | `ReceiverState` | 保存节点私有状态，并实现 Update 与供 selector / node compute 使用的局部读出 |
 | `EmitPolicy` | 把 active 节点的完整输出变成发往固定 children 的消息 |
 | `AggregatePort` / `MessageAggregate` | 统一处理 receiver 输入与 GraphBranch 输出的局部消息聚合 |
@@ -240,13 +242,13 @@ Observe / Update 或交叉消息发生
 | `RouteArtifact` | 记录每 Token 和每节点的 receive/update/active/read/emit |
 | `ExperimentLedger` | 保存谱系、配置、成本、数据、checkpoint 和指标 |
 
-同一 `HBLatticePlan` 必须能配合不同的 `HBLatticeExecutionConfig` 切换传播 profile、保存和恢复状态、执行 knockout，并分别统计轻量更新和昂贵计算。近期需要受限的 HB-Lattice 波前执行器，但不需要一般 event IR、任意 DAG 调度器、跨设备 allocator 或有环 Graph executor。
+同一 `HBLatticePlan` 必须能配合不同的 `HBLatticeExecutionConfig` 切换传播 profile、保存和恢复状态、执行 knockout，并分别统计轻量更新和昂贵计算。近期需要受限的 HB-Lattice 波前执行器，但不需要一般 event IR、通用图调度器、跨设备 allocator 或有环 Graph executor。
 
 ## 8. 首个可交付成果
 
 1. 选定开放权重 checkpoint、训练数据、框架和目标硬件。
 2. 完成原生 equality oracle、continued-training 校准与 save/reload 测试。
-3. 建立统一 `ReceiverCell` contract、`ReceiverNodeTemplate`、传播 profile、状态和 instrumentation 接口。
+3. 建立统一 receiver-node contract、`ReceiverNodeTemplate`、传播 profile、状态和 instrumentation 接口；`ReceiverCell` 作为可选封装。
 4. 在工作流 A 建立 dense 与成熟 flat MoE 强基线。
 5. 在工作流 B 实现一个保留 always-on backbone、具有有界局部连接、BO、可实际读出的私有状态、稀疏昂贵激活和 fixed merge 的首轮完整候选。
 6. 同时保留 matched `selected-dispatch`、状态 knockout 和交叉边开关。

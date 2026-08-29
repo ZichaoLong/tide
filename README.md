@@ -10,7 +10,7 @@
 >
 > 上游研究总入口：[ObsidianVault / TIDE](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)
 
-快速阅读：想一眼看懂研究理由，读第 1.2 节；想逐条检查完整推理，读第 2.3 节；想了解当前任务，读第 3 节；准备实现时读第 5、6 节和 [实验协议](docs/experiment-protocol.md)；实际采用的每日设置与结果见 [实验记录](experiments/README.md)。
+快速阅读：想一眼看懂研究理由，读第 1.2 节；想逐条检查完整推理，读第 2 节；想了解当前任务，读第 3 节；准备实现时读第 5、6 节和 [实验协议](docs/experiment-protocol.md)；实际采用的每日设置与结果见 [实验记录](experiments/README.md)。
 
 ## 1. 项目目标与当前状态
 
@@ -22,19 +22,19 @@ TIDE 的完整项目表述是：`TIDE: A Topology-Invariant Degree-bounded Expan
 
 TIDE 当前有三个最底层的结构要求：
 
-1. **固定空间拓扑**：对一个已经确定的模型，节点和边不随 Token、状态或 selector 临时改变。
-2. **单节点成本有界**：入口、receiver、selector、router 和 merge 的参数、状态、连接、候选处理与通信成本，不随模型总容量一直增长。
+1. **固定空间拓扑**：对一个已经确定的模型，底层节点和边不随 Token、状态或 selector 临时改变；每个 Token 实际激活的子图可以不同。
+2. **单节点成本有界**：入口、receiver、selector（MoE 对照中的 router）和 merge 的参数、状态、连接、候选处理与通信成本，不随模型总容量一直增长。
 3. **可达容量增长**：扩大模型时，更多潜在容量仍然能够被输入到达并实际利用。
 
-固定拓扑本身不表示度有界。但每条直接连接都会占用接口、状态、候选处理或通信资源；在这个成本口径下，单节点成本有统一上界会进一步限制节点度。有界度与可达容量增长共同要求多跳、逐级、层次化或空间化扩展，而不是一步平铺访问全部容量。
+固定拓扑本身不表示度有界。但每条直接连接都会占用接口、状态、候选处理或通信资源；在这个成本口径下，单节点成本有统一上界会进一步限制节点度。有界度与可达容量增长共同要求固定拓扑上的多跳、逐级、层次化或空间化扩展，而不是一步平铺访问全部容量。
 
 如果每个 Token 还只能执行少量昂贵模块，就要在逐级传播中做局部选择，并对消息、传播深度和总激活量设置明确预算。
 
-本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。所有 GraphBranch 拓扑共用唯一的 `GraphInputPort` 和 `GraphOutputPort`：前者沿固定边发送入口 hidden，后者作为终端 `AggregatePort` 聚合最终消息。每个 receiver 前也有一个 `AggregatePort`，负责聚合固定入边实际送达的消息。
+本文把接收上游消息并拥有自身参数或状态的下游模块称为 `receiver`，它作为固定拓扑顶点时称为 **receiver node**。每个 GraphBranch 内有一个 `GraphInputPort` 和一个 `GraphOutputPort`：前者沿固定边发送入口 hidden，后者是唯一出口端点并在内部执行终端 `MessageAggregate`。每个 receiver 前也有一个 `AggregatePort`，负责聚合固定入边实际送达的消息。
 
-receiver node 接收聚合后的完整 hidden，状态只在节点本地 proposal / commit，只把轻量 selector 读出和 active 时的完整 hidden 交给外部；selector 与消息聚合都位于节点外部。selector 只在固定局部候选集中选择已经 reached 的 nodes，不是拓扑发散点。当前默认 node 模板由可选记忆/状态模块和昂贵计算组成，并采用 Pre-Norm 双 residual，后续可以在保持外部契约不变的前提下替换内部模板。Attention readout、FFN、大型 SSM 更新等主体计算统称为“昂贵计算”，以区别于消息投影和轻量状态更新。
+receiver node 接收聚合后的完整 hidden，状态只在节点本地 proposal / commit，只把轻量 selector 读出和 active 时的完整 hidden 交给外部；selector 与消息聚合都位于节点外部。selector 只在固定局部候选集中选择已经 reached 的 nodes，不是拓扑发散点。当前默认 node 模板由可选记忆/状态模块和昂贵计算组成，并采用 Pre-Norm 双 residual，后续可以在保持外部契约不变的前提下替换内部模板。Attention readout 与 FFN 等主体计算统称为“昂贵计算”；状态 Update（即使采用大型 SSM）和消息投影单独计量，避免把 BO 的全 reached 更新误算成稀疏昂贵激活。
 
-> **当前状态：** Flat MoE 已经提供可靠的外部正面证据；本仓库自身尚无可靠训练结果。层次递归、私有状态、`broadcast-observe`（BO）、交叉汇聚和多次局部选择是否有效，都需要实验回答。
+> **当前状态：** 学界和业界的成熟 Flat MoE 已经提供可靠的外部正面证据；在本文定义的新语义下，本仓库尚无可靠的确认性结果。历史 v0 运行仍保留在实验记录中，不能直接当作新语义的证据。层次递归、私有状态、`broadcast-observe`（BO）、交叉汇聚和多次局部选择是否有效，都需要实验回答。
 
 ### 1.1 本仓库最终要回答什么
 
@@ -99,7 +99,7 @@ Flat MoE 证明：大容量可以与每 Token 少量昂贵计算同时存在
 寻找可训练、可扩展的成功候选，并通过配对实验建立归因
 ```
 
-第一条把“由目标得到的结构推论”和“近期采用的工程起点”分开；第二条记录的是“待验证风险 -> 候选机制 -> 实验任务”，不把 BO 写成由 TIDE 目标严格推出的结论。本节供快速阅读，第 2.3 节保留同一逻辑的完整版本；核心逻辑变化时，以第 2.3 节为完整记录，并同步更新这里的摘要。
+第一条把“由目标得到的结构推论”和“近期采用的工程起点”分开；第二条记录的是“待验证风险 -> 候选机制 -> 实验任务”，不把 BO 写成由 TIDE 目标严格推出的结论。本节供快速阅读，第 2 节保留同一推理的完整版本；核心逻辑变化时，以第 2 节为完整记录，并同步更新这里的摘要。
 
 ## 2. 从成熟基线到当前推理
 
@@ -149,7 +149,7 @@ TIDE 要研究的是：能否沿固定空间图逐步接触更多容量，使单
 
 10. **如果下游历史覆盖稀释真实存在并且有害，有几类重要候选机制。** 私有状态与 Update/Compute 分离可以保存收到的信息；BO 可以让未被选中做昂贵计算的固定直接下游仍获得 Observe / Update 机会；分支间交叉汇聚可以交换不同路径已经处理过的信息；backbone reinjection 可以重新提供稳定公共上下文。
 
-11. **BO 是工作流 B 的主要验证轴。** Active sender 向全部固定直接 children 发送；所有实际 receivers 执行声明的轻量 Observe / Update，只有少数 receivers 做昂贵计算并继续传播。它还允许 selector 读取更新后的 receiver state。第一批候选会重点检验这种“先收到和更新，再稀疏计算”的局部介质是否有 learning、scaling 和系统价值。
+11. **BO 是工作流 B 的主要验证轴。** 消息沿 active sender 的全部固定出边发送；BO 让所有 reached receivers 执行声明的轻量 Observe / Update，只有少数 active receivers 做昂贵计算并继续传播。配合 post-update selector 时，selector 还可以读取当前消息产生的 state proposal。第一批候选会重点检验这种“先收到和更新，再稀疏计算”的局部介质是否有 learning、scaling 和系统价值。
 
 12. **BO 首先改变的是一跳范围内的消息和写入机会。** 它不会绕过更早没有激活的祖先，也不保证状态一定在以后被读出，更不保证所有深层节点得到完整无损历史。因此必须与相同拓扑、相同 route 或 replay route 的 `selected-dispatch` 做直接对照。
 
@@ -163,7 +163,7 @@ TIDE 要研究的是：能否沿固定空间图逐步接触更多容量，使单
 
 #### 工作流 B 要验证什么
 
-17. **工作流 B 的核心任务，是找到至少一个可训练、可扩展的成功候选。** 当前用 always-on backbone 和 fixed merge 作为稳定骨架，把私有状态、BO、交叉汇聚、backbone reinjection、门控范围和 selector 作为可以组合、替换和消融的设计轴。其中 BO 是第一批实验的主要验证轴。
+17. **工作流 B 的核心任务，是找到至少一个可训练、可扩展的成功候选。** 当前用 always-on backbone 和 fixed merge 作为稳定骨架，把私有状态、BO、交叉汇聚、backbone reinjection、激活预算和 selector 作为可以组合、替换和消融的设计轴。其中 BO 是第一批实验的主要验证轴。
 
 第一轮探索要回答：在固定局部拓扑和明确预算下，能否从 checkpoint 中性生长出一个稳定训练、真实使用新增机制并优于匹配对照的完整候选。浅层实验可以先判断机制是否有 learning value；要支持 TIDE 的长期主张，还必须进一步进入有界度多跳或空间 scaling，验证容量增长时单节点成本、总工作和系统成本仍然可控。
 
@@ -195,7 +195,7 @@ Checkpoint 生长线近期并行推进两个工作流：
 
 工作流 B 不把 BO 当作由结构目标自动推出的结论，但把它作为主要验证轴。当前候选空间分成四层：
 
-面向以后的一般 Graph，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 自然延伸出的 matched controls。这个定位不预先代表 BO 已被证明更优。
+面向后续更深的固定拓扑，BO 是主要候选 profile；N 和 SD 分别作为从无状态 MoE 与 selected dispatch 自然延伸出的 matched controls。这个定位不预先代表 BO 已被证明更优。
 
 | 类别 | 内容 |
 | --- | --- |
@@ -233,7 +233,7 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 | 技术 | 当前作用 | 主要风险 |
 | --- | --- | --- |
-| 有界度递归或局部 DAG | 通过多跳接触增长的容量 | 传播深度、控制寿命和物理通信增长 |
+| 固定拓扑上的有界度多跳/空间扩展 | 通过多跳接触增长的容量 | 传播深度、控制寿命和物理通信增长 |
 | Always-on backbone | 保留 checkpoint 能力和公共梯度路径 | 新分支可能长期不被使用 |
 | Fixed merge | 在已知位置结束显式路径身份 | 不会消除已写入私有状态的延迟影响 |
 | 私有状态 | 保存 receiver 收到的局部历史 | 显存、顺序依赖和延迟信用 |
@@ -242,7 +242,7 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 | Backbone reinjection | 重新提供稳定公共表示 | 可能削弱局部路径的独立价值 |
 | Local selector | 在固定小候选集内控制稀疏激活 | 路由漂移、饥饿和状态语义复杂度 |
 
-每个具体候选至少要记录：静态拓扑、最大 fan-in/fan-out、门控范围、传播 profile、状态生命周期、selector 输入与决策、active/message budget、backbone/merge、交叉边和物理放置。
+每个具体候选至少要记录：静态拓扑、最大 fan-in/fan-out（固定入边/出边数）、selector 候选范围、传播 profile、状态生命周期、selector 输入与决策、active/message budget、backbone/merge、交叉边和物理放置。
 
 ## 5. 实验方法与成功标准
 
@@ -280,20 +280,20 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 ## 6. 近期交付与软件边界
 
-近期实现少量稳定抽象，不先完成一般 Graph runtime：
+近期实现少量稳定抽象，不先完成通用图 runtime：
 
 - `CheckpointAdapter`：原生装载、状态映射和 equality oracle；
-- `GraphBranchBoundary`：GraphBranch 与 checkpoint backbone 的外部接口及唯一 merge；
-- `GraphInputPort` / `GraphOutputPort`：所有 GraphBranch 拓扑共用的唯一入口端点与终端聚合端点；
+- `GraphBranchBoundary`：GraphBranch 与 checkpoint backbone 的外部封装；内部执行唯一 `BoundaryMerge`；
+- `GraphInputPort` / `GraphOutputPort`：每个 GraphBranch 内唯一的入口端点与终端聚合端点；
 - `HBLatticePlan`：已展开的边界端口、Lines、节点、边、regions 和镜像直通；
 - `HBLatticeExecutionConfig`：propagation profile、node template/state、selector、Emit、消息聚合和训练期均衡；
-- `TopologyBuilder`：由规则树、逐坐标混合或空间 Graph 生成 Plan；
+- `TopologyBuilder`：由规则树、逐坐标混合或受限空间图模板生成 Plan；
 - `WavefrontExecutor`：严格逐 Line 结算受限 HB-Lattice；
-- `MessageProjection`：固定、有界的 receiver slots；
-- `ReceiverCell`：实现单个 receiver node 的稳定输入、轻量读出、状态提交和完整输出契约；
+- `MessageProjection`：可选的固定形状、有限宽度消息适配，不改变语义接口；
+- `ReceiverCell`：一个 receiver node 的可选实现封装；稳定契约归属于 receiver node；
 - `ReceiverNodeTemplate`：组合状态模块、昂贵计算、归一化和 residual；当前默认是 Pre-Norm 双 residual；
-- `PropagationProfile`：切换 `selected-dispatch` / BO；
-- `Selector`：在一个 Line 的固定有界区域内选择 reached nodes；它不是拓扑发散点；
+- `PropagationProfile`：切换 `N`（无状态）/ `SD`（selected-dispatch）/ `BO`；
+- `Selector`：在固定有界 region 内选择 reached nodes；它不是拓扑发散点；
 - `ReceiverState`：保存节点私有状态，并实现 Update 与供 selector / node compute 使用的局部读出；
 - `EmitPolicy`：把 active 节点的完整输出变成发往固定 children 的消息；
 - `AggregatePort` / `MessageAggregate`：统一处理 receiver 输入与 GraphBranch 输出的局部消息聚合；
@@ -313,9 +313,9 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 这个交付首先要求实验可重放、候选语义完整、问题可观测、主要验证轴能够配对比较；不要求首轮结果已经证明 TIDE 有效。
 
-首轮 v0 已有可运行的浅层 PyTorch reference implementation，位于 [`src/tide`](src/tide)；上面的 HB-Lattice Plan 与波前执行器是后续实现边界，不表示 v0 已经具备。当天实际采用的模型、公式、命令、运行状态和结果统一记入 [每日实验记录](experiments/README.md)，避免把易变的运行细节继续堆进 README。
+首轮 v0 已有可运行的浅层 PyTorch reference implementation，位于 [`src/tide`](src/tide)；它是 legacy reference，目前不实现本文新增的 SEL-PRE/SEL-POST、EMIT-HST 或 receiver-local 独立归一化等完整契约。上面的 HB-Lattice Plan 与波前执行器是后续实现边界，不表示 v0 已经具备。当天实际采用的模型、公式、命令、运行状态和结果统一记入 [每日实验记录](experiments/README.md)，避免把易变的运行细节继续堆进 README。
 
-近期需要受限的 HB-Lattice 波前执行器，但不需要一般 event IR、任意 DAG 调度器、跨设备 allocator 或有环 Graph executor。
+近期需要受限的 HB-Lattice 波前执行器，但不需要通用事件 IR、通用图调度器、跨设备 allocator 或有环 Graph executor。
 
 ## 7. 当前不能主张的结论
 
@@ -325,10 +325,10 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 - 下游历史覆盖稀释必然等于当前 hidden 丢失上下文，或必然伤害任务质量。
 - 多父交叉汇聚必然恢复完整历史、缓解路径漂移，或只能采用 BO。
 - 一个组合候选成功，就分别证明其中所有部件都必要。
-- 规则递归是一般 Graph 的唯一扩展方式。
+- 规则递归是唯一的扩展方式。
 - Fixed merge、always-on backbone 或某种 mixer 对所有局部 Graph 都必要或最优。
 - 逻辑邻接局部会自动带来物理通信局部和更低延迟。
-- 固定空间 DAG 自动得到 Transformer/Mamba 级 node 内 Token 并行。
+- 固定空间拓扑会自动得到 Transformer/Mamba 级 node 内 Token 并行。
 - 任意 stateful selector 都能获得高性能 chunk `prefill`。
 - 人脑结构证明了 TIDE 可训练或高效。
 
@@ -336,7 +336,7 @@ README 只保留每项技术的角色，具体 reference semantics、公式和�
 
 ## 8. 背景、理论与上游文档
 
-TIDE 的早期动机来自 LH 对“局部通信 + 超稀疏”的一般 Graph 设想。后续研究发现，任意跨 Token、不可组合的自适应控制链会妨碍高性能 exact chunk `prefill`，因此近期实验优先使用固定局部 DAG、明确状态、有限控制寿命和可验证的 `prefill = decode` 语义。
+TIDE 的早期动机来自 LH 对“局部通信 + 超稀疏”的更一般固定拓扑设想。后续研究发现，任意跨 Token、不可组合的自适应控制链会妨碍高性能 exact chunk `prefill`，因此近期实验优先使用固定局部拓扑、明确状态、有限控制寿命和可验证的 `prefill = decode` 语义。
 
 Graph 收缩线继续负责定义、证明、反例和更一般拓扑；本仓库的 checkpoint 生长线负责真实训练、归因和系统实验。两条路线可以交换约束和候选，不要求最终收敛到同一种架构。
 
@@ -344,7 +344,7 @@ Graph 收缩线继续负责定义、证明、反例和更一般拓扑；本仓�
 
 - [TIDE 研究线总入口](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/README.md)：正式命名、战略路线和文档地图。
 - [TIDE Architecture / Network：模型架构与训练](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-model-architecture-and-training.md)：checkpoint 生长、结构候选和训练风险。
-- [TIDE 数学基础](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-mathematical-foundations.md)：`StepTransition`、`prefill = decode`、logical event DAG 与函数保持生长。
+- [TIDE 数学基础](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-mathematical-foundations.md)：`StepTransition`、`prefill = decode` 与函数保持生长。
 - [Adaptive routing prefill lower bound](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/adaptive-routing-prefill-lower-bound.md)：不可组合自适应路由的反向边界。
 - [TIDE 背景、历史谱系与参考](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-background-history-and-references.md)：LH、ISA/dataflow 和脑科学背景。
 - [TIDE Engine：runtime 验证与状态](https://github.com/ZichaoLong/ObsidianVault/blob/master/20-tide-decentralized-neural-network/tide-runtime-validation-and-status.md)：runtime contract、artifact equality 与工程状态。
