@@ -16,11 +16,11 @@
 
 GraphBranch 的工作方式是，对每个 Token，接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选中选择少量 receiver 做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
 
-本文档还特别注重，应可从原始 Transformer checkpoint 的良好基线出发，在满足上述三个要求的前提下逐步扩容，避免基于尚未验证的不成熟神经网络组件进行研究起步时，永远无法获得有效正面验证结果。因此，额外要求 GraphBranch 接入后可通过适当的初始话方式，保持与原始模型的函数级等价。
+本文档还特别注重，应可从原始 Transformer checkpoint 的良好基线出发，在满足上述三个要求的前提下逐步扩容，避免基于尚未验证的不成熟神经网络组件进行研究起步时，永远无法获得有效正面验证结果。因此，额外要求 GraphBranch 接入后可通过适当的初始化方式，保持与原始模型的函数级等价。
 
-对于一般的允许不等长路径、异步消息到达的 DAG，乃至更一般的可能有环的空间 Graph，本文档的基础组件、接口契约无法直接支撑构建满足高性能 prefill 的神经网络，这部分属于上层研究计划。
+本文还定义允许不等长路径和异步物理到达的**通用固定 DAG**：每条边最终结算为“有数据”或“不会再有数据”，每个 region 对每个 Token 只结算一次，每个 receiver 至多执行一次完整计算。单层特例和 HB-Lattice 都是这套语义的规则化特例；通用 DAG 的高性能 prefill 执行器，以及有环或需要节点多次结算的 Graph，仍属于上层研究计划。
 
-下文第 1 节说明 GraphBranch 与 base Transformer 的接入边界，第 2 节定义 GraphBranch 内各计算组件的基本语义，第 3、4 节给出由这些计算组件组装的单层特例和 HB-Lattice，后文说明基线、损失、命名和实验记录。
+下文第 1 节说明 GraphBranch 与 base Transformer 的接入边界，第 2 节定义内部组件和通用固定 DAG，第 3、4 节给出单层特例和 HB-Lattice，后文说明基线、损失、命名和实验记录。
 
 ## 1. Base block 与 GraphBranch 顶层边界
 
@@ -101,7 +101,7 @@ u_{\ell,t}, & \text{PARMLP},
 \qquad \ell=\ell(j).
 $$
 
-GraphBranch 内部可以采用第 3 节的单层特例，也可以采用第 4 节的 HB-Lattice；它对外始终只返回一个同维 hidden：
+GraphBranch 内部采用第 2.7 节的固定 DAG 语义；第 3 节的单层结构和第 4 节的 HB-Lattice 是两个规则化特例。它对外始终只返回一个同维 hidden：
 
 $$
 b_{\mathcal G,j,t}
@@ -229,17 +229,19 @@ GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 | 组件 | 职责 |
 | --- | --- |
 | 输入端点 \(\mathrm{in}\) | 接收 \(h^{\mathrm{in}}\)，并沿固定输入边发送 |
-| 固定有向边 | 规定消息可以从哪个发送方到达哪个接收位置 |
-| 输入聚合端口 \(P_v^{\mathrm{in}}\) | 收集 receiver \(v\) 实际收到的父消息，并合成一个 hidden |
+| 固定有向边 | 规定消息可以从哪个发送方到达哪个接收位置；每个 Token 最终结算一次 |
+| 输入聚合端口 \(P_v^{\mathrm{in}}\) | 等待固定父边全部结算，只聚合实际携带 hidden 的消息 |
 | receiver node \(v\) | 持有自己的参数和可选私有状态；active 时执行完整计算 |
-| region selector | 在固定局部 region 的 reached receivers 中选择 active receivers |
-| 输出端点 \(\mathrm{out}\) | 聚合终端消息并返回 \(b_{\mathcal G}\) |
+| region selector | 等待本 region 的成员端口都收齐父边完成结果（final），再在 reached receivers 中选择 active receivers |
+| 输出端点 \(\mathrm{out}\) | 等待固定终端边全部结算，聚合其中的数据并返回 \(b_{\mathcal G}\) |
+
+下图中的 \(\operatorname{DATA}(y)\) 表示固定边为当前 Token 携带 hidden \(y\)，\(\operatorname{CLOSED}\) 表示该边确认不会再有数据；精确定义见第 2.2 节。
 
 ```mermaid
 flowchart TB
     IN(["输入端点 in<br/>接收 h_in"])
-    P1[["输入聚合端口 P_in(v₁)<br/>inbox 非空 ⇒ reached"]]
-    P2[["输入聚合端口 P_in(v₂)<br/>inbox 非空 ⇒ reached"]]
+    P1[["输入聚合端口 P_in(v₁)<br/>父边全部结算；DATA 非空 ⇒ reached"]]
+    P2[["输入聚合端口 P_in(v₂)<br/>父边全部结算；DATA 非空 ⇒ reached"]]
 
     subgraph REGION["region R：固定局部候选 {v₁, v₂}"]
         direction LR
@@ -249,10 +251,10 @@ flowchart TB
 
     SEL{"region selector<br/>只比较 reached receivers"}
     PROFILE["propagation profile<br/>根据 reached / active 决定 Observe"]
-    OUT(["输出端点 out<br/>聚合实际终端消息 ⇒ b_G"])
+    OUT(["输出端点 out<br/>终端边全部结算；聚合 DATA ⇒ b_G"])
 
-    IN -->|"固定输入边：h_in"| P1
-    IN -->|"固定输入边：h_in"| P2
+    IN -->|"固定输入边：DATA(h_in)"| P1
+    IN -->|"固定输入边：DATA(h_in)"| P2
     P1 -->|"Aggregate ⇒ h_v₁"| V1
     P2 -->|"Aggregate ⇒ h_v₂"| V2
 
@@ -264,27 +266,42 @@ flowchart TB
     PROFILE -.->|"是否 Observe：提交状态（控制）"| V1
     PROFILE -.->|"是否 Observe：提交状态（控制）"| V2
 
-    V1 -->|"仅 active：Emit(g_hat_v₁)，沿固定边发送"| OUT
-    V2 -->|"仅 active：Emit(g_hat_v₂)，沿固定边发送"| OUT
+    V1 -->|"active：DATA(Emit)；否则：CLOSED"| OUT
+    V2 -->|"active：DATA(Emit)；否则：CLOSED"| OUT
 ```
 
 对一个给定 Token，需要分别判断同一个 receiver 是否 reached、active 和 Observe：
 
 | 概念 | 由什么决定 | 含义 |
 | --- | --- | --- |
-| **reached** | 固定边以及上游实际发送的消息 | 当前至少收到了一条消息 |
+| **reached** | 固定父边全部结算后，至少一条边携带数据 | 当前有可供 receiver 处理的输入 hidden |
 | **active** | 所属 region 的 selector | 当前执行完整计算并向固定下游发送 |
 | **Observe** | propagation profile（状态传播规则） | 当前把收到的内容提交到持久状态 |
 
 active 和 Observe 都以 reached 为前提，但二者是不同决定：有状态 receiver 可以 Observe 而不 active；无状态 receiver 即使 active，也没有状态需要提交。固定边决定消息能够到达哪里，selector 不创建分支，只决定 reached receivers 中哪些继续完整计算和发送。
 
-第 2.2 节定义消息、端点与聚合，第 2.3 节定义 receiver node，第 2.4 节定义 selector、propagation profile 与发送规则，第 2.5—2.6 节再给出完整执行顺序和跨 Token 状态规则。
+第 2.2 节定义消息、端点与聚合，第 2.3 节定义 receiver node，第 2.4 节定义 selector、propagation profile 与发送规则，第 2.5—2.6 节给出执行顺序和跨 Token 状态规则，第 2.7 节再定义不等长路径下的通用固定 DAG 调度。
 
 ### 2.2 输入/输出端点、固定边与消息聚合
 
+对同一个 Token，每条固定边最终恰好产生一种完成结果：
+
+- \(\operatorname{DATA}(y)\)：该边实际携带一个 \(d_{\mathrm{model}}\) 维 hidden \(y\)；
+- \(\operatorname{CLOSED}\)：该边确认本 Token 不会再有数据。
+
+\(\operatorname{CLOSED}\) 只是调度完成标记，不是模型 hidden，也不参加聚合。边一旦完成就不能改写或再次完成；物理上先到的结果可以缓存，不能据此提前重复执行 receiver。第 2.7 节给出通用固定 DAG 的完整结算规则。
+
 消息在端口内按固定 sender/edge ID 顺序提供；下文的花括号记号表示这些消息成员，传入聚合前按该顺序排成序列。`AGG-MEAN` 默认置换不敏感；任何依赖顺序或 edge ID 的聚合规则都必须把该依赖写入配置。
 
-每个 receiver node 前都有一个输入聚合端口，负责接收并整合所有固定父节点在**当前执行步**实际送达的消息。端口先收齐该步允许看见的消息，再进行一次聚合；同一 Token 不会因为消息先后到达而重复更新同一个 node。对 node \(v\)，令其实际收到的有序消息序列为 \(\operatorname{Inbox}_{v,t}\)，则：
+每个 receiver node 前都有一个输入聚合端口。令 \(\operatorname{In}(v)\) 为 node \(v\) 的固定入边集合；只有这些边都已返回 \(\operatorname{DATA}\) 或 \(\operatorname{CLOSED}\)，端口才算 final：
+
+$$
+\operatorname{Final}(P_{v,t}^{\mathrm{in}})
+\iff
+\forall e\in\operatorname{In}(v),\ e\text{ 已完成}.
+$$
+
+端口 final 后，只把其中的 \(\operatorname{DATA}\) 按固定 edge ID 排成有序序列 \(\operatorname{Inbox}_{v,t}\)；\(\operatorname{CLOSED}\) 不进入 inbox。随后端口只聚合一次，同一 Token 不会因为消息先后到达而重复更新 node：
 
 $$
 h_{v,t}
@@ -295,7 +312,7 @@ h_{v,t}
 q_{v,t}=\mathbf 1[\operatorname{Inbox}_{v,t}\ne\varnothing].
 $$
 
-收到至少一条消息即 \(q_{v,t}=1\) 时 receiver 才是 **reached**。在默认的 `AGG-MEAN`（以及声明为“单消息保持原样”（singleton-preserving）的其他规则）下，只有一条消息时聚合就是该消息；`AGG-CUSTOM` 若采用其他行为必须在设置中写明。没有消息时端口不产生输出，receiver 不参加当前选择、状态更新或计算。输出端点后不再接 receiver node，它只把最终消息聚合为 \(b_{\mathcal G}\)。
+端口 final 后，收到至少一条 \(\operatorname{DATA}\) 即 \(q_{v,t}=1\) 时 receiver 才是 **reached**。在默认的 `AGG-MEAN`（以及声明为“单消息保持原样”（singleton-preserving）的其他规则）下，只有一条消息时聚合就是该消息；`AGG-CUSTOM` 若采用其他行为必须在设置中写明。没有数据时端口不产生 hidden，receiver 不参加当前选择、状态更新或计算。输出端点后不再接 receiver node，它只把最终数据聚合为 \(b_{\mathcal G}\)。
 
 对 `AGG-MEAN` 和 `AGG-LEARNED`，聚合函数统一写成：
 
@@ -312,7 +329,7 @@ $$
 
 上述聚合公式中的 \(k\) 是 sender/edge 的局部标识；附录中的 \(k\) 另指 key 向量，按所在公式理解。
 
-`AGG-MEAN` 取 \(\alpha_{P,k,t}=1/|\mathcal M_{P,t}|\)。首个设置使用实际到达消息的均值；每条固定父边的 source-presence（父边到达标记）是一个 0/1 值，供聚合和诊断使用。节点级 \(q_{v,t}\) 始终用于构造候选集；只有实验明确声明时，source-presence 或 \(q_{v,t}\) 才作为 \(\operatorname{Score}\) 的可学习额外特征。若使用 `AGG-LEARNED`，端口内的轻量打分函数产生并归一化 \(\alpha\)；其他权重策略在实验设置中另行声明。
+`AGG-MEAN` 取 \(\alpha_{P,k,t}=1/|\mathcal M_{P,t}|\)。首个设置使用实际 \(\operatorname{DATA}\) 消息的均值；每条固定父边的 source-presence 是一个 0/1 值，表示该边最终是 \(\operatorname{DATA}\) 还是 \(\operatorname{CLOSED}\)，供聚合和诊断使用。节点级 \(q_{v,t}\) 始终用于构造候选集；只有实验明确声明时，source-presence 或 \(q_{v,t}\) 才作为 \(\operatorname{Score}\) 的可学习额外特征。若使用 `AGG-LEARNED`，端口内的轻量打分函数产生并归一化 \(\alpha\)；其他权重策略在实验设置中另行声明。
 
 多个 active receiver 的消息在同一端口汇合时，也使用同一个 \(\operatorname{Aggregate}\)，不另设一套“分支聚合”语义。
 
@@ -326,9 +343,9 @@ $$
 
 这些都是 \(\operatorname{Aggregate}\) 的具体规则；它们不改变发送方的 selector 或状态语义。
 
-空的 receiver inbox 不产生 hidden；拓扑配置和选择规则必须保证输出端点在每个有效 Token 上至少收到一条消息，否则该 run 记为配置失败并停止。聚合端口不持有 receiver 私有状态，不参加 selector，也不执行 \(\operatorname{NodeCompute}\)。一个 receiver 向多个 children 发送消息只是固定边的 fan-out，不需要额外的“发散点”。拓扑配置默认禁止同一发送方到同一端口的重复平行边。
+空的 receiver inbox 不产生 hidden；输出端点等待全部固定终端边完成后，也只聚合其中的 \(\operatorname{DATA}\)。拓扑配置和选择规则必须保证输出端点在每个有效 Token 上至少收到一条数据，否则该 run 记为配置失败并停止。聚合端口不持有 receiver 私有状态，不参加 selector，也不执行 \(\operatorname{NodeCompute}\)。一个 receiver 向多个 children 发送消息只是固定边的 fan-out，不需要额外的“发散点”。拓扑配置默认禁止同一发送方到同一端口的重复平行边。
 
-输入端点 \(\mathrm{in}\) 对每条固定 input edge 发送同一个 \(h^{\mathrm{in}}_{j,t}\)；输出端点 \(\mathrm{out}\) 用同一个聚合函数收集所有固定 output edges 实际送达的消息：
+输入端点 \(\mathrm{in}\) 对每条固定 input edge 产生 \(\operatorname{DATA}(h^{\mathrm{in}}_{j,t})\)；输出端点 \(\mathrm{out}\) 等所有固定 output edges 完成后，用同一个聚合函数收集其中实际送达的数据：
 
 $$
 \operatorname{Inbox}_{\mathrm{out},t}
@@ -339,7 +356,7 @@ b_{\mathcal G,j,t}
 \left(\operatorname{Inbox}_{\mathrm{out},t}\right).
 $$
 
-输出 inbox 为空表示动态路径保证失效，该次运行必须报告配置失败。
+全部固定 output edges 完成后，输出 inbox 仍为空，表示动态路径保证失效，该次运行必须报告配置失败。
 
 ### 2.3 Receiver node
 
@@ -409,7 +426,7 @@ $$
 
 #### 2.4.1 Candidate 与 Score
 
-**selector** 与一个固定的局部 receiver 集合（region）关联。对 region \(\mathcal R\)，当前候选只包括已经 reached 的 nodes：
+**selector** 与一个固定的局部 receiver 集合（region）关联。它只在 \(\mathcal R\) 中所有 receiver 的输入聚合端口都 final、每个 \(q_{v,t}\) 都已确定，并且所需的旧状态与 selector-history 已满足第 2.6 节的跨 Token 因果顺序后执行一次；这只是 region 内的局部等待，不要求其他无依赖 region 同步。第 2.7 节给出保证这种等待不会形成控制环的静态约束。此时的候选集只包括已经 reached 的 nodes：
 
 $$
 \mathcal C_{\mathcal R,t}
@@ -451,7 +468,7 @@ K^{\mathrm{req}}_{\mathcal R,t}\in\mathbb N,
 =\min\!\left(K^{\mathrm{req}}_{\mathcal R,t},|\mathcal C_{\mathcal R,t}|\right).
 $$
 
-候选为空时 \(\mathcal A_{\mathcal R,t}=\varnothing\)。这里的 \(p_{v,t}\) 是候选 node \(v\) 的 soft 选择概率，不是消息聚合权重；未 reached node 没有本次 \(p\)。selector 不直接读取完整私有状态，只接收 receiver 声明的轻量 \(\operatorname{Read}^{\mathrm{sel}}\)，也不执行昂贵计算。单层特例可另外提供共同入口的轻量内容摘要；HB-Lattice 不要求存在这样的公共摘要。
+候选为空时 \(\mathcal A_{\mathcal R,t}=\varnothing\)。这里的 \(p_{v,t}\) 是候选 node \(v\) 的 soft 选择概率，不是消息聚合权重；未 reached node 没有本次 \(p\)。selector 不直接读取完整私有状态，只接收 receiver 声明的轻量 \(\operatorname{Read}^{\mathrm{sel}}\)，也不执行昂贵计算。单层特例可另外提供共同入口的轻量内容摘要；非平凡固定 DAG 的 region 不要求存在这样的公共摘要。
 
 **candidate** 只是当前参加选择的 reached receiver；被选中的 candidate 称为 **active**。二者都是 receiver 在当前 Token 的运行时角色，不是新的拓扑角色。
 
@@ -525,25 +542,27 @@ $$
 
 ### 2.5 共用执行顺序
 
-前面的符号已经定义完毕。对当前执行步中已经收到消息、可以并列处理的一批 receiver nodes（单层特例是整层，HB-Lattice 是当前 Line），各 node 先完成本地步骤，各 region 再各自执行一次 selector；只有拓扑规定的 Line barrier 才会让下游等待。这里 \(h\) 是输入聚合端口得到的入口 hidden，\(p\) 是所属 region selector 给 reached candidate 的 soft 选择概率。
+前面的符号已经定义完毕。下面描述一个已经 ready 的 region 如何完成一次结算：region 中所有 receiver 的输入端口都已 final，所需的 receiver state 和 selector-history 也已满足跨 Token 因果顺序；其中 inbox 非空的 nodes reached，空 inbox 的 nodes 已确定不会参加本次选择。单层特例只有一个 region，HB-Lattice 可以用 Line barrier 批量结算同一 Line 的多个 regions，通用固定 DAG 则允许互不依赖的 regions 在不同时间 ready。
+
+这里 \(h\) 是输入聚合端口得到的入口 hidden，\(p\) 是所属 region selector 给 reached candidate 的 soft 选择概率。
 
 为便于阅读，下面的伪代码省略 \(v,t,\mathcal R\) 等下标：\(h,m,s^-,\widetilde s,s^{\mathrm{cmp}},s\) 仍分别表示入口 hidden、本地归一化消息、旧状态、proposal、当前计算可见的 commit 后状态和 Token 末最终状态；\(a,p,\mathcal A,\mathcal O\) 分别表示 logits、soft 概率、active 集和 Observe 集，\(g,\widehat g\) 分别表示节点完整输出和实际发送消息。
 
-1. 固定上游边把消息放入各 receiver 的 inbox；空 inbox 不产生 reached node。
+1. 每条固定父边完成为 \(\operatorname{DATA}\) 或 \(\operatorname{CLOSED}\)；输入端口在所有父边完成后 final，只把 \(\operatorname{DATA}\) 放入 inbox，空 inbox 不产生 reached node。
 
 2. reached node 聚合得到 \(h\)，并做本地入口归一化得到 \(m\)。
 
 3. 按 selector 时序产生 \(\operatorname{Read}^{\mathrm{sel}}\)：content-only 读当前 \(m\)，pre-update 读旧状态 \(s^-\)，post-update 先由当前 \(m\) 生成 proposal \(\widetilde s\) 再读它。
 
-4. 每个 region 在 reached candidates 上产生 logits \(a\)、概率 \(p\) 和 active set \(\mathcal A\)。
+4. 该 region 在 reached candidates 上产生 logits \(a\)、概率 \(p\) 和 active set \(\mathcal A\)。
 
 5. 按 N/SD/BO 或已声明的自定义 profile 确定 Observe 集 \(\mathcal O\)；content-only/pre-update 此时为 \(\mathcal O\) 生成 proposal，随后得到 \(s^{\mathrm{cmp}}\)；post-update + BO 直接提交第 3 步已生成的 proposal。
 
 6. active nodes 用 \(s^{\mathrm{cmp}}\) 做 \(\operatorname{NodeCompute}\) 得到 \(g\)，再按发送规则得到 \(\widehat g\)，沿固定边发送。
 
-7. 消息进入下游 receiver 的输入聚合端口或 GraphBranch 输出端点；跨 Line 消息先进入对应缓存。全部终端消息结算后，输出端点聚合成 \(b_{\mathcal G}\)。
+7. active node 的每条固定出边完成为 \(\operatorname{DATA}(\widehat g)\)；inactive 或未 reached node 的每条固定出边完成为 \(\operatorname{CLOSED}\)。下游端口缓存这些结果，全部固定终端边完成后，输出端点只聚合其中的 \(\operatorname{DATA}\)，得到 \(b_{\mathcal G}\)。
 
-其中 post-update 的 proposal 必须发生在第 4 步之前；content-only 和 pre-update 在第 4 步选择后、提交前，只为需要 Observe 的 nodes 计算 proposal。自定义 profile 若采用其他顺序，必须在配置中显式写出。单层特例在同一层内对各 receiver 并列执行上述过程；第 4 节的 HB-Lattice 按 Line 顺序结算各节点。两者都不改变这些角色的语义。除本节已定义的符号外，拓扑专用符号见第 3、4 节。
+其中 post-update 的 proposal 必须发生在第 4 步之前；content-only 和 pre-update 在第 4 步选择后、提交前，只为需要 Observe 的 nodes 计算 proposal。自定义 profile 若采用其他顺序，必须在配置中显式写出。每个 region 对每个 Token 只结算一次，每个 receiver 最多执行一次 \(\operatorname{NodeCompute}\)；“单次结算”不表示所有 receiver 都会 active。除本节已定义的符号外，拓扑专用规则见第 2.7、3、4 节。
 
 当 receiver state 跨 Token 保留时，同一 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 内必须按全局 \(t=0,1,\ldots\) 的因果顺序结算；当 selector-history 跨 Token 保留时，同一 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 或 node-level 键内也遵守同样顺序。scan、批量 kernel 或其他加速方式都不得改变相应状态或历史从 \(t-1\) 到 \(t\) 的因果顺序。
 
@@ -561,13 +580,125 @@ $$
 
 独立的 selector-history 也按其粒度隔离：region-level 使用 \((\mathrm{site},\mathrm{region},\mathrm{sid})\)，node-level 使用 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\)；它从空或声明的首状态开始，跨 chunk 继承并默认 detach，无效 Token 不更新。
 
+物理调度可以让后续 Token 的某个端口更早 final，但同一状态键的 Token \(t+1\) 必须等 Token \(t\) 结算后才能读取、提交或写回状态；提前完成的边结果保存在对应 Token 的缓存中。Token \(t\) 在某个 node 未 reached 时，也以“不更新状态”的空操作完成该 node 的因果位置。selector-history 使用相同规则，不能因异步到达而越过前一个 Token。
+
 这里若写作 \(s_{t-1}\)，仅表示该稳定序列上一个有效 Token 结算后的状态；\(t\) 是跨 chunk 不重置的全局 Token 索引，chunk 内位置只是实现索引。
 
 具体状态模块的可选样例见文末附录 A。
 
+### 2.7 通用固定 DAG 的确定性单次结算
+
+第 2.1—2.6 节的组件可以组装成一个有限、固定、无环的有向图。该图仍只有一个输入端点和一个输出端点，但不同入口—出口路径可以经过不同数量的 receiver nodes，也可以具有不同逻辑延迟；运行时产生的 \(\operatorname{DATA}\) 和 \(\operatorname{CLOSED}\) 在物理上可以异步到达。
+
+这里的**单次结算**是指：每个 region 对一个 Token 只执行一次选择和结果提交，每个 receiver 只得到一个最终角色，并至多执行一次完整计算；它不表示每个 receiver 都会被激活。
+
+忽略第 2.6 节另行约束的跨 Token 状态等待，一个 region 的输入就绪条件是：
+
+$$
+\operatorname{InputReady}(\mathcal R,t)
+\iff
+\forall v\in\mathcal R,\ \operatorname{Final}(P_{v,t}^{\mathrm{in}}).
+$$
+
+因此每个成员此时要么是 inbox 非空的 **reached-ready**，要么是 inbox 为空的 **unreached-final**；selector 等两类都确定后才执行，但候选集只包含前一类。这不要求所有成员都收到数据。
+
+这形成两级局部完成条件：每个输入聚合端口先等待自己的全部固定父边，每个 region 再等待所有成员端口 final 后执行 selector。二者都是模型语义上的局部 barrier，不要求实现为设备级全局同步；HB-Lattice 才另外增加第 4 节的全局 Line barrier。
+
+region 结算后，receiver 的最终角色及出边结果如下：
+
+| 最终角色 | 条件 | 本地行为 | 每条固定出边 |
+| --- | --- | --- | --- |
+| 未到达 | 输入端口 final，但 inbox 为空 | 不参加选择，不 Observe，不计算 | \(\operatorname{CLOSED}\) |
+| 已到达、未激活 | \(q_{v,t}=1\)，但 \(v\notin\mathcal A_{\mathcal R,t}\) | 是否 Observe 由 N/SD/BO 决定；不做完整计算 | \(\operatorname{CLOSED}\) |
+| 已到达、已激活 | \(v\in\mathcal A_{\mathcal R,t}\) | 按 profile 提交状态并执行一次 \(\operatorname{NodeCompute}\) | \(\operatorname{DATA}(\widehat g_{v,t})\) |
+
+#### 静态合法性
+
+完全展开的 DAG Plan 至少列出 receiver nodes、固定边、region 划分和每条边的固定正逻辑延迟 \(\delta_e\)。每个 receiver 恰好属于一个 region，并位于某条静态输入—输出路径上；固定 fan-in、fan-out、region 大小以及单节点成本都必须有界。
+
+region 划分还必须满足一个控制依赖约束。令 \(\mathcal R(v)\) 表示 receiver \(v\) 所属的 region；Plan 必须能为每个 region 分配控制拓扑序 \(\lambda(\mathcal R)\)，使每条 receiver-to-receiver 固定边 \(u\to v\) 都满足：
+
+$$
+\lambda(\mathcal R(u))<\lambda(\mathcal R(v)).
+$$
+
+等价地，把每个 receiver 替换为所属 region 后，得到的 region 依赖图必须仍是无自环的 DAG。这不仅禁止同一 region 内的直接边，也排除了经其他 regions 返回本 region 的间接控制环；否则 selector 可能等待由自己或后继 region 的本次选择才能产生的结果。一个 region 内的 nodes 不必具有相同的原始拓扑深度或 ready 时间，先 ready 的结果可以缓存；但实际 Plan 通常把拓扑位置和 ready 时间接近的 nodes 放在一起，以减少等待并方便批量执行。
+
+例如 \(\mathcal R_A=\{a_1,a_2\}\)、\(\mathcal R_B=\{b_1,b_2\}\) 各自内部都没有边，但若同时存在 \(a_1\to b_1\) 和 \(b_2\to a_2\)，region 依赖图就含有 \(A\to B\to A\)，该划分仍是无效的。
+
+#### 每个 Token 的结算顺序
+
+通用固定 DAG 不枚举完整路径，而按下面的局部规则推进：
+
+~~~text
+输入端点：每条固定 input edge 完成为 DATA(h_in)
+
+反复选取一个尚未结算、且所有成员端口都 final 的 region：
+  1. 等待它所需的跨 Token 状态依赖
+  2. 按第 2.5 节结算一次
+  3. 按上表完成该 region 的全部固定出边
+
+输出端点：等待全部固定 output edges 完成，只聚合其中的 DATA
+~~~
+
+静态 region 依赖图无环，因此不存在两个 regions 互相等待本次选择的情况；多个无依赖 regions 同时满足条件时，可以按任意顺序或并列结算。
+
+一个最小的不等长路径例子是：
+
+~~~text
+             ┌→ a ─────────→ out
+in ──────────┤
+             └→ b → c ─────→ out
+
+regions: R0={a,b}，R1={c}
+~~~
+
+若 \(\mathcal R_0\) 做 Top-1，\(c\) reached 时 forced-active：选择 \(a\) 时，\(a\to\mathrm{out}\) 是 \(\operatorname{DATA}\)，\(b\to c\) 和随后 \(c\to\mathrm{out}\) 是 \(\operatorname{CLOSED}\)；选择 \(b\) 时，\(a\to\mathrm{out}\) 关闭，数据经 \(b,c\) 两个 receiver 后到达输出。输出端点在两种情况下都等两条终端边完成，但只聚合其中的数据。
+
+region ready 时，每个 reached receiver 都已经得到自己的 \(h_{v,t}\) 和 \(m_{v,t}\)。selector 不需要一个全图统一的入口 hidden：content-only 读取各候选当前消息的轻量读出，pre-update 和 post-update 分别读取第 2.3 节定义的旧状态或 proposal 读出。selector 的信息范围、Observe 集、节点计算和发送公式仍完全沿用第 2.3—2.5 节。
+
+输出端点的全部固定父边完成后，若至少一个结果是 \(\operatorname{DATA}\)，就聚合这些数据；若全部是 \(\operatorname{CLOSED}\)，仍按第 2.2 节判为配置失败。任何边重复完成、先报告 \(\operatorname{CLOSED}\) 后又出现 \(\operatorname{DATA}\)，或在端口 final 后改写结果，都是执行错误。
+
+#### 逻辑时间与物理到达
+
+逻辑时间只描述图内依赖，不使用 wall-clock timeout 决定模型语义。令输入端点的完成时间为 0；对边 \(e=(u,v)\)，\(\delta_e\in\mathbb N_{>0}\) 是 Plan 中固定的逻辑延迟。若 source \(u\) 的本次结果在 \(T^{\mathrm{done}}_{u,t}\) 结算，则该边无论得到 \(\operatorname{DATA}\) 还是 \(\operatorname{CLOSED}\)，完成时间都是 \(T^{\mathrm{done}}_{u,t}+\delta_e\)。因此：
+
+$$
+T^{\mathrm{ready}}_{v,t}
+=
+\max_{e=(u,v)\in\operatorname{In}(v)}
+\left(T^{\mathrm{done}}_{u,t}+\delta_e\right),
+$$
+
+$$
+T^{\mathrm{done}}_{\mathcal R,t}
+=
+\max_{v\in\mathcal R}T^{\mathrm{ready}}_{v,t}.
+$$
+
+对 \(v\in\mathcal R\)，令 \(T^{\mathrm{done}}_{v,t}:=T^{\mathrm{done}}_{\mathcal R,t}\)。这里把 region 内选择和 node compute 看作同一个逻辑结算点；若实验需要显式建模固定的本地逻辑延迟，应把它加入 Plan，并相应加到 \(T^{\mathrm{done}}\)。快路径的结果可以先进入缓存，但端口必须等最慢父边完成，输出逻辑时间也由最慢的固定依赖决定。物理执行先后可以不同，只要最终结果与上述依赖和第 2.6 节的跨 Token 状态顺序一致。
+
+输出端点的逻辑完成时间同理为：
+
+$$
+T^{\mathrm{out}}_t
+=
+\max_{e=(u,\mathrm{out})}
+\left(T^{\mathrm{done}}_{u,t}+\delta_e\right).
+$$
+
+这些 \(T\) 只描述同一 Token 内的图依赖；跨 Token 的状态等待可以推迟物理执行，但不能改变上述模型逻辑时间或状态因果顺序。
+
+#### 单层与 HB-Lattice 的关系
+
+- 第 3 节的单层特例是 \(\mathrm{in}\to\) 一层 receivers \(\to\mathrm{out}\)：所有输入端口同时 final 且全部 receivers reached，唯一 region 选择一次，未激活 receiver 的终端边结算为 \(\operatorname{CLOSED}\)。
+- 第 4 节的 HB-Lattice 额外给出 Lines 和全局 Line barrier。Line barrier 可以批量满足各端口和 region 的局部完成条件；父 Line 结算后，未发送边的 \(\operatorname{CLOSED}\) 也可由执行器隐式推导。HB 当前还要求所有入口—出口路径具有相同总逻辑延迟，这是比通用固定 DAG 更强的约束。
+
+因此，同一套组件和数学语义直接包含单层特例与 HB-Lattice。每个 Token 至多产生 \(O(|V|+|E|)\) 个 node/edge 结算事件，不需要展开组合路径；但高性能的通用 DAG prefill 调度仍需单独实现和验证。有环图、同一 node 对同一 Token 多次结算、结果撤回或多版本输出不属于当前规范。
+
 ## 3. 单层特例：用最小拓扑展开共用语义
 
-本节不引入新角色，只把第 2 节的共用语义放进一个最小拓扑并给出完整公式：输入端点连接一层并列 receiver nodes，一个 selector 负责这些候选，active nodes 的消息直接进入输出端点。
+本节不引入新角色，只把第 2 节的共用语义放进一个最小固定 DAG 并给出完整公式：输入端点连接一层并列 receiver nodes，一个 selector 负责这些候选，active nodes 的消息直接进入输出端点。它是第 2.7 节确定性单次结算的最小规则化特例。
 
 ### 3.1 拓扑与局部符号
 
@@ -682,17 +813,17 @@ b_{\mathcal G,j,t}
 \left(\operatorname{Inbox}_{\mathrm{out},j,t}\right).
 $$
 
-Top-1 时输出端口只有一条消息；Top-K 使用 AGG-MEAN 时，聚合的是各 active node 的完整输出，不再额外乘 selector 概率。单层特例的 \(R\) 个候选都始终 reached，因此其 balance loss 是第 6.1 节的固定候选特例。
+未激活 receiver 的固定终端边结算为 \(\operatorname{CLOSED}\)；输出端点等全部 \(R\) 条终端边完成后，只把上式中的 \(\operatorname{DATA}\) 放入 inbox。Top-1 时输出端口只有一条数据；Top-K 使用 AGG-MEAN 时，聚合的是各 active node 的完整输出，不再额外乘 selector 概率。单层特例的 \(R\) 个候选都始终 reached，因此其 balance loss 是第 6.1 节的固定候选特例。
 
 ### 3.5 单层特例的语义边界
 
-“单层”只表示入口到出口的路径经过一个 receiver node；一个 node 内部可以有多个状态/计算子层，但这些子层不增加拓扑深度。单层特例是便于对照的平铺结构：扩大 \(R\) 会扩大 selector 的候选范围和 fan-out，因此不能把单层特例本身当作固定局部度有界的扩展方案；真正的局部扩展由第 4 节的多 Line 固定拓扑表达。
+“单层”只表示入口到出口的路径经过一个 receiver node；一个 node 内部可以有多个状态/计算子层，但这些子层不增加拓扑深度。单层特例是便于对照的平铺结构：扩大 \(R\) 会扩大 selector 的候选范围和 fan-out，因此不能把单层特例本身当作固定局部度有界的扩展方案；真正的局部扩展需要第 2.7 节的非平凡固定 DAG，第 4 节 HB-Lattice 是其中一个规则化方案。
 
 除共同入口和一个 selector 外，单层特例不增加新角色。各 receiver 的参数和状态默认互不共享；输入聚合、发送规则、状态时序和输出聚合均沿用第 2 节。
 
 ## 4. HB-Lattice：多层固定波前
 
-**HB-Lattice** 是一种把 receiver nodes 手动放在固定波前上的多层拓扑，不是另一套 node 语义。它直接复用第 2 节的输入/输出端点、消息聚合、receiver node、selector、profile、发送规则和训练期均衡规则。本节只增加 Line、region、静态拓扑 **Plan** 和跨 Line 的执行规则。
+**HB-Lattice** 是把 receiver nodes 手动放在固定波前上的多层固定 DAG，不是另一套 node 语义。它直接复用第 2 节的输入/输出端点、消息聚合、receiver node、selector、profile、发送规则和确定性单次结算。本节只在通用 DAG Plan 上增加 Line、phase、边类型、全局 Line barrier 和规则化拓扑生成方式。
 
 第 4.1—4.5 节的语义和执行约束是规范；第 4.6 节的拓扑形状与边选择仍是待核验的候选默认值。
 
@@ -702,7 +833,7 @@ receiver nodes 静态放在有序的 Lines \(L_0,L_1,\ldots,L_D\)，其中 \(D\)
 
 这里 \(t\) 始终是序列中的 Token 索引；Line/level 是 GraphBranch 的逻辑波前时钟，两者不是同一个时间轴。
 
-每个 Line 再划分为固定且不重叠的 selector regions；一个 region 只有一个 selector。固定边决定哪些 nodes reached，selector 只在本 region 的 reached nodes 中选择 active。一个 node 可以有多个 parents 或 children，但不需要额外的“发散点”或“汇合节点”：fan-out 是固定出边，fan-in 由目标输入聚合端口完成。
+每个 Line 再划分为固定且不重叠的 selector regions；一个 region 只有一个 selector。固定边决定哪些 nodes reached，selector 只在本 region 的 reached nodes 中选择 active。同一 Line 内没有 receiver-to-receiver 边，因此 region 划分自动满足第 2.7 节的控制拓扑序约束。一个 node 可以有多个 parents 或 children，但不需要额外的“发散点”或“汇合节点”：fan-out 是固定出边，fan-in 由目标输入聚合端口完成。
 
 一个最小例子是：
 
@@ -718,13 +849,13 @@ edges: in→0；0→1, 0→2；1→3, 1→4；2→3, 2→4；3→out, 4→out
 
 对一个 Token，节点 0 先把同一消息发给 1、2；L1 选择后，实际发送的消息决定 L2 中哪些节点 reached；3、4 各自把实际到达的一个或多个父消息（最多两个）在自己的输入聚合端口中合并。L2 结算后，输出端点聚合最终消息。
 
-Plan 静态列出输入/输出端点、nodes、edges、Lines 和 regions；其中的 node 都是第 2 节的 receiver node，聚合端口和两个端点不是计算 node。一个 Token 的 active nodes 与实际发送消息的边组成该 Token 的 active subgraph。
+HB Plan 在第 2.7 节通用 DAG Plan 的基础上静态列出 Lines、phases 和 HB 边类型；其中的 node 都是第 2 节的 receiver node，聚合端口和两个端点不是计算 node。一个 Token 的 active nodes 与实际发送数据的边组成该 Token 的 active subgraph。
 
 Line barrier 按 Token 分别生效，不要求整个 batch 同步停住；不同 Token 可以交错或批量处理。对保留 receiver state 的 node，任何执行顺序仍须遵守同一 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 的跨 Token 因果顺序；对 selector-history 则遵守相应的 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 或 node-level 键。无状态部分不因此被强制逐 Token 串行。
 
 Line 可以标记为扩展、平台或收拢 phase，分别表示宽度增加、保持或减少；第 4.6 节的标准生成规则采用“扩展→平台→收拢”，执行顺序始终由 Line 决定。
 
-跨 Line 消息按 \((\mathrm{site},\mathrm{sid},t,\mathrm{target\ Line},\mathrm{target},\mathrm{edge\ ID})\) 隔离。消息可以提前到达，但目标 node 只有在自己的 Line 开始时才收齐并聚合一次；当前 Line 结算后，发往更深 Line 的消息继续保留。延迟投递不改变 Line barrier。
+跨 Line 的 \(\operatorname{DATA}\) 或 \(\operatorname{CLOSED}\) 按 \((\mathrm{site},\mathrm{sid},t,\mathrm{target\ Line},\mathrm{target},\mathrm{edge\ ID})\) 隔离。结果可以提前到达，但目标 node 只有在自己的 Line 开始时才让输入端口 final 并聚合一次；当前 Line 结算后，发往更深 Line 的结果继续保留。延迟投递不改变 Line barrier。
 
 令 \(\operatorname{level}(\mathrm{in})=-1\)、\(\operatorname{level}(v)=d\)（\(v\in L_d\)）、\(\operatorname{level}(\mathrm{out})=D+1\)。这里 \(u,v\) 是边的端点 ID，与第 1.2 节 base block 的 hidden \(u_{\ell,t}\)、\(v_{\ell,t}\) 无关。
 
@@ -732,7 +863,7 @@ Line 可以标记为扩展、平台或收拢 phase，分别表示宽度增加、
 
 ### 4.2 Plan 与拓扑生成规则
 
-一次 HB-Lattice 实验由完全展开的 Plan 定义。Plan 至少列出输入/输出端点、每个 Line 的 phase、nodes 和 regions、每条边的端点与类型、forced-active nodes，以及每个 region 的激活上限。第 4.6 节的规则化配置可以生成 Plan，但配置或生成规则的名称不能代替最终 Plan。
+一次 HB-Lattice 实验由完全展开的 HB Plan 定义。除第 2.7 节通用字段外，它至少列出每个 Line 的 phase、nodes 和 regions、每条边的 HB 类型、forced-active nodes，以及每个 region 的激活上限。第 4.6 节的规则化配置可以生成 Plan，但配置或生成规则的名称不能代替最终 Plan。
 
 当前 HB-Lattice 把 input 边限定为 \(\mathrm{in}\to L_0\)，把 output 边限定为 \(L_D\to\mathrm{out}\)；若未来放宽边界，必须同时重新定义 level 与路径时序规则。
 
@@ -766,7 +897,7 @@ w\in\operatorname{Par}(v),\ w\text{ 在 }t\text{ 已发送}\right\}
 \mathrm{in}\to v\text{ 是固定边且 }v\in L_0\right\}.
 $$
 
-镜像或 shortcut 消息即使提前产生，也只在目标 Line 开始时参与这一次 inbox；按 4.2 的边界约束，输入端点的消息只进入首个 Line。于是：
+镜像或 shortcut 的 \(\operatorname{DATA}\) 即使提前产生，也只在目标 Line 开始时参与这一次 inbox；父节点未发送的固定边在相应父 Line 结算后隐式视为 \(\operatorname{CLOSED}\)。因此目标 Line 开始时，每个输入端口的全部固定父边都已完成。按 4.2 的边界约束，输入端点的数据只进入首个 Line。于是：
 
 $$
 q_{v,t}=\mathbf 1[\operatorname{Inbox}_{v,t}\ne\varnothing],
@@ -818,7 +949,7 @@ $$
 =\operatorname{Emit}_v(h_{v,t},g_{v,t},p_{v,t}).
 $$
 
-它把同一消息复制到全部固定 children；未 active node 不发送。只有当前 Token 的当前 Line 中所有 node、状态和待发送消息都结算后，才释放该 Line 的 barrier；下游 Line 开始时收齐所有实际送达的父消息，再各自执行一次聚合。
+它把同一消息作为 \(\operatorname{DATA}\) 复制到全部固定 children；未 active 或未 reached node 的固定出边结算为 \(\operatorname{CLOSED}\)。这些关闭结果可以在父 Line 结束时由执行器隐式推导，不要求真的逐边传输。只有当前 Token 的当前 Line 中所有 node、状态和出边结果都结算后，才释放该 Line 的 barrier；下游 Line 开始时等待全部父边完成，只聚合实际送达的数据。
 
 全部 Lines 和跨 Line 消息结算后，输出端点 \(\mathrm{out}\) 收到：
 
@@ -833,7 +964,7 @@ b_{\mathcal G,j,t}
 \left(\operatorname{Inbox}_{\mathrm{out},t}\right).
 $$
 
-输出端点不更新状态、不参加 selector、不执行 node compute；有效选择必须保证该 inbox 非空。训练时，每个参与竞争的 region 依据 \((\mathcal C,p,\mathcal A)\) 以及 site、Line、region、Token 标识计算均衡辅助项，不改变推理前向。
+输出端点等全部固定终端边结算后，只把 \(\operatorname{DATA}\) 放入上式的 inbox；它不更新状态、不参加 selector、不执行 node compute。有效选择必须保证该 inbox 非空。训练时，每个参与竞争的 region 依据 \((\mathcal C,p,\mathcal A)\) 以及 site、Line、region、Token 标识计算均衡辅助项，不改变推理前向。
 
 对跨 Token 的状态，每个 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 在 Line 内还要按全局 \(t=0,1,\ldots\) 因果结算（可用 scan 或 kernel 批量处理）；任何并行化都不得改变 \(s_{t-1}\to s_t\)。
 
@@ -1025,9 +1156,11 @@ $$
 
 若使用 **BAL-NONE**，令该 balance 项为 0；其他均衡规则用其自身公式替换该项。
 
-### 6.2 HB-Lattice 的 region balance loss
+### 6.2 非平凡固定 DAG 的 region balance loss
 
-HB-Lattice 中每个 region 只处理实际 reached 的节点。对 site \(j\)、Line \(d\)、region \(r\)，固定节点集合记为 \(\mathcal R_{j,d,r}\)，并令：
+非平凡固定 DAG 中每个 region 只处理实际 reached 的节点。以下用 HB-Lattice 的 site \(j\)、Line \(d\)、region \(r\) 下标写公式；通用固定 DAG 使用全局唯一的 region ID \(\rho\) 替换 \((d,r)\)，其余定义不变。
+
+下文的 \(\mathcal L_{\mathrm{bal}}^{\mathrm{HB}}\) 和 \(\omega_{\mathrm{HB}}\) 是 HB 实例的记号；其他固定 DAG 分别改记为 \(\mathcal L_{\mathrm{bal}}^{\mathrm{DAG}}\) 和 \(\omega_{\mathrm{DAG}}\)。固定节点集合记为 \(\mathcal R_{j,d,r}\)，并令：
 
 $$
 \mathcal V_{j,d,r}
@@ -1040,7 +1173,7 @@ $$
 
 表示该 region 在当前 micro-batch 中真正发生选择的 Token 事件。selector 只在 \(\mathcal C_{j,d,r,b,t}\) 内做 masked softmax；未 reached 节点不进入当前候选集合，也不能被 balance loss 当作本次本应选择的候选。
 
-这里的 \(\mathcal C_{j,d,r,b,t}\) 就是第 4.4 节的候选集，补回 site \(j\) 和序列 \(b\) 下标。
+HB-Lattice 中的 \(\mathcal C_{j,d,r,b,t}\) 是第 4.4 节的候选集，补回 site \(j\) 和序列 \(b\) 下标；通用固定 DAG 则直接使用第 2.4 节按 region \(\rho\) 定义的候选集。
 
 首个均衡规则使用 **BAL-AVAIL-SOFT**。对 \(N_{j,d,r}>0\) 的 region，约定未 reached 时 \(p_{j,d,r,b,t}^{(v)}=0\)（仅作为 balance 统计的扩展记号，运行时并没有该概率），并定义节点 \(v\) 实际得到的平均 soft mass：
 
@@ -1077,7 +1210,7 @@ $$
 \right)^2.
 $$
 
-这里的节点均值不保证不同 region 宽度下的塌缩惩罚完全同尺度；跨宽度比较时必须记录并重新校准 \(\omega_{\mathrm{HB}}\)，或另行定义带宽度归一化的 BAL-CUSTOM。
+这里的节点均值不保证不同 region 宽度下的塌缩惩罚完全同尺度；跨宽度比较时必须记录并重新校准 \(\omega_{\mathrm{HB}}\)（通用 DAG 对应 \(\omega_{\mathrm{DAG}}\)），或另行定义带宽度归一化的 BAL-CUSTOM。
 
 令 \(\mathcal Z\) 表示当前 micro-batch 中至少出现过一次 \(|\mathcal C_{j,d,r,b,t}|\ge2\) 的普通竞争 region 实例；forced-active region 不加入 \(\mathcal Z\)。则：
 
@@ -1221,7 +1354,7 @@ DENSE 没有 router，实际目标只有 \(\mathcal L_{\mathrm{LM}}\)。训练�
 | **训练期 balance loss** | 加入训练目标 | 不再计算 | 让模型学出较均衡的路由倾向，但不保证推理时始终均衡 |
 | **负载感知 selector** | 作为前向规则参与训练 | 继续使用 | 根据当前序列的路由历史动态调整后续选择 |
 
-下面给出一个最简单的单层固定候选样例；具体实验可以根据训练和推理情况选择其他公式。每个 receiver 可以把近期激活负载作为一个历史标量发给 selector；HB 中按实际 region 事件定义同一语义。本例把 load 定义为“该 receiver 最近是否 active”的 EMA，并按稳定序列标识初始化为 \(\operatorname{load}_{j,\mathrm{sid},-1}^{(i)}=0\)。这里的 load 是模型内部按序列维护的路由历史，不是硬件实时负载：
+下面给出一个最简单的单层固定候选样例；具体实验可以根据训练和推理情况选择其他公式。每个 receiver 可以把近期激活负载作为一个历史标量发给 selector；非平凡固定 DAG 按实际 region 事件定义同一语义。本例把 load 定义为“该 receiver 最近是否 active”的 EMA，并按稳定序列标识初始化为 \(\operatorname{load}_{j,\mathrm{sid},-1}^{(i)}=0\)。这里的 load 是模型内部按序列维护的路由历史，不是硬件实时负载：
 
 $$
 a_{j,\mathrm{sid},t}^{(i)}
@@ -1262,7 +1395,7 @@ $$
 <TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
 ~~~
 
-非平凡 HB-Lattice 使用：
+非平凡固定 DAG（包括 HB-Lattice）使用：
 
 ~~~text
 <TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-T<TOPO_ID>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
@@ -1272,7 +1405,7 @@ $$
 
 HB-Lattice 中的 \(D\) 是最后一个 Line 的下标，因此共有 \(D+1\) 个 Lines；H 是任一静态入口—出口路径经过的最大 receiver node 数，所以 \(H\le D+1\)。若存在经过每个 Line 的完整路径，则 \(H=D+1\)；否则 H 更小。
 
-T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配置记录）中的 Plan 与规范化哈希。除本文固定的单层特例外，任何结构即使同样是 H1，也必须提供 T；非平凡 HB-Lattice 始终必须提供 T。
+T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配置记录）中的 Plan 与规范化哈希。除本文固定的单层特例外，任何固定 DAG 即使同样是 H1，也必须提供 T。
 
 字段定义如下：
 
@@ -1281,13 +1414,13 @@ T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配�
 | TRAIN | PT / CPT / FT / SFT | 初始化与训练阶段 |
 | PLACEMENT | POST / PARBLK / PARATTN / PARMLP | GraphBranch 的输入与 residual 返回位置 |
 | PROFILE | N / SD / BO / CUSTOM | 状态接收与稀疏计算语义；混合或扩展规则使用 CUSTOM，并在 manifest 中给出 Observe 集合 |
-| R | R4、R8、R16、RVAR 等 | 单层特例的固定候选总数，或 HB-Lattice 非平凡 selector region 的固定大小摘要；运行时 reached 数和激活上限不写入 R；不统一时用 RVAR |
+| R | R4、R8、R16、RVAR 等 | 单层特例的固定候选总数，或非平凡固定 DAG 中 selector region 的固定大小摘要；运行时 reached 数和激活上限不写入 R；不统一时用 RVAR |
 | I | I1、I4、I8 等 | 一个 Token 沿 base 执行顺序经过的 routed 插入位置数；当前实验默认每个 site 都 routed |
 | H | H1、H2、HVAR 等 | 从固定结构或 Plan 推导的最大 receiver node 深度；多 site 不统一时用 HVAR，聚合端口不计入 |
 | T | T\<TOPO_ID\> | 已展开 topology 的索引；只有本文固定的单层特例省略 |
 | STATE | NONE、EMA128、GDN-K32-V32、ATTN-FULL、ATTN-W128、STATE-VAR、STATE-CUSTOM 等 | 状态结构和必要尺寸；STATE 值整体解析，其中 GDN 的 K/V 表示 key/value 维度，不是激活数 K；不统一时使用 STATE-VAR，未登记的压缩 Attention、复合状态或其他自定义算法使用 STATE-CUSTOM；ATTN-FULL 是探索性参考，不属于单节点成本有界的核心设置 |
 | SELECTOR | SEL-CONTENT / SEL-PRE / SEL-POST / SEL-CUSTOM | 第 2.4 节定义的 selector 输入时序；独立 selector-history 或自定义读写顺序使用 SEL-CUSTOM |
-| K | K1 / K2 / KALL / KVAR | 单层特例或 HB-Lattice 的激活数摘要；Kx 仅在对应 region 的 \(K^{\mathrm{req}}=K^{\max}=x\) 时使用，候选不足时实际激活数可更少；二者不等或不统一时用 KVAR |
+| K | K1 / K2 / KALL / KVAR | 单层特例或非平凡固定 DAG 的激活数摘要；Kx 仅在对应 region 的 \(K^{\mathrm{req}}=K^{\max}=x\) 时使用，候选不足时实际激活数可更少；二者不等或不统一时用 KVAR |
 | EMIT | EMIT-HARD / EMIT-HST / EMIT-SOFTP / EMIT-CUSTOM / EMIT-VAR | 第 2.4 节定义的 active receiver 发送语义 |
 | AGG | AGG-MEAN / AGG-LEARNED / AGG-CUSTOM / AGG-VAR | 第 2.2 节定义的端口消息聚合；不统一时用 VAR |
 | BAL | BAL-AVAIL-SOFT / BAL-NONE / BAL-CUSTOM / BAL-VAR | 第 6.1、6.2 节定义的训练期路由均衡；不改变推理前向 |
@@ -1300,7 +1433,7 @@ T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配�
 
 **SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 \(\operatorname{Read}^{\mathrm{sel}}\) 不读取持久 receiver state、额外读取旧状态或额外读取更新后状态；三者都以当前消息的轻量读出为基础，并可附加已声明的当前公共上下文。
 
-单层特例启用公共 \(\mu\) 时，\(\operatorname{Score}\) 还会读取它；HB-Lattice region 不要求存在单一公共 \(\mu\)，只联合处理 reached nodes 的轻量读出。presence 仅在明确声明时加入。
+单层特例启用公共 \(\mu\) 时，\(\operatorname{Score}\) 还会读取它；非平凡固定 DAG 的 region 不要求存在单一公共 \(\mu\)，只联合处理 reached nodes 的轻量读出。presence 仅在明确声明时加入。
 
 名称不限定打分采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
 
@@ -1308,9 +1441,9 @@ T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配�
 
 **K** 只表示 selector 激活多少个候选，**EMIT** 只表示 active receiver 怎样产生发送消息，**AGG** 只表示端口怎样合并实际收到的消息。三者不能互相代替。
 
-单层输出聚合、HB receiver 多父输入和 HB 最终输出都使用同一个 **AGG** 语义；AGG-MEAN 在单消息端口自然退化为 identity。selector 的 soft 概率对主任务前向的额外权重或梯度作用由 **EMIT** 承担，Top-K 成员仍由 selector 决定，消息聚合不再次读取 soft 概率。GraphBranch 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不属于 AGG。若同一实验的发送或聚合规则不统一，使用对应的 **VAR**，并在 manifest 中列出逐 node 或逐端口设置。
+单层输出聚合、固定 DAG 的 receiver 多父输入和最终输出都使用同一个 **AGG** 语义；AGG-MEAN 在单消息端口自然退化为 identity。selector 的 soft 概率对主任务前向的额外权重或梯度作用由 **EMIT** 承担，Top-K 成员仍由 selector 决定，消息聚合不再次读取 soft 概率。GraphBranch 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不属于 AGG。若同一实验的发送或聚合规则不统一，使用对应的 **VAR**，并在 manifest 中列出逐 node 或逐端口设置。
 
-**BAL-AVAIL-SOFT** 在单层特例中退化为第 6.1 节的固定候选均衡，在 HB-Lattice 中使用第 6.2 节的 availability 基准。**BAL-CUSTOM** 和 **BAL-VAR** 必须附完整公式与聚合范围。
+**BAL-AVAIL-SOFT** 在单层特例中退化为第 6.1 节的固定候选均衡，在非平凡固定 DAG 中使用第 6.2 节的 availability 基准。**BAL-CUSTOM** 和 **BAL-VAR** 必须附完整公式与聚合范围。
 
 TRAIN 的含义必须严格区分：
 
@@ -1333,7 +1466,7 @@ PT-POST-BO-R2-I4-H7-THBL2D2P2CMIR-GDN-K32-V32-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-
 
 ### 7.2 R、I、H 与 K 不得混用
 
-- **R8** 表示单层特例有 8 个固定候选，或 HB-Lattice 的非平凡 selector regions 固定大小均为 8；每个 Token 实际 reached 候选可以更少，R8 也不表示模型共有 8 个 receiver nodes。
+- **R8** 表示单层特例有 8 个固定候选，或非平凡固定 DAG 的 selector regions 固定大小均为 8；每个 Token 实际 reached 候选可以更少，R8 也不表示模型共有 8 个 receiver nodes。
 - **I8** 表示每个 Token 顺序经过 8 个插入位置，不表示 Transformer 只有 8 个 blocks。
 - **H2** 表示该 run 中 GraphBranch 的最大 receiver node 深度为 2；它由 Plan 推导，不能唯一确定拓扑。
 - **K2** 表示相应 region 固定请求且最多激活 2 个候选（\(K^{\mathrm{req}}=K^{\max}=2\)）；候选不足时实际激活数随之减少。只固定上限、请求数不同或各 region/token 不统一时使用 **KVAR**，并在 manifest 中分别记录 \(K^{\max}\) 与 \(K^{\mathrm{req}}\)。**KALL** 表示按 \(K^{\mathrm{req}}=|\mathcal C|\) 请求当前全部 reached candidates；只有配置的 \(K^{\max}\) 允许该数量时才会全部 active。
@@ -1381,11 +1514,10 @@ MOE 的精确插入 block、Top-K、capacity、token-drop、shared expert 和路
 即使规范名称相同，每个正式设置仍要明确记录：
 
 - 精确插入 block 编号；
-- 不同 sites、Lines 和节点之间是否共享参数；默认不共享；
-- 若使用 HB-Lattice，记录完整展开的 Plan、规范化哈希，以及生成规则的名称、版本和配置；
-- 若使用 HB-Lattice，记录每条 Line 的 phase、节点与 region 划分，输入/输出端点的连接，每条边的端点和 input/tree/local/shortcut/mirror/output 类别，以及逐节点镜像直通开关；
-- 若使用 HB-Lattice，记录最大 fan-in/fan-out、region 大小与 forced-active 节点；
-- 若使用 HB-Lattice，记录逐 Token 动态输出路径的保证方式（例如受保护的 forced-active 路径）；
+- 不同 sites、regions、Lines 和节点之间是否共享参数；默认不共享；
+- 若使用非平凡固定 DAG，记录完整展开的 Plan、规范化哈希、输入/输出端点、receiver 与 region 划分、每条固定边的端点和逻辑延迟，以及 region 控制拓扑序；
+- 若使用 HB-Lattice，另外记录每条 Line 的 phase、节点和 regions，每条边的 input/tree/local/shortcut/mirror/output 类别，以及逐节点镜像直通开关；
+- 若使用非平凡固定 DAG，记录最大 fan-in/fan-out、region 大小、forced-active 节点，以及逐 Token 动态输出路径的保证方式；
 - 每个 selector 的 active 数规则，以及逐 region 的 \(K^{\max}\)；
 - 每个聚合端口的 \(\operatorname{Aggregate}\) 公式、source-presence 与任何轻量聚合打分的精确公式；
 - 若边上传输压缩消息，记录每条边的编码/恢复公式、是否有损、消息形状和成本；
