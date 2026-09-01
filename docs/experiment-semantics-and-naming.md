@@ -1,31 +1,39 @@
 # TIDE 实验语义、命名与数学符号
 
-> 状态：新实验的规范性文档。
+> 本文从更上层研究计划继承 **[TIDE](https://github.com/ZichaoLong/ObsidianVault.git)** 这个名字，其余内容均可独立阅读。
 >
-> 本文只定义“模型实际怎样计算”和“实验名称怎样反映计算图”。实验晋级、结果报告组织和 checkpoint 保留策略另行讨论。
+> 本文描述的是新实验的目标语义，只定义“模型实际怎样计算”和“实验名称怎样反映计算图”。
 >
-> 本文描述的是新实验的目标语义；v0 reference 实现和历史实验可能尚未完全覆盖这些规则，不能据此反推旧结果的计算细节。
+> 实验晋级、结果报告组织和 checkpoint 保留策略另行讨论。
 >
 > 第 4.6 节拓扑生成规则中的候选默认值仍待逐项核验，详见核验台帐 [`experiment-semantics-review-ledger.md`](experiment-semantics-review-ledger.md)。
 
 ## 阅读入口：先看完整图景
 
-本文只从更上层研究计划继承 **TIDE** 这个名字，其余内容均可独立阅读。对每个 Token，**GraphBranch** 沿固定边传播 hidden，在固定的局部候选中选择少量 receiver 做昂贵计算，再把结果送往下游并与 base 合并；receiver 的状态可跨 Token 保留。第 1 节说明接入边界，第 2 节定义共用语义，第 3、4 节给出单层特例和 HB-Lattice，后文说明基线、损失、命名和实验记录。
+**GraphBranch** 是一个可独立输入输出、可接入原始 Transformer 的计算图，它用一个固定空间拓扑的 Graph 表示，其空间 Graph 的每个节点，是一个 **receiver node**，表示一个有“记忆模块+计算模块”的计算单元，可接受多个上游父节点输出、按需激活、激活消息发送给下游所有节点，节点内部设计的典型例子是 Transformer block，节点的具体定义见 2.3 节。
 
-这套语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
+这套 GraphBranch 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
+
+GraphBranch 的工作方式是，对每个 Token，接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选中选择少量 receiver 做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
+
+本文档还特别注重，应可从原始 Transformer checkpoint 的良好基线出发，在满足上述三个要求的前提下逐步扩容，避免基于尚未验证的不成熟神经网络组件进行研究起步时，永远无法获得有效正面验证结果。因此，额外要求 GraphBranch 接入后可通过适当的初始话方式，保持与原始模型的函数级等价。
+
+对于一般的允许不等长路径、异步消息到达的 DAG，乃至更一般的可能有环的空间 Graph，本文档的基础组件、接口契约无法直接支撑构建满足高性能 prefill 的神经网络，这部分属于上层研究计划。
+
+下文第 1 节说明 GraphBranch 与 base Transformer 的接入边界，第 2 节定义 GraphBranch 内各计算组件的基本语义，第 3、4 节给出由这些计算组件组装的单层特例和 HB-Lattice，后文说明基线、损失、命名和实验记录。
 
 ## 1. Base block 与 GraphBranch 顶层边界
 
 ### 1.1 Base 与顶层符号
 
-本节只引入理解 base block 和 GraphBranch 接入位置所需的符号；GraphBranch 内部的共用语义在第 2 节集中定义，单层特例和 HB-Lattice 的拓扑专用符号分别在第 3、4 节定义。
+本节只引入理解 base block 和 GraphBranch 接入位置所需的符号。
 
 | 符号 | 含义 |
 | --- | --- |
 | \(b\) | 当前 micro-batch 中的序列行号；正文通常省略这一维 |
 | \(\mathrm{sid}\) | 稳定的序列标识；跨 batch/chunk 继承状态和缓存时使用它 |
 | \(\ell\) | base Transformer block 编号 |
-| \(j\) | GraphBranch 插入位置（site）编号；site \(j\) 所在的 base block 记为 \(\ell(j)\)，GraphBranch 内的计算节点另记 receiver node |
+| \(j\) | GraphBranch 插入位置（site）编号；site \(j\) 所在的 base block 记为 \(\ell(j)\) |
 | \(t\) | 序列中的 Token 位置 |
 | \(d_{\mathrm{model}}\) | base hidden 的维度 |
 | \(x_{\ell,t}\) | 实际送入第 \(\ell\) 个 base block 的 hidden |
@@ -36,11 +44,11 @@
 | \(b_{\mathcal G,j,t}\) | GraphBranch 返回的完整 hidden |
 | \(\Delta_{\mathcal G,j,t}\) | GraphBranch 相对入口产生的 residual |
 
-这里的 \(b\) 只表示当前 batch 的序列行号，与输出符号 \(b_{\mathcal G,j,t}\) 无关；跨 batch 或 chunk 重排时，状态和缓存使用稳定的 \(\mathrm{sid}\)。
+这里的 \(b\) 只表示当前 batch 的序列行号，与输出 hidden \(b_{\mathcal G,j,t}\) 无关；跨 batch 或 chunk 重排时，状态和缓存使用稳定的 \(\mathrm{sid}\)。
 
 若同一 base block 放置多个 site，实验设置必须给出它们的执行顺序；默认每个 base block 至多放置一个 site。
 
-后文按作用复用基本符号：归一化写成 \(N\)，私有状态写成 \(s\)，状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)，激活节点的完整计算写成 \(\operatorname{NodeCompute}\)。相同符号表示相同职责，不表示共享参数或采用相同算法。
+后文按作用复用基本符号：归一化写成 \(N\)，私有状态写成 \(s\)，receiver node 内部状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\) 等，激活节点的完整计算写成 \(\operatorname{NodeCompute}\)。相同符号表示相同职责，不表示共享参数或采用相同算法。
 
 ### 1.2 Base Qwen3 block
 
@@ -105,14 +113,14 @@ $$
 
 这里的 \(\mathcal G_j\) 省略了逐序列持久状态；第 2 节定义状态及其具体读写顺序。无论内部多复杂，placement 只看见入口 \(h^{\mathrm{in}}\)、完整输出 \(b_{\mathcal G}\) 和唯一 residual \(\Delta_{\mathcal G}\)。
 
-这里 **always-on** 指每个有效 Token 都执行的原 base 路径。若 placement 的 always-on 输出记为 \(b^0_{j,t}\)，外部统一采用 **RESIDUAL_ADD**；合并结果为：
+每个有效 Token 都执行的原 base 路径是 **always-on** 的，把 placement 的 base always-on 输出记为 \(b^0_{j,t}\)，外部统一采用 **RESIDUAL_ADD**；合并结果为：
 
 $$
 b^0_{j,t}+\Delta_{\mathcal G,j,t}
 =b^0_{j,t}+\left(b_{\mathcal G,j,t}-h^{\mathrm{in}}_{j,t}\right).
 $$
 
-该式保留 always-on 路径，只叠加 GraphBranch 相对共同入口产生的变化；它与第 2.2 节定义的 GraphBranch 内部消息聚合是两种不同操作。
+该式保留 base always-on 路径，只叠加 GraphBranch 相对共同入口产生的变化；它与第 2.2 节定义的 GraphBranch 内部消息聚合是两种不同操作。
 
 对 PARATTN，边界合并后还要继续执行原 dense MLP；其他 placement 的合并结果直接作为 block 输出。
 
@@ -210,75 +218,67 @@ GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 
 若 GraphBranch 初始化为 identity，且内部端口聚合在相同输入上保持该输入（当前默认是对实际消息取均值），则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，四种 placement 都保持原 base 函数不变；采用其他聚合策略时必须单独验证这一条件。这只约束当前前向，状态是否仍按第 2.4 节的 profile 更新须在实验设置中声明。离开初始点后，它们的前向耦合、梯度路径和有效深度不同，不能视为同一架构。
 
-## 2. GraphBranch 内部的共用基础语义
+## 2. GraphBranch 内部的基础组件及语义
 
-本节是单层特例与多层波前拓扑共同遵守的完整基础规范：先定义消息、状态、selector、节点输出和一次局部执行；第 3、4 节只把这些语义放入各自拓扑，不再补定义另一套规则。这里 \(d_{\mathrm{model}}\) 是 base hidden 的宽度，边和端口默认传递这一维的完整 hidden。若某条边采用消息压缩，实验设置必须给出编码与恢复公式、是否有损及其成本。下文把一个 receiver 从收集入口消息到发出下游消息的闭合处理称为一次**节点执行步**；单层特例把多个节点执行步并列完成，多层波前拓扑再把它们排成有序波前，第 4 节称每个波前为 **Line**。
+### 2.1 内部组件与职责边界
 
-### 2.1 共用角色、局部符号与一眼数据流
+以下固定一个 site \(j\)、一个稳定序列 \(\mathrm{sid}\) 和其中的 Token \(t\)；后文在不影响理解时省略 \(j\) 和 \(\mathrm{sid}\)。receiver node 的 ID 记为 \(v\)，与第 1.2 节的 base hidden \(v_{\ell,t}\) 不是同一个量。
 
-固定一个 site \(j\)、一个稳定序列 \(\mathrm{sid}\) 和其中的 Token \(t\)。每个 GraphBranch 有唯一输入端点 \(\mathrm{in}\) 和唯一输出端点 \(\mathrm{out}\)；用 receiver node \(v\) 说明一次节点执行步，并用 \(P_v^{\mathrm{in}}\) 表示它的输入聚合端口。这里的 \(v\) 是 node ID，与第 1 节的 base hidden \(v_{\ell,t}\) 不是同一个量；后文若省略 \(j,\mathrm{sid}\)，仍沿用这个约定。
+在 GraphBranch 的拓扑中，只有 receiver node 属于计算节点。输入端点、输出端点和聚合端口负责传递或合并消息，不持有 receiver 的私有状态，也不执行 receiver 的昂贵计算；selector 是控制模块，不是拓扑节点。每个 receiver node 只属于一个固定 region；对给定拓扑，regions 的划分固定且互不重叠，每个 region 由一个 selector 负责。
 
-一条基本数据路径如下。图中的 \(\operatorname{Read}^{\mathrm{sel}}\) 是给 selector 的轻量读出，\(\operatorname{Read}^{\mathrm{ffn}}\) 是 active node 内供昂贵计算使用的较大读出：
-
-~~~text
-输入端点 / 上游固定边
-  → 输入聚合端口 P_v^in → receiver node v
-      ├→ 本地消息 m 与轻量 selector 读出 → region selector
-      └→（若 active）较大状态读出与节点完整计算 → 完整输出 g
-          → 发送规则 → 下游固定边或输出端点
-~~~
-
-固定边决定消息能到达哪些 node；输入聚合端口只把已经到达的消息合成一个 hidden。selector 只在这些 **reached** node 中选择 **active** node，active node 才做昂贵计算并发送结果。未 active 的 reached node 是否提交状态由 propagation profile 决定，proposal 是否在选择前生成由 selector 时序决定。**region** 是固定的一组局部候选，不是拓扑发散点。
-
-图中省略了时序差异：content-only 只读当前消息，pre-update 读旧状态，post-update 先由当前消息生成 proposal 再读它；完整顺序见第 2.4—2.6 节。
-
-| 共用角色 | 职责 |
+| 组件 | 职责 |
 | --- | --- |
-| 输入端点 \(\mathrm{in}\) | 把 \(h^{\mathrm{in}}\) 沿固定出边发送 |
-| 固定有向边 | 静态规定完整 hidden 可以从哪个发送方传到哪个端口 |
-| 输入聚合端口 \(P_v^{\mathrm{in}}\) | 收集 receiver \(v\) 的固定 parents 实际送达的消息，合成一个完整 hidden |
-| receiver node \(v\) | 持有自己的参数和可选私有状态，active 时产生完整 hidden；不同 node 默认不共享参数或状态 |
+| 输入端点 \(\mathrm{in}\) | 接收 \(h^{\mathrm{in}}\)，并沿固定输入边发送 |
+| 固定有向边 | 规定消息可以从哪个发送方到达哪个接收位置 |
+| 输入聚合端口 \(P_v^{\mathrm{in}}\) | 收集 receiver \(v\) 实际收到的父消息，并合成一个 hidden |
+| receiver node \(v\) | 持有自己的参数和可选私有状态；active 时执行完整计算 |
+| region selector | 在固定局部 region 的 reached receivers 中选择 active receivers |
 | 输出端点 \(\mathrm{out}\) | 聚合终端消息并返回 \(b_{\mathcal G}\) |
-| region selector | 在一个固定局部 region 的 reached receivers 中选择 active set |
-| propagation profile | 规定哪些 reached receivers 提交状态；完整计算仍由 active set 决定 |
-| 发送规则 \(\operatorname{Emit}\) | 把 active receiver 的完整输出变成沿固定出边发送的消息 |
-| 训练期均衡规则 | 根据选择事件产生辅助 loss，不改变推理数据流 |
 
-输入端点、输出端点和聚合端口都不执行 receiver 的状态更新或昂贵计算。每个 receiver node 只属于一个 region；对给定拓扑，这一归属在各 Token 中固定且互不重叠，多层拓扑可为不同层定义不同的 region。每个 node 在一个 GraphBranch 内有唯一 ID；不同 Line 的显示地址即使相同，也代表不同 node。
+```mermaid
+flowchart TB
+    IN(["输入端点 in<br/>接收 h_in"])
+    P1[["输入聚合端口 P_in(v₁)<br/>inbox 非空 ⇒ reached"]]
+    P2[["输入聚合端口 P_in(v₂)<br/>inbox 非空 ⇒ reached"]]
 
-文中 **fan-in** 和 **fan-out** 分别指一个 node 或端口的固定入边数和出边数。GraphBranch 内部的固定边传递消息 \(\widehat g\)；第 1.3 节的外部残差公式再把完整输出 \(b_{\mathcal G}\) 转换为 \(\Delta_{\mathcal G}\)，两者不得混用。若边上采用有损的消息编码与恢复，它属于模型语义，必须逐边记录相应公式和恢复后的消息维度。
+    subgraph REGION["region R：固定局部候选 {v₁, v₂}"]
+        direction LR
+        V1["receiver node v₁<br/>私有参数 / 可选状态<br/>active ⇒ NodeCompute"]
+        V2["receiver node v₂<br/>私有参数 / 可选状态<br/>active ⇒ NodeCompute"]
+    end
 
-| 符号 | 含义与来源 |
-| --- | --- |
-| \(\operatorname{Inbox}_{v,t}\)、\(\mathcal M_{P,t}\) | receiver 输入端口或任意端口 \(P\) 在当前执行步实际收到的消息序列（可为空）；消息带有 sender 标识，并按固定 sender/edge ID 排列 |
-| \(q_{v,t}\) | reached 标记：\(q_{v,t}=1\) 当且仅当 \(\operatorname{Inbox}_{v,t}\ne\varnothing\) |
-| \(h_{v,t}\) | \(P_v^{\mathrm{in}}\) 聚合后的完整入口 hidden |
-| \(m_{v,t}\) | receiver \(v\) 对 \(h_{v,t}\) 做本地入口归一化后的消息 |
-| \(N_{R,v}\)、\(N_{F,v}\) | receiver \(v\) 的入口归一化和昂贵 FFN 前归一化；默认分别独立配置 |
-| \(E_v\) | receiver \(v\) 的昂贵计算模块（通常为 FFN，也可由设置指定等价模块） |
-| \(s^-_{v,t}\)、\(\widetilde s_{v,t}\)、\(s^{\mathrm{cmp}}_{v,t}\)、\(s_{v,t}\) | 当前 Token 前的旧状态、\(\operatorname{Update}\) proposal、提交后供当前 \(\operatorname{NodeCompute}\) 读取的状态、Token 末所有写回后的状态；连续索引时 \(s^-_{v,t}=s_{v,t-1}\)，跨 chunk 时取上一 chunk 末状态 |
-| \(r^{\mathrm{sel}}_{v,t,\tau}\) | receiver \(v\) 给 selector 的轻量读出，\(\tau\) 指 content、pre 或 post 时刻 |
-| \(c^{\mathrm{ctx}}_{\mathcal R,t}\) | selector 可选的少量公共上下文；没有时取空 |
-| \(N_{\mathrm{sel}}\) | selector 可选的入口归一化；若使用，其可学习参数默认不与各 receiver 的 \(N_{R,v}\) 共享 |
-| \(a_{v,t}\)、\(p_{v,t}\) | 所属 region selector 对当前候选集 \(\mathcal C_{\mathcal R,t}\) 给 \(v\) 的 logit 和 soft probability |
-| \(K^{\max}_{\mathcal R}\)、\(K^{\mathrm{req}}_{\mathcal R,t}\)、\(\lvert\mathcal A_{\mathcal R,t}\rvert\) | region 的最多激活数配置、当前 Token 请求的激活数、实际激活数 |
-| \(\mathcal C_{\mathcal R,t}\)、\(\mathcal A_{\mathcal R,t}\)、\(\mathcal O_{\mathcal R,t}\) | 当前 region 的 reached candidate 集、active 集和实际 commit/Observe 集 |
-| \(g_{v,t}\)、\(\widehat g_{v,t}\) | active node 的完整计算输出，以及经发送规则处理后沿固定边发送的完整消息 |
-| \(\tau\) | selector 读取 receiver 信息的时刻：content、pre 或 post |
+    SEL{"region selector<br/>只比较 reached receivers"}
+    PROFILE["propagation profile<br/>根据 reached / active 决定 Observe"]
+    OUT(["输出端点 out<br/>聚合实际终端消息 ⇒ b_G"])
 
-除私有状态和轻量读出外，\(h_{v,t},m_{v,t},g_{v,t},\widehat g_{v,t}\) 均为 \(\mathbb R^{d_{\mathrm{model}}}\)；\(\operatorname{Read}^{\mathrm{sel}}\) 的输出维度由设置固定且有界，通常小于完整 hidden。
+    IN -->|"固定输入边：h_in"| P1
+    IN -->|"固定输入边：h_in"| P2
+    P1 -->|"Aggregate ⇒ h_v₁"| V1
+    P2 -->|"Aggregate ⇒ h_v₂"| V2
 
-同一 region 内的 \(\operatorname{Read}^{\mathrm{sel}}\) 输出必须具有相同的可比较维度；异构 receiver 先用固定的局部投影对齐。
+    V1 -.->|"轻量 Read^sel（非拓扑边）"| SEL
+    V2 -.->|"轻量 Read^sel（非拓扑边）"| SEL
+    SEL -.->|"active / inactive（控制）"| V1
+    SEL -.->|"active / inactive（控制）"| V2
+    SEL -.->|"active set"| PROFILE
+    PROFILE -.->|"是否 Observe：提交状态（控制）"| V1
+    PROFILE -.->|"是否 Observe：提交状态（控制）"| V2
 
-因此，后文写 \(h_{v,t}\) 时，指的是 receiver \(v\) 的输入聚合端口得到的完整 hidden；写 \(p_{v,t}\) 时，指的是该 node 在所属局部 selector 的 reached 候选集上得到的 soft 选择概率。
+    V1 -->|"仅 active：Emit(g_hat_v₁)，沿固定边发送"| OUT
+    V2 -->|"仅 active：Emit(g_hat_v₂)，沿固定边发送"| OUT
+```
 
-\(\operatorname{Score}\) 是 region 内的局部打分函数：它接收 reached receiver 发来的轻量 readout（以及可选的少量公共上下文），一次返回当前候选集的 logits 向量 \((a_{v,t})\)；它不要求 selector 保存或读取所有 receiver 的完整状态。\(\operatorname{Read}^{\mathrm{sel}}\) 可以只有范数、低维投影或历史标量，\(\operatorname{Read}^{\mathrm{ffn}}\) 则是 active node 内部给昂贵计算使用的较大读出。
+对一个给定 Token，需要分别判断同一个 receiver 是否 reached、active 和 Observe：
 
-若 GraphBranch 内需要 always-on 节点，可将其放入单独的 forced-active singleton region；内部多父或多 active 消息仍使用第 2.2 节的同一聚合规则。
+| 概念 | 由什么决定 | 含义 |
+| --- | --- | --- |
+| **reached** | 固定边以及上游实际发送的消息 | 当前至少收到了一条消息 |
+| **active** | 所属 region 的 selector | 当前执行完整计算并向固定下游发送 |
+| **Observe** | propagation profile（状态传播规则） | 当前把收到的内容提交到持久状态 |
 
-在给定拓扑配置中，每个 region 的候选数、\(K^{\max}\) 和 selector 输入宽度都有固定上界；扩大整张 Graph 时只增加局部 region 或 Line，不把单个 selector 的输入扩成全图，也不接收图外的完整状态。
+active 和 Observe 都以 reached 为前提，但二者是不同决定：有状态 receiver 可以 Observe 而不 active；无状态 receiver 即使 active，也没有状态需要提交。固定边决定消息能够到达哪里，selector 不创建分支，只决定 reached receivers 中哪些继续完整计算和发送。
 
-候选集合按固定 node ID 排列；未 reached node 被排除，平票时也按该顺序决断，从而保证 Top-K 的确定性。
+第 2.2 节定义消息、端点与聚合，第 2.3 节定义 receiver node，第 2.4 节定义 selector、propagation profile 与发送规则，第 2.5—2.6 节再给出完整执行顺序和跨 Token 状态规则。
 
 ### 2.2 输入/输出端点、固定边与消息聚合
 
