@@ -10,56 +10,28 @@
 
 ## 阅读入口：先看完整图景
 
-**GraphBranch** 是一个可独立输入输出、可接入原始 Transformer 的计算图，它用一个固定空间拓扑的 Graph 表示，其空间 Graph 的每个节点，是一个 **receiver node**，表示一个有“记忆模块+计算模块”的计算单元，可接受多个上游父节点输出、按需激活、激活消息发送给下游所有节点，节点内部设计的典型例子是 Transformer block，节点的具体定义见 2.3 节。
+我们希望设计一套 GraphBranch 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
 
-这套 GraphBranch 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
+为此，本文档定义的 **GraphBranch** 是一个具备单输入单输出的计算图。它用一个固定空间拓扑的 Graph 表示，
+- 对每个 Token，GraphBranch 接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选 receiver nodes 中选择少量节点做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
+- GraphBranch 的每个节点称为 **receiver node**。每个 receiver node 表示一个有“记忆模块+计算模块”的计算单元，收到消息即更新状态、激活消息发送给下游所有节点、是否激活由局部区域 selector 决定。节点内部设计的典型例子是 Transformer block，节点的具体定义见 2.3 节。
 
-GraphBranch 的工作方式是，对每个 Token，接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选中选择少量 receiver 做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
+GraphBranch 的更详细定义见下文。
 
-本文档还特别注重，应可从原始 Transformer checkpoint 的良好基线出发，在满足上述三个要求的前提下逐步扩容，避免基于尚未验证的不成熟神经网络组件进行研究起步时，永远无法获得有效正面验证结果。因此，额外要求 GraphBranch 接入后可通过适当的初始化方式，保持与原始模型的函数级等价。
+因此，GraphBranch 可以多种方式接入各类由 blocks 串连组成的 Base LLM 模型。
 
-本文还定义允许不等长路径和异步物理到达的**规范固定 DAG**：每条边最终结算为“有数据”或“不会再有数据”，每个 region 对每个 Token 只结算一次，每个 receiver 至多执行一次完整计算。任给一张满足约束的 DAG，都可自动校验并完全展开为一份静态记录（Plan），再由同一个通用参考解释器执行；单层特例和 HB-Lattice 都是这种 DAG 的规则化特例。高性能通用 prefill 执行器，以及有环或需要节点多次结算的 Graph，仍属于上层研究计划。
-
-下文第 1 节说明 GraphBranch 与 base Transformer 的接入边界，第 2 节定义内部组件和规范固定 DAG，第 3、4 节给出单层特例和 HB-Lattice，后文说明基线、损失、命名和实验记录。
+Base 模型接入 GraphBranch 后，Base 模型部分可原样复用已训练 checkpoint，GraphBranch 部分可进行适当的初始化。我们还额外要求，GraphBranch 在某些初始化下，接入后的总模型与 Base 模型函数等价，这时可避免研究起步时，待验证点过多、过于不成熟，永远无法获得有效正面验证结果。
 
 ## 1. Base block 与 GraphBranch 顶层边界
 
-### 1.1 Base 与顶层符号
-
-本节只引入理解 base block 和 GraphBranch 接入位置所需的符号。
-
-| 符号 | 含义 |
-| --- | --- |
-| \(b\) | 当前 micro-batch 中的序列行号；正文通常省略这一维 |
-| \(\mathrm{sid}\) | 稳定的序列标识；跨 batch/chunk 继承状态和缓存时使用它 |
-| \(\ell\) | base Transformer block 编号 |
-| \(j\) | GraphBranch 插入位置（site）编号；site \(j\) 所在的 base block 记为 \(\ell(j)\) |
-| \(t\) | 序列中的 Token 位置 |
-| \(d_{\mathrm{model}}\) | base hidden 的维度 |
-| \(x_{\ell,t}\) | 实际送入第 \(\ell\) 个 base block 的 hidden |
-| \(u_{\ell,t}\) | 当前 block 完成 Attention residual merge 后的 hidden |
-| \(v_{\ell,t}\) | 当前 block 完成原 dense MLP residual merge 后的 hidden |
-| \(y_{\ell,t}\) | 当前 block 连同可选 GraphBranch 最终送往下一个 block 的 hidden |
-| \(h^{\mathrm{in}}_{j,t}\) | site \(j\) 的 GraphBranch 实际入口 hidden |
-| \(b_{\mathcal G,j,t}\) | GraphBranch 返回的完整 hidden |
-| \(\Delta_{\mathcal G,j,t}\) | GraphBranch 相对入口产生的 residual |
-
-这里的 \(b\) 只表示当前 batch 的序列行号，与输出 hidden \(b_{\mathcal G,j,t}\) 无关；跨 batch 或 chunk 重排时，状态和缓存使用稳定的 \(\mathrm{sid}\)。
-
-若同一 base block 放置多个 site，实验设置必须给出它们的执行顺序；默认每个 base block 至多放置一个 site。
-
-后文按作用复用基本符号：归一化写成 \(N\)，私有状态写成 \(s\)，receiver node 内部状态操作写成 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\) 等，激活节点的完整计算写成 \(\operatorname{NodeCompute}\)。相同符号表示相同职责，不表示共享参数或采用相同算法。
-
-### 1.2 Base Qwen3 block
-
-令 \(N_A\) 和 \(N_F\) 分别表示 Attention 前与 MLP 前、逐 Token 执行的归一化操作；当前 Qwen3 base block 中二者都实现为 RMSNorm。\(A_\ell\) 表示 causal self-attention，\(F_\ell\) 表示原 dense SwiGLU MLP。先把第 \(\ell\) 个 block 到位置 \(t\) 为止的输入前缀记为：
-
+### 1.1 Base Qwen3 block
+第 \(\ell\) 个 block 接收到的第 \(0,...,t\) 个 token 的输入 hidden 是 \(t+1\) 个 \(d_{\mathrm{model}}\) 维向量，记作
 $$
 X_{\ell,\le t}
 :=(x_{\ell,0},x_{\ell,1},\ldots,x_{\ell,t}).
 $$
 
-\(N_A(X_{\ell,\le t})\) 表示分别归一化前缀中的每个 Token，方括号后的下标 \(t\) 表示取 self-attention 在当前位置的输出。一个原始 Pre-Norm Qwen3 block 对位置 \(t\) 计算：
+则对位置 \(t\)，一个原始 Pre-Norm Qwen3 block 计算：
 
 $$
 u_{\ell,t}
@@ -75,62 +47,36 @@ v_{\ell,t}
 +F_\ell\!\left(N_F(u_{\ell,t})\right).
 $$
 
-因此 \(x_{\ell,t}\) 是实际送入第 \(\ell\) 个 base block 的当前 Token hidden；对 \(\ell>0\)，有 \(x_{\ell,t}=y_{\ell-1,t}\)。
+其中， \(N_A\) 和 \(N_F\) 分别表示两个位置的归一化操作；当前 Qwen3 base block 中二者都实现为 RMSNorm。\(A_\ell\) 表示 causal self-attention，\(F_\ell\) 表示原 dense SwiGLU MLP。
 
-Dense 基线没有 receiver，直接令：
+### 1.2 GraphBranch 的单入口、单出口契约
+在 Base 模型中第 \(\ell(j)\) 个 block 插入的第 \(j\) 个 GraphBranch, 记作 \(\mathcal G_j\)。其中，每个 block 位置最多插入一个 GraphBranch。
 
-$$
-y_{\ell,t}=v_{\ell,t}.
-$$
-
-### 1.3 GraphBranch 的单入口、单出口契约
-
-每个 site 在原有 base computation 之外只接入一个 GraphBranch，记为 \(\mathcal G_j\)。它是一个单入口、单出口子图，外部语义由本节的输入、输出和合并公式完整定义。
-
-**placement** 表示 GraphBranch 相对当前 base block 的接入位置；对当前 Token，四种 placement 的入口分别是：
-
-$$
-h^{\mathrm{in}}_{j,t}
-=
-\begin{cases}
-v_{\ell,t}, & \text{POST},\\
-x_{\ell,t}, & \text{PARBLK},\\
-x_{\ell,t}, & \text{PARATTN},\\
-u_{\ell,t}, & \text{PARMLP},
-\end{cases}
-\qquad \ell=\ell(j).
-$$
-
-GraphBranch 内部采用第 2.7 节的固定 DAG 语义；第 3 节的单层结构和第 4 节的 HB-Lattice 是两个规则化特例。它对外始终只返回一个同维 hidden：
-
+对每个 Token，\(\mathcal G_j\) 可作为一个有逐序列持久状态的函数接受一个输入 hidden \(h^{\mathrm{in}}_{j,t}\)，并始终对外返回一个同维 hidden \(b_{\mathcal G,j,t}\)：
 $$
 b_{\mathcal G,j,t}
 =\mathcal G_j\!\left(h^{\mathrm{in}}_{j,t}\right),
-\qquad
+$$
+另外记 \(\mathcal G_j\) 输出值的 residual 为：
+$$
 \Delta_{\mathcal G,j,t}
 =b_{\mathcal G,j,t}-h^{\mathrm{in}}_{j,t}.
 $$
 
-这里的 \(\mathcal G_j\) 省略了逐序列持久状态；第 2 节定义状态及其具体读写顺序。无论内部多复杂，placement 只看见入口 \(h^{\mathrm{in}}\)、完整输出 \(b_{\mathcal G}\) 和唯一 residual \(\Delta_{\mathcal G}\)。
-
-每个有效 Token 都执行的原 base 路径是 **always-on** 的，把 placement 的 base always-on 输出记为 \(b^0_{j,t}\)，外部统一采用 **RESIDUAL_ADD**；合并结果为：
-
+记 block \(\ell(j)\) 的最终输出，也就是下一个 block \(\ell+1\) 的输入为 \(y_{\ell,t}\triangleq x_{\ell+1,t}\)，则 \(y_{\ell,t}\) 同时取决于 GraphBranch 的 placement 配置及其输出 hidden \(b_{\mathcal G,j,t}\)。对于未插入 GraphBranch 的情形有
 $$
-b^0_{j,t}+\Delta_{\mathcal G,j,t}
-=b^0_{j,t}+\left(b_{\mathcal G,j,t}-h^{\mathrm{in}}_{j,t}\right).
+y_{\ell,t}=v_{\ell,t}.
 $$
 
-该式保留 base always-on 路径，只叠加 GraphBranch 相对共同入口产生的变化；它与第 2.2 节定义的 GraphBranch 内部消息聚合是两种不同操作。
+下面给出不同的 placement 配置如何起作用的说明。
 
-对 PARATTN，边界合并后还要继续执行原 dense MLP；其他 placement 的合并结果直接作为 block 输出。
+### 1.3 GraphBranch 的四种 placement
 
-### 1.4 四种 placement
+GraphBranch 有四种 **placement** 配置，它们分别对应
+- 不同的接入位置：因此 \(\mathcal G_j\) 将获得不同的输入 hidden \(h^{\mathrm{in}}\)
+- 不同的合入位置：因此将与 \(u_{\ell,t}\) 或 \(v_{\ell,t}\) 合并 residual，并最终影响 \(y_{\ell,t}\)
 
-四种 placement 只改变 \(h^{\mathrm{in}}\)、always-on 输出和 residual 合入位置，不改变 GraphBranch 的内部语义。
-
-#### 1.4.1 POST：完整 block 后串联
-
-先按第 1.2 节得到完整 base block 输出 \(v_{\ell,t}\)，再令：
+#### 1.3.1 POST：完整 block 后串联
 
 $$
 h^{\mathrm{in}}_{j,t}=v_{\ell,t},
@@ -146,7 +92,7 @@ x → Attention → u → 原 dense MLP → v → GraphBranch → y
 
 GraphBranch 能看到当前 block 的 Attention 和原 MLP 结果。POST 是串联结构。
 
-#### 1.4.2 PARBLK：与完整 block 并列
+#### 1.3.2 PARBLK：与完整 block 并列
 
 GraphBranch 和完整 base block 都从 \(x_{\ell,t}\) 开始，最后在 block 出口合并：
 
@@ -165,7 +111,7 @@ x ────────┤                            + → y
 
 GraphBranch 看不到当前 block 的 Attention 或 MLP 结果，也不改变它们的输入；两条路径可以并行执行。
 
-#### 1.4.3 PARATTN：与 Attention 并列
+#### 1.3.3 PARATTN：与 Attention 并列
 
 GraphBranch 与 Attention 都读取 \(x_{\ell,t}\)。先在 Attention residual 位置合并，再让原 dense MLP 读取合并后的表示：
 
@@ -188,7 +134,7 @@ x ────────┤                   + → u' → 原 dense MLP → y
 
 PARATTN 只说明 GraphBranch residual 的接入位置，不限制 GraphBranch 内部只能使用 Attention。
 
-#### 1.4.4 PARMLP：与 MLP 并列
+#### 1.3.4 PARMLP：与 MLP 并列
 
 Attention residual 先得到 \(u_{\ell,t}\)；原 dense MLP 与 GraphBranch 都读取这个共同输入，最后在 MLP residual 位置合并：
 
@@ -207,7 +153,7 @@ x → self-attention → u
 
 GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的结果，也不改变原 MLP 的输入。本文统一使用 **PARMLP**；**PARFFN** 指同一个 placement。原 dense MLP 是 always-on 路径，GraphBranch 是与它并列的稀疏、可有状态主旁路。
 
-#### 1.4.5 直接比较与初始化
+#### 1.3.5 直接比较与初始化
 
 | Placement | \(h^{\mathrm{in}}\) | always-on 输出 | 看见当前 Attention | 看见当前原 MLP | 改变原 MLP 输入 | GraphBranch merge 后 |
 | --- | --- | --- | ---: | ---: | ---: | --- |
@@ -216,7 +162,7 @@ GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 | **PARATTN** | \(x\) | \(u\) | 否 | 否 | 是 | 得到 \(u'\)，再执行原 MLP |
 | **PARMLP** | \(u\) | \(v\) | 是 | 否 | 否 | 直接得到 \(y\) |
 
-若 GraphBranch 初始化为 identity，且内部端口聚合在相同输入上保持该输入（当前默认是对实际消息取均值），则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，四种 placement 都保持原 base 函数不变；采用其他聚合策略时必须单独验证这一条件。这只约束当前前向，状态是否仍按第 2.4 节的 profile 更新须在实验设置中声明。离开初始点后，它们的前向耦合、梯度路径和有效深度不同，不能视为同一架构。
+若 GraphBranch 可经过某种初始化变成 identity 函数，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，此时接入 \(\mathcal G_j\) 后的模型与原始 Base 模型函数等价。对于后文中给出的多种 GraphBranch 内部构型，这种初始化不难实现。
 
 ## 2. GraphBranch 内部的基础组件及语义
 
