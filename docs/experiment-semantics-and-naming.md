@@ -10,19 +10,18 @@
 
 ## 阅读入口：先看完整图景
 
-我们希望设计一套 GraphBranch 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
+我们希望设计一套 TIDE Graph 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
 
-为此，本文档定义的 **GraphBranch** 是一个具备单输入单输出的计算图。它用一个固定空间拓扑的 Graph 表示，
-- 对每个 Token，GraphBranch 接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选 receiver nodes 中选择少量节点做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
-- GraphBranch 的每个节点称为 **receiver node**。每个 receiver node 表示一个有“记忆模块+计算模块”的计算单元，收到消息即更新状态、激活消息发送给下游所有节点、是否激活由局部区域 selector 决定。节点内部设计的典型例子是 Transformer block，节点的具体定义见 2.3 节。
+为此，本文档定义一种 Single-Settlement Graph，下文简称 **SettleGraph** 是一个具备单输入单输出的计算图。它用一个固定空间拓扑的 Graph 表示，
+- 对每个 Token，SettleGraph 接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选 receiver nodes 中选择少量节点做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
+- SettleGraph 的每个节点称为 **receiver node**。每个 receiver node 表示一个有“记忆模块+计算模块”的计算单元，收到消息即更新状态、激活消息发送给下游所有节点、是否激活由局部区域 selector 决定。节点内部设计的典型例子是 Transformer block，节点的具体定义见 2.3 节。
+SettleGraph 的更详细定义见下文。
 
-GraphBranch 的更详细定义见下文。
+因此，SettleGraph 可以多种方式接入各类由 blocks 串连组成的 Base LLM 模型。
 
-因此，GraphBranch 可以多种方式接入各类由 blocks 串连组成的 Base LLM 模型。
+Base 模型接入 SettleGraph 后，Base 模型部分可原样复用已训练 checkpoint，SettleGraph 部分可进行适当的初始化。我们还额外要求，SettleGraph 在某些初始化下，接入后的总模型与 Base 模型函数等价，这时可避免研究起步时，待验证点过多、过于不成熟，永远无法获得有效正面验证结果。
 
-Base 模型接入 GraphBranch 后，Base 模型部分可原样复用已训练 checkpoint，GraphBranch 部分可进行适当的初始化。我们还额外要求，GraphBranch 在某些初始化下，接入后的总模型与 Base 模型函数等价，这时可避免研究起步时，待验证点过多、过于不成熟，永远无法获得有效正面验证结果。
-
-## 1. Base block 与 GraphBranch 顶层边界
+## 1. Base block 与 SettleGraph 顶层边界
 
 ### 1.1 Base Qwen3 block
 第 \(\ell\) 个 block 接收到的第 \(0,...,t\) 个 token 的输入 hidden 是 \(t+1\) 个 \(d_{\mathrm{model}}\) 维向量，记作
@@ -49,8 +48,8 @@ $$
 
 其中， \(N_A\) 和 \(N_F\) 分别表示两个位置的归一化操作；当前 Qwen3 base block 中二者都实现为 RMSNorm。\(A_\ell\) 表示 causal self-attention，\(F_\ell\) 表示原 dense SwiGLU MLP。
 
-### 1.2 GraphBranch 的单入口、单出口契约
-在 Base 模型中第 \(\ell(j)\) 个 block 插入的第 \(j\) 个 GraphBranch, 记作 \(\mathcal G_j\)。其中，每个 block 位置最多插入一个 GraphBranch。
+### 1.2 SettleGraph 的单入口、单出口契约
+在 Base 模型中第 \(\ell(j)\) 个 block 插入的第 \(j\) 个 SettleGraph, 记作 \(\mathcal G_j\)。其中，每个 block 位置最多插入一个 SettleGraph。
 
 对每个 Token，\(\mathcal G_j\) 可作为一个有逐序列持久状态的函数接受一个输入 hidden \(h^{\mathrm{in}}_{j,t}\)，并始终对外返回一个同维 hidden \(b_{\mathcal G,j,t}\)：
 $$
@@ -63,16 +62,16 @@ $$
 =b_{\mathcal G,j,t}-h^{\mathrm{in}}_{j,t}.
 $$
 
-记 block \(\ell(j)\) 的最终输出，也就是下一个 block \(\ell+1\) 的输入为 \(y_{\ell,t}\triangleq x_{\ell+1,t}\)，则 \(y_{\ell,t}\) 同时取决于 GraphBranch 的 placement 配置及其输出 hidden \(b_{\mathcal G,j,t}\)。对于未插入 GraphBranch 的情形有
+记 block \(\ell(j)\) 的最终输出，也就是下一个 block \(\ell+1\) 的输入为 \(y_{\ell,t}\triangleq x_{\ell+1,t}\)，则 \(y_{\ell,t}\) 同时取决于 SettleGraph 的 placement 配置及其输出 hidden \(b_{\mathcal G,j,t}\)。对于未插入 SettleGraph 的情形有
 $$
 y_{\ell,t}=v_{\ell,t}.
 $$
 
 下面给出不同的 placement 配置如何起作用的说明。
 
-### 1.3 GraphBranch 的四种 placement
+### 1.3 SettleGraph 的四种 placement
 
-GraphBranch 有四种 **placement** 配置，它们分别对应
+SettleGraph 有四种 **placement** 配置，它们分别对应
 - 不同的接入位置：因此 \(\mathcal G_j\) 将获得不同的输入 hidden \(h^{\mathrm{in}}\)
 - 不同的合入位置：因此将与 \(u_{\ell,t}\) 或 \(v_{\ell,t}\) 合并 residual，并最终影响 \(y_{\ell,t}\)
 
@@ -87,14 +86,14 @@ y_{\ell,t}
 $$
 
 ~~~text
-x → Attention → u → 原 dense MLP → v → GraphBranch → y
+x → Attention → u → 原 dense MLP → v → SettleGraph → y
 ~~~
 
-GraphBranch 能看到当前 block 的 Attention 和原 MLP 结果。POST 是串联结构。
+SettleGraph 能看到当前 block 的 Attention 和原 MLP 结果。POST 是串联结构。
 
 #### 1.3.2 PARBLK：与完整 block 并列
 
-GraphBranch 和完整 base block 都从 \(x_{\ell,t}\) 开始，最后在 block 出口合并：
+SettleGraph 和完整 base block 都从 \(x_{\ell,t}\) 开始，最后在 block 出口合并：
 
 $$
 h^{\mathrm{in}}_{j,t}=x_{\ell,t},
@@ -106,14 +105,14 @@ $$
 ~~~text
           ┌→ 完整 base block → v ─────┐
 x ────────┤                            + → y
-          └→ GraphBranch → Δ_G(x) ────┘
+          └→ SettleGraph → Δ_G(x) ────┘
 ~~~
 
-GraphBranch 看不到当前 block 的 Attention 或 MLP 结果，也不改变它们的输入；两条路径可以并行执行。
+SettleGraph 看不到当前 block 的 Attention 或 MLP 结果，也不改变它们的输入；两条路径可以并行执行。
 
 #### 1.3.3 PARATTN：与 Attention 并列
 
-GraphBranch 与 Attention 都读取 \(x_{\ell,t}\)。先在 Attention residual 位置合并，再让原 dense MLP 读取合并后的表示：
+SettleGraph 与 Attention 都读取 \(x_{\ell,t}\)。先在 Attention residual 位置合并，再让原 dense MLP 读取合并后的表示：
 
 $$
 h^{\mathrm{in}}_{j,t}=x_{\ell,t},
@@ -129,14 +128,14 @@ $$
 ~~~text
           ┌→ self-attention ─┐
 x ────────┤                   + → u' → 原 dense MLP → y
-          └→ GraphBranch ────┘
+          └→ SettleGraph ────┘
 ~~~
 
-PARATTN 只说明 GraphBranch residual 的接入位置，不限制 GraphBranch 内部只能使用 Attention。
+PARATTN 只说明 SettleGraph residual 的接入位置，不限制 SettleGraph 内部只能使用 Attention。
 
 #### 1.3.4 PARMLP：与 MLP 并列
 
-Attention residual 先得到 \(u_{\ell,t}\)；原 dense MLP 与 GraphBranch 都读取这个共同输入，最后在 MLP residual 位置合并：
+Attention residual 先得到 \(u_{\ell,t}\)；原 dense MLP 与 SettleGraph 都读取这个共同输入，最后在 MLP residual 位置合并：
 
 $$
 h^{\mathrm{in}}_{j,t}=u_{\ell,t},
@@ -148,29 +147,29 @@ $$
 ~~~text
 x → self-attention → u
                       ├→ 原 dense MLP ─┐
-                      └→ GraphBranch ── + → y
+                      └→ SettleGraph ── + → y
 ~~~
 
-GraphBranch 能看到当前 Attention 的结果，但看不到当前原 MLP 的结果，也不改变原 MLP 的输入。本文统一使用 **PARMLP**；**PARFFN** 指同一个 placement。原 dense MLP 是 always-on 路径，GraphBranch 是与它并列的稀疏、可有状态主旁路。
+SettleGraph 能看到当前 Attention 的结果，但看不到当前原 MLP 的结果，也不改变原 MLP 的输入。本文统一使用 **PARMLP**；**PARFFN** 指同一个 placement。原 dense MLP 是 always-on 路径，SettleGraph 是与它并列的稀疏、可有状态主旁路。
 
 #### 1.3.5 直接比较与初始化
 
-| Placement | \(h^{\mathrm{in}}\) | always-on 输出 | 看见当前 Attention | 看见当前原 MLP | 改变原 MLP 输入 | GraphBranch merge 后 |
+| Placement | \(h^{\mathrm{in}}\) | always-on 输出 | 看见当前 Attention | 看见当前原 MLP | 改变原 MLP 输入 | SettleGraph merge 后 |
 | --- | --- | --- | ---: | ---: | ---: | --- |
 | **POST** | \(v\) | \(v\) | 是 | 是 | 否 | 直接得到 \(y\) |
 | **PARBLK** | \(x\) | \(v\) | 否 | 否 | 否 | 直接得到 \(y\) |
 | **PARATTN** | \(x\) | \(u\) | 否 | 否 | 是 | 得到 \(u'\)，再执行原 MLP |
 | **PARMLP** | \(u\) | \(v\) | 是 | 否 | 否 | 直接得到 \(y\) |
 
-若 GraphBranch 可经过某种初始化变成 identity 函数，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，此时接入 \(\mathcal G_j\) 后的模型与原始 Base 模型函数等价。对于后文中给出的多种 GraphBranch 内部构型，这种初始化不难实现。
+若 SettleGraph 可经过某种初始化变成 identity 函数，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，此时接入 \(\mathcal G_j\) 后的模型与原始 Base 模型函数等价。对于后文中给出的多种 SettleGraph 内部构型，这种初始化不难实现。
 
-## 2. GraphBranch 内部的基础组件及语义
+## 2. SettleGraph 内部的基础组件及语义
 
 ### 2.1 内部组件与职责边界
 
 以下固定一个 site \(j\)、一个稳定序列 \(\mathrm{sid}\) 和其中的 Token \(t\)；后文在不影响理解时省略 \(j\) 和 \(\mathrm{sid}\)。receiver node 的 ID 记为 \(v\)，与第 1.2 节的 base hidden \(v_{\ell,t}\) 不是同一个量。
 
-在 GraphBranch 的拓扑中，只有 receiver node 属于计算节点。输入端点、输出端点和聚合端口负责传递或合并消息，不持有 receiver 的私有状态，也不执行 receiver 的昂贵计算；selector 是控制模块，不是拓扑节点。每个 receiver node 只属于一个固定 region；对给定拓扑，regions 的划分固定且互不重叠，每个 region 由一个 selector 负责。
+在 SettleGraph 的拓扑中，只有 receiver node 属于计算节点。输入端点、输出端点和聚合端口负责传递或合并消息，不持有 receiver 的私有状态，也不执行 receiver 的昂贵计算；selector 是控制模块，不是拓扑节点。每个 receiver node 只属于一个固定 region；对给定拓扑，regions 的划分固定且互不重叠，每个 region 由一个 selector 负责。
 
 | 组件 | 职责 |
 | --- | --- |
@@ -432,7 +431,7 @@ selector 读取状态的时刻有三种。下表中的 **N** 指 stateless profi
 | **Pre-update state** | 当前消息到来前的旧状态读出 | SD、BO |
 | **Post-update state** | 当前消息产生的状态 proposal 读出 | BO |
 
-核心规范中，一个 GraphBranch/site 的所有有状态 receiver 统一采用同一个 propagation profile，节点和 region 只继承该设置。N 只配 content-only，SD 配 content-only 或 pre-update，BO 可配三种时序；混合 N、SD、BO 或采用其他组合时，必须作为自定义 profile 给出 Observe 集合和命名。N 若另有独立 selector-history，也使用 SEL-CUSTOM。
+核心规范中，一个 SettleGraph/site 的所有有状态 receiver 统一采用同一个 propagation profile，节点和 region 只继承该设置。N 只配 content-only，SD 配 content-only 或 pre-update，BO 可配三种时序；混合 N、SD、BO 或采用其他组合时，必须作为自定义 profile 给出 Observe 集合和命名。N 若另有独立 selector-history，也使用 SEL-CUSTOM。
 
 `SEL-CUSTOM` 不由三种预设标签完整定义，必须在设置中列出可读信息和 proposal/commit 顺序。Pre 与 post 不是包含关系：若 \(\operatorname{Update}\) 会覆盖、压缩或遗忘旧状态，post-update 不能必然恢复 pre-update 的信息。
 
@@ -481,7 +480,7 @@ $$
 =h_{v,t}+\rho_{v,t}\bigl(g_{v,t}-h_{v,t}\bigr).
 $$
 
-\(\operatorname{sg}\) 表示 stop-gradient：前向值不变、反向梯度为零。因此 EMIT-HST 前向恒有 \(\widehat g=g\)，但主任务梯度可经 \(p\) 返回 selector；Top-K 的离散成员选择本身不求导。EMIT-HARD 令 \(\widehat g=g\) 且不传这条梯度，EMIT-SOFTP 令 \(\widehat g=h+p(g-h)\) 并同时改变前向强度；后者若用于 GraphBranch 内部，必须作为探索性扩展单独标记。
+\(\operatorname{sg}\) 表示 stop-gradient：前向值不变、反向梯度为零。因此 EMIT-HST 前向恒有 \(\widehat g=g\)，但主任务梯度可经 \(p\) 返回 selector；Top-K 的离散成员选择本身不求导。EMIT-HARD 令 \(\widehat g=g\) 且不传这条梯度，EMIT-SOFTP 令 \(\widehat g=h+p(g-h)\) 并同时改变前向强度；后者若用于 SettleGraph 内部，必须作为探索性扩展单独标记。
 \(\zeta^{\mathrm{ST}}_{v}\) 是 active node \(v\) 的固定梯度缩放常数，不参与反向传播；首个 Top-1 设置取 \(\zeta^{\mathrm{ST}}_{v}=1\)，其他值必须在实验设置中记录。
 
 若初始化时 \(g_{v,t}=h_{v,t}\)，经 Emit-HST 由主任务返回 selector 的这条梯度暂为零；需要非零分支初始化或其他主任务梯度路径、warmup 等方式让分支离开 identity 点，balance loss 只能改变路由倾向。
@@ -514,7 +513,7 @@ $$
 
 ### 2.6 状态生命周期与跨 Token 执行
 
-本节规则适用于所有拓扑。每条独立序列从空状态开始：EMA、GDN/KDA、SSM 状态置零，Attention 历史为空，历史激活计数清零；若实验使用可学习首状态，必须在设置中明确记录。padding 等无效 Token 不进入 GraphBranch，GraphBranch 输出取入口，因此 \(\Delta_{\mathcal G}=0\)；base 的 always-on 路径仍按第 1.4 节执行，也不把该 Token 放入路由 loss。
+本节规则适用于所有拓扑。每条独立序列从空状态开始：EMA、GDN/KDA、SSM 状态置零，Attention 历史为空，历史激活计数清零；若实验使用可学习首状态，必须在设置中明确记录。padding 等无效 Token 不进入 SettleGraph，SettleGraph 输出取入口，因此 \(\Delta_{\mathcal G}=0\)；base 的 always-on 路径仍按第 1.4 节执行，也不把该 Token 放入路由 loss。
 
 每个 receiver 状态按 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 隔离，默认不跨 site 或 node 共享。chunk 是一次前向接收的连续 Token 片段；prefill 指一次处理一段已有 Token，decode 指逐 Token 生成。跨 chunk 继承状态值，边界默认 detach（只截断 chunk 之间的梯度，chunk 内仍保留因果梯度）；在 deterministic/eval（或固定随机掩码）且聚合顺序相同的条件下，同一有效前缀的整段 prefill、分块 prefill 和逐 Token decode 应得到相同的逐 Token 输出与最终状态。
 
@@ -772,7 +771,7 @@ $$
           一个 selector 在这 R 个 reached candidates 中选择
 ~~~
 
-“单层”表示任一入口到出口路径只经过一个 receiver node，不表示 GraphBranch 总共只有一个 node。一个 receiver node 内部可以串行执行多个子层；只要它仍作为一个拓扑节点接收和返回完整 hidden，这些内部子层就不会变成新的拓扑节点。
+“单层”表示任一入口到出口路径只经过一个 receiver node，不表示 SettleGraph 总共只有一个 node。一个 receiver node 内部可以串行执行多个子层；只要它仍作为一个拓扑节点接收和返回完整 hidden，这些内部子层就不会变成新的拓扑节点。
 
 例如，这个结构包含 4 个 nodes 且采用 Top-1 时，每个 Token 只选其中一个做完整计算；这 4 个 nodes 并列存在，并不顺序串行。
 
@@ -886,7 +885,7 @@ $$
 
 receiver nodes 静态放在有序的 Lines \(L_0,L_1,\ldots,L_D\)，其中 \(D\) 是最后一个 Line 的下标。一个 Line 是同一 Token 的一次**逻辑波前步**，由该 Line 内各 node 的 inbox 判定和 reached 节点执行步组成：该 Token 在该 Line 的 inbox、聚合、selector、状态提交、active node compute 和发送全部结算后，才进入下一 Line。
 
-这里 \(t\) 始终是序列中的 Token 索引；Line/level 是 GraphBranch 的逻辑波前时钟，两者不是同一个时间轴。
+这里 \(t\) 始终是序列中的 Token 索引；Line/level 是 SettleGraph 的逻辑波前时钟，两者不是同一个时间轴。
 
 每个 Line 再划分为固定且不重叠的 selector regions；一个 region 只有一个 selector。固定边决定哪些 nodes reached，selector 只在本 region 的 reached nodes 中选择 active。同一 Line 内没有 receiver-to-receiver 边，因此 region 划分自动满足第 2.7 节的控制拓扑序约束。一个 node 可以有多个 parents 或 children，但不需要额外的“发散点”或“汇合节点”：fan-out 是固定出边，fan-in 由目标输入聚合端口完成。
 
@@ -1023,7 +1022,7 @@ $$
 
 对跨 Token 的状态，每个 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 在 Line 内还要按全局 \(t=0,1,\ldots\) 因果结算（可用 scan 或 kernel 批量处理）；任何并行化都不得改变 \(s_{t-1}\to s_t\)。
 
-GraphBranch 的执行依赖分为三类：同一 Token 沿 Plan 固定边的 Line 顺序；同一 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 的 receiver state 或同一 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 的 selector-history 跨 Token 因果；以及 region 等待其 \(\operatorname{Read}^{\mathrm{sel}}\) 就绪后执行一次 selector。token-major、Line-major 或等价批处理都可以使用，但必须保持这些依赖。base Attention 的 causal 前缀依赖仍按第 1.2 节单独处理。
+SettleGraph 的执行依赖分为三类：同一 Token 沿 Plan 固定边的 Line 顺序；同一 \((\mathrm{site},\mathrm{receiver\ node},\mathrm{sid})\) 的 receiver state 或同一 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 的 selector-history 跨 Token 因果；以及 region 等待其 \(\operatorname{Read}^{\mathrm{sel}}\) 就绪后执行一次 selector。token-major、Line-major 或等价批处理都可以使用，但必须保持这些依赖。base Attention 的 causal 前缀依赖仍按第 1.2 节单独处理。
 
 ### 4.6 两类标准拓扑生成规则
 
@@ -1134,9 +1133,9 @@ $$
 它与 PARMLP 位于同一个 block 位置，但语义不同：
 
 - MOE 用一个 routed expert 替换原 dense MLP；
-- PARMLP 保留原 dense MLP，再增加一个并列 GraphBranch residual。
+- PARMLP 保留原 dense MLP，再增加一个并列 SettleGraph residual。
 
-当 PARMLP 的 GraphBranch 采用第 3 节的单层特例时，也可以在结构上看作一种 shared-expert MoE：原 dense MLP 是 always-on shared expert，receiver nodes 是 routed experts；这只是结构类比，不表示参数或计算完全等价。
+当 PARMLP 的 SettleGraph 采用第 3 节的单层特例时，也可以在结构上看作一种 shared-expert MoE：原 dense MLP 是 always-on shared expert，receiver nodes 是 routed experts；这只是结构类比，不表示参数或计算完全等价。
 
 ## 6. 实际训练时的损失函数
 
@@ -1456,7 +1455,7 @@ $$
 <TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-T<TOPO_ID>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
 ~~~
 
-这里的 **H** 和 **T** 都只是可读索引。H 表示一个 site 的 GraphBranch 在**静态入口—出口路径**上最多顺序经过多少个 receiver nodes，不按某个 Token 的 active subgraph 变化；所有 site 深度相同时写该深度，只要不一致就一律使用 HVAR 并在 manifest 中逐 site 列出。H 由固定单层结构或最终 Plan 推导；短名称中的 H1、H2 分别表示最大深度为 1、2。H 不是拓扑名称，也不是独立配置。
+这里的 **H** 和 **T** 都只是可读索引。H 表示一个 site 的 SettleGraph 在**静态入口—出口路径**上最多顺序经过多少个 receiver nodes，不按某个 Token 的 active subgraph 变化；所有 site 深度相同时写该深度，只要不一致就一律使用 HVAR 并在 manifest 中逐 site 列出。H 由固定单层结构或最终 Plan 推导；短名称中的 H1、H2 分别表示最大深度为 1、2。H 不是拓扑名称，也不是独立配置。
 
 HB-Lattice 中的 \(D\) 是最后一个 Line 的下标，因此共有 \(D+1\) 个 Lines；H 是任一静态入口—出口路径经过的最大 receiver node 数，所以 \(H\le D+1\)。若存在经过每个 Line 的完整路径，则 \(H=D+1\)；否则 H 更小。
 
@@ -1467,7 +1466,7 @@ T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配�
 | 字段 | 允许值或形式 | 含义 |
 | --- | --- | --- |
 | TRAIN | PT / CPT / FT / SFT | 初始化与训练阶段 |
-| PLACEMENT | POST / PARBLK / PARATTN / PARMLP | GraphBranch 的输入与 residual 返回位置 |
+| PLACEMENT | POST / PARBLK / PARATTN / PARMLP | SettleGraph 的输入与 residual 返回位置 |
 | PROFILE | N / SD / BO / CUSTOM | 状态接收与稀疏计算语义；混合或扩展规则使用 CUSTOM，并在 manifest 中给出 Observe 集合 |
 | R | R4、R8、R16、RVAR 等 | 单层特例的固定候选总数，或非平凡固定 DAG 中 selector region 的固定大小摘要；运行时 reached 数和激活上限不写入 R；不统一时用 RVAR |
 | I | I1、I4、I8 等 | 一个 Token 沿 base 执行顺序经过的 routed 插入位置数；当前实验默认每个 site 都 routed |
@@ -1496,7 +1495,7 @@ T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配�
 
 **K** 只表示 selector 激活多少个候选，**EMIT** 只表示 active receiver 怎样产生发送消息，**AGG** 只表示端口怎样合并实际收到的消息。三者不能互相代替。
 
-单层输出聚合、固定 DAG 的 receiver 多父输入和最终输出都使用同一个 **AGG** 语义；AGG-MEAN 在单消息端口自然退化为 identity。selector 的 soft 概率对主任务前向的额外权重或梯度作用由 **EMIT** 承担，Top-K 成员仍由 selector 决定，消息聚合不再次读取 soft 概率。GraphBranch 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不属于 AGG。若同一实验的发送或聚合规则不统一，使用对应的 **VAR**，并在 manifest 中列出逐 node 或逐端口设置。
+单层输出聚合、固定 DAG 的 receiver 多父输入和最终输出都使用同一个 **AGG** 语义；AGG-MEAN 在单消息端口自然退化为 identity。selector 的 soft 概率对主任务前向的额外权重或梯度作用由 **EMIT** 承担，Top-K 成员仍由 selector 决定，消息聚合不再次读取 soft 概率。SettleGraph 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不属于 AGG。若同一实验的发送或聚合规则不统一，使用对应的 **VAR**，并在 manifest 中列出逐 node 或逐端口设置。
 
 **BAL-AVAIL-SOFT** 在单层特例中退化为第 6.1 节的固定候选均衡，在非平凡固定 DAG 中使用第 6.2 节的 availability 基准。**BAL-CUSTOM** 和 **BAL-VAR** 必须附完整公式与聚合范围。
 
@@ -1507,7 +1506,7 @@ TRAIN 的含义必须严格区分：
 - **FT**：加载预训练 checkpoint，使用不同于基础自回归预训练的下游任务目标；
 - **SFT**：FT 中特指有监督的指令或输入输出微调。
 
-TRAIN 描述 base 权重与训练目标；新增 GraphBranch 及其 receiver nodes 的初始化方式由实验设置单独记录。
+TRAIN 描述 base 权重与训练目标；新增 SettleGraph 及其 receiver nodes 的初始化方式由实验设置单独记录。
 
 口语中的“finetune”不能直接写入正式名称：如果实际仍是 FineWeb 或领域语料上的自回归语言模型训练，应记为 CPT；只有训练目标确实改变时才记为 FT 或 SFT。
 
@@ -1523,11 +1522,11 @@ PT-POST-BO-R2-I4-H7-THBL2D2P2CMIR-GDN-K32-V32-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-
 
 - **R8** 表示单层特例有 8 个固定候选，或非平凡固定 DAG 的 selector regions 固定大小均为 8；每个 Token 实际 reached 候选可以更少，R8 也不表示模型共有 8 个 receiver nodes。
 - **I8** 表示每个 Token 顺序经过 8 个插入位置，不表示 Transformer 只有 8 个 blocks。
-- **H2** 表示该 run 中 GraphBranch 的最大 receiver node 深度为 2；它由 Plan 推导，不能唯一确定拓扑。
+- **H2** 表示该 run 中 SettleGraph 的最大 receiver node 深度为 2；它由 Plan 推导，不能唯一确定拓扑。
 - **K2** 表示相应 region 固定请求且最多激活 2 个候选（\(K^{\mathrm{req}}=K^{\max}=2\)）；候选不足时实际激活数随之减少。只固定上限、请求数不同或各 region/token 不统一时使用 **KVAR**，并在 manifest 中分别记录 \(K^{\max}\) 与 \(K^{\mathrm{req}}\)。**KALL** 表示按 \(K^{\mathrm{req}}=|\mathcal C|\) 请求当前全部 reached candidates；只有配置的 \(K^{\max}\) 允许该数量时才会全部 active。
 - **AGG** 不携带 K；例如 **K2-EMIT-HST-AGG-MEAN** 表示最多激活两个候选，各自按 Hard-ST 发送，端口再均匀聚合实际消息。
 
-receiver node 内部串行的状态/上下文 residual 与 FFN residual 合计仍算一层；只有该 node 的完整输出继续进入下一层 receiver node 时，H 才增加。GraphBranch 输入端点、输出端点以及任意聚合端口都不增加 H。
+receiver node 内部串行的状态/上下文 residual 与 FFN residual 合计仍算一层；只有该 node 的完整输出继续进入下一层 receiver node 时，H 才增加。SettleGraph 输入端点、输出端点以及任意聚合端口都不增加 H。
 
 例如 **R4-I8-H1-K1** 表示 8 个顺序插入位置，每处采用固定单层特例，有 4 个候选且激活 1 个。它不是 8 层递归。
 
@@ -1581,7 +1580,7 @@ MOE 的精确插入 block、Top-K、capacity、token-drop、shared expert 和路
 - \(N_{\mathrm{sel}}\)、\(N_{R,i}\) 与 \(N_{F,i}\) 的精确实现和初始化；
 - \(\operatorname{Read}^{\mathrm{sel}}\)、\(\operatorname{Read}^{\mathrm{ffn}}\) 与 \(\operatorname{Score}\) 的精确公式、输出维度以及是否包含历史激活记录；
 - \(\operatorname{Update}\) proposal、selector、commit / Observe 和历史激活写回的精确顺序，以及写入 \(p\) 时是否 stop-gradient；
-- GraphBranch 与 backbone 的 RESIDUAL_ADD 公式以及任何额外缩放；
+- SettleGraph 与 backbone 的 RESIDUAL_ADD 公式以及任何额外缩放；
 - 训练期均衡规则、各辅助 loss 的公式、系数与 reduction；
 - 状态初始化、稳定 \(\mathrm{sid}\)、有效 Token mask、跨 chunk 的 carry/reset 与梯度 detach 规则；
 - 若物理调度允许改变算子先后，记录与调度顺序无关的随机键规则；
