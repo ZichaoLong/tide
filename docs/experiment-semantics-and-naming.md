@@ -6,13 +6,11 @@
 >
 > 实验晋级、结果报告组织和 checkpoint 保留策略另行讨论。
 >
-> 第 4.5 节拓扑 Builder 中的候选默认值仍待逐项核验，详见核验台帐 [`experiment-semantics-review-ledger.md`](experiment-semantics-review-ledger.md)。
-
 ## 阅读入口：先看完整图景
 
 我们希望设计一套 TIDE Graph 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
 
-为此，本文档定义一种 Single-Settlement Graph，下文简称 **SettleGraph** 是一个具备单输入单输出的计算图。它用一个固定空间拓扑的 Graph 表示，
+为此，本文档定义一种 Single-Settlement Graph，下文简称 **SettleGraph**。它是一个具备单输入、单输出和固定空间拓扑的计算图：
 - 对每个 Token，SettleGraph 接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选 receiver nodes 中选择少量节点做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
 - SettleGraph 的每个节点称为 **receiver node**。它聚合实际到达的入口或父消息，是否更新状态由 propagation profile 决定，是否执行完整计算并向下游发送由局部 region selector 决定。节点内部设计的典型例子是 Transformer block，具体定义见 2.2 节。
 SettleGraph 的更详细定义见下文。
@@ -177,7 +175,7 @@ $$
 
 其中：
 
-- \(V\) 是 receiver nodes 的集合；下文 (v\in V) 表示 receiver ID，与第 1 节的 base hidden (v_{\ell,t}) 不是同一个量；
+- \(V\) 是 receiver nodes 的集合；下文 \(v\in V\) 表示 receiver ID，与第 1 节的 base hidden \(v_{\ell,t}\) 不是同一个量；
 - \(E\subseteq V\times V\) 是固定有向边集合；
 - \(\mathfrak R\) 是对 \(V\) 的固定 region 划分，每个 receiver 恰好属于一个 region，每个 region 配置一个控制 receivers 激活与否的 selector。由 DAG \((V,E)\) 自然诱导的关于 \(\mathfrak R\) 的图，也被要求是 DAG。
 
@@ -213,6 +211,8 @@ $$
 - \(\operatorname{CLOSED}\) 表示该边已经确认本 Token 不会再有数据。
 
 \(\operatorname{CLOSED}\) 只是完成标记，不是 hidden，也不参加聚合。一条边一旦结算就不能改写或再次结算。先到的结果可以缓存，但 receiver 不能在全部固定父边结算前提前重复执行。
+
+语义上，每条 \(\operatorname{DATA}\) 边都携带声明 dtype 下的完整 \(d_{\mathrm{model}}\) 维 hidden。物理实现可以打包、重排或分片传输，但必须无损恢复同一 Tensor；有损消息压缩不属于本文定义的 SettleGraph。
 
 #### Receiver 如何得到一个输入 hidden
 
@@ -402,7 +402,7 @@ $$
 
 #### Selector
 
-selector 只接收 candidates 各自在本地产生的轻量 \(r^{\mathrm{sel}}\)。令 \(c^{\mathrm{ctx}}_{\mathcal R,t}\) 表示可选的固定、有界局部公共摘要；没有时取空。一次局部打分得到：
+selector 只接收 candidates 各自在本地产生的轻量 \(r^{\mathrm{sel}}\)。候选 nodes 及其读出始终按稳定 node ID 排列。令 \(c^{\mathrm{ctx}}_{\mathcal R,t}\) 表示可选的固定、有界局部公共摘要；没有时取空。一次局部打分得到：
 
 $$
 (a_{v,t})_{v\in\mathcal C_{\mathcal R,t}}
@@ -682,7 +682,7 @@ b_{\mathcal G,j,t}
 \right).
 $$
 
-Top-1 时只有一条终端消息；Top-K 使用 `AGG-MEAN` 时，聚合的是 active receivers 的完整输出，不再额外乘 selector 概率。因为所有 receivers 始终 reached，本例的 balance loss 使用第 6.1 节的固定候选形式。
+Top-1 时只有一条终端消息；Top-K 使用 `AGG-MEAN` 时，聚合的是 active receivers 的完整输出，不再额外乘 selector 概率。因为所有 receivers 始终 reached，本例的 balance loss 使用第 6.2 节给出的固定候选退化形式。
 
 ### 3.3 实验作用与边界
 
@@ -694,7 +694,7 @@ Top-1 时只有一条终端消息；Top-K 使用 `AGG-MEAN` 时，聚合的是 a
 
 HB-Lattice 是第 2 节合法 Plan 的一个规则化子集。它不改变 receiver、selector、聚合或发送语义，只增加有序 Lines、Line barrier、逻辑边延迟以及生成这种 Plan 的规则。
 
-第 4.1—4.4 节定义 HB-Lattice 的规范语义；第 4.5 节只给出仍待核验的候选拓扑 Builder。
+第 4.1—4.4 节定义 HB-Lattice 的规范语义；第 4.5 节只给出候选拓扑 Builder，不规定默认连接。
 
 ### 4.1 先看完整波前
 
@@ -758,7 +758,7 @@ $$
 
 这保证不同长度的固定路径在同一个逻辑波前终点结算。\(t\) 始终表示序列中的 Token 位置，\(d\) 才是图内的逻辑波前位置；两者不是同一个时间轴。
 
-为补全后续 loss 的下标，site \(j\) 的 Line \(d\) 中第 \(r\) 个 region 记作 \(\mathcal R_{j,d,r}\)。补回 batch/序列下标 \(b\) 后，其当前候选集仍是第 2.3 节的 reached nodes：
+site \(j\) 的 Line \(d\) 中第 \(r\) 个 region 记作 \(\mathcal R_{j,d,r}\)，其稳定 region ID 可以编码 \((d,r)\)。补回 batch/序列下标 \(b\) 后，其当前候选集仍是第 2.3 节的 reached nodes：
 
 $$
 \mathcal C_{j,d,r,b,t}
@@ -810,7 +810,7 @@ Builder 可以给边附加以下来源标签，用于生成、诊断和消融：
 
 ### 4.5 两类候选拓扑 Builder
 
-下面两类 Builder 用于缩小首轮设计空间，其具体连接默认值仍需按核验台帐逐项确认。无论采用哪一类，展开 Plan 都必须满足第 4.2 节。
+下面两类 Builder 只展示如何从紧凑规则生成 HB Plan，不规定默认连接。无论采用哪一类，实际实验都必须保存完整展开 Plan，并满足第 4.2 节。
 
 #### 4.5.1 B 叉扩展与逐坐标平台混合
 
@@ -852,11 +852,13 @@ $$
 
 同一个 \(G_{\mathrm{space}}\) 可以在各 hop 重复，也可以逐 hop 指定不同的 \(E_d\)。空间图自身即使有环，逐 Line 展开后仍是 DAG。local 与 shortcut 可以同时存在，但每个坐标的合计入度、出度必须具有与 \(|Q|\) 无关的固定上界；长程连接不能随着宽度增长形成高入度枢纽。
 
-## 5. Dense 与 mixture-of-experts（MoE）基线
+## 5. 对照基线与可归因比较
 
-### 5.1 DENSE
+本节定义后续实验需要区分的计算条件，不规定实验顺序，也不记录任何历史结果。所有 SettleGraph 条件都沿用第 1—4 节的同一套语义；对照实验只改变明确声明的坐标。
 
-DENSE 使用原 block：
+### 5.1 原生 Dense 与 Dense 扩展
+
+原生 Dense 基线不插入 SettleGraph，直接使用第 1.1 节的 base block：
 
 $$
 y_{\ell,t}
@@ -864,58 +866,93 @@ y_{\ell,t}
 =u_{\ell,t}+F_\ell\!\left(N_F(u_{\ell,t})\right).
 $$
 
-### 5.2 MOE
+它既是质量基线，也是 checkpoint 装载、prefill/decode、训练和保存恢复的正确性基线。
 
-M8 是本项目采用的每个 site 含 8 个 experts 的硬 Top-1 MoE 对照；正式名称用 **MOE-R8** 表示 expert 数（这里的 R 不属于 TIDE 单层/HB 的 R 字段），用 **I** 表示 site 数。它把每个 expert 初始化为原 dense MLP 的副本，每个有效 Token 只执行一个 expert，不设 capacity、不丢 Token、也不 reroute。这里 capacity 指一个 expert 在当前 batch 最多接收多少 Token；本设置不设上限，因此被选 Token 不会因 expert 过载而跳过，也不会改送其他 expert。
+如果使用 Dense 扩展作为参数量对照，必须明确新增计算放在哪里、怎样初始化以及是否始终执行。Dense 扩展不经过 selector，其主要作用是区分“结构机制带来的收益”和“单纯增加参数或计算带来的收益”。
 
-为避免与带 router gate 的 Switch 实现混淆，本文把这个对照明确记为 **hard-dispatch/no-gate**；它是本项目的 matched baseline，不声称复现所有 Switch 变体。
+### 5.2 Flat MoE 基线
 
-对插在 block \(\ell=\ell(j)\) 的 MoE site \(j\)，计算为：
+Flat MoE 在一个 block 内一次面对完整 expert 池，选择后立即回到共同 hidden。它不等同于 SettleGraph，但可以对照“潜在容量扩大、每 Token 只执行少量昂贵模块”这一基本能力。
 
-$$
-m^{\mathrm{moe}}_{j,t}=N_F(u_{\ell(j),t}).
-$$
+设 site \(j\) 位于 block \(\ell(j)\)，有 \(R_j^{\mathrm{moe}}\) 个 experts，并令 \(1\le K_j^{\mathrm{moe}}\le R_j^{\mathrm{moe}}\)。每个 expert 把 \(d_{\mathrm{model}}\) 维输入映射回同维输出。router 权重
 
 $$
-a_{j,t}=W_{\mathrm{moe}}m^{\mathrm{moe}}_{j,t},
+W_j^{\mathrm{moe}}
+\in
+\mathbb R^{R_j^{\mathrm{moe}}\times d_{\mathrm{model}}}.
+$$
+
+router 输入、logits 和概率为
+
+$$
+m^{\mathrm{moe}}_{j,t}
+=N_F(u_{\ell(j),t}),
+$$
+
+$$
+(a^{\mathrm{moe}}_{j,t,i})_{i=0}^{R_j^{\mathrm{moe}}-1}
+=W^{\mathrm{moe}}_j m^{\mathrm{moe}}_{j,t},
 \qquad
-p_{j,t}=\operatorname{softmax}(a_{j,t}),
+p^{\mathrm{moe}}_{j,t}
+=\operatorname{softmax}(a^{\mathrm{moe}}_{j,t}).
 $$
 
-$$
-c_{j,t}=\arg\max_i p_{j,t}^{(i)}.
-$$
-
-这里 \(W_{\mathrm{moe}}\) 是 router 的可训练权重，\(E_{j,i}\) 表示 site \(j\) 的第 \(i\) 个 expert；它与第 2 节 receiver node 的 \(E_v\) 不是同一组参数。
-
-若多个 expert 的概率相同，按 expert id 升序打破平票，以保证重放顺序确定。
-
-这里 \(i=0,1,\ldots,E_{\mathrm{MOE}}-1\)，且 \(E_{\mathrm{MOE}}=8\)；本节的 \(i\) 仅表示 expert 下标，不表示第 2 节的 receiver node。
+候选按稳定 expert ID 排列，Top-K 平票也按该 ID 打破。令
 
 $$
-z_{j,t}^{\mathrm{exp},(c_{j,t})}=m^{\mathrm{moe}}_{j,t}.
+\mathcal A^{\mathrm{moe}}_{j,t}
+=\operatorname{TopKIndex}
+\left(
+p^{\mathrm{moe}}_{j,t},
+K_j^{\mathrm{moe}}
+\right).
 $$
 
+选中 expert 的输出统一写成
+
 $$
-y_{\ell,t}
-=u_{\ell,t}
-+E_{j,c_{j,t}}\!\left(z_{j,t}^{\mathrm{exp},(c_{j,t})}\right).
+y_{\ell(j),t}
+=u_{\ell(j),t}
++\sum_{i\in\mathcal A^{\mathrm{moe}}_{j,t}}
+\alpha_{j,t,i}
+E^{\mathrm{moe}}_{j,i}
+\left(m^{\mathrm{moe}}_{j,t}\right).
 $$
 
-这里沿用相同的符号风格；\(z^{\mathrm{exp}}\) 专指送入 expert 的 dispatch 输入，不与其他模块的中间量混用。M8 直接合并被选 expert 的输出，不乘 soft 概率；这是本项目的硬 Top-1 对照约定，并非所有 Switch-style 实现都如此（有些实现会乘 router gate）。它没有 receiver 私有状态。
+其中合并权重 \(\alpha\) 是 MoE 条件的一部分。常见选择包括：
 
-在这个硬 argmax/dispatch 设定下，主任务梯度不经过离散路由返回 router；M8 的 router 只由第 6.3 节的 balance loss 和 z-loss 更新。
+| 合并方式 | \(\alpha_{j,t,i}\) | 说明 |
+| --- | --- | --- |
+| hard mean | \(1/\lvert\mathcal A^{\mathrm{moe}}_{j,t}\rvert\) | 前向不乘 soft 概率；Top-1 时为 1 |
+| soft gate | \(p^{\mathrm{moe}}_{j,t,i}\) | 主任务梯度可经选中 gate 返回 router |
+| normalized gate | \(p^{\mathrm{moe}}_{j,t,i}/\sum_{k\in\mathcal A^{\mathrm{moe}}_{j,t}}p^{\mathrm{moe}}_{j,t,k}\) | Top-K 内重新归一化；Top-1 时退化为 1 |
 
-它与 PARMLP 位于同一个 block 位置，但语义不同：
+上式定义的是用 routed experts 替换原 dense MLP 的基线。若保留原 dense MLP 或其他 shared expert，必须显式写出额外路径和合并公式。expert 怎样初始化、是否设置 capacity、是否丢弃或 reroute 过载 Token，也必须作为实验条件明确记录，不能由“MoE”一词推断。MoE expert 没有第 2 节定义的 receiver 私有状态，也不使用 SettleGraph 的多跳边结算。
 
-- MOE 用一个 routed expert 替换原 dense MLP；
-- PARMLP 保留原 dense MLP，再增加一个并列 SettleGraph residual。
+### 5.3 SettleGraph 内部的配对比较
 
-当 PARMLP 的 SettleGraph 采用第 3 节的单层实例时，也可以在结构上看作一种 shared-expert MoE：原 dense MLP 是 always-on shared expert，receiver nodes 是 routed experts；这只是结构类比，不表示参数或计算完全等价。
+SettleGraph 的核心比较应尽量一次只改变一个语义坐标：
 
-## 6. 实际训练时的损失函数
+| 要回答的问题 | 主要配对条件 |
+| --- | --- |
+| 私有状态本身是否有用 | 相同 Plan 和路由下，STATE=NONE 对照具体状态模块 |
+| 未 active receiver 的 Observe 是否有用 | 相同 Plan、receiver 和 active set 下，SD 对照 BO |
+| 状态是否参与选择 | SEL-CONTENT、SEL-PRE、SEL-POST 配对比较 |
+| post-update 选择是否有额外价值 | BO + SEL-POST 对照 BO + SEL-PRE/SEL-CONTENT |
+| 主任务梯度是否需要经过 selector 概率 | EMIT-HARD 对照 EMIT-HST |
+| 多父消息是否有用 | 保持 nodes 与预算不变，开关对应固定边 |
+| 多层局部传播是否有用 | 单层实例对照具有匹配成本的非平凡 Plan |
+| HB 规则拓扑是否有用 | 通用 Plan 语义不变，只替换展开拓扑 |
 
-为简洁起见，把输入位置及其对应的目标位置都记为 \(t\)；实际的 next-token shift 由 data pipeline 完成。令 \(\theta\) 表示全部可训练参数，\(\mathcal T\) 表示一个 micro-batch 中所有有效目标 Token 的 \((b,t)\) 集合，\(N_T=|\mathcal T|>0\)；\(w_{b,t}\) 是目标 Token，\(P_\theta(w_{b,t}\mid w_{b,<t})\) 是模型给它的条件概率。这里的 \(w_{b,t}\) 是目标词元，与前文偶尔表示父节点的 \(w\) 无关。若一个 batch 没有有效 Token，训练器跳过该 batch（或把相应 loss 记为 0）。自回归语言模型损失为：
+比较 SD 与 BO 时，优先保持 Plan、参数量、状态容量、active budget、NodeCompute、Emit、Aggregate、训练 Token 和优化器一致。若两者的 selector 输入允许相同，可以 replay 同一 active route，把差异限制为未 active receiver 是否 Observe；SEL-POST 依赖 BO 的当前 proposal，不能伪装成完全相同的 SD 输入。
+
+状态是否真的被使用，不能只看状态数值发生变化。至少需要比较正常运行与 state freeze、clear、shuffle、no-read 或 reset 后的输出、loss 或行为差异。交叉边和其他拓扑机制也应使用同样的因果消融原则。
+
+## 6. 训练目标与路由均衡
+
+### 6.1 自回归语言模型损失
+
+令 \(\theta\) 表示全部可训练参数，\(\mathcal T\) 表示一个统计批次内所有有效目标 Token 的 \((b,t)\) 集合，\(N_T=|\mathcal T|>0\)。目标 Token 为 \(w_{b,t}\)，模型条件概率为 \(P_\theta(w_{b,t}\mid w_{b,<t})\)，则
 
 $$
 \mathcal L_{\mathrm{LM}}
@@ -924,659 +961,566 @@ $$
 \log P_\theta(w_{b,t}\mid w_{b,<t}).
 $$
 
-路由辅助项使用的 Token 集合略有不同。当前单层实例中，每个 site 的 selector 都处理同一个集合 \(\mathcal V\)；标准 MoE 中，对应的是每个 site 的 router。
+next-token shift 由数据管线完成。padding 和其他无效位置不进入 \(\mathcal T\)，也不产生第 2.5 节已排除的状态更新或路由统计。
 
-\(\mathcal V\) 包含 attention mask 标记为有效、实际经过相应选择模块的全部 \((b,t)\) 位置，\(N_V=|\mathcal V|\)。它与 receiver node 或 expert \(i\) 无关，不是候选 \(i\) 实际被选中的 Token 集；若 \(N_V=0\)，相应辅助 loss 记为 0。
+### 6.2 SettleGraph 的 availability-aware region balance loss
 
-balance loss 不要求单个 Token 均匀选择所有候选，而是避免整个 micro-batch 长期集中到少数 nodes 或 experts。令 \(\mathcal I\) 表示所有 routed sites，\(I=|\mathcal I|\)。
+同一公式同时适用于第 3 节单层实例、一般合法 Plan 和 HB-Lattice，本文将它记为 `BAL-AVAIL-SOFT`。它只约束 selector 在实际可选的 candidates 中是否长期偏向少数 nodes，不试图用下游 loss 修复上游 topology 造成的 reach starvation。下面补回 batch/序列下标 \(b\)。
 
-每个 routed site 独立计算 balance loss，再在 sites 间等权平均；当前实验中每个 site 都是 routed site，因此下文简称 \(I=|\mathcal I|\)。若实验混合 dense 与 routed site，应改用 \(I_{\mathrm{route}}\) 计数并在记录中说明。若没有 routed site，辅助 loss 记为 0。统计范围是当前 micro-batch；梯度累积只累积各 micro-batch 的梯度，不预先把多个 micro-batches 合并成 global-batch balance loss。
-
-当前规范假定同一 run 的 routed sites 使用同一个有效 Token 集 \(\mathcal V\)；若某个 site 有不同的有效 mask，应改用该 site 的 \(\mathcal V_j,N_{V,j}\) 计算并在 manifest（完整实验设置记录）中记录。
-
-### 6.1 单层实例中 N、SD、BO 的 receiver balance loss
-
-以下公式仅在 \(N_V>0\) 时计算；若 \(N_V=0\)，本节的 receiver balance loss 记为 0。这里默认 \(R\) 个 receivers 都参加普通竞争；含 forced-active node 的设置应将其另行拆分，并在 manifest 中给出对应统计。对 site \(j\) 的 \(R\) 个 receivers，平均 softmax 概率为：
+给 site \(j\) 的每个 region 一个稳定 ID \(\rho\)，其固定 node 集记为 \(\mathcal R_{j,\rho}\)。在当前统计范围内，令
 
 $$
-\bar p_{j,i}
-=\frac{1}{N_V}
-\sum_{(b,t)\in\mathcal V}p_{j,b,t}^{(i)}.
-$$
-
-下式由当前单层结构的 N、SD、BO 共同使用，也是 **BAL-AVAIL-SOFT** 在全部候选始终 reached 时的特例：
-
-$$
-\mathcal L_{\mathrm{bal}}^{\mathrm{receiver}}
-=\frac{1}{I}
-\sum_{j\in\mathcal I}
-\frac{1}{R}\sum_{i=0}^{R-1}
-\left(\bar p_{j,i}-\frac1R\right)^2.
-$$
-
-上式假定所有 site 的候选宽度都为同一个 \(R\)；使用 RVAR 时，按各 site 的实际固定宽度替换内层 \(R\)，并在 manifest 中记录。
-
-它约束的是平均 soft 概率，不直接约束 \(\operatorname{TopKIndex}\) 后各 receiver 真正执行了多少次；Top-1 时，后者就是 \(\arg\max\) 的选择次数。因此它鼓励均衡，但不能严格保证 hard active counts 均衡。
-
-由于这里是对节点平方误差取均值，\(R\) 改变时 loss 的数值尺度也会改变；跨宽度比较必须分别记录并校准 \(\omega_{\mathrm{receiver}}\)。
-
-固定候选时的 hard active share 显式写为：
-
-$$
-\bar f_{j,i}
-=\frac{1}{N_V}
-\sum_{(b,t)\in\mathcal V}
-\frac{\mathbf 1[i\in\mathcal A_{j,b,t}]}
-{|\mathcal A_{j,b,t}|}.
-$$
-
-这里的分母是有效 Token 事件数 \(N_V\)，每个事件内部再按实际 active 数 \(\lvert\mathcal A_{j,b,t}\rvert\) 分摊；Top-1 时该分摊值就是 0 或 1。
-
-在采用 **BAL-AVAIL-SOFT** 时，N、SD、BO 的实际反向传播目标都是：
-
-$$
-\boxed{
-\mathcal L_{\mathrm{train}}^{\mathrm{N/SD/BO}}
-=\mathcal L_{\mathrm{LM}}
-+\omega_{\mathrm{receiver}}\mathcal L_{\mathrm{bal}}^{\mathrm{receiver}}
-}.
-$$
-
-\(\omega_{\mathrm{receiver}}\ge0\) 由实验设置记录；本文定义的单层 receiver 目标不含第 6.3 节的 MoE router z-loss。
-
-若使用 **BAL-NONE**，令该 balance 项为 0；其他均衡规则用其自身公式替换该项。
-
-### 6.2 非平凡固定 DAG 的 region balance loss
-
-非平凡固定 DAG 中每个 region 只处理实际 reached 的节点。以下用 HB-Lattice 的 site \(j\)、Line \(d\)、region \(r\) 下标写公式；规范固定 DAG 使用全局唯一的 region ID \(\rho\) 替换 \((d,r)\)，其余定义不变。
-
-下文的 \(\mathcal L_{\mathrm{bal}}^{\mathrm{HB}}\) 和 \(\omega_{\mathrm{HB}}\) 是 HB 实例的记号；其他固定 DAG 分别改记为 \(\mathcal L_{\mathrm{bal}}^{\mathrm{DAG}}\) 和 \(\omega_{\mathrm{DAG}}\)。固定节点集合记为 \(\mathcal R_{j,d,r}\)，并令：
-
-$$
-\mathcal V_{j,d,r}
-=\left\{
-(b,t)\mid\mathcal C_{j,d,r,b,t}\ne\varnothing
+\mathcal V_{j,\rho}
+=
+\left\{
+(b,t)\mid
+\mathcal C_{j,\rho,b,t}\ne\varnothing
 \right\},
 \qquad
-N_{j,d,r}=|\mathcal V_{j,d,r}|
+N_{j,\rho}=|\mathcal V_{j,\rho}|.
 $$
 
-表示该 region 在当前 micro-batch 中真正发生选择的 Token 事件。selector 只在 \(\mathcal C_{j,d,r,b,t}\) 内做 masked softmax；未 reached 节点不进入当前候选集合，也不能被 balance loss 当作本次本应选择的候选。
-
-HB-Lattice 中的 \(\mathcal C_{j,d,r,b,t}\) 是第 4.2 节的候选集；规范固定 DAG 则直接使用第 2.3 节按 region \(\rho\) 定义的候选集。
-
-首个均衡规则使用 **BAL-AVAIL-SOFT**。对 \(N_{j,d,r}>0\) 的 region，约定未 reached 时 \(p_{j,d,r,b,t}^{(v)}=0\)（仅作为 balance 统计的扩展记号，运行时并没有该概率），并定义节点 \(v\) 实际得到的平均 soft mass：
+没有选择事件的 region 不参加本次 loss。以下只对 \(N_{j,\rho}>0\) 的 region 定义统计量；对 \(v\notin\mathcal C_{j,\rho,b,t}\)，仅为统计方便扩展定义 \(p_{j,\rho,b,t,v}=0\)。receiver \(v\) 的平均 soft mass 为
 
 $$
-\bar p_{j,d,r,v}
-=\frac{1}{N_{j,d,r}}
-\sum_{(b,t)\in\mathcal V_{j,d,r}}
-\mathbf 1[v\in\mathcal C_{j,d,r,b,t}]
-p_{j,d,r,b,t}^{(v)}.
+\bar p_{j,\rho,v}
+=
+\frac{1}{N_{j,\rho}}
+\sum_{(b,t)\in\mathcal V_{j,\rho}}
+\mathbf 1[v\in\mathcal C_{j,\rho,b,t}]
+p_{j,\rho,b,t,v}.
 $$
 
-在相同可达性（availability）条件下，若每次都在当前 reached candidates 中均匀选择，节点 \(v\) 应得到的基准 mass 为：
+如果每次选择都在当时 reached 的 candidates 中均匀分配，receiver \(v\) 应得到的 availability 基准为
 
 $$
-\bar p_{j,d,r,v}^{\mathrm{avail}}
-=\frac{1}{N_{j,d,r}}
-\sum_{(b,t)\in\mathcal V_{j,d,r}}
+\bar p^{\mathrm{avail}}_{j,\rho,v}
+=
+\frac{1}{N_{j,\rho}}
+\sum_{(b,t)\in\mathcal V_{j,\rho}}
 \frac{
-\mathbf 1[v\in\mathcal C_{j,d,r,b,t}]
+\mathbf 1[v\in\mathcal C_{j,\rho,b,t}]
 }{
-\lvert\mathcal C_{j,d,r,b,t}\rvert
+\lvert\mathcal C_{j,\rho,b,t}\rvert
 }.
 $$
 
-region 的 loss 对 region 内节点取平均：
+令 \(\mathcal Z\) 表示当前统计范围内至少发生过一次 \(|\mathcal C_{j,\rho,b,t}|\ge2\) 的普通竞争 regions；forced-active singleton region 不加入 \(\mathcal Z\)。定义
 
 $$
-\mathcal L_{\mathrm{bal},j,d,r}^{\mathrm{avail}}
-=\frac{1}{|\mathcal R_{j,d,r}|}
-\sum_{v\in\mathcal R_{j,d,r}}
+\mathcal L_{\mathrm{bal}}^{\mathrm{SG}}
+=
+\begin{cases}
+\displaystyle
+\frac{1}{|\mathcal Z|}
+\sum_{(j,\rho)\in\mathcal Z}
+\frac{1}{|\mathcal R_{j,\rho}|}
+\sum_{v\in\mathcal R_{j,\rho}}
 \left(
-\bar p_{j,d,r,v}
--\bar p_{j,d,r,v}^{\mathrm{avail}}
-\right)^2.
+\bar p_{j,\rho,v}
+-\bar p^{\mathrm{avail}}_{j,\rho,v}
+\right)^2,
+&|\mathcal Z|>0,\\[12pt]
+0,&|\mathcal Z|=0.
+\end{cases}
 $$
 
-这里的节点均值不保证不同 region 宽度下的塌缩惩罚完全同尺度；跨宽度比较时必须记录并重新校准 \(\omega_{\mathrm{HB}}\)（通用 DAG 对应 \(\omega_{\mathrm{DAG}}\)），或另行定义带宽度归一化的 BAL-CUSTOM。
+候选集合、availability 基准和离散 active set 都视为 stop-gradient；该辅助项只通过 \(p\) 把梯度传回 selector。N、SD 和 BO 使用同一个公式，因为 balance loss 约束的是选择分布，而不是 Observe 集。
 
-令 \(\mathcal Z\) 表示当前 micro-batch 中至少出现过一次 \(|\mathcal C_{j,d,r,b,t}|\ge2\) 的普通竞争 region 实例；forced-active region 不加入 \(\mathcal Z\)。则：
+第 3 节单层实例中，所有 \(R\) 个 receivers 对每个有效 Token 都 reached，因此
 
 $$
-\mathcal L_{\mathrm{bal}}^{\mathrm{HB}}
-=\frac{1}{|\mathcal Z|}
-\sum_{(j,d,r)\in\mathcal Z}
-\mathcal L_{\mathrm{bal},j,d,r}^{\mathrm{avail}},
+\bar p^{\mathrm{avail}}_{j,\rho,v}=\frac1R,
 $$
 
-在采用 **BAL-AVAIL-SOFT** 时，HB-Lattice 的实际反向传播目标为：
+上式自然退化为固定候选均衡。若某次只有一个 candidate reached，实际概率和 availability 基准都为 1，不产生无法完成的均衡要求。
+
+实际 active slots 的份额另记为
+
+$$
+\bar f_{j,\rho,v}
+=
+\frac{1}{N_{j,\rho}}
+\sum_{(b,t)\in\mathcal V_{j,\rho}}
+\frac{
+\mathbf 1[v\in\mathcal A_{j,\rho,b,t}]
+}{
+\lvert\mathcal A_{j,\rho,b,t}\rvert
+}.
+$$
+
+\(\bar p\)、\(\bar p^{\mathrm{avail}}\) 和 \(\bar f\) 应一起报告；它们分别表示 soft 倾向、当时可达性给出的参考分布和真实 active 份额。reached、Observe、active 和发送率还应分别报告，不能用其中一个代替其他三个。
+
+启用该均衡项时，SettleGraph 的训练目标为
 
 $$
 \boxed{
-\mathcal L_{\mathrm{train}}^{\mathrm{HB}}
-=\mathcal L_{\mathrm{LM}}
-+\omega_{\mathrm{HB}}\mathcal L_{\mathrm{bal}}^{\mathrm{HB}}
-}.
-$$
-
-\(\omega_{\mathrm{HB}}\ge0\) 由实验设置记录；若 \(\mathcal Z=\varnothing\)，约定 \(\mathcal L_{\mathrm{bal}}^{\mathrm{HB}}=0\)。若使用 BAL-NONE，令该项为 0；其他均衡规则用其自身公式替换。
-
-这个 reduction 先对每个 region 内的节点取平均，再对本 micro-batch 中至少出现过一次竞争选择的 regions 等权平均。singleton-only region 不加入 \(\mathcal Z\)；若一个 region 同时出现 singleton 和竞争事件，singleton 事件仍按 availability 基准参与该 region 的统计。
-
-在这个规则中，reached mask、\(\mathcal C\)、\(\bar p^{\mathrm{avail}}\) 和 hard active set 都视为 stop-gradient；balance 梯度只通过当前 region 的 \(p\) 返回 selector。
-
-这个目标只比较“在同样已经 reached 的候选范围内，selector 是否长期偏向某些节点”：
-
-- 若一个 region 的全部节点始终 reached，则 \(\bar p_v^{\mathrm{avail}}=1/|\mathcal R_{j,d,r}|\)；在单层实例中这就是 \(1/R\)，退化为第 6.1 节的单层目标；
-- 若某次只有一个候选 reached，该事件的实际 \(p\) 与均匀基准都为 1，不会产生无法完成的均衡要求；
-- 从未 reached 的节点在 \(\bar p\) 和 \(\bar p^{\mathrm{avail}}\) 中都为 0。
-
-例如一个 region 只有 A、B 两个节点：第一个 Token 只 reached A，第二个 Token 同时 reached A、B，则两个事件的均匀基准分别是 \((1,0)\) 和 \((1/2,1/2)\)，micro-batch 基准为 \(\bar p^{\mathrm{avail}}=(3/4,1/4)\)，而不是强行要求 \((1/2,1/2)\)。
-
-它在 micro-batch 的平均值上约束分布，不强迫每个 Token 的 selector 概率都均匀，因此仍允许按内容形成专业化。它也不负责修复上游路由或 topology 造成的 reach starvation；那是独立问题。
-
-同时记录 hard active share：
-
-$$
-\bar f_{j,d,r,v}
-=\frac{1}{N_{j,d,r}}
-\sum_{(b,t)\in\mathcal V_{j,d,r}}
-\frac{
-\mathbf 1[v\in\mathcal A_{j,d,r,b,t}]
-}{
-\lvert\mathcal A_{j,d,r,b,t}\rvert
-}.
-$$
-
-\(\bar p\) 是可导的 soft mass，\(\bar p^{\mathrm{avail}}\) 是 availability 基准，\(\bar f\) 是实际 active slots 的份额；三者应一起报告。\(\bar f\) 只对 \(N_{j,d,r}>0\) 的 region 计算；没有事件的 region 不填 0 代替。
-
-另按所有有效 site-Token 事件分别记录每个节点的 reached、Observe、active 和发送率。这四个 rate 都以该 node 所在 site 的全部有效 Token 事件为分母，以对应事件发生次数为分子；它们用来区分：
-
-| 现象 | 首先检查 |
-| --- | --- |
-| 节点很少 reached | topology 与上游路径选择 |
-| reached 后总是落选 | region selector 的 \(\bar p,\bar f\) |
-| Observe 少 | reached 情况与 N/SD/BO profile |
-| 发送少或计算量失衡 | active set、forced-active 与实际执行 |
-
-**BAL-NONE** 可作为无辅助均衡的消融；其他 opportunity-normalized 或跨 micro-batch 方案统一写 **BAL-CUSTOM**，并在实验设置中给出完整公式、统计范围和 reduction。
-
-### 6.3 M8（hard-dispatch/no-gate）的 balance loss 与 router z-loss
-
-M8 使用不同的 Switch-style balance loss。以下公式仅在 \(N_V>0\) 且 \(I>0\) 时计算；否则相应辅助项记为 0。令 \(E_{\mathrm{MOE}}=8\) 表示本节的 expert 数（与单层实例的 \(R\) 无关），\(p_{j,b,t}^{(i)}\) 为 MoE router 的 softmax 概率，\(c_{j,b,t}\) 为硬 Top-1 expert，定义：
-
-$$
-\bar p_{j,i}
-=\frac{1}{N_V}
-\sum_{(b,t)\in\mathcal V}p_{j,b,t}^{(i)},
+\mathcal L_{\mathrm{train}}^{\mathrm{SG}}
+=
+\mathcal L_{\mathrm{LM}}
++\omega_{\mathrm{SG}}
+\mathcal L_{\mathrm{bal}}^{\mathrm{SG}}
+},
 \qquad
-f_{j,i}
-=\frac{1}{N_V}
+\omega_{\mathrm{SG}}\ge0.
+$$
+
+上标 \(\mathrm{SG}\) 表示 SettleGraph。把 \(\omega_{\mathrm{SG}}\) 设为 0 即得到 `BAL-NONE` 对照。若改变统计窗口、跨设备聚合方式、region reduction 或目标分布，就属于 `BAL-CUSTOM`，必须给出完整公式。
+
+### 6.3 Flat MoE 的路由辅助项
+
+下面给出一种经典 Switch-style 基线，不把它规定为所有 MoE 的唯一做法。为简化公式，假设 routed sites 集合为 \(\mathcal J_{\mathrm{moe}}\)，每个 site 都有 \(R^{\mathrm{moe}}\) 个 experts，并在相同有效 Token 集 \(\mathcal V\) 上统计，\(N_V=|\mathcal V|>0\)。
+
+令
+
+$$
+\bar p^{\mathrm{moe}}_{j,i}
+=
+\frac1{N_V}
 \sum_{(b,t)\in\mathcal V}
-\mathbf 1[c_{j,b,t}=i].
+p^{\mathrm{moe}}_{j,b,t,i},
 $$
 
-其中 \(f_{j,i}\) 是 expert \(i\) 真正收到的 Token 比例。M8 使用：
-
 $$
-\mathcal L_{\mathrm{bal}}^{\mathrm{MoE}}
-=\frac{1}{I}
-\sum_{j\in\mathcal I}
-E_{\mathrm{MOE}}\sum_{i=0}^{E_{\mathrm{MOE}}-1}
-\operatorname{sg}(f_{j,i})\,\bar p_{j,i}.
-$$
-
-其中 \(\operatorname{sg}\) 表示 stop-gradient（停止梯度）：前向值不变，反向梯度为零。\(f_{j,i}\) 来自不可导的硬路由，梯度只通过 \(\bar p_{j,i}\) 返回 router。完全均衡时，\(\mathcal L_{\mathrm{bal}}^{\mathrm{MoE}}=1\)，而 receiver balance loss 完全均衡时等于 0，所以两种 `balance_loss` 的原始数值不能直接比较。
-
-沿用第 5.2 节，MoE router 收到的消息、expert 输入和 router logits 为：
-
-$$
-m^{\mathrm{moe}}_{j,b,t}=N_F(u_{\ell(j),b,t}),
-\qquad
-z_{j,b,t}^{\mathrm{exp},(c_{j,b,t})}=m^{\mathrm{moe}}_{j,b,t},
-\qquad
-a_{j,b,t}=W_{\mathrm{moe}}m^{\mathrm{moe}}_{j,b,t}.
+f^{\mathrm{moe}}_{j,i}
+=
+\frac1{N_V}
+\sum_{(b,t)\in\mathcal V}
+\frac{
+\mathbf 1[i\in\mathcal A^{\mathrm{moe}}_{j,b,t}]
+}{
+\lvert\mathcal A^{\mathrm{moe}}_{j,b,t}\rvert
+}.
 $$
 
-M8 还使用 router z-loss，限制 logits 的整体尺度：
+Switch-style balance loss 为
+
+$$
+\mathcal L_{\mathrm{bal}}^{\mathrm{moe}}
+=
+\frac1{|\mathcal J_{\mathrm{moe}}|}
+\sum_{j\in\mathcal J_{\mathrm{moe}}}
+R^{\mathrm{moe}}
+\sum_{i=0}^{R^{\mathrm{moe}}-1}
+\operatorname{sg}\!\left(f^{\mathrm{moe}}_{j,i}\right)
+\bar p^{\mathrm{moe}}_{j,i}.
+$$
+
+其中 \(\operatorname{sg}\) 表示 stop-gradient：前向值不变，反向梯度为零。router z-loss 为
 
 $$
 \mathcal L_z
-=\frac{1}{I N_V}
-\sum_{j\in\mathcal I}
+=
+\frac1{|\mathcal J_{\mathrm{moe}}|N_V}
+\sum_{j\in\mathcal J_{\mathrm{moe}}}
 \sum_{(b,t)\in\mathcal V}
 \left[
-  \log\sum_{i=0}^{E_{\mathrm{MOE}}-1}\exp(a_{j,b,t}^{(i)})
+\log
+\sum_{i=0}^{R^{\mathrm{moe}}-1}
+\exp(a^{\mathrm{moe}}_{j,b,t,i})
 \right]^2.
 $$
 
-因此 M8 的实际反向传播目标是：
+采用这两项时，
 
 $$
 \boxed{
-\mathcal L_{\mathrm{train}}^{\mathrm{M8}}
-=\mathcal L_{\mathrm{LM}}
-+\omega_{\mathrm{MoE}}\mathcal L_{\mathrm{bal}}^{\mathrm{MoE}}
+\mathcal L_{\mathrm{train}}^{\mathrm{moe}}
+=
+\mathcal L_{\mathrm{LM}}
++\omega_{\mathrm{moe}}\mathcal L_{\mathrm{bal}}^{\mathrm{moe}}
 +\omega_z\mathcal L_z
 }.
 $$
 
-\(\omega_{\mathrm{MoE}},\omega_z\ge0\) 由实验设置记录。
-
-> **备注：**M8 是采用经典 MoE 辅助项、便于匹配的对照，但不是所有先进 MoE 统一采用的标准实现；下表只是代表性示例，具体实现以各项目的官方资料为准。
-
-| 机制或路线 | 当前定位 | 代表性采用情况 |
-| --- | --- | --- |
-| **Switch-style balance loss** | 常见的标准基线，但不是唯一推荐路线 | [Mixtral](https://huggingface.co/mistralai/Mixtral-8x7B-v0.1)、[OLMoE](https://huggingface.co/allenai/OLMoE-1B-7B-0924) 使用 |
-| **Router z-loss** | 常用的可选稳定项，但采用并不统一 | [ST-MoE](https://arxiv.org/abs/2202.08906) 推荐，OLMoE 使用 |
-| **其他负载均衡路线** | 用动态 bias、分位数校准或系统级 dispatch 替代或补充经典辅助损失 | [DeepSeek-V3/R1](https://arxiv.org/abs/2412.19437)：动态 expert bias；[Qwen3](https://huggingface.co/Qwen/Qwen3-235B-A22B)：公开资料描述的全局负载均衡变体；[Kimi K3](https://github.com/MoonshotAI/Kimi-K3)：Quantile Balancing；[GLM-5.2](https://huggingface.co/zai-org/GLM-5.2)/5.3：`noaux_tc`，5.3 沿用 5.2 base；[MiniMax-Text-01](https://huggingface.co/MiniMaxAI/MiniMax-Text-01)：GShard-style auxiliary loss + global token dispatch |
-
-这里的动态 expert bias 和 Quantile Balancing 都是训练期均衡；Kimi K3 的最终 bias 在推理时冻结，不等于第 6.4 节的推理期负载感知 selector。
-
-DENSE 没有 router，实际目标只有 \(\mathcal L_{\mathrm{LM}}\)。训练日志中的 `loss` 是包含该架构实际启用的辅助项的总损失，`lm_loss` 只表示 Token 预测损失；跨架构比较模型质量时应使用验证集 `lm_loss` 或 perplexity，而不是直接比较总 `loss` 或两种定义不同的 `balance_loss`。
+hard Top-1/no-gate 前向没有从主任务经离散 expert ID 返回 router 的梯度，router 只能依赖辅助项或其他显式梯度路径。soft gate 可以让主任务梯度经选中 gate 返回，但离散 Top-K 成员关系仍不求导。不同 MoE 条件必须分别记录其合并方式和辅助项，不能直接比较定义不同的原始 balance-loss 数值。
 
 ### 6.4 训练期均衡与推理期负载感知
 
-| 机制 | 训练时 | 推理时 | 作用 |
+| 机制 | 训练时 | 推理时 | 含义 |
 | --- | --- | --- | --- |
-| **训练期 balance loss** | 加入训练目标 | 不再计算 | 让模型学出较均衡的路由倾向，但不保证推理时始终均衡 |
-| **负载感知 selector** | 作为前向规则参与训练 | 继续使用 | 根据当前序列的路由历史动态调整后续选择 |
+| balance loss | 加入训练目标 | 不计算 | 学出较均衡的平均倾向 |
+| 负载感知 selector | 参与模型前向 | 继续参与前向 | 根据已声明的历史动态调整本次选择 |
 
-下面给出一个最简单的单层固定候选样例；具体实验可以根据训练和推理情况选择其他公式。每个 receiver 可以把近期激活负载作为一个历史标量发给 selector；非平凡固定 DAG 按实际 region 事件定义同一语义。本例把 load 定义为“该 receiver 最近是否 active”的 EMA，并按稳定序列标识初始化为 \(\operatorname{load}_{j,\mathrm{sid},-1}^{(i)}=0\)。这里的 load 是模型内部按序列维护的路由历史，不是硬件实时负载：
-
-$$
-a_{j,\mathrm{sid},t}^{(i)}
-=\left[\operatorname{Score}(\cdots)\right]_i
--\kappa_{\mathrm{load}}\,\operatorname{load}_{j,\mathrm{sid},t-1}^{(i)},
-$$
-
-完成选择后按这个额外 selector-history 规则更新；对进入本次候选集的 receiver 写回本次是否 active，未进入候选集的 receiver 可保持原值或只做衰减：
+负载感知 selector 可以直接训练。下面只给一个最简单样例，实际实现可根据训推情况调整。令 \(\ell^-_{v,t}\) 是 receiver \(v\) 在当前 Token 前的激活 EMA，先用它修正普通分数：
 
 $$
-\operatorname{load}_{j,\mathrm{sid},t}^{(i)}
-=\begin{cases}
-\lambda_{\mathrm{load}}\,\operatorname{load}_{j,\mathrm{sid},t-1}^{(i)}
-+(1-\lambda_{\mathrm{load}})\mathbf 1[i\in\mathcal A_{j,\mathrm{sid},t}],
-&i\in\mathcal C_{j,\mathrm{sid},t},\\
-\operatorname{load}_{j,\mathrm{sid},t-1}^{(i)},&
-i\notin\mathcal C_{j,\mathrm{sid},t},\ \delta_{\mathrm{miss}}=\mathrm{hold},\\
-\lambda_{\mathrm{load}}\,\operatorname{load}_{j,\mathrm{sid},t-1}^{(i)},&
-i\notin\mathcal C_{j,\mathrm{sid},t},\ \delta_{\mathrm{miss}}=\mathrm{decay}.
+a_{v,t}
+=a^{\mathrm{base}}_{v,t}
+-\kappa_{\mathrm{load}}\ell^-_{v,t},
+\qquad
+\kappa_{\mathrm{load}}\ge0.
+$$
+
+选择完成后更新：
+
+$$
+\ell_{v,t}
+=
+\begin{cases}
+\lambda_{\mathrm{load}}\ell^-_{v,t}
++(1-\lambda_{\mathrm{load}})
+\mathbf 1[v\in\mathcal A_{\mathcal R,t}],
+&v\in\mathcal C_{\mathcal R,t},\\
+\ell^-_{v,t},
+&v\notin\mathcal C_{\mathcal R,t},
 \end{cases}
 $$
 
-其中 \(\mathcal C_{j,\mathrm{sid},t}\) 和 \(\mathcal A_{j,\mathrm{sid},t}\) 分别是该稳定序列的当前候选集和 active 集；单层固定候选时，前者恒为全部 \(R\) 个 receiver。这里使用的是 active 0/1 指示量；若 \(K>1\) 改用 active share，应在实验记录中明确分母。参数满足 \(\kappa_{\mathrm{load}}\ge0\)、\(0\le\lambda_{\mathrm{load}}<1\)，并在设置中记录 \(\delta_{\mathrm{miss}}\) 取保持还是衰减。
+其中 \(0\le\lambda_{\mathrm{load}}<1\)。这是按稳定序列维护的模型内部选择历史，不是硬件队列的实时负载。它比纯训练期辅助损失更强，也会形成“历史选择影响以后选择”的跨 Token 递归，可能带来振荡或额外训练难度。若使用这种规则，应把它记为自定义 selector-history，并明确初始化、跨 chunk 状态和写回时序。
 
-这里的 load 是按 receiver 归属的额外轻量 selector 历史机制。若它独立存储，则不计入 receiver 的 Observe 集，且按选择后写回；若并入 receiver state，则只适用于有状态 profile，其 commit 按 SD/BO 的 Observe 集处理。N 没有 receiver 私有状态。两种存储方式都遵守第 2.5 节的序列隔离、跨 chunk carry/detach 规则。
+## 7. 实验条件命名
 
-负载历史不是三种基本 selector 时序本身：独立存储时名称使用 **SEL-CUSTOM**；并入 receiver state 且按旧/新状态读取时，保留 **SEL-PRE/SEL-POST**，并在 **STATE** 中标出复合状态。无论哪种方式，都要在 manifest 中记录历史的来源、读取和写回时序；独立 history 或改变基本时序时使用 SEL-CUSTOM。
-
-同一前向规则可以同时用于训练和推理。训练期 balance loss 只留下学到的均衡倾向；动态负载路由则形成更强的闭环反馈，但也会引入跨 Token 递归，并可能造成路由振荡或增加训练难度。
-
-## 7. 规范命名
-
-### 7.1 科学条件名
-
-单层实例采用：
+短名称只用于让人快速区分主要科学条件；完整 Plan、公式和训练设置始终以第 8 节的实验记录为准。推荐格式为：
 
 ~~~text
-<TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
+<TRAIN>-<PLACEMENT>-<PROFILE>-<TOPOLOGY>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
 ~~~
 
-非平凡固定 DAG（包括 HB-Lattice）使用：
+字段含义如下：
 
-~~~text
-<TRAIN>-<PLACEMENT>-<PROFILE>-R<WIDTH>-I<SITES>-H<DEPTH>-T<TOPO_ID>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
-~~~
-
-这里的 **H** 和 **T** 都只是可读索引。H 表示一个 site 的 SettleGraph 在**静态入口—终端路径**上最多顺序经过多少个 receiver nodes，不按某个 Token 的 active subgraph 变化；所有 site 深度相同时写该深度，只要不一致就一律使用 HVAR 并在 manifest 中逐 site 列出。H 由固定单层结构或最终 Plan 推导；短名称中的 H1、H2 分别表示最大深度为 1、2。H 不是拓扑名称，也不是独立配置。
-
-HB-Lattice 中的 \(D\) 是最后一个 Line 的下标，因此共有 \(D+1\) 个 Lines；H 是任一静态入口—终端路径经过的最大 receiver node 数，所以 \(H\le D+1\)。若存在经过每个 Line 的完整路径，则 \(H=D+1\)；否则 H 更小。
-
-T 中的 `TOPO_ID` 索引已展开 Plan，不代替 manifest（完整实验配置记录）中的 Plan 与规范化哈希。除本文固定的单层实例外，任何固定 DAG 即使同样是 H1，也必须提供 T。
-
-字段定义如下：
-
-| 字段 | 允许值或形式 | 含义 |
+| 字段 | 常用值 | 含义 |
 | --- | --- | --- |
-| TRAIN | PT / CPT / FT / SFT | 初始化与训练阶段 |
-| PLACEMENT | POST / PARBLK / PARATTN / PARMLP | SettleGraph 的输入与 residual 返回位置 |
-| PROFILE | N / SD / BO / CUSTOM | 状态接收与稀疏计算语义；混合或扩展规则使用 CUSTOM，并在 manifest 中给出 Observe 集合 |
-| R | R4、R8、R16、RVAR 等 | 单层实例的固定候选总数，或非平凡固定 DAG 中 selector region 的固定大小摘要；运行时 reached 数和激活上限不写入 R；不统一时用 RVAR |
-| I | I1、I4、I8 等 | 一个 Token 沿 base 执行顺序经过的 routed 插入位置数；当前实验默认每个 site 都 routed |
-| H | H1、H2、HVAR 等 | 从固定结构或 Plan 推导的最大 receiver node 深度；多 site 不统一时用 HVAR |
-| T | T\<TOPO_ID\> | 已展开 topology 的索引；只有本文固定的单层实例省略 |
-| STATE | NONE、EMA128、GDN-K32-V32、ATTN-FULL、ATTN-W128、STATE-VAR、STATE-CUSTOM 等 | 状态结构和必要尺寸；STATE 值整体解析，其中 GDN 的 K/V 表示 key/value 维度，不是激活数 K；不统一时使用 STATE-VAR，未登记的压缩 Attention、复合状态或其他自定义算法使用 STATE-CUSTOM；ATTN-FULL 是探索性参考，不属于单节点成本有界的核心设置 |
-| SELECTOR | SEL-CONTENT / SEL-PRE / SEL-POST / SEL-CUSTOM | 第 2.3 节定义的 selector 输入时序；独立 selector-history 或自定义读写顺序使用 SEL-CUSTOM |
-| K | K1 / K2 / KALL / KVAR | 单层实例或非平凡固定 DAG 的激活数摘要；Kx 仅在对应 region 的 \(K^{\mathrm{req}}=K^{\max}=x\) 时使用，候选不足时实际激活数可更少；二者不等或不统一时用 KVAR |
-| EMIT | EMIT-HARD / EMIT-HST / EMIT-SOFTP / EMIT-CUSTOM / EMIT-VAR | 第 2.3 节定义的 active receiver 发送语义 |
-| AGG | AGG-MEAN / AGG-LEARNED / AGG-CUSTOM / AGG-VAR | 第 2.1 节定义的 receiver 输入与图输出聚合；不统一时用 VAR |
-| BAL | BAL-AVAIL-SOFT / BAL-NONE / BAL-CUSTOM / BAL-VAR | 第 6.1、6.2 节定义的训练期路由均衡；不改变推理前向 |
-
-字段组合必须满足第 2.3 节的时序兼容关系；未覆盖的组合使用自定义标签，并在 manifest 中给出完整定义。
-
-同一字段在不同 node 或 region 不统一时，短名称使用相应的 VAR/CUSTOM 摘要，具体映射以 manifest 为准。
-
-核心规范中 N 与 STATE=NONE 配套；若保留未启用的状态参数，只在 manifest 中记录。SD/BO 若配 STATE=NONE，状态操作为空；若因此与 N 前向等价，仍应在实验记录中说明保留该 profile 的目的。已知状态类型或尺寸在 node/region 间不一致时使用 STATE-VAR；采用自定义状态实现时使用 STATE-CUSTOM，并在 manifest 中列出映射；selector 时序不统一时使用 SEL-CUSTOM。SEL-PRE/SEL-POST 必须有相应的持久 receiver state；STATE=NONE 只与 SEL-CONTENT 配套，除非 CUSTOM 明确声明外部历史。
-
-**SEL-CONTENT**、**SEL-PRE** 和 **SEL-POST** 分别表示 \(\operatorname{Read}^{\mathrm{sel}}\) 不读取持久 receiver state、额外读取旧状态或额外读取更新后状态；三者都以当前消息的轻量读出为基础，并可附加已声明的当前公共上下文。
-
-\(\operatorname{Score}\) 只读取候选 nodes 的轻量读出和已声明的有界 \(c^{\mathrm{ctx}}\)；任何拓扑都不默认存在全图公共摘要。逐父边 DATA/CLOSED 标记仅在明确声明时加入。
-
-名称不限定打分采用线性层、MLP 或其他实现；精确读出、打分公式以及状态中是否包含历史激活记录仍由 manifest 和实验设置保存。
-
-如果历史激活记录并入 receiver state 并影响 selector 或输出，它就是模型前向语义的一部分，不能隐藏在同一个纯 EMA/GDN 条件名下；已登记的复合状态使用固定 STATE 枚举，未登记的一律使用 **STATE-CUSTOM**，具体组成写入 manifest。独立且只供 selector 使用的历史记在 **SELECTOR=SEL-CUSTOM**，不冒充 receiver state；维度、衰减和写回规则也写入 manifest。
-
-**K** 只表示 selector 激活多少个候选，**EMIT** 只表示 active receiver 怎样产生发送消息，**AGG** 只表示 receiver 输入或图输出怎样合并实际收到的消息。三者不能互相代替。
-
-单层输出聚合、固定 DAG 的 receiver 多父输入和最终输出都使用同一个 **AGG** 语义；AGG-MEAN 在单消息输入上自然退化为 identity。selector 的 soft 概率对主任务前向的额外权重或梯度作用由 **EMIT** 承担，Top-K 成员仍由 selector 决定，消息聚合不再次读取 soft 概率。SettleGraph 与 backbone 的 RESIDUAL_ADD 已由 placement 固定，不属于 AGG。若同一实验的发送或聚合规则不统一，使用对应的 **VAR**，并在 manifest 中列出逐 receiver 输入或图输出设置。
-
-**BAL-AVAIL-SOFT** 在单层实例中退化为第 6.1 节的固定候选均衡，在非平凡固定 DAG 中使用第 6.2 节的 availability 基准。**BAL-CUSTOM** 和 **BAL-VAR** 必须附完整公式与聚合范围。
-
-TRAIN 的含义必须严格区分：
-
-- **PT**：随机初始化后做自回归预训练；
-- **CPT**：加载预训练 checkpoint，继续做语言模型目标训练；
-- **FT**：加载预训练 checkpoint，使用不同于基础自回归预训练的下游任务目标；
-- **SFT**：FT 中特指有监督的指令或输入输出微调。
-
-TRAIN 描述 base 权重与训练目标；新增 SettleGraph 及其 receiver nodes 的初始化方式由实验设置单独记录。
-
-口语中的“finetune”不能直接写入正式名称：如果实际仍是 FineWeb 或领域语料上的自回归语言模型训练，应记为 CPT；只有训练目标确实改变时才记为 FT 或 SFT。
-
-读完字段定义后，三个完整例子分别是：
-
-~~~text
-CPT-PARMLP-BO-R8-I4-H1-EMA128-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
-PT-POST-SD-R8-I4-H1-EMA128-SEL-PRE-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
-PT-POST-BO-R2-I4-H7-THBL2D2P2CMIR-GDN-K32-V32-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
-~~~
-
-### 7.2 R、I、H 与 K 不得混用
-
-- **R8** 表示单层实例有 8 个固定候选，或非平凡固定 DAG 的 selector regions 固定大小均为 8；每个 Token 实际 reached 候选可以更少，R8 也不表示模型共有 8 个 receiver nodes。
-- **I8** 表示每个 Token 顺序经过 8 个插入位置，不表示 Transformer 只有 8 个 blocks。
-- **H2** 表示该 run 中 SettleGraph 的最大 receiver node 深度为 2；它由 Plan 推导，不能唯一确定拓扑。
-- **K2** 表示相应 region 固定请求且最多激活 2 个候选（\(K^{\mathrm{req}}=K^{\max}=2\)）；候选不足时实际激活数随之减少。只固定上限、请求数不同或各 region/token 不统一时使用 **KVAR**，并在 manifest 中分别记录 \(K^{\max}\) 与 \(K^{\mathrm{req}}\)。**KALL** 表示按 \(K^{\mathrm{req}}=|\mathcal C|\) 请求当前全部 reached candidates；只有配置的 \(K^{\max}\) 允许该数量时才会全部 active。
-- **AGG** 不携带 K；例如 **K2-EMIT-HST-AGG-MEAN** 表示最多激活两个候选，各自按 Hard-ST 发送，下游输入或图输出再均匀聚合实际消息。
-
-receiver node 内部串行的状态/上下文 residual 与 FFN residual 合计仍算一层；只有该 node 的完整输出继续进入下一层 receiver node 时，H 才增加。图边界与输入/输出聚合都不增加 H。
-
-例如 **R4-I8-H1-K1** 表示 8 个顺序插入位置，每处采用固定单层实例，有 4 个候选且激活 1 个。它不是 8 层递归。
-
-如果不同插入位置或非平凡 selector regions 采用不同候选宽度，短名字中使用 **RVAR**，并在 manifest 和报告中列出完整宽度；Line 的节点总数变化不直接决定 R。forced-active node/region 不参与 R 的摘要。除本文固定的单层实例外，平台期、多父边、镜像直通以及任何其他结构差异都不能靠 R/H 推断，必须同时给出 **TOPO_ID** 和完整 Plan。
-
-### 7.3 具体 run 实例名
-
-科学条件之外，真实 run 还需要模型、seed 和尝试编号：
-
-~~~text
-<MODEL>-<scientific-condition>-s<SEED>-r<ATTEMPT>
-~~~
+| TRAIN | `PT`、`CPT`、`FT`、`SFT` | 随机初始化预训练、checkpoint continued pretraining、下游微调、监督微调 |
+| PLACEMENT | `POST`、`PARBLK`、`PARATTN`、`PARMLP` | 第 1.3 节的 SettleGraph 接入位置 |
+| PROFILE | `N`、`SD`、`BO`、`CUSTOM` | 第 2.3 节的传播与 Observe 语义 |
+| TOPOLOGY | `SL-R8`、`SG-<plan-id>`、`HB-<plan-id>` | 单层实例、一般 SettleGraph Plan 或 HB Plan |
+| STATE | `NONE`、`EMA128`、`GDN-K32-V32`、`ATTN-W128`、`CUSTOM` | receiver 状态算法与主要尺寸 |
+| SELECTOR | `SEL-CONTENT`、`SEL-PRE`、`SEL-POST`、`SEL-CUSTOM` | selector 读取的状态时刻 |
+| K | `K1`、`K2`、`KALL`、`KVAR` | region 请求的 active 数摘要 |
+| EMIT | `EMIT-HARD`、`EMIT-HST`、`EMIT-SOFTP`、`EMIT-CUSTOM` | 第 2.3 节的发送公式 |
+| AGG | `AGG-MEAN`、`AGG-LEARNED`、`AGG-CUSTOM`、`AGG-VAR` | receiver 输入和图输出聚合 |
+| BAL | `BAL-AVAIL-SOFT`、`BAL-NONE`、`BAL-CUSTOM` | 第 6.2 节的训练期均衡 |
 
 例如：
 
 ~~~text
-q3-06b-cpt-parmlp-bo-r8-i4-h1-ema128-sel-post-k1-emit-hst-agg-mean-bal-avail-soft-s42-r1
+CPT-PARMLP-BO-SL-R8-EMA128-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
+PT-POST-BO-HB-hb2d2p2-GDN-K32-V32-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
 ~~~
 
-模型 checkpoint、数据 revision、精确 block 编号、Token 预算、学习率、dtype、设备和代码 commit 仍由 manifest 保存，不强行塞进短名字。名称是可读索引，不代替完整实验设置。
+`SL-R8` 表示第 3 节的单层 Plan 有 8 个固定 receivers，不表示整个模型只有 8 个 nodes。`SG-<plan-id>` 和 `HB-<plan-id>` 只是展开 Plan 的可读索引，不能代替 Plan 本身及其哈希。最大静态路径深度、Line 数、site 数、总 nodes、region 宽度和 fan-in/fan-out 都是 Plan 或模型接入方式的派生摘要，不强行塞入短名称。
 
-解析实例名按固定字段顺序，从左至右匹配最长的已知字段枚举；字段边界由下一个字段的前缀确定，字段值内部的连字符不作为分隔符。若仍有歧义，以 manifest 中的字段值为准。
+当同一 run 的 sites、nodes 或 regions 使用不同设置时，相应字段使用 `VAR` 或 `CUSTOM`，并在完整记录中列出映射。TRAIN 只描述 base 权重来源与训练目标；新增 SettleGraph 参数怎样初始化另行记录。
 
-### 7.4 基线名称
-
-Dense 与 MoE 基线不使用 TIDE placement/profile 字段：
+Dense 和 Flat MoE 基线可使用更短的条件名，例如：
 
 ~~~text
-PT-DENSE
 CPT-DENSE
-PT-MOE-R8-I4
-CPT-MOE-R8-I4
+CPT-MOE-TOP1-HARD-E8
+CPT-MOE-TOP2-GATE-E8
 ~~~
 
-MOE 的精确插入 block、Top-K、capacity、token-drop、shared expert 和路由辅助项必须在完整设置中声明。
+真实 run 可以在条件名前加入模型缩写，并追加 seed 与尝试编号：
 
-## 8. 名称之外仍必须明确的语义
+~~~text
+<MODEL>-<CONDITION>-s<SEED>-r<ATTEMPT>
+~~~
 
-即使规范名称相同，每个正式设置仍要明确记录：
+名称是人类索引，不承担配置解析或实验复现职责。
 
-- 精确插入 block 编号；
-- 不同 sites、regions、Lines 和节点之间是否共享参数；默认不共享；
-- 若使用非平凡固定 DAG，记录完整展开的 Plan、规范化哈希、入口/终端 receivers、region 划分、每条固定边的端点及任何声明的逻辑延迟、全部显式跨 region 控制依赖，以及校验器生成的规范 region 拓扑序；
-- 若使用 HB-Lattice，另外记录每条 Line 的 phase、节点和 regions，每条边的 tree/local/shortcut/mirror 类别，以及逐节点镜像直通开关；
-- 若使用非平凡固定 DAG，记录最大 fan-in/fan-out、region 大小、forced-active 节点，以及逐 Token 至少到达一个 active 终端 receiver 的保证方式；
-- 每个 selector 的 active 数规则，以及逐 region 的 \(K^{\max}\)；
-- 每个 receiver 输入及图输出的 \(\operatorname{Aggregate}\) 公式、逐父边 DATA/CLOSED 特征与任何轻量聚合打分的精确公式；
-- 若边上传输压缩消息，记录每条边的编码/恢复公式、是否有损、消息形状和成本；
-- \(\operatorname{Emit}\) 的精确公式，以及 EMIT-HST 的 \(\zeta^{\mathrm{ST}}\)；
-- receiver 的精确 \(\operatorname{NodeCompute}\) 公式、内部执行顺序、归一化、residual、昂贵计算与 identity 初始化条件；
-- \(N_{\mathrm{sel}}\)、\(N_{R,i}\) 与 \(N_{F,i}\) 的精确实现和初始化；
-- \(\operatorname{Read}^{\mathrm{sel}}\)、\(\operatorname{Read}^{\mathrm{ffn}}\) 与 \(\operatorname{Score}\) 的精确公式、输出维度以及是否包含历史激活记录；
-- \(\operatorname{Update}\) proposal、selector、commit / Observe 和历史激活写回的精确顺序，proposal 到 selector 的梯度是否保留，以及写入 \(p\) 时是否 stop-gradient；
-- SettleGraph 与 backbone 的 RESIDUAL_ADD 公式以及任何额外缩放；
-- 训练期均衡规则、各辅助 loss 的公式、系数与 reduction；
-- 状态初始化、稳定 \(\mathrm{sid}\)、有效 Token mask、跨 chunk 的 carry/reset 与梯度 detach 规则；
-- 若物理调度允许改变算子先后，记录与调度顺序无关的随机键规则；
-- 可训练与冻结的参数集合、optimizer 分组、学习率及其他参数更新规则；
-- 辅助 loss 的 Token 范围、site/Line/region 聚合范围、reached mask 处理以及是否跨 micro-batch 或设备统计；
-- reached、Observe、active、发送、soft mass 与 hard share 等诊断量的分母和聚合范围；
-- 每个 Token 实际执行多少次消息聚合、本地入口归一化、轻量 selector 读出、\(\operatorname{Update}\) proposal、Observe commit、较大状态读出、昂贵 FFN 和发送；
-- 初始化怎样保持或改变 base 函数；
-- MOE 是否有 expert capacity、token drop 或 reroute。
+## 8. 一个完整实验条件必须说明什么
 
-这些项目不会全部进入短名字，但它们决定两个 run 是否构成真正的匹配对照。
+本节只规定实验记录必须包含的信息，不规定将来采用哪种文件格式或软件结构。任何结果都必须能从一份自包含记录中判断“模型实际算了什么”以及“它与对照只差在哪里”。
 
-## 附录 A：可选的 Receiver node 状态模块样例
+### 8.1 Base 模型与顶层边界
 
-本附录不属于某一种拓扑，只列出状态模块和 selector-history 的可选样例。它们用于展示设计空间，不表示已经通过 TIDE 实验，也不预设哪一种必然最好。
+至少记录：
 
-对任意 receiver \(v\)，\(m_{v,t}\) 是其本地消息，\(s^{\mathrm{cmp}}_{v,t}\) 是本 Token commit 后供当前计算读取的状态。A.3—A.5 不另设本步末历史写回，因此其中 \(s_{v,t}=s^{\mathrm{cmp}}_{v,t}\)；A.2 的历史激活按自身规则写回。
+- base checkpoint 或随机初始化配置、tokenizer 和模型 revision；
+- 插入 SettleGraph 的确切 blocks/sites，以及每个 site 的 placement；
+- 可训练、冻结和共享的参数集合；
+- SettleGraph 参数和状态的初始化规则；
+- 初始化是否要求保持 base 函数；若要求，记录四种 placement 中实际使用者的 equality 验证条件；
+- dtype、有效 Token mask，以及训练、prefill、decode 和 chunk 的输入约定。
 
-并入 receiver state 的样例遵守第 2.2、2.3 节规定的 \(s\)、\(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\) 语义；独立 selector-history 不计入 receiver 的 Observe 集，昂贵 FFN \(E\) 保持不变。状态算法与 selector 时序是两个独立坐标：content-only 的 \(\operatorname{Read}^{\mathrm{sel}}\) 只读取当前本地消息，pre/post state 才额外读取对应时刻的状态；\(\operatorname{Read}^{\mathrm{ffn}}\) 的输入状态按相应 proposal/commit 顺序确定。
+本文只规定 identity 初始化应满足 \(b_{\mathcal G}=h^{\mathrm{in}}\) 和 \(\Delta_{\mathcal G}=0\)，不规定具体采用零输出投影、residual scale 还是其他构造。
 
-各公式中的 EMA、GDN、Attention 等后缀只是标出具体算法，操作仍统一写作 \(\operatorname{Update}\)、\(\operatorname{Read}^{\mathrm{sel}}\) 和 \(\operatorname{Read}^{\mathrm{ffn}}\)。
+### 8.2 展开 Plan 与所有局部运算
 
-下面固定一条序列并省略其 batch 下标 \(b\)；公式用 \(j\) 表示 site，并将第 2 节的 receiver ID \(v\) 改写为全局唯一的整数 ID \(i\)（包含 Line/坐标）。参数下标 \(i\) 隐含固定的 \(j\)，默认不跨 site 共享。这里定义 node-level 的 \(\mathcal O_{j,t}:=\{i\mid\text{site }j\text{ 的 receiver }i\text{ 在 Token }t\text{ Observe/commit}\}\)，它是第 2.3 节各 region Observe 集的并集。
+至少记录：
 
-本附录把当前 Token 前的状态统一写成 \(s_{j,t}^{(i),-}\)；它沿用 2.5 节的约定，跨 chunk 不因位置重新编号而清零。式中的 \(\sigma\)、\(\operatorname{softplus}\) 和 \(\odot\) 分别表示 sigmoid、softplus 和逐元素乘法。
+- 完整 \(V,E,\mathfrak R\)、稳定 node/edge/region ID、入口和终端 receivers；
+- 每个 receiver 的固定 parents/children、最大 fan-in/fan-out、region 大小和 forced-active 设置；
+- 规范 region 依赖顺序，以及逐 Token 至少产生一个 active 终端消息的保证；
+- 每个 receiver 输入和图输出的 Aggregate 公式；
+- 每个 region 的 Score、\(c^{\mathrm{ctx}}\)、候选排列、Top-K 规则和 \(K^{\max}\)；
+- 每个 receiver 的 Update、两类 Read、NodeCompute 和 Emit 公式；
+- 参数是否跨 nodes、regions、Lines 或 sites 共享；
+- 规范化展开 Plan、其哈希，以及生成它的 Builder 名称、版本和配置。
 
-### A.1 一览
+HB-Lattice 还要记录每个 Line 的 nodes、regions、phase 和 barrier，以及每条边的 tree、local、shortcut 或 mirror 来源标签。
 
-| 样例 | 主要保留什么 | 典型消费者 | 主要特点 |
-| --- | --- | --- | --- |
-| **历史激活** | 激活次数、最近激活位置、概率或局部预算 | selector | 最轻量；记录控制历史，不直接保存内容语义 |
-| **EMA（指数移动平均）** | 一个固定长度的低通内容摘要 | selector / FFN | 简单、稳定，但不同历史会持续混合 |
-| **Gated DeltaNet（GDN）** | 固定大小的 key-value 关联矩阵 | selector / FFN | 可以按 query 关联读取，并按预测误差写入 |
-| **Kimi Delta Attention（KDA）** | 带细粒度门控的 delta-rule 矩阵状态 | selector / FFN | delta-rule 家族的近期增强，门控更细但实现更复杂 |
-| **SSM（state-space model）/ Mamba-2** | 固定大小的状态空间递归状态 | selector / FFN | 与 delta-rule 不同的成熟有界状态路线 |
-| **Attention** | 完整历史、局部窗口或压缩后的 key/value | selector / FFN | 设计空间大；信息保留与状态/计算成本由具体实现决定 |
+所有语义边都携带完整 \(d_{\mathrm{model}}\) hidden。物理实现可以改变布局、分片或传输顺序，但必须按声明 dtype 无损恢复相同 Tensor；不能把有损消息压缩隐藏在相同条件名下。
 
-两类读出都在 receiver 局部完成：\(\operatorname{Read}^{\mathrm{sel}}\) 输出固定且有界的读出（通常是低维投影、范数或历史统计），\(\operatorname{Read}^{\mathrm{ffn}}\) 则在内部完成必要的 output projection，并统一输出 hidden 维 residual。“典型消费者”只是常见用法，不是硬限制。
+### 8.3 状态、选择与跨 Token 时序
 
-对 EMA、GDN、SSM 或 Attention，\(\operatorname{Read}^{\mathrm{sel}}\) 都可取相应状态的低维投影、范数或历史标量；具体读出式由实验设置给出。
+至少记录：
+
+- propagation profile 及每个 region 的 Observe 集定义；
+- receiver 状态和 selector-history 的 shape、dtype、首状态与归属键；
+- content/pre/post 或自定义 selector 时序；
+- proposal、Score、Top-K、commit、NodeCompute 和历史写回的确切顺序；
+- proposal 到 selector 是否保留梯度，历史激活或 \(p\) 写回是否 stop-gradient；
+- 跨 chunk 的 carry、reset 和 detach 规则；
+- EMIT-HST 的 \(\zeta^{\mathrm{ST}}\)，以及其他自定义梯度路径；
+- 与调度顺序无关的随机数键或确定性规则。
+
+### 8.4 训练条件与统计范围
+
+至少记录：
+
+- 数据集、revision、样本顺序、有效 Token 数和训练阶段；
+- optimizer、学习率、参数组、batch、gradient accumulation、scheduler 和 gradient clipping；
+- 语言模型损失及所有辅助项的公式、系数和 reduction；
+- balance loss 的统计窗口、reached mask、site/region 聚合范围及跨设备同步方式；
+- Flat MoE 的 expert 数、Top-K、gate、capacity、token drop、reroute、shared expert 和辅助项；
+- checkpoint、验证与停止策略。
+
+### 8.5 可观测量与配对关系
+
+至少报告：
+
+- train/validation LM loss、perplexity 和任务指标；
+- 每个 node 的 reached、Observe、active、发送和有效梯度次数；
+- 每个 region 的 soft mass、availability 基准、hard share、熵和 active-set 变化；
+- 状态变化量、读出量、write-to-read 延迟及状态干预结果；
+- 每 Token 的聚合、轻量读出、proposal、commit、较大状态读出、昂贵计算和发送次数；
+- 参数量、active parameters、FLOPs、状态容量、显存、吞吐和通信成本；
+- 与主对照共享的条件，以及唯一被改变的坐标。
+
+这些内容可以逐步转成机器可读 manifest，但 manifest 的软件设计不属于本文的神经网络语义。
+
+## 附录 A：Receiver 状态模块样例
+
+本附录只展示怎样用第 2.2 节的统一接口表达若干状态模块，不规定首轮实验必须选择哪一种。
+
+对任意 reached receiver \(v\)，本地入口 hidden 和归一化输入始终是
+
+$$
+h_{v,t}
+=\operatorname{Aggregate}_v(\mathcal M_{v,t}),
+\qquad
+m_{v,t}=N_{R,v}(h_{v,t}).
+$$
+
+当前 Token 前的状态为 \(s^-_{v,t}\)，proposal 为
+
+$$
+\widetilde s_{v,t}
+=\operatorname{Update}_v(s^-_{v,t},m_{v,t}).
+$$
+
+第 2.3 节决定 proposal 是否 commit，并把当前完整计算可见的状态记为 \(s^{\mathrm{cmp}}_{v,t}\)。下列公式中的 \(s\) 表示传给某次 Read 的实际状态，可以是 \(s^-\)、\(\widetilde s\) 或 \(s^{\mathrm{cmp}}\)，具体由 selector 时序和 propagation profile 决定。
+
+### A.1 设计空间一览
+
+| 样例 | 状态主要保存什么 | 典型 Read |
+| --- | --- | --- |
+| 历史激活 | 次数、最近激活位置、概率或局部预算 | 供 selector 使用的少量标量 |
+| EMA | 固定长度的低通内容摘要 | 低维 selector 摘要或 \(d_{\mathrm{model}}\) residual |
+| Gated DeltaNet / KDA | 固定大小的 key-value 关联矩阵 | 按 query 读取关联内容 |
+| SSM / Mamba | 固定大小的递归状态 | state-space 输出或轻量摘要 |
+| Attention | 完整、窗口化或压缩后的 key/value 历史 | Attention 输出或其低维统计 |
+
+\(\operatorname{Read}^{\mathrm{sel}}\) 必须保持固定、有界，通常只输出低维投影、范数或历史统计。\(\operatorname{Read}^{\mathrm{ffn}}\) 可以包含较大的状态读取和 output projection，但只由 active receiver 执行，并最终输出 \(d_{\mathrm{model}}\) 维 residual。
 
 ### A.2 历史激活
 
-历史激活可以记录每个候选被选中的次数、距上次激活的 Token 数、soft probability 的移动平均、剩余局部预算或历史 selector 打分。本次选择只能在 selector 决策后写回，因此只影响以后 Token。
+历史激活可以记录 receiver 的累计或近期 active 次数、距上次 active 的 Token 数、soft probability 的移动平均或局部预算。它在本次选择完成后写回，因此只能影响以后 Token。
 
-它可以作为按 receiver 归属的独立轻量 selector-history，也可以并入 receiver state；前者不受 receiver Observe profile 约束，名称记在 **SELECTOR=SEL-CUSTOM**，后者按第 2.3 节的 \(\mathcal O\) 约束并记在 STATE 中。
+如果历史只服务于 selector，可以把它作为独立 selector-history，按 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 或声明的 node-level 键保存；它不属于 receiver 的 Observe 集。如果把它并入 receiver state，则其更新必须服从 SD/BO 的 Observe 规则。两种做法必须在实验条件中区分。
 
-若历史只服务于 selector，则对应的状态读出 \(r^{\mathrm{ffn}}=0\)。默认 content-only 不读取这些历史量；独立 history 或其他例外必须用 SEL-CUSTOM 明确声明，pre/post 则可按声明读取 receiver state 中的历史量。
-
-### A.3 EMA（指数移动平均）
-
-EMA\(d_s\) 把收到的内容压缩成一个长度为 \(d_s\) 的固定向量：
+只服务 selector 时可令
 
 $$
-s_{j,t}^{(i)}\in\mathbb R^{d_s},
+\operatorname{Read}^{\mathrm{ffn}}_v(s,m)=0.
+$$
+
+### A.3 EMA
+
+EMA 状态是固定长度向量：
+
+$$
+s_{v,t}\in\mathbb R^{d_s}.
+$$
+
+先从本地归一化输入产生观察量：
+
+$$
+o_{v,t}
+=\tanh\!\left(
+W_v^{\mathrm{obs}}m_{v,t}
++b_v^{\mathrm{obs}}
+\right),
 \qquad
-o_{j,t}^{(i)}
-=\tanh\!\left(W_i^{\mathrm{obs}}m_{j,t}^{(i)}+b_i^{\mathrm{obs}}\right).
+o_{v,t}\in\mathbb R^{d_s}.
 $$
 
-其中 \(W_i^{\mathrm{obs}}\in\mathbb R^{d_s\times d_{\mathrm{model}}}\)、\(b_i^{\mathrm{obs}}\in\mathbb R^{d_s}\)；\(W_i^{\mathrm{out}}\in\mathbb R^{d_{\mathrm{model}}\times d_s}\)。
-
-以下 proposal 只在所选 selector 时序或 propagation profile 需要该次状态更新时计算。EMA 的更新和 FFN 读出为：
+更新和较大读出可以定义为
 
 $$
-\operatorname{Update}_i^{\mathrm{EMA}}(s_{j,t}^{(i),-},m_{j,t}^{(i)})
-=\lambda_i\odot s_{j,t}^{(i),-}
-+(1-\lambda_i)\odot o_{j,t}^{(i)},
+\operatorname{Update}^{\mathrm{EMA}}_v(s^-_{v,t},m_{v,t})
+=
+\lambda_v\odot s^-_{v,t}
++(1-\lambda_v)\odot o_{v,t},
 $$
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,EMA}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
-=W_i^{\mathrm{out}}s_{j,t}^{(i)}.
-$$
-
-其中 \(W_i^{\mathrm{out}}\) 把 \(d_s\) 维状态映射回 \(d_{\mathrm{model}}\) 维，\(0\le\lambda_i<1\) 可以是标量，也可以是逐维向量；EMA 是最简单的内容记忆基线：新观察按 \(1-\lambda_i\) 写入，旧状态按 \(\lambda_i\) 保留。EMA128 就是 \(d_s=128\)。
-
-### A.4 Gated DeltaNet 与 KDA
-
-Gated DeltaNet（GDN）把同一个框架状态 \(s\) 实现为固定大小的关联矩阵：
-
-$$
-s_{j,t}^{(i)}\in\mathbb R^{d_k\times d_v}.
-$$
-
-读写该状态的 \(q^{\mathrm{qry}},k\in\mathbb R^{d_k}\) 和 \(\nu\in\mathbb R^{d_v}\) 都是列向量。这里的 \(q^{\mathrm{qry}}\) 是 query，与核心语义中表示 reached 的 \(q_{v,t}\) 无关。
-
-这里先抽取 gated delta-rule 的核心状态语义，不默认复制完整开放模型 block 中的短卷积、输出门或其他外围结构；若实验加入这些部件，必须单独声明。
-
-需要 proposal 时，receiver \(i\) 从本地消息 \(m_{j,t}^{(i)}\) 生成 key、value 和写入门；默认只有 active node 执行较大的 \(\operatorname{Read}^{\mathrm{ffn}}\) 时才生成 query。若某个 \(\operatorname{Read}^{\mathrm{sel}}\) 也需要 query，则为相应 reached node 提前生成，并把这项成本记入实验设置。
-
-以下 \(W_i^\cdot,w_i^\cdot,b_i^\cdot,\beta_i\) 均为 node 参数，\(N_k,N_q\) 是 query/key 的向量归一化；\(k,\nu,\eta,\gamma\) 供 \(\operatorname{Update}\) 使用，\(q^{\mathrm{qry}}\) 供 \(\operatorname{Read}^{\mathrm{sel}}\) 或 \(\operatorname{Read}^{\mathrm{ffn}}\) 使用。下列 proposal 公式只对本 Token 确实需要 proposal 的 receiver 定义，其他 receiver 不计算。
-
-$$
-k_{j,t}^{(i)}=N_k(W_i^k m_{j,t}^{(i)}),
+\operatorname{Read}^{\mathrm{ffn,EMA}}_v(s,m)
+=
+W_v^{\mathrm{out}}s,
 \qquad
-\nu_{j,t}^{(i)}=W_i^\nu m_{j,t}^{(i)},
+W_v^{\mathrm{out}}\in
+\mathbb R^{d_{\mathrm{model}}\times d_s},
+$$
+
+其中 \(0\le\lambda_v<1\) 可以是标量或逐维向量。selector 读出可以使用 \(s\) 的低维投影、范数或与当前 \(m\) 的简单相似度，但必须给出具体公式。
+
+### A.4 Gated DeltaNet
+
+Gated DeltaNet 用固定大小的关联矩阵保存状态：
+
+$$
+s_{v,t}\in\mathbb R^{d_k\times d_v}.
+$$
+
+其中 \(k_{v,t},q^{\mathrm{qry}}_{v,t}\in\mathbb R^{d_k}\)，\(\nu_{v,t},e_{v,t}\in\mathbb R^{d_v}\)，\(N_k,N_q\) 表示 key/query 的向量归一化，且
+
+$$
+W_v^{\mathrm{out}}
+\in\mathbb R^{d_{\mathrm{model}}\times d_v}.
+$$
+
+需要 proposal 时，从 \(m_{v,t}\) 产生 key、value 和写入门：
+
+$$
+k_{v,t}=N_k(W_v^k m_{v,t}),
+\qquad
+\nu_{v,t}=W_v^\nu m_{v,t},
 $$
 
 $$
-\eta_{j,t}^{(i)}
-=\sigma\!\left((w_i^\eta)^\top m_{j,t}^{(i)}+b_i^\eta\right),
-\qquad
-\gamma_{j,t}^{(i)}
+\eta_{v,t}
+=\sigma\!\left((w_v^\eta)^\top m_{v,t}+b_v^\eta\right),
+$$
+
+$$
+\gamma_{v,t}
 =\exp\!\left[
--\exp(\beta_i)\,
-\operatorname{softplus}\!\left((w_i^\gamma)^\top m_{j,t}^{(i)}+b_i^\gamma\right)
+-\exp(\beta_v)
+\operatorname{softplus}
+\left((w_v^\gamma)^\top m_{v,t}+b_v^\gamma\right)
 \right].
 $$
 
-$$
-q^{\mathrm{qry},(i)}_{j,t}=N_q(W_i^q m_{j,t}^{(i)}),
-$$
-
-前一组 \(k,\nu,\eta,\gamma\) 只在需要 proposal 时计算；默认 \(q^{\mathrm{qry}}\) 只在 active node 的 \(\operatorname{Read}^{\mathrm{ffn}}\) 中计算，若 selector readout 需要它则按上文规则提前计算。\(N_q,N_k\) 表示 query/key 的向量归一化，\(\gamma\) 控制旧状态保留量，\(\eta\) 控制本次误差写入量，\(\beta_i\) 是可学习的衰减参数。
-
-GDN 先衰减旧状态，再只写入当前 value 与已有预测之间的误差：
+先衰减旧状态，再写入当前 value 与已有预测之间的误差：
 
 $$
-s_{j,t,\mathrm{decay}}^{(i)}
-=\gamma_{j,t}^{(i)}s_{j,t}^{(i),-},
-\qquad
-e_{j,t}^{(i)}
-=\nu_{j,t}^{(i)}
--\left(s_{j,t,\mathrm{decay}}^{(i)}\right)^\top k_{j,t}^{(i)},
+s^{\mathrm{decay}}_{v,t}
+=\gamma_{v,t}s^-_{v,t},
 $$
 
 $$
-\operatorname{Update}_i^{\mathrm{GDN}}(s_{j,t}^{(i),-},m_{j,t}^{(i)})
-=s_{j,t,\mathrm{decay}}^{(i)}
-+\eta_{j,t}^{(i)}k_{j,t}^{(i)}(e_{j,t}^{(i)})^\top,
+e_{v,t}
+=\nu_{v,t}
+-\left(s^{\mathrm{decay}}_{v,t}\right)^\top k_{v,t},
 $$
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,GDN}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
-=W_i^{\mathrm{out}}
-\left[\left(s_{j,t}^{(i)}\right)^\top q^{\mathrm{qry},(i)}_{j,t}\right].
+\operatorname{Update}^{\mathrm{GDN}}_v(s^-_{v,t},m_{v,t})
+=
+s^{\mathrm{decay}}_{v,t}
++\eta_{v,t}k_{v,t}e_{v,t}^\top.
 $$
 
-其中 \(W_i^{\mathrm{out}}\) 把 \(d_v\) 维读出映射回 \(d_{\mathrm{model}}\) 维。
+active receiver 产生 query 并读取：
 
-因此 GDN 比 EMA 多了“按 key 写入、按 query 读取”的结构。它已经被开放权重的 [Qwen3-Next](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) 和 [Qwen3.5](https://huggingface.co/Qwen/Qwen3.5-0.8B-Base) 系列直接采用，是很强的现代参考点，但这不证明它对 TIDE receiver 必然最优。
+$$
+q^{\mathrm{qry}}_{v,t}
+=N_q(W_v^q m_{v,t}),
+$$
 
-[Kimi Linear](https://huggingface.co/moonshotai/Kimi-Linear-48B-A3B-Base) 使用的 Kimi Delta Attention（KDA）同样为 delta rule 引入细粒度门控，并公开了训练权重与 chunk/recurrent kernel。它可以作为 GDN 之后的增强候选；代价是状态更新、参数匹配和 kernel 移植都更复杂，因此不必在首轮同时实验。
+$$
+\operatorname{Read}^{\mathrm{ffn,GDN}}_v(s,m_{v,t})
+=
+W_v^{\mathrm{out}}
+\left(s^\top q^{\mathrm{qry}}_{v,t}\right).
+$$
+
+这里 \(q^{\mathrm{qry}}\) 是 query，与第 2.1 节表示 reached 的 \(q_{v,t}\) 无关。若 selector 也需要关联读出，可以为 reached receiver 提前计算低维 query/readout；这项计算必须计入 selector 成本。KDA 等 delta-rule 变体可以复用相同接口，但要给出自己的完整门控和更新公式。
 
 ### A.5 Attention 状态
 
-Attention receiver 可以把实际 Observe 到的 key/value 作为状态 \(s\)，再用当前 query 执行普通 Attention。下面以初始历史为空、保留最近 \(W\in\mathbb N_{>0}\) 次 Observe 为例；这里的 \(W\) 是历史窗口长度，与投影权重矩阵 \(W_i^{\cdot}\) 无关。
-
-以下公式沿用跨 chunk 不重置的全局 Token 序号 \(t\)。若使用非空或可学习首状态，必须把它作为状态组成部分另行记录，不能直接套用后面的历史集合展开式。
-
-状态相关量只在时序/profile 需要时计算：\(k,\nu\) 用于 proposal，默认 \(q^{\mathrm{qry}}\) 只在 active node 的 \(\operatorname{Read}^{\mathrm{ffn}}\) 中计算；若 selector readout 也需要 query，则对相应 reached node 提前计算并记录成本。
-
-本节取 \(q^{\mathrm{qry}},k\in\mathbb R^{d_k}\)、\(\nu\in\mathbb R^{d_v}\)，并令 \(N_q,N_k\) 表示 query/key 的向量归一化；\(q^{\mathrm{qry}}\) 是 query，与核心语义中表示 reached 的 \(q_{v,t}\) 无关。下列 \(k,\nu\) 只对需要 proposal 的 receiver 定义：
+Attention 状态保存此前 Observe 的 key/value。下面给出保留最近 \(W\) 次 Observe 的有界窗口样例：
 
 $$
-k_{j,t}^{(i)}=N_k(W_i^k m_{j,t}^{(i)}),
+k_{v,t},q^{\mathrm{qry}}_{v,t}\in\mathbb R^{d_k},
 \qquad
-\nu_{j,t}^{(i)}=W_i^\nu m_{j,t}^{(i)}.
-$$
-
-默认只有 active node 执行 \(\operatorname{Read}^{\mathrm{ffn}}\) 时才计算 \(q^{\mathrm{qry}}\)：
-
-$$
-q^{\mathrm{qry},(i)}_{j,t}=N_q(W_i^q m_{j,t}^{(i)}).
-$$
-
-令 \(\operatorname{AppendEvict}_W\) 表示把当前 \((k_{j,t}^{(i)},\nu_{j,t}^{(i)})\) 追加到旧历史并删除最早项；本例默认把当前 Observe 的 Token 写入后再读，因此 active node 可以读取当前 Token；若要严格只读更早历史，应改用旧状态并在设置中声明。于是：
-
-$$
-\widetilde s_{j,t}^{(i)}
-=\operatorname{AppendEvict}_W
- \left(s_{j,t}^{(i),-},(k_{j,t}^{(i)},\nu_{j,t}^{(i)})\right),
+\nu_{v,t}\in\mathbb R^{d_v},
 \qquad
-s_{j,t}^{(i)}
-=\begin{cases}
-\widetilde s_{j,t}^{(i)}, & i\in\mathcal O_{j,t},\\
-s_{j,t}^{(i),-}, & i\notin\mathcal O_{j,t}.
-\end{cases}
+W_v^{\mathrm{out}}
+\in\mathbb R^{d_{\mathrm{model}}\times d_v}.
 $$
 
-令 \(\mathcal H_{j,t}^{(i)}\) 表示截至 Token \(t\) 已被 receiver \(i\) Observe 的位置集合，\(\mathcal W_{j,t}^{(i)}\) 表示其中最近的至多 \(W\) 个位置：
-
 $$
-\mathcal H_{j,t}^{(i)}
-:=\{t'\le t\mid i\in\mathcal O_{j,t'}\},
+k_{v,t}=N_k(W_v^k m_{v,t}),
 \qquad
-\mathcal W_{j,t}^{(i)}
-:=\operatorname{Last}_W(\mathcal H_{j,t}^{(i)}),
+\nu_{v,t}=W_v^\nu m_{v,t},
 $$
 
-\(\operatorname{Last}_W\) 表示按时间保留集合中最近的至多 \(W\) 个位置。
+$$
+\operatorname{Update}^{\mathrm{Attn}}_v(s^-_{v,t},m_{v,t})
+=
+\operatorname{AppendEvict}_W
+\left(
+s^-_{v,t},
+(k_{v,t},\nu_{v,t})
+\right).
+$$
 
-等价地，以上状态可展开为：
+若状态 \(s\) 中按时间排列的 key/value 矩阵分别为
 
 $$
-s_{j,t}^{(i)}
-=\left((k_{j,t'}^{(i)},\nu_{j,t'}^{(i)})\right)_{
-t'\in\mathcal W_{j,t}^{(i)}}.
+\mathbf K(s)\in\mathbb R^{n_s\times d_k},
+\qquad
+\mathbf V(s)\in\mathbb R^{n_s\times d_v},
+\qquad
+0\le n_s\le W,
 $$
 
-令 \(\mathbf K_{j,t}^{(i)}\in\mathbb R^{|\mathcal W_{j,t}^{(i)}|\times d_k}\) 和 \(\mathbf V_{j,t}^{(i)}\in\mathbb R^{|\mathcal W_{j,t}^{(i)}|\times d_v}\) 分别表示状态中按时间堆叠的 key 和 value，并取 \(W_i^{\mathrm{out}}\in\mathbb R^{d_{\mathrm{model}}\times d_v}\)。位置编码或其他时间标识若需要，也必须作为状态的一部分记录。若历史非空，则：
+则 active receiver 的读出可以写为
 
 $$
-\operatorname{Read}_i^{\mathrm{ffn,Attn}}(s_{j,t}^{(i)},m_{j,t}^{(i)})
-=W_i^{\mathrm{out}}
+q^{\mathrm{qry}}_{v,t}=N_q(W_v^q m_{v,t}),
+$$
+
+$$
+\operatorname{Read}^{\mathrm{ffn,Attn}}_v(s,m_{v,t})
+=
+W_v^{\mathrm{out}}
 \left[
-\mathbf V_{j,t}^{(i)\top}
-\operatorname{softmax}\!\left(
-\frac{\mathbf K_{j,t}^{(i)}q^{\mathrm{qry},(i)}_{j,t}}{\sqrt {d_k}}
+\mathbf V(s)^\top
+\operatorname{softmax}
+\left(
+\frac{\mathbf K(s)q^{\mathrm{qry}}_{v,t}}{\sqrt{d_k}}
 \right)
 \right].
 $$
 
-若 \(|\mathcal W_{j,t}^{(i)}|=0\)，由 attention 历史产生的状态相关读出为零；\(\operatorname{Read}^{\mathrm{ffn}}\) 因而返回零向量。SEL-CONTENT 仍可从当前 \(m_{j,t}^{(i)}\) 产生读出，SEL-PRE/SEL-POST 再按声明附加历史读出（例如 attention 向量的范数）。若把历史激活并入 receiver state，则按 pre/post 读取；独立 selector-history 可用 SEL-CUSTOM 单独声明。
+空历史时，状态相关读出定义为零。上式默认当前 Observe 已经 commit 后再读，因此 BO/SD 中 active receiver 可以读取本 Token 写入的 key/value；如果实验要求只读旧历史，应显式改用 \(s^-_{v,t}\)。
 
-其他实验也可以保留完整历史，或使用分层/稀疏选择、压缩 key/value、固定记忆槽位。完整历史的状态和读取成本随上下文增长，不满足单节点成本有界，只作探索性参考；其他方案成本更可控，但会引入不同的信息选择。实验应如实记录实际状态量、读取成本和被保留的历史范围。
+固定窗口只是一个有界样例。也可以使用固定记忆槽位、分层或稀疏 Attention；完整历史则使状态和读取成本随上下文增长，不满足单节点成本有界的核心要求。
 
-### A.6 其他有界状态路线与当前定位
+### A.6 其他有界状态
 
-SSM（state-space model）/ Mamba-2 是另一类重要的固定状态候选，开放权重的 [Falcon-H1](https://huggingface.co/tiiuae/Falcon-H1-0.5B-Base) 已采用 Transformer 与 Mamba 的混合结构；RWKV-7、Lightning Attention 等也提供了可参考的递归或线性注意力状态。它们证明“有界 recurrent state”有多条成熟路线，但不必全部进入首轮 TIDE 实验。
+SSM、Mamba、KDA、RWKV 和其他线性 Attention 状态都可以接入同一组 Update、Read 与 commit 接口。要成为一个可比较条件，必须明确：
 
-当前更合适的定位是：历史激活用于最轻量的 selector 控制，EMA 作为简单内容基线，GDN 作为第一种先进关联记忆锚点，Attention 保留为可按预算选择的宽泛设计族；KDA 和 Mamba / structured state-space duality（SSD）则是增强或跨家族候选。这只是帮助建立全局观，不是固定实验顺序。能够用单一已登记格式表达的维度写入名称，例如 **GDN-K32-V32** 有 \(32\times32=1024\) 个状态标量；STATE-VAR/STATE-CUSTOM 的精确维度和映射写入 manifest。无论采用哪种名称，实际状态量都必须记录，不能把 GDN-K32-V32 与 EMA128 当作等状态量对照。
+- 状态 shape 和首状态；
+- 每次 proposal 的公式与成本；
+- selector 读取什么、在 pre 还是 post 时刻读取；
+- active receiver 的较大读出公式；
+- 状态是否真正保持固定上界；
+- chunk continuation 与 detach 规则。
+
+这些名字只标识算法家族，不能替代具体神经网络定义。
