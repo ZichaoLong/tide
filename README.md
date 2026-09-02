@@ -46,7 +46,7 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 - **单层并列 receivers**：用于隔离验证 selector、状态、N/SD/BO、Emit 和聚合；
 - **HB-Lattice**：在同一公共语义上增加规则化 Lines、波前 barrier 和扩展—平台—收拢拓扑。
 
-完整数学定义、执行顺序、loss 和命名见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。该文档是“模型实际怎样计算”的权威来源。
+完整数学定义、执行顺序、loss 和命名见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。该文档是“模型实际怎样计算”的权威来源；下一阶段的软件边界、执行器和差分验证方案见 [SettleGraph 实现与等价性验证计划](docs/settlegraph-implementation-plan.md)。
 
 ## 3. 主要实验问题
 
@@ -64,18 +64,7 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 
 ## 4. 当前仓库状态
 
-当前仓库尚无符合上述新语义的软件实现或实验结果。现阶段的权威产物只有语义规范；文档中的接口名称表示数学角色或实验条件，不表示同名软件模块已经存在。
-
-下一阶段可以按以下顺序推进：
-
-1. 核验并冻结语义文档；
-2. 定义可验证的展开 Plan 表示；
-3. 实现纯 PyTorch/CPU reference interpreter；
-4. 先通过单层实例验证 placement、N/SD/BO、状态时序和梯度；
-5. 冻结首个自包含实验条件；
-6. 再实现 HB-Lattice Builder、规则调度和高性能后端。
-
-具体软件组织、机器可读 manifest、实验晋级规则和运行基础设施将在实现阶段另行定义，不写入神经网络语义规范。
+当前仓库尚无符合上述新语义的软件实现或实验结果。语义规范是模型计算含义的权威来源；实现计划另外规定逐 Token 解释器、通用 packed prefill、特化执行器及 CPU/NPU 差分验证的建设顺序，但不增加新的模型语义。
 
 ## 5. 术语
 
