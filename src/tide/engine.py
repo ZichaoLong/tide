@@ -401,9 +401,17 @@ class SettleGraph(nn.Module):
         lm_target_mask: Optional[Tensor] = None,
         routing_stats_mask: Optional[Tensor] = None,
         reset_sequence_ids: Iterable[Any] = (),
+        detach_at_end: bool = True,
         record_trace: bool = False,
     ) -> ExecutionResult:
-        """Interpret one position for a batch of independent stable sequences."""
+        """Interpret one decode position for independent stable sequences.
+
+        A call boundary is a chunk boundary, so published receiver state is
+        detached by default.  Callers that deliberately train through several
+        decode calls can request ``detach_at_end=False`` explicitly.  The
+        token-major :meth:`prefill` loop does exactly that internally and
+        applies its requested detach only after the complete chunk.
+        """
 
         _validate_token_inputs(
             self.plan,
@@ -485,6 +493,8 @@ class SettleGraph(nn.Module):
             output_traces.extend(sample_outputs)
 
         result_state = StateStore(next_values, next_history, next_positions)
+        if detach_at_end:
+            result_state = result_state.detached()
         trace = (
             _build_trace(
                 self.plan,
@@ -591,6 +601,7 @@ class SettleGraph(nn.Module):
                     if routing_stats_mask is not None
                     else None
                 ),
+                detach_at_end=False,
                 record_trace=record_trace,
             )
             current = token_result.state
@@ -1819,6 +1830,12 @@ def _validate_reference_plan_capability(plan: Plan) -> None:
 def _validate_model_and_state(
     model: SettleGraph, hidden: Tensor, store: StateStore
 ) -> None:
+    if hidden.shape[0] == 0:
+        raise ExecutionContractError("SettleGraph execution requires a non-empty batch")
+    if hidden.dtype not in {torch.float32, torch.float64}:
+        raise ExecutionContractError(
+            "SettleGraph execution currently supports only float32 and float64 hidden"
+        )
     if model.typed_plan is not None:
         dtype_name = model.typed_plan.binding.dtype_roles["hidden"]
         expected_dtype = getattr(torch, dtype_name)

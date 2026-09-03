@@ -64,6 +64,7 @@
       "cpu_float64_oracle": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float64 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -v",
       "cpu_equivalence": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python -m unittest discover -s tests -p 'test_equivalence.py' -v",
       "cpu_development_corpus": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python scripts/run_development_corpus.py --run-dir \"$TIDE_CORPUS_RUN_DIR\"",
+      "cpu_executor_equivalence_development": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python scripts/run_executor_equivalence.py --run-dir \"$TIDE_EXECUTOR_RUN_DIR\"",
       "cpu_fp32_parity_prepare": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python tests/backend_parity_worker.py prepare --artifact \"$TIDE_PARITY_ARTIFACT\"",
       "cuda_fp32_smoke": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cuda TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_runtime.py' -v",
       "cuda_fp32_semantic": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cuda TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",

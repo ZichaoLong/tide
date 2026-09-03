@@ -41,7 +41,7 @@
 因此执行器证据分成三类：
 
 1. 逐 Token 路径可接受人工 golden、invariant 和自身 deterministic replay 的 reference 资格；
-2. token-major 与 region-major 的 256/64/16 差分只能作为开发回归；
+2. token-major 与 region-major 的 48 legal、6 VJP、24 invalid 快速差分只能作为开发回归；
 3. 只有真正没有热路径逐 Token、逐 batch row 或逐 node Python 调度的通用 packed executor，对全部适用语料通过后，才能晋级 `packed` cell。
 
 特化 executor 只对其静态支持谓词接受的 Plan 建独立 cell。它不得代替通用 packed executor，也不得只挑运行后已知会通过的样例。
@@ -187,12 +187,13 @@ legal/
 vjp/
 optimizer/
 invalid/
+extensions/input-k/
 scenarios/
 golden/
 npu-subsets.json
 ```
 
-`corpus-manifest.json` 保存 256 个 family ID、logical Plan hash、FP64/FP32 typed Plan hash、bundle hash、coverage probe、生成索引和子集成员。它还保存一个 `members` object：键覆盖 corpus 根目录下除 `corpus-manifest.json` 本身外的每个 regular file，值是该文件原始 bytes 的小写 SHA-256 hex。键是规范 POSIX 相对路径：UTF-8 NFC、不得为空，不含 U+0000、反斜杠、绝对前缀、`.` 或 `..` 路径段；symlink、device、socket、FIFO 和 hard-link 的重复 inode 全部拒绝。
+`corpus-manifest.json` 保存 256 个 core family ID、logical Plan hash、FP64/FP32 typed Plan hash、bundle hash、coverage probe、生成索引和子集成员，并把 input-K 派生工件列在独立的 extension members 中；扩展工件不增加 core family 数。manifest 还保存一个 `members` object：键覆盖 corpus 根目录下除 `corpus-manifest.json` 本身外的每个 regular file，值是该文件原始 bytes 的小写 SHA-256 hex。键是规范 POSIX 相对路径：UTF-8 NFC、不得为空，不含 U+0000、反斜杠、绝对前缀、`.` 或 `..` 路径段；symlink、device、socket、FIFO 和 hard-link 的重复 inode 全部拒绝。
 
 顶层 `corpus_root_sha256` 的输入以 ASCII bytes `tide.core-v1.qualification-corpus.v2` 加一个 `0x00` 开头。对所有 member 按路径 UTF-8 bytes 字典序排列，每项依次追加路径 byte 长度的无符号 64-bit 大端编码、路径 bytes，以及 member hex digest 解码后的 32 个 raw bytes；最后对整串做 SHA-256。`corpus-manifest.json` 内保存这个 root digest，但不保存自己的 digest，因而不存在自引用。manifest 按其 schema canonical JSON 物化后的 `corpus_manifest_sha256` 只由 run record 和外层 release index 保存。这两个 digest 共同构成 corpus identity；axes、pairs、goldens、scenarios、negative 和 NPU subset 等非 family 文件也都在 `members` 中，任何成员改变都必须发布新 corpus identity，不能覆盖旧目录。
 
@@ -231,7 +232,7 @@ npu-subsets.json
 | `A06.score` | `fixed-by-node`、`constant`、`read-sum`、`linear`、`mlp`、`NA` | probe event 的 Score；forced-active singleton 为 `NA` |
 | `A07.node-compute` | `identity`、`affine-residual`、`double-residual-swiglu` | probe active node 的完整计算 |
 | `A08.emit` | `hard`、`hard-st`、`soft-probability` | probe active node 的发送公式 |
-| `A09.k-source` | `fixed`、`input` | `fixed` 是主语义的 region 固定 $K$；`input` 是可选的外部 `requested_k` 接口 |
+| `A09.k-source` | `fixed` | 主语义的 region 固定 $K$；可选的外部 `requested_k` 接口不进入这份 core 轴表 |
 | `A10.k-class` | `top-1`、`top-2`、`all` | probe event 的实际竞争类别 |
 | `A11.shape` | `b1-t1-d2`、`b1-t6-d3`、`b2-t3-d4`、`b3-t5-d7` | 输入 batch、最大物理长度和 hidden 宽度 |
 | `A12.layout` | `contiguous`、`noncontiguous-positive-stride` | loader 交给 executor 的 hidden 布局；shape 与值不变 |
@@ -253,7 +254,7 @@ axis value 只是 coverage record 中的稳定标签，不是可由 executor 自
 | `A06.score` | `fixed-by-node` → 规范 type `fixed` 及 `A17` 指定的 ID；`constant` → `score.constant.v1`；`read-sum` → `score.read-sum.v1`；`linear` → `TEST-SCORE-LINEAR-V1`；`mlp` → `TEST-SCORE-MLP-V1`；`NA` → Plan 写入值为 0 的未执行 `constant` / `score.constant.v1` 占位配置，不产生 Score event |
 | `A07.node-compute` | `identity` → `node.identity.v1`；`affine-residual` → `TEST-NODE-AFFINE-V1`；`double-residual-swiglu` → `TEST-NODE-SWIGLU-V1` |
 | `A08.emit` | `hard` → `emit.hard.v1`；`hard-st` → 规范 type `hst` 及 `emit.hst.v1`；`soft-probability` → 规范 type `softp` 及 `emit.softp.v1` |
-| `A09.k-source` | `fixed` → `k.fixed.v1`；`input` → 当前实现的可选外部控制扩展 `k.input.v1` |
+| `A09.k-source` | `fixed` → `k.fixed.v1` |
 | `A16.norm-formula-ids` | `norm` 分量表示 `norm.rms.v1`，`test` 分量表示 `TEST-RMSNORM-V1`；两分量依次写入 input normalization 和 FFN normalization |
 | `A18.stateless-ffn-read-type` | `zero` → type `zero` / `read.ffn.zero.v1`；`state-default` → type `state_default` / `read.ffn.zero.v1`；两者只在 `A02=none` 时合法；其他 state 的该轴值为 `NA` |
 
@@ -267,7 +268,7 @@ chunk 切法、detach、reset、release、row reorder、并发和 checkpoint act
 2. 普通竞争 region 中，content timing 只配 content、content-rms 或 content-linear，pre/post 只配 content-state-linear 或 content-state-summary-linear；forced-active singleton 的 selector Read 与 Score 均为 `NA`。
 3. content-state-linear 只用于固定 shape 的 EMA 或 Gated DeltaNet Tensor state；窗口 Attention 使用 content-state-summary-linear。EMA/Gated DeltaNet 也可以使用 summary read。
 4. `state=none` 时 Update 为 `update.none.v1`、FFN Read 的 formula ID 为 `read.ffn.zero.v1`，type 由 `A18` 唯一写入为 `zero` 或 `state_default`，state origin 为 fresh empty；它可以出现在 SD/content 或 BO/content 以覆盖合法但 commit 为空操作的配置。
-5. forced-active singleton 固定 `K=1`、`k-source=fixed`、`k-class=all`、`route=all-active`、`selector-read=NA`、`score=NA` 和 `fixed-score-formula-id=NA`；它直接记录 $p=1$，不执行 selector Read、Score、softmax 或 Top-K。其他 `k-source=input` event 必须在 selector 前提供 int64 值。
+5. forced-active singleton 固定 `K=1`、`k-source=fixed`、`k-class=all`、`route=all-active`、`selector-read=NA`、`score=NA` 和 `fixed-score-formula-id=NA`；它直接记录 $p=1$，不执行 selector Read、Score、softmax 或 Top-K。其他 core region 也只使用各自 Plan 中的固定整数 $K$。
 6. `top-1` 要求候选数至少 2 且实际 $K=1$；`top-2` 要求候选数至少 3 且实际 $K=2$；`all` 要求 $K\ge C$。exact-tie、margin-safe 和 near-boundary 都要求 $C>K$。
 7. exact-tie 由逻辑源 logits 精确相等构造。margin-safe 在 FP64 和 FP32 两个 binding 中都满足 $\Delta_K$ 大于各自 guard band 的 16 倍。near-boundary 在 CPU FP32 中满足 $0<\Delta_K\le g_K/2$，并要求自然 route 仍与预期 exact 相同。具体 logit 数值使用第 3.1 节的精细 dyadic 域。
 8. VJP、gradcheck 和 optimizer 子集不使用 near-boundary。凡可微路径经过不带 epsilon 的 RMS read，fixture 必须令相应向量范数至少为 $2^{-8}$；L2 normalization 输入范数与 `norm_eps` 的距离至少为 $2^{-8}$。零范数 RMS 只进入 forward cell。
@@ -285,6 +286,14 @@ noncontiguous hidden 从 shape 为 $[B,T,2d]$ 的无 overlap contiguous backing 
 `legal-pairs.json` 由完整合法 tuple 集产生：对任意两个不同轴，若至少存在一个不含 `NA` 的合法完整 tuple 同时取这两个值，该值对就是必须覆盖的 legal pair。不能因为最终 256 行没有选到某一对就把它从分母删除。
 
 数学同义的公式 ID 仍由 `A16` 和 `A17` 作为 exact Plan configuration 分别覆盖；同 formula ID 下的合法 type 别名由 `A18` 分别覆盖。每个具体 `(field,type,formula_id)` 单独进入 expected/observed event coverage 和 parameter manifest，不能在 canonicalization 或报告中改写成另一个配置。
+
+`k.input.v1` 使用独立的接口扩展工件，不进入 `legal-pairs.json`、256 个 legal families、64 个 VJP、16 个 optimizer 或 NPU core set-cover。`E00` 固定派生 16 个正例 family；它们的扩展 ID 按下述选择顺序固定为 `extension-input-k-positive-00` 至 `extension-input-k-positive-15`。
+
+先对每个 core family 的 CPU FP32 expected trace 枚举 `(family_id, region_id)`；只保留该 region 会执行 selector、不是 forced-active singleton，且至少有一个 reached selector event 的 candidates 非空的记录。每条记录的 coverage units 为该 region 在 expected trace 中实际出现的下列值：六种 `A01.profile-timing`、四种 `A02.state`、三种 `A10.k-class`、四种 `A15.route`；若同一 region 还有 reached 且 candidates 为空的 event，再记一个 `empty-candidate-sentinel` unit。state unit 只由候选非空 event 中实际 active 的 node 贡献，其他 units 由该 selector event 的 expected record 贡献；不能只从 Plan 中未 reached 的声明推断。
+
+将记录先按 `family_id` 的 NFC UTF-8 bytes、再按 `region_id` 的 NFC UTF-8 bytes 排序。在所有由 16 条记录组成、`family_id` 两两不同且覆盖上述 18 个 units 的有序序列中，取 `(family_id, region_id)` 序列字典序最小的一个。不存在这样的 16 元序列时 corpus preflight 失败；不得增加数量、删除 unit，或根据 executor/backend 结果替换 carrier。
+
+每个选中记录只把目标 region 从 `k.fixed.v1` 改为 `k.input.v1`：对 candidates 非空的每个 event 提供与原 region 固定 $K$ 相同的 int64 值；对同一 region 中 reached 且 candidates 为空的位置写入 $K^{\max}+1$，并必须由 trace 证明该哨兵未被读取；其余物理位置仍写原固定 $K$。其 Plan、输入、hash、expected trace 和执行结果另行物化，不沿用原 core bundle 身份。`corpus-manifest.json` 的 extension members 必须在任何被测 executor 运行前，按扩展 ID 保存 exact source family ID、target region ID、coverage units、两种 dtype 的派生 Plan/bundle hash、`requested_k` Tensor hash 和 expected-trace hash。
 
 ## 5. 256 个 legal fixture 的确定性构造
 
@@ -330,10 +339,10 @@ noncontiguous hidden 从 shape 为 $[B,T,2d]$ 的无 overlap contiguous backing 
 选择向量 $R=(r_0,\ldots,r_{255})$ 中，$r_i$ 是槽位 $i$ 的 tuple rank。规范 corpus 取满足下列约束的字典序最小 $R$：
 
 - 所有 `legal-pairs.json` 中的 pair 至少被一个 coverage probe 行覆盖；
-- 六种 profile/timing、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、四种 state、两种 K source、三种 K class、五种 selector Read、五种 Score、三种 NodeCompute、四种 shape、两种 layout、四种 mask、两种 state origin、四种 normalization ID pairs、两个非 `NA` fixed Score IDs，以及两个非 `NA` stateless FFN Read types，各至少计 16 次；
+- 六种 profile/timing、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、四种 state、三种 K class、五种 selector Read、五种 Score、三种 NodeCompute、四种 shape、两种 layout、四种 mask、两种 state origin、四种 normalization ID pairs、两个非 `NA` fixed Score IDs，以及两个非 `NA` stateless FFN Read types，各至少计 16 次；
 - exact-tie 至少 16 个 selector events，margin-safe 至少 64 个，near-boundary 至少 16 个，all-active 至少 16 个；
 - 每个 `core-v1` 已注册的 `(field,type,formula_id)` 至少有 16 个实际执行的对应 formula-coverage events；事件底座按第 2.2 节分别是 selector、node 或 output event，因此 output Aggregate 不得用 node event 代计；需要两条消息或两个终端的公式按第 4.1 节的有效事件计数；
-- 第 8.3 节 52 个 mutation 的每组 carrier 前置都至少有两个 legal fixtures 满足第 8.2 节的不同-topology/不同-logical-hash 选择规则；对 `owner-alias-object`，carrier 中两个独立 storage 的 state Tensor 预先物化为 shape/dtype/value exact 相同，不在 mutation 时临时改值；
+- 第 8.3 节除四种 `requested-k-*` 接口扩展 mutation 外，每组 carrier 前置都至少有两个 core legal fixtures 满足第 8.2 节的不同-topology/不同-logical-hash 选择规则；四种接口扩展 mutation 使用第 4.1 节所述的派生工件；对 `owner-alias-object`，carrier 中两个独立 storage 的 state Tensor 预先物化为 shape/dtype/value exact 相同，不在 mutation 时临时改值；
 - 第 7 节的 64 VJP 和 16 optimizer 子集存在；第 11 节的嵌套 NPU 子集也存在。
 
 实现可用 SAT、ILP 或回溯求这个有限约束问题，但必须通过逐槽位固定最小可行 rank 得到同一个字典序最小解；solver 名称不成为语料身份。若约束无解，生成器非零失败，并修改计划/生成器版本后重新评审；不得在运行时放松计数或增加第 257 个样例。
@@ -348,12 +357,12 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 
 - canonical logical/typed Plan bytes 与 hash；
 - Plan 派生的 parameter-schema manifest、executor-independent logical keys 和 eager locator binding；
-- 由第 3.1 节产生的参数、hidden、调用前状态和运行期 K；
+- 由第 3.1 节产生的参数、hidden 和调用前状态；
 - `sequence_id`、全局位置、三个 masks、layout 元数据和 coverage probe；
 - 期望 candidates、K、route IDs、route class、event keys 和 invariant 数量；
 - comparator policy 和所有 artifact hashes。
 
-每个 bundle 的 $(B,T,d)$ 由 shape 轴给定。padding 槽位的位置放一个明显越界但被忽略的 int64 哨兵；至少 16 个 fixture 还在候选为空的 downstream event 放越界 `requested_k` 哨兵，并由 trace 证明该位置未读取。
+每个 core bundle 的 $(B,T,d)$ 由 shape 轴给定。padding 槽位的位置放一个明显越界但被忽略的 int64 哨兵。候选为空时不读取越界 `requested_k` 哨兵的要求只属于第 4.1 节的接口扩展工件，不进入 256 个 core bundle 的覆盖计数。
 
 ## 6. 人工 golden
 
@@ -364,7 +373,7 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | `golden-00` | singleton | reached 后直接取精确 probability 1，不执行 selector Read/Score/softmax/Top-K，forced active、identity 输出 |
 | `golden-01` | R2 Top-1 exact tie | node ID 平票、hard Emit、终端均值 |
 | `golden-02` | R8 Top-2 margin-safe | Top-K 顺序、Hard-ST 前向与 probability 梯度 |
-| `golden-03` | R8 all-active + input K | all-active、soft-probability Emit、K 读取时点；一个 stateless active node 使用 type `state_default` / `read.ffn.zero.v1` 并在 NodeCompute 中实际读取 |
+| `golden-03` | R8 all-active + fixed K | all-active、soft-probability Emit；一个 stateless active node 使用 type `state_default` / `read.ffn.zero.v1` 并在 NodeCompute 中实际读取 |
 | `golden-04` | chain | region 顺序、EMA carry、下一位置 |
 | `golden-05` | diamond | fan-out、`CLOSED`、edge order、edge-softmax fan-in |
 | `golden-06` | unequal path | 短路径缓存、shortcut 和晚汇合 |
@@ -372,7 +381,7 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | `golden-08` | mixed regions | 独立 ready regions、singleton 与竞争 event |
 | `golden-09` | forced backbone | 可选分支全关仍有终端消息 |
 | `golden-10` | small HB | Lines、barrier、tree/local/shortcut/mirror labels |
-| `golden-11` | masks/empty candidate | prompt、padding、routing subset、越界 K 哨兵未读取 |
+| `golden-11` | masks/empty candidate | prompt、padding、routing subset、empty-candidate state/trace |
 | `fault-golden-00` | late local operation | 早期 staged write、晚期失败、整调用回滚 |
 | `fault-golden-01` | injected empty terminal | 防线失败、无公开 output/stat/state 发布 |
 
@@ -388,9 +397,11 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | Score `score.fixed-by-node.v1`、`TEST-SCORE-CONST-V1`、`score.constant.v1`、`score.read-sum.v1`、`TEST-SCORE-LINEAR-V1`、`TEST-SCORE-MLP-V1` | 依次 `golden-07`、`golden-01`、`golden-03`、`golden-02`、`golden-04`、`golden-08` |
 | NodeCompute `node.identity.v1`、`TEST-NODE-AFFINE-V1`、`TEST-NODE-SWIGLU-V1` | 依次 `golden-00`、`golden-05`、`golden-02` |
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 依次 `golden-01`、`golden-02`、`golden-03`；Hard-ST 的 surrogate derivative 另按第 7.1 节解析验证 |
-| `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` / `k.input.v1` | none 语义用 `golden-00`；两种 K 依次用 `golden-01` 和 `golden-03` |
+| `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` | none 语义用 `golden-00`；固定 K 用 `golden-01` |
 
 这些 fixture 使用 $d\in\{2,3\}$、长度至多 4 的 dyadic 数值。期望生成器只能使用语言内标量四则运算、明写循环和独立的高精度 `exp`/`sqrt`；不得导入被测 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、state commit、balance-loss 或 executor helper。每个公式同时保存可读推导和完整 expected trace，不能只保存最终 output。
+
+接口扩展另保存 `extension-golden-k-input-00`，手算候选非空事件读取 `requested_k` 的时点、与相同数值 fixed-K 对照的 exact route，以及候选为空时越界哨兵未读取。它不属于上述 12 个 core legal goldens，也不贡献 `C01` 的 core formula registry closure。
 
 人工期望按等价性测试契约第 3 节保存 absent、edge status、父消息、proposal、适用的 readout/logit/probability/K、Observe/active、NodeCompute、Emit、staged state、终端聚合、最终状态和充分统计。forced-active singleton 的期望 trace 明确没有 selector Read、Score、softmax 和 Top-K event，只保存直接得到的 $p=1$ 与 active。离散字段 exact；浮点值按第 10.1 节比较。
 
@@ -417,7 +428,7 @@ cotangent 用 `U("cotangent:<fixture_id>:<objective>", i)` 产生并保存在 bu
 
 一个 family 只有在它满足对应 ordinal objective 的结构前置时才是该位置的 candidate：`output-hard`、`output-hst` 和 `output-softp` 必须分别实际执行对应 Emit；`final-state` 必须含可微的非空最终 Tensor state；`balance` 必须至少有一个 routing-stat mask 选中、候选非空且概率路径可微的竞争事件；`bo-post-proposal` 必须是含参数化 Update 的 BO/post；`pre-separation` 必须是含参数化 Update 的 SD/pre 或 BO/pre；`chunk-edge` 必须 stateful 且有至少两个连续执行位置。每个目标还必须至少有一个预先声明的 connected key 产生非零梯度；不能用全零 cotangent 或退化参数让路径断言真空通过。
 
-子集选择是字典序最小的有序 64 元组：第 $j$ 个元素的 legal fixture ID 严格递增，其 objective 由 $j\bmod8$ 唯一确定，且该 fixture 必须通过上述位置前置。选择约束还覆盖所有可微公式参数角色、六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、两种 K source、三种 NodeCompute、五种 Score、输入 hidden 和调用前可微当前状态。fixture v1 的 `required_keys` 必须精确等于 `inputs.hidden`、parameter manifest 中实际存在的全部 logical parameter keys，以及实际存在的可学习初态 keys；`core-v1` 的最后一类为空。每个实际 key 只标注为 `connected` 或 `disconnected`：connected 的零梯度必须是同 shape 零 Tensor，不能是 `None`，disconnected 必须返回 `None`。结构上不存在的参数由 parameter manifest 的 exact key set 证明，不向 `required_keys` 注入没有 Tensor 的幽灵路径。若未来 fixture 需要把特定 structurally absent 路径作为一等 VJP 断言，必须先定义有限、稳定的跨 fixture 路径全集并升级 fixture schema，不能在 v1 中接受任意字符串。
+子集选择是字典序最小的有序 64 元组：第 $j$ 个元素的 legal fixture ID 严格递增，其 objective 由 $j\bmod8$ 唯一确定，且该 fixture 必须通过上述位置前置。选择约束还覆盖所有可微公式参数角色、六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、三种 NodeCompute、五种 Score、输入 hidden 和调用前可微当前状态；active budget 全部是 fixed-K。fixture v1 的 `required_keys` 必须精确等于 `inputs.hidden`、parameter manifest 中实际存在的全部 logical parameter keys，以及实际存在的可学习初态 keys；`core-v1` 的最后一类为空。每个实际 key 只标注为 `connected` 或 `disconnected`：connected 的零梯度必须是同 shape 零 Tensor，不能是 `None`，disconnected 必须返回 `None`。结构上不存在的参数由 parameter manifest 的 exact key set 证明，不向 `required_keys` 注入没有 Tensor 的幽灵路径。若未来 fixture 需要把特定 structurally absent 路径作为一等 VJP 断言，必须先定义有限、稳定的跨 fixture 路径全集并升级 fixture schema，不能在 v1 中接受任意字符串。
 
 另外从这 64 个 cases 中冻结字典序最小的 32 个 CPU FP64 方向有限差分 cases，不再使用“前 32 个”这个与 objective ordinal 冲突的规则。FD candidate 必须对规定标量 forward 目标有真实的局部导数、全部连续公式远离非光滑点，且 $x\pm hd$ 两侧的 candidates、Top-K IDs 和 route 与中心 exact 相同。32 元集合覆盖所有适用的非退化 objective classes 和可微公式参数角色；若无解则 corpus generation 失败。
 
@@ -456,7 +467,7 @@ fixture 在 $h$ 邻域内必须保持同一路由；若不能证明，就不能�
 
 ### 7.2 optimizer 子集
 
-从 64 个 VJP fixtures 中预先选择满足约束的字典序最小 16 元集合，按 legal fixture ID 排序后映射为 `opt-00` 至 `opt-15`。选择约束覆盖四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、六种 profile/timing、两种 K source 和所有实际 trainable parameter roles；无解时 corpus generation 失败，不能换成运行后已知通过的集合。
+从 64 个 VJP fixtures 中预先选择满足约束的字典序最小 16 元集合，按 legal fixture ID 排序后映射为 `opt-00` 至 `opt-15`。选择约束覆盖四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、六种 profile/timing 和所有实际 trainable parameter roles；active budget 全部是 fixed-K。无解时 corpus generation 失败，不能换成运行后已知通过的集合。
 
 每个 optimizer case 沿用它在 VJP bundle 中已冻结的唯一标量目标、cotangents 和路径断言，不在 optimizer runner 中改成隐含的 output sum 或重新抽样 loss。一个 fixture 只有在该目标对至少一个 trainable logical parameter key 产生有限非零梯度时才能进入 16 个子集。
 
@@ -476,7 +487,7 @@ actual envelope 必须由 validator、loader 或已知执行阶段产生。比�
 
 ### 8.2 确定性构造
 
-下列 52 个 mutation IDs 各应用到两个不同 legal carriers，恰得 104 个 negative artifacts。每项的第一个 carrier 是满足前置条件的最小 fixture ID；第二个是满足前置条件且 topology fingerprint 不同的最小 ID。若不存在不同 topology，才取下一个 logical Plan hash 与第一 carrier 不同的 ID；仍不足两个则生成失败。前者物化为 FP64 mutant，后者物化为 FP32 mutant。前 4 种 artifact/schema mutation 的 8 个实例用于认证工件边界，独立于[等价性测试契约](equivalence-test-contract.md)第 7.2 节的数量门槛；其余 48 种恰好产生该门槛要求的 96 个非法 Plan 或运行期输入 mutants。动态 mutation 还必须选择预先指定的唯一 reached event，ID 为 `invalid-<mutation-id>-0` 或 `invalid-<mutation-id>-1`。
+下列 52 个 mutation IDs 各应用到两个不同 carriers，恰得 104 个 negative artifacts。除四种 `requested-k-*` mutation 外，第一个 carrier 是 256 个 core legal fixtures 中满足前置条件的最小 ID；第二个是满足前置条件且 topology fingerprint 不同的最小 ID。若不存在不同 topology，才取下一个 logical Plan hash 与第一 carrier 不同的 ID；仍不足两个则生成失败。四种 `requested-k-*` mutation 先按同一规则选择 fixed-K core family，再按第 4.1 节派生并成功 replay 一个合法 `k.input.v1` 接口扩展 carrier，mutation 只能施加在该派生工件上。每项的第一个 carrier 物化为 FP64 mutant，第二个物化为 FP32 mutant。前 4 种 artifact/schema mutation 的 8 个实例用于认证工件边界，独立于[等价性测试契约](equivalence-test-contract.md)第 7.2 节的数量门槛；其余 48 种产生该门槛要求的 96 个非法 Plan 或运行期输入 mutants，其中 88 个属于 fixed-K core，8 个属于单独报告的 input-K 接口扩展。动态 mutation 还必须选择预先指定的唯一 reached event，ID 为 `invalid-<mutation-id>-0` 或 `invalid-<mutation-id>-1`。
 
 | 组 | mutation IDs；每项都是一次有名变换 | 期望 phase/code |
 | --- | --- | --- |
@@ -488,9 +499,9 @@ actual envelope 必须由 validator、loader 或已知执行阶段产生。比�
 
 `binding-missing-role` 从 concrete `binding.dtype_roles` object 中只删除 `readout` role。`binding-symbolic-dtype` 保留四个 role，但只把 `binding.dtype_roles.readout` 的 concrete 值改为字面 `runtime`；这个值是 logical Plan 可用的符号声明，却不是 concrete binding 允许的 dtype，因此由现有 binding validator 唯一产生 `binding/binding.invalid`。负向 container 保存这个原始 mutated binding record 并重算外层工件 hash，但不伪造一个已通过 validation 的 typed Plan hash；重算外层认证字段不计为第二个语义 mutation。
 
-上表五组分别有 4、10、10、16、12 项，合计 52；每项两个 carriers，因此总数 exact 为 104。其中非 artifact 的后四组共 48 种、96 个实例，恰好满足上位契约的非法 Plan/运行期输入门槛；4 种、8 个 artifact faults 另计。`learnable_decay=true` 的 v1 拒绝可作为额外开发 mutant，并在 schema v2 引入相应能力时改由新 schema 的正负例覆盖，但它不计入这 104 个固定实例。
+上表五组分别有 4、10、10、16、12 项，合计 52；每项两个 carriers，因此总数 exact 为 104。其中非 artifact 的后四组共 48 种、96 个实例，恰好满足上位契约的非法 Plan/运行期输入门槛；按能力域拆分为 44 种/88 个 fixed-K core mutants 和 4 种/8 个 input-K 接口扩展 mutants。4 种、8 个 artifact faults 另计。`learnable_decay=true` 的 v1 拒绝可作为额外开发 mutant，并在 schema v2 引入相应能力时改由新 schema 的正负例覆盖，但它不计入这 104 个固定实例。
 
-其中前四组 40 种 mutation，加上最后一组的 `state-owner-key`、`state-shape`、两种 owner alias 和两种 Attention window mutation，共 46 种/92 个 mutants 应在静态或 loader 入口失败。两种 late K、两种 local failure 和两种 empty terminal 共 6 种/12 个 mutants 必须先通过 loader，再在 `C11` 运行到预定 event/execution 入口时失败；若它们被更早 gate 意外拒绝，case 也失败。
+其中前四组 40 种 mutation，加上最后一组的 `state-owner-key`、`state-shape`、两种 owner alias 和两种 Attention window mutation，共 46 种/92 个 mutants 应在静态或 loader 入口失败。两种 late K、两种 local failure 和两种 empty terminal 共 6 种/12 个 mutants 必须先通过 loader；late K 在接口扩展 cell 运行到预定 event，其他四种在 `C11-core-invalid` 运行到预定 execution 入口。若它们被更早 gate 意外拒绝，case 也失败。
 
 `requested-k-zero-late`、`requested-k-above-max-late`、`local-update-failure-late`、`local-node-failure-late` 和 `empty-terminal-late` 的每个 case 在失败点之前至少有两个成功执行 Token 和一次 staged state write。`empty-terminal-first` 则专门验证首个执行位置的防线和零公开发布；中途事务回滚由 `empty-terminal-late` 覆盖。失败后比较所有公开 receiver states、next positions、RNG、可见 artifact 路径集合和 checkpoint 可见内容 hash 与调用前 exact 相同；不得返回部分 output 或部分充分统计。原始 mutant 和尽可能收缩后的复现都保存，收缩结果不能替代原始工件。
 
@@ -582,7 +593,8 @@ actual envelope 必须由 validator、loader 或已知执行阶段产生。比�
 | lifecycle | 八个 stateful bundles | fresh create、连续调用、site-local reset、单 site 下的 all-site reset、release 后重建；release 为幂等成功，第二次结果固定为 `status=ok, released=[], already_absent=[<sorted requested IDs>]` |
 | position negatives | 六个 scenarios | replay、倒序、跳号各两个；任何执行前失败 |
 | controlled concurrency | 四个 scenarios | 两个 call 写同一 sequence 的相邻、不重叠 positions；barrier 固定 A 先获得 sequence lease，B 在 A publish 前请求并等待；A publish 后 B 重新校验并执行，两者都成功，结果 exact 等于 A→B 的唯一串行顺序 |
-| late rollback | 16 个 scenarios | late K 4、late Update failure 4、late NodeCompute failure 4、late empty terminal 4 |
+| fixed-K late rollback | 12 个 core scenarios | late Update failure 4、late NodeCompute failure 4、late empty terminal 4 |
+| input-K late rollback | 4 个接口扩展 scenarios | `requested-k-zero-late` 与 `requested-k-above-max-late` 各两个 carrier；只属于 `E00`，不进入 `C10` |
 
 single-site 中 site-local reset 与 all-site reset 的结果应相同，但这不构成多 site reset 证据。release 只能针对没有进行中调用的明确 sequence IDs；scenario action 要求请求 IDs 已经唯一并按稳定字符串排序，不存在的 ID 不是 failure。受控并发唯一允许的资格结果是上表 A→B 串行化；不再保留“或拒绝一个 call”的运行时选项。它不依赖 wall-clock 谁先到达，而使用测试屏障固定 lease 获取顺序。
 
@@ -649,12 +661,12 @@ schema、hash、keys、shape、声明 dtype、mask、owner、event key、candida
 
 ### 10.2 Cell 表
 
-表中“共同证据”指第 2.3 和 3.2 节的 manifest、stdout、terminal summary、case list、hash list 与 comparator worst-path records。任何 required case 失败、缺工件、被 skip 或数量不足，整个 gate 失败。下表每一行是 gate template，表中数量是该行全部子 cells 的合计；实际 capability cell ID 必须追加 host architecture、backend、单一 dtype 和 executor binding，并在行级 summary 中引用。例如 `C03` 展开为 FP64 和 FP32 子 cells，各含 256 个 materialized cases；`C11` 两个 dtype 子 cells 各含 52 个 mutants，行级总数为 104，其中非 artifact 的 96 个实例才贡献上位契约的非法 Plan/运行期输入门槛。只有 evidence I/O 的 `I00` 不分数值 dtype，只有 logical corpus identity 的 `C00` 使用明示 dtype set；两者都不由此声称数值 executor 能力。x86_64 CPU、aarch64 CPU 及不同 NPU SKU 永远不合并成一个 capability cell。
+表中“共同证据”指第 2.3 和 3.2 节的 manifest、stdout、terminal summary、case list、hash list 与 comparator worst-path records。任何 required case 失败、缺工件、被 skip 或数量不足，整个 gate 失败。下表每一行是 gate template，表中数量是该行全部子 cells 的合计；实际 capability cell ID 必须追加 host architecture、backend、单一 dtype 和 executor binding，并在行级 summary 中引用。例如 `C03` 展开为 FP64 和 FP32 子 cells，各含 256 个 materialized cases。`C11-core-invalid` 的两个 dtype 子 cells 各含 48 个 mutants，`E00-input-k-interface` 的两个 dtype 子 cells 各含 4 个 input-K mutants；二者合计 104，其中 88 个 fixed-K core 与 8 个 input-K 扩展实例共同贡献上位契约的 96 个非法 Plan/运行期输入门槛，8 个 artifact mutants 另计。只有 evidence I/O 的 `I00` 不分数值 dtype，只有 logical corpus identity 的 `C00` 使用明示 dtype set；两者都不由此声称数值 executor 能力。x86_64 CPU、aarch64 CPU 及不同 NPU SKU 永远不合并成一个 capability cell。
 
 | Cell | 输入 | 执行器/环境 | 比较量 | 阈值 | 必需工件 | 通过条件 |
 | --- | --- | --- | --- | --- | --- | --- |
 | `I00-evidence-infrastructure` | 第 3.3 节固定 35 probes | CPU-safe schema/manifest/fixture publisher/run-record 路径；I/O 故障用一次性 hook 和 fresh process | failure phase/code、primary/secondary identity、exit status、case IDs、inode/path set、published bytes/hash、Tensor storage hash、gradient key set、module/runtime identity、terminal records | exact | probe manifest、fault timeline、发布前后目录/inode/hash、runner summaries | 35/35 全部符合预期；无 raw 类型/重叠异常泄漏、无 hash 类型碰撞或未认证 storage、无半发布、无 primary 被遮蔽、无外部代码阴影、无 skip/缺 ID/预期失败；其他 cell 引用本门的通过 identity |
-| `C00-canonical` | 256 legal 的 logical/typed bytes、104 negative containers、默认省略/显式成对输入 | CPU-safe canonicalizer、negative-container parser 和静态/loader 入口；不导入 vendor plugin | canonical bytes/hash、默认物化、parameter manifest、bundle hash、negative-container schema；只对声明静态/loader 入口的 mutant 比较 actual envelope | exact | 共同证据、canonical goldens、所有 schema/preflight reports | 两次独立生成 byte-identical；256 正例通过；104 containers 的 schema 全部合法；92 个静态/loader mutants 在预期最早 phase 失败，12 个 event/execution mutants 通过 loader 并留给 `C11` 触发 |
+| `C00-canonical` | 256 core legal 的 logical/typed bytes、派生 input-K 扩展 carrier、104 negative containers、默认省略/显式成对输入 | CPU-safe canonicalizer、negative-container parser 和静态/loader 入口；不导入 vendor plugin | canonical bytes/hash、默认物化、parameter manifest、bundle hash、negative-container schema；只对声明静态/loader 入口的 mutant 比较 actual envelope | exact | 共同证据、canonical goldens、所有 schema/preflight reports | 两次独立生成 byte-identical；256 core 正例与全部派生扩展 carrier 通过；104 containers 的 schema 全部合法；92 个静态/loader mutants 在预期最早 phase 失败，12 个 event/execution mutants 通过 loader 并留给 `C11-core-invalid` 或 `E00-input-k-interface` 触发 |
 | `C01-golden-forward` | 12 legal goldens，FP64/FP32 | token-major eager CPU | 全部 exact trace、output/state/statistics、invariants，以及 `(field,type,formula_id)` 独立 oracle coverage | `T64`/`T32` + exact | 共同证据、手工推导、expected/actual traces、`golden-formula-coverage.json` | 24 个 materialized runs 零失败；core-v1 registry uncovered list 为空；期望代码未调用共享局部 helper |
 | `C02-golden-fault` | 2 fault goldens，两 dtype | token-major eager CPU + test hook | failure envelope、调用前后公开 state/RNG/artifact set | 浮点不发布；其余 exact | 共同证据、private diagnostic trace、before/after hashes | 四次都在指定 phase/code 失败且整调用回滚 |
 | `C03-reference-forward` | 全部 256 legal，两 dtype；每个 materialization 的 A/B 输入 bytes 相同 | 固定线程/确定性设置下的两个 fresh-process token-major eager CPU replay | A/B output/state/statistics/full trace；bundle 预期 route、invariants 和 event coverage | A/B 浮点用 `T64`/`T32`；离散量 exact | 共同证据、256 family 的 A/B results、coverage reports、已通过的 `C01` 身份 | `C01` 先通过；512 个 materialized cases、1024 次 process executions 零失败；256 logical hashes 唯一；所有数量与 pairwise 门槛通过 |
@@ -665,11 +677,14 @@ schema、hash、keys、shape、声明 dtype、mask、owner、event key、candida
 | `C07-optimizer` | 固定 16 optimizer，两 dtype | token-major 与 packed 各自 backward + Adam/AdamW step | step 前 grads、step 后全部参数、optimizer Tensor/state/key order | `T64`/`T32` + exact metadata | 共同证据、初始/最终 parameter 与 optimizer snapshots | 32 对零失败；8 Adam、8 AdamW 及 cold/warm 数量 exact |
 | `C08-chunk` | short/long chunk scenarios | token-major 与 packed CPU，full 对所有 split | 逐 Token output/trace、state、position、stats/loss、detach/no-detach VJP | `T64`/`T32` + exact | scenario、每个 action result、统计合并 records | 第 9.2 节所有切法零失败；空尾无事件；统计只先加后归约 |
 | `C09-mask-lifecycle` | masks/rows/lifecycle/concurrency scenarios | token-major 与 packed CPU | bypass、state owner、row reorder、reset/release、冲突结果 | `T64`/`T32` + exact | scenario、action timeline、before/after hashes | 所有合法动作等价；所有非法动作发布前失败；single-site 声明不外推多 site |
-| `C10-rollback` | 固定 16 late rollback scenarios，两 dtype | 两 CPU executors + test hook | envelope、公开 state/position/RNG/artifact set、无部分 result | exact | 原始/收缩 fixture、private trace、before/after hashes | 64 executor runs 都在预期点失败并 exact rollback |
-| `C11-invalid` | 固定 104 mutants（96 个 Plan/运行期输入，8 个 artifact） | 独立 validator/loader；随后对到达 execution 的 case 运行 token-major 和 packed | actual phase/full code set、failure priority、无发布 | exact | negative containers、actual envelopes、原始与 shrink artifacts | 104 个各自得到唯一预期 envelope；actual code 不来自 expected 注入；上位 96 门槛不计 artifact faults |
+| `C10-rollback` | 固定 12 个 fixed-K late rollback scenarios，两 dtype | 两 CPU executors + test hook | envelope、公开 state/position/RNG/artifact set、无部分 result | exact | 原始/收缩 fixture、private trace、before/after hashes | 48 executor runs（12 × 2 dtype × 2 executors）都在预期点失败并 exact rollback |
+| `C11-core-invalid` | 固定 96 个 core-domain mutants（88 个 Plan/运行期输入，8 个 artifact） | 独立 validator/loader；随后对到达 execution 的 fixed-K case 运行 token-major 和 packed | actual phase/full code set、failure priority、无发布 | exact | negative containers、actual envelopes、原始与 shrink artifacts | 96 个各自得到唯一预期 envelope；actual code 不来自 expected 注入；只把其中 88 个非 artifact 实例计入上位门槛 |
+| `E00-input-k-interface` | 固定 16 个派生 input-K 正例、`extension-golden-k-input-00` 和固定 8 个接口 mutants；正例和 golden 各物化 FP64/FP32 | token-major eager 与独立 region-major eager CPU；不要求 packed 接受 `k.input.v1` | 正例的 output/state/statistics/full trace、与同值 fixed-K 的 route，以及负例的 phase/full code set、回滚和未读取哨兵 | `T64`/`T32` + exact | 16 条冻结 carrier 记录、派生规则、扩展 Plan/input hashes、golden、positive/negative records | 32 个派生正例 materializations 和 2 个 golden materializations 零差分；8 个 mutants 得到唯一预期 envelope；这 8 个补足上位 96 门槛，但结果单独标为接口扩展且不产生 packed capability 声明 |
 | `C12-checkpoint` | 16 positive、16 checkpoint negative、8 runtime negative scenarios | CPU fresh processes；token-major 与 packed binding 各自加载 | forward/state/VJP、下一 optimizer step、init/resume 边界、联合 rollback | `T64`/`T32` + exact schema | checkpoint hashes、process manifests、before/after snapshots | 所有 positive 通过，所有 negative 精确失败；只声明第 9.3 节保存范围 |
 
 `C04`、`C06` 至 `C12` 中要求 packed 的部分，在 packed executor 或 scenario artifact 尚未实现时状态只能是 `planned`。可以先运行其 token-major/region-major 投影以发现问题，但不能删掉 packed 比较后沿用同一个 cell ID。
+
+`C05` 中 `hb-line.v1` 的第三方只构成独立的 HB Line-barrier 拓扑调度 oracle：它直接消费 fully expanded Plan，不调用 token-major 或通用 packed scheduler，但当前仍复用同一 parameter owner 的局部公式实现。因此三方一致能提供拓扑/顺序/barrier 独立证据，不能单独充当局部公式 oracle，也不产生高性能 HB kernel 声明；局部公式的独立证据仍由 `C01`/`C06` 提供，性能由 `X07`/`X08` 单独验证。
 
 ## 11. NPU 的预冻结 set-cover 子集
 
@@ -684,7 +699,7 @@ $$
 coverage universe 包括：
 
 - 每个声称支持的 formula 的 forward，以及训练公式的 backward；
-- 六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、两种 K source 和四种 route class；
+- 六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit 和四种 route class；active budget 全部是 fixed-K；
 - B=1、T=1、奇数 hidden/state dimension、最小/最大窗口、空 candidate event、padding/空段、packed 尾块和 noncontiguous layout；
 - sort/Top-K、mask/nonzero、count/cumsum、gather/scatter、`index_add`、归约、linear、normalization 和 Attention 的实际 shape/layout/direction units；
 - Adam、AdamW、cold/warm optimizer state 和 CPU checkpoint handoff。
@@ -708,12 +723,15 @@ coverage universe 包括：
 | `N04-packed-forward` | 同一固定 64 | CPU artifact、NPU eager、NPU packed 三方 | `N01` 全部量及 packed schedule | `TN32`，同 NPU eager/packed另用 `T32` | 三方 records、packed profiles | 64/64 零失败且真实 packed；region-major eager 不能代替 |
 | `N05-packed-vjp` | 同一固定 32 | CPU、NPU eager、NPU packed | `N02` 全部量 | `TN32`/`T32` + exact | 三方 gradient records、profiles | 32/32 零失败且 backward 无 fallback |
 | `N06-packed-opt-checkpoint` | 同一固定 8 | NPU packed + CPU handoff | `N03` 全部量 | `TN32` + exact schema | parameter/optimizer/checkpoint snapshots、profiles | 8/8 零失败；optimizer 和 load 后首步均有 placement closure |
+| `N07-input-k-interface` | `E00` 的 16 个 FP32 派生正例、`extension-golden-k-input-00` 的 FP32 materialization，以及 `invalid-requested-k-region-keyset-1`、`invalid-requested-k-shape-1`、`invalid-requested-k-zero-late-1`、`invalid-requested-k-above-max-late-1` | CPU artifact 对 NPU token-major eager；不进入 packed set-cover | 正例 output/state/statistics/route、负例 envelope/回滚、未读取哨兵 | `TN32` + exact route/code | 独立接口扩展 records、profiles；exact carrier/target-region/derived hashes | 17 个正例与 4 个负例全部符合 `E00`；单独报告 NPU input-K eager interface，不产生 core 或 packed 声明 |
+
+`N07` 的上述 21 个成员必须在任何 NPU 运行前从 CPU `E00` 工件按 exact ID 冻结；每个成员保存 source family/carrier ID、target region（若适用）、derived Plan/input/result hash。不得根据 NPU 成功、失败或性能替换成员。
 
 正确数值或一个 NPU output Tensor 不足以通过。每个关键 operator 必须有当前 TorchNPU/CANN 栈可解释的 profiler/dispatch 证据；若 fallback 可见性未知，相应 cell 保持 `implemented`，不能标 `verified`。x86_64/aarch64、不同 Ascend SKU、eager/packed 和每个软件栈 tuple 都是不同 cells。
 
 ## 12. 独立门：HB Builder、Qwen、短训练和性能
 
-这些门不贡献 256 legal、64 VJP、16 optimizer、96 Plan/运行期输入 negative 或另计 8 个 artifact negative 的 core executor 数量。每个门只有在其输入 identity 冻结后才能运行。
+这些门不贡献 256 legal、64 VJP、16 optimizer、由 88 个 fixed-K core 与 8 个 input-K 接口扩展组成的 96 个 Plan/运行期输入 negative，或另计 8 个 artifact negative。每个门只有在其输入 identity 冻结后才能运行。
 
 Qwen 接入、短训练和性能 workload 只使用每个 region 各自固定的 `k.fixed.v1`。`k.input.v1` 留在通用接口的正确性、失败处理和设备覆盖中，不作为主实验的 active-budget 条件。
 
@@ -764,7 +782,7 @@ Dense、Dense 扩展和 Flat MoE 若用于科学实验，另建各自的 referen
 
 ## 13. Schema v2 进入条件
 
-extension fixture 只有在下表的决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行：
+下表中的 schema-v2 extension fixture 只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行；已经单列的 `k.input.v1` 接口扩展不属于本表：
 
 | 扩展 | schema v2 必须先定义的内容 | 新增资格重点 |
 | --- | --- | --- |
@@ -774,7 +792,7 @@ extension fixture 只有在下表的决定被版本化并有 validator/canonical
 | 低精度 | 每个 dtype role、accumulation/reduction dtype、rounding/autocast 和逐公式 tolerance | FP16/BF16 forward/backward/optimizer、overflow、CPU/NPU parity |
 | adaptive budget | budget 输入来源、读取时点、值域、梯度、状态依赖和失败事务 | Tensor-derived K 的 forward/VJP、边界、chunk 与 replay |
 
-schema v2 不能只增加可选字段而沿用 v1 hash 含义。它必须使用新 schema/canonicalizer identity，定义 v1 到 v2 是否存在无损升级，并为未知/缺失/冲突字段增加 negative fixtures。extension 的 256 legal、64 VJP、16 optimizer 和至少 96 个非法 Plan/运行期输入数量另立 corpus，不能把 `core-v1` 的事件重复计入；artifact faults 仍按其版本化工件 schema 另计。
+schema v2 不能只增加可选字段而沿用 v1 hash 含义。它必须使用新 schema/canonicalizer identity，定义 v1 到 v2 是否存在无损升级，并为未知/缺失/冲突字段增加 negative fixtures。每个进入正式声明的 schema-v2 扩展都要另立 256 legal、64 VJP、16 optimizer 和至少 96 个非法 Plan/运行期输入的 corpus，不能把 `core-v1` 或 input-K 接口工件的事件重复计入；artifact faults 仍按其版本化工件 schema 另计。
 
 ## 14. 执行顺序和最终报告
 
@@ -782,7 +800,7 @@ schema v2 不能只增加可选字段而沿用 v1 hash 含义。它必须使用�
 
 1. 在相同 host architecture/commit 上先执行 `I00`，证明 schema、发布和 run-record 路径可承载资格证据；
 2. 冻结 corpus、axes、legal pairs、VJP/optimizer 和 NPU subsets；完成 hash preflight；
-3. `C00`、人工 golden、`C03` reference 和 `C11` invalid；
+3. `C00`、人工 golden、`C03` reference、`C11-core-invalid` 和 `E00-input-k-interface`；
 4. 真正 packed 落地后执行 `C04`，再执行 VJP、optimizer、scenario 和 checkpoint；
 5. CPU cell 在 exact host architecture/commit 上全部完成后执行 NPU eager，再执行 NPU packed；
 6. 独立执行 HB Builder、Qwen、short train；
@@ -802,6 +820,8 @@ schema v2 不能只增加可选字段而沿用 v1 hash 含义。它必须使用�
 
 ## 15. 现有 development corpus 的位置
 
-当前 48 legal、6 VJP、24 invalid 集合只用于快速 development regression。它可以发现明显的 schedule、formula 或 validator 回归，但不满足本文的固定 bundles、独立多 motif goldens、pairwise、event multiplicity、64 VJP、16 optimizer、96 Plan/运行期输入 mutants、另计 8 个 artifact mutants、scenario、checkpoint 和硬件证据要求。
+当前保留两层 development regression。快速层包含 48 legal、6 VJP 和 24 invalid；executor-equivalence candidate 层包含 256 个固定 K 的合法 Plan，其中 64 个预标记为 VJP cases。后者覆盖 11 类 motif、六种合法 profile/timing、none/EMA/Gated DeltaNet/窗口 Attention、当前五种 Score、三种 Emit、三种 NodeCompute、三种 receiver Aggregate、两种终端 Aggregate 以及 forced-active、multi-entry、multi-terminal 和 HB 拓扑。该层的 candidate identity digest 为 `8497fccea52a958373ae5963c433a0f8420874005c88639ebd9e35d51fec6111`；当前 packed/single-layer/HB 静态支持分区的 digest 为 `49fb9c797f40546f29534bbaf1fac5c4b04669b4990239d4af22d3154fa4c703`。
+
+这 256 个对象仍称 candidate，而不是本计划第 5.4 节的资格 bundles。它们由项目内生成器确定性构造，尚未逐个物化为通过 `tide.settlegraph.fixture.v1` 认证的长期工件，也没有实现第 7 节规定的资格 objective-class 选择、32 个有限差分、8 个 Hard-ST 局部 oracle 和 16 个 optimizer cases，亦未实现第 5 节的 pairwise/event multiplicity 约束与第 8 节的完整负例集合。当前 executor suite 对全部 candidates 做两 dtype 的 full-prefill forward/trace/state/balance，以及 full、一次 two-chunk split、逐 Token decode 的 forward 比较。对 64 个预标记 case，它在 FP64 和 FP32 下从同一次保留计算图按固定顺序隔离查询 output、可微 balance loss、每个最终状态 owner/component、每个 region 的 `soft_sum`、每个可微 trace region event 的 logits/probabilities、组合目标和重复 output，并逐项比较 hidden、全部具名参数及其 `None` 连通性；固定多候选反例另逐个检查 node-event logit root 的 connected-zero/`None` 结构。FP64 定向回归覆盖 EMA、Gated DeltaNet、窗口 Attention 的可微外部初态（包括分开的 Attention keys/values）以及跨两个 chunks 的保留图 public-result objectives。共享执行入口还定向验证只接受 FP32/FP64，并在公式执行前拒绝空 batch。对静态适用的 8 个单层和 16 个 HB case，suite 做三方两 dtype full/two-chunk/decode forward，并另做 full-prefill VJP；有状态代表集检查 reset、row reorder 和 empty tail。受控 development runner 只在 clean exact commit 上接受成功终态，并保存逐 case/dtype/mode 与逐 objective 的执行回执；静态 support 数量不再充当实际通过覆盖。这些仍是有界开发证据，不得沿用 `C04`—`C12` cell ID 或报告为资格通过；这里的隔离 objectives 也不等同于第 7 节尚未冻结的资格 objective/cotangent records。
 
 扩展该集合的 case 数、在本机跑通 region-major 或保存一次 NPU attempt，都不会自动把它变成资格 corpus。资格 runner 必须消费本计划冻结的独立 corpus identity，并生成第 2.3 节所述的 exact-commit terminal evidence。

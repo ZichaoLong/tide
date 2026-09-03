@@ -501,6 +501,44 @@ class LocalOperationBoundaryTests(unittest.TestCase):
 
 
 class StateAndTransactionTests(unittest.TestCase):
+    def test_decode_boundary_detaches_by_default_and_can_be_kept_explicitly(self):
+        model = SettleGraph(_ema_plan(profile="BO", d_model=2)).double()
+        hidden = torch.tensor(
+            [[1.0, -0.5]], dtype=torch.float64, requires_grad=True
+        )
+        mask = torch.tensor([True])
+        positions = torch.tensor([0], dtype=torch.int64)
+
+        detached = model.interpret_token(
+            hidden,
+            mask,
+            ["detached"],
+            positions,
+        )
+        self.assertTrue(detached.state.values)
+        self.assertTrue(
+            all(
+                isinstance(value, torch.Tensor) and not value.requires_grad
+                for value in detached.state.values.values()
+            )
+        )
+
+        connected_hidden = hidden.detach().clone().requires_grad_(True)
+        connected = model.interpret_token(
+            connected_hidden,
+            mask,
+            ["connected"],
+            positions,
+            detach_at_end=False,
+        )
+        objective = sum(
+            value.sum()
+            for value in connected.state.values.values()
+            if isinstance(value, torch.Tensor)
+        )
+        gradient = torch.autograd.grad(objective, connected_hidden)[0]
+        self.assertGreater(float(gradient.abs().sum()), 0.0)
+
     def test_prefill_shape_and_dtype_inputs_fail_before_state_publication(self):
         model = SettleGraph(build_singleton(d_model=2)).double()
         hidden = torch.zeros((2, 2, 2), dtype=torch.float64)

@@ -594,7 +594,7 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
             "vjp_minimum": 64,
             "optimizer_step_minimum": 16,
             "invalid_mutant_minimum": 96,
-            "packed_executor_present": False,
+            "packed_executor_included_in_this_suite": False,
         },
     }
     content = _json_bytes(record)
