@@ -501,6 +501,52 @@ class LocalOperationBoundaryTests(unittest.TestCase):
 
 
 class StateAndTransactionTests(unittest.TestCase):
+    def test_prefill_shape_and_dtype_inputs_fail_before_state_publication(self):
+        model = SettleGraph(build_singleton(d_model=2)).double()
+        hidden = torch.zeros((2, 2, 2), dtype=torch.float64)
+        execution_mask = torch.ones((2, 2), dtype=torch.bool)
+        token_positions = torch.tensor([[0, 1], [0, 1]], dtype=torch.int64)
+        mutations = (
+            (
+                "execution-mask-shape",
+                execution_mask.unsqueeze(-1),
+                token_positions,
+            ),
+            (
+                "execution-mask-dtype",
+                execution_mask.to(dtype=torch.int64),
+                token_positions,
+            ),
+            (
+                "token-position-shape",
+                execution_mask,
+                token_positions.unsqueeze(-1),
+            ),
+            (
+                "token-position-dtype",
+                execution_mask,
+                token_positions.to(dtype=torch.float64),
+            ),
+        )
+
+        for executor in (model.prefill, model.prefill_region_major):
+            for mutation_id, mutated_mask, mutated_positions in mutations:
+                with self.subTest(
+                    executor=executor.__name__, mutation=mutation_id
+                ):
+                    external = StateStore(next_position={"kept": 3})
+                    with self.assertRaises(ExecutionContractError):
+                        executor(
+                            hidden,
+                            mutated_mask,
+                            ["sequence.a", "sequence.b"],
+                            mutated_positions,
+                            state=external,
+                        )
+                    self.assertEqual(
+                        external, StateStore(next_position={"kept": 3})
+                    )
+
     def test_runtime_stable_ids_are_strict_and_fail_without_state_publication(self):
         model = SettleGraph(build_singleton(d_model=2)).double()
         token_hidden = torch.zeros((1, 2), dtype=torch.float64)

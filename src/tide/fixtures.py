@@ -242,7 +242,7 @@ _GRADIENT_KEYS = frozenset(
         "path_assertions",
     }
 )
-_PATH_ASSERTIONS = frozenset({"connected", "disconnected", "absent"})
+_PATH_ASSERTIONS = frozenset({"connected", "disconnected"})
 _NEGATIVE_MUTATIONS = frozenset(
     {
         "plan.topology.repeat-region-member",
@@ -1045,7 +1045,7 @@ def _validate_gradient(
         or set(assertions) != set(keys)
         or any(
             not isinstance(assertion, str)
-            or assertion not in {"connected", "disconnected"}
+            or assertion not in _PATH_ASSERTIONS
             for assertion in assertions.values()
         )
     ):

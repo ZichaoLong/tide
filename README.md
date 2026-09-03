@@ -84,7 +84,7 @@ region-major reference 仍按 region、Token 和 batch row 使用 Python 循环�
 - 真实 Qwen 的 causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度接入；
 - selector-history 递推，以及 Plan 参数组所表达的跨 node/site 只读参数共享；
 - 可学习首状态的 Plan owner/key/shape 与 reset、梯度累加 schema；当前 fixture v1 因而明确只接受空的 `learnable_initial_state`；
-- 完整多类别的独立 golden、把 48 个合法与 24 个非法 development cases 全部物化为长期保存 bundle 的资格语料、跨语言 canonicalizer conformance、达到 256/64/16/96 数量与 pairwise/event 计数的合法/非法随机覆盖、失败收缩、系统化故障注入、短训练与完整 checkpoint qualification；当前 bundle schema、parameter manifest、失败 envelope、统一 comparator、trace invariant 检查、一个 singleton 解析 exact-trace golden 和定向 optimizer 检查都只构成这些目标的已实现基础；
+- 完整多类别的独立 golden、把 48 个合法与 24 个非法 development cases 全部物化为长期保存 bundle 的资格语料、跨语言 canonicalizer conformance、达到 256 legal/64 VJP/16 optimizer/96 Plan-or-runtime-input negative 加另计 8 artifact negative 的数量与 pairwise/event 计数、失败收缩、系统化故障注入、短训练与完整 checkpoint qualification；当前 bundle schema、parameter manifest、失败 envelope、统一 comparator、trace invariant 检查、一个 singleton 解析 exact-trace golden 和定向 optimizer 检查都只构成这些目标的已实现基础；
 - checkpoint v1 尚未覆盖 scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口或窗口中途恢复；基础 CPU checkpoint 的跨 device 装载路径已经实现并有定向 continuation 用例，但完整 portable handoff 资格（完整训练状态、optimizer 下一步、规定数量和可追溯证据）尚未完成；它只支持已声明的 Adam/AdamW schema，也不承诺回滚任意 Python 属性或 load hook 的外部副作用；
 - 基线 NPU attempt 仍只有一个 BO/post 定向 parity fixture，运行记录没有 clean exact-commit 身份，且当前扩展代码尚未复验；它没有达到契约的 64 个 forward、32 个 VJP、8 个 optimizer/checkpoint case。bundle 已能保留并认证非连续 stride，但 NPU attempt 尚未覆盖完整算子、shape/layout、optimizer/checkpoint profiling、packed、低精度或短训练。较早 profiler attempt 还报告默认 schedule 可能不完整，其结果不能替当前代码提供 fallback closure，也不能外推为全路径无 CPU fallback。因此 NPU capability 仍为 `implemented`，完整 qualification 未完成；CUDA 的相应能力仍属规划。
 
