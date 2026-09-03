@@ -46,7 +46,7 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 - **单层并列 receivers**：用于隔离验证 selector、状态、N/SD/BO、Emit 和聚合；
 - **HB-Lattice**：在同一公共语义上增加规则化 Lines、波前 barrier 和扩展—平台—收拢拓扑。
 
-完整数学定义、执行顺序、loss 和命名见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。该文档是“模型实际怎样计算”的权威来源；下一阶段的软件边界、执行器和差分验证方案见 [SettleGraph 实现与等价性验证计划](docs/settlegraph-implementation-plan.md)。
+完整数学定义、执行顺序、loss 和命名见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。该文档是“模型实际怎样计算”的权威来源；软件边界与建设顺序见 [SettleGraph 实现与等价性验证计划](docs/settlegraph-implementation-plan.md)，资格测试的 fixture、trace、comparator 和证据门槛见 [SettleGraph 等价性测试契约](docs/equivalence-test-contract.md)。
 
 ## 3. 主要实验问题
 
@@ -64,7 +64,27 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 
 ## 4. 当前仓库状态
 
-当前仓库尚无符合上述新语义的软件实现或实验结果。语义规范是模型计算含义的权威来源；实现计划另外规定逐 Token 解释器、通用 packed prefill、特化执行器及 CPU/NPU 差分验证的建设顺序，但不增加新的模型语义。
+当前仓库已有 Stage A 的 eager reference 主体和一条独立的 eager region-major 调度参考，但尚无科学实验结果，也没有完成等价性测试契约所定义的完整资格验证。
+
+当前代码和定向测试覆盖：
+
+- CPU-safe 的运行时解析边界，logical/typed Plan 的规范化、静态校验和稳定哈希，当前 reference formula config 的严格键集、默认值物化、数值规范化与跨字段 shape/timing 校验，以及外部可变状态在不同 owner 键间共享 Tensor storage（包括不同 view）的运行期拒绝；实现无关、版本化的 parameter-schema manifest 尚未实现，当前参数身份仍由 eager module 构造隐式派生；
+- 若干完全展开的手工拓扑与 HB fixture Builder；
+- 当前 reference 算子子集上的逐 Token/token-major eager 执行和独立 region-major eager prefill，包括 N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务回滚、balance 充分统计和规范 trace；
+- POST、PARBLK、PARATTN、PARMLP 四种 placement 的独立方程测试；
+- 基础 CPU checkpoint v1 的 `init-from`/`resume` round trip，包括 Plan/binding/参数 dtype、Adam/AdamW 类型及超参数域、稳定模型参数组与顺序、已初始化 optimizer state manifest、optimizer Tensor shape/dtype/storage alias，以及 receiver、selector-history 与 Attention 规范状态的校验和继续执行；保存端只接受 weights-only-safe 元数据并自检，CPU 序列状态先做 owner/storage-alias 校验再转到目标 device；注入式 commit failure 会联合回滚 model `state_dict`、optimizer containers/defaults 和 CPU RNG；序列状态使用“下一待执行位置”字段并拒绝旧字段；
+- 2026-09-03 在本机 aarch64 `Ascend910_9392`、Torch `2.10.0+cpu`、TorchNPU `2.10.0`、CANN `9.0.0` 上，对 formula、canonical/stable-ID、checkpoint 与 trace 加固后的当前工作树代码快照完成一次 FP32 eager-reference 定向 attempt：严格队列分配物理卡 14，显式 NPU runtime suite 22/22、live semantic 3/3、独立 CPU→NPU fixture parity 和 CPU checkpoint continuation 均通过，parity 最大绝对/相对误差分别为 \(5.96\times10^{-8}\) 和 \(1.43\times10^{-6}\)；CPU parity artifact/checkpoint SHA-256 分别为 `944378eb1ad4e7ba20205eeb81f8243b4aebad85763f7db27139dde29964861f` 和 `5a4c155bb5ada1e1b47a30fc5628e622a225600f282fd42964d2df8fe6614172`。另一次较早的 EMA、Gated DeltaNet 与窗口 Attention region-major forward/backward profiler attempt 观察到 NPU kernels，未观察到 AI_CPU task 或显式 fallback 记录。
+
+region-major reference 仍按 region、Token 和 batch row 使用 Python 循环，不是实现计划所说的通用 packed prefill，也没有性能能力声明。尚未完成的主要范围包括：
+
+- packed 与特化/优化执行器及其 benchmark，以及混合/低精度的逐公式 accumulation role 与资格门槛；
+- 真实 Qwen 的 causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度接入；
+- selector-history 递推，以及 Plan 参数组所表达的跨 node/site 只读参数共享；
+- 完整多类别的独立 golden、带 canonical bytes 的序列化 fixture bundles、跨语言 canonicalizer conformance、结构化失败类别映射、随机覆盖、系统化故障注入、短训练与完整 checkpoint qualification；当前已有统一 comparator、trace invariant 检查、一个 singleton 解析 exact-trace golden 及定向 optimizer 检查；
+- checkpoint v1 尚未覆盖 scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口或窗口中途恢复；基础 CPU checkpoint 的跨 device 装载路径已经实现并有定向 continuation 用例，但完整 portable handoff 资格（完整训练状态、optimizer 下一步、规定数量和可追溯证据）尚未完成；它只支持已声明的 Adam/AdamW schema，也不承诺回滚任意 Python 属性或 load hook 的外部副作用；
+- 当前工作树的 NPU attempt 仍只有一个 BO/post 定向 parity fixture，且工作树未提交，不能作为 exact-commit 资格证据；它尚未达到契约的 64 个 forward、32 个 VJP、8 个 optimizer/checkpoint case，也未覆盖完整算子、shape/layout、optimizer/checkpoint profiling、packed、低精度或短训练。较早 profiler attempt 还报告默认 schedule 可能不完整，其结果不能替当前代码快照提供 fallback closure，也不能外推为全路径无 CPU fallback。因此 NPU capability 仍为 `implemented`，完整 qualification 未完成；CUDA 的相应能力仍属规划。
+
+因此，现有测试通过只说明对应 reference 子集的开发检查结果，不等于任一完整 capability cell 已达到 `verified`。语义文档仍是模型计算含义的权威来源；实现计划中的未完成阶段也不增加新的模型语义。
 
 ## 5. 术语
 

@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "tide-settlegraph",
+    "repository": "."
+  },
+  "contract": {
+    "path": ".torch-portability/contract.json",
+    "entrypoints": {
+      "runtime-diagnostic": {
+        "requires_explicit_device": false,
+        "supports_init_from": false,
+        "supports_resume": false
+      }
+    },
+    "cpu_reference": {
+      "dtype": "float32",
+      "commands": {
+        "forward": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",
+        "backward": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",
+        "optimizer_step": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",
+        "checkpoint_round_trip": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v"
+      },
+      "applicable": {
+        "backward": true,
+        "optimizer_step": true,
+        "checkpoint_round_trip": true
+      },
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      }
+    },
+    "cpu_float64_oracle": {
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float64 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -v",
+      "tolerances": {
+        "atol": 1e-10,
+        "rtol": 1e-08
+      }
+    },
+    "dtype_policy": {
+      "auto": "float32",
+      "cpu": [
+        "float64",
+        "float32",
+        "float16",
+        "bfloat16"
+      ],
+      "cuda": [
+        "float32",
+        "float16",
+        "bfloat16"
+      ],
+      "npu": [
+        "float32",
+        "float16",
+        "bfloat16"
+      ],
+      "rule": "The lists are requestable candidate dtypes, not verified workload cells. Every explicit dtype must pass the runtime forward/backward capability probe; float64 is CPU-only, and each model/operator path needs separate target evidence."
+    },
+    "validation_commands": {
+      "static_cli": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python -m unittest discover -s tests -p 'test_runtime.py' -v",
+      "cpu_fp32": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -v",
+      "cpu_float64_oracle": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cpu TEST_DTYPE=float64 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -v",
+      "cpu_equivalence": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python -m unittest discover -s tests -p 'test_equivalence.py' -v",
+      "cpu_fp32_parity_prepare": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python tests/backend_parity_worker.py prepare --artifact \"$TIDE_PARITY_ARTIFACT\"",
+      "cuda_fp32_smoke": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cuda TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_runtime.py' -v",
+      "cuda_fp32_semantic": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=cuda TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",
+      "npu_fp32_smoke": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=npu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_runtime.py' -v",
+      "npu_fp32_semantic": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src TEST_BACKEND=npu TEST_DTYPE=float32 TEST_DEVICE_INDEX=0 python -m unittest discover -s tests -p 'test_backend_semantics.py' -v",
+      "npu_fp32_parity": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 PYTHONPATH=src python tests/backend_parity_worker.py compare --artifact \"$TIDE_PARITY_ARTIFACT\" --backend npu --device-index 0",
+      "help_without_install": "PYTHONPATH=src python -m tide.runtime --help"
+    },
+    "required_capabilities": [
+      "runtime-resolution",
+      "logical-device-index",
+      "dtype-forward-backward-smoke",
+      "selected-backend-synchronization",
+      "selected-backend-seeding",
+      "settlegraph-forward-state-trace",
+      "settlegraph-backward",
+      "optimizer-step",
+      "checkpoint-round-trip"
+    ],
+    "validation_tiers": [
+      "static-cli",
+      "cpu-semantic",
+      "backend-smoke",
+      "parity",
+      "checkpoint-handoff",
+      "short-train",
+      "workload"
+    ],
+    "checkpoint": {
+      "enabled": true,
+      "schema": "tide.settlegraph.checkpoint.v1",
+      "init_from": "validated model weights only; runtime state, optimizer, progress, and RNG start fresh",
+      "resume": "validated model, optimizer, CPU RNG, progress, training metadata, and canonical sequence state",
+      "portable_handoff": true,
+      "exact_resume": "same-stack-only"
+    }
+  },
+  "targets": [
+    {
+      "id": "python-cpu-aarch64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "implemented",
+      "required_tiers": [
+        "static-cli",
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "python-cpu-x86_64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "x86_64",
+      "policy": "required",
+      "status": "planned",
+      "required_tiers": [
+        "static-cli",
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "python-npu-aarch64",
+      "language": "python",
+      "backend": "npu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "implemented",
+      "required_tiers": [
+        "backend-smoke",
+        "parity",
+        "checkpoint-handoff"
+      ]
+    },
+    {
+      "id": "python-cuda-x86_64",
+      "language": "python",
+      "backend": "cuda",
+      "host_arch": "x86_64",
+      "policy": "optional",
+      "status": "planned",
+      "required_tiers": [
+        "backend-smoke"
+      ]
+    }
+  ]
+}

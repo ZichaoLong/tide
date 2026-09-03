@@ -4,15 +4,17 @@
 >
 > 本文描述的是新实验的目标语义，只定义“模型实际怎样计算”和“实验名称怎样反映计算图”。
 >
-> 实验晋级、结果报告组织和 checkpoint 保留策略另行讨论。
->
+> 实现边界、实验晋级、证据和 checkpoint 要求不属于本文的模型语义，分别见 [实现与等价性验证计划](settlegraph-implementation-plan.md) 和 [等价性测试契约](equivalence-test-contract.md)。
+
 ## 阅读入口：先看完整图景
 
 我们希望设计一套 TIDE Graph 的语义服务于三个要求：**固定空间拓扑**（底层节点和边固定，但每个 Token 的 active 子图可以变化）、**单节点成本有界**（每个节点的参数、状态、连接和工作量有上界）以及**可达容量增长**（扩容后仍能沿这些固定局部连接到达更多节点）。
 
 为此，本文档定义一种 Single-Settlement Graph，下文简称 **SettleGraph**。它是一个具备单输入、单输出和固定空间拓扑的计算图：
+
 - 对每个 Token，SettleGraph 接受一个输入 hidden，沿内部固定边传播 hidden，在固定的局部候选 receiver nodes 中选择少量节点做昂贵计算，再把结果送往下游并最终输出一个与输入 hidden 同维度的张量。
 - SettleGraph 的每个节点称为 **receiver node**。它聚合实际到达的入口或父消息，是否更新状态由 propagation profile 决定，是否执行完整计算并向下游发送由局部 region selector 决定。节点内部设计的典型例子是 Transformer block，具体定义见 2.2 节。
+
 SettleGraph 的更详细定义见下文。
 
 因此，SettleGraph 可以多种方式接入各类由 blocks 串连组成的 Base LLM 模型。
@@ -22,6 +24,7 @@ Base 模型接入 SettleGraph 后，Base 模型部分可原样复用已训练 ch
 ## 1. Base block 与 SettleGraph 顶层边界
 
 ### 1.1 Base Qwen3 block
+
 第 \(\ell\) 个 block 接收到的第 \(0,...,t\) 个 token 的输入 hidden 是 \(t+1\) 个 \(d_{\mathrm{model}}\) 维向量，记作
 $$
 X_{\ell,\le t}
@@ -47,6 +50,7 @@ $$
 其中， \(N_A\) 和 \(N_F\) 分别表示两个位置的归一化操作；当前 Qwen3 base block 中二者都实现为 RMSNorm。\(A_\ell\) 表示 causal self-attention，\(F_\ell\) 表示原 dense SwiGLU MLP。
 
 ### 1.2 SettleGraph 的单入口、单出口契约
+
 在 Base 模型中第 \(\ell(j)\) 个 block 插入的第 \(j\) 个 SettleGraph，记作 \(\mathcal G_j\)，下文也把这个插入位置称为 site \(j\)。其中，每个 block 位置最多插入一个 SettleGraph。
 
 对每个 Token，\(\mathcal G_j\) 可作为一个有逐序列持久状态的函数接受一个输入 hidden \(h^{\mathrm{in}}_{j,t}\)，并始终对外返回一个同维 hidden \(b_{\mathcal G,j,t}\)：
@@ -70,6 +74,7 @@ $$
 ### 1.3 SettleGraph 的四种 placement
 
 SettleGraph 有四种 **placement** 配置，它们分别对应
+
 - 不同的接入位置：因此 \(\mathcal G_j\) 将获得不同的输入 hidden \(h^{\mathrm{in}}\)
 - 不同的合入位置：因此将与 \(u_{\ell,t}\) 或 \(v_{\ell,t}\) 合并 residual，并最终影响 \(y_{\ell,t}\)
 
@@ -148,7 +153,7 @@ x → self-attention → u
                       └→ SettleGraph ── + → y
 ~~~
 
-SettleGraph 能看到当前 Attention 的结果，但看不到当前原 MLP 的结果，也不改变原 MLP 的输入。本文统一使用 **PARMLP**；**PARFFN** 指同一个 placement。原 dense MLP 是 always-on 路径，SettleGraph 是与它并列的稀疏、可有状态主旁路。
+SettleGraph 能看到当前 Attention 的结果，但看不到当前原 MLP 的结果，也不改变原 MLP 的输入。原 dense MLP 是 always-on 路径，SettleGraph 是与它并列的稀疏、可有状态主旁路。
 
 #### 1.3.5 直接比较与初始化
 
@@ -159,7 +164,23 @@ SettleGraph 能看到当前 Attention 的结果，但看不到当前原 MLP 的�
 | **PARATTN** | \(x\) | \(u\) | 否 | 否 | 是 | 得到 \(u'\)，再执行原 MLP |
 | **PARMLP** | \(u\) | \(v\) | 是 | 否 | 否 | 直接得到 \(y\) |
 
-若 SettleGraph 可经过某种初始化变成 identity 函数，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，此时接入 \(\mathcal G_j\) 后的模型与原始 Base 模型函数等价。对于后文中给出的多种 SettleGraph 内部构型，这种初始化不难实现。
+若 SettleGraph 可经过某种初始化变成 identity 函数，则 \(b_{\mathcal G}=h^{\mathrm{in}}\)、\(\Delta_{\mathcal G}=0\)，此时接入 \(\mathcal G_j\) 后的模型与原始 Base 模型前向函数等价。以下条件共同构成一种与具体软件组织无关的充分条件；其中 Aggregate、NodeCompute 和 Emit 分别在第 2.1—2.3 节定义。对任意合法 hidden \(h\)、当前可见状态 \(s\)、soft probability \(p\)，以及任意允许的非空重复消息序列，要求
+
+$$
+\operatorname{Aggregate}_v(h,\ldots,h)=h,
+\qquad
+\operatorname{NodeCompute}_v(h,N_{R,v}(h),s)=h,
+$$
+
+$$
+\operatorname{Emit}_v(h,h,p)=h,
+\qquad
+\operatorname{Aggregate}_{\mathrm{out}}(h,\ldots,h)=h,
+$$
+
+并保证每个实际进入图的 Token（第 2.5 节的图执行/context mask 为 1）至少有一个 active 终端 receiver。于是图中每条实际消息都保持为入口 hidden，最终输出也保持为入口 hidden。这些条件不要求状态停止更新，也不要求 selector probability 均匀。
+
+这里的等价只直接保证模型前向函数及由同一语言模型输出定义的损失值。若训练目标还含非零路由辅助项，或者新增参数在该初始化点仍有非零梯度，则总训练 loss 和完整参数梯度不自动与 Base 模型等价；需要这种更强等价性时，必须另外声明辅助项、可训练参数集合和梯度比较条件。
 
 ## 2. 一个 Token 如何穿过 SettleGraph
 
@@ -178,6 +199,8 @@ $$
 - \(V\) 是 receiver nodes 的集合；下文 \(v\in V\) 表示 receiver ID，与第 1 节的 base hidden \(v_{\ell,t}\) 不是同一个量；
 - \(E\subseteq V\times V\) 是固定有向边集合；
 - \(\mathfrak R\) 是对 \(V\) 的固定 region 划分，每个 receiver 恰好属于一个 region，每个 region 配置一个控制 receivers 激活与否的 selector。由 DAG \((V,E)\) 自然诱导的关于 \(\mathfrak R\) 的图，也被要求是 DAG。
+
+本文所称稳定 ID，包括 site、node、edge、region 和参数角色 ID，都是非空的 Unicode scalar-value 字符串，必须已经采用 NFC 规范化，不含 NUL，且首尾既不是 Unicode `White_Space` 字符，也不是 C0 information separators U+001C–U+001F。稳定 ID 的“升序”是按 Unicode scalar value 序列做字典序比较；它与 locale、自然数排序、声明顺序和 executor 内部索引无关。合法 UTF-8 对 scalar value 保序，因此实现也可以对这些 NFC 字符串的 UTF-8 bytes 使用无符号字典序。这个顺序同时用于父消息、candidates、Top-K 平票、规范拓扑序中的可选节点、终端消息和规范 trace；后文只写“按 ID”时都指这一规则。
 
 令 \(\operatorname{In}(v)\) 和 \(\operatorname{Out}(v)\) 分别表示 receiver \(v\) 的固定入边和出边。没有 receiver 父节点的 nodes 是**入口 receivers**：
 
@@ -402,6 +425,14 @@ $$
 
 #### Selector
 
+令 \(K^{\max}_{\mathcal R}\) 表示 Plan 为 region \(\mathcal R\) 声明的请求上界。对候选非空的 region 事件，\(K^{\mathrm{req}}_{\mathcal R,t}\) 表示本次请求的 active receiver 数。标准 Plan（定义见第 2.4 节）只允许它来自 region 在 Plan 中声明的固定整数，或该 Plan 明确开放的运行期整数控制 `requested_k`。运行期控制按 region 事件给值，在该事件的 selector 读取、Score 和 Top-K 之前解析并校验；它不从 hidden、状态、logits 或 probability 推导，不参与求导。若请求值不满足
+
+$$
+1\le K^{\mathrm{req}}_{\mathcal R,t}\le K^{\max}_{\mathcal R},
+$$
+
+则整个调用失败，不能裁剪到这个区间。forced-active singleton region 的请求值固定为 1，不接受运行期覆盖。依赖模型 Tensor 或可变状态计算请求值的 adaptive budget 不属于标准 Plan；采用时必须给出新的控制时序、梯度和状态语义。
+
 selector 只接收 candidates 各自在本地产生的轻量 \(r^{\mathrm{sel}}\)。候选 nodes 及其读出始终按稳定 node ID 排列。令 \(c^{\mathrm{ctx}}_{\mathcal R,t}\) 表示可选的固定、有界局部公共摘要；没有时取空。一次局部打分得到：
 
 $$
@@ -419,25 +450,20 @@ $$
 \left((a_{v,t})_{v\in\mathcal C_{\mathcal R,t}}\right).
 $$
 
-这里 \(\tau\in\{\mathrm{content},\mathrm{pre},\mathrm{post}\}\) 是 selector 时序，\(p_{v,t}\) 是 soft 选择概率，不是消息聚合权重。Top-K 得到 active set：
+这里 \(\tau\in\{\mathrm{content},\mathrm{pre},\mathrm{post}\}\) 是 selector 时序，\(p_{v,t}\) 是 soft 选择概率，不是消息聚合权重。Top-K 按 logits \(a\) 排序得到 active set：
 
 $$
 \mathcal A_{\mathcal R,t}
 =\operatorname{TopKIndex}
 \left(
-p,
+(a_{v,t})_{v\in\mathcal C_{\mathcal R,t}},
 \min(K^{\mathrm{req}}_{\mathcal R,t},|\mathcal C_{\mathcal R,t}|)
 \right),
 $$
 
-其中候选非空时
+logits 平票按固定 node ID 打破。精确实数下 softmax 严格保序，因此按 \(a\) 或 \(p\) 排名相同；concrete execution binding 明确按 \(a\) 排名，避免有限精度 softmax 舍入产生新的 probability 平票。候选少于合法请求值时，按上式取全部 candidates。候选为空时 \(\mathcal A_{\mathcal R,t}=\varnothing\)，该 region 不读取运行期请求、不执行 selector Read 或 Score。
 
-$$
-1\le K^{\mathrm{req}}_{\mathcal R,t}
-\le K^{\max}_{\mathcal R};
-$$
-
-平票按固定 node ID 打破。候选为空时 \(\mathcal A_{\mathcal R,t}=\varnothing\)，该 region 不执行 Score。forced-active receiver 使用独立的 singleton region；它只要 reached 就令 \(p=1\) 并直接 active。
+forced-active receiver 使用独立的 singleton region。它 reached 时仍按声明的 selector 时序执行 Read 和 Score，并把实际标量 logit \(a_{v,t}\) 作为可观测 trace 值；singleton softmax 按上式得到精确的 \(p_{v,t}=1\)。该 receiver 随后直接 active，成员关系不依赖 logit 的数值，也不为 trace 合成零 logit。因 singleton softmax 的导数为零，主任务不会仅凭这个恒定概率向该 Score 产生梯度。它未 reached 时候选为空，遵守上一段的不执行规则。
 
 三种 selector 时序为：
 
@@ -514,12 +540,16 @@ active receiver 的每条固定出边结算为 \(\operatorname{DATA}(\widehat g_
 
 #### 哪些固定图可以执行
 
+dtype role 表示一个量在公式中的数值角色，例如消息与 hidden、某个状态分量、参数或某项归约累加量。任何进入资格范围的版本化 Plan/binding 都必须明确哪些量同 dtype、哪些量允许使用更高精度累加；不能从 backend 默认行为推断这些规则，也不能把 logical role 提前混同为某一次运行的 concrete dtype。
+
+当前 logical Plan schema v1 的 eager-reference 资格子集只闭合 FP32 与 FP64：`hidden`、`parameter`、`state` 和 `readout` 四个角色必须绑定为同一个 concrete dtype，公式中的归约输出与输入使用这个 dtype。内部 kernel 即使采用更高精度指令，也必须在对应 comparator 下表现为同一绑定。独立的 accumulation role、混合 dtype，以及 FP16/BF16 应在哪些公式中提升到 FP32，尚未进入当前 Plan schema；这些组合不能从某个 backend 的默认行为推断，也不能因一次运行成功就视为语义已闭合。未来支持时必须把逐公式 accumulation role/舍入规则写入 binding 并纳入 typed Plan hash。
+
 一张合法 SettleGraph 至少满足：
 
 1. receiver 图有限、无环、没有重复平行边，每个 receiver 位于某条入口—终端固定路径上；
 2. 每个 receiver 恰好属于一个 region，同一 region 内不存在 receiver-to-receiver 边；
 3. 将每个 region 收缩成一个点，并加入全部已声明的跨 region 控制依赖后，所得 region 依赖图仍然无环；
-4. hidden、状态、读出和参数的 shape/dtype 已确定，所有聚合、receiver、selector、profile 和发送规则均已完整定义；
+4. hidden、状态、读出、参数和归约量的 shape 与 dtype role 已确定，所有聚合、receiver、selector、profile 和发送规则均已完整定义；
 5. 固定 fan-in、fan-out、region 大小、入口/终端 receiver 数，以及单节点参数、状态和计算成本满足实验声明的上界。
 
 第三条保证 region 不会为了执行 selector 而相互等待。例如，只要存在 receiver 边 \(u\to v\)，就必须满足
@@ -529,13 +559,15 @@ $$
 <\lambda(\mathcal R(v)),
 $$
 
-其中 \(\mathcal R(v)\) 是 receiver \(v\) 所属 region，\(\lambda\) 是 region 依赖图的某个拓扑序。共享只读参数不会产生控制依赖；任何跨 region 共享可变状态或 selector 输入都必须声明读写顺序，并一起通过无环检查。
+其中 \(\mathcal R(v)\) 是 receiver \(v\) 所属 region，\(\lambda\) 是 region 依赖图的某个拓扑序。标准 Plan 禁止跨 receiver、region 或 site 共享可变状态：一个 receiver state 只能属于一个 \((\mathrm{site},\mathrm{receiver},\mathrm{sid})\) 键，一个 selector-history 只能属于其声明的唯一 site/region 或 node-level 键，两个不同所有者不能引用同一个可变状态。这项禁止按 backing storage 判定，不是只比较 Tensor object identity：两个 owner 即使持有同一 storage 上不重叠的不同 views，也属于非法可变状态共享。只读参数仍可由多个 nodes、regions 或 sites 共享，其反向梯度按同一参数的共同使用自然累加。若未来需要共享可变状态，必须另外定义事件级读写顺序、冲突处理、提交事务和 packed 调度语义；这种扩展不是本文的标准 Plan。
 
-原始图描述经过这些静态校验和规范化后得到的静态记录称为 **Plan**，记为 \(\Pi\)。Plan 包含 receivers、固定边、regions、稳定 ID、各项运算、Tensor/状态契约和依赖顺序；它不包含某个 Token 的 reached、active 或边结算结果，也不是人工编写的动态执行步骤。
+原始图描述经过这些静态校验和规范化后得到的静态记录称为 **logical Plan**，仍记为 \(\Pi\)。logical Plan 包含 receivers、固定边、regions、稳定 ID、各项运算、Tensor/状态契约、dtype roles 和依赖顺序；它不包含某个 Token 的 reached、active 或边结算结果，也不是人工编写的动态执行步骤。其规范序列化产生 logical Plan hash。通过上述图校验、使用第 2.3 节两种标准 active-budget 来源且满足可变状态唯一所有权的 logical Plan，称为 **标准 Plan**。
 
-#### 一个解释器执行所有合法 Plan
+一次 **concrete execution binding** \(\beta\) 把每个 dtype role 映射为具体 dtype，并验证算子对该映射的支持。\((\Pi,\beta)\) 的规范序列化产生 typed Plan hash。可训练或从 checkpoint 装载的参数 Tensor 数值、device、executor 和运行期输入不进入这两个 Plan hash，而在运行记录中分别标识。稳定参数键、shape 和 dtype role 属于 Plan schema；任何会改变公式的固定常量、尺寸或开关，例如 normalization epsilon、固定 Score、状态 decay 和 Hard-ST 缩放，也必须进入 logical Plan hash。CPU FP64 高精度 oracle 与 CPU/NPU FP32 执行可以共享同一个 logical Plan hash，但具有不同 typed Plan hash；它们比较的是同一公式在不同数值绑定下的结果，不是同一个 concrete-dtype Plan 的 bitwise 重放。
 
-令 \(\Theta\) 表示 Plan 绑定的参数与 Tensor 操作，\(S^-_t\) 表示当前 Token 前的全部 receiver state 和 selector-history。单 Token 执行统一写成
+#### 一个解释器执行所有标准 Plan
+
+令 \(\Theta\) 表示 concrete execution binding 下的参数与 Tensor 操作，\(S^-_t\) 表示当前 Token 前的全部 receiver state 和 selector-history。单 Token 执行统一写成
 
 $$
 (b_{\mathcal G,j,t},S_t)
@@ -543,7 +575,7 @@ $$
 (\Pi,\Theta,S^-_t,h^{\mathrm{in}}_{j,t}).
 $$
 
-同一个解释器可以执行任意合法 Plan，不需要枚举入口—终端路径：
+同一个解释器可以执行任意标准 Plan，不需要枚举入口—终端路径：
 
 ~~~text
 InterpretToken(Plan, states_before, h_in):
@@ -568,8 +600,8 @@ InterpretToken(Plan, states_before, h_in):
 
   等所有终端 receivers 完成本 Token 的角色结算
   收集 active 终端 receivers 的 g_hat
-  若集合为空，报告配置失败
-  否则用 Aggregate_out 聚合为 b_G，并返回最终状态
+  若集合为空，报告执行不变量失败并丢弃本次调用的暂存状态
+  否则用 Aggregate_out 聚合为 b_G，并原子提交最终状态
 ~~~
 
 图输出的数学定义为
@@ -586,7 +618,9 @@ b_{\mathcal G,j,t}
 (\mathcal M_{\mathrm{out},t}).
 $$
 
-\(\operatorname{Aggregate}_{\mathrm{out}}\) 遵守第 2.1 节相同的聚合契约。有效 Token 上 \(\mathcal M_{\mathrm{out},t}\) 必须非空；否则动态可达性保证失效，该 run 记为配置失败，不能静默回退或伪造 hidden。
+\(\operatorname{Aggregate}_{\mathrm{out}}\) 遵守第 2.1 节相同的聚合契约。对标准 Plan，入口 candidates 非空、每个非空候选事件至少选择一个 active receiver、active 非终端 receiver 向全部固定子边发送，且每个 receiver 都位于入口—终端路径上；沿有限 DAG 归纳可知，图执行 Token 的 \(\mathcal M_{\mathrm{out},t}\) 必然非空。因此空终端集合不是合法标准 Plan 的自然路由结果，而表示实现破坏了结算不变量，或某个非标准扩展改变了 Top-K/Emit 契约；公开调用必须失败，不能静默回退或伪造 hidden。
+
+状态提交对公开调用是事务性的。调用内部可以把较早 Token 或 region 的暂存状态提供给同一调用中因果上更晚的事件，但只有该调用的全部图执行 Token 都成功产生图输出后，才把最终 receiver state、selector-history 和序列位置一起对外发布。任一图执行 Token 出现非法运行期控制、局部操作失败、上述空终端不变量失败或其他执行失败时，调用不返回可用的部分输出或辅助统计，并丢弃该调用内的全部暂存写入；调用前外部可见的状态保持不变。
 
 每个 region 对每个 Token 只结算一次，每个 receiver 最多执行一次完整计算，每条固定边恰好返回一次 \(\operatorname{DATA}\) 或 \(\operatorname{CLOSED}\)。“单次结算”不表示每个 receiver 都会 active。独立、同时 ready 的 regions 可以串行或并行结算；只要满足声明的依赖并使用确定的聚合顺序，结果相同。
 
@@ -596,9 +630,11 @@ $$
 
 ### 2.5 跨 Token 状态
 
-令 \(\mathrm{sid}\) 表示一条稳定序列的标识。receiver 状态按 \((\mathrm{site},\mathrm{receiver},\mathrm{sid})\) 隔离，selector-history 若存在，则按 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 或声明的 node-level 键隔离。默认不跨 site、receiver 或稳定序列共享可变状态。
+令 \(\mathrm{sid}\) 表示一条稳定序列的标识。receiver 状态按 \((\mathrm{site},\mathrm{receiver},\mathrm{sid})\) 隔离，selector-history 若存在，则按 \((\mathrm{site},\mathrm{region},\mathrm{sid})\) 或声明的 node-level 键隔离。标准 Plan 不跨 site、receiver 或稳定序列共享可变状态。
 
-对同一个状态键，有效 Token 必须按全局 \(t=0,1,\ldots\) 的因果顺序执行。Token \(t\) 开始时读取 \(s^-_{v,t}\)，按第 2.3 节完成 proposal、selection 和 commit；若还要写入本次 active、\(p\) 等历史统计，则在完整计算后写回，形成最终状态 \(s_{v,t}\)，并从下一有效 Token 起可见。写入 active 或 \(p\) 的历史默认 stop-gradient：
+对一条标准输入序列，\(t=0,1,\ldots\) 是跨 chunk 不重置的全局 Token 位置。每个真实 context Token 的图执行 mask 都为 1；\([B,T]\) 容器中 mask 为 0 的槽位是 padding 或不存在的序列位置，不消耗 \(t\)，其 `token_position` 被忽略。因此物理列下标不必等于 \(t\)，但同一 \(\mathrm{sid}\) 的图执行位置必须从该序列已经提交的下一位置开始连续递增。若扩展需要跳过一个真实 context Token 后再恢复图执行，必须另外定义位置空洞怎样影响状态、Attention 时间戳和随机键；这种扩展不属于标准输入契约。
+
+对同一个状态键，图执行 Token 必须按该 \(t\) 的因果顺序执行。Token \(t\) 开始时读取 \(s^-_{v,t}\)，按第 2.3 节完成 proposal、selection 和 commit；若还要写入本次 active、\(p\) 等历史统计，则在完整计算后写回，形成最终状态 \(s_{v,t}\)，并从下一图执行 Token 起可见。写入 active 或 \(p\) 的历史默认 stop-gradient：
 
 $$
 s^-_{v,t+1}=s_{v,t}.
@@ -606,11 +642,15 @@ $$
 
 未 reached receiver 以“不更新状态”的空操作完成自己的因果位置。物理调度即使提前得到 Token \(t+1\) 的父边结果，也必须等同一状态键的 Token \(t\) 完成后，才能读取或提交 \(t+1\) 的状态；提前结果只保存在对应 Token 的缓存中。
 
-每条独立序列从声明的首状态开始：EMA、Gated DeltaNet/KDA 和 SSM 通常置零，Attention 历史为空，历史激活统计清零；使用可学习或其他首状态时必须记录。padding 等无效 Token 不进入 SettleGraph，图直接返回入口 hidden，因此 \(\Delta_{\mathcal G}=0\)，也不更新状态或产生路由 loss。
+每条独立序列从声明的首状态开始：EMA、Gated DeltaNet/KDA 和 SSM 通常置零，Attention 历史为空，历史激活统计清零；使用可学习或其他首状态时必须记录。
+
+对 batch 中序列 \(b\) 的容器槽位，图执行/context mask 记为 \(e_b\in\{0,1\}\)；当槽位对应逻辑位置 \(t\) 时也写作 \(e_{b,t}\)。当 \(e_{b,t}=1\) 时，该 Token 进入 SettleGraph、参与上下文并按本节更新状态；当 \(e_b=0\) 时，图直接返回该槽位的入口 hidden，因此 \(\Delta_{\mathcal G}=0\)，不执行 selector、不更新状态、不推进下一位置，也不产生路由事件。padding 的 \(e\) 必须为 0。
+
+LM target mask 记为 \(\ell_{b,t}\in\{0,1\}\)，只决定对齐到该位置的语言模型目标是否进入第 6.1 节的 loss，不决定该位置是否进入上下文或更新状态，并要求 \(\ell_{b,t}\le e_{b,t}\)。例如 SFT prompt Token 可以取 \(e=1,\ell=0\)。routing-stat mask 记为 \(r_{b,t}\)，只决定已经发生的 selector 事件是否进入第 6.2 节的统计窗口，不改变前向选择、Observe 或状态；默认 \(r=e\)，若实验另行取其子集，必须记录过滤规则。任何接口或实验记录中的 mask 都必须明确对应 \(e\)、\(\ell\) 或 \(r\)，不能只称“有效 Token mask”。
 
 chunk 是一次前向接收的连续 Token 片段；prefill 是一次处理一段已有 Token，decode 是逐 Token 生成。状态值跨 chunk 保留，chunk 边界默认 detach：只截断 chunk 之间的梯度，chunk 内仍保留因果梯度。在 deterministic/eval（或固定随机掩码）且聚合顺序相同的条件下，同一有效前缀的整段 prefill、分块 prefill 和逐 Token decode 应得到相同的逐 Token 输出与最终状态。
 
-写作 \(s_{t-1}\) 时，只表示同一稳定序列上一个有效 Token 结算后的状态；\(t\) 是跨 chunk 不重置的全局 Token 索引。具体状态模块见附录 A。
+写作 \(s_{t-1}\) 时，只表示同一稳定序列上一个图执行 Token 结算后的状态；\(t\) 是本节开头定义的跨 chunk 全局 Token 位置。具体状态模块见附录 A。
 
 ## 3. 最小实例：单层并列 receivers
 
@@ -653,12 +693,12 @@ q_{v,t}=1,
 \mathcal C_t=V.
 $$
 
-selector 按第 2.3 节得到 \((p_{v,t})_{v\in V}\)；将该 region 的请求激活数简写为 \(K^{\mathrm{req}}_t\)，则
+selector 按第 2.3 节得到 \((a_{v,t},p_{v,t})_{v\in V}\)；将该 region 的请求激活数简写为 \(K^{\mathrm{req}}_t\)，则
 
 $$
 \mathcal A_t
 =\operatorname{TopKIndex}
-\left((p_{v,t})_{v\in V},\min(K^{\mathrm{req}}_t,R)\right).
+\left((a_{v,t})_{v\in V},\min(K^{\mathrm{req}}_t,R)\right).
 $$
 
 三种 propagation profile 在本例中的 Observe 集为
@@ -765,7 +805,7 @@ $$
 =\{v\in\mathcal R_{j,d,r}\mid q_{v,b,t}=1\}.
 $$
 
-HB Plan 的静态检查只需在第 2.4 节基础上增加 Line 唯一归属、region 不跨 Line、边严格向深层、边界位于首尾 Line，以及所有边类合计后的 fan-in/fan-out 上界。有效 Token 仍须得到非空终端消息；若 Builder 依靠 forced-active backbone 保证这一点，完整路径必须出现在展开 Plan 中。
+HB Plan 的静态检查只需在第 2.4 节基础上增加 Line 唯一归属、region 不跨 Line、边严格向深层、边界位于首尾 Line，以及所有边类合计后的 fan-in/fan-out 上界。标准 K/Emit 规则与入口—终端路径约束仍保证每个图执行 Token 得到非空终端消息，不要求 HB Builder 额外加入 forced-active backbone；若 Builder 配置了这类 backbone，其完整路径仍必须出现在展开 Plan 中。
 
 ### 4.3 一个 Token 如何逐 Line 结算
 
@@ -795,7 +835,7 @@ $$
 =\operatorname{Build}_{\mathrm{name},\mathrm{version}}(\Gamma).
 $$
 
-展开 Plan 必须列出 Lines 及其 phase、nodes、regions、固定边及其来源标签、稳定 ID、forced-active 设置和所有第 2.4 节要求的运算契约。执行语义只由展开 Plan 决定；Builder 名称和配置不能替代它。正式实验同时保存规范化 Plan 及其哈希，以及 Builder 的名称、版本和配置。
+展开 Plan 必须列出 Lines 及其 phase、nodes、regions、固定边及其来源标签、稳定 ID、forced-active 设置和所有第 2.4 节要求的运算契约。执行语义只由展开 Plan 决定；Builder 名称和配置不能替代它。正式实验同时保存规范化 Plan 及其 logical Plan hash，以及 Builder 的名称、版本和配置。
 
 Builder 可以给边附加以下来源标签，用于生成、诊断和消融：
 
@@ -903,7 +943,7 @@ $$
 \mathcal A^{\mathrm{moe}}_{j,t}
 =\operatorname{TopKIndex}
 \left(
-p^{\mathrm{moe}}_{j,t},
+a^{\mathrm{moe}}_{j,t},
 K_j^{\mathrm{moe}}
 \right).
 $$
@@ -952,7 +992,7 @@ SettleGraph 的核心比较应尽量一次只改变一个语义坐标：
 
 ### 6.1 自回归语言模型损失
 
-令 \(\theta\) 表示全部可训练参数，\(\mathcal T\) 表示一个统计批次内所有有效目标 Token 的 \((b,t)\) 集合，\(N_T=|\mathcal T|>0\)。目标 Token 为 \(w_{b,t}\)，模型条件概率为 \(P_\theta(w_{b,t}\mid w_{b,<t})\)，则
+令 \(\theta\) 表示全部可训练参数，\(\mathcal T=\{(b,t)\mid \ell_{b,t}=1\}\) 表示一个统计批次内由 LM target mask 选中的目标 Token 集合，\(N_T=|\mathcal T|>0\)。目标 Token 为 \(w_{b,t}\)，模型条件概率为 \(P_\theta(w_{b,t}\mid w_{b,<t})\)，则
 
 $$
 \mathcal L_{\mathrm{LM}}
@@ -961,7 +1001,7 @@ $$
 \log P_\theta(w_{b,t}\mid w_{b,<t}).
 $$
 
-next-token shift 由数据管线完成。padding 和其他无效位置不进入 \(\mathcal T\)，也不产生第 2.5 节已排除的状态更新或路由统计。
+next-token shift 由数据管线完成。\(\ell=0\) 的上下文 Token 不进入 \(\mathcal T\)，但只要 \(e=1\)，仍按第 2.5 节参与模型上下文和状态更新；是否进入路由统计由 \(r\) 单独决定。
 
 ### 6.2 SettleGraph 的 availability-aware region balance loss
 
@@ -973,7 +1013,7 @@ $$
 \mathcal V_{j,\rho}
 =
 \left\{
-(b,t)\mid
+(b,t)\mid r_{b,t}=1,\quad
 \mathcal C_{j,\rho,b,t}\ne\varnothing
 \right\},
 \qquad
@@ -1027,7 +1067,7 @@ $$
 
 候选集合、availability 基准和离散 active set 都视为 stop-gradient；该辅助项只通过 \(p\) 把梯度传回 selector。N、SD 和 BO 使用同一个公式，因为 balance loss 约束的是选择分布，而不是 Observe 集。
 
-第 3 节单层实例中，所有 \(R\) 个 receivers 对每个有效 Token 都 reached，因此
+第 3 节单层实例中，所有 \(R\) 个 receivers 对每个进入当前统计窗口的选择事件都 reached，因此
 
 $$
 \bar p^{\mathrm{avail}}_{j,\rho,v}=\frac1R,
@@ -1069,7 +1109,7 @@ $$
 
 ### 6.3 Flat MoE 的路由辅助项
 
-下面给出一种经典 Switch-style 基线，不把它规定为所有 MoE 的唯一做法。为简化公式，假设 routed sites 集合为 \(\mathcal J_{\mathrm{moe}}\)，每个 site 都有 \(R^{\mathrm{moe}}\) 个 experts，并在相同有效 Token 集 \(\mathcal V\) 上统计，\(N_V=|\mathcal V|>0\)。
+下面给出一种经典 Switch-style 基线，不把它规定为所有 MoE 的唯一做法。为简化公式，假设 routed sites 集合为 \(\mathcal J_{\mathrm{moe}}\)，每个 site 都有 \(R^{\mathrm{moe}}\) 个 experts，并在同一个明确声明的 MoE 路由统计 Token 集 \(\mathcal V\) 上统计，\(N_V=|\mathcal V|>0\)。
 
 令
 
@@ -1174,7 +1214,7 @@ $$
 短名称只用于让人快速区分主要科学条件；完整 Plan、公式和训练设置始终以第 8 节的实验记录为准。推荐格式为：
 
 ~~~text
-<TRAIN>-<PLACEMENT>-<PROFILE>-<TOPOLOGY>-<STATE>-<SELECTOR>-K<ACTIVE>-<EMIT>-<AGG>-<BAL>
+<TRAIN>-<PLACEMENT>-<PROFILE>-<TOPOLOGY>-<STATE>-<SELECTOR>-<K>-<EMIT>-<AGG>-<BAL>
 ~~~
 
 字段含义如下：
@@ -1199,7 +1239,7 @@ CPT-PARMLP-BO-SL-R8-EMA128-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
 PT-POST-BO-HB-hb2d2p2-GDN-K32-V32-SEL-POST-K1-EMIT-HST-AGG-MEAN-BAL-AVAIL-SOFT
 ~~~
 
-`SL-R8` 表示第 3 节的单层 Plan 有 8 个固定 receivers，不表示整个模型只有 8 个 nodes。`SG-<plan-id>` 和 `HB-<plan-id>` 只是展开 Plan 的可读索引，不能代替 Plan 本身及其哈希。最大静态路径深度、Line 数、site 数、总 nodes、region 宽度和 fan-in/fan-out 都是 Plan 或模型接入方式的派生摘要，不强行塞入短名称。
+`SL-R8` 表示第 3 节的单层 Plan 有 8 个固定 receivers，不表示整个模型只有 8 个 nodes。`SG-<plan-id>` 和 `HB-<plan-id>` 只是展开 Plan 的可读索引，不能代替 Plan 本身及其 logical Plan hash。最大静态路径深度、Line 数、site 数、总 nodes、region 宽度和 fan-in/fan-out 都是 Plan 或模型接入方式的派生摘要，不强行塞入短名称。
 
 当同一 run 的 sites、nodes 或 regions 使用不同设置时，相应字段使用 `VAR` 或 `CUSTOM`，并在完整记录中列出映射。TRAIN 只描述 base 权重来源与训练目标；新增 SettleGraph 参数怎样初始化另行记录。
 
@@ -1232,9 +1272,10 @@ CPT-MOE-TOP2-GATE-E8
 - 可训练、冻结和共享的参数集合；
 - SettleGraph 参数和状态的初始化规则；
 - 初始化是否要求保持 base 函数；若要求，记录四种 placement 中实际使用者的 equality 验证条件；
-- dtype、有效 Token mask，以及训练、prefill、decode 和 chunk 的输入约定。
+- logical Plan 的 dtype roles、各次 concrete execution binding 与 typed Plan hash；
+- 图执行/context mask、LM target mask、routing-stat mask，以及训练、prefill、decode 和 chunk 的输入约定。
 
-本文只规定 identity 初始化应满足 \(b_{\mathcal G}=h^{\mathrm{in}}\) 和 \(\Delta_{\mathcal G}=0\)，不规定具体采用零输出投影、residual scale 还是其他构造。
+identity 初始化至少验证第 1.3.5 节的充分条件及 active 终端保证。具体可以采用零输出投影、residual scale 或其他构造，但必须记录构造及其适用的参数、状态和路由范围；若声称训练目标或梯度也等价，还必须单独验证辅助项和新增参数梯度。
 
 ### 8.2 展开 Plan 与所有局部运算
 
@@ -1244,10 +1285,10 @@ CPT-MOE-TOP2-GATE-E8
 - 每个 receiver 的固定 parents/children、最大 fan-in/fan-out、region 大小和 forced-active 设置；
 - 规范 region 依赖顺序，以及逐 Token 至少产生一个 active 终端消息的保证；
 - 每个 receiver 输入和图输出的 Aggregate 公式；
-- 每个 region 的 Score、\(c^{\mathrm{ctx}}\)、候选排列、Top-K 规则和 \(K^{\max}\)；
+- 每个 region 的 Score、\(c^{\mathrm{ctx}}\)、候选排列、Top-K 规则、\(K^{\max}\)，以及固定请求值或 `requested_k` 运行期控制契约；
 - 每个 receiver 的 Update、两类 Read、NodeCompute 和 Emit 公式；
 - 参数是否跨 nodes、regions、Lines 或 sites 共享；
-- 规范化展开 Plan、其哈希，以及生成它的 Builder 名称、版本和配置。
+- 规范化展开 Plan、logical Plan hash，以及生成它的 Builder 名称、版本和配置。
 
 HB-Lattice 还要记录每个 Line 的 nodes、regions、phase 和 barrier，以及每条边的 tree、local、shortcut 或 mirror 来源标签。
 
@@ -1259,10 +1300,12 @@ HB-Lattice 还要记录每个 Line 的 nodes、regions、phase 和 barrier，以
 
 - propagation profile 及每个 region 的 Observe 集定义；
 - receiver 状态和 selector-history 的 shape、dtype、首状态与归属键；
+- 可变状态不存在跨 receiver、region 或 site 别名的校验结果；
 - content/pre/post 或自定义 selector 时序；
 - proposal、Score、Top-K、commit、NodeCompute 和历史写回的确切顺序；
 - proposal 到 selector 是否保留梯度，历史激活或 \(p\) 写回是否 stop-gradient；
 - 跨 chunk 的 carry、reset 和 detach 规则；
+- 失败调用的事务回滚、序列位置提交和状态发布边界；
 - EMIT-HST 的 \(\zeta^{\mathrm{ST}}\)，以及其他自定义梯度路径；
 - 与调度顺序无关的随机数键或确定性规则。
 
@@ -1270,7 +1313,7 @@ HB-Lattice 还要记录每个 Line 的 nodes、regions、phase 和 barrier，以
 
 至少记录：
 
-- 数据集、revision、样本顺序、有效 Token 数和训练阶段；
+- 数据集、revision、样本顺序、图执行 Token 数、LM target 数、路由统计事件数和训练阶段；
 - optimizer、学习率、参数组、batch、gradient accumulation、scheduler 和 gradient clipping；
 - 语言模型损失及所有辅助项的公式、系数和 reduction；
 - balance loss 的统计窗口、reached mask、site/region 聚合范围及跨设备同步方式；
@@ -1475,9 +1518,25 @@ $$
 \operatorname{AppendEvict}_W
 \left(
 s^-_{v,t},
-(k_{v,t},\nu_{v,t})
+(t,k_{v,t},\nu_{v,t})
 \right).
 $$
+
+该窗口状态的规范逻辑表示是按 Observe 发生顺序排列的有限序列
+
+$$
+s_{v,t}
+=
+\bigl((\tau_i,k_{v,\tau_i},\nu_{v,\tau_i})\bigr)_{i=1}^{n_s},
+\qquad
+0\le n_s\le W,
+\qquad
+\tau_1<\cdots<\tau_{n_s},
+$$
+
+其中 \(\tau_i\) 是同一稳定序列的全局 Token 位置；只有 Observe 的 Token 出现在序列中。\(\operatorname{AppendEvict}_W\) 先把当前三元组追加到末尾，再只保留最新的 \(W\) 个三元组；reset 得到空序列。这个有序序列、有效长度和位置元数据共同决定逻辑状态。
+
+物理执行可以使用固定大小的 key/value buffers、有效长度和环形 head，也可以使用 packed 变长表示，但从物理状态恢复出的三元组序列必须与上述规范表示完全相同。buffer 中未落在有效逻辑窗口内的槽位没有语义，不能进入 Attention、checkpoint 比较或状态哈希。checkpoint 和执行器等价性比较先按时间顺序规范化，再比较有效位置、keys 和 values。
 
 若状态 \(s\) 中按时间排列的 key/value 矩阵分别为
 
