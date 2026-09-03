@@ -17,7 +17,18 @@ import unicodedata
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
 from types import MappingProxyType
-from typing import Any, Dict, Iterator, List, Optional, Sequence, Set, Tuple
+from typing import (
+    Any,
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Protocol,
+    Sequence,
+    Set,
+    Tuple,
+)
 
 
 JsonValue = Any
@@ -114,9 +125,42 @@ def _require_unicode_scalar_sequence(value: str, *, path: str) -> None:
 class PlanValidationError(ValueError):
     """A Plan violates one or more static SettleGraph invariants."""
 
-    def __init__(self, errors: Sequence[str]) -> None:
+    def __init__(
+        self,
+        errors: Sequence[str],
+        *,
+        failure_codes: Sequence[str] = (),
+    ) -> None:
         self.errors = tuple(errors)
+        self.failure_codes = tuple(sorted(set(failure_codes)))
         super().__init__("invalid Plan:\n- " + "\n- ".join(self.errors))
+
+
+class _ValidationErrorSink(Protocol):
+    """The minimal append/extend surface shared by validation collectors."""
+
+    def append(self, message: str) -> None: ...
+
+    def extend(self, messages: Iterable[str]) -> None: ...
+
+
+class _CategorizedValidationErrors:
+    """List-like view that records a stable category beside each message."""
+
+    def __init__(
+        self, messages: List[str], codes: Set[str], failure_code: str
+    ) -> None:
+        self._messages = messages
+        self._codes = codes
+        self._failure_code = failure_code
+
+    def append(self, message: str) -> None:
+        self._messages.append(message)
+        self._codes.add(self._failure_code)
+
+    def extend(self, messages: Iterable[str]) -> None:
+        for message in messages:
+            self.append(message)
 
 
 class FrozenConfig(Mapping):
@@ -195,6 +239,67 @@ def _config(value: Mapping[str, JsonValue]) -> FrozenConfig:
     if isinstance(value, FrozenConfig):
         return value
     return FrozenConfig(value)
+
+
+def _freeze_config_if_possible(value: object) -> object:
+    """Freeze a valid JSON object while deferring schema errors to validate()."""
+
+    if not isinstance(value, Mapping):
+        return value
+    try:
+        return _config(value)
+    except (TypeError, ValueError):
+        # Public dataclass constructors deliberately remain total for malformed
+        # declarations.  The schema gate owns their stable failure category.
+        return value
+
+
+def _is_sequence_declaration(value: object) -> bool:
+    """Return whether value is an accepted in-memory JSON-array declaration."""
+
+    return isinstance(value, (list, tuple))
+
+
+def _validate_sequence_schema(
+    value: object, name: str, errors: _ValidationErrorSink
+) -> bool:
+    if not isinstance(value, tuple):
+        errors.append(f"{name} must be a JSON array")
+        return False
+    return True
+
+
+def _validate_shape_schema(
+    value: object, name: str, errors: _ValidationErrorSink
+) -> None:
+    if not _validate_sequence_schema(value, name, errors):
+        return
+    if any(type(dimension) is not int for dimension in value):
+        errors.append(f"{name} must contain only integer dimensions")
+
+
+def _validate_config_schema(
+    value: object,
+    name: str,
+    errors: _ValidationErrorSink,
+    *,
+    operation: bool = True,
+) -> bool:
+    if not isinstance(value, FrozenConfig):
+        if isinstance(value, Mapping):
+            errors.append(f"{name} must be a JSON-safe object with string keys")
+        else:
+            errors.append(f"{name} must be a JSON object")
+        return False
+    if not operation:
+        return True
+    for field_name in ("type", "formula_id"):
+        field_value = value.get(field_name)
+        if field_name in value and not isinstance(field_value, str):
+            errors.append(f"{name}.{field_name} must be a string")
+    if "formula" in value and not isinstance(value.get("formula"), str):
+        errors.append(f"{name}.formula must be a string")
+    return True
 
 
 def _mean_config() -> Mapping[str, JsonValue]:
@@ -920,11 +1025,10 @@ class NodeSpec:
     emit: Mapping[str, JsonValue] = field(default_factory=_hard_config)
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "hidden_shape", tuple(self.hidden_shape))
-        object.__setattr__(
-            self, "selector_read_shape", tuple(self.selector_read_shape)
-        )
-        object.__setattr__(self, "state_shape", tuple(self.state_shape))
+        for name in ("hidden_shape", "selector_read_shape", "state_shape"):
+            value = getattr(self, name)
+            if _is_sequence_declaration(value):
+                object.__setattr__(self, name, tuple(value))
         for name in (
             "input_norm",
             "ffn_norm",
@@ -935,7 +1039,9 @@ class NodeSpec:
             "node_compute",
             "emit",
         ):
-            object.__setattr__(self, name, _config(getattr(self, name)))
+            object.__setattr__(
+                self, name, _freeze_config_if_possible(getattr(self, name))
+            )
 
 
 @dataclass(frozen=True)
@@ -972,29 +1078,96 @@ class RegionSpec:
     phase: Optional[str] = None
 
     def __post_init__(self) -> None:
-        object.__setattr__(
-            self, "node_ids", tuple(sorted(self.node_ids, key=_id_sort_key))
-        )
-        object.__setattr__(
-            self,
-            "control_dependencies",
-            tuple(sorted(self.control_dependencies, key=_id_sort_key)),
-        )
-        object.__setattr__(self, "profile", self.profile.upper())
-        object.__setattr__(
-            self, "selector_timing", self.selector_timing.lower()
-        )
+        if _is_sequence_declaration(self.node_ids):
+            object.__setattr__(
+                self,
+                "node_ids",
+                tuple(sorted(self.node_ids, key=_id_sort_key)),
+            )
+        if _is_sequence_declaration(self.control_dependencies):
+            object.__setattr__(
+                self,
+                "control_dependencies",
+                tuple(sorted(self.control_dependencies, key=_id_sort_key)),
+            )
+        if isinstance(self.profile, str):
+            object.__setattr__(self, "profile", self.profile.upper())
+        if isinstance(self.selector_timing, str):
+            object.__setattr__(
+                self, "selector_timing", self.selector_timing.lower()
+            )
         for name in (
             "k_requested",
             "score",
             "selector_context",
             "selector_history",
         ):
-            object.__setattr__(self, name, _config(getattr(self, name)))
+            object.__setattr__(
+                self, name, _freeze_config_if_possible(getattr(self, name))
+            )
 
 
-def _first_positive_dimension(shape: Sequence[object], fallback: int = 1) -> int:
-    if shape and type(shape[0]) is int and shape[0] > 0:
+_NODE_OPERATION_FIELDS = (
+    "input_norm",
+    "ffn_norm",
+    "aggregate",
+    "update",
+    "selector_read",
+    "ffn_read",
+    "node_compute",
+    "emit",
+)
+
+_REGION_OPERATION_FIELDS = (
+    "k_requested",
+    "score",
+    "selector_context",
+    "selector_history",
+)
+
+
+def _node_can_be_normalized(node: NodeSpec) -> bool:
+    return (
+        isinstance(node.hidden_shape, tuple)
+        and all(type(dimension) is int for dimension in node.hidden_shape)
+        and isinstance(node.selector_read_shape, tuple)
+        and all(
+            type(dimension) is int for dimension in node.selector_read_shape
+        )
+        and isinstance(node.state_shape, tuple)
+        and all(type(dimension) is int for dimension in node.state_shape)
+        and all(
+            isinstance(getattr(node, name), FrozenConfig)
+            for name in _NODE_OPERATION_FIELDS
+        )
+    )
+
+
+def _region_can_be_normalized(region: RegionSpec) -> bool:
+    return (
+        isinstance(region.node_ids, tuple)
+        and all(isinstance(node_id, str) for node_id in region.node_ids)
+        and isinstance(region.control_dependencies, tuple)
+        and all(
+            isinstance(dependency, str)
+            for dependency in region.control_dependencies
+        )
+        and isinstance(region.profile, str)
+        and isinstance(region.selector_timing, str)
+        and all(
+            isinstance(getattr(region, name), FrozenConfig)
+            for name in _REGION_OPERATION_FIELDS
+        )
+    )
+
+
+def _first_positive_dimension(shape: object, fallback: int = 1) -> int:
+    if (
+        isinstance(shape, (list, tuple))
+        and shape
+        and type(shape[0]) is int
+        and shape[0] > 0
+    ):
         return shape[0]
     return fallback
 
@@ -1102,74 +1275,177 @@ class Plan:
     )
 
     def __post_init__(self) -> None:
-        nodes = tuple(
-            _normalize_node_operations(node, self.d_model)
-            for node in sorted(
-                self.nodes, key=lambda item: _id_sort_key(item.node_id)
+        nodes_value: object = self.nodes
+        if _is_sequence_declaration(nodes_value):
+            nodes_value = tuple(nodes_value)
+        if isinstance(nodes_value, tuple) and all(
+            isinstance(node, NodeSpec) for node in nodes_value
+        ):
+            nodes = tuple(
+                _normalize_node_operations(node, self.d_model)
+                if _node_can_be_normalized(node)
+                else node
+                for node in sorted(
+                    nodes_value, key=lambda item: _id_sort_key(item.node_id)
+                )
             )
-        )
-        edges = tuple(sorted(self.edges, key=lambda item: _id_sort_key(item.edge_id)))
-        node_lookup = {node.node_id: node for node in nodes}
-        regions = tuple(
-            _normalize_region_operations(region, node_lookup)
-            for region in sorted(
-                self.regions, key=lambda item: _id_sort_key(item.region_id)
+        else:
+            nodes = nodes_value
+
+        edges_value: object = self.edges
+        if _is_sequence_declaration(edges_value):
+            edges_value = tuple(edges_value)
+        if isinstance(edges_value, tuple) and all(
+            isinstance(edge, EdgeSpec) for edge in edges_value
+        ):
+            edges = tuple(
+                sorted(edges_value, key=lambda item: _id_sort_key(item.edge_id))
             )
+        else:
+            edges = edges_value
+
+        node_lookup = (
+            {
+                node.node_id: node
+                for node in nodes
+                if isinstance(node, NodeSpec) and isinstance(node.node_id, str)
+            }
+            if isinstance(nodes, tuple)
+            else {}
         )
+
+        regions_value: object = self.regions
+        if _is_sequence_declaration(regions_value):
+            regions_value = tuple(regions_value)
+        if isinstance(regions_value, tuple) and all(
+            isinstance(region, RegionSpec) for region in regions_value
+        ):
+            regions = tuple(
+                _normalize_region_operations(region, node_lookup)
+                if _region_can_be_normalized(region)
+                else region
+                for region in sorted(
+                    regions_value,
+                    key=lambda item: _id_sort_key(item.region_id),
+                )
+            )
+        else:
+            regions = regions_value
         object.__setattr__(self, "nodes", nodes)
         object.__setattr__(self, "edges", edges)
         object.__setattr__(self, "regions", regions)
-        object.__setattr__(
-            self,
-            "entry_node_ids",
-            tuple(sorted(self.entry_node_ids, key=_id_sort_key)),
-        )
-        object.__setattr__(
-            self,
-            "terminal_node_ids",
-            tuple(sorted(self.terminal_node_ids, key=_id_sort_key)),
-        )
-        object.__setattr__(
-            self,
-            "output_aggregate",
-            _normalize_operation_config(
+
+        for name in ("entry_node_ids", "terminal_node_ids"):
+            value = getattr(self, name)
+            if _is_sequence_declaration(value):
+                object.__setattr__(
+                    self, name, tuple(sorted(value, key=_id_sort_key))
+                )
+
+        output_aggregate = _freeze_config_if_possible(self.output_aggregate)
+        if (
+            isinstance(output_aggregate, FrozenConfig)
+            and type(self.d_model) is int
+            and self.d_model > 0
+        ):
+            output_aggregate = _normalize_operation_config(
                 "output_aggregate",
-                self.output_aggregate,
+                output_aggregate,
                 {"output_shape": [self.d_model]},
-            ),
+            )
+        object.__setattr__(self, "output_aggregate", output_aggregate)
+        object.__setattr__(
+            self, "builder", _freeze_config_if_possible(self.builder)
         )
-        object.__setattr__(self, "builder", _config(self.builder))
-        object.__setattr__(self, "dtype_roles", _config(self.dtype_roles))
-        object.__setattr__(self, "topology_kind", self.topology_kind.lower())
+        object.__setattr__(
+            self, "dtype_roles", _freeze_config_if_possible(self.dtype_roles)
+        )
+        if isinstance(self.topology_kind, str):
+            object.__setattr__(
+                self, "topology_kind", self.topology_kind.lower()
+            )
         object.__setattr__(
             self,
             "_node_index",
-            MappingProxyType({node.node_id: node for node in nodes}),
+            MappingProxyType(
+                {
+                    node.node_id: node
+                    for node in nodes
+                    if isinstance(node, NodeSpec)
+                    and isinstance(node.node_id, str)
+                }
+                if isinstance(nodes, tuple)
+                else {}
+            ),
         )
         object.__setattr__(
             self,
             "_edge_index",
-            MappingProxyType({edge.edge_id: edge for edge in edges}),
+            MappingProxyType(
+                {
+                    edge.edge_id: edge
+                    for edge in edges
+                    if isinstance(edge, EdgeSpec)
+                    and isinstance(edge.edge_id, str)
+                }
+                if isinstance(edges, tuple)
+                else {}
+            ),
         )
         object.__setattr__(
             self,
             "_region_index",
-            MappingProxyType({region.region_id: region for region in regions}),
+            MappingProxyType(
+                {
+                    region.region_id: region
+                    for region in regions
+                    if isinstance(region, RegionSpec)
+                    and isinstance(region.region_id, str)
+                }
+                if isinstance(regions, tuple)
+                else {}
+            ),
         )
 
         # Boundary identities are semantic consequences of fixed edges.  An
         # omitted declaration is filled during normalization; an explicit but
         # incorrect declaration remains intact and is rejected by validate().
-        node_ids = {node.node_id for node in nodes}
-        sources_with_incoming = {edge.target for edge in edges}
-        sources_with_outgoing = {edge.source for edge in edges}
-        if node_ids and not self.entry_node_ids:
+        safe_graph = (
+            isinstance(nodes, tuple)
+            and all(
+                isinstance(node, NodeSpec) and isinstance(node.node_id, str)
+                for node in nodes
+            )
+            and isinstance(edges, tuple)
+            and all(
+                isinstance(edge, EdgeSpec)
+                and isinstance(edge.source, str)
+                and isinstance(edge.target, str)
+                for edge in edges
+            )
+        )
+        node_ids = {node.node_id for node in nodes} if safe_graph else set()
+        sources_with_incoming = (
+            {edge.target for edge in edges} if safe_graph else set()
+        )
+        sources_with_outgoing = (
+            {edge.source for edge in edges} if safe_graph else set()
+        )
+        if (
+            node_ids
+            and isinstance(self.entry_node_ids, tuple)
+            and not self.entry_node_ids
+        ):
             object.__setattr__(
                 self,
                 "entry_node_ids",
                 tuple(sorted(node_ids - sources_with_incoming)),
             )
-        if node_ids and not self.terminal_node_ids:
+        if (
+            node_ids
+            and isinstance(self.terminal_node_ids, tuple)
+            and not self.terminal_node_ids
+        ):
             object.__setattr__(
                 self,
                 "terminal_node_ids",
@@ -1251,31 +1527,61 @@ class Plan:
     def validate(self) -> "Plan":
         """Validate all static invariants and return ``self``."""
 
+        schema_messages: List[str] = []
+        schema_codes: Set[str] = set()
+        schema_errors = _CategorizedValidationErrors(
+            schema_messages, schema_codes, "plan.schema"
+        )
+        self._validate_schema_contracts(schema_errors)
+        if schema_messages:
+            raise PlanValidationError(
+                schema_messages, failure_codes=("plan.schema",)
+            )
+
         errors: List[str] = []
-        self._validate_scalar_contracts(errors)
+        failure_codes: Set[str] = set()
+        topology_errors = _CategorizedValidationErrors(
+            errors, failure_codes, "plan.topology"
+        )
+        formula_errors = _CategorizedValidationErrors(
+            errors, failure_codes, "plan.formula"
+        )
+        self._validate_formula_contracts(formula_errors)
         node_ids = [node.node_id for node in self.nodes]
         edge_ids = [edge.edge_id for edge in self.edges]
         region_ids = [region.region_id for region in self.regions]
 
-        _validate_unique_ids("node", node_ids, errors)
-        _validate_unique_ids("edge", edge_ids, errors)
-        _validate_unique_ids("region", region_ids, errors)
+        _validate_unique_ids("node", node_ids, topology_errors)
+        _validate_unique_ids("edge", edge_ids, topology_errors)
+        _validate_unique_ids("region", region_ids, topology_errors)
         if not node_ids:
-            errors.append("a Plan must contain at least one node")
+            topology_errors.append("a Plan must contain at least one node")
         if not region_ids:
-            errors.append("a Plan must contain at least one region")
+            topology_errors.append("a Plan must contain at least one region")
 
         node_set = set(node_ids)
         region_set = set(region_ids)
-        self._validate_nodes(node_set, region_set, errors)
-        self._validate_regions(node_set, region_set, errors)
-        self._validate_edges(node_set, errors)
-        self._validate_boundaries_and_paths(node_set, errors)
-        self._validate_region_graph(errors)
-        self._validate_hb(errors)
+        self._validate_nodes(
+            node_set,
+            region_set,
+            topology_errors,
+            formula_errors,
+        )
+        self._validate_regions(
+            node_set,
+            region_set,
+            topology_errors,
+            formula_errors,
+        )
+        self._validate_edges(node_set, topology_errors)
+        self._validate_boundaries_and_paths(node_set, topology_errors)
+        self._validate_region_graph(topology_errors)
+        self._validate_hb(topology_errors)
 
         if errors:
-            raise PlanValidationError(errors)
+            raise PlanValidationError(
+                errors, failure_codes=tuple(sorted(failure_codes))
+            )
         return self
 
     def canonical_dict(self) -> Dict[str, JsonValue]:
@@ -1371,81 +1677,238 @@ class Plan:
             "phase": region.phase,
         }
 
-    def _validate_scalar_contracts(self, errors: List[str]) -> None:
-        _validate_identifier("plan", self.plan_id, errors)
-        _validate_identifier("schema version", self.schema_version, errors)
+    def _validate_schema_contracts(
+        self,
+        schema_errors: _CategorizedValidationErrors,
+    ) -> None:
+        _validate_identifier("plan", self.plan_id, schema_errors)
+        _validate_identifier("schema version", self.schema_version, schema_errors)
         if self.schema_version != "1":
-            errors.append("schema_version must be exactly '1'")
+            schema_errors.append("schema_version must be exactly '1'")
         if type(self.d_model) is not int or self.d_model <= 0:
-            errors.append("d_model must be a positive integer")
-        if self.topology_kind not in {"general", "hb"}:
-            errors.append("topology_kind must be 'general' or 'hb'")
-        missing = sorted(_REQUIRED_DTYPE_ROLES - set(self.dtype_roles))
-        if missing:
-            errors.append(
-                "dtype_roles is missing required roles: " + ", ".join(missing)
-            )
-        for role, dtype in self.dtype_roles.items():
-            _validate_identifier("dtype role", role, errors)
-            if dtype != "runtime":
-                errors.append(
-                    f"logical dtype role {role!r} must remain symbolic as "
-                    f"'runtime', got concrete declaration {dtype!r}"
+            schema_errors.append("d_model must be a positive integer")
+        if not isinstance(self.topology_kind, str):
+            schema_errors.append("topology_kind must be a string")
+        elif self.topology_kind not in {"general", "hb"}:
+            schema_errors.append("topology_kind must be 'general' or 'hb'")
+
+        if _validate_config_schema(
+            self.dtype_roles,
+            "dtype_roles",
+            schema_errors,
+            operation=False,
+        ):
+            missing = sorted(_REQUIRED_DTYPE_ROLES - set(self.dtype_roles))
+            if missing:
+                schema_errors.append(
+                    "dtype_roles is missing required roles: " + ", ".join(missing)
                 )
+            for role, dtype in self.dtype_roles.items():
+                _validate_identifier("dtype role", role, schema_errors)
+                if not isinstance(dtype, str):
+                    schema_errors.append(
+                        f"logical dtype role {role!r} must be a string"
+                    )
+                elif dtype != "runtime":
+                    schema_errors.append(
+                        f"logical dtype role {role!r} must remain symbolic as "
+                        f"'runtime', got concrete declaration {dtype!r}"
+                    )
+        _validate_config_schema(
+            self.builder, "builder", schema_errors, operation=False
+        )
+        _validate_config_schema(
+            self.output_aggregate, "output_aggregate", schema_errors
+        )
+
+        for field_name, values, item_kind in (
+            ("entry_node_ids", self.entry_node_ids, "entry node"),
+            ("terminal_node_ids", self.terminal_node_ids, "terminal node"),
+        ):
+            if _validate_sequence_schema(values, field_name, schema_errors):
+                for node_id in values:
+                    _validate_identifier(item_kind, node_id, schema_errors)
+
+        if _validate_sequence_schema(self.nodes, "nodes", schema_errors):
+            for index, node in enumerate(self.nodes):
+                if not isinstance(node, NodeSpec):
+                    schema_errors.append(
+                        f"nodes[{index}] must be a NodeSpec declaration"
+                    )
+                    continue
+                _validate_identifier("node", node.node_id, schema_errors)
+                _validate_identifier(
+                    f"node {node.node_id!r} region",
+                    node.region_id,
+                    schema_errors,
+                )
+                for shape_name in (
+                    "hidden_shape",
+                    "selector_read_shape",
+                    "state_shape",
+                ):
+                    _validate_shape_schema(
+                        getattr(node, shape_name),
+                        f"node {node.node_id!r} {shape_name}",
+                        schema_errors,
+                    )
+                if node.state_owner is not None:
+                    _validate_identifier(
+                        f"node {node.node_id!r} state owner",
+                        node.state_owner,
+                        schema_errors,
+                    )
+                if node.parameter_group is not None:
+                    _validate_identifier(
+                        f"node {node.node_id!r} parameter_group",
+                        node.parameter_group,
+                        schema_errors,
+                    )
+                if type(node.forced_active) is not bool:
+                    schema_errors.append(
+                        f"node {node.node_id!r} forced_active must be a boolean"
+                    )
+                for name in _NODE_OPERATION_FIELDS:
+                    _validate_config_schema(
+                        getattr(node, name),
+                        f"node {node.node_id!r} {name}",
+                        schema_errors,
+                    )
+
+        if _validate_sequence_schema(self.regions, "regions", schema_errors):
+            for index, region in enumerate(self.regions):
+                if not isinstance(region, RegionSpec):
+                    schema_errors.append(
+                        f"regions[{index}] must be a RegionSpec declaration"
+                    )
+                    continue
+                _validate_identifier("region", region.region_id, schema_errors)
+                if not isinstance(region.profile, str):
+                    schema_errors.append(
+                        f"region {region.region_id!r} profile must be a string"
+                    )
+                elif _contains_surrogate(region.profile):
+                    schema_errors.append(
+                        f"region {region.region_id!r} profile must contain only "
+                        "Unicode scalar values"
+                    )
+                if not isinstance(region.selector_timing, str):
+                    schema_errors.append(
+                        f"region {region.region_id!r} selector_timing must be a string"
+                    )
+                elif _contains_surrogate(region.selector_timing):
+                    schema_errors.append(
+                        f"region {region.region_id!r} selector_timing must contain "
+                        "only Unicode scalar values"
+                    )
+                if type(region.k_max) is not int:
+                    schema_errors.append(
+                        f"region {region.region_id!r} k_max must be an integer"
+                    )
+                if region.line is not None and type(region.line) is not int:
+                    schema_errors.append(
+                        f"region {region.region_id!r} line must be null or an integer"
+                    )
+                if region.phase is not None and not isinstance(region.phase, str):
+                    schema_errors.append(
+                        f"region {region.region_id!r} phase must be null or a string"
+                    )
+                elif isinstance(region.phase, str) and _contains_surrogate(
+                    region.phase
+                ):
+                    schema_errors.append(
+                        f"region {region.region_id!r} phase must contain only "
+                        "Unicode scalar values"
+                    )
+                for field_name, values, item_kind in (
+                    ("node_ids", region.node_ids, "member node"),
+                    (
+                        "control_dependencies",
+                        region.control_dependencies,
+                        "control dependency",
+                    ),
+                ):
+                    context = f"region {region.region_id!r} {field_name}"
+                    if _validate_sequence_schema(values, context, schema_errors):
+                        for value in values:
+                            _validate_identifier(
+                                f"region {region.region_id!r} {item_kind}",
+                                value,
+                                schema_errors,
+                            )
+                for name in _REGION_OPERATION_FIELDS:
+                    _validate_config_schema(
+                        getattr(region, name),
+                        f"region {region.region_id!r} {name}",
+                        schema_errors,
+                    )
+
+        if _validate_sequence_schema(self.edges, "edges", schema_errors):
+            for index, edge in enumerate(self.edges):
+                if not isinstance(edge, EdgeSpec):
+                    schema_errors.append(
+                        f"edges[{index}] must be an EdgeSpec declaration"
+                    )
+                    continue
+                _validate_identifier("edge", edge.edge_id, schema_errors)
+                _validate_identifier(
+                    f"edge {edge.edge_id!r} source", edge.source, schema_errors
+                )
+                _validate_identifier(
+                    f"edge {edge.edge_id!r} target", edge.target, schema_errors
+                )
+                _validate_identifier(
+                    f"edge {edge.edge_id!r} label", edge.label, schema_errors
+                )
+
+    def _validate_formula_contracts(
+        self, formula_errors: _CategorizedValidationErrors
+    ) -> None:
         _validate_operation_config(
-            self.output_aggregate, "output_aggregate", errors
+            self.output_aggregate, "output_aggregate", formula_errors
         )
         _validate_known_reference_config(
             "output_aggregate",
             self.output_aggregate,
             "Plan output_aggregate",
-            errors,
+            formula_errors,
         )
         _validate_optional_shape_field(
             self.output_aggregate,
             "output_shape",
             (self.d_model,),
             "output_aggregate",
-            errors,
+            formula_errors,
         )
 
     def _validate_nodes(
         self,
         node_set: Set[str],
         region_set: Set[str],
-        errors: List[str],
+        topology_errors: _CategorizedValidationErrors,
+        formula_errors: _CategorizedValidationErrors,
     ) -> None:
         for node in self.nodes:
-            _validate_identifier("node", node.node_id, errors)
-            _validate_identifier(
-                f"node {node.node_id!r} region", node.region_id, errors
-            )
             if node.region_id not in region_set:
-                errors.append(
+                topology_errors.append(
                     f"node {node.node_id!r} names unknown region "
                     f"{node.region_id!r}"
                 )
             if node.hidden_shape != (self.d_model,):
-                errors.append(
+                formula_errors.append(
                     f"node {node.node_id!r} hidden_shape must be "
                     f"({self.d_model},), got {node.hidden_shape!r}"
                 )
             _validate_shape(
                 node.selector_read_shape,
                 f"node {node.node_id!r} selector_read_shape",
-                errors,
+                formula_errors,
             )
             _validate_shape(
                 node.state_shape,
                 f"node {node.node_id!r} state_shape",
-                errors,
+                formula_errors,
             )
-            if node.parameter_group is not None:
-                _validate_identifier(
-                    f"node {node.node_id!r} parameter_group",
-                    node.parameter_group,
-                    errors,
-                )
             for name in (
                 "input_norm",
                 "ffn_norm",
@@ -1459,13 +1922,13 @@ class Plan:
                 _validate_operation_config(
                     getattr(node, name),
                     f"node {node.node_id!r} {name}",
-                    errors,
+                    formula_errors,
                 )
                 _validate_known_reference_config(
                     name,
                     getattr(node, name),
                     f"node {node.node_id!r} {name}",
-                    errors,
+                    formula_errors,
                     state_update_type=node.update.get("type"),
                     semantic_context={
                         "d_model": self.d_model,
@@ -1478,35 +1941,38 @@ class Plan:
                 epsilon = norm.get("eps")
                 normalized_epsilon = _finite_formula_number(epsilon)
                 if normalized_epsilon is None or normalized_epsilon <= 0.0:
-                    errors.append(
+                    formula_errors.append(
                         f"node {node.node_id!r} {norm_name}.eps must be a "
                         "positive finite number with integer literals in the "
                         "JSON-safe range"
                     )
-            if node.update.get("type") in {"gdn", "attention_window"}:
+            update_type = node.update.get("type")
+            if isinstance(update_type, str) and update_type in {
+                "gdn",
+                "attention_window",
+            }:
                 epsilon = node.update.get("norm_eps")
                 normalized_epsilon = _finite_formula_number(epsilon)
                 if normalized_epsilon is None or normalized_epsilon <= 0.0:
-                    errors.append(
+                    formula_errors.append(
                         f"node {node.node_id!r} update.norm_eps must be a "
                         "positive finite number with integer literals in the "
                         "JSON-safe range"
                     )
-            update_type = node.update.get("type")
             if update_type == "none":
                 if node.state_owner is not None:
-                    errors.append(
+                    topology_errors.append(
                         f"stateless node {node.node_id!r} must not declare "
                         "state_owner"
                     )
                 if node.state_shape:
-                    errors.append(
+                    formula_errors.append(
                         f"stateless node {node.node_id!r} must use empty "
                         "state_shape"
                     )
             else:
                 if node.state_owner != node.node_id:
-                    errors.append(
+                    topology_errors.append(
                         f"stateful node {node.node_id!r} must own its mutable "
                         "state; cross-node mutable state sharing is not part of "
                         "the standard Plan"
@@ -1516,21 +1982,21 @@ class Plan:
                 "output_shape",
                 node.hidden_shape,
                 f"node {node.node_id!r} aggregate",
-                errors,
+                formula_errors,
             )
             _validate_optional_shape_field(
                 node.update,
                 "state_shape",
                 node.state_shape,
                 f"node {node.node_id!r} update",
-                errors,
+                formula_errors,
             )
             _validate_optional_shape_field(
                 node.selector_read,
                 "output_shape",
                 node.selector_read_shape,
                 f"node {node.node_id!r} selector_read",
-                errors,
+                formula_errors,
             )
             for config_name in ("ffn_read", "node_compute", "emit"):
                 _validate_optional_shape_field(
@@ -1538,7 +2004,7 @@ class Plan:
                     "output_shape",
                     node.hidden_shape,
                     f"node {node.node_id!r} {config_name}",
-                    errors,
+                    formula_errors,
                 )
             for config_name in (
                 "aggregate",
@@ -1550,7 +2016,7 @@ class Plan:
             ):
                 config = getattr(node, config_name)
                 if "d_model" in config and config["d_model"] != self.d_model:
-                    errors.append(
+                    formula_errors.append(
                         f"node {node.node_id!r} {config_name}.d_model must be "
                         f"{self.d_model}"
                     )
@@ -1559,28 +2025,30 @@ class Plan:
         self,
         node_set: Set[str],
         region_set: Set[str],
-        errors: List[str],
+        topology_errors: _CategorizedValidationErrors,
+        formula_errors: _CategorizedValidationErrors,
     ) -> None:
         declared_members: List[str] = []
         node_lookup = {node.node_id: node for node in self.nodes}
         for region in self.regions:
-            _validate_identifier("region", region.region_id, errors)
             if not region.node_ids:
-                errors.append(f"region {region.region_id!r} must not be empty")
+                topology_errors.append(
+                    f"region {region.region_id!r} must not be empty"
+                )
             duplicate_members = _duplicates(region.node_ids)
             if duplicate_members:
-                errors.append(
+                topology_errors.append(
                     f"region {region.region_id!r} repeats node IDs: "
                     + ", ".join(repr(item) for item in duplicate_members)
                 )
             for node_id in region.node_ids:
                 if node_id not in node_set:
-                    errors.append(
+                    topology_errors.append(
                         f"region {region.region_id!r} names unknown node "
                         f"{node_id!r}"
                     )
                 elif node_lookup[node_id].region_id != region.region_id:
-                    errors.append(
+                    topology_errors.append(
                         f"node {node_id!r} names region "
                         f"{node_lookup[node_id].region_id!r}, but region "
                         f"{region.region_id!r} lists it"
@@ -1591,28 +2059,28 @@ class Plan:
                 if node_id in node_lookup
             }
             if len(read_shapes) > 1:
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r} selector readouts must have "
                     "one common fixed shape"
                 )
             declared_members.extend(region.node_ids)
             if region.profile not in _PROFILES:
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r} has invalid profile "
                     f"{region.profile!r}"
                 )
             if region.selector_timing not in _SELECTOR_TIMINGS:
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r} has invalid selector timing "
                     f"{region.selector_timing!r}"
                 )
             elif region.profile == "N" and region.selector_timing != "content":
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r}: profile N only supports "
                     "content selector timing"
                 )
             elif region.profile == "SD" and region.selector_timing == "post":
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r}: standard SD does not "
                     "support post-update selection"
                 )
@@ -1634,7 +2102,7 @@ class Plan:
                     else set()
                 )
                 if read_type not in allowed_read_types:
-                    errors.append(
+                    formula_errors.append(
                         f"node {node_id!r} selector_read type {read_type!r} "
                         f"is incompatible with {region.selector_timing!r} "
                         "selector timing"
@@ -1643,7 +2111,7 @@ class Plan:
                 for node_id in region.node_ids:
                     node = node_lookup.get(node_id)
                     if node is not None and node.update.get("type") != "none":
-                        errors.append(
+                        formula_errors.append(
                             f"region {region.region_id!r}: profile N requires "
                             f"stateless node {node_id!r}"
                         )
@@ -1651,24 +2119,24 @@ class Plan:
                 region.selector_timing == "content"
                 and _declares_persistent_state(region.selector_context)
             ):
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r}: content timing cannot read "
                     "persistent selector context"
                 )
             if type(region.k_max) is not int or region.k_max < 1:
-                errors.append(
+                formula_errors.append(
                     f"region {region.region_id!r} k_max must be a positive integer"
                 )
             elif region.k_max > len(region.node_ids):
-                errors.append(
+                topology_errors.append(
                     f"region {region.region_id!r} k_max exceeds its fixed size"
                 )
-            _validate_k_request(region, errors)
+            _validate_k_request(region, formula_errors)
             _validate_known_reference_config(
                 "k_requested",
                 region.k_requested,
                 f"region {region.region_id!r} k_requested",
-                errors,
+                formula_errors,
             )
             for name in (
                 "score",
@@ -1678,18 +2146,18 @@ class Plan:
                 _validate_operation_config(
                     getattr(region, name),
                     f"region {region.region_id!r} {name}",
-                    errors,
+                    formula_errors,
                 )
                 _validate_known_reference_config(
                     name,
                     getattr(region, name),
                     f"region {region.region_id!r} {name}",
-                    errors,
+                    formula_errors,
                 )
             if region.score.get("type") == "fixed":
                 values = region.score.get("values_by_node")
                 if not isinstance(values, Mapping):
-                    errors.append(
+                    formula_errors.append(
                         f"region {region.region_id!r} fixed score must declare "
                         "values_by_node"
                     )
@@ -1697,31 +2165,31 @@ class Plan:
                     expected_nodes = set(region.node_ids)
                     actual_nodes = set(values)
                     if actual_nodes != expected_nodes:
-                        errors.append(
+                        formula_errors.append(
                             f"region {region.region_id!r} fixed score keys must "
                             "equal its static node IDs"
                         )
                     for node_id, value in values.items():
                         if _finite_formula_number(value) is None:
-                            errors.append(
+                            formula_errors.append(
                                 f"region {region.region_id!r} fixed score for "
                                 f"{node_id!r} must be finite numeric data with "
                                 "integer literals in the JSON-safe range"
                             )
             duplicate_dependencies = _duplicates(region.control_dependencies)
             if duplicate_dependencies:
-                errors.append(
+                topology_errors.append(
                     f"region {region.region_id!r} repeats control dependencies: "
                     + ", ".join(repr(item) for item in duplicate_dependencies)
                 )
             for dependency in region.control_dependencies:
                 if dependency not in region_set:
-                    errors.append(
+                    topology_errors.append(
                         f"region {region.region_id!r} names unknown control "
                         f"dependency {dependency!r}"
                     )
                 if dependency == region.region_id:
-                    errors.append(
+                    topology_errors.append(
                         f"region {region.region_id!r} cannot depend on itself"
                     )
             forced = [
@@ -1731,73 +2199,73 @@ class Plan:
             ]
             if forced:
                 if len(region.node_ids) != 1:
-                    errors.append(
+                    topology_errors.append(
                         f"forced-active node in region {region.region_id!r} "
                         "must use an independent singleton region"
                     )
                 if region.k_max != 1 or not _request_is_exactly_one(
                     region.k_requested
                 ):
-                    errors.append(
+                    formula_errors.append(
                         f"forced-active region {region.region_id!r} must request "
                         "exactly one active node"
                     )
 
         duplicate_memberships = _duplicates(declared_members)
         if duplicate_memberships:
-            errors.append(
+            topology_errors.append(
                 "nodes must belong to exactly one region; repeated memberships: "
                 + ", ".join(repr(item) for item in duplicate_memberships)
             )
         missing_memberships = sorted(node_set - set(declared_members))
         if missing_memberships:
-            errors.append(
+            topology_errors.append(
                 "nodes missing from region partition: "
                 + ", ".join(repr(item) for item in missing_memberships)
             )
 
-    def _validate_edges(self, node_set: Set[str], errors: List[str]) -> None:
+    def _validate_edges(
+        self,
+        node_set: Set[str],
+        topology_errors: _CategorizedValidationErrors,
+    ) -> None:
         endpoints: List[Tuple[str, str]] = []
         region_of = {node.node_id: node.region_id for node in self.nodes}
         valid_pairs: List[Tuple[str, str]] = []
         for edge in self.edges:
-            _validate_identifier("edge", edge.edge_id, errors)
-            _validate_identifier(f"edge {edge.edge_id!r} source", edge.source, errors)
-            _validate_identifier(f"edge {edge.edge_id!r} target", edge.target, errors)
-            _validate_identifier(f"edge {edge.edge_id!r} label", edge.label, errors)
             if edge.source not in node_set:
-                errors.append(
+                topology_errors.append(
                     f"edge {edge.edge_id!r} has unknown source {edge.source!r}"
                 )
             if edge.target not in node_set:
-                errors.append(
+                topology_errors.append(
                     f"edge {edge.edge_id!r} has unknown target {edge.target!r}"
                 )
             endpoints.append((edge.source, edge.target))
             if edge.source == edge.target:
-                errors.append(f"edge {edge.edge_id!r} is a self-loop")
+                topology_errors.append(f"edge {edge.edge_id!r} is a self-loop")
             if edge.source in region_of and edge.target in region_of:
                 if region_of[edge.source] == region_of[edge.target]:
-                    errors.append(
+                    topology_errors.append(
                         f"edge {edge.edge_id!r} connects nodes inside region "
                         f"{region_of[edge.source]!r}"
                     )
                 valid_pairs.append((edge.source, edge.target))
         duplicate_edges = _duplicates(endpoints)
         if duplicate_edges:
-            errors.append(
+            topology_errors.append(
                 "duplicate parallel receiver edges: "
                 + ", ".join(f"{source!r}->{target!r}" for source, target in duplicate_edges)
             )
         _, cyclic = _topological_order(sorted(node_set), valid_pairs)
         if cyclic:
-            errors.append(
+            topology_errors.append(
                 "receiver graph is cyclic; unresolved nodes: "
                 + ", ".join(repr(item) for item in cyclic)
             )
 
     def _validate_boundaries_and_paths(
-        self, node_set: Set[str], errors: List[str]
+        self, node_set: Set[str], errors: _ValidationErrorSink
     ) -> None:
         incoming = {node_id: [] for node_id in node_set}
         outgoing = {node_id: [] for node_id in node_set}
@@ -1863,7 +2331,7 @@ class Plan:
                         pairs.add((source, target))
         return sorted(pairs)
 
-    def _validate_region_graph(self, errors: List[str]) -> None:
+    def _validate_region_graph(self, errors: _ValidationErrorSink) -> None:
         region_ids = [region.region_id for region in self.regions]
         valid = set(region_ids)
         pairs = [
@@ -1878,11 +2346,14 @@ class Plan:
                 + ", ".join(repr(item) for item in cyclic)
             )
 
-    def _validate_hb(self, errors: List[str]) -> None:
+    def _validate_hb(
+        self,
+        topology_errors: _CategorizedValidationErrors,
+    ) -> None:
         if self.topology_kind != "hb":
             for region in self.regions:
                 if region.line is not None or region.phase is not None:
-                    errors.append(
+                    topology_errors.append(
                         f"general Plan region {region.region_id!r} must not "
                         "declare HB line/phase metadata"
                     )
@@ -1890,19 +2361,14 @@ class Plan:
         by_line: Dict[int, List[RegionSpec]] = {}
         for region in self.regions:
             if type(region.line) is not int or region.line < 0:
-                errors.append(
+                topology_errors.append(
                     f"HB region {region.region_id!r} must have a nonnegative "
                     "integer line"
                 )
                 continue
             if not isinstance(region.phase, str) or not region.phase:
-                errors.append(
+                topology_errors.append(
                     f"HB region {region.region_id!r} must declare a phase"
-                )
-            elif _contains_surrogate(region.phase):
-                errors.append(
-                    f"HB region {region.region_id!r} phase must contain only "
-                    "Unicode scalar values"
                 )
             by_line.setdefault(region.line, []).append(region)
         if not by_line:
@@ -1911,7 +2377,9 @@ class Plan:
         expected = set(range(maximum + 1))
         missing = sorted(expected - set(by_line))
         if missing:
-            errors.append(f"HB lines must be contiguous from 0; missing {missing!r}")
+            topology_errors.append(
+                f"HB lines must be contiguous from 0; missing {missing!r}"
+            )
         for line, regions in sorted(by_line.items()):
             phases = {
                 region.phase
@@ -1920,7 +2388,7 @@ class Plan:
                 for region in regions
             }
             if len(phases) != 1:
-                errors.append(
+                topology_errors.append(
                     f"all HB regions on line {line} must share one phase"
                 )
         region_lookup = {region.region_id: region for region in self.regions}
@@ -1942,11 +2410,11 @@ class Plan:
                 and target_line is not None
                 and source_line >= target_line
             ):
-                errors.append(
+                topology_errors.append(
                     f"HB edge {edge.edge_id!r} must point to a deeper line"
                 )
             if not isinstance(edge.label, str) or edge.label not in _HB_EDGE_LABELS:
-                errors.append(
+                topology_errors.append(
                     f"HB edge {edge.edge_id!r} has invalid source label "
                     f"{edge.label!r}"
                 )
@@ -1960,7 +2428,7 @@ class Plan:
                 ):
                     continue
                 if other.line >= region.line:
-                    errors.append(
+                    topology_errors.append(
                         f"HB control dependency {dependency!r} -> "
                         f"{region.region_id!r} must come from a shallower line"
                     )
@@ -1971,17 +2439,21 @@ class Plan:
             node_id for node_id, line in node_line.items() if line == maximum
         }
         if set(self.entry_node_ids) != first_line_nodes:
-            errors.append("HB entry receivers must be exactly line 0")
+            topology_errors.append("HB entry receivers must be exactly line 0")
         if set(self.terminal_node_ids) != last_line_nodes:
-            errors.append("HB terminal receivers must be exactly the final line")
+            topology_errors.append(
+                "HB terminal receivers must be exactly the final line"
+            )
 
 
-def _validate_identifier(kind: str, value: object, errors: List[str]) -> None:
+def _validate_identifier(
+    kind: str, value: object, errors: _ValidationErrorSink
+) -> None:
     errors.extend(_stable_id_errors(kind, value))
 
 
 def _validate_unique_ids(
-    kind: str, values: Sequence[str], errors: List[str]
+    kind: str, values: Sequence[str], errors: _ValidationErrorSink
 ) -> None:
     duplicates = _duplicates(values)
     if duplicates:
@@ -2001,7 +2473,9 @@ def _duplicates(values: Sequence[Any]) -> List[Any]:
     return sorted(duplicates)
 
 
-def _validate_shape(shape: Tuple[int, ...], name: str, errors: List[str]) -> None:
+def _validate_shape(
+    shape: Tuple[int, ...], name: str, errors: _ValidationErrorSink
+) -> None:
     for dimension in shape:
         if type(dimension) is not int or dimension <= 0:
             errors.append(f"{name} dimensions must be positive integers")
@@ -2009,7 +2483,7 @@ def _validate_shape(shape: Tuple[int, ...], name: str, errors: List[str]) -> Non
 
 
 def _validate_operation_config(
-    config: Mapping[str, JsonValue], name: str, errors: List[str]
+    config: Mapping[str, JsonValue], name: str, errors: _ValidationErrorSink
 ) -> None:
     operation_type = config.get("type")
     if not isinstance(operation_type, str) or not operation_type:
@@ -2024,7 +2498,7 @@ def _validate_known_reference_config(
     operation_field: str,
     config: Mapping[str, JsonValue],
     name: str,
-    errors: List[str],
+    errors: _ValidationErrorSink,
     *,
     state_update_type: Optional[str] = None,
     semantic_context: Optional[Mapping[str, JsonValue]] = None,
@@ -2034,6 +2508,10 @@ def _validate_known_reference_config(
     schema = _operation_schema(operation_field, config)
     operation_type = _normalized_operation_type(config.get("type"))
     formula_id = config.get("formula_id")
+    if not isinstance(operation_type, str):
+        return
+    if formula_id is not None and not isinstance(formula_id, str):
+        return
     field_schemas = {
         key: value
         for key, value in REFERENCE_OPERATION_CONFIG_SCHEMAS.items()
@@ -2074,7 +2552,7 @@ def _validate_optional_shape_field(
     field_name: str,
     expected: Tuple[int, ...],
     context: str,
-    errors: List[str],
+    errors: _ValidationErrorSink,
 ) -> None:
     if field_name not in config:
         return
@@ -2101,7 +2579,9 @@ def _request_is_exactly_one(config: Mapping[str, JsonValue]) -> bool:
     return request_type == "fixed" and config.get("value") == 1
 
 
-def _validate_k_request(region: RegionSpec, errors: List[str]) -> None:
+def _validate_k_request(
+    region: RegionSpec, errors: _ValidationErrorSink
+) -> None:
     config = region.k_requested
     _validate_operation_config(
         config, f"region {region.region_id!r} k_requested", errors
@@ -2109,7 +2589,11 @@ def _validate_k_request(region: RegionSpec, errors: List[str]) -> None:
     request_type = config.get("type")
     if request_type == "fixed":
         value = config.get("value")
-        if type(value) is not int or not (1 <= value <= region.k_max):
+        if (
+            type(value) is not int
+            or type(region.k_max) is not int
+            or not (1 <= value <= region.k_max)
+        ):
             errors.append(
                 f"region {region.region_id!r} fixed K must be an integer in "
                 f"[1, {region.k_max}]"
@@ -2222,11 +2706,32 @@ class ConcreteBinding:
     dtype_roles: Mapping[str, str]
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "dtype_roles", _config(self.dtype_roles))
+        object.__setattr__(
+            self,
+            "dtype_roles",
+            _freeze_config_if_possible(self.dtype_roles),
+        )
 
     def validate_for(self, plan: Plan) -> "ConcreteBinding":
         plan.validate()
         errors: List[str] = []
+        if not isinstance(self.dtype_roles, FrozenConfig):
+            errors.append("concrete binding dtype_roles must be a JSON object")
+            raise PlanValidationError(
+                errors, failure_codes=("binding.invalid",)
+            )
+        for role, dtype in self.dtype_roles.items():
+            if not isinstance(role, str) or not role:
+                errors.append("concrete binding role names must be nonempty strings")
+            if not isinstance(dtype, str):
+                errors.append(
+                    f"concrete dtype role {role!r} must be a string, got "
+                    f"{type(dtype).__name__}"
+                )
+        if errors:
+            raise PlanValidationError(
+                errors, failure_codes=("binding.invalid",)
+            )
         logical_roles = set(plan.dtype_roles)
         bound_roles = set(self.dtype_roles)
         if bound_roles != logical_roles:
@@ -2235,7 +2740,7 @@ class ConcreteBinding:
                 f"expected {sorted(logical_roles)!r}"
             )
         for role, dtype in self.dtype_roles.items():
-            if dtype not in _CONCRETE_DTYPES:
+            if not isinstance(dtype, str) or dtype not in _CONCRETE_DTYPES:
                 errors.append(
                     f"concrete dtype role {role!r} must not be symbolic, got "
                     f"{dtype!r}"
@@ -2248,7 +2753,9 @@ class ConcreteBinding:
                     f"with logical declaration {declared!r}"
                 )
         if errors:
-            raise PlanValidationError(errors)
+            raise PlanValidationError(
+                errors, failure_codes=("binding.invalid",)
+            )
         return self
 
     def canonical_dict(self) -> Dict[str, JsonValue]:

@@ -4,6 +4,7 @@ import dataclasses
 import hashlib
 import json
 import unittest
+from typing import Optional, Tuple
 
 from tide.builders import (
     build_chain,
@@ -30,10 +31,20 @@ from tide.plan import (
 
 
 class PlanTestCase(unittest.TestCase):
-    def assert_invalid(self, plan: Plan, text: str) -> None:
+    def assert_invalid(
+        self,
+        plan: Plan,
+        text: str,
+        *,
+        failure_codes: Optional[Tuple[str, ...]] = None,
+    ) -> PlanValidationError:
         with self.assertRaises(PlanValidationError) as raised:
             plan.validate()
         self.assertIn(text, str(raised.exception))
+        self.assertTrue(raised.exception.failure_codes)
+        if failure_codes is not None:
+            self.assertEqual(raised.exception.failure_codes, failure_codes)
+        return raised.exception
 
     def test_standard_builders_are_expanded_and_valid(self) -> None:
         fixtures = [
@@ -190,7 +201,7 @@ class PlanTestCase(unittest.TestCase):
         self.assertNotEqual(logical.canonical_hash(), typed.canonical_hash())
         self.assertEqual(typed.canonical_hash(), typed_again.canonical_hash())
         self.assertEqual(typed.binding.dtype_roles["hidden"], "float32")
-        with self.assertRaises(PlanValidationError):
+        with self.assertRaises(PlanValidationError) as raised:
             ConcreteBinding(
                 {
                     "hidden": "runtime",
@@ -199,6 +210,9 @@ class PlanTestCase(unittest.TestCase):
                     "readout": "float32",
                 }
             ).validate_for(logical)
+        self.assertEqual(
+            raised.exception.failure_codes, ("binding.invalid",)
+        )
 
     def test_canonical_json_is_json_safe_and_configs_are_copied(self) -> None:
         mutable_emit = {
@@ -365,8 +379,9 @@ class PlanTestCase(unittest.TestCase):
         with self.assertRaisesRegex(PlanValidationError, "Unicode scalar values"):
             invalid_hb.canonical_hash()
 
-    def test_operation_configs_reject_surrogate_keys_and_values(self) -> None:
-        base_node = build_singleton().nodes[0]
+    def test_operation_config_json_errors_are_schema_gated(self) -> None:
+        base = build_singleton()
+        base_node = base.nodes[0]
         invalid_configs = (
             {"type": "custom", "formula": "x + \ud800"},
             {
@@ -379,11 +394,18 @@ class PlanTestCase(unittest.TestCase):
                 "formula": "x",
                 "nested": ["valid", "bad.\ud800"],
             },
+            {"type": "custom", "formula": "x", "value": float("nan")},
+            {"type": "custom", "formula": "x", "value": float("inf")},
+            {"type": "custom", "formula": "x", "value": (1, 2)},
         )
         for config in invalid_configs:
             with self.subTest(config=ascii(config)):
-                with self.assertRaisesRegex(ValueError, "Unicode scalar values"):
-                    dataclasses.replace(base_node, emit=config)
+                node = dataclasses.replace(base_node, emit=config)
+                self.assert_invalid(
+                    dataclasses.replace(base, nodes=(node,)),
+                    "JSON-safe object",
+                    failure_codes=("plan.schema",),
+                )
 
     def test_known_formula_configs_are_canonicalized_before_hashing(self) -> None:
         base = build_singleton(d_model=3)
@@ -956,6 +978,472 @@ class PlanTestCase(unittest.TestCase):
         )
         self.assert_invalid(sd_post, "standard SD does not support post-update")
 
+    def test_schema_gate_and_static_category_aggregation(self) -> None:
+        base = build_chain(length=2)
+        wrong_shape_node = dataclasses.replace(
+            base.nodes[0], hidden_shape=(base.d_model + 1,)
+        )
+        topology_and_formula = dataclasses.replace(
+            base,
+            nodes=(wrong_shape_node, base.nodes[1]),
+            terminal_node_ids=(base.entry_node_ids[0],),
+        )
+        self.assert_invalid(
+            topology_and_formula,
+            "hidden_shape must be",
+            failure_codes=("plan.formula", "plan.topology"),
+        )
+
+        malformed_node = dataclasses.replace(
+            wrong_shape_node, node_id=" invalid.node"
+        )
+        schema_gated = dataclasses.replace(
+            topology_and_formula,
+            nodes=(malformed_node, base.nodes[1]),
+        )
+        gated_error = self.assert_invalid(
+            schema_gated,
+            "surrounding Unicode whitespace",
+            failure_codes=("plan.schema",),
+        )
+        self.assertNotIn("hidden_shape must be", str(gated_error))
+        self.assertNotIn("terminal_node_ids must equal", str(gated_error))
+
+    def test_malformed_public_declarations_are_schema_gated(self) -> None:
+        base = build_chain(length=2)
+        hb = build_small_hb()
+        cases = (
+            (
+                "d-model-object",
+                lambda: dataclasses.replace(base, d_model=object()),
+                "d_model must be a positive integer",
+            ),
+            (
+                "topology-kind-scalar",
+                lambda: dataclasses.replace(base, topology_kind=1),
+                "topology_kind must be a string",
+            ),
+            (
+                "output-aggregate-scalar",
+                lambda: dataclasses.replace(base, output_aggregate=1),
+                "output_aggregate must be a JSON object",
+            ),
+            (
+                "output-aggregate-nonfinite",
+                lambda: dataclasses.replace(
+                    base,
+                    output_aggregate={
+                        "type": "custom",
+                        "formula": "x",
+                        "value": float("inf"),
+                    },
+                ),
+                "output_aggregate must be a JSON-safe object",
+            ),
+            (
+                "dtype-roles-nonfinite",
+                lambda: dataclasses.replace(
+                    base,
+                    dtype_roles={
+                        "hidden": float("nan"),
+                        "parameter": "runtime",
+                        "state": "runtime",
+                        "readout": "runtime",
+                    },
+                ),
+                "dtype_roles must be a JSON-safe object",
+            ),
+            (
+                "builder-surrogate",
+                lambda: dataclasses.replace(
+                    base, builder={"source": "bad.\ud800"}
+                ),
+                "builder must be a JSON-safe object",
+            ),
+            (
+                "nodes-scalar",
+                lambda: dataclasses.replace(base, nodes=1),
+                "nodes must be a JSON array",
+            ),
+            (
+                "edges-string",
+                lambda: dataclasses.replace(base, edges="edge.0000"),
+                "edges must be a JSON array",
+            ),
+            (
+                "regions-scalar",
+                lambda: dataclasses.replace(base, regions=1),
+                "regions must be a JSON array",
+            ),
+            (
+                "entry-string",
+                lambda: dataclasses.replace(
+                    base, entry_node_ids=base.entry_node_ids[0]
+                ),
+                "entry_node_ids must be a JSON array",
+            ),
+            (
+                "terminal-string",
+                lambda: dataclasses.replace(
+                    base, terminal_node_ids=base.terminal_node_ids[0]
+                ),
+                "terminal_node_ids must be a JSON array",
+            ),
+            (
+                "hidden-shape-scalar",
+                lambda: dataclasses.replace(
+                    base,
+                    nodes=(
+                        dataclasses.replace(base.nodes[0], hidden_shape=1),
+                        base.nodes[1],
+                    ),
+                ),
+                "hidden_shape must be a JSON array",
+            ),
+            (
+                "hidden-shape-element-object",
+                lambda: dataclasses.replace(
+                    base,
+                    nodes=(
+                        dataclasses.replace(
+                            base.nodes[0], hidden_shape=(object(),)
+                        ),
+                        base.nodes[1],
+                    ),
+                ),
+                "hidden_shape must contain only integer dimensions",
+            ),
+            (
+                "operation-config-scalar",
+                lambda: dataclasses.replace(
+                    base,
+                    nodes=(
+                        dataclasses.replace(base.nodes[0], update=1),
+                        base.nodes[1],
+                    ),
+                ),
+                "update must be a JSON object",
+            ),
+            (
+                "operation-type-object",
+                lambda: dataclasses.replace(
+                    base,
+                    nodes=(
+                        dataclasses.replace(
+                            base.nodes[0],
+                            update={
+                                "type": {},
+                                "formula_id": "update.none.v1",
+                            },
+                        ),
+                        base.nodes[1],
+                    ),
+                ),
+                "update.type must be a string",
+            ),
+            (
+                "region-config-surrogate",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(
+                            base.regions[0],
+                            score={
+                                "type": "custom",
+                                "formula": "score.\ud800",
+                            },
+                        ),
+                        base.regions[1],
+                    ),
+                ),
+                "score must be a JSON-safe object",
+            ),
+            (
+                "region-members-string",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(
+                            base.regions[0], node_ids=base.nodes[0].node_id
+                        ),
+                        base.regions[1],
+                    ),
+                ),
+                "node_ids must be a JSON array",
+            ),
+            (
+                "control-dependencies-string",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        base.regions[0],
+                        dataclasses.replace(
+                            base.regions[1],
+                            control_dependencies=base.regions[0].region_id,
+                        ),
+                    ),
+                ),
+                "control_dependencies must be a JSON array",
+            ),
+            (
+                "profile-scalar",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(base.regions[0], profile=1),
+                        base.regions[1],
+                    ),
+                ),
+                "profile must be a string",
+            ),
+            (
+                "selector-timing-scalar",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(base.regions[0], selector_timing=1),
+                        base.regions[1],
+                    ),
+                ),
+                "selector_timing must be a string",
+            ),
+            (
+                "k-max-string",
+                lambda: dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(base.regions[0], k_max="one"),
+                        base.regions[1],
+                    ),
+                ),
+                "k_max must be an integer",
+            ),
+            (
+                "hb-line-string",
+                lambda: dataclasses.replace(
+                    hb,
+                    regions=(
+                        dataclasses.replace(hb.regions[0], line="zero"),
+                    )
+                    + hb.regions[1:],
+                ),
+                "line must be null or an integer",
+            ),
+            (
+                "hb-phase-scalar",
+                lambda: dataclasses.replace(
+                    hb,
+                    regions=(
+                        dataclasses.replace(hb.regions[0], phase=1),
+                    )
+                    + hb.regions[1:],
+                ),
+                "phase must be null or a string",
+            ),
+        )
+        for case_name, construct, message in cases:
+            with self.subTest(case=case_name):
+                plan = construct()
+                self.assert_invalid(
+                    plan,
+                    message,
+                    failure_codes=("plan.schema",),
+                )
+
+    def test_type_correct_invalid_values_retain_semantic_categories(self) -> None:
+        base = build_singleton()
+        hb = build_small_hb()
+        cases = (
+            (
+                "registered-formula-dispatch",
+                dataclasses.replace(
+                    base,
+                    output_aggregate={
+                        "type": "node_softmax",
+                        "formula_id": "agg.mean.v1",
+                    },
+                ),
+                "plan.formula",
+            ),
+            (
+                "profile-value",
+                dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(base.regions[0], profile="invalid"),
+                    ),
+                ),
+                "plan.formula",
+            ),
+            (
+                "hb-negative-line",
+                dataclasses.replace(
+                    hb,
+                    regions=(dataclasses.replace(hb.regions[0], line=-1),)
+                    + hb.regions[1:],
+                ),
+                "plan.topology",
+            ),
+            (
+                "hb-empty-phase",
+                dataclasses.replace(
+                    hb,
+                    regions=(dataclasses.replace(hb.regions[0], phase=""),)
+                    + hb.regions[1:],
+                ),
+                "plan.topology",
+            ),
+        )
+        for case_name, plan, expected_code in cases:
+            with self.subTest(case=case_name):
+                with self.assertRaises(PlanValidationError) as raised:
+                    plan.validate()
+                self.assertEqual(
+                    raised.exception.failure_codes, (expected_code,)
+                )
+
+    def test_malformed_binding_declarations_are_binding_invalid(self) -> None:
+        plan = build_singleton()
+        cases = (
+            ("root-scalar", 1),
+            (
+                "dtype-object",
+                {
+                    "hidden": {},
+                    "parameter": "float32",
+                    "state": "float32",
+                    "readout": "float32",
+                },
+            ),
+            (
+                "dtype-nonfinite",
+                {
+                    "hidden": float("nan"),
+                    "parameter": "float32",
+                    "state": "float32",
+                    "readout": "float32",
+                },
+            ),
+            (
+                "dtype-surrogate",
+                {
+                    "hidden": "float32.\ud800",
+                    "parameter": "float32",
+                    "state": "float32",
+                    "readout": "float32",
+                },
+            ),
+        )
+        for case_name, dtype_roles in cases:
+            with self.subTest(case=case_name):
+                binding = ConcreteBinding(dtype_roles)
+                with self.assertRaises(PlanValidationError) as raised:
+                    binding.validate_for(plan)
+                self.assertEqual(
+                    raised.exception.failure_codes, ("binding.invalid",)
+                )
+
+    def test_reference_ids_are_checked_by_the_schema_gate(self) -> None:
+        base = build_chain(length=2)
+        invalid_reference = " invalid.reference"
+        cases = (
+            (
+                "entry",
+                dataclasses.replace(
+                    base, entry_node_ids=(invalid_reference,)
+                ),
+            ),
+            (
+                "terminal",
+                dataclasses.replace(
+                    base, terminal_node_ids=(invalid_reference,)
+                ),
+            ),
+            (
+                "region-member",
+                dataclasses.replace(
+                    base,
+                    regions=(
+                        dataclasses.replace(
+                            base.regions[0], node_ids=(invalid_reference,)
+                        ),
+                        base.regions[1],
+                    ),
+                ),
+            ),
+            (
+                "control-dependency",
+                dataclasses.replace(
+                    base,
+                    regions=(
+                        base.regions[0],
+                        dataclasses.replace(
+                            base.regions[1],
+                            control_dependencies=(invalid_reference,),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        for reference_kind, plan in cases:
+            with self.subTest(reference_kind=reference_kind):
+                self.assert_invalid(
+                    plan,
+                    "surrounding Unicode whitespace",
+                    failure_codes=("plan.schema",),
+                )
+
+        numeric_entry = dataclasses.replace(
+            base, entry_node_ids=(1,)  # type: ignore[arg-type]
+        )
+        self.assert_invalid(
+            numeric_entry,
+            "entry node ID must be a nonempty string",
+            failure_codes=("plan.schema",),
+        )
+
+    def test_node_scalar_types_are_checked_by_the_schema_gate(self) -> None:
+        base = build_singleton()
+        invalid_owner = dataclasses.replace(
+            base.nodes[0], state_owner=1  # type: ignore[arg-type]
+        )
+        self.assert_invalid(
+            dataclasses.replace(base, nodes=(invalid_owner,)),
+            "state owner ID must be a nonempty string",
+            failure_codes=("plan.schema",),
+        )
+
+        invalid_forced_active = dataclasses.replace(
+            base.nodes[0], forced_active=1  # type: ignore[arg-type]
+        )
+        self.assert_invalid(
+            dataclasses.replace(base, nodes=(invalid_forced_active,)),
+            "forced_active must be a boolean",
+            failure_codes=("plan.schema",),
+        )
+
+    def test_static_capacity_is_topology_but_k_declaration_is_formula(self) -> None:
+        base = build_single_layer(receiver_count=2, k=1)
+        oversized_capacity = dataclasses.replace(
+            base,
+            regions=(dataclasses.replace(base.regions[0], k_max=3),),
+        )
+        self.assert_invalid(
+            oversized_capacity,
+            "k_max exceeds its fixed size",
+            failure_codes=("plan.topology",),
+        )
+
+        invalid_declaration = dataclasses.replace(
+            base,
+            regions=(dataclasses.replace(base.regions[0], k_max=0),),
+        )
+        self.assert_invalid(
+            invalid_declaration,
+            "k_max must be a positive integer",
+            failure_codes=("plan.formula",),
+        )
+
     def test_forced_active_requires_singleton_and_exact_k_one(self) -> None:
         plan = build_single_layer(receiver_count=2, k=1)
         forced_node = dataclasses.replace(plan.nodes[0], forced_active=True)
@@ -1099,7 +1587,11 @@ class PlanTestCase(unittest.TestCase):
             hb,
             regions=(malformed_line_region,) + hb.regions[1:],
         )
-        self.assert_invalid(malformed_line, "nonnegative integer line")
+        self.assert_invalid(
+            malformed_line,
+            "line must be null or an integer",
+            failure_codes=("plan.schema",),
+        )
 
 
 if __name__ == "__main__":

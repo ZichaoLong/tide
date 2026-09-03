@@ -9,6 +9,7 @@ commit to its caller.
 from __future__ import annotations
 
 import dataclasses
+import functools
 import numbers
 from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional, Sequence, Tuple, Union
 
@@ -17,6 +18,7 @@ from torch import Tensor, nn
 
 from .ops import (
     AttentionState,
+    OperationExecutionError,
     ReceiverModule,
     ReceiverState,
     RegionSelector,
@@ -45,6 +47,23 @@ class DynamicReachabilityError(RuntimeError):
 
 class UnsupportedPlanError(ExecutionContractError):
     """A valid logical Plan is outside this executor's declared capability."""
+
+
+class LocalOperationError(RuntimeError):
+    """A validated local formula explicitly failed during an event."""
+
+
+def _translate_local_operation_errors(operation: Any) -> Any:
+    """Keep the local-formula failure boundary narrow and executor-owned."""
+
+    @functools.wraps(operation)
+    def wrapped(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return operation(*args, **kwargs)
+        except OperationExecutionError as exc:
+            raise LocalOperationError(str(exc)) from exc
+
+    return wrapped
 
 
 @dataclasses.dataclass(frozen=True)
@@ -300,6 +319,13 @@ class SettleGraph(nn.Module):
                     "the eager reference executor currently requires hidden, "
                     "parameter, state, and readout roles to share one dtype"
                 )
+            concrete_dtype = next(iter(core_dtypes))
+            if concrete_dtype not in {"float32", "float64"}:
+                raise UnsupportedPlanError(
+                    "the eager reference executor has no closed accumulation "
+                    f"contract for dtype {concrete_dtype!r}; only float32 and "
+                    "float64 are implemented"
+                )
         self.receivers = nn.ModuleDict()
         for node in self.plan.nodes:
             self.receivers[safe_module_key(node.node_id)] = ReceiverModule(
@@ -361,6 +387,7 @@ class SettleGraph(nn.Module):
                     if transform.bias is not None:
                         nn.init.zeros_(transform.bias)
 
+    @_translate_local_operation_errors
     def interpret_token(
         self,
         hidden: Tensor,
@@ -593,6 +620,7 @@ class SettleGraph(nn.Module):
         output = torch.stack(outputs, dim=1) if outputs else hidden
         return ExecutionResult(output, current, balance, trace)
 
+    @_translate_local_operation_errors
     def prefill_region_major(
         self,
         hidden: Tensor,

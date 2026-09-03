@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 import math
 import unittest
+from unittest import mock
 
 import torch
 
@@ -15,11 +16,12 @@ from tide.builders import (
 )
 from tide.engine import (
     ExecutionContractError,
+    LocalOperationError,
     SettleGraph,
     StateStore,
     UnsupportedPlanError,
 )
-from tide.ops import safe_module_key
+from tide.ops import OperationExecutionError, ReceiverModule, safe_module_key
 from tide.plan import PlanValidationError, bind_dtypes
 
 
@@ -283,6 +285,22 @@ class FormulaDispatchContractTests(unittest.TestCase):
 
 
 class IdentityAndTopologyTests(unittest.TestCase):
+    def test_typed_low_precision_plans_fail_during_construction(self):
+        logical = build_singleton(d_model=2)
+        for dtype in ("float16", "bfloat16"):
+            with self.subTest(dtype=dtype):
+                typed = bind_dtypes(
+                    logical,
+                    hidden=dtype,
+                    parameter=dtype,
+                    state=dtype,
+                    readout=dtype,
+                )
+                with self.assertRaisesRegex(
+                    UnsupportedPlanError, f"dtype '{dtype}'.*only float32 and float64"
+                ):
+                    SettleGraph(typed)
+
     def test_typed_plan_accepts_matching_dtype_and_rejects_mismatches(self):
         logical = build_singleton(d_model=2)
         typed = bind_dtypes(
@@ -433,6 +451,53 @@ class IdentityAndTopologyTests(unittest.TestCase):
             [event.sequence_id for event in result.trace.output_events],
             ["a", "z"],
         )
+
+
+class LocalOperationBoundaryTests(unittest.TestCase):
+    @staticmethod
+    def _execute(model, executor_name):
+        if executor_name == "interpret_token":
+            return model.interpret_token(
+                torch.ones((1, 2), dtype=torch.float64),
+                torch.ones((1,), dtype=torch.bool),
+                ["sequence"],
+                torch.zeros((1,), dtype=torch.int64),
+            )
+        if executor_name == "prefill_region_major":
+            return model.prefill_region_major(
+                torch.ones((1, 1, 2), dtype=torch.float64),
+                torch.ones((1, 1), dtype=torch.bool),
+                ["sequence"],
+                torch.zeros((1, 1), dtype=torch.int64),
+            )
+        raise AssertionError(f"unknown test executor {executor_name!r}")
+
+    def test_operation_execution_error_becomes_executor_owned_failure(self):
+        for executor_name in ("interpret_token", "prefill_region_major"):
+            with self.subTest(executor=executor_name):
+                model = SettleGraph(build_singleton(d_model=2)).double()
+                sentinel = OperationExecutionError(
+                    f"injected local failure in {executor_name}"
+                )
+                with mock.patch.object(
+                    ReceiverModule, "aggregate", side_effect=sentinel
+                ):
+                    with self.assertRaises(LocalOperationError) as raised:
+                        self._execute(model, executor_name)
+                self.assertIs(raised.exception.__cause__, sentinel)
+                self.assertEqual(str(raised.exception), str(sentinel))
+
+    def test_unknown_operation_exception_is_not_reclassified(self):
+        for executor_name in ("interpret_token", "prefill_region_major"):
+            with self.subTest(executor=executor_name):
+                model = SettleGraph(build_singleton(d_model=2)).double()
+                sentinel = KeyError(f"injected bug in {executor_name}")
+                with mock.patch.object(
+                    ReceiverModule, "aggregate", side_effect=sentinel
+                ):
+                    with self.assertRaises(KeyError) as raised:
+                        self._execute(model, executor_name)
+                self.assertIs(raised.exception, sentinel)
 
 
 class StateAndTransactionTests(unittest.TestCase):

@@ -13,6 +13,7 @@ from tide.ops import (
     RegionSelector,
     deterministic_topk_mask,
     safe_module_key,
+    state_tensor_summary,
 )
 
 
@@ -81,6 +82,23 @@ class AggregateFormulaTests(unittest.TestCase):
 
 
 class StateFormulaTests(unittest.TestCase):
+    def test_no_epsilon_rms_uses_finite_zero_subgradient(self):
+        reference = torch.zeros(2, dtype=torch.float64)
+        state = torch.zeros(4, dtype=torch.float64, requires_grad=True)
+        summary = state_tensor_summary(state, reference)
+        summary.backward()
+        self.assertEqual(float(summary.detach()), 0.0)
+        torch.testing.assert_close(state.grad, torch.zeros_like(state), atol=0, rtol=0)
+
+        module = ReceiverModule(2, receiver_spec()).double()
+        content = torch.zeros(2, dtype=torch.float64, requires_grad=True)
+        readout = module.selector_read(content, None)
+        readout.sum().backward()
+        self.assertEqual(readout.tolist(), [0.0])
+        torch.testing.assert_close(
+            content.grad, torch.zeros_like(content), atol=0, rtol=0
+        )
+
     def test_ema_proposal_matches_formula(self):
         module = ReceiverModule(
             2,

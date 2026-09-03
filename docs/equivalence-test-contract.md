@@ -41,7 +41,7 @@
 
 跨 dtype 测试使用同一个 fixture family。family 保存可精确表示的逻辑源值或 CPU FP64 source，以及每种 concrete execution binding 的确定性 materialization 规则；每个 materialized bundle 分别记录 typed Plan hash 和 Tensor artifact hash。CPU 与 NPU FP32 必须读取 byte-identical 的 CPU FP32 bundle。FP64 对 FP32 的比较把两侧结果提升到 CPU float64 后进行，但不把两种 materialization 误称为同一个 typed Plan。
 
-fixture loader 在构造模型或写入状态仓库前完成以下检查：schema、artifact hash、logical/typed Plan hash、Tensor key/shape/dtype、mask 子集关系、唯一 `sequence_id`、连续位置、`requested_k` 容器的 region 键/shape/整数表示，以及状态所有者唯一性。状态所有者检查必须识别同一 backing storage 的不同 Tensor views，包括不重叠 views；只比较 object identity 不足以发现非法 alias。`requested_k` 的值域是动态事件检查：只有候选非空的 region 事件才在 selector Read/Score 前解析该位置的值并校验 \([1,K^{\max}]\)；候选为空时不读取、也不对该位置的数值做范围判定。期望失败的 fixture 还保存规范化错误类别；测试比较类别，不依赖任意一段异常文本。
+fixture loader 在构造模型或写入状态仓库前完成以下检查：schema、artifact hash、logical/typed Plan hash、Tensor key/shape/dtype/stride/storage group、mask 子集关系、唯一 `sequence_id`、连续位置、`requested_k` 容器的 region 键/shape/整数表示，以及状态所有者唯一性。状态所有者检查必须识别同一 backing storage 的不同 Tensor views，包括不重叠 views；只比较 object identity 不足以发现非法 alias。Tensor manifest 必须把规范 stride、storage offset、与物理地址无关的 storage group，以及包含 stride 间 holes 的完整 backing-storage bytes hash 纳入认证内容，使解除或新增 alias 关系、改变不可见 storage bytes 也会改变工件身份。`requested_k` 的值域是动态事件检查：只有候选非空的 region 事件才在 selector Read/Score 前解析该位置的值并校验 \([1,K^{\max}]\)；候选为空时不读取、也不对该位置的数值做范围判定。期望失败的 fixture 还保存规范化错误类别；loader 若走完相应入口仍未触发声明的缺陷，必须拒绝这个假负例。测试比较类别，不依赖任意一段异常文本。
 
 资格 fixture 的 `sequence_id` 使用语义文档第 2.1 节稳定 ID 的字符串合法性和升序规则；它不是 logical Plan ID，也不进入 Plan hash。logical/typed Plan bytes 使用实现计划第 2.2 节声明的 canonicalizer。loader 必须先验证 canonicalizer ID、bytes 的规范性和 SHA-256，再解析 Plan；没有通过该 canonicalizer byte golden 的 executor 只能消费 bundle 中的规范 bytes，不能以本地 JSON 重写后得到的另一 hash 代替。
 
@@ -68,7 +68,7 @@ w\odot
 \frac{x}{\sqrt{d^{-1}\sum_{i=1}^{d}x_i^2+\epsilon}},
 $$
 
-其中没有 bias；正数 \(\epsilon\) 作为公式常量写入 logical Plan，\(w\) 的稳定参数键/schema 写入 Plan 而 Tensor 数值由 fixture 的数值输入携带。\(w=1\) 不把 RMSNorm 变成 identity。解析 fixture 若需要无归一化操作，使用另一个明确公式 `TEST-NORM-IDENTITY-V1`，其定义为 \(N(x)=x\)。
+其中没有 bias；正数 \(\epsilon\) 作为公式常量写入 logical Plan，\(w\) 的稳定参数键/schema 写入 Plan 而 Tensor 数值由 fixture 的数值输入携带。\(w=1\) 不把 RMSNorm 变成 identity。若未来资格扩展需要无归一化操作，须先把定义为 \(N(x)=x\) 的独立公式 `TEST-NORM-IDENTITY-V1` 加入版本化 registry；它尚未注册，不能用于当前 `core-v1` fixture。
 
 公式 ID、稳定参数键、参数 shape 和 dtype role 写入 logical Plan；参数 Tensor 的数值由 fixture bundle 单独携带，不进入 logical/typed Plan hash。每个版本化公式的必需键、允许键、默认值与参数 schema 也是该公式契约的一部分；未知键、缺失的必需键或改变数学/参数 schema 的值必须在执行前拒绝，不得被 executor 忽略。规范化还必须物化所有默认值；仅因“省略某键”与“显式写出同一默认值”而不同的两份原始配置，必须得到 byte-identical 的规范记录和同一 logical Plan hash。eager、packed、compiled 和 kernel 选择等实现变体字段另存于 execution binding/manifest，不混入公式语义配置。未来替换激活、bias 或归约规则必须使用新的 formula ID。
 
@@ -176,7 +176,7 @@ b^{\mathrm{sel}}_v,
 \right),
 $$
 
-其中 \(W^{\mathrm{sel}}_v\) 的输入宽度为 \(d_{\mathrm{model}}+1\)。该公式没有额外 epsilon；若改变摘要、加入位置/有效长度或改变归约精度策略，必须使用新的 formula ID。
+其中 \(W^{\mathrm{sel}}_v\) 的输入宽度为 \(d_{\mathrm{model}}+1\)。该公式没有额外 epsilon；在摘要输入恰为全零时，测试公式规定 \(\partial\chi/\partial s=0\)，从而固定这个不可微点的 VJP，非零点仍使用上式的通常导数。若改变摘要、加入位置/有效长度、零点次梯度或归约精度策略，必须使用新的 formula ID。
 
 #### `read.selector.content-rms.v1`
 
@@ -193,7 +193,7 @@ r^{\mathrm{sel}}_{v,t}
 \right].
 $$
 
-它不读取 receiver state 或 selector-history，也不增加 epsilon；零向量的结果为零。该公式与 `TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` 中对状态的摘要不是同一操作，不能互换 formula ID。
+它不读取 receiver state 或 selector-history，也不增加 epsilon；零向量的结果为零，且测试公式规定该点对 \(m\) 的 VJP 为零。该公式与 `TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` 中对状态的摘要不是同一操作，不能互换 formula ID。
 
 #### `TEST-HISTORY-ACTIVE-EMA-V1`
 
@@ -350,7 +350,7 @@ $$
 | selector history `history.none.v1` | 不存在 selector-history 状态、读出或写回 |
 | active budget `k.fixed.v1` / `k.input.v1` | 分别使用 Plan 固定整数或候选非空事件的运行期 `requested_k`，值域与时序遵守语义文档第 2.3 节 |
 
-首轮 fixture 的 receiver input/FFN normalization 使用数学上完全同义的 `TEST-RMSNORM-V1` 或 `norm.rms.v1`，需要无归一化时使用明确的 `TEST-NORM-IDENTITY-V1`。报告仍保留 fixture 实际使用的 ID，不在证据中静默改写。未来使用其他 normalization 时必须记录完整公式和 epsilon，只写“RMSNorm”或“LayerNorm”不足以生成 golden。
+首轮 fixture 的 receiver input/FFN normalization 使用数学上完全同义的 `TEST-RMSNORM-V1` 或 `norm.rms.v1`。报告仍保留 fixture 实际使用的 ID，不在证据中静默改写。当前 registry 没有无归一化公式；未来若注册 `TEST-NORM-IDENTITY-V1` 或其他 normalization，必须记录完整公式和适用常量，只写“identity”“RMSNorm”或“LayerNorm”不足以生成 golden。
 
 ### 2.2 首轮 Plan formula config schema
 
@@ -402,7 +402,7 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 
 完整 fixture/checkpoint qualification 还要求一个版本化、实现无关的 parameter-schema manifest。manifest 对每个公式参数保存由 site、field、稳定 node/region/edge ID 和公式内参数角色组成的 logical key，以及 formula ID、shape、dtype role 和可选只读参数组 ID；条目按 logical key 规范排序。公式内角色就是第 2.1 节中的 (w,W,b,\eta,\beta) 等已定义量，不能换成某个 eager module 的属性路径。executor 的 `state_dict` 名称可以作为该实现的装载 locator，但不能充当跨 executor 的参数身份；每个 executor 必须显式证明 locator 与 logical key 一一对应。参数 Tensor 数值仍只由 bundle/checkpoint 携带，不进入 Plan hash。
 
-当前 eager reference 尚未产出这个 manifest，参数 key/shape/dtype role 仍由 module 命名和构造过程隐式派生；通用参数组 schema 也尚未闭合。因此本轮 formula config schema 的通过不等于 parameter schema、fixture bundle 或 checkpoint qualification 已通过。
+当前 eager reference 已能对单个 SettleGraph site 从 Plan 派生 `tide.parameter-schema.v1`：逻辑记录包含 field、稳定 node/region/edge/terminal ID、公式参数角色、formula ID、shape 和 dtype role，eager locator 位于独立 binding，并校验与 `named_parameters()` 一一对应。跨 sites 的 site ID、通用参数组及共享兼容性 schema 仍未闭合；当前序列化 bundle 的正向 round trip 也没有达到第 7 节的语料、独立 golden 和数量门槛。因此 parameter schema 的实现不等于 fixture、checkpoint 或 capability qualification 已通过。
 
 ### 2.3 失败类别 v1
 
@@ -444,7 +444,7 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 
 `phase` 取最早失败阶段，`codes` 只包含该阶段的 code，后续阶段不再求值。Plan schema 是 gate：根结构或类型不足以安全解释时只报告 `plan.schema`；schema 通过后，validator 才聚合同一 mutant 导致的独立 topology/formula codes。静态 codes 去重并按稳定字符串排序。动态资格 fixture 只有一个可到达故障，因此不得依赖 token-major、region-major 或并行执行器“谁先抛异常”的物理顺序。
 
-细粒度 mutant 覆盖使用 fixture manifest 的 `mutation_kind` 统计，例如 cycle、duplicate ID、wrong-dispatch formula 或 aliasing views；首版 executor envelope 只比较上表的稳定粗粒度 code，不把异常文本或实现私有 leaf reason 当作等价条件。随机非法语料的覆盖报告按不同 fixture 计数，每个实际声称支持的 code 至少有一个单缺陷 fixture。当前 eager reference 的异常仍主要是类与文本，尚未提供这个结构化映射，因此已有负测是开发检查，不能计作完整 error-category qualification。
+细粒度 mutant 覆盖使用 fixture manifest 的 `mutation_kind` 统计，例如 cycle、duplicate ID、wrong-dispatch formula 或 aliasing views；首版 executor envelope 只比较上表的稳定粗粒度 code，不把异常文本或实现私有 leaf reason 当作等价条件。随机非法语料的覆盖报告按不同 fixture 计数，每个实际声称支持的 code 至少有一个单缺陷 fixture。当前 eager reference 已提供 `tide.failure.v1` envelope、allowlist、比较与异常捕获 helper；Plan validator 自产 schema/topology/formula code，能由异常类型唯一确定的 code 直接映射，其他跨多个规范阶段的粗异常仍须由已知调用阶段显式提供 code，禁止解析异常文本猜测。保存器还可从合法 payload 应用并认证三种命名 mutation，真实落盘 Plan topology、mask 和 state storage-alias 负 bundle，并拒绝只声明 failure 的合法 payload。这只闭合三个代表性 loader-stage 负例；在全部 code 的单缺陷 bundle、两个 executor 的动态对照、96-case 覆盖和失败收缩补齐前，仍不能计作完整 error-category qualification。
 
 ## 3. 独立 oracle 与 exact trace
 

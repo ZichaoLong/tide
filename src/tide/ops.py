@@ -20,6 +20,10 @@ class OperationConfigurationError(ValueError):
     """A Plan names an unsupported or internally inconsistent operation."""
 
 
+class OperationExecutionError(ValueError):
+    """A validated local formula cannot execute for the supplied event."""
+
+
 @dataclasses.dataclass(frozen=True)
 class AttentionState:
     """Canonical bounded attention history for one receiver and sequence.
@@ -42,6 +46,18 @@ class AttentionState:
 ReceiverState = Optional[Union[Tensor, AttentionState]]
 
 
+def _rms_magnitude(value: Tensor) -> Tensor:
+    """Compute the no-epsilon RMS with the contract's zero subgradient."""
+
+    flattened = value.reshape(-1)
+    if flattened.numel() == 0:
+        return value.new_zeros(())
+    # The direct sqrt(mean(square)) expression has the same forward value but
+    # yields NaN gradients at zero in Torch.  vector_norm supplies the explicit
+    # all-zero subgradient required by the test-formula contract.
+    return torch.linalg.vector_norm(flattened) / math.sqrt(flattened.numel())
+
+
 def _config_type(config: Mapping[str, Any], default: str) -> str:
     value = config.get("type", default)
     if not isinstance(value, str):
@@ -50,7 +66,7 @@ def _config_type(config: Mapping[str, Any], default: str) -> str:
 
 
 class RMSNorm(nn.Module):
-    """Small backend-neutral RMSNorm with an explicit accumulation policy."""
+    """Small backend-neutral RMSNorm for the closed FP32/FP64 formula subset."""
 
     def __init__(self, width: int, eps: float = 1e-6) -> None:
         super().__init__()
@@ -58,12 +74,13 @@ class RMSNorm(nn.Module):
         self.eps = float(eps)
 
     def forward(self, value: Tensor) -> Tensor:
-        # Accumulate FP16/BF16 norms in FP32, then restore the declared dtype.
-        source_dtype = value.dtype
-        work = value.float() if value.dtype in {torch.float16, torch.bfloat16} else value
-        variance = work.square().mean(dim=-1, keepdim=True)
-        normalized = work * torch.rsqrt(variance + self.eps)
-        return normalized.to(source_dtype) * self.weight.to(source_dtype)
+        if value.dtype not in {torch.float32, torch.float64}:
+            raise OperationExecutionError(
+                "RMSNorm accumulation is closed only for float32 and float64"
+            )
+        variance = value.square().mean(dim=-1, keepdim=True)
+        normalized = value * torch.rsqrt(variance + self.eps)
+        return normalized * self.weight.to(value.dtype)
 
 
 def state_tensor_summary(state: ReceiverState, reference: Tensor) -> Tensor:
@@ -74,10 +91,12 @@ def state_tensor_summary(state: ReceiverState, reference: Tensor) -> Tensor:
     if isinstance(state, AttentionState):
         if state.length == 0:
             return reference.new_zeros(())
-        return torch.cat((state.keys.reshape(-1), state.values.reshape(-1))).square().mean().sqrt()
+        return _rms_magnitude(
+            torch.cat((state.keys.reshape(-1), state.values.reshape(-1)))
+        )
     if state.numel() == 0:
         return reference.new_zeros(())
-    return state.reshape(-1).square().mean().sqrt()
+    return _rms_magnitude(state)
 
 
 class ReceiverModule(nn.Module):
@@ -112,6 +131,7 @@ class ReceiverModule(nn.Module):
         )
 
         update_type = _config_type(self.update_config, "none")
+        ffn_read_type = _config_type(self.ffn_read_config, "state_default")
         self.update_type = update_type
         if update_type == "none":
             self.state_shape: Tuple[int, ...] = ()
@@ -142,8 +162,16 @@ class ReceiverModule(nn.Module):
             self.gdn_value = nn.Linear(d_model, value_dim, bias=False)
             self.gdn_eta = nn.Linear(d_model, 1)
             self.gdn_gamma = nn.Linear(d_model, 1)
-            self.gdn_query = nn.Linear(d_model, key_dim, bias=False)
-            self.gdn_out = nn.Linear(value_dim, d_model, bias=False)
+            self.gdn_query = (
+                nn.Linear(d_model, key_dim, bias=False)
+                if ffn_read_type == "state_default"
+                else None
+            )
+            self.gdn_out = (
+                nn.Linear(value_dim, d_model, bias=False)
+                if ffn_read_type == "state_default"
+                else None
+            )
             self.gdn_beta = nn.Parameter(torch.zeros(()))
             self.state_norm_eps = float(self.update_config.get("norm_eps", 1e-12))
         elif update_type == "attention_window":
@@ -160,8 +188,16 @@ class ReceiverModule(nn.Module):
             self.attn_window = window
             self.attn_key = nn.Linear(d_model, key_dim, bias=False)
             self.attn_value = nn.Linear(d_model, value_dim, bias=False)
-            self.attn_query = nn.Linear(d_model, key_dim, bias=False)
-            self.attn_out = nn.Linear(value_dim, d_model, bias=False)
+            self.attn_query = (
+                nn.Linear(d_model, key_dim, bias=False)
+                if ffn_read_type == "state_default"
+                else None
+            )
+            self.attn_out = (
+                nn.Linear(value_dim, d_model, bias=False)
+                if ffn_read_type == "state_default"
+                else None
+            )
             self.state_norm_eps = float(self.update_config.get("norm_eps", 1e-12))
         else:
             raise OperationConfigurationError(f"unsupported Update type: {update_type}")
@@ -203,7 +239,6 @@ class ReceiverModule(nn.Module):
                 f"unsupported selector Read type: {read_type}"
             )
 
-        ffn_read_type = _config_type(self.ffn_read_config, "state_default")
         self.ffn_read_type = ffn_read_type
         if ffn_read_type == "zero":
             self.state_out = None
@@ -304,9 +339,13 @@ class ReceiverModule(nn.Module):
 
     def aggregate(self, messages: Sequence[Tensor], edge_ids: Sequence[str]) -> Tensor:
         if not messages:
-            raise ValueError("Aggregate requires at least one DATA message")
+            raise OperationExecutionError(
+                "Aggregate requires at least one DATA message"
+            )
         if len(messages) != len(edge_ids):
-            raise ValueError("messages and edge_ids must have equal lengths")
+            raise OperationExecutionError(
+                "messages and edge_ids must have equal lengths"
+            )
         # Every entry receiver receives exactly one boundary message.  The
         # boundary is not a fixed parent edge and is returned unchanged even
         # for edge-parameterized Aggregate formulas.
@@ -367,9 +406,11 @@ class ReceiverModule(nn.Module):
         if self.update_type == "attention_window":
             assert isinstance(state, AttentionState)
             if token_position is None:
-                raise ValueError("window Attention Update requires token_position")
+                raise OperationExecutionError(
+                    "window Attention Update requires token_position"
+                )
             if state.length and token_position <= int(state.positions[-1].item()):
-                raise ValueError(
+                raise OperationExecutionError(
                     "window Attention positions must increase strictly within a sequence"
                 )
             key = F.normalize(
@@ -389,13 +430,15 @@ class ReceiverModule(nn.Module):
         if self.selector_read_type == "content":
             return normalized
         if self.selector_read_type == "content_norm":
-            return normalized.square().mean().sqrt().reshape(1)
+            return _rms_magnitude(normalized).reshape(1)
         assert self.selector_read_linear is not None
         if self.selector_read_type == "content_linear":
             return self.selector_read_linear(normalized)
         if self.selector_read_type == "content_state_linear":
             if not isinstance(state, Tensor):
-                raise ValueError("content_state_linear requires Tensor state")
+                raise OperationExecutionError(
+                    "content_state_linear requires Tensor state"
+                )
             return self.selector_read_linear(
                 torch.cat((normalized, state.reshape(-1)), dim=-1)
             )
@@ -412,6 +455,10 @@ class ReceiverModule(nn.Module):
             return self.state_out(state)
         if self.update_type == "gdn":
             assert isinstance(state, Tensor)
+            if self.gdn_query is None or self.gdn_out is None:
+                raise OperationExecutionError(
+                    "GDN state read has no query/output projection"
+                )
             query = F.normalize(
                 self.gdn_query(normalized), dim=-1, eps=self.state_norm_eps
             )
@@ -420,6 +467,10 @@ class ReceiverModule(nn.Module):
             assert isinstance(state, AttentionState)
             if state.length == 0:
                 return normalized.new_zeros((self.d_model,))
+            if self.attn_query is None or self.attn_out is None:
+                raise OperationExecutionError(
+                    "Attention state read has no query/output projection"
+                )
             query = F.normalize(
                 self.attn_query(normalized), dim=-1, eps=self.state_norm_eps
             )
@@ -538,20 +589,26 @@ class RegionSelector(nn.Module):
         context: Optional[Tensor] = None,
     ) -> Tensor:
         if readouts.ndim != 2:
-            raise ValueError("selector readouts must have shape [candidates, read_dim]")
+            raise OperationExecutionError(
+                "selector readouts must have shape [candidates, read_dim]"
+            )
         candidates = (
             tuple(candidate_node_ids)
             if candidate_node_ids is not None
             else self.node_ids
         )
         if len(candidates) != readouts.shape[0]:
-            raise ValueError("candidate IDs must match selector readout rows")
+            raise OperationExecutionError(
+                "candidate IDs must match selector readout rows"
+            )
         unknown = set(candidates) - set(self.node_ids)
         if unknown:
-            raise ValueError(f"unknown candidate node IDs: {sorted(unknown)}")
+            raise OperationExecutionError(
+                f"unknown candidate node IDs: {sorted(unknown)}"
+            )
         if self.context_dim:
             if context is None or context.shape != (self.context_dim,):
-                raise ValueError(
+                raise OperationExecutionError(
                     f"Score context must have shape [{self.context_dim}]"
                 )
             score_inputs = torch.cat(
@@ -560,7 +617,9 @@ class RegionSelector(nn.Module):
             )
         else:
             if context is not None and context.numel() != 0:
-                raise ValueError("this Score formula declares no public context")
+                raise OperationExecutionError(
+                    "this Score formula declares no public context"
+                )
             score_inputs = readouts
         if self.score_type == "read_sum":
             return score_inputs.sum(dim=-1)
@@ -616,10 +675,12 @@ def deterministic_topk_mask(scores: Tensor, k: int) -> Tensor:
     """
 
     if scores.ndim != 1:
-        raise ValueError("scores must be one-dimensional")
+        raise OperationExecutionError("scores must be one-dimensional")
     candidate_count = int(scores.shape[0])
     if not 1 <= int(k) <= candidate_count:
-        raise ValueError("k must satisfy 1 <= k <= number of candidates")
+        raise OperationExecutionError(
+            "k must satisfy 1 <= k <= number of candidates"
+        )
     # row i, column j: candidate j outranks candidate i.
     greater = scores.unsqueeze(0) > scores.unsqueeze(1)
     indices = torch.arange(candidate_count, device=scores.device)
