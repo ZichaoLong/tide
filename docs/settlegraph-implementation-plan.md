@@ -1,6 +1,6 @@
 # SettleGraph 实现与等价性验证计划
 
-> 本文是实现计划，不是新的神经网络语义来源。
+> 本文是实现计划，不改写 SettleGraph 的主模型语义。明确标为“可选外部控制扩展”的接口行为只描述和验证该扩展本身，不属于主语义或标准科学实验条件。
 >
 > [实验语义、命名与数学符号](experiment-semantics-and-naming.md) 是 SettleGraph 计算含义的权威文档。若实现计划与语义文档冲突，以语义文档为准；若语义文档不足以唯一决定实现行为，应先对齐语义，而不是在代码里自行选择一种解释。
 >
@@ -10,7 +10,7 @@
 
 首轮实现同时建设三条执行路径：
 
-| 执行路径 | 作用 | 是否必须覆盖任意标准 Plan |
+| 执行路径 | 作用 | 是否必须覆盖任意 `core-v1` Plan |
 | --- | --- | ---: |
 | 逐 Token 解释器 | 最直接地复现语义文档第 2.4 节，作为正确性基准，也可用于 decode | 是 |
 | 通用 packed prefill 执行器 | 批量处理一段 Token，避免按 Token、样本或 node 发起大量 Python 调用 | 是，具体性能能力按算子记录 |
@@ -18,7 +18,7 @@
 
 这三条路径必须复用同一份规范化 Plan、参数、输入、初始状态和随机数规则。特化执行器不是另一套模型语义；它只是通用执行的优化实现。
 
-这里的“标准 Plan”指语义文档第 2.4 节当前明确闭合的固定图子集：可变 receiver state 由唯一 receiver 键拥有，不跨 receiver、region 或 site 共享；active budget 是 Plan 固定整数或显式运行期 `requested_k`；所有局部公式和当前 FP32/FP64 reference 子集的 dtype roles 已完整声明。selector-history 的局部测试公式虽已定义，但通用 owner、字段和序列化 schema 尚未闭合，因此不属于当前 `core-v1` 标准 Plan。这里的“通用”首先表示不限制标准 Plan 的合法拓扑。逐 Token 和通用 prefill 接口都必须能执行任意标准 Plan；selector-history、共享可变状态、由模型 Tensor 推导 budget、混合/低精度 accumulation policy 或其他未来扩展，必须先增加语义和能力声明。任意新加入的自定义算子也不会自动获得高性能，其 reference、packed 和设备优化能力必须分别验证。
+这里的“`core-v1` Plan”指首轮实现和资格测试采用的固定图子集：每个 region 独立声明固定 active budget，每份可变状态和 SettleGraph 内部可训练参数都有唯一 owner；所有局部公式和当前 FP32/FP64 reference 子集的 dtype roles 已完整声明。当前 Plan schema 还接受可选的外部 `requested_k` 控制，但它不属于 `core-v1` Plan，必须作为单独的接口扩展标记和验证，也不能记作固定 \(K_{\mathcal R}\) 的标准实验。selector-history 的局部测试公式虽已定义，但通用 owner、字段和序列化 schema 尚未闭合，因此同样不属于当前 `core-v1` Plan。这里的“通用”首先表示不限制 `core-v1` Plan 的合法拓扑。逐 Token 和通用 prefill 接口都必须能执行任意 `core-v1` Plan；selector-history、由模型内容推导的 adaptive budget、混合/低精度 accumulation policy 或其他未来扩展，必须先增加语义和能力声明。任意新加入的自定义算子也不会自动获得高性能，其 reference、packed 和设备优化能力必须分别验证。
 
 “函数等价”至少包括：
 
@@ -37,19 +37,19 @@
 
 | 当前工件 | 已有范围 | 尚未达到的边界 |
 | --- | --- | --- |
-| 运行时与 Plan | CPU-safe 的包入口；device/dtype 解析；logical/typed Plan 规范化、分类静态校验与哈希；当前 reference formula config 的 exact schema、默认值物化、数值规范化及跨字段 shape/timing 校验；运行期拒绝不同 owner 键通过不同 Tensor views 共享可变 storage；手工拓扑和小型 HB fixture Builders；单 site 的实现无关 parameter-schema manifest 与独立 eager locator binding；`tide.failure.v1` envelope；CPU-only、weights-only-safe 的 `tide.settlegraph.fixture.v1` no-replace 保存、单次 bytes 装载、Tensor 值/stride/storage group 认证、真实负 mutation 与 preflight；development corpus 的项目内运行记录入口 | 跨 site/参数组共享 schema、可学习首状态 schema、混合/低精度 accumulation role、跨语言 canonicalizer conformance、完整资格 bundle 集、benchmark/训练/硬件资格运行 manifest、能力矩阵证据和 Builder qualification |
-| token-major eager reference | 当前 reference 算子子集的逐 Token 解释与 token-major prefill；N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务、balance 统计和 trace | 任意自定义公式、selector context/history、Plan 参数组共享，以及测试契约要求的完整多类别 golden/exact-trace 资格语料 |
+| 运行时与 Plan | CPU-safe 的包入口；device/dtype 解析；logical/typed Plan 规范化、分类静态校验与哈希；当前 reference formula config 的 exact schema、默认值物化、数值规范化及跨字段 shape/timing 校验；运行期拒绝不同 owner 键通过不同 Tensor views 共享可变 storage；手工拓扑和小型 HB fixture Builders；单 site 的实现无关 parameter-schema manifest 与独立 eager locator binding；`tide.failure.v1` envelope；CPU-only、weights-only-safe 的 `tide.settlegraph.fixture.v1` no-replace 保存、单次 bytes 装载、Tensor 值/stride/storage group 认证、真实负 mutation 与 preflight；development corpus 的项目内运行记录入口 | 跨 site 的独立参数 schema 组合、可学习首状态 schema、混合/低精度 accumulation role、跨语言 canonicalizer conformance、完整资格 bundle 集、benchmark/训练/硬件资格运行 manifest、能力矩阵证据和 Builder qualification |
+| token-major eager reference | 当前 reference 算子子集的逐 Token 解释与 token-major prefill；N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务、balance 统计和 trace | 任意自定义公式、selector context/history，以及测试契约要求的完整多类别 golden/exact-trace 资格语料；forced-active singleton 仍会额外执行 selector Read/Score，尚待按第 2.3.3 节简化 |
 | region-major eager reference | `prefill_region_major` 独立于 `interpret_token`，按规范 region 顺序执行同一 Plan，并已有 forward/state/trace/gradient 定向差分测试 | 仍按 region、Token 和 batch row 使用 Python 循环；不是第 3.2 节的通用 packed prefill，没有 packed 或性能能力声明 |
 | placement | POST、PARBLK、PARATTN、PARMLP 的通用 Tensor 方程及 identity 退化测试 | 真实 Qwen block、causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度接入 |
-| comparator 与解析 oracle | 统一 nested comparator、trace invariant 检查、route-boundary 分类，一个不调用共享局部算子或执行器 helper 的 singleton exact-trace golden；固定 seed 的 48-Plan development corpus 在 FP32/FP64 比较 token-major 与 region-major 的 output/state/balance/trace，其中 6 个 Plan 比较 hidden 与每个具名参数的 gradient/`None` 记录；24 个命名单变换非法 Plan 直接验证 validator 自产分类；三个序列化负 bundle 已真实覆盖 Plan topology、mask 和 state storage alias | 完整多类别独立 golden、把覆盖语料长期物化为 bundles、逐个实际 logical key 的 connected/disconnected VJP 与 parameter-manifest exact-key absence 判据、256 legal/64 VJP/16 optimizer/96 Plan-or-runtime-input negative 加另计 8 artifact negative 的资格数量及细分计数、其余非法 mutants、失败收缩和可追溯资格 artifact |
+| comparator 与解析 oracle | 统一 nested comparator、trace invariant 检查、route-boundary 分类，一个不调用共享局部算子或执行器 helper 的 singleton exact-trace golden；固定 seed 的 48-Plan development corpus 在 FP32/FP64 比较 token-major 与 region-major 的 output/state/balance/trace，其中 6 个 Plan 比较 hidden 与每个具名参数的 gradient/`None` 记录；24 个命名单变换非法 Plan 直接验证 validator 自产分类；三个序列化负 bundle 已真实覆盖 Plan topology、mask 和 state storage alias | 现有 singleton golden 仍包含多余的 selector Read/Score，需随第 2.3.3 节的实现简化重新生成；此外仍缺完整多类别独立 golden、长期物化 bundles、逐个实际 logical key 的 connected/disconnected VJP 与 parameter-manifest exact-key absence 判据、资格数量及细分计数、其余非法 mutants、失败收缩和可追溯资格 artifact |
 | checkpoint v1 | SettleGraph 参数、logical/typed Plan 与参数 dtype 校验、CPU 规范 receiver Tensor/窗口 Attention 状态、进度/训练元数据和 CPU RNG 的 `init-from`/`resume` round trip；通用状态序列化器严格编码、解码 selector-history 容器，但 eager executor/checkpoint attach 拒绝非空 history；root 键集 exact，序列位置使用下一待执行位置并拒绝旧字段；Adam/AdamW 类型与超参数域、稳定模型参数组/顺序、已初始化 state manifest、Tensor shape/dtype/storage alias 均在 commit 前校验；保存端只接受 weights-only-safe 元数据并自检；CPU 序列状态先做 owner/alias 校验再转目标 device；基础 CPU checkpoint 跨 device 装载路径和 receiver-state continuation 用例已实现；注入式 commit failure 对 model `state_dict`、optimizer containers/defaults 与 CPU RNG 联合回滚 | selector-history continuation、scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口和窗口中途恢复未实现；portable handoff 仍缺完整训练状态、optimizer 下一步、规定数量和可追溯证据，未达到完整资格；不支持任意 optimizer/schema，也不承诺回滚任意 Python 属性或 load hook 外部副作用；仍缺第 7.5 节与测试契约第 8 节的完整资格证据 |
 | live backend 入口 | CPU/NPU/CUDA 的显式 backend semantic 测试入口；2026-09-03 在本机 aarch64 `Ascend910_9392`、Torch `2.10.0+cpu`、TorchNPU `2.10.0`、CANN `9.0.0` 上，对后来提交为 `c6e2cc5` 的 eager-reference 基线内容完成一次 FP32 定向 attempt：由 site launcher 分配设备并在进程内使用 logical index 0，显式 NPU runtime suite 22/22、live semantic 3/3、独立 CPU→NPU fixture parity 和 CPU checkpoint continuation 通过，parity 最大绝对/相对误差为 \(5.96\times10^{-8}\)/\(1.43\times10^{-6}\)，CPU parity artifact/checkpoint SHA-256 分别为 `944378eb1ad4e7ba20205eeb81f8243b4aebad85763f7db27139dde29964861f`/`5a4c155bb5ada1e1b47a30fc5628e622a225600f282fd42964d2df8fe6614172`；另一次较早的 EMA、Gated DeltaNet 与窗口 Attention region-major forward/backward profiler attempt 观察到 NPU kernels，未观察到 AI_CPU task 或显式 fallback 记录 | 该记录不是 clean exact-commit 证据，且当前扩展代码尚未复验；parity 只有一个 BO/post fixture，未达到契约的 64/32/8 数量与完整 operator/shape/layout 覆盖，也未 profile optimizer/checkpoint 或建立 fallback closure；较早 profiler 有默认 schedule 可能不完整的 warning，并无 packed、低精度、短训练，因此 NPU 仍为 `implemented`；CUDA 仍为 `planned` |
 
-因此，Stage A 的 eager reference 主体、独立调度参考、基础 comparator/invariant、一个解析 golden、单-site parameter manifest、bundle 基础设施和扩大版 development corpus 已经存在，但 Stage A 的完整多类别 golden 与资格语料尚未闭合；Stage B 的 packed 执行、Stage C 的真实 Base 接入、selector-history 和跨 node/site 参数组共享均未完成。本机已有基线快照的 NPU 定向 parity/checkpoint attempt 和一次较早的 profiler attempt，但当前扩展代码与完整 NPU qualification、CUDA parity 均未验证。现有单元、定向差分和这些硬件 attempt 都不能代替第 10 节要求的完整可追溯资格 artifact。
+因此，Stage A 的 eager reference 主体、独立调度参考、基础 comparator/invariant、一个解析 golden、单-site parameter manifest、bundle 基础设施和扩大版 development corpus 已经存在，但 forced-active singleton 尚待简化，完整多类别 golden 与资格语料也尚未闭合；Stage B 的 packed 执行、Stage C 的真实 Base 接入和 selector-history 均未完成。本机已有基线快照的 NPU 定向 parity/checkpoint attempt 和一次较早的 profiler attempt，但当前扩展代码与完整 NPU qualification、CUDA parity 均未验证。现有单元、定向差分和这些硬件 attempt 都不能代替第 10 节要求的完整可追溯资格 artifact。
 
-其中 selector-history 与参数组共享还存在通用 schema 级未闭合项。测试契约中的 `TEST-HISTORY-ACTIVE-EMA-V1` 已经唯一规定一个 node-level history 的数值递推、写回时序、首值/decay 语义及其加入 Read 的位置，因此该局部公式本身可以生成 golden；尚未唯一规定的是通用 Plan 如何选择 region-level 或 node-level owner、规范 owner 键和字段、Read 维度，以及 trace/checkpoint 中的统一序列化表示。类似地，共享只读参数的数学含义已经明确为“多个使用点引用同一个 Tensor，梯度自然累加”，但参数组 schema 尚未规定组 ID 覆盖哪些局部参数键、允许部分还是整组共享，以及公式、shape、dtype role 和跨 site 命名的兼容条件。在这些选择形成版本化 schema 前，两者不能进入当前实现的通用标准测试子集；本计划不替这些待定项预选软件字段。
+selector-history 仍存在通用 schema 级未闭合项。测试契约中的 `TEST-HISTORY-ACTIVE-EMA-V1` 已经唯一规定一个 node-level history 的数值递推、写回时序、首值/decay 语义及其加入 Read 的位置，因此该局部公式本身可以生成 golden；尚未唯一规定的是通用 Plan 如何选择 region-level 或 node-level owner、规范 owner 键和字段、Read 维度，以及 trace/checkpoint 中的统一序列化表示。在这些选择形成版本化 schema 前，它不能进入当前实现的通用标准测试子集；本计划不替这些待定项预选软件字段。
 
-单个 SettleGraph site 当前从 Plan 派生实现无关 parameter schema，并另存 eager locator binding；fixture Tensor 因而可以使用逻辑参数键，而不把 eager module 路径当作跨 executor 身份。跨 sites 的 site ID、跨 node/site 参数组共享及兼容规则仍未闭合，packed/特化 executor 也尚未提供自己的 locator binding。当前 schema 解决了无共享单-site bundle 的参数身份，不代表端到端或共享参数资格已经完成。
+单个 SettleGraph site 当前从 Plan 派生实现无关 parameter schema，并另存 eager locator binding；fixture Tensor 因而可以使用逻辑参数键，而不把 eager module 路径当作跨 executor 身份。跨 sites 的稳定 site ID 与独立 parameter schema 组合仍未闭合，packed/特化 executor 也尚未提供自己的 locator binding。当前 schema 只解决了独立参数的单-site bundle 身份，不代表端到端资格已经完成。
 
 ## 2. 共同的数据契约
 
@@ -65,7 +65,7 @@
 | `routing_stats_mask`，shape 为 \([B,T]\)，可省略 | 只选择路由统计事件；默认等于 `execution_mask`，显式值必须是其子集 |
 | `sequence_id`，长度为 \(B\) | 跨 chunk 稳定标识每条序列 |
 | `token_position`，shape 为 \([B,T]\) | 同一序列内跨 chunk 不重置的全局 Token 位置 |
-| 可选 `requested_k` 控制 | 对 Plan 明确开放运行期 active budget 的 regions，按事件提供非可微整数 |
+| 可选 `requested_k` 控制 | 当前实现的外部控制扩展；对明确开放它的 regions，按事件提供非可微整数 |
 | 初始状态 | 按语义文档第 2.5 节的键读取的 receiver state 与 selector-history |
 | logical Plan、concrete execution binding 与参数 | 固定拓扑、局部运算、dtype role 绑定，以及按 Plan 稳定参数键提供的 Tensor 数值 |
 
@@ -85,7 +85,7 @@
 
 一个序列在首个成功执行位置创建声明的首状态，并在后续 chunks 中按 `sequence_id` 延续。显式 reset 在调用的第一个 Token 前把该序列在当前 site 的全部 receiver state、selector-history 和下一位置恢复到首值；顶层模型对一个序列做 reset 时，必须对其全部 sites 使用同一边界。释放状态是独立的生命周期操作，只能针对明确列出的、没有进行中调用的序列。
 
-一次公开调用使用私有暂存状态执行。调用内部较早位置的写入可以被同一调用中较晚位置读取，但 receiver state、selector-history、下一位置、reset 结果、输出和辅助统计只在全部输入校验与全部图执行 Token 成功后一起发布。任一图执行 Token 的 `requested_k` 越界、位置非法、局部操作失败或空终端执行不变量失败时，整个调用失败并丢弃暂存写入；调用前状态保持不变，也不得返回可用于继续训练的部分结果。语义文档第 2.4 节的标准 Plan 约束本身保证非空终端，空终端 case 只通过测试专用故障注入验证防御与回滚，不能当作合法路由样例。
+一次公开调用使用私有暂存状态执行。调用内部较早位置的写入可以被同一调用中较晚位置读取，但 receiver state、selector-history、下一位置、reset 结果、输出和辅助统计只在全部输入校验与全部图执行 Token 成功后一起发布。任一图执行 Token 的 `requested_k` 越界、位置非法、局部操作失败或空终端执行不变量失败时，整个调用失败并丢弃暂存写入；调用前状态保持不变，也不得返回可用于继续训练的部分结果。语义文档第 2.4 节的合法 Plan 约束本身保证非空终端，空终端 case 只通过测试专用故障注入验证防御与回滚，不能当作合法路由样例。
 
 chunk 边界的状态值默认延续，autograd 边界默认 detach；这两件事必须分别表达。若某项测试或训练选择跨 chunk 保留梯度，必须显式记录，并与采用相同边界的 oracle 比较。并发调用不能同时写入同一个 `sequence_id`；调度器必须串行化或在开始前拒绝冲突。
 
@@ -99,18 +99,99 @@ chunk 边界的状态值默认延续，autograd 边界默认 detach；这两件�
 - region 依赖图及其规范拓扑序；
 - Aggregate、Update、两类 Read、Score、Top-K、NodeCompute 和 Emit 的配置；
 - 状态、参数、hidden、读出和归约量的 shape 与 dtype role 契约；
-- forced-active、\(K^{\max}\)，以及固定 \(K^{\mathrm{req}}\) 或运行期 `requested_k` 契约；
+- forced-active 和每个 region 的固定 \(K_{\mathcal R}\)；若使用实现扩展，还要保存运行期 `requested_k` 契约；
 - HB-Lattice 可选的 Line、phase 和边来源标签。
 
 进入同一 receiver 的父消息按稳定 edge ID 排列；一个 region 的 candidates 按稳定 node ID 排列。logical Plan 的规范化序列化必须产生稳定 logical Plan hash。另一个规范记录把 dtype roles 映射到具体 dtype，连同 logical Plan hash 产生 typed Plan hash。可训练/装载的参数 Tensor 数值、device、executor、运行期 reached/active 结果和某个 batch 的状态不属于这两个 Plan hash；稳定参数键/schema 与会改变公式的固定常量、尺寸和开关属于 logical Plan。CPU FP64 oracle、CPU FP32 和 NPU FP32 分别建立 concrete execution binding，不能通过修改同一个 concrete Plan 的未记录运行时 dtype 来切换。
 
-当前 logical Plan schema `1` 的规范 bytes 由仓库 reference canonicalizer `tide-plan-json-v1` 产生：所有 object keys 按语义文档第 2.1 节的稳定字符串顺序排列，语义集合/序列先按各自稳定 ID 或规范拓扑序排列；JSON 直接写 Unicode、不写无意义空白、拒绝 NaN/Inf，再编码为 UTF-8。logical/typed Plan hash 都是相应 bytes 的小写 SHA-256。公式实数先按测试契约第 2.2 节完成整数/浮点同值与负零规范化；其他 JSON number 的 byte 表示以这个 reference canonicalizer 为准。fixture bundle 必须携带 canonicalizer ID 和原始规范 bytes；尚未通过 byte-for-byte golden 的其他语言 executor 应消费这些 bytes，而不能自行猜测另一种 JSON number renderer。当前仓库还没有独立于 Python reference 的跨语言 canonicalizer conformance suite，因此跨语言重新生成相同 Plan hash 仍是完整资格缺口，不影响本轮同一 Python reference 内的定向比较。
+当前 schema 中的 site、node、edge、region、参数角色等稳定 ID 都是非空的 Unicode scalar-value 字符串：必须采用 NFC 规范化，不含 NUL，首尾既不是 Unicode `White_Space` 字符，也不是 C0 information separators U+001C–U+001F。稳定顺序按 Unicode scalar value 序列做字典序比较，与 locale、自然数排序和声明顺序无关；合法 UTF-8 对 scalar value 保序，因此实现也可以对这些字符串的 UTF-8 bytes 使用无符号字典序。
 
-validator 必须拒绝跨 receiver、region 或 site 的可变状态别名；共享只读参数通过稳定参数组 ID 表达。`requested_k` 容器的键、shape 和整数表示可在调用前预验证；对每个候选非空的 region 事件，运行期值在任何 selector 计算前校验为整数且位于 \([1,K^{\max}]\)；候选为空时不读取该位置的值。候选少于合法请求值时才按语义取候选数。adaptive budget 不属于标准 Plan。
+当前 logical Plan schema `1` 的规范 bytes 由仓库 reference canonicalizer `tide-plan-json-v1` 产生：所有 object keys 按上述稳定字符串顺序排列，语义集合/序列先按各自稳定 ID 或规范拓扑序排列；JSON 直接写 Unicode、不写无意义空白、拒绝 NaN/Inf，再编码为 UTF-8。logical/typed Plan hash 都是相应 bytes 的小写 SHA-256。公式实数先按测试契约第 2.2 节完成整数/浮点同值与负零规范化；其他 JSON number 的 byte 表示以这个 reference canonicalizer 为准。fixture bundle 必须携带 canonicalizer ID 和原始规范 bytes；尚未通过 byte-for-byte golden 的其他语言 executor 应消费这些 bytes，而不能自行猜测另一种 JSON number renderer。当前仓库还没有独立于 Python reference 的跨语言 canonicalizer conformance suite，因此跨语言重新生成相同 Plan hash 仍是完整资格缺口，不影响本轮同一 Python reference 内的定向比较。
 
 为高性能执行派生的 region 批次、CSR 索引、算子分组和缓存生命周期称为编译后调度信息。它可以重新生成，不能改变规范化 Plan 的含义，也不能取代 logical/typed Plan hash。
 
-### 2.3 参数与算子实现
+### 2.3 当前 `core-v1` 的实现取舍
+
+本节把首轮实现有意采用的简单构造集中在一起。它们约束当前实现与资格测试，但不是 SettleGraph 数学语义的唯一可能实现。
+
+#### 2.3.1 每个 region 独立配置 active budget
+
+主语义中的固定 \(K_{\mathcal R}\) 在当前 Plan schema 中表示为
+
+$$
+K^{\max}_{\mathcal R}
+=K^{\mathrm{req}}_{\mathcal R}
+=K_{\mathcal R}.
+$$
+
+不同 regions 可以使用不同的固定值，标准实验只使用这种配置。当前 Plan schema 可以表示两种请求来源：
+
+- `fixed`：Plan 中固定的 \(K^{\mathrm{req}}_{\mathcal R}\)，用于标准实验；
+- `input`：对明确开放该接口的 region，由调用方通过 `requested_k` 提供非可微整数，属于可选的外部控制扩展。
+
+若当前事件有 \(C_{\mathcal R,t}>0\) 个 candidates，则先校验
+
+$$
+1\le K^{\mathrm{req}}_{\mathcal R,t}\le K^{\max}_{\mathcal R},
+$$
+
+再取
+
+$$
+K^{\mathrm{actual}}_{\mathcal R,t}
+=\min\!\left(K^{\mathrm{req}}_{\mathcal R,t},C_{\mathcal R,t}\right).
+$$
+
+候选为空时不执行选择，也不读取该事件的 `requested_k`。`requested_k` 可以随调用事件变化，因此只用于接口与调度实验，不能记作主语义中的固定 \(K_{\mathcal R}\) 实验。由 Token hidden、selector logits 或 receiver state 在模型内部推导请求值的 adaptive \(K\) 暂不支持。
+
+#### 2.3.2 状态与参数各自独占
+
+每份 receiver state、selector-history 和 SettleGraph 内部可训练参数都由一个稳定逻辑键唯一拥有。当前 validator 和 binding 必须拒绝跨 node、region 或 site 的共享、Tensor alias 以及 backing-storage alias；SettleGraph 权重不做绑定。批量执行可以重排或临时打包互不共享的参数，但不能把不同逻辑参数变成同一个可训练自由度。若以后重新引入共享，必须另行定义 owner、参数身份、更新顺序、梯度累加和 checkpoint 契约，不能把它当作当前 Plan 的自然扩展。
+
+#### 2.3.3 forced-active singleton
+
+forced-active singleton 被 reached 后直接取
+
+$$
+p_{v,t}=1,
+\qquad
+\mathcal A_{\mathcal R,t}=\{v\}.
+$$
+
+它不需要执行 selector 的 \(\operatorname{Read}^{\mathrm{sel}}\)、Score、softmax 或 Top-K；receiver 的 Update、\(\operatorname{Read}^{\mathrm{ffn}}\)、NodeCompute 和 Emit 仍按各自配置执行。当前 eager 路径和既有 singleton golden 仍会额外计算 selector Read/Score，这是待简化的实现差距；额外 logit 或 trace 不能成为权威行为。
+
+#### 2.3.4 结构化状态与 Attention 时间位置
+
+语义中的单个状态 \(s_{v,t}\) 可以是由多个 Tensor 和元数据组成的结构化值，而不必压成一个 Tensor。窗口 Attention 的数值状态是主语义附录 A.5 定义的有序 key/value 序列；当前 runtime 和 checkpoint 还为每个有效项附带 Observe 时的 Token 位置，其实现记录记为
+
+$$
+\bar s^{\mathrm{impl}}_{v,t}
+=\bigl((\tau_i,k_i,\nu_i)\bigr)_{i=1}^{n_s},
+\qquad
+0\le n_s\le W,
+$$
+
+其中 \((k_i,\nu_i)\) 是主语义附录 A.5 中按 Observe 顺序排列的第 \(i\) 个有效 key/value pair，\(\tau_i\) 是它在同一序列中的全局 Token 位置；丢弃各 \(\tau_i\) 后即得到主语义中的 \(s_{v,t}\)。当前 Attention 读出只消费有效的 keys 和 values，不使用 \(\tau_i\) 改变权重；位置元数据仍随 checkpoint 保存并参与实现状态比较，为以后定义时间衰减等另一种 receiver 公式保留信息。固定 ring buffer、有效长度加 head，或 packed 变长表示都只是物理实现；比较和保存前应恢复为同一有序有效序列，未使用槽位没有语义。
+
+#### 2.3.5 identity 的首轮充分构造
+
+当前实现不尝试构造“局部变化相互抵消、整体仍为 identity”的复杂初始化。对任意合法 hidden \(h\)、当前可见状态 \(s\)、soft probability \(p\) 和非空重复消息序列，首轮直接采用以下局部充分条件：
+
+$$
+\operatorname{Aggregate}_v(h,\ldots,h)=h,
+\qquad
+\operatorname{NodeCompute}_v(h,N_{R,v}(h),s)=h,
+$$
+
+$$
+\operatorname{Emit}_v(h,h,p)=h,
+\qquad
+\operatorname{Aggregate}_{\mathrm{out}}(h,\ldots,h)=h.
+$$
+
+再加上每个图执行 Token 至少有一个 active 终端 receiver，即可得到图整体 identity。该验收默认只承诺 Base 模型前向输出和由它定义的 LM loss 不变；非零路由辅助项、新增参数梯度和完整训练目标不自动与 Base 等价。
+
+### 2.4 参数与算子实现
 
 每项局部运算分成两层：
 
@@ -119,7 +200,7 @@ validator 必须拒绝跨 receiver、region 或 site 的可变状态别名；共
 
 每个语义配置至少有一个标准 Torch 参考实现。可选优化实现必须声明支持的 device、dtype、shape、forward/backward 和布局；不支持时只能显式选择已经验证等价的参考实现，或明确失败，不能暗中换算法、换 dtype、转 CPU 或丢失梯度。
 
-各执行器应直接读取同一组参数 Tensor。为了 grouped GEMM 或批量状态更新，可以为具有相同算子签名的 nodes 堆叠参数；不同执行器不能维护彼此独立、可能逐渐失配的参数副本。参数共享若被某个实验启用，也必须通过明确的参数索引表达并验证梯度累加。
+各执行器应读取同一组逻辑参数。为了 grouped GEMM 或批量状态更新，可以重排或临时堆叠具有相同算子签名、但彼此独立的 node 参数；不同执行器不能维护会逐渐失配的可训练副本，也不能借打包引入权重绑定。
 
 ## 3. 三条执行路径
 
@@ -130,12 +211,12 @@ validator 必须拒绝跨 receiver、region 或 site 的可变状态别名；共
 1. 为当前 Token 建立入口消息；
 2. 按 region 依赖的合法拓扑序推进；
 3. 等固定父边全部结算后，按 edge ID 收集 `DATA`，忽略 `CLOSED`；
-4. 完成 Aggregate、Read、Score、Top-K、Observe/commit、NodeCompute 和 Emit；
+4. 完成 Aggregate、选择、Observe/commit、NodeCompute 和 Emit；普通竞争 region 执行 selector Read、Score 和 Top-K，forced-active singleton 按第 2.3.3 节直接激活；
 5. 结算固定出边并最终聚合 active 终端输出。
 
 首版允许在 Python 中按 region、node 和 edge 循环，因为它的首要职责是清楚、可检查和适合逐步调试。Tensor 数学仍使用标准 Torch，使 CPU float64、autograd 和 NPU eager 路径能复用同一代码。
 
-解释器应支持可控 exact trace。小 fixture 中不能只保存状态摘要，而要按 [等价性测试契约](equivalence-test-contract.md) 记录父边结算与 payload、消息序列、\(s^-\)、proposal、selector readout、candidates、logits、probability、请求与实际 K、Observe/active、\(s^{\mathrm{cmp}}\)、NodeCompute、Emit、状态与历史写回，以及终端聚合。trace 的排列只依赖稳定 site/region/node/edge ID 和序列位置。
+解释器应支持可控 exact trace。小 fixture 中不能只保存状态摘要，而要按 [等价性测试契约](equivalence-test-contract.md) 记录父边结算与 payload、消息序列、\(s^-\)、proposal、candidates、Observe/active、\(s^{\mathrm{cmp}}\)、NodeCompute、Emit、状态与历史写回，以及终端聚合；selector readout、logits、probability、请求与实际 K 只在对应操作存在时记录。trace 的排列只依赖稳定 site/region/node/edge ID 和序列位置。
 
 至少一组解析 golden 必须独立写出期望事件和值，不能调用解释器与 packed 路径共同使用的 Aggregate、Update、Score、NodeCompute、Emit 或 balance-loss helper 来生成期望结果。执行器差分发现调度差异，解析 golden 负责发现多条路径共同实现错同一公式。
 
@@ -248,13 +329,13 @@ Plan 编译阶段应把相同状态算法、状态 shape、selector 形式、Nod
 | selector 时序 | content、pre、post | 当前内容、旧状态、proposal 参与选择 |
 | profile | N、SD、BO | 无状态、只更新 active、更新全部 reached |
 | Score | 固定/可构造分数、线性、两层 MLP、状态读出参与 | 平票、数值边界和真实可训练参数 |
-| active budget | Top-1、Top-2、all、按 region/event 变化 | singleton、候选少于请求 K 和变长 active set |
+| active budget | 各 region 独立的固定 Top-1、Top-2、all；另测外部 `requested_k` 扩展 | region 间上限不同、singleton、候选少于请求 K 和变长 active set |
 | Emit | hard、Hard-ST、soft probability | 前向值与 selector 主任务梯度 |
 | NodeCompute | 简单 affine 测试算子、SwiGLU MLP、状态读出 + 双 residual | 解析核验、真实昂贵计算和 residual |
-| 参数关系 | node 独立参数、显式共享参数组 | 默认独立与共享梯度累加 |
+| 参数关系 | 所有 SettleGraph 参数独立 | 参数 owner、Tensor/storage alias 拒绝和跨执行器同一逻辑参数 |
 | 状态首值 | 零、固定非零、可学习首状态 | reset、序列隔离和序列 continuation |
 
-窗口 Attention、Gated DeltaNet 等具体公式仍以语义文档附录 A 和实验记录为准。若实现的是另一种算法家族变体，必须使用新的明确配置，不能只复用旧名称。
+窗口 Attention、Gated DeltaNet 等具体公式仍以语义文档附录 A 和实验记录为准；Attention 状态的当前物理约束见第 2.3.4 节。若实现的是另一种算法家族变体，必须使用新的明确配置，不能只复用旧名称。
 
 组合测试采用三层覆盖：
 
@@ -272,7 +353,7 @@ Plan 编译阶段应把相同状态算法、状态 shape、selector 形式、Nod
 
 | Plan | 要覆盖的情况 |
 | --- | --- |
-| singleton forced-active | 最小入口/终端、实际 Read/Score logit、\(p=1\)、active 不依赖 Top-K |
+| singleton forced-active | 最小入口/终端、reached 后直接取 \(p=1\)，且不执行 selector Read/Score/Top-K |
 | 单层 \(R=1,2,8\) | Top-1、Top-2、Top-all 和多终端聚合 |
 | chain | 多层顺序传播和状态更新 |
 | diamond | fan-out、一个父分支关闭、fan-in 聚合 |
@@ -392,11 +473,11 @@ $$
 SettleGraph 独立测试通过后，再覆盖语义文档第 1.3 节的 POST、PARBLK、PARATTN 和 PARMLP：
 
 - 对每种 placement 检查输入 hidden 与 residual 合入位置；
-- identity 初始化时，接入模型与原 Base 模型的输出和选定梯度一致；
+- 按第 2.3.5 节初始化时，接入模型与原 Base 模型的前向输出和 LM loss 一致；
 - 非 identity 初始化时，逐 Token 与 prefill 仍相互等价；
-- 多个 sites 的参数和状态互不错误共享。
+- 多个 sites 的参数和状态保持各自独立。
 
-identity 的默认验收只比较 Base 模型前向输出、LM loss 和对共同输入/参数的选定梯度。若 SettleGraph 条件启用了非零 balance loss，或者新增参数在 identity 点仍可获得梯度，总训练目标和全部参数梯度不应标记为 Base 等价；只有关闭这些差异或逐项定义并通过更强契约后才能提出该声明。
+identity 的默认验收边界以第 2.3.5 节为准。共同输入或参数的梯度、全部新增参数梯度和含辅助项的总训练目标若要声明等价，必须作为更强契约逐项定义和验证。
 
 ### 6.5 训练能力
 
@@ -416,7 +497,7 @@ identity 的默认验收只比较 Base 模型前向输出、LM loss 和对共同
 
 ### 6.6 验证范围边界
 
-SettleGraph executor 的核心等价性范围是 fully expanded 的标准 Plan。HB-Lattice 只要已经展开并满足语义文档第 4.2 节的约束，就进入该范围；某个 HB Builder 是否生成预期端点则是独立的生成器测试，必须用固定名称/版本/config、规范化展开 Plan 和 golden hash 验证。在实际实验选定并版本化一个确切 Builder 以前，不能把语义文档第 4.5 节的候选规则称为已实现的默认 HB 拓扑。
+SettleGraph executor 的核心等价性范围是 fully expanded 的 `core-v1` Plan。HB-Lattice 只要已经展开并满足语义文档第 4.2 节的约束，就进入该范围；某个 HB Builder 是否生成预期端点则是独立的生成器测试，必须用固定名称/版本/config、规范化展开 Plan 和 golden hash 验证。在实际实验选定并版本化一个确切 Builder 以前，不能把语义文档第 4.5 节的候选规则称为已实现的默认 HB 拓扑。
 
 Dense、Dense 扩展和 Flat MoE 是实验对照，不经过 SettleGraph executor，因此不属于三执行器差分的通过条件。若某轮科学实验使用它们，则必须另有覆盖其 placement、expert/gate 合并、capacity/drop/reroute、辅助 loss、梯度和 checkpoint 的 reference 与接入测试。相同地，真实 Base Qwen 接入还需验证 causal attention mask、position IDs、KV-cache prefill/decode、最终 logits、LM target mask 和 base 参数梯度；独立 SettleGraph fixture 通过不能替代这些端到端证据。
 
@@ -482,7 +563,7 @@ NPU bring-up 依次验证：
 
 ### 7.5 Checkpoint 与恢复边界
 
-checkpoint 使用版本化 schema，并保存 logical Plan 规范记录与 logical Plan hash、保存时的 concrete execution binding 与 typed Plan hash、参数 schema、Builder 身份（若适用）、base/tokenizer/data identity，以及 checkpoint 内容 hash。Tensor 在可行时以 CPU 表示保存，Attention 状态按语义文档附录 A.5 的有序有效窗口规范化；路径只是可重定位提示，不作为身份。
+checkpoint 使用版本化 schema，并保存 logical Plan 规范记录与 logical Plan hash、保存时的 concrete execution binding 与 typed Plan hash、参数 schema、Builder 身份（若适用）、base/tokenizer/data identity，以及 checkpoint 内容 hash。Tensor 在可行时以 CPU 表示保存，Attention 状态按第 2.3.4 节的有序有效窗口规范化；路径只是可重定位提示，不作为身份。
 
 `--init-from` 只装载声明的 base/SettleGraph 参数和可学习首状态，并从新的 receiver state、selector-history、序列位置、optimizer、数据进度与 RNG 轨迹开始。`--resume` 恢复完整训练状态，至少包括：
 
@@ -527,6 +608,7 @@ benchmark 必须明确计时是否包含 packing、状态装载、图编译、Se
 - 建立 CPU-safe 的 Python package、设备/dtype 解析和测试入口；
 - 定义规范化 Plan 序列化、静态校验、logical/typed Plan hash 和编译后索引；
 - 实现首批 Aggregate、receiver、selector、profile 和 Emit 参考算子；
+- 按第 2.3.3 节简化 forced-active singleton，并更新 trace 与解析 golden；
 - 实现 CPU FP64/FP32 的逐 Token 解释器及完整 trace；
 - 完成人工 Plan 与非法 Plan 测试。
 

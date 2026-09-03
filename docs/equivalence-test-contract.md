@@ -19,7 +19,7 @@
 
 “executor 等价”表示同一 backend 和 concrete execution binding 下，两个 executor 对同一 fixture 通过本文要求的全部离散、浮点、状态、trace 和梯度比较。“跨 backend parity”表示 CPU 与 accelerator 分别在新进程中读取同一 CPU fixture，并在声明的容差内通过；它不表示浮点 bitwise 相同，也不表示两种 backend 的训练轨迹完全相同。
 
-本文的核心范围是语义文档第 2.4 节定义的标准 Plan。共享可变状态、由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
+本文的核心范围是语义文档第 2.4 节定义的合法 Plan，以及实现计划第 2.3 节的当前 `core-v1` 取舍：每个 region 使用自己的固定 \(K_{\mathcal R}\)，每份可变状态和 SettleGraph 可训练参数都有唯一 owner。本文另行测试实现计划第 2.3.1 节的可选外部控制扩展 `requested_k`，但其结果必须单独标记，不计入 `core-v1` 主语义或固定 \(K_{\mathcal R}\) 的标准实验。由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
 
 ## 2. Fixture bundle
 
@@ -31,19 +31,19 @@
 | Plan | canonicalizer ID、规范化 logical/typed Plan bytes、logical Plan hash、concrete execution binding、typed Plan hash |
 | 数值输入 | 在 CPU 上保存的 hidden、参数、可学习首状态和初始可变状态，保留原 dtype |
 | 序列输入 | `sequence_id`、`token_position`、图执行/context mask、LM target mask、routing-stat mask |
-| 控制输入 | Plan 开放时的 `requested_k`、reset 集合、chunk 切分、detach 边界和固定随机键 |
+| 控制输入 | 可选外部控制扩展开启时的 `requested_k`、reset 集合、chunk 切分、detach 边界和固定随机键 |
 | 期望 | 成功或失败类别；成功时可含解析 golden、期望 route、充分统计和最终状态 |
 | 梯度 | 标量目标定义、固定 cotangents、必查输入/参数/状态键及路径断言 |
 | 路由分类 | exact tie、margin-safe、near-boundary 或 all-active |
 | 端到端 Base 输入（适用时） | base/tokenizer 身份、输入与目标 Token、shift 规则、causal mask、position IDs，以及 decode case 的初始 KV cache |
 
-所有 Tensor 都以 CPU artifact 作为交换表示。bundle 不能保存未解析 device 对象、进程内指针、绝对私有数据路径或依赖某个 executor 排列的状态 buffer。Attention 窗口按语义文档附录 A.5 规范化为按全局 Token 位置排序的有效三元组序列；无效 ring-buffer 槽位不进入 fixture。
+所有 Tensor 都以 CPU artifact 作为交换表示。bundle 不能保存未解析 device 对象、进程内指针、绝对私有数据路径或依赖某个 executor 排列的状态 buffer。Attention 窗口按实现计划第 2.3.4 节规范化为按全局 Token 位置排序的有效三元组序列；无效 ring-buffer 槽位不进入 fixture。
 
 跨 dtype 测试使用同一个 fixture family。family 保存可精确表示的逻辑源值或 CPU FP64 source，以及每种 concrete execution binding 的确定性 materialization 规则；每个 materialized bundle 分别记录 typed Plan hash 和 Tensor artifact hash。CPU 与 NPU FP32 必须读取 byte-identical 的 CPU FP32 bundle。FP64 对 FP32 的比较把两侧结果提升到 CPU float64 后进行，但不把两种 materialization 误称为同一个 typed Plan。
 
-fixture loader 在构造模型或写入状态仓库前完成以下检查：schema、artifact hash、logical/typed Plan hash、Tensor key/shape/dtype/stride/storage group、mask 子集关系、唯一 `sequence_id`、连续位置、`requested_k` 容器的 region 键/shape/整数表示，以及状态所有者唯一性。状态所有者检查必须识别同一 backing storage 的不同 Tensor views，包括不重叠 views；只比较 object identity 不足以发现非法 alias。Tensor manifest 必须把规范 stride、storage offset、与物理地址无关的 storage group，以及包含 stride 间 holes 的完整 backing-storage bytes hash 纳入认证内容，使解除或新增 alias 关系、改变不可见 storage bytes 也会改变工件身份。`requested_k` 的值域是动态事件检查：只有候选非空的 region 事件才在 selector Read/Score 前解析该位置的值并校验 \([1,K^{\max}]\)；候选为空时不读取、也不对该位置的数值做范围判定。期望失败的 fixture 还保存规范化错误类别；loader 若走完相应入口仍未触发声明的缺陷，必须拒绝这个假负例。测试比较类别，不依赖任意一段异常文本。
+fixture loader 在构造模型或写入状态仓库前完成以下检查：schema、artifact hash、logical/typed Plan hash、Tensor key/shape/dtype/stride/storage group、mask 子集关系、唯一 `sequence_id`、连续位置、可选外部控制扩展的 `requested_k` 容器 region 键/shape/整数表示，以及状态所有者唯一性。状态所有者检查必须识别同一 backing storage 的不同 Tensor views，包括不重叠 views；只比较 object identity 不足以发现非法 alias。Tensor manifest 必须把规范 stride、storage offset、与物理地址无关的 storage group，以及包含 stride 间 holes 的完整 backing-storage bytes hash 纳入认证内容，使解除或新增 alias 关系、改变不可见 storage bytes 也会改变工件身份。开启该扩展时，`requested_k` 的值域是动态事件检查：只有候选非空的 region 事件才在 selector Read/Score 前解析该位置的值并校验 \([1,K^{\max}]\)；候选为空时不读取、也不对该位置的数值做范围判定。期望失败的 fixture 还保存规范化错误类别；loader 若走完相应入口仍未触发声明的缺陷，必须拒绝这个假负例。测试比较类别，不依赖任意一段异常文本。
 
-资格 fixture 的 `sequence_id` 使用语义文档第 2.1 节稳定 ID 的字符串合法性和升序规则；它不是 logical Plan ID，也不进入 Plan hash。logical/typed Plan bytes 使用实现计划第 2.2 节声明的 canonicalizer。loader 必须先验证 canonicalizer ID、bytes 的规范性和 SHA-256，再解析 Plan；没有通过该 canonicalizer byte golden 的 executor 只能消费 bundle 中的规范 bytes，不能以本地 JSON 重写后得到的另一 hash 代替。
+资格 fixture 的 `sequence_id` 使用实现计划第 2.2 节的稳定 ID 字符串合法性和升序规则；它不是 logical Plan ID，也不进入 Plan hash。logical/typed Plan bytes 使用同节声明的 canonicalizer。loader 必须先验证 canonicalizer ID、bytes 的规范性和 SHA-256，再解析 Plan；没有通过该 canonicalizer byte golden 的 executor 只能消费 bundle 中的规范 bytes，不能以本地 JSON 重写后得到的另一 hash 代替。
 
 独立 SettleGraph fixture 没有语言模型 logits 或目标 Token，因此必须令第 5 节的 \(\alpha_{\mathrm{LM}}=0\)；它可以携带 LM target mask 以验证 mask 契约，但不能据此构造 LM loss。只有端到端 Base fixture 提供上表最后一行的输入并固定 logits-to-target 对齐后，才能令 \(\alpha_{\mathrm{LM}}\ne0\)。
 
@@ -163,7 +163,7 @@ n_s(d_k+d_v)
 }.
 $$
 
-无状态或空状态取 \(\chi(s)=0\)。Attention 的有效 Token 位置不进入数值摘要，无效物理 buffer 槽位也不进入；keys 和 values 按规范时间顺序参与上式。selector 时序决定这里的 \(s\) 是旧状态还是 proposal。最终读出为
+无状态或空状态取 \(\chi(s)=0\)。Attention 有效项所附的 Token 位置不进入数值摘要，无效物理 buffer 槽位也不进入；keys 和 values 按 Observe 顺序参与上式。selector 时序决定这里的 \(s\) 是旧状态还是 proposal。最终读出为
 
 $$
 r^{\mathrm{sel}}_{v,t}
@@ -252,7 +252,7 @@ z_{v,t}
 a_{v,t}=w_{2,v}^{\top}z_{v,t}+b_{2,v}.
 $$
 
-这些 Score 参数默认按稳定 node ID \(v\) 独立；fixture 若验证共享只读参数，必须用 Plan 中显式参数组让相应 nodes 引用同一个 Tensor，并按同一参数键比较累积梯度。
+这些 Score 参数按稳定 node ID \(v\) 各自独立。
 
 #### `score.constant.v1`、`score.fixed-by-node.v1` 与 `score.read-sum.v1`
 
@@ -348,7 +348,7 @@ $$
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 分别精确对应语义文档第 2.3 节的 `EMIT-HARD`、`EMIT-HST`、`EMIT-SOFTP` |
 | selector context `context.none.v1` | \(c^{\mathrm{ctx}}\) 是空向量，Score 输入不追加公共摘要 |
 | selector history `history.none.v1` | 不存在 selector-history 状态、读出或写回 |
-| active budget `k.fixed.v1` / `k.input.v1` | 分别使用 Plan 固定整数或候选非空事件的运行期 `requested_k`，值域与时序遵守语义文档第 2.3 节 |
+| active budget `k.fixed.v1` / `k.input.v1` | 分别使用 Plan 固定整数，或实现计划第 2.3.1 节可选外部控制扩展在候选非空事件上提供的 `requested_k` |
 
 首轮 fixture 的 receiver input/FFN normalization 使用数学上完全同义的 `TEST-RMSNORM-V1` 或 `norm.rms.v1`。报告仍保留 fixture 实际使用的 ID，不在证据中静默改写。当前 registry 没有无归一化公式；未来若注册 `TEST-NORM-IDENTITY-V1` 或其他 normalization，必须记录完整公式和适用常量，只写“identity”“RMSNorm”或“LayerNorm”不足以生成 golden。
 
@@ -356,7 +356,7 @@ $$
 
 本节固定 logical Plan schema v1 中上述 reference 公式的规范配置。每项配置都含下表的规范 `type`、一个本节绑定的 `formula_id` 和“其他规范键”列出的全部键；该列没有列出的键不得出现。原始配置的 `type` 可做小写化和连字符转下划线的纯语法规范化；规范记录只保存表中拼写，不保留等价 alias。
 
-这张表只闭合当前 eager reference 子集。`TEST-HISTORY-ACTIVE-EMA-V1` 的局部数值公式已在上文闭合，但在通用 history owner/schema 定稿前不进入本表；跨 node/site 参数组和尚未注册的 `TEST-NORM-IDENTITY-V1` 同理。当前 reference 必须在运行前拒绝这些未闭合能力，它们仍是第 7 节完整资格目标中的未完成项。
+这张表只闭合当前 eager reference 子集。`TEST-HISTORY-ACTIVE-EMA-V1` 的局部数值公式已在上文闭合，但在通用 history owner/schema 定稿前不进入本表；尚未注册的 `TEST-NORM-IDENTITY-V1` 同理。当前 reference 必须在运行前拒绝这些未闭合能力，它们仍是第 7 节完整资格目标中的未完成项。
 
 表中的“派生”值从同一 logical Plan 的已声明 shape 或 region 常量决定，必须物化到规范配置并与来源一致。输入省略有默认值的键与显式写出该值必须产生 byte-identical 记录。`required` 表示没有默认，不能从其他字段猜测。
 
@@ -390,19 +390,19 @@ $$
 | Score | `read_sum`：`score.read-sum.v1` | `context_dim=0` |
 | selector context/history | `none`：`context.none.v1` / `history.none.v1` | 无 |
 | active budget | `fixed`：`k.fixed.v1` | `value` required |
-| active budget | `input`：`k.input.v1` | `field="requested_k"`、`minimum=1`，以及 `maximum` \(=K^{\max}_{\mathcal R}\)，三者均 required |
+| active budget 扩展 | `input`：`k.input.v1` | 实现计划第 2.3.1 节的可选外部控制；`field="requested_k"`、`minimum=1`，以及 `maximum` \(=K^{\max}_{\mathcal R}\)，三者均 required |
 | output Aggregate | `mean`：`agg.mean.v1` | `output_shape`，派生为 \([d_{\mathrm{model}}]\) |
 | output Aggregate | `node_softmax`：`TEST-AGG-TERMINAL-SOFTMAX-V1` | `output_shape`，派生为 \([d_{\mathrm{model}}]\) |
 
 `bias=true`、`learnable_decay=false`、`shared_parameters=false` 和 `context_dim=0` 都是该 formula ID 的固定 schema 值，不是可切换开关；写出其他值必须拒绝。所有 dimension 是非 bool 正整数，所有标量常数是非 bool 有限数；规范化把数学上相同的整数/浮点输入（如 `zeta=1` 与 `zeta=1.0`）统一为同一标量数值表示，并把负零规范为正零。作为公式实数输入的原始整数还必须位于 JSON/IEEE-754 safe-integer 区间 \([-(2^{53}-1),2^{53}-1]\)；超出该区间必须拒绝，不能先转 binary64、静默舍入后与另一个整数产生相同 hash。`eps` 和 `norm_eps` 严格为正，`decay` 满足 \(0\le\texttt{decay}<1\)。`values_by_node` 的键集精确等于 region 的固定 node IDs，值均为非 bool 有限标量并使用相同规范数值表示。
 
-selector readout 的首轮规范 shape 是一维 \([d_r]\)；多维声明不能只取首维执行，必须在 Plan 验证时拒绝。Update 的 `state_shape` 必须分别与 EMA、Gated DeltaNet 和窗口 Attention 表中的派生值一致；它不能作为被 executor 忽略的第二份状态声明。其中窗口 Attention 的 \([W,d_k,d_v]\) 是 logical Plan v1 对复合 Attention 状态的尺寸描述符，不表示一个 shape 为 \([W,d_k,d_v]\) 的物理 Tensor；它的规范状态仍是语义文档附录 A.5 定义的有效位置、keys 和 values 有序序列。
+selector readout 的首轮规范 shape 是一维 \([d_r]\)；多维声明不能只取首维执行，必须在 Plan 验证时拒绝。Update 的 `state_shape` 必须分别与 EMA、Gated DeltaNet 和窗口 Attention 表中的派生值一致；它不能作为被 executor 忽略的第二份状态声明。其中窗口 Attention 的 \([W,d_k,d_v]\) 是 logical Plan v1 对复合 Attention 状态的尺寸描述符，不表示一个 shape 为 \([W,d_k,d_v]\) 的物理 Tensor；它的规范位置、keys 和 values 有序序列遵守实现计划第 2.3.4 节。
 
 selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序只允许不读取 state 的 `content`、`content_norm` 或 `content_linear`；pre/post 时序必须使用显式带 state 输入的 `content_state_linear` 或 `content_state_summary_linear`。不能让 `content_linear` 在 pre/post 中静默丢弃可见状态，也不能让带 state 的投影在 content 时序收到一个临时的 absent 值。这里的 post 仍受语义文档“SD 不使用 post-update 选择”的上层约束。
 
-完整 fixture/checkpoint qualification 还要求一个版本化、实现无关的 parameter-schema manifest。manifest 对每个公式参数保存由 site、field、稳定 node/region/edge ID 和公式内参数角色组成的 logical key，以及 formula ID、shape、dtype role 和可选只读参数组 ID；条目按 logical key 规范排序。公式内角色就是第 2.1 节中的 (w,W,b,\eta,\beta) 等已定义量，不能换成某个 eager module 的属性路径。executor 的 `state_dict` 名称可以作为该实现的装载 locator，但不能充当跨 executor 的参数身份；每个 executor 必须显式证明 locator 与 logical key 一一对应。参数 Tensor 数值仍只由 bundle/checkpoint 携带，不进入 Plan hash。
+完整 fixture/checkpoint qualification 还要求一个版本化、实现无关的 parameter-schema manifest。manifest 对每个公式参数保存由 site、field、稳定 node/region/edge ID 和公式内参数角色组成的独立 logical key，以及 formula ID、shape 和 dtype role；条目按 logical key 规范排序。公式内角色就是第 2.1 节中的 \(w,W,b,\eta\) 等已定义量，不能换成某个 eager module 的属性路径。不同 logical keys 必须对应不同参数。executor 的 `state_dict` 名称可以作为该实现的装载 locator，但不能充当跨 executor 的参数身份；每个 executor 必须显式证明 locator 与 logical key 一一对应。参数 Tensor 数值仍只由 bundle/checkpoint 携带，不进入 Plan hash。
 
-当前 eager reference 已能对单个 SettleGraph site 从 Plan 派生 `tide.parameter-schema.v1`：逻辑记录包含 field、稳定 node/region/edge/terminal ID、公式参数角色、formula ID、shape 和 dtype role，eager locator 位于独立 binding，并校验与 `named_parameters()` 一一对应。跨 sites 的 site ID、通用参数组及共享兼容性 schema 仍未闭合；当前序列化 bundle 的正向 round trip 也没有达到第 7 节的语料、独立 golden 和数量门槛。因此 parameter schema 的实现不等于 fixture、checkpoint 或 capability qualification 已通过。
+当前 eager reference 已能对单个 SettleGraph site 从 Plan 派生 `tide.parameter-schema.v1`：逻辑记录包含 field、稳定 node/region/edge/terminal ID、公式参数角色、formula ID、shape 和 dtype role，eager locator 位于独立 binding，并校验与 `named_parameters()` 一一对应。跨 sites 的 site ID 组合仍未闭合；当前序列化 bundle 的正向 round trip 也没有达到第 7 节的语料、独立 golden 和数量门槛。因此 parameter schema 的实现不等于 fixture、checkpoint 或 capability qualification 已通过。
 
 ### 2.3 失败类别 v1
 
@@ -422,11 +422,11 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 | `input` | `input.schema` | 调用容器、Tensor shape/dtype、重复 `sequence_id` 或 reset 集合不合法 |
 | `input` | `input.mask` | mask shape/dtype 或子集关系不合法 |
 | `input` | `input.position` | 新序列起点、连续性、重放、倒序或跳号不合法 |
-| `event` | `input.requested_k` | 候选非空事件读取到缺失、非整数或越界的运行期 K；候选为空不能产生此 code |
+| `event` | `input.requested_k` | 可选外部控制扩展在候选非空事件读取到缺失、非整数或越界的运行期 K；候选为空不能产生此 code |
 | `state` | `state.schema` | 状态键、shape、dtype、Attention 有效窗口或下一位置不合法 |
 | `state` | `state.owner_alias` | owner 不唯一，或不同 owner 共享同一 backing storage |
 | `execution` | `execution.local_operation` | 已通过静态/输入校验的声明公式在事件执行时明确失败 |
-| `execution` | `execution.empty_terminal` | 标准 Plan 的执行 Token 没有终端消息 |
+| `execution` | `execution.empty_terminal` | 合法 Plan 的执行 Token 没有终端消息 |
 | `checkpoint` | `checkpoint.integrity` | checkpoint 内容 hash、安全解码或发布完整性失败 |
 | `checkpoint` | `checkpoint.schema` | checkpoint root/key/type/version 结构不合法 |
 | `checkpoint` | `checkpoint.compatibility` | Plan/binding/model/optimizer/状态身份或 shape/dtype 不兼容 |
@@ -463,9 +463,9 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 9. 按 node ID 排列的终端消息、输出聚合和图输出；
 10. 调用后规范状态、下一位置与 LM/balance 充分统计量。
 
-不存在的 proposal、readout、payload 或梯度使用显式的 absent 标记，不能以空 Tensor、零 Tensor 或缺少字段三种方式混用。trace 的规范排序键为 site ID、`sequence_id`、全局 Token 位置、region 规范拓扑序及 region ID、node ID、edge ID；executor 的实际完成时刻和 packed row 不进入排序。
+不存在的 proposal、readout、logits、Top-K 结果、payload 或梯度使用显式的 absent 标记，不能以空 Tensor、零 Tensor 或缺少字段三种方式混用。trace 的规范排序键为 site ID、`sequence_id`、全局 Token 位置、region 规范拓扑序及 region ID、node ID、edge ID；executor 的实际完成时刻和 packed row 不进入排序。
 
-reached 的 forced-active singleton 不是 selector 的 absent 事件：它必须保存按声明时序得到的实际 readout、声明 Score 公式产生的实际单元素 logits、精确的单元素 probability \([1]\)、请求值/实际值 1，以及唯一 node 的 Top-K ID。active 成员关系不读取 logit 排名，但不得以合成的零 logit代替实际 Score。该 singleton 未 reached 时才是候选为空事件，不执行 Read/Score。
+reached 的 forced-active singleton 直接把唯一 candidate 标记为 active，并记录精确的 \(p_{v,t}=1\)。它不执行 selector Read、Score、softmax 或 Top-K；trace 中的 readout、logits、请求/实际 K 和 Top-K IDs 都记为 absent，而不伪造零值或单元素计算结果。该 singleton 未 reached 时候选为空，同样不执行这些操作。
 
 无执行位置必须精确记录旁路输出等于入口 hidden、没有 selector event、没有状态 staged write。期望失败的事务 fixture 记录失败前可用于诊断的私有 trace，但正式结果必须标为 failure，并证明公开状态 hash、下一位置和 artifact 集与调用前完全相同。
 
@@ -473,9 +473,9 @@ reached 的 forced-active singleton 不是 selector 的 absent 事件：它必�
 
 ### 4.1 离散与结构量
 
-以下量要求 exact：schema、logical/typed Plan hash、Tensor key、shape、声明 dtype、mask、状态 owner、候选及其顺序、requested/effective K、reached/Observe/active/send、Top-K IDs、edge status、Attention 有效位置、错误类别和 checkpoint key 集。
+以下量在对应操作存在时要求 exact：schema、logical/typed Plan hash、Tensor key、shape、声明 dtype、mask、状态 owner、候选及其顺序、requested/effective K、reached/Observe/active/send、Top-K IDs、edge status、Attention 有效位置、错误类别和 checkpoint key 集；操作不存在时，其 absent 标记也要求 exact。
 
-exact 相等不能替代单边语义 invariant。每个成功 trace 还独立检查：每个执行 Token 的每条固定边恰好结算一次；每个 region 恰好结算一次；candidates 恰为 reached members 且 active 是其合法大小子集；Observe set 与 N/SD/BO 公式相同；普通 selector probability 非负并在当前 binding 的浮点门槛内和为 1；reached 的 forced-active singleton 有实际 Read/Score 值、probability 精确为 1 且唯一 candidate active；成功 Token 的终端消息非空；所有消息 hidden、状态 owner 和 Attention 有效长度满足 Plan；非执行位置没有图事件。任一 invariant 失败时，即使两个 executor 产生相同错误结果也不能通过。
+exact 相等不能替代单边语义 invariant。每个成功 trace 还独立检查：每个执行 Token 的每条固定边恰好结算一次；每个 region 恰好结算一次；candidates 恰为 reached members 且 active 是其合法大小子集；Observe set 与 N/SD/BO 公式相同；普通 selector probability 非负并在当前 binding 的浮点门槛内和为 1；reached 的 forced-active singleton 不执行 Read/Score/Top-K、probability 精确为 1 且唯一 candidate 直接 active；成功 Token 的终端消息非空；所有消息 hidden、状态 owner 和 Attention 有效长度满足 Plan；非执行位置没有图事件。任一 invariant 失败时，即使两个 executor 产生相同错误结果也不能通过。
 
 同一 concrete execution binding 的输出 dtype 必须相同。跨 binding 比较时，每一侧必须符合自身声明的 dtype；device placement 由该进程的运行 manifest 和 profiler 证明，不能通过把 accelerator case 实际放到 CPU 后获得数值通过。
 
@@ -555,8 +555,7 @@ $$
 - 所有执行位置的入口 hidden；
 - 声明可微的初始 receiver state；
 - fixture 实际使用的 Aggregate、Update、selector Read、Score、状态 Read、NodeCompute 和 Emit 参数；
-- Base 接入 fixture 中选定的共同 base 参数；
-- 明确共享的只读参数组，用于验证多使用点的梯度累加。
+- Base 接入 fixture 中选定的共同 base 参数。
 
 每个键在 fixture 中声明期望为 connected、disconnected 或 structurally absent。connected 键即使导数数值为零，也必须产生并比较同 shape 零 Tensor；`None` 只接受于 disconnected 或 absent 键。梯度先检查 finite，再使用第 4.2 节相应 backend/dtype 的 comparator。
 
@@ -590,7 +589,7 @@ mask fixture 至少分别包含：
 
 状态生命周期 fixture 覆盖创建、连续 chunks、site-local reset、顶层 all-site reset、显式释放、重复 `sequence_id`、位置重复/倒序/跳号以及并发写冲突。所有非法情况必须在公开状态发布前失败。
 
-标准事务 fixture 让较早 Token 成功写入 staged state、较晚 Token 的 `requested_k` 越界或局部操作显式失败；调用后逐键比较外部状态、selector-history 和下一位置与调用前完全相同。另用测试专用故障注入破坏“active receiver 发送”不变量，验证空终端防线，但不能把这种注入样例计为合法标准 Plan。失败调用不得留下部分 output、部分充分统计或可被 checkpoint 捕获的半提交状态。
+标准事务 fixture 让较早 Token 成功写入 staged state，再让较晚 Token 的局部操作显式失败；可选外部控制扩展还要覆盖较晚 Token 的 `requested_k` 越界。调用后逐键比较外部状态、selector-history 和下一位置与调用前完全相同。另用测试专用故障注入破坏“active receiver 发送”不变量，验证空终端防线，但不能把这种注入样例计为合法 Plan。失败调用不得留下部分 output、部分充分统计或可被 checkpoint 捕获的半提交状态。
 
 ## 7. 覆盖门槛
 
@@ -600,7 +599,7 @@ mask fixture 至少分别包含：
 
 | 类别 | 必须覆盖的语义 |
 | --- | --- |
-| singleton forced-active | 最小输入/终端、实际 Read/Score logit、\(p=1\)、active 不依赖 Top-K、identity |
+| singleton forced-active | 最小输入/终端、不执行 Read/Score/softmax/Top-K、\(p=1\)、直接 active、identity |
 | 单层 \(R=2,8\) | Top-1、Top-2、all、输出均值 |
 | chain | 跨 region 顺序、状态 carry |
 | diamond | fan-out、关闭父边、fan-in 与 edge order |
@@ -608,10 +607,10 @@ mask fixture 至少分别包含：
 | multi-entry/multi-terminal | 边界广播与终端聚合 |
 | mixed regions | 同层独立 regions、singleton 与竞争并存 |
 | forced backbone | 可选分支全关但仍有终端输出 |
-| injected empty-terminal invariant | 测试专用故障注入、调用失败和事务回滚；不属于合法标准 Plan |
+| injected empty-terminal invariant | 测试专用故障注入、调用失败和事务回滚；不属于合法 Plan |
 | small expanded HB | Lines、barrier、tree/local/shortcut/mirror 标签 |
 
-这些 fixtures 合计覆盖 N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post；hard、Hard-ST、soft probability Emit；mean、learned convex、edge-affine Aggregate；none、历史、EMA、Gated DeltaNet 和规范窗口 Attention 状态；固定与运行期 K，其中至少一个下游候选为空的事件携带超出值域的整数占位值，并证明该位置没有被读取；独立与共享只读参数；零、固定非零和可学习首状态。
+这些 fixtures 合计覆盖 N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post；hard、Hard-ST、soft probability Emit；mean、learned convex、edge-affine Aggregate；none、历史、EMA、Gated DeltaNet 和规范窗口 Attention 状态；各 region 独立的固定 K；全部独立参数；零、固定非零和可学习首状态。可选外部控制扩展单独覆盖运行期 `requested_k`；其中至少一个下游候选为空的事件携带超出值域的整数占位值，并证明该位置没有被读取。
 
 对所有受约束的配置轴做 pairwise covering：每一对合法取值至少共同出现一次。无效组合不为了覆盖而执行，而是作为 validator failure fixture 保存明确错误类别。
 
@@ -641,7 +640,7 @@ Flat MoE 和 Dense 不属于 SettleGraph executor 资格集合。科学实验若
 checkpoint schema 至少记录：
 
 - schema 版本、logical Plan 与 logical Plan hash、保存时 concrete execution binding 与 typed Plan hash；
-- base 与 SettleGraph 参数、可学习首状态及参数共享关系；
+- base 与 SettleGraph 参数、可学习首状态，以及 SettleGraph 参数的逻辑键和独立归属；
 - optimizer、scheduler、AMP scaler；
 - 按 owner 规范化的 receiver state、selector-history、Attention 有效窗口和每个序列的下一位置；
 - global step、Token 计数、epoch、gradient-accumulation microstep，以及允许中途保存时的累积梯度；

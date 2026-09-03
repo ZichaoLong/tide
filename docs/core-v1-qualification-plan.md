@@ -15,18 +15,20 @@
 | 坐标 | `core-v1` 的唯一取值或取值集合 |
 | --- | --- |
 | SettleGraph site | 单 site；测试记录使用固定外部标签 `site.core`，它不是 logical Plan v1 的新字段 |
-| logical Plan | schema `1`，canonicalizer `tide-plan-json-v1`，fully expanded 标准 Plan |
+| logical Plan | schema `1`，canonicalizer `tide-plan-json-v1`，fully expanded `core-v1` Plan |
 | selector context/history | `context.none.v1` 和 `history.none.v1` |
 | 参数关系 | 每个 logical parameter key 独立；`shared_parameters=false`，没有参数组 |
 | 首状态策略 | 新序列使用当前公式定义的零 Tensor 或空 Attention 窗口；可装载非零的调用前当前状态，但不把它称为 Plan 声明的固定首状态 |
 | receiver state | none、EMA、Gated DeltaNet、规范窗口 Attention；每个可变状态只有一个 receiver owner |
 | profile/timing | N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post |
-| active budget | `k.fixed.v1` 或 `k.input.v1`；不是从模型 Tensor 推导的 adaptive budget |
+| active budget | `k.fixed.v1`；每个 region 各自固定，不随 Token 改变 |
 | dtype binding | 四个核心 dtype roles 全部绑定为 FP64，或全部绑定为 FP32 |
 | 局部实现 | eager 标准 Torch 参考公式；没有 mixed precision、compiled、custom kernel 或静默 fallback |
 | Base 边界 | 独立 SettleGraph；不把 Qwen、Dense 或 Flat MoE 计入本范围 |
 
-一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、共享只读参数、可学习首状态和多 site 目标仍属于完整目标，见第 13 节的 schema v2 阻塞项。
+一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节的 schema v2 阻塞项。
+
+本计划另行测试当前实现的可选外部控制接口 `k.input.v1`；它不属于 `core-v1`，其通过只说明调用方能够显式提供有界整数并得到正确执行、失败和回滚行为。进入科学实验的 Plan 固定使用 `k.fixed.v1`，不同 regions 可以各自选择不同的固定 $K$。
 
 独立 SettleGraph fixture 固定 $\alpha_{\mathrm{LM}}=0$。LM target mask 只验证输入契约，不能从 hidden 合成语言模型损失；Qwen 专项门才允许非零 LM loss。
 
@@ -49,14 +51,13 @@
 以下能力在 Plan、parameter、trace 或 checkpoint schema 闭合前不能混入 `core-v1`：
 
 - selector-history；
-- node、region 或 site 间的只读参数组共享；
 - Plan 声明的固定非零或可学习首状态；
 - 多 site 参数和状态身份；
 - 从 Tensor 推导的 adaptive budget；
 - 混合或低精度 accumulation roles；
 - 尚未注册完整公式、导数或状态时序的自定义操作。
 
-实现明确拒绝这些能力是合法的 `unsupported` 或 `implemented` 边界，不是 `core-v1` 失败。把它们接受后静默改成无 history、无共享、零首状态或 FP32 eager 则是失败。
+实现明确拒绝这些能力是合法的 `unsupported` 或 `implemented` 边界，不是 `core-v1` 失败。把它们接受后静默改成无 history、零首状态或 FP32 eager 则是失败。
 
 ## 2. 计数单位和不可变身份
 
@@ -83,7 +84,7 @@ site 标签固定为 `site.core`，因为 `core-v1` 只执行一个 site。它�
 - forward 后又对同一事件 backward；
 - 重试失败运行。
 
-topology、shape、layout、mask 和调用前状态来源按 fixture 的 coverage probe 每个各计一次。profile/timing、K 和 route class 按 selector event 键计数；receiver Aggregate、Update、Read、Score、NodeCompute 和 Emit 按实际执行的 node event 键计数；output Aggregate 按 output event 键计数。coverage probe 行的 `A05.output-aggregate` 取同一 `(fixture_id, site_label, sequence_id, token_position)` 下的 output event；该 event 缺失时 probe 失败。一个 event 可以同时贡献不同轴，但不能对同一轴重复贡献。
+topology、shape、layout、mask 和调用前状态来源按 fixture 的 coverage probe 每个各计一次。profile/timing、K 和 route class 按 selector event 键计数；receiver Aggregate、Update、Read、Score、NodeCompute 和 Emit 按实际执行的 node event 键计数；output Aggregate 按 output event 键计数。forced-active singleton 不执行 selector Read 或 Score，因此这两个轴取 `NA`，也不产生相应 formula-coverage event。coverage probe 行的 `A05.output-aggregate` 取同一 `(fixture_id, site_label, sequence_id, token_position)` 下的 output event；该 event 缺失时 probe 失败。一个 event 可以同时贡献不同轴，但不能对同一轴重复贡献。
 
 运行前由 Plan 和期望 trace 产生 `expected-event-coverage.json`；运行后由实际 trace 产生 `observed-event-coverage.json`。两者的键和值必须 exact 相等。预期 probe 没有实际发生时，fixture 失败，不能临时改选另一个 event。
 
@@ -169,7 +170,7 @@ $$
 g_K^{32}=4\left[10^{-6}+10^{-5}\max(|a_{(K)}|,|a_{(K+1)}|)\right],
 $$
 
-FP64 则把式中的两项阈值替换为 $10^{-10}$ 和 $10^{-8}$。由此 near-boundary 的差 $2^{-19}<g_K^{32}/2$，margin-safe 的差 $2^{-8}$ 大于两种 binding 各自的 $16g_K$。若某个 Score/Read/topology tuple 不能在不共享参数的条件下精确实现这些 probe logits，该 tuple 不是可选 candidate；不得以普通网格过滤后得到的近似值替代。all-active 不构造 K/K+1 边界，其 Score 值继续使用普通数值域。
+FP64 则把式中的两项阈值替换为 $10^{-10}$ 和 $10^{-8}$。由此 near-boundary 的差 $2^{-19}<g_K^{32}/2$，margin-safe 的差 $2^{-8}$ 大于两种 binding 各自的 $16g_K$。若某个 Score/Read/topology tuple 不能在不共享参数的条件下精确实现这些 probe logits，该 tuple 不是可选 candidate；不得以普通网格过滤后得到的近似值替代。普通竞争 region 的 all-active 不构造 K/K+1 边界，其 Score 值继续使用普通数值域；forced-active singleton 不执行 Score。
 
 FP64 直接物化该逻辑源值。FP32 使用 IEEE-754 round-to-nearest-even 独立物化；CPU 与 NPU 必须读取 byte-identical 的 CPU FP32 bundle。参数初始化不能再调用 executor 自己的默认初始化器。
 
@@ -224,13 +225,13 @@ npu-subsets.json
 | `A00.topology` | `singleton`、`single-layer-r2`、`single-layer-r8`、`chain`、`diamond`、`unequal-path`、`multi-entry-terminal`、`mixed-regions`、`forced-backbone`、`small-hb`、`generated-dag` | fixture 的拓扑族 |
 | `A01.profile-timing` | `N/content`、`SD/content`、`SD/pre`、`BO/content`、`BO/pre`、`BO/post` | probe region 的传播与选择时序 |
 | `A02.state` | `none`、`ema`、`gdn`、`attention-window` | probe node 的 Update/FFN Read family |
-| `A03.selector-read` | `content`、`content-rms`、`content-linear`、`content-state-linear`、`content-state-summary-linear` | probe node 的 selector Read |
+| `A03.selector-read` | `content`、`content-rms`、`content-linear`、`content-state-linear`、`content-state-summary-linear`、`NA` | probe node 的 selector Read；forced-active singleton 为 `NA` |
 | `A04.receiver-aggregate` | `mean`、`edge-softmax`、`edge-affine-mean`、`NA` | probe node 非入口且实际收到消息时的 Aggregate |
 | `A05.output-aggregate` | `mean`、`node-softmax` | 本 fixture 的图输出 Aggregate |
-| `A06.score` | `fixed-by-node`、`constant`、`read-sum`、`linear`、`mlp` | probe event 的 Score |
+| `A06.score` | `fixed-by-node`、`constant`、`read-sum`、`linear`、`mlp`、`NA` | probe event 的 Score；forced-active singleton 为 `NA` |
 | `A07.node-compute` | `identity`、`affine-residual`、`double-residual-swiglu` | probe active node 的完整计算 |
 | `A08.emit` | `hard`、`hard-st`、`soft-probability` | probe active node 的发送公式 |
-| `A09.k-source` | `fixed`、`input` | probe region 的请求来源 |
+| `A09.k-source` | `fixed`、`input` | `fixed` 是主语义的 region 固定 $K$；`input` 是可选的外部 `requested_k` 接口 |
 | `A10.k-class` | `top-1`、`top-2`、`all` | probe event 的实际竞争类别 |
 | `A11.shape` | `b1-t1-d2`、`b1-t6-d3`、`b2-t3-d4`、`b3-t5-d7` | 输入 batch、最大物理长度和 hidden 宽度 |
 | `A12.layout` | `contiguous`、`noncontiguous-positive-stride` | loader 交给 executor 的 hidden 布局；shape 与值不变 |
@@ -246,13 +247,13 @@ axis value 只是 coverage record 中的稳定标签，不是可由 executor 自
 | 轴 | axis value 到 Plan 的唯一展开 |
 | --- | --- |
 | `A02.state` | `none` → Update type `none` / `update.none.v1`，FFN Read 由 `A18` 确定；`ema` → Update type `ema` / `state.ema.v1` 与 FFN Read type `state_default` / `read.ffn.ema.v1`；`gdn` → Update type `gdn` / `state.gdn.v1` 与 FFN Read type `state_default` / `read.ffn.gdn.v1`；`attention-window` → Update type `attention_window` / `state.attention-window.v1` 与 FFN Read type `state_default` / `read.ffn.attention-window.v1` |
-| `A03.selector-read` | `content` → `read.selector.content.v1`；`content-rms` → `read.selector.content-rms.v1`；`content-linear` 和 `content-state-linear` →各自规范 type 下的 `TEST-READ-PROJ-V1`；`content-state-summary-linear` → `TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` |
+| `A03.selector-read` | `content` → `read.selector.content.v1`；`content-rms` → `read.selector.content-rms.v1`；`content-linear` 和 `content-state-linear` →各自规范 type 下的 `TEST-READ-PROJ-V1`；`content-state-summary-linear` → `TEST-READ-STATE-RMS-SUMMARY-PROJ-V1`；`NA` → Plan 写入未执行的 `content` / `read.selector.content.v1` 占位配置，不产生 selector Read event |
 | `A04.receiver-aggregate` | `mean` → `agg.mean.v1`；`edge-softmax` → `TEST-AGG-EDGE-SOFTMAX-V1`；`edge-affine-mean` → 规范 type `edge_linear_mean` 及 `TEST-AGG-EDGE-AFFINE-MEAN-V1` |
 | `A05.output-aggregate` | `mean` → `agg.mean.v1`；`node-softmax` → `TEST-AGG-TERMINAL-SOFTMAX-V1` |
-| `A06.score` | `fixed-by-node` → 规范 type `fixed` 及 `A17` 指定的 ID；`constant` → `score.constant.v1`；`read-sum` → `score.read-sum.v1`；`linear` → `TEST-SCORE-LINEAR-V1`；`mlp` → `TEST-SCORE-MLP-V1` |
+| `A06.score` | `fixed-by-node` → 规范 type `fixed` 及 `A17` 指定的 ID；`constant` → `score.constant.v1`；`read-sum` → `score.read-sum.v1`；`linear` → `TEST-SCORE-LINEAR-V1`；`mlp` → `TEST-SCORE-MLP-V1`；`NA` → Plan 写入值为 0 的未执行 `constant` / `score.constant.v1` 占位配置，不产生 Score event |
 | `A07.node-compute` | `identity` → `node.identity.v1`；`affine-residual` → `TEST-NODE-AFFINE-V1`；`double-residual-swiglu` → `TEST-NODE-SWIGLU-V1` |
 | `A08.emit` | `hard` → `emit.hard.v1`；`hard-st` → 规范 type `hst` 及 `emit.hst.v1`；`soft-probability` → 规范 type `softp` 及 `emit.softp.v1` |
-| `A09.k-source` | `fixed` → `k.fixed.v1`；`input` → `k.input.v1` |
+| `A09.k-source` | `fixed` → `k.fixed.v1`；`input` → 当前实现的可选外部控制扩展 `k.input.v1` |
 | `A16.norm-formula-ids` | `norm` 分量表示 `norm.rms.v1`，`test` 分量表示 `TEST-RMSNORM-V1`；两分量依次写入 input normalization 和 FFN normalization |
 | `A18.stateless-ffn-read-type` | `zero` → type `zero` / `read.ffn.zero.v1`；`state-default` → type `state_default` / `read.ffn.zero.v1`；两者只在 `A02=none` 时合法；其他 state 的该轴值为 `NA` |
 
@@ -263,10 +264,10 @@ chunk 切法、detach、reset、release、row reorder、并发和 checkpoint act
 一行只有同时满足语义文档、Plan schema 和下列 corpus 约束时才进入 legal tuple 集：
 
 1. N 只能使用 content timing 和 `state=none`。pre/post 必须使用 EMA、Gated DeltaNet 或 Attention state。SD 不允许 post。
-2. content timing 只配 content、content-rms 或 content-linear。pre/post 只配 content-state-linear 或 content-state-summary-linear。
+2. 普通竞争 region 中，content timing 只配 content、content-rms 或 content-linear，pre/post 只配 content-state-linear 或 content-state-summary-linear；forced-active singleton 的 selector Read 与 Score 均为 `NA`。
 3. content-state-linear 只用于固定 shape 的 EMA 或 Gated DeltaNet Tensor state；窗口 Attention 使用 content-state-summary-linear。EMA/Gated DeltaNet 也可以使用 summary read。
 4. `state=none` 时 Update 为 `update.none.v1`、FFN Read 的 formula ID 为 `read.ffn.zero.v1`，type 由 `A18` 唯一写入为 `zero` 或 `state_default`，state origin 为 fresh empty；它可以出现在 SD/content 或 BO/content 以覆盖合法但 commit 为空操作的配置。
-5. forced-active singleton 固定 `K=1`、`k-source=fixed`、`k-class=all` 和 `route=all-active`。其他 `k-source=input` event 必须在 selector 前提供 int64 值。
+5. forced-active singleton 固定 `K=1`、`k-source=fixed`、`k-class=all`、`route=all-active`、`selector-read=NA`、`score=NA` 和 `fixed-score-formula-id=NA`；它直接记录 $p=1$，不执行 selector Read、Score、softmax 或 Top-K。其他 `k-source=input` event 必须在 selector 前提供 int64 值。
 6. `top-1` 要求候选数至少 2 且实际 $K=1$；`top-2` 要求候选数至少 3 且实际 $K=2$；`all` 要求 $K\ge C$。exact-tie、margin-safe 和 near-boundary 都要求 $C>K$。
 7. exact-tie 由逻辑源 logits 精确相等构造。margin-safe 在 FP64 和 FP32 两个 binding 中都满足 $\Delta_K$ 大于各自 guard band 的 16 倍。near-boundary 在 CPU FP32 中满足 $0<\Delta_K\le g_K/2$，并要求自然 route 仍与预期 exact 相同。具体 logit 数值使用第 3.1 节的精细 dyadic 域。
 8. VJP、gradcheck 和 optimizer 子集不使用 near-boundary。凡可微路径经过不带 epsilon 的 RMS read，fixture 必须令相应向量范数至少为 $2^{-8}$；L2 normalization 输入范数与 `norm_eps` 的距离至少为 $2^{-8}$。零范数 RMS 只进入 forward cell。
@@ -360,14 +361,14 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 
 | ID | topology/场景 | 独立展开的重点 |
 | --- | --- | --- |
-| `golden-00` | singleton | 实际 Read/Score、单元素 logit、精确 probability 1、forced active、identity 输出 |
+| `golden-00` | singleton | reached 后直接取精确 probability 1，不执行 selector Read/Score/softmax/Top-K，forced active、identity 输出 |
 | `golden-01` | R2 Top-1 exact tie | node ID 平票、hard Emit、终端均值 |
 | `golden-02` | R8 Top-2 margin-safe | Top-K 顺序、Hard-ST 前向与 probability 梯度 |
 | `golden-03` | R8 all-active + input K | all-active、soft-probability Emit、K 读取时点；一个 stateless active node 使用 type `state_default` / `read.ffn.zero.v1` 并在 NodeCompute 中实际读取 |
 | `golden-04` | chain | region 顺序、EMA carry、下一位置 |
 | `golden-05` | diamond | fan-out、`CLOSED`、edge order、edge-softmax fan-in |
 | `golden-06` | unequal path | 短路径缓存、shortcut 和晚汇合 |
-| `golden-07` | multi-entry/terminal | 边界广播、terminal node-softmax |
+| `golden-07` | multi-entry/terminal | 边界广播、fixed-by-node Score、terminal node-softmax |
 | `golden-08` | mixed regions | 独立 ready regions、singleton 与竞争 event |
 | `golden-09` | forced backbone | 可选分支全关仍有终端消息 |
 | `golden-10` | small HB | Lines、barrier、tree/local/shortcut/mirror labels |
@@ -383,15 +384,15 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | receiver Aggregate `agg.mean.v1`、`TEST-AGG-EDGE-SOFTMAX-V1`、`TEST-AGG-EDGE-AFFINE-MEAN-V1` | 依次 `golden-04`、`golden-05`、`golden-06`；后两者的实际父消息至少两条 |
 | output Aggregate `agg.mean.v1`、`TEST-AGG-TERMINAL-SOFTMAX-V1` | 依次 `golden-00` 和 `golden-07`；后者至少两个 active terminal messages |
 | Update `none` / `update.none.v1`；FFN Read `zero` / `read.ffn.zero.v1` 与 `state_default` / `read.ffn.zero.v1`；`ema` / `state.ema.v1` 与 `state_default` / `read.ffn.ema.v1`；`gdn` / `state.gdn.v1` 与 `state_default` / `read.ffn.gdn.v1`；`attention_window` / `state.attention-window.v1` 与 `state_default` / `read.ffn.attention-window.v1` | stateless Update 和 type `zero` Read 用 `golden-02`，stateless type `state_default` Read 用 `golden-03`，其余三个有状态 pair 依次用 `golden-04`、`golden-08`、`golden-11`；两个 stateless Read 都被 NodeCompute 实际读取，有状态三项同时手算 proposal、commit 和实际 FFN readout |
-| selector Read `read.selector.content.v1`、`read.selector.content-rms.v1`、content `TEST-READ-PROJ-V1`、state `TEST-READ-PROJ-V1`、`TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` | 依次 `golden-00`、`golden-01`、`golden-02`、`golden-04`、`golden-11` |
-| Score `score.fixed-by-node.v1`、`TEST-SCORE-CONST-V1`、`score.constant.v1`、`score.read-sum.v1`、`TEST-SCORE-LINEAR-V1`、`TEST-SCORE-MLP-V1` | 依次 `golden-00`、`golden-01`、`golden-03`、`golden-02`、`golden-04`、`golden-08` |
+| selector Read `read.selector.content.v1`、`read.selector.content-rms.v1`、content `TEST-READ-PROJ-V1`、state `TEST-READ-PROJ-V1`、`TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` | 依次 `golden-03`、`golden-01`、`golden-02`、`golden-04`、`golden-11` |
+| Score `score.fixed-by-node.v1`、`TEST-SCORE-CONST-V1`、`score.constant.v1`、`score.read-sum.v1`、`TEST-SCORE-LINEAR-V1`、`TEST-SCORE-MLP-V1` | 依次 `golden-07`、`golden-01`、`golden-03`、`golden-02`、`golden-04`、`golden-08` |
 | NodeCompute `node.identity.v1`、`TEST-NODE-AFFINE-V1`、`TEST-NODE-SWIGLU-V1` | 依次 `golden-00`、`golden-05`、`golden-02` |
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 依次 `golden-01`、`golden-02`、`golden-03`；Hard-ST 的 surrogate derivative 另按第 7.1 节解析验证 |
 | `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` / `k.input.v1` | none 语义用 `golden-00`；两种 K 依次用 `golden-01` 和 `golden-03` |
 
 这些 fixture 使用 $d\in\{2,3\}$、长度至多 4 的 dyadic 数值。期望生成器只能使用语言内标量四则运算、明写循环和独立的高精度 `exp`/`sqrt`；不得导入被测 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、state commit、balance-loss 或 executor helper。每个公式同时保存可读推导和完整 expected trace，不能只保存最终 output。
 
-人工期望按等价性测试契约第 3 节保存 absent、edge status、父消息、proposal、readout、logit/probability、K、Observe/active、NodeCompute、Emit、staged state、终端聚合、最终状态和充分统计。离散字段 exact；浮点值按第 10.1 节比较。
+人工期望按等价性测试契约第 3 节保存 absent、edge status、父消息、proposal、适用的 readout/logit/probability/K、Observe/active、NodeCompute、Emit、staged state、终端聚合、最终状态和充分统计。forced-active singleton 的期望 trace 明确没有 selector Read、Score、softmax 和 Top-K event，只保存直接得到的 $p=1$ 与 active。离散字段 exact；浮点值按第 10.1 节比较。
 
 这 12 个合法 golden 是独立 oracle 工件，不减少第 5 节的 256 个 legal family 数量；它们可以复用某个 topology 模板，但使用独立 fixture ID 和内容 hash。
 
@@ -463,7 +464,7 @@ fixture 在 $h$ 邻域内必须保持同一路由；若不能证明，就不能�
 - `opt-08` 至 `opt-15` 使用 AdamW：`lr=0.002`、`betas=(0.9,0.98)`、`eps=1e-8`、`weight_decay=0.01`、`amsgrad=false`。
 - 每种 optimizer 的偶数 local ordinal 从空 optimizer state 开始；奇数 local ordinal 装载冻结的、已经完成两次 deterministic priming step 的非零 state。
 
-参数组及组内 logical key 均按稳定字符串排序。priming gradients 由独立 bundle直接携带，不由任一被测 executor 临时生成。每个 case 比较 step 前所有梯度、step 后全部参数、step counter、moment Tensor、参数组超参数和 key 顺序。`core-v1` optimizer cell 不包含共享参数或可学习首状态；这些必须进入 extension-v2 optimizer cell。
+optimizer 参数组及组内 logical key 均按稳定字符串排序。这里的参数组只组织 optimizer 超参数，不表示 SettleGraph 权重共享。priming gradients 由独立 bundle 直接携带，不由任一被测 executor 临时生成。每个 case 比较 step 前所有梯度、step 后全部参数、step counter、moment Tensor、参数组超参数和 key 顺序。`core-v1` 的 SettleGraph 参数始终各自独立；可学习首状态必须进入 extension-v2 optimizer cell。
 
 ## 8. 104 个 negative mutants：96 个 Plan/运行期输入 + 8 个 artifact
 
@@ -487,7 +488,7 @@ actual envelope 必须由 validator、loader 或已知执行阶段产生。比�
 
 `binding-missing-role` 从 concrete `binding.dtype_roles` object 中只删除 `readout` role。`binding-symbolic-dtype` 保留四个 role，但只把 `binding.dtype_roles.readout` 的 concrete 值改为字面 `runtime`；这个值是 logical Plan 可用的符号声明，却不是 concrete binding 允许的 dtype，因此由现有 binding validator 唯一产生 `binding/binding.invalid`。负向 container 保存这个原始 mutated binding record 并重算外层工件 hash，但不伪造一个已通过 validation 的 typed Plan hash；重算外层认证字段不计为第二个语义 mutation。
 
-上表五组分别有 4、10、10、16、12 项，合计 52；每项两个 carriers，因此总数 exact 为 104。其中非 artifact 的后四组共 48 种、96 个实例，恰好满足上位契约的非法 Plan/运行期输入门槛；4 种、8 个 artifact faults 另计。`learnable_decay=true` 与 `shared_parameters=true` 的 v1 拒绝可作为额外开发 mutants，并在 schema v2 引入相应能力时改由新 schema 的正负例覆盖，但它们不计入这 104 个固定实例。
+上表五组分别有 4、10、10、16、12 项，合计 52；每项两个 carriers，因此总数 exact 为 104。其中非 artifact 的后四组共 48 种、96 个实例，恰好满足上位契约的非法 Plan/运行期输入门槛；4 种、8 个 artifact faults 另计。`learnable_decay=true` 的 v1 拒绝可作为额外开发 mutant，并在 schema v2 引入相应能力时改由新 schema 的正负例覆盖，但它不计入这 104 个固定实例。
 
 其中前四组 40 种 mutation，加上最后一组的 `state-owner-key`、`state-shape`、两种 owner alias 和两种 Attention window mutation，共 46 种/92 个 mutants 应在静态或 loader 入口失败。两种 late K、两种 local failure 和两种 empty terminal 共 6 种/12 个 mutants 必须先通过 loader，再在 `C11` 运行到预定 event/execution 入口时失败；若它们被更早 gate 意外拒绝，case 也失败。
 
@@ -642,7 +643,7 @@ $$
 | `TN32` | $10^{-4}$ | $10^{-4}$ | CPU FP32 与 NPU FP32 |
 | `TFD64` | $10^{-6}$ | $10^{-4}$ | 第 7.1 节的方向有限差分标量 |
 
-schema、hash、keys、shape、声明 dtype、mask、owner、event key、candidates、K、route、Top-K IDs、reached/Observe/active/send、edge status、Attention positions、failure envelope 和 checkpoint key set 全部 exact。所有 trace 还必须独立通过等价性测试契约第 4.1 节的单边 invariants；两个 executor 共同产生同一错误不能通过。
+schema、hash、keys、shape、声明 dtype、mask、owner、event key、candidates、K、route、普通竞争 region 的 Top-K IDs、forced-active singleton 的 $p=1$、reached/Observe/active/send、edge status、Attention positions、failure envelope 和 checkpoint key set 全部 exact。所有 trace 还必须独立通过等价性测试契约第 4.1 节的单边 invariants；两个 executor 共同产生同一错误不能通过。
 
 每个浮点 comparator artifact 保存量的稳定路径、最大绝对/相对误差、最坏 reference/candidate 值和阈值，不能只保存一个全局 bool。
 
@@ -714,15 +715,17 @@ coverage universe 包括：
 
 这些门不贡献 256 legal、64 VJP、16 optimizer、96 Plan/运行期输入 negative 或另计 8 个 artifact negative 的 core executor 数量。每个门只有在其输入 identity 冻结后才能运行。
 
+Qwen 接入、短训练和性能 workload 只使用每个 region 各自固定的 `k.fixed.v1`。`k.input.v1` 留在通用接口的正确性、失败处理和设备覆盖中，不作为主实验的 active-budget 条件。
+
 ### 12.1 冻结的性能 workload
 
 `performance-workloads.json` 固定下表 12 行，不把“代表组合”留给 benchmark runner 临时选择。每行先从第 5 节的 legal families 中取同时满足 topology 和 probe state 两列的最小 fixture ID，再作下列唯一性能输入物化：
 
-- logical Plan 保留该 family 的全部拓扑和公式；每个非 singleton region 的 active budget 规范化为 `k.input.v1`，`maximum` 保留该 region 的 $K^{\max}$，singleton 仍是 forced-active fixed 1。改写后的 canonical bytes/hash 单独冻结，不沿用源 family hash。
-- `one`、`half` 和 `all` 分别令每个非 singleton region 事件的 `requested_k` 为 $1$、$\lceil K^{\max}/2\rceil$ 和 $K^{\max}$；它们表示请求密度，实际 active 数仍按语义取候选数与请求值的较小者。
+- logical Plan 保留该 family 的全部拓扑和公式；每个 region 的 active budget 都规范化为 `k.fixed.v1`，singleton 固定为 forced-active 1。改写后的 canonical bytes/hash 单独冻结，不沿用源 family hash。
+- `one`、`half` 和 `all` 分别把每个非 singleton region 的固定 $K$ 写为 $1$、$\lceil K^{\max}/2\rceil$ 和 $K^{\max}$。实际 active 数仍取 candidates 数与该固定 $K$ 的较小者；workload 不携带 `requested_k`。
 - hidden 是 contiguous，数值由 `x("perf:<workload_id>:hidden", i)` 产生；状态 fresh，execution/routing-stat masks 全 true，LM target mask 全 false，每行使用独立稳定 sequence ID，positions 从 0 连续增加。
 
-| workload ID | topology | probe state | B | T | K 请求密度 |
+| workload ID | topology | probe state | B | T | 固定 K 密度 |
 | --- | --- | --- | ---: | ---: | --- |
 | `perf-00` | `single-layer-r8` | `none` | 1 | 128 | `one` |
 | `perf-01` | `single-layer-r8` | `ema` | 8 | 128 | `half` |
@@ -766,9 +769,8 @@ extension fixture 只有在下表的决定被版本化并有 validator/canonical
 | 扩展 | schema v2 必须先定义的内容 | 新增资格重点 |
 | --- | --- | --- |
 | selector-history | site/region/node owner 选择、规范 key、首值/decay、Read 维度、写回 stop-gradient、trace/state/checkpoint 表示 | node-level active EMA 的解析 trace、跨 Token/chunk/reset、failure rollback、VJP 断路 |
-| 共享只读参数 | group ID、成员 logical keys、部分/整公式共享规则、formula/shape/dtype兼容、跨 site 命名 | 多使用点 forward、同一 Tensor identity、梯度求和、optimizer 只更新一次、checkpoint round trip |
 | 固定/可学习首状态 | zero/fixed/learnable kind、owner 与 logical parameter key、shape/dtype、序列 materialization、reset、init-from/resume | 零/非零/reset、多个 sequences 的梯度累加、参数 manifest、optimizer 和 checkpoint |
-| 多 site | stable site ID、parameter/state/trace key、顶层 reset/release/transaction、placement 顺序 | 四 placements、多 site 隔离、all-site reset、共享/非共享组合 |
+| 多 site | stable site ID、parameter/state/trace key、顶层 reset/release/transaction、placement 顺序 | 四 placements、多 site 参数与状态隔离、all-site reset |
 | 低精度 | 每个 dtype role、accumulation/reduction dtype、rounding/autocast 和逐公式 tolerance | FP16/BF16 forward/backward/optimizer、overflow、CPU/NPU parity |
 | adaptive budget | budget 输入来源、读取时点、值域、梯度、状态依赖和失败事务 | Tensor-derived K 的 forward/VJP、边界、chunk 与 replay |
 
