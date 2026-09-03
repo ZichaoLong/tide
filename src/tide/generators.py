@@ -14,7 +14,7 @@ from __future__ import annotations
 import dataclasses
 import random
 from dataclasses import dataclass
-from typing import Callable, FrozenSet, List, Mapping, Sequence, Tuple
+from typing import Callable, FrozenSet, List, Mapping, Sequence, Set, Tuple
 
 from .builders import (
     build_chain,
@@ -32,6 +32,9 @@ from .plan import EdgeSpec, NodeSpec, Plan, RegionSpec
 DEFAULT_PLAN_CORPUS_SEED = 20_260_903
 DEFAULT_PLAN_CORPUS_SIZE = 48
 DEFAULT_INVALID_PLAN_CORPUS_SIZE = 24
+CORE_V1_CANDIDATE_CORPUS_SEED = 20_260_903
+CORE_V1_CANDIDATE_CORPUS_SIZE = 256
+CORE_V1_CANDIDATE_VJP_SIZE = 64
 
 _RUNTIME_DTYPES = {
     "hidden": "runtime",
@@ -906,6 +909,241 @@ def generate_plan_corpus(
     return tuple(cases)
 
 
+_CORE_V1_MANUAL_MOTIFS = (
+    "singleton",
+    "single-layer-r2",
+    "single-layer-r8",
+    "chain",
+    "diamond",
+    "unequal-path",
+    "multi-entry-terminal",
+    "mixed-regions",
+    "forced-backbone",
+    "small-hb",
+)
+
+
+def _core_v1_candidate_manual_base(
+    motif: str, variant: int, d_model: int
+) -> Tuple[Plan, str]:
+    """Build one readable fixed-slot topology for the larger candidate set."""
+
+    if motif == "singleton":
+        return build_singleton(d_model=d_model), "forced"
+    if motif == "single-layer-r2":
+        k = (1, 2)[variant % 2]
+        return (
+            build_single_layer(receiver_count=2, k=k, d_model=d_model),
+            f"k{k}",
+        )
+    if motif == "single-layer-r8":
+        k = (1, 2, 8)[variant % 3]
+        return (
+            build_single_layer(receiver_count=8, k=k, d_model=d_model),
+            f"k{k}",
+        )
+    if motif == "chain":
+        length = 3 + (variant % 3)
+        return build_chain(length=length, d_model=d_model), f"length-{length}"
+    if motif == "diamond":
+        branch_k = 1 + (variant % 2)
+        return (
+            build_diamond(d_model=d_model, branch_k=branch_k),
+            f"k{branch_k}",
+        )
+    if motif == "unequal-path":
+        return build_unequal_path(d_model=d_model), "base"
+    if motif == "multi-entry-terminal":
+        return build_multi_entry_terminal(d_model=d_model), "base"
+    if motif == "mixed-regions":
+        return build_mixed_regions(d_model=d_model), "base"
+    if motif == "forced-backbone":
+        return _forced_backbone_base(d_model), "base"
+    if motif == "small-hb":
+        return build_small_hb(d_model=d_model), "base"
+    raise AssertionError(motif)
+
+
+def _core_v1_candidate_rng_seed(
+    seed: int, ordinal: int, retry: int = 0
+) -> int:
+    """Mix a case-local seed without reading process-global RNG state."""
+
+    mask = (1 << 64) - 1
+    value = (
+        (seed & mask)
+        ^ (((ordinal + 1) * 0x9E3779B97F4A7C15) & mask)
+        ^ (((retry + 1) * 0xD1B54A32D192ED03) & mask)
+    )
+    value ^= value >> 30
+    value = (value * 0xBF58476D1CE4E5B9) & mask
+    value ^= value >> 27
+    value = (value * 0x94D049BB133111EB) & mask
+    return (value ^ (value >> 31)) & mask
+
+
+def _topology_signature(plan: Plan) -> Tuple[object, ...]:
+    """Return a formula-independent identity for generated-topology retries."""
+
+    return (
+        plan.topology_kind,
+        plan.entry_node_ids,
+        plan.terminal_node_ids,
+        tuple(
+            (node.node_id, node.region_id, node.forced_active)
+            for node in plan.nodes
+        ),
+        tuple(
+            (edge.edge_id, edge.source, edge.target, edge.label)
+            for edge in plan.edges
+        ),
+        tuple(
+            (
+                region.region_id,
+                region.node_ids,
+                region.control_dependencies,
+                region.line,
+                region.phase,
+            )
+            for region in plan.regions
+        ),
+    )
+
+
+def generate_core_v1_candidate_corpus(
+    seed: int = CORE_V1_CANDIDATE_CORPUS_SEED,
+) -> Tuple[PlanCorpusCase, ...]:
+    """Return 256 deterministic fixed-K executor-equivalence candidates.
+
+    The fixed slots follow the eleven topology motifs in the core-v1 plan:
+    sixteen cases for each readable motif and ninety-six bounded generated
+    DAGs.  Exactly sixty-four cases are marked for VJP comparison.  These are
+    validated logical Plans and reproducible seeds, not serialized fixture
+    bundles or a claim that any qualification capability cell has passed.
+
+    This entry point is intentionally independent of :func:`generate_plan_corpus`;
+    changing its seed, size, schedule, or identity does not alter the default
+    48-case development corpus.
+    """
+
+    if isinstance(seed, bool) or not isinstance(seed, int) or seed < 0:
+        raise ValueError(
+            "core-v1 candidate corpus seed must be a nonnegative integer"
+        )
+
+    schedule_rng = random.Random(seed ^ 0xC0E5_1DAD)
+    offsets = {
+        "profile": schedule_rng.randrange(len(_PROFILE_TIMINGS)),
+        "state": schedule_rng.randrange(len(_STATE_KINDS)),
+        "aggregate": schedule_rng.randrange(len(_AGGREGATES)),
+        "emit": schedule_rng.randrange(len(_EMITS)),
+        "compute": schedule_rng.randrange(len(_COMPUTES)),
+        "score": schedule_rng.randrange(len(_SCORES)),
+        "output": schedule_rng.randrange(2),
+    }
+    metadata_rng = random.Random(seed ^ 0x5EED_256)
+    d_models = (2, 3, 4, 7)
+    cases: List[PlanCorpusCase] = []
+    generated_signatures: Set[Tuple[object, ...]] = set()
+
+    for ordinal in range(CORE_V1_CANDIDATE_CORPUS_SIZE):
+        d_model = d_models[ordinal % len(d_models)]
+        retry = 0
+        if ordinal < 16 * len(_CORE_V1_MANUAL_MOTIFS):
+            motif = _CORE_V1_MANUAL_MOTIFS[ordinal // 16]
+            variant_index = ordinal % 16
+            base, variant = _core_v1_candidate_manual_base(
+                motif, variant_index, d_model
+            )
+        else:
+            motif = "generated-dag"
+            variant_index = ordinal - 16 * len(_CORE_V1_MANUAL_MOTIFS)
+            while True:
+                local_rng = random.Random(
+                    _core_v1_candidate_rng_seed(seed, ordinal, retry)
+                )
+                base = _generated_layered_dag(
+                    local_rng,
+                    d_model,
+                    variant_index + retry * CORE_V1_CANDIDATE_CORPUS_SIZE,
+                )
+                signature = _topology_signature(base)
+                if signature not in generated_signatures:
+                    generated_signatures.add(signature)
+                    break
+                retry += 1
+            variant = f"layered-{variant_index}-retry-{retry}"
+
+        case_id = f"core-v1-candidate.ql-{ordinal:04d}.{motif}.{variant}"
+        vjp = ordinal % 4 == 0
+        plan = _configure_plan(
+            base,
+            case_id=case_id,
+            motif=motif,
+            generation_seed=seed,
+            ordinal=ordinal,
+            offsets=offsets,
+            k_mode_hint="fixed",
+            vjp=vjp,
+        )
+        plan = dataclasses.replace(
+            plan,
+            builder={
+                "name": "core-v1-executor-equivalence-candidate",
+                "version": "1",
+                "config": {
+                    "seed": seed,
+                    "ordinal": ordinal,
+                    "motif": motif,
+                    "source_plan": base.plan_id,
+                    "variant": variant,
+                    "topology_retry": retry,
+                },
+            },
+        ).validate()
+        candidate_features = {
+            "corpus:core-v1-candidate",
+            f"shape:d{d_model}",
+        }
+        for node in plan.nodes:
+            candidate_features.add(f"selector-read:{node.selector_read['type']}")
+            candidate_features.add(f"ffn-read:{node.ffn_read['formula_id']}")
+            candidate_features.add(f"input-norm:{node.input_norm['formula_id']}")
+            candidate_features.add(f"ffn-norm:{node.ffn_norm['formula_id']}")
+        features = _features(plan, motif, vjp=vjp) | frozenset(
+            candidate_features
+        )
+        cases.append(
+            PlanCorpusCase(
+                case_id=case_id,
+                motif=motif,
+                ordinal=ordinal,
+                generation_seed=seed,
+                parameter_seed=metadata_rng.getrandbits(63),
+                input_seed=metadata_rng.getrandbits(63),
+                plan=plan,
+                features=features,
+                vjp=vjp,
+            )
+        )
+
+    if len(cases) != CORE_V1_CANDIDATE_CORPUS_SIZE:
+        raise AssertionError("core-v1 candidate schedule has the wrong size")
+    if sum(case.vjp for case in cases) != CORE_V1_CANDIDATE_VJP_SIZE:
+        raise AssertionError("core-v1 candidate VJP schedule has the wrong size")
+    plan_hashes = {case.plan.canonical_hash() for case in cases}
+    if len(plan_hashes) != len(cases):
+        raise AssertionError("core-v1 candidate logical Plan hashes are not unique")
+    if any(
+        region.k_requested.get("type") != "fixed"
+        or region.k_requested.get("value") != region.k_max
+        for case in cases
+        for region in case.plan.regions
+    ):
+        raise AssertionError("core-v1 candidate corpus contains a non-fixed K")
+    return tuple(cases)
+
+
 def _invalid_plan_mutations(base: Plan) -> Mapping[str, Tuple[Plan, Tuple[str, ...]]]:
     first_node = base.nodes[0]
     first_region = base.regions[0]
@@ -1035,11 +1273,15 @@ def generate_invalid_plan_corpus(
 
 
 __all__ = [
+    "CORE_V1_CANDIDATE_CORPUS_SEED",
+    "CORE_V1_CANDIDATE_CORPUS_SIZE",
+    "CORE_V1_CANDIDATE_VJP_SIZE",
     "DEFAULT_INVALID_PLAN_CORPUS_SIZE",
     "DEFAULT_PLAN_CORPUS_SEED",
     "DEFAULT_PLAN_CORPUS_SIZE",
     "InvalidPlanCorpusCase",
     "PlanCorpusCase",
+    "generate_core_v1_candidate_corpus",
     "generate_invalid_plan_corpus",
     "generate_plan_corpus",
 ]
