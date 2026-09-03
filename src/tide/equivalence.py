@@ -638,15 +638,6 @@ def validate_trace_invariants(
                 errors.append(
                     f"{prefix}.region[{region_id!r}]: active IDs are not a unique candidate subset"
                 )
-            if event.effective_k != len(event.active_node_ids):
-                errors.append(
-                    f"{prefix}.region[{region_id!r}]: effective K does not equal active count"
-                )
-            if type(event.effective_k) is not int or event.effective_k < 0:
-                errors.append(
-                    f"{prefix}.region[{region_id!r}]: effective K must be a "
-                    "nonnegative integer"
-                )
             expected_forced = bool(reached) and (
                 len(region.node_ids) == 1
                 and nodes_by_id[region.node_ids[0]].forced_active
@@ -661,41 +652,179 @@ def validate_trace_invariants(
                     event.logits is not None
                     or event.probabilities is not None
                     or event.requested_k is not None
-                    or event.effective_k != 0
+                    or event.effective_k is not None
+                    or event.top_k_node_ids is not None
                     or event.active_node_ids
                 ):
                     errors.append(
                         f"{prefix}.region[{region_id!r}]: empty candidates have routing values"
                     )
                 continue
-            if event.logits is None or event.probabilities is None:
-                errors.append(
-                    f"{prefix}.region[{region_id!r}]: nonempty candidates lack logits/probabilities"
-                )
-                continue
-            _check_vector(errors, f"{prefix}.region[{region_id!r}].logits", event.logits, len(reached))
-            _check_vector(errors, f"{prefix}.region[{region_id!r}].probabilities", event.probabilities, len(reached))
-            if (
-                event.logits.numel() == len(reached)
-                and event.probabilities.numel() == len(reached)
-            ):
+            if expected_forced:
+                if (
+                    event.logits is not None
+                    or event.requested_k is not None
+                    or event.effective_k is not None
+                    or event.top_k_node_ids is not None
+                ):
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: forced-active singleton "
+                        "must leave logits and K/Top-K fields absent"
+                    )
+                if event.probabilities is None:
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: forced-active singleton "
+                        "lacks its direct probability"
+                    )
+                else:
+                    _check_vector(
+                        errors,
+                        f"{prefix}.region[{region_id!r}].probabilities",
+                        event.probabilities,
+                        1,
+                    )
+                    if (
+                        event.probabilities.numel() != 1
+                        or float(event.probabilities.detach().cpu()[0].item()) != 1.0
+                    ):
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: forced-active "
+                            "singleton probability must be exactly one"
+                        )
+                if event.active_node_ids != reached:
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: forced-active singleton "
+                        "must directly activate its unique candidate"
+                    )
+            else:
+                if event.logits is None or event.probabilities is None:
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: ordinary nonempty "
+                        "candidates lack logits/probabilities"
+                    )
+                else:
+                    _check_vector(
+                        errors,
+                        f"{prefix}.region[{region_id!r}].logits",
+                        event.logits,
+                        len(reached),
+                    )
+                    _check_vector(
+                        errors,
+                        f"{prefix}.region[{region_id!r}].probabilities",
+                        event.probabilities,
+                        len(reached),
+                    )
+                    if (
+                        event.probabilities.numel() == len(reached)
+                        and bool(torch.isfinite(event.probabilities).all().item())
+                    ):
+                        if bool(
+                            (event.probabilities < -tolerance.atol).any().item()
+                        ):
+                            errors.append(
+                                f"{prefix}.region[{region_id!r}]: selector "
+                                "probability is negative"
+                            )
+                        probability_sum = float(
+                            event.probabilities.detach()
+                            .to(device="cpu", dtype=torch.float64)
+                            .sum()
+                            .item()
+                        )
+                        allowed = tolerance.atol + tolerance.rtol
+                        if abs(probability_sum - 1.0) > allowed:
+                            errors.append(
+                                f"{prefix}.region[{region_id!r}]: probabilities "
+                                "do not sum to one"
+                            )
+                if (
+                    type(event.requested_k) is not int
+                    or not 1 <= event.requested_k <= region.k_max
+                ):
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: requested K is "
+                        "outside the Plan bound"
+                    )
+                else:
+                    if region.k_requested.get("type") == "fixed":
+                        fixed_k = region.k_requested.get("value")
+                        if event.requested_k != fixed_k:
+                            errors.append(
+                                f"{prefix}.region[{region_id!r}]: requested K "
+                                "does not match the Plan fixed value"
+                            )
+                    expected_k = min(event.requested_k, len(reached))
+                    if event.effective_k != expected_k:
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: effective K is "
+                            "not min(requested,candidates)"
+                        )
+                if type(event.effective_k) is not int or event.effective_k < 1:
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: ordinary routing "
+                        "effective K must be a positive integer"
+                    )
+                if not isinstance(event.top_k_node_ids, tuple):
+                    errors.append(
+                        f"{prefix}.region[{region_id!r}]: ordinary routing "
+                        "lacks Top-K IDs"
+                    )
+                else:
+                    top_k_set = set(event.top_k_node_ids)
+                    if (
+                        len(top_k_set) != len(event.top_k_node_ids)
+                        or not top_k_set <= set(reached)
+                    ):
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: Top-K IDs are not "
+                            "a unique candidate subset"
+                        )
+                    if (
+                        type(event.effective_k) is int
+                        and event.effective_k != len(event.top_k_node_ids)
+                    ):
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: effective K does "
+                            "not equal the Top-K ID count"
+                        )
+                    if event.active_node_ids != event.top_k_node_ids:
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: active IDs do not "
+                            "match Top-K IDs"
+                        )
+                if (
+                    event.logits is not None
+                    and event.logits.numel() == len(reached)
+                    and type(event.effective_k) is int
+                    and event.effective_k > 0
+                ):
+                    values = (
+                        event.logits.detach()
+                        .to(device="cpu", dtype=torch.float64)
+                        .tolist()
+                    )
+                    ranking = sorted(
+                        range(len(reached)),
+                        key=lambda index: (-values[index], reached[index]),
+                    )
+                    selected = set(ranking[: event.effective_k])
+                    expected_top_k = tuple(
+                        node_id
+                        for index, node_id in enumerate(reached)
+                        if index in selected
+                    )
+                    if event.top_k_node_ids != expected_top_k:
+                        errors.append(
+                            f"{prefix}.region[{region_id!r}]: Top-K IDs do not "
+                            "match stable logit ordering"
+                        )
+
+            if event.probabilities is not None and event.probabilities.numel() == len(reached):
                 for index, node_id in enumerate(reached):
                     node_event = node_event_by_id.get(node_id)
                     if node_event is None:
                         continue
-                    if node_event.logit is not None:
-                        _append_report_errors(
-                            errors,
-                            compare_nested(
-                                event.logits[index],
-                                node_event.logit,
-                                tolerance=tolerance,
-                                path=(
-                                    f"{prefix}.region[{region_id!r}]"
-                                    f".node[{node_id!r}].logit"
-                                ),
-                            ),
-                        )
                     if node_event.probability is not None:
                         _append_report_errors(
                             errors,
@@ -709,62 +838,22 @@ def validate_trace_invariants(
                                 ),
                             ),
                         )
-            if (
-                type(event.requested_k) is not int
-                or not 1 <= event.requested_k <= region.k_max
-            ):
-                errors.append(
-                    f"{prefix}.region[{region_id!r}]: requested K is outside the Plan bound"
-                )
-            else:
-                if region.k_requested.get("type") == "fixed":
-                    fixed_k = region.k_requested.get("value")
-                    if event.requested_k != fixed_k:
-                        errors.append(
-                            f"{prefix}.region[{region_id!r}]: requested K "
-                            "does not match the Plan fixed value"
-                        )
-                expected_k = min(event.requested_k, len(reached))
-                if event.effective_k != expected_k:
-                    errors.append(
-                        f"{prefix}.region[{region_id!r}]: effective K is not min(requested,candidates)"
-                    )
-            if event.probabilities.numel() == len(reached) and bool(torch.isfinite(event.probabilities).all().item()):
-                if bool((event.probabilities < -tolerance.atol).any().item()):
-                    errors.append(
-                        f"{prefix}.region[{region_id!r}]: selector probability is negative"
-                    )
-                probability_sum = float(event.probabilities.detach().to(device="cpu", dtype=torch.float64).sum().item())
-                allowed = tolerance.atol + tolerance.rtol
-                if abs(probability_sum - 1.0) > allowed:
-                    errors.append(
-                        f"{prefix}.region[{region_id!r}]: probabilities do not sum to one"
-                    )
-            if event.forced_active:
-                if (
-                    len(region.node_ids) != 1
-                    or len(reached) != 1
-                    or event.requested_k != 1
-                    or event.effective_k != 1
-                    or event.probabilities.numel() != 1
-                    or float(event.probabilities.detach().cpu()[0].item()) != 1.0
-                ):
-                    errors.append(
-                        f"{prefix}.region[{region_id!r}]: forced-active singleton is malformed"
-                    )
-            elif event.logits.numel() == len(reached) and event.effective_k > 0:
-                values = event.logits.detach().to(device="cpu", dtype=torch.float64).tolist()
-                ranking = sorted(
-                    range(len(reached)),
-                    key=lambda index: (-values[index], reached[index]),
-                )
-                selected = set(ranking[: event.effective_k])
-                expected_active = tuple(
-                    node_id for index, node_id in enumerate(reached) if index in selected
-                )
-                if event.active_node_ids != expected_active:
-                    errors.append(
-                        f"{prefix}.region[{region_id!r}]: active IDs do not match stable Top-K"
+            if event.logits is not None and event.logits.numel() == len(reached):
+                for index, node_id in enumerate(reached):
+                    node_event = node_event_by_id.get(node_id)
+                    if node_event is None or node_event.logit is None:
+                        continue
+                    _append_report_errors(
+                        errors,
+                        compare_nested(
+                            event.logits[index],
+                            node_event.logit,
+                            tolerance=tolerance,
+                            path=(
+                                f"{prefix}.region[{region_id!r}]"
+                                f".node[{node_id!r}].logit"
+                            ),
+                        ),
                     )
 
             expected_observed = (
@@ -904,12 +993,38 @@ def validate_trace_invariants(
                     path=f"{node_prefix}.state_write",
                 )
                 _append_report_errors(errors, report)
-            for field_name in ("input_hidden", "normalized_input", "selector_read", "logit", "probability"):
+            for field_name in ("input_hidden", "normalized_input", "probability"):
                 value = getattr(event, field_name)
                 if event.reached and value is None:
                     errors.append(f"{node_prefix}: reached receiver lacks {field_name}")
                 if not event.reached and value is not None:
                     errors.append(f"{node_prefix}: unreached receiver has {field_name}")
+            forced_singleton = (
+                len(regions_by_id[node.region_id].node_ids) == 1
+                and node.forced_active
+            )
+            for field_name in ("selector_read", "logit"):
+                value = getattr(event, field_name)
+                if event.reached and forced_singleton and value is not None:
+                    errors.append(
+                        f"{node_prefix}: forced-active receiver has {field_name}"
+                    )
+                if event.reached and not forced_singleton and value is None:
+                    errors.append(f"{node_prefix}: reached receiver lacks {field_name}")
+                if not event.reached and value is not None:
+                    errors.append(f"{node_prefix}: unreached receiver has {field_name}")
+            if (
+                event.reached
+                and forced_singleton
+                and isinstance(event.probability, Tensor)
+                and (
+                    event.probability.shape != ()
+                    or float(event.probability.detach().cpu().item()) != 1.0
+                )
+            ):
+                errors.append(
+                    f"{node_prefix}: forced-active probability must be exactly one"
+                )
             for field_name in ("computed", "emitted"):
                 value = getattr(event, field_name)
                 if event.active and value is None:

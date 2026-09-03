@@ -68,7 +68,7 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 
 当前代码和定向测试覆盖：
 
-- CPU-safe 的运行时解析边界，logical/typed Plan 的规范化、静态校验和稳定哈希，当前 reference formula config 的严格键集、默认值物化、数值规范化与跨字段 shape/timing 校验，以及外部可变状态在不同 owner 键间共享 Tensor storage（包括不同 view）的运行期拒绝；单个 SettleGraph site 已能从 Plan 派生版本化、实现无关的 parameter-schema manifest，并把 eager `state_dict` locator 单列为实现 binding，逐项校验公式角色、owner、shape、dtype 和一一对应关系；
+- CPU-safe 的运行时解析边界，logical/typed Plan 的规范化、静态校验和稳定哈希，当前 reference formula config 的严格键集、默认值物化、数值规范化与跨字段 shape/timing 校验，以及外部可变状态在不同 owner 键间共享 Tensor storage（包括不同 view）的运行期拒绝；当前 Plan gate 也明确拒绝非空 `parameter_group`，保证 SettleGraph 参数各自独占；单个 SettleGraph site 已能从 Plan 派生版本化、实现无关的 parameter-schema manifest，并把 eager `state_dict` locator 单列为实现 binding，逐项校验公式角色、owner、shape、dtype 和一一对应关系；
 - 若干完全展开的手工拓扑与 HB fixture Builder；
 - 一个固定 seed 的 development corpus：48 个合法 Plan 覆盖 singleton、单层 \(R=2,8\)、chain、diamond、unequal path、multi-entry/multi-terminal、mixed regions、forced backbone、小型 HB 和有界分层 DAG；六种合法 profile/timing、none/EMA/Gated DeltaNet/窗口 Attention、三种 Emit、三种 receiver Aggregate、两种 output Aggregate 以及 fixed/input K 均进入 FP32/FP64 token-major—region-major 差分，其中 6 个 Plan 比较 hidden 以及每个具名参数的 gradient/`None` 记录，并要求至少一个参数梯度非零；另有 24 个命名的单变换非法 Plan，直接验证 validator 自产的 schema/topology/formula code，不把期望 code 回灌给捕获器；
 - 当前 reference 算子子集上的逐 Token/token-major eager 执行和独立 region-major eager prefill，包括 N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务回滚、balance 充分统计和规范 trace；
@@ -82,7 +82,7 @@ region-major reference 仍按 region、Token 和 batch row 使用 Python 循环�
 
 - packed 与特化/优化执行器及其 benchmark，以及混合/低精度的逐公式 accumulation role 与资格门槛；
 - 真实 Qwen 的 causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度接入；
-- selector-history 递推，以及 Plan 参数组所表达的跨 node/site 只读参数共享；
+- selector-history 递推；
 - 可学习首状态的 Plan owner/key/shape 与 reset、梯度累加 schema；当前 fixture v1 因而明确只接受空的 `learnable_initial_state`；
 - 完整多类别的独立 golden、把 48 个合法与 24 个非法 development cases 全部物化为长期保存 bundle 的资格语料、跨语言 canonicalizer conformance、达到 256 legal/64 VJP/16 optimizer/96 Plan-or-runtime-input negative 加另计 8 artifact negative 的数量与 pairwise/event 计数、失败收缩、系统化故障注入、短训练与完整 checkpoint qualification；当前 bundle schema、parameter manifest、失败 envelope、统一 comparator、trace invariant 检查、一个 singleton 解析 exact-trace golden 和定向 optimizer 检查都只构成这些目标的已实现基础；
 - checkpoint v1 尚未覆盖 scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口或窗口中途恢复；基础 CPU checkpoint 的跨 device 装载路径已经实现并有定向 continuation 用例，但完整 portable handoff 资格（完整训练状态、optimizer 下一步、规定数量和可追溯证据）尚未完成；它只支持已声明的 Adam/AdamW schema，也不承诺回滚任意 Python 属性或 load hook 的外部副作用；

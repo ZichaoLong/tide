@@ -1422,6 +1422,15 @@ class PlanTestCase(unittest.TestCase):
             failure_codes=("plan.schema",),
         )
 
+        parameter_alias = dataclasses.replace(
+            base.nodes[0], parameter_group="shared.0"
+        )
+        self.assert_invalid(
+            dataclasses.replace(base, nodes=(parameter_alias,)),
+            "parameter_group must be null",
+            failure_codes=("plan.schema",),
+        )
+
     def test_static_capacity_is_topology_but_k_declaration_is_formula(self) -> None:
         base = build_single_layer(receiver_count=2, k=1)
         oversized_capacity = dataclasses.replace(
@@ -1432,6 +1441,16 @@ class PlanTestCase(unittest.TestCase):
             oversized_capacity,
             "k_max exceeds its fixed size",
             failure_codes=("plan.topology",),
+        )
+
+        mismatched_fixed_k = dataclasses.replace(
+            base,
+            regions=(dataclasses.replace(base.regions[0], k_max=2),),
+        )
+        self.assert_invalid(
+            mismatched_fixed_k,
+            "fixed K must equal k_max=2 in core-v1",
+            failure_codes=("plan.formula",),
         )
 
         invalid_declaration = dataclasses.replace(

@@ -148,9 +148,10 @@ class RegionEventTrace:
     logits: Optional[Tensor]
     probabilities: Optional[Tensor]
     requested_k: Optional[int]
-    effective_k: int
+    effective_k: Optional[int]
     active_node_ids: Tuple[str, ...]
     forced_active: bool
+    top_k_node_ids: Optional[Tuple[str, ...]]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -819,74 +820,79 @@ class SettleGraph(nn.Module):
                             token_index,
                         )
 
-                    for node_id in reached_ids:
-                        node = self.receiver(node_id)
-                        state_for_selector: ReceiverState
-                        if timing == "post":
-                            proposal = node.proposal(
-                                state_before_by_node[node_id],
-                                normalized_by_node[node_id],
-                                token_position=token_position,
-                            )
-                            proposal_by_node[node_id] = proposal
-                            state_for_selector = proposal
-                        elif timing == "pre":
-                            state_for_selector = state_before_by_node[node_id]
-                        else:
-                            state_for_selector = None
-                        readout_by_node[node_id] = node.selector_read(
-                            normalized_by_node[node_id], state_for_selector
-                        )
-
                     active_ids: List[str] = []
                     probabilities = graph_input.new_empty((0,))
-                    logits = graph_input.new_empty((0,))
+                    logits: Optional[Tensor] = None
+                    effective_k: Optional[int] = None
+                    top_k_node_ids: Optional[Tuple[str, ...]] = None
                     if reached_ids:
-                        readouts = torch.stack(
-                            [readout_by_node[node_id] for node_id in reached_ids]
-                        )
-                        logits = self.selector(region.region_id)(
-                            readouts, reached_ids
-                        )
-                        if not bool(torch.isfinite(logits).all().item()):
-                            raise ExecutionContractError(
-                                f"region {region.region_id!r} produced non-finite logits"
-                            )
                         if forced:
                             if len(region.node_ids) != 1:
                                 raise ExecutionContractError(
                                     "forced-active regions must be singleton regions"
                                 )
-                            probabilities = logits.new_ones(logits.shape)
+                            probabilities = graph_input.new_ones((1,))
                             active_ids = list(reached_ids)
                         else:
+                            for node_id in reached_ids:
+                                node = self.receiver(node_id)
+                                state_for_selector: ReceiverState
+                                if timing == "post":
+                                    proposal = node.proposal(
+                                        state_before_by_node[node_id],
+                                        normalized_by_node[node_id],
+                                        token_position=token_position,
+                                    )
+                                    proposal_by_node[node_id] = proposal
+                                    state_for_selector = proposal
+                                elif timing == "pre":
+                                    state_for_selector = state_before_by_node[node_id]
+                                else:
+                                    state_for_selector = None
+                                readout_by_node[node_id] = node.selector_read(
+                                    normalized_by_node[node_id], state_for_selector
+                                )
+                            readouts = torch.stack(
+                                [readout_by_node[node_id] for node_id in reached_ids]
+                            )
+                            logits = self.selector(region.region_id)(
+                                readouts, reached_ids
+                            )
+                            if not bool(torch.isfinite(logits).all().item()):
+                                raise ExecutionContractError(
+                                    f"region {region.region_id!r} produced non-finite logits"
+                                )
                             probabilities = torch.softmax(logits, dim=0)
                             assert requested_for_event is not None
-                            active_count = min(
+                            effective_k = min(
                                 requested_for_event, len(reached_ids)
                             )
                             active_mask = deterministic_topk_mask(
-                                logits, active_count
+                                logits, effective_k
                             )
                             active_ids = [
                                 node_id
                                 for offset, node_id in enumerate(reached_ids)
                                 if bool(active_mask[offset].item())
                             ]
+                            top_k_node_ids = tuple(active_ids)
 
                     if record_trace:
                         region_traces.append(
                             RegionEventTrace(
-                                sequence_id,
-                                token_position,
-                                region.region_id,
-                                tuple(reached_ids),
-                                logits if reached_ids else None,
-                                probabilities if reached_ids else None,
-                                1 if forced else requested_for_event,
-                                len(active_ids),
-                                tuple(active_ids),
-                                forced,
+                                sequence_id=sequence_id,
+                                token_position=token_position,
+                                region_id=region.region_id,
+                                candidate_node_ids=tuple(reached_ids),
+                                logits=logits,
+                                probabilities=(
+                                    probabilities if reached_ids else None
+                                ),
+                                requested_k=requested_for_event,
+                                effective_k=effective_k,
+                                active_node_ids=tuple(active_ids),
+                                forced_active=forced,
+                                top_k_node_ids=top_k_node_ids,
                             )
                         )
 
@@ -901,10 +907,14 @@ class SettleGraph(nn.Module):
                         node_id: probabilities[index]
                         for index, node_id in enumerate(reached_ids)
                     }
-                    logit_by_node = {
-                        node_id: logits[index]
-                        for index, node_id in enumerate(reached_ids)
-                    }
+                    logit_by_node = (
+                        {
+                            node_id: logits[index]
+                            for index, node_id in enumerate(reached_ids)
+                        }
+                        if logits is not None
+                        else {}
+                    )
                     active_set = set(active_ids)
                     for node_id in region.node_ids:
                         reached = node_id in hidden_by_node
@@ -1195,68 +1205,71 @@ class SettleGraph(nn.Module):
                 requested_for_event = _resolve_requested_k(
                     region, requested_k, batch_index
                 )
-            for node_id in reached_ids:
-                node = self.receiver(node_id)
-                state_for_selector: ReceiverState
-                if timing == "post":
-                    proposal = node.proposal(
-                        state_before_by_node[node_id],
-                        normalized_by_node[node_id],
-                        token_position=token_position,
-                    )
-                    proposal_by_node[node_id] = proposal
-                    state_for_selector = proposal
-                elif timing == "pre":
-                    state_for_selector = state_before_by_node[node_id]
-                else:
-                    state_for_selector = None
-                readout_by_node[node_id] = node.selector_read(
-                    normalized_by_node[node_id], state_for_selector
-                )
-
             active_ids: List[str] = []
             probabilities = graph_input.new_empty((0,))
-            logits = graph_input.new_empty((0,))
+            logits: Optional[Tensor] = None
+            effective_k: Optional[int] = None
+            top_k_node_ids: Optional[Tuple[str, ...]] = None
             if reached_ids:
-                readouts = torch.stack(
-                    [readout_by_node[node_id] for node_id in reached_ids]
-                )
-                logits = self.selector(region.region_id)(readouts, reached_ids)
-                if not bool(torch.isfinite(logits).all().item()):
-                    raise ExecutionContractError(
-                        f"region {region.region_id!r} produced non-finite logits"
-                    )
                 if forced:
                     if len(region.node_ids) != 1:
                         raise ExecutionContractError(
                             "forced-active regions must be singleton regions"
                         )
-                    probabilities = logits.new_ones(logits.shape)
+                    probabilities = graph_input.new_ones((1,))
                     active_ids = list(reached_ids)
                 else:
+                    for node_id in reached_ids:
+                        node = self.receiver(node_id)
+                        state_for_selector: ReceiverState
+                        if timing == "post":
+                            proposal = node.proposal(
+                                state_before_by_node[node_id],
+                                normalized_by_node[node_id],
+                                token_position=token_position,
+                            )
+                            proposal_by_node[node_id] = proposal
+                            state_for_selector = proposal
+                        elif timing == "pre":
+                            state_for_selector = state_before_by_node[node_id]
+                        else:
+                            state_for_selector = None
+                        readout_by_node[node_id] = node.selector_read(
+                            normalized_by_node[node_id], state_for_selector
+                        )
+                    readouts = torch.stack(
+                        [readout_by_node[node_id] for node_id in reached_ids]
+                    )
+                    logits = self.selector(region.region_id)(readouts, reached_ids)
+                    if not bool(torch.isfinite(logits).all().item()):
+                        raise ExecutionContractError(
+                            f"region {region.region_id!r} produced non-finite logits"
+                        )
                     probabilities = torch.softmax(logits, dim=0)
                     assert requested_for_event is not None
-                    k = min(requested_for_event, len(reached_ids))
-                    active_mask = deterministic_topk_mask(logits, k)
+                    effective_k = min(requested_for_event, len(reached_ids))
+                    active_mask = deterministic_topk_mask(logits, effective_k)
                     active_ids = [
                         node_id
                         for offset, node_id in enumerate(reached_ids)
                         if bool(active_mask[offset].item())
                     ]
+                    top_k_node_ids = tuple(active_ids)
 
             if record_trace:
                 region_traces.append(
                     RegionEventTrace(
-                        sequence_id,
-                        token_position,
-                        region.region_id,
-                        tuple(reached_ids),
-                        logits if reached_ids else None,
-                        probabilities if reached_ids else None,
-                        1 if forced else requested_for_event,
-                        len(active_ids),
-                        tuple(active_ids),
-                        forced,
+                        sequence_id=sequence_id,
+                        token_position=token_position,
+                        region_id=region.region_id,
+                        candidate_node_ids=tuple(reached_ids),
+                        logits=logits,
+                        probabilities=probabilities if reached_ids else None,
+                        requested_k=requested_for_event,
+                        effective_k=effective_k,
+                        active_node_ids=tuple(active_ids),
+                        forced_active=forced,
+                        top_k_node_ids=top_k_node_ids,
                     )
                 )
 
@@ -1273,9 +1286,14 @@ class SettleGraph(nn.Module):
             probability_by_node = {
                 node_id: probabilities[index] for index, node_id in enumerate(reached_ids)
             }
-            logit_by_node = {
-                node_id: logits[index] for index, node_id in enumerate(reached_ids)
-            }
+            logit_by_node = (
+                {
+                    node_id: logits[index]
+                    for index, node_id in enumerate(reached_ids)
+                }
+                if logits is not None
+                else {}
+            )
             active_set = set(active_ids)
             for node_id in region.node_ids:
                 reached = node_id in hidden_by_node

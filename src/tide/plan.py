@@ -1759,10 +1759,9 @@ class Plan:
                         schema_errors,
                     )
                 if node.parameter_group is not None:
-                    _validate_identifier(
-                        f"node {node.node_id!r} parameter_group",
-                        node.parameter_group,
-                        schema_errors,
+                    schema_errors.append(
+                        f"node {node.node_id!r} parameter_group must be null "
+                        "in Plan schema version '1'"
                     )
                 if type(node.forced_active) is not bool:
                     schema_errors.append(
@@ -2597,6 +2596,11 @@ def _validate_k_request(
             errors.append(
                 f"region {region.region_id!r} fixed K must be an integer in "
                 f"[1, {region.k_max}]"
+            )
+        elif region.k_max <= len(region.node_ids) and value != region.k_max:
+            errors.append(
+                f"region {region.region_id!r} fixed K must equal "
+                f"k_max={region.k_max} in core-v1"
             )
     elif request_type == "input":
         if config.get("field") != "requested_k":

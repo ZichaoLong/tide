@@ -319,8 +319,8 @@ class TraceInvariantTests(unittest.TestCase):
                     None,
                     None,
                     None,
-                    normalized,
-                    torch.tensor(7.25, dtype=torch.float64),
+                    None,
+                    None,
                     torch.tensor(1.0, dtype=torch.float64),
                     message,
                     message,
@@ -337,12 +337,13 @@ class TraceInvariantTests(unittest.TestCase):
                     0,
                     region_id,
                     (node_id,),
-                    torch.tensor([7.25], dtype=torch.float64),
+                    None,
                     torch.tensor([1.0], dtype=torch.float64),
-                    1,
-                    1,
+                    None,
+                    None,
                     (node_id,),
                     True,
+                    None,
                 ),
             ),
             state_writes=(),
@@ -461,14 +462,36 @@ class TraceInvariantTests(unittest.TestCase):
         plan = build_singleton(d_model=3)
         trace, _, executed = self._run_both(plan)
         first = trace.region_events[0]
-        assert first.logits is not None
+        self.assertIsNone(first.logits)
+        self.assertIsNone(first.requested_k)
+        self.assertIsNone(first.effective_k)
+        self.assertIsNone(first.top_k_node_ids)
         malformed_region = dataclasses.replace(
             first,
-            logits=first.logits + 1.0,
+            top_k_node_ids=(first.candidate_node_ids[0],),
         )
         malformed = dataclasses.replace(
             trace,
             region_events=(malformed_region,) + trace.region_events[1:],
+        )
+        with self.assertRaisesRegex(
+            TraceInvariantError, "leave logits and K/Top-K fields absent"
+        ):
+            validate_trace_invariants(
+                plan,
+                malformed,
+                executed,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            )
+
+        node = trace.node_events[0]
+        assert node.probability is not None
+        malformed_node = dataclasses.replace(
+            node, probability=node.probability + 1.0
+        )
+        malformed = dataclasses.replace(
+            trace,
+            node_events=(malformed_node,) + trace.node_events[1:],
         )
         with self.assertRaisesRegex(
             TraceInvariantError, "linked trace payload differs"
@@ -547,20 +570,35 @@ class TraceInvariantTests(unittest.TestCase):
                 tolerance=CPU_FLOAT64_TOLERANCE,
             )
 
-        fixed = build_single_layer(receiver_count=2, k=1, d_model=3)
-        fixed_region = dataclasses.replace(fixed.regions[0], k_max=2)
-        fixed = dataclasses.replace(
-            fixed, regions=(fixed_region,)
-        ).validate()
+        fixed = build_single_layer(receiver_count=2, k=2, d_model=3)
         fixed_trace, _, fixed_executed = self._run_both(fixed)
         first = fixed_trace.region_events[0]
-        malformed_region = dataclasses.replace(first, requested_k=2)
+        assert first.top_k_node_ids is not None
+        self.assertEqual(first.top_k_node_ids, first.active_node_ids)
+        malformed_region = dataclasses.replace(first, requested_k=1)
         malformed = dataclasses.replace(
             fixed_trace,
             region_events=(malformed_region,) + fixed_trace.region_events[1:],
         )
         with self.assertRaisesRegex(
             TraceInvariantError, "fixed value"
+        ):
+            validate_trace_invariants(
+                fixed,
+                malformed,
+                fixed_executed,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            )
+
+        malformed_region = dataclasses.replace(
+            first, top_k_node_ids=tuple(reversed(first.top_k_node_ids))
+        )
+        malformed = dataclasses.replace(
+            fixed_trace,
+            region_events=(malformed_region,) + fixed_trace.region_events[1:],
+        )
+        with self.assertRaisesRegex(
+            TraceInvariantError, "active IDs do not match Top-K IDs"
         ):
             validate_trace_invariants(
                 fixed,

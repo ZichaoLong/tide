@@ -196,6 +196,37 @@ def _optional_downstream_input_k_plan():
     return replace(plan, nodes=nodes, regions=tuple(regions)).validate()
 
 
+def _unreached_forced_singleton_plan():
+    plan = build_unequal_path(d_model=2)
+    regions = tuple(
+        replace(
+            region,
+            k_max=1,
+            k_requested={
+                "type": "fixed",
+                "formula_id": "k.fixed.v1",
+                "value": 1,
+            },
+            score={
+                "type": "fixed",
+                "formula_id": "score.fixed-by-node.v1",
+                "values_by_node": {
+                    "node.long.0": -1.0,
+                    "node.short": 1.0,
+                },
+            },
+        )
+        if region.region_id == "region.split"
+        else region
+        for region in plan.regions
+    )
+    return replace(
+        plan,
+        plan_id="unreached-forced-singleton",
+        regions=regions,
+    ).validate()
+
+
 def _backward_plan():
     plan = build_single_layer(receiver_count=2, k=1, d_model=3)
     nodes = tuple(
@@ -233,7 +264,7 @@ def _backward_plan():
 
 
 class RegionMajorDifferentialTests(unittest.TestCase):
-    def test_forced_singleton_executes_read_and_score_without_topk(self):
+    def test_forced_singleton_skips_read_score_softmax_and_topk(self):
         hidden = torch.tensor([[[3.0, 4.0]]], dtype=torch.float64)
         execution_mask = torch.ones((1, 1), dtype=torch.bool)
         positions = torch.zeros((1, 1), dtype=torch.int64)
@@ -266,15 +297,7 @@ class RegionMajorDifferentialTests(unittest.TestCase):
             regions=(read_sum_region,),
         ).validate()
 
-        for plan, expected_logit in (
-            (fixed_plan, torch.tensor(7.25, dtype=torch.float64)),
-            (
-                read_sum_plan,
-                hidden[0, 0]
-                .div(torch.sqrt(hidden[0, 0].square().mean() + 1e-6))
-                .sum(),
-            ),
-        ):
+        for plan in (fixed_plan, read_sum_plan):
             with self.subTest(score=plan.regions[0].score["type"]):
                 graph = SettleGraph(plan).double()
                 receiver = graph.receiver("node.0")
@@ -288,6 +311,11 @@ class RegionMajorDifferentialTests(unittest.TestCase):
                     "forward",
                     wraps=selector.forward,
                 ) as score, mock.patch(
+                    "tide.engine.torch.softmax",
+                    side_effect=AssertionError(
+                        "forced-active selection must not depend on softmax"
+                    ),
+                ), mock.patch(
                     "tide.engine.deterministic_topk_mask",
                     side_effect=AssertionError(
                         "forced-active selection must not depend on Top-K"
@@ -310,35 +338,35 @@ class RegionMajorDifferentialTests(unittest.TestCase):
                         record_trace=True,
                     )
 
-                self.assertEqual(selector_read.call_count, 2)
-                self.assertEqual(score.call_count, 2)
+                self.assertEqual(selector_read.call_count, 0)
+                self.assertEqual(score.call_count, 0)
                 _assert_nested_close(self, token_major, region_major)
                 for result in (token_major, region_major):
                     assert result.trace is not None
                     region_event = result.trace.region_events[0]
                     node_event = result.trace.node_events[0]
-                    torch.testing.assert_close(
-                        region_event.logits[0],
-                        expected_logit,
-                        atol=1e-11,
-                        rtol=1e-11,
-                    )
-                    torch.testing.assert_close(
-                        node_event.logit,
-                        expected_logit,
-                        atol=1e-11,
-                        rtol=1e-11,
-                    )
+                    self.assertIsNone(region_event.logits)
                     torch.testing.assert_close(
                         region_event.probabilities,
                         torch.ones(1, dtype=torch.float64),
                         atol=0,
                         rtol=0,
                     )
+                    self.assertIsNone(region_event.requested_k)
+                    self.assertIsNone(region_event.effective_k)
+                    self.assertIsNone(region_event.top_k_node_ids)
                     self.assertEqual(region_event.active_node_ids, ("node.0",))
                     self.assertTrue(region_event.forced_active)
+                    self.assertIsNone(node_event.selector_read)
+                    self.assertIsNone(node_event.logit)
+                    torch.testing.assert_close(
+                        node_event.probability,
+                        torch.tensor(1.0, dtype=torch.float64),
+                        atol=0,
+                        rtol=0,
+                    )
 
-    def test_forced_singleton_rejects_nonfinite_actual_score(self):
+    def test_forced_singleton_does_not_read_nonfinite_unused_score(self):
         plan = build_singleton(d_model=2)
         region = replace(
             plan.regions[0],
@@ -364,16 +392,17 @@ class RegionMajorDifferentialTests(unittest.TestCase):
         positions = torch.zeros((1, 1), dtype=torch.int64)
         for executor in (graph.prefill, graph.prefill_region_major):
             with self.subTest(executor=executor.__name__):
-                with self.assertRaisesRegex(
-                    ExecutionContractError, "produced non-finite logits"
-                ):
-                    executor(
-                        hidden,
-                        execution_mask,
-                        ["seq"],
-                        positions,
-                        detach_at_end=False,
-                    )
+                result = executor(
+                    hidden,
+                    execution_mask,
+                    ["seq"],
+                    positions,
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                torch.testing.assert_close(result.output, hidden, atol=0, rtol=0)
+                assert result.trace is not None
+                self.assertIsNone(result.trace.region_events[0].logits)
 
     def test_identity_chain_and_diamond_match_token_major_exact_trace(self):
         torch.manual_seed(11)
@@ -640,7 +669,8 @@ class RegionMajorDifferentialTests(unittest.TestCase):
         )
         self.assertEqual(long_event.candidate_node_ids, ())
         self.assertIsNone(long_event.requested_k)
-        self.assertEqual(long_event.effective_k, 0)
+        self.assertIsNone(long_event.effective_k)
+        self.assertIsNone(long_event.top_k_node_ids)
 
         # Positive first coordinate selects the long branch.  The same value
         # is now consumed and must fail instead of being clipped to k_max.
@@ -656,6 +686,54 @@ class RegionMajorDifferentialTests(unittest.TestCase):
                         requested_k=invalid_placeholder,
                         detach_at_end=False,
                     )
+
+    def test_unreached_forced_singleton_has_an_empty_absent_trace(self):
+        graph = SettleGraph(_unreached_forced_singleton_plan()).double()
+        hidden = torch.tensor([[[1.0, -0.5]]], dtype=torch.float64)
+        execution_mask = torch.ones((1, 1), dtype=torch.bool)
+        positions = torch.zeros((1, 1), dtype=torch.int64)
+        token_major = graph.prefill(
+            hidden,
+            execution_mask,
+            ["seq"],
+            positions,
+            detach_at_end=False,
+            record_trace=True,
+        )
+        region_major = graph.prefill_region_major(
+            hidden,
+            execution_mask,
+            ["seq"],
+            positions,
+            detach_at_end=False,
+            record_trace=True,
+        )
+        _assert_nested_close(self, token_major, region_major)
+        for result in (token_major, region_major):
+            assert result.trace is not None
+            region_event = next(
+                event
+                for event in result.trace.region_events
+                if event.region_id == "region.long"
+            )
+            self.assertEqual(region_event.candidate_node_ids, ())
+            self.assertFalse(region_event.forced_active)
+            self.assertIsNone(region_event.logits)
+            self.assertIsNone(region_event.probabilities)
+            self.assertIsNone(region_event.requested_k)
+            self.assertIsNone(region_event.effective_k)
+            self.assertIsNone(region_event.top_k_node_ids)
+            self.assertEqual(region_event.active_node_ids, ())
+            node_event = next(
+                event
+                for event in result.trace.node_events
+                if event.node_id == "node.long.1"
+            )
+            self.assertFalse(node_event.reached)
+            self.assertFalse(node_event.active)
+            self.assertIsNone(node_event.selector_read)
+            self.assertIsNone(node_event.logit)
+            self.assertIsNone(node_event.probability)
 
     def test_backward_matches_token_major_for_inputs_and_parameters(self):
         torch.manual_seed(37)
