@@ -4,29 +4,31 @@
 
 ## 1. 当前结论
 
-固定 \(K\) 的 `core-v1` 子集已经有一条通用 packed executor，以及 `single-layer.v1` 和 `hb-line.v1` 两条拓扑特化 executor。对预先固定的 development candidate corpus，已有完整受控 run 没有发现 output、最终 state、balance、route、trace 数值或其已查询 VJP 目标的差异。后续对抗审查发现该 run 的 comparator 没有检查到的若干公开 Tensor autograd 元数据、连通性和 graph 生命周期差异；当前实现补丁和定向回归已经逐项关闭已知反例，修复后发现集中的 60 个测试也已在当前 dirty 工作树上用普通 `unittest` 分组完整复跑通过。新的 clean commit 上仍须执行受控 runner，才能形成当前补丁的 exact-commit、源码指纹和 execution-receipt 终态记录。
+固定 \(K\) 的 `core-v1` 子集已经有一条通用 packed executor，以及 `single-layer.v1` 和 `hb-line.v1` 两条拓扑特化 executor。对预先固定的 development candidate corpus，修复后的 clean exact commit 已完成受控 run：60/60 tests 通过，execution receipt 闭合，运行前后的 commit 和源码指纹一致。在记录的 output、最终 state、balance、route、trace、live autograd 元数据和 VJP 目标上，没有发现 eager、packed 和适用的拓扑特化路径之间的差异。
 
 这是一项强度较高的开发证据，结论仅限于当前支持子集、当前 CPU FP64/FP32 调用域和记录的测试场景；它不是 `C00`--`C12` qualification，也不是性能资格。
 
-最初的 packed/特化实现提交为：
+本次受控验证绑定的实现提交为：
 
 ```text
-107a05218e7ba95ec80fbcf78f788cff83775d17
-feat: add packed and topology-specialized executors
+5712e66f1cf51a85360e6507839c2fe443aa81ae
+fix: harden executor equivalence semantics
 ```
 
-该提交没有修改主语义文档 `docs/experiment-semantics-and-naming.md`。实现边界和资格边界的说明位于[实现与等价性验证计划](settlegraph-implementation-plan.md)和[core-v1 资格计划](core-v1-qualification-plan.md)。
+最初的 packed/特化实现提交是 `107a05218e7ba95ec80fbcf78f788cff83775d17`。修复提交没有修改主语义文档 `docs/experiment-semantics-and-naming.md`。实现边界和资格边界的说明位于[实现与等价性验证计划](settlegraph-implementation-plan.md)和[core-v1 资格计划](core-v1-qualification-plan.md)。
 
 ## 2. 已完成的可执行验证
 
-受控 runner `scripts/run_executor_equivalence.py` 已在上述 clean exact commit 上完成。它在运行前后检查 commit、工作区指纹和源码指纹；任何 dirty source、运行中源码变化、缺失测试、skip、expected failure 或覆盖回执不闭合都会使运行失败。该历史 run 的 45-test 数量和 execution receipt 都属于该提交；它们不能替代修复后提交尚待完成的整套重跑。
+受控 runner `scripts/run_executor_equivalence.py` 已在上述 clean exact commit 上完成。它在运行前后检查 commit、工作区指纹和源码指纹；任何 dirty source、运行中源码变化、缺失测试、skip、expected failure 或覆盖回执不闭合都会使运行失败。
 
-本次成功记录位于工作区的 `runs/20260903T143738Z-executor-equivalence-107a052/`：
+本次成功记录位于工作区的 `runs/20260904T070450Z-executor-equivalence-5712e66/`：
 
-- [运行 manifest](../runs/20260903T143738Z-executor-equivalence-107a052/run.json)：`completed`，`exact_commit=true`，运行中源码未改变；
-- [终态摘要](../runs/20260903T143738Z-executor-equivalence-107a052/summary.json)：45/45 tests 通过、退出码为零、`qualification=false`；
-- [实际执行回执](../runs/20260903T143738Z-executor-equivalence-107a052/artifacts/execution-receipt.json)：9298 个执行事件，期望键集与实际键集精确闭合；
-- [原始测试日志](../runs/20260903T143738Z-executor-equivalence-107a052/stdout.log)。
+- [运行 manifest](../runs/20260904T070450Z-executor-equivalence-5712e66/run.json)：`completed`，`exact_commit=true`，运行前后工作树均 clean，源码指纹未改变；
+- [终态摘要](../runs/20260904T070450Z-executor-equivalence-5712e66/summary.json)：60/60 tests 通过、退出码为零、`qualification=false`；
+- [实际执行回执](../runs/20260904T070450Z-executor-equivalence-5712e66/artifacts/execution-receipt.json)：9298 个执行事件，1680 个 forward cells、176 个 VJP case/dtype groups 和 4 个 lifecycle scenarios 与期望集合精确闭合；
+- [原始测试日志](../runs/20260904T070450Z-executor-equivalence-5712e66/stdout.log)。
+
+初始实现提交 `107a052` 的 45/45 历史 run 仍保留在 `runs/20260903T143738Z-executor-equivalence-107a052/`，但当前实现的结论以上述 60-test 修复后 run 为准。
 
 candidate corpus identity 为：
 
@@ -47,7 +49,7 @@ packed、single-layer 和 HB 的静态支持分区 identity 为：
 对 256 个预先固定的 legal candidates，在 FP64 和 FP32 下，逐一比较 token-major eager 与 packed 的：
 
 - full prefill；
-- 每个 case/dtype 按 case ordinal 固定选择的一次 two-chunk split；旧回执在全语料范围内同时出现 split 1 和 split 2，但没有让每个 case 都执行两个 split；
+- `T=3` 的两个非空 two-chunk splits；
 - 逐 Token decode；
 - output、最终 state、balance sufficient statistics、完整 canonical trace、route 和 trace invariant。
 
@@ -59,7 +61,7 @@ packed、single-layer 和 HB 的静态支持分区 identity 为：
 
 后续审查又发现多类公开 autograd 元数据或连通性差异。空调用前状态下，receiver 首次 Observe 以前的 `NodeEventTrace.state_before` 在 eager 中是不可微首状态，packed 却因整段 causal scan 的 Tensor 拼接而带有 `requires_grad=true`。分组计算结果写入同一 dense Tensor 后，identity/hard 的 node compute、Emit、edge payload、parent message 或 terminal message 也会继承其他 lane 的可微性；同类污染还能传播到下游 Aggregate，在 \(K=1\) 时使主 output 错误带图，或让混合 frozen/trainable formula group 中实际 active 的冻结 lane 继承 inactive 可训练 lane 的图。single-layer 特化的整调用 output-score 堆叠则会让单个 output event 对其他事件使用的 score 参数产生 connected-zero，而 eager 中为 `None`。此外，packed 的 no-detach 状态发布曾可能切断本次 batch 未出现的 dormant sequence 状态图。它们的数值可以完全相同，原 runner 查询的主训练 VJP 也不一定触及这些根，因此必须按公开 occurrence 和调用边界分别检查。
 
-当前补丁在首次 Observe 前直接复用调用入口 state；入口没有该 owner 时，按语义重建零 Tensor 或空 Attention 首状态。它在 `record_trace=True` 时保留未混入 dense storage 的每个 NodeCompute/Emit occurrence，并用这些 occurrence 还原 edge、parent、terminal 和 output trace；公开结果边界再按单个 observable 的真实 source liveness 去除 dense lane 带来的假阳性图，而不切断真实来源。未实际 Observe 的 owner 和本次 batch 外的 dormant sequence 在 no-detach 分支原样 carry 入口 state。single-layer output event 也按该事件实际 terminal messages 单独重建，不共享整调用的 score 图。新增回归递归比较整个 live `ExecutionResult` 的全部 Tensor shape 和 `requires_grad`，并用 isolated VJP 检查事件局部 score、跨 chunk state-before/state-for-compute roots 和 batch 外状态 leaves。`record_trace=False` 的训练/性能路径不保留诊断 occurrence，但主 output、发布状态和 source-liveness 边界仍受相同公开语义约束。
+`5712e66` 实现在首次 Observe 前直接复用调用入口 state；入口没有该 owner 时，按语义重建零 Tensor 或空 Attention 首状态。它在 `record_trace=True` 时保留未混入 dense storage 的每个 NodeCompute/Emit occurrence，并用这些 occurrence 还原 edge、parent、terminal 和 output trace；公开结果边界再按单个 observable 的真实 source liveness 去除 dense lane 带来的假阳性图，而不切断真实来源。未实际 Observe 的 owner 和本次 batch 外的 dormant sequence 在 no-detach 分支原样 carry 入口 state。single-layer output event 也按该事件实际 terminal messages 单独重建，不共享整调用的 score 图。新增回归递归比较整个 live `ExecutionResult` 的全部 Tensor shape 和 `requires_grad`，并用 isolated VJP 检查事件局部 score、跨 chunk state-before/state-for-compute roots 和 batch 外状态 leaves。`record_trace=False` 的训练/性能路径不保留诊断 occurrence，但主 output、发布状态和 source-liveness 边界仍受相同公开语义约束。
 
 source-liveness resolver 必须存活到反向实际选定公开 objective，但不应与内部 autograd graph 形成永久强引用环。调用含有语义可微的公开结果时，当前由公开 result boundary 唯一持续强持有该次调用的 connectivity tracker，内部 selective input/stack autograd context 只保存弱引用；结果仍存活，或派生 loss 等 Tensor 仍引用其图时，普通 backward 和 `retain_graph=True` 的重复 isolated VJP 均可取到同一 tracker。公开结果及所有仍引用该图的派生 Tensor 都释放后，tracker、resolver 和 region runtimes 可以一并回收；没有语义可微公开结果的调用不需要建立这一结果边界。定向回归还要求 tracker 若异常提前释放必须显式失败，不能静默退回 dense 连通性。
 
@@ -80,13 +82,13 @@ prefill 与 decode 省略参数时的默认 autograd detach，以及 `detach_at_
 
 HB 的结论需要准确限定：它是独立的拓扑调度和 barrier oracle，不是独立的局部公式 oracle，也不是高性能 HB kernel。因而三方一致能增强对拓扑顺序、barrier、state commit 和 trace 的证据，但不能单独排除三条路径共同错误地实现同一个局部公式。
 
-### 2.3 历史 run 覆盖闭合与当前发现集
+### 2.3 当前 run 的覆盖闭合
 
 runner 不从静态 support 数量推断通过覆盖。测试在完整比较、finite 检查和 VJP 连通性检查均成功后才写 execution receipt；随后用期望 key set 校验无缺失、无重复、无额外 cell。
 
 | 项目 | 实际数量 |
 | --- | ---: |
-| 测试（`107a052` 历史 run） | 45/45 通过 |
+| 测试（`5712e66` 当前 run） | 60/60 通过 |
 | forward cells | 1680 |
 | 其中 packed / single-layer / HB | 1536 / 48 / 96 |
 | VJP case/dtype groups | 176 |
@@ -94,11 +96,9 @@ runner 不从静态 support 数量推断通过覆盖。测试在完整比较、f
 | VJP objective queries | 7438 |
 | lifecycle scenarios | 4 |
 
-运行记录已用项目标准 record validator 验证为有效。其 `qualification=false` 是终态事实，不是待后续解释的注记。上述计数也不表示每一类轴都有同等强度的 VJP 覆盖：64 个 marked case 的现有选择与 `d_model` 轴相关，实际全部为 `d_model=2`，且只含 affine/SwiGLU、Hard-ST/soft-probability、linear/MLP Score 和 mean output Aggregate。更广的公式、shape 与 topology 覆盖主要来自 256-case forward，而不是一个正交的 isolated-root VJP 设计。
+当前 required discovery 包含 candidate corpus 4 个、core executor equivalence 14 个、packed 25 个和 specialized 17 个测试。60 个 test ID 唯一，runner 钉住的 29 个 required semantic IDs 全部存在。2026-09-04 的受控运行耗时 5353.196 秒，无 failure、error、skip、expected failure 或 unexpected success。
 
-当前未提交工作树的 required discovery 已扩为 60 个测试：candidate corpus 4 个、core executor equivalence 14 个、packed 25 个、specialized 17 个。60 个 test ID 唯一，runner 钉住的 29 个 required semantic IDs 全部存在。2026-09-04，在 source 实现和测试补丁稳定后，未持久化的普通 `unittest` 分组复跑得到：candidate corpus 与 core executor equivalence 合计 18/18 通过，耗时 2898.182 秒；packed 25/25 通过，耗时 161.628 秒；specialized 17/17 通过，耗时 8.302 秒。三组均无 failure、error 或 skip，因此当前 required 发现集的普通验证结果为 60/60。
-
-这些分组调用没有运行受控 runner，也没有生成或校验当前补丁的 run manifest、运行前后源码指纹和 execution receipt。工作树仍然 dirty，所以这里的 60/60 不能称为 clean exact-commit run、不能与上表的历史 45/45 终态合并，也不能提升为 qualification。
+受控 runner 的终态摘要记录 execution receipt 校验为 `passed`，receipt SHA-256 为 `a5131bf1eadfb5f1b0020d4d0cf8ac087c098826f81679452dfd1c2c5c7125dc`。其 `qualification=false` 是终态事实，不是待后续解释的注记。上述计数也不表示每一类轴都有同等强度的 VJP 覆盖：64 个 marked case 的现有选择与 `d_model` 轴相关，实际全部为 `d_model=2`，且只含 affine/SwiGLU、Hard-ST/soft-probability、linear/MLP Score 和 mean output Aggregate。更广的公式、shape 与 topology 覆盖主要来自 256-case forward，而不是一个正交的 isolated-root VJP 设计。
 
 ### 2.4 探索性 CPU 性能记录
 
@@ -109,7 +109,7 @@ runner 不从静态 support 数量推断通过覆盖。测试在完整比较、f
 
 这不是 `X07`：workload、进程数、warmup/sample 数、峰值内存和 profiler 均不符合资格计划。运行期间相关源码 fingerprint 没有改变，但工作区出现 README/状态文档改动，最终 `exact_commit=false`；而且它执行的是本次 trace 元数据和未 Observe state carry 修复之前的 `107a052`。trace occurrence 的保留与还原只在 `record_trace=True` 时启用，但该旧记录仍不能作为当前实现的正式性能证据。
 
-后续在本机 aarch64、Torch `2.10.0+cpu` 环境中，针对当前补丁做过一次未持久化的非资格 RSS 生命周期烟测。输入是 `corpus.011.mixed-regions.base-r2` 的 CPU FP64 fixture，形状为 \([B,T,d]=[2,3,3]\)；每轮在 grad-enabled、`record_trace=False` 下执行 prefill，删除结果并运行 Python GC，每十轮再调用一次 `malloc_trim`，随后从 `/proc/self/status` 读取 `VmRSS`。修复前，RSS 在 100 次调用中从 241.0 MiB 持续升至 458.6 MiB，100/100 个 tracker 弱引用仍存活；`torch.no_grad()` 对照预热后稳定。定位到的强环是 tracker 到 resolver 捕获的 runtimes，再经 Tensor autograd context 回到 tracker。改为上述单一强 owner 后，当前补丁的 60 次同类调用在预热增长后稳定于约 282.9 MiB，每次删除结果并 GC 后的采样点均没有存活 tracker。该烟测只表示在该进程与该 case 中未再观察到已定位的强环，不是峰值内存、吞吐或 `X07` 资格证据。
+后续在本机 aarch64、Torch `2.10.0+cpu` 环境中，针对 `5712e66` 实现做过一次未持久化的非资格 RSS 生命周期烟测。输入是 `corpus.011.mixed-regions.base-r2` 的 CPU FP64 fixture，形状为 \([B,T,d]=[2,3,3]\)；每轮在 grad-enabled、`record_trace=False` 下执行 prefill，删除结果并运行 Python GC，每十轮再调用一次 `malloc_trim`，随后从 `/proc/self/status` 读取 `VmRSS`。修复前，RSS 在 100 次调用中从 241.0 MiB 持续升至 458.6 MiB，100/100 个 tracker 弱引用仍存活；`torch.no_grad()` 对照预热后稳定。定位到的强环是 tracker 到 resolver 捕获的 runtimes，再经 Tensor autograd context 回到 tracker。改为上述单一强 owner 后，`5712e66` 的 60 次同类调用在预热增长后稳定于约 282.9 MiB，每次删除结果并 GC 后的采样点均没有存活 tracker。该烟测只表示在该进程与该 case 中未再观察到已定位的强环，不是峰值内存、吞吐或 `X07` 资格证据。
 
 source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enabled 前向中，公开 Tensor occurrence 为确定精确 `requires_grad` 元数据，会各自触发一次基于已发现 route 的完整反向语义遍历；该遍历还含 device 标量读取和 CPU list 转换。一个 `B=2,T=3` 的有状态代表 case 在 `record_trace=False` 下就会为 output、公开 state components 和 balance regions 重复触发多次遍历。现有 `python_*_hot_loops` profile 字段没有统计这项成本，因此其零值不能证明该路径没有 Python 控制流或 host synchronization。正式宣称 packed 高性能前，必须把这项前向成本移出热路径或合并，并用真实 profiler、同步计时和峰值内存证据验证。
 
@@ -117,11 +117,9 @@ source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enab
 
 ### 可以据此陈述
 
-- 在 `107a052` 上，对当时 256 个固定 \(K\) `core-v1` development candidates，通用 packed 的 full prefill、每个 case/dtype 按 ordinal 选择的一次 two-chunk split 和逐 Token decode，与 token-major eager 在该 runner 当时比较的可观测量上等价；
-- 对其中标记的 VJP 子集，值、输入/参数梯度和 `None` 连通性在该历史 run 记录的目标集合中等价；
-- 对当前静态适用的 8 个 single-layer 和 16 个 HB candidates，eager、packed 和特化路径在相同 development 范围内三方一致；
-- 在当前 dirty 补丁的普通 60/60 复跑中，全部 256 个 packed candidates 已执行两种 dtype 的 full prefill、\(T=3\) 的两种非空 two-chunk splits 和逐 Token decode；64 个标记 case 的两 dtype isolated VJP 也全部通过；
-- 在同一复跑中，8 个 single-layer 和 16 个 HB candidates 的 eager—packed—specialized 三方 forward/VJP 通过；定向回归另覆盖两种拓扑的 live autograd 元数据、HB 外部可微初态、默认 detach 和显式 no-detach；
+- 在 clean exact commit `5712e66` 上，对 256 个固定 \(K\) `core-v1` development candidates，通用 packed 的两种 dtype full prefill、\(T=3\) 的两种非空 two-chunk splits 和逐 Token decode，与 token-major eager 在记录的可观测量上等价；
+- 64 个标记 case 的两 dtype isolated VJP 在值、输入/参数梯度和 `None` 连通性上通过；
+- 对静态适用的 8 个 single-layer 和 16 个 HB candidates，eager—packed—specialized 三方 forward、VJP 和 live autograd 元数据一致；定向回归另覆盖 HB 外部可微初态、默认 detach 和显式 no-detach；
 - 当前定向回归关闭了已知的首次 Observe 前 state、跨 lane/Token 的 node/edge/parent/terminal provenance、下游 Aggregate 与 \(K=1\) output、混合 frozen/trainable formula lane、single-layer event-local output score，以及 batch 外 dormant sequence no-detach state 图反例；
 - selective parameter 的非叶 Tensor 叶源追溯已关闭 autograd node wrapper id 复用造成的漏分支反例；
 - 当前生命周期回归和 RSS smoke 没有再观察到已定位的 connectivity tracker 强引用环。
@@ -129,7 +127,6 @@ source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enab
 ### 不能据此陈述
 
 - `C00`--`C12` 的任何一个完整 qualification gate 已通过；
-- 当前补丁已经有 clean exact-commit 受控 runner 终态或闭合的 execution receipt；
 - `X07` CPU performance qualification 已通过，或 packed decode 已被证明加速；
 - packed decode 是独立算法、独立 kernel 或独立 oracle；当前 `decode` 只是同一 packed prefill 路径的 \(T=1\) wrapper；
 - HB 是优化 kernel 或独立局部公式实现；
@@ -139,7 +136,7 @@ source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enab
 - FP16/BF16、CUDA、当前代码的 NPU、x86_64、Qwen/Base、KV cache、LM loss、训练、完整 checkpoint、selector-history、可学习首状态、多 site 或 input-K packed 已验证；
 - 所有合法 Plan、所有 chunk split、所有并发 backward 或所有未来局部公式都已得到等价性证明。
 
-“packed 高性能”在当前阶段只描述实现路线：它不调用 eager scheduler，主要公式使用 Tensor 批处理或编译递推。它已经具备强开发级语义等价性证据、一项探索性 prefill 加速观察和一次定向 RSS 生命周期烟测，但还没有 callback/profile、峰值内存和冻结 workload 所要求的性能资格证据；当前 decode 也没有性能收益。
+“packed 高性能”在当前阶段只描述实现路线：它不调用 eager scheduler，主要公式使用 Tensor 批处理或编译递推。它已经具备强开发级语义等价性证据、一项探索性 prefill 加速观察和一次定向 RSS 生命周期烟测，但还没有 callback/profile、峰值内存和冻结 workload 所要求的性能资格证据；现有探索记录未观察到 decode 性能收益，当前提交尚无 decode 加速证据。
 
 ## 4. 后续工作的建议顺序
 
