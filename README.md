@@ -48,6 +48,8 @@ selector 可以读取当前内容、更新前状态或更新后 proposal，分�
 
 完整数学定义、执行顺序、loss 和命名见 [实验语义、命名与数学符号](docs/experiment-semantics-and-naming.md)。该文档是“模型实际怎样计算”的权威来源；软件边界与建设顺序见 [SettleGraph 实现与等价性验证计划](docs/settlegraph-implementation-plan.md)，资格测试的 fixture、trace、comparator 和证据门槛见 [SettleGraph 等价性测试契约](docs/equivalence-test-contract.md)。[SettleGraph core-v1 资格计划](docs/core-v1-qualification-plan.md)把当前闭合子集落实为待执行的语料、计数和 capability cells；它是工作单，不是当前通过证据。已完成的 executor development run、其证据边界和后续交接事项见 [执行器等价性开发验证状态](docs/executor-equivalence-development-status.md)。
 
+从真实 Base checkpoint 开始的 BO 实验、特化加速与后续多卡扩展顺序见 [checkpoint 到 SettleGraph + BO 实验路线](docs/checkpoint-to-bo-experiment-roadmap.md)。
+
 ## 3. 主要实验问题
 
 后续实验需要逐步回答：

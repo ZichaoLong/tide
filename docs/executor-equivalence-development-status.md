@@ -140,12 +140,8 @@ source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enab
 
 ## 4. 后续工作的建议顺序
 
-后续应先把开发证据转化为资格证据，再展开性能、设备与训练实验：
+当前 token-major eager reference 作为后续实现内参考，packed 与拓扑特化结果作为强开发级差分基准；主语义文档仍是计算含义的权威来源，独立 golden 仍是正式资格缺口。下一主线是从真实 Base checkpoint 出发，完成一个 SettleGraph + BO 的端到端垂直切片，并用受控对照检验其训练和推理行为。只有当该路径的真实 profiler 显示 executor 阻塞实验时，才同步做该拓扑的特化加速；通用超大 DAG 与多卡执行在已获得可复现模型信号后再展开。具体顺序和 development gates 见 [checkpoint 到 SettleGraph + BO 实验路线](checkpoint-to-bo-experiment-roadmap.md)。
 
-1. 冻结并物化 qualification corpus/bundles，补齐独立 golden、canonicalization、负例和 failure envelope 记录；
-2. 完成 `C00`--`C06`，重点是冻结的 objective/cotangent records、32 个 finite-difference、Hard-ST 局部 oracle，以及全部要求的 chunk 场景；
-3. 完成 `C07`--`C12`：optimizer、所有 chunk split、lifecycle/concurrency/rollback、negative 和 fresh-process checkpoint；
-4. 正确性 gates 完成后，按资格计划冻结的 workload、warmup/sample/process 规则运行 `X07`，记录长序列 prefill 与 stateful decode 的延迟、吞吐、峰值内存和 profile；
-5. 再分别完成当前 commit 的 NPU/CUDA packed 证据、fallback closure、低精度能力，以及 Qwen/Base 和正式训练实验。
+`C00`--`C12` 仍是正式正确性资格的必需工作，`X07` 仍是 CPU 性能声明的必需门。它们可与垂直切片按其实际使用范围逐步闭合；在完整资格前运行的 checkpoint bring-up 和小规模 pilot 必须标为 development evidence，不得冒用资格 cell 或正式结论。
 
 当前开发 runner 不能通过增加更多随机 candidates 自动升级为 qualification。升级需要资格计划规定的冻结 corpus identity、独立工件、完整 required cells 和可追溯 terminal evidence。

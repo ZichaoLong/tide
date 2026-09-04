@@ -464,6 +464,8 @@ $$
 
 其中 \(e\) 遍历 routing-stat mask 选中的非空候选事件。跨 chunks 和 devices 先分别对这些量求和，再用 \(P_v/N\)、\(A_v/N\)、\(F_v/N\) 代入语义文档第 6.2 节；\(Q>0\) 决定 region 是否进入竞争集合。\(P_v\) 必须保留到 selector probability 的梯度，\(N,A_v,F_v,Q\) stop-gradient。统计窗口、跨 rank 归并时点和 reduction 必须与未切 chunk 的参考完全相同。
 
+数据并行时不能先在各 rank 构造非线性 balance loss 再求平均。必须对完整统计窗口的 \(N,P_v,A_v,F_v,Q\) 做跨 rank 求和，其中 \(P_v\) 使用保留 autograd 语义的 collective，其余量 stop-gradient，然后只构造一次全局 loss；LM loss 同样先归并 \((L_{\mathrm{nll,sum}},N_T)\) 再相除。分布式实现必须用 VJP 对照证明该 reduction 与未分片参考一致。
+
 因为 balance loss 在全窗口平均之后平方，逐 chunk loss 的平均或 Token 加权平均一般都不等价。要求 loss/gradient chunk 等价的训练必须延后到完整统计窗口再构造该 loss，或者采用经过同一 VJP 验证的两遍/充分统计梯度算法；不能在不知道后续统计时对各 chunk mean 立即 backward 后声称等价。
 
 训练时若 chunk 边界 detach，则梯度只能与采用相同 detach 位置的参考执行比较；forward 和最终状态仍应一致。
@@ -665,20 +667,24 @@ benchmark 必须明确计时是否包含 packing、状态装载、图编译、Se
 
 运行记录必须包含仓库 commit/dirty 状态、logical/typed Plan hash、executor、算子实现变体、resolved backend 与 `resolution_reason`、host architecture、device 精确 SKU 与逻辑索引、Torch/TorchNPU/CANN/driver 等可观测版本、dtype 与精度/确定性设置、编译/自定义 kernel 选择、seed、输入与 checkpoint 身份、测试命令、artifact hash，以及明确的 fallback 情况。NPU 能力证据还要链接 profiler/dispatch artifact 和版本相关的 warning 分类。不能仅凭安装了某个包或一次 allocation 成功就宣称 SettleGraph 已支持该后端。
 
-## 11. 开始科学实验前的最终检查
+## 11. 实验层级与正式结论前的最终检查
 
-只有以下项目同时成立，才进入新的 finetune 或预训练实验：
+工程 bring-up 和 development pilot 可以在一个已明确的实验切片上逐步前进，用于接通 Base checkpoint、发现训练问题和判断是否值得继续投入。这类运行必须明示标为 development evidence，不得沿用未完成的 `C*`/`X*` cell ID，也不得据此发布正式模型或性能结论。其当前推进顺序见 [checkpoint 到 SettleGraph + BO 实验路线](checkpoint-to-bo-experiment-roadmap.md)。
+
+只有以下项目对所声称的具体组合同时成立，才把该软件组合提升为 verified capability：
 
 - 当前实验使用的 Plan 已规范化、通过静态检查并保存哈希；
-- 逐 Token、通用 prefill 和适用的特化执行器三方一致；
+- 所声称的 executor 与逐 Token reference 在其调用域内一致；若实际使用特化路径，再要求逐 Token、通用 packed 和该特化路径三方一致；
 - 完整 prefill、分块 prefill 和逐 Token 执行的 forward/state 一致；
-- 训练 loss、Hard-ST、balance loss 和关键梯度已经核验；
-- CPU FP64/FP32 oracle、NPU FP32 eager 与 NPU packed 路径均通过对应门槛；
-- NPU 关键算子没有未经说明的 CPU fallback；
+- 若声称训练能力，所用 loss、Hard-ST、balance loss 和关键梯度已经核验；
+- 所声称 backend/dtype 已通过对应 capability cell；若声称 NPU FP32 packed，再要求 CPU reference、NPU FP32 eager 与 NPU packed 通过相应门槛；
+- 若声称 NPU 能力，关键算子没有未经说明的 CPU fallback；
 - identity 初始化及所用 placement 已验证；
 - checkpoint、manifest、失败复现和磁盘保留策略已经可用；
 - 等价性测试契约要求的 fixture、trace、梯度、随机覆盖和 capability cells 均有可追溯通过证据；
 - 实际采用的 HB Builder、Base 接入以及 Dense/MoE 对照若在实验范围内，已分别通过第 6.6 节的专项测试；
-- benchmark 证明所选“高性能”路径名副其实。
+- 若声称某条路径“高性能”，benchmark 证明其在冻结 workload 上名副其实。
 
-这套检查的目的不是要求所有未来算法都一次完成，而是保证每一个进入实验的具体组合都同时拥有清楚的语义、独立的参考路径、可验证的高性能路径和可追溯的运行证据。
+verified capability 只证明软件在声明调用域内具备相应能力，不自动证明模型效果。把某次 finetune 或预训练提升为正式科学证据，还要求它实际使用的 capability 已验证，并另行预注册数据与切分、外部和内部基线、训练与调参预算、seed、统计协议、停止规则及失败保存策略。若不声称性能，较慢但已验证的 reference 路径也可形成模型效果证据；任何吞吐、延迟或容量结论则必须再经过对应性能门。
+
+这套检查的目的不是要求所有未来算法都一次完成，而是保证每一个进入正式证据的具体组合都有清楚的语义、独立参考、与声明相称的能力验证和可追溯运行记录。
