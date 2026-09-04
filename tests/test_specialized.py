@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
+import math
 import unittest
 from unittest import mock
 from typing import Iterable, Mapping, Optional, Tuple
@@ -8,6 +9,8 @@ from typing import Iterable, Mapping, Optional, Tuple
 import torch
 from torch import Tensor
 
+import tide.engine as engine_module
+import tide.packed as packed_module
 import tide.specialized as specialized_module
 
 from tide.builders import (
@@ -16,13 +19,30 @@ from tide.builders import (
     build_singleton,
     build_small_hb,
 )
-from tide.engine import ExecutionResult, SettleGraph, StateStore, UnsupportedPlanError
+from tide.engine import (
+    DynamicReachabilityError,
+    ExecutionContractError,
+    ExecutionResult,
+    SettleGraph,
+    StateStore,
+    UnsupportedPlanError,
+)
 from tide.equivalence import (
     CPU_FLOAT64_TOLERANCE,
     compare_nested,
     validate_trace_invariants,
 )
-from tide.generators import PlanCorpusCase, generate_plan_corpus
+from tide.failures import (
+    ExecutionFailed,
+    FailureEnvelope,
+    capture_execution,
+    compare_failure_envelopes,
+)
+from tide.generators import (
+    PlanCorpusCase,
+    generate_core_v1_candidate_corpus,
+    generate_plan_corpus,
+)
 from tide.ops import AttentionState, safe_module_key
 from tide.packed import PackedSettleGraph
 from tide.specialized import (
@@ -311,6 +331,167 @@ class SpecializedEquivalenceTests(unittest.TestCase):
                     _gradients(right, specialized_model, right_hidden),
                     "vjp",
                 )
+        self._assert_single_layer_output_event_vjp_is_event_local()
+
+    def _assert_single_layer_output_event_vjp_is_event_local(self) -> None:
+        case = generate_core_v1_candidate_corpus()[35]
+        self.assertEqual(
+            case.case_id,
+            "core-v1-candidate.ql-0035.single-layer-r8.k1",
+        )
+        self.assertEqual(case.plan.output_aggregate["type"], "node_softmax")
+        self.assertTrue(single_layer_v1_support(case.plan).supported)
+        source = _hidden(case)
+
+        def execute_calls(
+            executor: object,
+            hidden: Tensor,
+            boundaries: Tuple[Tuple[int, int], ...],
+            *,
+            decode: bool,
+        ) -> Tuple[ExecutionResult, ...]:
+            state: Optional[StateStore] = None
+            results = []
+            for start, end in boundaries:
+                if decode:
+                    self.assertEqual(end, start + 1)
+                    method = (
+                        executor.interpret_token
+                        if isinstance(executor, SettleGraph)
+                        else executor.decode
+                    )
+                    result = method(
+                        hidden[:, start],
+                        _EXECUTION_MASK[:, start],
+                        _SEQUENCE_IDS,
+                        _POSITIONS[:, start],
+                        state=state,
+                        routing_stats_mask=_ROUTING_MASK[:, start],
+                        detach_at_end=False,
+                        record_trace=True,
+                    )
+                else:
+                    result = executor.prefill(
+                        hidden[:, start:end],
+                        _EXECUTION_MASK[:, start:end],
+                        _SEQUENCE_IDS,
+                        _POSITIONS[:, start:end],
+                        state=state,
+                        routing_stats_mask=_ROUTING_MASK[:, start:end],
+                        detach_at_end=False,
+                        record_trace=True,
+                    )
+                state = result.state
+                results.append(result)
+            return tuple(results)
+
+        modes = (
+            ("full", ((0, 3),), False),
+            ("split-1", ((0, 1), (1, 3)), False),
+            ("split-2", ((0, 2), (2, 3)), False),
+            ("decode", ((0, 1), (1, 2), (2, 3)), True),
+        )
+        for mode, boundaries, decode in modes:
+            reference_model = _model(case)
+            packed_model = _model(case)
+            specialized_model = _model(case)
+            packed_model.load_state_dict(reference_model.state_dict(), strict=True)
+            specialized_model.load_state_dict(
+                reference_model.state_dict(), strict=True
+            )
+            executors = (
+                reference_model,
+                PackedSettleGraph(packed_model),
+                SpecializedExecutor(specialized_model, SINGLE_LAYER_V1),
+            )
+            call_groups = tuple(
+                execute_calls(
+                    executor,
+                    source.clone(),
+                    boundaries,
+                    decode=decode,
+                )
+                for executor in executors
+            )
+            score_groups = tuple(
+                tuple(
+                    (
+                        node_id,
+                        model.output_scores[safe_module_key(node_id)],
+                    )
+                    for node_id in case.plan.terminal_node_ids
+                )
+                for model in (
+                    reference_model,
+                    packed_model,
+                    specialized_model,
+                )
+            )
+            for call_index, results in enumerate(zip(*call_groups)):
+                reference, packed, specialized = results
+                for name, candidate in (
+                    ("packed", packed),
+                    (SINGLE_LAYER_V1, specialized),
+                ):
+                    compare_nested(
+                        reference,
+                        candidate,
+                        tolerance=CPU_FLOAT64_TOLERANCE,
+                        require_same_requires_grad=True,
+                        path=f"{mode}[{call_index}].{name}",
+                    ).require_pass()
+                assert reference.trace is not None
+                assert packed.trace is not None
+                assert specialized.trace is not None
+                for event_index, events in enumerate(
+                    zip(
+                        reference.trace.output_events,
+                        packed.trace.output_events,
+                        specialized.trace.output_events,
+                    )
+                ):
+                    gradient_groups = []
+                    for event, scores in zip(events, score_groups):
+                        cotangent = torch.arange(
+                            1,
+                            event.output.numel() + 1,
+                            dtype=event.output.dtype,
+                        ).reshape_as(event.output)
+                        gradient_groups.append(
+                            torch.autograd.grad(
+                                (event.output * cotangent).sum(),
+                                tuple(parameter for _, parameter in scores),
+                                allow_unused=True,
+                                retain_graph=True,
+                            )
+                        )
+                    reference_gradients, packed_gradients, specialized_gradients = (
+                        gradient_groups
+                    )
+                    _compare(
+                        reference_gradients,
+                        packed_gradients,
+                        f"{mode}[{call_index}].output[{event_index}].packed-vjp",
+                    )
+                    _compare(
+                        reference_gradients,
+                        specialized_gradients,
+                        f"{mode}[{call_index}].output[{event_index}].specialized-vjp",
+                    )
+                    active_ids = {
+                        node_id for node_id, _ in events[0].terminal_messages
+                    }
+                    self.assertEqual(len(active_ids), 1)
+                    self.assertEqual(
+                        tuple(
+                            node_id
+                            for (node_id, _), gradient in zip(
+                                score_groups[0], reference_gradients
+                            )
+                            if gradient is not None
+                        ),
+                        tuple(sorted(active_ids)),
+                    )
 
     def test_specialized_schedules_do_not_call_any_generic_eager_scheduler(self) -> None:
         for plan, kind in (
@@ -575,7 +756,9 @@ class SpecializedEquivalenceTests(unittest.TestCase):
             item for item in self.accepted if item[1] == HB_LINE_V1
         )
 
-        def first_input_gradient(detach_at_end: Optional[bool]):
+        def execute_pair(
+            api: str, detach_at_end: Optional[bool]
+        ) -> Tuple[ExecutionResult, ExecutionResult, Optional[Tensor]]:
             model = _model(case)
             executor = SpecializedExecutor(model, HB_LINE_V1)
             hidden = _hidden(case)
@@ -583,33 +766,105 @@ class SpecializedEquivalenceTests(unittest.TestCase):
             first_kwargs = (
                 {} if detach_at_end is None else {"detach_at_end": detach_at_end}
             )
-            first = executor.decode(
-                first_hidden,
-                _EXECUTION_MASK[:, 0],
-                _SEQUENCE_IDS,
-                _POSITIONS[:, 0],
-                **first_kwargs,
-            )
-            second = executor.decode(
-                hidden[:, 1],
-                _EXECUTION_MASK[:, 1],
-                _SEQUENCE_IDS,
-                _POSITIONS[:, 1],
-                state=first.state,
-                detach_at_end=False,
-            )
+            if api == "decode":
+                first = executor.decode(
+                    first_hidden,
+                    _EXECUTION_MASK[:, 0],
+                    _SEQUENCE_IDS,
+                    _POSITIONS[:, 0],
+                    **first_kwargs,
+                )
+                second = executor.decode(
+                    hidden[:, 1],
+                    _EXECUTION_MASK[:, 1],
+                    _SEQUENCE_IDS,
+                    _POSITIONS[:, 1],
+                    state=first.state,
+                    detach_at_end=False,
+                )
+            else:
+                self.assertEqual(api, "prefill")
+                first = executor.prefill(
+                    first_hidden.unsqueeze(1),
+                    _EXECUTION_MASK[:, :1],
+                    _SEQUENCE_IDS,
+                    _POSITIONS[:, :1],
+                    **first_kwargs,
+                )
+                second = executor.prefill(
+                    hidden[:, 1:2],
+                    _EXECUTION_MASK[:, 1:2],
+                    _SEQUENCE_IDS,
+                    _POSITIONS[:, 1:2],
+                    state=first.state,
+                    detach_at_end=False,
+                )
             objective = second.output.square().sum() + _state_objective(
-                second.state, hidden[:, 1]
+                second.state, second.output
             )
-            return torch.autograd.grad(
+            gradient = torch.autograd.grad(
                 objective, first_hidden, allow_unused=True
             )[0]
+            return first, second, gradient
 
-        self.assertIsNone(first_input_gradient(None))
-        connected = first_input_gradient(False)
-        self.assertIsNotNone(connected)
-        assert connected is not None
-        self.assertGreater(float(connected.abs().sum()), 0.0)
+        for api in ("prefill", "decode"):
+            with self.subTest(api=api):
+                default_first, default_second, default_gradient = execute_pair(
+                    api, None
+                )
+                live_first, live_second, live_gradient = execute_pair(api, False)
+                _compare(default_first.output, live_first.output, f"{api}.first.output")
+                _compare(default_first.state, live_first.state, f"{api}.first.state")
+                _compare(
+                    default_second.output,
+                    live_second.output,
+                    f"{api}.second.output",
+                )
+                _compare(
+                    default_second.state,
+                    live_second.state,
+                    f"{api}.second.state",
+                )
+                self.assertIsNone(default_gradient)
+                self.assertIsNotNone(live_gradient)
+                assert live_gradient is not None
+                self.assertGreater(float(live_gradient.abs().sum()), 0.0)
+
+        model = _model(case)
+        executor = SpecializedExecutor(model, HB_LINE_V1)
+        hidden = _hidden(case)[:1, :1]
+        state = StateStore(next_position={"sequence.a": 0})
+        state_before = StateStore(next_position={"sequence.a": 0})
+        invalid_values = (None, 0, 1, torch.tensor(True))
+        for api in ("prefill", "decode"):
+            for invalid in invalid_values:
+                with self.subTest(api=api, invalid=repr(invalid)), mock.patch.object(
+                    specialized_module, "_prepare_prefill"
+                ) as prepare:
+                    with self.assertRaisesRegex(
+                        ExecutionContractError,
+                        "detach_at_end must be a boolean",
+                    ):
+                        if api == "prefill":
+                            executor.prefill(
+                                hidden,
+                                torch.ones((1, 1), dtype=torch.bool),
+                                ("sequence.a",),
+                                torch.zeros((1, 1), dtype=torch.int64),
+                                state=state,
+                                detach_at_end=invalid,  # type: ignore[arg-type]
+                            )
+                        else:
+                            executor.decode(
+                                hidden[:, 0],
+                                torch.ones((1,), dtype=torch.bool),
+                                ("sequence.a",),
+                                torch.zeros((1,), dtype=torch.int64),
+                                state=state,
+                                detach_at_end=invalid,  # type: ignore[arg-type]
+                            )
+                    prepare.assert_not_called()
+                    _compare(state_before, state, f"{api}.invalid.entry-state")
 
     def test_empty_tail_has_no_events_and_preserves_published_state(self) -> None:
         for plan, kind in (
@@ -642,6 +897,263 @@ class SpecializedEquivalenceTests(unittest.TestCase):
                 self.assertEqual(empty.trace.node_events, ())
                 self.assertEqual(empty.trace.region_events, ())
                 self.assertEqual(empty.trace.output_events, ())
+
+    def test_prefill_preflight_failures_match_stable_envelopes(self) -> None:
+        plan = build_singleton()
+        model = SettleGraph(plan).to(dtype=torch.float64)
+        executors = (
+            ("eager", model.prefill),
+            ("packed", PackedSettleGraph(model).prefill),
+            (
+                SINGLE_LAYER_V1,
+                SpecializedExecutor(model, SINGLE_LAYER_V1).prefill,
+            ),
+        )
+        hidden = torch.randn((2, 2, plan.d_model), dtype=torch.float64)
+        execution_mask = torch.tensor(
+            [[True, True], [True, False]], dtype=torch.bool
+        )
+        positions = torch.tensor([[0, 1], [0, 99]], dtype=torch.int64)
+        base = {
+            "hidden": hidden,
+            "execution_mask": execution_mask,
+            "sequence_ids": ("sequence.a", "sequence.b"),
+            "token_positions": positions,
+        }
+        cases = (
+            (
+                "lm-mask-outside-execution",
+                {"lm_target_mask": torch.ones((2, 2), dtype=torch.bool)},
+                "input.mask",
+            ),
+            (
+                "routing-mask-outside-execution",
+                {"routing_stats_mask": torch.ones((2, 2), dtype=torch.bool)},
+                "input.mask",
+            ),
+            (
+                "duplicate-sequence-id",
+                {
+                    "sequence_ids": ("sequence.a", "sequence.a"),
+                    "token_positions": torch.tensor(
+                        [[0, 1], [0, 99]], dtype=torch.int64
+                    ),
+                },
+                "input.schema",
+            ),
+            (
+                "position-replay",
+                {
+                    "hidden": hidden[:1],
+                    "execution_mask": torch.ones((1, 2), dtype=torch.bool),
+                    "sequence_ids": ("sequence.a",),
+                    "token_positions": torch.tensor(
+                        [[1, 1]], dtype=torch.int64
+                    ),
+                    "state": StateStore(next_position={"sequence.a": 1}),
+                },
+                "input.position",
+            ),
+            (
+                "position-skip",
+                {
+                    "hidden": hidden[:1],
+                    "execution_mask": torch.ones((1, 2), dtype=torch.bool),
+                    "sequence_ids": ("sequence.a",),
+                    "token_positions": torch.tensor(
+                        [[1, 3]], dtype=torch.int64
+                    ),
+                    "state": StateStore(next_position={"sequence.a": 1}),
+                },
+                "input.position",
+            ),
+        )
+        for case_name, overrides, code in cases:
+            arguments = dict(base)
+            arguments.update(overrides)
+            expected = FailureEnvelope.create("input", code)
+            for executor_name, execute in executors:
+                with self.subTest(case=case_name, executor=executor_name):
+                    captured = capture_execution(
+                        lambda execute=execute, arguments=arguments: execute(
+                            **arguments
+                        ),
+                        codes=code,
+                    )
+                    self.assertIsInstance(captured, ExecutionFailed)
+                    assert isinstance(captured, ExecutionFailed)
+                    compare_failure_envelopes(expected, captured.envelope)
+
+    def test_invalid_state_shape_and_owner_alias_match_stable_envelopes(
+        self,
+    ) -> None:
+        case, _ = next(
+            (case, kind)
+            for case, kind in self.accepted
+            if kind == HB_LINE_V1
+            and any(node.update["type"] != "none" for node in case.plan.nodes)
+        )
+        model = _model(case)
+        executors = (
+            ("eager", model.prefill),
+            ("packed", PackedSettleGraph(model).prefill),
+            (HB_LINE_V1, SpecializedExecutor(model, HB_LINE_V1).prefill),
+        )
+        tensor_nodes = tuple(
+            node
+            for node in case.plan.nodes
+            if node.update["type"] not in {"none", "attention_window"}
+        )
+        wrong_shape_node = tensor_nodes[0]
+        wrong_shape_state = StateStore(
+            values={
+                ("sequence.a", wrong_shape_node.node_id): torch.zeros(
+                    wrong_shape_node.state_shape + (1,), dtype=torch.float64
+                )
+            },
+            next_position={"sequence.a": 0},
+        )
+        first, second = next(
+            (left, right)
+            for index, left in enumerate(tensor_nodes)
+            for right in tensor_nodes[index + 1 :]
+            if left.state_shape == right.state_shape
+        )
+        element_count = math.prod(first.state_shape)
+        backing = torch.arange(
+            2 * element_count, dtype=torch.float64
+        )
+        owner_alias_state = StateStore(
+            values={
+                ("sequence.a", first.node_id): backing[:element_count].reshape(
+                    first.state_shape
+                ),
+                ("sequence.a", second.node_id): backing[element_count:].reshape(
+                    second.state_shape
+                ),
+            },
+            next_position={"sequence.a": 0},
+        )
+        cases = (
+            ("wrong-shape", wrong_shape_state, "state.schema"),
+            ("owner-alias", owner_alias_state, "state.owner_alias"),
+        )
+        for case_name, state, code in cases:
+            state_before = StateStore(
+                values={key: value.clone() for key, value in state.values.items()},
+                selector_history=dict(state.selector_history),
+                next_position=dict(state.next_position),
+            )
+            expected = FailureEnvelope.create("state", code)
+            arguments = dict(_common())
+            arguments["state"] = state
+            for executor_name, execute in executors:
+                with self.subTest(case=case_name, executor=executor_name):
+                    captured = capture_execution(
+                        lambda execute=execute: execute(
+                            _hidden(case), **arguments
+                        ),
+                        codes=code,
+                    )
+                    self.assertIsInstance(captured, ExecutionFailed)
+                    assert isinstance(captured, ExecutionFailed)
+                    compare_failure_envelopes(expected, captured.envelope)
+                    _compare(state_before, state, f"{case_name}.entry-state")
+
+    def test_late_empty_terminal_failure_preserves_entry_state(self) -> None:
+        case, _ = next(
+            (case, kind)
+            for case, kind in self.accepted
+            if kind == HB_LINE_V1
+            and any(node.update["type"] != "none" for node in case.plan.nodes)
+        )
+        model = _model(case)
+        hidden = _hidden(case)
+        prefix = model.prefill(
+            hidden[:, :1],
+            _EXECUTION_MASK[:, :1],
+            _SEQUENCE_IDS,
+            _POSITIONS[:, :1],
+            detach_at_end=False,
+        )
+        entry_state = prefix.state
+        entry_snapshot = StateStore(
+            values={
+                key: (
+                    value.clone()
+                    if isinstance(value, Tensor)
+                    else AttentionState(
+                        value.positions.clone(),
+                        value.keys.clone(),
+                        value.values.clone(),
+                    )
+                )
+                for key, value in entry_state.values.items()
+            },
+            selector_history=dict(entry_state.selector_history),
+            next_position=dict(entry_state.next_position),
+        )
+        arguments = {
+            "hidden": hidden[:, 1:],
+            "execution_mask": _EXECUTION_MASK[:, 1:],
+            "sequence_ids": _SEQUENCE_IDS,
+            "token_positions": _POSITIONS[:, 1:],
+            "state": entry_state,
+            "detach_at_end": False,
+        }
+
+        def select_nothing(scores: Tensor, k: int) -> Tensor:
+            del k
+            return torch.zeros_like(scores, dtype=torch.bool)
+
+        operations = (
+            (
+                "eager",
+                model.prefill,
+                mock.patch.object(
+                    engine_module,
+                    "deterministic_topk_mask",
+                    side_effect=select_nothing,
+                ),
+            ),
+            (
+                "packed",
+                PackedSettleGraph(model).prefill,
+                mock.patch.object(
+                    packed_module,
+                    "_aggregate_terminals",
+                    side_effect=DynamicReachabilityError(
+                        "injected late empty-terminal failure"
+                    ),
+                ),
+            ),
+            (
+                HB_LINE_V1,
+                SpecializedExecutor(model, HB_LINE_V1).prefill,
+                mock.patch.object(
+                    specialized_module,
+                    "_stable_topk_mask",
+                    side_effect=select_nothing,
+                ),
+            ),
+        )
+        expected = FailureEnvelope.create(
+            "execution", "execution.empty_terminal"
+        )
+        for executor_name, execute, injection in operations:
+            with self.subTest(executor=executor_name), injection as injected:
+                captured = capture_execution(
+                    lambda execute=execute: execute(**arguments)
+                )
+                self.assertIsInstance(captured, ExecutionFailed)
+                assert isinstance(captured, ExecutionFailed)
+                compare_failure_envelopes(expected, captured.envelope)
+                self.assertTrue(injected.called)
+                _compare(
+                    entry_snapshot,
+                    entry_state,
+                    f"{executor_name}.late-failure.entry-state",
+                )
 
 if __name__ == "__main__":
     unittest.main()

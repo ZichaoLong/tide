@@ -53,6 +53,13 @@ class LocalOperationError(RuntimeError):
     """A validated local formula explicitly failed during an event."""
 
 
+def _validate_detach_at_end(value: Any) -> None:
+    """Require the public chunk-boundary autograd choice to be explicit."""
+
+    if type(value) is not bool:
+        raise ExecutionContractError("detach_at_end must be a boolean")
+
+
 def _translate_local_operation_errors(operation: Any) -> Any:
     """Keep the local-formula failure boundary narrow and executor-owned."""
 
@@ -413,6 +420,7 @@ class SettleGraph(nn.Module):
         applies its requested detach only after the complete chunk.
         """
 
+        _validate_detach_at_end(detach_at_end)
         _validate_token_inputs(
             self.plan,
             hidden,
@@ -527,6 +535,7 @@ class SettleGraph(nn.Module):
     ) -> ExecutionResult:
         """Reference token-major prefill with mergeable auxiliary statistics."""
 
+        _validate_detach_at_end(detach_at_end)
         if hidden.ndim != 3:
             raise ExecutionContractError("prefill hidden must have shape [B,T,d_model]")
         batch, length, width = hidden.shape
@@ -662,6 +671,7 @@ class SettleGraph(nn.Module):
         execution position produces a terminal message.
         """
 
+        _validate_detach_at_end(detach_at_end)
         if hidden.ndim != 3:
             raise ExecutionContractError("prefill hidden must have shape [B,T,d_model]")
         batch, length, width = hidden.shape

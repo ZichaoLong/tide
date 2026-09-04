@@ -44,6 +44,7 @@ from .engine import (
     StateStore,
     StateWriteTrace,
     UnsupportedPlanError,
+    _validate_detach_at_end,
     _validate_model_and_state,
     _validate_optional_mask,
     _validate_position_matrix,
@@ -314,6 +315,7 @@ class SpecializedExecutor:
     ) -> ExecutionResult:
         """Execute one chunk with the bound specialized schedule."""
 
+        _validate_detach_at_end(detach_at_end)
         prepared = _prepare_prefill(
             self.model,
             hidden,
@@ -365,8 +367,11 @@ class SpecializedExecutor:
         detach_at_end: bool = True,
         record_trace: bool = False,
     ) -> ExecutionResult:
-        """Execute one decode position through the same specialized kernel."""
+        """Execute one decode position through the same specialized path."""
 
+        # Keep composite-invalid calls observationally aligned with eager:
+        # configuration validation precedes decode-shape validation.
+        _validate_detach_at_end(detach_at_end)
         if hidden.ndim != 2:
             raise ExecutionContractError("decode hidden must have shape [B,d_model]")
         batch = hidden.shape[0]
@@ -1131,7 +1136,11 @@ def _single_layer_prefill(
                     sequence_id,
                     position,
                     tuple(terminal_messages),
-                    event_output[event_index],
+                    _aggregate_output(
+                        model,
+                        [payload for _, payload in terminal_messages],
+                        [node_id for node_id, _ in terminal_messages],
+                    ),
                 )
             )
         trace = _canonical_trace(

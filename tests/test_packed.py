@@ -1,15 +1,23 @@
 from __future__ import annotations
 
 import dataclasses
+import gc
 import math
 import unittest
+import weakref
 from unittest import mock
 
 import torch
 from torch import Tensor
 import torch.nn.functional as F
 
-from tide.builders import build_diamond, build_single_layer, build_singleton
+import tide.packed as packed_module
+from tide.builders import (
+    build_diamond,
+    build_multi_entry_terminal,
+    build_single_layer,
+    build_singleton,
+)
 from tide.engine import ExecutionResult, SettleGraph, StateStore, UnsupportedPlanError
 from tide.equivalence import (
     CPU_FLOAT64_TOLERANCE,
@@ -99,6 +107,94 @@ def _call_arguments() -> dict[str, object]:
         "routing_stats_mask": _ROUTING_STATS_MASK,
         "detach_at_end": False,
     }
+
+
+def _compare_live_result(
+    reference: ExecutionResult, candidate: ExecutionResult
+) -> None:
+    compare_nested(
+        reference,
+        candidate,
+        tolerance=CPU_FLOAT64_TOLERANCE,
+        require_same_requires_grad=True,
+    ).require_pass()
+
+
+def _isolated_live_objectives(
+    result: ExecutionResult,
+) -> tuple[tuple[str, Tensor], ...]:
+    """Make every differentiable public Tensor occurrence its own VJP root."""
+
+    objectives = []
+
+    def visit(value: object, path: str) -> None:
+        if isinstance(value, Tensor):
+            if value.requires_grad:
+                cotangent = torch.arange(
+                    1,
+                    value.numel() + 1,
+                    dtype=value.dtype,
+                    device=value.device,
+                ).reshape(value.shape)
+                objectives.append((path, (value * cotangent).sum()))
+            return
+        if dataclasses.is_dataclass(value) and not isinstance(value, type):
+            for field in dataclasses.fields(value):
+                visit(getattr(value, field.name), f"{path}.{field.name}")
+            return
+        if isinstance(value, dict):
+            for key in sorted(value, key=repr):
+                visit(value[key], f"{path}[{key!r}]")
+            return
+        if isinstance(value, (tuple, list)):
+            for index, item in enumerate(value):
+                visit(item, f"{path}[{index}]")
+
+    visit(result, "result")
+    return tuple(objectives)
+
+
+def _compare_isolated_live_vjps(
+    reference: ExecutionResult,
+    packed: ExecutionResult,
+    reference_inputs: tuple[Tensor, ...],
+    packed_inputs: tuple[Tensor, ...],
+    input_names: tuple[str, ...],
+) -> None:
+    reference_objectives = _isolated_live_objectives(reference)
+    packed_objectives = _isolated_live_objectives(packed)
+    reference_labels = tuple(label for label, _ in reference_objectives)
+    packed_labels = tuple(label for label, _ in packed_objectives)
+    if reference_labels != packed_labels:
+        raise AssertionError(
+            "strict metadata produced different isolated VJP roots:\n"
+            f"reference={reference_labels!r}\npacked={packed_labels!r}"
+        )
+    if len(reference_inputs) != len(packed_inputs):
+        raise AssertionError("reference/packed VJP input arity differs")
+    if len(input_names) != len(reference_inputs):
+        raise AssertionError("VJP input names do not match input arity")
+    for (label, reference_objective), (_, packed_objective) in zip(
+        reference_objectives, packed_objectives
+    ):
+        reference_gradients = torch.autograd.grad(
+            reference_objective,
+            reference_inputs,
+            allow_unused=True,
+            retain_graph=True,
+        )
+        packed_gradients = torch.autograd.grad(
+            packed_objective,
+            packed_inputs,
+            allow_unused=True,
+            retain_graph=True,
+        )
+        compare_nested(
+            dict(zip(input_names, reference_gradients)),
+            dict(zip(input_names, packed_gradients)),
+            tolerance=CPU_FLOAT64_TOLERANCE,
+            path=f"isolated-vjp[{label!r}]",
+        ).require_pass()
 
 
 def _state_objective(store: StateStore, reference: Tensor) -> Tensor:
@@ -229,6 +325,57 @@ def _sd_pre_route_boundary_plan(
 def _trace_routes(result: ExecutionResult) -> tuple[tuple[str, ...], ...]:
     assert result.trace is not None
     return tuple(event.active_node_ids for event in result.trace.region_events)
+
+
+def _independent_chain_provenance_plan(*, downstream_k: int):
+    """Two chains whose downstream nodes intentionally share one region."""
+
+    width = 3
+    plan = build_multi_entry_terminal(d_model=width)
+    affine = {
+        "type": "affine_residual",
+        "formula_id": "TEST-NODE-AFFINE-V1",
+        "bias": True,
+        "output_shape": [width],
+    }
+    nodes = tuple(
+        dataclasses.replace(node, node_compute=affine)
+        if node.node_id == "node.in.b"
+        else node
+        for node in plan.nodes
+    )
+    regions = tuple(
+        dataclasses.replace(
+            region,
+            k_max=downstream_k,
+            k_requested={
+                "type": "fixed",
+                "formula_id": "k.fixed.v1",
+                "value": downstream_k,
+            },
+            score={
+                "type": "fixed",
+                "formula_id": "score.fixed-by-node.v1",
+                "values_by_node": {
+                    "node.out.a": 1.0,
+                    "node.out.b": 0.0,
+                },
+            },
+        )
+        if region.region_id == "region.out"
+        else region
+        for region in plan.regions
+    )
+    return dataclasses.replace(
+        plan,
+        nodes=nodes,
+        edges=tuple(
+            edge
+            for edge in plan.edges
+            if edge.edge_id in {"edge.a-a", "edge.b-b"}
+        ),
+        regions=regions,
+    ).validate()
 
 
 def _state_boundary_probe_plan(state_kind: str):
@@ -480,7 +627,6 @@ class PackedSupportTests(unittest.TestCase):
                 with self.assertRaises(UnsupportedPlanError):
                     SettleGraph(plan)
 
-
 class PackedForwardTraceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -519,6 +665,379 @@ class PackedForwardTraceTests(unittest.TestCase):
                     self.assertEqual(profile.python_node_event_hot_loops, 0)
                     self.assertEqual(profile.eager_scheduler_calls, 0)
                     self.assertTrue(profile.trace_materialized)
+
+    def test_trace_linked_occurrences_keep_event_local_autograd_provenance(
+        self,
+    ) -> None:
+        width = 3
+        affine = {
+            "type": "affine_residual",
+            "formula_id": "TEST-NODE-AFFINE-V1",
+            "bias": True,
+            "output_shape": [width],
+        }
+        plans = []
+
+        single_layer = build_single_layer(
+            receiver_count=2, k=2, d_model=width
+        )
+        single_layer = dataclasses.replace(
+            single_layer,
+            nodes=(
+                single_layer.nodes[0],
+                dataclasses.replace(
+                    single_layer.nodes[1], node_compute=affine
+                ),
+            ),
+        ).validate()
+        plans.append(("terminal", single_layer))
+
+        diamond = build_diamond(d_model=width, branch_k=2)
+        diamond = dataclasses.replace(
+            diamond,
+            nodes=tuple(
+                dataclasses.replace(node, node_compute=affine)
+                if node.node_id == "node.branch.b"
+                else node
+                for node in diamond.nodes
+            ),
+        ).validate()
+        plans.append(("edge-and-parent", diamond))
+
+        for label, plan in plans:
+            with self.subTest(plan=label):
+                torch.manual_seed(611)
+                reference_model = SettleGraph(plan).double().eval()
+                packed_model = SettleGraph(plan).double().eval()
+                packed_model.load_state_dict(
+                    reference_model.state_dict(), strict=True
+                )
+                hidden = torch.randn((1, 2, width), dtype=torch.float64)
+                common = dict(
+                    execution_mask=torch.ones((1, 2), dtype=torch.bool),
+                    sequence_ids=("provenance",),
+                    token_positions=torch.tensor([[0, 1]]),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference = reference_model.prefill(hidden.clone(), **common)
+                packed = PackedSettleGraph(packed_model).prefill(
+                    hidden.clone(), **common
+                )
+                _compare_live_result(reference, packed)
+                assert packed.trace is not None
+
+                if label == "terminal":
+                    identity_events = tuple(
+                        event
+                        for event in packed.trace.node_events
+                        if event.node_id == "node.0000"
+                    )
+                    self.assertTrue(identity_events)
+                    for event in identity_events:
+                        assert event.computed is not None
+                        assert event.emitted is not None
+                        self.assertFalse(event.computed.requires_grad)
+                        self.assertFalse(event.emitted.requires_grad)
+                    for event in packed.trace.output_events:
+                        message_by_node = dict(event.terminal_messages)
+                        self.assertFalse(
+                            message_by_node["node.0000"].requires_grad
+                        )
+                        self.assertTrue(event.output.requires_grad)
+                else:
+                    root_events = tuple(
+                        event
+                        for event in packed.trace.node_events
+                        if event.node_id == "node.root"
+                    )
+                    self.assertTrue(root_events)
+                    for event in root_events:
+                        assert event.computed is not None
+                        assert event.emitted is not None
+                        self.assertFalse(event.computed.requires_grad)
+                        self.assertFalse(event.emitted.requires_grad)
+                    for event in packed.trace.edge_events:
+                        if event.edge_id.startswith("edge.root-"):
+                            assert event.payload is not None
+                            self.assertFalse(event.payload.requires_grad)
+                    for event in packed.trace.node_events:
+                        if event.node_id != "node.out":
+                            continue
+                        parent_by_edge = {
+                            edge_id: payload
+                            for edge_id, status, payload in event.parent_messages
+                            if status == "DATA"
+                        }
+                        self.assertFalse(
+                            parent_by_edge["edge.a-out"].requires_grad
+                        )
+                        self.assertTrue(
+                            parent_by_edge["edge.b-out"].requires_grad
+                        )
+
+    def test_independent_chain_aggregate_occurrences_and_output_provenance(
+        self,
+    ) -> None:
+        for downstream_k in (2, 1):
+            with self.subTest(downstream_k=downstream_k):
+                plan = _independent_chain_provenance_plan(
+                    downstream_k=downstream_k
+                )
+                torch.manual_seed(701)
+                reference_model = SettleGraph(plan).double().eval()
+                packed_model = SettleGraph(plan).double().eval()
+                packed_model.load_state_dict(
+                    reference_model.state_dict(), strict=True
+                )
+                hidden = torch.randn((1, 2, 3), dtype=torch.float64)
+                common = dict(
+                    execution_mask=torch.ones((1, 2), dtype=torch.bool),
+                    sequence_ids=("independent-chains",),
+                    token_positions=torch.tensor([[0, 1]]),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference = reference_model.prefill(hidden.clone(), **common)
+                packed = PackedSettleGraph(packed_model).prefill(
+                    hidden.clone(), **common
+                )
+                _compare_live_result(reference, packed)
+
+                assert packed.trace is not None
+                out_a = tuple(
+                    event
+                    for event in packed.trace.node_events
+                    if event.node_id == "node.out.a"
+                )
+                self.assertEqual(len(out_a), 2)
+                for event in out_a:
+                    assert event.input_hidden is not None
+                    self.assertFalse(event.input_hidden.requires_grad)
+                    if event.active:
+                        assert event.computed is not None
+                        assert event.emitted is not None
+                        self.assertFalse(event.computed.requires_grad)
+                        self.assertFalse(event.emitted.requires_grad)
+                for event in packed.trace.output_events:
+                    out_a_message = dict(event.terminal_messages)["node.out.a"]
+                    self.assertFalse(out_a_message.requires_grad)
+
+                if downstream_k == 1:
+                    self.assertFalse(reference.output.requires_grad)
+                    self.assertFalse(packed.output.requires_grad)
+                    self.assertTrue(
+                        all(
+                            not event.output.requires_grad
+                            for event in packed.trace.output_events
+                        )
+                    )
+                else:
+                    self.assertTrue(reference.output.requires_grad)
+                    self.assertTrue(packed.output.requires_grad)
+
+                reference_named = tuple(
+                    (name, parameter)
+                    for name, parameter in reference_model.named_parameters()
+                    if parameter.requires_grad
+                )
+                packed_named = tuple(
+                    (name, parameter)
+                    for name, parameter in packed_model.named_parameters()
+                    if parameter.requires_grad
+                )
+                self.assertEqual(
+                    tuple(name for name, _ in reference_named),
+                    tuple(name for name, _ in packed_named),
+                )
+                _compare_isolated_live_vjps(
+                    reference,
+                    packed,
+                    tuple(parameter for _, parameter in reference_named),
+                    tuple(parameter for _, parameter in packed_named),
+                    tuple(name for name, _ in reference_named),
+                )
+
+    def test_frozen_active_formula_lane_does_not_inherit_trainable_lane_graph(
+        self,
+    ) -> None:
+        width = 3
+        affine = {
+            "type": "affine_residual",
+            "formula_id": "TEST-NODE-AFFINE-V1",
+            "bias": True,
+            "output_shape": [width],
+        }
+        plan = build_single_layer(receiver_count=2, k=1, d_model=width)
+        plan = dataclasses.replace(
+            plan,
+            nodes=tuple(
+                dataclasses.replace(node, node_compute=affine)
+                for node in plan.nodes
+            ),
+            regions=(
+                dataclasses.replace(
+                    plan.regions[0],
+                    score={
+                        "type": "fixed",
+                        "formula_id": "score.fixed-by-node.v1",
+                        "values_by_node": {
+                            "node.0000": 1.0,
+                            "node.0001": 0.0,
+                        },
+                    },
+                ),
+            ),
+        ).validate()
+        torch.manual_seed(702)
+        reference_model = SettleGraph(plan).double().eval()
+        packed_model = SettleGraph(plan).double().eval()
+        packed_model.load_state_dict(reference_model.state_dict(), strict=True)
+        for model in (reference_model, packed_model):
+            for parameter in model.receiver("node.0000").parameters():
+                parameter.requires_grad_(False)
+
+        hidden = torch.randn((1, 2, width), dtype=torch.float64)
+        common = dict(
+            execution_mask=torch.ones((1, 2), dtype=torch.bool),
+            sequence_ids=("frozen-formula-lane",),
+            token_positions=torch.tensor([[0, 1]]),
+            detach_at_end=False,
+            record_trace=True,
+        )
+        reference = reference_model.prefill(hidden.clone(), **common)
+        packed = PackedSettleGraph(packed_model).prefill(
+            hidden.clone(), **common
+        )
+        _compare_live_result(reference, packed)
+        self.assertFalse(reference.output.requires_grad)
+        self.assertFalse(packed.output.requires_grad)
+
+        assert packed.trace is not None
+        active = tuple(
+            event
+            for event in packed.trace.node_events
+            if event.node_id == "node.0000"
+        )
+        self.assertEqual(len(active), 2)
+        for event in active:
+            self.assertTrue(event.active)
+            for value in (
+                event.input_hidden,
+                event.normalized_input,
+                event.selector_read,
+                event.computed,
+                event.emitted,
+            ):
+                assert value is not None
+                self.assertFalse(value.requires_grad)
+        for event in packed.trace.output_events:
+            self.assertFalse(event.output.requires_grad)
+            self.assertFalse(event.terminal_messages[0][1].requires_grad)
+
+        reference_named = tuple(
+            (name, parameter)
+            for name, parameter in reference_model.named_parameters()
+            if parameter.requires_grad
+        )
+        packed_named = tuple(
+            (name, parameter)
+            for name, parameter in packed_model.named_parameters()
+            if parameter.requires_grad
+        )
+        self.assertEqual(
+            tuple(name for name, _ in reference_named),
+            tuple(name for name, _ in packed_named),
+        )
+        _compare_isolated_live_vjps(
+            reference,
+            packed,
+            tuple(parameter for _, parameter in reference_named),
+            tuple(parameter for _, parameter in packed_named),
+            tuple(name for name, _ in reference_named),
+        )
+
+    def test_same_node_occurrences_keep_sequence_local_state_provenance(
+        self,
+    ) -> None:
+        plan = _state_boundary_probe_plan("ema")
+        torch.manual_seed(703)
+        reference_model = SettleGraph(plan).double().eval()
+        packed_model = SettleGraph(plan).double().eval()
+        packed_model.load_state_dict(reference_model.state_dict(), strict=True)
+        for model in (reference_model, packed_model):
+            for parameter in model.parameters():
+                parameter.requires_grad_(False)
+
+        generator = torch.Generator(device="cpu").manual_seed(704)
+        reference_values = {}
+        packed_values = {}
+        reference_leaves = []
+        packed_leaves = []
+        for sequence_id in ("state-grad", "state-plain"):
+            for node_id in ("node.0000", "node.0001"):
+                source = torch.randn(
+                    (1,), generator=generator, dtype=torch.float64
+                )
+                reference_value = source.clone()
+                packed_value = source.clone()
+                if sequence_id == "state-grad":
+                    reference_value.requires_grad_()
+                    packed_value.requires_grad_()
+                    reference_leaves.append(reference_value)
+                    packed_leaves.append(packed_value)
+                reference_values[(sequence_id, node_id)] = reference_value
+                packed_values[(sequence_id, node_id)] = packed_value
+        reference_state = StateStore(
+            reference_values,
+            next_position={"state-grad": 0, "state-plain": 0},
+        )
+        packed_state = StateStore(
+            packed_values,
+            next_position={"state-grad": 0, "state-plain": 0},
+        )
+        hidden = torch.randn((2, 1, plan.d_model), dtype=torch.float64)
+        common = dict(
+            execution_mask=torch.ones((2, 1), dtype=torch.bool),
+            sequence_ids=("state-grad", "state-plain"),
+            token_positions=torch.zeros((2, 1), dtype=torch.int64),
+            detach_at_end=False,
+            record_trace=True,
+        )
+        reference = reference_model.prefill(
+            hidden.clone(), state=reference_state, **common
+        )
+        packed = PackedSettleGraph(packed_model).prefill(
+            hidden.clone(), state=packed_state, **common
+        )
+        _compare_live_result(reference, packed)
+        self.assertFalse(reference.output.requires_grad)
+        self.assertFalse(packed.output.requires_grad)
+
+        assert packed.trace is not None
+        by_sequence = {
+            event.sequence_id: event
+            for event in packed.trace.node_events
+            if event.node_id == "node.0000"
+        }
+        grad_event = by_sequence["state-grad"]
+        plain_event = by_sequence["state-plain"]
+        assert isinstance(grad_event.state_before, Tensor)
+        assert isinstance(plain_event.state_before, Tensor)
+        assert grad_event.selector_read is not None
+        assert plain_event.selector_read is not None
+        self.assertTrue(grad_event.state_before.requires_grad)
+        self.assertFalse(plain_event.state_before.requires_grad)
+        self.assertTrue(grad_event.selector_read.requires_grad)
+        self.assertFalse(plain_event.selector_read.requires_grad)
+
+        _compare_isolated_live_vjps(
+            reference,
+            packed,
+            tuple(reference_leaves),
+            tuple(packed_leaves),
+            ("node.0000.initial", "node.0001.initial"),
+        )
 
     def test_forced_singleton_trace_has_no_selector_or_topk_artifacts(self) -> None:
         case = next(
@@ -1088,6 +1607,281 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                     tolerance=CPU_FLOAT64_TOLERANCE,
                 ).require_pass()
 
+    def _assert_connectivity_graph_lifetime(self) -> None:
+        # Autograd exposes Python wrappers for graph nodes lazily.  The leaf
+        # discovery used by selective packed parameters must keep those
+        # wrappers alive while traversing; tracking only their transient ids
+        # can miss every leaf in a branched or sufficiently deep expression.
+        single_leaf = torch.randn((), dtype=torch.float64, requires_grad=True)
+        composite_leaves = tuple(
+            torch.randn((), dtype=torch.float64, requires_grad=True)
+            for _ in range(16)
+        )
+        composite = sum(
+            (leaf * (index + 1)).sin()
+            for index, leaf in enumerate(composite_leaves)
+        )
+        shared_left = torch.randn((), dtype=torch.float64, requires_grad=True)
+        shared_right = torch.randn((), dtype=torch.float64, requires_grad=True)
+        shared = shared_left * shared_right
+        leaf_graphs = (
+            ("direct", single_leaf, (single_leaf,)),
+            ("sigmoid", single_leaf.sigmoid(), (single_leaf,)),
+            ("reduced", (single_leaf * 2.0).sum(), (single_leaf,)),
+            ("branched", composite, composite_leaves),
+            (
+                "shared-subgraph",
+                shared.sin() + shared.cos(),
+                (shared_left, shared_right),
+            ),
+        )
+        for label, value, leaves in leaf_graphs:
+            with self.subTest(leaf_graph=label):
+                self.assertEqual(
+                    set(packed_module._leaf_tensor_ids(value)),
+                    {id(leaf) for leaf in leaves},
+                )
+
+        width = 3
+        plan = build_single_layer(receiver_count=2, k=1, d_model=width)
+        affine = {
+            "type": "affine_residual",
+            "formula_id": "TEST-NODE-AFFINE-V1",
+            "bias": True,
+            "output_shape": [width],
+        }
+        plan = dataclasses.replace(
+            plan,
+            nodes=tuple(
+                dataclasses.replace(node, node_compute=affine)
+                for node in plan.nodes
+            ),
+            regions=(
+                dataclasses.replace(
+                    plan.regions[0],
+                    score={
+                        "type": "fixed",
+                        "formula_id": "score.fixed-by-node.v1",
+                        "values_by_node": {
+                            "node.0000": 1.0,
+                            "node.0001": 0.0,
+                        },
+                    },
+                ),
+            ),
+            output_aggregate={
+                "type": "node_softmax",
+                "formula_id": "TEST-AGG-TERMINAL-SOFTMAX-V1",
+                "output_shape": [width],
+            },
+        ).validate()
+        torch.manual_seed(779)
+        reference_model = SettleGraph(plan).double().eval()
+        packed_model = SettleGraph(plan).double().eval()
+        packed_model.load_state_dict(reference_model.state_dict(), strict=True)
+        packed_executor = PackedSettleGraph(packed_model)
+        hidden = torch.randn(
+            (1, 2, width),
+            generator=torch.Generator(device="cpu").manual_seed(780),
+            dtype=torch.float64,
+        )
+        reference_hidden = hidden.clone().requires_grad_()
+        packed_hidden = hidden.clone().requires_grad_()
+        common = dict(
+            execution_mask=torch.ones((1, 2), dtype=torch.bool),
+            sequence_ids=("connectivity-lifetime",),
+            token_positions=torch.tensor([[0, 1]], dtype=torch.int64),
+            detach_at_end=False,
+            record_trace=True,
+        )
+        reference = reference_model.prefill(reference_hidden, **common)
+        packed = packed_executor.prefill(packed_hidden, **common)
+        _compare_live_result(reference, packed)
+
+        def connectivity_refs(
+            result: ExecutionResult,
+        ) -> tuple[
+            weakref.ReferenceType[object],
+            tuple[weakref.ReferenceType[object], ...],
+        ]:
+            boundary = result.output.grad_fn
+            self.assertIsNotNone(boundary)
+            tracker = boundary.tracker
+            resolver = tracker._resolver
+            self.assertIsNotNone(resolver)
+            assert resolver is not None
+            captured = tuple(
+                cell.cell_contents for cell in resolver.__closure__ or ()
+            )
+            runtime_groups = tuple(
+                value
+                for value in captured
+                if isinstance(value, list)
+                and value
+                and all(
+                    type(runtime).__name__ == "_RegionRuntime"
+                    for runtime in value
+                )
+            )
+            self.assertEqual(len(runtime_groups), 1)
+            return (
+                weakref.ref(tracker),
+                tuple(weakref.ref(runtime) for runtime in runtime_groups[0]),
+            )
+
+        tracker_ref, runtime_refs = connectivity_refs(packed)
+        gc.collect()
+        self.assertIsNotNone(tracker_ref())
+        self.assertTrue(
+            all(runtime_ref() is not None for runtime_ref in runtime_refs)
+        )
+
+        reference_named = tuple(reference_model.named_parameters())
+        packed_named = tuple(packed_model.named_parameters())
+        self.assertEqual(
+            tuple(name for name, _ in reference_named),
+            tuple(name for name, _ in packed_named),
+        )
+        input_names = (
+            "hidden",
+            *(name for name, _ in reference_named),
+        )
+        reference_inputs = (
+            reference_hidden,
+            *(parameter for _, parameter in reference_named),
+        )
+        packed_inputs = (
+            packed_hidden,
+            *(parameter for _, parameter in packed_named),
+        )
+        _compare_isolated_live_vjps(
+            reference,
+            packed,
+            reference_inputs,
+            packed_inputs,
+            input_names,
+        )
+        self.assertIsNotNone(tracker_ref())
+
+        reference_probe_inputs = (
+            reference_model.output_scores[safe_module_key("node.0000")],
+            reference_model.output_scores[safe_module_key("node.0001")],
+            reference_model.receiver("node.0000").down_proj.weight,
+            reference_model.receiver("node.0001").down_proj.weight,
+        )
+        packed_probe_inputs = (
+            packed_model.output_scores[safe_module_key("node.0000")],
+            packed_model.output_scores[safe_module_key("node.0001")],
+            packed_model.receiver("node.0000").down_proj.weight,
+            packed_model.receiver("node.0001").down_proj.weight,
+        )
+        for _ in range(2):
+            reference_gradients = torch.autograd.grad(
+                reference.output.sum(),
+                reference_probe_inputs,
+                allow_unused=True,
+                retain_graph=True,
+            )
+            packed_gradients = torch.autograd.grad(
+                packed.output.sum(),
+                packed_probe_inputs,
+                allow_unused=True,
+                retain_graph=True,
+            )
+            compare_nested(
+                reference_gradients,
+                packed_gradients,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            ).require_pass()
+            self.assertIsNotNone(packed_gradients[0])
+            assert packed_gradients[0] is not None
+            self.assertEqual(torch.count_nonzero(packed_gradients[0]).item(), 0)
+            self.assertIsNone(packed_gradients[1])
+            self.assertIsNone(packed_gradients[3])
+            self.assertIsNotNone(tracker_ref())
+
+        reference_model.zero_grad(set_to_none=True)
+        packed_model.zero_grad(set_to_none=True)
+        reference_hidden.grad = None
+        packed_hidden.grad = None
+        reference.output.sum().backward()
+        packed.output.sum().backward()
+        compare_nested(
+            _gradient_record(reference_model, reference_hidden),
+            _gradient_record(packed_model, packed_hidden),
+            tolerance=CPU_FLOAT64_TOLERANCE,
+        ).require_pass()
+        self.assertIsNotNone(tracker_ref())
+
+        del reference_gradients, packed_gradients
+        del reference, packed
+        gc.collect()
+        self.assertIsNone(tracker_ref())
+        self.assertTrue(all(runtime_ref() is None for runtime_ref in runtime_refs))
+
+        for record_trace in (False, True):
+            discarded = packed_executor.prefill(
+                packed_hidden,
+                **dict(common, record_trace=record_trace),
+            )
+            discarded_tracker_ref, discarded_runtime_refs = connectivity_refs(
+                discarded
+            )
+            del discarded
+            gc.collect()
+            self.assertIsNone(discarded_tracker_ref())
+            self.assertTrue(
+                all(
+                    runtime_ref() is None
+                    for runtime_ref in discarded_runtime_refs
+                )
+            )
+
+        derived_result = packed_executor.prefill(
+            packed_hidden,
+            **dict(common, record_trace=False),
+        )
+        derived_tracker_ref, derived_runtime_refs = connectivity_refs(
+            derived_result
+        )
+        derived_loss = derived_result.output.square().sum()
+        del derived_result
+        gc.collect()
+        self.assertIsNotNone(derived_tracker_ref())
+        self.assertTrue(
+            all(runtime_ref() is not None for runtime_ref in derived_runtime_refs)
+        )
+        packed_model.zero_grad(set_to_none=True)
+        packed_hidden.grad = None
+        derived_loss.backward()
+        self.assertIsNotNone(derived_tracker_ref())
+        del derived_loss
+        gc.collect()
+        self.assertIsNone(derived_tracker_ref())
+        self.assertTrue(
+            all(runtime_ref() is None for runtime_ref in derived_runtime_refs)
+        )
+
+        tracker = packed_module._ConnectivityTracker()
+        token = packed_module._ACTIVE_CONNECTIVITY.set(tracker)
+        try:
+            abandoned_input = torch.ones(
+                (1,), dtype=torch.float64, requires_grad=True
+            )
+            abandoned = packed_module._selective_input(
+                abandoned_input, ("expired-tracker-probe",)
+            )
+        finally:
+            packed_module._ACTIVE_CONNECTIVITY.reset(token)
+        expired_ref = weakref.ref(tracker)
+        del token, tracker
+        gc.collect()
+        self.assertIsNone(expired_ref())
+        with self.assertRaisesRegex(
+            RuntimeError, "released before selective backward"
+        ):
+            abandoned.sum().backward()
+
     def test_differentiable_initial_state_and_cross_chunk_objectives_match(self) -> None:
         for state_kind in ("ema", "gdn", "attention_window"):
             plan = _state_boundary_probe_plan(state_kind)
@@ -1133,6 +1927,7 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                     state=packed_state,
                     **common,
                 )
+                _compare_live_result(reference, packed)
                 parameter_names = tuple(
                     name for name, _ in reference_model.named_parameters()
                 )
@@ -1185,6 +1980,7 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                     state=packed_state,
                     **common,
                 )
+                _compare_live_result(reference_first, packed_first)
                 reference_second = reference_model.prefill(
                     reference_second_hidden,
                     mask,
@@ -1201,6 +1997,7 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                     state=packed_first.state,
                     **common,
                 )
+                _compare_live_result(reference_second, packed_second)
                 reference_objectives = list(
                     _public_vjp_objectives(reference_second, "second:")
                 )
@@ -1245,6 +2042,543 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                         *state_names,
                         *parameter_names,
                     ),
+                )
+
+            with self.subTest(state=state_kind, phase="decode-no-detach"):
+                torch.manual_seed(993)
+                reference_model = SettleGraph(plan).double().eval()
+                packed_model = SettleGraph(plan).double().eval()
+                packed_model.load_state_dict(
+                    reference_model.state_dict(), strict=True
+                )
+                packed_executor = PackedSettleGraph(packed_model)
+                reference_state, reference_leaves, state_names = (
+                    _differentiable_probe_state(state_kind, torch.float64)
+                )
+                packed_state, packed_leaves = _clone_differentiable_probe_state(
+                    reference_state
+                )
+                generator = torch.Generator(device="cpu").manual_seed(554)
+                hidden = torch.randn(
+                    (1, 2, plan.d_model),
+                    generator=generator,
+                    dtype=torch.float64,
+                )
+                reference_first_hidden = hidden[:, 0].clone().requires_grad_()
+                reference_second_hidden = hidden[:, 1].clone().requires_grad_()
+                packed_first_hidden = hidden[:, 0].clone().requires_grad_()
+                packed_second_hidden = hidden[:, 1].clone().requires_grad_()
+                call = dict(
+                    execution_mask=torch.ones((1,), dtype=torch.bool),
+                    sequence_ids=("state-probe",),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference_first = reference_model.interpret_token(
+                    reference_first_hidden,
+                    token_positions=torch.tensor([2]),
+                    state=reference_state,
+                    **call,
+                )
+                packed_first = packed_executor.decode(
+                    packed_first_hidden,
+                    token_positions=torch.tensor([2]),
+                    state=packed_state,
+                    **call,
+                )
+                _compare_live_result(reference_first, packed_first)
+                reference_second = reference_model.interpret_token(
+                    reference_second_hidden,
+                    token_positions=torch.tensor([3]),
+                    state=reference_first.state,
+                    **call,
+                )
+                packed_second = packed_executor.decode(
+                    packed_second_hidden,
+                    token_positions=torch.tensor([3]),
+                    state=packed_first.state,
+                    **call,
+                )
+                _compare_live_result(reference_second, packed_second)
+                reference_objectives = (
+                    *_public_vjp_objectives(reference_first, "first:"),
+                    *_public_vjp_objectives(reference_second, "second:"),
+                )
+                packed_objectives = (
+                    *_public_vjp_objectives(packed_first, "first:"),
+                    *_public_vjp_objectives(packed_second, "second:"),
+                )
+                parameter_names = tuple(
+                    name for name, _ in reference_model.named_parameters()
+                )
+                self._assert_retained_vjps(
+                    f"{state_kind}.decode-no-detach",
+                    reference_objectives,
+                    packed_objectives,
+                    (
+                        reference_first_hidden,
+                        reference_second_hidden,
+                        *reference_leaves,
+                        *reference_model.parameters(),
+                    ),
+                    (
+                        packed_first_hidden,
+                        packed_second_hidden,
+                        *packed_leaves,
+                        *packed_model.parameters(),
+                    ),
+                    (
+                        "hidden:first",
+                        "hidden:second",
+                        *state_names,
+                        *parameter_names,
+                    ),
+                )
+
+        self._assert_no_detach_preserves_dormant_sequence_state_graph()
+
+    def _assert_no_detach_preserves_dormant_sequence_state_graph(self) -> None:
+        def initial_states(
+            state_kind: str,
+        ) -> tuple[StateStore, tuple[Tensor, ...], StateStore, tuple[Tensor, ...]]:
+            generator = torch.Generator(device="cpu").manual_seed(776)
+            if state_kind == "ema":
+                reference_value = torch.randn(
+                    (1,), generator=generator, dtype=torch.float64
+                ).requires_grad_()
+                packed_value = reference_value.detach().clone().requires_grad_()
+                return (
+                    StateStore(
+                        {("dormant", "node.0000"): reference_value},
+                        next_position={"active": 0, "dormant": 2},
+                    ),
+                    (reference_value,),
+                    StateStore(
+                        {("dormant", "node.0000"): packed_value},
+                        next_position={"active": 0, "dormant": 2},
+                    ),
+                    (packed_value,),
+                )
+
+            reference_keys = torch.randn(
+                (2, 3), generator=generator, dtype=torch.float64
+            ).requires_grad_()
+            reference_values = torch.randn(
+                (2, 4), generator=generator, dtype=torch.float64
+            ).requires_grad_()
+            packed_keys = reference_keys.detach().clone().requires_grad_()
+            packed_values = reference_values.detach().clone().requires_grad_()
+            positions = torch.tensor([0, 1], dtype=torch.int64)
+            return (
+                StateStore(
+                    {
+                        ("dormant", "node.0000"): AttentionState(
+                            positions, reference_keys, reference_values
+                        )
+                    },
+                    next_position={"active": 0, "dormant": 2},
+                ),
+                (reference_keys, reference_values),
+                StateStore(
+                    {
+                        ("dormant", "node.0000"): AttentionState(
+                            positions.clone(), packed_keys, packed_values
+                        )
+                    },
+                    next_position={"active": 0, "dormant": 2},
+                ),
+                (packed_keys, packed_values),
+            )
+
+        scenarios = (
+            ("full", ((0, 3),), False),
+            ("split-at-1", ((0, 1), (1, 3)), False),
+            ("split-at-2", ((0, 2), (2, 3)), False),
+            ("decode", ((0, 1), (1, 2), (2, 3)), True),
+        )
+        for state_kind in ("ema", "attention_window"):
+            plan = _state_boundary_probe_plan(state_kind)
+            for scenario, ranges, use_decode in scenarios:
+                with self.subTest(state=state_kind, scenario=scenario):
+                    torch.manual_seed(777)
+                    reference_model = SettleGraph(plan).double().eval()
+                    packed_model = SettleGraph(plan).double().eval()
+                    packed_model.load_state_dict(
+                        reference_model.state_dict(), strict=True
+                    )
+                    for model in (reference_model, packed_model):
+                        for parameter in model.parameters():
+                            parameter.requires_grad_(False)
+                    packed_executor = PackedSettleGraph(packed_model)
+                    (
+                        reference_state,
+                        reference_leaves,
+                        packed_state,
+                        packed_leaves,
+                    ) = initial_states(state_kind)
+                    hidden = torch.randn(
+                        (1, 3, plan.d_model),
+                        generator=torch.Generator(device="cpu").manual_seed(778),
+                        dtype=torch.float64,
+                    )
+
+                    for start, end in ranges:
+                        if use_decode:
+                            common = dict(
+                                execution_mask=torch.ones((1,), dtype=torch.bool),
+                                sequence_ids=("active",),
+                                token_positions=torch.tensor([start]),
+                                detach_at_end=False,
+                                record_trace=True,
+                            )
+                            reference = reference_model.interpret_token(
+                                hidden[:, start].clone(),
+                                state=reference_state,
+                                **common,
+                            )
+                            packed = packed_executor.decode(
+                                hidden[:, start].clone(),
+                                state=packed_state,
+                                **common,
+                            )
+                        else:
+                            common = dict(
+                                execution_mask=torch.ones(
+                                    (1, end - start), dtype=torch.bool
+                                ),
+                                sequence_ids=("active",),
+                                token_positions=torch.arange(
+                                    start, end, dtype=torch.int64
+                                ).reshape(1, -1),
+                                detach_at_end=False,
+                                record_trace=True,
+                            )
+                            reference = reference_model.prefill(
+                                hidden[:, start:end].clone(),
+                                state=reference_state,
+                                **common,
+                            )
+                            packed = packed_executor.prefill(
+                                hidden[:, start:end].clone(),
+                                state=packed_state,
+                                **common,
+                            )
+                        _compare_live_result(reference, packed)
+                        _compare_isolated_live_vjps(
+                            reference,
+                            packed,
+                            reference_leaves,
+                            packed_leaves,
+                            tuple(
+                                f"dormant:{index}"
+                                for index in range(len(reference_leaves))
+                            ),
+                        )
+                        reference_state = reference.state
+                        packed_state = packed.state
+
+    def test_empty_initial_state_trace_metadata_matches_before_first_observe(
+        self,
+    ) -> None:
+        for state_kind in ("ema", "gdn", "attention_window"):
+            for detach_at_end in (True, False):
+                with self.subTest(
+                    state=state_kind,
+                    detach_at_end=detach_at_end,
+                ):
+                    plan = _state_boundary_probe_plan(state_kind)
+                    torch.manual_seed(17)
+                    reference_model = SettleGraph(plan).double().eval()
+                    packed_model = SettleGraph(plan).double().eval()
+                    packed_model.load_state_dict(
+                        reference_model.state_dict(), strict=True
+                    )
+                    generator = torch.Generator(device="cpu").manual_seed(18)
+                    source = torch.randn(
+                        (1, 3, plan.d_model),
+                        generator=generator,
+                        dtype=torch.float64,
+                    )
+                    reference_hidden = source.clone().requires_grad_()
+                    packed_hidden = source.clone().requires_grad_()
+                    common = dict(
+                        execution_mask=torch.ones((1, 3), dtype=torch.bool),
+                        sequence_ids=("empty-state-probe",),
+                        token_positions=torch.arange(
+                            3, dtype=torch.int64
+                        ).reshape(1, 3),
+                        detach_at_end=detach_at_end,
+                        record_trace=True,
+                    )
+                    reference = reference_model.prefill(
+                        reference_hidden, **common
+                    )
+                    packed = PackedSettleGraph(packed_model).prefill(
+                        packed_hidden, **common
+                    )
+                    _compare_live_result(reference, packed)
+
+                    assert reference.trace is not None
+                    first_observe_seen: set[str] = set()
+                    pre_observe_states = []
+                    for event in reference.trace.node_events:
+                        if (
+                            event.state_before is not None
+                            and event.node_id not in first_observe_seen
+                        ):
+                            pre_observe_states.append(event.state_before)
+                        if event.observed:
+                            first_observe_seen.add(event.node_id)
+                    self.assertTrue(pre_observe_states)
+                    for state in pre_observe_states:
+                        if isinstance(state, Tensor):
+                            self.assertFalse(state.requires_grad)
+                        else:
+                            self.assertFalse(state.keys.requires_grad)
+                            self.assertFalse(state.values.requires_grad)
+
+    def test_unobserved_detached_input_state_is_carried_without_graph_pollution(
+        self,
+    ) -> None:
+        for state_kind in ("ema", "gdn", "attention_window"):
+            with self.subTest(state=state_kind):
+                plan = _state_boundary_probe_plan(state_kind)
+                torch.manual_seed(19)
+                reference_model = SettleGraph(plan).double().eval()
+                packed_model = SettleGraph(plan).double().eval()
+                packed_model.load_state_dict(
+                    reference_model.state_dict(), strict=True
+                )
+                source_state, _, _ = _differentiable_probe_state(
+                    state_kind, torch.float64
+                )
+                packed_state, _ = _clone_differentiable_probe_state(
+                    source_state
+                )
+                generator = torch.Generator(device="cpu").manual_seed(20)
+                source = torch.randn(
+                    (1, 3, plan.d_model),
+                    generator=generator,
+                    dtype=torch.float64,
+                )
+                reference_first_hidden = source[:, :1].clone().requires_grad_()
+                packed_first_hidden = source[:, :1].clone().requires_grad_()
+                reference_first = reference_model.prefill(
+                    reference_first_hidden,
+                    torch.ones((1, 1), dtype=torch.bool),
+                    ("state-probe",),
+                    torch.tensor([[2]]),
+                    state=source_state,
+                )
+                packed_executor = PackedSettleGraph(packed_model)
+                packed_first = packed_executor.prefill(
+                    packed_first_hidden,
+                    torch.ones((1, 1), dtype=torch.bool),
+                    ("state-probe",),
+                    torch.tensor([[2]]),
+                    state=packed_state,
+                )
+                _compare_live_result(reference_first, packed_first)
+                for state in packed_first.state.values.values():
+                    if isinstance(state, Tensor):
+                        self.assertFalse(state.requires_grad)
+                    elif isinstance(state, AttentionState):
+                        self.assertFalse(state.keys.requires_grad)
+                        self.assertFalse(state.values.requires_grad)
+
+                reference_second_hidden = source[:, 1:].clone().requires_grad_()
+                packed_second_hidden = source[:, 1:].clone().requires_grad_()
+                common = dict(
+                    execution_mask=torch.ones((1, 2), dtype=torch.bool),
+                    sequence_ids=("state-probe",),
+                    token_positions=torch.tensor([[3, 4]]),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference = reference_model.prefill(
+                    reference_second_hidden,
+                    state=reference_first.state,
+                    **common,
+                )
+                packed = packed_executor.prefill(
+                    packed_second_hidden,
+                    state=packed_first.state,
+                    **common,
+                )
+                _compare_live_result(reference, packed)
+
+                assert reference.trace is not None
+                unobserved_ids = {
+                    event.node_id
+                    for event in reference.trace.node_events
+                    if event.reached
+                }
+                unobserved_ids.difference_update(
+                    event.node_id
+                    for event in reference.trace.node_events
+                    if event.observed
+                )
+                self.assertTrue(unobserved_ids)
+                for node_id in unobserved_ids:
+                    state = packed.state.values[("state-probe", node_id)]
+                    if isinstance(state, Tensor):
+                        self.assertFalse(state.requires_grad)
+                    else:
+                        self.assertFalse(state.keys.requires_grad)
+                        self.assertFalse(state.values.requires_grad)
+
+    def test_cross_chunk_trace_state_roots_retain_event_local_vjps(self) -> None:
+        def components(state):
+            if isinstance(state, Tensor):
+                return (("tensor", state),)
+            if isinstance(state, AttentionState):
+                return (("keys", state.keys), ("values", state.values))
+            return ()
+
+        def objectives(
+            result: ExecutionResult,
+            carried_node_ids: set[str],
+        ) -> tuple[tuple[str, Tensor], ...]:
+            assert result.trace is not None
+            selected = [("output", result.output.sum())]
+            for event_index, event in enumerate(result.trace.node_events):
+                if event.node_id not in carried_node_ids:
+                    continue
+                for field in ("state_before", "state_for_compute"):
+                    for component, value in components(getattr(event, field)):
+                        if not value.requires_grad:
+                            continue
+                        cotangent = torch.arange(
+                            1,
+                            value.numel() + 1,
+                            dtype=value.dtype,
+                            device=value.device,
+                        ).reshape(value.shape)
+                        selected.append(
+                            (
+                                f"trace:{event_index}:{event.node_id}:"
+                                f"{field}:{component}",
+                                (value * cotangent).sum(),
+                            )
+                        )
+            return tuple(selected)
+
+        for state_kind in ("ema", "gdn", "attention_window"):
+            with self.subTest(state=state_kind):
+                plan = _state_boundary_probe_plan(state_kind)
+                torch.manual_seed(613)
+                reference_model = SettleGraph(plan).double().eval()
+                packed_model = SettleGraph(plan).double().eval()
+                packed_model.load_state_dict(
+                    reference_model.state_dict(), strict=True
+                )
+                packed_executor = PackedSettleGraph(packed_model)
+                generator = torch.Generator(device="cpu").manual_seed(614)
+                hidden = torch.randn(
+                    (1, 2, plan.d_model),
+                    generator=generator,
+                    dtype=torch.float64,
+                )
+                reference_first_hidden = hidden[:, :1].clone().requires_grad_()
+                packed_first_hidden = hidden[:, :1].clone().requires_grad_()
+                first_call = dict(
+                    execution_mask=torch.ones((1, 1), dtype=torch.bool),
+                    sequence_ids=("trace-state-vjp",),
+                    token_positions=torch.tensor([[0]]),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference_first = reference_model.prefill(
+                    reference_first_hidden, **first_call
+                )
+                packed_first = packed_executor.prefill(
+                    packed_first_hidden, **first_call
+                )
+                _compare_live_result(reference_first, packed_first)
+
+                carried_node_ids = {
+                    node_id
+                    for sequence_id, node_id in reference_first.state.values
+                    if sequence_id == "trace-state-vjp"
+                }
+                self.assertTrue(carried_node_ids)
+                self.assertEqual(
+                    carried_node_ids,
+                    {
+                        node_id
+                        for sequence_id, node_id in packed_first.state.values
+                        if sequence_id == "trace-state-vjp"
+                    },
+                )
+
+                reference_second_hidden = hidden[:, 1:].clone().requires_grad_()
+                packed_second_hidden = hidden[:, 1:].clone().requires_grad_()
+                second_call = dict(
+                    execution_mask=torch.ones((1, 1), dtype=torch.bool),
+                    sequence_ids=("trace-state-vjp",),
+                    token_positions=torch.tensor([[1]]),
+                    detach_at_end=False,
+                    record_trace=True,
+                )
+                reference_second = reference_model.prefill(
+                    reference_second_hidden,
+                    state=reference_first.state,
+                    **second_call,
+                )
+                packed_second = packed_executor.prefill(
+                    packed_second_hidden,
+                    state=packed_first.state,
+                    **second_call,
+                )
+                _compare_live_result(reference_second, packed_second)
+                reference_objectives = objectives(
+                    reference_second, carried_node_ids
+                )
+                packed_objectives = objectives(
+                    packed_second, carried_node_ids
+                )
+                trace_labels = tuple(
+                    label for label, _ in packed_objectives if label != "output"
+                )
+                self.assertTrue(
+                    any("state_before" in label for label in trace_labels)
+                )
+                self.assertTrue(
+                    any("state_for_compute" in label for label in trace_labels)
+                )
+                if state_kind == "attention_window":
+                    self.assertTrue(any(label.endswith(":keys") for label in trace_labels))
+                    self.assertTrue(any(label.endswith(":values") for label in trace_labels))
+
+                for label, objective in packed_objectives[1:]:
+                    gradient = torch.autograd.grad(
+                        objective,
+                        packed_first_hidden,
+                        allow_unused=True,
+                        retain_graph=True,
+                    )[0]
+                    self.assertIsNotNone(gradient, label)
+                    assert gradient is not None
+                    self.assertTrue(bool((gradient != 0).any().item()), label)
+
+                parameter_names = tuple(
+                    name for name, _ in reference_model.named_parameters()
+                )
+                self._assert_retained_vjps(
+                    f"{state_kind}.cross-chunk-trace-state",
+                    reference_objectives,
+                    packed_objectives,
+                    (
+                        reference_first_hidden,
+                        reference_second_hidden,
+                        *reference_model.parameters(),
+                    ),
+                    (
+                        packed_first_hidden,
+                        packed_second_hidden,
+                        *packed_model.parameters(),
+                    ),
+                    ("hidden:first", "hidden:second", *parameter_names),
                 )
 
     def test_each_node_event_logit_vjp_matches_none_connectivity(self) -> None:
@@ -1433,6 +2767,104 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
             reference, actual, tolerance=CPU_FLOAT64_TOLERANCE
         ).require_pass()
 
+    def test_prefill_default_detaches_cross_chunk_graph_and_false_retains_it(
+        self,
+    ) -> None:
+        case = generate_core_v1_candidate_corpus()[144]
+        self.assertEqual(
+            case.case_id, "core-v1-candidate.ql-0144.small-hb.base"
+        )
+        source = _hidden(case, torch.float64)[:1]
+        results = {}
+        for mode in ("default", "no-detach"):
+            reference_model = _model(case, torch.float64)
+            packed_model = _model(case, torch.float64)
+            packed_model.load_state_dict(
+                reference_model.state_dict(), strict=True
+            )
+            packed_executor = PackedSettleGraph(packed_model)
+            reference_first_hidden = (
+                source[:, :1].clone().requires_grad_(True)
+            )
+            packed_first_hidden = source[:, :1].clone().requires_grad_(True)
+            reference_second_hidden = (
+                source[:, 1:2].clone().requires_grad_(True)
+            )
+            packed_second_hidden = (
+                source[:, 1:2].clone().requires_grad_(True)
+            )
+            first_arguments = dict(
+                execution_mask=torch.ones((1, 1), dtype=torch.bool),
+                sequence_ids=("prefill-detach",),
+                token_positions=torch.tensor([[0]]),
+            )
+            if mode == "no-detach":
+                first_arguments["detach_at_end"] = False
+            reference_first = reference_model.prefill(
+                reference_first_hidden, **first_arguments
+            )
+            packed_first = packed_executor.prefill(
+                packed_first_hidden, **first_arguments
+            )
+            _compare_live_result(reference_first, packed_first)
+            second_arguments = dict(
+                execution_mask=torch.ones((1, 1), dtype=torch.bool),
+                sequence_ids=("prefill-detach",),
+                token_positions=torch.tensor([[1]]),
+                detach_at_end=False,
+            )
+            reference_second = reference_model.prefill(
+                reference_second_hidden,
+                state=reference_first.state,
+                **second_arguments,
+            )
+            packed_second = packed_executor.prefill(
+                packed_second_hidden,
+                state=packed_first.state,
+                **second_arguments,
+            )
+            _compare_live_result(reference_second, packed_second)
+            reference_gradient = torch.autograd.grad(
+                reference_second.output.sum(),
+                reference_first_hidden,
+                allow_unused=True,
+                retain_graph=True,
+            )[0]
+            packed_gradient = torch.autograd.grad(
+                packed_second.output.sum(),
+                packed_first_hidden,
+                allow_unused=True,
+                retain_graph=True,
+            )[0]
+            compare_nested(
+                reference_gradient,
+                packed_gradient,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            ).require_pass()
+            if mode == "default":
+                self.assertIsNone(reference_gradient)
+                self.assertIsNone(packed_gradient)
+            else:
+                self.assertIsNotNone(reference_gradient)
+                self.assertIsNotNone(packed_gradient)
+                assert packed_gradient is not None
+                self.assertTrue(bool((packed_gradient != 0).any().item()))
+            results[mode] = (
+                reference_first,
+                packed_first,
+                reference_second,
+                packed_second,
+            )
+
+        default = results["default"]
+        retained = results["no-detach"]
+        for default_result, retained_result in zip(default, retained):
+            compare_nested(
+                default_result,
+                retained_result,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            ).require_pass()
+
     def test_chunk_detach_cuts_only_the_cross_chunk_state_gradient(self) -> None:
         case = next(
             case for case in self.cases
@@ -1485,6 +2917,7 @@ class PackedChunkDecodeAndGradientTests(unittest.TestCase):
                     self.assertTrue(bool((right_first.grad != 0).any().item()))
 
     def test_supported_vjp_cases_match_values_and_none_connectivity(self) -> None:
+        self._assert_connectivity_graph_lifetime()
         selected = [case for case in self.cases if case.vjp]
         # Add a Top-2/8 regression where most receiver compute parameters are
         # structurally disconnected from an output-only objective.

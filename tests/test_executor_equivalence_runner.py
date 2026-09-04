@@ -64,6 +64,11 @@ def _corpus_record():
                 "float32": {"name": "T32", "atol": 1e-6, "rtol": 1e-5},
                 "finite_required": True,
                 "discrete_values": "exact",
+                "live_autograd_metadata": {
+                    "requires_grad": "exact-by-public-tensor-occurrence",
+                    "is_leaf": "not-compared",
+                    "grad_fn": "not-compared",
+                },
             },
             "equivalence_matrix": {
                 "packed": {
@@ -144,7 +149,7 @@ def _discovery():
 
 def _result(
     *,
-    tests_run: int = 45,
+    tests_run: int = 60,
     skipped=(),
     expected_failures=(),
     unexpected_successes=(),
@@ -177,7 +182,7 @@ def _complete_receipts():
 
     modes = (
         ("full-prefill", 1, "full-call"),
-        ("two-chunk-prefill", 2, "each-call-and-canonical-merge"),
+        ("two-chunk-prefill", 4, "each-call-and-canonical-merge"),
         ("token-by-token-decode", 3, "each-call-and-canonical-merge"),
     )
     observables = [
@@ -199,7 +204,7 @@ def _complete_receipts():
                     call_counts = {"eager": calls, "packed": calls}
                     if executor != runner._PACKED_IMPLEMENTATION_ID:
                         call_counts["specialized"] = calls
-                    add(
+                    record = dict(
                         kind="forward-cell",
                         executor=executor,
                         case_id=case_id,
@@ -209,6 +214,9 @@ def _complete_receipts():
                         observables=observables,
                         trace_scope=trace_scope,
                     )
+                    if mode == "two-chunk-prefill":
+                        record["splits"] = [1, 2]
+                    add(**record)
 
     packed_objectives = (
         ("output", "output"),
@@ -399,6 +407,11 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
                 "float32": {"name": "T32", "atol": 1e-6, "rtol": 1e-5},
                 "finite_required": True,
                 "discrete_values": "exact",
+                "live_autograd_metadata": {
+                    "requires_grad": "exact-by-public-tensor-occurrence",
+                    "is_leaf": "not-compared",
+                    "grad_fn": "not-compared",
+                },
             },
         )
         self.assertEqual(
@@ -481,7 +494,7 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
         self.assertIn("all 256 packed candidates", scenario_gap)
         self.assertIn("all 24 specialization-supported cases", scenario_gap)
         self.assertIn("cover full prefill", scenario_gap)
-        self.assertIn("one deterministic two-chunk split", scenario_gap)
+        self.assertIn("both nonempty T=3 two-chunk splits", scenario_gap)
         self.assertIn("token-by-token decode", scenario_gap)
         self.assertIn("complete short/long chunk-partition", scenario_gap)
         self.assertIn("concurrency, rollback", scenario_gap)
@@ -594,9 +607,9 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
                 manifest["experiment"]["suite"]["required_modules"],
                 list(runner._REQUIRED_TEST_MODULES),
             )
-            self.assertEqual(metrics["metrics"]["validation/tests_run"], 45)
+            self.assertEqual(metrics["metrics"]["validation/tests_run"], 60)
             self.assertEqual(
-                metrics["metrics"]["validation/tests_discovered"], 45
+                metrics["metrics"]["validation/tests_discovered"], 60
             )
             self.assertEqual(
                 metrics["metrics"]["validation/suite_complete"], 1
@@ -672,7 +685,7 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
                 "validation/tests_expected_failures",
             ),
             (_result(tests_run=0), "validation/tests_run"),
-            (_result(tests_run=44), "validation/suite_complete"),
+            (_result(tests_run=59), "validation/suite_complete"),
         )
         with tempfile.TemporaryDirectory() as directory:
             for index, (result, metric) in enumerate(variants):

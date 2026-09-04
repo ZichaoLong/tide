@@ -121,6 +121,7 @@ def compare_nested(
     *,
     tolerance: Tolerance,
     require_same_dtype: bool = True,
+    require_same_requires_grad: bool = False,
     path: str = "$",
 ) -> EquivalenceReport:
     """Compare nested dataclasses, mappings, sequences, scalars, and Tensors.
@@ -128,6 +129,9 @@ def compare_nested(
     Floating Tensors are checked for finiteness on their producing device,
     copied to CPU float64, and compared element by element.  Integer and bool
     Tensors, key sets, shapes, container kinds, and absent values are exact.
+    Callers comparing live public autograd results can additionally require
+    matching ``requires_grad`` metadata.  It is opt-in so serialized or
+    cross-process value artifacts do not acquire an autograd-graph contract.
     """
 
     errors: List[str] = []
@@ -140,6 +144,7 @@ def compare_nested(
                 right,
                 tolerance=tolerance,
                 require_same_dtype=require_same_dtype,
+                require_same_requires_grad=require_same_requires_grad,
                 path=current,
                 errors=errors,
                 comparisons=tensors,
@@ -224,6 +229,7 @@ def _compare_tensor(
     *,
     tolerance: Tolerance,
     require_same_dtype: bool,
+    require_same_requires_grad: bool,
     path: str,
     errors: List[str],
     comparisons: List[TensorComparison],
@@ -244,6 +250,14 @@ def _compare_tensor(
             f"{path}: Tensor dtype mismatch {reference.dtype} != {candidate.dtype}"
         )
         return
+    if (
+        require_same_requires_grad
+        and reference.requires_grad != candidate.requires_grad
+    ):
+        errors.append(
+            f"{path}: Tensor requires_grad mismatch "
+            f"{reference.requires_grad} != {candidate.requires_grad}"
+        )
     if reference.is_floating_point() != candidate.is_floating_point():
         errors.append(f"{path}: floating/integer Tensor kind mismatch")
         return

@@ -243,6 +243,26 @@ class ComparatorTests(unittest.TestCase):
         )
         self.assertTrue(report.passed)
 
+    def test_live_result_comparison_can_require_matching_autograd_metadata(self) -> None:
+        reference = torch.tensor([0.25, -0.5], dtype=torch.float64)
+        candidate = reference.clone().requires_grad_()
+
+        self.assertTrue(
+            compare_nested(
+                reference,
+                candidate,
+                tolerance=CPU_FLOAT64_TOLERANCE,
+            ).passed
+        )
+        report = compare_nested(
+            reference,
+            candidate,
+            tolerance=CPU_FLOAT64_TOLERANCE,
+            require_same_requires_grad=True,
+        )
+        self.assertFalse(report.passed)
+        self.assertIn("requires_grad mismatch", report.errors[0])
+
 
 class RouteBoundaryTests(unittest.TestCase):
     def test_all_four_route_boundary_classes(self) -> None:

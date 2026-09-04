@@ -18,6 +18,7 @@ import functools
 import hashlib
 import json
 import math
+import weakref
 from collections import defaultdict
 from contextvars import ContextVar
 from typing import (
@@ -55,6 +56,7 @@ from .engine import (
     StateWriteTrace,
     UnsupportedPlanError,
     _build_trace,
+    _validate_detach_at_end,
     _validate_model_and_state,
     _validate_optional_mask,
     _validate_position_matrix,
@@ -111,10 +113,11 @@ class PackedSupportReport:
 class PackedExecutionProfile:
     """Inspectable scheduling facts for the most recent successful call.
 
-    The counters describe Python dispatch boundaries, not device kernels.  A
-    trace request necessarily materializes semantic records in Python after
-    tensor execution; that diagnostic work is explicitly separate from the
-    non-trace hot path.
+    The counters describe selected Python dispatch boundaries, not device
+    kernels.  A trace request necessarily materializes semantic records in
+    Python after tensor execution.  Grad-enabled result publication also runs
+    a source-liveness analysis that these counters do not measure, so zero hot
+    loop fields are not by themselves a performance or synchronization claim.
     """
 
     executor_id: str
@@ -183,6 +186,16 @@ class _MessageBatch:
 
 
 @dataclasses.dataclass(frozen=True)
+class _ComputeBatch:
+    """Per-formula results before independent event lanes share dense storage."""
+
+    event: Tensor
+    local: Tensor
+    computed: Tensor
+    emitted: Tensor
+
+
+@dataclasses.dataclass(frozen=True)
 class _TensorStateResult:
     before: Tensor
     proposal: Tensor
@@ -227,6 +240,7 @@ class _RegionRuntime:
     computed: Tensor
     emitted: Tensor
     state_results: Tuple[Optional[_StateResult], ...]
+    compute_batches: Tuple[_ComputeBatch, ...]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -541,6 +555,9 @@ class _ConnectivityTracker:
         self._resolver: Optional[
             Callable[[frozenset["_ObservableSeed"]], set[Hashable]]
         ] = None
+        self._resolved_sources: Dict[
+            frozenset["_ObservableSeed"], frozenset[Hashable]
+        ] = {}
         self.finalized = False
 
     def finalize(
@@ -548,19 +565,49 @@ class _ConnectivityTracker:
         resolver: Callable[[frozenset["_ObservableSeed"]], set[Hashable]],
     ) -> None:
         self._resolver = resolver
+        self._resolved_sources.clear()
         self.finalized = True
 
-    def select(self, roots: frozenset["_ObservableSeed"]) -> None:
+    def resolve(
+        self, roots: frozenset["_ObservableSeed"]
+    ) -> frozenset[Hashable]:
         if self._resolver is None:
-            raise AssertionError("packed connectivity was selected before finalization")
+            raise AssertionError("packed connectivity was resolved before finalization")
+        if roots not in self._resolved_sources:
+            self._resolved_sources[roots] = frozenset(self._resolver(roots))
+        return self._resolved_sources[roots]
+
+    def select(self, roots: frozenset["_ObservableSeed"]) -> None:
         # Replace rather than accumulate: repeated autograd.grad/backward calls
         # with retain_graph=True must reflect the roots of the current call.
-        self.connected_source_tokens = self._resolver(roots)
+        self.connected_source_tokens = set(self.resolve(roots))
 
 
 _ACTIVE_CONNECTIVITY: ContextVar[Optional[_ConnectivityTracker]] = ContextVar(
     "tide_packed_connectivity", default=None
 )
+
+
+def _connectivity_tracker_for_backward(ctx: Any) -> Optional[_ConnectivityTracker]:
+    """Resolve a selective op's non-owning tracker reference."""
+
+    tracker_ref = ctx.connectivity_tracker_ref
+    if tracker_ref is None:
+        # This op was created outside a tracked packed call.  Preserve the
+        # ordinary usage-only fallback used by the internal tensor helpers.
+        return None
+    tracker = tracker_ref()
+    if tracker is None:
+        raise RuntimeError(
+            "packed connectivity tracker was released before selective backward; "
+            "a differentiable public result must retain its result boundary "
+            "throughout backward"
+        )
+    if not tracker.finalized:
+        raise RuntimeError(
+            "packed connectivity tracker was not finalized before selective backward"
+        )
+    return tracker
 
 
 def _track_connectivity(function: Any) -> Any:
@@ -586,13 +633,17 @@ def _leaf_tensor_ids(value: Tensor) -> Tuple[int, ...]:
     if value.is_leaf:
         return (id(value),)
     pending = [value.grad_fn]
-    seen: set[int] = set()
+    # Retain the Python autograd-node wrappers themselves while walking.
+    # Remembering only ``id(function)`` lets a wrapper be released after it
+    # is popped, after which CPython may reuse that id for another upstream
+    # node and make the traversal silently skip a real branch.
+    seen: set[Any] = set()
     leaves: set[int] = set()
     while pending:
         function = pending.pop()
-        if function is None or id(function) in seen:
+        if function is None or function in seen:
             continue
-        seen.add(id(function))
+        seen.add(function)
         variable = getattr(function, "variable", None)
         if isinstance(variable, Tensor) and variable.requires_grad:
             leaves.add(id(variable))
@@ -615,7 +666,13 @@ class _SelectiveStack(torch.autograd.Function):
     @staticmethod
     def forward(ctx: Any, usage: Tensor, *values: Tensor) -> Tensor:
         ctx.save_for_backward(usage)
-        ctx.connectivity_tracker = _ACTIVE_CONNECTIVITY.get()
+        tracker = _ACTIVE_CONNECTIVITY.get()
+        # The public result boundary is the sole strong lifetime owner.  A
+        # strong reference here would close a cycle through the resolver's
+        # captured runtimes and retain the complete packed autograd graph.
+        ctx.connectivity_tracker_ref = (
+            weakref.ref(tracker) if tracker is not None else None
+        )
         ctx.source_tokens = tuple(
             _leaf_tensor_ids(value) for value in values
         )
@@ -625,8 +682,8 @@ class _SelectiveStack(torch.autograd.Function):
     def backward(ctx: Any, gradient: Tensor) -> Tuple[Any, ...]:
         (usage,) = ctx.saved_tensors
         flags = tuple(bool(item) for item in usage.detach().to(device="cpu").tolist())
-        tracker = ctx.connectivity_tracker
-        if tracker is None or not tracker.finalized:
+        tracker = _connectivity_tracker_for_backward(ctx)
+        if tracker is None:
             return (
                 None,
                 *(gradient[index] if flag else None for index, flag in enumerate(flags)),
@@ -664,6 +721,34 @@ def _state_source_token(
     return ("receiver-state", sequence_id, node_id, component)
 
 
+def _differentiable_source_tokens(
+    model: SettleGraph,
+    initial: StateStore,
+    hidden: Tensor,
+) -> set[Hashable]:
+    """Return installed packed source tokens that can own an autograd edge."""
+
+    result: set[Hashable] = {
+        id(parameter) for parameter in model.parameters() if parameter.requires_grad
+    }
+    if hidden.requires_grad:
+        result.add(_HIDDEN_SOURCE_TOKEN)
+    for (sequence_id, node_id), state in initial.values.items():
+        if isinstance(state, Tensor):
+            if state.requires_grad:
+                result.add(
+                    _state_source_token(sequence_id, node_id, "tensor")
+                )
+        elif isinstance(state, AttentionState):
+            if state.keys.requires_grad:
+                result.add(_state_source_token(sequence_id, node_id, "keys"))
+            if state.values.requires_grad:
+                result.add(
+                    _state_source_token(sequence_id, node_id, "values")
+                )
+    return result
+
+
 @dataclasses.dataclass(frozen=True)
 class _ObservableSeed:
     kind: str
@@ -680,14 +765,17 @@ class _SelectiveInput(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx: Any, value: Tensor, source_token: Hashable) -> Tensor:
-        ctx.connectivity_tracker = _ACTIVE_CONNECTIVITY.get()
+        tracker = _ACTIVE_CONNECTIVITY.get()
+        ctx.connectivity_tracker_ref = (
+            weakref.ref(tracker) if tracker is not None else None
+        )
         ctx.source_token = source_token
         return value
 
     @staticmethod
     def backward(ctx: Any, gradient: Tensor) -> Tuple[Any, ...]:
-        tracker = ctx.connectivity_tracker
-        if tracker is None or not tracker.finalized:
+        tracker = _connectivity_tracker_for_backward(ctx)
+        if tracker is None:
             return gradient, None
         if ctx.source_token not in tracker.connected_source_tokens:
             return None, None
@@ -1677,6 +1765,59 @@ def _aggregate_region(
     return result
 
 
+def _aggregate_trace_occurrence(
+    model: SettleGraph,
+    node_id: str,
+    messages: Sequence[Tensor],
+    edge_ids: Sequence[str],
+) -> Tensor:
+    """Rebuild one semantic Aggregate without sharing another node's graph.
+
+    The packed hot path necessarily combines independent node/event lanes in
+    dense Tensors.  A slice of such a Tensor inherits the union of the lanes'
+    autograd metadata, even when this particular Aggregate only consumed
+    non-differentiable messages.  Exact trace materialization is diagnostic,
+    so reconstruct its per-occurrence value before exposing it publicly.
+    """
+
+    if not messages or len(messages) != len(edge_ids):  # pragma: no cover
+        raise AssertionError("invalid packed trace Aggregate occurrence")
+    if len(messages) == 1 and edge_ids[0].startswith("boundary:"):
+        return messages[0]
+
+    module = model.receivers[safe_module_key(node_id)]
+    stacked = torch.stack(tuple(messages), dim=0)
+    if module.aggregate_type == "mean":
+        return stacked.mean(dim=0)
+    if module.aggregate_type in {"learned_convex", "edge_softmax"}:
+        assert module.edge_scores is not None
+        scores = torch.stack(
+            tuple(
+                _selective_input(
+                    module.edge_scores[safe_module_key(edge_id)],
+                    id(module.edge_scores[safe_module_key(edge_id)]),
+                )
+                for edge_id in edge_ids
+            )
+        ).to(device=stacked.device, dtype=stacked.dtype)
+        weights = torch.softmax(scores, dim=0)
+        return (weights.unsqueeze(-1) * stacked).sum(dim=0)
+    if module.aggregate_type == "edge_linear_mean":
+        assert module.edge_transforms is not None
+        transformed = []
+        for edge_id, message in zip(edge_ids, messages):
+            linear = module.edge_transforms[safe_module_key(edge_id)]
+            weight = _selective_input(linear.weight, id(linear.weight))
+            bias = (
+                _selective_input(linear.bias, id(linear.bias))
+                if linear.bias is not None
+                else None
+            )
+            transformed.append(F.linear(message, weight, bias))
+        return torch.stack(tuple(transformed), dim=0).mean(dim=0)
+    raise AssertionError(module.aggregate_type)  # pragma: no cover
+
+
 def _normalize_region(
     model: SettleGraph, schedule: _RegionSchedule, hidden: Tensor, reached: Tensor
 ) -> Tensor:
@@ -2000,12 +2141,15 @@ def _compute_active(
     active: Tensor,
     probabilities: Tensor,
     state_results: Sequence[Optional[_StateResult]],
-) -> Tuple[Tensor, Tensor, int]:
+    *,
+    record_occurrences: bool = False,
+) -> Tuple[Tensor, Tensor, int, Tuple[_ComputeBatch, ...]]:
     event_count, node_count, width = hidden.shape
     computed_flat = hidden.new_zeros((event_count * node_count, width))
     emitted_flat = hidden.new_zeros((event_count * node_count, width))
     state_lookup = _state_group_lookup(schedule)
     active_rows = 0
+    occurrence_batches: List[_ComputeBatch] = []
     for group in schedule.compute_groups:
         locals_index = _device_index(group.node_locals, hidden)
         pairs = active[:, locals_index].nonzero(as_tuple=False)
@@ -2151,6 +2295,15 @@ def _compute_active(
             emitted = input_hidden + probability.unsqueeze(-1) * (computed - input_hidden)
         else:  # pragma: no cover
             raise AssertionError(emit_type)
+        if record_occurrences:
+            # Keep the formula-batch values before index_copy combines logical
+            # lanes with different autograd provenance into one dense Tensor.
+            # Exact trace materialization can then expose the same per-event
+            # requires_grad metadata as the eager interpreter without changing
+            # the non-trace execution path.
+            occurrence_batches.append(
+                _ComputeBatch(event, local, computed, emitted)
+            )
         destination = event * node_count + local
         computed_flat = computed_flat.index_copy(0, destination, computed)
         emitted_flat = emitted_flat.index_copy(0, destination, emitted)
@@ -2158,6 +2311,7 @@ def _compute_active(
         computed_flat.reshape(event_count, node_count, width),
         emitted_flat.reshape(event_count, node_count, width),
         active_rows,
+        tuple(occurrence_batches),
     )
 
 
@@ -2895,7 +3049,7 @@ def _publish_receiver_states(
                 observed_by_sequence = result.observed[:, :, column].any(dim=1)
                 for batch_index, sequence_id in enumerate(sequence_ids):
                     key = (sequence_id, node_id)
-                    if not bool(observed_by_sequence[batch_index].item()) and key not in published:
+                    if not bool(observed_by_sequence[batch_index].item()):
                         continue
                     if isinstance(result, _TensorStateResult):
                         # Public owners may not expose even disjoint views of
@@ -2959,16 +3113,6 @@ def _aggregate_terminals(
     return output, dense, mask
 
 
-def _discard_parameter_owner(parameter_ids: set[int], owner: Any) -> None:
-    if owner is None:
-        return
-    if isinstance(owner, Tensor):
-        parameter_ids.discard(id(owner))
-        return
-    for parameter in owner.parameters(recurse=True):
-        parameter_ids.discard(id(parameter))
-
-
 def _add_parameter_owner(source_tokens: set[Hashable], owner: Any) -> None:
     """Add every trainable leaf owned by a formula implementation."""
 
@@ -2990,270 +3134,6 @@ def _reverse_cumulative_any(mask: Tensor) -> Tensor:
     )
 
 
-def _semantic_connected_parameter_ids(
-    model: SettleGraph,
-    runtimes: Sequence[_RegionRuntime],
-    balance: BalanceStats,
-    route_mask: Tensor,
-    *,
-    batch: int,
-    length: int,
-    detach_at_end: bool,
-) -> set[int]:
-    """Return leaf parameters present in the eager-equivalent result graph.
-
-    Packing puts independent logical nodes in one physical Tensor.  Ordinary
-    autograd therefore gives an unused packed row an all-zero VJP even when
-    the eager interpreter never attached that row to an observable result.
-    This pass propagates *structural* liveness from output, published state,
-    and balance statistics over the already-discovered discrete route.  It
-    never inspects gradient values.
-    """
-
-    connected = {id(parameter) for parameter in model.parameters()}
-    if not runtimes:
-        return connected
-
-    runtime_by_node: Dict[str, Tuple[_RegionRuntime, int]] = {}
-    target_by_edge: Dict[str, Tuple[_RegionRuntime, int, int]] = {}
-    edges_by_source: Dict[str, List[Any]] = defaultdict(list)
-    for runtime in runtimes:
-        for local, node_id in enumerate(runtime.schedule.node_ids):
-            runtime_by_node[node_id] = (runtime, local)
-            for slot, edge_id in enumerate(runtime.schedule.parent_edge_ids[local]):
-                target_by_edge[edge_id] = (runtime, local, slot)
-    for edge in model.plan.edges:
-        edges_by_source[edge.source].append(edge)
-
-    competitive_regions = {
-        region_id
-        for region_id, stats in balance.regions.items()
-        if stats.event_count > 0 and stats.had_competition and not stats.forced_active
-    }
-    if competitive_regions:
-        balance_live_regions = competitive_regions
-    elif balance.regions:
-        # BalanceStats.loss deliberately retains the first recorded soft sum
-        # through ``sum() * 0`` when no region had competition.
-        balance_live_regions = {next(iter(balance.regions))}
-    else:
-        balance_live_regions = set()
-
-    terminal_ids = set(model.plan.terminal_node_ids)
-    aggregate_live_by_node: Dict[str, Tensor] = {}
-    normalized_live_by_node: Dict[str, Tensor] = {}
-    compute_live_by_node: Dict[str, Tensor] = {}
-    selector_live_by_node: Dict[str, Tensor] = {}
-    update_live_by_node: Dict[str, Tensor] = {}
-    state_read_live_by_node: Dict[str, Tensor] = {}
-    edge_live_by_id: Dict[str, Tensor] = {}
-
-    for runtime in reversed(tuple(runtimes)):
-        schedule = runtime.schedule
-        region = model.plan.region_by_id(schedule.region_id)
-        event_count, node_count = runtime.active.shape
-        emitted_live = torch.zeros_like(runtime.active)
-
-        for local, node_id in enumerate(schedule.node_ids):
-            if node_id in terminal_ids:
-                emitted_live[:, local] |= runtime.active[:, local]
-            for edge in edges_by_source[node_id]:
-                target_runtime, target_local, target_slot = target_by_edge[edge.edge_id]
-                downstream = aggregate_live_by_node[edge.target]
-                has_data = target_runtime.message_mask[:, target_local, target_slot]
-                emitted_live[:, local] |= has_data & downstream
-
-        compute_live = runtime.active & emitted_live
-        balance_event_live = torch.zeros(
-            (event_count,), dtype=torch.bool, device=runtime.active.device
-        )
-        if schedule.region_id in balance_live_regions:
-            balance_event_live = route_mask & runtime.reached.any(dim=1)
-
-        probability_event_live = balance_event_live.clone()
-        for local, node_id in enumerate(schedule.node_ids):
-            module = model.receivers[safe_module_key(node_id)]
-            if _kind(module.emit_config, "hard") != "hard":
-                probability_event_live |= compute_live[:, local]
-
-        # Forced singletons bypass selector Read, Score, softmax, and Top-K in
-        # both the semantic interpreter and the packed forward path.  A softp
-        # emitter still consumes the constant probability one, but that must
-        # not manufacture a dependency on the configured (unused) selector.
-        score_uses_readout = (
-            not schedule.forced_singleton
-            and _kind(region.score, "read_sum") not in {"fixed", "constant"}
-        )
-        selector_live = (
-            runtime.reached & probability_event_live.unsqueeze(1)
-            if score_uses_readout
-            else torch.zeros_like(runtime.reached)
-        )
-        normalized_live = selector_live.clone()
-        direct_proposal_live = torch.zeros_like(runtime.observed)
-        state_before_live = torch.zeros_like(runtime.observed)
-        state_read_live = torch.zeros_like(runtime.observed)
-
-        for local, node_id in enumerate(schedule.node_ids):
-            module = model.receivers[safe_module_key(node_id)]
-            node_compute_live = compute_live[:, local]
-            compute_type = module.compute_type
-            if compute_type == "affine_residual":
-                normalized_live[:, local] |= node_compute_live
-
-            if (
-                compute_type in {"double_residual_mlp", "double_residual_swiglu"}
-                and module.ffn_read_type == "state_default"
-                and module.update_type != "none"
-            ):
-                read_live = node_compute_live
-                location = _state_group_lookup(schedule).get(local)
-                if module.update_type == "attention_window" and location is not None:
-                    group_index, column = location
-                    state_result = runtime.state_results[group_index]
-                    assert isinstance(state_result, _AttentionStateResult)
-                    read_live = read_live & state_result.after_mask[
-                        :, :, column
-                    ].reshape(event_count, -1).any(dim=1)
-                state_read_live[:, local] = read_live
-                if module.update_type in {"gdn", "attention_window"}:
-                    normalized_live[:, local] |= read_live
-                direct_proposal_live[:, local] |= read_live & runtime.observed[:, local]
-                state_before_live[:, local] |= read_live & ~runtime.observed[:, local]
-
-            selector_uses_state = module.selector_read_type in {
-                "content_state_linear",
-                "content_state_summary_linear",
-            }
-            if selector_uses_state:
-                if region.selector_timing == "post":
-                    direct_proposal_live[:, local] |= selector_live[:, local]
-                elif region.selector_timing == "pre":
-                    state_before_live[:, local] |= selector_live[:, local]
-
-            if not detach_at_end and module.update_type != "none":
-                direct_proposal_live[:, local] |= runtime.observed[:, local]
-
-        update_formula_live = direct_proposal_live.clone()
-        for local, node_id in enumerate(schedule.node_ids):
-            module = model.receivers[safe_module_key(node_id)]
-            if module.update_type == "none":
-                continue
-            observed = runtime.observed[:, local].reshape(batch, length)
-            direct = direct_proposal_live[:, local].reshape(batch, length)
-            before = state_before_live[:, local].reshape(batch, length)
-            future_direct = _reverse_cumulative_any(direct)
-            future_before_inclusive = _reverse_cumulative_any(before)
-            future_before = torch.cat(
-                (
-                    future_before_inclusive[:, 1:],
-                    torch.zeros(
-                        (batch, 1), dtype=torch.bool, device=before.device
-                    ),
-                ),
-                dim=1,
-            )
-            live_observation = observed & (future_direct | future_before)
-            formula_live = direct | live_observation
-            update_formula_live[:, local] = formula_live.reshape(-1)
-            normalized_live[:, local] |= formula_live.reshape(-1)
-
-        aggregate_live = compute_live | normalized_live
-        for local, node_id in enumerate(schedule.node_ids):
-            aggregate_live_by_node[node_id] = aggregate_live[:, local]
-            normalized_live_by_node[node_id] = normalized_live[:, local]
-            compute_live_by_node[node_id] = compute_live[:, local]
-            selector_live_by_node[node_id] = selector_live[:, local]
-            update_live_by_node[node_id] = update_formula_live[:, local]
-            state_read_live_by_node[node_id] = state_read_live[:, local]
-            for slot, edge_id in enumerate(schedule.parent_edge_ids[local]):
-                edge_live_by_id[edge_id] = (
-                    runtime.message_mask[:, local, slot] & aggregate_live[:, local]
-                )
-
-    for node_id, (runtime, local) in runtime_by_node.items():
-        module = model.receivers[safe_module_key(node_id)]
-        if not bool(normalized_live_by_node[node_id].any().item()):
-            _discard_parameter_owner(connected, module.input_norm)
-        if not bool(compute_live_by_node[node_id].any().item()):
-            for attribute in (
-                "ffn_norm",
-                "state_out",
-                "gdn_query",
-                "gdn_out",
-                "attn_query",
-                "attn_out",
-                "gate_proj",
-                "up_proj",
-                "down_proj",
-            ):
-                _discard_parameter_owner(connected, getattr(module, attribute, None))
-        elif not bool(state_read_live_by_node[node_id].any().item()):
-            for attribute in (
-                "state_out",
-                "gdn_query",
-                "gdn_out",
-                "attn_query",
-                "attn_out",
-            ):
-                _discard_parameter_owner(connected, getattr(module, attribute, None))
-
-        if not bool(selector_live_by_node[node_id].any().item()):
-            _discard_parameter_owner(connected, module.selector_read_linear)
-        if not bool(update_live_by_node[node_id].any().item()):
-            for attribute in (
-                "ema_observe",
-                "ema_decay_logit",
-                "gdn_key",
-                "gdn_value",
-                "gdn_eta",
-                "gdn_gamma",
-                "gdn_beta",
-                "attn_key",
-                "attn_value",
-            ):
-                _discard_parameter_owner(connected, getattr(module, attribute, None))
-
-        for edge_id in runtime.schedule.parent_edge_ids[local]:
-            if bool(edge_live_by_id[edge_id].any().item()):
-                continue
-            key = safe_module_key(edge_id)
-            if module.edge_scores is not None and key in module.edge_scores:
-                _discard_parameter_owner(connected, module.edge_scores[key])
-            if module.edge_transforms is not None and key in module.edge_transforms:
-                _discard_parameter_owner(connected, module.edge_transforms[key])
-
-    for runtime in runtimes:
-        selector = model.selectors[safe_module_key(runtime.schedule.region_id)]
-        if selector.score_type not in {"linear", "mlp"}:
-            continue
-        node_live = tuple(
-            bool(selector_live_by_node[node_id].any().item())
-            for node_id in runtime.schedule.node_ids
-        )
-        if selector.shared_parameters:
-            if not any(node_live):
-                for attribute in ("linear", "hidden", "out"):
-                    _discard_parameter_owner(
-                        connected, getattr(selector, attribute, None)
-                    )
-            continue
-        owners = (
-            selector.linears
-            if selector.score_type == "linear"
-            else selector.hidden_layers
-        )
-        for node_id, live in zip(runtime.schedule.node_ids, node_live):
-            if live:
-                continue
-            key = safe_module_key(node_id)
-            _discard_parameter_owner(connected, owners[key])
-            if selector.score_type == "mlp":
-                _discard_parameter_owner(connected, selector.output_layers[key])
-
-    return connected
-
-
 def _semantic_connected_source_tokens(
     model: SettleGraph,
     runtimes: Sequence[_RegionRuntime],
@@ -3265,6 +3145,7 @@ def _semantic_connected_source_tokens(
     *,
     batch: int,
     length: int,
+    detach_at_end: bool,
 ) -> set[Hashable]:
     """Resolve eager structural liveness for one selected public objective.
 
@@ -3407,9 +3288,23 @@ def _semantic_connected_source_tokens(
                 )
                 destination[key][seed.event] = True
         elif seed.kind == "state":
+            if detach_at_end:
+                continue
             key = (str(seed.node_id), str(seed.component))
             row = sequence_row.get(str(seed.sequence_id))
-            if key in final_state and row is not None:
+            if row is None:
+                # A StateStore may carry owners for sequences that are not in
+                # this call's batch.  Eager leaves those values untouched when
+                # detach_at_end=False, so their public roots remain connected
+                # directly to the corresponding incoming state component.
+                initial_key = (str(seed.sequence_id), str(seed.node_id))
+                if initial_key in initial.values:
+                    connected.add(
+                        _state_source_token(
+                            initial_key[0], initial_key[1], str(seed.component)
+                        )
+                    )
+            elif key in final_state:
                 final_state[key][row] = True
         else:  # pragma: no cover - the internal boundary owns this vocabulary
             raise AssertionError(f"unknown packed observable seed {seed.kind!r}")
@@ -3713,7 +3608,13 @@ def _semantic_connected_source_tokens(
 class _BoundaryValues:
     """Collect and replace differentiable public result Tensor occurrences."""
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        tracker: _ConnectivityTracker,
+        differentiable_sources: set[Hashable],
+    ) -> None:
+        self.tracker = tracker
+        self.differentiable_sources = differentiable_sources
         self.values: List[Tensor] = []
         self.seeds: List[_ObservableSeed] = []
         self.paths: List[Tuple[Hashable, ...]] = []
@@ -3725,7 +3626,24 @@ class _BoundaryValues:
         value: Optional[Tensor],
         seed: _ObservableSeed,
     ) -> None:
-        if value is None or not value.requires_grad:
+        if value is None:
+            return
+        semantic_requires_grad = not self.tracker.resolve(
+            frozenset((seed,))
+        ).isdisjoint(self.differentiable_sources)
+        if not value.requires_grad:
+            if semantic_requires_grad:  # pragma: no cover - executor invariant
+                raise AssertionError(
+                    "packed public occurrence lost a semantic autograd source "
+                    f"at {path!r} for {seed!r}"
+                )
+            return
+        if not semantic_requires_grad:
+            # Dense packing unions autograd metadata across independent lanes.
+            # The eager public occurrence has no differentiable source at all,
+            # so expose an actual non-differentiable Tensor, not merely a VJP
+            # boundary that later turns its false-positive edges into None.
+            self.replacements[path] = value.detach()
             return
         self.paths.append(path)
         self.values.append(value)
@@ -3740,7 +3658,7 @@ class _BoundaryValues:
         outputs = (result,) if isinstance(result, Tensor) else tuple(result)
         if len(outputs) != len(self.paths):  # pragma: no cover - autograd invariant
             raise AssertionError("packed result boundary changed output arity")
-        self.replacements = dict(zip(self.paths, outputs))
+        self.replacements.update(zip(self.paths, outputs))
 
     def get(self, path: Tuple[Hashable, ...], value: Tensor) -> Tensor:
         return self.replacements.get(path, value)
@@ -3750,6 +3668,8 @@ def _apply_result_connectivity_boundary(
     model: SettleGraph,
     result: ExecutionResult,
     tracker: _ConnectivityTracker,
+    initial: StateStore,
+    hidden: Tensor,
     sequence_ids: Sequence[str],
     token_positions: Tensor,
     execution_mask: Tensor,
@@ -3763,7 +3683,10 @@ def _apply_result_connectivity_boundary(
     accidentally inherit liveness from an unrelated packed lane.
     """
 
-    values = _BoundaryValues()
+    values = _BoundaryValues(
+        tracker,
+        _differentiable_source_tokens(model, initial, hidden),
+    )
     values.add(("output",), result.output, _ObservableSeed("output"))
 
     def collect_state(
@@ -4139,6 +4062,9 @@ class PackedSettleGraph:
     ) -> ExecutionResult:
         """Run the packed path for one decode position without eager fallback."""
 
+        # Match the eager entry point's contract ordering: a malformed
+        # configuration is rejected before any Tensor shape is interpreted.
+        _validate_detach_at_end(kwargs.get("detach_at_end", True))
         if hidden.ndim != 2:
             raise ExecutionContractError("packed decode hidden must have shape [B,d_model]")
         if execution_mask.ndim != 1 or token_positions.ndim != 1:
@@ -4183,8 +4109,9 @@ class PackedSettleGraph:
         detach_at_end: bool = True,
         record_trace: bool = False,
     ) -> ExecutionResult:
-        """Execute a complete chunk with no Token/row/node event Python loop."""
+        """Execute a complete chunk without calling the eager event scheduler."""
 
+        _validate_detach_at_end(detach_at_end)
         if hidden.ndim != 3:
             raise ExecutionContractError("packed prefill hidden must have shape [B,T,d_model]")
         batch, length, width = hidden.shape
@@ -4257,7 +4184,6 @@ class PackedSettleGraph:
         event_count = batch * length
 
         pending: List[List[_MessageBatch]] = [[] for _ in self._schedules]
-        all_data_batches: List[_MessageBatch] = []
         terminal_batches: List[_MessageBatch] = []
         valid_events = execution_flat.nonzero(as_tuple=False).squeeze(-1)
         for schedule in self._schedules:
@@ -4444,7 +4370,7 @@ class PackedSettleGraph:
                     state_scan_batches += len(schedule.state_groups)
 
             assert probabilities is not None
-            computed, emitted, active_rows = _compute_active(
+            computed, emitted, active_rows, compute_batches = _compute_active(
                 self.model,
                 schedule,
                 aggregate,
@@ -4452,6 +4378,7 @@ class PackedSettleGraph:
                 active,
                 probabilities,
                 state_results,
+                record_occurrences=record_trace,
             )
             active_compute_rows += active_rows
             formula_batches += len(schedule.compute_groups)
@@ -4476,7 +4403,6 @@ class PackedSettleGraph:
                         payload, event, target_local, parent_slot, edge_index
                     )
                     pending[fanout.target_region_rank].append(batch_records)
-                    all_data_batches.append(batch_records)
                 fanout_batches += 1
 
             if schedule.terminal_locals:
@@ -4510,10 +4436,11 @@ class PackedSettleGraph:
                     computed,
                     emitted,
                     state_results,
+                    compute_batches,
                 )
             )
 
-        output_flat, terminal_dense, terminal_mask = _aggregate_terminals(
+        output_flat, _, terminal_mask = _aggregate_terminals(
             self.model, terminal_batches, hidden_flat, execution_flat
         )
         output = output_flat.reshape(batch, length, width)
@@ -4536,11 +4463,9 @@ class PackedSettleGraph:
                 execution_mask,
                 token_positions,
                 sequence_keys,
+                initial,
                 runtimes,
-                all_data_batches,
-                terminal_dense,
                 terminal_mask,
-                output_flat,
             )
             if record_trace
             else None
@@ -4570,12 +4495,15 @@ class PackedSettleGraph:
                     selected_roots,
                     batch=batch,
                     length=length,
+                    detach_at_end=detach_at_end,
                 )
             )
             result = _apply_result_connectivity_boundary(
                 self.model,
                 result,
                 tracker,
+                initial,
+                hidden,
                 sequence_keys,
                 token_positions,
                 execution_mask,
@@ -4588,11 +4516,9 @@ class PackedSettleGraph:
         execution_mask: Tensor,
         token_positions: Tensor,
         sequence_ids: Sequence[str],
+        initial: StateStore,
         runtimes: Sequence[_RegionRuntime],
-        all_data_batches: Sequence[_MessageBatch],
-        terminal_dense: Tensor,
         terminal_mask: Tensor,
-        output_flat: Tensor,
     ) -> Any:
         """Restore the canonical small-fixture trace after tensor execution.
 
@@ -4602,7 +4528,6 @@ class PackedSettleGraph:
         """
 
         batch, length, _ = hidden.shape
-        event_count = batch * length
         valid_events = execution_mask.reshape(-1).nonzero(as_tuple=False).squeeze(-1)
         node_events: List[NodeEventTrace] = []
         edge_events: List[EdgeEventTrace] = []
@@ -4610,25 +4535,108 @@ class PackedSettleGraph:
         region_events: List[RegionEventTrace] = []
         state_writes: List[StateWriteTrace] = []
         output_events: List[OutputEventTrace] = []
+        raw_computed_occurrences: Dict[Tuple[int, str], Tensor] = {}
+        raw_emitted_occurrences: Dict[Tuple[int, str], Tensor] = {}
+        for runtime in runtimes:
+            schedule = runtime.schedule
+            for records in runtime.compute_batches:
+                event_values = records.event.detach().to(device="cpu").tolist()
+                local_values = records.local.detach().to(device="cpu").tolist()
+                for record_index, (event, local) in enumerate(
+                    zip(event_values, local_values)
+                ):
+                    key = (int(event), schedule.node_ids[int(local)])
+                    if key in raw_computed_occurrences:  # pragma: no cover
+                        raise AssertionError(
+                            "packed trace found duplicate NodeCompute occurrence"
+                        )
+                    raw_computed_occurrences[key] = records.computed[record_index]
+                    raw_emitted_occurrences[key] = records.emitted[record_index]
 
-        edge_count = len(self.model.plan.edges)
-        edge_payload = hidden.new_zeros((event_count * max(1, edge_count), hidden.shape[-1]))
-        edge_has_data = torch.zeros(
-            (event_count * max(1, edge_count),), dtype=torch.bool, device=hidden.device
-        )
-        if edge_count and all_data_batches:
-            records = _merge_message_batches(all_data_batches, hidden.reshape(event_count, -1))
-            destination = records.event * edge_count + records.edge_index
-            edge_payload = edge_payload.index_copy(0, destination, records.hidden)
-            edge_has_data = edge_has_data.index_fill(0, destination, True)
-        if edge_count:
-            edge_payload = edge_payload.reshape(event_count, edge_count, hidden.shape[-1])
-            edge_has_data = edge_has_data.reshape(event_count, edge_count)
-        else:
-            edge_payload = hidden.new_empty((event_count, 0, hidden.shape[-1]))
-            edge_has_data = torch.empty(
-                (event_count, 0), dtype=torch.bool, device=hidden.device
-            )
+        edge_source = {
+            edge.edge_id: edge.source for edge in self.model.plan.edges
+        }
+        entry_ids = set(self.model.plan.entry_node_ids)
+        aggregate_occurrences: Dict[Tuple[int, str], Tensor] = {}
+        computed_occurrences: Dict[Tuple[int, str], Tensor] = {}
+        emitted_occurrences: Dict[Tuple[int, str], Tensor] = {}
+        # Rebuild semantic Aggregate occurrences in region order.  The source
+        # Emit occurrences for every non-entry receiver are already available
+        # because fixed graph edges cross topologically ordered regions.
+        for runtime in runtimes:
+            schedule = runtime.schedule
+            for event_tensor in valid_events:
+                event = int(event_tensor.item())
+                row, token = divmod(event, length)
+                for local, node_id in enumerate(schedule.node_ids):
+                    if not bool(runtime.reached[event, local].item()):
+                        continue
+                    if node_id in entry_ids:
+                        messages = (hidden[row, token],)
+                        edge_ids = (f"boundary:{node_id}",)
+                    else:
+                        data = tuple(
+                            (
+                                edge_id,
+                                emitted_occurrences[(event, edge_source[edge_id])],
+                            )
+                            for slot, edge_id in enumerate(
+                                schedule.parent_edge_ids[local]
+                            )
+                            if bool(
+                                runtime.message_mask[event, local, slot].item()
+                            )
+                        )
+                        edge_ids = tuple(edge_id for edge_id, _ in data)
+                        messages = tuple(value for _, value in data)
+                    key = (event, node_id)
+                    aggregate = _aggregate_trace_occurrence(
+                        self.model, node_id, messages, edge_ids
+                    )
+                    aggregate_occurrences[key] = aggregate
+                    if not bool(runtime.active[event, local].item()):
+                        continue
+                    module = self.model.receivers[safe_module_key(node_id)]
+                    computed = raw_computed_occurrences[key]
+                    if module.compute_type == "identity":
+                        computed = aggregate
+                    computed_occurrences[key] = computed
+                    emit_type = _kind(module.emit_config, "hard")
+                    if emit_type == "hard":
+                        emitted = computed
+                    else:
+                        # Non-hard Emit remains differentiable through its
+                        # probability even when NodeCompute is identity.  Its
+                        # grouped value has the correct formula graph; only a
+                        # hard identity needs exact object provenance here.
+                        emitted = raw_emitted_occurrences[key]
+                    emitted_occurrences[key] = emitted
+
+        def emitted_value(event: int, node_id: str) -> Tensor:
+            try:
+                return emitted_occurrences[(event, node_id)]
+            except KeyError as exc:  # pragma: no cover - execution invariant
+                raise AssertionError(
+                    "packed trace has DATA from a node without an Emit occurrence"
+                ) from exc
+
+        def aggregate_output(
+            messages: Sequence[Tuple[str, Tensor]],
+        ) -> Tensor:
+            if not messages:  # pragma: no cover - terminal reachability gate
+                raise AssertionError("packed trace cannot aggregate no messages")
+            stacked = torch.stack(tuple(value for _, value in messages), dim=0)
+            if self.model.output_aggregate_type == "mean":
+                return stacked.mean(dim=0)
+            assert self.model.output_scores is not None
+            scores = torch.stack(
+                tuple(
+                    self.model.output_scores[safe_module_key(node_id)]
+                    for node_id, _ in messages
+                )
+            ).to(device=stacked.device, dtype=stacked.dtype)
+            weights = torch.softmax(scores, dim=0)
+            return (weights.unsqueeze(-1) * stacked).sum(dim=0)
 
         for schedule in self._schedules:
             for local in schedule.entry_locals:
@@ -4649,6 +4657,20 @@ class PackedSettleGraph:
             schedule = runtime.schedule
             region = self.model.plan.region_by_id(schedule.region_id)
             state_lookup = _state_group_lookup(schedule)
+            entry_states: Dict[Tuple[int, int], ReceiverState] = {}
+
+            def entry_state(event: int, local: int) -> ReceiverState:
+                key = (event, local)
+                if key not in entry_states:
+                    row, _ = divmod(event, length)
+                    node_id = schedule.node_ids[local]
+                    default = self.model.receiver(node_id).initial_state(
+                        runtime.normalized[event, local]
+                    )
+                    entry_states[key] = initial.values.get(
+                        (sequence_ids[row], node_id), default
+                    )
+                return entry_states[key]
 
             def state_value(event: int, local: int, which: str) -> ReceiverState:
                 location = state_lookup.get(local)
@@ -4658,19 +4680,30 @@ class PackedSettleGraph:
                 result = runtime.state_results[group_index]
                 assert result is not None
                 row, token = divmod(event, length)
+                observed = bool(result.observed[row, token, column].item())
+                has_prior_observe = bool(
+                    result.observed[row, :token, column].any().item()
+                )
                 if isinstance(result, _TensorStateResult):
                     if which == "before":
+                        if not has_prior_observe:
+                            return entry_state(event, local)
                         return result.before[row, token, column]
                     if which == "proposal":
                         return result.proposal[row, token, column]
                     if which == "compute":
-                        return (
-                            result.proposal[row, token, column]
-                            if bool(result.observed[row, token, column].item())
-                            else result.before[row, token, column]
-                        )
+                        if observed:
+                            return result.proposal[row, token, column]
+                        if not has_prior_observe:
+                            return entry_state(event, local)
+                        return result.before[row, token, column]
                     raise AssertionError(which)
-                if which == "before":
+                use_before = which == "before" or (
+                    which == "compute" and not observed
+                )
+                if use_before and not has_prior_observe:
+                    return entry_state(event, local)
+                if use_before:
                     positions = result.before_positions[row, token, column]
                     keys = result.before_keys[row, token, column]
                     values = result.before_values[row, token, column]
@@ -4745,9 +4778,11 @@ class PackedSettleGraph:
                                 (
                                     edge_id,
                                     "DATA" if has_data else "CLOSED",
-                                    runtime.message_hidden[event, local, slot]
-                                    if has_data
-                                    else None,
+                                    (
+                                        emitted_value(event, edge_source[edge_id])
+                                        if has_data
+                                        else None
+                                    ),
                                 )
                             )
                         parents = tuple(parent_records)
@@ -4765,7 +4800,11 @@ class PackedSettleGraph:
                             reached,
                             observed,
                             active,
-                            runtime.hidden[event, local] if reached else None,
+                            (
+                                aggregate_occurrences[(event, node_id)]
+                                if reached
+                                else None
+                            ),
                             runtime.normalized[event, local] if reached else None,
                             state_value(event, local, "before") if reached else None,
                             proposal,
@@ -4781,8 +4820,12 @@ class PackedSettleGraph:
                                 else None
                             ),
                             runtime.probabilities[event, local] if reached else None,
-                            runtime.computed[event, local] if active else None,
-                            runtime.emitted[event, local] if active else None,
+                            (
+                                computed_occurrences[(event, node_id)]
+                                if active
+                                else None
+                            ),
+                            emitted_value(event, node_id) if active else None,
                             parents,
                         )
                     )
@@ -4802,21 +4845,21 @@ class PackedSettleGraph:
             row, token = divmod(event, length)
             sequence_id = sequence_ids[row]
             token_position = int(token_positions[row, token].item())
-            for edge_index, edge in enumerate(self.model.plan.edges):
-                has_data = bool(edge_has_data[event, edge_index].item())
+            for edge in self.model.plan.edges:
+                has_data = (event, edge.source) in emitted_occurrences
                 edge_events.append(
                     EdgeEventTrace(
                         sequence_id,
                         token_position,
                         edge.edge_id,
                         "DATA" if has_data else "CLOSED",
-                        edge_payload[event, edge_index] if has_data else None,
+                        emitted_value(event, edge.source) if has_data else None,
                     )
                 )
             messages = tuple(
                 (
                     node_id,
-                    terminal_dense[event, terminal_index],
+                    emitted_value(event, node_id),
                 )
                 for terminal_index, node_id in enumerate(self.model.plan.terminal_node_ids)
                 if bool(terminal_mask[event, terminal_index].item())
@@ -4826,7 +4869,7 @@ class PackedSettleGraph:
                     sequence_id,
                     token_position,
                     messages,
-                    output_flat[event],
+                    aggregate_output(messages),
                 )
             )
 

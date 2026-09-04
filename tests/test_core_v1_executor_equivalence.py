@@ -40,7 +40,7 @@ from tide.packed import (
     PackedSupportReport,
     inspect_packed_support,
 )
-from tide.plan import bind_dtypes
+from tide.plan import Plan, bind_dtypes
 from tide.specialized import (
     HB_LINE_V1,
     SINGLE_LAYER_V1,
@@ -366,6 +366,7 @@ def _compare(
         reference,
         candidate,
         tolerance=_tolerance(dtype),
+        require_same_requires_grad=True,
         path=path,
     ).require_pass()
 
@@ -386,6 +387,103 @@ def _gradient_record(model: SettleGraph, hidden: Tensor) -> Mapping[str, object]
         "hidden": hidden.grad,
         "parameters": {
             name: parameter.grad for name, parameter in model.named_parameters()
+        },
+    }
+
+
+def _differentiable_external_state(
+    plan: Plan,
+    *,
+    sequence_id: str,
+    next_position: int,
+    dtype: torch.dtype,
+    seed: int,
+) -> Tuple[StateStore, Tuple[Tuple[str, Tensor], ...]]:
+    """Create one legal nonempty differentiable state for every state owner."""
+
+    if next_position < 1:
+        raise AssertionError("the external-state fixture needs one history position")
+    generator = torch.Generator(device="cpu")
+    generator.manual_seed(seed)
+    values = {}
+    leaves = []
+    for node in plan.nodes:
+        state_kind = str(node.update["type"])
+        if state_kind == "none":
+            continue
+        if node.state_owner is None:
+            raise AssertionError(f"stateful node {node.node_id!r} has no owner")
+        key = (sequence_id, node.state_owner)
+        if key in values:
+            raise AssertionError(f"duplicate external state owner {key!r}")
+        if state_kind == "attention_window":
+            # One row is nonempty but remains inside every current core-v1
+            # window after the single exercised Token.  Both floating
+            # components are independent caller-owned autograd leaves.
+            keys = torch.randn(
+                (1, int(node.update["key_dim"])),
+                generator=generator,
+                dtype=dtype,
+            ).requires_grad_()
+            state_values = torch.randn(
+                (1, int(node.update["value_dim"])),
+                generator=generator,
+                dtype=dtype,
+            ).requires_grad_()
+            values[key] = AttentionState(
+                torch.tensor([next_position - 1], dtype=torch.int64),
+                keys,
+                state_values,
+            )
+            leaves.extend(
+                (
+                    (f"{state_kind}:{node.state_owner}:keys", keys),
+                    (f"{state_kind}:{node.state_owner}:values", state_values),
+                )
+            )
+        else:
+            state = torch.randn(
+                tuple(node.state_shape),
+                generator=generator,
+                dtype=dtype,
+            ).requires_grad_()
+            values[key] = state
+            leaves.append((f"{state_kind}:{node.state_owner}:tensor", state))
+    return (
+        StateStore(values, next_position={sequence_id: next_position}),
+        tuple(leaves),
+    )
+
+
+def _autograd_record_with_initial_state(
+    objective: Tensor,
+    model: SettleGraph,
+    hidden: Tensor,
+    initial_leaves: Tuple[Tuple[str, Tensor], ...],
+) -> Mapping[str, object]:
+    """Record hidden, caller-owned initial-state, and parameter VJPs."""
+
+    named_parameters = tuple(model.named_parameters())
+    inputs = (
+        hidden,
+        *(value for _, value in initial_leaves),
+        *(parameter for _, parameter in named_parameters),
+    )
+    gradients = torch.autograd.grad(objective, inputs, allow_unused=True)
+    state_end = 1 + len(initial_leaves)
+    return {
+        "hidden": gradients[0],
+        "initial_state": {
+            name: gradient
+            for (name, _), gradient in zip(
+                initial_leaves, gradients[1:state_end]
+            )
+        },
+        "parameters": {
+            name: gradient
+            for (name, _), gradient in zip(
+                named_parameters, gradients[state_end:]
+            )
         },
     }
 
@@ -685,6 +783,97 @@ class ExecutorContractParityTests(unittest.TestCase):
                         torch.empty((0,), dtype=torch.int64),
                     )
 
+    def test_all_executor_bindings_require_exact_boolean_detach_at_end(self) -> None:
+        case = next(
+            record.case
+            for record in _support_partition()
+            if record.single_layer.supported
+        )
+        model = _model(case, torch.float64)
+        sequence_id = "candidate.detach-validation"
+        state = StateStore(next_position={sequence_id: 0})
+        state_before = StateStore(next_position={sequence_id: 0})
+        prefill_hidden = torch.zeros(
+            (1, 1, case.plan.d_model), dtype=torch.float64
+        )
+        decode_hidden = prefill_hidden[:, 0]
+        invalid_values = (None, 0, 1, "false", torch.tensor(False))
+
+        for binding in self._bindings(model):
+            binding_name = type(binding).__name__
+            call_names = ["prefill", "decode"]
+            if isinstance(binding, SettleGraph):
+                call_names.insert(1, "prefill-region-major")
+            for call_name in call_names:
+                if call_name == "prefill":
+                    method = binding.prefill
+                elif call_name == "prefill-region-major":
+                    assert isinstance(binding, SettleGraph)
+                    method = binding.prefill_region_major
+                else:
+                    method = (
+                        binding.interpret_token
+                        if isinstance(binding, SettleGraph)
+                        else binding.decode
+                    )
+                is_prefill = call_name != "decode"
+                hidden = prefill_hidden if is_prefill else decode_hidden
+                mask = torch.ones(
+                    (1, 1) if is_prefill else (1,),
+                    dtype=torch.bool,
+                )
+                positions = torch.zeros(
+                    (1, 1) if is_prefill else (1,),
+                    dtype=torch.int64,
+                )
+                for invalid in invalid_values:
+                    with self.subTest(
+                        binding=binding_name,
+                        call=call_name,
+                        invalid=repr(invalid),
+                    ):
+                        with self.assertRaisesRegex(
+                            ExecutionContractError,
+                            "^detach_at_end must be a boolean$",
+                        ):
+                            method(
+                                hidden,
+                                mask,
+                                (sequence_id,),
+                                positions,
+                                state=state,
+                                detach_at_end=invalid,  # type: ignore[arg-type]
+                            )
+                        compare_nested(
+                            state_before,
+                            state,
+                            tolerance=CPU_FLOAT64_TOLERANCE,
+                        ).require_pass()
+
+                if call_name == "decode":
+                    with self.subTest(
+                        binding=binding_name,
+                        call=call_name,
+                        invalid="None-and-rank-3-hidden",
+                    ):
+                        with self.assertRaisesRegex(
+                            ExecutionContractError,
+                            "^detach_at_end must be a boolean$",
+                        ):
+                            method(
+                                decode_hidden.unsqueeze(0),
+                                mask,
+                                (sequence_id,),
+                                positions,
+                                state=state,
+                                detach_at_end=None,  # type: ignore[arg-type]
+                            )
+                        compare_nested(
+                            state_before,
+                            state,
+                            tolerance=CPU_FLOAT64_TOLERANCE,
+                        ).require_pass()
+
 
 class CandidateForwardEquivalenceTests(unittest.TestCase):
     def test_all_packed_supported_cases_match_both_cpu_dtypes(self) -> None:
@@ -761,49 +950,55 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                             ),
                         )
 
-                        # Alternate the nonempty boundary across the fixed
-                        # three-token corpus shape so every case exercises
-                        # state publication and continuation without adding a
-                        # result-dependent case selection rule.
-                        split = 1 + case.ordinal % 2
-                        reference_chunks = _run_two_chunk_prefill(
-                            model, hidden, split
-                        )
-                        packed_chunks = _run_two_chunk_prefill(
-                            packed, hidden, split
-                        )
-                        for index, label in ((0, "first"), (1, "second")):
-                            _compare(
-                                reference_chunks[index],
-                                packed_chunks[index],
-                                dtype=dtype,
-                                path=f"chunk.{label}.eager-packed",
+                        # T=3 has exactly two nonempty two-chunk boundaries.
+                        # Exercise both for every case instead of covering
+                        # them only in aggregate across alternating ordinals.
+                        splits = (1, 2)
+                        for split in splits:
+                            reference_chunks = _run_two_chunk_prefill(
+                                model, hidden, split
                             )
-                        _compare(
-                            reference_full,
-                            reference_chunks[2],
-                            dtype=dtype,
-                            path="chunk.reference-vs-full",
-                        )
-                        _compare(
-                            packed_full,
-                            packed_chunks[2],
-                            dtype=dtype,
-                            path="chunk.packed-vs-full",
-                        )
-                        _compare(
-                            reference_chunks[2],
-                            packed_chunks[2],
-                            dtype=dtype,
-                            path="chunk.eager-packed-combined",
-                        )
+                            packed_chunks = _run_two_chunk_prefill(
+                                packed, hidden, split
+                            )
+                            for index, label in ((0, "first"), (1, "second")):
+                                _compare(
+                                    reference_chunks[index],
+                                    packed_chunks[index],
+                                    dtype=dtype,
+                                    path=(
+                                        f"chunk.split-{split}.{label}."
+                                        "eager-packed"
+                                    ),
+                                )
+                            _compare(
+                                reference_full,
+                                reference_chunks[2],
+                                dtype=dtype,
+                                path=f"chunk.split-{split}.reference-vs-full",
+                            )
+                            _compare(
+                                packed_full,
+                                packed_chunks[2],
+                                dtype=dtype,
+                                path=f"chunk.split-{split}.packed-vs-full",
+                            )
+                            _compare(
+                                reference_chunks[2],
+                                packed_chunks[2],
+                                dtype=dtype,
+                                path=(
+                                    f"chunk.split-{split}."
+                                    "eager-packed-combined"
+                                ),
+                            )
                         _record_execution_receipt(
                             kind="forward-cell",
                             executor=PACKED_EXECUTOR_ID,
                             case_id=case.case_id,
                             dtype=_dtype_name(dtype),
                             mode="two-chunk-prefill",
-                            call_counts={"eager": 2, "packed": 2},
+                            call_counts={"eager": 4, "packed": 4},
                             observables=[
                                 "output",
                                 "final-state",
@@ -812,7 +1007,7 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                                 "exact-route",
                             ],
                             trace_scope="each-call-and-canonical-merge",
-                            split=split,
+                            splits=list(splits),
                             source_test_id=(
                                 "CandidateForwardEquivalenceTests."
                                 "test_all_packed_cases_match_full_chunked_and_decode_execution"
@@ -894,12 +1089,14 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                     specialized = SpecializedExecutor(model, specialization)
                     packed = PackedSettleGraph(model)
                     hidden = _hidden(case, dtype)
+                    common = dict(_call_arguments(record_trace=True))
+                    common["detach_at_end"] = True
                     with torch.no_grad():
                         reference = model.prefill(
-                            hidden.clone(), **_call_arguments(record_trace=True)
+                            hidden.clone(), **common
                         )
                         actual = specialized.prefill(
-                            hidden.clone(), **_call_arguments(record_trace=True)
+                            hidden.clone(), **common
                         )
                         _compare(reference, actual, dtype=dtype)
                         assert actual.trace is not None
@@ -916,7 +1113,7 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                         self.assertTrue(record.packed.accepted)
                         packed_result = packed.prefill(
                             hidden.clone(),
-                            **_call_arguments(record_trace=True),
+                            **common,
                         )
                         _compare(reference, packed_result, dtype=dtype)
                         _compare(packed_result, actual, dtype=dtype)
@@ -945,49 +1142,61 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                             ),
                         )
 
-                        split = 1 + case.ordinal % 2
-                        reference_chunks = _run_two_chunk_prefill(
-                            model, hidden, split
-                        )
-                        packed_chunks = _run_two_chunk_prefill(
-                            packed, hidden, split
-                        )
-                        specialized_chunks = _run_two_chunk_prefill(
-                            specialized, hidden, split
-                        )
-                        for index, label in ((0, "first"), (1, "second")):
-                            reference_chunk = reference_chunks[index]
-                            packed_chunk = packed_chunks[index]
-                            specialized_chunk = specialized_chunks[index]
-                            _compare(
-                                reference_chunk,
-                                packed_chunk,
-                                dtype=dtype,
-                                path=f"two-chunk.{label}.packed",
+                        splits = (1, 2)
+                        for split in splits:
+                            reference_chunks = _run_two_chunk_prefill(
+                                model, hidden, split
                             )
-                            _compare(
-                                reference_chunk,
-                                specialized_chunk,
-                                dtype=dtype,
-                                path=f"two-chunk.{label}.{specialization}",
+                            packed_chunks = _run_two_chunk_prefill(
+                                packed, hidden, split
                             )
-                            _compare(
-                                packed_chunk,
-                                specialized_chunk,
-                                dtype=dtype,
-                                path=f"two-chunk.{label}.three-way",
+                            specialized_chunks = _run_two_chunk_prefill(
+                                specialized, hidden, split
                             )
-                        for name, combined in (
-                            ("reference", reference_chunks[2]),
-                            ("packed", packed_chunks[2]),
-                            (specialization, specialized_chunks[2]),
-                        ):
-                            _compare(
-                                reference,
-                                combined,
-                                dtype=dtype,
-                                path=f"two-chunk.{name}.vs-full",
-                            )
+                            for index, label in ((0, "first"), (1, "second")):
+                                reference_chunk = reference_chunks[index]
+                                packed_chunk = packed_chunks[index]
+                                specialized_chunk = specialized_chunks[index]
+                                _compare(
+                                    reference_chunk,
+                                    packed_chunk,
+                                    dtype=dtype,
+                                    path=(
+                                        f"two-chunk.split-{split}.{label}.packed"
+                                    ),
+                                )
+                                _compare(
+                                    reference_chunk,
+                                    specialized_chunk,
+                                    dtype=dtype,
+                                    path=(
+                                        f"two-chunk.split-{split}.{label}."
+                                        f"{specialization}"
+                                    ),
+                                )
+                                _compare(
+                                    packed_chunk,
+                                    specialized_chunk,
+                                    dtype=dtype,
+                                    path=(
+                                        f"two-chunk.split-{split}.{label}."
+                                        "three-way"
+                                    ),
+                                )
+                            for name, combined in (
+                                ("reference", reference_chunks[2]),
+                                ("packed", packed_chunks[2]),
+                                (specialization, specialized_chunks[2]),
+                            ):
+                                _compare(
+                                    reference,
+                                    combined,
+                                    dtype=dtype,
+                                    path=(
+                                        f"two-chunk.split-{split}.{name}."
+                                        "vs-full"
+                                    ),
+                                )
                         _record_execution_receipt(
                             kind="forward-cell",
                             executor=specialization,
@@ -995,9 +1204,9 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                             dtype=_dtype_name(dtype),
                             mode="two-chunk-prefill",
                             call_counts={
-                                "eager": 2,
-                                "packed": 2,
-                                "specialized": 2,
+                                "eager": 4,
+                                "packed": 4,
+                                "specialized": 4,
                             },
                             observables=[
                                 "output",
@@ -1007,7 +1216,7 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                                 "exact-route",
                             ],
                             trace_scope="each-call-and-canonical-merge",
-                            split=split,
+                            splits=list(splits),
                             source_test_id=(
                                 "CandidateForwardEquivalenceTests."
                                 "test_all_specialized_supported_cases_match_both_cpu_dtypes"
@@ -1085,6 +1294,51 @@ class CandidateForwardEquivalenceTests(unittest.TestCase):
                             ),
                         )
 
+    def test_all_specialized_cases_match_live_public_result_metadata(self) -> None:
+        items = []
+        for record in _support_partition():
+            if record.single_layer.supported:
+                items.append((record, SINGLE_LAYER_V1))
+            if record.hb.supported:
+                items.append((record, HB_LINE_V1))
+        self.assertEqual(len(items), 24)
+
+        dtype = torch.float64
+        for record, specialization in items:
+            case = record.case
+            with self.subTest(
+                case=case.case_id,
+                specialization=specialization,
+            ):
+                model = _model(case, dtype)
+                hidden = _hidden(case, dtype)
+                common = _call_arguments(record_trace=True)
+                reference = model.prefill(hidden.clone(), **common)
+                packed = PackedSettleGraph(model).prefill(
+                    hidden.clone(), **common
+                )
+                specialized = SpecializedExecutor(
+                    model, specialization
+                ).prefill(hidden.clone(), **common)
+                _compare(
+                    reference,
+                    packed,
+                    dtype=dtype,
+                    path="live-result.packed",
+                )
+                _compare(
+                    reference,
+                    specialized,
+                    dtype=dtype,
+                    path=f"live-result.{specialization}",
+                )
+                _compare(
+                    packed,
+                    specialized,
+                    dtype=dtype,
+                    path="live-result.three-way",
+                )
+
 
 class CandidateVJPEquivalenceTests(unittest.TestCase):
     def _compare_isolated_packed_vjps(
@@ -1103,6 +1357,12 @@ class CandidateVJPEquivalenceTests(unittest.TestCase):
         )
         packed = PackedSettleGraph(packed_model).prefill(
             packed_hidden, **_call_arguments(record_trace=True)
+        )
+        _compare(
+            reference,
+            packed,
+            dtype=dtype,
+            path="packed.public-result",
         )
         reference_objectives = _isolated_objectives(case, reference)
         packed_objectives = _isolated_objectives(case, packed)
@@ -1282,6 +1542,144 @@ class CandidateVJPEquivalenceTests(unittest.TestCase):
                 ):
                     self._compare_isolated_packed_vjps(case, dtype)
 
+    def test_prefill_and_decode_default_detach_match_no_detach_three_way(
+        self,
+    ) -> None:
+        case = _corpus()[144]
+        self.assertEqual(
+            case.case_id,
+            "core-v1-candidate.ql-0144.small-hb.base",
+        )
+        self.assertTrue(inspect_packed_support(case.plan).accepted)
+        self.assertTrue(hb_line_v1_support(case.plan).supported)
+        dtype = torch.float64
+        sequence_id = "candidate.detach-gradient"
+        source = _hidden(case, dtype)[:1, :2]
+
+        def execute(
+            implementation: str,
+            api: str,
+            *,
+            omit_detach: bool,
+        ) -> Tuple[ExecutionResult, ExecutionResult, Optional[Tensor]]:
+            model = _model(case, dtype)
+            if implementation == "eager":
+                executor: object = model
+            elif implementation == "packed":
+                executor = PackedSettleGraph(model)
+            else:
+                self.assertEqual(implementation, HB_LINE_V1)
+                executor = SpecializedExecutor(model, HB_LINE_V1)
+
+            first_hidden = source[:, 0].clone().requires_grad_()
+            second_hidden = source[:, 1].clone().requires_grad_()
+            first_detach = {} if omit_detach else {"detach_at_end": False}
+            if api == "prefill":
+                first = executor.prefill(  # type: ignore[attr-defined]
+                    first_hidden.unsqueeze(1),
+                    torch.ones((1, 1), dtype=torch.bool),
+                    (sequence_id,),
+                    torch.tensor([[0]], dtype=torch.int64),
+                    **first_detach,
+                )
+                second = executor.prefill(  # type: ignore[attr-defined]
+                    second_hidden.unsqueeze(1),
+                    torch.ones((1, 1), dtype=torch.bool),
+                    (sequence_id,),
+                    torch.tensor([[1]], dtype=torch.int64),
+                    state=first.state,
+                    detach_at_end=False,
+                )
+            else:
+                self.assertEqual(api, "decode")
+                method = (
+                    model.interpret_token
+                    if implementation == "eager"
+                    else executor.decode  # type: ignore[attr-defined]
+                )
+                first = method(
+                    first_hidden,
+                    torch.ones((1,), dtype=torch.bool),
+                    (sequence_id,),
+                    torch.tensor([0], dtype=torch.int64),
+                    **first_detach,
+                )
+                second = method(
+                    second_hidden,
+                    torch.ones((1,), dtype=torch.bool),
+                    (sequence_id,),
+                    torch.tensor([1], dtype=torch.int64),
+                    state=first.state,
+                    detach_at_end=False,
+                )
+            objective = second.output.square().sum() + _state_objective(
+                second.state, second.output
+            )
+            gradient = torch.autograd.grad(
+                objective,
+                first_hidden,
+                allow_unused=True,
+            )[0]
+            return first, second, gradient
+
+        implementations = ("eager", "packed", HB_LINE_V1)
+        for api in ("prefill", "decode"):
+            results = {
+                (implementation, mode): execute(
+                    implementation,
+                    api,
+                    omit_detach=(mode == "default"),
+                )
+                for implementation in implementations
+                for mode in ("default", "no-detach")
+            }
+            for mode in ("default", "no-detach"):
+                eager_first, eager_second, _ = results[("eager", mode)]
+                for implementation in ("packed", HB_LINE_V1):
+                    first, second, _ = results[(implementation, mode)]
+                    _compare(
+                        eager_first,
+                        first,
+                        dtype=dtype,
+                        path=f"{api}.{mode}.{implementation}.first",
+                    )
+                    _compare(
+                        eager_second,
+                        second,
+                        dtype=dtype,
+                        path=f"{api}.{mode}.{implementation}.second",
+                    )
+
+            for implementation in implementations:
+                default_first, default_second, default_gradient = results[
+                    (implementation, "default")
+                ]
+                live_first, live_second, live_gradient = results[
+                    (implementation, "no-detach")
+                ]
+                compare_nested(
+                    (default_first, default_second),
+                    (live_first, live_second),
+                    tolerance=CPU_FLOAT64_TOLERANCE,
+                ).require_pass()
+                self.assertIsNone(default_gradient)
+                self.assertIsNotNone(live_gradient)
+                assert live_gradient is not None
+                self.assertTrue(bool(torch.isfinite(live_gradient).all().item()))
+                self.assertGreater(float(live_gradient.abs().sum()), 0.0)
+
+            eager_gradient = results[("eager", "no-detach")][2]
+            assert eager_gradient is not None
+            for implementation in ("packed", HB_LINE_V1):
+                gradient = results[(implementation, "no-detach")][2]
+                assert gradient is not None
+                _compare(
+                    eager_gradient,
+                    gradient,
+                    dtype=dtype,
+                    path=f"{api}.no-detach.{implementation}.cross-call-vjp",
+                )
+
     def test_every_statically_accepted_specialization_matches_vjp_and_none(
         self,
     ) -> None:
@@ -1305,6 +1703,157 @@ class CandidateVJPEquivalenceTests(unittest.TestCase):
                     executor=specialization,
                 ):
                     self._compare_vjp(record.case, dtype, specialization)
+
+    def test_hb_external_differentiable_initial_state_matches_three_way(
+        self,
+    ) -> None:
+        case = _corpus()[144]
+        self.assertEqual(
+            case.case_id,
+            "core-v1-candidate.ql-0144.small-hb.base",
+        )
+        self.assertEqual(
+            case.plan.canonical_hash(),
+            "056bd6d348c8a6579b874e6443fefb944e5388a66f98c469a951a976cf7b4e18",
+        )
+        self.assertTrue(inspect_packed_support(case.plan).accepted)
+        self.assertTrue(hb_line_v1_support(case.plan).supported)
+        self.assertTrue(
+            {"ema", "gdn", "attention_window"}.issubset(
+                {str(node.update["type"]) for node in case.plan.nodes}
+            )
+        )
+
+        dtype = torch.float64
+        reference_model = _model(case, dtype)
+        packed_model = _model(case, dtype)
+        specialized_model = _model(case, dtype)
+        packed_model.load_state_dict(reference_model.state_dict(), strict=True)
+        specialized_model.load_state_dict(
+            reference_model.state_dict(), strict=True
+        )
+
+        sequence_id = "candidate.hb.external-state"
+        state_arguments = {
+            "sequence_id": sequence_id,
+            "next_position": 1,
+            "dtype": dtype,
+            "seed": case.input_seed ^ 0x48425F5354415445,
+        }
+        reference_state, reference_leaves = _differentiable_external_state(
+            case.plan, **state_arguments
+        )
+        packed_state, packed_leaves = _differentiable_external_state(
+            case.plan, **state_arguments
+        )
+        specialized_state, specialized_leaves = (
+            _differentiable_external_state(case.plan, **state_arguments)
+        )
+        leaf_names = tuple(name for name, _ in reference_leaves)
+        self.assertEqual(
+            leaf_names, tuple(name for name, _ in packed_leaves)
+        )
+        self.assertEqual(
+            leaf_names, tuple(name for name, _ in specialized_leaves)
+        )
+        self.assertEqual(
+            {name.split(":", 1)[0] for name in leaf_names},
+            {"ema", "gdn", "attention_window"},
+        )
+
+        generator = torch.Generator(device="cpu")
+        generator.manual_seed(case.input_seed ^ 0x48425F4849444445)
+        source = torch.randn(
+            (1, 1, case.plan.d_model),
+            generator=generator,
+            dtype=dtype,
+        )
+        reference_hidden = source.clone().requires_grad_()
+        packed_hidden = source.clone().requires_grad_()
+        specialized_hidden = source.clone().requires_grad_()
+        common = {
+            "execution_mask": torch.ones((1, 1), dtype=torch.bool),
+            "sequence_ids": (sequence_id,),
+            "token_positions": torch.tensor([[1]], dtype=torch.int64),
+            "lm_target_mask": torch.ones((1, 1), dtype=torch.bool),
+            "routing_stats_mask": torch.ones((1, 1), dtype=torch.bool),
+            "detach_at_end": False,
+            "record_trace": True,
+        }
+        reference = reference_model.prefill(
+            reference_hidden, state=reference_state, **common
+        )
+        packed = PackedSettleGraph(packed_model).prefill(
+            packed_hidden, state=packed_state, **common
+        )
+        specialized = SpecializedExecutor(
+            specialized_model, HB_LINE_V1
+        ).prefill(
+            specialized_hidden, state=specialized_state, **common
+        )
+        _compare(reference, packed, dtype=dtype, path="hb-initial.packed")
+        _compare(
+            reference,
+            specialized,
+            dtype=dtype,
+            path="hb-initial.specialized",
+        )
+        _compare(
+            packed,
+            specialized,
+            dtype=dtype,
+            path="hb-initial.packed-specialized",
+        )
+
+        reference_gradients = _autograd_record_with_initial_state(
+            _backward_objective(case, reference, reference_hidden),
+            reference_model,
+            reference_hidden,
+            reference_leaves,
+        )
+        packed_gradients = _autograd_record_with_initial_state(
+            _backward_objective(case, packed, packed_hidden),
+            packed_model,
+            packed_hidden,
+            packed_leaves,
+        )
+        specialized_gradients = _autograd_record_with_initial_state(
+            _backward_objective(case, specialized, specialized_hidden),
+            specialized_model,
+            specialized_hidden,
+            specialized_leaves,
+        )
+        _compare(
+            reference_gradients,
+            packed_gradients,
+            dtype=dtype,
+            path="hb-initial-vjp.packed",
+        )
+        _compare(
+            reference_gradients,
+            specialized_gradients,
+            dtype=dtype,
+            path="hb-initial-vjp.specialized",
+        )
+        _compare(
+            packed_gradients,
+            specialized_gradients,
+            dtype=dtype,
+            path="hb-initial-vjp.packed-specialized",
+        )
+        for implementation, record in (
+            ("eager", reference_gradients),
+            ("packed", packed_gradients),
+            (HB_LINE_V1, specialized_gradients),
+        ):
+            initial_gradients = record["initial_state"]
+            assert isinstance(initial_gradients, Mapping)
+            self.assertEqual(tuple(initial_gradients), leaf_names)
+            for name, gradient in initial_gradients.items():
+                with self.subTest(implementation=implementation, state=name):
+                    self.assertIsNotNone(gradient)
+                    assert isinstance(gradient, Tensor)
+                    self.assertTrue(bool(torch.isfinite(gradient).all().item()))
 
 
 class CandidateLifecycleEquivalenceTests(unittest.TestCase):

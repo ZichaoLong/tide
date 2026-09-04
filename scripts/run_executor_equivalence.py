@@ -79,22 +79,54 @@ _REQUIRED_TEST_MODULES = (
 )
 _EXPECTED_MODULE_TEST_COUNTS = {
     "test_core_v1_candidate_corpus.py": 4,
-    "test_core_v1_executor_equivalence.py": 10,
-    "test_packed.py": 17,
-    "test_specialized.py": 14,
+    "test_core_v1_executor_equivalence.py": 14,
+    "test_packed.py": 25,
+    "test_specialized.py": 17,
 }
 _REQUIRED_SEMANTIC_TEST_IDS = frozenset(
     {
+        "test_core_v1_executor_equivalence.ExecutorContractParityTests."
+        "test_all_executor_bindings_require_exact_boolean_detach_at_end",
         "test_core_v1_executor_equivalence.CandidateForwardEquivalenceTests."
         "test_all_packed_cases_match_full_chunked_and_decode_execution",
         "test_core_v1_executor_equivalence.CandidateForwardEquivalenceTests."
         "test_all_specialized_supported_cases_match_both_cpu_dtypes",
+        "test_core_v1_executor_equivalence.CandidateForwardEquivalenceTests."
+        "test_all_specialized_cases_match_live_public_result_metadata",
         "test_core_v1_executor_equivalence.CandidateVJPEquivalenceTests."
         "test_all_64_marked_packed_vjp_cases_match_values_and_none",
         "test_core_v1_executor_equivalence.CandidateVJPEquivalenceTests."
         "test_every_statically_accepted_specialization_matches_vjp_and_none",
+        "test_core_v1_executor_equivalence.CandidateVJPEquivalenceTests."
+        "test_hb_external_differentiable_initial_state_matches_three_way",
+        "test_core_v1_executor_equivalence.CandidateVJPEquivalenceTests."
+        "test_prefill_and_decode_default_detach_match_no_detach_three_way",
         "test_core_v1_executor_equivalence.CandidateLifecycleEquivalenceTests."
         "test_representative_packed_and_specialized_lifecycle_scenarios",
+        "test_packed.PackedForwardTraceTests."
+        "test_trace_linked_occurrences_keep_event_local_autograd_provenance",
+        "test_packed.PackedForwardTraceTests."
+        "test_independent_chain_aggregate_occurrences_and_output_provenance",
+        "test_packed.PackedForwardTraceTests."
+        "test_frozen_active_formula_lane_does_not_inherit_trainable_lane_graph",
+        "test_packed.PackedForwardTraceTests."
+        "test_same_node_occurrences_keep_sequence_local_state_provenance",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_empty_initial_state_trace_metadata_matches_before_first_observe",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_unobserved_detached_input_state_is_carried_without_graph_pollution",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_cross_chunk_trace_state_roots_retain_event_local_vjps",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_differentiable_initial_state_and_cross_chunk_objectives_match",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_supported_vjp_cases_match_values_and_none_connectivity",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_prefill_default_detaches_cross_chunk_graph_and_false_retains_it",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_chunk_detach_cuts_only_the_cross_chunk_state_gradient",
+        "test_packed.PackedChunkDecodeAndGradientTests."
+        "test_decode_default_detaches_and_explicit_false_preserves_state_graph",
         "test_packed.PackedChunkDecodeAndGradientTests."
         "test_each_node_event_logit_vjp_matches_none_connectivity",
         "test_packed.PackedForwardTraceTests."
@@ -103,6 +135,14 @@ _REQUIRED_SEMANTIC_TEST_IDS = frozenset(
         "test_upstream_node_compute_preserves_downstream_fp32_tie_route",
         "test_specialized.SpecializedEquivalenceTests."
         "test_single_layer_mlp_fp32_prefill_preserves_eager_boundary_route",
+        "test_specialized.SpecializedEquivalenceTests."
+        "test_decode_default_detaches_and_explicit_false_keeps_cross_call_vjp",
+        "test_specialized.SpecializedEquivalenceTests."
+        "test_prefill_preflight_failures_match_stable_envelopes",
+        "test_specialized.SpecializedEquivalenceTests."
+        "test_invalid_state_shape_and_owner_alias_match_stable_envelopes",
+        "test_specialized.SpecializedEquivalenceTests."
+        "test_late_empty_terminal_failure_preserves_entry_state",
     }
 )
 _CANDIDATE_IDENTITY_SHA256 = (
@@ -154,7 +194,7 @@ def _qualification_gaps() -> list[dict[str, str]]:
             "id": "negative-and-scenarios",
             "detail": (
                 "all 256 packed candidates and all 24 specialization-supported "
-                "cases cover full prefill, one deterministic two-chunk split, "
+                "cases cover full prefill, both nonempty T=3 two-chunk splits, "
                 "and token-by-token decode; absent are the frozen 104 negative "
                 "containers and the qualification-required complete short/long "
                 "chunk-partition, concurrency, rollback, and checkpoint/resume "
@@ -353,7 +393,8 @@ def _validate_execution_receipts(
     }
     expected_mode_calls = {
         "full-prefill": 1,
-        "two-chunk-prefill": 2,
+        # Both nonempty boundaries of the fixed T=3 fixture are executed.
+        "two-chunk-prefill": 4,
         "token-by-token-decode": 3,
     }
     for receipt in forward_rows:
@@ -382,6 +423,13 @@ def _validate_execution_receipts(
         )
         if receipt.get("trace_scope") != expected_trace_scope:
             errors.append("invalid trace scope for " + _receipt_key_text(key))
+        if mode == "two-chunk-prefill":
+            if receipt.get("splits") != [1, 2]:
+                errors.append(
+                    "invalid short chunk splits for " + _receipt_key_text(key)
+                )
+        elif "splits" in receipt:
+            errors.append("unexpected chunk splits for " + _receipt_key_text(key))
 
     missing_forward = sorted(expected_forward - actual_forward)
     extra_forward = sorted(actual_forward - expected_forward)
@@ -883,6 +931,11 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
             },
             "finite_required": True,
             "discrete_values": "exact",
+            "live_autograd_metadata": {
+                "requires_grad": "exact-by-public-tensor-occurrence",
+                "is_leaf": "not-compared",
+                "grad_fn": "not-compared",
+            },
         },
         "implementation_variants": list(_IMPLEMENTATION_VARIANTS),
         "equivalence_matrix": {

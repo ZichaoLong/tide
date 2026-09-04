@@ -479,6 +479,8 @@ exact 相等不能替代单边语义 invariant。每个成功 trace 还独立检
 
 同一 concrete execution binding 的输出 dtype 必须相同。跨 binding 比较时，每一侧必须符合自身声明的 dtype；device placement 由该进程的运行 manifest 和 profiler 证明，不能通过把 accelerator case 实际放到 CPU 后获得数值通过。
 
+在同一进程中比较仍绑定 autograd 图的 live 结果时，每个公开 Tensor occurrence 除结构、shape、dtype 和数值外，`requires_grad` 也要求 exact；这包括输出、发布状态、辅助统计和完整诊断 trace 中的 Tensor。检查以公开 occurrence 为单位，不得因 packed 实现把多个逻辑值放入同一聚合 Tensor，就让无关 lane 的可微性污染该字段。`is_leaf`、具体 `grad_fn` 类型和内部 autograd 节点不是可观测契约。序列化或跨进程 result artifact 不保存 live 图，因而用第 5 节的冻结 VJP 连通性记录验证，不伪造 `requires_grad` 元数据。
+
 ### 4.2 浮点量
 
 先在产生结果的 backend 上检查有限性，再复制到 CPU 并在 float64 中计算误差。任一待比较浮点值出现 NaN、正无穷或负无穷，case 立即失败，即使参考与候选在相同位置出现相同非有限值也不接受。
@@ -576,6 +578,8 @@ optimizer fixture 保存 optimizer 类型、全部超参数、参数组顺序和
 ## 6. Chunk、mask 与状态事务
 
 对长度 \(T\le6\) 的 deterministic fixture，测试枚举全部 \(T-1\) 个边界的切分子集；更长 fixture 至少覆盖单 chunk、逐 Token、奇偶交错长度和包含空尾部的四种切法。每种切法从同一初始状态开始，并比较逐 Token 输出、exact trace 中的语义事件、最终规范状态和下一位置。
+
+当前公开 prefill/decode 调用在 chunk 末端默认 detach 发布的可微状态；只有显式设置 `detach_at_end=False` 才保留跨调用反向边。Python binding 对该参数只接受精确的 `bool` 值，不把 `None`、整数或其他对象按 truthiness 强制转换为 detach/no-detach。fixture 必须记录是省略参数而使用默认值，还是显式选择 detach/no-detach。两个分支在相同 state carry 下的 forward 必须一致；跨边界目标的 VJP 则必须分别证明前者断路、后者连通。
 
 LM loss 跨 chunk 只合并负对数似然总和与 LM target 数。`BAL-AVAIL-SOFT` 按实现计划第 6.3 节合并每个 site-region 的 \(N,P_v,A_v,F_v,Q\)，完整窗口结束后才做除法、平方和 region reduction。测试同时比较这些原始统计、最终 loss 和 VJP；各 chunk mean 的平均不作为合法合并方式。
 
