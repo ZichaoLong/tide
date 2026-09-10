@@ -311,7 +311,7 @@ selector 不是发散点。固定边决定消息可能去往哪里，selector �
 
 ### 2.2 Receiver：状态与昂贵计算
 
-receiver 是图中唯一的拓扑计算节点。每个 receiver 持有自己的参数、可选私有状态和昂贵计算；SettleGraph 内部不同 receivers、selectors 和 sites 的参数与可变状态在逻辑上互不共享。拓扑只依赖本节规定的输入、状态和输出契约，不依赖状态模块内部采用 EMA、Gated DeltaNet、Attention 还是其他算法。
+receiver 是图中唯一的拓扑计算节点。每个 receiver 持有可选私有状态和昂贵计算。SettleGraph 中每份可变状态只属于一个 receiver 或 selector；各局部操作的参数默认独立，需要共享时由 Plan 显式声明哪些操作引用同一组逻辑参数。拓扑只依赖本节规定的输入、状态和输出契约，不依赖状态模块内部采用 EMA、Gated DeltaNet、Attention 还是其他算法。
 
 对 reached receiver \(v\)，先对入口 hidden 做本地归一化：
 
@@ -415,14 +415,14 @@ $$
 1\le K_{\mathcal R}\le |\mathcal R|.
 $$
 
-selector 只接收 candidates 各自在本地产生的轻量 \(r^{\mathrm{sel}}\)。候选 nodes 及其读出始终按稳定 node ID 排列。令 \(c^{\mathrm{ctx}}_{\mathcal R,t}\) 表示可选的固定、有界局部公共摘要；没有时取空。一次局部打分得到：
+selector 只接收 candidates 各自在本地产生的轻量 \(r^{\mathrm{sel}}\)。候选 nodes 及其读出始终按稳定 node ID 排列。令 \(\xi^-_{\mathcal R,t}\) 表示该 region 在选择前可读的显式 selector-history；它只作为 Score 的可选历史输入，缺省为 \(\varnothing\)。node-level 历史按稳定 node ID 排列。一次局部打分得到：
 
 $$
 (a_{v,t})_{v\in\mathcal C_{\mathcal R,t}}
 =\operatorname{Score}_{\mathcal R}
 \left(
-c^{\mathrm{ctx}}_{\mathcal R,t},
-(r^{\mathrm{sel}}_{v,t,\tau})_{v\in\mathcal C_{\mathcal R,t}}
+(r^{\mathrm{sel}}_{v,t,\tau})_{v\in\mathcal C_{\mathcal R,t}},
+\xi^-_{\mathcal R,t}
 \right),
 $$
 
@@ -455,7 +455,7 @@ forced-active receiver 使用 \(K_{\mathcal R}=1\) 的独立 singleton region。
 | **Pre-update state** | 当前输入与旧状态 \(s^-\) 的轻量读出 |
 | **Post-update state** | 当前输入产生的 proposal \(\widetilde s\) 的轻量读出 |
 
-Pre 与 post 不是包含关系：如果 \(\operatorname{Update}\) 会覆盖、压缩或遗忘旧状态，post readout 不一定能恢复 pre readout 的信息。\(c^{\mathrm{ctx}}\) 的信息时刻必须与 \(\tau\) 一致；content-only 只能使用当前内容，不能读取持久状态或历史激活。任何跨 region 公共摘要或控制输入都必须来自固定、有界的上游，并在图描述中声明依赖；selector 不读取未声明的全图信息。
+Pre 与 post 不是包含关系：如果 \(\operatorname{Update}\) 会覆盖、压缩或遗忘旧状态，post readout 不一定能恢复 pre readout 的信息。content-only 表示 receiver 读出只使用当前内容；显式 selector-history 是与这三种时序正交的状态坐标，可按第 6.4 节的方式影响分数。selector 不读取候选本地读出和显式 selector-history 之外的未声明信息。
 
 #### Observe 与状态提交
 
@@ -527,7 +527,7 @@ active receiver 的每条固定出边结算为 \(\operatorname{DATA}(\widehat g_
 1. receiver 图有限、无环、没有重复平行边，每个 receiver 位于某条入口—终端固定路径上；
 2. 每个 receiver 恰好属于一个 region，同一 region 内不存在 receiver-to-receiver 边；
 3. 将每个 region 收缩成一个点，并加入全部已声明的跨 region 控制依赖后，所得 region 依赖图仍然无环；
-4. hidden、状态、读出和参数的 shape/dtype 已确定，所有聚合、receiver、selector、profile 和发送规则均已完整定义；
+4. hidden、状态、读出和参数的 shape/dtype，以及参数身份和共享关系已确定，所有聚合、receiver、selector、profile 和发送规则均已完整定义；
 5. 固定 fan-in、fan-out、region 大小、入口/终端 receiver 数，以及单节点参数、状态和计算成本满足实验声明的上界。
 
 第三条保证 region 不会为了执行 selector 而相互等待。例如，只要存在 receiver 边 \(u\to v\)，就必须满足
@@ -539,7 +539,7 @@ $$
 
 其中 \(\mathcal R(v)\) 是 receiver \(v\) 所属 region，\(\lambda\) 是 region 依赖图的某个拓扑序。
 
-原始图描述经过这些静态校验和规范化后得到的静态记录称为 **Plan**，记为 \(\Pi\)。Plan 包含 receivers、固定边、regions、稳定 ID、各项运算、Tensor/状态契约和依赖顺序；它不包含某个 Token 的 reached、active 或边结算结果，也不是人工编写的动态执行步骤。
+原始图描述经过这些静态校验和规范化后得到的静态记录称为 **Plan**，记为 \(\Pi\)。Plan 包含 receivers、固定边、regions、稳定 ID、各项运算、参数身份与共享关系、Tensor/状态契约和依赖顺序；它不包含某个 Token 的 reached、active 或边结算结果，也不是人工编写的动态执行步骤。
 
 #### 一个解释器执行所有合法 Plan
 
@@ -605,7 +605,7 @@ $$
 
 ### 2.5 跨 Token 状态
 
-令 \(\mathrm{sid}\) 表示一条稳定序列的标识，\(t=0,1,\ldots\) 表示该序列中跨 chunk 不重置的 Token 位置。receiver 状态按 \((\mathrm{site},\mathrm{receiver},\mathrm{sid})\) 隔离；selector-history 若存在，则按其声明的 region 或 node owner 隔离。
+令 \(\mathrm{sid}\) 表示一条稳定序列的标识，\(t=0,1,\ldots\) 表示该序列中跨 chunk 不重置的 Token 位置。receiver 状态按 \((\mathrm{site},\mathrm{receiver},\mathrm{sid})\) 隔离；selector-history 若存在，则按其声明的 region 或 node owner 隔离。不同 owner 不共享同一份可变状态。
 
 对同一个状态键，Token 必须按 \(t\) 的因果顺序执行。Token \(t\) 开始时读取 \(s^-_{v,t}\)，按第 2.3 节完成 proposal、selection 和 commit；若还要写入本次 active、\(p\) 等历史统计，则在完整计算后写回，形成最终状态 \(s_{v,t}\)，并从下一个 Token 起可见。写入 active 或 \(p\) 的历史默认 stop-gradient：
 
@@ -652,7 +652,7 @@ $$
        一个 selector 在 R 个 candidates 中选择
 ~~~
 
-“单层”表示任一入口—终端路径只经过一个 receiver node，不表示图中只有一个 node，也不限制 receiver 内部只能有一个计算子层。公共 selector 摘要若存在，直接使用第 2.3 节的 \(c^{\mathrm{ctx}}\)；它是可选配置，不属于该拓扑的必要组成。
+“单层”表示任一入口—终端路径只经过一个 receiver node，不表示图中只有一个 node，也不限制 receiver 内部只能有一个计算子层。
 
 ### 3.2 一个 Token 的完整结算
 
@@ -752,7 +752,7 @@ $$
 3. 图边界固定为 \(V_{\mathrm{in}}=L_0\)、\(V_{\mathrm{out}}=L_D\)。
 4. Line \(L_d\) 只有在同一 Token 的 \(L_0,\ldots,L_{d-1}\) 全部结算后才开始；同一 Line 内相互独立的 regions 可以并行结算。
 
-selector 的公共上下文若存在，只能来自固定常量或更浅 Line 已结算的有界读出，并作为控制依赖写入 Plan。跨多个 Lines 的消息在产生后缓存，到目标 Line 开始时再参与该 receiver 唯一一次输入聚合。
+跨多个 Lines 的消息在产生后缓存，到目标 Line 开始时再参与该 receiver 唯一一次输入聚合。
 
 边 \((u,v)\) 的逻辑延迟定义为
 
@@ -849,7 +849,7 @@ L5:  0, 1
 L6:  root
 ~~~
 
-相同坐标出现在不同 Line 时仍表示不同 receiver，参数和状态也各自独立。tree、平台和 mirror 边的合计 fan-in/fan-out 必须保持为与宽度和平台长度无关的固定上界。
+相同坐标出现在不同 Line 时仍表示不同 receiver。tree、平台和 mirror 边的合计 fan-in/fan-out 必须保持为与宽度和平台长度无关的固定上界。
 
 #### 4.5.2 统一空间图平台
 
@@ -1255,8 +1255,9 @@ CPT-MOE-TOP2-GATE-E8
 - 每个 receiver 的固定 parents/children、最大 fan-in/fan-out、region 大小和 forced-active 设置；
 - 规范 region 依赖顺序，以及逐 Token 至少产生一个 active 终端消息的保证；
 - 每个 receiver 输入和图输出的 Aggregate 公式；
-- 每个 region 的固定 \(K_{\mathcal R}\)；对普通竞争 region，记录 Score、\(c^{\mathrm{ctx}}\)、候选排列和 Top-K 规则；
+- 每个 region 的固定 \(K_{\mathcal R}\)；对普通竞争 region，记录 Score、候选排列和 Top-K 规则；
 - 每个 receiver 的 Update、两类 Read、NodeCompute 和 Emit 公式；
+- 各项局部操作的参数身份和显式共享关系；
 - 规范化展开 Plan、Plan hash，以及生成它的 Builder 名称、版本和配置。
 
 HB-Lattice 还要记录每个 Line 的 nodes、regions、phase 和 barrier，以及每条边的 tree、local、shortcut 或 mirror 来源标签。

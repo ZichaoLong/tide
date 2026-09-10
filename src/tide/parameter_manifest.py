@@ -19,12 +19,20 @@ from torch import nn
 
 from .engine import SettleGraph
 from .ops import safe_module_key
-from .plan import Plan, validate_stable_id
+from .plan import (
+    OperationParameterSlot,
+    Plan,
+    operation_parameter_slots,
+    validate_stable_id,
+)
 
 
 PARAMETER_SCHEMA_VERSION = "tide.parameter-schema.v1"
 PARAMETER_SCHEMA_CANONICALIZER_ID = "tide-parameter-schema-json-v1"
 EAGER_PARAMETER_BINDING_VERSION = "tide.eager-parameter-binding.v1"
+PARAMETER_SCHEMA_VERSION_V2 = "tide.parameter-schema.v2"
+PARAMETER_SCHEMA_CANONICALIZER_ID_V2 = "tide-parameter-schema-json-v2"
+EAGER_PARAMETER_BINDING_VERSION_V2 = "tide.eager-parameter-binding.v2"
 EAGER_EXECUTOR_ID = "tide.settlegraph.eager-reference.v1"
 
 
@@ -58,7 +66,7 @@ def _checked_id(value: object, *, kind: str) -> str:
 
 @dataclass(frozen=True)
 class LogicalParameterKey:
-    """Implementation-independent identity of one formula parameter.
+    """Implementation-independent key for one formula-parameter use-site.
 
     Receiver-local fields carry both their stable region and node IDs.  Edge
     Aggregate parameters additionally carry the fixed edge ID, Score
@@ -159,9 +167,29 @@ def logical_parameter_tensor_key(logical_key: Mapping[str, Any]) -> str:
     )
 
 
+def _operation_use_key(
+    logical_key: LogicalParameterKey,
+) -> Tuple[str, str, str]:
+    if logical_key.field == "score":
+        assert logical_key.region_id is not None
+        return ("region", logical_key.region_id, "score")
+    if logical_key.field == "output_aggregate":
+        return ("graph", "graph", "output_aggregate")
+    assert logical_key.node_id is not None
+    return ("node", logical_key.node_id, logical_key.field)
+
+
+def _entry_tensor_key(
+    entry: "ParameterManifestEntry", schema_version: str
+) -> str:
+    if schema_version == PARAMETER_SCHEMA_VERSION:
+        return logical_parameter_tensor_key(entry.logical_key.canonical_dict())
+    return entry.parameter_identity_key()
+
+
 @dataclass(frozen=True)
 class ParameterManifestEntry:
-    """One logical parameter plus its eager-reference load locator."""
+    """One operation-local parameter use plus its eager-reference locator."""
 
     logical_key: LogicalParameterKey
     formula_id: str
@@ -171,6 +199,7 @@ class ParameterManifestEntry:
     state_dict_locator: str
     state_dict_shape: Optional[Tuple[int, ...]] = None
     logical_to_state_dict: str = "identity"
+    parameter_slot: Optional[str] = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.logical_key, LogicalParameterKey):
@@ -186,6 +215,9 @@ class ParameterManifestEntry:
             )
         if self.parameter_group is not None:
             _checked_id(self.parameter_group, kind="parameter group")
+        if self.parameter_slot is not None:
+            _checked_id(self.parameter_slot, kind="parameter slot")
+        if (self.parameter_group is None) != (self.parameter_slot is None):
             raise ParameterManifestError(
                 "parameter groups are not closed in parameter schema v1"
             )
@@ -235,6 +267,40 @@ class ParameterManifestEntry:
             "logical_to_state_dict": self.logical_to_state_dict,
         }
 
+    def parameter_identity_dict(self) -> Dict[str, Any]:
+        """Return the schema-v2 identity of the Tensor used at this site."""
+
+        if self.parameter_group is None:
+            return {
+                "kind": "use",
+                "logical_key": self.logical_key.canonical_dict(),
+            }
+        return {
+            "kind": "set",
+            "parameter_set_id": self.parameter_group,
+            "parameter_slot": self.parameter_slot,
+        }
+
+    def parameter_identity_key(self) -> str:
+        return "tide.logical-parameter.v2:" + json.dumps(
+            self.parameter_identity_dict(),
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+
+    def use_schema_dict_v2(self) -> Dict[str, Any]:
+        return {
+            "logical_key": self.logical_key.canonical_dict(),
+            "formula_id": self.formula_id,
+            "shape": list(self.shape),
+            "dtype_role": self.dtype_role,
+            "parameter_id": self.parameter_identity_key(),
+            "parameter_set_id": self.parameter_group,
+            "parameter_slot": self.parameter_slot,
+        }
+
 
 def _normalize_parameter_shape(
     shape: object, *, context: str
@@ -279,15 +345,28 @@ class ParameterSchemaManifest:
     binding_schema_version: str = EAGER_PARAMETER_BINDING_VERSION
 
     def __post_init__(self) -> None:
-        if self.schema_version != PARAMETER_SCHEMA_VERSION:
+        supported_versions = {
+            PARAMETER_SCHEMA_VERSION: (
+                PARAMETER_SCHEMA_CANONICALIZER_ID,
+                EAGER_PARAMETER_BINDING_VERSION,
+            ),
+            PARAMETER_SCHEMA_VERSION_V2: (
+                PARAMETER_SCHEMA_CANONICALIZER_ID_V2,
+                EAGER_PARAMETER_BINDING_VERSION_V2,
+            ),
+        }
+        if self.schema_version not in supported_versions:
             raise ParameterManifestError(
                 f"unsupported parameter schema version {self.schema_version!r}"
             )
-        if self.canonicalizer_id != PARAMETER_SCHEMA_CANONICALIZER_ID:
+        expected_canonicalizer, expected_binding = supported_versions[
+            self.schema_version
+        ]
+        if self.canonicalizer_id != expected_canonicalizer:
             raise ParameterManifestError(
                 f"unsupported parameter canonicalizer {self.canonicalizer_id!r}"
             )
-        if self.binding_schema_version != EAGER_PARAMETER_BINDING_VERSION:
+        if self.binding_schema_version != expected_binding:
             raise ParameterManifestError(
                 "unsupported eager parameter binding schema "
                 f"{self.binding_schema_version!r}"
@@ -321,11 +400,96 @@ class ParameterSchemaManifest:
         locators = [entry.state_dict_locator for entry in ordered]
         if len(locators) != len(set(locators)):
             raise ParameterManifestError("state_dict locators must be unique")
+        if self.schema_version == PARAMETER_SCHEMA_VERSION:
+            if any(
+                entry.parameter_group is not None
+                or entry.parameter_slot is not None
+                for entry in ordered
+            ):
+                raise ParameterManifestError(
+                    "parameter groups are not closed in parameter schema v1"
+                )
+        else:
+            self._validate_v2_parameter_identities(ordered)
         object.__setattr__(self, "entries", ordered)
+
+    @staticmethod
+    def _validate_v2_parameter_identities(
+        entries: Sequence[ParameterManifestEntry],
+    ) -> None:
+        contracts: Dict[str, Tuple[str, Tuple[int, ...], str]] = {}
+        uses_by_set: Dict[
+            str,
+            Dict[Tuple[str, str, str], Dict[str, Tuple[str, Tuple[int, ...], str]]],
+        ] = {}
+        for entry in entries:
+            identity = entry.parameter_identity_key()
+            contract = (entry.formula_id, entry.shape, entry.dtype_role)
+            previous = contracts.get(identity)
+            if previous is not None and previous != contract:
+                raise ParameterManifestError(
+                    f"logical parameter {identity!r} has incompatible contracts"
+                )
+            contracts[identity] = contract
+            if entry.parameter_group is None:
+                continue
+            assert entry.parameter_slot is not None
+            use = _operation_use_key(entry.logical_key)
+            slots = uses_by_set.setdefault(entry.parameter_group, {}).setdefault(
+                use, {}
+            )
+            if entry.parameter_slot in slots:
+                raise ParameterManifestError(
+                    f"parameter set {entry.parameter_group!r} repeats slot "
+                    f"{entry.parameter_slot!r} at operation use {use!r}"
+                )
+            slots[entry.parameter_slot] = contract
+
+        for parameter_set_id, uses in uses_by_set.items():
+            expected: Optional[Dict[str, Tuple[str, Tuple[int, ...], str]]] = None
+            expected_use: Optional[Tuple[str, str, str]] = None
+            for use, slots in sorted(uses.items()):
+                if expected is None:
+                    expected = slots
+                    expected_use = use
+                elif slots != expected:
+                    raise ParameterManifestError(
+                        f"parameter set {parameter_set_id!r} has incompatible "
+                        f"operation slots at {expected_use!r} and {use!r}"
+                    )
 
     def canonical_dict(self) -> Dict[str, Any]:
         """Return the implementation-independent canonical schema record."""
 
+        if self.schema_version == PARAMETER_SCHEMA_VERSION_V2:
+            parameters: Dict[str, Dict[str, Any]] = {}
+            uses = []
+            for entry in self.entries:
+                parameter_id = entry.parameter_identity_key()
+                uses.append(
+                    {
+                        "logical_key": entry.logical_key.canonical_dict(),
+                        "parameter_id": parameter_id,
+                        "parameter_set_id": entry.parameter_group,
+                        "parameter_slot": entry.parameter_slot,
+                    }
+                )
+                parameters.setdefault(
+                    parameter_id,
+                    {
+                        "parameter_id": parameter_id,
+                        "formula_id": entry.formula_id,
+                        "shape": list(entry.shape),
+                        "dtype_role": entry.dtype_role,
+                    },
+                )
+            return {
+                "schema_version": self.schema_version,
+                "canonicalizer_id": self.canonicalizer_id,
+                "logical_plan_hash": self.logical_plan_hash,
+                "parameter_uses": uses,
+                "parameters": [parameters[key] for key in sorted(parameters)],
+            }
         return {
             "schema_version": self.schema_version,
             "canonicalizer_id": self.canonicalizer_id,
@@ -375,16 +539,27 @@ class ParameterSchemaManifest:
                 "manifest logical Plan hash does not match the model"
             )
 
-        derived_entries = tuple(
-            _receiver_entries(model.plan)
-            + _selector_entries(model.plan)
-            + _output_entries(model.plan)
+        derived_manifest = build_parameter_schema_manifest(model.plan)
+        if (
+            self.schema_version != derived_manifest.schema_version
+            or self.canonicalizer_id != derived_manifest.canonicalizer_id
+            or self.binding_schema_version
+            != derived_manifest.binding_schema_version
+        ):
+            raise ParameterManifestError(
+                "manifest version does not match the Plan schema version"
+            )
+        derived_entries = derived_manifest.entries
+        schema_record = (
+            (lambda entry: entry.use_schema_dict_v2())
+            if self.schema_version == PARAMETER_SCHEMA_VERSION_V2
+            else (lambda entry: entry.logical_dict())
         )
         derived_schema = {
-            entry.logical_key: entry.logical_dict() for entry in derived_entries
+            entry.logical_key: schema_record(entry) for entry in derived_entries
         }
         declared_schema = {
-            entry.logical_key: entry.logical_dict() for entry in self.entries
+            entry.logical_key: schema_record(entry) for entry in self.entries
         }
         if declared_schema != derived_schema:
             raise ParameterManifestError(
@@ -409,31 +584,55 @@ class ParameterSchemaManifest:
             )
 
         named_with_duplicates = list(model.named_parameters(remove_duplicate=False))
-        parameter_ids: Dict[int, str] = {}
-        aliases: List[Tuple[str, str]] = []
+        entry_by_locator = {
+            entry.state_dict_locator: entry for entry in self.entries
+        }
+        identity_by_object: Dict[int, Tuple[str, str]] = {}
+        object_by_identity: Dict[str, Tuple[int, str]] = {}
         for locator, parameter in named_with_duplicates:
-            previous = parameter_ids.get(id(parameter))
-            if previous is not None:
-                aliases.append((previous, locator))
-            else:
-                parameter_ids[id(parameter)] = locator
-        if aliases:
-            details = ", ".join(f"{left!r}/{right!r}" for left, right in aliases)
-            raise ParameterManifestError(
-                "parameter aliases require a closed parameter_group schema: " + details
-            )
+            entry = entry_by_locator.get(locator)
+            if entry is None:
+                continue
+            logical_identity = _entry_tensor_key(entry, self.schema_version)
+            previous_identity = identity_by_object.get(id(parameter))
+            if (
+                previous_identity is not None
+                and previous_identity[0] != logical_identity
+            ):
+                raise ParameterManifestError(
+                    "parameter aliases are not declared by one parameter set: "
+                    f"{previous_identity[1]!r}/{locator!r}"
+                )
+            identity_by_object[id(parameter)] = (logical_identity, locator)
+            previous_object = object_by_identity.get(logical_identity)
+            if previous_object is not None and previous_object[0] != id(parameter):
+                raise ParameterManifestError(
+                    f"logical parameter {logical_identity!r} is bound to distinct "
+                    f"Parameters at {previous_object[1]!r}/{locator!r}"
+                )
+            object_by_identity[logical_identity] = (id(parameter), locator)
 
-        storage_owners: Dict[Tuple[str, Optional[int], str, int], str] = {}
-        storage_ranges: List[Tuple[str, Optional[int], int, int, str]] = []
+        storage_owners: Dict[
+            Tuple[str, Optional[int], str, int], Tuple[str, int, str]
+        ] = {}
+        storage_ranges: List[
+            Tuple[str, Optional[int], int, int, str, int, str]
+        ] = []
         for locator, parameter in named_with_duplicates:
+            entry = entry_by_locator.get(locator)
+            if entry is None:
+                continue
+            logical_identity = _entry_tensor_key(entry, self.schema_version)
             storage_id, storage_range = _parameter_storage_descriptor(
                 parameter, locator=locator
             )
             previous = storage_owners.get(storage_id)
-            if previous is not None and previous != locator:
+            if previous is not None and (
+                previous[0] != logical_identity or previous[1] != id(parameter)
+            ):
                 raise ParameterManifestError(
-                    "parameter backing-storage aliases require a closed "
-                    f"parameter_group schema: {previous!r}/{locator!r}"
+                    "parameter backing-storage aliases are not one declared "
+                    f"Parameter: {previous[2]!r}/{locator!r}"
                 )
             if storage_range is not None:
                 device_type, device_index, start, end = storage_range
@@ -442,24 +641,41 @@ class ParameterSchemaManifest:
                     other_index,
                     other_start,
                     other_end,
+                    other_identity,
+                    other_object,
                     other_locator,
                 ) in storage_ranges:
                     if (
-                        other_locator != locator
-                        and other_type == device_type
+                        other_type == device_type
                         and other_index == device_index
                         and start < other_end
                         and other_start < end
+                        and (
+                            other_identity != logical_identity
+                            or other_object != id(parameter)
+                        )
                     ):
                         raise ParameterManifestError(
-                            "parameter backing-storage aliases require a closed "
-                            "parameter_group schema: "
+                            "parameter backing-storage aliases are not one "
+                            "declared Parameter: "
                             f"{other_locator!r}/{locator!r}"
                         )
                 storage_ranges.append(
-                    (device_type, device_index, start, end, locator)
+                    (
+                        device_type,
+                        device_index,
+                        start,
+                        end,
+                        logical_identity,
+                        id(parameter),
+                        locator,
+                    )
                 )
-            storage_owners[storage_id] = locator
+            storage_owners[storage_id] = (
+                logical_identity,
+                id(parameter),
+                locator,
+            )
 
         named = dict(named_with_duplicates)
         expected_locators = {entry.state_dict_locator for entry in self.entries}
@@ -631,179 +847,208 @@ def _expected_parameter_dtype(model: SettleGraph) -> Optional[torch.dtype]:
     return dtype
 
 
-def _formula_id(config: Mapping[str, Any], *, field: str) -> str:
-    formula_id = config.get("formula_id")
-    if not isinstance(formula_id, str) or not formula_id:
-        raise ParameterManifestError(
-            f"{field} does not declare a nonempty formula_id"
-        )
-    return formula_id
-
-
 def _entry(
     entries: List[ParameterManifestEntry],
     *,
     field: str,
-    role: str,
-    formula_id: str,
-    shape: Sequence[int],
+    contract: OperationParameterSlot,
     locator: str,
     node_id: Optional[str] = None,
     region_id: Optional[str] = None,
     edge_id: Optional[str] = None,
     terminal_node_id: Optional[str] = None,
     state_dict_shape: Optional[Sequence[int]] = None,
+    parameter_set_id: Optional[str] = None,
+    parameter_slot: Optional[str] = None,
 ) -> None:
-    logical_shape = tuple(shape)
+    logical_shape = contract.shape
     eager_shape = logical_shape if state_dict_shape is None else tuple(state_dict_shape)
     entries.append(
         ParameterManifestEntry(
             logical_key=LogicalParameterKey(
                 field=field,
-                parameter_role=role,
+                parameter_role=contract.parameter_role,
                 node_id=node_id,
                 region_id=region_id,
                 edge_id=edge_id,
                 terminal_node_id=terminal_node_id,
             ),
-            formula_id=formula_id,
+            formula_id=contract.formula_id,
             shape=logical_shape,
-            dtype_role="parameter",
-            parameter_group=None,
+            dtype_role=contract.dtype_role,
+            parameter_group=parameter_set_id,
             state_dict_locator=locator,
             state_dict_shape=eager_shape,
             logical_to_state_dict=(
                 "identity" if logical_shape == eager_shape else "reshape-row-major"
             ),
+            parameter_slot=parameter_slot,
         )
     )
 
 
+def _operation_slot_map(
+    plan: Plan,
+    use: Tuple[str, str, str],
+) -> Mapping[str, OperationParameterSlot]:
+    slots = operation_parameter_slots(plan, *use)
+    mapped = {slot.parameter_slot: slot for slot in slots}
+    if len(mapped) != len(slots):  # pragma: no cover - module invariant
+        raise ParameterManifestError(
+            f"operation use {use!r} repeats a canonical parameter slot"
+        )
+    return mapped
+
+
+def _required_operation_slot(
+    contracts: Mapping[str, OperationParameterSlot],
+    use: Tuple[str, str, str],
+    slot: str,
+) -> OperationParameterSlot:
+    try:
+        return contracts[slot]
+    except KeyError as exc:  # pragma: no cover - executor/schema invariant
+        raise ParameterManifestError(
+            f"eager binding for operation use {use!r} has no canonical "
+            f"parameter slot {slot!r}"
+        ) from exc
+
+
+def _parameter_binding_map(
+    plan: Plan,
+) -> Dict[Tuple[str, str, str], str]:
+    if plan.schema_version != "2":
+        return {}
+    return {
+        (binding.owner_kind, binding.owner_id, binding.operation):
+        binding.parameter_set_id
+        for binding in plan.parameter_bindings
+    }
+
+
+def _bound_parameter_kwargs(
+    bindings: Mapping[Tuple[str, str, str], str],
+    use: Tuple[str, str, str],
+    slot: str,
+) -> Dict[str, Optional[str]]:
+    parameter_set_id = bindings.get(use)
+    return {
+        "parameter_set_id": parameter_set_id,
+        "parameter_slot": slot if parameter_set_id is not None else None,
+    }
+
+
 def _receiver_entries(plan: Plan) -> List[ParameterManifestEntry]:
     entries: List[ParameterManifestEntry] = []
-    d_model = plan.d_model
     incoming = {
         node.node_id: tuple(
             edge for edge in plan.edges if edge.target == node.node_id
         )
         for node in plan.nodes
     }
+    bindings = _parameter_binding_map(plan)
     for node in plan.nodes:
-        if node.parameter_group is not None:
-            raise ParameterManifestError(
-                f"node {node.node_id!r} requests parameter_group "
-                f"{node.parameter_group!r}; shared parameter schema is not closed"
-            )
         node_key = safe_module_key(node.node_id)
         prefix = f"receivers.{node_key}"
         owner = {"node_id": node.node_id, "region_id": node.region_id}
+        contracts_by_operation: Dict[
+            str, Mapping[str, OperationParameterSlot]
+        ] = {}
+
+        def add_node_parameter(
+            field: str,
+            slot: str,
+            locator: str,
+            *,
+            edge_id: Optional[str] = None,
+            state_dict_shape: Optional[Sequence[int]] = None,
+        ) -> None:
+            use = ("node", node.node_id, field)
+            contracts = contracts_by_operation.get(field)
+            if contracts is None:
+                contracts = _operation_slot_map(plan, use)
+                contracts_by_operation[field] = contracts
+            _entry(
+                entries,
+                field=field,
+                contract=_required_operation_slot(contracts, use, slot),
+                locator=locator,
+                edge_id=edge_id,
+                state_dict_shape=state_dict_shape,
+                **_bound_parameter_kwargs(bindings, use, slot),
+                **owner,
+            )
 
         for field, suffix in (
             ("input_norm", "input_norm.weight"),
             ("ffn_norm", "ffn_norm.weight"),
         ):
-            _entry(
-                entries,
-                field=field,
-                role="w",
-                formula_id=_formula_id(getattr(node, field), field=field),
-                shape=(d_model,),
-                locator=f"{prefix}.{suffix}",
-                **owner,
-            )
+            add_node_parameter(field, "w", f"{prefix}.{suffix}")
 
         aggregate_type = node.aggregate["type"]
-        aggregate_formula = _formula_id(node.aggregate, field="aggregate")
-        for edge in incoming[node.node_id]:
+        for edge_ordinal, edge in enumerate(incoming[node.node_id]):
             edge_key = safe_module_key(edge.edge_id)
             if aggregate_type == "edge_softmax":
-                _entry(
-                    entries,
-                    field="aggregate",
-                    role="eta",
-                    formula_id=aggregate_formula,
-                    shape=(),
-                    locator=f"{prefix}.edge_scores.{edge_key}",
+                add_node_parameter(
+                    "aggregate",
+                    f"edge.{edge_ordinal}.eta",
+                    f"{prefix}.edge_scores.{edge_key}",
                     edge_id=edge.edge_id,
-                    **owner,
                 )
             elif aggregate_type == "edge_linear_mean":
-                for role, suffix, shape in (
-                    ("W", "weight", (d_model, d_model)),
-                    ("b", "bias", (d_model,)),
+                for role, suffix in (
+                    ("W", "weight"),
+                    ("b", "bias"),
                 ):
-                    _entry(
-                        entries,
-                        field="aggregate",
-                        role=role,
-                        formula_id=aggregate_formula,
-                        shape=shape,
-                        locator=f"{prefix}.edge_transforms.{edge_key}.{suffix}",
+                    add_node_parameter(
+                        "aggregate",
+                        f"edge.{edge_ordinal}.{role}",
+                        f"{prefix}.edge_transforms.{edge_key}.{suffix}",
                         edge_id=edge.edge_id,
-                        **owner,
                     )
 
         update_type = node.update["type"]
-        update_formula = _formula_id(node.update, field="update")
         if update_type == "ema":
-            state_dim = int(node.update["state_dim"])
-            for role, suffix, shape in (
-                ("W_obs", "ema_observe.weight", (state_dim, d_model)),
-                ("b_obs", "ema_observe.bias", (state_dim,)),
+            for role, suffix in (
+                ("W_obs", "ema_observe.weight"),
+                ("b_obs", "ema_observe.bias"),
             ):
-                _entry(
-                    entries,
-                    field="update",
-                    role=role,
-                    formula_id=update_formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    **owner,
-                )
+                add_node_parameter("update", role, f"{prefix}.{suffix}")
         elif update_type == "gdn":
-            key_dim = int(node.update["key_dim"])
-            value_dim = int(node.update["value_dim"])
-            for role, suffix, shape in (
-                ("W_k", "gdn_key.weight", (key_dim, d_model)),
-                ("W_nu", "gdn_value.weight", (value_dim, d_model)),
-                ("w_eta", "gdn_eta.weight", (d_model,)),
-                ("b_eta", "gdn_eta.bias", ()),
-                ("w_gamma", "gdn_gamma.weight", (d_model,)),
-                ("b_gamma", "gdn_gamma.bias", ()),
-                ("beta", "gdn_beta", ()),
+            for role, suffix in (
+                ("W_k", "gdn_key.weight"),
+                ("W_nu", "gdn_value.weight"),
+                ("w_eta", "gdn_eta.weight"),
+                ("b_eta", "gdn_eta.bias"),
+                ("w_gamma", "gdn_gamma.weight"),
+                ("b_gamma", "gdn_gamma.bias"),
+                ("beta", "gdn_beta"),
             ):
-                _entry(
-                    entries,
-                    field="update",
-                    role=role,
-                    formula_id=update_formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    state_dict_shape=(
-                        (1, d_model)
-                        if role in {"w_eta", "w_gamma"}
-                        else (1,)
-                        if role in {"b_eta", "b_gamma"}
-                        else shape
-                    ),
-                    **owner,
+                use = ("node", node.node_id, "update")
+                contracts = contracts_by_operation.get("update")
+                if contracts is None:
+                    contracts = _operation_slot_map(plan, use)
+                    contracts_by_operation["update"] = contracts
+                contract = _required_operation_slot(contracts, use, role)
+                state_dict_shape = (
+                    (1, contract.shape[0])
+                    if role in {"w_eta", "w_gamma"}
+                    else (1,)
+                    if role in {"b_eta", "b_gamma"}
+                    else contract.shape
+                )
+                add_node_parameter(
+                    "update",
+                    role,
+                    f"{prefix}.{suffix}",
+                    state_dict_shape=state_dict_shape,
                 )
         elif update_type == "attention_window":
-            key_dim = int(node.update["key_dim"])
-            value_dim = int(node.update["value_dim"])
-            for role, suffix, shape in (
-                ("W_k", "attn_key.weight", (key_dim, d_model)),
-                ("W_nu", "attn_value.weight", (value_dim, d_model)),
+            for role, suffix in (
+                ("W_k", "attn_key.weight"),
+                ("W_nu", "attn_value.weight"),
             ):
-                _entry(
-                    entries,
-                    field="update",
-                    role=role,
-                    formula_id=update_formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    **owner,
-                )
+                add_node_parameter("update", role, f"{prefix}.{suffix}")
 
         read_type = node.selector_read["type"]
         if read_type in {
@@ -811,150 +1056,120 @@ def _receiver_entries(plan: Plan) -> List[ParameterManifestEntry]:
             "content_state_linear",
             "content_state_summary_linear",
         }:
-            read_dim = int(node.selector_read["out_dim"])
-            if read_type == "content_linear":
-                input_dim = d_model
-            elif read_type == "content_state_linear":
-                input_dim = d_model + math.prod(node.state_shape)
-            else:
-                input_dim = d_model + 1
-            formula = _formula_id(node.selector_read, field="selector_read")
-            for role, suffix, shape in (
-                ("W_sel", "selector_read_linear.weight", (read_dim, input_dim)),
-                ("b_sel", "selector_read_linear.bias", (read_dim,)),
+            for role, suffix in (
+                ("W_sel", "selector_read_linear.weight"),
+                ("b_sel", "selector_read_linear.bias"),
             ):
-                _entry(
-                    entries,
-                    field="selector_read",
-                    role=role,
-                    formula_id=formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    **owner,
+                add_node_parameter(
+                    "selector_read", role, f"{prefix}.{suffix}"
                 )
 
         ffn_type = node.ffn_read["type"]
         if ffn_type == "state_default":
-            formula = _formula_id(node.ffn_read, field="ffn_read")
             if update_type == "ema":
-                _entry(
-                    entries,
-                    field="ffn_read",
-                    role="W_out",
-                    formula_id=formula,
-                    shape=(d_model, int(node.update["state_dim"])),
-                    locator=f"{prefix}.state_out.weight",
-                    **owner,
+                add_node_parameter(
+                    "ffn_read", "W_out", f"{prefix}.state_out.weight"
                 )
             elif update_type in {"gdn", "attention_window"}:
                 stem = "gdn" if update_type == "gdn" else "attn"
-                key_dim = int(node.update["key_dim"])
-                value_dim = int(node.update["value_dim"])
-                for role, suffix, shape in (
-                    ("W_q", f"{stem}_query.weight", (key_dim, d_model)),
-                    ("W_out", f"{stem}_out.weight", (d_model, value_dim)),
+                for role, suffix in (
+                    ("W_q", f"{stem}_query.weight"),
+                    ("W_out", f"{stem}_out.weight"),
                 ):
-                    _entry(
-                        entries,
-                        field="ffn_read",
-                        role=role,
-                        formula_id=formula,
-                        shape=shape,
-                        locator=f"{prefix}.{suffix}",
-                        **owner,
-                    )
+                    add_node_parameter("ffn_read", role, f"{prefix}.{suffix}")
 
         compute_type = node.node_compute["type"]
-        compute_formula = _formula_id(node.node_compute, field="node_compute")
         if compute_type == "affine_residual":
-            for role, suffix, shape in (
-                ("W_node", "down_proj.weight", (d_model, d_model)),
-                ("b_node", "down_proj.bias", (d_model,)),
+            for role, suffix in (
+                ("W_node", "down_proj.weight"),
+                ("b_node", "down_proj.bias"),
             ):
-                _entry(
-                    entries,
-                    field="node_compute",
-                    role=role,
-                    formula_id=compute_formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    **owner,
-                )
+                add_node_parameter("node_compute", role, f"{prefix}.{suffix}")
         elif compute_type == "double_residual_swiglu":
-            hidden_dim = int(node.node_compute["hidden_dim"])
-            for role, suffix, shape in (
-                ("W_g", "gate_proj.weight", (hidden_dim, d_model)),
-                ("b_g", "gate_proj.bias", (hidden_dim,)),
-                ("W_u", "up_proj.weight", (hidden_dim, d_model)),
-                ("b_u", "up_proj.bias", (hidden_dim,)),
-                ("W_o", "down_proj.weight", (d_model, hidden_dim)),
-                ("b_o", "down_proj.bias", (d_model,)),
+            for role, suffix in (
+                ("W_g", "gate_proj.weight"),
+                ("b_g", "gate_proj.bias"),
+                ("W_u", "up_proj.weight"),
+                ("b_u", "up_proj.bias"),
+                ("W_o", "down_proj.weight"),
+                ("b_o", "down_proj.bias"),
             ):
-                _entry(
-                    entries,
-                    field="node_compute",
-                    role=role,
-                    formula_id=compute_formula,
-                    shape=shape,
-                    locator=f"{prefix}.{suffix}",
-                    **owner,
-                )
+                add_node_parameter("node_compute", role, f"{prefix}.{suffix}")
     return entries
 
 
 def _selector_entries(plan: Plan) -> List[ParameterManifestEntry]:
     entries: List[ParameterManifestEntry] = []
-    nodes = {node.node_id: node for node in plan.nodes}
+    bindings = _parameter_binding_map(plan)
     for region in plan.regions:
         score_type = region.score["type"]
         if score_type not in {"linear", "mlp"}:
             continue
-        formula = _formula_id(region.score, field="score")
-        input_dim = int(nodes[region.node_ids[0]].selector_read_shape[0])
         prefix = f"selectors.{safe_module_key(region.region_id)}"
-        for node_id in region.node_ids:
+        use = ("region", region.region_id, "score")
+        contracts = _operation_slot_map(plan, use)
+        for candidate_ordinal, node_id in enumerate(region.node_ids):
             node_key = safe_module_key(node_id)
             owner = {"node_id": node_id, "region_id": region.region_id}
+
+            def add_score_parameter(
+                role: str,
+                suffix: str,
+                *,
+                state_dict_shape: Optional[Sequence[int]] = None,
+            ) -> None:
+                slot = f"candidate.{candidate_ordinal}.{role}"
+                _entry(
+                    entries,
+                    field="score",
+                    contract=_required_operation_slot(contracts, use, slot),
+                    locator=f"{prefix}.{suffix}",
+                    state_dict_shape=state_dict_shape,
+                    **_bound_parameter_kwargs(bindings, use, slot),
+                    **owner,
+                )
+
             if score_type == "linear":
-                for role, suffix, shape in (
-                    ("w_score", f"linears.{node_key}.weight", (input_dim,)),
-                    ("b_score", f"linears.{node_key}.bias", ()),
+                for role, suffix in (
+                    ("w_score", f"linears.{node_key}.weight"),
+                    ("b_score", f"linears.{node_key}.bias"),
                 ):
-                    _entry(
-                        entries,
-                        field="score",
-                        role=role,
-                        formula_id=formula,
-                        shape=shape,
-                        locator=f"{prefix}.{suffix}",
+                    contract = _required_operation_slot(
+                        contracts,
+                        use,
+                        f"candidate.{candidate_ordinal}.{role}",
+                    )
+                    add_score_parameter(
+                        role,
+                        suffix,
                         state_dict_shape=(
-                            (1, input_dim) if role == "w_score" else (1,)
+                            (1, contract.shape[0])
+                            if role == "w_score"
+                            else (1,)
                         ),
-                        **owner,
                     )
             else:
-                hidden_dim = int(region.score["hidden_dim"])
-                for role, suffix, shape in (
-                    ("W_1", f"hidden_layers.{node_key}.weight", (hidden_dim, input_dim)),
-                    ("b_1", f"hidden_layers.{node_key}.bias", (hidden_dim,)),
-                    ("w_2", f"output_layers.{node_key}.weight", (hidden_dim,)),
-                    ("b_2", f"output_layers.{node_key}.bias", ()),
+                for role, suffix in (
+                    ("W_1", f"hidden_layers.{node_key}.weight"),
+                    ("b_1", f"hidden_layers.{node_key}.bias"),
+                    ("w_2", f"output_layers.{node_key}.weight"),
+                    ("b_2", f"output_layers.{node_key}.bias"),
                 ):
-                    _entry(
-                        entries,
-                        field="score",
-                        role=role,
-                        formula_id=formula,
-                        shape=shape,
-                        locator=f"{prefix}.{suffix}",
+                    contract = _required_operation_slot(
+                        contracts,
+                        use,
+                        f"candidate.{candidate_ordinal}.{role}",
+                    )
+                    add_score_parameter(
+                        role,
+                        suffix,
                         state_dict_shape=(
-                            (1, hidden_dim)
+                            (1, contract.shape[0])
                             if role == "w_2"
                             else (1,)
                             if role == "b_2"
-                            else shape
+                            else contract.shape
                         ),
-                        **owner,
                     )
     return entries
 
@@ -962,17 +1177,19 @@ def _selector_entries(plan: Plan) -> List[ParameterManifestEntry]:
 def _output_entries(plan: Plan) -> List[ParameterManifestEntry]:
     if plan.output_aggregate["type"] != "node_softmax":
         return []
-    formula = _formula_id(plan.output_aggregate, field="output_aggregate")
     entries: List[ParameterManifestEntry] = []
-    for node_id in plan.terminal_node_ids:
+    bindings = _parameter_binding_map(plan)
+    use = ("graph", "graph", "output_aggregate")
+    contracts = _operation_slot_map(plan, use)
+    for terminal_ordinal, node_id in enumerate(plan.terminal_node_ids):
+        slot = f"terminal.{terminal_ordinal}.eta_out"
         _entry(
             entries,
             field="output_aggregate",
-            role="eta_out",
-            formula_id=formula,
-            shape=(),
+            contract=_required_operation_slot(contracts, use, slot),
             locator=f"output_scores.{safe_module_key(node_id)}",
             terminal_node_id=node_id,
+            **_bound_parameter_kwargs(bindings, use, slot),
         )
     return entries
 
@@ -990,13 +1207,123 @@ def build_parameter_schema_manifest(plan: Plan) -> ParameterSchemaManifest:
     entries = tuple(
         _receiver_entries(plan) + _selector_entries(plan) + _output_entries(plan)
     )
+    if plan.schema_version == "2":
+        return ParameterSchemaManifest(
+            logical_plan_hash=plan.canonical_hash(),
+            entries=entries,
+            schema_version=PARAMETER_SCHEMA_VERSION_V2,
+            canonicalizer_id=PARAMETER_SCHEMA_CANONICALIZER_ID_V2,
+            binding_schema_version=EAGER_PARAMETER_BINDING_VERSION_V2,
+        )
     return ParameterSchemaManifest(
         logical_plan_hash=plan.canonical_hash(), entries=entries
     )
 
 
+def _parameter_at_locator(model: nn.Module, locator: str) -> nn.Parameter:
+    current: Any = model
+    parts = locator.split(".")
+    for part in parts[:-1]:
+        if isinstance(current, (nn.ModuleDict, nn.ParameterDict)):
+            current = current[part]
+        else:
+            current = getattr(current, part)
+    leaf = parts[-1]
+    value = (
+        current[leaf]
+        if isinstance(current, nn.ParameterDict)
+        else getattr(current, leaf)
+    )
+    if not isinstance(value, nn.Parameter):
+        raise ParameterManifestError(
+            f"eager locator {locator!r} does not name an nn.Parameter"
+        )
+    return value
+
+
+def _set_parameter_at_locator(
+    model: nn.Module, locator: str, parameter: nn.Parameter
+) -> None:
+    current: Any = model
+    parts = locator.split(".")
+    for part in parts[:-1]:
+        if isinstance(current, (nn.ModuleDict, nn.ParameterDict)):
+            current = current[part]
+        else:
+            current = getattr(current, part)
+    leaf = parts[-1]
+    if isinstance(current, nn.ParameterDict):
+        current[leaf] = parameter
+    else:
+        setattr(current, leaf, parameter)
+
+
+def tie_eager_parameters(
+    model: nn.Module,
+    manifest: Optional[ParameterSchemaManifest] = None,
+) -> ParameterSchemaManifest:
+    """Apply explicit Plan-v2 parameter-set bindings to an eager model.
+
+    Every parameter-set slot keeps one ``nn.Parameter`` identity.  This helper
+    changes only trainable parameter bindings; receiver and selector state are
+    outside the parameter manifest and are never aliased here.  Full dtype and
+    storage validation remains the responsibility of
+    :func:`build_eager_parameter_manifest`, because construction may precede a
+    caller's ``model.to(dtype=...)`` conversion.
+    """
+
+    if not isinstance(model, SettleGraph):
+        raise ParameterManifestError(
+            "eager parameter tying requires a SettleGraph model"
+        )
+    expected = build_parameter_schema_manifest(model.plan)
+    if manifest is not None and manifest.canonical_dict() != expected.canonical_dict():
+        raise ParameterManifestError(
+            "parameter tying manifest does not match the model Plan"
+        )
+    manifest = expected
+    if manifest.schema_version == PARAMETER_SCHEMA_VERSION:
+        return manifest
+
+    grouped: Dict[str, List[ParameterManifestEntry]] = {}
+    originals: Dict[str, nn.Parameter] = {}
+    for entry in manifest.entries:
+        parameter = _parameter_at_locator(model, entry.state_dict_locator)
+        originals[entry.state_dict_locator] = parameter
+        grouped.setdefault(entry.parameter_identity_key(), []).append(entry)
+
+    replacements: List[Tuple[str, nn.Parameter]] = []
+    for entries in grouped.values():
+        if len(entries) < 2 or entries[0].parameter_group is None:
+            continue
+        canonical = originals[entries[0].state_dict_locator]
+        for entry in entries[1:]:
+            candidate = originals[entry.state_dict_locator]
+            if (
+                candidate.shape != canonical.shape
+                or candidate.dtype != canonical.dtype
+                or candidate.device != canonical.device
+                or candidate.layout != canonical.layout
+                or candidate.requires_grad != canonical.requires_grad
+            ):
+                raise ParameterManifestError(
+                    f"parameter set {entry.parameter_group!r} cannot tie "
+                    "incompatible eager Parameters"
+                )
+            replacements.append((entry.state_dict_locator, canonical))
+
+    try:
+        for locator, parameter in replacements:
+            _set_parameter_at_locator(model, locator, parameter)
+        return manifest
+    except BaseException:
+        for locator, parameter in originals.items():
+            _set_parameter_at_locator(model, locator, parameter)
+        raise
+
+
 def build_eager_parameter_manifest(model: nn.Module) -> ParameterSchemaManifest:
-    """Derive and validate schema v1 for an eager-reference SettleGraph."""
+    """Derive and validate the Plan-matched eager parameter schema."""
 
     if not isinstance(model, SettleGraph):
         raise ParameterManifestError(
@@ -1012,13 +1339,13 @@ def export_eager_parameter_tensors(
     """Expose eager parameters under their implementation-independent keys."""
 
     manifest.validate_model(model)
-    named = dict(model.named_parameters())
-    return {
-        logical_parameter_tensor_key(entry.logical_key.canonical_dict()): named[
-            entry.state_dict_locator
-        ].reshape(entry.shape)
-        for entry in manifest.entries
-    }
+    named = dict(model.named_parameters(remove_duplicate=False))
+    exported: Dict[str, torch.Tensor] = {}
+    for entry in manifest.entries:
+        key = _entry_tensor_key(entry, manifest.schema_version)
+        if key not in exported:
+            exported[key] = named[entry.state_dict_locator].reshape(entry.shape)
+    return exported
 
 
 def load_eager_parameter_tensors(
@@ -1043,11 +1370,12 @@ def load_eager_parameter_tensors(
         raise ParameterManifestError(
             "logical parameter Tensor keys must all be strings"
         )
-    named = dict(model.named_parameters())
-    entries = {
-        logical_parameter_tensor_key(entry.logical_key.canonical_dict()): entry
-        for entry in manifest.entries
-    }
+    named = dict(model.named_parameters(remove_duplicate=False))
+    entries: Dict[str, List[ParameterManifestEntry]] = {}
+    for entry in manifest.entries:
+        entries.setdefault(
+            _entry_tensor_key(entry, manifest.schema_version), []
+        ).append(entry)
     if set(supplied) != set(entries):
         missing = sorted(set(entries) - set(supplied))
         unexpected = sorted(set(supplied) - set(entries))
@@ -1062,7 +1390,7 @@ def load_eager_parameter_tensors(
         Tuple[str, Optional[int], int, int, str]
     ] = []
     for key, source in supplied.items():
-        entry = entries[key]
+        entry = entries[key][0]
         target = named[entry.state_dict_locator]
         if (
             not isinstance(source, torch.Tensor)
@@ -1118,7 +1446,7 @@ def load_eager_parameter_tensors(
     }
     staged = {}
     for key, source in staged_cpu.items():
-        entry = entries[key]
+        entry = entries[key][0]
         target = named[entry.state_dict_locator]
         try:
             staged[key] = source.reshape(entry.state_dict_shape).to(
@@ -1129,24 +1457,28 @@ def load_eager_parameter_tensors(
                 f"cannot stage logical parameter Tensor {key!r} on the "
                 f"target device {target.device}"
             ) from exc
+    unique_targets: Dict[int, Tuple[str, nn.Parameter]] = {}
+    for key, entry_group in entries.items():
+        target = named[entry_group[0].state_dict_locator]
+        unique_targets[id(target)] = (key, target)
     snapshot = {
-        name: parameter.detach().clone(memory_format=torch.preserve_format)
-        for name, parameter in named.items()
+        identity: parameter.detach().clone(memory_format=torch.preserve_format)
+        for identity, (_, parameter) in unique_targets.items()
     }
     try:
         with torch.no_grad():
             for key, source in staged.items():
-                entry = entries[key]
+                entry = entries[key][0]
                 target = named[entry.state_dict_locator]
                 target.copy_(source)
     except BaseException as copy_error:
         rollback_errors = []
         with torch.no_grad():
-            for name, target in named.items():
+            for identity, (key, target) in unique_targets.items():
                 try:
-                    target.copy_(snapshot[name])
+                    target.copy_(snapshot[identity])
                 except BaseException as rollback_error:
-                    rollback_errors.append((name, rollback_error))
+                    rollback_errors.append((key, rollback_error))
         if rollback_errors:
             # Diagnostics must never replace the primary copy failure.  A
             # user-defined exception may reject both attributes and notes.
@@ -1177,9 +1509,12 @@ def load_eager_parameter_tensors(
 __all__ = [
     "EAGER_EXECUTOR_ID",
     "EAGER_PARAMETER_BINDING_VERSION",
+    "EAGER_PARAMETER_BINDING_VERSION_V2",
     "LogicalParameterKey",
     "PARAMETER_SCHEMA_CANONICALIZER_ID",
+    "PARAMETER_SCHEMA_CANONICALIZER_ID_V2",
     "PARAMETER_SCHEMA_VERSION",
+    "PARAMETER_SCHEMA_VERSION_V2",
     "ParameterManifestEntry",
     "ParameterManifestError",
     "ParameterSchemaManifest",
@@ -1188,4 +1523,5 @@ __all__ = [
     "export_eager_parameter_tensors",
     "load_eager_parameter_tensors",
     "logical_parameter_tensor_key",
+    "tie_eager_parameters",
 ]

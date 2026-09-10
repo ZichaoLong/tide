@@ -20,8 +20,11 @@ from tide.failures import FailureEnvelope, failure_envelope_from_exception
 from tide.parameter_manifest import (
     EAGER_EXECUTOR_ID,
     EAGER_PARAMETER_BINDING_VERSION,
+    EAGER_PARAMETER_BINDING_VERSION_V2,
     PARAMETER_SCHEMA_CANONICALIZER_ID,
+    PARAMETER_SCHEMA_CANONICALIZER_ID_V2,
     PARAMETER_SCHEMA_VERSION,
+    PARAMETER_SCHEMA_VERSION_V2,
     LogicalParameterKey,
     ParameterManifestEntry,
     ParameterManifestError,
@@ -31,8 +34,9 @@ from tide.parameter_manifest import (
     export_eager_parameter_tensors,
     load_eager_parameter_tensors,
     logical_parameter_tensor_key,
+    tie_eager_parameters,
 )
-from tide.plan import bind_dtypes
+from tide.plan import OperationParameterBinding, bind_dtypes
 
 
 def _replace_plan(plan, *, nodes=None, regions=None, **changes):
@@ -156,7 +160,195 @@ def _stateful_plan(kind: str, *, score_type: str = "mlp"):
     return _replace_plan(plan, nodes=(node,), regions=(region,))
 
 
+def _shared_input_norm_plan():
+    base = build_single_layer(receiver_count=2, k=1, d_model=2)
+    return dataclasses.replace(
+        base,
+        schema_version="2",
+        parameter_bindings=tuple(
+            OperationParameterBinding(
+                owner_kind="node",
+                owner_id=node.node_id,
+                operation="input_norm",
+                parameter_set_id="shared.input-norm",
+            )
+            for node in base.nodes
+        ),
+    ).validate()
+
+
 class ParameterSchemaManifestTests(unittest.TestCase):
+    def test_v2_operation_binding_ties_one_parameter_and_exports_it_once(self):
+        plan = _shared_input_norm_plan()
+        graph = SettleGraph(plan)
+        manifest = tie_eager_parameters(graph)
+
+        first = graph.receiver(plan.nodes[0].node_id)
+        second = graph.receiver(plan.nodes[1].node_id)
+        self.assertIs(first.input_norm.weight, second.input_norm.weight)
+        self.assertIsNot(first.ffn_norm.weight, second.ffn_norm.weight)
+        self.assertEqual(manifest.schema_version, PARAMETER_SCHEMA_VERSION_V2)
+        self.assertEqual(
+            manifest.canonicalizer_id, PARAMETER_SCHEMA_CANONICALIZER_ID_V2
+        )
+        self.assertEqual(
+            manifest.binding_schema_version, EAGER_PARAMETER_BINDING_VERSION_V2
+        )
+        self.assertEqual(len(manifest.entries), 4)
+        self.assertEqual(len(manifest.canonical_dict()["parameter_uses"]), 4)
+        self.assertEqual(len(manifest.canonical_dict()["parameters"]), 3)
+        exported = export_eager_parameter_tensors(graph, manifest)
+        self.assertEqual(len(exported), 3)
+        self.assertEqual(
+            sum(key.startswith("tide.logical-parameter.v2:") for key in exported),
+            3,
+        )
+        self.assertEqual(
+            len(list(graph.named_parameters(remove_duplicate=False))), 4
+        )
+        self.assertEqual(len(list(graph.named_parameters())), 3)
+
+        replacement = {
+            key: torch.full_like(value, float(index + 1))
+            for index, (key, value) in enumerate(sorted(exported.items()))
+        }
+        load_eager_parameter_tensors(graph, manifest, replacement)
+        self.assertIs(first.input_norm.weight, second.input_norm.weight)
+        roundtrip = export_eager_parameter_tensors(graph, manifest)
+        for key, expected in replacement.items():
+            torch.testing.assert_close(roundtrip[key], expected, atol=0, rtol=0)
+
+    def test_v2_declared_sharing_requires_one_parameter_identity(self):
+        plan = _shared_input_norm_plan()
+        graph = SettleGraph(plan)
+        manifest = tie_eager_parameters(graph)
+        second = graph.receiver(plan.nodes[1].node_id)
+        second.input_norm.weight = torch.nn.Parameter(
+            second.input_norm.weight.detach().clone()
+        )
+        with self.assertRaisesRegex(
+            ParameterManifestError, "bound to distinct Parameters"
+        ):
+            manifest.validate_model(graph)
+
+    def test_v2_shared_parameter_accumulates_all_use_site_gradients(self):
+        plan = _shared_input_norm_plan()
+        graph = SettleGraph(plan).double()
+        tie_eager_parameters(graph)
+        receivers = [graph.receiver(node.node_id) for node in plan.nodes]
+        inputs = (
+            torch.tensor([[1.0, 2.0]], dtype=torch.float64),
+            torch.tensor([[3.0, -1.0]], dtype=torch.float64),
+        )
+        sum(receiver.input_norm(value).sum() for receiver, value in zip(receivers, inputs)).backward()
+        shared_gradient = receivers[0].input_norm.weight.grad.detach().clone()
+
+        references = []
+        for receiver, value in zip(receivers, inputs):
+            norm = type(receiver.input_norm)(2, eps=receiver.input_norm.eps).double()
+            with torch.no_grad():
+                norm.weight.copy_(receiver.input_norm.weight)
+            norm(value).sum().backward()
+            references.append(norm.weight.grad)
+        torch.testing.assert_close(
+            shared_gradient, references[0] + references[1], atol=0, rtol=0
+        )
+
+    def test_v2_operation_local_slots_use_canonical_ordinals(self):
+        base = build_diamond(d_model=2, branch_k=2)
+        nodes = tuple(
+            dataclasses.replace(
+                node,
+                aggregate={
+                    "type": "edge_linear_mean",
+                    "formula_id": "TEST-AGG-EDGE-AFFINE-MEAN-V1",
+                    "bias": True,
+                    "output_shape": [2],
+                },
+            )
+            if node.node_id == "node.out"
+            else node
+            for node in base.nodes
+        )
+        plan = dataclasses.replace(
+            base,
+            nodes=nodes,
+            schema_version="2",
+            parameter_bindings=(
+                OperationParameterBinding(
+                    "node", "node.out", "aggregate", "diamond.aggregate"
+                ),
+            ),
+        ).validate()
+        slots = {
+            entry.parameter_slot
+            for entry in build_parameter_schema_manifest(plan).entries
+            if entry.parameter_group == "diamond.aggregate"
+        }
+        self.assertEqual(
+            slots,
+            {"edge.0.W", "edge.0.b", "edge.1.W", "edge.1.b"},
+        )
+
+        score_base = build_single_layer(receiver_count=2, k=1, d_model=2)
+        score_region = dataclasses.replace(
+            score_base.regions[0],
+            score={
+                "type": "linear",
+                "formula_id": "TEST-SCORE-LINEAR-V1",
+                "bias": True,
+            },
+        )
+        score_plan = dataclasses.replace(
+            score_base,
+            regions=(score_region,),
+            schema_version="2",
+            parameter_bindings=(
+                OperationParameterBinding(
+                    "region", score_region.region_id, "score", "linear.score"
+                ),
+            ),
+        ).validate()
+        score_slots = {
+            entry.parameter_slot
+            for entry in build_parameter_schema_manifest(score_plan).entries
+            if entry.parameter_group == "linear.score"
+        }
+        self.assertEqual(
+            score_slots,
+            {
+                "candidate.0.w_score",
+                "candidate.0.b_score",
+                "candidate.1.w_score",
+                "candidate.1.b_score",
+            },
+        )
+
+        output_base = build_multi_entry_terminal(d_model=2)
+        output_plan = dataclasses.replace(
+            output_base,
+            output_aggregate={
+                "type": "node_softmax",
+                "formula_id": "TEST-AGG-TERMINAL-SOFTMAX-V1",
+                "output_shape": [2],
+            },
+            schema_version="2",
+            parameter_bindings=(
+                OperationParameterBinding(
+                    "graph", "graph", "output_aggregate", "output.score"
+                ),
+            ),
+        ).validate()
+        output_slots = {
+            entry.parameter_slot
+            for entry in build_parameter_schema_manifest(output_plan).entries
+            if entry.parameter_group == "output.score"
+        }
+        self.assertEqual(
+            output_slots,
+            {"terminal.0.eta_out", "terminal.1.eta_out"},
+        )
+
     def test_manifest_rejects_non_eager_executor_identity(self):
         manifest = build_eager_parameter_manifest(
             SettleGraph(build_singleton(d_model=2))

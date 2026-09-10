@@ -29,9 +29,12 @@ from tide.fixtures import (
     save_negative_fixture_bundle,
 )
 from tide.failures import ExecutionFailed, FailureEnvelope, capture_execution
-from tide.parameter_manifest import build_eager_parameter_manifest
+from tide.parameter_manifest import (
+    PARAMETER_SCHEMA_VERSION_V2,
+    build_eager_parameter_manifest,
+)
 from tide.parameter_manifest import load_eager_parameter_tensors
-from tide.plan import bind_dtypes
+from tide.plan import OperationParameterBinding, bind_dtypes
 
 
 def _typed(plan, dtype: str = "float64"):
@@ -128,6 +131,32 @@ def _fixture_parts(dtype: str = "float64"):
     return parts
 
 
+def _shared_parameter_fixture_parts(dtype: str = "float64"):
+    parts = _fixture_parts(dtype)
+    base = build_single_layer(receiver_count=2, k=1, d_model=2)
+    plan = dataclasses.replace(
+        base,
+        schema_version="2",
+        parameter_bindings=tuple(
+            OperationParameterBinding(
+                "node", node.node_id, "input_norm", "shared.input-norm"
+            )
+            for node in base.nodes
+        ),
+    ).validate()
+    typed = _typed(plan, dtype)
+    model = SettleGraph(typed).to(dtype=getattr(torch, dtype))
+    manifest = build_eager_parameter_manifest(model)
+    parts.update(
+        fixture_id=f"fixture.shared-parameter.{dtype}",
+        typed_plan=typed,
+        parameter_schema=manifest,
+        parameters=eager_parameter_tensors(model, manifest),
+    )
+    _set_gradient_contract(parts)
+    return parts
+
+
 def _rewrite_payload(path: Path, mutate) -> None:
     payload = torch.load(path, map_location="cpu", weights_only=True)
     mutate(payload)
@@ -148,6 +177,71 @@ def _failure(phase: str, *codes: str):
 
 
 class FixtureBundleTests(unittest.TestCase):
+    def test_v2_shared_parameter_fixture_roundtrip_stores_one_tensor(self) -> None:
+        parts = _shared_parameter_fixture_parts()
+        schema = parts["parameter_schema"].canonical_dict()
+        self.assertEqual(schema["schema_version"], PARAMETER_SCHEMA_VERSION_V2)
+        self.assertEqual(len(schema["parameter_uses"]), 4)
+        self.assertEqual(len(schema["parameters"]), 3)
+        self.assertEqual(len(parts["parameters"]), 3)
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "shared.pt"
+            artifact = save_fixture_bundle(path, **parts)
+            loaded = load_fixture_bundle(path, expected_sha256=artifact.sha256)
+
+        self.assertEqual(loaded.parameter_schema, schema)
+        self.assertEqual(set(loaded.parameters), set(parts["parameters"]))
+        target = SettleGraph(loaded.typed_plan).to(dtype=torch.float64)
+        target_manifest = build_eager_parameter_manifest(target)
+        load_eager_parameter_tensors(
+            target, target_manifest, loaded.parameters
+        )
+        nodes = loaded.typed_plan.logical_plan.nodes
+        self.assertIs(
+            target.receiver(nodes[0].node_id).input_norm.weight,
+            target.receiver(nodes[1].node_id).input_norm.weight,
+        )
+
+    def test_v2_parameter_use_mapping_tamper_is_rejected(self) -> None:
+        parts = _shared_parameter_fixture_parts()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "shared.pt"
+            save_fixture_bundle(path, **parts)
+            payload = torch.load(path, map_location="cpu", weights_only=True)
+            uses = payload["parameter_schema"]["parameter_uses"]
+            shared_uses = [
+                use
+                for use in uses
+                if use["parameter_set_id"] == "shared.input-norm"
+            ]
+            unshared_id = next(
+                use["parameter_id"]
+                for use in uses
+                if use["parameter_set_id"] is None
+            )
+            shared_uses[1]["parameter_id"] = unshared_id
+            _seal_payload(payload)
+            torch.save(payload, path)
+
+            with self.assertRaises(FixtureError) as raised:
+                load_fixture_bundle(path)
+        self.assertEqual(raised.exception.code, "artifact.schema")
+
+    def test_v2_parameter_use_rejects_non_string_parameter_id(self) -> None:
+        parts = _shared_parameter_fixture_parts()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "shared.pt"
+            save_fixture_bundle(path, **parts)
+            payload = torch.load(path, map_location="cpu", weights_only=True)
+            payload["parameter_schema"]["parameter_uses"][0]["parameter_id"] = []
+            _seal_payload(payload)
+            torch.save(payload, path)
+
+            with self.assertRaises(FixtureError) as raised:
+                load_fixture_bundle(path)
+        self.assertEqual(raised.exception.code, "artifact.schema")
+
     def test_content_hash_domain_separates_bytes_from_user_mappings(self) -> None:
         parts = _fixture_parts()
         parts["control"]["random_keys"]["opaque"] = b"x"

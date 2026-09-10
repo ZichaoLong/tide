@@ -15,7 +15,7 @@ import os
 import tempfile
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, Iterable, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
 
 import torch
 from torch import Tensor, nn
@@ -908,6 +908,24 @@ def _validate_model_state(model: nn.Module, saved: Any) -> None:
                 f"{tuple(value.shape)}/{value.dtype}, expected "
                 f"{tuple(reference.shape)}/{reference.dtype}"
             )
+
+    aliases: Dict[int, List[str]] = {}
+    for name, parameter in model.named_parameters(remove_duplicate=False):
+        aliases.setdefault(id(parameter), []).append(name)
+    for names in aliases.values():
+        if len(names) < 2:
+            continue
+        reference = saved[names[0]]
+        for name in names[1:]:
+            value = saved[name]
+            equal = torch.eq(reference, value)
+            if reference.is_floating_point():
+                equal = equal | (torch.isnan(reference) & torch.isnan(value))
+            if not bool(torch.all(equal).item()):
+                raise CheckpointError(
+                    "aliased model parameter entries carry inconsistent "
+                    f"values: {names[0]!r}/{name!r}"
+                )
 
 
 def _validate_root_key_set(payload: Mapping[str, Any]) -> None:

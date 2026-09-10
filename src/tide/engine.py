@@ -377,6 +377,26 @@ class SettleGraph(nn.Module):
                 f"unsupported output Aggregate type: {output_type}"
             )
 
+        # Parameter-set bindings can name receiver, selector, edge-Aggregate,
+        # and output-Aggregate parameters, so apply them only after every
+        # operation has materialized its complete parameter set.  Keep this
+        # import local because the manifest validator binds against
+        # ``SettleGraph`` itself.
+        if self.plan.schema_version == "2":
+            from .parameter_manifest import tie_eager_parameters
+
+            tie_eager_parameters(self)
+
+    def _apply(self, fn: Any, recurse: bool = True) -> "SettleGraph":
+        """Preserve Plan-declared parameter identities across conversions."""
+
+        converted = super()._apply(fn, recurse=recurse)
+        if self.plan.schema_version == "2":
+            from .parameter_manifest import tie_eager_parameters
+
+            tie_eager_parameters(self)
+        return converted
+
     def receiver(self, node_id: str) -> ReceiverModule:
         return self.receivers[safe_module_key(node_id)]
 

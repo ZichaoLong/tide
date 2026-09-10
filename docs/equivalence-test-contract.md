@@ -19,7 +19,7 @@
 
 “executor 等价”表示同一 backend 和 concrete execution binding 下，两个 executor 对同一 fixture 通过本文要求的全部离散、浮点、状态、trace 和梯度比较。“跨 backend parity”表示 CPU 与 accelerator 分别在新进程中读取同一 CPU fixture，并在声明的容差内通过；它不表示浮点 bitwise 相同，也不表示两种 backend 的训练轨迹完全相同。
 
-本文的核心范围是语义文档第 2.4 节定义的合法 Plan，以及实现计划第 2.3 节的当前 `core-v1` 取舍：每个 region 使用自己的固定 \(K_{\mathcal R}\)，每份可变状态和 SettleGraph 可训练参数都有唯一 owner。本文另行测试实现计划第 2.3.1 节的可选外部控制扩展 `requested_k`，但其结果必须单独标记，不计入 `core-v1` 主语义或固定 \(K_{\mathcal R}\) 的标准实验。由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
+本文的核心范围是语义文档第 2.4 节定义的合法 Plan，以及实现计划第 2.3 节的当前 `core-v1` 取舍：每个 region 使用自己的固定 \(K_{\mathcal R}\)，每份可变状态都有唯一 owner，全部 SettleGraph 可训练参数彼此独立。按具体操作显式共享参数属于完整语义；当前已有 Plan/parameter schema 2 和定向开发测试，但尚未进入 `core-v1` 资格范围或形成独立资格 cell。本文另行测试实现计划第 2.3.1 节的可选外部控制扩展 `requested_k`，但其结果必须单独标记，不计入 `core-v1` 主语义或固定 \(K_{\mathcal R}\) 的标准实验。由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出所声明范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
 
 ## 2. Fixture bundle
 
@@ -226,11 +226,10 @@ $$
 
 $$
 x_{v,t}^{\mathrm{score}}
-=
-[r^{\mathrm{sel}}_{v,t};c^{\mathrm{ctx}}_{\mathcal R,t}],
+=r^{\mathrm{sel}}_{v,t},
 $$
 
-公共摘要为空时只保留 readout。然后分别计算
+然后分别计算
 
 $$
 a_{v,t}
@@ -252,7 +251,7 @@ z_{v,t}
 a_{v,t}=w_{2,v}^{\top}z_{v,t}+b_{2,v}.
 $$
 
-这些 Score 参数按稳定 node ID \(v\) 各自独立。
+这些 Score 参数按稳定 node ID \(v\) 各自独立；这是当前 `core-v1` fixture 的参数关系，不是完整 SettleGraph 语义对参数共享的限制。
 
 #### `score.constant.v1`、`score.fixed-by-node.v1` 与 `score.read-sum.v1`
 
@@ -276,8 +275,7 @@ $$
 
 $$
 x_{v,t}^{\mathrm{score}}
-=
-[r^{\mathrm{sel}}_{v,t};c^{\mathrm{ctx}}_{\mathcal R,t}],
+=r^{\mathrm{sel}}_{v,t},
 $$
 
 其分数是
@@ -288,7 +286,7 @@ a_{v,t}
 \sum_i x_{v,t,i}^{\mathrm{score}}.
 $$
 
-首轮 reference 只实现 `context.none.v1`，因此该 binding 下的公共摘要为空、分数即 readout 各分量之和。不得用一个只写入 Score 配置而没有对应 selector-context 公式和输入的非零 `context_dim` 扩张该语义。
+当前 schema 仍要求保留字段 `selector_context=context.none.v1` 和 `context_dim=0`；它们不提供额外 Score 输入。非零 `context_dim` 必须拒绝。
 
 #### `TEST-NODE-AFFINE-V1` 与 `TEST-NODE-SWIGLU-V1`
 
@@ -346,7 +344,7 @@ $$
 | FFN Read `read.ffn.zero.v1` | 返回 \(d_{\mathrm{model}}\) 维零向量 |
 | NodeCompute `node.identity.v1` | \(g=h\)，不读取 \(m\) 或 receiver state |
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 分别精确对应语义文档第 2.3 节的 `EMIT-HARD`、`EMIT-HST`、`EMIT-SOFTP` |
-| selector context `context.none.v1` | \(c^{\mathrm{ctx}}\) 是空向量，Score 输入不追加公共摘要 |
+| 保留字段 `selector_context=context.none.v1` | 不提供额外 Score 输入 |
 | selector history `history.none.v1` | 不存在 selector-history 状态、读出或写回 |
 | active budget `k.fixed.v1` / `k.input.v1` | 分别使用 Plan 固定整数，或实现计划第 2.3.1 节可选外部控制扩展在候选非空事件上提供的 `requested_k` |
 
@@ -388,7 +386,8 @@ $$
 | Score | `linear`：`TEST-SCORE-LINEAR-V1` | `bias=true`；`shared_parameters=false`；`context_dim=0` |
 | Score | `mlp`：`TEST-SCORE-MLP-V1` | `hidden_dim`，默认 \(\max(4,d_r)\)；`bias=true`；`shared_parameters=false`；`context_dim=0` |
 | Score | `read_sum`：`score.read-sum.v1` | `context_dim=0` |
-| selector context/history | `none`：`context.none.v1` / `history.none.v1` | 无 |
+| 保留字段 `selector_context` | `none`：`context.none.v1` | 无额外 Score 输入 |
+| selector history | `none`：`history.none.v1` | 无 |
 | active budget | `fixed`：`k.fixed.v1` | `value` required |
 | active budget 扩展 | `input`：`k.input.v1` | 实现计划第 2.3.1 节的可选外部控制；`field="requested_k"`、`minimum=1`，以及 `maximum` \(=K^{\max}_{\mathcal R}\)，三者均 required |
 | output Aggregate | `mean`：`agg.mean.v1` | `output_shape`，派生为 \([d_{\mathrm{model}}]\) |
@@ -396,13 +395,17 @@ $$
 
 `bias=true`、`learnable_decay=false`、`shared_parameters=false` 和 `context_dim=0` 都是该 formula ID 的固定 schema 值，不是可切换开关；写出其他值必须拒绝。所有 dimension 是非 bool 正整数，所有标量常数是非 bool 有限数；规范化把数学上相同的整数/浮点输入（如 `zeta=1` 与 `zeta=1.0`）统一为同一标量数值表示，并把负零规范为正零。作为公式实数输入的原始整数还必须位于 JSON/IEEE-754 safe-integer 区间 \([-(2^{53}-1),2^{53}-1]\)；超出该区间必须拒绝，不能先转 binary64、静默舍入后与另一个整数产生相同 hash。`eps` 和 `norm_eps` 严格为正，`decay` 满足 \(0\le\texttt{decay}<1\)。`values_by_node` 的键集精确等于 region 的固定 node IDs，值均为非 bool 有限标量并使用相同规范数值表示。
 
+这里的 `shared_parameters=false` 只约束单个 Score 公式内部的 candidate slots；Plan schema 2 仍可把该完整 Score operation 与另一个兼容 operation 绑定到同一 parameter set。
+
 selector readout 的首轮规范 shape 是一维 \([d_r]\)；多维声明不能只取首维执行，必须在 Plan 验证时拒绝。Update 的 `state_shape` 必须分别与 EMA、Gated DeltaNet 和窗口 Attention 表中的派生值一致；它不能作为被 executor 忽略的第二份状态声明。其中窗口 Attention 的 \([W,d_k,d_v]\) 是 logical Plan v1 对复合 Attention 状态的尺寸描述符，不表示一个 shape 为 \([W,d_k,d_v]\) 的物理 Tensor；它的规范位置、keys 和 values 有序序列遵守实现计划第 2.3.4 节。
 
 selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序只允许不读取 state 的 `content`、`content_norm` 或 `content_linear`；pre/post 时序必须使用显式带 state 输入的 `content_state_linear` 或 `content_state_summary_linear`。不能让 `content_linear` 在 pre/post 中静默丢弃可见状态，也不能让带 state 的投影在 content 时序收到一个临时的 absent 值。这里的 post 仍受语义文档“SD 不使用 post-update 选择”的上层约束。
 
-完整 fixture/checkpoint qualification 还要求一个版本化、实现无关的 parameter-schema manifest。manifest 对每个公式参数保存由 site、field、稳定 node/region/edge ID 和公式内参数角色组成的独立 logical key，以及 formula ID、shape 和 dtype role；条目按 logical key 规范排序。公式内角色就是第 2.1 节中的 \(w,W,b,\eta\) 等已定义量，不能换成某个 eager module 的属性路径。不同 logical keys 必须对应不同参数。executor 的 `state_dict` 名称可以作为该实现的装载 locator，但不能充当跨 executor 的参数身份；每个 executor 必须显式证明 locator 与 logical key 一一对应。参数 Tensor 数值仍只由 bundle/checkpoint 携带，不进入 Plan hash。
+完整 fixture/checkpoint qualification 还要求版本化、实现无关的 parameter-schema manifest。`core-v1` 使用 `tide.parameter-schema.v1`：每个公式参数由 field、稳定 node/region/edge/terminal ID 和公式内参数角色形成独立 logical key，并记录 formula ID、shape 和 dtype role。
 
-当前 eager reference 已能对单个 SettleGraph site 从 Plan 派生 `tide.parameter-schema.v1`：逻辑记录包含 field、稳定 node/region/edge/terminal ID、公式参数角色、formula ID、shape 和 dtype role，eager locator 位于独立 binding，并校验与 `named_parameters()` 一一对应。跨 sites 的 site ID 组合仍未闭合；当前序列化 bundle 的正向 round trip 也没有达到第 7 节的语料、独立 golden 和数量门槛。因此 parameter schema 的实现不等于 fixture、checkpoint 或 capability qualification 已通过。
+共享参数 extension-v2 使用 Plan schema 2 和 `tide.parameter-schema.v2`。一个 operation use 由 `(owner_kind, owner_id, operation)` 标识，并可映射到 `parameter_set_id`；未映射的 use 仍独立。映射作用于该 operation 的完整参数角色集合，manifest 将其展开为规范 `parameter_slot`。引用同一 parameter set 的 uses 必须具有相同 formula 和完整 slot 契约；每个 `(parameter_set_id, parameter_slot)` 只对应一个参数身份。manifest 分开保存 `parameter_uses` 与去重后的 `parameters`，fixture 只保存后者的每个 Tensor 一次。eager、packed 和特化执行必须复用这些身份，共享梯度等于各 use 梯度之和，optimizer 只登记一次；checkpoint 必须恢复相同 alias，并拒绝同一共享参数的多个 `state_dict` 值不一致。可变状态仍严格按 owner 独占。
+
+上述 v1/v2 manifest 和 fixture round trip 当前只覆盖单个 SettleGraph/site；跨 sites 的身份组合仍未闭合。已有共享参数用例属于定向开发回归，不满足第 7 节的语料、独立 golden、VJP、optimizer/checkpoint 数量和证据要求，因此不能报告为资格通过。executor 的 `state_dict` 名称只可作为本地装载 locator，不能充当跨 executor 的参数身份；参数 Tensor 数值仍由 fixture/checkpoint 携带，不进入 Plan hash。
 
 ### 2.3 失败类别 v1
 
@@ -456,7 +459,7 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 2. 每个 Token 的入口边界消息；
 3. 对每个执行 Token，保存每条固定边的 `DATA`/`CLOSED`，`DATA` 时保存 payload；
 4. 每个 receiver 的父消息序列、reached、聚合 hidden \(h\)、归一化输入 \(m\) 和 \(s^-\)；
-5. proposal 是否存在及其值、selector readout 和公共摘要；
+5. proposal 是否存在及其值、selector readout 和显式 selector-history 输入；
 6. 每个 region 的 candidates、logits、probabilities、请求 K、实际 K 和 Top-K IDs；
 7. Observe/active、\(s^{\mathrm{cmp}}\)、NodeCompute 的 \(g\) 与 Emit 的 \(\widehat g\)；
 8. receiver state 与 selector-history 的 staged write；
@@ -614,7 +617,7 @@ mask fixture 至少分别包含：
 | injected empty-terminal invariant | 测试专用故障注入、调用失败和事务回滚；不属于合法 Plan |
 | small expanded HB | Lines、barrier、tree/local/shortcut/mirror 标签 |
 
-这些 fixtures 合计覆盖 N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post；hard、Hard-ST、soft probability Emit；mean、learned convex、edge-affine Aggregate；none、历史、EMA、Gated DeltaNet 和规范窗口 Attention 状态；各 region 独立的固定 K；全部独立参数；零、固定非零和可学习首状态。可选外部控制扩展单独覆盖运行期 `requested_k`；其中至少一个下游候选为空的事件携带超出值域的整数占位值，并证明该位置没有被读取。
+这些 fixtures 合计覆盖 N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post；hard、Hard-ST、soft probability Emit；mean、learned convex、edge-affine Aggregate；none、历史、EMA、Gated DeltaNet 和规范窗口 Attention 状态；各 region 独立的固定 K；全部独立参数；零、固定非零和可学习首状态。共享参数 extension-v2 必须另建 fixture 与 capability cell，不得把现有定向回归计入这些数量。可选外部控制扩展单独覆盖运行期 `requested_k`；其中至少一个下游候选为空的事件携带超出值域的整数占位值，并证明该位置没有被读取。
 
 对所有受约束的配置轴做 pairwise covering：每一对合法取值至少共同出现一次。无效组合不为了覆盖而执行，而是作为 validator failure fixture 保存明确错误类别。
 
@@ -644,7 +647,7 @@ Flat MoE 和 Dense 不属于 SettleGraph executor 资格集合。科学实验若
 checkpoint schema 至少记录：
 
 - schema 版本、logical Plan 与 logical Plan hash、保存时 concrete execution binding 与 typed Plan hash；
-- base 与 SettleGraph 参数、可学习首状态，以及 SettleGraph 参数的逻辑键和独立归属；
+- base 与 SettleGraph 参数、可学习首状态，以及 SettleGraph 参数身份和各操作的引用关系；当前 `core-v1` 中所有参数身份独立；
 - optimizer、scheduler、AMP scaler；
 - 按 owner 规范化的 receiver state、selector-history、Attention 有效窗口和每个序列的下一位置；
 - global step、Token 计数、epoch、gradient-accumulation microstep，以及允许中途保存时的累积梯度；

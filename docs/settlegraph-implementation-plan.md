@@ -18,7 +18,9 @@
 
 这三条路径必须复用同一份规范化 Plan、参数、输入、初始状态和随机数规则。特化执行器不是另一套模型语义；它只是通用执行的优化实现。
 
-这里的“`core-v1` Plan”指首轮实现和资格测试采用的固定图子集：每个 region 独立声明固定 active budget，每份可变状态和 SettleGraph 内部可训练参数都有唯一 owner；所有局部公式和当前 FP32/FP64 reference 子集的 dtype roles 已完整声明。当前 Plan schema 还接受可选的外部 `requested_k` 控制，但它不属于 `core-v1` Plan，必须作为单独的接口扩展标记和验证，也不能记作固定 \(K_{\mathcal R}\) 的标准实验。selector-history 的局部测试公式虽已定义，但通用 owner、字段和序列化 schema 尚未闭合，因此同样不属于当前 `core-v1` Plan。这里的“通用”首先表示不限制 `core-v1` Plan 的合法拓扑。逐 Token 和通用 prefill 接口都必须能执行任意 `core-v1` Plan；selector-history、由模型内容推导的 adaptive budget、混合/低精度 accumulation policy 或其他未来扩展，必须先增加语义和能力声明。任意新加入的自定义算子也不会自动获得高性能，其 reference、packed 和设备优化能力必须分别验证。
+这里的“`core-v1` Plan”指首轮实现和资格测试采用的固定图子集：每个 region 独立声明固定 active budget，每份可变状态都有唯一 owner，SettleGraph 内部可训练参数全部独立；所有局部公式和当前 FP32/FP64 reference 子集的 dtype roles 已完整声明。当前 Plan schema 还接受可选的外部 `requested_k` 控制，但它不属于 `core-v1` Plan，必须作为单独的接口扩展标记和验证，也不能记作固定 \(K_{\mathcal R}\) 的标准实验。selector-history 的局部测试公式虽已定义，但通用 owner、字段和序列化 schema 尚未闭合，因此同样不属于当前 `core-v1` Plan。这里的“通用”首先表示不限制 `core-v1` Plan 的合法拓扑。逐 Token 和通用 prefill 接口都必须能执行任意 `core-v1` Plan；selector-history、由模型内容推导的 adaptive budget、混合/低精度 accumulation policy 或其他未来扩展，必须先增加语义和能力声明。任意新加入的自定义算子也不会自动获得高性能，其 reference、packed 和设备优化能力必须分别验证。
+
+参数全部独立的 Plan schema 1 仍是 `core-v1` 的资格范围。当前代码另外实现了单个 SettleGraph/site 内的共享参数 extension-v2：Plan schema 2、parameter schema v2、eager/packed/特化执行、fixture、optimizer 和 checkpoint 已有定向开发回归，但尚未建立相应资格 corpus 或 capability cell。
 
 “函数等价”至少包括：
 
@@ -37,21 +39,23 @@
 
 | 当前工件 | 已有范围 | 尚未达到的边界 |
 | --- | --- | --- |
-| 运行时与 Plan | CPU-safe 的包入口；device/dtype 解析；logical/typed Plan 规范化、分类静态校验与哈希；当前 reference formula config 的 exact schema、默认值物化、数值规范化及跨字段 shape/timing 校验；运行期拒绝不同 owner 键通过不同 Tensor views 共享可变 storage；手工拓扑和小型 HB fixture Builders；单 site 的实现无关 parameter-schema manifest 与独立 eager locator binding；`tide.failure.v1` envelope；CPU-only、weights-only-safe 的 `tide.settlegraph.fixture.v1` no-replace 保存、单次 bytes 装载、Tensor 值/stride/storage group 认证、真实负 mutation 与 preflight；development corpus 的项目内运行记录入口 | 跨 site 的独立参数 schema 组合、可学习首状态 schema、混合/低精度 accumulation role、跨语言 canonicalizer conformance、完整资格 bundle 集、benchmark/训练/硬件资格运行 manifest、能力矩阵证据和 Builder qualification |
-| token-major eager reference | 当前 reference 算子子集的逐 Token 解释与 token-major prefill；N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务、balance 统计和 trace；forced-active singleton reached 后直接取精确概率 1，并跳过 selector Read、Score、softmax 和 Top-K | 任意自定义公式、selector context/history，以及测试契约要求的完整多类别 golden/exact-trace 资格语料 |
+| 运行时与 Plan | CPU-safe 的包入口；device/dtype 解析；logical/typed Plan 规范化、分类静态校验和稳定哈希；Plan schema 1 的独立参数，以及 Plan schema 2 的 operation-level parameter bindings；parameter schema v1/v2、独立 eager locator binding 和单-site fixture round trip；运行期拒绝不同状态 owner 的 Tensor/storage alias；手工拓扑和小型 HB fixture Builders；`tide.failure.v1` envelope；CPU-only、weights-only-safe 的 `tide.settlegraph.fixture.v1` no-replace 保存、单次 bytes 装载、Tensor 值/stride/storage group 认证、真实负 mutation 与 preflight；development corpus 的项目内运行记录入口 | 共享参数 extension-v2 的正式资格 corpus/cells、跨 site 参数 schema 组合、可学习首状态 schema、混合/低精度 accumulation role、跨语言 canonicalizer conformance、完整资格 bundle 集、benchmark/训练/硬件资格运行 manifest、能力矩阵证据和 Builder qualification |
+| token-major eager reference | 当前 reference 算子子集的逐 Token 解释与 token-major prefill；N/SD/BO、content/pre/post、状态 carry、mask、运行期 K、事务、balance 统计和 trace；forced-active singleton reached 后直接取精确概率 1，并跳过 selector Read、Score、softmax 和 Top-K | 任意自定义公式、selector-history，以及测试契约要求的完整多类别 golden/exact-trace 资格语料 |
 | region-major eager reference | `prefill_region_major` 独立于 `interpret_token`，按规范 region 顺序执行同一 Plan，并已有 forward/state/trace/gradient 定向差分测试 | 仍按 region、Token 和 batch row 使用 Python 循环；不是第 3.2 节的通用 packed prefill，没有 packed 或性能能力声明 |
-| 通用 packed executor | `tide.generic-packed.torch.v1` 直接复用同一 `SettleGraph` owner 的参数，静态接受当前 256 个固定 K `core-v1` candidates；按 region 处理整段 ([B,T])，只在 regions 间保留实际 `DATA` records，并覆盖 N/SD/BO、content/pre/post、EMA、Gated DeltaNet、窗口 Attention、当前 Aggregate/Read/Score/NodeCompute/Emit、forced-active singleton、prefill/decode 和 trace；代表性 lifecycle 覆盖 carry、reset、row reorder 与 empty tail；SD/pre 的 hard route 发现及必须保持因果顺序的状态扫描位于 TorchScript 循环中，随后按固定 route 可微重算；不调用任一 eager scheduler | 这是 tensorized packed development implementation，尚未通过 `C04` 正确性资格或 `X07` 性能资格：StateStore 打包/发布、下一位置和静态参数分组仍有 host-side mapping，部分严格 FP32 顺序路径在 TorchScript 中串行；已针对 source-liveness tracker 与 autograd graph 的已知强引用环改为公开结果边界的单一强 owner 和内部弱引用，定向生命周期回归与非资格 RSS smoke 未再复现该环，详见[开发验证状态](executor-equivalence-development-status.md)；但 grad-enabled 前向仍会为公开 Tensor occurrence 重复运行 source-liveness 语义遍历并产生 host synchronization，现有 profile counters 未覆盖该成本；反向时的小 usage-mask host copy、真实 callback/峰值内存 profiler、长序列 benchmark 和 NPU fallback closure 仍须单独收口；`k.input.v1`、selector context/history、未注册自定义公式和混合/低精度仍静态拒绝 |
-| 拓扑特化 executors | `single-layer.v1` 对无状态 N/content 单层拓扑采用平铺 Tensor 路径；`hb-line.v1` 直接消费 fully expanded HB Plan，独立按 Line barrier 推进；二者共享 owner 参数而没有第二份参数 namespace，支持 full/chunk/decode 和静态拒绝，不调用通用 eager scheduler | HB 版本当前是独立拓扑调度 oracle，不是融合或高性能 HB kernel，也没有形成独立的局部公式 oracle；支持集合目前只是 256 candidates 中预先由谓词选出的单层 8 个与 HB 16 个，尚缺资格 bundles、目标设备 profiling 和正式性能门 |
+| 通用 packed executor | `tide.generic-packed.torch.v1` 直接复用同一 `SettleGraph` owner 的参数，静态接受当前 256 个固定 K `core-v1` candidates；按 region 处理整段 ([B,T])，只在 regions 间保留实际 `DATA` records，并覆盖 N/SD/BO、content/pre/post、EMA、Gated DeltaNet、窗口 Attention、当前 Aggregate/Read/Score/NodeCompute/Emit、forced-active singleton、prefill/decode 和 trace；代表性 lifecycle 覆盖 carry、reset、row reorder 与 empty tail；SD/pre 的 hard route 发现及必须保持因果顺序的状态扫描位于 TorchScript 循环中，随后按固定 route 可微重算；不调用任一 eager scheduler。共享参数 extension-v2 的定向用例证明它沿用 owner 中已经绑定的参数身份 | 这是 tensorized packed development implementation，尚未通过 `C04` 正确性资格或 `X07` 性能资格，共享参数也尚未建立扩展资格 cell：StateStore 打包/发布、下一位置和静态参数分组仍有 host-side mapping，部分严格 FP32 顺序路径在 TorchScript 中串行；已针对 source-liveness tracker 与 autograd graph 的已知强引用环改为公开结果边界的单一强 owner 和内部弱引用，定向生命周期回归与非资格 RSS smoke 未再复现该环，详见[开发验证状态](executor-equivalence-development-status.md)；但 grad-enabled 前向仍会为公开 Tensor occurrence 重复运行 source-liveness 语义遍历并产生 host synchronization，现有 profile counters 未覆盖该成本；反向时的小 usage-mask host copy、真实 callback/峰值内存 profiler、长序列 benchmark 和 NPU fallback closure 仍须单独收口；`k.input.v1`、selector-history、未注册自定义公式和混合/低精度仍静态拒绝 |
+| 拓扑特化 executors | `single-layer.v1` 对无状态 N/content 单层拓扑采用平铺 Tensor 路径；`hb-line.v1` 直接消费 fully expanded HB Plan，独立按 Line barrier 推进；二者共享 owner 参数而没有第二份参数 namespace，因而不会复制或解除 Plan schema 2 已声明的参数绑定；支持 full/chunk/decode 和静态拒绝，不调用通用 eager scheduler | HB 版本当前是独立拓扑调度 oracle，不是融合或高性能 HB kernel，也没有形成独立的局部公式 oracle；支持集合目前只是 256 candidates 中预先由谓词选出的单层 8 个与 HB 16 个，尚缺资格 bundles、目标设备 profiling 和正式性能门；共享参数只有单层定向开发回归 |
 | placement | POST、PARBLK、PARATTN、PARMLP 的通用 Tensor 方程及 identity 退化测试 | 真实 Qwen block、causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度接入 |
 | comparator 与解析 oracle | 统一 nested comparator、trace invariant 检查、route-boundary 分类，一个不调用共享局部算子或执行器 helper、并按第 2.3.3 节省略 selector Read/Score/K/Top-K 的 singleton exact-trace golden；48-Plan/6-VJP/24-invalid 快速 corpus 比较 token-major 与 region-major；固定 identity 的 256-candidate/64-marked-VJP executor corpus 对通用 packed 做两 dtype output/state/balance/full-trace 和 full/全部非空 `T=3` two-chunk/decode forward，每段 chunk/每步 decode 的 trace 均直接对照 eager，规范合并后的 trace 再与 full 对照。64 个 VJP cases 在每种 dtype 下依次隔离查询 output、可微 balance loss、每个最终状态 owner/component、每个 region `soft_sum`、每个可微 trace region event 的 logits/probabilities、组合目标和重复 output，并比较 hidden/全部具名参数的数值与 `None` 连通性；live 结果另递归比较每个公开 Tensor occurrence 的 `requires_grad`。FP64 定向回归覆盖 EMA/Gated DeltaNet/窗口 Attention 的空初态与可微外部初态、Attention keys/values、跨 chunks 的保留图 public-result/trace-state objectives，以及关联 node/edge/parent/terminal trace occurrence 的事件局部 autograd provenance。对静态适用的全部单层 8 个和 HB 16 个做 eager—packed—specialized 三方两 dtype full/全部非空 `T=3` two-chunk/decode forward 与另行 full-prefill VJP；24 个支持 case 在 FP64 下另做 live 公开结果元数据三方比较，一个混合状态 HB case 把 17 个调用方初始状态 leaves 纳入三方 VJP。有状态代表集另覆盖 reset、row reorder、empty tail、mask/位置/状态所有权负例和晚期 empty-terminal 失败回滚；共享执行入口还定向验证只接受 FP32/FP64，并在执行前拒绝空 batch。受控 runner 从执行期回执而非静态 support 数量导出实际覆盖，缺少任一 case/dtype/mode 或 objective completion 时失败 | 256 个仍是生成式 development candidates，不是长期物化的资格 bundles；仍缺完整多类别独立 goldens、资格 objective/cotangent 与 exact logical-key records、32 FD、16 optimizer、完整 pairwise/event multiplicity、其余非法 mutants、失败收缩和 `C00`—`C12` 可追溯 artifacts |
-| checkpoint v1 | SettleGraph 参数、logical/typed Plan 与参数 dtype 校验、CPU 规范 receiver Tensor/窗口 Attention 状态、进度/训练元数据和 CPU RNG 的 `init-from`/`resume` round trip；通用状态序列化器严格编码、解码 selector-history 容器，但 eager executor/checkpoint attach 拒绝非空 history；root 键集 exact，序列位置使用下一待执行位置并拒绝旧字段；Adam/AdamW 类型与超参数域、稳定模型参数组/顺序、已初始化 state manifest、Tensor shape/dtype/storage alias 均在 commit 前校验；保存端只接受 weights-only-safe 元数据并自检；CPU 序列状态先做 owner/alias 校验再转目标 device；基础 CPU checkpoint 跨 device 装载路径和 receiver-state continuation 用例已实现；注入式 commit failure 对 model `state_dict`、optimizer containers/defaults 与 CPU RNG 联合回滚 | selector-history continuation、scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口和窗口中途恢复未实现；portable handoff 仍缺完整训练状态、optimizer 下一步、规定数量和可追溯证据，未达到完整资格；不支持任意 optimizer/schema，也不承诺回滚任意 Python 属性或 load hook 外部副作用；仍缺第 7.5 节与测试契约第 8 节的完整资格证据 |
-| live backend 入口 | CPU/NPU/CUDA 的显式 backend semantic 测试入口；2026-09-03 在本机 aarch64 `Ascend910_9392`、Torch `2.10.0+cpu`、TorchNPU `2.10.0`、CANN `9.0.0` 上，对后来提交为 `c6e2cc5` 的 eager-reference 基线内容完成一次 FP32 定向 attempt：由 site launcher 分配设备并在进程内使用 logical index 0，显式 NPU runtime suite 22/22、live semantic 3/3、独立 CPU→NPU fixture parity 和 CPU checkpoint continuation 通过，parity 最大绝对/相对误差为 \(5.96\times10^{-8}\)/\(1.43\times10^{-6}\)，CPU parity artifact/checkpoint SHA-256 分别为 `944378eb1ad4e7ba20205eeb81f8243b4aebad85763f7db27139dde29964861f`/`5a4c155bb5ada1e1b47a30fc5628e622a225600f282fd42964d2df8fe6614172`；另一次较早的 EMA、Gated DeltaNet 与窗口 Attention region-major forward/backward profiler attempt 观察到 NPU kernels，未观察到 AI_CPU task 或显式 fallback 记录 | 该记录不是 clean exact-commit 证据，且当前扩展代码尚未复验；parity 只有一个 BO/post fixture，未达到契约的 64/32/8 数量与完整 operator/shape/layout 覆盖，也未 profile optimizer/checkpoint 或建立 fallback closure；较早 profiler 有默认 schedule 可能不完整的 warning，并无 packed、低精度、短训练，因此 NPU 仍为 `implemented`；CUDA 仍为 `planned` |
+| checkpoint v1 | SettleGraph 参数、logical/typed Plan 与参数 dtype 校验、CPU 规范 receiver Tensor/窗口 Attention 状态、进度/训练元数据和 CPU RNG 的 `init-from`/`resume` round trip；Plan schema 2 的目标模型会先恢复参数绑定，loader 要求同一共享参数的多个 `state_dict` locators 携带一致数值，optimizer 只登记一次共享参数；通用状态序列化器严格编码、解码 selector-history 容器，但 eager executor/checkpoint attach 拒绝非空 history；root 键集 exact，序列位置使用下一待执行位置并拒绝旧字段；Adam/AdamW 类型与超参数域、稳定模型参数组/顺序、已初始化 state manifest、Tensor shape/dtype/storage alias 均在 commit 前校验；保存端只接受 weights-only-safe 元数据并自检；CPU 序列状态先做 owner/alias 校验再转目标 device；基础 CPU checkpoint 跨 device 装载路径和 receiver-state continuation 用例已实现；注入式 commit failure 对 model `state_dict`、optimizer containers/defaults 与 CPU RNG 联合回滚 | 共享参数 checkpoint 目前只有定向开发回归，尚无扩展资格 cell；selector-history continuation、scheduler、scaler、backend RNG、sampler/data cursor、未归约统计窗口和窗口中途恢复未实现；portable handoff 仍缺完整训练状态、optimizer 下一步、规定数量和可追溯证据，未达到完整资格；不支持任意 optimizer/schema，也不承诺回滚任意 Python 属性或 load hook 外部副作用；仍缺第 7.5 节与测试契约第 8 节的完整资格证据 |
+| live backend 入口 | CPU/NPU/CUDA 的显式 backend semantic 测试入口；2026-09-03 在本机 aarch64 `Ascend910_9392`、Torch `2.10.0+cpu`、TorchNPU `2.10.0`、CANN `9.0.0` 上，对后来提交为 `c6e2cc5` 的 eager-reference 基线内容完成一次 FP32 定向 attempt：由 site launcher 分配设备并在进程内使用 logical index 0，显式 NPU runtime suite 22/22、live semantic 3/3、独立 CPU→NPU fixture parity 和 CPU checkpoint continuation 通过，parity 最大绝对/相对误差为 \(5.96\times10^{-8}\)/\(1.43\times10^{-6}\)，CPU parity artifact/checkpoint SHA-256 分别为 `944378eb1ad4e7ba20205eeb81f8243b4aebad85763f7db27139dde29964861f`/`5a4c155bb5ada1e1b47a30fc5628e622a225600f282fd42964d2df8fe6614172`；另一次较早的 EMA、Gated DeltaNet 与窗口 Attention region-major forward/backward profiler attempt 观察到 NPU kernels，未观察到 AI_CPU task 或显式 fallback 记录 | 该记录不是 clean exact-commit 证据，且当前扩展代码尚未完成可追溯复验；parity 只有一个 BO/post fixture，未达到契约的 64/32/8 数量与完整 operator/shape/layout 覆盖，也未 profile optimizer/checkpoint 或建立 fallback closure；较早 profiler 有默认 schedule 可能不完整的 warning，并无 packed、低精度、短训练，因此 NPU 仍为 `implemented`；CUDA 仍为 `planned` |
 
 因此，Stage A 的 eager reference 主体、forced-active singleton 简化、独立调度参考、基础 comparator/invariant、一个解析 golden、单-site parameter manifest 和 bundle 基础设施已经存在；Stage B 的当前 `core-v1` 通用 packed 路径以及 Stage C 中单层/HB 的拓扑特化路径也已实现并进入扩大版 development regression。Stage C 的真实 Base 接入、selector-history，以及 Stage B/C 的正式 qualification 与性能收口仍未完成。本机已有 eager-reference 基线快照的 NPU 定向 parity/checkpoint attempt 和一次较早的 profiler attempt，但当前 packed/特化代码与完整 NPU qualification、CUDA parity 均未验证。现有单元、定向差分和这些硬件 attempt 都不能代替第 10 节要求的完整可追溯资格 artifact。
 
 selector-history 仍存在通用 schema 级未闭合项。测试契约中的 `TEST-HISTORY-ACTIVE-EMA-V1` 已经唯一规定一个 node-level history 的数值递推、写回时序、首值/decay 语义及其加入 Read 的位置，因此该局部公式本身可以生成 golden；尚未唯一规定的是通用 Plan 如何选择 region-level 或 node-level owner、规范 owner 键和字段、Read 维度，以及 trace/checkpoint 中的统一序列化表示。在这些选择形成版本化 schema 前，它不能进入当前实现的通用标准测试子集；本计划不替这些待定项预选软件字段。
 
-单个 SettleGraph site 当前从 Plan 派生实现无关 parameter schema，并另存 owner model 的 locator binding；fixture Tensor 因而可以使用逻辑参数键，而不把 module 路径当作跨 executor 身份。packed 与特化绑定直接持有并使用同一个 `SettleGraph` 参数 owner，不注册参数副本或第二个 `state_dict` namespace，所以当前不需要另一份参数 locator。跨 sites 的稳定 site ID 与独立 parameter schema 组合仍未闭合；当前 schema 只解决了独立参数的单-site bundle 身份，不代表端到端资格已经完成。
+当前 schema 仍保留 `selector_context=context.none.v1` 和 Score 的 `context_dim=0` 字段；它们只表示没有额外输入，不对应主语义中的 selector 信息源。
+
+单个 SettleGraph/site 当前可从 Plan 派生实现无关的 parameter schema v1 或 v2，并另存 eager locator binding；fixture Tensor 因而按参数身份而不是 module 路径交换。packed 与特化执行器直接持有同一个 `SettleGraph` 参数 owner，不注册参数副本或第二个 `state_dict` namespace。跨 sites 的稳定 site ID、参数身份组合与共享范围仍未闭合；当前 extension-v2 及其定向测试不代表端到端资格已经完成。
 
 ## 2. 共同的数据契约
 
@@ -146,9 +150,15 @@ $$
 
 候选为空时不执行选择，也不读取该事件的 `requested_k`。`requested_k` 可以随调用事件变化，因此只用于接口与调度实验，不能记作主语义中的固定 \(K_{\mathcal R}\) 实验。由 Token hidden、selector logits 或 receiver state 在模型内部推导请求值的 adaptive \(K\) 暂不支持。
 
-#### 2.3.2 状态与参数各自独占
+#### 2.3.2 状态所有权与操作级参数共享
 
-每份 receiver state、selector-history 和 SettleGraph 内部可训练参数都由一个稳定逻辑键唯一拥有。当前 validator 和 binding 必须拒绝跨 node、region 或 site 的共享、Tensor alias 以及 backing-storage alias；SettleGraph 权重不做绑定。批量执行可以重排或临时打包互不共享的参数，但不能把不同逻辑参数变成同一个可训练自由度。若以后重新引入共享，必须另行定义 owner、参数身份、更新顺序、梯度累加和 checkpoint 契约，不能把它当作当前 Plan 的自然扩展。
+每份 receiver state 和 selector-history 都由一个稳定逻辑键唯一拥有。当前 validator 和 binding 必须拒绝不同状态 owner 之间的 Tensor alias 及 backing-storage alias。
+
+`core-v1` 使用 Plan schema 1，每个可训练参数身份彼此独立。共享参数 extension-v2 使用 Plan schema 2：一个 **operation use** 由 `(owner_kind, owner_id, operation)` 唯一标识，并可显式映射到 `parameter_set_id`；未列出的 operation use 仍拥有独立参数。
+
+一次映射覆盖该 operation 暴露的全部可训练角色。parameter schema v2 把这些角色展开为规范 `parameter_slot`；edge、candidate 或 terminal 相关角色使用稳定顺序的 ordinal。多个 operation uses 只有在 formula、完整 slots、shape 和 dtype role 全部兼容时才能引用同一 parameter set，每个 `(parameter_set_id, parameter_slot)` 表示一个可训练参数身份。当前接口不允许只共享一个 operation 的部分角色。
+
+eager 模型把同一参数身份绑定为同一个 `nn.Parameter`，因此各 use 的梯度自然求和，optimizer 只登记一次。parameter manifest v2 分开记录 operation uses 与去重后的参数身份，`tide.settlegraph.fixture.v1` 也只为每个参数身份保存一次 Tensor；checkpoint 恢复时必须保持 Plan 声明的 alias，并拒绝同一共享参数在不同 `state_dict` locators 中出现不一致数值。packed 与特化执行器复用同一个参数 owner。上述能力当前仅覆盖单个 SettleGraph/site，并只有定向开发回归，尚未资格化；它从不允许 receiver state 或 selector-history 共享。
 
 #### 2.3.3 forced-active singleton
 
@@ -202,7 +212,7 @@ $$
 
 每个语义配置至少有一个标准 Torch 参考实现。可选优化实现必须声明支持的 device、dtype、shape、forward/backward 和布局；不支持时只能显式选择已经验证等价的参考实现，或明确失败，不能暗中换算法、换 dtype、转 CPU 或丢失梯度。
 
-各执行器应读取同一组逻辑参数。为了 grouped GEMM 或批量状态更新，可以重排或临时堆叠具有相同算子签名、但彼此独立的 node 参数；不同执行器不能维护会逐渐失配的可训练副本，也不能借打包引入权重绑定。
+各执行器应读取同一组逻辑参数。`core-v1` 可以为 grouped GEMM 或批量状态更新重排、临时堆叠彼此独立的 node 参数；extension-v2 则必须按 Plan 声明复用同一参数身份。不同执行器不能维护会逐渐失配的可训练副本，也不能借打包新增或取消权重绑定。
 
 ## 3. 三条执行路径
 
@@ -334,7 +344,8 @@ Plan 编译阶段应把相同状态算法、状态 shape、selector 形式、Nod
 | active budget | 各 region 独立的固定 Top-1、Top-2、all；另测外部 `requested_k` 扩展 | region 间上限不同、singleton、候选少于请求 K 和变长 active set |
 | Emit | hard、Hard-ST、soft probability | 前向值与 selector 主任务梯度 |
 | NodeCompute | 简单 affine 测试算子、SwiGLU MLP、状态读出 + 双 residual | 解析核验、真实昂贵计算和 residual |
-| 参数关系 | 所有 SettleGraph 参数独立 | 参数 owner、Tensor/storage alias 拒绝和跨执行器同一逻辑参数 |
+| `core-v1` 参数关系 | 所有 SettleGraph 参数独立 | 参数 owner、Tensor/storage alias 拒绝和跨执行器同一逻辑参数；不覆盖主语义中的显式共享 |
+| 共享参数 extension-v2 | 单 site 内按 operation use 绑定完整参数 slots | Plan/hash、manifest/fixture 去重、eager—packed—特化复用、梯度求和、optimizer/checkpoint；单列开发结果，不计入 `core-v1` |
 | 状态首值 | 零、固定非零、可学习首状态 | reset、序列隔离和序列 continuation |
 
 窗口 Attention、Gated DeltaNet 等具体公式仍以语义文档附录 A 和实验记录为准；Attention 状态的当前物理约束见第 2.3.4 节。若实现的是另一种算法家族变体，必须使用新的明确配置，不能只复用旧名称。
@@ -479,7 +490,7 @@ SettleGraph 独立测试通过后，再覆盖语义文档第 1.3 节的 POST、P
 - 对每种 placement 检查输入 hidden 与 residual 合入位置；
 - 按第 2.3.5 节初始化时，接入模型与原 Base 模型的前向输出和 LM loss 一致；
 - 非 identity 初始化时，逐 Token 与 prefill 仍相互等价；
-- 多个 sites 的参数和状态保持各自独立。
+- 多 site 的参数身份、状态键和可选跨 site 参数共享须由后续 schema 明确；可变状态始终按 owner 独占。
 
 identity 的默认验收边界以第 2.3.5 节为准。共同输入或参数的梯度、全部新增参数梯度和含辅助项的总训练目标若要声明等价，必须作为更强契约逐项定义和验证。
 

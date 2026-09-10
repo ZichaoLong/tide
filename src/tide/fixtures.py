@@ -40,8 +40,12 @@ from .failures import (
 )
 from .ops import AttentionState
 from .parameter_manifest import (
+    EAGER_PARAMETER_BINDING_VERSION,
+    EAGER_PARAMETER_BINDING_VERSION_V2,
     PARAMETER_SCHEMA_CANONICALIZER_ID,
+    PARAMETER_SCHEMA_CANONICALIZER_ID_V2,
     PARAMETER_SCHEMA_VERSION,
+    PARAMETER_SCHEMA_VERSION_V2,
     LogicalParameterKey,
     ParameterManifestEntry,
     ParameterManifestError,
@@ -55,6 +59,7 @@ from .plan import (
     ConcreteBinding,
     EdgeSpec,
     NodeSpec,
+    OperationParameterBinding,
     Plan,
     PlanValidationError,
     RegionSpec,
@@ -191,6 +196,10 @@ _LOGICAL_PLAN_KEYS = frozenset(
         "edges",
         "regions",
     }
+)
+_LOGICAL_PLAN_KEYS_V2 = _LOGICAL_PLAN_KEYS | {"parameter_bindings"}
+_PARAMETER_BINDING_KEYS = frozenset(
+    {"owner_kind", "owner_id", "operation", "parameter_set_id"}
 )
 _NODE_KEYS = frozenset(
     {
@@ -721,9 +730,18 @@ def _decode_json_bytes(data: Any, *, context: str) -> Any:
 
 
 def _decode_logical_plan(record: Any, *, plan_id: str) -> Plan:
+    if not isinstance(record, Mapping):
+        _raise(
+            "plan", "plan.schema", "logical Plan must be a mapping"
+        )
+    logical_keys = (
+        _LOGICAL_PLAN_KEYS_V2
+        if record.get("schema_version") == "2"
+        else _LOGICAL_PLAN_KEYS
+    )
     root = _exact_mapping(
         record,
-        _LOGICAL_PLAN_KEYS,
+        logical_keys,
         context="logical Plan",
         phase="plan",
         code="plan.schema",
@@ -731,13 +749,17 @@ def _decode_logical_plan(record: Any, *, plan_id: str) -> Plan:
     nodes_raw = root["nodes"]
     edges_raw = root["edges"]
     regions_raw = root["regions"]
-    if not isinstance(nodes_raw, list) or not isinstance(edges_raw, list) or not isinstance(
-        regions_raw, list
+    parameter_bindings_raw = root.get("parameter_bindings", [])
+    if (
+        not isinstance(nodes_raw, list)
+        or not isinstance(edges_raw, list)
+        or not isinstance(regions_raw, list)
+        or not isinstance(parameter_bindings_raw, list)
     ):
         _raise(
             "plan",
             "plan.schema",
-            "logical Plan nodes, edges, and regions must be JSON arrays",
+            "logical Plan nodes, edges, regions, and parameter_bindings must be JSON arrays",
         )
     try:
         nodes = []
@@ -770,6 +792,16 @@ def _decode_logical_plan(record: Any, *, plan_id: str) -> Plan:
                 code="plan.schema",
             )
             regions.append(RegionSpec(**dict(item)))
+        parameter_bindings = []
+        for index, raw in enumerate(parameter_bindings_raw):
+            item = _exact_mapping(
+                raw,
+                _PARAMETER_BINDING_KEYS,
+                context=f"logical Plan parameter binding {index}",
+                phase="plan",
+                code="plan.schema",
+            )
+            parameter_bindings.append(OperationParameterBinding(**dict(item)))
         plan = Plan(
             plan_id=plan_id,
             d_model=root["d_model"],
@@ -783,6 +815,7 @@ def _decode_logical_plan(record: Any, *, plan_id: str) -> Plan:
             entry_node_ids=root["entry_node_ids"],
             terminal_node_ids=root["terminal_node_ids"],
             output_aggregate=root["output_aggregate"],
+            parameter_bindings=tuple(parameter_bindings),
             topology_kind=root["topology_kind"],
             schema_version=root["schema_version"],
         )
@@ -1097,6 +1130,46 @@ def _validate_distinct_tensor_storage(
             owners[identity] = owner
 
 
+def _decode_parameter_manifest_entry(
+    logical_key: Any,
+    contract: Mapping[str, Any],
+    *,
+    index: int,
+    parameter_group: Any,
+    parameter_slot: Any = None,
+) -> ParameterManifestEntry:
+    logical_key_fields = {
+        "field",
+        "region_id",
+        "node_id",
+        "edge_id",
+        "terminal_node_id",
+        "parameter_role",
+    }
+    if not isinstance(logical_key, Mapping) or set(logical_key) != logical_key_fields:
+        _raise(
+            "artifact",
+            "artifact.schema",
+            f"parameter_schema use {index} logical_key is malformed",
+        )
+    try:
+        return ParameterManifestEntry(
+            logical_key=LogicalParameterKey(**dict(logical_key)),
+            formula_id=contract["formula_id"],
+            shape=tuple(contract["shape"]),
+            dtype_role=contract["dtype_role"],
+            parameter_group=parameter_group,
+            state_dict_locator=f"fixture.parameter.{index:08d}",
+            parameter_slot=parameter_slot,
+        )
+    except (ParameterManifestError, TypeError, ValueError, KeyError) as exc:
+        _raise(
+            "artifact",
+            "artifact.schema",
+            f"parameter_schema use {index} metadata is invalid: {exc}",
+        )
+
+
 def _validate_parameter_schema(
     value: Any, logical_hash: str, plan: Optional[Plan] = None
 ) -> Mapping[str, Any]:
@@ -1111,24 +1184,35 @@ def _validate_parameter_schema(
             "parameter_schema must contain the Plan-derived canonical manifest",
         )
     if value:
-        if set(value) != {
+        schema_version = value.get("schema_version")
+        is_v2 = schema_version == PARAMETER_SCHEMA_VERSION_V2
+        expected_root_keys = {
             "schema_version",
             "canonicalizer_id",
             "logical_plan_hash",
             "parameters",
-        }:
+        } | ({"parameter_uses"} if is_v2 else set())
+        if set(value) != expected_root_keys:
             _raise(
                 "artifact",
                 "artifact.schema",
                 "parameter_schema root has an unexpected key set",
             )
-        if value.get("schema_version") != PARAMETER_SCHEMA_VERSION:
+        if schema_version not in {
+            PARAMETER_SCHEMA_VERSION,
+            PARAMETER_SCHEMA_VERSION_V2,
+        }:
             _raise(
                 "artifact",
                 "artifact.schema",
                 "parameter_schema has an unsupported schema_version",
             )
-        if value.get("canonicalizer_id") != PARAMETER_SCHEMA_CANONICALIZER_ID:
+        expected_canonicalizer = (
+            PARAMETER_SCHEMA_CANONICALIZER_ID_V2
+            if is_v2
+            else PARAMETER_SCHEMA_CANONICALIZER_ID
+        )
+        if value.get("canonicalizer_id") != expected_canonicalizer:
             _raise(
                 "artifact",
                 "artifact.schema",
@@ -1140,60 +1224,116 @@ def _validate_parameter_schema(
                 "artifact.schema",
                 "parameter_schema logical Plan hash does not match",
             )
-        entries = value.get("parameters")
-        if not isinstance(entries, (list, tuple)):
+        parameters = value.get("parameters")
+        if not isinstance(parameters, (list, tuple)):
             _raise(
                 "artifact",
                 "artifact.schema",
                 "parameter_schema.parameters must be an array",
             )
         decoded_entries = []
-        for index, entry in enumerate(entries):
-            if not isinstance(entry, Mapping) or set(entry) != {
-                "logical_key",
-                "formula_id",
-                "shape",
-                "dtype_role",
-                "parameter_group",
-            }:
+        if is_v2:
+            contracts: Dict[str, Mapping[str, Any]] = {}
+            for index, parameter in enumerate(parameters):
+                if not isinstance(parameter, Mapping) or set(parameter) != {
+                    "parameter_id",
+                    "formula_id",
+                    "shape",
+                    "dtype_role",
+                }:
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        f"parameter_schema.parameters[{index}] is malformed",
+                    )
+                parameter_id = parameter["parameter_id"]
+                if not isinstance(parameter_id, str) or parameter_id in contracts:
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        "parameter_schema parameter IDs must be unique strings",
+                    )
+                contracts[parameter_id] = parameter
+            uses = value.get("parameter_uses")
+            if not isinstance(uses, (list, tuple)):
                 _raise(
                     "artifact",
                     "artifact.schema",
-                    f"parameter_schema.parameters[{index}] is malformed",
+                    "parameter_schema.parameter_uses must be an array",
                 )
-            logical_key = entry["logical_key"]
-            if not isinstance(logical_key, Mapping) or set(logical_key) != {
-                "field",
-                "region_id",
-                "node_id",
-                "edge_id",
-                "terminal_node_id",
-                "parameter_role",
-            }:
-                _raise(
-                    "artifact",
-                    "artifact.schema",
-                    f"parameter_schema.parameters[{index}].logical_key is malformed",
-                )
-            try:
+            for index, use in enumerate(uses):
+                if not isinstance(use, Mapping) or set(use) != {
+                    "logical_key",
+                    "parameter_id",
+                    "parameter_set_id",
+                    "parameter_slot",
+                }:
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        f"parameter_schema.parameter_uses[{index}] is malformed",
+                    )
+                parameter_id = use["parameter_id"]
+                if not isinstance(parameter_id, str):
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        f"parameter_schema.parameter_uses[{index}].parameter_id must be a string",
+                    )
+                contract = contracts.get(parameter_id)
+                if contract is None:
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        f"parameter_schema.parameter_uses[{index}] names an unknown parameter",
+                    )
                 decoded_entries.append(
-                    ParameterManifestEntry(
-                        logical_key=LogicalParameterKey(**dict(logical_key)),
-                        formula_id=entry["formula_id"],
-                        shape=tuple(entry["shape"]),
-                        dtype_role=entry["dtype_role"],
-                        parameter_group=entry["parameter_group"],
-                        state_dict_locator=f"fixture.parameter.{index:08d}",
+                    _decode_parameter_manifest_entry(
+                        use["logical_key"],
+                        contract,
+                        index=index,
+                        parameter_group=use["parameter_set_id"],
+                        parameter_slot=use["parameter_slot"],
                     )
                 )
-            except (ParameterManifestError, TypeError, ValueError) as exc:
-                _raise(
-                    "artifact",
-                    "artifact.schema",
-                    f"parameter_schema.parameters[{index}] metadata is invalid: {exc}",
+        else:
+            for index, entry in enumerate(parameters):
+                if not isinstance(entry, Mapping) or set(entry) != {
+                    "logical_key",
+                    "formula_id",
+                    "shape",
+                    "dtype_role",
+                    "parameter_group",
+                }:
+                    _raise(
+                        "artifact",
+                        "artifact.schema",
+                        f"parameter_schema.parameters[{index}] is malformed",
+                    )
+                decoded_entries.append(
+                    _decode_parameter_manifest_entry(
+                        entry["logical_key"],
+                        entry,
+                        index=index,
+                        parameter_group=entry["parameter_group"],
+                    )
                 )
         try:
-            decoded = ParameterSchemaManifest(logical_hash, tuple(decoded_entries))
+            decoded = ParameterSchemaManifest(
+                logical_hash,
+                tuple(decoded_entries),
+                schema_version=(
+                    PARAMETER_SCHEMA_VERSION_V2
+                    if is_v2
+                    else PARAMETER_SCHEMA_VERSION
+                ),
+                canonicalizer_id=expected_canonicalizer,
+                binding_schema_version=(
+                    EAGER_PARAMETER_BINDING_VERSION_V2
+                    if is_v2
+                    else EAGER_PARAMETER_BINDING_VERSION
+                ),
+            )
         except ParameterManifestError as exc:
             _raise(
                 "artifact",
@@ -1844,10 +1984,16 @@ def _decode_payload(
     )
     parameter_dtype = _dtype_from_binding(typed_plan, "parameter")
     if parameter_schema:
-        schema_entries = {
-            logical_parameter_tensor_key(entry["logical_key"]): entry
-            for entry in parameter_schema["parameters"]
-        }
+        if parameter_schema["schema_version"] == PARAMETER_SCHEMA_VERSION_V2:
+            schema_entries = {
+                entry["parameter_id"]: entry
+                for entry in parameter_schema["parameters"]
+            }
+        else:
+            schema_entries = {
+                logical_parameter_tensor_key(entry["logical_key"]): entry
+                for entry in parameter_schema["parameters"]
+            }
         if set(parameters) != set(schema_entries):
             _raise(
                 "artifact",

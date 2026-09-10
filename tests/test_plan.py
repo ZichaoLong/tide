@@ -68,6 +68,29 @@ class PlanTestCase(unittest.TestCase):
                 self.assertTrue(plan.entry_node_ids)
                 self.assertTrue(plan.terminal_node_ids)
 
+    def test_schema_v1_legacy_positional_constructor_order_is_preserved(self) -> None:
+        base = build_singleton()
+        reconstructed = Plan(
+            base.plan_id,
+            base.d_model,
+            base.dtype_roles,
+            base.nodes,
+            base.edges,
+            base.regions,
+            base.entry_node_ids,
+            base.terminal_node_ids,
+            base.output_aggregate,
+            base.topology_kind,
+            base.schema_version,
+            base.builder,
+        ).validate()
+
+        self.assertEqual(reconstructed.parameter_bindings, ())
+        self.assertEqual(reconstructed.topology_kind, base.topology_kind)
+        self.assertEqual(reconstructed.schema_version, base.schema_version)
+        self.assertEqual(reconstructed.builder, base.builder)
+        self.assertEqual(reconstructed.canonical_bytes(), base.canonical_bytes())
+
     def test_declaration_reordering_does_not_change_hash(self) -> None:
         original = build_small_hb()
         reordered_regions = tuple(
@@ -264,8 +287,13 @@ class PlanTestCase(unittest.TestCase):
         )
 
     def test_plan_schema_version_is_an_exact_gate(self) -> None:
-        incompatible = dataclasses.replace(build_singleton(), schema_version="2")
-        self.assert_invalid(incompatible, "schema_version must be exactly '1'")
+        schema_v2 = dataclasses.replace(
+            build_singleton(), schema_version="2"
+        ).validate()
+        self.assertEqual(schema_v2.canonical_dict()["parameter_bindings"], [])
+
+        incompatible = dataclasses.replace(build_singleton(), schema_version="3")
+        self.assert_invalid(incompatible, "schema_version must be '1' or '2'")
         with self.assertRaises(PlanValidationError):
             incompatible.canonical_hash()
 

@@ -16,8 +16,8 @@
 | --- | --- |
 | SettleGraph site | 单 site；测试记录使用固定外部标签 `site.core`，它不是 logical Plan v1 的新字段 |
 | logical Plan | schema `1`，canonicalizer `tide-plan-json-v1`，fully expanded `core-v1` Plan |
-| selector context/history | `context.none.v1` 和 `history.none.v1` |
-| 参数关系 | 每个 logical parameter key 独立；`shared_parameters=false`，没有参数组 |
+| 保留的 selector-context 字段 / selector-history | `context.none.v1` 和 `history.none.v1`；前者不提供额外 Score 输入 |
+| 参数关系 | 每个 logical parameter key 独立；`shared_parameters=false`，没有参数组；不覆盖主语义中的显式共享 |
 | 首状态策略 | 新序列使用当前公式定义的零 Tensor 或空 Attention 窗口；可装载非零的调用前当前状态，但不把它称为 Plan 声明的固定首状态 |
 | receiver state | none、EMA、Gated DeltaNet、规范窗口 Attention；每个可变状态只有一个 receiver owner |
 | profile/timing | N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post |
@@ -26,7 +26,7 @@
 | 局部实现 | eager 标准 Torch 参考公式；没有 mixed precision、compiled、custom kernel 或静默 fallback |
 | Base 边界 | 独立 SettleGraph；不把 Qwen、Dense 或 Flat MoE 计入本范围 |
 
-一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节的 schema v2 阻塞项。
+一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。共享参数已有 extension-v2 定向开发回归，但不计入这里的通过范围；[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节。
 
 本计划另行测试当前实现的可选外部控制接口 `k.input.v1`；它不属于 `core-v1`，其通过只说明调用方能够显式提供有界整数并得到正确执行、失败和回滚行为。进入科学实验的 Plan 固定使用 `k.fixed.v1`，不同 regions 可以各自选择不同的固定 $K$。
 
@@ -48,8 +48,9 @@
 
 ### 1.3 extension-v2
 
-以下能力在 Plan、parameter、trace 或 checkpoint schema 闭合前不能混入 `core-v1`：
+以下能力不属于 `core-v1`，必须使用独立的扩展身份、语料和 capability cells：
 
+- 按具体操作显式共享参数；Plan schema 2、parameter schema v2、单-site fixture/eager/packed/特化/optimizer/checkpoint 的定向开发回归已经实现，但尚未资格化；
 - selector-history；
 - Plan 声明的固定非零或可学习首状态；
 - 多 site 参数和状态身份；
@@ -57,7 +58,7 @@
 - 混合或低精度 accumulation roles；
 - 尚未注册完整公式、导数或状态时序的自定义操作。
 
-实现明确拒绝这些能力是合法的 `unsupported` 或 `implemented` 边界，不是 `core-v1` 失败。把它们接受后静默改成无 history、零首状态或 FP32 eager 则是失败。
+`core-v1` runner 明确排除这些能力不是失败。某项扩展只有定向测试时只能报告 `implemented`，不能借用 `core-v1` 证据报告 `verified`；把已接受的扩展静默改成参数独立、无 history、零首状态或 FP32 eager 则是失败。
 
 ## 2. 计数单位和不可变身份
 
@@ -397,7 +398,7 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | Score `score.fixed-by-node.v1`、`TEST-SCORE-CONST-V1`、`score.constant.v1`、`score.read-sum.v1`、`TEST-SCORE-LINEAR-V1`、`TEST-SCORE-MLP-V1` | 依次 `golden-07`、`golden-01`、`golden-03`、`golden-02`、`golden-04`、`golden-08` |
 | NodeCompute `node.identity.v1`、`TEST-NODE-AFFINE-V1`、`TEST-NODE-SWIGLU-V1` | 依次 `golden-00`、`golden-05`、`golden-02` |
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 依次 `golden-01`、`golden-02`、`golden-03`；Hard-ST 的 surrogate derivative 另按第 7.1 节解析验证 |
-| `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` | none 语义用 `golden-00`；固定 K 用 `golden-01` |
+| 保留字段 `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` | none 语义用 `golden-00`；固定 K 用 `golden-01` |
 
 这些 fixture 使用 $d\in\{2,3\}$、长度至多 4 的 dyadic 数值。期望生成器只能使用语言内标量四则运算、明写循环和独立的高精度 `exp`/`sqrt`；不得导入被测 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、state commit、balance-loss 或 executor helper。每个公式同时保存可读推导和完整 expected trace，不能只保存最终 output。
 
@@ -780,19 +781,20 @@ Qwen lock 至少保存 immutable model revision、config/tokenizer hashes、输�
 
 Dense、Dense 扩展和 Flat MoE 若用于科学实验，另建各自的 reference、capacity/drop/reroute、loss、gradient、checkpoint 和性能门；它们不借用 `core-v1` 通过状态。
 
-## 13. Schema v2 进入条件
+## 13. Extension-v2 资格进入条件
 
-下表中的 schema-v2 extension fixture 只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行；已经单列的 `k.input.v1` 接口扩展不属于本表：
+共享参数已经具备可执行的 schema 和定向开发回归；下表其他扩展只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行。已经单列的 `k.input.v1` 接口扩展不属于本表：
 
-| 扩展 | schema v2 必须先定义的内容 | 新增资格重点 |
+| 扩展 | 当前边界或必须先定义的内容 | 新增资格重点 |
 | --- | --- | --- |
+| operation-level 参数共享 | Plan schema 2 以 operation use → `parameter_set_id` 绑定完整规范 slots；parameter schema v2 分开记录 uses 和唯一参数身份；当前仅单 SettleGraph/site | 独立 extension corpus；共享/未共享混合、全部注册参数化 operations、eager—packed—特化、梯度求和、optimizer 唯一参数、fixture/checkpoint alias 与负例 |
 | selector-history | site/region/node owner 选择、规范 key、首值/decay、Read 维度、写回 stop-gradient、trace/state/checkpoint 表示 | node-level active EMA 的解析 trace、跨 Token/chunk/reset、failure rollback、VJP 断路 |
 | 固定/可学习首状态 | zero/fixed/learnable kind、owner 与 logical parameter key、shape/dtype、序列 materialization、reset、init-from/resume | 零/非零/reset、多个 sequences 的梯度累加、参数 manifest、optimizer 和 checkpoint |
 | 多 site | stable site ID、parameter/state/trace key、顶层 reset/release/transaction、placement 顺序 | 四 placements、多 site 参数与状态隔离、all-site reset |
 | 低精度 | 每个 dtype role、accumulation/reduction dtype、rounding/autocast 和逐公式 tolerance | FP16/BF16 forward/backward/optimizer、overflow、CPU/NPU parity |
 | adaptive budget | budget 输入来源、读取时点、值域、梯度、状态依赖和失败事务 | Tensor-derived K 的 forward/VJP、边界、chunk 与 replay |
 
-schema v2 不能只增加可选字段而沿用 v1 hash 含义。它必须使用新 schema/canonicalizer identity，定义 v1 到 v2 是否存在无损升级，并为未知/缺失/冲突字段增加 negative fixtures。每个进入正式声明的 schema-v2 扩展都要另立 256 legal、64 VJP、16 optimizer 和至少 96 个非法 Plan/运行期输入的 corpus，不能把 `core-v1` 或 input-K 接口工件的事件重复计入；artifact faults 仍按其版本化工件 schema 另计。
+扩展 schema 必须把版本及新增字段纳入 canonical bytes 和 hash，并定义 v1 到 v2 是否存在无损升级；未知、缺失或冲突字段需要 negative fixtures。每个进入正式声明的 extension-v2 都要另立 256 legal、64 VJP、16 optimizer 和至少 96 个非法 Plan/运行期输入的 corpus，不能把 `core-v1`、定向开发回归或 input-K 接口工件的事件重复计入；artifact faults 仍按其版本化工件 schema 另计。
 
 ## 14. 执行顺序和最终报告
 

@@ -1,8 +1,9 @@
 """Canonical, framework-neutral SettleGraph plans.
 
 The classes in this module describe logical graph semantics only.  They do
-not contain parameters, runtime state, reached/active events, or compiled
-schedules.  Identifiers are NFC-normalized Unicode scalar-value sequences.
+not contain parameter Tensor values, runtime state, reached/active events, or
+compiled schedules.  Identifiers are NFC-normalized Unicode scalar-value
+sequences.
 Python's string order is therefore their scalar-value lexicographic order;
 declaration order has no effect on canonical JSON or the plan digest.
 """
@@ -375,6 +376,7 @@ class OperationConfigSchema:
     """Exact serialized config shape for one executable formula dispatch."""
 
     canonical_type: str
+    has_parameter_roles: bool = False
     required_keys: frozenset[str] = frozenset()
     defaults: Mapping[str, object] = field(
         default_factory=lambda: MappingProxyType({})
@@ -399,12 +401,14 @@ class ReferenceOperationConfigError(ValueError):
 def _schema(
     canonical_type: str,
     *,
+    has_parameter_roles: bool = False,
     required: Sequence[str] = (),
     defaults: Optional[Mapping[str, object]] = None,
     fixed: Optional[Mapping[str, JsonValue]] = None,
 ) -> OperationConfigSchema:
     return OperationConfigSchema(
         canonical_type=canonical_type,
+        has_parameter_roles=has_parameter_roles,
         required_keys=frozenset(required),
         defaults=MappingProxyType(dict(defaults or {})),
         fixed_values=MappingProxyType(dict(fixed or {})),
@@ -437,7 +441,9 @@ def _reference_operation_schemas() -> Mapping[
                     raise AssertionError(f"duplicate operation schema {key!r}")
                 schemas[key] = schema
 
-    norm_schema = _schema("rmsnorm", defaults={"eps": 1e-6})
+    norm_schema = _schema(
+        "rmsnorm", has_parameter_roles=True, defaults={"eps": 1e-6}
+    )
     for norm_field in ("input_norm", "ffn_norm"):
         add(
             norm_field,
@@ -456,7 +462,11 @@ def _reference_operation_schemas() -> Mapping[
         "aggregate",
         ("edge_softmax",),
         ("TEST-AGG-EDGE-SOFTMAX-V1",),
-        _schema("edge_softmax", defaults={"output_shape": _OUTPUT_SHAPE}),
+        _schema(
+            "edge_softmax",
+            has_parameter_roles=True,
+            defaults={"output_shape": _OUTPUT_SHAPE},
+        ),
     )
     add(
         "aggregate",
@@ -464,6 +474,7 @@ def _reference_operation_schemas() -> Mapping[
         ("TEST-AGG-EDGE-AFFINE-MEAN-V1",),
         _schema(
             "edge_linear_mean",
+            has_parameter_roles=True,
             defaults={"bias": True, "output_shape": _OUTPUT_SHAPE},
             fixed={"bias": True},
         ),
@@ -481,6 +492,7 @@ def _reference_operation_schemas() -> Mapping[
         ("state.ema.v1",),
         _schema(
             "ema",
+            has_parameter_roles=True,
             defaults={
                 "state_dim": _STATE_DIM,
                 "decay": 0.9,
@@ -496,6 +508,7 @@ def _reference_operation_schemas() -> Mapping[
         ("state.gdn.v1",),
         _schema(
             "gdn",
+            has_parameter_roles=True,
             required=("key_dim", "value_dim"),
             defaults={"norm_eps": 1e-12, "state_shape": _STATE_SHAPE},
         ),
@@ -506,6 +519,7 @@ def _reference_operation_schemas() -> Mapping[
         ("state.attention-window.v1",),
         _schema(
             "attention_window",
+            has_parameter_roles=True,
             required=("key_dim", "value_dim", "window"),
             defaults={"norm_eps": 1e-12, "state_shape": _STATE_SHAPE},
         ),
@@ -527,6 +541,12 @@ def _reference_operation_schemas() -> Mapping[
             (formula_id,),
             _schema(
                 read_type,
+                has_parameter_roles=read_type
+                in {
+                    "content_linear",
+                    "content_state_linear",
+                    "content_state_summary_linear",
+                },
                 defaults={
                     "out_dim": _SELECTOR_OUT_DIM,
                     "output_shape": _OUTPUT_SHAPE,
@@ -540,18 +560,20 @@ def _reference_operation_schemas() -> Mapping[
         ("read.ffn.zero.v1",),
         _schema("zero", defaults={"output_shape": _OUTPUT_SHAPE}),
     )
-    for state_formula in (
-        "read.ffn.zero.v1",
-        "read.ffn.ema.v1",
-        "read.ffn.gdn.v1",
-        "read.ffn.attention-window.v1",
+    for state_formula, has_parameter_roles in (
+        ("read.ffn.zero.v1", False),
+        ("read.ffn.ema.v1", True),
+        ("read.ffn.gdn.v1", True),
+        ("read.ffn.attention-window.v1", True),
     ):
         add(
             "ffn_read",
             ("state_default",),
             (state_formula,),
             _schema(
-                "state_default", defaults={"output_shape": _OUTPUT_SHAPE}
+                "state_default",
+                has_parameter_roles=has_parameter_roles,
+                defaults={"output_shape": _OUTPUT_SHAPE},
             ),
         )
 
@@ -567,6 +589,7 @@ def _reference_operation_schemas() -> Mapping[
         ("TEST-NODE-AFFINE-V1",),
         _schema(
             "affine_residual",
+            has_parameter_roles=True,
             defaults={"bias": True, "output_shape": _OUTPUT_SHAPE},
             fixed={"bias": True},
         ),
@@ -577,6 +600,7 @@ def _reference_operation_schemas() -> Mapping[
         ("TEST-NODE-SWIGLU-V1",),
         _schema(
             "double_residual_swiglu",
+            has_parameter_roles=True,
             defaults={
                 "hidden_dim": _NODE_HIDDEN_DIM,
                 "bias": True,
@@ -619,6 +643,7 @@ def _reference_operation_schemas() -> Mapping[
         ("TEST-SCORE-LINEAR-V1",),
         _schema(
             "linear",
+            has_parameter_roles=True,
             defaults={
                 "bias": True,
                 "shared_parameters": False,
@@ -637,6 +662,7 @@ def _reference_operation_schemas() -> Mapping[
         ("TEST-SCORE-MLP-V1",),
         _schema(
             "mlp",
+            has_parameter_roles=True,
             defaults={
                 "hidden_dim": _SCORE_HIDDEN_DIM,
                 "bias": True,
@@ -699,7 +725,9 @@ def _reference_operation_schemas() -> Mapping[
         ("node_softmax",),
         ("TEST-AGG-TERMINAL-SOFTMAX-V1",),
         _schema(
-            "node_softmax", defaults={"output_shape": _OUTPUT_SHAPE}
+            "node_softmax",
+            has_parameter_roles=True,
+            defaults={"output_shape": _OUTPUT_SHAPE},
         ),
     )
     return MappingProxyType(schemas)
@@ -1000,6 +1028,64 @@ def validate_reference_operation_config(
 
 
 @dataclass(frozen=True)
+class OperationParameterBinding:
+    """Bind one operation use to a logical trainable-parameter set.
+
+    The formula-specific parameter roles remain part of the parameter schema,
+    not the graph declaration.  Reusing ``parameter_set_id`` therefore ties
+    all roles exposed by compatible operation uses while leaving every
+    unlisted use independent.
+    """
+
+    owner_kind: str
+    owner_id: str
+    operation: str
+    parameter_set_id: str
+
+
+@dataclass(frozen=True)
+class OperationParameterSlot:
+    """One canonical trainable-parameter role exposed by an operation use."""
+
+    parameter_slot: str
+    parameter_role: str
+    formula_id: str
+    shape: Tuple[int, ...]
+    dtype_role: str = "parameter"
+
+    def compatibility_key(
+        self,
+    ) -> Tuple[str, str, str, Tuple[int, ...], str]:
+        """Return the complete contract used to decide whether uses can tie."""
+
+        return (
+            self.parameter_slot,
+            self.parameter_role,
+            self.formula_id,
+            self.shape,
+            self.dtype_role,
+        )
+
+
+def _parameter_binding_sort_key(
+    binding: OperationParameterBinding,
+) -> Tuple[
+    Tuple[int, str, str],
+    Tuple[int, str, str],
+    Tuple[int, str, str],
+    Tuple[int, str, str],
+]:
+    """Order valid and malformed declarations deterministically."""
+
+    return (
+        _id_sort_key(binding.owner_kind),
+        _id_sort_key(binding.owner_id),
+        _id_sort_key(binding.operation),
+        _id_sort_key(binding.parameter_set_id),
+    )
+
+
+@dataclass(frozen=True)
 class NodeSpec:
     """One receiver and its complete local logical-operation contract."""
 
@@ -1123,6 +1209,14 @@ _REGION_OPERATION_FIELDS = (
     "score",
     "selector_context",
     "selector_history",
+)
+
+_PARAMETER_BINDING_OPERATIONS = MappingProxyType(
+    {
+        "node": frozenset(_NODE_OPERATION_FIELDS),
+        "region": frozenset(_REGION_OPERATION_FIELDS),
+        "graph": frozenset({"output_aggregate"}),
+    }
 )
 
 
@@ -1264,6 +1358,7 @@ class Plan:
     topology_kind: str = "general"
     schema_version: str = "1"
     builder: Mapping[str, JsonValue] = field(default_factory=dict)
+    parameter_bindings: Tuple[OperationParameterBinding, ...] = ()
     _node_index: Mapping[str, NodeSpec] = field(
         init=False, repr=False, compare=False
     )
@@ -1334,6 +1429,23 @@ class Plan:
         object.__setattr__(self, "nodes", nodes)
         object.__setattr__(self, "edges", edges)
         object.__setattr__(self, "regions", regions)
+
+        parameter_bindings_value: object = self.parameter_bindings
+        if _is_sequence_declaration(parameter_bindings_value):
+            parameter_bindings_value = tuple(parameter_bindings_value)
+        if isinstance(parameter_bindings_value, tuple) and all(
+            isinstance(binding, OperationParameterBinding)
+            for binding in parameter_bindings_value
+        ):
+            parameter_bindings_value = tuple(
+                sorted(
+                    parameter_bindings_value,
+                    key=_parameter_binding_sort_key,
+                )
+            )
+        object.__setattr__(
+            self, "parameter_bindings", parameter_bindings_value
+        )
 
         for name in ("entry_node_ids", "terminal_node_ids"):
             value = getattr(self, name)
@@ -1573,6 +1685,12 @@ class Plan:
             topology_errors,
             formula_errors,
         )
+        self._validate_parameter_bindings(
+            node_set,
+            region_set,
+            topology_errors,
+            formula_errors,
+        )
         self._validate_edges(node_set, topology_errors)
         self._validate_boundaries_and_paths(node_set, topology_errors)
         self._validate_region_graph(topology_errors)
@@ -1588,7 +1706,7 @@ class Plan:
         """Return the normalized semantic record used for SHA-256."""
 
         self.validate()
-        return {
+        canonical = {
             "schema_version": self.schema_version,
             "topology_kind": self.topology_kind,
             "d_model": self.d_model,
@@ -1600,6 +1718,12 @@ class Plan:
             "edges": [self._edge_dict(edge) for edge in self.edges],
             "regions": [self._region_dict(region) for region in self.regions],
         }
+        if self.schema_version == "2":
+            canonical["parameter_bindings"] = [
+                self._parameter_binding_dict(binding)
+                for binding in self.parameter_bindings
+            ]
+        return canonical
 
     def canonical_json(self) -> str:
         """Serialize the logical Plan with a stable JSON encoding."""
@@ -1677,14 +1801,25 @@ class Plan:
             "phase": region.phase,
         }
 
+    @staticmethod
+    def _parameter_binding_dict(
+        binding: OperationParameterBinding,
+    ) -> Dict[str, JsonValue]:
+        return {
+            "owner_kind": binding.owner_kind,
+            "owner_id": binding.owner_id,
+            "operation": binding.operation,
+            "parameter_set_id": binding.parameter_set_id,
+        }
+
     def _validate_schema_contracts(
         self,
         schema_errors: _CategorizedValidationErrors,
     ) -> None:
         _validate_identifier("plan", self.plan_id, schema_errors)
         _validate_identifier("schema version", self.schema_version, schema_errors)
-        if self.schema_version != "1":
-            schema_errors.append("schema_version must be exactly '1'")
+        if self.schema_version not in ("1", "2"):
+            schema_errors.append("schema_version must be '1' or '2'")
         if type(self.d_model) is not int or self.d_model <= 0:
             schema_errors.append("d_model must be a positive integer")
         if not isinstance(self.topology_kind, str):
@@ -1720,6 +1855,79 @@ class Plan:
         _validate_config_schema(
             self.output_aggregate, "output_aggregate", schema_errors
         )
+
+        if _validate_sequence_schema(
+            self.parameter_bindings, "parameter_bindings", schema_errors
+        ):
+            if self.schema_version == "1" and self.parameter_bindings:
+                schema_errors.append(
+                    "parameter_bindings must be empty in Plan schema version '1'"
+                )
+            seen_parameter_uses: Set[Tuple[str, str, str]] = set()
+            for index, binding in enumerate(self.parameter_bindings):
+                if not isinstance(binding, OperationParameterBinding):
+                    schema_errors.append(
+                        "parameter_bindings["
+                        f"{index}] must be an OperationParameterBinding declaration"
+                    )
+                    continue
+                context = f"parameter_bindings[{index}]"
+                for name, kind in (
+                    ("owner_kind", "parameter owner kind"),
+                    ("owner_id", "parameter use owner"),
+                    ("operation", "parameter use operation"),
+                    ("parameter_set_id", "parameter set"),
+                ):
+                    _validate_identifier(
+                        f"{context} {kind}",
+                        getattr(binding, name),
+                        schema_errors,
+                    )
+                if not isinstance(binding.owner_kind, str):
+                    continue
+                allowed_operations = _PARAMETER_BINDING_OPERATIONS.get(
+                    binding.owner_kind
+                )
+                if allowed_operations is None:
+                    schema_errors.append(
+                        f"{context} owner_kind must be 'node', 'region', or "
+                        f"'graph', got {binding.owner_kind!r}"
+                    )
+                    continue
+                if (
+                    isinstance(binding.operation, str)
+                    and binding.operation not in allowed_operations
+                ):
+                    schema_errors.append(
+                        f"{context} operation {binding.operation!r} is not valid "
+                        f"for owner_kind {binding.owner_kind!r}"
+                    )
+                if (
+                    binding.owner_kind == "graph"
+                    and binding.owner_id != "graph"
+                ):
+                    schema_errors.append(
+                        f"{context} graph owner_id must be exactly 'graph'"
+                    )
+                if all(
+                    isinstance(value, str)
+                    for value in (
+                        binding.owner_kind,
+                        binding.owner_id,
+                        binding.operation,
+                    )
+                ):
+                    use_key = (
+                        binding.owner_kind,
+                        binding.owner_id,
+                        binding.operation,
+                    )
+                    if use_key in seen_parameter_uses:
+                        schema_errors.append(
+                            "each operation use may have at most one explicit "
+                            f"parameter binding; duplicate use {use_key!r}"
+                        )
+                    seen_parameter_uses.add(use_key)
 
         for field_name, values, item_kind in (
             ("entry_node_ids", self.entry_node_ids, "entry node"),
@@ -1761,7 +1969,7 @@ class Plan:
                 if node.parameter_group is not None:
                     schema_errors.append(
                         f"node {node.node_id!r} parameter_group must be null "
-                        "in Plan schema version '1'"
+                        f"in Plan schema version {self.schema_version!r}"
                     )
                 if type(node.forced_active) is not bool:
                     schema_errors.append(
@@ -2223,6 +2431,111 @@ class Plan:
                 + ", ".join(repr(item) for item in missing_memberships)
             )
 
+    def _validate_parameter_bindings(
+        self,
+        node_set: Set[str],
+        region_set: Set[str],
+        topology_errors: _CategorizedValidationErrors,
+        formula_errors: _CategorizedValidationErrors,
+    ) -> None:
+        if self.schema_version != "2":
+            return
+
+        contract_by_parameter_set: Dict[
+            str,
+            Tuple[
+                Tuple[Tuple[str, str, str, Tuple[int, ...], str], ...],
+                str,
+            ],
+        ] = {}
+
+        for binding in self.parameter_bindings:
+            if not isinstance(binding, OperationParameterBinding):
+                continue
+            allowed_operations = _PARAMETER_BINDING_OPERATIONS.get(
+                binding.owner_kind
+            )
+            if (
+                allowed_operations is None
+                or binding.operation not in allowed_operations
+                or not isinstance(binding.parameter_set_id, str)
+            ):
+                continue
+
+            config: Optional[Mapping[str, JsonValue]] = None
+            use_description = (
+                f"{binding.owner_kind} {binding.owner_id!r} operation "
+                f"{binding.operation!r}"
+            )
+            if binding.owner_kind == "node":
+                if binding.owner_id not in node_set:
+                    topology_errors.append(
+                        f"parameter binding names unknown node "
+                        f"{binding.owner_id!r}"
+                    )
+                    continue
+                config = getattr(
+                    self.node_by_id(binding.owner_id), binding.operation
+                )
+            elif binding.owner_kind == "region":
+                if binding.owner_id not in region_set:
+                    topology_errors.append(
+                        f"parameter binding names unknown region "
+                        f"{binding.owner_id!r}"
+                    )
+                    continue
+                config = getattr(
+                    self.region_by_id(binding.owner_id), binding.operation
+                )
+            elif binding.owner_kind == "graph":
+                if binding.owner_id != "graph":
+                    continue
+                config = self.output_aggregate
+
+            assert config is not None
+            try:
+                parameter_slots = operation_parameter_slots(
+                    self,
+                    binding.owner_kind,
+                    binding.owner_id,
+                    binding.operation,
+                )
+            except (IndexError, KeyError, TypeError, ValueError, OverflowError):
+                # The operation's own formula validation reports malformed
+                # dimensions and config values with the stable Plan category.
+                continue
+            if not parameter_slots:
+                formula_errors.append(
+                    f"parameter binding for {use_description} does not name "
+                    "a registered operation with at least one parameter role"
+                )
+                continue
+
+            signature = tuple(
+                slot.compatibility_key() for slot in parameter_slots
+            )
+            previous = contract_by_parameter_set.get(binding.parameter_set_id)
+            if previous is None:
+                contract_by_parameter_set[binding.parameter_set_id] = (
+                    signature,
+                    use_description,
+                )
+            elif previous[0] != signature:
+                previous_formula = previous[0][0][2]
+                formula_id = signature[0][2]
+                if previous_formula == formula_id:
+                    formula_errors.append(
+                        f"parameter set {binding.parameter_set_id!r} has "
+                        "incompatible canonical parameter slots at "
+                        f"{previous[1]} and {use_description}"
+                    )
+                    continue
+                formula_errors.append(
+                    f"parameter set {binding.parameter_set_id!r} mixes "
+                    f"formula_id {previous_formula!r} at {previous[1]} with "
+                    f"formula_id {formula_id!r} at {use_description}"
+                )
+
     def _validate_edges(
         self,
         node_set: Set[str],
@@ -2443,6 +2756,189 @@ class Plan:
             topology_errors.append(
                 "HB terminal receivers must be exactly the final line"
             )
+
+
+def operation_parameter_slots(
+    plan: Plan,
+    owner_kind: str,
+    owner_id: str,
+    operation: str,
+) -> Tuple[OperationParameterSlot, ...]:
+    """Return the canonical parameter contract for one operation use.
+
+    The result is the single source for Plan-v2 sharing compatibility and
+    executor-independent parameter manifests.  An empty result means that the
+    selected reference operation has no trainable parameters at this use.
+    Callers validate owner IDs and operation configs separately.
+    """
+
+    config: Optional[Mapping[str, JsonValue]] = None
+    node: Optional[NodeSpec] = None
+    region: Optional[RegionSpec] = None
+    if owner_kind == "node":
+        node = plan._node_index.get(owner_id)
+        if node is None or operation not in _PARAMETER_BINDING_OPERATIONS["node"]:
+            return ()
+        config = getattr(node, operation)
+    elif owner_kind == "region":
+        region = plan._region_index.get(owner_id)
+        if (
+            region is None
+            or operation not in _PARAMETER_BINDING_OPERATIONS["region"]
+        ):
+            return ()
+        config = getattr(region, operation)
+    elif owner_kind == "graph":
+        if owner_id != "graph" or operation != "output_aggregate":
+            return ()
+        config = plan.output_aggregate
+    else:
+        return ()
+
+    if not isinstance(config, Mapping):
+        return ()
+    operation_schema = _operation_schema(operation, config)
+    if operation_schema is None or not operation_schema.has_parameter_roles:
+        return ()
+    formula_id = config.get("formula_id")
+    if not isinstance(formula_id, str):
+        return ()
+
+    slots: List[OperationParameterSlot] = []
+
+    def add(slot: str, role: str, shape: Sequence[int]) -> None:
+        slots.append(
+            OperationParameterSlot(
+                parameter_slot=slot,
+                parameter_role=role,
+                formula_id=formula_id,
+                shape=tuple(shape),
+            )
+        )
+
+    operation_type = operation_schema.canonical_type
+    d_model = plan.d_model
+    if node is not None:
+        if operation in {"input_norm", "ffn_norm"}:
+            add("w", "w", (d_model,))
+        elif operation == "aggregate":
+            incoming = tuple(
+                edge for edge in plan.edges if edge.target == node.node_id
+            )
+            for edge_ordinal, _edge in enumerate(incoming):
+                if operation_type == "edge_softmax":
+                    add(f"edge.{edge_ordinal}.eta", "eta", ())
+                elif operation_type == "edge_linear_mean":
+                    add(
+                        f"edge.{edge_ordinal}.W",
+                        "W",
+                        (d_model, d_model),
+                    )
+                    add(f"edge.{edge_ordinal}.b", "b", (d_model,))
+        elif operation == "update":
+            if operation_type == "ema":
+                state_dim = int(config["state_dim"])
+                add("W_obs", "W_obs", (state_dim, d_model))
+                add("b_obs", "b_obs", (state_dim,))
+            elif operation_type == "gdn":
+                key_dim = int(config["key_dim"])
+                value_dim = int(config["value_dim"])
+                for role, shape in (
+                    ("W_k", (key_dim, d_model)),
+                    ("W_nu", (value_dim, d_model)),
+                    ("w_eta", (d_model,)),
+                    ("b_eta", ()),
+                    ("w_gamma", (d_model,)),
+                    ("b_gamma", ()),
+                    ("beta", ()),
+                ):
+                    add(role, role, shape)
+            elif operation_type == "attention_window":
+                key_dim = int(config["key_dim"])
+                value_dim = int(config["value_dim"])
+                add("W_k", "W_k", (key_dim, d_model))
+                add("W_nu", "W_nu", (value_dim, d_model))
+        elif operation == "selector_read":
+            read_dim = int(config["out_dim"])
+            if operation_type == "content_linear":
+                input_dim = d_model
+            elif operation_type == "content_state_linear":
+                input_dim = d_model + math.prod(node.state_shape)
+            else:
+                input_dim = d_model + 1
+            add("W_sel", "W_sel", (read_dim, input_dim))
+            add("b_sel", "b_sel", (read_dim,))
+        elif operation == "ffn_read":
+            update_type = _normalized_operation_type(node.update.get("type"))
+            if update_type == "ema":
+                add(
+                    "W_out",
+                    "W_out",
+                    (d_model, int(node.update["state_dim"])),
+                )
+            elif update_type in {"gdn", "attention_window"}:
+                key_dim = int(node.update["key_dim"])
+                value_dim = int(node.update["value_dim"])
+                add("W_q", "W_q", (key_dim, d_model))
+                add("W_out", "W_out", (d_model, value_dim))
+        elif operation == "node_compute":
+            if operation_type == "affine_residual":
+                add("W_node", "W_node", (d_model, d_model))
+                add("b_node", "b_node", (d_model,))
+            elif operation_type == "double_residual_swiglu":
+                hidden_dim = int(config["hidden_dim"])
+                for role, shape in (
+                    ("W_g", (hidden_dim, d_model)),
+                    ("b_g", (hidden_dim,)),
+                    ("W_u", (hidden_dim, d_model)),
+                    ("b_u", (hidden_dim,)),
+                    ("W_o", (d_model, hidden_dim)),
+                    ("b_o", (d_model,)),
+                ):
+                    add(role, role, shape)
+    elif region is not None and operation == "score":
+        member = next(
+            (
+                plan._node_index[node_id]
+                for node_id in region.node_ids
+                if node_id in plan._node_index
+            ),
+            None,
+        )
+        if member is not None:
+            input_dim = member.selector_read_shape[0]
+            for candidate_ordinal, _node_id in enumerate(region.node_ids):
+                if operation_type == "linear":
+                    for role, shape in (
+                        ("w_score", (input_dim,)),
+                        ("b_score", ()),
+                    ):
+                        add(
+                            f"candidate.{candidate_ordinal}.{role}",
+                            role,
+                            shape,
+                        )
+                elif operation_type == "mlp":
+                    hidden_dim = int(config["hidden_dim"])
+                    for role, shape in (
+                        ("W_1", (hidden_dim, input_dim)),
+                        ("b_1", (hidden_dim,)),
+                        ("w_2", (hidden_dim,)),
+                        ("b_2", ()),
+                    ):
+                        add(
+                            f"candidate.{candidate_ordinal}.{role}",
+                            role,
+                            shape,
+                        )
+    elif operation == "output_aggregate" and operation_type == "node_softmax":
+        for terminal_ordinal, _node_id in enumerate(plan.terminal_node_ids):
+            add(
+                f"terminal.{terminal_ordinal}.eta_out",
+                "eta_out",
+                (),
+            )
+    return tuple(slots)
 
 
 def _validate_identifier(
@@ -2816,11 +3312,14 @@ __all__ = [
     "EdgeSpec",
     "FrozenConfig",
     "NodeSpec",
+    "OperationParameterBinding",
+    "OperationParameterSlot",
     "PLAN_CANONICALIZER_ID",
     "Plan",
     "PlanValidationError",
     "RegionSpec",
     "TypedPlan",
     "bind_dtypes",
+    "operation_parameter_slots",
     "validate_stable_id",
 ]
