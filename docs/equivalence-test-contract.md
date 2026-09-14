@@ -2,9 +2,11 @@
 
 > 本文规定怎样构造、执行和判定 SettleGraph 等价性测试，不是新的模型语义来源。
 >
-> 模型含义以 [实验语义、命名与数学符号](experiment-semantics-and-naming.md) 为准；执行路径和实施顺序见 [SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)。本文中的 formula ID 只标识测试 fixture 使用的确切公式，不把它们规定为科学实验的默认配置。
+> 语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；执行路径和实施顺序见 [SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)。本文中的 formula ID 只标识测试 fixture 使用的确切公式，不把它们规定为上游对象或科学实验的默认配置。
 >
 > 本文描述完整验收目标，不把仓库中已有的 eager reference、region-major reference 或定向单元测试自动算作资格通过。当前实现边界见实现计划第 1.1 节；只有本文要求的 fixture、comparator 和可追溯 artifact 全部存在并通过，才能形成对应 capability cell 的证据。
+
+下文简称“语义文档”时指本地实验语义文档。`core-v1`、`extension-v2` 是本地实现和资格范围；Plan/parameter schema 与 fixture、formula ID 等各自固定工件或公式版本，均不等同于上游语义版本 `tide-core-2`。采用上游版本本身不产生测试通过证据。
 
 ## 1. 声明范围与通过含义
 
@@ -19,7 +21,7 @@
 
 “executor 等价”表示同一 backend 和 concrete execution binding 下，两个 executor 对同一 fixture 通过本文要求的全部离散、浮点、状态、trace 和梯度比较。“跨 backend parity”表示 CPU 与 accelerator 分别在新进程中读取同一 CPU fixture，并在声明的容差内通过；它不表示浮点 bitwise 相同，也不表示两种 backend 的训练轨迹完全相同。
 
-本文的核心范围是语义文档第 2.4 节定义的合法 Plan，以及实现计划第 2.3 节的当前 `core-v1` 取舍：每个 region 使用自己的固定 \(K_{\mathcal R}\)，每份可变状态都有唯一 owner，全部 SettleGraph 可训练参数彼此独立。按具体操作显式共享参数属于完整语义；当前已有 Plan/parameter schema 2 和定向开发测试，但尚未进入 `core-v1` 资格范围或形成独立资格 cell。本文另行测试实现计划第 2.3.1 节的可选外部控制扩展 `requested_k`，但其结果必须单独标记，不计入 `core-v1` 主语义或固定 \(K_{\mathcal R}\) 的标准实验。由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出所声明范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
+本文的核心范围是本地语义文档第 2.4 节定义的合法 Plan，以及实现计划第 2.3 节的当前 `core-v1` 取舍：每个 region 使用自己的固定 \(K_{\mathcal R}\)，每份可变状态都有唯一 owner，全部 SettleGraph 可训练参数彼此独立。按具体操作显式共享参数是本地语义允许的实例选择，上游也允许固定参数共享；当前已有 Plan/parameter schema 2 和定向开发测试，但尚未进入 `core-v1` 资格范围或形成独立资格 cell。本文另行测试实现计划第 2.3.1 节的可选外部控制扩展 `requested_k`，但其结果必须单独标记，不计入 `core-v1` 资格范围或固定 \(K_{\mathcal R}\) 的标准实验。由模型 Tensor 产生 active budget 或公式未完整声明的自定义操作不能进入通过集合。实现可以拒绝超出所声明范围的 Plan，但必须在运行前明确失败，不能静默改变语义。
 
 ## 2. Fixture bundle
 
@@ -72,7 +74,9 @@ $$
 
 公式 ID、稳定参数键、参数 shape 和 dtype role 写入 logical Plan；参数 Tensor 的数值由 fixture bundle 单独携带，不进入 logical/typed Plan hash。每个版本化公式的必需键、允许键、默认值与参数 schema 也是该公式契约的一部分；未知键、缺失的必需键或改变数学/参数 schema 的值必须在执行前拒绝，不得被 executor 忽略。规范化还必须物化所有默认值；仅因“省略某键”与“显式写出同一默认值”而不同的两份原始配置，必须得到 byte-identical 的规范记录和同一 logical Plan hash。eager、packed、compiled 和 kernel 选择等实现变体字段另存于 execution binding/manifest，不混入公式语义配置。未来替换激活、bias 或归约规则必须使用新的 formula ID。
 
-下面两个依赖父 edge ID 的 Aggregate 公式只作用于非入口 receiver。入口 receiver 的消息序列只有图边界 hidden，测试公式规定它原样返回；实现不得为此虚构语义父边或父边参数。
+下面两个依赖父 edge ID 的 receiver Aggregate，以及随后依赖终端 node ID 的 output Aggregate，属于本地语义文档第 2.1 节登记的 SettleGraph 身份感知扩展，并按一般 TimedDAG 实例解释。相应 fixture 验证本地公式和执行器，不能计作严格上游 SettleGraph 裸值聚合的符合性样例。
+
+这两个 receiver Aggregate 只作用于非入口 receiver。入口 receiver 的消息序列只有图边界 hidden，测试公式规定它原样返回；实现不得为此虚构语义父边或父边参数。
 
 #### `TEST-AGG-EDGE-SOFTMAX-V1`
 

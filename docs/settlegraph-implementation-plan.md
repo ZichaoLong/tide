@@ -1,10 +1,12 @@
 # SettleGraph 实现与等价性验证计划
 
-> 本文是实现计划，不改写 SettleGraph 的主模型语义。明确标为“可选外部控制扩展”的接口行为只描述和验证该扩展本身，不属于主语义或标准科学实验条件。
+> 本文是实现计划，不改写所采用的模型语义。明确标为“可选外部控制扩展”的接口行为只描述和验证该扩展本身，不属于本地标准 profile 或标准科学实验条件。
 >
-> [实验语义、命名与数学符号](experiment-semantics-and-naming.md) 是 SettleGraph 计算含义的权威文档。若实现计划与语义文档冲突，以语义文档为准；若语义文档不足以唯一决定实现行为，应先对齐语义，而不是在代码里自行选择一种解释。
+> 语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；本计划不能覆盖任一层。若尚不足以唯一决定实现行为，应先在相应语义层对齐，再实现。
 >
 > [等价性测试契约](equivalence-test-contract.md) 把本文的验证要求具体化为 fixture、trace、comparator 和证据门槛；它同样不增加模型语义。
+
+下文简称“语义文档”或“主语义”时均指本地实验语义文档；上游定义另行明确标注。`tide-core-2` 是上游抽象语义版本；`core-v1` 与 `extension-v2` 是本地实现和资格范围的名称；Plan schema、parameter schema 等版本规定本地工件的表示与兼容性。这些版本轴分别记录，数字相同不表示范围或通过状态相同。
 
 ## 1. 目标与完成标准
 
@@ -104,9 +106,14 @@ chunk 边界的状态值默认延续，autograd 边界默认 detach；这两件�
 - 入口和终端 receivers；
 - region 依赖图及其规范拓扑序；
 - Aggregate、Update、两类 Read、Score、Top-K、NodeCompute 和 Emit 的配置；
+- 状态延续绑定；当前 schema 由版本固定默认 Next，即 reached receiver 保存 `state_for_compute`、未 reached receiver 保持旧状态，不能读取 NodeCompute／Emit 的结果；
 - 状态、参数、hidden、读出和归约量的 shape 与 dtype role 契约；
 - forced-active 和每个 region 的固定 \(K_{\mathcal R}\)；若使用实现扩展，还要保存运行期 `requested_k` 契约；
 - HB-Lattice 可选的 Line、phase 和边来源标签。
+
+本地语义文档第 2.1 节还从 Plan 的 region 依赖或 HB Line 派生统一逻辑时间日程。当前 Plan schema 1/2 没有独立的日程或 Next 配置字段，已注册局部公式也不读取逻辑时间；因此这次上游采用不会改变既有 Plan bytes、Plan hash 或 Tensor 前向。需要按逻辑时间衰减、自定义 Next 或选择后清理时，必须先增加明确的公式与 schema，并分别验证；不能把文档中的数学适配器当作这些能力已经实现。Full 反馈不在当前采用范围内，若以后需要，须先另行修改语义边界，不能只用本地 schema 扩充。正式实验记录还须按本地语义文档第 8 节保存上游版本和所用日程。
+
+当前测试公式中读取父 edge ID 或终端 node ID 的 Aggregate 属于 SettleGraph 的本地身份感知扩展，并按一般 TimedDAG 实例解释。执行器支持或资格覆盖这些公式，只能形成相应本地扩展的证据，不自动形成严格上游 SettleGraph 的全面符合性结论。
 
 进入同一 receiver 的父消息按稳定 edge ID 排列；一个 region 的 candidates 按稳定 node ID 排列。logical Plan 的规范化序列化必须产生稳定 logical Plan hash。另一个规范记录把 dtype roles 映射到具体 dtype，连同 logical Plan hash 产生 typed Plan hash。可训练/装载的参数 Tensor 数值、device、executor、运行期 reached/active 结果和某个 batch 的状态不属于这两个 Plan hash；稳定参数键/schema 与会改变公式的固定常量、尺寸和开关属于 logical Plan。CPU FP64 oracle、CPU FP32 和 NPU FP32 分别建立 concrete execution binding，不能通过修改同一个 concrete Plan 的未记录运行时 dtype 来切换。
 
@@ -118,7 +125,7 @@ chunk 边界的状态值默认延续，autograd 边界默认 detach；这两件�
 
 ### 2.3 当前 `core-v1` 的实现取舍
 
-本节把首轮实现有意采用的简单构造集中在一起。它们约束当前实现与资格测试，但不是 SettleGraph 数学语义的唯一可能实现。
+本节把首轮实现有意采用的简单构造集中在一起。它们在两层语义允许的范围内约束当前实现与资格测试，不穷尽上游对象或本地实验语义允许的实例。
 
 #### 2.3.1 每个 region 独立配置 active budget
 

@@ -2,7 +2,7 @@
 
 > 本文把当前已经闭合的语义子集转成可执行的资格工作单。它不增加模型语义，也不证明仓库已经通过任何资格 cell。
 >
-> 模型含义以[实验语义、命名与数学符号](experiment-semantics-and-naming.md)为准，公式、比较器和完整目标以[等价性测试契约](equivalence-test-contract.md)为准，实现边界以[SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)为准。三者有冲突时，本计划只能缩小一次声明的范围，不能改写它们的语义。
+> 语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；测试公式、比较器和完整目标以[等价性测试契约](equivalence-test-contract.md)为准，实现边界以[SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)为准。本计划只能在这些契约内缩小一次资格声明的范围，不能改写模型语义或用较小测试范围消解语义冲突。
 
 本文是可执行的验收约束，不声称只凭文本就能重建每个 Tensor byte。本文已给出精确算法的部分必须按该算法实现；人工 golden 数值、非 probe 配置及其他仅给出有限约束的部分，由版本化 generator 在任何被测 executor 运行前一次性物化，通过代码审查后以 canonical bytes、生成决策记录和内容 hash 冻结。后续 executor 与 backend 必须消费这些相同冻结 bytes，不得根据运行结果重选数值、carrier 或子集。因此“字典序最小”只对文中已定义的有限 candidate 表生效，不把未定义的生成器选择暗中当作规范。
 
@@ -10,7 +10,7 @@
 
 ### 1.1 core-v1
 
-本文把以下共同范围称为 `core-v1`：
+本文把以下共同范围称为 `core-v1`。它与 `extension-v2` 都是本地实现和资格范围的名称；上游 `tide-core-2` 固定抽象语义版本，Plan schema、parameter schema 及各工件 schema 则分别固定表示与兼容性。三者不是同一条版本序列，采用上游定义也不自动获得本地资格：
 
 | 坐标 | `core-v1` 的唯一取值或取值集合 |
 | --- | --- |
@@ -21,12 +21,14 @@
 | 首状态策略 | 新序列使用当前公式定义的零 Tensor 或空 Attention 窗口；可装载非零的调用前当前状态，但不把它称为 Plan 声明的固定首状态 |
 | receiver state | none、EMA、Gated DeltaNet、规范窗口 Attention；每个可变状态只有一个 receiver owner |
 | profile/timing | N/content、SD/content、SD/pre、BO/content、BO/pre、BO/post |
+| 状态延续 | 默认 Next：reached receiver 保存本次 `state_for_compute`，未 reached receiver 保持旧状态；不读取 NodeCompute／Emit 结果 |
+| 上游逻辑时间适配 | 从 region 依赖或 HB Line 派生日程；当前公式忽略逻辑时间，Plan schema 不开放时间衰减配置 |
 | active budget | `k.fixed.v1`；每个 region 各自固定，不随 Token 改变 |
 | dtype binding | 四个核心 dtype roles 全部绑定为 FP64，或全部绑定为 FP32 |
 | 局部实现 | eager 标准 Torch 参考公式；没有 mixed precision、compiled、custom kernel 或静默 fallback |
 | Base 边界 | 独立 SettleGraph；不把 Qwen、Dense 或 Flat MoE 计入本范围 |
 
-一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。共享参数已有 extension-v2 定向开发回归，但不计入这里的通过范围；[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节。
+一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。`core-v1` 语料包含读取父 edge ID 或终端 node ID 的身份感知 Aggregate；这些 fixture 属本地扩展，其通过不能计作严格上游 SettleGraph 裸值聚合的符合性样例。共享参数已有 extension-v2 定向开发回归，但不计入这里的通过范围；[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节。
 
 本计划另行测试当前实现的可选外部控制接口 `k.input.v1`；它不属于 `core-v1`，其通过只说明调用方能够显式提供有界整数并得到正确执行、失败和回滚行为。进入科学实验的 Plan 固定使用 `k.fixed.v1`，不同 regions 可以各自选择不同的固定 $K$。
 
@@ -101,7 +103,7 @@ topology、shape、layout、mask 和调用前状态来源按 fixture 的 coverag
 - 完整 argv、resolved backend、`resolution_reason`、确定性和精度设置；
 - comparator 版本、逐稳定路径最坏误差、运行状态和 artifact hash。
 
-本计划不使用“当前文档”或“最新 schema”作版本。corpus 冻结时必须把下表键值逐字写入 manifest，并对三份 authority documents 另存当时 UTF-8 bytes 的 SHA-256：
+本计划不使用“当前文档”或“最新 schema”作版本。corpus 冻结时必须把下表键值逐字写入 manifest，并对三份本地 authority documents 另存当时 UTF-8 bytes 的 SHA-256：
 
 | identity 键 | 本版字面值 |
 | --- | --- |
@@ -121,7 +123,9 @@ topology、shape、layout、mask 和调用前状态来源按 fixture 的 coverag
 | `negative_schema_id` | `tide.settlegraph.negative.v2` |
 | `scenario_schema_id` | `tide.settlegraph.scenario.v1` |
 
-authority documents 当前没有自带的机器可读 schema version，因此上表的 document label 只是本计划的证据坐标，不冒充它们文件内已存在的字段；内容 hash 才固定精确版本。任何会改变解析、计数或通过条件的修订都必须换新相应 schema ID；不能只依赖 hash 变化却继续沿用旧 ID。上表 corpus/axes/coverage/result/run/negative/scenario schemas 未全部实现前，相应 cell 保持 `planned`。
+上表的 `semantic_authority` 固定本地实例语义文档，其上游采用声明固定相应的 20-tide 提交与语义版本；该字段不表示本地文档独占一般对象的定义权。历史工件仍按当时冻结的文档、commit 和 run 身份解释，不因当前采用声明而获得额外符合性或资格结论。
+
+这三份本地 authority documents 当前没有自带的机器可读 schema version，因此上表的 document label 只是本计划的证据坐标，不冒充它们文件内已存在的字段；内容 hash 才固定精确版本。任何会改变解析、计数或通过条件的修订都必须换新相应 schema ID；不能只依赖 hash 变化却继续沿用旧 ID。上表 corpus/axes/coverage/result/run/negative/scenario schemas 未全部实现前，相应 cell 保持 `planned`。
 
 dirty tree 可以产生开发记录，但不能把 capability cell 标为 `verified`。物理卡号、私有工作目录和可见设备映射只进入清洗后的 site-private 运行记录，不进入共享 corpus 或本文。
 
@@ -783,7 +787,7 @@ Dense、Dense 扩展和 Flat MoE 若用于科学实验，另建各自的 referen
 
 ## 13. Extension-v2 资格进入条件
 
-共享参数已经具备可执行的 schema 和定向开发回归；下表其他扩展只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行。已经单列的 `k.input.v1` 接口扩展不属于本表：
+本节的 extension-v2 是本地扩展资格范围，不是上游 tide-core-2，也不表示已有 Plan schema 2 或 parameter schema v2 支持下表全部能力。共享参数已经具备可执行的 schema 和定向开发回归；下表其他扩展只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行。已经单列的 `k.input.v1` 接口扩展不属于本表：
 
 | 扩展 | 当前边界或必须先定义的内容 | 新增资格重点 |
 | --- | --- | --- |

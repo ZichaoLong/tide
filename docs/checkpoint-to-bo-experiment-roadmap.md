@@ -1,15 +1,17 @@
 # 从 Base checkpoint 到 SettleGraph + BO 实验及后续扩展路线
 
-> 本文是当前实现完成 executor 等价性开发验证后的实验与工程推进计划。它不定义新的模型语义，也不修改既有语义。SettleGraph、BO、SD、placement、loss 和实验条件的计算含义以[实验语义、命名与数学符号](experiment-semantics-and-naming.md)为准；当前软件能力以[实现与等价性验证计划](settlegraph-implementation-plan.md)和[执行器等价性开发验证状态](executor-equivalence-development-status.md)为准；正式资格门槛以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
+> 本文是当前实现完成 executor 等价性开发验证后的实验与工程推进计划，不定义或修改模型语义。语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；当前软件能力以[实现与等价性验证计划](settlegraph-implementation-plan.md)和[执行器等价性开发验证状态](executor-equivalence-development-status.md)为准；正式资格门槛以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
 >
 > 本文的用途是让后续工作从一个明确基准继续：先用 checkpoint 实验判断 SettleGraph，尤其是 BO，是否具有可复现的训练或推理价值；只为实际实验路径做必要的特化加速；确认正面信号后，再建设面向超大、超稀疏、多卡 DAG 的通用高性能执行器。
+
+下文的 `core-v1`、`extension-v2` 指本地实现和资格范围，Plan/parameter schema 指本地工件版本，均不等同于上游语义版本 `tide-core-2`。当前采用关系不扩大历史 commit/run 的验证范围。
 
 ## 1. 已确定的优先级
 
 后续工作分成三层，按以下顺序投入：
 
 1. **实验有效性主线**：从真实 Base checkpoint 出发，接通推理、训练、恢复和评测，优先检验 SettleGraph + BO 能否取得可复现的正面结果。
-2. **实验所需的特化加速**：如果 profiler 证明当前执行路径阻塞第 1 层实验，则优化该实验实际使用的 Plan、状态和 placement；每个优化版本继续以主语义和 token-major eager reference 为实现内语义基准，并与现有 packed 路径差分。packed 是已有强开发等价证据的对照路径，不是独立的局部公式 oracle。
+2. **实验所需的特化加速**：如果 profiler 证明当前执行路径阻塞第 1 层实验，则优化该实验实际使用的 Plan、状态和 placement；每个优化版本继续以两层语义为计算依据，以 token-major eager reference 为实现内参考，并与现有 packed 路径差分。packed 是已有强开发等价证据的对照路径，不是独立的局部公式 oracle。
 3. **通用超大 DAG 性能工程**：只有在某类 SettleGraph/BO 配置已表现出稳定价值、并积累真实路由与通信记录后，才建设节点跨卡放置、设备端调度和大规模 packed 执行。
 
 这一区分避免把“模型是否值得训练”和“任意大图是否能极致加速”混成一个问题。第 1 层允许使用尚未达到最终性能资格、但已经通过所用调用域正确性验证的实现。在完整资格门之前，这些运行必须标为 engineering bring-up 或 development pilot，不能冒用正式 capability/scientific cell 身份；任何公开的模型效果或性能结论仍需对应的冻结证据。
@@ -58,7 +60,7 @@ docs: record controlled executor equivalence run
 
 受控 development run 在 `5712e66` 的 clean exact commit 上完成，60/60 tests 通过；它比较了固定 \(K\) `core-v1` 的 eager、通用 packed 以及适用的单层/HB 特化路径。覆盖包括 CPU FP64/FP32 的 full prefill、两种非空 `T=3` chunk 切分、逐 Token decode、output、state、balance、route、完整 trace、公开 Tensor 的 `requires_grad`，以及记录目标上的 VJP 数值和 `None` 连通性。详细边界见[执行器等价性开发验证状态](executor-equivalence-development-status.md)。
 
-主语义文档始终是计算含义的权威来源。后续实现不得用更快路径替换或删除 token-major eager reference；可获得独立 golden 时还必须一并保留。若新的 Base 接入、设备 kernel、特化 executor 或分布式调度改变了可观测结果，应先按 correctness 问题处理，不能用性能收益解释差异。packed 与 eager 一致是强开发证据，但不能单独排除二者共享的局部公式错误。
+上游抽象语义与本地实例语义共同限定后续实现的计算含义；上述历史证据仍以其原始文档和 commit/run 身份为界。后续实现不得用更快路径替换或删除 token-major eager reference；可获得独立 golden 时还必须一并保留。若新的 Base 接入、设备 kernel、特化 executor 或分布式调度改变了可观测结果，应先按 correctness 问题处理，不能用性能收益解释差异。packed 与 eager 一致是强开发证据，但不能单独排除二者共享的局部公式错误。
 
 ### 3.2 已有能力与使用边界
 
@@ -256,7 +258,7 @@ SettleGraph-only 相对冻结 Base 的比较衡量“增加一个可训练模块
 
 ### 7.2 设备正确性优先于低精度和规模
 
-当前共享 executor 明确只接受 FP32/FP64，而 NPU 首轮使用 FP32。BF16/FP16 不能只通过替换 execution binding 加入：必须先闭合各 Tensor 的 dtype role、accumulation/reduction dtype、autocast 与 rounding 规则及逐公式 tolerance，并进入资格计划第 13 节定义的 Schema v2 扩展，使用新的 schema/canonicalizer identity。之后才分别验证 output、state、route、loss、gradient、optimizer、checkpoint、真实设备算子和 fallback。不能因为 Base 模型能用 BF16，就假定 SettleGraph 的 selector、递推状态和 Top-K 边界也已获得同等能力。
+当前共享 executor 明确只接受 FP32/FP64，而 NPU 首轮使用 FP32。BF16/FP16 不能只通过替换 execution binding 加入：必须先闭合各 Tensor 的 dtype role、accumulation/reduction dtype、autocast 与 rounding 规则及逐公式 tolerance，并满足资格计划第 13 节中低精度 extension-v2 的进入条件，使用明确覆盖该能力的新 schema/canonicalizer identity；已有共享参数的 Plan schema 2 不代表低精度支持。之后才分别验证 output、state、route、loss、gradient、optimizer、checkpoint、真实设备算子和 fallback。不能因为 Base 模型能用 BF16，就假定 SettleGraph 的 selector、递推状态和 Top-K 边界也已获得同等能力。
 
 每次扩卡都先运行固定 smoke 和短 continuation，再运行长训练。任一卡出现 fallback、HCCL timeout、OOM 或不一致时保存完整失败记录；不通过缩短日志或自动跳过失败 rank 得到“成功”终态。
 
@@ -396,7 +398,7 @@ grad-enabled prefill 属于训练工作负载，其 activation、source-liveness
 
 新会话应按下面的顺序继续，不从通用性能重构开始：
 
-1. 完整阅读本文，以及主语义文档中 placement、BO/SD、配对实验、loss 和实验记录章节；保持主语义文档不变。
+1. 完整阅读本文，以及本地语义文档的上游采用声明、placement、BO/SD、配对实验、loss 和实验记录章节；实现工作保持所采用的两层语义不变。
 2. 确认工作树、分支和 `5712e66` 基准仍可定位；审视任何新的未提交交接，不能默认其正确。
 3. 只读盘点本机实际可见的加速卡数量、可用内存/拓扑/软件栈（扩展目标上限为 16 卡），以及本地 Base checkpoints、tokenizers 和候选数据；不要在未确认 identity 前启动下载或长任务。
 4. 基于实际资产，物化第 4.2 节的首个垂直切片配置；若 checkpoint 或数据选择会实质改变研究目标，再向用户确认。

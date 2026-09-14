@@ -1,6 +1,8 @@
 # 执行器等价性开发验证状态
 
-> 本文记录一次可复现的开发验证结果和后续交接事项。它不定义或修改 SettleGraph 语义，也不把 development evidence 提升为资格验证。计算含义仍以[实验语义、命名与数学符号](experiment-semantics-and-naming.md)为准；资格门槛仍以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
+> 本文记录一次可复现的开发验证结果和后续交接事项，不定义或修改模型语义。当前语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定后续实现与测试的计算含义；资格门槛仍以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
+
+本文的 `core-v1` 是本地实现和资格子集，与本地 `extension-v2`、各 Plan/parameter schema 及上游 `tide-core-2` 分别记录。以下历史结果绑定其原始 commit、语义文档快照和 run，不因当前上游采用声明而升级为 tide-core-2 符合性、完整资格或更广能力的证据。
 
 ## 1. 当前结论
 
@@ -21,14 +23,14 @@ fix: harden executor equivalence semantics
 
 受控 runner `scripts/run_executor_equivalence.py` 已在上述 clean exact commit 上完成。它在运行前后检查 commit、工作区指纹和源码指纹；任何 dirty source、运行中源码变化、缺失测试、skip、expected failure 或覆盖回执不闭合都会使运行失败。
 
-本次成功记录位于工作区的 `runs/20260904T070450Z-executor-equivalence-5712e66/`：
+本次运行时的成功记录路径为 `runs/20260904T070450Z-executor-equivalence-5712e66/`。该 `runs/` 目录没有随当前 Git checkout 保存，下面的身份与计数来自原状态记录；本次文档迁移没有重新读取这些原始产物：
 
-- [运行 manifest](../runs/20260904T070450Z-executor-equivalence-5712e66/run.json)：`completed`，`exact_commit=true`，运行前后工作树均 clean，源码指纹未改变；
-- [终态摘要](../runs/20260904T070450Z-executor-equivalence-5712e66/summary.json)：60/60 tests 通过、退出码为零、`qualification=false`；
-- [实际执行回执](../runs/20260904T070450Z-executor-equivalence-5712e66/artifacts/execution-receipt.json)：9298 个执行事件，1680 个 forward cells、176 个 VJP case/dtype groups 和 4 个 lifecycle scenarios 与期望集合精确闭合；
-- [原始测试日志](../runs/20260904T070450Z-executor-equivalence-5712e66/stdout.log)。
+- `run.json`：`completed`，`exact_commit=true`，运行前后工作树均 clean，源码指纹未改变；
+- `summary.json`：60/60 tests 通过、退出码为零、`qualification=false`；
+- `artifacts/execution-receipt.json`：9298 个执行事件，1680 个 forward cells、176 个 VJP case/dtype groups 和 4 个 lifecycle scenarios 与期望集合精确闭合；
+- `stdout.log`：原始测试日志。
 
-初始实现提交 `107a052` 的 45/45 历史 run 仍保留在 `runs/20260903T143738Z-executor-equivalence-107a052/`，但当前实现的结论以上述 60-test 修复后 run 为准。
+初始实现提交 `107a052` 的 45/45 历史 run 路径为 `runs/20260903T143738Z-executor-equivalence-107a052/`，当前 checkout 同样未携带该目录；当前实现的结论仍以上述 60-test 修复后状态记录为准。
 
 candidate corpus identity 为：
 
@@ -140,7 +142,7 @@ source-liveness 的当前正确性实现本身仍是性能风险。在 grad-enab
 
 ## 4. 后续工作的建议顺序
 
-当前 token-major eager reference 作为后续实现内参考，packed 与拓扑特化结果作为强开发级差分基准；主语义文档仍是计算含义的权威来源，独立 golden 仍是正式资格缺口。下一主线是从真实 Base checkpoint 出发，完成一个 SettleGraph + BO 的端到端垂直切片，并用受控对照检验其训练和推理行为。只有当该路径的真实 profiler 显示 executor 阻塞实验时，才同步做该拓扑的特化加速；通用超大 DAG 与多卡执行在已获得可复现模型信号后再展开。具体顺序和 development gates 见 [checkpoint 到 SettleGraph + BO 实验路线](checkpoint-to-bo-experiment-roadmap.md)。
+当前 token-major eager reference 作为后续实现内参考，packed 与拓扑特化结果作为强开发级差分基准；计算含义由上游抽象语义与本地实例语义共同限定，独立 golden 仍是正式资格缺口。下一主线是从真实 Base checkpoint 出发，完成一个 SettleGraph + BO 的端到端垂直切片，并用受控对照检验其训练和推理行为。只有当该路径的真实 profiler 显示 executor 阻塞实验时，才同步做该拓扑的特化加速；通用超大 DAG 与多卡执行在已获得可复现模型信号后再展开。具体顺序和 development gates 见 [checkpoint 到 SettleGraph + BO 实验路线](checkpoint-to-bo-experiment-roadmap.md)。
 
 `C00`--`C12` 仍是正式正确性资格的必需工作，`X07` 仍是 CPU 性能声明的必需门。它们可与垂直切片按其实际使用范围逐步闭合；在完整资格前运行的 checkpoint bring-up 和小规模 pilot 必须标为 development evidence，不得冒用资格 cell 或正式结论。
 

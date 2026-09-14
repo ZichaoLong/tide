@@ -1,0 +1,10 @@
+{
+  "schema": "fractal-latcarf.upstream-semantics-lock.v1",
+  "lock_version": 1,
+  "upstream_repository": "https://github.com/ZichaoLong/ObsidianVault",
+  "upstream_revision": "facf1afc696673a80e49b1e327bb1d058273893b",
+  "semantic_version": "tide-core-2",
+  "adopted_family": "SettleGraph",
+  "anchor_path": "20-tide-decentralized-neural-network/semantics-anchor.md",
+  "anchor_sha256": "36a482c14b359994bf61bfbb3b7f98456df9effdc59abc5e468c3e5247b0732b"
+}
