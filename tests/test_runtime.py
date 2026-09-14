@@ -343,7 +343,7 @@ class RuntimeContractTests(unittest.TestCase):
         checkpoint = contract["contract"]["checkpoint"]
         self.assertTrue(checkpoint["enabled"])
         self.assertEqual(
-            checkpoint["schema"], "tide.settlegraph.checkpoint.v1"
+            checkpoint["schema"], "tide.settlegraph.checkpoint.v2"
         )
         self.assertTrue((_REPOSITORY_ROOT / "tests" / "test_runtime.py").is_file())
         self.assertTrue(

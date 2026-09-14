@@ -20,6 +20,7 @@ from tide.checkpoint import (
 from tide.engine import SettleGraph, StateStore
 from tide.ops import AttentionState
 from tide.plan import bind_dtypes
+from tide.semantics import semantic_context_for_plan
 
 
 def _typed_float64(plan):
@@ -223,12 +224,26 @@ class CheckpointTests(unittest.TestCase):
             root_payload = torch.load(
                 valid_path, map_location="cpu", weights_only=True
             )
-            root_payload["unexpected"] = "not part of checkpoint v1"
+            root_payload["unexpected"] = "not part of checkpoint v2"
             cases.append(
                 (
                     "root-extra-key.pt",
                     root_payload,
                     "checkpoint root has an unexpected key set",
+                )
+            )
+
+            semantic_payload = torch.load(
+                valid_path, map_location="cpu", weights_only=True
+            )
+            semantic_payload["semantic_context"]["authority"]["upstream_lock"][
+                "semantic_version"
+            ] = "tide-core-invalid"
+            cases.append(
+                (
+                    "semantic-context-mismatch.pt",
+                    semantic_payload,
+                    "semantic_context does not match",
                 )
             )
 
@@ -471,6 +486,10 @@ class CheckpointTests(unittest.TestCase):
                 expected_sha256=artifact.sha256,
             )
             self.assertEqual(loaded.progress["global_step"], 1)
+            self.assertEqual(
+                loaded.semantic_context,
+                semantic_context_for_plan(typed.logical_plan),
+            )
             _assert_state_close(self, loaded.state, state)
             self.assertTrue(restored_optimizer.state_dict()["state"])
             for key, value in model.state_dict().items():
@@ -521,6 +540,10 @@ class CheckpointTests(unittest.TestCase):
             )
             self.assertEqual(loaded.state, StateStore())
             self.assertEqual(loaded.progress, {})
+            self.assertEqual(
+                loaded.semantic_context,
+                semantic_context_for_plan(typed.logical_plan),
+            )
             self.assertEqual(target_optimizer.state_dict()["state"], {})
             for key, value in model.state_dict().items():
                 torch.testing.assert_close(
@@ -904,10 +927,10 @@ class CheckpointTests(unittest.TestCase):
             for key, value in target.state_dict().items():
                 torch.testing.assert_close(value, before[key], atol=0, rtol=0)
 
-    def test_v1_state_uses_next_position_and_strictly_rejects_old_field(self):
+    def test_state_uses_next_position_and_strictly_rejects_old_field(self):
         state = StateStore(next_position={"s": 3})
         record = serialize_state_store(state)
-        self.assertEqual(SCHEMA_VERSION, "tide.settlegraph.checkpoint.v1")
+        self.assertEqual(SCHEMA_VERSION, "tide.settlegraph.checkpoint.v2")
         self.assertEqual(record["next_position"], {"s": 3})
         self.assertNotIn("last_position", record)
         restored = deserialize_state_store(

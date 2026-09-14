@@ -28,13 +28,19 @@ from .engine import (
 )
 from .ops import AttentionState
 from .plan import TypedPlan, validate_stable_id
+from .semantics import (
+    SemanticContextError,
+    semantic_context_for_plan,
+    validate_semantic_context,
+)
 
 
-SCHEMA_VERSION = "tide.settlegraph.checkpoint.v1"
+SCHEMA_VERSION = "tide.settlegraph.checkpoint.v2"
 
 _CHECKPOINT_ROOT_KEYS = frozenset(
     {
         "schema_version",
+        "semantic_context",
         "logical_plan",
         "logical_plan_hash",
         "binding",
@@ -78,6 +84,7 @@ class CheckpointLoadResult:
     state: StateStore
     progress: Mapping[str, Any]
     training_state: Mapping[str, Any]
+    semantic_context: Mapping[str, Any]
     artifact: CheckpointArtifact
 
 
@@ -105,14 +112,14 @@ def _validate_model_contract(model: nn.Module, typed_plan: TypedPlan) -> SettleG
 
     typed_plan.validate()
     if not isinstance(model, SettleGraph):
-        raise CheckpointError("checkpoint v1 requires a SettleGraph model")
+        raise CheckpointError("checkpoint v2 requires a SettleGraph model")
     if model.plan.canonical_dict() != typed_plan.logical_plan.canonical_dict():
         raise CheckpointError(
             "SettleGraph logical Plan does not match the checkpoint typed_plan"
         )
     if model.typed_plan is None:
         raise CheckpointError(
-            "checkpoint v1 requires a SettleGraph constructed from a TypedPlan"
+            "checkpoint v2 requires a SettleGraph constructed from a TypedPlan"
         )
     model.typed_plan.validate()
     if (
@@ -226,7 +233,7 @@ def _validate_optimizer_group_options(
 
     if optimizer_type not in _SUPPORTED_OPTIMIZER_TYPES:
         raise CheckpointError(
-            f"checkpoint v1 does not support optimizer type {optimizer_type!r}"
+            f"checkpoint v2 does not support optimizer type {optimizer_type!r}"
         )
     if not isinstance(param_groups, list):
         raise CheckpointError("optimizer param_groups must be a list")
@@ -619,7 +626,7 @@ def serialize_state_store(store: StateStore) -> Dict[str, Any]:
     for (sequence_id, owner_id), value in sorted(store.selector_history.items()):
         if not isinstance(value, Tensor):
             raise CheckpointError(
-                "checkpoint v1 only serializes Tensor selector-history values"
+                "checkpoint v2 only serializes Tensor selector-history values"
             )
         history.append(
             {
@@ -817,6 +824,9 @@ def save_checkpoint(
         raise CheckpointError("training_state must be a mapping")
     payload = {
         "schema_version": SCHEMA_VERSION,
+        "semantic_context": semantic_context_for_plan(
+            typed_plan.logical_plan
+        ),
         "logical_plan": typed_plan.logical_plan.canonical_dict(),
         "logical_plan_hash": typed_plan.logical_hash(),
         "binding": typed_plan.binding.canonical_dict(),
@@ -855,6 +865,8 @@ def save_checkpoint(
             not isinstance(probe, Mapping)
             or set(probe) != _CHECKPOINT_ROOT_KEYS
             or probe.get("schema_version") != SCHEMA_VERSION
+            or probe.get("semantic_context")
+            != semantic_context_for_plan(typed_plan.logical_plan)
             or probe.get("logical_plan_hash") != typed_plan.logical_hash()
             or probe.get("typed_plan_hash") != typed_plan.typed_hash()
         ):
@@ -1340,6 +1352,12 @@ def load_checkpoint(
         raise CheckpointError("checkpoint typed Plan hash does not match")
     if payload["binding"] != typed_plan.binding.canonical_dict():
         raise CheckpointError("checkpoint concrete dtype binding does not match")
+    try:
+        semantic_context = validate_semantic_context(
+            typed_plan.logical_plan, payload["semantic_context"]
+        )
+    except SemanticContextError as exc:
+        raise CheckpointError(str(exc)) from exc
     _validate_model_state(model, payload["model_state"])
 
     parameter = next(model.parameters(), None)
@@ -1478,7 +1496,13 @@ def load_checkpoint(
             "checkpoint commit failed and caller state was rolled back: "
             f"{type(exc).__name__}: {exc}{rollback_suffix}"
         ) from exc
-    return CheckpointLoadResult(state, progress, training_state, artifact)
+    return CheckpointLoadResult(
+        state,
+        progress,
+        training_state,
+        semantic_context,
+        artifact,
+    )
 
 
 __all__ = [

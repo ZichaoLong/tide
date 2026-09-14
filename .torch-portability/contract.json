@@ -95,7 +95,7 @@
     ],
     "checkpoint": {
       "enabled": true,
-      "schema": "tide.settlegraph.checkpoint.v1",
+      "schema": "tide.settlegraph.checkpoint.v2",
       "init_from": "validated model weights only; runtime state, optimizer, progress, and RNG start fresh",
       "resume": "validated model, optimizer, CPU RNG, progress, training metadata, and canonical sequence state",
       "portable_handoff": true,

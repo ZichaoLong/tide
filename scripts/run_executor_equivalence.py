@@ -75,12 +75,14 @@ _REQUIRED_TEST_MODULES = (
     "test_core_v1_candidate_corpus.py",
     "test_core_v1_executor_equivalence.py",
     "test_packed.py",
+    "test_semantics.py",
     "test_specialized.py",
 )
 _EXPECTED_MODULE_TEST_COUNTS = {
     "test_core_v1_candidate_corpus.py": 4,
     "test_core_v1_executor_equivalence.py": 14,
     "test_packed.py": 25,
+    "test_semantics.py": 5,
     "test_specialized.py": 17,
 }
 _REQUIRED_SEMANTIC_TEST_IDS = frozenset(
@@ -133,6 +135,16 @@ _REQUIRED_SEMANTIC_TEST_IDS = frozenset(
         "test_sd_pre_state_replay_preserves_natural_route_at_fp32_boundaries",
         "test_packed.PackedForwardTraceTests."
         "test_upstream_node_compute_preserves_downstream_fp32_tie_route",
+        "test_semantics.SemanticAuthorityTests."
+        "test_repository_authority_lock_and_document_bytes_are_bound",
+        "test_semantics.SemanticAuthorityTests."
+        "test_general_schedule_includes_explicit_control_dependencies",
+        "test_semantics.SemanticAuthorityTests."
+        "test_hb_schedule_uses_line_rank_and_positive_edge_delays",
+        "test_semantics.SemanticAuthorityTests."
+        "test_sd_lazy_proposal_and_default_next_have_an_explicit_golden",
+        "test_semantics.SemanticAuthorityTests."
+        "test_trace_invariants_reject_next_or_schedule_mutation",
         "test_specialized.SpecializedEquivalenceTests."
         "test_single_layer_mlp_fp32_prefill_preserves_eager_boundary_route",
         "test_specialized.SpecializedEquivalenceTests."
@@ -735,6 +747,7 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
     )
     from tide.packed import PACKED_EXECUTOR_ID, inspect_packed_support
     from tide.plan import bind_dtypes
+    from tide.semantics import semantic_context_for_plan
     from tide.specialized import (
         HB_LINE_V1,
         SINGLE_LAYER_V1,
@@ -1038,6 +1051,7 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
                 "vjp": case.vjp,
                 "features": sorted(case.features),
                 "logical_plan_hash": case.plan.canonical_hash(),
+                "semantic_context": semantic_context_for_plan(case.plan),
                 "typed_plan_hashes": {
                     dtype: bind_dtypes(
                         case.plan,
@@ -1081,6 +1095,9 @@ def main(argv: list[str] | None = None) -> int:
     excluded_run_dir = _run_dir_exclusion(run_dir)
     source_before = _source_snapshot(excluded_run_dir=excluded_run_dir)
     _prepare_repository_imports()
+    from tide.semantics import validate_repository_semantic_sources
+
+    semantics = validate_repository_semantic_sources(_REPOSITORY_ROOT)
     corpus, corpus_hash = _corpus_record()
 
     # Torch and the test graph are imported only after the initial source
@@ -1102,7 +1119,7 @@ def main(argv: list[str] | None = None) -> int:
         *parsed_argv,
     ]
     manifest: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": run_id,
         "project": "tide-settlegraph",
         "name": "core-v1-cpu-executor-equivalence-development",
@@ -1113,6 +1130,7 @@ def main(argv: list[str] | None = None) -> int:
         "ended_at": None,
         "qualification": False,
         "qualification_gaps": corpus["qualification_gaps"],
+        "semantics": semantics,
         "source": {
             "repository": "fractal-latcarf",
             "commit": source_before["commit"],

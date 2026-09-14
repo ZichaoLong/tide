@@ -2,7 +2,7 @@
 
 > 本文把当前已经闭合的语义子集转成可执行的资格工作单。它不增加模型语义，也不证明仓库已经通过任何资格 cell。
 >
-> 语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；测试公式、比较器和完整目标以[等价性测试契约](equivalence-test-contract.md)为准，实现边界以[SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)为准。本计划只能在这些契约内缩小一次资格声明的范围，不能改写模型语义或用较小测试范围消解语义冲突。
+> 语义依据分为两层：上游 20-tide 的 tide-core-3 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；测试公式、比较器和完整目标以[等价性测试契约](equivalence-test-contract.md)为准，实现边界以[SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)为准。本计划只能在这些契约内缩小一次资格声明的范围，不能改写模型语义或用较小测试范围消解语义冲突。
 
 本文是可执行的验收约束，不声称只凭文本就能重建每个 Tensor byte。本文已给出精确算法的部分必须按该算法实现；人工 golden 数值、非 probe 配置及其他仅给出有限约束的部分，由版本化 generator 在任何被测 executor 运行前一次性物化，通过代码审查后以 canonical bytes、生成决策记录和内容 hash 冻结。后续 executor 与 backend 必须消费这些相同冻结 bytes，不得根据运行结果重选数值、carrier 或子集。因此“字典序最小”只对文中已定义的有限 candidate 表生效，不把未定义的生成器选择暗中当作规范。
 
@@ -10,7 +10,7 @@
 
 ### 1.1 core-v1
 
-本文把以下共同范围称为 `core-v1`。它与 `extension-v2` 都是本地实现和资格范围的名称；上游 `tide-core-2` 固定抽象语义版本，Plan schema、parameter schema 及各工件 schema 则分别固定表示与兼容性。三者不是同一条版本序列，采用上游定义也不自动获得本地资格：
+本文把以下共同范围称为 `core-v1`。它与 `extension-v2` 都是本地实现和资格范围的名称；上游 `tide-core-3` 固定抽象语义版本，Plan schema、parameter schema 及各工件 schema 则分别固定表示与兼容性。三者不是同一条版本序列，采用上游定义也不自动获得本地资格：
 
 | 坐标 | `core-v1` 的唯一取值或取值集合 |
 | --- | --- |
@@ -28,13 +28,13 @@
 | 局部实现 | eager 标准 Torch 参考公式；没有 mixed precision、compiled、custom kernel 或静默 fallback |
 | Base 边界 | 独立 SettleGraph；不把 Qwen、Dense 或 Flat MoE 计入本范围 |
 
-一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。`core-v1` 语料包含读取父 edge ID 或终端 node ID 的身份感知 Aggregate；这些 fixture 属本地扩展，其通过不能计作严格上游 SettleGraph 裸值聚合的符合性样例。共享参数已有 extension-v2 定向开发回归，但不计入这里的通过范围；[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节。
+一个通过报告必须写成“`core-v1` 的某个 capability cell 通过”，不能缩写成“完整 SettleGraph 已通过”。`core-v1` 语料包含读取父 edge ID 或终端 node ID 的身份感知 Aggregate；这些 fixture 是 tide-core-3 的标准 SettleGraph 实例，但其通过仍只证明声明的公式、执行器、binding 和语料范围，不能简写成整个模型族的全面符合性。共享参数已有 extension-v2 定向开发回归，但不计入这里的通过范围；[等价性测试契约](equivalence-test-contract.md)第 7 节中的 selector-history、可学习首状态和多 site 目标仍属于完整目标，见第 13 节。
 
 本计划另行测试当前实现的可选外部控制接口 `k.input.v1`；它不属于 `core-v1`，其通过只说明调用方能够显式提供有界整数并得到正确执行、失败和回滚行为。进入科学实验的 Plan 固定使用 `k.fixed.v1`，不同 regions 可以各自选择不同的固定 $K$。
 
 独立 SettleGraph fixture 固定 $\alpha_{\mathrm{LM}}=0$。LM target mask 只验证输入契约，不能从 hidden 合成语言模型损失；Qwen 专项门才允许非零 LM loss。
 
-非零调用前状态只表示 fixture 从一个已存在序列的已提交状态继续。当前 Plan 没有“固定非零首状态”的策略字段，因此 reset 后回到该非零值、把它作为参数训练或由多个序列共享梯度，都不属于 `core-v1` 声明。
+非零调用前状态只表示 fixture 从一个已存在序列的持久状态继续。当前 Plan 没有“固定非零首状态”的策略字段，因此 reset 后回到该非零值、把它作为参数训练或由多个序列共享梯度，都不属于 `core-v1` 声明。
 
 ### 1.2 当前执行路径不等于资格完成
 
@@ -112,7 +112,7 @@ topology、shape、layout、mask 和调用前状态来源按 fixture 的 coverag
 | `equivalence_contract_id` | `tide.settlegraph.equivalence-contract.document.v1` + `equivalence_contract_sha256` |
 | `implementation_plan` | `docs/settlegraph-implementation-plan.md` + `implementation_plan_sha256` |
 | `plan_schema_id` | logical schema `1` + canonicalizer `tide-plan-json-v1` |
-| `fixture_schema_id` | `tide.settlegraph.fixture.v1` |
+| `fixture_schema_id` | `tide.settlegraph.fixture.v2` |
 | `parameter_schema_id` | `tide.parameter-schema.v1` |
 | `failure_schema_id` | `tide.failure.v1` |
 | `corpus_schema_id` | `tide.core-v1.qualification-corpus.v2` |
@@ -272,7 +272,7 @@ chunk 切法、detach、reset、release、row reorder、并发和 checkpoint act
 1. N 只能使用 content timing 和 `state=none`。pre/post 必须使用 EMA、Gated DeltaNet 或 Attention state。SD 不允许 post。
 2. 普通竞争 region 中，content timing 只配 content、content-rms 或 content-linear，pre/post 只配 content-state-linear 或 content-state-summary-linear；forced-active singleton 的 selector Read 与 Score 均为 `NA`。
 3. content-state-linear 只用于固定 shape 的 EMA 或 Gated DeltaNet Tensor state；窗口 Attention 使用 content-state-summary-linear。EMA/Gated DeltaNet 也可以使用 summary read。
-4. `state=none` 时 Update 为 `update.none.v1`、FFN Read 的 formula ID 为 `read.ffn.zero.v1`，type 由 `A18` 唯一写入为 `zero` 或 `state_default`，state origin 为 fresh empty；它可以出现在 SD/content 或 BO/content 以覆盖合法但 commit 为空操作的配置。
+4. `state=none` 时 Update 为 `update.none.v1`、FFN Read 的 formula ID 为 `read.ffn.zero.v1`，type 由 `A18` 唯一写入为 `zero` 或 `state_default`，state origin 为 fresh empty；它可以出现在 SD/content 或 BO/content 以覆盖合法但状态采用与 Next 均为单点操作的配置。
 5. forced-active singleton 固定 `K=1`、`k-source=fixed`、`k-class=all`、`route=all-active`、`selector-read=NA`、`score=NA` 和 `fixed-score-formula-id=NA`；它直接记录 $p=1$，不执行 selector Read、Score、softmax 或 Top-K。其他 core region 也只使用各自 Plan 中的固定整数 $K$。
 6. `top-1` 要求候选数至少 2 且实际 $K=1$；`top-2` 要求候选数至少 3 且实际 $K=2$；`all` 要求 $K\ge C$。exact-tie、margin-safe 和 near-boundary 都要求 $C>K$。
 7. exact-tie 由逻辑源 logits 精确相等构造。margin-safe 在 FP64 和 FP32 两个 binding 中都满足 $\Delta_K$ 大于各自 guard band 的 16 倍。near-boundary 在 CPU FP32 中满足 $0<\Delta_K\le g_K/2$，并要求自然 route 仍与预期 exact 相同。具体 logit 数值使用第 3.1 节的精细 dyadic 域。
@@ -397,14 +397,14 @@ formula ID 由 axis tuple 在 logical Plan canonicalization 前确定。若某�
 | input/FFN normalization 的 `norm.rms.v1` 和 `TEST-RMSNORM-V1` | `golden-02` 依次使用 input `norm.rms.v1` / FFN `TEST-RMSNORM-V1`，`golden-08` 使用 input `TEST-RMSNORM-V1` / FFN `norm.rms.v1`；两个 FFN 位置都必须被 SwiGLU 实际读取 |
 | receiver Aggregate `agg.mean.v1`、`TEST-AGG-EDGE-SOFTMAX-V1`、`TEST-AGG-EDGE-AFFINE-MEAN-V1` | 依次 `golden-04`、`golden-05`、`golden-06`；后两者的实际父消息至少两条 |
 | output Aggregate `agg.mean.v1`、`TEST-AGG-TERMINAL-SOFTMAX-V1` | 依次 `golden-00` 和 `golden-07`；后者至少两个 active terminal messages |
-| Update `none` / `update.none.v1`；FFN Read `zero` / `read.ffn.zero.v1` 与 `state_default` / `read.ffn.zero.v1`；`ema` / `state.ema.v1` 与 `state_default` / `read.ffn.ema.v1`；`gdn` / `state.gdn.v1` 与 `state_default` / `read.ffn.gdn.v1`；`attention_window` / `state.attention-window.v1` 与 `state_default` / `read.ffn.attention-window.v1` | stateless Update 和 type `zero` Read 用 `golden-02`，stateless type `state_default` Read 用 `golden-03`，其余三个有状态 pair 依次用 `golden-04`、`golden-08`、`golden-11`；两个 stateless Read 都被 NodeCompute 实际读取，有状态三项同时手算 proposal、commit 和实际 FFN readout |
+| Update `none` / `update.none.v1`；FFN Read `zero` / `read.ffn.zero.v1` 与 `state_default` / `read.ffn.zero.v1`；`ema` / `state.ema.v1` 与 `state_default` / `read.ffn.ema.v1`；`gdn` / `state.gdn.v1` 与 `state_default` / `read.ffn.gdn.v1`；`attention_window` / `state.attention-window.v1` 与 `state_default` / `read.ffn.attention-window.v1` | stateless Update 和 type `zero` Read 用 `golden-02`，stateless type `state_default` Read 用 `golden-03`，其余三个有状态 pair 依次用 `golden-04`、`golden-08`、`golden-11`；两个 stateless Read 都被 NodeCompute 实际读取，有状态三项同时手算 proposal、计算快照、Next 最终状态和实际 FFN readout |
 | selector Read `read.selector.content.v1`、`read.selector.content-rms.v1`、content `TEST-READ-PROJ-V1`、state `TEST-READ-PROJ-V1`、`TEST-READ-STATE-RMS-SUMMARY-PROJ-V1` | 依次 `golden-03`、`golden-01`、`golden-02`、`golden-04`、`golden-11` |
 | Score `score.fixed-by-node.v1`、`TEST-SCORE-CONST-V1`、`score.constant.v1`、`score.read-sum.v1`、`TEST-SCORE-LINEAR-V1`、`TEST-SCORE-MLP-V1` | 依次 `golden-07`、`golden-01`、`golden-03`、`golden-02`、`golden-04`、`golden-08` |
 | NodeCompute `node.identity.v1`、`TEST-NODE-AFFINE-V1`、`TEST-NODE-SWIGLU-V1` | 依次 `golden-00`、`golden-05`、`golden-02` |
 | Emit `emit.hard.v1`、`emit.hst.v1`、`emit.softp.v1` | 依次 `golden-01`、`golden-02`、`golden-03`；Hard-ST 的 surrogate derivative 另按第 7.1 节解析验证 |
 | 保留字段 `context.none.v1` / `history.none.v1` 与 `k.fixed.v1` | none 语义用 `golden-00`；固定 K 用 `golden-01` |
 
-这些 fixture 使用 $d\in\{2,3\}$、长度至多 4 的 dyadic 数值。期望生成器只能使用语言内标量四则运算、明写循环和独立的高精度 `exp`/`sqrt`；不得导入被测 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、state commit、balance-loss 或 executor helper。每个公式同时保存可读推导和完整 expected trace，不能只保存最终 output。
+这些 fixture 使用 $d\in\{2,3\}$、长度至多 4 的 dyadic 数值。期望生成器只能使用语言内标量四则运算、明写循环和独立的高精度 `exp`/`sqrt`；不得导入被测 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、状态采用或 Next、balance-loss 或 executor helper。每个公式同时保存可读推导和完整 expected trace，不能只保存最终 output。
 
 接口扩展另保存 `extension-golden-k-input-00`，手算候选非空事件读取 `requested_k` 的时点、与相同数值 fixed-K 对照的 exact route，以及候选为空时越界哨兵未读取。它不属于上述 12 个 core legal goldens，也不贡献 `C01` 的 core formula registry closure。
 
@@ -433,7 +433,7 @@ cotangent 用 `U("cotangent:<fixture_id>:<objective>", i)` 产生并保存在 bu
 
 一个 family 只有在它满足对应 ordinal objective 的结构前置时才是该位置的 candidate：`output-hard`、`output-hst` 和 `output-softp` 必须分别实际执行对应 Emit；`final-state` 必须含可微的非空最终 Tensor state；`balance` 必须至少有一个 routing-stat mask 选中、候选非空且概率路径可微的竞争事件；`bo-post-proposal` 必须是含参数化 Update 的 BO/post；`pre-separation` 必须是含参数化 Update 的 SD/pre 或 BO/pre；`chunk-edge` 必须 stateful 且有至少两个连续执行位置。每个目标还必须至少有一个预先声明的 connected key 产生非零梯度；不能用全零 cotangent 或退化参数让路径断言真空通过。
 
-子集选择是字典序最小的有序 64 元组：第 $j$ 个元素的 legal fixture ID 严格递增，其 objective 由 $j\bmod8$ 唯一确定，且该 fixture 必须通过上述位置前置。选择约束还覆盖所有可微公式参数角色、六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、三种 NodeCompute、五种 Score、输入 hidden 和调用前可微当前状态；active budget 全部是 fixed-K。fixture v1 的 `required_keys` 必须精确等于 `inputs.hidden`、parameter manifest 中实际存在的全部 logical parameter keys，以及实际存在的可学习初态 keys；`core-v1` 的最后一类为空。每个实际 key 只标注为 `connected` 或 `disconnected`：connected 的零梯度必须是同 shape 零 Tensor，不能是 `None`，disconnected 必须返回 `None`。结构上不存在的参数由 parameter manifest 的 exact key set 证明，不向 `required_keys` 注入没有 Tensor 的幽灵路径。若未来 fixture 需要把特定 structurally absent 路径作为一等 VJP 断言，必须先定义有限、稳定的跨 fixture 路径全集并升级 fixture schema，不能在 v1 中接受任意字符串。
+子集选择是字典序最小的有序 64 元组：第 $j$ 个元素的 legal fixture ID 严格递增，其 objective 由 $j\bmod8$ 唯一确定，且该 fixture 必须通过上述位置前置。选择约束还覆盖所有可微公式参数角色、六种 profile/timing、四种 state、三种 receiver Aggregate、两种 output Aggregate、三种 Emit、三种 NodeCompute、五种 Score、输入 hidden 和调用前可微当前状态；active budget 全部是 fixed-K。fixture v2 的 `required_keys` 必须精确等于 `inputs.hidden`、parameter manifest 中实际存在的全部 logical parameter keys，以及实际存在的可学习初态 keys；`core-v1` 的最后一类为空。每个实际 key 只标注为 `connected` 或 `disconnected`：connected 的零梯度必须是同 shape 零 Tensor，不能是 `None`，disconnected 必须返回 `None`。结构上不存在的参数由 parameter manifest 的 exact key set 证明，不向 `required_keys` 注入没有 Tensor 的幽灵路径。若未来 fixture 需要把特定 structurally absent 路径作为一等 VJP 断言，必须先定义有限、稳定的跨 fixture 路径全集并升级 fixture schema，不能在 v2 中接受任意字符串。
 
 另外从这 64 个 cases 中冻结字典序最小的 32 个 CPU FP64 方向有限差分 cases，不再使用“前 32 个”这个与 objective ordinal 冲突的规则。FD candidate 必须对规定标量 forward 目标有真实的局部导数、全部连续公式远离非光滑点，且 $x\pm hd$ 两侧的 candidates、Top-K IDs 和 route 与中心 exact 相同。32 元集合覆盖所有适用的非退化 objective classes 和可微公式参数角色；若无解则 corpus generation 失败。
 
@@ -577,7 +577,7 @@ actual envelope 必须由 validator、loader 或已知执行阶段产生。比�
 
 ### 9.1 Scenario 工件
 
-单调用 `tide.settlegraph.fixture.v1` 不足以表达完整生命周期。资格实现应增加独立 scenario 工件；建议 serialized ID 为 `tide.settlegraph.scenario.v1`，但只有 schema、loader 和 tests 实际落地后才能在 README 中称其存在。它至少保存：
+单调用 `tide.settlegraph.fixture.v2` 不足以表达完整生命周期。资格实现应增加独立 scenario 工件；建议 serialized ID 为 `tide.settlegraph.scenario.v1`，但只有 schema、loader 和 tests 实际落地后才能在 README 中称其存在。它至少保存：
 
 - scenario ID、源 bundle hashes 和有序 `actions`；
 - 每个 action 的输入、预期结果或 failure envelope；
@@ -787,7 +787,7 @@ Dense、Dense 扩展和 Flat MoE 若用于科学实验，另建各自的 referen
 
 ## 13. Extension-v2 资格进入条件
 
-本节的 extension-v2 是本地扩展资格范围，不是上游 tide-core-2，也不表示已有 Plan schema 2 或 parameter schema v2 支持下表全部能力。共享参数已经具备可执行的 schema 和定向开发回归；下表其他扩展只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行。已经单列的 `k.input.v1` 接口扩展不属于本表：
+本节的 extension-v2 是本地扩展资格范围，不是上游 tide-core-3，也不表示已有 Plan schema 2 或 parameter schema v2 支持下表全部能力。共享参数已经具备可执行的 schema 和定向开发回归；下表其他扩展只有在相应决定被版本化并有 validator/canonical golden 后，才能从 `planned` 变为可执行。已经单列的 `k.input.v1` 接口扩展不属于本表：
 
 | 扩展 | 当前边界或必须先定义的内容 | 新增资格重点 |
 | --- | --- | --- |
@@ -828,6 +828,6 @@ Dense、Dense 扩展和 Flat MoE 若用于科学实验，另建各自的 referen
 
 当前保留两层 development regression。快速层包含 48 legal、6 VJP 和 24 invalid；executor-equivalence candidate 层包含 256 个固定 K 的合法 Plan，其中 64 个预标记为 VJP cases。后者覆盖 11 类 motif、六种合法 profile/timing、none/EMA/Gated DeltaNet/窗口 Attention、当前五种 Score、三种 Emit、三种 NodeCompute、三种 receiver Aggregate、两种终端 Aggregate 以及 forced-active、multi-entry、multi-terminal 和 HB 拓扑。该层的 candidate identity digest 为 `8497fccea52a958373ae5963c433a0f8420874005c88639ebd9e35d51fec6111`；当前 packed/single-layer/HB 静态支持分区的 digest 为 `49fb9c797f40546f29534bbaf1fac5c4b04669b4990239d4af22d3154fa4c703`。
 
-这 256 个对象仍称 candidate，而不是本计划第 5.4 节的资格 bundles。它们由项目内生成器确定性构造，尚未逐个物化为通过 `tide.settlegraph.fixture.v1` 认证的长期工件，也没有实现第 7 节规定的资格 objective-class 选择、32 个有限差分、8 个 Hard-ST 局部 oracle 和 16 个 optimizer cases，亦未实现第 5 节的 pairwise/event multiplicity 约束与第 8 节的完整负例集合。当前 executor suite 对全部 candidates 做两 dtype 的 full-prefill forward/trace/state/balance，以及 full、`T=3` 的全部非空 two-chunk splits、逐 Token decode 的 forward 比较。对 64 个预标记 case，它在 FP64 和 FP32 下从同一次保留计算图按固定顺序隔离查询 output、可微 balance loss、每个最终状态 owner/component、每个 region 的 `soft_sum`、每个可微 trace region event 的 logits/probabilities、组合目标和重复 output，并逐项比较 hidden、全部具名参数及其 `None` 连通性；另在 live 结果上递归比较每个公开 Tensor occurrence 的 `requires_grad`。FP64 定向回归覆盖 EMA、Gated DeltaNet、窗口 Attention 的空初态与可微外部初态（包括分开的 Attention keys/values）、跨 chunks 的保留图 public-result/trace-state objectives，以及 node-event、edge、parent-message 和 terminal-message 的事件局部 autograd provenance。共享执行入口还定向验证只接受 FP32/FP64，并在公式执行前拒绝空 batch。对静态适用的 8 个单层和 16 个 HB case，suite 做三方两 dtype full/全部非空 `T=3` two-chunk/decode forward，并另做 full-prefill VJP；FP64 下另做 24 个支持 case 的 live 公开结果元数据三方比较，一个混合状态 HB case 还把 17 个调用方初始状态 leaves 纳入三方 VJP。有状态代表集检查 reset、row reorder、empty tail，并对 mask/位置/状态所有权负例和晚期 empty-terminal 失败比较稳定错误 envelope 与入口状态回滚。受控 development runner 只在 clean exact commit 上接受成功终态，并保存逐 case/dtype/mode 与逐 objective 的执行回执；静态 support 数量不再充当实际通过覆盖。这些仍是有界开发证据，不得沿用 `C04`—`C12` cell ID 或报告为资格通过；这里的隔离 objectives 也不等同于第 7 节尚未冻结的资格 objective/cotangent records。
+这 256 个对象仍称 candidate，而不是本计划第 5.4 节的资格 bundles。它们由项目内生成器确定性构造，尚未逐个物化为通过 `tide.settlegraph.fixture.v2` 认证的长期工件，也没有实现第 7 节规定的资格 objective-class 选择、32 个有限差分、8 个 Hard-ST 局部 oracle 和 16 个 optimizer cases，亦未实现第 5 节的 pairwise/event multiplicity 约束与第 8 节的完整负例集合。当前 executor suite 对全部 candidates 做两 dtype 的 full-prefill forward/trace/state/balance，以及 full、`T=3` 的全部非空 two-chunk splits、逐 Token decode 的 forward 比较。对 64 个预标记 case，它在 FP64 和 FP32 下从同一次保留计算图按固定顺序隔离查询 output、可微 balance loss、每个最终状态 owner/component、每个 region 的 `soft_sum`、每个可微 trace region event 的 logits/probabilities、组合目标和重复 output，并逐项比较 hidden、全部具名参数及其 `None` 连通性；另在 live 结果上递归比较每个公开 Tensor occurrence 的 `requires_grad`。FP64 定向回归覆盖 EMA、Gated DeltaNet、窗口 Attention 的空初态与可微外部初态（包括分开的 Attention keys/values）、跨 chunks 的保留图 public-result/trace-state objectives，以及 node-event、edge、parent-message 和 terminal-message 的事件局部 autograd provenance。共享执行入口还定向验证只接受 FP32/FP64，并在公式执行前拒绝空 batch。对静态适用的 8 个单层和 16 个 HB case，suite 做三方两 dtype full/全部非空 `T=3` two-chunk/decode forward，并另做 full-prefill VJP；FP64 下另做 24 个支持 case 的 live 公开结果元数据三方比较，一个混合状态 HB case 还把 17 个调用方初始状态 leaves 纳入三方 VJP。有状态代表集检查 reset、row reorder、empty tail，并对 mask/位置/状态所有权负例和晚期 empty-terminal 失败比较稳定错误 envelope 与入口状态回滚。受控 development runner 只在 clean exact commit 上接受成功终态，并保存逐 case/dtype/mode 与逐 objective 的执行回执；静态 support 数量不再充当实际通过覆盖。这些仍是有界开发证据，不得沿用 `C04`—`C12` cell ID 或报告为资格通过；这里的隔离 objectives 也不等同于第 7 节尚未冻结的资格 objective/cotangent records。
 
 扩展该集合的 case 数、在本机跑通 region-major 或保存一次 NPU attempt，都不会自动把它变成资格 corpus。资格 runner 必须消费本计划冻结的独立 corpus identity，并生成第 2.3 节所述的 exact-commit terminal evidence。

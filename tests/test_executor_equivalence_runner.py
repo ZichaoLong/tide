@@ -126,7 +126,14 @@ def _corpus_record():
                 },
             },
             "cases": [
-                {"ordinal": ordinal, "case_id": case_id}
+                {
+                    "ordinal": ordinal,
+                    "case_id": case_id,
+                    "semantic_context": {
+                        "schema_version": "tide.settlegraph.semantic-context.v1",
+                        "logical_plan_hash": f"{ordinal:064x}",
+                    },
+                }
                 for ordinal, case_id in enumerate(case_ids)
             ],
         },
@@ -149,7 +156,7 @@ def _discovery():
 
 def _result(
     *,
-    tests_run: int = 60,
+    tests_run: int = 65,
     skipped=(),
     expected_failures=(),
     unexpected_successes=(),
@@ -338,6 +345,16 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
         self.assertEqual(
             set(corpus["cases"][0]["typed_plan_hashes"]),
             {"float64", "float32"},
+        )
+        self.assertEqual(
+            corpus["cases"][0]["semantic_context"]["logical_plan_hash"],
+            corpus["cases"][0]["logical_plan_hash"],
+        )
+        self.assertEqual(
+            corpus["cases"][0]["semantic_context"]["authority"][
+                "upstream_lock"
+            ]["semantic_version"],
+            "tide-core-3",
         )
 
         support = corpus["support"]["executors"]
@@ -584,6 +601,14 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
 
             self.assertEqual(manifest["status"], "completed")
             self.assertEqual(summary["status"], "completed")
+            self.assertEqual(manifest["schema_version"], 2)
+            self.assertEqual(
+                manifest["semantics"]["upstream_lock"]["semantic_version"],
+                "tide-core-3",
+            )
+            self.assertTrue(
+                all("semantic_context" in case for case in corpus["cases"])
+            )
             self.assertEqual(
                 manifest["command"]["argv"],
                 [
@@ -607,9 +632,9 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
                 manifest["experiment"]["suite"]["required_modules"],
                 list(runner._REQUIRED_TEST_MODULES),
             )
-            self.assertEqual(metrics["metrics"]["validation/tests_run"], 60)
+            self.assertEqual(metrics["metrics"]["validation/tests_run"], 65)
             self.assertEqual(
-                metrics["metrics"]["validation/tests_discovered"], 60
+                metrics["metrics"]["validation/tests_discovered"], 65
             )
             self.assertEqual(
                 metrics["metrics"]["validation/suite_complete"], 1
@@ -685,7 +710,7 @@ class ExecutorEquivalenceRunnerTests(unittest.TestCase):
                 "validation/tests_expected_failures",
             ),
             (_result(tests_run=0), "validation/tests_run"),
-            (_result(tests_run=59), "validation/suite_complete"),
+            (_result(tests_run=64), "validation/suite_complete"),
         )
         with tempfile.TemporaryDirectory() as directory:
             for index, (result, metric) in enumerate(variants):

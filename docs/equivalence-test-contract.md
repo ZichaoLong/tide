@@ -2,11 +2,11 @@
 
 > 本文规定怎样构造、执行和判定 SettleGraph 等价性测试，不是新的模型语义来源。
 >
-> 语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；执行路径和实施顺序见 [SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)。本文中的 formula ID 只标识测试 fixture 使用的确切公式，不把它们规定为上游对象或科学实验的默认配置。
+> 语义依据分为两层：上游 20-tide 的 tide-core-3 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；执行路径和实施顺序见 [SettleGraph 实现与等价性验证计划](settlegraph-implementation-plan.md)。本文中的 formula ID 只标识测试 fixture 使用的确切公式，不把它们规定为上游对象或科学实验的默认配置。
 >
 > 本文描述完整验收目标，不把仓库中已有的 eager reference、region-major reference 或定向单元测试自动算作资格通过。当前实现边界见实现计划第 1.1 节；只有本文要求的 fixture、comparator 和可追溯 artifact 全部存在并通过，才能形成对应 capability cell 的证据。
 
-下文简称“语义文档”时指本地实验语义文档。`core-v1`、`extension-v2` 是本地实现和资格范围；Plan/parameter schema 与 fixture、formula ID 等各自固定工件或公式版本，均不等同于上游语义版本 `tide-core-2`。采用上游版本本身不产生测试通过证据。
+下文简称“语义文档”时指本地实验语义文档。`core-v1`、`extension-v2` 是本地实现和资格范围；Plan/parameter schema 与 fixture、formula ID 等各自固定工件或公式版本，均不等同于上游语义版本 `tide-core-3`。采用上游版本本身不产生测试通过证据。
 
 ## 1. 声明范围与通过含义
 
@@ -31,6 +31,7 @@
 | --- | --- |
 | 身份 | fixture schema 版本、fixture ID、内容 hash、生成命令或人工来源 |
 | Plan | canonicalizer ID、规范化 logical/typed Plan bytes、logical Plan hash、concrete execution binding、typed Plan hash |
+| 语义上下文 | 上游仓库与不可变提交、语义版本、锚点与本地权威文档 hash、该 Plan 的逻辑日程、Next 公式与 trace 投影 ID |
 | 数值输入 | 在 CPU 上保存的 hidden、参数、可学习首状态和初始可变状态，保留原 dtype |
 | 序列输入 | `sequence_id`、`token_position`、图执行/context mask、LM target mask、routing-stat mask |
 | 控制输入 | 可选外部控制扩展开启时的 `requested_k`、reset 集合、chunk 切分、detach 边界和固定随机键 |
@@ -44,6 +45,8 @@
 跨 dtype 测试使用同一个 fixture family。family 保存可精确表示的逻辑源值或 CPU FP64 source，以及每种 concrete execution binding 的确定性 materialization 规则；每个 materialized bundle 分别记录 typed Plan hash 和 Tensor artifact hash。CPU 与 NPU FP32 必须读取 byte-identical 的 CPU FP32 bundle。FP64 对 FP32 的比较把两侧结果提升到 CPU float64 后进行，但不把两种 materialization 误称为同一个 typed Plan。
 
 fixture loader 在构造模型或写入状态仓库前完成以下检查：schema、artifact hash、logical/typed Plan hash、Tensor key/shape/dtype/stride/storage group、mask 子集关系、唯一 `sequence_id`、连续位置、可选外部控制扩展的 `requested_k` 容器 region 键/shape/整数表示，以及状态所有者唯一性。状态所有者检查必须识别同一 backing storage 的不同 Tensor views，包括不重叠 views；只比较 object identity 不足以发现非法 alias。Tensor manifest 必须把规范 stride、storage offset、与物理地址无关的 storage group，以及包含 stride 间 holes 的完整 backing-storage bytes hash 纳入认证内容，使解除或新增 alias 关系、改变不可见 storage bytes 也会改变工件身份。开启该扩展时，`requested_k` 的值域是动态事件检查：只有候选非空的 region 事件才在 selector Read/Score 前解析该位置的值并校验 \([1,K^{\max}]\)；候选为空时不读取、也不对该位置的数值做范围判定。期望失败的 fixture 还保存规范化错误类别；loader 若走完相应入口仍未触发声明的缺陷，必须拒绝这个假负例。测试比较类别，不依赖任意一段异常文本。
+
+这里的 schema 检查包括语义上下文与当前 Plan 及权威文档的精确匹配；语义上下文不一致属于 `artifact.schema`，并必须在构造模型或修改状态前失败。
 
 资格 fixture 的 `sequence_id` 使用实现计划第 2.2 节的稳定 ID 字符串合法性和升序规则；它不是 logical Plan ID，也不进入 Plan hash。logical/typed Plan bytes 使用同节声明的 canonicalizer。loader 必须先验证 canonicalizer ID、bytes 的规范性和 SHA-256，再解析 Plan；没有通过该 canonicalizer byte golden 的 executor 只能消费 bundle 中的规范 bytes，不能以本地 JSON 重写后得到的另一 hash 代替。
 
@@ -74,7 +77,7 @@ $$
 
 公式 ID、稳定参数键、参数 shape 和 dtype role 写入 logical Plan；参数 Tensor 的数值由 fixture bundle 单独携带，不进入 logical/typed Plan hash。每个版本化公式的必需键、允许键、默认值与参数 schema 也是该公式契约的一部分；未知键、缺失的必需键或改变数学/参数 schema 的值必须在执行前拒绝，不得被 executor 忽略。规范化还必须物化所有默认值；仅因“省略某键”与“显式写出同一默认值”而不同的两份原始配置，必须得到 byte-identical 的规范记录和同一 logical Plan hash。eager、packed、compiled 和 kernel 选择等实现变体字段另存于 execution binding/manifest，不混入公式语义配置。未来替换激活、bias 或归约规则必须使用新的 formula ID。
 
-下面两个依赖父 edge ID 的 receiver Aggregate，以及随后依赖终端 node ID 的 output Aggregate，属于本地语义文档第 2.1 节登记的 SettleGraph 身份感知扩展，并按一般 TimedDAG 实例解释。相应 fixture 验证本地公式和执行器，不能计作严格上游 SettleGraph 裸值聚合的符合性样例。
+下面两个依赖父 edge ID 的 receiver Aggregate，以及随后依赖终端 node ID 的 output Aggregate，都是 tide-core-3 身份—值聚合接口的标准 SettleGraph 实例。它们的公式、参数成本与本地资格范围仍由本契约限定；这一分类更正不会自动把旧 run 升级为新语义的符合性证据。
 
 这两个 receiver Aggregate 只作用于非入口 receiver。入口 receiver 的消息序列只有图边界 hidden，测试公式规定它原样返回；实现不得为此虚构语义父边或父边参数。
 
@@ -340,7 +343,7 @@ $$
 | --- | --- |
 | Aggregate `agg.mean.v1` | 语义文档第 2.1 节中对实际消息的算术平均；同一 ID 可用于图输出聚合 |
 | normalization `norm.rms.v1` | 与 `TEST-RMSNORM-V1` 完全相同，包括无 bias、可学习 \(w\) 和 Plan 中的正 epsilon |
-| Update `update.none.v1` | 无 receiver state、proposal 或 commit |
+| Update `update.none.v1` | receiver 状态空间为单点；没有非平凡 proposal、计算快照或下一持久状态 |
 | Update `state.ema.v1` / FFN Read `read.ffn.ema.v1` | 语义文档附录 A.3 的 EMA Update 与 \(W^{\mathrm{out}}s\) 读出；首轮绑定的 \(\lambda\) 是 logical Plan 记录的固定有限标量且 \(0\le\lambda<1\)，逐维或可学习衰减须另建 formula ID 并定义参数化 |
 | Update `state.gdn.v1` / FFN Read `read.ffn.gdn.v1` | 语义文档附录 A.4，且 \(N_k=N_q=\operatorname{L2Norm}_{\epsilon}\) |
 | Update `state.attention-window.v1` / FFN Read `read.ffn.attention-window.v1` | 语义文档附录 A.5 的 AppendEvict 和缩放点积 Attention，且 \(N_k=N_q=\operatorname{L2Norm}_{\epsilon}\) |
@@ -455,18 +458,24 @@ selector timing 与 Read 类型也在 Plan 阶段交叉校验。content 时序�
 
 ## 3. 独立 oracle 与 exact trace
 
-逐 Token 解释器是调度 oracle，但不是局部公式的唯一 oracle。至少一组人工 fixture 必须从保存的有理数或可精确枚举的小 Tensor 直接写出期望值，且生成期望值的代码不能调用被测执行器共用的 Aggregate、Update、Read、Score、Top-K、NodeCompute、Emit、状态提交或 balance-loss helper。
+逐 Token 解释器是调度 oracle，但不是局部公式的唯一 oracle。至少一组人工 fixture 必须从保存的有理数或可精确枚举的小 Tensor 直接写出期望值，且生成期望值的代码不能调用被测执行器共用的 Aggregate、Update、Read、Score、Top-K、Observe 状态采用、Next、NodeCompute、Emit 或 balance-loss helper。
 
-每个成功的 exact-trace fixture 按以下顺序保存事件：
+每个成功的 exact-trace fixture 使用 `tide.settlegraph.trace.v1`，并在 Plan 外层保存完整的 `tide.settlegraph.semantic-context.v1`。这份上下文精确绑定 logical Plan hash、语义权威文档及其 hash、逻辑日程、每个 receiver 的 Next 公式、每个 region 的 selector-history 公式和 trace 投影 ID。Plan canonical bytes 不因这份外层记录改变。
+
+当前投影 `tide.settlegraph.trace-projection.lazy-proposal.v1` 允许 content/pre 时序中未 Observe 的数学 proposal 不求值，trace 将它记为 absent。这不会删除 reached、旧状态、计算快照或最终状态：每个 reached 的有状态 receiver 都必须保存 `state_before`、`state_for_compute` 和 `state_after`；执行了 Update 时还必须保存 proposal。当前默认 Next 的 formula ID 为 `next.compute-snapshot.v1`，它规定 `state_after = state_for_compute`，不读取或重算 Full。`history.none.v1` 是 selector-history 的单点状态，每个 region 事件的 `selector_history_before` 和 `selector_history_after` 都精确为 `None`。
+
+事件不重复保存每个逻辑时间整数。对于序列的全局 Token 位置 (t)，检查器从 semantic context 中的 `step_stride`、node rank 和 `output_rank` 唯一恢复节点与输出时间。因此 chunk/decode 记录必须保留全局 Token 位置，不能用调用内索引代替。
+
+在这一 schema 与投影下，每个 fixture 按以下顺序保存事件：
 
 1. 调用输入、三个 masks、序列位置、reset 和调用前状态；
 2. 每个 Token 的入口边界消息；
 3. 对每个执行 Token，保存每条固定边的 `DATA`/`CLOSED`，`DATA` 时保存 payload；
 4. 每个 receiver 的父消息序列、reached、聚合 hidden \(h\)、归一化输入 \(m\) 和 \(s^-\)；
-5. proposal 是否存在及其值、selector readout 和显式 selector-history 输入；
+5. proposal 是否存在及其值、selector readout，以及 selector-history 的前后状态；
 6. 每个 region 的 candidates、logits、probabilities、请求 K、实际 K 和 Top-K IDs；
-7. Observe/active、\(s^{\mathrm{cmp}}\)、NodeCompute 的 \(g\) 与 Emit 的 \(\widehat g\)；
-8. receiver state 与 selector-history 的 staged write；
+7. Observe/active、\(s^{\mathrm{cmp}}\)、Next 产生的最终 receiver 状态、NodeCompute 的 \(g\) 与 Emit 的 \(\widehat g\)；
+8. receiver 最终状态与 selector-history 的 staged write；
 9. 按 node ID 排列的终端消息、输出聚合和图输出；
 10. 调用后规范状态、下一位置与 LM/balance 充分统计量。
 
@@ -481,6 +490,8 @@ reached 的 forced-active singleton 直接把唯一 candidate 标记为 active�
 ### 4.1 离散与结构量
 
 以下量在对应操作存在时要求 exact：schema、logical/typed Plan hash、Tensor key、shape、声明 dtype、mask、状态 owner、候选及其顺序、requested/effective K、reached/Observe/active/send、Top-K IDs、edge status、Attention 有效位置、错误类别和 checkpoint key 集；操作不存在时，其 absent 标记也要求 exact。
+
+trace schema 与 semantic context 必须精确匹配当前 Plan 和权威文档；默认 Next 下 `state_after` 必须精确等于本次计算快照，并与 staged state write 一致；`history.none.v1` 的前后状态均必须为 `None`。检查器还必须能从全局 Token 位置和上下文的逻辑日程恢复时间坐标。
 
 exact 相等不能替代单边语义 invariant。每个成功 trace 还独立检查：每个执行 Token 的每条固定边恰好结算一次；每个 region 恰好结算一次；candidates 恰为 reached members 且 active 是其合法大小子集；Observe set 与 N/SD/BO 公式相同；普通 selector probability 非负并在当前 binding 的浮点门槛内和为 1；reached 的 forced-active singleton 不执行 Read/Score/Top-K、probability 精确为 1 且唯一 candidate 直接 active；成功 Token 的终端消息非空；所有消息 hidden、状态 owner 和 Attention 有效长度满足 Plan；非执行位置没有图事件。任一 invariant 失败时，即使两个 executor 产生相同错误结果也不能通过。
 
@@ -571,7 +582,7 @@ $$
 至少包含以下隔离目标和路径断言：
 
 1. post-update + BO 中，仅由 selector logits/probability 构成的目标对 proposal 和 Update 参数具有按解析公式预期的梯度；默认不得 detach proposal；
-2. pre-update 的同类隔离目标不经本 Token proposal 返回 Update，但 active NodeCompute 仍可经已提交状态返回 Update；
+2. pre-update 的同类隔离目标不经本 Token proposal 返回 Update，但 active NodeCompute 仍可经 Observe 采用后的计算快照返回 Update；
 3. `EMIT-HST` 前向逐元素等于 \(g\)，且对 active probability 的主任务局部导数为 \(\zeta^{\mathrm{ST}}(g-h)\)；`EMIT-HARD` 没有这条 probability 梯度；
 4. candidates、availability 基准、Top-K IDs、active set 和默认 selector-history 写回 stop-gradient；
 5. inactive receiver 的 NodeCompute 参数不从主任务目标获得梯度，selector 参数仍可从辅助项或 Hard-ST 的已选路径获得声明的梯度；
@@ -651,6 +662,7 @@ Flat MoE 和 Dense 不属于 SettleGraph executor 资格集合。科学实验若
 checkpoint schema 至少记录：
 
 - schema 版本、logical Plan 与 logical Plan hash、保存时 concrete execution binding 与 typed Plan hash；
+- 与 fixture/trace 相同结构的语义上下文，包括权威文档 hash、逻辑日程、Next 和 trace 投影；
 - base 与 SettleGraph 参数、可学习首状态，以及 SettleGraph 参数身份和各操作的引用关系；当前 `core-v1` 中所有参数身份独立；
 - optimizer、scheduler、AMP scaler；
 - 按 owner 规范化的 receiver state、selector-history、Attention 有效窗口和每个序列的下一位置；

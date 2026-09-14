@@ -1,14 +1,16 @@
 # 执行器等价性开发验证状态
 
-> 本文记录一次可复现的开发验证结果和后续交接事项，不定义或修改模型语义。当前语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定后续实现与测试的计算含义；资格门槛仍以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
+> 本文记录一次可复现的开发验证结果和后续交接事项，不定义或修改模型语义。当前语义依据分为两层：上游 20-tide 的 tide-core-3 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定后续实现与测试的计算含义；资格门槛仍以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
 
-本文的 `core-v1` 是本地实现和资格子集，与本地 `extension-v2`、各 Plan/parameter schema 及上游 `tide-core-2` 分别记录。以下历史结果绑定其原始 commit、语义文档快照和 run，不因当前上游采用声明而升级为 tide-core-2 符合性、完整资格或更广能力的证据。
+本文的 `core-v1` 是本地实现和资格子集，与本地 `extension-v2`、各 Plan/parameter schema 及上游 `tide-core-3` 分别记录。以下历史结果绑定其原始 commit、语义文档快照和 run，不因当前上游采用声明而升级为 tide-core-3 符合性、完整资格或更广能力的证据。
 
 ## 1. 当前结论
 
 固定 \(K\) 的 `core-v1` 子集已经有一条通用 packed executor，以及 `single-layer.v1` 和 `hb-line.v1` 两条拓扑特化 executor。对预先固定的 development candidate corpus，修复后的 clean exact commit 已完成受控 run：60/60 tests 通过，execution receipt 闭合，运行前后的 commit 和源码指纹一致。在记录的 output、最终 state、balance、route、trace、live autograd 元数据和 VJP 目标上，没有发现 eager、packed 和适用的拓扑特化路径之间的差异。
 
 这是一项强度较高的开发证据，结论仅限于当前支持子集、当前 CPU FP64/FP32 调用域和记录的测试场景；它不是 `C00`--`C12` qualification，也不是性能资格。
+
+当前 checkout 已在这一历史基线上增加 tide-core-3 语义权威绑定、逻辑日程、Next/最终状态和 trace 投影检查。下述 60-test run 发生在这些字段加入之前；新 runner 要求的语义测试即使在本地回归通过，也不会改写该历史 run 的证据身份。
 
 本次受控验证绑定的实现提交为：
 
@@ -82,7 +84,7 @@ prefill 与 decode 省略参数时的默认 autograd detach，以及 `detach_at_
 
 两条路径都复用同一个参数 owner，构造前静态拒绝不适用 Plan，且不回退到通用 eager scheduler。全部 24 个支持 case 在 FP64 下另递归比较 live 公开 Tensor 的 `requires_grad`；一个同时含 EMA、GDN 和 Attention 的 HB case 把 17 个调用方初始状态 leaves 纳入完整结果与 VJP 三方比较。对有状态代表场景，另行检查 reset、row reorder、empty tail，以及 mask/位置/状态所有权负例和晚期 empty-terminal 失败回滚。
 
-HB 的结论需要准确限定：它是独立的拓扑调度和 barrier oracle，不是独立的局部公式 oracle，也不是高性能 HB kernel。因而三方一致能增强对拓扑顺序、barrier、state commit 和 trace 的证据，但不能单独排除三条路径共同错误地实现同一个局部公式。
+HB 的结论需要准确限定：它是独立的拓扑调度和 barrier oracle，不是独立的局部公式 oracle，也不是高性能 HB kernel。因而三方一致能增强对拓扑顺序、barrier、状态采用/最终状态和 trace 的证据，但不能单独排除三条路径共同错误地实现同一个局部公式。
 
 ### 2.3 当前 run 的覆盖闭合
 

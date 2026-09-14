@@ -35,6 +35,7 @@ from tide.parameter_manifest import (
 )
 from tide.parameter_manifest import load_eager_parameter_tensors
 from tide.plan import OperationParameterBinding, bind_dtypes
+from tide.semantics import semantic_context_for_plan
 
 
 def _typed(plan, dtype: str = "float64"):
@@ -338,7 +339,11 @@ class FixtureBundleTests(unittest.TestCase):
             repeated = save_fixture_bundle(Path(directory) / "fixture-copy.pt", **parts)
             loaded = load_fixture_bundle(path, expected_sha256=artifact.sha256)
 
-            self.assertEqual(FIXTURE_SCHEMA_VERSION, "tide.settlegraph.fixture.v1")
+            self.assertEqual(FIXTURE_SCHEMA_VERSION, "tide.settlegraph.fixture.v2")
+            self.assertEqual(
+                loaded.semantic_context,
+                semantic_context_for_plan(parts["typed_plan"].logical_plan),
+            )
             self.assertEqual(loaded.fixture_id, parts["fixture_id"])
             self.assertEqual(
                 loaded.typed_plan.logical_hash(),
@@ -397,6 +402,20 @@ class FixtureBundleTests(unittest.TestCase):
                 atol=0,
                 rtol=0,
             )
+
+    def test_resigned_semantic_context_tamper_is_a_schema_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "fixture.pt"
+            save_fixture_bundle(path, **_fixture_parts())
+
+            def mutate(payload):
+                payload["semantic_context"]["logical_plan_hash"] = "0" * 64
+                _refresh_content_hash(payload)
+
+            _rewrite_payload(path, mutate)
+            with self.assertRaises(FixtureError) as raised:
+                load_fixture_bundle(path)
+            self.assertEqual(raised.exception.code, "artifact.schema")
 
     def test_file_hash_is_checked_before_safe_decode(self) -> None:
         parts = _fixture_parts()
@@ -627,7 +646,7 @@ class FixtureBundleTests(unittest.TestCase):
             parts = _fixture_parts()
             artifact = save_fixture_bundle(path, **parts)
             def mutate(payload):
-                payload["schema_version"] = "tide.settlegraph.fixture.v2"
+                payload["schema_version"] = "tide.settlegraph.fixture.v3"
                 _refresh_content_hash(payload)
 
             _rewrite_payload(path, mutate)
@@ -1156,7 +1175,7 @@ class FixtureBundleTests(unittest.TestCase):
             _rewrite_payload(
                 path,
                 lambda payload: payload.__setitem__(
-                    "schema_version", "tide.settlegraph.fixture.v2"
+                    "schema_version", "tide.settlegraph.fixture.v3"
                 ),
             )
             with self.assertRaises(FixtureError) as raised:

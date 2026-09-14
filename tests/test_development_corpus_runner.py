@@ -80,6 +80,17 @@ class DevelopmentCorpusRunnerTests(unittest.TestCase):
             corpus_record["invalid_cases"][0]["mutated_plan_identity"]["schema"],
             "tide.invalid-plan-structural.v1",
         )
+        first_legal = corpus_record["legal_cases"][0]
+        self.assertEqual(
+            first_legal["semantic_context"]["logical_plan_hash"],
+            first_legal["logical_plan_hash"],
+        )
+        self.assertEqual(
+            first_legal["semantic_context"]["authority"]["upstream_lock"][
+                "semantic_version"
+            ],
+            "tide-core-3",
+        )
 
     def test_structural_identity_keeps_container_type_domains_disjoint(self) -> None:
         @dataclasses.dataclass
@@ -379,6 +390,11 @@ class DevelopmentCorpusRunnerTests(unittest.TestCase):
 
             manifest = json.loads((run_dir / "run.json").read_text())
             summary = json.loads((run_dir / "summary.json").read_text())
+            self.assertEqual(manifest["schema_version"], 2)
+            self.assertEqual(
+                manifest["semantics"]["upstream_lock"]["semantic_version"],
+                "tide-core-3",
+            )
             self.assertEqual(
                 manifest["command"]["argv"],
                 [sys.executable, "scripts/run_development_corpus.py", *arguments],

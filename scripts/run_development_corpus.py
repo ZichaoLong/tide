@@ -542,6 +542,7 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
         generate_plan_corpus,
     )
     from tide.plan import bind_dtypes
+    from tide.semantics import semantic_context_for_plan
 
     legal = generate_plan_corpus()
     invalid = generate_invalid_plan_corpus()
@@ -562,6 +563,7 @@ def _corpus_record() -> tuple[dict[str, Any], str]:
                 "case_id": case.case_id,
                 "motif": case.motif,
                 "logical_plan_hash": case.plan.canonical_hash(),
+                "semantic_context": semantic_context_for_plan(case.plan),
                 "typed_plan_hashes": {
                     dtype: bind_dtypes(
                         case.plan,
@@ -625,6 +627,9 @@ def main(argv: list[str] | None = None) -> int:
     excluded_run_dir = _run_dir_exclusion(run_dir)
     source_before = _source_snapshot(excluded_run_dir=excluded_run_dir)
     _prepare_repository_imports()
+    from tide.semantics import validate_repository_semantic_sources
+
+    semantics = validate_repository_semantic_sources(_REPOSITORY_ROOT)
     corpus, corpus_hash = _corpus_record()
     # Torch and the project test graph are intentionally imported only after
     # the initial repository snapshot.  The final snapshot below detects a
@@ -647,7 +652,7 @@ def main(argv: list[str] | None = None) -> int:
         *parsed_argv,
     ]
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": run_id,
         "project": "tide-settlegraph",
         "name": "settlegraph-development-plan-corpus",
@@ -656,6 +661,7 @@ def main(argv: list[str] | None = None) -> int:
         "created_at": started_at,
         "started_at": started_at,
         "ended_at": None,
+        "semantics": semantics,
         "source": {
             "repository": "fractal-latcarf",
             "commit": source_before["commit"],

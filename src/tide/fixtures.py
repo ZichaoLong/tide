@@ -66,9 +66,14 @@ from .plan import (
     TypedPlan,
     validate_stable_id,
 )
+from .semantics import (
+    SemanticContextError,
+    semantic_context_for_plan,
+    validate_semantic_context,
+)
 
 
-FIXTURE_SCHEMA_VERSION = "tide.settlegraph.fixture.v1"
+FIXTURE_SCHEMA_VERSION = "tide.settlegraph.fixture.v2"
 TENSOR_MANIFEST_SCHEMA_VERSION = "tide.tensor-manifest.v1"
 
 
@@ -145,6 +150,7 @@ _ROOT_KEYS = frozenset(
         "schema_version",
         "fixture_id",
         "source",
+        "semantic_context",
         "canonicalizer_id",
         "logical_plan_bytes",
         "logical_plan_hash",
@@ -295,6 +301,7 @@ class FixtureBundle:
     fixture_id: str
     typed_plan: TypedPlan
     source: Mapping[str, Any]
+    semantic_context: Mapping[str, Any]
     parameter_schema: Mapping[str, Any]
     inputs: Mapping[str, Any]
     parameters: Mapping[str, Tensor]
@@ -1955,7 +1962,7 @@ def _decode_payload(
         _raise(
             "artifact",
             "artifact.schema",
-            "fixture v1 has no Plan schema for learnable initial state and requires an empty mapping",
+            "fixture v2 has no Plan schema for learnable initial state and requires an empty mapping",
         )
 
     logical_bytes = root["logical_plan_bytes"]
@@ -1978,6 +1985,12 @@ def _decode_payload(
         _raise(
             "artifact", "artifact.integrity", "typed Plan bytes are not canonical"
         )
+    try:
+        semantic_context = validate_semantic_context(
+            plan, root["semantic_context"]
+        )
+    except SemanticContextError as exc:
+        _raise("artifact", "artifact.schema", str(exc))
 
     parameter_schema = _validate_parameter_schema(
         parameter_schema, root["logical_plan_hash"], plan
@@ -2060,6 +2073,7 @@ def _decode_payload(
         fixture_id=fixture_id,
         typed_plan=typed_plan,
         source=MappingProxyType(dict(source)),
+        semantic_context=MappingProxyType(dict(semantic_context)),
         parameter_schema=MappingProxyType(dict(parameter_schema)),
         inputs=MappingProxyType(dict(inputs)),
         parameters=parameters,
@@ -2127,6 +2141,7 @@ def _build_fixture_payload(
         "schema_version": FIXTURE_SCHEMA_VERSION,
         "fixture_id": fixture_id,
         "source": _safe_value(source, path="source"),
+        "semantic_context": semantic_context_for_plan(typed_plan.logical_plan),
         "canonicalizer_id": PLAN_CANONICALIZER_ID,
         "logical_plan_bytes": typed_plan.logical_plan.canonical_bytes(),
         "logical_plan_hash": typed_plan.logical_hash(),

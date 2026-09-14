@@ -34,6 +34,7 @@ from tide.equivalence import (
     validate_trace_invariants,
 )
 from tide.plan import bind_dtypes
+from tide.semantics import TRACE_SCHEMA_VERSION, semantic_context_for_plan
 
 
 def _replace_plan(plan, *, nodes=None, regions=None, **changes):
@@ -325,6 +326,8 @@ class TraceInvariantTests(unittest.TestCase):
         node_id = "node.0"
         region_id = "region.0"
         expected = ExecutionTrace(
+            schema_version=TRACE_SCHEMA_VERSION,
+            semantic_context=semantic_context_for_plan(plan),
             node_events=(
                 NodeEventTrace(
                     "sequence",
@@ -336,6 +339,7 @@ class TraceInvariantTests(unittest.TestCase):
                     True,
                     message,
                     normalized,
+                    None,
                     None,
                     None,
                     None,
@@ -363,6 +367,8 @@ class TraceInvariantTests(unittest.TestCase):
                     None,
                     (node_id,),
                     True,
+                    None,
+                    None,
                     None,
                 ),
             ),
@@ -679,6 +685,8 @@ class TraceInvariantTests(unittest.TestCase):
         trace, _, executed = self._run_both(plan)
         output = dataclasses.replace(trace.output_events[0], token_position=99)
         malformed = ExecutionTrace(
+            trace.schema_version,
+            trace.semantic_context,
             trace.node_events,
             trace.edge_events,
             trace.boundary_events,

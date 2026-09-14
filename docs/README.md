@@ -14,4 +14,4 @@
 
 上游定义共同语义与一般定理，本地实验文档选择具体实例。实现计划、测试契约、资格工作单和运行报告分别说明软件、判定规则、待完成目标和已取得证据，均不能通过同名术语扩大上游定义。具体配置超出采用范围时，应在[本地对应表](upstream-semantics.md)登记，不能由执行器自行解释。
 
-`tide-core-2` 与本地 `core-v1`、`extension-v2`、Plan schema 和 parameter schema 是不同版本坐标。文档采用新上游版本，不会改写旧 run 的语义身份，也不会自动增加已验证能力。返回[仓库入口](../README.md)。
+`tide-core-3` 与本地 `core-v1`、`extension-v2`、Plan schema 和 parameter schema 是不同版本坐标。文档采用新上游版本，不会改写旧 run 的语义身份，也不会自动增加已验证能力。返回[仓库入口](../README.md)。

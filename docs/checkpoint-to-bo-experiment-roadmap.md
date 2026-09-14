@@ -1,10 +1,10 @@
 # 从 Base checkpoint 到 SettleGraph + BO 实验及后续扩展路线
 
-> 本文是当前实现完成 executor 等价性开发验证后的实验与工程推进计划，不定义或修改模型语义。语义依据分为两层：上游 20-tide 的 tide-core-2 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；当前软件能力以[实现与等价性验证计划](settlegraph-implementation-plan.md)和[执行器等价性开发验证状态](executor-equivalence-development-status.md)为准；正式资格门槛以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
+> 本文是当前实现完成 executor 等价性开发验证后的实验与工程推进计划，不定义或修改模型语义。语义依据分为两层：上游 20-tide 的 tide-core-3 教材与语义锚点定义一般对象、接口和定理；本地[SettleGraph 实验实例、局部公式与命名](experiment-semantics-and-naming.md)声明所采用的具体公式、profile 限制、本地扩展、placement、loss 和命名，并记录上游采用关系。两层共同决定实现与测试的计算含义；当前软件能力以[实现与等价性验证计划](settlegraph-implementation-plan.md)和[执行器等价性开发验证状态](executor-equivalence-development-status.md)为准；正式资格门槛以[core-v1 资格计划](core-v1-qualification-plan.md)为准。
 >
 > 本文的用途是让后续工作从一个明确基准继续：先用 checkpoint 实验判断 SettleGraph，尤其是 BO，是否具有可复现的训练或推理价值；只为实际实验路径做必要的特化加速；确认正面信号后，再建设面向超大、超稀疏、多卡 DAG 的通用高性能执行器。
 
-下文的 `core-v1`、`extension-v2` 指本地实现和资格范围，Plan/parameter schema 指本地工件版本，均不等同于上游语义版本 `tide-core-2`。当前采用关系不扩大历史 commit/run 的验证范围。
+下文的 `core-v1`、`extension-v2` 指本地实现和资格范围，Plan/parameter schema 指本地工件版本，均不等同于上游语义版本 `tide-core-3`。当前采用关系不扩大历史 commit/run 的验证范围。
 
 ## 1. 已确定的优先级
 
@@ -24,8 +24,8 @@
 
 - **Base checkpoint**：一个已训练 Base LLM 的不可变权重、配置和 tokenizer 身份。`init-from` 表示从它建立新的实验轨迹，不恢复旧实验的 optimizer、数据位置或随机数轨迹。
 - **实验垂直切片**：一个从 checkpoint 装载开始，贯通 Base block 接入、SettleGraph 执行、logits、loss、backward、optimizer、checkpoint、fresh-process resume、prefill 和 decode 的最小完整配置。
-- **BO**：对每个局部 region，所有 reached receivers 都 Observe 并提交状态，只有 active receivers 执行完整 NodeCompute 并发送消息。
-- **SD**：只有 active receivers Observe、提交状态、执行完整计算并发送。profile 是规范 Plan 字段，因此 BO 与 SD 使用 hash 不同的两份 Plan；直接比较应保持除 profile 外的拓扑与公式字段、状态容量、active budget、NodeCompute、Emit、Aggregate、训练 Token 和 optimizer 匹配。
+- **BO**：对每个局部 region，所有 reached receivers 都由 Observe 采用 proposal 作为本次计算快照，再由 Next 确定下一持久状态；只有 active receivers 执行完整 NodeCompute 并发送消息。
+- **SD**：只有 active receivers 由 Observe 采用 proposal，再由 Next 确定下一持久状态并执行完整计算与发送。profile 是规范 Plan 字段，因此 BO 与 SD 使用 hash 不同的两份 Plan；直接比较应保持除 profile 外的拓扑与公式字段、状态容量、active budget、NodeCompute、Emit、Aggregate、训练 Token 和 optimizer 匹配。
 - **函数等价起点**：SettleGraph 初始化后满足其输出等于输入，即残差为零，使接入后的模型在声明调用域内与原 Base 模型具有相同 forward 和 LM loss。
 - **正面实验结果**：在预先声明的主要指标和预算下，相对主要对照出现多 seed 可复现的改善，同时没有被稳定性、路由坍缩或系统成本否定。它不是单次 run 的最低 loss，也不是从许多事后切片中挑出的最好数字。
 - \(R\) 与 \(K\)：\(R\) 是一个 region 中的固定 receiver 数，\(K\) 是该 region 每次 settlement 的固定 active 数上限。
@@ -70,7 +70,7 @@ docs: record controlled executor equivalence run
 | 拓扑特化 | `single-layer.v1` 与 `hb-line.v1` 已与 eager、packed 做开发级三方等价验证 | `single-layer.v1` 只接受无状态 N/content；不能直接承担 stateful BO 首轮实验。`hb-line.v1` 只对其静态支持谓词接受的 fully expanded HB Plan 提供 BO 的独立拓扑调度 oracle，不代表任意 HB/BO Plan，也不是高性能 HB kernel |
 | 跨调用梯度 | 省略参数时默认在调用结束 detach；显式 `detach_at_end=False` 保留跨 chunk/decode 的状态图，两种模式均已有定向验证 | checkpoint 不能保存一个仍需继续反向的现场 autograd 图；训练必须声明截断边界或保存可重放前缀 |
 | placement | POST、PARBLK、PARATTN、PARMLP 的 Tensor 方程和 identity 退化已有单元测试 | 尚未接入真实 Qwen block，也未覆盖真实 causal mask、position IDs、KV cache、logits、LM loss 和 Base 参数梯度 |
-| checkpoint | SettleGraph 参数、Plan/binding、receiver state、Adam/AdamW、CPU RNG 和基础 continuation 已有版本化 CPU checkpoint v1 | 还不是完整 Base 训练 checkpoint；scheduler、AMP scaler、backend RNG、sampler/data cursor、累积中梯度和未归约统计窗口尚未闭合 |
+| checkpoint | SettleGraph 参数、Plan/binding、语义上下文、receiver state、Adam/AdamW、CPU RNG 和基础 continuation 已有版本化 CPU checkpoint v2 | 还不是完整 Base 训练 checkpoint；scheduler、AMP scaler、backend RNG、sampler/data cursor、累积中梯度和未归约统计窗口尚未闭合 |
 | 后端 | 有 CPU/CUDA/NPU runtime 解析边界；旧 eager-reference 内容在本机 Ascend 上有一次 FP32 定向 attempt | 当前 packed/特化提交尚未在本机 NPU 重新形成 clean exact-commit 证据；CUDA 仍未验证，FP16/BF16 不在当前 executor 调用域 |
 | 分布式 | 语义允许物理实现改变布局和节点放置，只要恢复相同可观测值 | 仓库当前没有 DDP/FSDP、HCCL DAG 调度、跨卡 state ownership 或节点并行实现 |
 
@@ -189,9 +189,9 @@ SettleGraph-only 相对冻结 Base 的比较衡量“增加一个可训练模块
 
 第一次正式矩阵运行前还要冻结主要估计目标，即哪两个条件在什么评测量、预算和时点上的差值，以及它的汇总方法：使用最后一个预定 checkpoint，还是只按验证集选择 checkpoint；跨 seed 使用何种中心量、离散度或置信区间；OOM、nonfinite、提前退出和缺失评测如何计入；允许几次基础设施重试；同时检验多个任务、时间点或 BO 变体时如何控制或明确披露多重比较。所有条件使用同一 checkpoint-selection 规则，不能用 test set 或事后最好切片选择主结果。
 
-主结果使用各条件自然产生的 route；route replay 只用于因果诊断，不替代模型实际路由。BO 与 SD 可以精确匹配 active NodeCompute，但 BO 还会对所有 reached receivers 执行状态 Update/commit；因此不能预设两者总 FLOPs、显存或 wall time 相等，必须实测并与质量收益一起报告。
+主结果使用各条件自然产生的 route；route replay 只用于因果诊断，不替代模型实际路由。BO 与 SD 可以精确匹配 active NodeCompute，但 BO 还会对所有 reached receivers 求 Update proposal、由 Observe 采用并用 Next 确定最终状态；因此不能预设两者总 FLOPs、显存或 wall time 相等，必须实测并与质量收益一起报告。
 
-每个 state intervention 都要固定被干预的 site、receiver/状态分量或 Read 路径、发生在 Observe/commit/read/reset 的哪个边界、持续的 Token/sequence 范围，以及恢复规则。shuffle 还要固定 sequence/node/component 轴与 seed；clear/reset 要区分单序列、单 site 和全局范围；no-read 要记录替代值。没有这些坐标，干预 run 不能互相比较。
+每个 state intervention 都要固定被干预的 site、receiver/状态分量或 Read 路径、发生在 proposal 求值、Observe 状态采用、Next 最终状态、Read 或 reset 的哪个边界、持续的 Token/sequence 范围，以及恢复规则。shuffle 还要固定 sequence/node/component 轴与 seed；clear/reset 要区分单序列、单 site 和全局范围；no-read 要记录替代值。没有这些坐标，干预 run 不能互相比较。
 
 ### 5.3 正面结果的最低解释要求
 
@@ -218,7 +218,7 @@ SettleGraph-only 相对冻结 Base 的比较衡量“增加一个可训练模块
 - CPU checkpoint 到 NPU 可以作为 portable handoff；除非 backend、软件栈、数据顺序和确定性设置完全匹配并已有证据，不承诺跨 backend 的逐 step 同轨迹恢复。
 - 保存后必须退出进程，再由 fresh process 加载并执行下一步；同一进程内 save/load 不能单独作为 resume 证据。
 
-当前 checkpoint v1 只接受独立 `SettleGraph` owner，可复用其 Plan、SettleGraph 参数 owner、状态和 optimizer 校验逻辑，但不能直接装载 Base + SettleGraph + LoRA 联合模型；真实 Base 训练 checkpoint 需要扩展上述缺失范围。扩展时不得放松现有 no-partial-commit、hash、shape、dtype 和 rollback 约束。
+当前 checkpoint v2 只接受独立 `SettleGraph` owner，可复用其 Plan、语义上下文、SettleGraph 参数 owner、状态和 optimizer 校验逻辑，但不能直接装载 Base + SettleGraph + LoRA 联合模型；真实 Base 训练 checkpoint 需要扩展上述缺失范围。扩展时不得放松现有 no-partial-commit、hash、shape、dtype 和 rollback 约束。
 
 默认 checkpoint 只允许落在 optimizer step 与完整 LM/balance 统计窗口共同闭合的边界，此时 gradient-accumulation microstep 为零且参数梯度已清空。若 schema 明确允许在 accumulation 中途保存，则必须保存已累积参数梯度；对尚未 backward 的 LM 或 balance 充分统计，还必须保存能在新进程中确定性重放并重建 VJP 的输入、前置状态、mask、RNG 和窗口位置，而不能只保存已经 detach 的统计数值。两种策略必须二选一并由 fresh-process 下一步测试验证。
 
@@ -281,7 +281,7 @@ SettleGraph-only 相对冻结 Base 的比较衡量“增加一个可训练模块
 
 当前 decode 是长度为 1 的 packed prefill 路径复用，已有正确性证据，但旧 CPU 探索记录没有观察到加速。低延迟 decode 需要单独的 workload 和调度/kernel 设计，不应从 prefill 吞吐外推。此外，同一结果图上不同 roots 的并发 backward 尚未声明或验证；在其生命周期和线程安全契约闭合前，实验 runner 不得隐式依赖该用法。
 
-候选优化包括把 route 与 source-liveness 信息在一次设备端/编译遍历中复用、把同构 node/region 工作按 shape 和算子分组、将因果 state scan 放入编译图或设备 kernel、为固定 BO Plan 生成静态 schedule，以及把非 trace 训练路径与诊断 trace 路径分离。任何优化都不得改变 BO 的 Observe/commit 时序、Top-K、state owner 或消息结算。
+候选优化包括把 route 与 source-liveness 信息在一次设备端/编译遍历中复用、把同构 node/region 工作按 shape 和算子分组、将因果 state scan 放入编译图或设备 kernel、为固定 BO Plan 生成静态 schedule，以及把非 trace 训练路径与诊断 trace 路径分离。任何优化都不得改变 BO 的 Update proposal、Observe 状态采用与 Next 最终状态时序、Top-K、state owner 或消息结算。
 
 ## 9. 通用超大 DAG 与多卡性能路线
 
@@ -344,7 +344,7 @@ F_{\mathrm{token}}
 +F_{\mathrm{active\ NodeCompute}}.
 $$
 
-其中 \(F_{\mathrm{Base}}\) 是 Base 模型成本，\(F_{\mathrm{aggregate/selector/route}}\) 是消息聚合、候选打分和路由成本，\(F_{\mathrm{state}}\) 是 Observe、Update 和 commit 的状态成本，最后一项是 active receivers 的昂贵计算。最后一项始终直接随 active NodeCompute 稀疏化；BO 的状态成本仍随 reached 集合发生，SD 的 Observe/Update/commit 则随 active 集合稀疏。selector 仍处理 reached candidates，Base、图结算和通信也不会自动按 1/32 缩小。
+其中 \(F_{\mathrm{Base}}\) 是 Base 模型成本，\(F_{\mathrm{aggregate/selector/route}}\) 是消息聚合、候选打分和路由成本，\(F_{\mathrm{state}}\) 是 Update proposal、Observe 状态采用和 Next 最终状态的成本，最后一项是 active receivers 的昂贵计算。最后一项始终直接随 active NodeCompute 稀疏化；BO 的状态成本仍随 reached 集合发生，SD 的状态采用与 Next 则随 active 集合稀疏。selector 仍处理 reached candidates，Base、图结算和通信也不会自动按 1/32 缩小。
 
 参数激活还要区分唯一存储量和累计访问量。令 \(P_{\mathrm{NC,all}}\) 为统计范围内全部 receiver NodeCompute 参数量，\(P_{\mathrm{NC,touched}}(t)\) 为 Token \(t\) 至少调用一次的 NodeCompute 唯一参数存储量，则
 

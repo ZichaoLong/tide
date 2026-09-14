@@ -1,15 +1,15 @@
 # SettleGraph 实验实例、局部公式与命名
 
-> 本文继承 20-tide 的 **tide-core-2**，固定上游提交为 `facf1afc696673a80e49b1e327bb1d058273893b`。通用对象、接口及定理以该提交中的[语义锚点][up-anchor]、[SettleGraph 教材][up-settle]和 [TimedDAG 教材][up-timed]为准。本文负责 fractal-latcarf 的具体实验实例：模型接入、局部公式、标准 profile、拓扑生成、训练目标与可复现条件。
+> 本文继承 20-tide 的 **tide-core-3**，固定上游提交为 `e529de212c605f7f417c3a1ce97e780a2ee59824`。通用对象、接口及定理以该提交中的[语义锚点][up-anchor]、[SettleGraph 教材][up-settle]和 [TimedDAG 教材][up-timed]为准。本文负责 fractal-latcarf 的具体实验实例：模型接入、局部公式、标准 profile、拓扑生成、训练目标与可复现条件。
 >
-> [整理前的语义文档](archive/experiment-semantics-and-naming-pre-tide-core-2.md)仅用于追溯旧条件，不是当前规范。本文的继承声明不代表现有实现已经通过上游语义验证；实现范围见[实现与等价性验证计划](settlegraph-implementation-plan.md)，具体比较与证据见[等价性测试契约](equivalence-test-contract.md)和 [core-v1 资格计划](core-v1-qualification-plan.md)。`core-v1` 是本地资格范围名称，与上游语义版本不是同一版本轴；其中使用身份感知聚合的 fixtures 验证本地扩展，不构成严格上游 SettleGraph 的全面符合性证明。
+> [整理前的语义文档](archive/experiment-semantics-and-naming-pre-tide-core-2.md)仅用于追溯旧条件，不是当前规范。本文的继承声明不代表现有实现已经通过上游语义验证；实现范围见[实现与等价性验证计划](settlegraph-implementation-plan.md)，具体比较与证据见[等价性测试契约](equivalence-test-contract.md)和 [core-v1 资格计划](core-v1-qualification-plan.md)。`core-v1` 是本地资格范围名称，与上游语义版本不是同一版本轴。父边感知 receiver 聚合和终端节点感知输出聚合现在是 tide-core-3 的标准 SettleGraph 实例；具体公式、成本与验证范围仍由本地契约限定。
 
 上游版本、同步方式及本地扩展登记见[上游语义关系](upstream-semantics.md)。
 
-[up-anchor]: https://github.com/ZichaoLong/ObsidianVault/blob/facf1afc696673a80e49b1e327bb1d058273893b/20-tide-decentralized-neural-network/semantics-anchor.md
-[up-settle]: https://github.com/ZichaoLong/ObsidianVault/blob/facf1afc696673a80e49b1e327bb1d058273893b/20-tide-decentralized-neural-network/settlegraph-learning-note.md
-[up-timed]: https://github.com/ZichaoLong/ObsidianVault/blob/facf1afc696673a80e49b1e327bb1d058273893b/20-tide-decentralized-neural-network/timed-dag-region-selector-learning-note.md
-[up-chunk]: https://github.com/ZichaoLong/ObsidianVault/blob/facf1afc696673a80e49b1e327bb1d058273893b/20-tide-decentralized-neural-network/timed-dag-chunk-prefill-learning-note.md
+[up-anchor]: https://github.com/ZichaoLong/ObsidianVault/blob/e529de212c605f7f417c3a1ce97e780a2ee59824/20-tide-decentralized-neural-network/semantics-anchor.md
+[up-settle]: https://github.com/ZichaoLong/ObsidianVault/blob/e529de212c605f7f417c3a1ce97e780a2ee59824/20-tide-decentralized-neural-network/settlegraph-learning-note.md
+[up-timed]: https://github.com/ZichaoLong/ObsidianVault/blob/e529de212c605f7f417c3a1ce97e780a2ee59824/20-tide-decentralized-neural-network/timed-dag-region-selector-learning-note.md
+[up-chunk]: https://github.com/ZichaoLong/ObsidianVault/blob/e529de212c605f7f417c3a1ce97e780a2ee59824/20-tide-decentralized-neural-network/timed-dag-chunk-prefill-learning-note.md
 
 ## 阅读入口：从上游对象到本地实验
 
@@ -19,7 +19,7 @@
 
 第 1 节定义 Qwen3 的接入位置；第 2 节给出本平台的局部运算及其上游映射；第 3--4 节实例化单层和 HB-Lattice；第 5--8 节规定对照、loss、命名与实验记录；附录 A 保存状态模块样例。一般有限性、唯一性、分段继续与嵌入证明由上游教材承担，本文只说明采用这些结论所需的本地条件。
 
-下文区分两种范围：仅按顺序读取裸值序列的聚合属于当前 SettleGraph 实例；额外读取父边或终端身份的聚合登记为 SettleGraph 的本地扩展，并按一般 TimedDAG 实例解释。`CUSTOM` 只是实验字段，不能自动扩大上游接口。所有自定义设置仍须给出完整公式、读取范围和比较目标。
+上游核心聚合接收规范排序的身份—值序列；具体函数可以读取父边或终端节点身份，也可以忽略标签而退化为只读值的简单实例。`CUSTOM` 只是实验字段，不能自动扩大上游接口。所有自定义设置仍须给出完整公式、读取范围、成本分类和比较目标。
 
 Base 权重可来自已训练 checkpoint。若要求从保持 Base 前向函数的起点开始，必须声明使图输出等于图输入的初始化及状态范围，并验证第 1.3.5 节的条件；具体训练效果由实验检验。
 
@@ -206,7 +206,7 @@ $$
 
 #### 向上游适配的统一逻辑时间
 
-令 \(\mathcal R(v)\) 表示 receiver \(v\) 所属 region。给每个 region 固定正整数秩 \(r_{\mathcal R}\)，使每条 receiver 边 \(u\to v\) 满足 \(r_{\mathcal R(u)}<r_{\mathcal R(v)}\)。一般 Plan 的默认选择是：无父 region 的秩为 1，其余 region 的秩为父 region 最大秩加 1；第 4 节的 HB 实例另按 Line 固定秩。定义
+令 \(\mathcal R(v)\) 表示 receiver \(v\) 所属 region。把跨 region 的 receiver 边与只约束等待的显式 control dependency 都视为 region 依赖；若依赖从 \(\mathcal R_a\) 指向 \(\mathcal R_b\)，则固定正整数秩须满足 \(r_{\mathcal R_a}<r_{\mathcal R_b}\)。一般 Plan 的默认选择是：无依赖 region 的秩为 1，其余 region 的秩为全部直接数据／控制依赖最大秩加 1；第 4 节的 HB 实例另按 Line 固定秩。定义
 
 $$
 r_v=r_{\mathcal R(v)},\qquad
@@ -247,21 +247,31 @@ $$
 
 #### Receiver 如何得到一个输入 hidden
 
-入口 receiver 的消息序列只包含图输入；其他 receiver 等全部固定父边结算后，只收集其中的 \(\operatorname{DATA}\)。消息按固定 edge ID 排列，并允许不同父边携带数值相同的 hidden：
+为每个入口 receiver \(v\) 固定一个不属于 \(E\) 的形式标签 \(\mathrm{in}_v\)，并定义它可接收的标签集合
+
+$$
+I_v=
+\begin{cases}
+\{\mathrm{in}_v\},&v\in V_{\mathrm{in}},\\
+\operatorname{In}(v),&v\notin V_{\mathrm{in}}.
+\end{cases}
+$$
+
+本地 trace 中的 `boundary:<node_id>` 是 \(\mathrm{in}_v\) 的稳定序列化编码，不是新增 receiver 边。入口 receiver 的消息序列只包含带该标签的图输入；其他 receiver 等全部固定父边结算后，只收集其中的 \(\operatorname{DATA}\)，保留 edge ID，并按固定 edge ID 排列。不同父边即使携带数值相同的 hidden，仍是不同的带身份项：
 
 $$
 \mathcal M_{v,t}
 =
 \begin{cases}
-\bigl(h^{\mathrm{in}}_{j,t}\bigr),
+\bigl((\mathrm{in}_v,h^{\mathrm{in}}_{j,t})\bigr),
 &v\in V_{\mathrm{in}},\\[4pt]
-\bigl(y_e:\ e\in\operatorname{In}(v),\
+\bigl((e,y_e):\ e\in\operatorname{In}(v),\
 z_{e,t}=\operatorname{DATA}(y_e)\bigr)_{\text{按 edge ID}},
 &v\notin V_{\mathrm{in}}.
 \end{cases}
 $$
 
-这里 \(\mathcal M_{v,t}\) 是按边序排列的值序列，空序列记为 \(()\)。由此定义 receiver 是否 **reached**：
+这里 \(\mathcal M_{v,t}\) 是按标签规范排序的身份—值序列，空序列记为 \(()\)。由此定义 receiver 是否 **reached**：
 
 $$
 q_{v,t}=\mathbf 1[\mathcal M_{v,t}\ne()].
@@ -281,20 +291,20 @@ $$
 $$
 \operatorname{Aggregate}_v(\mathcal M_{v,t})
 =\frac{1}{|\mathcal M_{v,t}|}
-\sum_{y\in\mathcal M_{v,t}}y.
+\sum_{(i,y)\in\mathcal M_{v,t}}y.
 $$
 
 因此只有一条实际消息时，输入 hidden 就是该消息本身。可选聚合只需满足输出仍为一个 \(d_{\mathrm{model}}\) 维 hidden：
 
 | 设置 | 定义 |
 | --- | --- |
-| `AGG-MEAN` | 对实际到达的消息取均值；当前默认 |
-| `AGG-LEARNED` | \(\sum_k\alpha_{v,k,t}y_k\)，其中 \(\alpha_k\ge0\)、\(\sum_k\alpha_k=1\) |
-| `AGG-CUSTOM` | 自定义值序列函数；须记录完整公式、输入顺序及额外参数成本。若读取父边或终端身份，按下面的局部扩展登记 |
+| `AGG-MEAN` | 忽略标签，对实际到达的消息值取均值；当前默认 |
+| `AGG-LEARNED` | \(\sum_k\alpha_{v,i_k,t}y_k\)，其中权重可按实际标签 \(i_k\) 取参数，\(\alpha_k\ge0\)、\(\sum_k\alpha_k=1\) |
+| `AGG-CUSTOM` | 自定义身份—值序列函数；须记录完整公式、规范输入顺序、读取的标签及额外参数成本 |
 
-上表中属于上游 SettleGraph 的聚合只接收值序列；固定 edge ID 只负责确定序列顺序。若同一值序列来自不同父边集合，聚合结果仍相同。selector 概率不在聚合中再次相乘。
+三种设置都使用 tide-core-3 的 SettleGraph 聚合接口。只读值的旧公式通过忽略每项第一坐标保守提升；identity-aware 公式则可以让同一值序列因来源标签不同而得到不同结果。selector 概率不在聚合中再次相乘。
 
-父边相关线性变换等设置需要显式输入 \(((e_k,y_k))_k\)，不能继续用只接受 \((y_k)_k\) 的公式表示。终端相关聚合同理需要 \(((v_k,\widehat g_k))_k\)。这两类设置保留为 **SettleGraph 的身份感知聚合本地扩展**，并按一般 TimedDAG 实例解释：TimedDAG 的带标记原子可以提供这些身份，但当前上游 SettleGraph 的裸值聚合及其嵌入定理不直接覆盖它们。实验须记录所读身份、完整函数、参数成本与单独的映射／验证范围，不能仅写 `AGG-CUSTOM` 就视为已经继承证明。当前 `core-v1` 中读取 edge ID 的 receiver 聚合和读取终端 node ID 的输出聚合都按这个扩展范围解释；本地资格名称不抹去这一区别。
+父边相关线性变换等设置显式读取 \(((e_k,y_k))_k\)；终端相关聚合同理读取 \(((v_k,\widehat g_k))_k\)。它们现在是标准 SettleGraph 实例，并由上游第 10 节的嵌入保持标签。\(\operatorname{CLOSED}\) 不作为数值项传入，但聚合的固定标签域 \(I_v\) 与本次实际标签集合共同确定哪些父边缺席；实现不能用补零代替缺席。实验仍须登记完整函数、参数成本和规范排序。若身份感知 Aggregate 含逐边大矩阵等主要计算，还须把它计入昂贵作用范围，并为相应批处理结论另给精确 witness。
 
 #### 一个最小示意
 
@@ -589,14 +599,14 @@ $$
 ~~~text
 InterpretToken(Plan, t, states_before, h_in):
   把每条固定边初始化为“未结算”
-  入口 receivers 的消息序列初始化为 [h_in]
+  入口 receivers 的消息序列初始化为 [(in_v, h_in)]
 
   只要仍有未结算 region：
     选取一个数据依赖、控制依赖和跨 Token 状态依赖都已满足的 region R
 
     对每个 v ∈ R：
       若 v 不是入口 receiver，断言全部固定父边已经结算
-      按 edge ID 收集父边中的全部 DATA；CLOSED 不进入消息序列
+      按 edge ID 收集父边中的全部 (edge ID, DATA value)；CLOSED 不进入消息序列
       消息非空则 reached，并执行 Aggregate 与入口归一化
 
     按第 2.3 节为 R 完成一次选择：
@@ -610,7 +620,7 @@ InterpretToken(Plan, t, states_before, h_in):
       其他情况 ⇒ 结算为 CLOSED
 
   等所有终端 receivers 完成本 Token 的角色结算
-  收集 active 终端 receivers 的 g_hat
+  收集 active 终端 receivers 的 (node ID, g_hat)
   若集合为空，报告执行失败
   否则用 Aggregate_out 聚合为 b_G，并返回 Next 与选择历史规则确定的状态
 ~~~
@@ -619,7 +629,7 @@ InterpretToken(Plan, t, states_before, h_in):
 
 $$
 \mathcal M_{\mathrm{out},t}
-=\bigl(\widehat g_{v,t}:
+=\bigl((v,\widehat g_{v,t}):
 v\in V_{\mathrm{out}},\ v\text{ active}\bigr)_{\text{按 node ID}},
 $$
 
@@ -629,7 +639,7 @@ b_{\mathcal G,j,t}
 (\mathcal M_{\mathrm{out},t}).
 $$
 
-普通 \(\operatorname{Aggregate}_{\mathrm{out}}\) 只读取有序终端值序列；额外读取终端 ID 的设置按第 2.1 节登记为 SettleGraph 本地扩展，并按一般 TimedDAG 实例解释。上游 SettleGraph 教材的输出存在引理给出非空终端集合的保证。本平台对每个实际图输入要求该集合非空；若实现得到空集合，必须失败，不能静默回退或伪造 hidden。
+\(\operatorname{Aggregate}_{\mathrm{out}}\) 接收有序终端身份—值序列；均值选择忽略 node ID，node-aware 选择可以读取它。两者都是第 2.1 节定义的标准 SettleGraph 实例。上游 SettleGraph 教材的输出存在引理给出非空终端集合的保证。本平台对每个实际图输入要求该集合非空；若实现得到空集合，必须失败，不能静默回退或伪造 hidden。
 
 本平台采用上游的单次结算规则：每个 region 每个输入位置只结算一次，每个 receiver 至多做一次完整计算，每条固定边给出一次有值或无值结果。独立区域可以按不同合法次序求值；上游唯一性定理提供数学比较目标，浮点、记录投影与反向规则则由本地测试契约单独固定。
 
@@ -662,7 +672,7 @@ $$
 
 只供 selector 使用的历史可以留在 \(\xi_{\mathcal R,t}\) 中，由同一次 SelStep 的历史输出确定，并满足 \(\xi^-_{\mathcal R,t+1}=\xi_{\mathcal R,t}\)。node-level 历史键若存放区域历史的各节点分量，必须声明它们与区域历史向量的对应；不能同时维护两份可独立改写的副本。
 
-上述 Next 和选择历史更新不能读取或重算 NodeCompute／Emit 的结果，也不能读取其他未声明信息。实现即使安排在 Full 完成后保存 active 或 \(p\)，它们仍必须由当前选择与已给状态独立确定，并从下一输入位置起可见。本次 NodeCompute 始终读 \(s^{\mathrm{cmp}}\)，不能改读已清理的最终状态。需要 Full 结果反馈的设计超出 `tide-core-2`，不能作为本文标准 profile 的普通配置项。
+上述 Next 和选择历史更新不能读取或重算 NodeCompute／Emit 的结果，也不能读取其他未声明信息。实现即使安排在 Full 完成后保存 active 或 \(p\)，它们仍必须由当前选择与已给状态独立确定，并从下一输入位置起可见。本次 NodeCompute 始终读 \(s^{\mathrm{cmp}}\)，不能改读已清理的最终状态。需要 Full 结果反馈的设计超出 `tide-core-3`，不能作为本文标准 profile 的普通配置项。
 
 写入 active 或 \(p\) 的历史默认 stop-gradient；这属于本地训练规则，不改变其前向数值。状态的其他梯度路径、清理与保留坐标必须随实验声明。
 
@@ -684,7 +694,7 @@ chunk 是一次前向接收的连续有效输入片段；prefill 是处理一段
 | --- | --- |
 | \(\operatorname{DATA}(y)\)、\(\operatorname{CLOSED}\) | SettleGraph 边值 \(y\)、\(\bot\)；进入 TimedDAG 编码后分别为实际消息、该固定槽位无消息 |
 | reached、active | 候选集合 \(\mathcal C\)、激活集合 \(\mathcal A\) |
-| Aggregate | Agg；普通实例只读取有序值序列，身份感知扩展另列 |
+| Aggregate | Agg；输入是规范排序的身份—值序列，具体实例可以读取或忽略身份标签 |
 | Update 与本地归一化 | \(\operatorname{Upd}_v(s,\theta,h)=\operatorname{Update}_v(s,N_{R,v}(h))\) |
 | 三种 \(\operatorname{Read}^{\mathrm{sel}}\) | 上游 \(\operatorname{Read}^{0,-,+}\)，把 \(m=N_R(h)\) 组合进本地函数 |
 | Score、softmax、Top-K 与选择历史更新 | 一次 SelStep 的整体函数值；返回激活集合、每候选控制量与下一历史 |
@@ -704,7 +714,7 @@ $$
 
 本地 Score 得到的 logits 可作为局部辅助记录保留；完整选择及其历史更新共同组成 SelStep。使用概率以外的控制内容时，必须另行声明控制空间和各字段的来源，不能让 Full 直接读取整个区域的隐式数据。
 
-本文的普通实例采用上游 SettleGraph 的节点、区域与时间编码。向 TimedDAG 的消息、输出和切面对应使用[上游教材][up-settle]第 10 节；这里不重证一般嵌入。身份感知聚合、额外控制读入和惰性中间量记录分别按第 2.1、2.4、2.2 节声明范围。前向、数值容差、可观测记录和指定反向是不同的比较项目；任何一项通过都不能代替其余项目。
+本文实例采用上游 SettleGraph 的节点、区域、带身份聚合与时间编码。向 TimedDAG 的消息、输出和切面对应使用[上游教材][up-settle]第 10 节；这里不重证一般嵌入。额外控制读入和惰性中间量记录分别按第 2.4、2.2 节声明范围。前向、数值容差、可观测记录和指定反向是不同的比较项目；任何一项通过都不能代替其余项目。
 
 ## 3. 最小实例：单层并列 receivers
 
@@ -772,7 +782,7 @@ $$
 b_{\mathcal G,j,t}
 =\operatorname{Aggregate}_{\mathrm{out}}
 \left(
-(\widehat g_{v,t}:v\in\mathcal A_t)_{\text{按 node ID}}
+((v,\widehat g_{v,t}):v\in\mathcal A_t)_{\text{按 node ID}}
 \right).
 $$
 
@@ -1274,7 +1284,7 @@ $$
 
 ## 7. 实验条件命名
 
-短名称只用于区分主要实验条件；第 8 节的完整记录还须注明上游版本、本地限制或扩展。`tide-core-2`、本地资格范围 `core-v1`、Plan schema 及 formula ID 分别记录，不互相替代。推荐短名格式仍为：
+短名称只用于区分主要实验条件；第 8 节的完整记录还须注明上游版本、本地限制或扩展。`tide-core-3`、本地资格范围 `core-v1`、Plan schema 及 formula ID 分别记录，不互相替代。推荐短名格式仍为：
 
 ~~~text
 <TRAIN>-<PLACEMENT>-<PROFILE>-<TOPOLOGY>-<STATE>-<SELECTOR>-<K>-<EMIT>-<AGG>-<BAL>
@@ -1324,7 +1334,7 @@ CPT-MOE-TOP2-GATE-E8
 
 ## 8. 一个完整实验条件必须说明什么
 
-本节只规定实验记录必须包含的信息，不规定将来采用哪种文件格式或软件结构。任何结果都必须能从一份自包含记录中判断“模型实际算了什么”以及“它与对照只差在哪里”。记录首先固定上游仓库、提交 `facf1afc696673a80e49b1e327bb1d058273893b`、语义版本 `tide-core-2`、采用的教材与本地语义文档版本／hash；随后分别列出具体实例、局部扩展及采用的比较投影。
+本节只规定实验记录必须包含的信息，不规定将来采用哪种文件格式或软件结构。任何结果都必须能从一份自包含记录中判断“模型实际算了什么”以及“它与对照只差在哪里”。记录首先固定上游仓库、提交 `e529de212c605f7f417c3a1ce97e780a2ee59824`、语义版本 `tide-core-3`、采用的教材与本地语义文档版本／hash；随后分别列出具体实例、局部扩展及采用的比较投影。
 
 ### 8.1 Base 模型与顶层边界
 
@@ -1344,7 +1354,7 @@ CPT-MOE-TOP2-GATE-E8
 - 完整 \(V,E,\mathfrak R\)、稳定 node/edge/region ID、入口和终端 receivers；
 - 每个 receiver 的固定 parents/children、最大 fan-in/fan-out、region 大小和 forced-active 设置；
 - region 依赖及额外等待条件，固定的区域秩、输出秩与时间步幅，以及上游输出存在条件的适用范围；
-- 每个 receiver 输入和图输出的 Aggregate 公式，以及是否额外读取 edge ID／terminal ID；身份感知设置须附本地 TimedDAG 映射与验证范围；
+- 每个 receiver 输入和图输出的 Aggregate 公式、读取哪些入口／edge／terminal 标签、规范排序及成本分类；只读值的设置也须明确声明忽略身份；
 - 每个 region 的固定 \(K_{\mathcal R}\)；对普通竞争 region，记录 Score、候选排列和 Top-K 规则；
 - 每个 receiver 的 Update、两类 Read、Next、NodeCompute 和 Emit 公式；数学 proposal 的定义域与惰性实现省略哪些中间量；
 - 各项局部操作的参数身份和显式共享关系；

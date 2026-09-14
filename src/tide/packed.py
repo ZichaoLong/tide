@@ -3785,6 +3785,7 @@ def _apply_result_connectivity_boundary(
                 ("state_before", "state-before"),
                 ("proposal", "state-proposal"),
                 ("state_for_compute", "state-compute"),
+                ("state_after", "state-compute"),
             ):
                 collect_state(
                     (*base, field),
@@ -3926,6 +3927,7 @@ def _apply_result_connectivity_boundary(
                         "state_before",
                         "proposal",
                         "state_for_compute",
+                        "state_after",
                     )
                 }
             )
@@ -4015,7 +4017,14 @@ def _apply_result_connectivity_boundary(
             for index, event in enumerate(trace.output_events)
         )
         rebuilt_trace = ExecutionTrace(
-            tuple(nodes), edges, boundaries, regions, writes, outputs
+            trace.schema_version,
+            trace.semantic_context,
+            tuple(nodes),
+            edges,
+            boundaries,
+            regions,
+            writes,
+            outputs,
         )
 
     return ExecutionResult(
@@ -4761,6 +4770,8 @@ class PackedSettleGraph:
                         active_node_ids=active_ids,
                         forced_active=forced,
                         top_k_node_ids=top_k_ids,
+                        selector_history_before=None,
+                        selector_history_after=None,
                     )
                 )
 
@@ -4791,6 +4802,12 @@ class PackedSettleGraph:
                         if observed and local in state_lookup
                         else None
                     )
+                    state_before_value = (
+                        state_value(event, local, "before") if reached else None
+                    )
+                    compute_state_value = (
+                        state_value(event, local, "compute") if reached else None
+                    )
                     node_events.append(
                         NodeEventTrace(
                             sequence_id,
@@ -4806,9 +4823,10 @@ class PackedSettleGraph:
                                 else None
                             ),
                             runtime.normalized[event, local] if reached else None,
-                            state_value(event, local, "before") if reached else None,
+                            state_before_value,
                             proposal,
-                            state_value(event, local, "compute") if reached else None,
+                            compute_state_value,
+                            compute_state_value,
                             (
                                 runtime.selector_read[event, local]
                                 if reached and runtime.selector_read is not None

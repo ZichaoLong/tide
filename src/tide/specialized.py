@@ -54,6 +54,7 @@ from .engine import (
 )
 from .ops import OperationExecutionError, ReceiverState, safe_module_key
 from .plan import Plan
+from .semantics import TRACE_SCHEMA_VERSION, semantic_context_for_plan
 
 
 SINGLE_LAYER_V1 = "single-layer.v1"
@@ -1091,6 +1092,8 @@ def _single_layer_prefill(
                     top_k_node_ids=None if forced else active_ids,
                     active_node_ids=active_ids,
                     forced_active=forced,
+                    selector_history_before=None,
+                    selector_history_after=None,
                 )
             )
             terminal_messages: List[Tuple[str, Tensor]] = []
@@ -1115,6 +1118,7 @@ def _single_layer_prefill(
                         state_before=None,
                         proposal=None,
                         state_for_compute=None,
+                        state_after=None,
                         selector_read=(
                             None if forced else readout[node_id][event_index]
                         ),
@@ -1341,6 +1345,8 @@ def _hb_line_prefill(
                                 top_k_node_ids=None if forced else top_k_ids,
                                 active_node_ids=tuple(active_ids),
                                 forced_active=forced,
+                                selector_history_before=None,
+                                selector_history_after=None,
                             )
                         )
 
@@ -1429,6 +1435,7 @@ def _hb_line_prefill(
                                     state_before=state_before.get(node_id),
                                     proposal=proposal,
                                     state_for_compute=compute_state,
+                                    state_after=compute_state,
                                     selector_read=readouts.get(node_id),
                                     logit=logit_by_node.get(node_id),
                                     probability=probability_by_node.get(node_id),
@@ -1548,6 +1555,8 @@ def _canonical_trace(
         for index, region in enumerate(plan.topological_regions)
     }
     return ExecutionTrace(
+        TRACE_SCHEMA_VERSION,
+        semantic_context_for_plan(plan),
         tuple(
             sorted(
                 node_events,

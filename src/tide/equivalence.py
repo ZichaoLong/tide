@@ -21,6 +21,11 @@ from torch import Tensor
 from .engine import ExecutionTrace
 from .ops import AttentionState
 from .plan import Plan, validate_stable_id
+from .semantics import (
+    TRACE_SCHEMA_VERSION,
+    SemanticContextError,
+    validate_semantic_context,
+)
 
 
 @dataclass(frozen=True)
@@ -383,6 +388,14 @@ def validate_trace_invariants(
 
     plan.validate()
     errors: List[str] = []
+    if trace.schema_version != TRACE_SCHEMA_VERSION:
+        errors.append(
+            "trace schema version does not match the current projection contract"
+        )
+    try:
+        validate_semantic_context(plan, trace.semantic_context)
+    except SemanticContextError as exc:
+        errors.append(str(exc))
     expected_items = tuple(executed_tokens)
     expected_list: List[Tuple[str, int]] = []
     for index, item in enumerate(expected_items):
@@ -637,6 +650,14 @@ def validate_trace_invariants(
             event = region_event_by_id.get(region_id)
             if event is None:
                 continue
+            if region.selector_history.get("type") == "none" and (
+                event.selector_history_before is not None
+                or event.selector_history_after is not None
+            ):
+                errors.append(
+                    f"{prefix}.region[{region_id!r}]: history.none.v1 must "
+                    "record the singleton history as None before and after SelStep"
+                )
             reached = tuple(
                 node_id
                 for node_id in region.node_ids
@@ -943,6 +964,7 @@ def validate_trace_invariants(
                     "state_before",
                     "proposal",
                     "state_for_compute",
+                    "state_after",
                 ):
                     if getattr(event, field_name) is not None:
                         errors.append(
@@ -988,20 +1010,30 @@ def validate_trace_invariants(
                         path=f"{node_prefix}.state_for_compute",
                     ),
                 )
+                _append_report_errors(
+                    errors,
+                    compare_nested(
+                        expected_compute_state,
+                        event.state_after,
+                        tolerance=tolerance,
+                        path=f"{node_prefix}.state_after",
+                    ),
+                )
             else:
                 for field_name in (
                     "state_before",
                     "proposal",
                     "state_for_compute",
+                    "state_after",
                 ):
                     if getattr(event, field_name) is not None:
                         errors.append(
                             f"{node_prefix}: stateless receiver has {field_name}"
                         )
             state_write = receiver_write_by_id.get(node_id)
-            if state_write is not None and event.proposal is not None:
+            if state_write is not None and event.state_after is not None:
                 report = compare_nested(
-                    event.proposal,
+                    event.state_after,
                     state_write.value,
                     tolerance=tolerance,
                     path=f"{node_prefix}.state_write",

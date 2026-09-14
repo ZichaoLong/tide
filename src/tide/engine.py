@@ -32,6 +32,7 @@ from .plan import (
     validate_reference_operation_config,
     validate_stable_id,
 )
+from .semantics import TRACE_SCHEMA_VERSION, semantic_context_for_plan
 
 
 StateKey = Tuple[str, str]
@@ -121,6 +122,7 @@ class NodeEventTrace:
     state_before: ReceiverState
     proposal: ReceiverState
     state_for_compute: ReceiverState
+    state_after: ReceiverState
     selector_read: Optional[Tensor]
     logit: Optional[Tensor]
     probability: Optional[Tensor]
@@ -159,6 +161,8 @@ class RegionEventTrace:
     active_node_ids: Tuple[str, ...]
     forced_active: bool
     top_k_node_ids: Optional[Tuple[str, ...]]
+    selector_history_before: Any
+    selector_history_after: Any
 
 
 @dataclasses.dataclass(frozen=True)
@@ -284,6 +288,8 @@ class BalanceStats:
 
 @dataclasses.dataclass(frozen=True)
 class ExecutionTrace:
+    schema_version: str
+    semantic_context: Mapping[str, Any]
     node_events: Tuple[NodeEventTrace, ...]
     edge_events: Tuple[EdgeEventTrace, ...]
     boundary_events: Tuple[BoundaryEventTrace, ...] = ()
@@ -934,6 +940,8 @@ class SettleGraph(nn.Module):
                                 active_node_ids=tuple(active_ids),
                                 forced_active=forced,
                                 top_k_node_ids=top_k_node_ids,
+                                selector_history_before=None,
+                                selector_history_after=None,
                             )
                         )
 
@@ -1028,6 +1036,7 @@ class SettleGraph(nn.Module):
                                     normalized_by_node.get(node_id),
                                     state_before_by_node.get(node_id),
                                     proposal,
+                                    state_for_compute,
                                     state_for_compute,
                                     readout_by_node.get(node_id),
                                     logit_by_node.get(node_id),
@@ -1311,6 +1320,8 @@ class SettleGraph(nn.Module):
                         active_node_ids=tuple(active_ids),
                         forced_active=forced,
                         top_k_node_ids=top_k_node_ids,
+                        selector_history_before=None,
+                        selector_history_after=None,
                     )
                 )
 
@@ -1394,6 +1405,7 @@ class SettleGraph(nn.Module):
                             normalized_by_node.get(node_id),
                             state_before_by_node.get(node_id),
                             proposal,
+                            state_for_compute,
                             state_for_compute,
                             readout_by_node.get(node_id),
                             logit_by_node.get(node_id),
@@ -1534,6 +1546,8 @@ def _build_trace(
         key=lambda event: (event.sequence_id, event.token_position),
     )
     return ExecutionTrace(
+        TRACE_SCHEMA_VERSION,
+        semantic_context_for_plan(plan),
         tuple(nodes),
         tuple(edges),
         tuple(boundaries),
