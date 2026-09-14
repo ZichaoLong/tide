@@ -16,3 +16,8 @@
 - Read and edit long documents in coherent sections, then perform a separate whole-document pass for terminology, definition order, cross-references, numbering, duplicated explanations, and Markdown rendering.
 - Preserve useful detail, but remove repeated definitions. Later sections should instantiate or specialize earlier semantics rather than silently introduce a second version.
 - After editing, search globally for removed names, undefined symbols, stale section references, and claims about existing implementation.
+
+## Long-running commands
+
+- For an authorized test, build, benchmark, or evaluation that should survive the current agent process, use the account's `run-durable-user-task` skill when it is available. A verified background submission may outlive the current response; wait for completion only when the user explicitly asks to wait, monitor, or finish.
+- Launch from a stable source snapshot or keep the relevant checkout read-only until the task ends. Record the unit, working directory, exact command, source identity, logs and durable status paths, and inspection and stop commands. Never report submission itself as a successful result.
