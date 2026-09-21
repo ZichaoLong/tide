@@ -93,7 +93,9 @@ class BasicKernel final : public StateKernel {
   }
 };
 }  // namespace
+std::shared_ptr<const StateKernel> make_matrix_kernel(const std::string&);
 std::shared_ptr<const StateKernel> make_state_kernel(const std::string& name) {
+  if (name == "linear" || name == "delta") return make_matrix_kernel(name);
   if (name != "ema" && name != "identity" && name != "ssm") throw std::invalid_argument("unknown state kernel: " + name);
   return std::make_shared<BasicKernel>(name);
 }

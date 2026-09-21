@@ -8,7 +8,7 @@ add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ops.cpp cpp/src/pool.cpp
   cpp/src/validation.cpp cpp/src/stream.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
-  cpp/src/kernel.cpp cpp/src/basic_kernels.cpp)
+  cpp/src/kernel.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp)
 set_target_properties(tidegraph PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(tidegraph PUBLIC cpp/include)
 target_link_libraries(tidegraph PUBLIC torch Threads::Threads)

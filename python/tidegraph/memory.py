@@ -62,6 +62,9 @@ def kernel(name):
         return EMA()
     if name == "ssm":
         return DiagonalSSM()
+    if name in {"linear", "delta"}:
+        from .matrix_memory import MatrixMemory
+        return MatrixMemory(name)
     raise ValueError(f"unknown state kernel: {name}")
 
 

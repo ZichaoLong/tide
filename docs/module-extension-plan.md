@@ -1,15 +1,16 @@
 # Next implementation: state and operator programs (M5)
 
-This is the next work item, not an implemented capability. The current runtime
-supports general graph topology with a fixed `ema-ffn-v1` local profile and
-stateless identity adapters. It cannot yet host arbitrary attention/SSM modules.
+The initial state-program seam and SSM/SwiGLU are implemented and qualified in
+`evidence/m5a-state-programs.md`. Matrix-memory profiles are under qualification.
+This document retains the remaining interface/module work; it is not a blanket
+support claim for arbitrary models.
 
 ## First change: remove formula assumptions from schedulers
 
-Current formula sites: `python/tidegraph/ops.py`, `cpp/src/stream.cpp` preparation,
-`cpp/src/block.cpp` scan/preparation, and `cpp/src/ops.cpp` Full. Introduce a native
-node-program interface (ordinary C++ virtual calls or a typed registry, no Python
-callbacks) and a matching Python interface. Keep Python scheduling independent.
+State formulas now live in Python memory modules and native state kernels behind
+`cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
+callbacks. Full formulas remain in `ops.py`/`ops.cpp`; region/Agg/Full program
+generalization remains work. Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;
   a scalar weighted sum alone cannot represent LH's same-fiber attention.

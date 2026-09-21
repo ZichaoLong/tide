@@ -45,6 +45,12 @@ class NodeWeights(nn.Module):
                 self.extra[name] = parameter((width, width), 0.15)
             self.extra["ssm_a"] = parameter((width,), 0.1)
             self.extra["ssm_skip"] = parameter((width,), 0.2)
+        if spec is not None and spec.memory in {"linear", "delta"}:
+            for name in ("mem_q", "mem_k", "mem_v", "mem_out"):
+                self.extra[name] = parameter((width, width), 0.15)
+            if spec.memory == "delta":
+                for name in ("mem_beta", "mem_decay"):
+                    self.extra[name] = parameter((width,), 0.15)
         if self.full_kind == "swiglu":
             for name, shape in (("ffn_gate", (width, width * 2)), ("ffn_up", (width, width * 2)),
                                 ("ffn_down", (width * 2, width))):

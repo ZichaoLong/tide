@@ -10,6 +10,16 @@ See `evidence/m5a-state-programs.md`; prior evidence is linked from `ROADMAP.md`
 No active background jobs. Unit `tide-foundation-m5a-20260921-0900` completed
 with exit 0; no worker remains.
 
+M5B candidate now adds Linear Attention and gated DeltaRule matrix-state kernels,
+including packed independent-sample steps and sequence scans. New targeted Python
+checks: 48 passed. Native and full regression qualification is pending; see
+`matrix-memory.md` for the dense Delta scan performance boundary.
+Planned unit: `tide-foundation-m5b-20260921-0920`.
+Command: `python scripts/job.py --output-dir artifacts/m5b-20260921-0920 -- python scripts/qualify.py --output-dir artifacts/m5b-20260921-0920`.
+Freeze this checkout until terminal status. Inspect that directory's status,
+task log and verification manifest. Stop with
+`systemctl --user stop tide-foundation-m5b-20260921-0920`.
+
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
 encoding/direct Python execution, independent self-loop/chain anchors, complete
@@ -25,9 +35,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. M5B: implement Linear Attention and gated DeltaRule matrix-state profiles in
-   independent Python/native kernels. Compare step and exact sequence contracts,
-   all state slots, VJPs, clear, cuts and mixed-module SettleGraph embeddings.
+1. Finish M5B build/full qualification; fix any failures and commit evidence.
 2. Add GQA/window attention with ragged KV representation, actual packed sample
    and sequence batches, explicit position/same-fiber policies and cache VJPs.
    See `module-extension-plan.md` and `state-programs.md` for interfaces.
