@@ -24,8 +24,8 @@ the old broadcast profile; its slot-affine/phase profile is
    source-origin views now restore tag-sensitive custom Aggregate under SettleGraph
    embedding and are [qualified](evidence/source-origins.md). Built-in memory
    profiles still consume the summary. Complete typed content now reaches
-   Upd/Read/Full and packed metadata (`content-programs.md`); qualification is
-   pending. Next receives complete content in the following gate.
+   Upd/Read/Full and packed metadata and is [qualified](evidence/content-programs.md).
+   Next receives complete content in the following gate.
 2. Follow `next-read-plan.md` to expose complete content and the full Next inputs
    (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill

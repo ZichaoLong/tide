@@ -1,6 +1,6 @@
 # Complete content and state-program extension
 
-Implemented, qualification pending in `STATUS.md`. This extends the content
+[Qualified](evidence/content-programs.md). This extends the content
 interface; region Read modes and general Next remain the following gate.
 
 Python `Content` and native `ContentView` expose summary `value`, canonical

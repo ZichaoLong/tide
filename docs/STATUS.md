@@ -4,12 +4,12 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1740 tests passed** at
-`dd351c9524f8530929ee66e5d151f3176b85f890`.
-See `evidence/source-origins.md`; prior evidence is linked from `ROADMAP.md`.
-Previous qualification unit `tide-foundation-origin-20260921-1222`
-completed with exit 0, no worker remains. Artifacts:
-`artifacts/origin-20260921-1222/{status.json,task.log,verification/}`.
+Latest clean qualification: **1758 tests passed** at
+`f76a90cb752b0feed0e7aeec44b496664e9f1264`.
+See `evidence/content-programs.md`; prior evidence is linked from `ROADMAP.md`.
+Unit `tide-foundation-content-20260921-1250` completed with exit 0, is inactive
+and has MainPID 0. Artifacts:
+`artifacts/content-20260921-1250/{status.json,task.log,verification/}`.
 
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
@@ -27,23 +27,11 @@ graphs without views allocate no origin index or additional source sort. The
 native custom example includes mixed boundary/internal fibers and independent
 forward/VJP formulas. See `aggregate-programs.md` and source-origin evidence.
 
-Complete-content implementation is ready for clean qualification: source tags,
-summary and contributions now reach state/Read/Full, packed metadata and replay.
-Python custom state programs register parameters and validate sharing; the native
-adapter rejects unmatched Python overrides. See `content-programs.md`.
-Development build `tide-foundation-content-build-20260921-1248` passed, is inactive
-and has MainPID 0. Relevant FP64/FP32 checks: **619 passed in 54.70s**.
-The preceding build `content-build-20260921-1240` failed because one test fixture
-still used legacy fiber pointers; it is fixed. Both build artifacts are retained.
-
-Next job: `tide-foundation-content-20260921-1250`, command
-`python scripts/qualify.py --output-dir artifacts/content-20260921-1250 --jobs 2`.
-It will run immediately after the implementation commit, via `scripts/job.py` in
-`background.slice`, with two build workers and one ATen/BLAS thread. Artifacts:
-`artifacts/content-20260921-1250/{status.json,task.log,verification/}`.
-Freeze source until it terminates. Inspect service MainPID/exit and both JSON
-records; a live job is not passing evidence. On success, archive an evidence
-report in a separate commit; on failure, preserve logs and fix the reproducer.
+No active job. Complete-content propagation and registered Python state programs
+are qualified (`content-programs.md`, `evidence/content-programs.md`).
+Next increment: separate Read from state programs and implement the three region
+modes, then full Next requests and explicit state-prefill gates. Follow
+`next-read-plan.md`, preserving independent schedules and isolated-root VJPs.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -68,8 +56,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Inspect complete-content qualification above and archive its result. Then
-   implement region Read modes and independent readout programs, followed by
+1. Implement region Read modes and independent readout programs, followed by
    complete Next requests and prefill capability guards (`next-read-plan.md`).
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
