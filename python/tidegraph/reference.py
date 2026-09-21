@@ -4,6 +4,7 @@ from .records import Atom, Result, State
 from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
 from .aggregate import evaluate as evaluate_aggregate
+from .next import NextInput, evaluate as evaluate_next
 
 
 def run(graph, model, continuation, external, stop, *, sealed_until,
@@ -43,7 +44,8 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 for v in nodes:
                     event = prepared[batch, v]
                     comparison = event["proposal_state"] if region.observe_all or v in active else event["old"]
-                    next_state = model.nodes[v].next(comparison, graph.nodes[v].clear and v in active)
+                    next_state = evaluate_next(model.nodes[v], graph.nodes[v], NextInput(
+                        event["old"], comparison, time, event["_content"], v in active, controls[v]))
                     q.states[batch, v] = next_state
                     event.update(active=v in active, control=controls[v], comparison=comparison.value,
                                  _comparison_state=comparison,

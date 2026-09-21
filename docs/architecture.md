@@ -22,6 +22,7 @@
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
 | `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
 | `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
+| `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
 | `docs/next-program-plan.md` | Planned full Next seam and prefill gates |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
@@ -57,7 +58,8 @@ prefill is isolated in `block_prepare.cpp`; its checked segment representation i
 in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
 from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
 native kernels and replay evaluation in separate source files. Read is separate
-in `readout.py`/`read.h`/`read.cpp`. Region/Next generalization remains in the module extension
+in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
+Region generalization remains in the module extension
 plan. Slot tensors are included in all state
 comparisons, resets, explicit detach and checkpoint v3.
 

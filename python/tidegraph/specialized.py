@@ -6,6 +6,7 @@ from .records import Atom, Result, State
 from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
 from .aggregate import evaluate as evaluate_aggregate
+from .next import NextInput, evaluate as evaluate_next
 
 
 def validate_topology(graph, topology):
@@ -30,7 +31,8 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     prop, desc = model.nodes[node].prepare(old, event["_content"], time, graph.regions[graph.nodes[node].region].read_mode)
     # A singleton softmax retains the generic zero VJP connection to its score.
     control = desc.reshape(1).softmax(0)[0]
-    next_state = model.nodes[node].next(prop, graph.nodes[node].clear)
+    next_state = evaluate_next(model.nodes[node], graph.nodes[node], NextInput(
+        old, prop, time, event["_content"], True, control))
     q.states[batch, node] = next_state
     history = dict(q.history.get((batch, node), {}))
     history[node] = history.get(node, 0) + 1; q.history[batch, node] = history

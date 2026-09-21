@@ -5,6 +5,7 @@
 #include "tide/full.h"
 #include "tide/aggregate.h"
 #include "tide/read.h"
+#include "tide/next.h"
 #include "tide/delivery.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -145,9 +146,6 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         const State& comparison = region.observe_all || e.active ? e.proposed_state : e.old;
         e.comparison = comparison.value;
         e.comparison_state = comparison;
-        e.next_state = graph_.nodes[e.node].clear && e.active ? model_.nodes[e.node].kernel->reset(comparison) : comparison;
-        e.next = e.next_state.value;
-        q.states[{e.batch, e.node}] = e.next_state;
         if (options_.trace) e.history = history;
       }
     }
@@ -155,16 +153,23 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     for (const auto& [node, all] : by_node) {
       std::vector<size_t> ids;
       for (auto i : all) if (events[i].active) ids.push_back(i);
-      if (ids.empty()) continue;
-      stats["full_calls"] += options_.packed ? 1 : ids.size();
+      stats["next_steps"] += all.size();
+      if (!ids.empty()) stats["full_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
-      jobs.push_back([&, ids] {
-        evaluate_full(graph_, model_, events, ids, options_, options_.packed);
+      jobs.push_back([&, node, all, ids] {
+        const auto& w = model_.nodes[node];
+        for (auto i : all) {
+          auto& e = events[i];
+          e.next_state = evaluate_next(graph_.nodes[node], w, {e.old, e.comparison_state, e.time, e.local_content(), e.active, e.control});
+          e.next = e.next_state.value;
+        }
+        if (!ids.empty()) evaluate_full(graph_, model_, events, ids, options_, options_.packed);
       });
     }
     pool_.run(std::move(jobs));
     for (auto& event : events) {
+      q.states[{event.batch, event.node}] = event.next_state;
       if (event.active) {
         deliver(graph_, model_, event, [&](const Atom& a) {
           queue[a.time].push_back(a);

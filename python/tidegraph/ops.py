@@ -7,6 +7,7 @@ from .full import ProjectionEmit
 from .aggregate import SourceAggregate
 from .content import as_content, Content
 from .readout import LinearRead, evaluate as evaluate_read, request as read_request
+from .next import program as next_program, AdoptNext
 
 
 class _HST(torch.autograd.Function):
@@ -34,7 +35,7 @@ def emit(h, g, p, mode, zeta=1.0):
 
 class NodeWeights(nn.Module):
     def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
-                 input_slots=0, aggregate_program=None, state_program=None, read_program=None):
+                 input_slots=0, aggregate_program=None, state_program=None, read_program=None, transition=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -46,6 +47,7 @@ class NodeWeights(nn.Module):
         if read_program is None and spec is not None and spec.readout != "linear-v1":
             raise ValueError("unknown Read profile")
         self.read_program = LinearRead() if read_program is None else read_program
+        self.next_program = next_program("adopt-v1" if spec is None else spec.next_state) if transition is None else transition
         self.full_kind = "tanh" if spec is None else spec.full
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program
         self.aggregate_program = SourceAggregate("sum" if spec is None else spec.aggregation) if aggregate_program is None else aggregate_program
@@ -127,10 +129,10 @@ class NodeWeights(nn.Module):
 
     @property
     def can_prefill(self):
-        return self.kernel.sequence_contract
+        return self.kernel.sequence_contract and self.next_program.comparison_identity
 
-    def next(self, comparison, clear):
-        return getattr(self.kernel, "reset", reset)(comparison) if clear else comparison
+    def reset(self, state):
+        return getattr(self.kernel, "reset", reset)(state)
 
     def validate(self, state):
         self.kernel.validate(self, state)
@@ -138,7 +140,7 @@ class NodeWeights(nn.Module):
 
 class Model(nn.Module):
     def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None,
-                 state_programs=None, read_programs=None):
+                 state_programs=None, read_programs=None, next_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
@@ -156,11 +158,14 @@ class Model(nn.Module):
         readers = {} if read_programs is None else read_programs
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in readers):
             raise ValueError("invalid custom Read owner")
+        transitions = {} if next_programs is None else next_programs
+        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in transitions):
+            raise ValueError("invalid custom Next owner")
         offsets = graph.port_indexes[1].offsets
         incoming = graph.port_indexes[0].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
-            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v), readers.get(v)) for v, n in enumerate(graph.nodes))
+            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v)) for v, n in enumerate(graph.nodes))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -194,6 +199,7 @@ class BoundaryWeights(nn.Module):
         self.full_program = ProjectionEmit(Node(0, identity=True))
         self.aggregate_program = SourceAggregate()
         self.read_program = LinearRead(identity=True)
+        self.next_program = AdoptNext()
 
     def initial(self):
         return State(torch.zeros_like(self.bias))
@@ -226,8 +232,8 @@ class BoundaryWeights(nn.Module):
     def fresh(self, comparison, content):
         return content
 
-    def next(self, comparison, clear):
-        return reset(comparison) if clear else comparison
+    def reset(self, state):
+        return reset(state)
 
     def validate(self, state):
         if state.slots:

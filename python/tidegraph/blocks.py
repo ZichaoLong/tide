@@ -6,6 +6,7 @@ from .records import Atom, State
 from .packing import prepare_sequences
 from .full import FullInput, evaluate as evaluate_full
 from .aggregate import evaluate as evaluate_aggregate
+from .next import NextInput, evaluate as evaluate_next
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
@@ -35,6 +36,9 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
         if not model.nodes[node].aggregate_program.joint_batch:
             stats["aggregate_scalar_fallback_steps"] = stats.get("aggregate_scalar_fallback_steps", 0) + len(es)
         region = graph.regions[graph.nodes[node].region]
+        if (prefill and getattr(getattr(model.nodes[node], "kernel", None), "sequence_contract", False)
+                and region.observe_all and not graph.nodes[node].clear and not model.nodes[node].next_program.comparison_identity):
+            stats["state_prefill_blocked_next"] = stats.get("state_prefill_blocked_next", 0) + len(es)
         if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
             sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]
             stats["state_blocks"] += len(sequences)
@@ -71,7 +75,9 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             proposal_slots = e["proposal_state"].slots
             cmp = e.pop("proposal_state") if region.observe_all or node in active else old
             e.pop("proposal_state", None)
-            next_state = model.nodes[node].next(cmp, graph.nodes[node].clear and node in active)
+            next_state = evaluate_next(model.nodes[node], graph.nodes[node], NextInput(
+                old, cmp, time, e["_content"], node in active, controls[node]))
+            stats["next_steps"] = stats.get("next_steps", 0) + 1
             q.states[batch, node] = next_state
             e.update(active=node in active, control=controls[node], comparison=cmp.value, next=next_state.value,
                      history=dict(history), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots,

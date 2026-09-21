@@ -11,6 +11,7 @@
 
 void check_content_programs(const at::TensorOptions&);
 void check_read_programs(const at::TensorOptions&);
+void check_next_programs(const at::TensorOptions&);
 
 namespace {
 class CustomAccumulator final : public tide::StateKernel {
@@ -92,6 +93,7 @@ int main(int argc, char** argv) {
     if (cursor.snapshot().states.size() != 512) throw std::runtime_error("cursor snapshot lost idle state");
     check_content_programs(options);
     check_read_programs(options);
+    check_next_programs(options);
     const std::string report = "custom-state-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");

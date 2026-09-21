@@ -26,10 +26,10 @@ the old broadcast profile; its slot-affine/phase profile is
    profiles still consume the summary. Complete typed content now reaches
    Upd/Read/Full and packed metadata and is [qualified](evidence/content-programs.md).
    Next receives complete content in the following gate.
-2. Follow `next-program-plan.md` to expose complete content and the full Next inputs
-   (old, comparison, time, content, active, control).
-   A custom Next that uses controls invalidates the present identity-Next prefill
-   contract unless it provides an exact joint contract. Independent Read now
+2. Full Next inputs (old, comparison, time, content, active, control) and an
+   explicit comparison-identity prefill gate are implemented (`next-programs.md`),
+   pending qualification. Control-sensitive Next uses causal state preparation
+   while retaining Full batching. Independent Read now
    supports content, old-state and proposed-state modes (`read-programs.md`),
    now [qualified](evidence/read-programs.md).
 3. Region programs need explicit integer/tensor history and controls beyond
@@ -51,7 +51,7 @@ State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
 callbacks. Full programs live in `full.py`/`full_kernel.cpp`, with FFN/Emit
 primitives in `ops.py`/`ops.cpp`. Aggregate programs are separate from scheduling;
-Read is independent (`readout.py`/`read.h`); Region/Next generalization remains work.
+Read is independent (`readout.py`/`read.h`); Next is separate (`next.py`/`next.h`); Region generalization remains work.
 Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;

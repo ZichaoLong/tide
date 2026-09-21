@@ -13,10 +13,10 @@ using namespace tide;
 PYBIND11_MODULE(_tide_native, m) {
   py::class_<Edge>(m, "Edge").def(py::init<Index, Index, Index>())
     FIELD(Edge, source) FIELD(Edge, target) FIELD(Edge, delay);
-  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>, std::string, std::string>())
+  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>, std::string, std::string, std::string>())
     FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity) FIELD(Node, memory) FIELD(Node, full)
     FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window)
-    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation) FIELD(Node, readout);
+    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation) FIELD(Node, readout) FIELD(Node, next_state);
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool, std::string>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority) FIELD(Region, read_mode);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);

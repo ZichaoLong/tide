@@ -1,8 +1,7 @@
 # Complete content and state-program extension
 
 [Qualified](evidence/content-programs.md). This extends the content
-interface; Read is now separate (`read-programs.md`); general Next remains the
-following gate.
+interface; Read and Next are separate (`read-programs.md`, `next-programs.md`).
 
 Python `Content` and native `ContentView` expose summary `value`, canonical
 program-visible `sources` and optional per-slot `contributions`. Each source has

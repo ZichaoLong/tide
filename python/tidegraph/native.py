@@ -13,6 +13,7 @@ class Native:
         from .aggregate import SourceAggregate, validate_program as validate_aggregate
         from .state_program import validate_program as validate_state_program
         from .readout import validate_program as validate_read
+        from .next import validate_program as validate_next
         for v, spec in enumerate(graph.nodes):
             if type(model.nodes[v].full_program) is not ProjectionEmit:
                 raise ValueError("Python custom Full has no native implementation")
@@ -24,9 +25,10 @@ class Native:
             validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
             validate_state_program(model.nodes[v], spec, native=True)
             validate_read(model.nodes[v], spec, native=True)
+            validate_next(model.nodes[v], spec, native=True)
         g = core.Graph()
         g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
-                             n.emission, n.emit_period, n.emit_phases, n.aggregation, n.readout)
+                             n.emission, n.emit_period, n.emit_phases, n.aggregation, n.readout, n.next_state)
                    for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority, r.read_mode) for r in graph.regions]

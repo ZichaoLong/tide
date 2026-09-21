@@ -1,6 +1,7 @@
 #include "tide/block.h"
 #include "tide/autograd.h"
 #include "tide/read.h"
+#include "tide/next.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
@@ -15,7 +16,10 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   std::map<Index, size_t> by_node;
   for (const auto& [owner, ids] : by_sequence) {
     const auto node = owner.second;
-    if (!options.prefill || !m.nodes[node].kernel->exact_sequence()
+    if (options.prefill && m.nodes[node].kernel->exact_sequence() && g.regions[g.nodes[node].region].observe_all
+        && !g.nodes[node].clear && !m.nodes[node].next_kernel->comparison_identity())
+      stats["state_prefill_blocked_next"] += ids.size();
+    if (!options.prefill || !m.nodes[node].next_kernel->comparison_identity() || !m.nodes[node].kernel->exact_sequence()
         || !g.regions[g.nodes[node].region].observe_all || g.nodes[node].clear) continue;
     size_t index;
     if (options.packed && by_node.count(node)) index = by_node.at(node);

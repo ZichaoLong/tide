@@ -32,10 +32,22 @@ independent Read programs and all three region modes are qualified. Read's
 program requests expose only the selected state and preserve complete metadata;
 see `content-programs.md`, `read-programs.md` and their evidence.
 
-Next increment: full Next(old, comparison, time, content, active, control),
-custom programs, an adopt profile preserving existing clear behavior, a
-control-blend example, state validation and an explicit identity/comparison
-contract guarding state prefill. See `next-program-plan.md`. No Next code yet.
+Next implementation is ready for clean qualification: complete requests,
+registered custom programs, adopt/control-blend profiles, graph-owned clear,
+state validation, native independent-node execution and prefill capability gates.
+See `next-programs.md`. Development build `tide-foundation-next-build-20260921-1330`
+passed, is inactive and has MainPID 0. Related CPU FP64/FP32 checks passed:
+**122 tests in 17.52s**, including standalone custom Next and existing sharing.
+
+Next qualification unit: `tide-foundation-next-20260921-1335`.
+Command: `python scripts/qualify.py --output-dir artifacts/next-20260921-1335 --jobs 2`.
+Artifacts: `artifacts/next-20260921-1335/{status.json,task.log,verification/}`.
+Run after the implementation commit via scripts/job.py in background.slice.
+Freeze source while active. Inspect MainPID/exit, status.json and verification
+result.json; archive evidence separately only after successful termination.
+Native graph format advances to v10; checkpoint payload stays v3. After this
+qualification, replace the finished Next plan with the remaining region/history/
+control plan, then implement that seam before LH profiles and numerical parity.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -60,8 +72,8 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Implement complete Next requests and prefill capability guards
-   (`next-program-plan.md`).
+1. Inspect the clean Next qualification above and archive its evidence. Then
+   implement region histories/controls and selector programs.
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache

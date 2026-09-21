@@ -69,19 +69,21 @@ void Graph::compile() {
     for (auto phase : node.emit_phases) if (phase < -2 || phase >= node.emit_period) fail("invalid emission phase policy");
     if (node.identity && (node.emission != "broadcast" || node.emit_period != 1 || !node.emit_phases.empty()))
       fail("identity boundaries require unconditional broadcast");
+    if (node.identity && node.next_state != "adopt-v1") fail("identity boundaries require adopt Next");
     if (node.identity && node.readout != "linear-v1") fail("identity boundaries require the default Read profile");
     if (node.identity && node.aggregation != "sum") fail("identity boundaries require sum Aggregate");
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v9;n=" << n << ';';
+  out << "tide-graph-v10;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
         << v.query_heads << ',' << v.kv_heads << ',' << v.window << ','
         << v.emission.size() << ':' << v.emission << ',' << v.emit_period << ':';
     for (auto phase : v.emit_phases) out << phase << ',';
-    out << ':' << v.aggregation.size() << ':' << v.aggregation << ':' << v.readout.size() << ':' << v.readout;
+    out << ':' << v.aggregation.size() << ':' << v.aggregation << ':' << v.readout.size() << ':' << v.readout
+        << ':' << v.next_state.size() << ':' << v.next_state;
     out << ';';
   }
   out << "r;";

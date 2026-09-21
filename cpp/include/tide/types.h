@@ -21,7 +21,7 @@ struct Node {
   std::string emission = "broadcast";
   Index emit_period = 1;
   std::vector<Index> emit_phases;
-  std::string aggregation = "sum", readout = "linear-v1";
+  std::string aggregation = "sum", readout = "linear-v1", next_state = "adopt-v1";
 };
 struct Region {
   Index budget;
@@ -82,6 +82,7 @@ class StateKernel;
 class FullKernel;
 class AggregateKernel;
 class ReadKernel;
+class NextKernel;
 struct NodeWeights {
   Tensor decay, weight, bias, read;
   std::map<std::string, Tensor> extra;
@@ -90,6 +91,7 @@ struct NodeWeights {
   std::shared_ptr<const FullKernel> full_kernel;
   std::shared_ptr<const AggregateKernel> aggregate_kernel;
   std::shared_ptr<const ReadKernel> read_kernel;
+  std::shared_ptr<const NextKernel> next_kernel;
 };
 struct Model {
   std::vector<NodeWeights> nodes;

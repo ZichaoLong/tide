@@ -61,7 +61,8 @@ class SettleGraph:
                    full_programs={v: w.full_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
                    aggregate_programs={v: w.aggregate_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
                    state_programs={v: w.kernel for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   read_programs={v: w.read_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})
+                   read_programs={v: w.read_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
+                   next_programs={v: w.next_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})
         em.nodes = torch.nn.ModuleList(list(model.nodes) + list(em.nodes[-2:]))
         def one():
             return torch.nn.Parameter(model.nodes[0].bias.new_ones(()), requires_grad=False)

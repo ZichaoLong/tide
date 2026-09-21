@@ -5,6 +5,7 @@
 #include "tide/full.h"
 #include "tide/aggregate.h"
 #include "tide/read.h"
+#include "tide/next.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -84,10 +85,19 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       auto cmp = region.observe_all || e.active ? e.proposed_state : old_state(q, m, e.batch, e.node);
       e.comparison = cmp.value;
       e.comparison_state = cmp;
-      e.next_state = g.nodes[e.node].clear && e.active ? m.nodes[e.node].kernel->reset(cmp) : cmp;
-      e.next = e.next_state.value;
-      q.states[{e.batch, e.node}] = e.next_state;
       if (options.trace) e.history = history;
+    }
+    jobs.clear();
+    stats["next_steps"] += ids.size();
+    for (auto i : ids) jobs.push_back([&, i] {
+      auto& e = events[i]; const auto& w = m.nodes[e.node];
+      e.next_state = evaluate_next(g.nodes[e.node], w, {e.old, e.comparison_state, e.time, e.local_content(), e.active, e.control});
+      e.next = e.next_state.value;
+    });
+    pool.run(std::move(jobs));
+    for (auto i : ids) {
+      const auto& e = events[i];
+      q.states[{e.batch, e.node}] = e.next_state;
     }
   }
   jobs.clear();
