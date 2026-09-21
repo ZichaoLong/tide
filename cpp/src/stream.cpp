@@ -140,7 +140,9 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
           if (time > std::numeric_limits<Index>::max() - edge.delay)
             throw std::overflow_error("logical time overflow");
           Atom a{event.batch, edge.target, time + edge.delay, 1, id, time, event.full * model_.edge_scale[id]};
-          queue[a.time].push_back(a); result.messages.push_back(a); ++stats["visited_edges"];
+          queue[a.time].push_back(a);
+          if (options_.trace) result.messages.push_back(a);
+          ++stats["visited_edges"];
         }
         for (Index j = graph_.output_index.offsets[node]; j < graph_.output_index.offsets[node + 1]; ++j) {
           const auto port = graph_.output_index.edges[j];

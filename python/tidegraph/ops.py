@@ -2,6 +2,7 @@
 import torch
 from torch import nn
 from .records import State
+from .scan import affine_scan
 
 
 class _HST(torch.autograd.Function):
@@ -48,6 +49,11 @@ class NodeWeights(nn.Module):
     def full(self, comparison, content, probability, mode, zeta):
         g = content + (comparison @ self.weight + self.bias).tanh()
         return emit(content, g, probability, mode, zeta)
+
+    def prepare_block(self, old, contents, times):
+        values = affine_scan(self.decay.sigmoid().expand_as(contents), contents, old.value)
+        states = [State(v, t, old.observations + i + 1) for i, (v, t) in enumerate(zip(values, times))]
+        return states, (values * self.read).sum(-1)
 
 
 class Model(nn.Module):

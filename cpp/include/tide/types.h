@@ -22,6 +22,7 @@ struct Graph {
   Adjacency csr, csc, output_index;
   std::string identity;
   void compile();
+  std::vector<Index> topological_order() const;
 };
 struct State { Tensor value; Index last_time = -1, observations = 0; };
 struct External { Index batch, port, position, time; Tensor value; };
@@ -65,5 +66,7 @@ struct Options {
   bool packed = false, trace = true;
   std::string mode = "hard";
   double zeta = 1.0;
+  bool prefill = true;
+  Index max_events = 1000000;
 };
 }  // namespace tide

@@ -67,4 +67,4 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 events.append(event)
     q.pending = sorted((a for a in available if a.kind == 1 and a.time >= stop), key=lambda a: a.key())
     q.cut = stop
-    return Result(q, events, outputs, messages, {"candidate_events": visits})
+    return Result(q, events, outputs, messages if trace else [], {"candidate_events": visits})

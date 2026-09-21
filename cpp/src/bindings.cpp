@@ -1,6 +1,7 @@
 // Python is only an adapter; core library sources contain no Python headers.
 #include "tide/stream.h"
 #include "tide/ops.h"
+#include "tide/frontier.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -39,9 +40,12 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Result>(m, "Result") FIELD(Result, continuation) FIELD(Result, trace)
     FIELD(Result, outputs) FIELD(Result, messages) FIELD(Result, stats);
   py::class_<Options>(m, "Options").def(py::init<>())
-    FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta);
+    FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta)
+    FIELD(Options, prefill) FIELD(Options, max_events);
   py::class_<Streaming>(m, "Streaming").def(py::init<Graph, Model, Options>())
     .def("run", &Streaming::run, py::call_guard<py::gil_scoped_release>());
+  py::class_<Frontier>(m, "Frontier").def(py::init<Graph, Model, Options>())
+    .def("run", &Frontier::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);
 }
 #undef FIELD

@@ -3,6 +3,18 @@
 #include <stdexcept>
 
 namespace tide {
+std::vector<Index> Graph::topological_order() const {
+  std::vector<Index> degree(nodes.size(), 0), ready, order;
+  for (const auto& e : edges) ++degree[e.target];
+  for (Index v = 0; v < static_cast<Index>(nodes.size()); ++v) if (!degree[v]) ready.push_back(v);
+  while (!ready.empty()) {
+    auto v = ready.back(); ready.pop_back(); order.push_back(v);
+    for (auto j = csr.offsets[v]; j < csr.offsets[v + 1]; ++j)
+      if (!--degree[edges[csr.edges[j]].target]) ready.push_back(edges[csr.edges[j]].target);
+  }
+  if (order.size() != nodes.size()) throw std::invalid_argument("TimedDAG requires an acyclic node graph");
+  return order;
+}
 void Graph::compile() {
   const auto n = static_cast<Index>(nodes.size());
   auto fail = [](const char* s) { throw std::invalid_argument(s); };

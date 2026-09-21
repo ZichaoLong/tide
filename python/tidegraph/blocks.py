@@ -1,0 +1,94 @@
+"""Exact region blocks: causal state/selection followed by packed Full."""
+from collections import defaultdict
+import torch
+from .ops import select
+from .records import Atom, State
+
+
+def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
+    """Frames belong to one (sample,region), with complete fibers and ordered time.
+
+    Contract: block contains no unresolved Full->fiber edge. Persistent region
+    history is processed causally; node state scans are allowed only if state
+    adoption/reset is independent of selection.
+    """
+    events, by_node, by_sequence, by_frame = [], defaultdict(list), defaultdict(list), defaultdict(list)
+    stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0}
+    for batch, region, time, nodes in frames:
+        for node in sorted(nodes):
+            atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
+            if not atoms:
+                continue
+            event = dict(batch=batch, node=node, time=time, fiber=atoms, content=model.aggregate(atoms))
+            by_node[node].append(event); by_sequence[batch, node].append(event)
+            by_frame[batch, time].append(event); events.append(event)
+    for (batch, node), es in by_sequence.items():
+        region = graph.regions[graph.nodes[node].region]
+        if prefill and region.observe_all and not graph.nodes[node].clear:
+            old = q.states.get((es[0]["batch"], node), model.nodes[node].initial())
+            states, descriptors = model.nodes[node].prepare_block(old, torch.stack([e["content"] for e in es]),
+                                                                [e["time"] for e in es])
+            stats["state_blocks"] += 1
+            for e, state, descriptor in zip(es, states, descriptors):
+                e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)
+    for batch, region_id, time, _ in frames:
+        es = by_frame[batch, time]
+        if not es:
+            continue
+        region = graph.regions[region_id]
+        for e in es:
+            node = e["node"]
+            if "proposal" not in e:
+                old = q.states.get((batch, node), model.nodes[node].initial())
+                prop, desc = model.nodes[node].prepare(old, e["content"], time)
+                e.update(proposal_state=prop, proposal=prop.value, descriptor=desc)
+                stats["state_steps"] += 1
+        nodes = [e["node"] for e in es]
+        active, controls, history = select(nodes, {e["node"]: e["descriptor"] for e in es},
+                                           q.history.get((batch, region_id), {}), region)
+        q.history[batch, region_id] = history
+        for e in es:
+            node = e["node"]
+            old = q.states.get((batch, node), model.nodes[node].initial())
+            cmp = e.pop("proposal_state") if region.observe_all or node in active else old
+            e.pop("proposal_state", None)
+            value = cmp.value * 0 if graph.nodes[node].clear and node in active else cmp.value
+            q.states[batch, node] = State(value, cmp.last_time, cmp.observations)
+            e.update(active=node in active, control=controls[node], comparison=cmp.value, next=value, history=dict(history))
+    for node, es in by_node.items():
+        active = [e for e in es if e["active"]]
+        if not active:
+            continue
+        values = model.nodes[node].full(torch.stack([e["comparison"] for e in active]),
+                                       torch.stack([e["content"] for e in active]),
+                                       torch.stack([e["control"] for e in active]), mode, zeta)
+        stats["full_blocks"] += 1
+        for event, value in zip(active, values):
+            event["full"] = value
+    return events, stats
+
+
+def deliver(graph, model, events, fibers, messages, outputs):
+    offsets, edges = graph.adjacency()
+    for e in events:
+        if not e["active"]:
+            continue
+        node, batch, time = e["node"], e["batch"], e["time"]
+        for edge_id in edges[offsets[node]:offsets[node + 1]]:
+            edge = graph.edges[edge_id]
+            arrival = time + edge.delay
+            if arrival >= 2**63:
+                raise ValueError("logical time overflow")
+            a = Atom(batch, edge.target, arrival, 1, edge_id, time, e["full"] * model.edge_scale[edge_id])
+            fibers[batch, edge.target, arrival].append(a); messages.append(a)
+        for port, source in enumerate(graph.outputs):
+            if source == node:
+                outputs.append((batch, time, port, e["full"] * model.output_scale[port]))
+
+
+def canonicalize(graph, result):
+    result.trace.sort(key=lambda e: (e["time"], e["batch"], e["node"]))
+    result.outputs.sort(key=lambda o: (o[1], o[0], graph.outputs[o[2]], o[2]))
+    result.messages.sort(key=lambda a: (a.position, a.batch, graph.edges[a.source].source, a.source))
+    result.continuation.pending.sort(key=lambda a: a.key())
+    return result

@@ -3,7 +3,8 @@ from .records import Atom, Continuation, Result, State
 
 
 class Native:
-    def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0):
+    def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
+                 algorithm="streaming", prefill=True, max_events=1000000):
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         g = core.Graph()
@@ -20,7 +21,10 @@ class Native:
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta
-        self.engine = core.Streaming(g, m, options)
+        options.prefill, options.max_events = prefill, max_events
+        if algorithm not in {"streaming", "frontier"}:
+            raise ValueError("unknown native algorithm")
+        self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)
 
     def run(self, continuation, external, stop, *, sealed_until):
         c = self.core
