@@ -98,8 +98,9 @@ generic executor does not make these different profiles interchangeable.
 LH contributes C++ inference and implementation ideas, not training semantics.
 Its candidate updates, count-priority selector and selected clear can fit the
 spine. Compatibility still requires a precise mapping of unit-delay ticks,
-eager decay, same-fiber attention and token-window Pronounce. No numerical LH
-equivalence is claimed until an original-C++ comparison is executed.
+eager decay, same-fiber attention and token-window Pronounce. The original-C++
+selector comparison is qualified in `evidence/lh-selector.md`; whole-LH numerical
+equivalence remains unverified.
 
 `fractal-latcarf` supplies validation design examples (eager/packed/specialized,
 chunk/state/gradient checks). Its historical results do not certify this tree.

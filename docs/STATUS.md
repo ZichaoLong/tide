@@ -4,23 +4,17 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest complete foundation qualification: **2226 passed** on clean implementation
-`eb328b36487d7acc4a11a21554c4959c12659d5a`; `evidence/region-programs.md`.
-Unit `tide-foundation-region-20260921-1417` finished with exit 0; no live process.
-Region/history/controls, cursor/checkpoint v4 and checked counters are qualified.
+Latest complete foundation qualification: **2318 passed** on clean implementation
+`805c74eab1fc8041dc83791e64700dcbc68e26af`; `evidence/lh-selector.md`.
+The same job passed original LH heap/tensor Selector comparisons in FP64/FP32:
+each dtype 12 cases, 288 ticks and 7368 candidate occurrences against Tide serial,
+node-parallel packed streaming and frontier. This is component, not full-model,
+equivalence. Norm VJP and payload/descriptor precision are Tide training choices.
 
-The next implementation, now ready to commit, adds FP64 norm Read, explicit
-payload metadata/conversion, LH selected/affected-count selection and a standalone
-original-C++ selector oracle. **400 focused tests passed**, and the original LH
-heap/tensor paths matched Tide serial, packed/node-parallel streaming and frontier
-in FP64/FP32. Each dtype: 12 cases, 288 ticks, 7368 candidate occurrences. These
-are development results; full qualification of a clean commit is the next step.
-Both development units finished with exit 0:
-- `tide-foundation-lh-selector-dev-20260921-1431`
-- `tide-foundation-lh-selector-assert-20260921-1436`
-The latter explicitly enables original assertions (`-UNDEBUG`) and validates
-snapshot inventory/CMake/library identities. Their paths are under `artifacts/`
-with the same suffixes. No active job remains before the prepared submission below.
+Unit `tide-foundation-lh-selector-20260921-1442` is inactive, MainPID 0, exit 0.
+Artifacts: `artifacts/lh-selector-20260921-1442/`; outer `status.json`,
+`verification/result.json`, `oracle/result.json` all passed with clean source.
+No active job. Evidence is committed separately from the tested implementation.
 
 ## Immutable original source
 
@@ -30,26 +24,19 @@ LH HEAD is `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, with actual dirty source
 captured and checksummed. The original tree was only read. Oracle details:
 `lh-selector.md`; full-model mapping: `lh-compatibility.md`.
 
-## Prepared clean qualification
+## Next action
 
-Commit this implementation, then submit:
-- Unit `tide-foundation-lh-selector-20260921-1442`, `background.slice`.
-- Job output `artifacts/lh-selector-20260921-1442`.
-- `python scripts/qualify.py --output-dir artifacts/lh-selector-20260921-1442
-  --jobs 2 --lh-snapshot artifacts/lh-source-20260921-1428`, via scripts/job.py.
-
-This job runs the full foundation suite, then rebuilds/runs the original selector
-oracle in both dtypes. Freeze source until terminal. Inspect outer `status.json`,
-`verification/result.json` and `oracle/result.json`, plus unit state/exit code.
-Launch has not occurred at this handoff commit; the outer record identifies the
-actual clean source revision. Archive evidence separately after success.
-
-## Next action after qualification
-
-Follow `lh-add-plan.md`: explicit lazy tick clocks and original Add comparison,
+Implement `lh-add-plan.md`: lazy tick clocks and original Add component comparison,
 then same-fiber attention, source signaling/activation/normalization and Pronounce.
+No Add profile code exists at this handoff. Start with `StateKernel`, Python
+`memory.py`/`state_program.py` and snapshotted AccumulateLocal/Hidden/BatchHidden.
 A repeat decay profile is the original numeric-order baseline; power regrouping
 requires separate explicit numerical/route policy. No whole-LH parity is claimed.
+
+Use focused tests, commit implementation, then launch clean `scripts/qualify.py`
+under `scripts/job.py` in `background.slice` with `--jobs 2` and the LH snapshot.
+Freeze source during jobs. Require terminal outer/test/oracle records before
+recording success. STATUS is the sole current handoff; ROADMAP is the backlog.
 
 ROADMAP retains broader losses/performance: optimized packed backward, cache
 allocation, structured Delta chunks and large sparse workloads. Touched region

@@ -64,4 +64,4 @@ limits. Equality outside that domain is not claimed. Tide preserves its checked
 int64 policy rather than reproducing overflow. This is a selector component
 comparison, not whole-LH inference parity: Add idle decay, same-fiber attention,
 edge signaling and Pronounce still require complete state/message/clock mapping.
-Current verification status and evidence are in STATUS/ROADMAP.
+Clean FP64/FP32 qualification is recorded in [evidence](evidence/lh-selector.md).
