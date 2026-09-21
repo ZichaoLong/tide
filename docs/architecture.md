@@ -36,6 +36,7 @@
 | `docs/token-window.md` | Sealed body-to-token conversion, norm-only readout, labeled logits and continuation |
 | `docs/lh-pronounce-plan.md` | Token clock, sealed-window adapter, original readout oracle and whole-model obligations |
 | `docs/lh-iocortex-plan.md` | Actual whole-model oracle, four-block wiring and remaining containment obligations |
+| `docs/lh-single-graph.md` | Bounded single-PDG IOCortex construction, every-cut projection and readout ledger boundary |
 | `docs/lh-iocortex.md` | Original whole-model entry points, precise graph projection and cross-language oracle scope |
 | `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |

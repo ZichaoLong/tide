@@ -36,7 +36,7 @@ VPtrBatchSignals ObservedSelector::select(const VPtrBatchSignals& inputs) {
 }
 tide::State empty_state(const tide::Graph& g, const tide::Model& m, Index v) {
   if (g.nodes[v].memory == "lh-add-repeat-v1") return {at::zeros_like(m.nodes[v].bias)};
-  const auto slots = g.incoming_ports.offsets[v+1]-g.incoming_ports.offsets[v];
+  const auto slots = g.source_counts[v];
   return tide::make_fiber_attention_kernel(g.nodes[v], slots)->initial(m.nodes[v]);
 }
 void compare_cache(const tide::NodeWeights& w, const tide::State& s, Index cut,

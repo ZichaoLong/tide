@@ -2,7 +2,8 @@
 
 Component gates through Pronounce are qualified in `evidence/pronounce.md`.
 The whole-model adapter in `lh-iocortex.md` is qualified in `evidence/lh-iocortex.md`.
-The single-graph construction below is still proposed.
+The single-graph construction below is implemented in the oracle layer;
+`lh-single-graph.md` defines its bounded projection and STATUS tracks qualification.
 Call actual unchanged IOCortexNet::think and think_single_step from the hashed
 snapshot; component parity alone cannot certify whole-model execution.
 
@@ -83,7 +84,7 @@ patch this by scaling arbitrary softmax weights. Qualify an explicit domain map,
 parameter aliasing, cache order and duplicate-arrival rejection. `state-clocks.md`
 implements the clock wrapper and delegated step/block contracts; treating the
 reserved phase as an extra idle decay changes LH. Whole-model complete-cut
-projection remains proposed; these primitives alone are not a containment proof.
+projection is implemented separately; these primitives alone are not a containment proof.
 Keep original valid-input restrictions (globally
 nonempty readout windows), fixed inference weights and equal-width scope explicit.
 

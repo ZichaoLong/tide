@@ -91,7 +91,9 @@ def check(record):
         result = reference.run(g, m, q, part, stop, sealed_until=stop); q = result.continuation
         outputs.extend(result.outputs); trace.extend(result.trace); messages.extend(result.messages)
     equivalent(whole, replace(result, outputs=outputs, trace=trace, messages=messages))
-    if record["scenario"] == "ragged": return len(trace)
+    from single_graph_checks import check_original
+    single_cuts = check_original(record, g, m, inputs, dtype)
+    if record["scenario"] == "ragged": return len(trace), single_cuts
     assert record["scenario"] == "tokens"
     rg = graph(record["readout"]); rm = model(rg, record["read_model"], record["width"], dtype)
     rq = Continuation(rg.identity, record["batch_size"]); tokens = cut//step
@@ -115,4 +117,4 @@ def check(record):
             tail = run(rg, rm, chunk, xs, token+1, sealed_until=token+1)
             chunk = tail.continuation; chunk_outputs.extend(tail.outputs)
         equivalent(chunk, final); equivalent(logits(chunk_outputs), expected)
-    return len(trace)
+    return len(trace), single_cuts

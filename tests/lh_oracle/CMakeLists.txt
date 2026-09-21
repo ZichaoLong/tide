@@ -49,6 +49,8 @@ if(TIDE_LH_ADD)
   add_executable(lh-iocortex-check ${TIDE_ROOT}/cpp/test/lh_iocortex_oracle.cpp
     ${TIDE_ROOT}/cpp/test/lh_iocortex_fixture.cpp ${TIDE_ROOT}/cpp/test/lh_iocortex_compare.cpp
     ${TIDE_ROOT}/cpp/test/lh_iocortex_export.cpp
+    ${TIDE_ROOT}/cpp/test/lh_single_graph.cpp ${TIDE_ROOT}/cpp/test/lh_single_compare.cpp
+    ${TIDE_ROOT}/cpp/test/lh_single_check.cpp
     ${TIDE_ROOT}/cpp/src/runtime.cpp)
   target_include_directories(lh-iocortex-check PRIVATE ${TIDE_ROOT}/cpp/include)
   target_link_libraries(lh-iocortex-check PRIVATE qualified_tide original_lh Threads::Threads)

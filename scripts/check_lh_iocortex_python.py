@@ -38,14 +38,16 @@ sys.path[:0] = [str(root/"python"), str(root/"tests")]
 from iocortex_fixture import check
 out = Path(args.output_dir).resolve(); out.mkdir(parents=True, exist_ok=False)
 def fingerprint():
-    paths = sorted((root/"python").rglob("*.py"))+[root/"tests/iocortex_fixture.py", Path(__file__)]
+    paths = sorted((root/"python").rglob("*.py"))+[root/"tests/iocortex_fixture.py",
+        root/"tests/single_graph_adapter.py", root/"tests/single_graph_checks.py",
+        root/"tests/single_graph_compare.py", Path(__file__)]
     return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 record = {"state": "running", "source": revision(root),
           "dirty": subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip(),
           "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
           "oracle_result": str(manifest), "oracle_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
           "python_sha256": fingerprint(), "fixture_sha256": digests, "torch": torch.__version__,
-          "device": "cpu", "resolution_reason": "explicit:cpu", "cases": 0, "events": 0}
+          "device": "cpu", "resolution_reason": "explicit:cpu", "cases": 0, "events": 0, "single_cuts": 0}
 def save():
     temp = out/"result.tmp"; temp.write_text(json.dumps(record, indent=2)+"\n"); temp.replace(out/"result.json")
 save(); inventory = set()
@@ -56,10 +58,10 @@ try:
             key = (data["dtype"], data["pool"], data["clear"], data["scenario"])
             if key in inventory: raise ValueError("duplicate original scenario")
             inventory.add(key)
-            try: events = check(data)
+            try: events, single_cuts = check(data)
             except Exception as error: raise RuntimeError(f"{name}: {error}") from error
-            record["cases"] += 1; record["events"] += events
-            log.write(f"passed {name}: {events} original candidate events\n"); log.flush(); save()
+            record["cases"] += 1; record["events"] += events; record["single_cuts"] += single_cuts
+            log.write(f"passed {name}: {events} original candidate events, {single_cuts} single-PDG cuts\n"); log.flush(); save()
     expected = {(dtype, pool, clear, scenario) for dtype in expected_dtypes
                 for pool in ("add", "sum", "mean", "linear", "active-softmax", "all-softmax")
                 for clear in (False, True) for scenario in ("tokens", "ragged")}
@@ -75,5 +77,5 @@ except Exception as error:
     record.update(state="failed", exit_code=1, error=str(error))
 finally:
     record["finished"] = datetime.datetime.now(datetime.timezone.utc).isoformat(); save()
-print(json.dumps({k: record.get(k) for k in ("state", "cases", "events", "error")}))
+print(json.dumps({k: record.get(k) for k in ("state", "cases", "events", "single_cuts", "error")}))
 sys.exit(record["exit_code"])

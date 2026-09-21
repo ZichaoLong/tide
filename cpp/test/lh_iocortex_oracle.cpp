@@ -1,5 +1,5 @@
 // Actual original IOCortexNet execution, mapped to two explicit graph clocks.
-#include "lh_iocortex_fixture.h"
+#include "lh_single_graph.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/stream.h"
 #include "tide/frontier.h"
@@ -12,7 +12,7 @@
 namespace {
 using namespace lh_iocortex;
 namespace AL = AccumulateLocal;
-struct Counts { Index candidates = 0, messages = 0, outputs = 0; };
+struct Counts { Index candidates = 0, messages = 0, outputs = 0, single_cuts = 0; };
 tide::Continuation initial(const tide::Graph& g) {
   tide::Continuation q; q.identity = g.identity; q.batch_size = Fixture::batch; return q;
 }
@@ -72,6 +72,7 @@ Counts check_tokens(const Fixture& f, int schedule, const std::string& export_pa
     check_logits(f, r, token, targets[token]);
   }
   write_fixture(export_path, f, all_inputs, is, os, ih, oh, ph, targets);
+  counts.single_cuts = check_single_graph(f, schedule, all_inputs, is, os, targets);
   return counts;
 }
 Counts check_ragged(const Fixture& f, int schedule, const std::string& export_path) {
@@ -109,6 +110,7 @@ Counts check_ragged(const Fixture& f, int schedule, const std::string& export_pa
   compare_trace(f, whole, is, os, 0); compare_continuation(q, whole.continuation);
   for (const auto& [owner, state] : q.states) require(owner.first != 3, "IOCortex fabricated absent sample state");
   write_fixture(export_path, f, all_inputs, is, os, ih, oh, nullptr, {});
+  counts.single_cuts = check_single_graph(f, schedule, all_inputs, is, os);
   return counts;
 }
 }  // namespace
@@ -141,6 +143,7 @@ int main(int argc, char** argv) {
             auto a = check_tokens(fixture, schedule, path.empty() ? "" : path+"-tokens.json");
             auto b = check_ragged(fixture, schedule, path.empty() ? "" : path+"-ragged.json");
             totals.candidates += a.candidates+b.candidates; totals.messages += a.messages+b.messages; totals.outputs += a.outputs;
+            totals.single_cuts += a.single_cuts+b.single_cuts;
           } catch (const std::exception& e) {
             throw std::runtime_error(std::string("IOCortex pool=")+pool+" clear="+std::to_string(clear)
                 +" lead="+std::to_string(lead)+" original_mode="+std::to_string(mode)+" schedule="+std::to_string(schedule)+": "+e.what());
@@ -150,7 +153,8 @@ int main(int argc, char** argv) {
         }
     std::cout << "original-LH-iocortex: passed; " << cases << " cases, " << totals.candidates << " candidates, "
               << totals.messages << " messages, " << totals.outputs << " token/sample logits; actual think + ragged ticks; "
-                 "serial/parallel/packed, cuts, full hidden/history/pending; unavailable original FP64 assertion cases=" << unavailable << '\n';
+                 "serial/parallel/packed, cuts, full hidden/history/pending; single-PDG cuts=" << totals.single_cuts
+              << "; unavailable original FP64 assertion cases=" << unavailable << '\n';
     return 0;
   } catch (const std::exception& e) { std::cerr << e.what() << '\n'; return 2; }
 }

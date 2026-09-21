@@ -67,6 +67,9 @@ Token-clock/readout is [qualified](evidence/pronounce.md), and actual IOCortexNe
 two-clock inference is [qualified](evidence/lh-iocortex.md). Remaining single-PDG
 and composite-checkpoint obligations: `lh-iocortex-plan.md`. The single-PDG map
 must preserve occurrence ledgers when phases are absent, not infer them from time.
+The bounded single-PDG oracle is implemented (`lh-single-graph.md`, qualification
+in STATUS). Its readout projection explicitly forgets the adapter-only ledger;
+complete readout continuation equivalence requires additional occurrence state.
 
 M8 implementation observation: `ProjectionEmit` currently launches a matmul per
 output slot, while original LH uses one large Linear per CSR row. Evaluate an
