@@ -1,5 +1,6 @@
 // Actual original IOCortexNet execution, mapped to two explicit graph clocks.
 #include "lh_single_graph.h"
+#include "lh_iocortex_scope.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/stream.h"
 #include "tide/frontier.h"
@@ -117,8 +118,13 @@ Counts check_ragged(const Fixture& f, int schedule, const std::string& export_pa
 
 int main(int argc, char** argv) {
   try {
-    const auto args = portable_torch::parse_cli(argc, argv);
-    if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }
+    auto scope = lh_iocortex::oracle_scope(argc, argv);
+    const auto args = portable_torch::parse_cli(scope.arguments.size(), scope.arguments.data());
+    if (args.help) {
+      portable_torch::print_usage(std::cout, argv[0]);
+      std::cout << "  --scope full|smoke  (default full; smoke exports no qualification fixtures)\n";
+      return 0;
+    }
     const auto device = portable_torch::resolve_device(args);
     if (!device.is_cpu() || (args.dtype != at::kFloat && args.dtype != at::kDouble))
       throw std::invalid_argument("IOCortex oracle requires CPU FP64/FP32");
@@ -130,6 +136,7 @@ int main(int argc, char** argv) {
       for (bool clear : {false, true}) for (bool lead : {false, true})
         for (int mode = 0; mode < 3; ++mode) for (int schedule = 0; schedule < 3; ++schedule) {
           if (std::string(pool) == "add" && mode == 2) continue;
+          if (!scope.includes(pool, clear, lead, mode, schedule)) continue;
 #ifdef ENABLE_RUNTIME_ASSERTION
           if (args.dtype == at::kDouble && std::string(pool) == "active-softmax" && mode) { ++unavailable; continue; }
 #endif
@@ -138,7 +145,7 @@ int main(int argc, char** argv) {
             AL::KVHidden::multi_batch_forward_mode = mode != 0; AL::KVHidden::is_no_grad = true;
             AL::KVHidden::attention_mode = mode == 2 ? AL::KVHidden::AttentionMode::CROSSBATCH : AL::KVHidden::AttentionMode::PACKED;
             Fixture fixture(opts, {pool, clear, lead, mode});
-            auto path = !args.output_dir.empty() && mode == 0 && schedule == 0 && lead
+            auto path = scope.name == "full" && !args.output_dir.empty() && mode == 0 && schedule == 0 && lead
               ? args.output_dir+"/"+pool+"-clear"+std::to_string(clear) : std::string();
             auto a = check_tokens(fixture, schedule, path.empty() ? "" : path+"-tokens.json");
             auto b = check_ragged(fixture, schedule, path.empty() ? "" : path+"-ragged.json");
@@ -151,7 +158,8 @@ int main(int argc, char** argv) {
           ++cases;
           if (cases%24 == 0) std::cout << "IOCortex progress: " << cases << " numerical cases passed\n" << std::flush;
         }
-    std::cout << "original-LH-iocortex: passed; " << cases << " cases, " << totals.candidates << " candidates, "
+    std::cout << "original-LH-iocortex: passed; scope=" << scope.name << "; "
+              << cases << " cases, " << totals.candidates << " candidates, "
               << totals.messages << " messages, " << totals.outputs << " token/sample logits; actual think + ragged ticks; "
                  "serial/parallel/packed, cuts, full hidden/history/pending; single-PDG cuts=" << totals.single_cuts
               << "; unavailable original FP64 assertion cases=" << unavailable << '\n';

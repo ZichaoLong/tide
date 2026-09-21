@@ -19,6 +19,8 @@ if sys.flags.optimize:
     parser.error("the original-fixture checker requires Python assertions enabled")
 root = Path(__file__).resolve().parents[1]
 manifest = Path(args.oracle_result).resolve(); oracle = json.loads(manifest.read_text())
+if oracle.get("scope") != "full":
+    parser.error("a complete full-scope original oracle is required; smoke cannot qualify Python fixtures")
 if (oracle["state"] != "passed" or oracle["source"] != revision(root)
         or oracle["build"]["cpp_source_sha256"] != source_hash(root)):
     parser.error("a passed original oracle from the current frozen source is required")

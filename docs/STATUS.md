@@ -11,25 +11,36 @@ Latest clean original-LH qualification remains 776fc2e597dac872f4204ac3a09966db3
 evidence/lh-iocortex.md. The single-PDG implementation below passed its complete
 development gate; clean full qualification and reviewed evidence are next.
 
-1. Single-PDG implementation committed as a558b87. Checkpoint ownership v5 is
-   now integrated from the isolated development worktree; 110 directed tests
-   passed there, including SGD/Adam/AdamW next-update equality and failure before
-   mutation. Commit this repair; clean full qualification remains pending.
-2. Bring the explicit IOCortex smoke scope from
-   /var/tmp/zlong-graph-execution-foundation/ownership-dev. Its scope changes are
-   CMakeLists.txt, scripts/{build,develop_lh,check_lh_selector,
-   check_lh_iocortex_python}.py, cpp/test/lh_iocortex_{scope.h,oracle.cpp},
-   cpp/test/lh_scope_check.cpp, tests/test_lh_gate_scope.py, docs/verification.md.
-   Standalone scope inventory test and two Python scope-rejection tests passed;
-   actual original-LH smoke gate still needs to run. Full remains the default.
-3. Commit these coherent changes after their directed gates. Launch full clean
-   qualification from an isolated frozen exact-commit worktree with independent
-   build directories and the same immutable LH snapshot. Main source may then
-   progress without changing the long job's inputs. Evidence is a separate commit.
-4. Refresh stale plan/navigation text, then continue M6 composite ownership and
-   broader module training, and M8 sparse performance. ROADMAP owns the backlog.
+1. Single-PDG implementation is a558b87; optimizer ownership repair is f900e15.
+   Checkpoint v5 passed 110 directed tests in an isolated worktree (8.09s).
+2. Explicit IOCortex scope passed its actual original-LH development gate:
+   tide-foundation-iocortex-smoke-dev-20260921-2229 is inactive/dead, MainPID 0,
+   Result=success, exit 0; finished 2026-09-21T22:31:30Z. Three records under
+   artifacts/iocortex-smoke-dev-20260921-2229/ are passed. Four dtype/assertion
+   runs each passed 6 cases / 165 single-PDG cuts. Both oracle manifests say
+   scope=smoke and export no fixtures; archive/current-source hashes matched.
+   Three integrated scope/inventory/rejection tests passed in 0.14s. Commit this
+   scope change. It is explicitly partial; full remains the default.
+3. Launch full clean qualification at that commit in the isolated worktree
+   /var/tmp/zlong-graph-execution-foundation/qualification-20260921-2234.
+   Planned unit: tide-foundation-single-qualified-20260921-2234; output:
+   artifacts/single-qualified-20260921-2234/. Use scripts/job.py wrapping
+   scripts/qualify.py --output-dir (absolute output) --jobs 2 --lh-snapshot
+   /var/tmp/zlong-graph-execution-foundation/artifacts/lh-source-20260921-1428.
+   The worktree must have its own build; link its ignored artifacts path to the
+   retained artifact root. Mark tracked files read-only. Verify service and
+   records after dispatch, and update this handoff with exact source/command.
+4. Continue on main while the isolated job runs. Clean full evidence is still
+   pending; do not relabel the development result. Refresh stale plan/navigation
+   descriptions, correct snapshot identity-copy cost, then implement the first
+   bounded M8 native streaming benchmark with correctness checks and records.
+   M6 composite ownership and broader training remain in ROADMAP.
 
-No active job now. No push; no sub-agents. Reference repositories remain read-only.
+No active job now. Temporary /var/tmp/zlong-graph-execution-foundation/ownership-dev
+has no unique implementation left. Once scope is committed, compare all modified/
+untracked source files to main before removing that redundant worktree. Preserve
+its development records until the clean qualification is retained.
+No push; no sub-agents. Reference repositories remain read-only.
 
 ## Single-PDG development result
 

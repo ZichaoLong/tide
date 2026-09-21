@@ -28,6 +28,8 @@
 - Commit a coherent implementation after relevant tests pass. For durable
   qualification, commit the implementation first, test that immutable commit,
   then commit the evidence separately. Do not push without task authorization.
+- Use `docs/verification.md` for development/full gate scopes and isolated
+  qualification. Smoke evidence must never stand in for a complete matrix.
 - Long builds/tests use a detached user service in `background.slice`, bounded
   build/CPU threads, a frozen checkout and durable status/logs. Never edit source
   that an active job reads. Short checks may run interactively.

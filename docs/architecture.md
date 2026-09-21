@@ -9,6 +9,7 @@
 | `cpp/src/` | LibTorch kernels, streaming/frontier execution and binding adapter |
 | `tests/` | Analytic formulas, invariant tests and differential qualification |
 | `scripts/` | Configure/build/verify, durable job and re-entry helpers |
+| `docs/verification.md` | Explicit development/full gates and frozen worktree lifecycle |
 | `docs/semantics.md` | Adopted semantics and local formula/gradient contracts |
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |

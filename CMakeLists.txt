@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 project(tidegraph LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(tidegraph-lh-scope-check cpp/test/lh_scope_check.cpp)
 find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
 add_library(tidegraph STATIC

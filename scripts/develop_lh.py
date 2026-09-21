@@ -17,7 +17,10 @@ parser.add_argument("--component", required=True,
                     choices=("selector", "add", "full", "attention", "pronounce", "iocortex", "all"))
 parser.add_argument("--jobs", type=int, default=2)
 parser.add_argument("--dtype", choices=("float32", "float64", "both"), default="both")
+parser.add_argument("--scope", choices=("full", "smoke"), default="full")
 args = parser.parse_args()
+if args.scope == "smoke" and args.component != "iocortex":
+    parser.error("--scope smoke requires --component iocortex")
 out = Path(args.output_dir).resolve()
 if not out.is_dir() or (out/"source.tar.gz").exists() or args.jobs < 1:
     parser.error("existing new job directory and positive build jobs required")
@@ -32,7 +35,7 @@ for assertions, directory, cache in (("on", "oracle", "build/lh-oracle"),
     subprocess.run([sys.executable, str(root/"scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", args.dtype,
                     "--snapshot", args.lh_snapshot, "--component", args.component, "--jobs", str(args.jobs),
                     "--output-dir", str(out/directory), "--runtime-assertions", assertions,
-                    "--oracle-build-dir", cache], cwd=root, check=True)
-if args.component in ("iocortex", "all"):
+                    "--oracle-build-dir", cache, "--scope", args.scope], cwd=root, check=True)
+if args.component in ("iocortex", "all") and args.scope == "full":
     subprocess.run([sys.executable, str(root/"scripts/check_lh_iocortex_python.py"), "--device", "cpu",
                     "--oracle-result", str(out/"oracle/result.json"), "--output-dir", str(out/"python")], cwd=root, check=True)

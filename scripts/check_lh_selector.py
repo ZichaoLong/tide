@@ -21,9 +21,13 @@ parser.add_argument("--jobs", type=int, default=2)
 parser.add_argument("--component", choices=("selector", "add", "full", "attention", "pronounce", "iocortex", "all"), default="selector")
 parser.add_argument("--runtime-assertions", choices=("on", "off"), default="on",
                     help="original LH build policy; off requires a separate oracle cache")
+parser.add_argument("--scope", choices=("full", "smoke"), default="full",
+                    help="smoke is a six-configuration IOCortex development gate, without fixture export")
 args = parser.parse_args()
 if args.jobs < 1:
     parser.error("positive build jobs required")
+if args.scope == "smoke" and args.component != "iocortex":
+    parser.error("--scope smoke requires --component iocortex")
 root = Path(__file__).resolve().parents[1]
 core, snapshot, out = Path(args.core_build_dir).resolve(), Path(args.snapshot).resolve(), Path(args.output_dir).resolve()
 oracle_build = Path(args.oracle_build_dir).resolve()
@@ -66,6 +70,7 @@ record = {"source": revision(root), "dirty": subprocess.check_output(["git", "st
           "state": "running", "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
           "snapshot": manifest, "build": build_record, "device": "cpu", "resolution_reason": "explicit:cpu",
           "dtype": args.dtype, "component": args.component, "runtime_assertions": args.runtime_assertions,
+          "scope": args.scope,
           "oracle_cmake_sha256": hashlib.sha256(cmake.read_bytes()).hexdigest(),
           "oracle_build_dir": str(oracle_build), "runs": []}
 def save():
@@ -89,14 +94,14 @@ try:
             with (out/f"{component}-{dtype}.log").open("w") as log:
                 command = [str(binary), "--device", "cpu", "--dtype", dtype]
                 if component == "iocortex":
-                    command += ["--output-dir", str(out/f"fixtures-{dtype}")]
+                    command += ["--scope", args.scope, "--output-dir", str(out/f"fixtures-{dtype}")]
                 result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
             record["runs"].append({"component": component, "command": command, "exit_code": result.returncode}); save()
             if result.returncode:
                 raise RuntimeError(f"LH {component} comparison failed in {dtype}; inspect its log")
             if component == "iocortex":
                 fixtures = sorted((out/f"fixtures-{dtype}").glob("*.json"))
-                if len(fixtures) != 24:
+                if len(fixtures) != (24 if args.scope == "full" else 0):
                     raise RuntimeError("IOCortex fixture inventory incomplete")
                 record.setdefault("fixture_sha256", {}).update(
                     {str(p.relative_to(out)): hashlib.sha256(p.read_bytes()).hexdigest() for p in fixtures})
