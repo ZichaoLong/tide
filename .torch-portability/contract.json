@@ -83,17 +83,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "652f2e7a7a09f4dcf6b220cbc058c580cc10c41d",
-          "scope": "CPU FP64/FP32 graph executors and state programs including packed event GQA/window; trace/VJP, shared AdamW and checkpoint; exact cells in report",
+          "commit": "900f19577f5bf6cead893ea53cf73a475f5dc1c1",
+          "scope": "CPU FP64/FP32 executors and state programs, owned native streaming cursor, trace/VJP/checkpoint/truncation and recovery; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/m5c-20260921-0939",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m5c-attention.md"
+          "environment_manifest": "docs/evidence/native-cursor.md"
         }
       ]
     },
@@ -147,17 +147,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "652f2e7a7a09f4dcf6b220cbc058c580cc10c41d",
-          "scope": "CPU FP64/FP32 graph executors and state programs including packed event GQA/window; trace/VJP, shared AdamW and checkpoint; exact cells in report",
+          "commit": "900f19577f5bf6cead893ea53cf73a475f5dc1c1",
+          "scope": "CPU FP64/FP32 executors and state programs, owned native streaming cursor, trace/VJP/checkpoint/truncation and recovery; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/m5c-20260921-0939",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m5c-attention.md"
+          "environment_manifest": "docs/evidence/native-cursor.md"
         }
       ]
     },

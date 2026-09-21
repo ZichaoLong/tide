@@ -37,6 +37,7 @@ Performance requires separate evidence: touched nodes/edges, visits/allocations,
 batch lengths, sequence block sizes, Full/Upd call counts, wall time and peak
 memory. No speed claim follows from fewer calls or correct numerical results.
 
-Remaining runtime work: owned native cursor with explicit snapshots (avoid whole
-state work per streaming cut); joint batch/sequence SSM kernels; allocation and
-structured Delta chunk optimizations. Preserve simple paths as comparison anchors.
+Owned native cursor and explicit snapshots are [qualified](evidence/native-cursor.md),
+avoiding whole-state work per streaming cut. Remaining runtime work includes
+joint batch/sequence SSM, allocation and structured Delta chunk optimization.
+Preserve simple paths as comparison anchors.

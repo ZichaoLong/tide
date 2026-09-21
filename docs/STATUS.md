@@ -4,19 +4,13 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **799 tests passed** at
-`652f2e7a7a09f4dcf6b220cbc058c580cc10c41d`.
-See `evidence/m5c-attention.md`; prior evidence is linked from `ROADMAP.md`.
-M5C's unit completed with exit 0. The next candidate adds an owned native
-streaming cursor with persistent queues, incremental input validation, explicit
-snapshot/detach, and failure recovery. See `streaming-cursor.md`. Python reference
-regressions: 84 passed. Cursor/native/full regression qualification is pending.
-
-Planned unit: `tide-foundation-cursor-20260921-0954`.
-Command: `/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/cursor-20260921-0954 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954`.
-Freeze this checkout while active. Inspect that directory's `status.json`,
-`task.log`, and `verification/result.json`; stop with
-`systemctl --user stop tide-foundation-cursor-20260921-0954` if necessary.
+Latest clean qualification: **843 tests passed** at
+`900f19577f5bf6cead893ea53cf73a475f5dc1c1`.
+See `evidence/native-cursor.md`; prior evidence is linked from `ROADMAP.md`.
+No active background jobs. Unit `tide-foundation-cursor-20260921-0954` completed
+with exit 0; no worker remains. The owned native streaming cursor keeps queues
+and state native across cuts, with explicit snapshot/detach and error recovery.
+See `streaming-cursor.md` for the ownership and finite-valued equivalence contract.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
@@ -34,12 +28,13 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Finish cursor build/full qualification; fix failures and commit evidence.
-   The functional streaming/Python paths remain equivalence anchors.
+1. Implement joint batch/sequence SSM (currently one prefill scan per sample),
+   using the checked packed-sequence interface. Compare with per-sample scans
+   and independent stepping, including ragged samples and initial-state VJPs.
 2. Generalize region/Agg/Full interfaces and loss statistics; review original LH
    C++ inference mapping (`lh-compatibility.md`) before choosing its exact profiles.
 3. Performance qualification must also address cache allocation, structured Delta
-   chunks and joint batch/sequence SSM (currently one prefill scan per sample).
+   chunks and observed sparse work; no speed claim follows from kernel counts.
 
 ## Boundaries
 
