@@ -74,6 +74,9 @@ class DiagonalSSM:
 
 
 def kernel(name, spec=None):
+    if name == "lh-fiber-attention-sum-repeat-v1":
+        from .fiber_attention import FiberAttention
+        return FiberAttention(spec)
     if name == "lh-add-repeat-v1":
         from .lazy_add import LazyAdd
         return LazyAdd()

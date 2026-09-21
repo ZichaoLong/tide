@@ -74,6 +74,8 @@ generic executor does not make these different profiles interchangeable.
 cut decoding and the fixed-parameter boundary of its LH inference interpretation.
 `lh-full.md` specifies post-selection activation/normalization and the per-edge
 signaling mapping, with Tide's explicit HARD/SOFTP/HST training contract.
+`fiber-attention.md` defines separately named same-fiber visibility, sum pooling,
+tick-repeat KV log-bias decay and complete cache continuation.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.

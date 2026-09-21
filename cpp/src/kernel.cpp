@@ -4,6 +4,7 @@
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
+#include "tide/fiber_attention.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -44,7 +45,8 @@ void configure_model(const Graph& g, Model& m) {
   for (size_t i = 0; i < m.nodes.size(); ++i) {
     if (!m.nodes[i].kernel) {
       const auto& n = g.nodes[i];
-      m.nodes[i].kernel = !n.identity && n.memory == "attention" ? make_attention_kernel(n.query_heads, n.kv_heads, n.window)
+      m.nodes[i].kernel = !n.identity && n.memory == "lh-fiber-attention-sum-repeat-v1" ? make_fiber_attention_kernel(n)
+                        : !n.identity && n.memory == "attention" ? make_attention_kernel(n.query_heads, n.kv_heads, n.window)
                                                               : make_state_kernel(n.identity ? "identity" : n.memory);
     }
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;

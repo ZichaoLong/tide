@@ -53,6 +53,14 @@ class NodeWeights(nn.Module):
         self.extra = nn.ParameterDict()
         if spec is not None and spec.memory == "lh-add-repeat-v1":
             self.extra["add_retention"] = nn.Parameter(torch.tensor(1.0 - 0.01, dtype=dtype))
+        if spec is not None and spec.memory == "lh-fiber-attention-sum-repeat-v1":
+            if width % spec.query_heads:
+                raise ValueError("fiber attention width must be divisible by heads")
+            self.extra["fiber_qkv"] = parameter((width, 3*width), .15)
+            self.extra["fiber_out"] = parameter((width, width), .15)
+            self.extra["fiber_qkv_bias"] = nn.Parameter(torch.zeros(3*width, dtype=dtype))
+            self.extra["fiber_out_bias"] = nn.Parameter(torch.zeros(width, dtype=dtype))
+            self.extra["fiber_decay"] = nn.Parameter(torch.tensor(.01, dtype=dtype))
         if spec is not None and spec.memory == "attention":
             if width % spec.query_heads:
                 raise ValueError("attention width must be divisible by query heads")

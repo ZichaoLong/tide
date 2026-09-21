@@ -28,6 +28,7 @@
 | `docs/lazy-add.md` | Explicit tick-repeat Add, physical decode, batch buckets and parameter-epoch limits |
 | `docs/lh-full.md` | LH activation/normalization backbones and per-edge signaling mapping |
 | `docs/lh-attention-plan.md` | Same-fiber cache/visibility/decay and post-attention pooling gate |
+| `docs/fiber-attention.md` | Same-fiber sum attention, encoded log bias and independent scalar anchors |
 | `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 

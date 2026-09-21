@@ -44,8 +44,9 @@ def validate_program(weights, spec, *, native=False):
     from .attention import Attention
     from .matrix_memory import MatrixMemory
     from .lazy_add import LazyAdd
+    from .fiber_attention import FiberAttention
     builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory,
-                "attention": Attention, LazyAdd.profile: LazyAdd}
+                "attention": Attention, LazyAdd.profile: LazyAdd, FiberAttention.profile: FiberAttention}
     program = weights.kernel
     if type(program) is not builtins.get(spec.memory):
         if native:
@@ -55,8 +56,11 @@ def validate_program(weights, spec, *, native=False):
         return
     if isinstance(program, MatrixMemory) and program.kind != spec.memory:
         raise ValueError("shared state program does not match graph profile")
-    if isinstance(program, LazyAdd):
+    if isinstance(program, (LazyAdd, FiberAttention)):
         program.validate_weights(weights)
+    if isinstance(program, FiberAttention) and (program.heads != spec.query_heads
+            or spec.kv_heads != program.heads or spec.window or spec.aggregation != "sum"):
+        raise ValueError("shared state program does not match fiber attention policy")
     if isinstance(program, Attention) and (program.query_heads, program.kv_heads, program.window) != (
             spec.query_heads, spec.kv_heads, spec.window):
         raise ValueError("shared state program does not match attention policy")
