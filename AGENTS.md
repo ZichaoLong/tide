@@ -16,6 +16,9 @@
 - Continue implementation autonomously in reviewable, tested increments.
 - `STATUS.md` is the single current handoff; `ROADMAP.md` is the single backlog.
   Replace stale status, do not accumulate session diaries or duplicate ledgers.
+- `scripts/status.py` shows all live and recent terminal job records. Use
+  `--all-jobs` when auditing retained historical failures; never relabel an old
+  failure as passed merely because a newer run succeeded.
 - Update the handoff before long jobs, at commit boundaries, and before ending
   a session. Include exact next commands, blockers, source identity, job/unit,
   logs, terminal status and any uncommitted work. Never call a live job passed.
