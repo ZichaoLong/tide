@@ -10,8 +10,9 @@ are qualified in `evidence/lh-add.md` (`lazy-add.md`). Whole-LH inference
 comparison remains pending. Activation/normalization and per-edge signaling with
 default eps/equal widths are qualified in `evidence/lh-full.md` (`lh-full.md`).
 Same-fiber sum attention's scalar baseline and five original attention modes are
-qualified in `evidence/lh-attention.md` (`fiber-attention.md`); CROSSBATCH and
-normalized/learned post-attention Confluence remain pending.
+qualified in `evidence/lh-attention.md` (`fiber-attention.md`); batch/sequence
+packing and CROSSBATCH are qualified in `evidence/fiber-packing.md`.
+Normalized/learned post-attention Confluence remains pending.
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no

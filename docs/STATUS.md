@@ -4,46 +4,47 @@ Updated: 2026-09-22 (Asia/Shanghai). Branch: `graph-execution-foundation`.
 
 ## Current qualification
 
-**2728 tests passed** on clean implementation
-`dfc2e5b622946614831962fb44683990fa609e8d`; `evidence/lh-attention.md`.
+**2764 tests passed** on clean implementation
+`eb9dc6c86ef46ab4db9e06029b0029412a890395`; `evidence/fiber-packing.md`.
 Original LH Selector/Add/Full/Attention passed in FP64/FP32. Attention per dtype:
-240 configurations, 5760 ticks, 16080 candidate updates across five original modes.
-This qualifies same-fiber sum attention's scalar baseline and complete cache/clock
-projection, not whole-model behavior or joint packed attention.
+264 configurations, 6336 ticks, 17688 candidate updates across all six original
+modes, including CROSSBATCH. This qualifies same-fiber sum attention's actual
+batch/sequence packing and complete state/clock projection, not whole-model or speed.
 
-Unit `tide-foundation-fiber-20260921-1618` is inactive, MainPID 0, exit 0.
-`artifacts/fiber-20260921-1618/{status.json,verification/result.json,oracle/result.json}`
-all passed at the same clean source. No active job. Evidence is committed separately.
+Unit `tide-foundation-fiber-pack-20260921-1638` is inactive, MainPID 0, exit 0.
+`artifacts/fiber-pack-20260921-1638/{status.json,verification/result.json,oracle/result.json}`
+all passed at that clean source. No active job. Evidence is committed separately.
+Scalar baseline: `evidence/lh-attention.md` on `dfc2e5b622946614831962fb44683990fa609e8d`.
 
 Earlier failures `fiber-dev-20260921-1601` and `fiber-dev-20260921-1608` remain
 retained and failed. Corrections, FP32 conditioning limits and Read precision
-comparison policy: `fiber-attention.md` and the qualification report.
+comparison policy: `fiber-attention.md` and the baseline qualification report.
+Two incorporated packing drafts and one Python import cache were removed after
+body comparison with installed source; no other artifacts/reference files removed.
 
-## Current increment and next qualification
+## Next implementation
 
-Real packed source/event attention is ready to commit: `fiber_packing.py` and
-`fiber_packing.{h,cpp}`. Scalar step remains independent. The data/visibility,
-storage, work-counter and replay contracts are in `fiber-packing.md`.
+Continue `lh-attention-plan.md` with post-attention Confluence, then token-clock
+Pronounce/IOCortexNet. Proposed bounded profiles reuse the existing memory-name
+field: `lh-fiber-attention-{mean,linear,active-softmax,all-softmax}-repeat-v1`;
+keep the sum profile unchanged. Coefficients act on attention output rows before
+output projection, never on pre-attention Q/K/V inputs. Keep raw sum Aggregate as
+independent content for Tide's Full/Emit contract.
 
-Development unit `tide-foundation-fiber-pack-dev-20260921-1633` is inactive,
-MainPID 0, exit 0. Output `artifacts/fiber-pack-dev-20260921-1633/` records **246
-passing targeted tests**, then original attention passing both dtypes across all
-six modes, including CROSSBATCH: each 264 cases, 6336 ticks, 17688 candidates.
-The dirty source snapshot/hash and oracle manifests are retained in that output.
-Two incorporated draft sources and their one Python import cache were removed
-only after a dry-run comparison confirmed their bodies are preserved in source.
-No other artifacts or reference files were removed.
+Use a single learned `fiber_pool` vector indexed by graph-owned local input slots;
+validate its shape against incoming degree. Mean/active softmax normalize only
+present sources; all-source softmax uses the full domain including absent sources.
+Absent coordinates of a used vector parameter have ordinary zero gradients under
+active-only pooling; all-source normalization can give them nonzero gradients.
+A cache-only root must have no pooling-parameter path. Preserve sum's old order.
 
-After implementation commit, submit `tide-foundation-fiber-pack-20260921-1638`
-through scripts/job.py with output `artifacts/fiber-pack-20260921-1638`, running
-`python scripts/qualify.py --output-dir artifacts/fiber-pack-20260921-1638 --jobs 2
---lh-snapshot artifacts/lh-source-20260921-1428`. Freeze until terminal; inspect
-unit/status.json/verification/result.json/oracle/result.json. Save evidence in a
-separate commit only after all pass. No performance claim follows from counters.
-
-Then continue `lh-attention-plan.md`: post-attention normalized/learned Confluence,
-token-clock Pronounce and IOCortexNet adapter. Normalized
-pooling must not multiply coefficients into pre-attention Q/K/V input rows.
+An isolated helper draft is at `artifacts/fiber_pool_draft.py`; it is not installed
+or tested. Wire input-slot count through state factories and built-in validation
+(Python validation/native adapter, native configure_model). Do not add a graph
+field or silently reinterpret the existing sum profile. Extend scalar/packed
+pooling and the original oracle, with independent analytic/VJP/order tests,
+slot permutations, missing/zero rows, parameter-domain sharing, checkpoints and
+scheduler/embedding checks. Then commit, qualify frozen clean source, save evidence.
 ROADMAP retains optimizer/backward/cache/history-patch and scale/performance work.
 
 ## Immutable original source and execution policy
