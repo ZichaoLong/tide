@@ -6,21 +6,18 @@ Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 
 Clock implementation bd933e0980a2076bace5c6ffbb09da61bc400593 passed 3745 tests
 in 300.89s; evidence/state-clocks.md (evidence commit 6aa0963). Graph v13 /
-checkpoint v4. SourceDomain evidence: evidence/source-domains.md.
+checkpoint v4 at that source; working checkpoint v5. SourceDomain evidence: evidence/source-domains.md.
 Latest clean original-LH qualification remains 776fc2e597dac872f4204ac3a09966db39ab74c0,
 evidence/lh-iocortex.md. The single-PDG implementation below passed its complete
 development gate; clean full qualification and reviewed evidence are next.
 
-1. Commit the single-PDG implementation and its development result.
-2. Bring the already tested optimizer-ownership repair and explicit IOCortex
-   smoke scope from /var/tmp/zlong-graph-execution-foundation/ownership-dev.
-   That detached worktree starts at 6aa0963; do not blindly copy its old docs.
-   Checkpoint repair: checkpoint.py, checkpoint_ownership.py,
-   test_checkpoint_ownership.py, test_region_continuation.py, checkpoint-ownership.md.
-   110 targeted FP64/FP32 tests passed in 8.09s. Silent optimizer momentum
-   exchange under same-shaped parameter reordering was reproduced on v4.
-   Repair uses v5; update current schema/navigation on this branch.
-   Scope changes: CMakeLists.txt, scripts/{build,develop_lh,check_lh_selector,
+1. Single-PDG implementation committed as a558b87. Checkpoint ownership v5 is
+   now integrated from the isolated development worktree; 110 directed tests
+   passed there, including SGD/Adam/AdamW next-update equality and failure before
+   mutation. Commit this repair; clean full qualification remains pending.
+2. Bring the explicit IOCortex smoke scope from
+   /var/tmp/zlong-graph-execution-foundation/ownership-dev. Its scope changes are
+   CMakeLists.txt, scripts/{build,develop_lh,check_lh_selector,
    check_lh_iocortex_python}.py, cpp/test/lh_iocortex_{scope.h,oracle.cpp},
    cpp/test/lh_scope_check.cpp, tests/test_lh_gate_scope.py, docs/verification.md.
    Standalone scope inventory test and two Python scope-rejection tests passed;

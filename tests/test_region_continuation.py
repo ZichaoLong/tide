@@ -76,7 +76,7 @@ def test_region_checkpoint_optimizer_identity_and_history_validation(dtype, tmp_
     equivalent(optimizer.state_dict(), ro.state_dict())
     assert not loaded.history[0, 0].tensors["memory"].requires_grad
     record = torch.load(path, weights_only=True)
-    assert record["schema"] == "tide-continuation-v4" and isinstance(record["history"][0, 0], tuple)
+    assert record["schema"] == "tide-continuation-v5" and isinstance(record["history"][0, 0], tuple)
     record["weights"]["regions.0.alpha"].fill_(float("nan"))
     bad_weights = tmp_path / "bad-weights.pt"; torch.save(record, bad_weights)
     before = {k: v.clone() for k, v in restored.state_dict().items()}

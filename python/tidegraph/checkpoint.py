@@ -4,21 +4,16 @@ import torch
 from .records import Atom, Continuation, State
 from .history import History
 from .validation import validate_window
-
-
-def parameter_aliases(model):
-    groups = {}
-    for name, parameter in model.named_parameters(remove_duplicate=False):
-        groups.setdefault(id(parameter), []).append(name)
-    return sorted(sorted(names) for names in groups.values())
+from .checkpoint_ownership import parameter_aliases, optimizer_record, preflight_optimizer
 
 
 def save(path, graph, model, continuation, optimizer=None):
     q = continuation
     validate_window(graph, model, q, [], q.cut, q.cut)
+    layout, optimizer_state = optimizer_record(model, optimizer)
     record = {
-        "schema": "tide-continuation-v4", "identity": graph.identity, "aliases": parameter_aliases(model),
-        "weights": model.state_dict(), "optimizer": None if optimizer is None else optimizer.state_dict(),
+        "schema": "tide-continuation-v5", "identity": graph.identity, "aliases": parameter_aliases(model),
+        "weights": model.state_dict(), "optimizer": optimizer_state, "optimizer_layout": layout,
         "batch_size": q.batch_size, "cut": q.cut,
         "states": {k: (s.value.detach(), s.last_time, s.observations, {n: v.detach() for n, v in s.slots.items()})
                    for k, s in q.states.items()},
@@ -34,7 +29,7 @@ def save(path, graph, model, continuation, optimizer=None):
 
 def load(path, graph, model, optimizer=None):
     record = torch.load(path, map_location="cpu", weights_only=True)
-    if record["schema"] != "tide-continuation-v4" or record["identity"] != graph.identity:
+    if record["schema"] != "tide-continuation-v5" or record["identity"] != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
     if record["aliases"] != parameter_aliases(model):
         raise ValueError("checkpoint parameter sharing mismatch; reconstruct the same aliases before loading")
@@ -45,13 +40,15 @@ def load(path, graph, model, optimizer=None):
         if (not isinstance(actual[key], torch.Tensor) or actual[key].shape != value.shape
                 or actual[key].dtype != value.dtype or not torch.isfinite(actual[key]).all()):
             raise ValueError(f"checkpoint parameter mismatch: {key}")
+    for names in record["aliases"]:
+        if any(not torch.equal(actual[names[0]], actual[name]) for name in names[1:]):
+            raise ValueError("checkpoint shared parameter values disagree")
     q = Continuation(record["identity"], record["batch_size"], record["cut"],
                      {k: State(*s) for k, s in record["states"].items()},
                      {k: History(*h) for k, h in record["history"].items()},
                      [Atom(*a) for a in record["pending"]], record["ledger"])
     validate_window(graph, model, q, [], q.cut, q.cut)
-    if optimizer is not None and record["optimizer"] is None:
-        raise ValueError("checkpoint has no optimizer state")
+    preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"])
     model.load_state_dict(actual)
     if optimizer is not None:
         optimizer.load_state_dict(record["optimizer"])

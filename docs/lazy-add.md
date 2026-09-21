@@ -57,7 +57,7 @@ Frontier can still batch Aggregate, Read and Full. A time scan or fast long-gap
 power profile is not silently substituted. Costs grow with deferred tick gaps;
 no large-gap speed claim follows from sparse allocation.
 
-The profile name already participates in graph identity v11; checkpoint v4 stores
+The profile name already participates in graph identity v11; the value checkpoint (current schema in `semantics.md`) stores
 the required value/time/count. No schema change is needed.
 
 ## Original Add comparison

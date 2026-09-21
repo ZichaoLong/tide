@@ -18,7 +18,7 @@ Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
-Current native structural identity is **v13**; checkpoint payload is **v4**.
+Current native structural identity is **v13**; checkpoint payload is **v5**.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
@@ -96,8 +96,10 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   input, parameter and differentiable initial-state VJPs. In-memory chunking has
   no implicit detach. Serialized continuation is a declared gradient boundary.
   `Continuation.detach()` explicitly truncates state, region history and in-flight messages.
-  Checkpoint v4 stores all node/region tensor slots and validates parameter-alias topology before changing any
-  weights; reconstruct the same sharing when restoring. Checkpoints do not
+  Checkpoint v5 stores all node/region tensor slots and validates parameter-alias
+  topology, shared values and named optimizer ownership/order/class before
+  changing weights. Reconstruct the same sharing and optimizer groups when
+  restoring; see `checkpoint-ownership.md`. Older schemas are rejected. Checkpoints do not
   claim to restore a full training controller, data cursor or framework RNG.
 - `None` versus connected-zero is observable for optimizer parameter groups;
   do not silently normalize away a missing parameter gradient. For a single

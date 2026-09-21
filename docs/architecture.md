@@ -16,6 +16,7 @@
 | `docs/module-extension-plan.md` | Concrete next kernel/state interface work |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
+| `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership and preflight value restore |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
 | `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |
@@ -76,7 +77,7 @@ native kernels and replay evaluation in separate source files. Read is separate
 in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
 Regions use `region.py`/`region.h`, with typed history in `history.py`/`types.h`.
 Node and region tensor slots participate in comparisons, explicit detach and
-checkpoint v4. Built-in counters use checked int64 arithmetic.
+the checkpoint schema in `semantics.md`. Built-in counters use checked int64 arithmetic.
 
 Build qualification checks a source fingerprint and binary hashes from
 `build/build-manifest.json`; stale native modules cannot certify newer C++ code.
