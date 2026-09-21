@@ -91,7 +91,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "notes": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Deferred by user; no accelerator support in current implementation scope."
     },
     {
       "id": "python-npu-aarch64",
@@ -103,7 +103,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "notes": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Deferred by user; no accelerator support in current implementation scope."
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -140,7 +140,7 @@
         "build",
         "backend-smoke"
       ],
-      "notes": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Deferred by user; no accelerator support in current implementation scope."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -153,7 +153,7 @@
         "build",
         "backend-smoke"
       ],
-      "notes": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Deferred by user; no accelerator support in current implementation scope."
     }
   ]
 }
