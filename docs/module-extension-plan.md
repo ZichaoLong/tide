@@ -1,7 +1,8 @@
 # Next implementation: state and operator programs (M5)
 
 The initial state-program seam and SSM/SwiGLU are implemented and qualified in
-`evidence/m5a-state-programs.md`. Matrix-memory profiles are under qualification.
+`evidence/m5a-state-programs.md`. Matrix-memory profiles are qualified in
+`evidence/m5b-matrix-memory.md`.
 This document retains the remaining interface/module work; it is not a blanket
 support claim for arbitrary models.
 

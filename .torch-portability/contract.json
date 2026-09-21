@@ -83,17 +83,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "50b5e943b4ba183d66d78a30a4e94468c6ed8349",
-          "scope": "CPU FP64/FP32 graph executors, EMA/identity and selective diagonal SSM, tanh/SwiGLU, tensor-slot trace/VJP/checkpoint; exact cells in report",
+          "commit": "ca0a12764ab0f766ba86f46c84a6d60f2e35e303",
+          "scope": "CPU FP64/FP32 graph executors, EMA/identity/SSM/Linear/Delta, tanh/SwiGLU, trace/VJP/checkpoint and mixed-memory SettleGraph embedding; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/m5a-20260921-0900",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/m5b-20260921-0920",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m5a-state-programs.md"
+          "environment_manifest": "docs/evidence/m5b-matrix-memory.md"
         }
       ]
     },
@@ -147,17 +147,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "50b5e943b4ba183d66d78a30a4e94468c6ed8349",
-          "scope": "CPU FP64/FP32 graph executors, EMA/identity and selective diagonal SSM, tanh/SwiGLU, tensor-slot trace/VJP/checkpoint; exact cells in report",
+          "commit": "ca0a12764ab0f766ba86f46c84a6d60f2e35e303",
+          "scope": "CPU FP64/FP32 graph executors, EMA/identity/SSM/Linear/Delta, tanh/SwiGLU, trace/VJP/checkpoint and mixed-memory SettleGraph embedding; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/m5a-20260921-0900",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/m5b-20260921-0920",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m5a-state-programs.md"
+          "environment_manifest": "docs/evidence/m5b-matrix-memory.md"
         }
       ]
     },
