@@ -18,7 +18,7 @@ parser.add_argument("--core-build-dir", default="build")
 parser.add_argument("--oracle-build-dir", default="build/lh-oracle", help="reusable CMake cache; result/log directories remain unique")
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
-parser.add_argument("--component", choices=("selector", "add", "full", "attention", "pronounce", "all"), default="selector")
+parser.add_argument("--component", choices=("selector", "add", "full", "attention", "pronounce", "iocortex", "all"), default="selector")
 parser.add_argument("--runtime-assertions", choices=("on", "off"), default="on",
                     help="original LH build policy; off requires a separate oracle cache")
 args = parser.parse_args()
@@ -72,7 +72,7 @@ def save():
     temp = out/"result.tmp"; temp.write_text(json.dumps(record, indent=2)+"\n"); temp.replace(out/"result.json")
 save()
 try:
-    components = ("selector", "add", "full", "attention", "pronounce") if args.component == "all" else (args.component,)
+    components = ("selector", "add", "full", "attention", "pronounce", "iocortex") if args.component == "all" else (args.component,)
     with (out/"build.log").open("w") as log:
         subprocess.run(["cmake", "-S", str(cmake.parent), "-B", str(oracle_build), "-G", "Ninja",
                         "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={torch.utils.cmake_prefix_path}",
@@ -88,10 +88,18 @@ try:
         for dtype in (("float64", "float32") if args.dtype == "both" else (args.dtype,)):
             with (out/f"{component}-{dtype}.log").open("w") as log:
                 command = [str(binary), "--device", "cpu", "--dtype", dtype]
+                if component == "iocortex":
+                    command += ["--output-dir", str(out/f"fixtures-{dtype}")]
                 result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
             record["runs"].append({"component": component, "command": command, "exit_code": result.returncode}); save()
             if result.returncode:
                 raise RuntimeError(f"LH {component} comparison failed in {dtype}; inspect its log")
+            if component == "iocortex":
+                fixtures = sorted((out/f"fixtures-{dtype}").glob("*.json"))
+                if len(fixtures) != 24:
+                    raise RuntimeError("IOCortex fixture inventory incomplete")
+                record.setdefault("fixture_sha256", {}).update(
+                    {str(p.relative_to(out)): hashlib.sha256(p.read_bytes()).hexdigest() for p in fixtures})
     if (source_hash(root) != build_record["cpp_source_sha256"] or snapshot_identity() != manifest["identity"]
             or hashlib.sha256(library.read_bytes()).hexdigest() != library_hash
             or hashlib.sha256(cmake.read_bytes()).hexdigest() != record["oracle_cmake_sha256"]):

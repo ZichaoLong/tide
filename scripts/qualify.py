@@ -29,3 +29,10 @@ if args.lh_snapshot:
                     "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "pronounce-release"),
                     "--oracle-build-dir", "build/lh-oracle-release", "--runtime-assertions", "off",
                     "--jobs", str(args.jobs), "--component", "pronounce"], check=True)
+    subprocess.run([sys.executable, str(root / "scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", "both",
+                    "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "iocortex-release"),
+                    "--oracle-build-dir", "build/lh-oracle-release", "--runtime-assertions", "off",
+                    "--jobs", str(args.jobs), "--component", "iocortex"], check=True)
+    subprocess.run([sys.executable, str(root / "scripts/check_lh_iocortex_python.py"), "--device", "cpu",
+                    "--oracle-result", str(Path(args.output_dir).resolve() / "oracle/result.json"),
+                    "--output-dir", str(Path(args.output_dir).resolve() / "iocortex-python")], check=True)

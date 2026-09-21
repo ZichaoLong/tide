@@ -7,7 +7,8 @@ Do not modify or clean that tree. Numerical runs record the actual dirty-source
 snapshot, not HEAD alone. Original-selector equivalence is qualified in
 `evidence/lh-selector.md`. Tick-repeat Add and its original-C++ component oracle
 are qualified in `evidence/lh-add.md` (`lazy-add.md`). Whole-LH inference
-comparison remains pending. Activation/normalization and per-edge signaling with
+adapter is implemented (`lh-iocortex.md`); current qualification is in STATUS.
+Activation/normalization and per-edge signaling with
 default eps/equal widths are qualified in `evidence/lh-full.md` (`lh-full.md`).
 Same-fiber sum attention's scalar baseline and five original attention modes are
 qualified in `evidence/lh-attention.md` (`fiber-attention.md`); batch/sequence
@@ -15,7 +16,8 @@ packing and CROSSBATCH are qualified in `evidence/fiber-packing.md`.
 Normalized/learned post-attention Confluence is qualified in
 `evidence/fiber-pooling.md`, with the original FP64 assertion limitation recorded
 separately. Token-window Pronounce is qualified in `evidence/pronounce.md`;
-whole-model and single-PDG mapping remain pending (`lh-iocortex-plan.md`).
+the whole-model adapter is a two-clock composition, and the single-PDG proof
+remains pending (`lh-iocortex-plan.md`).
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no
@@ -69,7 +71,7 @@ compare all mapped state/messages/counters as well as outputs in FP64/FP32.
 If a true semantic mismatch survives an explicit encoding, document the minimal
 counterexample and discuss the choice with the user before changing Tide semantics.
 
-## Next bounded gate after region programs
+## Selector scope within the whole-model gate
 
 Typed region histories and SelStep extension interfaces are qualified in
 `region-programs.md`. The LH selector profile with separate selected/affected maps
