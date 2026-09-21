@@ -68,6 +68,9 @@ generic executor does not make these different profiles interchangeable.
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.
 - Shared parameter ownership must survive packing, parallelism and checkpoints.
+- Isolated public roots must preserve structural gradient absence. Packed
+  execution currently uses local semantic autograd replay with an explicit
+  training cost; see `packed-autograd.md`. Numeric zeros cannot identify absence.
 - A specialization owns its loop/dependency order. Common kernels alone do not
   validate formulas; tiny hand-computable cases supply independent anchors.
 

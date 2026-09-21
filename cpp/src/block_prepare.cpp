@@ -1,4 +1,6 @@
 #include "tide/block.h"
+#include "tide/autograd.h"
+#include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <stdexcept>
 
@@ -8,6 +10,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
                     const std::map<Owner, std::vector<size_t>>& by_sequence, std::map<std::string, Index>& stats) {
   struct Task { Index node; PackedSequence batch; std::vector<State> old; std::vector<size_t> ids; PackedStates result; };
   std::vector<Task> tasks;
+  const bool replay = at::GradMode::is_enabled();
   std::map<Index, size_t> by_node;
   for (const auto& [owner, ids] : by_sequence) {
     const auto node = owner.second;
@@ -31,23 +34,41 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
     for (auto j : task.ids) {
       values.push_back(events[j].content); batch.times.push_back(events[j].time); batch.fibers.push_back(&events[j].fiber);
     }
-    batch.contents = at::stack(values);
     const auto& w = m.nodes[task.node];
-    task.result = w.kernel->packed_sequence(w, task.old, batch);
-    const auto& states = task.result.states;
-    if (states.size() != task.ids.size()) throw std::invalid_argument("packed kernel returned incorrect state count");
-    std::vector<State> previous;
-    for (size_t s = 0; s < task.old.size(); ++s) {
-      previous.push_back(task.old[s]);
-      previous.insert(previous.end(), states.begin() + batch.offsets[s], states.begin() + batch.offsets[s + 1] - 1);
+    Tensor desc;
+    {
+      at::NoGradGuard guard;
+      batch.contents = at::stack(values);
+      task.result = w.kernel->packed_sequence(w, task.old, batch);
+      const auto& states = task.result.states;
+      if (states.size() != task.ids.size()) throw std::invalid_argument("packed kernel returned incorrect state count");
+      std::vector<State> previous;
+      for (size_t s = 0; s < task.old.size(); ++s) {
+        previous.push_back(task.old[s]);
+        previous.insert(previous.end(), states.begin() + batch.offsets[s], states.begin() + batch.offsets[s + 1] - 1);
+      }
+      desc = w.kernel->read_batch(w, previous, states, batch.contents, batch.times, batch.fibers);
     }
-    auto desc = w.kernel->read_batch(w, previous, states, batch.contents, batch.times, batch.fibers);
+    auto& states = task.result.states;
     for (size_t j = 0; j < task.ids.size(); ++j) {
       auto& e = events[task.ids[j]]; e.proposed_state = states[j]; e.proposal = states[j].value; e.descriptor = desc[j];
+    }
+    if (replay) for (size_t s = 0; s < task.old.size(); ++s) {
+      auto previous = task.old[s];
+      for (Index j = batch.offsets[s]; j < batch.offsets[s + 1]; ++j) {
+        auto& e = events[task.ids[j]];
+        auto reference = w.kernel->step(w, previous, e.content, e.time, e.fiber);
+        e.proposed_state = semantic_state(e.proposed_state, reference);
+        e.proposal = e.proposed_state.value;
+        auto read = w.kernel->read(w, previous, e.proposed_state, e.content, e.time, e.fiber);
+        e.descriptor = semantic_value(e.descriptor, read);
+        previous = e.proposed_state;
+      }
     }
   });
   pool.run(std::move(jobs));
   for (const auto& task : tasks) {
+    if (replay) stats["semantic_state_replays"] += task.ids.size();
     stats["state_sequence_calls"] += task.result.calls;
     stats["max_state_batch"] = std::max(stats["max_state_batch"], task.result.max_batch);
     stats["max_state_sequence"] = std::max(stats["max_state_sequence"], task.result.max_length);

@@ -69,7 +69,10 @@ class NodeWeights(nn.Module):
 
     def prepare(self, old, content, time):
         proposal = self.kernel.step(self, old, content, time)
-        return proposal, (proposal.value * self.read).sum(-1)
+        return proposal, self.describe(old, proposal, content, time)
+
+    def describe(self, old, proposal, content, time):
+        return (proposal.value * self.read).sum(-1)
 
     def full(self, comparison, content, probability, mode, zeta):
         if self.full_kind == "swiglu":
@@ -147,6 +150,9 @@ class BoundaryWeights(nn.Module):
 
     def prepare(self, old, content, time):
         return old, content.new_zeros(())
+
+    def describe(self, old, proposal, content, time):
+        return content.new_zeros(())
 
     def prepare_block(self, old, contents, times):
         return [old for _ in times], contents.new_zeros((len(times),))

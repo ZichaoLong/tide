@@ -16,6 +16,7 @@
 | `docs/module-extension-plan.md` | Concrete next kernel/state interface work |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
+| `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.

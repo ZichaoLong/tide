@@ -19,6 +19,8 @@ python scripts/status.py
 SettleGraph 编码及拓扑特化；当前局部模块包括 EMA、identity、对角选择性 SSM、
 Linear Attention、Gated DeltaRule、事件 GQA/window attention、tanh FFN 和 SwiGLU。
 [原生 streaming cursor](docs/streaming-cursor.md) 可跨窗口持有状态和消息队列。
+Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) 保留梯度连接，
+其额外计算单独计数；`no_grad` / `inference_mode` 不需要这部分重放。
 具体覆盖以 [验证证据](docs/ROADMAP.md) 为准；LH 数值对齐等仍见 [后续工作](docs/module-extension-plan.md)。
 源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
 

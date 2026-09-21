@@ -1,6 +1,8 @@
 #include "tide/cursor.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
+#include "tide/autograd.h"
+#include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -35,7 +37,9 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
   Result result;
   auto& stats = result.stats;
   stats = {{"candidate_events", 0}, {"logical_times", 0}, {"visited_edges", 0},
-           {"update_calls", 0}, {"full_calls", 0}};
+           {"update_calls", 0}, {"full_calls", 0},
+           {"semantic_state_replays", 0}, {"semantic_full_replays", 0}};
+  const bool replay = at::GradMode::is_enabled();
   while (!queue.empty() && queue.begin()->first < stop) {
     const Index time = queue.begin()->first;
     auto arrived = std::move(queue.begin()->second);
@@ -62,6 +66,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     std::vector<std::function<void()>> jobs;
     for (const auto& [node, ids] : by_node) {
       stats["update_calls"] += options_.packed ? 1 : ids.size();
+      if (options_.packed && replay) stats["semantic_state_replays"] += ids.size();
       jobs.push_back([&, node, ids] {
         const auto& w = model_.nodes[node];
         std::vector<State> old;
@@ -80,11 +85,23 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
           }
         }
         if (options_.packed) {
-          auto h = at::stack(content);
-          auto states = w.kernel->batch(w, old, h, times, fiber_views);
-          auto desc = w.kernel->read_batch(w, old, states, h, times, fiber_views);
+          std::vector<State> states;
+          Tensor desc;
+          {
+            at::NoGradGuard guard;
+            auto h = at::stack(content);
+            states = w.kernel->batch(w, old, h, times, fiber_views);
+            desc = w.kernel->read_batch(w, old, states, h, times, fiber_views);
+          }
           for (size_t k = 0; k < ids.size(); ++k) {
-            events[ids[k]].proposed_state = states[k]; events[ids[k]].descriptor = desc[k];
+            auto& e = events[ids[k]];
+            e.proposed_state = states[k]; e.descriptor = desc[k];
+            if (replay) {
+              auto reference = w.kernel->step(w, e.old, e.content, time, e.fiber);
+              e.proposed_state = semantic_state(e.proposed_state, reference);
+              auto read = w.kernel->read(w, e.old, e.proposed_state, e.content, time, e.fiber);
+              e.descriptor = semantic_value(e.descriptor, read);
+            }
           }
         }
         for (auto i : ids) {
@@ -132,14 +149,23 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       for (auto i : all) if (events[i].active) ids.push_back(i);
       if (ids.empty()) continue;
       stats["full_calls"] += options_.packed ? 1 : ids.size();
+      if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();
       jobs.push_back([&, node, ids] {
         if (options_.packed) {
           std::vector<Tensor> cmp, content, p;
           for (auto i : ids) {
             cmp.push_back(events[i].comparison); content.push_back(events[i].content); p.push_back(events[i].control);
           }
-          auto values = full(model_.nodes[node], at::stack(cmp), at::stack(content), at::stack(p), options_, graph_.nodes[node].identity);
-          for (size_t j = 0; j < ids.size(); ++j) events[ids[j]].full = values[j];
+          Tensor values;
+          {
+            at::NoGradGuard guard;
+            values = full(model_.nodes[node], at::stack(cmp), at::stack(content), at::stack(p), options_, graph_.nodes[node].identity);
+          }
+          for (size_t j = 0; j < ids.size(); ++j) {
+            auto& e = events[ids[j]]; e.full = values[j];
+            if (replay) e.full = semantic_value(e.full, full(model_.nodes[node], e.comparison, e.content,
+                                                           e.control, options_, graph_.nodes[node].identity));
+          }
         } else {
           for (auto i : ids) {
             auto& e = events[i];

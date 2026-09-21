@@ -1,5 +1,6 @@
 """Nonempty event segments. Padding is absent, so it cannot create candidates."""
 from dataclasses import dataclass
+from . import autograd
 import torch
 
 
@@ -31,19 +32,31 @@ def prepare_sequences(weights, sequences, q):
     for owner, events in sequences:
         owners.append(owner); old.append(q.states.get(owner, weights.initial()))
         flat.extend(events); offsets.append(len(flat))
-    batch = PackedSequence(torch.stack([e["content"] for e in flat]), offsets, owners,
-                           [e["time"] for e in flat], [e["fiber"] for e in flat])
-    batch.validate()
-    if hasattr(getattr(weights, "kernel", None), "packed_sequence"):
-        states, calls = weights.kernel.packed_sequence(weights, old, batch)
-        descriptors = (torch.stack([s.value for s in states]) * weights.read).sum(-1)
-    else:
-        states, parts = [], []
-        for i, state in enumerate(old):
+    replay = torch.is_grad_enabled()
+    with torch.no_grad():
+        batch = PackedSequence(torch.stack([e["content"] for e in flat]), offsets, owners,
+                               [e["time"] for e in flat], [e["fiber"] for e in flat])
+        batch.validate()
+        if hasattr(getattr(weights, "kernel", None), "packed_sequence"):
+            states, calls = weights.kernel.packed_sequence(weights, old, batch)
+            descriptors = (torch.stack([s.value for s in states]) * weights.read).sum(-1)
+        else:
+            states, parts = [], []
+            for i, state in enumerate(old):
+                a, b = offsets[i:i+2]
+                ss, ds = weights.prepare_block(state, batch.contents[a:b], batch.times[a:b])
+                states.extend(ss); parts.append(ds)
+            descriptors = torch.cat(parts); calls = len(old)
+    if replay:
+        for i, previous in enumerate(old):
             a, b = offsets[i:i+2]
-            ss, ds = weights.prepare_block(state, batch.contents[a:b], batch.times[a:b])
-            states.extend(ss); parts.append(ds)
-        descriptors = torch.cat(parts); calls = len(old)
+            for j in range(a, b):
+                event = flat[j]
+                proposed, _ = weights.prepare(previous, event["content"], event["time"])
+                states[j] = autograd.state(states[j], proposed)
+                descriptor = weights.describe(previous, states[j], event["content"], event["time"])
+                flat[j]["semantic_descriptor"] = autograd.value(descriptors[j], descriptor)
+                previous = states[j]
     for e, state, descriptor in zip(flat, states, descriptors):
-        e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)
+        e.update(proposal_state=state, proposal=state.value, descriptor=e.pop("semantic_descriptor", descriptor))
     return calls

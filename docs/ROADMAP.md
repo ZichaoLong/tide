@@ -42,3 +42,9 @@ avoiding whole-state work per streaming cut. Remaining runtime work includes
 allocation and structured Delta chunk optimization. Joint EMA/SSM batch/sequence
 scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.
+
+Isolated-root training exposed a packed autograd connectivity defect after the
+903-test qualification. Local semantic replay is implementing the correction;
+see `packed-autograd.md` and `STATUS.md`. Optimized packed backward must preserve
+this contract before replacing the replay baseline; its training overhead is
+part of M8 performance qualification.

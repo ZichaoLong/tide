@@ -4,6 +4,8 @@
 namespace tide {
 // A C++ client can provide its own immutable program in NodeWeights::kernel.
 // Tensor state is functional; no program may mutate persistent state or weights.
+// Exact batch/sequence contracts also require deterministic, independent step
+// semantics: training replays step/read to preserve autograd connectivity.
 class StateKernel {
  public:
   virtual ~StateKernel() = default;

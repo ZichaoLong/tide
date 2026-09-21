@@ -4,6 +4,7 @@ import torch
 from .ops import select
 from .records import Atom, State
 from .packing import prepare_sequences
+from . import autograd
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
@@ -14,7 +15,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
     adoption/reset is independent of selection.
     """
     events, by_node, by_sequence, by_frame = [], defaultdict(list), defaultdict(list), defaultdict(list)
-    stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0, "state_sequence_calls": 0}
+    stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0, "state_sequence_calls": 0,
+             "semantic_state_replays": 0, "semantic_full_replays": 0}
     for batch, region, time, nodes in frames:
         for node in sorted(nodes):
             atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
@@ -28,6 +30,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
         if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
             sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]
             stats["state_blocks"] += len(sequences)
+            if torch.is_grad_enabled():
+                stats["semantic_state_replays"] += sum(len(es) for _, es in sequences)
             stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], sequences, q)
     for batch, region_id, time, _ in frames:
         es = by_frame[batch, time]
@@ -59,11 +63,15 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
         active = [e for e in es if e["active"]]
         if not active:
             continue
-        values = model.nodes[node].full(torch.stack([e["comparison"] for e in active]),
-                                       torch.stack([e["content"] for e in active]),
-                                       torch.stack([e["control"] for e in active]), mode, zeta)
+        with torch.no_grad():
+            values = model.nodes[node].full(torch.stack([e["comparison"] for e in active]),
+                                           torch.stack([e["content"] for e in active]),
+                                           torch.stack([e["control"] for e in active]), mode, zeta)
         stats["full_blocks"] += 1
         for event, value in zip(active, values):
+            if torch.is_grad_enabled():
+                reference = model.nodes[node].full(event["comparison"], event["content"], event["control"], mode, zeta)
+                value = autograd.value(value, reference); stats["semantic_full_replays"] += 1
             event["full"] = value
     return events, stats
 
