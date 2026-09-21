@@ -15,6 +15,28 @@ Unit `tide-foundation-lh-add-20260921-1511` is inactive, MainPID 0, exit 0.
 all report passed with the same clean source. No active job. Evidence is saved
 separately from the tested implementation.
 
+## Full implementation ready for clean qualification
+
+The six `lh-{relu|silu}-{identity|rms|layer}-v1` backbones and slot-affine signaling
+mapping are implemented (`lh-full.md`). **421 focused tests passed in 33.02s**,
+plus **8 direct fixed-chain/self-loop specialization checks**. Original LH
+ModuleUtils passed FP64/FP32: 72 configurations, 504 rows per dtype comparing
+activation/norm and every signaling slot, scalar/packed. Original Selector/Add
+also passed in both dtypes. These are development results.
+
+Unit `tide-foundation-lh-full-dev-20260921-1527` is inactive, MainPID 0, exit 0.
+Artifacts: `artifacts/lh-full-dev-20260921-1527/`; outer and oracle records passed.
+No active job before the prepared clean launch. Existing inference checks use
+fixed default eps and equal payload widths; arbitrary LH configs are not claimed.
+
+Prepared unit `tide-foundation-lh-full-20260921-1535`, `background.slice`;
+output `artifacts/lh-full-20260921-1535/`. Commit this implementation, then run
+`python scripts/qualify.py --output-dir artifacts/lh-full-20260921-1535
+--jobs 2 --lh-snapshot artifacts/lh-source-20260921-1428` via scripts/job.py.
+Launch has not occurred at this edit. Freeze source until terminal; inspect outer
+`status.json`, `verification/result.json` and `oracle/result.json`, plus logs.
+Commit evidence separately after clean success.
+
 The Add profile, lazy/physical state distinction, native equal-gap batch buckets,
 causal time-loop accounting and parameter-epoch limits are in `lazy-add.md`.
 An earlier development fixture requested a pending root after the queue drained;
@@ -29,19 +51,16 @@ LH HEAD is `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, with actual dirty source
 captured and checksummed. The original tree was only read. Oracle details:
 `lh-selector.md`; full-model mapping: `lh-compatibility.md`.
 
-## Next action
+## Next action after qualification
 
-First map LH's selected `activation -> normalization -> per-edge signaling` into
-Full. Existing slot-affine Emit provides the projections, but existing backbones
-include an extra FFN/residual. Add explicit ReLU/SiLU plus identity/RMS/LayerNorm
-profiles using original default eps, then compare the actual ModuleUtils routines.
-This closes the current Add-to-output gap before the whole-model adapter.
-
-Next implement same-fiber attention and token-window Pronounce (`lh-add-plan.md`).
-The snapshot's Hidden/BatchHidden stores per-key log bias, subtracts decay each
-tick and resets appended keys to zero. Every query sees all current-fiber K/V;
-cache atom count differs from observation count. Existing event attention is not
-that profile. Keep source IDs and post-attention Confluence ordering explicit.
+Implement `lh-attention-plan.md`: a separately named same-fiber attention profile
+with sum Confluence and tick-repeat log-bias decay first, then post-attention
+normalized/learned Confluence and token-window Pronounce. The plan records the
+original visibility, clock, cache, source-order and pooling constraints from the
+actual C++ snapshot. Existing event attention is not that profile. Start from
+AccumulateLocal/Hidden/BatchHidden, StateKernel and Content/SourceInput interfaces.
+Full activation/normalization/signaling now has a component oracle; do not
+conflate this with an executed IOCortexNet end-to-end comparison.
 
 STATUS is the sole handoff; ROADMAP is the backlog. Current schemas live in
 semantics.md; immutable evidence retains old versions. Artifact cleanup dry-run

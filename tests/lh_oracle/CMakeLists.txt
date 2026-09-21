@@ -16,7 +16,7 @@ target_compile_definitions(original_lh PUBLIC DISABLE_CUDA ENABLE_RUNTIME_ASSERT
 target_link_libraries(original_lh PUBLIC torch)
 separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(original_lh PUBLIC ${TIDE_TORCH_FLAGS} -UNDEBUG)
-option(TIDE_LH_ADD "Include the original Add memory component" OFF)
+option(TIDE_LH_ADD "Include the original Add and Full components" OFF)
 if(TIDE_LH_ADD)
   target_sources(original_lh PRIVATE
     ${TIDE_LH_SNAPSHOT}/src/AccumulateLocal.cpp ${TIDE_LH_SNAPSHOT}/src/Hidden.cpp
@@ -32,4 +32,7 @@ if(TIDE_LH_ADD)
   add_executable(lh-add-check ${TIDE_ROOT}/cpp/test/lh_add_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
   target_include_directories(lh-add-check PRIVATE ${TIDE_ROOT}/cpp/include)
   target_link_libraries(lh-add-check PRIVATE qualified_tide original_lh Threads::Threads)
+  add_executable(lh-full-check ${TIDE_ROOT}/cpp/test/lh_full_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
+  target_include_directories(lh-full-check PRIVATE ${TIDE_ROOT}/cpp/include)
+  target_link_libraries(lh-full-check PRIVATE qualified_tide original_lh Threads::Threads)
 endif()

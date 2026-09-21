@@ -72,6 +72,8 @@ Their clocks, clear behavior and batching contracts are explicit; sharing the
 generic executor does not make these different profiles interchangeable.
 `lazy-add.md` defines explicit tick-repeat decay, encoded versus physical state,
 cut decoding and the fixed-parameter boundary of its LH inference interpretation.
+`lh-full.md` specifies post-selection activation/normalization and the per-edge
+signaling mapping, with Tide's explicit HARD/SOFTP/HST training contract.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.

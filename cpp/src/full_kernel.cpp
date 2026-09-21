@@ -1,5 +1,6 @@
 #include "tide/full.h"
 #include "tide/ops.h"
+#include "tide/lh_full.h"
 #include <stdexcept>
 
 namespace tide {
@@ -79,7 +80,8 @@ class ProjectionEmit final : public FullKernel {
     };
     if (w.full_kind == "swiglu") {
       check("ffn_gate", {d, 2*d}); check("ffn_up", {d, 2*d}); check("ffn_down", {2*d, d});
-    } else if (w.full_kind != "tanh" && w.full_kind != "identity") throw std::invalid_argument("unknown Full profile");
+    } else if (is_lh_full(w.full_kind)) validate_lh_full(w);
+    else if (w.full_kind != "tanh" && w.full_kind != "identity") throw std::invalid_argument("unknown Full profile");
     if (kind_ == "slot_affine") for (Index slot = 0; slot < slots; ++slot) {
       check("emit_w_" + std::to_string(slot), {d, d}); check("emit_b_" + std::to_string(slot), {d});
     }

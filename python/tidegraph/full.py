@@ -100,6 +100,9 @@ def validate_program(weights, spec, slots):
         raise ValueError("shared Full program does not match graph policy")
     if not spec.identity and weights.full_kind != spec.full:
         raise ValueError("shared Full backbone does not match graph profile")
+    from . import lh_full
+    if not spec.identity and weights.full_kind in lh_full.PROFILES:
+        lh_full.validate(weights)
     if program.kind == "slot_affine":
         width = weights.bias.numel()
         for slot in range(slots):

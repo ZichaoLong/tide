@@ -17,7 +17,7 @@ parser.add_argument("--snapshot", required=True)
 parser.add_argument("--core-build-dir", default="build")
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
-parser.add_argument("--component", choices=("selector", "add", "all"), default="selector")
+parser.add_argument("--component", choices=("selector", "add", "full", "all"), default="selector")
 args = parser.parse_args()
 if args.jobs < 1:
     parser.error("positive build jobs required")
@@ -69,7 +69,7 @@ try:
                         f"-DTIDE_LH_SNAPSHOT={snapshot}", f"-DTIDE_CORE_LIBRARY={library}",
                         f"-DTIDE_LH_ADD={'OFF' if args.component == 'selector' else 'ON'}"], stdout=log, stderr=subprocess.STDOUT, check=True)
         subprocess.run(["cmake", "--build", str(out/"build"), "--parallel", str(args.jobs)], stdout=log, stderr=subprocess.STDOUT, check=True)
-    components = ("selector", "add") if args.component == "all" else (args.component,)
+    components = ("selector", "add", "full") if args.component == "all" else (args.component,)
     record["binary_sha256"] = {}
     for component in components:
         binary = out/f"build/lh-{component}-check"

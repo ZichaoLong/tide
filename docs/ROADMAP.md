@@ -55,7 +55,9 @@ typed history, tensor controls and checkpoint v4 are
 [qualified](evidence/region-programs.md) (`region-programs.md`). LH selection, explicit FP64 descriptor policy and the original-selector oracle
 are [qualified](evidence/lh-selector.md) (`lh-selector.md`). The
 tick-repeat Add/physical decode gate is [qualified](evidence/lh-add.md)
-(`lazy-add.md`). Remaining LH mapping is in `lh-add-plan.md`.
+(`lazy-add.md`). LH activation/norm/signaling is implemented (`lh-full.md`), with clean qualification
+in STATUS. Next attention gate: `lh-attention-plan.md`; remaining whole-model
+mapping: `lh-add-plan.md`.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

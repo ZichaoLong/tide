@@ -26,6 +26,8 @@
 | `docs/region-programs.md` | Selector interfaces, typed history, controls and persistence |
 | `docs/lh-add-plan.md` | Next lazy Add, decay precision, physical state projection and oracle gate |
 | `docs/lazy-add.md` | Explicit tick-repeat Add, physical decode, batch buckets and parameter-epoch limits |
+| `docs/lh-full.md` | LH activation/normalization backbones and per-edge signaling mapping |
+| `docs/lh-attention-plan.md` | Same-fiber cache/visibility/decay and post-attention pooling gate |
 | `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 

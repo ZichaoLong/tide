@@ -17,8 +17,9 @@ recurrence, not implicit eager decay using historical parameter values.
 
 ## Remaining original-model bridge
 
-Then map source signaling and CHAL activation/normalization into per-slot Full
-programs. The current projection Emit alone does not implement original signaling.
+LH activation/normalization and source signaling are implemented in `lh-full.md`,
+with qualification in STATUS. Same-fiber attention is specified as the next
+bounded gate in `lh-attention-plan.md`.
 Confluence source normalization must preserve source IDs and missing versus zero.
 Only after these pieces fit should a tiny actual IOCortexNet/Pronounce run compare
 weights, input occurrences, messages, hidden, selection history and logits.

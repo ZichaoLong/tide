@@ -25,6 +25,8 @@ no node event or state/history update.
 Tanh/SwiGLU backbones retain `g = h + FFN(comparison.value)`.
 `Node.emission="broadcast"` replicates the existing HARD/HST/SOFTP result.
 Identity boundary adapters copy content and ignore Emit mode, with no parameters.
+LH activation/normalization backbones without that residual are in `lh-full.md`;
+the same slot projection machinery implements their source signaling.
 
 `Node.emission="slot_affine"` owns independent `emit_w_j` and `emit_b_j` parameters
 in the node's extra map for every local output slot j:

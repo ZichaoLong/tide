@@ -8,6 +8,7 @@ from .aggregate import SourceAggregate
 from .content import as_content, Content
 from .readout import LinearRead, program as make_read, evaluate as evaluate_read, request as read_request
 from .next import program as next_program, AdoptNext
+from . import lh_full
 
 
 class _HST(torch.autograd.Function):
@@ -73,6 +74,8 @@ class NodeWeights(nn.Module):
             for name, shape in (("ffn_gate", (width, width * 2)), ("ffn_up", (width, width * 2)),
                                 ("ffn_down", (width * 2, width))):
                 self.extra[name] = parameter(shape, 0.15)
+        elif self.full_kind in lh_full.PROFILES:
+            lh_full.initialize(self)
         elif self.full_kind != "tanh":
             raise ValueError("unknown Full profile")
         if isinstance(self.full_program, ProjectionEmit) and self.full_program.kind == "slot_affine":
@@ -110,6 +113,8 @@ class NodeWeights(nn.Module):
         return emit(content, self.fresh(comparison, content), probability, mode, zeta)
 
     def fresh(self, comparison, content):
+        if self.full_kind in lh_full.PROFILES:
+            return lh_full.fresh(self, comparison)
         if self.full_kind == "swiglu":
             g = content + (torch.nn.functional.silu(comparison @ self.extra["ffn_gate"])
                            * (comparison @ self.extra["ffn_up"])) @ self.extra["ffn_down"]
