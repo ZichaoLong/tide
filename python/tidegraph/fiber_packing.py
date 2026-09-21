@@ -1,21 +1,23 @@
-"""Ragged source-row packing, per-sample event masks and sum pooling."""
+"""Ragged source-row packing, per-sample event masks and post-attention pooling."""
 from collections import defaultdict
 import math
 import torch
 from .fiber_attention import advance_bias
 from .history import increment
 from .records import State
+from .fiber_pool import pool_rows
 
 
-def packed_sequence(w, heads, old, batch):
+def packed_sequence(w, heads, pool, old, batch):
     batch.validate()
     if len(old) != len(batch.owners):
         raise ValueError("packed initial-state count mismatch")
-    rows, offsets = [], [0]
+    rows, offsets, source_slots = [], [0], []
     for view in batch.views:
         if not view.sources:
             raise ValueError("fiber attention requires complete source rows")
-        rows.extend(s.atom.value*s.scale for s in sorted(view.sources, key=lambda s: s.slot))
+        sources = sorted(view.sources, key=lambda s: s.slot)
+        rows.extend(s.atom.value*s.scale for s in sources); source_slots.extend(s.slot for s in sources)
         offsets.append(len(rows))
     x = torch.stack(rows); width = len(w.bias); d = width//heads
     qkv = torch.nn.functional.linear(x, w.extra["fiber_qkv"].t(), w.extra["fiber_qkv_bias"])
@@ -53,7 +55,7 @@ def packed_sequence(w, heads, old, batch):
             a, b = batch.offsets[i:i+2]; start = offsets[a]
             for j in range(a, b):
                 begin, end = offsets[j]-start, offsets[j+1]-start
-                pooled[j] = outputs[row, begin:end].sum(0)
+                pooled[j] = pool_rows(w, pool, source_slots[offsets[j]:offsets[j+1]], outputs[row, begin:end])
                 slots = {"key": keys[row, :cache+end], "value": values[row, :cache+end]}
                 if j == b-1:
                     slots = {name: t.clone() for name, t in slots.items()}

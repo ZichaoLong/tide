@@ -18,3 +18,10 @@ if args.lh_snapshot:
     subprocess.run([sys.executable, str(root / "scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", "both",
                     "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "oracle"),
                     "--jobs", str(args.jobs), "--component", "all"], check=True)
+    # Original active-softmax's diagnostic comparison hardcodes a float32 CSR
+    # denominator; its FP64 multi-batch path is qualified separately without
+    # original runtime assertions, using the exact same immutable source.
+    subprocess.run([sys.executable, str(root / "scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", "both",
+                    "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "oracle-release"),
+                    "--oracle-build-dir", "build/lh-oracle-release", "--runtime-assertions", "off",
+                    "--jobs", str(args.jobs), "--component", "attention"], check=True)

@@ -12,6 +12,9 @@ times and complete source views. A second offset vector maps each event to its
 real source rows, sorted by local slot. Source tags, physical IDs and input
 positions remain in those views; no padding source or synthetic candidate exists.
 Raw scaled sources are flattened for one joint Q/K/V projection.
+Local slot IDs are retained alongside the flattened rows. `fiber-pooling.md`
+uses them to select post-attention coefficients from the complete incoming domain;
+neither absent slots nor zero coefficients alter attention visibility or K/V rows.
 
 Group samples by `(initial_cache_rows, total_source_rows)`. The score shape is
 `[batch, heads, source_rows, initial_cache_rows + source_rows]`. Different samples

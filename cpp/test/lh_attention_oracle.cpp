@@ -36,19 +36,21 @@ std::map<std::string, at::Tensor> cache(const AL::BatchPtrKVHidden& h, Index b, 
           {"log_bias", h.batch_total_growth_rate[b].slice(0, 0, n).clone()}};
 }
 Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clear, double decay,
-                 Index width, Index heads, bool bias, int schedule) {
+                 Index width, Index heads, bool bias, int schedule, const std::string& pool = "sum") {
   const Index nodes = 2, sources = 5, batches = 4, ticks = 24;
+  const std::map<std::string, std::string> confluence{{"sum", "add"}, {"mean", "average"}, {"linear", "linear"},
+    {"active-softmax", "actsoftmax"}, {"all-softmax", "allsoftmax"}};
   AL::KVHidden::attention_mode = mode; AL::KVHidden::multi_batch_forward_mode = multi;
   AL::KVHidden::is_no_grad = true;
   std::vector<std::shared_ptr<AL::Attention>> original;
   std::vector<std::shared_ptr<AL::BatchPtrKVHidden>> hidden;
   tide::Graph g; tide::Model m; tide::Continuation initial; initial.batch_size = batches;
   for (Index node = 0; node < nodes; ++node) {
-    tide::Node spec{node, clear}; spec.memory = "lh-fiber-attention-sum-repeat-v1";
+    tide::Node spec{node, clear}; spec.memory = "lh-fiber-attention-"+pool+"-repeat-v1";
     spec.query_heads = spec.kv_heads = heads; spec.readout = "norm-fp64-v1";
     g.nodes.push_back(spec); g.regions.push_back({1});
     auto al = std::make_shared<AL::Attention>(sources, width, nlohmann::json{
-      {"confluence", "add"}, {"decay_rate", decay}, {"n_head", heads}, {"bias", bias}, {"block_size", 2}});
+      {"confluence", confluence.at(pool)}, {"decay_rate", decay}, {"n_head", heads}, {"bias", bias}, {"block_size", 2}});
     al->to(opts.dtype().toScalarType());
     al->c_attn->weight.copy_(at::sin(at::arange(3*width*width, opts).reshape({3*width, width})*.31+node)*.3);
     al->c_proj->weight.copy_(at::cos(at::arange(width*width, opts).reshape({width, width})*.23)*.2);
@@ -63,6 +65,11 @@ Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clea
                {"fiber_qkv_bias", bias ? al->c_attn->bias.clone() : at::zeros({3*width}, opts)},
                {"fiber_out_bias", bias ? al->c_proj->bias.clone() : at::zeros({width}, opts)},
                {"fiber_decay", at::scalar_tensor(decay, opts)}};
+    auto pooling = al->ptr2confluence->named_parameters();
+    if (pooling.contains("weight")) {
+      pooling["weight"].copy_(at::arange(sources, opts)*.3-.4+node/10.);
+      w.extra["fiber_pool"] = pooling["weight"].clone();
+    }
     m.nodes.push_back(w);
     for (Index p = 0; p < sources; ++p) {
       g.inputs.push_back(node); m.input_scale.push_back(at::scalar_tensor(.7+p/10., opts));
@@ -172,6 +179,21 @@ Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clea
   }
   return candidates;
 }
+#ifdef ENABLE_RUNTIME_ASSERTION
+void check_original_fp64_assertion_limit(const at::TensorOptions& opts) {
+  AL::ActSoftmaxConfluence original(3); original.to(at::kDouble);
+  // Actual forward computes a double result, then its diagnostic denominator
+  // calls SumCoe(num, indptr) with the original hardcoded float32 default.
+  bool rejected = false;
+  try {
+    original.forward(at::ones({2, 4}, opts), at::tensor({0, 2}, at::kLong),
+                     at::tensor({0, 2}, at::kLong), at::tensor({2}, at::kLong), {});
+  } catch (const c10::Error& error) {
+    rejected = std::string(error.what()).find("expected scalar type Float but found Double") != std::string::npos;
+  }
+  require(rejected, "original FP64 active-softmax assertion limitation changed; review oracle coverage");
+}
+#endif
 }  // namespace
 int main(int argc, char** argv) {
   try {
@@ -182,16 +204,31 @@ int main(int argc, char** argv) {
       throw std::invalid_argument("LH Attention oracle requires CPU FP64/FP32");
     at::set_num_threads(1); at::NoGradGuard guard;
     const auto opts = at::TensorOptions().dtype(args.dtype).device(device);
-    Index candidates = 0, cases = 0;
+    Index candidates = 0, cases = 0, unavailable = 0;
+#ifdef ENABLE_RUNTIME_ASSERTION
+    if (args.dtype == at::kDouble) check_original_fp64_assertion_limit(opts);
+#endif
     for (auto mode : {Mode::LOOP, Mode::PACKED, Mode::CACHEDMATMUL, Mode::CACHEDPACKED, Mode::CACHEDATTENTION, Mode::CROSSBATCH})
       for (bool multi : {false, true}) for (bool clear : {false, true}) for (double decay : {0., .01})
         for (bool wide : {false, true}) for (int schedule = 0; schedule < 3; ++schedule) {
           if (mode == Mode::CROSSBATCH && !multi) continue;  // Original API forbids this combination.
           candidates += check_case(opts, mode, multi, clear, decay, wide ? 4 : 1, wide ? 2 : 1, wide, schedule); ++cases;
         }
+    for (const auto& pool : {"mean", "linear", "active-softmax", "all-softmax"})
+      for (auto mode : {Mode::PACKED, Mode::CROSSBATCH}) for (bool multi : {false, true})
+        for (bool clear : {false, true}) for (int schedule = 0; schedule < 3; ++schedule) {
+          if (mode == Mode::CROSSBATCH && !multi) continue;
+#ifdef ENABLE_RUNTIME_ASSERTION
+          if (args.dtype == at::kDouble && std::string(pool) == "active-softmax" && multi) {
+            ++unavailable; continue;  // Separately qualified in the assertions-off executable.
+          }
+#endif
+          candidates += check_case(opts, mode, multi, clear, .01, 4, 2, true, schedule, pool); ++cases;
+        }
     std::cout << "original-LH-attention: passed; " << cases << " cases, " << cases*24 << " ticks, " << candidates
               << " candidate occurrences; LOOP/PACKED/CACHEDMATMUL/CACHEDPACKED/CACHEDATTENTION/CROSSBATCH; "
-                 "single/multi projection; serial/packed/frontier; tick/whole windows; sum Confluence\n";
+                 "single/multi projection; serial/packed/frontier; tick/whole windows; 264 sum + "
+              << cases-264 << " mean/linear/softmax cases; unavailable original FP64 assertion cases=" << unavailable << '\n';
     return 0;
   } catch (const std::exception& error) { std::cerr << error.what() << '\n'; return 2; }
 }

@@ -37,7 +37,7 @@ class StateProgram(torch.nn.Module):
         raise NotImplementedError
 
 
-def validate_program(weights, spec, *, native=False):
+def validate_program(weights, spec, *, slots=None, native=False):
     if spec.identity:
         return
     from .memory import EMA, DiagonalSSM
@@ -45,8 +45,9 @@ def validate_program(weights, spec, *, native=False):
     from .matrix_memory import MatrixMemory
     from .lazy_add import LazyAdd
     from .fiber_attention import FiberAttention
+    from .fiber_pool import PROFILES, LEARNED
     builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory,
-                "attention": Attention, LazyAdd.profile: LazyAdd, FiberAttention.profile: FiberAttention}
+                "attention": Attention, LazyAdd.profile: LazyAdd, **{name: FiberAttention for name in PROFILES}}
     program = weights.kernel
     if type(program) is not builtins.get(spec.memory):
         if native:
@@ -59,7 +60,9 @@ def validate_program(weights, spec, *, native=False):
     if isinstance(program, (LazyAdd, FiberAttention)):
         program.validate_weights(weights)
     if isinstance(program, FiberAttention) and (program.heads != spec.query_heads
-            or spec.kv_heads != program.heads or spec.window or spec.aggregation != "sum"):
+            or spec.kv_heads != program.heads or spec.window or spec.aggregation != "sum"
+            or program.profile != spec.memory
+            or (program.pool in LEARNED and slots is not None and program.input_slots != slots)):
         raise ValueError("shared state program does not match fiber attention policy")
     if isinstance(program, Attention) and (program.query_heads, program.kv_heads, program.window) != (
             spec.query_heads, spec.kv_heads, spec.window):

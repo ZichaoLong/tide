@@ -19,6 +19,8 @@ parser.add_argument("--oracle-build-dir", default="build/lh-oracle", help="reusa
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
 parser.add_argument("--component", choices=("selector", "add", "full", "attention", "all"), default="selector")
+parser.add_argument("--runtime-assertions", choices=("on", "off"), default="on",
+                    help="original LH build policy; off requires a separate oracle cache")
 args = parser.parse_args()
 if args.jobs < 1:
     parser.error("positive build jobs required")
@@ -27,6 +29,8 @@ core, snapshot, out = Path(args.core_build_dir).resolve(), Path(args.snapshot).r
 oracle_build = Path(args.oracle_build_dir).resolve()
 if oracle_build in (core, snapshot) or snapshot in oracle_build.parents or oracle_build in snapshot.parents:
     parser.error("oracle build directory must be separate from core and source snapshot")
+if args.runtime_assertions == "off" and args.oracle_build_dir == "build/lh-oracle":
+    parser.error("assertions-off requires an explicit separate --oracle-build-dir")
 build_record = json.loads((core/"build-manifest.json").read_text())
 manifest = json.loads((snapshot/"manifest.json").read_text())
 if manifest.get("schema") != "lh-cpp-snapshot-v1":
@@ -61,7 +65,7 @@ cmake = root/"tests/lh_oracle/CMakeLists.txt"
 record = {"source": revision(root), "dirty": subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip(),
           "state": "running", "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
           "snapshot": manifest, "build": build_record, "device": "cpu", "resolution_reason": "explicit:cpu",
-          "dtype": args.dtype, "component": args.component,
+          "dtype": args.dtype, "component": args.component, "runtime_assertions": args.runtime_assertions,
           "oracle_cmake_sha256": hashlib.sha256(cmake.read_bytes()).hexdigest(),
           "oracle_build_dir": str(oracle_build), "runs": []}
 def save():
@@ -73,7 +77,8 @@ try:
         subprocess.run(["cmake", "-S", str(cmake.parent), "-B", str(oracle_build), "-G", "Ninja",
                         "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={torch.utils.cmake_prefix_path}",
                         f"-DTIDE_LH_SNAPSHOT={snapshot}", f"-DTIDE_CORE_LIBRARY={library}",
-                        f"-DTIDE_LH_ADD={'OFF' if args.component == 'selector' else 'ON'}"], stdout=log, stderr=subprocess.STDOUT, check=True)
+                        f"-DTIDE_LH_ADD={'OFF' if args.component == 'selector' else 'ON'}",
+                        f"-DTIDE_LH_RUNTIME_ASSERTIONS={args.runtime_assertions.upper()}"], stdout=log, stderr=subprocess.STDOUT, check=True)
         subprocess.run(["cmake", "--build", str(oracle_build), "--parallel", str(args.jobs), "--target",
                         *(f"lh-{component}-check" for component in components)], stdout=log, stderr=subprocess.STDOUT, check=True)
     record["binary_sha256"] = {}

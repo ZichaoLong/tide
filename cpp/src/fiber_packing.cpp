@@ -1,5 +1,6 @@
 // Event/source offsets preserve all current-fiber keys without cross-sample scores.
 #include "fiber_packing.h"
+#include "fiber_pool.h"
 #include "tide/counters.h"
 #include <algorithm>
 #include <cmath>
@@ -11,6 +12,7 @@ namespace {
 struct FiberRows {
   Tensor values;
   std::vector<Index> offsets{0};  // event -> source rows; original tags stay in views
+  std::vector<Index> slots;
 };
 FiberRows flatten(const ContentViews& views) {
   FiberRows result; std::vector<Tensor> rows;
@@ -19,7 +21,9 @@ FiberRows flatten(const ContentViews& views) {
     std::vector<const SourceInput*> sources;
     for (const auto& source : view.sources) sources.push_back(&source);
     std::sort(sources.begin(), sources.end(), [](auto a, auto b) { return a->slot < b->slot; });
-    for (auto source : sources) rows.push_back(source->atom.value*source->scale);
+    for (auto source : sources) {
+      rows.push_back(source->atom.value*source->scale); result.slots.push_back(source->slot);
+    }
     result.offsets.push_back(rows.size());
   }
   result.values = at::stack(rows); return result;
@@ -30,7 +34,7 @@ Tensor repeat_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
   return bias;
 }
 }  // namespace
-PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std::vector<State>& old,
+PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std::string& pool, const std::vector<State>& old,
                                    const PackedSequence& batch) {
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
@@ -75,7 +79,8 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
       const auto i = ids[row], a = batch.offsets[i], b = batch.offsets[i+1], start = offsets[a];
       for (auto j = a; j < b; ++j) {
         const auto begin = offsets[j]-start, end = offsets[j+1]-start;
-        pooled[j] = outputs[row].slice(0, begin, end).sum(0);
+        pooled[j] = fiber_pool_rows(w, pool, {source.slots.begin()+offsets[j], source.slots.begin()+offsets[j+1]},
+                                   outputs[row].slice(0, begin, end));
         auto key_slot = keys[row].slice(0, 0, cache+end), value_slot = values[row].slice(0, 0, cache+end);
         if (j == b-1) { key_slot = key_slot.clone(); value_slot = value_slot.clone(); }
         result.states[j].slots.emplace("key", key_slot); result.states[j].slots.emplace("value", value_slot);

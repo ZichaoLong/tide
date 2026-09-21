@@ -16,7 +16,7 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
     for node, spec in enumerate(graph.nodes):
         validate_program(model.nodes[node], spec, offsets[node+1] - offsets[node])
         validate_aggregate(model.nodes[node], spec, incoming[node+1] - incoming[node])
-        validate_state_program(model.nodes[node], spec)
+        validate_state_program(model.nodes[node], spec, slots=incoming[node+1] - incoming[node])
         validate_read(model.nodes[node], spec)
         validate_next(model.nodes[node], spec)
     reference = model.nodes[0].bias

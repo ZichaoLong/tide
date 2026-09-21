@@ -1,10 +1,11 @@
-"""Readable LH same-fiber attention, sum pooling and ordered log-bias decay."""
+"""Readable LH same-fiber attention, post-attention pooling and tick-repeat decay."""
 import math
 import torch
 from .content import as_content, Content
 from .history import increment, int64
 from .records import State
 from .state_program import StateProgram
+from .fiber_pool import PROFILES, LEARNED, pool_rows
 
 PROFILE = "lh-fiber-attention-sum-repeat-v1"
 
@@ -22,8 +23,11 @@ class FiberAttention(StateProgram):
     sequence_contract = True
     joint_sequence = True
 
-    def __init__(self, spec):
+    def __init__(self, spec, input_slots=0):
         super().__init__()
+        self.profile = spec.memory
+        self.pool = PROFILES[spec.memory]
+        self.input_slots = input_slots
         self.heads = spec.query_heads
         if spec.kv_heads != self.heads or spec.window or spec.aggregation != "sum":
             raise ValueError("LH fiber attention requires equal heads, no eviction and sum Aggregate")
@@ -58,7 +62,7 @@ class FiberAttention(StateProgram):
                 probability = (k[:, head] @ query[head] + bias).softmax(0)
                 heads.append(probability @ v[:, head])
             rows.append(torch.cat(heads))
-        pooled = torch.stack(rows).sum(0)
+        pooled = pool_rows(w, self.pool, [s.slot for s in sources], torch.stack(rows))
         value = torch.nn.functional.linear(pooled, w.extra["fiber_out"].t(), w.extra["fiber_out_bias"])
         return State(value, time, observations, {"key": k, "value": v, "log_bias": bias})
 
@@ -71,7 +75,7 @@ class FiberAttention(StateProgram):
 
     def packed_sequence(self, w, old, batch):
         from .fiber_packing import packed_sequence
-        return packed_sequence(w, self.heads, old, batch)
+        return packed_sequence(w, self.heads, self.pool, old, batch)
 
     @staticmethod
     def reset(state):
@@ -88,6 +92,11 @@ class FiberAttention(StateProgram):
             if (p is None or p.shape != shape or p.dtype != w.bias.dtype or p.device != w.bias.device
                     or not torch.isfinite(p).all()):
                 raise ValueError("invalid fiber attention parameter")
+        if self.pool in LEARNED:
+            p = w.extra.get("fiber_pool")
+            if (p is None or p.shape != (self.input_slots,) or p.dtype != w.bias.dtype
+                    or p.device != w.bias.device or not torch.isfinite(p).all()):
+                raise ValueError("invalid fiber pooling parameter/domain")
 
     def validate(self, w, state):
         if set(state.slots) != {"key", "value", "log_bias"}:

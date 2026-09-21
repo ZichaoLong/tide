@@ -21,6 +21,7 @@ class StateKernel {
   virtual bool joint_batch() const { return false; }
   virtual bool joint_sequence() const { return false; }
   virtual State reset(const State&) const;
+  virtual void validate_policy(const Node&, Index input_slots) const {}
   virtual void validate_weights(const NodeWeights&) const = 0;
   virtual void validate_state(const NodeWeights&, const State&) const = 0;
 };

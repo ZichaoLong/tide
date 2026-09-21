@@ -29,6 +29,7 @@ void validate_model(const Graph& g, const Model& m) {
     check_tensor(w.decay, ref, {d}); check_tensor(w.weight, ref, {d, d});
     check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
     require(static_cast<bool>(w.kernel), "state kernel is not configured");
+    w.kernel->validate_policy(g.nodes[node], g.incoming_ports.offsets[node+1]-g.incoming_ports.offsets[node]);
     w.kernel->validate_weights(w);
     require(static_cast<bool>(w.read_kernel), "Read kernel is not configured");
     w.read_kernel->validate_weights(w);

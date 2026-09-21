@@ -5,13 +5,17 @@ from tidegraph.fiber_attention import PROFILE, decode_bias
 from tidegraph.ops import Model
 
 
-def fixture(dtype, policy="all", cyclic=False, full="tanh"):
-    g = Graph(tuple(Node(0 if v < 2 else 1, memory=PROFILE, query_heads=2, kv_heads=2,
+def fixture(dtype, policy="all", cyclic=False, full="tanh", profile=PROFILE):
+    g = Graph(tuple(Node(0 if v < 2 else 1, memory=profile, query_heads=2, kv_heads=2,
                          clear=policy == "clear", full=full) for v in range(3)),
               (Edge(0, 2, 2), Edge(1, 2, 5)) + ((Edge(2, 0, 1),) if cyclic else ()),
               (Region(1, observe_all=policy != "selected", read_mode="old" if policy == "old" else "proposal"),
                Region(1)), (0, 1, 0, 1, 2), (0, 1, 2))
     m = Model(g, width=4, dtype=dtype); q = Continuation(g.identity, 3)
+    with torch.no_grad():
+        for w in m.nodes:
+            if "fiber_pool" in w.extra:
+                w.extra["fiber_pool"].copy_(torch.linspace(-.4, .7, len(w.extra["fiber_pool"]), dtype=dtype))
     leaves = dict(m.named_parameters()); xs = []
     for b in range(3):
         for v, w in enumerate(m.nodes):

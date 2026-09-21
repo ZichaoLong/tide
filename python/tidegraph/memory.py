@@ -73,10 +73,11 @@ class DiagonalSSM:
             raise ValueError("SSM requires one width-sized memory slot")
 
 
-def kernel(name, spec=None):
-    if name == "lh-fiber-attention-sum-repeat-v1":
+def kernel(name, spec=None, input_slots=0):
+    from .fiber_pool import PROFILES
+    if name in PROFILES:
         from .fiber_attention import FiberAttention
-        return FiberAttention(spec)
+        return FiberAttention(spec, input_slots)
     if name == "lh-add-repeat-v1":
         from .lazy_add import LazyAdd
         return LazyAdd()

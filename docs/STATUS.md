@@ -2,66 +2,77 @@
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: `graph-execution-foundation`.
 
-## Current qualification
+## Qualification boundary
 
-**2764 tests passed** on clean implementation
+Last complete qualification: **2764 tests passed** on clean implementation
 `eb9dc6c86ef46ab4db9e06029b0029412a890395`; `evidence/fiber-packing.md`.
-Original LH Selector/Add/Full/Attention passed in FP64/FP32. Attention per dtype:
-264 configurations, 6336 ticks, 17688 candidate updates across all six original
-modes, including CROSSBATCH. This qualifies same-fiber sum attention's actual
-batch/sequence packing and complete state/clock projection, not whole-model or speed.
+Original LH Selector/Add/Full/Attention passed FP64/FP32 for that sum-only gate.
+The pooling implementation below has passed its development gate, but has not
+yet received complete clean-source qualification. Do not promote it prematurely.
 
-Unit `tide-foundation-fiber-pack-20260921-1638` is inactive, MainPID 0, exit 0.
-`artifacts/fiber-pack-20260921-1638/{status.json,verification/result.json,oracle/result.json}`
-all passed at that clean source. No active job. Evidence is committed separately.
-Scalar baseline: `evidence/lh-attention.md` on `dfc2e5b622946614831962fb44683990fa609e8d`.
+## Pooling implementation and completed development gate
 
-Earlier failures `fiber-dev-20260921-1601` and `fiber-dev-20260921-1608` remain
-retained and failed. Corrections, FP32 conditioning limits and Read precision
-comparison policy: `fiber-attention.md` and the baseline qualification report.
-Two incorporated packing drafts and one Python import cache were removed after
-body comparison with installed source; no other artifacts/reference files removed.
+Mean, linear, active-softmax and all-softmax profiles are implemented in Python
+and native scalar/packed attention; see `fiber-pooling.md`. Original sum is
+unchanged. Graph-owned incoming domains validate vector `fiber_pool` parameters,
+including a supplied C++ state kernel's policy. Analytic/VJP, missing/zero,
+scheduler, embedding, cuts, optimizer/sharing and checkpoint tests are present.
+A packed Python source-slot variable collision found during review was fixed.
 
-## Next implementation
+Unit `tide-foundation-fiber-pool-dev-20260921-1715` is inactive, MainPID 0, exit 0.
+`artifacts/fiber-pool-dev-20260921-1715/{status.json,oracle/result.json,
+oracle-release/result.json}` are passed. **582 targeted tests passed in 53.27s**.
+Both original runtime-assertion variants passed their declared coverage:
 
-Continue `lh-attention-plan.md` with post-attention Confluence, then token-clock
-Pronounce/IOCortexNet. Proposed bounded profiles reuse the existing memory-name
-field: `lh-fiber-attention-{mean,linear,active-softmax,all-softmax}-repeat-v1`;
-keep the sum profile unchanged. Coefficients act on attention output rows before
-output projection, never on pre-attention Q/K/V inputs. Keep raw sum Aggregate as
-independent content for Tide's Full/Emit contract.
+- Assertions-on: FP64 324 cases (12 explicitly unavailable), FP32 336 cases.
+- Assertions-off: FP64/FP32 each 336 cases, 8064 ticks, 22512 candidate updates.
 
-Use a single learned `fiber_pool` vector indexed by graph-owned local input slots;
-validate its shape against incoming degree. Mean/active softmax normalize only
-present sources; all-source softmax uses the full domain including absent sources.
-Absent coordinates of a used vector parameter have ordinary zero gradients under
-active-only pooling; all-source normalization can give them nonzero gradients.
-A cache-only root must have no pooling-parameter path. Preserve sum's old order.
+The 12 unavailable cases hit original `ActSoftmaxConfluence`'s diagnostic
+FP32-default `SumCoe` multiplied by FP64 weights. A direct original exception
+check preserves this limit; the separate build disables only the original
+`ENABLE_RUNTIME_ASSERTION` flag, with plain C/C++ assertions still enabled.
+The same immutable snapshot is used throughout, without source edits.
+Initial failed run `fiber-pool-dev-20260921-1709` and its source tar/hash remain
+retained: build + 582 tests passed, original FP64 failed as described above.
 
-An isolated helper draft is at `artifacts/fiber_pool_draft.py`; it is not installed
-or tested. Wire input-slot count through state factories and built-in validation
-(Python validation/native adapter, native configure_model). Do not add a graph
-field or silently reinterpret the existing sum profile. Extend scalar/packed
-pooling and the original oracle, with independent analytic/VJP/order tests,
-slot permutations, missing/zero rows, parameter-domain sharing, checkpoints and
-scheduler/embedding checks. Then commit, qualify frozen clean source, save evidence.
-ROADMAP retains optimizer/backward/cache/history-patch and scale/performance work.
+## Exact next action
 
-## Immutable original source and execution policy
+Commit this coherent implementation, then launch clean qualification as unit
+`tide-foundation-fiber-pool-20260921-1722` with:
+
+`python scripts/job.py --output-dir artifacts/fiber-pool-20260921-1722 --
+/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
+artifacts/fiber-pool-20260921-1722 --jobs 2 --lh-snapshot
+artifacts/lh-source-20260921-1428`.
+
+Use the durable systemd policy below. Freeze source and both oracle caches while
+active. No full result is asserted yet. Inspect the unit and all four results:
+outer status, verification, oracle and oracle-release. Qualify now runs both
+original assertion variants. After passing, commit evidence separately and update
+ROADMAP/current compatibility links. Remove only the incorporated helper
+`artifacts/fiber_pool_draft.py` after a dry-run comparison; keep failed reproducers.
+Continue Pronounce token-clock/readout, then IOCortexNet mapping and ROADMAP's
+remaining training/cache/history/performance work. No whole-LH equivalence or
+performance result is claimed.
+
+## Source, reference and execution policy
 
 Snapshot `artifacts/lh-source-20260921-1428`: 69 C++/JSON-header files, identity
 `ac7c878a56aeb55eec9f919da1962be6134fc5e3d1872f6d2303917306edb87f`; LH HEAD
 `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, including actual dirty source hashes.
 Reference trees stay read-only. Do not remove this snapshot or cited artifacts.
+Old attention failures `fiber-dev-20260921-1601` and `fiber-dev-20260921-1608`
+remain retained; conditioning and norm precision limits: `fiber-attention.md`.
 
-Oracle builds reuse `build/lh-oracle`, reconfigured each time; result directories
-remain unique and retain source/library/CMake/binary hashes. Cached binaries can
-be replaced by later builds; source commits and recorded recipes identify runs.
-Never concurrently mutate this checkout, core build or oracle cache during jobs.
-No push or artifact deletion. STATUS is the sole current handoff; ROADMAP is backlog.
+Default original cache: `build/lh-oracle` (runtime assertions on). Separate
+release-variant cache: `build/lh-oracle-release`. Reconfigure each run; unique
+result directories retain source/library/CMake/binary hashes. Never concurrently
+mutate source or shared caches during a job. No push. Delete only known obsolete
+project artifacts after dry-run inspection. STATUS is the sole current handoff;
+ROADMAP is backlog. Implementation and evidence use separate commits.
 
 CPU aarch64; `/home/zlong/anaconda3/bin/python`, Python 3.11.15,
-Torch/LibTorch 2.10.0+cpu, C++11 ABI. Disable backend autoload, set OMP/OpenBLAS to 1,
-use two build jobs and background.slice. Current schemas: semantics.md (graph v11,
-checkpoint v4); portability contract now also states v4. Packed replay only
-promises tested first-order public-root VJPs; no replay occurs in inference.
+Torch/LibTorch 2.10.0+cpu, C++11 ABI. Disable backend autoload; OMP/OpenBLAS=1;
+use two build jobs, Nice=10 and background.slice. Current schemas: semantics.md
+(graph v11, checkpoint v4). Packed training promises tested first-order public
+root VJPs with scalar semantic replay; inference does not replay.

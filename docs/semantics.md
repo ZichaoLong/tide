@@ -76,6 +76,8 @@ cut decoding and the fixed-parameter boundary of its LH inference interpretation
 signaling mapping, with Tide's explicit HARD/SOFTP/HST training contract.
 `fiber-attention.md` defines separately named same-fiber visibility, sum pooling,
 tick-repeat KV log-bias decay and complete cache continuation.
+`fiber-pooling.md` adds separately named post-attention mean/linear/softmax profiles
+and a graph-domain coefficient vector, without changing sum Aggregate content.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.

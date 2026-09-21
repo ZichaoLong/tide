@@ -23,7 +23,7 @@ class Native:
                 raise ValueError("Python custom Aggregate has no native implementation")
             incoming = graph.port_indexes[0].offsets
             validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
-            validate_state_program(model.nodes[v], spec, native=True)
+            validate_state_program(model.nodes[v], spec, slots=incoming[v+1] - incoming[v], native=True)
             validate_read(model.nodes[v], spec, native=True)
             validate_next(model.nodes[v], spec, native=True)
         from .region import validate_program as validate_region

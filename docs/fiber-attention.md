@@ -4,6 +4,8 @@ Profile `lh-fiber-attention-sum-repeat-v1` is a separate local program from even
 GQA/window attention. Python `fiber_attention.py` is the readable query/head
 oracle; native `fiber_attention.cpp` uses head-batched matmul for scalar steps.
 `fiber-packing.md` describes the independent-batch/event-sequence implementation.
+`fiber-pooling.md` adds mean, linear, active-softmax and all-softmax pooling under
+separate profile names, keeping the sum profile and its reduction order unchanged.
 The first qualified gate (`evidence/lh-attention.md`) only covered scalar state
 loops; later evidence must explicitly qualify packed work. No speed claim follows.
 
@@ -71,8 +73,8 @@ CSC ordering plus appended bridge/token inputs. The bounded oracle links the
 untouched source snapshot in STATUS under no-grad, testing LOOP, PACKED,
 CACHEDMATMUL, CACHEDPACKED and CACHEDATTENTION with per-sample and multi-sample
 projection, initial cache, clearing, idle ticks and capacity growth. CROSSBATCH is
-added by the packed gate; post-attention weighted Confluence and IOCortexNet/Pronounce
-remain separate extensions.
+added by the packed gate. The pooling extension covers bounded original Confluence
+cases as described in `fiber-pooling.md`; IOCortexNet/Pronounce remains a separate gate.
 See immutable evidence for which tests have actually passed.
 The oracle independently checks Read against an FP64 norm of Tide's own
 proposal. Cross-implementation norms inherit the proposal's payload tolerance:

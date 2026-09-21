@@ -12,7 +12,11 @@ add_library(original_lh STATIC
   ${TIDE_LH_SNAPSHOT}/src/BaseConfig.cpp ${TIDE_LH_SNAPSHOT}/src/GraphConfig.cpp
   ${TIDE_LH_SNAPSHOT}/src/Adjacency.cpp ${TIDE_LH_SNAPSHOT}/src/Selector.cpp)
 target_include_directories(original_lh PUBLIC ${TIDE_LH_SNAPSHOT}/include ${TIDE_LH_SNAPSHOT}/vendor)
-target_compile_definitions(original_lh PUBLIC DISABLE_CUDA ENABLE_RUNTIME_ASSERTION)
+target_compile_definitions(original_lh PUBLIC DISABLE_CUDA)
+option(TIDE_LH_RUNTIME_ASSERTIONS "Enable the original LH runtime assertions" ON)
+if(TIDE_LH_RUNTIME_ASSERTIONS)
+  target_compile_definitions(original_lh PUBLIC ENABLE_RUNTIME_ASSERTION)
+endif()
 target_link_libraries(original_lh PUBLIC torch)
 separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(original_lh PUBLIC ${TIDE_TORCH_FLAGS} -UNDEBUG)

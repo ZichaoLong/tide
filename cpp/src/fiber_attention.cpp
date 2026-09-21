@@ -1,6 +1,7 @@
 #include "tide/fiber_attention.h"
 #include "tide/counters.h"
 #include "fiber_packing.h"
+#include "fiber_pool.h"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -13,9 +14,11 @@ Tensor advance_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
   return bias;
 }
 class FiberAttention final : public StateKernel {
-  Index heads_;
+  Index heads_, input_slots_;
+  std::string pool_;
  public:
-  explicit FiberAttention(const Node& n) : heads_(n.query_heads) {
+  explicit FiberAttention(const Node& n, Index input_slots = 0)
+      : heads_(n.query_heads), input_slots_(input_slots), pool_(fiber_pool_kind(n.memory)) {
     if (heads_ < 1 || n.kv_heads != heads_ || n.window || n.aggregation != "sum")
       throw std::invalid_argument("LH fiber attention requires equal heads, no eviction and sum Aggregate");
   }
@@ -43,7 +46,8 @@ class FiberAttention final : public StateKernel {
     bias = at::cat({bias, at::zeros({x.size(0)}, x.options())});
     auto scores = at::matmul(k.transpose(0, 1), q.transpose(1, 2)).transpose(1, 2)+bias;
     auto output = at::matmul(at::softmax(scores, -1), v.transpose(0, 1));
-    auto pooled = output.transpose(0, 1).contiguous().reshape({x.size(0), width}).sum(0);
+    std::vector<Index> slots; for (auto source : sources) slots.push_back(source->slot);
+    auto pooled = fiber_pool_rows(w, pool_, slots, output.transpose(0, 1).contiguous().reshape({x.size(0), width}));
     auto value = at::linear(pooled, w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
     return {value, time, observations, {{"key", k}, {"value", v}, {"log_bias", bias}}};
   }
@@ -64,14 +68,21 @@ class FiberAttention final : public StateKernel {
   }
   PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
                                const PackedSequence& batch) const override {
-    return fiber_attention_packed(w, heads_, old, batch);
+    return fiber_attention_packed(w, heads_, pool_, old, batch);
   }
   State reset(const State& state) const override {
     auto result = state; result.value = state.value*0;
     for (auto& [name, value] : result.slots) value = value.slice(0, 0, 0).clone();
     return result;
   }
+  void validate_policy(const Node& n, Index slots) const override {
+    if (n.identity || !is_fiber_attention_profile(n.memory) || fiber_pool_kind(n.memory) != pool_
+        || n.query_heads != heads_ || n.kv_heads != heads_ || n.window || n.aggregation != "sum"
+        || (fiber_pool_learned(pool_) && slots != input_slots_))
+      throw std::invalid_argument("shared state program does not match fiber attention policy/domain");
+  }
   void validate_weights(const NodeWeights& w) const override {
+    validate_fiber_pool(w, pool_, input_slots_);
     const auto d = w.bias.numel();
     if (d % heads_) throw std::invalid_argument("invalid fiber attention head/width policy");
     const std::map<std::string, std::vector<Index>> shapes{{"fiber_qkv", {d, 3*d}}, {"fiber_qkv_bias", {3*d}},
@@ -93,11 +104,12 @@ class FiberAttention final : public StateKernel {
   }
 };
 }  // namespace
-std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n) { return std::make_shared<FiberAttention>(n); }
+std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots) { return std::make_shared<FiberAttention>(n, slots); }
 Tensor decode_fiber_bias(const NodeWeights& w, const State& state, Index cut) {
   if (!state.slots.count("key") || state.slots.at("key").dim() != 3)
     throw std::invalid_argument("invalid fiber attention cache shape");
-  Node node{0}; node.query_heads = node.kv_heads = state.slots.at("key").size(1);
+  Node node{0}; node.memory = "lh-fiber-attention-sum-repeat-v1";
+  node.query_heads = node.kv_heads = state.slots.at("key").size(1);
   FiberAttention kernel(node); kernel.validate_weights(w); kernel.validate_state(w, state);
   if (cut < 0 || state.last_time < -1 || state.last_time >= cut || state.observations < 0)
     throw std::invalid_argument("invalid fiber attention cut/state clock");

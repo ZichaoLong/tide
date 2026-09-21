@@ -9,6 +9,7 @@ from .content import as_content, Content
 from .readout import LinearRead, program as make_read, evaluate as evaluate_read, request as read_request
 from .next import program as next_program, AdoptNext
 from . import lh_full
+from .fiber_pool import PROFILES as FIBER_PROFILES, LEARNED as FIBER_LEARNED
 
 
 class _HST(torch.autograd.Function):
@@ -44,7 +45,7 @@ class NodeWeights(nn.Module):
         self.weight = parameter((width, width), 0.15)
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
-        self.kernel = kernel("ema" if spec is None else spec.memory, spec) if state_program is None else state_program
+        self.kernel = kernel("ema" if spec is None else spec.memory, spec, input_slots) if state_program is None else state_program
         self.read_program = make_read("linear-v1" if spec is None else spec.readout) if read_program is None else read_program
         self.next_program = next_program("adopt-v1" if spec is None else spec.next_state) if transition is None else transition
         self.full_kind = "tanh" if spec is None else spec.full
@@ -53,7 +54,7 @@ class NodeWeights(nn.Module):
         self.extra = nn.ParameterDict()
         if spec is not None and spec.memory == "lh-add-repeat-v1":
             self.extra["add_retention"] = nn.Parameter(torch.tensor(1.0 - 0.01, dtype=dtype))
-        if spec is not None and spec.memory == "lh-fiber-attention-sum-repeat-v1":
+        if spec is not None and spec.memory in FIBER_PROFILES:
             if width % spec.query_heads:
                 raise ValueError("fiber attention width must be divisible by heads")
             self.extra["fiber_qkv"] = parameter((width, 3*width), .15)
@@ -61,6 +62,8 @@ class NodeWeights(nn.Module):
             self.extra["fiber_qkv_bias"] = nn.Parameter(torch.zeros(3*width, dtype=dtype))
             self.extra["fiber_out_bias"] = nn.Parameter(torch.zeros(width, dtype=dtype))
             self.extra["fiber_decay"] = nn.Parameter(torch.tensor(.01, dtype=dtype))
+            if FIBER_PROFILES[spec.memory] in FIBER_LEARNED:
+                self.extra["fiber_pool"] = nn.Parameter(torch.ones(input_slots, dtype=dtype))
         if spec is not None and spec.memory == "attention":
             if width % spec.query_heads:
                 raise ValueError("attention width must be divisible by query heads")
