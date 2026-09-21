@@ -74,4 +74,5 @@ retention 0/1/.99 and selected clear.
 
 This is an Add component gate, not original CHAL/IOCortexNet output equivalence.
 Tide independently tests VJPs, sharing, cuts/detach, checkpoints, positive-delay
-cycles, TimedDAG and SettleGraph specializations. Current evidence is in STATUS.
+cycles, TimedDAG and SettleGraph specializations. Clean qualification:
+[evidence/lh-add.md](evidence/lh-add.md).

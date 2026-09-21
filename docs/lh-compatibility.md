@@ -6,7 +6,7 @@ inspected 2026-09-21. It contains user modifications to `BatchHidden.cpp`,
 Do not modify or clean that tree. Numerical runs record the actual dirty-source
 snapshot, not HEAD alone. Original-selector equivalence is qualified in
 `evidence/lh-selector.md`. Tick-repeat Add and its original-C++ component oracle
-are implemented (`lazy-add.md`), with qualification in STATUS. Whole-LH inference
+are qualified in `evidence/lh-add.md` (`lazy-add.md`). Whole-LH inference
 comparison remains pending.
 
 Only the C++ interpreter is relevant. Python graph generation is useful;

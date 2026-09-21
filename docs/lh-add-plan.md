@@ -4,11 +4,11 @@ Region programs and descriptor precision remove the selector obstacle. Continue
 from the original C++ snapshot identified in STATUS/`lh-selector.md`; never edit
 the LH worktree. The selector component oracle is not a whole-model oracle.
 
-## Completed interface, pending clean qualification
+## Qualified Add interface
 
 Tick-repeat Add, explicit physical cut decode, native independent-batch buckets
-and the unchanged original Add component oracle are implemented in `lazy-add.md`.
-Development tests pass; STATUS owns the clean qualification status. The default
+and the unchanged original Add component oracle are qualified in
+`evidence/lh-add.md`; semantics are in `lazy-add.md`. The default
 and original compatibility path retain repeated floating-point multiplication.
 Long-gap power/scan regrouping is a separately named future profile, with explicit
 numerical/route policy. Eager inference interpretation requires fixed parameters
