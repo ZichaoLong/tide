@@ -23,7 +23,7 @@ Native serial/parallel/packed and original PACKED/CROSSBATCH are covered.
 Each case uses one homogeneous body/readout profile. No core runtime/schema
 change in this gate and no whole-model training or single-PDG claim.
 
-## Source-domain qualification completed; next local clocks
+## Source domains qualified
 
 Clean implementation fb55f2e92e4979fc36e4bef1cf81172988b2df8f passed 3480 tests in
 265.18s; evidence/source-domains.md. Unit tide-foundation-source-domain-20260921-1958
@@ -45,33 +45,23 @@ an already quadratic objective again. Current acceptance isolates actual public
 tensors and directly differentiates the loss, without changing runtime/tolerance.
 The final targeted run passed 250 tests including standalone C++ custom kernels.
 
-## Local-clock implementation and clean qualification
+## Local clocks qualified; single-PDG adapter next
 
-StateClock(period, first, count) and wrappers are implemented: working graph v13
-/ checkpoint v4. Contract: state-clocks.md. Step/batch/sequence/packed calls use
-local state ticks and restore global metadata. Full/Read/Next, region history,
-input ledgers, message send/arrival and seals keep global clocks. Decoders map
-complete cuts. Raw native NodeWeights require an explicit clock when their
-kernel is unconfigured. Policies are compact immutable data, not Python callbacks.
+Clean implementation bd933e0980a2076bace5c6ffbb09da61bc400593 passed 3745 tests
+in 300.89s; evidence/state-clocks.md. Unit tide-foundation-clock-20260921-2031
+is inactive/dead, MainPID 0, Result=success, exit 0. Outer status and verification
+records in artifacts/clock-20260921-2031/ are passed/clean at that source,
+finished 2026-09-21T20:36:10Z. No live jobs; source/shared build may be edited.
+This CPU gate did not rerun original LH oracles; their exact source stays above.
 
-Development unit tide-foundation-clock-dev-20260921-2020 is inactive/dead,
-MainPID 0, exit 0. status.json and development.json under
-artifacts/clock-dev-20260921-2020/ passed; 512 checks in 68.52s, original dirty
-source archive/hash retained. Subsequently added post-checkpoint new-input/VJP
-and isolated pending-root checks passed (22 tests/8.23s). After a strict policy
-type guard, all 265 clock checks passed in 38.56s before committing this source.
-Keep failed artifacts/clock-python-dev-20260922-a: missing MatrixMemory packed
-method was fixed by retaining its per-segment sequence fallback and call counts.
-No numerical tolerance change. Latest cleanup dry run had no candidates.
-
-Dispatching clean qualification: unit tide-foundation-clock-20260921-2031,
-output artifacts/clock-20260921-2031/. Command: /home/zlong/anaconda3/bin/python
-scripts/job.py --output-dir artifacts/clock-20260921-2031 --
-/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
-artifacts/clock-20260921-2031 --jobs 2. Source is committed before dispatch.
-Freeze checkout/shared build while active. Inspect terminal unit, status.json,
-verification/result.json and tests.log, then save clock evidence separately.
-This gate reruns CPU tests, not original LH oracles; their source is above.
+StateClock(period, first, count), graph v13 / checkpoint v4: state programs see
+local ticks; Full/Read/Next, region history, input ledger and messages stay global.
+Underlying step/batch/sequence/packed capabilities and fallbacks are preserved.
+Native raw NodeWeights require explicit nondefault decoder clocks. See
+state-clocks.md and its evidence for tests, sharing and inference boundaries.
+Development clock-dev-20260921-2020 passed 512 checks; retain its dirty archive.
+Keep failed clock-python-dev-20260922-a (MatrixMemory packed fallback, now fixed).
+Final 265 clock checks and added post-restore VJPs passed before the clean commit.
 
 Next: bounded single-PDG IOCortex adapter/oracle, using lh-iocortex_fixture.h.
 Replicate each original body edge per body phase, delay one except delay two at

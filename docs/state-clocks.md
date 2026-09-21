@@ -54,5 +54,5 @@ Tests use independently scheduled local-time graphs as anchors for EMA, SSM,
 Linear/Delta, event attention, LH Add and learned same-fiber attention. A cyclic
 phase-edge fixture combines SourceDomain aliases with one/two-tick delays and
 compares every global cut, including the reserved phase and pending messages.
-Qualification status is in STATUS. These primitives alone do not establish the
+Qualification: [CPU FP64/FP32 evidence](evidence/state-clocks.md). These primitives alone do not establish the
 whole-model single-PDG projection or phase-occurrence ledger reconstruction.
