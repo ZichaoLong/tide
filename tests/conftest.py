@@ -1,9 +1,15 @@
 import os
+from pathlib import Path
+import random
+import sys
 os.environ["TORCH_DEVICE_BACKEND_AUTOLOAD"] = "0"
+sys.path.insert(0, str(Path(os.environ.get("TIDE_BUILD_DIR", Path(__file__).resolve().parents[1] / "build"))))
 import torch
 
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
+torch.manual_seed(int(os.environ.get("TIDE_TEST_SEED", "7")))
+random.seed(int(os.environ.get("TIDE_TEST_SEED", "7")))
 
 
 def pytest_addoption(parser):

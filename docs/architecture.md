@@ -13,6 +13,8 @@
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |
 | `docs/evidence/` | Small immutable-source qualification reports |
+| `docs/module-extension-plan.md` | Concrete next kernel/state interface work |
+| `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
 Embeddings transform clocks, boundary nodes and source tags explicitly. Local
@@ -38,6 +40,15 @@ language implementations and analytic examples check the operator formulas.
   fallback, rather than naming a sequential loop “prefill”.
 - Runtime checkpoints serialize values/spec identity, not a live autograd graph.
   In-memory cuts preserve graph connectivity unless explicitly detached.
+
+The current C++ schedulers still specialize preparation to EMA/identity.
+General node/region program interfaces are the next architectural step; see the
+module extension plan. Topology generality is not yet operator generality.
+
+Build qualification checks a source fingerprint and binary hashes from
+`build/build-manifest.json`; stale native modules cannot certify newer C++ code.
+Custom build directories propagate explicitly to pytest. `scripts/clean_artifacts.py`
+defaults to a dry run and protects referenced, failed and active-job artifacts.
 
 ## Module boundaries
 

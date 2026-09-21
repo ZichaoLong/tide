@@ -9,6 +9,7 @@ from pathlib import Path
 import platform
 import subprocess
 import sys
+from build_identity import source_hash
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--device", required=True, choices=("auto", "cpu", "cuda", "npu"))
@@ -34,6 +35,15 @@ build = Path(args.build_dir).resolve()
 sys.path[:0] = [str(root / "python"), str(build)]
 import _tide_native
 
+build_manifest = json.loads((build / "build-manifest.json").read_text())
+if build_manifest["cpp_source_sha256"] != source_hash(root):
+    parser.error("native build does not match current C++ sources; run scripts/build.py")
+for name, digest in build_manifest["binary_sha256"].items():
+    if hashlib.sha256((build / name).read_bytes()).hexdigest() != digest:
+        parser.error(f"native build artifact changed: {name}")
+if Path(_tide_native.__file__).parent.resolve() != build:
+    parser.error("loaded native module is outside the requested build directory")
+
 out = Path(args.output_dir).resolve()
 out.mkdir(parents=True, exist_ok=False)
 binary = Path(_tide_native.__file__)
@@ -46,7 +56,7 @@ manifest = {
                     "torch": torch.__version__, "torch_git": torch.version.git_version,
                     "cxx11_abi": torch.compiled_with_cxx11_abi(), "threads": 1},
     "device": "cpu", "resolution_reason": "explicit:cpu" if args.device == "cpu" else "auto:only-compiled-cpu",
-    "dtype": args.dtype, "seed": args.seed,
+    "dtype": args.dtype, "seed": args.seed, "build": build_manifest,
     "native_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(), "state": "running",
 }
 def save():
@@ -54,7 +64,8 @@ def save():
     temp.write_text(json.dumps(manifest, indent=2) + "\n")
     temp.replace(out / "result.json")
 save()
-env = dict(os.environ, PYTHONPATH=os.pathsep.join((str(root / "python"), str(build))), TIDE_TEST_SEED=str(args.seed))
+env = dict(os.environ, PYTHONPATH=os.pathsep.join((str(root / "python"), str(build))),
+           TIDE_TEST_SEED=str(args.seed), TIDE_BUILD_DIR=str(build))
 with (out / "tests.log").open("w") as log:
     result = subprocess.run(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
 manifest.update(exit_code=result.returncode, state="passed" if result.returncode == 0 else "failed",

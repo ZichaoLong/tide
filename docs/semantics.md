@@ -16,6 +16,7 @@ Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
+Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
 ## First local profile: `ema-ffn-v1`
@@ -48,6 +49,10 @@ unselected descriptors can receive gradient through softmax denominators.
 - Objectives separately root outputs, final state and pending messages. Compare
   input, parameter and differentiable initial-state VJPs. In-memory chunking has
   no implicit detach. Serialized continuation is a declared gradient boundary.
+  `Continuation.detach()` explicitly truncates both state and in-flight messages.
+  Checkpoint v2 also validates the parameter-alias topology before changing any
+  weights; reconstruct the same sharing when restoring. Checkpoints do not
+  claim to restore a full training controller, data cursor or framework RNG.
 - `None` versus connected-zero is observable for optimizer parameter groups;
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.

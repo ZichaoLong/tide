@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import signal
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
@@ -25,12 +26,19 @@ def save():
     temp.write_text(json.dumps(record, indent=2) + "\n")
     temp.replace(out / "status.json")
 save()
+def cancelled(signum, _frame):
+    record.update(state="cancelled", exit_code=128 + signum)
+    save()
+    raise SystemExit(record["exit_code"])
+signal.signal(signal.SIGTERM, cancelled)
+signal.signal(signal.SIGINT, cancelled)
 try:
     with (out / "task.log").open("w") as log:
         result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
     record.update(state="passed" if result.returncode == 0 else "failed", exit_code=result.returncode)
 except BaseException as error:
-    record.update(state="failed", error=repr(error), exit_code=1)
+    if record.get("state") != "cancelled":
+        record.update(state="failed", error=repr(error), exit_code=1)
 finally:
     record["finished"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
     save()

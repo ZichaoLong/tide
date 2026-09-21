@@ -6,6 +6,20 @@
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。
 下文保留 Tide 研究总览；具体实现状态以本分支的验证证据为准。
 
+本分支当前运行入口（CPU FP64/FP32，选择已有的匹配 Torch 环境）：
+
+```sh
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/build.py --jobs 2
+TORCH_DEVICE_BACKEND_AUTOLOAD=0 python scripts/verify.py --device cpu --dtype both --output-dir artifacts/my-verification
+./build/tidegraph-smoke --device cpu --dtype float64
+python scripts/status.py
+```
+
+`--output-dir` 必须是新目录。验证包括 PyTorch/LibTorch streaming、TimedDAG 前沿、
+SettleGraph 编码及拓扑特化；当前局部模块是 EMA/tanh FFN 与 identity，
+Attention/DeltaRule/SSM 和 LH 数值对齐仍见 [后续工作](docs/module-extension-plan.md)。
+源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
+
 Tide 是一条研究线，研究如何在固定消息拓扑上组织局部选择、节点状态和稀疏计算，并把这些语义落实为可验证的模型与执行器。
 
 本仓库的 `main` 分支是项目总入口。它维护研究对象、上游语义、项目导航和共同验证约定；具体实现、实验路线与测量结果在独立分支或独立仓库中维护。

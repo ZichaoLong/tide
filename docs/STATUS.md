@@ -17,6 +17,15 @@ standalone C++ graph forward/backward all passed; see
 `evidence/m4-settle-specialized.md`. No active jobs. Unit
 `tide-foundation-m4-20260921-0830` completed with exit 0.
 
+M6 candidate hardening: parameter-alias checkpoint v2, explicit state/message
+detach, shared-gradient and random sparse/ragged cases, inference-mode TLS,
+build/source fingerprints and cancellation status. Targeted tests: 22 passed.
+Planned unit: `tide-foundation-contracts-20260921-0840`.
+Command: `python scripts/job.py --output-dir artifacts/contracts-20260921-0840 -- python scripts/qualify.py --output-dir artifacts/contracts-20260921-0840`.
+Cwd is this checkout, frozen until terminal status. Inspect
+`artifacts/contracts-20260921-0840/status.json`, `task.log`, `verification/result.json`.
+Stop: `systemctl --user stop tide-foundation-contracts-20260921-0840`.
+
 Environment inspected: aarch64, Python 3.11, Torch 2.10.0+cpu; native CPU
 operator probe passed. Local Python: `/home/zlong/anaconda3/bin/python`.
 Set `TORCH_DEVICE_BACKEND_AUTOLOAD=0` for CPU commands on this machine because
@@ -24,9 +33,11 @@ the installed NPU plugin otherwise auto-loads. No packages were changed.
 
 ## Next action
 
-1. Extend state/kernel interfaces for Attention/GQA, linear attention, DeltaRule,
+1. Finish the current qualification and commit its evidence; no broad M5 claims.
+2. Extend state/kernel interfaces for Attention/GQA, linear attention, DeltaRule,
    SSM and SwiGLU; qualify step/block, reset, clock and packed-state behavior.
-2. M6/M7/M8 remain: broader training/sharing/truncation, LH C++ adapter, scale.
+   Concrete design/navigation: `module-extension-plan.md`.
+3. M6/M7/M8 remain: broader training objectives, LH C++ adapter, scale.
 
 ## Important boundaries
 

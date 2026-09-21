@@ -16,7 +16,8 @@ class SettleGraph:
 
     def __post_init__(self):
         g = self.graph
-        if len(self.ranks) != len(g.regions) or len(set(self.ranks)) != len(self.ranks) or min(self.ranks) <= 0:
+        if (len(self.ranks) != len(g.regions) or len(set(self.ranks)) != len(self.ranks)
+                or any(type(rank) is not int or rank <= 0 for rank in self.ranks)):
             raise ValueError("regions require distinct positive ranks")
         if not g.inputs or not g.outputs:
             raise ValueError("SettleGraph requires input and output boundaries")

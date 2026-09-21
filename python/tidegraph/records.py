@@ -1,5 +1,5 @@
 """Tensor-bearing event records. Copies preserve autograd unless detached."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import torch
 
 
@@ -47,6 +47,13 @@ class Continuation:
         return Continuation(self.identity, self.batch_size, self.cut, dict(self.states),
                             {k: dict(v) for k, v in self.history.items()},
                             list(self.pending), dict(self.ledger))
+
+    def detach(self):
+        """Explicit TBPTT boundary: detach state and every in-flight message."""
+        q = self.fork()
+        q.states = {owner: replace(state, value=state.value.detach()) for owner, state in self.states.items()}
+        q.pending = [replace(atom, value=atom.value.detach()) for atom in self.pending]
+        return q
 
 
 @dataclass

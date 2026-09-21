@@ -5,11 +5,18 @@ from .records import Atom, Continuation, State
 from .validation import validate_window
 
 
+def parameter_aliases(model):
+    groups = {}
+    for name, parameter in model.named_parameters(remove_duplicate=False):
+        groups.setdefault(id(parameter), []).append(name)
+    return sorted(sorted(names) for names in groups.values())
+
+
 def save(path, graph, model, continuation, optimizer=None):
     q = continuation
     validate_window(graph, model, q, [], q.cut, q.cut)
     record = {
-        "schema": "tide-continuation-v1", "identity": graph.identity,
+        "schema": "tide-continuation-v2", "identity": graph.identity, "aliases": parameter_aliases(model),
         "weights": model.state_dict(), "optimizer": None if optimizer is None else optimizer.state_dict(),
         "batch_size": q.batch_size, "cut": q.cut,
         "states": {k: (s.value.detach(), s.last_time, s.observations) for k, s in q.states.items()},
@@ -24,8 +31,10 @@ def save(path, graph, model, continuation, optimizer=None):
 
 def load(path, graph, model, optimizer=None):
     record = torch.load(path, map_location="cpu", weights_only=True)
-    if record["schema"] != "tide-continuation-v1" or record["identity"] != graph.identity:
+    if record["schema"] != "tide-continuation-v2" or record["identity"] != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
+    if record["aliases"] != parameter_aliases(model):
+        raise ValueError("checkpoint parameter sharing mismatch; reconstruct the same aliases before loading")
     expected, actual = model.state_dict(), record["weights"]
     if expected.keys() != actual.keys():
         raise ValueError("checkpoint parameter keys mismatch")
