@@ -3,6 +3,7 @@
 #include "tide/ops.h"
 #include "tide/frontier.h"
 #include "tide/specialized.h"
+#include "tide/cursor.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -50,6 +51,15 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Options, prefill) FIELD(Options, max_events);
   py::class_<Streaming>(m, "Streaming").def(py::init<Graph, Model, Options>())
     .def("run", &Streaming::run, py::call_guard<py::gil_scoped_release>());
+  py::class_<AdvanceResult>(m, "AdvanceResult") FIELD(AdvanceResult, cut) FIELD(AdvanceResult, trace)
+    FIELD(AdvanceResult, outputs) FIELD(AdvanceResult, messages) FIELD(AdvanceResult, stats);
+  py::class_<StreamingCursor>(m, "StreamingCursor")
+    .def(py::init<Streaming&, Continuation>(), py::keep_alive<1, 2>())
+    .def("advance", &StreamingCursor::advance, py::call_guard<py::gil_scoped_release>())
+    .def("snapshot", &StreamingCursor::snapshot, py::call_guard<py::gil_scoped_release>())
+    .def("detach", &StreamingCursor::detach, py::call_guard<py::gil_scoped_release>())
+    .def_property_readonly("cut", &StreamingCursor::cut)
+    .def_property_readonly("failed", &StreamingCursor::failed);
   py::class_<Frontier>(m, "Frontier").def(py::init<Graph, Model, Options>())
     .def("run", &Frontier::run, py::call_guard<py::gil_scoped_release>());
   py::class_<Specialized>(m, "Specialized").def(py::init<Graph, Model, Options, std::string>())

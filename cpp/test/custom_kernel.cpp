@@ -1,6 +1,8 @@
 #include "portable_torch/runtime.hpp"
 #include "tide/kernel.h"
 #include "tide/stream.h"
+#include "tide/cursor.h"
+#include <atomic>
 #include <ATen/Parallel.h>
 #include <torch/csrc/autograd/autograd.h>
 #include <filesystem>
@@ -10,6 +12,7 @@
 namespace {
 class CustomAccumulator final : public tide::StateKernel {
  public:
+  mutable std::atomic<int> validations{0};  // Diagnostic only; no execution state in the program.
   tide::State initial(const tide::NodeWeights& w) const override {
     return {at::zeros_like(w.bias), -1, 0, {{"sum", at::zeros_like(w.bias)}}};
   }
@@ -20,6 +23,7 @@ class CustomAccumulator final : public tide::StateKernel {
   }
   void validate_weights(const tide::NodeWeights&) const override {}
   void validate_state(const tide::NodeWeights& w, const tide::State& s) const override {
+    ++validations;
     if (s.slots.size() != 1 || !s.slots.count("sum") || s.slots.at("sum").sizes() != w.bias.sizes())
       throw std::invalid_argument("invalid custom state");
   }
@@ -38,7 +42,8 @@ int main(int argc, char** argv) {
     g.edges = {{0, 0, 1}}; g.regions = {{1}}; g.inputs = {0}; g.outputs = {0}; g.compile();
     tide::Model m;
     m.nodes = {{at::zeros({2}, options), at::zeros({2, 2}, options), at::zeros({2}, options), at::ones({2}, options)}};
-    m.nodes[0].kernel = std::make_shared<CustomAccumulator>();
+    auto kernel = std::make_shared<CustomAccumulator>();
+    m.nodes[0].kernel = kernel;
     m.input_scale = m.agg_scale = m.edge_scale = m.output_scale = {at::ones({}, options)};
     auto x = at::ones({2, 2}, options) * 0.25; x.set_requires_grad(true);
     tide::Continuation q; q.identity = g.identity; q.batch_size = 2;
@@ -69,6 +74,17 @@ int main(int argc, char** argv) {
       try { malformed.validate(); } catch (const std::invalid_argument&) { rejected = true; }
       if (!rejected) throw std::runtime_error("invalid packed metadata was accepted");
     }
+    auto imported = result.continuation; imported.batch_size = 512;
+    for (tide::Index b = 2; b < imported.batch_size; ++b) imported.states[{b, 0}] = state;
+    const auto checked = kernel->validations.load();
+    tide::StreamingCursor cursor(engine, imported);
+    if (kernel->validations != checked + 512) throw std::runtime_error("cursor import validation mismatch");
+    auto advanced = cursor.advance({}, 3, 3);
+    if (advanced.cut != 3 || advanced.stats.at("candidate_events") != 2)
+      throw std::runtime_error("cursor sparse advance mismatch");
+    cursor.advance({}, 5, 5);
+    if (kernel->validations != checked + 512) throw std::runtime_error("cursor rescanned imported state");
+    if (cursor.snapshot().states.size() != 512) throw std::runtime_error("cursor snapshot lost idle state");
     const std::string report = "custom-state-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");

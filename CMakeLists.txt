@@ -6,7 +6,7 @@ find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
 add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ops.cpp cpp/src/pool.cpp
-  cpp/src/validation.cpp cpp/src/stream.cpp cpp/src/planner.cpp
+  cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
   cpp/src/kernel.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp)

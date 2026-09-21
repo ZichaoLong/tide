@@ -63,22 +63,7 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
   for (const auto& [owner, last] : q.ledger)
     require(batch(owner.first) && owner.second >= 0 && owner.second < p && last.first >= 0
             && last.second >= 0 && last.second < q.cut, "invalid input ledger");
-  auto sorted = external;
-  std::sort(sorted.begin(), sorted.end(), [](const auto& a, const auto& b) {
-    return std::tie(a.batch, a.port, a.position) < std::tie(b.batch, b.port, b.position);
-  });
-  std::vector<Atom> atoms;
-  for (const auto& x : sorted) {
-    require(batch(x.batch) && x.port >= 0 && x.port < p && x.position >= 0
-            && x.time >= q.cut && x.time < stop, "invalid external coordinate");
-    const Owner owner{x.batch, x.port};
-    auto it = q.ledger.find(owner);
-    const auto last = it == q.ledger.end() ? Owner{-1, -1} : it->second;
-    require(x.position == last.first + 1 && x.time > last.second, "noncontiguous/nonmonotonic port history");
-    check_tensor(x.value, ref, {m.width()});
-    q.ledger[owner] = {x.position, x.time};
-    atoms.push_back({x.batch, g.inputs[x.port], x.time, 0, x.port, x.position, x.value});
-  }
+  auto input = validate_external(g, m, q, external, stop, seal);
   std::set<std::tuple<Index, Index, Index>> seen;
   for (const auto& a : q.pending) {
     require(a.kind == 1 && a.source >= 0 && a.source < static_cast<Index>(g.edges.size()), "invalid pending edge");
@@ -89,6 +74,7 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
     require(seen.insert({a.batch, a.source, a.position}).second, "duplicate pending message");
     check_tensor(a.value, ref, {m.width()});
   }
-  return atoms;
+  for (const auto& [owner, last] : input.ledger_updates) q.ledger[owner] = last;
+  return input.atoms;
 }
 }  // namespace tide

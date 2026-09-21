@@ -1,4 +1,4 @@
-#include "tide/stream.h"
+#include "tide/cursor.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
 #include <algorithm>
@@ -19,13 +19,20 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   if (!std::isfinite(options_.zeta)) throw std::invalid_argument("nonfinite zeta");
 }
 Result Streaming::run(const Continuation& initial, const std::vector<External>& external, Index stop, Index seal) {
-  Result result;
-  result.continuation = initial;  // Tensor handles preserve graph connectivity.
-  auto& q = result.continuation;
+  std::lock_guard<std::mutex> lock(run_mutex_);
+  auto q = initial;  // Tensor handles preserve graph connectivity.
   auto inputs = validate_window(graph_, model_, q, external, stop, seal);
-  std::map<Index, std::vector<Atom>> queue;
+  EventQueue queue;
   for (const auto& a : q.pending) queue[a.time].push_back(a);
   for (const auto& a : inputs) queue[a.time].push_back(a);
+  q.pending.clear();
+  auto result = execute(q, queue, stop);
+  export_pending(q, queue);
+  result.continuation = std::move(q);
+  return result;
+}
+Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
+  Result result;
   auto& stats = result.stats;
   stats = {{"candidate_events", 0}, {"logical_times", 0}, {"visited_edges", 0},
            {"update_calls", 0}, {"full_calls", 0}};
@@ -163,9 +170,6 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
       if (options_.trace) result.trace.push_back(std::move(event));
     }
   }
-  q.pending.clear();
-  for (const auto& [time, atoms] : queue) q.pending.insert(q.pending.end(), atoms.begin(), atoms.end());
-  std::sort(q.pending.begin(), q.pending.end(), [](const auto& a, const auto& b) { return a.key() < b.key(); });
   q.cut = stop;
   return result;
 }

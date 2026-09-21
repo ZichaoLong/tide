@@ -7,10 +7,16 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 Latest clean qualification: **799 tests passed** at
 `652f2e7a7a09f4dcf6b220cbc058c580cc10c41d`.
 See `evidence/m5c-attention.md`; prior evidence is linked from `ROADMAP.md`.
-No active background jobs. Unit `tide-foundation-m5c-20260921-0939` completed
-with exit 0; no worker remains. M5C adds aggregated-event GQA/window, ragged K/V
-slots, checked packed-sequence metadata, and actual batch/sequence attention
-groups. Exact scope and limits are in `attention.md`.
+M5C's unit completed with exit 0. The next candidate adds an owned native
+streaming cursor with persistent queues, incremental input validation, explicit
+snapshot/detach, and failure recovery. See `streaming-cursor.md`. Python reference
+regressions: 84 passed. Cursor/native/full regression qualification is pending.
+
+Planned unit: `tide-foundation-cursor-20260921-0954`.
+Command: `/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/cursor-20260921-0954 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954`.
+Freeze this checkout while active. Inspect that directory's `status.json`,
+`task.log`, and `verification/result.json`; stop with
+`systemctl --user stop tide-foundation-cursor-20260921-0954` if necessary.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
@@ -28,10 +34,8 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Implement a native owned streaming cursor/advance API: current functional
-   windows copy/validate all cached state each cut. Validate initial import once,
-   keep queues and state native, touch only new inputs/events; snapshot explicitly.
-   Keep functional streaming and Python as equivalence oracles.
+1. Finish cursor build/full qualification; fix failures and commit evidence.
+   The functional streaming/Python paths remain equivalence anchors.
 2. Generalize region/Agg/Full interfaces and loss statistics; review original LH
    C++ inference mapping (`lh-compatibility.md`) before choosing its exact profiles.
 3. Performance qualification must also address cache allocation, structured Delta

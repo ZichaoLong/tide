@@ -66,3 +66,13 @@ class Result:
     outputs: list[tuple[int, int, int, torch.Tensor]]
     messages: list[Atom]
     stats: dict[str, int]
+
+
+@dataclass
+class AdvanceResult:
+    """Only this window's records; request cursor.snapshot() for complete state."""
+    cut: int
+    trace: list
+    outputs: list
+    messages: list
+    stats: dict

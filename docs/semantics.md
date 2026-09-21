@@ -19,6 +19,12 @@ The sealed-window API explicitly declares complete external inputs in `[a,b)`.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
+Native cursor ownership changes materialization, not finite-valued event
+semantics. `advance` keeps queues/state native; snapshots explicitly clone tensor
+storage and preserve gradients in ordinary grad mode. Input rejection is
+retryable; execution exceptions require restoring a prior snapshot into a new
+cursor. See `streaming-cursor.md` for ownership and recovery details.
+
 ## First local profile: `ema-ffn-v1`
 
 For tagged values x_i and learned source weights w_i, `h=sum_i w_i*x_i`.
