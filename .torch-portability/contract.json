@@ -51,7 +51,7 @@
     ],
     "checkpoint": {
       "enabled": true,
-      "schema": "tide-continuation-v4",
+      "schema": "tide-continuation-v5",
       "init_from": "weights or explicitly declared initial state; starts new progress",
       "resume": "complete state declared by the schema",
       "portable_handoff": true,

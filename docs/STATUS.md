@@ -3,21 +3,34 @@
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault remain read-only.
 
-## Next action
+## Next action and training increment
 
-1. Continue Tide two-clock versus single-PDG **training** equivalence. Reuse
-   tests/single_graph_{cases,adapter,checks}.py, but existing every_cut defaults
-   to HARD and test_single_graph is no_grad. Add independent output/state/pending
-   roots and input/parameter VJPs, including None versus connected zero, six
-   profiles, HARD/SOFTP/HST, clear and native serial/parallel/packed/cursor.
-   Phase replicas must alias base tensors. Partial pending loss must include
-   the two-clock body's unconsumed readout buffer. Across optimizer steps detach
-   both continuations AND this buffer. Do not take LH as a training authority.
-2. Monitor the frozen original-LH qualification below. After terminal success,
-   inspect all stage results, source/build/fixture identities and counts, then
-   commit single-PDG evidence and update pending compatibility contracts.
-3. Remaining scope is in ROADMAP: composite application checkpoint, independent
-   C++ optimizer ownership, broader model modules and performance qualification.
+Tide two-clock versus single-PDG training passed its directed development gate:
+artifacts/single-training-dev-20260921-2335/, 826 tests in 178.62s, including
+700 new training cases and 126 prior inference/guard cases. Both durable records
+passed; unit tide-foundation-single-training-dev-20260921-2335 is inactive/dead,
+MainPID 0, exit 0. Frozen source archive was compared byte-for-byte with the
+unchanged tree after exit. The relocated main CMake build reconfigured and
+rebuilt successfully; no special cache repair was needed.
+
+Contract: single-graph-training.md; helpers single_graph_{training,roots}.py.
+Covers isolated roots, parameter aliases, HARD/SOFTP/HST, six profiles, clear,
+serial/parallel/packed/cursor and truncated SGD/AdamW updates. AdamW explicitly
+uses epsilon 1e-5. Default-epsilon FP32 trajectory failure remains retained at
+artifacts/single-training-adamw-fp32-repro/; strict tolerances were not changed.
+Earlier invalid buffer-presence test assumption is archived at
+artifacts/single-training-initial-buffer-repro/.
+
+Next apply the reviewed checkpoint extension from ignored
+artifacts/single-training-checkpoint-draft/{single_graph_optimizer.py,
+test_single_graph_optimizer.py,test_single_graph_resume.py}. It factors the
+trainer and adds two single-PDG save/restore boundaries inside nonempty partial
+windows. Draft smoke: 24 FP64 reference and 12 FP32 cursor cases passed.
+Run the optimizer/resume directed gate, commit, then full clean CPU qualification
+from an isolated worktree. The existing single-graph v5 schema is sufficient;
+this does not serialize the separate two-clock application/occurrence ledger.
+Continue original-LH qualification below; commit evidence only after termination.
+Remaining scope and separate composite/C++ checkpoint ownership are in ROADMAP.
 
 ## Active immutable qualification
 
@@ -31,7 +44,8 @@ CPU stage passed 3946 tests in 326.58s, exit 0, at 22:43:32Z;
 evidence/checkpoint-ownership.md qualifies only that completed stage.
 Original assertions-on Selector/Add/Full/Attention/Pronounce passed both dtypes.
 IOCortex FP64 passed 180 cases / 4950 cuts (24 known diagnostic limitations).
-Assertions-on FP32 is running; no whole-job result yet.
+Assertions-on FP32 also passed; oracle/result.json passed at 23:23:42Z.
+Assertions-off component gates are running; no whole-job result yet.
 
 Exact command, from the worktree:
 
