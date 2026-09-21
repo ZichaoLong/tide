@@ -2,39 +2,29 @@
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: `graph-execution-foundation`.
 
-## Current increment and qualification
+## Current qualification
 
-Same-fiber sum attention baseline is ready to commit: Python per-query oracle,
-native head-batched step, complete K/V/log-bias state, tick-repeat decay and cut
-decoder; batch/sequence execution still uses explicit scalar fallbacks.
-Contract: `fiber-attention.md`. No packed-prefill, CROSSBATCH, whole-LH or speed claim.
+**2728 tests passed** on clean implementation
+`dfc2e5b622946614831962fb44683990fa609e8d`; `evidence/lh-attention.md`.
+Original LH Selector/Add/Full/Attention passed in FP64/FP32. Attention per dtype:
+240 configurations, 5760 ticks, 16080 candidate updates across five original modes.
+This qualifies same-fiber sum attention's scalar baseline and complete cache/clock
+projection, not whole-model behavior or joint packed attention.
 
-Development unit `tide-foundation-fiber-dev-20260921-1613` is inactive, MainPID 0,
-exit 0. `artifacts/fiber-dev-20260921-1613/{status.json,task.log,oracle/result.json}`
-records 210 targeted fiber/counter tests and original LH Attention passing both
-dtypes: each 240 cases, 5760 ticks, 16080 candidate occurrences. Dirty-source tar
-SHA256 `c162fa6be69adf0e42997c215b41959e77a3351deba6ea832ee03a1af9da1007`.
+Unit `tide-foundation-fiber-20260921-1618` is inactive, MainPID 0, exit 0.
+`artifacts/fiber-20260921-1618/{status.json,verification/result.json,oracle/result.json}`
+all passed at the same clean source. No active job. Evidence is committed separately.
 
-Earlier failed development records remain: `fiber-dev-20260921-1601` captures
-unsupported dual-input specialization fixtures and ill-conditioned FP32 RMS
-composition; `fiber-dev-20260921-1608` captures a promoted-descriptor tolerance
-mistake. Corrections and remaining conditioning limits: `fiber-attention.md`.
-Do not relabel those historical runs as passed.
-
-Next command after committing: submit `tide-foundation-fiber-20260921-1618` through
-scripts/job.py with output `artifacts/fiber-20260921-1618`, running
-`python scripts/qualify.py --output-dir artifacts/fiber-20260921-1618 --jobs 2
---lh-snapshot artifacts/lh-source-20260921-1428`.
-Freeze this checkout until terminal. Inspect the unit, outer status, verification
-result and oracle result. Commit qualification evidence separately after all pass.
-The prior clean qualification remains 2596 passed on `5df88e7b91985092870d0197888d8d95311ee7b1`
-(`evidence/lh-full.md`), covering original Selector/Add/Full.
+Earlier failures `fiber-dev-20260921-1601` and `fiber-dev-20260921-1608` remain
+retained and failed. Corrections, FP32 conditioning limits and Read precision
+comparison policy: `fiber-attention.md` and the qualification report.
 
 ## Next implementation
 
-After clean qualification, implement real independent-batch and event-sequence
+Implement real independent-batch and event-sequence
 packed same-fiber attention, retaining the scalar path as a reference. Prototype
-`artifacts/fiber-packed-draft.py` is isolated from installed code and was only
+`artifacts/fiber-packed-draft.py` and `artifacts/fiber_packing_draft.cpp` are isolated
+from installed code. Only the Python draft was
 checked for values/caches on a small ragged case in both dtypes; it is not qualified.
 Use event/source offsets, per-sample visibility, all current-fiber keys, per-event
 pooling and ordered bias updates. Check batch/sequence work counters, storage
