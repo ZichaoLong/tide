@@ -1,6 +1,6 @@
 # Region Read modes and independent readout programs
 
-Implemented; qualification pending in `STATUS.md`. This instantiates upstream
+[Qualified](evidence/read-programs.md). This instantiates upstream
 Read modes without changing candidate preparation or state adoption.
 
 `Region.read_mode` is `content`, `old` or `proposal` (default). Every candidate
@@ -44,4 +44,4 @@ not implicit migration. See `tests/test_read_modes.py`, `test_read_contract.py`
 and the standalone `cpp/test/read_programs.cpp` analytic checks.
 
 Full Next requests and control-sensitive state-prefill gates are the next seam
-in `next-read-plan.md`; this change alone does not implement them.
+in `next-program-plan.md`; this change alone does not implement them.

@@ -26,12 +26,12 @@ the old broadcast profile; its slot-affine/phase profile is
    profiles still consume the summary. Complete typed content now reaches
    Upd/Read/Full and packed metadata and is [qualified](evidence/content-programs.md).
    Next receives complete content in the following gate.
-2. Follow `next-read-plan.md` to expose complete content and the full Next inputs
+2. Follow `next-program-plan.md` to expose complete content and the full Next inputs
    (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill
    contract unless it provides an exact joint contract. Independent Read now
    supports content, old-state and proposed-state modes (`read-programs.md`),
-   with qualification pending.
+   now [qualified](evidence/read-programs.md).
 3. Region programs need explicit integer/tensor history and controls beyond
    selection counts. Preserve checkpoint/detach/VJP for tensor history; add LH's
    selection-count/affect-count/FP64-norm/stable-ID ordering as one profile.
