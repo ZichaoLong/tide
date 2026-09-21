@@ -28,6 +28,13 @@ std::map<std::string, at::Tensor> cache(const AL::KVHidden& h, const at::TensorO
   return {{"key", k.transpose(0, 1).clone()}, {"value", v.transpose(0, 1).clone()},
           {"log_bias", h.total_growth_rate.slice(0, 0, h.endidx).clone()}};
 }
+std::map<std::string, at::Tensor> cache(const AL::BatchPtrKVHidden& h, Index b, const at::TensorOptions& opts) {
+  if (AL::KVHidden::attention_mode != Mode::CROSSBATCH) return cache(*h.hptrs[b], opts);
+  const auto n = h.endindices[b];
+  return {{"key", h.batch_keys_cache[b].slice(1, 0, n).transpose(0, 1).clone()},
+          {"value", h.batch_values_cache[b].slice(1, 0, n).transpose(0, 1).clone()},
+          {"log_bias", h.batch_total_growth_rate[b].slice(0, 0, n).clone()}};
+}
 Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clear, double decay,
                  Index width, Index heads, bool bias, int schedule) {
   const Index nodes = 2, sources = 5, batches = 4, ticks = 24;
@@ -66,10 +73,18 @@ Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clea
       const Index rows = b % 3;
       if (rows) {
         auto k = at::sin(at::arange(heads*rows*(width/heads), opts).reshape({heads, rows, width/heads})*.17+b);
-        bh->hptrs[b]->addkvcache(k, k*.3+.1);
-        bh->hptrs[b]->total_growth_rate.slice(0, 0, rows).fill_(-.13*b);
+        if (mode == Mode::CROSSBATCH) {
+          auto samples = at::tensor(std::vector<Index>{b}, at::kLong);
+          auto lengths = at::tensor(std::vector<Index>{rows}, at::kLong);
+          bh->addkvcache(k.transpose(0, 1), (k*.3+.1).transpose(0, 1), samples, lengths,
+                        samples, lengths, at::full({rows}, b, at::kLong));
+          bh->batch_total_growth_rate[b].slice(0, 0, rows).fill_(-.13*b);
+        } else {
+          bh->hptrs[b]->addkvcache(k, k*.3+.1);
+          bh->hptrs[b]->total_growth_rate.slice(0, 0, rows).fill_(-.13*b);
+        }
       }
-      initial.states[{b, node}] = {at::zeros({width}, opts), -1, 0, cache(*bh->hptrs[b], opts)};
+      initial.states[{b, node}] = {at::zeros({width}, opts), -1, 0, cache(*bh, b, opts)};
     }
   }
   g.compile(); initial.identity = g.identity;
@@ -112,7 +127,7 @@ Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clea
       if (!input) continue;
       const auto samples = input->get_sampleids();
       for (Index row = 0; row < samples.numel(); ++row) {
-        auto b = samples[row].item<Index>(); auto slots = cache(*hidden[node]->hptrs[b], opts);
+        auto b = samples[row].item<Index>(); auto slots = cache(*hidden[node], b, opts);
         max_rows = std::max(max_rows, slots.at("key").size(0));
         proposals[{time, b, node}] = {output[row].clone(), time, 0, slots}; ++candidates; ++count;
       }
@@ -135,7 +150,7 @@ Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clea
         close(event.proposed_state.slots.at(name), value, "original Attention proposal cache mismatch");
     }
     for (Index node = 0; node < nodes; ++node) for (Index b = 0; b < batches; ++b) {
-      const auto& state = q.states.at({b, node}); const auto expected = cache(*hidden[node]->hptrs[b], opts);
+      const auto& state = q.states.at({b, node}); const auto expected = cache(*hidden[node], b, opts);
       for (const auto& name : {"key", "value"}) close(state.slots.at(name), expected.at(name), "Attention cut cache mismatch");
       close(tide::decode_fiber_bias(m.nodes[node], state, time+1), expected.at("log_bias"), "Attention cut decoded bias mismatch");
     }
@@ -168,13 +183,14 @@ int main(int argc, char** argv) {
     at::set_num_threads(1); at::NoGradGuard guard;
     const auto opts = at::TensorOptions().dtype(args.dtype).device(device);
     Index candidates = 0, cases = 0;
-    for (auto mode : {Mode::LOOP, Mode::PACKED, Mode::CACHEDMATMUL, Mode::CACHEDPACKED, Mode::CACHEDATTENTION})
+    for (auto mode : {Mode::LOOP, Mode::PACKED, Mode::CACHEDMATMUL, Mode::CACHEDPACKED, Mode::CACHEDATTENTION, Mode::CROSSBATCH})
       for (bool multi : {false, true}) for (bool clear : {false, true}) for (double decay : {0., .01})
         for (bool wide : {false, true}) for (int schedule = 0; schedule < 3; ++schedule) {
+          if (mode == Mode::CROSSBATCH && !multi) continue;  // Original API forbids this combination.
           candidates += check_case(opts, mode, multi, clear, decay, wide ? 4 : 1, wide ? 2 : 1, wide, schedule); ++cases;
         }
     std::cout << "original-LH-attention: passed; " << cases << " cases, " << cases*24 << " ticks, " << candidates
-              << " candidate occurrences; LOOP/PACKED/CACHEDMATMUL/CACHEDPACKED/CACHEDATTENTION; "
+              << " candidate occurrences; LOOP/PACKED/CACHEDMATMUL/CACHEDPACKED/CACHEDATTENTION/CROSSBATCH; "
                  "single/multi projection; serial/packed/frontier; tick/whole windows; sum Confluence\n";
     return 0;
   } catch (const std::exception& error) { std::cerr << error.what() << '\n'; return 2; }

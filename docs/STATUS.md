@@ -19,19 +19,30 @@ Earlier failures `fiber-dev-20260921-1601` and `fiber-dev-20260921-1608` remain
 retained and failed. Corrections, FP32 conditioning limits and Read precision
 comparison policy: `fiber-attention.md` and the qualification report.
 
-## Next implementation
+## Current increment and next qualification
 
-Implement real independent-batch and event-sequence
-packed same-fiber attention, retaining the scalar path as a reference. Prototype
-`artifacts/fiber-packed-draft.py` and `artifacts/fiber_packing_draft.cpp` are isolated
-from installed code. Only the Python draft was
-checked for values/caches on a small ragged case in both dtypes; it is not qualified.
-Use event/source offsets, per-sample visibility, all current-fiber keys, per-event
-pooling and ordered bias updates. Check batch/sequence work counters, storage
-compaction, every public-root VJP, cuts, clear, sharing and original LH again.
+Real packed source/event attention is ready to commit: `fiber_packing.py` and
+`fiber_packing.{h,cpp}`. Scalar step remains independent. The data/visibility,
+storage, work-counter and replay contracts are in `fiber-packing.md`.
+
+Development unit `tide-foundation-fiber-pack-dev-20260921-1633` is inactive,
+MainPID 0, exit 0. Output `artifacts/fiber-pack-dev-20260921-1633/` records **246
+passing targeted tests**, then original attention passing both dtypes across all
+six modes, including CROSSBATCH: each 264 cases, 6336 ticks, 17688 candidates.
+The dirty source snapshot/hash and oracle manifests are retained in that output.
+Two incorporated draft sources and their one Python import cache were removed
+only after a dry-run comparison confirmed their bodies are preserved in source.
+No other artifacts or reference files were removed.
+
+After implementation commit, submit `tide-foundation-fiber-pack-20260921-1638`
+through scripts/job.py with output `artifacts/fiber-pack-20260921-1638`, running
+`python scripts/qualify.py --output-dir artifacts/fiber-pack-20260921-1638 --jobs 2
+--lh-snapshot artifacts/lh-source-20260921-1428`. Freeze until terminal; inspect
+unit/status.json/verification/result.json/oracle/result.json. Save evidence in a
+separate commit only after all pass. No performance claim follows from counters.
 
 Then continue `lh-attention-plan.md`: post-attention normalized/learned Confluence,
-CROSSBATCH original mode, token-clock Pronounce and IOCortexNet adapter. Normalized
+token-clock Pronounce and IOCortexNet adapter. Normalized
 pooling must not multiply coefficients into pre-attention Q/K/V input rows.
 ROADMAP retains optimizer/backward/cache/history-patch and scale/performance work.
 

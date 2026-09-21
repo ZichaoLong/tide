@@ -32,12 +32,12 @@ def test_fiber_schedules_and_isolated_public_roots(dtype, policy, implementation
     # Entirely idle samples keep their representation and observation count.
     assert actual.continuation.states[2, 0].observations == 0
     if implementation == "native-frontier" and policy in {"all", "old"}:
-        assert actual.stats["state_scalar_sequence_steps"] > 0
+        assert actual.stats["state_scalar_sequence_steps"] == 0
 
 
 @pytest.mark.parametrize("mode", ["hard", "hst", "softp"])
 @pytest.mark.parametrize("clear", [False, True])
-def test_fiber_cyclic_serial_parallel_and_batch_fallback(dtype, mode, clear):
+def test_fiber_cyclic_serial_parallel_and_packed_batch(dtype, mode, clear):
     g, m, q, xs, leaves = fixture(dtype, "clear" if clear else "all", cyclic=True)
     expected = execute("reference", g, m, q, xs, stop=9, mode=mode)
     for workers, packed in ((1, False), (1, True), (3, True)):

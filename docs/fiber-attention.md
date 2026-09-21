@@ -2,9 +2,10 @@
 
 Profile `lh-fiber-attention-sum-repeat-v1` is a separate local program from event
 GQA/window attention. Python `fiber_attention.py` is the readable query/head
-oracle; native `fiber_attention.cpp` uses head-batched matmul. Both currently
-retain scalar batch/sequence loop fallbacks, exposed in runtime counters.
-This first gate makes no packed-prefill or performance claim.
+oracle; native `fiber_attention.cpp` uses head-batched matmul for scalar steps.
+`fiber-packing.md` describes the independent-batch/event-sequence implementation.
+The first qualified gate (`evidence/lh-attention.md`) only covered scalar state
+loops; later evidence must explicitly qualify packed work. No speed claim follows.
 
 ## Forward and stored state
 
@@ -52,9 +53,8 @@ as an original eager LH tick trajectory. After an optimizer update, deferred
 decay uses the current parameter, as declared for lazy Add; no parameter epoch
 history is reconstructed. Old-mode Read reads the stored value.
 
-Exact sequence capability means an equivalent causal loop here; it is not a
-claim of joint sequence work. Clear/selection/Next restrictions remain scheduler
-capability gates. Training replay follows `packed-autograd.md`'s first-order
+Clear/selection/Next restrictions remain scheduler capability gates for packed
+sequence work. Training replay follows `packed-autograd.md`'s first-order
 public-root boundary. Cache allocation and long idle-gap cost remain unoptimized.
 
 ## Independent anchors and original mapping
@@ -70,8 +70,9 @@ missing original biases map to zero tensors. Local slots follow original incomin
 CSC ordering plus appended bridge/token inputs. The bounded oracle links the
 untouched source snapshot in STATUS under no-grad, testing LOOP, PACKED,
 CACHEDMATMUL, CACHEDPACKED and CACHEDATTENTION with per-sample and multi-sample
-projection, initial cache, clearing, idle ticks and capacity growth. CROSSBATCH,
-post-attention weighted Confluence and IOCortexNet/Pronounce require later gates.
+projection, initial cache, clearing, idle ticks and capacity growth. CROSSBATCH is
+added by the packed gate; post-attention weighted Confluence and IOCortexNet/Pronounce
+remain separate extensions.
 See immutable evidence for which tests have actually passed.
 The oracle independently checks Read against an FP64 norm of Tide's own
 proposal. Cross-implementation norms inherit the proposal's payload tolerance:

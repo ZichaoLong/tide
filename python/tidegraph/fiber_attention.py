@@ -1,7 +1,7 @@
 """Readable LH same-fiber attention, sum pooling and ordered log-bias decay."""
 import math
 import torch
-from .content import as_content
+from .content import as_content, Content
 from .history import increment, int64
 from .records import State
 from .state_program import StateProgram
@@ -20,7 +20,7 @@ def advance_bias(bias, rate, ticks):
 class FiberAttention(StateProgram):
     profile = PROFILE
     sequence_contract = True
-    joint_sequence = False  # Baseline only; packed attention is a separate gate.
+    joint_sequence = True
 
     def __init__(self, spec):
         super().__init__()
@@ -61,6 +61,17 @@ class FiberAttention(StateProgram):
         pooled = torch.stack(rows).sum(0)
         value = torch.nn.functional.linear(pooled, w.extra["fiber_out"].t(), w.extra["fiber_out_bias"])
         return State(value, time, observations, {"key": k, "value": v, "log_bias": bias})
+
+    def sequence(self, w, old, values, times, views=None):
+        from .packing import PackedSequence
+        if not times:
+            return []
+        views = [Content(h) for h in values] if views is None else views
+        return self.packed_sequence(w, [old], PackedSequence(values, [0, len(times)], [(0, 0)], times, views))[0]
+
+    def packed_sequence(self, w, old, batch):
+        from .fiber_packing import packed_sequence
+        return packed_sequence(w, self.heads, old, batch)
 
     @staticmethod
     def reset(state):

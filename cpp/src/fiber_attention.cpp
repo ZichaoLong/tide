@@ -1,5 +1,6 @@
 #include "tide/fiber_attention.h"
 #include "tide/counters.h"
+#include "fiber_packing.h"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -47,8 +48,24 @@ class FiberAttention final : public StateKernel {
     return {value, time, observations, {{"key", k}, {"value", v}, {"log_bias", bias}}};
   }
   bool exact_sequence() const override { return true; }
-  // The initial correctness path deliberately retains the base batch/sequence
-  // loops, reported by scalar fallback counters. Packed kernels follow later.
+  bool joint_batch() const override { return true; }
+  bool joint_sequence() const override { return true; }
+  std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
+                          const std::vector<Index>& times, const ContentViews& views) const override {
+    if (old.empty()) return {};
+    PackedSequence p; p.contents = h; p.times = times; p.views = views;
+    for (size_t i = 0; i < old.size(); ++i) { p.offsets.push_back(i+1); p.owners.emplace_back(i, 0); }
+    return packed_sequence(w, old, p).states;
+  }
+  std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
+                             const std::vector<Index>& times, const ContentViews& views) const override {
+    if (times.empty()) return {};
+    return packed_sequence(w, {old}, PackedSequence{h, {0, h.size(0)}, {{0, 0}}, times, views}).states;
+  }
+  PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
+                               const PackedSequence& batch) const override {
+    return fiber_attention_packed(w, heads_, old, batch);
+  }
   State reset(const State& state) const override {
     auto result = state; result.value = state.value*0;
     for (auto& [name, value] : result.slots) value = value.slice(0, 0, 0).clone();
