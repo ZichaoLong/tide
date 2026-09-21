@@ -1,5 +1,6 @@
 #include "tide/ops.h"
 #include "tide/kernel.h"
+#include "tide/full.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -19,19 +20,15 @@ void validate_model(const Graph& g, const Model& m) {
   require(ref.defined() && ref.dim() == 1 && ref.numel() > 0, "invalid model width");
   require(ref.scalar_type() == at::kFloat || ref.scalar_type() == at::kDouble, "FP32/FP64 required");
   const Index d = ref.numel();
-  for (const auto& w : m.nodes) {
+  for (size_t node = 0; node < m.nodes.size(); ++node) {
+    const auto& w = m.nodes[node];
     check_tensor(w.decay, ref, {d}); check_tensor(w.weight, ref, {d, d});
     check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
     require(static_cast<bool>(w.kernel), "state kernel is not configured");
     w.kernel->validate_weights(w);
     for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
-    if (w.full_kind == "swiglu") {
-      for (const auto& name : {"ffn_gate", "ffn_up", "ffn_down"}) {
-        auto it = w.extra.find(name);
-        require(it != w.extra.end(), "missing SwiGLU weights");
-        check_tensor(it->second, ref, std::string(name) == "ffn_down" ? at::IntArrayRef({2 * d, d}) : at::IntArrayRef({d, 2 * d}));
-      }
-    } else require(w.full_kind == "tanh" || w.full_kind == "identity", "unknown Full profile");
+    require(static_cast<bool>(w.full_kernel), "Full kernel is not configured");
+    w.full_kernel->validate_weights(w, g.outgoing_ports.offsets[node+1] - g.outgoing_ports.offsets[node]);
   }
   require(m.input_scale.size() == g.inputs.size() && m.agg_scale.size() == g.edges.size()
           && m.edge_scale.size() == g.edges.size() && m.output_scale.size() == g.outputs.size(),

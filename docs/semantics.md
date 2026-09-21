@@ -46,6 +46,11 @@ VJP `(bar_h=0, bar_g=u, bar_p=zeta*sum(u*(g-h)))`. This is an explicit surrogate
 not the derivative of the hard forward. Only selected nodes execute Full;
 unselected descriptors can receive gradient through softmax denominators.
 
+`full-programs.md` extends Full to an optional auxiliary value and a sparse family
+of local output-slot payloads. Only present coordinates are delivered; numerical
+zero still sends. Broadcast retains the first profile; slot-affine projection and
+explicit logical-time phases instantiate distinct payloads and absence.
+
 ## Equality and training
 
 Additional local state profiles are specified in `state-programs.md` (SSM),

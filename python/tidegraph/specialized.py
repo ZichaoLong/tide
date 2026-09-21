@@ -4,6 +4,7 @@ import torch
 from .blocks import canonicalize
 from .records import Atom, Result, State
 from .validation import validate_window
+from .full import FullInput, evaluate as evaluate_full
 
 
 def validate_topology(graph, topology):
@@ -30,10 +31,11 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     q.states[batch, node] = next_state
     history = dict(q.history.get((batch, node), {}))
     history[node] = history.get(node, 0) + 1; q.history[batch, node] = history
-    value = model.nodes[node].full(prop.value, h, control, mode, zeta)
+    offsets = graph.port_indexes[1].offsets
+    value = evaluate_full(model.nodes[node], [FullInput(prop, time, h, control)], offsets[node+1] - offsets[node], mode, zeta)[0]
     return dict(batch=batch, node=node, time=time, fiber=fiber, content=h, proposal=prop.value,
                 descriptor=desc, control=control, active=True, comparison=prop.value,
-                next=next_state.value, history=dict(history), full=value, proposal_slots=prop.slots,
+                next=next_state.value, history=dict(history), full=value.value, emitted=value.emitted, proposal_slots=prop.slots,
                 comparison_slots=prop.slots, next_slots=next_state.slots)
 
 
@@ -53,13 +55,15 @@ def run(graph, model, initial, external, stop, *, sealed_until, topology, mode="
         if topology == "self_loop" or node < len(graph.nodes) - 1:
             edge = 0 if topology == "self_loop" else node
             target = 0 if topology == "self_loop" else node + 1
-            arrival = time + graph.edges[edge].delay
-            if arrival >= 2**63:
-                raise ValueError("logical time overflow")
-            a = Atom(batch, target, arrival, 1, edge, time, e["full"] * model.edge_scale[edge])
-            inbox[target, batch, arrival].append(a); messages.append(a)
-        if node == len(graph.nodes) - 1:
-            outputs.append((batch, time, 0, e["full"] * model.output_scale[0]))
+            slot = graph.ports.edge_source[edge]
+            if slot in e["emitted"]:
+                arrival = time + graph.edges[edge].delay
+                if arrival >= 2**63:
+                    raise ValueError("logical time overflow")
+                a = Atom(batch, target, arrival, 1, edge, time, e["emitted"][slot] * model.edge_scale[edge])
+                inbox[target, batch, arrival].append(a); messages.append(a)
+        if node == len(graph.nodes) - 1 and graph.ports.output[0] in e["emitted"]:
+            outputs.append((batch, time, 0, e["emitted"][graph.ports.output[0]] * model.output_scale[0]))
     if topology == "self_loop":
         for time in range(q.cut, stop):
             for batch in range(q.batch_size):

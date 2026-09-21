@@ -2,6 +2,7 @@
 from .ops import select
 from .records import Atom, Result, State
 from .validation import validate_window
+from .full import FullInput, evaluate as evaluate_full
 
 
 def run(graph, model, continuation, external, stop, *, sealed_until,
@@ -43,26 +44,32 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                     next_state = model.nodes[v].next(comparison, graph.nodes[v].clear and v in active)
                     q.states[batch, v] = next_state
                     event.update(active=v in active, control=controls[v], comparison=comparison.value,
+                                 _comparison_state=comparison,
                                  next=next_state.value, history=dict(history), proposal_slots=event["proposal_state"].slots,
                                  comparison_slots=comparison.slots, next_slots=next_state.slots)
                     event.pop("old")
                     event.pop("proposal_state")
         for (batch, node), event in sorted(prepared.items()):
             if event["active"]:
-                value = model.nodes[node].full(event["comparison"], event["content"], event["control"], mode, zeta)
-                event["full"] = value
+                offsets = graph.port_indexes[1].offsets
+                request = FullInput(event["_comparison_state"], time, event["content"], event["control"])
+                result = evaluate_full(model.nodes[node], [request], offsets[node+1] - offsets[node], mode, zeta)[0]
+                event["full"], event["emitted"] = result.value, result.emitted
                 for e, edge in enumerate(graph.edges):
-                    if edge.source != node:
+                    slot = graph.ports.edge_source[e]
+                    if edge.source != node or slot not in result.emitted:
                         continue
                     arrival = time + edge.delay
                     if arrival >= 2**63:
                         raise ValueError("logical time overflow")
-                    message = Atom(batch, edge.target, arrival, 1, e, time, value * model.edge_scale[e])
+                    message = Atom(batch, edge.target, arrival, 1, e, time, result.emitted[slot] * model.edge_scale[e])
                     available.append(message)
                     messages.append(message)
                 for port, source in enumerate(graph.outputs):
-                    if source == node:
-                        outputs.append((batch, time, port, value * model.output_scale[port]))
+                    slot = graph.ports.output[port]
+                    if source == node and slot in result.emitted:
+                        outputs.append((batch, time, port, result.emitted[slot] * model.output_scale[port]))
+            event.pop("_comparison_state")
             if trace:
                 events.append(event)
     q.pending = sorted((a for a in available if a.kind == 1 and a.time >= stop), key=lambda a: a.key())

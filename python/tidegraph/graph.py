@@ -23,6 +23,12 @@ class Node:
     query_heads: int = 1
     kv_heads: int = 1
     window: int = 0  # 0 means unbounded; otherwise accepted observations, including current.
+    emission: str = "broadcast"
+    emit_period: int = 1
+    emit_phases: tuple[int, ...] = ()  # -1 always, -2 never; empty means all.
+
+    def __post_init__(self):
+        object.__setattr__(self, "emit_phases", tuple(self.emit_phases))
 
 
 @dataclass(frozen=True)
@@ -66,6 +72,15 @@ class Graph:
         if self.layout is not None and not isinstance(self.layout, PortLayout):
             raise ValueError("invalid local port layout")
         self.port_indexes  # Validate before any execution or checkpoint operation.
+        outgoing = self.port_indexes[1]
+        for v, node in enumerate(self.nodes):
+            degree = outgoing.offsets[v + 1] - outgoing.offsets[v]
+            if (type(node.emit_period) is not int or not 0 < node.emit_period < 2**63
+                    or (node.emit_phases and len(node.emit_phases) != degree)
+                    or any(type(p) is not int or not -2 <= p < node.emit_period for p in node.emit_phases)):
+                raise ValueError("invalid emission phase policy")
+            if node.identity and (node.emission != "broadcast" or node.emit_phases or node.emit_period != 1):
+                raise ValueError("identity boundaries require unconditional broadcast")
 
     @cached_property
     def ports(self):

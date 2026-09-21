@@ -36,10 +36,13 @@ Tensor emit(const Tensor& h, const Tensor& g, const Tensor& p, const std::string
 Tensor full(const NodeWeights& w, const Tensor& comparison, const Tensor& h,
             const Tensor& p, const Options& options, bool identity) {
   if (identity || w.full_kind == "identity") return h;
-  auto g = w.full_kind == "swiglu"
+  return emit(h, full_fresh(w, comparison, h, identity), p, options.mode, options.zeta);
+}
+Tensor full_fresh(const NodeWeights& w, const Tensor& comparison, const Tensor& h, bool identity) {
+  if (identity || w.full_kind == "identity") return h;
+  return w.full_kind == "swiglu"
     ? h + at::matmul(at::silu(at::matmul(comparison, w.extra.at("ffn_gate")))
                     * at::matmul(comparison, w.extra.at("ffn_up")), w.extra.at("ffn_down"))
     : h + at::tanh(at::matmul(comparison, w.weight) + w.bias);
-  return emit(h, g, p, options.mode, options.zeta);
 }
 }  // namespace tide

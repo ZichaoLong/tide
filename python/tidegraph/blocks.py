@@ -4,7 +4,7 @@ import torch
 from .ops import select
 from .records import Atom, State
 from .packing import prepare_sequences
-from . import autograd
+from .full import FullInput, evaluate as evaluate_full
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
@@ -16,7 +16,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
     """
     events, by_node, by_sequence, by_frame = [], defaultdict(list), defaultdict(list), defaultdict(list)
     stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0, "state_sequence_calls": 0,
-             "semantic_state_replays": 0, "semantic_full_replays": 0}
+             "semantic_state_replays": 0, "semantic_full_replays": 0, "full_scalar_fallback_steps": 0}
     for batch, region, time, nodes in frames:
         for node in sorted(nodes):
             atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
@@ -58,40 +58,44 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             next_state = model.nodes[node].next(cmp, graph.nodes[node].clear and node in active)
             q.states[batch, node] = next_state
             e.update(active=node in active, control=controls[node], comparison=cmp.value, next=next_state.value,
-                     history=dict(history), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots)
+                     history=dict(history), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots,
+                     _comparison_state=cmp)
     for node, es in by_node.items():
         active = [e for e in es if e["active"]]
         if not active:
             continue
-        with torch.no_grad():
-            values = model.nodes[node].full(torch.stack([e["comparison"] for e in active]),
-                                           torch.stack([e["content"] for e in active]),
-                                           torch.stack([e["control"] for e in active]), mode, zeta)
+        requests = [FullInput(e["_comparison_state"], e["time"], e["content"], e["control"]) for e in active]
+        offsets = graph.port_indexes[1].offsets
+        values = evaluate_full(model.nodes[node], requests, offsets[node+1] - offsets[node], mode, zeta, packed=True)
         stats["full_blocks"] += 1
+        if not model.nodes[node].full_program.joint_batch:
+            stats["full_scalar_fallback_steps"] += len(active)
+        if torch.is_grad_enabled():
+            stats["semantic_full_replays"] += len(active)
         for event, value in zip(active, values):
-            if torch.is_grad_enabled():
-                reference = model.nodes[node].full(event["comparison"], event["content"], event["control"], mode, zeta)
-                value = autograd.value(value, reference); stats["semantic_full_replays"] += 1
-            event["full"] = value
+            event["full"], event["emitted"] = value.value, value.emitted
+    for event in events:
+        event.pop("_comparison_state")
     return events, stats
 
 
 def deliver(graph, model, events, fibers, messages, outputs):
-    offsets, edges = graph.adjacency()
+    index = graph.port_indexes[1]
     for e in events:
         if not e["active"]:
             continue
         node, batch, time = e["node"], e["batch"], e["time"]
-        for edge_id in edges[offsets[node]:offsets[node + 1]]:
-            edge = graph.edges[edge_id]
-            arrival = time + edge.delay
-            if arrival >= 2**63:
-                raise ValueError("logical time overflow")
-            a = Atom(batch, edge.target, arrival, 1, edge_id, time, e["full"] * model.edge_scale[edge_id])
-            fibers[batch, edge.target, arrival].append(a); messages.append(a)
-        for port, source in enumerate(graph.outputs):
-            if source == node:
-                outputs.append((batch, time, port, e["full"] * model.output_scale[port]))
+        for slot, value in e["emitted"].items():
+            kind, source = index.bindings[index.offsets[node] + slot]
+            if kind == 1:
+                edge = graph.edges[source]
+                arrival = time + edge.delay
+                if arrival >= 2**63:
+                    raise ValueError("logical time overflow")
+                a = Atom(batch, edge.target, arrival, 1, source, time, value * model.edge_scale[source])
+                fibers[batch, edge.target, arrival].append(a); messages.append(a)
+            else:
+                outputs.append((batch, time, source, value * model.output_scale[source]))
 
 
 def canonicalize(graph, result):

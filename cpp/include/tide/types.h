@@ -18,6 +18,9 @@ struct Node {
   bool clear = false, identity = false;
   std::string memory = "ema", full = "tanh";
   Index query_heads = 1, kv_heads = 1, window = 0;
+  std::string emission = "broadcast";
+  Index emit_period = 1;
+  std::vector<Index> emit_phases;
 };
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };
@@ -58,23 +61,27 @@ struct Continuation {
   std::map<Owner, Owner> ledger;
 };
 class StateKernel;
+class FullKernel;
 struct NodeWeights {
   Tensor decay, weight, bias, read;
   std::map<std::string, Tensor> extra;
   std::shared_ptr<const StateKernel> kernel;
   std::string full_kind = "tanh";
+  std::shared_ptr<const FullKernel> full_kernel;
 };
 struct Model {
   std::vector<NodeWeights> nodes;
   std::vector<Tensor> input_scale, agg_scale, edge_scale, output_scale;
   Index width() const { return nodes.at(0).bias.numel(); }
 };
+struct SlotValue { Index slot; Tensor value; };
 struct Event {
   Index batch, node, time;
   std::vector<Atom> fiber;
   Tensor content, proposal, descriptor, control, comparison, next, full;
   State old, proposed_state, comparison_state, next_state;
   bool active = false;
+  std::vector<SlotValue> emitted;
   std::map<Index, Index> history;
 };
 struct Output { Index batch, time, port; Tensor value; };

@@ -42,3 +42,11 @@ def test_cpp_custom_state_kernel(dtype):
     result = subprocess.run([str(binary), "--device=cpu", "--dtype=" + str(dtype).split(".")[-1]],
                             text=True, capture_output=True, check=True)
     assert result.stdout.strip() == "custom-state-kernel: passed"
+
+
+def test_cpp_custom_full_kernel(dtype):
+    import _tide_native
+    binary = Path(_tide_native.__file__).with_name("tidegraph-full-check")
+    result = subprocess.run([str(binary), "--device=cpu", "--dtype=" + str(dtype).split(".")[-1]],
+                            text=True, capture_output=True, check=True)
+    assert result.stdout.strip() == "custom-full-kernel: passed"

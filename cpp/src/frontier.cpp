@@ -1,6 +1,7 @@
 #include "tide/frontier.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
+#include "tide/delivery.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -49,17 +50,10 @@ Result Frontier::run(const Continuation& initial, const std::vector<External>& e
       ++stats["region_blocks"]; stats["candidate_events"] += events.size();
       for (auto& e : events) {
         if (e.active) {
-          for (auto j = graph_.csr.offsets[e.node]; j < graph_.csr.offsets[e.node + 1]; ++j) {
-            const auto id = graph_.csr.edges[j]; const auto& edge = graph_.edges[id];
-            if (e.time > std::numeric_limits<Index>::max() - edge.delay) throw std::overflow_error("logical time overflow");
-            Atom a{e.batch, edge.target, e.time + edge.delay, 1, id, e.time, e.full * model_.edge_scale[id]};
+          deliver(graph_, model_, e, [&](const Atom& a) {
             fibers[{a.batch, a.node, a.time}].push_back(a);
             if (options_.trace) result.messages.push_back(a);
-          }
-          for (auto j = graph_.output_index.offsets[e.node]; j < graph_.output_index.offsets[e.node + 1]; ++j) {
-            const auto port = graph_.output_index.edges[j];
-            result.outputs.push_back({e.batch, e.time, port, e.full * model_.output_scale[port]});
-          }
+          }, [&](const Output& output) { result.outputs.push_back(output); });
         }
         if (options_.trace) result.trace.push_back(std::move(e));
       }

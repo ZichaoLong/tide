@@ -2,6 +2,7 @@
 #include "tide/ops.h"
 #include "tide/block.h"
 #include "tide/autograd.h"
+#include "tide/full.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -88,20 +89,8 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     if (ids.empty()) continue;
     ++stats["full_blocks"];
     if (replay) stats["semantic_full_replays"] += ids.size();
-    jobs.push_back([&, node, ids] {
-      std::vector<Tensor> cmp, h, p;
-      for (auto i : ids) { cmp.push_back(events[i].comparison); h.push_back(events[i].content); p.push_back(events[i].control); }
-      Tensor values;
-      {
-        at::NoGradGuard guard;
-        values = full(m.nodes[node], at::stack(cmp), at::stack(h), at::stack(p), options, g.nodes[node].identity);
-      }
-      for (size_t i = 0; i < ids.size(); ++i) {
-        auto& e = events[ids[i]]; e.full = values[i];
-        if (replay) e.full = semantic_value(e.full, full(m.nodes[node], e.comparison, e.content,
-                                                       e.control, options, g.nodes[node].identity));
-      }
-    });
+    if (!m.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
+    jobs.push_back([&, ids] { evaluate_full(g, m, events, ids, options, true); });
   }
   pool.run(std::move(jobs));
   return events;

@@ -2,6 +2,8 @@
 #include "tide/ops.h"
 #include "tide/kernel.h"
 #include "tide/autograd.h"
+#include "tide/full.h"
+#include "tide/delivery.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -38,7 +40,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
   auto& stats = result.stats;
   stats = {{"candidate_events", 0}, {"logical_times", 0}, {"visited_edges", 0},
            {"update_calls", 0}, {"full_calls", 0},
-           {"semantic_state_replays", 0}, {"semantic_full_replays", 0}};
+           {"semantic_state_replays", 0}, {"semantic_full_replays", 0}, {"full_scalar_fallback_steps", 0}};
   const bool replay = at::GradMode::is_enabled();
   while (!queue.empty() && queue.begin()->first < stop) {
     const Index time = queue.begin()->first;
@@ -150,53 +152,32 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       if (ids.empty()) continue;
       stats["full_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();
-      jobs.push_back([&, node, ids] {
-        if (options_.packed) {
-          std::vector<Tensor> cmp, content, p;
-          for (auto i : ids) {
-            cmp.push_back(events[i].comparison); content.push_back(events[i].content); p.push_back(events[i].control);
-          }
-          Tensor values;
-          {
-            at::NoGradGuard guard;
-            values = full(model_.nodes[node], at::stack(cmp), at::stack(content), at::stack(p), options_, graph_.nodes[node].identity);
-          }
-          for (size_t j = 0; j < ids.size(); ++j) {
-            auto& e = events[ids[j]]; e.full = values[j];
-            if (replay) e.full = semantic_value(e.full, full(model_.nodes[node], e.comparison, e.content,
-                                                           e.control, options_, graph_.nodes[node].identity));
-          }
-        } else {
-          for (auto i : ids) {
-            auto& e = events[i];
-            e.full = full(model_.nodes[node], e.comparison, e.content, e.control, options_, graph_.nodes[node].identity);
-          }
-        }
+      if (options_.packed && !model_.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
+      jobs.push_back([&, ids] {
+        evaluate_full(graph_, model_, events, ids, options_, options_.packed);
       });
     }
     pool_.run(std::move(jobs));
     for (auto& event : events) {
       if (event.active) {
-        const Index node = event.node;
-        for (Index j = graph_.csr.offsets[node]; j < graph_.csr.offsets[node + 1]; ++j) {
-          const Index id = graph_.csr.edges[j];
-          const auto& edge = graph_.edges[id];
-          if (time > std::numeric_limits<Index>::max() - edge.delay)
-            throw std::overflow_error("logical time overflow");
-          Atom a{event.batch, edge.target, time + edge.delay, 1, id, time, event.full * model_.edge_scale[id]};
+        deliver(graph_, model_, event, [&](const Atom& a) {
           queue[a.time].push_back(a);
           if (options_.trace) result.messages.push_back(a);
           ++stats["visited_edges"];
-        }
-        for (Index j = graph_.output_index.offsets[node]; j < graph_.output_index.offsets[node + 1]; ++j) {
-          const auto port = graph_.output_index.edges[j];
-          result.outputs.push_back({event.batch, time, port, event.full * model_.output_scale[port]});
-        }
+        }, [&](const Output& output) { result.outputs.push_back(output); });
       }
       if (options_.trace) result.trace.push_back(std::move(event));
     }
   }
   q.cut = stop;
+  std::sort(result.messages.begin(), result.messages.end(), [&](const auto& a, const auto& b) {
+    return std::tie(a.position, a.batch, graph_.edges[a.source].source, a.source)
+         < std::tie(b.position, b.batch, graph_.edges[b.source].source, b.source);
+  });
+  std::sort(result.outputs.begin(), result.outputs.end(), [&](const auto& a, const auto& b) {
+    return std::tie(a.time, a.batch, graph_.outputs[a.port], a.port)
+         < std::tie(b.time, b.batch, graph_.outputs[b.port], b.port);
+  });
   return result;
 }
 }  // namespace tide

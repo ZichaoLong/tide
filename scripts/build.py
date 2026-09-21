@@ -32,5 +32,6 @@ manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": torc
             "architecture": platform.machine(), "python": platform.python_version(),
             "cxx11_abi": torch.compiled_with_cxx11_abi(),
             "binary_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                              for p in (target / "_tide_native.so", target / "tidegraph-smoke", target / "tidegraph-kernel-check")}}
+                              for p in (target / "_tide_native.so", target / "tidegraph-smoke", target / "tidegraph-kernel-check",
+                                        target / "tidegraph-full-check")}}
 (target / "build-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")

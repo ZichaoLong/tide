@@ -32,5 +32,6 @@ def window_records(result):
         event["fiber"] = [atom(a) for a in e.fiber]
         if e.active:
             event["full"] = e.full
+            event["emitted"] = e.emitted
         events.append(event)
     return events, [(o.batch, o.time, o.port, o.value) for o in result.outputs], [atom(a) for a in result.messages], result.stats

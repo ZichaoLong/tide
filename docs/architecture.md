@@ -18,7 +18,7 @@
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
-| `docs/full-emit-plan.md` | Next Full program API and per-slot emission acceptance gates |
+| `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
@@ -50,8 +50,9 @@ State preparation now uses `cpp/include/tide/kernel.h`, with named tensor slots
 and an opt-in exact sequence contract. Built-in profiles are EMA, identity and
 selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed state
 prefill is isolated in `block_prepare.cpp`; its checked segment representation is
-in `packed.h`/`packed.cpp`. General region/Agg/Full program interfaces remain future
-work; see the module extension plan. Slot tensors are included in all state
+in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
+from scheduling; region/Agg/Next generalization remains in the module extension
+plan. Slot tensors are included in all state
 comparisons, resets, explicit detach and checkpoint v3.
 
 Build qualification checks a source fingerprint and binary hashes from

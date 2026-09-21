@@ -7,6 +7,7 @@ Tensor emit(const Tensor& h, const Tensor& g, const Tensor& p,
             const std::string& mode, double zeta);
 Tensor full(const NodeWeights&, const Tensor& comparison, const Tensor& h,
             const Tensor& p, const Options&, bool identity = false);
+Tensor full_fresh(const NodeWeights&, const Tensor& comparison, const Tensor& h, bool identity = false);
 void validate_model(const Graph&, const Model&);
 struct ValidatedInput { std::vector<Atom> atoms; std::map<Owner, Owner> ledger_updates; };
 ValidatedInput validate_external(const Graph&, const Model&, const Continuation&,

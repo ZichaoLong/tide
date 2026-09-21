@@ -49,14 +49,14 @@ sharing and do not contain these physical mappings. Projection restores source
 tags and re-sorts mixed boundary/internal fibers to the original canonical order.
 
 Layouts participate in Python's graph fingerprint and native structural format
-`tide-graph-v5`. Existing checkpoint payload schema v3 is unchanged, but checkpoints
+`tide-graph-v6` (v5 introduced layouts; v6 also records Full policy). Checkpoint
+payload schema v3 is unchanged, but checkpoints
 with a different graph fingerprint, including old fingerprints without layouts,
 are rejected before weights change. There is no implicit checkpoint migration.
 
-This increment establishes identity and indexing. The current weighted-sum and
-replicated Emit profiles still use their established physical parameter arrays.
-General Full/Emit and source-aware Aggregate programs will consume these slots;
-their numerical contracts and qualification are separate increments.
+Full/Emit now consumes local output slots; physical send/output scales remain
+outside its program. Source-aware Aggregate is still a subsequent increment.
+Program numerical contracts and qualification are separate from layout indexing.
 
 Implementation: `python/tidegraph/ports.py`, `cpp/include/tide/ports.h`,
 `cpp/src/ports.cpp`, graph definitions and `SettleGraph.embed/project`.

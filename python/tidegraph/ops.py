@@ -3,6 +3,7 @@ import torch
 from torch import nn
 from .records import State
 from .memory import kernel, reset
+from .full import ProjectionEmit
 
 
 class _HST(torch.autograd.Function):
@@ -29,7 +30,7 @@ def emit(h, g, p, mode, zeta=1.0):
 
 
 class NodeWeights(nn.Module):
-    def __init__(self, width, generator, dtype, spec=None):
+    def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -39,6 +40,7 @@ class NodeWeights(nn.Module):
         self.read = parameter((width,), 0.2)
         self.kernel = kernel("ema" if spec is None else spec.memory, spec)
         self.full_kind = "tanh" if spec is None else spec.full
+        self.full_program = ProjectionEmit(spec) if full_program is None else full_program
         self.extra = nn.ParameterDict()
         if spec is not None and spec.memory == "attention":
             if width % spec.query_heads:
@@ -63,6 +65,10 @@ class NodeWeights(nn.Module):
                 self.extra[name] = parameter(shape, 0.15)
         elif self.full_kind != "tanh":
             raise ValueError("unknown Full profile")
+        if isinstance(self.full_program, ProjectionEmit) and self.full_program.kind == "slot_affine":
+            for slot in range(output_slots):
+                self.extra[f"emit_w_{slot}"] = parameter((width, width), 0.2)
+                self.extra[f"emit_b_{slot}"] = parameter((width,), 0.05)
 
     def initial(self):
         return self.kernel.initial(self)
@@ -75,12 +81,15 @@ class NodeWeights(nn.Module):
         return (proposal.value * self.read).sum(-1)
 
     def full(self, comparison, content, probability, mode, zeta):
+        return emit(content, self.fresh(comparison, content), probability, mode, zeta)
+
+    def fresh(self, comparison, content):
         if self.full_kind == "swiglu":
             g = content + (torch.nn.functional.silu(comparison @ self.extra["ffn_gate"])
                            * (comparison @ self.extra["ffn_up"])) @ self.extra["ffn_down"]
         else:
             g = content + (comparison @ self.weight + self.bias).tanh()
-        return emit(content, g, probability, mode, zeta)
+        return g
 
     def prepare_block(self, old, contents, times):
         states = self.kernel.sequence(self, old, contents, times)
@@ -98,14 +107,18 @@ class NodeWeights(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, graph, width=3, seed=7, dtype=torch.float64):
+    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
         self.width = width
         generator = torch.Generator().manual_seed(seed)
-        self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(width, generator, dtype, n)
-                                   for n in graph.nodes)
+        programs = {} if full_programs is None else full_programs
+        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in programs):
+            raise ValueError("invalid custom Full owner")
+        offsets = graph.port_indexes[1].offsets
+        self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
+            width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v)) for v, n in enumerate(graph.nodes))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -144,6 +157,8 @@ class BoundaryWeights(nn.Module):
         for name, shape in (("decay", (width,)), ("weight", (width, width)), ("bias", (width,)), ("read", (width,))):
             self.register_buffer(name, torch.zeros(shape, dtype=dtype))
         self.extra = nn.ParameterDict()
+        from .graph import Node
+        self.full_program = ProjectionEmit(Node(0, identity=True))
 
     def initial(self):
         return State(torch.zeros_like(self.bias))
@@ -162,6 +177,9 @@ class BoundaryWeights(nn.Module):
         return True
 
     def full(self, comparison, content, probability, mode, zeta):
+        return content
+
+    def fresh(self, comparison, content):
         return content
 
     def next(self, comparison, clear):

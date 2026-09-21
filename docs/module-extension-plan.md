@@ -13,35 +13,23 @@ Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing
 
 ## Next vertical gates: general local programs
 
-The local-port mapping prerequisite is [qualified](evidence/local-ports.md);
-see `local-ports.md`. It precedes Full/Emit so
-that the first slot-aware program can already survive SettleGraph embedding.
-The concrete next interface and acceptance gates are in `full-emit-plan.md`.
+Stable local ports are [qualified](evidence/local-ports.md). Full/Emit now returns
+per-slot payloads or absence, supports native/Python custom programs, and retains
+the old broadcast profile; its new slot-affine/phase profile is undergoing clean
+qualification (`full-programs.md`, `STATUS.md`). Remaining gates:
 
-1. Full/Emit must return separately tagged outgoing edge/output coordinates;
-   missing coordinates mean no message, and numerical zero still means a real
-   message. Current scalar-scaled replication is only a TotalEmit profile. Add a
-   public native program interface and independent Python examples, preserving
-   batched selected-only evaluation and immutable comparison state. Test phase
-   routing, edge-specific transforms, dead branches and sparse continuation.
-2. Output program slots need a stable mapping to physical edges/ports. SettleGraph
-   turns output ports into adapter edges; retaining only physical IDs in a shared
-   node module would silently break arbitrary programs. Keep mapping outside
-   shared parameter modules, validate it, and map it explicitly during embedding.
-   Source slots likewise must survive input-adapter remapping for normalized Agg
-   and LH confluence weights. Include static program layout in checkpoint guards.
-3. Aggregate programs should receive complete source-tagged fibers and time. Add
+1. Aggregate programs should receive complete source-tagged fibers and time. Add
    weighted mean, active-source softmax and all-source softmax with independent
    forward/VJP checks. Do not confuse absent sources with zero-valued messages;
    all-source denominators can differentiate inactive source parameters.
-4. Expose the full Next inputs (old, comparison, time, content, active, control).
+2. Expose the full Next inputs (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill
    contract unless it provides an exact joint contract. Read must support content,
    old-state and proposed-state modes, not assume a proposal-only scalar score.
-5. Region programs need explicit integer/tensor history and controls beyond
+3. Region programs need explicit integer/tensor history and controls beyond
    selection counts. Preserve checkpoint/detach/VJP for tensor history; add LH's
    selection-count/affect-count/FP64-norm/stable-ID ordering as one profile.
-6. After these seams, implement LH Add and same-fiber attention with lazy idle
+4. After these seams, implement LH Add and same-fiber attention with lazy idle
    decay, per-edge signaling and token-window Pronounce. Compare an immutable
    snapshot of actual LH C++ sources, never its older Python interpreter.
 
@@ -55,12 +43,13 @@ same regression/evidence process, not a one-time blanket certification.
 
 State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
-callbacks. Full formulas remain in `ops.py`/`ops.cpp`; region/Agg/Full program
-generalization remains work. Keep Python scheduling independent.
+callbacks. Full programs live in `full.py`/`full_kernel.cpp`, with FFN/Emit
+primitives in `ops.py`/`ops.cpp`. Region/Agg/Next generalization remains work.
+Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;
   a scalar weighted sum alone cannot represent LH's same-fiber attention.
-- Extend State with named tensor slots and explicit slot schema. Keep logical
+- State has named tensor slots and per-kernel validation. Keep logical
   time and observation count separate from memory; Full consumes the comparison
   snapshot, Next decides every persistent slot before Full.
 - Node programs supply initial state, Agg/Upd/Read/Next and Full/Emit. Region

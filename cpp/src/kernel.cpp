@@ -1,4 +1,5 @@
 #include "tide/kernel.h"
+#include "tide/full.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -47,6 +48,7 @@ void configure_model(const Graph& g, Model& m) {
                                                               : make_state_kernel(n.identity ? "identity" : n.memory);
     }
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;
+    if (!m.nodes[i].full_kernel) m.nodes[i].full_kernel = make_full_kernel(g.nodes[i]);
   }
 }
 }  // namespace tide

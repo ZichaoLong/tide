@@ -1,6 +1,7 @@
 #include "tide/specialized.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
+#include "tide/delivery.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -34,16 +35,10 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
     // and propagation and never invokes Streaming, Frontier or their planner.
     auto events = evaluate_block(graph_, model_, q, frames, inbox, options_, pool_, result.stats);
     for (auto& e : events) {
-      if (topology_ == "self_loop" || node < n - 1) {
-        const Index edge_id = topology_ == "self_loop" ? 0 : node;
-        const Index target = topology_ == "self_loop" ? 0 : node + 1;
-        const auto delay = graph_.edges[edge_id].delay;
-        if (e.time > std::numeric_limits<Index>::max() - delay) throw std::overflow_error("logical time overflow");
-        Atom a{e.batch, target, e.time + delay, 1, edge_id, e.time, e.full * model_.edge_scale[edge_id]};
+      deliver(graph_, model_, e, [&](const Atom& a) {
         inbox[{a.batch, a.node, a.time}].push_back(a);
         if (options_.trace) result.messages.push_back(a);
-      }
-      if (node == n - 1) result.outputs.push_back({e.batch, e.time, 0, e.full * model_.output_scale[0]});
+      }, [&](const Output& output) { result.outputs.push_back(output); });
       ++result.stats["candidate_events"];
       if (options_.trace) result.trace.push_back(std::move(e));
     }

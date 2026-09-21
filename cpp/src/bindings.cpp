@@ -13,9 +13,10 @@ using namespace tide;
 PYBIND11_MODULE(_tide_native, m) {
   py::class_<Edge>(m, "Edge").def(py::init<Index, Index, Index>())
     FIELD(Edge, source) FIELD(Edge, target) FIELD(Edge, delay);
-  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index>())
+  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>>())
     FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity) FIELD(Node, memory) FIELD(Node, full)
-    FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window);
+    FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window)
+    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases);
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);
@@ -46,6 +47,11 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)
     FIELD(Event, next) FIELD(Event, full) FIELD(Event, active) FIELD(Event, history)
+    .def_property_readonly("emitted", [](const Event& e) {
+      std::map<Index, Tensor> result;
+      for (const auto& value : e.emitted) result.emplace(value.slot, value.value);
+      return result;
+    })
     .def_property_readonly("proposal_slots", [](const Event& e) { return e.proposed_state.slots; })
     .def_property_readonly("comparison_slots", [](const Event& e) { return e.comparison_state.slots; })
     .def_property_readonly("next_slots", [](const Event& e) { return e.next_state.slots; });

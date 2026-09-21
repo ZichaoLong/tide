@@ -48,12 +48,26 @@ void Graph::compile() {
   for (const auto& e : edges) { source.push_back(e.source); target.push_back(e.target); }
   csr = index(source); csc = index(target); output_index = index(outputs);
   compile_ports(*this);
+  for (Index v = 0; v < n; ++v) {
+    const auto& node = nodes[v];
+    const auto degree = outgoing_ports.offsets[v+1] - outgoing_ports.offsets[v];
+    if (node.emit_period <= 0 || (!node.emit_phases.empty() && static_cast<Index>(node.emit_phases.size()) != degree))
+      fail("invalid emission phase policy");
+    for (auto phase : node.emit_phases) if (phase < -2 || phase >= node.emit_period) fail("invalid emission phase policy");
+    if (node.identity && (node.emission != "broadcast" || node.emit_period != 1 || !node.emit_phases.empty()))
+      fail("identity boundaries require unconditional broadcast");
+  }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v5;n=" << n << ';';
-  for (const auto& v : nodes) out << v.region << ',' << v.clear << ',' << v.identity << ','
+  out << "tide-graph-v6;n=" << n << ';';
+  for (const auto& v : nodes) {
+    out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
-                                << v.query_heads << ',' << v.kv_heads << ',' << v.window << ';';
+        << v.query_heads << ',' << v.kv_heads << ',' << v.window << ','
+        << v.emission.size() << ':' << v.emission << ',' << v.emit_period << ':';
+    for (auto phase : v.emit_phases) out << phase << ',';
+    out << ';';
+  }
   out << "r;";
   for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ';';
   out << "e;";

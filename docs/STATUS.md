@@ -7,7 +7,7 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 Latest clean qualification: **1296 tests passed** at
 `df2a851d759da9d6e5ccd7cef9ba931e416fdf07`.
 See `evidence/local-ports.md`; prior evidence is linked from `ROADMAP.md`.
-No active background jobs. Unit `tide-foundation-ports-20260921-1047`
+Previous qualification unit `tide-foundation-ports-20260921-1047`
 completed with exit 0, no worker remains. Artifacts:
 `artifacts/ports-20260921-1047/{status.json,task.log,verification/}`.
 
@@ -17,9 +17,20 @@ SettleGraph case also now restores canonical fiber order after projecting source
 tags. See `local-ports.md`. Native graph format is v5; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
-Next code increment: per-slot Full/Emit. The concrete API, example profiles,
-integration sites and acceptance gates are in `full-emit-plan.md`; it is still
-a plan and no FullKernel implementation has started.
+Active uncommitted increment: per-slot Full/Emit. The concrete API, example
+profiles, integration sites and acceptance gates are in `full-programs.md`.
+Programs and all schedules are integrated. New-feature/native CLI checks:
+**195 passed** in FP64/FP32. After tightening the adapter's subclass/backbone
+guards, the Full contract suite passed **21 tests**. Native graph v6 includes
+emission/phase policy. Development build `artifacts/full-build-20260921-1114`
+exited 0; no worker remains.
+
+Next: commit the coherent implementation, then launch clean qualification under
+unit `tide-foundation-full-20260921-1125`, artifacts
+`artifacts/full-20260921-1125/{status.json,task.log,verification/}`.
+Command: `python scripts/qualify.py --output-dir artifacts/full-20260921-1125`.
+Freeze source while active, archive evidence separately after terminal exit 0,
+then proceed to source-aware Aggregate and full Next/Read contracts.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -45,7 +56,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 ## Next action
 
 1. Generalize Full/Emit to return per-slot values or absence using the qualified
-   layouts. Follow `full-emit-plan.md` and preserve all independent schedules.
+   layouts. Finish the active `full-programs.md` qualification first.
 2. Extend source-aware Aggregate, full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
