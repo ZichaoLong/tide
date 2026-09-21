@@ -1,5 +1,7 @@
 # Logical source domains and physical aliases
 
+Qualified scope and retained development failures: [evidence](evidence/source-domains.md).
+
 `SourceDomain` names incoming logical slots independently of the bijective
 physical `PortLayout`. It supplies `edge_target[e]` and `input[p]`, indexed by
 physical IDs. Every node's union of logical slots must be exactly `0..S-1`;

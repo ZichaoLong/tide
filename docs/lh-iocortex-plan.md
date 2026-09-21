@@ -76,8 +76,8 @@ body wires plus partial token-window output buffers, not only token boundaries.
 
 Physical phase wires need a graph-owned logical source domain: all alternatives
 of an original wire share its source slot and coefficient. `source-domains.md`
-implements this layer separately from bijective PortLayout; qualification is in
-STATUS. Duplicating all-softmax coefficients over
+implements this layer separately from bijective PortLayout and is qualified in
+`evidence/source-domains.md`. Duplicating all-softmax coefficients over
 physical aliases changes normalization even if only one alias arrives. Do not
 patch this by scaling arbitrary softmax weights. Qualify an explicit domain map,
 parameter aliasing, cache order and duplicate-arrival rejection. A clock wrapper

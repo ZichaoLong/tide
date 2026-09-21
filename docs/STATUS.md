@@ -23,41 +23,42 @@ Native serial/parallel/packed and original PACKED/CROSSBATCH are covered.
 Each case uses one homogeneous body/readout profile. No core runtime/schema
 change in this gate and no whole-model training or single-PDG claim.
 
-## Source-domain increment and clean qualification
+## Source-domain qualification completed; next local clocks
 
-SourceDomain is implemented: graph v12 / checkpoint v4, logical incoming domains
-separate from physical PortLayout, complete-fiber collision rejection,
-Python/native factories and SettleGraph remapping. Contract: source-domains.md.
-250 targeted checks passed in 35.73s (FP64/FP32), including standalone C++ custom
-kernels, domain guards, reference/native schedules, cyclic every-cut cursor,
-SettleGraph, isolated public-root/direct-loss VJPs, optimizer and alias save/resume.
-Implementation is being committed before the clean qualification below.
+Clean implementation fb55f2e92e4979fc36e4bef1cf81172988b2df8f passed 3480 tests in
+265.18s; evidence/source-domains.md. Unit tide-foundation-source-domain-20260921-1958
+is inactive/dead, MainPID 0, Result=success, exit 0. Outer status and verification
+records in artifacts/source-domain-20260921-1958/ are passed/clean at that source,
+finished 2026-09-21T20:02:49Z. No live jobs; checkout/shared build may be edited.
+This CPU gate did not rerun original LH oracles; their exact source stays above.
 
-Dispatch: unit tide-foundation-source-domain-20260921-1958, output
-artifacts/source-domain-20260921-1958/. Command: /home/zlong/anaconda3/bin/python
-scripts/job.py --output-dir artifacts/source-domain-20260921-1958 --
-/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
-artifacts/source-domain-20260921-1958 --jobs 2. This gate reruns all CPU tests;
-it does not rerun original LH oracles (their last qualified source is above).
-Freeze checkout/shared build while active. Inspect unit, status.json,
-verification/result.json and tests.log to establish terminal success. Then save
-source-domain evidence and update STATUS/ROADMAP in a separate commit.
+Graph v12 / checkpoint v4: SourceDomain separates logical incoming coefficients
+from bijective physical PortLayout. Complete-fiber collisions fail. Python/native
+factories, packed fiber caches, every-cut cyclic continuation, isolated VJPs,
+optimizer/alias checkpoints and SettleGraph remapping are covered. Domain maps
+leave physical tags and receive/send parameter ownership explicit. Source files
+are small and navigable via docs/source-domains.md.
 
-Retain failed artifacts/source-domain-dev-20260921-1951: native build passed,
-241 tests passed and one FP32 Settle test failed. Its original dirty source,
-hash and logs remain archived. Like source-domain-python-20260922-a, it squared
-an already quadratic objective again. New tests independently root actual public
-tensors and directly differentiate the quadratic loss; runtime and tolerance are
-unchanged. Keep both failure records failed. The corrected 250-test run above
-included all previous targets plus standalone C++ CLI/kernel checks.
+Retain source-domain-dev-20260921-1951 (build passed, 241 tests passed, one FP32
+Settle test failed) and source-domain-python-20260922-a. Both failed tests squared
+an already quadratic objective again. Current acceptance isolates actual public
+tensors and directly differentiates the loss, without changing runtime/tolerance.
+The final targeted run passed 250 tests including standalone C++ custom kernels.
 
-Next: periodic local state clocks (body phases 0..L-1, token readout phase L,
-period L+1), delegated step/batch/sequence contracts and global stored timestamps.
-Prove cut conversion and idle decay without changing Full's global phase clock.
-Then continue lh-iocortex-plan.md's single-PDG arbitrary-cut projection. Phase
-occurrence ledgers cannot be inferred from token time: either explicitly track
-them or state a narrower projection directly to original LH, which has no such
-ledger. Composite checkpoint ownership and large-sparse performance stay pending.
+Next: StateClock(period, first, count), a contiguous valid-phase interval per
+period. Body = (L+1,0,L); readout = (L+1,L,1). This compact policy avoids a heap
+allocation for every native node. Convert state-program event/last timestamps
+into local ticks; return stored metadata to global time. Delegate step, batch,
+sequence and packed capabilities; preserve tensors, observations and content
+source tags. Keep Full phases, region timestamps and message delays global.
+Guard invalid phases and inverse int64 overflow; validate checkpoint identity.
+
+Then complete lh-iocortex-plan.md's single-PDG arbitrary-cut projection. Phase
+occurrence ledgers cannot be inferred from token time: track them explicitly or
+state a narrower projection directly to original LH, which has no such ledger.
+Do not claim complete dual-graph continuation equality without these counters.
+Composite checkpoint ownership and large-sparse performance stay pending.
+No implementation work on local clocks has been applied yet.
 
 ## Runtime, reference and retention
 
