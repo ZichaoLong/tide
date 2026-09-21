@@ -1,11 +1,14 @@
-# Next LH gate: token-window Pronounce
+# Token-window Pronounce clock and oracle design
 
 Source audit: immutable LH snapshot from STATUS. Relevant definitions are
 `include/CortexNet.h:Pronounce`, `src/CortexNet.cpp:IOCortexNet::think`,
 `src/Adjacency.cpp:gather_signals_info`, and `include/AccumulateLocal.h:BaseAL::forward`.
-Pooling has passed `evidence/fiber-pooling.md`. The bounded Pronounce gate below is
-implemented (`token-window.md`); exact qualification status is in STATUS. Whole-model
-and single-graph equivalence remain unproved.
+Pooling and Pronounce are qualified in `evidence/fiber-pooling.md` and
+`evidence/pronounce.md`; the readout contract is `token-window.md`. The actual
+two-clock whole-model gate is qualified in `evidence/lh-iocortex.md`. The bounded
+single-PDG implementation is `lh-single-graph.md`, with qualification tracked in
+STATUS. The design requirements below explain the separate gates; ROADMAP owns
+current remaining work.
 
 ## Audited behavior
 
@@ -67,6 +70,6 @@ Keep pending-message, slot, history and state-clock projections explicit. Prove
 this construction separately before making a single-graph containment claim.
 
 The current graph schema need not change for the first component gate. Do not
-silently rescale decay or add empty state-update events. Full IOCortexNet still
-needs four-block wiring, port ordering, selection, token embedding/readout and
-complete continuation projection, including nonuniform signaling weights.
+silently rescale decay or add empty state-update events. The actual IOCortexNet gate also checks four-block wiring, port ordering, selection,
+token embedding/readout and complete body continuation projection, including
+nonuniform signaling weights; see `lh-iocortex.md`.

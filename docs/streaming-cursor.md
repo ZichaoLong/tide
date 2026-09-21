@@ -31,7 +31,11 @@ Native execution invokes no Python.
 
 `snapshot()` copies metadata, canonicalizes pending records and clones all
 state/history/pending tensors. Mutating a snapshot cannot change cursor state. Its cost
-is O(all retained state + pending), plus pending sorting. Clones retain VJPs in
+is O(all retained state + pending + bytes(graph identity)), plus pending sorting.
+The native identity is the complete canonical graph string, so copying it grows
+with structural graph size even if little state is active. Python continuation
+conversion additionally reconstructs the graph's JSON/SHA256 identity. These
+costs belong to snapshot/import measurements; `advance` avoids them. Clones retain VJPs in
 ordinary grad mode; no_grad/inference_mode follow normal Torch rules.
 `detach()` walks every state, region history and queued message, making an explicit gradient
 boundary. Checkpoints remain values-only autograd boundaries.

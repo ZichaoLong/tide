@@ -1,4 +1,4 @@
-# Remaining LH inference bridge after tick-repeat Add
+# Tick-repeat Add bridge design notes
 
 Region programs and descriptor precision remove the selector obstacle. Continue
 from the original C++ snapshot identified in STATUS/`lh-selector.md`; never edit
@@ -15,19 +15,17 @@ numerical/route policy. Eager inference interpretation requires fixed parameters
 across cuts; carried state after an optimizer update follows the declared lazy
 recurrence, not implicit eager decay using historical parameter values.
 
-## Remaining original-model bridge
+## Related qualified interfaces
 
-LH activation/normalization and source signaling are qualified in
-`evidence/lh-full.md` (`lh-full.md`). Same-fiber attention is specified as the next
-bounded gate in `lh-attention-plan.md`.
-Confluence source normalization must preserve source IDs and missing versus zero.
-Only after these pieces fit should a tiny actual IOCortexNet/Pronounce run compare
-weights, input occurrences, messages, hidden, selection history and logits.
-Pronounce consumes a token window on its own clock; empty-output input domains
-and its retained state need explicit handling. Same-fiber attention is another
-profile, not the already-qualified aggregated-event attention.
+Activation/normalization, source signaling, same-fiber attention, Confluence and
+Pronounce each have separate contracts/evidence. The actual whole-model two-clock
+adapter is qualified in `evidence/lh-iocortex.md`; the bounded single-PDG map is
+specified in `lh-single-graph.md`. Current qualification is tracked in STATUS.
+Confluence retains source identities and absent-versus-zero behavior; Pronounce
+retains its own clock and valid-input domain. These remain distinct profiles from
+aggregated-event attention. Current backlog belongs only in ROADMAP.
 
-## Remaining performance boundary
+## Performance boundary
 
 Current selectors copy/validate a touched history's full maps. Sparse cursor
 advance avoids other region owners, but a huge single region's history can still

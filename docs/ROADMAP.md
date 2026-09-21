@@ -71,6 +71,15 @@ The bounded single-PDG oracle is implemented (`lh-single-graph.md`, qualificatio
 in STATUS). Its readout projection explicitly forgets the adapter-only ledger;
 complete readout continuation equivalence requires additional occurrence state.
 
+M8 first measurement covers owned native cursor versus the functional streaming
+anchor: graph/model/engine construction, advance-only execution, explicit
+snapshot/identity copies, fixed touched work under growing dormant topology,
+serial/node-parallel and batch packing. Record raw repetition distributions,
+work counters, process RSS, shared weights and exact workload/state reset policy.
+Python graph identity JSON/SHA256 conversion and native canonical identity-string
+copies are separate full-structure costs. Touched region history still copies
+and validates its full maps; large single-region history needs its own workload.
+
 M8 implementation observation: `ProjectionEmit` currently launches a matmul per
 output slot, while original LH uses one large Linear per CSR row. Evaluate an
 inference packing/cache or a separately specified single-matrix profile. Packing

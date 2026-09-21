@@ -11,35 +11,56 @@ Latest clean original-LH qualification remains 776fc2e597dac872f4204ac3a09966db3
 evidence/lh-iocortex.md. The single-PDG implementation below passed its complete
 development gate; clean full qualification and reviewed evidence are next.
 
-1. Single-PDG implementation is a558b87; optimizer ownership repair is f900e15.
-   Checkpoint v5 passed 110 directed tests in an isolated worktree (8.09s).
-2. Explicit IOCortex scope passed its actual original-LH development gate:
-   tide-foundation-iocortex-smoke-dev-20260921-2229 is inactive/dead, MainPID 0,
-   Result=success, exit 0; finished 2026-09-21T22:31:30Z. Three records under
-   artifacts/iocortex-smoke-dev-20260921-2229/ are passed. Four dtype/assertion
-   runs each passed 6 cases / 165 single-PDG cuts. Both oracle manifests say
-   scope=smoke and export no fixtures; archive/current-source hashes matched.
-   Three integrated scope/inventory/rejection tests passed in 0.14s. Commit this
-   scope change. It is explicitly partial; full remains the default.
-3. Launch full clean qualification at that commit in the isolated worktree
-   /var/tmp/zlong-graph-execution-foundation/qualification-20260921-2234.
-   Planned unit: tide-foundation-single-qualified-20260921-2234; output:
-   artifacts/single-qualified-20260921-2234/. Use scripts/job.py wrapping
-   scripts/qualify.py --output-dir (absolute output) --jobs 2 --lh-snapshot
-   /var/tmp/zlong-graph-execution-foundation/artifacts/lh-source-20260921-1428.
-   The worktree must have its own build; link its ignored artifacts path to the
-   retained artifact root. Mark tracked files read-only. Verify service and
-   records after dispatch, and update this handoff with exact source/command.
-4. Continue on main while the isolated job runs. Clean full evidence is still
-   pending; do not relabel the development result. Refresh stale plan/navigation
-   descriptions, correct snapshot identity-copy cost, then implement the first
-   bounded M8 native streaming benchmark with correctness checks and records.
-   M6 composite ownership and broader training remain in ROADMAP.
+## Active clean qualification
 
-No active job now. Temporary /var/tmp/zlong-graph-execution-foundation/ownership-dev
-has no unique implementation left. Once scope is committed, compare all modified/
-untracked source files to main before removing that redundant worktree. Preserve
-its development records until the clean qualification is retained.
+Source c84abbed7c9cfce6d4c6a44f6b7ae5f9aab465d3 is frozen at
+/var/tmp/zlong-graph-execution-foundation/qualification-20260921-2234.
+Tracked files are read-only; git status is clean; build/ belongs only to that
+worktree. Unit tide-foundation-single-qualified-20260921-2234 was confirmed
+active/running, MainPID 254881, background.slice, Transient=yes and a control
+group outside focus.service. Started 2026-09-21T22:33:32Z. No result yet.
+
+Working directory is the frozen worktree. Exact command:
+/home/zlong/anaconda3/bin/python scripts/job.py --output-dir
+/var/tmp/zlong-graph-execution-foundation/artifacts/single-qualified-20260921-2234
+-- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
+/var/tmp/zlong-graph-execution-foundation/artifacts/single-qualified-20260921-2234
+--jobs 2 --lh-snapshot
+/var/tmp/zlong-graph-execution-foundation/artifacts/lh-source-20260921-1428.
+
+Main checkout artifacts/single-qualified-20260921-2234/ resolves to those logs.
+Inspect `systemctl --user show tide-foundation-single-qualified-20260921-2234`
+with -p ActiveState -p SubState -p MainPID -p Result -p ExecMainStatus, then
+status.json, verification/result.json, oracle/result.json,
+oracle-release/result.json, pronounce-release/result.json,
+iocortex-release/result.json and iocortex-python/result.json.
+Stop only if needed: systemctl --user stop tide-foundation-single-qualified-20260921-2234.
+Do not edit the frozen worktree/build or change the immutable LH snapshot.
+Main development can proceed independently. Commit evidence only after terminal
+success and verified source/clean-state/inventories/counts.
+
+## Current implementation and next work
+
+Single-PDG implementation: a558b87. Named optimizer ownership and checkpoint v5:
+f900e15; 110 directed tests passed (8.09s). Explicit original IOCortex smoke/full
+scope: c84abbe; full remains the default. Actual development gate
+artifacts/iocortex-smoke-dev-20260921-2229/ is passed in all three records;
+unit inactive/dead, MainPID 0, exit 0, finished 2026-09-21T22:31:30Z. Each of
+four dtype/assertion runs passed 6 cases / 165 single-PDG cuts. Both oracle
+manifests explicitly say smoke and export no fixtures. Archive/source matched.
+Three integrated scope/inventory/rejection tests passed in 0.14s.
+
+Stale module/Add/attention/Pronounce navigation is refreshed; native/Python
+snapshot identity-copy cost is explicit. All 15 modified/new files in the temporary
+ownership-dev worktree matched main byte-for-byte; that redundant worktree was
+removed after inspection. Its implementation is committed in f900e15/c84abbe.
+Next implement the first bounded M8 native streaming benchmark: separate construction,
+advance and snapshot; include complete correctness checks outside timing, work
+counters, per-repetition latency and process peak memory. Experiment skill read;
+Torch interpreter has no Trackio and no site viewer is configured. Keep portable
+local metrics and report any best-effort tracking degradation. Do not claim a
+speedup or broad workload support without measurements. M6 composite ownership,
+more training objectives and further performance work stay in ROADMAP.
 No push; no sub-agents. Reference repositories remain read-only.
 
 ## Single-PDG development result

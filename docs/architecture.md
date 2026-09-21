@@ -14,7 +14,7 @@
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |
 | `docs/evidence/` | Small immutable-source qualification reports |
-| `docs/module-extension-plan.md` | Concrete next kernel/state interface work |
+| `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership and preflight value restore |
@@ -28,7 +28,7 @@
 | `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
 | `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
 | `docs/region-programs.md` | Selector interfaces, typed history, controls and persistence |
-| `docs/lh-add-plan.md` | Next lazy Add, decay precision, physical state projection and oracle gate |
+| `docs/lh-add-plan.md` | Lazy Add design notes, decay precision and physical state projection |
 | `docs/lazy-add.md` | Explicit tick-repeat Add, physical decode, batch buckets and parameter-epoch limits |
 | `docs/lh-full.md` | LH activation/normalization backbones and per-edge signaling mapping |
 | `docs/lh-attention-plan.md` | Same-fiber cache/visibility/decay and post-attention pooling gate |

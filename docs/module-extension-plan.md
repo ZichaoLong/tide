@@ -1,22 +1,24 @@
-# Next implementation: state and operator programs (M5)
+# Local program catalog and extension contracts (M5)
 
 The initial state-program seam and SSM/SwiGLU are implemented and qualified in
 `evidence/m5a-state-programs.md`. Matrix-memory profiles are qualified in
 `evidence/m5b-matrix-memory.md`.
-This document retains the remaining interface/module work; it is not a blanket
+Current backlog is in `ROADMAP.md`. This document explains the module contracts; it is not a blanket
 support claim for arbitrary models.
 
-M5C adds aggregated-event GQA/window attention and checked packed sequence
-interfaces; see `attention.md` and the current qualification in `STATUS.md`.
-RoPE/position and LH same-fiber attention remain separate profiles to implement.
+Aggregated-event GQA/window attention and packed sequence interfaces are
+qualified in `evidence/m5c-attention.md` (`attention.md`). LH same-fiber attention,
+packing and pooling have separate contracts and evidence in `fiber-attention.md`,
+`fiber-packing.md` and `fiber-pooling.md`. RoPE/model-specific position rules are
+outside these representative profiles.
 Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing.md`.
 
-## Next vertical gates: general local programs
+## General local programs
 
 Stable local ports are [qualified](evidence/local-ports.md). Full/Emit now returns
 per-slot payloads or absence, supports native/Python custom programs, and retains
 the old broadcast profile; its slot-affine/phase profile is
-[qualified](evidence/full-programs.md). Remaining gates:
+[qualified](evidence/full-programs.md). Their separate contracts and gates:
 
 1. Aggregate interfaces and weighted mean, active-source softmax and all-source
    softmax are implemented with full tags, local slots and optional contributions;
@@ -38,9 +40,11 @@ the old broadcast profile; its slot-affine/phase profile is
    selector oracle are [qualified](evidence/lh-selector.md) (`lh-selector.md`).
 4. Tick-repeat LH Add and explicit physical cut decode are [qualified](evidence/lh-add.md)
    (`lazy-add.md`). LH activation/norm and per-edge signaling are
-   [qualified](evidence/lh-full.md) (`lh-full.md`). Next: same-fiber attention
-   (`lh-attention-plan.md`) and token-window Pronounce. Compare an immutable
-   snapshot of actual LH C++ sources, never its older Python interpreter.
+   [qualified](evidence/lh-full.md) (`lh-full.md`). Same-fiber attention and token-window Pronounce are qualified in
+   `evidence/lh-attention.md` and `evidence/pronounce.md`; whole-model two-clock
+   inference is qualified in `evidence/lh-iocortex.md`. The single-PDG construction
+   is in `lh-single-graph.md`; current qualification is tracked in STATUS.
+   All original oracles use immutable actual C++ sources, not the older Python interpreter.
 
 These gates instantiate the existing upstream functions; do not change Tide's
 Next-before-Full or no-autonomous-empty-event semantics to fit an implementation.
@@ -48,7 +52,7 @@ Keep modules and schedulers independently testable, with explicit capability
 fallbacks. Mixed-profile training/loss statistics and performance follow the
 same regression/evidence process, not a one-time blanket certification.
 
-## First change: remove formula assumptions from schedulers
+## Keep formula assumptions outside schedulers
 
 State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
@@ -71,7 +75,7 @@ Keep Python scheduling independent.
 - Preserve old EMA/identity behavior as compatibility profiles. Re-run existing
   tests before adding advanced profiles; update checkpoint schema deliberately.
 
-## Concrete module sequence and gates
+## Concrete profiles and independent gates
 
 | Module | State and explicit contract | Independent checks |
 | --- | --- | --- |

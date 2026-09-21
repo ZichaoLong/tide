@@ -16,7 +16,7 @@ class StreamingCursor {
  public:
   StreamingCursor(Streaming&, Continuation);
   AdvanceResult advance(const std::vector<External>&, Index stop, Index seal);
-  Continuation snapshot() const;  // Explicit O(all state + pending), differentiable clones.
+  Continuation snapshot() const;  // Explicit state/pending/graph-identity copy and differentiable tensor clones.
   void detach();                 // Explicit O(all state + pending) truncation.
   Index cut() const;
   bool failed() const;

@@ -1,10 +1,11 @@
-# Next LH gate: same-fiber attention
+# Same-fiber attention oracle design
 
 Scalar sum/tick-repeat baseline is qualified in `evidence/lh-attention.md`;
 contract: `fiber-attention.md`. Real batch/sequence packing and CROSSBATCH are
 qualified in `evidence/fiber-packing.md` (`fiber-packing.md`). Post-attention
 Confluence is now qualified in `evidence/fiber-pooling.md` (`fiber-pooling.md`).
-Continue with `lh-pronounce-plan.md` and whole-model readout.
+Pronounce and whole-model two-clock inference are qualified in
+`evidence/pronounce.md` and `evidence/lh-iocortex.md`. Current backlog: ROADMAP.
 
 Use the immutable snapshot in STATUS. `AccumulateLocal.cpp` projects every source
 row, appends all current K/V, evaluates every current query against the entire
@@ -12,7 +13,7 @@ cache including all current rows, then applies Confluence and `c_proj`. The
 existing aggregated-event attention is a different program. A triangular mask
 inside one fiber changes semantics; a prefill mask must compare **event** order.
 
-## First bounded profile and independent anchors
+## Bounded profile and independent anchors
 
 Start with explicitly named same-fiber **sum Confluence** and tick-repeat log-bias
 decay. Preserve raw source tags/local slots and scaled input rows; do not collapse
@@ -63,5 +64,5 @@ bridge/token inputs; an adapter must map local slots and numerical reduction
 order deliberately. This extension must be separately qualified against original
 Confluence routines before claiming those whole-model configurations.
 
-After attention, complete the IOCortexNet adapter and Pronounce token clock. The
-qualified Add/Selector/Full components alone do not establish whole-model parity.
+The IOCortexNet adapter and Pronounce token clock have their own original-C++
+gates; Add/Selector/Full component checks alone would not establish those results.
