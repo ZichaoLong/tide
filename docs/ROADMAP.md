@@ -12,7 +12,7 @@ stays explicit; later milestones may refine earlier interfaces.
 | M3 | TimedDAG validation and frontier contracts; Python + native; actual time batching; region quotient cycles; independent DAG specialization | verified for ema-ffn-v1; [frontier](evidence/m3-frontier.md), [specialization](evidence/m4-settle-specialized.md) |
 | M4 | SettleGraph executor + encoding; Python/native generic; independent Python specialization; embedded trace and backward correspondence | verified for ema-ffn-v1; [evidence](evidence/m4-settle-specialized.md) |
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | SSM/SwiGLU [verified](evidence/m5a-state-programs.md); Linear/Delta [verified](evidence/m5b-matrix-memory.md); event GQA/window [verified](evidence/m5c-attention.md); broader programs pending |
-| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profile verified; [evidence](evidence/m6-training-contracts.md); broader modules/objectives pending |
+| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); broader modules/objectives pending |
 | M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | planned |
 | M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | planned |
 
@@ -44,7 +44,8 @@ scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
-903-test qualification. Local semantic replay is implementing the correction;
-see `packed-autograd.md` and `STATUS.md`. Optimized packed backward must preserve
+903-test qualification. Local semantic replay corrects the tested boundary;
+see [qualification](evidence/isolated-autograd.md) and `packed-autograd.md`.
+Optimized packed backward must preserve
 this contract before replacing the replay baseline; its training overhead is
 part of M8 performance qualification.

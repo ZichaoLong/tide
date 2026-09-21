@@ -4,42 +4,28 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **903 tests passed** at
-`55abdd5badc31255e574c237be4ea7d624b839eb`.
-See `evidence/m5d-memory-packing.md`; prior evidence is linked from `ROADMAP.md`.
-Unit `tide-foundation-memory-pack-20260921-1006` completed with exit 0.
-EMA/SSM now have joint
-`[time,batch,width]` scans, grouping nonempty equal-length samples and compacting
-final persistent tensors. The native owned cursor remains qualified.
-
-Active correctness work: isolated output roots exposed a
-packing defect not covered by the 903-test all-root suite. Reading only sample 0
-returns connected-zero gradients for independent sample-1 initial state through
-packed state/Full operations; the scalar reference returns None. This can also
-reach upstream parameters. Do not claim arbitrary isolated-root VJP equivalence
-until clean qualification. Local semantic replay is implemented in Python and
-native source; counters and limits are in `packed-autograd.md`. Targeted Python
-and native checks: **364 passed**, FP64/FP32, including isolated public roots,
-connected numerical zeros, independent parameters, optimizer updates,
-serial/parallel/packed paths, cuts/cursor and SettleGraph/specializations.
-Development native build `artifacts/autograd-build-20260921-1030` exited 0;
-the preceding `1028` build failed on an include, now fixed. No worker remains.
-
-Next: commit this implementation, then launch clean qualification under unit
-`tide-foundation-autograd-20260921-1034`, artifacts
+Latest clean qualification: **1267 tests passed** at
+`c04b89eb5e2ab414a3367ae4ae8b65f24cc08768`.
+See `evidence/isolated-autograd.md`; prior evidence is linked from `ROADMAP.md`.
+No active background jobs. Unit `tide-foundation-autograd-20260921-1034`
+completed with exit 0, no worker remains. Artifacts:
 `artifacts/autograd-20260921-1034/{status.json,task.log,verification/}`.
-Command: `python scripts/qualify.py --output-dir artifacts/autograd-20260921-1034`.
-Freeze source while the job runs; inspect terminal status and archive evidence
-in a separate commit. No original-LH numerical or performance run is included.
+
+The packed isolated-gradient defect is fixed for tested first-order public-root
+VJPs to parameters, external inputs and initial-state leaves. Packed numerical
+kernels retain their forward values; grad-enabled execution additionally builds
+independent scalar/event graphs. Counters and performance limits are explicit in
+`packed-autograd.md`. No numerical-zero-to-None conversion or global liveness
+traversal is used. Inference has no replay.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
 encoding/direct Python execution, independent self-loop/chain anchors, complete
-trace/VJP comparisons, sharing, explicit detach and checkpoint v3. State kernels
-now own preparation; native clients can supply their own StateKernel. EMA,
-identity, diagonal selective SSM, Linear/Delta, event attention and tanh/SwiGLU
-profiles are present.
-Refer to each report for the exact executor/profile cells tested.
+trace/VJP comparisons, sharing, explicit detach and checkpoint v3. Native owned
+cursors preserve queues across windows. State kernels own preparation and accept
+custom native implementations. EMA, identity, diagonal selective SSM,
+Linear/Delta, event attention/GQA/window and tanh/SwiGLU profiles are present.
+Refer to evidence for the exact executor/profile cells tested.
 
 Environment: aarch64; Python 3.11.15; Torch/LibTorch 2.10.0+cpu. Local Python:
 `/home/zlong/anaconda3/bin/python`. CPU commands need
@@ -48,14 +34,15 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Finish the active isolated-gradient repair and clean qualification above.
-2. Generalize local programs, starting with Full/Emit per-edge values and absent
-   coordinates. See `module-extension-plan.md` for ordered gates. Preserve all
-   existing independent schedules and exact SettleGraph boundary mapping.
-3. Extend region history/selector and Aggregate/Next contracts, then loss
-   statistics and original LH C++ inference comparison (`lh-compatibility.md`).
-4. Performance qualification must also address cache allocation, structured Delta
-   chunks and observed sparse work; no speed claim follows from kernel counts.
+1. Generalize local programs. First establish validated per-node input/output
+   slots outside shared parameter modules, with compact native inverse indexes,
+   SettleGraph boundary remapping and graph/checkpoint identity guards. Then
+   Full/Emit can return per-slot values or absence. See `module-extension-plan.md`.
+2. Extend source-aware Aggregate, full Next/Read, region history/selector, then
+   loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
+3. Performance qualification must address replay cost/optimized backward, cache
+   allocation, structured Delta chunks and observed sparse work. No speed claim
+   follows from kernel counts.
 
 ## Boundaries
 
@@ -67,3 +54,4 @@ No packages were changed. CMake derives LibTorch from the selected Python.
   Python frontend. Native execution itself does not call Python.
 - Evidence is tied to immutable source revisions. Build artifacts are ignored;
   verify source/binary fingerprints before fresh qualification.
+- Cleanup dry run found no eligible obsolete artifacts; nothing was deleted.
