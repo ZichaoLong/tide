@@ -46,8 +46,9 @@ Stable local port layouts, native flat inverse indexes and SettleGraph remapping
 are [qualified](evidence/local-ports.md). Extensible Full/Emit programs and sparse
 per-slot emissions are [qualified](evidence/full-programs.md). Source-aware
 Aggregate profiles and extension seams are [qualified](evidence/aggregate-programs.md).
-Tag-sensitive custom programs need a source-origin view under SettleGraph embedding;
-the initial built-in embedding tests do not establish that broader case.
+Graph-owned source-origin views for tag-sensitive custom programs under boundary
+embedding are [qualified](evidence/source-origins.md). Complete-content propagation
+and Read/Next are the next program gates (`next-read-plan.md`).
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

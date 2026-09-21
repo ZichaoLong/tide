@@ -22,7 +22,7 @@ the old broadcast profile; its slot-affine/phase profile is
    softmax are implemented with full tags, local slots and optional contributions;
    [qualification](evidence/aggregate-programs.md) covers the built-ins. Graph-owned
    source-origin views now restore tag-sensitive custom Aggregate under SettleGraph
-   embedding and are undergoing qualification. Built-in memory
+   embedding and are [qualified](evidence/source-origins.md). Built-in memory
    profiles still consume the summary; expose complete typed content through
    Upd/Read/Next/Full when adding source-aware memory, before LH attention.
 2. Follow `next-read-plan.md` to expose complete content and the full Next inputs

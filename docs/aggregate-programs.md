@@ -1,8 +1,8 @@
 # Source-aware Aggregate programs
 
 Built-ins and extension seams are [qualified](evidence/aggregate-programs.md).
-The source-origin adapter described below fixes the subsequent tag-sensitive
-embedding counterexample; its clean qualification is pending in `STATUS.md`.
+The source-origin adapter below fixes the subsequent tag-sensitive embedding
+counterexample and is [qualified](evidence/source-origins.md).
 Aggregate receives a complete nonempty source-tagged fiber, logical time, stable
 local input slots and legacy physical source scales. Programs are functional,
 immutable during execution, and independent across events. Source tags and input

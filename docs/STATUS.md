@@ -4,42 +4,34 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1727 tests passed** at
-`4fa29b6d2291da006781aa456a15647e874d4fb1`.
-See `evidence/aggregate-programs.md`; prior evidence is linked from `ROADMAP.md`.
-Previous qualification unit `tide-foundation-aggregate-20260921-1203`
+Latest clean qualification: **1740 tests passed** at
+`dd351c9524f8530929ee66e5d151f3176b85f890`.
+See `evidence/source-origins.md`; prior evidence is linked from `ROADMAP.md`.
+Previous qualification unit `tide-foundation-origin-20260921-1222`
 completed with exit 0, no worker remains. Artifacts:
-`artifacts/aggregate-20260921-1203/{status.json,task.log,verification/}`.
+`artifacts/origin-20260921-1222/{status.json,task.log,verification/}`.
 
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
 SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v7; checkpoint payload remains
+tags. See `local-ports.md`. Native graph format is v8; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
 Per-slot Full/Emit is qualified: native/Python program extension interfaces,
 slot-affine parameters and sparse phase-based emissions across all schedules.
 The concrete API and boundaries are in `full-programs.md`. No active job remains.
-Aggregate's five profiles and extension seam are qualified, with a newly found
-embedding limit: a custom program reading atom kind/origin position sees changed
-tags after SettleGraph converts inputs to edges. Built-in local-slot programs
-pass the tested embedding. Immediate next fix: graph-owned source-origin views,
-preserving physical routing/scales but restoring program-visible tags and
-canonical order. Add a minimal custom-program regression in Python and native.
-Active implementation: origin views now map source kind/ID/position and restore
-canonical program order before Aggregate, while resolving local slots and scales
-from physical identities. Python custom-program regression and malformed-origin
-checks passed 11 cases in FP64/FP32; native custom check adds mixed boundary/
-internal fibers and hand-computed forward/VJP. Development build
-`artifacts/origin-build-20260921-1215` exited 0 and targeted origin/Aggregate/
-SettleGraph/port/CLI suites passed **340 tests**. A subsequent small refinement
-avoids allocating the origin index and re-sorting sources when no view exists.
-Rebuild `artifacts/origin-build-20260921-1219` exited 0, no worker remains;
-source-origin/CLI checks passed 21 tests after the refinement. Next: commit this
-fix, then qualify clean source with `python scripts/qualify.py --output-dir
-artifacts/origin-20260921-1222`, unit `tide-foundation-origin-20260921-1222`.
-Freeze source while active and archive evidence separately after terminal success.
-Continue with `next-read-plan.md` after qualification.
+Aggregate's five profiles and extension seam are qualified. Graph-owned origin
+views fix tag-sensitive custom programs under SettleGraph boundary encoding and
+restore canonical program order. Raw routing/scales still use physical identity;
+graphs without views allocate no origin index or additional source sort. The
+native custom example includes mixed boundary/internal fibers and independent
+forward/VJP formulas. See `aggregate-programs.md` and source-origin evidence.
+
+No active job or uncommitted implementation remains. Next: `next-read-plan.md`.
+First propagate complete content (summary, program-visible sources and optional
+contributions) through state/Read/Full, including packed metadata and replay.
+Then expose Read's region modes and full Next requests with prefill capability
+guards. Keep generic Python/native schedules independent and qualify each seam.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -64,7 +56,8 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Fix tag-sensitive custom Aggregate under SettleGraph embedding as above.
+1. Propagate complete content and add registered Python custom state programs,
+   with strict native adapter guards; follow `next-read-plan.md`.
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
