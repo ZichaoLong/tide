@@ -21,16 +21,30 @@ artifacts/single-training-adamw-fp32-repro/; strict tolerances were not changed.
 Earlier invalid buffer-presence test assumption is archived at
 artifacts/single-training-initial-buffer-repro/.
 
-Next apply the reviewed checkpoint extension from ignored
-artifacts/single-training-checkpoint-draft/{single_graph_optimizer.py,
-test_single_graph_optimizer.py,test_single_graph_resume.py}. It factors the
-trainer and adds two single-PDG save/restore boundaries inside nonempty partial
-windows. Draft smoke: 24 FP64 reference and 12 FP32 cursor cases passed.
-Run the optimizer/resume directed gate, commit, then full clean CPU qualification
-from an isolated worktree. The existing single-graph v5 schema is sufficient;
-this does not serialize the separate two-clock application/occurrence ledger.
-Continue original-LH qualification below; commit evidence only after termination.
-Remaining scope and separate composite/C++ checkpoint ownership are in ROADMAP.
+Checkpoint extension passed 500 optimizer/resume tests in 148.65s:
+artifacts/single-resume-dev-20260921-2340/, both records passed, unit inactive/dead,
+MainPID 0, exit 0. Its source archive matched every working source file after
+termination. Two complete single-PDG v5 saves/restores occur inside nonempty
+partial readout windows, preserving aliases, detached state/pending payloads,
+weights and optimizer updates. No composite two-clock/controller serialization
+or standalone C++ optimizer qualification follows from this test.
+
+Commit this increment, then freeze that clean commit at
+/var/tmp/zlong-graph-execution-foundation/training-qualification-20260921-2345
+and dispatch unit tide-foundation-training-qualified-20260921-2345 from it:
+
+```sh
+/home/zlong/anaconda3/bin/python scripts/job.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 --jobs 2
+```
+
+That gate covers the complete CPU suite; original LH runs separately below.
+After submission record the exact source, active unit and result locations.
+Next independent repair: checkpoint save currently writes directly to the final
+exclusive filename. An interrupted/full-disk write can leave a partial final
+file. An ignored draft exists at artifacts/checkpoint-io-draft/; reproduce the
+old failure, then implement atomic exclusive publication with fault-injection
+coverage. Keep the current v5 format and protect existing targets/racing writers.
+Remaining composite application and standalone C++ ownership stay in ROADMAP.
 
 ## Active immutable qualification
 

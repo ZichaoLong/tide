@@ -45,12 +45,27 @@ that old LH eager decay under changing weights is the same computation.
   SOFTP and HST (zeta 0.37), selected clear on/off, FP64/FP32, values, routes,
   gradients and unchanged connectivity through cuts. Separate zero-cotangent
   cases retain None versus connected-zero observations.
-- tests/test_single_graph_optimizer.py checks three truncated updates with
+- tests/single_graph_optimizer.py owns the shared training/checkpoint driver.
+  tests/test_single_graph_optimizer.py checks three truncated updates with
   SGD (lr .001, momentum .8, weight decay .01) and AdamW (lr .0002, epsilon
   1e-5, weight decay .01), Add/all-softmax, all three Emit modes, both clear
   settings and all five encoded schedules. Compare gradients, parameters and
   complete optimizer states at every update. The first cut precedes readout,
   so head parameters must be skipped; later cuts must connect them.
+
+- tests/test_single_graph_resume.py repeats that update matrix with two
+  save/restore boundaries before readout, while the token buffer is nonempty.
+  Save the full encoded graph under checkpoint v5; reconstruct the same parameter
+  aliases and optimizer order, restore deliberately changed fresh weights, then
+  compare subsequent inputs/parameter gradients, values and optimizer state to
+  the uncheckpointed two-clock trajectory. Native cursors reimport the restored
+  complete continuation. Loading begins a new autograd segment.
+
+The single-PDG checkpoint covers its body, readout, registered vocabulary head,
+state/cache/history and pending partial-window messages together. It needs no
+reconstructed two-clock occurrence ledger. The external data source/controller
+must still supply the same future sealed inputs; framework RNG and the data
+cursor are not serialized.
 
 The optimizer controller is Python over aliased LibTorch tensors for native
 execution. This does not qualify independent C++ optimizer serialization or a
