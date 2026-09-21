@@ -4,6 +4,7 @@ from functools import cached_property
 import hashlib
 import json
 from .ports import PortLayout
+from .origins import InputOrigin, validate_origins
 
 
 @dataclass(frozen=True)
@@ -47,6 +48,7 @@ class Graph:
     inputs: tuple[int, ...]
     outputs: tuple[int, ...]
     layout: PortLayout | None = None
+    origins: tuple[InputOrigin, ...] = ()
 
     def __post_init__(self):
         n = len(self.nodes)
@@ -68,6 +70,8 @@ class Graph:
                 raise ValueError("invalid edge endpoint")
             if type(e.delay) is not int or not 0 < e.delay < 2**63:
                 raise ValueError("edge delay must be a positive int64")
+        validate_origins(self.origins, len(self.edges))
+        object.__setattr__(self, "origins", tuple(sorted(self.origins, key=lambda x: x.edge)))
         if any(not 0 <= v < n for v in (*self.inputs, *self.outputs)):
             raise ValueError("invalid port owner")
         if self.layout is not None and not isinstance(self.layout, PortLayout):
@@ -84,6 +88,10 @@ class Graph:
                 raise ValueError("identity boundaries require unconditional broadcast")
             if node.identity and node.aggregation != "sum":
                 raise ValueError("identity boundaries require sum Aggregate")
+
+    @cached_property
+    def origin_index(self):
+        return {origin.edge: origin for origin in self.origins}
 
     @cached_property
     def ports(self):

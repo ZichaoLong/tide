@@ -26,7 +26,20 @@ tags after SettleGraph converts inputs to edges. Built-in local-slot programs
 pass the tested embedding. Immediate next fix: graph-owned source-origin views,
 preserving physical routing/scales but restoring program-visible tags and
 canonical order. Add a minimal custom-program regression in Python and native.
-No job is active; no uncommitted implementation remains.
+Active implementation: origin views now map source kind/ID/position and restore
+canonical program order before Aggregate, while resolving local slots and scales
+from physical identities. Python custom-program regression and malformed-origin
+checks passed 11 cases in FP64/FP32; native custom check adds mixed boundary/
+internal fibers and hand-computed forward/VJP. Development build
+`artifacts/origin-build-20260921-1215` exited 0 and targeted origin/Aggregate/
+SettleGraph/port/CLI suites passed **340 tests**. A subsequent small refinement
+avoids allocating the origin index and re-sorting sources when no view exists.
+Rebuild `artifacts/origin-build-20260921-1219` exited 0, no worker remains;
+source-origin/CLI checks passed 21 tests after the refinement. Next: commit this
+fix, then qualify clean source with `python scripts/qualify.py --output-dir
+artifacts/origin-20260921-1222`, unit `tide-foundation-origin-20260921-1222`.
+Freeze source while active and archive evidence separately after terminal success.
+Continue with `next-read-plan.md` after qualification.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical

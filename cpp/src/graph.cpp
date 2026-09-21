@@ -1,5 +1,6 @@
 #include "tide/types.h"
 #include "tide/ports.h"
+#include <algorithm>
 #include <sstream>
 #include <stdexcept>
 
@@ -34,6 +35,15 @@ void Graph::compile() {
     if (!valid(e.source) || !valid(e.target) || e.delay <= 0) fail("invalid positive-delay edge");
   for (auto v : inputs) if (!valid(v)) fail("invalid input owner");
   for (auto v : outputs) if (!valid(v)) fail("invalid output owner");
+  std::sort(origins.begin(), origins.end(), [](const auto& a, const auto& b) { return a.edge < b.edge; });
+  origin_index.clear();
+  if (!origins.empty()) origin_index.assign(edges.size(), -1);
+  for (size_t i = 0; i < origins.size(); ++i) {
+    const auto& origin = origins[i];
+    if (origin.edge < 0 || origin.edge >= static_cast<Index>(edges.size()) || origin.port < 0 || origin.stride < 1
+        || origin_index[origin.edge] != -1) fail("invalid input origin view");
+    origin_index[origin.edge] = i;
+  }
   auto index = [n](const std::vector<Index>& owners) {
     Adjacency result;
     result.offsets.assign(n + 1, 0);
@@ -60,7 +70,7 @@ void Graph::compile() {
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v7;n=" << n << ';';
+  out << "tide-graph-v8;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
@@ -80,6 +90,7 @@ void Graph::compile() {
   out << "lt;"; for (auto v : layout->edge_target) out << v << ',';
   out << "li;"; for (auto v : layout->input) out << v << ',';
   out << "lo;"; for (auto v : layout->output) out << v << ',';
+  out << "origin;"; for (const auto& origin : origins) out << origin.edge << ',' << origin.port << ',' << origin.stride << ';';
   identity = out.str();
 }
 }  // namespace tide

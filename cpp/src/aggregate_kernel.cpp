@@ -52,7 +52,7 @@ class SourceAggregate final : public AggregateKernel {
   }
   AggregateResult step(const NodeWeights& w, const AggregateInput& request) const override {
     std::vector<Tensor> values;
-    for (const auto& source : request.sources) values.push_back(source.atom->value * source.scale);
+    for (const auto& source : request.sources) values.push_back(source.atom.value * source.scale);
     return combine(w, request, values);
   }
   std::vector<AggregateResult> batch(const NodeWeights& w, const std::vector<AggregateInput>& requests) const override {
@@ -68,7 +68,7 @@ class SourceAggregate final : public AggregateKernel {
       std::vector<Tensor> values;
       for (size_t j = 0; j < signature.size(); ++j) {
         std::vector<Tensor> atoms, scales;
-        for (auto i : rows) { atoms.push_back(requests[i].sources[j].atom->value); scales.push_back(requests[i].sources[j].scale); }
+        for (auto i : rows) { atoms.push_back(requests[i].sources[j].atom.value); scales.push_back(requests[i].sources[j].scale); }
         values.push_back(at::stack(atoms) * at::stack(scales).unsqueeze(-1));
       }
       auto packed = combine(w, request, values);

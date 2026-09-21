@@ -20,6 +20,7 @@
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
+| `docs/next-read-plan.md` | Planned complete-content, Read/Next seams and prefill gates |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.

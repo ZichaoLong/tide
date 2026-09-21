@@ -1,6 +1,7 @@
 #include "tide/aggregate.h"
 #include "tide/autograd.h"
 #include <ATen/core/grad_mode.h>
+#include <algorithm>
 #include <set>
 #include <stdexcept>
 
@@ -8,14 +9,23 @@ namespace tide {
 namespace {
 AggregateInput request(const Graph& g, const Model& m, const Event& event) {
   AggregateInput result{event.time, g.incoming_ports.offsets[event.node+1] - g.incoming_ports.offsets[event.node], {}};
-  for (const auto& atom : event.fiber)
-    result.sources.push_back({atom.kind == 0 ? g.layout->input[atom.source] : g.layout->edge_target[atom.source], &atom,
+  for (const auto& atom : event.fiber) {
+    auto visible = atom;
+    if (atom.kind == 1 && !g.origins.empty() && g.origin_index[atom.source] != -1) {
+      const auto& origin = g.origins[g.origin_index[atom.source]];
+      if (atom.position % origin.stride) throw std::invalid_argument("message does not lie on input origin clock");
+      visible.kind = 0; visible.source = origin.port; visible.position /= origin.stride;
+    }
+    result.sources.push_back({atom.kind == 0 ? g.layout->input[atom.source] : g.layout->edge_target[atom.source], visible,
                               atom.kind == 0 ? m.input_scale[atom.source] : m.agg_scale[atom.source]});
+  }
   if (result.sources.empty()) throw std::invalid_argument("Aggregate requires a nonempty fiber");
+  if (!g.origins.empty())
+    std::sort(result.sources.begin(), result.sources.end(), [](const auto& a, const auto& b) { return a.atom.key() < b.atom.key(); });
   return result;
 }
 void validate(const AggregateResult& result, const AggregateInput& input) {
-  const auto& reference = input.sources[0].atom->value;
+  const auto& reference = input.sources[0].atom.value;
   auto tensor = [&](const Tensor& value) {
     if (!value.defined() || value.sizes() != reference.sizes() || value.device() != reference.device()
         || value.scalar_type() != reference.scalar_type()) throw std::invalid_argument("Aggregate returned incompatible tensor metadata");

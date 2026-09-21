@@ -4,6 +4,7 @@ from collections import defaultdict
 import torch
 from . import autograd
 from .records import Atom
+from .origins import view
 
 
 @dataclass(frozen=True)
@@ -17,7 +18,7 @@ class SourceInput:
 class AggregateInput:
     time: int
     slots: int
-    sources: tuple[SourceInput, ...]  # Canonical raw atom order, no padding.
+    sources: tuple[SourceInput, ...]  # Canonical program-visible atom order, no padding.
 
 
 @dataclass
@@ -109,9 +110,11 @@ def request(graph, model, fiber):
         raise ValueError("Aggregate requires a nonempty fiber")
     node, time = fiber[0].node, fiber[0].time
     offsets = graph.port_indexes[0].offsets
-    sources = tuple(SourceInput(graph.ports.input[a.source] if a.kind == 0 else graph.ports.edge_target[a.source],
-                                a, model.input_scale[a.source] if a.kind == 0 else model.agg_scale[a.source]) for a in fiber)
-    return AggregateInput(time, offsets[node+1] - offsets[node], sources)
+    sources = [SourceInput(graph.ports.input[a.source] if a.kind == 0 else graph.ports.edge_target[a.source],
+                           view(graph, a), model.input_scale[a.source] if a.kind == 0 else model.agg_scale[a.source]) for a in fiber]
+    if graph.origins:
+        sources.sort(key=lambda s: s.atom.key())
+    return AggregateInput(time, offsets[node+1] - offsets[node], tuple(sources))
 
 
 def validate(result, request):

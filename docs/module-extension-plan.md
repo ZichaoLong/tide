@@ -20,12 +20,13 @@ the old broadcast profile; its slot-affine/phase profile is
 
 1. Aggregate interfaces and weighted mean, active-source softmax and all-source
    softmax are implemented with full tags, local slots and optional contributions;
-   [qualification](evidence/aggregate-programs.md) covers the built-ins. Before
-   proceeding, add graph-owned source-origin views for tag-sensitive custom
-   Aggregate under SettleGraph embedding. Built-in memory
+   [qualification](evidence/aggregate-programs.md) covers the built-ins. Graph-owned
+   source-origin views now restore tag-sensitive custom Aggregate under SettleGraph
+   embedding and are undergoing qualification. Built-in memory
    profiles still consume the summary; expose complete typed content through
    Upd/Read/Next/Full when adding source-aware memory, before LH attention.
-2. Expose the full Next inputs (old, comparison, time, content, active, control).
+2. Follow `next-read-plan.md` to expose complete content and the full Next inputs
+   (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill
    contract unless it provides an exact joint contract. Read must support content,
    old-state and proposed-state modes, not assume a proposal-only scalar score.

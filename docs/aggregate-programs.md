@@ -1,8 +1,8 @@
 # Source-aware Aggregate programs
 
 Built-ins and extension seams are [qualified](evidence/aggregate-programs.md).
-Tag-sensitive custom-program SettleGraph embedding still needs an origin adapter;
-see the counterexample boundary in the evidence and next action in `STATUS.md`.
+The source-origin adapter described below fixes the subsequent tag-sensitive
+embedding counterexample; its clean qualification is pending in `STATUS.md`.
 Aggregate receives a complete nonempty source-tagged fiber, logical time, stable
 local input slots and legacy physical source scales. Programs are functional,
 immutable during execution, and independent across events. Source tags and input
@@ -58,8 +58,8 @@ programs fail explicitly.
 ## Extension and navigation
 
 Native clients provide `NodeWeights::aggregate_kernel` implementing
-`AggregateKernel` in `cpp/include/tide/aggregate.h`. Input atom pointers are borrowed
-only for the synchronous call; do not retain or mutate them. Python programs are
+`AggregateKernel` in `cpp/include/tide/aggregate.h`. Source atom metadata is copied;
+Tensor storage remains shared and read-only. Python programs are
 parameter-owning `AggregateProgram` modules, passed in `Model(aggregate_programs=)`
 and carrying a versioned profile matching `Node.aggregation`. A Python-only
 program cannot cross the native adapter without a corresponding native program.
@@ -67,7 +67,31 @@ program cannot cross the native adapter without a corresponding native program.
 `aggregate_kernel.cpp` holds built-ins; `aggregate_evaluate.cpp` handles validation
 and replay. Python's independent counterpart is `aggregate.py`. Scalar fallback,
 packed Aggregate calls and semantic replays have separate statistics. Native
-graph format is v7; checkpoint payload remains v3 with a new graph fingerprint.
+graph format is v8; checkpoint payload remains v3 with a new graph fingerprint.
 `cpp/test/custom_aggregate.cpp` checks a time/tag/slot-dependent program with
 hand-computed loss 136, input gradients 52 and 4, gain gradient 116 and a
 disconnected sample. Related tests live in `test_aggregate_{formulas,schedules,contract}.py`.
+
+## Source-origin views under embedding
+
+A physical boundary edge is not an external atom. Its source ID and send time
+also differ from the original port ID and input position. Custom programs can
+observe these differences, so preserving only local slots is insufficient.
+
+`Graph.origins` contains explicit `InputOrigin(edge, port, stride)` entries.
+Aggregate input construction first resolves the physical scale and local slot,
+then presents that edge's atom as `(kind=external, source=port,
+position=send_time/stride)`. Arrival time, target, sample and payload are preserved.
+The declared send-time lattice is checked; no rounding is allowed. Sources are
+sorted into canonical program-visible order after projection, including mixed
+external/internal fibers. Raw routing, pending records and traces keep physical
+identities; SettleGraph's public projection restores its original fiber records.
+
+The mapping is graph-owned, included in graph/checkpoint identity and independent
+of shared parameters. Native compilation stores a flat edge-to-origin index;
+execution visits only the present fiber. Graphs without origin views allocate no
+origin index and skip the extra source sort. SettleGraph supplies the mapping for
+each boundary input adapter automatically. Built-in and custom Aggregate programs
+then see the original source domain without retaining physical IDs in modules.
+This mapping currently applies to Aggregate; passing the complete source-aware
+content to other program seams remains a separate extension.

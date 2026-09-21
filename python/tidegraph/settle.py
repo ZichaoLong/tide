@@ -7,6 +7,7 @@ from .graph import Edge, Graph, Node, Region
 from .ops import Model
 from .records import Atom, Continuation, External, Result
 from .ports import PortLayout
+from .origins import InputOrigin
 from .validation import validate_window
 
 
@@ -54,7 +55,8 @@ class SettleGraph:
         layout = PortLayout(ports.edge_source + tuple(range(len(g.inputs))) + ports.output,
                             ports.edge_target + ports.input + tuple(range(len(g.outputs))), (0,), (0,))
         encoded = Graph(g.nodes + (Node(r, identity=True), Node(r + 1, identity=True)), edges,
-                        g.regions + (Region(1), Region(1)), (n,), (n + 1,), layout)
+                        g.regions + (Region(1), Region(1)), (n,), (n + 1,), layout,
+                        g.origins + tuple(InputOrigin(len(g.edges)+p, p, self.stride) for p in range(len(g.inputs))))
         em = Model(encoded, model.width, dtype=model.nodes[0].bias.dtype,
                    full_programs={v: w.full_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
                    aggregate_programs={v: w.aggregate_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})

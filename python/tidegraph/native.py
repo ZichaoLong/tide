@@ -31,6 +31,7 @@ class Native:
         for name in ("edge_source", "edge_target", "input", "output"):
             setattr(layout, name, getattr(graph.ports, name))
         g.layout = layout
+        g.origins = [core.InputOrigin(o.edge, o.port, o.stride) for o in graph.origins]
         g.compile()
         self.compiled = g
         m = core.Model()

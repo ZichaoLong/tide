@@ -2,9 +2,9 @@
 #include "tide/types.h"
 
 namespace tide {
-// Borrowed atoms live only for the synchronous call. Programs cannot mutate
-// their payloads, weights or source scales. Empty fibers never call Aggregate.
-struct SourceInput { Index slot; const Atom* atom; Tensor scale; };
+// Atom metadata is copied to allow graph-owned source-origin views; Tensor
+// storage is shared read-only. Empty fibers never call Aggregate.
+struct SourceInput { Index slot; Atom atom; Tensor scale; };
 struct AggregateInput { Index time, slots; std::vector<SourceInput> sources; };
 struct AggregateResult { Tensor value; std::vector<SlotValue> contributions; };
 class AggregateKernel {
