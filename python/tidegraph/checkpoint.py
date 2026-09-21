@@ -2,6 +2,7 @@
 from pathlib import Path
 import torch
 from .records import Atom, Continuation, State
+from .history import History
 from .validation import validate_window
 
 
@@ -16,12 +17,13 @@ def save(path, graph, model, continuation, optimizer=None):
     q = continuation
     validate_window(graph, model, q, [], q.cut, q.cut)
     record = {
-        "schema": "tide-continuation-v3", "identity": graph.identity, "aliases": parameter_aliases(model),
+        "schema": "tide-continuation-v4", "identity": graph.identity, "aliases": parameter_aliases(model),
         "weights": model.state_dict(), "optimizer": None if optimizer is None else optimizer.state_dict(),
         "batch_size": q.batch_size, "cut": q.cut,
         "states": {k: (s.value.detach(), s.last_time, s.observations, {n: v.detach() for n, v in s.slots.items()})
                    for k, s in q.states.items()},
-        "history": q.history, "ledger": q.ledger,
+        "history": {k: (h.last_time, h.scalars, h.node_maps, {n: v.detach() for n, v in h.tensors.items()})
+                    for k, h in q.history.items()}, "ledger": q.ledger,
         "pending": [(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value.detach()) for a in q.pending],
     }
     target = Path(path)
@@ -32,7 +34,7 @@ def save(path, graph, model, continuation, optimizer=None):
 
 def load(path, graph, model, optimizer=None):
     record = torch.load(path, map_location="cpu", weights_only=True)
-    if record["schema"] != "tide-continuation-v3" or record["identity"] != graph.identity:
+    if record["schema"] != "tide-continuation-v4" or record["identity"] != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
     if record["aliases"] != parameter_aliases(model):
         raise ValueError("checkpoint parameter sharing mismatch; reconstruct the same aliases before loading")
@@ -40,10 +42,12 @@ def load(path, graph, model, optimizer=None):
     if expected.keys() != actual.keys():
         raise ValueError("checkpoint parameter keys mismatch")
     for key, value in expected.items():
-        if actual[key].shape != value.shape or actual[key].dtype != value.dtype:
+        if (not isinstance(actual[key], torch.Tensor) or actual[key].shape != value.shape
+                or actual[key].dtype != value.dtype or not torch.isfinite(actual[key]).all()):
             raise ValueError(f"checkpoint parameter mismatch: {key}")
     q = Continuation(record["identity"], record["batch_size"], record["cut"],
-                     {k: State(*s) for k, s in record["states"].items()}, record["history"],
+                     {k: State(*s) for k, s in record["states"].items()},
+                     {k: History(*h) for k, h in record["history"].items()},
                      [Atom(*a) for a in record["pending"]], record["ledger"])
     validate_window(graph, model, q, [], q.cut, q.cut)
     if optimizer is not None and record["optimizer"] is None:

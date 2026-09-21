@@ -4,84 +4,75 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **2010 tests passed** at
-`c4a5ce5a5b27284a50e343afed71a1a09e76ad55`.
-See `evidence/next-programs.md`; prior evidence is linked from `ROADMAP.md`.
-Unit `tide-foundation-next-20260921-1335` completed with exit 0, is inactive
-and has MainPID 0. Artifacts:
-`artifacts/next-20260921-1335/{status.json,task.log,verification/}`.
+The region-program/history increment is implemented, with **310 focused tests
+passed in FP64/FP32**, and the standalone native custom-kernel checker passed
+in both dtypes. No full qualification of this increment yet. Contract:
+`region-programs.md`. Completed region implementation plan removed; ROADMAP is
+still the full backlog. The status helper now summarizes old failures instead of
+printing their complete stale dirty-file lists.
 
-Stable local input/output mappings, native flat inverse indexes, SettleGraph
-remapping and graph/checkpoint identity guards are qualified. A mixed-input
-SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v10; checkpoint payload remains
-v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
+Implemented in this increment:
+- Python RegionProgram and native RegionKernel, graph-owned membership/policy,
+  default count, positive-only and learned tensor-history profiles.
+- Typed region history, complete controls, empty selection in independent fixed
+  topology loops, SettleGraph program sharing and initial-history embedding.
+- Trace/history roots, cuts/detach, cursor clone ownership, parameter sharing,
+  AdamW/checkpoint restoration and malformed-output checks.
+- Checked int64 counters across built-in state step/batch/sequence and selection.
 
-Per-slot Full/Emit is qualified: native/Python program extension interfaces,
-slot-affine parameters and sparse phase-based emissions across all schedules.
-The concrete API and boundaries are in `full-programs.md`. No active job remains.
-Aggregate's five profiles and extension seam are qualified. Graph-owned origin
-views fix tag-sensitive custom programs under SettleGraph boundary encoding and
-restore canonical program order. Raw routing/scales still use physical identity;
-graphs without views allocate no origin index or additional source sort. The
-native custom example includes mixed boundary/internal fibers and independent
-forward/VJP formulas. See `aggregate-programs.md` and source-origin evidence.
+Native graph identity is **v11**; checkpoint payload is **v4**. Old identities or
+schemas are rejected without implicit migration. Vector controls are supported
+by custom local programs; built-in projection Emit/control-blend require scalars.
+Region scans remain causal and scalar per frame; no joint selector batch or
+performance gain is claimed. Named heterogeneous controls and explicit FP64 Read
+precision policy remain future extensions.
 
-No active job. Complete-content propagation, registered Python state programs,
-independent Read programs and all three region modes are qualified. Read's
-program requests expose only the selected state and preserve complete metadata;
-see `content-programs.md`, `read-programs.md` and their evidence.
+Both development builds completed (exit 0, inactive, MainPID 0):
+`tide-foundation-region-build-20260921-1406` and
+`tide-foundation-region-build-20260921-1412`; artifacts use the corresponding
+`artifacts/region-build-20260921-{1406,1412}` paths.
 
-No active job. Complete-content propagation, registered state programs,
-independent Read modes and complete Next programs/prefill guards are qualified.
-See their contracts and evidence. Next keeps clear policy graph-owned, validates
-custom states and preserves pre-Next Full snapshots. Original parameter-sharing
-behavior is retained. No joint Next batch or performance gain is claimed.
+## Qualification handoff
 
-Next increment: region-owned typed histories, independent selector programs and
-controls, followed by LH count/affect/norm selection and original-C++ inference
-comparison. Follow `region-program-plan.md`; it identifies serialization, cursor,
-fixed-topology and isolated-gradient obligations. No region program code yet.
+Commit the current implementation, then launch the prepared immutable check:
+- Unit: `tide-foundation-region-20260921-1417`, `background.slice`.
+- Command: `python scripts/job.py --output-dir artifacts/region-20260921-1417
+  -- python scripts/qualify.py --output-dir artifacts/region-20260921-1417 --jobs 2`.
+- Freeze this checkout until the job ends. The authoritative source revision,
+  live/terminal state and exit code are in its `status.json`; output in `task.log`
+  and `verification/`. Launch has not occurred when this handoff is committed.
+- Inspect the exact unit and both JSON records. On success, add an evidence report
+  tied to the tested implementation commit and commit that evidence separately.
 
-The packed isolated-gradient defect is fixed for tested first-order public-root
-VJPs to parameters, external inputs and initial-state leaves. Packed numerical
-kernels retain their forward values; grad-enabled execution additionally builds
-independent scalar/event graphs. Counters and performance limits are explicit in
-`packed-autograd.md`. No numerical-zero-to-None conversion or global liveness
-traversal is used. Inference has no replay.
-
-Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
-serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
-encoding/direct Python execution, independent self-loop/chain anchors, complete
-trace/VJP comparisons, sharing, explicit detach and checkpoint v3. Native owned
-cursors preserve queues across windows. State kernels own preparation and accept
-custom native implementations. EMA, identity, diagonal selective SSM,
-Linear/Delta, event attention/GQA/window and tanh/SwiGLU profiles are present.
-Refer to evidence for the exact executor/profile cells tested.
-
-Environment: aarch64; Python 3.11.15; Torch/LibTorch 2.10.0+cpu. Local Python:
-`/home/zlong/anaconda3/bin/python`. CPU commands need
-`TORCH_DEVICE_BACKEND_AUTOLOAD=0` here to avoid unrelated NPU plugin auto-loading.
-No packages were changed. CMake derives LibTorch from the selected Python.
+Previous complete qualification remains **2010 passed** at
+`c4a5ce5a5b27284a50e343afed71a1a09e76ad55`, unit
+`tide-foundation-next-20260921-1335`, exit 0, inactive/MainPID 0;
+`artifacts/next-20260921-1335`, `evidence/next-programs.md`.
 
 ## Next action
 
-1. Implement region histories/controls and selector programs
-   (`region-program-plan.md`).
-2. Add LH selector/memory/readout profiles, then
-   loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
-3. Performance qualification must address replay cost/optimized backward, cache
-   allocation, structured Delta chunks and observed sparse work. No speed claim
-   follows from kernel counts.
+1. Finish the region qualification above, then implement LH selector counters and
+   explicit FP64 norm Read/descriptor policy (`lh-compatibility.md`, final section).
+2. Compare both original LH C++ selector paths from an immutable dirty-source
+   snapshot; then implement Add/same-fiber attention/Pronounce and compare complete
+   mapped inference state/messages. LH never supplies the training contract.
+3. Broader losses and performance qualification remain in ROADMAP: optimized
+   packed backward, cache allocation, structured Delta chunks, large sparse work.
 
-## Boundaries
+## Boundaries and environment
 
-- The LH worktree contains user changes; do not modify or clean it. LH supplies
-  inference compatibility only, never the training authority.
-- Original-LH numerical parity and large workload performance remain pending.
-  Event attention is not LH same-fiber attention or pretrained-model compatibility.
-- Native SettleGraph runs the exact TimedDAG encoding; its graph compiler is a
-  Python frontend. Native execution itself does not call Python.
-- Evidence is tied to immutable source revisions. Build artifacts are ignored;
-  verify source/binary fingerprints before fresh qualification.
-- Cleanup dry run found no eligible obsolete artifacts; nothing was deleted.
+CPU aarch64; `/home/zlong/anaconda3/bin/python`, Python 3.11.15,
+Torch/LibTorch 2.10.0+cpu. Commands need `TORCH_DEVICE_BACKEND_AUTOLOAD=0`,
+`OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`. Native builds use two jobs.
+No packages changed, no push. Reference repositories remain read-only; LH has
+user modifications. No original-LH numerical parity or workload speed is claimed.
+
+The packed replay baseline preserves tested first-order public-root VJPs,
+including None versus connected-zero, at a disclosed training cost. Inference
+has no replay. Native SettleGraph executes its exact TimedDAG encoding; Python
+is its graph compiler only. Existing qualified profiles include EMA, identity,
+SSM, Linear/Delta, event attention/GQA/window and tanh/SwiGLU. Event attention is
+not LH same-fiber attention or general pretrained-model compatibility.
+
+Artifacts total approximately 584 KiB before this qualification; build products
+19 MiB. No artifacts were deleted. Prior evidence is linked from ROADMAP.

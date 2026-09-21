@@ -1,3 +1,4 @@
+#include "tide/counters.h"
 #include "tide/kernel.h"
 #include <algorithm>
 #include <stdexcept>
@@ -15,10 +16,10 @@ class BasicKernel final : public StateKernel {
   State step(const NodeWeights& w, const State& old, const ContentView& content, Index time) const override {
     const auto& h = content.value;
     if (kind_ == "identity") return old;
-    if (kind_ == "ema") return {at::sigmoid(w.decay) * old.value + h, time, old.observations + 1};
+    if (kind_ == "ema") return {at::sigmoid(w.decay) * old.value + h, time, increment(old.observations)};
     const auto [a, b] = coefficients(w, h);
     auto memory = a * old.slots.at("memory") + b;
-    return {summary(w, h, memory), time, old.observations + 1, {{"memory", memory}}};
+    return {summary(w, h, memory), time, increment(old.observations), {{"memory", memory}}};
   }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
                            const std::vector<Index>& times, const ContentViews&) const override {
@@ -33,7 +34,7 @@ class BasicKernel final : public StateKernel {
     }
     std::vector<State> states;
     for (size_t i = 0; i < old.size(); ++i) {
-      State s{values[i], times[i], old[i].observations + 1};
+      State s{values[i], times[i], increment(old[i].observations)};
       if (kind_ == "ssm") s.slots["memory"] = memory[i];
       states.push_back(std::move(s));
     }
@@ -53,7 +54,7 @@ class BasicKernel final : public StateKernel {
     }
     std::vector<State> states;
     for (size_t i = 0; i < times.size(); ++i) {
-      State s{values[i], times[i], old.observations + static_cast<Index>(i) + 1};
+      State s{values[i], times[i], increment(old.observations, static_cast<Index>(i) + 1)};
       if (kind_ == "ssm") s.slots["memory"] = memory[i];
       if (i + 1 == times.size()) {
         s.value = s.value.clone();
@@ -89,7 +90,7 @@ class BasicKernel final : public StateKernel {
         const auto i = ids[row];
         for (Index t = 0; t < length; ++t) {
           const auto j = p.offsets[i] + t;
-          State s{values[t][row], p.times[j], old[i].observations + t + 1};
+          State s{values[t][row], p.times[j], increment(old[i].observations, t + 1)};
           if (kind_ == "ssm") s.slots["memory"] = memory[t][row];
           if (t + 1 == length) {
             s.value = s.value.clone();

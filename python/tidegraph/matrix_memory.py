@@ -1,5 +1,6 @@
 """Linear attention and gated DeltaRule with independent recurrence/scan paths."""
 import torch
+from .history import increment
 from .content import as_content
 from torch.nn.functional import elu
 from .records import State
@@ -60,7 +61,7 @@ class MatrixMemory:
             matrix = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2)
             slots = {"matrix": matrix}
             value = self.output(w, q, matrix)
-        return State(value, time, old.observations + 1, slots)
+        return State(value, time, increment(old.observations), slots)
 
     def sequence(self, w, old, h, times, views=None):
         q, k, v = self.project(w, h)
@@ -81,7 +82,7 @@ class MatrixMemory:
             slots = {"matrix": matrix[i]}
             if self.kind == "linear":
                 slots["normalizer"] = z[i]
-            states.append(State(values[i], time, old.observations + i + 1, slots))
+            states.append(State(values[i], time, increment(old.observations, i + 1), slots))
         return states
 
     def validate(self, w, state):

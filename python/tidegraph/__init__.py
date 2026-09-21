@@ -2,5 +2,6 @@
 from .graph import Edge, Graph, Node, Region
 from .records import Atom, Continuation, External, State
 from .ports import PortLayout
+from .history import History
 
-__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout"]
+__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout", "History"]

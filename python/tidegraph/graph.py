@@ -41,6 +41,7 @@ class Region:
     observe_all: bool = True
     count_priority: bool = True
     read_mode: str = "proposal"
+    selector: str = "count-v1"
 
 
 @dataclass(frozen=True)
@@ -65,6 +66,8 @@ class Graph:
                     or x.query_heads % x.kv_heads or not 0 <= x.window < 2**63):
                 raise ValueError("invalid attention heads/window")
         for r, spec in enumerate(self.regions):
+            if not isinstance(spec.selector, str) or not spec.selector:
+                raise ValueError("invalid region selector profile")
             if spec.read_mode not in {"content", "old", "proposal"}:
                 raise ValueError("invalid region Read mode")
             count = sum(x.region == r for x in self.nodes)
@@ -97,6 +100,14 @@ class Graph:
                 raise ValueError("identity boundaries require the default Read profile")
             if node.identity and node.aggregation != "sum":
                 raise ValueError("identity boundaries require sum Aggregate")
+
+    @cached_property
+    def region_layouts(self):
+        from .region import RegionLayout
+        members = [[] for _ in self.regions]
+        for v, node in enumerate(self.nodes):
+            members[node.region].append(v)
+        return tuple(RegionLayout.create(spec, vs) for spec, vs in zip(self.regions, members))
 
     @cached_property
     def origin_index(self):

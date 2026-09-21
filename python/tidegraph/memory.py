@@ -1,5 +1,6 @@
 """State-kernel programs. Scheduling sees State and exact block capabilities."""
 import torch
+from .history import increment
 from torch.nn.functional import softplus
 from .records import State
 from .scan import affine_scan
@@ -15,11 +16,11 @@ class EMA:
 
     def step(self, w, old, h, time):
         h = as_content(h).value
-        return State(w.decay.sigmoid() * old.value + h, time, old.observations + 1)
+        return State(w.decay.sigmoid() * old.value + h, time, increment(old.observations))
 
     def sequence(self, w, old, h, times, views=None):
         values = affine_scan(w.decay.sigmoid().expand_as(h), h, old.value)
-        return [State(v.clone() if i == len(times)-1 else v, t, old.observations + i + 1)
+        return [State(v.clone() if i == len(times)-1 else v, t, increment(old.observations, i + 1))
                 for i, (v, t) in enumerate(zip(values, times))]
 
     def packed_sequence(self, w, old, batch):
@@ -53,13 +54,13 @@ class DiagonalSSM:
         a, b = self.coefficients(w, h)
         memory = a * old.slots["memory"] + b
         value = (h @ w.extra["ssm_c"]) * memory + w.extra["ssm_skip"] * h
-        return State(value, time, old.observations + 1, {"memory": memory})
+        return State(value, time, increment(old.observations), {"memory": memory})
 
     def sequence(self, w, old, h, times, views=None):
         a, b = self.coefficients(w, h)
         memory = affine_scan(a, b, old.slots["memory"])
         values = (h @ w.extra["ssm_c"]) * memory + w.extra["ssm_skip"] * h
-        return [State(v.clone() if i == len(times)-1 else v, t, old.observations + i + 1,
+        return [State(v.clone() if i == len(times)-1 else v, t, increment(old.observations, i + 1),
                       {"memory": m.clone() if i == len(times)-1 else m})
                 for i, (v, m, t) in enumerate(zip(values, memory, times))]
 

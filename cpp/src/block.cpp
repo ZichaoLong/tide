@@ -6,6 +6,7 @@
 #include "tide/aggregate.h"
 #include "tide/read.h"
 #include "tide/next.h"
+#include "tide/region.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -65,27 +66,13 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       });
     }
     pool.run(std::move(jobs));
-    auto& history = q.history[{frame.batch, frame.region}];
-    std::vector<std::tuple<Index, double, Index, size_t>> ranking;
-    std::vector<Tensor> desc;
+    select_events(g, m, q, events, ids, options.trace);
+    ++stats["region_steps"];
     for (auto i : ids) {
-      const auto& e = events[i];
-      auto count = history.find(e.node); auto score = e.descriptor.item<double>();
-      if (!std::isfinite(score)) throw std::invalid_argument("nonfinite selector score");
-      ranking.emplace_back(region.count_priority && count != history.end() ? count->second : 0, -score, e.node, i);
-      desc.push_back(e.descriptor);
-    }
-    std::sort(ranking.begin(), ranking.end());
-    for (Index i = 0; i < std::min<Index>(region.budget, ranking.size()); ++i) {
-      auto& e = events[std::get<3>(ranking[i])]; e.active = true; ++history[e.node];
-    }
-    auto controls = at::softmax(at::stack(desc), 0);
-    for (size_t j = 0; j < ids.size(); ++j) {
-      auto& e = events[ids[j]]; e.control = controls[j];
+      auto& e = events[i];
       auto cmp = region.observe_all || e.active ? e.proposed_state : old_state(q, m, e.batch, e.node);
       e.comparison = cmp.value;
       e.comparison_state = cmp;
-      if (options.trace) e.history = history;
     }
     jobs.clear();
     stats["next_steps"] += ids.size();

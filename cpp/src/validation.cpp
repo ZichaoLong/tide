@@ -4,6 +4,7 @@
 #include "tide/aggregate.h"
 #include "tide/read.h"
 #include "tide/next.h"
+#include "tide/region.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -39,6 +40,13 @@ void validate_model(const Graph& g, const Model& m) {
     require(static_cast<bool>(w.aggregate_kernel), "Aggregate kernel is not configured");
     w.aggregate_kernel->validate_weights(w, g.incoming_ports.offsets[node+1] - g.incoming_ports.offsets[node]);
   }
+  require(m.regions.size() == g.regions.size(), "region weight count mismatch");
+  for (size_t r = 0; r < m.regions.size(); ++r) {
+    const auto& w = m.regions[r];
+    require(static_cast<bool>(w.kernel), "region kernel is not configured");
+    for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
+    w.kernel->validate_weights(w, region_layout(g, r));
+  }
   require(m.input_scale.size() == g.inputs.size() && m.agg_scale.size() == g.edges.size()
           && m.edge_scale.size() == g.edges.size() && m.output_scale.size() == g.outputs.size(),
           "source scale count mismatch");
@@ -61,10 +69,11 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
     m.nodes[owner.second].kernel->validate_state(m.nodes[owner.second], state);
     for (const auto& [name, value] : state.slots) check_tensor(value, ref, value.sizes());
   }
-  for (const auto& [owner, counts] : q.history) {
+  for (const auto& [owner, history] : q.history) {
     require(batch(owner.first) && owner.second >= 0 && owner.second < r, "invalid history owner");
-    for (const auto& [v, count] : counts)
-      require(v >= 0 && v < n && g.nodes[v].region == owner.second && count >= 0, "invalid selector history");
+    auto layout = region_layout(g, owner.second);
+    validate_history(history, layout, ref, q.cut-1);
+    m.regions[owner.second].kernel->validate_history(history, layout);
   }
   for (const auto& [owner, last] : q.ledger)
     require(batch(owner.first) && owner.second >= 0 && owner.second < p && last.first >= 0

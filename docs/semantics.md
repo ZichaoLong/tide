@@ -59,7 +59,9 @@ missing messages and present zeros remain distinct. Existing memory profiles
 consume summary content; `content-programs.md` propagates full source information
 to custom state/Read/Full programs. `read-programs.md` separates Read and implements
 region content/old/proposal modes. `next-programs.md` implements complete Next
-requests with comparison-identity state-prefill guards.
+requests with comparison-identity state-prefill guards. `region-programs.md`
+adds region-owned typed histories and independent SelStep programs, including
+empty selection and tensor controls.
 
 ## Equality and training
 
@@ -77,8 +79,8 @@ generic executor does not make these different profiles interchangeable.
 - Objectives separately root outputs, final state and pending messages. Compare
   input, parameter and differentiable initial-state VJPs. In-memory chunking has
   no implicit detach. Serialized continuation is a declared gradient boundary.
-  `Continuation.detach()` explicitly truncates both state and in-flight messages.
-  Checkpoint v3 stores all state slots and validates parameter-alias topology before changing any
+  `Continuation.detach()` explicitly truncates state, region history and in-flight messages.
+  Checkpoint v4 stores all node/region tensor slots and validates parameter-alias topology before changing any
   weights; reconstruct the same sharing when restoring. Checkpoints do not
   claim to restore a full training controller, data cursor or framework RNG.
 - `None` versus connected-zero is observable for optimizer parameter groups;

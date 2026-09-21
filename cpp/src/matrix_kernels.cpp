@@ -1,3 +1,4 @@
+#include "tide/counters.h"
 #include "tide/kernel.h"
 #include <array>
 #include <stdexcept>
@@ -24,7 +25,7 @@ class MatrixKernel final : public StateKernel {
   State step(const NodeWeights& w, const State& old, const ContentView& content, Index time) const override {
     const auto& h = content.value;
     auto p = project(w, h); const auto& q = p[0]; const auto& k = p[1]; const auto& v = p[2];
-    State s; s.last_time = time; s.observations = old.observations + 1;
+    State s; s.last_time = time; s.observations = increment(old.observations);
     if (linear_) {
       s.slots["matrix"] = old.slots.at("matrix") + k.unsqueeze(-1) * v.unsqueeze(-2);
       s.slots["normalizer"] = old.slots.at("normalizer") + k;
@@ -57,7 +58,7 @@ class MatrixKernel final : public StateKernel {
     }
     std::vector<State> states;
     for (size_t i = 0; i < old.size(); ++i) {
-      State s{values[i], times[i], old[i].observations + 1, {{"matrix", matrix[i]}}};
+      State s{values[i], times[i], increment(old[i].observations), {{"matrix", matrix[i]}}};
       if (linear_) s.slots["normalizer"] = z[i]; states.push_back(std::move(s));
     }
     return states;
@@ -81,7 +82,7 @@ class MatrixKernel final : public StateKernel {
     }
     std::vector<State> states;
     for (size_t i = 0; i < times.size(); ++i) {
-      State s{values[i], times[i], old.observations + static_cast<Index>(i) + 1, {{"matrix", matrix[i]}}};
+      State s{values[i], times[i], increment(old.observations, static_cast<Index>(i) + 1), {{"matrix", matrix[i]}}};
       if (linear_) s.slots["normalizer"] = z[i]; states.push_back(std::move(s));
     }
     return states;

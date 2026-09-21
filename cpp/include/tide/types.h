@@ -26,7 +26,7 @@ struct Node {
 struct Region {
   Index budget;
   bool observe_all = true, count_priority = true;
-  std::string read_mode = "proposal";
+  std::string read_mode = "proposal", selector = "count-v1";
 };
 struct Adjacency { std::vector<Index> offsets, edges; };
 struct PortLayout {
@@ -40,7 +40,7 @@ struct Graph {
   std::vector<Edge> edges;
   std::vector<Region> regions;
   std::vector<Index> inputs, outputs;
-  Adjacency csr, csc, output_index;
+  Adjacency csr, csc, output_index, region_index;  // Region rows contain canonical node IDs.
   std::optional<PortLayout> layout;
   PortIndex incoming_ports, outgoing_ports;
   std::vector<InputOrigin> origins;
@@ -53,6 +53,12 @@ struct State {
   Tensor value;
   Index last_time = -1, observations = 0;
   std::map<std::string, Tensor> slots;
+};
+struct History {
+  Index last_time = -1;
+  std::map<std::string, Index> scalars;
+  std::map<std::string, std::map<Index, Index>> node_maps;
+  std::map<std::string, Tensor> tensors;
 };
 struct External { Index batch, port, position, time; Tensor value; };
 struct Atom {
@@ -74,7 +80,7 @@ struct Continuation {
   std::string identity;
   Index batch_size = 1, cut = 0;
   std::map<Owner, State> states;
-  std::map<Owner, std::map<Index, Index>> history;
+  std::map<Owner, History> history;
   std::vector<Atom> pending;
   std::map<Owner, Owner> ledger;
 };
@@ -83,6 +89,11 @@ class FullKernel;
 class AggregateKernel;
 class ReadKernel;
 class NextKernel;
+class RegionKernel;
+struct RegionWeights {
+  std::map<std::string, Tensor> extra;
+  std::shared_ptr<const RegionKernel> kernel;
+};
 struct NodeWeights {
   Tensor decay, weight, bias, read;
   std::map<std::string, Tensor> extra;
@@ -95,6 +106,7 @@ struct NodeWeights {
 };
 struct Model {
   std::vector<NodeWeights> nodes;
+  std::vector<RegionWeights> regions;
   std::vector<Tensor> input_scale, agg_scale, edge_scale, output_scale;
   Index width() const { return nodes.at(0).bias.numel(); }
 };
@@ -108,7 +120,7 @@ struct Event {
   std::vector<SlotValue> contributions;
   std::vector<SourceInput> sources;
   ContentView local_content() const { return {content, sources, contributions}; }
-  std::map<Index, Index> history;
+  History history;
 };
 struct Output { Index batch, time, port; Tensor value; };
 struct Result {

@@ -26,12 +26,17 @@ class Native:
             validate_state_program(model.nodes[v], spec, native=True)
             validate_read(model.nodes[v], spec, native=True)
             validate_next(model.nodes[v], spec, native=True)
+        from .region import validate_program as validate_region
+        if len(model.regions) != len(graph.regions):
+            raise ValueError("region program count mismatch")
+        for p, layout in zip(model.regions, graph.region_layouts):
+            validate_region(p, layout, model.nodes[0].bias, native=True)
         g = core.Graph()
         g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
                              n.emission, n.emit_period, n.emit_phases, n.aggregation, n.readout, n.next_state)
                    for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
-        g.regions = [core.Region(r.budget, r.observe_all, r.count_priority, r.read_mode) for r in graph.regions]
+        g.regions = [core.Region(r.budget, r.observe_all, r.count_priority, r.read_mode, r.selector) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs
         layout = core.PortLayout()
         for name in ("edge_source", "edge_target", "input", "output"):
@@ -47,6 +52,12 @@ class Native:
             weight.extra = dict(w.extra.items())
             weights.append(weight)
         m.nodes = weights
+        regions = []
+        for program in model.regions:
+            weight = core.RegionWeights()
+            weight.extra = dict(program.named_parameters())
+            regions.append(weight)
+        m.regions = regions
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
         options = core.Options()

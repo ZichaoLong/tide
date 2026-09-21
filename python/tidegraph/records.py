@@ -1,6 +1,7 @@
 """Tensor-bearing event records. Copies preserve autograd unless detached."""
 from dataclasses import dataclass, field, replace
 import torch
+from .history import History
 
 
 @dataclass
@@ -40,13 +41,13 @@ class Continuation:
     batch_size: int
     cut: int = 0
     states: dict[tuple[int, int], State] = field(default_factory=dict)
-    history: dict[tuple[int, int], dict[int, int]] = field(default_factory=dict)
+    history: dict[tuple[int, int], History] = field(default_factory=dict)
     pending: list[Atom] = field(default_factory=list)
     ledger: dict[tuple[int, int], tuple[int, int]] = field(default_factory=dict)
 
     def fork(self):
         return Continuation(self.identity, self.batch_size, self.cut, dict(self.states),
-                            {k: dict(v) for k, v in self.history.items()},
+                            {k: v.fork() for k, v in self.history.items()},
                             list(self.pending), dict(self.ledger))
 
     def detach(self):
@@ -55,6 +56,7 @@ class Continuation:
         q.states = {owner: replace(state, value=state.value.detach(),
                                   slots={k: v.detach() for k, v in state.slots.items()})
                     for owner, state in self.states.items()}
+        q.history = {owner: h.detach() for owner, h in self.history.items()}
         q.pending = [replace(atom, value=atom.value.detach()) for atom in self.pending]
         return q
 

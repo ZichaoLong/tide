@@ -1,6 +1,7 @@
 """Joint [time,batch,width] scans over equal-length, nonempty event segments."""
 from collections import defaultdict
 import torch
+from .history import increment
 from .records import State
 from .scan import affine_scan
 
@@ -29,5 +30,5 @@ def diagonal_batch(weights, old, batch, ssm=None):
                 if t == length - 1:
                     value = value.clone(); slots = {k: v.clone() for k, v in slots.items()}
                 j = batch.offsets[i] + t
-                states[j] = State(value, batch.times[j], old[i].observations + t + 1, slots)
+                states[j] = State(value, batch.times[j], increment(old[i].observations, t + 1), slots)
     return states, len(groups)

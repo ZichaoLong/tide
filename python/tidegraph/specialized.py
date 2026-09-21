@@ -7,6 +7,7 @@ from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
 from .aggregate import evaluate as evaluate_aggregate
 from .next import NextInput, evaluate as evaluate_next
+from .region import evaluate as select
 
 
 def validate_topology(graph, topology):
@@ -29,19 +30,23 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     h = event["content"]
     old = q.states.get((batch, node), model.nodes[node].initial())
     prop, desc = model.nodes[node].prepare(old, event["_content"], time, graph.regions[graph.nodes[node].region].read_mode)
-    # A singleton softmax retains the generic zero VJP connection to its score.
-    control = desc.reshape(1).softmax(0)[0]
+    region = graph.regions[node]
+    active, controls, history = select(graph, model, q, batch, node, time, [(node, desc)])
+    selected, control = node in active, controls[node]
+    comparison = prop if region.observe_all or selected else old
     next_state = evaluate_next(model.nodes[node], graph.nodes[node], NextInput(
-        old, prop, time, event["_content"], True, control))
+        old, comparison, time, event["_content"], selected, control))
     q.states[batch, node] = next_state
-    history = dict(q.history.get((batch, node), {}))
-    history[node] = history.get(node, 0) + 1; q.history[batch, node] = history
     offsets = graph.port_indexes[1].offsets
-    value = evaluate_full(model.nodes[node], [FullInput(prop, time, event.pop("_content"), control)], offsets[node+1] - offsets[node], mode, zeta)[0]
+    content = event.pop("_content")
+    if selected:
+        value = evaluate_full(model.nodes[node], [FullInput(comparison, time, content, control)],
+                              offsets[node+1] - offsets[node], mode, zeta)[0]
+        event.update(full=value.value, emitted=value.emitted)
     return dict(event, proposal=prop.value,
-                descriptor=desc, control=control, active=True, comparison=prop.value,
-                next=next_state.value, history=dict(history), full=value.value, emitted=value.emitted, proposal_slots=prop.slots,
-                comparison_slots=prop.slots, next_slots=next_state.slots)
+                descriptor=desc, control=control, active=selected, comparison=comparison.value,
+                next=next_state.value, history=history.fork(), proposal_slots=prop.slots,
+                comparison_slots=comparison.slots, next_slots=next_state.slots)
 
 
 def run(graph, model, initial, external, stop, *, sealed_until, topology, mode="hard", zeta=1.0):
@@ -57,6 +62,8 @@ def run(graph, model, initial, external, stop, *, sealed_until, topology, mode="
         if not fiber:
             return
         e = _step(graph, model, q, node, batch, time, fiber, mode, zeta); events.append(e)
+        if not e["active"]:
+            return
         if topology == "self_loop" or node < len(graph.nodes) - 1:
             edge = 0 if topology == "self_loop" else node
             target = 0 if topology == "self_loop" else node + 1

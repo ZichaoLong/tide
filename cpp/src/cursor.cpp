@@ -10,6 +10,8 @@ void clone_tensors(Continuation& q) {
     state.value = state.value.clone();
     for (auto& [name, value] : state.slots) value = value.clone();
   }
+  for (auto& [owner, history] : q.history)
+    for (auto& [name, value] : history.tensors) value = value.clone();
   for (auto& atom : q.pending) atom.value = atom.value.clone();
 }
 }  // namespace
@@ -60,6 +62,8 @@ void StreamingCursor::detach() {
     state.value = state.value.detach();
     for (auto& [name, value] : state.slots) value = value.detach();
   }
+  for (auto& [owner, history] : state_.history)
+    for (auto& [name, value] : history.tensors) value = value.detach();
   for (auto& [time, atoms] : queue_) for (auto& atom : atoms) atom.value = atom.value.detach();
 }
 Index StreamingCursor::cut() const { std::lock_guard<std::mutex> lock(mutex_); healthy(); return state_.cut; }

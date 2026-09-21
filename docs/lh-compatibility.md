@@ -58,3 +58,33 @@ ticks, selected clear, token continuation and Pronounce. Save weights/inputs and
 compare all mapped state/messages/counters as well as outputs in FP64/FP32.
 If a true semantic mismatch survives an explicit encoding, document the minimal
 counterexample and discuss the choice with the user before changing Tide semantics.
+
+## Next bounded gate after region programs
+
+Typed region histories and SelStep extension interfaces are implemented in
+`region-programs.md`; qualification status is in STATUS. Add an LH selector
+profile with separate selected/affected maps and graph-owned canonical membership.
+Selection compares **prior** counts; all actual candidates then increment affect,
+and only active nodes increment selected. Forced-activity hubs use other regions.
+
+Add a norm Read with real FP64 accumulation, and an explicit descriptor precision
+contract. Default softmax controls must convert to payload dtype by declaration,
+including packed paths and semantic replay. The generic region request needs
+payload tensor metadata when descriptors have another dtype; custom programs
+must not infer it from a possibly empty history. Preserve current scalar finite
+validation and test mixed descriptor/payload dtypes and their VJPs.
+
+Re-reading `Selector.cpp` and `Selector.h` confirms that original LH count storage
+is **int32**, while ranking uses double. The heap compares lexicographically;
+the tensor path builds a composite double score with successive multiplications.
+Adding one to every candidate affect count preserves ordering only while counts
+and composite arithmetic stay in a safe range. Do not claim equivalence at
+int32 overflow or beyond exact composite-score precision.
+
+Before full LH topology matching, qualify this component against both original
+C++ selector paths on immutable snapshots of their actual source files, with
+ragged batches, ties, empty candidates, sparse local IDs, forced activity and
+small counters. Record hashes/configuration and compare active sets plus both
+counter maps. This component comparison alone is not whole-LH inference parity.
+The subsequent Add/same-fiber attention/Pronounce gate still needs the complete
+clock/state/message projection above.

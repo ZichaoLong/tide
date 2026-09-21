@@ -1,6 +1,8 @@
 """Fail early on malformed windows, states, tensor shapes and message identity."""
 import torch
 from .records import Atom
+from .history import int64, validate as validate_history
+from .region import validate_program as validate_region
 
 
 def validate_window(graph, model, continuation, external, stop, sealed_until):
@@ -17,6 +19,11 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         validate_state_program(model.nodes[node], spec)
         validate_read(model.nodes[node], spec)
         validate_next(model.nodes[node], spec)
+    reference = model.nodes[0].bias
+    if len(model.regions) != len(graph.regions):
+        raise ValueError("region program count mismatch")
+    for p, layout in zip(model.regions, graph.region_layouts):
+        validate_region(p, layout, reference)
     q = continuation
     if q.identity != graph.identity or q.batch_size < 1:
         raise ValueError("continuation identity or batch size mismatch")
@@ -31,19 +38,19 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
     for (b, v), state in q.states.items():
         if not 0 <= b < q.batch_size or not 0 <= v < len(graph.nodes):
             raise ValueError("invalid state owner")
-        if not -1 <= state.last_time < q.cut or state.observations < 0:
+        if (not int64(state.last_time) or not int64(state.observations)
+                or not -1 <= state.last_time < q.cut or state.observations < 0):
             raise ValueError("invalid state clock")
         tensor(state.value)
         model.nodes[v].validate(state)
         for value in state.slots.values():
             if value.device.type != "cpu" or value.dtype != reference.dtype or not torch.isfinite(value).all():
                 raise ValueError("incompatible state slot dtype/device/value")
-    for (b, r), counts in q.history.items():
+    for (b, r), history in q.history.items():
         if not 0 <= b < q.batch_size or not 0 <= r < len(graph.regions):
             raise ValueError("invalid history owner")
-        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].region != r or c < 0
-               for v, c in counts.items()):
-            raise ValueError("invalid selector history")
+        validate_history(history, graph.region_layouts[r], reference, q.cut-1)
+        model.regions[r].validate_history(history, graph.region_layouts[r])
     ledger = dict(q.ledger)
     for (b, p), (position, time) in ledger.items():
         if not (0 <= b < q.batch_size and 0 <= p < len(graph.inputs)

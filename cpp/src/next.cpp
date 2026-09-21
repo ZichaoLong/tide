@@ -13,6 +13,7 @@ class AdoptNext final : public NextKernel {
 class ControlBlendNext final : public NextKernel {
  public:
   State step(const NodeWeights&, const NextInput& r) const override {
+    if (r.control.dim() != 0) throw std::invalid_argument("control-blend Next requires scalar control");
     auto result = r.comparison;
     const auto& a = r.old; const auto& b = r.comparison; const auto& c = r.control;
     if (a.slots.size() != b.slots.size()) throw std::invalid_argument("control-blend Next requires matching slot shapes");

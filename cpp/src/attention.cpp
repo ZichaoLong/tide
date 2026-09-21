@@ -1,3 +1,4 @@
+#include "tide/counters.h"
 #include "tide/kernel.h"
 #include <algorithm>
 #include <cmath>
@@ -73,7 +74,7 @@ class AttentionKernel final : public StateKernel {
           if (t == length - 1) { key_slot = key_slot.clone(); value_slot = value_slot.clone(); }
           const auto j = p.offsets[i] + t;
           auto read_value = t == length - 1 ? value[row][t].clone() : value[row][t];
-          result.states[j] = {read_value, p.times[j], old[i].observations + t + 1,
+          result.states[j] = {read_value, p.times[j], increment(old[i].observations, t + 1),
                               {{"key", key_slot}, {"value", value_slot}}};
         }
       }

@@ -62,7 +62,8 @@ class SettleGraph:
                    aggregate_programs={v: w.aggregate_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
                    state_programs={v: w.kernel for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
                    read_programs={v: w.read_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   next_programs={v: w.next_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})
+                   next_programs={v: w.next_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
+                   region_programs={r: p for r, p in enumerate(model.regions)})
         em.nodes = torch.nn.ModuleList(list(model.nodes) + list(em.nodes[-2:]))
         def one():
             return torch.nn.Parameter(model.nodes[0].bias.new_ones(()), requires_grad=False)
@@ -73,8 +74,13 @@ class SettleGraph:
         return encoded, em
 
     def embed_initial(self, q, encoded):
-        if q.cut or q.pending or q.ledger or q.history:
+        if q.cut or q.pending or q.ledger:
             raise ValueError("embed_initial requires an initial cut; retain encoded continuation for subsequent windows")
+        if q.identity != self.graph.identity or any(
+                not 0 <= b < q.batch_size or not 0 <= owner < size
+                for owners, size in ((q.states, len(self.graph.nodes)), (q.history, len(self.graph.regions)))
+                for b, owner in owners):
+            raise ValueError("invalid body initial identity/owner in embedding")
         return replace(q.fork(), identity=encoded.identity)
 
     def project(self, result):

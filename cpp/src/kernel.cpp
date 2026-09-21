@@ -3,6 +3,7 @@
 #include "tide/aggregate.h"
 #include "tide/read.h"
 #include "tide/next.h"
+#include "tide/region.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -36,6 +37,10 @@ Tensor affine_scan(Tensor a, Tensor b, const Tensor& initial) {
 std::shared_ptr<const StateKernel> make_attention_kernel(Index, Index, Index);
 void configure_model(const Graph& g, Model& m) {
   if (g.nodes.size() != m.nodes.size()) throw std::invalid_argument("node weight count mismatch");
+  if (m.regions.empty()) m.regions.resize(g.regions.size());
+  if (m.regions.size() != g.regions.size()) throw std::invalid_argument("region weight count mismatch");
+  for (size_t r = 0; r < m.regions.size(); ++r)
+    if (!m.regions[r].kernel) m.regions[r].kernel = make_region_kernel(g.regions[r]);
   for (size_t i = 0; i < m.nodes.size(); ++i) {
     if (!m.nodes[i].kernel) {
       const auto& n = g.nodes[i];

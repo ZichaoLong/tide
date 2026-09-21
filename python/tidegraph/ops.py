@@ -140,7 +140,7 @@ class NodeWeights(nn.Module):
 
 class Model(nn.Module):
     def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None,
-                 state_programs=None, read_programs=None, next_programs=None):
+                 state_programs=None, read_programs=None, next_programs=None, region_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
@@ -166,6 +166,12 @@ class Model(nn.Module):
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
             incoming[v+1] - incoming[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v)) for v, n in enumerate(graph.nodes))
+        from .region import program as region_program
+        selectors = {} if region_programs is None else region_programs
+        if any(type(r) is not int or not 0 <= r < len(graph.regions) for r in selectors):
+            raise ValueError("invalid custom region owner")
+        self.regions = nn.ModuleList(selectors[r] if r in selectors else region_program(layout, dtype)
+                                     for r, layout in enumerate(graph.region_layouts))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -173,19 +179,6 @@ class Model(nn.Module):
         self.agg_scale = scales(len(graph.edges))
         self.edge_scale = scales(len(graph.edges))
         self.output_scale = scales(len(graph.outputs))
-
-
-def select(nodes, descriptors, history, region):
-    if any(not torch.isfinite(d).all() for d in descriptors.values()):
-        raise ValueError("nonfinite selector score")
-    order = sorted(nodes, key=lambda v: (history.get(v, 0) if region.count_priority else 0,
-                                        -float(descriptors[v].detach()), v))
-    active = set(order[:region.budget])
-    probs = torch.stack([descriptors[v] for v in nodes]).softmax(0)
-    updated = dict(history)
-    for v in active:
-        updated[v] = updated.get(v, 0) + 1
-    return active, dict(zip(nodes, probs.unbind(0))), updated
 
 
 class BoundaryWeights(nn.Module):

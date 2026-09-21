@@ -17,8 +17,9 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity) FIELD(Node, memory) FIELD(Node, full)
     FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window)
     FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation) FIELD(Node, readout) FIELD(Node, next_state);
-  py::class_<Region>(m, "Region").def(py::init<Index, bool, bool, std::string>())
-    FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority) FIELD(Region, read_mode);
+  py::class_<Region>(m, "Region").def(py::init<Index, bool, bool, std::string, std::string>())
+    .def(py::init<Index, bool, bool, std::string>())
+    FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority) FIELD(Region, read_mode) FIELD(Region, selector);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);
   py::class_<PortLayout>(m, "PortLayout").def(py::init<>())
     FIELD(PortLayout, edge_source) FIELD(PortLayout, edge_target) FIELD(PortLayout, input) FIELD(PortLayout, output);
@@ -34,6 +35,8 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_readonly("csr", &Graph::csr).def_readonly("csc", &Graph::csc).def_readonly("identity", &Graph::identity);
   py::class_<State>(m, "State").def(py::init<Tensor, Index, Index, std::map<std::string, Tensor>>())
     FIELD(State, value) FIELD(State, last_time) FIELD(State, observations) FIELD(State, slots);
+  py::class_<History>(m, "History").def(py::init<Index, std::map<std::string, Index>, std::map<std::string, std::map<Index, Index>>, std::map<std::string, Tensor>>())
+    FIELD(History, last_time) FIELD(History, scalars) FIELD(History, node_maps) FIELD(History, tensors);
   py::class_<External>(m, "External").def(py::init<Index, Index, Index, Index, Tensor>())
     FIELD(External, batch) FIELD(External, port) FIELD(External, position) FIELD(External, time) FIELD(External, value);
   py::class_<Atom>(m, "Atom").def(py::init<Index, Index, Index, Index, Index, Index, Tensor>())
@@ -44,8 +47,9 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Continuation, states) FIELD(Continuation, history) FIELD(Continuation, pending) FIELD(Continuation, ledger);
   py::class_<NodeWeights>(m, "NodeWeights").def(py::init<Tensor, Tensor, Tensor, Tensor>())
     FIELD(NodeWeights, decay) FIELD(NodeWeights, weight) FIELD(NodeWeights, bias) FIELD(NodeWeights, read) FIELD(NodeWeights, extra);
+  py::class_<RegionWeights>(m, "RegionWeights").def(py::init<>()) FIELD(RegionWeights, extra);
   py::class_<Model>(m, "Model").def(py::init<>())
-    FIELD(Model, nodes) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale);
+    FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale);
   py::class_<Event>(m, "Event")
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)

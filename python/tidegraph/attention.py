@@ -2,6 +2,7 @@
 from collections import defaultdict
 import math
 import torch
+from .history import increment
 from .records import State
 from .packing import PackedSequence
 from .content import as_content, Content
@@ -34,7 +35,7 @@ class Attention:
             p = (k[:, j] @ q[i] / math.sqrt(d)).softmax(0)
             heads.append(p @ v[:, j])
         value = torch.cat(heads) @ w.extra["attn_out"]
-        return State(value, time, old.observations + 1, {"key": k.clone(), "value": v.clone()})
+        return State(value, time, increment(old.observations), {"key": k.clone(), "value": v.clone()})
 
     def sequence(self, w, old, h, times, views=None):
         batch = PackedSequence(h, [0, len(times)], [(0, 0)], times, [Content(v) for v in h] if views is None else views)
@@ -80,7 +81,7 @@ class Attention:
                         slots = {name: x.clone() for name, x in slots.items()}
                     j = batch.offsets[i] + t
                     value = out[row, t].clone() if t == length - 1 else out[row, t]
-                    states[j] = State(value, batch.times[j], old[i].observations + t + 1, slots)
+                    states[j] = State(value, batch.times[j], increment(old[i].observations, t + 1), slots)
         return states, len(groups)
 
     @staticmethod

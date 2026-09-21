@@ -36,6 +36,8 @@ def objective(result, root="all"):
     if root in {"all", "state"}:
         terms += [s.value.square().sum() * 0.3 for s in result.continuation.states.values()]
         terms += [v.square().sum() * 0.11 for s in result.continuation.states.values() for v in s.slots.values()]
+    if root in {"all", "history"}:
+        terms += [v.square().sum() * 0.13 for h in result.continuation.history.values() for v in h.tensors.values()]
     if root in {"all", "pending"}:
         terms += [m.value.square().sum() * 0.2 for m in result.continuation.pending]
     if not terms:

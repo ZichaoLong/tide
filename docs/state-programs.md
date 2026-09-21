@@ -2,7 +2,7 @@
 
 Implemented; qualification is in `evidence/m5a-state-programs.md`. `State` consists
 of a read vector, named tensor slots, last logical observation time and observation
-count. Every slot participates in trace, clear, in-memory detach and checkpoint v3.
+count. Every slot participates in trace, clear, in-memory detach and checkpoint v4.
 `Next` still precedes Full and cannot read its value. The generic reset for these
 profiles zeros read/memory tensors but preserves clock/count metadata.
 

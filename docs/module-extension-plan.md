@@ -25,16 +25,16 @@ the old broadcast profile; its slot-affine/phase profile is
    embedding and are [qualified](evidence/source-origins.md). Built-in memory
    profiles still consume the summary. Complete typed content now reaches
    Upd/Read/Full and packed metadata and is [qualified](evidence/content-programs.md).
-   Next receives complete content in the following gate.
+   Next also receives complete content.
 2. Full Next inputs (old, comparison, time, content, active, control) and an
    explicit comparison-identity prefill gate are implemented (`next-programs.md`),
    now [qualified](evidence/next-programs.md). Control-sensitive Next uses causal state preparation
    while retaining Full batching. Independent Read now
    supports content, old-state and proposed-state modes (`read-programs.md`),
    now [qualified](evidence/read-programs.md).
-3. Region programs need explicit integer/tensor history and controls beyond
-   selection counts. Preserve checkpoint/detach/VJP for tensor history; add LH's
-   selection-count/affect-count/FP64-norm/stable-ID ordering as one profile.
+3. Region programs and typed integer/tensor history are implemented
+   (`region-programs.md`), with qualification in progress. LH's
+   selection-count/affect-count/FP64-norm/stable-ID profile remains pending.
 4. After these seams, implement LH Add and same-fiber attention with lazy idle
    decay, per-edge signaling and token-window Pronounce. Compare an immutable
    snapshot of actual LH C++ sources, never its older Python interpreter.
@@ -51,7 +51,7 @@ State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
 callbacks. Full programs live in `full.py`/`full_kernel.cpp`, with FFN/Emit
 primitives in `ops.py`/`ops.cpp`. Aggregate programs are separate from scheduling;
-Read is independent (`readout.py`/`read.h`); Next is separate (`next.py`/`next.h`); Region generalization remains work.
+Read is independent (`readout.py`/`read.h`); Next is separate (`next.py`/`next.h`); regions use `region.py`/`region.h`.
 Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;
@@ -60,7 +60,7 @@ Keep Python scheduling independent.
   time and observation count separate from memory; Full consumes the comparison
   snapshot, Next decides every persistent slot before Full.
 - Node programs supply initial state, Agg/Upd/Read/Next and Full/Emit. Region
-  programs eventually generalize count history and the current top-k selector.
+  programs own complete history and return active subsets and candidate controls.
 - State kernels expose step, packed independent-sample step, and optional exact
   sequence-block contracts. A sequential fallback must be visible in statistics.
 - The packed representation needs values, sequence/sample/node IDs, prefix

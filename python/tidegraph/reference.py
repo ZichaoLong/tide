@@ -1,5 +1,5 @@
 """Direct time-major specification oracle; deliberately not event-queue based."""
-from .ops import select
+from .region import evaluate as select
 from .records import Atom, Result, State
 from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
@@ -38,9 +38,8 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 nodes = sorted(v for b, v in prepared if b == batch and graph.nodes[v].region == r)
                 if not nodes:
                     continue
-                active, controls, history = select(nodes, {v: prepared[batch, v]["descriptor"] for v in nodes},
-                                                   q.history.get((batch, r), {}), region)
-                q.history[batch, r] = history
+                active, controls, history = select(graph, model, q, batch, r, time,
+                                                   [(v, prepared[batch, v]["descriptor"]) for v in nodes])
                 for v in nodes:
                     event = prepared[batch, v]
                     comparison = event["proposal_state"] if region.observe_all or v in active else event["old"]
@@ -49,7 +48,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                     q.states[batch, v] = next_state
                     event.update(active=v in active, control=controls[v], comparison=comparison.value,
                                  _comparison_state=comparison,
-                                 next=next_state.value, history=dict(history), proposal_slots=event["proposal_state"].slots,
+                                 next=next_state.value, history=history.fork(), proposal_slots=event["proposal_state"].slots,
                                  comparison_slots=comparison.slots, next_slots=next_state.slots)
                     event.pop("old")
                     event.pop("proposal_state")

@@ -11,4 +11,9 @@ print((root / "docs/STATUS.md").read_text())
 for status in sorted((root / "artifacts").glob("*/status.json")):
     data = json.loads(status.read_text())
     if data.get("state") in {"starting", "running", "failed"}:
-        print(f"{status.relative_to(root)}: {json.dumps(data)}")
+        # Old failure records can contain enormous dirty-file lists. Keep their
+        # evidence on disk and print only enough to locate and inspect each job.
+        summary = {key: data[key] for key in ("state", "source", "started", "finished", "exit_code") if key in data}
+        summary["dirty"] = bool(data.get("dirty"))
+        summary["log"] = str((status.parent / "task.log").relative_to(root))
+        print(f"{status.relative_to(root)}: {json.dumps(summary)}")

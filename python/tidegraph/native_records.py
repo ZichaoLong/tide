@@ -1,5 +1,10 @@
 """Tensor-preserving record conversion, separate from native execution ownership."""
 from .records import Atom, Continuation, State
+from .history import History
+
+
+def history(h):
+    return History(h.last_time, h.scalars, h.node_maps, h.tensors)
 
 
 def to_continuation(core, graph, compiled, continuation):
@@ -8,7 +13,8 @@ def to_continuation(core, graph, compiled, continuation):
     q = core.Continuation()
     q.identity, q.batch_size, q.cut = compiled.identity, continuation.batch_size, continuation.cut
     q.states = {k: core.State(s.value, s.last_time, s.observations, s.slots) for k, s in continuation.states.items()}
-    q.history, q.ledger = continuation.history, continuation.ledger
+    q.history = {k: core.History(h.last_time, h.scalars, h.node_maps, h.tensors) for k, h in continuation.history.items()}
+    q.ledger = continuation.ledger
     q.pending = [core.Atom(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value) for a in continuation.pending]
     return q
 
@@ -20,7 +26,7 @@ def atom(a):
 def from_continuation(graph, q):
     return Continuation(graph.identity, q.batch_size, q.cut,
                         {k: State(s.value, s.last_time, s.observations, s.slots) for k, s in q.states.items()},
-                        q.history, [atom(a) for a in q.pending], q.ledger)
+                        {k: history(h) for k, h in q.history.items()}, [atom(a) for a in q.pending], q.ledger)
 
 
 def window_records(result):
@@ -29,6 +35,7 @@ def window_records(result):
         event = {k: getattr(e, k) for k in ("batch", "node", "time", "content", "proposal", "descriptor",
                                           "control", "comparison", "next", "active", "history",
                                           "proposal_slots", "comparison_slots", "next_slots", "contributions")}
+        event["history"] = history(e.history)
         event["fiber"] = [atom(a) for a in e.fiber]
         if e.active:
             event["full"] = e.full

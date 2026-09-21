@@ -29,10 +29,16 @@ void Graph::compile() {
     ++members[node.region];
   }
   for (size_t r = 0; r < regions.size(); ++r) {
+    if (regions[r].selector.empty()) fail("invalid region selector profile");
     if (regions[r].budget < 1 || regions[r].budget > members[r]) fail("invalid region budget");
     const auto& mode = regions[r].read_mode;
     if (mode != "content" && mode != "old" && mode != "proposal") fail("invalid region Read mode");
   }
+  region_index.offsets.assign(regions.size()+1, 0);
+  for (size_t r = 0; r < regions.size(); ++r) region_index.offsets[r+1] = region_index.offsets[r]+members[r];
+  auto region_cursor = region_index.offsets;
+  region_index.edges.resize(n);
+  for (Index v = 0; v < n; ++v) region_index.edges[region_cursor[nodes[v].region]++] = v;
   auto valid = [n](Index v) { return v >= 0 && v < n; };
   for (const auto& e : edges)
     if (!valid(e.source) || !valid(e.target) || e.delay <= 0) fail("invalid positive-delay edge");
@@ -75,7 +81,7 @@ void Graph::compile() {
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v10;n=" << n << ';';
+  out << "tide-graph-v11;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
@@ -88,7 +94,7 @@ void Graph::compile() {
   }
   out << "r;";
   for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ','
-                                     << r.read_mode.size() << ':' << r.read_mode << ';';
+                                     << r.read_mode.size() << ':' << r.read_mode << ',' << r.selector.size() << ':' << r.selector << ';';
   out << "e;";
   for (const auto& e : edges) out << e.source << ',' << e.target << ',' << e.delay << ';';
   out << "i;"; for (auto v : inputs) out << v << ',';

@@ -6,6 +6,7 @@
 #include "tide/aggregate.h"
 #include "tide/read.h"
 #include "tide/next.h"
+#include "tide/region.h"
 #include "tide/delivery.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -122,31 +123,13 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     pool_.run(std::move(jobs));
     for (const auto& [owner, ids] : by_region) {
       const auto& region = graph_.regions[owner.second];
-      auto& history = q.history[owner];
-      std::vector<std::tuple<Index, double, Index, size_t>> rank;
-      std::vector<Tensor> desc;
+      select_events(graph_, model_, q, events, ids, options_.trace);
+      ++stats["region_steps"];
       for (auto i : ids) {
-        const auto& e = events[i];
-        const auto score = e.descriptor.item<double>();
-        if (!std::isfinite(score)) throw std::invalid_argument("nonfinite selector score");
-        auto count = history.find(e.node);
-        rank.emplace_back(region.count_priority && count != history.end() ? count->second : 0,
-                          -score, e.node, i);
-        desc.push_back(e.descriptor);
-      }
-      std::sort(rank.begin(), rank.end());
-      const auto selected = std::min<Index>(region.budget, rank.size());
-      for (Index j = 0; j < selected; ++j) {
-        auto& e = events[std::get<3>(rank[j])]; e.active = true; ++history[e.node];
-      }
-      auto controls = at::softmax(at::stack(desc), 0);
-      for (size_t j = 0; j < ids.size(); ++j) {
-        auto& e = events[ids[j]];
-        e.control = controls[j];
+        auto& e = events[i];
         const State& comparison = region.observe_all || e.active ? e.proposed_state : e.old;
         e.comparison = comparison.value;
         e.comparison_state = comparison;
-        if (options_.trace) e.history = history;
       }
     }
     jobs.clear();

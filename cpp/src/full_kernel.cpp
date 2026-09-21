@@ -26,6 +26,7 @@ class ProjectionEmit final : public FullKernel {
   bool joint_batch() const override { return true; }
   FullResult step(const NodeWeights& w, const FullInput& input, Index slots, const Options& options) const override {
     const auto& h = input.content.value; const auto& p = input.control;
+    if (p.dim() != 0) throw std::invalid_argument("projection Emit requires scalar control");
     auto fresh = full_fresh(w, input.comparison->value, h, identity_);
     FullResult result{identity_ ? h : emit(h, fresh, p, options.mode, options.zeta), {}};
     for (Index slot = 0; slot < slots; ++slot) {
@@ -44,6 +45,7 @@ class ProjectionEmit final : public FullKernel {
                                 Index slots, const Options& options) const override {
     std::vector<Tensor> comparisons, contents, controls;
     for (const auto& input : inputs) {
+      if (input.control.dim() != 0) throw std::invalid_argument("projection Emit requires scalar control");
       comparisons.push_back(input.comparison->value); contents.push_back(input.content.value); controls.push_back(input.control);
     }
     auto h = at::stack(contents), p = at::stack(controls);

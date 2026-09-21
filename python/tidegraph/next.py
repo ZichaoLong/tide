@@ -36,6 +36,8 @@ class ControlBlendNext(NextProgram):
 
     def step(self, weights, r):
         a, b, c = r.old, r.comparison, r.control
+        if c.ndim != 0:
+            raise ValueError("control-blend Next requires scalar control")
         if a.slots.keys() != b.slots.keys() or any(a.slots[k].shape != b.slots[k].shape for k in a.slots):
             raise ValueError("control-blend Next requires matching slot shapes")
         return replace(b, value=(1-c)*a.value+c*b.value,

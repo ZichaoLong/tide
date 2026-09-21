@@ -1,7 +1,7 @@
 """Exact region blocks: causal state/selection followed by packed Full."""
 from collections import defaultdict
 import torch
-from .ops import select
+from .region import evaluate as select
 from .records import Atom, State
 from .packing import prepare_sequences
 from .full import FullInput, evaluate as evaluate_full
@@ -66,9 +66,9 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
                 stats["state_steps"] += 1
                 stats["read_calls"] = stats.get("read_calls", 0) + 1
         nodes = [e["node"] for e in es]
-        active, controls, history = select(nodes, {e["node"]: e["descriptor"] for e in es},
-                                           q.history.get((batch, region_id), {}), region)
-        q.history[batch, region_id] = history
+        active, controls, history = select(graph, model, q, batch, region_id, time,
+                                           [(e["node"], e["descriptor"]) for e in es])
+        stats["region_steps"] = stats.get("region_steps", 0) + 1
         for e in es:
             node = e["node"]
             old = q.states.get((batch, node), model.nodes[node].initial())
@@ -80,7 +80,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             stats["next_steps"] = stats.get("next_steps", 0) + 1
             q.states[batch, node] = next_state
             e.update(active=node in active, control=controls[node], comparison=cmp.value, next=next_state.value,
-                     history=dict(history), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots,
+                     history=history.fork(), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots,
                      _comparison_state=cmp)
     for node, es in by_node.items():
         active = [e for e in es if e["active"]]

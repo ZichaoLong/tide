@@ -50,6 +50,8 @@ class ProjectionEmit(FullProgram):
     def step(self, w, request, slots, mode, zeta):
         from .ops import emit
         h, p = request.content.value, request.control
+        if p.ndim != 0:
+            raise ValueError("projection Emit requires scalar control")
         fresh = w.fresh(request.comparison.value, h)
         value = h if self.identity else emit(h, fresh, p, mode, zeta)
         outputs = {}
@@ -65,6 +67,8 @@ class ProjectionEmit(FullProgram):
 
     def batch(self, w, requests, slots, mode, zeta):
         from .ops import emit
+        if any(r.control.ndim != 0 for r in requests):
+            raise ValueError("projection Emit requires scalar control")
         h = torch.stack([r.content.value for r in requests]); p = torch.stack([r.control for r in requests])
         comparison = torch.stack([r.comparison.value for r in requests])
         fresh = w.fresh(comparison, h)

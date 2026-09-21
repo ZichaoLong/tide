@@ -115,5 +115,5 @@ def test_zero_message_still_updates_linear_normalizer(dtype):
     expected = run(g, m, q, xs, 5, sealed_until=5)
     actual = Native(g, m, packed=True).run(q, xs, 5, sealed_until=5)
     equivalent(expected, actual)
-    assert len(actual.outputs) == 5 and actual.continuation.history[0, 0][0] == 5
+    assert len(actual.outputs) == 5 and actual.continuation.history[0, 0].node_maps["selected"][0] == 5
     equivalent(actual.continuation.states[0, 0].slots["normalizer"], torch.full((3,), 5.0, dtype=dtype))

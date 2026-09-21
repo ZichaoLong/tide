@@ -12,7 +12,7 @@ cursor = engine.cursor(initial_continuation)
 window = cursor.advance(new_inputs, stop, sealed_until=stop)
 # window: cut, outputs, optional trace/messages and counters; no complete state.
 saved = cursor.snapshot()  # Explicit export for inspection, loss or checkpoint.
-cursor.detach()            # Explicit state-slot and pending-message truncation.
+cursor.detach()            # Explicit state/history-slot and pending-message truncation.
 ```
 
 C++ interface: `cpp/include/tide/cursor.h`. The engine must outlive its cursors;
@@ -30,10 +30,10 @@ arriving fibers, relevant region histories and selected outgoing CSR edges.
 Native execution invokes no Python.
 
 `snapshot()` copies metadata, canonicalizes pending records and clones all
-state/pending tensors. Mutating a snapshot cannot change cursor state. Its cost
+state/history/pending tensors. Mutating a snapshot cannot change cursor state. Its cost
 is O(all retained state + pending), plus pending sorting. Clones retain VJPs in
 ordinary grad mode; no_grad/inference_mode follow normal Torch rules.
-`detach()` walks every state and queued message, making an explicit gradient
+`detach()` walks every state, region history and queued message, making an explicit gradient
 boundary. Checkpoints remain values-only autograd boundaries.
 
 Treat inputs and `advance` result tensors as immutable while consumers need them.

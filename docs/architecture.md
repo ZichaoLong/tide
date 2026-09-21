@@ -23,7 +23,7 @@
 | `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
 | `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
 | `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
-| `docs/region-program-plan.md` | Planned region programs, typed history and controls |
+| `docs/region-programs.md` | Selector interfaces, typed history, controls and persistence |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
@@ -59,9 +59,9 @@ in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separ
 from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
 native kernels and replay evaluation in separate source files. Read is separate
 in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
-Region generalization remains in the module extension
-plan. Slot tensors are included in all state
-comparisons, resets, explicit detach and checkpoint v3.
+Regions use `region.py`/`region.h`, with typed history in `history.py`/`types.h`.
+Node and region tensor slots participate in comparisons, explicit detach and
+checkpoint v4. Built-in counters use checked int64 arithmetic.
 
 Build qualification checks a source fingerprint and binary hashes from
 `build/build-manifest.json`; stale native modules cannot certify newer C++ code.
