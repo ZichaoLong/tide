@@ -12,8 +12,9 @@ default eps/equal widths are qualified in `evidence/lh-full.md` (`lh-full.md`).
 Same-fiber sum attention's scalar baseline and five original attention modes are
 qualified in `evidence/lh-attention.md` (`fiber-attention.md`); batch/sequence
 packing and CROSSBATCH are qualified in `evidence/fiber-packing.md`.
-Normalized/learned post-attention Confluence is implemented in `fiber-pooling.md`;
-current qualification is recorded in STATUS. Pronounce/whole-model mapping remains pending.
+Normalized/learned post-attention Confluence is qualified in
+`evidence/fiber-pooling.md`, with the original FP64 assertion limitation recorded
+separately. Pronounce/whole-model mapping remains pending (`lh-pronounce-plan.md`).
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no

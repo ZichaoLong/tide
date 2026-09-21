@@ -2,58 +2,45 @@
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: `graph-execution-foundation`.
 
-## Qualification boundary
+## Current qualification
 
-Last complete qualification: **2764 tests passed** on clean implementation
-`eb9dc6c86ef46ab4db9e06029b0029412a890395`; `evidence/fiber-packing.md`.
-Original LH Selector/Add/Full/Attention passed FP64/FP32 for that sum-only gate.
-The pooling implementation below has passed its development gate, but has not
-yet received complete clean-source qualification. Do not promote it prematurely.
+**3092 tests passed in 296.20s** on clean implementation
+`733983e648b18f3da0df215dfd7aedbef1d1d331`; `evidence/fiber-pooling.md`.
+Unit `tide-foundation-fiber-pool-20260921-1722` is inactive, MainPID 0, exit 0.
+All four records in `artifacts/fiber-pool-20260921-1722/` passed at that clean
+source: `status.json`, `verification/result.json`, `oracle/result.json` and
+`oracle-release/result.json`. No active job. Evidence is saved separately.
 
-## Pooling implementation and completed development gate
+Four post-attention pooling profiles now qualify Python/native scalar/packed,
+node parallel, frontier, cycles, specialization/embedding, analytic VJPs, cuts,
+shared optimizer and checkpoint behavior. Original Selector/Add/Full also passed.
+Original Attention runtime-assertions-on: FP64 324 cases with 12 explicitly
+unavailable, FP32 336. Assertions-off: each precision 336 cases, 8064 ticks,
+22512 candidate updates. The 12 are a hardcoded-FP32 diagnostic denominator in
+original FP64 multi-batch active-softmax; the unchanged-source oracle checks this
+exception, and an independent build covers the missing numerical cases. Plain
+C/C++ assertions remain enabled in both builds. This is not whole-model parity.
 
-Mean, linear, active-softmax and all-softmax profiles are implemented in Python
-and native scalar/packed attention; see `fiber-pooling.md`. Original sum is
-unchanged. Graph-owned incoming domains validate vector `fiber_pool` parameters,
-including a supplied C++ state kernel's policy. Analytic/VJP, missing/zero,
-scheduler, embedding, cuts, optimizer/sharing and checkpoint tests are present.
-A packed Python source-slot variable collision found during review was fixed.
-
-Unit `tide-foundation-fiber-pool-dev-20260921-1715` is inactive, MainPID 0, exit 0.
-`artifacts/fiber-pool-dev-20260921-1715/{status.json,oracle/result.json,
-oracle-release/result.json}` are passed. **582 targeted tests passed in 53.27s**.
-Both original runtime-assertion variants passed their declared coverage:
-
-- Assertions-on: FP64 324 cases (12 explicitly unavailable), FP32 336 cases.
-- Assertions-off: FP64/FP32 each 336 cases, 8064 ticks, 22512 candidate updates.
-
-The 12 unavailable cases hit original `ActSoftmaxConfluence`'s diagnostic
-FP32-default `SumCoe` multiplied by FP64 weights. A direct original exception
-check preserves this limit; the separate build disables only the original
-`ENABLE_RUNTIME_ASSERTION` flag, with plain C/C++ assertions still enabled.
-The same immutable snapshot is used throughout, without source edits.
-Initial failed run `fiber-pool-dev-20260921-1709` and its source tar/hash remain
-retained: build + 582 tests passed, original FP64 failed as described above.
+Retain failed `fiber-pool-dev-20260921-1709` and successful follow-up
+`fiber-pool-dev-20260921-1715` (582 targeted checks plus both original variants).
+Only the incorporated 805-byte `artifacts/fiber_pool_draft.py` was removed, after
+reviewing a dry-run diff against installed source including its added validation.
 
 ## Exact next action
 
-Commit this coherent implementation, then launch clean qualification as unit
-`tide-foundation-fiber-pool-20260921-1722` with:
+Proceed with `lh-pronounce-plan.md`: norm-only Full, independent Python/native
+sealed token-window conversion and actual original Pronounce oracle, then whole
+IOCortexNet. The audit found token/phase clocks and contiguous per-port occurrence
+positions must stay distinct. A globally empty original Pronounce window is an
+invalid input domain; absent samples/phases must not be padded with zero messages.
 
-`python scripts/job.py --output-dir artifacts/fiber-pool-20260921-1722 --
-/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
-artifacts/fiber-pool-20260921-1722 --jobs 2 --lh-snapshot
-artifacts/lh-source-20260921-1428`.
-
-Use the durable systemd policy below. Freeze source and both oracle caches while
-active. No full result is asserted yet. Inspect the unit and all four results:
-outer status, verification, oracle and oracle-release. Qualify now runs both
-original assertion variants. After passing, commit evidence separately and update
-ROADMAP/current compatibility links. Remove only the incorporated helper
-`artifacts/fiber_pool_draft.py` after a dry-run comparison; keep failed reproducers.
-Continue Pronounce token-clock/readout, then IOCortexNet mapping and ROADMAP's
-remaining training/cache/history/performance work. No whole-LH equivalence or
-performance result is claimed.
+First gate composes body-tick and token-clock graphs through an explicit adapter;
+it does not prove a single-PDG whole-model encoding. The plan records the required
+autoregressive sealing and phase/source-domain obligations for that later proof.
+No next-stage code exists yet. Implement/test in bounded files, commit, qualify
+frozen clean source and commit evidence separately. ROADMAP retains further
+training/backward, persistent cache/history and measured-scale work. No speed or
+whole-LH equivalence claim is established.
 
 ## Source, reference and execution policy
 

@@ -2,8 +2,9 @@
 
 Scalar sum/tick-repeat baseline is qualified in `evidence/lh-attention.md`;
 contract: `fiber-attention.md`. Real batch/sequence packing and CROSSBATCH are
-qualified in `evidence/fiber-packing.md` (`fiber-packing.md`). Continue with
-post-attention Confluence and whole-model readout.
+qualified in `evidence/fiber-packing.md` (`fiber-packing.md`). Post-attention
+Confluence is now qualified in `evidence/fiber-pooling.md` (`fiber-pooling.md`).
+Continue with `lh-pronounce-plan.md` and whole-model readout.
 
 Use the immutable snapshot in STATUS. `AccumulateLocal.cpp` projects every source
 row, appends all current K/V, evaluates every current query against the entire
