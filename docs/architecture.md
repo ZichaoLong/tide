@@ -23,7 +23,7 @@
 | `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
 | `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
 | `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
-| `docs/next-program-plan.md` | Planned full Next seam and prefill gates |
+| `docs/region-program-plan.md` | Planned region programs, typed history and controls |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.

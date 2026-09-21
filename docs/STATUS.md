@@ -4,17 +4,17 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1918 tests passed** at
-`4b5e14f6412c587d3ccec4ce75f1b6c88dbc3820`.
-See `evidence/read-programs.md`; prior evidence is linked from `ROADMAP.md`.
-Unit `tide-foundation-read-20260921-1311` completed with exit 0, is inactive
+Latest clean qualification: **2010 tests passed** at
+`c4a5ce5a5b27284a50e343afed71a1a09e76ad55`.
+See `evidence/next-programs.md`; prior evidence is linked from `ROADMAP.md`.
+Unit `tide-foundation-next-20260921-1335` completed with exit 0, is inactive
 and has MainPID 0. Artifacts:
-`artifacts/read-20260921-1311/{status.json,task.log,verification/}`.
+`artifacts/next-20260921-1335/{status.json,task.log,verification/}`.
 
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
 SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v9; checkpoint payload remains
+tags. See `local-ports.md`. Native graph format is v10; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
 Per-slot Full/Emit is qualified: native/Python program extension interfaces,
@@ -32,22 +32,16 @@ independent Read programs and all three region modes are qualified. Read's
 program requests expose only the selected state and preserve complete metadata;
 see `content-programs.md`, `read-programs.md` and their evidence.
 
-Next implementation is ready for clean qualification: complete requests,
-registered custom programs, adopt/control-blend profiles, graph-owned clear,
-state validation, native independent-node execution and prefill capability gates.
-See `next-programs.md`. Development build `tide-foundation-next-build-20260921-1330`
-passed, is inactive and has MainPID 0. Related CPU FP64/FP32 checks passed:
-**122 tests in 17.52s**, including standalone custom Next and existing sharing.
+No active job. Complete-content propagation, registered state programs,
+independent Read modes and complete Next programs/prefill guards are qualified.
+See their contracts and evidence. Next keeps clear policy graph-owned, validates
+custom states and preserves pre-Next Full snapshots. Original parameter-sharing
+behavior is retained. No joint Next batch or performance gain is claimed.
 
-Next qualification unit: `tide-foundation-next-20260921-1335`.
-Command: `python scripts/qualify.py --output-dir artifacts/next-20260921-1335 --jobs 2`.
-Artifacts: `artifacts/next-20260921-1335/{status.json,task.log,verification/}`.
-Run after the implementation commit via scripts/job.py in background.slice.
-Freeze source while active. Inspect MainPID/exit, status.json and verification
-result.json; archive evidence separately only after successful termination.
-Native graph format advances to v10; checkpoint payload stays v3. After this
-qualification, replace the finished Next plan with the remaining region/history/
-control plan, then implement that seam before LH profiles and numerical parity.
+Next increment: region-owned typed histories, independent selector programs and
+controls, followed by LH count/affect/norm selection and original-C++ inference
+comparison. Follow `region-program-plan.md`; it identifies serialization, cursor,
+fixed-topology and isolated-gradient obligations. No region program code yet.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -72,9 +66,9 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Inspect the clean Next qualification above and archive its evidence. Then
-   implement region histories/controls and selector programs.
-2. Extend full Next/Read, region history/selector, then
+1. Implement region histories/controls and selector programs
+   (`region-program-plan.md`).
+2. Add LH selector/memory/readout profiles, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
    allocation, structured Delta chunks and observed sparse work. No speed claim

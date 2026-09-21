@@ -44,4 +44,4 @@ not implicit migration. See `tests/test_read_modes.py`, `test_read_contract.py`
 and the standalone `cpp/test/read_programs.cpp` analytic checks.
 
 Full Next requests and control-sensitive state-prefill gates are implemented
-separately in `next-programs.md`, pending qualification.
+and [qualified](evidence/next-programs.md) separately in `next-programs.md`.

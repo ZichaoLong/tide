@@ -28,7 +28,7 @@ the old broadcast profile; its slot-affine/phase profile is
    Next receives complete content in the following gate.
 2. Full Next inputs (old, comparison, time, content, active, control) and an
    explicit comparison-identity prefill gate are implemented (`next-programs.md`),
-   pending qualification. Control-sensitive Next uses causal state preparation
+   now [qualified](evidence/next-programs.md). Control-sensitive Next uses causal state preparation
    while retaining Full batching. Independent Read now
    supports content, old-state and proposed-state modes (`read-programs.md`),
    now [qualified](evidence/read-programs.md).

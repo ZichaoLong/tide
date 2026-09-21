@@ -1,6 +1,6 @@
 # Persistent Next programs and causal state preparation
 
-Implemented, qualification pending in STATUS. This instantiates upstream
+[Qualified](evidence/next-programs.md). This instantiates upstream
 Next(old, comparison, time, content, active, control) without changing Full's
 snapshot or introducing updates for empty nodes.
 
