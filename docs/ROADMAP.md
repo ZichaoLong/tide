@@ -7,8 +7,8 @@ stays explicit; later milestones may refine earlier interfaces.
 | Milestone | Deliverable and acceptance | Status |
 | --- | --- | --- |
 | M0 | Re-entry, architecture, semantic lock, status, evidence and cleanup rules | implemented |
-| M1 | Independent Python + C++ sealed streaming; cycles/delays/regions; sparse CSR/CSC; FP64/FP32 trace, VJP, continuation | implementing |
-| M2 | Native serial/node-parallel + batch packing; sparse allocation/work counters; differential and thread/grad-mode tests | planned |
+| M1 | Independent Python + C++ sealed streaming; cycles/delays/regions; sparse CSR/CSC; FP64/FP32 trace, VJP, continuation | verified for ema-ffn-v1; [evidence](evidence/m1-streaming.md) |
+| M2 | Native serial/node-parallel + batch packing; sparse allocation/work counters; differential and thread/grad-mode tests | verified for ema-ffn-v1; [evidence](evidence/m1-streaming.md); performance pending |
 | M3 | TimedDAG validation and frontier contracts; Python + native; actual time batching; region quotient cycles; independent DAG specialization | planned |
 | M4 | SettleGraph executor + encoding; Python/native generic; independent Python specialization; embedded trace and backward correspondence | planned |
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | planned |

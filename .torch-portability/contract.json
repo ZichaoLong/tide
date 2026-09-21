@@ -16,10 +16,10 @@
     "cpu_reference": {
       "dtype": "float32",
       "commands": {
-        "forward": "python scripts/verify.py --device cpu --dtype float32",
-        "backward": "python scripts/verify.py --device cpu --dtype float32",
-        "optimizer_step": "python scripts/verify.py --device cpu --dtype float32",
-        "checkpoint_round_trip": "python scripts/verify.py --device cpu --dtype float32"
+        "forward": "python scripts/verify.py --device cpu --dtype float32 --output-dir artifacts/verify-fp32",
+        "backward": "python scripts/verify.py --device cpu --dtype float32 --output-dir artifacts/verify-fp32",
+        "optimizer_step": "python scripts/verify.py --device cpu --dtype float32 --output-dir artifacts/verify-fp32",
+        "checkpoint_round_trip": "python scripts/verify.py --device cpu --dtype float32 --output-dir artifacts/verify-fp32"
       },
       "applicable": {
         "backward": true,
@@ -65,7 +65,7 @@
       "backend": "cpu",
       "host_arch": "x86_64",
       "policy": "required",
-      "status": "planned",
+      "status": "implemented",
       "required_tiers": [
         "cpu-semantic"
       ]
@@ -76,9 +76,25 @@
       "backend": "cpu",
       "host_arch": "aarch64",
       "policy": "required",
-      "status": "planned",
+      "status": "verified",
       "required_tiers": [
         "cpu-semantic"
+      ],
+      "evidence": [
+        {
+          "date": "2026-09-21",
+          "commit": "9c957fdf90c946ee7263c323d6f5153f793f49e3",
+          "scope": "ema-ffn-v1 sparse streaming, serial/node-parallel, packed batch, trace/VJP/AdamW/value checkpoint; FP64/FP32",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/verify-m1",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/m1-streaming.md"
+        }
       ]
     },
     {
@@ -111,7 +127,7 @@
       "backend": "cpu",
       "host_arch": "x86_64",
       "policy": "required",
-      "status": "planned",
+      "status": "implemented",
       "required_tiers": [
         "build",
         "cpu-semantic"
@@ -123,10 +139,26 @@
       "backend": "cpu",
       "host_arch": "aarch64",
       "policy": "required",
-      "status": "planned",
+      "status": "verified",
       "required_tiers": [
         "build",
         "cpu-semantic"
+      ],
+      "evidence": [
+        {
+          "date": "2026-09-21",
+          "commit": "9c957fdf90c946ee7263c323d6f5153f793f49e3",
+          "scope": "ema-ffn-v1 sparse streaming, serial/node-parallel, packed batch, trace/VJP/AdamW/value checkpoint; FP64/FP32",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/verify-m1",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/m1-streaming.md"
+        }
       ]
     },
     {
