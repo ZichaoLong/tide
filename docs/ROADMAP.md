@@ -12,7 +12,7 @@ stays explicit; later milestones may refine earlier interfaces.
 | M3 | TimedDAG validation and frontier contracts; Python + native; actual time batching; region quotient cycles; independent DAG specialization | verified for ema-ffn-v1; [frontier](evidence/m3-frontier.md), [specialization](evidence/m4-settle-specialized.md) |
 | M4 | SettleGraph executor + encoding; Python/native generic; independent Python specialization; embedded trace and backward correspondence | verified for ema-ffn-v1; [evidence](evidence/m4-settle-specialized.md) |
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | planned |
-| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | planned |
+| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profile verified; [evidence](evidence/m6-training-contracts.md); broader modules/objectives pending |
 | M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | planned |
 | M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | planned |
 

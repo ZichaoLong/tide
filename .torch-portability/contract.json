@@ -51,7 +51,7 @@
     ],
     "checkpoint": {
       "enabled": true,
-      "schema": "tide-continuation-v1",
+      "schema": "tide-continuation-v2",
       "init_from": "weights or explicitly declared initial state; starts new progress",
       "resume": "complete state declared by the schema",
       "portable_handoff": true,
@@ -83,17 +83,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "9c957fdf90c946ee7263c323d6f5153f793f49e3",
-          "scope": "ema-ffn-v1 sparse streaming, serial/node-parallel, packed batch, trace/VJP/AdamW/value checkpoint; FP64/FP32",
+          "commit": "a2d833eade4c30034706db38f7d805397e35d5f0",
+          "scope": "ema-ffn-v1 CPU streaming/frontier, SettleGraph embedding, independent specializations; FP64/FP32 trace, VJP, sharing, AdamW, value checkpoint and explicit truncation",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/verify-m1",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/contracts-20260921-0840",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m1-streaming.md"
+          "environment_manifest": "docs/evidence/m6-training-contracts.md"
         }
       ]
     },
@@ -147,17 +147,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "9c957fdf90c946ee7263c323d6f5153f793f49e3",
-          "scope": "ema-ffn-v1 sparse streaming, serial/node-parallel, packed batch, trace/VJP/AdamW/value checkpoint; FP64/FP32",
+          "commit": "a2d833eade4c30034706db38f7d805397e35d5f0",
+          "scope": "ema-ffn-v1 CPU streaming/frontier, SettleGraph embedding, independent specializations; FP64/FP32 trace, VJP, sharing, AdamW, value checkpoint and explicit truncation",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/verify-m1",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/contracts-20260921-0840",
           "result": "passed",
-          "environment_manifest": "docs/evidence/m1-streaming.md"
+          "environment_manifest": "docs/evidence/m6-training-contracts.md"
         }
       ]
     },
