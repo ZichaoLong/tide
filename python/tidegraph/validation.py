@@ -18,7 +18,7 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
     for (b, v), state in q.states.items():
         if not 0 <= b < q.batch_size or not 0 <= v < len(graph.nodes):
             raise ValueError("invalid state owner")
-        if state.last_time >= q.cut or state.observations < 0:
+        if not -1 <= state.last_time < q.cut or state.observations < 0:
             raise ValueError("invalid state clock")
         tensor(state.value)
     for (b, r), counts in q.history.items():
@@ -38,8 +38,8 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
                 and x.position >= 0 and q.cut <= x.time < stop):
             raise ValueError("invalid external coordinate")
         old_position, old_time = ledger.get((x.batch, x.port), (-1, -1))
-        if x.position <= old_position or x.time <= old_time:
-            raise ValueError("port positions and times must strictly increase")
+        if x.position != old_position + 1 or x.time <= old_time:
+            raise ValueError("port positions must be contiguous and times strictly increase")
         tensor(x.value)
         ledger[x.batch, x.port] = x.position, x.time
         atoms.append(Atom(x.batch, graph.inputs[x.port], x.time, 0, x.port, x.position, x.value))

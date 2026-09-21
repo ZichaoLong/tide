@@ -60,8 +60,8 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
             && x.time >= q.cut && x.time < stop, "invalid external coordinate");
     const Owner owner{x.batch, x.port};
     auto it = q.ledger.find(owner);
-    if (it != q.ledger.end())
-      require(x.position > it->second.first && x.time > it->second.second, "nonmonotonic port history");
+    const auto last = it == q.ledger.end() ? Owner{-1, -1} : it->second;
+    require(x.position == last.first + 1 && x.time > last.second, "noncontiguous/nonmonotonic port history");
     check_tensor(x.value, ref, {m.width()});
     q.ledger[owner] = {x.position, x.time};
     atoms.push_back({x.batch, g.inputs[x.port], x.time, 0, x.port, x.position, x.value});

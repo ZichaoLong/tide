@@ -2,6 +2,7 @@
 #include "tide/stream.h"
 #include "tide/ops.h"
 #include "tide/frontier.h"
+#include "tide/specialized.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -11,7 +12,7 @@ using namespace tide;
 PYBIND11_MODULE(_tide_native, m) {
   py::class_<Edge>(m, "Edge").def(py::init<Index, Index, Index>())
     FIELD(Edge, source) FIELD(Edge, target) FIELD(Edge, delay);
-  py::class_<Node>(m, "Node").def(py::init<Index, bool>()) FIELD(Node, region) FIELD(Node, clear);
+  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool>()) FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity);
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);
@@ -46,6 +47,8 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("run", &Streaming::run, py::call_guard<py::gil_scoped_release>());
   py::class_<Frontier>(m, "Frontier").def(py::init<Graph, Model, Options>())
     .def("run", &Frontier::run, py::call_guard<py::gil_scoped_release>());
+  py::class_<Specialized>(m, "Specialized").def(py::init<Graph, Model, Options, std::string>())
+    .def("run", &Specialized::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);
 }
 #undef FIELD

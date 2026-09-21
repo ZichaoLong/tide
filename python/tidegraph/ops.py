@@ -63,7 +63,8 @@ class Model(nn.Module):
             raise ValueError("CPU float32/float64 and positive width required")
         self.width = width
         generator = torch.Generator().manual_seed(seed)
-        self.nodes = nn.ModuleList(NodeWeights(width, generator, dtype) for _ in graph.nodes)
+        self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(width, generator, dtype)
+                                   for n in graph.nodes)
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -83,6 +84,8 @@ class Model(nn.Module):
 
 
 def select(nodes, descriptors, history, region):
+    if any(not torch.isfinite(d).all() for d in descriptors.values()):
+        raise ValueError("nonfinite selector score")
     order = sorted(nodes, key=lambda v: (history.get(v, 0) if region.count_priority else 0,
                                         -float(descriptors[v].detach()), v))
     active = set(order[:region.budget])
@@ -91,3 +94,23 @@ def select(nodes, descriptors, history, region):
     for v in active:
         updated[v] = updated.get(v, 0) + 1
     return active, dict(zip(nodes, probs.unbind(0))), updated
+
+
+class BoundaryWeights(nn.Module):
+    """Stateless identity adapter, with no trainable parameters."""
+    def __init__(self, width, dtype):
+        super().__init__()
+        for name, shape in (("decay", (width,)), ("weight", (width, width)), ("bias", (width,)), ("read", (width,))):
+            self.register_buffer(name, torch.zeros(shape, dtype=dtype))
+
+    def initial(self):
+        return State(torch.zeros_like(self.bias))
+
+    def prepare(self, old, content, time):
+        return old, content.new_zeros(())
+
+    def prepare_block(self, old, contents, times):
+        return [old for _ in times], contents.new_zeros((len(times),))
+
+    def full(self, comparison, content, probability, mode, zeta):
+        return content

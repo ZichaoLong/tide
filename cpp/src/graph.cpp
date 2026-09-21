@@ -46,8 +46,8 @@ void Graph::compile() {
   csr = index(source); csc = index(target); output_index = index(outputs);
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v1;n=" << n << ';';
-  for (const auto& v : nodes) out << v.region << ',' << v.clear << ';';
+  out << "tide-graph-v2;n=" << n << ';';
+  for (const auto& v : nodes) out << v.region << ',' << v.clear << ',' << v.identity << ';';
   out << "r;";
   for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ';';
   out << "e;";

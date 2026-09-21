@@ -34,7 +34,8 @@ Tensor emit(const Tensor& h, const Tensor& g, const Tensor& p, const std::string
   throw std::invalid_argument("invalid emit mode");
 }
 Tensor full(const NodeWeights& w, const Tensor& comparison, const Tensor& h,
-            const Tensor& p, const Options& options) {
+            const Tensor& p, const Options& options, bool identity) {
+  if (identity) return h;
   auto g = h + at::tanh(at::matmul(comparison, w.weight) + w.bias);
   return emit(h, g, p, options.mode, options.zeta);
 }

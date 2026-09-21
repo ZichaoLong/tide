@@ -15,6 +15,7 @@ class Edge:
 class Node:
     region: int
     clear: bool = False
+    identity: bool = False
 
 
 @dataclass(frozen=True)

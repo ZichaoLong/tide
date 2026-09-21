@@ -55,6 +55,9 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       for (size_t j = 0; j < ids.size(); ++j) {
         auto& e = events[ids[j]]; e.proposal = proposals[j]; e.descriptor = desc[j];
         e.proposed_state = {e.proposal, e.time, old.observations + static_cast<Index>(j) + 1};
+        if (g.nodes[node].identity) {
+          e.proposal = old.value; e.descriptor = at::zeros({}, e.content.options()); e.proposed_state = old;
+        }
       }
     });
   }
@@ -73,6 +76,9 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
         e.proposal = at::sigmoid(w.decay) * e.old.value + e.content;
         e.descriptor = (e.proposal * w.read).sum(-1);
         e.proposed_state = {e.proposal, e.time, e.old.observations + 1};
+        if (g.nodes[e.node].identity) {
+          e.proposal = e.old.value; e.descriptor = at::zeros({}, e.content.options()); e.proposed_state = e.old;
+        }
       });
     }
     pool.run(std::move(jobs));
@@ -109,7 +115,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     jobs.push_back([&, node, ids] {
       std::vector<Tensor> cmp, h, p;
       for (auto i : ids) { cmp.push_back(events[i].comparison); h.push_back(events[i].content); p.push_back(events[i].control); }
-      auto values = full(m.nodes[node], at::stack(cmp), at::stack(h), at::stack(p), options);
+      auto values = full(m.nodes[node], at::stack(cmp), at::stack(h), at::stack(p), options, g.nodes[node].identity);
       for (size_t i = 0; i < ids.size(); ++i) events[ids[i]].full = values[i];
     });
   }

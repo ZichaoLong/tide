@@ -8,7 +8,7 @@ class Native:
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         g = core.Graph()
-        g.nodes = [core.Node(n.region, n.clear) for n in graph.nodes]
+        g.nodes = [core.Node(n.region, n.clear, n.identity) for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs
@@ -22,9 +22,12 @@ class Native:
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta
         options.prefill, options.max_events = prefill, max_events
-        if algorithm not in {"streaming", "frontier"}:
+        if algorithm not in {"streaming", "frontier", "self_loop", "chain"}:
             raise ValueError("unknown native algorithm")
-        self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)
+        if algorithm in {"self_loop", "chain"}:
+            self.engine = core.Specialized(g, m, options, algorithm)
+        else:
+            self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)
 
     def run(self, continuation, external, stop, *, sealed_until):
         c = self.core

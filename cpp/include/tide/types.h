@@ -11,7 +11,7 @@ using Tensor = at::Tensor;
 using Index = int64_t;
 using Owner = std::pair<Index, Index>;
 struct Edge { Index source, target, delay; };
-struct Node { Index region; bool clear = false; };
+struct Node { Index region; bool clear = false, identity = false; };
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };
 struct Graph {

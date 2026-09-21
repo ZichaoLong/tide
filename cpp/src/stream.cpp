@@ -74,6 +74,10 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
         for (auto i : ids) {
           auto& e = events[i];
           e.proposed_state = {e.proposal, time, e.old.observations + 1};
+          if (graph_.nodes[node].identity) {
+            e.proposal = e.old.value; e.descriptor = at::zeros({}, e.content.options());
+            e.proposed_state = e.old;
+          }
         }
       });
     }
@@ -120,12 +124,12 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
           for (auto i : ids) {
             cmp.push_back(events[i].comparison); content.push_back(events[i].content); p.push_back(events[i].control);
           }
-          auto values = full(model_.nodes[node], at::stack(cmp), at::stack(content), at::stack(p), options_);
+          auto values = full(model_.nodes[node], at::stack(cmp), at::stack(content), at::stack(p), options_, graph_.nodes[node].identity);
           for (size_t j = 0; j < ids.size(); ++j) events[ids[j]].full = values[j];
         } else {
           for (auto i : ids) {
             auto& e = events[i];
-            e.full = full(model_.nodes[node], e.comparison, e.content, e.control, options_);
+            e.full = full(model_.nodes[node], e.comparison, e.content, e.control, options_, graph_.nodes[node].identity);
           }
         }
       });
