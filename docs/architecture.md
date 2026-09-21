@@ -16,6 +16,7 @@
 | `docs/evidence/` | Small immutable-source qualification reports |
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
+| `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership and preflight value restore |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |

@@ -56,7 +56,7 @@ Stale module/Add/attention/Pronounce navigation is refreshed; native/Python
 snapshot identity-copy cost is explicit. All 15 modified/new files in the temporary
 ownership-dev worktree matched main byte-for-byte; that redundant worktree was
 removed after inspection. Its implementation is committed in f900e15/c84abbe.
-M8 implementation is now dirty on main: cpp/bench/{streaming.h,config.cpp,
+M8 implementation passed its directed development gate and is ready to commit: cpp/bench/{streaming.h,config.cpp,
 workload.cpp,compare.cpp,main.cpp,metrics_jsonl_writer.h}, CMakeLists.txt,
 scripts/{build,benchmark_streaming,experiment_record}.py,
 tests/test_streaming_benchmark.py, docs/streaming-benchmark.md. It uses separate construction,
@@ -127,16 +127,26 @@ that local parent. Check capacity before writes. Never clean reference trees.
 Keep cited failures/evidence; cleanup dry run found no eligible old artifacts.
 Packed first-order VJPs use semantic replay; higher-order AD remains unclaimed.
 
-## M8 directed gate to dispatch
+## M8 development and pilot
 
-Unit tide-foundation-streaming-bench-dev-20260921-2252, output
-artifacts/streaming-bench-dev-20260921-2252/. Command from main:
+Development unit tide-foundation-streaming-bench-dev-20260921-2252 is terminal
+inactive/dead, MainPID 0, Result=success, exit 0. Build passed; 15 tests passed in
+10.49s, finished 2026-09-21T22:53:59Z. Both status.json and development.json in
+artifacts/streaming-bench-dev-20260921-2252/ are passed; frozen dirty source was
+86a980b plus archive, tree SHA256
+b6af7db5d376aa27f2e595aee40af78ee22a93a92eb1b76292bc8392915aa509.
+No performance claim follows from these correctness checks.
+
+Commit the benchmark and fixed pilot driver, then dispatch
+unit tide-foundation-streaming-pilot-20260921-2300 from main:
 /home/zlong/anaconda3/bin/python scripts/job.py --output-dir
-artifacts/streaming-bench-dev-20260921-2252 -- /home/zlong/anaconda3/bin/python
-scripts/develop.py --output-dir artifacts/streaming-bench-dev-20260921-2252
---jobs 2 tests/test_streaming_benchmark.py.
-Freeze main source/build during this development gate. The original-LH job uses
-its separate immutable worktree and continues independently. Inspect result and
-fix targeted failures before committing the benchmark. Then make a small clean
-tracked pilot; performance is unmeasured so far. Experiment record/CLI APIs and
-Trackio projection are not qualified by merely writing this implementation.
+artifacts/streaming-pilot-20260921-2300 -- /home/zlong/anaconda3/bin/python
+scripts/pilot_streaming.py --device cpu --dtype float32 --output-dir
+artifacts/streaming-pilot-20260921-2300/comparison --jobs 2 --tracking best-effort.
+The pilot rebuilds manifests from the clean commit, then runs exactly 16 cases:
+nodes 32/4096 x functional/cursor x workers 1/3 x packed 0/1; each has two warmups
+and five measured repetitions, four active rings, batch 4, width 16, ticks 32.
+Freeze main source/build until this small controlled comparison terminates.
+Original-LH qualification remains independent and live; record co-running load.
+Inspect outer status, comparison/pilot.json and all 16 run.json/summary.json and
+raw metric files; validate complete records and report Trackio degradation.

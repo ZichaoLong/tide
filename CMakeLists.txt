@@ -27,6 +27,9 @@ add_executable(tidegraph-full-check cpp/test/custom_full.cpp cpp/src/runtime.cpp
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph)
 add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-aggregate-check PRIVATE tidegraph)
+add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
+  cpp/bench/workload.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp)
+target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph)
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
