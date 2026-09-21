@@ -4,6 +4,7 @@
 #include "tide/autograd.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/read.h"
 #include "tide/delivery.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -69,6 +70,9 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     std::vector<std::function<void()>> jobs;
     for (const auto& [node, ids] : by_node) {
       stats["update_calls"] += options_.packed ? 1 : ids.size();
+      stats["read_calls"] += options_.packed ? 1 : ids.size();
+      if (options_.packed && replay) stats["semantic_read_replays"] += ids.size();
+      if (options_.packed && !model_.nodes[node].read_kernel->joint_batch()) stats["read_scalar_batch_steps"] += ids.size();
       if (options_.packed && replay) stats["semantic_state_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].kernel->joint_batch()) stats["state_scalar_batch_steps"] += ids.size();
       stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
@@ -88,29 +92,26 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
           }
           else {
             e.proposed_state = w.kernel->step(w, e.old, e.local_content(), time);
-            e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), time);
           }
         }
         if (options_.packed) {
           std::vector<State> states;
-          Tensor desc;
           {
             at::NoGradGuard guard;
             auto h = at::stack(content);
             states = w.kernel->batch(w, old, h, times, content_views);
-            desc = w.kernel->read_batch(w, old, states, h, times, content_views);
+            if (states.size() != ids.size()) throw std::invalid_argument("state batch changed event count");
           }
           for (size_t k = 0; k < ids.size(); ++k) {
             auto& e = events[ids[k]];
-            e.proposed_state = states[k]; e.descriptor = desc[k];
+            e.proposed_state = states[k];
             if (replay) {
               auto reference = w.kernel->step(w, e.old, e.local_content(), time);
               e.proposed_state = semantic_state(e.proposed_state, reference);
-              auto read = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), time);
-              e.descriptor = semantic_value(e.descriptor, read);
             }
           }
         }
+        evaluate_read(graph_, model_, events, ids, options_.packed);
         for (auto i : ids) {
           auto& e = events[i];
           e.proposal = e.proposed_state.value;

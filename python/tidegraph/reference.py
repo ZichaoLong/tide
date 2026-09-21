@@ -29,7 +29,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 event = dict(batch=batch, node=node, time=time, fiber=fiber)
                 evaluate_aggregate(graph, model, [event])
                 h = event["content"]
-                prop, desc = model.nodes[node].prepare(old, event["_content"], time)
+                prop, desc = model.nodes[node].prepare(old, event["_content"], time, graph.regions[graph.nodes[node].region].read_mode)
                 event.update(proposal=prop.value, descriptor=desc, old=old, proposal_state=prop)
                 prepared[batch, node] = event
         for batch in range(q.batch_size):

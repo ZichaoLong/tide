@@ -15,13 +15,6 @@ class StateProgram(torch.nn.Module):
     def step(self, weights, old, content, time):
         raise NotImplementedError
 
-    def read(self, weights, old, proposal, content, time):
-        return (proposal.value * weights.read).sum(-1)
-
-    def read_batch(self, weights, old, proposals, batch):
-        return torch.stack([self.read(weights, a, b, c.with_value(h), t)
-                            for a, b, c, h, t in zip(old, proposals, batch.views, batch.contents, batch.times)])
-
     def sequence(self, weights, old, values, times, views=None):
         views = [Content(h) for h in values] if views is None else views
         states = []

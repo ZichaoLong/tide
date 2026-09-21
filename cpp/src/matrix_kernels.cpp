@@ -86,11 +86,6 @@ class MatrixKernel final : public StateKernel {
     }
     return states;
   }
-  Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor&, const std::vector<Index>&, const ContentViews&) const override {
-    std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
-    return (at::stack(values) * w.read).sum(-1);
-  }
   void validate_weights(const NodeWeights& w) const override {
     const auto d = w.bias.numel();
     for (const auto& name : {"mem_q", "mem_k", "mem_v", "mem_out"}) {

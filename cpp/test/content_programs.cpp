@@ -2,6 +2,7 @@
 #include "tide/frontier.h"
 #include "tide/kernel.h"
 #include "tide/full.h"
+#include "tide/read.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <stdexcept>
 
@@ -24,9 +25,6 @@ class SourceMemory final : public StateKernel {
     }
     return {old.value+w.extra.at("source_gain")*value, time, old.observations+1, {{"sum", old.slots.at("sum")+total}}};
   }
-  Tensor read(const NodeWeights&, const State&, const State& proposal, const ContentView& content, Index) const override {
-    return proposal.value.sum()+content.contributions[0].value.sum();
-  }
   bool exact_sequence() const override { return true; }  // The base sequence is a counted scalar fallback.
   void validate_weights(const NodeWeights& w) const override {
     if (!w.extra.count("source_gain")) throw std::invalid_argument("missing source gain");
@@ -35,6 +33,14 @@ class SourceMemory final : public StateKernel {
     if (state.slots.size() != 1 || !state.slots.count("sum") || state.slots.at("sum").sizes() != w.bias.sizes())
       throw std::invalid_argument("source memory slot mismatch");
   }
+};
+class SourceRead final : public ReadKernel {
+ public:
+  Tensor step(const NodeWeights&, const ReadInput& r) const override {
+    if (!r.state) throw std::invalid_argument("source Read requires a state");
+    return r.state->value.sum()+r.content.contributions[0].value.sum();
+  }
+  void validate_weights(const NodeWeights&) const override {}
 };
 class SourceFull final : public FullKernel {
  public:
@@ -57,10 +63,11 @@ void check_content_programs(const at::TensorOptions& options) {
   using namespace tide;
   for (bool clear : {false, true}) for (bool encoded : {false, true}) for (int algorithm : {0, 1, 2}) {
     Graph g; g.nodes = {{0, clear}}; g.nodes[0].memory = "source-memory-v1";
-    g.nodes[0].emission = "source-full-v1"; g.regions = {{1}}; g.inputs = {0, 0}; g.outputs = {0};
+    g.nodes[0].emission = "source-full-v1"; g.nodes[0].readout = "source-read-v1"; g.regions = {{1}}; g.inputs = {0, 0}; g.outputs = {0};
     Model m; m.nodes = {{at::zeros({2}, options), at::zeros({2, 2}, options), at::zeros({2}, options), at::ones({2}, options)}};
     auto gain = at::full({}, 2, options).set_requires_grad(true);
     m.nodes[0].extra["source_gain"] = gain; m.nodes[0].kernel = std::make_shared<SourceMemory>();
+    m.nodes[0].read_kernel = std::make_shared<SourceRead>();
     m.nodes[0].full_kernel = std::make_shared<SourceFull>();
     m.input_scale = {at::ones({}, options), at::ones({}, options)}; m.output_scale = {at::ones({}, options)};
     if (encoded) {

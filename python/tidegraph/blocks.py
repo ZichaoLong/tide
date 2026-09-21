@@ -40,7 +40,12 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             stats["state_blocks"] += len(sequences)
             if torch.is_grad_enabled():
                 stats["semantic_state_replays"] += sum(len(es) for _, es in sequences)
-            stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], sequences, q)
+            stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], sequences, q, region.read_mode)
+            stats["read_calls"] = stats.get("read_calls", 0) + 1
+            if torch.is_grad_enabled():
+                stats["semantic_read_replays"] = stats.get("semantic_read_replays", 0) + len(es)
+            if not model.nodes[node].read_program.joint_batch:
+                stats["read_scalar_batch_steps"] = stats.get("read_scalar_batch_steps", 0) + len(es)
             if not getattr(getattr(model.nodes[node], "kernel", None), "joint_sequence", True):
                 stats["state_scalar_sequence_steps"] = stats.get("state_scalar_sequence_steps", 0) + sum(len(es) for _, es in sequences)
     for batch, region_id, time, _ in frames:
@@ -52,9 +57,10 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             node = e["node"]
             if "proposal" not in e:
                 old = q.states.get((batch, node), model.nodes[node].initial())
-                prop, desc = model.nodes[node].prepare(old, e["_content"], time)
+                prop, desc = model.nodes[node].prepare(old, e["_content"], time, region.read_mode)
                 e.update(proposal_state=prop, proposal=prop.value, descriptor=desc)
                 stats["state_steps"] += 1
+                stats["read_calls"] = stats.get("read_calls", 0) + 1
         nodes = [e["node"] for e in es]
         active, controls, history = select(nodes, {e["node"]: e["descriptor"] for e in es},
                                            q.history.get((batch, region_id), {}), region)

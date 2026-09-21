@@ -57,7 +57,8 @@ physical scales, and returns summary content plus optional per-source content.
 Only all-source softmax differentiates absent-source logits via its denominator;
 missing messages and present zeros remain distinct. Existing memory profiles
 consume summary content; `content-programs.md` propagates full source information
-to custom state/Read/Full programs. Region Read modes and general Next are pending.
+to custom state/Read/Full programs. `read-programs.md` separates Read and implements
+region content/old/proposal modes. General Next remains pending.
 
 ## Equality and training
 

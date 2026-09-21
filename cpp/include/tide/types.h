@@ -21,9 +21,13 @@ struct Node {
   std::string emission = "broadcast";
   Index emit_period = 1;
   std::vector<Index> emit_phases;
-  std::string aggregation = "sum";
+  std::string aggregation = "sum", readout = "linear-v1";
 };
-struct Region { Index budget; bool observe_all = true, count_priority = true; };
+struct Region {
+  Index budget;
+  bool observe_all = true, count_priority = true;
+  std::string read_mode = "proposal";
+};
 struct Adjacency { std::vector<Index> offsets, edges; };
 struct PortLayout {
   std::vector<Index> edge_source, edge_target, input, output;
@@ -77,6 +81,7 @@ struct Continuation {
 class StateKernel;
 class FullKernel;
 class AggregateKernel;
+class ReadKernel;
 struct NodeWeights {
   Tensor decay, weight, bias, read;
   std::map<std::string, Tensor> extra;
@@ -84,6 +89,7 @@ struct NodeWeights {
   std::string full_kind = "tanh";
   std::shared_ptr<const FullKernel> full_kernel;
   std::shared_ptr<const AggregateKernel> aggregate_kernel;
+  std::shared_ptr<const ReadKernel> read_kernel;
 };
 struct Model {
   std::vector<NodeWeights> nodes;

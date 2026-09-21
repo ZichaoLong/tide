@@ -6,6 +6,7 @@ from .memory import kernel, reset
 from .full import ProjectionEmit
 from .aggregate import SourceAggregate
 from .content import as_content, Content
+from .readout import LinearRead, evaluate as evaluate_read, request as read_request
 
 
 class _HST(torch.autograd.Function):
@@ -33,7 +34,7 @@ def emit(h, g, p, mode, zeta=1.0):
 
 class NodeWeights(nn.Module):
     def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
-                 input_slots=0, aggregate_program=None, state_program=None):
+                 input_slots=0, aggregate_program=None, state_program=None, read_program=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -42,6 +43,9 @@ class NodeWeights(nn.Module):
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
         self.kernel = kernel("ema" if spec is None else spec.memory, spec) if state_program is None else state_program
+        if read_program is None and spec is not None and spec.readout != "linear-v1":
+            raise ValueError("unknown Read profile")
+        self.read_program = LinearRead() if read_program is None else read_program
         self.full_kind = "tanh" if spec is None else spec.full
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program
         self.aggregate_program = SourceAggregate("sum" if spec is None else spec.aggregation) if aggregate_program is None else aggregate_program
@@ -83,23 +87,22 @@ class NodeWeights(nn.Module):
     def initial(self):
         return self.kernel.initial(self)
 
-    def prepare(self, old, content, time):
+    def prepare(self, old, content, time, read_mode="proposal"):
         content = as_content(content)
         proposal = self.propose(old, content, time)
-        return proposal, self.describe(old, proposal, content, time)
+        return proposal, self.describe(old, proposal, content, time, read_mode)
 
     def propose(self, old, content, time):
         return self.kernel.step(self, old, as_content(content), time)
 
-    def describe(self, old, proposal, content, time):
-        if hasattr(self.kernel, "read"):
-            return self.kernel.read(self, old, proposal, as_content(content), time)
-        return (proposal.value * self.read).sum(-1)
+    def describe(self, old, proposal, content, time, read_mode="proposal"):
+        r = read_request(read_mode, old, proposal, as_content(content), time)
+        return evaluate_read(self, [r])[0]
 
-    def describe_batch(self, old, proposals, batch):
-        if hasattr(self.kernel, "read_batch"):
-            return self.kernel.read_batch(self, old, proposals, batch)
-        return (torch.stack([s.value for s in proposals]) * self.read).sum(-1)
+    def describe_batch(self, old, proposals, batch, read_mode="proposal"):
+        requests = [read_request(read_mode, a, b, c, t)
+                    for a, b, c, t in zip(old, proposals, batch.views, batch.times)]
+        return evaluate_read(self, requests, packed=True)
 
     def full(self, comparison, content, probability, mode, zeta):
         return emit(content, self.fresh(comparison, content), probability, mode, zeta)
@@ -112,11 +115,15 @@ class NodeWeights(nn.Module):
             g = content + (comparison @ self.weight + self.bias).tanh()
         return g
 
-    def prepare_block(self, old, contents, times, views=None):
+    def propose_block(self, old, contents, times, views=None):
         views = [Content(h) for h in contents] if views is None else views
-        states = self.kernel.sequence(self, old, contents, times, views)
+        return self.kernel.sequence(self, old, contents, times, views)
+
+    def prepare_block(self, old, contents, times, views=None, read_mode="proposal"):
+        views = [Content(h) for h in contents] if views is None else views
+        states = self.propose_block(old, contents, times, views)
         previous = [old, *states[:-1]]
-        return states, torch.stack([self.describe(a, b, c, t) for a, b, c, t in zip(previous, states, views, times)])
+        return states, torch.stack([self.describe(a, b, c, t, read_mode) for a, b, c, t in zip(previous, states, views, times)])
 
     @property
     def can_prefill(self):
@@ -130,7 +137,8 @@ class NodeWeights(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None, state_programs=None):
+    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None,
+                 state_programs=None, read_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
@@ -145,11 +153,14 @@ class Model(nn.Module):
         states = {} if state_programs is None else state_programs
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in states):
             raise ValueError("invalid custom state owner")
+        readers = {} if read_programs is None else read_programs
+        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in readers):
+            raise ValueError("invalid custom Read owner")
         offsets = graph.port_indexes[1].offsets
         incoming = graph.port_indexes[0].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
-            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v)) for v, n in enumerate(graph.nodes))
+            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v), readers.get(v)) for v, n in enumerate(graph.nodes))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -182,23 +193,27 @@ class BoundaryWeights(nn.Module):
         from .graph import Node
         self.full_program = ProjectionEmit(Node(0, identity=True))
         self.aggregate_program = SourceAggregate()
+        self.read_program = LinearRead(identity=True)
 
     def initial(self):
         return State(torch.zeros_like(self.bias))
 
-    def prepare(self, old, content, time):
+    def prepare(self, old, content, time, read_mode="proposal"):
         return old, as_content(content).value.new_zeros(())
 
     def propose(self, old, content, time):
         return old
 
-    def describe(self, old, proposal, content, time):
+    def describe(self, old, proposal, content, time, read_mode="proposal"):
         return as_content(content).value.new_zeros(())
 
-    def describe_batch(self, old, proposals, batch):
-        return batch.contents.new_zeros((len(batch.times),))
+    def describe_batch(self, old, proposals, batch, read_mode="proposal"):
+        return [batch.contents.new_zeros(()) for _ in batch.times]
 
-    def prepare_block(self, old, contents, times, views=None):
+    def propose_block(self, old, contents, times, views=None):
+        return [old for _ in times]
+
+    def prepare_block(self, old, contents, times, views=None, read_mode="proposal"):
         return [old for _ in times], contents.new_zeros((len(times),))
 
     @property

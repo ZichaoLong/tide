@@ -12,6 +12,7 @@ class Native:
         from .full import ProjectionEmit, validate_program
         from .aggregate import SourceAggregate, validate_program as validate_aggregate
         from .state_program import validate_program as validate_state_program
+        from .readout import validate_program as validate_read
         for v, spec in enumerate(graph.nodes):
             if type(model.nodes[v].full_program) is not ProjectionEmit:
                 raise ValueError("Python custom Full has no native implementation")
@@ -22,12 +23,13 @@ class Native:
             incoming = graph.port_indexes[0].offsets
             validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
             validate_state_program(model.nodes[v], spec, native=True)
+            validate_read(model.nodes[v], spec, native=True)
         g = core.Graph()
         g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
-                             n.emission, n.emit_period, n.emit_phases, n.aggregation)
+                             n.emission, n.emit_period, n.emit_phases, n.aggregation, n.readout)
                    for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
-        g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]
+        g.regions = [core.Region(r.budget, r.observe_all, r.count_priority, r.read_mode) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs
         layout = core.PortLayout()
         for name in ("edge_source", "edge_target", "input", "output"):

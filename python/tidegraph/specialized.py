@@ -27,7 +27,7 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     evaluate_aggregate(graph, model, [event])
     h = event["content"]
     old = q.states.get((batch, node), model.nodes[node].initial())
-    prop, desc = model.nodes[node].prepare(old, event["_content"], time)
+    prop, desc = model.nodes[node].prepare(old, event["_content"], time, graph.regions[graph.nodes[node].region].read_mode)
     # A singleton softmax retains the generic zero VJP connection to its score.
     control = desc.reshape(1).softmax(0)[0]
     next_state = model.nodes[node].next(prop, graph.nodes[node].clear)

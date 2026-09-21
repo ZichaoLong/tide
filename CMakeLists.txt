@@ -6,7 +6,7 @@ find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
 add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/pool.cpp
-  cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp
+  cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/read.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
   cpp/src/kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
@@ -18,7 +18,7 @@ separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(tidegraph PUBLIC ${TIDE_TORCH_FLAGS})
 add_executable(tidegraph-smoke cpp/src/main.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph)
-add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/src/runtime.cpp)
+add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph)

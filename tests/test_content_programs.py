@@ -11,6 +11,7 @@ from tidegraph.records import State
 from tidegraph.reference import run
 from tidegraph.settle import SettleGraph, run as settle
 from tidegraph.state_program import StateProgram
+from tidegraph.readout import ReadProgram
 from isolated_cases import vjp
 
 
@@ -30,12 +31,16 @@ class SourceMemory(StateProgram):
         total = sum((slot+1)*value for slot, value in content.contributions.items())
         return State(old.value+self.gain*value, time, old.observations+1, {"sum": old.slots["sum"]+total})
 
-    def read(self, w, old, proposal, content, time):
-        return proposal.value.sum()+content.contributions[0].sum()
-
     def validate(self, w, state):
         if set(state.slots) != {"sum"} or state.slots["sum"].shape != w.bias.shape:
             raise ValueError("source memory slot mismatch")
+
+
+class SourceRead(ReadProgram):
+    profile = "source-read-v1"
+
+    def step(self, w, request):
+        return request.state.value.sum()+request.content.contributions[0].sum()
 
 
 class SourceFull(FullProgram):
@@ -49,9 +54,9 @@ class SourceFull(FullProgram):
 
 
 def fixture(dtype, clear=False):
-    g = Graph((Node(0, clear=clear, memory="source-memory-v1", emission="source-full-v1"),),
+    g = Graph((Node(0, clear=clear, memory="source-memory-v1", emission="source-full-v1", readout=SourceRead.profile),),
               (), (Region(1),), (0, 0), (0,))
-    m = Model(g, width=2, dtype=dtype, state_programs={0: SourceMemory(dtype)}, full_programs={0: SourceFull()})
+    m = Model(g, width=2, dtype=dtype, state_programs={0: SourceMemory(dtype)}, full_programs={0: SourceFull()}, read_programs={0: SourceRead()})
     with torch.no_grad():
         for p in [*m.input_scale, *m.output_scale]:
             p.fill_(1)

@@ -2,6 +2,7 @@
 #include "tide/kernel.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/read.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -27,6 +28,8 @@ void validate_model(const Graph& g, const Model& m) {
     check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
     require(static_cast<bool>(w.kernel), "state kernel is not configured");
     w.kernel->validate_weights(w);
+    require(static_cast<bool>(w.read_kernel), "Read kernel is not configured");
+    w.read_kernel->validate_weights(w);
     for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
     require(static_cast<bool>(w.full_kernel), "Full kernel is not configured");
     w.full_kernel->validate_weights(w, g.outgoing_ports.offsets[node+1] - g.outgoing_ports.offsets[node]);

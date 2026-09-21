@@ -14,7 +14,7 @@ and has MainPID 0. Artifacts:
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
 SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v8; checkpoint payload remains
+tags. See `local-ports.md`. The previous qualified native graph format is v8; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
 Per-slot Full/Emit is qualified: native/Python program extension interfaces,
@@ -27,11 +27,21 @@ graphs without views allocate no origin index or additional source sort. The
 native custom example includes mixed boundary/internal fibers and independent
 forward/VJP formulas. See `aggregate-programs.md` and source-origin evidence.
 
-No active job. Complete-content propagation and registered Python state programs
-are qualified (`content-programs.md`, `evidence/content-programs.md`).
-Next increment: separate Read from state programs and implement the three region
-modes, then full Next requests and explicit state-prefill gates. Follow
-`next-read-plan.md`, preserving independent schedules and isolated-root VJPs.
+Read implementation is ready for clean qualification. It separates readout
+programs from state kernels, exposes content/old/proposal region modes, binds
+correct per-event previous states and validates packed scalar results. Graph
+identity format advances to v9; checkpoint payload stays v3. See `read-programs.md`.
+Development build `tide-foundation-read-build-20260921-1305` passed (inactive,
+MainPID 0). The related CPU FP64/FP32 suite passed **186 tests in 17.72s**.
+
+Next clean qualification unit: `tide-foundation-read-20260921-1311`.
+Command: `python scripts/qualify.py --output-dir artifacts/read-20260921-1311 --jobs 2`.
+Artifacts: `artifacts/read-20260921-1311/{status.json,task.log,verification/}`.
+Run after this implementation commit via scripts/job.py in background.slice.
+Freeze source while active. Inspect MainPID/exit, status.json and verification
+result.json; archive evidence separately only after successful termination.
+After Read qualification, implement full Next requests and explicit state-prefill
+gates in `next-read-plan.md`. No Next code has been added yet.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -56,7 +66,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Implement region Read modes and independent readout programs, followed by
+1. Inspect the clean Read qualification above, archive its result, then implement
    complete Next requests and prefill capability guards (`next-read-plan.md`).
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).

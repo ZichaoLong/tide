@@ -1,7 +1,8 @@
 # Complete content and state-program extension
 
 [Qualified](evidence/content-programs.md). This extends the content
-interface; region Read modes and general Next remain the following gate.
+interface; Read is now separate (`read-programs.md`); general Next remains the
+following gate.
 
 Python `Content` and native `ContentView` expose summary `value`, canonical
 program-visible `sources` and optional per-slot `contributions`. Each source has
@@ -18,7 +19,7 @@ with no source metadata; actual graph events always have nonempty sources.
 
 ## State and batch APIs
 
-Native StateKernel step/read now receive ContentView. Independent batch and
+Native StateKernel step and the independent ReadKernel receive ContentView. Independent batch and
 sequence APIs retain packed values/times with aligned ContentViews. The default
 fallback replaces each view's summary with its packed row before invoking step;
 source metadata and contributions still correspond to that event. Packed inputs

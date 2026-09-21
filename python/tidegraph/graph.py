@@ -28,6 +28,7 @@ class Node:
     emit_period: int = 1
     emit_phases: tuple[int, ...] = ()  # -1 always, -2 never; empty means all.
     aggregation: str = "sum"
+    readout: str = "linear-v1"
 
     def __post_init__(self):
         object.__setattr__(self, "emit_phases", tuple(self.emit_phases))
@@ -38,6 +39,7 @@ class Region:
     budget: int
     observe_all: bool = True
     count_priority: bool = True
+    read_mode: str = "proposal"
 
 
 @dataclass(frozen=True)
@@ -62,6 +64,8 @@ class Graph:
                     or x.query_heads % x.kv_heads or not 0 <= x.window < 2**63):
                 raise ValueError("invalid attention heads/window")
         for r, spec in enumerate(self.regions):
+            if spec.read_mode not in {"content", "old", "proposal"}:
+                raise ValueError("invalid region Read mode")
             count = sum(x.region == r for x in self.nodes)
             if not 1 <= spec.budget <= count:
                 raise ValueError("invalid region budget or empty region")
@@ -86,6 +90,8 @@ class Graph:
                 raise ValueError("invalid emission phase policy")
             if node.identity and (node.emission != "broadcast" or node.emit_phases or node.emit_period != 1):
                 raise ValueError("identity boundaries require unconditional broadcast")
+            if node.identity and node.readout != "linear-v1":
+                raise ValueError("identity boundaries require the default Read profile")
             if node.identity and node.aggregation != "sum":
                 raise ValueError("identity boundaries require sum Aggregate")
 

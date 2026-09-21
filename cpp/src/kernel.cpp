@@ -1,6 +1,7 @@
 #include "tide/kernel.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/read.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -17,14 +18,6 @@ std::vector<State> StateKernel::sequence(const NodeWeights& w, const State& init
     state = step(w, state, views[i].with_value(h[i]), times[i]); states.push_back(state);
   }
   return states;
-}
-Tensor StateKernel::read(const NodeWeights& w, const State&, const State& proposal, const ContentView&,
-                         Index) const { return (proposal.value * w.read).sum(-1); }
-Tensor StateKernel::read_batch(const NodeWeights& w, const std::vector<State>& old, const std::vector<State>& proposals,
-                               const Tensor& h, const std::vector<Index>& times, const ContentViews& views) const {
-  std::vector<Tensor> values;
-  for (size_t i = 0; i < proposals.size(); ++i) values.push_back(read(w, old[i], proposals[i], views[i].with_value(h[i]), times[i]));
-  return at::stack(values);
 }
 State StateKernel::reset(const State& state) const {
   auto result = state; result.value = state.value * 0;
@@ -50,6 +43,7 @@ void configure_model(const Graph& g, Model& m) {
     }
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;
     if (!m.nodes[i].full_kernel) m.nodes[i].full_kernel = make_full_kernel(g.nodes[i]);
+    if (!m.nodes[i].read_kernel) m.nodes[i].read_kernel = make_read_kernel(g.nodes[i]);
     if (!m.nodes[i].aggregate_kernel) m.nodes[i].aggregate_kernel = make_aggregate_kernel(g.nodes[i]);
   }
 }

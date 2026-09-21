@@ -7,12 +7,14 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
     from .full import validate_program
     from .aggregate import validate_program as validate_aggregate
     from .state_program import validate_program as validate_state_program
+    from .readout import validate_program as validate_read
     offsets = graph.port_indexes[1].offsets
     incoming = graph.port_indexes[0].offsets
     for node, spec in enumerate(graph.nodes):
         validate_program(model.nodes[node], spec, offsets[node+1] - offsets[node])
         validate_aggregate(model.nodes[node], spec, incoming[node+1] - incoming[node])
         validate_state_program(model.nodes[node], spec)
+        validate_read(model.nodes[node], spec)
     q = continuation
     if q.identity != graph.identity or q.batch_size < 1:
         raise ValueError("continuation identity or batch size mismatch")

@@ -20,6 +20,7 @@
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
+| `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
 | `docs/content-programs.md` | Complete-content views, state extensions, packing and replay |
 | `docs/next-read-plan.md` | Planned complete-content, Read/Next seams and prefill gates |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
@@ -55,8 +56,8 @@ selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed stat
 prefill is isolated in `block_prepare.cpp`; its checked segment representation is
 in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
 from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
-native kernels and replay evaluation in separate source files. Region/Next/Read
-generalization remains in the module extension
+native kernels and replay evaluation in separate source files. Read is separate
+in `readout.py`/`read.h`/`read.cpp`. Region/Next generalization remains in the module extension
 plan. Slot tensors are included in all state
 comparisons, resets, explicit detach and checkpoint v3.
 

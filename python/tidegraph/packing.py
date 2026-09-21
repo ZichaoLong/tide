@@ -30,7 +30,7 @@ class PackedSequence:
                 raise ValueError("packed segments require nonempty, ordered events")
 
 
-def prepare_sequences(weights, sequences, q):
+def prepare_sequences(weights, sequences, q, read_mode="proposal"):
     """One node's independent sample sequences; scalar kernels remain an explicit fallback."""
     owners, old, flat, offsets = [], [], [], [0]
     for owner, events in sequences:
@@ -47,26 +47,22 @@ def prepare_sequences(weights, sequences, q):
             states = []
             for i, state in enumerate(old):
                 a, b = offsets[i:i+2]
-                ss, _ = weights.prepare_block(state, batch.contents[a:b], batch.times[a:b], batch.views[a:b])
+                ss = weights.propose_block(state, batch.contents[a:b], batch.times[a:b], batch.views[a:b])
                 states.extend(ss)
             calls = len(old)
         if len(states) != len(flat):
             raise ValueError("packed state program changed event count")
-        previous = []
-        for i, state in enumerate(old):
-            a, b = offsets[i:i+2]
-            previous.extend([state, *states[a:b-1]])
-        descriptors = weights.describe_batch(previous, states, batch)
-    if replay:
-        for i, previous in enumerate(old):
-            a, b = offsets[i:i+2]
-            for j in range(a, b):
+    previous = []
+    for i, state in enumerate(old):
+        a, b = offsets[i:i+2]
+        for j in range(a, b):
+            previous.append(state)
+            if replay:
                 event = flat[j]
-                proposed = weights.propose(previous, event["_content"], event["time"])
+                proposed = weights.propose(state, event["_content"], event["time"])
                 states[j] = autograd.state(states[j], proposed)
-                descriptor = weights.describe(previous, states[j], event["_content"], event["time"])
-                flat[j]["semantic_descriptor"] = autograd.value(descriptors[j], descriptor)
-                previous = states[j]
+            state = states[j]
+    descriptors = weights.describe_batch(previous, states, batch, read_mode)
     for e, state, descriptor in zip(flat, states, descriptors):
-        e.update(proposal_state=state, proposal=state.value, descriptor=e.pop("semantic_descriptor", descriptor))
+        e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)
     return calls

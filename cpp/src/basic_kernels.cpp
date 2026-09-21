@@ -103,16 +103,6 @@ class BasicKernel final : public StateKernel {
     }
     return result;
   }
-  Tensor read(const NodeWeights& w, const State&, const State& proposal, const ContentView& content, Index) const override {
-    const auto& h = content.value;
-    return kind_ == "identity" ? at::zeros({}, h.options()) : (proposal.value * w.read).sum(-1);
-  }
-  Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor& h, const std::vector<Index>&, const ContentViews&) const override {
-    if (kind_ == "identity") return at::zeros({h.size(0)}, h.options());
-    std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
-    return (at::stack(values) * w.read).sum(-1);
-  }
   void validate_weights(const NodeWeights& w) const override {
     if (kind_ != "ssm") return;
     const auto d = w.bias.numel();

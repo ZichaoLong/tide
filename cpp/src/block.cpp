@@ -4,6 +4,7 @@
 #include "tide/autograd.h"
 #include "tide/full.h"
 #include "tide/aggregate.h"
+#include "tide/read.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -53,12 +54,13 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     for (auto i : ids) {
       if (events[i].proposal.defined()) continue;
       ++stats["state_steps"];
+      ++stats["read_calls"];
       events[i].old = old_state(q, m, events[i].batch, events[i].node);
       jobs.push_back([&, i] {
         auto& e = events[i]; const auto& w = m.nodes[e.node];
         e.proposed_state = w.kernel->step(w, e.old, e.local_content(), e.time);
         e.proposal = e.proposed_state.value;
-        e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), e.time);
+        evaluate_read(g, m, events, {i}, false);
       });
     }
     pool.run(std::move(jobs));

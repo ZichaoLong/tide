@@ -83,11 +83,6 @@ class AttentionKernel final : public StateKernel {
     }
     return result;
   }
-  Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor&, const std::vector<Index>&, const ContentViews&) const override {
-    std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
-    return (at::stack(values) * w.read).sum(-1);
-  }
   State reset(const State& state) const override {
     auto s = state; s.value = s.value * 0;
     for (auto& [name, tensor] : s.slots) tensor = tensor.slice(0, 0, 0).clone();

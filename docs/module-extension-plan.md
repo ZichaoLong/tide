@@ -29,8 +29,9 @@ the old broadcast profile; its slot-affine/phase profile is
 2. Follow `next-read-plan.md` to expose complete content and the full Next inputs
    (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill
-   contract unless it provides an exact joint contract. Read must support content,
-   old-state and proposed-state modes, not assume a proposal-only scalar score.
+   contract unless it provides an exact joint contract. Independent Read now
+   supports content, old-state and proposed-state modes (`read-programs.md`),
+   with qualification pending.
 3. Region programs need explicit integer/tensor history and controls beyond
    selection counts. Preserve checkpoint/detach/VJP for tensor history; add LH's
    selection-count/affect-count/FP64-norm/stable-ID ordering as one profile.
@@ -50,7 +51,7 @@ State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
 callbacks. Full programs live in `full.py`/`full_kernel.cpp`, with FFN/Emit
 primitives in `ops.py`/`ops.cpp`. Aggregate programs are separate from scheduling;
-Region/Next/Read generalization remains work.
+Read is independent (`readout.py`/`read.h`); Region/Next generalization remains work.
 Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;

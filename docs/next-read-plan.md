@@ -1,6 +1,8 @@
 # Next gate: complete content, Read and Next programs
 
-Planned, not an implementation/support claim. This refines the corresponding
+Complete content is qualified (`evidence/content-programs.md`); independent Read
+is implemented pending qualification (`read-programs.md`). Next remains planned.
+This refines the corresponding
 `ROADMAP.md` gate; `STATUS.md` remains the only current handoff. Replace this plan
 with the implemented contract after qualification.
 

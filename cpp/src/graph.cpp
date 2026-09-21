@@ -28,8 +28,11 @@ void Graph::compile() {
       fail("invalid attention heads/window");
     ++members[node.region];
   }
-  for (size_t r = 0; r < regions.size(); ++r)
+  for (size_t r = 0; r < regions.size(); ++r) {
     if (regions[r].budget < 1 || regions[r].budget > members[r]) fail("invalid region budget");
+    const auto& mode = regions[r].read_mode;
+    if (mode != "content" && mode != "old" && mode != "proposal") fail("invalid region Read mode");
+  }
   auto valid = [n](Index v) { return v >= 0 && v < n; };
   for (const auto& e : edges)
     if (!valid(e.source) || !valid(e.target) || e.delay <= 0) fail("invalid positive-delay edge");
@@ -66,22 +69,24 @@ void Graph::compile() {
     for (auto phase : node.emit_phases) if (phase < -2 || phase >= node.emit_period) fail("invalid emission phase policy");
     if (node.identity && (node.emission != "broadcast" || node.emit_period != 1 || !node.emit_phases.empty()))
       fail("identity boundaries require unconditional broadcast");
+    if (node.identity && node.readout != "linear-v1") fail("identity boundaries require the default Read profile");
     if (node.identity && node.aggregation != "sum") fail("identity boundaries require sum Aggregate");
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v8;n=" << n << ';';
+  out << "tide-graph-v9;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
         << v.query_heads << ',' << v.kv_heads << ',' << v.window << ','
         << v.emission.size() << ':' << v.emission << ',' << v.emit_period << ':';
     for (auto phase : v.emit_phases) out << phase << ',';
-    out << ':' << v.aggregation.size() << ':' << v.aggregation;
+    out << ':' << v.aggregation.size() << ':' << v.aggregation << ':' << v.readout.size() << ':' << v.readout;
     out << ';';
   }
   out << "r;";
-  for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ';';
+  for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ','
+                                     << r.read_mode.size() << ':' << r.read_mode << ';';
   out << "e;";
   for (const auto& e : edges) out << e.source << ',' << e.target << ',' << e.delay << ';';
   out << "i;"; for (auto v : inputs) out << v << ',';
