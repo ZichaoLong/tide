@@ -18,6 +18,7 @@
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
+| `docs/full-emit-plan.md` | Next Full program API and per-slot emission acceptance gates |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.

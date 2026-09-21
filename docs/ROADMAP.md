@@ -42,6 +42,8 @@ avoiding whole-state work per streaming cut. Remaining runtime work includes
 allocation and structured Delta chunk optimization. Joint EMA/SSM batch/sequence
 scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.
+Stable local port layouts, native flat inverse indexes and SettleGraph remapping
+are [qualified](evidence/local-ports.md). Slot-aware Full/Emit remains next.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

@@ -4,26 +4,22 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1267 tests passed** at
-`c04b89eb5e2ab414a3367ae4ae8b65f24cc08768`.
-See `evidence/isolated-autograd.md`; prior evidence is linked from `ROADMAP.md`.
-No active background jobs. Unit `tide-foundation-autograd-20260921-1034`
+Latest clean qualification: **1296 tests passed** at
+`df2a851d759da9d6e5ccd7cef9ba931e416fdf07`.
+See `evidence/local-ports.md`; prior evidence is linked from `ROADMAP.md`.
+No active background jobs. Unit `tide-foundation-ports-20260921-1047`
 completed with exit 0, no worker remains. Artifacts:
-`artifacts/autograd-20260921-1034/{status.json,task.log,verification/}`.
-
-Active increment (based on `1cca4cc`): stable local input/output
-slot mappings, native flat inverse indexes, SettleGraph remapping and graph
-identity guards. See `local-ports.md`. Targeted Python/native checks: **29 passed**
-in FP64/FP32. Development build `artifacts/ports-build-20260921-1042` exited 0;
-no worker remains. A mixed-input SettleGraph case also required restoring
-canonical fiber order after projecting source tags.
-
-Next: commit the implementation and launch clean qualification under unit
-`tide-foundation-ports-20260921-1047`, artifacts
 `artifacts/ports-20260921-1047/{status.json,task.log,verification/}`.
-Command: `python scripts/qualify.py --output-dir artifacts/ports-20260921-1047`.
-Freeze the source while active; after exit 0 archive evidence separately, then
-implement per-slot Full/Emit using the already mapped slots.
+
+Stable local input/output mappings, native flat inverse indexes, SettleGraph
+remapping and graph/checkpoint identity guards are qualified. A mixed-input
+SettleGraph case also now restores canonical fiber order after projecting source
+tags. See `local-ports.md`. Native graph format is v5; checkpoint payload remains
+v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
+
+Next code increment: per-slot Full/Emit. The concrete API, example profiles,
+integration sites and acceptance gates are in `full-emit-plan.md`; it is still
+a plan and no FullKernel implementation has started.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -48,10 +44,8 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Generalize local programs. First establish validated per-node input/output
-   slots outside shared parameter modules, with compact native inverse indexes,
-   SettleGraph boundary remapping and graph/checkpoint identity guards. Then
-   Full/Emit can return per-slot values or absence. See `module-extension-plan.md`.
+1. Generalize Full/Emit to return per-slot values or absence using the qualified
+   layouts. Follow `full-emit-plan.md` and preserve all independent schedules.
 2. Extend source-aware Aggregate, full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
