@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build/run original LH selector parity against a fingerprinted Tide CPU library."""
+"""Build/run original LH component parity against a fingerprinted Tide CPU library."""
 import argparse
 import datetime
 import hashlib
@@ -17,6 +17,7 @@ parser.add_argument("--snapshot", required=True)
 parser.add_argument("--core-build-dir", default="build")
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
+parser.add_argument("--component", choices=("selector", "add", "all"), default="selector")
 args = parser.parse_args()
 if args.jobs < 1:
     parser.error("positive build jobs required")
@@ -56,7 +57,8 @@ cmake = root/"tests/lh_oracle/CMakeLists.txt"
 record = {"source": revision(root), "dirty": subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip(),
           "state": "running", "started": datetime.datetime.now(datetime.timezone.utc).isoformat(),
           "snapshot": manifest, "build": build_record, "device": "cpu", "resolution_reason": "explicit:cpu",
-          "dtype": args.dtype, "oracle_cmake_sha256": hashlib.sha256(cmake.read_bytes()).hexdigest(), "runs": []}
+          "dtype": args.dtype, "component": args.component,
+          "oracle_cmake_sha256": hashlib.sha256(cmake.read_bytes()).hexdigest(), "runs": []}
 def save():
     temp = out/"result.tmp"; temp.write_text(json.dumps(record, indent=2)+"\n"); temp.replace(out/"result.json")
 save()
@@ -64,17 +66,21 @@ try:
     with (out/"build.log").open("w") as log:
         subprocess.run(["cmake", "-S", str(cmake.parent), "-B", str(out/"build"), "-G", "Ninja",
                         "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={torch.utils.cmake_prefix_path}",
-                        f"-DTIDE_LH_SNAPSHOT={snapshot}", f"-DTIDE_CORE_LIBRARY={library}"], stdout=log, stderr=subprocess.STDOUT, check=True)
+                        f"-DTIDE_LH_SNAPSHOT={snapshot}", f"-DTIDE_CORE_LIBRARY={library}",
+                        f"-DTIDE_LH_ADD={'OFF' if args.component == 'selector' else 'ON'}"], stdout=log, stderr=subprocess.STDOUT, check=True)
         subprocess.run(["cmake", "--build", str(out/"build"), "--parallel", str(args.jobs)], stdout=log, stderr=subprocess.STDOUT, check=True)
-    binary = out/"build/lh-selector-check"
-    record["binary_sha256"] = hashlib.sha256(binary.read_bytes()).hexdigest()
-    for dtype in (("float64", "float32") if args.dtype == "both" else (args.dtype,)):
-        with (out/f"{dtype}.log").open("w") as log:
-            command = [str(binary), "--device", "cpu", "--dtype", dtype]
-            result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
-        record["runs"].append({"command": command, "exit_code": result.returncode}); save()
-        if result.returncode:
-            raise RuntimeError(f"LH selector comparison failed in {dtype}; inspect its log")
+    components = ("selector", "add") if args.component == "all" else (args.component,)
+    record["binary_sha256"] = {}
+    for component in components:
+        binary = out/f"build/lh-{component}-check"
+        record["binary_sha256"][component] = hashlib.sha256(binary.read_bytes()).hexdigest()
+        for dtype in (("float64", "float32") if args.dtype == "both" else (args.dtype,)):
+            with (out/f"{component}-{dtype}.log").open("w") as log:
+                command = [str(binary), "--device", "cpu", "--dtype", dtype]
+                result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
+            record["runs"].append({"component": component, "command": command, "exit_code": result.returncode}); save()
+            if result.returncode:
+                raise RuntimeError(f"LH {component} comparison failed in {dtype}; inspect its log")
     if (source_hash(root) != build_record["cpp_source_sha256"] or snapshot_identity() != manifest["identity"]
             or hashlib.sha256(library.read_bytes()).hexdigest() != library_hash
             or hashlib.sha256(cmake.read_bytes()).hexdigest() != record["oracle_cmake_sha256"]):

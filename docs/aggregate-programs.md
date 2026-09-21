@@ -66,8 +66,8 @@ program cannot cross the native adapter without a corresponding native program.
 
 `aggregate_kernel.cpp` holds built-ins; `aggregate_evaluate.cpp` handles validation
 and replay. Python's independent counterpart is `aggregate.py`. Scalar fallback,
-packed Aggregate calls and semantic replays have separate statistics. Native
-graph format is v8; checkpoint payload remains v3 with a new graph fingerprint.
+packed Aggregate calls and semantic replays have separate statistics. Current
+graph/checkpoint versions and identity rules are in `semantics.md`.
 `cpp/test/custom_aggregate.cpp` checks a time/tag/slot-dependent program with
 hand-computed loss 136, input gradients 52 and 4, gain gradient 116 and a
 disconnected sample. Related tests live in `test_aggregate_{formulas,schedules,contract}.py`.

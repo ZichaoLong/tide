@@ -48,14 +48,13 @@ source slots of edges to the readout adapter. Body parameter modules retain thei
 sharing and do not contain these physical mappings. Projection restores source
 tags and re-sorts mixed boundary/internal fibers to the original canonical order.
 
-Layouts participate in Python's graph fingerprint and native structural format
-`tide-graph-v6` (v5 introduced layouts; v6 also records Full policy). Checkpoint
-payload schema v3 is unchanged, but checkpoints
+Layouts participate in Python's graph fingerprint and native structural identity.
+Current graph/checkpoint versions are in `semantics.md`. Checkpoints
 with a different graph fingerprint, including old fingerprints without layouts,
 are rejected before weights change. There is no implicit checkpoint migration.
 
 Full/Emit now consumes local output slots; physical send/output scales remain
-outside its program. Source-aware Aggregate is still a subsequent increment.
+outside its program. Source-aware Aggregate is described in `aggregate-programs.md`.
 Program numerical contracts and qualification are separate from layout indexing.
 
 Implementation: `python/tidegraph/ports.py`, `cpp/include/tide/ports.h`,

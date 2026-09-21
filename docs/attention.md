@@ -65,8 +65,8 @@ groups/calls. Native frontier reports `max_state_batch`, `max_state_sequence` an
 not establish speedup. Streaming `update_calls` counts kernel entry calls, not
 internal cache-length groups.
 
-Graph fingerprints now include attention fields (native structural format v4).
-Checkpoint payload stays v3; incompatible graph identities are rejected, without
-implicit migration. Pretrained model support needs explicit position/RoPE,
+Graph fingerprints include attention fields. Current graph/checkpoint versions
+are in `semantics.md`; incompatible identities are rejected without implicit
+migration. Pretrained model support needs explicit position/RoPE,
 normalization, layout and model-specific equivalence work. This representative
 state program is not a complete open-weight model importer.

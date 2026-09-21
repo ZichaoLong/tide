@@ -16,8 +16,20 @@ target_compile_definitions(original_lh PUBLIC DISABLE_CUDA ENABLE_RUNTIME_ASSERT
 target_link_libraries(original_lh PUBLIC torch)
 separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(original_lh PUBLIC ${TIDE_TORCH_FLAGS} -UNDEBUG)
+option(TIDE_LH_ADD "Include the original Add memory component" OFF)
+if(TIDE_LH_ADD)
+  target_sources(original_lh PRIVATE
+    ${TIDE_LH_SNAPSHOT}/src/AccumulateLocal.cpp ${TIDE_LH_SNAPSHOT}/src/Hidden.cpp
+    ${TIDE_LH_SNAPSHOT}/src/BatchHidden.cpp ${TIDE_LH_SNAPSHOT}/src/Confluence.cpp
+    ${TIDE_LH_SNAPSHOT}/src/ModuleUtils.cpp)
+endif()
 add_library(qualified_tide STATIC IMPORTED)
 set_target_properties(qualified_tide PROPERTIES IMPORTED_LOCATION "${TIDE_CORE_LIBRARY}")
 add_executable(lh-selector-check ${TIDE_ROOT}/cpp/test/lh_selector_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
 target_include_directories(lh-selector-check PRIVATE ${TIDE_ROOT}/cpp/include)
 target_link_libraries(lh-selector-check PRIVATE qualified_tide original_lh Threads::Threads)
+if(TIDE_LH_ADD)
+  add_executable(lh-add-check ${TIDE_ROOT}/cpp/test/lh_add_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
+  target_include_directories(lh-add-check PRIVATE ${TIDE_ROOT}/cpp/include)
+  target_link_libraries(lh-add-check PRIVATE qualified_tide original_lh Threads::Threads)
+endif()

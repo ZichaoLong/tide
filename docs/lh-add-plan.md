@@ -1,47 +1,21 @@
-# Next LH gate: Add state, idle clocks and complete inference projection
+# Remaining LH inference bridge after tick-repeat Add
 
 Region programs and descriptor precision remove the selector obstacle. Continue
 from the original C++ snapshot identified in STATUS/`lh-selector.md`; never edit
 the LH worktree. The selector component oracle is not a whole-model oracle.
 
-## Establish the clock mapping before optimizing it
+## Completed interface, pending clean qualification
 
-Original `BaseAL::forward` calls hidden decay on **every tick**, including absent
-inputs. `TensorHidden::decay` and the batch cache multiply by `(1-decay_rate)`;
-Add then aggregates the complete incoming fiber and adds it to the decayed hidden.
-Chosen nodes can clear afterward, while this tick's output snapshot survives.
+Tick-repeat Add, explicit physical cut decode, native independent-batch buckets
+and the unchanged original Add component oracle are implemented in `lazy-add.md`.
+Development tests pass; STATUS owns the clean qualification status. The default
+and original compatibility path retain repeated floating-point multiplication.
+Long-gap power/scan regrouping is a separately named future profile, with explicit
+numerical/route policy. Eager inference interpretation requires fixed parameters
+across cuts; carried state after an optimizer update follows the declared lazy
+recurrence, not implicit eager decay using historical parameter values.
 
-Implement a lazy Add state storing the post-candidate value and last tick. For
-a candidate at theta, decay from last_time through theta, then add content.
-Initial last_time=-1 means tick zero includes one decay. At a cut b, the original
-physical hidden is obtained by decaying the stored value through tick b-1.
-This decode is for comparison/readout; it must not manufacture idle graph events
-or scan the whole graph during sparse advance. Include initial nonzero state,
-idle prefixes/suffixes, missing samples, clear and token-cut continuation.
-
-Finite precision requires an explicit policy: repeated per-tick multiplication
-matches the original order, while power/scan regrouping may round differently
-and change hard routing near ties. Start with an explicitly named repeat profile
-as the original-code oracle. A separately named power profile can target sparse
-long gaps, with numerical/route qualification and disclosed limits; do not
-silently substitute power and claim original bitwise semantics. Retention can
-be a learned scalar initialized from the original computed `(1-decay_rate)` in
-payload dtype. Tide defines its VJP independently of LH's in-place/custom AD.
-
-Local state APIs should carry this profile through scalar, independent-batch and
-optional exact sequence contracts. Counters still count observations, not ticks.
-Old-mode Read must have a declared interpretation of the stored representation;
-LH's compatibility path reads the proposal. Complete cut roots and checkpoint
-records must preserve the clock needed to decode physical hidden state.
-
-## Original component comparison and later whole-model bridge
-
-Extend the optional oracle to link untouched AccumulateLocal, Hidden, BatchHidden,
-Confluence, ModuleUtils and their configuration dependencies. Test both original
-single-sample and batch Add paths using the same frozen weights/tagged fibers,
-then compare mapped hidden at every tick/cut and selected pre-clear outputs.
-Keep ordinary Tide training anchors in Python: hand-computed values, input,
-retention and initial-state VJPs; include cuts/detach/sharing and all executors.
+## Remaining original-model bridge
 
 Then map source signaling and CHAL activation/normalization into per-slot Full
 programs. The current projection Emit alone does not implement original signaling.

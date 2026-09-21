@@ -1,5 +1,6 @@
 #include "tide/counters.h"
 #include "tide/kernel.h"
+#include "tide/lazy_add.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -133,6 +134,7 @@ class BasicKernel final : public StateKernel {
 }  // namespace
 std::shared_ptr<const StateKernel> make_matrix_kernel(const std::string&);
 std::shared_ptr<const StateKernel> make_state_kernel(const std::string& name) {
+  if (name == "lh-add-repeat-v1") return make_add_repeat_kernel();
   if (name == "linear" || name == "delta") return make_matrix_kernel(name);
   if (name != "ema" && name != "identity" && name != "ssm") throw std::invalid_argument("unknown state kernel: " + name);
   return std::make_shared<BasicKernel>(name);

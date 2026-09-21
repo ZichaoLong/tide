@@ -44,8 +44,8 @@ otherwise one integer per slot specifies -1 always, -2 never, or a residue
 matching `logical_time % period`. Identity adapters remain unconditional.
 Logical time is not silently interpreted as token position.
 
-Profiles and phase policy enter graph fingerprints and native format v6.
-Checkpoint payload stays v3; incompatible graph identities fail before weight
+Profiles and phase policy enter graph fingerprints. Current graph/checkpoint
+versions are in `semantics.md`; incompatible identities fail before weight
 changes. Shared modules require compatible policies/parameter slot domains,
 independently of physical wiring. SettleGraph preserves body-local slots and
 program modules when converting ports to edges.

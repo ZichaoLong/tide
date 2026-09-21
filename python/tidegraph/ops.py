@@ -50,6 +50,8 @@ class NodeWeights(nn.Module):
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program
         self.aggregate_program = SourceAggregate("sum" if spec is None else spec.aggregation) if aggregate_program is None else aggregate_program
         self.extra = nn.ParameterDict()
+        if spec is not None and spec.memory == "lh-add-repeat-v1":
+            self.extra["add_retention"] = nn.Parameter(torch.tensor(1.0 - 0.01, dtype=dtype))
         if spec is not None and spec.memory == "attention":
             if width % spec.query_heads:
                 raise ValueError("attention width must be divisible by query heads")

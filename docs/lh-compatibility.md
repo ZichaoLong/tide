@@ -3,10 +3,11 @@
 Reference: `~/llm/lh`, HEAD `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`,
 inspected 2026-09-21. It contains user modifications to `BatchHidden.cpp`,
 `bench-lh-small.cpp`, test graph data, and untracked build/data directories.
-Do not modify or clean that tree. A future numerical run must record the actual
-dirty-source snapshot, not identify it by HEAD alone. The original-selector component oracle is now implemented (`lh-selector.md`);
-its current qualification status is in STATUS. Whole-LH inference comparison
-remains pending.
+Do not modify or clean that tree. Numerical runs record the actual dirty-source
+snapshot, not HEAD alone. Original-selector equivalence is qualified in
+`evidence/lh-selector.md`. Tick-repeat Add and its original-C++ component oracle
+are implemented (`lazy-add.md`), with qualification in STATUS. Whole-LH inference
+comparison remains pending.
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no
@@ -79,10 +80,9 @@ Adding one to every candidate affect count preserves ordering only while counts
 and composite arithmetic stay in a safe range. Do not claim equivalence at
 int32 overflow or beyond exact composite-score precision.
 
-Before full LH topology matching, qualify this component against both original
-C++ selector paths on immutable snapshots of their actual source files, with
-ragged batches, ties, empty candidates, sparse local IDs, forced activity and
-small counters. Record hashes/configuration and compare active sets plus both
-counter maps. This component comparison alone is not whole-LH inference parity.
-The subsequent Add/same-fiber attention/Pronounce gate still needs the complete
-clock/state/message projection above.
+Both original C++ selector paths are qualified against an immutable actual-source
+snapshot with ragged batches, ties, empty candidates, sparse local IDs,
+forced activity and small counters. Active sets and both counter maps agree;
+see `evidence/lh-selector.md`. This is not whole-LH inference parity. Add's
+encoded/physical clocks are specified in `lazy-add.md`; same-fiber attention,
+source signaling and Pronounce still need the complete projection above.

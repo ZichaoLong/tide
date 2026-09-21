@@ -6,7 +6,7 @@ from tidegraph.ops import Model
 from read_cases import execute
 
 
-@pytest.mark.parametrize("kind", ["ema", "ssm", "linear", "delta", "attention"])
+@pytest.mark.parametrize("kind", ["ema", "ssm", "linear", "delta", "attention", "lh-add-repeat-v1"])
 @pytest.mark.parametrize("implementation", ["reference", "python-frontier", "native-serial", "native-packed", "native-frontier"])
 def test_builtin_observation_counter_limits(dtype, kind, implementation):
     g = Graph((Node(0, memory=kind),), (), (Region(1),), (0,), ())

@@ -14,7 +14,31 @@ equivalence. Norm VJP and payload/descriptor precision are Tide training choices
 Unit `tide-foundation-lh-selector-20260921-1442` is inactive, MainPID 0, exit 0.
 Artifacts: `artifacts/lh-selector-20260921-1442/`; outer `status.json`,
 `verification/result.json`, `oracle/result.json` all passed with clean source.
-No active job. Evidence is committed separately from the tested implementation.
+Selector evidence is committed separately from the tested implementation.
+
+## Add implementation ready for clean qualification
+
+`lh-add-repeat-v1` now has Python/LibTorch state programs, native equal-gap batch
+buckets, physical cut decode and explicit causal time-loop accounting. Contracts
+and fixed-parameter interpretation: `lazy-add.md`.
+**278 focused tests passed in 10.79 seconds**. Original Selector and Add both
+passed in FP64/FP32. Add per dtype: 54 cases, 1296 ticks, 5400 candidate occurrences,
+with original single/cached/dual hidden against serial/packed/frontier and whole
+versus tick windows. These are development results, not clean qualification.
+
+Unit `tide-foundation-lh-add-dev-20260921-1507` is inactive, MainPID 0, exit 0;
+outer and oracle records passed under `artifacts/lh-add-dev-20260921-1507/`.
+The earlier `...-1503` job built successfully but stopped on a pending-root test
+fixture at an exhausted cut. Cut 7 now guarantees that root; the retry passed.
+Failure logs are retained. No active job remains before the prepared launch.
+
+Prepared clean unit: `tide-foundation-lh-add-20260921-1511`, `background.slice`.
+Output: `artifacts/lh-add-20260921-1511/`. Commit this implementation first, then
+run `python scripts/qualify.py --output-dir artifacts/lh-add-20260921-1511
+--jobs 2 --lh-snapshot artifacts/lh-source-20260921-1428` via scripts/job.py.
+It runs the full suite plus original Selector/Add in both dtypes. Launch has not
+occurred at this edit. Freeze source until terminal; require passed outer,
+verification and oracle results. Commit evidence separately after success.
 
 ## Immutable original source
 
@@ -24,19 +48,17 @@ LH HEAD is `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, with actual dirty source
 captured and checksummed. The original tree was only read. Oracle details:
 `lh-selector.md`; full-model mapping: `lh-compatibility.md`.
 
-## Next action
+## Next action after qualification
 
-Implement `lh-add-plan.md`: lazy tick clocks and original Add component comparison,
-then same-fiber attention, source signaling/activation/normalization and Pronounce.
-No Add profile code exists at this handoff. Start with `StateKernel`, Python
-`memory.py`/`state_program.py` and snapshotted AccumulateLocal/Hidden/BatchHidden.
-A repeat decay profile is the original numeric-order baseline; power regrouping
-requires separate explicit numerical/route policy. No whole-LH parity is claimed.
-
-Use focused tests, commit implementation, then launch clean `scripts/qualify.py`
-under `scripts/job.py` in `background.slice` with `--jobs 2` and the LH snapshot.
-Freeze source during jobs. Require terminal outer/test/oracle records before
-recording success. STATUS is the sole current handoff; ROADMAP is the backlog.
+Follow `lh-add-plan.md`: same-fiber attention, source signaling/activation/
+normalization and token-window Pronounce. Do not treat the existing aggregated-event
+attention as the LH profile. The fixed snapshot's Hidden/BatchHidden stores a
+per-key log bias, subtracts decay every tick and resets appended keys to zero.
+Attention sees every key in the complete current fiber. A dedicated profile must
+preserve that visibility and distinguish event count from cache atom count.
+No whole-LH parity is claimed. STATUS is the sole current handoff; ROADMAP is the
+backlog. Current schema versions live in semantics.md; historical evidence is
+unchanged. Artifact cleanup dry-run found nothing eligible; no files deleted.
 
 ROADMAP retains broader losses/performance: optimized packed backward, cache
 allocation, structured Delta chunks and large sparse workloads. Touched region

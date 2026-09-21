@@ -54,7 +54,8 @@ capability gates are [qualified](evidence/next-programs.md). Region programs,
 typed history, tensor controls and checkpoint v4 are
 [qualified](evidence/region-programs.md) (`region-programs.md`). LH selection, explicit FP64 descriptor policy and the original-selector oracle
 are [qualified](evidence/lh-selector.md) (`lh-selector.md`). The
-next memory/clock gate is `lh-add-plan.md`.
+tick-repeat Add/physical decode gate is implemented (`lazy-add.md`), pending clean
+qualification in STATUS. Remaining LH mapping is in `lh-add-plan.md`.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

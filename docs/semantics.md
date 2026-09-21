@@ -18,6 +18,7 @@ Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
+Current native structural identity is **v11**; checkpoint payload is **v4**.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
@@ -69,6 +70,8 @@ Additional local state profiles are specified in `state-programs.md` (SSM),
 `matrix-memory.md` (Linear/Delta) and `attention.md` (aggregated-event GQA/window).
 Their clocks, clear behavior and batching contracts are explicit; sharing the
 generic executor does not make these different profiles interchangeable.
+`lazy-add.md` defines explicit tick-repeat decay, encoded versus physical state,
+cut decoding and the fixed-parameter boundary of its LH inference interpretation.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.

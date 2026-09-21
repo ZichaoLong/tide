@@ -8,7 +8,7 @@ import sys
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
-parser.add_argument("--lh-snapshot", help="also qualify original C++ LH selector from this immutable snapshot")
+parser.add_argument("--lh-snapshot", help="also qualify original C++ LH selector/Add from this immutable snapshot")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(root / "scripts/build.py"), "--jobs", str(args.jobs)], check=True)
@@ -17,4 +17,4 @@ subprocess.run([sys.executable, str(root / "scripts/verify.py"), "--device", "cp
 if args.lh_snapshot:
     subprocess.run([sys.executable, str(root / "scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", "both",
                     "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "oracle"),
-                    "--jobs", str(args.jobs)], check=True)
+                    "--jobs", str(args.jobs), "--component", "all"], check=True)

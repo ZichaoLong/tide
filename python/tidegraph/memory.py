@@ -74,6 +74,9 @@ class DiagonalSSM:
 
 
 def kernel(name, spec=None):
+    if name == "lh-add-repeat-v1":
+        from .lazy_add import LazyAdd
+        return LazyAdd()
     if name == "ema":
         return EMA()
     if name == "ssm":

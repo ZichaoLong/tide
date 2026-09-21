@@ -25,6 +25,7 @@
 | `docs/next-programs.md` | Next requests, clear policy, state validation and prefill gates |
 | `docs/region-programs.md` | Selector interfaces, typed history, controls and persistence |
 | `docs/lh-add-plan.md` | Next lazy Add, decay precision, physical state projection and oracle gate |
+| `docs/lazy-add.md` | Explicit tick-repeat Add, physical decode, batch buckets and parameter-epoch limits |
 | `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 

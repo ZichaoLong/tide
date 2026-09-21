@@ -57,3 +57,5 @@
   old handoffs. Fix broken navigation when moving files.
 - Report implemented/verified/planned separately. A small formula profile does
   not certify all models, graph families, scales, platforms or performance.
+- `docs/semantics.md` owns current graph/checkpoint versions. Module documents
+  link there; immutable evidence retains the versions tested at its source commit.

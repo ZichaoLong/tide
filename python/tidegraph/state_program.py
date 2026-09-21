@@ -43,7 +43,9 @@ def validate_program(weights, spec, *, native=False):
     from .memory import EMA, DiagonalSSM
     from .attention import Attention
     from .matrix_memory import MatrixMemory
-    builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory, "attention": Attention}
+    from .lazy_add import LazyAdd
+    builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory,
+                "attention": Attention, LazyAdd.profile: LazyAdd}
     program = weights.kernel
     if type(program) is not builtins.get(spec.memory):
         if native:
@@ -53,6 +55,8 @@ def validate_program(weights, spec, *, native=False):
         return
     if isinstance(program, MatrixMemory) and program.kind != spec.memory:
         raise ValueError("shared state program does not match graph profile")
+    if isinstance(program, LazyAdd):
+        program.validate_weights(weights)
     if isinstance(program, Attention) and (program.query_heads, program.kv_heads, program.window) != (
             spec.query_heads, spec.kv_heads, spec.window):
         raise ValueError("shared state program does not match attention policy")

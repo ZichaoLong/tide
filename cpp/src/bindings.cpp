@@ -4,6 +4,7 @@
 #include "tide/frontier.h"
 #include "tide/specialized.h"
 #include "tide/cursor.h"
+#include "tide/lazy_add.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -48,6 +49,7 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<NodeWeights>(m, "NodeWeights").def(py::init<Tensor, Tensor, Tensor, Tensor>())
     FIELD(NodeWeights, decay) FIELD(NodeWeights, weight) FIELD(NodeWeights, bias) FIELD(NodeWeights, read) FIELD(NodeWeights, extra);
   py::class_<RegionWeights>(m, "RegionWeights").def(py::init<>()) FIELD(RegionWeights, extra);
+  m.def("decode_add_repeat", &decode_add_repeat);
   py::class_<Model>(m, "Model").def(py::init<>())
     FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale);
   py::class_<Event>(m, "Event")

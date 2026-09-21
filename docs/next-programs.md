@@ -55,9 +55,9 @@ its contracts. No fused or joint Next batch is claimed. This preserves isolated
 public-root first-order VJPs without additional Next replay; packed backward
 optimization and performance measurement remain separate gates.
 
-Native graph identity is v10; checkpoint payload remains v3. Profile changes
+Current graph/checkpoint versions are in `semantics.md`. Profile changes
 reject incompatible graph identity before changing weights. Shared custom Next
 parameters use normal optimizer/checkpoint alias tracking. Representative checks
 are in `test_next_schedules.py`, `test_next_contract.py` and the standalone
-`cpp/test/next_programs.cpp`. Region integer/tensor history and structured controls,
-LH profiles and original-C++ inference comparison follow this gate.
+`cpp/test/next_programs.cpp`. Region integer/tensor history and structured controls
+are in `region-programs.md`; LH profiles and comparisons are in `lh-compatibility.md`.
