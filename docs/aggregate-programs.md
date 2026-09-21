@@ -1,6 +1,8 @@
 # Source-aware Aggregate programs
 
-Implemented; clean-source qualification is pending. See `STATUS.md`.
+Built-ins and extension seams are [qualified](evidence/aggregate-programs.md).
+Tag-sensitive custom-program SettleGraph embedding still needs an origin adapter;
+see the counterexample boundary in the evidence and next action in `STATUS.md`.
 Aggregate receives a complete nonempty source-tagged fiber, logical time, stable
 local input slots and legacy physical source scales. Programs are functional,
 immutable during execution, and independent across events. Source tags and input

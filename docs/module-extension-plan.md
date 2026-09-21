@@ -20,7 +20,9 @@ the old broadcast profile; its slot-affine/phase profile is
 
 1. Aggregate interfaces and weighted mean, active-source softmax and all-source
    softmax are implemented with full tags, local slots and optional contributions;
-   clean qualification is pending (`aggregate-programs.md`). Built-in memory
+   [qualification](evidence/aggregate-programs.md) covers the built-ins. Before
+   proceeding, add graph-owned source-origin views for tag-sensitive custom
+   Aggregate under SettleGraph embedding. Built-in memory
    profiles still consume the summary; expose complete typed content through
    Upd/Read/Next/Full when adding source-aware memory, before LH attention.
 2. Expose the full Next inputs (old, comparison, time, content, active, control).

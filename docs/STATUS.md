@@ -4,12 +4,12 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1489 tests passed** at
-`fda9a66858f008e481c4969f83a0d1d0bf609700`.
-See `evidence/full-programs.md`; prior evidence is linked from `ROADMAP.md`.
-Previous qualification unit `tide-foundation-full-20260921-1125`
+Latest clean qualification: **1727 tests passed** at
+`4fa29b6d2291da006781aa456a15647e874d4fb1`.
+See `evidence/aggregate-programs.md`; prior evidence is linked from `ROADMAP.md`.
+Previous qualification unit `tide-foundation-aggregate-20260921-1203`
 completed with exit 0, no worker remains. Artifacts:
-`artifacts/full-20260921-1125/{status.json,task.log,verification/}`.
+`artifacts/aggregate-20260921-1203/{status.json,task.log,verification/}`.
 
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
@@ -20,18 +20,13 @@ v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 Per-slot Full/Emit is qualified: native/Python program extension interfaces,
 slot-affine parameters and sparse phase-based emissions across all schedules.
 The concrete API and boundaries are in `full-programs.md`. No active job remains.
-Active increment: source-aware Aggregate; contract and acceptance gates are in
-`aggregate-programs.md`. Native/Python seams, optional per-source contributions,
-five profiles, grouped batching and all schedules are implemented. Development
-build `artifacts/aggregate-build-20260921-1157` exited 0; no worker remains.
-Aggregate/CLI checks passed 230 tests; inference and SettleGraph specialization
-checks passed 14 more in FP64/FP32.
-
-Next: commit this coherent increment, then launch clean qualification with
-`python scripts/qualify.py --output-dir artifacts/aggregate-20260921-1203` under
-unit `tide-foundation-aggregate-20260921-1203`. Freeze source while active. Retain
-`artifacts/aggregate-20260921-1203/{status.json,task.log,verification/}` and archive
-evidence in a separate commit only after terminal success. Full Next/Read follow.
+Aggregate's five profiles and extension seam are qualified, with a newly found
+embedding limit: a custom program reading atom kind/origin position sees changed
+tags after SettleGraph converts inputs to edges. Built-in local-slot programs
+pass the tested embedding. Immediate next fix: graph-owned source-origin views,
+preserving physical routing/scales but restoring program-visible tags and
+canonical order. Add a minimal custom-program regression in Python and native.
+No job is active; no uncommitted implementation remains.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -56,7 +51,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Complete clean Aggregate qualification and archive its evidence.
+1. Fix tag-sensitive custom Aggregate under SettleGraph embedding as above.
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
