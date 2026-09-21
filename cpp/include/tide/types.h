@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -20,12 +21,19 @@ struct Node {
 };
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };
+struct PortLayout {
+  std::vector<Index> edge_source, edge_target, input, output;
+};
+struct PortBinding { Index kind, id; };  // 0: boundary port, 1: edge
+struct PortIndex { std::vector<Index> offsets; std::vector<PortBinding> bindings; };
 struct Graph {
   std::vector<Node> nodes;
   std::vector<Edge> edges;
   std::vector<Region> regions;
   std::vector<Index> inputs, outputs;
   Adjacency csr, csc, output_index;
+  std::optional<PortLayout> layout;
+  PortIndex incoming_ports, outgoing_ports;
   std::string identity;
   void compile();
   std::vector<Index> topological_order() const;

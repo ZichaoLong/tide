@@ -1,4 +1,5 @@
 #include "tide/types.h"
+#include "tide/ports.h"
 #include <sstream>
 #include <stdexcept>
 
@@ -46,9 +47,10 @@ void Graph::compile() {
   std::vector<Index> source, target;
   for (const auto& e : edges) { source.push_back(e.source); target.push_back(e.target); }
   csr = index(source); csc = index(target); output_index = index(outputs);
+  compile_ports(*this);
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v4;n=" << n << ';';
+  out << "tide-graph-v5;n=" << n << ';';
   for (const auto& v : nodes) out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
                                 << v.query_heads << ',' << v.kv_heads << ',' << v.window << ';';
@@ -58,6 +60,10 @@ void Graph::compile() {
   for (const auto& e : edges) out << e.source << ',' << e.target << ',' << e.delay << ';';
   out << "i;"; for (auto v : inputs) out << v << ',';
   out << "o;"; for (auto v : outputs) out << v << ',';
+  out << "ls;"; for (auto v : layout->edge_source) out << v << ',';
+  out << "lt;"; for (auto v : layout->edge_target) out << v << ',';
+  out << "li;"; for (auto v : layout->input) out << v << ',';
+  out << "lo;"; for (auto v : layout->output) out << v << ',';
   identity = out.str();
 }
 }  // namespace tide

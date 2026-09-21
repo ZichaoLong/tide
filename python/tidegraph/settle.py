@@ -6,6 +6,7 @@ from .blocks import canonicalize, deliver, evaluate_block
 from .graph import Edge, Graph, Node, Region
 from .ops import Model
 from .records import Atom, Continuation, External, Result
+from .ports import PortLayout
 from .validation import validate_window
 
 
@@ -49,8 +50,11 @@ class SettleGraph:
         n, r = len(g.nodes), len(g.regions)
         edges = (g.edges + tuple(Edge(n, v, self.rank(v)) for v in g.inputs)
                  + tuple(Edge(v, n + 1, self.output_rank - self.rank(v)) for v in g.outputs))
+        ports = g.ports
+        layout = PortLayout(ports.edge_source + tuple(range(len(g.inputs))) + ports.output,
+                            ports.edge_target + ports.input + tuple(range(len(g.outputs))), (0,), (0,))
         encoded = Graph(g.nodes + (Node(r, identity=True), Node(r + 1, identity=True)), edges,
-                        g.regions + (Region(1), Region(1)), (n,), (n + 1,))
+                        g.regions + (Region(1), Region(1)), (n,), (n + 1,), layout)
         em = Model(encoded, model.width, dtype=model.nodes[0].bias.dtype)
         em.nodes = torch.nn.ModuleList(list(model.nodes) + list(em.nodes[-2:]))
         def one():
@@ -81,7 +85,7 @@ class SettleGraph:
         events = []
         for event in result.trace:
             if event["node"] < n:
-                events.append(dict(event, fiber=[atom(a) for a in event["fiber"]]))
+                events.append(dict(event, fiber=sorted((atom(a) for a in event["fiber"]), key=lambda a: a.key())))
         q = result.continuation
         ledger = {(b, p): (position, time + self.rank(v)) for (b, _), (position, time) in q.ledger.items()
                   for p, v in enumerate(g.inputs)}

@@ -1,7 +1,9 @@
 """Immutable graph identity and independently checked adjacency compilation."""
 from dataclasses import asdict, dataclass
+from functools import cached_property
 import hashlib
 import json
+from .ports import PortLayout
 
 
 @dataclass(frozen=True)
@@ -37,6 +39,7 @@ class Graph:
     regions: tuple[Region, ...]
     inputs: tuple[int, ...]
     outputs: tuple[int, ...]
+    layout: PortLayout | None = None
 
     def __post_init__(self):
         n = len(self.nodes)
@@ -60,9 +63,22 @@ class Graph:
                 raise ValueError("edge delay must be a positive int64")
         if any(not 0 <= v < n for v in (*self.inputs, *self.outputs)):
             raise ValueError("invalid port owner")
+        if self.layout is not None and not isinstance(self.layout, PortLayout):
+            raise ValueError("invalid local port layout")
+        self.port_indexes  # Validate before any execution or checkpoint operation.
+
+    @cached_property
+    def ports(self):
+        return PortLayout.automatic(self) if self.layout is None else self.layout
+
+    @cached_property
+    def port_indexes(self):
+        return self.ports.indexes(self)
 
     def wire(self):
-        return asdict(self)
+        record = asdict(self)
+        record["layout"] = asdict(self.ports)
+        return record
 
     @property
     def identity(self):

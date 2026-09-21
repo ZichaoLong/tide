@@ -5,6 +5,9 @@ and edge delay equal to target rank minus source rank. `stride=max(rank)+2`;
 the output boundary rank is `max(rank)+1`. Each (sample,position) input is sent
 through a stateless source adapter at `stride*position`; the output adapter
 aggregates source-tagged terminal values. Adapters have no trainable parameters.
+Body-local input/output slots are preserved explicitly across boundary-to-edge
+conversion; see `local-ports.md`. Projection re-sorts restored fiber tags when
+external and internal inputs meet at one body node.
 
 The direct Python executor settles a whole sequence by region rank, using exact
 state/Full blocks. Its schedule does not call the TimedDAG planner. The native

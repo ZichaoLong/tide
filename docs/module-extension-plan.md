@@ -13,6 +13,10 @@ Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing
 
 ## Next vertical gates: general local programs
 
+The local-port mapping prerequisite is implemented in source and undergoing
+qualification; see `local-ports.md` and `STATUS.md`. It precedes Full/Emit so
+that the first slot-aware program can already survive SettleGraph embedding.
+
 1. Full/Emit must return separately tagged outgoing edge/output coordinates;
    missing coordinates mean no message, and numerical zero still means a real
    message. Current scalar-scaled replication is only a TotalEmit profile. Add a

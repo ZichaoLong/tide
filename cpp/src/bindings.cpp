@@ -19,8 +19,14 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);
+  py::class_<PortLayout>(m, "PortLayout").def(py::init<>())
+    FIELD(PortLayout, edge_source) FIELD(PortLayout, edge_target) FIELD(PortLayout, input) FIELD(PortLayout, output);
+  py::class_<PortBinding>(m, "PortBinding").def_readonly("kind", &PortBinding::kind).def_readonly("id", &PortBinding::id);
+  py::class_<PortIndex>(m, "PortIndex").def_readonly("offsets", &PortIndex::offsets).def_readonly("bindings", &PortIndex::bindings);
   py::class_<Graph>(m, "Graph").def(py::init<>()).def("compile", &Graph::compile)
     FIELD(Graph, nodes) FIELD(Graph, edges) FIELD(Graph, regions) FIELD(Graph, inputs) FIELD(Graph, outputs)
+    FIELD(Graph, layout)
+    .def_readonly("incoming_ports", &Graph::incoming_ports).def_readonly("outgoing_ports", &Graph::outgoing_ports)
     .def_readonly("csr", &Graph::csr).def_readonly("csc", &Graph::csc).def_readonly("identity", &Graph::identity);
   py::class_<State>(m, "State").def(py::init<Tensor, Index, Index, std::map<std::string, Tensor>>())
     FIELD(State, value) FIELD(State, last_time) FIELD(State, observations) FIELD(State, slots);

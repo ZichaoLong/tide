@@ -11,6 +11,20 @@ No active background jobs. Unit `tide-foundation-autograd-20260921-1034`
 completed with exit 0, no worker remains. Artifacts:
 `artifacts/autograd-20260921-1034/{status.json,task.log,verification/}`.
 
+Active increment (based on `1cca4cc`): stable local input/output
+slot mappings, native flat inverse indexes, SettleGraph remapping and graph
+identity guards. See `local-ports.md`. Targeted Python/native checks: **29 passed**
+in FP64/FP32. Development build `artifacts/ports-build-20260921-1042` exited 0;
+no worker remains. A mixed-input SettleGraph case also required restoring
+canonical fiber order after projecting source tags.
+
+Next: commit the implementation and launch clean qualification under unit
+`tide-foundation-ports-20260921-1047`, artifacts
+`artifacts/ports-20260921-1047/{status.json,task.log,verification/}`.
+Command: `python scripts/qualify.py --output-dir artifacts/ports-20260921-1047`.
+Freeze the source while active; after exit 0 archive evidence separately, then
+implement per-slot Full/Emit using the already mapped slots.
+
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
 kernels retain their forward values; grad-enabled execution additionally builds

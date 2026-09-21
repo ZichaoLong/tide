@@ -12,6 +12,8 @@ stored state/history. Candidate state adoption may observe all or active only;
 Next can clear selected state without erasing the snapshot used by Full.
 
 Logical time, token position, observation count and execution time are distinct.
+Local program input/output slots have validated physical edge/port mappings;
+see `local-ports.md`. Layout is part of graph identity, outside shared weights.
 Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.

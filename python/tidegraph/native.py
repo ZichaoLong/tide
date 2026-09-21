@@ -15,6 +15,10 @@ class Native:
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs
+        layout = core.PortLayout()
+        for name in ("edge_source", "edge_target", "input", "output"):
+            setattr(layout, name, getattr(graph.ports, name))
+        g.layout = layout
         g.compile()
         self.compiled = g
         m = core.Model()
