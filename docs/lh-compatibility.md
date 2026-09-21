@@ -14,7 +14,8 @@ qualified in `evidence/lh-attention.md` (`fiber-attention.md`); batch/sequence
 packing and CROSSBATCH are qualified in `evidence/fiber-packing.md`.
 Normalized/learned post-attention Confluence is qualified in
 `evidence/fiber-pooling.md`, with the original FP64 assertion limitation recorded
-separately. Pronounce/whole-model mapping remains pending (`lh-pronounce-plan.md`).
+separately. Token-window Pronounce is qualified in `evidence/pronounce.md`;
+whole-model and single-PDG mapping remain pending (`lh-iocortex-plan.md`).
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no
@@ -91,5 +92,6 @@ Both original C++ selector paths are qualified against an immutable actual-sourc
 snapshot with ragged batches, ties, empty candidates, sparse local IDs,
 forced activity and small counters. Active sets and both counter maps agree;
 see `evidence/lh-selector.md`. This is not whole-LH inference parity. Add's
-encoded/physical clocks are specified in `lazy-add.md`; same-fiber attention,
-source signaling and Pronounce still need the complete projection above.
+encoded/physical clocks are specified in `lazy-add.md`; qualified attention,
+source signaling and Pronounce components still need the complete whole-model
+projection above.

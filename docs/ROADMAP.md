@@ -13,7 +13,7 @@ stays explicit; later milestones may refine earlier interfaces.
 | M4 | SettleGraph executor + encoding; Python/native generic; independent Python specialization; embedded trace and backward correspondence | verified for ema-ffn-v1; [evidence](evidence/m4-settle-specialized.md) |
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | SSM/SwiGLU [verified](evidence/m5a-state-programs.md); Linear/Delta [verified](evidence/m5b-matrix-memory.md); event GQA/window [verified](evidence/m5c-attention.md); broader programs pending |
 | M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); broader modules/objectives pending |
-| M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md) verified; [post-attention pooling](evidence/fiber-pooling.md) verified; token-window readout implemented (qualification in STATUS); full model pending |
+| M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md) verified; [post-attention pooling](evidence/fiber-pooling.md) verified; [token-window Pronounce](evidence/pronounce.md) verified; whole model [next gate](lh-iocortex-plan.md) |
 | M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | planned |
 
 ## Dependencies and acceptance details
@@ -60,8 +60,8 @@ tick-repeat Add/physical decode gate is [qualified](evidence/lh-add.md)
 [qualified](evidence/lh-attention.md) (`fiber-attention.md`); actual batch/sequence
 packing and CROSSBATCH are [qualified](evidence/fiber-packing.md) (`fiber-packing.md`).
 Post-attention Confluence is [qualified](evidence/fiber-pooling.md) (`fiber-pooling.md`).
-Next token-clock/readout gate: `lh-pronounce-plan.md`; remaining whole-model
-mapping: `lh-add-plan.md`.
+Token-clock/readout is [qualified](evidence/pronounce.md). Next whole-model
+mapping and single-PDG/composite-checkpoint obligations: `lh-iocortex-plan.md`.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;
