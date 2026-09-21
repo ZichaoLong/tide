@@ -9,6 +9,42 @@ support claim for arbitrary models.
 M5C adds aggregated-event GQA/window attention and checked packed sequence
 interfaces; see `attention.md` and the current qualification in `STATUS.md`.
 RoPE/position and LH same-fiber attention remain separate profiles to implement.
+Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing.md`.
+
+## Next vertical gates: general local programs
+
+1. Full/Emit must return separately tagged outgoing edge/output coordinates;
+   missing coordinates mean no message, and numerical zero still means a real
+   message. Current scalar-scaled replication is only a TotalEmit profile. Add a
+   public native program interface and independent Python examples, preserving
+   batched selected-only evaluation and immutable comparison state. Test phase
+   routing, edge-specific transforms, dead branches and sparse continuation.
+2. Output program slots need a stable mapping to physical edges/ports. SettleGraph
+   turns output ports into adapter edges; retaining only physical IDs in a shared
+   node module would silently break arbitrary programs. Keep mapping outside
+   shared parameter modules, validate it, and map it explicitly during embedding.
+   Source slots likewise must survive input-adapter remapping for normalized Agg
+   and LH confluence weights. Include static program layout in checkpoint guards.
+3. Aggregate programs should receive complete source-tagged fibers and time. Add
+   weighted mean, active-source softmax and all-source softmax with independent
+   forward/VJP checks. Do not confuse absent sources with zero-valued messages;
+   all-source denominators can differentiate inactive source parameters.
+4. Expose the full Next inputs (old, comparison, time, content, active, control).
+   A custom Next that uses controls invalidates the present identity-Next prefill
+   contract unless it provides an exact joint contract. Read must support content,
+   old-state and proposed-state modes, not assume a proposal-only scalar score.
+5. Region programs need explicit integer/tensor history and controls beyond
+   selection counts. Preserve checkpoint/detach/VJP for tensor history; add LH's
+   selection-count/affect-count/FP64-norm/stable-ID ordering as one profile.
+6. After these seams, implement LH Add and same-fiber attention with lazy idle
+   decay, per-edge signaling and token-window Pronounce. Compare an immutable
+   snapshot of actual LH C++ sources, never its older Python interpreter.
+
+These gates instantiate the existing upstream functions; do not change Tide's
+Next-before-Full or no-autonomous-empty-event semantics to fit an implementation.
+Keep modules and schedulers independently testable, with explicit capability
+fallbacks. Mixed-profile training/loss statistics and performance follow the
+same regression/evidence process, not a one-time blanket certification.
 
 ## First change: remove formula assumptions from schedulers
 

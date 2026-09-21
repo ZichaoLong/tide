@@ -39,5 +39,6 @@ memory. No speed claim follows from fewer calls or correct numerical results.
 
 Owned native cursor and explicit snapshots are [qualified](evidence/native-cursor.md),
 avoiding whole-state work per streaming cut. Remaining runtime work includes
-joint batch/sequence SSM, allocation and structured Delta chunk optimization.
+allocation and structured Delta chunk optimization. Joint EMA/SSM batch/sequence
+scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.

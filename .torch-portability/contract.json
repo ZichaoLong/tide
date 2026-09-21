@@ -83,17 +83,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "900f19577f5bf6cead893ea53cf73a475f5dc1c1",
-          "scope": "CPU FP64/FP32 executors and state programs, owned native streaming cursor, trace/VJP/checkpoint/truncation and recovery; exact cells in report",
+          "commit": "55abdd5badc31255e574c237be4ea7d624b839eb",
+          "scope": "CPU FP64/FP32 executors and state programs including joint batch/sequence attention and EMA/SSM, owned cursor, trace/VJP/checkpoint; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006",
           "result": "passed",
-          "environment_manifest": "docs/evidence/native-cursor.md"
+          "environment_manifest": "docs/evidence/m5d-memory-packing.md"
         }
       ]
     },
@@ -147,17 +147,17 @@
       "evidence": [
         {
           "date": "2026-09-21",
-          "commit": "900f19577f5bf6cead893ea53cf73a475f5dc1c1",
-          "scope": "CPU FP64/FP32 executors and state programs, owned native streaming cursor, trace/VJP/checkpoint/truncation and recovery; exact cells in report",
+          "commit": "55abdd5badc31255e574c237be4ea7d624b839eb",
+          "scope": "CPU FP64/FP32 executors and state programs including joint batch/sequence attention and EMA/SSM, owned cursor, trace/VJP/checkpoint; exact cells in report",
           "tiers": [
             "build",
             "cpu-semantic",
             "parity",
             "checkpoint-handoff"
           ],
-          "test_command": "python scripts/qualify.py --output-dir artifacts/cursor-20260921-0954",
+          "test_command": "python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006",
           "result": "passed",
-          "environment_manifest": "docs/evidence/native-cursor.md"
+          "environment_manifest": "docs/evidence/m5d-memory-packing.md"
         }
       ]
     },

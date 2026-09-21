@@ -4,19 +4,13 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **843 tests passed** at
-`900f19577f5bf6cead893ea53cf73a475f5dc1c1`.
-See `evidence/native-cursor.md`; prior evidence is linked from `ROADMAP.md`.
-Cursor qualification completed with exit 0. A new candidate adds joint
-`[time,batch,width]` EMA/SSM scans, grouping nonempty equal-length samples and
-compacting final persistent tensors. Targeted Python checks: 16 passed.
-Native/full regression qualification is pending.
-
-Planned unit: `tide-foundation-memory-pack-20260921-1006`.
-Command: `/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/memory-pack-20260921-1006 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006`.
-Freeze this checkout while active. Inspect that directory's `status.json`,
-`task.log`, and `verification/result.json`; stop with
-`systemctl --user stop tide-foundation-memory-pack-20260921-1006` if necessary.
+Latest clean qualification: **903 tests passed** at
+`55abdd5badc31255e574c237be4ea7d624b839eb`.
+See `evidence/m5d-memory-packing.md`; prior evidence is linked from `ROADMAP.md`.
+No active background jobs. Unit `tide-foundation-memory-pack-20260921-1006`
+completed with exit 0; no worker remains. EMA/SSM now have joint
+`[time,batch,width]` scans, grouping nonempty equal-length samples and compacting
+final persistent tensors. The native owned cursor remains qualified.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
@@ -34,9 +28,11 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Finish joint EMA/SSM batch/sequence qualification and commit evidence.
-2. Generalize region/Agg/Full interfaces and loss statistics; review original LH
-   C++ inference mapping (`lh-compatibility.md`) before choosing its exact profiles.
+1. Generalize local programs, starting with Full/Emit per-edge values and absent
+   coordinates. See `module-extension-plan.md` for ordered gates. Preserve all
+   existing independent schedules and exact SettleGraph boundary mapping.
+2. Extend region history/selector and Aggregate/Next contracts, then loss
+   statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must also address cache allocation, structured Delta
    chunks and observed sparse work; no speed claim follows from kernel counts.
 
