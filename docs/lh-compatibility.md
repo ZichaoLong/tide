@@ -7,7 +7,8 @@ Do not modify or clean that tree. Numerical runs record the actual dirty-source
 snapshot, not HEAD alone. Original-selector equivalence is qualified in
 `evidence/lh-selector.md`. Tick-repeat Add and its original-C++ component oracle
 are qualified in `evidence/lh-add.md` (`lazy-add.md`). Whole-LH inference
-adapter is implemented (`lh-iocortex.md`); current qualification is in STATUS.
+adapter is qualified for the bounded equal-width two-clock scope in
+`evidence/lh-iocortex.md` (`lh-iocortex.md`).
 Activation/normalization and per-edge signaling with
 default eps/equal widths are qualified in `evidence/lh-full.md` (`lh-full.md`).
 Same-fiber sum attention's scalar baseline and five original attention modes are
@@ -63,11 +64,12 @@ native thread pool already propagates Torch thread-local state and coordinates
 commits; preserve these properties when borrowing kernels. Avoid nested OpenMP
 and ATen oversubscription.
 
-For the remaining whole-model comparison, build a read-only adapter from
+The qualified whole-model comparison builds a read-only adapter from
 an immutable snapshot of LH C++ sources using this project's CPU build setup.
-Start with Add hidden and a tiny graph, then attention, multiple samples, idle
-ticks, selected clear, token continuation and Pronounce. Save weights/inputs and
-compare all mapped state/messages/counters as well as outputs in FP64/FP32.
+It covers Add/attention, multiple samples, idle ticks, selected clear, token
+continuation and Pronounce, with saved weights/inputs and mapped state/messages/
+counters as well as FP64/FP32 outputs. Its exact configuration scope is in
+`lh-iocortex.md`; the single-PDG proof remains separate.
 If a true semantic mismatch survives an explicit encoding, document the minimal
 counterexample and discuss the choice with the user before changing Tide semantics.
 
@@ -93,7 +95,6 @@ int32 overflow or beyond exact composite-score precision.
 Both original C++ selector paths are qualified against an immutable actual-source
 snapshot with ragged batches, ties, empty candidates, sparse local IDs,
 forced activity and small counters. Active sets and both counter maps agree;
-see `evidence/lh-selector.md`. This is not whole-LH inference parity. Add's
-encoded/physical clocks are specified in `lazy-add.md`; qualified attention,
-source signaling and Pronounce components still need the complete whole-model
-projection above.
+see `evidence/lh-selector.md`. Add's encoded/physical clocks are specified in
+`lazy-add.md`; the complete bounded two-clock projection is now qualified in
+`evidence/lh-iocortex.md`. The selector gate alone would not establish that result.

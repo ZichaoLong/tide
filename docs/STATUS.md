@@ -4,57 +4,42 @@ Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 
 ## Verified baseline
 
-3296 tests passed in 303.80s on clean implementation
-`e6188802d3e893fa31d5351a9602748e0543915c`; evidence/pronounce.md.
-Unit tide-foundation-pronounce-20260921-175646 is inactive/MainPID 0/exit 0.
-All five records under artifacts/pronounce-20260921-175646/ passed cleanly:
-outer status, verification, oracle, oracle-release and pronounce-release.
-Actual Pronounce defaults to identity norm; its head remains outside the graph.
+Clean implementation `776fc2e597dac872f4204ac3a09966db39ab74c0` passed
+3296 tests in 240.23s and all original Selector/Add/Full/Attention/Pronounce/
+IOCortex gates; see evidence/lh-iocortex.md. Unit
+`tide-foundation-iocortex-20260921-1855` is inactive/dead, MainPID 0, exit 0.
+All seven records in artifacts/iocortex-20260921-1855/ are terminal passed,
+exit 0, clean at that source: status, verification, oracle, oracle-release,
+pronounce-release, iocortex-release and iocortex-python. Finished
+2026-09-21T19:28:09Z. No running jobs; source/shared caches may be edited.
 
-## Completed IOCortex development gate
+IOCortex original assertions-on FP64: 180 cases and 24 unavailable (known LH
+active-softmax diagnostic); assertions-on FP32 and assertions-off FP64/FP32:
+204 cases each. Independent Python: 48 fixtures / 28680 original candidate
+events. Actual original think/think_single_step, greedy feedback, all four
+adjacency blocks, explicit slots, candidate/cache/physical hidden, both counters,
+emitted/pending messages and logits match within the bounded two-clock scope.
+Native serial/parallel/packed and original PACKED/CROSSBATCH are covered.
+Each case uses one homogeneous body/readout profile. No core runtime/schema
+change in this gate and no whole-model training or single-PDG claim.
 
-Unit tide-foundation-iocortex-dev-20260921-1832 is inactive/MainPID 0/exit 0.
-Outer status, oracle, oracle-release and python/result.json all passed.
-Both original assertion variants in FP32: 204 configurations, 243780 candidates,
-961188 messages, 3264 token/sample logits each. Independent Python: 24 exported
-fixtures, 14340 original candidate events, body time-major and readout
-reference/frontier, whole/cut continuation. This development run requested only
-FP32. Source archive and logs are retained in its artifact directory.
+## Next action
 
-Implementation: lh-iocortex.md. Actual original think/think_single_step, four
-CSR/CSC blocks, explicit source/output slots, parallel physical edges, candidate
-proposal/cache, selected activation, final physical state and selector counts,
-all emitted/pending messages and logits. Native serial/parallel/packed and
-original PACKED single/multi/CROSSBATCH; equal-width scope and two graph clocks.
-No core runtime/schema changes and no whole-model training claim.
+Save the completed evidence/docs separately from the qualified implementation.
+Then implement the single-PDG prerequisites in lh-iocortex-plan.md: logical source
+domains for physical phase aliases and explicit local clocks with step/block
+contracts. Prove arbitrary-cut pending/body/readout projection and preserve
+occurrence positions when phases are absent. Do not infer occurrence count from
+token time. Composite checkpoint/parameter ownership and large-sparse performance
+remain separate ROADMAP obligations. Review relevant interfaces with rg before
+reading whole files; preserve existing SettleGraph canonical rank/stride clocks.
 
-Retain failed iocortex-dev-20260921-1820 (two missing namespace aliases) and
-failed iocortex-dev-20260921-1822 (180 FP64 cases passed, then the FP32 oracle
-incorrectly applied FP64 tolerance to upstream FP32 norm perturbations).
-The corrected test separately checks the FP64 norm formula, payload tolerance
-and actual perturbation bound; discrete routes stay exact. New Python checker
-also rejects -O and detects source/oracle/fixture changes; its -O probe exited 2
-without creating an output directory.
-
-## Clean qualification dispatch and next action
-
-This implementation is being committed before the clean dispatch:
-unit tide-foundation-iocortex-20260921-1855, output artifacts/iocortex-20260921-1855/.
-Command: python scripts/job.py --output-dir artifacts/iocortex-20260921-1855 --
-/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
-artifacts/iocortex-20260921-1855 --jobs 2 --lh-snapshot
-artifacts/lh-source-20260921-1428.
-
-Freeze source and shared caches while active. Inspect unit and all SEVEN terminal
-records: status.json, verification/result.json, oracle/result.json,
-oracle-release/result.json, pronounce-release/result.json,
-iocortex-release/result.json and iocortex-python/result.json. No clean IOCortex
-qualification result is asserted yet. Do not call a live job passed.
-After success write evidence/lh-iocortex.md with the actual clean source, scope,
-test/oracle counts and unavailable cases; update links/status in a separate commit.
-Then continue lh-iocortex-plan.md: single-PDG clock embedding and logical source
-domains, with complete-cut projections. Composite checkpoint/alias ownership and
-large-sparse state/history/performance remain separate roadmap obligations.
+Relevant code: ports.py/ports.h, origins.py, aggregate.py/aggregate.h,
+fiber_pool.cpp, kernel.h/kernel.cpp, full_kernel.cpp, token_window.py/.cpp.
+Native binding rejects Python-only custom kernels: cross-language support needs
+native implementation, not just a wrapper. Targeted checks first, commit source,
+then qualify its exact clean revision and save evidence separately. Do not rerun
+the completed IOCortex qualification solely for documentation edits.
 
 ## Runtime, reference and retention
 
@@ -63,14 +48,18 @@ LH snapshot artifacts/lh-source-20260921-1428: 69 files, identity
 `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, including actual dirty-source hashes.
 All reference trees are read-only. Keep this snapshot and all cited artifacts.
 Original FP64 active-softmax diagnostic hardcodes an FP32 denominator; on builds
-report the unavailable cases, off builds fill numerical coverage. Both retain
+report unavailable cases, off builds fill numerical coverage. Both retain
 ordinary C/C++ asserts. Caches: build/lh-oracle and build/lh-oracle-release.
 
-Prior retained failures/successes: pronounce-dev-20260921-{1744,1751,175316},
-fiber-pool-dev-20260921-{1709,1715}, fiber-dev-20260921-{1601,1608}; their reports
-retain causes and boundaries. Artifact cleanup dry run found no eligible entries;
-no files removed this iteration. No push. STATUS is the only current handoff,
-ROADMAP the backlog; source and evidence use separate commits.
+Retain failed iocortex-dev-20260921-1820 (missing type aliases) and
+failed iocortex-dev-20260921-1822 (FP32 oracle demanded FP64 upstream norm accuracy).
+The corrected oracle preserves payload tolerance and exact routes; see evidence.
+Successful iocortex-dev-20260921-1832 tested both original FP32 variants and Python.
+Earlier retained records: pronounce-dev-20260921-{1744,1751,175316},
+fiber-pool-dev-20260921-{1709,1715}, fiber-dev-20260921-{1601,1608}.
+Their reports retain causes and boundaries. Last artifact cleanup dry run had no
+eligible entries; no files removed. No push, no sub-agents. STATUS is the only
+current handoff; ROADMAP is the backlog.
 
 CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
 Torch/LibTorch 2.10.0+cpu, C++11 ABI. Backend autoload off; OMP/OpenBLAS=1;

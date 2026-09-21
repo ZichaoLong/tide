@@ -3,8 +3,9 @@
 The oracle now calls actual unchanged `IOCortexNet::think` and
 `think_single_step`, including embedding, four adjacency blocks, candidate state
 updates, selection, activation/norm, clear and Pronounce. Development and clean
-qualification status are recorded in STATUS; separate component evidence alone
-does not establish this whole-model gate. LH remains an inference reference.
+qualification are recorded in [evidence/lh-iocortex.md](evidence/lh-iocortex.md);
+the qualified scope below is narrower than arbitrary LH configurations.
+LH remains an inference reference.
 
 ## Mapping
 
@@ -59,6 +60,7 @@ their recorded inputs as a whole teacher-forced window.
 Small graphs have N=11 per cortex, width 4, two heads, batch 4 and vocabulary 7.
 Six state/pooling profiles cross clear on/off, lead selection on/off, original
 single/multi PACKED or CROSSBATCH (attention only), and three native schedules.
+Each case uses one profile throughout both cortexes and readout.
 The fixture policy couples clear with relu/L=3 versus silu/L=2, and lead with
 bias+RMS versus no-bias+identity norm; it is not a full Cartesian norm/act sweep.
 Original heap selection is used in PACKED modes, tensor selection in CROSSBATCH.

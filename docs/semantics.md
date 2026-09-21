@@ -108,10 +108,11 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
 
 LH contributes C++ inference and implementation ideas, not training semantics.
 Its candidate updates, count-priority selector and selected clear can fit the
-spine. Compatibility still requires a precise mapping of unit-delay ticks,
-eager decay, same-fiber attention and token-window Pronounce. The original-C++
-selector comparison is qualified in `evidence/lh-selector.md`; whole-LH numerical
-equivalence remains unverified.
+spine. The bounded equal-width, fixed-weight two-clock composition maps
+unit-delay ticks, eager decay, same-fiber attention and token-window Pronounce;
+actual original-C++ whole-model inference is qualified in
+`evidence/lh-iocortex.md`. Single-PDG containment and composite checkpoint/training
+ownership remain separate obligations (`lh-iocortex-plan.md`).
 
 `fractal-latcarf` supplies validation design examples (eager/packed/specialized,
 chunk/state/gradient checks). Its historical results do not certify this tree.

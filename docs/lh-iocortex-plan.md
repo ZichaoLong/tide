@@ -1,8 +1,8 @@
 # IOCortexNet mapping and remaining containment work
 
 Component gates through Pronounce are qualified in `evidence/pronounce.md`.
-The whole-model adapter is implemented in `lh-iocortex.md`; current qualification
-is in STATUS. The single-graph construction below is still proposed.
+The whole-model adapter in `lh-iocortex.md` is qualified in `evidence/lh-iocortex.md`.
+The single-graph construction below is still proposed.
 Call actual unchanged IOCortexNet::think and think_single_step from the hashed
 snapshot; component parity alone cannot certify whole-model execution.
 
@@ -84,3 +84,12 @@ must also declare its step/block contract; treating the reserved phase as an
 extra idle decay changes LH. These are proposed interfaces, not implemented
 behavior or a containment proof. Keep original valid-input restrictions (globally
 nonempty readout windows), fixed inference weights and equal-width scope explicit.
+
+Original LH phase/sample CSR has no External.position. The two-graph token_inputs
+adapter adds a contiguous occurrence ledger per sample/phase. If some phases are
+absent, send_time / period gives a token index, not the occurrence position.
+Projection to the complete two-graph Tide continuation therefore needs explicit
+phase occurrence counters with typed state/checkpoint rules. Alternatively a
+narrower projection to original LH may omit that adapter-only ledger, but must
+not claim complete two-graph continuation equality. Choose and document the
+projection boundary before implementing the single-graph oracle.
