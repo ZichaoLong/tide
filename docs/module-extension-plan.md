@@ -33,7 +33,7 @@ the old broadcast profile; its slot-affine/phase profile is
    supports content, old-state and proposed-state modes (`read-programs.md`),
    now [qualified](evidence/read-programs.md).
 3. Region programs and typed integer/tensor history are implemented
-   (`region-programs.md`), with qualification in progress. LH's
+   (`region-programs.md`), now [qualified](evidence/region-programs.md). LH's
    selection-count/affect-count/FP64-norm/stable-ID profile remains pending.
 4. After these seams, implement LH Add and same-fiber attention with lazy idle
    decay, per-edge signaling and token-window Pronounce. Compare an immutable

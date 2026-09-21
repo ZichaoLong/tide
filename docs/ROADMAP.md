@@ -51,8 +51,8 @@ embedding are [qualified](evidence/source-origins.md). Complete-content propagat
 is [qualified](evidence/content-programs.md). Independent Read and three region
 modes are [qualified](evidence/read-programs.md). Full Next requests and prefill
 capability gates are [qualified](evidence/next-programs.md). Region programs,
-typed history, tensor controls and checkpoint v4 are implemented
-(`region-programs.md`); full qualification is pending in STATUS. LH selection
+typed history, tensor controls and checkpoint v4 are
+[qualified](evidence/region-programs.md) (`region-programs.md`). LH selection
 and explicit FP64 descriptor policy are next (`lh-compatibility.md`).
 
 Isolated-root training exposed a packed autograd connectivity defect after the
