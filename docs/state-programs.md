@@ -30,6 +30,15 @@ The sequence implementation uses associative affine scan; the streaming batch
 implementation stacks only actual samples for the same node. This is a declared
 representative recurrence, not a Mamba/Mamba-2 checkpoint-compatibility claim.
 
+EMA and SSM also implement packed sequence blocks: equal nonempty event lengths
+form one `[time,batch,width]` affine scan, with separate initial memory per sample.
+No padded event becomes a candidate and no recurrence crosses a sample boundary.
+Python frontier uses this grouping; native `packed=False` keeps B=1 and
+`packed=True` groups samples. `prefill=False` retains causal steps. Counters
+distinguish semantic sequences from actual grouped scan calls. Final persistent
+read/memory tensors are compact clones; intermediate trace views may share block
+storage. This establishes batch/sequence execution, not a measured speedup.
+
 The SwiGLU Full profile uses a 2*width intermediate dimension:
 
 ```

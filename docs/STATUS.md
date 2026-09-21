@@ -7,10 +7,16 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 Latest clean qualification: **843 tests passed** at
 `900f19577f5bf6cead893ea53cf73a475f5dc1c1`.
 See `evidence/native-cursor.md`; prior evidence is linked from `ROADMAP.md`.
-No active background jobs. Unit `tide-foundation-cursor-20260921-0954` completed
-with exit 0; no worker remains. The owned native streaming cursor keeps queues
-and state native across cuts, with explicit snapshot/detach and error recovery.
-See `streaming-cursor.md` for the ownership and finite-valued equivalence contract.
+Cursor qualification completed with exit 0. A new candidate adds joint
+`[time,batch,width]` EMA/SSM scans, grouping nonempty equal-length samples and
+compacting final persistent tensors. Targeted Python checks: 16 passed.
+Native/full regression qualification is pending.
+
+Planned unit: `tide-foundation-memory-pack-20260921-1006`.
+Command: `/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/memory-pack-20260921-1006 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006`.
+Freeze this checkout while active. Inspect that directory's `status.json`,
+`task.log`, and `verification/result.json`; stop with
+`systemctl --user stop tide-foundation-memory-pack-20260921-1006` if necessary.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
@@ -28,9 +34,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Implement joint batch/sequence SSM (currently one prefill scan per sample),
-   using the checked packed-sequence interface. Compare with per-sample scans
-   and independent stepping, including ragged samples and initial-state VJPs.
+1. Finish joint EMA/SSM batch/sequence qualification and commit evidence.
 2. Generalize region/Agg/Full interfaces and loss statistics; review original LH
    C++ inference mapping (`lh-compatibility.md`) before choosing its exact profiles.
 3. Performance qualification must also address cache allocation, structured Delta

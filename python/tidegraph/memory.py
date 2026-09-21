@@ -16,7 +16,12 @@ class EMA:
 
     def sequence(self, w, old, h, times):
         values = affine_scan(w.decay.sigmoid().expand_as(h), h, old.value)
-        return [State(v, t, old.observations + i + 1) for i, (v, t) in enumerate(zip(values, times))]
+        return [State(v.clone() if i == len(times)-1 else v, t, old.observations + i + 1)
+                for i, (v, t) in enumerate(zip(values, times))]
+
+    def packed_sequence(self, w, old, batch):
+        from .memory_batch import diagonal_batch
+        return diagonal_batch(w, old, batch)
 
     def validate(self, w, state):
         if state.slots:
@@ -49,8 +54,13 @@ class DiagonalSSM:
         a, b = self.coefficients(w, h)
         memory = affine_scan(a, b, old.slots["memory"])
         values = (h @ w.extra["ssm_c"]) * memory + w.extra["ssm_skip"] * h
-        return [State(v, t, old.observations + i + 1, {"memory": m})
+        return [State(v.clone() if i == len(times)-1 else v, t, old.observations + i + 1,
+                      {"memory": m.clone() if i == len(times)-1 else m})
                 for i, (v, m, t) in enumerate(zip(values, memory, times))]
+
+    def packed_sequence(self, w, old, batch):
+        from .memory_batch import diagonal_batch
+        return diagonal_batch(w, old, batch, self)
 
     def validate(self, w, state):
         if set(state.slots) != {"memory"} or state.slots["memory"].shape != w.bias.shape:

@@ -1,4 +1,5 @@
 #include "tide/kernel.h"
+#include <algorithm>
 #include <stdexcept>
 
 namespace tide {
@@ -52,9 +53,53 @@ class BasicKernel final : public StateKernel {
     for (size_t i = 0; i < times.size(); ++i) {
       State s{values[i], times[i], old.observations + static_cast<Index>(i) + 1};
       if (kind_ == "ssm") s.slots["memory"] = memory[i];
+      if (i + 1 == times.size()) {
+        s.value = s.value.clone();
+        for (auto& [name, tensor] : s.slots) tensor = tensor.clone();
+      }
       states.push_back(std::move(s));
     }
     return states;
+  }
+  PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
+                                const PackedSequence& p) const override {
+    if (kind_ == "identity") return StateKernel::packed_sequence(w, old, p);
+    p.validate();
+    if (old.size() != p.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
+    std::map<Index, std::vector<Index>> groups;
+    for (size_t i = 0; i < old.size(); ++i) groups[p.offsets[i + 1] - p.offsets[i]].push_back(i);
+    PackedStates result; result.states.resize(p.times.size());
+    for (const auto& [length, ids] : groups) {
+      std::vector<Tensor> contents, initial;
+      for (auto i : ids) {
+        contents.push_back(p.contents.slice(0, p.offsets[i], p.offsets[i + 1]));
+        initial.push_back(kind_ == "ema" ? old[i].value : old[i].slots.at("memory"));
+      }
+      // One scan over [time,batch,width], with no padding or cross-sample terms.
+      auto h = at::stack(contents, 1); auto previous = at::stack(initial);
+      Tensor memory, values;
+      if (kind_ == "ema") values = affine_scan(at::sigmoid(w.decay).expand_as(h), h, previous);
+      else {
+        const auto [a, b] = coefficients(w, h); memory = affine_scan(a, b, previous);
+        values = summary(w, h, memory);
+      }
+      for (size_t row = 0; row < ids.size(); ++row) {
+        const auto i = ids[row];
+        for (Index t = 0; t < length; ++t) {
+          const auto j = p.offsets[i] + t;
+          State s{values[t][row], p.times[j], old[i].observations + t + 1};
+          if (kind_ == "ssm") s.slots["memory"] = memory[t][row];
+          if (t + 1 == length) {
+            s.value = s.value.clone();
+            for (auto& [name, tensor] : s.slots) tensor = tensor.clone();
+          }
+          result.states[j] = std::move(s);
+        }
+      }
+      ++result.calls; result.max_batch = std::max<Index>(result.max_batch, ids.size());
+      result.max_length = std::max(result.max_length, length);
+    }
+    return result;
   }
   Tensor read(const NodeWeights& w, const State&, const State& proposal, const Tensor& h,
               Index, const std::vector<Atom>&) const override {

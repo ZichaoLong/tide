@@ -8,7 +8,7 @@ Build and tests exited 0: **843 passed**, pytest 69.42 seconds.
 Retain `artifacts/cursor-20260921-0954/{status.json,task.log,verification/}`.
 
 New FP64/FP32 coverage: mixed EMA/SSM/Linear/Delta/attention cyclic graphs,
-parallel/unpacked versus serial/packed combinations, all Emit modes, selected
+serial/unpacked and parallel/packed combinations, all Emit modes, selected
 clear and observe-all/selected-only adoption. Multi-window traces, state/history,
 pending messages and parameter/input/initial-slot VJPs match the independent
 Python reference. Each-cut exports also match functional native streaming.
