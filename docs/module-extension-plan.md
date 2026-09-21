@@ -15,8 +15,8 @@ Joint EMA/SSM batch/sequence scans are qualified in `evidence/m5d-memory-packing
 
 Stable local ports are [qualified](evidence/local-ports.md). Full/Emit now returns
 per-slot payloads or absence, supports native/Python custom programs, and retains
-the old broadcast profile; its new slot-affine/phase profile is undergoing clean
-qualification (`full-programs.md`, `STATUS.md`). Remaining gates:
+the old broadcast profile; its slot-affine/phase profile is
+[qualified](evidence/full-programs.md). Remaining gates:
 
 1. Aggregate programs should receive complete source-tagged fibers and time. Add
    weighted mean, active-source softmax and all-source softmax with independent

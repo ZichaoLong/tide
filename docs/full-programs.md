@@ -1,6 +1,6 @@
 # Full programs and sparse per-slot emissions
 
-Implementation is undergoing qualification; see `STATUS.md` for current evidence.
+The interfaces and built-in profiles are [qualified](evidence/full-programs.md).
 `FullKernel` (C++) and `FullProgram` (Python) evaluate selected events after Next.
 They receive the complete read-only comparison State (value, slots, clock and
 observation count), logical time, content, control and outgoing slot-domain size.

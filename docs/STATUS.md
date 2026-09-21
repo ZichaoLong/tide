@@ -4,33 +4,24 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest clean qualification: **1296 tests passed** at
-`df2a851d759da9d6e5ccd7cef9ba931e416fdf07`.
-See `evidence/local-ports.md`; prior evidence is linked from `ROADMAP.md`.
-Previous qualification unit `tide-foundation-ports-20260921-1047`
+Latest clean qualification: **1489 tests passed** at
+`fda9a66858f008e481c4969f83a0d1d0bf609700`.
+See `evidence/full-programs.md`; prior evidence is linked from `ROADMAP.md`.
+Previous qualification unit `tide-foundation-full-20260921-1125`
 completed with exit 0, no worker remains. Artifacts:
-`artifacts/ports-20260921-1047/{status.json,task.log,verification/}`.
+`artifacts/full-20260921-1125/{status.json,task.log,verification/}`.
 
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
 SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v5; checkpoint payload remains
+tags. See `local-ports.md`. Native graph format is v6; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
-Active uncommitted increment: per-slot Full/Emit. The concrete API, example
-profiles, integration sites and acceptance gates are in `full-programs.md`.
-Programs and all schedules are integrated. New-feature/native CLI checks:
-**195 passed** in FP64/FP32. After tightening the adapter's subclass/backbone
-guards, the Full contract suite passed **21 tests**. Native graph v6 includes
-emission/phase policy. Development build `artifacts/full-build-20260921-1114`
-exited 0; no worker remains.
-
-Next: commit the coherent implementation, then launch clean qualification under
-unit `tide-foundation-full-20260921-1125`, artifacts
-`artifacts/full-20260921-1125/{status.json,task.log,verification/}`.
-Command: `python scripts/qualify.py --output-dir artifacts/full-20260921-1125`.
-Freeze source while active, archive evidence separately after terminal exit 0,
-then proceed to source-aware Aggregate and full Next/Read contracts.
+Per-slot Full/Emit is qualified: native/Python program extension interfaces,
+slot-affine parameters and sparse phase-based emissions across all schedules.
+The concrete API and boundaries are in `full-programs.md`. No active job or
+uncommitted implementation remains. Next: source-aware Aggregate, retaining full
+tagged fibers and stable local input slots, then full Next/Read contracts.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -55,9 +46,9 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Generalize Full/Emit to return per-slot values or absence using the qualified
-   layouts. Finish the active `full-programs.md` qualification first.
-2. Extend source-aware Aggregate, full Next/Read, region history/selector, then
+1. Implement source-aware Aggregate with weighted mean, active-source softmax and
+   all-source softmax. Preserve absent/zero and inactive-parameter VJP distinctions.
+2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache
    allocation, structured Delta chunks and observed sparse work. No speed claim
