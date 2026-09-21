@@ -23,6 +23,8 @@ Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) �
 其额外计算单独计数；`no_grad` / `inference_mode` 不需要这部分重放。
 [Full 程序接口](docs/full-programs.md) 支持逐槽位载荷及缺席，
 通过 [局部端口映射](docs/local-ports.md) 保持 SettleGraph 编码与参数共享的含义。
+[Aggregate 程序接口](docs/aggregate-programs.md) 保留来源标签及逐来源贡献，
+提供求和、均值、正权重均值、活动来源和全部来源 softmax。
 具体覆盖以 [验证证据](docs/ROADMAP.md) 为准；LH 数值对齐等仍见 [后续工作](docs/module-extension-plan.md)。
 源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
 

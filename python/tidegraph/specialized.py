@@ -5,6 +5,7 @@ from .blocks import canonicalize
 from .records import Atom, Result, State
 from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
+from .aggregate import evaluate as evaluate_aggregate
 
 
 def validate_topology(graph, topology):
@@ -22,7 +23,9 @@ def validate_topology(graph, topology):
 
 def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     fiber = sorted(atoms, key=lambda a: a.key())
-    h = model.aggregate(fiber)
+    event = dict(batch=batch, node=node, time=time, fiber=fiber)
+    evaluate_aggregate(graph, model, [event])
+    h = event["content"]
     old = q.states.get((batch, node), model.nodes[node].initial())
     prop, desc = model.nodes[node].prepare(old, h, time)
     # A singleton softmax retains the generic zero VJP connection to its score.
@@ -33,7 +36,7 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     history[node] = history.get(node, 0) + 1; q.history[batch, node] = history
     offsets = graph.port_indexes[1].offsets
     value = evaluate_full(model.nodes[node], [FullInput(prop, time, h, control)], offsets[node+1] - offsets[node], mode, zeta)[0]
-    return dict(batch=batch, node=node, time=time, fiber=fiber, content=h, proposal=prop.value,
+    return dict(event, proposal=prop.value,
                 descriptor=desc, control=control, active=True, comparison=prop.value,
                 next=next_state.value, history=dict(history), full=value.value, emitted=value.emitted, proposal_slots=prop.slots,
                 comparison_slots=prop.slots, next_slots=next_state.slots)

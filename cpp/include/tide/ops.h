@@ -2,7 +2,6 @@
 #include "tide/types.h"
 
 namespace tide {
-Tensor aggregate(const Model&, const std::vector<Atom>&);
 Tensor emit(const Tensor& h, const Tensor& g, const Tensor& p,
             const std::string& mode, double zeta);
 Tensor full(const NodeWeights&, const Tensor& comparison, const Tensor& h,

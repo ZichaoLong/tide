@@ -10,14 +10,19 @@ class Native:
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
         from .full import ProjectionEmit, validate_program
+        from .aggregate import SourceAggregate, validate_program as validate_aggregate
         for v, spec in enumerate(graph.nodes):
             if type(model.nodes[v].full_program) is not ProjectionEmit:
                 raise ValueError("Python custom Full has no native implementation")
             offsets = graph.port_indexes[1].offsets
             validate_program(model.nodes[v], spec, offsets[v+1] - offsets[v])
+            if type(model.nodes[v].aggregate_program) is not SourceAggregate:
+                raise ValueError("Python custom Aggregate has no native implementation")
+            incoming = graph.port_indexes[0].offsets
+            validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
         g = core.Graph()
         g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
-                             n.emission, n.emit_period, n.emit_phases)
+                             n.emission, n.emit_period, n.emit_phases, n.aggregation)
                    for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]

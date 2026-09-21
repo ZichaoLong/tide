@@ -1,5 +1,6 @@
 #include "tide/kernel.h"
 #include "tide/full.h"
+#include "tide/aggregate.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -49,6 +50,7 @@ void configure_model(const Graph& g, Model& m) {
     }
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;
     if (!m.nodes[i].full_kernel) m.nodes[i].full_kernel = make_full_kernel(g.nodes[i]);
+    if (!m.nodes[i].aggregate_kernel) m.nodes[i].aggregate_kernel = make_aggregate_kernel(g.nodes[i]);
   }
 }
 }  // namespace tide

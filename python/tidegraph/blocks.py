@@ -5,6 +5,7 @@ from .ops import select
 from .records import Atom, State
 from .packing import prepare_sequences
 from .full import FullInput, evaluate as evaluate_full
+from .aggregate import evaluate as evaluate_aggregate
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
@@ -22,10 +23,17 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
             if not atoms:
                 continue
-            event = dict(batch=batch, node=node, time=time, fiber=atoms, content=model.aggregate(atoms))
+            event = dict(batch=batch, node=node, time=time, fiber=atoms)
             by_node[node].append(event); by_sequence[batch, node].append(event)
             by_frame[batch, time].append(event); events.append(event)
     for node in by_node:
+        es = by_node[node]
+        evaluate_aggregate(graph, model, es, packed=True)
+        stats["aggregate_calls"] = stats.get("aggregate_calls", 0) + 1
+        if torch.is_grad_enabled():
+            stats["semantic_aggregate_replays"] = stats.get("semantic_aggregate_replays", 0) + len(es)
+        if not model.nodes[node].aggregate_program.joint_batch:
+            stats["aggregate_scalar_fallback_steps"] = stats.get("aggregate_scalar_fallback_steps", 0) + len(es)
         region = graph.regions[graph.nodes[node].region]
         if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
             sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]

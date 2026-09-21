@@ -51,6 +51,13 @@ of local output-slot payloads. Only present coordinates are delivered; numerical
 zero still sends. Broadcast retains the first profile; slot-affine projection and
 explicit logical-time phases instantiate distinct payloads and absence.
 
+`aggregate-programs.md` adds mean, positive weighted mean, active-source softmax
+and all-source softmax. Aggregate sees tagged atoms, time, local input slots and
+physical scales, and returns summary content plus optional per-source content.
+Only all-source softmax differentiates absent-source logits via its denominator;
+missing messages and present zeros remain distinct. Existing memory profiles
+consume summary content; source-aware state programs are a subsequent extension.
+
 ## Equality and training
 
 Additional local state profiles are specified in `state-programs.md` (SSM),

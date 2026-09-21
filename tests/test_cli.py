@@ -50,3 +50,11 @@ def test_cpp_custom_full_kernel(dtype):
     result = subprocess.run([str(binary), "--device=cpu", "--dtype=" + str(dtype).split(".")[-1]],
                             text=True, capture_output=True, check=True)
     assert result.stdout.strip() == "custom-full-kernel: passed"
+
+
+def test_cpp_custom_aggregate_kernel(dtype):
+    import _tide_native
+    binary = Path(_tide_native.__file__).with_name("tidegraph-aggregate-check")
+    result = subprocess.run([str(binary), "--device=cpu", "--dtype=" + str(dtype).split(".")[-1]],
+                            text=True, capture_output=True, check=True)
+    assert result.stdout.strip() == "custom-aggregate-kernel: passed"

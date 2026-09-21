@@ -1,6 +1,7 @@
 #include "tide/ops.h"
 #include "tide/kernel.h"
 #include "tide/full.h"
+#include "tide/aggregate.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -29,6 +30,8 @@ void validate_model(const Graph& g, const Model& m) {
     for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
     require(static_cast<bool>(w.full_kernel), "Full kernel is not configured");
     w.full_kernel->validate_weights(w, g.outgoing_ports.offsets[node+1] - g.outgoing_ports.offsets[node]);
+    require(static_cast<bool>(w.aggregate_kernel), "Aggregate kernel is not configured");
+    w.aggregate_kernel->validate_weights(w, g.incoming_ports.offsets[node+1] - g.incoming_ports.offsets[node]);
   }
   require(m.input_scale.size() == g.inputs.size() && m.agg_scale.size() == g.edges.size()
           && m.edge_scale.size() == g.edges.size() && m.output_scale.size() == g.outputs.size(),

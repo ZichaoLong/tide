@@ -19,6 +19,7 @@
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
+| `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
@@ -51,7 +52,9 @@ and an opt-in exact sequence contract. Built-in profiles are EMA, identity and
 selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed state
 prefill is isolated in `block_prepare.cpp`; its checked segment representation is
 in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
-from scheduling; region/Agg/Next generalization remains in the module extension
+from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
+native kernels and replay evaluation in separate source files. Region/Next/Read
+generalization remains in the module extension
 plan. Slot tensors are included in all state
 comparisons, resets, explicit detach and checkpoint v3.
 

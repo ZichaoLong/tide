@@ -56,7 +56,8 @@ class SettleGraph:
         encoded = Graph(g.nodes + (Node(r, identity=True), Node(r + 1, identity=True)), edges,
                         g.regions + (Region(1), Region(1)), (n,), (n + 1,), layout)
         em = Model(encoded, model.width, dtype=model.nodes[0].bias.dtype,
-                   full_programs={v: w.full_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})
+                   full_programs={v: w.full_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
+                   aggregate_programs={v: w.aggregate_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity})
         em.nodes = torch.nn.ModuleList(list(model.nodes) + list(em.nodes[-2:]))
         def one():
             return torch.nn.Parameter(model.nodes[0].bias.new_ones(()), requires_grad=False)

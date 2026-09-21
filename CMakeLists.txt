@@ -6,6 +6,7 @@ find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
 add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/pool.cpp
+  cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
   cpp/src/kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
@@ -21,6 +22,8 @@ add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/src/runtime
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph)
+add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp cpp/src/runtime.cpp)
+target_link_libraries(tidegraph-aggregate-check PRIVATE tidegraph)
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)

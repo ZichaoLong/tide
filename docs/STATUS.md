@@ -14,14 +14,24 @@ completed with exit 0, no worker remains. Artifacts:
 Stable local input/output mappings, native flat inverse indexes, SettleGraph
 remapping and graph/checkpoint identity guards are qualified. A mixed-input
 SettleGraph case also now restores canonical fiber order after projecting source
-tags. See `local-ports.md`. Native graph format is v6; checkpoint payload remains
+tags. See `local-ports.md`. Native graph format is v7; checkpoint payload remains
 v3, with a changed graph fingerprint. No implicit old-checkpoint migration.
 
 Per-slot Full/Emit is qualified: native/Python program extension interfaces,
 slot-affine parameters and sparse phase-based emissions across all schedules.
-The concrete API and boundaries are in `full-programs.md`. No active job or
-uncommitted implementation remains. Next: source-aware Aggregate, retaining full
-tagged fibers and stable local input slots, then full Next/Read contracts.
+The concrete API and boundaries are in `full-programs.md`. No active job remains.
+Active increment: source-aware Aggregate; contract and acceptance gates are in
+`aggregate-programs.md`. Native/Python seams, optional per-source contributions,
+five profiles, grouped batching and all schedules are implemented. Development
+build `artifacts/aggregate-build-20260921-1157` exited 0; no worker remains.
+Aggregate/CLI checks passed 230 tests; inference and SettleGraph specialization
+checks passed 14 more in FP64/FP32.
+
+Next: commit this coherent increment, then launch clean qualification with
+`python scripts/qualify.py --output-dir artifacts/aggregate-20260921-1203` under
+unit `tide-foundation-aggregate-20260921-1203`. Freeze source while active. Retain
+`artifacts/aggregate-20260921-1203/{status.json,task.log,verification/}` and archive
+evidence in a separate commit only after terminal success. Full Next/Read follow.
 
 The packed isolated-gradient defect is fixed for tested first-order public-root
 VJPs to parameters, external inputs and initial-state leaves. Packed numerical
@@ -46,8 +56,7 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Implement source-aware Aggregate with weighted mean, active-source softmax and
-   all-source softmax. Preserve absent/zero and inactive-parameter VJP distinctions.
+1. Complete clean Aggregate qualification and archive its evidence.
 2. Extend full Next/Read, region history/selector, then
    loss statistics and original LH C++ inference comparison (`lh-compatibility.md`).
 3. Performance qualification must address replay cost/optimized backward, cache

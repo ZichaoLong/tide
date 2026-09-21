@@ -18,10 +18,11 @@ per-slot payloads or absence, supports native/Python custom programs, and retain
 the old broadcast profile; its slot-affine/phase profile is
 [qualified](evidence/full-programs.md). Remaining gates:
 
-1. Aggregate programs should receive complete source-tagged fibers and time. Add
-   weighted mean, active-source softmax and all-source softmax with independent
-   forward/VJP checks. Do not confuse absent sources with zero-valued messages;
-   all-source denominators can differentiate inactive source parameters.
+1. Aggregate interfaces and weighted mean, active-source softmax and all-source
+   softmax are implemented with full tags, local slots and optional contributions;
+   clean qualification is pending (`aggregate-programs.md`). Built-in memory
+   profiles still consume the summary; expose complete typed content through
+   Upd/Read/Next/Full when adding source-aware memory, before LH attention.
 2. Expose the full Next inputs (old, comparison, time, content, active, control).
    A custom Next that uses controls invalidates the present identity-Next prefill
    contract unless it provides an exact joint contract. Read must support content,
@@ -44,7 +45,8 @@ same regression/evidence process, not a one-time blanket certification.
 State formulas now live in Python memory modules and native state kernels behind
 `cpp/include/tide/kernel.h`. Scheduling calls these interfaces without Python
 callbacks. Full programs live in `full.py`/`full_kernel.cpp`, with FFN/Emit
-primitives in `ops.py`/`ops.cpp`. Region/Agg/Next generalization remains work.
+primitives in `ops.py`/`ops.cpp`. Aggregate programs are separate from scheduling;
+Region/Next/Read generalization remains work.
 Keep Python scheduling independent.
 
 - Typed content must preserve source-tagged atoms as well as an optional summary;

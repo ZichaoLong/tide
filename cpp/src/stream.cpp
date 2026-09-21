@@ -3,6 +3,7 @@
 #include "tide/kernel.h"
 #include "tide/autograd.h"
 #include "tide/full.h"
+#include "tide/aggregate.h"
 #include "tide/delivery.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -69,15 +70,18 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     for (const auto& [node, ids] : by_node) {
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_state_replays"] += ids.size();
+      stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
+      if (options_.packed && replay) stats["semantic_aggregate_replays"] += ids.size();
+      if (options_.packed && !model_.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
       jobs.push_back([&, node, ids] {
         const auto& w = model_.nodes[node];
+        evaluate_aggregate(graph_, model_, events, ids, options_.packed);
         std::vector<State> old;
         std::vector<Tensor> content;
         std::vector<Index> times;
         FiberViews fiber_views;
         for (auto i : ids) {
           auto& e = events[i];
-          e.content = aggregate(model_, e.fiber);
           if (options_.packed) {
             old.push_back(e.old); content.push_back(e.content); times.push_back(time); fiber_views.push_back(&e.fiber);
           }

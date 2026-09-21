@@ -28,7 +28,7 @@ def window_records(result):
     for e in result.trace:
         event = {k: getattr(e, k) for k in ("batch", "node", "time", "content", "proposal", "descriptor",
                                           "control", "comparison", "next", "active", "history",
-                                          "proposal_slots", "comparison_slots", "next_slots")}
+                                          "proposal_slots", "comparison_slots", "next_slots", "contributions")}
         event["fiber"] = [atom(a) for a in e.fiber]
         if e.active:
             event["full"] = e.full

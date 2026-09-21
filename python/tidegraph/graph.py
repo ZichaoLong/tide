@@ -26,6 +26,7 @@ class Node:
     emission: str = "broadcast"
     emit_period: int = 1
     emit_phases: tuple[int, ...] = ()  # -1 always, -2 never; empty means all.
+    aggregation: str = "sum"
 
     def __post_init__(self):
         object.__setattr__(self, "emit_phases", tuple(self.emit_phases))
@@ -81,6 +82,8 @@ class Graph:
                 raise ValueError("invalid emission phase policy")
             if node.identity and (node.emission != "broadcast" or node.emit_phases or node.emit_period != 1):
                 raise ValueError("identity boundaries require unconditional broadcast")
+            if node.identity and node.aggregation != "sum":
+                raise ValueError("identity boundaries require sum Aggregate")
 
     @cached_property
     def ports(self):

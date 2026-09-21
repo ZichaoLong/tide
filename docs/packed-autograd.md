@@ -11,7 +11,7 @@ agreement and objectives rooting all outputs do not detect this defect.
 ## Current correctness path
 
 Python blocks and native streaming/blocks retain the requested packed forward
-kernels. They evaluate packed state/read and Full without autograd recording.
+kernels. They evaluate packed Aggregate, state/read and Full without autograd recording.
 When grad mode is enabled, they also construct independent scalar/event graphs
 from the original per-event inputs and per-owner state, before stacking.
 
@@ -32,7 +32,8 @@ Repeated `autograd.grad(..., retain_graph=True)` queries are supported.
 ## Cost and limits
 
 - `semantic_state_replays` counts extra per-event step/read evaluations;
-  `semantic_full_replays` counts extra selected Full evaluations. Existing
+  `semantic_full_replays` counts extra selected Full evaluations;
+  `semantic_aggregate_replays` counts extra per-fiber Aggregate evaluations. Existing
   batch/sequence/Full counters count the packed forward work separately.
   Native counters are accumulated by the coordinating thread.
 - `no_grad` and `inference_mode` do no semantic replay. Their packing and node
@@ -56,6 +57,7 @@ Repeated `autograd.grad(..., retain_graph=True)` queries are supported.
 Binding: `python/tidegraph/autograd.py`, `cpp/src/autograd.cpp`.
 Preparation: `packing.py`, `block_prepare.cpp`, `stream.cpp`.
 Full: `blocks.py`, `block.cpp`, `stream.cpp`.
+Aggregate: `aggregate.py`, `aggregate_kernel.cpp`, `aggregate_evaluate.cpp`.
 
 `tests/isolated_cases.py` supplies separate input/initial-state leaves and
 upstream parameters. `test_isolated_gradients.py` separately roots outputs,

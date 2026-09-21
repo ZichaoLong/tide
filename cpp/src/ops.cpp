@@ -19,14 +19,6 @@ class HST : public torch::autograd::Function<HST> {
   }
 };
 }  // namespace
-Tensor aggregate(const Model& m, const std::vector<Atom>& atoms) {
-  Tensor h;
-  for (const auto& a : atoms) {
-    auto value = a.value * (a.kind == 0 ? m.input_scale.at(a.source) : m.agg_scale.at(a.source));
-    h = h.defined() ? h + value : value;
-  }
-  return h;
-}
 Tensor emit(const Tensor& h, const Tensor& g, const Tensor& p, const std::string& mode, double zeta) {
   if (mode == "hard") return g;
   if (mode == "softp") return h + p.unsqueeze(-1) * (g - h);

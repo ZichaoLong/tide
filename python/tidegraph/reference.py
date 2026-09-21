@@ -3,6 +3,7 @@ from .ops import select
 from .records import Atom, Result, State
 from .validation import validate_window
 from .full import FullInput, evaluate as evaluate_full
+from .aggregate import evaluate as evaluate_aggregate
 
 
 def run(graph, model, continuation, external, stop, *, sealed_until,
@@ -25,11 +26,12 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                     continue
                 visits += 1
                 old = q.states.get((batch, node), model.nodes[node].initial())
-                h = model.aggregate(fiber)
+                event = dict(batch=batch, node=node, time=time, fiber=fiber)
+                evaluate_aggregate(graph, model, [event])
+                h = event["content"]
                 prop, desc = model.nodes[node].prepare(old, h, time)
-                prepared[batch, node] = dict(batch=batch, node=node, time=time, fiber=fiber,
-                                            content=h, proposal=prop.value, descriptor=desc,
-                                            old=old, proposal_state=prop)
+                event.update(proposal=prop.value, descriptor=desc, old=old, proposal_state=prop)
+                prepared[batch, node] = event
         for batch in range(q.batch_size):
             for r, region in enumerate(graph.regions):
                 nodes = sorted(v for b, v in prepared if b == batch and graph.nodes[v].region == r)

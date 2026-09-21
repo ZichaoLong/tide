@@ -13,10 +13,10 @@ using namespace tide;
 PYBIND11_MODULE(_tide_native, m) {
   py::class_<Edge>(m, "Edge").def(py::init<Index, Index, Index>())
     FIELD(Edge, source) FIELD(Edge, target) FIELD(Edge, delay);
-  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>>())
+  py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>, std::string>())
     FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity) FIELD(Node, memory) FIELD(Node, full)
     FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window)
-    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases);
+    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation);
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority);
   py::class_<Adjacency>(m, "Adjacency") FIELD(Adjacency, offsets) FIELD(Adjacency, edges);
@@ -50,6 +50,11 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_property_readonly("emitted", [](const Event& e) {
       std::map<Index, Tensor> result;
       for (const auto& value : e.emitted) result.emplace(value.slot, value.value);
+      return result;
+    })
+    .def_property_readonly("contributions", [](const Event& e) {
+      std::map<Index, Tensor> result;
+      for (const auto& value : e.contributions) result.emplace(value.slot, value.value);
       return result;
     })
     .def_property_readonly("proposal_slots", [](const Event& e) { return e.proposed_state.slots; })

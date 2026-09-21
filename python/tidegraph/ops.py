@@ -4,6 +4,7 @@ from torch import nn
 from .records import State
 from .memory import kernel, reset
 from .full import ProjectionEmit
+from .aggregate import SourceAggregate
 
 
 class _HST(torch.autograd.Function):
@@ -30,7 +31,8 @@ def emit(h, g, p, mode, zeta=1.0):
 
 
 class NodeWeights(nn.Module):
-    def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None):
+    def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
+                 input_slots=0, aggregate_program=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -41,6 +43,7 @@ class NodeWeights(nn.Module):
         self.kernel = kernel("ema" if spec is None else spec.memory, spec)
         self.full_kind = "tanh" if spec is None else spec.full
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program
+        self.aggregate_program = SourceAggregate("sum" if spec is None else spec.aggregation) if aggregate_program is None else aggregate_program
         self.extra = nn.ParameterDict()
         if spec is not None and spec.memory == "attention":
             if width % spec.query_heads:
@@ -69,6 +72,12 @@ class NodeWeights(nn.Module):
             for slot in range(output_slots):
                 self.extra[f"emit_w_{slot}"] = parameter((width, width), 0.2)
                 self.extra[f"emit_b_{slot}"] = parameter((width,), 0.05)
+        if isinstance(self.aggregate_program, SourceAggregate):
+            kind = self.aggregate_program.kind
+            prefix = "agg_mass_" if kind == "weighted_mean" else "agg_logit_" if "softmax" in kind else None
+            if prefix:
+                for slot in range(input_slots):
+                    self.extra[f"{prefix}{slot}"] = parameter((), 0.2)
 
     def initial(self):
         return self.kernel.initial(self)
@@ -107,7 +116,7 @@ class NodeWeights(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None):
+    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
@@ -116,9 +125,14 @@ class Model(nn.Module):
         programs = {} if full_programs is None else full_programs
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in programs):
             raise ValueError("invalid custom Full owner")
+        aggregates = {} if aggregate_programs is None else aggregate_programs
+        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in aggregates):
+            raise ValueError("invalid custom Aggregate owner")
         offsets = graph.port_indexes[1].offsets
+        incoming = graph.port_indexes[0].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
-            width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v)) for v, n in enumerate(graph.nodes))
+            width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
+            incoming[v+1] - incoming[v], aggregates.get(v)) for v, n in enumerate(graph.nodes))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -126,15 +140,6 @@ class Model(nn.Module):
         self.agg_scale = scales(len(graph.edges))
         self.edge_scale = scales(len(graph.edges))
         self.output_scale = scales(len(graph.outputs))
-
-    def aggregate(self, atoms):
-        values = [a.value * (self.input_scale[a.source] if a.kind == 0
-                            else self.agg_scale[a.source]) for a in atoms]
-        # Explicit canonical fold also fixes floating addition order.
-        h = values[0]
-        for x in values[1:]:
-            h = h + x
-        return h
 
 
 def select(nodes, descriptors, history, region):
@@ -159,6 +164,7 @@ class BoundaryWeights(nn.Module):
         self.extra = nn.ParameterDict()
         from .graph import Node
         self.full_program = ProjectionEmit(Node(0, identity=True))
+        self.aggregate_program = SourceAggregate()
 
     def initial(self):
         return State(torch.zeros_like(self.bias))

@@ -45,7 +45,7 @@ Preserve simple paths as comparison anchors.
 Stable local port layouts, native flat inverse indexes and SettleGraph remapping
 are [qualified](evidence/local-ports.md). Extensible Full/Emit programs and sparse
 per-slot emissions are [qualified](evidence/full-programs.md). Source-aware
-Aggregate is the next local-program gate.
+Aggregate is implemented and undergoing clean qualification (`aggregate-programs.md`).
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

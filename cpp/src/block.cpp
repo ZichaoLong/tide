@@ -3,6 +3,7 @@
 #include "tide/block.h"
 #include "tide/autograd.h"
 #include "tide/full.h"
+#include "tide/aggregate.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -29,15 +30,21 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       Event e;
       e.batch = frame.batch; e.node = node; e.time = frame.time; e.fiber = it->second;
       std::sort(e.fiber.begin(), e.fiber.end(), [](const auto& a, const auto& b) { return a.key() < b.key(); });
-      e.content = aggregate(m, e.fiber);
       by_node[node].push_back(events.size());
       by_sequence[{frame.batch, node}].push_back(events.size());
       by_frame[{frame.batch, frame.time}].push_back(events.size());
       events.push_back(std::move(e));
     }
   }
-  prefill_states(g, m, q, options, pool, events, by_sequence, stats);
   std::vector<std::function<void()>> jobs;
+  for (const auto& [node, ids] : by_node) {
+    ++stats["aggregate_calls"];
+    if (at::GradMode::is_enabled()) stats["semantic_aggregate_replays"] += ids.size();
+    if (!m.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
+    jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, true); });
+  }
+  pool.run(std::move(jobs));
+  prefill_states(g, m, q, options, pool, events, by_sequence, stats);
   for (const auto& frame : frames) {
     const auto& ids = by_frame[{frame.batch, frame.time}];
     if (ids.empty()) continue;

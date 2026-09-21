@@ -21,6 +21,7 @@ struct Node {
   std::string emission = "broadcast";
   Index emit_period = 1;
   std::vector<Index> emit_phases;
+  std::string aggregation = "sum";
 };
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };
@@ -62,12 +63,14 @@ struct Continuation {
 };
 class StateKernel;
 class FullKernel;
+class AggregateKernel;
 struct NodeWeights {
   Tensor decay, weight, bias, read;
   std::map<std::string, Tensor> extra;
   std::shared_ptr<const StateKernel> kernel;
   std::string full_kind = "tanh";
   std::shared_ptr<const FullKernel> full_kernel;
+  std::shared_ptr<const AggregateKernel> aggregate_kernel;
 };
 struct Model {
   std::vector<NodeWeights> nodes;
@@ -82,6 +85,7 @@ struct Event {
   State old, proposed_state, comparison_state, next_state;
   bool active = false;
   std::vector<SlotValue> emitted;
+  std::vector<SlotValue> contributions;
   std::map<Index, Index> history;
 };
 struct Output { Index batch, time, port; Tensor value; };
