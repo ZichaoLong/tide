@@ -24,7 +24,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             by_frame[batch, time].append(event); events.append(event)
     for (batch, node), es in by_sequence.items():
         region = graph.regions[graph.nodes[node].region]
-        if prefill and region.observe_all and not graph.nodes[node].clear:
+        if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
             old = q.states.get((es[0]["batch"], node), model.nodes[node].initial())
             states, descriptors = model.nodes[node].prepare_block(old, torch.stack([e["content"] for e in es]),
                                                                 [e["time"] for e in es])
@@ -50,11 +50,13 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
         for e in es:
             node = e["node"]
             old = q.states.get((batch, node), model.nodes[node].initial())
+            proposal_slots = e["proposal_state"].slots
             cmp = e.pop("proposal_state") if region.observe_all or node in active else old
             e.pop("proposal_state", None)
-            value = cmp.value * 0 if graph.nodes[node].clear and node in active else cmp.value
-            q.states[batch, node] = State(value, cmp.last_time, cmp.observations)
-            e.update(active=node in active, control=controls[node], comparison=cmp.value, next=value, history=dict(history))
+            next_state = model.nodes[node].next(cmp, graph.nodes[node].clear and node in active)
+            q.states[batch, node] = next_state
+            e.update(active=node in active, control=controls[node], comparison=cmp.value, next=next_state.value,
+                     history=dict(history), proposal_slots=proposal_slots, comparison_slots=cmp.slots, next_slots=next_state.slots)
     for node, es in by_node.items():
         active = [e for e in es if e["active"]]
         if not active:

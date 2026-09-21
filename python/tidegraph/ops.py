@@ -2,7 +2,7 @@
 import torch
 from torch import nn
 from .records import State
-from .scan import affine_scan
+from .memory import kernel, reset
 
 
 class _HST(torch.autograd.Function):
@@ -29,7 +29,7 @@ def emit(h, g, p, mode, zeta=1.0):
 
 
 class NodeWeights(nn.Module):
-    def __init__(self, width, generator, dtype):
+    def __init__(self, width, generator, dtype, spec=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -37,23 +37,49 @@ class NodeWeights(nn.Module):
         self.weight = parameter((width, width), 0.15)
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
+        self.kernel = kernel("ema" if spec is None else spec.memory)
+        self.full_kind = "tanh" if spec is None else spec.full
+        self.extra = nn.ParameterDict()
+        if spec is not None and spec.memory == "ssm":
+            for name in ("ssm_dt", "ssm_b", "ssm_c"):
+                self.extra[name] = parameter((width, width), 0.15)
+            self.extra["ssm_a"] = parameter((width,), 0.1)
+            self.extra["ssm_skip"] = parameter((width,), 0.2)
+        if self.full_kind == "swiglu":
+            for name, shape in (("ffn_gate", (width, width * 2)), ("ffn_up", (width, width * 2)),
+                                ("ffn_down", (width * 2, width))):
+                self.extra[name] = parameter(shape, 0.15)
+        elif self.full_kind != "tanh":
+            raise ValueError("unknown Full profile")
 
     def initial(self):
-        return State(self.bias.new_zeros(self.bias.shape))
+        return self.kernel.initial(self)
 
     def prepare(self, old, content, time):
-        value = self.decay.sigmoid() * old.value + content
-        proposal = State(value, time, old.observations + 1)
-        return proposal, (value * self.read).sum(-1)
+        proposal = self.kernel.step(self, old, content, time)
+        return proposal, (proposal.value * self.read).sum(-1)
 
     def full(self, comparison, content, probability, mode, zeta):
-        g = content + (comparison @ self.weight + self.bias).tanh()
+        if self.full_kind == "swiglu":
+            g = content + (torch.nn.functional.silu(comparison @ self.extra["ffn_gate"])
+                           * (comparison @ self.extra["ffn_up"])) @ self.extra["ffn_down"]
+        else:
+            g = content + (comparison @ self.weight + self.bias).tanh()
         return emit(content, g, probability, mode, zeta)
 
     def prepare_block(self, old, contents, times):
-        values = affine_scan(self.decay.sigmoid().expand_as(contents), contents, old.value)
-        states = [State(v, t, old.observations + i + 1) for i, (v, t) in enumerate(zip(values, times))]
-        return states, (values * self.read).sum(-1)
+        states = self.kernel.sequence(self, old, contents, times)
+        return states, (torch.stack([s.value for s in states]) * self.read).sum(-1)
+
+    @property
+    def can_prefill(self):
+        return self.kernel.sequence_contract
+
+    def next(self, comparison, clear):
+        return reset(comparison) if clear else comparison
+
+    def validate(self, state):
+        self.kernel.validate(self, state)
 
 
 class Model(nn.Module):
@@ -63,7 +89,7 @@ class Model(nn.Module):
             raise ValueError("CPU float32/float64 and positive width required")
         self.width = width
         generator = torch.Generator().manual_seed(seed)
-        self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(width, generator, dtype)
+        self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(width, generator, dtype, n)
                                    for n in graph.nodes)
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
@@ -102,6 +128,7 @@ class BoundaryWeights(nn.Module):
         super().__init__()
         for name, shape in (("decay", (width,)), ("weight", (width, width)), ("bias", (width,)), ("read", (width,))):
             self.register_buffer(name, torch.zeros(shape, dtype=dtype))
+        self.extra = nn.ParameterDict()
 
     def initial(self):
         return State(torch.zeros_like(self.bias))
@@ -112,5 +139,16 @@ class BoundaryWeights(nn.Module):
     def prepare_block(self, old, contents, times):
         return [old for _ in times], contents.new_zeros((len(times),))
 
+    @property
+    def can_prefill(self):
+        return True
+
     def full(self, comparison, content, probability, mode, zeta):
         return content
+
+    def next(self, comparison, clear):
+        return reset(comparison) if clear else comparison
+
+    def validate(self, state):
+        if state.slots:
+            raise ValueError("identity state has unexpected slots")

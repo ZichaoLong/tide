@@ -8,14 +8,19 @@ class Native:
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         g = core.Graph()
-        g.nodes = [core.Node(n.region, n.clear, n.identity) for n in graph.nodes]
+        g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full) for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs
         g.compile()
         self.compiled = g
         m = core.Model()
-        m.nodes = [core.NodeWeights(w.decay, w.weight, w.bias, w.read) for w in model.nodes]
+        weights = []
+        for w in model.nodes:
+            weight = core.NodeWeights(w.decay, w.weight, w.bias, w.read)
+            weight.extra = dict(w.extra.items())
+            weights.append(weight)
+        m.nodes = weights
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
         options = core.Options()
@@ -35,7 +40,7 @@ class Native:
             raise ValueError("continuation graph identity mismatch")
         q = c.Continuation()
         q.identity, q.batch_size, q.cut = self.compiled.identity, continuation.batch_size, continuation.cut
-        q.states = {k: c.State(s.value, s.last_time, s.observations) for k, s in continuation.states.items()}
+        q.states = {k: c.State(s.value, s.last_time, s.observations, s.slots) for k, s in continuation.states.items()}
         q.history, q.ledger = continuation.history, continuation.ledger
         q.pending = [c.Atom(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value)
                      for a in continuation.pending]
@@ -45,12 +50,13 @@ class Native:
             return Atom(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value)
         r = result.continuation
         out_q = Continuation(self.graph.identity, r.batch_size, r.cut,
-                             {k: State(s.value, s.last_time, s.observations) for k, s in r.states.items()},
+                             {k: State(s.value, s.last_time, s.observations, s.slots) for k, s in r.states.items()},
                              r.history, [atom(a) for a in r.pending], r.ledger)
         events = []
         for e in result.trace:
             event = {k: getattr(e, k) for k in ("batch", "node", "time", "content", "proposal", "descriptor",
-                                              "control", "comparison", "next", "active", "history")}
+                                              "control", "comparison", "next", "active", "history",
+                                              "proposal_slots", "comparison_slots", "next_slots")}
             event["fiber"] = [atom(a) for a in e.fiber]
             if e.active:
                 event["full"] = e.full

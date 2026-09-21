@@ -2,6 +2,7 @@
 #include <ATen/ATen.h>
 #include <cstdint>
 #include <map>
+#include <memory>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -11,7 +12,11 @@ using Tensor = at::Tensor;
 using Index = int64_t;
 using Owner = std::pair<Index, Index>;
 struct Edge { Index source, target, delay; };
-struct Node { Index region; bool clear = false, identity = false; };
+struct Node {
+  Index region;
+  bool clear = false, identity = false;
+  std::string memory = "ema", full = "tanh";
+};
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };
 struct Graph {
@@ -24,7 +29,11 @@ struct Graph {
   void compile();
   std::vector<Index> topological_order() const;
 };
-struct State { Tensor value; Index last_time = -1, observations = 0; };
+struct State {
+  Tensor value;
+  Index last_time = -1, observations = 0;
+  std::map<std::string, Tensor> slots;
+};
 struct External { Index batch, port, position, time; Tensor value; };
 struct Atom {
   Index batch, node, time, kind, source, position;
@@ -39,7 +48,13 @@ struct Continuation {
   std::vector<Atom> pending;
   std::map<Owner, Owner> ledger;
 };
-struct NodeWeights { Tensor decay, weight, bias, read; };
+class StateKernel;
+struct NodeWeights {
+  Tensor decay, weight, bias, read;
+  std::map<std::string, Tensor> extra;
+  std::shared_ptr<const StateKernel> kernel;
+  std::string full_kind = "tanh";
+};
 struct Model {
   std::vector<NodeWeights> nodes;
   std::vector<Tensor> input_scale, agg_scale, edge_scale, output_scale;
@@ -49,7 +64,7 @@ struct Event {
   Index batch, node, time;
   std::vector<Atom> fiber;
   Tensor content, proposal, descriptor, control, comparison, next, full;
-  State old, proposed_state;
+  State old, proposed_state, comparison_state, next_state;
   bool active = false;
   std::map<Index, Index> history;
 };

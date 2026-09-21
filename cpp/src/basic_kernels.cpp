@@ -1,0 +1,100 @@
+#include "tide/kernel.h"
+#include <stdexcept>
+
+namespace tide {
+namespace {
+class BasicKernel final : public StateKernel {
+ public:
+  explicit BasicKernel(std::string kind) : kind_(std::move(kind)) {}
+  State initial(const NodeWeights& w) const override {
+    State s{at::zeros_like(w.bias)};
+    if (kind_ == "ssm") s.slots["memory"] = at::zeros_like(w.bias);
+    return s;
+  }
+  State step(const NodeWeights& w, const State& old, const Tensor& h, Index time,
+             const std::vector<Atom>&) const override {
+    if (kind_ == "identity") return old;
+    if (kind_ == "ema") return {at::sigmoid(w.decay) * old.value + h, time, old.observations + 1};
+    const auto [a, b] = coefficients(w, h);
+    auto memory = a * old.slots.at("memory") + b;
+    return {summary(w, h, memory), time, old.observations + 1, {{"memory", memory}}};
+  }
+  std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
+                           const std::vector<Index>& times, const FiberViews&) const override {
+    if (kind_ == "identity") return old;
+    std::vector<Tensor> previous;
+    for (const auto& s : old) previous.push_back(kind_ == "ema" ? s.value : s.slots.at("memory"));
+    Tensor memory, values;
+    if (kind_ == "ema") values = at::sigmoid(w.decay) * at::stack(previous) + h;
+    else {
+      const auto [a, b] = coefficients(w, h); memory = a * at::stack(previous) + b;
+      values = summary(w, h, memory);
+    }
+    std::vector<State> states;
+    for (size_t i = 0; i < old.size(); ++i) {
+      State s{values[i], times[i], old[i].observations + 1};
+      if (kind_ == "ssm") s.slots["memory"] = memory[i];
+      states.push_back(std::move(s));
+    }
+    return states;
+  }
+  bool exact_sequence() const override { return true; }
+  std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
+                              const std::vector<Index>& times, const FiberViews&) const override {
+    if (kind_ == "identity") return std::vector<State>(times.size(), old);
+    Tensor memory, values;
+    if (kind_ == "ema") values = affine_scan(at::sigmoid(w.decay).expand_as(h), h, old.value);
+    else {
+      const auto [a, b] = coefficients(w, h); memory = affine_scan(a, b, old.slots.at("memory"));
+      values = summary(w, h, memory);
+    }
+    std::vector<State> states;
+    for (size_t i = 0; i < times.size(); ++i) {
+      State s{values[i], times[i], old.observations + static_cast<Index>(i) + 1};
+      if (kind_ == "ssm") s.slots["memory"] = memory[i];
+      states.push_back(std::move(s));
+    }
+    return states;
+  }
+  Tensor read(const NodeWeights& w, const State&, const State& proposal, const Tensor& h,
+              Index, const std::vector<Atom>&) const override {
+    return kind_ == "identity" ? at::zeros({}, h.options()) : (proposal.value * w.read).sum(-1);
+  }
+  Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
+                    const Tensor& h, const std::vector<Index>&, const FiberViews&) const override {
+    if (kind_ == "identity") return at::zeros({h.size(0)}, h.options());
+    std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
+    return (at::stack(values) * w.read).sum(-1);
+  }
+  void validate_weights(const NodeWeights& w) const override {
+    if (kind_ != "ssm") return;
+    const auto d = w.bias.numel();
+    for (const auto& name : {"ssm_dt", "ssm_b", "ssm_c", "ssm_a", "ssm_skip"}) {
+      const auto it = w.extra.find(name);
+      const bool matrix = std::string(name) == "ssm_dt" || std::string(name) == "ssm_b" || std::string(name) == "ssm_c";
+      const std::vector<Index> shape = matrix ? std::vector<Index>{d, d} : std::vector<Index>{d};
+      if (it == w.extra.end() || it->second.sizes() != at::IntArrayRef(shape)) throw std::invalid_argument("invalid SSM weights");
+    }
+  }
+  void validate_state(const NodeWeights& w, const State& s) const override {
+    if (kind_ != "ssm") {
+      if (!s.slots.empty()) throw std::invalid_argument("unexpected state slots");
+    } else if (s.slots.size() != 1 || !s.slots.count("memory") || s.slots.at("memory").sizes() != w.bias.sizes())
+      throw std::invalid_argument("SSM requires a width-sized memory slot");
+  }
+ private:
+  std::string kind_;
+  static std::pair<Tensor, Tensor> coefficients(const NodeWeights& w, const Tensor& h) {
+    auto dt = at::softplus(at::matmul(h, w.extra.at("ssm_dt")));
+    return {at::exp(-at::softplus(w.extra.at("ssm_a")) * dt), dt * at::matmul(h, w.extra.at("ssm_b"))};
+  }
+  static Tensor summary(const NodeWeights& w, const Tensor& h, const Tensor& memory) {
+    return at::matmul(h, w.extra.at("ssm_c")) * memory + w.extra.at("ssm_skip") * h;
+  }
+};
+}  // namespace
+std::shared_ptr<const StateKernel> make_state_kernel(const std::string& name) {
+  if (name != "ema" && name != "identity" && name != "ssm") throw std::invalid_argument("unknown state kernel: " + name);
+  return std::make_shared<BasicKernel>(name);
+}
+}  // namespace tide

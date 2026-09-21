@@ -1,5 +1,6 @@
 #include "tide/specialized.h"
 #include "tide/ops.h"
+#include "tide/kernel.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -8,7 +9,7 @@
 namespace tide {
 Specialized::Specialized(Graph g, Model m, Options options, std::string topology)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), topology_(std::move(topology)), pool_(options.workers) {
-  graph_.compile(); validate_model(graph_, model_);
+  graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
   const Index n = graph_.nodes.size();
   auto require = [](bool ok) { if (!ok) throw std::invalid_argument("specialization topology/options mismatch"); };
   require(topology_ == "self_loop" || topology_ == "chain");

@@ -1,22 +1,15 @@
 #include "tide/frontier.h"
 #include "tide/ops.h"
+#include "tide/kernel.h"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace tide {
 namespace {
-Tensor scan(Tensor a, Tensor b, const Tensor& initial) {
-  const auto n = b.size(0);
-  for (Index stride = 1; stride < n; stride *= 2) {
-    b = at::cat({b.slice(0, 0, stride), b.slice(0, stride) + a.slice(0, stride) * b.slice(0, 0, n - stride)});
-    a = at::cat({a.slice(0, 0, stride), a.slice(0, stride) * a.slice(0, 0, n - stride)});
-  }
-  return b + a * initial;
-}
 State old_state(const Continuation& q, const Model& m, Index batch, Index node) {
   auto it = q.states.find({batch, node});
-  return it == q.states.end() ? State{at::zeros_like(m.nodes[node].bias)} : it->second;
+  return it == q.states.end() ? m.nodes[node].kernel->initial(m.nodes[node]) : it->second;
 }
 }  // namespace
 std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& q, const std::vector<Frame>& frames,
@@ -43,21 +36,23 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   std::vector<std::function<void()>> jobs;
   for (const auto& [owner, ids] : by_sequence) {
     const auto node = owner.second;
-    if (!options.prefill || !g.regions[g.nodes[node].region].observe_all || g.nodes[node].clear) continue;
+    if (!options.prefill || !m.nodes[node].kernel->exact_sequence()
+        || !g.regions[g.nodes[node].region].observe_all || g.nodes[node].clear) continue;
     ++stats["state_blocks"];
     auto old = old_state(q, m, owner.first, node);
     jobs.push_back([&, node, ids, old] {
       std::vector<Tensor> values;
-      for (auto i : ids) values.push_back(events[i].content);
+      std::vector<Index> times;
+      FiberViews views;
+      for (auto i : ids) { values.push_back(events[i].content); times.push_back(events[i].time); views.push_back(&events[i].fiber); }
       auto h = at::stack(values);
-      auto proposals = scan(at::sigmoid(m.nodes[node].decay).expand_as(h), h, old.value);
-      auto desc = (proposals * m.nodes[node].read).sum(-1);
+      const auto& w = m.nodes[node];
+      auto states = w.kernel->sequence(w, old, h, times, views);
+      std::vector<State> previous{old};
+      previous.insert(previous.end(), states.begin(), states.end() - 1);
+      auto desc = w.kernel->read_batch(w, previous, states, h, times, views);
       for (size_t j = 0; j < ids.size(); ++j) {
-        auto& e = events[ids[j]]; e.proposal = proposals[j]; e.descriptor = desc[j];
-        e.proposed_state = {e.proposal, e.time, old.observations + static_cast<Index>(j) + 1};
-        if (g.nodes[node].identity) {
-          e.proposal = old.value; e.descriptor = at::zeros({}, e.content.options()); e.proposed_state = old;
-        }
+        auto& e = events[ids[j]]; e.proposed_state = states[j]; e.proposal = states[j].value; e.descriptor = desc[j];
       }
     });
   }
@@ -73,12 +68,9 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       events[i].old = old_state(q, m, events[i].batch, events[i].node);
       jobs.push_back([&, i] {
         auto& e = events[i]; const auto& w = m.nodes[e.node];
-        e.proposal = at::sigmoid(w.decay) * e.old.value + e.content;
-        e.descriptor = (e.proposal * w.read).sum(-1);
-        e.proposed_state = {e.proposal, e.time, e.old.observations + 1};
-        if (g.nodes[e.node].identity) {
-          e.proposal = e.old.value; e.descriptor = at::zeros({}, e.content.options()); e.proposed_state = e.old;
-        }
+        e.proposed_state = w.kernel->step(w, e.old, e.content, e.time, e.fiber);
+        e.proposal = e.proposed_state.value;
+        e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.content, e.time, e.fiber);
       });
     }
     pool.run(std::move(jobs));
@@ -101,8 +93,10 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       auto& e = events[ids[j]]; e.control = controls[j];
       auto cmp = region.observe_all || e.active ? e.proposed_state : old_state(q, m, e.batch, e.node);
       e.comparison = cmp.value;
-      e.next = g.nodes[e.node].clear && e.active ? cmp.value * 0 : cmp.value;
-      q.states[{e.batch, e.node}] = {e.next, cmp.last_time, cmp.observations};
+      e.comparison_state = cmp;
+      e.next_state = g.nodes[e.node].clear && e.active ? m.nodes[e.node].kernel->reset(cmp) : cmp;
+      e.next = e.next_state.value;
+      q.states[{e.batch, e.node}] = e.next_state;
       if (options.trace) e.history = history;
     }
   }

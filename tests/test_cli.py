@@ -34,3 +34,11 @@ def test_standalone_libtorch_forward_backward(dtype, tmp_path):
     for options in (["--device=npu"], ["--device=cuda"], ["--device=cpu", "--dtype=float16"],
                     ["--seed=-1"], ["--output-dir", str(out)], ["--unknown"]):
         assert subprocess.run([str(binary), *options], capture_output=True).returncode != 0
+
+
+def test_cpp_custom_state_kernel(dtype):
+    import _tide_native
+    binary = Path(_tide_native.__file__).with_name("tidegraph-kernel-check")
+    result = subprocess.run([str(binary), "--device=cpu", "--dtype=" + str(dtype).split(".")[-1]],
+                            text=True, capture_output=True, check=True)
+    assert result.stdout.strip() == "custom-state-kernel: passed"

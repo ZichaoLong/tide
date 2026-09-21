@@ -16,10 +16,11 @@ def save(path, graph, model, continuation, optimizer=None):
     q = continuation
     validate_window(graph, model, q, [], q.cut, q.cut)
     record = {
-        "schema": "tide-continuation-v2", "identity": graph.identity, "aliases": parameter_aliases(model),
+        "schema": "tide-continuation-v3", "identity": graph.identity, "aliases": parameter_aliases(model),
         "weights": model.state_dict(), "optimizer": None if optimizer is None else optimizer.state_dict(),
         "batch_size": q.batch_size, "cut": q.cut,
-        "states": {k: (s.value.detach(), s.last_time, s.observations) for k, s in q.states.items()},
+        "states": {k: (s.value.detach(), s.last_time, s.observations, {n: v.detach() for n, v in s.slots.items()})
+                   for k, s in q.states.items()},
         "history": q.history, "ledger": q.ledger,
         "pending": [(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value.detach()) for a in q.pending],
     }
@@ -31,7 +32,7 @@ def save(path, graph, model, continuation, optimizer=None):
 
 def load(path, graph, model, optimizer=None):
     record = torch.load(path, map_location="cpu", weights_only=True)
-    if record["schema"] != "tide-continuation-v2" or record["identity"] != graph.identity:
+    if record["schema"] != "tide-continuation-v3" or record["identity"] != graph.identity:
         raise ValueError("checkpoint schema/graph mismatch")
     if record["aliases"] != parameter_aliases(model):
         raise ValueError("checkpoint parameter sharing mismatch; reconstruct the same aliases before loading")

@@ -26,14 +26,15 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     prop, desc = model.nodes[node].prepare(old, h, time)
     # A singleton softmax retains the generic zero VJP connection to its score.
     control = desc.reshape(1).softmax(0)[0]
-    next_value = prop.value * 0 if graph.nodes[node].clear else prop.value
-    q.states[batch, node] = State(next_value, prop.last_time, prop.observations)
+    next_state = model.nodes[node].next(prop, graph.nodes[node].clear)
+    q.states[batch, node] = next_state
     history = dict(q.history.get((batch, node), {}))
     history[node] = history.get(node, 0) + 1; q.history[batch, node] = history
     value = model.nodes[node].full(prop.value, h, control, mode, zeta)
     return dict(batch=batch, node=node, time=time, fiber=fiber, content=h, proposal=prop.value,
                 descriptor=desc, control=control, active=True, comparison=prop.value,
-                next=next_value, history=dict(history), full=value)
+                next=next_state.value, history=dict(history), full=value, proposal_slots=prop.slots,
+                comparison_slots=prop.slots, next_slots=next_state.slots)
 
 
 def run(graph, model, initial, external, stop, *, sealed_until, topology, mode="hard", zeta=1.0):

@@ -1,5 +1,6 @@
 #include "tide/stream.h"
 #include "tide/ops.h"
+#include "tide/kernel.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -11,6 +12,7 @@ namespace tide {
 Streaming::Streaming(Graph graph, Model model, Options options)
     : graph_(std::move(graph)), model_(std::move(model)), options_(std::move(options)), pool_(options_.workers) {
   graph_.compile();
+  configure_model(graph_, model_);
   validate_model(graph_, model_);
   if (options_.mode != "hard" && options_.mode != "softp" && options_.mode != "hst")
     throw std::invalid_argument("invalid emit mode");
@@ -43,7 +45,8 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
       event.batch = owner.first; event.node = owner.second; event.time = time;
       event.fiber = std::move(fiber);
       auto old = q.states.find(owner);
-      event.old = old == q.states.end() ? State{at::zeros_like(model_.nodes[event.node].bias)} : old->second;
+      const auto& weights = model_.nodes[event.node];
+      event.old = old == q.states.end() ? weights.kernel->initial(weights) : old->second;
       by_node[event.node].push_back(events.size());
       by_region[{event.batch, graph_.nodes[event.node].region}].push_back(events.size());
       events.push_back(std::move(event));
@@ -54,30 +57,32 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       jobs.push_back([&, node, ids] {
         const auto& w = model_.nodes[node];
-        std::vector<Tensor> old, content;
+        std::vector<State> old;
+        std::vector<Tensor> content;
+        std::vector<Index> times;
+        FiberViews fiber_views;
         for (auto i : ids) {
           auto& e = events[i];
           e.content = aggregate(model_, e.fiber);
-          if (options_.packed) { old.push_back(e.old.value); content.push_back(e.content); }
+          if (options_.packed) {
+            old.push_back(e.old); content.push_back(e.content); times.push_back(time); fiber_views.push_back(&e.fiber);
+          }
           else {
-            e.proposal = at::sigmoid(w.decay) * e.old.value + e.content;
-            e.descriptor = (e.proposal * w.read).sum(-1);
+            e.proposed_state = w.kernel->step(w, e.old, e.content, time, e.fiber);
+            e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.content, time, e.fiber);
           }
         }
         if (options_.packed) {
-          auto values = at::sigmoid(w.decay) * at::stack(old) + at::stack(content);
-          auto desc = (values * w.read).sum(-1);
+          auto h = at::stack(content);
+          auto states = w.kernel->batch(w, old, h, times, fiber_views);
+          auto desc = w.kernel->read_batch(w, old, states, h, times, fiber_views);
           for (size_t k = 0; k < ids.size(); ++k) {
-            events[ids[k]].proposal = values[k]; events[ids[k]].descriptor = desc[k];
+            events[ids[k]].proposed_state = states[k]; events[ids[k]].descriptor = desc[k];
           }
         }
         for (auto i : ids) {
           auto& e = events[i];
-          e.proposed_state = {e.proposal, time, e.old.observations + 1};
-          if (graph_.nodes[node].identity) {
-            e.proposal = e.old.value; e.descriptor = at::zeros({}, e.content.options());
-            e.proposed_state = e.old;
-          }
+          e.proposal = e.proposed_state.value;
         }
       });
     }
@@ -107,8 +112,10 @@ Result Streaming::run(const Continuation& initial, const std::vector<External>& 
         e.control = controls[j];
         const State& comparison = region.observe_all || e.active ? e.proposed_state : e.old;
         e.comparison = comparison.value;
-        e.next = graph_.nodes[e.node].clear && e.active ? comparison.value * 0 : comparison.value;
-        q.states[{e.batch, e.node}] = {e.next, comparison.last_time, comparison.observations};
+        e.comparison_state = comparison;
+        e.next_state = graph_.nodes[e.node].clear && e.active ? model_.nodes[e.node].kernel->reset(comparison) : comparison;
+        e.next = e.next_state.value;
+        q.states[{e.batch, e.node}] = e.next_state;
         if (options_.trace) e.history = history;
       }
     }

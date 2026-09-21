@@ -40,11 +40,11 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 for v in nodes:
                     event = prepared[batch, v]
                     comparison = event["proposal_state"] if region.observe_all or v in active else event["old"]
-                    value = comparison.value * 0 if graph.nodes[v].clear and v in active else comparison.value
-                    next_state = State(value, comparison.last_time, comparison.observations)
+                    next_state = model.nodes[v].next(comparison, graph.nodes[v].clear and v in active)
                     q.states[batch, v] = next_state
                     event.update(active=v in active, control=controls[v], comparison=comparison.value,
-                                 next=value, history=dict(history))
+                                 next=next_state.value, history=dict(history), proposal_slots=event["proposal_state"].slots,
+                                 comparison_slots=comparison.slots, next_slots=next_state.slots)
                     event.pop("old")
                     event.pop("proposal_state")
         for (batch, node), event in sorted(prepared.items()):

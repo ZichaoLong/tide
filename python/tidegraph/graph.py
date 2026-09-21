@@ -16,6 +16,8 @@ class Node:
     region: int
     clear: bool = False
     identity: bool = False
+    memory: str = "ema"
+    full: str = "tanh"
 
 
 @dataclass(frozen=True)

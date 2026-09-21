@@ -1,4 +1,5 @@
 #include "tide/ops.h"
+#include "tide/kernel.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -21,6 +22,16 @@ void validate_model(const Graph& g, const Model& m) {
   for (const auto& w : m.nodes) {
     check_tensor(w.decay, ref, {d}); check_tensor(w.weight, ref, {d, d});
     check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
+    require(static_cast<bool>(w.kernel), "state kernel is not configured");
+    w.kernel->validate_weights(w);
+    for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
+    if (w.full_kind == "swiglu") {
+      for (const auto& name : {"ffn_gate", "ffn_up", "ffn_down"}) {
+        auto it = w.extra.find(name);
+        require(it != w.extra.end(), "missing SwiGLU weights");
+        check_tensor(it->second, ref, std::string(name) == "ffn_down" ? at::IntArrayRef({2 * d, d}) : at::IntArrayRef({d, 2 * d}));
+      }
+    } else require(w.full_kind == "tanh" || w.full_kind == "identity", "unknown Full profile");
   }
   require(m.input_scale.size() == g.inputs.size() && m.agg_scale.size() == g.edges.size()
           && m.edge_scale.size() == g.edges.size() && m.output_scale.size() == g.outputs.size(),
@@ -41,6 +52,8 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
     require(batch(owner.first) && owner.second >= 0 && owner.second < n, "invalid state owner");
     require(state.last_time < q.cut && state.last_time >= -1 && state.observations >= 0, "invalid state clock");
     check_tensor(state.value, ref, {m.width()});
+    m.nodes[owner.second].kernel->validate_state(m.nodes[owner.second], state);
+    for (const auto& [name, value] : state.slots) check_tensor(value, ref, value.sizes());
   }
   for (const auto& [owner, counts] : q.history) {
     require(batch(owner.first) && owner.second >= 0 && owner.second < r, "invalid history owner");

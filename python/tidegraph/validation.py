@@ -21,6 +21,10 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         if not -1 <= state.last_time < q.cut or state.observations < 0:
             raise ValueError("invalid state clock")
         tensor(state.value)
+        model.nodes[v].validate(state)
+        for value in state.slots.values():
+            if value.device.type != "cpu" or value.dtype != reference.dtype or not torch.isfinite(value).all():
+                raise ValueError("incompatible state slot dtype/device/value")
     for (b, r), counts in q.history.items():
         if not 0 <= b < q.batch_size or not 0 <= r < len(graph.regions):
             raise ValueError("invalid history owner")

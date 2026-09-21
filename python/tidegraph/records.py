@@ -8,6 +8,7 @@ class State:
     value: torch.Tensor
     last_time: int = -1
     observations: int = 0
+    slots: dict[str, torch.Tensor] = field(default_factory=dict)
 
 
 @dataclass
@@ -51,7 +52,9 @@ class Continuation:
     def detach(self):
         """Explicit TBPTT boundary: detach state and every in-flight message."""
         q = self.fork()
-        q.states = {owner: replace(state, value=state.value.detach()) for owner, state in self.states.items()}
+        q.states = {owner: replace(state, value=state.value.detach(),
+                                  slots={k: v.detach() for k, v in state.slots.items()})
+                    for owner, state in self.states.items()}
         q.pending = [replace(atom, value=atom.value.detach()) for atom in self.pending]
         return q
 

@@ -1,5 +1,6 @@
 #include "tide/frontier.h"
 #include "tide/ops.h"
+#include "tide/kernel.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -8,7 +9,7 @@
 namespace tide {
 Frontier::Frontier(Graph g, Model m, Options options)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), pool_(options.workers) {
-  graph_.compile(); graph_.topological_order(); validate_model(graph_, model_);
+  graph_.compile(); graph_.topological_order(); configure_model(graph_, model_); validate_model(graph_, model_);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp") throw std::invalid_argument("invalid emit mode");
   if (options.max_events < 1 || !std::isfinite(options.zeta)) throw std::invalid_argument("invalid frontier options");
 }

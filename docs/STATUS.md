@@ -22,6 +22,20 @@ checkpoint v2, explicit detach, shared/random VJPs, inference-mode TLS and build
 identity checks are covered. Cancellation lifecycle was separately checked.
 See `evidence/m6-training-contracts.md`. No active jobs; all owned workers ended.
 
+M5A candidate: State gains named tensor slots; Python/native state-kernel
+programs remove EMA equations from schedulers; diagonal selective SSM and
+SwiGLU profiles added. Checkpoint candidate is v3. Python targeted tests: 77 pass.
+A standalone C++ client implements its own StateKernel to test the public seam.
+
+Planned unit: `tide-foundation-m5a-20260921-0900`.
+Command: `python scripts/job.py --output-dir artifacts/m5a-20260921-0900 -- python scripts/qualify.py --output-dir artifacts/m5a-20260921-0900`.
+Freeze this checkout until the job ends. Inspect the output directory's status,
+task log and verification result. Stop with
+`systemctl --user stop tide-foundation-m5a-20260921-0900`.
+Immediate next action: complete this build/qualification, fix any failures and
+record exact evidence. Do not report old 323-test results as M5A qualification.
+Attention/linear/DeltaRule remain subsequent work.
+
 Environment inspected: aarch64, Python 3.11, Torch 2.10.0+cpu; native CPU
 operator probe passed. Local Python: `/home/zlong/anaconda3/bin/python`.
 Set `TORCH_DEVICE_BACKEND_AUTOLOAD=0` for CPU commands on this machine because
