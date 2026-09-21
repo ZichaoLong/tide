@@ -14,7 +14,7 @@ stays explicit; later milestones may refine earlier interfaces.
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | SSM/SwiGLU [verified](evidence/m5a-state-programs.md); Linear/Delta [verified](evidence/m5b-matrix-memory.md); event GQA/window [verified](evidence/m5c-attention.md); broader programs pending |
 | M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); named optimizer ownership [verified](evidence/checkpoint-ownership.md); composite ownership and broader modules/objectives pending |
 | M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md), [post-attention pooling](evidence/fiber-pooling.md), [token-window Pronounce](evidence/pronounce.md) and bounded [whole-model two-clock adapter](evidence/lh-iocortex.md) verified; single-PDG proof and composite checkpoint ownership pending |
-| M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | planned |
+| M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | first bounded EMA inference [pilot retained](evidence/m8-streaming-pilot.md); other scales, profiles, prefill and training pending |
 
 ## Dependencies and acceptance details
 
@@ -65,7 +65,10 @@ packing and CROSSBATCH are [qualified](evidence/fiber-packing.md) (`fiber-packin
 Post-attention Confluence is [qualified](evidence/fiber-pooling.md) (`fiber-pooling.md`).
 Token-clock/readout is [qualified](evidence/pronounce.md), and actual IOCortexNet
 two-clock inference is [qualified](evidence/lh-iocortex.md). Remaining single-PDG
-and composite-checkpoint obligations: `lh-iocortex-plan.md`. The single-PDG map
+and composite-checkpoint obligations: `lh-iocortex-plan.md`. Training comparison
+will use Tide two-clock versus single-PDG semantics, with isolated output/state/
+pending roots, HARD/SOFTP/HST VJPs, parameter aliases, optimizer steps and explicit
+truncation of partial-window buffers. LH training is not an authority. The single-PDG map
 must preserve occurrence ledgers when phases are absent, not infer them from time.
 The bounded single-PDG oracle is implemented (`lh-single-graph.md`, qualification
 in STATUS). Its readout projection explicitly forgets the adapter-only ledger;
