@@ -1,5 +1,11 @@
 # Tide
 
+本分支 `graph-execution-foundation` 实现 CPU PyTorch/LibTorch 的图执行与等价性验证。
+开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
+[路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
+[本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。
+下文保留 Tide 研究总览；具体实现状态以本分支的验证证据为准。
+
 Tide 是一条研究线，研究如何在固定消息拓扑上组织局部选择、节点状态和稀疏计算，并把这些语义落实为可验证的模型与执行器。
 
 本仓库的 `main` 分支是项目总入口。它维护研究对象、上游语义、项目导航和共同验证约定；具体实现、实验路线与测量结果在独立分支或独立仓库中维护。

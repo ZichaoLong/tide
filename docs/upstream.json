@@ -1,0 +1,14 @@
+{
+  "semantic_version": "tide-core-3",
+  "repository": "https://github.com/ZichaoLong/ObsidianVault",
+  "revision": "bd7483b927e047bf17fd4ba52278d20bc67f999e",
+  "directory": "20-tide-decentralized-neural-network",
+  "sources": [
+    "semantics-anchor.md",
+    "positive-delay-graph-finite-cut-learning-note.md",
+    "timed-dag-region-selector-learning-note.md",
+    "timed-dag-chunk-prefill-learning-note.md",
+    "settlegraph-learning-note.md"
+  ],
+  "local_profile": "ema-ffn-v1"
+}

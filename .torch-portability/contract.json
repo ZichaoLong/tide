@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "tide-graph-execution-foundation",
+    "repository": "."
+  },
+  "contract": {
+    "path": ".torch-portability/contract.json",
+    "entrypoints": {
+      "verify": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
+      }
+    },
+    "cpu_reference": {
+      "dtype": "float32",
+      "commands": {
+        "forward": "python scripts/verify.py --device cpu --dtype float32",
+        "backward": "python scripts/verify.py --device cpu --dtype float32",
+        "optimizer_step": "python scripts/verify.py --device cpu --dtype float32",
+        "checkpoint_round_trip": "python scripts/verify.py --device cpu --dtype float32"
+      },
+      "applicable": {
+        "backward": true,
+        "optimizer_step": true,
+        "checkpoint_round_trip": true
+      },
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      }
+    },
+    "required_capabilities": [
+      "forward",
+      "backward",
+      "optimizer-step",
+      "checkpoint-round-trip"
+    ],
+    "validation_tiers": [
+      "static-cli",
+      "build",
+      "cpu-semantic",
+      "backend-smoke",
+      "parity",
+      "feature",
+      "distributed",
+      "checkpoint-handoff",
+      "short-train",
+      "workload"
+    ],
+    "checkpoint": {
+      "enabled": true,
+      "schema": "tide-continuation-v1",
+      "init_from": "weights or explicitly declared initial state; starts new progress",
+      "resume": "complete state declared by the schema",
+      "portable_handoff": true,
+      "exact_resume": "not-promised"
+    }
+  },
+  "targets": [
+    {
+      "id": "python-cpu-x86_64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "x86_64",
+      "policy": "required",
+      "status": "planned",
+      "required_tiers": [
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "python-cpu-aarch64",
+      "language": "python",
+      "backend": "cpu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "planned",
+      "required_tiers": [
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "python-cuda-x86_64",
+      "language": "python",
+      "backend": "cuda",
+      "host_arch": "x86_64",
+      "policy": "optional",
+      "status": "unsupported",
+      "required_tiers": [
+        "backend-smoke"
+      ],
+      "notes": "Deferred by user; no accelerator support in current implementation scope."
+    },
+    {
+      "id": "python-npu-aarch64",
+      "language": "python",
+      "backend": "npu",
+      "host_arch": "aarch64",
+      "policy": "optional",
+      "status": "unsupported",
+      "required_tiers": [
+        "backend-smoke"
+      ],
+      "notes": "Deferred by user; no accelerator support in current implementation scope."
+    },
+    {
+      "id": "cpp-cpu-x86_64",
+      "language": "cpp",
+      "backend": "cpu",
+      "host_arch": "x86_64",
+      "policy": "required",
+      "status": "planned",
+      "required_tiers": [
+        "build",
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "cpp-cpu-aarch64",
+      "language": "cpp",
+      "backend": "cpu",
+      "host_arch": "aarch64",
+      "policy": "required",
+      "status": "planned",
+      "required_tiers": [
+        "build",
+        "cpu-semantic"
+      ]
+    },
+    {
+      "id": "cpp-cuda-x86_64",
+      "language": "cpp",
+      "backend": "cuda",
+      "host_arch": "x86_64",
+      "policy": "optional",
+      "status": "unsupported",
+      "required_tiers": [
+        "build",
+        "backend-smoke"
+      ],
+      "notes": "Deferred by user; no accelerator support in current implementation scope."
+    },
+    {
+      "id": "cpp-npu-aarch64",
+      "language": "cpp",
+      "backend": "npu",
+      "host_arch": "aarch64",
+      "policy": "optional",
+      "status": "unsupported",
+      "required_tiers": [
+        "build",
+        "backend-smoke"
+      ],
+      "notes": "Deferred by user; no accelerator support in current implementation scope."
+    }
+  ]
+}
