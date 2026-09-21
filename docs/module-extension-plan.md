@@ -37,8 +37,9 @@ the old broadcast profile; its slot-affine/phase profile is
    selection-count/affect-count/FP64-norm/stable-ID profile and original-C++
    selector oracle are [qualified](evidence/lh-selector.md) (`lh-selector.md`).
 4. Tick-repeat LH Add and explicit physical cut decode are [qualified](evidence/lh-add.md)
-   (`lazy-add.md`). Next: same-fiber attention,
-   per-edge signaling and token-window Pronounce. Compare an immutable
+   (`lazy-add.md`). LH activation/norm and per-edge signaling are
+   [qualified](evidence/lh-full.md) (`lh-full.md`). Next: same-fiber attention
+   (`lh-attention-plan.md`) and token-window Pronounce. Compare an immutable
    snapshot of actual LH C++ sources, never its older Python interpreter.
 
 These gates instantiate the existing upstream functions; do not change Tide's

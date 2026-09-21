@@ -41,6 +41,7 @@ encoding/specialization, cuts/detach and shared-parameter AdamW/checkpoints.
 The optional original-source runner accepts `--component full` or `all`.
 `lh-full-check` calls the actual snapshotted ModuleUtils factories, with both
 signaling bias choices, widths 1/3/5 and output degrees 1/3, comparing scalar
-and packed Full values and every output slot. Qualification is in STATUS.
+and packed Full values and every output slot. Clean qualification is in
+[evidence/lh-full.md](evidence/lh-full.md).
 This establishes the post-selection component only; original IOCortexNet,
 same-fiber attention and token-window Pronounce remain separate gates.

@@ -4,44 +4,24 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-Latest complete qualification: **2436 tests passed** on clean implementation
-`bb6590fe8a977e16590243094d0f645b41ccdcb0`; `evidence/lh-add.md`.
-Original Selector and Add also passed in FP64/FP32. Each dtype: Selector 12 cases,
-288 ticks, 7368 candidate occurrences; Add 54 cases, 1296 ticks, 5400 candidate
-occurrences. These are component gates, not whole-model or performance claims.
+Latest complete qualification: **2596 tests passed** on clean implementation
+`5df88e7b91985092870d0197888d8d95311ee7b1`; `evidence/lh-full.md`.
+Original Selector, Add and Full passed in FP64/FP32. Per dtype:
+- Selector: 12 cases, 288 ticks, 7368 candidate occurrences.
+- Add: 54 cases, 1296 ticks, 5400 candidate occurrences.
+- Full: 72 configurations, 504 rows, scalar/packed activation/norm/signaling.
+These are component gates, not whole-model or performance claims.
 
-Unit `tide-foundation-lh-add-20260921-1511` is inactive, MainPID 0, exit 0.
-`artifacts/lh-add-20260921-1511/{status.json,verification/result.json,oracle/result.json}`
-all report passed with the same clean source. No active job. Evidence is saved
-separately from the tested implementation.
+Unit `tide-foundation-lh-full-20260921-1535` is inactive, MainPID 0, exit 0.
+`artifacts/lh-full-20260921-1535/{status.json,verification/result.json,oracle/result.json}`
+all passed at the same clean source. No active job. Evidence is saved separately
+from the tested implementation. Add semantics: `lazy-add.md`; the six Full
+profiles, default epsilon/width domain and signaling mapping: `lh-full.md`.
 
-## Full implementation ready for clean qualification
-
-The six `lh-{relu|silu}-{identity|rms|layer}-v1` backbones and slot-affine signaling
-mapping are implemented (`lh-full.md`). **421 focused tests passed in 33.02s**,
-plus **8 direct fixed-chain/self-loop specialization checks**. Original LH
-ModuleUtils passed FP64/FP32: 72 configurations, 504 rows per dtype comparing
-activation/norm and every signaling slot, scalar/packed. Original Selector/Add
-also passed in both dtypes. These are development results.
-
-Unit `tide-foundation-lh-full-dev-20260921-1527` is inactive, MainPID 0, exit 0.
-Artifacts: `artifacts/lh-full-dev-20260921-1527/`; outer and oracle records passed.
-No active job before the prepared clean launch. Existing inference checks use
-fixed default eps and equal payload widths; arbitrary LH configs are not claimed.
-
-Prepared unit `tide-foundation-lh-full-20260921-1535`, `background.slice`;
-output `artifacts/lh-full-20260921-1535/`. Commit this implementation, then run
-`python scripts/qualify.py --output-dir artifacts/lh-full-20260921-1535
---jobs 2 --lh-snapshot artifacts/lh-source-20260921-1428` via scripts/job.py.
-Launch has not occurred at this edit. Freeze source until terminal; inspect outer
-`status.json`, `verification/result.json` and `oracle/result.json`, plus logs.
-Commit evidence separately after clean success.
-
-The Add profile, lazy/physical state distinction, native equal-gap batch buckets,
-causal time-loop accounting and parameter-epoch limits are in `lazy-add.md`.
-An earlier development fixture requested a pending root after the queue drained;
-cut 7 guarantees that root. The corrected 278 focused tests and clean full suite
-passed. The original failure logs are retained under `artifacts/lh-add-dev-20260921-1503/`.
+Re-entry now reports all live and three recent terminal jobs; use
+`python scripts/status.py --all-jobs` to audit historical failures. Current schema
+versions live in semantics.md; historical evidence retains tested versions.
+Artifact cleanup dry-run found nothing eligible; no reference/artifact files deleted.
 
 ## Immutable original source
 
@@ -51,7 +31,7 @@ LH HEAD is `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`, with actual dirty source
 captured and checksummed. The original tree was only read. Oracle details:
 `lh-selector.md`; full-model mapping: `lh-compatibility.md`.
 
-## Next action after qualification
+## Next action
 
 Implement `lh-attention-plan.md`: a separately named same-fiber attention profile
 with sum Confluence and tick-repeat log-bias decay first, then post-attention
