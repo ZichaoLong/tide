@@ -7,7 +7,7 @@ count. Every slot participates in trace, clear, in-memory detach and checkpoint 
 profiles zeros read/memory tensors but preserves clock/count metadata.
 
 The native `StateKernel` interface supplies initial, step, independent-sample
-batch, optional exact sequence block, Read, reset and validation. Clients can
+batch, optional exact sequence/packed-sequence blocks, Read, reset and validation. Clients can
 provide their own immutable C++ implementation through `NodeWeights::kernel`;
 the standalone `cpp/test/custom_kernel.cpp` is an example. No Python callback is
 made by native node workers. Default batch and sequence methods are explicit

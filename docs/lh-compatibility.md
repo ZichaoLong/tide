@@ -35,6 +35,14 @@ Map LH activations to in-flight transformed messages, hidden to node state,
 selector counters to region history and token-window readout to its own state.
 State projection must include all of these. Comparing logits alone is inadequate.
 
+Further source audit: signaling produces one distinct vector per outgoing edge
+(`CortexNet.cpp:EmitToEdges`), so replicated scalar-scaled emissions alone do not
+instantiate LH. Confluence distinguishes active-only softmax normalization from
+all-source softmax, preserving incoming source indices. The attention `block_size`
+configuration is stored but does not evict KV entries in the inspected C++ code;
+do not map it to Tide's new window setting. Add decay occurs before each tick's
+update, including idle ticks. Selector norm scores explicitly accumulate in FP64.
+
 ## Implementation reuse and next experiment
 
 Reuse dual CSR/CSC indices, sample IDs, packed signal offsets and segmented
