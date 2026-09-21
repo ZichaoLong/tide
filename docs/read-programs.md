@@ -12,9 +12,9 @@ later events; selecting old-state Read does not select old-state adoption.
 
 `Node.readout` names a program profile. `linear-v1` returns the dot product of
 `w.read` and the content summary or mode-selected state value. Identity boundaries
-always return zero. The current selector consumes a finite scalar of the payload
-dtype; tuple descriptors and independent FP64 score precision are later region
-program work, including LH compatibility.
+always return zero. Selectors consume finite scalar descriptors under an explicit
+payload/FP64 precision policy. `norm-fp64-v1` accumulates the L2 norm in FP64;
+tuple descriptors remain outside the current interface.
 
 Python custom `ReadProgram` is a registered module supplied by
 `Model(read_programs={node: program})`. Native clients supply `ReadKernel` through
@@ -38,10 +38,14 @@ None versus connected-zero. A scalar score with the wrong dtype/device/shape,
 a changed batch length or nonfinite values fails explicitly. Read parameters
 participate in sharing, optimizer state and checkpoints through module ownership.
 
-Mode/profile are part of graph identity. Native graph identity format is v9;
-checkpoint payload remains v3. Old identities require explicit reconstruction,
+Mode/profile are part of graph identity. Native graph identity format is v11;
+checkpoint payload is v4. Old identities require explicit reconstruction,
 not implicit migration. See `tests/test_read_modes.py`, `test_read_contract.py`
 and the standalone `cpp/test/read_programs.cpp` analytic checks.
 
 Full Next requests and control-sensitive state-prefill gates are implemented
 and [qualified](evidence/next-programs.md) separately in `next-programs.md`.
+
+Explicit Read precision is now `payload | float64`; `norm-fp64-v1` accumulates
+the L2 norm in FP64. Payload dtype remains independent of descriptor precision;
+see `lh-selector.md` for controls, histories and the original-selector oracle.

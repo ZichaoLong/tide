@@ -34,7 +34,8 @@ the old broadcast profile; its slot-affine/phase profile is
    now [qualified](evidence/read-programs.md).
 3. Region programs and typed integer/tensor history are implemented
    (`region-programs.md`), now [qualified](evidence/region-programs.md). LH's
-   selection-count/affect-count/FP64-norm/stable-ID profile remains pending.
+   selection-count/affect-count/FP64-norm/stable-ID profile and original-C++
+   selector oracle are implemented (`lh-selector.md`), with qualification in STATUS.
 4. After these seams, implement LH Add and same-fiber attention with lazy idle
    decay, per-edge signaling and token-window Pronounce. Compare an immutable
    snapshot of actual LH C++ sources, never its older Python interpreter.

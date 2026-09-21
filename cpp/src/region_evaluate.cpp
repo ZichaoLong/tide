@@ -46,7 +46,7 @@ void select_events(const Graph& g, const Model& m, Continuation& q, std::vector<
     validate_history(initial, layout, ref, first.time-1); w.kernel->validate_history(initial, layout);
   }
   const auto& old = it == q.history.end() ? initial : it->second;
-  auto result = w.kernel->step(w, {old, first.time, candidates, layout});
+  auto result = w.kernel->step(w, {old, first.time, candidates, layout, ref.options()});
   if (static_cast<Index>(result.active.size()) > layout.spec.budget
       || !std::includes(nodes.begin(), nodes.end(), result.active.begin(), result.active.end()))
     throw std::invalid_argument("region selector returned invalid active subset/capacity");

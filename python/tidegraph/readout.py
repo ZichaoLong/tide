@@ -23,6 +23,7 @@ def request(mode, old, proposal, content, time):
 class ReadProgram(torch.nn.Module):
     profile = "custom"
     joint_batch = False
+    precision = "payload"
 
     def step(self, weights, request):
         raise NotImplementedError
@@ -52,20 +53,47 @@ class LinearRead(ReadProgram):
         return list((values * w.read).sum(-1).unbind())
 
 
+class NormRead(ReadProgram):
+    profile = "norm-fp64-v1"
+    precision = "float64"
+    joint_batch = True
+
+    def step(self, w, r):
+        value = r.content.value if r.state is None else r.state.value
+        return torch.linalg.vector_norm(value, ord=2, dim=-1, dtype=torch.float64)
+
+    def batch(self, w, requests):
+        values = torch.stack([r.content.value if r.state is None else r.state.value for r in requests])
+        return list(torch.linalg.vector_norm(values, ord=2, dim=-1, dtype=torch.float64).unbind())
+
+
+def program(profile, identity=False):
+    if profile == LinearRead.profile:
+        return LinearRead(identity)
+    if profile == NormRead.profile and not identity:
+        return NormRead()
+    raise ValueError("unknown Read profile")
+
+
 def validate_program(weights, spec, *, native=False):
     program = weights.read_program
-    if native and type(program) is not LinearRead:
+    if native and type(program) not in {LinearRead, NormRead}:
         raise ValueError("Python custom Read has no native implementation")
     if not isinstance(program, ReadProgram) or program.profile != spec.readout:
         raise ValueError("Read program does not match graph profile")
     if isinstance(program, LinearRead) and program.identity != spec.identity:
         raise ValueError("shared Read program does not match identity policy")
+    if (program.precision not in {"payload", "float64"}
+            or isinstance(program, LinearRead) and program.precision != "payload"
+            or isinstance(program, NormRead) and program.precision != "float64"):
+        raise ValueError("invalid Read precision policy")
 
 
-def validate(value, r):
+def validate(value, r, precision="payload"):
     ref = r.content.value
+    dtype = torch.float64 if precision == "float64" else ref.dtype
     if not isinstance(value, torch.Tensor) or (value.shape, value.dtype, value.device) != (
-            torch.Size([]), ref.dtype, ref.device):
+            torch.Size([]), dtype, ref.device):
         raise ValueError("Read returned incompatible scalar metadata")
     if not torch.isfinite(value):
         raise ValueError("nonfinite selector score from Read")
@@ -81,10 +109,10 @@ def evaluate(weights, requests, *, packed=False):
     if len(values) != len(requests):
         raise ValueError("Read batch changed event count")
     for value, r in zip(values, requests):
-        validate(value, r)
+        validate(value, r, program.precision)
     if packed and torch.is_grad_enabled():
         semantic = [program.step(weights, r) for r in requests]
         for value, r in zip(semantic, requests):
-            validate(value, r)
+            validate(value, r, program.precision)
         values = [autograd.value(a, b) for a, b in zip(values, semantic)]
     return values

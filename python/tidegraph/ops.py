@@ -6,7 +6,7 @@ from .memory import kernel, reset
 from .full import ProjectionEmit
 from .aggregate import SourceAggregate
 from .content import as_content, Content
-from .readout import LinearRead, evaluate as evaluate_read, request as read_request
+from .readout import LinearRead, program as make_read, evaluate as evaluate_read, request as read_request
 from .next import program as next_program, AdoptNext
 
 
@@ -44,9 +44,7 @@ class NodeWeights(nn.Module):
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
         self.kernel = kernel("ema" if spec is None else spec.memory, spec) if state_program is None else state_program
-        if read_program is None and spec is not None and spec.readout != "linear-v1":
-            raise ValueError("unknown Read profile")
-        self.read_program = LinearRead() if read_program is None else read_program
+        self.read_program = make_read("linear-v1" if spec is None else spec.readout) if read_program is None else read_program
         self.next_program = next_program("adopt-v1" if spec is None else spec.next_state) if transition is None else transition
         self.full_kind = "tanh" if spec is None else spec.full
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program

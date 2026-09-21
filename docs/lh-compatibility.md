@@ -4,8 +4,9 @@ Reference: `~/llm/lh`, HEAD `5fd237d40c9880ccb6e511e4bf20799c7022fd1e`,
 inspected 2026-09-21. It contains user modifications to `BatchHidden.cpp`,
 `bench-lh-small.cpp`, test graph data, and untracked build/data directories.
 Do not modify or clean that tree. A future numerical run must record the actual
-dirty-source snapshot, not identify it by HEAD alone. No original-LH numerical
-comparison has been executed in this project yet.
+dirty-source snapshot, not identify it by HEAD alone. The original-selector component oracle is now implemented (`lh-selector.md`);
+its current qualification status is in STATUS. Whole-LH inference comparison
+remains pending.
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no
@@ -17,7 +18,7 @@ training contract; use this project's explicit state/VJP/truncation rules.
 | --- | --- |
 | `CortexNet.cpp:think_single_step` reads prior activations through four adjacency blocks | Unit-delay edges; source signalling can move into the prior event Full for fixed inference weights |
 | Candidate CHAL updates before selector | Observe-all proposal adoption; candidates are not restricted to selected nodes |
-| Base-hub selector count/affect/norm/ID priority and other-hub forced activity | A dedicated region selector and explicit region partition; current count/descriptor profile is insufficient |
+| Base-hub selector count/affect/norm/ID priority and other-hub forced activity | A dedicated region selector and explicit region partition; `lh-count-affect-v1` now provides the ordering; full-capacity regions provide forced activity |
 | Clear after selection | Next resets selected memory but Full retains the pre-clear comparison snapshot |
 | Tensor hidden decays every tick, including idle | Lazy `(memory,last_tick)` interpretation; repeated multiplication vs exponentiation needs a numerical policy |
 | KV decay subtracts decay rate from attention log biases | A separate decay law; not tensor multiplicative decay |
@@ -51,7 +52,7 @@ native thread pool already propagates Torch thread-local state and coordinates
 commits; preserve these properties when borrowing kernels. Avoid nested OpenMP
 and ATen oversubscription.
 
-After M5 makes content/state programs extensible: build a read-only adapter from
+For the remaining whole-model comparison, build a read-only adapter from
 an immutable snapshot of LH C++ sources using this project's CPU build setup.
 Start with Add hidden and a tiny graph, then attention, multiple samples, idle
 ticks, selected clear, token continuation and Pronounce. Save weights/inputs and
@@ -61,18 +62,15 @@ counterexample and discuss the choice with the user before changing Tide semanti
 
 ## Next bounded gate after region programs
 
-Typed region histories and SelStep extension interfaces are implemented in
-`region-programs.md`; qualification status is in STATUS. Add an LH selector
-profile with separate selected/affected maps and graph-owned canonical membership.
+Typed region histories and SelStep extension interfaces are qualified in
+`region-programs.md`. The LH selector profile with separate selected/affected maps
+and graph-owned canonical membership is implemented (`lh-selector.md`).
 Selection compares **prior** counts; all actual candidates then increment affect,
 and only active nodes increment selected. Forced-activity hubs use other regions.
 
-Add a norm Read with real FP64 accumulation, and an explicit descriptor precision
-contract. Default softmax controls must convert to payload dtype by declaration,
-including packed paths and semantic replay. The generic region request needs
-payload tensor metadata when descriptors have another dtype; custom programs
-must not infer it from a possibly empty history. Preserve current scalar finite
-validation and test mixed descriptor/payload dtypes and their VJPs.
+The explicit FP64 norm Read and payload metadata/conversion policy are also
+implemented; see `lh-selector.md` and STATUS for qualification. The generic
+region request carries dtype/device separately from descriptors/history.
 
 Re-reading `Selector.cpp` and `Selector.h` confirms that original LH count storage
 is **int32**, while ranking uses double. The heap compares lexicographically;

@@ -23,6 +23,8 @@ class RegionInput:
     time: int
     candidates: tuple[tuple[int, torch.Tensor], ...]
     layout: RegionLayout
+    payload_dtype: torch.dtype
+    payload_device: torch.device
 
 
 @dataclass
@@ -69,7 +71,7 @@ class CountSelector(RegionProgram):
         order = sorted((i for i, d in enumerate(scores) if self.eligible(d)), key=lambda i: (
             counts.get(nodes[i], 0) if r.layout.spec.count_priority else 0, -float(scores[i].detach()), nodes[i]))
         active = {nodes[i] for i in order[:r.layout.spec.budget]}
-        probs = torch.stack(scores).softmax(0)
+        probs = torch.stack(scores).softmax(0).to(dtype=r.payload_dtype, device=r.payload_device)
         history = r.history.fork()
         history.last_time = r.time
         for v in active:
@@ -110,7 +112,7 @@ class TensorHistorySelector(CountSelector):
     def step(self, r):
         result = super().step(r)
         result.history.tensors["memory"] = self.alpha*r.history.tensors["memory"] + torch.stack(
-            [d for _, d in r.candidates]).sum()
+            [d for _, d in r.candidates]).sum().to(dtype=r.payload_dtype, device=r.payload_device)
         return result
 
     def validate_weights(self, layout):
@@ -132,11 +134,15 @@ def program(layout, dtype):
         return PositiveSelector()
     if profile == TensorHistorySelector.profile:
         return TensorHistorySelector(len(layout.members), dtype)
+    from .lh_selector import LHSelector
+    if profile == LHSelector.profile:
+        return LHSelector()
     raise ValueError("unknown region selector profile")
 
 
 def validate_program(program, layout, reference, *, native=False):
-    if native and type(program) not in {CountSelector, PositiveSelector, TensorHistorySelector}:
+    from .lh_selector import LHSelector
+    if native and type(program) not in {CountSelector, PositiveSelector, TensorHistorySelector, LHSelector}:
         raise ValueError("Python custom region selector has no native implementation")
     if not isinstance(program, RegionProgram) or program.profile != layout.spec.selector:
         raise ValueError("region program does not match graph profile")
@@ -158,7 +164,7 @@ def evaluate(graph, model, q, batch, region, time, candidates):
         old = p.initial(layout, reference)
         validate_history(old, layout, reference, time-1)
         p.validate_history(old, layout)
-    result = p.step(RegionInput(old, time, tuple(candidates), layout))
+    result = p.step(RegionInput(old, time, tuple(candidates), layout, reference.dtype, reference.device))
     if (not isinstance(result, Selection) or not isinstance(result.active, set)
             or any(type(v) is not int for v in result.active) or not result.active <= set(nodes)
             or len(result.active) > layout.spec.budget):

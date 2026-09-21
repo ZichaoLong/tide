@@ -44,12 +44,12 @@ class CountSelector final : public RegionKernel {
       auto node = std::get<2>(ranking[i]); result.active.insert(node);
       auto& count = result.history.node_maps.at("selected")[node]; count = increment(count);
     }
-    auto controls = at::softmax(at::stack(scores), 0);
+    auto controls = at::softmax(at::stack(scores), 0).to(r.payload_options);
     for (size_t i = 0; i < scores.size(); ++i) result.controls.emplace(r.candidates[i].node, controls[i]);
     if (tensor_history()) {
       std::vector<Tensor> descriptors;
       for (const auto& candidate : r.candidates) descriptors.push_back(candidate.descriptor);
-      result.history.tensors["memory"] = w.extra.at("alpha")*r.history.tensors.at("memory") + at::stack(descriptors).sum();
+      result.history.tensors["memory"] = w.extra.at("alpha")*r.history.tensors.at("memory") + at::stack(descriptors).sum().to(r.payload_options);
     }
     return result;
   }
@@ -77,7 +77,9 @@ class CountSelector final : public RegionKernel {
   std::string profile_;
 };
 }  // namespace
+std::shared_ptr<const RegionKernel> make_lh_selector();
 std::shared_ptr<const RegionKernel> make_region_kernel(const Region& spec) {
+  if (spec.selector == "lh-count-affect-v1") return make_lh_selector();
   if (spec.selector == "count-v1" || spec.selector == "positive-v1" || spec.selector == "tensor-history-v1")
     return std::make_shared<CountSelector>(spec.selector);
   throw std::invalid_argument("unknown region selector profile: " + spec.selector);

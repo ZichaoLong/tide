@@ -24,8 +24,9 @@ generic control type is one finite floating tensor per candidate, in the payload
 dtype/device; it need not be a scalar or a probability. Built-in projection Emit
 and control-blend Next explicitly require scalar controls. Named heterogeneous
 control records are a future interface extension if an actual profile needs them.
-Descriptors remain finite payload-dtype scalars. LH FP64 norm accumulation and
-conversion to payload-dtype controls require a separate explicit precision policy.
+Descriptors are finite scalars under an explicit payload/FP64 precision policy.
+Region requests carry payload dtype/device separately; see `lh-selector.md` for
+FP64 norm accumulation and built-in control/history conversion rules.
 
 Empty candidate regions call no program, allocate no initial history and preserve
 stored history. A nonempty region with empty selection still runs Upd, Read and
@@ -71,6 +72,7 @@ default programs and maps initial histories without changing body node IDs.
 | --- | --- |
 | `count-v1` | Ascending selected count (optional), descending descriptor, ascending ID; increment selected counts; softmax over all candidate descriptors |
 | `positive-v1` | Same rule, but only strictly positive scores are eligible; controls still softmax over every candidate |
+| `lh-count-affect-v1` | Prior selected count ascending, prior affected count descending, descriptor descending, ID ascending; increment affects for every candidate and selections for active nodes |
 | `tensor-history-v1` | Scores `d_v + memory*bias[local_slot(v)]`; history `memory' = alpha*memory + sum(d)`; count/score/ID ranking and softmax over scores |
 
 Tensor-history alpha and bias are registered learned parameters. Its history is

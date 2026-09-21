@@ -52,8 +52,9 @@ is [qualified](evidence/content-programs.md). Independent Read and three region
 modes are [qualified](evidence/read-programs.md). Full Next requests and prefill
 capability gates are [qualified](evidence/next-programs.md). Region programs,
 typed history, tensor controls and checkpoint v4 are
-[qualified](evidence/region-programs.md) (`region-programs.md`). LH selection
-and explicit FP64 descriptor policy are next (`lh-compatibility.md`).
+[qualified](evidence/region-programs.md) (`region-programs.md`). LH selection, explicit FP64 descriptor policy and the original-selector oracle
+are implemented (`lh-selector.md`), pending clean qualification in STATUS. The
+next memory/clock gate is `lh-add-plan.md`.
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

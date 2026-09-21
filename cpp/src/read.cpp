@@ -33,13 +33,28 @@ class LinearRead final : public ReadKernel {
  private:
   bool identity_;
 };
-void validate(const Tensor& value, const ReadInput& r) {
+class NormRead final : public ReadKernel {
+ public:
+  Tensor step(const NodeWeights&, const ReadInput& r) const override {
+    return at::norm(r.state ? r.state->value : r.content.value, 2, {-1}, false, at::kDouble);
+  }
+  std::vector<Tensor> batch(const NodeWeights&, const std::vector<ReadInput>& requests) const override {
+    std::vector<Tensor> values;
+    for (const auto& r : requests) values.push_back(r.state ? r.state->value : r.content.value);
+    return at::norm(at::stack(values), 2, {-1}, false, at::kDouble).unbind();
+  }
+  at::ScalarType descriptor_dtype(at::ScalarType) const override { return at::kDouble; }
+  bool joint_batch() const override { return true; }
+  void validate_weights(const NodeWeights&) const override {}
+};
+void validate(const Tensor& value, const ReadInput& r, at::ScalarType dtype) {
   if (!value.defined() || value.dim() != 0 || value.device() != r.content.value.device()
-      || value.scalar_type() != r.content.value.scalar_type()) throw std::invalid_argument("Read returned incompatible scalar metadata");
+      || value.scalar_type() != dtype) throw std::invalid_argument("Read returned incompatible scalar metadata");
   if (!at::isfinite(value).item<bool>()) throw std::invalid_argument("nonfinite selector score from Read");
 }
 }  // namespace
 std::shared_ptr<const ReadKernel> make_read_kernel(const Node& node) {
+  if (node.readout == "norm-fp64-v1" && !node.identity) return std::make_shared<NormRead>();
   if (node.readout != "linear-v1") throw std::invalid_argument("unknown Read profile: " + node.readout);
   return std::make_shared<LinearRead>(node.identity);
 }
@@ -58,10 +73,13 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
   else for (const auto& r : requests) values.push_back(w.read_kernel->step(w, r));
   if (values.size() != ids.size()) throw std::invalid_argument("Read batch changed event count");
   for (size_t j = 0; j < ids.size(); ++j) {
-    validate(values[j], requests[j]);
+    auto dtype = w.read_kernel->descriptor_dtype(requests[j].content.value.scalar_type());
+    if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble)
+      throw std::invalid_argument("invalid Read precision policy");
+    validate(values[j], requests[j], dtype);
     if (packed && at::GradMode::is_enabled()) {
       auto semantic = w.read_kernel->step(w, requests[j]);
-      validate(semantic, requests[j]);
+      validate(semantic, requests[j], dtype);
       values[j] = semantic_value(values[j], semantic);
     }
     events[ids[j]].descriptor = values[j];

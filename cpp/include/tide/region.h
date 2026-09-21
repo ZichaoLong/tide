@@ -15,6 +15,7 @@ struct RegionInput {
   Index time;
   c10::ArrayRef<Candidate> candidates;
   RegionLayout layout;
+  at::TensorOptions payload_options;
 };
 struct Selection {
   std::set<Index> active;
