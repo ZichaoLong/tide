@@ -35,6 +35,7 @@ struct PortLayout {
 struct PortBinding { Index kind, id; };  // 0: boundary port, 1: edge
 struct PortIndex { std::vector<Index> offsets; std::vector<PortBinding> bindings; };
 struct InputOrigin { Index edge, port, stride; };
+struct SourceDomain { std::vector<Index> edge_target, input; };
 struct Graph {
   std::vector<Node> nodes;
   std::vector<Edge> edges;
@@ -45,6 +46,8 @@ struct Graph {
   PortIndex incoming_ports, outgoing_ports;
   std::vector<InputOrigin> origins;
   std::vector<Index> origin_index;  // Physical edge -> origin record, or -1.
+  std::optional<SourceDomain> source_domain;
+  std::vector<Index> source_counts;  // Logical incoming domain size per node.
   std::string identity;
   void compile();
   std::vector<Index> topological_order() const;

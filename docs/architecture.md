@@ -18,6 +18,7 @@
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
+| `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
 | `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |

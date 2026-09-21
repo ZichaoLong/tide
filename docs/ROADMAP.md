@@ -43,7 +43,9 @@ allocation and structured Delta chunk optimization. Joint EMA/SSM batch/sequence
 scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.
 Stable local port layouts, native flat inverse indexes and SettleGraph remapping
-are [qualified](evidence/local-ports.md). Extensible Full/Emit programs and sparse
+are [qualified](evidence/local-ports.md). Logical source domains for exclusive physical
+phase aliases are implemented (`source-domains.md`); current qualification is
+in STATUS. Extensible Full/Emit programs and sparse
 per-slot emissions are [qualified](evidence/full-programs.md). Source-aware
 Aggregate profiles and extension seams are [qualified](evidence/aggregate-programs.md).
 Graph-owned source-origin views for tag-sensitive custom programs under boundary

@@ -5,6 +5,7 @@ import hashlib
 import json
 from .ports import PortLayout
 from .origins import InputOrigin, validate_origins
+from .source_domain import SourceDomain
 
 
 @dataclass(frozen=True)
@@ -53,6 +54,7 @@ class Graph:
     outputs: tuple[int, ...]
     layout: PortLayout | None = None
     origins: tuple[InputOrigin, ...] = ()
+    source_domain: SourceDomain | None = None
 
     def __post_init__(self):
         n = len(self.nodes)
@@ -85,6 +87,9 @@ class Graph:
         if self.layout is not None and not isinstance(self.layout, PortLayout):
             raise ValueError("invalid local port layout")
         self.port_indexes  # Validate before any execution or checkpoint operation.
+        if self.source_domain is not None and not isinstance(self.source_domain, SourceDomain):
+            raise ValueError("invalid source domain")
+        self.source_counts
         outgoing = self.port_indexes[1]
         for v, node in enumerate(self.nodes):
             degree = outgoing.offsets[v + 1] - outgoing.offsets[v]
@@ -121,9 +126,18 @@ class Graph:
     def port_indexes(self):
         return self.ports.indexes(self)
 
+    @cached_property
+    def domain(self):
+        return SourceDomain(self.ports.edge_target, self.ports.input) if self.source_domain is None else self.source_domain
+
+    @cached_property
+    def source_counts(self):
+        return self.domain.counts(self)
+
     def wire(self):
         record = asdict(self)
         record["layout"] = asdict(self.ports)
+        record["source_domain"] = asdict(self.domain)
         return record
 
     @property

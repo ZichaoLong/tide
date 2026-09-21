@@ -75,14 +75,15 @@ global clock. Resets preserve that metadata. Arbitrary cuts must project pending
 body wires plus partial token-window output buffers, not only token boundaries.
 
 Physical phase wires need a graph-owned logical source domain: all alternatives
-of an original wire share its source slot and coefficient. The current bijective
-PortLayout alone cannot express this. Duplicating all-softmax coefficients over
+of an original wire share its source slot and coefficient. `source-domains.md`
+implements this layer separately from bijective PortLayout; qualification is in
+STATUS. Duplicating all-softmax coefficients over
 physical aliases changes normalization even if only one alias arrives. Do not
 patch this by scaling arbitrary softmax weights. Qualify an explicit domain map,
 parameter aliasing, cache order and duplicate-arrival rejection. A clock wrapper
 must also declare its step/block contract; treating the reserved phase as an
-extra idle decay changes LH. These are proposed interfaces, not implemented
-behavior or a containment proof. Keep original valid-input restrictions (globally
+extra idle decay changes LH. Clock wrappers and complete-cut projection remain
+proposed; the domain layer alone is not a containment proof. Keep original valid-input restrictions (globally
 nonempty readout windows), fixed inference weights and equal-width scope explicit.
 
 Original LH phase/sample CSR has no External.position. The two-graph token_inputs

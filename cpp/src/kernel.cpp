@@ -46,7 +46,7 @@ void configure_model(const Graph& g, Model& m) {
     if (!m.nodes[i].kernel) {
       const auto& n = g.nodes[i];
       m.nodes[i].kernel = !n.identity && is_fiber_attention_profile(n.memory)
-                        ? make_fiber_attention_kernel(n, g.incoming_ports.offsets[i+1]-g.incoming_ports.offsets[i])
+                        ? make_fiber_attention_kernel(n, g.source_counts[i])
                         : !n.identity && n.memory == "attention" ? make_attention_kernel(n.query_heads, n.kv_heads, n.window)
                                                               : make_state_kernel(n.identity ? "identity" : n.memory);
     }

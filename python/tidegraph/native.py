@@ -21,9 +21,8 @@ class Native:
             validate_program(model.nodes[v], spec, offsets[v+1] - offsets[v])
             if type(model.nodes[v].aggregate_program) is not SourceAggregate:
                 raise ValueError("Python custom Aggregate has no native implementation")
-            incoming = graph.port_indexes[0].offsets
-            validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
-            validate_state_program(model.nodes[v], spec, slots=incoming[v+1] - incoming[v], native=True)
+            validate_aggregate(model.nodes[v], spec, graph.source_counts[v])
+            validate_state_program(model.nodes[v], spec, slots=graph.source_counts[v], native=True)
             validate_read(model.nodes[v], spec, native=True)
             validate_next(model.nodes[v], spec, native=True)
         from .region import validate_program as validate_region
@@ -43,6 +42,9 @@ class Native:
             setattr(layout, name, getattr(graph.ports, name))
         g.layout = layout
         g.origins = [core.InputOrigin(o.edge, o.port, o.stride) for o in graph.origins]
+        domain = core.SourceDomain()
+        domain.edge_target, domain.input = graph.domain.edge_target, graph.domain.input
+        g.source_domain = domain
         g.compile()
         self.compiled = g
         m = core.Model()

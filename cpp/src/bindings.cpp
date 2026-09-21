@@ -30,10 +30,14 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<PortIndex>(m, "PortIndex").def_readonly("offsets", &PortIndex::offsets).def_readonly("bindings", &PortIndex::bindings);
   py::class_<InputOrigin>(m, "InputOrigin").def(py::init<Index, Index, Index>())
     FIELD(InputOrigin, edge) FIELD(InputOrigin, port) FIELD(InputOrigin, stride);
+  py::class_<SourceDomain>(m, "SourceDomain").def(py::init<>())
+    FIELD(SourceDomain, edge_target) FIELD(SourceDomain, input);
   py::class_<Graph>(m, "Graph").def(py::init<>()).def("compile", &Graph::compile)
     FIELD(Graph, nodes) FIELD(Graph, edges) FIELD(Graph, regions) FIELD(Graph, inputs) FIELD(Graph, outputs)
     FIELD(Graph, layout)
     FIELD(Graph, origins)
+    FIELD(Graph, source_domain)
+    .def_readonly("source_counts", &Graph::source_counts)
     .def_readonly("incoming_ports", &Graph::incoming_ports).def_readonly("outgoing_ports", &Graph::outgoing_ports)
     .def_readonly("csr", &Graph::csr).def_readonly("csc", &Graph::csc).def_readonly("identity", &Graph::identity);
   py::class_<State>(m, "State").def(py::init<Tensor, Index, Index, std::map<std::string, Tensor>>())

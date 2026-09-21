@@ -29,7 +29,7 @@ void validate_model(const Graph& g, const Model& m) {
     check_tensor(w.decay, ref, {d}); check_tensor(w.weight, ref, {d, d});
     check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
     require(static_cast<bool>(w.kernel), "state kernel is not configured");
-    w.kernel->validate_policy(g.nodes[node], g.incoming_ports.offsets[node+1]-g.incoming_ports.offsets[node]);
+    w.kernel->validate_policy(g.nodes[node], g.source_counts[node]);
     w.kernel->validate_weights(w);
     require(static_cast<bool>(w.read_kernel), "Read kernel is not configured");
     w.read_kernel->validate_weights(w);
@@ -39,7 +39,7 @@ void validate_model(const Graph& g, const Model& m) {
     require(static_cast<bool>(w.full_kernel), "Full kernel is not configured");
     w.full_kernel->validate_weights(w, g.outgoing_ports.offsets[node+1] - g.outgoing_ports.offsets[node]);
     require(static_cast<bool>(w.aggregate_kernel), "Aggregate kernel is not configured");
-    w.aggregate_kernel->validate_weights(w, g.incoming_ports.offsets[node+1] - g.incoming_ports.offsets[node]);
+    w.aggregate_kernel->validate_weights(w, g.source_counts[node]);
   }
   require(m.regions.size() == g.regions.size(), "region weight count mismatch");
   for (size_t r = 0; r < m.regions.size(); ++r) {

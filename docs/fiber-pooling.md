@@ -47,12 +47,13 @@ is an independently missing Parameter. Standard optimizers may apply weight deca
 to all coordinates of a used vector. A cache-only root in an isolated node has
 no path to pooling weights; downstream graph feedback may create legitimate paths.
 
-Kernel factories receive incoming degree, independently of the shared matrices.
+Kernel factories receive the logical incoming domain size (`source-domains.md`),
+independently of the physical degree and shared matrices.
 Native model validation calls `StateKernel.validate_policy`; the fiber program
 checks the graph's profile, heads and domain even for an already supplied kernel.
-Sharing an entire learned-pooling state program across different degrees is
+Sharing an entire learned-pooling state program across different logical sizes is
 rejected; projection parameters can still be shared between separate compatible
-programs. Same-degree sharing, all memory slots, clocks and the coefficient vector
+programs. Same-domain sharing, all memory slots, clocks and the coefficient vector
 round-trip through checkpoints. In-memory cuts/detach/parameter-epoch rules are
 unchanged. Packed schedulers retain semantic replay for first-order public roots.
 Mean/active-softmax may coincide in value initially but remain distinct profiles

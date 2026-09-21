@@ -18,7 +18,7 @@ Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
-Current native structural identity is **v11**; checkpoint payload is **v4**.
+Current native structural identity is **v12**; checkpoint payload is **v4**.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
@@ -56,8 +56,11 @@ explicit logical-time phases instantiate distinct payloads and absence.
 and all-source softmax. Aggregate sees tagged atoms, time, local input slots and
 physical scales, and returns summary content plus optional per-source content.
 Only all-source softmax differentiates absent-source logits via its denominator;
-missing messages and present zeros remain distinct. Existing memory profiles
-consume summary content; `content-programs.md` propagates full source information
+missing messages and present zeros remain distinct. Source slots
+use the graph's logical `SourceDomain`, which can give exclusive physical aliases
+one source coefficient. Duplicate logical arrivals fail; physical tags, ledgers
+and explicit parameter ownership remain observable. See `source-domains.md`.
+Existing memory profiles consume summary content; `content-programs.md` propagates full source information
 to custom state/Read/Full programs. `read-programs.md` separates Read and implements
 region content/old/proposal modes. `next-programs.md` implements complete Next
 requests with comparison-identity state-prefill guards. `region-programs.md`

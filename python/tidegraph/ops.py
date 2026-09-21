@@ -178,10 +178,9 @@ class Model(nn.Module):
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in transitions):
             raise ValueError("invalid custom Next owner")
         offsets = graph.port_indexes[1].offsets
-        incoming = graph.port_indexes[0].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
-            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v)) for v, n in enumerate(graph.nodes))
+            graph.source_counts[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v)) for v, n in enumerate(graph.nodes))
         from .region import program as region_program
         selectors = {} if region_programs is None else region_programs
         if any(type(r) is not int or not 0 <= r < len(graph.regions) for r in selectors):

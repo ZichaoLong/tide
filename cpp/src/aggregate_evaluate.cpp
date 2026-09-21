@@ -8,7 +8,8 @@
 namespace tide {
 namespace {
 AggregateInput request(const Graph& g, const Model& m, const Event& event) {
-  AggregateInput result{event.time, g.incoming_ports.offsets[event.node+1] - g.incoming_ports.offsets[event.node], {}};
+  AggregateInput result{event.time, g.source_counts[event.node], {}};
+  std::set<Index> present;
   for (const auto& atom : event.fiber) {
     auto visible = atom;
     if (atom.kind == 1 && !g.origins.empty() && g.origin_index[atom.source] != -1) {
@@ -16,7 +17,9 @@ AggregateInput request(const Graph& g, const Model& m, const Event& event) {
       if (atom.position % origin.stride) throw std::invalid_argument("message does not lie on input origin clock");
       visible.kind = 0; visible.source = origin.port; visible.position /= origin.stride;
     }
-    result.sources.push_back({atom.kind == 0 ? g.layout->input[atom.source] : g.layout->edge_target[atom.source], visible,
+    const auto slot = atom.kind == 0 ? g.source_domain->input[atom.source] : g.source_domain->edge_target[atom.source];
+    if (!present.insert(slot).second) throw std::invalid_argument("duplicate logical source in complete fiber");
+    result.sources.push_back({slot, visible,
                               atom.kind == 0 ? m.input_scale[atom.source] : m.agg_scale[atom.source]});
   }
   if (result.sources.empty()) throw std::invalid_argument("Aggregate requires a nonempty fiber");

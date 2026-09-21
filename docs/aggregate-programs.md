@@ -7,6 +7,9 @@ Aggregate receives a complete nonempty source-tagged fiber, logical time, stable
 local input slots and legacy physical source scales. Programs are functional,
 immutable during execution, and independent across events. Source tags and input
 positions remain available; logical time is not a token position.
+Slots now resolve through `SourceDomain` (`source-domains.md`). Its default
+is the incoming physical layout; explicit exclusive aliases share a logical
+coefficient. Duplicate logical arrivals are rejected before invoking the program.
 
 Return a summary tensor and an optional sparse map of per-source contributions,
 indexed by present local input slots. The summary need not be a sum for a custom

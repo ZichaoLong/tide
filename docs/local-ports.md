@@ -34,6 +34,10 @@ The existing physical CSR/CSC indexes continue to retain physical edge IDs.
 Compilation/storage is O(nodes + edges + boundary ports); no per-event graph
 scan is needed for slot lookup. These properties are not throughput evidence.
 
+Logical input coefficients can now use a separate `SourceDomain`, allowing
+exclusive physical aliases to share one source slot. This does not relax this
+physical bijection or merge wires; see `source-domains.md`.
+
 Python `dataclasses.replace` on an automatic graph recomputes its layout.
 After modifying an already compiled native topology, either supply a compatible
 layout or reset `graph.layout` to `std::nullopt` before compiling. Compilation

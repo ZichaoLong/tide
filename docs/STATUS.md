@@ -23,23 +23,41 @@ Native serial/parallel/packed and original PACKED/CROSSBATCH are covered.
 Each case uses one homogeneous body/readout profile. No core runtime/schema
 change in this gate and no whole-model training or single-PDG claim.
 
-## Next action
+## Source-domain increment and clean qualification
 
-Save the completed evidence/docs separately from the qualified implementation.
-Then implement the single-PDG prerequisites in lh-iocortex-plan.md: logical source
-domains for physical phase aliases and explicit local clocks with step/block
-contracts. Prove arbitrary-cut pending/body/readout projection and preserve
-occurrence positions when phases are absent. Do not infer occurrence count from
-token time. Composite checkpoint/parameter ownership and large-sparse performance
-remain separate ROADMAP obligations. Review relevant interfaces with rg before
-reading whole files; preserve existing SettleGraph canonical rank/stride clocks.
+SourceDomain is implemented: graph v12 / checkpoint v4, logical incoming domains
+separate from physical PortLayout, complete-fiber collision rejection,
+Python/native factories and SettleGraph remapping. Contract: source-domains.md.
+250 targeted checks passed in 35.73s (FP64/FP32), including standalone C++ custom
+kernels, domain guards, reference/native schedules, cyclic every-cut cursor,
+SettleGraph, isolated public-root/direct-loss VJPs, optimizer and alias save/resume.
+Implementation is being committed before the clean qualification below.
 
-Relevant code: ports.py/ports.h, origins.py, aggregate.py/aggregate.h,
-fiber_pool.cpp, kernel.h/kernel.cpp, full_kernel.cpp, token_window.py/.cpp.
-Native binding rejects Python-only custom kernels: cross-language support needs
-native implementation, not just a wrapper. Targeted checks first, commit source,
-then qualify its exact clean revision and save evidence separately. Do not rerun
-the completed IOCortex qualification solely for documentation edits.
+Dispatch: unit tide-foundation-source-domain-20260921-1958, output
+artifacts/source-domain-20260921-1958/. Command: /home/zlong/anaconda3/bin/python
+scripts/job.py --output-dir artifacts/source-domain-20260921-1958 --
+/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
+artifacts/source-domain-20260921-1958 --jobs 2. This gate reruns all CPU tests;
+it does not rerun original LH oracles (their last qualified source is above).
+Freeze checkout/shared build while active. Inspect unit, status.json,
+verification/result.json and tests.log to establish terminal success. Then save
+source-domain evidence and update STATUS/ROADMAP in a separate commit.
+
+Retain failed artifacts/source-domain-dev-20260921-1951: native build passed,
+241 tests passed and one FP32 Settle test failed. Its original dirty source,
+hash and logs remain archived. Like source-domain-python-20260922-a, it squared
+an already quadratic objective again. New tests independently root actual public
+tensors and directly differentiate the quadratic loss; runtime and tolerance are
+unchanged. Keep both failure records failed. The corrected 250-test run above
+included all previous targets plus standalone C++ CLI/kernel checks.
+
+Next: periodic local state clocks (body phases 0..L-1, token readout phase L,
+period L+1), delegated step/batch/sequence contracts and global stored timestamps.
+Prove cut conversion and idle decay without changing Full's global phase clock.
+Then continue lh-iocortex-plan.md's single-PDG arbitrary-cut projection. Phase
+occurrence ledgers cannot be inferred from token time: either explicitly track
+them or state a narrower projection directly to original LH, which has no such
+ledger. Composite checkpoint ownership and large-sparse performance stay pending.
 
 ## Runtime, reference and retention
 
@@ -63,6 +81,7 @@ current handoff; ROADMAP is the backlog.
 
 CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
 Torch/LibTorch 2.10.0+cpu, C++11 ABI. Backend autoload off; OMP/OpenBLAS=1;
-two build jobs, Nice=10, background.slice. Graph v11, checkpoint v4.
+two build jobs, Nice=10, background.slice. Working graph v12, checkpoint v4;
+qualified IOCortex baseline used graph v11.
 Packed training has tested first-order public-root VJPs with scalar replay;
 inference does not replay. Higher-order AD and large-sparse speed remain unclaimed.

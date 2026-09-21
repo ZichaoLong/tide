@@ -42,6 +42,7 @@ void check_origins(const at::TensorOptions& options) {
   auto encoded = direct; encoded.nodes.push_back({1, false, true}); encoded.regions.push_back({1});
   encoded.edges.insert(encoded.edges.end(), {{1, 0, 1}, {1, 0, 1}}); encoded.inputs = {1};
   encoded.layout = tide::PortLayout{{0, 0, 1}, {2, 0, 1}, {0}, {1}};
+  encoded.source_domain.reset();  // Derive the new domain from the remapped physical slots.
   encoded.origins = {{1, 0, 3}, {2, 1, 3}}; encoded.compile();
   if (!direct.origin_index.empty() || encoded.origin_index.size() != encoded.edges.size())
     throw std::runtime_error("optional origin index allocation mismatch");

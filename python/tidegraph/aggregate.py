@@ -102,12 +102,13 @@ def request(graph, model, fiber):
     if not fiber:
         raise ValueError("Aggregate requires a nonempty fiber")
     node, time = fiber[0].node, fiber[0].time
-    offsets = graph.port_indexes[0].offsets
-    sources = [SourceInput(graph.ports.input[a.source] if a.kind == 0 else graph.ports.edge_target[a.source],
+    sources = [SourceInput(graph.domain.input[a.source] if a.kind == 0 else graph.domain.edge_target[a.source],
                            view(graph, a), model.input_scale[a.source] if a.kind == 0 else model.agg_scale[a.source]) for a in fiber]
+    if len({s.slot for s in sources}) != len(sources):
+        raise ValueError("duplicate logical source in complete fiber")
     if graph.origins:
         sources.sort(key=lambda s: s.atom.key())
-    return AggregateInput(time, offsets[node+1] - offsets[node], tuple(sources))
+    return AggregateInput(time, graph.source_counts[node], tuple(sources))
 
 
 def validate(result, request):

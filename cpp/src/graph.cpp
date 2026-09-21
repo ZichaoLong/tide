@@ -1,5 +1,6 @@
 #include "tide/types.h"
 #include "tide/ports.h"
+#include "tide/source_domain.h"
 #include <algorithm>
 #include <sstream>
 #include <stdexcept>
@@ -67,6 +68,7 @@ void Graph::compile() {
   for (const auto& e : edges) { source.push_back(e.source); target.push_back(e.target); }
   csr = index(source); csc = index(target); output_index = index(outputs);
   compile_ports(*this);
+  compile_source_domain(*this);
   for (Index v = 0; v < n; ++v) {
     const auto& node = nodes[v];
     const auto degree = outgoing_ports.offsets[v+1] - outgoing_ports.offsets[v];
@@ -81,7 +83,7 @@ void Graph::compile() {
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v11;n=" << n << ';';
+  out << "tide-graph-v12;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
@@ -104,6 +106,8 @@ void Graph::compile() {
   out << "li;"; for (auto v : layout->input) out << v << ',';
   out << "lo;"; for (auto v : layout->output) out << v << ',';
   out << "origin;"; for (const auto& origin : origins) out << origin.edge << ',' << origin.port << ',' << origin.stride << ';';
+  out << "ds;"; for (auto v : source_domain->edge_target) out << v << ',';
+  out << "di;"; for (auto v : source_domain->input) out << v << ',';
   identity = out.str();
 }
 }  // namespace tide

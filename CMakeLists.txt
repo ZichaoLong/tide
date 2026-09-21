@@ -6,7 +6,7 @@ find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
 add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/pool.cpp
-  cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/read.cpp cpp/src/next.cpp
+  cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_pool.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp

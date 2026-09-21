@@ -12,11 +12,10 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
     from .readout import validate_program as validate_read
     from .next import validate_program as validate_next
     offsets = graph.port_indexes[1].offsets
-    incoming = graph.port_indexes[0].offsets
     for node, spec in enumerate(graph.nodes):
         validate_program(model.nodes[node], spec, offsets[node+1] - offsets[node])
-        validate_aggregate(model.nodes[node], spec, incoming[node+1] - incoming[node])
-        validate_state_program(model.nodes[node], spec, slots=incoming[node+1] - incoming[node])
+        validate_aggregate(model.nodes[node], spec, graph.source_counts[node])
+        validate_state_program(model.nodes[node], spec, slots=graph.source_counts[node])
         validate_read(model.nodes[node], spec)
         validate_next(model.nodes[node], spec)
     reference = model.nodes[0].bias
