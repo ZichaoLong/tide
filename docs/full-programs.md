@@ -3,7 +3,9 @@
 The interfaces and built-in profiles are [qualified](evidence/full-programs.md).
 `FullKernel` (C++) and `FullProgram` (Python) evaluate selected events after Next.
 They receive the complete read-only comparison State (value, slots, clock and
-observation count), logical time, content, control and outgoing slot-domain size.
+observation count), logical time, complete content, control and outgoing slot-domain size.
+Content's summary, source metadata and per-source contributions are described in
+`content-programs.md`; built-in Full profiles continue using the summary.
 They cannot mutate state/weights or re-evaluate Next.
 
 Return an optional auxiliary `value` and a sparse family of `(local_slot,payload)`.

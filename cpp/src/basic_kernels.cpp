@@ -12,8 +12,8 @@ class BasicKernel final : public StateKernel {
     if (kind_ == "ssm") s.slots["memory"] = at::zeros_like(w.bias);
     return s;
   }
-  State step(const NodeWeights& w, const State& old, const Tensor& h, Index time,
-             const std::vector<Atom>&) const override {
+  State step(const NodeWeights& w, const State& old, const ContentView& content, Index time) const override {
+    const auto& h = content.value;
     if (kind_ == "identity") return old;
     if (kind_ == "ema") return {at::sigmoid(w.decay) * old.value + h, time, old.observations + 1};
     const auto [a, b] = coefficients(w, h);
@@ -21,7 +21,7 @@ class BasicKernel final : public StateKernel {
     return {summary(w, h, memory), time, old.observations + 1, {{"memory", memory}}};
   }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
-                           const std::vector<Index>& times, const FiberViews&) const override {
+                           const std::vector<Index>& times, const ContentViews&) const override {
     if (kind_ == "identity") return old;
     std::vector<Tensor> previous;
     for (const auto& s : old) previous.push_back(kind_ == "ema" ? s.value : s.slots.at("memory"));
@@ -40,8 +40,10 @@ class BasicKernel final : public StateKernel {
     return states;
   }
   bool exact_sequence() const override { return true; }
+  bool joint_batch() const override { return true; }
+  bool joint_sequence() const override { return true; }
   std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
-                              const std::vector<Index>& times, const FiberViews&) const override {
+                              const std::vector<Index>& times, const ContentViews&) const override {
     if (kind_ == "identity") return std::vector<State>(times.size(), old);
     Tensor memory, values;
     if (kind_ == "ema") values = affine_scan(at::sigmoid(w.decay).expand_as(h), h, old.value);
@@ -101,12 +103,12 @@ class BasicKernel final : public StateKernel {
     }
     return result;
   }
-  Tensor read(const NodeWeights& w, const State&, const State& proposal, const Tensor& h,
-              Index, const std::vector<Atom>&) const override {
+  Tensor read(const NodeWeights& w, const State&, const State& proposal, const ContentView& content, Index) const override {
+    const auto& h = content.value;
     return kind_ == "identity" ? at::zeros({}, h.options()) : (proposal.value * w.read).sum(-1);
   }
   Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor& h, const std::vector<Index>&, const FiberViews&) const override {
+                    const Tensor& h, const std::vector<Index>&, const ContentViews&) const override {
     if (kind_ == "identity") return at::zeros({h.size(0)}, h.options());
     std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
     return (at::stack(values) * w.read).sum(-1);

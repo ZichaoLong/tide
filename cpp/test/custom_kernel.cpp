@@ -9,6 +9,8 @@
 #include <fstream>
 #include <iostream>
 
+void check_content_programs(const at::TensorOptions&);
+
 namespace {
 class CustomAccumulator final : public tide::StateKernel {
  public:
@@ -16,9 +18,10 @@ class CustomAccumulator final : public tide::StateKernel {
   tide::State initial(const tide::NodeWeights& w) const override {
     return {at::zeros_like(w.bias), -1, 0, {{"sum", at::zeros_like(w.bias)}}};
   }
-  tide::State step(const tide::NodeWeights&, const tide::State& old, const tide::Tensor& h,
-                   tide::Index time, const std::vector<tide::Atom>& fiber) const override {
-    if (fiber.empty()) throw std::invalid_argument("custom kernel requires a real fiber");
+  tide::State step(const tide::NodeWeights&, const tide::State& old, const tide::ContentView& content,
+                   tide::Index time) const override {
+    const auto& h = content.value;
+    if (content.sources.empty()) throw std::invalid_argument("custom kernel requires a real fiber");
     return {old.value + 2 * h, time, old.observations + 1, {{"sum", old.slots.at("sum") + 3 * h}}};
   }
   void validate_weights(const tide::NodeWeights&) const override {}
@@ -57,9 +60,10 @@ int main(int argc, char** argv) {
     auto idle = engine.run(result.continuation, {}, 2, 2);
     if (idle.continuation.states.size() != 2) throw std::runtime_error("custom kernel continuation mismatch");
     // Public packed contract: ragged independent sequences and the default scalar fallback.
-    std::vector<tide::Atom> fiber{{0, 0, 0, 0, 0, 0, x[0]}};
+    std::vector<tide::SourceInput> sources{{0, {0, 0, 0, 0, 0, 0, x[0]}, m.input_scale[0]}};
     tide::PackedSequence packed{at::ones({3, 2}, options) * 0.25, {0, 1, 3}, {{0, 0}, {1, 0}},
-                                {0, 0, 2}, {&fiber, &fiber, &fiber}};
+                                {0, 0, 2}, {}};
+    for (tide::Index i = 0; i < 3; ++i) packed.views.push_back({packed.contents[i], sources, {}});
     auto state = m.nodes[0].kernel->initial(m.nodes[0]);
     auto batch = m.nodes[0].kernel->packed_sequence(m.nodes[0], {state, state}, packed);
     if (batch.calls != 2 || batch.max_batch != 1 || batch.max_length != 2
@@ -85,6 +89,7 @@ int main(int argc, char** argv) {
     cursor.advance({}, 5, 5);
     if (kernel->validations != checked + 512) throw std::runtime_error("cursor rescanned imported state");
     if (cursor.snapshot().states.size() != 512) throw std::runtime_error("cursor snapshot lost idle state");
+    check_content_programs(options);
     const std::string report = "custom-state-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");

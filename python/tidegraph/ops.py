@@ -5,6 +5,7 @@ from .records import State
 from .memory import kernel, reset
 from .full import ProjectionEmit
 from .aggregate import SourceAggregate
+from .content import as_content, Content
 
 
 class _HST(torch.autograd.Function):
@@ -32,7 +33,7 @@ def emit(h, g, p, mode, zeta=1.0):
 
 class NodeWeights(nn.Module):
     def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
-                 input_slots=0, aggregate_program=None):
+                 input_slots=0, aggregate_program=None, state_program=None):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -40,7 +41,7 @@ class NodeWeights(nn.Module):
         self.weight = parameter((width, width), 0.15)
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
-        self.kernel = kernel("ema" if spec is None else spec.memory, spec)
+        self.kernel = kernel("ema" if spec is None else spec.memory, spec) if state_program is None else state_program
         self.full_kind = "tanh" if spec is None else spec.full
         self.full_program = ProjectionEmit(spec) if full_program is None else full_program
         self.aggregate_program = SourceAggregate("sum" if spec is None else spec.aggregation) if aggregate_program is None else aggregate_program
@@ -83,11 +84,22 @@ class NodeWeights(nn.Module):
         return self.kernel.initial(self)
 
     def prepare(self, old, content, time):
-        proposal = self.kernel.step(self, old, content, time)
+        content = as_content(content)
+        proposal = self.propose(old, content, time)
         return proposal, self.describe(old, proposal, content, time)
 
+    def propose(self, old, content, time):
+        return self.kernel.step(self, old, as_content(content), time)
+
     def describe(self, old, proposal, content, time):
+        if hasattr(self.kernel, "read"):
+            return self.kernel.read(self, old, proposal, as_content(content), time)
         return (proposal.value * self.read).sum(-1)
+
+    def describe_batch(self, old, proposals, batch):
+        if hasattr(self.kernel, "read_batch"):
+            return self.kernel.read_batch(self, old, proposals, batch)
+        return (torch.stack([s.value for s in proposals]) * self.read).sum(-1)
 
     def full(self, comparison, content, probability, mode, zeta):
         return emit(content, self.fresh(comparison, content), probability, mode, zeta)
@@ -100,9 +112,11 @@ class NodeWeights(nn.Module):
             g = content + (comparison @ self.weight + self.bias).tanh()
         return g
 
-    def prepare_block(self, old, contents, times):
-        states = self.kernel.sequence(self, old, contents, times)
-        return states, (torch.stack([s.value for s in states]) * self.read).sum(-1)
+    def prepare_block(self, old, contents, times, views=None):
+        views = [Content(h) for h in contents] if views is None else views
+        states = self.kernel.sequence(self, old, contents, times, views)
+        previous = [old, *states[:-1]]
+        return states, torch.stack([self.describe(a, b, c, t) for a, b, c, t in zip(previous, states, views, times)])
 
     @property
     def can_prefill(self):
@@ -116,7 +130,7 @@ class NodeWeights(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None):
+    def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None, state_programs=None):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
@@ -128,11 +142,14 @@ class Model(nn.Module):
         aggregates = {} if aggregate_programs is None else aggregate_programs
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in aggregates):
             raise ValueError("invalid custom Aggregate owner")
+        states = {} if state_programs is None else state_programs
+        if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in states):
+            raise ValueError("invalid custom state owner")
         offsets = graph.port_indexes[1].offsets
         incoming = graph.port_indexes[0].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
-            incoming[v+1] - incoming[v], aggregates.get(v)) for v, n in enumerate(graph.nodes))
+            incoming[v+1] - incoming[v], aggregates.get(v), states.get(v)) for v, n in enumerate(graph.nodes))
         def scales(count):
             return nn.ParameterList(nn.Parameter(torch.tensor(0.8 + 0.03 * i, dtype=dtype))
                                     for i in range(count))
@@ -170,12 +187,18 @@ class BoundaryWeights(nn.Module):
         return State(torch.zeros_like(self.bias))
 
     def prepare(self, old, content, time):
-        return old, content.new_zeros(())
+        return old, as_content(content).value.new_zeros(())
+
+    def propose(self, old, content, time):
+        return old
 
     def describe(self, old, proposal, content, time):
-        return content.new_zeros(())
+        return as_content(content).value.new_zeros(())
 
-    def prepare_block(self, old, contents, times):
+    def describe_batch(self, old, proposals, batch):
+        return batch.contents.new_zeros((len(batch.times),))
+
+    def prepare_block(self, old, contents, times, views=None):
         return [old for _ in times], contents.new_zeros((len(times),))
 
     @property

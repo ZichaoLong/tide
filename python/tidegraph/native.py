@@ -11,6 +11,7 @@ class Native:
         self.algorithm = algorithm
         from .full import ProjectionEmit, validate_program
         from .aggregate import SourceAggregate, validate_program as validate_aggregate
+        from .state_program import validate_program as validate_state_program
         for v, spec in enumerate(graph.nodes):
             if type(model.nodes[v].full_program) is not ProjectionEmit:
                 raise ValueError("Python custom Full has no native implementation")
@@ -20,6 +21,7 @@ class Native:
                 raise ValueError("Python custom Aggregate has no native implementation")
             incoming = graph.port_indexes[0].offsets
             validate_aggregate(model.nodes[v], spec, incoming[v+1] - incoming[v])
+            validate_state_program(model.nodes[v], spec, native=True)
         g = core.Graph()
         g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
                              n.emission, n.emit_period, n.emit_phases, n.aggregation)

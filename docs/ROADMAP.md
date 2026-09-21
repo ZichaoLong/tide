@@ -48,7 +48,8 @@ per-slot emissions are [qualified](evidence/full-programs.md). Source-aware
 Aggregate profiles and extension seams are [qualified](evidence/aggregate-programs.md).
 Graph-owned source-origin views for tag-sensitive custom programs under boundary
 embedding are [qualified](evidence/source-origins.md). Complete-content propagation
-and Read/Next are the next program gates (`next-read-plan.md`).
+is implemented pending qualification; Read/Next are the next program gates
+(`next-read-plan.md`).
 
 Isolated-root training exposed a packed autograd connectivity defect after the
 903-test qualification. Local semantic replay corrects the tested boundary;

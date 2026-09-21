@@ -32,7 +32,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
     auto& task = tasks[i]; auto& batch = task.batch;
     std::vector<Tensor> values;
     for (auto j : task.ids) {
-      values.push_back(events[j].content); batch.times.push_back(events[j].time); batch.fibers.push_back(&events[j].fiber);
+      values.push_back(events[j].content); batch.times.push_back(events[j].time); batch.views.push_back(events[j].local_content());
     }
     const auto& w = m.nodes[task.node];
     Tensor desc;
@@ -47,7 +47,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
         previous.push_back(task.old[s]);
         previous.insert(previous.end(), states.begin() + batch.offsets[s], states.begin() + batch.offsets[s + 1] - 1);
       }
-      desc = w.kernel->read_batch(w, previous, states, batch.contents, batch.times, batch.fibers);
+      desc = w.kernel->read_batch(w, previous, states, batch.contents, batch.times, batch.views);
     }
     auto& states = task.result.states;
     for (size_t j = 0; j < task.ids.size(); ++j) {
@@ -57,10 +57,10 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
       auto previous = task.old[s];
       for (Index j = batch.offsets[s]; j < batch.offsets[s + 1]; ++j) {
         auto& e = events[task.ids[j]];
-        auto reference = w.kernel->step(w, previous, e.content, e.time, e.fiber);
+        auto reference = w.kernel->step(w, previous, e.local_content(), e.time);
         e.proposed_state = semantic_state(e.proposed_state, reference);
         e.proposal = e.proposed_state.value;
-        auto read = w.kernel->read(w, previous, e.proposed_state, e.content, e.time, e.fiber);
+        auto read = w.kernel->read(w, previous, e.proposed_state, e.local_content(), e.time);
         e.descriptor = semantic_value(e.descriptor, read);
         previous = e.proposed_state;
       }
@@ -70,6 +70,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   for (const auto& task : tasks) {
     if (replay) stats["semantic_state_replays"] += task.ids.size();
     stats["state_sequence_calls"] += task.result.calls;
+    stats["state_scalar_sequence_steps"] += task.result.scalar_steps;
     stats["max_state_batch"] = std::max(stats["max_state_batch"], task.result.max_batch);
     stats["max_state_sequence"] = std::max(stats["max_state_sequence"], task.result.max_length);
     stats["attention_score_elements"] += task.result.score_elements;

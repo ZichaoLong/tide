@@ -4,7 +4,6 @@
 namespace tide {
 // Atom metadata is copied to allow graph-owned source-origin views; Tensor
 // storage is shared read-only. Empty fibers never call Aggregate.
-struct SourceInput { Index slot; Atom atom; Tensor scale; };
 struct AggregateInput { Index time, slots; std::vector<SourceInput> sources; };
 struct AggregateResult { Tensor value; std::vector<SlotValue> contributions; };
 class AggregateKernel {

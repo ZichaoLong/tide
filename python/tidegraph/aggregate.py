@@ -3,15 +3,8 @@ from dataclasses import dataclass
 from collections import defaultdict
 import torch
 from . import autograd
-from .records import Atom
+from .content import Content, SourceInput
 from .origins import view
-
-
-@dataclass(frozen=True)
-class SourceInput:
-    slot: int
-    atom: Atom
-    scale: torch.Tensor
 
 
 @dataclass(frozen=True)
@@ -157,3 +150,4 @@ def evaluate(graph, model, events, packed=False):
     for event, result, r in zip(events, results, requests):
         validate(result, r)
         event.update(content=result.value, contributions=result.contributions)
+        event["_content"] = Content(result.value, r.sources, result.contributions)

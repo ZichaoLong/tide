@@ -4,26 +4,26 @@
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
-                                    const std::vector<Index>& times, const FiberViews& fibers) const {
+                                    const std::vector<Index>& times, const ContentViews& views) const {
   std::vector<State> states;
-  for (size_t i = 0; i < old.size(); ++i) states.push_back(step(w, old[i], h[i], times[i], *fibers[i]));
+  for (size_t i = 0; i < old.size(); ++i) states.push_back(step(w, old[i], views[i].with_value(h[i]), times[i]));
   return states;
 }
 std::vector<State> StateKernel::sequence(const NodeWeights& w, const State& initial, const Tensor& h,
-                                       const std::vector<Index>& times, const FiberViews& fibers) const {
+                                       const std::vector<Index>& times, const ContentViews& views) const {
   State state = initial;
   std::vector<State> states;
   for (size_t i = 0; i < times.size(); ++i) {
-    state = step(w, state, h[i], times[i], *fibers[i]); states.push_back(state);
+    state = step(w, state, views[i].with_value(h[i]), times[i]); states.push_back(state);
   }
   return states;
 }
-Tensor StateKernel::read(const NodeWeights& w, const State&, const State& proposal, const Tensor&,
-                         Index, const std::vector<Atom>&) const { return (proposal.value * w.read).sum(-1); }
+Tensor StateKernel::read(const NodeWeights& w, const State&, const State& proposal, const ContentView&,
+                         Index) const { return (proposal.value * w.read).sum(-1); }
 Tensor StateKernel::read_batch(const NodeWeights& w, const std::vector<State>& old, const std::vector<State>& proposals,
-                               const Tensor& h, const std::vector<Index>& times, const FiberViews& fibers) const {
+                               const Tensor& h, const std::vector<Index>& times, const ContentViews& views) const {
   std::vector<Tensor> values;
-  for (size_t i = 0; i < proposals.size(); ++i) values.push_back(read(w, old[i], proposals[i], h[i], times[i], *fibers[i]));
+  for (size_t i = 0; i < proposals.size(); ++i) values.push_back(read(w, old[i], proposals[i], views[i].with_value(h[i]), times[i]));
   return at::stack(values);
 }
 State StateKernel::reset(const State& state) const {

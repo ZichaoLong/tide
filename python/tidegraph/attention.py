@@ -4,10 +4,12 @@ import math
 import torch
 from .records import State
 from .packing import PackedSequence
+from .content import as_content, Content
 
 
 class Attention:
     sequence_contract = True
+    joint_sequence = True
 
     def __init__(self, query_heads, kv_heads, window):
         self.query_heads, self.kv_heads, self.window = query_heads, kv_heads, window
@@ -18,6 +20,7 @@ class Attention:
 
     def step(self, w, old, h, time):
         """Readable independent oracle: one query head at a time, no dense causal mask."""
+        h = as_content(h).value
         d = len(w.bias) // self.query_heads
         q = (h @ w.extra["attn_q"]).reshape(self.query_heads, d)
         k = (h @ w.extra["attn_k"]).reshape(1, self.kv_heads, d)
@@ -33,8 +36,8 @@ class Attention:
         value = torch.cat(heads) @ w.extra["attn_out"]
         return State(value, time, old.observations + 1, {"key": k.clone(), "value": v.clone()})
 
-    def sequence(self, w, old, h, times):
-        batch = PackedSequence(h, [0, len(times)], [(0, 0)], times, [[] for _ in times])
+    def sequence(self, w, old, h, times, views=None):
+        batch = PackedSequence(h, [0, len(times)], [(0, 0)], times, [Content(v) for v in h] if views is None else views)
         return self.packed_sequence(w, [old], batch)[0]
 
     def packed_sequence(self, w, old, batch):

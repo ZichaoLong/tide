@@ -4,7 +4,7 @@
 namespace tide {
 // The comparison pointer is borrowed only for this synchronous program call.
 // Programs are immutable and must not mutate comparison, content or weights.
-struct FullInput { const State* comparison; Index time; Tensor content, control; };
+struct FullInput { const State* comparison; Index time; ContentView content; Tensor control; };
 struct FullResult { Tensor value; std::vector<SlotValue> emitted; };
 class FullKernel {
  public:

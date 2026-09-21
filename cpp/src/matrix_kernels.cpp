@@ -21,7 +21,8 @@ class MatrixKernel final : public StateKernel {
     if (linear_) s.slots["normalizer"] = at::zeros_like(w.bias);
     return s;
   }
-  State step(const NodeWeights& w, const State& old, const Tensor& h, Index time, const std::vector<Atom>&) const override {
+  State step(const NodeWeights& w, const State& old, const ContentView& content, Index time) const override {
+    const auto& h = content.value;
     auto p = project(w, h); const auto& q = p[0]; const auto& k = p[1]; const auto& v = p[2];
     State s; s.last_time = time; s.observations = old.observations + 1;
     if (linear_) {
@@ -39,7 +40,7 @@ class MatrixKernel final : public StateKernel {
     return s;
   }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
-                           const std::vector<Index>& times, const FiberViews&) const override {
+                           const std::vector<Index>& times, const ContentViews&) const override {
     auto p = project(w, h); const auto& q = p[0]; const auto& k = p[1]; const auto& v = p[2];
     std::vector<Tensor> ms, zs;
     for (const auto& s : old) { ms.push_back(s.slots.at("matrix")); if (linear_) zs.push_back(s.slots.at("normalizer")); }
@@ -62,8 +63,10 @@ class MatrixKernel final : public StateKernel {
     return states;
   }
   bool exact_sequence() const override { return true; }
+  bool joint_batch() const override { return true; }
+  bool joint_sequence() const override { return true; }
   std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
-                              const std::vector<Index>& times, const FiberViews&) const override {
+                              const std::vector<Index>& times, const ContentViews&) const override {
     auto p = project(w, h); const auto& q = p[0]; const auto& k = p[1]; const auto& v = p[2];
     Tensor matrix, z, values;
     if (linear_) {
@@ -84,7 +87,7 @@ class MatrixKernel final : public StateKernel {
     return states;
   }
   Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor&, const std::vector<Index>&, const FiberViews&) const override {
+                    const Tensor&, const std::vector<Index>&, const ContentViews&) const override {
     std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
     return (at::stack(values) * w.read).sum(-1);
   }

@@ -48,9 +48,9 @@ def test_python_invalid_full_batch_contract_is_rejected(dtype, fault):
             if fault == "presence":
                 result[0].emitted = {}
             elif fault == "slot":
-                result[0].emitted = {1: requests[0].content}
+                result[0].emitted = {1: requests[0].content.value}
             elif fault == "shape":
-                result[0].emitted = {0: requests[0].content[:1]}
+                result[0].emitted = {0: requests[0].content.value[:1]}
             else:
                 result.pop()
             return result

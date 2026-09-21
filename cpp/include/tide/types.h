@@ -56,6 +56,16 @@ struct Atom {
   Tensor value;
   auto key() const { return std::tie(batch, node, time, kind, source, position); }
 };
+struct SourceInput { Index slot; Atom atom; Tensor scale; };
+struct SlotValue { Index slot; Tensor value; };
+// Metadata views live only for a synchronous kernel call, never in persistent
+// State. Tensor handles may be retained by autograd; storage is read-only.
+struct ContentView {
+  Tensor value;
+  c10::ArrayRef<SourceInput> sources;
+  c10::ArrayRef<SlotValue> contributions;
+  ContentView with_value(Tensor v) const { return {std::move(v), sources, contributions}; }
+};
 struct Continuation {
   std::string identity;
   Index batch_size = 1, cut = 0;
@@ -80,7 +90,6 @@ struct Model {
   std::vector<Tensor> input_scale, agg_scale, edge_scale, output_scale;
   Index width() const { return nodes.at(0).bias.numel(); }
 };
-struct SlotValue { Index slot; Tensor value; };
 struct Event {
   Index batch, node, time;
   std::vector<Atom> fiber;
@@ -89,6 +98,8 @@ struct Event {
   bool active = false;
   std::vector<SlotValue> emitted;
   std::vector<SlotValue> contributions;
+  std::vector<SourceInput> sources;
+  ContentView local_content() const { return {content, sources, contributions}; }
   std::map<Index, Index> history;
 };
 struct Output { Index batch, time, port; Tensor value; };

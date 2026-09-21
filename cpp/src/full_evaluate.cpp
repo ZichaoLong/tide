@@ -7,8 +7,8 @@ namespace tide {
 namespace {
 void validate(const FullResult& result, const FullInput& input, Index slots) {
   auto tensor = [&](const Tensor& t) {
-    if (!t.defined() || t.sizes() != input.content.sizes() || t.scalar_type() != input.content.scalar_type()
-        || t.device() != input.content.device()) throw std::invalid_argument("Full returned incompatible tensor metadata");
+    if (!t.defined() || t.sizes() != input.content.value.sizes() || t.scalar_type() != input.content.value.scalar_type()
+        || t.device() != input.content.value.device()) throw std::invalid_argument("Full returned incompatible tensor metadata");
   };
   if (result.value.defined()) tensor(result.value);
   Index previous = -1;
@@ -39,7 +39,7 @@ void evaluate_full(const Graph& g, const Model& m, std::vector<Event>& events, c
   const auto& w = m.nodes[node];
   std::vector<FullInput> inputs;
   for (auto i : ids) {
-    const auto& e = events[i]; inputs.push_back({&e.comparison_state, e.time, e.content, e.control});
+    const auto& e = events[i]; inputs.push_back({&e.comparison_state, e.time, e.local_content(), e.control});
   }
   std::vector<FullResult> results;
   if (packed) {

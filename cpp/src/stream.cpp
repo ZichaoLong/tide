@@ -70,6 +70,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     for (const auto& [node, ids] : by_node) {
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_state_replays"] += ids.size();
+      if (options_.packed && !model_.nodes[node].kernel->joint_batch()) stats["state_scalar_batch_steps"] += ids.size();
       stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_aggregate_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
@@ -79,15 +80,15 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         std::vector<State> old;
         std::vector<Tensor> content;
         std::vector<Index> times;
-        FiberViews fiber_views;
+        ContentViews content_views;
         for (auto i : ids) {
           auto& e = events[i];
           if (options_.packed) {
-            old.push_back(e.old); content.push_back(e.content); times.push_back(time); fiber_views.push_back(&e.fiber);
+            old.push_back(e.old); content.push_back(e.content); times.push_back(time); content_views.push_back(e.local_content());
           }
           else {
-            e.proposed_state = w.kernel->step(w, e.old, e.content, time, e.fiber);
-            e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.content, time, e.fiber);
+            e.proposed_state = w.kernel->step(w, e.old, e.local_content(), time);
+            e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), time);
           }
         }
         if (options_.packed) {
@@ -96,16 +97,16 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
           {
             at::NoGradGuard guard;
             auto h = at::stack(content);
-            states = w.kernel->batch(w, old, h, times, fiber_views);
-            desc = w.kernel->read_batch(w, old, states, h, times, fiber_views);
+            states = w.kernel->batch(w, old, h, times, content_views);
+            desc = w.kernel->read_batch(w, old, states, h, times, content_views);
           }
           for (size_t k = 0; k < ids.size(); ++k) {
             auto& e = events[ids[k]];
             e.proposed_state = states[k]; e.descriptor = desc[k];
             if (replay) {
-              auto reference = w.kernel->step(w, e.old, e.content, time, e.fiber);
+              auto reference = w.kernel->step(w, e.old, e.local_content(), time);
               e.proposed_state = semantic_state(e.proposed_state, reference);
-              auto read = w.kernel->read(w, e.old, e.proposed_state, e.content, time, e.fiber);
+              auto read = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), time);
               e.descriptor = semantic_value(e.descriptor, read);
             }
           }

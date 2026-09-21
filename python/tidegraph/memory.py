@@ -3,18 +3,21 @@ import torch
 from torch.nn.functional import softplus
 from .records import State
 from .scan import affine_scan
+from .content import as_content
 
 
 class EMA:
     sequence_contract = True
+    joint_sequence = True
 
     def initial(self, w):
         return State(torch.zeros_like(w.bias))
 
     def step(self, w, old, h, time):
+        h = as_content(h).value
         return State(w.decay.sigmoid() * old.value + h, time, old.observations + 1)
 
-    def sequence(self, w, old, h, times):
+    def sequence(self, w, old, h, times, views=None):
         values = affine_scan(w.decay.sigmoid().expand_as(h), h, old.value)
         return [State(v.clone() if i == len(times)-1 else v, t, old.observations + i + 1)
                 for i, (v, t) in enumerate(zip(values, times))]
@@ -35,6 +38,7 @@ class DiagonalSSM:
     m'=a*m+dt*(h W_b); value=(h W_c)*m'+skip*h.
     """
     sequence_contract = True
+    joint_sequence = True
 
     def initial(self, w):
         return State(torch.zeros_like(w.bias), slots={"memory": torch.zeros_like(w.bias)})
@@ -45,12 +49,13 @@ class DiagonalSSM:
         return a, dt * (h @ w.extra["ssm_b"])
 
     def step(self, w, old, h, time):
+        h = as_content(h).value
         a, b = self.coefficients(w, h)
         memory = a * old.slots["memory"] + b
         value = (h @ w.extra["ssm_c"]) * memory + w.extra["ssm_skip"] * h
         return State(value, time, old.observations + 1, {"memory": memory})
 
-    def sequence(self, w, old, h, times):
+    def sequence(self, w, old, h, times, views=None):
         a, b = self.coefficients(w, h)
         memory = affine_scan(a, b, old.slots["memory"])
         values = (h @ w.extra["ssm_c"]) * memory + w.extra["ssm_skip"] * h

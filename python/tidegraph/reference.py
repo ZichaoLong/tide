@@ -29,7 +29,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                 event = dict(batch=batch, node=node, time=time, fiber=fiber)
                 evaluate_aggregate(graph, model, [event])
                 h = event["content"]
-                prop, desc = model.nodes[node].prepare(old, h, time)
+                prop, desc = model.nodes[node].prepare(old, event["_content"], time)
                 event.update(proposal=prop.value, descriptor=desc, old=old, proposal_state=prop)
                 prepared[batch, node] = event
         for batch in range(q.batch_size):
@@ -54,7 +54,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
         for (batch, node), event in sorted(prepared.items()):
             if event["active"]:
                 offsets = graph.port_indexes[1].offsets
-                request = FullInput(event["_comparison_state"], time, event["content"], event["control"])
+                request = FullInput(event["_comparison_state"], time, event["_content"], event["control"])
                 result = evaluate_full(model.nodes[node], [request], offsets[node+1] - offsets[node], mode, zeta)[0]
                 event["full"], event["emitted"] = result.value, result.emitted
                 for e, edge in enumerate(graph.edges):
@@ -72,6 +72,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                     if source == node and slot in result.emitted:
                         outputs.append((batch, time, port, result.emitted[slot] * model.output_scale[port]))
             event.pop("_comparison_state")
+            event.pop("_content")
             if trace:
                 events.append(event)
     q.pending = sorted((a for a in available if a.kind == 1 and a.time >= stop), key=lambda a: a.key())

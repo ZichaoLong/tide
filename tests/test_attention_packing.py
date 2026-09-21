@@ -69,10 +69,12 @@ def test_attention_config_and_graph_identity(dtype):
         different, Model(different, width=4, dtype=dtype)).compiled.identity
 
 
-@pytest.mark.parametrize("change", ["offsets", "owners", "times", "fibers"])
+@pytest.mark.parametrize("change", ["offsets", "owners", "times", "views"])
 def test_packed_metadata_validation(change):
-    p = PackedSequence(torch.ones(3, 2), [0, 1, 3], [(0, 0), (1, 0)], [0, 1, 2], [[], [], []])
+    from tidegraph.content import Content
+    values = torch.ones(3, 2)
+    p = PackedSequence(values, [0, 1, 3], [(0, 0), (1, 0)], [0, 1, 2], [Content(v) for v in values])
     p.validate()
-    setattr(p, change, {"offsets": [], "owners": [(0, 0), (0, 0)], "times": [0, 2, 1], "fibers": []}[change])
+    setattr(p, change, {"offsets": [], "owners": [(0, 0), (0, 0)], "times": [0, 2, 1], "views": []}[change])
     with pytest.raises(ValueError, match="packed"):
         p.validate()

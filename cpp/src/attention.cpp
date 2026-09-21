@@ -15,20 +15,21 @@ class AttentionKernel final : public StateKernel {
     return {at::zeros_like(w.bias), -1, 0, {{"key", at::zeros(shape, w.bias.options())},
                                           {"value", at::zeros(shape, w.bias.options())}}};
   }
-  State step(const NodeWeights& w, const State& old, const Tensor& h, Index time,
-              const std::vector<Atom>& fiber) const override {
-    return batch(w, {old}, h.unsqueeze(0), {time}, {&fiber})[0];
+  State step(const NodeWeights& w, const State& old, const ContentView& content, Index time) const override {
+    return batch(w, {old}, content.value.unsqueeze(0), {time}, {content})[0];
   }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
-                           const std::vector<Index>& times, const FiberViews& fibers) const override {
-    PackedSequence p; p.contents = h; p.times = times; p.fibers = fibers;
+                           const std::vector<Index>& times, const ContentViews& views) const override {
+    PackedSequence p; p.contents = h; p.times = times; p.views = views;
     for (size_t i = 0; i < old.size(); ++i) { p.offsets.push_back(i + 1); p.owners.emplace_back(i, 0); }
     return packed_sequence(w, old, p).states;
   }
   bool exact_sequence() const override { return true; }
+  bool joint_batch() const override { return true; }
+  bool joint_sequence() const override { return true; }
   std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
-                              const std::vector<Index>& times, const FiberViews& fibers) const override {
-    PackedSequence p{h, {0, h.size(0)}, {{0, 0}}, times, fibers};
+                              const std::vector<Index>& times, const ContentViews& views) const override {
+    PackedSequence p{h, {0, h.size(0)}, {{0, 0}}, times, views};
     return packed_sequence(w, {old}, p).states;
   }
   PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
@@ -83,7 +84,7 @@ class AttentionKernel final : public StateKernel {
     return result;
   }
   Tensor read_batch(const NodeWeights& w, const std::vector<State>&, const std::vector<State>& proposals,
-                    const Tensor&, const std::vector<Index>&, const FiberViews&) const override {
+                    const Tensor&, const std::vector<Index>&, const ContentViews&) const override {
     std::vector<Tensor> values; for (const auto& s : proposals) values.push_back(s.value);
     return (at::stack(values) * w.read).sum(-1);
   }

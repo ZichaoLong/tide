@@ -56,9 +56,9 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       events[i].old = old_state(q, m, events[i].batch, events[i].node);
       jobs.push_back([&, i] {
         auto& e = events[i]; const auto& w = m.nodes[e.node];
-        e.proposed_state = w.kernel->step(w, e.old, e.content, e.time, e.fiber);
+        e.proposed_state = w.kernel->step(w, e.old, e.local_content(), e.time);
         e.proposal = e.proposed_state.value;
-        e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.content, e.time, e.fiber);
+        e.descriptor = w.kernel->read(w, e.old, e.proposed_state, e.local_content(), e.time);
       });
     }
     pool.run(std::move(jobs));

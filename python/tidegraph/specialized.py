@@ -27,7 +27,7 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     evaluate_aggregate(graph, model, [event])
     h = event["content"]
     old = q.states.get((batch, node), model.nodes[node].initial())
-    prop, desc = model.nodes[node].prepare(old, h, time)
+    prop, desc = model.nodes[node].prepare(old, event["_content"], time)
     # A singleton softmax retains the generic zero VJP connection to its score.
     control = desc.reshape(1).softmax(0)[0]
     next_state = model.nodes[node].next(prop, graph.nodes[node].clear)
@@ -35,7 +35,7 @@ def _step(graph, model, q, node, batch, time, atoms, mode, zeta):
     history = dict(q.history.get((batch, node), {}))
     history[node] = history.get(node, 0) + 1; q.history[batch, node] = history
     offsets = graph.port_indexes[1].offsets
-    value = evaluate_full(model.nodes[node], [FullInput(prop, time, h, control)], offsets[node+1] - offsets[node], mode, zeta)[0]
+    value = evaluate_full(model.nodes[node], [FullInput(prop, time, event.pop("_content"), control)], offsets[node+1] - offsets[node], mode, zeta)[0]
     return dict(event, proposal=prop.value,
                 descriptor=desc, control=control, active=True, comparison=prop.value,
                 next=next_state.value, history=dict(history), full=value.value, emitted=value.emitted, proposal_slots=prop.slots,

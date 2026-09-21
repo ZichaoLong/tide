@@ -14,8 +14,8 @@ class SlotState final : public tide::StateKernel {
   tide::State initial(const tide::NodeWeights& w) const override {
     return {at::zeros_like(w.bias), -1, 0, {{"memory", at::zeros_like(w.bias)}}};
   }
-  tide::State step(const tide::NodeWeights&, const tide::State& old, const tide::Tensor& h, tide::Index time,
-                   const std::vector<tide::Atom>&) const override {
+  tide::State step(const tide::NodeWeights&, const tide::State& old, const tide::ContentView& content, tide::Index time) const override {
+    const auto& h = content.value;
     return {old.value + h, time, old.observations + 1, {{"memory", old.slots.at("memory") + 2*h}}};
   }
   void validate_weights(const tide::NodeWeights&) const override {}

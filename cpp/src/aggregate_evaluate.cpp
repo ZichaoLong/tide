@@ -74,6 +74,7 @@ void evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& even
     validate(results[j], requests[j]);
     auto& event = events[ids[j]];
     event.content = results[j].value; event.contributions = std::move(results[j].contributions);
+    event.sources = std::move(requests[j].sources);
   }
 }
 }  // namespace tide

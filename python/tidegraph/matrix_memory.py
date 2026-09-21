@@ -1,5 +1,6 @@
 """Linear attention and gated DeltaRule with independent recurrence/scan paths."""
 import torch
+from .content import as_content
 from torch.nn.functional import elu
 from .records import State
 
@@ -16,6 +17,7 @@ def matrix_scan(a, b, initial):
 
 class MatrixMemory:
     sequence_contract = True
+    joint_sequence = True
     epsilon = 1e-6
 
     def __init__(self, kind):
@@ -43,6 +45,7 @@ class MatrixMemory:
         return value @ w.extra["mem_out"]
 
     def step(self, w, old, h, time):
+        h = as_content(h).value
         q, k, v = self.project(w, h)
         if self.kind == "linear":
             matrix = old.slots["matrix"] + k.unsqueeze(-1) * v.unsqueeze(-2)
@@ -59,7 +62,7 @@ class MatrixMemory:
             value = self.output(w, q, matrix)
         return State(value, time, old.observations + 1, slots)
 
-    def sequence(self, w, old, h, times):
+    def sequence(self, w, old, h, times, views=None):
         q, k, v = self.project(w, h)
         if self.kind == "linear":
             matrix = (k.unsqueeze(-1) * v.unsqueeze(-2)).cumsum(0) + old.slots["matrix"]

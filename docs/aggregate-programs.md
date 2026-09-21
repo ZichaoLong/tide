@@ -11,7 +11,7 @@ positions remain available; logical time is not a token position.
 Return a summary tensor and an optional sparse map of per-source contributions,
 indexed by present local input slots. The summary need not be a sum for a custom
 program. Contributions preserve information for future source-aware state
-programs; current memory profiles consume the summary. The raw fiber remains in
+programs; built-in memory profiles consume the summary. The raw fiber remains in
 the event. Public traces expose `contributions` as a local-slot map. Empty fibers
 never call Aggregate. A present zero stays present.
 
@@ -93,5 +93,6 @@ execution visits only the present fiber. Graphs without origin views allocate no
 origin index and skip the extra source sort. SettleGraph supplies the mapping for
 each boundary input adapter automatically. Built-in and custom Aggregate programs
 then see the original source domain without retaining physical IDs in modules.
-This mapping currently applies to Aggregate; passing the complete source-aware
-content to other program seams remains a separate extension.
+Aggregate's result now carries this complete source-aware content through state,
+Read and Full; see `content-programs.md` for the implementation and qualification
+status of that interface extension.

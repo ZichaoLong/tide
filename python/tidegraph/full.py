@@ -3,13 +3,14 @@ from dataclasses import dataclass
 import torch
 from . import autograd
 from .records import State
+from .content import Content
 
 
 @dataclass(frozen=True)
 class FullInput:
     comparison: State
     time: int
-    content: torch.Tensor
+    content: Content
     control: torch.Tensor
 
 
@@ -48,7 +49,7 @@ class ProjectionEmit(FullProgram):
 
     def step(self, w, request, slots, mode, zeta):
         from .ops import emit
-        h, p = request.content, request.control
+        h, p = request.content.value, request.control
         fresh = w.fresh(request.comparison.value, h)
         value = h if self.identity else emit(h, fresh, p, mode, zeta)
         outputs = {}
@@ -64,7 +65,7 @@ class ProjectionEmit(FullProgram):
 
     def batch(self, w, requests, slots, mode, zeta):
         from .ops import emit
-        h = torch.stack([r.content for r in requests]); p = torch.stack([r.control for r in requests])
+        h = torch.stack([r.content.value for r in requests]); p = torch.stack([r.control for r in requests])
         comparison = torch.stack([r.comparison.value for r in requests])
         fresh = w.fresh(comparison, h)
         values = h if self.identity else emit(h, fresh, p, mode, zeta)
@@ -109,7 +110,7 @@ def validate(result, request, slots):
         raise ValueError("Full returned invalid output slots")
     for value in ([result.value] if result.value is not None else []) + list(result.emitted.values()):
         if not isinstance(value, torch.Tensor) or (value.shape, value.dtype, value.device) != (
-                request.content.shape, request.content.dtype, request.content.device):
+                request.content.value.shape, request.content.value.dtype, request.content.value.device):
             raise ValueError("Full returned incompatible tensor metadata")
 
 

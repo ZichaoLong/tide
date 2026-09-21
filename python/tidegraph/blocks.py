@@ -41,6 +41,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             if torch.is_grad_enabled():
                 stats["semantic_state_replays"] += sum(len(es) for _, es in sequences)
             stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], sequences, q)
+            if not getattr(getattr(model.nodes[node], "kernel", None), "joint_sequence", True):
+                stats["state_scalar_sequence_steps"] = stats.get("state_scalar_sequence_steps", 0) + sum(len(es) for _, es in sequences)
     for batch, region_id, time, _ in frames:
         es = by_frame[batch, time]
         if not es:
@@ -50,7 +52,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             node = e["node"]
             if "proposal" not in e:
                 old = q.states.get((batch, node), model.nodes[node].initial())
-                prop, desc = model.nodes[node].prepare(old, e["content"], time)
+                prop, desc = model.nodes[node].prepare(old, e["_content"], time)
                 e.update(proposal_state=prop, proposal=prop.value, descriptor=desc)
                 stats["state_steps"] += 1
         nodes = [e["node"] for e in es]
@@ -72,7 +74,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
         active = [e for e in es if e["active"]]
         if not active:
             continue
-        requests = [FullInput(e["_comparison_state"], e["time"], e["content"], e["control"]) for e in active]
+        requests = [FullInput(e["_comparison_state"], e["time"], e["_content"], e["control"]) for e in active]
         offsets = graph.port_indexes[1].offsets
         values = evaluate_full(model.nodes[node], requests, offsets[node+1] - offsets[node], mode, zeta, packed=True)
         stats["full_blocks"] += 1
@@ -84,6 +86,7 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             event["full"], event["emitted"] = value.value, value.emitted
     for event in events:
         event.pop("_comparison_state")
+        event.pop("_content")
     return events, stats
 
 
