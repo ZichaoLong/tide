@@ -25,7 +25,7 @@ if(TIDE_LH_ADD)
   target_sources(original_lh PRIVATE
     ${TIDE_LH_SNAPSHOT}/src/AccumulateLocal.cpp ${TIDE_LH_SNAPSHOT}/src/Hidden.cpp
     ${TIDE_LH_SNAPSHOT}/src/BatchHidden.cpp ${TIDE_LH_SNAPSHOT}/src/Confluence.cpp
-    ${TIDE_LH_SNAPSHOT}/src/ModuleUtils.cpp)
+    ${TIDE_LH_SNAPSHOT}/src/ModuleUtils.cpp ${TIDE_LH_SNAPSHOT}/src/CortexConfig.cpp)
 endif()
 add_library(qualified_tide STATIC IMPORTED)
 set_target_properties(qualified_tide PROPERTIES IMPORTED_LOCATION "${TIDE_CORE_LIBRARY}")
@@ -42,4 +42,7 @@ if(TIDE_LH_ADD)
   add_executable(lh-attention-check ${TIDE_ROOT}/cpp/test/lh_attention_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
   target_include_directories(lh-attention-check PRIVATE ${TIDE_ROOT}/cpp/include)
   target_link_libraries(lh-attention-check PRIVATE qualified_tide original_lh Threads::Threads)
+  add_executable(lh-pronounce-check ${TIDE_ROOT}/cpp/test/lh_pronounce_oracle.cpp ${TIDE_ROOT}/cpp/src/runtime.cpp)
+  target_include_directories(lh-pronounce-check PRIVATE ${TIDE_ROOT}/cpp/include)
+  target_link_libraries(lh-pronounce-check PRIVATE qualified_tide original_lh Threads::Threads)
 endif()

@@ -20,8 +20,9 @@ def test_lh_full_value_and_independent_analytic_vjp(dtype, profile, mode):
     s = torch.tensor([.3, -.7, 1.2], dtype=dtype, requires_grad=True)
     h = torch.tensor([-.2, .5, .7], dtype=dtype, requires_grad=True)
     p = torch.tensor(.3, dtype=dtype, requires_grad=True)
-    a = s.detach().relu() if act == "relu" else s.detach()*s.detach().sigmoid()
-    da = (s.detach() > 0).to(dtype) if act == "relu" else s.detach().sigmoid()*(1+s.detach()*(1-s.detach().sigmoid()))
+    a = s.detach().relu() if act == "relu" else s.detach()*s.detach().sigmoid() if act == "silu" else s.detach()
+    da = (s.detach() > 0).to(dtype) if act == "relu" else (
+        s.detach().sigmoid()*(1+s.detach()*(1-s.detach().sigmoid())) if act == "silu" else torch.ones_like(s))
     gamma = torch.ones_like(a) if norm == "identity" else w.extra["lh_norm_weight"].detach()
     if norm == "rms":
         inv = (a.square().mean()+1e-7).rsqrt(); fresh = gamma*a*inv

@@ -3,8 +3,9 @@
 Source audit: immutable LH snapshot from STATUS. Relevant definitions are
 `include/CortexNet.h:Pronounce`, `src/CortexNet.cpp:IOCortexNet::think`,
 `src/Adjacency.cpp:gather_signals_info`, and `include/AccumulateLocal.h:BaseAL::forward`.
-Pooling has passed `evidence/fiber-pooling.md`; this document describes the next
-implementation, not completed Pronounce or whole-model equivalence.
+Pooling has passed `evidence/fiber-pooling.md`. The bounded Pronounce gate below is
+implemented (`token-window.md`); exact qualification status is in STATUS. Whole-model
+and single-graph equivalence remain unproved.
 
 ## Audited behavior
 
@@ -19,8 +20,11 @@ A globally empty window fails the original `wholex.defined()` assertion. A sampl
 with no rows is omitted from the returned dense logits rows; the original Tensor
 alone does not retain sample IDs. An adapter must return explicit sample/token
 coordinates and preserve phase IDs through missing entries. No synthetic zeros.
-The original ALConfig does not expose a norm option; the actual default norm is
-RMS with eps=1e-7. Use the original constructor for the first oracle.
+The original ALConfig does not expose a norm option. `ModuleUtils.h:get_norm_type`
+defaults to **identity**; IntraCortexConfig separately injects its own RMS default.
+Pronounce therefore uses identity normalization in an ordinary valid configuration.
+The first oracle attempt exposed and corrected an earlier RMS assumption; preserve
+that failure. Do not conflate cortex defaults with readout defaults.
 
 ## Bounded implementation
 

@@ -78,6 +78,8 @@ signaling mapping, with Tide's explicit HARD/SOFTP/HST training contract.
 tick-repeat KV log-bias decay and complete cache continuation.
 `fiber-pooling.md` adds separately named post-attention mean/linear/softmax profiles
 and a graph-domain coefficient vector, without changing sum Aggregate content.
+`token-window.md` defines an explicit application clock boundary for readout and
+norm-only Full profiles; it does not alter logical edge delays or input seals.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.

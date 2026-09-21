@@ -9,7 +9,7 @@ Updated: 2026-09-22 (Asia/Shanghai). Branch: `graph-execution-foundation`.
 Unit `tide-foundation-fiber-pool-20260921-1722` is inactive, MainPID 0, exit 0.
 All four records in `artifacts/fiber-pool-20260921-1722/` passed at that clean
 source: `status.json`, `verification/result.json`, `oracle/result.json` and
-`oracle-release/result.json`. No active job. Evidence is saved separately.
+`oracle-release/result.json`. The completed gate is terminal; evidence is saved separately.
 
 Four post-attention pooling profiles now qualify Python/native scalar/packed,
 node parallel, frontier, cycles, specialization/embedding, analytic VJPs, cuts,
@@ -26,21 +26,49 @@ Retain failed `fiber-pool-dev-20260921-1709` and successful follow-up
 Only the incorporated 805-byte `artifacts/fiber_pool_draft.py` was removed, after
 reviewing a dry-run diff against installed source including its added validation.
 
-## Exact next action
+## Pronounce implementation and completed development gate
 
-Proceed with `lh-pronounce-plan.md`: norm-only Full, independent Python/native
-sealed token-window conversion and actual original Pronounce oracle, then whole
-IOCortexNet. The audit found token/phase clocks and contiguous per-port occurrence
-positions must stay distinct. A globally empty original Pronounce window is an
-invalid input domain; absent samples/phases must not be padded with zero messages.
+Norm-only Full profiles, independent Python/native sealed token-window conversion,
+and the original Pronounce oracle are implemented. `token-window.md` owns the
+contract. Actual Pronounce defaults to identity normalization, because ALConfig
+has no norm option and `ModuleUtils.h:get_norm_type` falls back to identity.
+Optional RMS/Layer norm-only Full profiles are separate supported components.
+The vocabulary head stays outside the uniform-width graph; source coordinates
+and both body/token clocks stay explicit. No whole IOCortexNet claim follows.
 
-First gate composes body-tick and token-clock graphs through an explicit adapter;
-it does not prove a single-PDG whole-model encoding. The plan records the required
-autoregressive sealing and phase/source-domain obligations for that later proof.
-No next-stage code exists yet. Implement/test in bounded files, commit, qualify
-frozen clean source and commit evidence separately. ROADMAP retains further
-training/backward, persistent cache/history and measured-scale work. No speed or
-whole-LH equivalence claim is established.
+Unit `tide-foundation-pronounce-dev-20260921-175316` is inactive, MainPID 0, exit 0.
+Its outer status and both Pronounce results passed. Corrected adapter/readout
+checks: **132 passed in 6.45s**, including direct recurrence/VJPs, cuts/detach,
+head/state checkpoint and momentum-SGD resume. Original assertions-on FP64:
+180 cases/1080 tokens/2430 sample outputs, 24 explicitly unavailable. FP32 and
+both assertions-off precisions: 204 cases/1224 tokens/2754 sample outputs each.
+
+Retain failed `pronounce-dev-20260921-1744` (846 tests + Full passed; inherited
+AnyModule accessor failed to compile) and `pronounce-dev-20260921-1751` (850 tests
++ Full passed; original default norm disproved the adapter's RMS assumption).
+The source tar/hash/logs preserve both. The adapter now casts the stored Module
+and checks the actual identity norm policy; no original source was edited.
+Full's development oracle covered 108 cases/756 rows per precision, including
+36 norm-only combinations in addition to the previous 72 activation cases.
+
+## Clean qualification dispatch and next action
+
+This implementation is being committed before the clean qualification dispatch
+`tide-foundation-pronounce-20260921-175646`. Command:
+
+`python scripts/job.py --output-dir artifacts/pronounce-20260921-175646 --
+/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
+artifacts/pronounce-20260921-175646 --jobs 2 --lh-snapshot
+artifacts/lh-source-20260921-1428`.
+
+Freeze source and both oracle caches while active. Inspect the unit and all five
+terminal records: outer status, verification, oracle, oracle-release and
+pronounce-release. No complete qualification result is asserted yet. Save the
+result as a separate evidence commit and update current links after success.
+Then continue the actual IOCortexNet bridge: four CSR/CSC blocks and exact port
+ordering, original selection/caches, activation-to-pending-message projection,
+body/token continuation and labeled logits. The single-PDG clock embedding and
+large-sparse performance remain separate roadmap obligations.
 
 ## Source, reference and execution policy
 

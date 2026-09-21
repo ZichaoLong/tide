@@ -1,6 +1,8 @@
 # LH post-selection Full and edge signaling
 
-Six explicit `Node.full` profiles combine `lh-{relu|silu}-{identity|rms|layer}-v1`.
+Nine explicit `Node.full` profiles combine `lh-{relu|silu|identity}-{identity|rms|layer}-v1`.
+The three identity-activation names implement norm-only readout; they are ordinary
+stateful nodes, distinct from unconditional graph identity boundary adapters.
 They compute activation of **comparison.value**, followed by normalization along
 the last, width-sized dimension. They add no FFN or content residual. RMSNorm
 has learned `extra['lh_norm_weight']` and epsilon 1e-7; LayerNorm has learned
@@ -44,4 +46,5 @@ signaling bias choices, widths 1/3/5 and output degrees 1/3, comparing scalar
 and packed Full values and every output slot. Clean qualification is in
 [evidence/lh-full.md](evidence/lh-full.md).
 This establishes the post-selection component only; original IOCortexNet,
-same-fiber attention and token-window Pronounce remain separate gates.
+token-window Pronounce and whole-model wiring remain separate gates. The norm-only
+extension and token-clock adapter are described in `token-window.md`.

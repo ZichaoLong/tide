@@ -31,6 +31,7 @@
 | `docs/fiber-attention.md` | Same-fiber sum attention, encoded log bias and independent scalar anchors |
 | `docs/fiber-packing.md` | Source/event offsets, per-sample attention buckets, visibility masks and replay |
 | `docs/fiber-pooling.md` | Post-attention mean/linear/softmax Confluence, slot domains and vector VJPs |
+| `docs/token-window.md` | Sealed body-to-token conversion, norm-only readout, labeled logits and continuation |
 | `docs/lh-pronounce-plan.md` | Token clock, sealed-window adapter, original readout oracle and whole-model obligations |
 | `docs/lh-selector.md` | Descriptor precision, LH selector profile and original C++ component oracle |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |

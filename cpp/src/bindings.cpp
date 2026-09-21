@@ -6,6 +6,7 @@
 #include "tide/cursor.h"
 #include "tide/lazy_add.h"
 #include "tide/fiber_attention.h"
+#include "tide/token_window.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -71,7 +72,9 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_property_readonly("proposal_slots", [](const Event& e) { return e.proposed_state.slots; })
     .def_property_readonly("comparison_slots", [](const Event& e) { return e.comparison_state.slots; })
     .def_property_readonly("next_slots", [](const Event& e) { return e.next_state.slots; });
-  py::class_<Output>(m, "Output") FIELD(Output, batch) FIELD(Output, time) FIELD(Output, port) FIELD(Output, value);
+  py::class_<Output>(m, "Output").def(py::init<Index, Index, Index, Tensor>())
+    FIELD(Output, batch) FIELD(Output, time) FIELD(Output, port) FIELD(Output, value);
+  m.def("token_inputs", &token_inputs, py::call_guard<py::gil_scoped_release>());
   py::class_<Result>(m, "Result") FIELD(Result, continuation) FIELD(Result, trace)
     FIELD(Result, outputs) FIELD(Result, messages) FIELD(Result, stats);
   py::class_<Options>(m, "Options").def(py::init<>())

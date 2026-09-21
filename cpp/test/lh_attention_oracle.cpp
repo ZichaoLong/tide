@@ -1,5 +1,5 @@
 // Actual original Attention/KVHidden inference; never adopt its custom backward.
-#include "AccumulateLocal.h"
+#include "lh_cache_oracle.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/fiber_attention.h"
 #include "tide/stream.h"
@@ -19,22 +19,7 @@ void close(const at::Tensor& a, const at::Tensor& b, const char* message, bool f
   require(a.sizes() == b.sizes() && a.scalar_type() == b.scalar_type()
           && at::allclose(a, b, fp64 ? 1e-8 : 1e-5, fp64 ? 1e-10 : 1e-6), message);
 }
-std::map<std::string, at::Tensor> cache(const AL::KVHidden& h, const at::TensorOptions& opts) {
-  at::Tensor k, v;
-  if (AL::KVHidden::attention_mode == Mode::LOOP || AL::KVHidden::attention_mode == Mode::PACKED) {
-    k = h.keys.empty() ? at::empty({h.n_head, 0, h.D/h.n_head}, opts) : at::cat(h.keys, 1);
-    v = h.values.empty() ? at::empty({h.n_head, 0, h.D/h.n_head}, opts) : at::cat(h.values, 1);
-  } else { k = h.keys_cache.slice(1, 0, h.endidx); v = h.values_cache.slice(1, 0, h.endidx); }
-  return {{"key", k.transpose(0, 1).clone()}, {"value", v.transpose(0, 1).clone()},
-          {"log_bias", h.total_growth_rate.slice(0, 0, h.endidx).clone()}};
-}
-std::map<std::string, at::Tensor> cache(const AL::BatchPtrKVHidden& h, Index b, const at::TensorOptions& opts) {
-  if (AL::KVHidden::attention_mode != Mode::CROSSBATCH) return cache(*h.hptrs[b], opts);
-  const auto n = h.endindices[b];
-  return {{"key", h.batch_keys_cache[b].slice(1, 0, n).transpose(0, 1).clone()},
-          {"value", h.batch_values_cache[b].slice(1, 0, n).transpose(0, 1).clone()},
-          {"log_bias", h.batch_total_growth_rate[b].slice(0, 0, n).clone()}};
-}
+using lh_oracle::cache;
 Index check_case(const at::TensorOptions& opts, Mode mode, bool multi, bool clear, double decay,
                  Index width, Index heads, bool bias, int schedule, const std::string& pool = "sum") {
   const Index nodes = 2, sources = 5, batches = 4, ticks = 24;

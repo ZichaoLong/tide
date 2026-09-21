@@ -2,7 +2,7 @@
 import torch
 
 PROFILES = {f"lh-{act}-{norm}-v1": (act, norm)
-            for act in ("relu", "silu") for norm in ("identity", "rms", "layer")}
+            for act in ("relu", "silu", "identity") for norm in ("identity", "rms", "layer")}
 
 
 def initialize(weights):
@@ -27,7 +27,7 @@ def validate(weights):
 
 def fresh(weights, comparison):
     act, norm = PROFILES[weights.full_kind]
-    value = comparison.relu() if act == "relu" else torch.nn.functional.silu(comparison)
+    value = comparison.relu() if act == "relu" else torch.nn.functional.silu(comparison) if act == "silu" else comparison
     shape = (len(weights.bias),)
     if norm == "rms":
         return torch.nn.functional.rms_norm(value, shape, weights.extra["lh_norm_weight"], eps=1e-7)

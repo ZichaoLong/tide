@@ -18,7 +18,7 @@ parser.add_argument("--core-build-dir", default="build")
 parser.add_argument("--oracle-build-dir", default="build/lh-oracle", help="reusable CMake cache; result/log directories remain unique")
 parser.add_argument("--output-dir", required=True)
 parser.add_argument("--jobs", type=int, default=2)
-parser.add_argument("--component", choices=("selector", "add", "full", "attention", "all"), default="selector")
+parser.add_argument("--component", choices=("selector", "add", "full", "attention", "pronounce", "all"), default="selector")
 parser.add_argument("--runtime-assertions", choices=("on", "off"), default="on",
                     help="original LH build policy; off requires a separate oracle cache")
 args = parser.parse_args()
@@ -72,7 +72,7 @@ def save():
     temp = out/"result.tmp"; temp.write_text(json.dumps(record, indent=2)+"\n"); temp.replace(out/"result.json")
 save()
 try:
-    components = ("selector", "add", "full", "attention") if args.component == "all" else (args.component,)
+    components = ("selector", "add", "full", "attention", "pronounce") if args.component == "all" else (args.component,)
     with (out/"build.log").open("w") as log:
         subprocess.run(["cmake", "-S", str(cmake.parent), "-B", str(oracle_build), "-G", "Ninja",
                         "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={torch.utils.cmake_prefix_path}",

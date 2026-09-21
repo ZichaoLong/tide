@@ -16,7 +16,8 @@ void close(const at::Tensor& a, const at::Tensor& b, const char* message) {
 void check(const at::TensorOptions& opts, const std::string& act, const std::string& norm,
            Index width, Index slots, bool bias) {
   const nlohmann::json cfg{{"actfn", act}, {"norm", norm}, {"signalling", "linear"}, {"bias", bias}};
-  auto activation = ConfigurableModule::gen_actfn_anymodule(cfg);
+  auto activation = act == "identity" ? torch::nn::AnyModule(std::make_shared<torch::nn::IdentityImpl>())
+                                      : ConfigurableModule::gen_actfn_anymodule(cfg);
   auto normalization = ConfigurableModule::gen_norm_anymodule(width, cfg);
   normalization.ptr()->to(opts.dtype().toScalarType());
   ConfigurableModule::SubModules signaling;
@@ -73,10 +74,10 @@ int main(int argc, char** argv) {
       throw std::invalid_argument("LH Full oracle requires CPU FP64/FP32");
     at::set_num_threads(1); at::NoGradGuard guard;
     const auto opts = at::TensorOptions().dtype(args.dtype).device(device);
-    for (const auto& act : {"relu", "silu"}) for (const auto& norm : {"identity", "rms", "layer"})
+    for (const auto& act : {"relu", "silu", "identity"}) for (const auto& norm : {"identity", "rms", "layer"})
       for (Index width : {1, 3, 5}) for (Index slots : {1, 3}) for (bool bias : {false, true})
         check(opts, act, norm, width, slots, bias);
-    std::cout << "original-LH-full: passed; 72 configurations, 504 rows; activation/norm and per-edge signaling; scalar/packed\n";
+    std::cout << "original-LH-full: passed; 108 configurations, 756 rows; 72 activation + 36 norm-only; per-edge signaling; scalar/packed\n";
     return 0;
   } catch (const std::exception& error) { std::cerr << error.what() << '\n'; return 2; }
 }

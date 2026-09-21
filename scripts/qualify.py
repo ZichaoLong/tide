@@ -25,3 +25,7 @@ if args.lh_snapshot:
                     "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "oracle-release"),
                     "--oracle-build-dir", "build/lh-oracle-release", "--runtime-assertions", "off",
                     "--jobs", str(args.jobs), "--component", "attention"], check=True)
+    subprocess.run([sys.executable, str(root / "scripts/check_lh_selector.py"), "--device", "cpu", "--dtype", "both",
+                    "--snapshot", args.lh_snapshot, "--output-dir", str(Path(args.output_dir).resolve() / "pronounce-release"),
+                    "--oracle-build-dir", "build/lh-oracle-release", "--runtime-assertions", "off",
+                    "--jobs", str(args.jobs), "--component", "pronounce"], check=True)
