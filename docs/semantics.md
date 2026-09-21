@@ -50,7 +50,7 @@ unselected descriptors can receive gradient through softmax denominators.
   input, parameter and differentiable initial-state VJPs. In-memory chunking has
   no implicit detach. Serialized continuation is a declared gradient boundary.
   `Continuation.detach()` explicitly truncates both state and in-flight messages.
-  Checkpoint v2 also validates the parameter-alias topology before changing any
+  Checkpoint v3 stores all state slots and validates parameter-alias topology before changing any
   weights; reconstruct the same sharing when restoring. Checkpoints do not
   claim to restore a full training controller, data cursor or framework RNG.
 - `None` versus connected-zero is observable for optimizer parameter groups;

@@ -41,9 +41,11 @@ language implementations and analytic examples check the operator formulas.
 - Runtime checkpoints serialize values/spec identity, not a live autograd graph.
   In-memory cuts preserve graph connectivity unless explicitly detached.
 
-The current C++ schedulers still specialize preparation to EMA/identity.
-General node/region program interfaces are the next architectural step; see the
-module extension plan. Topology generality is not yet operator generality.
+State preparation now uses `cpp/include/tide/kernel.h`, with named tensor slots
+and an opt-in exact sequence contract. Built-in profiles are EMA, identity and
+selective diagonal SSM. General region/Agg/Full program interfaces remain future
+work; see the module extension plan. Slot tensors are included in all state
+comparisons, resets, explicit detach and checkpoint v3.
 
 Build qualification checks a source fingerprint and binary hashes from
 `build/build-manifest.json`; stale native modules cannot certify newer C++ code.

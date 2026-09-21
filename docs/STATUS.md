@@ -4,54 +4,43 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 
 ## Current work
 
-M1/M2 `ema-ffn-v1` slice qualified: **105 tests passed** on clean `9c957fd`.
-See `evidence/m1-streaming.md` for commands, scope and retained raw artifacts.
-Native serial/node-parallel, packed batch and independent Python scheduling
-agree in FP64/FP32, including trace, three VJP roots, cuts and checkpoint/AdamW.
-M3 frontier slice qualified on clean `06d9d3e`: **191 tests passed**, including
-region quotient cycles, batch/sequence Full and affine state scan. See
-`evidence/m3-frontier.md` and `frontier-contract.md` for scope and limits.
-M4 qualified on clean `a1da7fe`: **301 tests passed**. Direct SettleGraph,
-identity-boundary embedding, Python/C++ self-loop and chain specializations,
-standalone C++ graph forward/backward all passed; see
-`evidence/m4-settle-specialized.md`. No active jobs. Unit
-`tide-foundation-m4-20260921-0830` completed with exit 0.
+Latest clean qualification: **481 tests passed** at
+`50b5e943b4ba183d66d78a30a4e94468c6ed8349`.
+See `evidence/m5a-state-programs.md`; prior evidence is linked from `ROADMAP.md`.
+No active background jobs. Unit `tide-foundation-m5a-20260921-0900` completed
+with exit 0; no worker remains.
 
-Latest qualification: clean `a2d833e`, **323 tests passed**. Parameter-alias
-checkpoint v2, explicit detach, shared/random VJPs, inference-mode TLS and build
-identity checks are covered. Cancellation lifecycle was separately checked.
-See `evidence/m6-training-contracts.md`. No active jobs; all owned workers ended.
+Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
+serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
+encoding/direct Python execution, independent self-loop/chain anchors, complete
+trace/VJP comparisons, sharing, explicit detach and checkpoint v3. State kernels
+now own preparation; native clients can supply their own StateKernel. EMA,
+identity, diagonal selective SSM and tanh/SwiGLU Full profiles are present.
+Refer to each report for the exact executor/profile cells tested.
 
-M5A candidate: State gains named tensor slots; Python/native state-kernel
-programs remove EMA equations from schedulers; diagonal selective SSM and
-SwiGLU profiles added. Checkpoint candidate is v3. Python targeted tests: 77 pass.
-A standalone C++ client implements its own StateKernel to test the public seam.
-
-Planned unit: `tide-foundation-m5a-20260921-0900`.
-Command: `python scripts/job.py --output-dir artifacts/m5a-20260921-0900 -- python scripts/qualify.py --output-dir artifacts/m5a-20260921-0900`.
-Freeze this checkout until the job ends. Inspect the output directory's status,
-task log and verification result. Stop with
-`systemctl --user stop tide-foundation-m5a-20260921-0900`.
-Immediate next action: complete this build/qualification, fix any failures and
-record exact evidence. Do not report old 323-test results as M5A qualification.
-Attention/linear/DeltaRule remain subsequent work.
-
-Environment inspected: aarch64, Python 3.11, Torch 2.10.0+cpu; native CPU
-operator probe passed. Local Python: `/home/zlong/anaconda3/bin/python`.
-Set `TORCH_DEVICE_BACKEND_AUTOLOAD=0` for CPU commands on this machine because
-the installed NPU plugin otherwise auto-loads. No packages were changed.
+Environment: aarch64; Python 3.11.15; Torch/LibTorch 2.10.0+cpu. Local Python:
+`/home/zlong/anaconda3/bin/python`. CPU commands need
+`TORCH_DEVICE_BACKEND_AUTOLOAD=0` here to avoid unrelated NPU plugin auto-loading.
+No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Extend state/kernel interfaces for Attention/GQA, linear attention, DeltaRule,
-   SSM and SwiGLU; qualify step/block, reset, clock and packed-state behavior.
-   Concrete design/navigation: `module-extension-plan.md`.
-2. M6/M7/M8 remain: broader training objectives, LH C++ adapter, scale.
+1. M5B: implement Linear Attention and gated DeltaRule matrix-state profiles in
+   independent Python/native kernels. Compare step and exact sequence contracts,
+   all state slots, VJPs, clear, cuts and mixed-module SettleGraph embeddings.
+2. Add GQA/window attention with ragged KV representation, actual packed sample
+   and sequence batches, explicit position/same-fiber policies and cache VJPs.
+   See `module-extension-plan.md` and `state-programs.md` for interfaces.
+3. Remaining broader scope: general region/Agg/Full programs, loss statistics,
+   original LH C++ inference adapter (`lh-compatibility.md`), scale/performance.
 
-## Important boundaries
+## Boundaries
 
-- LH worktree contains user modifications; do not write there.
-- LH is an inference compatibility target, never the training authority.
-- No performance or broad model compatibility claims yet.
-- Full user scope remains in the roadmap, including frontier execution,
-  specializations, node parallelism and packed attention/recurrent modules.
+- The LH worktree contains user changes; do not modify or clean it. LH supplies
+  inference compatibility only, never the training authority.
+- Attention, Linear Attention, DeltaRule, original-LH numerical parity and large
+  workload performance remain pending. Do not expand claims from SSM or EMA tests.
+- Native SettleGraph runs the exact TimedDAG encoding; its graph compiler is a
+  Python frontend. Native execution itself does not call Python.
+- Evidence is tied to immutable source revisions. Build artifacts are ignored;
+  verify source/binary fingerprints before fresh qualification.
