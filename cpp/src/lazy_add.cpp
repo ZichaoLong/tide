@@ -1,5 +1,6 @@
 #include "tide/lazy_add.h"
 #include "tide/counters.h"
+#include "tide/clocked_kernel.h"
 #include <cstdint>
 #include <stdexcept>
 
@@ -65,7 +66,9 @@ class AddRepeat final : public StateKernel {
 };
 }  // namespace
 std::shared_ptr<const StateKernel> make_add_repeat_kernel() { return std::make_shared<AddRepeat>(); }
-Tensor decode_add_repeat(const NodeWeights& w, const State& state, Index cut) {
+Tensor decode_add_repeat(const NodeWeights& w, const State& global, Index global_cut, std::optional<StateClock> policy) {
+  const auto clock = policy.value_or(kernel_clock(w.kernel));
+  const auto state = local_state(clock, global); const auto cut = clock.cut(global_cut);
   AddRepeat kernel; kernel.validate_weights(w); kernel.validate_state(w, state);
   if (cut < 0 || state.last_time < -1 || state.last_time >= cut || state.observations < 0)
     throw std::invalid_argument("invalid Add cut/state clock");

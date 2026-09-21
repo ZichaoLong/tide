@@ -11,7 +11,7 @@ add_library(tidegraph STATIC
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_pool.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
-  cpp/src/kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
+  cpp/src/kernel.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp)
 set_target_properties(tidegraph PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(tidegraph PUBLIC cpp/include)
@@ -20,7 +20,7 @@ separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(tidegraph PUBLIC ${TIDE_TORCH_FLAGS})
 add_executable(tidegraph-smoke cpp/src/main.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph)
-add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/src/runtime.cpp)
+add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-full-check PRIVATE tidegraph)

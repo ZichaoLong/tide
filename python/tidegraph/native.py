@@ -31,9 +31,13 @@ class Native:
         for p, layout in zip(model.regions, graph.region_layouts):
             validate_region(p, layout, model.nodes[0].bias, native=True)
         g = core.Graph()
-        g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
+        nodes = []
+        for n in graph.nodes:
+            node = core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window,
                              n.emission, n.emit_period, n.emit_phases, n.aggregation, n.readout, n.next_state)
-                   for n in graph.nodes]
+            node.state_clock = core.StateClock(n.state_clock.period, n.state_clock.first, n.state_clock.count)
+            nodes.append(node)
+        g.nodes = nodes
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority, r.read_mode, r.selector) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs

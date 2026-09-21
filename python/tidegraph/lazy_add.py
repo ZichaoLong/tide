@@ -45,6 +45,10 @@ def decode(weights, state, cut):
     observation count remain unchanged. Parameters must stay fixed for an eager
     LH interpretation across composed windows.
     """
+    from .clocked_state import ClockedState
+    if isinstance(weights.kernel, ClockedState):
+        state = weights.kernel.clock.local_state(state)
+        cut = weights.kernel.clock.cut(cut)
     LazyAdd().validate_weights(weights)
     LazyAdd().validate(weights, state)
     if (not int64(cut) or not int64(state.last_time) or not int64(state.observations)

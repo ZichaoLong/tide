@@ -49,6 +49,16 @@ def validate_program(weights, spec, *, slots=None, native=False):
     builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory,
                 "attention": Attention, LazyAdd.profile: LazyAdd, **{name: FiberAttention for name in PROFILES}}
     program = weights.kernel
+    from .clocked_state import ClockedState
+    from .clocks import StateClock
+    if isinstance(program, ClockedState):
+        if type(program.clock) is not StateClock or program.clock != spec.state_clock:
+            raise ValueError("shared state program does not match state clock")
+        if native and type(program) is not ClockedState:
+            raise ValueError("Python custom clock wrapper has no native implementation")
+        program = program.program
+    elif spec.state_clock != StateClock():
+        raise ValueError("missing state clock wrapper")
     if type(program) is not builtins.get(spec.memory):
         if native:
             raise ValueError("Python custom state program has no native implementation")

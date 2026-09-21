@@ -5,6 +5,7 @@
 #include "tide/next.h"
 #include "tide/region.h"
 #include "tide/fiber_attention.h"
+#include "tide/clocked_kernel.h"
 
 namespace tide {
 std::vector<State> StateKernel::batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
@@ -50,6 +51,7 @@ void configure_model(const Graph& g, Model& m) {
                         : !n.identity && n.memory == "attention" ? make_attention_kernel(n.query_heads, n.kv_heads, n.window)
                                                               : make_state_kernel(n.identity ? "identity" : n.memory);
     }
+    m.nodes[i].kernel = with_state_clock(m.nodes[i].kernel, g.nodes[i].state_clock);
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;
     if (!m.nodes[i].full_kernel) m.nodes[i].full_kernel = make_full_kernel(g.nodes[i]);
     if (!m.nodes[i].next_kernel) m.nodes[i].next_kernel = make_next_kernel(g.nodes[i]);

@@ -24,6 +24,8 @@ void Graph::compile() {
   if (!n || regions.empty()) fail("empty node/region set");
   std::vector<Index> members(regions.size(), 0);
   for (const auto& node : nodes) {
+    node.state_clock.validate();
+    if (node.identity && node.state_clock != StateClock{}) fail("identity boundaries require the global state clock");
     if (node.region < 0 || node.region >= static_cast<Index>(regions.size())) fail("invalid region owner");
     if (node.kv_heads < 1 || node.query_heads < node.kv_heads || node.query_heads % node.kv_heads || node.window < 0)
       fail("invalid attention heads/window");
@@ -83,7 +85,7 @@ void Graph::compile() {
   }
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v12;n=" << n << ';';
+  out << "tide-graph-v13;n=" << n << ';';
   for (const auto& v : nodes) {
     out << v.region << ',' << v.clear << ',' << v.identity << ','
                                 << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
@@ -91,7 +93,8 @@ void Graph::compile() {
         << v.emission.size() << ':' << v.emission << ',' << v.emit_period << ':';
     for (auto phase : v.emit_phases) out << phase << ',';
     out << ':' << v.aggregation.size() << ':' << v.aggregation << ':' << v.readout.size() << ':' << v.readout
-        << ':' << v.next_state.size() << ':' << v.next_state;
+        << ':' << v.next_state.size() << ':' << v.next_state
+        << ':' << v.state_clock.period << ',' << v.state_clock.first << ',' << v.state_clock.count;
     out << ';';
   }
   out << "r;";

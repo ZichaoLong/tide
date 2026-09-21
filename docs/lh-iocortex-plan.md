@@ -80,10 +80,11 @@ implements this layer separately from bijective PortLayout and is qualified in
 `evidence/source-domains.md`. Duplicating all-softmax coefficients over
 physical aliases changes normalization even if only one alias arrives. Do not
 patch this by scaling arbitrary softmax weights. Qualify an explicit domain map,
-parameter aliasing, cache order and duplicate-arrival rejection. A clock wrapper
-must also declare its step/block contract; treating the reserved phase as an
-extra idle decay changes LH. Clock wrappers and complete-cut projection remain
-proposed; the domain layer alone is not a containment proof. Keep original valid-input restrictions (globally
+parameter aliasing, cache order and duplicate-arrival rejection. `state-clocks.md`
+implements the clock wrapper and delegated step/block contracts; treating the
+reserved phase as an extra idle decay changes LH. Whole-model complete-cut
+projection remains proposed; these primitives alone are not a containment proof.
+Keep original valid-input restrictions (globally
 nonempty readout windows), fixed inference weights and equal-width scope explicit.
 
 Original LH phase/sample CSR has no External.position. The two-graph token_inputs

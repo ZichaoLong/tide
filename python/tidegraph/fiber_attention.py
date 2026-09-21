@@ -108,9 +108,14 @@ class FiberAttention(StateProgram):
 
 
 def decode_bias(w, state, cut):
-    if not isinstance(w.kernel, FiberAttention):
+    from .clocked_state import ClockedState
+    kernel = w.kernel
+    if isinstance(kernel, ClockedState):
+        state = kernel.clock.local_state(state); cut = kernel.clock.cut(cut)
+        kernel = kernel.program
+    if not isinstance(kernel, FiberAttention):
         raise ValueError("fiber bias decoder requires the fiber attention profile")
-    w.kernel.validate_weights(w); w.kernel.validate(w, state)
+    kernel.validate_weights(w); kernel.validate(w, state)
     if (not int64(cut) or not int64(state.last_time) or not int64(state.observations)
             or not -1 <= state.last_time < cut or state.observations < 0):
         raise ValueError("invalid fiber attention cut/state clock")

@@ -45,20 +45,50 @@ an already quadratic objective again. Current acceptance isolates actual public
 tensors and directly differentiates the loss, without changing runtime/tolerance.
 The final targeted run passed 250 tests including standalone C++ custom kernels.
 
-Next: StateClock(period, first, count), a contiguous valid-phase interval per
-period. Body = (L+1,0,L); readout = (L+1,L,1). This compact policy avoids a heap
-allocation for every native node. Convert state-program event/last timestamps
-into local ticks; return stored metadata to global time. Delegate step, batch,
-sequence and packed capabilities; preserve tensors, observations and content
-source tags. Keep Full phases, region timestamps and message delays global.
-Guard invalid phases and inverse int64 overflow; validate checkpoint identity.
+## Local-clock implementation and clean qualification
 
-Then complete lh-iocortex-plan.md's single-PDG arbitrary-cut projection. Phase
-occurrence ledgers cannot be inferred from token time: track them explicitly or
-state a narrower projection directly to original LH, which has no such ledger.
-Do not claim complete dual-graph continuation equality without these counters.
-Composite checkpoint ownership and large-sparse performance stay pending.
-No implementation work on local clocks has been applied yet.
+StateClock(period, first, count) and wrappers are implemented: working graph v13
+/ checkpoint v4. Contract: state-clocks.md. Step/batch/sequence/packed calls use
+local state ticks and restore global metadata. Full/Read/Next, region history,
+input ledgers, message send/arrival and seals keep global clocks. Decoders map
+complete cuts. Raw native NodeWeights require an explicit clock when their
+kernel is unconfigured. Policies are compact immutable data, not Python callbacks.
+
+Development unit tide-foundation-clock-dev-20260921-2020 is inactive/dead,
+MainPID 0, exit 0. status.json and development.json under
+artifacts/clock-dev-20260921-2020/ passed; 512 checks in 68.52s, original dirty
+source archive/hash retained. Subsequently added post-checkpoint new-input/VJP
+and isolated pending-root checks passed (22 tests/8.23s). After a strict policy
+type guard, all 265 clock checks passed in 38.56s before committing this source.
+Keep failed artifacts/clock-python-dev-20260922-a: missing MatrixMemory packed
+method was fixed by retaining its per-segment sequence fallback and call counts.
+No numerical tolerance change. Latest cleanup dry run had no candidates.
+
+Dispatching clean qualification: unit tide-foundation-clock-20260921-2031,
+output artifacts/clock-20260921-2031/. Command: /home/zlong/anaconda3/bin/python
+scripts/job.py --output-dir artifacts/clock-20260921-2031 --
+/home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir
+artifacts/clock-20260921-2031 --jobs 2. Source is committed before dispatch.
+Freeze checkout/shared build while active. Inspect terminal unit, status.json,
+verification/result.json and tests.log, then save clock evidence separately.
+This gate reruns CPU tests, not original LH oracles; their source is above.
+
+Next: bounded single-PDG IOCortex adapter/oracle, using lh-iocortex_fixture.h.
+Replicate each original body edge per body phase, delay one except delay two at
+phase L-1; share original local-slot emit weights and physical scales explicitly.
+Split body output into L edges to appended readout, delay L-p, logical target
+slot p. Body clock=(L+1,0,L), readout=(L+1,L,1), emit phases use global time.
+Project body trace, all state/region clocks, input ledgers, emitted/pending wires
+and partial token-window buffers at arbitrary global cuts, not just token edges.
+Use actual think plus independent ragged/whole/cut replay as appropriate.
+
+Readout projection must initially be stated directly to original LH hidden/logits,
+which have no External.position ledger. A full dual-graph continuation projection
+requires explicit phase occurrence counters; token time is not occurrence count.
+Do not imply that these clock/domain primitives prove whole-model containment.
+Preserve fixed weights, equal widths, homogeneous profile and nonempty global
+Pronounce windows as the current original-oracle scope. Composite checkpoint
+ownership and large-sparse performance remain separate ROADMAP obligations.
 
 ## Runtime, reference and retention
 
@@ -82,7 +112,7 @@ current handoff; ROADMAP is the backlog.
 
 CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
 Torch/LibTorch 2.10.0+cpu, C++11 ABI. Backend autoload off; OMP/OpenBLAS=1;
-two build jobs, Nice=10, background.slice. Working graph v12, checkpoint v4;
+two build jobs, Nice=10, background.slice. Working graph v13, checkpoint v4;
 qualified IOCortex baseline used graph v11.
 Packed training has tested first-order public-root VJPs with scalar replay;
 inference does not replay. Higher-order AD and large-sparse speed remain unclaimed.

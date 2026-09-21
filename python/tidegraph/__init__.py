@@ -4,5 +4,6 @@ from .records import Atom, Continuation, External, State
 from .ports import PortLayout
 from .history import History
 from .source_domain import SourceDomain
+from .clocks import StateClock
 
-__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout", "History", "SourceDomain"]
+__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout", "History", "SourceDomain", "StateClock"]

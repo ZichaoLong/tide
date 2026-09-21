@@ -14,12 +14,17 @@ namespace py = pybind11;
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name, &T::name)
 PYBIND11_MODULE(_tide_native, m) {
+  py::class_<StateClock>(m, "StateClock").def(py::init<>()).def(py::init<Index, Index, Index>())
+    FIELD(StateClock, period) FIELD(StateClock, first) FIELD(StateClock, count)
+    .def("validate", &StateClock::validate).def("to_local", &StateClock::to_local)
+    .def("to_global", &StateClock::to_global).def("cut", &StateClock::cut);
   py::class_<Edge>(m, "Edge").def(py::init<Index, Index, Index>())
     FIELD(Edge, source) FIELD(Edge, target) FIELD(Edge, delay);
   py::class_<Node>(m, "Node").def(py::init<Index, bool, bool, std::string, std::string, Index, Index, Index, std::string, Index, std::vector<Index>, std::string, std::string, std::string>())
     FIELD(Node, region) FIELD(Node, clear) FIELD(Node, identity) FIELD(Node, memory) FIELD(Node, full)
     FIELD(Node, query_heads) FIELD(Node, kv_heads) FIELD(Node, window)
-    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation) FIELD(Node, readout) FIELD(Node, next_state);
+    FIELD(Node, emission) FIELD(Node, emit_period) FIELD(Node, emit_phases) FIELD(Node, aggregation) FIELD(Node, readout) FIELD(Node, next_state)
+    FIELD(Node, state_clock);
   py::class_<Region>(m, "Region").def(py::init<Index, bool, bool, std::string, std::string>())
     .def(py::init<Index, bool, bool, std::string>())
     FIELD(Region, budget) FIELD(Region, observe_all) FIELD(Region, count_priority) FIELD(Region, read_mode) FIELD(Region, selector);
@@ -55,8 +60,8 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<NodeWeights>(m, "NodeWeights").def(py::init<Tensor, Tensor, Tensor, Tensor>())
     FIELD(NodeWeights, decay) FIELD(NodeWeights, weight) FIELD(NodeWeights, bias) FIELD(NodeWeights, read) FIELD(NodeWeights, extra);
   py::class_<RegionWeights>(m, "RegionWeights").def(py::init<>()) FIELD(RegionWeights, extra);
-  m.def("decode_add_repeat", &decode_add_repeat);
-  m.def("decode_fiber_bias", &decode_fiber_bias);
+  m.def("decode_add_repeat", &decode_add_repeat, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
+  m.def("decode_fiber_bias", &decode_fiber_bias, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
   py::class_<Model>(m, "Model").def(py::init<>())
     FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale);
   py::class_<Event>(m, "Event")

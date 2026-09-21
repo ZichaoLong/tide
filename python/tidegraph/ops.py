@@ -10,6 +10,7 @@ from .readout import LinearRead, program as make_read, evaluate as evaluate_read
 from .next import program as next_program, AdoptNext
 from . import lh_full
 from .fiber_pool import PROFILES as FIBER_PROFILES, LEARNED as FIBER_LEARNED
+from .clocked_state import with_clock
 
 
 class _HST(torch.autograd.Function):
@@ -46,6 +47,8 @@ class NodeWeights(nn.Module):
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
         self.kernel = kernel("ema" if spec is None else spec.memory, spec, input_slots) if state_program is None else state_program
+        if spec is not None:
+            self.kernel = with_clock(self.kernel, spec.state_clock)
         self.read_program = make_read("linear-v1" if spec is None else spec.readout) if read_program is None else read_program
         self.next_program = next_program("adopt-v1" if spec is None else spec.next_state) if transition is None else transition
         self.full_kind = "tanh" if spec is None else spec.full

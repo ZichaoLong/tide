@@ -1,4 +1,5 @@
 #pragma once
+#include "tide/clock.h"
 #include <ATen/ATen.h>
 #include <cstdint>
 #include <map>
@@ -22,6 +23,7 @@ struct Node {
   Index emit_period = 1;
   std::vector<Index> emit_phases;
   std::string aggregation = "sum", readout = "linear-v1", next_state = "adopt-v1";
+  StateClock state_clock;
 };
 struct Region {
   Index budget;

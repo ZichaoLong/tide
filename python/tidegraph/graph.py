@@ -6,6 +6,7 @@ import json
 from .ports import PortLayout
 from .origins import InputOrigin, validate_origins
 from .source_domain import SourceDomain
+from .clocks import StateClock
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,7 @@ class Node:
     aggregation: str = "sum"
     readout: str = "linear-v1"
     next_state: str = "adopt-v1"
+    state_clock: StateClock = StateClock()
 
     def __post_init__(self):
         object.__setattr__(self, "emit_phases", tuple(self.emit_phases))
@@ -63,6 +65,10 @@ class Graph:
         if any(not 0 <= x.region < len(self.regions) for x in self.nodes):
             raise ValueError("invalid region owner")
         for x in self.nodes:
+            if type(x.state_clock) is not StateClock:
+                raise ValueError("invalid node state clock")
+            if x.identity and x.state_clock != StateClock():
+                raise ValueError("identity boundaries require the global state clock")
             if (any(type(v) is not int for v in (x.query_heads, x.kv_heads, x.window))
                     or not 1 <= x.kv_heads <= x.query_heads < 2**63
                     or x.query_heads % x.kv_heads or not 0 <= x.window < 2**63):

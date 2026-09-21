@@ -1,4 +1,5 @@
 #include "tide/fiber_attention.h"
+#include "tide/clocked_kernel.h"
 #include "tide/counters.h"
 #include "fiber_packing.h"
 #include "fiber_pool.h"
@@ -105,7 +106,9 @@ class FiberAttention final : public StateKernel {
 };
 }  // namespace
 std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots) { return std::make_shared<FiberAttention>(n, slots); }
-Tensor decode_fiber_bias(const NodeWeights& w, const State& state, Index cut) {
+Tensor decode_fiber_bias(const NodeWeights& w, const State& global, Index global_cut, std::optional<StateClock> policy) {
+  const auto clock = policy.value_or(kernel_clock(w.kernel));
+  const auto state = local_state(clock, global); const auto cut = clock.cut(global_cut);
   if (!state.slots.count("key") || state.slots.at("key").dim() != 3)
     throw std::invalid_argument("invalid fiber attention cache shape");
   Node node{0}; node.memory = "lh-fiber-attention-sum-repeat-v1";

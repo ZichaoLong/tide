@@ -19,7 +19,7 @@ def test_domain_default_and_physical_layout_are_distinct(dtype):
     assert encoded.identity != replace(encoded, source_domain=None).identity
     engine = Native(encoded, em)
     assert tuple(engine.compiled.source_counts) == encoded.source_counts
-    assert engine.compiled.identity.startswith("tide-graph-v12;")
+    assert engine.compiled.identity.startswith("tide-graph-v13;")
     default = Native(base, model).compiled
     identity = default.identity; default.source_domain = None; default.compile()
     assert default.identity == identity

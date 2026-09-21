@@ -44,7 +44,8 @@ scans are [qualified](evidence/m5d-memory-packing.md).
 Preserve simple paths as comparison anchors.
 Stable local port layouts, native flat inverse indexes and SettleGraph remapping
 are [qualified](evidence/local-ports.md). Logical source domains for exclusive
-physical phase aliases are [qualified](evidence/source-domains.md).
+physical phase aliases are [qualified](evidence/source-domains.md). Local state
+clocks are implemented (`state-clocks.md`); current qualification is in STATUS.
 Extensible Full/Emit programs and sparse
 per-slot emissions are [qualified](evidence/full-programs.md). Source-aware
 Aggregate profiles and extension seams are [qualified](evidence/aggregate-programs.md).
