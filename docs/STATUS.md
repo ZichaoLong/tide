@@ -18,7 +18,9 @@ Source c84abbed7c9cfce6d4c6a44f6b7ae5f9aab465d3 is frozen at
 Tracked files are read-only; git status is clean; build/ belongs only to that
 worktree. Unit tide-foundation-single-qualified-20260921-2234 was confirmed
 active/running, MainPID 254881, background.slice, Transient=yes and a control
-group outside focus.service. Started 2026-09-21T22:33:32Z. No result yet.
+group outside focus.service. Started 2026-09-21T22:33:32Z. CPU stage passed 3946 tests in 326.58s, clean,
+exit 0, finished 2026-09-21T22:43:32Z; evidence/checkpoint-ownership.md qualifies
+that completed stage. Original LH stages are still running; no whole-job result.
 
 Working directory is the frozen worktree. Exact command:
 /home/zlong/anaconda3/bin/python scripts/job.py --output-dir
@@ -54,7 +56,10 @@ Stale module/Add/attention/Pronounce navigation is refreshed; native/Python
 snapshot identity-copy cost is explicit. All 15 modified/new files in the temporary
 ownership-dev worktree matched main byte-for-byte; that redundant worktree was
 removed after inspection. Its implementation is committed in f900e15/c84abbe.
-Next implement the first bounded M8 native streaming benchmark: separate construction,
+M8 implementation is now dirty on main: cpp/bench/{streaming.h,config.cpp,
+workload.cpp,compare.cpp,main.cpp,metrics_jsonl_writer.h}, CMakeLists.txt,
+scripts/{build,benchmark_streaming,experiment_record}.py,
+tests/test_streaming_benchmark.py, docs/streaming-benchmark.md. It uses separate construction,
 advance and snapshot; include complete correctness checks outside timing, work
 counters, per-repetition latency and process peak memory. Experiment skill read;
 Torch interpreter has no Trackio and no site viewer is configured. Keep portable
@@ -121,3 +126,17 @@ their duplicate project-owned shared-volume copies. Relocation manifests are in
 that local parent. Check capacity before writes. Never clean reference trees.
 Keep cited failures/evidence; cleanup dry run found no eligible old artifacts.
 Packed first-order VJPs use semantic replay; higher-order AD remains unclaimed.
+
+## M8 directed gate to dispatch
+
+Unit tide-foundation-streaming-bench-dev-20260921-2252, output
+artifacts/streaming-bench-dev-20260921-2252/. Command from main:
+/home/zlong/anaconda3/bin/python scripts/job.py --output-dir
+artifacts/streaming-bench-dev-20260921-2252 -- /home/zlong/anaconda3/bin/python
+scripts/develop.py --output-dir artifacts/streaming-bench-dev-20260921-2252
+--jobs 2 tests/test_streaming_benchmark.py.
+Freeze main source/build during this development gate. The original-LH job uses
+its separate immutable worktree and continues independently. Inspect result and
+fix targeted failures before committing the benchmark. Then make a small clean
+tracked pilot; performance is unmeasured so far. Experiment record/CLI APIs and
+Trackio projection are not qualified by merely writing this implementation.
