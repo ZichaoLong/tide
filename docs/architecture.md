@@ -18,7 +18,7 @@
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
-| `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership and preflight value restore |
+| `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership, atomic publication and preflight restore |
 | `docs/packed-autograd.md` | Packed values, independent gradient connectivity and replay cost |
 | `docs/local-ports.md` | Stable node slots, physical wire mappings and compact inverse indexes |
 | `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |

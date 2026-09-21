@@ -29,22 +29,42 @@ partial readout windows, preserving aliases, detached state/pending payloads,
 weights and optimizer updates. No composite two-clock/controller serialization
 or standalone C++ optimizer qualification follows from this test.
 
-Commit this increment, then freeze that clean commit at
-/var/tmp/zlong-graph-execution-foundation/training-qualification-20260921-2345
-and dispatch unit tide-foundation-training-qualified-20260921-2345 from it:
+## Active clean training qualification
+
+Source d233429cd5807614869214dcea21d9492e309fd1 is frozen, clean and read-only at
+/var/tmp/zlong-graph-execution-foundation/training-qualification-20260921-2345,
+with its own build. Unit tide-foundation-training-qualified-20260921-2345 is
+confirmed active/running, MainPID 618952, background.slice, Transient=yes,
+control group outside focus.service. No full result yet. Command:
 
 ```sh
 /home/zlong/anaconda3/bin/python scripts/job.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 --jobs 2
 ```
 
-That gate covers the complete CPU suite; original LH runs separately below.
-After submission record the exact source, active unit and result locations.
-Next independent repair: checkpoint save currently writes directly to the final
-exclusive filename. An interrupted/full-disk write can leave a partial final
-file. An ignored draft exists at artifacts/checkpoint-io-draft/; reproduce the
-old failure, then implement atomic exclusive publication with fault-injection
-coverage. Keep the current v5 format and protect existing targets/racing writers.
-Remaining composite application and standalone C++ ownership stay in ROADMAP.
+Inspect that unit's ActiveState/SubState/MainPID/Result/ExecMainStatus and
+artifacts/training-qualified-20260921-2345/{status.json,task.log} plus
+verification/{result.json,tests.log}. Stop only if necessary with
+systemctl --user stop tide-foundation-training-qualified-20260921-2345.
+Never edit the frozen worktree/build. Original LH runs independently below.
+
+## Current main work
+
+The old direct checkpoint writer was reproduced at d233429:
+artifacts/checkpoint-partial-write-repro/ (injected ENOSPC, 18-byte invalid final
+file). Atomic checkpoint_io.py repair passed 84 directed IO/ownership/round-trip
+tests in 5.73s. Includes serialization/file-fsync failure and retry, concurrent
+publication, absence of a partial target, and honest post-publication directory-
+fsync failure. v5/load are unchanged. See checkpoint-ownership.md.
+
+Commit the repair, then run a clean bounded gate on that commit, using
+scripts/job.py + scripts/develop.py for test_checkpoint_io.py,
+test_checkpoint_ownership.py, test_checkpoint.py and four explicit single-PDG
+resume node IDs (FP64/FP32; Add serial SGD and all-softmax cursor AdamW).
+Main source/build must remain frozen for this short gate; the two long
+qualifications above/below use independent worktrees. Record source, unit and
+logs before running. After passing, retain a separate IO evidence report.
+Composite two-clock and standalone C++ optimizer ownership stay in ROADMAP.
+Ignored staging drafts are redundant; remove after a reviewed cleanup dry run.
 
 ## Active immutable qualification
 

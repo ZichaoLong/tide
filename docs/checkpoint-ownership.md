@@ -39,3 +39,25 @@ state; `checkpoint_ownership.py` handles parameter and optimizer identities.
 `tests/test_checkpoint_ownership.py` covers the silent-reorder reproducer,
 rejection without mutation, shared subset ownership and next-update equality.
 Existing module/executor checkpoint tests supply their numerical continuations.
+
+## Exclusive atomic publication
+
+Save serializes into a private temporary file in the target directory, flushes
+and fsyncs it, atomically creates the final name with a no-overwrite hard link,
+removes the staging name, then fsyncs the directory. Readers never see a partially
+serialized final target. Existing files (including a competing writer that wins
+during serialization) are preserved. Serialization or file-fsync failure removes
+the temporary file and permits a retry at the same target path. The value schema
+and load semantics do not change.
+
+A process killed before cleanup may leave an unreferenced staging file. If the
+final directory fsync fails after publication, save reports the error while the
+complete target may already exist; inspect it rather than blindly overwriting.
+The filesystem must support same-directory hard links and directory fsync; an
+unsupported operation fails explicitly. This is the Linux CPU IO contract.
+
+The prior direct-write failure is retained in
+artifacts/checkpoint-partial-write-repro/: injected ENOSPC left an 18-byte final
+file that could not load. tests/test_checkpoint_io.py injects serialization and
+file-fsync failures, retry, an existing/racing writer and target visibility while
+serialization is in progress. Implementation: checkpoint_io.py.

@@ -1,8 +1,8 @@
 """Value checkpoints. Loading explicitly starts a new autograd segment."""
-from pathlib import Path
 import torch
 from .records import Atom, Continuation, State
 from .history import History
+from .checkpoint_io import publish
 from .validation import validate_window
 from .checkpoint_ownership import parameter_aliases, optimizer_record, preflight_optimizer
 
@@ -21,10 +21,7 @@ def save(path, graph, model, continuation, optimizer=None):
                     for k, h in q.history.items()}, "ledger": q.ledger,
         "pending": [(a.batch, a.node, a.time, a.kind, a.source, a.position, a.value.detach()) for a in q.pending],
     }
-    target = Path(path)
-    # Exclusive creation keeps evidence/checkpoints from accidental replacement.
-    with target.open("xb") as output:
-        torch.save(record, output)
+    publish(path, record)
 
 
 def load(path, graph, model, optimizer=None):
