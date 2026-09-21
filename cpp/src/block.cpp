@@ -1,6 +1,6 @@
 #include "tide/frontier.h"
 #include "tide/ops.h"
-#include "tide/kernel.h"
+#include "tide/block.h"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -33,30 +33,8 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
       events.push_back(std::move(e));
     }
   }
+  prefill_states(g, m, q, options, pool, events, by_sequence, stats);
   std::vector<std::function<void()>> jobs;
-  for (const auto& [owner, ids] : by_sequence) {
-    const auto node = owner.second;
-    if (!options.prefill || !m.nodes[node].kernel->exact_sequence()
-        || !g.regions[g.nodes[node].region].observe_all || g.nodes[node].clear) continue;
-    ++stats["state_blocks"];
-    auto old = old_state(q, m, owner.first, node);
-    jobs.push_back([&, node, ids, old] {
-      std::vector<Tensor> values;
-      std::vector<Index> times;
-      FiberViews views;
-      for (auto i : ids) { values.push_back(events[i].content); times.push_back(events[i].time); views.push_back(&events[i].fiber); }
-      auto h = at::stack(values);
-      const auto& w = m.nodes[node];
-      auto states = w.kernel->sequence(w, old, h, times, views);
-      std::vector<State> previous{old};
-      previous.insert(previous.end(), states.begin(), states.end() - 1);
-      auto desc = w.kernel->read_batch(w, previous, states, h, times, views);
-      for (size_t j = 0; j < ids.size(); ++j) {
-        auto& e = events[ids[j]]; e.proposed_state = states[j]; e.proposal = states[j].value; e.descriptor = desc[j];
-      }
-    });
-  }
-  pool.run(std::move(jobs));
   for (const auto& frame : frames) {
     const auto& ids = by_frame[{frame.batch, frame.time}];
     if (ids.empty()) continue;

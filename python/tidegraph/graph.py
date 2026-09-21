@@ -18,6 +18,9 @@ class Node:
     identity: bool = False
     memory: str = "ema"
     full: str = "tanh"
+    query_heads: int = 1
+    kv_heads: int = 1
+    window: int = 0  # 0 means unbounded; otherwise accepted observations, including current.
 
 
 @dataclass(frozen=True)
@@ -41,6 +44,11 @@ class Graph:
             raise ValueError("nodes and regions must be nonempty")
         if any(not 0 <= x.region < len(self.regions) for x in self.nodes):
             raise ValueError("invalid region owner")
+        for x in self.nodes:
+            if (any(type(v) is not int for v in (x.query_heads, x.kv_heads, x.window))
+                    or not 1 <= x.kv_heads <= x.query_heads < 2**63
+                    or x.query_heads % x.kv_heads or not 0 <= x.window < 2**63):
+                raise ValueError("invalid attention heads/window")
         for r, spec in enumerate(self.regions):
             count = sum(x.region == r for x in self.nodes)
             if not 1 <= spec.budget <= count:

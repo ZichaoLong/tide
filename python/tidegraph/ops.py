@@ -37,9 +37,15 @@ class NodeWeights(nn.Module):
         self.weight = parameter((width, width), 0.15)
         self.bias = parameter((width,), 0.05)
         self.read = parameter((width,), 0.2)
-        self.kernel = kernel("ema" if spec is None else spec.memory)
+        self.kernel = kernel("ema" if spec is None else spec.memory, spec)
         self.full_kind = "tanh" if spec is None else spec.full
         self.extra = nn.ParameterDict()
+        if spec is not None and spec.memory == "attention":
+            if width % spec.query_heads:
+                raise ValueError("attention width must be divisible by query heads")
+            kv_width = width // spec.query_heads * spec.kv_heads
+            for name, size in (("attn_q", width), ("attn_k", kv_width), ("attn_v", kv_width), ("attn_out", width)):
+                self.extra[name] = parameter((width, size), 0.15)
         if spec is not None and spec.memory == "ssm":
             for name in ("ssm_dt", "ssm_b", "ssm_c"):
                 self.extra[name] = parameter((width, width), 0.15)
@@ -82,7 +88,7 @@ class NodeWeights(nn.Module):
         return self.kernel.sequence_contract
 
     def next(self, comparison, clear):
-        return reset(comparison) if clear else comparison
+        return getattr(self.kernel, "reset", reset)(comparison) if clear else comparison
 
     def validate(self, state):
         self.kernel.validate(self, state)

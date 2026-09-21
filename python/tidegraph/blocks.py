@@ -3,17 +3,18 @@ from collections import defaultdict
 import torch
 from .ops import select
 from .records import Atom, State
+from .packing import prepare_sequences
 
 
 def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True):
-    """Frames belong to one (sample,region), with complete fibers and ordered time.
+    """Frames belong to one region across samples, with complete fibers and ordered time.
 
     Contract: block contains no unresolved Full->fiber edge. Persistent region
     history is processed causally; node state scans are allowed only if state
     adoption/reset is independent of selection.
     """
     events, by_node, by_sequence, by_frame = [], defaultdict(list), defaultdict(list), defaultdict(list)
-    stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0}
+    stats = {"state_blocks": 0, "state_steps": 0, "full_blocks": 0, "state_sequence_calls": 0}
     for batch, region, time, nodes in frames:
         for node in sorted(nodes):
             atoms = sorted(fibers.get((batch, node, time), []), key=lambda a: a.key())
@@ -22,15 +23,12 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True)
             event = dict(batch=batch, node=node, time=time, fiber=atoms, content=model.aggregate(atoms))
             by_node[node].append(event); by_sequence[batch, node].append(event)
             by_frame[batch, time].append(event); events.append(event)
-    for (batch, node), es in by_sequence.items():
+    for node in by_node:
         region = graph.regions[graph.nodes[node].region]
         if prefill and model.nodes[node].can_prefill and region.observe_all and not graph.nodes[node].clear:
-            old = q.states.get((es[0]["batch"], node), model.nodes[node].initial())
-            states, descriptors = model.nodes[node].prepare_block(old, torch.stack([e["content"] for e in es]),
-                                                                [e["time"] for e in es])
-            stats["state_blocks"] += 1
-            for e, state, descriptor in zip(es, states, descriptors):
-                e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)
+            sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]
+            stats["state_blocks"] += len(sequences)
+            stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], sequences, q)
     for batch, region_id, time, _ in frames:
         es = by_frame[batch, time]
         if not es:

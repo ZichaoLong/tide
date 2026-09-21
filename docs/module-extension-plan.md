@@ -6,6 +6,10 @@ The initial state-program seam and SSM/SwiGLU are implemented and qualified in
 This document retains the remaining interface/module work; it is not a blanket
 support claim for arbitrary models.
 
+M5C adds aggregated-event GQA/window attention and checked packed sequence
+interfaces; see `attention.md` and the current qualification in `STATUS.md`.
+RoPE/position and LH same-fiber attention remain separate profiles to implement.
+
 ## First change: remove formula assumptions from schedulers
 
 State formulas now live in Python memory modules and native state kernels behind

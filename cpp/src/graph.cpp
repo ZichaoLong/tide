@@ -22,6 +22,8 @@ void Graph::compile() {
   std::vector<Index> members(regions.size(), 0);
   for (const auto& node : nodes) {
     if (node.region < 0 || node.region >= static_cast<Index>(regions.size())) fail("invalid region owner");
+    if (node.kv_heads < 1 || node.query_heads < node.kv_heads || node.query_heads % node.kv_heads || node.window < 0)
+      fail("invalid attention heads/window");
     ++members[node.region];
   }
   for (size_t r = 0; r < regions.size(); ++r)
@@ -46,9 +48,10 @@ void Graph::compile() {
   csr = index(source); csc = index(target); output_index = index(outputs);
   // Collision-free canonical structural identity, independent of object addresses.
   std::ostringstream out;
-  out << "tide-graph-v3;n=" << n << ';';
+  out << "tide-graph-v4;n=" << n << ';';
   for (const auto& v : nodes) out << v.region << ',' << v.clear << ',' << v.identity << ','
-                                << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ';';
+                                << v.memory.size() << ':' << v.memory << ',' << v.full.size() << ':' << v.full << ','
+                                << v.query_heads << ',' << v.kv_heads << ',' << v.window << ';';
   out << "r;";
   for (const auto& r : regions) out << r.budget << ',' << r.observe_all << ',' << r.count_priority << ';';
   out << "e;";

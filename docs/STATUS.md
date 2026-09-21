@@ -7,13 +7,16 @@ Updated: 2026-09-21. Branch: `graph-execution-foundation`.
 Latest clean qualification: **619 tests passed** at
 `ca0a12764ab0f766ba86f46c84a6d60f2e35e303`.
 See `evidence/m5b-matrix-memory.md`; prior evidence is linked from `ROADMAP.md`.
-No active background jobs. Unit `tide-foundation-m5b-20260921-0920` completed
-with exit 0; no worker remains.
+M5B's unit completed with exit 0. M5C candidate adds aggregated-event GQA/window,
+ragged K/V slots, checked packed-sequence metadata, and actual batch/sequence
+attention groups. Targeted Python attention/schedule/metadata checks: 60 passed.
+Native/full regression qualification is pending; see `attention.md`.
 
-M5B adds qualified Linear Attention and gated DeltaRule matrix-state kernels,
-including packed independent-sample steps and sequence scans. Mixed SSM/Linear/
-Delta SettleGraph embeddings are covered. See `matrix-memory.md` for the dense
-Delta scan performance boundary. M5C attention is the next implementation.
+Planned durable unit: `tide-foundation-m5c-20260921-0939`.
+Command: `/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/m5c-20260921-0939 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir artifacts/m5c-20260921-0939`.
+Freeze this checkout while the unit is active. Inspect its `status.json`,
+`task.log`, and `verification/result.json`; stop if necessary with
+`systemctl --user stop tide-foundation-m5c-20260921-0939`.
 
 Implemented: CPU FP64/FP32 PositiveDelayGraph sparse streaming, native
 serial/node-parallel and batch packing, TimedDAG frontier, SettleGraph
@@ -30,11 +33,13 @@ No packages were changed. CMake derives LibTorch from the selected Python.
 
 ## Next action
 
-1. Add GQA/window attention with ragged KV representation, actual packed sample
-   and sequence batches, explicit position/same-fiber policies and cache VJPs.
-   See `module-extension-plan.md` and `state-programs.md` for interfaces.
-2. Remaining broader scope: general region/Agg/Full programs, loss statistics,
-   original LH C++ inference adapter (`lh-compatibility.md`), scale/performance.
+1. Finish M5C build/full qualification; fix failures and commit evidence separately.
+2. Generalize region/Agg/Full interfaces and loss statistics; review original LH
+   C++ inference mapping (`lh-compatibility.md`) before choosing its exact profiles.
+3. Native owned streaming cursor/advance API is needed for very sparse, large
+   workloads: current functional windows copy/validate all cached state each cut.
+   Keep the functional executor as an oracle. Performance qualification must also
+   address cache allocation, structured Delta chunks and observed batching.
 
 ## Boundaries
 

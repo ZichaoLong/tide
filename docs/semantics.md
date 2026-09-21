@@ -40,6 +40,11 @@ unselected descriptors can receive gradient through softmax denominators.
 
 ## Equality and training
 
+Additional local state profiles are specified in `state-programs.md` (SSM),
+`matrix-memory.md` (Linear/Delta) and `attention.md` (aggregated-event GQA/window).
+Their clocks, clear behavior and batching contracts are explicit; sharing the
+generic executor does not make these different profiles interchangeable.
+
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.
 - Tensor comparison: FP64 atol=1e-10 rtol=1e-8; FP32 atol=1e-6 rtol=1e-5.

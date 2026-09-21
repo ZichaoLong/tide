@@ -16,6 +16,7 @@ struct Node {
   Index region;
   bool clear = false, identity = false;
   std::string memory = "ema", full = "tanh";
+  Index query_heads = 1, kv_heads = 1, window = 0;
 };
 struct Region { Index budget; bool observe_all = true, count_priority = true; };
 struct Adjacency { std::vector<Index> offsets, edges; };

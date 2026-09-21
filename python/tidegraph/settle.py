@@ -115,7 +115,7 @@ def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True):
         deliver(graph, model, block, fibers, messages, raw_outputs)
         events.extend(block); stats["region_blocks"] += 1
         for key, value in counters.items():
-            stats[key] += value
+            stats[key] = stats.get(key, 0) + value
     groups = defaultdict(list)
     for b, time, port, value in raw_outputs:
         position = (time - spec.rank(graph.outputs[port])) // spec.stride

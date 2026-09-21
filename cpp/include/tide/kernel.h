@@ -1,10 +1,9 @@
 #pragma once
-#include "tide/types.h"
+#include "tide/packed.h"
 
 namespace tide {
 // A C++ client can provide its own immutable program in NodeWeights::kernel.
 // Tensor state is functional; no program may mutate persistent state or weights.
-using FiberViews = std::vector<const std::vector<Atom>*>;
 class StateKernel {
  public:
   virtual ~StateKernel() = default;
@@ -15,6 +14,8 @@ class StateKernel {
                                   const std::vector<Index>&, const FiberViews&) const;
   virtual std::vector<State> sequence(const NodeWeights&, const State&, const Tensor&,
                                      const std::vector<Index>&, const FiberViews&) const;
+  virtual PackedStates packed_sequence(const NodeWeights&, const std::vector<State>&,
+                                       const PackedSequence&) const;
   virtual bool exact_sequence() const { return false; }
   virtual Tensor read(const NodeWeights&, const State& old, const State& proposal, const Tensor&,
                       Index, const std::vector<Atom>&) const;

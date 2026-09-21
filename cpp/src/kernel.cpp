@@ -37,10 +37,15 @@ Tensor affine_scan(Tensor a, Tensor b, const Tensor& initial) {
   }
   return b + a * initial;
 }
+std::shared_ptr<const StateKernel> make_attention_kernel(Index, Index, Index);
 void configure_model(const Graph& g, Model& m) {
   if (g.nodes.size() != m.nodes.size()) throw std::invalid_argument("node weight count mismatch");
   for (size_t i = 0; i < m.nodes.size(); ++i) {
-    if (!m.nodes[i].kernel) m.nodes[i].kernel = make_state_kernel(g.nodes[i].identity ? "identity" : g.nodes[i].memory);
+    if (!m.nodes[i].kernel) {
+      const auto& n = g.nodes[i];
+      m.nodes[i].kernel = !n.identity && n.memory == "attention" ? make_attention_kernel(n.query_heads, n.kv_heads, n.window)
+                                                              : make_state_kernel(n.identity ? "identity" : n.memory);
+    }
     m.nodes[i].full_kind = g.nodes[i].identity ? "identity" : g.nodes[i].full;
   }
 }

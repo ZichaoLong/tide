@@ -8,7 +8,8 @@ class Native:
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         g = core.Graph()
-        g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full) for n in graph.nodes]
+        g.nodes = [core.Node(n.region, n.clear, n.identity, n.memory, n.full, n.query_heads, n.kv_heads, n.window)
+                   for n in graph.nodes]
         g.edges = [core.Edge(e.source, e.target, e.delay) for e in graph.edges]
         g.regions = [core.Region(r.budget, r.observe_all, r.count_priority) for r in graph.regions]
         g.inputs, g.outputs = graph.inputs, graph.outputs

@@ -14,6 +14,7 @@
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |
 | `docs/evidence/` | Small immutable-source qualification reports |
 | `docs/module-extension-plan.md` | Concrete next kernel/state interface work |
+| `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/lh-compatibility.md` | C++ LH inference mapping and unverified obligations |
 
 One semantic spine: `SettleGraph -> encoded TimedDAG -> PositiveDelayGraph`.
@@ -43,7 +44,9 @@ language implementations and analytic examples check the operator formulas.
 
 State preparation now uses `cpp/include/tide/kernel.h`, with named tensor slots
 and an opt-in exact sequence contract. Built-in profiles are EMA, identity and
-selective diagonal SSM. General region/Agg/Full program interfaces remain future
+selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed state
+prefill is isolated in `block_prepare.cpp`; its checked segment representation is
+in `packed.h`/`packed.cpp`. General region/Agg/Full program interfaces remain future
 work; see the module extension plan. Slot tensors are included in all state
 comparisons, resets, explicit detach and checkpoint v3.
 

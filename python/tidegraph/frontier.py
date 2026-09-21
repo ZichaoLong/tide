@@ -76,7 +76,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until, mode="hard"
             deliver(graph, model, block_events, fibers, messages, outputs)
             events.extend(block_events)
             for name, count in block_stats.items():
-                stats[name] += count
+                stats[name] = stats.get(name, 0) + count
             stats["region_blocks"] += 1
         for owner, keys in blocks:
             cursor[owner] += len(keys); done.update(keys)

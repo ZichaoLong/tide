@@ -57,7 +57,7 @@ class DiagonalSSM:
             raise ValueError("SSM requires one width-sized memory slot")
 
 
-def kernel(name):
+def kernel(name, spec=None):
     if name == "ema":
         return EMA()
     if name == "ssm":
@@ -65,6 +65,9 @@ def kernel(name):
     if name in {"linear", "delta"}:
         from .matrix_memory import MatrixMemory
         return MatrixMemory(name)
+    if name == "attention":
+        from .attention import Attention
+        return Attention(spec.query_heads, spec.kv_heads, spec.window)
     raise ValueError(f"unknown state kernel: {name}")
 
 

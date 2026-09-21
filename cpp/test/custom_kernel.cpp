@@ -51,6 +51,24 @@ int main(int argc, char** argv) {
     if (!at::equal(grad, at::full_like(x, 10))) throw std::runtime_error("custom kernel VJP mismatch");
     auto idle = engine.run(result.continuation, {}, 2, 2);
     if (idle.continuation.states.size() != 2) throw std::runtime_error("custom kernel continuation mismatch");
+    // Public packed contract: ragged independent sequences and the default scalar fallback.
+    std::vector<tide::Atom> fiber{{0, 0, 0, 0, 0, 0, x[0]}};
+    tide::PackedSequence packed{at::ones({3, 2}, options) * 0.25, {0, 1, 3}, {{0, 0}, {1, 0}},
+                                {0, 0, 2}, {&fiber, &fiber, &fiber}};
+    auto state = m.nodes[0].kernel->initial(m.nodes[0]);
+    auto batch = m.nodes[0].kernel->packed_sequence(m.nodes[0], {state, state}, packed);
+    if (batch.calls != 2 || batch.max_batch != 1 || batch.max_length != 2
+        || !at::equal(batch.states.back().value, at::ones({2}, options)))
+      throw std::runtime_error("custom kernel packed fallback mismatch");
+    for (int invalid = 0; invalid < 3; ++invalid) {
+      auto malformed = packed;
+      if (invalid == 0) malformed.offsets = {0, 0, 3};
+      if (invalid == 1) malformed.owners[1] = malformed.owners[0];
+      if (invalid == 2) malformed.times[2] = malformed.times[1];
+      bool rejected = false;
+      try { malformed.validate(); } catch (const std::invalid_argument&) { rejected = true; }
+      if (!rejected) throw std::runtime_error("invalid packed metadata was accepted");
+    }
     const std::string report = "custom-state-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");
