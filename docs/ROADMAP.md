@@ -85,8 +85,8 @@ and validates its full maps; large single-region history needs its own workload.
 
 M8 includes local experiments around two [large LH/Tide references](lh-scale-benchmark.md):
 8.8B/width2048/batch512/nominal 1/32 and 8.5B/width128/batch512/nominal 1/64,
-on a common 56-core CPU budget. These sizes/times are references, not strict
-acceptance targets; the user authorized local exploratory runs. Recover static nodes/hubs, four-block topology,
+on a common declared CPU budget (initial Add pilot56, Attention follow-up160).
+These sizes/times are references, not strict acceptance targets; the user authorized local exploratory runs. Recover static nodes/hubs, four-block topology,
 actual parameter owners and selector semantics before importing. Generalize the
 small oracle's fixed fixture into a reusable weight-preserving importer and
 separate timed harness; retain exact-inference and comparable-scale lanes.

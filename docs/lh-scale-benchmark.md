@@ -147,10 +147,14 @@ preparation, core advance and snapshots separately. If cache ages change with
 steps, compare identical ages and report the time series; do not treat growing
 caches as repetitions of the same fixed workload.
 
-Use the same selected 56 physical cores for same-host LH/Tide runs, record CPU
-model, affinity and NUMA placement, and run heavy variants sequentially. Record
-node-worker, ATen, inter-op, BLAS and OpenMP settings; 56 workers each invoking
-56-thread BLAS is not a 56-core budget. Serial is a correctness/overhead anchor;
+Use a common explicitly selected physical-core budget for same-host LH/Tide
+runs, record CPU model, affinity and NUMA placement, and run heavy variants
+sequentially. The earlier Add pilot used56 cores; the user authorizes up to160
+for the a10fdb1 Attention follow-up. Record node-worker, ATen, inter-op, BLAS
+and OpenMP settings; worker count times an independent BLAS pool is not the
+physical-core budget. Budget roughly half this host's physical memory for
+this workload; the former256-GiB bound is superseded. Record an address-space
+limit separately from actual RSS. Serial is a correctness/overhead anchor;
 parallel implementations may divide the common core budget differently.
 Matching a core count does not reproduce another CPU's bandwidth or caches.
 

@@ -75,8 +75,15 @@ Records: `artifacts/lh-a10-attention-20260922-0830/`; frozen checkout under
 The repaired pipeline is active/running in background.slice, transient=yes,
 MainPID2796242, frozen Tide source6ade84d. Both width64/batch4/steps4 original
 Attention modes passed (23,133,347 parameters); both run records validate.
-The wide build passed and wide-nograd is running; no large case has completed
-yet. The build estimates17,269,426,339 parameters and58.125GiB initial KV tensors.
+The wide build and all100 wide-nograd steps passed:26.6342ms/sample-token
+over all100 steps,27.1745 over steps4–99, peak child RSS193.506GiB.
+The native model confirms17,269,426,339 parameters. Wide-grad-forward is
+running; narrow build/runs follow. No result is yet available for those modes.
+The retained analyze.py rechecks original/configured sources, binaries, graph
+and vendor hashes and validates all three completed run records; outputs are
+comparison.json and record-validation.json. The wide build preflight estimated
+58.125GiB initial KV tensors, distinct from measured peak RSS. The completed
+wide result and limits are in [Attention evidence](evidence/lh-a10-attention.md).
 The old0820 unit is failed/exit1 and must not be relabeled. Its source, smoke
 build, logs and failure record remain in artifacts/lh-a10-attention-20260922-0820/.
 The pipeline first builds width64/batch4/steps4 and checks both original
@@ -95,7 +102,22 @@ tail -n 30 artifacts/lh-a10-attention-20260922-0830/task.log
 
 Stop if needed with `systemctl --user stop tide-lh-a10-attention-20260922-0830`.
 Outer service12000s; per-build stage1200s, per-large-run1800s. The source
-checkout is read-only while the job runs. Main worktree changes are docs only.
+checkout is read-only while the job runs. This checkpoint changes docs only.
+After each case ends, refresh and validate the completed records, then the plot:
+
+```sh
+/home/zlong/anaconda3/bin/python artifacts/lh-a10-attention-20260922-0830/analyze.py
+/home/zlong/anaconda3/bin/python artifacts/lh-a10-attention-20260922-0830/plot.py
+```
+
+When the pipeline terminates, inspect both outer and per-case exit codes, repeat
+the frozen-source audit, and update evidence/lh-a10-attention.md and this handoff.
+Retain failed/partial cases and leave missing RSS as null, never zero. Report
+full100-step means only for complete cases. The wide result is complete; three
+large modes remain unfinished at this checkpoint. The narrow grad mode will be
+skipped if its nograd case fails. The1280-GiB virtual-address bound and expected
+904.008-GiB initial narrow KV allocation are distinct from measured peak RSS.
+No new large run or repeat of passed build/smoke stages is needed now.
 
 After original Attention results are recorded, the next M8 increment remains a
 reusable weight-preserving four-block LH-to-Tide importer and paired timer.
@@ -166,8 +188,9 @@ Never relabel historical failures when a later run passes.
 CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
 Torch/LibTorch 2.10.0+cpu, C++11 ABI. TORCH_DEVICE_BACKEND_AUTOLOAD=0;
 Default correctness OMP/OpenBLAS=1, two build jobs, Nice=10/background.slice.
-The LH performance cases explicitly use ATen/OpenMP 56, BLAS 56 or 1, inter-op 1
-and CPU affinity 160–215. FP64 atol/rtol
+The earlier Add cases use ATen/OpenMP56, BLAS56 or1, inter-op1 and
+CPU affinity160–215. The a10fdb1 original Attention cases use ATen/OpenMP160,
+BLAS1, original inter-op defaults and CPU affinity160–319. FP64 atol/rtol
 1e-10/1e-8; FP32 1e-6/1e-5; routes/identities exact. Keep builds isolated.
 LH snapshot artifacts/lh-source-20260921-1428 has 69 files, identity
 ac7c878a56aeb55eec9f919da1962be6134fc5e3d1872f6d2303917306edb87f,
