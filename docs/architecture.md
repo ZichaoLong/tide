@@ -90,6 +90,9 @@ Build qualification checks a source fingerprint and binary hashes from
 `build/build-manifest.json`; stale native modules cannot certify newer C++ code.
 Custom build directories propagate explicitly to pytest. `scripts/clean_artifacts.py`
 defaults to a dry run and protects referenced, failed and active-job artifacts.
+`scripts/durable_records.py` owns fsynced atomic text/JSON records and isolated
+job-record read failures; `status.py` reports unknown records without hiding
+healthy jobs or rewriting historical failures.
 
 ## Module boundaries
 

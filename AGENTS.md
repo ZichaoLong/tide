@@ -20,7 +20,8 @@
   `--all-jobs` when auditing retained historical failures; never relabel an old
   failure as passed merely because a newer run succeeded.
 - Use fsynced staging plus atomic replacement for programmatic handoff writes;
-  verify the result. Check storage capacity before large writes. A failed write
+  verify the result. Prefer `scripts/durable_records.py` for these writes.
+  Check storage capacity before large writes. A failed write
   must not replace a known-good handoff or be reported as successful.
 - Update the handoff before long jobs, at commit boundaries, and before ending
   a session. Include exact next commands, blockers, source identity, job/unit,

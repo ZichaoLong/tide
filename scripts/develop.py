@@ -6,11 +6,11 @@ until termination. Clean qualification still uses scripts/verify.py.
 """
 import argparse
 import hashlib
-import json
 from pathlib import Path
 import os
 import subprocess
 import sys
+from durable_records import write_json
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
@@ -60,5 +60,5 @@ except BaseException as error:
     raise
 finally:
     record.update(state="passed" if code == 0 and identity() == before else "failed", exit_code=code)
-    (out/"development.json").write_text(json.dumps(record, indent=2)+"\n")
+    write_json(out/"development.json", record)
 sys.exit(code)

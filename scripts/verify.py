@@ -10,6 +10,7 @@ import platform
 import subprocess
 import sys
 from build_identity import source_hash
+from durable_records import write_json
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--device", required=True, choices=("auto", "cpu", "cuda", "npu"))
@@ -60,9 +61,7 @@ manifest = {
     "native_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(), "state": "running",
 }
 def save():
-    temp = out / "result.tmp"
-    temp.write_text(json.dumps(manifest, indent=2) + "\n")
-    temp.replace(out / "result.json")
+    write_json(out / "result.json", manifest)
 save()
 env = dict(os.environ, PYTHONPATH=os.pathsep.join((str(root / "python"), str(build))),
            TIDE_TEST_SEED=str(args.seed), TIDE_BUILD_DIR=str(build))

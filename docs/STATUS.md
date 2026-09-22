@@ -104,6 +104,21 @@ Exact directed command from /home/zlong/llm/graph-execution-foundation:
 ROADMAP remains the only backlog. The running qualification above supersedes
 the composite development gate; its result is not yet known.
 
+## Independent re-entry tooling update
+
+While the frozen CPU job runs, the main branch adds scripts/durable_records.py:
+fsynced atomic publication for job/development/verification JSON, and resilient
+status reading. It is separate from source 69ca379; the running CPU job does not
+test this later change. Short directed gate: 16 passed / 0.46s. Commit this tested
+change, then run the same 16 cases under the clean main source with scripts/job.py,
+leaving that source unchanged until exit. No C++ build or full repeat is needed.
+The first strict loader rejected an explicitly recorded old terminal postmortem
+because it has observed time but no workload start; corrected with a regression,
+without changing the old failed record. Evidence/reproducer:
+artifacts/durable-records-postmortem-repro/. tests/test_durable_records.py also
+covers failed writes/file-fsync/rename, post-publication directory-fsync failure,
+real workload exit preservation, duplicate-output rejection and broken JSON.
+
 ## Terminal records and source retention
 
 All units below are inactive/dead, MainPID 0, Result=success, exit 0:

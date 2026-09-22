@@ -52,3 +52,25 @@ After terminal verification, remove only redundant frozen worktrees/builds whose
 commit and logs remain available. Inspect the cleanup dry run; do not remove
 active jobs or reference sources. Project `build`/`artifacts` may be symlinks to
 a filesystem with space; never assume the shared repository volume has room.
+
+## Durable record failures
+
+scripts/durable_records.py centralizes same-directory staging, file flush/fsync,
+atomic replacement and directory fsync for job status, development results and
+CPU verification manifests. Before replacement, a failed serialization/write/
+file-fsync/rename preserves the previous complete value. A directory-fsync error
+after replacement is still reported, even though the new complete file may exist.
+This does not certify behavior under actual power loss; orphan staging files can
+remain after a killed process. Record writers require one coordinated owner.
+
+The status command continues to show healthy jobs if another status.json is
+unreadable or inconsistent, reports that record's state as unknown and exits
+nonzero. An explicit terminal systemd postmortem can use its observed timestamp
+without inventing a workload start. Historical failures remain failed. Always
+cross-check unit termination, workload exit and acceptance artifacts; a running
+record left by an interrupted terminal write cannot establish success.
+
+Fault-injection and real launcher/re-entry tests: tests/test_durable_records.py.
+These dependency-free control tools do not change graph execution or checkpoint
+value semantics. Qualification for this later control change is recorded
+separately from earlier frozen CPU worktrees in STATUS.

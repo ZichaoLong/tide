@@ -2,11 +2,11 @@
 """Persistent lifecycle for a command run by an external durable launcher."""
 import argparse
 import datetime
-import json
 from pathlib import Path
 import subprocess
 import sys
 import signal
+from durable_records import write_json
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output-dir", required=True)
@@ -22,9 +22,7 @@ record = {"command": command, "cwd": str(Path.cwd()), "state": "running",
           "dirty": subprocess.check_output(["git", "status", "--porcelain"], text=True).strip(),
           "started": datetime.datetime.now(datetime.timezone.utc).isoformat()}
 def save():
-    temp = out / "status.tmp"
-    temp.write_text(json.dumps(record, indent=2) + "\n")
-    temp.replace(out / "status.json")
+    write_json(out / "status.json", record)
 save()
 def cancelled(signum, _frame):
     record.update(state="cancelled", exit_code=128 + signum)
