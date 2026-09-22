@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     if (c.runtime.help) {
       portable_torch::print_usage(std::cout, argv[0]);
       std::cout << "PDG scale: --topology FILE --run-id ID --width N --batch N --steps N --warmup N\n"
-        "  --workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1\n";
+        "  --workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
     const auto construction_start = Clock::now();
     auto f = fixture(c, topology);
     tide::Options options; options.workers = c.workers; options.packed = c.packed; options.trace = false;
+    options.profile = c.profile;
     tide::Streaming engine(std::move(f.graph), std::move(f.model), options);
     const auto construction = seconds(construction_start);
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters") << " construction_seconds=" << construction
@@ -56,12 +57,14 @@ int main(int argc, char** argv) {
       for (Index b = 0; b < c.batch; ++b) inputs.push_back({b, 0, token, token*period, embeddings[b]});
       const auto advance_begin = Clock::now();
       auto result = cursor.advance(inputs, (token+1)*period, (token+1)*period);
-      const auto advance = seconds(advance_begin);
+      const auto advance_end = Clock::now();
+      const auto advance = std::chrono::duration<double>(advance_end-advance_begin).count();
       // Missing readout is an explicit zero row, as in sparse token readout.
       std::vector<at::Tensor> hidden(c.batch, at::zeros({c.width}, embeddings.options()));
       for (const auto& output : result.outputs) hidden.at(output.batch) = output.value;
       previous_logits = at::linear(at::stack(hidden), f.head);
-      const auto elapsed = seconds(begin);
+      const auto end = Clock::now();
+      const auto elapsed = std::chrono::duration<double>(end-begin).count();
       if (!at::isfinite(previous_logits).all().item<bool>() || previous_logits.requires_grad() != c.grad)
         throw std::runtime_error("nonfinite logits or incorrect grad mode");
       std::map<std::string, double> metrics{{"perf/token_seconds", elapsed}, {"perf/advance_seconds", advance},
@@ -70,11 +73,19 @@ int main(int argc, char** argv) {
         {"check/logits_sum", previous_logits.detach().to(at::kDouble).sum().item<double>()},
         {"check/logits_requires_grad", previous_logits.requires_grad() ? 1. : 0.},
         {"work/readout_rows", double(result.outputs.size())}};
+      if (c.profile) {
+        metrics["profile/input_seconds"] = std::chrono::duration<double>(advance_begin-begin).count();
+        metrics["profile/head_seconds"] = std::chrono::duration<double>(end-advance_end).count();
+      }
       for (const auto& [key, value] : f.inventory) metrics["model/"+key] = value;
-      for (const auto& [key, value] : result.stats) metrics["work/"+key] = value;
+      for (const auto& [key, value] : result.stats) {
+        if (key.rfind("profile_", 0) == 0)
+          metrics["profile/"+key.substr(8, key.size()-11)+"_seconds"] = value*1e-9;
+        else metrics["work/"+key] = value;
+      }
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
-        {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}});
+        {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile}});
       std::cout << "STEP " << token << " ms/sample-token=" << elapsed*1000/c.batch
                 << " candidates=" << result.stats["candidate_events"] << " edges=" << result.stats["visited_edges"] << '\n' << std::flush;
     }

@@ -8,6 +8,7 @@
 #include "tide/next.h"
 #include "tide/region.h"
 #include "tide/delivery.h"
+#include "tide/stream_profile.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -47,6 +48,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
            {"semantic_state_replays", 0}, {"semantic_full_replays", 0}, {"full_scalar_fallback_steps", 0}};
   const bool replay = at::GradMode::is_enabled();
   while (!queue.empty() && queue.begin()->first < stop) {
+    StreamProfile profile(options_.profile, stats);
     const Index time = queue.begin()->first;
     auto arrived = std::move(queue.begin()->second);
     queue.erase(queue.begin());
@@ -70,6 +72,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       events.push_back(std::move(event));
     }
     stats["candidate_events"] += events.size();
+    profile.phase("profile_update_ns");
     std::vector<std::function<void()>> jobs;
     for (const auto& [node, ids] : by_node) {
       stats["max_node_batch"] = std::max<Index>(stats["max_node_batch"], ids.size());
@@ -123,6 +126,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       });
     }
     pool_.run(std::move(jobs));
+    profile.phase("profile_select_ns");
     for (const auto& [owner, ids] : by_region) {
       const auto& region = graph_.regions[owner.second];
       select_events(graph_, model_, q, events, ids, options_.trace);
@@ -134,6 +138,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         e.comparison_state = comparison;
       }
     }
+    profile.phase("profile_full_ns");
     jobs.clear();
     for (const auto& [node, all] : by_node) {
       std::vector<size_t> ids;
@@ -155,6 +160,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       });
     }
     pool_.run(std::move(jobs));
+    profile.phase("profile_commit_ns");
     for (auto& event : events) {
       q.states[{event.batch, event.node}] = event.next_state;
       if (event.active) {
@@ -166,6 +172,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       }
       if (options_.trace) result.trace.push_back(std::move(event));
     }
+    profile.phase("profile_cleanup_ns");
   }
   q.cut = stop;
   std::sort(result.messages.begin(), result.messages.end(), [&](const auto& a, const auto& b) {

@@ -5,11 +5,12 @@
 namespace pdg_scale {
 namespace {
 tide::Result traced(const Config& c, const Topology& topology, Index workers, bool packed,
-                    const std::string& emission) {
+                    const std::string& emission, bool profile = false) {
   auto local = c; local.emission = emission;
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   auto f = fixture(local, topology);
   tide::Options opts; opts.workers = workers; opts.packed = packed; opts.trace = true;
+  opts.profile = profile;
   tide::Streaming engine(std::move(f.graph), std::move(f.model), opts);
   tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
   tide::StreamingCursor cursor(engine, std::move(q)); tide::Result all;
@@ -29,7 +30,7 @@ void check(const Config& c, const Topology& t) {
   at::NoGradGuard guard;
   auto expected = traced(c, t, 1, false, "slot");
   for (const auto& variant : {std::make_pair(Index{1}, false), std::make_pair(Index{1}, true), std::make_pair(Index{3}, true)}) {
-    auto actual = traced(c, t, variant.first, variant.second, "row");
+    auto actual = traced(c, t, variant.first, variant.second, "row", c.profile);
     tide_bench::compare(actual, expected, true);
   }
 }

@@ -70,3 +70,18 @@ binary/source identities, raw metrics, log, terminal summary and optional
 best-effort Trackio projection. Missing Trackio does not discard local records.
 Preserve timed-out/partial cases and their missing observations. Measured results
 belong in evidence; implementation alone is not performance evidence.
+
+## Optional streaming phase timing
+
+`--profile 1` enables coordinator wall-clock intervals, reported in seconds per
+batch token under `profile/`: events (queue/fiber/event grouping), update
+(Aggregate/State/Read jobs and barrier), select (region decisions/comparison),
+full (Next/Full/Emit jobs and barrier), commit (state/message publication), and
+cleanup (tick-local destruction). Their sum equals `tick_seconds`, a subset of
+`perf/advance_seconds`. Intervals include job construction and barrier time;
+they are not sums of worker durations or isolated operator CPU times. Disabled
+by default, this option does not change the schedule or semantic state.
+The scale executable additionally reports `input_seconds` (previous logits
+release, token/embedding/input preparation) and `head_seconds` (readout rows,
+stack and vocabulary Linear). Input + advance + head partitions token time;
+readout Attention itself belongs to the graph's update interval.

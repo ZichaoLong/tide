@@ -44,7 +44,7 @@ def main():
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
                          ('threads', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('packed', 1), ('grad', 0), ('check', 0)]:
+    for key, default in [('packed', 1), ('grad', 0), ('check', 0), ('profile', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--tracking', choices=['best-effort', 'off', 'required'], default='best-effort')
@@ -66,7 +66,7 @@ def main():
     if manifest['cpp_source_sha256'] != identity or manifest['binary_sha256'].get(binary.name) != binary_hash:
         p.error('source/build mismatch; rebuild the immutable source')
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
-              'threads', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission')}
+              'threads', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile')}
     out.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(topology, out/'topology.txt')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()

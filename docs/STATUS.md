@@ -73,7 +73,7 @@ width256/batch32 and width2048/batch64 ramps before wide2048/batch512 parallel
 Wide/narrow inputs are artifacts/pdg-scale-input-20260922/{wide,narrow}.txt
 and adjacent JSON provenance; no LH weights were read.
 
-Active clean source f6686c124c8f588a44c1825603ffa5c8843dd422 is frozen at
+Retained clean source f6686c124c8f588a44c1825603ffa5c8843dd422 is frozen at
 /var/tmp/zlong-graph-execution-foundation/qualification/pdg-scale-20260922-1020,
 with validated build executables/manifest copied into its build/.
 The fixed driver scripts/pilot_pdg_scale.py runs through scripts/job.py in unit
@@ -90,17 +90,35 @@ sample-token. PDG peak109.39629GiB over12steps (LH peak covers100).
 [Evidence](evidence/pdg-scale-attention.md) states scope, source and limitations.
 All terminal portable records validate; analyze.py and comparison.json are under
 the job directory. Trackio is best-effort/degraded (not installed).
-The wide serial case is running; narrow parallel is queued. The overall pilot
-is still active/running; frozen source and isolated build remain unchanged.
+The wide serial case passed4/4steps (native0); narrow timed out after5/8steps
+(native-15, no unreaped child). The enclosing pilot is failed/exit1, MainPID0;
+its completed wide cases remain valid. analyze.py was rerun against all terminal
+records; failures stay failed. Preserve the source, binary, inputs and logs.
 
-After a case completes, run:
-/home/zlong/anaconda3/bin/python artifacts/pdg-scale-20260922-1020/analyze.py
-Then inspect per-case/native exit codes, raw series and outer unit, refresh
-this handoff and the evidence. Original LH and all frozen pilot inputs stay
-read-only. No need to re-run passed large cases merely for more validation.
-Inspect status.json, comparison/pilot.json, per-case summaries and unit state;
-stop with systemctl --user stop tide-pdg-scale-20260922-1020 if needed.
-Do not claim submission or partial/failed cases as passed.
+Current task: explain the wide PDG/LH37.3% timing gap with measured attribution.
+An uncommitted, default-off `Options.profile` / scale `--profile` adds coordinator
+wall phases: events, update, select, full, commit, cleanup and total tick.
+No schedule/model/route changes. Small tests compare full traced semantics with
+profiling enabled and verify timing accounting/default-off behavior.
+The first phase-timer development gate passed62 tests/32.50s at
+artifacts/pdg-profile-dev-20260922-1138/ (source archive retained).
+The follow-up input/head split passed15 tests/14.48s at
+artifacts/pdg-profile-head-dev-20260922-1143/; both services passed/exit0.
+Implementation is ready for commit and immutable measurement. Next job:
+`tide-pdg-profile-20260922-1145`, output artifacts/pdg-profile-20260922-1145/,
+read-only worktree qualification/pdg-profile-20260922-1145 under the local parent,
+with copied source-hash-matching native binary/build manifest. Launch the exact
+committed code through job.py and benchmark_pdg_scale.py:
+--device cpu --dtype float32 --topology ABS/artifacts/pdg-scale-input-20260922/wide.txt
+--width 2048 --batch 512 --steps 8 --warmup 4 --workers 160 --threads 1
+--packed 1 --grad 0 --emission row --profile 1 --seed 7
+--memory-gib 1280 --timeout-seconds 1200 --output-dir ABS/JOB/wide-profile
+CPUs160-319, BLAS1, Nice10/background.slice, RuntimeMaxSec1320.
+After completion, compare token4–7 with the same window of original PDG and LH;
+check all work counters/checksums, source/binary/input identities and terminal
+records. Preserve raw phase times. Do not attribute the entire37% to a stage
+from code inspection alone. LH original nested timers must not be double counted.
+Original LH and all frozen pilot inputs stay read-only.
 
 The original Attention pipeline has terminated failed/exit1 (unit
 `tide-lh-a10-attention-20260922-0830`, MainPID0, inactive computation).

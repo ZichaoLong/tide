@@ -24,11 +24,12 @@ def topology(path):
 
 
 @pytest.mark.parametrize('grad', [0, 1])
-def test_attention_scale_full_state_and_schedule_parity(dtype, grad, tmp_path):
+@pytest.mark.parametrize('profile', [0, 1])
+def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, tmp_path):
     graph = tmp_path/'graph.txt'; edges = topology(graph); out = tmp_path/'native'
     cmd = [str(binary()), '--device', 'cpu', '--dtype', str(dtype).split('.')[-1], '--topology', str(graph),
            '--width', '8', '--batch', '4', '--steps', '4', '--warmup', '1', '--vocab', '17',
-           '--workers', '3', '--packed', '1', '--grad', str(grad), '--check', '1',
+           '--workers', '3', '--packed', '1', '--grad', str(grad), '--check', '1', '--profile', str(profile),
            '--run-id', 'test', '--output-dir', str(out)]
     run = subprocess.run(cmd, capture_output=True, text=True)
     assert run.returncode == 0, run.stdout+run.stderr
@@ -45,6 +46,16 @@ def test_attention_scale_full_state_and_schedule_parity(dtype, grad, tmp_path):
         assert 1 <= m['work/max_node_batch'] <= 4
         assert m['work/semantic_state_replays'] > 0 if grad else m['work/semantic_state_replays'] == 0
         assert m['perf/ms_per_sample_token'] == pytest.approx(m['perf/token_seconds']*1000/4)
+        phases = ['events', 'update', 'select', 'full', 'commit', 'cleanup']
+        if profile:
+            times = [m['profile/'+phase+'_seconds'] for phase in phases]
+            assert all(t >= 0 for t in times)
+            assert sum(times) == pytest.approx(m['profile/tick_seconds'], abs=1e-8)
+            assert 0 < m['profile/tick_seconds'] <= m['perf/advance_seconds']
+            assert m['profile/input_seconds'] >= 0 and m['profile/head_seconds'] >= 0
+            assert m['profile/input_seconds']+m['perf/advance_seconds']+m['profile/head_seconds'] == pytest.approx(m['perf/token_seconds'], abs=1e-8)
+        else:
+            assert not any(key.startswith('profile/') for key in m)
     before = (out/'metrics.jsonl').read_bytes()
     assert subprocess.run(cmd, capture_output=True).returncode != 0
     assert (out/'metrics.jsonl').read_bytes() == before
@@ -79,7 +90,8 @@ def test_csr_export_retains_parallel_edges_and_rejects_damage(tmp_path):
 
 
 @pytest.mark.parametrize('args', [[], ['--device', 'npu'], ['--device', 'cpu', '--dtype', 'float16'],
-                                ['--device', 'cpu', '--width', '7'], ['--device', 'cpu', '--workers', '161']])
+                                ['--device', 'cpu', '--width', '7'], ['--device', 'cpu', '--workers', '161'],
+                                ['--device', 'cpu', '--profile', '2']])
 def test_scale_rejects_invalid_cli(args, tmp_path):
     graph = tmp_path/'graph.txt'; topology(graph); out = tmp_path/'native'
     result = subprocess.run([str(binary()), '--run-id', 'bad', '--topology', str(graph), '--output-dir', str(out), *args], capture_output=True)

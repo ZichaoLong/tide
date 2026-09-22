@@ -146,5 +146,6 @@ struct Options {
   double zeta = 1.0;
   bool prefill = true;
   Index max_events = 1000000;
+  bool profile = false; // Optional streaming coordinator wall-time phases.
 };
 }  // namespace tide

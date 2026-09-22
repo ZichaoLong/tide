@@ -11,7 +11,7 @@ Config parse(int argc, char** argv) {
   for (int i = 1; i < argc; ++i) {
     const std::string key = argv[i];
     if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission"
-        && key != "--packed" && key != "--grad" && key != "--check") { common.push_back(argv[i]); continue; }
+        && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
     std::string value = argv[i];
     if (ints.count(key)) {
@@ -26,6 +26,7 @@ Config parse(int argc, char** argv) {
       if (key == "--packed") c.packed = value == "1";
       if (key == "--grad") c.grad = value == "1";
       if (key == "--check") c.check = value == "1";
+      if (key == "--profile") c.profile = value == "1";
     }
   }
   c.runtime = portable_torch::parse_cli(common.size(), common.data(), true);
