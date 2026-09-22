@@ -12,6 +12,13 @@ stored state/history. Candidate state adoption may observe all or active only;
 Next can clear selected state without erasing the snapshot used by Full.
 
 Logical time, token position, observation count and execution time are distinct.
+Graph indices/budgets and all execution coordinates/counters must be exact Python
+`int` values in signed int64 range at Python entry points. Bool, float (including
+integral float), scalar tensors and out-of-range integers are rejected before
+execution or native conversion. Field-specific nonnegative/clock/owner bounds
+still apply. This also covers imported state/history, pending messages and input
+ledgers before checkpoint restoration changes live owners. Native C++ fields
+already use int64; malformed Python records are not coerced into valid C++ ones.
 Local program input/output slots have validated physical edge/port mappings;
 see `local-ports.md`. Layout is part of graph identity, outside shared weights.
 Complete-cut continuation is `(cut, node states, region histories, pending)`;
@@ -122,8 +129,10 @@ unit-delay ticks, eager decay, same-fiber attention and token-window Pronounce;
 actual original-C++ whole-model inference is qualified in
 `evidence/lh-iocortex.md`. The bounded single-PDG inference encoding is qualified
 in `evidence/lh-single-graph.md`; Tide training/single-graph resume separately in
-`evidence/single-graph-training.md`. Complete two-clock occurrence-ledger
-reconstruction and composite checkpoint ownership remain separate obligations.
+`evidence/single-graph-training.md`. The two-clock bundle preserves its actual occurrence ledgers and cross-graph
+owners (`token-application-checkpoint.md`). Reconstructing those ledgers from the
+single-PDG projection remains a separate obligation; token index is not an
+occurrence counter.
 
 `fractal-latcarf` supplies validation design examples (eager/packed/specialized,
 chunk/state/gradient checks). Its historical results do not certify this tree.

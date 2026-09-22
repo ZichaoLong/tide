@@ -1,6 +1,7 @@
 """Tensor-preserving adapter for the separately compiled LibTorch core."""
 from .records import Result
 from .native_records import from_continuation, to_continuation, window_records
+from .coordinates import window_inputs
 
 
 class Native:
@@ -78,6 +79,7 @@ class Native:
             self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)
 
     def run(self, continuation, external, stop, *, sealed_until):
+        external = window_inputs(external, stop, sealed_until)
         q = to_continuation(self.core, self.graph, self.compiled, continuation)
         xs = [self.core.External(x.batch, x.port, x.position, x.time, x.value) for x in external]
         result = self.engine.run(q, xs, stop, sealed_until)

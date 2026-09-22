@@ -82,6 +82,9 @@ in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
 Regions use `region.py`/`region.h`, with typed history in `history.py`/`types.h`.
 Node and region tensor slots participate in comparisons, explicit detach and
 the checkpoint schema in `semantics.md`. Built-in counters use checked int64 arithmetic.
+`coordinates.py` rejects non-int/bool metadata before Python execution or native
+record conversion. Cursor imports validate complete metadata once; advances only
+check the window bounds and incoming external records.
 
 Build qualification checks a source fingerprint and binary hashes from
 `build/build-manifest.json`; stale native modules cannot certify newer C++ code.

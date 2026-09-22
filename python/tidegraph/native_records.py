@@ -1,6 +1,7 @@
 """Tensor-preserving record conversion, separate from native execution ownership."""
 from .records import Atom, Continuation, State
 from .history import History
+from .coordinates import continuation as validate_coordinates
 
 
 def history(h):
@@ -8,6 +9,7 @@ def history(h):
 
 
 def to_continuation(core, graph, compiled, continuation):
+    validate_coordinates(continuation)
     if continuation.identity != graph.identity:
         raise ValueError("continuation graph identity mismatch")
     q = core.Continuation()

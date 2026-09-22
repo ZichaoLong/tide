@@ -53,7 +53,9 @@ a work-boundary property, not speedup or million-node workload performance.
 
 ## Failure and recovery
 
-Input coordinate/tensor/position/seal checks finish before mutation. Rejection
+Input coordinate/tensor/position/seal checks finish before mutation. The Python
+adapter requires exact non-bool int64 coordinates before pybind conversion and
+checks only new external/window metadata on advance. Rejection
 leaves the cursor usable and unchanged. Exceptions during execution mark it
 failed. Further advance/snapshot/cut/detach reject it; `failed` remains readable.
 Recover by constructing a new cursor from an earlier snapshot/checkpoint. There

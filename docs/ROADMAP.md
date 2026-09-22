@@ -102,7 +102,7 @@ Atomic exclusive value-checkpoint publication is
 races, retry and resumed native training. Composite application checkpoints and
 standalone C++ optimizer ownership remain separate obligations.
 
-Immediate correctness gate: reject non-integer/boolean Python execution coordinates
-before mutation in reference/frontier/native/cursor paths and checkpoint preflight.
-The fractional-time silent-drop reproducer is retained in STATUS; follow this
-fix with clean CPU qualification of the two-clock bundle and all regressions.
+Integer-coordinate validation is implemented at graph/execution/native-adapter
+and checkpoint boundaries. Its 1224-case directed regression passed; clean CPU
+qualification with the two-clock bundle is next (STATUS). Malformed Python
+records must fail before mutation; cursor advance must not scan retained state.

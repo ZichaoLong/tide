@@ -58,10 +58,11 @@ need separate mappings and oracles. Scale/performance remain M8 obligations.
 
 Tide two-clock/single-PDG training and single-graph value resume are qualified in
 `evidence/single-graph-training.md`; this uses Tide's declared VJPs and truncated
-updates. No training equivalence to old LH is claimed. The composite two-clock
-application still needs named cross-graph ownership and one checkpoint containing
-both continuations plus its unfinished readout buffer/controller state. Existing
-single-PDG v5 resume does not serialize that separate application.
+updates. No training equivalence to old LH is claimed. The composite two-clock application now has named cross-graph ownership and one
+value checkpoint containing both continuations, the application cut and unfinished
+readout buffer; see `token-application-checkpoint.md` and STATUS for qualification.
+RNG/data cursors and an arbitrary training controller remain caller-owned.
+Single-PDG v5 resume does not serialize that separate application.
 
 Original LH phase/sample CSR has no External.position. The two-graph token_inputs
 adapter adds a contiguous occurrence ledger per sample/phase. With missing phases,

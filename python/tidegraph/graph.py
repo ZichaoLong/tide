@@ -7,6 +7,7 @@ from .ports import PortLayout
 from .origins import InputOrigin, validate_origins
 from .source_domain import SourceDomain
 from .clocks import StateClock
+from .history import int64
 
 
 @dataclass(frozen=True)
@@ -62,7 +63,7 @@ class Graph:
         n = len(self.nodes)
         if not n or not self.regions:
             raise ValueError("nodes and regions must be nonempty")
-        if any(not 0 <= x.region < len(self.regions) for x in self.nodes):
+        if any(not int64(x.region) or not 0 <= x.region < len(self.regions) for x in self.nodes):
             raise ValueError("invalid region owner")
         for x in self.nodes:
             if type(x.state_clock) is not StateClock:
@@ -79,16 +80,16 @@ class Graph:
             if spec.read_mode not in {"content", "old", "proposal"}:
                 raise ValueError("invalid region Read mode")
             count = sum(x.region == r for x in self.nodes)
-            if not 1 <= spec.budget <= count:
+            if not int64(spec.budget) or not 1 <= spec.budget <= count:
                 raise ValueError("invalid region budget or empty region")
         for e in self.edges:
-            if not 0 <= e.source < n or not 0 <= e.target < n:
+            if not int64(e.source) or not int64(e.target) or not 0 <= e.source < n or not 0 <= e.target < n:
                 raise ValueError("invalid edge endpoint")
             if type(e.delay) is not int or not 0 < e.delay < 2**63:
                 raise ValueError("edge delay must be a positive int64")
         validate_origins(self.origins, len(self.edges))
         object.__setattr__(self, "origins", tuple(sorted(self.origins, key=lambda x: x.edge)))
-        if any(not 0 <= v < n for v in (*self.inputs, *self.outputs)):
+        if any(not int64(v) or not 0 <= v < n for v in (*self.inputs, *self.outputs)):
             raise ValueError("invalid port owner")
         if self.layout is not None and not isinstance(self.layout, PortLayout):
             raise ValueError("invalid local port layout")

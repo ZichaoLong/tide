@@ -1,6 +1,7 @@
 """Owned native streaming state. Advancing does not serialize the continuation."""
 from .native_records import from_continuation, to_continuation, window_records
 from .records import AdvanceResult
+from .coordinates import window_inputs
 
 
 class NativeCursor:
@@ -10,6 +11,7 @@ class NativeCursor:
         self.cursor = native.core.StreamingCursor(native.engine, q)
 
     def advance(self, external, stop, *, sealed_until):
+        external = window_inputs(external, stop, sealed_until)
         xs = [self.native.core.External(x.batch, x.port, x.position, x.time, x.value) for x in external]
         r = self.cursor.advance(xs, stop, sealed_until)
         return AdvanceResult(r.cut, *window_records(r))

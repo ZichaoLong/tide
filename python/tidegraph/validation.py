@@ -3,9 +3,12 @@ import torch
 from .records import Atom
 from .history import int64, validate as validate_history
 from .region import validate_program as validate_region
+from .coordinates import continuation as validate_coordinates, window_inputs
 
 
 def validate_window(graph, model, continuation, external, stop, sealed_until):
+    external = window_inputs(external, stop, sealed_until)
+    validate_coordinates(continuation)
     from .full import validate_program
     from .aggregate import validate_program as validate_aggregate
     from .state_program import validate_program as validate_state_program

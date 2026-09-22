@@ -1,8 +1,8 @@
 # Current handoff
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
-Composite checkpoint implementation is ready to commit after its passed directed gate.
-Next: reject invalid Python coordinate types, then qualify a clean combined commit.
+Composite checkpoint committed at c08105e; strict coordinate validation is ready
+to commit after 1224 directed cases passed. Next: clean combined CPU qualification.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -33,16 +33,24 @@ occurrence ledger explicitly. Contracts/navigation were updated after success.
 
 ## Next action and latest directed gate
 
-No active jobs. Commit the token-application checkpoint, then fix the independent
-Python integer-coordinate validation defect before one combined clean full CPU
-qualification. Reproducer: artifacts/coordinate-types-probe/probe.json. Python
-accepts time=0.5 and drops the event while updating the ledger; native rejects it.
-Both accept bool coordinates. Reuse history.int64 for strict non-bool int64
-validation of external/window metadata and imported continuation owners/counters.
-Apply this before reference/frontier execution, native conversion and cursor
-advance. Cursor checks must scale with incoming inputs, not all held state.
-Test rejection without mutation, retry and checkpoint preflight; keep existing
-counter-overflow behavior. No C++ kernel change is needed for Python types.
+No active jobs. Commit the integer-coordinate fix, then qualify the new clean
+HEAD from an isolated read-only worktree with its own build. The Python boundary
+now rejects bool, float, non-int and out-of-range int64 metadata in windows,
+external records, imported state/history/ledger/pending and graph owners/budgets.
+Native C++ fields were already int64. Cursor advance checks only new inputs;
+complete imported coordinates are checked once. Graph v13/checkpoint v5 and
+valid execution semantics are unchanged.
+
+Interactive directed command passed 1224 cases / 18.95s (FP64/FP32):
+PYTHONPATH=python:build python -m pytest tests/test_coordinates.py
+tests/test_coordinate_checkpoints.py tests/test_counter_limits.py
+tests/test_cursor_failures.py tests/test_region_contract.py -q --dtype both -x.
+The original silent fractional-time loss is retained in
+artifacts/coordinate-types-probe/probe.json. A test-fixture key-collision failure
+(523 passed, 1 failed before fixture correction) is retained in
+artifacts/coordinate-test-key-collision-repro/ with source archive and diagnosis.
+Bool key insertion had collided with an existing int key; it now demonstrably
+inserts the intended malformed metadata. No tolerance or rejection was relaxed.
 
 Composite implementation: token_checkpoint.py, checkpoint_values.py, v5 codec
 refactor, application tests/controller helper extraction and docs. Contract:
@@ -67,7 +75,7 @@ Exact directed command from /home/zlong/llm/graph-execution-foundation:
 /home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/token-bundle-dev-20260922-0038 -- /home/zlong/anaconda3/bin/python scripts/develop.py --output-dir artifacts/token-bundle-dev-20260922-0038 --jobs 2 tests/test_token_checkpoint.py tests/test_checkpoint_io.py tests/test_checkpoint_ownership.py tests/test_checkpoint.py tests/test_single_graph_training.py tests/test_single_graph_optimizer.py tests/test_single_graph_resume.py tests/test_single_graph.py
 ```
 
-After the coordinate fix and directed tests, commit, create a read-only detached
+After the tested coordinate fix is committed, create a read-only detached
 worktree and run scripts/job.py --output-dir ABS_OUTPUT -- python
 scripts/qualify.py --output-dir ABS_OUTPUT --jobs 2 through the usual durable
 service. No C++/LH oracle changes require rerunning the original LH full matrix.
