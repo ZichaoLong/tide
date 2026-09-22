@@ -96,6 +96,14 @@ separately from backward/optimizer work. Use explicit FP32 for initial
 reconstruction, bounded scale ramps and same-host comparisons, with source,
 cache-age, NUMA, memory and work records. No historical timing is a speed gate.
 
+The original-LH standalone preparation/build/timing path and first bounded
+local scale pilot are [measured](evidence/lh-local-scale-pilot.md): two Add
+configurations at 9.468B/9.025B parameters, FP32/batch512/56 physical cores;
+eight cases cover nograd, grad-forward and explicit BLAS pool counts. Small
+FP64/backward/parallel harness checks passed. These are short-window original-LH
+observations, not large Tide equivalence, attention or backward-performance
+qualification. The reusable Tide importer and paired timer remain outstanding.
+
 M8 implementation observation: `ProjectionEmit` currently launches a matmul per
 output slot, while original LH uses one large Linear per CSR row. Evaluate an
 inference packing/cache or a separately specified single-matrix profile. Packing
@@ -132,9 +140,12 @@ native execution still consumes the ordinary encoded `Graph` produced by the
 Python frontend. The native checkpoint format remains independent of Python
 files and graph continuation.
 
-The M8 large-LH workstream first needs an allocation-free graph/parameter audit
-and a reusable importer/timing entry point following `lh-scale-benchmark.md`;
-the two fixed targets are not runnable by changing the small oracle constants.
+The M8 large-LH workstream has completed original-LH graph/parameter preflight,
+native count confirmation and bounded local measurement. Next generalize the
+small oracle into a reusable weight-preserving Tide importer and paired timer
+following `lh-scale-benchmark.md`, with small independent parity before scale.
+The existing fixed oracle cannot be scaled by changing its constants. Do not
+repeat completed LH pilots unless a new comparison or concern requires it.
 Expand the other M8 fixed workloads beyond the EMA pilot: Attention/SSM streaming,
 frontier/SettleGraph prefill and measured backward/replay costs. Declare batch,
 sequence length, width, active/dormant topology, sharing/reset policy and exact

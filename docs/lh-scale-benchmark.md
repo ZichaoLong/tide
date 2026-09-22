@@ -1,15 +1,16 @@
 # Large LH/Tide streaming comparison contract
 
-Status: local exploratory execution authorized; standalone LH measurement tooling
-is being brought up. Historical data are references, not pass/fail targets.
-No large run, historical reproduction or LH/Tide speed ratio is yet qualified. Implementation backlog
+Status: eight original-LH local scale runs are complete; see
+[source, measurements and limits](evidence/lh-local-scale-pilot.md).
+Historical data are references, not pass/fail targets. Exact historical
+reproduction, large Tide/LH parity and a LH/Tide speed ratio remain unverified. Implementation backlog
 belongs to [ROADMAP](ROADMAP.md); this file owns workload and comparison meaning.
 
 ## User-reported historical references
 
 Reported on 2026-09-22, for a 56-core CPU and batch 512:
 
-| Target | Approximate parameters | Hidden width | Nominal activation ratio | Reported static nodes | grad ms/token | nograd ms/token |
+| Reference | Approximate parameters | Hidden width | Nominal activation ratio | Reported static nodes | grad ms/token | nograd ms/token |
 | --- | --- | --- | --- | --- | --- | --- |
 | `lh-wide-2048` | 8.8 billion | 2048 | 1/32 | 224 | 3.6 | 3.3 |
 | `lh-narrow-128` | 8.5 billion | 128 | 1/64 | 57,344 | 136 | 29 |
@@ -73,7 +74,8 @@ Keep the LH tree read-only. Snapshot its actual C++ bytes, dirty-source identity
 graph-generation Python/dependencies, model configuration, generated adjacency
 and inputs into project-owned artifacts before qualification. Python is used
 only for graph generation here; the LH execution reference is its original C++.
-The existing C++ snapshot tool does not yet snapshot graph-generation sources.
+The dedicated preparation tool now snapshots graph-generation sources separately
+from the existing C++ snapshot, with identities in each input record.
 
 ## Node and parameter accounting
 
@@ -207,4 +209,5 @@ The local Torch CPU build links both OpenMP and a pthread OpenBLAS pool. Record
 declared physical CPU set. The default BLAS count matches --threads for
 reproducibility of the initial pilot. A bounded follow-up compares BLAS=1
 with the initial BLAS=56 observation and uses common measured token ages
-for nograd and grad-forward. Thread-count changes are explicit variants.
+for nograd and grad-forward. This follow-up is complete in the linked evidence;
+thread-count changes are explicit variants.

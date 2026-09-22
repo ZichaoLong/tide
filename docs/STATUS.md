@@ -9,8 +9,11 @@ token-bundle, integer-coordinate and durable-record qualification remains
 complete.
 The latest user explicitly authorized local performance experiments and clarified
 that historical 8.8B/8.5B sizes/times are references, not strict targets. New
-standalone original-LH graph preparation/build/timing tools are implemented
-for staged bring-up; no new runtime qualification has completed yet.
+standalone original-LH preparation/build/timing tools and bounded local
+experiments are complete: five small harness checks and eight large cases
+passed. See [local scale evidence](evidence/lh-local-scale-pilot.md). The large
+Tide importer and paired timer remain unimplemented; large matched numerical
+checks and a Tide/LH speed ratio remain unmeasured.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -29,6 +32,7 @@ Source and scope are separate for each report:
 | First native streaming performance pilot | aee0da48e4c6661d7a75fd97ca39ddaba654ee4d | 16 cases / 80 events; evidence/m8-streaming-pilot.md |
 | Standalone C++ named ownership and SGD/AdamW parity | 9aef27aa2e8eeeda6f3d6298ae295bf687b3a66b | clean frozen build; 338 directed tests plus FP64/FP32 executable checks; evidence/cpp-optimizer-ownership.md |
 | Standalone C++ `TIDENCK1` value checkpoint | 4325bb14434bbe0e9702aff244f77ed71e75cbee | clean frozen build; 344 directed tests plus FP64/FP32 checkpoint and optimizer checks; evidence/cpp-native-checkpoint.md |
+| Original LH local 9B Add performance pilot | a7edf44eb7046a307c9a53085ea2420e76e644b1 / wrapper 9548be6ecb6635c2beed2aee0b62a1eb5cb05282 | 5 harness checks; 8 large cases / 36 forward events; evidence/lh-local-scale-pilot.md |
 
 The application bundle preserves two complete continuations, real occurrence ledgers,
 unfinished token buffers, named cross-graph aliases and optimizer state. 192
@@ -48,108 +52,65 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The standalone C++ owner registry, independent LibTorch SGD/AdamW updates and
-the `TIDENCK1` native value codec are implemented and cleanly qualified; see
-evidence/cpp-native-checkpoint.md. The standalone C++ SettleGraph
-construction/encoding frontend is the next interface obligation; do not rerun
-the original LH full oracle unless its relevant code/mapping changes.
+No job from this increment is live. The finite local pilot is complete; results
+and comparison limits are in the linked evidence. Do not rerun it simply to
+re-enter the task. Inspect its analysis without model allocation:
 
-The active M8 increment is original-LH local measurement. Frozen source a7edf44
-is at `/var/tmp/zlong-graph-execution-foundation/qualification/lh-local-20260922`.
-Launch/inspect `tide-lh-local-build-20260922-0720`,
-`tide-lh-local-wide-input-20260922-0720` and
-`tide-lh-local-narrow-input-20260922-0720` in background.slice. Planned job
-records are respectively artifacts/lh-local-build-20260922-0720,
-artifacts/lh-local-wide-input-20260922-0720 and
-artifacts/lh-local-narrow-input-20260922-0720 in the main repository.
-Build output: `/var/tmp/zlong-graph-execution-foundation/build-lh-local`;
-original C++ snapshot: `artifacts/lh-source-20260921-1428` (unchanged).
-Build and both input preparation jobs finished successfully. Python preflight
-counts are 9,468,020,899 and 9,024,921,853 parameters (native counts pending).
-`tide-lh-smoke-fp32-20260922-0725` is now launched from the frozen source;
-records: artifacts/lh-smoke-fp32-20260922-0725. It checks width64/batch4 before
-any large allocation. Inspect its terminal record before proceeding to further
-FP64/grad checks and bounded scale ramps. FP32 smoke passed with 15,514,787 parameters at width64/batch4. Further
-bring-up units are `tide-lh-smoke-{fp64,grad,backward,parallel}-20260922-0727`,
-with matching `artifacts/lh-smoke-*-20260922-0727` records. They are correctness
-and harness probes; their concurrent timing is not comparative evidence.
-Historical times are references, and grad stage is unknown.
-All five small harness cases passed; candidate/selected counts match exactly
-and logit sums agree within 1e-5 relative/absolute across FP64, grad-forward,
-backward-forward and eight-thread variants. This is a bounded harness gate,
-not a full-model gradient-equivalence proof.
-Next launch: `tide-lh-scale-pilot-20260922-0730`, frozen source a7edf44, pinned
-CPUs 160-215 (socket 2, NUMA 4/5, first-touch memory). Sequential cases:
-wide/narrow nograd batch512 warmup4/steps8, then wide/narrow grad-forward
-batch512 warmup1/steps3. Each child has 600s/256GiB address-space bounds;
-outer service 3000s. Records: artifacts/lh-scale-pilot-20260922-0730,
-with per-case run/summary/metrics. The initial wide/narrow nograd and wide grad-forward cases have completed;
-narrow grad-forward is still live. Inspect its result before claiming the
-whole pilot passed. Nograd means are provisionally 6.096/16.109 ms/sample-token.
-The first grad window differs from nograd; do not infer a grad overhead ratio.
-A follow-up will use warmup4/steps4 in all cases, with explicit BLAS=1 versus
-the initial BLAS=56 pool. Native code/binary remain unchanged; only wrapper
-thread-policy recording is extended in the main checkout.
-The generic Tide importer and paired benchmark remain unimplemented.
-The SettleGraph frontend obligation remains in ROADMAP.
+```sh
+/home/zlong/anaconda3/bin/python artifacts/lh-window-threads-20260922-0740/analyze.py
+```
+
+The next M8 performance increment is a reusable, weight-preserving four-block
+LH-to-Tide importer and paired timer. Start from `docs/lh-scale-benchmark.md`,
+`docs/lh-iocortex.md`, `docs/lh-single-graph.md` and
+`cpp/test/lh_iocortex_fixture.*`; the current width4/batch4 fixture rewrites
+weights and clones imports, so changing its constants is insufficient. First
+prove small independent state/route/output parity and owner/edge accounting,
+then scale with bounded memory and identical token ages, modules and CPU budget.
+Keep exact-inference and comparable-scale experiments separately labeled.
+
+The independent M6 interface obligation is still the standalone C++ SettleGraph
+construction/encoding frontend. Native owners, SGD/AdamW and `TIDENCK1` values
+are implemented and qualified; graph construction/embedding still uses Python.
+The remaining overall objectives and workload obligations belong to ROADMAP.
+Do not rerun the full original-LH oracle unless its code or mapping changes.
 
 ## Latest terminal jobs and retained source
 
-All listed units are inactive/dead, MainPID 0, Result=success, exit 0:
+Both large pilot jobs passed with exit 0; systemd inspection found inactive/dead,
+MainPID 0, Result=success. Persistent status.json and all case exit codes agree:
 
-- tide-foundation-native-checkpoint-qualified-20260922-121524, finished
-  2026-09-22T04:22:36Z. The clean frozen worktree at commit 4325bb1 passed
-  the standalone checkpoint and optimizer checks for both dtypes plus 344
-  directed tests in 61.95s. Output is
-  artifacts/native-checkpoint-qualified-20260922-121524/; source audit reports
-  no dirty files. Build and worktree are retained under
-  /var/tmp/zlong-graph-execution-foundation/qualification/.
+- `tide-lh-scale-pilot-20260922-0730`, finished 2026-09-22T07:35:40Z.
+  Records: `artifacts/lh-scale-pilot-20260922-0730/`.
+  Frozen source a7edf44: qualification/lh-local-20260922 under the local parent.
+- `tide-lh-window-threads-20260922-0740`, finished 2026-09-22T07:41:15Z.
+  Records: `artifacts/lh-window-threads-20260922-0740/`.
+  Frozen wrapper 9548be6: qualification/lh-local-threads-20260922.
+  Contains analyze.py, comparison.json, record-validation.json and
+  post-run-audit.json; both clean trees match all 365 tracked Git-archive files,
+  and binary/snapshot/input hashes match. All eight run records validate.
 
-- tide-foundation-named-optimizer-qualified-20260922-1045, finished
-  2026-09-22T03:00:15Z. The clean frozen worktree at commit 9aef27a passed
-  both standalone C++ FP64/FP32 checks and 338 directed tests in 63.13s.
-  Output is artifacts/named-optimizer-qualified-20260922-1045/; source audit
-  reports no dirty files. Build and worktree are retained under
-  /var/tmp/zlong-graph-execution-foundation/qualification/.
-- tide-foundation-named-optimizer-qualified-20260922-1010, finished
-  2026-09-22T02:17:44Z. The clean frozen worktree at commit 5c440e1 passed
-  both standalone C++ FP64/FP32 checks and 338 directed tests in 64.18s.
-  Output is artifacts/named-optimizer-qualified-20260922-1010/; source audit
-  reports no dirty files. Build and worktree are retained under
-  /var/tmp/zlong-graph-execution-foundation/qualification/.
-- tide-foundation-named-optimizer-dev-20260922-0940, finished
-  2026-09-22T02:06:34Z. Its dirty-source build and directed gate passed:
-  both standalone C++ FP64/FP32 checks and 338 native/PyTorch, Python
-  ownership and single-graph optimizer tests. Output is
-  artifacts/named-optimizer-dev-20260922-0940/; the independent build is
-  /var/tmp/zlong-graph-execution-foundation/build-named-optimizer. A previous
-  path-correctness interruption is retained in
-  artifacts/named-optimizer-dev-20260922-0930/ and is not a pass result.
-- tide-foundation-token-coordinates-qualified-20260922-0106, finished
-  2026-09-22T01:21:19Z. Output artifacts/token-coordinates-qualified-20260922-0106/:
-  status.json, task.log, verification/{result.json,tests.log}, dispatch.json,
-  qualification-audit.json. All 339 frozen source files and eight binary hashes
-  checked. Worktree retained read-only with its own build:
-  /var/tmp/zlong-graph-execution-foundation/qualification/token-coordinates-20260922-0106.
-  Exact command there (Python=/home/zlong/anaconda3/bin/python):
-  scripts/job.py --output-dir ABS_OUTPUT -- python scripts/qualify.py
-  --output-dir ABS_OUTPUT --jobs 2. ABS_OUTPUT is the absolute output above.
-- tide-foundation-records-qualified-20260922-0115, finished 01:13:20Z.
-  artifacts/records-qualified-20260922-0115/{status.json,task.log,post-run-audit.json}.
-  Clean main source stayed unchanged during scripts/job.py --output-dir ABS_OUTPUT
-  -- python -m pytest tests/test_durable_records.py -q --dtype both.
-  All 341 tracked files matched git archive after exit.
-- tide-foundation-token-bundle-dev-20260922-0038: 1398 passed / 342.38s,
-  finished 00:52:00Z. Its archived 335 dirty-source files were compared to the
-  unchanged main tree before c08105e. Artifacts and exact command are retained
-  in artifacts/token-bundle-dev-20260922-0038/ and the latest evidence report.
+The native binary is retained at
+`/var/tmp/zlong-graph-execution-foundation/build-lh-local/tide-lh-bench`.
+Prepared inputs: `artifacts/lh-local-{wide,narrow}-input-20260922-0720/prepared/input.json`.
+Build/input preparation and all five smoke jobs passed; identities and logs are
+in the linked evidence. No full Tide regression rerun was needed for this
+separate harness/docs increment; the complete baseline remains scoped above.
 
-Earlier qualifications, fixtures, snapshots and failure logs remain retained.
-The old training/LH qualification worktrees were audited and removed; their
-commits and evidence remain. Cleanup manifest is
-/var/tmp/zlong-graph-execution-foundation/qualification-worktree-cleanup.json.
-The dry-run artifact cleaner found no eligible old records. Do not delete cited
-artifacts or the latest frozen worktree without a fresh terminal/source audit.
+Brief observations (FP32/batch512/56 physical cores): wide2048/narrow128
+actual parameters 9.468B/9.025B; nograd steps4–11 mean 6.096/16.109 ms/token.
+Aligned steps1–3 grad-forward versus nograd time ratios are 1.072x/5.068x.
+BLAS1 versus BLAS56 steps4–7 ratios are 1.009x/0.895x. This is a single-seed,
+single-repetition Add workload, not attention or full-scale backward timing.
+Grad windows are short and retained continuously. Aggregate counts/logit sums
+match in the aligned comparisons; they do not prove complete large-model parity.
+Trackio was best-effort/degraded because it is not installed; local data are complete.
+
+Earlier qualification and failure artifacts remain retained and are referenced
+by their evidence reports. Old training/LH qualification worktree cleanup is
+recorded in /var/tmp/zlong-graph-execution-foundation/qualification-worktree-cleanup.json.
+No cleanup was needed for this increment. Keep current cited snapshots,
+inputs, binaries and records; inspect a fresh dry run before any deletion.
 
 ## Numerical boundaries and retained failures
 
@@ -174,7 +135,9 @@ Never relabel historical failures when a later run passes.
 
 CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
 Torch/LibTorch 2.10.0+cpu, C++11 ABI. TORCH_DEVICE_BACKEND_AUTOLOAD=0;
-OMP/OpenBLAS=1, two build jobs, Nice=10/background.slice. FP64 atol/rtol
+Default correctness OMP/OpenBLAS=1, two build jobs, Nice=10/background.slice.
+The LH performance cases explicitly use ATen/OpenMP 56, BLAS 56 or 1, inter-op 1
+and CPU affinity 160–215. FP64 atol/rtol
 1e-10/1e-8; FP32 1e-6/1e-5; routes/identities exact. Keep builds isolated.
 LH snapshot artifacts/lh-source-20260921-1428 has 69 files, identity
 ac7c878a56aeb55eec9f919da1962be6134fc5e3d1872f6d2303917306edb87f,
