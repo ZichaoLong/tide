@@ -2,10 +2,10 @@
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 The standalone C++ named-owner/optimizer implementation is committed at
-5c440e1 and its frozen clean qualification passed. The reviewed report is
-evidence/cpp-optimizer-ownership.md. The prior token-bundle, integer-coordinate
-and durable-record qualification remains complete. Native value persistence is
-the next bounded increment.
+5c440e1, with the native region-name fix at 9aef27a. Its frozen clean
+qualification passed and evidence/cpp-optimizer-ownership.md is refreshed.
+The prior token-bundle, integer-coordinate and durable-record qualification
+remains complete. Native value persistence is the next bounded increment.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -22,7 +22,7 @@ Source and scope are separate for each report:
 | Original LH bounded single-PDG inference | c84abbed7c9cfce6d4c6a44f6b7ae5f9aab465d3 | All seven stages passed; evidence/lh-single-graph.md |
 | Atomic value-checkpoint publication | 00bbf78fb99e410d46b4d7e36e37266eb3d8cf9e | 88 directed clean tests; evidence/checkpoint-io.md |
 | First native streaming performance pilot | aee0da48e4c6661d7a75fd97ca39ddaba654ee4d | 16 cases / 80 events; evidence/m8-streaming-pilot.md |
-| Standalone C++ named ownership and SGD/AdamW parity | 5c440e1648070c74eb25955893e10bffd3091d5c | clean frozen build; 338 directed tests plus FP64/FP32 executable checks; evidence/cpp-optimizer-ownership.md |
+| Standalone C++ named ownership and SGD/AdamW parity | 9aef27aa2e8eeeda6f3d6298ae295bf687b3a66b | clean frozen build; 338 directed tests plus FP64/FP32 executable checks; evidence/cpp-optimizer-ownership.md |
 
 The bundle preserves two complete continuations, real occurrence ledgers,
 unfinished token buffers, named cross-graph aliases and optimizer state. 192
@@ -41,12 +41,12 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 ## Next action
 
 The standalone C++ owner registry and independent LibTorch SGD/AdamW
-updates are implemented and cleanly qualified at 5c440e1; see
+updates are implemented at 9aef27a and cleanly qualified; see
 evidence/cpp-optimizer-ownership.md. The next increment is native value
-serialization and resume, with an explicit schema/identity and transactional
-preflight. The standalone C++ SettleGraph construction frontend is still a
-separate interface obligation; do not rerun the original LH full oracle unless
-its relevant code/mapping changes.
+serialization and resume, with an
+explicit schema/identity and transactional preflight. The standalone C++
+SettleGraph construction frontend is still a separate interface obligation; do
+not rerun the original LH full oracle unless its relevant code/mapping changes.
 
 Later M8 Attention/SSM/prefill/training measurements require new declared fixed
 workloads; the current EMA pilot does not certify those cases. Wider module
@@ -56,6 +56,12 @@ imports and Delta chunk optimization remain in ROADMAP, the only backlog.
 
 All listed units are inactive/dead, MainPID 0, Result=success, exit 0:
 
+- tide-foundation-named-optimizer-qualified-20260922-1045, finished
+  2026-09-22T03:00:15Z. The clean frozen worktree at commit 9aef27a passed
+  both standalone C++ FP64/FP32 checks and 338 directed tests in 63.13s.
+  Output is artifacts/named-optimizer-qualified-20260922-1045/; source audit
+  reports no dirty files. Build and worktree are retained under
+  /var/tmp/zlong-graph-execution-foundation/qualification/.
 - tide-foundation-named-optimizer-qualified-20260922-1010, finished
   2026-09-22T02:17:44Z. The clean frozen worktree at commit 5c440e1 passed
   both standalone C++ FP64/FP32 checks and 338 directed tests in 64.18s.
