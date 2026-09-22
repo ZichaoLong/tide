@@ -74,6 +74,18 @@ best-effort Trackio projection. Missing Trackio does not discard local records.
 Preserve timed-out/partial cases and their missing observations. Measured results
 belong in evidence; implementation alone is not performance evidence.
 
+## Optional optimized schedules
+
+Add `--head-workers 160 --parallel-regions 1 --compact-events 1` to select the
+column-parallel vocabulary head, independent region tasks and compact event
+grouping/cleanup. All default off; compare against the same binary with
+`--head-workers 1 --parallel-regions 0 --compact-events 0`.
+The [optimization contract](streaming-optimizations.md) explains state ownership,
+autograd and the separate graph/head worker phases. Each phase observes the
+worker × intra-op budget; idle pools can make total OS thread count larger.
+`runtime/*` metrics report the pools actually visible to the native runtime,
+with `-1` for unavailable introspection. They do not measure simultaneous CPU use.
+
 ## Optional streaming phase timing
 
 `--profile 1` enables coordinator wall-clock intervals, reported in seconds per

@@ -161,12 +161,14 @@ and bounded native timing. The first17.27B wide parallel measurement is
 [retained](evidence/pdg-scale-attention.md); serial completed; narrow timed out
 after5/8steps (retained failure). Small row-versus-slot and schedule checks
 preceded the scale ramp. The [phase/runtime diagnosis](evidence/pdg-scale-profile.md)
-is complete. The current bounded increment implements default-off
-[streaming optimizations](streaming-optimizations.md): reported runtime pools,
-column-parallel dense head, independent region evaluation and compact event
-construction/cleanup. Directed correctness, full regression and the fixed
-wide baseline/optimized measurement must pass before any performance claim. OPENBLAS_NUM_THREADS=1 does not imply an
-effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
+is complete. Default-off [streaming optimizations](streaming-optimizations.md)
+are [verified](evidence/pdg-streaming-optimization.md):6459 CPU regression tests
+and a same-binary wide pair,34.30392→29.65650ms/sample-token (13.55% lower latency).
+Head/region/cleanup improved; update/Full now consume89.20% of token time.
+Next, profile and improve their operator/data-layout/allocation costs while
+preserving complete small semantics and fixed large work counters. Component
+ablations, longer contexts, narrow scale and training performance remain pending.
+OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
 the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.
 Expand the other M8 fixed workloads beyond the EMA pilot: Attention/SSM streaming,

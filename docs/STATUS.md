@@ -24,6 +24,7 @@ Source and scope are separate for each report:
 
 | Scope | Clean source | Result / evidence |
 | --- | --- | --- |
+| Complete CPU regression plus optional canonical streaming optimizations | da5a17bdbda1196fb32e2352fba9aa3b95e6dde3 | 6459 tests / 716.61s; evidence/pdg-streaming-optimization.md |
 | Complete CPU regression, two-clock checkpoint and strict coordinates | 69ca37900e9c10d3fca95570ea1ebca8f9079f46 | 6233 tests / 665.45s; evidence/token-checkpoint-coordinates.md |
 | Durable status publication and damaged-record re-entry | 3604ec002722e701c74bd13e6f681b88ada14199 | 16 tests / 0.44s; evidence/durable-records.md |
 | Bounded two-clock/single-PDG training and single-graph resume | d233429cd5807614869214dcea21d9492e309fd1 | 4901 tests / 584.15s; evidence/single-graph-training.md |
@@ -53,43 +54,52 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The user confirmed optimization under the 20-tide canonical framework. The
-adopted authority remains tide-core-3; no graph/profile/checkpoint version changes.
-The implementation adds independently switchable region parallelism, compact
-events/parallel temporary cleanup and a separate bounded column-parallel
-vocabulary head. See streaming-optimizations.md. All default off. Runtime pool
-reporting distinguishes requested environment from reported counts.
+The requested canonical PDG optimization is complete; no active job remains.
+Authority stays tide-core-3. Source da5a17bdbda1196fb32e2352fba9aa3b95e6dde3
+adds default-off column-parallel dense head, independent region selection,
+compact event grouping/parallel cleanup and effective runtime pool reporting.
+See [contract](streaming-optimizations.md) and
+[validated results](evidence/pdg-streaming-optimization.md).
 
-Directed gate artifacts/pdg-opt-dev-20260923-0050 passed 479 FP64/FP32 tests in
-98.40s after the native build; unit tide-pdg-opt-dev-20260923-0050 terminated
-exit0, inactive/dead, MainPID0. The source archive/hash and development.json are
-retained. Independent Python, legacy native and optimized paths agree on complete
-traces/continuation, isolated VJPs, tensor history, custom selectors and thread
-local modes. Dense projection forward/VJPs also pass. This is correctness evidence,
-not an optimization speed claim. CPU operator doctor passed; static audit has no
-errors and only existing guarded runtime/CLI review leads.
+Directed development passed479 tests/98.40s after the native build:
+artifacts/pdg-opt-dev-20260923-0050/, unit tide-pdg-opt-dev-20260923-0050 exit0.
+Clean fixed-source CPU regression passed6459 tests/716.61s, FP64/FP32. Complete
+trace/continuation, isolated VJP/None structure, mixed memories, custom regions,
+clear, HARD/HST/SOFTP and dense grad/inference modes passed. The actual-size
+[512,2048]×[50304,2048] FP32 head check had zero error. Three small optimized
+scale cases passed before the wide pair.
 
-Next: commit this coherent implementation, freeze that exact source under
-/var/tmp/zlong-graph-execution-foundation/qualification/pdg-opt-20260923-0100,
-and copy source-hash-matching build artifacts/manifest to its isolated build/.
-This reuses the directed build; do not call it a fresh clean build.
-Submit unit tide-pdg-opt-20260923-0100 through scripts/job.py in background.slice,
-Nice10, CPUs160-319, OMP/OPENBLAS1, TORCH_DEVICE_BACKEND_AUTOLOAD=0,
-RuntimeMaxSec3000; job output artifacts/pdg-opt-20260923-0100/ in the main tree.
-The fixed driver is artifacts/pdg-opt-runner-20260923-0100.py, invoked with
---source pointing to the frozen directory, --output-dir to the job directory,
-and --topology artifacts/pdg-scale-input-20260922/wide.txt (absolute paths).
-It first runs scripts/verify.py --device cpu --dtype both in the frozen source,
-then an actual-size dense-head numerical smoke, small optimized scale checks,
-and a sequential baseline/optimized wide pair. Each wide case is
-17.27B/B512/D2048/FP32,12steps/warmup4,workers160/threads1,seed7,profile1,
-1280GiB address-space limit,timeout1200. Optimized head-workers160,
-parallel-regions1,compact-events1; baseline flags off. Preserve failures and
-compare work counters and the identical4–11 window. No LH rerun is needed.
-At publication the follow-up job has not yet been submitted; inspect status.json,
-pipeline.json, qualification/result.json and task.log after launch. No speed
-claim is available. Source and result identities must be audited before writing
-final evidence. Weight-preserving LH import remains a separate future task.
+Unit tide-pdg-opt-20260923-0100 passed/exit0, inactive/dead, MainPID0.
+All6driver stages passed. Records: artifacts/pdg-opt-20260923-0100/;
+status.json, pipeline.json, qualification/result.json, head-smoke.json,
+case manifests/metrics, task.log, analyze.py and analysis.json. Fixed driver:
+artifacts/pdg-opt-runner-20260923-0100.py. Exact argv and hashes are retained.
+Immutable source: /var/tmp/zlong-graph-execution-foundation/qualification/pdg-opt-20260923-0100.
+Its isolated copied build matches the source hash; build metadata retains the
+honest dirty-development base revision. This was not a fresh clean compilation.
+Source inventory, binary/input hashes and all five portable run records passed
+terminal audit. Preserve these files. Trackio remains best-effort/degraded
+(not installed); local records are complete.
+
+Wide pair:17.27B,D2048,B512,FP32,nograd,12steps/warmup4,seed7,row Emit,
+workers160/ATen1,CPUs160–319,1280GiB address-space bound,profile1. Same-binary
+baseline versus all optimization switches:34.30392→29.65650ms/sample-token,
+latency−13.55%,throughput+15.67%. All12steps' work/model counters and output
+checksums match. Historical LH same4–11window is24.58203ms, leaving20.64%
+observed overhead; LH has different random weights/tokens. Head1.38147→0.06141s,
+region1.22383→0.29325s,cleanup0.91583→0.44591s per batch token. Event grouping
+improved only0.02147s; commit/update/Full were slightly slower. Peak RSS
+110.45091→111.75505GiB. This is one short-window repetition, not broad scale or
+training-performance qualification. Small training correctness is covered.
+
+Next bounded performance target: inspect Aggregate/State/Read and Next/Full/Emit
+operator/allocation/layout costs, which now account for89.20% of token time.
+Keep the simple schedule and exact graph/workload anchors. Further default changes,
+component ablations, narrow/long-context/training timing and broader module
+performance remain separate tasks in ROADMAP. Do not rerun unchanged pilots.
+Weight-preserving LH import remains a separate exact-inference objective.
+No new benchmark or kernel work is in progress. Implementation and terminal
+evidence are saved in separate commits; git status is authoritative on re-entry.
 
 The native benchmark, graph-only exporter, row Emit and recorded wrapper are
 implemented. Development gate artifacts/pdg-scale-dev-20260922-1120 passed:
@@ -153,7 +163,7 @@ thread reporting/lifecycle needs implementation before accepting a tuned result.
 The original LH loop uses unseeded random token IDs, not greedy feedback; older
 scale documentation was corrected. Original LH and frozen sources remain read-only.
 Trackio remains best-effort/degraded (not installed); complete local records are
-retained. No optimized large-model rerun was performed in this diagnosis.
+retained. That diagnosis predates the completed optimization recorded above.
 
 The original Attention pipeline has terminated failed/exit1 (unit
 `tide-lh-a10-attention-20260922-0830`, MainPID0, inactive computation).
