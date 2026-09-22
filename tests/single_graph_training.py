@@ -69,19 +69,25 @@ class TwoClock:
         self.rq = Continuation(case.readout.identity, case.batch)
         self.buffer = []
 
+    def execute_body(self, xs, stop):
+        c = self.case
+        return run(c.body, c.model, self.bq, xs, stop, sealed_until=stop, mode=self.mode, zeta=.37)
+
+    def execute_read(self, xs, stop):
+        c = self.case
+        return run(c.readout, c.read_model, self.rq, xs, stop, sealed_until=stop, mode=self.mode, zeta=.37)
+
     def advance(self, stop):
         c = self.case; bodies, reads = [], []
         for cut in range(self.cut+1, stop+1):
             token, phase = divmod(cut, c.period)
             body_cut = token*c.layers+min(phase, c.layers)
             xs = [x for x in c.xs if self.bq.cut <= x.time < body_cut]
-            br = run(c.body, c.model, self.bq, xs, body_cut, sealed_until=body_cut,
-                     mode=self.mode, zeta=.37)
+            br = self.execute_body(xs, body_cut)
             self.bq = br.continuation; bodies.append(br); self.buffer.extend(br.outputs)
             if self.rq.cut < token:
                 xs = token_inputs(self.buffer, self.rq, c.layers, token, body_cut=body_cut) if self.buffer else []
-                rr = run(c.readout, c.read_model, self.rq, xs, token, sealed_until=token,
-                         mode=self.mode, zeta=.37)
+                rr = self.execute_read(xs, token)
                 self.rq = rr.continuation; reads.append(rr); self.buffer = []
         self.cut = stop
         return Frame(joined(c.body, self.bq, bodies), joined(c.readout, self.rq, reads),

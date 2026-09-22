@@ -1,7 +1,9 @@
 # Current handoff
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
-No active jobs. No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
+Composite checkpoint implementation is ready to commit after its passed directed gate.
+Next: reject invalid Python coordinate types, then qualify a clean combined commit.
+No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
 ## Verified state
@@ -29,29 +31,47 @@ events / 660 single-PDG cuts. Projection is bounded equal-width, fixed inference
 weights and homogeneous profiles; readout view omits the two-clock adapter's
 occurrence ledger explicitly. Contracts/navigation were updated after success.
 
-## Next implementation
+## Next action and latest directed gate
 
-Implement a separately specified composite checkpoint for the **two-clock
-application**. Existing v5 already saves the full encoded single graph, but it
-does not store both independent graph continuations and their external unfinished
-readout buffer/controller state as one application. Start from
-checkpoint-ownership.md, single-graph-training.md, lh-iocortex-plan.md and
-python/tidegraph/{checkpoint,checkpoint_ownership,token_window}.py.
+No active jobs. Commit the token-application checkpoint, then fix the independent
+Python integer-coordinate validation defect before one combined clean full CPU
+qualification. Reproducer: artifacts/coordinate-types-probe/probe.json. Python
+accepts time=0.5 and drops the event while updating the ledger; native rejects it.
+Both accept bool coordinates. Reuse history.int64 for strict non-bool int64
+validation of external/window metadata and imported continuation owners/counters.
+Apply this before reference/frontier execution, native conversion and cursor
+advance. Cursor checks must scale with incoming inputs, not all held state.
+Test rejection without mutation, retry and checkpoint preflight; keep existing
+counter-overflow behavior. No C++ kernel change is needed for Python types.
 
-Define the application identity, named component/parameter ownership and clock/
-buffer invariants before coding. Validate every component and optimizer layout
-before mutating any live weights. Preserve cross-graph aliases and per-phase
-occurrence ledgers; never infer occurrence count from token index. A composite
-save is an explicit gradient boundary. Add malformed-bundle/no-mutation tests
-and independent uninterrupted/resumed updates with nonempty partial windows.
-Use a distinct versioned bundle format rather than silently changing v5.
+Composite implementation: token_checkpoint.py, checkpoint_values.py, v5 codec
+refactor, application tests/controller helper extraction and docs. Contract:
+token-application-checkpoint.md. Common Emit mode/zeta bind application identity.
+Whole-bundle preflight validates named cross-graph aliases, optimizer layout,
+both clocks/continuations/ledgers and partial buffers before changing live owners.
+The bundle persists a complete two-clock value boundary; RNG/data cursors and
+standalone C++ persistence remain separate backlog obligations.
 
-Keep standalone C++ optimizer ownership/serialization separately scoped.
-ROADMAP is the only backlog: broader modules/imports, structured Delta prefill,
-large active sets and Attention/SSM/prefill/training performance remain pending.
-First M8 pilot measures shared-weight EMA rings only; no consistent parallel/
-packing benefit was found at those sizes. Trackio projections are explicitly
-degraded because the package is absent; local records passed validation.
+Directed gate tide-foundation-token-bundle-dev-20260922-0038 completed:
+1398 passed / 342.38s, finished 2026-09-22T00:52:00Z. Service inactive/dead,
+MainPID 0, Result=success, exit 0. Source d3ab673 plus the archived uncommitted
+implementation. artifacts/token-bundle-dev-20260922-0038/ holds status.json,
+development.json, task.log, source.tar.gz and post-run-audit.json. All 335 archive
+files matched the unchanged worktree; tree SHA256
+38226eef1ea1fc4c342853d879cde06840a05133177a197a8d6b49e2f703bbc4.
+This is development evidence; clean qualification remains pending.
+
+Exact directed command from /home/zlong/llm/graph-execution-foundation:
+
+```sh
+/home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/token-bundle-dev-20260922-0038 -- /home/zlong/anaconda3/bin/python scripts/develop.py --output-dir artifacts/token-bundle-dev-20260922-0038 --jobs 2 tests/test_token_checkpoint.py tests/test_checkpoint_io.py tests/test_checkpoint_ownership.py tests/test_checkpoint.py tests/test_single_graph_training.py tests/test_single_graph_optimizer.py tests/test_single_graph_resume.py tests/test_single_graph.py
+```
+
+After the coordinate fix and directed tests, commit, create a read-only detached
+worktree and run scripts/job.py --output-dir ABS_OUTPUT -- python
+scripts/qualify.py --output-dir ABS_OUTPUT --jobs 2 through the usual durable
+service. No C++/LH oracle changes require rerunning the original LH full matrix.
+ROADMAP remains the only backlog.
 
 ## Terminal records and source retention
 

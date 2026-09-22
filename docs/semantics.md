@@ -18,7 +18,9 @@ Complete-cut continuation is `(cut, node states, region histories, pending)`;
 pending contains every message sent before cut and arriving at/after cut.
 Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
-Current native structural identity is **v13**; checkpoint payload is **v5**.
+Current native structural identity is **v13**; single-graph checkpoint payload is
+**v5**. The separate two-clock application bundle is **tide-token-application-v1**
+(`token-application-checkpoint.md`); its current qualification is tracked in STATUS.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
