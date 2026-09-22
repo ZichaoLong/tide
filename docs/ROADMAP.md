@@ -157,7 +157,8 @@ The M8 large-LH workstream has completed original-LH graph/parameter preflight,
 native count confirmation and bounded local measurement. Per the user's latest
 instruction, prioritize the [graph-only PDG scale benchmark](pdg-scale-benchmark.md):
 fresh random weights, similar topology/modules/parameters, actual work counters
-and bounded native timing. Small row-versus-slot and schedule checks precede the
+and bounded native timing. The first17.27B wide parallel measurement is
+[retained](evidence/pdg-scale-attention.md); serial/narrow are still running/queued. Small row-versus-slot and schedule checks precede the
 scale ramp. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.
 Expand the other M8 fixed workloads beyond the EMA pilot: Attention/SSM streaming,

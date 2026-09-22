@@ -82,11 +82,22 @@ RuntimeMaxSec7200, BLAS1 and at most160 node workers. Job output:
 artifacts/pdg-scale-20260922-1020/ (pilot cases under comparison/).
 Submission verified active/running in background.slice, transient=yes.
 Timeout-finalization and three smoke stages are accepted; the timeout case
-remains recorded as failed, with native exit-15 and no unreaped child. The
-width256/batch32 ramp completed6steps. Initial terminal record validation is in
-artifacts/pdg-scale-20260922-1020/record-validation.json. The width2048/batch64
-case is constructing its model; no large PDG token result is available yet.
-The frozen source and build remain fixed.
+remains failed/native exit-15 with no unreaped child. Both ramps passed.
+The wide2048/batch512 parallel case completed12/12steps, native exit0:
+indices4–11 mean33.75842ms/sample-token vs LH24.58203,
+observed ratio1.3733x; both selected32 body rows per
+sample-token. PDG peak109.39629GiB over12steps (LH peak covers100).
+[Evidence](evidence/pdg-scale-attention.md) states scope, source and limitations.
+All terminal portable records validate; analyze.py and comparison.json are under
+the job directory. Trackio is best-effort/degraded (not installed).
+The wide serial case is running; narrow parallel is queued. The overall pilot
+is still active/running; frozen source and isolated build remain unchanged.
+
+After a case completes, run:
+/home/zlong/anaconda3/bin/python artifacts/pdg-scale-20260922-1020/analyze.py
+Then inspect per-case/native exit codes, raw series and outer unit, refresh
+this handoff and the evidence. Original LH and all frozen pilot inputs stay
+read-only. No need to re-run passed large cases merely for more validation.
 Inspect status.json, comparison/pilot.json, per-case summaries and unit state;
 stop with systemctl --user stop tide-pdg-scale-20260922-1020 if needed.
 Do not claim submission or partial/failed cases as passed.
