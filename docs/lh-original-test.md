@@ -63,8 +63,9 @@ test without an added seed. No tensor/route parity is claimed from timing logs.
 The raw log remains authoritative. Metrics are projected after process exit;
 their timestamps are projection time, not original token emission times.
 Report the full100-step mean, a separately labeled steps4–99 mean, and early/
-late windows. Never erase the original cold first step. GNU time records whole
-process RSS and elapsed/resource usage; it is distinct from summed Think time.
+late windows. Never erase the original cold first step. Linux wait4 records the
+child's peak RSS and CPU usage without an external time executable. Whole-process
+elapsed time is distinct from summed Think time.
 Best-effort Trackio can degrade while complete local records are retained.
 
 Small bring-up may override width64/batch4/steps4; those overrides remain

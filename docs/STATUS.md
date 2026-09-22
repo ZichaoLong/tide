@@ -58,21 +58,40 @@ parameters yields the intended Attention workloads. The current default width512
 is not a new target. Use exact a10fdb1 numerical sources, not the dirty LH
 workspace's modified BatchHidden.cpp; the old Add pilot remains separate.
 The user authorizes up to half this host's320 physical cores (160) and ample
-memory. See [original test contract](lh-original-test.md).
+memory, suggesting roughly half the2-TiB host (not the old256-GiB limit).
+The1280-GiB address-space cap is distinct from measured physical RSS.
+See [original test contract](lh-original-test.md).
 
 Current increment: implement/build the original-test reproduction path, preserving
 original kernels and the100-step loop, with explicit width/selector overrides.
-Four timer-record tests are the directed development gate. Next freeze the clean
-Tide commit and run durable build/check/measurement jobs. Planned unit:
-`tide-lh-a10-attention-20260922-0820` in background.slice, pinned CPUs160–319.
-Records: `artifacts/lh-a10-attention-20260922-0820/`; frozen checkout under
-`/var/tmp/zlong-graph-execution-foundation/qualification/lh-a10-20260922-0820`.
-The pipeline will first build width64/batch4/steps4 and check both original
+Five timer/resource-record tests passed. The first build at87f3687 passed,
+but its smoke launcher failed because /usr/bin/time is absent. No native test
+ran in that failed launch; the complete failure record remains retained.
+The resource wrapper now uses Linux wait4 and reuses the completed smoke build.
+Next durable pipeline unit:
+`tide-lh-a10-attention-20260922-0830` in background.slice, pinned CPUs160–319.
+Records: `artifacts/lh-a10-attention-20260922-0830/`; frozen checkout under
+`/var/tmp/zlong-graph-execution-foundation/qualification/lh-a10-20260922-0830`.
+The repaired pipeline is not yet submitted; update after launch.
+The old0820 unit is failed/exit1 and must not be relabeled. Its source, smoke
+build, logs and failure record remain in artifacts/lh-a10-attention-20260922-0820/.
+The pipeline first builds width64/batch4/steps4 and checks both original
 nograd/grad-forward modes. Then build wide2048 and narrow128 against their
 retained original graph-generator outputs, run nograd then grad-forward at
 batch512/100steps, OpenMP160/BLAS1. Each large run has an explicit1800-second,
 1280-GiB address-space bound; failures remain recorded. Do not call a planned,
-queued or live job passed. Exact launch state must be filled after submission.
+queued or live job passed. Inspect status.json, task.log and
+pilot/pipeline.json before claiming a result. Exact launcher arguments are in
+status.json and the source revision is recorded there. Inspect with:
+
+```sh
+systemctl --user show tide-lh-a10-attention-20260922-0830 -p ActiveState -p SubState -p Result -p MainPID
+tail -n 30 artifacts/lh-a10-attention-20260922-0830/task.log
+```
+
+Stop if needed with `systemctl --user stop tide-lh-a10-attention-20260922-0830`.
+Outer service12000s; per-build stage1200s, per-large-run1800s. The source
+checkout is read-only while the job runs. Main worktree changes are docs only.
 
 After original Attention results are recorded, the next M8 increment remains a
 reusable weight-preserving four-block LH-to-Tide importer and paired timer.

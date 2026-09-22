@@ -6,6 +6,14 @@ Historical data are references, not pass/fail targets. Exact historical
 reproduction, large Tide/LH parity and a LH/Tide speed ratio remain unverified. Implementation backlog
 belongs to [ROADMAP](ROADMAP.md); this file owns workload and comparison meaning.
 
+The user subsequently identified a10fdb1 plus a few parameter changes as the
+intended Attention baseline. The active follow-up uses that revision's original
+C++ algorithms/test timer and explicit width/selector changes, with an expanded
+160-core local budget; see [original test reproduction](lh-original-test.md).
+The earlier Add pilot does not reproduce that Attention workload. The present
+LH workspace has a modified BatchHidden.cpp, so this follow-up uses a separate
+clone of the selected revision instead of the earlier dirty-source snapshot.
+
 ## User-reported historical references
 
 Reported on 2026-09-22, for a 56-core CPU and batch 512:

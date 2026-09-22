@@ -2,6 +2,7 @@
 import importlib.util
 from pathlib import Path
 import sys
+import subprocess
 import pytest
 
 SCRIPTS = Path(__file__).resolve().parents[1] / 'scripts'
@@ -24,3 +25,10 @@ def test_original_timer_keeps_cold_step_and_ignores_nested_timers():
 def test_original_timer_rejects_unpaired_or_reordered_tokens(text):
     with pytest.raises(ValueError):
         module.parse_log(text)
+
+
+def test_child_resource_wait_preserves_exit_and_reaps_only_its_child():
+    child = subprocess.Popen([sys.executable, '-c', 'raise SystemExit(7)'])
+    code, usage = module.wait_resource(child, 10)
+    assert code == 7 and child.wait() == 7
+    assert usage.ru_maxrss > 0

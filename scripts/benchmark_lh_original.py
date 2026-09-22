@@ -17,6 +17,19 @@ from build_lh_original import audit_source, digest
 from experiment_record import LocalTrackio, atomic_json, utc_now
 
 
+def wait_resource(child, timeout):
+    """Reap this one child with its own RSS/CPU counters, without GNU time."""
+    deadline = time.monotonic() + timeout
+    while True:
+        pid, status, usage = os.wait4(child.pid, os.WNOHANG)
+        if pid:
+            child.returncode = os.waitstatus_to_exitcode(status)
+            return child.returncode, usage
+        if time.monotonic() >= deadline:
+            raise subprocess.TimeoutExpired(child.args, timeout)
+        time.sleep(min(0.1, max(0, deadline - time.monotonic())))
+
+
 def parse_log(text):
     observations, pending, parameters = [], None, None
     for line in text.splitlines():
@@ -70,7 +83,7 @@ def main():
     run_id = out.name + '-' + uuid.uuid4().hex[:8]
     track = LocalTrackio(args.tracking, out.parent / 'trackio', 'tide-graph-execution', run_id, vars(args))
     executable = Path(build['build_dir']) / ('test-cortexnet-nograd' if args.mode == 'nograd' else 'test-cortexnet-grad')
-    command = ['/usr/bin/time', '-v', '-o', str(out / 'resource.txt'), str(executable)]
+    command = [str(executable)]
     now = utc_now()
     record = dict(schema_version=1, run_id=run_id, project='tide-graph-execution', name=run_id,
         status='running', created_at=now, started_at=now, ended_at=None,
@@ -90,10 +103,10 @@ def main():
             timestamp_semantics='events projected after subprocess exit; elapsed_seconds is projection time',
             seed_policy='unchanged original test; no added manual seed'),
         tracking=track.record, artifacts=dict(metrics='metrics.jsonl', stdout='stdout.log',
-            summary='summary.json', resources='resource.txt'))
+            summary='summary.json', resources='resource.json'))
     atomic_json(out / 'run.json', record)
     code, native_code, error, observations, parameters, events = 1, None, None, [], None, []
-    child = None
+    child, usage = None, None
     started = time.monotonic()
     def limits():
         resource.setrlimit(resource.RLIMIT_AS, (args.memory_gib * 1024**3,) * 2)
@@ -108,7 +121,7 @@ def main():
         with (out / 'stdout.log').open('w') as log:
             child = subprocess.Popen(command, cwd=build['build_dir'], env=env, stdout=log,
                 stderr=subprocess.STDOUT, start_new_session=True, preexec_fn=limits)
-            native_code = child.wait(timeout=args.timeout_seconds)
+            native_code, usage = wait_resource(child, args.timeout_seconds)
         if native_code != 0:
             raise RuntimeError('original test exited ' + str(native_code))
         observations, parameters = parse_log((out / 'stdout.log').read_text())
@@ -121,13 +134,16 @@ def main():
     except BaseException as exception:
         error = f'{type(exception).__name__}: {exception}'
     finally:
-        if child is not None and child.poll() is None:
-            os.killpg(child.pid, signal.SIGTERM)
+        if child is not None and child.returncode is None:
             try:
-                child.wait(timeout=10)
+                os.killpg(child.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            try:
+                native_code, usage = wait_resource(child, 10)
             except subprocess.TimeoutExpired:
                 os.killpg(child.pid, signal.SIGKILL)
-                child.wait()
+                native_code, usage = wait_resource(child, 10)
         for s, handler in previous.items():
             signal.signal(s, handler)
         native_code = None if child is None else child.returncode
@@ -150,10 +166,11 @@ def main():
         except Exception as exception:
             code = 1
             error = error or str(exception)
-        rss = None
-        if (out / 'resource.txt').exists():
-            match = re.search(r'Maximum resident set size \(kbytes\): (\d+)', (out / 'resource.txt').read_text())
-            rss = int(match[1]) * 1024 if match else None
+        rss = None if usage is None else usage.ru_maxrss * 1024
+        atomic_json(out / 'resource.json', dict(source='Linux wait4 child rusage', peak_rss_bytes=rss,
+            user_seconds=None if usage is None else usage.ru_utime,
+            system_seconds=None if usage is None else usage.ru_stime,
+            major_faults=None if usage is None else usage.ru_majflt))
         windows = {}
         for name, lo, hi in [('all', 0, steps), ('after-first-4', 4, steps), ('early-4-11', 4, 12), ('late-80-99', 80, 100)]:
             times = observations[lo:hi]
