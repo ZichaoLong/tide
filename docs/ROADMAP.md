@@ -107,6 +107,14 @@ The user subsequently identified a10fdb1 plus a few parameter changes as the
 Attention baseline. First complete the [original-test reproduction](lh-original-test.md)
 on the expanded160-core budget; preserve original kernels and separate it from
 the earlier Add/snapshot measurements. Then resume the matched Tide importer.
+The source-only [portable original-LH kit](evidence/lh-portable-repro.md) is
+qualified locally for clean setup, relocation, CPU build and four small
+original/diagnostic modes; Intel execution remains target-host work.
+The large wide-grad-forward run exposed a harness cleanup defect: after its
+1800s limit, both10s child-reaping waits timed out and bypassed final status/RSS/
+partial-metric publication. Fix cleanup/finalization and prove that a lingering
+native process cannot overlap the next large case; retain the79-step failure.
+Do not modify the active frozen runner or infer a missing peak RSS as zero.
 
 M8 implementation observation: `ProjectionEmit` currently launches a matmul per
 output slot, while original LH uses one large Linear per CSR row. Evaluate an

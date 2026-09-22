@@ -33,6 +33,7 @@ Source and scope are separate for each report:
 | First native streaming performance pilot | aee0da48e4c6661d7a75fd97ca39ddaba654ee4d | 16 cases / 80 events; evidence/m8-streaming-pilot.md |
 | Standalone C++ named ownership and SGD/AdamW parity | 9aef27aa2e8eeeda6f3d6298ae295bf687b3a66b | clean frozen build; 338 directed tests plus FP64/FP32 executable checks; evidence/cpp-optimizer-ownership.md |
 | Standalone C++ `TIDENCK1` value checkpoint | 4325bb14434bbe0e9702aff244f77ed71e75cbee | clean frozen build; 344 directed tests plus FP64/FP32 checkpoint and optimizer checks; evidence/cpp-native-checkpoint.md |
+| Portable LH Attention source kit / clean relocated CPU build | eda5357da86ea0022c8e8aab43f75e315f71de79 | 6 report checks; 26 qualification stages / 4 small native modes; evidence/lh-portable-repro.md |
 | Original LH local 9B Add performance pilot | a7edf44eb7046a307c9a53085ea2420e76e644b1 / wrapper 9548be6ecb6635c2beed2aee0b62a1eb5cb05282 | 5 harness checks; 8 large cases / 36 forward events; evidence/lh-local-scale-pilot.md |
 
 The application bundle preserves two complete continuations, real occurrence ledgers,
@@ -124,22 +125,26 @@ skipped if its nograd case fails. The1280-GiB virtual-address bound and expected
 904.008-GiB initial narrow KV allocation are distinct from measured peak RSS.
 No new large run or repeat of passed build/smoke stages is needed now.
 
-The current user requests a portable reproduction of the exact17.27B workload
-on the original Intel host. New sources are tools/lh_repro/ and
-scripts/export_lh_repro.py: a clean-LH configurator, source-only CPU CMake,
-original and optional diagnostic entries, and an original-timer summary tool.
-Six focused report tests pass. Next freeze this implementation, export the
-retained wide graph/vendor bytes, and build/run a relocated width64/batch4/4step
-smoke in an independent LH clone. Do not run another large benchmark for this
-packaging check. The exporter relocates graph_node_info_dir; this is necessary
-because the generated original graph config contains a local absolute path.
-The current source is not yet claimed compiled or qualified; qualification and
-final archive identity will be recorded after the isolated check.
+The portable17.27B reproduction kit requested by the user is complete:
+[commands](../tools/lh_repro/README.md), [qualification](evidence/lh-portable-repro.md).
+Archive: artifacts/lh-repro-export-20260922-0930/lh-a10-wide-repro-kit.tar.gz;
+SHA2562fbf82e55a675fe372c1dbdcd9a7294a26787e7c4a0dd0e5f1c889a4ce7e7182.
+Frozen source eda5357 under qualification/lh-repro-20260922-0930. Clean archive
+and default-wide configuration identities match. Six report checks and all26
+qualification stages pass, including four native small modes and loader checks.
+The service tide-lh-repro-check-20260922-0930 is terminal: passed/exit0,
+inactive/dead, MainPID0, Result=success. Records: artifacts/lh-repro-check-20260922-0930/;
+source launcher: artifacts/lh-repro-helper-20260922-0930/qualify.py. No large
+repeat ran for this kit. Intel execution remains the user's target-host step.
+The kit uses only LH source, local LibTorch, standard-library Python and bundled
+graph/JSON headers; it preserves the original entry and adds an optional
+separate diagnostic entry. Keep the delivered archive and qualification records.
 
-A separate harness defect remains to fix after the portable kit: cleanup timeout
-must not bypass terminal status/partial metrics publication or allow orphaned
-native children to overlap another large case. Do not edit the active frozen
-runner. Preserve wide-grad-forward's missing-finalization failure explicitly.
+The next action is to inspect the still-active original Attention pipeline and
+record its terminal narrow results. The wide-grad-forward postmortem lives
+beside its original run/log and preserves missing RSS and native exit as null.
+The cleanup/finalization defect is now explicit in ROADMAP; do not edit the
+active frozen runner. Failed/partial cases must stay distinct from complete ones.
 
 After original Attention results are recorded, the next M8 increment remains a
 reusable weight-preserving four-block LH-to-Tide importer and paired timer.
