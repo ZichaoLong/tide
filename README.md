@@ -27,6 +27,7 @@ Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) �
 提供求和、均值、正权重均值、活动来源和全部来源 softmax。
 [Region 程序接口](docs/region-programs.md) 支持可微历史、空选择及完整候选控制量；
 [checkpoint](docs/checkpoint-ownership.md) 保存节点及区域状态，并校验参数别名和优化器归属。
+[两时钟应用 checkpoint](docs/token-application-checkpoint.md) 还保存 body/readout 两图、未完成 token 窗口和跨图共享参数。
 具体覆盖以 [验证证据](docs/ROADMAP.md) 为准；模块边界见 [接口说明](docs/module-extension-plan.md)，后续任务统一见路线图。
 源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
 

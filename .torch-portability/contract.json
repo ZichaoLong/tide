@@ -108,6 +108,20 @@
           "test_command": "python scripts/qualify.py --output-dir artifacts/training-qualified-20260921-2345 --jobs 2",
           "result": "passed",
           "environment_manifest": "docs/evidence/single-graph-training.md"
+        },
+        {
+          "date": "2026-09-22",
+          "commit": "69ca37900e9c10d3fca95570ea1ebca8f9079f46",
+          "scope": "6233 FP64/FP32 CPU checks including complete two-clock value checkpoint, shared optimizer owners and strict Python coordinates; Python file/optimizer controller with native execution; exact profiles and limits in report",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify.py --output-dir artifacts/token-coordinates-qualified-20260922-0106 --jobs 2",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/token-checkpoint-coordinates.md"
         }
       ]
     },
@@ -186,6 +200,20 @@
           "test_command": "python scripts/qualify.py --output-dir artifacts/training-qualified-20260921-2345 --jobs 2",
           "result": "passed",
           "environment_manifest": "docs/evidence/single-graph-training.md"
+        },
+        {
+          "date": "2026-09-22",
+          "commit": "69ca37900e9c10d3fca95570ea1ebca8f9079f46",
+          "scope": "6233 FP64/FP32 CPU checks including complete two-clock value checkpoint, shared optimizer owners and strict Python coordinates; Python file/optimizer controller with native execution; exact profiles and limits in report",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify.py --output-dir artifacts/token-coordinates-qualified-20260922-0106 --jobs 2",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/token-checkpoint-coordinates.md"
         }
       ]
     },

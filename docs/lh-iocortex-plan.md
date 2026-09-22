@@ -60,7 +60,8 @@ Tide two-clock/single-PDG training and single-graph value resume are qualified i
 `evidence/single-graph-training.md`; this uses Tide's declared VJPs and truncated
 updates. No training equivalence to old LH is claimed. The composite two-clock application now has named cross-graph ownership and one
 value checkpoint containing both continuations, the application cut and unfinished
-readout buffer; see `token-application-checkpoint.md` and STATUS for qualification.
+readout buffer; see `token-application-checkpoint.md` and
+`evidence/token-checkpoint-coordinates.md` for the qualified scope.
 RNG/data cursors and an arbitrary training controller remain caller-owned.
 Single-PDG v5 resume does not serialize that separate application.
 

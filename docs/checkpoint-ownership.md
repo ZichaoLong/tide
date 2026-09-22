@@ -32,7 +32,8 @@ module hooks with external side effects do not have a transactional guarantee.
 This is a single graph/model value checkpoint. It does not restore a live
 autograd graph, `.grad` buffers, RNG, data cursor, training controller or a
 multi-graph application. Loading starts a new autograd segment. The separate two-clock bundle is described in `token-application-checkpoint.md`;
-its qualification is tracked in STATUS. Standalone C++ ownership remains in ROADMAP.
+its CPU qualification is in `evidence/token-checkpoint-coordinates.md`.
+Standalone C++ ownership remains in ROADMAP.
 
 Implementation: `python/tidegraph/checkpoint.py` encodes and validates graph
 state; `checkpoint_ownership.py` handles parameter and optimizer identities.

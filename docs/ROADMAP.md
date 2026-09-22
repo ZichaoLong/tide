@@ -12,8 +12,8 @@ stays explicit; later milestones may refine earlier interfaces.
 | M3 | TimedDAG validation and frontier contracts; Python + native; actual time batching; region quotient cycles; independent DAG specialization | verified for ema-ffn-v1; [frontier](evidence/m3-frontier.md), [specialization](evidence/m4-settle-specialized.md) |
 | M4 | SettleGraph executor + encoding; Python/native generic; independent Python specialization; embedded trace and backward correspondence | verified for ema-ffn-v1; [evidence](evidence/m4-settle-specialized.md) |
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | SSM/SwiGLU [verified](evidence/m5a-state-programs.md); Linear/Delta [verified](evidence/m5b-matrix-memory.md); event GQA/window [verified](evidence/m5c-attention.md); broader programs pending |
-| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); named optimizer ownership [verified](evidence/checkpoint-ownership.md); bounded two-clock/single-PDG training and single-graph resume [verified](evidence/single-graph-training.md); two-clock bundle [implemented](token-application-checkpoint.md), qualification pending; broader modules/objectives pending |
-| M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md), [post-attention pooling](evidence/fiber-pooling.md), [token-window Pronounce](evidence/pronounce.md) and bounded [whole-model two-clock adapter](evidence/lh-iocortex.md) verified; bounded [single-PDG inference map](evidence/lh-single-graph.md) verified; composite checkpoint implemented, clean qualification and wider configurations pending |
+| M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); named optimizer ownership [verified](evidence/checkpoint-ownership.md); bounded two-clock/single-PDG training and single-graph resume [verified](evidence/single-graph-training.md); two-clock bundle and strict coordinates [verified](evidence/token-checkpoint-coordinates.md); broader modules/objectives pending |
+| M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md), [post-attention pooling](evidence/fiber-pooling.md), [token-window Pronounce](evidence/pronounce.md) and bounded [whole-model two-clock adapter](evidence/lh-iocortex.md) verified; bounded [single-PDG inference map](evidence/lh-single-graph.md) verified; composite checkpoint [verified](evidence/token-checkpoint-coordinates.md); wider configurations pending |
 | M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | first bounded EMA inference [pilot retained](evidence/m8-streaming-pilot.md); other scales, profiles, prefill and training pending |
 
 ## Dependencies and acceptance details
@@ -99,10 +99,28 @@ part of M8 performance qualification.
 
 Atomic exclusive value-checkpoint publication is
 [qualified](evidence/checkpoint-io.md) with Linux CPU fault injection, no-overwrite
-races, retry and resumed native training. Composite application checkpoints and
-standalone C++ optimizer ownership remain separate obligations.
+races, retry and resumed native training. Composite application checkpoints are [qualified](evidence/token-checkpoint-coordinates.md);
+standalone C++ optimizer ownership remains a separate obligation.
 
-Integer-coordinate validation is implemented at graph/execution/native-adapter
-and checkpoint boundaries. Its 1224-case directed regression passed; clean CPU
-qualification with the two-clock bundle is next (STATUS). Malformed Python
-records must fail before mutation; cursor advance must not scan retained state.
+Integer-coordinate validation at graph/execution/native-adapter and checkpoint
+boundaries is [qualified](evidence/token-checkpoint-coordinates.md). Malformed
+Python records must fail before mutation; cursor advance must not scan retained state.
+
+## Next bounded increment
+
+M6 standalone C++ ownership comes next. Start with a named tensor-owner registry
+for the existing native Model plus declared auxiliary parameters; canonical names,
+alias partitions and optimizer group order must survive sharing across nodes and
+graphs. Use the current Python checkpoint_ownership.py as an explicit contract,
+not a native runtime dependency. Check independent standalone LibTorch SGD/AdamW
+updates against PyTorch, including unused/connected-zero/shared parameters, before
+adding native value serialization and resume. A native format must declare its
+schema/identity and transactional preflight; do not silently promise Python-file
+interoperability. Keep core model/optimizer, codec and publication layers separate.
+
+Then expand the M8 fixed workload beyond the EMA pilot: Attention/SSM streaming,
+frontier/SettleGraph prefill and measured backward/replay costs. Declare batch,
+sequence length, width, active/dormant topology, sharing/reset policy and exact
+parity anchors before timing. No parameter sweep or scale claim follows from
+the existing small pilot. Broader model-specific imports and Delta chunk
+optimization remain independent items above.

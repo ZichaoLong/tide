@@ -27,7 +27,8 @@ Runtime identity, sample count and input-position ledger are also validated.
 The sealed-window API explicitly declares complete external inputs in `[a,b)`.
 Current native structural identity is **v13**; single-graph checkpoint payload is
 **v5**. The separate two-clock application bundle is **tide-token-application-v1**
-(`token-application-checkpoint.md`); its current qualification is tracked in STATUS.
+(`token-application-checkpoint.md`); CPU qualification is in
+`evidence/token-checkpoint-coordinates.md`.
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 

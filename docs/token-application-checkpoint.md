@@ -1,6 +1,6 @@
 # Two-clock application value checkpoint
 
-Implemented; clean qualification is tracked in STATUS. This is a
+Implemented and [qualified](evidence/token-checkpoint-coordinates.md) on CPU FP64/FP32. This is a
 separate **tide-token-application-v1** format. Single-graph checkpoint v5 retains
 its keys, value semantics and API. Shared value codecs live in checkpoint_values.py.
 No generic executor or LH training behavior changes.
@@ -57,7 +57,7 @@ caller reconstructs the same programs, zeroes gradients and supplies
 the same future sealed inputs. No interoperability with the separate v5 single-
 PDG file is implied. Standalone C++ optimizer/file ownership remains separate.
 
-## Implemented validation scope
+## Qualified validation scope
 
 Cross-graph send/receive and memory parameters are shared explicitly in fixtures.
 Compare uninterrupted Python two-clock updates with twice-restored Python or
