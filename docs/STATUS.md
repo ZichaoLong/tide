@@ -2,10 +2,11 @@
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 The standalone C++ named-owner/optimizer implementation is committed at
-5c440e1, with the native region-name fix at 9aef27a. Its frozen clean
-qualification passed and evidence/cpp-optimizer-ownership.md is refreshed.
+5c440e1, with the native region-name fix at 9aef27a. The native `TIDENCK1`
+value-checkpoint implementation is now in the current source and has passed
+its dirty-source directed gate; clean frozen qualification is still pending.
 The prior token-bundle, integer-coordinate and durable-record qualification
-remains complete. Native value persistence is the next bounded increment.
+remains complete.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -40,13 +41,16 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The standalone C++ owner registry and independent LibTorch SGD/AdamW
-updates are implemented at 9aef27a and cleanly qualified; see
-evidence/cpp-optimizer-ownership.md. The next increment is native value
-serialization and resume, with an
-explicit schema/identity and transactional preflight. The standalone C++
-SettleGraph construction frontend is still a separate interface obligation; do
-not rerun the original LH full oracle unless its relevant code/mapping changes.
+The standalone C++ owner registry, independent LibTorch SGD/AdamW updates and
+the `TIDENCK1` native value codec are implemented. The dirty-source gate for
+this increment passed 344 directed Python tests plus FP64/FP32 standalone
+checkpoint and optimizer checks from the current source; do not treat that as
+clean qualification. After the implementation commit, freeze it in an
+independent worktree and run the exact checkpoint/optimizer executable checks
+and directed Python tests, then commit the evidence separately. The standalone
+C++ SettleGraph construction/encoding frontend is the next interface
+obligation; do not rerun the original LH full oracle unless its relevant
+code/mapping changes.
 
 Later M8 Attention/SSM/prefill/training measurements require new declared fixed
 workloads; the current EMA pilot does not certify those cases. Wider module

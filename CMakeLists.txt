@@ -13,7 +13,8 @@ add_library(tidegraph STATIC
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
   cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
   cpp/src/kernel.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
-  cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp)
+  cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
+  cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp)
 set_target_properties(tidegraph PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(tidegraph PUBLIC cpp/include)
 target_link_libraries(tidegraph PUBLIC torch Threads::Threads)
@@ -29,6 +30,8 @@ add_executable(tidegraph-aggregate-check cpp/test/custom_aggregate.cpp cpp/src/r
 target_link_libraries(tidegraph-aggregate-check PRIVATE tidegraph)
 add_executable(tidegraph-optimizer-check cpp/test/optimizer.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-optimizer-check PRIVATE tidegraph)
+add_executable(tidegraph-checkpoint-check cpp/test/checkpoint.cpp cpp/src/runtime.cpp)
+target_link_libraries(tidegraph-checkpoint-check PRIVATE tidegraph)
 add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
   cpp/bench/workload.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph)

@@ -9,6 +9,7 @@
 #include "tide/token_window.h"
 #include "tide/parameters.h"
 #include "tide/optimizer.h"
+#include "tide/checkpoint.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -97,7 +98,13 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_readonly("exp_avg", &OptimizerState::exp_avg)
     .def_readonly("exp_avg_sq", &OptimizerState::exp_avg_sq)
     .def_readonly("max_exp_avg_sq", &OptimizerState::max_exp_avg_sq);
-  py::class_<SGD>(m, "SGD")
+  py::class_<NamedOptimizer>(m, "NamedOptimizer")
+    .def("step", &NamedOptimizer::step)
+    .def("zero_grad", &NamedOptimizer::zero_grad, py::arg("set_to_none") = true)
+    .def("layout", &NamedOptimizer::layout)
+    .def("groups", &NamedOptimizer::groups)
+    .def("state", &NamedOptimizer::state);
+  py::class_<SGD, NamedOptimizer>(m, "SGD")
     .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
          py::keep_alive<1, 2>())
     .def("step", &SGD::step)
@@ -105,7 +112,7 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("layout", &SGD::layout)
     .def("groups", &SGD::groups)
     .def("state", &SGD::state);
-  py::class_<AdamW>(m, "AdamW")
+  py::class_<AdamW, NamedOptimizer>(m, "AdamW")
     .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
          py::keep_alive<1, 2>())
     .def("step", &AdamW::step)
@@ -113,6 +120,16 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("layout", &AdamW::layout)
     .def("groups", &AdamW::groups)
     .def("state", &AdamW::state);
+  m.def("save_checkpoint", [](const std::string& path, const ParameterRegistry& registry,
+                               const NamedOptimizer* optimizer, const std::string& identity) {
+    Checkpoint::save(path, registry, optimizer, identity);
+  }, py::arg("path"), py::arg("registry"), py::arg("optimizer") = nullptr,
+     py::arg("identity") = "");
+  m.def("load_checkpoint", [](const std::string& path, ParameterRegistry& registry,
+                               NamedOptimizer* optimizer, const std::string& expected_identity) {
+    Checkpoint::load(path, registry, optimizer, expected_identity);
+  }, py::arg("path"), py::arg("registry"), py::arg("optimizer") = nullptr,
+     py::arg("expected_identity") = "");
   py::class_<Event>(m, "Event")
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)

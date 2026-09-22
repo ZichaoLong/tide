@@ -111,6 +111,11 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   changing weights. Reconstruct the same sharing and optimizer groups when
   restoring; see `checkpoint-ownership.md`. Older schemas are rejected. Checkpoints do not
   claim to restore a full training controller, data cursor or framework RNG.
+  The standalone C++ owner layer additionally defines `TIDENCK1` schema v1 for
+  CPU FP32/FP64 named values and built-in SGD/AdamW state. It is a separate
+  little-endian, checksummed format with identity and alias preflight and
+  exclusive no-overwrite publication; it is not interoperable with Python torch
+  files and does not restore graph continuation or a training controller.
 - `None` versus connected-zero is observable for optimizer parameter groups;
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.

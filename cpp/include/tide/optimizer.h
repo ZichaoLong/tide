@@ -7,6 +7,8 @@
 
 namespace tide {
 
+class Checkpoint;
+
 // The group keeps the ordered owner names and all options needed by the two
 // built-in optimizers.  An optimizer normalizes aliases to canonical names at
 // construction, then rejects duplicate owners across groups.
@@ -55,6 +57,7 @@ class NamedOptimizer {
   std::map<std::string, OptimizerState> state_;
 
  private:
+  friend class Checkpoint;
   ParameterRegistry& registry_;
   std::vector<OptimizerGroup> groups_;
   std::string class_name_;

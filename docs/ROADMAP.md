@@ -101,7 +101,8 @@ Atomic exclusive value-checkpoint publication is
 [qualified](evidence/checkpoint-io.md) with Linux CPU fault injection, no-overwrite
 races, retry and resumed native training. Composite application checkpoints are [qualified](evidence/token-checkpoint-coordinates.md);
 standalone C++ optimizer ownership and update parity are [qualified](evidence/cpp-optimizer-ownership.md);
-native value serialization/resume remains a separate obligation.
+native value serialization/resume is implemented as the independent `TIDENCK1`
+schema and awaits the clean qualification report for this increment.
 
 Integer-coordinate validation at graph/execution/native-adapter and checkpoint
 boundaries is [qualified](evidence/token-checkpoint-coordinates.md). Malformed
@@ -109,15 +110,14 @@ Python records must fail before mutation; cursor advance must not scan retained 
 
 ## Next bounded increment
 
-The standalone C++ owner registry and independent LibTorch SGD/AdamW updates are
-implemented and parity-checked. The next M6 increment is native value
-serialization and resume: use the Python `checkpoint_ownership.py` behavior as
-an explicit contract, not a native runtime dependency. A native format must
-declare its schema/identity and transactional preflight; do not silently promise
-Python-file interoperability. Keep core model/optimizer, codec and publication
-layers separate. The standalone C++ SettleGraph construction/encoding frontend
-is still a separate interface obligation; current native execution consumes the
-ordinary encoded `Graph` produced by the Python frontend.
+The standalone C++ owner registry, independent LibTorch SGD/AdamW updates and
+the `TIDENCK1` native value format are implemented. The next M6 interface
+increment is to audit and then implement the standalone C++ SettleGraph
+construction/encoding frontend required for fully independent C++ use. Keep
+graph construction, embedding, codec and publication layers separate; current
+native execution still consumes the ordinary encoded `Graph` produced by the
+Python frontend. The native checkpoint format remains independent of Python
+files and graph continuation.
 
 Then expand the M8 fixed workload beyond the EMA pilot: Attention/SSM streaming,
 frontier/SettleGraph prefill and measured backward/replay costs. Declare batch,

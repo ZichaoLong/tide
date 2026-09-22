@@ -98,10 +98,11 @@ Named native parameters are a separate layer in `parameters.h`/`parameters.cpp`:
 `ParameterRegistry` collects explicit tensors or trainable `Model` fields,
 groups aliases by TensorImpl identity and exposes canonical owner names. The
 standalone `optimizer.h`/`optimizer.cpp` layer applies CPU FP32/FP64 SGD and
-AdamW without Python callbacks. It is independent of graph execution and has
-no serialization responsibility; the native value codec and transactional
-publication remain a later layer. SettleGraph construction and embedding are
-still a Python frontend that emits an ordinary compiled `Graph`.
+AdamW without Python callbacks. The native `checkpoint.h` layer uses separate
+codec, preflight and publication files to persist named values and built-in
+optimizer state in `TIDENCK1` schema v1; it has no Python-file interoperability
+or graph-continuation responsibility. SettleGraph construction and embedding
+are still a Python frontend that emits an ordinary compiled `Graph`.
 
 ## Module boundaries
 

@@ -52,8 +52,36 @@ independent of Python (`cpp/include/tide/parameters.h` and
 `cpp/include/tide/optimizer.h`); `cpp/src/parameters.cpp` and
 `cpp/src/optimizer.cpp` provide the core, with a small standalone executable
 and `tests/test_cpp_optimizer.py` comparing both dtypes directly with
-PyTorch's SGD/AdamW. This layer has no native value codec or resume format
-yet; transactional persistence remains the next bounded increment.
+PyTorch's SGD/AdamW.
+
+## Standalone native value checkpoints
+
+The independent value layer uses the self-describing `TIDENCK1` schema version
+1 in `cpp/include/tide/checkpoint.h` and the separate codec, preflight and
+publication sources. A file records a caller-supplied graph identity, the
+complete canonical alias partition, CPU FP32/FP64 dense owner values, and
+optionally the built-in `torch.optim.sgd.SGD` or `torch.optim.adamw.AdamW`
+class, ordered canonical owner groups, group options and named optimizer
+slots. Tensor bytes are little-endian IEEE values and the payload has an
+FNV-1a checksum. The format is deliberately independent of Python's torch
+serialization; no Python-file interoperability claim follows from it.
+
+Load reads and fully decodes the file before mutation. It checks identity when
+an expected identity is supplied, alias topology, owner shapes/dtypes,
+non-overlapping destination storage, optimizer class/order/options/state and
+finite values. A failed check leaves live owners and optimizer state unchanged.
+Publication writes and fsyncs a same-directory temporary file, creates the
+final path with an exclusive hard link, removes the staging name and fsyncs
+the directory. Existing targets are never overwritten. Omitting the optimizer
+restores weights only; this format does not contain graph continuation, RNG,
+data cursors or a training controller.
+
+The standalone executable `tidegraph-checkpoint-check` and
+`tests/test_cpp_checkpoint.py` cover both CPU dtypes, SGD/AdamW moments,
+shared aliases, undefined versus connected-zero gradients, identity and
+topology rejection, checksum/truncation preflight, unchanged-on-failure and
+exclusive publication. The Python functions are only a client adapter;
+`Checkpoint::save/load` remains usable from independent C++ code.
 
 Implementation: `python/tidegraph/checkpoint.py` encodes and validates graph
 state; `checkpoint_ownership.py` handles Python parameter and optimizer
