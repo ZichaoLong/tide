@@ -104,20 +104,18 @@ Exact directed command from /home/zlong/llm/graph-execution-foundation:
 ROADMAP remains the only backlog. The running qualification above supersedes
 the composite development gate; its result is not yet known.
 
-## Independent re-entry tooling update
+## Independently qualified re-entry tooling
 
-While the frozen CPU job runs, the main branch adds scripts/durable_records.py:
-fsynced atomic publication for job/development/verification JSON, and resilient
-status reading. It is separate from source 69ca379; the running CPU job does not
-test this later change. Short directed gate: 16 passed / 0.46s. Commit this tested
-change, then run the same 16 cases under the clean main source with scripts/job.py,
-leaving that source unchanged until exit. No C++ build or full repeat is needed.
-The first strict loader rejected an explicitly recorded old terminal postmortem
-because it has observed time but no workload start; corrected with a regression,
-without changing the old failed record. Evidence/reproducer:
-artifacts/durable-records-postmortem-repro/. tests/test_durable_records.py also
-covers failed writes/file-fsync/rename, post-publication directory-fsync failure,
-real workload exit preservation, duplicate-output rejection and broken JSON.
+Source 3604ec002722e701c74bd13e6f681b88ada14199 adds durable_records.py:
+fsynced atomic job/development/verification JSON and resilient status reading.
+This is separate from the running graph gate at source 69ca379. Clean main-source
+service tide-foundation-records-qualified-20260922-0115 passed 16 tests / 0.44s,
+finished 01:13:20Z; inactive/dead, MainPID 0, Result=success, exit 0.
+Output artifacts/records-qualified-20260922-0115/ retains status.json, task.log
+and post-run-audit.json; every tracked file matched git archive before editing.
+Report: evidence/durable-records.md. The explicit old launcher postmortem remains
+failed with observed time and no invented workload start. Reproducer:
+artifacts/durable-records-postmortem-repro/. No C++ code changed in this update.
 
 ## Terminal records and source retention
 

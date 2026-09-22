@@ -70,7 +70,8 @@ without inventing a workload start. Historical failures remain failed. Always
 cross-check unit termination, workload exit and acceptance artifacts; a running
 record left by an interrupted terminal write cannot establish success.
 
-Fault-injection and real launcher/re-entry tests: tests/test_durable_records.py.
+Fault-injection and real launcher/re-entry tests: tests/test_durable_records.py;
+clean-source [evidence](evidence/durable-records.md).
 These dependency-free control tools do not change graph execution or checkpoint
 value semantics. Qualification for this later control change is recorded
 separately from earlier frozen CPU worktrees in STATUS.

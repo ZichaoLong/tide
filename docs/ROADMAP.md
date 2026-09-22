@@ -6,7 +6,7 @@ stays explicit; later milestones may refine earlier interfaces.
 
 | Milestone | Deliverable and acceptance | Status |
 | --- | --- | --- |
-| M0 | Re-entry, architecture, semantic lock, status, evidence and cleanup rules | implemented |
+| M0 | Re-entry, architecture, semantic lock, status, evidence and cleanup rules | implemented; durable records/re-entry [verified](evidence/durable-records.md) |
 | M1 | Independent Python + C++ sealed streaming; cycles/delays/regions; sparse CSR/CSC; FP64/FP32 trace, VJP, continuation | verified for ema-ffn-v1; [evidence](evidence/m1-streaming.md) |
 | M2 | Native serial/node-parallel + batch packing; sparse allocation/work counters; differential and thread/grad-mode tests | verified for ema-ffn-v1; [evidence](evidence/m1-streaming.md); performance pending |
 | M3 | TimedDAG validation and frontier contracts; Python + native; actual time batching; region quotient cycles; independent DAG specialization | verified for ema-ffn-v1; [frontier](evidence/m3-frontier.md), [specialization](evidence/m4-settle-specialized.md) |
