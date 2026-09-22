@@ -89,3 +89,15 @@ python scripts/benchmark_lh_original.py --device cpu --dtype float32 \
 Execution status and exact durable jobs belong to STATUS; implementation and
 remaining comparison obligations belong to ROADMAP. No result is implied by
 the configuration estimates or a successful build.
+
+
+## Reproducing on another Linux CPU host
+
+The source-only [portable kit instructions](../tools/lh_repro/README.md) cover a
+fresh exact LH checkout, the retained232-node graph, eight width overrides,
+CPU CMake, optional diagnostics and original-timer summaries. Export with
+scripts/export_lh_repro.py from a clean Tide commit and an audited wide-prepared
+directory. The kit normalizes only the graph metadata path and requires no LH
+Python interpreter or graph-generation packages on the receiving machine.
+The target machine must rebuild against its own LibTorch. Execution on Intel
+remains target-machine work until that host's actual result is available.

@@ -77,8 +77,13 @@ MainPID2796242, frozen Tide source6ade84d. Both width64/batch4/steps4 original
 Attention modes passed (23,133,347 parameters); both run records validate.
 The wide build and all100 wide-nograd steps passed:26.6342ms/sample-token
 over all100 steps,27.1745 over steps4–99, peak child RSS193.506GiB.
-The native model confirms17,269,426,339 parameters. Wide-grad-forward is
-running; narrow build/runs follow. No result is yet available for those modes.
+The native model confirms17,269,426,339 parameters. Wide-grad-forward failed
+at its1800-second limit after79 completed tokens. Its SIGTERM and SIGKILL
+cleanup waits each exceeded10 seconds, raising before final record publication;
+run.json is stale/running and summary/resource/metrics files are absent. The
+pipeline correctly records failed/exit1. No native wide process remained when
+checked afterward. Retain the log and traceback; do not invent peak RSS or a
+full100-step mean. The narrow build passed; narrow-nograd is now running.
 The retained analyze.py rechecks original/configured sources, binaries, graph
 and vendor hashes and validates all three completed run records; outputs are
 comparison.json and record-validation.json. The wide build preflight estimated
@@ -113,11 +118,28 @@ After each case ends, refresh and validate the completed records, then the plot:
 When the pipeline terminates, inspect both outer and per-case exit codes, repeat
 the frozen-source audit, and update evidence/lh-a10-attention.md and this handoff.
 Retain failed/partial cases and leave missing RSS as null, never zero. Report
-full100-step means only for complete cases. The wide result is complete; three
-large modes remain unfinished at this checkpoint. The narrow grad mode will be
+full100-step means only for complete cases. Only wide-nograd is complete;
+wide-grad-forward has a retained partial failure, and narrow modes are pending. The narrow grad mode will be
 skipped if its nograd case fails. The1280-GiB virtual-address bound and expected
 904.008-GiB initial narrow KV allocation are distinct from measured peak RSS.
 No new large run or repeat of passed build/smoke stages is needed now.
+
+The current user requests a portable reproduction of the exact17.27B workload
+on the original Intel host. New sources are tools/lh_repro/ and
+scripts/export_lh_repro.py: a clean-LH configurator, source-only CPU CMake,
+original and optional diagnostic entries, and an original-timer summary tool.
+Six focused report tests pass. Next freeze this implementation, export the
+retained wide graph/vendor bytes, and build/run a relocated width64/batch4/4step
+smoke in an independent LH clone. Do not run another large benchmark for this
+packaging check. The exporter relocates graph_node_info_dir; this is necessary
+because the generated original graph config contains a local absolute path.
+The current source is not yet claimed compiled or qualified; qualification and
+final archive identity will be recorded after the isolated check.
+
+A separate harness defect remains to fix after the portable kit: cleanup timeout
+must not bypass terminal status/partial metrics publication or allow orphaned
+native children to overlap another large case. Do not edit the active frozen
+runner. Preserve wide-grad-forward's missing-finalization failure explicitly.
 
 After original Attention results are recorded, the next M8 increment remains a
 reusable weight-preserving four-block LH-to-Tide importer and paired timer.
