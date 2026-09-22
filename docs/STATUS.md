@@ -24,6 +24,7 @@ Source and scope are separate for each report:
 
 | Scope | Clean source | Result / evidence |
 | --- | --- | --- |
+| Portable paired LH/PDG CPU source kit | dd024e6f1d57153c22ab7cef2762d059cbd3ac7d | 18 directed tests; 3 fresh relocated native builds/runs and numerical anchors; evidence/cpu-comparison-kit.md |
 | Complete CPU regression plus optional canonical streaming optimizations | da5a17bdbda1196fb32e2352fba9aa3b95e6dde3 | 6459 tests / 716.61s; evidence/pdg-streaming-optimization.md |
 | Complete CPU regression, two-clock checkpoint and strict coordinates | 69ca37900e9c10d3fca95570ea1ebca8f9079f46 | 6233 tests / 665.45s; evidence/token-checkpoint-coordinates.md |
 | Durable status publication and damaged-record re-entry | 3604ec002722e701c74bd13e6f681b88ada14199 | 16 tests / 0.44s; evidence/durable-records.md |
@@ -54,16 +55,29 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-Active increment: explain LH versus PDG attention packing and implement a
-portable one-command CPU comparison kit, separately run_lh.py/run_pdg.py.
-Defaults reproduce the measured wide FP32/no_grad12-token window; fixed graph
-and C++ sources are bundled, rebuilt against target LibTorch. No reference
-repository changes. Python helper/related-record tests passed18/0.98s using the matching Torch Python. No job is live.
-Next: commit runner/exporter, freeze source and launch tide-cpu-kit-20260923-0345
-using artifacts/cpu-kit-runner-20260923-0345.py. It exports, relocates and freshly
-builds/runs small LH and PDG cases (including explicit standalone LibTorch),
-checks logs/numerical anchors and portable records. Output:
-artifacts/cpu-kit-20260923-0345/. Then export clean final kit and commit evidence. Keep old large timing evidence scoped below.
+The portable paired CPU comparison kit and attention-grouping explanation are
+complete. No active job. Source dd024e6f1d57153c22ab7cef2762d059cbd3ac7d;
+[commands](../tools/cpu_compare/README.md), [algorithm comparison](attention-grouping-comparison.md)
+and [reviewed evidence](evidence/cpu-comparison-kit.md). Directed frozen tests:
+18 passed/1.01s; three fresh relocated builds/runs passed. LH complete logits
+match prior1/4-thread fixtures exactly; PDG complete-state schedule checks and
+old-binary work/checksum anchors pass. Explicit-prefix LibTorch works under
+system Python -S. Intel execution remains the user's target-machine step.
+
+Unit tide-cpu-kit-20260923-0345 passed/exit0, inactive/dead, MainPID0;
+all12 stages and four portable records validate, including the retained failed
+absent-prefix negative control. Source/packet/prepared/binary hashes audited.
+Records: artifacts/cpu-kit-20260923-0345/, including post-run-audit.json.
+Frozen source: qualification/cpu-kit-20260923-0345 under the local parent;
+fixed driver: artifacts/cpu-kit-runner-20260923-0345.py.
+Qualified final archive: artifacts/cpu-kit-20260923-0345/export/cpu-attention-compare.tar.gz
+(382946 bytes). Both scripts default to the measured wide configuration;
+--smoke is small. No new17.27B timing; preserve earlier performance scope below.
+Next: inspect the user's target-machine run/summary/metrics/host/logs when
+available. Further performance work should follow the bounded M8 hypothesis
+below; do not repeat completed large runs merely to revalidate packaging.
+Retain the initial wrong-Python failure and dirty preview as identified in the
+kit evidence; deliver only the clean qualified archive. No uncommitted code.
 
 The user-approved LH–PDG operator-work comparison is complete. No active job.
 Implementation source f0c31bef864af0ccdfa82afc1889c686890fbca6; authority tide-core-3.

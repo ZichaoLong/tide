@@ -31,6 +31,11 @@ Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) �
 具体覆盖以 [验证证据](docs/ROADMAP.md) 为准；模块边界见 [接口说明](docs/module-extension-plan.md)，后续任务统一见路线图。
 源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
 
+LH 与 PDG 的固定图 CPU 性能对照使用 [两个一键入口](tools/cpu_compare/README.md)，
+支持目标机 LibTorch 本地编译、默认 17.27B 配置与小规模检查。
+[Attention 分组差异](docs/attention-grouping-comparison.md) 和
+[源码包验证范围](docs/evidence/cpu-comparison-kit.md) 已记录。
+
 Tide 是一条研究线，研究如何在固定消息拓扑上组织局部选择、节点状态和稀疏计算，并把这些语义落实为可验证的模型与执行器。
 
 本仓库的 `main` 分支是项目总入口。它维护研究对象、上游语义、项目导航和共同验证约定；具体实现、实验路线与测量结果在独立分支或独立仓库中维护。

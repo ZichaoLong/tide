@@ -165,10 +165,12 @@ is complete. Default-off [streaming optimizations](streaming-optimizations.md)
 are [verified](evidence/pdg-streaming-optimization.md):6459 CPU regression tests
 and a same-binary wide pair,34.30392→29.65650ms/sample-token (13.55% lower latency).
 Head/region/cleanup improved; update/Full now consume89.20% of token time.
-Implementing portable paired CPU reproduction: two one-command runners,
-fixed graph/source package, target-local LibTorch builds, live concise metrics,
-complete records and relocated small qualification. x86_64 execution remains
-the user's target-machine step; no new large timing is required for packaging.
+The [portable paired CPU kit](evidence/cpu-comparison-kit.md) is verified on
+aarch64: two one-command runners, fixed graph/source package, target-local
+LibTorch builds, live metrics, complete records and relocated small parity.
+[Attention grouping and cache/pooling differences](attention-grouping-comparison.md)
+are documented. Intel x86_64 execution remains the user's target-machine step;
+no new large timing was performed for packaging.
 Optional LH/PDG operator-work accounting is [verified](evidence/lh-pdg-operator-work.md):
 81 directed tests in both dtypes, original-LH small counting/parallel parity,
 and a fresh12-token wide pair. Major matrix arithmetic differs0.00846%; measured
