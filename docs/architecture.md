@@ -17,6 +17,7 @@
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
+| `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B targets, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/token-application-checkpoint.md` | Two-clock bundle, partial-window/ledger state, cross-graph ownership and whole-bundle preflight |
 | `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership, atomic publication and preflight restore |

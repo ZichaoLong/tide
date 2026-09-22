@@ -7,6 +7,9 @@ value-checkpoint implementation is committed at 4325bb1 and has passed clean
 frozen qualification; see evidence/cpp-native-checkpoint.md. The prior
 token-bundle, integer-coordinate and durable-record qualification remains
 complete.
+The latest user request adds two large LH/Tide M8 comparison targets. Their
+contract and source-reconstruction findings are in `lh-scale-benchmark.md`;
+this update changes documentation only and launches no benchmark.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -50,9 +53,18 @@ evidence/cpp-native-checkpoint.md. The standalone C++ SettleGraph
 construction/encoding frontend is the next interface obligation; do not rerun
 the original LH full oracle unless its relevant code/mapping changes.
 
-Later M8 Attention/SSM/prefill/training measurements require new declared fixed
-workloads; the current EMA pilot does not certify those cases. Wider module
-imports and Delta chunk optimization remain in ROADMAP, the only backlog.
+For the new M8 workstream, start with the user-requested 8.8B/2048/1-in-32 and
+8.5B/128/1-in-64 targets, both batch 512 and a common 56-core budget; see
+`lh-scale-benchmark.md`. The next bounded step is an allocation-free audit of
+candidate graph configurations and parameter accounting, then a reusable
+four-block importer and separate timing harness. The original small C++ oracle
+fixes width/batch and rewrites weights, so changing its constants is insufficient.
+The user confirmed amortized ms/sample-token (elapsed / batch / token steps).
+Historical grad stage, exact topology and dtype remain uncertain; initial new
+reconstruction uses explicit FP32 and records separate forward/backward phases.
+No 8B model or new performance result has been produced. This does not replace
+the standalone SettleGraph frontend obligation above. Other M8 workloads and
+module optimizations remain in ROADMAP, the only backlog.
 
 ## Latest terminal jobs and retained source
 
