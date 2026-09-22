@@ -33,7 +33,8 @@ remain unresolved. The user did not observe a substantial next-token slowdown
 within a few hundred tokens; record that as a bounded historical observation,
 not constant-time attention or an unbounded-context claim.
 
-The reported leaf-count products are exactly equal:
+The reported node-count products (leaf counts in the candidate reconstructions)
+are exactly equal:
 `224 * 2048^2 = 57344 * 128^2 = 939524096`. This makes the pair useful for
 studying node granularity near a fixed parameter budget. It does not establish
 equal total parameters, degree, candidate work or selected work; the activation
@@ -200,3 +201,10 @@ resets state and reuses the same pre-generated token IDs. Warmup advances the
 state; measurements retain token/cache age in each event. Finite-value checks,
 logging and graph disposal are outside forward timing. Large matched Tide
 imports and performance qualification remain separate work.
+
+The local Torch CPU build links both OpenMP and a pthread OpenBLAS pool. Record
+`--threads` and `--blas-threads` separately; pin the combined process to the
+declared physical CPU set. The default BLAS count matches --threads for
+reproducibility of the initial pilot. A bounded follow-up compares BLAS=1
+with the initial BLAS=56 observation and uses common measured token ages
+for nograd and grad-forward. Thread-count changes are explicit variants.

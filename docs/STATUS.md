@@ -54,17 +54,44 @@ evidence/cpp-native-checkpoint.md. The standalone C++ SettleGraph
 construction/encoding frontend is the next interface obligation; do not rerun
 the original LH full oracle unless its relevant code/mapping changes.
 
-The active M8 increment is original-LH local measurement on the recovered
-Add-model profiles. Build `cpp/lh_bench` using `scripts/build_lh_benchmark.py`
-and the unchanged `artifacts/lh-source-20260921-1428` snapshot; prepare the
-wide-add/narrow-add inputs with `scripts/prepare_lh_benchmark.py`. First run
-small width/batch CPU FP32/FP64 checks, then stage toward the reference sizes.
-Use `scripts/benchmark_lh.py` for bounded modes, raw per-step timings, parameter
-counts and work/memory records. Historical grad stage is unknown; new modes
-are explicit. Source freeze and job identity must be recorded before launch.
-The generic Tide importer and paired benchmark remain unimplemented. The
-SettleGraph frontend obligation remains in ROADMAP. No large performance
-claim may follow from source inspection or the former shared-weight EMA pilot.
+The active M8 increment is original-LH local measurement. Frozen source a7edf44
+is at `/var/tmp/zlong-graph-execution-foundation/qualification/lh-local-20260922`.
+Launch/inspect `tide-lh-local-build-20260922-0720`,
+`tide-lh-local-wide-input-20260922-0720` and
+`tide-lh-local-narrow-input-20260922-0720` in background.slice. Planned job
+records are respectively artifacts/lh-local-build-20260922-0720,
+artifacts/lh-local-wide-input-20260922-0720 and
+artifacts/lh-local-narrow-input-20260922-0720 in the main repository.
+Build output: `/var/tmp/zlong-graph-execution-foundation/build-lh-local`;
+original C++ snapshot: `artifacts/lh-source-20260921-1428` (unchanged).
+Build and both input preparation jobs finished successfully. Python preflight
+counts are 9,468,020,899 and 9,024,921,853 parameters (native counts pending).
+`tide-lh-smoke-fp32-20260922-0725` is now launched from the frozen source;
+records: artifacts/lh-smoke-fp32-20260922-0725. It checks width64/batch4 before
+any large allocation. Inspect its terminal record before proceeding to further
+FP64/grad checks and bounded scale ramps. FP32 smoke passed with 15,514,787 parameters at width64/batch4. Further
+bring-up units are `tide-lh-smoke-{fp64,grad,backward,parallel}-20260922-0727`,
+with matching `artifacts/lh-smoke-*-20260922-0727` records. They are correctness
+and harness probes; their concurrent timing is not comparative evidence.
+Historical times are references, and grad stage is unknown.
+All five small harness cases passed; candidate/selected counts match exactly
+and logit sums agree within 1e-5 relative/absolute across FP64, grad-forward,
+backward-forward and eight-thread variants. This is a bounded harness gate,
+not a full-model gradient-equivalence proof.
+Next launch: `tide-lh-scale-pilot-20260922-0730`, frozen source a7edf44, pinned
+CPUs 160-215 (socket 2, NUMA 4/5, first-touch memory). Sequential cases:
+wide/narrow nograd batch512 warmup4/steps8, then wide/narrow grad-forward
+batch512 warmup1/steps3. Each child has 600s/256GiB address-space bounds;
+outer service 3000s. Records: artifacts/lh-scale-pilot-20260922-0730,
+with per-case run/summary/metrics. The initial wide/narrow nograd and wide grad-forward cases have completed;
+narrow grad-forward is still live. Inspect its result before claiming the
+whole pilot passed. Nograd means are provisionally 6.096/16.109 ms/sample-token.
+The first grad window differs from nograd; do not infer a grad overhead ratio.
+A follow-up will use warmup4/steps4 in all cases, with explicit BLAS=1 versus
+the initial BLAS=56 pool. Native code/binary remain unchanged; only wrapper
+thread-policy recording is extended in the main checkout.
+The generic Tide importer and paired benchmark remain unimplemented.
+The SettleGraph frontend obligation remains in ROADMAP.
 
 ## Latest terminal jobs and retained source
 

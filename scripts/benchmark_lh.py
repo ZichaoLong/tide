@@ -28,13 +28,16 @@ def main():
                           ('repetitions', 1), ('threads', 1), ('seed', 7),
                           ('timeout-seconds', 900), ('memory-gib', 192)):
         p.add_argument('--'+name, type=int, default=default)
+    p.add_argument('--blas-threads', type=int, help='OpenBLAS pool size; default matches --threads')
     p.add_argument('--tracking', choices=('best-effort', 'required', 'off'), default='best-effort')
     args = p.parse_args()
     if (not 1 <= args.batch <= 512 or not 1 <= args.steps <= 256 or not 0 <= args.warmup <= 64
             or not 1 <= args.repetitions <= 20 or not 1 <= args.threads <= 56 or not 0 <= args.seed < 2**32
             or args.width and (not 4 <= args.width <= 2048 or args.width%4)
-            or not 10 <= args.timeout_seconds <= 3600 or not 4 <= args.memory_gib <= 384):
+            or not 10 <= args.timeout_seconds <= 3600 or not 4 <= args.memory_gib <= 384
+            or args.blas_threads is not None and not 1 <= args.blas_threads <= 56):
         p.error('requested workload exceeds benchmark bounds')
+    blas_threads = args.threads if args.blas_threads is None else args.blas_threads
     root = Path(__file__).resolve().parents[1]
     dirty = subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True).strip()
     if dirty:
@@ -70,6 +73,7 @@ def main():
       runtime=dict(resolved_device='cpu', resolution_reason='explicit:cpu', dtype=args.dtype,
         host_arch=platform.machine(), torch_version=compiled['torch'], cxx11_abi=compiled['cxx11_abi'],
         cpu_affinity=sorted(os.sched_getaffinity(0)), threads=args.threads, interop_threads=1,
+        openblas_threads=blas_threads, omp_threads=args.threads,
         load_average_before=list(os.getloadavg()), memory_limit_gib=args.memory_gib),
       experiment=dict(config=request, **{'class':'benchmark'},
         global_step_semantics='one token forward or one whole-window backward; see phase context',
@@ -88,7 +92,7 @@ def main():
         track.start()
         atomic_json(out/'run.json', record)
         env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0', OMP_NUM_THREADS=str(args.threads),
-                   MKL_NUM_THREADS=str(args.threads), OPENBLAS_NUM_THREADS=str(args.threads))
+                   MKL_NUM_THREADS=str(args.threads), OPENBLAS_NUM_THREADS=str(blas_threads))
         with (out/'stdout.log').open('w') as log:
             child = subprocess.Popen(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
                                      start_new_session=True, preexec_fn=limits)
