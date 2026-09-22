@@ -100,7 +100,8 @@ part of M8 performance qualification.
 Atomic exclusive value-checkpoint publication is
 [qualified](evidence/checkpoint-io.md) with Linux CPU fault injection, no-overwrite
 races, retry and resumed native training. Composite application checkpoints are [qualified](evidence/token-checkpoint-coordinates.md);
-standalone C++ optimizer ownership remains a separate obligation.
+standalone C++ optimizer ownership and update parity are [qualified](evidence/cpp-optimizer-ownership.md);
+native value serialization/resume remains a separate obligation.
 
 Integer-coordinate validation at graph/execution/native-adapter and checkpoint
 boundaries is [qualified](evidence/token-checkpoint-coordinates.md). Malformed
