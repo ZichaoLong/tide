@@ -6,7 +6,7 @@ from .coordinates import window_inputs
 
 class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
-                 algorithm="streaming", prefill=True, max_events=1000000):
+                 algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False):
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
@@ -71,6 +71,9 @@ class Native:
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta
         options.prefill, options.max_events = prefill, max_events
+        options.parallel_regions, options.compact_events = parallel_regions, compact_events
+        if algorithm != "streaming" and (parallel_regions or compact_events):
+            raise ValueError("streaming optimizations require the streaming algorithm")
         if algorithm not in {"streaming", "frontier", "self_loop", "chain"}:
             raise ValueError("unknown native algorithm")
         if algorithm in {"self_loop", "chain"}:

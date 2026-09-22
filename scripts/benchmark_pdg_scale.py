@@ -42,9 +42,9 @@ def main():
     p.add_argument('--build-dir', default='build')
     p.add_argument('--output-dir', required=True)
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
-                         ('threads', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
+                         ('threads', 1), ('head-workers', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('packed', 1), ('grad', 0), ('check', 0), ('profile', 0)]:
+    for key, default in [('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--tracking', choices=['best-effort', 'off', 'required'], default='best-effort')
@@ -52,6 +52,7 @@ def main():
     if (not 4 <= args.width <= 4096 or args.width%4 or not 1 <= args.batch <= 1024
             or not 0 <= args.warmup < args.steps <= 1000 or not 1 <= args.workers <= 160
             or not 1 <= args.threads <= 160 or args.workers*args.threads > 160 or not 2 <= args.vocab <= 100000
+            or not 1 <= args.head_workers <= 160 or args.head_workers*args.threads > 160
             or not 0 <= args.seed < 2**64 or not 1 <= args.timeout_seconds <= 7200
             or not 1 <= args.memory_gib <= 1280 or (args.check and (args.width > 64 or args.batch > 8 or args.steps > 12))):
         p.error('invalid bounded scale configuration')
@@ -66,13 +67,14 @@ def main():
     if manifest['cpp_source_sha256'] != identity or manifest['binary_sha256'].get(binary.name) != binary_hash:
         p.error('source/build mismatch; rebuild the immutable source')
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
-              'threads', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile')}
+              'threads', 'head_workers', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile',
+              'parallel_regions', 'compact_events')}
     out.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(topology, out/'topology.txt')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
     track = LocalTrackio(args.tracking, out.parent/'trackio', 'tide-graph-execution', run_id, config)
     command = [str(binary), '--topology', str(out/'topology.txt'), '--run-id', run_id, '--output-dir', str(out/'native')]
-    for key, value in config.items(): command += ['--'+key, str(value)]
+    for key, value in config.items(): command += ['--'+key.replace('_', '-'), str(value)]
     record = dict(schema_version=1, run_id=run_id, project='tide-graph-execution', name=run_id,
         status='running', created_at=now, started_at=now, ended_at=None,
         source=dict(repository='tide/graph-execution-foundation', commit=commit, dirty=False,
@@ -82,7 +84,9 @@ def main():
         runtime=dict(resolved_device='cpu', resolution_reason='explicit:cpu', dtype=args.dtype,
                      host_arch=platform.machine(), cpu_affinity=sorted(os.sched_getaffinity(0)),
                      load_average_before=list(os.getloadavg()), aten_threads=args.threads,
-                     node_workers=args.workers, blas_threads=1, interop_threads=1, address_space_limit_gib=args.memory_gib),
+                     node_workers=args.workers, head_workers=args.head_workers, openblas_num_threads_env=1,
+                     effective_thread_counts='native runtime/* metrics; -1 means unavailable',
+                     interop_threads=1, address_space_limit_gib=args.memory_gib),
         experiment=dict(config=config, **{'class': 'benchmark'}, primary_metric='perf/ms_per_sample_token',
                         global_step_semantics='token index; warmup prefix retained, caches/history grow; fixed external token IDs',
                         stop_condition=f'{args.steps} steps or {args.timeout_seconds} seconds',

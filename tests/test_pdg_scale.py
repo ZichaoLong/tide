@@ -25,11 +25,14 @@ def topology(path):
 
 @pytest.mark.parametrize('grad', [0, 1])
 @pytest.mark.parametrize('profile', [0, 1])
-def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, tmp_path):
+@pytest.mark.parametrize('optimized', [0, 1])
+def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, tmp_path):
     graph = tmp_path/'graph.txt'; edges = topology(graph); out = tmp_path/'native'
     cmd = [str(binary()), '--device', 'cpu', '--dtype', str(dtype).split('.')[-1], '--topology', str(graph),
            '--width', '8', '--batch', '4', '--steps', '4', '--warmup', '1', '--vocab', '17',
            '--workers', '3', '--packed', '1', '--grad', str(grad), '--check', '1', '--profile', str(profile),
+           '--head-workers', '3' if optimized else '1', '--parallel-regions', str(optimized),
+           '--compact-events', str(optimized),
            '--run-id', 'test', '--output-dir', str(out)]
     run = subprocess.run(cmd, capture_output=True, text=True)
     assert run.returncode == 0, run.stdout+run.stderr
@@ -42,6 +45,9 @@ def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, tm
         assert m['model/parameters'] == (4*9+edges)*8**2+8*8+edges+1+2+2*17*8
         assert m['model/physical_edges'] == 2*edges+2
         assert m['check/logits_requires_grad'] == grad
+        assert m['runtime/aten_threads'] == m['runtime/interop_threads'] == 1
+        assert m['runtime/head_workers'] == (3 if optimized else 1)
+        assert m['runtime/openblas_reported_threads'] >= -1
         assert m['work/source_rows'] >= m['work/candidate_events'] >= m['work/selected_events'] > 0
         assert 1 <= m['work/max_node_batch'] <= 4
         assert m['work/semantic_state_replays'] > 0 if grad else m['work/semantic_state_replays'] == 0
@@ -91,7 +97,12 @@ def test_csr_export_retains_parallel_edges_and_rejects_damage(tmp_path):
 
 @pytest.mark.parametrize('args', [[], ['--device', 'npu'], ['--device', 'cpu', '--dtype', 'float16'],
                                 ['--device', 'cpu', '--width', '7'], ['--device', 'cpu', '--workers', '161'],
-                                ['--device', 'cpu', '--profile', '2']])
+                                ['--device', 'cpu', '--profile', '2'],
+                                ['--device', 'cpu', '--parallel-regions', '2'],
+                                ['--device', 'cpu', '--compact-events', '2'],
+                                ['--device', 'cpu', '--head-workers', '0'],
+                                ['--device', 'cpu', '--head-workers', '161'],
+                                ['--device', 'cpu', '--head-workers', '160', '--threads', '2']])
 def test_scale_rejects_invalid_cli(args, tmp_path):
     graph = tmp_path/'graph.txt'; topology(graph); out = tmp_path/'native'
     result = subprocess.run([str(binary()), '--run-id', 'bad', '--topology', str(graph), '--output-dir', str(out), *args], capture_output=True)

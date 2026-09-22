@@ -9,6 +9,7 @@
 #include "tide/region.h"
 #include "tide/delivery.h"
 #include "tide/stream_profile.h"
+#include "stream_support.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -55,10 +56,11 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     ++stats["logical_times"];
     stats["source_rows"] += arrived.size();
     std::map<Owner, std::vector<Atom>> fibers;
-    for (const auto& a : arrived) fibers[{a.batch, a.node}].push_back(a);
     std::vector<Event> events;
-    std::map<Index, std::vector<size_t>> by_node;
-    std::map<Owner, std::vector<size_t>> by_region;
+    NodeEvents by_node;
+    RegionEvents by_region;
+    if (options_.compact_events) events = compact_stream_events(graph_, model_, q, arrived, by_node, by_region);
+    else for (const auto& a : arrived) fibers[{a.batch, a.node}].push_back(a);
     for (auto& [owner, fiber] : fibers) {
       std::sort(fiber.begin(), fiber.end(), [](const auto& a, const auto& b) { return a.key() < b.key(); });
       Event event;
@@ -127,7 +129,10 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     }
     pool_.run(std::move(jobs));
     profile.phase("profile_select_ns");
-    for (const auto& [owner, ids] : by_region) {
+    if (options_.parallel_regions) {
+      parallel_stream_regions(graph_, model_, q, events, by_region, pool_, options_.workers, options_.trace);
+      stats["region_steps"] += by_region.size();
+    } else for (const auto& [owner, ids] : by_region) {
       const auto& region = graph_.regions[owner.second];
       select_events(graph_, model_, q, events, ids, options_.trace);
       ++stats["region_steps"];
@@ -162,7 +167,8 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     pool_.run(std::move(jobs));
     profile.phase("profile_commit_ns");
     for (auto& event : events) {
-      q.states[{event.batch, event.node}] = event.next_state;
+      if (options_.compact_events && !options_.trace) q.states[{event.batch, event.node}] = std::move(event.next_state);
+      else q.states[{event.batch, event.node}] = event.next_state;
       if (event.active) {
         deliver(graph_, model_, event, [&](const Atom& a) {
           queue[a.time].push_back(a);
@@ -173,6 +179,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       if (options_.trace) result.trace.push_back(std::move(event));
     }
     profile.phase("profile_cleanup_ns");
+    if (options_.compact_events && !options_.trace) release_stream_events(events, pool_, options_.workers);
   }
   q.cut = stop;
   std::sort(result.messages.begin(), result.messages.end(), [&](const auto& a, const auto& b) {

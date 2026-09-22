@@ -65,7 +65,7 @@ void equal(const Tensor& actual, double value) {
 }  // namespace
 
 void check_region_programs(const at::TensorOptions& opts) {
-  for (int schedule = 0; schedule < 4; ++schedule) {
+  for (int schedule = 0; schedule < 5; ++schedule) {
     Graph g; g.nodes = {{0}, {0}}; g.inputs = {0, 1}; g.outputs = {0, 1};
     for (auto& n : g.nodes) n.emission = "vector-control-v1";
     g.regions = {{1, true, false, "content", "clock-selector-v1"}}; g.compile();
@@ -86,6 +86,7 @@ void check_region_programs(const at::TensorOptions& opts) {
     std::vector<External> xs{{0, 0, 0, 1, x}, {0, 1, 0, 1, y}, {0, 0, 1, 4, z}, {0, 1, 1, 4, a},
                              {1, 0, 0, 1, unused}, {1, 0, 1, 4, unused}};
     Options options; options.workers = schedule ? 2 : 1; options.packed = schedule > 1;
+    options.parallel_regions = options.compact_events = schedule == 4;
     Result result;
     if (schedule == 3) { Frontier engine(g, m, options); result = engine.run(q, xs, 6, 6); }
     else { Streaming engine(g, m, options); result = engine.run(q, xs, 6, 6); }
@@ -115,7 +116,7 @@ void check_region_programs(const at::TensorOptions& opts) {
     for (int invalid = 0; invalid < 7; ++invalid) {
       auto bad = m; bad.regions[0].kernel = std::make_shared<ClockSelector>(invalid);
       bool rejected = false;
-      try { Streaming broken(g, bad, options); broken.run(q, {xs[0], xs[1]}, 3, 3); }
+      try { Streaming broken(g, bad, options); broken.run(q, {xs[0], xs[1], xs[4]}, 3, 3); }
       catch (const std::invalid_argument&) { rejected = true; }
       if (!rejected) throw std::runtime_error("malformed custom region result was accepted");
     }

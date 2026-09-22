@@ -1,5 +1,7 @@
 #include "scale.h"
 #include "../bench/metrics_jsonl_writer.h"
+#include "tide/dense.h"
+#include "portable_torch/threads.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/Version.h>
 #include <filesystem>
@@ -19,7 +21,8 @@ int main(int argc, char** argv) {
     if (c.runtime.help) {
       portable_torch::print_usage(std::cout, argv[0]);
       std::cout << "PDG scale: --topology FILE --run-id ID --width N --batch N --steps N --warmup N\n"
-        "  --workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
+        "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
+      std::cout << "  --parallel-regions 0|1 --compact-events 0|1\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -37,11 +40,14 @@ int main(int argc, char** argv) {
     auto f = fixture(c, topology);
     tide::Options options; options.workers = c.workers; options.packed = c.packed; options.trace = false;
     options.profile = c.profile;
+    options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
     tide::Streaming engine(std::move(f.graph), std::move(f.model), options);
+    tide::DenseLinear head(c.head_workers);
     const auto construction = seconds(construction_start);
+    const auto runtime_threads = portable_torch::thread_metrics();
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters") << " construction_seconds=" << construction
               << " grad=" << c.grad << " workers=" << c.workers << " threads=" << at::get_num_threads() << '\n'
-              << at::get_parallel_info() << std::flush;
+              << at::get_parallel_info() << portable_torch::blas_description() << '\n' << std::flush;
     tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
     tide::StreamingCursor cursor(engine, std::move(q));
     const auto period = topology.layers+1;
@@ -62,7 +68,7 @@ int main(int argc, char** argv) {
       // Missing readout is an explicit zero row, as in sparse token readout.
       std::vector<at::Tensor> hidden(c.batch, at::zeros({c.width}, embeddings.options()));
       for (const auto& output : result.outputs) hidden.at(output.batch) = output.value;
-      previous_logits = at::linear(at::stack(hidden), f.head);
+      previous_logits = head.run(at::stack(hidden), f.head);
       const auto end = Clock::now();
       const auto elapsed = std::chrono::duration<double>(end-begin).count();
       if (!at::isfinite(previous_logits).all().item<bool>() || previous_logits.requires_grad() != c.grad)
@@ -78,6 +84,8 @@ int main(int argc, char** argv) {
         metrics["profile/head_seconds"] = std::chrono::duration<double>(end-advance_end).count();
       }
       for (const auto& [key, value] : f.inventory) metrics["model/"+key] = value;
+      metrics.insert(runtime_threads.begin(), runtime_threads.end());
+      metrics["runtime/head_workers"] = c.head_workers;
       for (const auto& [key, value] : result.stats) {
         if (key.rfind("profile_", 0) == 0)
           metrics["profile/"+key.substr(8, key.size()-11)+"_seconds"] = value*1e-9;

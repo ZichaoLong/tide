@@ -161,9 +161,11 @@ and bounded native timing. The first17.27B wide parallel measurement is
 [retained](evidence/pdg-scale-attention.md); serial completed; narrow timed out
 after5/8steps (retained failure). Small row-versus-slot and schedule checks
 preceded the scale ramp. The [phase/runtime diagnosis](evidence/pdg-scale-profile.md)
-is complete. Next, record effective runtime pools and budget the dense head
-separately from node-parallel work, then reduce serial region/control/history
-and event/commit/destruction costs. OPENBLAS_NUM_THREADS=1 does not imply an
+is complete. The current bounded increment implements default-off
+[streaming optimizations](streaming-optimizations.md): reported runtime pools,
+column-parallel dense head, independent region evaluation and compact event
+construction/cleanup. Directed correctness, full regression and the fixed
+wide baseline/optimized measurement must pass before any performance claim. OPENBLAS_NUM_THREADS=1 does not imply an
 effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
 the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.

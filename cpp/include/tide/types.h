@@ -147,5 +147,6 @@ struct Options {
   bool prefill = true;
   Index max_events = 1000000;
   bool profile = false; // Optional streaming coordinator wall-time phases.
+  bool parallel_regions = false, compact_events = false;
 };
 }  // namespace tide

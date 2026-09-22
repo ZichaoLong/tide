@@ -33,6 +33,10 @@ class RegionKernel {
 RegionLayout region_layout(const Graph&, Index region);
 std::shared_ptr<const RegionKernel> make_region_kernel(const Region&);
 void validate_history(const History&, const RegionLayout&, const Tensor& reference, Index time);
+Selection evaluate_selection(const Graph&, const Model&, const History*, const std::vector<Event>&,
+                             const std::vector<size_t>&);
+void commit_selection(Continuation&, Owner, Selection, std::vector<Event>&,
+                      const std::vector<size_t>&, bool trace);
 void select_events(const Graph&, const Model&, Continuation&, std::vector<Event>&,
                    const std::vector<size_t>&, bool trace);
 }  // namespace tide

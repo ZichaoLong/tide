@@ -22,9 +22,9 @@ void validate_history(const History& h, const RegionLayout& layout, const Tensor
     check_tensor(value, ref, "incompatible or nonfinite region history tensor");
   }
 }
-void select_events(const Graph& g, const Model& m, Continuation& q, std::vector<Event>& events,
-                   const std::vector<size_t>& ids, bool trace) {
-  if (ids.empty()) return;
+Selection evaluate_selection(const Graph& g, const Model& m, const History* previous_history,
+                             const std::vector<Event>& events, const std::vector<size_t>& ids) {
+  if (ids.empty()) throw std::invalid_argument("empty region evaluation");
   const auto& first = events[ids[0]];
   const Owner owner{first.batch, g.nodes[first.node].region};
   const auto layout = region_layout(g, owner.second);
@@ -39,13 +39,12 @@ void select_events(const Graph& g, const Model& m, Continuation& q, std::vector<
       throw std::invalid_argument("invalid region candidate domain/order");
     candidates.push_back({e.node, e.descriptor}); nodes.insert(e.node); previous = e.node;
   }
-  auto it = q.history.find(owner);
   History initial;
-  if (it == q.history.end()) {
+  if (!previous_history) {
     initial = w.kernel->initial(w, layout, ref);
     validate_history(initial, layout, ref, first.time-1); w.kernel->validate_history(initial, layout);
   }
-  const auto& old = it == q.history.end() ? initial : it->second;
+  const auto& old = previous_history ? *previous_history : initial;
   auto result = w.kernel->step(w, {old, first.time, candidates, layout, ref.options()});
   if (static_cast<Index>(result.active.size()) > layout.spec.budget
       || !std::includes(nodes.begin(), nodes.end(), result.active.begin(), result.active.end()))
@@ -56,10 +55,23 @@ void select_events(const Graph& g, const Model& m, Continuation& q, std::vector<
     check_tensor(control, ref, "region selector returned incompatible or nonfinite control");
   }
   validate_history(result.history, layout, ref, first.time); w.kernel->validate_history(result.history, layout);
+  return result;
+}
+void commit_selection(Continuation& q, Owner owner, Selection result, std::vector<Event>& events,
+                      const std::vector<size_t>& ids, bool trace) {
   q.history[owner] = std::move(result.history);
   for (auto i : ids) {
-    auto& e = events[i]; e.active = result.active.count(e.node); e.control = result.controls.at(e.node);
+    auto& e = events[i]; e.active = result.active.count(e.node); e.control = std::move(result.controls.at(e.node));
     if (trace) e.history = q.history.at(owner);
   }
+}
+void select_events(const Graph& g, const Model& m, Continuation& q, std::vector<Event>& events,
+                   const std::vector<size_t>& ids, bool trace) {
+  if (ids.empty()) return;
+  const auto& first = events[ids[0]];
+  const Owner owner{first.batch, g.nodes[first.node].region};
+  const auto it = q.history.find(owner);
+  auto result = evaluate_selection(g, m, it == q.history.end() ? nullptr : &it->second, events, ids);
+  commit_selection(q, owner, std::move(result), events, ids, trace);
 }
 }  // namespace tide

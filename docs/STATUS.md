@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
+Updated: 2026-09-23 (Asia/Shanghai). Branch: graph-execution-foundation.
 The standalone C++ named-owner/optimizer implementation is committed at
 5c440e1, with the native region-name fix at 9aef27a. The native `TIDENCK1`
 value-checkpoint implementation is committed at 4325bb1 and has passed clean
@@ -53,13 +53,43 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The graph-only comparable-scale PDG Attention benchmark and requested diagnosis
-of its37% observed gap are complete; see the records below. The next bounded
-performance increment is to record effective runtime pools and give the dense
-head an appropriate thread budget while preserving node-parallel limits, then
-reduce serial region/event/history overhead. Validate small complete semantics
-before any same-window full-model timing. Do not launch another unchanged pilot.
-Weight-preserving LH import remains a separate future numerical-equivalence task.
+The user confirmed optimization under the 20-tide canonical framework. The
+adopted authority remains tide-core-3; no graph/profile/checkpoint version changes.
+The implementation adds independently switchable region parallelism, compact
+events/parallel temporary cleanup and a separate bounded column-parallel
+vocabulary head. See streaming-optimizations.md. All default off. Runtime pool
+reporting distinguishes requested environment from reported counts.
+
+Directed gate artifacts/pdg-opt-dev-20260923-0050 passed 479 FP64/FP32 tests in
+98.40s after the native build; unit tide-pdg-opt-dev-20260923-0050 terminated
+exit0, inactive/dead, MainPID0. The source archive/hash and development.json are
+retained. Independent Python, legacy native and optimized paths agree on complete
+traces/continuation, isolated VJPs, tensor history, custom selectors and thread
+local modes. Dense projection forward/VJPs also pass. This is correctness evidence,
+not an optimization speed claim. CPU operator doctor passed; static audit has no
+errors and only existing guarded runtime/CLI review leads.
+
+Next: commit this coherent implementation, freeze that exact source under
+/var/tmp/zlong-graph-execution-foundation/qualification/pdg-opt-20260923-0100,
+and copy source-hash-matching build artifacts/manifest to its isolated build/.
+This reuses the directed build; do not call it a fresh clean build.
+Submit unit tide-pdg-opt-20260923-0100 through scripts/job.py in background.slice,
+Nice10, CPUs160-319, OMP/OPENBLAS1, TORCH_DEVICE_BACKEND_AUTOLOAD=0,
+RuntimeMaxSec3000; job output artifacts/pdg-opt-20260923-0100/ in the main tree.
+The fixed driver is artifacts/pdg-opt-runner-20260923-0100.py, invoked with
+--source pointing to the frozen directory, --output-dir to the job directory,
+and --topology artifacts/pdg-scale-input-20260922/wide.txt (absolute paths).
+It first runs scripts/verify.py --device cpu --dtype both in the frozen source,
+then an actual-size dense-head numerical smoke, small optimized scale checks,
+and a sequential baseline/optimized wide pair. Each wide case is
+17.27B/B512/D2048/FP32,12steps/warmup4,workers160/threads1,seed7,profile1,
+1280GiB address-space limit,timeout1200. Optimized head-workers160,
+parallel-regions1,compact-events1; baseline flags off. Preserve failures and
+compare work counters and the identical4–11 window. No LH rerun is needed.
+At publication the follow-up job has not yet been submitted; inspect status.json,
+pipeline.json, qualification/result.json and task.log after launch. No speed
+claim is available. Source and result identities must be audited before writing
+final evidence. Weight-preserving LH import remains a separate future task.
 
 The native benchmark, graph-only exporter, row Emit and recorded wrapper are
 implemented. Development gate artifacts/pdg-scale-dev-20260922-1120 passed:

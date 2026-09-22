@@ -7,11 +7,13 @@ namespace pdg_scale {
 Config parse(int argc, char** argv) {
   Config c; std::vector<char*> common{argv[0]}; std::set<std::string> seen;
   std::map<std::string, Index*> ints{{"--width", &c.width}, {"--batch", &c.batch}, {"--steps", &c.steps},
-    {"--warmup", &c.warmup}, {"--workers", &c.workers}, {"--threads", &c.threads}, {"--vocab", &c.vocab}};
+    {"--warmup", &c.warmup}, {"--workers", &c.workers}, {"--threads", &c.threads}, {"--vocab", &c.vocab},
+    {"--head-workers", &c.head_workers}};
   for (int i = 1; i < argc; ++i) {
     const std::string key = argv[i];
     if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission"
-        && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile") { common.push_back(argv[i]); continue; }
+        && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
+        && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
     std::string value = argv[i];
     if (ints.count(key)) {
@@ -27,6 +29,8 @@ Config parse(int argc, char** argv) {
       if (key == "--grad") c.grad = value == "1";
       if (key == "--check") c.check = value == "1";
       if (key == "--profile") c.profile = value == "1";
+      if (key == "--parallel-regions") c.parallel_regions = value == "1";
+      if (key == "--compact-events") c.compact_events = value == "1";
     }
   }
   c.runtime = portable_torch::parse_cli(common.size(), common.data(), true);
@@ -34,6 +38,7 @@ Config parse(int argc, char** argv) {
   if (c.width < 4 || c.width > 4096 || c.width%4 || c.batch < 1 || c.batch > 1024
       || c.steps < 1 || c.steps > 1000 || c.warmup >= c.steps || c.workers < 1 || c.workers > 160
       || c.threads < 1 || c.threads > 160 || c.workers*c.threads > 160 || c.vocab < 2 || c.vocab > 100000
+      || c.head_workers < 1 || c.head_workers > 160 || c.head_workers*c.threads > 160
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
   if (c.check && (c.width > 64 || c.batch > 8 || c.steps > 12))
