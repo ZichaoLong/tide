@@ -2,8 +2,8 @@
 
 Component gates through Pronounce are qualified in `evidence/pronounce.md`.
 The whole-model adapter in `lh-iocortex.md` is qualified in `evidence/lh-iocortex.md`.
-The single-graph construction below is implemented in the oracle layer;
-`lh-single-graph.md` defines its bounded projection and STATUS tracks qualification.
+The single-graph oracle construction is qualified in `evidence/lh-single-graph.md`;
+`lh-single-graph.md` is the canonical construction/projection contract.
 Call actual unchanged IOCortexNet::think and think_single_step from the hashed
 snapshot; component parity alone cannot certify whole-model execution.
 
@@ -47,52 +47,26 @@ the two norms differ by at most the actual candidate L2 perturbation plus FP64
 roundoff. Candidates themselves still use their payload-dtype tolerance, and
 routes must match exactly. FP32 payloads do not become FP64-accurate by promotion.
 
-## Separate obligations
+## Remaining obligations
 
-Two-clock composition is not yet a single-PDG proof. A reserved readout phase
-(period L+1) may resolve autoregressive sealing, but the last body phase then
-needs a two-tick edge gap and explicit local state clocks. Replicated phase
-edges must map to original source domains so all-softmax denominators remain
-unchanged. Prove clocks, idle decay and pending projection separately.
+The bounded single-PDG projection is qualified; do not treat its primitives
+alone as proof for other configurations. Keep original valid-input restrictions
+(globally nonempty original Pronounce windows), fixed inference weights and
+equal-width homogeneous profiles explicit. Phase replication has O(L*E) cost.
+Unequal widths, arbitrary mixed profiles and full pretrained/configuration import
+need separate mappings and oracles. Scale/performance remain M8 obligations.
 
-Define composite checkpoint and cross-graph parameter/optimizer aliases before
-claiming whole-model save/resume or training. LH is an inference oracle only.
-Persistent cache/history and scale/performance remain M8 obligations.
-
-## Single-graph construction to qualify separately
-
-Let D=L+1. Map original body tick kL+p (0<=p<L) to global kD+p;
-reserve global phase L for token readout. A body wire uses delay one except
-when its sender phase is L-1, where it uses delay two. Fixed physical edges
-with phase-selective Full can implement these alternatives. Body output phase p
-uses delay L-p to reach the readout at kD+L. Readout completes before the next
-external input at (k+1)D can be sealed, including greedy generation.
-
-For a complete global cut c, the body cut projection is
-floor(c/D)*L+min(c%D,L); the readout cut is floor(c/D). At body events convert
-stored last_time and event time into body ticks before applying repeated decay;
-at readout events convert them into token ticks. Return stored metadata to the
-global clock. Resets preserve that metadata. Arbitrary cuts must project pending
-body wires plus partial token-window output buffers, not only token boundaries.
-
-Physical phase wires need a graph-owned logical source domain: all alternatives
-of an original wire share its source slot and coefficient. `source-domains.md`
-implements this layer separately from bijective PortLayout and is qualified in
-`evidence/source-domains.md`. Duplicating all-softmax coefficients over
-physical aliases changes normalization even if only one alias arrives. Do not
-patch this by scaling arbitrary softmax weights. Qualify an explicit domain map,
-parameter aliasing, cache order and duplicate-arrival rejection. `state-clocks.md`
-implements the clock wrapper and delegated step/block contracts; treating the
-reserved phase as an extra idle decay changes LH. Whole-model complete-cut
-projection is implemented separately; these primitives alone are not a containment proof.
-Keep original valid-input restrictions (globally
-nonempty readout windows), fixed inference weights and equal-width scope explicit.
+Tide two-clock/single-PDG training and single-graph value resume are qualified in
+`evidence/single-graph-training.md`; this uses Tide's declared VJPs and truncated
+updates. No training equivalence to old LH is claimed. The composite two-clock
+application still needs named cross-graph ownership and one checkpoint containing
+both continuations plus its unfinished readout buffer/controller state. Existing
+single-PDG v5 resume does not serialize that separate application.
 
 Original LH phase/sample CSR has no External.position. The two-graph token_inputs
-adapter adds a contiguous occurrence ledger per sample/phase. If some phases are
-absent, send_time / period gives a token index, not the occurrence position.
-Projection to the complete two-graph Tide continuation therefore needs explicit
-phase occurrence counters with typed state/checkpoint rules. Alternatively a
-narrower projection to original LH may omit that adapter-only ledger, but must
-not claim complete two-graph continuation equality. Choose and document the
-projection boundary before implementing the single-graph oracle.
+adapter adds a contiguous occurrence ledger per sample/phase. With missing phases,
+last send time divided by period gives a token index, not an occurrence position.
+The qualified readout view therefore omits this adapter-only ledger explicitly.
+If full two-clock continuation reconstruction is needed, introduce validated
+occurrence counters and persistence rather than fabricating them from time.
+Standalone C++ optimizer ownership/serialization remains a separate deliverable.

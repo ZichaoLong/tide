@@ -118,8 +118,10 @@ Its candidate updates, count-priority selector and selected clear can fit the
 spine. The bounded equal-width, fixed-weight two-clock composition maps
 unit-delay ticks, eager decay, same-fiber attention and token-window Pronounce;
 actual original-C++ whole-model inference is qualified in
-`evidence/lh-iocortex.md`. Single-PDG containment and composite checkpoint/training
-ownership remain separate obligations (`lh-iocortex-plan.md`).
+`evidence/lh-iocortex.md`. The bounded single-PDG inference encoding is qualified
+in `evidence/lh-single-graph.md`; Tide training/single-graph resume separately in
+`evidence/single-graph-training.md`. Complete two-clock occurrence-ledger
+reconstruction and composite checkpoint ownership remain separate obligations.
 
 `fractal-latcarf` supplies validation design examples (eager/packed/specialized,
 chunk/state/gradient checks). Its historical results do not certify this tree.

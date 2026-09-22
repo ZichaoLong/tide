@@ -76,7 +76,10 @@ history integers and message identities remain exact. Original active-softmax's
 known FP64 multi-batch diagnostic defect remains an explicit unavailable case in
 assertions-on builds; the separate consistent assertions-off build fills it.
 
-This is bounded equal-width two-clock inference composition. Unequal widths,
-arbitrary pretrained model import, whole-model training/optimizer checkpoint,
-single-PDG containment and large-sparse speed remain separate obligations.
-The single-clock construction is in `lh-iocortex-plan.md`; it is not yet proved.
+The original two-clock projection is bounded and equal-width. Its single-PDG
+encoding is now qualified separately in `evidence/lh-single-graph.md`; the
+construction and readout-ledger boundary are in `lh-single-graph.md`. Tide
+training and single-graph checkpoint resume have their own evidence in
+`evidence/single-graph-training.md`; LH training is not an authority. Unequal
+widths, arbitrary pretrained import, composite application serialization and
+large-sparse speed remain separate obligations.

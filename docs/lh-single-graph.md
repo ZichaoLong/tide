@@ -1,7 +1,7 @@
 # Bounded IOCortex inference in a single PositiveDelayGraph
 
-The adapter is implemented in the oracle layer; qualification is tracked in
-STATUS until immutable-source evidence is available. It uses existing graph v13
+The oracle-layer adapter is [qualified](evidence/lh-single-graph.md) for the
+bounded inference scope below. It uses existing graph v13
 clocks, source domains and slot-affine Full, without adding an execution primitive.
 Original LH remains an inference reference, with its C++ source unchanged. This
 construction covers the equal-width fixed-weight profiles of lh-iocortex.md.
@@ -67,8 +67,9 @@ original snapshot and exports.
 Original think requires globally nonempty Pronounce windows. Manual ragged
 think_single_step cases have no original Pronounce call. Empty readout windows
 there only test Tide's no-candidate behavior, without claiming original-LH
-readout parity. Whole-model training, composite optimizer ownership, unequal
-widths and large-sparse speed remain separate obligations.
+readout parity. Tide training and single-graph value resume are independently
+[qualified](evidence/single-graph-training.md). Composite two-clock ownership,
+unequal widths and large-sparse speed remain separate obligations.
 
 Norm comparisons follow the original whole-model rule: each descriptor matches
 its own candidate's FP64 norm, and the cross-norm difference is bounded by the

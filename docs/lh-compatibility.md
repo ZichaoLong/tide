@@ -17,8 +17,8 @@ packing and CROSSBATCH are qualified in `evidence/fiber-packing.md`.
 Normalized/learned post-attention Confluence is qualified in
 `evidence/fiber-pooling.md`, with the original FP64 assertion limitation recorded
 separately. Token-window Pronounce is qualified in `evidence/pronounce.md`;
-the whole-model adapter is a two-clock composition, and the single-PDG proof
-remains pending (`lh-iocortex-plan.md`).
+the bounded single-PDG map is qualified in `evidence/lh-single-graph.md`
+(`lh-single-graph.md`). Its readout view omits the adapter-only occurrence ledger.
 
 Only the C++ interpreter is relevant. Python graph generation is useful;
 the old Python interpreter is not an inference authority. LH supplies no
@@ -37,10 +37,11 @@ training contract; use this project's explicit state/VJP/truncation rules.
 | All same-fiber K/V are appended before queries attend | Same-event visibility is all-to-all; ordinary triangular order within the fiber changes LH |
 | `Pronounce` gathers `n_layer` output occurrences once per token | Explicit window/readout clock and source-occurrence tags; not an ordinary next-tick output node |
 
-For Pronounce, a candidate fixed-graph encoding uses one phase-tagged edge per
+For Pronounce, the qualified fixed-graph encoding uses one phase-tagged edge per
 tick phase, with a constant delay per edge so all occurrences reach the token
 readout event together. Full selects the phase edge from its logical clock.
-This is a design to verify, not an established numerical compatibility result.
+Qualification covers the explicit homogeneous profiles and scenarios in
+`lh-iocortex.md`; it does not establish arbitrary-configuration compatibility.
 Empty-output windows need an explicit valid-input/readout protocol matching the
 original C++ behavior. Preserve Pronounce's own hidden state and decay clock.
 
@@ -69,7 +70,7 @@ an immutable snapshot of LH C++ sources using this project's CPU build setup.
 It covers Add/attention, multiple samples, idle ticks, selected clear, token
 continuation and Pronounce, with saved weights/inputs and mapped state/messages/
 counters as well as FP64/FP32 outputs. Its exact configuration scope is in
-`lh-iocortex.md`; the single-PDG proof remains separate.
+`lh-iocortex.md`; bounded single-PDG evidence is in `evidence/lh-single-graph.md`.
 If a true semantic mismatch survives an explicit encoding, document the minimal
 counterexample and discuss the choice with the user before changing Tide semantics.
 
