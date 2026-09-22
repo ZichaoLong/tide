@@ -53,15 +53,13 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The latest user explicitly requests comparable-scale PDG performance without LH
-weight import. Reuse the existing four-block LH graph, freshly initialize
-Attention/all-softmax + SiLU/RMSNorm + linear Emit, and match width/batch,
-parameter count and region budgets. Record actual candidates/selected rows,
-source rows/edges and packing, because random routes can change work. Implement
-a standalone native cursor benchmark, validate small serial/parallel/packed and
-row-versus-slot Emit, then ramp to width2048/batch512 under at most160 cores and
-roughly half host memory. Weight-preserving import is a separate future task,
-not a blocker for this lane. Do not claim numerical LH parity for these runs.
+The graph-only comparable-scale PDG Attention benchmark and requested diagnosis
+of its37% observed gap are complete; see the records below. The next bounded
+performance increment is to record effective runtime pools and give the dense
+head an appropriate thread budget while preserving node-parallel limits, then
+reduce serial region/event/history overhead. Validate small complete semantics
+before any same-window full-model timing. Do not launch another unchanged pilot.
+Weight-preserving LH import remains a separate future numerical-equivalence task.
 
 The native benchmark, graph-only exporter, row Emit and recorded wrapper are
 implemented. Development gate artifacts/pdg-scale-dev-20260922-1120 passed:
@@ -95,30 +93,37 @@ The wide serial case passed4/4steps (native0); narrow timed out after5/8steps
 its completed wide cases remain valid. analyze.py was rerun against all terminal
 records; failures stay failed. Preserve the source, binary, inputs and logs.
 
-Current task: explain the wide PDG/LH37.3% timing gap with measured attribution.
-An uncommitted, default-off `Options.profile` / scale `--profile` adds coordinator
-wall phases: events, update, select, full, commit, cleanup and total tick.
-No schedule/model/route changes. Small tests compare full traced semantics with
-profiling enabled and verify timing accounting/default-off behavior.
-The first phase-timer development gate passed62 tests/32.50s at
-artifacts/pdg-profile-dev-20260922-1138/ (source archive retained).
-The follow-up input/head split passed15 tests/14.48s at
-artifacts/pdg-profile-head-dev-20260922-1143/; both services passed/exit0.
-Implementation is ready for commit and immutable measurement. Next job:
-`tide-pdg-profile-20260922-1145`, output artifacts/pdg-profile-20260922-1145/,
-read-only worktree qualification/pdg-profile-20260922-1145 under the local parent,
-with copied source-hash-matching native binary/build manifest. Launch the exact
-committed code through job.py and benchmark_pdg_scale.py:
---device cpu --dtype float32 --topology ABS/artifacts/pdg-scale-input-20260922/wide.txt
---width 2048 --batch 512 --steps 8 --warmup 4 --workers 160 --threads 1
---packed 1 --grad 0 --emission row --profile 1 --seed 7
---memory-gib 1280 --timeout-seconds 1200 --output-dir ABS/JOB/wide-profile
-CPUs160-319, BLAS1, Nice10/background.slice, RuntimeMaxSec1320.
-After completion, compare token4–7 with the same window of original PDG and LH;
-check all work counters/checksums, source/binary/input identities and terminal
-records. Preserve raw phase times. Do not attribute the entire37% to a stage
-from code inspection alone. LH original nested timers must not be double counted.
-Original LH and all frozen pilot inputs stay read-only.
+The gap diagnosis is [recorded](evidence/pdg-scale-profile.md). Source
+3151d5968b89479f1932f201e89b21af0e81a4aa adds default-off Options.profile and scale
+--profile (six coordinator phases plus input/head), with no schedule changes.
+Development gates passed62 tests/32.50s and15 tests/14.48s (overlapping scopes):
+artifacts/pdg-profile-dev-20260922-1138/ and pdg-profile-head-dev-20260922-1143/.
+
+Unit tide-pdg-profile-20260922-1145 passed/exit0, inactive/dead, MainPID0; no active
+job remains. Records: artifacts/pdg-profile-20260922-1145/; immutable read-only
+source: qualification/pdg-profile-20260922-1145 under the local parent, with an
+isolated copied source-hash-matching binary/build manifest. Exact argv is in
+status.json. Wide profile passed8/8steps, FP32/D2048/B512, workers160/ATen1,
+nograd/packed/row Emit, seed7, CPUs160-319, memory-gib1280, timeout1200.
+All work/model counters and output checksums equal the old PDG prefix. analyze.py
+validates identities, complete records and timing accounting; analysis.json has
+all phase means. Window4–7:17.40005s/batch step (33.98447ms/sample-token), versus
+old PDG16.77750s and LH12.13625s. Do not relabel the old4–11 ratio with this window.
+Region/event/commit/cleanup total2.99501s; output head1.39280s; update7.01003s;
+Full/Emit5.99091s. Construction226.98044s excluded, peak105.02517GiB.
+
+Important runtime correction: this OpenBLAS uses OpenMP. Replaying LH's original
+OMP160/MKL160/OPENBLAS1 startup reports128 BLAS threads, versus1 for PDG's OMP1.
+OPENBLAS_NUM_THREADS=1 is not proof of an effective single-thread BLAS. Fresh,
+matched head-only processes measured1.36608s versus0.04237s and byte-identical
+outputs; scripts/records and negative earlier probes are retained in this job
+directory, summarized in head-analysis.json. All four head records validate.
+Do not infer an end-to-end speedup or raise every node worker's BLAS pool. Runtime
+thread reporting/lifecycle needs implementation before accepting a tuned result.
+The original LH loop uses unseeded random token IDs, not greedy feedback; older
+scale documentation was corrected. Original LH and frozen sources remain read-only.
+Trackio remains best-effort/degraded (not installed); complete local records are
+retained. No optimized large-model rerun was performed in this diagnosis.
 
 The original Attention pipeline has terminated failed/exit1 (unit
 `tide-lh-a10-attention-20260922-0830`, MainPID0, inactive computation).
@@ -201,7 +206,9 @@ Torch/LibTorch 2.10.0+cpu, C++11 ABI. TORCH_DEVICE_BACKEND_AUTOLOAD=0;
 Default correctness OMP/OpenBLAS=1, two build jobs, Nice=10/background.slice.
 The earlier Add cases use ATen/OpenMP56, BLAS56 or1, inter-op1 and
 CPU affinity160–215. The a10fdb1 original Attention cases use ATen/OpenMP160,
-BLAS1, original inter-op defaults and CPU affinity160–319. FP64 atol/rtol
+OPENBLAS_NUM_THREADS=1 requested (effective BLAS count was not logged),
+original inter-op defaults and CPU affinity160–319. See the profile diagnosis
+for the fresh-process OpenMP BLAS correction. FP64 atol/rtol
 1e-10/1e-8; FP32 1e-6/1e-5; routes/identities exact. Keep builds isolated.
 LH snapshot artifacts/lh-source-20260921-1428 has 69 files, identity
 ac7c878a56aeb55eec9f919da1962be6134fc5e3d1872f6d2303917306edb87f,

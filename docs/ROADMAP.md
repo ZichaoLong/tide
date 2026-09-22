@@ -158,10 +158,14 @@ native count confirmation and bounded local measurement. Per the user's latest
 instruction, prioritize the [graph-only PDG scale benchmark](pdg-scale-benchmark.md):
 fresh random weights, similar topology/modules/parameters, actual work counters
 and bounded native timing. The first17.27B wide parallel measurement is
-[retained](evidence/pdg-scale-attention.md); serial completed; narrow timed out after5/8steps (retained failure). Small row-versus-slot and schedule checks precede the
-scale ramp. Next, quantify the observed37% wide-case time gap with optional
-streaming phase timers and an identical short wide workload, before choosing
-optimizations. Weight-preserving imports remain a separate exact-inference goal.
+[retained](evidence/pdg-scale-attention.md); serial completed; narrow timed out
+after5/8steps (retained failure). Small row-versus-slot and schedule checks
+preceded the scale ramp. The [phase/runtime diagnosis](evidence/pdg-scale-profile.md)
+is complete. Next, record effective runtime pools and budget the dense head
+separately from node-parallel work, then reduce serial region/control/history
+and event/commit/destruction costs. OPENBLAS_NUM_THREADS=1 does not imply an
+effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
+the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.
 Expand the other M8 fixed workloads beyond the EMA pilot: Attention/SSM streaming,
 frontier/SettleGraph prefill and measured backward/replay costs. Declare batch,

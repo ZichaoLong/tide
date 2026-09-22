@@ -5,7 +5,7 @@ The user requests a performance comparison without importing LH weights.
 `tidegraph-scale-bench` instantiates an ordinary single PositiveDelayGraph and
 runs the existing native StreamingCursor. This does not establish LH numerical
 equivalence. Fresh seeded parameters and fixed token IDs can yield different
-routes and cache lengths from original LH greedy feedback.
+routes and cache lengths from the original LH unseeded random-token loop.
 
 ## Workload
 
@@ -64,7 +64,10 @@ python scripts/benchmark_pdg_scale.py --device cpu --dtype float32 \
 ```
 
 Run from frozen source using the durable workflow. At most160 selected CPUs,
-BLAS1 and explicit node/ATen thread counts bound oversubscription. The address
+Explicit node/ATen thread counts bound the requested parallelism. OPENBLAS1
+is a requested environment setting, not proof of the effective BLAS pool;
+OpenMP-built BLAS may honor OMP_NUM_THREADS instead. Inspect runtime pools; see
+[evidence/pdg-scale-profile.md](evidence/pdg-scale-profile.md). The address
 space bound is not measured RSS. Each run owns its topology copy, configuration,
 binary/source identities, raw metrics, log, terminal summary and optional
 best-effort Trackio projection. Missing Trackio does not discard local records.

@@ -2,8 +2,8 @@
 
 Implementation: f6686c124c8f588a44c1825603ffa5c8843dd422. The user explicitly
 requested similar topology, parameter/compute scale and modules without LH
-weight import. This report covers a completed wide parallel case; the enclosing
-pilot is still running serial and then narrow cases. It is not a full-matrix
+weight import. This report covers completed wide parallel/serial cases; the enclosing
+pilot terminated failed because the narrow case timed out. It is not a full-matrix
 or training-performance qualification.
 
 ## Source, correctness and records
@@ -47,7 +47,7 @@ PDG row Emit uses one dense Linear per node for its combined cortex/bridge row;
 LH uses one Linear per nonempty block row. PDG timing includes embedding, two
 body ticks, readout and vocabulary projection. Validation, metrics and model
 construction are outside token timing. PDG uses fixed external token IDs and
-on-demand KV; original LH uses its unseeded greedy loop and initial KV reserve.
+on-demand KV; original LH uses its unseeded random-token loop and initial KV reserve.
 Both run without grad. See ../pdg-scale-benchmark.md for the detailed contract.
 
 Both timing rows below use **token indices4–11**, batch512 and hidden2048.
@@ -85,27 +85,32 @@ peak95.58398GiB and construction226.92974s. Its time rose from63.10936 to140.350
 within the measured window. Do not compare that different batch/window as a
 matched LH speed ratio.
 
-## Live continuation
+## Terminal serial and narrow cases
 
-At this checkpoint the wide serial case is running (workers1, ATen/BLAS1,
-batch512,4steps,600s process limit); it is an intentionally serial baseline.
-The narrow parallel case is queued:115,713 PDG nodes, width128/batch512,
-nominal2/128 leaf budget,8steps,1800s. The overall pilot has no terminal result.
-The process address-space limit1280GiB is separate from measured RSS.
+The enclosing service terminated failed/exit1, MainPID0, because the final narrow
+case exceeded its1800s process limit. Its failure does not invalidate completed
+wide cases. All terminal portable records were revalidated by analyze.py;
+comparison.json now includes the complete terminal inventory.
 
-The durable command is recorded verbatim as an argv array in status.json,
-working directory is the frozen checkout above; runner is
-/home/zlong/anaconda3/bin/python scripts/job.py, wrapping scripts/pilot_pdg_scale.py
-with the wide/narrow input paths under artifacts/pdg-scale-input-20260922/ and
-comparison output under this job directory. Inspect or stop with:
+Wide serial passed4/4steps, workers1/ATen1/BLAS1. On the common token1–3 window,
+serial averaged149.99953ms/sample-token versus parallel21.78595, a6.88515x
+speedup. All recorded work counters and logit checksums agree over tokens0–3.
+These checksums are consistency checks, not full large-model numerical parity.
+Do not compare this earlier window with parallel4–11 for a scaling ratio.
 
-```sh
-systemctl --user show tide-pdg-scale-20260922-1020 -p ActiveState -p SubState -p Result -p MainPID
-tail -n 30 artifacts/pdg-scale-20260922-1020/task.log
-systemctl --user stop tide-pdg-scale-20260922-1020
-```
+Narrow128/batch512 completed5/8steps before timeout, native exit-15, with no
+unreaped child; peak183.72528GiB and1821.47484s whole-process time. The five
+completed batch-step times are4.3320,194.1513,402.1489,444.3787,487.0197s.
+The missing three observations remain missing; this is not a passing narrow
+benchmark. The1280GiB address-space cap is distinct from measured RSS.
 
-After each terminal case, rerun analyze.py, inspect its status/exit code and
-update STATUS plus this evidence. Preserve failed/partial cases; a live job is
-not passed. Large grad-forward/backward, longer context and attribution by
-operator/scheduling phase remain future measurements.
+Source, all inputs, binaries and raw records remain retained. Large
+training/backward, longer context and operator attribution remain unmeasured.
+The subsequent default-off phase-timer work is a separate source and run; it
+must compare identical windows and cannot retrospectively attach phase numbers
+to these uninstrumented observations.
+
+Subsequent [phase/runtime diagnosis](pdg-scale-profile.md) identifies substantial
+serial event/region costs and a dense-head runtime difference. It also corrects
+the earlier assumption that requesting OPENBLAS_NUM_THREADS=1 guaranteed LH used
+one BLAS thread; the original measurement remains a configuration comparison.
