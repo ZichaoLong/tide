@@ -54,6 +54,17 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
+Active increment: explain LH versus PDG attention packing and implement a
+portable one-command CPU comparison kit, separately run_lh.py/run_pdg.py.
+Defaults reproduce the measured wide FP32/no_grad12-token window; fixed graph
+and C++ sources are bundled, rebuilt against target LibTorch. No reference
+repository changes. Python helper/related-record tests passed18/0.98s using the matching Torch Python. No job is live.
+Next: commit runner/exporter, freeze source and launch tide-cpu-kit-20260923-0345
+using artifacts/cpu-kit-runner-20260923-0345.py. It exports, relocates and freshly
+builds/runs small LH and PDG cases (including explicit standalone LibTorch),
+checks logs/numerical anchors and portable records. Output:
+artifacts/cpu-kit-20260923-0345/. Then export clean final kit and commit evidence. Keep old large timing evidence scoped below.
+
 The user-approved LH–PDG operator-work comparison is complete. No active job.
 Implementation source f0c31bef864af0ccdfa82afc1889c686890fbca6; authority tide-core-3.
 Optional inference counters, original-LH preparation instrumentation and small

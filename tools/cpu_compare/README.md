@@ -1,0 +1,92 @@
+# LH / PDG 固定图 CPU 一键对照
+
+这是源码包：固定图、两边的 C++ 源码和 nlohmann/json 头文件均已携带。
+不用安装 LH Python 解释器或图生成依赖，也不需要另外找 LH/Tide checkout。
+Python 脚本负责构建和记录，模型计算全部运行在独立 C++/LibTorch 进程中。
+
+需要 64 位小端 Linux、Python 3.8+、CMake 3.18+、C++17/OpenMP 编译器和
+CPU LibTorch。本机验证栈是 Torch 2.10.0+cpu / GCC 10.3.1 / aarch64；
+Intel x86_64 需在目标机器重新编译，优先使用相同 Torch 版本。
+包内没有二进制、模型权重或本机绝对输入路径。
+
+默认：17,269,426,339 参数，D2048、B512、V50304、FP32/no_grad，
+12 tokens，前4个 warmup，报告索引4–11。四头 Attention、all-softmax、
+SiLU/RMS、clear、两次 body step/token；seed7，固定外部 token IDs。
+权重独立初始化，两边使用相同四块静态图；不宣称函数完全相同。
+
+## 两条正式测试命令
+
+解压后，在目标 Torch Python 环境中执行：
+
+```bash
+tar -xzf cpu-attention-compare.tar.gz
+cd cpu-attention-compare
+sha256sum -c SHA256SUMS
+
+python run_lh.py --device cpu --threads 56 --output-dir runs/lh-wide
+python run_pdg.py --device cpu --threads 56 --output-dir runs/pdg-wide
+```
+
+每条命令独立完成：校验包 → 准备专用源码目录 → CMake 构建 → 运行 → 汇总。
+运行目录必须是新目录；重测请换名字。编译默认2个作业，可用 `--jobs 4`。
+默认不设置内存上限、不绑定特定 CPU 编号；`--threads` 默认最多56个可用逻辑 CPU。
+需要固定核时，在两条命令前使用目标机合适的 `taskset -c ...`；
+脚本继承并记录 CPU affinity。LH 和 PDG 应顺序运行，使用相同 affinity。
+
+`--threads 56` 的含义：LH 的 ATen/OpenMP 为56；PDG 的 node/head worker
+分别为56，分阶段运行，ATen/OpenMP/BLAS 请求1。实际 BLAS 池大小会打印；
+OpenMP OpenBLAS 可能忽略 `OPENBLAS_NUM_THREADS=1` 而跟随 OpenMP，不能只看环境变量。
+LH 使用 OpenMP 默认等待策略，PDG 设置 PASSIVE，与本次测量入口一致。
+
+## 首次在目标机运行
+
+建议先用同一入口完成小规模检查：
+
+```bash
+python run_lh.py --device cpu --threads 4 --smoke --output-dir runs/lh-smoke
+python run_pdg.py --device cpu --threads 4 --smoke --output-dir runs/pdg-smoke
+```
+
+`--smoke` 是 D16/B4/V257/6 tokens/warmup2；PDG 同时执行小规模完整状态对齐检查。
+小规模通过表示目标机的构建和入口可用，性能对照仍应运行上面的正式配置。
+`--width/--batch/--steps/--warmup/--vocab` 可显式覆盖默认值；它们会完整记录。
+本次 LH 入口是 FP32，PDG 还允许 `--dtype float64` 做单独的小规模验证。
+
+使用独立 LibTorch、Python 中没有安装 torch 时，给两条命令都加：
+
+```text
+--torch-prefix /path/to/libtorch --libtorch-label torch-2.10.0-cpu
+```
+
+该路径只用于目标机器的 CMake 配置，不需要 Python Torch。
+工具不会自动安装或替换任何环境。默认 native 超时3600秒，configure/build
+各自超时3600秒；慢机器可显式增大 `--timeout-seconds` / `--build-timeout-seconds`。
+`--memory-gib 0` 表示没有额外地址空间上限；可显式设置其他值。
+
+## 打印和记录
+
+终端打印 CONFIG、LibTorch 来源、构建阶段和日志路径、实际线程池、每 token
+耗时、QKV 行数、attention 分组调用数，以及测量窗口的均值/中位数/离散程度、
+吞吐、矩阵 GFLOPs、padding 比和进程峰值 RSS。长阶段每30秒打印存活信息。
+
+每个 run 目录包含：
+
+- `run.json` / `summary.json`：配置、源码与输入身份、成功/失败、测量窗口、资源；
+- `metrics.jsonl`：逐 token 原始标量，包括 warmup；
+- `stdout.log`：完整 native 输出；`configure.log` / `build.log`：构建及编译器信息；
+- `host.json`：CPU、内存、affinity、环境及 CMake 信息；
+- `prepared.json` / `source/`：本次实际使用的配置源码、哈希和目标机构建结果。
+
+`ms/sample-token` 除以了 batch；不是单条序列的一次迭代延迟。构造不计入
+测量窗口，KV/history 跨 token 保留。LH 主指标来自原 Think 整数毫秒计时，
+PDG 主指标来自 native cursor+head；两边计数和统计输出发生在主计时之外，
+计数更新本身仍在计时中。`--work-count 0` 可单独检查计数开销。
+
+Trackio 默认为 best-effort；未安装时仍完成完整本地记录，不自动安装。
+可以使用 `--tracking off` 关闭投影。比较时先检查 summary 的 completed 状态，
+然后反馈两份 run.json、summary.json、metrics.jsonl、host.json 及日志即可，
+不必复制 source/build。中断、编译失败和超时均保留失败记录并返回非零退出码。
+
+本源码包来自仓库的 `tools/cpu_compare/`；导出入口是
+`scripts/export_cpu_compare.py --lh-prepared PATH --topology PATH --output-dir NEW`。
+复现不依赖旧的 commit ID 操作指令；包内 manifest 已记录精确来源和全部文件哈希。

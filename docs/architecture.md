@@ -17,6 +17,8 @@
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/pdg-scale-benchmark.md` | Graph-only LH-scale Attention workload, fresh parameters, native cursor and row Emit timing |
+| `docs/attention-grouping-comparison.md` | LH padded queries versus PDG exact buckets, cache layout and pooling |
+| `tools/cpu_compare/README.md` | Two portable one-command CPU runners and source/graph packet |
 | `docs/operator-work.md` | Optional LH/PDG inference matrix work, attention padding and Emit boundary accounting |
 | `docs/streaming-optimizations.md` | Independent region scheduling, compact event ownership, bounded dense projection and validation |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
