@@ -47,24 +47,23 @@ verification/{result.json,tests.log}. Stop only if necessary with
 systemctl --user stop tide-foundation-training-qualified-20260921-2345.
 Never edit the frozen worktree/build. Original LH runs independently below.
 
-## Current main work
+## Current main work and next actions
 
-The old direct checkpoint writer was reproduced at d233429:
-artifacts/checkpoint-partial-write-repro/ (injected ENOSPC, 18-byte invalid final
-file). Atomic checkpoint_io.py repair passed 84 directed IO/ownership/round-trip
-tests in 5.73s. Includes serialization/file-fsync failure and retry, concurrent
-publication, absence of a partial target, and honest post-publication directory-
-fsync failure. v5/load are unchanged. See checkpoint-ownership.md.
+Atomic checkpoint repair 00bbf78fb99e410d46b4d7e36e37266eb3d8cf9e is qualified by
+88 clean directed tests (6.82s), including ownership, fault injection and four
+native resume/update cases. Unit tide-foundation-checkpoint-io-qualified-
+20260922-0000 ended inactive/dead, MainPID 0, exit 0 at 00:00:12Z. Both records
+in artifacts/checkpoint-io-qualified-20260922-0000/ passed; archive/tree match.
+Report: evidence/checkpoint-io.md. Prior ENOSPC failure is retained in
+artifacts/checkpoint-partial-write-repro/. v5/load are unchanged.
+Reviewed redundant training/IO draft directories were removed (7 files, about
+20 KiB); source archives, failures and active jobs are retained. General artifact
+cleanup dry run found no other eligible entries.
 
-Commit the repair, then run a clean bounded gate on that commit, using
-scripts/job.py + scripts/develop.py for test_checkpoint_io.py,
-test_checkpoint_ownership.py, test_checkpoint.py and four explicit single-PDG
-resume node IDs (FP64/FP32; Add serial SGD and all-softmax cursor AdamW).
-Main source/build must remain frozen for this short gate; the two long
-qualifications above/below use independent worktrees. Record source, unit and
-logs before running. After passing, retain a separate IO evidence report.
-Composite two-clock and standalone C++ optimizer ownership stay in ROADMAP.
-Ignored staging drafts are redundant; remove after a reviewed cleanup dry run.
+Next finish the two independent clean qualifications, inspect terminal status,
+source/build/fixture inventories and counts, then commit their evidence and
+replace pending LH/training claims. Do not edit either frozen worktree/build.
+Composite two-clock and standalone C++ optimizer ownership remain in ROADMAP.
 
 ## Active immutable qualification
 

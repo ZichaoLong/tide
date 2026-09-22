@@ -97,8 +97,7 @@ Optimized packed backward must preserve
 this contract before replacing the replay baseline; its training overhead is
 part of M8 performance qualification.
 
-Checkpoint durability follow-up: direct writes to the exclusive final filename
-can expose a partial file after interrupted/full-disk serialization. Preserve v5
-and no-overwrite behavior while staging, fsyncing and atomically publishing; test
-write failure, retry and a competing writer. Composite application checkpoints
-and standalone C++ optimizer ownership remain separate from this IO repair.
+Atomic exclusive value-checkpoint publication is
+[qualified](evidence/checkpoint-io.md) with Linux CPU fault injection, no-overwrite
+races, retry and resumed native training. Composite application checkpoints and
+standalone C++ optimizer ownership remain separate obligations.
