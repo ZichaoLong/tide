@@ -1,8 +1,8 @@
 # Current handoff
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
-Composite checkpoint committed at c08105e; strict coordinate validation is ready
-to commit after 1224 directed cases passed. Next: clean combined CPU qualification.
+Composite checkpoint committed at c08105e; strict coordinates at 69ca379.
+Clean full CPU qualification is running below; no terminal result yet.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -33,8 +33,34 @@ occurrence ledger explicitly. Contracts/navigation were updated after success.
 
 ## Next action and latest directed gate
 
-No active jobs. Commit the integer-coordinate fix, then qualify the new clean
-HEAD from an isolated read-only worktree with its own build. The Python boundary
+Running clean CPU qualification of source
+69ca37900e9c10d3fca95570ea1ebca8f9079f46 (composite bundle + strict coordinates).
+Unit: tide-foundation-token-coordinates-qualified-20260922-0106.
+Frozen tracked files/workdir:
+/var/tmp/zlong-graph-execution-foundation/qualification/token-coordinates-20260922-0106
+Independent build: that workdir/build. Persistent output:
+/home/zlong/llm/graph-execution-foundation/artifacts/token-coordinates-qualified-20260922-0106
+
+Exact command from the frozen workdir (Python=/home/zlong/anaconda3/bin/python):
+
+```sh
+/home/zlong/anaconda3/bin/python scripts/job.py --output-dir /home/zlong/llm/graph-execution-foundation/artifacts/token-coordinates-qualified-20260922-0106 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir /home/zlong/llm/graph-execution-foundation/artifacts/token-coordinates-qualified-20260922-0106 --jobs 2
+```
+
+Verified transient service active/running, MainPID 919809, background.slice and
+control group outside focus.service. Started 2026-09-22T01:05:00Z with clean source.
+Nice=10, KillMode=control-group,
+OMP_NUM_THREADS=1, OPENBLAS_NUM_THREADS=1, TORCH_DEVICE_BACKEND_AUTOLOAD=0.
+Inspect `systemctl --user show tide-foundation-token-coordinates-qualified-20260922-0106
+-p ActiveState -p SubState -p MainPID -p Result -p ExecMainStatus`, then output
+status.json, task.log and verification/{result.json,tests.log}. Stop only if needed:
+`systemctl --user stop tide-foundation-token-coordinates-qualified-20260922-0106`.
+After terminal pass, audit source/clean state/build hashes and counts, write an
+immutable-source evidence report, update ROADMAP/contract/navigation and commit
+only evidence. No C++/original-LH changes require repeating the old LH matrix.
+Do not edit the frozen worktree or report a live submission as a pass.
+
+The Python boundary
 now rejects bool, float, non-int and out-of-range int64 metadata in windows,
 external records, imported state/history/ledger/pending and graph owners/budgets.
 Native C++ fields were already int64. Cursor advance checks only new inputs;
@@ -75,11 +101,8 @@ Exact directed command from /home/zlong/llm/graph-execution-foundation:
 /home/zlong/anaconda3/bin/python scripts/job.py --output-dir artifacts/token-bundle-dev-20260922-0038 -- /home/zlong/anaconda3/bin/python scripts/develop.py --output-dir artifacts/token-bundle-dev-20260922-0038 --jobs 2 tests/test_token_checkpoint.py tests/test_checkpoint_io.py tests/test_checkpoint_ownership.py tests/test_checkpoint.py tests/test_single_graph_training.py tests/test_single_graph_optimizer.py tests/test_single_graph_resume.py tests/test_single_graph.py
 ```
 
-After the tested coordinate fix is committed, create a read-only detached
-worktree and run scripts/job.py --output-dir ABS_OUTPUT -- python
-scripts/qualify.py --output-dir ABS_OUTPUT --jobs 2 through the usual durable
-service. No C++/LH oracle changes require rerunning the original LH full matrix.
-ROADMAP remains the only backlog.
+ROADMAP remains the only backlog. The running qualification above supersedes
+the composite development gate; its result is not yet known.
 
 ## Terminal records and source retention
 
