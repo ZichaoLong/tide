@@ -42,6 +42,8 @@ def main():
     p.add_argument('--revision', default='a10fdb1')
     p.add_argument('--profile', required=True, choices=['wide', 'narrow'])
     p.add_argument('--width', type=int, help='explicit small bring-up override')
+    p.add_argument('--accounting', action='store_true', help='optional audited inference work-count instrumentation')
+    p.add_argument('--vocab', type=int, help='small accounting fixtures only')
     p.add_argument('--batch', type=int, default=512)
     p.add_argument('--steps', type=int, default=100)
     p.add_argument('--graph-input', required=True, help='existing graph-generation input record; its model is not used')
@@ -72,6 +74,11 @@ def main():
     cfg_path = source / 'Connectome/cpp/test/cfg.json'
     model = json.loads(cfg_path.read_text())
     changes = []
+    if args.vocab is not None:
+        if not args.accounting or not 2 <= args.vocab <= 50304:
+            p.error('vocab override requires accounting and range [2,50304]')
+        changes.append(dict(file='test/cfg.json', path='/vocab_size', before=model['vocab_size'], after=args.vocab))
+        model['vocab_size'] = args.vocab
     for name in ('input_', 'output_', 'iobridge_', 'oibridge_'):
         for key in ('emitD', 'receiveD'):
             changes.append(dict(file='test/cfg.json', path=f'/{name}/{key}', before=model[name][key], after=width))
@@ -96,7 +103,11 @@ def main():
         if before != after:
             changes.append(dict(file='test/test-cortexnet.cpp', before=before, after=after))
     test_path.write_text(test)
-    parameter_files = {str(f.relative_to(source)): digest(f) for f in (cfg_path, test_path)}
+    modified, added = [], []
+    if args.accounting:
+        from lh_work_instrument import instrument
+        modified, added = instrument(source, root)
+    parameter_files = {str(f.relative_to(source)): digest(f) for f in (cfg_path, test_path, *modified)}
     cmake = root / 'cpp/lh_original/CMakeLists.txt'
     shutil.copyfile(cmake, source / 'Connectome/cpp/CMakeLists.txt')
     shutil.copytree(graph, source / 'graph-data', dirs_exist_ok=True)
@@ -120,7 +131,8 @@ def main():
         build / 'test-cortexnet-nograd', build / 'libConnectome.so']}
     write_json(out / 'build-manifest.json', dict(schema='lh-original-test-build-v1', source=str(source),
         source_revision=revision, source_files_sha256=before, parameter_files_sha256=parameter_files,
-        parameter_changes=changes, cmake_sha256=digest(cmake),
+        parameter_changes=changes, cmake_sha256=digest(cmake), accounting=args.accounting,
+        added_files_sha256={str(f.relative_to(source)): digest(f) for f in added},
         tide_source=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
         build_dir=str(build), artifacts_sha256=artifacts,
         vendor_sha256={str(f.relative_to(vendor)): digest(f) for f in vendor.rglob('*') if f.is_file()},
@@ -132,7 +144,7 @@ def main():
         graph_input_path=str(inputs), graph_input_sha256=digest(inputs),
         graph_files_sha256=graph_record['graph_files_sha256'], graph_config=graph_record['graph_config'],
         graph_seed=graph_record['seed'], static_nodes=graph_record['static_nodes'],
-        changes='CMake CPU build plus listed width/batch/step/selector parameters; original C++ algorithms unchanged',
+        changes='CMake and listed parameters; '+('optional operator counters, seed7/default and fixed token IDs' if args.accounting else 'original C++ algorithms unchanged'),
         timing='original ENABLE_RAIITIMER; inner timer printing included; integer milliseconds',
         mode='Release, DISABLE_CUDA, ENABLE_PARALLEL_FOR; separate NOGRAD test target'))
     print(json.dumps(dict(state='built', manifest=str(out / 'build-manifest.json'))))

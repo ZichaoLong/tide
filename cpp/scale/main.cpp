@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "scale.h"
 #include "../bench/metrics_jsonl_writer.h"
 #include "tide/dense.h"
@@ -55,6 +56,7 @@ int main(int argc, char** argv) {
     // Persistent cache/history spans all steps, including the warmup prefix.
     at::Tensor previous_logits;
     for (Index token = 0; token < c.steps; ++token) {
+      tide::work::reset(c.work_count);
       const auto begin = Clock::now();
       previous_logits = at::Tensor();
       auto ids = at::remainder(at::arange(c.batch, at::TensorOptions().dtype(at::kLong))*3+token*7, c.vocab);
@@ -68,6 +70,7 @@ int main(int argc, char** argv) {
       // Missing readout is an explicit zero row, as in sparse token readout.
       std::vector<at::Tensor> hidden(c.batch, at::zeros({c.width}, embeddings.options()));
       for (const auto& output : result.outputs) hidden.at(output.batch) = output.value;
+      tide::work::linear(tide::work::HeadCalls, c.batch, c.width, c.vocab);
       previous_logits = head.run(at::stack(hidden), f.head);
       const auto end = Clock::now();
       const auto elapsed = std::chrono::duration<double>(end-begin).count();
@@ -79,6 +82,11 @@ int main(int argc, char** argv) {
         {"check/logits_sum", previous_logits.detach().to(at::kDouble).sum().item<double>()},
         {"check/logits_requires_grad", previous_logits.requires_grad() ? 1. : 0.},
         {"work/readout_rows", double(result.outputs.size())}};
+      if (c.work_count) {
+        tide::work::add(tide::work::BodyCandidates, result.stats["candidate_events"]-result.outputs.size());
+        tide::work::add(tide::work::BodySelected, result.stats["selected_events"]-result.outputs.size());
+        auto work = tide::work::metrics(); metrics.insert(work.begin(), work.end());
+      }
       if (c.profile) {
         metrics["profile/input_seconds"] = std::chrono::duration<double>(advance_begin-begin).count();
         metrics["profile/head_seconds"] = std::chrono::duration<double>(end-advance_end).count();

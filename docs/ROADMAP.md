@@ -165,7 +165,9 @@ is complete. Default-off [streaming optimizations](streaming-optimizations.md)
 are [verified](evidence/pdg-streaming-optimization.md):6459 CPU regression tests
 and a same-binary wide pair,34.30392→29.65650ms/sample-token (13.55% lower latency).
 Head/region/cleanup improved; update/Full now consume89.20% of token time.
-Next, profile and improve their operator/data-layout/allocation costs while
+Now implementing optional LH/PDG operator-work accounting: QKV/output/Emit/head,
+valid/padded attention, and send/receive window boundaries, followed by a fresh
+short-window wide comparison. Then profile and improve operator/data-layout/allocation costs while
 preserving complete small semantics and fixed large work counters. Component
 ablations, longer contexts, narrow scale and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun

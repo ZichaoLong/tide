@@ -54,6 +54,9 @@ def main():
     p.add_argument('--prepared', required=True)
     p.add_argument('--output-dir', required=True)
     p.add_argument('--mode', required=True, choices=['nograd', 'grad-forward'])
+    p.add_argument('--work-count', type=int, choices=[0, 1], default=0)
+    p.add_argument('--seed', type=int, default=7, help='instrumented fixture only')
+    p.add_argument('--audit-logits', action='store_true', help='instrumented small fixture only')
     p.add_argument('--threads', type=int, default=160)
     p.add_argument('--blas-threads', type=int, default=1)
     p.add_argument('--memory-gib', type=int, default=768)
@@ -68,9 +71,16 @@ def main():
     prepared, out = Path(args.prepared).resolve(), Path(args.output_dir).resolve()
     build = json.loads((prepared / 'build-manifest.json').read_text())
     source = Path(build['source'])
+    if (args.work_count or args.audit_logits) and not build.get('accounting'):
+        p.error('accounting-enabled prepared copy required')
+    if args.seed < 0 or args.seed >= 2**63 or (args.work_count and args.mode != 'nograd'):
+        p.error('invalid seed or work counts outside inference')
     def verify():
         if audit_source(source, build['source_revision'], build['parameter_files_sha256']) != build['source_files_sha256']:
             raise ValueError('original source changed')
+        for name, expected in build.get('added_files_sha256', {}).items():
+            if digest(source / name) != expected:
+                raise ValueError('added accounting file changed: ' + name)
         for name, expected in build['artifacts_sha256'].items():
             if digest(prepared / name) != expected:
                 raise ValueError('binary changed: ' + name)
@@ -101,7 +111,7 @@ def main():
             primary_metric='perf/ms_per_sample_token', stop_condition=f'{args.timeout_seconds}s; {steps} original steps',
             includes='original Think timer, state preparation and inner timer printing; no backward or optimizer',
             timestamp_semantics='events projected after subprocess exit; elapsed_seconds is projection time',
-            seed_policy='unchanged original test; no added manual seed'),
+            seed_policy=('manual seed; fixed (3*sample+7*token)%vocab IDs' if build.get('accounting') else 'unchanged original test; no added manual seed')),
         tracking=track.record, artifacts=dict(metrics='metrics.jsonl', stdout='stdout.log',
             summary='summary.json', resources='resource.json'))
     atomic_json(out / 'run.json', record)
@@ -118,6 +128,12 @@ def main():
         atomic_json(out / 'run.json', record)
         env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0', OMP_NUM_THREADS=str(args.threads),
             OPENBLAS_NUM_THREADS=str(args.blas_threads), MKL_NUM_THREADS=str(args.threads))
+        if build.get('accounting'):
+            env.update(TIDE_LH_WORK=str(args.work_count), TIDE_LH_SEED=str(args.seed))
+            if args.audit_logits:
+                env['TIDE_LH_AUDIT'] = '1'
+            else:
+                env.pop('TIDE_LH_AUDIT', None)
         with (out / 'stdout.log').open('w') as log:
             child = subprocess.Popen(command, cwd=build['build_dir'], env=env, stdout=log,
                 stderr=subprocess.STDOUT, start_new_session=True, preexec_fn=limits)
@@ -150,11 +166,17 @@ def main():
         elapsed = time.monotonic() - started
         try:
             observations, parameters = parse_log((out / 'stdout.log').read_text())
+            work = []
+            if build.get('accounting'):
+                from lh_work_instrument import parse_work
+                work = parse_work((out / 'stdout.log').read_text(), len(observations))
             with (out / 'metrics.jsonl').open('w') as metrics:
                 for step, ms in enumerate(observations):
                     event = dict(schema_version=1, run_id=run_id, sequence=step, timestamp=utc_now(), step=step,
                         elapsed_seconds=elapsed, metrics={'perf/think_ms_per_batch': ms,
                         'perf/ms_per_sample_token': ms / batch}, context={'phase': 'forward', 'token_step': step})
+                    if work:
+                        event['metrics'].update(work[step]['metrics'])
                     metrics.write(json.dumps(event, allow_nan=False) + '\n')
                     events.append(event)
             track.project_events(events)

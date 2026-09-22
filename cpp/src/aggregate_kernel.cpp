@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/aggregate.h"
 #include <algorithm>
 #include <stdexcept>
@@ -35,6 +36,10 @@ class SourceAggregate final : public AggregateKernel {
     return at::stack(values);
   }
   AggregateResult combine(const NodeWeights& w, const AggregateInput& request, const std::vector<Tensor>& values) const {
+    if (work::enabled()) {
+      work::add(work::AggregateScaleElements, values.size()*values.at(0).numel());
+      work::add(work::AggregateAddElements, (values.size()-1)*values.at(0).numel());
+    }
     auto coe = coefficients(w, request);
     AggregateResult result;
     for (size_t i = 0; i < values.size(); ++i) {

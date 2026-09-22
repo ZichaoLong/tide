@@ -44,7 +44,7 @@ def main():
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
                          ('threads', 1), ('head-workers', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
+    for key, default in [('work-count', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--tracking', choices=['best-effort', 'off', 'required'], default='best-effort')
@@ -68,7 +68,7 @@ def main():
         p.error('source/build mismatch; rebuild the immutable source')
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
               'threads', 'head_workers', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile',
-              'parallel_regions', 'compact_events')}
+              'parallel_regions', 'compact_events', 'work_count')}
     out.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(topology, out/'topology.txt')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()

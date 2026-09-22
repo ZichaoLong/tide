@@ -15,7 +15,7 @@ struct Config {
   Index width = 64, batch = 4, steps = 12, warmup = 4, workers = 1, threads = 1, vocab = 50304;
   Index head_workers = 1;
   bool packed = true, grad = false, check = false, profile = false;
-  bool parallel_regions = false, compact_events = false;
+  bool parallel_regions = false, compact_events = false, work_count = false;
   std::string topology, run_id, emission = "row";
 };
 struct Topology {

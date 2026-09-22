@@ -1,4 +1,5 @@
 #include "scale.h"
+#include "tide/operator_work.h"
 #include "../bench/streaming.h"
 #include <stdexcept>
 
@@ -30,10 +31,13 @@ tide::Result traced(const Config& c, const Topology& topology, Index workers, bo
 }
 void check(const Config& c, const Topology& t) {
   at::NoGradGuard guard;
+  tide::work::reset(false);
   auto expected = traced(c, t, 1, false, "slot");
   for (const auto& variant : {std::make_pair(Index{1}, false), std::make_pair(Index{1}, true), std::make_pair(Index{3}, true)}) {
+    tide::work::reset(c.work_count);
     auto actual = traced(c, t, variant.first, variant.second, "row", c.profile, true);
     tide_bench::compare(actual, expected, true);
+    tide::work::reset(false);
   }
 }
 } // namespace pdg_scale

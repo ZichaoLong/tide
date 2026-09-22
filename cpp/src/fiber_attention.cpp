@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/fiber_attention.h"
 #include "tide/clocked_kernel.h"
 #include "tide/counters.h"
@@ -39,16 +40,19 @@ class FiberAttention final : public StateKernel {
     std::vector<Tensor> rows;
     for (auto s : sources) rows.push_back(s->atom.value*s->scale);
     auto x = at::stack(rows); const auto width = w.bias.numel(), d = width/heads_;
+    work::linear(work::QkvCalls, x.size(0), width, 3*width);
     auto qkv = at::linear(x, w.extra.at("fiber_qkv").t(), w.extra.at("fiber_qkv_bias")).split(width, -1);
     auto q = qkv[0].reshape({x.size(0), heads_, d}).transpose(0, 1)*(1/std::sqrt(double(d)));
     auto k = at::cat({old.slots.at("key"), qkv[1].reshape({x.size(0), heads_, d})});
     auto v = at::cat({old.slots.at("value"), qkv[2].reshape({x.size(0), heads_, d})});
     auto bias = advance_bias(old.slots.at("log_bias"), w.extra.at("fiber_decay"), old.last_time, time);
     bias = at::cat({bias, at::zeros({x.size(0)}, x.options())});
+    work::attention(width, heads_, x.size(0)*k.size(0), x.size(0)*k.size(0));
     auto scores = at::matmul(k.transpose(0, 1), q.transpose(1, 2)).transpose(1, 2)+bias;
     auto output = at::matmul(at::softmax(scores, -1), v.transpose(0, 1));
     std::vector<Index> slots; for (auto source : sources) slots.push_back(source->slot);
     auto pooled = fiber_pool_rows(w, pool_, slots, output.transpose(0, 1).contiguous().reshape({x.size(0), width}));
+    work::linear(work::OutCalls, 1, width, width);
     auto value = at::linear(pooled, w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
     return {value, time, observations, {{"key", k}, {"value", v}, {"log_bias", bias}}};
   }

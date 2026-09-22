@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 // Event/source offsets preserve all current-fiber keys without cross-sample scores.
 #include "fiber_packing.h"
 #include "fiber_pool.h"
@@ -40,6 +41,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
   const auto source = flatten(batch.views); const auto& offsets = source.offsets;
   const auto width = w.bias.numel(), d = width/heads;
+  work::linear(work::QkvCalls, source.values.size(0), width, 3*width);
   auto qkv = at::linear(source.values, w.extra.at("fiber_qkv").t(), w.extra.at("fiber_qkv_bias")).split(width, -1);
   auto q = qkv[0].reshape({-1, heads, d})*(1/std::sqrt(double(d)));
   auto k = qkv[1].reshape({-1, heads, d}), v = qkv[2].reshape({-1, heads, d});
@@ -50,6 +52,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
   for (const auto& [shape, ids] : groups) {
     const auto cache = shape.first, queries = shape.second, rows = static_cast<Index>(ids.size());
     std::vector<Tensor> qs, ks, vs, bs, ms;
+    Index valid_pairs = 0;
     auto key_index = at::arange(cache+queries, source.values.options().dtype(at::kLong));
     for (auto i : ids) {
       const auto a = batch.offsets[i], b = batch.offsets[i+1], begin = offsets[a], end = offsets[b];
@@ -62,6 +65,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
         const auto time = batch.times[j], count = offsets[j+1]-offsets[j];
         bias = at::cat({repeat_bias(bias, w.extra.at("fiber_decay"), last, time), at::zeros({count}, source.values.options())});
         const auto full = cache+queries;
+        if (work::enabled()) valid_pairs += count*bias.numel();
         auto padded = at::cat({bias, at::zeros({full-bias.numel()}, source.values.options())});
         bias_rows.push_back(padded.unsqueeze(0).expand({count, full}));
         masks.push_back((key_index < bias.numel()).unsqueeze(0).expand({count, full})); last = time;
@@ -71,6 +75,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
       result.max_length = std::max(result.max_length, b-a);
     }
     auto keys = at::stack(ks), values = at::stack(vs);
+    work::attention(width, heads, valid_pairs, rows*queries*(cache+queries));
     auto scores = at::matmul(at::stack(qs).transpose(1, 2), keys.permute({0, 2, 3, 1}));
     scores = scores+at::stack(bs).unsqueeze(1);
     auto probabilities = at::softmax(scores.masked_fill(~at::stack(ms).unsqueeze(1), -std::numeric_limits<double>::infinity()), -1);
@@ -88,6 +93,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
     }
     ++result.calls; result.max_batch = std::max(result.max_batch, rows); result.score_elements += scores.numel();
   }
+  work::linear(work::OutCalls, pooled.size(), width, width);
   auto y = at::linear(at::stack(pooled), w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
   for (size_t j = 0; j < result.states.size(); ++j) result.states[j].value = y[j].clone();
   return result;
