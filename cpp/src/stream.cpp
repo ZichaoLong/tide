@@ -51,6 +51,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     auto arrived = std::move(queue.begin()->second);
     queue.erase(queue.begin());
     ++stats["logical_times"];
+    stats["source_rows"] += arrived.size();
     std::map<Owner, std::vector<Atom>> fibers;
     for (const auto& a : arrived) fibers[{a.batch, a.node}].push_back(a);
     std::vector<Event> events;
@@ -71,6 +72,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     stats["candidate_events"] += events.size();
     std::vector<std::function<void()>> jobs;
     for (const auto& [node, ids] : by_node) {
+      stats["max_node_batch"] = std::max<Index>(stats["max_node_batch"], ids.size());
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       stats["read_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_read_replays"] += ids.size();
@@ -136,6 +138,8 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     for (const auto& [node, all] : by_node) {
       std::vector<size_t> ids;
       for (auto i : all) if (events[i].active) ids.push_back(i);
+      stats["selected_events"] += ids.size();
+      stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
       stats["next_steps"] += all.size();
       if (!ids.empty()) stats["full_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();

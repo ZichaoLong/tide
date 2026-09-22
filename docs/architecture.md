@@ -16,6 +16,7 @@
 | `docs/evidence/` | Small immutable-source qualification reports |
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
+| `docs/pdg-scale-benchmark.md` | Graph-only LH-scale Attention workload, fresh parameters, native cursor and row Emit timing |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
 | `docs/evidence/lh-local-scale-pilot.md` | Original-LH local 9B Add measurements, aligned grad/thread comparisons and explicit unmeasured scope |

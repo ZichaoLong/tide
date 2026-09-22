@@ -35,6 +35,9 @@ target_link_libraries(tidegraph-checkpoint-check PRIVATE tidegraph)
 add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
   cpp/bench/workload.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph)
+add_executable(tidegraph-scale-bench cpp/scale/main.cpp cpp/scale/config.cpp
+  cpp/scale/model.cpp cpp/scale/emit.cpp cpp/scale/check.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp)
+target_link_libraries(tidegraph-scale-bench PRIVATE tidegraph)
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)

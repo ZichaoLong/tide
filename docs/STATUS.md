@@ -11,10 +11,9 @@ The latest user explicitly authorized local performance experiments and clarifie
 that historical 8.8B/8.5B sizes/times are references, not strict targets. New
 standalone original-LH preparation/build/timing tools and bounded local
 experiments are complete: five small harness checks and eight large cases
-passed. See [local scale evidence](evidence/lh-local-scale-pilot.md). The large
-Tide importer and paired timer remain unimplemented; large matched numerical
-checks and a Tide/LH speed ratio remain unmeasured. The active follow-up now
-reproduces the user-identified a10fdb1 Attention configuration family.
+passed. See [local scale evidence](evidence/lh-local-scale-pilot.md). Large matched numerical checks remain unmeasured. The user now prioritizes
+graph-only comparable-scale PDG Attention timing with random weights, without
+waiting for a weight-preserving importer.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -54,105 +53,55 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The user clarified the original baseline: a10fdb1 plus a few configuration
-parameters yields the intended Attention workloads. The current default width512
-is not a new target. Use exact a10fdb1 numerical sources, not the dirty LH
-workspace's modified BatchHidden.cpp; the old Add pilot remains separate.
-The user authorizes up to half this host's320 physical cores (160) and ample
-memory, suggesting roughly half the2-TiB host (not the old256-GiB limit).
-The1280-GiB address-space cap is distinct from measured physical RSS.
-See [original test contract](lh-original-test.md).
+The latest user explicitly requests comparable-scale PDG performance without LH
+weight import. Reuse the existing four-block LH graph, freshly initialize
+Attention/all-softmax + SiLU/RMSNorm + linear Emit, and match width/batch,
+parameter count and region budgets. Record actual candidates/selected rows,
+source rows/edges and packing, because random routes can change work. Implement
+a standalone native cursor benchmark, validate small serial/parallel/packed and
+row-versus-slot Emit, then ramp to width2048/batch512 under at most160 cores and
+roughly half host memory. Weight-preserving import is a separate future task,
+not a blocker for this lane. Do not claim numerical LH parity for these runs.
 
-Current increment: implement/build the original-test reproduction path, preserving
-original kernels and the100-step loop, with explicit width/selector overrides.
-Five timer/resource-record tests passed. The first build at87f3687 passed,
-but its smoke launcher failed because /usr/bin/time is absent. No native test
-ran in that failed launch; the complete failure record remains retained.
-The resource wrapper now uses Linux wait4 and reuses the completed smoke build.
-Next durable pipeline unit:
-`tide-lh-a10-attention-20260922-0830` in background.slice, pinned CPUs160–319.
-Records: `artifacts/lh-a10-attention-20260922-0830/`; frozen checkout under
-`/var/tmp/zlong-graph-execution-foundation/qualification/lh-a10-20260922-0830`.
-The repaired pipeline is active/running in background.slice, transient=yes,
-MainPID2796242, frozen Tide source6ade84d. Both width64/batch4/steps4 original
-Attention modes passed (23,133,347 parameters); both run records validate.
-The wide build and all100 wide-nograd steps passed:26.6342ms/sample-token
-over all100 steps,27.1745 over steps4–99, peak child RSS193.506GiB.
-The native model confirms17,269,426,339 parameters. Wide-grad-forward failed
-at its1800-second limit after79 completed tokens. Its SIGTERM and SIGKILL
-cleanup waits each exceeded10 seconds, raising before final record publication;
-run.json is stale/running and summary/resource/metrics files are absent. The
-pipeline correctly records failed/exit1. No native wide process remained when
-checked afterward. Retain the log and traceback; do not invent peak RSS or a
-full100-step mean. The narrow build passed; narrow-nograd is now running.
-The retained analyze.py rechecks original/configured sources, binaries, graph
-and vendor hashes and validates all three completed run records; outputs are
-comparison.json and record-validation.json. The wide build preflight estimated
-58.125GiB initial KV tensors, distinct from measured peak RSS. The completed
-wide result and limits are in [Attention evidence](evidence/lh-a10-attention.md).
-The old0820 unit is failed/exit1 and must not be relabeled. Its source, smoke
-build, logs and failure record remain in artifacts/lh-a10-attention-20260922-0820/.
-The pipeline first builds width64/batch4/steps4 and checks both original
-nograd/grad-forward modes. Then build wide2048 and narrow128 against their
-retained original graph-generator outputs, run nograd then grad-forward at
-batch512/100steps, OpenMP160/BLAS1. Each large run has an explicit1800-second,
-1280-GiB address-space bound; failures remain recorded. Do not call a planned,
-queued or live job passed. Inspect status.json, task.log and
-pilot/pipeline.json before claiming a result. Exact launcher arguments are in
-status.json and the source revision is recorded there. Inspect with:
+The native benchmark, graph-only exporter, row Emit and recorded wrapper are
+implemented. Development gate artifacts/pdg-scale-dev-20260922-1120 passed:
+57 tests in24.91s, FP32/FP64 including full trace/state/route parity and existing
+streaming/cursor checks. Unit tide-pdg-scale-dev-20260922-1120 passed/exit0.
+The fixed pilot driver adds a timeout-finalization check, small clean matrix,
+width256/batch32 and width2048/batch64 ramps before wide2048/batch512 parallel
+(12steps) and serial(4steps), then narrow128/batch512 parallel(8steps).
+Wide/narrow inputs are artifacts/pdg-scale-input-20260922/{wide,narrow}.txt
+and adjacent JSON provenance; no LH weights were read.
 
-```sh
-systemctl --user show tide-lh-a10-attention-20260922-0830 -p ActiveState -p SubState -p Result -p MainPID
-tail -n 30 artifacts/lh-a10-attention-20260922-0830/task.log
-```
+Next launch: freeze this implementation commit at
+/var/tmp/zlong-graph-execution-foundation/qualification/pdg-scale-20260922-1020,
+copy the validated build executables/manifest to that checkout's build/,
+then launch scripts/pilot_pdg_scale.py through scripts/job.py in unit
+`tide-pdg-scale-20260922-1020`, CPUs160-319, background.slice, Nice10,
+RuntimeMaxSec7200, BLAS1 and at most160 node workers. Job output:
+artifacts/pdg-scale-20260922-1020/ (pilot cases under comparison/).
+No large PDG result is available yet. The source and build must remain fixed.
+Inspect status.json, comparison/pilot.json, per-case summaries and unit state;
+stop with systemctl --user stop tide-pdg-scale-20260922-1020 if needed.
+Do not claim submission or partial/failed cases as passed.
 
-Stop if needed with `systemctl --user stop tide-lh-a10-attention-20260922-0830`.
-Outer service12000s; per-build stage1200s, per-large-run1800s. The source
-checkout is read-only while the job runs. This checkpoint changes docs only.
-After each case ends, refresh and validate the completed records, then the plot:
+The original Attention pipeline has terminated failed/exit1 (unit
+`tide-lh-a10-attention-20260922-0830`, MainPID0, inactive computation).
+Records: artifacts/lh-a10-attention-20260922-0830/; source6ade84d.
+Wide nograd completed100 steps:17,269,426,339 parameters,
+26.6342ms/sample-token, peak193.506GiB. Wide grad-forward timed out after79
+steps and has missing terminal native resource fields; retained postmortem
+preserves them as null. Narrow nograd timed out before any completed token,
+with16,608,289,021 parameters and native exit-15; its summary records
+606,587,662,336 peak RSS bytes and1814.4654 process seconds. Narrow grad was
+skipped. These failures are retained; no large original-LH rerun is needed now.
+The previously documented cleanup/finalization defect remains in ROADMAP.
 
-```sh
-/home/zlong/anaconda3/bin/python artifacts/lh-a10-attention-20260922-0830/analyze.py
-/home/zlong/anaconda3/bin/python artifacts/lh-a10-attention-20260922-0830/plot.py
-```
-
-When the pipeline terminates, inspect both outer and per-case exit codes, repeat
-the frozen-source audit, and update evidence/lh-a10-attention.md and this handoff.
-Retain failed/partial cases and leave missing RSS as null, never zero. Report
-full100-step means only for complete cases. Only wide-nograd is complete;
-wide-grad-forward has a retained partial failure, and narrow modes are pending. The narrow grad mode will be
-skipped if its nograd case fails. The1280-GiB virtual-address bound and expected
-904.008-GiB initial narrow KV allocation are distinct from measured peak RSS.
-No new large run or repeat of passed build/smoke stages is needed now.
-
-The portable17.27B reproduction kit requested by the user is complete:
-[commands](../tools/lh_repro/README.md), [qualification](evidence/lh-portable-repro.md).
-Archive: artifacts/lh-repro-export-20260922-0930/lh-a10-wide-repro-kit.tar.gz;
-SHA2562fbf82e55a675fe372c1dbdcd9a7294a26787e7c4a0dd0e5f1c889a4ce7e7182.
-Frozen source eda5357 under qualification/lh-repro-20260922-0930. Clean archive
-and default-wide configuration identities match. Six report checks and all26
-qualification stages pass, including four native small modes and loader checks.
-The service tide-lh-repro-check-20260922-0930 is terminal: passed/exit0,
-inactive/dead, MainPID0, Result=success. Records: artifacts/lh-repro-check-20260922-0930/;
-source launcher: artifacts/lh-repro-helper-20260922-0930/qualify.py. No large
-repeat ran for this kit. Intel execution remains the user's target-host step.
-The kit uses only LH source, local LibTorch, standard-library Python and bundled
-graph/JSON headers; it preserves the original entry and adds an optional
-separate diagnostic entry. Keep the delivered archive and qualification records.
-
-The next action is to inspect the still-active original Attention pipeline and
-record its terminal narrow results. The wide-grad-forward postmortem lives
-beside its original run/log and preserves missing RSS and native exit as null.
-The cleanup/finalization defect is now explicit in ROADMAP; do not edit the
-active frozen runner. Failed/partial cases must stay distinct from complete ones.
-
-After original Attention results are recorded, the next M8 increment remains a
-reusable weight-preserving four-block LH-to-Tide importer and paired timer.
-First prove small independent state/route/output parity and owner/edge accounting,
-then perform a bounded matched scale ramp. The current width4/batch4 oracle
-rewrites weights and clones imports; changing constants is insufficient.
-The independent M6 interface obligation remains the standalone C++ SettleGraph
-construction/encoding frontend. Full objectives and backlog belong to ROADMAP.
+The portable LH17.27B source kit is complete and qualified:
+[commands](../tools/lh_repro/README.md), [evidence](evidence/lh-portable-repro.md).
+Archive: artifacts/lh-repro-export-20260922-0930/lh-a10-wide-repro-kit.tar.gz.
+Unit tide-lh-repro-check-20260922-0930 passed/exit0. Preserve the archive and
+artifacts/lh-repro-check-20260922-0930/. Target Intel execution is the user's step.
 
 ## Latest terminal jobs and retained source
 

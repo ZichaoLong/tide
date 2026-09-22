@@ -87,9 +87,10 @@ M8 includes local experiments around two [large LH/Tide references](lh-scale-ben
 8.8B/width2048/batch512/nominal 1/32 and 8.5B/width128/batch512/nominal 1/64,
 on a common declared CPU budget (initial Add pilot56, Attention follow-up160).
 These sizes/times are references, not strict acceptance targets; the user authorized local exploratory runs. Recover static nodes/hubs, four-block topology,
-actual parameter owners and selector semantics before importing. Generalize the
-small oracle's fixed fixture into a reusable weight-preserving importer and
-separate timed harness; retain exact-inference and comparable-scale lanes.
+actual parameter owners and selector semantics before importing. The user now prioritizes comparable-scale performance: reuse graph connectivity,
+initialize fresh parameters and match Attention/Full/Emit, width, batch and
+selector settings. A weight-preserving importer is not a prerequisite for this
+lane; keep exact-inference imports as a separate future obligation.
 Historical times are user-reported amortized ms/sample-token; grad-stage and
 historical dtype remain uncertain. Qualify nograd-forward and grad-forward
 separately from backward/optimizer work. Use explicit FP32 for initial
@@ -106,7 +107,7 @@ qualification. The reusable Tide importer and paired timer remain outstanding.
 The user subsequently identified a10fdb1 plus a few parameter changes as the
 Attention baseline. First complete the [original-test reproduction](lh-original-test.md)
 on the expanded160-core budget; preserve original kernels and separate it from
-the earlier Add/snapshot measurements. Then resume the matched Tide importer.
+the earlier Add/snapshot measurements. Then prioritize the graph-only comparable-scale Tide benchmark.
 The source-only [portable original-LH kit](evidence/lh-portable-repro.md) is
 qualified locally for clean setup, relocation, CPU build and four small
 original/diagnostic modes; Intel execution remains target-host work.
@@ -153,11 +154,12 @@ Python frontend. The native checkpoint format remains independent of Python
 files and graph continuation.
 
 The M8 large-LH workstream has completed original-LH graph/parameter preflight,
-native count confirmation and bounded local measurement. Next generalize the
-small oracle into a reusable weight-preserving Tide importer and paired timer
-following `lh-scale-benchmark.md`, with small independent parity before scale.
-The existing fixed oracle cannot be scaled by changing its constants. Do not
-repeat completed LH pilots unless a new comparison or concern requires it.
+native count confirmation and bounded local measurement. Per the user's latest
+instruction, prioritize the [graph-only PDG scale benchmark](pdg-scale-benchmark.md):
+fresh random weights, similar topology/modules/parameters, actual work counters
+and bounded native timing. Small row-versus-slot and schedule checks precede the
+scale ramp. Weight-preserving imports remain a separate exact-inference goal.
+Do not repeat completed LH pilots unless a new comparison requires it.
 Expand the other M8 fixed workloads beyond the EMA pilot: Attention/SSM streaming,
 frontier/SettleGraph prefill and measured backward/replay costs. Declare batch,
 sequence length, width, active/dormant topology, sharing/reset policy and exact
