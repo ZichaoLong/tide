@@ -165,9 +165,14 @@ is complete. Default-off [streaming optimizations](streaming-optimizations.md)
 are [verified](evidence/pdg-streaming-optimization.md):6459 CPU regression tests
 and a same-binary wide pair,34.30392→29.65650ms/sample-token (13.55% lower latency).
 Head/region/cleanup improved; update/Full now consume89.20% of token time.
-Now implementing optional LH/PDG operator-work accounting: QKV/output/Emit/head,
-valid/padded attention, and send/receive window boundaries, followed by a fresh
-short-window wide comparison. Then profile and improve operator/data-layout/allocation costs while
+Optional LH/PDG operator-work accounting is [verified](evidence/lh-pdg-operator-work.md):
+81 directed tests in both dtypes, original-LH small counting/parallel parity,
+and a fresh12-token wide pair. Major matrix arithmetic differs0.00846%; measured
+LH24.69385 versus PDG28.44610ms/sample-token (+15.2%). Boundary-adjusted Emit
+is within0.014%. PDG exact attention buckets make6.258× more attention calls,
+while saving a small fraction of total matrix arithmetic. Next investigate
+bucket/call count, tensor allocation and projection layout with controlled
+small parity anchors; no specific speedup is established yet. Profile and improve these costs while
 preserving complete small semantics and fixed large work counters. Component
 ablations, longer contexts, narrow scale and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun

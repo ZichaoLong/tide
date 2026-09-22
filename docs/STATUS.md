@@ -54,43 +54,55 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-Operator-work accounting is implemented; directed development passed81 tests
-in47.55s, both FP64/FP32, artifacts/work-dev-20260923-0254/ (unit exit0).
-The first build artifacts/work-dev-20260923-0252 failed on a test initializer
-brace; it is fixed and retained. No live job yet. Contract: operator-work.md.
-Next: commit implementation and freeze a clean worktree at
+The user-approved LH–PDG operator-work comparison is complete. No active job.
+Implementation source f0c31bef864af0ccdfa82afc1889c686890fbca6; authority tide-core-3.
+Optional inference counters, original-LH preparation instrumentation and small
+parity tooling are documented in [operator-work.md](operator-work.md).
+[Reviewed evidence](evidence/lh-pdg-operator-work.md) has commands, units and limits.
+
+Development81 tests/47.55s, frozen directed repeat81/48.62s, both FP64/FP32.
+Original LH small D16/B4/V257 six-token counted/uncounted complete logits match;
+serial/4-thread outputs and all counts pass. The previous full6459-test CPU
+regression remains scoped to da5a17b; this increment ran the directed gate.
+
+Fresh wide pair:17.27B/D2048/B512/V50304/FP32/no_grad, 12 tokens/warmup4,
+seed7/fixed IDs, same four CSR blocks and independent weights. Means for4–11:
+LH24.69385ms/sample-token; PDG28.44610ms (+15.1951%). Matrix FLOPs differ
+only0.00846%; all linear projections differ0.06748%. Body selections both32
+per sample-token. Boundary-adjusted Emit differs0.01325%. Attention padding:
+LH1.80835× vsPDG1.0×, but PDG attention calls6.258× as many. This establishes
+comparable matrix work, not exact whole-model function equality or pure dispatch
+cost. It does not establish an improvement over the earlier PDG timing.
+
+Unit tide-operator-work-20260923-0300 passed/exit0, inactive/dead, MainPID0;
+all6 stages and five portable run records passed. Records:
+artifacts/operator-work-20260923-0300/ (status.json, pipeline.json, per-stage logs,
+small/wide prepared LH copies, lh-small-parity/, lh-wide/, pdg-wide/, analyze.py,
+analysis.json, post-run-audit.json). Fixed driver:
+artifacts/operator-work-runner-20260923-0300.py. Immutable source:
 /var/tmp/zlong-graph-execution-foundation/qualification/operator-work-20260923-0300.
-Copy the source-hash-matching build outputs and original manifest (not a fresh
-clean compilation). Run fixed driver artifacts/operator-work-runner-20260923-0300.py
-through scripts/job.py, unit tide-operator-work-20260923-0300, output
-artifacts/operator-work-20260923-0300/. Driver first repeats directed tests,
-builds/checks a small LH fixture, then builds/runs wide LH and optimized PDG.
-CPUs160–319, background.slice, Nice10, RuntimeMaxSec4200; per-wide process
-address-space1280GiB/time1200s. Stop on any gate failure. Record exact commands
-in status.json, pipeline.json and per-case manifests. Main tree may change
-only after the immutable worktree is in use. No push or subagents.
-Current base: 5695c64 (completed canonical streaming optimization evidence).
-Do not change graph semantics or import LH weights for this task.
+PDG copied build matches its C++ hash; original development build metadata is
+retained (not a fresh clean compile). LH was freshly compiled. Source, binaries,
+inputs and flow identities passed audit. All12 PDG model/work/checksums match
+prior uncounted optimized output; full-state equality is a small-test claim.
+Trackio best-effort/degraded (unavailable); local records are complete.
+CPUs160–319, at most160 active workers per phase, 1280GiB address-space bound.
+Preserve failed work-dev-20260923-0252 (fixed test brace), and the two repaired
+analysis preflight failure records. No reference repo was modified; no push.
 
-1. Add optional inference-only counters for QKV/output/Emit/head matrix work,
-   valid versus executed attention score pairs, candidate/selected rows and
-   pending Emit boundary work. Instrument a new owned LH a10fdb1 copy only.
-2. Check analytic counts and counted/uncounted numerical parity on small ragged
-   cases, including serial/parallel and cache reset; retain directed test records.
-3. Commit implementation, freeze source, run a fresh bounded wide pair:
-   D2048/B512/FP32/no_grad, 12 tokens, window4–11, CPUs160–319, address-space
-   bound1280GiB. Record actual runtime thread pools, seeds and fixed token IDs.
-4. Analyze actual work and timing separately; count overhead and short-window
-   limitations remain explicit. Commit evidence separately and update this file.
+Next bounded M8 investigation: measure/update data layout, tensor allocation
+and attention bucket/call costs in Aggregate/State/Read and Next/Full/Emit.
+Current update7.05349s +Full5.96256s per batch-token dominate timing. Consider
+coarser attention packing only with independent complete-state/VJP anchors;
+more padding may reduce small operator calls. This is a hypothesis, not a
+measured optimization. Wide counter timing overhead, repetitions, longer context,
+narrow shape and training performance remain unmeasured. Do not repeat the
+completed comparison without a new hypothesis. Weight-preserving import is a
+separate exact-inference objective; broader goals stay in ROADMAP.
 
-Previous optimized PDG source da5a17b: full6459 CPU tests/716.61s;
-wide baseline34.30392→optimized29.65650ms/sample-token. Historical LH24.58203ms
-for the same4–11 indices uses different unseeded weights/tokens. Those timings
-are not a pure executor-overhead measurement. See evidence/pdg-streaming-optimization.md.
-Retain artifacts/pdg-opt-20260923-0100/ and its frozen source/binary, analysis,
-terminal audits; unit tide-pdg-opt-20260923-0100 passed/exit0. Earlier failed
-narrow/grad pilots remain failed, documented in evidence/pdg-scale-attention.md
-and evidence/lh-portable-repro.md. No push or subagents.
+Earlier optimized source da5a17b and its complete6459-test gate remain retained
+in artifacts/pdg-opt-20260923-0100/ and evidence/pdg-streaming-optimization.md.
+Older failed narrow/grad pilots remain failed in their evidence and records.
 
 ## Latest terminal jobs and retained source
 

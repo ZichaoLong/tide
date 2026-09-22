@@ -9,8 +9,11 @@ routes and cache lengths from the original LH unseeded random-token loop.
 
 ## Workload
 
-Two independent body state namespaces share the static graph structure; a
-separate readout node collects two body phases per token. Periodic local clocks
+Both body networks and both bridges are retained as independent owners.
+In the retained wide graph, inet and onet are transposes (984 edges each),
+with232 iobridge and8 oibridge edges. Its232 static nodes include224 leaves
+and8 hubs/leads per cortex. PDG therefore has464 body owners plus one readout
+node, which collects two body phases per token. Periodic local clocks
 and phase-specific positive-delay edges use the existing single-PDG encoding.
 Four-head fiber Attention, all-softmax source pooling, decay .01, SiLU/RMSNorm,
 clear-after-selection and LH count/affect regions match the chosen module family.
@@ -100,3 +103,15 @@ The scale executable additionally reports `input_seconds` (previous logits
 release, token/embedding/input preparation) and `head_seconds` (readout rows,
 stack and vocabulary Linear). Input + advance + head partitions token time;
 readout Attention itself belongs to the graph's update interval.
+
+## Optional operator-work accounting
+
+`--work-count 1` records QKV/output/Emit/head matrix work and valid versus
+executed attention score elements for inference row Emit. The
+[accounting contract](operator-work.md) defines units, covered kernels, small
+validation and LH's delayed-projection versus PDG's send-time boundary.
+The instrumented LH harness uses fixed token IDs and an explicit seed, while
+retaining independent weights. Historical unseeded runs keep their old policy.
+
+The [fresh operator-work comparison](evidence/lh-pdg-operator-work.md) measures
+both networks and bridges, padding, call counts and the projection boundary.

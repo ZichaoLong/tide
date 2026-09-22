@@ -50,3 +50,5 @@ and clear cases (via `tests/test_cli.py`), and `scripts/check_lh_work.py` on a
 small prepared LH fixture. Scale `--check 1 --work-count 1` compares complete
 trace/cache/pending/output continuations against an uncounted scalar schedule.
 Large counts and timings are evidence for the measured window only.
+
+Measured wide comparison and exact validation scope: [evidence](evidence/lh-pdg-operator-work.md).

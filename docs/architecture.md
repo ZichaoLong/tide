@@ -17,6 +17,7 @@
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/pdg-scale-benchmark.md` | Graph-only LH-scale Attention workload, fresh parameters, native cursor and row Emit timing |
+| `docs/operator-work.md` | Optional LH/PDG inference matrix work, attention padding and Emit boundary accounting |
 | `docs/streaming-optimizations.md` | Independent region scheduling, compact event ownership, bounded dense projection and validation |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
