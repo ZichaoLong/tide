@@ -72,7 +72,11 @@ Next durable pipeline unit:
 `tide-lh-a10-attention-20260922-0830` in background.slice, pinned CPUs160–319.
 Records: `artifacts/lh-a10-attention-20260922-0830/`; frozen checkout under
 `/var/tmp/zlong-graph-execution-foundation/qualification/lh-a10-20260922-0830`.
-The repaired pipeline is not yet submitted; update after launch.
+The repaired pipeline is active/running in background.slice, transient=yes,
+MainPID2796242, frozen Tide source6ade84d. Both width64/batch4/steps4 original
+Attention modes passed (23,133,347 parameters); both run records validate.
+The wide build passed and wide-nograd is running; no large case has completed
+yet. The build estimates17,269,426,339 parameters and58.125GiB initial KV tensors.
 The old0820 unit is failed/exit1 and must not be relabeled. Its source, smoke
 build, logs and failure record remain in artifacts/lh-a10-attention-20260922-0820/.
 The pipeline first builds width64/batch4/steps4 and checks both original
