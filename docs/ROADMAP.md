@@ -101,8 +101,8 @@ Atomic exclusive value-checkpoint publication is
 [qualified](evidence/checkpoint-io.md) with Linux CPU fault injection, no-overwrite
 races, retry and resumed native training. Composite application checkpoints are [qualified](evidence/token-checkpoint-coordinates.md);
 standalone C++ optimizer ownership and update parity are [qualified](evidence/cpp-optimizer-ownership.md);
-native value serialization/resume is implemented as the independent `TIDENCK1`
-schema and awaits the clean qualification report for this increment.
+native value serialization/resume is [qualified](evidence/cpp-native-checkpoint.md)
+as the independent `TIDENCK1` schema.
 
 Integer-coordinate validation at graph/execution/native-adapter and checkpoint
 boundaries is [qualified](evidence/token-checkpoint-coordinates.md). Malformed

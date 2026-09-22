@@ -3,10 +3,10 @@
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
 The standalone C++ named-owner/optimizer implementation is committed at
 5c440e1, with the native region-name fix at 9aef27a. The native `TIDENCK1`
-value-checkpoint implementation is now in the current source and has passed
-its dirty-source directed gate; clean frozen qualification is still pending.
-The prior token-bundle, integer-coordinate and durable-record qualification
-remains complete.
+value-checkpoint implementation is committed at 4325bb1 and has passed clean
+frozen qualification; see evidence/cpp-native-checkpoint.md. The prior
+token-bundle, integer-coordinate and durable-record qualification remains
+complete.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -24,14 +24,17 @@ Source and scope are separate for each report:
 | Atomic value-checkpoint publication | 00bbf78fb99e410d46b4d7e36e37266eb3d8cf9e | 88 directed clean tests; evidence/checkpoint-io.md |
 | First native streaming performance pilot | aee0da48e4c6661d7a75fd97ca39ddaba654ee4d | 16 cases / 80 events; evidence/m8-streaming-pilot.md |
 | Standalone C++ named ownership and SGD/AdamW parity | 9aef27aa2e8eeeda6f3d6298ae295bf687b3a66b | clean frozen build; 338 directed tests plus FP64/FP32 executable checks; evidence/cpp-optimizer-ownership.md |
+| Standalone C++ `TIDENCK1` value checkpoint | 4325bb14434bbe0e9702aff244f77ed71e75cbee | clean frozen build; 344 directed tests plus FP64/FP32 checkpoint and optimizer checks; evidence/cpp-native-checkpoint.md |
 
-The bundle preserves two complete continuations, real occurrence ledgers,
+The application bundle preserves two complete continuations, real occurrence ledgers,
 unfinished token buffers, named cross-graph aliases and optimizer state. 192
 three-update/two-restore comparisons cover Python/native serial/parallel/packed,
 Add/all-softmax, clear, HARD/SOFTP/HST, SGD/AdamW and both dtypes. Corruption
-preflight leaves both live owners unchanged. It is not a training controller or
-standalone C++ file format. Native execution has no Python callbacks; optimizer
-and persistence ownership in these gates is Python.
+preflight leaves both live owners unchanged. The application bundle is not a
+training controller or standalone C++ file format. Native execution has no
+Python callbacks; optimizer
+and persistence ownership in those application gates is Python. The separate
+native `TIDENCK1` gate covers named values and built-in optimizer state only.
 
 Strict Python int64 checks reject bool/float/overflow before scheduling, native
 conversion or checkpoint restoration. Cursor import checks complete metadata
@@ -42,15 +45,10 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 ## Next action
 
 The standalone C++ owner registry, independent LibTorch SGD/AdamW updates and
-the `TIDENCK1` native value codec are implemented. The dirty-source gate for
-this increment passed 344 directed Python tests plus FP64/FP32 standalone
-checkpoint and optimizer checks from the current source; do not treat that as
-clean qualification. After the implementation commit, freeze it in an
-independent worktree and run the exact checkpoint/optimizer executable checks
-and directed Python tests, then commit the evidence separately. The standalone
-C++ SettleGraph construction/encoding frontend is the next interface
-obligation; do not rerun the original LH full oracle unless its relevant
-code/mapping changes.
+the `TIDENCK1` native value codec are implemented and cleanly qualified; see
+evidence/cpp-native-checkpoint.md. The standalone C++ SettleGraph
+construction/encoding frontend is the next interface obligation; do not rerun
+the original LH full oracle unless its relevant code/mapping changes.
 
 Later M8 Attention/SSM/prefill/training measurements require new declared fixed
 workloads; the current EMA pilot does not certify those cases. Wider module
@@ -59,6 +57,14 @@ imports and Delta chunk optimization remain in ROADMAP, the only backlog.
 ## Latest terminal jobs and retained source
 
 All listed units are inactive/dead, MainPID 0, Result=success, exit 0:
+
+- tide-foundation-native-checkpoint-qualified-20260922-121524, finished
+  2026-09-22T04:22:36Z. The clean frozen worktree at commit 4325bb1 passed
+  the standalone checkpoint and optimizer checks for both dtypes plus 344
+  directed tests in 61.95s. Output is
+  artifacts/native-checkpoint-qualified-20260922-121524/; source audit reports
+  no dirty files. Build and worktree are retained under
+  /var/tmp/zlong-graph-execution-foundation/qualification/.
 
 - tide-foundation-named-optimizer-qualified-20260922-1045, finished
   2026-09-22T03:00:15Z. The clean frozen worktree at commit 9aef27a passed
