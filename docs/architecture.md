@@ -19,6 +19,7 @@
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
 | `docs/evidence/lh-local-scale-pilot.md` | Original-LH local 9B Add measurements, aligned grad/thread comparisons and explicit unmeasured scope |
+| `docs/lh-original-test.md` | Exact a10fdb1 Attention algorithms, explicit parameter overrides, original100-step timing and resource bounds |
 | `docs/streaming-cursor.md` | Native owned state, incremental advance and explicit snapshots |
 | `docs/token-application-checkpoint.md` | Two-clock bundle, partial-window/ledger state, cross-graph ownership and whole-bundle preflight |
 | `docs/checkpoint-ownership.md` | Named parameter/optimizer ownership, atomic publication and preflight restore |

@@ -103,6 +103,10 @@ eight cases cover nograd, grad-forward and explicit BLAS pool counts. Small
 FP64/backward/parallel harness checks passed. These are short-window original-LH
 observations, not large Tide equivalence, attention or backward-performance
 qualification. The reusable Tide importer and paired timer remain outstanding.
+The user subsequently identified a10fdb1 plus a few parameter changes as the
+Attention baseline. First complete the [original-test reproduction](lh-original-test.md)
+on the expanded160-core budget; preserve original kernels and separate it from
+the earlier Add/snapshot measurements. Then resume the matched Tide importer.
 
 M8 implementation observation: `ProjectionEmit` currently launches a matmul per
 output slot, while original LH uses one large Linear per CSR row. Evaluate an

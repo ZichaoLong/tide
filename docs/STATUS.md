@@ -13,7 +13,8 @@ standalone original-LH preparation/build/timing tools and bounded local
 experiments are complete: five small harness checks and eight large cases
 passed. See [local scale evidence](evidence/lh-local-scale-pilot.md). The large
 Tide importer and paired timer remain unimplemented; large matched numerical
-checks and a Tide/LH speed ratio remain unmeasured.
+checks and a Tide/LH speed ratio remain unmeasured. The active follow-up now
+reproduces the user-identified a10fdb1 Attention configuration family.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -52,28 +53,34 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-No job from this increment is live. The finite local pilot is complete; results
-and comparison limits are in the linked evidence. Do not rerun it simply to
-re-enter the task. Inspect its analysis without model allocation:
+The user clarified the original baseline: a10fdb1 plus a few configuration
+parameters yields the intended Attention workloads. The current default width512
+is not a new target. Use exact a10fdb1 numerical sources, not the dirty LH
+workspace's modified BatchHidden.cpp; the old Add pilot remains separate.
+The user authorizes up to half this host's320 physical cores (160) and ample
+memory. See [original test contract](lh-original-test.md).
 
-```sh
-/home/zlong/anaconda3/bin/python artifacts/lh-window-threads-20260922-0740/analyze.py
-```
+Current increment: implement/build the original-test reproduction path, preserving
+original kernels and the100-step loop, with explicit width/selector overrides.
+Four timer-record tests are the directed development gate. Next freeze the clean
+Tide commit and run durable build/check/measurement jobs. Planned unit:
+`tide-lh-a10-attention-20260922-0820` in background.slice, pinned CPUs160–319.
+Records: `artifacts/lh-a10-attention-20260922-0820/`; frozen checkout under
+`/var/tmp/zlong-graph-execution-foundation/qualification/lh-a10-20260922-0820`.
+The pipeline will first build width64/batch4/steps4 and check both original
+nograd/grad-forward modes. Then build wide2048 and narrow128 against their
+retained original graph-generator outputs, run nograd then grad-forward at
+batch512/100steps, OpenMP160/BLAS1. Each large run has an explicit1800-second,
+1280-GiB address-space bound; failures remain recorded. Do not call a planned,
+queued or live job passed. Exact launch state must be filled after submission.
 
-The next M8 performance increment is a reusable, weight-preserving four-block
-LH-to-Tide importer and paired timer. Start from `docs/lh-scale-benchmark.md`,
-`docs/lh-iocortex.md`, `docs/lh-single-graph.md` and
-`cpp/test/lh_iocortex_fixture.*`; the current width4/batch4 fixture rewrites
-weights and clones imports, so changing its constants is insufficient. First
-prove small independent state/route/output parity and owner/edge accounting,
-then scale with bounded memory and identical token ages, modules and CPU budget.
-Keep exact-inference and comparable-scale experiments separately labeled.
-
-The independent M6 interface obligation is still the standalone C++ SettleGraph
-construction/encoding frontend. Native owners, SGD/AdamW and `TIDENCK1` values
-are implemented and qualified; graph construction/embedding still uses Python.
-The remaining overall objectives and workload obligations belong to ROADMAP.
-Do not rerun the full original-LH oracle unless its code or mapping changes.
+After original Attention results are recorded, the next M8 increment remains a
+reusable weight-preserving four-block LH-to-Tide importer and paired timer.
+First prove small independent state/route/output parity and owner/edge accounting,
+then perform a bounded matched scale ramp. The current width4/batch4 oracle
+rewrites weights and clones imports; changing constants is insufficient.
+The independent M6 interface obligation remains the standalone C++ SettleGraph
+construction/encoding frontend. Full objectives and backlog belong to ROADMAP.
 
 ## Latest terminal jobs and retained source
 
