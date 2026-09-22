@@ -86,9 +86,14 @@ void check_model_view(at::TensorOptions options) {
   model.nodes[0].bias = at::zeros({2}, options);
   model.nodes[0].read = at::zeros({2}, options);
   model.nodes[1] = model.nodes[0];
+  auto region_gain = parameter(options, {.3});
+  RegionWeights region;
+  region.extra["gain"] = region_gain;
+  model.regions = {region};
   model.input_scale = {at::ones({}, options).set_requires_grad(true)};
   auto registry = model.parameters();
-  require(registry.contains("nodes.0.decay") && registry.contains("nodes.1.decay"),
+  require(registry.contains("nodes.0.decay") && registry.contains("nodes.1.decay")
+          && registry.contains("regions.0.gain"),
           "Model parameter view omitted trainable aliases");
   require(registry.canonical_name("nodes.1.decay") == "nodes.0.decay",
           "Model parameter view did not preserve cross-node sharing");

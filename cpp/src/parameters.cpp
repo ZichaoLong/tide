@@ -44,7 +44,9 @@ void ParameterRegistry::add_model(const Model& model, const std::string& prefix,
       add_if(*this, base + ".extra." + name, value, trainable_only);
   }
   for (size_t region = 0; region < model.regions.size(); ++region) {
-    const auto base = qualified(prefix, "regions." + std::to_string(region) + ".extra");
+    // RegionWeights::extra is a native transport map; its keys already carry
+    // the Python RegionProgram's local parameter names.
+    const auto base = qualified(prefix, "regions." + std::to_string(region));
     for (const auto& [name, value] : model.regions[region].extra)
       add_if(*this, base + "." + name, value, trainable_only);
   }
