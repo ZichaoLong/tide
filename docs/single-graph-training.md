@@ -4,7 +4,7 @@ This is Tide two-clock versus Tide single-PDG training. LH supplies the original
 inference topology and local formulas; its training is not an authority. The
 inference construction and readout-ledger projection remain in lh-single-graph.md.
 No runtime/schema change is introduced by this validation increment. Current
-qualification status belongs in STATUS; exact evidence follows the clean gate.
+qualification is in [evidence/single-graph-training.md](evidence/single-graph-training.md).
 
 ## Owners and differentiable boundary
 

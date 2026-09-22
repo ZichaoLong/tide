@@ -29,23 +29,16 @@ partial readout windows, preserving aliases, detached state/pending payloads,
 weights and optimizer updates. No composite two-clock/controller serialization
 or standalone C++ optimizer qualification follows from this test.
 
-## Active clean training qualification
+## Completed clean training qualification
 
-Source d233429cd5807614869214dcea21d9492e309fd1 is frozen, clean and read-only at
-/var/tmp/zlong-graph-execution-foundation/training-qualification-20260921-2345,
-with its own build. Unit tide-foundation-training-qualified-20260921-2345 is
-confirmed active/running, MainPID 618952, background.slice, Transient=yes,
-control group outside focus.service. No full result yet. Command:
-
-```sh
-/home/zlong/anaconda3/bin/python scripts/job.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 -- /home/zlong/anaconda3/bin/python scripts/qualify.py --output-dir /var/tmp/zlong-graph-execution-foundation/artifacts/training-qualified-20260921-2345 --jobs 2
-```
-
-Inspect that unit's ActiveState/SubState/MainPID/Result/ExecMainStatus and
-artifacts/training-qualified-20260921-2345/{status.json,task.log} plus
-verification/{result.json,tests.log}. Stop only if necessary with
-systemctl --user stop tide-foundation-training-qualified-20260921-2345.
-Never edit the frozen worktree/build. Original LH runs independently below.
+Source d233429cd5807614869214dcea21d9492e309fd1 passed 4901 CPU tests in
+584.15s. Both records under artifacts/training-qualified-20260921-2345/ are
+passed/clean, exit 0; unit tide-foundation-training-qualified-20260921-2345
+ended inactive/dead, MainPID 0 at 2026-09-22T00:09:41Z. Frozen worktree and all
+build binary hashes match. Report: evidence/single-graph-training.md.
+The worktree /var/tmp/zlong-graph-execution-foundation/training-qualification-
+20260921-2345 is now a redundant source/build copy; inspect before removal,
+keeping its commit and evidence/logs. Original-LH worktree below is still live.
 
 ## Current main work and next actions
 
@@ -60,9 +53,9 @@ Reviewed redundant training/IO draft directories were removed (7 files, about
 20 KiB); source archives, failures and active jobs are retained. General artifact
 cleanup dry run found no other eligible entries.
 
-Next finish the two independent clean qualifications, inspect terminal status,
-source/build/fixture inventories and counts, then commit their evidence and
-replace pending LH/training claims. Do not edit either frozen worktree/build.
+Next finish the original-LH qualification, inspect all terminal records and
+source/build/fixture inventories/counts, then commit its evidence and replace
+pending LH claims. Never edit its frozen worktree/build.
 Composite two-clock and standalone C++ optimizer ownership remain in ROADMAP.
 
 ## Active immutable qualification

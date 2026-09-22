@@ -94,6 +94,20 @@
           "test_command": "python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006",
           "result": "passed",
           "environment_manifest": "docs/evidence/m5d-memory-packing.md"
+        },
+        {
+          "date": "2026-09-22",
+          "commit": "d233429cd5807614869214dcea21d9492e309fd1",
+          "scope": "4901 FP64/FP32 CPU checks including bounded two-clock/single-PDG VJPs and truncated updates/resume; native execution uses a Python optimizer/checkpoint controller; exact cells and AdamW epsilon in report",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify.py --output-dir artifacts/training-qualified-20260921-2345 --jobs 2",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/single-graph-training.md"
         }
       ]
     },
@@ -158,6 +172,20 @@
           "test_command": "python scripts/qualify.py --output-dir artifacts/memory-pack-20260921-1006",
           "result": "passed",
           "environment_manifest": "docs/evidence/m5d-memory-packing.md"
+        },
+        {
+          "date": "2026-09-22",
+          "commit": "d233429cd5807614869214dcea21d9492e309fd1",
+          "scope": "4901 FP64/FP32 CPU checks including bounded two-clock/single-PDG VJPs and truncated updates/resume; native execution uses a Python optimizer/checkpoint controller; exact cells and AdamW epsilon in report",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify.py --output-dir artifacts/training-qualified-20260921-2345 --jobs 2",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/single-graph-training.md"
         }
       ]
     },
