@@ -5,7 +5,7 @@
 | Path | Responsibility |
 | --- | --- |
 | `python/tidegraph/` | Independent readable Torch oracle, fixtures and validation |
-| `cpp/include/tide/` | Public graph, state, kernel and executor interfaces |
+| `cpp/include/tide/` | Public graph, state, kernel, owner and executor interfaces |
 | `cpp/src/` | LibTorch kernels, streaming/frontier execution and binding adapter |
 | `tests/` | Analytic formulas, invariant tests and differential qualification |
 | `scripts/` | Configure/build/verify, durable job and re-entry helpers |
@@ -93,6 +93,15 @@ defaults to a dry run and protects referenced, failed and active-job artifacts.
 `scripts/durable_records.py` owns fsynced atomic text/JSON records and isolated
 job-record read failures; `status.py` reports unknown records without hiding
 healthy jobs or rewriting historical failures.
+
+Named native parameters are a separate layer in `parameters.h`/`parameters.cpp`:
+`ParameterRegistry` collects explicit tensors or trainable `Model` fields,
+groups aliases by TensorImpl identity and exposes canonical owner names. The
+standalone `optimizer.h`/`optimizer.cpp` layer applies CPU FP32/FP64 SGD and
+AdamW without Python callbacks. It is independent of graph execution and has
+no serialization responsibility; the native value codec and transactional
+publication remain a later layer. SettleGraph construction and embedding are
+still a Python frontend that emits an ordinary compiled `Graph`.
 
 ## Module boundaries
 

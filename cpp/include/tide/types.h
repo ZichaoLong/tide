@@ -12,6 +12,7 @@
 namespace tide {
 using Tensor = at::Tensor;
 using Index = int64_t;
+class ParameterRegistry;
 using Owner = std::pair<Index, Index>;
 struct Edge { Index source, target, delay; };
 struct Node {
@@ -114,6 +115,9 @@ struct Model {
   std::vector<RegionWeights> regions;
   std::vector<Tensor> input_scale, agg_scale, edge_scale, output_scale;
   Index width() const { return nodes.at(0).bias.numel(); }
+  // Build a fresh named view after graph/model aliases have been configured.
+  // The registry owns Tensor handles, while the Model remains the value owner.
+  ParameterRegistry parameters(bool trainable_only = true) const;
 };
 struct Event {
   Index batch, node, time;

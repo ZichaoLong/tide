@@ -33,13 +33,39 @@ This is a single graph/model value checkpoint. It does not restore a live
 autograd graph, `.grad` buffers, RNG, data cursor, training controller or a
 multi-graph application. Loading starts a new autograd segment. The separate two-clock bundle is described in `token-application-checkpoint.md`;
 its CPU qualification is in `evidence/token-checkpoint-coordinates.md`.
-Standalone C++ ownership remains in ROADMAP.
+## Standalone C++ owner and optimizer layer
+
+The native core now has a standalone named-owner layer before persistence. A
+`ParameterRegistry` can register explicit auxiliary tensors or collect the
+trainable tensors in a `Model` under `nodes.*`, `regions.*` and scale names.
+One registry can collect several graph models with prefixes; TensorImpl
+identity preserves aliases across nodes and graphs while distinct tensors that
+overlap storage remain distinct owners. Canonical names are the
+lexicographically first aliases and optimizer groups retain their declared
+order after alias normalization.
+
+`SGD` and `AdamW` update only owners in their groups. An undefined gradient is
+skipped, while a connected zero gradient still creates or updates optimizer
+state, including decoupled AdamW decay. Shared aliases are updated once, and
+`zero_grad` only clears the optimizer's own groups. The implementation is
+independent of Python (`cpp/include/tide/parameters.h` and
+`cpp/include/tide/optimizer.h`); `cpp/src/parameters.cpp` and
+`cpp/src/optimizer.cpp` provide the core, with a small standalone executable
+and `tests/test_cpp_optimizer.py` comparing both dtypes directly with
+PyTorch's SGD/AdamW. This layer has no native value codec or resume format
+yet; transactional persistence remains the next bounded increment.
 
 Implementation: `python/tidegraph/checkpoint.py` encodes and validates graph
-state; `checkpoint_ownership.py` handles parameter and optimizer identities.
+state; `checkpoint_ownership.py` handles Python parameter and optimizer
+identities. The independent native owner/step layer is in
+`cpp/include/tide/parameters.h`, `cpp/include/tide/optimizer.h`,
+`cpp/src/parameters.cpp` and `cpp/src/optimizer.cpp`.
 `tests/test_checkpoint_ownership.py` covers the silent-reorder reproducer,
 rejection without mutation, shared subset ownership and next-update equality.
-Existing module/executor checkpoint tests supply their numerical continuations.
+`tests/test_cpp_optimizer.py` and the `tidegraph-optimizer-check` executable
+cover native alias partitions, group order, None versus connected-zero
+gradients and direct LibTorch/PyTorch update equality. Existing
+module/executor checkpoint tests supply their numerical continuations.
 
 ## Exclusive atomic publication
 

@@ -7,6 +7,8 @@
 #include "tide/lazy_add.h"
 #include "tide/fiber_attention.h"
 #include "tide/token_window.h"
+#include "tide/parameters.h"
+#include "tide/optimizer.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -63,7 +65,54 @@ PYBIND11_MODULE(_tide_native, m) {
   m.def("decode_add_repeat", &decode_add_repeat, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
   m.def("decode_fiber_bias", &decode_fiber_bias, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
   py::class_<Model>(m, "Model").def(py::init<>())
-    FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale);
+    FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale)
+    .def("parameters", &Model::parameters, py::arg("trainable_only") = true);
+  py::class_<ParameterOwner>(m, "ParameterOwner")
+    .def_readonly("canonical", &ParameterOwner::canonical)
+    .def_readonly("aliases", &ParameterOwner::aliases)
+    .def_readonly("value", &ParameterOwner::value);
+  py::class_<ParameterRegistry>(m, "ParameterRegistry")
+    .def(py::init<>())
+    .def("add", &ParameterRegistry::add, py::arg("name"), py::arg("value"))
+    .def("add_model", &ParameterRegistry::add_model, py::arg("model"), py::arg("prefix") = "",
+         py::arg("trainable_only") = true)
+    .def("contains", &ParameterRegistry::contains)
+    .def("value", &ParameterRegistry::value)
+    .def("canonical_name", &ParameterRegistry::canonical_name)
+    .def("names", &ParameterRegistry::names)
+    .def("owners", &ParameterRegistry::owners)
+    .def("alias_partitions", &ParameterRegistry::alias_partitions);
+  py::class_<OptimizerGroup>(m, "OptimizerGroup")
+    .def(py::init<>())
+    FIELD(OptimizerGroup, parameters) FIELD(OptimizerGroup, lr) FIELD(OptimizerGroup, weight_decay)
+    FIELD(OptimizerGroup, momentum) FIELD(OptimizerGroup, dampening) FIELD(OptimizerGroup, beta1)
+    FIELD(OptimizerGroup, beta2) FIELD(OptimizerGroup, eps) FIELD(OptimizerGroup, nesterov)
+    FIELD(OptimizerGroup, amsgrad) FIELD(OptimizerGroup, maximize);
+  py::class_<OptimizerLayout>(m, "OptimizerLayout")
+    .def_readonly("class_name", &OptimizerLayout::class_name)
+    .def_readonly("groups", &OptimizerLayout::groups);
+  py::class_<OptimizerState>(m, "OptimizerState")
+    .def_readonly("step", &OptimizerState::step)
+    .def_readonly("momentum_buffer", &OptimizerState::momentum_buffer)
+    .def_readonly("exp_avg", &OptimizerState::exp_avg)
+    .def_readonly("exp_avg_sq", &OptimizerState::exp_avg_sq)
+    .def_readonly("max_exp_avg_sq", &OptimizerState::max_exp_avg_sq);
+  py::class_<SGD>(m, "SGD")
+    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
+         py::keep_alive<1, 2>())
+    .def("step", &SGD::step)
+    .def("zero_grad", &SGD::zero_grad, py::arg("set_to_none") = true)
+    .def("layout", &SGD::layout)
+    .def("groups", &SGD::groups)
+    .def("state", &SGD::state);
+  py::class_<AdamW>(m, "AdamW")
+    .def(py::init<ParameterRegistry&, std::vector<OptimizerGroup>>(), py::arg("registry"), py::arg("groups") = std::vector<OptimizerGroup>{},
+         py::keep_alive<1, 2>())
+    .def("step", &AdamW::step)
+    .def("zero_grad", &AdamW::zero_grad, py::arg("set_to_none") = true)
+    .def("layout", &AdamW::layout)
+    .def("groups", &AdamW::groups)
+    .def("state", &AdamW::state);
   py::class_<Event>(m, "Event")
     FIELD(Event, batch) FIELD(Event, node) FIELD(Event, time) FIELD(Event, fiber) FIELD(Event, content)
     FIELD(Event, proposal) FIELD(Event, descriptor) FIELD(Event, control) FIELD(Event, comparison)

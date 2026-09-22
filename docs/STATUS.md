@@ -1,10 +1,10 @@
 # Current handoff
 
 Updated: 2026-09-22 (Asia/Shanghai). Branch: graph-execution-foundation.
-No active jobs. Implementation and clean qualification are complete for the
-latest token-bundle, integer-coordinate and durable-record increments. The
-commit carrying this handoff retains the final reviewed evidence. Next work is
-described below; no validation job needs resuming.
+The standalone C++ named-owner/optimizer increment and its directed dirty
+qualification are complete. The prior token-bundle, integer-coordinate and
+durable-record qualification remains complete; commit this implementation,
+then rebuild and test that immutable commit before publishing evidence.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -38,13 +38,16 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-Follow ROADMAP's "Next bounded increment": standalone C++ named parameter
-ownership and LibTorch SGD/AdamW equivalence before native persistence. Start at
-cpp/include/tide/types.h, cpp/src/main.cpp, python/tidegraph/checkpoint_ownership.py
-and docs/checkpoint-ownership.md. Preserve Parameter aliases, optimizer order,
-None versus connected-zero gradients and the independent Python anchor. Keep
-new core ownership/codec/publication responsibilities in separate small files.
-Do not rerun the original LH full oracle unless its relevant code/mapping changes.
+The current increment adds ParameterRegistry, SGD and AdamW in
+cpp/include/tide/parameters.h, cpp/include/tide/optimizer.h and their
+separate source files. It preserves TensorImpl aliases across model/node/graph
+registrations, canonical names and optimizer group order, and skips None while
+updating connected-zero gradients. The dirty directed gate passed; commit the
+implementation next, rebuild and test that immutable commit, then publish the
+parity evidence. Native value serialization/resume then remains the next
+increment. The standalone C++ SettleGraph construction frontend is still a
+separate interface obligation; do not rerun the original LH full oracle unless
+its relevant code/mapping changes.
 
 Later M8 Attention/SSM/prefill/training measurements require new declared fixed
 workloads; the current EMA pilot does not certify those cases. Wider module
@@ -54,6 +57,14 @@ imports and Delta chunk optimization remain in ROADMAP, the only backlog.
 
 All listed units are inactive/dead, MainPID 0, Result=success, exit 0:
 
+- tide-foundation-named-optimizer-dev-20260922-0940, finished
+  2026-09-22T02:06:34Z. Its dirty-source build and directed gate passed:
+  both standalone C++ FP64/FP32 checks and 338 native/PyTorch, Python
+  ownership and single-graph optimizer tests. Output is
+  artifacts/named-optimizer-dev-20260922-0940/; the independent build is
+  /var/tmp/zlong-graph-execution-foundation/build-named-optimizer. A previous
+  path-correctness interruption is retained in
+  artifacts/named-optimizer-dev-20260922-0930/ and is not a pass result.
 - tide-foundation-token-coordinates-qualified-20260922-0106, finished
   2026-09-22T01:21:19Z. Output artifacts/token-coordinates-qualified-20260922-0106/:
   status.json, task.log, verification/{result.json,tests.log}, dispatch.json,
