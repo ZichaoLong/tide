@@ -1,10 +1,11 @@
 # Large LH/Tide streaming comparison contract
 
-Status: planned workloads, with source inspection only. No large run, historical
-reproduction or LH/Tide speed ratio has been qualified. Implementation backlog
+Status: local exploratory execution authorized; standalone LH measurement tooling
+is being brought up. Historical data are references, not pass/fail targets.
+No large run, historical reproduction or LH/Tide speed ratio is yet qualified. Implementation backlog
 belongs to [ROADMAP](ROADMAP.md); this file owns workload and comparison meaning.
 
-## User-reported historical targets
+## User-reported historical references
 
 Reported on 2026-09-22, for a 56-core CPU and batch 512:
 
@@ -38,7 +39,9 @@ studying node granularity near a fixed parameter budget. It does not establish
 equal total parameters, degree, candidate work or selected work; the activation
 ratios differ by two. Historical reproduction retains both ratios. A later
 controlled granularity comparison needs a common ratio and actual work counts.
-Widths 128/256/512 alone are insufficient coverage: 2048 is a required target.
+Include width 2048 in local exploration; reported parameter counts, graph sizes
+and timings are reference scales, not exact acceptance thresholds. The user
+explicitly authorized local experiments and requested measured results.
 
 ## Source clues and unresolved reconstruction
 
@@ -164,9 +167,9 @@ serve as a large-model importer merely by changing constants. A reusable
 four-block CSR/CSC importer must preserve original weights, arbitrary region
 budgets, aliasing and source-port identity, with bounded memory overhead.
 
-Accept the large matched comparison only after the reusable importer passes
+A completed large matched comparison requires that the reusable importer passes
 small independent parity gates, topology/parameter accounting is checked, a
-bounded scale ramp succeeds, and both full target results have complete timing,
+bounded scale ramp succeeds, and the chosen scale results have complete timing,
 work and memory evidence. Check large output/state/route agreement outside the
 timer without materializing an unbounded whole-run trace. Never relax routing
 identity requirements or fabricate equivalence when different kernels choose
@@ -177,3 +180,23 @@ provides no qualification for these independent-weight 8B workloads. The
 observed historical gap motivates profiling call granularity, CSR-row Emit,
 indexing, memory traffic, autograd objects and packing, without assigning the
 entire gap to hidden width before matched experiments.
+
+## Local execution entry points
+
+`scripts/prepare_lh_benchmark.py` snapshots Graph.py/BaseUtils.py, uses original
+Python graph generation only, and retains historical Add-model configuration
+bytes recovered from LH history. Width2048 and width128 Add configurations
+exist in that history; they remain candidate reconstructions. The narrow
+localnum128 recipe uses selectnum2 for nominal 1/64; the wide localnum32 recipe
+uses selectnum1 for nominal 1/32. Actual selected fractions include hubs.
+
+`scripts/build_lh_benchmark.py` builds `cpp/lh_bench/` against the unchanged
+original C++ snapshot with OpenMP node parallelism. `scripts/benchmark_lh.py`
+records one explicitly bounded nograd, grad-forward or backward run. Grad
+forward retains the graph across the declared finite window; backward, when
+requested, differentiates a summed squared-logit mean for that window. This is
+a runtime probe, not a language-model training objective. Each repetition
+resets state and reuses the same pre-generated token IDs. Warmup advances the
+state; measurements retain token/cache age in each event. Finite-value checks,
+logging and graph disposal are outside forward timing. Large matched Tide
+imports and performance qualification remain separate work.

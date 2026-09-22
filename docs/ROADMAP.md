@@ -14,7 +14,7 @@ stays explicit; later milestones may refine earlier interfaces.
 | M5 | Packed attention/GQA/window, linear attention, DeltaRule, SSM, FFN/SwiGLU; step/block equivalence; source-aware Agg and HARD/HST/SOFTP Emit | SSM/SwiGLU [verified](evidence/m5a-state-programs.md); Linear/Delta [verified](evidence/m5b-matrix-memory.md); event GQA/window [verified](evidence/m5c-attention.md); broader programs pending |
 | M6 | Training roots, sharing, optimizer state, checkpoint/truncation and replay contracts; serial/parallel/packed/specialized validation matrix | initial profiles and isolated roots [verified](evidence/isolated-autograd.md); [prior evidence](evidence/m6-training-contracts.md); named Python ownership [verified](evidence/checkpoint-ownership.md); standalone C++ named ownership + SGD/AdamW parity [verified](evidence/cpp-optimizer-ownership.md); bounded two-clock/single-PDG training and single-graph resume [verified](evidence/single-graph-training.md); two-clock bundle and strict coordinates [verified](evidence/token-checkpoint-coordinates.md); broader modules/objectives pending |
 | M7 | LH inference adapter using original C++; exact clock/readout/decay mapping; numerical qualification without changes to LH | [Selector](evidence/lh-selector.md), [Add](evidence/lh-add.md), [Full](evidence/lh-full.md), [same-fiber sum attention](evidence/lh-attention.md), [packing/CROSSBATCH](evidence/fiber-packing.md), [post-attention pooling](evidence/fiber-pooling.md), [token-window Pronounce](evidence/pronounce.md) and bounded [whole-model two-clock adapter](evidence/lh-iocortex.md) verified; bounded [single-PDG inference map](evidence/lh-single-graph.md) verified; composite checkpoint [verified](evidence/token-checkpoint-coordinates.md); wider configurations pending |
-| M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | first bounded EMA inference [pilot retained](evidence/m8-streaming-pilot.md); user-requested 8.8B/8.5B [LH/Tide scale targets](lh-scale-benchmark.md) planned; other profiles, prefill and training pending |
+| M8 | Scale/performance qualification, sparse graph/activation workloads and retained evidence | first bounded EMA inference [pilot retained](evidence/m8-streaming-pilot.md); user-supplied 8.8B/8.5B [LH/Tide reference scales](lh-scale-benchmark.md) planned; other profiles, prefill and training pending |
 
 ## Dependencies and acceptance details
 
@@ -83,9 +83,10 @@ Python graph identity JSON/SHA256 conversion and native canonical identity-strin
 copies are separate full-structure costs. Touched region history still copies
 and validates its full maps; large single-region history needs its own workload.
 
-M8 now includes two required [large LH/Tide targets](lh-scale-benchmark.md):
+M8 includes local experiments around two [large LH/Tide references](lh-scale-benchmark.md):
 8.8B/width2048/batch512/nominal 1/32 and 8.5B/width128/batch512/nominal 1/64,
-on a common 56-core CPU budget. Recover static nodes/hubs, four-block topology,
+on a common 56-core CPU budget. These sizes/times are references, not strict
+acceptance targets; the user authorized local exploratory runs. Recover static nodes/hubs, four-block topology,
 actual parameter owners and selector semantics before importing. Generalize the
 small oracle's fixed fixture into a reusable weight-preserving importer and
 separate timed harness; retain exact-inference and comparable-scale lanes.
