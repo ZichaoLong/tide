@@ -73,14 +73,20 @@ width256/batch32 and width2048/batch64 ramps before wide2048/batch512 parallel
 Wide/narrow inputs are artifacts/pdg-scale-input-20260922/{wide,narrow}.txt
 and adjacent JSON provenance; no LH weights were read.
 
-Next launch: freeze this implementation commit at
+Active clean source f6686c124c8f588a44c1825603ffa5c8843dd422 is frozen at
 /var/tmp/zlong-graph-execution-foundation/qualification/pdg-scale-20260922-1020,
-copy the validated build executables/manifest to that checkout's build/,
-then launch scripts/pilot_pdg_scale.py through scripts/job.py in unit
+with validated build executables/manifest copied into its build/.
+The fixed driver scripts/pilot_pdg_scale.py runs through scripts/job.py in unit
 `tide-pdg-scale-20260922-1020`, CPUs160-319, background.slice, Nice10,
 RuntimeMaxSec7200, BLAS1 and at most160 node workers. Job output:
 artifacts/pdg-scale-20260922-1020/ (pilot cases under comparison/).
-No large PDG result is available yet. The source and build must remain fixed.
+Submission verified active/running in background.slice, transient=yes.
+Timeout-finalization and three smoke stages are accepted; the timeout case
+remains recorded as failed, with native exit-15 and no unreaped child. The
+width256/batch32 ramp completed6steps. Initial terminal record validation is in
+artifacts/pdg-scale-20260922-1020/record-validation.json. The width2048/batch64
+case is constructing its model; no large PDG token result is available yet.
+The frozen source and build remain fixed.
 Inspect status.json, comparison/pilot.json, per-case summaries and unit state;
 stop with systemctl --user stop tide-pdg-scale-20260922-1020 if needed.
 Do not claim submission or partial/failed cases as passed.
