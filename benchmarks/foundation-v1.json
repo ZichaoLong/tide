@@ -1,0 +1,223 @@
+{
+  "schema": "tide-foundation-suite-v1",
+  "frozen_date": "2026-09-23",
+  "status": "definitions-only; runners/evidence tracked in ROADMAP S5",
+  "repeats": 3,
+  "warmup": 2,
+  "configurations": [
+    {
+      "id": "P01",
+      "graph": "pdg",
+      "topology": "sparse-ring",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 128,
+      "module": "ema",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "P02",
+      "graph": "pdg",
+      "topology": "sparse-ring+dormant",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 8192,
+      "module": "ema",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "P03",
+      "graph": "pdg",
+      "topology": "source-regions",
+      "width": 512,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 32,
+      "module": "fiber-attention",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "T01",
+      "graph": "timed-dag",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 4,
+      "module": "attention",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "T02",
+      "graph": "timed-dag",
+      "topology": "four-regions",
+      "width": 128,
+      "batch": 32,
+      "sequence": 128,
+      "body_nodes": 16,
+      "module": "ssm",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "S01",
+      "graph": "settle",
+      "topology": "four-layers",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 8,
+      "module": "attention-gqa-window128",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "S02",
+      "graph": "settle",
+      "topology": "chain",
+      "width": 512,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "ssm-swiglu",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "A01",
+      "graph": "timed-dag",
+      "topology": "chain-ragged",
+      "width": 128,
+      "batch": 8,
+      "sequence": 2048,
+      "body_nodes": 2,
+      "module": "attention-gqa",
+      "nominal_touched_nodes": 2,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "A02",
+      "graph": "timed-dag",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 512,
+      "body_nodes": 4,
+      "module": "fiber-attention",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "M01",
+      "graph": "timed-dag",
+      "topology": "chain",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "linear",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "M02",
+      "graph": "timed-dag",
+      "topology": "chain",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "gated-delta",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null
+    },
+    {
+      "id": "TR01",
+      "graph": "all-three",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 4,
+      "module": "ssm-swiglu",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "grad-forward",
+        "backward",
+        "optimizer",
+        "train-step"
+      ],
+      "training_window": 16
+    }
+  ],
+  "large_presets": [
+    {
+      "id": "wide",
+      "width": 2048,
+      "batch": 512,
+      "nominal_selection_denominator": 32,
+      "reference_parameters": 17270000000
+    },
+    {
+      "id": "narrow",
+      "width": 128,
+      "batch": 512,
+      "nominal_selection_denominator": 64,
+      "reference_parameter_range": [
+        8000000000,
+        9000000000
+      ]
+    }
+  ]
+}
