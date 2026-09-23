@@ -53,7 +53,7 @@ Each bucket of G samples builds:
 - AV: `[G,H,q,c+q] @ [G,H,c+q,d]` → `[G,H,q,d]`.
 
 K/V is represented once per sample inside the bucket and can be reused across
-its q queries. Samples with different shapes are separate calls. The current
+its q queries. Samples with different shapes are separate calls. The default
 implementation concatenates old/current KV, stacks bucket tensors, builds decay
 bias/masks, and clones the final per-sample slices into compact persistent state.
 Sparse `(sample,node)` state is created only when used. This differs from LH's
@@ -84,7 +84,7 @@ if outputs, masks, state ownership and VJPs continue to satisfy the contract.
 
 For the measured all-softmax Confluence, LH computes slot weights once for the
 node batch, selects source coefficients, and uses the CSR `SumCoe` mapping to
-reduce all source outputs to sample rows. Current PDG
+reduce all source outputs to sample rows. Default PDG
 [fiber_pool.cpp](../cpp/src/fiber_pool.cpp) calls `fiber_pool_rows` separately for
 each event: it constructs a slot-index tensor, computes/selects coefficients,
 and reduces that event's source rows. The output Linear is then batched again.
@@ -97,7 +97,9 @@ QK/AV represented only0.132% versus0.0728% of the counted matrix FLOPs.
 Thus smaller score tensors do not guarantee lower elapsed time. Extra operator
 calls and intermediate tensors are plausible costs to investigate, but the
 6.258× count alone neither proves a bottleneck nor explains the entire15.2%
-latency gap. A separate controlled operator/profile experiment is still needed.
+latency gap. The later [operator diagnostics](evidence/operator-profiling.md)
+found pooling small in its measured scope and redirected investigation toward
+KV movement, temporary layout, state lifetime and effective node concurrency.
 
 The portable [CPU comparison kit](../tools/cpu_compare/README.md) exposes both
 unchanged strategies and the same counters for target-machine measurements.
@@ -105,3 +107,14 @@ unchanged strategies and the same counters for target-machine measurements.
 The optional [single-batch policy](attention-packing-policy.md) now implements
 padded query-owner gathering in PDG. The measurements above predate that option
 and describe the default exact policy.
+
+The independent opt-in [fiber execution options](fiber-efficiency.md) now add
+CSR pooling, immutable per-owner KV reuse, head-major temporary Q/K/V storage and
+deferred old-state retirement. These implementation choices are separate from
+exact versus single grouping; the default behavior described above is retained.
+
+The [qualified ablations](evidence/fiber-efficiency.md) found about1% improvement
+for the repeated all160 combination in the short17.27B window; no independent
+option demonstrated a large gain. [Process interleaving](evidence/fiber-numa.md)
+also produced little PDG change while slowing LH. These observations do not
+establish a canonical semantic lower bound on PDG overhead.

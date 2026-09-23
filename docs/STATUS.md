@@ -1,18 +1,20 @@
 # Current handoff
 
 Updated: 2026-09-23 (Asia/Shanghai). Branch: graph-execution-foundation.
-The previous increment is complete: configurable native same-fiber
-Attention `exact|single`, default exact, with full CPU regression, a refreshed
-portable source kit and a bounded 17.27B same-binary performance comparison.
-See [the policy and API](attention-packing-policy.md) and
-[reviewed evidence](evidence/attention-packing-policy.md).
+This increment is complete: five opt-in fiber execution/storage policies,
+complete CPU regression, refreshed portable source kit,12 wide ablation cases
+and a four-case NUMA follow-up. Both services and terminal audits passed;
+no qualification or benchmark remains active. The measured gains are limited,
+so retain conservative defaults. See [options](fiber-efficiency.md),
+[primary evidence](evidence/fiber-efficiency.md) and
+[NUMA evidence](evidence/fiber-numa.md).
 
 The overall objective remains Python/LibTorch generic and independent specialized
 PDG/TimedDAG/SettleGraph execution, complete training/inference equivalence,
-sparse streaming/prefill performance, and LH inference inclusion. Its full
+sparse streaming/prefill performance and LH inference inclusion. Its full
 acceptance matrix and remaining scope live only in [ROADMAP](ROADMAP.md).
-Historical 8.8B/8.5B numbers are references, not strict performance targets.
-No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
+Historical8.8B/8.5B numbers are references, not strict performance targets.
+No push; no sub-agents. LH/fractal-latcarf/ObsidianVault remain read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
 ## Verified state
@@ -22,6 +24,8 @@ Source and scope are separate for each report:
 
 | Scope | Clean source | Result / evidence |
 | --- | --- | --- |
+| Fixed CPU memory-policy2×2 follow-up using qualified binaries | fa31ad8202b688dc220f814ef6c2ff6ba2c6e465 | checked small smoke,4 wide cases,12 stages and terminal audit; evidence/fiber-numa.md |
+| Fiber execution/storage options, complete CPU gate, portable kit and12 wide cases | fa31ad8202b688dc220f814ef6c2ff6ba2c6e465 | 6719 tests/832.99s;32 stages and terminal audit passed; evidence/fiber-efficiency.md |
 | Optional common operator diagnostics and fixed17.27B on/off pair | 2619ed3fc79fe299e1a573b5088c552748f87196 | 67 clean directed tests; fresh LH full-logit checks; evidence/operator-profiling.md |
 | Complete CPU regression, exact/single fiber policy and refreshed portable kit | 9e950bfbb7ceee6a5105d7978c0419aab6877859 | 6553 tests/745.74s; fresh relocated LH/PDG smokes; fixed 17.27B pair; evidence/attention-packing-policy.md |
 | Portable paired LH/PDG CPU source kit | dd024e6f1d57153c22ab7cef2762d059cbd3ac7d | 18 directed tests; 3 fresh relocated native builds/runs and numerical anchors; evidence/cpu-comparison-kit.md |
@@ -53,135 +57,106 @@ once; advance checks new inputs only. Source 69ca379 did not include the later
 durable-record tooling, whose independent clean 16-case gate is listed above.
 Both results have source/terminal audits. No C++/original-LH oracle changed.
 
-## Next action
+## Outcome and next action
 
-User authorizes performance investigations and optimizations within canonical PDG
-semantics. Common optional timers are committed and their diagnostic run passed;
-see evidence/operator-profiling.md. Exact disabled-timer baseline: LH25.10840,
-PDG30.36451 ms/sample-token. Profiling variants were ~5% faster for both engines,
-so do not treat their difference as an overhead estimate. Worker sums are not
-wall latency. Pooling is small; data layout and event management remain candidates.
+Qualified implementation source: fa31ad8202b688dc220f814ef6c2ff6ba2c6e465.
+Options: CSR fiber pooling, immutable per-sample KV reuse, head-major temporary
+attention layout, deferred old-state release and scale projection strides.
+They complement exact/single packing and preserve graph identity, canonical
+complete-fiber Aggregate/Upd/Read/SelStep/Next/Full, clocks, ownership and public
+VJPs. Packed backward still uses semantic replay; this is inference performance
+work with gradient correctness checks, not an optimized-backward claim.
 
-Candidate implementation is ready for committing, defaults unchanged:
-CSR fiber pooling; immutable per-sample KV reuse; head-major temporary attention
-layout; deferred old-state retirement; scale projection weight layout. No graph
-identity, Aggregate/Next behavior, scalar oracle or public VJP is intentionally
-changed. Contract: fiber-efficiency.md. No candidate speedup is established yet.
+At17.27B/D2048/B512/V50304/FP32/no_grad/12 tokens/warmup4:
 
-Directed development:375 tests passed initially;48 failures came only from a
-new isolated no-edge fixture requesting a nonexistent pending-gradient objective.
-Corrected48/2.96s passed against the unchanged compiled C++ source; both services
-terminated and were audited. Values/states, routing, gradients, strided shared
-optimizer owners, snapshots and checkpoint policy switches pass. Records:
-artifacts/fiber-efficiency-dev-20260923-112506/ (retained failed archive),
-artifacts/fiber-efficiency-first-failure/, and
-artifacts/fiber-efficiency-retest-20260923-113224/ (passed retest).
-No candidate wide timing or full regression result yet.
+- Two baseline means28.82426/29.11735 average28.97080 ms/sample-token.
+- All160 combination28.79132/28.56860 averages28.67996, only1.0039% lower.
+- All116 single observation27.92335 is3.6156% below the two-baseline mean;
+  it is not a repeated result. The primary LH observation is25.04663.
+- Follow-up LH default25.43408/interleave27.16406: interleave is6.8018% slower.
+  PDG default29.35316/interleave29.16130: only0.6536% lower. The smaller gap under
+  interleave largely comes from slowing LH; do not claim it solves PDG overhead.
+- All primary PDG per-token model/work/operator inventories match. Within each
+  NUMA engine pair, inventories and output checksums match exactly. Large sums
+  supplement complete small values/states/routes/VJPs; they do not replace them.
 
-Next: commit the candidate implementation and run
-artifacts/qualify_fiber_efficiency.py from a new clean frozen worktree through
-job.py/background.slice. It builds, runs the complete CPU gate, exports and
-smokes a relocated source kit, then fixed17.27B independent/combined ablations.
-The driver also tests116 workers and repeats baseline/combined. Pass
---lh-prepared artifacts/operator-profile-20260923-105551/wide-prepared by absolute
-path. Use CPU affinity160–319,4 build jobs,1024GiB per native case; allow enough
-bounded service time for serial tests/experiments. Do not overlap project builds
-with measured wide cases. Continue through terminal analysis and evidence;
-compare source identities and work counters before interpreting speed.
+No more work is required to close this bounded increment. The next M8 questions
+are in ROADMAP: isolate node scheduling/data locality, then batched state/cache
+and signal storage, before expanding context/narrow/training cases. Preserve
+thread-local grad state, exception draining and publication barriers in any
+scheduler change. Private reusable caches require explicit snapshot/trace/AD
+ownership contracts. These are pending designs; do not describe them as already
+implemented, or infer that PDG semantics require the remaining LH gap.
+Do not repeat completed large cases without a new bounded measurement question.
 
-The original queued candidate service fiber-efficiency-dev-20260923-110604 was
-cancelled before compiling to add head-layout tests; its cancelled status and
-snapshot remain. The profiler's first development failed on a namespace error;
-original source.tar.gz/log/terminal audit are retained at
-artifacts/operator-profile-dev-20260923-104828. The retest178/85.20s passed at
-artifacts/operator-profile-retest-20260923-105234. The clean diagnostic's67/70.94s
-and all LH/wide stages passed at artifacts/operator-profile-20260923-105551;
-terminal-audit.json matches inactive/dead, MainPID0, Result=success, status0.
-No push, no sub-agents; reference repositories remain read-only.
+## Completed job and artifact identities
 
-The previous runtime implementation remains qualified at9e950bf, with evidence
-at8bd17a0. Its source archive and records below remain the current delivered kit
-until a later increment is qualified and exported.
+Both services are inactive/dead, MainPID0, Result=success, ExecMainStatus0,
+matching status.json, pipeline.json and post-run-audit.json.
 
-The portable archive now includes `--attention-packing exact|single`. To test on
-the user's Intel server, copy and extract the new archive, then run sequentially
-from its cpu-attention-compare directory in the target Torch environment:
+| Scope | Unit / output directory suffix | Result |
+| --- | --- | --- |
+| Full CPU, portable kit and ablations | tide-fiber-efficiency-20260923-113526 / fiber-efficiency-20260923-113526 |6719 tests/832.99s;32 stages;14 run records |
+| Process memory policy | tide-fiber-numa-20260923-131329 / fiber-numa-20260923-131329 | checked smoke;4 wide cases;12 stages;5 run records |
+
+Both use frozen source
+`/var/tmp/zlong-graph-execution-foundation/qualification/fiber-efficiency-20260923-113526`.
+Outputs live under `/var/tmp/zlong-graph-execution-foundation/artifacts/`.
+Exact argv/cwd/source/driver identities: artifacts/fiber-efficiency-qualification.json
+and artifacts/fiber-numa-qualification.json. Drivers and independent terminal
+audits: artifacts/qualify_fiber_efficiency.py, audit_fiber_efficiency.py,
+qualify_fiber_numa.py and audit_fiber_numa.py. Inspect summary records directly
+or run the corresponding inspect_fiber_efficiency.py / inspect_fiber_numa.py.
+
+Source audit verifies439 tracked files against Git archive,12 native binary
+hashes and248 packet files. Both relocated kit engines build/run; optimized
+PDG has complete small scalar/packed/parallel state checks, and original LH
+small full logits exactly match the old anchor. Packet PDG binary matches the
+primary binary. Reference repositories are unchanged. Trackio best-effort is
+degraded/unavailable; all local records/validators are complete.
+One read-only NUMA scan occurred during the primary pooling timing and may
+perturb its small difference; the explicit note is retained in that run's
+numa-observations/. No such scans occurred in the controlled NUMA timings.
+
+## Current portable kit
+
+`artifacts/fiber-efficiency-20260923-113526/export/cpu-attention-compare.tar.gz`,
+391597 bytes; SHA256
+`83c63e8df95a027d68c706d03f23ec43f922ebccac52c02e0c6ca6cca46aa62a`.
+It includes exact/single, all five candidate switches and optional operator
+profiling. No commit checkout or original LH source is required to use it.
+Extract and run sequentially in the target Torch/LibTorch environment:
 
 ```bash
-python run_pdg.py --device cpu --threads 56 --attention-packing exact --output-dir runs/pdg-exact
-python run_pdg.py --device cpu --threads 56 --attention-packing single --output-dir runs/pdg-single
 python run_lh.py --device cpu --threads 56 --output-dir runs/lh-wide
+python run_pdg.py --device cpu --threads 56 --output-dir runs/pdg-default
+python run_pdg.py --device cpu --threads 56 --fiber-pooling csr --fiber-cache owned \
+  --defer-state-release 1 --projection-layout linear --attention-layout head \
+  --output-dir runs/pdg-candidate
 ```
 
-Use new output directories, common affinity and optionally `--smoke` first.
-No commit checkout or original LH source is needed. Commands/configuration:
+Use common target-machine affinity, new output directories and optionally
+`--smoke` first. The candidate command is available for comparison, not a
+promised speedup on the user's Intel server; x86_64 remains unverified here.
+Detailed configuration and standalone LibTorch discovery:
 [tools/cpu_compare/README.md](../tools/cpu_compare/README.md).
-Intel x86_64 remains unverified locally. Do not repeat the completed wide pair
-without a new measurement question. Follow the M8 section of ROADMAP for the
-next bounded performance work: pooling, temporary KV movement and allocation;
-longer context, repetitions, narrow shape and training remain separate scopes.
+Do not enable a global interleave default based on the NUMA gap ratio.
 
-## Prior complete CPU qualification
+## Retained evidence and failures
 
-Unit tide-attention-policy-20260923-093207 passed / exit 0; all 12 driver stages
-passed. Terminal audit observed inactive/dead, MainPID 0, Result=success,
-ExecMainStatus 0, agreeing with persistent status/pipeline. Finished 02:05:21Z.
+Keep currently cited snapshots, records and packets. Older source kits and
+measurements retain their original source/scope in docs/evidence; the archive
+above is the delivered current version. No cleanup was needed in this increment.
 
-- Frozen source: `/var/tmp/zlong-graph-execution-foundation/qualification/attention-policy-20260923-093207`.
-- Records: `artifacts/attention-policy-20260923-093207/`: status.json,
-  pipeline.json, full-cpu/, kit-pdg/, kit-lh/, wide-exact/, wide-single/,
-  analysis.json, post-run-audit.json, export/ and relocated kit with spaces/.
-- Fixed driver: `artifacts/qualify_attention_policy.py`; audit:
-  `artifacts/audit_attention_policy.py`. Exact argv/cwd are in the job/run records.
-- Current archive: `artifacts/attention-policy-20260923-093207/export/cpu-attention-compare.tar.gz`,
-  384753 bytes; SHA256
-  `b45ab7b2fdb18b032f44382c2a5074377adcff854343c83839aacff7efc3b6c5`.
-- Inspection: `/home/zlong/anaconda3/bin/python scripts/status.py` and
-  `cat artifacts/attention-policy-20260923-093207/post-run-audit.json`.
-
-Fresh CMake build; 6553 CPU FP64/FP32 tests/745.74s. Relocated PDG-single and LH
-fresh builds and six-token smokes pass, with complete small PDG state checks
-and exact LH full-logit agreement with the prior anchor. All 428 frozen tracked
-files match Git archive; 11 build hashes, 244 packet files, prepared source and
-binary hashes, archive/manifest and four run records pass the terminal audit.
-
-The new pair uses 17,269,426,339 parameters, D2048/B512/V50304, FP32/no_grad,
-12 tokens/warmup 4, seed 7/fixed IDs, workers/head-workers 160 in separate phases,
-ATen/OpenMP/BLAS/inter-op 1. Exact 29.35656 versus single 31.53019 ms/sample-token:
-single is 7.4042% slower in this one short-window run. Attention calls fall
-5769.25→921.625 per batch-token (84.0252% fewer); score padding 1→1.80757;
-peak RSS 109.51699→114.45406 GiB. All other model/work/operator inventories match
-for all 12 tokens. Output-sum difference≤0.00561374 is only a checksum observation;
-complete value/state/route/VJP equivalence is established by the small tests.
-The prior exact run's inventories/checksums are unchanged. Keep default exact.
-
-Wide affinity 160–319, 1024 GiB address-space and 1200s bounds per native process;
-service 7200s, Nice10/background.slice, 4 build jobs. Trackio best-effort/degraded
-(unavailable); all local records complete. This does not establish a general
-speedup, optimized backward, long-context result or new LH–PDG timing comparison.
-
-## Retained prior evidence
-
-The original portable kit remains retained under artifacts/cpu-kit-20260923-0345/
-and its [evidence](evidence/cpu-comparison-kit.md), including the standalone
-Python-without-Torch discovery check. Deliver the new archive above for the
-packing option; do not overwrite or relabel the old packet.
-
-The prior [LH–PDG work comparison](evidence/lh-pdg-operator-work.md) remains
-scoped to f0c31be: LH 24.69385 versus PDG 28.44610 ms/sample-token, matrix work within
-0.00846%, independent weights and one short window. Records and its source
-remain in artifacts/operator-work-20260923-0300/ and the corresponding
-qualification directory. It is not a contemporaneous baseline for the new pair.
-The earlier optional [streaming optimizations](evidence/pdg-streaming-optimization.md)
-and complete 6459-test gate remain in artifacts/pdg-opt-20260923-0100/.
-
-Older local LH pilots and terminal/failed cases remain referenced by
-[local scale](evidence/lh-local-scale-pilot.md),
-[original Attention reproduction](evidence/lh-portable-repro.md), and
-[PDG scale evidence](evidence/pdg-scale-attention.md). Their exact source,
-commands, units, binaries and artifact locations belong to those reports.
-No cleanup was needed here. Keep currently cited snapshots and failure
-reproducers; inspect a fresh dry run before removing project-owned artifacts.
+Current development records: fiber-efficiency-dev-20260923-112506 preserves
+375 passed/48 failed from a malformed no-edge test objective; the corrected48
+passed/2.96s in fiber-efficiency-retest-20260923-113224 against unchanged C++.
+Keep fiber-efficiency-first-failure and the original failed source archive/audit.
+The candidate fiber-efficiency-dev-20260923-110604 was cancelled before compiling.
+The profiler namespace-error failure operator-profile-dev-20260923-104828 and
+its passed retest operator-profile-retest-20260923-105234 remain retained.
+All are fixed/covered by the later clean gate without relabeling old failures.
+Use scripts/status.py --all-jobs for retained terminal records.
 
 ## Numerical boundaries and retained failures
 
@@ -211,24 +186,20 @@ Never relabel historical failures when a later run passes.
 
 ## Runtime and storage
 
-CPU aarch64, /home/zlong/anaconda3/bin/python, Python 3.11.15,
-Torch/LibTorch 2.10.0+cpu, C++11 ABI. TORCH_DEVICE_BACKEND_AUTOLOAD=0;
-Default correctness OMP/OpenBLAS=1, two build jobs, Nice=10/background.slice.
-The earlier Add cases use ATen/OpenMP56, BLAS56 or1, inter-op1 and
-CPU affinity160–215. The a10fdb1 original Attention cases use ATen/OpenMP160,
-OPENBLAS_NUM_THREADS=1 requested (effective BLAS count was not logged),
-original inter-op defaults and CPU affinity160–319. See the profile diagnosis
-for the fresh-process OpenMP BLAS correction. FP64 atol/rtol
-1e-10/1e-8; FP32 1e-6/1e-5; routes/identities exact. Keep builds isolated.
-LH snapshot artifacts/lh-source-20260921-1428 has 69 files, identity
-ac7c878a56aeb55eec9f919da1962be6134fc5e3d1872f6d2303917306edb87f,
-original HEAD 5fd237d40c9880ccb6e511e4bf20799c7022fd1e plus actual dirty hashes.
+CPU aarch64, /home/zlong/anaconda3/bin/python, Python3.11.15,
+Torch/LibTorch2.10.0+cpu, GCC10.3.1, C++11 ABI. TORCH_DEVICE_BACKEND_AUTOLOAD=0.
+Correctness uses OMP/OpenBLAS/MKL1. Long tasks use immutable source, bounded
+build jobs, Nice10/background.slice and durable records. These wide cases used
+about-half-host affinity160–319 and1024GiB address-space bounds; exact effective
+thread counts and limits belong to their run records. Requested OpenBLAS1 alone
+does not ensure one actual thread under an OpenMP BLAS build.
+FP64 atol/rtol1e-10/1e-8; FP32 1e-6/1e-5; routes/identities exact.
 
-Shared storage filled twice. The stable repository path
+Shared storage filled in earlier increments. The stable repository path
 /home/zlong/llm/graph-execution-foundation symlinks to
 /var/tmp/zlong-graph-execution-foundation/repository (including .git); build and
-artifacts use that local parent too. Migration inventories/cleanup records remain
-there. Check capacity before large writes. Use scripts/durable_records.py for
-fsynced atomic handoff writes, then read back and verify. A directory-fsync error
-may occur after complete publication; never call a failed write successful.
-No tracked source/document exceeds 500 lines; relative Markdown links were checked.
+artifacts use that local parent too. About27GiB remained after this increment;
+check capacity before large writes. Migration/cleanup inventories remain there.
+Use scripts/durable_records.py for fsynced atomic handoff writes and read back
+the result. Do not delete referenced evidence or reference repositories; inspect
+a fresh dry run before removing only known obsolete project-owned artifacts.

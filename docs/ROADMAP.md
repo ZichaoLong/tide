@@ -182,13 +182,30 @@ while saving a small fraction of total matrix arithmetic. The user-authorized
 relocated kit builds and a same-binary 17.27B pair. Exact 29.35656 versus
 single 31.53019 ms/sample-token: single was 7.4% slower in this one short-window
 run despite 84% fewer groups, with 1.808× score padding and 4.937 GiB more peak RSS.
-Keep exact as the default. Common optional operator timers are now
-[qualified](evidence/operator-profiling.md). User-authorized opt-in candidate
-ablations cover pooling, state/event storage lifetime, KV ownership and head
-layout, projection layout, and effective node concurrency. Preserve complete small parity anchors; grouping
-alone has not established a speedup. Preserve complete small
-semantics and fixed large work counters when profiling or improving these costs.
-Component ablations, longer contexts, narrow scale and training performance remain pending.
+Keep exact as the default. Common optional operator timers are
+[qualified](evidence/operator-profiling.md). The five independent
+[fiber execution/storage options](fiber-efficiency.md) are now
+[qualified](evidence/fiber-efficiency.md):6719 CPU FP64/FP32 tests, fresh relocated
+kit builds,12 wide cases and complete terminal audits. All PDG model/work/operator
+inventories match. Repeated baseline28.97080 versus all160 combination28.67996
+ms/sample-token is only1.0% lower latency; all116 at27.92335 is a single candidate
+observation. Do not infer large/general gains from fewer calls or copies.
+The [bounded NUMA2×2 follow-up](evidence/fiber-numa.md) reuses the same binaries:
+interleave raises LH latency6.8%, lowers PDG only0.65%; its smaller LH/PDG ratio
+largely comes from slowing LH. Keep conservative defaults and all experimental
+options available for target-machine comparisons.
+
+Next bounded M8 work should isolate data locality and the node scheduler, then
+batched state/cache and signal storage. Compare stable node/worker assignment
+against the current dynamic queue with fixed work and identical BLAS/resource
+settings; preserve caller thread-local/grad state, exception draining and
+canonical publication barriers. A private reusable inference cache requires
+explicit ownership and snapshot/trace/autograd boundaries before implementation;
+these are pending designs, not existing optimized paths. Use small independent
+state/route/VJP anchors and an isolated cost probe before another wide case.
+Retain sparse allocation and complete-fiber semantics, including present zero
+sources; do not skip Aggregate or change counters to make timings favorable.
+Longer contexts, narrow scale, prefill and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
 the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.

@@ -81,5 +81,8 @@ remains in `detail/kv_gather`, with fewer implicit copies inside attention.
 Directed checks live in `test_fiber_efficiency.py`, `test_scale_efficiency.py`
 and `test_stream_optimizations.py`: independent values/routes/states and VJPs,
 ragged prefill, no-grad ownership, snapshot/checkpoint policy switches, extreme
-active logits, shared strided parameters and optimizer updates. Consult STATUS
-and immutable evidence for which gates and workload measurements have passed.
+active logits, shared strided parameters and optimizer updates. The
+[CPU qualification and ablations](evidence/fiber-efficiency.md) passed6719 tests
+and measured12 large cases. The repeated all160 combination improved latency
+by about1% in that short window; this is not a general speedup claim. Consult
+STATUS for the current qualification and follow-up measurements.
