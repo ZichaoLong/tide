@@ -14,17 +14,28 @@ TIDE_PYTHON_BINDINGS=OFF and standalone FP64/FP32 passed; no libpython/torch_pyt
 runtime dependency.456 source hashes match Git archive. Both units are terminal
 inactive/dead, MainPID0/exit0; no active durable job.
 
-Current uncommitted S2.2 work: native/Python ring and diamond (including paired
-middle region) specialization; independent Python layered SettleGraph; frame
-formulas split into specialized_step.py; directed tests in
- tests/test_specialized_topologies.py. Native changes still require rebuild/test.
-An interactive Python directed check failed1/90 on an over-scaled composite
-FP32 Linear VJP: test helper squared an already quadratic scalar objective.
-Reproducer retained at artifacts/specialized-linear-fp32-repro-20260923/.
-Inspect objective-diagnostic.json and failure.log; direct declared composite
-objective VJPs pass unchanged tolerances. Correct the test loss composition,
-then run durable directed gate including old specializations and native frontend.
-No execution-code fix or tolerance relaxation has been made for this probe.
+S2.2 is implemented and directed-tested: Python/C++ multi-node ring and diamond
+(singleton or shared middle region); Python fully connected layered SettleGraph
+with independent scalar frame/layer schedule. Delays/ragged input, empty selection,
+all state slots, tensor history, initial-state VJPs, shared owners, isolated roots,
+chunk cuts and existing chain/self-loop regression passed. Durable gate554 passed
+in61.54s; build exited0. Unit tide-specialized-topologies-dev-20260923-a is
+inactive/dead, MainPID0/exit0. Source archive, tree hash, tests/build manifests,
+terminal-inspection.json and logs: artifacts/specialized-topologies-dev-20260923-a/.
+Current edits are coherent S2.2 implementation/tests/contracts ready to commit.
+No active job and no unrelated user edits.
+
+Original failed Python Linear test is retained at
+artifacts/specialized-linear-fp32-repro-20260923/. It squared the already quadratic
+composite objective again. Declared direct-objective VJPs pass unchanged tolerances
+(max abs4.77e-7); only test loss composition changed. No execution workaround.
+
+Next bounded step: commit S2.2, freeze a clean read-only worktree and run complete
+CPU FP64/FP32 regression through scripts/build.py and scripts/verify.py. Then
+commit reviewed stage2 evidence separately. While that isolated gate runs, S3
+can progress on the main worktree. Priority: legal frontier packed source/event/
+sequence transport, batch Next/reset and explicit fallback/capability counters;
+then ungated DeltaRule and the small norm/position/RoPE/mask/cache adapter.
 
 S3 audit refinement: existing `delta` is explicitly Gated DeltaRule (learned decay
 and beta); plain ungated DeltaRule is a required missing profile. Preserve the

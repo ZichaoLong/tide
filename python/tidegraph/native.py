@@ -92,9 +92,9 @@ class Native:
         options.packed_sources, options.batch_next = packed_sources, batch_next
         if algorithm != "streaming" and (parallel_regions or compact_events or defer_state_release or packed_sources or batch_next):
             raise ValueError("streaming optimizations require the streaming algorithm")
-        if algorithm not in {"streaming", "frontier", "self_loop", "chain"}:
+        if algorithm not in {"streaming", "frontier", "self_loop", "ring", "chain", "diamond"}:
             raise ValueError("unknown native algorithm")
-        if algorithm in {"self_loop", "chain"}:
+        if algorithm in {"self_loop", "ring", "chain", "diamond"}:
             self.engine = core.Specialized(g, m, options, algorithm)
         else:
             self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)

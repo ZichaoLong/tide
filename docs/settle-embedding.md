@@ -24,8 +24,9 @@ messages remain in flight. Keep encoded continuation between native windows;
 do not discard partially processed boundary state/messages. Logical time remains
 the encoded time, and external position remains the original token position.
 
-Independent topology anchors: Python/C++ `self_loop` for PositiveDelayGraph and
-`chain` for TimedDAG; Python `settle_chain` for SettleGraph. They reject incompatible
+Independent topology anchors: Python/C++ `self_loop` and multi-node `ring` for
+PositiveDelayGraph, `chain` and `diamond` for TimedDAG; Python `settle_chain` and
+`settle_layered` for SettleGraph. They reject incompatible
 graphs and own their propagation loops. They may share local formulas, and the
 native specializations share the local region-block evaluator; neither invokes
 a generic scheduler. Analytical cases separately check operator formulas.
@@ -98,3 +99,21 @@ These constructors instantiate the rank-aligned, broadcast-input/summed-output
 profile already used by the Python frontend. They do not prove arbitrary
 SettleGraph encodings, arbitrary custom modules or arbitrary model equivalence.
 Local program sequence/clear/Next capabilities still control legal prefill.
+
+## Fixed-topology specialization domains
+
+The multi-node ring requires ordered singleton regions, edges i→(i+1)%N with
+strictly positive delays, input at0 and output atN−1. It owns a logical-time loop
+and propagates across each ring edge, including feedback and pending messages.
+The diamond uses edges0→1,0→2,1→3,2→3 in that identity order and accepts either
+four singleton regions or one shared middle region. Its fixed dependency layers
+finish predecessors before constructing complete region/time fibers; middle
+nodes compete under the actual Region program. Unequal positive edge delays
+and ragged input clocks are legal. No generic scheduler or planner is called.
+
+The Python layered specialization requires fully connected adjacent region
+layers, one input per first-layer node and one output per last-layer node. It
+uses scalar complete-frame formulas and a fixed layer/time/batch loop, with
+independent output-boundary grouping. It does not call generic SettleGraph or
+encoded frontier. Shared local modules, canonical sorting and emission mapping
+do not replace that independent schedule. Wrong topologies fail explicitly.

@@ -11,6 +11,7 @@ class Specialized {
   Model model_;
   Options options_;
   std::string topology_;
+  std::vector<std::vector<Index>> layers_;
   NodePool pool_;
 };
 }  // namespace tide

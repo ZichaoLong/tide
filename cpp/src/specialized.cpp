@@ -15,13 +15,31 @@ Specialized::Specialized(Graph g, Model m, Options options, std::string topology
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
   const Index n = graph_.nodes.size();
   auto require = [](bool ok) { if (!ok) throw std::invalid_argument("specialization topology/options mismatch"); };
-  require(topology_ == "self_loop" || topology_ == "chain");
+  require(topology_ == "self_loop" || topology_ == "ring" || topology_ == "chain" || topology_ == "diamond");
   require(graph_.inputs == std::vector<Index>{0} && graph_.outputs == std::vector<Index>{n - 1});
-  require(static_cast<Index>(graph_.regions.size()) == n);
-  for (Index v = 0; v < n; ++v) require(graph_.nodes[v].region == v);
-  require(static_cast<Index>(graph_.edges.size()) == (topology_ == "self_loop" ? 1 : n - 1));
-  if (topology_ == "self_loop") require(n == 1 && graph_.edges[0].source == 0 && graph_.edges[0].target == 0);
-  else for (Index v = 0; v < n - 1; ++v) require(graph_.edges[v].source == v && graph_.edges[v].target == v + 1);
+  std::vector<std::pair<Index, Index>> expected;
+  if (topology_ == "diamond") {
+    require(n == 4);
+    const auto& nodes = graph_.nodes;
+    const bool paired = nodes[1].region == nodes[2].region;
+    require(nodes[0].region == 0 && nodes[1].region == 1 && nodes[2].region == (paired ? 1 : 2) &&
+            nodes[3].region == (paired ? 2 : 3) && graph_.regions.size() == (paired ? 3 : 4));
+    expected = {{0, 1}, {0, 2}, {1, 3}, {2, 3}};
+    layers_ = paired ? std::vector<std::vector<Index>>{{0}, {1, 2}, {3}}
+                     : std::vector<std::vector<Index>>{{0}, {1}, {2}, {3}};
+  } else {
+    require(static_cast<Index>(graph_.regions.size()) == n);
+    for (Index v = 0; v < n; ++v) {
+      require(graph_.nodes[v].region == v); layers_.push_back({v});
+    }
+    const bool cyclic = topology_ == "self_loop" || topology_ == "ring";
+    if (topology_ == "self_loop") require(n == 1);
+    if (topology_ == "ring") require(n >= 2);
+    for (Index v = 0; v < (cyclic ? n : n - 1); ++v) expected.push_back({v, (v + 1) % n});
+  }
+  require(graph_.edges.size() == expected.size());
+  for (size_t i = 0; i < expected.size(); ++i)
+    require(std::make_pair(graph_.edges[i].source, graph_.edges[i].target) == expected[i]);
   require(options.mode == "hard" || options.mode == "hst" || options.mode == "softp");
   require(std::isfinite(options.zeta));
 }
@@ -32,7 +50,7 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
   Fibers inbox;
   for (const auto& a : atoms) inbox[{a.batch, a.node, a.time}].push_back(a);
   const Index n = graph_.nodes.size();
-  auto execute = [&](Index node, const std::vector<Frame>& frames) {
+  auto execute = [&](const std::vector<Frame>& frames) {
     // Local region-block formulas are shared; the fixed topology owns scheduling
     // and propagation and never invokes Streaming, Frontier or their planner.
     auto events = evaluate_block(graph_, model_, q, frames, inbox, options_, pool_, result.stats);
@@ -45,22 +63,29 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
       if (options_.trace) result.trace.push_back(std::move(e));
     }
   };
-  if (topology_ == "self_loop") {
+  if (topology_ == "self_loop" || topology_ == "ring") {
     for (Index time = q.cut; time < stop; ++time) {
-      std::vector<Frame> frames;
-      for (Index b = 0; b < q.batch_size; ++b)
-        if (inbox.count({b, 0, time})) frames.push_back({b, 0, time, {0}, {}});
-      execute(0, frames);
+      for (Index node = 0; node < n; ++node) {
+        std::vector<Frame> frames;
+        for (Index b = 0; b < q.batch_size; ++b)
+          if (inbox.count({b, node, time})) frames.push_back({b, node, time, {node}, {}});
+        execute(frames);
+      }
     }
   } else {
-    for (Index node = 0; node < n; ++node) {
+    for (const auto& layer : layers_) {
+      // All predecessors of this fixed layer have published their messages.
+      // Group actual fibers by region/time, including paired diamond candidates.
+      std::map<std::pair<Index, Index>, std::set<Index>> coordinates;
       std::vector<Frame> frames;
       for (const auto& [coordinate, bucket] : inbox) {
         auto [b, v, t] = coordinate;
-        if (v == node && t >= q.cut && t < stop) frames.push_back({b, node, t, {node}, {}});
+        if (std::find(layer.begin(), layer.end(), v) != layer.end() && t >= q.cut && t < stop)
+          coordinates[{t, b}].insert(v);
       }
-      std::sort(frames.begin(), frames.end(), [](const auto& a, const auto& b) { return std::tie(a.time, a.batch) < std::tie(b.time, b.batch); });
-      execute(node, frames);
+      for (const auto& [coordinate, nodes] : coordinates)
+        frames.push_back({coordinate.second, graph_.nodes[layer[0]].region, coordinate.first, nodes, {}});
+      execute(frames);
     }
   }
   q.pending.clear(); q.cut = stop;
