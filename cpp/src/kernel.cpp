@@ -28,6 +28,11 @@ State StateKernel::reset(const State& state) const {
   for (auto& [name, value] : result.slots) value = value * 0;
   return result;
 }
+std::vector<State> StateKernel::reset_batch(const std::vector<State>& states) const {
+  std::vector<State> result;
+  for (const auto& state : states) result.push_back(reset(state));
+  return result;
+}
 Tensor affine_scan(Tensor a, Tensor b, const Tensor& initial) {
   const auto n = b.size(0);
   for (Index stride = 1; stride < n; stride *= 2) {

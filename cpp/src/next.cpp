@@ -1,6 +1,8 @@
 #include "tide/operator_profile.h"
 #include "tide/next.h"
 #include "tide/kernel.h"
+#include "tide/autograd.h"
+#include <ATen/core/grad_mode.h>
 #include <stdexcept>
 
 namespace tide {
@@ -9,6 +11,12 @@ class AdoptNext final : public NextKernel {
  public:
   State step(const NodeWeights&, const NextInput& r) const override { return r.comparison; }
   bool comparison_identity() const override { return true; }
+  bool joint_batch() const override { return true; }
+  std::vector<State> batch(const NodeWeights&, const std::vector<NextInput>& requests) const override {
+    std::vector<State> result;
+    for (const auto& request : requests) result.push_back(request.comparison);
+    return result;
+  }
   void validate_weights(const NodeWeights&) const override {}
 };
 class ControlBlendNext final : public NextKernel {
@@ -53,6 +61,33 @@ State evaluate_next(const Node& node, const NodeWeights& w, const NextInput& req
   auto result = w.next_kernel->step(w, request);
   if (!w.next_kernel->comparison_identity()) validate(result, w, request.time);
   if (node.clear && request.active) result = w.kernel->reset(result);
+  return result;
+}
+std::vector<State> evaluate_next_batch(const Node& node, const NodeWeights& w, const std::vector<NextInput>& requests) {
+  if (!w.next_kernel->joint_batch()) {
+    std::vector<State> result;
+    for (const auto& request : requests) result.push_back(evaluate_next(node, w, request));
+    return result;
+  }
+  op_profile::Scope profile(op_profile::Next);
+  std::vector<State> result;
+  {
+    at::NoGradGuard guard;
+    result = w.next_kernel->batch(w, requests);
+    if (result.size() != requests.size()) throw std::invalid_argument("Next batch changed event count");
+    for (size_t i = 0; i < result.size(); ++i)
+      if (!w.next_kernel->comparison_identity()) validate(result[i], w, requests[i].time);
+    if (node.clear) {
+      std::vector<State> selected;
+      for (size_t i = 0; i < requests.size(); ++i) if (requests[i].active) selected.push_back(result[i]);
+      auto reset = w.kernel->reset_batch(selected);
+      if (reset.size() != selected.size()) throw std::invalid_argument("state reset batch changed event count");
+      size_t k = 0;
+      for (size_t i = 0; i < requests.size(); ++i) if (requests[i].active) result[i] = std::move(reset[k++]);
+    }
+  }
+  if (at::GradMode::is_enabled()) for (size_t i = 0; i < requests.size(); ++i)
+    result[i] = semantic_state(result[i], evaluate_next(node, w, requests[i]));
   return result;
 }
 }  // namespace tide

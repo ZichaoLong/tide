@@ -54,16 +54,46 @@ AggregateResult bind(const AggregateResult& packed, const AggregateResult& ref) 
   }
   return result;
 }
+void validate_transport(const AggregateBatch& batch, const std::vector<AggregateInput>& requests) {
+  const auto& ref = requests.at(0).sources.at(0).atom.value;
+  auto matrix = [&](const Tensor& value, Index rows) {
+    if (!value.defined() || value.dim() != 2 || value.size(0) != rows || value.size(1) != ref.numel()
+        || value.device() != ref.device() || value.scalar_type() != ref.scalar_type())
+      throw std::invalid_argument("Aggregate transport changed tensor metadata");
+  };
+  if (batch.contents.defined()) matrix(batch.contents, requests.size());
+  if (!batch.sources) return;
+  const auto& s = *batch.sources;
+  if (s.offsets.size() != requests.size()+1 || s.offsets.front() != 0)
+    throw std::invalid_argument("Aggregate transport changed event offsets");
+  Index count = 0;
+  for (size_t i = 0; i < requests.size(); ++i) {
+    for (const auto& source : requests[i].sources) {
+      if (count >= static_cast<Index>(s.slots.size()) || s.slots[count++] != source.slot)
+        throw std::invalid_argument("Aggregate transport changed source slots");
+    }
+    if (s.offsets[i+1] != count) throw std::invalid_argument("Aggregate transport changed event offsets");
+  }
+  if (count != static_cast<Index>(s.slots.size())) throw std::invalid_argument("Aggregate transport changed source count");
+  matrix(s.values, count);
+}
 }  // namespace
-void evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids, bool packed) {
-  if (ids.empty()) return;
+Tensor evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids,
+                          bool packed, bool packed_sources) {
+  if (ids.empty()) return {};
   op_profile::Scope profile(op_profile::Aggregate);
   const auto& w = m.nodes[events[ids[0]].node];
   std::vector<AggregateInput> requests;
   for (auto i : ids) requests.push_back(request(g, m, events[i]));
   std::vector<AggregateResult> results;
+  AggregateBatch transport;
   if (packed) {
-    { at::NoGradGuard guard; results = w.aggregate_kernel->batch(w, requests); }
+    { at::NoGradGuard guard;
+      if (packed_sources) {
+        transport = w.aggregate_kernel->source_batch(w, requests); validate_transport(transport, requests);
+        results = std::move(transport.events);
+      } else results = w.aggregate_kernel->batch(w, requests);
+    }
     if (results.size() != requests.size()) throw std::invalid_argument("Aggregate batch changed event count");
     for (size_t i = 0; i < requests.size(); ++i) {
       validate(results[i], requests[i]);
@@ -80,6 +110,8 @@ void evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& even
     auto& event = events[ids[j]];
     event.content = results[j].value; event.contributions = std::move(results[j].contributions);
     event.sources = std::move(requests[j].sources);
+    event.source_batch = transport.sources; event.source_row = transport.sources ? static_cast<Index>(j) : -1;
   }
+  return transport.contents;
 }
 }  // namespace tide

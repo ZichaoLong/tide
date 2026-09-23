@@ -33,7 +33,7 @@ class BrokenNext final : public ClockNext {
 
 void check_next_programs(const at::TensorOptions& options) {
   using namespace tide;
-  for (bool clear : {false, true}) for (bool encoded : {false, true}) for (int algorithm : {0, 1, 2}) {
+  for (bool clear : {false, true}) for (bool encoded : {false, true}) for (int algorithm : {0, 1, 2, 3}) {
     Graph g; g.nodes = {{0, clear}, {0}, {0}}; g.regions = {{1, true, false, "content"}};
     for (auto& n : g.nodes) { n.memory = "ssm"; n.next_state = "clock-next-v1"; }
     g.inputs = {0, 1}; g.outputs = {0, 1};
@@ -66,9 +66,12 @@ void check_next_programs(const at::TensorOptions& options) {
     for (Index b = 0; b < 2; ++b) for (Index v = 0; v < 2; ++v) for (Index i = 0; i < 2; ++i)
       xs.push_back({b, v, i, 3*i+(encoded ? 0 : 1), (b == 0 ? x : other)[i][v].reshape({1})});
     Options runtime; runtime.packed = algorithm != 0; runtime.workers = algorithm == 0 ? 1 : 3;
+    runtime.packed_sources = runtime.batch_next = algorithm == 3;
     auto execute = [&] { return algorithm == 2 ? Frontier(g, m, runtime).run(q, xs, 5, 5)
                                               : Streaming(g, m, runtime).run(q, xs, 5, 5); };
     auto result = execute();
+    if (algorithm == 3 && result.stats["next_scalar_fallback_steps"] != 8)
+      throw std::runtime_error("custom Next fallback was not counted");
     Tensor loss = at::zeros({}, options);
     for (Index v = 0; v < 2; ++v) {
       const auto& state = result.continuation.states.at({0, v});

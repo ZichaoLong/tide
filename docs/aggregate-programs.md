@@ -60,6 +60,10 @@ programs fail explicitly.
 
 ## Extension and navigation
 
+Optional native Streaming [packed source transport](packed-transport.md) shares
+scaled source rows with attention and retains a packed summary between stages.
+It preserves the same per-event content/trace and first-order VJP contract.
+
 Native clients provide `NodeWeights::aggregate_kernel` implementing
 `AggregateKernel` in `cpp/include/tide/aggregate.h`. Source atom metadata is copied;
 Tensor storage remains shared and read-only. Python programs are

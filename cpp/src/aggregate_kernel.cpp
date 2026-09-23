@@ -85,6 +85,43 @@ class SourceAggregate final : public AggregateKernel {
     return result;
   }
   bool joint_batch() const override { return true; }
+  bool joint_sources() const override { return true; }
+  AggregateBatch source_batch(const NodeWeights& w, const std::vector<AggregateInput>& requests) const override {
+    AggregateBatch result;
+    if (requests.empty()) return result;
+    auto sources = std::make_shared<SourceBatch>();
+    std::vector<Tensor> atoms, scales;
+    std::map<std::vector<Index>, std::vector<Index>> groups;
+    for (size_t i = 0; i < requests.size(); ++i) {
+      std::vector<Index> signature;
+      for (const auto& source : requests[i].sources) {
+        signature.push_back(source.slot); sources->slots.push_back(source.slot);
+        atoms.push_back(source.atom.value); scales.push_back(source.scale);
+      }
+      sources->offsets.push_back(atoms.size()); groups[signature].push_back(i);
+    }
+    sources->values = at::stack(atoms)*at::stack(scales).unsqueeze(-1);
+    result.sources = sources; result.events.resize(requests.size());
+    const auto width = sources->values.size(1);
+    // Fresh private numeric storage; evaluate_aggregate invokes this under no-grad.
+    result.contents = at::empty({static_cast<Index>(requests.size()), width}, sources->values.options());
+    for (const auto& [signature, rows] : groups) {
+      std::vector<Index> indices;
+      for (auto i : rows)
+        for (auto j = sources->offsets[i]; j < sources->offsets[i+1]; ++j) indices.push_back(j);
+      auto group = sources->values.index_select(0, at::tensor(indices, sources->values.options().dtype(at::kLong)))
+                     .reshape({static_cast<Index>(rows.size()), static_cast<Index>(signature.size()), width});
+      std::vector<Tensor> values;
+      for (size_t j = 0; j < signature.size(); ++j) values.push_back(group.select(1, j));
+      auto combined = combine(w, requests[rows[0]], values);
+      result.contents.index_copy_(0, at::tensor(rows, sources->values.options().dtype(at::kLong)), combined.value);
+      for (size_t row = 0; row < rows.size(); ++row)
+        for (const auto& source : combined.contributions)
+          result.events[rows[row]].contributions.push_back({source.slot, source.value[row]});
+    }
+    for (size_t i = 0; i < requests.size(); ++i) result.events[i].value = result.contents[i];
+    return result;
+  }
   void validate_weights(const NodeWeights& w, Index slots) const override {
     std::string prefix = kind_ == "weighted_mean" ? "agg_mass_" :
                          kind_ == "active_softmax" || kind_ == "all_softmax" ? "agg_logit_" : "";

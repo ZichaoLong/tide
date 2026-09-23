@@ -55,6 +55,10 @@ class ClockedKernel final : public StateKernel {
   bool joint_batch() const override { return program_->joint_batch(); }
   bool joint_sequence() const override { return program_->joint_sequence(); }
   State reset(const State& state) const override { return global_state(clock_, program_->reset(local_state(clock_, state))); }
+  bool joint_reset_batch() const override { return program_->joint_reset_batch(); }
+  std::vector<State> reset_batch(const std::vector<State>& states) const override {
+    return global(program_->reset_batch(local(states)));
+  }
   void validate_policy(const Node& node, Index slots) const override {
     if (node.state_clock != clock_) throw std::invalid_argument("shared state program does not match state clock");
     program_->validate_policy(node, slots);

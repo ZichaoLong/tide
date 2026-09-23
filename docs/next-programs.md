@@ -49,9 +49,11 @@ causally. Full can still batch closed frames. `next_steps` counts candidate
 transitions; `state_prefill_blocked_next` counts events blocked by this capability
 when the other prefill conditions hold.
 
-Next currently uses independent scalar event graphs, with native node parallelism.
+By default Next uses independent scalar event graphs, with native node parallelism.
+Optional native Streaming [batch Next](packed-transport.md) batches adoption/reset
+and binds training results to scalar semantic replay.
 Batch/sequence packing of Aggregate, Upd, Read and Full remains available under
-its contracts. No fused or joint Next batch is claimed. This preserves isolated
+its contracts. The default path has no joint Next batch. This preserves isolated
 public-root first-order VJPs without additional Next replay; packed backward
 optimization and performance measurement remain separate gates.
 

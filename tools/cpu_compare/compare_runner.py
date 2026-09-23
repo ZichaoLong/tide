@@ -66,6 +66,7 @@ def main(engine):
           fiber_pooling=getattr(a, 'fiber_pooling', 'lh-csr'), fiber_cache=getattr(a, 'fiber_cache', 'lh-capacity'),
           projection_layout=getattr(a, 'projection_layout', 'linear'), defer_state_release=getattr(a, 'defer_state_release', 0),
           attention_layout=getattr(a, 'attention_layout', 'head'),
+          packed_sources=getattr(a, 'packed_sources', 0), batch_next=getattr(a, 'batch_next', 0),
           parameters=expected, parameter_gib=expected*(8 if a.dtype=='float64' else 4)/2**30,
           lh_initial_kv_gib=465*a.batch*16*a.width*8/2**30 if engine=='lh' else 0,
           graph=dict(nodes_per_cortex=232, inet_edges=984, onet_edges=984, io_edges=232, oi_edges=8),

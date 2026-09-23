@@ -88,9 +88,13 @@ int main(int argc, char** argv) {
     auto y = at::full({2}, 3, options).set_requires_grad(true);
     auto unused = at::ones({2}, options).set_requires_grad(true);
     tide::Continuation q; q.identity = g.identity; q.batch_size = 2;
+    for (bool transport : {false, true}) {
     tide::Options runtime; runtime.packed = true; runtime.workers = 2;
+    runtime.packed_sources = runtime.batch_next = transport;
     tide::Streaming engine(g, m, runtime);
     auto result = engine.run(q, {{0, 0, 0, 0, x}, {0, 1, 0, 1, y}, {1, 0, 0, 0, unused}, {1, 1, 0, 1, unused}}, 2, 2);
+    if (transport && result.stats["packed_source_fallback_events"] != 4)
+      throw std::runtime_error("custom source transport fallback was not counted");
     auto loss = result.outputs[0].value.sum() + result.outputs[2].value.sum();
     if (!at::equal(loss, at::full({}, 136, options)) || result.stats.at("aggregate_scalar_fallback_steps") != 4)
       throw std::runtime_error("custom Aggregate forward/fallback mismatch");
@@ -101,6 +105,7 @@ int main(int argc, char** argv) {
     const auto& terms = result.trace[2].contributions;
     if (terms.size() != 2 || terms[0].slot != 0 || terms[1].slot != 2)
       throw std::runtime_error("custom Aggregate contribution identity mismatch");
+    }
     check_origins(options);
     const std::string report = "custom-aggregate-kernel: passed\n";
     if (!args.output_dir.empty()) {

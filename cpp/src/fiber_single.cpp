@@ -2,6 +2,7 @@
 // One node-local query batch, with per-query owner gather and padded KV.
 #include "fiber_packing.h"
 #include "fiber_pool.h"
+#include "fiber_rows.h"
 #include "tide/counters.h"
 #include "tide/operator_work.h"
 #include <algorithm>
@@ -16,17 +17,10 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
   op_profile::Scope profile(op_profile::InputPack);
-  std::vector<Tensor> inputs;
-  std::vector<Index> offsets{0}, slots, query_owners;
-  for (const auto& view : batch.views) {
-    if (view.sources.empty()) throw std::invalid_argument("fiber attention requires complete source rows");
-    std::vector<const SourceInput*> sources;
-    for (const auto& source : view.sources) sources.push_back(&source);
-    std::sort(sources.begin(), sources.end(), [](auto a, auto b) { return a->slot < b->slot; });
-    for (auto source : sources) { inputs.push_back(source->atom.value*source->scale); slots.push_back(source->slot); }
-    offsets.push_back(inputs.size());
-  }
-  auto x = at::stack(inputs);
+  const auto source = fiber_rows(batch.views);
+  const auto& offsets = source.offsets; const auto& slots = source.slots;
+  std::vector<Index> query_owners;
+  const auto& x = source.values;
   const auto width = w.bias.numel(), d = width/heads;
   profile.phase(op_profile::Qkv);
   work::linear(work::QkvCalls, x.size(0), width, 3*width);

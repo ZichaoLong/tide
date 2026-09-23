@@ -17,6 +17,7 @@ struct Config {
   bool packed = true, grad = false, check = false, profile = false;
   bool parallel_regions = false, compact_events = false, work_count = false, operator_profile = false;
   bool defer_state_release = false;
+  bool packed_sources = false, batch_next = false;
   std::string topology, run_id, emission = "row", attention_packing = "exact";
   std::string fiber_pooling = "event", fiber_cache = "cloned", projection_layout = "input", attention_layout = "event";
 };

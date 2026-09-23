@@ -8,7 +8,7 @@ class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
                  attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
-                 attention_layout="event"):
+                 attention_layout="event", packed_sources=False, batch_next=False):
         if attention_packing not in {"exact", "single"}:
             raise ValueError("invalid fiber attention packing")
         if fiber_pooling not in {"event", "csr"}:
@@ -19,6 +19,8 @@ class Native:
             raise ValueError("invalid fiber attention layout")
         if defer_state_release and not compact_events:
             raise ValueError("deferred state release requires compact events")
+        if (packed_sources or batch_next) and not packed:
+            raise ValueError("packed transport requires packed Streaming")
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
@@ -86,7 +88,8 @@ class Native:
         options.prefill, options.max_events = prefill, max_events
         options.parallel_regions, options.compact_events = parallel_regions, compact_events
         options.defer_state_release = defer_state_release
-        if algorithm != "streaming" and (parallel_regions or compact_events or defer_state_release):
+        options.packed_sources, options.batch_next = packed_sources, batch_next
+        if algorithm != "streaming" and (parallel_regions or compact_events or defer_state_release or packed_sources or batch_next):
             raise ValueError("streaming optimizations require the streaming algorithm")
         if algorithm not in {"streaming", "frontier", "self_loop", "chain"}:
             raise ValueError("unknown native algorithm")

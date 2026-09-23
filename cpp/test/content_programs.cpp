@@ -61,7 +61,7 @@ class SourceFull final : public FullKernel {
 
 void check_content_programs(const at::TensorOptions& options) {
   using namespace tide;
-  for (bool clear : {false, true}) for (bool encoded : {false, true}) for (int algorithm : {0, 1, 2}) {
+  for (bool clear : {false, true}) for (bool encoded : {false, true}) for (int algorithm : {0, 1, 2, 3}) {
     Graph g; g.nodes = {{0, clear}}; g.nodes[0].memory = "source-memory-v1";
     g.nodes[0].emission = "source-full-v1"; g.nodes[0].readout = "source-read-v1"; g.regions = {{1}}; g.inputs = {0, 0}; g.outputs = {0};
     Model m; m.nodes = {{at::zeros({2}, options), at::zeros({2, 2}, options), at::zeros({2}, options), at::ones({2}, options)}};
@@ -86,6 +86,7 @@ void check_content_programs(const at::TensorOptions& options) {
     }
     Continuation q; q.identity = g.identity; q.batch_size = 2;
     Options runtime; runtime.packed = algorithm != 0; runtime.workers = algorithm == 0 ? 1 : 2;
+    runtime.packed_sources = runtime.batch_next = algorithm == 3;
     Result result = algorithm == 2 ? Frontier(g, m, runtime).run(q, xs, 5, 5) : Streaming(g, m, runtime).run(q, xs, 5, 5);
     auto loss = result.outputs[0].value.sum()+result.outputs[2].value.sum();
     if (!at::equal(loss, at::full({}, clear ? 104 : 116, options))) throw std::runtime_error("complete content forward mismatch");

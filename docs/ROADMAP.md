@@ -195,8 +195,13 @@ interleave raises LH latency6.8%, lowers PDG only0.65%; its smaller LH/PDG ratio
 largely comes from slowing LH. Keep conservative defaults and all experimental
 options available for target-machine comparisons.
 
-Next bounded M8 work should isolate data locality and the node scheduler, then
-batched state/cache and signal storage. Compare stable node/worker assignment
+The active M8 increment implements optional [packed source transport and batch
+Next](packed-transport.md). Directed checks cover both dtypes; complete CPU and
+bounded performance qualification are pending. This does not yet batch persistent
+KV ownership or eliminate per-event trace/state records.
+
+Remaining M8 work should isolate data locality and the node scheduler, then
+batched persistent state/cache and signal storage. Compare stable node/worker assignment
 against the current dynamic queue with fixed work and identical BLAS/resource
 settings; preserve caller thread-local/grad state, exception draining and
 canonical publication barriers. A private reusable inference cache requires
@@ -204,7 +209,10 @@ explicit ownership and snapshot/trace/autograd boundaries before implementation;
 these are pending designs, not existing optimized paths. Use small independent
 state/route/VJP anchors and an isolated cost probe before another wide case.
 Retain sparse allocation and complete-fiber semantics, including present zero
-sources; do not skip Aggregate or change counters to make timings favorable.
+sources and Aggregate/Next logical results. Semantics does not require a separate
+Tensor/allocation/operator per logical value. Fusion and reuse may reduce physical
+work; report logical event counts separately from actual operations and never
+mislabel reduced work as unchanged. Preserve trace and declared VJP contracts.
 Longer contexts, narrow scale, prefill and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
 the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.

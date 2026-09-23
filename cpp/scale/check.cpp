@@ -20,6 +20,8 @@ tide::Result traced(const Config& c, const Topology& topology, Index workers, bo
   opts.parallel_regions = optimized && c.parallel_regions;
   opts.compact_events = optimized && c.compact_events;
   opts.defer_state_release = optimized && c.defer_state_release;
+  opts.packed_sources = optimized && packed && c.packed_sources;
+  opts.batch_next = optimized && packed && c.batch_next;
   tide::Streaming engine(std::move(f.graph), std::move(f.model), opts);
   tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
   tide::StreamingCursor cursor(engine, std::move(q)); tide::Result all;

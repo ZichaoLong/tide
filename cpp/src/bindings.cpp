@@ -158,7 +158,8 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Options>(m, "Options").def(py::init<>())
     FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta)
     FIELD(Options, prefill) FIELD(Options, max_events)
-    FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events) FIELD(Options, defer_state_release);
+    FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events) FIELD(Options, defer_state_release)
+    FIELD(Options, packed_sources) FIELD(Options, batch_next);
   py::class_<DenseLinear>(m, "DenseLinear").def(py::init<Index>())
     .def("run", [](DenseLinear& head, const Tensor& x, const Tensor& weight, const std::optional<Tensor>& bias) {
       return head.run(x, weight, bias.value_or(Tensor()));

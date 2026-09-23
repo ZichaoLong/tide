@@ -14,7 +14,8 @@ Config parse(int argc, char** argv) {
     if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
         && key != "--fiber-pooling" && key != "--fiber-cache" && key != "--projection-layout" && key != "--attention-layout"
-        && key != "--defer-state-release" && key != "--work-count" && key != "--operator-profile"
+        && key != "--defer-state-release" && key != "--packed-sources" && key != "--batch-next"
+        && key != "--work-count" && key != "--operator-profile"
         && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
     std::string value = argv[i];
@@ -41,6 +42,8 @@ Config parse(int argc, char** argv) {
       if (key == "--parallel-regions") c.parallel_regions = value == "1";
       if (key == "--compact-events") c.compact_events = value == "1";
       if (key == "--defer-state-release") c.defer_state_release = value == "1";
+      if (key == "--packed-sources") c.packed_sources = value == "1";
+      if (key == "--batch-next") c.batch_next = value == "1";
     }
   }
   c.runtime = portable_torch::parse_cli(common.size(), common.data(), true);
@@ -58,6 +61,8 @@ Config parse(int argc, char** argv) {
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
   if (c.defer_state_release && !c.compact_events)
     throw std::invalid_argument("deferred state release requires compact events");
+  if ((c.packed_sources || c.batch_next) && !c.packed)
+    throw std::invalid_argument("packed transport requires packed Streaming");
   if (c.operator_profile && (c.grad || !c.packed || c.emission != "row"))
     throw std::invalid_argument("operator profiling supports packed inference row Emit only");
   if (c.work_count && (c.grad || c.emission != "row"))

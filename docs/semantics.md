@@ -83,6 +83,12 @@ batch preserve event visibility, logical state and the declared public VJP.
 
 ## Equality and training
 
+Logical content/state observability does not fix Tensor object count, physical
+layout or operator granularity. [Optional packed transport](packed-transport.md)
+preserves source-aware content and Next transitions through batched storage and
+explicit first-order replay. Trace and snapshot contracts still apply; physical
+reuse counters are distinct from canonical logical event counts.
+
 Additional local state profiles are specified in `state-programs.md` (SSM),
 `matrix-memory.md` (Linear/Delta) and `attention.md` (aggregated-event GQA/window).
 Their clocks, clear behavior and batching contracts are explicit; sharing the

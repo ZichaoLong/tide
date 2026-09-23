@@ -74,13 +74,21 @@ struct Atom {
 };
 struct SourceInput { Index slot; Atom atom; Tensor scale; };
 struct SlotValue { Index slot; Tensor value; };
+// Immutable numeric transport. Rows use each event's canonical Aggregate order.
+// Original atoms/scales remain authoritative for custom programs and VJP replay.
+struct SourceBatch {
+  Tensor values;
+  std::vector<Index> offsets{0}, slots;
+};
 // Metadata views live only for a synchronous kernel call, never in persistent
 // State. Tensor handles may be retained by autograd; storage is read-only.
 struct ContentView {
   Tensor value;
   c10::ArrayRef<SourceInput> sources;
   c10::ArrayRef<SlotValue> contributions;
-  ContentView with_value(Tensor v) const { return {std::move(v), sources, contributions}; }
+  std::shared_ptr<const SourceBatch> source_batch;
+  Index source_row = -1;
+  ContentView with_value(Tensor v) const { auto result = *this; result.value = std::move(v); return result; }
 };
 struct Continuation {
   std::string identity;
@@ -128,7 +136,9 @@ struct Event {
   std::vector<SlotValue> emitted;
   std::vector<SlotValue> contributions;
   std::vector<SourceInput> sources;
-  ContentView local_content() const { return {content, sources, contributions}; }
+  std::shared_ptr<const SourceBatch> source_batch;
+  Index source_row = -1;
+  ContentView local_content() const { return {content, sources, contributions, source_batch, source_row}; }
   History history;
 };
 struct Output { Index batch, time, port; Tensor value; };
@@ -149,5 +159,6 @@ struct Options {
   bool profile = false; // Optional streaming coordinator wall-time phases.
   bool parallel_regions = false, compact_events = false;
   bool defer_state_release = false; // Retire old state containers in compact cleanup.
+  bool packed_sources = false, batch_next = false; // Optional packed Streaming transport.
 };
 }  // namespace tide

@@ -14,13 +14,14 @@ enum Field { QkvCalls, QkvRows, QkvFlops, OutCalls, OutRows, OutFlops,
   EmitCalls, EmitRows, EmitFlops, HeadCalls, HeadRows, HeadFlops,
   ValidScores, ExecutedScores, ValidAttentionFlops, ExecutedAttentionFlops,
   AttentionCalls, EmitEdgeRows, PendingEdgeRows, BodyCandidates, BodySelected,
-  AggregateScaleElements, AggregateAddElements, Fields };
+  AggregateScaleElements, AggregateAddElements, FiberScaleElements, FiberReusedElements, Fields };
 inline constexpr std::array<const char*, Fields> names{
   "qkv_calls", "qkv_rows", "qkv_flops", "out_calls", "out_rows", "out_flops",
   "emit_calls", "emit_rows", "emit_flops", "head_calls", "head_rows", "head_flops",
   "valid_score_elements", "executed_score_elements", "valid_attention_flops",
   "executed_attention_flops", "attention_calls", "emit_edge_rows", "pending_edge_rows",
-  "body_candidates", "body_selected", "aggregate_scale_elements", "aggregate_add_elements"};
+  "body_candidates", "body_selected", "aggregate_scale_elements", "aggregate_add_elements",
+  "fiber_scale_elements", "fiber_reused_elements"};
 inline std::atomic<bool> active{false};
 inline std::array<std::atomic<Count>, Fields> counts{};
 inline bool enabled() { return active.load(std::memory_order_relaxed); }

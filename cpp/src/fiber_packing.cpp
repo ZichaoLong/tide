@@ -3,6 +3,7 @@
 // Event/source offsets preserve all current-fiber keys without cross-sample scores.
 #include "fiber_packing.h"
 #include "fiber_pool.h"
+#include "fiber_rows.h"
 #include "tide/counters.h"
 #include <algorithm>
 #include <cmath>
@@ -11,25 +12,6 @@
 
 namespace tide {
 namespace {
-struct FiberRows {
-  Tensor values;
-  std::vector<Index> offsets{0};  // event -> source rows; original tags stay in views
-  std::vector<Index> slots;
-};
-FiberRows flatten(const ContentViews& views) {
-  FiberRows result; std::vector<Tensor> rows;
-  for (const auto& view : views) {
-    if (view.sources.empty()) throw std::invalid_argument("fiber attention requires complete source rows");
-    std::vector<const SourceInput*> sources;
-    for (const auto& source : view.sources) sources.push_back(&source);
-    std::sort(sources.begin(), sources.end(), [](auto a, auto b) { return a->slot < b->slot; });
-    for (auto source : sources) {
-      rows.push_back(source->atom.value*source->scale); result.slots.push_back(source->slot);
-    }
-    result.offsets.push_back(rows.size());
-  }
-  result.values = at::stack(rows); return result;
-}
 Tensor repeat_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
   if (last < -1 || target <= last) throw std::invalid_argument("fiber attention requires increasing tick times");
   if (bias.numel()) for (auto tick = last; tick < target; ++tick) bias = bias-rate;
@@ -47,7 +29,7 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
   op_profile::Scope profile(op_profile::InputPack);
-  const auto source = flatten(batch.views); const auto& offsets = source.offsets;
+  const auto source = fiber_rows(batch.views); const auto& offsets = source.offsets;
   const auto width = w.bias.numel(), d = width/heads;
   profile.phase(op_profile::Qkv);
   work::linear(work::QkvCalls, source.values.size(0), width, 3*width);

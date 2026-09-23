@@ -44,7 +44,7 @@ def main():
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
                          ('threads', 1), ('head-workers', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('work-count', 0), ('operator-profile', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0), ('defer-state-release', 0)]:
+    for key, default in [('work-count', 0), ('operator-profile', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0), ('defer-state-release', 0), ('packed-sources', 0), ('batch-next', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact')
@@ -74,9 +74,11 @@ def main():
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
               'threads', 'head_workers', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile',
               'parallel_regions', 'compact_events', 'work_count', 'operator_profile', 'attention_packing',
-              'fiber_pooling', 'fiber_cache', 'projection_layout', 'attention_layout', 'defer_state_release')}
+              'fiber_pooling', 'fiber_cache', 'projection_layout', 'attention_layout', 'defer_state_release', 'packed_sources', 'batch_next')}
     if args.defer_state_release and not args.compact_events:
         p.error('deferred state release requires compact events')
+    if (args.packed_sources or args.batch_next) and not args.packed:
+        p.error('packed transport requires packed Streaming')
     if args.operator_profile and (args.grad or not args.packed or args.emission != 'row'):
         p.error('operator profiling supports packed inference row Emit only')
     out.mkdir(parents=True, exist_ok=False)

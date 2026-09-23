@@ -45,8 +45,11 @@ class FiberAttention final : public StateKernel {
     for (const auto& source : content.sources) sources.push_back(&source);
     std::sort(sources.begin(), sources.end(), [](auto a, auto b) { return a->slot < b->slot; });
     std::vector<Tensor> rows;
-    for (auto s : sources) rows.push_back(s->atom.value*s->scale);
+    for (auto s : sources) {
+      rows.push_back(s->atom.value*s->scale);
+    }
     auto x = at::stack(rows); const auto width = w.bias.numel(), d = width/heads_;
+    if (work::enabled()) work::add(work::FiberScaleElements, x.numel());
     work::linear(work::QkvCalls, x.size(0), width, 3*width);
     auto qkv = at::linear(x, w.extra.at("fiber_qkv").t(), w.extra.at("fiber_qkv_bias")).split(width, -1);
     auto q = qkv[0].reshape({x.size(0), heads_, d}).transpose(0, 1)*(1/std::sqrt(double(d)));
@@ -86,6 +89,20 @@ class FiberAttention final : public StateKernel {
   State reset(const State& state) const override {
     auto result = state; result.value = state.value*0;
     for (auto& [name, value] : result.slots) value = value.slice(0, 0, 0).clone();
+    return result;
+  }
+  bool joint_reset_batch() const override { return true; }
+  std::vector<State> reset_batch(const std::vector<State>& states) const override {
+    if (states.empty()) return {};
+    std::vector<Tensor> values;
+    for (const auto& state : states) values.push_back(state.value);
+    auto zeros = at::stack(values)*0;
+    std::vector<State> result;
+    // Numeric batch runs under no-grad; public VJPs are bound to scalar reset.
+    std::map<std::string, Tensor> empty;
+    for (const auto& [name, value] : states[0].slots) empty.emplace(name, value.slice(0, 0, 0).clone());
+    for (size_t i = 0; i < states.size(); ++i)
+      result.push_back({zeros[i], states[i].last_time, states[i].observations, empty});
     return result;
   }
   void validate_policy(const Node& n, Index slots) const override {

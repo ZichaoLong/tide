@@ -29,6 +29,8 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   if (!std::isfinite(options_.zeta)) throw std::invalid_argument("nonfinite zeta");
   if (options_.defer_state_release && !options_.compact_events)
     throw std::invalid_argument("deferred state release requires compact events");
+  if ((options_.packed_sources || options_.batch_next) && !options_.packed)
+    throw std::invalid_argument("packed transport requires packed Streaming");
 }
 Result Streaming::run(const Continuation& initial, const std::vector<External>& external, Index stop, Index seal) {
   std::lock_guard<std::mutex> lock(run_mutex_);
@@ -89,9 +91,13 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_aggregate_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
+      if (options_.packed_sources) {
+        if (model_.nodes[node].aggregate_kernel->joint_sources()) stats["packed_source_batches"] += 1;
+        else stats["packed_source_fallback_events"] += ids.size();
+      }
       jobs.push_back([&, node, ids] {
         const auto& w = model_.nodes[node];
-        evaluate_aggregate(graph_, model_, events, ids, options_.packed);
+        auto packed_content = evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources);
         std::vector<State> old;
         std::vector<Tensor> content;
         std::vector<Index> times;
@@ -109,7 +115,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
           std::vector<State> states;
           {
             at::NoGradGuard guard;
-            auto h = at::stack(content);
+            auto h = packed_content.defined() ? packed_content : at::stack(content);
             states = w.kernel->batch(w, old, h, times, content_views);
             if (states.size() != ids.size()) throw std::invalid_argument("state batch changed event count");
           }
@@ -153,14 +159,36 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       stats["selected_events"] += ids.size();
       stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
       stats["next_steps"] += all.size();
+      if (options_.batch_next) {
+        const auto& w = model_.nodes[node];
+        if (w.next_kernel->joint_batch()) {
+          ++stats["next_batches"];
+          if (replay) stats["semantic_next_replays"] += all.size();
+          if (graph_.nodes[node].clear && !ids.empty()) {
+            if (w.kernel->joint_reset_batch()) ++stats["next_reset_batches"];
+            else stats["next_reset_scalar_steps"] += ids.size();
+          }
+        } else stats["next_scalar_fallback_steps"] += all.size();
+      }
       if (!ids.empty()) stats["full_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
       jobs.push_back([&, node, all, ids] {
         const auto& w = model_.nodes[node];
+        std::vector<State> next;
+        if (options_.batch_next) {
+          std::vector<NextInput> requests;
+          for (auto i : all) {
+            const auto& e = events[i];
+            requests.push_back({e.old, e.comparison_state, e.time, e.local_content(), e.active, e.control});
+          }
+          next = evaluate_next_batch(graph_.nodes[node], w, requests);
+        }
+        size_t row = 0;
         for (auto i : all) {
           auto& e = events[i];
-          e.next_state = evaluate_next(graph_.nodes[node], w, {e.old, e.comparison_state, e.time, e.local_content(), e.active, e.control});
+          e.next_state = options_.batch_next ? std::move(next[row++]) :
+            evaluate_next(graph_.nodes[node], w, {e.old, e.comparison_state, e.time, e.local_content(), e.active, e.control});
           e.next = e.next_state.value;
         }
         if (!ids.empty()) evaluate_full(graph_, model_, events, ids, options_, options_.packed);

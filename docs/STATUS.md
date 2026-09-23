@@ -1,13 +1,22 @@
 # Current handoff
 
 Updated: 2026-09-23 (Asia/Shanghai). Branch: graph-execution-foundation.
-This increment is complete: five opt-in fiber execution/storage policies,
-complete CPU regression, refreshed portable source kit,12 wide ablation cases
-and a four-case NUMA follow-up. Both services and terminal audits passed;
-no qualification or benchmark remains active. The measured gains are limited,
-so retain conservative defaults. See [options](fiber-efficiency.md),
-[primary evidence](evidence/fiber-efficiency.md) and
-[NUMA evidence](evidence/fiber-numa.md).
+Active increment: optional packed source transport between Aggregate and fiber
+attention, plus batched Next adoption/reset. User authorized implementation and
+bounded performance trials, preserving canonical semantics and optional policies.
+Baseline is fc97b46. Development build succeeded; 251 directed checks passed and 12 failed from
+invalid new test fixtures. Corrected 12-case retest passed in4.37s against the
+unchanged C++ build. Both services are terminal. Implementation is ready to
+commit before immutable CPU/performance qualification; no job currently runs.
+Preserve `packed-transport-dev-20260923-142352` (failed, source archive retained)
+and `packed-transport-retest-20260923-143254` (passed), without relabeling either.
+
+Plan: retain defaults; validate independent Python/native values, source slots,
+routes, isolated VJPs, clear/comparison snapshots, clocks and checkpoint policy
+switching; then freeze/commit and run complete CPU gates and a bounded fixed
+17.27B baseline/source/Next/combined comparison with repetitions. Options are
+execution policies, outside graph/checkpoint identity. Custom modules retain an
+explicit counted scalar fallback. Training keeps semantic replay where needed.
 
 The overall objective remains Python/LibTorch generic and independent specialized
 PDG/TimedDAG/SettleGraph execution, complete training/inference equivalence,
@@ -80,14 +89,14 @@ At17.27B/D2048/B512/V50304/FP32/no_grad/12 tokens/warmup4:
   NUMA engine pair, inventories and output checksums match exactly. Large sums
   supplement complete small values/states/routes/VJPs; they do not replace them.
 
-No more work is required to close this bounded increment. The next M8 questions
-are in ROADMAP: isolate node scheduling/data locality, then batched state/cache
-and signal storage, before expanding context/narrow/training cases. Preserve
-thread-local grad state, exception draining and publication barriers in any
-scheduler change. Private reusable caches require explicit snapshot/trace/AD
-ownership contracts. These are pending designs; do not describe them as already
-implemented, or infer that PDG semantics require the remaining LH gap.
-Do not repeat completed large cases without a new bounded measurement question.
+Next action: commit this implementation, create a detached read-only worktree
+at that commit, and launch `artifacts/qualify_packed_transport.py` through job.py
+in background.slice with affinity160–319. Driver: complete CPU FP64/FP32, fresh
+relocated kit smokes, four small operator-cost probes, LH and six fixed17.27B
+PDG cases (baseline/source/Next/combined plus baseline/combined repeat). Then run
+`artifacts/audit_packed_transport.py RECEIPT`; retain exact source/run identities
+in `artifacts/packed-transport-qualification.json`. Performance is not yet known.
+No complete batched persistent KV storage or optimized backward is claimed.
 
 ## Completed job and artifact identities
 

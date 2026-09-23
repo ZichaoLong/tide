@@ -45,6 +45,17 @@ PDG 另有五个独立实验选项，默认保留此前路径：`--fiber-pooling
 样本 KV 分配、并行清理旧状态容器、投影权重布局，以及 attention 临时张量的 head 排列。
 这些选项不改变图和参数量；性能需按机器与配置分别测量。
 
+还有两个默认关闭的独立选项：`--packed-sources 0|1` 将来源载荷批量缩放后在
+Aggregate 与 Attention 间复用；`--batch-next 0|1` 批量采用/清空状态。
+两者保留完整来源、比较快照与下一状态语义，可分别启用做对照：
+
+```bash
+python run_pdg.py --device cpu --threads 56 --packed-sources 1 --batch-next 1 --output-dir runs/pdg-transport
+```
+
+`op/fiber_scale_elements` 记录实际来源缩放，`op/fiber_reused_elements` 记录复用量；
+逻辑事件数与这些实际操作计数分开报告。先加 `--smoke` 检查目标机。
+
 每条命令独立完成：校验包 → 准备专用源码目录 → CMake 构建 → 运行 → 汇总。
 运行目录必须是新目录；重测请换名字。编译默认2个作业，可用 `--jobs 4`。
 默认不设置内存上限、不绑定特定 CPU 编号；`--threads` 默认最多56个可用逻辑 CPU。

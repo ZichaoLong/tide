@@ -24,6 +24,7 @@
 | `docs/operator-profiling.md` | Optional exclusive calling-thread timers, common boundaries and interpretation |
 | `docs/fiber-efficiency.md` | CSR pooling, immutable KV ownership, deferred state retirement and matrix layout |
 | `docs/streaming-optimizations.md` | Independent region scheduling, compact event ownership, bounded dense projection and validation |
+| `docs/packed-transport.md` | Optional shared source-row transport and batch Next/reset; scalar fallbacks and public VJPs |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |
 | `docs/evidence/lh-local-scale-pilot.md` | Original-LH local 9B Add measurements, aligned grad/thread comparisons and explicit unmeasured scope |

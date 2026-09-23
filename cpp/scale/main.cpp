@@ -28,7 +28,8 @@ int main(int argc, char** argv) {
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
       std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n";
       std::cout << "  --fiber-pooling event|csr --fiber-cache cloned|owned --projection-layout input|linear\n"
-                   "  --attention-layout event|head --defer-state-release 0|1 (requires compact events)\n";
+                   "  --attention-layout event|head --defer-state-release 0|1 (requires compact events)\n"
+                   "  --packed-sources 0|1 --batch-next 0|1 (require packed Streaming)\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
     options.profile = c.profile;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
     options.defer_state_release = c.defer_state_release;
+    options.packed_sources = c.packed_sources; options.batch_next = c.batch_next;
     tide::Streaming engine(std::move(f.graph), std::move(f.model), options);
     tide::DenseLinear head(c.head_workers);
     const auto construction = seconds(construction_start);
@@ -116,7 +118,7 @@ int main(int argc, char** argv) {
         {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile},
         {"fiber_pooling", c.fiber_pooling}, {"fiber_cache", c.fiber_cache},
         {"projection_layout", c.projection_layout}, {"attention_layout", c.attention_layout},
-        {"defer_state_release", c.defer_state_release}});
+        {"defer_state_release", c.defer_state_release}, {"packed_sources", c.packed_sources}, {"batch_next", c.batch_next}});
       std::cout << "STEP " << token << " ms/sample-token=" << elapsed*1000/c.batch
                 << " candidates=" << result.stats["candidate_events"] << " edges=" << result.stats["visited_edges"] << '\n' << std::flush;
     }
