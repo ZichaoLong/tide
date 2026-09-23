@@ -7,27 +7,30 @@ Stage1 scope/matrix audit and twelve-config performance freeze are accepted;
 and [capabilities](execution-capabilities.md) distinguish existing verified
 kernels from required gaps. Previous PDG/LH tuning is closed; defaults remain.
 
-S2.1 native SettleGraph is implemented: independent C++ graph/rank validation,
-encoded boundary construction, owner-preserving model mapping, dense-window
-entry and complete-boundary projection. The binding is an adapter; standalone
-C++ requires no Python. Directed development gate passed230 CPU FP64/FP32
-checks in23.26s, including standalone literal-formula/VJP and complete native vs
-Python traces, slots, ownership and chunk cuts. This is not the final full gate.
+S2.1 native SettleGraph is verified for the rank-aligned broadcast-input/sum-output
+profile. Implementation commit ac19aad; [reviewed evidence](evidence/native-settle-frontend.md).
+Directed gate230 passed/23.26s. Independent clean CMake build with
+TIDE_PYTHON_BINDINGS=OFF and standalone FP64/FP32 passed; no libpython/torch_python
+runtime dependency.456 source hashes match Git archive. Both units are terminal
+inactive/dead, MainPID0/exit0; no active durable job.
 
-Terminal unit tide-native-settle-dev-20260923-a: inactive/dead, MainPID0,
-ExecMainStatus0/Result=success; status.json and development.json both passed.
-Source is stage1 e3ffad0 plus archived implementation (tree SHA256 in records).
-Artifacts: artifacts/native-settle-dev-20260923-a/{source.tar.gz,status.json,
-development.json,task.log,live-inspection.json,terminal-inspection.json}.
-No active job. Current uncommitted changes are this coherent S2.1 code/tests/docs,
-ready for local implementation commit. No user changes were overwritten.
+Current uncommitted S2.2 work: native/Python ring and diamond (including paired
+middle region) specialization; independent Python layered SettleGraph; frame
+formulas split into specialized_step.py; directed tests in
+ tests/test_specialized_topologies.py. Native changes still require rebuild/test.
+An interactive Python directed check failed1/90 on an over-scaled composite
+FP32 Linear VJP: test helper squared an already quadratic scalar objective.
+Reproducer retained at artifacts/specialized-linear-fp32-repro-20260923/.
+Inspect objective-diagnostic.json and failure.log; direct declared composite
+objective VJPs pass unchanged tolerances. Correct the test loss composition,
+then run durable directed gate including old specializations and native frontend.
+No execution-code fix or tolerance relaxation has been made for this probe.
 
-Next: commit implementation, create a detached clean read-only worktree, build
-`tidegraph-settle-check` with TIDE_PYTHON_BINDINGS=OFF in a separate build directory,
-run FP64/FP32 and audit binary dependencies; commit reviewed evidence separately.
-Then S2.2 independent multi-node ring, diamond with region selection, and Python
-layered SettleGraph. Keep full CPU gate for the stage boundary. No new wide runs.
-No push/sub-agents. All reference repositories remain read-only.
+S3 audit refinement: existing `delta` is explicitly Gated DeltaRule (learned decay
+and beta); plain ungated DeltaRule is a required missing profile. Preserve the
+existing formula/name and add a separately named profile in S3.1.
+No push/sub-agents. Reference directories remain read-only. Native checkpoint
+is already qualified; no new wide performance run is queued.
 
 Commands before continuing (also after compaction):
 ```bash
@@ -57,3 +60,9 @@ Raw artifacts retained under artifacts/packed-transport-20260923-143526/.
 No repeated stable speedup for combined options; experimental defaults stay off.
 Native TIDENCK1 value/optimizer checkpoint, graph continuation v5 and two-clock
 application bundle are distinct scopes; none promises full controller/RNG resume.
+
+S2.1 artifact directories: native-settle-dev-20260923-a and
+native-settle-standalone-20260923-a under artifacts/. Standalone snapshot:
+/var/tmp/zlong-graph-execution-foundation/qualification/native-settle-ac19aad.
+Its source/build/driver stay immutable. The reviewed evidence owns exact paths,
+commands, binary identity and terminal audit. Full stage2 gate remains after S2.2.

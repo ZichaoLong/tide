@@ -9,7 +9,7 @@ semantic parity, not optimized backward; packed state/Read/Full replay remains.
 ## Graph × schedule × option × mode
 
 P = PDG, D = TimedDAG, S = encoded SettleGraph. D/S streaming use ordinary PDG
-kernel and preserve their legal topology. Native S construction is implemented in `settle.h`; clean standalone gate is pending.
+kernel and preserve their legal topology. Native S construction is [verified](evidence/native-settle-frontend.md) in `settle.h`.
 "verified" refers to the existing bounded modules/tests below, not every custom
 program. Infer/train entries share values; training uses scalar semantic replay.
 
@@ -41,7 +41,7 @@ gaps when the scheduling contract allows the operation, not semantic N/A.
 | EMA/identity/SSM | memory.py, memory_batch.py / basic_kernels.cpp | exact affine batch/time scan; `test_memory_programs.py`, `test_memory_packing.py` |
 | event Attention/GQA/window | attention.py / attention.cpp | ragged KV, grouped batch and causal sequence; `test_attention.py`, `test_attention_packing.py`, `test_attention_schedules.py`, `test_attention_training.py` |
 | same-fiber Attention/pooling | fiber_attention.py, fiber_packing.py, fiber_pool.py / corresponding native files | complete fiber visibility; distinct KV/log-bias decay; packed batch/time; fiber formula/schedule/pool/continuation/single/efficiency tests |
-| Linear/Delta/Gated Delta | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; packed fallback may be scalar; `test_matrix_memory.py`, isolated roots |
+| Linear/Gated Delta (`linear`/`delta`) | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; ungated DeltaRule is still required by S3.1; `test_matrix_memory.py`, isolated roots |
 | FFN/SwiGLU/identity/norm Full | ops.py, lh_full.py / ops.cpp, lh_full.cpp | independent selected rows batched; `test_memory_programs.py`, `test_lh_full_formulas.py` |
 | Agg sum/mean/positive mean/active/all softmax | aggregate.py / aggregate_kernel.cpp | complete source domain and contributions, absent != zero; aggregate formula/contract/schedule and source-domain tests |
 | HARD/SOFTP/HST Emit, sparse slot payloads | full.py / full_kernel.cpp | explicit HST surrogate, None/zero/unused; emit/isolated-gradient tests |
