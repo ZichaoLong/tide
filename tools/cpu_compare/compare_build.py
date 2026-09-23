@@ -69,7 +69,8 @@ def command(engine, a, binary, out, run_id):
                   steps=a.steps, warmup=a.warmup, vocab=a.vocab, seed=a.seed,
                   workers=a.threads, threads=1, head_workers=a.threads, parallel_regions=1,
                   compact_events=1, packed=1, grad=0, emission='row', profile=1,
-                  work_count=a.work_count, check=int(a.smoke and a.width <= 64 and a.batch <= 8 and a.steps <= 12))
+                  work_count=a.work_count, attention_packing=a.attention_packing,
+                  check=int(a.smoke and a.width <= 64 and a.batch <= 8 and a.steps <= 12))
     result = [str(binary)]
     for key, value in values.items():
         result += ['--'+key.replace('_', '-'), str(value)]

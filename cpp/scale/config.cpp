@@ -11,7 +11,7 @@ Config parse(int argc, char** argv) {
     {"--head-workers", &c.head_workers}};
   for (int i = 1; i < argc; ++i) {
     const std::string key = argv[i];
-    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission"
+    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
         && key != "--work-count" && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
@@ -23,6 +23,7 @@ Config parse(int argc, char** argv) {
     } else if (key == "--topology") c.topology = value;
     else if (key == "--run-id") c.run_id = value;
     else if (key == "--emission") c.emission = value;
+    else if (key == "--attention-packing") c.attention_packing = value;
     else {
       if (value != "0" && value != "1") throw std::invalid_argument("boolean requires 0 or 1: "+key);
       if (key == "--packed") c.packed = value == "1";
@@ -41,6 +42,7 @@ Config parse(int argc, char** argv) {
       || c.threads < 1 || c.threads > 160 || c.workers*c.threads > 160 || c.vocab < 2 || c.vocab > 100000
       || c.head_workers < 1 || c.head_workers > 160 || c.head_workers*c.threads > 160
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
+      || (c.attention_packing != "exact" && c.attention_packing != "single")
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
   if (c.work_count && (c.grad || c.emission != "row"))
     throw std::invalid_argument("work accounting supports inference row Emit only");

@@ -17,10 +17,11 @@ Tensor advance_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
 }
 class FiberAttention final : public StateKernel {
   Index heads_, input_slots_;
-  std::string pool_;
+  std::string pool_, packing_;
  public:
-  explicit FiberAttention(const Node& n, Index input_slots = 0)
-      : heads_(n.query_heads), input_slots_(input_slots), pool_(fiber_pool_kind(n.memory)) {
+  explicit FiberAttention(const Node& n, Index input_slots, const std::string& packing)
+      : heads_(n.query_heads), input_slots_(input_slots), pool_(fiber_pool_kind(n.memory)), packing_(packing) {
+    if (packing_ != "exact" && packing_ != "single") throw std::invalid_argument("invalid fiber attention packing");
     if (heads_ < 1 || n.kv_heads != heads_ || n.window || n.aggregation != "sum")
       throw std::invalid_argument("LH fiber attention requires equal heads, no eviction and sum Aggregate");
   }
@@ -73,7 +74,8 @@ class FiberAttention final : public StateKernel {
   }
   PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
                                const PackedSequence& batch) const override {
-    return fiber_attention_packed(w, heads_, pool_, old, batch);
+    return packing_ == "single" ? fiber_attention_single(w, heads_, pool_, old, batch)
+                               : fiber_attention_packed(w, heads_, pool_, old, batch);
   }
   State reset(const State& state) const override {
     auto result = state; result.value = state.value*0;
@@ -109,7 +111,20 @@ class FiberAttention final : public StateKernel {
   }
 };
 }  // namespace
-std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots) { return std::make_shared<FiberAttention>(n, slots); }
+std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots, const std::string& packing) {
+  return std::make_shared<FiberAttention>(n, slots, packing);
+}
+void configure_fiber_attention(const Graph& g, Model& m, const std::string& packing) {
+  if (packing != "exact" && packing != "single") throw std::invalid_argument("invalid fiber attention packing");
+  if (g.nodes.size() != m.nodes.size() || g.source_counts.size() != g.nodes.size())
+    throw std::invalid_argument("fiber packing requires compiled graph and matching model");
+  std::vector<std::pair<size_t, std::shared_ptr<const StateKernel>>> programs;
+  for (size_t i = 0; i < g.nodes.size(); ++i) if (!g.nodes[i].identity && is_fiber_attention_profile(g.nodes[i].memory)) {
+    if (m.nodes[i].kernel) throw std::invalid_argument("fiber packing must be selected before kernel configuration");
+    programs.emplace_back(i, make_fiber_attention_kernel(g.nodes[i], g.source_counts[i], packing));
+  }
+  for (const auto& [i, program] : programs) m.nodes[i].kernel = program;
+}
 Tensor decode_fiber_bias(const NodeWeights& w, const State& global, Index global_cut, std::optional<StateClock> policy) {
   const auto clock = policy.value_or(kernel_clock(w.kernel));
   const auto state = local_state(clock, global); const auto cut = clock.cut(global_cut);
@@ -117,7 +132,7 @@ Tensor decode_fiber_bias(const NodeWeights& w, const State& global, Index global
     throw std::invalid_argument("invalid fiber attention cache shape");
   Node node{0}; node.memory = "lh-fiber-attention-sum-repeat-v1";
   node.query_heads = node.kv_heads = state.slots.at("key").size(1);
-  FiberAttention kernel(node); kernel.validate_weights(w); kernel.validate_state(w, state);
+  FiberAttention kernel(node, 0, "exact"); kernel.validate_weights(w); kernel.validate_state(w, state);
   if (cut < 0 || state.last_time < -1 || state.last_time >= cut || state.observations < 0)
     throw std::invalid_argument("invalid fiber attention cut/state clock");
   if (!state.value.defined() || state.value.sizes() != w.bias.sizes())

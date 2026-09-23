@@ -27,6 +27,18 @@ python run_lh.py --device cpu --threads 56 --output-dir runs/lh-wide
 python run_pdg.py --device cpu --threads 56 --output-dir runs/pdg-wide
 ```
 
+PDG 默认 `--attention-packing exact`，按精确 KV/query 形状分桶。
+可使用 `--attention-packing single`，将同一节点的真实 query 合为一个批次，
+对 KV 补齐并按 sample 遮罩；仍保留 QKV 批处理、node 并行和其他设置：
+
+```bash
+python run_pdg.py --device cpu --threads 56 --attention-packing single --output-dir runs/pdg-single
+```
+
+该选项仅改变 built-in same-fiber Attention 的执行策略。缓存管理、逐事件
+pooling 和训练语义保持原有方式；LH 入口不接受此选项。
+`--smoke --attention-packing single` 可先检查新策略。
+
 每条命令独立完成：校验包 → 准备专用源码目录 → CMake 构建 → 运行 → 汇总。
 运行目录必须是新目录；重测请换名字。编译默认2个作业，可用 `--jobs 4`。
 默认不设置内存上限、不绑定特定 CPU 编号；`--threads` 默认最多56个可用逻辑 CPU。

@@ -1,4 +1,5 @@
 #include "scale.h"
+#include "tide/fiber_attention.h"
 #include <stdexcept>
 
 namespace pdg_scale {
@@ -53,6 +54,7 @@ Fixture fixture(const Config& c, const Topology& t) {
   g.layout->input = {physical_in[0]++}; g.source_domain->input = {logical_in[0]++}; g.layout->output = {0};
   for (Index v = 0; v <= body; ++v) {
     tide::NodeWeights w{zero, dummy, zero, zero};
+    w.kernel = tide::make_fiber_attention_kernel(g.nodes[v], logical_in[v], c.attention_packing);
     // Non-learned schema scaffolding is shared and excluded from the model count.
     w.extra["fiber_qkv"] = parameter({width, 3*width});
     w.extra["fiber_out"] = parameter({width, width});

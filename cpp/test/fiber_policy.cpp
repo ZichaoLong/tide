@@ -23,8 +23,8 @@ void check_fiber_policy(const at::TensorOptions& opts) {
   g.inputs = {0, 0, 0}; g.outputs = {0}; g.regions = {{1}}; g.compile();
   // Analytic ragged two-event prefill: queries [2,1], initial cache [0,2].
   // Compare every resulting state with counting disabled, including after reset.
-  for (Index cache : {0, 2}) {
-    auto w = model(opts).nodes[0]; auto kernel = tide::make_fiber_attention_kernel(g.nodes[0], 3);
+  for (const auto& packing : {"exact", "single"}) for (Index cache : {0, 2}) {
+    auto w = model(opts).nodes[0]; auto kernel = tide::make_fiber_attention_kernel(g.nodes[0], 3, packing);
     auto old = kernel->initial(w);
     old.slots["key"] = old.slots["value"] = at::ones({cache, 1, 2}, opts);
     old.slots["log_bias"] = at::zeros({cache}, opts);
@@ -53,6 +53,10 @@ void check_fiber_policy(const at::TensorOptions& opts) {
     if (counters.at("op/valid_score_elements") != 1 || counters.at("op/qkv_flops") != 24)
       throw std::runtime_error("reset cache counted incorrectly");
   }
+  bool bad_packing = false;
+  try { tide::make_fiber_attention_kernel(g.nodes[0], 3, "unknown"); }
+  catch (const std::invalid_argument&) { bad_packing = true; }
+  if (!bad_packing) throw std::runtime_error("invalid native attention packing accepted");
   // Exercise native model construction directly, without Python pre-validation.
   tide::Streaming valid(g, model(opts), {});
   for (int invalid = 0; invalid < 7; ++invalid) {

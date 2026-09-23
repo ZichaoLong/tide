@@ -45,3 +45,31 @@ def test_work_count_rejects_uncovered_execution(args, tmp_path):
                           '--run-id', 'bad', '--output-dir', str(tmp_path/'out'),
                           '--work-count', '1', *args], capture_output=True)
     assert run.returncode != 0 and not (tmp_path/'out').exists()
+
+
+def test_single_group_counts_only_add_padding_and_reduce_calls(dtype, tmp_path):
+    graph = tmp_path/'graph.txt'; topology(graph); observations = {}
+    for packing in ('exact', 'single'):
+        out = tmp_path/packing
+        cmd = [str(binary()), '--device', 'cpu', '--dtype', str(dtype).split('.')[-1],
+               '--topology', str(graph), '--width', '8', '--batch', '4', '--vocab', '17',
+               '--steps', '4', '--warmup', '1', '--workers', '3', '--packed', '1',
+               '--work-count', '1', '--check', '1', '--attention-packing', packing,
+               '--run-id', packing, '--output-dir', str(out)]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        assert result.returncode == 0, result.stdout+result.stderr
+        events = [json.loads(line) for line in (out/'metrics.jsonl').read_text().splitlines()]
+        assert all(e['context']['attention_packing'] == packing for e in events)
+        observations[packing] = [e['metrics'] for e in events]
+    changed = False
+    for exact, single in zip(observations['exact'], observations['single']):
+        assert single['op/attention_calls'] == single['op/qkv_calls']
+        assert single['op/attention_calls'] <= exact['op/attention_calls']
+        assert single['op/executed_score_elements'] >= exact['op/executed_score_elements']
+        changed |= single['op/attention_calls'] < exact['op/attention_calls']
+        assert single['check/logits_sum'] == pytest.approx(exact['check/logits_sum'], abs=1e-6, rel=1e-5)
+        varied = {'op/attention_calls', 'op/executed_score_elements', 'op/executed_attention_flops', 'op/executed_matmul_flops'}
+        for k in exact:
+            if k.startswith('op/') and k not in varied:
+                assert single[k] == exact[k], k
+    assert changed

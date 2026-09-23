@@ -6,7 +6,10 @@ from .coordinates import window_inputs
 
 class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
-                 algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False):
+                 algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
+                 attention_packing="exact"):
+        if attention_packing not in {"exact", "single"}:
+            raise ValueError("invalid fiber attention packing")
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
@@ -67,6 +70,7 @@ class Native:
         m.regions = regions
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
+        core.configure_fiber_attention(g, m, attention_packing)
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta

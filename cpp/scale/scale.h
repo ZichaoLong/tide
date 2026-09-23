@@ -16,7 +16,7 @@ struct Config {
   Index head_workers = 1;
   bool packed = true, grad = false, check = false, profile = false;
   bool parallel_regions = false, compact_events = false, work_count = false;
-  std::string topology, run_id, emission = "row";
+  std::string topology, run_id, emission = "row", attention_packing = "exact";
 };
 struct Topology {
   Index nodes, local, points, forced, budget, layers;

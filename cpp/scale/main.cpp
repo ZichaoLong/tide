@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
       std::cout << "PDG scale: --topology FILE --run-id ID --width N --batch N --steps N --warmup N\n"
         "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
       std::cout << "  --parallel-regions 0|1 --compact-events 0|1\n";
+      std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -47,7 +48,8 @@ int main(int argc, char** argv) {
     const auto construction = seconds(construction_start);
     const auto runtime_threads = portable_torch::thread_metrics();
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters") << " construction_seconds=" << construction
-              << " grad=" << c.grad << " workers=" << c.workers << " threads=" << at::get_num_threads() << '\n'
+              << " grad=" << c.grad << " workers=" << c.workers << " threads=" << at::get_num_threads()
+              << " attention_packing=" << (c.packed ? c.attention_packing : "scalar") << '\n'
               << at::get_parallel_info() << portable_torch::blas_description() << '\n' << std::flush;
     tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
     tide::StreamingCursor cursor(engine, std::move(q));
@@ -101,7 +103,8 @@ int main(int argc, char** argv) {
       }
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
-        {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile}});
+        {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
+        {"attention_packing", c.packed ? c.attention_packing : "scalar"}});
       std::cout << "STEP " << token << " ms/sample-token=" << elapsed*1000/c.batch
                 << " candidates=" << result.stats["candidate_events"] << " edges=" << result.stats["visited_edges"] << '\n' << std::flush;
     }

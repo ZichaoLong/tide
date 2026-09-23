@@ -69,6 +69,7 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Model>(m, "Model").def(py::init<>())
     FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale)
     .def("parameters", &Model::parameters, py::arg("trainable_only") = true);
+  m.def("configure_fiber_attention", &configure_fiber_attention);
   py::class_<ParameterOwner>(m, "ParameterOwner")
     .def_readonly("canonical", &ParameterOwner::canonical)
     .def_readonly("aliases", &ParameterOwner::aliases)

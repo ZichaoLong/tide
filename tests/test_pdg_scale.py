@@ -98,6 +98,7 @@ def test_csr_export_retains_parallel_edges_and_rejects_damage(tmp_path):
 @pytest.mark.parametrize('args', [[], ['--device', 'npu'], ['--device', 'cpu', '--dtype', 'float16'],
                                 ['--device', 'cpu', '--width', '7'], ['--device', 'cpu', '--workers', '161'],
                                 ['--device', 'cpu', '--profile', '2'],
+                                ['--device', 'cpu', '--attention-packing', 'unknown'],
                                 ['--device', 'cpu', '--parallel-regions', '2'],
                                 ['--device', 'cpu', '--compact-events', '2'],
                                 ['--device', 'cpu', '--head-workers', '0'],

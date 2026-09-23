@@ -49,6 +49,9 @@ def parse(engine):
     p.add_argument('--threads', type=int, default=min(56, len(os.sched_getaffinity(0))))
     p.add_argument('--jobs', type=int, default=2, help='CMake build jobs')
     p.add_argument('--work-count', type=int, choices=[0, 1], default=1)
+    if engine == 'pdg':
+        p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact',
+                       help='exact shape buckets or one padded query batch per node update')
     p.add_argument('--timeout-seconds', type=int, default=3600, help='native execution only')
     p.add_argument('--build-timeout-seconds', type=int, default=3600)
     p.add_argument('--memory-gib', type=int, default=0, help='optional address-space bound; 0 means no added limit')

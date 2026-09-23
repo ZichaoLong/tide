@@ -78,5 +78,6 @@ def test_cli_help_and_invalid_backend_without_torch(engine,tmp_path):
     script=ROOT/'tools/cpu_compare'/('run_'+engine+'.py')
     result=subprocess.run([sys.executable,str(script),'--help'],capture_output=True,text=True)
     assert result.returncode==0 and '--torch-prefix' in result.stdout
+    assert ('--attention-packing' in result.stdout) == (engine == 'pdg')
     result=subprocess.run([sys.executable,str(script),'--device','npu','--output-dir',str(tmp_path/'bad')],capture_output=True)
     assert result.returncode!=0 and not (tmp_path/'bad').exists()

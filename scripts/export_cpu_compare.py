@@ -83,7 +83,8 @@ message(STATUS "COMPARE Release flags: ${CMAKE_CXX_FLAGS_RELEASE}; global flags:
         graph_csr_sha256=info['graph_files_sha256'],topology_sha256=info['topology_sha256'],
         files_sha256=files, graph_format='little-endian int64/float64 original LH; PDG portable text',
         support='CPU source kit; target-local build required; no binary portability claim',
-        default_config=dict(width=2048,batch=512,vocab=50304,steps=12,warmup=4,seed=7,dtype='float32',grad=False),
+        default_config=dict(width=2048,batch=512,vocab=50304,steps=12,warmup=4,seed=7,dtype='float32',grad=False,
+                            pdg_attention_packing='exact'),
         expected_parameters=17269426339))
     sums = ''.join(digest(f)+'  '+str(f.relative_to(packet))+'\n' for f in sorted(packet.rglob('*')) if f.is_file())
     replace_text(packet/'SHA256SUMS',sums)

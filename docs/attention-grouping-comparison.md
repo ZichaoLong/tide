@@ -42,7 +42,7 @@ capacity16 in this profile, extended geometrically and updated/cleared by indexe
 writes. The original custom Functions also support the original autograd path;
 this comparison concerns their no_grad forward execution only.
 
-## Current PDG packing
+## Default PDG exact packing
 
 [fiber_packing.cpp](../cpp/src/fiber_packing.cpp) groups samples by the exact pair
 `(initial_cache_rows, total_query_rows)`. For one streaming tick this is `(c_b,q_b)`.
@@ -101,3 +101,7 @@ latency gap. A separate controlled operator/profile experiment is still needed.
 
 The portable [CPU comparison kit](../tools/cpu_compare/README.md) exposes both
 unchanged strategies and the same counters for target-machine measurements.
+
+The optional [single-batch policy](attention-packing-policy.md) now implements
+padded query-owner gathering in PDG. The measurements above predate that option
+and describe the default exact policy.

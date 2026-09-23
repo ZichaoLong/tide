@@ -55,31 +55,32 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The portable paired CPU comparison kit and attention-grouping explanation are
-complete. No active job. Source dd024e6f1d57153c22ab7cef2762d059cbd3ac7d;
-[commands](../tools/cpu_compare/README.md), [algorithm comparison](attention-grouping-comparison.md)
-and [reviewed evidence](evidence/cpu-comparison-kit.md). Directed frozen tests:
-18 passed/1.01s; three fresh relocated builds/runs passed. LH complete logits
-match prior1/4-thread fixtures exactly; PDG complete-state schedule checks and
-old-binary work/checksum anchors pass. Explicit-prefix LibTorch works under
-system Python -S. Intel execution remains the user's target-machine step.
+Active user-authorized increment: implement independent same-fiber Attention
+packing policy exact|single, default exact. Single flattens queries into one
+padded node-local batch while preserving event visibility/decay/clear. Keep
+QKV/output batching and existing compact persistent state/pooling semantics.
+Expose through the immutable C++ fiber-kernel factory, Native adapter, scale
+CLI and portable run_pdg.py; keep graph/checkpoint identity unchanged.
+Development complete: attention-dev-20260923-092415 built successfully;
+402 passed and4 failed/99.55s, all four failures were the new test's mistaken
+AdvanceResult->Result reconstruction. Corrected new-file repeat:80 passed/13.27s
+against the identical compiled C++ hash; record artifacts/attention-single-retest.json.
+The other326 directed tests passed. Both development units are terminal/failed;
+retain their logs and source archives. Earlier attention-dev-20260923-092147
+failed compilation from a missed private constructor call; that fix is tested.
+Next: commit implementation, freeze clean source, then run fresh build, complete
+CPU FP64/FP32 regression, exported/relocated LH and PDG-single smoke, and fixed
+wide exact/single pair (D2048/B512/12steps/warmup4, workers160, intra-op1,
+CPUs160–319, at most1024GiB address space per native process). No active job.
+Fixed pending driver: artifacts/qualify_attention_policy.py. Fresh packet will
+replace the old kit only as a new separately identified artifact; preserve both.
+Use /home/zlong/anaconda3/bin/python with backend autoload disabled. No reference
+repository edits, no push, no sub-agents. Full initial baseline is eebd877.
+The existing portable kit remains qualified at dd024e6; see
+[its evidence](evidence/cpu-comparison-kit.md). Retain its archive and logs;
+the new policy will need a newly exported packet after qualification.
 
-Unit tide-cpu-kit-20260923-0345 passed/exit0, inactive/dead, MainPID0;
-all12 stages and four portable records validate, including the retained failed
-absent-prefix negative control. Source/packet/prepared/binary hashes audited.
-Records: artifacts/cpu-kit-20260923-0345/, including post-run-audit.json.
-Frozen source: qualification/cpu-kit-20260923-0345 under the local parent;
-fixed driver: artifacts/cpu-kit-runner-20260923-0345.py.
-Qualified final archive: artifacts/cpu-kit-20260923-0345/export/cpu-attention-compare.tar.gz
-(382946 bytes). Both scripts default to the measured wide configuration;
---smoke is small. No new17.27B timing; preserve earlier performance scope below.
-Next: inspect the user's target-machine run/summary/metrics/host/logs when
-available. Further performance work should follow the bounded M8 hypothesis
-below; do not repeat completed large runs merely to revalidate packaging.
-Retain the initial wrong-Python failure and dirty preview as identified in the
-kit evidence; deliver only the clean qualified archive. No uncommitted code.
-
-The user-approved LH–PDG operator-work comparison is complete. No active job.
+The earlier user-approved LH–PDG operator-work comparison is complete.
 Implementation source f0c31bef864af0ccdfa82afc1889c686890fbca6; authority tide-core-3.
 Optional inference counters, original-LH preparation instrumentation and small
 parity tooling are documented in [operator-work.md](operator-work.md).

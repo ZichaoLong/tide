@@ -77,6 +77,10 @@ requests with comparison-identity state-prefill guards. `region-programs.md`
 adds region-owned typed histories and independent SelStep programs, including
 empty selection and tensor controls.
 
+The [fiber attention packing policy](attention-packing-policy.md) is an execution
+choice outside graph/checkpoint identity. Exact buckets and one padded query
+batch preserve event visibility, logical state and the declared public VJP.
+
 ## Equality and training
 
 Additional local state profiles are specified in `state-programs.md` (SSM),
