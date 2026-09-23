@@ -7,9 +7,18 @@ from .coordinates import window_inputs
 class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
-                 attention_packing="exact"):
+                 attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
+                 attention_layout="event"):
         if attention_packing not in {"exact", "single"}:
             raise ValueError("invalid fiber attention packing")
+        if fiber_pooling not in {"event", "csr"}:
+            raise ValueError("invalid fiber pooling execution")
+        if fiber_cache not in {"cloned", "owned"}:
+            raise ValueError("invalid fiber cache ownership")
+        if attention_layout not in {"event", "head"}:
+            raise ValueError("invalid fiber attention layout")
+        if defer_state_release and not compact_events:
+            raise ValueError("deferred state release requires compact events")
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
@@ -70,13 +79,14 @@ class Native:
         m.regions = regions
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
-        core.configure_fiber_attention(g, m, attention_packing)
+        core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta
         options.prefill, options.max_events = prefill, max_events
         options.parallel_regions, options.compact_events = parallel_regions, compact_events
-        if algorithm != "streaming" and (parallel_regions or compact_events):
+        options.defer_state_release = defer_state_release
+        if algorithm != "streaming" and (parallel_regions or compact_events or defer_state_release):
             raise ValueError("streaming optimizations require the streaming algorithm")
         if algorithm not in {"streaming", "frontier", "self_loop", "chain"}:
             raise ValueError("unknown native algorithm")

@@ -39,6 +39,12 @@ python run_pdg.py --device cpu --threads 56 --attention-packing single --output-
 pooling 和训练语义保持原有方式；LH 入口不接受此选项。
 `--smoke --attention-packing single` 可先检查新策略。
 
+PDG 另有五个独立实验选项，默认保留此前路径：`--fiber-pooling event|csr`、
+`--fiber-cache cloned|owned`、`--defer-state-release 0|1`、
+`--projection-layout input|linear`、`--attention-layout event|head`。分别测试节点批量 CSR pooling、复用已有的
+样本 KV 分配、并行清理旧状态容器、投影权重布局，以及 attention 临时张量的 head 排列。
+这些选项不改变图和参数量；性能需按机器与配置分别测量。
+
 每条命令独立完成：校验包 → 准备专用源码目录 → CMake 构建 → 运行 → 汇总。
 运行目录必须是新目录；重测请换名字。编译默认2个作业，可用 `--jobs 4`。
 默认不设置内存上限、不绑定特定 CPU 编号；`--threads` 默认最多56个可用逻辑 CPU。

@@ -71,6 +71,9 @@ def command(engine, a, binary, out, run_id):
                   compact_events=1, packed=1, grad=0, emission='row', profile=1,
                   work_count=a.work_count, attention_packing=a.attention_packing,
                   operator_profile=getattr(a, 'operator_profile', 0),
+                  fiber_pooling=getattr(a, 'fiber_pooling', 'event'), fiber_cache=getattr(a, 'fiber_cache', 'cloned'),
+                  projection_layout=getattr(a, 'projection_layout', 'input'), defer_state_release=getattr(a, 'defer_state_release', 0),
+                  attention_layout=getattr(a, 'attention_layout', 'event'),
                   check=int(a.smoke and a.width <= 64 and a.batch <= 8 and a.steps <= 12))
     result = [str(binary)]
     for key, value in values.items():

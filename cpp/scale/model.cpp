@@ -10,9 +10,11 @@ Fixture fixture(const Config& c, const Topology& t) {
   auto opts = at::TensorOptions().dtype(c.runtime.dtype).device(at::kCPU);
   auto zero = at::zeros({width}, opts), dummy = at::zeros({width, width}, opts);
   auto identity = at::eye(width, opts), one = at::ones({}, opts);
-  auto parameter = [&](const std::vector<Index>& shape, bool random = true) {
+  auto parameter = [&](const std::vector<Index>& shape, bool random = true, bool projection = false) {
     auto value = at::empty(shape, opts);
     if (random) value.normal_(0, .02); else value.fill_(1);
+    // Preserve values/RNG order and one owner. Only its physical storage changes.
+    if (projection && c.projection_layout == "linear") value = value.t().contiguous().t();
     value.set_requires_grad(true); f.owners.push_back(value); return value;
   };
   const auto base = t.points-t.forced;
@@ -54,10 +56,11 @@ Fixture fixture(const Config& c, const Topology& t) {
   g.layout->input = {physical_in[0]++}; g.source_domain->input = {logical_in[0]++}; g.layout->output = {0};
   for (Index v = 0; v <= body; ++v) {
     tide::NodeWeights w{zero, dummy, zero, zero};
-    w.kernel = tide::make_fiber_attention_kernel(g.nodes[v], logical_in[v], c.attention_packing);
+    w.kernel = tide::make_fiber_attention_kernel(g.nodes[v], logical_in[v], c.attention_packing,
+                                                c.fiber_pooling, c.fiber_cache, c.attention_layout);
     // Non-learned schema scaffolding is shared and excluded from the model count.
-    w.extra["fiber_qkv"] = parameter({width, 3*width});
-    w.extra["fiber_out"] = parameter({width, width});
+    w.extra["fiber_qkv"] = parameter({width, 3*width}, true, true);
+    w.extra["fiber_out"] = parameter({width, width}, true, true);
     w.extra["fiber_qkv_bias"] = at::zeros({3*width}, opts);
     w.extra["fiber_out_bias"] = zero;
     w.extra["fiber_decay"] = at::full({}, .01, opts);

@@ -10,7 +10,7 @@ from cursor_cases import fixture
 from region_cases import fixture as history_fixture
 
 
-FLAGS = [(True, False), (False, True), (True, True)]
+FLAGS = [(True, False), (False, True), (True, True), (True, True, True)]
 
 
 def gradients(result, leaves, root):
@@ -24,7 +24,8 @@ def execute(make, dtype, mode, flags, *, trace, packed, workers, stop):
     if flags is None:
         return run(g, m, q, xs, stop, sealed_until=stop, mode=mode), leaves
     engine = Native(g, m, workers=workers, packed=packed, mode=mode, trace=trace,
-                    parallel_regions=flags[0], compact_events=flags[1])
+                    parallel_regions=flags[0], compact_events=flags[1],
+                    defer_state_release=len(flags) == 3 and flags[2])
     cursor = engine.cursor(q); events, outputs, messages = [], [], []
     for end in sorted({0, 1, 4, stop-1, stop}):
         piece = cursor.advance([x for x in xs if cursor.cut <= x.time < end], end, sealed_until=end)

@@ -13,7 +13,9 @@ Config parse(int argc, char** argv) {
     const std::string key = argv[i];
     if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
-        && key != "--work-count" && key != "--operator-profile" && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
+        && key != "--fiber-pooling" && key != "--fiber-cache" && key != "--projection-layout" && key != "--attention-layout"
+        && key != "--defer-state-release" && key != "--work-count" && key != "--operator-profile"
+        && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
     std::string value = argv[i];
     if (ints.count(key)) {
@@ -24,6 +26,10 @@ Config parse(int argc, char** argv) {
     else if (key == "--run-id") c.run_id = value;
     else if (key == "--emission") c.emission = value;
     else if (key == "--attention-packing") c.attention_packing = value;
+    else if (key == "--fiber-pooling") c.fiber_pooling = value;
+    else if (key == "--fiber-cache") c.fiber_cache = value;
+    else if (key == "--projection-layout") c.projection_layout = value;
+    else if (key == "--attention-layout") c.attention_layout = value;
     else {
       if (value != "0" && value != "1") throw std::invalid_argument("boolean requires 0 or 1: "+key);
       if (key == "--packed") c.packed = value == "1";
@@ -34,6 +40,7 @@ Config parse(int argc, char** argv) {
       if (key == "--profile") c.profile = value == "1";
       if (key == "--parallel-regions") c.parallel_regions = value == "1";
       if (key == "--compact-events") c.compact_events = value == "1";
+      if (key == "--defer-state-release") c.defer_state_release = value == "1";
     }
   }
   c.runtime = portable_torch::parse_cli(common.size(), common.data(), true);
@@ -44,7 +51,13 @@ Config parse(int argc, char** argv) {
       || c.head_workers < 1 || c.head_workers > 160 || c.head_workers*c.threads > 160
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
       || (c.attention_packing != "exact" && c.attention_packing != "single")
+      || (c.fiber_pooling != "event" && c.fiber_pooling != "csr")
+      || (c.fiber_cache != "cloned" && c.fiber_cache != "owned")
+      || (c.projection_layout != "input" && c.projection_layout != "linear")
+      || (c.attention_layout != "event" && c.attention_layout != "head")
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
+  if (c.defer_state_release && !c.compact_events)
+    throw std::invalid_argument("deferred state release requires compact events");
   if (c.operator_profile && (c.grad || !c.packed || c.emission != "row"))
     throw std::invalid_argument("operator profiling supports packed inference row Emit only");
   if (c.work_count && (c.grad || c.emission != "row"))

@@ -69,7 +69,8 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Model>(m, "Model").def(py::init<>())
     FIELD(Model, nodes) FIELD(Model, regions) FIELD(Model, input_scale) FIELD(Model, agg_scale) FIELD(Model, edge_scale) FIELD(Model, output_scale)
     .def("parameters", &Model::parameters, py::arg("trainable_only") = true);
-  m.def("configure_fiber_attention", &configure_fiber_attention);
+  m.def("configure_fiber_attention", &configure_fiber_attention, py::arg("graph"), py::arg("model"),
+        py::arg("packing"), py::arg("pooling") = "event", py::arg("cache") = "cloned", py::arg("layout") = "event");
   py::class_<ParameterOwner>(m, "ParameterOwner")
     .def_readonly("canonical", &ParameterOwner::canonical)
     .def_readonly("aliases", &ParameterOwner::aliases)
@@ -157,7 +158,7 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Options>(m, "Options").def(py::init<>())
     FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta)
     FIELD(Options, prefill) FIELD(Options, max_events)
-    FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events);
+    FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events) FIELD(Options, defer_state_release);
   py::class_<DenseLinear>(m, "DenseLinear").def(py::init<Index>())
     .def("run", [](DenseLinear& head, const Tensor& x, const Tensor& weight, const std::optional<Tensor>& bias) {
       return head.run(x, weight, bias.value_or(Tensor()));

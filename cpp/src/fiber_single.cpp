@@ -11,7 +11,8 @@
 
 namespace tide {
 PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std::string& pool,
-                                    const std::vector<State>& old, const PackedSequence& batch) {
+                                    const std::vector<State>& old, const PackedSequence& batch,
+                                    const std::string& pooling, const std::string& ownership, const std::string& layout) {
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
   op_profile::Scope profile(op_profile::InputPack);
@@ -60,7 +61,7 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
       bias_rows.push_back(at::cat({bias, hidden}).unsqueeze(0).expand({count, maximum}));
       auto key = ks.slice(0, 0, cache+offsets[j+1]-begin);
       auto value = vs.slice(0, 0, cache+offsets[j+1]-begin);
-      if (j == b-1) { key = key.clone(); value = value.clone(); }
+      if (j == b-1 && ownership == "cloned") { key = key.clone(); value = value.clone(); }
       result.states[j] = {Tensor(), time, increment(old[i].observations, j-a+1),
                           {{"key", key}, {"value", value}, {"log_bias", bias}}};
       last = time;
@@ -68,27 +69,37 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
     result.max_length = std::max(result.max_length, b-a);
   }
   auto owner = at::tensor(query_owners, x.options().dtype(at::kLong));
+  const bool head_layout = layout == "head";
+  if (head_layout) {
+    for (auto& key : keys) key = key.transpose(0, 1);
+    for (auto& value : values) value = value.transpose(0, 1);
+  }
   work::attention(width, heads, valid_pairs, x.size(0)*maximum);
   profile.phase(op_profile::KvGather);
-  auto gathered_keys = at::stack(keys).index_select(0, owner).transpose(1, 2);
+  auto gathered_keys = at::stack(keys).index_select(0, owner);
+  if (!head_layout) gathered_keys = gathered_keys.transpose(1, 2);
   profile.phase(op_profile::Attention);
   auto scores = at::matmul(gathered_keys, q.unsqueeze(-1));
   gathered_keys = Tensor();
   scores = scores+at::cat(bias_rows).unsqueeze(1).unsqueeze(-1);
   auto probabilities = at::softmax(scores, 2).transpose(2, 3);
   profile.phase(op_profile::KvGather);
-  auto gathered_values = at::stack(values).index_select(0, owner).transpose(1, 2);
+  auto gathered_values = at::stack(values).index_select(0, owner);
+  if (!head_layout) gathered_values = gathered_values.transpose(1, 2);
   profile.phase(op_profile::Attention);
   auto outputs = at::matmul(probabilities, gathered_values).reshape({x.size(0), width});
   gathered_values = Tensor();
   profile.phase(op_profile::StateOther);
   std::vector<Tensor> pooled;
-  for (size_t j = 0; j < batch.times.size(); ++j)
+  if (pooling == "event") for (size_t j = 0; j < batch.times.size(); ++j)
     pooled.push_back(fiber_pool_rows(w, pool, {slots.begin()+offsets[j], slots.begin()+offsets[j+1]},
                                      outputs.slice(0, offsets[j], offsets[j+1])));
+  Tensor pooled_rows;
+  if (pooling == "csr") pooled_rows = fiber_pool_csr(w, pool, slots, offsets, {outputs});
   profile.phase(op_profile::Output);
-  work::linear(work::OutCalls, pooled.size(), width, width);
-  auto y = at::linear(at::stack(pooled), w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
+  if (!pooled_rows.defined()) pooled_rows = at::stack(pooled);
+  work::linear(work::OutCalls, batch.times.size(), width, width);
+  auto y = at::linear(pooled_rows, w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
   profile.phase(op_profile::StateCommit);
   for (size_t j = 0; j < result.states.size(); ++j) result.states[j].value = y[j].clone();
   result.calls = 1; result.max_batch = old.size(); result.score_elements = scores.numel();

@@ -28,8 +28,8 @@ retained in each run. No weights were imported between engines.
 | Engine | Detail timers | ms/sample-token | Peak RSS GiB |
 | --- | --- | ---: | ---: |
 | LH | off | 25.10840 | 148.65564 |
-| PDG exact | off | 30.36451 | 109.44339 |
-| PDG exact | on | 28.64634 | 109.44305 |
+| PDG exact | off | 30.36451 | 109.44319 |
+| PDG exact | on | 28.64634 | 109.44284 |
 | LH | on | 23.88574 | 148.43994 |
 
 Unprofiled PDG is20.93% slower in this one paired window. Profiling on/off changes

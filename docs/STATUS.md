@@ -62,19 +62,23 @@ PDG30.36451 ms/sample-token. Profiling variants were ~5% faster for both engines
 so do not treat their difference as an overhead estimate. Worker sums are not
 wall latency. Pooling is small; data layout and event management remain candidates.
 
-Current main-tree changes are uncommitted candidates, defaults unchanged:
+Candidate implementation is ready for committing, defaults unchanged:
 CSR fiber pooling; immutable per-sample KV reuse; head-major temporary attention
 layout; deferred old-state retirement; scale projection weight layout. No graph
 identity, Aggregate/Next behavior, scalar oracle or public VJP is intentionally
 changed. Contract: fiber-efficiency.md. No candidate speedup is established yet.
 
-Active directed development: `tide-fiber-efficiency-dev-20260923-112506`.
-Frozen dirty source: `/var/tmp/zlong-graph-execution-foundation/qualification/fiber-efficiency-dev-20260923-112506`.
-Output: `/var/tmp/zlong-graph-execution-foundation/artifacts/fiber-efficiency-dev-20260923-112506`. Exact argv/cwd:
-artifacts/fiber-efficiency-active.json. Inspect status.json/development.json,
-task.log and systemctl. Never modify that source or a live driver.
+Directed development:375 tests passed initially;48 failures came only from a
+new isolated no-edge fixture requesting a nonexistent pending-gradient objective.
+Corrected48/2.96s passed against the unchanged compiled C++ source; both services
+terminated and were audited. Values/states, routing, gradients, strided shared
+optimizer owners, snapshots and checkpoint policy switches pass. Records:
+artifacts/fiber-efficiency-dev-20260923-112506/ (retained failed archive),
+artifacts/fiber-efficiency-first-failure/, and
+artifacts/fiber-efficiency-retest-20260923-113224/ (passed retest).
+No candidate wide timing or full regression result yet.
 
-After directed tests pass, commit the candidate implementation and run
+Next: commit the candidate implementation and run
 artifacts/qualify_fiber_efficiency.py from a new clean frozen worktree through
 job.py/background.slice. It builds, runs the complete CPU gate, exports and
 smokes a relocated source kit, then fixed17.27B independent/combined ablations.

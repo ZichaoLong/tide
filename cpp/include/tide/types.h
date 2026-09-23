@@ -148,5 +148,6 @@ struct Options {
   Index max_events = 1000000;
   bool profile = false; // Optional streaming coordinator wall-time phases.
   bool parallel_regions = false, compact_events = false;
+  bool defer_state_release = false; // Retire old state containers in compact cleanup.
 };
 }  // namespace tide

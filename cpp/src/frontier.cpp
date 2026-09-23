@@ -10,7 +10,7 @@
 namespace tide {
 Frontier::Frontier(Graph g, Model m, Options options)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), pool_(options.workers) {
-  if (options.parallel_regions || options.compact_events) throw std::invalid_argument("streaming optimizations require Streaming");
+  if (options.parallel_regions || options.compact_events || options.defer_state_release) throw std::invalid_argument("streaming optimizations require Streaming");
   graph_.compile(); graph_.topological_order(); configure_model(graph_, model_); validate_model(graph_, model_);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp") throw std::invalid_argument("invalid emit mode");
   if (options.max_events < 1 || !std::isfinite(options.zeta)) throw std::invalid_argument("invalid frontier options");

@@ -10,7 +10,7 @@
 namespace tide {
 Specialized::Specialized(Graph g, Model m, Options options, std::string topology)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), topology_(std::move(topology)), pool_(options.workers) {
-  if (options.parallel_regions || options.compact_events) throw std::invalid_argument("streaming optimizations require Streaming");
+  if (options.parallel_regions || options.compact_events || options.defer_state_release) throw std::invalid_argument("streaming optimizations require Streaming");
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
   const Index n = graph_.nodes.size();
   auto require = [](bool ok) { if (!ok) throw std::invalid_argument("specialization topology/options mismatch"); };

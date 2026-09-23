@@ -35,9 +35,15 @@ Tensor repeat_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
   if (bias.numel()) for (auto tick = last; tick < target; ++tick) bias = bias-rate;
   return bias;
 }
+Tensor stack_heads(const std::vector<Tensor>& rows) {
+  std::vector<Tensor> views; views.reserve(rows.size());
+  for (const auto& row : rows) views.push_back(row.transpose(0, 1));
+  return at::stack(views); // [owner,head,row,D]: owner/head can flatten as a view.
+}
 }  // namespace
 PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std::string& pool, const std::vector<State>& old,
-                                   const PackedSequence& batch) {
+                                   const PackedSequence& batch, const std::string& pooling, const std::string& ownership,
+                                   const std::string& layout) {
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
   op_profile::Scope profile(op_profile::InputPack);
@@ -80,30 +86,46 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
       result.max_length = std::max(result.max_length, b-a);
     }
     profile.phase(op_profile::KvGather);
-    auto keys = at::stack(ks), values = at::stack(vs);
+    const bool head_layout = layout == "head";
+    auto keys = head_layout ? stack_heads(ks) : at::stack(ks);
+    auto values = head_layout ? stack_heads(vs) : at::stack(vs);
+    Tensor query_batch;
+    if (head_layout) { op_profile::Scope query_pack(op_profile::InputPack); query_batch = stack_heads(qs); }
     work::attention(width, heads, valid_pairs, rows*queries*(cache+queries));
     profile.phase(op_profile::Attention);
-    auto scores = at::matmul(at::stack(qs).transpose(1, 2), keys.permute({0, 2, 3, 1}));
+    auto scores = at::matmul(head_layout ? query_batch : at::stack(qs).transpose(1, 2),
+                             head_layout ? keys.transpose(2, 3) : keys.permute({0, 2, 3, 1}));
     scores = scores+at::stack(bs).unsqueeze(1);
     auto probabilities = at::softmax(scores.masked_fill(~at::stack(ms).unsqueeze(1), -std::numeric_limits<double>::infinity()), -1);
-    auto outputs = at::matmul(probabilities, values.transpose(1, 2)).transpose(1, 2).reshape({rows, queries, width});
+    auto outputs = at::matmul(probabilities, head_layout ? values : values.transpose(1, 2))
+                     .transpose(1, 2).reshape({rows, queries, width});
     profile.phase(op_profile::StateCommit);
     for (Index row = 0; row < rows; ++row) {
       const auto i = ids[row], a = batch.offsets[i], b = batch.offsets[i+1], start = offsets[a];
       for (auto j = a; j < b; ++j) {
         const auto begin = offsets[j]-start, end = offsets[j+1]-start;
-        pooled[j] = fiber_pool_rows(w, pool, {source.slots.begin()+offsets[j], source.slots.begin()+offsets[j+1]},
-                                   outputs[row].slice(0, begin, end));
-        auto key_slot = keys[row].slice(0, 0, cache+end), value_slot = values[row].slice(0, 0, cache+end);
-        if (j == b-1) { key_slot = key_slot.clone(); value_slot = value_slot.clone(); }
+        auto output_rows = outputs[row].slice(0, begin, end);
+        pooled[j] = pooling == "csr" ? output_rows : fiber_pool_rows(w, pool,
+          {source.slots.begin()+offsets[j], source.slots.begin()+offsets[j+1]}, output_rows);
+        // Per-owner concatenations are already immutable, compact allocations.
+        // Reuse them instead of cloning the same rows out of the temporary bucket.
+        auto saved_key = ownership == "owned" ? ks[row] : head_layout ? keys[row].transpose(0, 1) : keys[row];
+        auto saved_value = ownership == "owned" ? vs[row] : head_layout ? values[row].transpose(0, 1) : values[row];
+        auto key_slot = saved_key.slice(0, 0, cache+end), value_slot = saved_value.slice(0, 0, cache+end);
+        if (j == b-1 && ownership == "cloned") {
+          key_slot = key_slot.clone(at::MemoryFormat::Contiguous); value_slot = value_slot.clone(at::MemoryFormat::Contiguous);
+        }
         result.states[j].slots.emplace("key", key_slot); result.states[j].slots.emplace("value", value_slot);
       }
     }
     ++result.calls; result.max_batch = std::max(result.max_batch, rows); result.score_elements += scores.numel();
   }
+  Tensor pooled_rows;
+  if (pooling == "csr") pooled_rows = fiber_pool_csr(w, pool, source.slots, offsets, pooled);
   profile.phase(op_profile::Output);
+  if (!pooled_rows.defined()) pooled_rows = at::stack(pooled);
   work::linear(work::OutCalls, pooled.size(), width, width);
-  auto y = at::linear(at::stack(pooled), w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
+  auto y = at::linear(pooled_rows, w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
   profile.phase(op_profile::StateCommit);
   for (size_t j = 0; j < result.states.size(); ++j) result.states[j].value = y[j].clone();
   return result;

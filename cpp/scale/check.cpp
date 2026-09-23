@@ -9,12 +9,17 @@ namespace {
 tide::Result traced(const Config& c, const Topology& topology, Index workers, bool packed,
                     const std::string& emission, bool profile = false, bool optimized = false) {
   auto local = c; local.emission = emission;
+  if (!optimized) {
+    local.fiber_pooling = "event"; local.fiber_cache = "cloned";
+    local.projection_layout = "input"; local.attention_layout = "event";
+  }
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   auto f = fixture(local, topology);
   tide::Options opts; opts.workers = workers; opts.packed = packed; opts.trace = true;
   opts.profile = profile;
   opts.parallel_regions = optimized && c.parallel_regions;
   opts.compact_events = optimized && c.compact_events;
+  opts.defer_state_release = optimized && c.defer_state_release;
   tide::Streaming engine(std::move(f.graph), std::move(f.model), opts);
   tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
   tide::StreamingCursor cursor(engine, std::move(q)); tide::Result all;

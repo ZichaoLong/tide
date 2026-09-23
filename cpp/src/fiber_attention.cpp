@@ -17,11 +17,17 @@ Tensor advance_bias(Tensor bias, const Tensor& rate, Index last, Index target) {
 }
 class FiberAttention final : public StateKernel {
   Index heads_, input_slots_;
-  std::string pool_, packing_;
+  std::string pool_, packing_, pooling_, cache_, layout_;
  public:
-  explicit FiberAttention(const Node& n, Index input_slots, const std::string& packing)
-      : heads_(n.query_heads), input_slots_(input_slots), pool_(fiber_pool_kind(n.memory)), packing_(packing) {
+  explicit FiberAttention(const Node& n, Index input_slots, const std::string& packing,
+                          const std::string& pooling = "event", const std::string& cache = "cloned",
+                          const std::string& layout = "event")
+      : heads_(n.query_heads), input_slots_(input_slots), pool_(fiber_pool_kind(n.memory)), packing_(packing),
+        pooling_(pooling), cache_(cache), layout_(layout) {
     if (packing_ != "exact" && packing_ != "single") throw std::invalid_argument("invalid fiber attention packing");
+    if (pooling_ != "event" && pooling_ != "csr") throw std::invalid_argument("invalid fiber pooling execution");
+    if (cache_ != "cloned" && cache_ != "owned") throw std::invalid_argument("invalid fiber cache ownership");
+    if (layout_ != "event" && layout_ != "head") throw std::invalid_argument("invalid fiber attention layout");
     if (heads_ < 1 || n.kv_heads != heads_ || n.window || n.aggregation != "sum")
       throw std::invalid_argument("LH fiber attention requires equal heads, no eviction and sum Aggregate");
   }
@@ -74,8 +80,8 @@ class FiberAttention final : public StateKernel {
   }
   PackedStates packed_sequence(const NodeWeights& w, const std::vector<State>& old,
                                const PackedSequence& batch) const override {
-    return packing_ == "single" ? fiber_attention_single(w, heads_, pool_, old, batch)
-                               : fiber_attention_packed(w, heads_, pool_, old, batch);
+    return packing_ == "single" ? fiber_attention_single(w, heads_, pool_, old, batch, pooling_, cache_, layout_)
+                               : fiber_attention_packed(w, heads_, pool_, old, batch, pooling_, cache_, layout_);
   }
   State reset(const State& state) const override {
     auto result = state; result.value = state.value*0;
@@ -111,17 +117,23 @@ class FiberAttention final : public StateKernel {
   }
 };
 }  // namespace
-std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots, const std::string& packing) {
-  return std::make_shared<FiberAttention>(n, slots, packing);
+std::shared_ptr<const StateKernel> make_fiber_attention_kernel(const Node& n, Index slots, const std::string& packing,
+                                                             const std::string& pooling, const std::string& cache,
+                                                             const std::string& layout) {
+  return std::make_shared<FiberAttention>(n, slots, packing, pooling, cache, layout);
 }
-void configure_fiber_attention(const Graph& g, Model& m, const std::string& packing) {
+void configure_fiber_attention(const Graph& g, Model& m, const std::string& packing,
+                               const std::string& pooling, const std::string& cache, const std::string& layout) {
   if (packing != "exact" && packing != "single") throw std::invalid_argument("invalid fiber attention packing");
+  if (pooling != "event" && pooling != "csr") throw std::invalid_argument("invalid fiber pooling execution");
+  if (cache != "cloned" && cache != "owned") throw std::invalid_argument("invalid fiber cache ownership");
+  if (layout != "event" && layout != "head") throw std::invalid_argument("invalid fiber attention layout");
   if (g.nodes.size() != m.nodes.size() || g.source_counts.size() != g.nodes.size())
     throw std::invalid_argument("fiber packing requires compiled graph and matching model");
   std::vector<std::pair<size_t, std::shared_ptr<const StateKernel>>> programs;
   for (size_t i = 0; i < g.nodes.size(); ++i) if (!g.nodes[i].identity && is_fiber_attention_profile(g.nodes[i].memory)) {
     if (m.nodes[i].kernel) throw std::invalid_argument("fiber packing must be selected before kernel configuration");
-    programs.emplace_back(i, make_fiber_attention_kernel(g.nodes[i], g.source_counts[i], packing));
+    programs.emplace_back(i, make_fiber_attention_kernel(g.nodes[i], g.source_counts[i], packing, pooling, cache, layout));
   }
   for (const auto& [i, program] : programs) m.nodes[i].kernel = program;
 }

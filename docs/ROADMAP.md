@@ -182,11 +182,10 @@ while saving a small fraction of total matrix arithmetic. The user-authorized
 relocated kit builds and a same-binary 17.27B pair. Exact 29.35656 versus
 single 31.53019 ms/sample-token: single was 7.4% slower in this one short-window
 run despite 84% fewer groups, with 1.808× score padding and 4.937 GiB more peak RSS.
-Keep exact as the default. User-authorized follow-up is implementing common
-optional operator timers for original LH and PDG, followed by measured independent
-common operator timers are now [qualified](evidence/operator-profiling.md).
-Current opt-in candidate ablations cover pooling, state/event storage lifetime, temporary KV
-movement and projection layout. Preserve complete small parity anchors; grouping
+Keep exact as the default. Common optional operator timers are now
+[qualified](evidence/operator-profiling.md). User-authorized opt-in candidate
+ablations cover pooling, state/event storage lifetime, KV ownership and head
+layout, projection layout, and effective node concurrency. Preserve complete small parity anchors; grouping
 alone has not established a speedup. Preserve complete small
 semantics and fixed large work counters when profiling or improving these costs.
 Component ablations, longer contexts, narrow scale and training performance remain pending.

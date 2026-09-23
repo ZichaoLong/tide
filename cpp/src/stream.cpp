@@ -27,6 +27,8 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   if (options_.mode != "hard" && options_.mode != "softp" && options_.mode != "hst")
     throw std::invalid_argument("invalid emit mode");
   if (!std::isfinite(options_.zeta)) throw std::invalid_argument("nonfinite zeta");
+  if (options_.defer_state_release && !options_.compact_events)
+    throw std::invalid_argument("deferred state release requires compact events");
 }
 Result Streaming::run(const Continuation& initial, const std::vector<External>& external, Index stop, Index seal) {
   std::lock_guard<std::mutex> lock(run_mutex_);
@@ -167,7 +169,11 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     pool_.run(std::move(jobs));
     profile.phase("profile_commit_ns");
     for (auto& event : events) {
-      if (options_.compact_events && !options_.trace) q.states[{event.batch, event.node}] = std::move(event.next_state);
+      if (options_.compact_events && !options_.trace) {
+        auto& state = q.states[{event.batch, event.node}];
+        if (options_.defer_state_release) std::swap(state, event.next_state);
+        else state = std::move(event.next_state);
+      }
       else q.states[{event.batch, event.node}] = event.next_state;
       if (event.active) {
         deliver(graph_, model_, event, [&](const Atom& a) {

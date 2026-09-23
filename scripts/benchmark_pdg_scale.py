@@ -44,10 +44,14 @@ def main():
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
                          ('threads', 1), ('head-workers', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('work-count', 0), ('operator-profile', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
+    for key, default in [('work-count', 0), ('operator-profile', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0), ('defer-state-release', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact')
+    p.add_argument('--fiber-pooling', choices=['event', 'csr'], default='event')
+    p.add_argument('--fiber-cache', choices=['cloned', 'owned'], default='cloned')
+    p.add_argument('--projection-layout', choices=['input', 'linear'], default='input')
+    p.add_argument('--attention-layout', choices=['event', 'head'], default='event')
     p.add_argument('--tracking', choices=['best-effort', 'off', 'required'], default='best-effort')
     args = p.parse_args()
     if (not 4 <= args.width <= 4096 or args.width%4 or not 1 <= args.batch <= 1024
@@ -69,7 +73,10 @@ def main():
         p.error('source/build mismatch; rebuild the immutable source')
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
               'threads', 'head_workers', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile',
-              'parallel_regions', 'compact_events', 'work_count', 'operator_profile', 'attention_packing')}
+              'parallel_regions', 'compact_events', 'work_count', 'operator_profile', 'attention_packing',
+              'fiber_pooling', 'fiber_cache', 'projection_layout', 'attention_layout', 'defer_state_release')}
+    if args.defer_state_release and not args.compact_events:
+        p.error('deferred state release requires compact events')
     if args.operator_profile and (args.grad or not args.packed or args.emission != 'row'):
         p.error('operator profiling supports packed inference row Emit only')
     out.mkdir(parents=True, exist_ok=False)

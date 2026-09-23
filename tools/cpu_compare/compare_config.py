@@ -54,6 +54,11 @@ def parse(engine):
     if engine == 'pdg':
         p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact',
                        help='exact shape buckets or one padded query batch per node update')
+        p.add_argument('--fiber-pooling', choices=['event', 'csr'], default='event')
+        p.add_argument('--fiber-cache', choices=['cloned', 'owned'], default='cloned')
+        p.add_argument('--projection-layout', choices=['input', 'linear'], default='input')
+        p.add_argument('--attention-layout', choices=['event', 'head'], default='event')
+        p.add_argument('--defer-state-release', type=int, choices=[0, 1], default=0)
     p.add_argument('--timeout-seconds', type=int, default=3600, help='native execution only')
     p.add_argument('--build-timeout-seconds', type=int, default=3600)
     p.add_argument('--memory-gib', type=int, default=0, help='optional address-space bound; 0 means no added limit')

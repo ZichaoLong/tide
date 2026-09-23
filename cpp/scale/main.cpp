@@ -27,6 +27,8 @@ int main(int argc, char** argv) {
       std::cout << "  --parallel-regions 0|1 --compact-events 0|1\n";
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
       std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n";
+      std::cout << "  --fiber-pooling event|csr --fiber-cache cloned|owned --projection-layout input|linear\n"
+                   "  --attention-layout event|head --defer-state-release 0|1 (requires compact events)\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -45,6 +47,7 @@ int main(int argc, char** argv) {
     tide::Options options; options.workers = c.workers; options.packed = c.packed; options.trace = false;
     options.profile = c.profile;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
+    options.defer_state_release = c.defer_state_release;
     tide::Streaming engine(std::move(f.graph), std::move(f.model), options);
     tide::DenseLinear head(c.head_workers);
     const auto construction = seconds(construction_start);
@@ -110,7 +113,10 @@ int main(int argc, char** argv) {
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
         {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
-        {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile}});
+        {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile},
+        {"fiber_pooling", c.fiber_pooling}, {"fiber_cache", c.fiber_cache},
+        {"projection_layout", c.projection_layout}, {"attention_layout", c.attention_layout},
+        {"defer_state_release", c.defer_state_release}});
       std::cout << "STEP " << token << " ms/sample-token=" << elapsed*1000/c.batch
                 << " candidates=" << result.stats["candidate_events"] << " edges=" << result.stats["visited_edges"] << '\n' << std::flush;
     }
