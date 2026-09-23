@@ -43,7 +43,7 @@ def group_pids(group):
 
 def terminate_group(child):
     """Reap adopted grandchildren as well as the direct child, including zombies."""
-    for sig, grace in ((signal.SIGTERM, 2), (signal.SIGKILL, 5)):
+    for sig, grace in ((signal.SIGTERM, 10), (signal.SIGKILL, 20)):
         try:
             os.killpg(child.pid, sig)
         except ProcessLookupError:

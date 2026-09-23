@@ -60,7 +60,7 @@ def execute_pass(execution,modes,*,instrument=False):
     finally: core.reset_work(False)
 
 
-def measure(execution,modes,warmup,progress=lambda stage:None):
+def measure(execution,modes,warmup,progress=lambda stage:None,publish=lambda name,value:None):
     if 'nograd-forward' in modes and len(modes)>1: raise ValueError('inference and training require separate measured passes')
     training=any(mode!='nograd-forward' for mode in modes)
     initial={k:v.detach().clone() for k,v in execution.model.state_dict().items()} if training else None
@@ -70,6 +70,8 @@ def measure(execution,modes,warmup,progress=lambda stage:None):
         progress(f'warmup-{i}')
         reset_parameters();execute_pass(execution,modes)
     progress('measuring');reset_parameters();measured=execute_pass(execution,modes)
+    publish('measured',measured)
     progress('profiling');reset_parameters();profile=execute_pass(execution,modes,instrument=True)
+    publish('profile',profile)
     # Profile overhead is reported separately, never folded into formal timing.
     return measured,profile

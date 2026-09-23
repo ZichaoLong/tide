@@ -50,7 +50,11 @@ ms/effective-sample-position, positions/s and ms/batch-position (wall/T).
 
 A separate accounting pass records actual projections/matrix FLOPs, logical
 Agg/Upd/Read/Next/Full, source/event batching, selected/candidate events, padding,
-cache size, replay counts and worker durations. FMA counts as two operations;
+cache size, replay counts and worker durations. `logical.Upd` counts nonidentity
+body updates; other logical totals include encoded boundary events. The
+`body_candidate_events`/`body_selected_events` counters permit body-only
+comparisons. Measured timing is published before the separate profile starts;
+profile failure keeps the whole run failed while retaining its completed phase. FMA counts as two operations;
 elementwise/norm/softmax and general backward FLOPs are excluded. Forward FLOPs
 in training include scalar semantic replay. Its worker-duration sum is not wall
 time and is never added to wall phases. Backward remains ordinary autograd over
@@ -65,7 +69,8 @@ threads, Torch/OpenMP/BLAS pools, affinity and NUMA are recorded. No attention-h
 worker pool is claimed. Build jobs default2. Real worker-group plus coordinator
 RSS is sampled/enforced; cgroup usage is recorded separately and can include
 unrelated account workloads. Timeout/cancellation terminate and reap child groups
-and adopted grandchildren before another workload starts.
+and adopted grandchildren before another workload starts (up to10s TERM and20s
+KILL/reap grace beyond the work deadline; failure to reap stops the suite).
 
 Large presets use four active ranked regions of32 or64 candidates, budget1 per
 region, plus dormant regions to reach the target parameter count. Each node has

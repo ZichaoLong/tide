@@ -17,7 +17,8 @@ python scripts/status.py
 
 `--output-dir` 必须是新目录。验证包括 PyTorch/LibTorch streaming、TimedDAG 前沿、
 SettleGraph 编码及拓扑特化；当前局部模块包括 EMA、identity、对角选择性 SSM、
-Linear Attention、Gated DeltaRule、事件 GQA/window attention、tanh FFN 和 SwiGLU。
+Linear Attention、DeltaRule/Gated DeltaRule、事件 GQA/window attention、
+same-fiber Attention、tanh FFN 和 SwiGLU。
 [原生 streaming cursor](docs/streaming-cursor.md) 可跨窗口持有状态和消息队列。
 Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) 保留梯度连接，
 其额外计算单独计数；`no_grad` / `inference_mode` 不需要这部分重放。
@@ -30,6 +31,18 @@ Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) �
 [两时钟应用 checkpoint](docs/token-application-checkpoint.md) 还保存 body/readout 两图、未完成 token 窗口和跨图共享参数。
 具体覆盖以 [验证证据](docs/ROADMAP.md) 为准；模块边界见 [接口说明](docs/module-extension-plan.md)，后续任务统一见路线图。
 源码无需导入任何本机 skill 文件；CMake 从所选 Python 的 Torch 查找 LibTorch。
+
+三类图的统一 [smoke、prefill 和训练性能入口](docs/foundation-benchmarks.md)：
+
+```sh
+python scripts/benchmark_foundation.py --device cpu --tier smoke --build \
+  --build-dir build/foundation --output-dir artifacts/foundation-smoke
+```
+
+提供独立 C++ SettleGraph 构图/编码、Python/C++ ring/diamond 特化和 Python layered
+SettleGraph；[六类实现矩阵](docs/ROADMAP.md) 与 [优化能力表](docs/execution-capabilities.md)
+给出经过验证的范围。小型 [RMSNorm/RoPE/GQA/SwiGLU 适配示例](docs/model-adapter.md)
+验证真实布局、mask/cache 与梯度接口；不代表任意预训练模型已兼容。
 
 LH 与 PDG 的固定图 CPU 性能对照使用 [两个一键入口](tools/cpu_compare/README.md)，
 支持目标机 LibTorch 本地编译、默认 17.27B 配置与小规模检查。

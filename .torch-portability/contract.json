@@ -11,6 +11,11 @@
         "requires_explicit_device": true,
         "supports_init_from": false,
         "supports_resume": false
+      },
+      "foundation_benchmark": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
       }
     },
     "cpu_reference": {
@@ -64,11 +69,12 @@
       "language": "python",
       "backend": "cpu",
       "host_arch": "x86_64",
-      "policy": "required",
+      "policy": "optional",
       "status": "implemented",
       "required_tiers": [
         "cpu-semantic"
-      ]
+      ],
+      "reason": "Target-machine rebuild/verification is an extension; this acceptance requires CPU FP32/FP64 on the available aarch64 host."
     },
     {
       "id": "python-cpu-aarch64",
@@ -167,6 +173,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; exact kit and fixed-workload commands in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/packed-transport.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "494e6a91ea134d9e36498aa14a51ce20bcdc0371",
+          "scope": "7611 clean CPU FP32/FP64 checks; six graph classes, independent native Settle frontend, representative modules/prefill/options and fresh-process training continuation; build reuses matching archived C++ content",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/foundation-stage34.md"
         }
       ]
     },
@@ -199,12 +220,13 @@
       "language": "cpp",
       "backend": "cpu",
       "host_arch": "x86_64",
-      "policy": "required",
+      "policy": "optional",
       "status": "implemented",
       "required_tiers": [
         "build",
         "cpu-semantic"
-      ]
+      ],
+      "reason": "Target-machine rebuild/verification is an extension; this acceptance requires CPU FP32/FP64 on the available aarch64 host."
     },
     {
       "id": "cpp-cpu-aarch64",
@@ -304,6 +326,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; exact kit and fixed-workload commands in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/packed-transport.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "494e6a91ea134d9e36498aa14a51ce20bcdc0371",
+          "scope": "7611 clean CPU FP32/FP64 checks; six graph classes, independent native Settle frontend, representative modules/prefill/options and fresh-process training continuation; build reuses matching archived C++ content",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/foundation-stage34.md"
         }
       ]
     },

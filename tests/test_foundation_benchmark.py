@@ -100,3 +100,17 @@ def test_large_preflight_target_is_not_a_smoke_claim(preset,family):
     assert abs(counted['parameters']-target)<counted['parameters_per_node']*preset['nominal_selection_denominator']
     assert config['batch']==512 and config['sequence']==6
     assert counted['body_nodes']>=4*preset['nominal_selection_denominator']
+
+
+def test_completed_timing_survives_later_profile_failure(dtype,monkeypatch):
+    import foundation_measure as runner
+    execution=Execution(small('T01',dtype=dtype),'native-frontier')
+    original=runner.execute_pass;published={}
+    def fail_profile(execution,modes,**options):
+        if options.get('instrument'):raise RuntimeError('injected profile failure')
+        return original(execution,modes,**options)
+    monkeypatch.setattr(runner,'execute_pass',fail_profile)
+    with pytest.raises(RuntimeError,match='injected profile failure'):
+        runner.measure(execution,['nograd-forward'],0,publish=lambda name,value:published.update({name:value}))
+    assert set(published)=={'measured'}
+    assert published['measured']['seconds']['nograd-forward']>0

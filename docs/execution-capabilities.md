@@ -70,11 +70,11 @@ part of qualification; physical sharing need not allocate one Tensor per value.
 
 | Unit | Existing implementation/evidence | Acceptance extension |
 | --- | --- | --- |
-| isolated outputs/state/slots/history/pending roots | isolated_* tests, [semantic replay](evidence/isolated-autograd.md) | newly added schedules/native frontend S4.1 |
-| owner/alias, unused vs zero, SGD/momentum/AdamW | parameters/optimizer C++, checkpoint_ownership.py; [native owners](evidence/cpp-optimizer-ownership.md) | new six-class trajectories S4.1 |
-| graph continuation value checkpoint v5 | checkpoint.py and checkpoint_values.py | new-process integration S4.2 |
-| two-clock application, partial buffer and ledgers | token_checkpoint.py, single_graph training/resume tests; [evidence](evidence/token-checkpoint-coordinates.md) | new-process integration S4.2 |
-| native named values/optimizer TIDENCK1 | checkpoint codec/preflight/io, standalone check; [evidence](evidence/cpp-native-checkpoint.md) | reuse; verify process boundary S4.2 |
+| isolated outputs/state/slots/history/pending roots | isolated_* tests, [semantic replay](evidence/isolated-autograd.md) | verified six-class/new-frontend roots, [S3/S4](evidence/foundation-stage34.md) |
+| owner/alias, unused vs zero, SGD/momentum/AdamW | parameters/optimizer C++, checkpoint_ownership.py; [native owners](evidence/cpp-optimizer-ownership.md) | verified multi-update six-class trajectories, S3/S4 |
+| graph continuation value checkpoint v5 | checkpoint.py and checkpoint_values.py | verified fresh-process trajectories, S3/S4 |
+| two-clock application, partial buffer and ledgers | token_checkpoint.py, single_graph training/resume tests; [evidence](evidence/token-checkpoint-coordinates.md) | verified fresh-process trajectories, S3/S4 |
+| native named values/optimizer TIDENCK1 | checkpoint codec/preflight/io, standalone check; [evidence](evidence/cpp-native-checkpoint.md) | verified standalone format and fresh-process updates, S3/S4 |
 
 Named values do not include continuation. Graph/application bundles do not
 restore a full training controller, framework RNG or dataset cursor. Native

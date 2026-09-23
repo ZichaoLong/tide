@@ -34,7 +34,11 @@ def main():
     torch.set_num_threads(args.threads);torch.set_num_interop_threads(1)
     config=json.loads(args.config.read_text());out=args.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
     record={'state':'starting','pid':os.getpid(),'config':config,'variant':args.variant,'modes':args.modes,
-            'preflight':estimate(config),'model_constructed':False}
+            'preflight':estimate(config),'model_constructed':False,
+            'native_binary_path':str(Path(core.__file__).resolve()),
+            'native_binary_sha256':hashlib.sha256(Path(core.__file__).read_bytes()).hexdigest(),
+            'actual_threads':torch.get_num_threads(),'actual_interop_threads':torch.get_num_interop_threads(),
+            'parallel_info':torch.__config__.parallel_info()}
     def save():
         write_json(out/'worker.json',record)
         assert json.loads((out/'worker.json').read_text())==record
@@ -59,7 +63,8 @@ def main():
         save()
         def progress(stage):
             record['stage']=stage;save()
-        measured,profile=measure(execution,args.modes,args.warmup,progress)
+        measured,profile=measure(execution,args.modes,args.warmup,progress,
+                                 lambda name,value:write_json(out/(name+'.json'),value))
         write_json(out/'measured.json',measured);write_json(out/'profile.json',profile)
         record.update(state='passed',exit_code=0,seconds=time.perf_counter()-started,
                       peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,

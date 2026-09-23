@@ -38,7 +38,7 @@ def test_three_family_smoke_has_real_modes_and_terminal_records(tmp_path):
     assert all(r['completed_repeats']==1 and not r['dispersion_qualified'] for r in report['rows'])
 
 
-@pytest.mark.parametrize('args',[['--tier','medium','--repeats','1'],['--tier','smoke','--ids','P01','--variants','native-settle'],
+@pytest.mark.parametrize('args',[['--tier','smoke','--timeout-seconds','0'],['--tier','medium','--repeats','1'],['--tier','smoke','--ids','P01','--variants','native-settle'],
                                 ['--tier','large','--modes','backward'],['--tier','smoke','--ids','P01','--modes','train-step']])
 def test_unsupported_requests_are_rejected(args):
     result=subprocess.run(command(*args,'--describe'),text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30)

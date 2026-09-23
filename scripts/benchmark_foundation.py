@@ -85,7 +85,7 @@ def main():
     parser.add_argument('--allow-dirty-smoke',action='store_true',help='development smoke only; exact source status/hashes retained')
     args=parser.parse_args();root=Path(__file__).resolve().parents[1]
     args.repeats=args.repeats if args.repeats is not None else (3 if args.tier=='medium' else 1)
-    args.timeout_seconds=args.timeout_seconds or (300 if args.tier=='large' else 180)
+    args.timeout_seconds=args.timeout_seconds if args.timeout_seconds is not None else (300 if args.tier=='large' else 180)
     if not 1<=args.repeats<=3 or not 1<=args.timeout_seconds<=1800 or args.workers<1 or args.threads<1 or args.warmup<0:
         parser.error('invalid bounded resources/repetition settings')
     if args.tier=='medium' and (args.repeats!=3 or args.warmup!=2):parser.error('frozen medium suite requires three independent repeats and two reset warmups')

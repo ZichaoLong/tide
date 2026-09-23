@@ -1,68 +1,70 @@
 # Current handoff
 
 Updated: 2026-09-23 (Asia/Shanghai). Branch graph-execution-foundation.
-Overall six-stage acceptance remains active. ROADMAP is the sole backlog.
-S1 audit/frozen12-config suite and S2 native Settle/independent schedules accepted:
-docs/evidence/foundation-scope-audit.md, native-settle-frontend.md and foundation-stage2.md.
-S2 clean gate7167 passed on70809fd; source/binary/exit audits retained.
+Overall acceptance remains active; current stage S5. ROADMAP is the only backlog.
 
-S3 implementation4a2c366/1a982a1: cross-graph packed transport/Next, explicit
-fallbacks, ungated DeltaRule, projection strides and tiny RMSNorm/RoPE/GQA/SwiGLU
-adapter. Directed gates1098 and736 passed. S4 implementation5014c3d plus494e6a9:
-six-class multiple updates and36 fresh-process checkpoint trajectories. Original
-274-test gate had a Settle logical-cut/position test-helper defect;54 corrected
-tests passed. Failure retained in artifacts/settle-training-clock-repro-20260923/.
-Do not accept cancelled partial stage34-a (exit143, no descendants).
+Accepted: S1 frozen scope/12 medium configs/2 large presets; S2 standalone native
+Settle and independent ring/diamond/layered schedules; S3 modules/prefill/options;
+S4 six-class training and fresh-process persistence. Evidence:
+- docs/evidence/foundation-scope-audit.md, native-settle-frontend.md, foundation-stage2.md
+- docs/evidence/foundation-stage34.md: clean494e6a9,7611 passed/1153.34s,
+  470 source files/13 binaries/36 fresh-process payloads audited, terminal exit0.
+  Reused immutable archived module build is explicitly identified; S6 rebuilds.
+The cancelled stage34-a/helper clock defect is retained in
+artifacts/settle-training-clock-repro-20260923/; do not call that attempt passed.
 
-Accepted combined clean S3/S4 qualification: tide-foundation-stage34-20260923-b,
-source494e6a9, qualification/foundation-stage34-494e6a9; read-only reused build
-qualification/modules-dev-20260923-a/build. This build's archived dirty source
-matches C++ bytes; it was not rebuilt at494e6a9. Output/status/full-cpu result and
-logs: artifacts/foundation-stage34-20260923-b/. 7611 passed/1153.34s, exit0; inactive/dead/MainPID0, no descendants.
-All source hashes,13 binaries and36 fresh-process payloads audited. Reviewed
-evidence: docs/evidence/foundation-stage34.md. Final S6 rebuilds clean source in a new directory.
+S5 implementation9f0cfff: unified three-family runner, real training phases,
+separate work/replay accounting, dynamic budgets/lifetime control, source export.
+127 directed tests/55.95s passed in foundation-bench-dev-20260923-b;5 durable
+records validated. Earlier build gate a passed524 tests but failed the original
+orphan deadline check. Cancellation/proc-scan failure and6-test correction remain
+in artifacts/foundation-lifecycle-repro-20260923/. Both development units terminal.
 
-S5 implementation ready for local commit: foundation_workloads/execute/measure/worker/control/
-lifecycle/resources and benchmark_foundation.py; optional C++ work/replay metrics.
-Frozen12 workloads and2 large presets; explicit phases, reset warmups, detached
-training windows, dynamic half-effective resources, process-group timeout/RSS/
-cancellation/reaping, source/build identity and local Trackio records. Scalar
-transport weights fixed0.8, deterministic matrices std1/sqrt(D). Python reference
-retains traces; native wall timing trace-free, separately disclosed. Detailed
-accounting is a separate pass. No formal timing or new tuning candidate started.
+Completed formal medium evaluation: tide-foundation-medium-20260923-a.
+Clean frozen source: qualification/foundation-performance-9f0cfff.
+Read-only build: qualification/foundation-bench-dev-20260923-a/build.
+Outputs: artifacts/foundation-medium-20260923-a/{status.json,task.log,suite/}.
+Launch/resource and live process/cgroup/binary inspection records are retained.
+All12 configs,3 independent repeats,2 reset warmups, per-process180s, ATen1,
+node-worker limit4, RuntimeMaxSec22000. All108 runs completed, zero failures; unit exit0/MainPID0. Audit/report at
+artifacts/foundation-medium-20260923-a/{reviewed-audit.json,report.json,report.md}.
+No formal timing remains active.
 
-Development build completed in foundation-bench-dev-20260923-a;524 tests passed
-and the original orphan-process test failed (full-host proc scan exceeded0.5s).
-Unit terminal exit1/MainPID0; all artifacts retained. Corrected child-only scan
-and uncatchable cancellation signal pass6 lifecycle tests, failure reproduction
-at artifacts/foundation-lifecycle-repro-20260923/.
-New runner/CLI gate passed127 tests/55.95s, exit0/MainPID0: tide-foundation-bench-dev-20260923-b,
-qualification/foundation-bench-dev-20260923-b, exact immutable a/build reused.
-Output artifacts/foundation-bench-dev-20260923-b/, including terminal audit and
-validated durable records. Adds real three-family CLI
-modes/records, export identity and whole-suite cancellation checks.
-Main-tree edits may continue; never edit either active checkout/build. Directed
-runner tests cover exact owners, complete client semantics, actual training
-updates/detaches, accounting parity, prefill/fallback and child reaping. Next: commit this tested implementation, freeze a clean worktree, then launch
-`python scripts/benchmark_foundation.py --device cpu --tier medium --build-dir
-/var/tmp/zlong-graph-execution-foundation/qualification/foundation-bench-dev-20260923-a/build
---output-dir NEW`. Frozen12 configs,3 independent repeats,2 reset warmups,
-ATen1/native limit4, per-process180s; no heavy overlap. Large: two presets,
-TimedDAG/Settle families,300s/stage; existing PDG wide and narrow failure reused.
-Then S5 reviewed report and clean S6 CPU/standalone/relocation qualification.
-No live job remains after the development gates.
+Follow-up implementation ready to commit after130 directed tests/56.42s,
+exit0/MainPID0 (foundation-records-dev-20260923-a). Changes:
+- reject explicit timeout0; publish completed measured phase before profiling;
+  retain effective thread and binary identity before model allocation;
+  allow30s bounded group cleanup after a large-process deadline;
+  directed regression gate passed in foundation-records-dev-20260923-a;
+  artifacts/foundation-records-dev-20260923-a, same immutable matching build.
+- README, capability and portability-contract docs; schema validator passed.
+  x86 target-machine execution is an optional extension of this acceptance.
+No unreviewed user changes, no push/subagents/reference writes.
 
-Re-entry:
+Next bounded sequence:
+1. Audit terminal medium records, source/binary hashes, actual exits and cleanup;
+   summarize three repeats and dispersion with scripts/foundation_report.py.
+2. Run directed benchmark/CLI tests for the small record follow-up, commit it.
+3. Freeze new clean source; evaluate both large presets for timed-dag and settle,
+   node workers32/ATen1,300s per stage, stopping a family at its first failure.
+   Reuse existing wide PDG/LH and narrow PDG timeout evidence; no repeat search.
+4. Review/commit S5 evidence, then freeze final source and run the prepared
+   artifacts/qualify_foundation_final.py driver via scripts/job.py. It exports
+   to a new path with spaces, rebuilds/smokes, runs full CPU FP64/FP32, and builds
+   C++ Settle with TIDE_PYTHON_BINDINGS=OFF plus loader/forward/VJP checks.
+5. Audit S6, update final matrix/status, commit evidence and stop this scope.
+No new performance bottleneck/candidate has been selected; defaults stay unchanged.
+
+Re-entry commands:
 ```
 git status --short --branch
 git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
-Python /home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1.
-CPU FP32/FP64; TORCH_DEVICE_BACKEND_AUTOLOAD=0; correctness pools1/build2.
-Dynamic resources scripts/foundation_resources.py:320 CPUs, aggregate160 at last
-check; eight NUMA nodes; recompute half-effective-memory and disk before large jobs.
-No NPU/CUDA claim. Disk27GiB free at startup. Source resolves under /var/tmp.
-Native value checkpoint is already qualified. Existing LH/PDG wide and narrow
-failure evidence remains; no repeated wide tuning. No push, subagents or reference
-writes. Use durable_records.py with readback. Preserve all cited failure artifacts.
+Python /home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1,
+C++11 ABI. CPU FP32/FP64 only, TORCH_DEVICE_BACKEND_AUTOLOAD=0. Correctness
+pools1/build2. Recompute scripts/foundation_resources.py before large work:
+last320 CPUs/eight NUMA nodes, aggregate half-budget160; memory is dynamically
+half-effective, never a fixed256GiB cap. Disk27GiB at last check. Source resolves
+under /var/tmp/zlong-graph-execution-foundation/repository. Preserve cited builds,
+raw records and failures. Use durable_records.py and readback for all handoffs.
