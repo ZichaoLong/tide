@@ -16,8 +16,8 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 | Option / applicable module | P/D/S streaming, infer/train | D/S frontier, infer/train | Independent specialization |
 | --- | --- | --- | --- |
 | node workers, packed state/Full | verified | verified | chain/self-loop verified |
-| attention_packing exact/single, same-fiber | verified | verified, `test_fiber_single.py` | default covered; policy combinations need S3 audit |
-| fiber_pooling event/CSR, same-fiber | verified | verified, `test_fiber_efficiency.py` | exact default covered; options not separately certified |
+| attention_packing exact/single, same-fiber | verified | verified, `test_fiber_single.py` | ring/diamond/chain/self-loop policies covered by frontier-options gate |
+| fiber_pooling event/CSR, same-fiber | verified | verified, `test_fiber_efficiency.py` | exact default covered; options covered by frontier-options gate |
 | cloned/owned KV, same-fiber | verified | verified, same test | default covered |
 | attention layout event/head, same-fiber | verified | verified, same test | default covered |
 | projection input/linear layout | same-fiber QKV/output physical strides selected by scale model initialization; [fiber efficiency](evidence/fiber-efficiency.md) | Model projection_layout selects physical QKV/output strides; cross-graph ownership/update tests | default projection covered |
@@ -30,7 +30,7 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 
 S3.2 directed gate: `tests/test_frontier_options.py` and eight related files,
 1098 CPU FP64/FP32 tests passed; archived source and terminal audit at
-`artifacts/frontier-options-dev-20260923-a/`. Stage3 clean qualification remains.
+`artifacts/frontier-options-dev-20260923-a/`. Clean7611-test qualification: [S3/S4 evidence](evidence/foundation-stage34.md).
 Defaults stay unchanged. Prefill fallback counters distinguish disabled, missing
 sequence contract, selected-only adoption, selected clear, and custom Next.
 Phase profiling remains explicitly Streaming-only.
@@ -52,7 +52,7 @@ gaps when the scheduling contract allows the operation, not semantic N/A.
 | EMA/identity/SSM | memory.py, memory_batch.py / basic_kernels.cpp | exact affine batch/time scan; `test_memory_programs.py`, `test_memory_packing.py` |
 | event Attention/GQA/window | attention.py / attention.cpp | ragged KV, grouped batch and causal sequence; `test_attention.py`, `test_attention_packing.py`, `test_attention_schedules.py`, `test_attention_training.py` |
 | same-fiber Attention/pooling | fiber_attention.py, fiber_packing.py, fiber_pool.py / corresponding native files | complete fiber visibility; distinct KV/log-bias decay; packed batch/time; fiber formula/schedule/pool/continuation/single/efficiency tests |
-| Linear/Gated Delta/DeltaRule (`linear`/`delta`/`delta-rule-v1`) | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; ungated profile directed-tested; clean S3 gate pending; `test_matrix_memory.py`, isolated roots |
+| Linear/Gated Delta/DeltaRule (`linear`/`delta`/`delta-rule-v1`) | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; ungated profile directed-tested; clean S3/S4 gate passed; `test_matrix_memory.py`, isolated roots |
 | FFN/SwiGLU/identity/norm Full | ops.py, lh_full.py / ops.cpp, lh_full.cpp | independent selected rows batched; `test_memory_programs.py`, `test_lh_full_formulas.py` |
 | Agg sum/mean/positive mean/active/all softmax | aggregate.py / aggregate_kernel.cpp | complete source domain and contributions, absent != zero; aggregate formula/contract/schedule and source-domain tests |
 | HARD/SOFTP/HST Emit, sparse slot payloads | full.py / full_kernel.cpp | explicit HST surrogate, None/zero/unused; emit/isolated-gradient tests |
