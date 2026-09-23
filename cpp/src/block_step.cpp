@@ -21,6 +21,7 @@ void advance_block_events(const Graph& g, const Model& m, Continuation& q,
       auto& e = events[i];
       nodes[e.node].push_back(i); regions[{e.batch, g.nodes[e.node].region}].push_back(i);
       if (e.proposal.defined()) continue;
+      if (m.nodes[e.node].kernel->scalar_policy_fallback()) ++stats["fiber_policy_scalar_events"];
       ++stats["state_steps"]; ++stats["read_calls"];
       const auto old = q.states.find({e.batch, e.node});
       e.old = old == q.states.end() ? m.nodes[e.node].kernel->initial(m.nodes[e.node]) : old->second;

@@ -38,7 +38,8 @@ def emit(h, g, p, mode, zeta=1.0):
 
 class NodeWeights(nn.Module):
     def __init__(self, width, generator, dtype, spec=None, output_slots=0, full_program=None,
-                 input_slots=0, aggregate_program=None, state_program=None, read_program=None, transition=None):
+                 input_slots=0, aggregate_program=None, state_program=None, read_program=None, transition=None,
+                 projection_layout="input"):
         super().__init__()
         def parameter(shape, scale):
             return nn.Parameter(torch.randn(shape, generator=generator, dtype=dtype) * scale)
@@ -62,6 +63,9 @@ class NodeWeights(nn.Module):
                 raise ValueError("fiber attention width must be divisible by heads")
             self.extra["fiber_qkv"] = parameter((width, 3*width), .15)
             self.extra["fiber_out"] = parameter((width, width), .15)
+            if projection_layout == "linear":
+                for name in ("fiber_qkv", "fiber_out"):
+                    self.extra[name] = nn.Parameter(self.extra[name].detach().t().contiguous().t())
             self.extra["fiber_qkv_bias"] = nn.Parameter(torch.zeros(3*width, dtype=dtype))
             self.extra["fiber_out_bias"] = nn.Parameter(torch.zeros(width, dtype=dtype))
             self.extra["fiber_decay"] = nn.Parameter(torch.tensor(.01, dtype=dtype))
@@ -78,11 +82,11 @@ class NodeWeights(nn.Module):
                 self.extra[name] = parameter((width, width), 0.15)
             self.extra["ssm_a"] = parameter((width,), 0.1)
             self.extra["ssm_skip"] = parameter((width,), 0.2)
-        if spec is not None and spec.memory in {"linear", "delta"}:
+        if spec is not None and spec.memory in {"linear", "delta", "delta-rule-v1"}:
             for name in ("mem_q", "mem_k", "mem_v", "mem_out"):
                 self.extra[name] = parameter((width, width), 0.15)
-            if spec.memory == "delta":
-                for name in ("mem_beta", "mem_decay"):
+            if spec.memory != "linear":
+                for name in (("mem_beta", "mem_decay") if spec.memory == "delta" else ("mem_beta",)):
                     self.extra[name] = parameter((width,), 0.15)
         if self.full_kind == "swiglu":
             for name, shape in (("ffn_gate", (width, width * 2)), ("ffn_up", (width, width * 2)),
@@ -159,10 +163,15 @@ class NodeWeights(nn.Module):
 
 class Model(nn.Module):
     def __init__(self, graph, width=3, seed=7, dtype=torch.float64, full_programs=None, aggregate_programs=None,
-                 state_programs=None, read_programs=None, next_programs=None, region_programs=None):
+                 state_programs=None, read_programs=None, next_programs=None, region_programs=None,
+                 projection_layout="input"):
         super().__init__()
         if dtype not in (torch.float32, torch.float64) or width < 1:
             raise ValueError("CPU float32/float64 and positive width required")
+        if projection_layout not in {"input", "linear"}:
+            raise ValueError("unknown projection layout")
+        if projection_layout != "input" and not any(n.memory in FIBER_PROFILES for n in graph.nodes):
+            raise ValueError("nondefault projection layout requires same-fiber attention")
         self.width = width
         generator = torch.Generator().manual_seed(seed)
         programs = {} if full_programs is None else full_programs
@@ -183,7 +192,8 @@ class Model(nn.Module):
         offsets = graph.port_indexes[1].offsets
         self.nodes = nn.ModuleList(BoundaryWeights(width, dtype) if n.identity else NodeWeights(
             width, generator, dtype, n, offsets[v+1] - offsets[v], programs.get(v),
-            graph.source_counts[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v)) for v, n in enumerate(graph.nodes))
+            graph.source_counts[v], aggregates.get(v), states.get(v), readers.get(v), transitions.get(v),
+            projection_layout) for v, n in enumerate(graph.nodes))
         from .region import program as region_program
         selectors = {} if region_programs is None else region_programs
         if any(type(r) is not int or not 0 <= r < len(graph.regions) for r in selectors):

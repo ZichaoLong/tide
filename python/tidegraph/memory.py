@@ -85,7 +85,7 @@ def kernel(name, spec=None, input_slots=0):
         return EMA()
     if name == "ssm":
         return DiagonalSSM()
-    if name in {"linear", "delta"}:
+    if name in {"linear", "delta", "delta-rule-v1"}:
         from .matrix_memory import MatrixMemory
         return MatrixMemory(name)
     if name == "attention":

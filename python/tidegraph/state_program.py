@@ -46,7 +46,7 @@ def validate_program(weights, spec, *, slots=None, native=False):
     from .lazy_add import LazyAdd
     from .fiber_attention import FiberAttention
     from .fiber_pool import PROFILES, LEARNED
-    builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory,
+    builtins = {"ema": EMA, "ssm": DiagonalSSM, "linear": MatrixMemory, "delta": MatrixMemory, "delta-rule-v1": MatrixMemory,
                 "attention": Attention, LazyAdd.profile: LazyAdd, **{name: FiberAttention for name in PROFILES}}
     program = weights.kernel
     from .clocked_state import ClockedState

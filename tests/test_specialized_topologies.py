@@ -78,7 +78,7 @@ def test_specialized_ring_diamond_trace_and_roots(dtype, topology, mode, clear, 
 
 
 @pytest.mark.parametrize("topology", ["ring", "diamond-region"])
-@pytest.mark.parametrize("kind", ["attention", "ssm", "linear", "delta"])
+@pytest.mark.parametrize("kind", ["attention", "ssm", "linear", "delta", "delta-rule-v1"])
 @pytest.mark.parametrize("implementation", ["python", "packed"])
 def test_representative_modules_and_chunk_cuts(dtype, topology, kind, implementation):
     g, m, q, xs, variables = fixture(dtype, topology, kind=kind)
@@ -126,7 +126,7 @@ def layered_fixture(dtype, kind, clear):
     return SettleGraph(graph, (1, 2, 3)), m, Continuation(graph.identity, 2), x
 
 
-@pytest.mark.parametrize("kind", ["ema", "attention", "ssm", "linear", "delta"])
+@pytest.mark.parametrize("kind", ["ema", "attention", "ssm", "linear", "delta", "delta-rule-v1"])
 @pytest.mark.parametrize("clear", [False, True])
 @pytest.mark.parametrize("mode", ["hard", "softp", "hst"])
 def test_layered_settle_independent_schedule(dtype, kind, clear, mode):

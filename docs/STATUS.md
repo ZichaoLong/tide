@@ -22,14 +22,27 @@ Stage2 clean qualification finished:7167 passed/933.90s, build/test exit0.
 70809fd frozen source, all459 source hashes and every binary audited.
 Unit tide-foundation-stage2-20260923-a inactive/dead, MainPID0/exit0; no descendants.
 Reviewed evidence: docs/evidence/foundation-stage2.md; raw artifacts and frozen
-worktree retained at the paths in that report. No active job remains.
+worktree retained at the paths in that report. No stage2 process remains.
 
-Current uncommitted increment: add explicitly named ungated DeltaRule
-(existing delta is Gated DeltaRule; preserve it), deterministic model-style
-layout/norm/explicit-position/RoPE/mask/cache adapter and formula/chunk/VJP tests.
-Cross-graph QKV/output physical projection strides need owner/update coverage;
-scale initialization already supports them (not a general Native constructor
-option). Follow ROADMAP S3.1/S3.3, then clean stage3 qualification.
+S3.1/S3.3 module implementation directed gate passed:736 tests/92.06s;
+build/test exit0. Unit tide-modules-dev-20260923-a inactive/dead, MainPID0/exit0,
+no remaining processes. Source snapshot qualification/modules-dev-20260923-a;
+artifacts/modules-dev-20260923-a has source archive, development manifest,
+terminal-inspection.json and logs. Its independent build remains immutable.
+Ungated delta-rule-v1, physical same-fiber projection strides, scalar-policy
+fallback counters and the tiny RMSNorm/RoPE/GQA/SwiGLU model adapter are ready
+for local commit. Module adapter first Python-only gate12 passed/3.36s.
+No long verification job is active; S4 directed gate is next.
+
+Additional uncommitted S4 tests: foundation_training.py/test_foundation_training.py
+compare three updates (SGD, momentum, AdamW eps1e-5), all six classes, native
+optimizers, shared/unused/zero owners, isolated roots, initial slots, truncation
+and DenseLinear application head. First SSM/AdamW probe14 passed/6.78s.
+checkpoint_process_worker.py/test_checkpoint_process.py exercise actual new
+processes for graph v5, two-clock application and native named values; native SGD fresh-process probe passed; single/application AdamW probes2 passed
+in31.40s. Full directed gate still needed. verify.py now retains pytest temporary evidence in
+the qualification output. No checkpoint format/controller scope changed.
+Clean S3/S4 qualification follows coherent commits.
 No unrelated user changes, no push/sub-agents/reference writes. Native value
 checkpoint already qualified; no wide LH/PDG tuning is queued.
 
@@ -58,3 +71,7 @@ Durable writes use scripts/durable_records.py and readback. Commit tested code,
 then freeze isolated source for long qualification and separately commit reviewed
 evidence. Never edit inputs read by a live development job or call a live run
 passed. STATUS is current handoff, not a session diary.
+
+S5 preparation uncommitted: scripts/foundation_resources.py discovers affinity,
+cpuset, ancestor quotas/limits, physical cores/NUMA and dynamic aggregate half
+budgets. No formal benchmark has started.

@@ -15,7 +15,7 @@ Tensor matrix_scan(Tensor a, Tensor b, const Tensor& initial) {
 }
 class MatrixKernel final : public StateKernel {
  public:
-  explicit MatrixKernel(bool linear) : linear_(linear) {}
+  explicit MatrixKernel(const std::string& name) : linear_(name == "linear"), gated_(name == "delta") {}
   State initial(const NodeWeights& w) const override {
     const auto d = w.bias.numel();
     State s{at::zeros_like(w.bias), -1, 0, {{"matrix", at::zeros({d, d}, w.bias.options())}}};
@@ -32,7 +32,7 @@ class MatrixKernel final : public StateKernel {
       s.value = output(w, q, s.slots.at("matrix"), s.slots.at("normalizer"));
     } else {
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta")));
-      auto decay = at::sigmoid(at::matmul(h, w.extra.at("mem_decay")));
+      auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))) : at::ones_like(beta);
       auto decayed = decay * old.slots.at("matrix");
       auto error = v - at::matmul(k, decayed);
       s.slots["matrix"] = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2);
@@ -51,7 +51,7 @@ class MatrixKernel final : public StateKernel {
       z = at::stack(zs) + k; values = output(w, q, matrix, z);
     } else {
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta"))).unsqueeze(-1).unsqueeze(-1);
-      auto decay = at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1);
+      auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1) : at::ones_like(beta);
       auto decayed = decay * at::stack(ms);
       auto error = v - at::matmul(k.unsqueeze(-2), decayed).squeeze(-2);
       matrix = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2); values = output(w, q, matrix);
@@ -75,7 +75,7 @@ class MatrixKernel final : public StateKernel {
       z = at::cumsum(k, 0) + old.slots.at("normalizer"); values = output(w, q, matrix, z);
     } else {
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta"))).unsqueeze(-1).unsqueeze(-1);
-      auto decay = at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1);
+      auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1) : at::ones_like(beta);
       auto a = decay * (at::eye(h.size(-1), h.options()) - beta * k.unsqueeze(-1) * k.unsqueeze(-2));
       auto b = beta * k.unsqueeze(-1) * v.unsqueeze(-2);
       matrix = matrix_scan(a, b, old.slots.at("matrix")); values = output(w, q, matrix);
@@ -94,6 +94,7 @@ class MatrixKernel final : public StateKernel {
       if (it == w.extra.end() || it->second.sizes() != at::IntArrayRef({d, d})) throw std::invalid_argument("invalid matrix-memory weights");
     }
     if (!linear_) for (const auto& name : {"mem_beta", "mem_decay"}) {
+      if (std::string(name) == "mem_decay" && !gated_) continue;
       auto it = w.extra.find(name);
       if (it == w.extra.end() || it->second.sizes() != w.bias.sizes()) throw std::invalid_argument("invalid delta gate weights");
     }
@@ -107,7 +108,7 @@ class MatrixKernel final : public StateKernel {
       throw std::invalid_argument("invalid linear attention normalizer");
   }
  private:
-  bool linear_;
+  bool linear_, gated_;
   std::array<Tensor, 3> project(const NodeWeights& w, const Tensor& h) const {
     auto q = at::matmul(h, w.extra.at("mem_q")); auto k = at::matmul(h, w.extra.at("mem_k"));
     if (linear_) { q = at::elu(q) + 1; k = at::elu(k) + 1; }
@@ -125,6 +126,6 @@ class MatrixKernel final : public StateKernel {
 };
 }  // namespace
 std::shared_ptr<const StateKernel> make_matrix_kernel(const std::string& name) {
-  return std::make_shared<MatrixKernel>(name == "linear");
+  return std::make_shared<MatrixKernel>(name);
 }
 }  // namespace tide

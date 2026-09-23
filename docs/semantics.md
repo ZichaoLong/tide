@@ -90,7 +90,7 @@ explicit first-order replay. Trace and snapshot contracts still apply; physical
 reuse counters are distinct from canonical logical event counts.
 
 Additional local state profiles are specified in `state-programs.md` (SSM),
-`matrix-memory.md` (Linear/Delta) and `attention.md` (aggregated-event GQA/window).
+`matrix-memory.md` (Linear, gated `delta`, ungated `delta-rule-v1`) and `attention.md` (aggregated-event GQA/window).
 Their clocks, clear behavior and batching contracts are explicit; sharing the
 generic executor does not make these different profiles interchangeable.
 `state-clocks.md` adds explicit periodic local state ticks, delegating the local

@@ -69,6 +69,9 @@ class FiberAttention final : public StateKernel {
   bool exact_sequence() const override { return true; }
   bool joint_batch() const override { return true; }
   bool joint_sequence() const override { return true; }
+  bool scalar_policy_fallback() const override {
+    return packing_ != "exact" || pooling_ != "event" || cache_ != "cloned" || layout_ != "event";
+  }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
                           const std::vector<Index>& times, const ContentViews& views) const override {
     if (old.empty()) return {};

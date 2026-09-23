@@ -1,4 +1,4 @@
-"""Linear attention and gated DeltaRule with independent recurrence/scan paths."""
+"""Linear attention and explicitly distinct ungated/gated DeltaRule with independent recurrence/scan paths."""
 import torch
 from .history import increment
 from .content import as_content
@@ -55,7 +55,7 @@ class MatrixMemory:
             value = self.output(w, q, matrix, z)
         else:
             beta = (h @ w.extra["mem_beta"]).sigmoid()
-            a = (h @ w.extra["mem_decay"]).sigmoid()
+            a = (h @ w.extra["mem_decay"]).sigmoid() if self.kind == "delta" else 1
             decayed = a * old.slots["matrix"]
             error = v - k @ decayed
             matrix = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2)
@@ -71,7 +71,7 @@ class MatrixMemory:
             values = self.output(w, q, matrix, z)
         else:
             beta = (h @ w.extra["mem_beta"]).sigmoid()[:, None, None]
-            decay = (h @ w.extra["mem_decay"]).sigmoid()[:, None, None]
+            decay = (h @ w.extra["mem_decay"]).sigmoid()[:, None, None] if self.kind == "delta" else 1
             eye = torch.eye(h.shape[-1], dtype=h.dtype, device=h.device)
             a = decay * (eye - beta * k.unsqueeze(-1) * k.unsqueeze(-2))
             b = beta * k.unsqueeze(-1) * v.unsqueeze(-2)

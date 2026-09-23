@@ -70,6 +70,7 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   for (const auto& task : tasks) {
     if (replay) {
       stats["semantic_state_replays"] += task.ids.size();
+      if (m.nodes[task.node].kernel->scalar_policy_fallback()) stats["fiber_policy_semantic_replays"] += task.ids.size();
       stats["semantic_read_replays"] += task.ids.size();
     }
     ++stats["read_calls"];

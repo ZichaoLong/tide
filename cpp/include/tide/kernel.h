@@ -20,6 +20,9 @@ class StateKernel {
   virtual bool exact_sequence() const { return false; }
   virtual bool joint_batch() const { return false; }
   virtual bool joint_sequence() const { return false; }
+  // A configured nondefault packed policy uses the scalar oracle on causal
+  // fallback/replay. Executors report that path instead of silently ignoring it.
+  virtual bool scalar_policy_fallback() const { return false; }
   virtual State reset(const State&) const;
   virtual bool joint_reset_batch() const { return false; }
   virtual std::vector<State> reset_batch(const std::vector<State>&) const;

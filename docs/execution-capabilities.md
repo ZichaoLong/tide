@@ -20,13 +20,13 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 | fiber_pooling event/CSR, same-fiber | verified | verified, `test_fiber_efficiency.py` | exact default covered; options not separately certified |
 | cloned/owned KV, same-fiber | verified | verified, same test | default covered |
 | attention layout event/head, same-fiber | verified | verified, same test | default covered |
-| projection input/linear layout | same-fiber QKV/output physical strides selected by scale model initialization; [fiber efficiency](evidence/fiber-efficiency.md) | local kernels accept either stride; explicit cross-graph ownership/update gate remains S3.1 | default projection covered |
+| projection input/linear layout | same-fiber QKV/output physical strides selected by scale model initialization; [fiber efficiency](evidence/fiber-efficiency.md) | Model projection_layout selects physical QKV/output strides; cross-graph ownership/update tests | default projection covered |
 | compact events | native Streaming, trace snapshots retained | consumed fibers moved, trace snapshots retained | same block publication |
 | parallel regions | native Streaming, canonical publish order | same-time independent sample owners, canonical publication | same causal waves |
 | deferred state release | compact required | compact + trace-free displaced states retire on workers | same block cleanup |
 | packed_sources | packed sum transport; counted unsupported Agg fallback | Aggregate and same-fiber sequence transport | independent ring/diamond/chain/self-loop |
 | batch_next/reset | packed adopt/selected fiber reset; counted custom fallback | same-time batch owners; times stay causal | same causal Next/reset grouping |
-| head workers | native scale/portable Full projection pool; separate from executor node pool | no general frontier head-worker API; S3.1 audit of applicable Full path | no general head-worker API |
+| head workers | native DenseLinear application vocabulary head; separate from graph node pool | same DenseLinear can consume frontier/Settle output; this pool is outside graph scheduling | same application DenseLinear, not an attention-head worker pool |
 
 S3.2 directed gate: `tests/test_frontier_options.py` and eight related files,
 1098 CPU FP64/FP32 tests passed; archived source and terminal audit at
@@ -34,6 +34,10 @@ S3.2 directed gate: `tests/test_frontier_options.py` and eight related files,
 Defaults stay unchanged. Prefill fallback counters distinguish disabled, missing
 sequence contract, selected-only adoption, selected clear, and custom Next.
 Phase profiling remains explicitly Streaming-only.
+
+Nondefault same-fiber policies on scalar paths report `fiber_policy_scalar_events`;
+training oracle calls report `fiber_policy_semantic_replays`. Packed numeric
+policies remain distinct from the independent scalar reference.
 
 A local same-fiber policy does not apply to aggregated-event attention kernels;
 these remain separate semantic profiles. Explicit unsupported configuration
@@ -48,12 +52,12 @@ gaps when the scheduling contract allows the operation, not semantic N/A.
 | EMA/identity/SSM | memory.py, memory_batch.py / basic_kernels.cpp | exact affine batch/time scan; `test_memory_programs.py`, `test_memory_packing.py` |
 | event Attention/GQA/window | attention.py / attention.cpp | ragged KV, grouped batch and causal sequence; `test_attention.py`, `test_attention_packing.py`, `test_attention_schedules.py`, `test_attention_training.py` |
 | same-fiber Attention/pooling | fiber_attention.py, fiber_packing.py, fiber_pool.py / corresponding native files | complete fiber visibility; distinct KV/log-bias decay; packed batch/time; fiber formula/schedule/pool/continuation/single/efficiency tests |
-| Linear/Gated Delta (`linear`/`delta`) | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; ungated DeltaRule is still required by S3.1; `test_matrix_memory.py`, isolated roots |
+| Linear/Gated Delta/DeltaRule (`linear`/`delta`/`delta-rule-v1`) | matrix_memory.py / matrix_kernels.cpp | literal steps and exact scans; ungated profile directed-tested; clean S3 gate pending; `test_matrix_memory.py`, isolated roots |
 | FFN/SwiGLU/identity/norm Full | ops.py, lh_full.py / ops.cpp, lh_full.cpp | independent selected rows batched; `test_memory_programs.py`, `test_lh_full_formulas.py` |
 | Agg sum/mean/positive mean/active/all softmax | aggregate.py / aggregate_kernel.cpp | complete source domain and contributions, absent != zero; aggregate formula/contract/schedule and source-domain tests |
 | HARD/SOFTP/HST Emit, sparse slot payloads | full.py / full_kernel.cpp | explicit HST surrogate, None/zero/unused; emit/isolated-gradient tests |
 | Read/Next/Region | readout.py, next.py, region.py / matching native files | history and controls causal; comparison-identity Next permits state prefill; custom Next blocks prefill with counter; contract/schedule/continuation tests |
-| position/norm/mask/cache adapter composition | attention kernels provide causal/window mask and cache; LH Full provides norm | RoPE and concrete small model composition required S3.3; no arbitrary model compatibility |
+| position/norm/mask/cache adapter composition | attention kernels provide causal/window mask and cache; LH Full provides norm | [tiny model composition](model-adapter.md) implemented; independent formula/chunk/VJP test; no arbitrary model compatibility |
 
 State prefill requires exact_sequence, observe_all, no selected clear, and
 comparison-identity Next. Otherwise state remains causal; Full can still batch.
@@ -75,3 +79,8 @@ part of qualification; physical sharing need not allocate one Tensor per value.
 Named values do not include continuation. Graph/application bundles do not
 restore a full training controller, framework RNG or dataset cursor. Native
 TIDENCK1 is independent of Python files; format interoperation is not promised.
+
+S3.1/S3.3 directed frozen-snapshot gate:736 passed/92.06s. Artifacts and terminal
+source/build audit: `artifacts/modules-dev-20260923-a/`; CPU FP64/FP32. This
+includes ungated formula/scan, all new schedules/native Settle, projection strides
+with three updates, explicit scalar-policy reporting and model adapter roots.

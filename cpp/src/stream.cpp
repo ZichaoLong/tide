@@ -87,6 +87,10 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       if (options_.packed && replay) stats["semantic_read_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].read_kernel->joint_batch()) stats["read_scalar_batch_steps"] += ids.size();
       if (options_.packed && replay) stats["semantic_state_replays"] += ids.size();
+      if (model_.nodes[node].kernel->scalar_policy_fallback()) {
+        if (!options_.packed) stats["fiber_policy_scalar_events"] += ids.size();
+        else if (replay) stats["fiber_policy_semantic_replays"] += ids.size();
+      }
       if (options_.packed && !model_.nodes[node].kernel->joint_batch()) stats["state_scalar_batch_steps"] += ids.size();
       stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_aggregate_replays"] += ids.size();

@@ -69,7 +69,7 @@ def test_causal_next_fallback_is_counted(dtype, clear):
     assert actual.stats.get("next_batches", 0) == 0
 
 
-@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", profile("all-softmax")])
+@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1", profile("all-softmax")])
 @pytest.mark.parametrize("clear", [False, True])
 def test_cpp_settle_frontend_uses_transport_and_actual_prefill(dtype, kind, clear):
     graph = Graph(tuple(Node(r, memory=kind, clear=clear, query_heads=2, kv_heads=2,
@@ -136,3 +136,14 @@ def test_policy_for_wrong_module_is_explicitly_rejected(dtype, flags):
     g = Graph((Node(0, memory="attention"),), (), (Region(1),), (0,), (0,))
     with pytest.raises(ValueError, match="same-fiber"):
         Native(g, Model(g, dtype=dtype), algorithm="frontier", **flags)
+
+
+@pytest.mark.parametrize("algorithm", ["streaming", "frontier"])
+@pytest.mark.parametrize("packed", [False, True])
+def test_nondefault_policy_scalar_path_is_reported(dtype, algorithm, packed):
+    g, m, q, xs, _ = fixture(dtype, "clear")
+    engine = Native(g, m, algorithm=algorithm, packed=packed, attention_packing="single")
+    result = engine.run(q, xs, 8, sealed_until=8)
+    equivalent(run(g, m, q, xs, 8, sealed_until=8), result)
+    counter = "fiber_policy_semantic_replays" if algorithm == "streaming" and packed else "fiber_policy_scalar_events"
+    assert result.stats[counter] == result.stats["candidate_events"]

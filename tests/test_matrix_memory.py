@@ -37,7 +37,7 @@ def vjp(result, variables):
     return dict(zip(variables, torch.autograd.grad(objective(result), list(variables.values()), allow_unused=True)))
 
 
-@pytest.mark.parametrize("kind", ["linear", "delta", "mixed"])
+@pytest.mark.parametrize("kind", ["linear", "delta", "delta-rule-v1", "mixed"])
 @pytest.mark.parametrize("clear", [False, True])
 @pytest.mark.parametrize("mode", ["hard", "hst", "softp"])
 @pytest.mark.parametrize("implementation", ["python", "native-streaming", "native-frontier"])
@@ -51,7 +51,7 @@ def test_matrix_profiles_trace_vjp(dtype, kind, clear, mode, implementation):
     equivalent(expected, actual); equivalent(expected_grad, vjp(actual, variables))
 
 
-@pytest.mark.parametrize("kind", ["linear", "delta"])
+@pytest.mark.parametrize("kind", ["linear", "delta", "delta-rule-v1"])
 @pytest.mark.parametrize("packed", [False, True])
 def test_matrix_cycles_and_value_checkpoint(dtype, kind, packed, tmp_path):
     g, m, q, xs, _, variables = fixture(dtype, kind, True, cyclic=True)
@@ -67,7 +67,7 @@ def test_matrix_cycles_and_value_checkpoint(dtype, kind, packed, tmp_path):
     equivalent(expected, actual)
 
 
-@pytest.mark.parametrize("kind", ["ssm", "linear", "delta", "mixed"])
+@pytest.mark.parametrize("kind", ["ssm", "linear", "delta", "delta-rule-v1", "mixed"])
 @pytest.mark.parametrize("implementation", ["python", "native"])
 def test_advanced_settle_embedding(dtype, kind, implementation):
     g, m, q, _, x, variables = fixture(dtype, kind, aligned=True)
@@ -85,7 +85,7 @@ def test_advanced_settle_embedding(dtype, kind, implementation):
     equivalent(expected, actual); equivalent(expected_grad, vjp(actual, variables))
 
 
-@pytest.mark.parametrize("kind", ["linear", "delta"])
+@pytest.mark.parametrize("kind", ["linear", "delta", "delta-rule-v1"])
 def test_matrix_memory_analytic_vjp(dtype, kind):
     g = Graph((Node(0, memory=kind),), (), (Region(1),), (0,), (0,))
     w = Model(g, width=1, dtype=dtype).nodes[0]
@@ -100,11 +100,11 @@ def test_matrix_memory_analytic_vjp(dtype, kind):
     if kind == "linear":
         old.slots["normalizer"] = torch.tensor([0.5], dtype=dtype, requires_grad=True)
     first, _ = w.prepare(old, h[0], 1); second, _ = w.prepare(first, h[1], 4)
-    expected = 3.2 / 2.500001 if kind == "linear" else 1.15
+    expected = 3.2 / 2.500001 if kind == "linear" else (1.15 if kind == "delta" else 1.35)
     equivalent(second.value, h.new_tensor([expected]))
     dh, dm = torch.autograd.grad(second.value.sum(), (h, matrix))
-    equivalent(dh, h.new_tensor([[1 / 2.500001], [1 / 2.500001]]) if kind == "linear" else h.new_tensor([[0.125], [0.5]]))
-    equivalent(dm, matrix.new_tensor([[1 / 2.500001 if kind == "linear" else 0.0625]]))
+    equivalent(dh, h.new_tensor([[1 / 2.500001], [1 / 2.500001]]) if kind == "linear" else h.new_tensor([[0.125 if kind == "delta" else 0.25], [0.5]]))
+    equivalent(dm, matrix.new_tensor([[1 / 2.500001 if kind == "linear" else (0.0625 if kind == "delta" else 0.25)]]))
     states, _ = w.prepare_block(old, h, [1, 4]); equivalent(states, [first, second])
 
 

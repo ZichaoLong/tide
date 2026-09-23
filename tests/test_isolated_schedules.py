@@ -44,7 +44,7 @@ def check(expected, actual, variables, actual_variables):
         assert grad["source.1"] is not None and torch.count_nonzero(grad["source.1"]) == 0
 
 
-@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta"])
+@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1"])
 @pytest.mark.parametrize("topology", ["chain", "self_loop"])
 @pytest.mark.parametrize("implementation", ["python", "native"])
 def test_isolated_specialization_roots(dtype, kind, topology, implementation):
@@ -62,7 +62,7 @@ def test_isolated_specialization_roots(dtype, kind, topology, implementation):
     check(expected, actual, variables, actual_variables)
 
 
-@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta"])
+@pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1"])
 @pytest.mark.parametrize("implementation", ["direct", "encoded-python", "encoded-native"])
 def test_isolated_settle_roots_and_identity_adapters(dtype, kind, implementation):
     def execute(anchor):
