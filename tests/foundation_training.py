@@ -92,7 +92,8 @@ class TrainingCase:
 
     def advance(self, stop):
         if self.family == 'settle':
-            x = self.values[:,self.q.cut:stop]
+            # Settle continuation stores logical cuts, not position indices.
+            x = self.values[:,self.q.cut//self.spec.stride:stop]
             if self.engine:
                 result = self.engine.run(self.encoded_q, x); self.encoded_q = result.continuation
                 result = projected(self.spec, self.compiled, result)

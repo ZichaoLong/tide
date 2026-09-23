@@ -31,24 +31,29 @@ artifacts/modules-dev-20260923-a has source archive, development manifest,
 terminal-inspection.json and logs. Its independent build remains immutable.
 Ungated delta-rule-v1, physical same-fiber projection strides, scalar-policy
 fallback counters and the tiny RMSNorm/RoPE/GQA/SwiGLU model adapter committed as1a982a1. Module adapter first Python-only gate12 passed/3.36s.
-S4 directed gate is launching: tide-training-dev-20260923-a, frozen dirty
-snapshot qualification/training-dev-20260923-a at1a982a1 plus S4 edits. It reuses
-the terminal immutable modules-dev build after verifying C++/binary hashes.
-Output artifacts/training-dev-20260923-a. develop.py --reuse-build tests:
-foundation_training, checkpoint_process, checkpoint_ownership, cpp_optimizer,
-cpp_checkpoint, checkpoint_io. Both CPU dtypes, threads1, RuntimeMaxSec1800.
-Check actual unit/status/log/exit before accepting. Main-tree work may continue;
-do not modify the snapshot, reused build or its sources.
+S4 directed gate passed:274 tests/189.86s, exit0. Unit
+`tide-training-dev-20260923-a` inactive/dead, MainPID0/exit0, no descendants.
+Frozen snapshot qualification/training-dev-20260923-a; verified immutable build
+from qualification/modules-dev-20260923-a/build. Artifacts at
+artifacts/training-dev-20260923-a include source archive, development/terminal
+manifests and retained test-tmp. Audit verified36 unique fresh worker manifests
+and payload hashes (pytest current symlink excluded): both dtypes, SGD/momentum
+and AdamW, existing single-graph v5, two-clock application and native TIDENCK1
+scopes, partial buffers/owners/ledgers and resumed updates. No new checkpoint
+format or controller/RNG scope. Six-class multi-update, isolated roots/initial
+slots, None/zero/shared owners, truncation and application DenseLinear head also
+passed. S4 implementation/scripts/tests committed as5014c3d.
 
-Additional uncommitted S4 tests: foundation_training.py/test_foundation_training.py
-compare three updates (SGD, momentum, AdamW eps1e-5), all six classes, native
-optimizers, shared/unused/zero owners, isolated roots, initial slots, truncation
-and DenseLinear application head. First SSM/AdamW probe14 passed/6.78s.
-checkpoint_process_worker.py/test_checkpoint_process.py exercise actual new
-processes for graph v5, two-clock application and native named values; native SGD fresh-process probe passed; single/application AdamW probes2 passed
-in31.40s. Full directed gate still needed. verify.py now retains pytest temporary evidence in
-the qualification output. No checkpoint format/controller scope changed.
-Clean S3/S4 qualification follows coherent commits.
+Next: clean combined stage3/4 full regression from5014c3d, using the already
+terminal immutable module build (exact C++ hash checked). Its build provenance
+is the archived module snapshot; final S6 will rebuild clean source in a new
+directory. Follow with separate reviewed evidence commit.
+
+Uncommitted S5 preparation: dynamic resource discovery and optional accounting
+for body work, event Attention/SSM/Linear/Delta/Full matrices and scalar replay
+worker durations; dedicated bindings adapter. New accounting remains off during
+formal wall timing. These edits are outside the S4 source/gate. No formal
+benchmark has started and no new performance tuning bottleneck is selected.
 No unrelated user changes, no push/sub-agents/reference writes. Native value
 checkpoint already qualified; no wide LH/PDG tuning is queued.
 
@@ -78,6 +83,15 @@ then freeze isolated source for long qualification and separately commit reviewe
 evidence. Never edit inputs read by a live development job or call a live run
 passed. STATUS is current handoff, not a session diary.
 
-S5 preparation uncommitted: scripts/foundation_resources.py discovers affinity,
-cpuset, ancestor quotas/limits, physical cores/NUMA and dynamic aggregate half
-budgets. No formal benchmark has started.
+
+Qualification tide-foundation-stage34-20260923-a was cancelled (exit143,
+MainPID0, no remaining processes) after review found the S4 Settle training helper
+sliced values by logical cut rather than cut/stride. The 274-pass directed gate
+therefore proves only the first Settle update; other class/checkpoint scopes
+remain valid. Full gate was partial and is not accepted. Raw status/log/result
+and cancellation-audit.json are retained. Explicit failing repro:
+artifacts/settle-training-clock-repro-20260923/ (exit1, helper/test source hashes).
+Main helper is fixed; new assertion requires fresh positions/outputs each update.
+Corrected directed gate54 passed/21.92s (CPU both); hashes and exact command
+in corrected-gate.json. Ready to commit the test correction, then run a new
+clean combined S3/S4 gate. No live job remains.
