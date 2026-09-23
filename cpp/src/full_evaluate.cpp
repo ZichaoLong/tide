@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/operator_profile.h"
 #include "tide/full.h"
 #include "tide/autograd.h"
@@ -53,6 +54,7 @@ void evaluate_full(const Graph& g, const Model& m, std::vector<Event>& events, c
     for (size_t j = 0; j < ids.size(); ++j) {
       validate(results[j], inputs[j], slots);
       if (at::GradMode::is_enabled()) {
+        work::StateReplayTimer replay_timer(work::FullReplayNs);
         auto reference = w.full_kernel->step(w, inputs[j], slots, options);
         validate(reference, inputs[j], slots);
         results[j] = bind(results[j], reference);

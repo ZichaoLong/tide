@@ -14,4 +14,5 @@ def source_hash(root):
 
 
 def revision(root):
-    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+    from source_identity import source_state
+    return source_state(root)[0]

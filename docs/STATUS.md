@@ -22,7 +22,7 @@ logs: artifacts/foundation-stage34-20260923-b/. 7611 passed/1153.34s, exit0; ina
 All source hashes,13 binaries and36 fresh-process payloads audited. Reviewed
 evidence: docs/evidence/foundation-stage34.md. Final S6 rebuilds clean source in a new directory.
 
-Uncommitted S5 implementation: foundation_workloads/execute/measure/worker/control/
+S5 implementation ready for local commit: foundation_workloads/execute/measure/worker/control/
 lifecycle/resources and benchmark_foundation.py; optional C++ work/replay metrics.
 Frozen12 workloads and2 large presets; explicit phases, reset warmups, detached
 training windows, dynamic half-effective resources, process-group timeout/RSS/
@@ -31,15 +31,26 @@ transport weights fixed0.8, deterministic matrices std1/sqrt(D). Python referenc
 retains traces; native wall timing trace-free, separately disclosed. Detailed
 accounting is a separate pass. No formal timing or new tuning candidate started.
 
-Development build/test launching in its own archived dirty snapshot:
-tide-foundation-bench-dev-20260923-a; qualification/foundation-bench-dev-20260923-a;
-artifacts/foundation-bench-dev-20260923-a/{status.json,task.log,development.json}.
+Development build completed in foundation-bench-dev-20260923-a;524 tests passed
+and the original orphan-process test failed (full-host proc scan exceeded0.5s).
+Unit terminal exit1/MainPID0; all artifacts retained. Corrected child-only scan
+and uncatchable cancellation signal pass6 lifecycle tests, failure reproduction
+at artifacts/foundation-lifecycle-repro-20260923/.
+New runner/CLI gate passed127 tests/55.95s, exit0/MainPID0: tide-foundation-bench-dev-20260923-b,
+qualification/foundation-bench-dev-20260923-b, exact immutable a/build reused.
+Output artifacts/foundation-bench-dev-20260923-b/, including terminal audit and
+validated durable records. Adds real three-family CLI
+modes/records, export identity and whole-suite cancellation checks.
 Main-tree edits may continue; never edit either active checkout/build. Directed
 runner tests cover exact owners, complete client semantics, actual training
-updates/detaches, accounting parity, prefill/fallback and child reaping. Commit
-a coherent implementation only after gates pass. Then smoke/record validation,
-fixed performance suite sequentially with no heavy overlap, S5 reviewed report,
-and clean S6 full CPU/standalone/relocation qualification.
+updates/detaches, accounting parity, prefill/fallback and child reaping. Next: commit this tested implementation, freeze a clean worktree, then launch
+`python scripts/benchmark_foundation.py --device cpu --tier medium --build-dir
+/var/tmp/zlong-graph-execution-foundation/qualification/foundation-bench-dev-20260923-a/build
+--output-dir NEW`. Frozen12 configs,3 independent repeats,2 reset warmups,
+ATen1/native limit4, per-process180s; no heavy overlap. Large: two presets,
+TimedDAG/Settle families,300s/stage; existing PDG wide and narrow failure reused.
+Then S5 reviewed report and clean S6 CPU/standalone/relocation qualification.
+No live job remains after the development gates.
 
 Re-entry:
 ```

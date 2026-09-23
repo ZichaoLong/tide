@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/operator_profile.h"
 #include "tide/aggregate.h"
 #include "tide/autograd.h"
@@ -98,6 +99,7 @@ Tensor evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& ev
     for (size_t i = 0; i < requests.size(); ++i) {
       validate(results[i], requests[i]);
       if (at::GradMode::is_enabled()) {
+        work::StateReplayTimer replay_timer(work::AggregateReplayNs);
         auto ref = w.aggregate_kernel->step(w, requests[i]); validate(ref, requests[i]);
         results[i] = bind(results[i], ref);
       }

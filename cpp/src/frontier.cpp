@@ -57,6 +57,7 @@ Result Frontier::run(const Continuation& initial, const std::vector<External>& e
       for (auto& e : events) {
         if (e.active) {
           deliver(graph_, model_, e, [&](const Atom& a) {
+            ++stats["visited_edges"];
             fibers[{a.batch, a.node, a.time}].push_back(a);
             if (options_.trace) result.messages.push_back(a);
           }, [&](const Output& output) { result.outputs.push_back(output); });

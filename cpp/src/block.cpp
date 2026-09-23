@@ -39,6 +39,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   }
   std::vector<std::function<void()>> jobs;
   for (const auto& [node, ids] : by_node) {
+    if (!g.nodes[node].identity) stats["body_candidate_events"] += ids.size();
     ++stats["aggregate_calls"];
     if (at::GradMode::is_enabled()) stats["semantic_aggregate_replays"] += ids.size();
     if (!m.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
@@ -67,6 +68,9 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     std::vector<size_t> ids;
     for (auto i : all) if (events[i].active) ids.push_back(i);
     if (ids.empty()) continue;
+    stats["selected_events"] += ids.size();
+    if (!g.nodes[node].identity) stats["body_selected_events"] += ids.size();
+    stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
     ++stats["full_blocks"];
     if (replay) stats["semantic_full_replays"] += ids.size();
     if (!m.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();

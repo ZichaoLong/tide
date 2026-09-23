@@ -60,6 +60,7 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
     auto events = evaluate_block(graph_, model_, q, frames, inbox, options_, pool_, result.stats);
     for (auto& e : events) {
       deliver(graph_, model_, e, [&](const Atom& a) {
+        ++result.stats["visited_edges"];
         inbox[{a.batch, a.node, a.time}].push_back(a);
         if (options_.trace) result.messages.push_back(a);
       }, [&](const Output& output) { result.outputs.push_back(output); });

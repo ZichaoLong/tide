@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/operator_profile.h"
 #include "tide/read.h"
 #include "tide/autograd.h"
@@ -80,6 +81,7 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[j], requests[j], dtype);
     if (packed && at::GradMode::is_enabled()) {
+        work::StateReplayTimer replay_timer(work::ReadReplayNs);
       auto semantic = w.read_kernel->step(w, requests[j]);
       validate(semantic, requests[j], dtype);
       values[j] = semantic_value(values[j], semantic);

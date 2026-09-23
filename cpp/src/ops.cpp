@@ -1,5 +1,6 @@
 #include "tide/ops.h"
 #include "tide/lh_full.h"
+#include "tide/operator_work.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <stdexcept>
 
@@ -34,6 +35,12 @@ Tensor full(const NodeWeights& w, const Tensor& comparison, const Tensor& h,
 Tensor full_fresh(const NodeWeights& w, const Tensor& comparison, const Tensor& h, bool identity) {
   if (identity || w.full_kind == "identity") return h;
   if (is_lh_full(w.full_kind)) return lh_full_fresh(w, comparison);
+  const auto d = w.bias.numel(), rows = comparison.numel()/d;
+  if (w.full_kind == "swiglu") {
+    work::linear(work::FullCalls, rows, d, 2*d);
+    work::linear(work::FullCalls, rows, d, 2*d);
+    work::linear(work::FullCalls, rows, 2*d, d);
+  } else work::linear(work::FullCalls, rows, d, d);
   return w.full_kind == "swiglu"
     ? h + at::matmul(at::silu(at::matmul(comparison, w.extra.at("ffn_gate")))
                     * at::matmul(comparison, w.extra.at("ffn_up")), w.extra.at("ffn_down"))

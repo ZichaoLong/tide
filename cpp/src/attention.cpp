@@ -1,5 +1,6 @@
 #include "tide/counters.h"
 #include "tide/kernel.h"
+#include "tide/operator_work.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -38,6 +39,9 @@ class AttentionKernel final : public StateKernel {
     p.validate();
     if (old.size() != p.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
     const auto width = w.bias.numel(), d = width / query_heads_;
+    work::linear(work::QkvCalls, p.contents.size(0), width, width);
+    work::linear(work::QkvCalls, p.contents.size(0), width, kv_heads_*d);
+    work::linear(work::QkvCalls, p.contents.size(0), width, kv_heads_*d);
     auto q = at::matmul(p.contents, w.extra.at("attn_q")).reshape({-1, query_heads_, d});
     auto k = at::matmul(p.contents, w.extra.at("attn_k")).reshape({-1, kv_heads_, d});
     auto v = at::matmul(p.contents, w.extra.at("attn_v")).reshape({-1, kv_heads_, d});
@@ -47,6 +51,12 @@ class AttentionKernel final : public StateKernel {
     PackedStates result; result.states.resize(p.times.size());
     for (const auto& [shape, ids] : groups) {
       const auto cache = shape.first, length = shape.second, rows = static_cast<Index>(ids.size());
+      if (work::enabled()) {
+        Index valid = 0;
+        for (Index t = 0; t < length; ++t) valid += window_ ? std::min(window_, cache+t+1) : cache+t+1;
+        work::attention(width, query_heads_, rows*valid, rows*length*(cache+length));
+        work::linear(work::OutCalls, rows*length, width, width);
+      }
       std::vector<Tensor> qs, ks, vs;
       for (auto i : ids) {
         const auto a = p.offsets[i], b = p.offsets[i + 1];

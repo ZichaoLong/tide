@@ -1,6 +1,7 @@
 #include "tide/counters.h"
 #include "tide/kernel.h"
 #include "tide/lazy_add.h"
+#include "tide/operator_work.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -124,10 +125,15 @@ class BasicKernel final : public StateKernel {
  private:
   std::string kind_;
   static std::pair<Tensor, Tensor> coefficients(const NodeWeights& w, const Tensor& h) {
+    const auto d = w.bias.numel();
+    work::linear(work::StateCalls, h.numel()/d, d, d);
+    work::linear(work::StateCalls, h.numel()/d, d, d);
     auto dt = at::softplus(at::matmul(h, w.extra.at("ssm_dt")));
     return {at::exp(-at::softplus(w.extra.at("ssm_a")) * dt), dt * at::matmul(h, w.extra.at("ssm_b"))};
   }
   static Tensor summary(const NodeWeights& w, const Tensor& h, const Tensor& memory) {
+    const auto d = w.bias.numel();
+    work::linear(work::StateCalls, h.numel()/d, d, d);
     return at::matmul(h, w.extra.at("ssm_c")) * memory + w.extra.at("ssm_skip") * h;
   }
 };

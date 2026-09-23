@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/counters.h"
 #include "tide/kernel.h"
 #include <array>
@@ -8,9 +9,13 @@ namespace {
 Tensor matrix_scan(Tensor a, Tensor b, const Tensor& initial) {
   const auto n = b.size(0);
   for (Index stride = 1; stride < n; stride *= 2) {
+    const auto d = b.size(-1);
+    work::linear(work::StateCalls, (n-stride)*d, d, d);
+    work::linear(work::StateCalls, (n-stride)*d, d, d);
     b = at::cat({b.slice(0, 0, stride), b.slice(0, stride) + at::matmul(a.slice(0, stride), b.slice(0, 0, n - stride))});
     a = at::cat({a.slice(0, 0, stride), at::matmul(a.slice(0, stride), a.slice(0, 0, n - stride))});
   }
+  work::linear(work::StateCalls, n*b.size(-1), b.size(-1), b.size(-1));
   return b + at::matmul(a, initial);
 }
 class MatrixKernel final : public StateKernel {
@@ -31,9 +36,12 @@ class MatrixKernel final : public StateKernel {
       s.slots["normalizer"] = old.slots.at("normalizer") + k;
       s.value = output(w, q, s.slots.at("matrix"), s.slots.at("normalizer"));
     } else {
+      work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
+      if (gated_) work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta")));
       auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))) : at::ones_like(beta);
       auto decayed = decay * old.slots.at("matrix");
+      work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), w.bias.numel());
       auto error = v - at::matmul(k, decayed);
       s.slots["matrix"] = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2);
       s.value = output(w, q, s.slots.at("matrix"));
@@ -50,9 +58,12 @@ class MatrixKernel final : public StateKernel {
       matrix = at::stack(ms) + k.unsqueeze(-1) * v.unsqueeze(-2);
       z = at::stack(zs) + k; values = output(w, q, matrix, z);
     } else {
+      work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
+      if (gated_) work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta"))).unsqueeze(-1).unsqueeze(-1);
       auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1) : at::ones_like(beta);
       auto decayed = decay * at::stack(ms);
+      work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), w.bias.numel());
       auto error = v - at::matmul(k.unsqueeze(-2), decayed).squeeze(-2);
       matrix = decayed + beta * k.unsqueeze(-1) * error.unsqueeze(-2); values = output(w, q, matrix);
     }
@@ -74,6 +85,8 @@ class MatrixKernel final : public StateKernel {
       matrix = at::cumsum(k.unsqueeze(-1) * v.unsqueeze(-2), 0) + old.slots.at("matrix");
       z = at::cumsum(k, 0) + old.slots.at("normalizer"); values = output(w, q, matrix, z);
     } else {
+      work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
+      if (gated_) work::linear(work::StateCalls, h.numel()/w.bias.numel(), w.bias.numel(), 1);
       auto beta = at::sigmoid(at::matmul(h, w.extra.at("mem_beta"))).unsqueeze(-1).unsqueeze(-1);
       auto decay = gated_ ? at::sigmoid(at::matmul(h, w.extra.at("mem_decay"))).unsqueeze(-1).unsqueeze(-1) : at::ones_like(beta);
       auto a = decay * (at::eye(h.size(-1), h.options()) - beta * k.unsqueeze(-1) * k.unsqueeze(-2));
@@ -110,6 +123,8 @@ class MatrixKernel final : public StateKernel {
  private:
   bool linear_, gated_;
   std::array<Tensor, 3> project(const NodeWeights& w, const Tensor& h) const {
+    const auto d = w.bias.numel();
+    for (int i = 0; i < 3; ++i) work::linear(work::QkvCalls, h.numel()/d, d, d);
     auto q = at::matmul(h, w.extra.at("mem_q")); auto k = at::matmul(h, w.extra.at("mem_k"));
     if (linear_) { q = at::elu(q) + 1; k = at::elu(k) + 1; }
     else {
@@ -119,6 +134,9 @@ class MatrixKernel final : public StateKernel {
     return {q, k, at::matmul(h, w.extra.at("mem_v"))};
   }
   static Tensor output(const NodeWeights& w, const Tensor& q, const Tensor& matrix, const Tensor& z = {}) {
+    const auto d = w.bias.numel();
+    work::linear(work::StateCalls, q.numel()/d, d, d);
+    work::linear(work::OutCalls, q.numel()/d, d, d);
     auto value = at::matmul(q.unsqueeze(-2), matrix).squeeze(-2);
     if (z.defined()) value = value / ((q * z).sum(-1, true) + 1e-6);
     return at::matmul(value, w.extra.at("mem_out"));

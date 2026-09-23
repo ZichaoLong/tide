@@ -1,10 +1,11 @@
 #pragma once
 // Optional process-wide forward accounting. Enable/reset/snapshot only with
 // workers quiescent. One measured executor per process; no backward/replay claim.
-// No tensor reads, clocks, or callbacks on the hot path. FMA counts as 2 FLOPs.
+// No tensor reads or callbacks; clocks only when replay accounting is enabled. FMA counts as 2 FLOPs.
 #include <array>
 #include <atomic>
 #include <cstdint>
+#include <chrono>
 #include <map>
 #include <string>
 
@@ -14,14 +15,17 @@ enum Field { QkvCalls, QkvRows, QkvFlops, OutCalls, OutRows, OutFlops,
   EmitCalls, EmitRows, EmitFlops, HeadCalls, HeadRows, HeadFlops,
   ValidScores, ExecutedScores, ValidAttentionFlops, ExecutedAttentionFlops,
   AttentionCalls, EmitEdgeRows, PendingEdgeRows, BodyCandidates, BodySelected,
-  AggregateScaleElements, AggregateAddElements, FiberScaleElements, FiberReusedElements, Fields };
+  AggregateScaleElements, AggregateAddElements, FiberScaleElements, FiberReusedElements,
+  StateCalls, StateRows, StateFlops, FullCalls, FullRows, FullFlops, StateReplayNs, AggregateReplayNs, ReadReplayNs, FullReplayNs, NextReplayNs, Fields };
 inline constexpr std::array<const char*, Fields> names{
   "qkv_calls", "qkv_rows", "qkv_flops", "out_calls", "out_rows", "out_flops",
   "emit_calls", "emit_rows", "emit_flops", "head_calls", "head_rows", "head_flops",
   "valid_score_elements", "executed_score_elements", "valid_attention_flops",
   "executed_attention_flops", "attention_calls", "emit_edge_rows", "pending_edge_rows",
   "body_candidates", "body_selected", "aggregate_scale_elements", "aggregate_add_elements",
-  "fiber_scale_elements", "fiber_reused_elements"};
+  "fiber_scale_elements", "fiber_reused_elements", "state_matmul_calls", "state_matmul_rows",
+  "state_matmul_flops", "full_matmul_calls", "full_matmul_rows", "full_matmul_flops", "state_replay_worker_ns",
+  "aggregate_replay_worker_ns", "read_replay_worker_ns", "full_replay_worker_ns", "next_replay_worker_ns"};
 inline std::atomic<bool> active{false};
 inline std::array<std::atomic<Count>, Fields> counts{};
 inline bool enabled() { return active.load(std::memory_order_relaxed); }
@@ -31,6 +35,18 @@ inline void reset(bool on) {
   active.store(on, std::memory_order_relaxed);
 }
 inline void add(Field field, Count n) { counts[field].fetch_add(n, std::memory_order_relaxed); }
+// Profiling pass only. Sums worker call durations; never an end-to-end wall time.
+class StateReplayTimer {
+  bool active_ = enabled();
+  Field field_;
+  std::chrono::steady_clock::time_point start_;
+ public:
+  explicit StateReplayTimer(Field field = StateReplayNs) : field_(field) { if (active_) start_ = std::chrono::steady_clock::now(); }
+  ~StateReplayTimer() {
+    if (active_) add(field_, std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now()-start_).count());
+  }
+};
 inline void linear(Field first, Count rows, Count in, Count out) {
   if (!enabled()) return;
   add(first, 1); add(Field(first+1), rows); add(Field(first+2), 2*rows*in*out);
@@ -53,6 +69,7 @@ inline std::map<std::string, double> metrics() {
   result["op/linear_flops"] = result["op/qkv_flops"]+result["op/out_flops"]+
     result["op/emit_flops"]+result["op/head_flops"];
   result["op/executed_matmul_flops"] = result["op/linear_flops"]+result["op/executed_attention_flops"];
+  result["op/executed_matmul_flops"] += result["op/state_matmul_flops"]+result["op/full_matmul_flops"];
   return result;
 }
 } // namespace tide::work

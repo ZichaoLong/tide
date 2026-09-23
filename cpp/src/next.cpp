@@ -1,3 +1,4 @@
+#include "tide/operator_work.h"
 #include "tide/operator_profile.h"
 #include "tide/next.h"
 #include "tide/kernel.h"
@@ -86,8 +87,10 @@ std::vector<State> evaluate_next_batch(const Node& node, const NodeWeights& w, c
       for (size_t i = 0; i < requests.size(); ++i) if (requests[i].active) result[i] = std::move(reset[k++]);
     }
   }
-  if (at::GradMode::is_enabled()) for (size_t i = 0; i < requests.size(); ++i)
+  if (at::GradMode::is_enabled()) for (size_t i = 0; i < requests.size(); ++i) {
+    work::StateReplayTimer replay_timer(work::NextReplayNs);
     result[i] = semantic_state(result[i], evaluate_next(node, w, requests[i]));
+  }
   return result;
 }
 }  // namespace tide

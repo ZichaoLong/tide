@@ -10,6 +10,7 @@
 #include "tide/delivery.h"
 #include "tide/stream_profile.h"
 #include "stream_support.h"
+#include "tide/operator_work.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -81,6 +82,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     profile.phase("profile_update_ns");
     std::vector<std::function<void()>> jobs;
     for (const auto& [node, ids] : by_node) {
+      if (!graph_.nodes[node].identity) stats["body_candidate_events"] += ids.size();
       stats["max_node_batch"] = std::max<Index>(stats["max_node_batch"], ids.size());
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       stats["read_calls"] += options_.packed ? 1 : ids.size();
@@ -127,6 +129,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
             auto& e = events[ids[k]];
             e.proposed_state = states[k];
             if (replay) {
+              work::StateReplayTimer replay_timer;
               auto reference = w.kernel->step(w, e.old, e.local_content(), time);
               e.proposed_state = semantic_state(e.proposed_state, reference);
             }
@@ -161,6 +164,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       std::vector<size_t> ids;
       for (auto i : all) if (events[i].active) ids.push_back(i);
       stats["selected_events"] += ids.size();
+      if (!graph_.nodes[node].identity) stats["body_selected_events"] += ids.size();
       stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
       stats["next_steps"] += all.size();
       if (options_.batch_next) {
