@@ -1,8 +1,8 @@
 # Execution capability audit
 
-Snapshot: source in [scope audit](evidence/foundation-scope-audit.md). This is a
-capability description, not a second backlog; unfinished acceptance IDs refer to
-ROADMAP. CPU FP32/FP64 required. Python schedules are serial with batch/sequence
+Qualified source:81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5;
+[7741-test final CPU gate](evidence/foundation-final.md). This is the current
+capability description; ROADMAP owns stage status and extensions. CPU FP32/FP64 required. Python schedules are serial with batch/sequence
 support. Native schedules support node workers. Training denotes first-order
 semantic parity, not optimized backward; packed state/Read/Full replay remains.
 
@@ -15,7 +15,7 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 
 | Option / applicable module | P/D/S streaming, infer/train | D/S frontier, infer/train | Independent specialization |
 | --- | --- | --- | --- |
-| node workers, packed state/Full | verified | verified | chain/self-loop verified |
+| node workers, packed state/Full | verified | verified | native self-loop/ring/chain/diamond verified; Python Settle specializations serial |
 | attention_packing exact/single, same-fiber | verified | verified, `test_fiber_single.py` | ring/diamond/chain/self-loop policies covered by frontier-options gate |
 | fiber_pooling event/CSR, same-fiber | verified | verified, `test_fiber_efficiency.py` | exact default covered; options covered by frontier-options gate |
 | cloned/owned KV, same-fiber | verified | verified, same test | default covered |

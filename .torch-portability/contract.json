@@ -188,6 +188,23 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/foundation-stage34.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5",
+          "scope": "7741 clean CPU FP32/FP64 tests after fresh relocated rebuild; six implementation classes/modules/options/prefill/training,17 relocated smoke variants,36 fresh-process checkpoint records; separate C++ build with Python bindings OFF and standalone forward/VJP/loader checks",
+          "tiers": [
+            "static-cli",
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir FRESH_RELOCATED_BUILD --output-dir NEW; exact export/build/standalone argv in final report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/foundation-final.md"
         }
       ]
     },
@@ -341,6 +358,23 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/foundation-stage34.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5",
+          "scope": "7741 clean CPU FP32/FP64 tests after fresh relocated rebuild; six implementation classes/modules/options/prefill/training,17 relocated smoke variants,36 fresh-process checkpoint records; separate C++ build with Python bindings OFF and standalone forward/VJP/loader checks",
+          "tiers": [
+            "static-cli",
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir FRESH_RELOCATED_BUILD --output-dir NEW; exact export/build/standalone argv in final report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/foundation-final.md"
         }
       ]
     },

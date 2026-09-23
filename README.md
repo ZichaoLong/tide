@@ -1,6 +1,10 @@
 # Tide
 
 本分支 `graph-execution-foundation` 实现 CPU PyTorch/LibTorch 的图执行与等价性验证。
+
+图执行基础验收版本已完成：[最终验收报告](docs/evidence/foundation-final.md)。
+CPU FP32/FP64 共 7741 项测试、17 个可搬迁 smoke 变体通过；性能评估保留
+实际规模、超时和未测范围，详见报告。
 开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
 [路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。

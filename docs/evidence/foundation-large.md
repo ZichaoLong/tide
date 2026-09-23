@@ -1,8 +1,8 @@
 # Bounded large graph assessment
 
 Clean source `3d2622a7d03afe505c980915c0b3c38f1470144c`, CPU aarch64,
-Torch/LibTorch2.10.0+cpu, FP32. This closes the two frozen large-preset
-assessments, including limits; it does not certify successful target-scale runs.
+Torch/LibTorch2.10.0+cpu, FP32. This covers the two frozen DAG/Settle large
+presets, including limits; it does not certify successful target-scale runs.
 Five stages completed, four timed out, and one larger stage was not launched.
 
 ## Provenance and resource boundary
@@ -110,13 +110,66 @@ independent inet/onet namespaces yield465 physical PDG nodes/4418 physical edges
 not232 total PDG nodes. This is comparable-scale inference with independent
 initialization, not a complete two-graph continuation equivalence claim.
 The [earlier narrow failure](pdg-scale-attention.md) retains5/8 steps before its
-1800s limit, exit-15 and183.73GiB peak. There is no new hypothesis requiring a
-repeat of that expensive failure. The DAG/Settle modules, parameters, clocks,
+1800s limit, exit-15 and183.73GiB peak. Its actual summary reports16,608,289,021
+parameters,57,856 static nodes per cortex,115,713 physical PDG nodes and
+1,098,230 physical edges. Count audit:
+`artifacts/foundation-pdg-narrow-count-audit.json`. This larger two-namespace
+workload does not substitute for the frozen8.497B graph-only PDG narrow preset;
+the bounded supplement below closes that gap. The historical expensive failure is retained. The DAG/Settle modules, parameters, clocks,
 selected work and cache lengths above differ; no cross-family speed ratio is
 computed from these records.
 
 Together with [all12 medium configurations](foundation-medium.md), every graph
-family has non-smoke performance evidence. Both large presets are honestly
-bounded and closed; target-scale success is not claimed. Zero new bottlenecks
-or tuning candidates were added. Defaults remain conservative. Relocated rebuild/
-smoke and the final correctness gate remain S6 acceptance work.
+family has non-smoke performance evidence. Both frozen large presets have bounded
+assessments across all three families, with the wide PDG/LH record reused.
+Target-scale success is not claimed for the new timed-out/unlaunched targets.
+Zero new bottlenecks or tuning candidates were added. Defaults remain conservative.
+Relocated rebuild/smoke and [final correctness](foundation-final.md) are complete.
+
+
+## Frozen PDG narrow supplement after exact-count audit
+
+Clean source81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5, using the freshly rebuilt
+and fully qualified relocated native binary. Source/build identity matches the
+[final gate](foundation-final.md). Records:
+`artifacts/foundation-pdg-narrow-20260923-a/` (suite, reviewed-audit.json,
+report.json, terminal-inspection.json); exact command/preflight/resources in
+`artifacts/foundation-pdg-narrow-a-launch.json`. This is the already-frozen
+D128/B512/T6 graph-only preset, not another shape or tuning candidate. It ran
+only after the final correctness/build unit had fully exited.
+
+Half-effective launch budget160 CPUs/719.39GiB. The requested worker limit was32;
+the fixed native-stream-packed variant explicitly uses one node worker,
+constructor_threads_created0, ATen/inter-op/OpenMP/BLAS1. This is a serial baseline,
+not a measurement of parallel PDG's narrow-graph ceiling. The medium P03 and
+retained wide PDG runs cover node parallelism separately. Affinity is the same
+resource-policy-derived160-CPU set. Two reset warmups, one measured repeat,
+300s per stage including setup/profile, bounded cleanup and no heavy overlap.
+
+| Body nodes / true parameters | Result | Forward seconds | Peak combined RSS GiB |
+| --- | --- | ---: | ---: |
+| 256 /46,391,680 | completed | 57.53553 | 3.521 |
+| 1024 /185,492,608 | completed | 57.89133 | 4.254 |
+| 46912 /8,496,773,056 | timeout in second warmup | unmeasured | 49.279 |
+
+Target construction completed in175.21s, including the check of actual allocated
+parameter count against preflight. It did not complete a formal timed phase.
+The target worker exited-15; two completed workers exited0. All three records
+validate, with empty remaining process groups. Unit
+tide-foundation-pdg-narrow-20260923-a is inactive/MainPID0/exit0; its evaluated
+wrapper status does not make the target run passed.
+
+These PDG stages use stride1 and stop at logical cut6. Completed runs record
+589,824 body candidates/updates and9,216 selections (actual1/64),256 touched body
+nodes/131,072 node-sample owners,491,520 edge visits,1,536 outputs and98,304
+pending messages. There are3,072 supplied sample positions and32,768 ledger keys;
+the tail remains a valid continuation. ms/sample-position divides by supplied
+positions, not completed outputs. Settle/TimedDAG's sealed clocks and larger
+completed work differ. No timing ratio between those schedules is inferred.
+A source-level measurement description is in [benchmark entry](../foundation-benchmarks.md).
+
+Combined new large assessments have12 launched stages:7 complete and5 timeouts,
+plus one explicitly unlaunched larger Settle stage. Historical PDG/LH results
+and failures remain separately identified. The bounded assessment is closed;
+there is no claim that every target size passed or that the serial narrow result
+establishes a parallel limit. No further tuning follows this acceptance version.

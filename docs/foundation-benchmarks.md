@@ -47,6 +47,11 @@ transport weights are0.8, independent of edge index. Every sample position has
 an explicit occurrence and application time. Ragged A01 uses four fixed length
 fractions. Denominators use sum(input lengths), not ports; records include
 ms/effective-sample-position, positions/s and ms/batch-position (wall/T).
+Streaming ends at the declared finite cut, retaining pending messages; it does
+not drain feedback graphs. Input-position throughput is not completed-output
+throughput. For the frozen large PDG, stride1/T6 leaves three output positions
+per sample and in-flight tail messages; DAG/Settle use sealed position clocks.
+Check actual output/pending/work counts before comparing timings.
 
 A separate accounting pass records actual projections/matrix FLOPs, logical
 Agg/Upd/Read/Next/Full, source/event batching, selected/candidate events, padding,
@@ -75,7 +80,12 @@ KILL/reap grace beyond the work deadline; failure to reap stops the suite).
 Large presets use four active ranked regions of32 or64 candidates, budget1 per
 region, plus dormant regions to reach the target parameter count. Each node has
 independent same-fiber Attention/SwiGLU owners; exact counts precede allocation.
-Stages use4×denominator,16×denominator and the target node count. PDG/TimedDAG
+Stages use4×denominator,16×denominator and the target node count. The frozen
+large PDG variant is native-stream-packed (serial, actual worker1); --workers
+is a limit for worker variants, not a request to change that baseline. Large
+DAG/Settle frontier variants use the requested limit. Parallel PDG has separate
+medium and retained17.27B evidence; this fixed narrow assessment does not measure
+its parallel ceiling. PDG/TimedDAG
 use the legal positive-delay layered graph; Settle adds two boundary nodes.
 Dormant Settle ranks increase its clock stride, changing KV decay intervals;
 clocks, activation, KV and actual matrix work are reported. Equal parameter

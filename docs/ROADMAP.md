@@ -2,8 +2,9 @@
 
 This is the only backlog and stage acceptance index. STATUS owns the current
 handoff; semantics owns the contract. The six-stage acceptance scope was frozen
-on 2026-09-23. Historical M0–M8 evidence remains indexed by architecture.md and
-Git history; its finite profiles do not certify the broader acceptance version.
+on 2026-09-23 and is now complete; [final qualification](evidence/foundation-final.md)
+is the delivery report. No mandatory acceptance unit remains pending. Historical
+M0–M8 evidence remains indexed by architecture.md and Git history; its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
 
@@ -17,13 +18,13 @@ isolated roots and input/parameter/initial-state VJPs, None/zero connectivity,
 shared/unused owners, optimizer updates and continuation. HST uses its declared
 surrogate VJP. Empty/ragged/parallel-edge/reset/delay/chunk regressions remain.
 
-| Class | Actual implementation and existing gate | Acceptance gap / next unit |
+| Class | Actual implementation and existing gate | Accepted scope / evidence |
 | --- | --- | --- |
-| PDG generic | `reference.py`, `cpp/src/stream.cpp`, cursor; CSR/CSC, feedback, lazy state, packed and node workers; [streaming](evidence/m1-streaming.md), [cursor](evidence/native-cursor.md), [isolated roots](evidence/isolated-autograd.md), [transport](evidence/packed-transport.md) | retain/regress; S3 option matrix, S5 performance |
-| PDG specialized | `specialized.py`, `cpp/src/specialized.cpp`: independent self-loop propagation; `test_specialized.py`, `test_isolated_schedules.py` | ring verified; [stage2 gate](evidence/foundation-stage2.md) |
-| TimedDAG generic | `frontier.py`, native planner/frontier/block; streaming is restricted PDG; [frontier](evidence/m3-frontier.md), Attention/SSM packed sequences | S3 applicable transport/scheduler options; S5 unified entry |
-| TimedDAG specialized | independent Python/native singleton-region chain; [specializations](evidence/m4-settle-specialized.md) | diamond/paired-region verified; [stage2 gate](evidence/foundation-stage2.md) |
-| SettleGraph generic | `settle.py`: independent Python region-major, Python encoding then native frontier/streaming; [encoding](evidence/m4-settle-specialized.md), [ports](evidence/local-ports.md), [origins](evidence/source-origins.md) | native `settle.h` [verified](evidence/native-settle-frontend.md) for rank-aligned profile |
+| PDG generic | `reference.py`, `cpp/src/stream.cpp`, cursor; CSR/CSC, feedback, lazy state, packed and node workers; [streaming](evidence/m1-streaming.md), [cursor](evidence/native-cursor.md), [isolated roots](evidence/isolated-autograd.md), [transport](evidence/packed-transport.md) | verified: [final7741-test gate](evidence/foundation-final.md), options and bounded performance |
+| PDG specialized | `specialized.py`, `cpp/src/specialized.cpp`: independent self-loop/ring propagation; `test_specialized.py`, `test_isolated_schedules.py` | ring verified; [stage2 gate](evidence/foundation-stage2.md) |
+| TimedDAG generic | `frontier.py`, native planner/frontier/block; streaming is restricted PDG; [frontier](evidence/m3-frontier.md), Attention/SSM packed sequences | verified: migrated options, real prefill, [unified entry](foundation-benchmarks.md) and final gate |
+| TimedDAG specialized | independent Python/native chain/diamond, including shared middle region; [specializations](evidence/m4-settle-specialized.md) | diamond/paired-region verified; [stage2 gate](evidence/foundation-stage2.md) |
+| SettleGraph generic | `settle.py`: independent Python region-major; independent native `settle.h` frontend using frontier, with encoded streaming comparison; [encoding](evidence/m4-settle-specialized.md), [ports](evidence/local-ports.md), [origins](evidence/source-origins.md) | native `settle.h` [verified](evidence/native-settle-frontend.md) for rank-aligned profile |
 | SettleGraph specialized | independent Python `settle_chain`, analytic formulas; Attention/SSM isolated roots | layered scalar schedule verified; [stage2 gate](evidence/foundation-stage2.md) |
 
 ## Stage gates and required units
@@ -34,21 +35,21 @@ surrogate VJP. Empty/ragged/parallel-edge/reset/delay/chunk regressions remain.
 | S2.1 | standalone C++ SettleGraph spec, structural encoding, model alias mapping, inputs and complete-boundary projection; no Python dependency; standalone FP32/64 forward/VJP, negative validation and Python/native parity | verified: [native frontend](evidence/native-settle-frontend.md); 230 directed tests and clean C++-only FP64/FP32 gate |
 | S2.2 | independent ring and diamond Python/C++ schedules, Python layered SettleGraph; full trace/isolated VJP/initial state/cuts and representative modules | verified; 7167-test [clean stage2 gate](evidence/foundation-stage2.md) |
 | S2.3 | explicit Settle → TimedDAG → PDG clock, node/region/edge/source/port, state/history/message/pending/ledger mapping and cut restrictions; source-aware roots | verified for declared profile; [stage2 gate](evidence/foundation-stage2.md), contract in settle-embedding.md |
-| S3.1 | actual module step/batch/sequence capabilities and counters, Attention/GQA/window, distinct same-fiber, Linear/Delta/Gated Delta/SSM, FFN/SwiGLU, Agg/Emit | all required representative kernels implemented, including separately named ungated DeltaRule; 736 directed tests and [S3/S4 gate](evidence/foundation-stage34.md) passed; [capability table](execution-capabilities.md); fallback and new-schedule gates passed |
-| S3.2 | migrate packed_sources and batch_next/reset to legal frontier/encoded Settle blocks; compact/region parallel/deferred-release applicability with explicit errors; single-option, interaction and historical failure tests | implemented; 1098 directed CPU tests passed; verified by [S3/S4 gate](evidence/foundation-stage34.md) |
-| S3.3 | small deterministic model-style adapter composing layout, norm, explicit position/RoPE/mask/cache; CPU formula, chunk and VJP anchors | implemented; tiny explicit RMSNorm/RoPE/GQA/SwiGLU adapter, independent formula/cache/chunk/VJP gate passed |
+| S3.1 | actual module step/batch/sequence capabilities and counters, Attention/GQA/window, distinct same-fiber, Linear/Delta/Gated Delta/SSM, FFN/SwiGLU, Agg/Emit | verified including separately named ungated DeltaRule;736 directed tests, S3/S4 and final7741-test gate passed; [capability table](execution-capabilities.md); fallback and new-schedule gates passed |
+| S3.2 | migrate packed_sources and batch_next/reset to legal frontier/encoded Settle blocks; compact/region parallel/deferred-release applicability with explicit errors; single-option, interaction and historical failure tests | verified:1098 directed CPU tests, [S3/S4 gate](evidence/foundation-stage34.md) and final gate |
+| S3.3 | small deterministic model-style adapter composing layout, norm, explicit position/RoPE/mask/cache; CPU formula, chunk and VJP anchors | verified: tiny explicit RMSNorm/RoPE/GQA/SwiGLU adapter; independent formula/cache/chunk/VJP and final gate passed |
 | S3 gate | nontrivial time batches and counted causal fallbacks; independent simple path, node parallel, packed/unpacked, default/option parity; no backward-speed claim from scalar replay | directed option/module gates passed; 7611-test [S3/S4 clean gate](evidence/foundation-stage34.md) passed |
-| S4.1 | six-class isolated training roots, shared/unused owners, None vs connected zero, multi-step SGD/momentum/AdamW + decoupled decay, eps=1e-5; detached/chunk/partial buffers | implemented extension; 274 directed tests plus54 corrected multi-window Settle tests passed; [S3/S4 clean gate](evidence/foundation-stage34.md) passed |
-| S4.2 | interrupt/save/new-process restore/continue vs uninterrupted trajectory for promised single-graph, two-clock application and native value scopes | implemented; 36 fresh subprocesses cover both dtypes, SGD/momentum and AdamW, single/application/native schemas; directed gate passed |
+| S4.1 | six-class isolated training roots, shared/unused owners, None vs connected zero, multi-step SGD/momentum/AdamW + decoupled decay, eps=1e-5; detached/chunk/partial buffers | verified extension;274 directed tests plus54 corrected multi-window Settle tests passed; [S3/S4 clean gate](evidence/foundation-stage34.md) passed |
+| S4.2 | interrupt/save/new-process restore/continue vs uninterrupted trajectory for promised single-graph, two-clock application and native value scopes | verified:36 fresh subprocesses cover both dtypes, SGD/momentum and AdamW, single/application/native schemas; final payload/identity audit passed |
 | S4 gate | transactional malformed-input rejection and publication failure; graph/model/owner/alias/optimizer/group identity | [Python values](evidence/checkpoint-ownership.md), [publication](evidence/checkpoint-io.md), [native format](evidence/cpp-native-checkpoint.md), [application](evidence/token-checkpoint-coordinates.md) verified; retain, do not rebuild formats |
-| S5.1 | unified smoke/non-smoke entry and fixed suite below; explicit nograd-forward/grad-forward/backward/optimizer/train-step implementations and bounds | unified graph runner implemented;130 directed runner/CLI tests passed; [entry/modes](foundation-benchmarks.md); LH/PDG portable kit remains inference-only |
-| S5.2 | three graph families measured; both large shape presets counted and evaluated under resource preflight, timeout and process reaping; report achieved size and failures | all108 medium runs completed; [medium evidence](evidence/foundation-medium.md); [large assessment](evidence/foundation-large.md) reviewed:5 complete/4 timeout/1 unlaunched; PDG/LH evidence reused; target-scale success not claimed |
-| S5.3 | bounded optional tuning, if justified; all defaults evidence-based, at least three independent repeats for gain claims; export/rebuild/smoke from new directory | no new candidate selected; existing negative findings retained; relocated rebuild/smoke pending in final gate |
-| S6 | freeze clean implementation commit, independent read-only worktree, complete CPU gates + standalone/relocation, source/build/binary/result/exit audit; evidence commit and final matrix | planned, after all required gates |
+| S5.1 | unified smoke/non-smoke entry and fixed suite below; explicit nograd-forward/grad-forward/backward/optimizer/train-step implementations and bounds | verified unified graph runner;130 directed runner/CLI tests and final gate passed; [entry/modes](foundation-benchmarks.md); LH/PDG portable kit remains inference-only |
+| S5.2 | three graph families measured; both large shape presets counted and evaluated under resource preflight, timeout and process reaping; report achieved size and failures | all108 medium runs completed; [medium evidence](evidence/foundation-medium.md); [large assessment](evidence/foundation-large.md) reviewed:7 complete/5 timeout/1 unlaunched across new runs; wide PDG/LH reused, corrected16.608B historical narrow count and frozen8.497B supplement; target-scale success not claimed |
+| S5.3 | bounded optional tuning, if justified; all defaults evidence-based, at least three independent repeats for gain claims; export/rebuild/smoke from new directory | closed:zero new candidates, existing negative findings/defaults retained; fresh relocated rebuild/all17 smoke variants passed |
+| S6 | freeze clean implementation commit, independent read-only worktree, complete CPU gates + standalone/relocation, source/build/binary/result/exit audit; evidence commit and final matrix | verified: [final gate](evidence/foundation-final.md), clean81a1b26,7741 tests,17 relocated smoke,36 fresh-process payloads and separate no-Python standalone build; all task units terminal |
 
-S6 finishes this acceptance version: all required correctness cells pass, fixed
-performance assessment is honestly closed, no task live job remains, clean local
-commit/status is explicit. No automatic extra platform/model/tuning work follows.
+S6 has finished this acceptance version: all required correctness cells passed,
+fixed performance assessment is honestly closed, and no task live job remains.
+The final local commit/status is in STATUS. No extra platform/model/tuning work follows.
 
 ## Frozen performance suite
 
