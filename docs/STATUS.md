@@ -22,6 +22,7 @@ Source and scope are separate for each report:
 
 | Scope | Clean source | Result / evidence |
 | --- | --- | --- |
+| Optional common operator diagnostics and fixed17.27B on/off pair | 2619ed3fc79fe299e1a573b5088c552748f87196 | 67 clean directed tests; fresh LH full-logit checks; evidence/operator-profiling.md |
 | Complete CPU regression, exact/single fiber policy and refreshed portable kit | 9e950bfbb7ceee6a5105d7978c0419aab6877859 | 6553 tests/745.74s; fresh relocated LH/PDG smokes; fixed 17.27B pair; evidence/attention-packing-policy.md |
 | Portable paired LH/PDG CPU source kit | dd024e6f1d57153c22ab7cef2762d059cbd3ac7d | 18 directed tests; 3 fresh relocated native builds/runs and numerical anchors; evidence/cpu-comparison-kit.md |
 | Complete CPU regression plus optional canonical streaming optimizations | da5a17bdbda1196fb32e2352fba9aa3b95e6dde3 | 6459 tests / 716.61s; evidence/pdg-streaming-optimization.md |
@@ -54,29 +55,45 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-The user now authorizes the proposed profiling and optimization investigations
-under canonical PDG semantics. Base:8bd17a0 (runtime9e950bf). Optional common operator timers are implemented.
-Directed frozen development gate passed: 178 CPU FP64/FP32 tests /85.20s,
-including profiling on/off full-state checks, one/three workers, exact/single,
-work counts and nested/thread-local timer invariants. Records:
-artifacts/operator-profile-retest-20260923-105234/; terminal service agrees.
-The first development job failed on a namespace error; original archive/log
-and terminal audit remain in artifacts/operator-profile-dev-20260923-104828/.
-No reference source or model formula changed. See operator-profiling.md.
-Next: commit the implementation, then run artifacts/qualify_operator_profile.py
-from a frozen clean worktree through job.py/background.slice. It builds fresh
-LH small/wide copies, checks complete logits against the old anchor and on/off
-serial/parallel, then runs fixed17.27B LH/PDG profiling on/off to terminal records.
-Worker elapsed time is separate from coordinator wall intervals; never sum them.
-Then use a bounded fixed17.27B diagnosis to prioritize independent ablations:
-node-batched pooling, state/event lifetime management, KV materialization and
-projection layout. Keep exact packing default, no in-place autograd mutation,
-no snapshot aliasing and no skipping observable Aggregate/Next/trace behavior.
-Each implemented change needs complete small state/message/route/VJP checks,
-committed frozen-source qualification and same-work performance evidence.
-No speedup is established for this new work. Continue to terminal results.
-Use the existing160-CPU affinity and about-half-memory budget (1024GiB per wide
-process), not the obsolete256GiB cap. No push, no sub-agents, reference repos read-only.
+User authorizes performance investigations and optimizations within canonical PDG
+semantics. Common optional timers are committed and their diagnostic run passed;
+see evidence/operator-profiling.md. Exact disabled-timer baseline: LH25.10840,
+PDG30.36451 ms/sample-token. Profiling variants were ~5% faster for both engines,
+so do not treat their difference as an overhead estimate. Worker sums are not
+wall latency. Pooling is small; data layout and event management remain candidates.
+
+Current main-tree changes are uncommitted candidates, defaults unchanged:
+CSR fiber pooling; immutable per-sample KV reuse; head-major temporary attention
+layout; deferred old-state retirement; scale projection weight layout. No graph
+identity, Aggregate/Next behavior, scalar oracle or public VJP is intentionally
+changed. Contract: fiber-efficiency.md. No candidate speedup is established yet.
+
+Active directed development: `tide-fiber-efficiency-dev-20260923-112506`.
+Frozen dirty source: `/var/tmp/zlong-graph-execution-foundation/qualification/fiber-efficiency-dev-20260923-112506`.
+Output: `/var/tmp/zlong-graph-execution-foundation/artifacts/fiber-efficiency-dev-20260923-112506`. Exact argv/cwd:
+artifacts/fiber-efficiency-active.json. Inspect status.json/development.json,
+task.log and systemctl. Never modify that source or a live driver.
+
+After directed tests pass, commit the candidate implementation and run
+artifacts/qualify_fiber_efficiency.py from a new clean frozen worktree through
+job.py/background.slice. It builds, runs the complete CPU gate, exports and
+smokes a relocated source kit, then fixed17.27B independent/combined ablations.
+The driver also tests116 workers and repeats baseline/combined. Pass
+--lh-prepared artifacts/operator-profile-20260923-105551/wide-prepared by absolute
+path. Use CPU affinity160–319,4 build jobs,1024GiB per native case; allow enough
+bounded service time for serial tests/experiments. Do not overlap project builds
+with measured wide cases. Continue through terminal analysis and evidence;
+compare source identities and work counters before interpreting speed.
+
+The original queued candidate service fiber-efficiency-dev-20260923-110604 was
+cancelled before compiling to add head-layout tests; its cancelled status and
+snapshot remain. The profiler's first development failed on a namespace error;
+original source.tar.gz/log/terminal audit are retained at
+artifacts/operator-profile-dev-20260923-104828. The retest178/85.20s passed at
+artifacts/operator-profile-retest-20260923-105234. The clean diagnostic's67/70.94s
+and all LH/wide stages passed at artifacts/operator-profile-20260923-105551;
+terminal-audit.json matches inactive/dead, MainPID0, Result=success, status0.
+No push, no sub-agents; reference repositories remain read-only.
 
 The previous runtime implementation remains qualified at9e950bf, with evidence
 at8bd17a0. Its source archive and records below remain the current delivered kit
@@ -100,7 +117,7 @@ without a new measurement question. Follow the M8 section of ROADMAP for the
 next bounded performance work: pooling, temporary KV movement and allocation;
 longer context, repetitions, narrow shape and training remain separate scopes.
 
-## Latest completed qualification
+## Prior complete CPU qualification
 
 Unit tide-attention-policy-20260923-093207 passed / exit 0; all 12 driver stages
 passed. Terminal audit observed inactive/dead, MainPID 0, Result=success,

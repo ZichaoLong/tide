@@ -184,7 +184,8 @@ single 31.53019 ms/sample-token: single was 7.4% slower in this one short-window
 run despite 84% fewer groups, with 1.808× score padding and 4.937 GiB more peak RSS.
 Keep exact as the default. User-authorized follow-up is implementing common
 optional operator timers for original LH and PDG, followed by measured independent
-ablations of per-event pooling, state/event storage lifetime, temporary KV
+common operator timers are now [qualified](evidence/operator-profiling.md).
+Current opt-in candidate ablations cover pooling, state/event storage lifetime, temporary KV
 movement and projection layout. Preserve complete small parity anchors; grouping
 alone has not established a speedup. Preserve complete small
 semantics and fixed large work counters when profiling or improving these costs.
