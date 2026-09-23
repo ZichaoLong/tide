@@ -13,7 +13,7 @@ Config parse(int argc, char** argv) {
     const std::string key = argv[i];
     if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
-        && key != "--work-count" && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
+        && key != "--work-count" && key != "--operator-profile" && key != "--parallel-regions" && key != "--compact-events") { common.push_back(argv[i]); continue; }
     if (!seen.insert(key).second || ++i == argc) throw std::invalid_argument("duplicate/missing option: "+key);
     std::string value = argv[i];
     if (ints.count(key)) {
@@ -30,6 +30,7 @@ Config parse(int argc, char** argv) {
       if (key == "--grad") c.grad = value == "1";
       if (key == "--check") c.check = value == "1";
       if (key == "--work-count") c.work_count = value == "1";
+      if (key == "--operator-profile") c.operator_profile = value == "1";
       if (key == "--profile") c.profile = value == "1";
       if (key == "--parallel-regions") c.parallel_regions = value == "1";
       if (key == "--compact-events") c.compact_events = value == "1";
@@ -44,6 +45,8 @@ Config parse(int argc, char** argv) {
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
       || (c.attention_packing != "exact" && c.attention_packing != "single")
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
+  if (c.operator_profile && (c.grad || !c.packed || c.emission != "row"))
+    throw std::invalid_argument("operator profiling supports packed inference row Emit only");
   if (c.work_count && (c.grad || c.emission != "row"))
     throw std::invalid_argument("work accounting supports inference row Emit only");
   if (c.check && (c.width > 64 || c.batch > 8 || c.steps > 12))

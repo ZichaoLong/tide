@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/operator_work.h"
 #include "scale.h"
 #include "tide/ops.h"
@@ -22,7 +23,9 @@ class RowEmit final : public tide::FullKernel {
     std::vector<at::Tensor> rows;
     for (const auto& input : inputs) rows.push_back(input.comparison->value);
     auto fresh = tide::lh_full_fresh(w, at::stack(rows));
-    auto projected = targets_ ? at::linear(fresh, w.extra.at("row_emit_weight")) : at::Tensor();
+    at::Tensor projected;
+    { tide::op_profile::Scope profile(tide::op_profile::Emit);
+      projected = targets_ ? at::linear(fresh, w.extra.at("row_emit_weight")) : at::Tensor(); }
     const auto width = w.bias.numel();
     if (tide::work::enabled()) {
       Index pending = 0;

@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/next.h"
 #include "tide/kernel.h"
 #include <stdexcept>
@@ -48,6 +49,7 @@ std::shared_ptr<const NextKernel> make_next_kernel(const Node& node) {
   throw std::invalid_argument("unknown Next profile: " + node.next_state);
 }
 State evaluate_next(const Node& node, const NodeWeights& w, const NextInput& request) {
+  op_profile::Scope profile(op_profile::Next);
   auto result = w.next_kernel->step(w, request);
   if (!w.next_kernel->comparison_identity()) validate(result, w, request.time);
   if (node.clear && request.active) result = w.kernel->reset(result);

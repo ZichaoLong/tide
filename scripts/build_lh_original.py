@@ -132,6 +132,7 @@ def main():
     write_json(out / 'build-manifest.json', dict(schema='lh-original-test-build-v1', source=str(source),
         source_revision=revision, source_files_sha256=before, parameter_files_sha256=parameter_files,
         parameter_changes=changes, cmake_sha256=digest(cmake), accounting=args.accounting,
+        operator_profile=args.accounting,
         added_files_sha256={str(f.relative_to(source)): digest(f) for f in added},
         tide_source=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
         build_dir=str(build), artifacts_sha256=artifacts,

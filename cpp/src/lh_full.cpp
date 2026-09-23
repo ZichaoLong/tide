@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/lh_full.h"
 #include <stdexcept>
 
@@ -27,6 +28,7 @@ void validate_lh_full(const NodeWeights& w) {
   }
 }
 Tensor lh_full_fresh(const NodeWeights& w, const Tensor& comparison) {
+  op_profile::Scope profile(op_profile::Norm);
   const auto [act, norm] = profiles.at(w.full_kind);
   auto value = act == Act::Relu ? at::relu(comparison) : act == Act::Silu ? at::silu(comparison) : comparison;
   const auto d = w.bias.numel();

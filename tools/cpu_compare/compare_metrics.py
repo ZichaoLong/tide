@@ -105,7 +105,7 @@ def summarize(events, batch, warmup):
         median_ms_per_sample_token=statistics.median(times), min_ms_per_sample_token=min(times),
         max_ms_per_sample_token=max(times), population_stdev_ms=statistics.pstdev(times),
         sample_tokens_per_second=len(times)*1000/sum(times) if sum(times) else None, raw_ms=times)
-    keys = [k for k in measured[0] if k.startswith(('op/', 'profile/'))]
+    keys = [k for k in measured[0] if k.startswith(('op/', 'profile/', 'detail/'))]
     result['mean_metrics_per_batch_token'] = {k: statistics.mean(m[k] for m in measured) for k in keys}
     if 'op/qkv_rows' in measured[0]:
         counts = result['mean_metrics_per_batch_token']

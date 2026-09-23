@@ -36,5 +36,5 @@ manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": torc
                                         target / "tidegraph-full-check", target / "tidegraph-aggregate-check",
                                         target / "tidegraph-optimizer-check", target / "tidegraph-checkpoint-check",
                                         target / "tidegraph-lh-scope-check", target / "tidegraph-streaming-bench",
-                                        target / "tidegraph-scale-bench")}}
+                                        target / "tidegraph-scale-bench", target / "tidegraph-profile-check")}}
 (target / "build-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")

@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/operator_work.h"
 // Event/source offsets preserve all current-fiber keys without cross-sample scores.
 #include "fiber_packing.h"
@@ -39,17 +40,21 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
                                    const PackedSequence& batch) {
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
+  op_profile::Scope profile(op_profile::InputPack);
   const auto source = flatten(batch.views); const auto& offsets = source.offsets;
   const auto width = w.bias.numel(), d = width/heads;
+  profile.phase(op_profile::Qkv);
   work::linear(work::QkvCalls, source.values.size(0), width, 3*width);
   auto qkv = at::linear(source.values, w.extra.at("fiber_qkv").t(), w.extra.at("fiber_qkv_bias")).split(width, -1);
   auto q = qkv[0].reshape({-1, heads, d})*(1/std::sqrt(double(d)));
   auto k = qkv[1].reshape({-1, heads, d}), v = qkv[2].reshape({-1, heads, d});
+  profile.phase(op_profile::KvBuild);
   std::map<Owner, std::vector<Index>> groups;  // initial cache rows, total query rows
   for (size_t i = 0; i < old.size(); ++i)
     groups[{old[i].slots.at("key").size(0), offsets[batch.offsets[i+1]]-offsets[batch.offsets[i]]}].push_back(i);
   PackedStates result; result.states.resize(batch.times.size()); std::vector<Tensor> pooled(batch.times.size());
   for (const auto& [shape, ids] : groups) {
+    profile.phase(op_profile::KvBuild);
     const auto cache = shape.first, queries = shape.second, rows = static_cast<Index>(ids.size());
     std::vector<Tensor> qs, ks, vs, bs, ms;
     Index valid_pairs = 0;
@@ -74,12 +79,15 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
       bs.push_back(at::cat(bias_rows)); ms.push_back(at::cat(masks));
       result.max_length = std::max(result.max_length, b-a);
     }
+    profile.phase(op_profile::KvGather);
     auto keys = at::stack(ks), values = at::stack(vs);
     work::attention(width, heads, valid_pairs, rows*queries*(cache+queries));
+    profile.phase(op_profile::Attention);
     auto scores = at::matmul(at::stack(qs).transpose(1, 2), keys.permute({0, 2, 3, 1}));
     scores = scores+at::stack(bs).unsqueeze(1);
     auto probabilities = at::softmax(scores.masked_fill(~at::stack(ms).unsqueeze(1), -std::numeric_limits<double>::infinity()), -1);
     auto outputs = at::matmul(probabilities, values.transpose(1, 2)).transpose(1, 2).reshape({rows, queries, width});
+    profile.phase(op_profile::StateCommit);
     for (Index row = 0; row < rows; ++row) {
       const auto i = ids[row], a = batch.offsets[i], b = batch.offsets[i+1], start = offsets[a];
       for (auto j = a; j < b; ++j) {
@@ -93,8 +101,10 @@ PackedStates fiber_attention_packed(const NodeWeights& w, Index heads, const std
     }
     ++result.calls; result.max_batch = std::max(result.max_batch, rows); result.score_elements += scores.numel();
   }
+  profile.phase(op_profile::Output);
   work::linear(work::OutCalls, pooled.size(), width, width);
   auto y = at::linear(at::stack(pooled), w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
+  profile.phase(op_profile::StateCommit);
   for (size_t j = 0; j < result.states.size(); ++j) result.states[j].value = y[j].clone();
   return result;
 }

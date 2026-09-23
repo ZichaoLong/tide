@@ -55,6 +55,7 @@ def main():
     p.add_argument('--output-dir', required=True)
     p.add_argument('--mode', required=True, choices=['nograd', 'grad-forward'])
     p.add_argument('--work-count', type=int, choices=[0, 1], default=0)
+    p.add_argument('--operator-profile', type=int, choices=[0, 1], default=0)
     p.add_argument('--seed', type=int, default=7, help='instrumented fixture only')
     p.add_argument('--audit-logits', action='store_true', help='instrumented small fixture only')
     p.add_argument('--threads', type=int, default=160)
@@ -73,6 +74,8 @@ def main():
     source = Path(build['source'])
     if (args.work_count or args.audit_logits) and not build.get('accounting'):
         p.error('accounting-enabled prepared copy required')
+    if args.operator_profile and (not build.get('operator_profile') or args.mode != 'nograd'):
+        p.error('operator profiling requires a capable prepared copy and nograd')
     if args.seed < 0 or args.seed >= 2**63 or (args.work_count and args.mode != 'nograd'):
         p.error('invalid seed or work counts outside inference')
     def verify():
@@ -129,7 +132,8 @@ def main():
         env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0', OMP_NUM_THREADS=str(args.threads),
             OPENBLAS_NUM_THREADS=str(args.blas_threads), MKL_NUM_THREADS=str(args.threads))
         if build.get('accounting'):
-            env.update(TIDE_LH_WORK=str(args.work_count), TIDE_LH_SEED=str(args.seed))
+            env.update(TIDE_LH_WORK=str(args.work_count), TIDE_LH_SEED=str(args.seed),
+                       TIDE_LH_OPERATOR_PROFILE=str(args.operator_profile))
             if args.audit_logits:
                 env['TIDE_LH_AUDIT'] = '1'
             else:

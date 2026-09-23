@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/aggregate.h"
 #include "tide/autograd.h"
 #include <ATen/core/grad_mode.h>
@@ -56,6 +57,7 @@ AggregateResult bind(const AggregateResult& packed, const AggregateResult& ref) 
 }  // namespace
 void evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids, bool packed) {
   if (ids.empty()) return;
+  op_profile::Scope profile(op_profile::Aggregate);
   const auto& w = m.nodes[events[ids[0]].node];
   std::vector<AggregateInput> requests;
   for (auto i : ids) requests.push_back(request(g, m, events[i]));

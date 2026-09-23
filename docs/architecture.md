@@ -21,6 +21,7 @@
 | `docs/attention-grouping-comparison.md` | LH padded queries versus PDG exact buckets, cache layout and pooling |
 | `tools/cpu_compare/README.md` | Two portable one-command CPU runners and source/graph packet |
 | `docs/operator-work.md` | Optional LH/PDG inference matrix work, attention padding and Emit boundary accounting |
+| `docs/operator-profiling.md` | Optional exclusive calling-thread timers, common boundaries and interpretation |
 | `docs/streaming-optimizations.md` | Independent region scheduling, compact event ownership, bounded dense projection and validation |
 | `docs/streaming-benchmark.md` | Bounded native workload, parity anchors, timed phases and experiment records |
 | `docs/lh-scale-benchmark.md` | Historical 8.8B/8.5B references, topology/parameter accounting and matched versus comparable-scale LH/Tide timing |

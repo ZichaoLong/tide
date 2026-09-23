@@ -49,6 +49,8 @@ def parse(engine):
     p.add_argument('--threads', type=int, default=min(56, len(os.sched_getaffinity(0))))
     p.add_argument('--jobs', type=int, default=2, help='CMake build jobs')
     p.add_argument('--work-count', type=int, choices=[0, 1], default=1)
+    p.add_argument('--operator-profile', type=int, choices=[0, 1], default=0,
+                   help='exclusive calling-thread timers; do not add to wall intervals')
     if engine == 'pdg':
         p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact',
                        help='exact shape buckets or one padded query batch per node update')
@@ -74,6 +76,8 @@ def parse(engine):
         packet = verify_packet(Path(a.kit_dir))
     except (ValueError, OSError, KeyError) as error:
         p.error(str(error))
+    if engine == 'lh' and a.operator_profile and not packet.get('lh_operator_profile'):
+        p.error('LH operator profiling requires a freshly prepared capable source kit')
     run_id = engine+'-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d-%H%M%S')+'-'+uuid.uuid4().hex[:6]
     a.output_dir = str(Path(a.output_dir or Path.cwd()/'runs'/run_id).resolve())
     if Path(a.output_dir).exists():
@@ -104,7 +108,8 @@ def environment(engine, a):
     env = dict(os.environ, TORCH_DEVICE_BACKEND_AUTOLOAD='0', OPENBLAS_NUM_THREADS='1',
                OMP_NUM_THREADS=str(a.threads if engine == 'lh' else 1),
                MKL_NUM_THREADS=str(a.threads if engine == 'lh' else 1),
-               TIDE_LH_SEED=str(a.seed), TIDE_LH_WORK=str(a.work_count))
+               TIDE_LH_SEED=str(a.seed), TIDE_LH_WORK=str(a.work_count),
+               TIDE_LH_OPERATOR_PROFILE=str(getattr(a, 'operator_profile', 0)))
     env.pop('TIDE_LH_AUDIT', None)
     if engine == 'pdg':
         env['OMP_WAIT_POLICY'] = 'PASSIVE'

@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/read.h"
 #include "tide/autograd.h"
 #include <ATen/core/grad_mode.h>
@@ -60,6 +61,7 @@ std::shared_ptr<const ReadKernel> make_read_kernel(const Node& node) {
 }
 void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids, bool packed) {
   if (ids.empty()) return;
+  op_profile::Scope profile(op_profile::Read);
   const auto node = events[ids.front()].node;
   const auto& w = m.nodes[node];
   const auto& mode = g.regions[g.nodes[node].region].read_mode;

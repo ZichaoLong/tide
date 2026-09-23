@@ -44,7 +44,7 @@ def main():
     for key, default in [('width', 64), ('batch', 4), ('steps', 12), ('warmup', 4), ('workers', 1),
                          ('threads', 1), ('head-workers', 1), ('vocab', 50304), ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 1280)]:
         p.add_argument('--'+key, type=int, default=default)
-    for key, default in [('work-count', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
+    for key, default in [('work-count', 0), ('operator-profile', 0), ('packed', 1), ('grad', 0), ('check', 0), ('profile', 0), ('parallel-regions', 0), ('compact-events', 0)]:
         p.add_argument('--'+key, type=int, choices=[0, 1], default=default)
     p.add_argument('--emission', choices=['row', 'slot'], default='row')
     p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact')
@@ -69,7 +69,9 @@ def main():
         p.error('source/build mismatch; rebuild the immutable source')
     config = {k: getattr(args, k) for k in ('device', 'dtype', 'width', 'batch', 'steps', 'warmup', 'workers',
               'threads', 'head_workers', 'vocab', 'seed', 'packed', 'grad', 'check', 'emission', 'profile',
-              'parallel_regions', 'compact_events', 'work_count', 'attention_packing')}
+              'parallel_regions', 'compact_events', 'work_count', 'operator_profile', 'attention_packing')}
+    if args.operator_profile and (args.grad or not args.packed or args.emission != 'row'):
+        p.error('operator profiling supports packed inference row Emit only')
     out.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(topology, out/'topology.txt')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
@@ -140,6 +142,7 @@ def main():
         try: track.finish()
         except Exception as exc: code = 1; error = (error or '')+'; tracking: '+str(exc)
         if cancelled: code = 128+cancelled
+        record['runtime']['load_average_after'] = list(os.getloadavg())
         record.update(status='cancelled' if cancelled else 'completed' if code == 0 else 'failed', ended_at=utc_now())
         measured = [e['metrics'] for e in events if e['step'] >= args.warmup]
         summaries = {}

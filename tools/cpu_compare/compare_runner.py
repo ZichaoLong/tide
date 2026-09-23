@@ -62,6 +62,7 @@ def main(engine):
     print('CONFIG '+json.dumps(dict(engine=engine, width=a.width, batch=a.batch, vocab=a.vocab,
           steps=a.steps, warmup=a.warmup, seed=a.seed, grad=False, dtype=a.dtype, threads=a.threads,
           attention_packing=getattr(a, 'attention_packing', 'lh-crossbatch'),
+          operator_profile=getattr(a, 'operator_profile', 0),
           parameters=expected, parameter_gib=expected*(8 if a.dtype=='float64' else 4)/2**30,
           lh_initial_kv_gib=465*a.batch*16*a.width*8/2**30 if engine=='lh' else 0,
           graph=dict(nodes_per_cortex=232, inet_edges=984, onet_edges=984, io_edges=232, oi_edges=8),

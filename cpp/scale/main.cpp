@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/operator_work.h"
 #include "scale.h"
 #include "../bench/metrics_jsonl_writer.h"
@@ -25,6 +26,7 @@ int main(int argc, char** argv) {
         "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
       std::cout << "  --parallel-regions 0|1 --compact-events 0|1\n";
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
+      std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n";
       return 0;
     }
     auto device = portable_torch::resolve_device(c.runtime);
@@ -59,6 +61,7 @@ int main(int argc, char** argv) {
     at::Tensor previous_logits;
     for (Index token = 0; token < c.steps; ++token) {
       tide::work::reset(c.work_count);
+      tide::op_profile::reset(c.operator_profile);
       const auto begin = Clock::now();
       previous_logits = at::Tensor();
       auto ids = at::remainder(at::arange(c.batch, at::TensorOptions().dtype(at::kLong))*3+token*7, c.vocab);
@@ -89,6 +92,9 @@ int main(int argc, char** argv) {
         tide::work::add(tide::work::BodySelected, result.stats["selected_events"]-result.outputs.size());
         auto work = tide::work::metrics(); metrics.insert(work.begin(), work.end());
       }
+      if (c.operator_profile) {
+        auto detail = tide::op_profile::metrics(); metrics.insert(detail.begin(), detail.end());
+      }
       if (c.profile) {
         metrics["profile/input_seconds"] = std::chrono::duration<double>(advance_begin-begin).count();
         metrics["profile/head_seconds"] = std::chrono::duration<double>(end-advance_end).count();
@@ -104,7 +110,7 @@ int main(int argc, char** argv) {
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
         {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
-        {"attention_packing", c.packed ? c.attention_packing : "scalar"}});
+        {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile}});
       std::cout << "STEP " << token << " ms/sample-token=" << elapsed*1000/c.batch
                 << " candidates=" << result.stats["candidate_events"] << " edges=" << result.stats["visited_edges"] << '\n' << std::flush;
     }

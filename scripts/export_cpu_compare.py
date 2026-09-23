@@ -79,6 +79,7 @@ message(STATUS "COMPARE Release flags: ${CMAKE_CXX_FLAGS_RELEASE}; global flags:
         tide_source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
         source_dirty=bool(dirty), source_dirty_status=dirty,
         lh_revision=build['source_revision'], lh_batch=build['batch'],lh_steps=build['steps'],
+        lh_operator_profile=build.get('operator_profile', False),
         lh_preparation_manifest_sha256=digest(prepared/'build-manifest.json'),
         graph_csr_sha256=info['graph_files_sha256'],topology_sha256=info['topology_sha256'],
         files_sha256=files, graph_format='little-endian int64/float64 original LH; PDG portable text',

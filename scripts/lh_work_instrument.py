@@ -54,6 +54,7 @@ def instrument(source, root):
         ('Tensor ids = at::randint(0, ionet.config.vocab_size, {batch_size}, torch::TensorOptions().dtype(torch::kInt64).device(ionet.iodevice));',
          'Tensor ids = at::remainder(at::arange(batch_size, torch::TensorOptions().dtype(torch::kInt64).device(ionet.iodevice))*3+t*7, ionet.config.vocab_size);'),
         ('        Tensor logits = ionet.think', '''        tide::work::reset(lh_accounting::counting());
+        tide::op_profile::reset(lh_accounting::profiling());
         auto begin = std::chrono::steady_clock::now();
         Tensor logits = ionet.think'''),
         ('        cout << "t: " << t << endl;', '''        auto elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count();
@@ -61,6 +62,7 @@ def instrument(source, root):
         lh_accounting::finish(t, logits, ionet, iacts, oacts, elapsed);''')])
     # Kept inside the prepared tree and explicitly hashed in its manifest.
     copies = {'cpp/include/tide/operator_work.h': 'include/tide/operator_work.h',
+              'cpp/include/tide/operator_profile.h': 'include/tide/operator_profile.h',
               'cpp/include/portable_torch/threads.hpp': 'include/portable_torch/threads.hpp',
               'cpp/src/threads.cpp': 'src/tide_threads.cpp',
               'cpp/lh_original/accounting.h': 'include/lh_accounting.h'}
@@ -70,6 +72,8 @@ def instrument(source, root):
         path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(root / src, path)
         added.append(path)
+    from lh_profile_instrument import instrument as profile_instrument
+    modified.extend(profile_instrument(cpp))
     return modified, added
 
 

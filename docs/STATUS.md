@@ -1,7 +1,7 @@
 # Current handoff
 
 Updated: 2026-09-23 (Asia/Shanghai). Branch: graph-execution-foundation.
-The latest authorized increment is complete: configurable native same-fiber
+The previous increment is complete: configurable native same-fiber
 Attention `exact|single`, default exact, with full CPU regression, a refreshed
 portable source kit and a bounded 17.27B same-binary performance comparison.
 See [the policy and API](attention-packing-policy.md) and
@@ -54,10 +54,33 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-No job is active and no additional run is required for this increment. Runtime
-implementation is committed at 9e950bfbb7ceee6a5105d7978c0419aab6877859;
-the reviewed evidence and this handoff are committed separately. Source identity,
-graph/checkpoint versions and default behavior remain explicit in the report.
+The user now authorizes the proposed profiling and optimization investigations
+under canonical PDG semantics. Base:8bd17a0 (runtime9e950bf). Optional common operator timers are implemented.
+Directed frozen development gate passed: 178 CPU FP64/FP32 tests /85.20s,
+including profiling on/off full-state checks, one/three workers, exact/single,
+work counts and nested/thread-local timer invariants. Records:
+artifacts/operator-profile-retest-20260923-105234/; terminal service agrees.
+The first development job failed on a namespace error; original archive/log
+and terminal audit remain in artifacts/operator-profile-dev-20260923-104828/.
+No reference source or model formula changed. See operator-profiling.md.
+Next: commit the implementation, then run artifacts/qualify_operator_profile.py
+from a frozen clean worktree through job.py/background.slice. It builds fresh
+LH small/wide copies, checks complete logits against the old anchor and on/off
+serial/parallel, then runs fixed17.27B LH/PDG profiling on/off to terminal records.
+Worker elapsed time is separate from coordinator wall intervals; never sum them.
+Then use a bounded fixed17.27B diagnosis to prioritize independent ablations:
+node-batched pooling, state/event lifetime management, KV materialization and
+projection layout. Keep exact packing default, no in-place autograd mutation,
+no snapshot aliasing and no skipping observable Aggregate/Next/trace behavior.
+Each implemented change needs complete small state/message/route/VJP checks,
+committed frozen-source qualification and same-work performance evidence.
+No speedup is established for this new work. Continue to terminal results.
+Use the existing160-CPU affinity and about-half-memory budget (1024GiB per wide
+process), not the obsolete256GiB cap. No push, no sub-agents, reference repos read-only.
+
+The previous runtime implementation remains qualified at9e950bf, with evidence
+at8bd17a0. Its source archive and records below remain the current delivered kit
+until a later increment is qualified and exported.
 
 The portable archive now includes `--attention-packing exact|single`. To test on
 the user's Intel server, copy and extract the new archive, then run sequentially

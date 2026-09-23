@@ -182,9 +182,11 @@ while saving a small fraction of total matrix arithmetic. The user-authorized
 relocated kit builds and a same-binary 17.27B pair. Exact 29.35656 versus
 single 31.53019 ms/sample-token: single was 7.4% slower in this one short-window
 run despite 84% fewer groups, with 1.808× score padding and 4.937 GiB more peak RSS.
-Keep exact as the default. Next investigate per-event pooling, temporary KV
-movement, tensor allocation and projection layout with controlled small parity
-anchors; grouping alone has not established a speedup. Preserve complete small
+Keep exact as the default. User-authorized follow-up is implementing common
+optional operator timers for original LH and PDG, followed by measured independent
+ablations of per-event pooling, state/event storage lifetime, temporary KV
+movement and projection layout. Preserve complete small parity anchors; grouping
+alone has not established a speedup. Preserve complete small
 semantics and fixed large work counters when profiling or improving these costs.
 Component ablations, longer contexts, narrow scale and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun

@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "fiber_pool.h"
 #include "tide/fiber_attention.h"
 #include <stdexcept>
@@ -29,6 +30,7 @@ void validate_fiber_pool(const NodeWeights& w, const std::string& kind, Index sl
 }
 Tensor fiber_pool_rows(const NodeWeights& w, const std::string& kind, const std::vector<Index>& slots,
                        const Tensor& rows) {
+  op_profile::Scope profile(op_profile::Pooling);
   if (kind == "sum") return rows.sum(0);
   if (kind == "mean") return rows.mean(0);
   if (!fiber_pool_learned(kind)) throw std::invalid_argument("unknown fiber pooling kind");

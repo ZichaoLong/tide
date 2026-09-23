@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 #include "tide/full.h"
 #include "tide/autograd.h"
 #include <ATen/core/grad_mode.h>
@@ -34,6 +35,7 @@ FullResult bind(const FullResult& packed, const FullResult& reference) {
 void evaluate_full(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids,
                    const Options& options, bool packed) {
   if (ids.empty()) return;
+  op_profile::Scope profile(op_profile::FullOther);
   const auto node = events[ids.front()].node;
   const auto slots = g.outgoing_ports.offsets[node + 1] - g.outgoing_ports.offsets[node];
   const auto& w = m.nodes[node];

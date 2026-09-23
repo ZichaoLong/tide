@@ -1,3 +1,4 @@
+#include "tide/operator_profile.h"
 // One node-local query batch, with per-query owner gather and padded KV.
 #include "fiber_packing.h"
 #include "fiber_pool.h"
@@ -13,6 +14,7 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
                                     const std::vector<State>& old, const PackedSequence& batch) {
   batch.validate();
   if (old.size() != batch.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
+  op_profile::Scope profile(op_profile::InputPack);
   std::vector<Tensor> inputs;
   std::vector<Index> offsets{0}, slots, query_owners;
   for (const auto& view : batch.views) {
@@ -25,10 +27,12 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
   }
   auto x = at::stack(inputs);
   const auto width = w.bias.numel(), d = width/heads;
+  profile.phase(op_profile::Qkv);
   work::linear(work::QkvCalls, x.size(0), width, 3*width);
   auto qkv = at::linear(x, w.extra.at("fiber_qkv").t(), w.extra.at("fiber_qkv_bias")).split(width, -1);
   auto q = qkv[0].reshape({-1, heads, d})*(1/std::sqrt(double(d)));
   auto k = qkv[1].reshape({-1, heads, d}), v = qkv[2].reshape({-1, heads, d});
+  profile.phase(op_profile::KvBuild);
   Index maximum = 0, valid_pairs = 0;
   for (size_t i = 0; i < old.size(); ++i) {
     const auto count = offsets[batch.offsets[i+1]]-offsets[batch.offsets[i]];
@@ -65,16 +69,27 @@ PackedStates fiber_attention_single(const NodeWeights& w, Index heads, const std
   }
   auto owner = at::tensor(query_owners, x.options().dtype(at::kLong));
   work::attention(width, heads, valid_pairs, x.size(0)*maximum);
-  auto scores = at::matmul(at::stack(keys).index_select(0, owner).transpose(1, 2), q.unsqueeze(-1));
+  profile.phase(op_profile::KvGather);
+  auto gathered_keys = at::stack(keys).index_select(0, owner).transpose(1, 2);
+  profile.phase(op_profile::Attention);
+  auto scores = at::matmul(gathered_keys, q.unsqueeze(-1));
+  gathered_keys = Tensor();
   scores = scores+at::cat(bias_rows).unsqueeze(1).unsqueeze(-1);
   auto probabilities = at::softmax(scores, 2).transpose(2, 3);
-  auto outputs = at::matmul(probabilities, at::stack(values).index_select(0, owner).transpose(1, 2)).reshape({x.size(0), width});
+  profile.phase(op_profile::KvGather);
+  auto gathered_values = at::stack(values).index_select(0, owner).transpose(1, 2);
+  profile.phase(op_profile::Attention);
+  auto outputs = at::matmul(probabilities, gathered_values).reshape({x.size(0), width});
+  gathered_values = Tensor();
+  profile.phase(op_profile::StateOther);
   std::vector<Tensor> pooled;
   for (size_t j = 0; j < batch.times.size(); ++j)
     pooled.push_back(fiber_pool_rows(w, pool, {slots.begin()+offsets[j], slots.begin()+offsets[j+1]},
                                      outputs.slice(0, offsets[j], offsets[j+1])));
+  profile.phase(op_profile::Output);
   work::linear(work::OutCalls, pooled.size(), width, width);
   auto y = at::linear(at::stack(pooled), w.extra.at("fiber_out").t(), w.extra.at("fiber_out_bias"));
+  profile.phase(op_profile::StateCommit);
   for (size_t j = 0; j < result.states.size(); ++j) result.states[j].value = y[j].clone();
   result.calls = 1; result.max_batch = old.size(); result.score_elements = scores.numel();
   return result;

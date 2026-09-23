@@ -94,6 +94,12 @@ python run_pdg.py --device cpu --threads 4 --smoke --output-dir runs/pdg-smoke
 PDG 主指标来自 native cursor+head；两边计数和统计输出发生在主计时之外，
 计数更新本身仍在计时中。`--work-count 0` 可单独检查计数开销。
 
+两边可加 `--operator-profile 1` 输出 QKV、KV 构建/搬运、attention、pooling、
+输出投影和 Emit 的细分计时，默认关闭。`detail/*_worker_seconds` 是各调用线程
+互不重叠的累计耗时，包含线程被调度暂停的时间；不是端到端耗时，不能与
+`profile/*` 相加。LH 需要新生成且标明支持此功能的源码包。性能结论应使用
+关闭细分计时的配对测试，并单独检查计时开销。
+
 Trackio 默认为 best-effort；未安装时仍完成完整本地记录，不自动安装。
 可以使用 `--tracking off` 关闭投影。比较时先检查 summary 的 completed 状态，
 然后反馈两份 run.json、summary.json、metrics.jsonl、host.json 及日志即可，

@@ -1,11 +1,16 @@
 #pragma once
 // Injected only into the explicitly instrumented, project-owned LH copy.
 #include "tide/operator_work.h"
+#include "tide/operator_profile.h"
 #include "portable_torch/threads.hpp"
 #include <chrono>
 #include <cstdlib>
 
 namespace lh_accounting {
+inline bool profiling() {
+  const char* value = std::getenv("TIDE_LH_OPERATOR_PROFILE");
+  return value && std::string(value) == "1";
+}
 inline bool counting() {
   const char* value = std::getenv("TIDE_LH_WORK");
   return value && std::string(value) == "1";
@@ -26,6 +31,9 @@ inline void finish(int64_t token, const Tensor& logits, const IOCortexNet& net,
                    const VPtrBatchSignals& iacts, const VPtrBatchSignals& oacts,
                    double elapsed) {
   auto metrics = counting() ? tide::work::metrics() : std::map<std::string, double>{};
+  if (profiling()) {
+    auto detail = tide::op_profile::metrics(); metrics.insert(detail.begin(), detail.end());
+  }
   if (counting()) metrics["op/pending_edge_rows"] = pending(*net.inet, iacts)+
     pending(*net.onet, oacts)+pending(*net.iobridge, iacts)+pending(*net.oibridge, oacts);
   metrics["check/logits_sum"] = logits.detach().to(torch::kFloat64).sum().item<double>();
