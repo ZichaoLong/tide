@@ -152,6 +152,8 @@ void configure_fiber_attention(const Graph& g, Model& m, const std::string& pack
     if (m.nodes[i].kernel) throw std::invalid_argument("fiber packing must be selected before kernel configuration");
     programs.emplace_back(i, make_fiber_attention_kernel(g.nodes[i], g.source_counts[i], packing, pooling, cache, layout));
   }
+  if (programs.empty() && (packing != "exact" || pooling != "event" || cache != "cloned" || layout != "event"))
+    throw std::invalid_argument("nondefault fiber execution policy requires a same-fiber attention node");
   for (const auto& [i, program] : programs) m.nodes[i].kernel = program;
 }
 Tensor decode_fiber_bias(const NodeWeights& w, const State& global, Index global_cut, std::optional<StateClock> policy) {

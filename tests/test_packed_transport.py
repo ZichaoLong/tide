@@ -131,8 +131,8 @@ def test_local_clock_clear_and_inference_modes(dtype, context):
 
 
 @pytest.mark.parametrize('flags', FLAGS)
-def test_unsupported_schedules_rejected(dtype, flags):
+def test_transport_requires_packed_before_schedule_dispatch(dtype, flags):
     g,m,*_=fixture(dtype)
     with pytest.raises(ValueError,match='packed'):Native(g,m,**flags)
-    for algorithm in ('frontier','chain','self_loop'):
-        with pytest.raises(ValueError,match='streaming'):Native(g,m,algorithm=algorithm,packed=True,**flags)
+    for algorithm in ('frontier','chain','self_loop','ring','diamond'):
+        with pytest.raises(ValueError,match='packed'):Native(g,m,algorithm=algorithm,**flags)

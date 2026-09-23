@@ -12,7 +12,7 @@ struct Frame {
 };
 std::vector<Frame> plan_frontier(const Graph&, const std::vector<Atom>&, Index start, Index stop, Index limit);
 std::vector<Event> evaluate_block(const Graph&, const Model&, Continuation&, const std::vector<Frame>&,
-                                 const Fibers&, const Options&, NodePool&, std::map<std::string, Index>& stats);
+                                 Fibers&, const Options&, NodePool&, std::map<std::string, Index>& stats);
 class Frontier {
  public:
   Frontier(Graph graph, Model model, Options options);

@@ -2,6 +2,7 @@
 #include "tide/ops.h"
 #include "tide/kernel.h"
 #include "tide/delivery.h"
+#include "stream_support.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -10,8 +11,11 @@
 namespace tide {
 Specialized::Specialized(Graph g, Model m, Options options, std::string topology)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), topology_(std::move(topology)), pool_(options.workers) {
-  if (options.parallel_regions || options.compact_events || options.defer_state_release || options.packed_sources || options.batch_next)
-    throw std::invalid_argument("streaming optimizations require Streaming");
+  if (options.profile) throw std::invalid_argument("phase profiling requires Streaming");
+  if (options.defer_state_release && !options.compact_events)
+    throw std::invalid_argument("deferred state release requires compact events");
+  if ((options.packed_sources || options.batch_next) && !options.packed)
+    throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
   const Index n = graph_.nodes.size();
   auto require = [](bool ok) { if (!ok) throw std::invalid_argument("specialization topology/options mismatch"); };
@@ -62,6 +66,7 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
       ++result.stats["candidate_events"];
       if (options_.trace) result.trace.push_back(std::move(e));
     }
+    if (options_.compact_events && !options_.trace) release_stream_events(events, pool_, options_.workers);
   };
   if (topology_ == "self_loop" || topology_ == "ring") {
     for (Index time = q.cut; time < stop; ++time) {

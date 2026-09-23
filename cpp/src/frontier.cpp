@@ -2,6 +2,7 @@
 #include "tide/ops.h"
 #include "tide/kernel.h"
 #include "tide/delivery.h"
+#include "stream_support.h"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -10,8 +11,11 @@
 namespace tide {
 Frontier::Frontier(Graph g, Model m, Options options)
     : graph_(std::move(g)), model_(std::move(m)), options_(options), pool_(options.workers) {
-  if (options.parallel_regions || options.compact_events || options.defer_state_release || options.packed_sources || options.batch_next)
-    throw std::invalid_argument("streaming optimizations require Streaming");
+  if (options.profile) throw std::invalid_argument("phase profiling requires Streaming");
+  if (options.defer_state_release && !options.compact_events)
+    throw std::invalid_argument("deferred state release requires compact events");
+  if ((options.packed_sources || options.batch_next) && !options.packed)
+    throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); graph_.topological_order(); configure_model(graph_, model_); validate_model(graph_, model_);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp") throw std::invalid_argument("invalid emit mode");
   if (options.max_events < 1 || !std::isfinite(options.zeta)) throw std::invalid_argument("invalid frontier options");
@@ -59,6 +63,7 @@ Result Frontier::run(const Continuation& initial, const std::vector<External>& e
         }
         if (options_.trace) result.trace.push_back(std::move(e));
       }
+      if (options_.compact_events && !options_.trace) release_stream_events(events, pool_, options_.workers);
       for (auto i : ids) { done.insert(i); ++cursor[{frames[i].batch, frames[i].region}]; }
     }
   }

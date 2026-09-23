@@ -73,7 +73,7 @@ def test_tensor_history_and_idle_owners_remain_independent(dtype, policy, mode, 
 
 
 @pytest.mark.parametrize("algorithm", ["frontier", "chain", "self_loop"])
-def test_stream_flags_are_not_silently_ignored(dtype, algorithm):
+def test_deferred_release_requires_compact_storage(dtype, algorithm):
     g, m, *_ = fixture(dtype)
-    with pytest.raises(ValueError, match="streaming optimizations"):
-        Native(g, m, algorithm=algorithm, parallel_regions=True)
+    with pytest.raises(ValueError, match="requires compact"):
+        Native(g, m, algorithm=algorithm, defer_state_release=True)

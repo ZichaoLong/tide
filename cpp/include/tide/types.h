@@ -159,6 +159,6 @@ struct Options {
   bool profile = false; // Optional streaming coordinator wall-time phases.
   bool parallel_regions = false, compact_events = false;
   bool defer_state_release = false; // Retire old state containers in compact cleanup.
-  bool packed_sources = false, batch_next = false; // Optional packed Streaming transport.
+  bool packed_sources = false, batch_next = false; // Optional packed source/Next execution.
 };
 }  // namespace tide

@@ -20,13 +20,20 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 | fiber_pooling event/CSR, same-fiber | verified | verified, `test_fiber_efficiency.py` | exact default covered; options not separately certified |
 | cloned/owned KV, same-fiber | verified | verified, same test | default covered |
 | attention layout event/head, same-fiber | verified | verified, same test | default covered |
-| projection input/linear layout | native ProjectionEmit with explicit scale harness setup; owner identity preserved; [fiber efficiency](evidence/fiber-efficiency.md) | local Full reusable; verify explicit adapter/config coverage S3.1 | default projection covered |
-| compact events | native Streaming only, trace snapshots retained | explicitly rejected, S3.2 | explicitly rejected |
-| parallel regions | native Streaming only, canonical publish order | explicitly rejected, S3.2 | explicitly rejected |
-| deferred state release | native Streaming, compact required | explicitly rejected, S3.2 | explicitly rejected |
-| packed_sources | native packed Streaming; sum transport with reported fallback for unsupported Agg | explicitly rejected, S3.2 | explicitly rejected |
-| batch_next/reset | native packed Streaming; adopt/selected fiber reset, counted custom fallback | explicitly rejected, S3.2 | explicitly rejected |
+| projection input/linear layout | same-fiber QKV/output physical strides selected by scale model initialization; [fiber efficiency](evidence/fiber-efficiency.md) | local kernels accept either stride; explicit cross-graph ownership/update gate remains S3.1 | default projection covered |
+| compact events | native Streaming, trace snapshots retained | consumed fibers moved, trace snapshots retained | same block publication |
+| parallel regions | native Streaming, canonical publish order | same-time independent sample owners, canonical publication | same causal waves |
+| deferred state release | compact required | compact + trace-free displaced states retire on workers | same block cleanup |
+| packed_sources | packed sum transport; counted unsupported Agg fallback | Aggregate and same-fiber sequence transport | independent ring/diamond/chain/self-loop |
+| batch_next/reset | packed adopt/selected fiber reset; counted custom fallback | same-time batch owners; times stay causal | same causal Next/reset grouping |
 | head workers | native scale/portable Full projection pool; separate from executor node pool | no general frontier head-worker API; S3.1 audit of applicable Full path | no general head-worker API |
+
+S3.2 directed gate: `tests/test_frontier_options.py` and eight related files,
+1098 CPU FP64/FP32 tests passed; archived source and terminal audit at
+`artifacts/frontier-options-dev-20260923-a/`. Stage3 clean qualification remains.
+Defaults stay unchanged. Prefill fallback counters distinguish disabled, missing
+sequence contract, selected-only adoption, selected clear, and custom Next.
+Phase profiling remains explicitly Streaming-only.
 
 A local same-fiber policy does not apply to aggregated-event attention kernels;
 these remain separate semantic profiles. Explicit unsupported configuration

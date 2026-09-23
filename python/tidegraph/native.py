@@ -20,7 +20,7 @@ class Native:
         if defer_state_release and not compact_events:
             raise ValueError("deferred state release requires compact events")
         if (packed_sources or batch_next) and not packed:
-            raise ValueError("packed transport requires packed Streaming")
+            raise ValueError("packed transport requires packed execution")
         import _tide_native as core
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
@@ -90,8 +90,6 @@ class Native:
         options.parallel_regions, options.compact_events = parallel_regions, compact_events
         options.defer_state_release = defer_state_release
         options.packed_sources, options.batch_next = packed_sources, batch_next
-        if algorithm != "streaming" and (parallel_regions or compact_events or defer_state_release or packed_sources or batch_next):
-            raise ValueError("streaming optimizations require the streaming algorithm")
         if algorithm not in {"streaming", "frontier", "self_loop", "ring", "chain", "diamond"}:
             raise ValueError("unknown native algorithm")
         if algorithm in {"self_loop", "ring", "chain", "diamond"}:

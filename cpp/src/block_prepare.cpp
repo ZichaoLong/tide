@@ -16,11 +16,13 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   std::map<Index, size_t> by_node;
   for (const auto& [owner, ids] : by_sequence) {
     const auto node = owner.second;
-    if (options.prefill && m.nodes[node].kernel->exact_sequence() && g.regions[g.nodes[node].region].observe_all
-        && !g.nodes[node].clear && !m.nodes[node].next_kernel->comparison_identity())
-      stats["state_prefill_blocked_next"] += ids.size();
-    if (!options.prefill || !m.nodes[node].next_kernel->comparison_identity() || !m.nodes[node].kernel->exact_sequence()
-        || !g.regions[g.nodes[node].region].observe_all || g.nodes[node].clear) continue;
+    const char* fallback = nullptr;
+    if (!options.prefill) fallback = "state_prefill_disabled";
+    else if (!m.nodes[node].kernel->exact_sequence()) fallback = "state_prefill_no_sequence_contract";
+    else if (!g.regions[g.nodes[node].region].observe_all) fallback = "state_prefill_selected_adoption";
+    else if (g.nodes[node].clear) fallback = "state_prefill_selected_clear";
+    else if (!m.nodes[node].next_kernel->comparison_identity()) fallback = "state_prefill_blocked_next";
+    if (fallback) { stats[fallback] += ids.size(); stats["state_prefill_fallback_events"] += ids.size(); continue; }
     size_t index;
     if (options.packed && by_node.count(node)) index = by_node.at(node);
     else { index = tasks.size(); by_node[node] = index; tasks.push_back(Task{node}); }
