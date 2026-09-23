@@ -1,7 +1,9 @@
 # Optional native Streaming transport
 
-Implementation candidate; qualification and performance are pending. Both
-`packed_sources` and `batch_next` default to false and require packed native
+[CPU qualification](evidence/packed-transport.md) passed 6897 FP64/FP32 tests,
+relocated kit checks and terminal audits. In the fixed 17.27B short-window trial,
+two-repeat combined latency was 0.5662% higher than baseline; no stable speedup
+is established. Both `packed_sources` and `batch_next` default to false and require packed native
 Streaming. They are independent of exact/single attention and earlier fiber
 options, and are outside graph/checkpoint identity. Frontier and independent
 specializations reject these currently unsupported policies explicitly.

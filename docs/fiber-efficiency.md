@@ -35,8 +35,10 @@ cause active-domain underflow. This policy uses native CPU ATen CSR operations.
 Exact attention buckets collect their output views into original event order
 before pooling. This adds a concatenation but removes repeated tiny Tensor
 index/softmax/matmul calls. Performance depends on shape and sparsity; fewer
-calls alone do not establish improvement. Aggregate remains independently
-evaluated and visible, including its source contributions.
+calls alone do not establish improvement. Aggregate's logical result remains
+visible, including source contributions. The independent [packed transport
+option](packed-transport.md) can share scaled source storage with attention;
+visibility does not require separate allocation or repeated scaling.
 
 ## Immutable KV ownership
 

@@ -195,10 +195,15 @@ interleave raises LH latency6.8%, lowers PDG only0.65%; its smaller LH/PDG ratio
 largely comes from slowing LH. Keep conservative defaults and all experimental
 options available for target-machine comparisons.
 
-The active M8 increment implements optional [packed source transport and batch
-Next](packed-transport.md). Directed checks cover both dtypes; complete CPU and
-bounded performance qualification are pending. This does not yet batch persistent
-KV ownership or eliminate per-event trace/state records.
+Optional [packed source transport and batch Next](packed-transport.md) are now
+[qualified](evidence/packed-transport.md): 6897 CPU FP64/FP32 tests, relocated kit
+checks, 30 stages and 13 completed run records. Source rows are reused and Next
+adoption/clear is batched, preserving all logical results and first-order VJPs.
+The repeated baseline 29.45082 versus combined 29.61758 ms/sample-token is 0.5662%
+slower with both switches. Single sources 28.80887/Next 28.96047 are exploratory
+observations, not repeated gains. Defaults stay off. This closes the bounded
+increment without claiming end-to-end speedup. Persistent KV ownership and
+per-event trace/state records remain; no new large run is queued.
 
 Remaining M8 work should isolate data locality and the node scheduler, then
 batched persistent state/cache and signal storage. Compare stable node/worker assignment

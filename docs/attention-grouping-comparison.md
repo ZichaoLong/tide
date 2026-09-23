@@ -118,3 +118,9 @@ for the repeated all160 combination in the short17.27B window; no independent
 option demonstrated a large gain. [Process interleaving](evidence/fiber-numa.md)
 also produced little PDG change while slowing LH. These observations do not
 establish a canonical semantic lower bound on PDG overhead.
+
+[Packed source transport and batch Next](packed-transport.md) are two further
+independent Streaming options. They reuse source rows across Aggregate/attention
+and batch state adoption/clear without changing attention grouping, comparison
+snapshots or logical results. Per-event observability specifies values and VJPs,
+not a required Tensor count or one physical kernel call per event.

@@ -152,6 +152,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; fixed kit and wide commands in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/attention-packing-policy.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "488500b28a2ce1bebcea62ee0e4f6d93b7cc51df",
+          "scope": "6897 clean CPU FP64/FP32 regression checks; native packed Streaming source transport and batch Next/reset with Python scalar value/VJP anchors, sharing/optimizer/checkpoint policy changes; relocated source-kit rebuilds and bounded FP32 17.27B no_grad ablations; no end-to-end speedup or x86_64 claim",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; exact kit and fixed-workload commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/packed-transport.md"
         }
       ]
     },
@@ -274,6 +289,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; fixed kit and wide commands in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/attention-packing-policy.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "488500b28a2ce1bebcea62ee0e4f6d93b7cc51df",
+          "scope": "6897 clean CPU FP64/FP32 regression checks; native packed Streaming source transport and batch Next/reset with Python scalar value/VJP anchors, sharing/optimizer/checkpoint policy changes; relocated source-kit rebuilds and bounded FP32 17.27B no_grad ablations; no end-to-end speedup or x86_64 claim",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; exact kit and fixed-workload commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/packed-transport.md"
         }
       ]
     },

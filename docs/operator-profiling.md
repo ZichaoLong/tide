@@ -16,7 +16,7 @@ measured per process. Disabled scopes avoid clock reads and counter registration
 
 | Category | PDG | Original LH CROSSBATCH |
 | --- | --- | --- |
-| input_pack | ordered source scaling/stacking | local index preparation and CSR SumCoe |
+| input_pack | ordered source scaling/stacking, or packed-source reuse/gather | local index preparation and CSR SumCoe |
 | qkv | QKV Linear and query scaling/reshape | same |
 | kv_build | functional cache append, decay, bias/mask and grouping metadata | indexed append/capacity growth, hidden list bookkeeping, decay |
 | kv_gather | stacked KV; single policy also query-owner gather | BatchCachedConcat indexed cache gather |
@@ -33,6 +33,13 @@ are destroyed inside its state phase; single's final locals are destroyed after
 its last phase. KV state clones in single are part of kv_build. These boundaries
 must accompany comparisons. PDG `detail/state_commit` is local state assembly,
 distinct from coordinator `profile/commit_seconds` that publishes states/messages.
+
+With [packed transport](packed-transport.md), source stack/scale moves into
+Aggregate and input_pack measures reuse plus any source-slot reordering. Batch
+Next counts one local batch scope, including selected reset, instead of one
+scope per event. Logical `work/next_steps` is unchanged; `work/next_batches` and
+`work/next_reset_batches` report physical batches. Compare the combined scope
+costs as well as the individual timers when work moves between phases.
 
 Work counters (`op/*`) remain independent. Compare profiling on/off numerical
 values and work inventories, then measure overhead on the workload being studied.
