@@ -28,9 +28,12 @@ Launch/resource and live process/cgroup/binary inspection records are retained.
 All12 configs,3 independent repeats,2 reset warmups, per-process180s, ATen1,
 node-worker limit4, RuntimeMaxSec22000. All108 runs completed, zero failures; unit exit0/MainPID0. Audit/report at
 artifacts/foundation-medium-20260923-a/{reviewed-audit.json,report.json,report.md}.
-No formal timing remains active.
+Medium evidence: docs/evidence/foundation-medium.md.
+Medium audit complete: all108 records validate; repeat logical/operator counts
+identical within each variant. Audit tuple/list readback failure was fixed and
+retained in its audit-readback-repro directory.
 
-Follow-up implementation ready to commit after130 directed tests/56.42s,
+Follow-up implementation committed as3d2622a after130 directed tests/56.42s,
 exit0/MainPID0 (foundation-records-dev-20260923-a). Changes:
 - reject explicit timeout0; publish completed measured phase before profiling;
   retain effective thread and binary identity before model allocation;
@@ -41,19 +44,24 @@ exit0/MainPID0 (foundation-records-dev-20260923-a). Changes:
   x86 target-machine execution is an optional extension of this acceptance.
 No unreviewed user changes, no push/subagents/reference writes.
 
-Next bounded sequence:
-1. Audit terminal medium records, source/binary hashes, actual exits and cleanup;
-   summarize three repeats and dispersion with scripts/foundation_report.py.
-2. Run directed benchmark/CLI tests for the small record follow-up, commit it.
-3. Freeze new clean source; evaluate both large presets for timed-dag and settle,
-   node workers32/ATen1,300s per stage, stopping a family at its first failure.
-   Reuse existing wide PDG/LH and narrow PDG timeout evidence; no repeat search.
-4. Review/commit S5 evidence, then freeze final source and run the prepared
-   artifacts/qualify_foundation_final.py driver via scripts/job.py. It exports
-   to a new path with spaces, rebuilds/smokes, runs full CPU FP64/FP32, and builds
-   C++ Settle with TIDE_PYTHON_BINDINGS=OFF plus loader/forward/VJP checks.
-5. Audit S6, update final matrix/status, commit evidence and stop this scope.
-No new performance bottleneck/candidate has been selected; defaults stay unchanged.
+Active bounded large assessment: tide-foundation-large-20260923-a,
+clean source3d2622a, qualification/foundation-large-3d2622a; same immutable native
+build. Output artifacts/foundation-large-20260923-a/{status.json,task.log,suite/}.
+Exact preflight/budget/command: artifacts/foundation-large-a-launch.json.
+Wide D2048/B512 target384 body nodes/17,722,251,712 parameters; narrow D128/B512
+target46,912 body nodes/8,496,773,056 parameters. DAG and Settle run sequentially;
+node workers32, ATen/BLAS1,2 reset warmups,1 bounded repeat,300s per stage plus
+up to30s cleanup. RuntimeMaxSec4000. Dynamic half-budget160 CPUs/~740GiB at launch;
+read launch record for exact current memory. No heavy task may overlap.
+No new tuning candidate selected. Existing PDG wide/narrow evidence reused.
+
+Next: inspect each terminal run and cleanup; retain all failures/skipped larger
+stages. Audit with artifacts/review_foundation_suite.py and summarize. Review/
+commit S5 evidence, freeze final clean source, then launch the prepared
+artifacts/qualify_foundation_final.py through scripts/job.py. It exports/rebuilds/
+smokes in a new path with spaces, runs full CPU FP64/FP32 and builds C++ Settle
+with TIDE_PYTHON_BINDINGS=OFF plus loader/forward/VJP checks. Audit S6, update final
+matrix/status, commit evidence and stop this acceptance scope.
 
 Re-entry commands:
 ```
