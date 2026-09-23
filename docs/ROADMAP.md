@@ -20,11 +20,11 @@ surrogate VJP. Empty/ragged/parallel-edge/reset/delay/chunk regressions remain.
 | Class | Actual implementation and existing gate | Acceptance gap / next unit |
 | --- | --- | --- |
 | PDG generic | `reference.py`, `cpp/src/stream.cpp`, cursor; CSR/CSC, feedback, lazy state, packed and node workers; [streaming](evidence/m1-streaming.md), [cursor](evidence/native-cursor.md), [isolated roots](evidence/isolated-autograd.md), [transport](evidence/packed-transport.md) | retain/regress; S3 option matrix, S5 performance |
-| PDG specialized | `specialized.py`, `cpp/src/specialized.cpp`: independent self-loop propagation; `test_specialized.py`, `test_isolated_schedules.py` | ring implemented; S2 clean full gate pending |
+| PDG specialized | `specialized.py`, `cpp/src/specialized.cpp`: independent self-loop propagation; `test_specialized.py`, `test_isolated_schedules.py` | ring verified; [stage2 gate](evidence/foundation-stage2.md) |
 | TimedDAG generic | `frontier.py`, native planner/frontier/block; streaming is restricted PDG; [frontier](evidence/m3-frontier.md), Attention/SSM packed sequences | S3 applicable transport/scheduler options; S5 unified entry |
-| TimedDAG specialized | independent Python/native singleton-region chain; [specializations](evidence/m4-settle-specialized.md) | diamond/paired-region implemented; S2 clean full gate pending |
+| TimedDAG specialized | independent Python/native singleton-region chain; [specializations](evidence/m4-settle-specialized.md) | diamond/paired-region verified; [stage2 gate](evidence/foundation-stage2.md) |
 | SettleGraph generic | `settle.py`: independent Python region-major, Python encoding then native frontier/streaming; [encoding](evidence/m4-settle-specialized.md), [ports](evidence/local-ports.md), [origins](evidence/source-origins.md) | native `settle.h` [verified](evidence/native-settle-frontend.md) for rank-aligned profile |
-| SettleGraph specialized | independent Python `settle_chain`, analytic formulas; Attention/SSM isolated roots | layered scalar schedule implemented; S2 clean full gate pending |
+| SettleGraph specialized | independent Python `settle_chain`, analytic formulas; Attention/SSM isolated roots | layered scalar schedule verified; [stage2 gate](evidence/foundation-stage2.md) |
 
 ## Stage gates and required units
 
@@ -32,8 +32,8 @@ surrogate VJP. Empty/ragged/parallel-edge/reset/delay/chunk regressions remain.
 | --- | --- | --- |
 | S1 | audit implementation/module/training/option matrices; freeze benchmarks, resources and stops; remove superseded tuning priority | verified by [scope audit](evidence/foundation-scope-audit.md) |
 | S2.1 | standalone C++ SettleGraph spec, structural encoding, model alias mapping, inputs and complete-boundary projection; no Python dependency; standalone FP32/64 forward/VJP, negative validation and Python/native parity | verified: [native frontend](evidence/native-settle-frontend.md); 230 directed tests and clean C++-only FP64/FP32 gate |
-| S2.2 | independent ring and diamond Python/C++ schedules, Python layered SettleGraph; full trace/isolated VJP/initial state/cuts and representative modules | implemented; 554 directed CPU tests passed; clean full gate pending |
-| S2.3 | explicit Settle → TimedDAG → PDG clock, node/region/edge/source/port, state/history/message/pending/ledger mapping and cut restrictions; source-aware roots | implemented/representative native parity passed; clock/owner/projection contract in settle-embedding.md |
+| S2.2 | independent ring and diamond Python/C++ schedules, Python layered SettleGraph; full trace/isolated VJP/initial state/cuts and representative modules | verified; 7167-test [clean stage2 gate](evidence/foundation-stage2.md) |
+| S2.3 | explicit Settle → TimedDAG → PDG clock, node/region/edge/source/port, state/history/message/pending/ledger mapping and cut restrictions; source-aware roots | verified for declared profile; [stage2 gate](evidence/foundation-stage2.md), contract in settle-embedding.md |
 | S3.1 | actual module step/batch/sequence capabilities and counters, Attention/GQA/window, distinct same-fiber, Linear/Delta/Gated Delta/SSM, FFN/SwiGLU, Agg/Emit | representative kernels verified; existing `delta` is gated, ungated DeltaRule still required; [capability table](execution-capabilities.md); audit fallback reasons and extend new schedules |
 | S3.2 | migrate packed_sources and batch_next/reset to legal frontier/encoded Settle blocks; compact/region parallel/deferred-release applicability with explicit errors; single-option, interaction and historical failure tests | implemented; 1098 directed CPU tests passed; stage3 clean gate pending |
 | S3.3 | small deterministic model-style adapter composing layout, norm, explicit position/RoPE/mask/cache; CPU formula, chunk and VJP anchors | planned; RoPE/model adapter absent from current representative modules |

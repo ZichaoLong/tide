@@ -5,7 +5,7 @@ Overall acceptance is active, not complete. ROADMAP is the only backlog.
 Stage1 audit/frozen twelve-config suite accepted. S2 native standalone SettleGraph
 verified at ac19aad; evidence/native-settle-frontend.md has exact qualification.
 S2 independent ring/diamond Python+C++ and Python layered Settle implemented at
-70809fd; 554 directed tests passed. Complete CPU gate is still running below.
+70809fd; 554 directed tests passed. Complete CPU gate now passes; reviewed evidence below.
 
 S3.2 frontier/native Settle and independent specialization option migration now
 passes 1098 directed CPU FP64/FP32 tests (182.07s), build/test exit0. Changes:
@@ -16,20 +16,15 @@ semantic replay remains the training baseline; defaults unchanged. Source was
 frozen throughout the gate. Raw source archive/development/build and terminal
 audit: artifacts/frontier-options-dev-20260923-a/. Unit
 `tide-frontier-options-dev-20260923-a` inactive/dead, MainPID0/exit0; no descendants.
-These coherent implementation/tests/docs changes are ready for local commit.
+S3.2 implementation committed as4a2c366; clean stage3 gate remains.
 
-Active job: `tide-foundation-stage2-20260923-a`, source70809fd in clean read-only
-/var/tmp/zlong-graph-execution-foundation/qualification/foundation-stage2-70809fd.
-MainPID126713 last observed; background.slice/Nice10, build2/ATen-BLAS1;
-RuntimeMaxSec3600. Immutable driver artifacts/qualify_foundation_stage2.py runs
-scripts/build.py then scripts/verify.py --device cpu --dtype both. Output:
-artifacts/foundation-stage2-20260923-a/{status.json,pipeline.json,build/,
-full-cpu/result.json,full-cpu/tests.log}; launch foundation-stage2-launch.json.
-Do not modify its source/build/driver. No benchmark overlaps. Check terminal
-unit, actual exits, process cleanup, source hashes against Git archive and all
-binary hashes, then commit reviewed S2 evidence separately.
+Stage2 clean qualification finished:7167 passed/933.90s, build/test exit0.
+70809fd frozen source, all459 source hashes and every binary audited.
+Unit tide-foundation-stage2-20260923-a inactive/dead, MainPID0/exit0; no descendants.
+Reviewed evidence: docs/evidence/foundation-stage2.md; raw artifacts and frozen
+worktree retained at the paths in that report. No active job remains.
 
-Next bounded increment after S3.2 commit: add explicitly named ungated DeltaRule
+Current uncommitted increment: add explicitly named ungated DeltaRule
 (existing delta is Gated DeltaRule; preserve it), deterministic model-style
 layout/norm/explicit-position/RoPE/mask/cache adapter and formula/chunk/VJP tests.
 Cross-graph QKV/output physical projection strides need owner/update coverage;
