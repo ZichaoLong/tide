@@ -30,9 +30,15 @@ no remaining processes. Source snapshot qualification/modules-dev-20260923-a;
 artifacts/modules-dev-20260923-a has source archive, development manifest,
 terminal-inspection.json and logs. Its independent build remains immutable.
 Ungated delta-rule-v1, physical same-fiber projection strides, scalar-policy
-fallback counters and the tiny RMSNorm/RoPE/GQA/SwiGLU model adapter are ready
-for local commit. Module adapter first Python-only gate12 passed/3.36s.
-No long verification job is active; S4 directed gate is next.
+fallback counters and the tiny RMSNorm/RoPE/GQA/SwiGLU model adapter committed as1a982a1. Module adapter first Python-only gate12 passed/3.36s.
+S4 directed gate is launching: tide-training-dev-20260923-a, frozen dirty
+snapshot qualification/training-dev-20260923-a at1a982a1 plus S4 edits. It reuses
+the terminal immutable modules-dev build after verifying C++/binary hashes.
+Output artifacts/training-dev-20260923-a. develop.py --reuse-build tests:
+foundation_training, checkpoint_process, checkpoint_ownership, cpp_optimizer,
+cpp_checkpoint, checkpoint_io. Both CPU dtypes, threads1, RuntimeMaxSec1800.
+Check actual unit/status/log/exit before accepting. Main-tree work may continue;
+do not modify the snapshot, reused build or its sources.
 
 Additional uncommitted S4 tests: foundation_training.py/test_foundation_training.py
 compare three updates (SGD, momentum, AdamW eps1e-5), all six classes, native

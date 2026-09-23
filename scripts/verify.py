@@ -48,7 +48,8 @@ if Path(_tide_native.__file__).parent.resolve() != build:
 out = Path(args.output_dir).resolve()
 out.mkdir(parents=True, exist_ok=False)
 binary = Path(_tide_native.__file__)
-command = [sys.executable, "-m", "pytest", "tests", "-q", "--dtype", args.dtype]
+command = [sys.executable, "-m", "pytest", "tests", "-q", "--dtype", args.dtype,
+           "--basetemp", str(out / "test-tmp")]
 manifest = {
     "source": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip(),
     "dirty": subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip(),
