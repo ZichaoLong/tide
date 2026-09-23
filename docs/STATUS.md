@@ -7,17 +7,27 @@ Stage1 scope/matrix audit and twelve-config performance freeze are accepted;
 and [capabilities](execution-capabilities.md) distinguish existing verified
 kernels from required gaps. Previous PDG/LH tuning is closed; defaults remain.
 
-Next bounded increment S2.1: implement standalone C++ SettleGraph construction,
-encoding, model alias mapping, input clocks and complete-boundary projection;
-reuse native frontier. Add standalone FP64/FP32 forward/VJP and directed parity,
-malformed spec/cut and ownership tests. Then S2.2 independent ring/diamond/layered.
-No native checkpoint reimplementation and no new wide tuning are queued.
+S2.1 native SettleGraph is implemented: independent C++ graph/rank validation,
+encoded boundary construction, owner-preserving model mapping, dense-window
+entry and complete-boundary projection. The binding is an adapter; standalone
+C++ requires no Python. Directed development gate passed230 CPU FP64/FP32
+checks in23.26s, including standalone literal-formula/VJP and complete native vs
+Python traces, slots, ownership and chunk cuts. This is not the final full gate.
 
-No active job. No pre-existing uncommitted work. Current edits are the stage1
-ROADMAP/capability/evidence/config freeze and this handoff, ready for review and
-local commit. Check git status/log on re-entry for exact current source. Original
-implementation at entry is recorded in the scope evidence. Do not push or use
-sub-agents. LH/fractal-latcarf/ObsidianVault remain read-only.
+Terminal unit tide-native-settle-dev-20260923-a: inactive/dead, MainPID0,
+ExecMainStatus0/Result=success; status.json and development.json both passed.
+Source is stage1 e3ffad0 plus archived implementation (tree SHA256 in records).
+Artifacts: artifacts/native-settle-dev-20260923-a/{source.tar.gz,status.json,
+development.json,task.log,live-inspection.json,terminal-inspection.json}.
+No active job. Current uncommitted changes are this coherent S2.1 code/tests/docs,
+ready for local implementation commit. No user changes were overwritten.
+
+Next: commit implementation, create a detached clean read-only worktree, build
+`tidegraph-settle-check` with TIDE_PYTHON_BINDINGS=OFF in a separate build directory,
+run FP64/FP32 and audit binary dependencies; commit reviewed evidence separately.
+Then S2.2 independent multi-node ring, diamond with region selection, and Python
+layered SettleGraph. Keep full CPU gate for the stage boundary. No new wide runs.
+No push/sub-agents. All reference repositories remain read-only.
 
 Commands before continuing (also after compaction):
 ```bash

@@ -15,6 +15,7 @@
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
+void bind_settle(py::module_&);
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name, &T::name)
 PYBIND11_MODULE(_tide_native, m) {
@@ -180,5 +181,6 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Specialized>(m, "Specialized").def(py::init<Graph, Model, Options, std::string>())
     .def("run", &Specialized::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);
+  bind_settle(m);
 }
 #undef FIELD

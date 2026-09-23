@@ -9,7 +9,7 @@ semantic parity, not optimized backward; packed state/Read/Full replay remains.
 ## Graph × schedule × option × mode
 
 P = PDG, D = TimedDAG, S = encoded SettleGraph. D/S streaming use ordinary PDG
-kernel and preserve their legal topology. Native S construction is S2.1 pending.
+kernel and preserve their legal topology. Native S construction is implemented in `settle.h`; clean standalone gate is pending.
 "verified" refers to the existing bounded modules/tests below, not every custom
 program. Infer/train entries share values; training uses scalar semantic replay.
 

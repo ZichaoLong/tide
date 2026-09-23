@@ -82,6 +82,7 @@ class Native:
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
         core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
+        self.weights = m  # Tensor-preserving model record for other native clients.
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace
         options.mode, options.zeta = mode, zeta

@@ -113,8 +113,10 @@ standalone `optimizer.h`/`optimizer.cpp` layer applies CPU FP32/FP64 SGD and
 AdamW without Python callbacks. The native `checkpoint.h` layer uses separate
 codec, preflight and publication files to persist named values and built-in
 optimizer state in `TIDENCK1` schema v1; it has no Python-file interoperability
-or graph-continuation responsibility. SettleGraph construction and embedding
-are still a Python frontend that emits an ordinary compiled `Graph`.
+or graph-continuation responsibility. SettleGraph construction and embedding have independent Python (`settle.py`)
+and native (`settle.h`, `settle.cpp`, `settle_projection.cpp`) frontends. The
+native entry owns a compiled rank-aligned encoding and reuses Frontier;
+`bind_settle.cpp` is only its client/test adapter.
 
 ## Module boundaries
 

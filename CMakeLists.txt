@@ -15,7 +15,7 @@ add_library(tidegraph STATIC
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
-  cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp
+  cpp/src/block.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp
   cpp/src/kernel.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
   cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp)
@@ -26,6 +26,8 @@ separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(tidegraph PUBLIC ${TIDE_TORCH_FLAGS})
 add_executable(tidegraph-smoke cpp/src/main.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph)
+add_executable(tidegraph-settle-check cpp/test/settle.cpp cpp/src/runtime.cpp)
+target_link_libraries(tidegraph-settle-check PRIVATE tidegraph)
 add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp cpp/src/runtime.cpp)
@@ -46,6 +48,6 @@ option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
   find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp)
+  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()
