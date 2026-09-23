@@ -1,19 +1,17 @@
 # Current handoff
 
 Updated: 2026-09-23 (Asia/Shanghai). Branch: graph-execution-foundation.
-The standalone C++ named-owner/optimizer implementation is committed at
-5c440e1, with the native region-name fix at 9aef27a. The native `TIDENCK1`
-value-checkpoint implementation is committed at 4325bb1 and has passed clean
-frozen qualification; see evidence/cpp-native-checkpoint.md. The prior
-token-bundle, integer-coordinate and durable-record qualification remains
-complete.
-The latest user explicitly authorized local performance experiments and clarified
-that historical 8.8B/8.5B sizes/times are references, not strict targets. New
-standalone original-LH preparation/build/timing tools and bounded local
-experiments are complete: five small harness checks and eight large cases
-passed. See [local scale evidence](evidence/lh-local-scale-pilot.md). Large matched numerical checks remain unmeasured. The user now prioritizes
-graph-only comparable-scale PDG Attention timing with random weights, without
-waiting for a weight-preserving importer.
+The latest authorized increment is complete: configurable native same-fiber
+Attention `exact|single`, default exact, with full CPU regression, a refreshed
+portable source kit and a bounded 17.27B same-binary performance comparison.
+See [the policy and API](attention-packing-policy.md) and
+[reviewed evidence](evidence/attention-packing-policy.md).
+
+The overall objective remains Python/LibTorch generic and independent specialized
+PDG/TimedDAG/SettleGraph execution, complete training/inference equivalence,
+sparse streaming/prefill performance, and LH inference inclusion. Its full
+acceptance matrix and remaining scope live only in [ROADMAP](ROADMAP.md).
+Historical 8.8B/8.5B numbers are references, not strict performance targets.
 No push; no sub-agents. LH/fractal-latcarf/ObsidianVault are read-only.
 Run git status and scripts/status.py on re-entry, then follow this file.
 
@@ -24,6 +22,7 @@ Source and scope are separate for each report:
 
 | Scope | Clean source | Result / evidence |
 | --- | --- | --- |
+| Complete CPU regression, exact/single fiber policy and refreshed portable kit | 9e950bfbb7ceee6a5105d7978c0419aab6877859 | 6553 tests/745.74s; fresh relocated LH/PDG smokes; fixed 17.27B pair; evidence/attention-packing-policy.md |
 | Portable paired LH/PDG CPU source kit | dd024e6f1d57153c22ab7cef2762d059cbd3ac7d | 18 directed tests; 3 fresh relocated native builds/runs and numerical anchors; evidence/cpu-comparison-kit.md |
 | Complete CPU regression plus optional canonical streaming optimizations | da5a17bdbda1196fb32e2352fba9aa3b95e6dde3 | 6459 tests / 716.61s; evidence/pdg-streaming-optimization.md |
 | Complete CPU regression, two-clock checkpoint and strict coordinates | 69ca37900e9c10d3fca95570ea1ebca8f9079f46 | 6233 tests / 665.45s; evidence/token-checkpoint-coordinates.md |
@@ -55,119 +54,99 @@ Both results have source/terminal audits. No C++/original-LH oracle changed.
 
 ## Next action
 
-Active user-authorized increment: implement independent same-fiber Attention
-packing policy exact|single, default exact. Single flattens queries into one
-padded node-local batch while preserving event visibility/decay/clear. Keep
-QKV/output batching and existing compact persistent state/pooling semantics.
-Expose through the immutable C++ fiber-kernel factory, Native adapter, scale
-CLI and portable run_pdg.py; keep graph/checkpoint identity unchanged.
-Development complete: attention-dev-20260923-092415 built successfully;
-402 passed and4 failed/99.55s, all four failures were the new test's mistaken
-AdvanceResult->Result reconstruction. Corrected new-file repeat:80 passed/13.27s
-against the identical compiled C++ hash; record artifacts/attention-single-retest.json.
-The other326 directed tests passed. Both development units are terminal/failed;
-retain their logs and source archives. Earlier attention-dev-20260923-092147
-failed compilation from a missed private constructor call; that fix is tested.
-Next: commit implementation, freeze clean source, then run fresh build, complete
-CPU FP64/FP32 regression, exported/relocated LH and PDG-single smoke, and fixed
-wide exact/single pair (D2048/B512/12steps/warmup4, workers160, intra-op1,
-CPUs160–319, at most1024GiB address space per native process). No active job.
-Fixed pending driver: artifacts/qualify_attention_policy.py. Fresh packet will
-replace the old kit only as a new separately identified artifact; preserve both.
-Use /home/zlong/anaconda3/bin/python with backend autoload disabled. No reference
-repository edits, no push, no sub-agents. Full initial baseline is eebd877.
-The existing portable kit remains qualified at dd024e6; see
-[its evidence](evidence/cpu-comparison-kit.md). Retain its archive and logs;
-the new policy will need a newly exported packet after qualification.
+No job is active and no additional run is required for this increment. Runtime
+implementation is committed at 9e950bfbb7ceee6a5105d7978c0419aab6877859;
+the reviewed evidence and this handoff are committed separately. Source identity,
+graph/checkpoint versions and default behavior remain explicit in the report.
 
-The earlier user-approved LH–PDG operator-work comparison is complete.
-Implementation source f0c31bef864af0ccdfa82afc1889c686890fbca6; authority tide-core-3.
-Optional inference counters, original-LH preparation instrumentation and small
-parity tooling are documented in [operator-work.md](operator-work.md).
-[Reviewed evidence](evidence/lh-pdg-operator-work.md) has commands, units and limits.
+The portable archive now includes `--attention-packing exact|single`. To test on
+the user's Intel server, copy and extract the new archive, then run sequentially
+from its cpu-attention-compare directory in the target Torch environment:
 
-Development81 tests/47.55s, frozen directed repeat81/48.62s, both FP64/FP32.
-Original LH small D16/B4/V257 six-token counted/uncounted complete logits match;
-serial/4-thread outputs and all counts pass. The previous full6459-test CPU
-regression remains scoped to da5a17b; this increment ran the directed gate.
+```bash
+python run_pdg.py --device cpu --threads 56 --attention-packing exact --output-dir runs/pdg-exact
+python run_pdg.py --device cpu --threads 56 --attention-packing single --output-dir runs/pdg-single
+python run_lh.py --device cpu --threads 56 --output-dir runs/lh-wide
+```
 
-Fresh wide pair:17.27B/D2048/B512/V50304/FP32/no_grad, 12 tokens/warmup4,
-seed7/fixed IDs, same four CSR blocks and independent weights. Means for4–11:
-LH24.69385ms/sample-token; PDG28.44610ms (+15.1951%). Matrix FLOPs differ
-only0.00846%; all linear projections differ0.06748%. Body selections both32
-per sample-token. Boundary-adjusted Emit differs0.01325%. Attention padding:
-LH1.80835× vsPDG1.0×, but PDG attention calls6.258× as many. This establishes
-comparable matrix work, not exact whole-model function equality or pure dispatch
-cost. It does not establish an improvement over the earlier PDG timing.
+Use new output directories, common affinity and optionally `--smoke` first.
+No commit checkout or original LH source is needed. Commands/configuration:
+[tools/cpu_compare/README.md](../tools/cpu_compare/README.md).
+Intel x86_64 remains unverified locally. Do not repeat the completed wide pair
+without a new measurement question. Follow the M8 section of ROADMAP for the
+next bounded performance work: pooling, temporary KV movement and allocation;
+longer context, repetitions, narrow shape and training remain separate scopes.
 
-Unit tide-operator-work-20260923-0300 passed/exit0, inactive/dead, MainPID0;
-all6 stages and five portable run records passed. Records:
-artifacts/operator-work-20260923-0300/ (status.json, pipeline.json, per-stage logs,
-small/wide prepared LH copies, lh-small-parity/, lh-wide/, pdg-wide/, analyze.py,
-analysis.json, post-run-audit.json). Fixed driver:
-artifacts/operator-work-runner-20260923-0300.py. Immutable source:
-/var/tmp/zlong-graph-execution-foundation/qualification/operator-work-20260923-0300.
-PDG copied build matches its C++ hash; original development build metadata is
-retained (not a fresh clean compile). LH was freshly compiled. Source, binaries,
-inputs and flow identities passed audit. All12 PDG model/work/checksums match
-prior uncounted optimized output; full-state equality is a small-test claim.
-Trackio best-effort/degraded (unavailable); local records are complete.
-CPUs160–319, at most160 active workers per phase, 1280GiB address-space bound.
-Preserve failed work-dev-20260923-0252 (fixed test brace), and the two repaired
-analysis preflight failure records. No reference repo was modified; no push.
+## Latest completed qualification
 
-Next bounded M8 investigation: measure/update data layout, tensor allocation
-and attention bucket/call costs in Aggregate/State/Read and Next/Full/Emit.
-Current update7.05349s +Full5.96256s per batch-token dominate timing. Consider
-coarser attention packing only with independent complete-state/VJP anchors;
-more padding may reduce small operator calls. This is a hypothesis, not a
-measured optimization. Wide counter timing overhead, repetitions, longer context,
-narrow shape and training performance remain unmeasured. Do not repeat the
-completed comparison without a new hypothesis. Weight-preserving import is a
-separate exact-inference objective; broader goals stay in ROADMAP.
+Unit tide-attention-policy-20260923-093207 passed / exit 0; all 12 driver stages
+passed. Terminal audit observed inactive/dead, MainPID 0, Result=success,
+ExecMainStatus 0, agreeing with persistent status/pipeline. Finished 02:05:21Z.
 
-Earlier optimized source da5a17b and its complete6459-test gate remain retained
-in artifacts/pdg-opt-20260923-0100/ and evidence/pdg-streaming-optimization.md.
-Older failed narrow/grad pilots remain failed in their evidence and records.
+- Frozen source: `/var/tmp/zlong-graph-execution-foundation/qualification/attention-policy-20260923-093207`.
+- Records: `artifacts/attention-policy-20260923-093207/`: status.json,
+  pipeline.json, full-cpu/, kit-pdg/, kit-lh/, wide-exact/, wide-single/,
+  analysis.json, post-run-audit.json, export/ and relocated kit with spaces/.
+- Fixed driver: `artifacts/qualify_attention_policy.py`; audit:
+  `artifacts/audit_attention_policy.py`. Exact argv/cwd are in the job/run records.
+- Current archive: `artifacts/attention-policy-20260923-093207/export/cpu-attention-compare.tar.gz`,
+  384753 bytes; SHA256
+  `b45ab7b2fdb18b032f44382c2a5074377adcff854343c83839aacff7efc3b6c5`.
+- Inspection: `/home/zlong/anaconda3/bin/python scripts/status.py` and
+  `cat artifacts/attention-policy-20260923-093207/post-run-audit.json`.
 
-## Latest terminal jobs and retained source
+Fresh CMake build; 6553 CPU FP64/FP32 tests/745.74s. Relocated PDG-single and LH
+fresh builds and six-token smokes pass, with complete small PDG state checks
+and exact LH full-logit agreement with the prior anchor. All 428 frozen tracked
+files match Git archive; 11 build hashes, 244 packet files, prepared source and
+binary hashes, archive/manifest and four run records pass the terminal audit.
 
-Both large pilot jobs passed with exit 0; systemd inspection found inactive/dead,
-MainPID 0, Result=success. Persistent status.json and all case exit codes agree:
+The new pair uses 17,269,426,339 parameters, D2048/B512/V50304, FP32/no_grad,
+12 tokens/warmup 4, seed 7/fixed IDs, workers/head-workers 160 in separate phases,
+ATen/OpenMP/BLAS/inter-op 1. Exact 29.35656 versus single 31.53019 ms/sample-token:
+single is 7.4042% slower in this one short-window run. Attention calls fall
+5769.25→921.625 per batch-token (84.0252% fewer); score padding 1→1.80757;
+peak RSS 109.51699→114.45406 GiB. All other model/work/operator inventories match
+for all 12 tokens. Output-sum difference≤0.00561374 is only a checksum observation;
+complete value/state/route/VJP equivalence is established by the small tests.
+The prior exact run's inventories/checksums are unchanged. Keep default exact.
 
-- `tide-lh-scale-pilot-20260922-0730`, finished 2026-09-22T07:35:40Z.
-  Records: `artifacts/lh-scale-pilot-20260922-0730/`.
-  Frozen source a7edf44: qualification/lh-local-20260922 under the local parent.
-- `tide-lh-window-threads-20260922-0740`, finished 2026-09-22T07:41:15Z.
-  Records: `artifacts/lh-window-threads-20260922-0740/`.
-  Frozen wrapper 9548be6: qualification/lh-local-threads-20260922.
-  Contains analyze.py, comparison.json, record-validation.json and
-  post-run-audit.json; both clean trees match all 365 tracked Git-archive files,
-  and binary/snapshot/input hashes match. All eight run records validate.
+Wide affinity 160–319, 1024 GiB address-space and 1200s bounds per native process;
+service 7200s, Nice10/background.slice, 4 build jobs. Trackio best-effort/degraded
+(unavailable); all local records complete. This does not establish a general
+speedup, optimized backward, long-context result or new LH–PDG timing comparison.
 
-The native binary is retained at
-`/var/tmp/zlong-graph-execution-foundation/build-lh-local/tide-lh-bench`.
-Prepared inputs: `artifacts/lh-local-{wide,narrow}-input-20260922-0720/prepared/input.json`.
-Build/input preparation and all five smoke jobs passed; identities and logs are
-in the linked evidence. No full Tide regression rerun was needed for this
-separate harness/docs increment; the complete baseline remains scoped above.
+## Retained prior evidence
 
-Brief observations (FP32/batch512/56 physical cores): wide2048/narrow128
-actual parameters 9.468B/9.025B; nograd steps4–11 mean 6.096/16.109 ms/token.
-Aligned steps1–3 grad-forward versus nograd time ratios are 1.072x/5.068x.
-BLAS1 versus BLAS56 steps4–7 ratios are 1.009x/0.895x. This is a single-seed,
-single-repetition Add workload, not attention or full-scale backward timing.
-Grad windows are short and retained continuously. Aggregate counts/logit sums
-match in the aligned comparisons; they do not prove complete large-model parity.
-Trackio was best-effort/degraded because it is not installed; local data are complete.
+The original portable kit remains retained under artifacts/cpu-kit-20260923-0345/
+and its [evidence](evidence/cpu-comparison-kit.md), including the standalone
+Python-without-Torch discovery check. Deliver the new archive above for the
+packing option; do not overwrite or relabel the old packet.
 
-Earlier qualification and failure artifacts remain retained and are referenced
-by their evidence reports. Old training/LH qualification worktree cleanup is
-recorded in /var/tmp/zlong-graph-execution-foundation/qualification-worktree-cleanup.json.
-No cleanup was needed for this increment. Keep current cited snapshots,
-inputs, binaries and records; inspect a fresh dry run before any deletion.
+The prior [LH–PDG work comparison](evidence/lh-pdg-operator-work.md) remains
+scoped to f0c31be: LH 24.69385 versus PDG 28.44610 ms/sample-token, matrix work within
+0.00846%, independent weights and one short window. Records and its source
+remain in artifacts/operator-work-20260923-0300/ and the corresponding
+qualification directory. It is not a contemporaneous baseline for the new pair.
+The earlier optional [streaming optimizations](evidence/pdg-streaming-optimization.md)
+and complete 6459-test gate remain in artifacts/pdg-opt-20260923-0100/.
+
+Older local LH pilots and terminal/failed cases remain referenced by
+[local scale](evidence/lh-local-scale-pilot.md),
+[original Attention reproduction](evidence/lh-portable-repro.md), and
+[PDG scale evidence](evidence/pdg-scale-attention.md). Their exact source,
+commands, units, binaries and artifact locations belong to those reports.
+No cleanup was needed here. Keep currently cited snapshots and failure
+reproducers; inspect a fresh dry run before removing project-owned artifacts.
 
 ## Numerical boundaries and retained failures
+
+The two development jobs remain failed: attention-dev-20260923-092147 had a
+missed private constructor call; attention-dev-20260923-092415 built and had
+402 passed/4 failed because the new test reconstructed AdvanceResult as the
+wrong result record. The corrected 80-case test file passed/13.27s against the
+same C++ binary (artifacts/attention-single-retest.json). The clean full gate
+covers both fixes. Preserve both failed logs and archived source snapshots.
 
 Training uses AdamW epsilon 1e-5 explicitly. Default 1e-8 FP32 packed attention
 amplified tiny gradients beyond the unchanged strict tolerance; keep

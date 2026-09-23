@@ -137,6 +137,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/pdg-streaming-optimization.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "9e950bfbb7ceee6a5105d7978c0419aab6877859",
+          "scope": "6553 CPU FP64/FP32 regression checks after a fresh build; native exact/single fiber policy, VJPs, shared updates and checkpoint policy changes; fresh relocated CPU kit smokes and fixed FP32 17.27B no_grad pair; no PyTorch single kernel or x86_64 claim",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; fixed kit and wide commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/attention-packing-policy.md"
         }
       ]
     },
@@ -244,6 +259,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/pdg-streaming-optimization.md"
+        },
+        {
+          "date": "2026-09-23",
+          "commit": "9e950bfbb7ceee6a5105d7978c0419aab6877859",
+          "scope": "6553 CPU FP64/FP32 regression checks after a fresh build; native exact/single fiber policy, VJPs, shared updates and checkpoint policy changes; fresh relocated CPU kit smokes and fixed FP32 17.27B no_grad pair; no PyTorch single kernel or x86_64 claim",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "workload"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --output-dir artifacts/NEW; fixed kit and wide commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/attention-packing-policy.md"
         }
       ]
     },

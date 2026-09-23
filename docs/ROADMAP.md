@@ -177,13 +177,16 @@ and a fresh12-token wide pair. Major matrix arithmetic differs0.00846%; measured
 LH24.69385 versus PDG28.44610ms/sample-token (+15.2%). Boundary-adjusted Emit
 is within0.014%. PDG exact attention buckets make6.258× more attention calls,
 while saving a small fraction of total matrix arithmetic. The user-authorized
-[exact/single packing option](attention-packing-policy.md) is implemented and
-under directed development validation; clean full CPU qualification, refreshed
-portable kit and the fixed wide same-binary comparison are next. Next investigate
-bucket/call count, tensor allocation and projection layout with controlled
-small parity anchors; no specific speedup is established yet. Profile and improve these costs while
-preserving complete small semantics and fixed large work counters. Component
-ablations, longer contexts, narrow scale and training performance remain pending.
+[exact/single packing option](attention-packing-policy.md) is now
+[verified](evidence/attention-packing-policy.md): 6553 CPU FP64/FP32 tests, fresh
+relocated kit builds and a same-binary 17.27B pair. Exact 29.35656 versus
+single 31.53019 ms/sample-token: single was 7.4% slower in this one short-window
+run despite 84% fewer groups, with 1.808× score padding and 4.937 GiB more peak RSS.
+Keep exact as the default. Next investigate per-event pooling, temporary KV
+movement, tensor allocation and projection layout with controlled small parity
+anchors; grouping alone has not established a speedup. Preserve complete small
+semantics and fixed large work counters when profiling or improving these costs.
+Component ablations, longer contexts, narrow scale and training performance remain pending.
 OPENBLAS_NUM_THREADS=1 does not imply an effective single-thread OpenMP BLAS. Preserve small semantic anchors and rerun
 the same token window after each bounded optimization. Weight-preserving imports remain a separate exact-inference goal.
 Do not repeat completed LH pilots unless a new comparison requires it.

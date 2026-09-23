@@ -25,10 +25,14 @@ Floating-point tensor equality uses the existing FP64/FP32 tolerance; routes,
 identities and gradient presence must match exactly.
 
 `single` can reduce dispatch at the cost of padding and temporary repeated KV.
+For M participating owners, Q real queries and maximum KV length L, padded
+owner KV scales as M×L×D; each gathered K or V scales as Q×L×D, besides the
+Q×H×L scores. Exact buckets reuse each owner's KV across its queries. This
+memory difference matters when local caches or per-owner query counts grow;
+the number of global tokens alone does not predict it.
 It does not imply LH's reserved in-place cache or CSR pooling. No automatic
-selection or coarse interval buckets are implemented. Global token length does
-not determine local KV length. A single-policy speedup, if measured, is scoped
-to its workload and host.
+selection or coarse interval buckets are implemented. Performance conclusions
+remain specific to the measured workload and host.
 
 ## API and CLI
 
@@ -65,5 +69,7 @@ attention group and preserves all useful/projection work while counting padded
 scores. Native factory validation and multi-event counts are also exercised.
 Counters include all computed padded scores, including masked future scores
 inside prefill. `max_state_batch` continues to count participating owners.
-Full qualification and workload results must be reported against frozen source;
-implementation alone is not a performance or target-platform claim.
+The clean [qualification and fixed workload report](evidence/attention-packing-policy.md)
+covers 6553 CPU FP64/FP32 tests, relocated kit builds and a same-binary 17.27B
+pair. In that single short-window run, `single` was 7.4% slower despite 84% fewer
+attention groups. No general speedup or x86_64 verification is claimed.
