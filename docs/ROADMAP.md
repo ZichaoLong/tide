@@ -153,3 +153,11 @@ Aggregate/state/Read VJP costs, or measure complete training-step memory/time;
 then consider independent packed VJPs, respecting undefined-cotangent contracts.
 Do not repeat this Full sweep without a new question. Earlier resource bounds,
 independent anchors, honest failure records and three-repeat gain checks apply.
+
+## Active follow-up: remaining grad-forward costs
+
+User authorized on 2026-09-24: profile Full-batched Aggregate/state/Read,
+choose one measured candidate, preserve default replay and isolated VJP roots,
+then measure small backward/optimizer/train-step and repeated wide Add if the
+cost probe supports it. No new topology sweep or default-policy promotion.
+Existing half-CPU/half-memory bounds apply. Diagnostic entry:31 directed tests.

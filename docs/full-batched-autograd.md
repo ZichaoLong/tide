@@ -80,3 +80,12 @@ D2048/B512, three independent optimized processes, and one fresh same-binary
 replay control alongside the retained three-repeat baseline. Source/build,
 resources, raw metrics, terminal status and remaining limits belong in the
 reviewed report; STATUS holds its current completion state.
+
+## Forward diagnostics
+
+The native scale executable and PDG comparison runner permit `--work-count 1`
+and `--operator-profile 1` with grad-forward. Counts include numeric execution
+and any semantic replay; they are not unique logical work or backward FLOPs.
+Replay timers sum calling-thread elapsed time and must not be added to wall
+latency. Use a separate uninstrumented process for performance comparisons.
+LH's grad-forward diagnostic restriction remains unchanged.

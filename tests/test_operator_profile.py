@@ -45,7 +45,7 @@ def test_profiling_preserves_outputs_state_and_work(dtype, workers, packing, tmp
                     assert value <= on[key.replace('_max_seconds', '_worker_seconds')]
 
 
-@pytest.mark.parametrize('extra', [['--grad', '1'], ['--packed', '0'], ['--emission', 'slot']])
+@pytest.mark.parametrize('extra', [['--packed', '0'], ['--emission', 'slot']])
 def test_rejects_uncovered_profile(extra, tmp_path):
     graph = tmp_path/'graph.txt'; topology(graph)
     out = tmp_path/'out'

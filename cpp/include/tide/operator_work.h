@@ -1,6 +1,7 @@
 #pragma once
 // Optional process-wide forward accounting. Enable/reset/snapshot only with
-// workers quiescent. One measured executor per process; no backward/replay claim.
+// workers quiescent. One measured executor per process. Grad-forward includes
+// numeric calls AND semantic replay; counts are not unique logical work or backward.
 // No tensor reads or callbacks; clocks only when replay accounting is enabled. FMA counts as 2 FLOPs.
 #include <array>
 #include <atomic>

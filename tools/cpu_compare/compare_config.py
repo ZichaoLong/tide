@@ -77,8 +77,8 @@ def parse(engine):
     a = p.parse_args()
     if a.work_count is None:
         a.work_count = int(a.mode == 'nograd')
-    if a.mode == 'grad-forward' and (a.work_count or a.operator_profile):
-        p.error('grad-forward requires work-count=0 and operator-profile=0')
+    if engine == 'lh' and a.mode == 'grad-forward' and (a.work_count or a.operator_profile):
+        p.error('LH grad-forward requires work-count=0 and operator-profile=0')
     if engine == 'pdg' and a.memory == 'add' and (a.attention_packing != 'exact'
             or a.fiber_pooling != 'event' or a.fiber_cache != 'cloned'
             or a.projection_layout != 'input' or a.attention_layout != 'event'):

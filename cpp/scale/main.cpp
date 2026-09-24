@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
       std::cout << "  --full-autograd replay|batched --parallel-regions 0|1 --compact-events 0|1\n";
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
-      std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n"
+      std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed forward, including grad replay)\n"
                    "  --memory attention|add (all-softmax, tick-repeat decay)\n";
       std::cout << "  --fiber-pooling event|csr --fiber-cache cloned|owned --projection-layout input|linear\n"
                    "  --attention-layout event|head --defer-state-release 0|1 (requires compact events)\n"

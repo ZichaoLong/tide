@@ -38,7 +38,7 @@ def test_work_counts_match_shapes_and_schedules(dtype, tmp_path):
                 assert serial[key] == packed[key] == parallel[key], key
 
 
-@pytest.mark.parametrize('args', [['--grad', '1'], ['--emission', 'slot']])
+@pytest.mark.parametrize('args', [['--emission', 'slot']])
 def test_work_count_rejects_uncovered_execution(args, tmp_path):
     graph = tmp_path/'graph.txt'; topology(graph)
     run = subprocess.run([str(binary()), '--device', 'cpu', '--topology', str(graph),

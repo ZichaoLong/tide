@@ -71,10 +71,10 @@ Config parse(int argc, char** argv) {
     throw std::invalid_argument("deferred state release requires compact events");
   if ((c.packed_sources || c.batch_next) && !c.packed)
     throw std::invalid_argument("packed transport requires packed Streaming");
-  if (c.operator_profile && (c.grad || !c.packed || c.emission != "row"))
-    throw std::invalid_argument("operator profiling supports packed inference row Emit only");
-  if (c.work_count && (c.grad || c.emission != "row"))
-    throw std::invalid_argument("work accounting supports inference row Emit only");
+  if (c.operator_profile && (!c.packed || c.emission != "row"))
+    throw std::invalid_argument("operator profiling supports packed row Emit only");
+  if (c.work_count && c.emission != "row")
+    throw std::invalid_argument("work accounting supports row Emit only");
   if (c.check && (c.width > 64 || c.batch > 8 || c.steps > 12))
     throw std::invalid_argument("full traced check is restricted to small shapes");
   return c;

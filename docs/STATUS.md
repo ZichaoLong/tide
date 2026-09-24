@@ -1,7 +1,11 @@
 # Current handoff
 
 Updated:2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
-**Requested PDG grad-forward optimization COMPLETE. No live task job remains.**
+**Active follow-up: profile grad-forward with Full batched, then implement one
+measured Aggregate/state/Read optimization and check full training cost.**
+Diagnostic gate:31 tests passed/55.54s in grad-profile-dev-20260924-b.
+-a is retained failed (wrong pytest path, successful build). Next: freeze this
+source and run artifacts/run_grad_update_profile.py; no live job yet.
 No push, subagents or reference-repository writes. STATUS is the sole handoff;
 ROADMAP is the sole backlog; semantics.md is the canonical local contract.
 
@@ -59,12 +63,16 @@ git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
 
-No further heavy experiment is queued. Suggested next bounded question:
-attribute remaining Aggregate/state/Read replay or measure complete backward/
-optimizer/train-step cost before optimizing another layer. Keep simple oracles,
+User authorized the follow-up on 2026-09-24. First enable existing worker timers
+for grad-forward diagnostics (the CLI currently rejects them), profile with
+Full batched, then choose one measured optimization and retain replay as oracle.
+Add small complete-training timing and repeated wide Add validation if beneficial. Keep simple oracles,
 explicit options, source isolation, failure records and coherent local commits.
 No whole-foundation restart. Read ROADMAP for extensions and resource bounds.
 Python:/home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1,
 TORCH_DEVICE_BACKEND_AUTOLOAD=0, correctness pools1/build2. Resource limits remain
 half effective CPU/memory and at most8 Ascend cards for a separately requested
 extension. Reference LH, fractal-latcarf and ObsidianVault are read-only.
+
+Diagnostic gate -a built successfully but selected a nonexistent test file.
+Retain its failed record; -b reuses the verified build with the corrected path.
