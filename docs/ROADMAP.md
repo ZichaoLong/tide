@@ -4,7 +4,8 @@ This is the only backlog and stage acceptance index. STATUS owns the current
 handoff; semantics owns the contract. The six-stage acceptance scope was frozen
 on 2026-09-23 and is now complete; [final qualification](evidence/foundation-final.md)
 is the delivery report. No unit of that acceptance version remains pending;
-the separately authorized cross-family extension below is now active. Historical
+the separately authorized cross-family extension below is also complete.
+Historical
 M0–M8 evidence remains indexed by architecture.md and Git history; its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
@@ -187,21 +188,21 @@ correctness coverage, not a new throughput claim. Resource/repeat limits above
 apply across graph families; acceptance stays closed.
 
 
-## Active extension: cross-family streaming and prefill policies
+## Completed extension: cross-family streaming and prefill policies
 
 Authorized 2026-09-24. This finite extension reuses the completed PDG performance
 policies in TimedDAG and SettleGraph, for streaming AND legal prefill. It does
 not reopen the original six-stage acceptance or remove any semantic roots.
-Defaults remain conservative. STATUS owns progress/next commands, this section
-owns the required remaining work. Historical foundation-v1 stays frozen.
+Defaults remain conservative. STATUS owns the current handoff, this section
+records the finite delivery. Historical foundation-v1 stays frozen.
 
 | Unit | Required result | Status |
 | --- | --- | --- |
-| E1 | Versioned option/capability and benchmark definitions: separate scheduler, kernel, model-layout and application-head policies; requested/resolved/fallback records; reject unsupported explicit requests | implemented; clean qualification pending |
-| E2 | Python independent chain/diamond and Settle layered/chain block schedules; retain scalar schedules; Python isolated Full/Aggregate batched VJPs; native streaming/frontier/specialized/native-Settle uptake and actual sequence/fallback counters | implemented; clean qualification pending |
-| E3 | CPU FP64/FP32 full-observable, isolated VJP, aliases/None/zero, optimizer/checkpoint/cut/detach/snapshot and prefill-to-streaming policy-switch tests; targeted combinations plus individual policies | directed1632 + final CLI7 passed; clean qualification pending |
-| E4 | Fixed bounded smoke/medium/large assessment below; separate prefill, streaming, transition, forward/backward/optimizer/whole-step timings and actual paths; explicit terminal failures/limits | planned |
-| E5 | Frozen clean independent build/gates, relocated export/rebuild/smoke, source/binary/result audit, reviewed evidence and coherent commits; no live task job | planned |
+| E1 | Versioned option/capability and benchmark definitions: separate scheduler, kernel, model-layout and application-head policies; requested/resolved/fallback records; reject unsupported explicit requests | verified: clean qualification and [cross-family audit](evidence/cross-family-qualification.md) |
+| E2 | Python independent chain/diamond and Settle layered/chain block schedules; retain scalar schedules; Python isolated Full/Aggregate batched VJPs; native streaming/frontier/specialized/native-Settle uptake and actual sequence/fallback counters | verified: clean qualification and [cross-family performance](evidence/cross-family-performance.md) |
+| E3 | CPU FP64/FP32 full-observable, isolated VJP, aliases/None/zero, optimizer/checkpoint/cut/detach/snapshot and prefill-to-streaming policy-switch tests; targeted combinations plus individual policies | verified: 8,577-test CPU gate, 60 relocated smoke variants, and [cross-family audit](evidence/cross-family-qualification.md) |
+| E4 | Fixed bounded smoke/medium/large assessment below; separate prefill, streaming, transition, forward/backward/optimizer/whole-step timings and actual paths; explicit terminal failures/limits | verified: [terminal performance assessment](evidence/cross-family-performance.md); one narrow Settle target timeout retained |
+| E5 | Frozen clean independent build/gates, relocated export/rebuild/smoke, source/binary/result audit, reviewed evidence and coherent commits; no live task job | verified: [qualification and audit](evidence/cross-family-qualification.md); unit inactive/dead |
 
 Coverage: PDG generic/specialized are regression baselines. TimedDAG generic
 Python/native: streaming, frontier, legal blocks and transition. TimedDAG
@@ -236,4 +237,6 @@ reset, repeats, failure retention and timing denominator rules apply.
 Completion requires E1-E5, real sequence batching where legal, independent
 reference/specialized schedules, passing mandatory correctness cells and an
 honestly terminal fixed performance assessment. Every option need not speed up.
-Documenting a mandatory implementation gap does not complete that unit.
+This extension is complete. The bounded narrow Settle target timeout is part of
+the delivery evidence; it leaves no live task and does not establish a general
+target-scale success claim.

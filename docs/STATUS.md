@@ -1,12 +1,13 @@
 # Current handoff
 
 Updated: 2026-09-25 (Asia/Shanghai). Branch: graph-execution-foundation.
-**Active: authorized cross-family streaming/prefill policy extension (E1-E5).**
+**Completed: authorized cross-family streaming/prefill policy extension (E1-E5).**
 The first clean qualification attempt is terminal failed; the second clean
 qualification job passed and its evidence is recorded below.
 Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
+There is no live task job.
 
 ## Current work and next action
 
@@ -70,13 +71,15 @@ The contract correction is present in the current worktree and its focused
 isolated-root gate passes 252 tests for FP32/FP64. The new clean qualification
 now passes; the old failure remains retained as historical evidence.
 
-Next: finish the fixed v2 large assessment, then audit the passing qualification
-and terminal performance records. Commit reviewed evidence separately. The
-medium tier is now terminal: **180/180 runs completed, 0 failed and 0 bounded
-stops**; its raw suite and summary remain under
-`artifacts/cross-family-performance-20260925-a/medium/`.
+E1-E5 are complete. The fixed v2 performance assessment is terminal and its
+reviewed evidence is [cross-family performance](evidence/cross-family-performance.md).
+The clean qualification and source/result audit are recorded in
+[cross-family qualification](evidence/cross-family-qualification.md). The
+medium tier had **180/180 completed, 0 failed and 0 bounded stops**. Large had
+11 completed runs and one retained narrow Settle target timeout; this is a
+bounded result, not a blanket target-scale success claim.
 The performance driver is prepared at artifacts/cross-family-drivers-20260924/performance.py;
-the running unit is `tide-cross-family-performance-20260925-a` in
+the terminal unit was `tide-cross-family-performance-20260925-a` in
 `background.slice`, Nice=10. It runs from passing frozen source `eaa15c6` at
 /var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925,
 using driver copy
@@ -86,17 +89,27 @@ It writes unique medium/large output under
 artifacts/cross-family-performance-20260925-a and launch output under
 artifacts/cross-family-performance-20260925-a-launch.log. Resource discovery
 resolved a combined budget of 160 CPUs and about 841 GiB effective memory;
-the fixed driver uses medium 4 workers/1 thread/180 s and large dynamic
-workers/4 threads/900 s. Medium is evaluated as above; large is currently
-running and has no terminal result yet. Inspect the unit and assessment.json.
-Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
-(OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
-Medium 4 workers/1 thread, 3 processes, 180s bound completed successfully;
-large 32 workers/4 threads (with dynamic budget reduction), 1 process, 900s
-bound including setup/warmups is still running. Do not call the live large
-assessment passed or infer a general speedup from the medium observations.
+the fixed driver used medium 4 workers/1 thread/180 s and large 32 workers/4
+threads/900 s. The terminal records are in
+`artifacts/cross-family-performance-20260925-a/assessment.json`, with medium
+and large summaries alongside their suites. The unit is inactive/dead with
+wrapper exit 0.
+The terminal audit used `artifacts/cross-family-drivers-20260924/review.py`
+against the frozen qualification and performance directories; its reviewed
+record is `artifacts/cross-family-performance-20260925-a/reviewed-audit.json`.
+Medium 4 workers/1 thread, 3 processes, 180s bound completed successfully.
+Large 32 workers/4 threads, 1 process, 900s bound completed with 11/12 runs
+successful; the narrow Settle target record is a 901.732593-second bounded
+timeout with no unreaped child. Do not infer a general speedup from these finite
+observations.
 
-Read ROADMAP's "Active extension" for finite coverage and completion. Preserve
+The terminal audit reports 535 tracked source files, two 13-binary builds, 252
+validated run records and 567 passed comparisons, with zero audit failures. It
+also checked the 60 relocated smoke records, all 180 medium records and all 12
+large records. Trackio remained best-effort/degraded because the module is not
+installed; local project records are authoritative.
+
+Read ROADMAP's "Completed extension" for finite coverage and completion. Preserve
 foundation-v1 and historical results. Native local kernels are largely shared;
 do not infer actual sequence execution or throughput from option acceptance.
 Native SettleExecutor selects Frontier or Streaming over its native encoding.
