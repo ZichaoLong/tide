@@ -57,10 +57,11 @@ The contract correction is present in the current worktree and its focused
 isolated-root gate passes 252 tests for FP32/FP64. It still needs a new clean
 frozen qualification; do not use the old frozen source for a passing claim.
 
-Next: commit and push the correction, establish a new frozen source, rerun the
-full qualification and audit actual paths, training observations, records and
-terminal jobs. Then run fixed v2 medium and resource-staged large assessments
-without overlapping build/test load; commit reviewed evidence separately.
+Next: establish a new frozen source from the current clean commit and run the
+full qualification plus relocated export/rebuild and v2 smoke. Audit actual
+paths, training observations, records and terminal jobs. Then run fixed v2
+medium and resource-staged large assessments without overlapping build/test
+load; commit reviewed evidence separately.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
 Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
