@@ -1,0 +1,332 @@
+{
+  "schema": "tide-foundation-suite-v2",
+  "frozen_date": "2026-09-24",
+  "repeats": 3,
+  "warmup": 2,
+  "scope": "CPU cross-family policies; full traces/isolated roots checked separately; no vocabulary head",
+  "configurations": [
+    {
+      "id": "P01",
+      "graph": "pdg",
+      "topology": "sparse-ring",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 128,
+      "module": "ema",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-stream-packed",
+        "native-stream",
+        "native-stream-optimized"
+      ]
+    },
+    {
+      "id": "T01",
+      "graph": "timed-dag",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 4,
+      "module": "attention",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "prefill-stream",
+      "variants": [
+        "python-frontier-optimized",
+        "python-diamond-optimized",
+        "native-stream",
+        "native-frontier",
+        "native-frontier-optimized",
+        "native-diamond-optimized"
+      ],
+      "prefill_positions": 112
+    },
+    {
+      "id": "T02",
+      "graph": "timed-dag",
+      "topology": "four-regions",
+      "width": 128,
+      "batch": 32,
+      "sequence": 128,
+      "body_nodes": 16,
+      "module": "ssm",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-frontier",
+        "python-frontier-optimized",
+        "native-frontier-scalar",
+        "native-frontier",
+        "native-frontier-step",
+        "native-frontier-optimized"
+      ]
+    },
+    {
+      "id": "S01",
+      "graph": "settle",
+      "topology": "four-layers",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 8,
+      "module": "attention-gqa-window128",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "prefill-stream",
+      "variants": [
+        "python-settle-optimized",
+        "python-layered-block-optimized",
+        "native-settle-stream",
+        "native-settle",
+        "native-settle-optimized",
+        "encoded-frontier-optimized"
+      ],
+      "prefill_positions": 112
+    },
+    {
+      "id": "S02",
+      "graph": "settle",
+      "topology": "chain",
+      "width": 512,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "ssm-swiglu",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-chain-block-optimized",
+        "native-settle-scalar",
+        "native-settle",
+        "native-settle-step",
+        "native-settle-optimized",
+        "encoded-stream-optimized"
+      ]
+    },
+    {
+      "id": "A01",
+      "graph": "timed-dag",
+      "topology": "chain-ragged",
+      "width": 128,
+      "batch": 8,
+      "sequence": 2048,
+      "body_nodes": 2,
+      "module": "attention-gqa",
+      "nominal_touched_nodes": 2,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "prefill-stream",
+      "variants": [
+        "native-stream",
+        "native-frontier",
+        "native-frontier-optimized"
+      ],
+      "prefill_positions": 2032
+    },
+    {
+      "id": "A02",
+      "graph": "timed-dag",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 512,
+      "body_nodes": 4,
+      "module": "fiber-attention",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-diamond-optimized",
+        "native-frontier",
+        "native-frontier-single",
+        "native-frontier-optimized",
+        "native-diamond-optimized"
+      ]
+    },
+    {
+      "id": "S03",
+      "graph": "settle",
+      "topology": "four-layers",
+      "width": 128,
+      "batch": 8,
+      "sequence": 512,
+      "body_nodes": 8,
+      "module": "fiber-attention",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-layered-block-optimized",
+        "native-settle-stream-optimized",
+        "native-settle",
+        "native-settle-optimized",
+        "encoded-frontier-optimized"
+      ]
+    },
+    {
+      "id": "M01",
+      "graph": "timed-dag",
+      "topology": "chain",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "linear",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-chain-optimized",
+        "native-chain",
+        "native-chain-optimized",
+        "native-frontier",
+        "native-frontier-optimized"
+      ]
+    },
+    {
+      "id": "M02",
+      "graph": "timed-dag",
+      "topology": "chain",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 3,
+      "module": "gated-delta",
+      "nominal_touched_nodes": 3,
+      "dtype": "float32",
+      "modes": [
+        "nograd-forward"
+      ],
+      "training_window": null,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-chain-optimized",
+        "native-chain",
+        "native-chain-optimized",
+        "native-frontier",
+        "native-frontier-optimized"
+      ]
+    },
+    {
+      "id": "TR01",
+      "graph": "timed-dag",
+      "topology": "diamond",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 4,
+      "module": "ssm-swiglu",
+      "nominal_touched_nodes": 4,
+      "dtype": "float32",
+      "modes": [
+        "grad-forward",
+        "backward",
+        "optimizer",
+        "train-step"
+      ],
+      "training_window": 16,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-diamond",
+        "python-diamond-optimized",
+        "native-frontier",
+        "native-frontier-optimized",
+        "native-diamond-optimized"
+      ]
+    },
+    {
+      "id": "TR02",
+      "graph": "settle",
+      "topology": "four-layers",
+      "width": 128,
+      "batch": 8,
+      "sequence": 128,
+      "body_nodes": 8,
+      "module": "fiber-attention-swiglu",
+      "nominal_touched_nodes": 8,
+      "dtype": "float32",
+      "modes": [
+        "grad-forward",
+        "backward",
+        "optimizer",
+        "train-step"
+      ],
+      "training_window": 16,
+      "execution_pattern": "whole",
+      "variants": [
+        "python-layered-block",
+        "python-layered-block-optimized",
+        "native-settle",
+        "native-settle-optimized",
+        "encoded-frontier-optimized"
+      ]
+    }
+  ],
+  "large_presets": [
+    {
+      "id": "wide-add",
+      "width": 2048,
+      "batch": 512,
+      "nominal_selection_denominator": 32,
+      "reference_parameters": 9468020899,
+      "module": "add-swiglu"
+    },
+    {
+      "id": "wide-attention",
+      "width": 2048,
+      "batch": 512,
+      "nominal_selection_denominator": 32,
+      "reference_parameters": 17270000000,
+      "module": "fiber-attention-swiglu"
+    },
+    {
+      "id": "narrow",
+      "width": 128,
+      "batch": 512,
+      "nominal_selection_denominator": 64,
+      "reference_parameters": 8500000000,
+      "module": "fiber-attention-swiglu"
+    }
+  ]
+}

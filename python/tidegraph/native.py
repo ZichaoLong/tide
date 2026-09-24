@@ -96,6 +96,7 @@ class Native:
         options.parallel_regions, options.compact_events = parallel_regions, compact_events
         options.defer_state_release = defer_state_release
         options.packed_sources, options.batch_next = packed_sources, batch_next
+        self.options = options  # Scheduler-only options for native frontend clients.
         if algorithm not in {"streaming", "frontier", "self_loop", "ring", "chain", "diamond"}:
             raise ValueError("unknown native algorithm")
         if algorithm in {"self_loop", "ring", "chain", "diamond"}:

@@ -29,7 +29,7 @@ def summarize(suite):
                            median_ms_per_sample_position=statistics.median(r['metrics'][f'perf/{mode}/ms_per_sample_position']
                               for r in runs if r['status']=='completed'))
             rows.append(row)
-    return dict(schema='tide-foundation-summary-v1',source=suite['source'],tier=suite['tier'],
+    return dict(schema='tide-foundation-summary-v1',suite_schema=suite.get('suite_schema','tide-foundation-suite-v1'),source=suite['source'],tier=suite['tier'],
                 evaluation_state=suite['state'],rows=rows,bounded_stops=suite['bounded_stops'],
                 scope='Measured durations, not an automatic speedup/default recommendation; fewer than three samples do not establish gain')
 

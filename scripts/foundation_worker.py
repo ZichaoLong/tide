@@ -60,11 +60,21 @@ def main():
                       trace_policy='Python reference retains full semantic traces; native wall pass trace=false',
                       clock_stride=execution.spec.stride if execution.spec else execution.stride,
                       actual_input_lengths=execution.lengths)
+        if hasattr(execution,'policy'):
+            record['execution_policy']=execution.policy
+            record['trace_policy']='native and Python streaming/frontier trace=false; Python Settle/specialized blocks retain full trace'
+            record['operator_counter_scope']='native operators only; Python kernel/sequence/replay paths use stats counters'
         save()
         def progress(stage):
             record['stage']=stage;save()
+        def publish(name,value):
+            write_json(out/(name+'.json'),value)
+            if config.get('execution_schema')=='v2' and config.get('training_window') and any(m!='nograd-forward' for m in args.modes):
+                from foundation_training_record import publish as training_record
+                record.setdefault('training_observations',{})[name]=training_record(out/(name+'-training.pt'),execution.model)
+                save()
         measured,profile=measure(execution,args.modes,args.warmup,progress,
-                                 lambda name,value:write_json(out/(name+'.json'),value))
+                                 publish)
         write_json(out/'measured.json',measured);write_json(out/'profile.json',profile)
         record.update(state='passed',exit_code=0,seconds=time.perf_counter()-started,
                       peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,

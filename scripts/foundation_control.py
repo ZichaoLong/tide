@@ -24,11 +24,12 @@ def run_variant(root,build,out,config,variant,modes,args,source,repeat):
     preflight=estimate(config);out.mkdir(parents=True,exist_ok=False)
     write_json(out/'config.json',config)
     run_id=out.name+'-'+uuid.uuid4().hex[:8];now=utc_now()
-    track=LocalTrackio(args.tracking,out.parent/'trackio','tide-foundation-v1',run_id,dict(config=config,variant=variant,modes=modes,repeat=repeat))
+    project='tide-foundation-v2' if config.get('execution_schema')=='v2' else 'tide-foundation-v1'
+    track=LocalTrackio(args.tracking,out.parent/'trackio',project,run_id,dict(config=config,variant=variant,modes=modes,repeat=repeat))
     command=[sys.executable,str(root/'scripts/foundation_worker.py'),'--device','cpu','--config',str(out/'config.json'),
              '--build-dir',str(build),'--output-dir',str(out/'worker'),'--variant',variant,'--modes',*modes,
              '--workers',str(args.workers),'--threads',str(args.threads),'--warmup',str(args.warmup)]
-    record=dict(schema_version=1,run_id=run_id,project='tide-foundation-v1',name=run_id,status='running',
+    record=dict(schema_version=1,run_id=run_id,project=project,name=run_id,status='running',
         created_at=now,started_at=now,ended_at=None,source=source,
         command=dict(argv=command,working_directory=str(root)),inputs=dict(config_sha256=digest(out/'config.json'),
         weights='deterministic seed7; matrices rescaled to std1/sqrt(D); scalar transport scales0.8; no LH weights'),
@@ -70,6 +71,17 @@ def run_variant(root,build,out,config,variant,modes,args,source,repeat):
             metrics.update({f'perf/{mode}/seconds':seconds,f'perf/{mode}/sample_positions_per_second':positions/seconds,
                             f'perf/{mode}/ms_per_sample_position':seconds*1000/positions,
                             f'perf/{mode}/ms_per_batch_position':seconds*1000/config['sequence']})
+        if config.get('execution_schema')=='v2' and config.get('execution_pattern')!='whole':
+            for phase in sorted({s['phase'] for s in measured['segments']}):
+                segments=[s for s in measured['segments'] if s['phase']==phase]
+                sample_positions=sum(s['effective_input_positions'] for s in segments)
+                batch_positions=sum(s['stop_position']-s['start_position'] for s in segments)
+                for mode in modes:
+                    seconds=sum(s['seconds'][mode] for s in segments)
+                    metrics.update({f'perf/{mode}-{phase}/seconds':seconds,
+                        f'perf/{mode}-{phase}/sample_positions_per_second':sample_positions/seconds,
+                        f'perf/{mode}-{phase}/ms_per_sample_position':seconds*1000/sample_positions,
+                        f'perf/{mode}-{phase}/ms_per_batch_position':seconds*1000/batch_positions})
         events=[dict(schema_version=1,run_id=run_id,sequence=0,step=0,timestamp=utc_now(),elapsed_seconds=time.monotonic()-started,metrics=metrics)]
         replace_text(out/'metrics.jsonl',''.join(json.dumps(e,allow_nan=False)+'\n' for e in events))
         track.project_events(events);code=0

@@ -40,14 +40,14 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   std::vector<std::function<void()>> jobs;
   for (const auto& [node, ids] : by_node) {
     if (!g.nodes[node].identity) stats["body_candidate_events"] += ids.size();
-    ++stats["aggregate_calls"];
-    if (at::GradMode::is_enabled()) stats[options.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
+    stats["aggregate_calls"] += options.packed ? 1 : ids.size();
+    if (options.packed && at::GradMode::is_enabled()) stats[options.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
     if (!m.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
     if (options.packed_sources) {
       if (m.nodes[node].aggregate_kernel->joint_sources()) ++stats["packed_source_batches"];
       else stats["packed_source_fallback_events"] += ids.size();
     }
-    jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, true, options.packed_sources, options.aggregate_autograd); });
+    jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, options.packed, options.packed_sources, options.aggregate_autograd); });
   }
   pool.run(std::move(jobs));
   prefill_states(g, m, q, options, pool, events, by_sequence, stats);
@@ -56,7 +56,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   for (const auto& frame : frames) {
     const auto& ids = by_frame[{frame.batch, frame.time}];
     if (ids.empty()) continue;
-    if (waves.empty() || previous_time != frame.time || (!options.batch_next && !options.parallel_regions))
+    if (waves.empty() || previous_time != frame.time || (!options.packed && !options.batch_next && !options.parallel_regions))
       waves.emplace_back();
     waves.back().insert(waves.back().end(), ids.begin(), ids.end());
     previous_time = frame.time;
@@ -70,11 +70,12 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     if (ids.empty()) continue;
     stats["selected_events"] += ids.size();
     if (!g.nodes[node].identity) stats["body_selected_events"] += ids.size();
-    stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
+    stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], options.packed ? ids.size() : 1);
     ++stats["full_blocks"];
-    if (replay) stats[options.full_autograd == "batched" ? "batched_full_events" : "semantic_full_replays"] += ids.size();
+    stats["full_calls"] += options.packed ? 1 : ids.size();
+    if (replay && options.packed) stats[options.full_autograd == "batched" ? "batched_full_events" : "semantic_full_replays"] += ids.size();
     if (!m.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
-    jobs.push_back([&, ids] { evaluate_full(g, m, events, ids, options, true); });
+    jobs.push_back([&, ids] { evaluate_full(g, m, events, ids, options, options.packed); });
   }
   pool.run(std::move(jobs));
   return events;

@@ -10,7 +10,8 @@ from tidegraph.compare import equivalent
 
 @pytest.mark.parametrize('kind', ['weighted_mean', 'active_softmax', 'all_softmax'])
 @pytest.mark.parametrize('sources', [1, 3, 7])
-def test_equal_sources_normalization_preserves_optimizer_update(dtype, kind, sources):
+@pytest.mark.parametrize('implementation', ['native', 'python'])
+def test_equal_sources_normalization_preserves_optimizer_update(dtype, kind, sources, implementation):
     g = Graph((Node(0, aggregation=kind),), (), (Region(1),), (0,)*sources, (0,))
     def execute(native):
         m = Model(g, width=4, dtype=dtype)
@@ -21,7 +22,13 @@ def test_equal_sources_normalization_preserves_optimizer_update(dtype, kind, sou
         xs = [External(b, p, 0, 0, torch.tensor([.39, .73, -.37, .18], dtype=dtype)*(b+1))
               for b in range(7) for p in range(sources)]
         q = Continuation(g.identity, 7)
-        r = Native(g, m, packed=True, aggregate_autograd='batched').run(q, xs, 1, sealed_until=1) if native else run(g, m, q, xs, 1, sealed_until=1)
+        if native:
+            if implementation == 'native':
+                r = Native(g, m, packed=True, aggregate_autograd='batched').run(q, xs, 1, sealed_until=1)
+            else:
+                from tidegraph.streaming import run as packed
+                r = packed(g, m, q, xs, 1, sealed_until=1, aggregate_autograd='batched')
+        else: r = run(g, m, q, xs, 1, sealed_until=1)
         opt = torch.optim.AdamW(m.parameters(), lr=.01, eps=1e-8)
         sum(e['content'].square().sum() for e in r.trace).backward()
         gradients = {k: None if p.grad is None else p.grad.clone() for k, p in m.named_parameters()}

@@ -124,13 +124,20 @@ def validate(result, request):
             raise ValueError("Aggregate returned incompatible tensor metadata")
 
 
-def evaluate(graph, model, events, packed=False):
+def evaluate(graph, model, events, packed=False, aggregate_autograd="replay"):
+    if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
+        raise ValueError("invalid Aggregate autograd policy or unpacked execution")
     if not events:
         return
     w = model.nodes[events[0]["node"]]
     requests = [request(graph, model, e["fiber"]) for e in events]
     program = w.aggregate_program
-    if packed:
+    if aggregate_autograd == "batched" and type(program) is not SourceAggregate:
+        raise ValueError("Aggregate program has no batched autograd implementation")
+    if packed and aggregate_autograd == "batched" and torch.is_grad_enabled():
+        from .aggregate_rows import evaluate as batch_grad
+        results = batch_grad(program, w, requests)
+    elif packed:
         with torch.no_grad():
             results = program.batch(w, requests)
         if len(results) != len(events):

@@ -110,8 +110,12 @@ class SettleGraph:
         return Result(projected, events, result.outputs, [a for a in result.messages if a.source < e], result.stats)
 
 
-def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True):
+def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True, packed=True,
+        full_autograd="replay", aggregate_autograd="replay"):
     """Independent SettleGraph schedule: each region settles the whole sequence."""
+    from .block_policy import validate
+    policy = dict(packed=packed, full_autograd=full_autograd, aggregate_autograd=aggregate_autograd)
+    validate(model, **policy)
     if q.cut % spec.stride or q.pending or values.shape[0] != q.batch_size:
         raise ValueError("SettleGraph continuation must be a complete position boundary")
     start = q.cut // spec.stride
@@ -130,11 +134,12 @@ def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True):
                   for t in range(start, start + values.shape[1]) for b in range(q.batch_size)]
         if not frames:
             continue
-        block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode, zeta=zeta, prefill=prefill)
+        block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode, zeta=zeta,
+                                          prefill=prefill, **policy)
         deliver(graph, model, block, fibers, messages, raw_outputs)
         events.extend(block); stats["region_blocks"] += 1
         for key, value in counters.items():
-            stats[key] = stats.get(key, 0) + value
+            stats[key] = max(stats.get(key, 0), value) if key.startswith("max_") else stats.get(key, 0) + value
     groups = defaultdict(list)
     for b, time, port, value in raw_outputs:
         position = (time - spec.rank(graph.outputs[port])) // spec.stride

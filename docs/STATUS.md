@@ -1,77 +1,88 @@
 # Current handoff
 
 Updated: 2026-09-24 (Asia/Shanghai). Branch: graph-execution-foundation.
-**The authorized Aggregate grad-forward follow-up is complete. No live project
-job or queued task remains.** No push, no subagents, no reference-repository
-writes. STATUS is the current handoff, ROADMAP is the sole backlog, semantics.md
-is the local semantic contract. ROADMAP lists optional bounded extensions.
+**Active: authorized cross-family streaming/prefill policy extension (E1-E5).**
+No live project job. No push/subagents/reference writes. STATUS owns handoff,
+ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
+execution of the five-stage plan; the previous no-queued-task notice is obsolete.
 
-## Latest delivery
+## Current work and next action
 
-[Aggregate VJP evidence](evidence/aggregate-batched-autograd.md),
-[contract/API](aggregate-batched-autograd.md). Implementation: 8cafa2d.
-Optional `aggregate_autograd=batched` / `--aggregate-autograd batched`, independent
-of `full_autograd=batched`; both defaults remain replay. Built-in source programs
-preserve isolated public roots, None/connected zero, shared owners and per-event
-normalization backward. No-grad/inference retain the old numeric path. State and
-Read replay remain; CPU FP64/FP32 first-order scope only.
+Re-entry checked clean worktree at extension start; no live durable records.
+CPU operator probe passed on aarch64/Torch2.10.0+cpu. Static portability audit:
+12 review warnings, all in existing runtime/test boundaries; no detected errors.
+Current implementation (uncommitted): Python isolated Full/Aggregate VJPs;
+independent packed streaming and chain/diamond/Settle layered block schedules;
+native Settle streaming frontend; block packed=False now controls Full/Agg;
+versioned foundation-v2 policy/client/config/phase-recording entry. Contract:
+docs/cross-family-policies.md. Python directed gates:102+112 passed,4 native
+checks deselected pending rebuild. Raw pytest basetemps under artifacts/
+cross-family-python-dev-{a,b}; no formal speed/qualification claim yet.
 
-Frozen read-only source:
-/var/tmp/zlong-graph-execution-foundation/qualification/aggregate-vjp-20260924.
-Independent build in its build/; 552 selected tests passed in 105.35s. This is
-not a whole-foundation rerun. Qualification raw records:
-artifacts/aggregate-vjp-qualification-20260924-a/.
-Unit tide-aggregate-vjp-qualification-20260924-a: inactive/MainPID0/exit0.
+Development job-a:terminal exit1,898 passed/124 import-typo failures.
+Development job-b:terminal exit1,1629 passed/3 FP32 S03 squared-loss failures.
+All failures and source archives retained in artifacts/cross-family-dev-20260924-{a,b}/.
+The new v2 test accidentally squared the assembled objective via a raw-root VJP
+helper. It now differentiates the declared loss directly and separately roots
+raw content/output. No tolerance changed; corrected v2 gate130 passed locally.
+Diagnostic retained at artifacts/cross-family-loss-reproducer-20260924/;
+this finite contract does not certify every rescaling of cancellation-sensitive
+FP32 derivatives. Original scalar/batched near-zero AdamW tests pass.
 
-Performance and reviewed audits:
-artifacts/aggregate-vjp-comparison-20260924-b/.
-All 25 records completed/exit0 and schemas validate: 4 smoke, 2 probes, 12 small
-training, 6 wide Add forwards, 1 diagnostic. Audit verifies 514 frozen tracked
-files against Git/archive, 13 binaries, packet/driver hashes, timing denominators,
-logical work/checksums and complete saved small-training owners/final gradients.
-Unit tide-aggregate-vjp-comparison-20260924-b: inactive/MainPID0/exit0; no native
-children or live project records. Trackio degraded; local records authoritative.
+Development job-c is terminal:1632 passed in311.12s, exit0, MainPID0.
+Archive/source identities are in artifacts/cross-family-dev-20260924-c/.
+The later training-observation artifact/CLI check passed7 tests in60.71s;
+raw output: artifacts/cross-family-records-dev-a/. Training audit snapshots are
+final-window owner values/gradients/aliases, not resumable checkpoints.
+Development checkout /var/tmp/zlong-graph-execution-foundation/development/cross-family-20260924-a
+was reused only between terminated attempts; per-job source archives are immutable.
 
-D2048/B512/V50304, Add 9.468B, FP32, 56 CPUs, Full batched in both controls:
-Aggregate replay median 11.61919 → batched 8.55906 ms/sample-token (3 processes
-each), latency -26.34%, throughput +35.75%; RSS 77.43–78.76 → 73.54–74.09 GiB.
-No backward/optimizer in this wide interval. Small D128/B16/T16, 4 windows:
-total training time Add 1.44187→1.04816s, Attention 5.47745→4.98471s (3 repeats).
-All six small parameter/gradient/loss comparisons pass. No new LH or wide
-no-grad result. The wide diagnostic now places most wall time in the Full phase;
-Attention's small diagnostic points to state/KV. See evidence for exact scopes.
+Next: review/diff-check and commit the complete implementation. Then create a
+clean detached worktree at that new HEAD:
+/var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260924.
+Frozen driver: artifacts/cross-family-drivers-20260924/qualification.py.
+Planned unit tide-cross-family-qualification-20260924-a; job output
+artifacts/cross-family-qualification-20260924-a/. Driver runs independent full
+CPU qualification, relocated export/rebuild and all60 v2 smoke variants; no
+unchanged original-LH oracle rerun. After qualification, run fixed v2 medium and
+resource-staged large assessments without overlapping build/test load. Audit
+actual paths, training observations, records and terminal jobs; commit reviewed
+evidence separately. Do not end at submission. No formal speed claim yet.
 
-Updated portable source kit:
-artifacts/aggregate-vjp-portable-20260924/cpu-attention-compare.tar.gz.
-SHA256: fa5099e7e4424cc7fc69ab24e2974e24d8273ff7fffb528832d85ab5f0106334.
-Packet source1065978 changes only README versus the measured packet; 267-file
-inventory/native/runner equality, archive contents and relocated hash/help checks
-pass. Target-local LibTorch rebuild remains required.
+Read ROADMAP's "Active extension" for finite coverage and completion. Preserve
+foundation-v1 and historical results. Native local kernels are largely shared;
+do not infer actual sequence execution or throughput from option acceptance.
+Native SettleExecutor selects Frontier or Streaming over its native encoding.
+Frontier/Specialized reject coordinator phase profiling. Attention policies
+configure kernels; projection layout configures Model, not core.Options.
+Do not blindly forward kernel settings into native Settle core.Options.
 
-Retain the raw Aggregate development failures, near-zero AdamW reproducer,
-profile wrong-path failure and comparison -a cancellation. Their exact reasons
-and corrected gates are linked in the evidence; never relabel old attempts.
-Drivers and reviewed analysis helpers remain under ignored artifacts/.
+Key files: scripts/foundation_{execute,workloads,measure,worker,control}.py,
+python/tidegraph/{blocks,full,aggregate,specialized,frontier,settle,native}.py,
+cpp/src/{block,block_prepare,specialized,frontier,settle}.cpp. Keep schedules
+independent and serial/replay oracles. Checkpoint identities exclude execution
+policies. Preserve None/connected zero and per-event normalization backward.
 
-## Retained foundation and earlier results
+## Retained completed evidence
 
-Six-stage finite CPU acceptance remains complete:
-[evidence](evidence/foundation-final.md), [capabilities](execution-capabilities.md).
-Original gate: 7741 tests, 17 relocated smoke variants, 36 fresh-process checkpoint
-trajectories. Six implementation classes, independent schedules, native Settle
-construction/encoding, first-order ownership/optimizer/checkpoint scopes remain.
-This does not certify arbitrary models, higher-order AD, GPU/NPU, or full
-controller/RNG/data-cursor recovery. Native named-value checkpoint excludes
-continuation. Keep large timeouts/unlaunched cases; do not mechanically repeat.
+- Six-class finite CPU acceptance: evidence/foundation-final.md (7741 tests,
+  17 relocated smoke variants, 36 fresh-process checkpoint trajectories).
+- Optional native Full VJP: evidence/full-batched-autograd.md.
+- Optional native Aggregate VJP: evidence/aggregate-batched-autograd.md;
+  552 selected clean-build tests, all25 experiment records terminal/exit0.
+  Wide Add D2048/B512/56 CPUs: replay11.61919 -> batched8.55906ms/sample-token
+  median with Full batched (3 processes each); forward with grad only.
+  Small actual training Add1.44187->1.04816s, Attention5.47745->4.98471s.
+  No new LH timing. Full/Aggregate defaults remain replay; State/Read replay remains.
+- Raw evidence: artifacts/aggregate-vjp-comparison-20260924-b/ and
+  artifacts/aggregate-vjp-qualification-20260924-a/. Frozen source:
+  /var/tmp/zlong-graph-execution-foundation/qualification/aggregate-vjp-20260924.
+- Previous portable kit: artifacts/aggregate-vjp-portable-20260924/cpu-attention-compare.tar.gz.
+  SHA256 fa5099e7e4424cc7fc69ab24e2974e24d8273ff7fffb528832d85ab5f0106334.
+- Keep prior failures/reproducers and timeout/unlaunched results. Do not restart
+  completed acceptance or infer arbitrary-model/backend certification.
 
-[Full VJP evidence](evidence/full-batched-autograd.md): clean 690-test gate,
-Full-batched Add median 10.49906 versus same-binary Full-replay 110.43917
-ms/sample-token. That earlier run batch is not the current Aggregate control.
-[Earlier Add comparison](evidence/add-scale-comparison.md): PDG/LH nograd
-5.59769/5.82417 (overlapping ranges), LH grad-forward 7.12832 ms/sample-token,
-3 repeats each. LH was not rerun in this increment; it is historical context.
-
-## Re-entry and next work
+## Re-entry commands and resource contract
 
 ```bash
 git status --short --branch
@@ -79,15 +90,11 @@ git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
 
-Read ROADMAP for bounded next choices. Wide Add: inspect remaining Full phase
-before optimizing another kernel. Attention: state/KV VJPs are the stronger
-measured candidate. TimedDAG/Settle reuse this kernel with correctness coverage;
-performance needs its own bounded question. Do not reopen completed acceptance.
-Keep serial/replay oracles and optional policies; qualify coherent implementation
-commits from frozen independent builds and commit evidence separately.
-
-Python: /home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1;
-TORCH_DEVICE_BACKEND_AUTOLOAD=0, correctness pools1/build2. Resource budget remains
-half effective CPU/memory, at most8 Ascend cards only for an explicit backend
-extension. The completed comparison used CPUs160–215 (56), host half-budget160,
-and dynamic half-memory747.38GiB. LH, fractal-latcarf and ObsidianVault stay read-only.
+Python /home/zlong/anaconda3/bin/python. TORCH_DEVICE_BACKEND_AUTOLOAD=0;
+correctness ATen/OMP/BLAS1, build2. Half effective CPU and half dynamically
+available/effective memory across the task; at most8 Ascend cards only for a
+separate authorized backend extension. Main filesystem has about27GiB free at
+start: check actual build/artifact targets before large writes. Long jobs use
+frozen inputs, independent builds, background.slice, Nice10, durable records.
+Implementation and reviewed evidence commits are separate. No live source edits.
+~/llm/lh, ~/llm/fractal-latcarf and /home/zlong/ObsidianVault remain read-only.

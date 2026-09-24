@@ -22,15 +22,20 @@ def execute_pass(execution,modes,*,instrument=False):
     window=execution.config.get('training_window') or execution.config['sequence']
     phases={'nograd-forward':0.,'grad-forward':0.,'backward':0.,'optimizer':0.,'train-step':0.}
     latencies=[];phase_latencies={k:[] for k in phases};stats={};work={};outputs=0;last=None;losses=[]
+    segments=[]; output_checksum=0.
     core.reset_work(instrument)
     try:
         with torch.set_grad_enabled(training):
-            for end in range(window,execution.config['sequence']+window,window):
-                end=min(end,execution.config['sequence'])
+            cuts=execution.cuts() if hasattr(execution,'cuts') else [(min(t,execution.config['sequence']),'whole')
+                for t in range(window,execution.config['sequence']+window,window)]
+            for end,phase in cuts:
+                begin=execution.position
                 phase_before=phases.copy()
                 start=time.perf_counter()
                 if opt: opt.zero_grad()
-                before=time.perf_counter(); result=execution.advance(end); elapsed=time.perf_counter()-before
+                before=time.perf_counter()
+                result=execution.advance(end,phase=phase) if hasattr(execution,'cuts') else execution.advance(end)
+                elapsed=time.perf_counter()-before
                 phases['grad-forward' if training else 'nograd-forward']+=elapsed
                 if training:
                     objective=loss(result)
@@ -42,13 +47,26 @@ def execute_pass(execution,modes,*,instrument=False):
                 duration=time.perf_counter()-start
                 phases['train-step']+=duration;latencies.append(duration)
                 for key in phases:phase_latencies[key].append(phases[key]-phase_before[key])
+                positions=sum(max(0,min(end,length)-begin) for length in execution.lengths)
+                segment=dict(start_position=begin,stop_position=end,phase=phase,effective_input_positions=positions,
+                             seconds={k:phases[k]-phase_before[k] for k in modes})
+                if hasattr(execution,'policy'):
+                    from foundation_policy import actual_paths
+                    segment['execution_paths']=actual_paths(execution.policy,result.stats,training)
+                    segment['execution_paths']['effective_schedule']=execution.last_execution
+                segments.append(segment)
                 if training: losses.append(float(objective.detach()))
                 outputs+=len(result.outputs);last=result
+                output_checksum+=sum(float(v.detach().double().sum()) for _,_,_,v in result.outputs)
                 counters=observations(execution,result)['stats'] if execution.variant.startswith('python') else result.stats
                 for key,value in counters.items():
                     stats[key]=max(stats.get(key,0),value) if key.startswith('max_') else stats.get(key,0)+value
         if instrument: work=core.work_metrics()
         detail=observations(execution,last);detail['stats']=stats;detail['outputs']=outputs
+        detail['output_checksum']=output_checksum
+        if hasattr(execution,'policy'):
+            from foundation_policy import actual_paths
+            detail['execution_paths']=actual_paths(execution.policy,stats,training)
         # Each native window's counters cover real events; sum logical counts.
         detail['logical']={'Aggregate':stats.get('candidate_events',0),'Upd':stats.get('body_candidate_events',stats.get('candidate_events',0)),
                           'Read':stats.get('candidate_events',0),'Next':stats.get('candidate_events',0),
@@ -56,7 +74,7 @@ def execute_pass(execution,modes,*,instrument=False):
         detail['edge_visits']=stats.get('visited_edges',detail['edge_visits'])
         return {'seconds':{k:phases[k] for k in modes},'window_latencies_seconds':latencies,
                 'phase_window_seconds':{k:phase_latencies[k] for k in modes},
-                'losses':losses,'work':work,'observations':detail,'optimizer_updates':len(latencies) if update else 0}
+                'losses':losses,'segments':segments,'work':work,'observations':detail,'optimizer_updates':len(latencies) if update else 0}
     finally: core.reset_work(False)
 
 

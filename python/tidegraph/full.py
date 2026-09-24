@@ -130,9 +130,16 @@ def bind(packed, reference):
     return FullResult(value, emitted)
 
 
-def evaluate(weights, requests, slots, mode, zeta, packed=False):
+def evaluate(weights, requests, slots, mode, zeta, packed=False, full_autograd="replay"):
     program = weights.full_program
-    if not packed:
+    if full_autograd not in {"replay", "batched"} or (full_autograd == "batched" and not packed):
+        raise ValueError("invalid Full autograd policy or unpacked execution")
+    if full_autograd == "batched" and type(program) is not ProjectionEmit:
+        raise ValueError("Full program has no batched autograd implementation")
+    if packed and full_autograd == "batched" and torch.is_grad_enabled():
+        from .full_rows import evaluate as batch_grad
+        results = batch_grad(program, weights, requests, slots, mode, zeta)
+    elif not packed:
         results = [program.step(weights, r, slots, mode, zeta) for r in requests]
     else:
         with torch.no_grad():

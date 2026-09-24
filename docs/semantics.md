@@ -83,10 +83,10 @@ batch preserve event visibility, logical state and the declared public VJP.
 
 ## Equality and training
 
-Native `full_autograd` is an execution policy outside semantic/checkpoint
+Python/native `full_autograd` is an execution policy outside semantic/checkpoint
 identity. Its optional batched affine VJP retains per-row undefined/connected-zero
 gradients under the [declared first-order contract](full-batched-autograd.md).
-Native `aggregate_autograd` independently selects replay or isolated batched
+Python/native `aggregate_autograd` independently selects replay or isolated batched
 source VJPs under [its contract](aggregate-batched-autograd.md), also outside
 semantic/checkpoint identity. Normalization retains per-event Jacobians before
 shared-owner accumulation, including near-zero-gradient optimizer behavior.
@@ -143,6 +143,10 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   training cost; see `packed-autograd.md`. Numeric zeros cannot identify absence.
 - A specialization owns its loop/dependency order. Common kernels alone do not
   validate formulas; tiny hand-computable cases supply independent anchors.
+
+Python/native streaming and legal block policy interfaces are specified in
+[cross-family-policies.md](cross-family-policies.md). Policies and schedule
+switches do not alter checkpoint identity or the first-order contract.
 
 ## LH and other references
 

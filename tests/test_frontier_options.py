@@ -67,6 +67,8 @@ def test_causal_next_fallback_is_counted(dtype, clear):
     assert actual.stats["state_prefill_fallback_events"] == actual.stats["candidate_events"]
     assert actual.stats["state_prefill_blocked_next"] > 0
     assert actual.stats.get("next_batches", 0) == 0
+    assert actual.stats["state_step_batch_calls"] > 0
+    assert actual.stats["max_state_batch"] >= 2
 
 
 @pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1", profile("all-softmax")])
@@ -145,5 +147,5 @@ def test_nondefault_policy_scalar_path_is_reported(dtype, algorithm, packed):
     engine = Native(g, m, algorithm=algorithm, packed=packed, attention_packing="single")
     result = engine.run(q, xs, 8, sealed_until=8)
     equivalent(run(g, m, q, xs, 8, sealed_until=8), result)
-    counter = "fiber_policy_semantic_replays" if algorithm == "streaming" and packed else "fiber_policy_scalar_events"
+    counter = "fiber_policy_semantic_replays" if packed else "fiber_policy_scalar_events"
     assert result.stats[counter] == result.stats["candidate_events"]

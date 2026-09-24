@@ -11,7 +11,7 @@ from tidegraph.specialized import settle_layered
 from foundation_workloads import initialize, inputs_for
 
 
-class Execution:
+class LegacyExecution:
     def __init__(self,config,variant,workers=4,trace=False):
         self.config,self.variant=config,variant
         self.graph,self.spec,self.model=initialize(config,'linear' if variant.endswith('efficient') else 'input')
@@ -84,6 +84,13 @@ class Execution:
             q=from_continuation(graph,self.eq).detach()
             self.eq=to_continuation(core,graph,self.compiled.encoded_graph,q)
         elif self.variant=='encoded-frontier': self.eq=self.eq.detach()
+
+
+def Execution(config, variant, workers=4, trace=False):
+    if config.get('execution_schema') == 'v2':
+        from foundation_execution_v2 import Execution as V2
+        return V2(config, variant, workers, trace)
+    return LegacyExecution(config, variant, workers, trace)
 
 
 def loss(result):

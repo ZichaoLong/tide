@@ -17,7 +17,7 @@ from isolated_cases import vjp
 from test_settle import fixture
 
 
-def native(spec, model, q, *, mode="hst", packed=True, workers=3, full_autograd="replay", aggregate_autograd="replay"):
+def native(spec, model, q, *, mode="hst", packed=True, workers=3, full_autograd="replay", aggregate_autograd="replay", algorithm="frontier"):
     body = Native(spec.graph, model)
     compiled = core.SettleGraph(body.compiled, spec.ranks)
     initial = compiled.embed_initial(to_continuation(core, spec.graph, body.compiled, q))
@@ -25,7 +25,7 @@ def native(spec, model, q, *, mode="hst", packed=True, workers=3, full_autograd=
     options.mode, options.packed, options.workers = mode, packed, workers
     options.full_autograd = full_autograd
     options.aggregate_autograd = aggregate_autograd
-    return compiled, core.SettleExecutor(compiled, body.weights, options), initial
+    return compiled, core.SettleExecutor(compiled, body.weights, options, algorithm), initial
 
 
 def projected(spec, compiled, result):
@@ -84,13 +84,15 @@ def test_native_encoding_ports_parallel_edges_source_domains_and_aliases(dtype):
 
 
 @pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1"])
-def test_native_settle_isolated_roots_and_all_slots(dtype, kind):
+@pytest.mark.parametrize("algorithm", ["frontier", "streaming"])
+def test_native_settle_isolated_roots_and_all_slots(dtype, kind, algorithm):
     from test_isolated_schedules import fixture as memory_fixture
     g, m, q, x, variables = memory_fixture(dtype, kind)
     spec = SettleGraph(g, (1, 2))
     expected = run(spec, m, q, x, mode="hst")
     g, m, q, x, actual_variables = memory_fixture(dtype, kind)
-    compiled, engine, eq = native(SettleGraph(g, (1, 2)), m, q)
+    compiled, engine, eq = native(SettleGraph(g, (1, 2)), m, q, algorithm=algorithm,
+                                 full_autograd="batched", aggregate_autograd="batched")
     actual = projected(spec, compiled, engine.run(eq, x))
     equivalent(expected, actual)
     roots = lambda r: [r.outputs[0][3], r.continuation.states[0, 0].value,

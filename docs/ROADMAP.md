@@ -3,7 +3,8 @@
 This is the only backlog and stage acceptance index. STATUS owns the current
 handoff; semantics owns the contract. The six-stage acceptance scope was frozen
 on 2026-09-23 and is now complete; [final qualification](evidence/foundation-final.md)
-is the delivery report. No mandatory acceptance unit remains pending. Historical
+is the delivery report. No unit of that acceptance version remains pending;
+the separately authorized cross-family extension below is now active. Historical
 M0–M8 evidence remains indexed by architecture.md and Git history; its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
@@ -184,3 +185,55 @@ stronger small-probe signal; retain replay and test backward/optimizer as well.
 State/Read replay remains. Shared native TimedDAG/Settle paths have bounded
 correctness coverage, not a new throughput claim. Resource/repeat limits above
 apply across graph families; acceptance stays closed.
+
+
+## Active extension: cross-family streaming and prefill policies
+
+Authorized 2026-09-24. This finite extension reuses the completed PDG performance
+policies in TimedDAG and SettleGraph, for streaming AND legal prefill. It does
+not reopen the original six-stage acceptance or remove any semantic roots.
+Defaults remain conservative. STATUS owns progress/next commands, this section
+owns the required remaining work. Historical foundation-v1 stays frozen.
+
+| Unit | Required result | Status |
+| --- | --- | --- |
+| E1 | Versioned option/capability and benchmark definitions: separate scheduler, kernel, model-layout and application-head policies; requested/resolved/fallback records; reject unsupported explicit requests | implemented; clean qualification pending |
+| E2 | Python independent chain/diamond and Settle layered/chain block schedules; retain scalar schedules; Python isolated Full/Aggregate batched VJPs; native streaming/frontier/specialized/native-Settle uptake and actual sequence/fallback counters | implemented; clean qualification pending |
+| E3 | CPU FP64/FP32 full-observable, isolated VJP, aliases/None/zero, optimizer/checkpoint/cut/detach/snapshot and prefill-to-streaming policy-switch tests; targeted combinations plus individual policies | directed1632 + final CLI7 passed; clean qualification pending |
+| E4 | Fixed bounded smoke/medium/large assessment below; separate prefill, streaming, transition, forward/backward/optimizer/whole-step timings and actual paths; explicit terminal failures/limits | planned |
+| E5 | Frozen clean independent build/gates, relocated export/rebuild/smoke, source/binary/result audit, reviewed evidence and coherent commits; no live task job | planned |
+
+Coverage: PDG generic/specialized are regression baselines. TimedDAG generic
+Python/native: streaming, frontier, legal blocks and transition. TimedDAG
+specialized Python/native: independent chain/diamond step and block schedules.
+Settle generic Python/native: region/block prefill, encoded streaming, chunk
+continuation and the native frontend. Settle specialized at least Python:
+independent scalar and layered/chain block schedules. Python node workers are
+not required; native core stays independent of Python.
+
+Policies include workers/packed/prefill, Full/Aggregate replay|batched,
+packed_sources/batch_next, compact_events/parallel_regions/defer_state_release,
+applicable exact|single attention packing, scalar|CSR pooling, cloned|owned KV,
+event|head layout and input|linear projection layout. Head workers belong to
+application DenseLinear, absent in graph-only workloads. A missing implementation
+is not semantic N/A. Known causal gates (selected adoption, clear, custom Next,
+no exact state sequence) retain observable fallbacks. State/Read replay remains
+separately counted; removing all replay is outside this extension.
+
+Fixed measurement budget: at most 12 logical workloads, at most 6 formal
+variants each, 3 independent processes for speed claims. Smoke D16/B4/T6;
+medium D128/D512, B8/B32, T128/T512, ragged attention T2048 where needed.
+Large wide D2048/B512/nominal1:32, Add ~9.468B or Attention ~17B; narrow
+D128/B512/nominal1:64 ~8-9B is assessed in resource stages. Count actual
+parameters, active work, topology/encoding boundaries and explain differences;
+do not repeat known timeouts without a new policy/workload question.
+
+Dynamic aggregate half-effective-CPU/half-memory limits apply to every family;
+no fixed256GiB cap. Ascend at most8 cards only for an explicit later backend
+extension; this gate requires CPU FP32/FP64. Existing durable-job, frozen-build,
+reset, repeats, failure retention and timing denominator rules apply.
+
+Completion requires E1-E5, real sequence batching where legal, independent
+reference/specialized schedules, passing mandatory correctness cells and an
+honestly terminal fixed performance assessment. Every option need not speed up.
+Documenting a mandatory implementation gap does not complete that unit.

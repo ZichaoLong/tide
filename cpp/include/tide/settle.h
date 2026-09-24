@@ -1,5 +1,6 @@
 #pragma once
 #include "tide/frontier.h"
+#include "tide/stream.h"
 
 namespace tide {
 // Rank-aligned SettleGraph, with one broadcast input occurrence per sample and
@@ -27,14 +28,15 @@ class SettleGraph {
   Index stride_;
 };
 
-// Standalone C++ entry: owns the native encoding and verified frontier kernel.
+// Standalone C++ entry: owns the native encoding and selected native scheduler.
 // Both input and returned continuation are in the encoded graph namespace.
 class SettleExecutor {
  public:
-  SettleExecutor(SettleGraph, Model, Options = {});
+  SettleExecutor(SettleGraph, Model, Options = {}, std::string algorithm = "frontier");
   Result run(const Continuation& encoded_initial, const Tensor& values);
  private:
   SettleGraph spec_;
-  Frontier engine_;
+  std::unique_ptr<Frontier> frontier_;
+  std::unique_ptr<Streaming> streaming_;
 };
 }  // namespace tide

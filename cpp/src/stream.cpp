@@ -11,6 +11,7 @@
 #include "tide/stream_profile.h"
 #include "stream_support.h"
 #include "tide/operator_work.h"
+#include "tide/state_evaluate.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
 #include <cmath>
@@ -86,6 +87,8 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     for (const auto& [node, ids] : by_node) {
       if (!graph_.nodes[node].identity) stats["body_candidate_events"] += ids.size();
       stats["max_node_batch"] = std::max<Index>(stats["max_node_batch"], ids.size());
+      stats["max_state_batch"] = std::max<Index>(stats["max_state_batch"], options_.packed ? ids.size() : 1);
+      if (options_.packed) ++stats["state_step_batch_calls"];
       stats["update_calls"] += options_.packed ? 1 : ids.size();
       stats["read_calls"] += options_.packed ? 1 : ids.size();
       if (options_.packed && replay) stats["semantic_read_replays"] += ids.size();
@@ -104,44 +107,9 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         else stats["packed_source_fallback_events"] += ids.size();
       }
       jobs.push_back([&, node, ids] {
-        const auto& w = model_.nodes[node];
         auto packed_content = evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources, options_.aggregate_autograd);
-        std::vector<State> old;
-        std::vector<Tensor> content;
-        std::vector<Index> times;
-        ContentViews content_views;
-        for (auto i : ids) {
-          auto& e = events[i];
-          if (options_.packed) {
-            old.push_back(e.old); content.push_back(e.content); times.push_back(time); content_views.push_back(e.local_content());
-          }
-          else {
-            e.proposed_state = w.kernel->step(w, e.old, e.local_content(), time);
-          }
-        }
-        if (options_.packed) {
-          std::vector<State> states;
-          {
-            at::NoGradGuard guard;
-            auto h = packed_content.defined() ? packed_content : at::stack(content);
-            states = w.kernel->batch(w, old, h, times, content_views);
-            if (states.size() != ids.size()) throw std::invalid_argument("state batch changed event count");
-          }
-          for (size_t k = 0; k < ids.size(); ++k) {
-            auto& e = events[ids[k]];
-            e.proposed_state = states[k];
-            if (replay) {
-              work::StateReplayTimer replay_timer;
-              auto reference = w.kernel->step(w, e.old, e.local_content(), time);
-              e.proposed_state = semantic_state(e.proposed_state, reference);
-            }
-          }
-        }
+        evaluate_state(model_, events, ids, options_.packed, packed_content);
         evaluate_read(graph_, model_, events, ids, options_.packed);
-        for (auto i : ids) {
-          auto& e = events[i];
-          e.proposal = e.proposed_state.value;
-        }
       });
     }
     pool_.run(std::move(jobs));
@@ -180,7 +148,10 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
           }
         } else stats["next_scalar_fallback_steps"] += all.size();
       }
-      if (!ids.empty()) stats["full_calls"] += options_.packed ? 1 : ids.size();
+      if (!ids.empty()) {
+        stats["full_calls"] += options_.packed ? 1 : ids.size();
+        stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], options_.packed ? ids.size() : 1);
+      }
       if (options_.packed && replay) stats[options_.full_autograd == "batched" ? "batched_full_events" : "semantic_full_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
       jobs.push_back([&, node, all, ids] {

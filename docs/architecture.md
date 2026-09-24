@@ -38,6 +38,7 @@
 | `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |
 | `docs/state-clocks.md` | Compact periodic state clocks, global continuation and delegated batching |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
+| `docs/cross-family-policies.md` | Python/native policies, independent block schedules and v2 benchmark entry |
 | `docs/aggregate-batched-autograd.md` | Optional native Aggregate source VJP, normalization precision and independent roots |
 | `docs/full-batched-autograd.md` | Optional native Full affine VJP, row isolation, capability and validation boundary |
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
@@ -120,7 +121,7 @@ codec, preflight and publication files to persist named values and built-in
 optimizer state in `TIDENCK1` schema v1; it has no Python-file interoperability
 or graph-continuation responsibility. SettleGraph construction and embedding have independent Python (`settle.py`)
 and native (`settle.h`, `settle.cpp`, `settle_projection.cpp`) frontends. The
-native entry owns a compiled rank-aligned encoding and reuses Frontier;
+native entry owns a compiled rank-aligned encoding and selects Frontier or Streaming;
 `bind_settle.cpp` is only its client/test adapter.
 
 ## Module boundaries

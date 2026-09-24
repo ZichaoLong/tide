@@ -70,9 +70,15 @@ void check(at::TensorOptions options) {
   reference_loss = reference_loss + .07 * (state0.square().sum() + state1.square().sum());
   std::vector<Tensor> variables{x, initial, node.decay, node.weight, node.bias, node.read, input_scale, edge_scale};
   auto reference_vjp = torch::autograd::grad({reference_loss}, variables, {}, true, false, true);
-  for (bool packed : {false, true}) {
+  for (const std::string algorithm : {"frontier", "streaming"}) for (bool packed : {false, true}) {
     Options execution; execution.workers = packed ? 3 : 1; execution.packed = packed;
-    SettleExecutor executor(spec, model, execution);
+    if (packed) {
+      execution.full_autograd = "batched"; execution.aggregate_autograd = "batched";
+      execution.packed_sources = true; execution.batch_next = true;
+      execution.parallel_regions = true; execution.compact_events = true;
+      execution.defer_state_release = true;
+    }
+    SettleExecutor executor(spec, model, execution, algorithm);
     auto encoded = executor.run(eq, x);
     auto result = spec.project(encoded);
     require(result.outputs.size() == 6 && result.continuation.pending.empty(), "Settle output count/cut mismatch");
@@ -89,9 +95,10 @@ void check(at::TensorOptions options) {
     auto actual_vjp = torch::autograd::grad({loss}, variables, {}, true, false, true);
     for (size_t i = 0; i < variables.size(); ++i) close(actual_vjp[i], reference_vjp[i]);
     require(!actual_vjp[5].defined(), "HARD unused Read unexpectedly connected");
-    require(encoded.stats.at("max_state_sequence") == 3, "Settle did not execute time prefill");
+    if (algorithm == "frontier") require(encoded.stats.at("max_state_sequence") == 3, "Settle did not execute time prefill");
     auto first = executor.run(eq, x.slice(1, 0, 1));
-    auto last = executor.run(first.continuation, x.slice(1, 1));
+    SettleExecutor stream(spec, model, execution, "streaming");
+    auto last = stream.run(first.continuation, x.slice(1, 1));
     auto projected = spec.project(last);
     for (const auto& [owner, state] : result.continuation.states) close(state.value, projected.continuation.states.at(owner).value);
     require(projected.continuation.ledger == result.continuation.ledger, "Settle chunk ledger mismatch");
@@ -102,6 +109,7 @@ void check(at::TensorOptions options) {
   rejects([&] { SettleGraph bad(graph, {1, 2}); });
   rejects([&] { SettleGraph bad(graph, {1, std::numeric_limits<Index>::max()}); });
   rejects([&] { spec.external(x, std::numeric_limits<Index>::max()); });
+  rejects([&] { SettleExecutor bad(spec, model, {}, "invalid"); });
   rejects([&] { auto bad = q; bad.cut = 1; spec.embed_initial(bad); });
 }
 }  // namespace

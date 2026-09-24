@@ -53,6 +53,7 @@ def optimizer_state(opt, registry, native_optimizer):
 class TrainingCase:
     def __init__(self, dtype, family, implementation, memory, full_autograd="replay", aggregate_autograd="replay"):
         self.family, self.implementation = family, implementation
+        self.python_options = dict(full_autograd=full_autograd, aggregate_autograd=aggregate_autograd)
         if family == 'settle':
             self.spec, self.model, self.q, self.values = layered_fixture(dtype, memory, False)
             self.graph = self.spec.graph; self.leaves = {'input':self.values}
@@ -98,13 +99,23 @@ class TrainingCase:
                 result = self.engine.run(self.encoded_q, x); self.encoded_q = result.continuation
                 result = projected(self.spec, self.compiled, result)
             else:
-                fn = settle_layered if self.implementation == 'specialized' else settle
-                result = fn(self.spec, self.model, self.q, x, mode='hst')
+                if self.implementation == 'python-block':
+                    from tidegraph.specialized_blocks import settle_layered as fn
+                else: fn = settle_layered if self.implementation == 'specialized' else settle
+                options = self.python_options if self.implementation in {'python-block', 'python-packed'} else {}
+                result = fn(self.spec, self.model, self.q, x, mode='hst', **options)
         else:
             xs = [x for x in self.inputs if self.q.cut <= x.time < stop]
             if self.engine: result = self.engine.run(self.q, xs, stop, sealed_until=stop)
             elif self.implementation == 'specialized':
                 result = specialized(self.graph, self.model, self.q, xs, stop, sealed_until=stop, topology=self.topology, mode='hst')
+            elif self.implementation in {'python-packed', 'python-block'}:
+                from tidegraph.frontier import run as frontier
+                from tidegraph.streaming import run as stream
+                from tidegraph.specialized_blocks import run as block
+                fn = stream if self.family == 'pdg' else block if self.implementation == 'python-block' else frontier
+                options = dict(topology=self.topology) if fn is block else {}
+                result = fn(self.graph, self.model, self.q, xs, stop, sealed_until=stop, mode='hst', **options, **self.python_options)
             else: result = run(self.graph, self.model, self.q, xs, stop, sealed_until=stop, mode='hst')
         self.q = result.continuation
         return result

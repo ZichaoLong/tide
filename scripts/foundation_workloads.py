@@ -27,6 +27,7 @@ def graph_for(config):
     n = config['body_nodes']; topology = config['topology']; family = config['graph']
     module = config['module']; full = 'swiglu' if 'swiglu' in module else 'tanh'
     memory = {'gated-delta':'delta','fiber-attention':PROFILE,'fiber-attention-swiglu':PROFILE,'ssm-swiglu':'ssm',
+              'add-swiglu':'lh-add-repeat-v1',
               'attention-gqa':'attention','attention-gqa-window128':'attention'}.get(module,module)
     heads, kv = (4,1) if 'gqa' in module else (4,4)
     window = 128 if 'window128' in module else 0
@@ -122,7 +123,7 @@ def estimate(config):
 def large_config(preset, family, nodes=None):
     d,denom = preset['width'],preset['nominal_selection_denominator']
     config=dict(id=preset['id'],graph=family,topology='large-layered',width=d,batch=preset['batch'],
-                sequence=6,body_nodes=4*denom,module='fiber-attention-swiglu',dtype='float32',training_window=None,
+                sequence=6,body_nodes=4*denom,module=preset.get('module','fiber-attention-swiglu'),dtype='float32',training_window=None,
                 nominal_selection_denominator=denom,nominal_touched_nodes=4*denom,modes=['nograd-forward'])
     per=count(config)['parameters_per_node']; target=preset.get('reference_parameters',8500000000)
     config['body_nodes']=nodes or max(4*denom,round(target/per/denom)*denom)

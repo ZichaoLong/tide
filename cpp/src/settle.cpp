@@ -105,8 +105,14 @@ std::vector<External> SettleGraph::external(const Tensor& values, Index start, b
   return result;
 }
 
-SettleExecutor::SettleExecutor(SettleGraph spec, Model model, Options options)
-    : spec_(std::move(spec)), engine_(spec_.encoded_graph(), spec_.embed_model(model), options) {}
+SettleExecutor::SettleExecutor(SettleGraph spec, Model model, Options options, std::string algorithm)
+    : spec_(std::move(spec)) {
+  if (algorithm == "frontier")
+    frontier_ = std::make_unique<Frontier>(spec_.encoded_graph(), spec_.embed_model(model), options);
+  else if (algorithm == "streaming")
+    streaming_ = std::make_unique<Streaming>(spec_.encoded_graph(), spec_.embed_model(model), options);
+  else throw std::invalid_argument("SettleExecutor algorithm must be frontier or streaming");
+}
 
 Result SettleExecutor::run(const Continuation& initial, const Tensor& values) {
   if (initial.cut < 0 || initial.cut % spec_.stride() || !initial.pending.empty())
@@ -115,6 +121,6 @@ Result SettleExecutor::run(const Continuation& initial, const Tensor& values) {
   auto inputs = spec_.external(values, start);
   if (initial.batch_size != values.size(0)) throw std::invalid_argument("SettleGraph batch mismatch");
   const auto stop = (start + values.size(1)) * spec_.stride();
-  return engine_.run(initial, inputs, stop, stop);
+  return frontier_ ? frontier_->run(initial, inputs, stop, stop) : streaming_->run(initial, inputs, stop, stop);
 }
 }  // namespace tide

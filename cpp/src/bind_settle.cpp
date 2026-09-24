@@ -20,6 +20,7 @@ void bind_settle(py::module_& module) {
          py::arg("encoded") = true)
     .def("project", &SettleGraph::project);
   py::class_<SettleExecutor>(module, "SettleExecutor")
-    .def(py::init<SettleGraph, Model, Options>())
+    .def(py::init<SettleGraph, Model, Options, std::string>(), py::arg("spec"), py::arg("model"),
+         py::arg("options"), py::arg("algorithm") = "frontier")
     .def("run", &SettleExecutor::run, py::call_guard<py::gil_scoped_release>());
 }

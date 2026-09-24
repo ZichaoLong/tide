@@ -22,6 +22,12 @@ from foundation_workloads import VARIANTS,large_config,estimate
 
 
 def configurations(args,suite):
+    if suite['schema']=='tide-foundation-suite-v2':
+        from foundation_config_v2 import configurations as v2
+        return v2(args,suite)
+    from foundation_policy import FIELDS
+    if any(getattr(args,n,None) is not None for n in FIELDS-{'workers'}):
+        raise ValueError('explicit execution policies require foundation-v2.json; v1 is frozen')
     if args.tier=='large':
         selected=suite['large_presets'] if not args.ids else [p for p in suite['large_presets'] if p['id'] in args.ids]
         if not selected or (args.ids and {p['id'] for p in selected}!=set(args.ids)):raise ValueError('unknown large preset')
@@ -83,6 +89,8 @@ def main():
     parser.add_argument('--tracking',choices=['best-effort','off','required'],default='best-effort')
     parser.add_argument('--describe',action='store_true',help='print concrete topology/owner/resource estimates without building or timing')
     parser.add_argument('--allow-dirty-smoke',action='store_true',help='development smoke only; exact source status/hashes retained')
+    from foundation_config_v2 import add_arguments
+    add_arguments(parser)
     args=parser.parse_args();root=Path(__file__).resolve().parents[1]
     args.repeats=args.repeats if args.repeats is not None else (3 if args.tier=='medium' else 1)
     args.timeout_seconds=args.timeout_seconds if args.timeout_seconds is not None else (300 if args.tier=='large' else 180)
@@ -94,7 +102,10 @@ def main():
     try:cases=configurations(args,suite)
     except ValueError as error:parser.error(str(error))
     if args.describe:
-        print(json.dumps([dict(config=c,variants=v,preflight=estimate(c)) for c,v in cases],indent=2));return 0
+        from foundation_policy import resolve
+        print(json.dumps([dict(config=c,variants=v,preflight=estimate(c),
+            **({'policies':[resolve(c,name,args.workers,c.get('execution_options')) for name in v]}
+               if c.get('execution_schema')=='v2' else {})) for c,v in cases],indent=2));return 0
     if args.output_dir is None:parser.error('--output-dir required for execution')
     commit,dirty=source_state(root)
     if dirty and not (args.tier=='smoke' and args.allow_dirty_smoke):parser.error('formal timing requires clean frozen source')
@@ -112,7 +123,7 @@ def main():
                 cpp_source_sha256=source_hash(root),native_binary_sha256=digest(build/'_tide_native.so'),build=manifest,
                 files_sha256={str(p.relative_to(root)):digest(p) for base in ('python','scripts') for p in (root/base).rglob('*.py')})
     out=args.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
-    record={'schema':'tide-foundation-evaluation-v1','state':'running','tier':args.tier,'source':source,
+    record={'schema':'tide-foundation-evaluation-v1','suite_schema':suite['schema'],'state':'running','tier':args.tier,'source':source,
             'suite_sha256':digest(args.suite),'command':sys.argv,'runs':[],'bounded_stops':[]}
     write_json(out/'suite.json',record);stopped=set()
     try:
@@ -132,6 +143,11 @@ def main():
                     if summary['status']!='completed' and args.tier=='large':stopped.add(key);break
                     if summary['status']!='completed' and args.tier=='smoke':
                         record['state']='failed';write_json(out/'suite.json',record);return 1
+                    if summary['status']!='completed' and args.tier=='medium' and config.get('execution_schema')=='v2':
+                        record['bounded_stops'].append(dict(config=config,variant=variant,
+                            repeats_unlaunched=args.repeats-repeat-1,
+                            reason='first failed v2 performance repeat; no gain claim, do not repeat an unchanged failure'))
+                        write_json(out/'suite.json',record);break
                 if key in stopped:break
     except BaseException as error:
         record.update(state='cancelled' if isinstance(error,(SystemExit,KeyboardInterrupt)) else 'failed',

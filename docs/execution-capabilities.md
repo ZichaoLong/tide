@@ -12,6 +12,15 @@ programs with isolated roots and per-event normalization backward. Its
 [bounded qualification and performance evidence](evidence/aggregate-batched-autograd.md)
 separates graph correctness, wide grad-forward and small complete training.
 
+## Active cross-family extension
+
+[cross-family-policies.md](cross-family-policies.md) describes the implemented
+v2 interfaces now under validation: Python packed tick streaming, independent
+chain/diamond/Settle block schedules, Python isolated Full/Aggregate VJPs,
+native Settle streaming/frontend transitions, shared native causal state batches
+and separated scheduler/kernel/layout benchmark options. ROADMAP E1-E5 owns
+acceptance. The older evidence below does not certify this new extension.
+
 ## Graph × schedule × option × mode
 
 P = PDG, D = TimedDAG, S = encoded SettleGraph. D/S streaming use ordinary PDG

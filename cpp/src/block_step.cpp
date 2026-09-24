@@ -4,6 +4,8 @@
 #include "tide/next.h"
 #include "tide/read.h"
 #include "tide/region.h"
+#include "tide/kernel.h"
+#include "tide/state_evaluate.h"
 #include "stream_support.h"
 #include <ATen/core/grad_mode.h>
 #include <algorithm>
@@ -15,21 +17,37 @@ void advance_block_events(const Graph& g, const Model& m, Continuation& q,
   for (const auto& ids : waves) {
     if (ids.empty()) continue;
     NodeEvents nodes;
+    NodeEvents causal;
     RegionEvents regions;
     std::vector<std::function<void()>> jobs;
     for (auto i : ids) {
       auto& e = events[i];
       nodes[e.node].push_back(i); regions[{e.batch, g.nodes[e.node].region}].push_back(i);
       if (e.proposal.defined()) continue;
-      if (m.nodes[e.node].kernel->scalar_policy_fallback()) ++stats["fiber_policy_scalar_events"];
-      ++stats["state_steps"]; ++stats["read_calls"];
+      ++stats["state_steps"];
       const auto old = q.states.find({e.batch, e.node});
       e.old = old == q.states.end() ? m.nodes[e.node].kernel->initial(m.nodes[e.node]) : old->second;
-      jobs.push_back([&, i] {
-        auto& e = events[i]; const auto& w = m.nodes[e.node];
-        e.proposed_state = w.kernel->step(w, e.old, e.local_content(), e.time);
-        e.proposal = e.proposed_state.value;
-        evaluate_read(g, m, events, {i}, false);
+      causal[e.node].push_back(i);
+    }
+    for (const auto& [node, batch] : causal) {
+      const auto& w = m.nodes[node];
+      stats["read_calls"] += options.packed ? 1 : batch.size();
+      stats["state_step_calls"] += options.packed ? 1 : batch.size();
+      stats["max_state_batch"] = std::max<Index>(stats["max_state_batch"], options.packed ? batch.size() : 1);
+      const bool replay = options.packed && at::GradMode::is_enabled();
+      if (options.packed) {
+        ++stats["state_step_batch_calls"];
+        if (!w.kernel->joint_batch()) stats["state_scalar_batch_steps"] += batch.size();
+        if (!w.read_kernel->joint_batch()) stats["read_scalar_batch_steps"] += batch.size();
+      }
+      if (replay) { stats["semantic_state_replays"] += batch.size(); stats["semantic_read_replays"] += batch.size(); }
+      if (w.kernel->scalar_policy_fallback()) {
+        if (!options.packed) stats["fiber_policy_scalar_events"] += batch.size();
+        else if (replay) stats["fiber_policy_semantic_replays"] += batch.size();
+      }
+      jobs.push_back([&, batch] {
+        evaluate_state(m, events, batch, options.packed);
+        evaluate_read(g, m, events, batch, options.packed);
       });
     }
     pool.run(std::move(jobs));

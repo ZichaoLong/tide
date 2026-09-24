@@ -40,7 +40,11 @@ def plan(graph, atoms, start, stop, max_events=1000000):
 
 
 def run(graph, model, continuation, external, stop, *, sealed_until, mode="hard", zeta=1.0,
-        trace=True, prefill=True, max_events=1000000):
+        trace=True, prefill=True, max_events=1000000, packed=True,
+        full_autograd="replay", aggregate_autograd="replay"):
+    from .block_policy import validate
+    policy = dict(packed=packed, full_autograd=full_autograd, aggregate_autograd=aggregate_autograd)
+    validate(model, **policy)
     if mode not in {"hard", "hst", "softp"}:
         raise ValueError("invalid emit mode")
     inputs, ledger = validate_window(graph, model, continuation, external, stop, sealed_until)
@@ -72,11 +76,12 @@ def run(graph, model, continuation, external, stop, *, sealed_until, mode="hard"
             region_blocks[owner[1]].extend(keys)
         for keys in region_blocks.values():
             ready = [(b, r, t, frames[b, r, t]) for b, r, t in sorted(keys, key=lambda k: (k[2], k[0]))]
-            block_events, block_stats = evaluate_block(graph, model, q, ready, fibers, mode=mode, zeta=zeta, prefill=prefill)
+            block_events, block_stats = evaluate_block(graph, model, q, ready, fibers, mode=mode, zeta=zeta,
+                                                       prefill=prefill, **policy)
             deliver(graph, model, block_events, fibers, messages, outputs)
             events.extend(block_events)
             for name, count in block_stats.items():
-                stats[name] = stats.get(name, 0) + count
+                stats[name] = max(stats.get(name, 0), count) if name.startswith("max_") else stats.get(name, 0) + count
             stats["region_blocks"] += 1
         for owner, keys in blocks:
             cursor[owner] += len(keys); done.update(keys)
