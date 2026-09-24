@@ -31,6 +31,7 @@ def test_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, m
     graph = tmp_path/'graph.txt'; edges = topology(graph); out = tmp_path/'native'
     cmd = [str(binary()), '--device', 'cpu', '--dtype', str(dtype).split('.')[-1], '--topology', str(graph),
            '--width', '8', '--batch', '4', '--steps', '4', '--warmup', '1', '--vocab', '17', '--memory', memory,
+           '--full-autograd', 'batched' if optimized else 'replay',
            '--workers', '3', '--packed', '1', '--grad', str(grad), '--check', '1', '--profile', str(profile),
            '--head-workers', '3' if optimized else '1', '--parallel-regions', str(optimized),
            '--compact-events', str(optimized),
@@ -38,6 +39,8 @@ def test_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, m
     run = subprocess.run(cmd, capture_output=True, text=True)
     assert run.returncode == 0, run.stdout+run.stderr
     assert 'CHECK passed' in run.stdout
+    if optimized and grad:
+        assert 'CHECK gradient roots passed' in run.stdout
     events = [json.loads(line) for line in (out/'metrics.jsonl').read_text().splitlines()]
     assert len(events) == 4
     for i, e in enumerate(events):
@@ -52,6 +55,8 @@ def test_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, m
         assert m['runtime/openblas_reported_threads'] >= -1
         assert m['work/source_rows'] >= m['work/candidate_events'] >= m['work/selected_events'] > 0
         assert 1 <= m['work/max_node_batch'] <= 4
+        assert e['context']['full_autograd'] == ('batched' if optimized else 'replay')
+        assert m.get('work/batched_full_events', 0) == (m['work/selected_events'] if optimized and grad else 0)
         assert m['work/semantic_state_replays'] > 0 if grad else m['work/semantic_state_replays'] == 0
         assert m['perf/ms_per_sample_token'] == pytest.approx(m['perf/token_seconds']*1000/4)
         phases = ['events', 'update', 'select', 'full', 'commit', 'cleanup']
@@ -102,6 +107,8 @@ def test_csr_export_retains_parallel_edges_and_rejects_damage(tmp_path):
                                 ['--device', 'cpu', '--profile', '2'],
                                 ['--device', 'cpu', '--attention-packing', 'unknown'],
                                 ['--device', 'cpu', '--memory', 'unknown'],
+                                ['--device', 'cpu', '--full-autograd', 'unknown'],
+                                ['--device', 'cpu', '--full-autograd', 'batched', '--packed', '0'],
                                 ['--device', 'cpu', '--memory', 'add', '--attention-packing', 'single'],
                                 ['--device', 'cpu', '--parallel-regions', '2'],
                                 ['--device', 'cpu', '--compact-events', '2'],

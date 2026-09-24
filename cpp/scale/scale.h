@@ -1,7 +1,7 @@
 #pragma once
 #include "portable_torch/runtime.hpp"
 #include "tide/cursor.h"
-#include "tide/full.h"
+#include "tide/row_emit.h"
 #include <chrono>
 
 namespace pdg_scale {
@@ -18,7 +18,7 @@ struct Config {
   bool parallel_regions = false, compact_events = false, work_count = false, operator_profile = false;
   bool defer_state_release = false;
   bool packed_sources = false, batch_next = false;
-  std::string topology, run_id, emission = "row", attention_packing = "exact", memory = "attention";
+  std::string topology, run_id, emission = "row", attention_packing = "exact", memory = "attention", full_autograd = "replay";
   std::string fiber_pooling = "event", fiber_cache = "cloned", projection_layout = "input", attention_layout = "event";
 };
 struct Topology {
@@ -35,7 +35,6 @@ struct Fixture {
 Config parse(int, char**);
 Topology read_topology(const std::string&);
 Fixture fixture(const Config&, const Topology&);
-std::shared_ptr<const tide::FullKernel> row_emit(std::vector<Index> logical,
-                                              std::vector<Index> phases, Index period, Index targets);
 void check(const Config&, const Topology&);
+void check_grad(const Config&, const Topology&);
 } // namespace pdg_scale

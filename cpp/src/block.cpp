@@ -72,7 +72,7 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
     if (!g.nodes[node].identity) stats["body_selected_events"] += ids.size();
     stats["max_full_batch"] = std::max<Index>(stats["max_full_batch"], ids.size());
     ++stats["full_blocks"];
-    if (replay) stats["semantic_full_replays"] += ids.size();
+    if (replay) stats[options.full_autograd == "batched" ? "batched_full_events" : "semantic_full_replays"] += ids.size();
     if (!m.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
     jobs.push_back([&, ids] { evaluate_full(g, m, events, ids, options, true); });
   }

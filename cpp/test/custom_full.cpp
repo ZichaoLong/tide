@@ -62,6 +62,11 @@ int main(int argc, char** argv) {
     auto unused = at::full({2}, 0.4, options).set_requires_grad(true);
     tide::Continuation q; q.identity = g.identity; q.batch_size = 2;
     tide::Options runtime; runtime.packed = true; runtime.workers = 2;
+    auto unsupported = runtime; unsupported.full_autograd = "batched";
+    bool rejected = false;
+    try { tide::Streaming bad(g, m, unsupported); }
+    catch (const std::invalid_argument&) { rejected = true; }
+    if (!rejected) throw std::runtime_error("custom Full must reject unsupported batched VJP");
     tide::Streaming engine(g, m, runtime);
     auto result = engine.run(q, {{0, 0, 0, 0, x}, {1, 0, 0, 0, unused}}, 3, 3);
     if (result.trace.size() != 4 || result.messages.size() != 2 || result.outputs.size() != 4

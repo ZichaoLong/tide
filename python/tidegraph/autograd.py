@@ -6,6 +6,7 @@ from .records import State
 class _SemanticValue(torch.autograd.Function):
     @staticmethod
     def forward(ctx, reference, value):
+        ctx.set_materialize_grads(False)
         return value.clone()
 
     @staticmethod

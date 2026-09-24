@@ -83,7 +83,7 @@ Fixture fixture(const Config& c, const Topology& t) {
       auto weight = logical_out[v] ? parameter({logical_out[v]*width, width}) : at::Tensor();
       if (c.emission == "row") {
         if (weight.defined()) w.extra["row_emit_weight"] = weight;
-        w.full_kernel = row_emit(rows[v], g.nodes[v].emit_phases, period, logical_out[v]);
+        w.full_kernel = tide::make_row_emit(rows[v], g.nodes[v].emit_phases, period, logical_out[v]);
       } else {
         // The comparison path uses the existing independent per-slot Full kernel.
         for (size_t slot = 0; slot < rows[v].size(); ++slot) {

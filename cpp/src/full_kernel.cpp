@@ -1,6 +1,8 @@
 #include "tide/full.h"
 #include "tide/ops.h"
 #include "tide/lh_full.h"
+#include "tide/full_rows.h"
+#include "tide/isolated_linear.h"
 #include <stdexcept>
 
 namespace tide {
@@ -25,6 +27,38 @@ class ProjectionEmit final : public FullKernel {
     if (kind_ != "broadcast" && kind_ != "slot_affine") throw std::invalid_argument("unknown emission program");
   }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
+  std::vector<FullResult> batch_grad(const NodeWeights& w, const std::vector<FullInput>& inputs,
+                                    Index slots, const Options& options) const override {
+    auto fresh = full_fresh_rows(w, inputs, identity_);
+    std::vector<FullResult> results;
+    for (size_t i = 0; i < inputs.size(); ++i) {
+      const auto& in = inputs[i];
+      if (in.control.dim() != 0) throw std::invalid_argument("projection Emit requires scalar control");
+      results.push_back({identity_ ? in.content.value : emit(in.content.value, fresh[i], in.control, options.mode, options.zeta), {}});
+    }
+    for (Index slot = 0; slot < slots; ++slot) {
+      std::vector<Index> ids;
+      std::vector<Tensor> active, held;
+      for (size_t i = 0; i < inputs.size(); ++i) if (present(slot, inputs[i].time)) {
+        ids.push_back(i); active.push_back(fresh[i]); held.push_back(inputs[i].content.value);
+      }
+      if (ids.empty()) continue;
+      if (kind_ == "broadcast") {
+        for (auto i : ids) results[i].emitted.push_back({slot, results[i].value});
+      } else {
+        const auto& weight = w.extra.at("emit_w_"+std::to_string(slot));
+        active = isolated_linear(active, weight.t());
+        if (options.mode != "hard") held = isolated_linear(held, weight.t());
+        for (size_t j = 0; j < ids.size(); ++j) {
+          auto value = emit(held[j], active[j]+w.extra.at("emit_b_"+std::to_string(slot)),
+                            inputs[ids[j]].control, options.mode, options.zeta);
+          results[ids[j]].emitted.push_back({slot, value});
+        }
+      }
+    }
+    return results;
+  }
   FullResult step(const NodeWeights& w, const FullInput& input, Index slots, const Options& options) const override {
     const auto& h = input.content.value; const auto& p = input.control;
     if (p.dim() != 0) throw std::invalid_argument("projection Emit requires scalar control");

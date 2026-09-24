@@ -12,9 +12,13 @@ class FullKernel {
   virtual FullResult step(const NodeWeights&, const FullInput&, Index slots, const Options&) const = 0;
   virtual std::vector<FullResult> batch(const NodeWeights&, const std::vector<FullInput>&, Index slots, const Options&) const;
   virtual bool joint_batch() const { return false; }
+  virtual bool batched_autograd() const { return false; }
+  virtual std::vector<FullResult> batch_grad(const NodeWeights&, const std::vector<FullInput>&,
+                                           Index slots, const Options&) const;
   virtual void validate_weights(const NodeWeights&, Index slots) const = 0;
 };
 std::shared_ptr<const FullKernel> make_full_kernel(const Node&);
 void evaluate_full(const Graph&, const Model&, std::vector<Event>&, const std::vector<size_t>&,
                    const Options&, bool packed);
+void validate_full_autograd(const Model&, const Options&);
 }  // namespace tide

@@ -6,7 +6,9 @@ namespace tide {
 namespace {
 class SemanticValue : public torch::autograd::Function<SemanticValue> {
  public:
-  static Tensor forward(torch::autograd::AutogradContext*, Tensor reference, Tensor value) { return value.clone(); }
+  static Tensor forward(torch::autograd::AutogradContext* ctx, Tensor reference, Tensor value) {
+    ctx->set_materialize_grads(false); return value.clone();
+  }
   static torch::autograd::variable_list backward(torch::autograd::AutogradContext*, torch::autograd::variable_list grad) {
     return {grad[0], Tensor()};
   }

@@ -15,6 +15,7 @@
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
+void bind_full(py::module_&);
 void bind_settle(py::module_&);
 void bind_metrics(py::module_&);
 using namespace tide;
@@ -64,7 +65,7 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Continuation, identity) FIELD(Continuation, batch_size) FIELD(Continuation, cut)
     FIELD(Continuation, states) FIELD(Continuation, history) FIELD(Continuation, pending) FIELD(Continuation, ledger);
   py::class_<NodeWeights>(m, "NodeWeights").def(py::init<Tensor, Tensor, Tensor, Tensor>())
-    FIELD(NodeWeights, decay) FIELD(NodeWeights, weight) FIELD(NodeWeights, bias) FIELD(NodeWeights, read) FIELD(NodeWeights, extra);
+    FIELD(NodeWeights, decay) FIELD(NodeWeights, weight) FIELD(NodeWeights, bias) FIELD(NodeWeights, read) FIELD(NodeWeights, extra) FIELD(NodeWeights, full_kind);
   py::class_<RegionWeights>(m, "RegionWeights").def(py::init<>()) FIELD(RegionWeights, extra);
   m.def("decode_add_repeat", &decode_add_repeat, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
   m.def("decode_fiber_bias", &decode_fiber_bias, py::arg("weights"), py::arg("state"), py::arg("cut"), py::arg("clock") = py::none());
@@ -161,7 +162,7 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta)
     FIELD(Options, prefill) FIELD(Options, max_events)
     FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events) FIELD(Options, defer_state_release)
-    FIELD(Options, packed_sources) FIELD(Options, batch_next);
+    FIELD(Options, packed_sources) FIELD(Options, batch_next) FIELD(Options, full_autograd);
   py::class_<DenseLinear>(m, "DenseLinear").def(py::init<Index>())
     .def("run", [](DenseLinear& head, const Tensor& x, const Tensor& weight, const std::optional<Tensor>& bias) {
       return head.run(x, weight, bias.value_or(Tensor()));
@@ -182,6 +183,7 @@ PYBIND11_MODULE(_tide_native, m) {
   py::class_<Specialized>(m, "Specialized").def(py::init<Graph, Model, Options, std::string>())
     .def("run", &Specialized::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);
+  bind_full(m);
   bind_settle(m);
   bind_metrics(m);
 }

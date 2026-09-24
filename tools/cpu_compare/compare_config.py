@@ -58,6 +58,7 @@ def parse(engine):
     p.add_argument('--operator-profile', type=int, choices=[0, 1], default=0,
                    help='exclusive calling-thread timers; do not add to wall intervals')
     if engine == 'pdg':
+        p.add_argument('--full-autograd', choices=['replay', 'batched'], default='replay')
         p.add_argument('--phase-profile', type=int, choices=[0, 1], default=1,
                        help='Streaming phase timers; set 0 for an unprofiled comparison')
         p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact',

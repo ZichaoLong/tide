@@ -16,6 +16,7 @@ tide::Result traced(const Config& c, const Topology& topology, Index workers, bo
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   auto f = fixture(local, topology);
   tide::Options opts; opts.workers = workers; opts.packed = packed; opts.trace = true;
+  opts.full_autograd = optimized && packed ? c.full_autograd : "replay";
   opts.profile = profile;
   opts.parallel_regions = optimized && c.parallel_regions;
   opts.compact_events = optimized && c.compact_events;

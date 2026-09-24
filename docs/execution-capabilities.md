@@ -4,7 +4,10 @@ Qualified source:81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5;
 [7741-test final CPU gate](evidence/foundation-final.md). This is the current
 capability description; ROADMAP owns stage status and extensions. CPU FP32/FP64 required. Python schedules are serial with batch/sequence
 support. Native schedules support node workers. Training denotes first-order
-semantic parity, not optimized backward; packed state/Read/Full replay remains.
+semantic parity, not generally optimized backward; default packed state/Read/Full
+replay remains. The optional [native Full affine VJP](full-batched-autograd.md)
+removes Full projection replay for its declared profiles; STATUS records its
+qualification and performance separately.
 
 ## Graph × schedule × option × mode
 

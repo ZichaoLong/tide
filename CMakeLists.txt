@@ -9,7 +9,7 @@ add_executable(tidegraph-profile-check cpp/test/operator_profile.cpp)
 target_include_directories(tidegraph-profile-check PRIVATE cpp/include)
 target_link_libraries(tidegraph-profile-check PRIVATE Threads::Threads)
 add_library(tidegraph STATIC
-  cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/pool.cpp cpp/src/dense.cpp
+  cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
@@ -42,12 +42,12 @@ add_executable(tidegraph-streaming-bench cpp/bench/main.cpp cpp/bench/config.cpp
   cpp/bench/workload.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph)
 add_executable(tidegraph-scale-bench cpp/scale/main.cpp cpp/scale/config.cpp
-  cpp/scale/model.cpp cpp/scale/emit.cpp cpp/scale/check.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp cpp/src/threads.cpp)
+  cpp/scale/model.cpp cpp/scale/check.cpp cpp/scale/grad_check.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp cpp/src/threads.cpp)
 target_link_libraries(tidegraph-scale-bench PRIVATE tidegraph ${CMAKE_DL_LIBS})
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
   find_library(TORCH_PYTHON_LIBRARY torch_python PATHS "${TORCH_INSTALL_PREFIX}/lib" REQUIRED NO_DEFAULT_PATH)
-  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp)
+  Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()

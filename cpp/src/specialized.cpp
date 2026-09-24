@@ -1,3 +1,4 @@
+#include "tide/full.h"
 #include "tide/specialized.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
@@ -17,6 +18,7 @@ Specialized::Specialized(Graph g, Model m, Options options, std::string topology
   if ((options.packed_sources || options.batch_next) && !options.packed)
     throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
+  validate_full_autograd(model_, options);
   const Index n = graph_.nodes.size();
   auto require = [](bool ok) { if (!ok) throw std::invalid_argument("specialization topology/options mismatch"); };
   require(topology_ == "self_loop" || topology_ == "ring" || topology_ == "chain" || topology_ == "diamond");

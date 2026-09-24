@@ -8,7 +8,9 @@ class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
                  attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
-                 attention_layout="event", packed_sources=False, batch_next=False):
+                 attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay"):
+        if full_autograd not in {"replay", "batched"} or (full_autograd == "batched" and not packed):
+            raise ValueError("invalid Full autograd policy or unpacked execution")
         if attention_packing not in {"exact", "single"}:
             raise ValueError("invalid fiber attention packing")
         if fiber_pooling not in {"event", "csr"}:
@@ -85,6 +87,7 @@ class Native:
         self.weights = m  # Tensor-preserving model record for other native clients.
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace
+        options.full_autograd = full_autograd
         options.mode, options.zeta = mode, zeta
         options.prefill, options.max_events = prefill, max_events
         options.parallel_regions, options.compact_events = parallel_regions, compact_events

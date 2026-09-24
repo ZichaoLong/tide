@@ -1,11 +1,12 @@
 #include "tide/operator_profile.h"
 #include "tide/operator_work.h"
-#include "scale.h"
+#include "tide/row_emit.h"
+#include "tide/isolated_linear.h"
 #include "tide/ops.h"
 #include "tide/lh_full.h"
 #include <stdexcept>
 
-namespace pdg_scale {
+namespace tide {
 namespace {
 // A benchmark instance of the public FullKernel interface. One dense Linear
 // per node row; phase aliases route slices without multiplying parameters.
@@ -14,8 +15,35 @@ class RowEmit final : public tide::FullKernel {
   Index period_, targets_;
  public:
   RowEmit(std::vector<Index> logical, std::vector<Index> phases, Index period, Index targets)
-      : logical_(std::move(logical)), phases_(std::move(phases)), period_(period), targets_(targets) {}
+      : logical_(std::move(logical)), phases_(std::move(phases)), period_(period), targets_(targets) {
+    if (period_ <= 0 || targets_ < 0) throw std::invalid_argument("invalid row Emit period/targets");
+  }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
+  std::vector<FullResult> batch_grad(const NodeWeights& w, const std::vector<FullInput>& inputs,
+                                    Index slots, const Options& options) const override {
+    if (options.mode != "hard") throw std::invalid_argument("scale row Emit implements hard mode only");
+    if (slots != static_cast<Index>(logical_.size())) throw std::invalid_argument("row Emit slot count");
+    std::vector<Tensor> fresh;
+    for (const auto& input : inputs) fresh.push_back(lh_full_fresh(w, input.comparison->value));
+    auto projected = targets_ ? isolated_linear(fresh, w.extra.at("row_emit_weight")) : std::vector<Tensor>{};
+    const auto width = w.bias.numel();
+    if (work::enabled()) {
+      Index pending = 0;
+      for (const auto& input : inputs) pending += input.time%period_ == period_-2;
+      work::emit(inputs.size(), width, targets_, pending);
+    }
+    std::vector<FullResult> result;
+    for (size_t i = 0; i < inputs.size(); ++i) {
+      FullResult r{fresh[i], {}};
+      for (Index slot = 0; slot < slots; ++slot) if (inputs[i].time%period_ == phases_[slot]) {
+        const auto logical = logical_[slot];
+        r.emitted.push_back({slot, logical < 0 ? fresh[i] : projected[i].slice(0, logical*width, (logical+1)*width)});
+      }
+      result.push_back(std::move(r));
+    }
+    return result;
+  }
   std::vector<tide::FullResult> batch(const tide::NodeWeights& w, const std::vector<tide::FullInput>& inputs,
                                     Index slots, const tide::Options& options) const override {
     if (options.mode != "hard") throw std::invalid_argument("scale row Emit implements hard mode only");
@@ -59,8 +87,8 @@ class RowEmit final : public tide::FullKernel {
   }
 };
 }
-std::shared_ptr<const tide::FullKernel> row_emit(std::vector<Index> logical, std::vector<Index> phases,
+std::shared_ptr<const tide::FullKernel> make_row_emit(std::vector<Index> logical, std::vector<Index> phases,
                                               Index period, Index targets) {
   return std::make_shared<RowEmit>(std::move(logical), std::move(phases), period, targets);
 }
-} // namespace pdg_scale
+} // namespace tide

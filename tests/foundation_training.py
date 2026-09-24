@@ -51,7 +51,7 @@ def optimizer_state(opt, registry, native_optimizer):
 
 
 class TrainingCase:
-    def __init__(self, dtype, family, implementation, memory):
+    def __init__(self, dtype, family, implementation, memory, full_autograd="replay"):
         self.family, self.implementation = family, implementation
         if family == 'settle':
             self.spec, self.model, self.q, self.values = layered_fixture(dtype, memory, False)
@@ -81,12 +81,12 @@ class TrainingCase:
         if implementation.startswith('native'):
             if family == 'settle':
                 self.compiled, self.engine, self.encoded_q = native(self.spec, m, self.q, mode='hst',
-                    packed=implementation != 'native-serial', workers=1 if implementation == 'native-serial' else 3)
+                    full_autograd=full_autograd, packed=implementation != 'native-serial', workers=1 if implementation == 'native-serial' else 3)
                 # Used only for test record conversion; native constructs its own encoding.
                 self.eg, _ = self.spec.embed(m)
             else:
                 algorithm = self.topology if implementation == 'native-specialized' else 'streaming' if family == 'pdg' else 'frontier'
-                self.engine = Native(self.graph, m, algorithm=algorithm, mode='hst',
+                self.engine = Native(self.graph, m, algorithm=algorithm, mode='hst', full_autograd=full_autograd,
                     workers=1 if implementation == 'native-serial' else 3,
                     packed=implementation not in {'native-serial','native-parallel'})
 
@@ -127,8 +127,8 @@ class TrainingCase:
             self.encoded_q = to_continuation(core, self.eg, self.compiled.encoded_graph, q)
 
 
-def trajectory(dtype, family, implementation, memory, kind, native_optimizer=False):
-    c = TrainingCase(dtype, family, implementation, memory)
+def trajectory(dtype, family, implementation, memory, kind, native_optimizer=False, full_autograd="replay"):
+    c = TrainingCase(dtype, family, implementation, memory, full_autograd)
     opt, registry = optimizer(c.model, kind, native_optimizer)
     owner_ids = {n:id(p) for n,p in c.model.named_parameters(remove_duplicate=False)}
     records = []

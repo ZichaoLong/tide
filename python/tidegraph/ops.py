@@ -16,12 +16,15 @@ from .clocked_state import with_clock
 class _HST(torch.autograd.Function):
     @staticmethod
     def forward(ctx, h, g, p, zeta):
+        ctx.set_materialize_grads(False)
         ctx.save_for_backward(g - h)
         ctx.zeta = zeta
         return g.clone()
 
     @staticmethod
     def backward(ctx, grad):
+        if grad is None:
+            return None, None, None, None
         (delta,) = ctx.saved_tensors
         return torch.zeros_like(grad), grad, (grad * delta).sum(-1) * ctx.zeta, None
 

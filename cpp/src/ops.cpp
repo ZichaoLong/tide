@@ -9,12 +9,14 @@ namespace {
 class HST : public torch::autograd::Function<HST> {
  public:
   static Tensor forward(torch::autograd::AutogradContext* ctx, Tensor h, Tensor g, Tensor p, double zeta) {
+    ctx->set_materialize_grads(false);
     ctx->save_for_backward({g - h});
     ctx->saved_data["zeta"] = zeta;
     return g.clone();
   }
   static torch::autograd::variable_list backward(torch::autograd::AutogradContext* ctx,
                                                 torch::autograd::variable_list grad) {
+    if (!grad[0].defined()) return {Tensor(), Tensor(), Tensor(), Tensor()};
     const auto delta = ctx->get_saved_variables().at(0);
     return {at::zeros_like(grad[0]), grad[0],
             (grad[0] * delta).sum(-1) * ctx->saved_data["zeta"].toDouble(), Tensor()};

@@ -160,5 +160,6 @@ struct Options {
   bool parallel_regions = false, compact_events = false;
   bool defer_state_release = false; // Retire old state containers in compact cleanup.
   bool packed_sources = false, batch_next = false; // Optional packed source/Next execution.
+  std::string full_autograd = "replay"; // replay | batched (isolated affine VJP).
 };
 }  // namespace tide

@@ -33,6 +33,19 @@ FullResult bind(const FullResult& packed, const FullResult& reference) {
   return result;
 }
 }  // namespace
+void validate_full_autograd(const Model& model, const Options& options) {
+  if (options.full_autograd != "replay" && options.full_autograd != "batched")
+    throw std::invalid_argument("unknown Full autograd policy");
+  if (options.full_autograd == "batched") {
+    if (!options.packed) throw std::invalid_argument("batched Full autograd requires packed execution");
+    for (const auto& w : model.nodes) if (!w.full_kernel->batched_autograd())
+      throw std::invalid_argument("Full program has no batched autograd implementation");
+  }
+}
+std::vector<FullResult> FullKernel::batch_grad(const NodeWeights&, const std::vector<FullInput>&,
+                                             Index, const Options&) const {
+  throw std::invalid_argument("Full program has no batched autograd implementation");
+}
 void evaluate_full(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids,
                    const Options& options, bool packed) {
   if (ids.empty()) return;
@@ -45,7 +58,11 @@ void evaluate_full(const Graph& g, const Model& m, std::vector<Event>& events, c
     const auto& e = events[i]; inputs.push_back({&e.comparison_state, e.time, e.local_content(), e.control});
   }
   std::vector<FullResult> results;
-  if (packed) {
+  if (packed && at::GradMode::is_enabled() && options.full_autograd == "batched") {
+    results = w.full_kernel->batch_grad(w, inputs, slots, options);
+    if (results.size() != ids.size()) throw std::invalid_argument("Full batch changed event count");
+    for (size_t j = 0; j < ids.size(); ++j) validate(results[j], inputs[j], slots);
+  } else if (packed) {
     {
       at::NoGradGuard guard;
       results = w.full_kernel->batch(w, inputs, slots, options);

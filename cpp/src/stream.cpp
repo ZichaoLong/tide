@@ -25,6 +25,7 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   graph_.compile();
   configure_model(graph_, model_);
   validate_model(graph_, model_);
+  validate_full_autograd(model_, options_);
   if (options_.mode != "hard" && options_.mode != "softp" && options_.mode != "hst")
     throw std::invalid_argument("invalid emit mode");
   if (!std::isfinite(options_.zeta)) throw std::invalid_argument("nonfinite zeta");
@@ -179,7 +180,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         } else stats["next_scalar_fallback_steps"] += all.size();
       }
       if (!ids.empty()) stats["full_calls"] += options_.packed ? 1 : ids.size();
-      if (options_.packed && replay) stats["semantic_full_replays"] += ids.size();
+      if (options_.packed && replay) stats[options_.full_autograd == "batched" ? "batched_full_events" : "semantic_full_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].full_kernel->joint_batch()) stats["full_scalar_fallback_steps"] += ids.size();
       jobs.push_back([&, node, all, ids] {
         const auto& w = model_.nodes[node];

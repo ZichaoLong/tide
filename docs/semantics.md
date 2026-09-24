@@ -83,6 +83,10 @@ batch preserve event visibility, logical state and the declared public VJP.
 
 ## Equality and training
 
+Native `full_autograd` is an execution policy outside semantic/checkpoint
+identity. Its optional batched affine VJP retains per-row undefined/connected-zero
+gradients under the [declared first-order contract](full-batched-autograd.md).
+
 Logical content/state observability does not fix Tensor object count, physical
 layout or operator granularity. [Optional packed transport](packed-transport.md)
 preserves source-aware content and Next transitions through batched storage and

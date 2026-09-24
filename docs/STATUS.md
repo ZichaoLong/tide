@@ -1,10 +1,38 @@
 # Current handoff
 
 Updated: 2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
-**Six-stage finite CPU foundation acceptance COMPLETE. Requested Add comparison COMPLETE.**
-No task live jobs or descendants remain. ROADMAP is the sole backlog; semantics
-is the current contract. Do not restart old milestones or repeat completed large
-experiments without a new question. No push or reference-repository writes.
+**Active: optional PDG grad-forward optimization (user requested).**
+Six-stage CPU acceptance and previous Add comparison remain complete.
+No task job is live. No push or reference writes; no subagents.
+
+## Current increment
+
+Implemented `full_autograd=replay|batched`, default replay. Contract/navigation:
+[Full batched autograd](full-batched-autograd.md). Row-isolated linear VJPs remove
+Full affine scalar replay in native streaming and legal frontier/Settle calls.
+Other semantic replay stays. CPU FP64/FP32, first-order only; custom ancestors
+must propagate undefined cotangents. Options do not change checkpoint identity.
+
+Directed gates: -c passed682/failed8 (new scale-check fixture used uncompiled
+identity); corrected fixture and -d passed all49 scale tests/51.92s. Union690
+selected tests now passes. Core new primitive, independent Full/slot roots,
+HST/None/zero/shared/frozen owners, native SGD/AdamW, cuts and six-class paths
+passed. Small scale checks include actual scalar/batched backward.
+Raw source archives/logs/status: artifacts/full-vjp-dev-20260924-{a,b,c,d}.
+Retain -a archive failure (unstaged deletion), -b153 passed/25 failed (test profile
+and exception type), -c682 passed/8 failed; do not relabel old failures.
+All units terminal/MainPID0. No new global7741-test qualification claim yet.
+
+Next: commit coherent implementation, create clean read-only worktree
+qualification/full-vjp-20260924, build2/CPU pools1, repeat the bounded directed
+matrix there. Preserve build/source/archive hashes. Then run the retained
+artifacts/run_full_vjp_compare.py with full_vjp_compare_support.py, frozen
+--source/--build-dir, new --output-dir and freshly discovered --host-resources.
+This performs4 smoke cases,2 D256/B32 probes,3 optimized wide grad-forward
+repeats and1 same-binary replay control. Reuse previous3-repeat baseline/LH
+results below; this is no backward-throughput measurement.56 physical CPUs
+160-215, within dynamic half-host CPU/memory budget, sequential native processes.
+No new performance result exists yet. Commit reviewed evidence separately.
 
 ## Latest requested work: fixed-graph Add comparison
 
@@ -72,7 +100,7 @@ The tiny model adapter is not arbitrary pretrained import. CUDA/Ascend/x86 targe
 qualification and optimized training remain extensions, not current evidence.
 Suggested next priorities and resource limits remain in ROADMAP. The latest
 Add result makes packed training VJP optimization the strongest next candidate.
-No further heavy task is queued or implicitly authorized by this completed audit.
+The new requested Full optimization is authorized; do not reopen unrelated milestones.
 
 ## Re-entry
 

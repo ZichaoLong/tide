@@ -144,3 +144,14 @@ Trackio 默认为 best-effort；未安装时仍完成完整本地记录，不自
 本源码包来自仓库的 `tools/cpu_compare/`；导出入口是
 `scripts/export_cpu_compare.py --lh-prepared PATH --topology PATH --output-dir NEW`。
 复现不依赖旧的 commit ID 操作指令；包内 manifest 已记录精确来源和全部文件哈希。
+# Optional PDG Full training execution
+
+Add `--full-autograd batched` to the PDG runner with `--mode grad-forward` to
+use batched affine VJPs with isolated row dependencies. The default is `replay`.
+Both choices retain the declared Tide first-order training semantics; LH does
+not define these semantics. The option also applies to the Attention workload.
+In nograd it uses the existing numeric batch. Grad-forward timings exclude
+backward and optimizer work. Small `--smoke` runs with this option check native
+scalar/batched gradient roots before timing. Use `--phase-profile 0 --work-count 0`
+for comparisons without instrumentation. See the repository's
+`docs/full-batched-autograd.md` for the supported profiles and AD boundary.
