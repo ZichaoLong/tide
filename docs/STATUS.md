@@ -73,6 +73,10 @@ now passes; the old failure remains retained as historical evidence.
 Next: audit the passing qualification, then run fixed v2 medium and
 resource-staged large assessments without overlapping build/test load. Commit
 reviewed evidence separately. No formal speed claim exists yet.
+The performance driver is prepared at artifacts/cross-family-drivers-20260924/performance.py;
+it will run from the passing frozen source and write unique medium/large output
+under artifacts/cross-family-performance-20260925-a. The performance unit and
+resource state will be recorded before launch.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
 Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
