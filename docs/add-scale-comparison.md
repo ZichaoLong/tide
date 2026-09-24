@@ -46,5 +46,6 @@ bounds are recorded before execution; failures remain failures. Historical
 3.3/3.6ms measurements and the earlier dirty-snapshot LH pilot are references,
 not acceptance thresholds. No backward-performance claim is intended.
 
-Current progress and live jobs belong to STATUS; reviewed observations will
-live in docs/evidence/add-scale-comparison.md after terminal audit.
+Completed and independently audited:4 native smoke cases and12 large runs, all
+exit0. See [reviewed results](evidence/add-scale-comparison.md); STATUS owns the
+current handoff. No further run is pending.

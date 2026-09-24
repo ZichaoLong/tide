@@ -1,88 +1,90 @@
 # Current handoff
 
 Updated: 2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
-**Six-stage graph execution foundation acceptance COMPLETE.**
-All mandatory implementation/correctness units passed for the declared finite
-CPU FP32/FP64 profiles; fixed performance evaluation is closed with honest limits.
-ROADMAP is the sole backlog; only explicitly optional extensions remain.
+**Six-stage finite CPU foundation acceptance COMPLETE. Requested Add comparison COMPLETE.**
+No task live jobs or descendants remain. ROADMAP is the sole backlog; semantics
+is the current contract. Do not restart old milestones or repeat completed large
+experiments without a new question. No push or reference-repository writes.
 
-New user-requested Add comparison is active (2026-09-24), separate from the
-completed six-stage acceptance. Scope: docs/add-scale-comparison.md. Add scale
-fixture, portable Add/grad-forward/outer-timer options and derived-descriptor
-precision validation passed472 directed CPU FP32/FP64 tests/113.88s.
-Gate: artifacts/add-compare-dev-20260924-d, unit inactive/MainPID0/exit0.
-Failures -a (bad pytest path), -b and -c (FP32-derived FP64 norm tolerance) remain
-retained; no runtime formula changed. No reference sources changed.
-Implementation is ready for a coherent commit and frozen worktree. Next: launch
-artifacts/run_add_comparison.py against that clean source with recorded host
-resources,4 real native smoke cases and12 D2048/B512 Add runs (3 repeats per
-engine/mode). Planned unit/output: tide-add-scale-comparison-20260924-a /
-artifacts/add-scale-comparison-20260924-a. Main source may change only after
-freezing the input checkout; never edit its files or experiment driver while live.
-After terminal inspection, audit identities/metrics, write evidence and commit it.
-Do not claim this Add extension qualified from the preceding7741-test gate.
+## Latest requested work: fixed-graph Add comparison
 
-Delivery entry: docs/evidence/foundation-final.md.
+Delivery: [reviewed Add results and objective assessment](evidence/add-scale-comparison.md).
+Contract: add-scale-comparison.md; portable CLI: ../tools/cpu_compare/README.md.
+Implementation source:0c053ebc7f8b3be03220c54aebf56502f5f0f6f1.
+Frozen clean source: /var/tmp/zlong-graph-execution-foundation/qualification/add-scale-20260924.
+Raw records: artifacts/add-scale-comparison-20260924-a/ (status.json, pipeline.json,
+reviewed-audit.json, analysis.json, per-run manifests/metrics/summaries, export/,
+three source/build records, optional process-samples.json).
+Exact launch/preflight: artifacts/add-scale-comparison-a-launch.json and
+artifacts/add-scale-host-preflight-20260924.json. Retained run/review drivers are
+hashed in the records. Portable archive: export/cpu-attention-compare.tar.gz
+under that result directory; it now supports Add and explicit grad-forward.
 
-- Six implementation classes/encoding/independent anchors: final report + ROADMAP.
-- Module, prefill, option, fallback and training scope: execution-capabilities.md.
-- Performance: evidence/foundation-medium.md and evidence/foundation-large.md.
-- One-command build/smoke and actual CLI: foundation-benchmarks.md.
-- Semantic contract: semantics.md and settle-embedding.md.
+All4 actual native smoke cases and12 wide cases completed/exit0, with3 independent
+process repeats per engine/mode. Unit tide-add-scale-comparison-20260924-a is
+inactive/dead, MainPID0/Result=success/ExecMainStatus0, with no remaining group PID.
+Independent audit checks frozen source against Git archive, exported inventories,
+all3 build/binary records,16 validated run records, counts, thread settings,
+denominators, memory bounds and exact same-engine checksum sequences.
 
-Qualified clean source:81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5.
-Read-only checkout: qualification/foundation-final-81a1b26.
-Raw evidence: artifacts/foundation-final-20260923-a/reviewed-audit.json,
-pipeline.json, full-cpu/{result.json,tests.log,test-tmp}, relocated-smoke/,
-relocated source with spaces/build/, standalone-build/ and stage logs.
-7741 CPU FP32/FP64 tests passed/1235.63s;489 source files/13 binaries and36 fresh
-process checkpoint manifests/payloads audited. Fresh relocated rebuild and17
-smoke variants passed. Separate TIDE_PYTHON_BINDINGS=OFF build, native Settle
-FP32/FP64 formula/VJP/prefill/continuation and no-Python loader checks passed.
-The evidence commit containing this handoff changes docs/support metadata only;
-implementation/tests remain identical to the qualified source. Exact final local
-commit and clean-status audit: artifacts/foundation-final-20260923-a/delivery.json.
-No unreviewed user changes; no uncommitted changes after that evidence commit.
+D2048/B512/V50304, FP32, nominal leaf1/32;9,468,020,899 parameters (8.818 divided
+by1024³). Same graph/module scale, independent weights, no backward/optimizer.
+Median of3 process-window means (12 steps, warmup4), ms/sample-token:
 
-Performance closure:
+- LH nograd5.82417; PDG nograd5.59769. Repeat ranges overlap; no consistent win.
+- LH grad-forward7.12832; PDG grad-forward108.23288 (15.18x). Scalar semantic
+  replay is a priority performance target; Tide training semantics stay intact.
 
-- 12 frozen medium configs/108 completed runs,3 independent repeats each.
-- New large assessments:12 launched stages,7 complete/5 timeouts, plus1 unlaunched
- larger Settle stage. Per-run failures remain failures despite evaluated wrappers.
-- PDG/LH wide17.27B retained. Historical narrow is actually16.608B/115713 physical
- nodes; exact-count audit retained. The frozen8.497B PDG supplement completed
- N256/N1024, then constructed46912 nodes before timing out in its second warmup.
-- Its fixed native-stream-packed variant is serial (actual1, worker limit32),
- stride1/cut6 retains pending tail; input throughput is not completed-output
- throughput. It does not establish parallel narrow performance limits.
-- No target-scale success claim for timed-out/unlaunched targets. No new tuning
- candidates or defaults; no heavy task overlapped formal timing.
+Actual56-core affinity160-215 from half-host budget160; dynamic half-memory752GiB.
+Peak RSS across cases <=85.17GiB. LH actual ATen/OpenMP/OpenBLAS56 (interop reports
+320, not320 active workers); PDG pools1 plus56 node/head workers in separate phases.
+Trackio unavailable/degraded; all local records are complete and validated.
 
-At the completed foundation delivery there were no task live jobs or descendants. Reviewed terminal units, all MainPID0/exit0:
+472 directed CPU FP64/FP32 tests passed/113.88s in artifacts/add-compare-dev-20260924-d;
+unit inactive/MainPID0/exit0. Retain failures -a (bad pytest path), -b/-c (FP32-derived
+FP64 norm descriptor incorrectly checked at FP64 tolerance). The scale comparator
+now uses payload precision for derived descriptors; no execution formula or
+exact route/identity check changed. No claim of a new7741-test global rerun.
 
-- tide-foundation-final-20260923-a (all qualification stages passed)
-- tide-foundation-medium-20260923-a (all108 runs completed)
-- tide-foundation-large-20260923-a (DAG/Settle bounded assessment)
-- tide-foundation-pdg-narrow-20260923-a (PDG bounded supplement)
-Per-case timeout exits-15 and cleanup records are retained. Previous failed/
-cancelled development gates and audit-helper reproductions are not relabeled.
+## Completed foundation and its limits
 
-The six-stage acceptance scope remains closed. The new Add comparison above is
-explicitly requested. Further model/backend/performance work needs a new request;
-ROADMAP extensions include (CUDA/NPU/x86 target runtime, arbitrary models/LH configs,
-higher-order AD or whole training-controller/RNG/data-cursor resume).
+Delivery: evidence/foundation-final.md. Capabilities: execution-capabilities.md.
+Six implementation classes, independent schedules, representative modules,
+native Settle construction/encoding, applicable optimization migration, isolated
+first-order roots, optimizer/alias/None-versus-zero and scoped checkpoints passed.
+Qualified source81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5; clean checkout
+qualification/foundation-final-81a1b26. Evidence artifacts/foundation-final-20260923-a:
+7741 CPU FP64/FP32 tests/1235.63s,17 relocated smoke variants,36 fresh-process
+checkpoint trajectories,489 source files/13 binaries and no-Python native Settle.
 
-Re-entry verification:
+Performance evidence: foundation-medium.md (12 configs/108 completed runs) and
+foundation-large.md under docs/evidence. Large assessments retain7 complete,
+5 timeouts and1 unlaunched stage; these are not target-scale successes. One narrow
+PDG supplement actually ran1 worker despite limit32; it cannot establish parallel
+scaling limits. Some300s limits included construction/warmup/profile. Do not
+repeat expensive old failures without separating these causes and actual work.
+Native self-loop/ring specializations also do not expose multiple nodes in their
+Aggregate/Full dispatch; worker configuration is not a universal speedup claim.
+
+Native named-value checkpoint TIDENCK1 does not contain graph continuation;
+graph/application checkpoints do not restore the whole controller/RNG/data cursor.
+The tiny model adapter is not arbitrary pretrained import. CUDA/Ascend/x86 target
+qualification and optimized training remain extensions, not current evidence.
+Suggested next priorities and resource limits remain in ROADMAP. The latest
+Add result makes packed training VJP optimization the strongest next candidate.
+No further heavy task is queued or implicitly authorized by this completed audit.
+
+## Re-entry
 
 ```
 git status --short --branch
 git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
-Environment: /home/zlong/anaconda3/bin/python; aarch64, Torch/LibTorch2.10.0+cpu,
-GCC10.3.1/Python3.11.15/C++11 ABI; TORCH_DEVICE_BACKEND_AUTOLOAD=0. Correctness
-pools1/build2. Resource budgets were dynamically half-effective (160 CPUs,
-719–743GiB for the new large runs), with actual RSS/thread/cgroup records.
+
+Environment: /home/zlong/anaconda3/bin/python, aarch64, Torch/LibTorch2.10.0+cpu,
+GCC10.3.1/Python3.11.15/C++11 ABI; TORCH_DEVICE_BACKEND_AUTOLOAD=0.
+Correctness pools1/build2; future experiments retain half-effective CPU/memory,
+sequential heavy timing and maximum8 Ascend cards if that extension is requested.
 Source/artifacts resolve under /var/tmp/zlong-graph-execution-foundation.
-Retain all cited sources/builds/results/failure reproducers. No push, subagents,
-or writes to read-only references were performed. Durable records are local truth.
+Preserve cited artifacts and failure reproducers; no subagents or push.

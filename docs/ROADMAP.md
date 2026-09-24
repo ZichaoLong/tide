@@ -123,7 +123,17 @@ for the bounded exact mapping; scale comparisons permit independent weights.
 
 ## User-requested follow-up: Add scale comparison
 
-2026-09-24: implement configurable Add/grad-forward/outer-timer comparison,
-validate small paths, then execute the bounded56-core D2048/B512 comparison
-in [the contract](add-scale-comparison.md). This does not reopen the completed
-six-stage acceptance or qualify arbitrary model/backward/backend performance.
+2026-09-24 completed: configurable Add/grad-forward/outer-timer comparison;
+472 directed CPU FP64/FP32 tests,4 fresh native smoke runs and12 D2048/B512/56-core
+runs (3 repeats per engine/mode), all passed. [Reviewed results](evidence/add-scale-comparison.md)
+retain the exact9,468,020,899 count, overlapping nograd repeat ranges and15.18x
+PDG/LH grad-forward median latency. [Contract](add-scale-comparison.md).
+No backward-throughput or arbitrary model/backend claim follows.
+
+Suggested priority for a separately requested performance increment: preserve
+scalar replay as the correctness oracle and implement packed VJPs that retain
+isolated roots, None/connected-zero and ownership; then separate startup and
+steady-state limits in actual parallel large sparse runs. Costly Linear/Delta
+scans and one concrete model adapter follow. Existing CPU/memory/Ascend bounds,
+independent anchors and repeat requirements apply across all graph families.
+This recommendation does not reopen completed acceptance or queue another sweep.

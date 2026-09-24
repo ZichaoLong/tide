@@ -4,8 +4,9 @@ Definitions: `benchmarks/foundation-v1.json`; exact topology/module/variants:
 `scripts/foundation_workloads.py`. Twelve medium logical configurations and two
 large presets only. This suite is a graph-only workload, with no vocabulary head,
 embedding or LH parameter import. It complements the retained [LH/PDG source
-kit](evidence/cpu-comparison-kit.md). That kit remains inference-only, with its
-D16/B4/V257/6-step/warmup2 smoke; it has no new training-mode argument.
+kit](evidence/cpu-comparison-kit.md). The original qualified kit was inference-only. The subsequent
+[Add comparison](add-scale-comparison.md) adds an explicit grad-forward mode
+(no backward/optimizer) and retains its D16/B4/V257/6-step/warmup2 smoke.
 
 In a matching Torch Python environment, one command builds and runs graph smoke:
 

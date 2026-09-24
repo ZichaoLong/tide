@@ -28,6 +28,13 @@ program. Infer/train entries share values; training uses scalar semantic replay.
 | batch_next/reset | packed adopt/selected fiber reset; counted custom fallback | same-time batch owners; times stay causal | same causal Next/reset grouping |
 | head workers | native DenseLinear application vocabulary head; separate from graph node pool | same DenseLinear can consume frontier/Settle output; this pool is outside graph scheduling | same application DenseLinear, not an attention-head worker pool |
 
+Worker support does not imply every specialization exposes multiple nodes in
+one dispatch. In `cpp/src/specialized.cpp`, self-loop/ring visit nodes before
+`evaluate_block`, so their Aggregate/Full dispatch has one node at a time;
+sample/region work can still be parallel. No cyclic-specialization node-speedup
+claim follows from accepting a worker count. Generic Streaming exposes the
+multi-node path measured by P03 and the wide LH-scale comparisons.
+
 S3.2 directed gate: `tests/test_frontier_options.py` and eight related files,
 1098 CPU FP64/FP32 tests passed; archived source and terminal audit at
 `artifacts/frontier-options-dev-20260923-a/`. Clean7611-test qualification: [S3/S4 evidence](evidence/foundation-stage34.md).
