@@ -103,9 +103,10 @@ Correctness uses ATen/OpenMP/BLAS1, build2. Record effective pools, not just env
 No heavy job overlaps formal timing; large variants run sequentially. Durable
 background.slice/Nice10 jobs have bounded timeouts and complete child reaping.
 
-At most four new performance bottlenecks, two main candidates each. Currently
-zero selected. Small correctness/cost probe first, at least three independent
-repeats plus spread for speed claims. No benefit/regression/instability closes
+A new bounded performance increment considers at most four bottlenecks and two
+main candidates each. The frozen acceptance selected none; separately authorized
+Full and Aggregate follow-ups are recorded below. Small correctness/cost probe
+first, at least three independent repeats plus spread for speed claims. No benefit/regression/instability closes
 an experiment; keep conservative defaults. Implementation/correctness work is
 not capped by those exploration counts. Existing exact/single, fiber and packed
 transport trials are closed evidence, not an invitation to restart wide search.
@@ -130,11 +131,11 @@ retain the exact9,468,020,899 count, overlapping nograd repeat ranges and15.18x
 PDG/LH grad-forward median latency. [Contract](add-scale-comparison.md).
 No backward-throughput or arbitrary model/backend claim follows.
 
-Suggested priority for a separately requested performance increment: preserve
-scalar replay as the correctness oracle and implement packed VJPs that retain
-isolated roots, None/connected-zero and ownership; then separate startup and
-steady-state limits in actual parallel large sparse runs. Costly Linear/Delta
-scans and one concrete model adapter follow. Existing CPU/memory/Ascend bounds,
+The subsequent Full/Aggregate follow-ups below implement isolated packed VJPs
+while retaining scalar replay, None/connected-zero and ownership. Remaining
+extensions include separating startup/steady-state limits in parallel large
+sparse runs, costly Linear/Delta scans and one concrete model adapter. Existing
+CPU/memory/Ascend bounds,
 independent anchors and repeat requirements apply across all graph families.
 This recommendation does not reopen completed acceptance or queue another sweep.
 
@@ -148,22 +149,38 @@ same-binary replay110.43917 (1 repeat) and retained replay108.23288 (3 repeats).
 No backward-throughput or all-model/platform claim. Implementation reusable by
 legal frontier/Settle calls with bounded correctness; no speed claim there.
 
-No new task queued. Priority candidates after this completed increment: isolate
-Aggregate/state/Read VJP costs, or measure complete training-step memory/time;
-then consider independent packed VJPs, respecting undefined-cotangent contracts.
-Do not repeat this Full sweep without a new question. Earlier resource bounds,
-independent anchors, honest failure records and three-repeat gain checks apply.
+The subsequent follow-up below supplies Aggregate/state/Read attribution and
+small actual complete-training timing. Do not repeat this Full sweep without
+a new question. Earlier resource bounds, independent anchors, honest failure records and three-repeat gain checks apply.
 
-## Active follow-up: remaining grad-forward costs
+## Completed follow-up: Aggregate VJP and remaining grad-forward costs
 
-User authorized on 2026-09-24: profile Full-batched Aggregate/state/Read,
-choose one measured candidate, preserve default replay and isolated VJP roots,
-then measure small backward/optimizer/train-step and repeated wide Add if the
-cost probe supports it. No new topology sweep or default-policy promotion.
-Existing half-CPU/half-memory bounds apply. Diagnostic entry:31 directed tests.
+2026-09-24: Full-batched diagnostics selected Aggregate for the wide Add case;
+Attention small state replay remains a separate candidate. Optional native
+`aggregate_autograd=replay|batched` is independent of Full; default replay stays.
+Source scaling/reduction VJPs are batched, while normalization preserves per-event
+Jacobians and near-zero AdamW behavior. [Contract](aggregate-batched-autograd.md),
+[reviewed evidence](evidence/aggregate-batched-autograd.md).
 
-Candidate implemented: native aggregate_autograd=replay|batched, independent
-from Full policy, default replay. Source scaling/reduction VJPs batched;
-softmax retains event dimension and positive weighted mean retains per-event
-normalization graphs to preserve near-zero AdamW behavior.552 directed tests
-passed/104.09s; clean qualification and performance follow before closing.
+Clean 552-test selected CPU FP64/FP32 gate passed after an independent build.
+All 25 runs passed: 4 smoke, 2 cost probes, 12 small actual training, 6 wide Add
+forwards and 1 separate diagnostic. No tolerance changes. Complete training
+owner values/final gradients/losses match across all six small replay/batched
+pairs. Source/archive/build/packet and terminal-record audits passed.
+
+D2048/B512/56 CPUs: replay versus batched Aggregate median 11.61919 versus
+8.55906 ms/sample-token, with Full batched throughout and 3 processes per policy.
+Latency -26.34%, throughput +35.75%; peak RSS 77.43–78.76 versus 73.54–74.09 GiB.
+Small D128/B16/T16, median total time across 4 training windows: Add 1.44187→1.04816s,
+Attention 5.47745→4.98471s. These small timings do not certify wide-model training.
+No new LH or wide no-grad performance result. Portable kit and complete commands
+are linked from the evidence; all jobs are terminal, no task is queued.
+
+Next choices, only for a separately requested bounded increment: wide Add now
+spends most coordinator time in Full (2.77939s versus Update 0.59177s in a separate
+diagnostic), with scalar Full/Aggregate replay zero. Profile within that phase
+before choosing another large-Add kernel. For Attention, state/KV VJPs have the
+stronger small-probe signal; retain replay and test backward/optimizer as well.
+State/Read replay remains. Shared native TimedDAG/Settle paths have bounded
+correctness coverage, not a new throughput claim. Resource/repeat limits above
+apply across graph families; acceptance stays closed.

@@ -68,4 +68,6 @@ pass measures Aggregate/state/Read worker times and coordinator phases. Formal
 comparisons disable instrumentation, preserve graphs/weights/windows, and use
 independent process repetitions. Small actual backward/optimizer/train-step
 measurements have a separate workload; they do not certify wide-model training
-throughput or large Attention performance. See the reviewed evidence when ready.
+throughput or large Attention performance. [Reviewed evidence](evidence/aggregate-batched-autograd.md)
+records the clean 552-test gate, three repeats per policy and separate actual
+backward/optimizer measurements. Default replay is retained.

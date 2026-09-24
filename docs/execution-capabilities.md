@@ -8,8 +8,9 @@ semantic parity, not generally optimized backward; default packed state/Read/Ful
 replay remains. The optional [native Full affine VJP](full-batched-autograd.md)
 removes Full projection replay for its declared profiles. The optional
 [Aggregate source VJP](aggregate-batched-autograd.md) batches built-in source
-programs with isolated roots and per-event normalization backward; STATUS records
-the current correctness and performance qualification separately.
+programs with isolated roots and per-event normalization backward. Its
+[bounded qualification and performance evidence](evidence/aggregate-batched-autograd.md)
+separates graph correctness, wide grad-forward and small complete training.
 
 ## Graph × schedule × option × mode
 
