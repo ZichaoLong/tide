@@ -2,7 +2,8 @@
 
 Updated: 2026-09-25 (Asia/Shanghai). Branch: graph-execution-foundation.
 **Active: authorized cross-family streaming/prefill policy extension (E1-E5).**
-The first clean qualification attempt is terminal failed; no live project job.
+The first clean qualification attempt is terminal failed; the second clean
+qualification job is running below.
 Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
@@ -38,30 +39,38 @@ final-window owner values/gradients/aliases, not resumable checkpoints.
 Development checkout /var/tmp/zlong-graph-execution-foundation/development/cross-family-20260924-a
 was reused only between terminated attempts; per-job source archives are immutable.
 
-The first clean qualification attempt is terminal failed, not passed. Unit:
-tide-cross-family-qualification-20260924-a, previously in background.slice, Nice10.
-It tested frozen source957b004:
+The first clean qualification attempt is terminal failed, not passed. The
+second attempt is running as unit `tide-cross-family-qualification-20260925-a`
+in `background.slice`, Nice=10, from frozen source `eaa15c6`:
+/var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925.
+It uses driver copy
+/var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925-driver.py
+(SHA256 0abed3b859776457f7dafbf868b82d97378e1a44c62069f9fd8795f73366c546).
+The prior failed attempt tested frozen source957b004:
 /var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260924.
 Driver: artifacts/cross-family-drivers-20260924/qualification.py.
 Command: Python driver OUTPUT RELOCATED; scripts/job.py records exact argv/cwd.
-Output/status/log: artifacts/cross-family-qualification-20260924-a/{status.json,task.log,qualification.json}.
-Relocated target: /var/tmp/zlong-graph-execution-foundation/relocated/cross-family-20260924.
-Driver runs independent full CPU qualification, relocated export/rebuild and
-all60 v2 smoke variants; no unchanged original-LH oracle rerun. The109-step clean
-build completed; the full CPU gate failed with 8,547 passed and 30 failures,
-all in the native-unpacked replay-counter contract. Standalone loader audit
-resolved all libraries and found no Python runtime dependency. Preserve this
-failure record; it is not relabeled as a pass.
+Current output/status/log: artifacts/cross-family-qualification-20260925-a/{status.json,task.log,qualification.json}
+and artifacts/cross-family-qualification-20260925-a-launch.log.
+Current relocated target: /var/tmp/zlong-graph-execution-foundation/relocated/cross-family-20260925.
+The driver runs independent full CPU qualification, relocated export/rebuild and
+all60 v2 smoke variants; no unchanged original-LH oracle rerun. Inspect with
+`systemctl --user show tide-cross-family-qualification-20260925-a` and the
+status/log/qualification artifacts. Do not edit the frozen source while live.
+
+The prior 109-step clean build and standalone loader audit completed; its full
+CPU gate failed with 8,547 passed and 30 failures, all in the native-unpacked
+replay-counter contract. Preserve that failure record; it is not relabeled as
+a pass.
 
 The contract correction is present in the current worktree and its focused
 isolated-root gate passes 252 tests for FP32/FP64. It still needs a new clean
 frozen qualification; do not use the old frozen source for a passing claim.
 
-Next: establish a new frozen source from the current clean commit and run the
-full qualification plus relocated export/rebuild and v2 smoke. Audit actual
-paths, training observations, records and terminal jobs. Then run fixed v2
+Next: finish and audit the running qualification. If it passes, run fixed v2
 medium and resource-staged large assessments without overlapping build/test
-load; commit reviewed evidence separately.
+load; commit reviewed evidence separately. If it fails, preserve the new
+failure and repair only after inspecting its exact cause.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
 Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
