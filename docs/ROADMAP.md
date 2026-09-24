@@ -5,8 +5,8 @@ handoff; semantics owns the contract. The six-stage acceptance scope was frozen
 on 2026-09-23 and is now complete; [final qualification](evidence/foundation-final.md)
 is the delivery report. No unit of that acceptance version remains pending;
 the separately authorized cross-family extension below is also complete.
-Historical
-M0–M8 evidence remains indexed by architecture.md and Git history; its finite profiles do not certify the broader acceptance version.
+Historical M0–M8 evidence remains indexed by architecture.md and Git history;
+its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
 
