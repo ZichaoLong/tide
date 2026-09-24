@@ -6,7 +6,10 @@ capability description; ROADMAP owns stage status and extensions. CPU FP32/FP64 
 support. Native schedules support node workers. Training denotes first-order
 semantic parity, not generally optimized backward; default packed state/Read/Full
 replay remains. The optional [native Full affine VJP](full-batched-autograd.md)
-removes Full projection replay for its declared profiles; STATUS records its
+removes Full projection replay for its declared profiles. The optional
+[Aggregate source VJP](aggregate-batched-autograd.md) batches built-in source
+programs with isolated roots and per-event normalization backward; STATUS records
+its current correctness/performance qualification and
 qualification and performance separately.
 
 ## Graph × schedule × option × mode

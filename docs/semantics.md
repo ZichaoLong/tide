@@ -86,6 +86,10 @@ batch preserve event visibility, logical state and the declared public VJP.
 Native `full_autograd` is an execution policy outside semantic/checkpoint
 identity. Its optional batched affine VJP retains per-row undefined/connected-zero
 gradients under the [declared first-order contract](full-batched-autograd.md).
+Native `aggregate_autograd` independently selects replay or isolated batched
+source VJPs under [its contract](aggregate-batched-autograd.md), also outside
+semantic/checkpoint identity. Normalization retains per-event Jacobians before
+shared-owner accumulation, including near-zero-gradient optimizer behavior.
 
 Logical content/state observability does not fix Tensor object count, physical
 layout or operator granularity. [Optional packed transport](packed-transport.md)

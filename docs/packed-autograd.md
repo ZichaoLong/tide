@@ -12,7 +12,8 @@ agreement and objectives rooting all outputs do not detect this defect.
 
 The default remains the path below. Native Full additionally has an opt-in
 [batched affine VJP](full-batched-autograd.md), preserving isolated row gradients
-without Full's scalar projection replay. Other replay layers remain in place.
+without Full's scalar projection replay. Native Aggregate independently supports
+[batched source VJPs](aggregate-batched-autograd.md). State/Read replay remains.
 
 Python blocks and native streaming/blocks retain the requested packed forward
 kernels. They evaluate packed Aggregate, state/read and Full without autograd recording.

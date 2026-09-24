@@ -16,6 +16,7 @@
 
 namespace py = pybind11;
 void bind_full(py::module_&);
+void bind_aggregate(py::module_&);
 void bind_settle(py::module_&);
 void bind_metrics(py::module_&);
 using namespace tide;
@@ -162,7 +163,7 @@ PYBIND11_MODULE(_tide_native, m) {
     FIELD(Options, workers) FIELD(Options, packed) FIELD(Options, trace) FIELD(Options, mode) FIELD(Options, zeta)
     FIELD(Options, prefill) FIELD(Options, max_events)
     FIELD(Options, profile) FIELD(Options, parallel_regions) FIELD(Options, compact_events) FIELD(Options, defer_state_release)
-    FIELD(Options, packed_sources) FIELD(Options, batch_next) FIELD(Options, full_autograd);
+    FIELD(Options, packed_sources) FIELD(Options, batch_next) FIELD(Options, full_autograd) FIELD(Options, aggregate_autograd);
   py::class_<DenseLinear>(m, "DenseLinear").def(py::init<Index>())
     .def("run", [](DenseLinear& head, const Tensor& x, const Tensor& weight, const std::optional<Tensor>& bias) {
       return head.run(x, weight, bias.value_or(Tensor()));
@@ -184,6 +185,7 @@ PYBIND11_MODULE(_tide_native, m) {
     .def("run", &Specialized::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);
   bind_full(m);
+  bind_aggregate(m);
   bind_settle(m);
   bind_metrics(m);
 }

@@ -161,3 +161,9 @@ choose one measured candidate, preserve default replay and isolated VJP roots,
 then measure small backward/optimizer/train-step and repeated wide Add if the
 cost probe supports it. No new topology sweep or default-policy promotion.
 Existing half-CPU/half-memory bounds apply. Diagnostic entry:31 directed tests.
+
+Candidate implemented: native aggregate_autograd=replay|batched, independent
+from Full policy, default replay. Source scaling/reduction VJPs batched;
+softmax retains event dimension and positive weighted mean retains per-event
+normalization graphs to preserve near-zero AdamW behavior.552 directed tests
+passed/104.09s; clean qualification and performance follow before closing.

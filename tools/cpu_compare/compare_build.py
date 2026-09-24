@@ -83,7 +83,7 @@ def command(engine, a, binary, out, run_id):
                   fiber_pooling=getattr(a, 'fiber_pooling', 'event'), fiber_cache=getattr(a, 'fiber_cache', 'cloned'),
                   projection_layout=getattr(a, 'projection_layout', 'input'), defer_state_release=getattr(a, 'defer_state_release', 0),
                   attention_layout=getattr(a, 'attention_layout', 'event'),
-                  full_autograd=getattr(a, 'full_autograd', 'replay'), packed_sources=getattr(a, 'packed_sources', 0), batch_next=getattr(a, 'batch_next', 0),
+                  full_autograd=getattr(a, 'full_autograd', 'replay'), aggregate_autograd=getattr(a, 'aggregate_autograd', 'replay'), packed_sources=getattr(a, 'packed_sources', 0), batch_next=getattr(a, 'batch_next', 0),
                   check=int(a.smoke and a.width <= 64 and a.batch <= 8 and a.steps <= 12))
     result = [str(binary)]
     for key, value in values.items():

@@ -38,6 +38,7 @@
 | `docs/source-domains.md` | Logical incoming slots, exclusive physical aliases and denominator/cache correspondence |
 | `docs/state-clocks.md` | Compact periodic state clocks, global continuation and delegated batching |
 | `docs/full-programs.md` | Full program API, per-slot emission, absence and replay contracts |
+| `docs/aggregate-batched-autograd.md` | Optional native Aggregate source VJP, normalization precision and independent roots |
 | `docs/full-batched-autograd.md` | Optional native Full affine VJP, row isolation, capability and validation boundary |
 | `docs/aggregate-programs.md` | Tagged fibers, source contributions, normalized profiles and program API |
 | `docs/read-programs.md` | Region Read modes, independent readout kernels and scalar VJP validation |
@@ -91,7 +92,9 @@ selective diagonal SSM, Linear/Delta and event GQA/window attention. Packed stat
 prefill is isolated in `block_prepare.cpp`; its checked segment representation is
 in `packed.h`/`packed.cpp`. Full programs and sparse per-slot delivery are separate
 from scheduling. Source-aware Aggregate uses `aggregate.h`/`aggregate.py`, with
-native kernels and replay evaluation in separate source files. Read is separate
+native kernels and replay evaluation in separate source files.
+`isolated_aggregate.cpp` batches source VJPs; `bind_aggregate.cpp` is only a
+primitive test adapter. Read is separate
 in `readout.py`/`read.h`/`read.cpp`; Next in `next.py`/`next.h`/`next.cpp`.
 Regions use `region.py`/`region.h`, with typed history in `history.py`/`types.h`.
 Node and region tensor slots participate in comparisons, explicit detach and

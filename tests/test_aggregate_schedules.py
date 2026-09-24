@@ -87,14 +87,15 @@ def test_shared_source_program_settle_embedding_with_mixed_fiber(dtype, kind, im
 
 
 @pytest.mark.parametrize("kind", ["weighted_mean", "active_softmax", "all_softmax"])
-def test_aggregate_checkpoint_roundtrip_and_profile_rejection(dtype, kind, tmp_path):
+@pytest.mark.parametrize("policy", ["replay", "batched"])
+def test_aggregate_checkpoint_roundtrip_and_profile_rejection(dtype, kind, policy, tmp_path):
     g, m, q, xs, _ = fixture(dtype, kind)
-    first = Native(g, m, packed=True).run(q, [x for x in xs if x.time < 2], 2, sealed_until=2)
+    first = Native(g, m, packed=True, aggregate_autograd=policy).run(q, [x for x in xs if x.time < 2], 2, sealed_until=2)
     path = tmp_path / "aggregate.pt"; save(path, g, m, first.continuation)
     restored = Model(g, width=4, dtype=dtype, seed=123); resumed = load(path, g, restored)
     later = [x for x in xs if x.time >= 2]
     expected = run(g, m, first.continuation.detach(), later, 5, sealed_until=5)
-    actual = Native(g, restored, algorithm="frontier", packed=True, workers=3).run(resumed, later, 5, sealed_until=5)
+    actual = Native(g, restored, algorithm="frontier", packed=True, workers=3, aggregate_autograd=policy).run(resumed, later, 5, sealed_until=5)
     equivalent(expected, actual)
     equivalent(vjp(objective(expected), dict(m.named_parameters())), vjp(objective(actual), dict(restored.named_parameters())))
     changed = replace(g, nodes=tuple(replace(n, aggregation="mean") for n in g.nodes))

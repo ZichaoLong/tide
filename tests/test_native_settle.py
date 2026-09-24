@@ -17,13 +17,14 @@ from isolated_cases import vjp
 from test_settle import fixture
 
 
-def native(spec, model, q, *, mode="hst", packed=True, workers=3, full_autograd="replay"):
+def native(spec, model, q, *, mode="hst", packed=True, workers=3, full_autograd="replay", aggregate_autograd="replay"):
     body = Native(spec.graph, model)
     compiled = core.SettleGraph(body.compiled, spec.ranks)
     initial = compiled.embed_initial(to_continuation(core, spec.graph, body.compiled, q))
     options = core.Options()
     options.mode, options.packed, options.workers = mode, packed, workers
     options.full_autograd = full_autograd
+    options.aggregate_autograd = aggregate_autograd
     return compiled, core.SettleExecutor(compiled, body.weights, options), initial
 
 

@@ -18,6 +18,8 @@ class AggregateKernel {
   virtual std::vector<AggregateResult> batch(const NodeWeights&, const std::vector<AggregateInput>&) const;
   virtual bool joint_batch() const { return false; }
   virtual bool joint_sources() const { return false; }
+  virtual bool batched_autograd() const { return false; }
+  virtual std::vector<AggregateResult> batch_grad(const NodeWeights&, const std::vector<AggregateInput>&) const;
   virtual AggregateBatch source_batch(const NodeWeights& w, const std::vector<AggregateInput>& r) const {
     return {batch(w, r), {}, {}};
   }
@@ -25,5 +27,6 @@ class AggregateKernel {
 };
 std::shared_ptr<const AggregateKernel> make_aggregate_kernel(const Node&);
 Tensor evaluate_aggregate(const Graph&, const Model&, std::vector<Event>&, const std::vector<size_t>&,
-                          bool packed, bool packed_sources = false);
+                          bool packed, bool packed_sources = false, const std::string& autograd = "replay");
+void validate_aggregate_autograd(const Model&, const Options&);
 }  // namespace tide

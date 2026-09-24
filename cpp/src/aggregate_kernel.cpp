@@ -1,5 +1,6 @@
 #include "tide/operator_work.h"
 #include "tide/aggregate.h"
+#include "tide/isolated_aggregate.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -13,7 +14,7 @@ namespace {
 class SourceAggregate final : public AggregateKernel {
   std::string kind_;
 
-  Tensor coefficients(const NodeWeights& w, const AggregateInput& request) const {
+  Tensor coefficients(const NodeWeights& w, const AggregateInput& request, Index rows = 0) const {
     if (kind_ == "sum" || kind_ == "mean") return {};
     std::vector<Tensor> values;
     const auto prefix = kind_ == "weighted_mean" ? "agg_mass_" : "agg_logit_";
@@ -23,17 +24,21 @@ class SourceAggregate final : public AggregateKernel {
       for (const auto& source : request.sources) values.push_back(w.extra.at(prefix + std::to_string(source.slot)));
     }
     auto coefficients = at::stack(values);
+    // Softmax keeps an event axis: apply each row's Jacobian before accumulating
+    // shared-owner gradients. A shared vector instead aggregates cotangents first
+    // and can change near-zero float gradients enough to alter AdamW updates.
+    if (rows) coefficients = coefficients.unsqueeze(0).expand({rows, coefficients.numel()});
     if (kind_ == "weighted_mean") {
       coefficients = at::softplus(coefficients);
       auto denominator = coefficients.sum();
       if (!(denominator.item<double>() > 0)) throw std::invalid_argument("Aggregate weighted mean has zero mass");
       return coefficients / denominator;
     }
-    coefficients = at::softmax(coefficients, 0);
+    coefficients = at::softmax(coefficients, rows ? 1 : 0);
     if (kind_ != "all_softmax") return coefficients;
     values.clear();
-    for (const auto& source : request.sources) values.push_back(coefficients[source.slot]);
-    return at::stack(values);
+    for (const auto& source : request.sources) values.push_back(rows ? coefficients.select(1, source.slot) : coefficients[source.slot]);
+    return at::stack(values, rows ? 1 : 0);
   }
   AggregateResult combine(const NodeWeights& w, const AggregateInput& request, const std::vector<Tensor>& values) const {
     if (work::enabled()) {
@@ -85,6 +90,44 @@ class SourceAggregate final : public AggregateKernel {
     return result;
   }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
+  std::vector<AggregateResult> batch_grad(const NodeWeights& w, const std::vector<AggregateInput>& requests) const override {
+    std::map<std::vector<Index>, std::vector<size_t>> groups;
+    for (size_t i = 0; i < requests.size(); ++i) {
+      std::vector<Index> signature;
+      for (const auto& source : requests[i].sources) signature.push_back(source.slot);
+      groups[signature].push_back(i);
+    }
+    std::vector<AggregateResult> result(requests.size());
+    for (const auto& [signature, rows] : groups) {
+      Tensor coe;
+      if (kind_ == "weighted_mean") {
+        // Keep normalization VJPs per event: combining their cotangents before
+        // division changes cancellation near zero, which AdamW can amplify.
+        std::vector<Tensor> coefficients_by_event;
+        for (auto i : rows) coefficients_by_event.push_back(coefficients(w, requests[i]));
+        coe = at::stack(coefficients_by_event);
+      } else coe = coefficients(w, requests[rows[0]], rows.size());
+      std::vector<Tensor> atoms, scales;
+      for (auto i : rows) for (const auto& source : requests[i].sources) {
+        atoms.push_back(source.atom.value); scales.push_back(source.scale);
+      }
+      if (!coe.defined()) coe = at::empty({0}, atoms[0].options());
+      auto values = isolated_aggregate(atoms, scales, coe, signature.size(), kind_ == "mean");
+      if (work::enabled()) {
+        work::add(work::AggregateScaleElements, atoms.size()*atoms[0].numel());
+        work::add(work::AggregateAddElements, (atoms.size()-rows.size())*atoms[0].numel());
+      }
+      for (size_t i = 0; i < rows.size(); ++i) {
+        auto& item = result[rows[i]];
+        item.value = values[i*(signature.size()+1)];
+        for (size_t j = 0; j < signature.size(); ++j)
+          item.contributions.push_back({signature[j], values[i*(signature.size()+1)+1+j]});
+        std::sort(item.contributions.begin(), item.contributions.end(), [](const auto& a, const auto& b) { return a.slot < b.slot; });
+      }
+    }
+    return result;
+  }
   bool joint_sources() const override { return true; }
   AggregateBatch source_batch(const NodeWeights& w, const std::vector<AggregateInput>& requests) const override {
     AggregateBatch result;

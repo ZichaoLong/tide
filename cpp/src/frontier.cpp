@@ -1,4 +1,5 @@
 #include "tide/full.h"
+#include "tide/aggregate.h"
 #include "tide/frontier.h"
 #include "tide/ops.h"
 #include "tide/kernel.h"
@@ -19,6 +20,7 @@ Frontier::Frontier(Graph g, Model m, Options options)
     throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); graph_.topological_order(); configure_model(graph_, model_); validate_model(graph_, model_);
   validate_full_autograd(model_, options);
+  validate_aggregate_autograd(model_, options);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp") throw std::invalid_argument("invalid emit mode");
   if (options.max_events < 1 || !std::isfinite(options.zeta)) throw std::invalid_argument("invalid frontier options");
 }

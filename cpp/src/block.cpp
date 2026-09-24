@@ -41,13 +41,13 @@ std::vector<Event> evaluate_block(const Graph& g, const Model& m, Continuation& 
   for (const auto& [node, ids] : by_node) {
     if (!g.nodes[node].identity) stats["body_candidate_events"] += ids.size();
     ++stats["aggregate_calls"];
-    if (at::GradMode::is_enabled()) stats["semantic_aggregate_replays"] += ids.size();
+    if (at::GradMode::is_enabled()) stats[options.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
     if (!m.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
     if (options.packed_sources) {
       if (m.nodes[node].aggregate_kernel->joint_sources()) ++stats["packed_source_batches"];
       else stats["packed_source_fallback_events"] += ids.size();
     }
-    jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, true, options.packed_sources); });
+    jobs.push_back([&, ids] { evaluate_aggregate(g, m, events, ids, true, options.packed_sources, options.aggregate_autograd); });
   }
   pool.run(std::move(jobs));
   prefill_states(g, m, q, options, pool, events, by_sequence, stats);

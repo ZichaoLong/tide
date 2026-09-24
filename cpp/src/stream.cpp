@@ -26,6 +26,7 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   configure_model(graph_, model_);
   validate_model(graph_, model_);
   validate_full_autograd(model_, options_);
+  validate_aggregate_autograd(model_, options_);
   if (options_.mode != "hard" && options_.mode != "softp" && options_.mode != "hst")
     throw std::invalid_argument("invalid emit mode");
   if (!std::isfinite(options_.zeta)) throw std::invalid_argument("nonfinite zeta");
@@ -96,7 +97,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       }
       if (options_.packed && !model_.nodes[node].kernel->joint_batch()) stats["state_scalar_batch_steps"] += ids.size();
       stats["aggregate_calls"] += options_.packed ? 1 : ids.size();
-      if (options_.packed && replay) stats["semantic_aggregate_replays"] += ids.size();
+      if (options_.packed && replay) stats[options_.aggregate_autograd == "batched" ? "batched_aggregate_events" : "semantic_aggregate_replays"] += ids.size();
       if (options_.packed && !model_.nodes[node].aggregate_kernel->joint_batch()) stats["aggregate_scalar_fallback_steps"] += ids.size();
       if (options_.packed_sources) {
         if (model_.nodes[node].aggregate_kernel->joint_sources()) stats["packed_source_batches"] += 1;
@@ -104,7 +105,7 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
       }
       jobs.push_back([&, node, ids] {
         const auto& w = model_.nodes[node];
-        auto packed_content = evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources);
+        auto packed_content = evaluate_aggregate(graph_, model_, events, ids, options_.packed, options_.packed_sources, options_.aggregate_autograd);
         std::vector<State> old;
         std::vector<Tensor> content;
         std::vector<Index> times;

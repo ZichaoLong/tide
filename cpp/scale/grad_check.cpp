@@ -10,7 +10,8 @@ Run execute_grad(const Config& c, const Topology& topology, bool batched) {
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   auto f = fixture(c, topology);
   tide::Options opts; opts.packed = batched; opts.workers = batched ? 3 : 1;
-  opts.full_autograd = batched ? "batched" : "replay";
+  opts.full_autograd = batched ? c.full_autograd : "replay";
+  opts.aggregate_autograd = batched ? c.aggregate_autograd : "replay";
   opts.parallel_regions = batched; opts.packed_sources = batched && c.packed_sources;
   opts.batch_next = batched && c.batch_next;
   tide::Streaming engine(f.graph, f.model, opts);

@@ -3,9 +3,19 @@
 Updated:2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
 **Active follow-up: profile grad-forward with Full batched, then implement one
 measured Aggregate/state/Read optimization and check full training cost.**
-Diagnostic gate:31 tests passed/55.54s in grad-profile-dev-20260924-b.
--a is retained failed (wrong pytest path, successful build). Next: freeze this
-source and run artifacts/run_grad_update_profile.py; no live job yet.
+Diagnostic gate31 tests passed. Profiling job grad-update-profile-20260924-a
+completed/exit0 (unit tide-grad-update-profile-20260924-a, inactive/MainPID0).
+Frozen de87fba source/build retained in qualification/grad-profile-20260924.
+Add wide Aggregate replay24.26 worker seconds vs state11.84/Read6.93; Update wall
+2.07s, Full wall2.38s per batch-token. Attention small state replay dominates.
+Chosen candidate implemented: aggregate_autograd=batched, default replay.
+552 directed CPU FP64/FP32 tests passed/104.09s in aggregate-vjp-dev-20260924-d.
+Keep failed -a/-b and passed -c/-d plus the equal-source probe reproducer.
+Next: commit implementation, freeze qualification/aggregate-vjp-20260924,
+clean independent build and same selected gate, then comparison driver
+artifacts/run_aggregate_vjp_compare.py. Training helper
+artifacts/aggregate_training_probe.py is retained and has its own source hash.
+No live job now. Two main candidates have not been opened; only Aggregate selected.
 No push, subagents or reference-repository writes. STATUS is the sole handoff;
 ROADMAP is the sole backlog; semantics.md is the canonical local contract.
 
@@ -74,5 +84,17 @@ TORCH_DEVICE_BACKEND_AUTOLOAD=0, correctness pools1/build2. Resource limits rema
 half effective CPU/memory and at most8 Ascend cards for a separately requested
 extension. Reference LH, fractal-latcarf and ObsidianVault are read-only.
 
-Diagnostic gate -a built successfully but selected a nonexistent test file.
-Retain its failed record; -b reuses the verified build with the corrected path.
+Retain grad-profile-dev-20260924-a failed wrong-path record and -b passed.
+
+Retain aggregate-vjp-dev-20260924-a:269 passed/16 failed. Failures: expected
+exception class, missing Settle test option forwarding, FP32 positive-singleton
+normalization cancellation. -b fixes these without changing comparison tolerances.
+
+-b:532 passed/1 failed. Exact singleton zero changes tiny scalar VJP residuals
+that AdamW amplifies. -c keeps weighted-mean normalization per event, batching
+only its products/sums; no tolerance change. Other normalization profiles shared.
+
+-c passed534 tests. Additional equal-source near-zero probe found shared
+softmax Jacobian accumulation can change AdamW updates (raw reproducer retained).
+-d keeps a batch/event axis through softmax VJP before summing owner gradients.
+Weighted-mean coefficients remain per event. Added explicit optimizer regression.

@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
       portable_torch::print_usage(std::cout, argv[0]);
       std::cout << "PDG scale: --topology FILE --run-id ID --width N --batch N --steps N --warmup N\n"
         "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
-      std::cout << "  --full-autograd replay|batched --parallel-regions 0|1 --compact-events 0|1\n";
+      std::cout << "  --full-autograd replay|batched --aggregate-autograd replay|batched --parallel-regions 0|1 --compact-events 0|1\n";
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
       std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed forward, including grad replay)\n"
                    "  --memory attention|add (all-softmax, tick-repeat decay)\n";
@@ -42,13 +42,14 @@ int main(int argc, char** argv) {
     const auto started = Clock::now();
     portable_experiment::MetricsJsonlWriter writer(std::filesystem::path(c.runtime.output_dir)/"metrics.jsonl", c.run_id);
     if (c.check) { check(c, topology); std::cout << "CHECK passed: scalar slot / scalar row / packed row / parallel packed row\n" << std::flush; }
-    if (c.check && c.grad && c.full_autograd == "batched") { check_grad(c, topology); std::cout << "CHECK gradient roots passed\n" << std::flush; }
+    if (c.check && c.grad && (c.full_autograd == "batched" || c.aggregate_autograd == "batched")) { check_grad(c, topology); std::cout << "CHECK gradient roots passed\n" << std::flush; }
     portable_torch::seed_runtime(device, c.runtime.seed);
     at::AutoGradMode grad(c.grad);
     const auto construction_start = Clock::now();
     auto f = fixture(c, topology);
     tide::Options options; options.workers = c.workers; options.packed = c.packed; options.trace = false;
     options.full_autograd = c.full_autograd;
+    options.aggregate_autograd = c.aggregate_autograd;
     options.profile = c.profile;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
     options.defer_state_release = c.defer_state_release;
@@ -58,7 +59,7 @@ int main(int argc, char** argv) {
     const auto construction = seconds(construction_start);
     const auto runtime_threads = portable_torch::thread_metrics();
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters") << " construction_seconds=" << construction
-              << " memory=" << c.memory << " grad=" << c.grad << " full_autograd=" << c.full_autograd << " workers=" << c.workers << " threads=" << at::get_num_threads()
+              << " memory=" << c.memory << " grad=" << c.grad << " full_autograd=" << c.full_autograd << " aggregate_autograd=" << c.aggregate_autograd << " workers=" << c.workers << " threads=" << at::get_num_threads()
               << " attention_packing=" << (c.packed ? c.attention_packing : "scalar") << '\n'
               << at::get_parallel_info() << portable_torch::blas_description() << '\n' << std::flush;
     tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
@@ -118,7 +119,7 @@ int main(int argc, char** argv) {
       }
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
-        {"full_autograd", c.full_autograd}, {"emission", c.emission}, {"memory", c.memory}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
+        {"full_autograd", c.full_autograd}, {"aggregate_autograd", c.aggregate_autograd}, {"emission", c.emission}, {"memory", c.memory}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
         {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile},
         {"fiber_pooling", c.fiber_pooling}, {"fiber_cache", c.fiber_cache},
         {"projection_layout", c.projection_layout}, {"attention_layout", c.attention_layout},

@@ -79,8 +79,20 @@ void validate_transport(const AggregateBatch& batch, const std::vector<Aggregate
   matrix(s.values, count);
 }
 }  // namespace
+void validate_aggregate_autograd(const Model& m, const Options& options) {
+  if (options.aggregate_autograd != "replay" && options.aggregate_autograd != "batched")
+    throw std::invalid_argument("unknown Aggregate autograd policy");
+  if (options.aggregate_autograd == "batched") {
+    if (!options.packed) throw std::invalid_argument("batched Aggregate autograd requires packed execution");
+    for (const auto& w : m.nodes) if (!w.aggregate_kernel->batched_autograd())
+      throw std::invalid_argument("Aggregate program has no batched autograd implementation");
+  }
+}
+std::vector<AggregateResult> AggregateKernel::batch_grad(const NodeWeights&, const std::vector<AggregateInput>&) const {
+  throw std::invalid_argument("Aggregate program has no batched autograd implementation");
+}
 Tensor evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& events, const std::vector<size_t>& ids,
-                          bool packed, bool packed_sources) {
+                          bool packed, bool packed_sources, const std::string& autograd) {
   if (ids.empty()) return {};
   op_profile::Scope profile(op_profile::Aggregate);
   const auto& w = m.nodes[events[ids[0]].node];
@@ -88,7 +100,26 @@ Tensor evaluate_aggregate(const Graph& g, const Model& m, std::vector<Event>& ev
   for (auto i : ids) requests.push_back(request(g, m, events[i]));
   std::vector<AggregateResult> results;
   AggregateBatch transport;
-  if (packed) {
+  if (packed && at::GradMode::is_enabled() && autograd == "batched") {
+    results = w.aggregate_kernel->batch_grad(w, requests);
+    if (results.size() != requests.size()) throw std::invalid_argument("Aggregate batch changed event count");
+    if (packed_sources) {
+      // Internal numeric transport is deliberately detached, as in replay.
+      // Public source atoms/contributions above retain independent VJPs.
+      at::NoGradGuard guard;
+      auto sources = std::make_shared<SourceBatch>();
+      std::vector<Tensor> atoms, scales, content;
+      for (size_t i = 0; i < requests.size(); ++i) {
+        for (const auto& source : requests[i].sources) {
+          atoms.push_back(source.atom.value); scales.push_back(source.scale); sources->slots.push_back(source.slot);
+        }
+        sources->offsets.push_back(atoms.size()); content.push_back(results[i].value);
+      }
+      sources->values = at::stack(atoms)*at::stack(scales).unsqueeze(-1);
+      transport.sources = sources; transport.contents = at::stack(content);
+      validate_transport(transport, requests);
+    }
+  } else if (packed) {
     { at::NoGradGuard guard;
       if (packed_sources) {
         transport = w.aggregate_kernel->source_batch(w, requests); validate_transport(transport, requests);

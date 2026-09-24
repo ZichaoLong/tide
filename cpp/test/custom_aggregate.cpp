@@ -88,6 +88,14 @@ int main(int argc, char** argv) {
     auto y = at::full({2}, 3, options).set_requires_grad(true);
     auto unused = at::ones({2}, options).set_requires_grad(true);
     tide::Continuation q; q.identity = g.identity; q.batch_size = 2;
+    for (bool grad : {false, true}) {
+      at::AutoGradMode mode(grad);
+      tide::Options unsupported; unsupported.packed = true; unsupported.aggregate_autograd = "batched";
+      bool rejected = false;
+      try { tide::Streaming invalid(g, m, unsupported); }
+      catch (const std::invalid_argument&) { rejected = true; }
+      if (!rejected) throw std::runtime_error("custom Aggregate accepted unsupported batched VJP");
+    }
     for (bool transport : {false, true}) {
     tide::Options runtime; runtime.packed = true; runtime.workers = 2;
     runtime.packed_sources = runtime.batch_next = transport;

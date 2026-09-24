@@ -11,7 +11,7 @@ Config parse(int argc, char** argv) {
     {"--head-workers", &c.head_workers}};
   for (int i = 1; i < argc; ++i) {
     const std::string key = argv[i];
-    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing" && key != "--memory" && key != "--full-autograd"
+    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing" && key != "--memory" && key != "--full-autograd" && key != "--aggregate-autograd"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
         && key != "--fiber-pooling" && key != "--fiber-cache" && key != "--projection-layout" && key != "--attention-layout"
         && key != "--defer-state-release" && key != "--packed-sources" && key != "--batch-next"
@@ -26,6 +26,7 @@ Config parse(int argc, char** argv) {
     } else if (key == "--topology") c.topology = value;
     else if (key == "--run-id") c.run_id = value;
     else if (key == "--emission") c.emission = value;
+    else if (key == "--aggregate-autograd") c.aggregate_autograd = value;
     else if (key == "--full-autograd") c.full_autograd = value;
     else if (key == "--memory") c.memory = value;
     else if (key == "--attention-packing") c.attention_packing = value;
@@ -55,6 +56,8 @@ Config parse(int argc, char** argv) {
       || c.threads < 1 || c.threads > 160 || c.workers*c.threads > 160 || c.vocab < 2 || c.vocab > 100000
       || c.head_workers < 1 || c.head_workers > 160 || c.head_workers*c.threads > 160
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
+      || (c.aggregate_autograd != "replay" && c.aggregate_autograd != "batched")
+      || (c.aggregate_autograd == "batched" && !c.packed)
       || (c.full_autograd != "replay" && c.full_autograd != "batched")
       || (c.full_autograd == "batched" && !c.packed)
       || (c.memory != "attention" && c.memory != "add")

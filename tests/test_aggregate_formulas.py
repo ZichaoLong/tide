@@ -13,7 +13,7 @@ KINDS = ["sum", "mean", "weighted_mean", "active_softmax", "all_softmax"]
 
 
 @pytest.mark.parametrize("kind", KINDS)
-@pytest.mark.parametrize("implementation", ["reference", "python", "native", "native-serial"])
+@pytest.mark.parametrize("implementation", ["reference", "python", "native", "native-batched", "native-serial"])
 def test_analytic_source_normalization_vjp_absence_and_zero(dtype, kind, implementation):
     g = Graph((Node(0, aggregation=kind),), (), (Region(1),), (0, 0, 0), (0,), PortLayout((), (), (2, 0, 1), (0,)))
     m = Model(g, width=2, dtype=dtype)
@@ -34,7 +34,8 @@ def test_analytic_source_normalization_vjp_absence_and_zero(dtype, kind, impleme
     if implementation in {"reference", "python"}:
         result = (run if implementation == "reference" else frontier)(g, m, q, xs, 1, sealed_until=1)
     else:
-        result = Native(g, m, packed=implementation == "native", workers=3).run(q, xs, 1, sealed_until=1)
+        result = Native(g, m, packed=implementation != "native-serial", workers=3,
+                        aggregate_autograd="batched" if implementation == "native-batched" else "replay").run(q, xs, 1, sealed_until=1)
     event = result.trace[0]; h = event["content"]
     denominator = 10 if kind == "all_softmax" else 7
     c0, c2 = (1., 1.) if kind == "sum" else (.5, .5) if kind == "mean" else (2/denominator, 5/denominator)
@@ -64,14 +65,14 @@ def test_analytic_source_normalization_vjp_absence_and_zero(dtype, kind, impleme
 
 
 @pytest.mark.parametrize("kind", ["weighted_mean", "active_softmax", "all_softmax"])
-@pytest.mark.parametrize("implementation", ["python", "native"])
+@pytest.mark.parametrize("implementation", ["python", "native", "native-batched"])
 def test_absent_source_optimizer_behavior(dtype, kind, implementation):
     def update(reference):
         g = Graph((Node(0, aggregation=kind),), (), (Region(1),), (0, 0), (0,))
         m = Model(g, width=2, dtype=dtype)
         optimizer = torch.optim.AdamW(m.parameters(), lr=0.01, weight_decay=0.1)
         xs = [External(0, 0, 0, 0, torch.ones(2, dtype=dtype))]; q = Continuation(g.identity, 1)
-        engine = lambda: Native(g, m, packed=True).run(q, xs, 1, sealed_until=1)
+        engine = lambda: Native(g, m, packed=True, aggregate_autograd="batched" if implementation == "native-batched" else "replay").run(q, xs, 1, sealed_until=1)
         result = run(g, m, q, xs, 1, sealed_until=1) if reference else frontier(
             g, m, q, xs, 1, sealed_until=1) if implementation == "python" else engine()
         absent = m.nodes[0].extra["agg_mass_1" if kind == "weighted_mean" else "agg_logit_1"]
