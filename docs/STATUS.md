@@ -70,9 +70,11 @@ The contract correction is present in the current worktree and its focused
 isolated-root gate passes 252 tests for FP32/FP64. The new clean qualification
 now passes; the old failure remains retained as historical evidence.
 
-Next: audit the passing qualification, then run fixed v2 medium and
-resource-staged large assessments without overlapping build/test load. Commit
-reviewed evidence separately. No formal speed claim exists yet.
+Next: finish the fixed v2 large assessment, then audit the passing qualification
+and terminal performance records. Commit reviewed evidence separately. The
+medium tier is now terminal: **180/180 runs completed, 0 failed and 0 bounded
+stops**; its raw suite and summary remain under
+`artifacts/cross-family-performance-20260925-a/medium/`.
 The performance driver is prepared at artifacts/cross-family-drivers-20260924/performance.py;
 the running unit is `tide-cross-family-performance-20260925-a` in
 `background.slice`, Nice=10. It runs from passing frozen source `eaa15c6` at
@@ -85,13 +87,14 @@ artifacts/cross-family-performance-20260925-a and launch output under
 artifacts/cross-family-performance-20260925-a-launch.log. Resource discovery
 resolved a combined budget of 160 CPUs and about 841 GiB effective memory;
 the fixed driver uses medium 4 workers/1 thread/180 s and large dynamic
-workers/4 threads/900 s. Inspect the unit and assessment.json; no performance
-result is available until the unit reaches a terminal state.
+workers/4 threads/900 s. Medium is evaluated as above; large is currently
+running and has no terminal result yet. Inspect the unit and assessment.json.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
-Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
-(with dynamic budget reduction),1 process,900s bound including setup/warmups.
-Do not end at submission. No formal speed claim yet.
+Medium 4 workers/1 thread, 3 processes, 180s bound completed successfully;
+large 32 workers/4 threads (with dynamic budget reduction), 1 process, 900s
+bound including setup/warmups is still running. Do not call the live large
+assessment passed or infer a general speedup from the medium observations.
 
 Read ROADMAP's "Active extension" for finite coverage and completion. Preserve
 foundation-v1 and historical results. Native local kernels are largely shared;
