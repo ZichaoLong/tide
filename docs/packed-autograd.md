@@ -40,6 +40,11 @@ Repeated `autograd.grad(..., retain_graph=True)` queries are supported.
   `semantic_full_replays` counts extra selected Full evaluations;
   `semantic_aggregate_replays` counts extra per-fiber Aggregate evaluations. Existing
   batch/sequence/Full counters count the packed forward work separately.
+  These counters describe only packed numeric execution. With `packed=False`,
+  scalar state, Read, Aggregate, and Full programs run directly under the
+  active autograd context, so no extra replay is needed and the replay counters
+  remain zero. The scalar path is still checked against the packed path as an
+  independent semantic anchor.
   Native counters are accumulated by the coordinating thread.
 - `no_grad` and `inference_mode` do no semantic replay. Their packing and node
   parallelism remain active. A missing replay counter is equivalent to zero.

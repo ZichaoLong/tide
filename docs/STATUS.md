@@ -1,8 +1,9 @@
 # Current handoff
 
-Updated: 2026-09-24 (Asia/Shanghai). Branch: graph-execution-foundation.
+Updated: 2026-09-25 (Asia/Shanghai). Branch: graph-execution-foundation.
 **Active: authorized cross-family streaming/prefill policy extension (E1-E5).**
-No live project job. No push/subagents/reference writes. STATUS owns handoff,
+The first clean qualification attempt is terminal failed; no live project job.
+Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
 
@@ -11,7 +12,7 @@ execution of the five-stage plan; the previous no-queued-task notice is obsolete
 Re-entry checked clean worktree at extension start; no live durable records.
 CPU operator probe passed on aarch64/Torch2.10.0+cpu. Static portability audit:
 12 review warnings, all in existing runtime/test boundaries; no detected errors.
-Current implementation (uncommitted): Python isolated Full/Aggregate VJPs;
+Implementation committed as957b004: Python isolated Full/Aggregate VJPs;
 independent packed streaming and chain/diamond/Settle layered block schedules;
 native Settle streaming frontend; block packed=False now controls Full/Agg;
 versioned foundation-v2 policy/client/config/phase-recording entry. Contract:
@@ -37,17 +38,34 @@ final-window owner values/gradients/aliases, not resumable checkpoints.
 Development checkout /var/tmp/zlong-graph-execution-foundation/development/cross-family-20260924-a
 was reused only between terminated attempts; per-job source archives are immutable.
 
-Next: review/diff-check and commit the complete implementation. Then create a
-clean detached worktree at that new HEAD:
+The first clean qualification attempt is terminal failed, not passed. Unit:
+tide-cross-family-qualification-20260924-a, previously in background.slice, Nice10.
+It tested frozen source957b004:
 /var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260924.
-Frozen driver: artifacts/cross-family-drivers-20260924/qualification.py.
-Planned unit tide-cross-family-qualification-20260924-a; job output
-artifacts/cross-family-qualification-20260924-a/. Driver runs independent full
-CPU qualification, relocated export/rebuild and all60 v2 smoke variants; no
-unchanged original-LH oracle rerun. After qualification, run fixed v2 medium and
-resource-staged large assessments without overlapping build/test load. Audit
-actual paths, training observations, records and terminal jobs; commit reviewed
-evidence separately. Do not end at submission. No formal speed claim yet.
+Driver: artifacts/cross-family-drivers-20260924/qualification.py.
+Command: Python driver OUTPUT RELOCATED; scripts/job.py records exact argv/cwd.
+Output/status/log: artifacts/cross-family-qualification-20260924-a/{status.json,task.log,qualification.json}.
+Relocated target: /var/tmp/zlong-graph-execution-foundation/relocated/cross-family-20260924.
+Driver runs independent full CPU qualification, relocated export/rebuild and
+all60 v2 smoke variants; no unchanged original-LH oracle rerun. The109-step clean
+build completed; the full CPU gate failed with 8,547 passed and 30 failures,
+all in the native-unpacked replay-counter contract. Standalone loader audit
+resolved all libraries and found no Python runtime dependency. Preserve this
+failure record; it is not relabeled as a pass.
+
+The contract correction is present in the current worktree and its focused
+isolated-root gate passes 252 tests for FP32/FP64. It still needs a new clean
+frozen qualification; do not use the old frozen source for a passing claim.
+
+Next: commit and push the correction, establish a new frozen source, rerun the
+full qualification and audit actual paths, training observations, records and
+terminal jobs. Then run fixed v2 medium and resource-staged large assessments
+without overlapping build/test load; commit reviewed evidence separately.
+Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
+(OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
+Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
+(with dynamic budget reduction),1 process,900s bound including setup/warmups.
+Do not end at submission. No formal speed claim yet.
 
 Read ROADMAP's "Active extension" for finite coverage and completion. Preserve
 foundation-v1 and historical results. Native local kernels are largely shared;

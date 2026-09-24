@@ -42,7 +42,9 @@ independent roots, disable materialized gradients, and select defined cotangents
 without testing numerical zero. Unused rows stay None; connected zero stays
 connected. CPU FP32/64 only; create_graph backward is rejected. Normalization
 keeps per-event softmax Jacobians and per-event weighted-mean graphs, preserving
-near-zero AdamW behavior. Retain the independent scalar formulas as the oracle.
+near-zero AdamW behavior. With `packed=False`, scalar programs execute directly
+under autograd; replay counters remain zero because no detached numeric batch is
+being rebound. Retain the independent scalar formulas as the oracle.
 State/Read semantic replay remains and must be reported in training cost.
 Native state_evaluate.cpp is shared by tick streaming and causal block waves;
 prefill-disabled, selected-adoption, clear and custom-Next cases still batch

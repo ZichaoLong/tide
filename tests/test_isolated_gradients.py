@@ -44,8 +44,15 @@ def test_separate_public_roots_preserve_connectivity(dtype, kind, mode, implemen
             assert grad["upstream.1"] is None
             if name.startswith("trace.") or name in {"output", "pending"}:
                 assert all(grad[f"input.0.{n}.{t}"] is None for n in range(2) for t in (2, 3))
-    assert actual.stats.get("semantic_full_replays", 0) > 0
-    if implementation not in {"python-step", "native-step"}:
+    # Packed execution uses a detached numeric Full kernel plus an independent
+    # scalar graph. The explicit native unpacked path executes scalar Full
+    # directly under autograd, so it has no extra replay to count; both paths
+    # still satisfy the same observable-root comparison above.
+    if implementation == "native-unpacked":
+        assert actual.stats.get("semantic_full_replays", 0) == 0
+    else:
+        assert actual.stats.get("semantic_full_replays", 0) > 0
+    if implementation not in {"python-step", "native-step", "native-unpacked"}:
         assert actual.stats["semantic_state_replays"] == len(actual.trace)
 
 
