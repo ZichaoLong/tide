@@ -24,6 +24,6 @@ struct Measurement {
   double reset = 0, advance = 0, snapshot = 0;
 };
 Measurement execute(tide::Streaming&, const Config&, const std::vector<tide::External>&);
-void compare(const tide::Result&, const tide::Result&, bool traces);
+void compare(const tide::Result&, const tide::Result&, bool traces, at::ScalarType payload_dtype = at::kDouble);
 void check_work(const Measurement&, const Config&);
 }  // namespace tide_bench

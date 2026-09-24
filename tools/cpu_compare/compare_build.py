@@ -38,11 +38,19 @@ def prepare(engine, a, packet, out):
             for key in ('emitD', 'receiveD'):
                 model[name][key] = a.width
         model['vocab_size'] = a.vocab
+        if getattr(a, 'memory', 'attention') == 'add':
+            for name in ('input_', 'output_'):
+                for chal in model[name]['chals']:
+                    chal['chal'] = 'add'
+            model['pronounce']['chal'] = 'add'
         cfg.write_text(json.dumps(model, indent=2)+'\n')
         test = source/'test/test-cortexnet.cpp'
         value = replace_once(test.read_text(), f"int64_t batch_size = {packet['lh_batch']};", f'int64_t batch_size = {a.batch};')
         value = replace_once(value, f"t<{packet['lh_steps']};", f't<{a.steps};')
         test.write_text(value)
+        if getattr(a, 'lh_timer', 'original') == 'outer':
+            cmake = source/'CMakeLists.txt'
+            cmake.write_text(replace_once(cmake.read_text(), ' ENABLE_RAIITIMER', ''))
         shutil.copytree(kit/'graph-data', source/'test/graph-data')
         shutil.copytree(kit/'vendor', source/'vendor')
     return source
@@ -56,7 +64,7 @@ def build_commands(engine, a, source, prefix):
         target = 'tidegraph-scale-bench'
     else:
         configure.append('-DLH_JSON_INCLUDE='+str(source/'vendor'))
-        target = 'test-cortexnet-nograd'
+        target = 'test-cortexnet-'+('grad' if getattr(a, 'mode', 'nograd') == 'grad-forward' else 'nograd')
     compile_ = ['cmake', '--build', str(build), '--target', target, '--parallel', str(a.jobs)]
     return configure, compile_, build/target
 
@@ -68,7 +76,8 @@ def command(engine, a, binary, out, run_id):
                   run_id=run_id, output_dir=out/'native', width=a.width, batch=a.batch,
                   steps=a.steps, warmup=a.warmup, vocab=a.vocab, seed=a.seed,
                   workers=a.threads, threads=1, head_workers=a.threads, parallel_regions=1,
-                  compact_events=1, packed=1, grad=0, emission='row', profile=1,
+                  compact_events=1, packed=1, grad=int(getattr(a, 'mode', 'nograd') == 'grad-forward'),
+                  memory=getattr(a, 'memory', 'attention'), emission='row', profile=getattr(a, 'phase_profile', 1),
                   work_count=a.work_count, attention_packing=a.attention_packing,
                   operator_profile=getattr(a, 'operator_profile', 0),
                   fiber_pooling=getattr(a, 'fiber_pooling', 'event'), fiber_cache=getattr(a, 'fiber_cache', 'cloned'),

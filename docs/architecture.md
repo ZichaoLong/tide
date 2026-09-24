@@ -20,6 +20,7 @@
 | `docs/attention-packing-policy.md` | Exact versus single padded fiber attention policy, native API and validation |
 | `docs/attention-grouping-comparison.md` | LH padded queries versus PDG exact buckets, cache layout and pooling |
 | `tools/cpu_compare/README.md` | Two portable one-command CPU runners and source/graph packet |
+| `docs/add-scale-comparison.md` | Fixed-graph Add count, grad-forward mode and bounded local comparison contract |
 | `docs/operator-work.md` | Optional LH/PDG inference matrix work, attention padding and Emit boundary accounting |
 | `docs/operator-profiling.md` | Optional exclusive calling-thread timers, common boundaries and interpretation |
 | `docs/fiber-efficiency.md` | CSR pooling, immutable KV ownership, deferred state retirement and matrix layout |

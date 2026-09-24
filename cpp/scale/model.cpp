@@ -1,5 +1,6 @@
 #include "scale.h"
 #include "tide/fiber_attention.h"
+#include "tide/lazy_add.h"
 #include <stdexcept>
 
 namespace pdg_scale {
@@ -24,7 +25,8 @@ Fixture fixture(const Config& c, const Topology& t) {
     for (Index v = 0; v < n; ++v) {
       const auto region = v < t.forced ? base : v < t.points ? v-t.forced : (v-t.points)/t.local;
       tide::Node node{side*(base+1)+region};
-      node.memory = "lh-fiber-attention-all-softmax-repeat-v1";
+      node.memory = c.memory == "add" ? "lh-add-repeat-v1" : "lh-fiber-attention-all-softmax-repeat-v1";
+      if (c.memory == "add") node.aggregation = "all_softmax";
       node.query_heads = node.kv_heads = 4;
       node.clear = true; node.full = "lh-silu-rms-v1"; node.readout = "norm-fp64-v1";
       node.state_clock = {period, 0, t.layers}; node.emit_period = period;
@@ -33,7 +35,8 @@ Fixture fixture(const Config& c, const Topology& t) {
     }
   }
   tide::Node read{static_cast<Index>(g.regions.size())};
-  read.memory = "lh-fiber-attention-all-softmax-repeat-v1";
+  read.memory = c.memory == "add" ? "lh-add-repeat-v1" : "lh-fiber-attention-all-softmax-repeat-v1";
+  if (c.memory == "add") read.aggregation = "all_softmax";
   read.query_heads = read.kv_heads = 4; read.full = "lh-identity-identity-v1";
   read.state_clock = {period, t.layers, 1}; g.nodes.push_back(read); g.regions.push_back({1});
   g.inputs = {0}; g.outputs = {body}; g.layout = tide::PortLayout{}; g.source_domain = tide::SourceDomain{};
@@ -56,15 +59,25 @@ Fixture fixture(const Config& c, const Topology& t) {
   g.layout->input = {physical_in[0]++}; g.source_domain->input = {logical_in[0]++}; g.layout->output = {0};
   for (Index v = 0; v <= body; ++v) {
     tide::NodeWeights w{zero, dummy, zero, zero};
-    w.kernel = tide::make_fiber_attention_kernel(g.nodes[v], logical_in[v], c.attention_packing,
-                                                c.fiber_pooling, c.fiber_cache, c.attention_layout);
     // Non-learned schema scaffolding is shared and excluded from the model count.
-    w.extra["fiber_qkv"] = parameter({width, 3*width}, true, true);
-    w.extra["fiber_out"] = parameter({width, width}, true, true);
-    w.extra["fiber_qkv_bias"] = at::zeros({3*width}, opts);
-    w.extra["fiber_out_bias"] = zero;
-    w.extra["fiber_decay"] = at::full({}, .01, opts);
-    w.extra["fiber_pool"] = parameter({logical_in[v]}, false);
+    if (c.memory == "add") {
+      w.kernel = tide::make_add_repeat_kernel();
+      // LH decay is configuration, not a learned owner. Import computed retention.
+      w.extra["add_retention"] = at::scalar_tensor(1.0-.01, opts);
+      auto pool = parameter({logical_in[v]}, false);
+      at::AutoGradMode track_pool_views(true);
+      for (Index slot = 0; slot < logical_in[v]; ++slot)
+        w.extra["agg_logit_"+std::to_string(slot)] = pool[slot];
+    } else {
+      w.kernel = tide::make_fiber_attention_kernel(g.nodes[v], logical_in[v], c.attention_packing,
+                                                  c.fiber_pooling, c.fiber_cache, c.attention_layout);
+      w.extra["fiber_qkv"] = parameter({width, 3*width}, true, true);
+      w.extra["fiber_out"] = parameter({width, width}, true, true);
+      w.extra["fiber_qkv_bias"] = at::zeros({3*width}, opts);
+      w.extra["fiber_out_bias"] = zero;
+      w.extra["fiber_decay"] = at::full({}, .01, opts);
+      w.extra["fiber_pool"] = parameter({logical_in[v]}, false);
+    }
     if (v < body) {
       w.extra["lh_norm_weight"] = parameter({width}, false);
       auto weight = logical_out[v] ? parameter({logical_out[v]*width, width}) : at::Tensor();
@@ -86,7 +99,7 @@ Fixture fixture(const Config& c, const Topology& t) {
   m.agg_scale.assign(g.edges.size(), one); m.edge_scale = m.agg_scale;
   f.embedding = parameter({c.vocab, width}); f.head = parameter({c.vocab, width});
   Index count = 0; for (const auto& p : f.owners) count += p.numel();
-  const auto expected = (4*(body+1)+static_cast<Index>(t.edges.size()))*width*width
+  const auto expected = ((c.memory == "attention" ? 4*(body+1) : 0)+static_cast<Index>(t.edges.size()))*width*width
       +body*width+static_cast<Index>(t.edges.size())+1+t.layers+2*c.vocab*width;
   if (count != expected) throw std::logic_error("scale parameter accounting mismatch");
   f.inventory = {{"parameters", double(count)}, {"parameter_bytes", double(count)*(c.runtime.dtype == at::kDouble ? 8 : 4)},

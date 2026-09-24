@@ -38,7 +38,8 @@ def main(engine):
         experiment=dict(config=vars(a), **{'class':'benchmark'}, primary_metric='perf/ms_per_sample_token',
             global_step_semantics='token index; persistent state, fixed IDs (3*sample+7*token)%vocab',
             stop_condition=f'{a.steps} native tokens or {a.timeout_seconds}s; build phase separately bounded',
-            timing='LH original integer Think timer; PDG native cursor+head; no backward or optimizer; construction excluded from warm window',
+            timing=('LH '+getattr(a, 'lh_timer', 'original')+' timer; PDG native cursor+head; '
+                    'no backward or optimizer; construction excluded from warm window'),
             expected_parameters=expected),
         tracking=track.record, artifacts=dict(metrics='metrics.jsonl', summary='summary.json', stdout='stdout.log',
             host='host.json', configure='configure.log', build='build.log', prepared='prepared.json'),
@@ -60,7 +61,8 @@ def main(engine):
     handlers = {sig:signal.signal(sig,interrupt) for sig in (signal.SIGINT,signal.SIGTERM)}
     save()
     print('CONFIG '+json.dumps(dict(engine=engine, width=a.width, batch=a.batch, vocab=a.vocab,
-          steps=a.steps, warmup=a.warmup, seed=a.seed, grad=False, dtype=a.dtype, threads=a.threads,
+          steps=a.steps, warmup=a.warmup, seed=a.seed, grad=a.mode=='grad-forward', dtype=a.dtype, threads=a.threads,
+          memory=a.memory, mode=a.mode, lh_timer=getattr(a, 'lh_timer', None),
           attention_packing=getattr(a, 'attention_packing', 'lh-crossbatch'),
           operator_profile=getattr(a, 'operator_profile', 0),
           fiber_pooling=getattr(a, 'fiber_pooling', 'lh-csr'), fiber_cache=getattr(a, 'fiber_cache', 'lh-capacity'),
@@ -68,7 +70,7 @@ def main(engine):
           attention_layout=getattr(a, 'attention_layout', 'head'),
           packed_sources=getattr(a, 'packed_sources', 0), batch_next=getattr(a, 'batch_next', 0),
           parameters=expected, parameter_gib=expected*(8 if a.dtype=='float64' else 4)/2**30,
-          lh_initial_kv_gib=465*a.batch*16*a.width*8/2**30 if engine=='lh' else 0,
+          lh_initial_kv_gib=465*a.batch*16*a.width*8/2**30 if engine=='lh' and a.memory=='attention' else 0,
           graph=dict(nodes_per_cortex=232, inet_edges=984, onet_edges=984, io_edges=232, oi_edges=8),
           output_dir=str(out))), flush=True)
 

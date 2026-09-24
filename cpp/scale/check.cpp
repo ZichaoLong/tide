@@ -46,7 +46,7 @@ void check(const Config& c, const Topology& t) {
     tide::work::reset(c.work_count);
     tide::op_profile::reset(c.operator_profile && variant.second);
     auto actual = traced(c, t, variant.first, variant.second, "row", c.profile, true);
-    tide_bench::compare(actual, expected, true);
+    tide_bench::compare(actual, expected, true, c.runtime.dtype);
     tide::work::reset(false);
     tide::op_profile::reset(false);
   }

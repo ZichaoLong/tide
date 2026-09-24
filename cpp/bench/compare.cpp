@@ -1,4 +1,5 @@
 #include "streaming.h"
+#include <sstream>
 #include <stdexcept>
 
 namespace tide_bench {
@@ -6,12 +7,21 @@ namespace {
 void require(bool ok, const char* what) {
   if (!ok) throw std::runtime_error(std::string("benchmark parity: ")+what);
 }
+struct Comparison {
+  bool fp32_payload;
 void tensor(const at::Tensor& a, const at::Tensor& b) {
   require(a.defined() == b.defined(), "tensor presence");
   if (!a.defined()) return;
   require(a.scalar_type() == b.scalar_type() && a.sizes() == b.sizes(), "tensor metadata");
-  const bool fp64 = a.scalar_type() == at::kDouble;
-  require(at::allclose(a, b, fp64 ? 1e-8 : 1e-5, fp64 ? 1e-10 : 1e-6), "tensor value");
+  // FP64 descriptors computed from FP32 intermediates inherit FP32 error.
+  const bool fp64 = a.scalar_type() == at::kDouble && !fp32_payload;
+  if (!at::allclose(a, b, fp64 ? 1e-8 : 1e-5, fp64 ? 1e-10 : 1e-6)) {
+    std::ostringstream message;
+    message << "benchmark parity: tensor value (dtype=" << a.scalar_type() << ", shape=" << a.sizes()
+            << ", max_abs_error=" << (a-b).abs().max().item<double>()
+            << ", reference_max_abs=" << b.abs().max().item<double>() << ')';
+    throw std::runtime_error(message.str());
+  }
 }
 void slots(const std::map<std::string, at::Tensor>& a, const std::map<std::string, at::Tensor>& b) {
   require(a.size() == b.size(), "tensor slots");
@@ -38,8 +48,7 @@ void emitted(const std::vector<tide::SlotValue>& a, const std::vector<tide::Slot
     require(a[i].slot == b[i].slot, "slot identity"); tensor(a[i].value, b[i].value);
   }
 }
-}
-void compare(const tide::Result& a, const tide::Result& b, bool traces) {
+void result(const tide::Result& a, const tide::Result& b, bool traces) {
   const auto& x = a.continuation; const auto& y = b.continuation;
   // The anchor contains only the active rings. All their IDs and edges form an
   // unchanged prefix of the dormant extension; only whole-graph identity differs.
@@ -72,5 +81,10 @@ void compare(const tide::Result& a, const tide::Result& b, bool traces) {
       atom(u.sources[j].atom, v.sources[j].atom); tensor(u.sources[j].scale, v.sources[j].scale);
     }
   }
+}
+};
+}  // namespace
+void compare(const tide::Result& a, const tide::Result& b, bool traces, at::ScalarType payload_dtype) {
+  Comparison{payload_dtype == at::kFloat}.result(a, b, traces);
 }
 }  // namespace tide_bench

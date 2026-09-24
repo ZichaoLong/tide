@@ -11,7 +11,7 @@ Config parse(int argc, char** argv) {
     {"--head-workers", &c.head_workers}};
   for (int i = 1; i < argc; ++i) {
     const std::string key = argv[i];
-    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing"
+    if (!ints.count(key) && key != "--topology" && key != "--run-id" && key != "--emission" && key != "--attention-packing" && key != "--memory"
         && key != "--packed" && key != "--grad" && key != "--check" && key != "--profile"
         && key != "--fiber-pooling" && key != "--fiber-cache" && key != "--projection-layout" && key != "--attention-layout"
         && key != "--defer-state-release" && key != "--packed-sources" && key != "--batch-next"
@@ -26,6 +26,7 @@ Config parse(int argc, char** argv) {
     } else if (key == "--topology") c.topology = value;
     else if (key == "--run-id") c.run_id = value;
     else if (key == "--emission") c.emission = value;
+    else if (key == "--memory") c.memory = value;
     else if (key == "--attention-packing") c.attention_packing = value;
     else if (key == "--fiber-pooling") c.fiber_pooling = value;
     else if (key == "--fiber-cache") c.fiber_cache = value;
@@ -53,12 +54,16 @@ Config parse(int argc, char** argv) {
       || c.threads < 1 || c.threads > 160 || c.workers*c.threads > 160 || c.vocab < 2 || c.vocab > 100000
       || c.head_workers < 1 || c.head_workers > 160 || c.head_workers*c.threads > 160
       || (c.emission != "row" && c.emission != "slot") || c.topology.empty()
+      || (c.memory != "attention" && c.memory != "add")
       || (c.attention_packing != "exact" && c.attention_packing != "single")
       || (c.fiber_pooling != "event" && c.fiber_pooling != "csr")
       || (c.fiber_cache != "cloned" && c.fiber_cache != "owned")
       || (c.projection_layout != "input" && c.projection_layout != "linear")
       || (c.attention_layout != "event" && c.attention_layout != "head")
       || c.run_id.empty() || c.runtime.output_dir.empty()) throw std::invalid_argument("invalid bounded PDG scale configuration");
+  if (c.memory == "add" && (c.attention_packing != "exact" || c.fiber_pooling != "event"
+      || c.fiber_cache != "cloned" || c.projection_layout != "input" || c.attention_layout != "event"))
+    throw std::invalid_argument("fiber attention policies do not apply to Add");
   if (c.defer_state_release && !c.compact_events)
     throw std::invalid_argument("deferred state release requires compact events");
   if ((c.packed_sources || c.batch_next) && !c.packed)

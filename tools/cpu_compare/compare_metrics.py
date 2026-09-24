@@ -38,6 +38,7 @@ class Collector:
         print(f'{self.engine.upper()} token={index} {phase} ms/sample-token={ms:.6f}'+work, flush=True)
 
     def line(self, line):
+        outer = getattr(self.args, 'lh_timer', 'original') == 'outer'
         if line.startswith(("OpenBLAS ", "ATen parallel backend:")):
             print(line, flush=True)
         if self.engine == 'pdg':
@@ -54,7 +55,7 @@ class Collector:
                 raise ValueError('Think timer missing completion')
             self.pending_ms = int(match[1])
         elif match := re.fullmatch(r't: (\d+)\s*', line):
-            if self.pending_ms is None or int(match[1]) != len(self.events):
+            if (not outer and self.pending_ms is None) or self.token is not None or int(match[1]) != len(self.events):
                 raise ValueError('Think timer/token order mismatch')
             self.token = int(match[1])
         elif line.startswith('WORK '):
@@ -62,10 +63,11 @@ class Collector:
             if self.token is None or data['step'] != self.token:
                 raise ValueError('work event without completed Think')
             m = data['metrics']; m['model/parameters'] = self.parameters
-            m['perf/ms_per_sample_token'] = self.pending_ms/self.args.batch
-            m['perf/think_ms_per_batch'] = self.pending_ms
-            if self.pending_ms:
-                m['perf/sample_tokens_per_second'] = 1000*self.args.batch/self.pending_ms
+            milliseconds = m['perf/token_seconds']*1000 if outer else self.pending_ms
+            m['perf/ms_per_sample_token'] = milliseconds/self.args.batch
+            m['perf/think_ms_per_batch'] = milliseconds
+            if milliseconds:
+                m['perf/sample_tokens_per_second'] = 1000*self.args.batch/milliseconds
             event = dict(schema_version=1, run_id=self.run_id, sequence=len(self.events), step=self.token,
                          timestamp=utc_now(), elapsed_seconds=time.monotonic()-self.started, metrics=m,
                          context=dict(phase='warmup' if self.token < self.args.warmup else 'measure'))
@@ -90,7 +92,10 @@ class Collector:
         if self.args.work_count:
             for event in self.events:
                 m = event['metrics']
-                if m.get('op/qkv_flops', 0) <= 0 or m['op/executed_score_elements'] < m['op/valid_score_elements']:
+                add = getattr(self.args, 'memory', 'attention') == 'add'
+                if (not add and m.get('op/qkv_flops', 0) <= 0
+                    or add and (m.get('op/qkv_flops', 0) != 0 or m.get('op/head_flops', 0) <= 0)
+                    or m['op/executed_score_elements'] < m['op/valid_score_elements']):
                     raise ValueError('work inventory missing or inconsistent')
         return summarize(self.events, self.args.batch, self.args.warmup)
 
@@ -110,5 +115,6 @@ def summarize(events, batch, warmup):
     if 'op/qkv_rows' in measured[0]:
         counts = result['mean_metrics_per_batch_token']
         result['mean_counted_gflops_per_sample_token'] = counts['op/executed_matmul_flops']/batch/1e9
-        result['attention_padding_ratio'] = counts['op/executed_score_elements']/counts['op/valid_score_elements']
+        result['attention_padding_ratio'] = (counts['op/executed_score_elements']/counts['op/valid_score_elements']
+                                             if counts['op/valid_score_elements'] else None)
     return result

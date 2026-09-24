@@ -120,3 +120,10 @@ LH configs and general proof for all graphs/modules are outside this gate.
 Stable node locality and batched persistent KV remain optional bounded candidates,
 not blockers or existing capabilities. LH original C++ is inference-only authority
 for the bounded exact mapping; scale comparisons permit independent weights.
+
+## User-requested follow-up: Add scale comparison
+
+2026-09-24: implement configurable Add/grad-forward/outer-timer comparison,
+validate small paths, then execute the bounded56-core D2048/B512 comparison
+in [the contract](add-scale-comparison.md). This does not reopen the completed
+six-stage acceptance or qualify arbitrary model/backward/backend performance.

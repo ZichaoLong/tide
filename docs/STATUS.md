@@ -1,10 +1,26 @@
 # Current handoff
 
-Updated: 2026-09-23 (Asia/Shanghai). Branch graph-execution-foundation.
+Updated: 2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
 **Six-stage graph execution foundation acceptance COMPLETE.**
 All mandatory implementation/correctness units passed for the declared finite
 CPU FP32/FP64 profiles; fixed performance evaluation is closed with honest limits.
 ROADMAP is the sole backlog; only explicitly optional extensions remain.
+
+New user-requested Add comparison is active (2026-09-24), separate from the
+completed six-stage acceptance. Scope: docs/add-scale-comparison.md. Add scale
+fixture, portable Add/grad-forward/outer-timer options and derived-descriptor
+precision validation passed472 directed CPU FP32/FP64 tests/113.88s.
+Gate: artifacts/add-compare-dev-20260924-d, unit inactive/MainPID0/exit0.
+Failures -a (bad pytest path), -b and -c (FP32-derived FP64 norm tolerance) remain
+retained; no runtime formula changed. No reference sources changed.
+Implementation is ready for a coherent commit and frozen worktree. Next: launch
+artifacts/run_add_comparison.py against that clean source with recorded host
+resources,4 real native smoke cases and12 D2048/B512 Add runs (3 repeats per
+engine/mode). Planned unit/output: tide-add-scale-comparison-20260924-a /
+artifacts/add-scale-comparison-20260924-a. Main source may change only after
+freezing the input checkout; never edit its files or experiment driver while live.
+After terminal inspection, audit identities/metrics, write evidence and commit it.
+Do not claim this Add extension qualified from the preceding7741-test gate.
 
 Delivery entry: docs/evidence/foundation-final.md.
 
@@ -42,7 +58,7 @@ Performance closure:
 - No target-scale success claim for timed-out/unlaunched targets. No new tuning
  candidates or defaults; no heavy task overlapped formal timing.
 
-No task live jobs or descendants. Reviewed terminal units, all MainPID0/exit0:
+At the completed foundation delivery there were no task live jobs or descendants. Reviewed terminal units, all MainPID0/exit0:
 
 - tide-foundation-final-20260923-a (all qualification stages passed)
 - tide-foundation-medium-20260923-a (all108 runs completed)
@@ -51,9 +67,9 @@ No task live jobs or descendants. Reviewed terminal units, all MainPID0/exit0:
 Per-case timeout exits-15 and cleanup records are retained. Previous failed/
 cancelled development gates and audit-helper reproductions are not relabeled.
 
-Next bounded increment: NONE. Stop this acceptance scope. Do not automatically
-start another model import/backend/performance search. A new request is needed
-for ROADMAP extensions (CUDA/NPU/x86 target runtime, arbitrary models/LH configs,
+The six-stage acceptance scope remains closed. The new Add comparison above is
+explicitly requested. Further model/backend/performance work needs a new request;
+ROADMAP extensions include (CUDA/NPU/x86 target runtime, arbitrary models/LH configs,
 higher-order AD or whole training-controller/RNG/data-cursor resume).
 
 Re-entry verification:

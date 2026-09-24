@@ -14,6 +14,25 @@ Intel x86_64 需在目标机器重新编译，优先使用相同 Torch 版本。
 SiLU/RMS、clear、两次 body step/token；seed7，固定外部 token IDs。
 权重独立初始化，两边使用相同四块静态图；不宣称函数完全相同。
 
+可选 `--memory add` 将两侧 cortex 和 readout 都实例化为 tick-decayed
+Add + all-softmax；D2048 固定图有9,468,020,899个参数（除以1024³约8.818）。
+保留相同连接、SiLU/RMS、clear和两次body step。PDG 使用正典的
+`lh-add-repeat-v1` 与 source-aware Aggregate；LH 保留原始 Add 内核。
+`--mode grad-forward` 只开启autograd前向，无backward/optimizer/detach，默认关闭计数。
+显式开启grad-forward的work-count/operator-profile会被拒绝。
+
+对照历史关闭RAII timer的测试，可用：
+
+```bash
+python run_lh.py --device cpu --threads 56 --memory add --lh-timer outer --work-count 0 --output-dir runs/lh-add
+python run_pdg.py --device cpu --threads 56 --memory add --phase-profile 0 --work-count 0 --output-dir runs/pdg-add
+```
+
+`--lh-timer outer` 在独立准备副本中关闭原RAII timer，使用已有的外层steady-clock
+区间；原始默认仍解析`Think`整数毫秒。`--phase-profile 0`关闭PDG调度阶段计时。
+两者的构造、数值检查及日志不在主计时内。加`--mode grad-forward`可测同窗口
+开启autograd的前向；显式保留`--work-count 0`。Add拒绝非默认的Attention专用选项。
+
 ## 两条正式测试命令
 
 解压后，在目标 Torch Python 环境中执行：
@@ -107,7 +126,7 @@ python run_pdg.py --device cpu --threads 4 --smoke --output-dir runs/pdg-smoke
 - `prepared.json` / `source/`：本次实际使用的配置源码、哈希和目标机构建结果。
 
 `ms/sample-token` 除以了 batch；不是单条序列的一次迭代延迟。构造不计入
-测量窗口，KV/history 跨 token 保留。LH 主指标来自原 Think 整数毫秒计时，
+测量窗口，KV/history 跨 token 保留。LH 默认主指标来自原 Think 整数毫秒计时（outer选项使用外层高精度计时），
 PDG 主指标来自 native cursor+head；两边计数和统计输出发生在主计时之外，
 计数更新本身仍在计时中。`--work-count 0` 可单独检查计数开销。
 

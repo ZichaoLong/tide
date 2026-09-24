@@ -26,10 +26,11 @@ def topology(path):
 @pytest.mark.parametrize('grad', [0, 1])
 @pytest.mark.parametrize('profile', [0, 1])
 @pytest.mark.parametrize('optimized', [0, 1])
-def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, tmp_path):
+@pytest.mark.parametrize('memory', ['attention', 'add'])
+def test_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, memory, tmp_path):
     graph = tmp_path/'graph.txt'; edges = topology(graph); out = tmp_path/'native'
     cmd = [str(binary()), '--device', 'cpu', '--dtype', str(dtype).split('.')[-1], '--topology', str(graph),
-           '--width', '8', '--batch', '4', '--steps', '4', '--warmup', '1', '--vocab', '17',
+           '--width', '8', '--batch', '4', '--steps', '4', '--warmup', '1', '--vocab', '17', '--memory', memory,
            '--workers', '3', '--packed', '1', '--grad', str(grad), '--check', '1', '--profile', str(profile),
            '--head-workers', '3' if optimized else '1', '--parallel-regions', str(optimized),
            '--compact-events', str(optimized),
@@ -42,7 +43,8 @@ def test_attention_scale_full_state_and_schedule_parity(dtype, grad, profile, op
     for i, e in enumerate(events):
         m = e['metrics']
         assert e['step'] == e['sequence'] == i
-        assert m['model/parameters'] == (4*9+edges)*8**2+8*8+edges+1+2+2*17*8
+        assert m['model/parameters'] == ((4*9 if memory == 'attention' else 0)+edges)*8**2+8*8+edges+1+2+2*17*8
+        assert e['context']['memory'] == memory
         assert m['model/physical_edges'] == 2*edges+2
         assert m['check/logits_requires_grad'] == grad
         assert m['runtime/aten_threads'] == m['runtime/interop_threads'] == 1
@@ -99,6 +101,8 @@ def test_csr_export_retains_parallel_edges_and_rejects_damage(tmp_path):
                                 ['--device', 'cpu', '--width', '7'], ['--device', 'cpu', '--workers', '161'],
                                 ['--device', 'cpu', '--profile', '2'],
                                 ['--device', 'cpu', '--attention-packing', 'unknown'],
+                                ['--device', 'cpu', '--memory', 'unknown'],
+                                ['--device', 'cpu', '--memory', 'add', '--attention-packing', 'single'],
                                 ['--device', 'cpu', '--parallel-regions', '2'],
                                 ['--device', 'cpu', '--compact-events', '2'],
                                 ['--device', 'cpu', '--head-workers', '0'],

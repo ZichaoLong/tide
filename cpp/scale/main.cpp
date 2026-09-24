@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
         "  --workers N --head-workers N --threads N --packed 0|1 --grad 0|1 --emission row|slot --vocab N --check 0|1 --profile 0|1\n";
       std::cout << "  --parallel-regions 0|1 --compact-events 0|1\n";
       std::cout << "  --attention-packing exact|single (packed fiber attention only) --work-count 0|1\n";
-      std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n";
+      std::cout << "  --operator-profile 0|1 (exclusive worker elapsed times; packed inference)\n"
+                   "  --memory attention|add (all-softmax, tick-repeat decay)\n";
       std::cout << "  --fiber-pooling event|csr --fiber-cache cloned|owned --projection-layout input|linear\n"
                    "  --attention-layout event|head --defer-state-release 0|1 (requires compact events)\n"
                    "  --packed-sources 0|1 --batch-next 0|1 (require packed Streaming)\n";
@@ -55,7 +56,7 @@ int main(int argc, char** argv) {
     const auto construction = seconds(construction_start);
     const auto runtime_threads = portable_torch::thread_metrics();
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters") << " construction_seconds=" << construction
-              << " grad=" << c.grad << " workers=" << c.workers << " threads=" << at::get_num_threads()
+              << " memory=" << c.memory << " grad=" << c.grad << " workers=" << c.workers << " threads=" << at::get_num_threads()
               << " attention_packing=" << (c.packed ? c.attention_packing : "scalar") << '\n'
               << at::get_parallel_info() << portable_torch::blas_description() << '\n' << std::flush;
     tide::Continuation q; q.identity = engine.graph().identity; q.batch_size = c.batch;
@@ -67,9 +68,10 @@ int main(int argc, char** argv) {
     for (Index token = 0; token < c.steps; ++token) {
       tide::work::reset(c.work_count);
       tide::op_profile::reset(c.operator_profile);
-      const auto begin = Clock::now();
+      // Match LH's forward interval: dispose of the preceding logits outside it.
       previous_logits = at::Tensor();
       auto ids = at::remainder(at::arange(c.batch, at::TensorOptions().dtype(at::kLong))*3+token*7, c.vocab);
+      const auto begin = Clock::now();
       auto embeddings = f.embedding.index_select(0, ids);
       std::vector<tide::External> inputs;
       for (Index b = 0; b < c.batch; ++b) inputs.push_back({b, 0, token, token*period, embeddings[b]});
@@ -114,7 +116,7 @@ int main(int argc, char** argv) {
       }
       if (result.stats["update_calls"]) metrics["work/mean_rows_per_update_call"] = double(result.stats["candidate_events"])/result.stats["update_calls"];
       writer.Write(token, metrics, seconds(started), {{"phase", std::string(token < c.warmup ? "warmup" : "measure")},
-        {"emission", c.emission}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
+        {"emission", c.emission}, {"memory", c.memory}, {"packed", c.packed}, {"grad", c.grad}, {"profile", c.profile},
         {"attention_packing", c.packed ? c.attention_packing : "scalar"}, {"operator_profile", c.operator_profile},
         {"fiber_pooling", c.fiber_pooling}, {"fiber_cache", c.fiber_cache},
         {"projection_layout", c.projection_layout}, {"attention_layout", c.attention_layout},

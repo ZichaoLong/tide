@@ -43,15 +43,23 @@ def parse(engine):
     p.add_argument('--torch-prefix', help='standalone LibTorch root or CMake prefix; otherwise discover from this Python')
     p.add_argument('--libtorch-label', help='optional archive/package identity when using --torch-prefix')
     p.add_argument('--smoke', action='store_true', help='D16/B4/V257/6 steps/warmup2, instead of the 17.27B workload')
+    p.add_argument('--memory', choices=['attention', 'add'], default='attention')
+    p.add_argument('--mode', choices=['nograd', 'grad-forward'], default='nograd',
+                   help='grad-forward retains the forward graph; no backward/optimizer/detach')
+    if engine == 'lh':
+        p.add_argument('--lh-timer', choices=['original', 'outer'], default='original',
+                       help='outer disables original RAII timers and uses the surrounding steady-clock interval')
     for key in ('width', 'batch', 'vocab', 'steps', 'warmup'):
         p.add_argument('--'+key, type=int)
     p.add_argument('--seed', type=int, default=7)
     p.add_argument('--threads', type=int, default=min(56, len(os.sched_getaffinity(0))))
     p.add_argument('--jobs', type=int, default=2, help='CMake build jobs')
-    p.add_argument('--work-count', type=int, choices=[0, 1], default=1)
+    p.add_argument('--work-count', type=int, choices=[0, 1], default=None)
     p.add_argument('--operator-profile', type=int, choices=[0, 1], default=0,
                    help='exclusive calling-thread timers; do not add to wall intervals')
     if engine == 'pdg':
+        p.add_argument('--phase-profile', type=int, choices=[0, 1], default=1,
+                       help='Streaming phase timers; set 0 for an unprofiled comparison')
         p.add_argument('--attention-packing', choices=['exact', 'single'], default='exact',
                        help='exact shape buckets or one padded query batch per node update')
         p.add_argument('--fiber-pooling', choices=['event', 'csr'], default='event')
@@ -66,6 +74,14 @@ def parse(engine):
     p.add_argument('--memory-gib', type=int, default=0, help='optional address-space bound; 0 means no added limit')
     p.add_argument('--tracking', choices=['best-effort', 'off', 'required'], default='best-effort')
     a = p.parse_args()
+    if a.work_count is None:
+        a.work_count = int(a.mode == 'nograd')
+    if a.mode == 'grad-forward' and (a.work_count or a.operator_profile):
+        p.error('grad-forward requires work-count=0 and operator-profile=0')
+    if engine == 'pdg' and a.memory == 'add' and (a.attention_packing != 'exact'
+            or a.fiber_pooling != 'event' or a.fiber_cache != 'cloned'
+            or a.projection_layout != 'input' or a.attention_layout != 'event'):
+        p.error('fiber attention policies do not apply to Add')
     if sys.platform != 'linux' or sys.byteorder != 'little' or struct.calcsize('P') != 8:
         p.error('requires little-endian 64-bit Linux')
     defaults = dict(width=16, batch=4, vocab=257, steps=6, warmup=2) if a.smoke else dict(width=2048, batch=512, vocab=50304, steps=12, warmup=4)
@@ -93,7 +109,8 @@ def parse(engine):
 
 
 def parameters(a):
-    return (2208+4*465)*a.width**2+(464+2*a.vocab)*a.width+2211
+    attention = 4*465 if getattr(a, 'memory', 'attention') == 'attention' else 0
+    return (2208+attention)*a.width**2+(464+2*a.vocab)*a.width+2211
 
 
 def host_info():
