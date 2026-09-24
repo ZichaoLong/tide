@@ -138,18 +138,18 @@ scans and one concrete model adapter follow. Existing CPU/memory/Ascend bounds,
 independent anchors and repeat requirements apply across all graph families.
 This recommendation does not reopen completed acceptance or queue another sweep.
 
-## Active follow-up: PDG grad-forward
+## Completed follow-up: PDG grad-forward
 
-User authorized this bounded increment on2026-09-24. Target duplicated Full
-projection work: optional row-isolated batched linear forward/VJP, reusable by
-streaming and legal frontier/Settle Full calls. Preserve replay default and
-explicit capability failures. Gates: independent-root and ownership tests,
-FP64/FP32, shared/frozen/unused parameters, HST, optimizer and cut parity;
-clean-source bounded qualification; small cost probe followed by3 D2048/B512 Add
-grad-forward optimized repeats,1 fresh same-binary replay control and the retained
-3-repeat baseline, with exact resources recorded.
-No general training speed claim without separate backward measurements.
+2026-09-24: optional native Full batched affine VJP, default replay retained.
+[Evidence](evidence/full-batched-autograd.md), [contract](full-batched-autograd.md).
+Clean690-test selected FP64/FP32 gate,4 smoke/2 probes/4 wide runs all passed.
+D2048/B512 optimized median10.49906ms/sample-token (3 repeats), versus current
+same-binary replay110.43917 (1 repeat) and retained replay108.23288 (3 repeats).
+No backward-throughput or all-model/platform claim. Implementation reusable by
+legal frontier/Settle calls with bounded correctness; no speed claim there.
 
-Implementation ready for frozen qualification: row-isolated linear and supported
-Full programs, explicit option/capability checks, undefined-safe SemanticValue/HST.
-690 directed cases passed across -c and corrected -d. No wide speed claim yet.
+No new task queued. Priority candidates after this completed increment: isolate
+Aggregate/state/Read VJP costs, or measure complete training-step memory/time;
+then consider independent packed VJPs, respecting undefined-cotangent contracts.
+Do not repeat this Full sweep without a new question. Earlier resource bounds,
+independent anchors, honest failure records and three-repeat gain checks apply.

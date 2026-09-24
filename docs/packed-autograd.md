@@ -44,8 +44,8 @@ Repeated `autograd.grad(..., retain_graph=True)` queries are supported.
   parallelism remain active. A missing replay counter is equivalent to zero.
 - Training currently pays both packed numerical work and the scalar semantic
   graph's compute/storage cost. Packed call counts alone are not training-speed
-  evidence. An optimized packed backward preserving the same isolated-root
-  contract remains a performance task.
+  evidence. Full has the optional affine VJP above; optimizing the remaining replay
+  layers under the same isolated-root contract remains a performance task.
 - The qualified profiles are deterministic and functional. Custom programs must
   satisfy the same step/batch contract. Random/stateful side effects need an
   explicit replay contract before they can use this path.

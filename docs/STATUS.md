@@ -1,108 +1,57 @@
 # Current handoff
 
-Updated: 2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
-**Active: optional PDG grad-forward optimization (user requested).**
-Six-stage CPU acceptance and previous Add comparison remain complete.
-No task job is live. No push or reference writes; no subagents.
+Updated:2026-09-24 (Asia/Shanghai). Branch graph-execution-foundation.
+**Requested PDG grad-forward optimization COMPLETE. No live task job remains.**
+No push, subagents or reference-repository writes. STATUS is the sole handoff;
+ROADMAP is the sole backlog; semantics.md is the canonical local contract.
 
-## Current increment
+## Latest delivery
 
-Implemented `full_autograd=replay|batched`, default replay. Contract/navigation:
-[Full batched autograd](full-batched-autograd.md). Row-isolated linear VJPs remove
-Full affine scalar replay in native streaming and legal frontier/Settle calls.
-Other semantic replay stays. CPU FP64/FP32, first-order only; custom ancestors
-must propagate undefined cotangents. Options do not change checkpoint identity.
+[Full VJP evidence](evidence/full-batched-autograd.md),
+[contract/API](full-batched-autograd.md). Implementation:764794f3d3936a40a507da6e1e0056c46c740b9a.
+Optional `full_autograd=batched` / `--full-autograd batched`; default replay retained.
+Removes Full affine replay with first-order isolated row VJPs. Aggregate/state/Read
+replay remains. Supports declared CPU FP64/FP32 profiles, preserving None/zero,
+shared/unused owners and controls. Custom ancestors need undefined-safe VJPs.
 
-Directed gates: -c passed682/failed8 (new scale-check fixture used uncompiled
-identity); corrected fixture and -d passed all49 scale tests/51.92s. Union690
-selected tests now passes. Core new primitive, independent Full/slot roots,
-HST/None/zero/shared/frozen owners, native SGD/AdamW, cuts and six-class paths
-passed. Small scale checks include actual scalar/batched backward.
-Raw source archives/logs/status: artifacts/full-vjp-dev-20260924-{a,b,c,d}.
-Retain -a archive failure (unstaged deletion), -b153 passed/25 failed (test profile
-and exception type), -c682 passed/8 failed; do not relabel old failures.
-All units terminal/MainPID0. No new global7741-test qualification claim yet.
+Clean read-only source: /var/tmp/zlong-graph-execution-foundation/qualification/full-vjp-20260924.
+Independent build in its build/;690 selected tests passed/104.25s (not a global
+foundation rerun). Source/Git/archive505 files and13 binary hashes match.
+Raw qualification: artifacts/full-vjp-qualification-20260924-a/.
+Retain development failures -a/-b/-c and passed -d as described in evidence.
 
-Next: commit coherent implementation, create clean read-only worktree
-qualification/full-vjp-20260924, build2/CPU pools1, repeat the bounded directed
-matrix there. Preserve build/source/archive hashes. Then run the retained
-artifacts/run_full_vjp_compare.py with full_vjp_compare_support.py, frozen
---source/--build-dir, new --output-dir and freshly discovered --host-resources.
-This performs4 smoke cases,2 D256/B32 probes,3 optimized wide grad-forward
-repeats and1 same-binary replay control. Reuse previous3-repeat baseline/LH
-results below; this is no backward-throughput measurement.56 physical CPUs
-160-215, within dynamic half-host CPU/memory budget, sequential native processes.
-No new performance result exists yet. Commit reviewed evidence separately.
+Performance: artifacts/full-vjp-comparison-20260924-a/.
+4 smoke,2 cost probes,4 wide runs; all10 completed/exit0 and schemas validated.
+Reviewed audit, analysis, pipeline, native-build, resources and per-run records
+are present. Three optimized means:10.22666, 10.49906, 10.61330ms/sample-token.
+D2048/B512 Add9.468B: new median10.49906, same-binary replay control110.43917;
+about10.52x throughput. Grad-forward only, no backward/optimizer/detach.
+56 CPUs160-215 within half-host budget160; dynamic half-memory about814.7GiB.
+Peak optimized RSS77.48–78.37GiB.
+Exact forward checksum/work sequences agree; independent gradient anchors above.
+Both qualification/comparison units inactive/MainPID0/exit0, no native descendants.
+Portable source kit: export/cpu-attention-compare.tar.gz beneath the performance
+artifact directory. Trackio degraded; authoritative local records are complete.
 
-## Latest requested work: fixed-graph Add comparison
+## Retained foundation and previous comparison
 
-Delivery: [reviewed Add results and objective assessment](evidence/add-scale-comparison.md).
-Contract: add-scale-comparison.md; portable CLI: ../tools/cpu_compare/README.md.
-Implementation source:0c053ebc7f8b3be03220c54aebf56502f5f0f6f1.
-Frozen clean source: /var/tmp/zlong-graph-execution-foundation/qualification/add-scale-20260924.
-Raw records: artifacts/add-scale-comparison-20260924-a/ (status.json, pipeline.json,
-reviewed-audit.json, analysis.json, per-run manifests/metrics/summaries, export/,
-three source/build records, optional process-samples.json).
-Exact launch/preflight: artifacts/add-scale-comparison-a-launch.json and
-artifacts/add-scale-host-preflight-20260924.json. Retained run/review drivers are
-hashed in the records. Portable archive: export/cpu-attention-compare.tar.gz
-under that result directory; it now supports Add and explicit grad-forward.
+Six-stage finite CPU foundation acceptance remains complete:
+[evidence/foundation-final.md](evidence/foundation-final.md),
+[capability matrix](execution-capabilities.md). Original gate7741 tests,
+17 relocated smoke variants,36 fresh-process checkpoint trajectories. Six
+implementation classes, independent schedules, native Settle construction and
+encoding, first-order ownership/optimizer/checkpoint scopes are retained.
+No claim of arbitrary model import, higher-order AD, GPU/NPU or complete
+controller/RNG/data-cursor recovery. Native named-value checkpoint does not
+contain graph continuation. Large assessments retain their timeouts/unlaunched
+cases; do not relabel or mechanically repeat them.
 
-All4 actual native smoke cases and12 wide cases completed/exit0, with3 independent
-process repeats per engine/mode. Unit tide-add-scale-comparison-20260924-a is
-inactive/dead, MainPID0/Result=success/ExecMainStatus0, with no remaining group PID.
-Independent audit checks frozen source against Git archive, exported inventories,
-all3 build/binary records,16 validated run records, counts, thread settings,
-denominators, memory bounds and exact same-engine checksum sequences.
+[Earlier Add evidence](evidence/add-scale-comparison.md):3 repeats per engine/mode;
+PDG nograd5.59769, LH nograd5.82417, PDG replay grad-forward108.23288,
+LH grad-forward7.12832ms/sample-token. Independent engine weights; graph/module
+scale comparison. Original raw artifacts/add-scale-comparison-20260924-a stay.
 
-D2048/B512/V50304, FP32, nominal leaf1/32;9,468,020,899 parameters (8.818 divided
-by1024³). Same graph/module scale, independent weights, no backward/optimizer.
-Median of3 process-window means (12 steps, warmup4), ms/sample-token:
-
-- LH nograd5.82417; PDG nograd5.59769. Repeat ranges overlap; no consistent win.
-- LH grad-forward7.12832; PDG grad-forward108.23288 (15.18x). Scalar semantic
-  replay is a priority performance target; Tide training semantics stay intact.
-
-Actual56-core affinity160-215 from half-host budget160; dynamic half-memory752GiB.
-Peak RSS across cases <=85.17GiB. LH actual ATen/OpenMP/OpenBLAS56 (interop reports
-320, not320 active workers); PDG pools1 plus56 node/head workers in separate phases.
-Trackio unavailable/degraded; all local records are complete and validated.
-
-472 directed CPU FP64/FP32 tests passed/113.88s in artifacts/add-compare-dev-20260924-d;
-unit inactive/MainPID0/exit0. Retain failures -a (bad pytest path), -b/-c (FP32-derived
-FP64 norm descriptor incorrectly checked at FP64 tolerance). The scale comparator
-now uses payload precision for derived descriptors; no execution formula or
-exact route/identity check changed. No claim of a new7741-test global rerun.
-
-## Completed foundation and its limits
-
-Delivery: evidence/foundation-final.md. Capabilities: execution-capabilities.md.
-Six implementation classes, independent schedules, representative modules,
-native Settle construction/encoding, applicable optimization migration, isolated
-first-order roots, optimizer/alias/None-versus-zero and scoped checkpoints passed.
-Qualified source81a1b266af49d918aa6e1587e4ed9e0c4d4e5eb5; clean checkout
-qualification/foundation-final-81a1b26. Evidence artifacts/foundation-final-20260923-a:
-7741 CPU FP64/FP32 tests/1235.63s,17 relocated smoke variants,36 fresh-process
-checkpoint trajectories,489 source files/13 binaries and no-Python native Settle.
-
-Performance evidence: foundation-medium.md (12 configs/108 completed runs) and
-foundation-large.md under docs/evidence. Large assessments retain7 complete,
-5 timeouts and1 unlaunched stage; these are not target-scale successes. One narrow
-PDG supplement actually ran1 worker despite limit32; it cannot establish parallel
-scaling limits. Some300s limits included construction/warmup/profile. Do not
-repeat expensive old failures without separating these causes and actual work.
-Native self-loop/ring specializations also do not expose multiple nodes in their
-Aggregate/Full dispatch; worker configuration is not a universal speedup claim.
-
-Native named-value checkpoint TIDENCK1 does not contain graph continuation;
-graph/application checkpoints do not restore the whole controller/RNG/data cursor.
-The tiny model adapter is not arbitrary pretrained import. CUDA/Ascend/x86 target
-qualification and optimized training remain extensions, not current evidence.
-Suggested next priorities and resource limits remain in ROADMAP. The latest
-Add result makes packed training VJP optimization the strongest next candidate.
-The new requested Full optimization is authorized; do not reopen unrelated milestones.
-
-## Re-entry
+## Re-entry and next work
 
 ```
 git status --short --branch
@@ -110,9 +59,12 @@ git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
 
-Environment: /home/zlong/anaconda3/bin/python, aarch64, Torch/LibTorch2.10.0+cpu,
-GCC10.3.1/Python3.11.15/C++11 ABI; TORCH_DEVICE_BACKEND_AUTOLOAD=0.
-Correctness pools1/build2; future experiments retain half-effective CPU/memory,
-sequential heavy timing and maximum8 Ascend cards if that extension is requested.
-Source/artifacts resolve under /var/tmp/zlong-graph-execution-foundation.
-Preserve cited artifacts and failure reproducers; no subagents or push.
+No further heavy experiment is queued. Suggested next bounded question:
+attribute remaining Aggregate/state/Read replay or measure complete backward/
+optimizer/train-step cost before optimizing another layer. Keep simple oracles,
+explicit options, source isolation, failure records and coherent local commits.
+No whole-foundation restart. Read ROADMAP for extensions and resource bounds.
+Python:/home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1,
+TORCH_DEVICE_BACKEND_AUTOLOAD=0, correctness pools1/build2. Resource limits remain
+half effective CPU/memory and at most8 Ascend cards for a separately requested
+extension. Reference LH, fractal-latcarf and ObsidianVault are read-only.
