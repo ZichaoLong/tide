@@ -11,11 +11,34 @@ Add wide Aggregate replay24.26 worker seconds vs state11.84/Read6.93; Update wal
 Chosen candidate implemented: aggregate_autograd=batched, default replay.
 552 directed CPU FP64/FP32 tests passed/104.09s in aggregate-vjp-dev-20260924-d.
 Keep failed -a/-b and passed -c/-d plus the equal-source probe reproducer.
-Next: commit implementation, freeze qualification/aggregate-vjp-20260924,
-clean independent build and same selected gate, then comparison driver
-artifacts/run_aggregate_vjp_compare.py. Training helper
-artifacts/aggregate_training_probe.py is retained and has its own source hash.
-No live job now. Two main candidates have not been opened; only Aggregate selected.
+Implementation commit:8cafa2d. Frozen read-only source:
+/var/tmp/zlong-graph-execution-foundation/qualification/aggregate-vjp-20260924.
+Clean qualification completed: tide-aggregate-vjp-qualification-20260924-a;
+552 selected CPU FP64/FP32 tests passed/105.35s after an independent build.
+Unit inactive/MainPID0/exit0. Raw records:
+artifacts/aggregate-vjp-qualification-20260924-a/{status.json,task.log,development.json}.
+Not a rerun of the whole foundation gate.
+
+Active comparison: tide-aggregate-vjp-comparison-20260924-b;
+artifacts/aggregate-vjp-comparison-20260924-b/{status.json,task.log,pipeline.json}.
+4 smoke,2 cost probes,12 small training runs completed/exit0; saved owner values,
+final-window gradients and loss sequences pass replay/batched parity. Six wide
+Add grad-forwards (3 per policy) and one diagnostic are still running/pending.
+Do not call the comparison passed until its terminal record is verified.
+Command: artifacts/run_aggregate_vjp_compare.py --source <frozen source>
+--build-dir <frozen source>/build --output-dir <comparison artifact>
+--host-resources artifacts/grad-update-host-resources-20260924.json
+--qualification artifacts/aggregate-vjp-qualification-20260924-a.
+CPU160-215 (56),dynamic half-memory,OMP/BLAS1; no heavy overlap during timing.
+Paths under /var/tmp/zlong-graph-execution-foundation. Drivers retained read-only:
+artifacts/run_aggregate_vjp_compare.py,aggregate_training_probe.py,
+full_vjp_compare_support.py. Do not modify active inputs or frozen source/build.
+Inspect systemctl --user show UNIT and above logs/exit records. Stop with
+systemctl --user stop UNIT if required. RUNNING/WAITING is not passed.
+Next: await terminal results, audit source/archive/build/packet/run records,
+review wide repeats and small actual backward/train-step results, write
+aggregate-batched-autograd evidence, update ROADMAP/STATUS and commit evidence.
+Audit helper: artifacts/audit_aggregate_vjp.py (run only after terminal success).
 No push, subagents or reference-repository writes. STATUS is the sole handoff;
 ROADMAP is the sole backlog; semantics.md is the canonical local contract.
 
@@ -73,11 +96,10 @@ git log -6 --oneline
 /home/zlong/anaconda3/bin/python scripts/status.py
 ```
 
-User authorized the follow-up on 2026-09-24. First enable existing worker timers
-for grad-forward diagnostics (the CLI currently rejects them), profile with
-Full batched, then choose one measured optimization and retain replay as oracle.
-Add small complete-training timing and repeated wide Add validation if beneficial. Keep simple oracles,
-explicit options, source isolation, failure records and coherent local commits.
+User-authorized follow-up is implemented and independently qualified; the live
+comparison above must finish before closing. Inspect its terminal status and
+review all repeats, not just the fastest sample. Keep simple oracles, explicit
+options, immutable sources, retained failures and coherent local commits.
 No whole-foundation restart. Read ROADMAP for extensions and resource bounds.
 Python:/home/zlong/anaconda3/bin/python; aarch64/Torch2.10.0+cpu/GCC10.3.1,
 TORCH_DEVICE_BACKEND_AUTOLOAD=0, correctness pools1/build2. Resource limits remain
@@ -98,3 +120,7 @@ only its products/sums; no tolerance change. Other normalization profiles shared
 softmax Jacobian accumulation can change AdamW updates (raw reproducer retained).
 -d keeps a batch/event axis through softmax VJP before summing owner gradients.
 Weighted-mean coefficients remain per event. Added explicit optimizer regression.
+
+Comparison -a cancelled during qualification wait, before any run, to correct
+training manifest seed to actual explicit7. Original drivers/cancellation record
+retained in its directory. -b uses the corrected read-only helper.

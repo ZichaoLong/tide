@@ -19,7 +19,8 @@ Add + all-softmax；D2048 固定图有9,468,020,899个参数（除以1024³约8.
 保留相同连接、SiLU/RMS、clear和两次body step。PDG 使用正典的
 `lh-add-repeat-v1` 与 source-aware Aggregate；LH 保留原始 Add 内核。
 `--mode grad-forward` 只开启autograd前向，无backward/optimizer/detach，默认关闭计数。
-显式开启grad-forward的work-count/operator-profile会被拒绝。
+LH 的 grad-forward 仍拒绝 work-count/operator-profile；PDG 可显式开启这些
+诊断计数和计时，但正式性能对照应关闭它们。
 
 对照历史关闭RAII timer的测试，可用：
 
@@ -144,14 +145,30 @@ Trackio 默认为 best-effort；未安装时仍完成完整本地记录，不自
 本源码包来自仓库的 `tools/cpu_compare/`；导出入口是
 `scripts/export_cpu_compare.py --lh-prepared PATH --topology PATH --output-dir NEW`。
 复现不依赖旧的 commit ID 操作指令；包内 manifest 已记录精确来源和全部文件哈希。
-# Optional PDG Full training execution
+## PDG 的可选批量 autograd 路径
 
-Add `--full-autograd batched` to the PDG runner with `--mode grad-forward` to
-use batched affine VJPs with isolated row dependencies. The default is `replay`.
-Both choices retain the declared Tide first-order training semantics; LH does
-not define these semantics. The option also applies to the Attention workload.
-In nograd it uses the existing numeric batch. Grad-forward timings exclude
-backward and optimizer work. Small `--smoke` runs with this option check native
-scalar/batched gradient roots before timing. Use `--phase-profile 0 --work-count 0`
-for comparisons without instrumentation. See the repository's
-`docs/full-batched-autograd.md` for the supported profiles and AD boundary.
+`--full-autograd replay|batched` 与 `--aggregate-autograd replay|batched` 是两个
+独立选项，默认均为 `replay`。前者批量计算 Full 的仿射 VJP，后者批量计算内置
+Aggregate 的来源缩放、贡献和归约 VJP，保留各个公开输出的独立梯度依赖。
+状态与 Read 的 replay 仍然保留；两项都可用于 Add 或 Attention workload。
+
+例如开启两项优化，测量 Add 的 grad-forward：
+
+```bash
+python run_pdg.py --device cpu --threads 56 --memory add --mode grad-forward \
+  --full-autograd batched --aggregate-autograd batched \
+  --phase-profile 0 --operator-profile 0 --work-count 0 \
+  --output-dir runs/pdg-add-grad-batched
+```
+
+固定 Full 为 `batched`、只切换 Aggregate，可单独衡量 Aggregate 的收益。
+小规模 `--smoke` 会先验证 scalar/batched 的梯度根；目标机器先做该检查。
+这些选项覆盖声明的 CPU FP32/FP64 一阶训练语义，保留 None/connected-zero、
+共享参数和规范化梯度；不支持任意自定义模块或高阶微分。在 nograd 下仍使用
+原有数值批处理。此入口只计 grad-forward，不执行 backward 或 optimizer。
+详情见仓库的 `docs/full-batched-autograd.md` 与
+`docs/aggregate-batched-autograd.md`。
+
+另开诊断 run，可使用 `--phase-profile 1 --operator-profile 1 --work-count 1`。
+Aggregate/state/Read replay 的 worker 累计计时可能在线程之间重叠，不能相加后
+当作端到端延迟，也不能与关闭诊断的正式结果混用。

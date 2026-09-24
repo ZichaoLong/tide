@@ -9,8 +9,7 @@ replay remains. The optional [native Full affine VJP](full-batched-autograd.md)
 removes Full projection replay for its declared profiles. The optional
 [Aggregate source VJP](aggregate-batched-autograd.md) batches built-in source
 programs with isolated roots and per-event normalization backward; STATUS records
-its current correctness/performance qualification and
-qualification and performance separately.
+the current correctness and performance qualification separately.
 
 ## Graph × schedule × option × mode
 
