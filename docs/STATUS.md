@@ -74,9 +74,19 @@ Next: audit the passing qualification, then run fixed v2 medium and
 resource-staged large assessments without overlapping build/test load. Commit
 reviewed evidence separately. No formal speed claim exists yet.
 The performance driver is prepared at artifacts/cross-family-drivers-20260924/performance.py;
-it will run from the passing frozen source and write unique medium/large output
-under artifacts/cross-family-performance-20260925-a. The performance unit and
-resource state will be recorded before launch.
+the running unit is `tide-cross-family-performance-20260925-a` in
+`background.slice`, Nice=10. It runs from passing frozen source `eaa15c6` at
+/var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925,
+using driver copy
+/var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925-performance.py
+(SHA256 8b8cbedf3e976c4f5745d0d339e34c43faf9d13589181e3076e3bb9155bbb3ee).
+It writes unique medium/large output under
+artifacts/cross-family-performance-20260925-a and launch output under
+artifacts/cross-family-performance-20260925-a-launch.log. Resource discovery
+resolved a combined budget of 160 CPUs and about 841 GiB effective memory;
+the fixed driver uses medium 4 workers/1 thread/180 s and large dynamic
+workers/4 threads/900 s. Inspect the unit and assessment.json; no performance
+result is available until the unit reaches a terminal state.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
 Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
