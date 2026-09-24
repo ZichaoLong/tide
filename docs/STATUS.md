@@ -3,7 +3,7 @@
 Updated: 2026-09-25 (Asia/Shanghai). Branch: graph-execution-foundation.
 **Active: authorized cross-family streaming/prefill policy extension (E1-E5).**
 The first clean qualification attempt is terminal failed; the second clean
-qualification job is running below.
+qualification job passed and its evidence is recorded below.
 Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
@@ -40,7 +40,7 @@ Development checkout /var/tmp/zlong-graph-execution-foundation/development/cross
 was reused only between terminated attempts; per-job source archives are immutable.
 
 The first clean qualification attempt is terminal failed, not passed. The
-second attempt is running as unit `tide-cross-family-qualification-20260925-a`
+second attempt ran as unit `tide-cross-family-qualification-20260925-a`
 in `background.slice`, Nice=10, from frozen source `eaa15c6`:
 /var/tmp/zlong-graph-execution-foundation/qualification/cross-family-20260925.
 It uses driver copy
@@ -53,10 +53,13 @@ Command: Python driver OUTPUT RELOCATED; scripts/job.py records exact argv/cwd.
 Current output/status/log: artifacts/cross-family-qualification-20260925-a/{status.json,task.log,qualification.json}
 and artifacts/cross-family-qualification-20260925-a-launch.log.
 Current relocated target: /var/tmp/zlong-graph-execution-foundation/relocated/cross-family-20260925.
-The driver runs independent full CPU qualification, relocated export/rebuild and
-all60 v2 smoke variants; no unchanged original-LH oracle rerun. Inspect with
+The driver ran independent full CPU qualification, relocated export/rebuild and
+all60 v2 smoke variants; no unchanged original-LH oracle rerun. The terminal
+result is exit 0: **8,577/8,577 CPU tests passed; relocated smoke 60/60 passed
+with 0 failures; standalone Settle FP64 and FP32 passed.** Inspect with
 `systemctl --user show tide-cross-family-qualification-20260925-a` and the
-status/log/qualification artifacts. Do not edit the frozen source while live.
+status/log/qualification artifacts. The unit is now inactive; preserve its
+outputs and frozen source.
 
 The prior 109-step clean build and standalone loader audit completed; its full
 CPU gate failed with 8,547 passed and 30 failures, all in the native-unpacked
@@ -64,13 +67,12 @@ replay-counter contract. Preserve that failure record; it is not relabeled as
 a pass.
 
 The contract correction is present in the current worktree and its focused
-isolated-root gate passes 252 tests for FP32/FP64. It still needs a new clean
-frozen qualification; do not use the old frozen source for a passing claim.
+isolated-root gate passes 252 tests for FP32/FP64. The new clean qualification
+now passes; the old failure remains retained as historical evidence.
 
-Next: finish and audit the running qualification. If it passes, run fixed v2
-medium and resource-staged large assessments without overlapping build/test
-load; commit reviewed evidence separately. If it fails, preserve the new
-failure and repair only after inspecting its exact cause.
+Next: audit the passing qualification, then run fixed v2 medium and
+resource-staged large assessments without overlapping build/test load. Commit
+reviewed evidence separately. No formal speed claim exists yet.
 Prepared next driver: artifacts/cross-family-drivers-20260924/performance.py
 (OUTPUT QUALIFICATION), then review.py (FROZEN_SOURCE QUALIFICATION ASSESSMENT).
 Medium4 workers/1 thread,3 processes,180s bound; large32 workers/4 threads
