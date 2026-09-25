@@ -226,11 +226,25 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "unsupported",
+      "status": "verified",
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Deferred by user; no accelerator support in current implementation scope."
+      "evidence": [
+        {
+          "date": "2026-09-25",
+          "commit": "781141882259ad66269dc87533bd82a893fb69a5",
+          "scope": "Local aarch64 Ascend 910 Python eager FP32 graph parity across PDG, TimedDAG and Settle, first-order backward, isolated VJPs, optimizer step and portable checkpoint handoff",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "ASCEND_RT_VISIBLE_DEVICES=6 python scripts/npu_smoke.py --device npu --with-backward --output-dir artifacts/npu-smoke-20260925-i",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/npu-python-20260925.md"
+        }
+      ]
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -402,7 +416,21 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Installed torch_npu libtorch_npu.so is classified as python-wheel-runtime: no standalone CMake package/public ABI, libtorch_python dependency and CPython symbols; no reproducible C++ NPU build or live-device smoke is currently possible.",
+      "attempts": [
+        {
+          "date": "2026-09-25",
+          "commit": "781141882259ad66269dc87533bd82a893fb69a5",
+          "scope": "Read-only static preflight of the installed TorchNPU libtorch_npu.so candidate; no C++ build was attempted without a standalone SDK",
+          "test_command": "python /home/zlong/.agents/skills/develop-portable-torch/scripts/inspect_libtorch_npu_sdk.py /home/zlong/anaconda3/lib/python3.11/site-packages/torch_npu --format json",
+          "result": "blocked",
+          "reason": "The wheel artifact lacks a CMake consumer package and public headers/exports, depends on libtorch_python.so and has 201 undefined CPython API symbols; it is not a standalone libtorch_npu SDK.",
+          "environment_manifest": "docs/evidence/npu-python-20260925.md",
+          "tiers": [
+            "static-cli"
+          ]
+        }
+      ]
     }
   ]
 }

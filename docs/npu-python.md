@@ -43,3 +43,9 @@ only CPU LibTorch binaries; a Python `torch_npu` import is not a
 `libtorch_npu` SDK.  Native NPU stays unverified until a version-matched
 standalone SDK, CMake/ABI and loader closure are built and a live-device C++
 smoke passes.
+
+The 2026-09-25 qualification passed from clean commit `7811418`; its machine
+manifest and finite case list are recorded in
+[the evidence report](evidence/npu-python-20260925.md).  The support matrix
+therefore marks only this finite Python FP32 eager scope as verified and keeps
+the C++ target unsupported.

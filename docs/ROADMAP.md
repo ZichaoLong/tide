@@ -124,6 +124,26 @@ Stable node locality and batched persistent KV remain optional bounded candidate
 not blockers or existing capabilities. LH original C++ is inference-only authority
 for the bounded exact mapping; scale comparisons permit independent weights.
 
+## Completed follow-up: Python TorchNPU boundary
+
+Authorized 2026-09-25. The shared Python graph/model/checkpoint path now has an
+explicit `cpu|cuda|npu|auto` runtime boundary with lazy TorchNPU loading,
+logical-device resolution, synchronization, CPU-portable checkpoints and
+deliberate optimizer-state placement. A clean aarch64 Ascend 910 smoke from
+commit `7811418` passed PDG streaming, TimedDAG frontier/diamond, generic and
+layered/chain Settle, one first-order backward, isolated Linear/Aggregate VJPs,
+an optimizer step and a fresh checkpoint handoff. The exact command, runtime
+manifest and comparisons are in [Python TorchNPU evidence](evidence/npu-python-20260925.md).
+
+This verifies only the recorded local eager FP32 Python scope. The local
+TorchNPU stack rejects the FP64 graph matmul path, so Python NPU FP64 is
+unsupported by design. The smoke is a correctness/parity result, not a
+throughput, distributed, all-module or host-fallback audit; optimized operator
+traces remain unclaimed. C++ NPU remains unsupported because the installed
+wheel's `libtorch_npu.so` is classified as `python-wheel-runtime` and lacks the
+standalone SDK/CMake/public ABI required for a matching LibTorch build. The
+support matrix records both the verified Python cell and the blocked C++ attempt.
+
 ## User-requested follow-up: Add scale comparison
 
 2026-09-24 completed: configurable Add/grad-forward/outer-timer comparison;

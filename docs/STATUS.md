@@ -7,7 +7,8 @@ qualification job passed and its evidence is recorded below.
 Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
-There is no live task job.
+The NPU smoke is terminal passed. One CPU qualification service remains active
+while its full result is collected; it is not yet a qualification result.
 
 ## Current work and next action
 
@@ -21,12 +22,25 @@ historical evidence; the follow-up is recorded in
 `docs/evidence/cross-family-performance.md` and
 `artifacts/cross-family-performance-20260925-b/`.
 
-The next authorized increment is the Python TorchNPU boundary and smoke. The
-working tree currently contains that implementation but it is not yet
-committed or claimed as verified. Native C++ NPU remains blocked on a
-version-matched standalone `libtorch_npu` SDK and live-device build.
+The Python TorchNPU boundary is committed at `60ccbaf`; portable checkpoint
+handoff is committed at `7e1477a`; and the smoke source-identity recording is
+committed and pushed at `7811418`. The fresh local smoke passed from that clean
+commit on physical NPU 6 (logical `npu:0`), with the result at
+`artifacts/npu-smoke-20260925-i/smoke.json`. Its finite FP32 eager scope is
+recorded in [Python TorchNPU evidence](evidence/npu-python-20260925.md).
+Native C++ NPU remains unsupported: the installed `libtorch_npu.so` is a
+Python-wheel runtime without a standalone CMake/public ABI and cannot yet be
+built or smoke-tested as a C++ target.
 
-Re-entry checked clean worktree at extension start; no live durable records.
+The full CPU regression is running as unit
+`tide-cpu-npu-qualification-20260925-b` from source `7e1477a` in
+`background.slice`, with output under
+`artifacts/cpu-npu-qualification-20260925-b/`. The source-only smoke metadata
+change after submission does not alter Python/C++ implementation semantics;
+inspect the unit and `result.json` before treating it as terminal evidence.
+
+Re-entry checked clean worktree at extension start; the CPU qualification above
+is the only live durable record.
 CPU operator probe passed on aarch64/Torch2.10.0+cpu. Static portability audit:
 12 review warnings, all in existing runtime/test boundaries; no detected errors.
 Implementation committed as957b004: Python isolated Full/Aggregate VJPs;
