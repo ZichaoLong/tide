@@ -33,7 +33,7 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         raise ValueError("window requires monotonic cut and explicit input seal")
     reference = model.nodes[0].bias
     def tensor(x):
-        if x.device.type != "cpu" or x.dtype != reference.dtype or x.shape != (model.width,):
+        if x.device != reference.device or x.dtype != reference.dtype or x.shape != (model.width,):
             raise ValueError("incompatible tensor device, dtype or shape")
         if not torch.isfinite(x).all():
             raise ValueError("nonfinite input/state")
@@ -46,7 +46,7 @@ def validate_window(graph, model, continuation, external, stop, sealed_until):
         tensor(state.value)
         model.nodes[v].validate(state)
         for value in state.slots.values():
-            if value.device.type != "cpu" or value.dtype != reference.dtype or not torch.isfinite(value).all():
+            if value.device != reference.device or value.dtype != reference.dtype or not torch.isfinite(value).all():
                 raise ValueError("incompatible state slot dtype/device/value")
     for (b, r), history in q.history.items():
         if not 0 <= b < q.batch_size or not 0 <= r < len(graph.regions):

@@ -66,9 +66,9 @@ def graph_for(config):
     return graph,spec
 
 
-def initialize(config, projection_layout='input'):
+def initialize(config, projection_layout='input', device=None):
     graph,spec = graph_for(config); d=config['width']
-    model=Model(graph,width=d,dtype=getattr(torch,config['dtype']),projection_layout=projection_layout)
+    model=Model(graph,width=d,dtype=getattr(torch,config['dtype']),projection_layout=projection_layout,device=device)
     with torch.no_grad():
         for p in model.parameters():
             if p.ndim == 2: p.mul_(1/(.15*math.sqrt(d)))
@@ -77,9 +77,9 @@ def initialize(config, projection_layout='input'):
     return graph,spec,model
 
 
-def inputs_for(config, graph):
+def inputs_for(config, graph, device=None):
     b,t,d = config['batch'],config['sequence'],config['width']
-    values = (torch.sin(torch.arange(b*t*d,dtype=getattr(torch,config['dtype']))*.019).reshape(b,t,d)*.02)
+    values = (torch.sin(torch.arange(b*t*d,dtype=getattr(torch,config['dtype']),device=device)*.019).reshape(b,t,d)*.02)
     lengths = [t-(i%4)*(t//8) if 'ragged' in config['topology'] else t for i in range(b)]
     # An explicit sealed application clock, not an inferred occurrence ledger.
     stride = 1 if config['graph']=='pdg' and config['topology']!='diamond' else 6 if config['topology']=='large-layered' else len(graph.regions)+2

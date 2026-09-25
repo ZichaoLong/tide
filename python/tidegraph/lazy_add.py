@@ -27,11 +27,11 @@ class LazyAdd(StateProgram):
 
     def validate_weights(self, weights):
         rho = weights.extra.get("add_retention")
-        if (rho is None or rho.ndim != 0 or rho.device.type != "cpu"
+        if (rho is None or rho.ndim != 0 or rho.device.type not in {"cpu", "cuda", "npu"}
                 or rho.dtype not in (torch.float32, torch.float64)
                 or (rho.dtype, rho.device) != (weights.bias.dtype, weights.bias.device)
                 or not torch.isfinite(rho)):
-            raise ValueError("Add requires finite payload-dtype scalar retention")
+            raise ValueError("Add requires a finite payload-dtype scalar retention")
 
     def validate(self, weights, state):
         if state.slots:

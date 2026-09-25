@@ -90,8 +90,8 @@ def aggregate(atoms, scales, coefficients, sources, mean=False):
     if type(sources) is not int or sources < 1 or not atoms or len(atoms)%sources or len(atoms) != len(scales):
         raise ValueError("isolated Aggregate source layout mismatch")
     first = atoms[0]
-    if first.ndim != 1 or first.device.type != "cpu" or first.dtype not in (torch.float32, torch.float64):
-        raise ValueError("isolated Aggregate requires CPU FP32/FP64 vectors")
+    if first.ndim != 1 or first.device.type not in {"cpu", "cuda", "npu"} or first.dtype not in (torch.float32, torch.float64):
+        raise ValueError("isolated Aggregate requires supported FP32/FP64 vectors")
     if any(a.shape != first.shape or s.ndim != 0 or a.dtype != first.dtype or s.dtype != first.dtype
            or a.device != first.device or s.device != first.device for a, s in zip(atoms, scales)):
         raise ValueError("isolated Aggregate input metadata mismatch")
