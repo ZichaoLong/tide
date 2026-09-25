@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 import torch
@@ -261,7 +262,10 @@ def main() -> int:
     torch.set_num_interop_threads(1)
     out = args.output_dir.resolve()
     out.mkdir(parents=True, exist_ok=False)
+    source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()
     record = {"schema": "tide-npu-python-smoke-v1", "state": "running",
+              "source": {"commit": source, "dirty": dirty},
               "runtime": manifest(device, reason, torch.float32), "cases": []}
     (out / "smoke.json").write_text(json.dumps(record, indent=2) + "\n")
     try:
