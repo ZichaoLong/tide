@@ -7,8 +7,8 @@ qualification job passed and its evidence is recorded below.
 Push is authorized for this continuation; no subagents/reference writes. STATUS owns handoff,
 ROADMAP owns backlog, semantics.md owns the contract. User explicitly approved
 execution of the five-stage plan; the previous no-queued-task notice is obsolete.
-The NPU smoke is terminal passed. One CPU qualification service remains active
-while its full result is collected; it is not yet a qualification result.
+The NPU smoke and the follow-up CPU qualification are terminal passed. There
+is no live durable task job.
 
 ## Current work and next action
 
@@ -32,15 +32,17 @@ Native C++ NPU remains unsupported: the installed `libtorch_npu.so` is a
 Python-wheel runtime without a standalone CMake/public ABI and cannot yet be
 built or smoke-tested as a C++ target.
 
-The full CPU regression is running as unit
-`tide-cpu-npu-qualification-20260925-b` from source `7e1477a` in
-`background.slice`, with output under
-`artifacts/cpu-npu-qualification-20260925-b/`. The source-only smoke metadata
-change after submission does not alter Python/C++ implementation semantics;
-inspect the unit and `result.json` before treating it as terminal evidence.
+The full CPU regression ran as unit
+`tide-cpu-npu-qualification-20260925-b` from clean source `7e1477a` in
+`background.slice`; it exited 0 with **8580/8580 tests passed in 1383.38s**.
+Its terminal manifest and log are under
+`artifacts/cpu-npu-qualification-20260925-b/` and record aarch64,
+Torch2.10.0+cpu, FP32/FP64 and the matching native binary hashes. The source-only
+smoke metadata change after submission does not alter Python/C++ implementation
+semantics; this qualification therefore remains valid for the shared code.
 
-Re-entry checked clean worktree at extension start; the CPU qualification above
-is the only live durable record.
+Re-entry checked clean worktree at extension start; no live durable records
+remain.
 CPU operator probe passed on aarch64/Torch2.10.0+cpu. Static portability audit:
 12 review warnings, all in existing runtime/test boundaries; no detected errors.
 Implementation committed as957b004: Python isolated Full/Aggregate VJPs;

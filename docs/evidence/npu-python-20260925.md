@@ -58,6 +58,13 @@ serialized tensor was on CPU, while the fresh continuation states and optimizer
 state were deliberately moved to the requested NPU. This is portable handoff,
 not an exact cross-device resume promise.
 
+As the CPU reference check for the same implementation, the detached unit
+`tide-cpu-npu-qualification-20260925-b` ran from clean source `7e1477a` in
+`background.slice` and exited 0 with 8580/8580 FP32/FP64 tests passed in
+1383.38 seconds. Its terminal `result.json` is at
+`artifacts/cpu-npu-qualification-20260925-b/result.json`. This CPU result is a
+separate semantic baseline; it does not expand the NPU scope below.
+
 ## Dtype and coverage limits
 
 FP64 is not part of this NPU support cell. The local Ascend 910 TorchNPU stack
