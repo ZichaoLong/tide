@@ -89,3 +89,27 @@ The assessment is therefore closed with all planned measurements terminal,
 the one resource-limited target retained as a failure, and no blanket claim of
 large-scale acceleration, arbitrary-model support or target success for every
 graph family.
+
+## Extended-timeout follow-up
+
+The original failed record above is retained unchanged. A separately
+authorized follow-up reran only the narrow Settle target from the same clean
+source and matching build, in a new output directory, with the durable user
+service `tide-cross-family-timeout-20260925-b` in `background.slice`, Nice 10.
+The command used the same 32 workers and four Torch threads, but increased the
+per-run bound from 900 to 1800 seconds. The service reached a terminal state
+and was collected; its persistent output is
+`artifacts/cross-family-performance-20260925-b/`.
+
+Both staged runs completed: the 256-node resource stage took 240.704912 s and
+the 46,912-node target took 1034.865380 s. The target constructed
+8,496,773,056 parameters, completed prefill in 70.643869 s and streaming in
+59.924672 s, and reported a whole no-grad forward time of 130.568541 s.
+Peak combined RSS was 55,644,233,728 bytes (about 51.82 GiB); no child was
+left unreaped. The individual follow-up records are
+`large/narrow-settle-n256-native-settle-optimized-r0/summary.json` and
+`large/narrow-settle-n46912-native-settle-optimized-r0/summary.json`.
+
+This establishes that the earlier 900-second boundary was insufficient for
+this exact CPU run. It does not change the original failure record, or imply
+that a longer bound alone is a general performance or NPU qualification.

@@ -11,6 +11,21 @@ There is no live task job.
 
 ## Current work and next action
 
+The retained 900-second narrow Settle failure was followed by an isolated
+extended-timeout rerun from the same frozen source/build. Unit
+`tide-cross-family-timeout-20260925-b` ran in `background.slice` with a
+1800-second bound and completed both stages: the 46,912-node target finished in
+1034.865380 seconds with 8,496,773,056 parameters, 55,644,233,728-byte peak
+combined RSS, and no unreaped child. The original failed record remains
+historical evidence; the follow-up is recorded in
+`docs/evidence/cross-family-performance.md` and
+`artifacts/cross-family-performance-20260925-b/`.
+
+The next authorized increment is the Python TorchNPU boundary and smoke. The
+working tree currently contains that implementation but it is not yet
+committed or claimed as verified. Native C++ NPU remains blocked on a
+version-matched standalone `libtorch_npu` SDK and live-device build.
+
 Re-entry checked clean worktree at extension start; no live durable records.
 CPU operator probe passed on aarch64/Torch2.10.0+cpu. Static portability audit:
 12 review warnings, all in existing runtime/test boundaries; no detected errors.

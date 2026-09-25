@@ -204,6 +204,18 @@ records the finite delivery. Historical foundation-v1 stays frozen.
 | E4 | Fixed bounded smoke/medium/large assessment below; separate prefill, streaming, transition, forward/backward/optimizer/whole-step timings and actual paths; explicit terminal failures/limits | verified: [terminal performance assessment](evidence/cross-family-performance.md); one narrow Settle target timeout retained |
 | E5 | Frozen clean independent build/gates, relocated export/rebuild/smoke, source/binary/result audit, reviewed evidence and coherent commits; no live task job | verified: [qualification and audit](evidence/cross-family-qualification.md); unit inactive/dead |
 
+### Extended-timeout follow-up
+
+The original narrow Settle target timeout is retained as a failed bounded
+record. On 2026-09-25 a separate durable run from the same frozen source and
+build increased only that run's bound from 900 to 1800 seconds. Both the
+resource stage and the 46,912-node target completed; the target took
+1034.865380 seconds, used 8,496,773,056 parameters and peaked at about 51.82
+GiB combined RSS. The follow-up output is recorded in
+[cross-family performance](evidence/cross-family-performance.md). This is a
+bounded confirmation for the exact workload, not a blanket large-scale or
+accelerator claim.
+
 Coverage: PDG generic/specialized are regression baselines. TimedDAG generic
 Python/native: streaming, frontier, legal blocks and transition. TimedDAG
 specialized Python/native: independent chain/diamond step and block schedules.
