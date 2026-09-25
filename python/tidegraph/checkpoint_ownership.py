@@ -92,7 +92,15 @@ def optimizer_record(model, optimizer):
     layout = optimizer_layout(model, optimizer)
     if optimizer is None:
         return layout, None
-    state = optimizer.state_dict()
+    def cpu(value):
+        if isinstance(value, torch.Tensor):
+            return value.detach().cpu()
+        if isinstance(value, dict):
+            return {key: cpu(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [cpu(item) for item in value]
+        return value
+    state = cpu(optimizer.state_dict())
     validate_optimizer_state(optimizer, state)
     return layout, state
 

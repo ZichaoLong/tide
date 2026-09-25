@@ -201,6 +201,47 @@ def run_isolated_vjps(device: torch.device) -> list[dict]:
              "loss": float(aggregate_loss.detach().cpu())}]
 
 
+def _all_tensors(value):
+    if isinstance(value, torch.Tensor):
+        return [value]
+    if isinstance(value, dict):
+        return [tensor for item in value.values() for tensor in _all_tensors(item)]
+    if isinstance(value, (list, tuple)):
+        return [tensor for item in value for tensor in _all_tensors(item)]
+    return []
+
+
+def run_optimizer_checkpoint(device: torch.device, output: Path) -> dict:
+    from tidegraph.checkpoint import load, save
+
+    config = _base("pdg-streaming")
+    graph, spec, model = initialize(config, device=device)
+    values, _, _, _ = inputs_for(config, graph, device=device)
+    result = _execute("pdg-streaming", model, graph, spec, values.clone().requires_grad_(True))
+    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+    _loss(result).backward()
+    optimizer.step()
+    path = output / "npu-continuation-v5.pt"
+    save(path, graph, model, result.continuation, optimizer)
+    record = torch.load(path, map_location="cpu", weights_only=True)
+    if any(tensor.device.type != "cpu" for tensor in _all_tensors(record)):
+        raise AssertionError("portable checkpoint contains a non-CPU tensor")
+    restored = initialize(config, device=device)[2]
+    restored_optimizer = torch.optim.AdamW(restored.parameters(), lr=0.8)
+    restored_q = load(path, graph, restored, restored_optimizer)
+    if any(state.value.device != device for state in restored_q.states.values()):
+        raise AssertionError("checkpoint continuation was not placed on the requested NPU")
+    for left, right in zip(model.parameters(), restored.parameters()):
+        torch.testing.assert_close(left.detach().cpu(), right.detach().cpu(), atol=1e-6, rtol=1e-5)
+    if not restored_optimizer.state:
+        raise AssertionError("optimizer state was not restored")
+    if any(tensor.device != device for tensor in _all_tensors(restored_optimizer.state)):
+        raise AssertionError("restored optimizer state is not on the requested NPU")
+    synchronize(device)
+    return {"case": "optimizer-checkpoint-handoff", "status": "passed",
+            "checkpoint": str(path), "state_owners": len(restored_q.states)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--device", required=True)
@@ -231,6 +272,7 @@ def main() -> int:
         if args.with_backward:
             record["cases"].append(run_backward(device))
             record["cases"].extend(run_isolated_vjps(device))
+            record["cases"].append(run_optimizer_checkpoint(device, out))
         record["state"] = "passed"
     except BaseException as error:
         record.update(state="failed", error=f"{type(error).__name__}: {error}")
