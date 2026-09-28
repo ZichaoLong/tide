@@ -11,6 +11,7 @@ using namespace tide;
 struct Counters {
   std::atomic<int64_t> host_to_device{0}, device_to_host{0}, copies{0};
   std::atomic<int64_t> device_to_device{0}, local_messages{0}, remote_messages{0};
+  std::atomic<int64_t> metadata_host_to_device{0}, metadata_device_to_host{0};
   void reset();
   std::map<std::string, double> metrics() const;
 };
@@ -58,6 +59,7 @@ struct Placement {
   int64_t node_load_limit = 0;
   bool resident = false;
   Scoring scoring;
+  std::string ranking_device = "cpu", event_device = "cpu";
 };
 struct Partition { std::vector<Index> shards; int64_t limit; };
 Partition partition(const Graph&, const std::vector<int64_t>&, Index, const std::string&);
@@ -70,5 +72,5 @@ std::map<std::string, double> memory(const Placement&);
 Tensor host(const Tensor&);
 Tensor embed(const Tensor&, const Tensor& ids, bool host_result = true);
 Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result = true);
-void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned, const Scoring&, bool reference_fp64);
+void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned, const Scoring&, bool reference_fp64, const std::string& ranking_device, const std::string& event_device);
 }  // namespace accelerator_scale

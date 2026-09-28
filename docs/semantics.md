@@ -167,6 +167,13 @@ chunk/state/gradient checks). Its historical results do not certify this tree.
 
 ## Accelerator execution boundary
 
+The standalone historical-topology consumer additionally owns optional tensor
+node ranking/event queues and explicitly bounded training windows; see
+[its contract](accelerator-scale.md). Those implementation choices preserve exact
+discrete order, integer histories, edge identities and payload VJPs. They do not
+broaden the public single-device library's placement contract. Training window
+resets are explicit application boundaries, never an implicit runtime detach.
+
 The single-device eager extension preserves graph identities, schedules, HST VJP
 and checkpoint schemas. CPU FP32/FP64 remains the reference. CUDA FP32/FP64 and
 NPU FP32 require explicit backend capability; NPU FP64 is rejected. Graph tensor

@@ -9,7 +9,7 @@ namespace accelerator_scale {
 namespace {
 struct Run { Result result; std::vector<Tensor> leaves, roots; };
 Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device device,
-            Index devices, bool candidate, const std::string& policy, bool resident, const Scoring& scoring) {
+            Index devices, bool candidate, const std::string& policy, bool resident, const Scoring& scoring,const std::string& ranking_device="cpu",const std::string& event_device="cpu") {
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   c.emission = candidate ? "row" : "slot";
   auto f = pdg_scale::fixture(c,topology);
@@ -29,7 +29,7 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
   Placement placement;
   f.graph.compile(); const auto identity = f.graph.identity;
   if (candidate) placement = place(f,device,devices,policy,resident);
-  placement.scoring = scoring;
+  placement.scoring = scoring;placement.ranking_device=ranking_device;placement.event_device=event_device;
   f.graph.compile(); if (f.graph.identity != identity) throw std::runtime_error("placement changed graph identity");
   Options options; options.packed = candidate; options.trace = true;
   options.workers = candidate ? c.workers : 1;
@@ -89,13 +89,13 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
   return run;
 }
 }
-void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::Device device,Index devices,const std::string& policy,bool resident,bool conditioned,const Scoring& scoring,bool reference_fp64) {
+void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::Device device,Index devices,const std::string& policy,bool resident,bool conditioned,const Scoring& scoring,bool reference_fp64,const std::string& ranking_device,const std::string& event_device) {
   if (c.width > 64 || c.batch > 8 || c.steps > 6) throw std::invalid_argument("placement parity needs bounded small tensors");
   for (bool enable_grad : {false,true}) {
   at::AutoGradMode grad(enable_grad);
   Scoring reference; reference.dtype = reference_fp64 ? at::kDouble : scoring.dtype;
   auto expected = execute(c,topology,at::Device(at::kCPU),1,false,policy,false,reference);
-  auto actual = execute(c,topology,device,devices,true,policy,resident,scoring);
+  auto actual = execute(c,topology,device,devices,true,policy,resident,scoring,ranking_device,event_device);
   auto comparable = actual.result;
   size_t route_mismatches=0;double score_max_abs=0;
   if (actual.result.trace.size()!=expected.result.trace.size())

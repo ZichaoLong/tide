@@ -6,6 +6,7 @@ Counters transfers;
 void Counters::reset() {
   host_to_device = 0; device_to_host = 0; copies = 0;
   device_to_device = 0; local_messages = 0; remote_messages = 0;
+  metadata_host_to_device=0;metadata_device_to_host=0;
 }
 std::map<std::string, double> Counters::metrics() const {
   return {{"transfer/host_to_device_bytes", double(host_to_device.load())},
@@ -13,7 +14,9 @@ std::map<std::string, double> Counters::metrics() const {
           {"transfer/device_to_device_bytes", double(device_to_device.load())},
           {"transfer/local_message_bytes", double(local_messages.load())},
           {"transfer/remote_message_bytes", double(remote_messages.load())},
-          {"transfer/copy_calls", double(copies.load())}};
+          {"transfer/copy_calls", double(copies.load())},
+          {"transfer/metadata_host_to_device_bytes",double(metadata_host_to_device.load())},
+          {"transfer/metadata_device_to_host_bytes",double(metadata_device_to_host.load())}};
 }
 void Transfer::add(const Tensor& value) {
   if (!value.defined() || value.device() == destination_ || index_.count(value.unsafeGetTensorImpl())) return;

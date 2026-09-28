@@ -19,6 +19,8 @@ def main():
     p.add_argument('--read-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--read-dtype', choices=('float64', 'float32'), default='float64')
     p.add_argument('--control-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--ranking-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--event-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--reference-read-dtype', choices=('matched', 'float64'), default='matched')
     p.add_argument('--output-dir', type=Path, required=True)
     a = p.parse_args(); out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
@@ -36,7 +38,7 @@ def main():
             '--steps', '3', '--warmup', '1', '--workers', '3', '--check', '1', '--vjp-policy', a.vjp_policy,
             '--full-autograd', 'batched', '--aggregate-autograd', 'batched',
             '--packed-sources', '1', '--batch-next', '1']
-    for key in ('read_device', 'read_dtype', 'control_device', 'reference_read_dtype'):
+    for key in ('read_device', 'read_dtype', 'control_device', 'reference_read_dtype', 'ranking_device', 'event_device'):
         base += ['--'+key.replace('_', '-'), getattr(a, key)]
     results = []; mappings = {}; env = dict(os.environ)
     if a.device == 'npu': env['TASK_QUEUE_ENABLE'] = str(a.npu_task_queue)
@@ -44,10 +46,11 @@ def main():
                   device=a.device, devices=a.devices, npu_task_queue=a.npu_task_queue,
                   vjp_policy=a.vjp_policy, read_device=a.read_device, read_dtype=a.read_dtype,
                   control_device=a.control_device, reference_read_dtype=a.reference_read_dtype,
+                  ranking_device=a.ranking_device,event_device=a.event_device,
                   state='running', cases=results)
     write_json(out/'gates.json', record)
     try:
-        transports = ('resident',) if 'model' in (a.read_device, a.control_device) else ('resident', 'host')
+        transports = ('resident',) if 'model' in (a.read_device, a.control_device,a.ranking_device,a.event_device) else ('resident', 'host')
         for transport in transports:
             for memory in ('add', 'attention'):
                 for policy in ('memory', 'locality'):
@@ -71,7 +74,7 @@ def main():
                     results.append(dict(name=name, command=command, state='passed'))
                     write_json(out/'gates.json', record); print(name, 'passed', flush=True)
         for key, value in [('--transport', 'invalid'), ('--placement', 'invalid'), ('--devices', '0'), ('--vjp-policy', 'invalid'),
-                           ('--read-device','invalid'), ('--control-device','invalid'), ('--read-dtype','float16')]:
+                           ('--ranking-device','invalid'),('--event-device','invalid'),('--read-device','invalid'), ('--control-device','invalid'), ('--read-dtype','float16')]:
             bad = out/('rejected-'+key[2:]); command = [*base, key, value, '--run-id', 'bad', '--output-dir', str(bad)]
             run = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30, env=env)
             assert run.returncode != 0 and not bad.exists()

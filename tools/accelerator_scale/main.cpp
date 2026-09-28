@@ -1,4 +1,5 @@
 #include "execution.h"
+#include "training.h"
 #include "../../cpp/bench/metrics_jsonl_writer.h"
 #include <ATen/Parallel.h>
 #include <cstdlib>
@@ -17,16 +18,34 @@ int run(int argc, char** argv) {
     Index count = 1; bool seen = false, seen_policy = false, seen_transport = false, seen_vjp = false;
     std::string policy = "memory", transport = "resident", vjp_policy = "strict";
     accelerator_scale::Scoring scoring;
+    accelerator_scale::TrainingConfig training;
+    std::string ranking_device="cpu", event_device="cpu";
     bool reference_fp64 = false;
     std::set<std::string> scoring_flags;
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
       const std::string flag = argv[i];
-      if (flag == "--read-device" || flag == "--control-device" || flag == "--read-dtype" || flag == "--reference-read-dtype") {
+      if(flag=="--training-steps" || flag=="--training-warmup" || flag=="--optimizer" || flag=="--learning-rate") {
+        if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
+        const std::string value=argv[i];
+        if(flag=="--optimizer")training.optimizer=value;
+        else if(flag=="--learning-rate") {
+          size_t used=0;training.learning_rate=std::stod(value,&used);
+          if(used!=value.size())throw std::invalid_argument("invalid learning rate");
+        }else {
+          if(value.empty() || value.find_first_not_of("0123456789")!=std::string::npos)
+            throw std::invalid_argument("nonnegative training integer required");
+          if(flag=="--training-steps")training.steps=std::stoll(value);else training.warmup=std::stoll(value);
+        }
+        continue;
+      }
+      if (flag == "--read-device" || flag == "--control-device" || flag == "--read-dtype" || flag == "--reference-read-dtype" || flag == "--ranking-device" || flag == "--event-device") {
         if (!scoring_flags.insert(flag).second || ++i == argc) throw std::invalid_argument("duplicate/missing "+flag);
         const std::string value = argv[i];
         if (flag == "--read-device") scoring.read_device = value;
         else if (flag == "--control-device") scoring.control_device = value;
+        else if (flag == "--ranking-device") ranking_device = value;
+        else if (flag == "--event-device") event_device = value;
         else if (flag == "--read-dtype") {
           if (value != "float32" && value != "float64") throw std::invalid_argument("--read-dtype requires float32 or float64");
           scoring.dtype = value == "float32" ? at::kFloat : at::kDouble;
@@ -65,11 +84,13 @@ int run(int argc, char** argv) {
     auto c = parse(common.size(), common.data());
     if (c.runtime.help) {
       portable_torch::print_usage(std::cout, argv[0]);
-      std::cout << "Historical PDG scale options plus --devices 1..16 --placement memory|locality. CPU event scheduling/ranking,\n"
+      std::cout << "Historical PDG scale options plus --devices 1..16 --placement memory|locality. configurable event scheduling/ranking,\n"
                    "--transport resident|host: NPU state/messages or CPU bridge baseline.\n"
                    "--read-device cpu|model --read-dtype float64|float32 --control-device cpu|model (defaults cpu,float64,cpu).\n"
                    "model uses node/region-owner device; NPU requires FP32 Read/controls.\n"
-                   "Inference or grad-forward only; no checkpoint import.\n"
+                   "--ranking-device cpu|model --event-device cpu|model (defaults cpu,cpu).\n"
+                   "--training-steps N --training-warmup N --optimizer sgd|adamw --learning-rate X.\n"
+                   "Training: --grad 1 --warmup 0; each update uses --steps tokens from empty state.\n"
                    "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
       return 0;
     }
@@ -91,10 +112,20 @@ int run(int argc, char** argv) {
     if (scoring_flags.count("--reference-read-dtype") && !c.check)
       throw std::invalid_argument("--reference-read-dtype requires --check 1");
     const bool resident = transport == "resident";
-    scoring.validate(device, resident);
+    scoring.validate(device, resident);training.validate(c);
+    if((ranking_device!="cpu" && ranking_device!="model") || (event_device!="cpu" && event_device!="model")
+        || (!resident && (ranking_device!="cpu" || event_device!="cpu")))
+      throw std::invalid_argument("ranking/event device must be cpu|model; model requires resident transport");
+    if(ranking_device=="model" && !device.is_cpu() && scoring.dtype!=at::kFloat)
+      throw std::invalid_argument("NPU ranking requires FP32 descriptors; no implicit conversion");
     const auto device_contexts = accelerator_scale::initialize_devices(device, count);
     if (!std::filesystem::create_directories(c.runtime.output_dir)) throw std::invalid_argument("new output directory required");
-    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident,vjp_policy=="basis-conditioned",scoring,reference_fp64);
+    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident,vjp_policy=="basis-conditioned",scoring,reference_fp64,ranking_device,event_device);
+    if(c.check && training.steps) {
+      accelerator_scale::Placement policies;policies.resident=resident;policies.policy=policy;
+      policies.scoring=scoring;policies.ranking_device=ranking_device;policies.event_device=event_device;
+      accelerator_scale::check_training(c,topology,device,count,policies,training);
+    }
     const auto started = Clock::now();
     portable_experiment::MetricsJsonlWriter writer(std::filesystem::path(c.runtime.output_dir)/"metrics.jsonl", c.run_id);
     portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
@@ -103,12 +134,12 @@ int run(int argc, char** argv) {
     auto f = fixture(c, topology);
     accelerator_scale::configure_scoring(f, scoring);
     auto placement = accelerator_scale::place(f, device, count, policy, resident);
-    placement.scoring = scoring;
+    placement.scoring = scoring;placement.ranking_device=ranking_device;placement.event_device=event_device;
     tide::Options options; options.workers = c.workers; options.packed = true; options.trace = false;
     options.full_autograd = c.full_autograd; options.aggregate_autograd = c.aggregate_autograd;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
     options.defer_state_release = c.defer_state_release; options.packed_sources = c.packed_sources; options.batch_next = c.batch_next;
-    accelerator_scale::Execution cursor(std::move(f.graph), std::move(f.model), options, c.batch, placement);
+
     accelerator_scale::synchronize(placement);
     const auto construction = seconds(setup_start);
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters")
@@ -119,7 +150,7 @@ int run(int argc, char** argv) {
     mapping << "],\"device_resident_state\":" << (resident ? "true" : "false")
             << ",\"cpu_fp64_read\":" << (scoring.read_device=="cpu" && scoring.dtype==at::kDouble ? "true" : "false")
             << ",\"read_device\":\"" << scoring.read_device << "\",\"read_dtype\":\"" << scoring.dtype_name()
-            << "\",\"control_device\":\"" << scoring.control_device << "\",\"event_scheduler\":\"cpu\",\"ranking\":\"cpu\",\"policy\":\"" << policy
+            << "\",\"control_device\":\"" << scoring.control_device << "\",\"event_scheduler\":\"" << event_device << "\",\"ranking\":\"" << ranking_device << "\",\"policy\":\"" << policy
             << "\",\"physical_edges\":" << placement.edges << ",\"cut_edges\":" << placement.cut_edges
             << ",\"node_load_limit_bytes\":" << placement.node_load_limit << ",\"devices\":" << count
             << ",\"embedding_device_index\":" << int(f.embedding.device().index())
@@ -127,6 +158,11 @@ int run(int argc, char** argv) {
     for(size_t i=0;i<placement.parameter_bytes.size();++i) mapping << (i?",":"") << placement.parameter_bytes[i];
     mapping << "]}\n";
     mapping.close(); if (!mapping) throw std::runtime_error("placement publication failed");
+    if(training.steps) {
+      accelerator_scale::train(c,topology,f,placement,options,training,writer,construction);
+      return 0;
+    }
+    accelerator_scale::Execution cursor(std::move(f.graph),std::move(f.model),options,c.batch,placement);
     at::Tensor previous_logits;
     for (Index token = 0; token < c.steps; ++token) {
       previous_logits = at::Tensor();
@@ -160,7 +196,7 @@ int run(int argc, char** argv) {
       writer.Write(token,metrics,seconds(started),{{"phase",std::string(token<c.warmup ? "warmup" : "measure")},
         {"memory",c.memory},{"grad",c.grad},{"transport",transport},
         {"partition_policy",policy},{"read_device",scoring.read_device},{"read_dtype",scoring.dtype_name()},
-        {"control_device",scoring.control_device},{"event_scheduler",std::string("cpu")}});
+        {"control_device",scoring.control_device},{"event_scheduler",event_device},{"ranking_device",ranking_device}});
       std::cout << "STEP " << token << " seconds=" << elapsed << " rows=" << result.outputs.size() << '\n' << std::flush;
     }
     return 0;

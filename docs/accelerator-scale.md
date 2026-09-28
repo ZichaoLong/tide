@@ -11,7 +11,8 @@ The targets are the historical D2048/B512/V50304, 465-node topology:
 is the historical "8.8B" count in units of 1024^3. FP32 weights, CPU initialization
 order/seed, edge identities, two body ticks/token, clear, full-domain softmax,
 four-head Attention are preserved. The default Read remains `norm-fp64-v1`. The measured modes
-are no-grad and grad-forward, with no backward, optimizer, or history detach.
+are no-grad, grad-forward and explicitly requested complete training windows.
+The historical no-grad/grad-forward modes keep their original window behavior.
 
 `--transport resident` keeps node state, KV caches, Aggregate/Full and messages
 on assigned devices. The benchmark's own sealed-window scheduler reuses public
@@ -36,11 +37,26 @@ The default remains unchanged. FP32 uses the benchmark-owned custom Read profile
 `scale-norm-fp32-v1`, changing graph identity while keeping the L2-norm formula.
 NPU FP64 and model-device scoring with host transport fail explicitly.
 
-Node ranking, count histories and event scheduling still run on CPU in every
-configuration. Model-device controls copy only descriptors across shards for
-softmax; ranking extracts their scalar values to CPU. This is not a claim that
-selection or scheduling is NPU-native. Those implementations need separate
-correctness gates and inference/training measurements before selection.
+`--ranking-device cpu|model` and `--event-device cpu|model` independently select
+CPU or tensor implementations. Defaults stay CPU. Tensor ranking uses exact stable
+lexicographic order: selected count ascending, affected count descending for LH,
+descriptor descending, node ID ascending. Histories remain host-owned int64 maps;
+node selection decisions run on the fixed region-owner device. Equal-length
+candidate buckets batch the nondifferentiable ranking only. Softmax autograd stays
+independent per region, preserving disconnected versus connected-zero VJPs.
+NPU ranking requires FP32 Read; FP64 descriptors are never silently cast.
+
+The tensor event queue owns scheduling keys on the first shard and computes next
+arrival time, ready membership and canonical order there. It preserves all physical
+edge identities and differentiable payload handles. The host consumes returned
+indices to dispatch C++ local programs and assemble results. This is an explicit
+device scheduling candidate, not an entirely device-resident control loop.
+Snapshot export may sort host metadata outside the forward scheduling path.
+Integer keys remain int64; on the local CANN9.0 stack ArgSort reports on-device
+AiCPU execution for int64, distinct from host CPU and from AiCore. Explicit metadata
+uploads/downloads have separate byte counters; other implicit validation/scalar
+synchronizations are not covered by those counters. Both candidates require their
+own exact-route/history/pending and isolated-VJP gates before performance use.
 
 `--check 1` uses an independent CPU scalar schedule with matching Read precision.
 `--reference-read-dtype float64` explicitly compares against historical FP64,
@@ -126,3 +142,35 @@ All requested device contexts are initialized before CPU weight construction so
 reserved chips remain visible as occupied during that phase. Cooperative queue
 locks do not prevent unrelated/non-cooperating processes from entering a device;
 record such contention separately from a model capacity failure.
+
+## Complete training windows
+
+`--training-steps N` enables a complete training benchmark with `--grad 1` and
+`--warmup 0`. Each optimizer update processes `--steps` tokens from an empty graph
+state. Every token within that window retains full autograd/KV history: there is
+no implicit detach or shortened window. Parameters and optimizer states continue
+across updates. This explicitly models independent training sequences; it does not
+claim continuous-stream training across optimizer boundaries.
+
+The synthetic objective is the mean token cross-entropy over the entire batch and
+window, with targets `(input_id + 1) % vocab`. HARD signaling preserves the historical
+benchmark profile. `--optimizer adamw|sgd` selects AdamW (betas0.9/0.999, eps1e-5) or
+SGD (momentum0.9), both weight decay0.01; learning rate defaults to1e-4. None gradients
+remain absent and skip optimizer updates/decay. `--training-warmup` counts complete
+optimizer updates, separately from the historical inference token warmup.
+
+Timing includes zero_grad, empty-window executor initialization, IDs, embedding,
+body, vocabulary head, cross-entropy, backward and optimizer update, with all-shard
+barriers between phases. Model construction, previous-window loss/graph destruction
+and validation/metrics are excluded. Phase times, total update time, normalized
+ms/sample-token, loss, gradient-owner inventory and optimizer-state inventory are
+recorded. These are throughput measurements of synthetic full training steps, not
+training-convergence evidence. Training phase timings are not interchangeable with
+the historical grad-forward token timings.
+
+`scripts/verify_accelerator_training.py` checks both optimizers and models against
+an independent CPU scalar-slot schedule for three updates: complete observables,
+exact discrete decisions, loss, every parameter gradient including None/zero,
+updated weights and optimizer slots. The ordinary isolated-root VJP check also runs.
+New training/dispatch modes are development candidates until immutable device gates
+and performance evidence are recorded in STATUS/evidence.

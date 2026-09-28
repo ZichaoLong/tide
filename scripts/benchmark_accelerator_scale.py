@@ -33,6 +33,12 @@ def parse():
     p.add_argument('--read-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--read-dtype', choices=('float64', 'float32'), default='float64')
     p.add_argument('--control-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--ranking-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--event-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--training-steps', type=int, default=0)
+    p.add_argument('--training-warmup', type=int, default=1)
+    p.add_argument('--optimizer', choices=('sgd','adamw'), default='adamw')
+    p.add_argument('--learning-rate', type=float, default=1e-4)
     p.add_argument('--npu-task-queue', type=int, choices=(0, 1, 2), default=0,
                    help='0 is the qualified multi-device mode on the local SDK/CANN stack')
     p.add_argument('--full-autograd', choices=('replay', 'batched'), default='batched')
@@ -48,6 +54,13 @@ def parse():
     if ((a.read_device == 'model' or a.control_device == 'model')
             and (a.transport != 'resident' or (a.device == 'npu' and a.read_dtype != 'float32'))):
         p.error('model-device Read/controls require resident transport and FP32 on NPU')
+    if (a.ranking_device == 'model' and a.device == 'npu' and a.read_dtype != 'float32'
+            or a.transport != 'resident' and 'model' in (a.ranking_device, a.event_device)):
+        p.error('model ranking/events require resident transport; NPU ranking requires FP32 Read')
+    if (not 0 <= a.training_steps <= 100 or a.training_warmup < 0
+            or a.training_steps and (a.training_warmup >= a.training_steps or not a.grad or a.warmup != 0)
+            or not 0 < a.learning_rate < float('inf')):
+        p.error('invalid training configuration; requires grad1 and token warmup0')
     if (not 1 <= a.devices <= 16 or (a.device == 'cpu' and a.devices != 1)
             or not 4 <= a.width <= 4096 or a.width % 4 or not 1 <= a.batch <= 1024
             or not 2 <= a.vocab <= 100000 or not 0 <= a.warmup < a.steps <= 1000
@@ -87,7 +100,7 @@ def main():
     config = {key: getattr(a, key) for key in ('device', 'devices', 'memory', 'placement', 'transport', 'width', 'batch',
               'vocab', 'steps', 'warmup', 'workers', 'threads', 'seed', 'grad', 'check', 'parallel_regions',
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
-              'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device')}
+              'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device', 'ranking_device', 'event_device', 'training_steps', 'training_warmup', 'optimizer', 'learning_rate')}
     config.update(dtype='float32', packed=1, emission='row', head_workers=1, fiber_pooling='event')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
     track = LocalTrackio(a.tracking, a.tracking_root, 'tide-npu-performance', run_id, config)
@@ -110,16 +123,20 @@ def main():
                      aten_threads=a.threads, interop_threads=1, openblas_num_threads=1,
                      npu_task_queue=a.npu_task_queue if a.device == 'npu' else None,
                      read_device=a.read_device, read_dtype=a.read_dtype, control_device=a.control_device,
-                     node_ranking='cpu', event_scheduler='cpu',
+                     node_ranking=a.ranking_device, event_scheduler=a.event_device,
                      load_average_before=list(os.getloadavg()), memory_budget_gib=a.memory_gib),
         experiment=dict(config=config, **{'class': 'benchmark'}, primary_metric='perf/ms_per_sample_token',
-                        global_step_semantics='growing-context token index, warmup retained',
-                        stop_condition=f'{a.steps} tokens or {a.timeout_seconds} seconds or RSS budget',
+                        global_step_semantics='optimizer update, independent complete sequence windows' if a.training_steps else 'growing-context token index, warmup retained',
+                        stop_condition=f'{a.training_steps} updates of {a.steps} tokens' if a.training_steps else f'{a.steps} tokens or {a.timeout_seconds} seconds or RSS budget',
                         placement='node-shards-v1; '+a.transport+' state/message transport; '
                                   +a.read_device+' '+a.read_dtype+' Read; '+a.control_device+' controls',
-                        timed_scope='embedding+body+head+CPU/NPU transfers; synchronized all shards',
-                        excluded='construction, ID creation, previous logits disposal, metrics',
-                        backward=False, optimizer=False, detach=False,
+                        timed_scope='zero_grad+window reset+IDs+forward+cross_entropy+backward+optimizer; synchronized phase boundaries' if a.training_steps else 'embedding+body+head+CPU/NPU transfers; synchronized all shards',
+                        excluded='construction, previous loss/graph disposal, metrics' if a.training_steps else 'construction, ID creation, previous logits disposal, metrics',
+                        backward=bool(a.training_steps), optimizer=bool(a.training_steps), detach=False,
+                        loss='mean token cross_entropy, targets=(input_id+1)%vocab' if a.training_steps else None,
+                        window_boundary='reset graph state per optimizer update; no detach inside window' if a.training_steps else None,
+                        optimizer_options=dict(lr=a.learning_rate,weight_decay=.01,eps=1e-5,beta1=.9,beta2=.999,momentum=.9) if a.training_steps else None,
+                        measured_warmup=a.training_warmup if a.training_steps else a.warmup,
                         cut_edges='static physical-edge proxy; actual local/remote message bytes measured'),
         tracking=track.record, artifacts=dict(metrics='metrics.jsonl', stdout='stdout.log', summary='summary.json',
             topology='topology.txt', native='native', lifecycle='lifecycle.json', loader='loader.txt'))
@@ -141,7 +158,7 @@ def main():
                                     timeout=a.timeout_seconds, memory_budget=a.memory_gib*2**30, audit=audit)
         if native_code != 0: raise RuntimeError(f'native exit {native_code}')
         events = read_events(out/'native/metrics.jsonl', run_id)
-        if len(events) != a.steps: raise ValueError('incomplete token inventory')
+        if len(events) != (a.training_steps or a.steps): raise ValueError('incomplete observation inventory')
         if (source_state(root) != (commit, dirty) or client_hash(root) != identity
                 or digest(binary) != binary_hash or digest(topology) != graph_hash):
             raise ValueError('source/input/binary changed')
@@ -164,7 +181,7 @@ def main():
         if cancelled: code = 128+cancelled
         record['runtime']['load_average_after'] = list(os.getloadavg())
         record.update(status='cancelled' if cancelled else 'completed' if code == 0 else 'failed', ended_at=utc_now())
-        measured, summary = summarize(events, a.warmup)
+        measured, summary = summarize(events, a.training_warmup if a.training_steps else a.warmup)
         write_json(out/'lifecycle.json', audit)
         write_json(out/'summary.json', dict(schema_version=1, run_id=run_id, status=record['status'],
             ended_at=record['ended_at'], exit_code=code, native_exit_code=audit.get('worker_exit_code'),

@@ -1,5 +1,6 @@
 #pragma once
 #include "placement.h"
+#include "dispatch.h"
 #include <tide/pool.h>
 #include <tide/region.h>
 #include <c10/core/Stream.h>
@@ -26,6 +27,7 @@ class Resident {
   std::vector<Model> device_selection_models_;
   Continuation state_;
   EventQueue queue_;
+  std::unique_ptr<TensorEventQueue> tensor_queue_;
   bool failed_ = false;
   void phase(const Groups&, const std::function<void(Index,const std::vector<size_t>&)>&);
   void read(std::vector<Event>&, const std::vector<size_t>&);

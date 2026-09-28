@@ -41,6 +41,7 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
     }
   }
   state_.identity = graph_.identity; state_.batch_size = batch;
+  if(placement_.event_device=="model")tensor_queue_=std::make_unique<TensorEventQueue>(placement_.devices.front());
 }
 void Resident::phase(const Groups& groups, const std::function<void(Index,const std::vector<size_t>&)>& fn) {
   std::vector<std::function<void()>> jobs;
@@ -120,10 +121,16 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
   AdvanceResult result;
   try {
     state_.ledger = std::move(ledger);
-    for (const auto& x : inputs) queue_[x.time].push_back({x.batch,graph_.inputs[x.port],x.time,0,x.port,x.position,x.value});
-    while (!queue_.empty() && queue_.begin()->first < stop) {
-      auto arrived = std::move(queue_.begin()->second); queue_.erase(queue_.begin());
-      std::sort(arrived.begin(),arrived.end(),[](const auto& a,const auto& b){return a.key()<b.key();});
+    auto enqueue=[&](const Atom& a){if(tensor_queue_)tensor_queue_->push(a);else queue_[a.time].push_back(a);};
+    for (const auto& x : inputs) enqueue({x.batch,graph_.inputs[x.port],x.time,0,x.port,x.position,x.value});
+    while (true) {
+      std::vector<Atom> arrived;
+      if(tensor_queue_) { if(!tensor_queue_->pop(stop,arrived))break; }
+      else {
+        if(queue_.empty() || queue_.begin()->first>=stop)break;
+        arrived=std::move(queue_.begin()->second);queue_.erase(queue_.begin());
+        std::sort(arrived.begin(),arrived.end(),[](const auto& a,const auto& b){return a.key()<b.key();});
+      }
       std::vector<Event> events; Groups nodes; std::map<Owner,std::vector<size_t>> regions;
       for (auto& atom : arrived) {
         if (events.empty() || Owner{events.back().batch,events.back().node} != Owner{atom.batch,atom.node}) {
@@ -154,25 +161,27 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
         auto content=evaluate_aggregate(graph_,model_,events,ids,true,options_.packed_sources,options_.aggregate_autograd);
         evaluate_state(model_,events,ids,true,content); read(events,ids);
       });
-      struct RegionTask { Owner owner; const std::vector<size_t>* ids; const History* old; Selection selection; };
       std::vector<RegionTask> region_tasks;
       for(const auto& [owner,ids]:regions) {
         const auto old=state_.history.find(owner);
         region_tasks.push_back({owner,&ids,old==state_.history.end()?nullptr:&old->second,{}});
       }
-      const bool device_controls = placement_.scoring.control_device == "model";
+      const bool device_controls = placement_.scoring.control_device == "model" || placement_.ranking_device=="model";
       const auto region_workers=device_controls?placement_.devices.size():
         options_.parallel_regions?std::min<size_t>(options_.workers,region_tasks.size()):1;
       std::vector<std::function<void()>> select_jobs;
       for(size_t worker=0;worker<region_workers;++worker) select_jobs.push_back([&,worker]{
         std::optional<c10::StreamGuard> guard;
         if (device_controls) guard.emplace(streams_[worker]);
+        std::vector<RegionTask*> ranking_tasks;
         for(size_t i=0;i<region_tasks.size();++i) {
           auto& task=region_tasks[i];
           const auto shard=placement_.node_device[region_layout(graph_,task.owner.second).members.front()];
           if ((device_controls ? size_t(shard) : i%region_workers) != worker) continue;
-          task.selection=select(task.old,events,*task.ids);
+          if(placement_.ranking_device=="model")ranking_tasks.push_back(&task);
+          else task.selection=select(task.old,events,*task.ids);
         }
+        if(!ranking_tasks.empty())tensor_select(graph_,model_,placement_,events,ranking_tasks);
       });
       pool_.run(std::move(select_jobs));
       if (device_controls) synchronize(placement_);
@@ -204,7 +213,7 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
         if(e.active) {
           ++result.stats["selected_events"];
           c10::StreamGuard guard(streams_[placement_.node_device[e.node]]);
-          deliver(graph_,model_,e,[&](const Atom& a){queue_[a.time].push_back(a);if(options_.trace)result.messages.push_back(a);++result.stats["visited_edges"];},
+          deliver(graph_,model_,e,[&](const Atom& a){enqueue(a);if(options_.trace)result.messages.push_back(a);++result.stats["visited_edges"];},
             [&](const Output& output){result.outputs.push_back(output);});
         }
         if(options_.trace)result.trace.push_back(std::move(e));
@@ -221,7 +230,7 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
 }
 Continuation Resident::snapshot() const {
   if(failed_)throw std::runtime_error("resident executor failed");
-  auto q=state_; export_pending(q,queue_);
+  auto q=state_;if(tensor_queue_)tensor_queue_->export_pending(q);else export_pending(q,queue_);
   for(auto& [owner,s]:q.states){s.value=s.value.clone();for(auto& [name,t]:s.slots)t=t.clone();}
   for(auto& a:q.pending)a.value=a.value.clone();
   return q;
