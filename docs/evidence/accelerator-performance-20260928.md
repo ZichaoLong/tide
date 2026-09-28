@@ -3,8 +3,9 @@
 The completed exploratory screens below use immutable implementation
 `b4f26b3659cec0549e18560a1a996d5bee0cae6d`, after the independent
 [CPU/two/four/eight-device correctness gates](accelerator-dispatch-training-20260928.md).
-All 25 reported cells passed. Matched repetitions, eight-device measurements,
-Attention full training and warmed training remain in [STATUS](../STATUS.md).
+All 28 reported cells passed, including three warmed Add training repetitions.
+Matched repetitions, eight-device measurements and Attention full training remain
+in [STATUS](../STATUS.md).
 This report does not mark that remaining assessment complete.
 
 The [record manifest](accelerator-performance-20260928.json) preserves each
@@ -103,6 +104,26 @@ measurement is slower. Its parameter loads span8.003..9.673 GiB, compared with
 host/dispatch overhead must be evaluated together; cut count is not a latency
 objective by itself. This finite screen does not tune or exhaust all placements.
 
+## Warmed Add training
+
+The selected CPU FP32 Read/CPU control/ranking/event configuration passed three
+fresh processes on the same four-chip allocation. Each performed two complete
+12-token AdamW updates, with the first update excluded as warmup.
+
+| Fresh process | Measured ms/sample-token | Full update seconds | Forward seconds | Backward seconds | Optimizer seconds | Peak allocated GiB/chip |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 40.404 | 248.242 | 192.732 | 54.313 | 1.189 | 41.058 |
+| 2 | 43.123 | 264.946 | 200.026 | 63.734 | 1.173 | 41.070 |
+| 3 | 42.080 | 258.537 | 203.453 | 53.877 | 1.188 | 41.065 |
+
+Median42.080 ms/sample-token, range40.404..43.123; mean41.869, population
+stdev1.120 across three process means. The full-update median is258.537 seconds.
+Every measured update has1356 gradient and optimizer-state owners and loss
+9.7425966..9.7425976. This two-update synthetic loss change is not convergence
+or quality evidence. The retained optimizer slots raise the measured allocation
+peak above the first update's38.177 GiB, to at most41.070 GiB. Other host workloads
+were present; no causal improvement over the cold screen is inferred.
+
 ## Retained capacity evidence
 
 The earlier two-card Attention model-FP32 Read/control grad-forward case failed
@@ -116,7 +137,7 @@ allocation. Its source is `a12ee0c676faa80096db4034595b581db11a5f22`; the manife
 records this distinct identity. It is a concurrent **grad-forward** pilot with
 NPU FP32 Read/controls, not complete training or matched scaling evidence.
 
-All25 new terminal records passed schema/finite-metric/lifecycle validation,
+All28 new terminal records passed schema/finite-metric/lifecycle validation,
 reported healthy best-effort local Trackio recording, and left no child process.
 Trackio has no per-event durable acknowledgement; raw records are authoritative.
 Live and queued work, including resource-only cancellations before any benchmark
