@@ -30,6 +30,9 @@ def parse():
     p.add_argument('--memory', choices=('add', 'attention'), required=True)
     p.add_argument('--placement', choices=('memory', 'locality'), default='memory')
     p.add_argument('--transport', choices=('host', 'resident'), default='resident')
+    p.add_argument('--read-device', choices=('cpu', 'model'), default='cpu')
+    p.add_argument('--read-dtype', choices=('float64', 'float32'), default='float64')
+    p.add_argument('--control-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--npu-task-queue', type=int, choices=(0, 1, 2), default=0,
                    help='0 is the qualified multi-device mode on the local SDK/CANN stack')
     p.add_argument('--full-autograd', choices=('replay', 'batched'), default='batched')
@@ -42,6 +45,9 @@ def parse():
                           ('defer-state-release', 1), ('packed-sources', 1), ('batch-next', 1)]:
         p.add_argument('--'+name, type=int, choices=(0, 1), default=default)
     a = p.parse_args()
+    if ((a.read_device == 'model' or a.control_device == 'model')
+            and (a.transport != 'resident' or (a.device == 'npu' and a.read_dtype != 'float32'))):
+        p.error('model-device Read/controls require resident transport and FP32 on NPU')
     if (not 1 <= a.devices <= 16 or (a.device == 'cpu' and a.devices != 1)
             or not 4 <= a.width <= 4096 or a.width % 4 or not 1 <= a.batch <= 1024
             or not 2 <= a.vocab <= 100000 or not 0 <= a.warmup < a.steps <= 1000
@@ -81,7 +87,7 @@ def main():
     config = {key: getattr(a, key) for key in ('device', 'devices', 'memory', 'placement', 'transport', 'width', 'batch',
               'vocab', 'steps', 'warmup', 'workers', 'threads', 'seed', 'grad', 'check', 'parallel_regions',
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
-              'full_autograd', 'aggregate_autograd')}
+              'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device')}
     config.update(dtype='float32', packed=1, emission='row', head_workers=1, fiber_pooling='event')
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
     track = LocalTrackio(a.tracking, a.tracking_root, 'tide-npu-performance', run_id, config)
@@ -103,11 +109,14 @@ def main():
                      host_arch=platform.machine(), cpu_affinity=affinity, node_workers=a.workers,
                      aten_threads=a.threads, interop_threads=1, openblas_num_threads=1,
                      npu_task_queue=a.npu_task_queue if a.device == 'npu' else None,
+                     read_device=a.read_device, read_dtype=a.read_dtype, control_device=a.control_device,
+                     node_ranking='cpu', event_scheduler='cpu',
                      load_average_before=list(os.getloadavg()), memory_budget_gib=a.memory_gib),
         experiment=dict(config=config, **{'class': 'benchmark'}, primary_metric='perf/ms_per_sample_token',
                         global_step_semantics='growing-context token index, warmup retained',
                         stop_condition=f'{a.steps} tokens or {a.timeout_seconds} seconds or RSS budget',
-                        placement='node-shards-v1; '+a.transport+' state/message transport; CPU FP64 Read',
+                        placement='node-shards-v1; '+a.transport+' state/message transport; '
+                                  +a.read_device+' '+a.read_dtype+' Read; '+a.control_device+' controls',
                         timed_scope='embedding+body+head+CPU/NPU transfers; synchronized all shards',
                         excluded='construction, ID creation, previous logits disposal, metrics',
                         backward=False, optimizer=False, detach=False,

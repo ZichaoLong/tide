@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <sys/resource.h>
 
 namespace {
@@ -15,8 +16,26 @@ int run(int argc, char** argv) {
   try {
     Index count = 1; bool seen = false, seen_policy = false, seen_transport = false, seen_vjp = false;
     std::string policy = "memory", transport = "resident", vjp_policy = "strict";
+    accelerator_scale::Scoring scoring;
+    bool reference_fp64 = false;
+    std::set<std::string> scoring_flags;
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
+      const std::string flag = argv[i];
+      if (flag == "--read-device" || flag == "--control-device" || flag == "--read-dtype" || flag == "--reference-read-dtype") {
+        if (!scoring_flags.insert(flag).second || ++i == argc) throw std::invalid_argument("duplicate/missing "+flag);
+        const std::string value = argv[i];
+        if (flag == "--read-device") scoring.read_device = value;
+        else if (flag == "--control-device") scoring.control_device = value;
+        else if (flag == "--read-dtype") {
+          if (value != "float32" && value != "float64") throw std::invalid_argument("--read-dtype requires float32 or float64");
+          scoring.dtype = value == "float32" ? at::kFloat : at::kDouble;
+        } else {
+          if (value != "matched" && value != "float64") throw std::invalid_argument("--reference-read-dtype requires matched or float64");
+          reference_fp64 = value == "float64";
+        }
+        continue;
+      }
       if (std::string(argv[i]) == "--vjp-policy") {
         if(seen_vjp || ++i==argc)throw std::invalid_argument("duplicate/missing --vjp-policy");
         seen_vjp=true;vjp_policy=argv[i];
@@ -46,10 +65,12 @@ int run(int argc, char** argv) {
     auto c = parse(common.size(), common.data());
     if (c.runtime.help) {
       portable_torch::print_usage(std::cout, argv[0]);
-      std::cout << "Historical PDG scale options plus --devices 1..16 --placement memory|locality. Explicit CPU coordination/FP64 Read,\n"
-                   "--transport resident|host: NPU state/messages or CPU bridge baseline. FP64 Read remains on CPU.\n"
+      std::cout << "Historical PDG scale options plus --devices 1..16 --placement memory|locality. CPU event scheduling/ranking,\n"
+                   "--transport resident|host: NPU state/messages or CPU bridge baseline.\n"
+                   "--read-device cpu|model --read-dtype float64|float32 --control-device cpu|model (defaults cpu,float64,cpu).\n"
+                   "model uses node/region-owner device; NPU requires FP32 Read/controls.\n"
                    "Inference or grad-forward only; no checkpoint import.\n"
-                   "--check 1 --vjp-policy strict|basis-conditioned (default strict).\n";
+                   "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
       return 0;
     }
     if (c.runtime.dtype != at::kFloat || c.emission != "row" || !c.packed || c.fiber_pooling != "event"
@@ -67,16 +88,22 @@ int run(int argc, char** argv) {
     at::set_num_threads(c.threads); at::set_num_interop_threads(1);
     auto topology = read_topology(c.topology);
     if(seen_vjp && !c.check)throw std::invalid_argument("--vjp-policy requires --check 1");
-    if (!std::filesystem::create_directories(c.runtime.output_dir)) throw std::invalid_argument("new output directory required");
+    if (scoring_flags.count("--reference-read-dtype") && !c.check)
+      throw std::invalid_argument("--reference-read-dtype requires --check 1");
     const bool resident = transport == "resident";
-    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident,vjp_policy=="basis-conditioned");
+    scoring.validate(device, resident);
+    const auto device_contexts = accelerator_scale::initialize_devices(device, count);
+    if (!std::filesystem::create_directories(c.runtime.output_dir)) throw std::invalid_argument("new output directory required");
+    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident,vjp_policy=="basis-conditioned",scoring,reference_fp64);
     const auto started = Clock::now();
     portable_experiment::MetricsJsonlWriter writer(std::filesystem::path(c.runtime.output_dir)/"metrics.jsonl", c.run_id);
     portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
     at::AutoGradMode grad(c.grad);
     const auto setup_start = Clock::now();
     auto f = fixture(c, topology);
+    accelerator_scale::configure_scoring(f, scoring);
     auto placement = accelerator_scale::place(f, device, count, policy, resident);
+    placement.scoring = scoring;
     tide::Options options; options.workers = c.workers; options.packed = true; options.trace = false;
     options.full_autograd = c.full_autograd; options.aggregate_autograd = c.aggregate_autograd;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
@@ -89,7 +116,10 @@ int run(int argc, char** argv) {
     std::ofstream mapping(std::filesystem::path(c.runtime.output_dir)/"placement.json");
     mapping << "{\"node_shards\":[";
     for (size_t i = 0; i < placement.node_device.size(); ++i) mapping << (i ? "," : "") << placement.node_device[i];
-    mapping << "],\"device_resident_state\":" << (resident ? "true" : "false") << ",\"cpu_fp64_read\":true,\"policy\":\"" << policy
+    mapping << "],\"device_resident_state\":" << (resident ? "true" : "false")
+            << ",\"cpu_fp64_read\":" << (scoring.read_device=="cpu" && scoring.dtype==at::kDouble ? "true" : "false")
+            << ",\"read_device\":\"" << scoring.read_device << "\",\"read_dtype\":\"" << scoring.dtype_name()
+            << "\",\"control_device\":\"" << scoring.control_device << "\",\"event_scheduler\":\"cpu\",\"ranking\":\"cpu\",\"policy\":\"" << policy
             << "\",\"physical_edges\":" << placement.edges << ",\"cut_edges\":" << placement.cut_edges
             << ",\"node_load_limit_bytes\":" << placement.node_load_limit << ",\"devices\":" << count
             << ",\"embedding_device_index\":" << int(f.embedding.device().index())
@@ -129,7 +159,8 @@ int run(int argc, char** argv) {
       for (const auto& [key,value] : result.stats) metrics["work/"+key] = value;
       writer.Write(token,metrics,seconds(started),{{"phase",std::string(token<c.warmup ? "warmup" : "measure")},
         {"memory",c.memory},{"grad",c.grad},{"transport",transport},
-        {"partition_policy",policy}});
+        {"partition_policy",policy},{"read_device",scoring.read_device},{"read_dtype",scoring.dtype_name()},
+        {"control_device",scoring.control_device},{"event_scheduler",std::string("cpu")}});
       std::cout << "STEP " << token << " seconds=" << elapsed << " rows=" << result.outputs.size() << '\n' << std::flush;
     }
     return 0;

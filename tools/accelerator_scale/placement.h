@@ -1,5 +1,6 @@
 #pragma once
 #include "../../cpp/scale/scale.h"
+#include "scoring.h"
 #include <tide/kernel.h>
 #include <tide/full.h>
 #include <atomic>
@@ -16,7 +17,7 @@ struct Counters {
 extern Counters transfers;
 
 // Coalesce fields only without autograd; keep independent gradient roots apart.
-// CPU graph values and FP64 selectors remain authoritative.
+// Only explicit copies are counted; scalar extraction inside selectors is not.
 class Transfer {
  public:
   explicit Transfer(at::Device destination) : destination_(destination) {}
@@ -56,6 +57,7 @@ struct Placement {
   Index cut_edges = 0, edges = 0;
   int64_t node_load_limit = 0;
   bool resident = false;
+  Scoring scoring;
 };
 struct Partition { std::vector<Index> shards; int64_t limit; };
 Partition partition(const Graph&, const std::vector<int64_t>&, Index, const std::string&);
@@ -63,9 +65,10 @@ Placement place(pdg_scale::Fixture&, at::Device first, Index count, const std::s
 void synchronize(const Placement&);
 void reset_memory(const Placement&);
 void finalize();
+std::vector<Tensor> initialize_devices(at::Device first, Index count);
 std::map<std::string, double> memory(const Placement&);
 Tensor host(const Tensor&);
 Tensor embed(const Tensor&, const Tensor& ids, bool host_result = true);
 Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result = true);
-void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned);
+void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned, const Scoring&, bool reference_fp64);
 }  // namespace accelerator_scale

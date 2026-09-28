@@ -63,18 +63,21 @@ fallback visibility instead of extrapolating from a small device smoke.
 Authorized 2026-09-28: independent benchmarks on multiple NPUs and one model
 across multiple NPUs, using the historical D2048/B512/V50304 Attention17.269B
 and Add9.468B (historical binary-unit label8.818) PDG topology. Keep the
-single-device runtime contract and CPU FP64 Read semantics explicit.
+single-device runtime contract explicit; retain historical CPU FP64 Read as a
+reference while adding declared FP32 Read/control placements.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
 | P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | verified: immutable CPU/2/8-NPU small and real-topology gates; explicit VJP policy, see [evidence](evidence/accelerator-scale-20260928.md) |
 | P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | verified: local Trackio success and timeout cleanup; immutable consumer build |
-| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | planned |
-| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | placement verified; full-size4-card pilots submitted, no timing result yet |
+| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | in progress: disjoint-device pilots overlapped during construction; external device contention recorded; no concurrent throughput claim yet |
+| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | four-card no_grad Add/Attention and two-card Add grad-forward pilots passed; scaling/repeats pending |
+| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | implemented candidate; CPU/NPU qualification in progress |
+| P6 | Independent NPU node-selection/event-scheduling candidates; validate then choose by inference/training performance | authorized, planned; current sorting/scheduling remains CPU |
 
-Full-size throughput remains unclaimed until the corresponding terminal runs
-pass. CPU coordination/FP64 Read and all device-transfer overhead belong in
-timing; host state is confined to the explicitly named comparison transport.
+Full-size pilot timings are descriptive until matched repetitions complete.
+CPU coordination, configured Read/controls and all device-transfer overhead belong
+in timing; host state is confined to the explicitly named comparison transport.
 See [the consumer contract](accelerator-scale.md).
 
 ## Six implementation classes

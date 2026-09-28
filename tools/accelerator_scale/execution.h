@@ -1,6 +1,7 @@
 #pragma once
 #include "placement.h"
 #include <tide/pool.h>
+#include <tide/region.h>
 #include <c10/core/Stream.h>
 
 namespace accelerator_scale {
@@ -22,11 +23,13 @@ class Resident {
   NodePool pool_;
   std::vector<c10::Stream> streams_;
   std::vector<NodeWeights> host_read_;
+  std::vector<Model> device_selection_models_;
   Continuation state_;
   EventQueue queue_;
   bool failed_ = false;
   void phase(const Groups&, const std::function<void(Index,const std::vector<size_t>&)>&);
   void read(std::vector<Event>&, const std::vector<size_t>&);
+  Selection select(const History*, std::vector<Event>&, const std::vector<size_t>&);
 };
 class Execution {
  public:

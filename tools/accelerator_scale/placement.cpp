@@ -10,6 +10,22 @@
 #endif
 
 namespace accelerator_scale {
+std::vector<Tensor> initialize_devices(at::Device first, Index count) {
+  if (count < 1 || count > 16 || (first.is_cpu() && count != 1))
+    throw std::invalid_argument("placement requires 1..16 devices; CPU supports one");
+  if (!first.is_cpu() && first.index()+count > c10::impl::VirtualGuardImpl(first.type()).deviceCount())
+    throw std::invalid_argument("requested devices unavailable");
+  std::vector<Tensor> contexts;
+  for (Index i = 0; i < count; ++i) {
+    auto device = first.is_cpu() ? first : at::Device(first.type(), first.index()+i);
+    c10::DeviceGuard guard(device);
+    contexts.push_back(at::zeros({1}, at::TensorOptions().dtype(at::kFloat).device(device)));
+    portable_torch::synchronize(device);
+  }
+  // Keep contexts visible on every acquired device during lengthy CPU model
+  // construction. Advisory locks still cannot exclude non-cooperating jobs.
+  return contexts;
+}
 void finalize() {
 #if PORTABLE_TORCH_ENABLE_NPU
   torch_npu::finalize_npu();

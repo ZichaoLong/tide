@@ -2,133 +2,118 @@
 
 Updated: 2026-09-28 (Asia/Shanghai). Branch graph-execution-foundation.
 
-## Authorized scope and fixed workload
+## Authorized scope
 
-Implement LibTorch/NPU performance tests for historical 17B Attention and "8.8B"
-Add: independent concurrent processes AND a model spanning devices. Exploit edge
-locality; up to8/12 available NPUs. No subagents or pushes. Public core unchanged.
+Portable GPU/NPU foundation; full-size LibTorch/NPU historical17B Attention and
+"8.8B" Add performance: independent concurrent processes AND one model spanning
+2/4/8 cards, with locality-aware placement. Up to12 available chips total.
+No subagents/pushes/reference-repo edits. Public core remains unchanged.
+
+Latest accepted extension: configurable CPU/model-device Read and softmax,
+FP64/FP32, independent correctness comparisons. NPU node ranking/event scheduling
+are separate future candidates; validate independently before choosing based on
+inference AND training performance. Current benchmark is no_grad or grad-forward,
+without backward/optimizer/history detach; it does not measure a training step.
+
+## Fixed historical workload
+
 465 nodes,2208 logical/4418 physical edges,D2048/B512/V50304. Attention exactly
-17,269,426,339 parameters; Add9,468,020,899 (historical8.818*1024^3). FP32,
-CPU seed7 and original owner/RNG order,2 body ticks/token,clear,all-softmax,
-4-head Attention,exact norm-fp64-v1 Read. Twelve growing-context tokens:
-4 warmup+8 measured; no_grad and grad-forward without backward/optimizer/detach.
-No smaller case may be reported as full size. Contract: docs/accelerator-scale.md.
+17,269,426,339 parameters; Add9,468,020,899 (historical8.818*1024^3). FP32 payload,
+CPU seed7/original owner-RNG order,2 body ticks/token,clear,all-softmax,4 heads.
+Twelve growing-context tokens,4 warmup+8 measured. Default CPU norm-fp64-v1 Read.
+Never silently shrink topology/dimensions/precision. Contract: accelerator-scale.md.
 
-## Implementation and numerical policy
+## Code and gates
 
-edfb340/d69acba add a standalone installed-core consumer, resident/host transports,
-memory/locality partitions, explicit copy and allocator metrics, durable wrapper.
-Resident state/KV/Aggregate/Full/messages stay on assigned NPUs. Same-device
-messages remain local; cross-device inputs use Torch D2D copies. CPU owns
-metadata/selection and exact FP64 Read of necessary vectors. CSR pooling is
-unrelated; the historical workload uses event pooling. No checkpoint import or
-general heterogeneous-core claim. Placement aliases and None-vs-zero are checked.
+HEAD before current increment08a6a27; baseline implementation bb0ecc6.
+Frozen perf-a2/client-{cpu,npu}-a2 passed immutable CPU/2/8-NPU tiny gates and
+real465-node D8/B1 gates. Evidence: evidence/accelerator-scale-20260928.{md,json}.
+Default strict VJP remains rtol1e-5/atol1e-6. Wide Add Full squared-norm gradients
+suffer cancellation reproduced in one node; explicit basis-conditioned checks
+complete Jacobians at original tolerance and FP64 contractions. Prior strict
+failures remain failed. Core baseline1b0cb48 was qualified: CPU8636+22 complex
+cells,328 positive NPU gates/four CSR rejections/four CANN stacks. Do not repeat
+this unchanged-core qualification. No CUDA hardware performance claim.
 
-Current candidate adds explicit SDK finalization after all local tensors/workers
-are destroyed, before process statics. This fixes the observed intermittent
-8-device exit crash in development. The core's later repeated finalization warns
-"Please init npu device first!"; zero exit and all gates remain necessary.
+Current implementation increment in tools/accelerator_scale and two Python wrappers:
+--read-device cpu|model,--read-dtype float64|float32,--control-device cpu|model.
+Default cpu/float64/cpu unchanged. CPU FP32 reference and NPU FP32 custom Read
+profile scale-norm-fp32-v1; precision appears in graph identity and run manifests.
+model means node shard for Read,fixed lowest-region-member shard for softmax.
+Sorting,integer histories and event scheduling remain CPU. Gradients preserve
+None-vs-zero. --reference-read-dtype float64 explicitly compares precision; exact
+routes and all other observables stay checked. FP64 conversion is CPU-only.
+Unsupported NPU FP64 or model scoring with host transport fail explicitly.
 
-Default --vjp-policy strict remains unchanged. Real-topology Add D8/B1 seed0
-fails its first Full squared-norm VJP by7.7188e-6 (tolerance ratio3.06184).
-An independent single-node Python reproduction, without graph execution or
-transfers, yields exactly the same error. CPU FP32 vs FP64 itself differs by
-9.20483e-6; NPU FP32 vs FP64 by1.37738e-5. Complete local Jacobian passes the
-original componentwise tolerance (ratio0.03123). Explicit FP32 RMS expansion
-(dev06) changed nothing and was removed; its snapshot/failure is retained.
+All acquired NPU contexts now initialize BEFORE lengthy CPU weight construction.
+This makes reservations visible to process-based resource checks, but advisory
+locks still cannot exclude non-cooperating jobs.
 
-Explicit --vjp-policy basis-conditioned reports any strict quadratic failure,
-checks every root-coordinate VJP at original rtol1e-5/atol1e-6, and compares
-quadratic VJPs against CPU FP64 contractions using sum(abs(J*cotangent)) scale.
-Only roots<=64 coordinates qualify; all finiteness, None/zero, forward, routes
-and ownership checks remain mandatory. No model math, dtype or seed changes.
-This benchmark-specific numerical policy does NOT claim the strict gate passed.
-Negative tests reject wrong Jacobians, None-vs-zero changes and nonfinite grads.
+Development snapshots scoring-dev10/scoring-dev11 are frozen; never edit them.
+build-{cpu,npu}-dev11 PASSED including analytic scoring/zero VJP and rejection
+CTests. Dev10 tiny gates passed: check-cpu-default-dev10/check-cpu-fp32-dev10
+8 cells each,check-npu2-default-dev10 8,check-npu2-fp32-dev10 4 (strict).
+scoring-profile-dev10 PASSED: msprof observed41 FP32 LpNormV2/MIX_AIV tasks
+and349 SoftmaxV2/AI_VECTOR_CORE tasks on both chips; not a performance result.
+Dev09 missing-header compile failure retained. scoring-extra-dev10 exposed a
+comparison-only NPU FP64 cast bug; fixed in dev11 by host copy before conversion.
+No timed math changed. Preserve old failure.
 
-## Evidence, current jobs and next commands
+scoring-extra-dev11 PASSED on physical9,11: both mixed read/control placements,
+including explicit CPU FP64 comparison,and four465-node Add/Attention seed0/7
+D8/B1 cells with basis-conditioned policy. Every cell has normal exit,complete
+observables and isolated VJPs. Raw results: task-root/runs/scoring-extra-dev11.
+Next immutable qualification: commit implementation,freeze perf-a3,build jobs
+build-cpu-a3/build-npu-a3 into client-{cpu,npu}-a3. Then rerun CPU baseline/FP32,
+NPU2 baseline/FP32,and scoring-extra gates on that source before full-size runs.
+NPU8 new scoring mode and full-size FP32 timings remain unverified.
 
-Task root: /mi/data2T/zlong/tide-npu-performance. Frozen sources, builds, runs,
-launchers, inputs and Trackio are separate. Artifact links are under
-artifacts/npu-performance-*. Use launchers/freeze_run.py; never edit a snapshot.
-Every job has tide-npu-performance-NAME.service in background.slice and
-runs/NAME/{status.json,task.log}; NPU jobs have queue.json with physical mapping.
-FIFO allocation uses the account's run_on_free_npu.py. All compiler threads bounded.
+## Full-size results and concurrency correction
 
-Clean a1 at d69acba: CPU/2-NPU eight-cell gates passed. Wrapper/Trackio success
-and deliberate timeout cleanup passed (73 partial tokens, no remaining workers).
-8-NPU a1 Attention finished checks/steps then crashed on exit: still FAILED.
-Wide CPU Add passed; wide NPU Add strict VJP failed as above. GDB exit diagnostic
-was not a workload pass. Tiny msprof trace contains1059 MEMCPY_ASYNC D2D operations
-(240940 bytes), including internal copies; these are NOT all peer-link traffic.
+Task root /mi/data2T/zlong/tide-npu-performance. Each job has frozen source,unique
+runs/NAME/{status.json,queue.json,task.log,run/*}; artifact links in repository.
+launchers/freeze_run.py owns stable source and background.slice unit launch.
+Unit pattern tide-npu-performance-NAME.service. Inspect run.json/summary.json,
+metrics.jsonl/stdout.log/lifecycle.json; never infer a pass from a dead unit.
 
-Dev07 CPU/NPU builds passed. Wide2-card Add/Attention at seeds0/7 passed with
-basis-conditioned policy. strict-repro-dev07 confirms default strict still fails
-seed0 Add: enclosing diagnostic passed, native workload remains a strict failure.
-Independent probes numerical-local-a1 and numerical-jacobian-a1 passed.
+perf-a2 pilots,locality/resident,1800s native/512GiB RSS/7500s queue limit:
+- pilot-add-g0-n4-a2b PASSED,physical1,5,9,11,mean16.2893ms/sample-token.
+- pilot-attention-g0-n4-a2b PASSED,same4,mean56.0128ms/sample-token.
+- pilot-add-g1-n2-a2c PASSED,physical9,11,mean48.0210ms/sample-token.
+All12 tokens/8 measured,exit0,no children,records validated. Single pilots only;
+Add2 grad-forward overlapped other construction. Do not compare it directly with
+four-card no_grad numbers or claim matched/repeated speedups.
+- pilot-add-g1-n4-a2c FAILED during placement,logical3 OOM,own allocation7.69GiB.
+  Queue devices1,5,8,12; cannot interpret as a clean four-card capacity failure.
+- pilot-attention-g1-n4-a2c CANCELLED during construction after other processes
+  entered allocated physical2,8 (its pool1,2,5,8). Only our process was stopped.
+Evidence: runs/parallel-pilots-a2c-{results,device-contention}.json.
+Original fixed-four queued a2b grad pilots and earlier a2 pilots cancelled;
+all records retained. No live full-size pilot now.
 
-Dev08 CPU/NPU builds and new negative tests passed. Tiny CPU,2-NPU and8-NPU
-all8 cells each passed strict policy (both models,transports,placements; full
-observable and isolated zero/nonzero VJPs). Jobs check-cpu-dev08,
-check-npu2-dev08,check-npu8-dev08 are terminal passed. topology-npu8-dev08 also
-passed the real wide graph,D8/B1,models Add/Attention,seeds0/7,explicit
-basis-conditioned policy, including all4 normal process exits. This is correctness only, not full-size performance.
+The user correctly identified avoidable serialization. New pool is twelve
+eligible devices1,2,5,6,7,8,9,11,12,13,14,15,not twelve allocated chips.
+FIFO helper admits healthy,no-process,low-HBM devices using two snapshots and
+locks; no priority changes/backfill/live queue edits. Actual Add2/Add4 lifetimes
+overlapped,but Add4 never reached timing. Init-all-device fix addresses the window
+where uninitialized allocated cards appeared free during CPU construction.
+After qualification,submit independent cases separately and confirm actual overlap.
+Compare2/4/8 cards,memory/locality,and three fresh-process repeats where feasible;
+concurrent contention and isolated timing are separate. Preserve capacity failures.
 
-Implementation committed bb0ecc6; clean source perf-a2 frozen at this commit.
-Both clean builds and all immutable gates PASSED: build-cpu-a2/build-npu-a2,
-check-cpu-a2/check-npu2-a2/check-npu8-a2 (24 tiny cells,strict),
-topology-npu2-a2/topology-npu8-a2 (8 wide cells,basis-conditioned).
-Evidence: docs/evidence/accelerator-scale-20260928.{md,json}. All process exits
-were normal. Core qualification was not repeated.
+## Environment and inspection
 
-Full-size pilots SUBMITTED from perf-a2 via launchers/launch-pilots-a2b.py:
-- pilot-add-g0-n4-a2b
-- pilot-attention-g0-n4-a2b
-- pilot-add-g1-n4-a2b
-- pilot-attention-g1-n4-a2b
-Each unit is tide-npu-performance-NAME.service; records under runs/NAME and
-artifacts/npu-performance-NAME. They use the same candidate physical devices
-1,5,9,11 to run sequentially (queue verifies availability), not concurrently.
-The original four *-a2 pilots were cancelled while queued before native startup,
-because physical7 became occupied. Their cancelled records are retained.
-Each replacement has1800s native timeout,512GiB RSS budget,7500s queue wait,workers16,
-ATen threads1,locality,resident,FP32,D2048/B512/V50304,seed7,12 tokens/4 warmup.
---grad0 or1 means no_grad or grad-forward without backward/optimizer/detach.
-Run wrapper uses /home/zlong/venvs/trackio/bin/python; module is the standalone
-libtorch-npu2.10/CANN9.0 stack. The exact argv is in job status and, after
-allocation, run/run.json. Input wide.txt SHA256:
-d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4.
-
-Inspect with python scripts/status.py and runs/NAME/{queue.json,task.log,
-run/run.json,run/summary.json,run/stdout.log}. Stop a specific pilot with
-systemctl --user stop tide-npu-performance-NAME.service. No pilot result yet;
-verify current records rather than inferring completion from elapsed time.
-After pilots: preserve OOM/timeouts. Do not repeat unchanged failed cells.
-For completed modes compare2/4/8 cards,memory/locality,3 independent fresh
-processes on matched resources. Independently concurrent models remain a
-separate requested test (total occupancy<=8); not satisfied by these serial
-pilots. Do not silently reduce dimensions or precision. Commit performance
-evidence only from inspected terminal records.
-
-## Runtime and completed foundation
-
-Use user-selected public /opt modules, not the older guide's personal defaults.
-Standalone module libtorch-npu/2.10.0-cann9.0.0; TorchNPU2.10/CANN9.0/driver25.3.rc1,
-A3 Ascend910_9392. Public driver unchanged. Existing qualified core builds:
+Use user-selected public /opt modules,not older personal guide defaults.
+libtorch-npu/2.10.0-cann9.0.0,TorchNPU2.10/CANN9.0/driver25.3.rc1,A3
+Ascend910_9392,16 chips×64GiB. Driver unchanged. Existing installed core builds:
 /mi/data2T/zlong/tide-accelerator/builds/native-{cpu,npu-sdk}-dev03.
-Default async queue crashed at rtStreamWaitEvent on2 devices; retain its failures.
-Explicit/default TASK_QUEUE_ENABLE=0 passes these gates and is recorded. This
-changes dispatch synchronization, not CPU staging or model precision.
-SDK allocator header supplement contains only2 unmodified official headers from
-94f8a8e6b523d7ba553e1b80d5b5248478391526 with installation provenance.
-Official EnvVariables.cpp at that same commit documents keep-origin FP32 default
-on910B1 and later and disabled matmul HF32; no precision override is applied.
+TASK_QUEUE_ENABLE=0 is explicit/recorded; async queue cross-card wait crashed.
+Early SDK finalization after tensor/worker destruction fixes observed exit crash;
+repeated-finalize warning is benign only with exit0. CSR pooling unrelated.
 
-Trackio writer/viewer /home/zlong/venvs/trackio/bin/python,0.35.0; local root
- task-root/trackio,storage auto,project tide-npu-performance. No dashboard exposed.
-Raw manifests/JSONL are authoritative. Completed foundation baseline1b0cb48:
-CPU8636 tests+22 complex cells+installed consumers;4 CANN stacks passed328 positive
-NPU gates+4 CSR rejections. Standalone2.10/CANN9.0 qualified. No CUDA hardware
-results. Do not redo that core qualification for consumer-only changes.
-
-Implementation is bb0ecc6. The next commit records only reviewed evidence,
-ROADMAP and this handoff. No core/Python changes; full-size jobs use perf-a2.
+Trackio wrapper/viewer /home/zlong/venvs/trackio/bin/python,0.35.0,project
+ tide-npu-performance,local task-root/trackio,storage auto; no dashboard exposed.
+Raw records authoritative. Stop one task with systemctl --user stop
+ tide-npu-performance-NAME.service. Implementation/STATUS/ROADMAP/accelerator-scale docs committed together;
+evidence must be a separate commit after immutable qualification. No core/Python package edits. Use atomic handoff writes and git diff
+before committing; active jobs read frozen snapshots only.

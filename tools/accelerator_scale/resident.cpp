@@ -35,6 +35,10 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
   }
   for (auto d : placement_.devices) {
     c10::impl::VirtualGuardImpl api(d.type()); streams_.push_back(api.getStream(d));
+    if (placement_.scoring.control_device == "model") {
+      device_selection_models_.push_back(model_);
+      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d));
+    }
   }
   state_.identity = graph_.identity; state_.batch_size = batch;
 }
@@ -51,7 +55,8 @@ void Resident::phase(const Groups& groups, const std::function<void(Index,const 
 }
 void Resident::read(std::vector<Event>& events, const std::vector<size_t>& ids) {
   const auto node = events[ids.front()].node;
-  const auto& w = host_read_[node];
+  const auto& w = placement_.scoring.read_device == "cpu" ? host_read_[node] : model_.nodes[node];
+  const auto destination = w.read.device();
   const auto& mode = graph_.regions[graph_.nodes[node].region].read_mode;
   std::vector<Tensor> originals, numeric;
   for (auto i : ids) {
@@ -65,7 +70,7 @@ void Resident::read(std::vector<Event>& events, const std::vector<size_t>& ids) 
   };
   {
     at::NoGradGuard guard;
-    Transfer copy(at::Device(at::kCPU)); for (const auto& t : originals) copy.add(t); copy.execute();
+    Transfer copy(destination); for (const auto& t : originals) copy.add(t); copy.execute();
     std::vector<State> states(originals.size()); std::vector<ReadInput> requests;
     for (size_t j = 0; j < ids.size(); ++j) {
       states[j].value = copy.get(originals[j]);
@@ -74,11 +79,28 @@ void Resident::read(std::vector<Event>& events, const std::vector<size_t>& ids) 
     numeric = w.read_kernel->batch(w, requests);
   }
   for (size_t j = 0; j < ids.size(); ++j) {
-    if (at::GradMode::is_enabled()) numeric[j] = semantic_value(numeric[j], evaluate(host(originals[j])));
-    if (!numeric[j].device().is_cpu() || !at::isfinite(numeric[j]).item<bool>())
-      throw std::runtime_error("invalid CPU descriptor");
+    if (at::GradMode::is_enabled()) {
+      Transfer copy(destination); copy.add(originals[j]); copy.execute();
+      numeric[j] = semantic_value(numeric[j], evaluate(copy.get(originals[j])));
+    }
+    if (numeric[j].device() != destination || !at::isfinite(numeric[j]).item<bool>())
+      throw std::runtime_error("invalid configured Read descriptor");
     events[ids[j]].descriptor = numeric[j];
   }
+}
+Selection Resident::select(const History* history, std::vector<Event>& events, const std::vector<size_t>& ids) {
+  const auto region = graph_.nodes[events[ids.front()].node].region;
+  // A fixed region owner does not change when the candidate subset changes.
+  const auto shard = placement_.node_device[region_layout(graph_, region).members.front()];
+  const auto& model = placement_.scoring.control_device == "cpu" ? selection_model_ : device_selection_models_[shard];
+  Transfer copy(model.nodes[0].bias.device());
+  for (auto i : ids) copy.add(events[i].descriptor);
+  copy.execute();
+  std::vector<Tensor> originals;
+  for (auto i : ids) { originals.push_back(events[i].descriptor); events[i].descriptor = copy.get(events[i].descriptor); }
+  auto selected = evaluate_selection(graph_, model, history, events, ids);
+  for (size_t j = 0; j < ids.size(); ++j) events[ids[j]].descriptor = originals[j];
+  return selected;
 }
 AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop, Index seal) {
   if (failed_) throw std::runtime_error("resident executor failed; new instance required");
@@ -138,14 +160,22 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
         const auto old=state_.history.find(owner);
         region_tasks.push_back({owner,&ids,old==state_.history.end()?nullptr:&old->second,{}});
       }
-      const auto region_workers=options_.parallel_regions?std::min<size_t>(options_.workers,region_tasks.size()):1;
+      const bool device_controls = placement_.scoring.control_device == "model";
+      const auto region_workers=device_controls?placement_.devices.size():
+        options_.parallel_regions?std::min<size_t>(options_.workers,region_tasks.size()):1;
       std::vector<std::function<void()>> select_jobs;
       for(size_t worker=0;worker<region_workers;++worker) select_jobs.push_back([&,worker]{
-        for(size_t i=worker;i<region_tasks.size();i+=region_workers) {
-          auto& task=region_tasks[i];task.selection=evaluate_selection(graph_,selection_model_,task.old,events,*task.ids);
+        std::optional<c10::StreamGuard> guard;
+        if (device_controls) guard.emplace(streams_[worker]);
+        for(size_t i=0;i<region_tasks.size();++i) {
+          auto& task=region_tasks[i];
+          const auto shard=placement_.node_device[region_layout(graph_,task.owner.second).members.front()];
+          if ((device_controls ? size_t(shard) : i%region_workers) != worker) continue;
+          task.selection=select(task.old,events,*task.ids);
         }
       });
       pool_.run(std::move(select_jobs));
+      if (device_controls) synchronize(placement_);
       for(auto& task:region_tasks) {
         const auto& owner=task.owner;const auto& ids=*task.ids;
         commit_selection(state_,owner,std::move(task.selection),events,ids,options_.trace);

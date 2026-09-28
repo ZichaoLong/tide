@@ -10,17 +10,46 @@ The targets are the historical D2048/B512/V50304, 465-node topology:
 17,269,426,339 Attention parameters and 9,468,020,899 Add parameters. The latter
 is the historical "8.8B" count in units of 1024^3. FP32 weights, CPU initialization
 order/seed, edge identities, two body ticks/token, clear, full-domain softmax,
-four-head Attention and `norm-fp64-v1` Read are preserved. The measured modes
+four-head Attention are preserved. The default Read remains `norm-fp64-v1`. The measured modes
 are no-grad and grad-forward, with no backward, optimizer, or history detach.
 
 `--transport resident` keeps node state, KV caches, Aggregate/Full and messages
 on assigned devices. The benchmark's own sealed-window scheduler reuses public
 local programs. Same-device messages remain on that device; cross-device inputs
 use Torch device-to-device copies when the destination consumes the fiber.
-CPU computes exact FP64 Read from the required vectors and maintains count-only
-region histories; controls return to each node. This is single-process model
-sharding, not data parallelism or HCCL collectives. Device-copy byte counters
-describe explicit tensor transfers, not independently measured fabric traffic.
+The default computes FP64 Read on CPU; controls return to each node. This is
+single-process model sharding, not data parallelism or HCCL collectives. Device-copy
+byte counters describe explicit tensor transfers, not independently measured
+fabric traffic, and exclude implicit scalar extraction inside the selector.
+
+Read and control placement are independent of payload precision:
+
+| Configuration | Read | Softmax controls | Intended use |
+| --- | --- | --- | --- |
+| `--read-device cpu --read-dtype float64 --control-device cpu` | CPU FP64 | CPU FP64, cast to payload | Historical default/reference |
+| `--read-device cpu --read-dtype float32 --control-device cpu` | CPU FP32 | CPU FP32 | Same-precision CPU reference |
+| `--read-device model --read-dtype float32 --control-device model` | Node device FP32 | Fixed region-owner device FP32 | Resident inference/grad-forward candidate |
+
+Mixed Read/control placement is also explicit. `model` means the node's assigned
+device for Read and the lowest region member's assigned device for controls.
+The default remains unchanged. FP32 uses the benchmark-owned custom Read profile
+`scale-norm-fp32-v1`, changing graph identity while keeping the L2-norm formula.
+NPU FP64 and model-device scoring with host transport fail explicitly.
+
+Node ranking, count histories and event scheduling still run on CPU in every
+configuration. Model-device controls copy only descriptors across shards for
+softmax; ranking extracts their scalar values to CPU. This is not a claim that
+selection or scheduling is NPU-native. Those implementations need separate
+correctness gates and inference/training measurements before selection.
+
+`--check 1` uses an independent CPU scalar schedule with matching Read precision.
+`--reference-read-dtype float64` explicitly compares against historical FP64,
+reporting descriptor error and route mismatches. Only descriptor dtype metadata
+is normalized for that cross-precision comparison; discrete routes, all other
+observables and gradients retain their checks. Near-tie route changes are failures,
+not silently accepted numerical noise. Read and control roots have isolated VJP
+checks, including connected-zero versus absent gradients. This extension is under
+qualification; earlier immutable evidence applies to the historical default only.
 
 `--transport host` retains the earlier comparison: CPU state/messages/Aggregate
 and device State/Full through adapters. It necessarily transfers same-card
@@ -92,3 +121,8 @@ Raw JSONL, atomic run/summary records, binary/input identities, physical mapping
 per-device allocator memory and an optional local Trackio projection are retained.
 Independent concurrent processes and one model spanning devices are separate
 experiments; comparisons must record contention and physical assignments.
+
+All requested device contexts are initialized before CPU weight construction so
+reserved chips remain visible as occupied during that phase. Cooperative queue
+locks do not prevent unrelated/non-cooperating processes from entering a device;
+record such contention separately from a model capacity failure.
