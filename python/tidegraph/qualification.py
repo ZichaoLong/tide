@@ -94,9 +94,12 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
         if not requested.execution.trace:
             without_trace = GraphRuntime(replace(effective, execution=replace(effective.execution, trace=False)),
                                          device=device, native_library=native_library)
-            quiet = probe.clone().advance(without_trace.session(batch_size))
-            compare(replace(actual, trace=[], messages=[]), quiet)
-            checked("requested-trace-disabled")
+            quiet_probe = probe.clone()
+            quiet = quiet_probe.advance(without_trace.session(batch_size))
+            observable = replace(actual, trace=[], messages=[])
+            compare(observable, quiet)
+            compare_gradients(observable, candidate, b, quiet, without_trace, quiet_probe, compare=compare)
+            checked("requested-trace-disabled-values-and-vjps")
         # Fresh runtimes avoid carrying any gradients or parameter updates across gates.
         ref_train = GraphRuntime(effective, device=device, options=oracle_options)
         candidate_train = GraphRuntime(effective, device=device, native_library=native_library)

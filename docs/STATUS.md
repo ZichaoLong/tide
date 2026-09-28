@@ -17,25 +17,34 @@ legacy CPU comparison exports; relocated PDG CMake configuration passed.
 Latest static audit: zero errors,45 warning review leads (new ones are explicit
 backend guards/negative tests). No new hardware support is claimed.
 
-Active durable gate: tide-library-consumption-20260928-a.service.
-Frozen clean source c08cc90 at /var/tmp/zlong-graph-execution-foundation/library-l3-source;
-build /var/tmp/zlong-graph-execution-foundation/library-l3-build. Build109/109 is
-complete; installed Python/native gates and CMake consumer are still running.
-Job/status/log: artifacts/library-consumption-20260928-a/{status.json,task.log};
-consumer/{result.json,commands.log}. background.slice/Nice10/KillMode=control-group,
-build2 and ATen/OMP/BLAS1. No terminal pass claim yet.
-Inspect/stop with systemctl --user show/stop tide-library-consumption-20260928-a.service.
+L3 durable consumption passed: clean c08cc90, unit
+`tide-library-consumption-20260928-a.service` terminal exit0, 02:13:34 UTC.
+artifacts/library-consumption-20260928-a/{status.json,consumer/result.json}:
+109/109 fresh build,6 external Python/native apps,3 installed config gates,
+and installed standalone C++ FP32/FP64 forward/chunk/backward.
 
-Directed L4:26 API/config tests passed; three mixed active native gates passed:
-64-node/768-edge TimedDAG FP32 and Settle FP64,32-node feedback FP64 (pending79).
-Earlier installed -001/-002 failures remain; normalized diagnostic losses pass
-original strict tolerances in -003. Wheel runtime is independent of source paths.
-Next: commit/push export fix, freeze the new head, wait for the consumption unit,
-then run scripts/qualify_library.py --reuse-build --build-dir library-l3-build
-through a new durable job. It includes full CPU regression,22 complex cells
-(D4/B1/T2/three steps; exact P02 has8192 nodes/four active),installed consumers.
+Full library gate passed at clean ff708a1, unit
+tide-library-release-20260928-a.service, exit0,02:54:59 UTC:
+- 8621 CPU tests passed in1531.34s;
+- 22 complex cells passed (both CPU dtypes, Python/native active mixed graphs,
+  exact P01/P02/T02/S01/A02 topologies; P02 retains8192 nodes/four observed);
+- 6 installed Python/native applications,3 installed configuration gates and
+  installed C++ FP32/FP64 consumer passed.
+Records: artifacts/library-release-20260928-a/qualification/{result.json,cpu,
+complex,consumer}; wrapper status/log in its parent. No live job from this gate.
+
+Review follow-up: validator now checks trace-disabled VJPs, not only values.
+A deliberately wrong backward with identical forward is rejected; native
+compact/deferred release/packed transport passes in both dtypes. Directed:
+16 qualification tests passed in83.75s;3 trace-disabled tests passed in14.89s
+(18 distinct cases including the new two-dtype optimized-path test).
+Only production diff since ff708a1 is qualification.py; executors/models unchanged.
+Next: commit/push this validator hardening, freeze new head, durable rerun of all
+18 qualifier tests and installed consumer gate. Retain ff708a1 complete evidence;
+no need to repeat unaffected executor regression. Then evidence commit/push.
+The validator fix, test/docs and this handoff are uncommitted. No live job yet.
 CPU FP32/FP64, aarch64 Torch/LibTorch2.10.0+cpu; ATen/OMP/BLAS1, build2.
-CPU operator probe passed. Static audit: zero errors, 40 existing review leads.
+CPU operator probe passed. Static audit: zero errors,45 reviewed warning leads.
 About 13 GiB disk free at re-entry; recheck before large writes.
 
 ## Retained completed evidence

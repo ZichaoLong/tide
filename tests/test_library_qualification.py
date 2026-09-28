@@ -75,3 +75,41 @@ def test_finite_checks_and_tolerance_preserve_discrete_contract():
         compare_finite({"route":0}, {"route":1}, atol=100.)
     with pytest.raises(AssertionError):
         compare_finite(None, torch.tensor(0.), atol=100.)
+
+
+def test_trace_disabled_bad_backward_cannot_pass(tmp_path, monkeypatch):
+    class BadBackward(torch.autograd.Function):
+        @staticmethod
+        def forward(ctx, value):
+            return value.clone()
+
+        @staticmethod
+        def backward(ctx, grad):
+            return grad * 2
+    config = GraphConfig.from_dict(dict(schema_version=1, family="timed-dag",
+                                       topology=dict(kind="chain"), model=dict(width=2)))
+    original = GraphRuntime._run
+    def corrupt(runtime, *args, **kwargs):
+        result = original(runtime, *args, **kwargs)
+        if not runtime.options.trace:
+            b,t,p,value = result.outputs[0]
+            result.outputs[0] = b,t,p,BadBackward.apply(value)
+        return result
+    monkeypatch.setattr(GraphRuntime, "_run", corrupt)
+    with pytest.raises(AssertionError, match="gradient"):
+        qualify(config, device="cpu", output_dir=tmp_path / "gate")
+    report = json.loads((tmp_path / "gate/report.json").read_text())
+    assert report["state"] == "failed"
+    assert "chunk-observables-and-vjps" in {c["name"] for c in report["checks"]}
+
+
+def test_trace_disabled_native_compaction_vjps(dtype, tmp_path):
+    config = GraphConfig.from_dict(dict(schema_version=1, family="timed-dag",
+        topology=dict(kind="diamond", budget=1, module=dict(memory="ssm", full="swiglu")),
+        model=dict(width=4, dtype=str(dtype).split(".")[-1]),
+        execution=dict(implementation="native", mode="hst", full_autograd="batched", aggregate_autograd="batched",
+                       compact_events=True, defer_state_release=True, packed_sources=True,
+                       batch_next=True, parallel_regions=True)))
+    build = os.environ.get("TIDE_BUILD_DIR", str(Path(__file__).resolve().parents[1] / "build"))
+    report = qualify(config, device="cpu", output_dir=tmp_path / "gate", native_library=build, steps=2)
+    assert "requested-trace-disabled-values-and-vjps" in {c["name"] for c in report["checks"]}

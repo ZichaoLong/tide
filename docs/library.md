@@ -136,7 +136,8 @@ and exit nonzero. A running report is not evidence of success.
 
 The gate checks full outputs, state slots, history, routes, trace, pending and
 ledger; input/parameter VJPs including None connectivity and isolated roots;
-whole-versus-chunk observables/VJPs; a stateful optimizer trajectory; and a
+whole-versus-chunk observables/VJPs; requested trace-disabled values/VJPs;
+a stateful optimizer trajectory with full diagnostics; and a
 fresh-process checkpoint continuation. Settle also compares its independent
 direct scalar schedule against the encoded execution. Scalar Python scheduling
 is the default oracle; a reference candidate uses independent scalar streaming.
