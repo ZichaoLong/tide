@@ -99,3 +99,41 @@ entry points are the exported configuration/runtime/record classes and the
 documented qualification CLI. Internal schedulers and benchmark scripts are not
 the experiment API. New module implementations belong here with independent
 semantic tests; keep task-specific training code in the consuming repository.
+
+## Qualify the configuration before an experiment
+
+```bash
+python -m tidegraph inspect graph.json
+python -m tidegraph qualify graph.json --device cpu --output-dir results/gate-001 \
+  --width 8 --dtype float64 --batch-size 2 --positions 4 --steps 3
+```
+
+Native configs additionally pass `--native-library /matching/build-directory`.
+`--width` and `--dtype` are explicit qualification overrides; they never change
+the topology or module assignments. Inspect `report.json` for requested and
+effective config hashes, generated/caller input hash, package/native identity,
+actual touched/unobserved nodes, tolerances, resolved policy and every passed
+check. The retained `input.pt` contains the exact effective config and fixture
+values, including caller data; choose its output location accordingly. Output
+directories must be new. Failures retain a terminal failed report
+and exit nonzero. A running report is not evidence of success.
+
+The gate checks full outputs, state slots, history, routes, trace, pending and
+ledger; input/parameter VJPs including None connectivity and isolated roots;
+whole-versus-chunk observables/VJPs; a stateful optimizer trajectory; and a
+fresh-process checkpoint continuation. Settle also compares its independent
+direct scalar schedule against the encoded execution. Scalar Python scheduling
+is the default oracle; a reference candidate uses independent scalar streaming.
+Choose `--optimizer adamw|sgd|momentum`. The default three steps exercise state
+carry, explicit truncation and repeated updates. These are semantic test losses,
+not a claim about task convergence or performance.
+
+For real inputs use `tidegraph.qualification.qualify(config, device="cpu",
+output_dir=..., inputs=..., batch_size=..., positions=..., stop=...)`. Settle
+accepts the same tensor format as its session; explicit External probes require
+a final logical stop. CPU tensors must already match the effective dtype/shape.
+This gate constructs the modules declared by the config; custom Python objects,
+custom task heads and pretrained weight import require their own differential
+tests. It currently certifies CPU only. Exact application resume still needs the
+experiment-owned state described above. Repeat qualification whenever topology,
+modules, execution policy, dtype or dependency version changes.

@@ -9,6 +9,9 @@ description = "Tide graph execution and configuration equivalence library"
 requires-python = ">=3.10"
 dependencies = ["torch>=2.4"]
 
+[project.scripts]
+tidegraph = "tidegraph.__main__:main"
+
 [project.optional-dependencies]
 test = ["pytest>=8"]
 

@@ -11,10 +11,13 @@ independent consumer example. L1-L4 in ROADMAP owns this active plan.
 Commit each coherent tested increment and push immediately. No subagents.
 Reference repositories and ObsidianVault remain read-only.
 
-Start source: clean `62c83ea`. L1 implementation complete; preparing its commit.
-Directed gate: 95 tests passed in 10.70s (test_library + checkpoint_ownership),
-CPU FP32/FP64. Next: L2 package-owned per-config qualification, then L3/L4.
-No durable job is running. New code/docs are the authorized L1 increment.
+L1 committed and pushed as `31d7b96`; 95 directed API/checkpoint tests passed.
+L2 implemented: finite-config CPU gate, full observables and independent VJPs,
+chunking, optimizer trajectory, and fresh-process checkpoint continuation.
+Directed L2 matrix: 14 passed in 78.46s, all three families, both dtypes,
+Python/native, plus caller inputs and a deliberately corrupt candidate.
+Preparing L2 commit. Next: L3 installed Python/native/CMake consumers and L4
+complex topology + clean full CPU regression. No durable job is running.
 CPU FP32/FP64, aarch64 Torch/LibTorch2.10.0+cpu; ATen/OMP/BLAS1, build2.
 CPU operator probe passed. Static audit: zero errors, 40 existing review leads.
 About 13 GiB disk free at re-entry; recheck before large writes.
