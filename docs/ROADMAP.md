@@ -58,6 +58,25 @@ schedules and exact discrete graph semantics remain mandatory. Floating toleranc
 and numerical backend settings are explicit. Report finite coverage and unknown
 fallback visibility instead of extrapolating from a small device smoke.
 
+## Authorized extension: full-topology NPU performance
+
+Authorized 2026-09-28: independent benchmarks on multiple NPUs and one model
+across multiple NPUs, using the historical D2048/B512/V50304 Attention17.269B
+and Add9.468B (historical binary-unit label8.818) PDG topology. Keep the
+single-device runtime contract and CPU FP64 Read semantics explicit.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | implemented; development CPU/1/2-NPU gates passed, immutable gate pending |
+| P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | implemented; record lifecycle qualification pending |
+| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | planned |
+| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | placement implemented; full-scale measurement planned |
+
+Full-size throughput remains unclaimed until the corresponding terminal runs
+pass. CPU coordination/FP64 Read and all device-transfer overhead belong in
+timing; host state is confined to the explicitly named comparison transport.
+See [the consumer contract](accelerator-scale.md).
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.
