@@ -56,7 +56,7 @@ link dependency; fixed matched torch.libs search path); build-tide-sdk29-a4
 (official SDK export header gaps;46 exact-source ACL/HCCL/HCCLUtils headers added).
 Successful follow-ups: build-sdk29-smoke-l2,smoke-sdk29-l2,build-tide-sdk29-a4b.
 Package README,recipes,hashes,supplement manifest retain reproducibility.
-Evidence docs/evidence/standalone-sdk29-20260928.{md,json}, ready to commit.
+Evidence b5166eb: docs/evidence/standalone-sdk29-20260928.{md,json}.
 
 All four CANN stacks have actual operator traces: int64 Sort on card-local AiCPU,
 FP32 norms/reductions on MIX_AIV,Softmax on AI_VECTOR_CORE.8.5 traces each6946
@@ -71,21 +71,37 @@ TASK_QUEUE_ENABLE=0,A3 driver25.3.rc1. Native bounds and host RSS budgets explic
 - screen-add-a4 PASSED seven two-card cases on5,6;12/8 observations each.
   CPU64=17.110,CPU32=18.419,mixed32=28.282,score32=39.415,rank32=35.383,
   queue32=40.650,all32=34.933 ms/sample-token. Exploratory concurrent observations.
-- screen-attention-a4 RUNNING on1,2,8,9: CPU64=56.671,CPU32=49.512,
-  mixed32=63.671,score32=59.956 passed; rank32 running,queue32/all32 pending.
-- train-screen-add-a4 RUNNING on5,6,7,11 after SDK gates released them.
+- screen-attention-a4 PASSED on1,2,8,9: CPU64=56.671,CPU32=49.512,
+  mixed32=63.671,score32=59.956,rank32=60.560,queue32=71.442,all32=67.420.
+  All12/8. Both fastest FP32 screens are cpu32. plans/matched-inference-a4.json
+  prepared (NOT submitted):12 runs,6-chip allocation,Add uses indices0,1;
+  Attention uses2,3,4,5;3 repeats per CPU64/CPU32,interleavedAB/BA/AB.
+- train-screen-add-a4 PASSED all7 on5,6,7,11.
   Seven same scoring/dispatch choices; full12-token forward/backward/AdamW,
-  one cold complete update (training_steps1,warmup0). First cpu64 constructing/
-  executing; no training result yet. Per cell2400s/RSS256GiB. Stop plan on first
+  one cold complete update (training_steps1,warmup0). CPU64/cpu32/mixed32/score32/rank32 cold updates PASSED
+  42.742/41.679/48.622/57.142/53.073 ms/sample-token;queue32/all32 PASSED56.014/57.273. CPU64 phase times202.553/57.514/2.540s,
+  total262.607s,max peak38.177GiB. CPU32 total256.073s,peak38.177GiB. Per cell2400s/RSS256GiB. Stop plan on first
   failure, then inspect before another attempt. Cold screen is NOT warm throughput.
-- placement-scale4-a4 QUEUED for1,2,8,9 (wait7200): Add memory/locality4,
+- placement-scale4-a4 PASSED on1,2,8,9: Add memory/locality4,
   Attention memory4/locality2. Fixed CPU FP32 scoring/CPU dispatch;12/4 tokens,
- 1800s/RSS256GiB each. Can overlap Add training on disjoint cards. Descriptive only.
+ 1800s/RSS256GiB each. Add memory/locality4 PASSED14.442/16.609;
+ Attention memory4 PASSED43.533;Attention locality2 PASSED73.028. Descriptive only.
+
+- train-screen-attention-a4 CANCELLED QUEUED WAITER: external SGLang processes
+  newly occupy1,8,9,12; only2,5,6,7,11 free. Preserve cancellation, no benchmark
+  cell started. Do not touch other workloads or queue priorities. Resubmit a NEW
+  job identity when8 devices available; original seven-cell plan unchanged.
+- train-warm-add-a4 RUNNING on eligible5,6,7,11; prepared
+  plans/train-warm-add-a4.json via run-training-screen-a4.py. Three fresh CPU32
+  processes,2 complete12-token AdamW updates,first warmup. Stop on first failure.
+  First process cpu32-r1 running; allocation physical5,6,7,11 to logical0..3.
+  timeout3600/RSS256GiB per cell. This smaller ready job should not sit behind
+  an impossible8-card queue head.
 
 Full continuation scope is fixed in plans/followup-policy-a4.md:
 1. Finish above jobs; inspect failures and validate new terminal records.
-2. Submit train-screen-attention-a4 with its prepared8-card plan after sufficient
-   cards free; do not block ready small jobs with an8-card waiter. Seven cold
+2. Resubmit Attention cold screen with a NEW job name after8 devices are free.
+   Previous queue-only cancellation preserves records; never reuse its output. Seven cold
    complete training cells, stop on first failure. Preserve dimensions/window.
 3. Isolated inference finalists: historical CPU64 vs fastest completed FP32
    screen config for each model;3 fresh-process repeats each,AB/BA/AB, fixed
@@ -95,6 +111,7 @@ Full continuation scope is fixed in plans/followup-policy-a4.md:
    subsets; report observed finite-workflow throughput/overlap, no causal gain
    claim from one pair. External workloads remain recorded limitations.
 4. Finish fixed-CPU-FP32 no-grad scaling at8 devices for each model (two cases).
+   Prepared plans/scaling8-a4.json; NOT submitted;run-plan-a4.py.
    Existing/planned2/4 cases above complete finite scaling/locality comparison.
 5. Training finalist:3 fresh processes/model,2 full updates,first warmup;
    capacity-qualified placement/count,full12-token windows,phase/total timing.
@@ -120,10 +137,22 @@ priorities or other workloads. Eligible pool1,2,5,6,7,8,9,11,12,13,14,15 is not
 an allocation. Recent free pool was9 chips; other users occupy remaining chips.
 
 New/changed record validation: python launchers/validate-new-records-a4.py JOB...
-Hashes cached in runs/record-validations-a4.json;11 terminal identities validated
+Hashes cached in runs/record-validations-a4.json;25 terminal identities validated
 so far,healthy Trackio,no remaining descendants. Do not print full RSS arrays.
 Trackio0.35 best-effort local project tide-npu-performance,task-root/trackio,
 viewer /home/zlong/venvs/trackio/bin/python,storage auto;raw records authoritative.
 freeze_run.py owns immutable snapshots/transient services; never edit an input
 of a running OR queued job. Long waits belong inside the queued service.
 Reentry main repo: git status --short --branch;python scripts/status.py.
+
+Prepared launcher run-concurrent-pair-a4.py (not submitted) accepts2-cell plan
+with disjoint device_indices covering the full allocation. It records total
+finite-workflow wall time including construction/recording, plus individual
+usual benchmark records; do not compare that combined metric directly with
+warm per-token latency. New task launchers use only portable benchmark CLI.
+
+Current reviewed evidence checkpoint: docs/evidence/accelerator-performance-20260928.{md,json}
+contains25 completed full-size cells plus the historical Attention4 grad-forward
+follow-up. ROADMAP,accelerator-scale and older scoring-pilots navigation updated.
+Documentation-only checkpoint; active source remains b4f26b3.
+Do not claim overall performance completion while required jobs remain.

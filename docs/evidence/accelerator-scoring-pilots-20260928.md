@@ -66,5 +66,6 @@ Its contention and device assignment are not matched to the earlier pilots;
 this number alone does not establish a CPU-control speedup. Raw record hashes
 and the full timing distribution are in the evidence manifest.
 
-The four-device Attention capacity follow-up and its live state are in
-[STATUS](../STATUS.md); the remaining acceptance work is in [ROADMAP](../ROADMAP.md).
+The successful four-device Attention capacity follow-up is retained in
+[performance evidence](accelerator-performance-20260928.md); remaining acceptance
+work is in [ROADMAP](../ROADMAP.md), with live jobs in [STATUS](../STATUS.md).

@@ -4,7 +4,8 @@ This standalone consumer links the installed Tide C++ core. It does not extend
 the public single-device runtime or import checkpoints. Immutable CPU/2/8-NPU
 small-tensor qualification passed, including the465-node topology with the
 explicit numerical policy below. See [qualification evidence](evidence/accelerator-scale-20260928.md).
-Full-size performance is a separate ongoing experiment; consult `STATUS.md`.
+Full-size performance has [completed exploratory screens](evidence/accelerator-performance-20260928.md);
+remaining repeated/training work is tracked in `STATUS.md`.
 
 The targets are the historical D2048/B512/V50304, 465-node topology:
 17,269,426,339 Attention parameters and 9,468,020,899 Add parameters. The latter
