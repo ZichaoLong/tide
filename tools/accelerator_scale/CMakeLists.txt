@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.18)
 project(tide_accelerator_scale LANGUAGES CXX)
 find_package(TideGraph 0.2 CONFIG REQUIRED)
-add_executable(tide-accelerator-scale main.cpp transfer.cpp partition.cpp placement.cpp state.cpp full.cpp check.cpp resident.cpp
+add_executable(tide-accelerator-scale main.cpp transfer.cpp partition.cpp placement.cpp state.cpp full.cpp check.cpp check_vjp.cpp resident.cpp
   ../../cpp/scale/config.cpp ../../cpp/scale/model.cpp ../../cpp/bench/compare.cpp)
 target_link_libraries(tide-accelerator-scale PRIVATE tide::runtime)
 target_compile_features(tide-accelerator-scale PRIVATE cxx_std_17)
+enable_testing()
+add_executable(tide-accelerator-vjp-test check_vjp_test.cpp check_vjp.cpp)
+target_link_libraries(tide-accelerator-vjp-test PRIVATE tide::runtime)
+target_compile_features(tide-accelerator-vjp-test PRIVATE cxx_std_17)
+add_test(NAME accelerator-vjp-policy COMMAND tide-accelerator-vjp-test)

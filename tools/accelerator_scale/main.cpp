@@ -7,15 +7,23 @@
 #include <sys/resource.h>
 
 namespace {
+bool used_npu = false;
 double rss() { rusage r{}; if (getrusage(RUSAGE_SELF, &r)) throw std::runtime_error("getrusage failed"); return double(r.ru_maxrss)*1024; }
 }
-int main(int argc, char** argv) {
+int run(int argc, char** argv) {
   using namespace pdg_scale;
   try {
-    Index count = 1; bool seen = false, seen_policy = false, seen_transport = false;
-    std::string policy = "memory", transport = "resident";
+    Index count = 1; bool seen = false, seen_policy = false, seen_transport = false, seen_vjp = false;
+    std::string policy = "memory", transport = "resident", vjp_policy = "strict";
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
+      if (std::string(argv[i]) == "--vjp-policy") {
+        if(seen_vjp || ++i==argc)throw std::invalid_argument("duplicate/missing --vjp-policy");
+        seen_vjp=true;vjp_policy=argv[i];
+        if(vjp_policy!="strict" && vjp_policy!="basis-conditioned")
+          throw std::invalid_argument("--vjp-policy requires strict or basis-conditioned");
+        continue;
+      }
       if (std::string(argv[i]) == "--transport") {
         if (seen_transport || ++i == argc) throw std::invalid_argument("duplicate/missing --transport");
         seen_transport = true; transport = argv[i];
@@ -40,7 +48,8 @@ int main(int argc, char** argv) {
       portable_torch::print_usage(std::cout, argv[0]);
       std::cout << "Historical PDG scale options plus --devices 1..16 --placement memory|locality. Explicit CPU coordination/FP64 Read,\n"
                    "--transport resident|host: NPU state/messages or CPU bridge baseline. FP64 Read remains on CPU.\n"
-                   "Inference or grad-forward only; no checkpoint import.\n";
+                   "Inference or grad-forward only; no checkpoint import.\n"
+                   "--check 1 --vjp-policy strict|basis-conditioned (default strict).\n";
       return 0;
     }
     if (c.runtime.dtype != at::kFloat || c.emission != "row" || !c.packed || c.fiber_pooling != "event"
@@ -52,13 +61,15 @@ int main(int argc, char** argv) {
     if (c.runtime.device_spec.rfind("npu",0)==0 && !std::getenv("TASK_QUEUE_ENABLE"))
       if (setenv("TASK_QUEUE_ENABLE","0",0)) throw std::runtime_error("cannot select NPU task queue policy");
     const auto device = portable_torch::resolve_device(c.runtime);
+    used_npu = device.type()==c10::DeviceType::PrivateUse1;
     if (!device.is_cpu() && device.type() != c10::DeviceType::PrivateUse1)
       throw std::invalid_argument("this placement client is qualified for CPU/NPU only");
     at::set_num_threads(c.threads); at::set_num_interop_threads(1);
     auto topology = read_topology(c.topology);
+    if(seen_vjp && !c.check)throw std::invalid_argument("--vjp-policy requires --check 1");
     if (!std::filesystem::create_directories(c.runtime.output_dir)) throw std::invalid_argument("new output directory required");
     const bool resident = transport == "resident";
-    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident);
+    if (c.check) accelerator_scale::check(c, topology, device, count, policy, resident,vjp_policy=="basis-conditioned");
     const auto started = Clock::now();
     portable_experiment::MetricsJsonlWriter writer(std::filesystem::path(c.runtime.output_dir)/"metrics.jsonl", c.run_id);
     portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
@@ -123,4 +134,12 @@ int main(int argc, char** argv) {
     }
     return 0;
   } catch (const std::exception& error) { std::cerr << error.what() << '\n'; return 1; }
+}
+int main(int argc,char** argv) {
+  const auto code=run(argc,argv);
+  // All benchmark tensors and worker pools have been destroyed. Release the
+  // vendor runtime while its process-static event/cache managers still exist.
+  try {if(used_npu)accelerator_scale::finalize();}
+  catch(const std::exception& error) {std::cerr << "NPU finalization: " << error.what() << '\n';return 1;}
+  return code;
 }

@@ -54,6 +54,34 @@ VJPs, including None connectivity, as well as resident tensor devices. The
 historical forward-only slot fixture's views are rebound to their original CPU
 owners for this gradient oracle without changing values or initialization order.
 
+The default `--vjp-policy strict` retains componentwise FP32 rtol=1e-5,
+atol=1e-6 for quadratic-root VJPs. An explicit `basis-conditioned` check also
+supports cancellation-sensitive quadratic contractions of roots with at most64
+coordinates. If the strict comparison fails, it reports that failure, checks
+every coordinate's VJP (the complete Jacobian) with the original componentwise
+tolerances and exact None connectivity, and reconstructs each quadratic VJP on
+CPU in FP64. Each direct VJP must agree with its reconstruction within
+`atol + rtol * sum(abs(J_ij * cotangent_j))`. A changed Jacobian, nonfinite
+value, connected-zero discrepancy, oversized root or failed reconstruction still
+fails. All forward values, discrete routes and zero VJPs keep the strict rule.
+This is a named benchmark verification policy, not a change to the core runtime
+contract or a claim that the strict quadratic test passed. It changes no model
+operator, parameter, precision, seed or timed computation.
+
+Why this distinction matters: the wide Add D8/B1 seed0 fixture's first Full
+is SiLU/RMS. Its squared norm is nearly constant, so backward subtracts large
+terms. The same local formula without graph scheduling or transfers reproduces
+CPU/NPU max error7.7188e-6; CPU FP32 itself differs from CPU FP64 by9.20483e-6.
+The complete local Jacobian passes the original tolerance (maximum ratio0.0313).
+An explicit FP32 RMS expansion did not change the failure. Historical strict
+failures remain failed; evidence must name which policy qualified a workload.
+
+The standalone process finalizes the NPU SDK after local tensors and workers
+are destroyed and before static teardown. This resolved an observed intermittent
+8-device exit crash in development. The installed core's later shutdown hook
+can print a repeated-finalize warning; a zero exit and all gates are still
+required. The earlier failed run is retained.
+
 Formal runs use `scripts/benchmark_accelerator_scale.py`, a clean frozen source,
 explicit device/count, copied topology, bounded time/RSS and fresh output paths.
 There are 12 growing-context tokens: four warmup, eight measured. Every timed

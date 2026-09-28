@@ -62,9 +62,10 @@ Partition partition(const Graph&, const std::vector<int64_t>&, Index, const std:
 Placement place(pdg_scale::Fixture&, at::Device first, Index count, const std::string& policy, bool resident);
 void synchronize(const Placement&);
 void reset_memory(const Placement&);
+void finalize();
 std::map<std::string, double> memory(const Placement&);
 Tensor host(const Tensor&);
 Tensor embed(const Tensor&, const Tensor& ids, bool host_result = true);
 Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result = true);
-void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident);
+void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned);
 }  // namespace accelerator_scale

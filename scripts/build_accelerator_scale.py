@@ -16,7 +16,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--core-build', type=Path, required=True)
     parser.add_argument('--build-dir', type=Path, required=True)
-    parser.add_argument('--jobs', type=int, choices=(1, 2), default=2)
+    parser.add_argument('--jobs', type=int, choices=(1, 2, 4, 8), default=2)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     core, build = args.core_build.resolve(), args.build_dir.resolve()
@@ -40,6 +40,7 @@ def main():
                     '-DTorch_DIR=' + torch_dir,
                     '-DCMAKE_PREFIX_PATH=' + ';'.join(p for p in prefixes if p)], check=True)
     subprocess.run(['cmake', '--build', str(build), '--parallel', str(args.jobs)], check=True)
+    subprocess.run(['ctest', '--test-dir', str(build), '--output-on-failure'], check=True, timeout=120)
     binary = build / 'tide-accelerator-scale'
     closure = subprocess.check_output(['ldd', str(binary)], text=True)
     if any(item in closure.lower() for item in ('not found', 'libtorch_python', 'libpython', '/stubs/', '/stub/')):

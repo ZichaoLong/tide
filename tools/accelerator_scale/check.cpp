@@ -1,6 +1,6 @@
 #include "execution.h"
+#include "check_vjp.h"
 #include "../../cpp/bench/streaming.h"
-#include <torch/csrc/autograd/autograd.h>
 #include <iostream>
 #include <set>
 
@@ -77,7 +77,7 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
   return run;
 }
 }
-void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::Device device,Index devices,const std::string& policy,bool resident) {
+void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::Device device,Index devices,const std::string& policy,bool resident,bool conditioned) {
   if (c.width > 64 || c.batch > 8 || c.steps > 6) throw std::invalid_argument("placement parity needs bounded small tensors");
   for (bool enable_grad : {false,true}) {
   at::AutoGradMode grad(enable_grad);
@@ -95,16 +95,8 @@ void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::De
     if (actual.roots[root].requires_grad()!=expected.roots[root].requires_grad())
       throw std::runtime_error("placement changed public root connectivity");
     if (!expected.roots[root].requires_grad()) continue;
-    for (bool zero : {false,true}) {
-      auto a=torch::autograd::grad({expected.roots[root].square().sum()*(zero?0.:.7)},expected.leaves,{},true,false,true);
-      auto b=torch::autograd::grad({actual.roots[root].square().sum()*(zero?0.:.7)},actual.leaves,{},true,false,true);
-      for(size_t i=0;i<a.size();++i) {
-        if(a[i].defined()!=b[i].defined()) throw std::runtime_error("placement changed None connectivity: root="+std::to_string(root)+" owner="+std::to_string(i)
-          +" expected="+std::to_string(a[i].defined())+" actual="+std::to_string(b[i].defined()));
-        if(a[i].defined() && (!at::isfinite(b[i]).all().item<bool>() || !at::allclose(b[i].to(at::kCPU),a[i],1e-5,1e-6)))
-          throw std::runtime_error("placement changed VJP: root="+std::to_string(root)+" owner="+std::to_string(i));
-      }
-    }
+    for (bool zero : {false,true})
+      check_vjp(expected.roots[root],actual.roots[root],expected.leaves,actual.leaves,root,zero,conditioned);
   }
   }
   std::cout << "CHECK complete CPU scalar-slot vs placed packed-row values/routes/state/history/pending, logits, isolated VJPs and None/zero: passed\n" << std::flush;

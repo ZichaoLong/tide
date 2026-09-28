@@ -15,6 +15,7 @@ def main():
     p.add_argument('--device', choices=('cpu', 'npu'), required=True)
     p.add_argument('--devices', type=int, default=1)
     p.add_argument('--npu-task-queue', type=int, choices=(0, 1, 2), default=0)
+    p.add_argument('--vjp-policy', choices=('strict', 'basis-conditioned'), default='strict')
     p.add_argument('--output-dir', type=Path, required=True)
     a = p.parse_args(); out = a.output_dir.resolve(); out.mkdir(parents=True, exist_ok=False)
     binary = a.build_dir.resolve()/'tide-accelerator-scale'
@@ -28,13 +29,14 @@ def main():
                         +''.join(f'{src} {dst}\n' for src, dst in edges))
     base = [str(binary), '--device', a.device, '--devices', str(a.devices), '--dtype', 'float32',
             '--topology', str(topology), '--width', '8', '--batch', '2', '--vocab', '17',
-            '--steps', '3', '--warmup', '1', '--workers', '3', '--check', '1',
+            '--steps', '3', '--warmup', '1', '--workers', '3', '--check', '1', '--vjp-policy', a.vjp_policy,
             '--full-autograd', 'batched', '--aggregate-autograd', 'batched',
             '--packed-sources', '1', '--batch-next', '1']
     results = []; mappings = {}; env = dict(os.environ)
     if a.device == 'npu': env['TASK_QUEUE_ENABLE'] = str(a.npu_task_queue)
     record = dict(schema='tide-accelerator-scale-gates-v1', binary_sha256=digest(binary),
-                  device=a.device, devices=a.devices, npu_task_queue=a.npu_task_queue, state='running', cases=results)
+                  device=a.device, devices=a.devices, npu_task_queue=a.npu_task_queue,
+                  vjp_policy=a.vjp_policy, state='running', cases=results)
     write_json(out/'gates.json', record)
     try:
         for transport in ('resident', 'host'):
@@ -57,7 +59,7 @@ def main():
                         assert sum(e['metrics']['transfer/device_to_device_bytes'] for e in events) > 0
                     results.append(dict(name=name, command=command, state='passed'))
                     write_json(out/'gates.json', record); print(name, 'passed', flush=True)
-        for key, value in [('--transport', 'invalid'), ('--placement', 'invalid'), ('--devices', '0')]:
+        for key, value in [('--transport', 'invalid'), ('--placement', 'invalid'), ('--devices', '0'), ('--vjp-policy', 'invalid')]:
             bad = out/('rejected-'+key[2:]); command = [*base, key, value, '--run-id', 'bad', '--output-dir', str(bad)]
             run = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30, env=env)
             assert run.returncode != 0 and not bad.exists()

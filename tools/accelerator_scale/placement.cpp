@@ -5,10 +5,16 @@
 #include <set>
 #include <stdexcept>
 #if PORTABLE_TORCH_ENABLE_NPU
+#include <torch_npu/torch_npu.h>
 #include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
 #endif
 
 namespace accelerator_scale {
+void finalize() {
+#if PORTABLE_TORCH_ENABLE_NPU
+  torch_npu::finalize_npu();
+#endif
+}
 Placement place(pdg_scale::Fixture& f, at::Device first, Index count, const std::string& policy, bool resident) {
   at::NoGradGuard guard;
   if (count < 1 || count > 16 || (first.is_cpu() && count != 1))
