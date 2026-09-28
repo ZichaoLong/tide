@@ -81,8 +81,8 @@ int main(int argc, char** argv) {
     mapping << "],\"device_resident_state\":" << (resident ? "true" : "false") << ",\"cpu_fp64_read\":true,\"policy\":\"" << policy
             << "\",\"physical_edges\":" << placement.edges << ",\"cut_edges\":" << placement.cut_edges
             << ",\"node_load_limit_bytes\":" << placement.node_load_limit << ",\"devices\":" << count
-            << ",\"embedding_device_index\":" << f.embedding.device().index()
-            << ",\"head_device_index\":" << f.head.device().index() << ",\"parameter_bytes\":[";
+            << ",\"embedding_device_index\":" << int(f.embedding.device().index())
+            << ",\"head_device_index\":" << int(f.head.device().index()) << ",\"parameter_bytes\":[";
     for(size_t i=0;i<placement.parameter_bytes.size();++i) mapping << (i?",":"") << placement.parameter_bytes[i];
     mapping << "]}\n";
     mapping.close(); if (!mapping) throw std::runtime_error("placement publication failed");
