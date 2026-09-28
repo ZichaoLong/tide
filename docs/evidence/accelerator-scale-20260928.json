@@ -1,0 +1,132 @@
+{
+  "schema": "tide-accelerator-scale-qualification-v1",
+  "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+  "builds": {
+    "cpu": {
+      "schema": "tide-accelerator-scale-build-v1",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "dirty": "",
+      "client_source_sha256": "76c824b71fc35ff97748f3d1cb564ff59ff50bea8c743120e1318d73968b1dc2",
+      "binary_sha256": "4c808f347bc00a2631628f14e5db849a0177c0035e8212bf45cffe415a564e27",
+      "loader_sha256": "6d78b4679f3758c04583e089bb7fae6fff0c7c7b9770bb537f963abf5533c5c2"
+    },
+    "npu": {
+      "schema": "tide-accelerator-scale-build-v1",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "dirty": "",
+      "client_source_sha256": "76c824b71fc35ff97748f3d1cb564ff59ff50bea8c743120e1318d73968b1dc2",
+      "binary_sha256": "4da2d102023f03cba965e4737b158bb10fa4cb9fce44af03b45487fc33238fb5",
+      "loader_sha256": "eb7744bd8feeabb684fcfb79739651b2c6f87f785e166d5140452af8ff2f103a"
+    }
+  },
+  "gates": [
+    {
+      "name": "build-cpu-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "7ad5c52ffdb276308585b7fd75ebee66df3199ff145b8d712e68f5450e1b4408",
+      "artifact": "artifacts/npu-performance-build-cpu-a2",
+      "physical_ids": []
+    },
+    {
+      "name": "build-npu-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "7dbad8d9e4c09013b60db2c85e5acc4f050ccc0c52ac1e6a98e5c119234b4d56",
+      "artifact": "artifacts/npu-performance-build-npu-a2",
+      "physical_ids": []
+    },
+    {
+      "name": "check-cpu-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "13b9beb14629370a16d43798988b82e3e5dabfdb88ea99975aebc12d596ff5f1",
+      "artifact": "artifacts/npu-performance-check-cpu-a2",
+      "physical_ids": []
+    },
+    {
+      "name": "check-npu2-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "81ad065c7837abc7c26bf45e632352879a3d4b395e8f31180c50a77598d5a820",
+      "artifact": "artifacts/npu-performance-check-npu2-a2",
+      "physical_ids": [
+        9,
+        11
+      ]
+    },
+    {
+      "name": "check-npu8-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "ad04fc105d0580c47325d04dc741fbf40e8125f452f0270476e3d33dca4f678e",
+      "artifact": "artifacts/npu-performance-check-npu8-a2",
+      "physical_ids": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ]
+    },
+    {
+      "name": "topology-npu2-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "3428244ba973f2bcde65350a2152e20a7dd7d47096bd4af514e9073e701fae22",
+      "artifact": "artifacts/npu-performance-topology-npu2-a2",
+      "physical_ids": [
+        1,
+        7
+      ]
+    },
+    {
+      "name": "topology-npu8-a2",
+      "state": "passed",
+      "source": "bb0ecc6bd98c94c868ad7707bec43248b9ddbd2e",
+      "status_sha256": "0e8fd5d2d227444e5ec0b533e6b8693ea29989fbc8901a463b0fa9b63ca6022e",
+      "artifact": "artifacts/npu-performance-topology-npu8-a2",
+      "physical_ids": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ]
+    }
+  ],
+  "runtime": {
+    "architecture": "aarch64",
+    "npu": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch_npu": "2.10.0",
+    "driver": "25.3.rc1",
+    "task_queue_enable": 0
+  },
+  "scope": {
+    "tiny_cells": 24,
+    "real_topology_cells": 8,
+    "tiny_vjp_policy": "strict",
+    "real_topology_vjp_policy": "basis-conditioned",
+    "full_size_performance": "pending",
+    "core_api_changed": false
+  },
+  "retained_failures": [
+    "check-npu-dev04",
+    "check-npu8-a1",
+    "topology-npu2-a1",
+    "numerical-npu2-dev05",
+    "topology-npu2-dev06"
+  ],
+  "numerical_probes": [
+    "numerical-local-a1",
+    "numerical-jacobian-a1",
+    "strict-repro-dev07"
+  ]
+}

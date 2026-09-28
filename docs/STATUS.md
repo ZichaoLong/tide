@@ -73,15 +73,41 @@ check-npu2-dev08,check-npu8-dev08 are terminal passed. topology-npu8-dev08 also
 passed the real wide graph,D8/B1,models Add/Attention,seeds0/7,explicit
 basis-conditioned policy, including all4 normal process exits. This is correctness only, not full-size performance.
 
-Next: commit the coherent consumer fix, freeze clean perf-a2, rebuild
-client-cpu-a2/client-npu-a2 from the existing qualified core with4 workers, then
-qualify CPU/2/8-device tiny strict cells and wide2/8-device conditioned cells on
-that immutable source. Commit evidence separately. No full-size result exists.
-Full-size4-card pilots follow only after these gates, both models and both modes,
-12 tokens,4 warmup,1800-second process timeout and512GiB RSS cap. Stop repeating
-unchanged failed cells. For completed modes compare2/4/8 cards,memory/locality,
-3 independent fresh processes on matched resources. Concurrent-model tests are
-separate and total occupancy<=8. Do not silently reduce dimensions or precision.
+Implementation committed bb0ecc6; clean source perf-a2 frozen at this commit.
+Both clean builds and all immutable gates PASSED: build-cpu-a2/build-npu-a2,
+check-cpu-a2/check-npu2-a2/check-npu8-a2 (24 tiny cells,strict),
+topology-npu2-a2/topology-npu8-a2 (8 wide cells,basis-conditioned).
+Evidence: docs/evidence/accelerator-scale-20260928.{md,json}. All process exits
+were normal. Core qualification was not repeated.
+
+Full-size pilots SUBMITTED from perf-a2 via launchers/launch-pilots-a2b.py:
+- pilot-add-g0-n4-a2b
+- pilot-attention-g0-n4-a2b
+- pilot-add-g1-n4-a2b
+- pilot-attention-g1-n4-a2b
+Each unit is tide-npu-performance-NAME.service; records under runs/NAME and
+artifacts/npu-performance-NAME. They use the same candidate physical devices
+1,5,9,11 to run sequentially (queue verifies availability), not concurrently.
+The original four *-a2 pilots were cancelled while queued before native startup,
+because physical7 became occupied. Their cancelled records are retained.
+Each replacement has1800s native timeout,512GiB RSS budget,7500s queue wait,workers16,
+ATen threads1,locality,resident,FP32,D2048/B512/V50304,seed7,12 tokens/4 warmup.
+--grad0 or1 means no_grad or grad-forward without backward/optimizer/detach.
+Run wrapper uses /home/zlong/venvs/trackio/bin/python; module is the standalone
+libtorch-npu2.10/CANN9.0 stack. The exact argv is in job status and, after
+allocation, run/run.json. Input wide.txt SHA256:
+d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4.
+
+Inspect with python scripts/status.py and runs/NAME/{queue.json,task.log,
+run/run.json,run/summary.json,run/stdout.log}. Stop a specific pilot with
+systemctl --user stop tide-npu-performance-NAME.service. No pilot result yet;
+verify current records rather than inferring completion from elapsed time.
+After pilots: preserve OOM/timeouts. Do not repeat unchanged failed cells.
+For completed modes compare2/4/8 cards,memory/locality,3 independent fresh
+processes on matched resources. Independently concurrent models remain a
+separate requested test (total occupancy<=8); not satisfied by these serial
+pilots. Do not silently reduce dimensions or precision. Commit performance
+evidence only from inspected terminal records.
 
 ## Runtime and completed foundation
 
@@ -104,5 +130,5 @@ CPU8636 tests+22 complex cells+installed consumers;4 CANN stacks passed328 posit
 NPU gates+4 CSR rejections. Standalone2.10/CANN9.0 qualified. No CUDA hardware
 results. Do not redo that core qualification for consumer-only changes.
 
-Implementation prepared on d69acba; all development gates passed. Commit these
-consumer fixes/tests/CLI/docs next; no core/Python changes.
+Implementation is bb0ecc6. The next commit records only reviewed evidence,
+ROADMAP and this handoff. No core/Python changes; full-size jobs use perf-a2.

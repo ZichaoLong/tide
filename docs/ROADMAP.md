@@ -67,10 +67,10 @@ single-device runtime contract and CPU FP64 Read semantics explicit.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | implemented; development CPU/1/2-NPU gates passed, immutable gate pending |
-| P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | implemented; record lifecycle qualification pending |
+| P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | verified: immutable CPU/2/8-NPU small and real-topology gates; explicit VJP policy, see [evidence](evidence/accelerator-scale-20260928.md) |
+| P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | verified: local Trackio success and timeout cleanup; immutable consumer build |
 | P3 | Independent concurrent configuration benchmarks, with resource interference recorded | planned |
-| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | placement implemented; full-scale measurement planned |
+| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | placement verified; full-size4-card pilots submitted, no timing result yet |
 
 Full-size throughput remains unclaimed until the corresponding terminal runs
 pass. CPU coordination/FP64 Read and all device-transfer overhead belong in
