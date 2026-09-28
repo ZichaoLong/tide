@@ -9,6 +9,14 @@ Native NPU and CUDA are unsupported in this release.
 
 ## Configuration and runtime
 
+Install a pinned wheel into the experiment's own environment, keeping its
+existing CPU/TorchNPU stack: `python -m pip install --no-deps tidegraph-0.2.0-py3-none-any.whl`.
+Build that wheel from a pinned checkout with `python -m pip wheel --no-deps
+--no-build-isolation . -w /path/to/wheels`. This build writes setuptools staging
+files; use a writable build checkout or a source copy. The installed runtime
+never writes into Tide source and needs no source/scripts/tests on PYTHONPATH.
+The wheel is Python-only; native is an explicit separate dependency.
+
 ```python
 import torch
 from tidegraph import GraphConfig, GraphRuntime
@@ -124,7 +132,12 @@ whole-versus-chunk observables/VJPs; a stateful optimizer trajectory; and a
 fresh-process checkpoint continuation. Settle also compares its independent
 direct scalar schedule against the encoded execution. Scalar Python scheduling
 is the default oracle; a reference candidate uses independent scalar streaming.
-Choose `--optimizer adamw|sgd|momentum`. The default three steps exercise state
+Choose `--optimizer adamw|sgd|momentum`. Tensor comparisons reject nonfinite
+values. Defaults are FP64 atol=1e-10/rtol=1e-8 and FP32 atol=1e-6/rtol=1e-5;
+explicit `--atol`/`--rtol` overrides are recorded and never alter discrete checks.
+Diagnostic losses divide weighted squared observables by their scalar count;
+isolated roots use means, keeping test-gradient scale independent of graph size.
+The default three steps exercise state
 carry, explicit truncation and repeated updates. These are semantic test losses,
 not a claim about task convergence or performance.
 
@@ -137,3 +150,42 @@ custom task heads and pretrained weight import require their own differential
 tests. It currently certifies CPU only. Exact application resume still needs the
 experiment-owned state described above. Repeat qualification whenever topology,
 modules, execution policy, dtype or dependency version changes.
+
+## Native and C++ dependencies
+
+Build the adapter from the same pinned source using the experiment's exact
+Torch/Python/ABI/architecture: `python scripts/build.py --build-dir /path/to/build
+--jobs 2`. For native execution pass `native_library="/path/to/build"` to
+GraphRuntime. The loader validates the adjacent build manifest, host/Torch/ABI
+and binary hash; it performs no compilation or sys.path mutation. A relocated
+adapter needs both `_tide_native.so` and `build-manifest.json`, and the matching
+Torch dynamic libraries. Rebuild on another architecture or framework stack.
+Different native binaries cannot be loaded into one process. Qualify the exact
+package/native pair before running an experiment.
+
+For a standalone C++ dependency, no Python bindings or repository clients are
+required:
+
+```sh
+cmake -S /path/to/tide -B build/tide -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_PREFIX_PATH=/path/to/libtorch -DTIDE_PYTHON_BINDINGS=OFF \
+  -DTIDE_BUILD_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/path/to/tide-prefix
+cmake --build build/tide --parallel 2
+cmake --install build/tide
+```
+
+In the consuming CMake project use `find_package(TideGraph 0.2 CONFIG REQUIRED)`
+and `target_link_libraries(my_target PRIVATE tide::tidegraph)`. Include both the
+Tide install prefix and matching Torch prefix in `CMAKE_PREFIX_PATH`. The export
+propagates headers, C++17, ABI flags, Torch and Threads. It validates Torch
+version and architecture; the consumer must still use the exact compatible
+Torch distribution and runtime loader environment. C++ constructs graphs/models
+through its typed API; schema-v1 JSON configuration is the Python frontend.
+`examples/consumer_cpp` exercises standalone forward, chunking and backward.
+
+`scripts/library_consumer.py --output-dir NEW --build-dir MATCHING_BUILD` is
+the developer consumption gate: build a generic wheel in staging, install it
+in a fresh environment reusing the existing Torch stack, run a copied external
+application and installed qualification for all three families, relocate the
+native adapter, install the CMake package, and compile/run the external C++
+client. Consumers never import benchmark scripts or reference repositories.

@@ -2,6 +2,8 @@
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
+from functools import partial
+import math
 import subprocess
 import sys
 import time
@@ -9,9 +11,8 @@ import torch
 from .config import GraphConfig
 from .execution_options import ExecutionOptions
 from .library import GraphRuntime
-from .compare import equivalent
 from .records import Continuation
-from .qualification_checks import compare_gradients, chunked, coverage
+from .qualification_checks import compare_gradients, chunked, coverage, compare_finite
 from .qualification_inputs import Probe
 from .qualification_records import publish
 from .qualification_training import trajectory
@@ -19,7 +20,7 @@ from .qualification_training import trajectory
 
 def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=4,
             stop=None, input_seed=19, width=None, dtype=None, steps=3, optimizer="adamw",
-            native_library=None, resume_timeout=1800):
+            native_library=None, resume_timeout=1800, atol=None, rtol=None):
     """Validate one finite configuration; raise on any failed mandatory check.
 
     Optional width/dtype overrides preserve every node/edge/region/module.
@@ -36,6 +37,11 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
     effective = replace(requested, width=requested.width if width is None else width,
                         dtype=requested.dtype if dtype is None else dtype,
                         execution=replace(requested.execution, trace=True))
+    atol = (1e-10 if effective.dtype == "float64" else 1e-6) if atol is None else atol
+    rtol = (1e-8 if effective.dtype == "float64" else 1e-5) if rtol is None else rtol
+    if any(type(t) not in (int,float) or not math.isfinite(t) or t < 0 for t in (atol,rtol)):
+        raise ValueError("tolerances must be finite nonnegative numbers")
+    compare = partial(compare_finite, atol=atol, rtol=rtol)
     probe = Probe(effective, inputs=inputs, batch_size=batch_size, positions=positions, stop=stop, seed=input_seed)
     oracle_options = ExecutionOptions(schedule="reference", packed=False, trace=True,
                                       mode=effective.execution.mode, zeta=effective.execution.zeta)
@@ -52,8 +58,8 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
                   topology_unchanged=requested.graph.identity == effective.graph.identity,
                   inputs=probe.manifest(), candidate=candidate.manifest(), oracle=reference.manifest(),
                   steps=steps, optimizer=optimizer, checks=[], scope="finite CPU configuration; no general scale/backend claim",
-                  tolerances={"atol":1e-10 if effective.dtype == "float64" else 1e-6,
-                              "rtol":1e-8 if effective.dtype == "float64" else 1e-5})
+                  probe_loss="weighted squared observables divided by participating scalar count; isolated mean-square roots",
+                  tolerances={"atol":atol, "rtol":rtol})
     def checked(name, **details):
         report["checks"].append(dict(name=name, state="passed", **details))
         publish(out / "report.json", report)
@@ -63,18 +69,18 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
         a, b = probe.clone(), probe.clone()
         expected = a.advance(reference.session(batch_size))
         actual = b.advance(candidate.session(batch_size))
-        equivalent(expected, actual)
+        compare(expected, actual)
         report["coverage"] = coverage(actual, candidate.graph)
         report["execution_stats"] = actual.stats
         if not actual.trace:
             raise ValueError("probe observed no graph events")
         checked("complete-observables")
-        details = compare_gradients(expected, reference, a, actual, candidate, b)
+        details = compare_gradients(expected, reference, a, actual, candidate, b, compare=compare)
         checked("independent-vjps", **details)
         c = probe.clone()
         parts = chunked(candidate, c)
-        equivalent(actual, parts)
-        compare_gradients(actual, candidate, b, parts, candidate, c)
+        compare(actual, parts)
+        compare_gradients(actual, candidate, b, parts, candidate, c, compare=compare)
         checked("chunk-observables-and-vjps")
         if candidate.spec:
             from .settle import run
@@ -82,14 +88,14 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
             direct_runtime = GraphRuntime(effective, device="cpu", options=oracle_options)
             direct = run(direct_runtime.spec, direct_runtime.model, Continuation(candidate.graph.identity, batch_size),
                          direct_probe.values, packed=False, prefill=False, mode=oracle_options.mode, zeta=oracle_options.zeta)
-            equivalent(expected, direct)
-            compare_gradients(expected, reference, a, direct, direct_runtime, direct_probe)
+            compare(expected, direct)
+            compare_gradients(expected, reference, a, direct, direct_runtime, direct_probe, compare=compare)
             checked("independent-direct-settle")
         if not requested.execution.trace:
             without_trace = GraphRuntime(replace(effective, execution=replace(effective.execution, trace=False)),
                                          device=device, native_library=native_library)
             quiet = probe.clone().advance(without_trace.session(batch_size))
-            equivalent(replace(actual, trace=[], messages=[]), quiet)
+            compare(replace(actual, trace=[], messages=[]), quiet)
             checked("requested-trace-disabled")
         # Fresh runtimes avoid carrying any gradients or parameter updates across gates.
         ref_train = GraphRuntime(effective, device=device, options=oracle_options)
@@ -97,7 +103,7 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
         expected_steps = trajectory(ref_train, probe, steps, optimizer)
         checkpoint = out / "continuation.pt"
         actual_steps = trajectory(candidate_train, probe, steps, optimizer, checkpoint=checkpoint)
-        equivalent(expected_steps, actual_steps)
+        compare(expected_steps, actual_steps)
         checked("optimizer-trajectory", steps=steps, optimizer=optimizer)
         resolved_native = str(Path(candidate.engine.core.__file__).resolve()) if candidate.engine else None
         torch.save(dict(config=effective.to_dict(), probe=probe.payload(), steps=steps, optimizer=optimizer,
@@ -108,7 +114,7 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
         if completed.returncode:
             raise RuntimeError(f"fresh-process resume exited {completed.returncode}; inspect {out / 'resume.log'}")
         resumed = torch.load(out / "resumed.pt", weights_only=True, map_location="cpu")
-        equivalent(actual_steps[1:], resumed)
+        compare(actual_steps[1:], resumed)
         checked("fresh-process-checkpoint", exit_code=completed.returncode)
         report["state"] = "passed"
     except BaseException as error:

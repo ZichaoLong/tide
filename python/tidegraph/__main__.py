@@ -23,6 +23,8 @@ def main():
     qualify.add_argument("--steps", type=int, default=3)
     qualify.add_argument("--optimizer", choices=("adamw", "sgd", "momentum"), default="adamw")
     qualify.add_argument("--threads", type=int, default=1)
+    qualify.add_argument("--atol", type=float, help="explicit tensor tolerance, recorded in the report")
+    qualify.add_argument("--rtol", type=float, help="explicit tensor tolerance, recorded in the report")
     args = parser.parse_args()
     try:
         config = GraphConfig.load(args.config)
@@ -37,7 +39,8 @@ def main():
         from .qualification import qualify as run
         report = run(config, device=args.device, output_dir=args.output_dir, native_library=args.native_library,
                      width=args.width, dtype=args.dtype, batch_size=args.batch_size, positions=args.positions,
-                     stop=args.stop, input_seed=args.seed, steps=args.steps, optimizer=args.optimizer)
+                     stop=args.stop, input_seed=args.seed, steps=args.steps, optimizer=args.optimizer,
+                     atol=args.atol, rtol=args.rtol)
         print(json.dumps(dict(state=report["state"], effective_sha256=report["effective_sha256"],
                               coverage=report["coverage"], checks=report["checks"]), indent=2))
     except (ValueError, RuntimeError, AssertionError, OSError) as error:

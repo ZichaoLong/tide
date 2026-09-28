@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "family": "settle",
+  "topology": {
+    "kind": "layered",
+    "layers": [2, 3, 2],
+    "module": {"memory": "ssm", "full": "swiglu"},
+    "node_overrides": {"2": {"memory": "linear"}, "3": {"memory": "delta"}}
+  },
+  "model": {"width": 8, "dtype": "float32", "seed": 7},
+  "execution": {"implementation": "python", "schedule": "frontier"}
+}

@@ -65,3 +65,13 @@ def test_bad_candidate_preserves_failed_report(tmp_path, monkeypatch):
         qualify(cfg, device="cpu", output_dir=tmp_path / "gate")
     report = json.loads((tmp_path / "gate/report.json").read_text())
     assert report["state"] == "failed" and "AssertionError" in report["error"]
+
+
+def test_finite_checks_and_tolerance_preserve_discrete_contract():
+    from tidegraph.qualification_checks import compare_finite
+    with pytest.raises(AssertionError, match="nonfinite"):
+        compare_finite(torch.tensor(float("inf")), torch.tensor(float("inf")))
+    with pytest.raises(AssertionError):
+        compare_finite({"route":0}, {"route":1}, atol=100.)
+    with pytest.raises(AssertionError):
+        compare_finite(None, torch.tensor(0.), atol=100.)

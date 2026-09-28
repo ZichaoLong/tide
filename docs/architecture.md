@@ -4,7 +4,9 @@
 
 | Path | Responsibility |
 | --- | --- |
-| `python/tidegraph/` | Independent readable Torch oracle, fixtures and validation |
+| `python/tidegraph/` | Public configuration/runtime/session, independent Torch oracle and installed configuration qualification |
+| `docs/library.md` | External dependency, configuration, execution, checkpoints and compatibility |
+| `examples/consumer`, `examples/consumer_cpp` | Independent installed Python and CMake clients |
 | `cpp/include/tide/` | Public graph, state, kernel, owner and executor interfaces |
 | `cpp/src/` | LibTorch kernels, streaming/frontier execution and binding adapter |
 | `tests/` | Analytic formulas, invariant tests and differential qualification |

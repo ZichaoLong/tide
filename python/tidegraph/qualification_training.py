@@ -1,7 +1,6 @@
 """Stateful optimizer trajectories and new-process checkpoint continuation."""
 import torch
-from .compare import objective
-from .qualification_checks import plain, vjp
+from .qualification_checks import plain, vjp, probe_loss
 
 
 def optimizer(runtime, kind):
@@ -24,7 +23,7 @@ def trajectory(runtime, probe, steps, kind, *, checkpoint=None, resume=None):
         opt.zero_grad(set_to_none=True)
         inputs = probe.clone()
         result = inputs.advance(session, cycle=cycle)
-        loss = objective(result)
+        loss = probe_loss(result)
         leaves = {k:v for k,v in runtime.model.named_parameters() if v.requires_grad} | inputs.leaves()
         gradient = plain(vjp(loss, leaves))
         loss.backward()

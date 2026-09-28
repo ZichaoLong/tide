@@ -6,7 +6,7 @@ import subprocess
 
 def source_hash(root):
     digest = hashlib.sha256()
-    files = [root / "CMakeLists.txt"] + sorted((root / "cpp").rglob("*"))
+    files = [root / "CMakeLists.txt"] + sorted((root / "cpp").rglob("*")) + sorted((root / "cmake").rglob("*"))
     for path in files:
         if path.is_file():
             digest.update(str(path.relative_to(root)).encode() + b"\0" + path.read_bytes() + b"\0")

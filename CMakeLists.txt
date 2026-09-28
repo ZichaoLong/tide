@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.18)
-project(tidegraph LANGUAGES CXX)
+project(tidegraph VERSION 0.2.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_executable(tidegraph-lh-scope-check cpp/test/lh_scope_check.cpp)
 find_package(Torch REQUIRED)
 find_package(Threads REQUIRED)
-add_executable(tidegraph-profile-check cpp/test/operator_profile.cpp)
-target_include_directories(tidegraph-profile-check PRIVATE cpp/include)
-target_link_libraries(tidegraph-profile-check PRIVATE Threads::Threads)
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+option(TIDE_BUILD_CLIENTS "Build repository checks and benchmark clients" ON)
 add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/next.cpp
@@ -20,10 +19,19 @@ add_library(tidegraph STATIC
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
   cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp)
 set_target_properties(tidegraph PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_include_directories(tidegraph PUBLIC cpp/include)
+add_library(tide::tidegraph ALIAS tidegraph)
+target_include_directories(tidegraph PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cpp/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features(tidegraph PUBLIC cxx_std_17)
 target_link_libraries(tidegraph PUBLIC torch Threads::Threads)
 separate_arguments(TIDE_TORCH_FLAGS NATIVE_COMMAND "${TORCH_CXX_FLAGS}")
 target_compile_options(tidegraph PUBLIC ${TIDE_TORCH_FLAGS})
+if(TIDE_BUILD_CLIENTS)
+add_executable(tidegraph-lh-scope-check cpp/test/lh_scope_check.cpp)
+add_executable(tidegraph-profile-check cpp/test/operator_profile.cpp)
+target_include_directories(tidegraph-profile-check PRIVATE cpp/include)
+target_link_libraries(tidegraph-profile-check PRIVATE Threads::Threads)
 add_executable(tidegraph-smoke cpp/src/main.cpp cpp/src/runtime.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph)
 add_executable(tidegraph-settle-check cpp/test/settle.cpp cpp/src/runtime.cpp)
@@ -44,6 +52,7 @@ target_link_libraries(tidegraph-streaming-bench PRIVATE tidegraph)
 add_executable(tidegraph-scale-bench cpp/scale/main.cpp cpp/scale/config.cpp
   cpp/scale/model.cpp cpp/scale/check.cpp cpp/scale/grad_check.cpp cpp/bench/compare.cpp cpp/src/runtime.cpp cpp/src/threads.cpp)
 target_link_libraries(tidegraph-scale-bench PRIVATE tidegraph ${CMAKE_DL_LIBS})
+endif()
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
 if(TIDE_PYTHON_BINDINGS)
   find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
@@ -51,3 +60,16 @@ if(TIDE_PYTHON_BINDINGS)
   Python3_add_library(_tide_native MODULE cpp/src/bindings.cpp cpp/src/bind_settle.cpp cpp/src/bind_metrics.cpp cpp/src/bind_full.cpp cpp/src/bind_aggregate.cpp)
   target_link_libraries(_tide_native PRIVATE tidegraph ${TORCH_PYTHON_LIBRARY})
 endif()
+
+install(TARGETS tidegraph EXPORT TideGraphTargets ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY cpp/include/tide DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(EXPORT TideGraphTargets FILE TideGraphTargets.cmake NAMESPACE tide::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideGraph)
+configure_package_config_file(cmake/TideGraphConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/TideGraphConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideGraph)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/TideGraphConfigVersion.cmake
+  VERSION ${PROJECT_VERSION} COMPATIBILITY SameMinorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/TideGraphConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/TideGraphConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/TideGraph)

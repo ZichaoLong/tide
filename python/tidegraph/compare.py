@@ -3,28 +3,29 @@ from dataclasses import fields, is_dataclass
 import torch
 
 
-def equivalent(a, b, path="root"):
+def equivalent(a, b, path="root", *, atol=None, rtol=None):
     if isinstance(a, torch.Tensor):
         if not isinstance(b, torch.Tensor):
             raise AssertionError(f"{path}: missing tensor")
         tol = (1e-10, 1e-8) if a.dtype == torch.float64 else (1e-6, 1e-5)
-        torch.testing.assert_close(a, b, atol=tol[0], rtol=tol[1], msg=lambda msg: f"{path}: {msg}")
+        torch.testing.assert_close(a, b, atol=tol[0] if atol is None else atol,
+                                   rtol=tol[1] if rtol is None else rtol, msg=lambda msg: f"{path}: {msg}")
     elif is_dataclass(a):
         if type(a) is not type(b):
             raise AssertionError(f"{path}: different record types")
         for f in fields(a):
             if f.name != "stats":
-                equivalent(getattr(a, f.name), getattr(b, f.name), path + "." + f.name)
+                equivalent(getattr(a, f.name), getattr(b, f.name), path + "." + f.name, atol=atol, rtol=rtol)
     elif isinstance(a, dict):
         if a.keys() != b.keys():
             raise AssertionError(f"{path}: key/route/gradient-presence mismatch {a.keys()} != {b.keys()}")
         for k in a:
-            equivalent(a[k], b[k], f"{path}[{k}]")
+            equivalent(a[k], b[k], f"{path}[{k}]", atol=atol, rtol=rtol)
     elif isinstance(a, (tuple, list)):
         if len(a) != len(b):
             raise AssertionError(f"{path}: record count mismatch {len(a)} != {len(b)}")
         for i, (x, y) in enumerate(zip(a, b)):
-            equivalent(x, y, f"{path}[{i}]")
+            equivalent(x, y, f"{path}[{i}]", atol=atol, rtol=rtol)
     elif a != b:
         raise AssertionError(f"{path}: {a} != {b}")
 
