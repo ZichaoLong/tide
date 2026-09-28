@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import sysconfig
 import venv
 from durable_records import write_json
 from source_identity import source_state
@@ -47,6 +48,14 @@ def main():
         record["wheel_sha256"] = hashlib.sha256(wheel.read_bytes()).hexdigest()
         venv.EnvBuilder(with_pip=True, system_site_packages=True).create(out / "env")
         python = out / "env/bin/python"
+        # A venv nested inside a vendor venv otherwise inherits sys.base_prefix,
+        # which may contain a different Torch distribution. Reuse this exact
+        # environment's dependencies while keeping Tide installed in the child.
+        child_site, = (out / "env/lib").glob("python*/site-packages")
+        (child_site / "tide-selected-dependencies.pth").write_text(sysconfig.get_path("purelib") + "\n")
+        import torch
+        run([python, "-c", f"import torch; assert torch.__version__ == {torch.__version__!r}, torch.__version__"])
+        record["torch"] = torch.__version__
         run([python, "-m", "pip", "install", "--no-index", "--no-deps", wheel])
         consumer = out / "application"
         shutil.copytree(root / "examples/consumer", consumer)
@@ -88,7 +97,6 @@ def main():
         if not args.python_only and not args.skip_cpp:
             run(["cmake", "--install", build, "--prefix", out / "prefix"])
             shutil.copytree(root / "examples/consumer_cpp", out / "cpp-application")
-            import torch
             run(["cmake", "-S", out / "cpp-application", "-B", out / "cpp-build", "-G", "Ninja",
                  "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={out / 'prefix'};{torch.utils.cmake_prefix_path}"])
             run(["cmake", "--build", out / "cpp-build", "--parallel", "2"])

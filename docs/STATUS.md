@@ -40,20 +40,29 @@ standalone generic RNG hook, profiler JSON/scratch handling, NPU sparse CSR,
 and cuda-host-dev05 missing pytest. Reproducers retained. GPU environment now
 has pytest9.1.1; no framework upgrades were performed.
 
-## Next commands and active submissions
+## Active immutable qualification
 
-Commit A2, freeze exact clean commit as accelerator-a2, then submit:
-- cpu-a2: scripts/qualify_library.py --reuse-build using builds/native-cpu-dev03.
-- python/native-cann900-a2, python/native-cann850-a2, python/native-cann851-a2,
-  python/native-cann852-a2: complete named device suites, one queued NPU each.
-- sdk-a2, owners-a2, profiles and installed consumers: exact-commit NPU gates.
-- cuda-host-a2: CPU tests in CUDA-linked build and explicit unavailable failures;
-  installed CMake/Python consumer CPU checks. No GPU execution claim.
+Implementation committed as 10cd630. All A2 jobs read the clean frozen
+sources/accelerator-a2. cpu-a2 runs full CPU regression, 22 complex cells and
+installed consumers against matching builds/native-cpu-dev03. Eight Python/native
+complete suites run CANN850/851/852/900. SDK/profile/owners/installed NPU gates
+also submitted. No active job is a passing result.
+
+Terminal so far: cuda-host-a2 passed; installed-cpp-cuda-host-a2 passed;
+sdk-a2 passed native C++ with msprof trace. installed-cuda-host-a2 failed because
+creating a nested venv inherited the base CPU Torch rather than the selected
+CUDA Torch. Fix is limited to scripts/library_consumer.py: explicit selected
+dependency site path and a distribution assertion. The isolated
+installed-cuda-host-dev06 passed all 10 installed Python/native/C++ checks.
+Commit this verification-only correction, then qualify installed-cuda-host-a3
+and installed-cpu-a3 from a clean accelerator-a3 snapshot.
+
 Units are tide-accelerator-NAME, in background.slice; runs/NAME contains exact
-commands/log/status, NPU queue assignments and results. Submit only from frozen
-source; two build workers/one CPU thread pool. All listed submissions are still
-pending, not passing evidence. Inspect terminal results and commit reviewed
-support/evidence separately. Keep working until the qualification is terminal.
+commands/log/status and NPU queue assignments. Two build workers/one CPU thread.
+Next: inspect all terminal gates, commit tested consumer correction separately,
+qualify its immutable consumer behavior, and commit reviewed evidence/matrix.
+Keep working until full qualification is terminal. No runtime C++ or algorithm
+changes after 10cd630; source hashes/binary reuse remain explicit.
 
 ## Environments
 
