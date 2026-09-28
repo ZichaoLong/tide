@@ -244,6 +244,22 @@
           "test_command": "python -m pytest tests/test_library_qualification.py -q; python scripts/library_consumer.py --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/library-foundation.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "Accelerator extension regression: 8636 CPU FP32/FP64 tests, all 22 complex topology cells and 10 installed Python/native/C++ checks. Reused build has exact matching C++ source and recorded binary hashes. Consumer-only bf4ac1c follow-up passed ten installed CPU checks; runtime unchanged.",
+          "tiers": [
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md"
         }
       ]
     },
@@ -257,7 +273,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified."
     },
     {
       "id": "python-npu-aarch64",
@@ -282,9 +298,25 @@
           "test_command": "ASCEND_RT_VISIBLE_DEVICES=6 python scripts/npu_smoke.py --device npu --with-backward --output-dir artifacts/npu-smoke-20260925-i",
           "result": "passed",
           "environment_manifest": "docs/evidence/npu-python-20260925.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "39 complete Python configuration cases per CANN8.5.0/8.5.1/8.5.2 (Torch/TorchNPU2.9) and CANN9.0 (2.10): complete observables/VJPs, three AdamW steps, fresh-process resume and CPU handoff; installed consumers and CANN9.0 kernel profile.",
+          "tiers": [
+            "static-cli",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_accelerator.py --device npu:0 --implementation python --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md"
         }
       ],
-      "reason": "Verified only for the finite eager FP32 cases at the cited source. The Tide 0.2 public config/runtime API has no additional NPU qualification."
+      "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim."
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -445,6 +477,23 @@
           "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/library-foundation.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "Accelerator extension regression: 8636 CPU FP32/FP64 tests, all 22 complex topology cells and 10 installed Python/native/C++ checks. Reused build has exact matching C++ source and recorded binary hashes. Consumer-only bf4ac1c follow-up passed ten installed CPU checks; runtime unchanged.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md"
         }
       ]
     },
@@ -459,7 +508,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -467,12 +516,12 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "implemented",
+      "status": "verified",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Standalone SDK runtime and Python-owned native adapter implemented separately; preserve historical unavailable-wheel attempt as prior evidence.",
+      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0; native core through Python registration also qualified with 2.9/CANN8.5.0/8.5.1/8.5.2. CSR pooling and NPU FP64 unsupported.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -486,6 +535,41 @@
             "static-cli"
           ]
         }
+      ],
+      "evidence": [
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "Standalone ring/diamond CPU-vs-NPU complete values/VJPs, three AdamW steps, shared owners, nondefault worker stream and device/CPU checkpoint; installed CMake consumer/loader and msprof hardware trace. Official SDK source 94f8a8e6b523d7ba553e1b80d5b5248478391526.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "build/npu-sdk/tidegraph-accelerator-check --device npu:0 --dtype float32 --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "43 complete native-adapter cases and one explicit CSR rejection for each of four CANN versions; full values, VJPs, three updates, fresh process and CPU checkpoint handoff. Python owns TorchNPU registration; not standalone SDK evidence for 2.9.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_accelerator.py --device npu:0 --implementation native --native-library BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        }
       ]
     },
     {
@@ -498,7 +582,22 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified.",
+      "attempts": [
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "Torch2.10.0+cu128 / CUDA Toolkit12.8.1: CUDA-linked C++ build, loader, 38 directed CPU/CLI tests and installed Python/native/CMake CPU consumers. No GPU execution.",
+          "tiers": [
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir BUILD; host checks and immutable consumer correction in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md",
+          "reason": "Build and CPU checks passed; real GPU execution awaits target hardware."
+        }
+      ]
     },
     {
       "id": "cpp-cuda-aarch64",
@@ -511,7 +610,23 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified.",
+      "attempts": [
+        {
+          "date": "2026-09-28",
+          "commit": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+          "scope": "Torch2.10.0+cu128 / CUDA Toolkit12.8.1: CUDA-linked C++ build, loader, 38 directed CPU/CLI tests and installed Python/native/CMake CPU consumers. No GPU execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir BUILD; host checks and immutable consumer correction in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerators-20260928.md",
+          "reason": "Build and CPU checks passed; real GPU execution awaits target hardware."
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,2466 @@
+{
+  "schema": "tide-accelerator-evidence-v1",
+  "date": "2026-09-28",
+  "implementation": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+  "consumer_followup": "bf4ac1c4afdb33f3ae4b51f2cea319ceab7797cc",
+  "runs": {
+    "cpu-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-cpu-a2",
+      "started": "2026-09-28T06:21:15.467723+00:00",
+      "finished": "2026-09-28T07:03:39.154401+00:00",
+      "status_sha256": "9b1bda43d1e4d47518f97a0a79f7e8010805f1209be7c743847f78590fcafc25",
+      "command_template": [
+        "python",
+        "scripts/qualify_library.py",
+        "--reuse-build",
+        "--build-dir",
+        "BUILD_ROOT/native-cpu-dev03",
+        "--output-dir",
+        "RUN_ROOT/cpu-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "c6ceb193840c131808d9a24f620fb77ac51c7b5d0c2057cce73bd1e6cca54bb1",
+          "schema": "tide-library-release-v1",
+          "scope": null
+        }
+      }
+    },
+    "cuda-host-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-cuda-host-a2",
+      "started": "2026-09-28T06:21:16.054421+00:00",
+      "finished": "2026-09-28T06:22:40.016849+00:00",
+      "status_sha256": "4921ced24266a8538d0f70bb193929a29d8d9070edff516be397c94744865552",
+      "command_template": [
+        "env",
+        "TIDE_BUILD_DIR=BUILD_ROOT/native-cuda-dev03",
+        "python",
+        "-m",
+        "pytest",
+        "tests/test_cli.py",
+        "tests/test_cpp_accelerator.py",
+        "tests/test_accelerator_boundary.py",
+        "tests/test_library_qualification.py",
+        "-q"
+      ],
+      "reports": {}
+    },
+    "sdk-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-sdk-a2",
+      "started": "2026-09-28T06:22:03.177382+00:00",
+      "finished": "2026-09-28T06:22:30.609059+00:00",
+      "status_sha256": "5353f47d2048a5f227db9b8d05374a67d237dc9f668d2b999e3f5ec3fcf84397",
+      "command_template": [
+        "msprof",
+        "--output=RUN_ROOT/sdk-a2/profile",
+        "--task-time=on",
+        "--aicpu=on",
+        "--runtime-api=on",
+        "BUILD_ROOT/native-npu-sdk-dev03/tidegraph-accelerator-check",
+        "--device",
+        "npu:0",
+        "--dtype",
+        "float32",
+        "--output-dir",
+        "RUN_ROOT/sdk-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "ec8162799d71836d1b8844c1635bc3a1fa52cbf2dbd91d0cac73b20f74cbbba6",
+          "schema": null,
+          "scope": null,
+          "cases": 2,
+          "training_steps": 3,
+          "workers": 2,
+          "nondefault_stream": true,
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "owners-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-owners-a2",
+      "started": "2026-09-28T06:22:03.243303+00:00",
+      "finished": "2026-09-28T06:22:55.079436+00:00",
+      "status_sha256": "94ccd72021af3137981698f2638f222b4b6267c1f4dd0461d5e4f6904d1bde8d",
+      "command_template": [
+        "python",
+        "scripts/check_native_device.py",
+        "--device",
+        "npu:0",
+        "--native-library",
+        "BUILD_ROOT/native-npu-python-dev03",
+        "--output-dir",
+        "RUN_ROOT/owners-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "3a3535e8960a02df51f7e68e74637cc1c63f8ca397b59a1f84d4f1b9bc70f1e1",
+          "schema": null,
+          "scope": null,
+          "checks": [
+            "SGD-aliases-None-zero-updates-device-checkpoint",
+            "AdamW-aliases-None-zero-updates-device-checkpoint",
+            "explicit-NPU-FP64-and-FP64-Read-rejection"
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          }
+        }
+      }
+    },
+    "python-profile-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-python-profile-a2",
+      "started": "2026-09-28T06:22:03.311214+00:00",
+      "finished": "2026-09-28T06:23:22.466224+00:00",
+      "status_sha256": "a78f07183c6e759d41331a98e0d5de137afd2e815611cbc588de2784ff9de957",
+      "command_template": [
+        "python",
+        "scripts/profile_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--output-dir",
+        "RUN_ROOT/python-profile-a2/profile"
+      ],
+      "reports": {
+        "profile": {
+          "sha256": "e7de5ecaeef4327aac35bf0599d9db1274286b81c48aa8886c75735cb513ef55",
+          "schema": "tide-device-profile-v1",
+          "scope": "candidate-only warm eager forward/backward/AdamW",
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "package_sha256": "31be609f3ddf41f6e49e175e3e6c2a014dbaf820c53385b44b56fb30566a050e",
+          "kernel_events": 1295,
+          "kernel_types": {
+            "KERNEL_AIVEC": 957,
+            "KERNEL_MIX_AIV": 174,
+            "KERNEL_AICORE": 164
+          },
+          "transfers": {
+            "aten::_local_scalar_dense": 193,
+            "MEMCPY_ASYNC": 96
+          },
+          "trace_sha256": "e04b1cae0f05efd01515c925b7cf2d4827bcd700199ee02e7e827f682fe65608",
+          "observed_fallback_events": []
+        }
+      }
+    },
+    "native-profile-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-native-profile-a2",
+      "started": "2026-09-28T06:22:03.383050+00:00",
+      "finished": "2026-09-28T06:23:56.687629+00:00",
+      "status_sha256": "dcede3ac0049d01dd13f0745667ecce2d2994a5b58bddc75abed4364b0f4fb66",
+      "command_template": [
+        "python",
+        "scripts/profile_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--case",
+        "worker-streams",
+        "--native-library",
+        "BUILD_ROOT/native-npu-python-dev03",
+        "--output-dir",
+        "RUN_ROOT/native-profile-a2/profile"
+      ],
+      "reports": {
+        "profile": {
+          "sha256": "11ce8bb19f79108838b1e55d1a236b75595c4d99aeeec9c21216b1247be23218",
+          "schema": "tide-device-profile-v1",
+          "scope": "candidate-only warm eager forward/backward/AdamW",
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "package_sha256": "31be609f3ddf41f6e49e175e3e6c2a014dbaf820c53385b44b56fb30566a050e",
+          "kernel_events": 1013,
+          "kernel_types": {
+            "KERNEL_AIVEC": 840,
+            "KERNEL_MIX_AIV": 83,
+            "KERNEL_AICORE": 90
+          },
+          "transfers": {
+            "aten::_local_scalar_dense": 157,
+            "MEMCPY_ASYNC": 60
+          },
+          "trace_sha256": "75e88e46ab170a99686b9b03df7d2727401e4333ad907a6d0dd7982a4bc2fe54",
+          "observed_fallback_events": []
+        }
+      }
+    },
+    "installed-python-npu-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-installed-python-npu-a2",
+      "started": "2026-09-28T06:22:03.449834+00:00",
+      "finished": "2026-09-28T06:26:36.572201+00:00",
+      "status_sha256": "d9e1ef31653be30cc69a1dc615c268ed12e3e110578292eb2c52479f2ef19aff",
+      "command_template": [
+        "python",
+        "scripts/library_consumer.py",
+        "--device",
+        "npu:0",
+        "--skip-cpp",
+        "--build-dir",
+        "BUILD_ROOT/native-npu-python-dev03",
+        "--output-dir",
+        "RUN_ROOT/installed-python-npu-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "fb99b47c691d2e924c48cac30087cd819f08c172f026091c258c3cb480766b8c",
+          "schema": "tide-consumer-v1",
+          "scope": "python-native",
+          "checks": [
+            {
+              "family": "pdg",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "pdg",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "pdg",
+              "state": "passed",
+              "checks": 7
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "timed-dag",
+              "state": "passed",
+              "checks": 7
+            },
+            {
+              "family": "settle",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "settle",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "settle",
+              "state": "passed",
+              "checks": 8
+            }
+          ],
+          "device": "npu:0",
+          "wheel_sha256": "f6eefa8e75ba675c226c337c56d9ba50ba93861812acaf02e86408febef714f1"
+        }
+      }
+    },
+    "installed-cpp-npu-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-installed-cpp-npu-a2",
+      "started": "2026-09-28T06:22:03.517296+00:00",
+      "finished": "2026-09-28T06:27:14.950095+00:00",
+      "status_sha256": "dcd32b37016851911f4d494caad0d5dc848673c979d843932a5e9e4d19717855",
+      "command_template": [
+        "python",
+        "scripts/check_cpp_consumer.py",
+        "--device",
+        "npu:0",
+        "--build-dir",
+        "BUILD_ROOT/native-npu-sdk-dev03",
+        "--output-dir",
+        "RUN_ROOT/installed-cpp-npu-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "3d33c538ac900e952a4418fa3cb969d52aaff6d42514fadb146415285b2a0210",
+          "schema": "tide-cpp-consumer-v1",
+          "scope": null,
+          "device": "npu:0",
+          "dtype": "float32",
+          "binary_sha256": "d4dac77c4fcadceccc537e3093ecfb7ccc3b09f4a6511465a1ad90b6a0654766",
+          "loader_sha256": "4b8181aa19f10600124ded42681c6c48fac6c14f7719a42b4db3924c6d34f925"
+        }
+      }
+    },
+    "installed-cpp-cuda-host-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-installed-cpp-cuda-host-a2",
+      "started": "2026-09-28T06:22:03.638471+00:00",
+      "finished": "2026-09-28T06:22:26.568846+00:00",
+      "status_sha256": "9d44a95ef72e489b1fe1dd12c17c291fbbbd6c0c28efe05be50762aa7af14ce1",
+      "command_template": [
+        "python",
+        "scripts/check_cpp_consumer.py",
+        "--device",
+        "cpu",
+        "--build-dir",
+        "BUILD_ROOT/native-cuda-dev03",
+        "--output-dir",
+        "RUN_ROOT/installed-cpp-cuda-host-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "5658b3f387f37f2bd489437741ee3fda643069eab37766c41e068eaf5089a975",
+          "schema": "tide-cpp-consumer-v1",
+          "scope": null,
+          "device": "cpu",
+          "dtype": "float32",
+          "binary_sha256": "383847c3818ca09af4d693eafed6dc171041ad248495d71b2482a674bee2b27c",
+          "loader_sha256": "e49b9bf5d66d633cfc4a39e04636b3793c75758b8a5fbb8b247edb38c61e4695"
+        }
+      }
+    },
+    "installed-cpu-a3": {
+      "source": "bf4ac1c4afdb33f3ae4b51f2cea319ceab7797cc",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-installed-cpu-a3",
+      "started": "2026-09-28T06:25:59.387605+00:00",
+      "finished": "2026-09-28T06:27:34.520530+00:00",
+      "status_sha256": "d93c28ef7128ab078c4eab66edc1d14c48e3f0d4ed1426cf01ee9a56e7b074f8",
+      "command_template": [
+        "python",
+        "scripts/library_consumer.py",
+        "--device",
+        "cpu",
+        "--build-dir",
+        "BUILD_ROOT/native-cpu-dev03",
+        "--output-dir",
+        "RUN_ROOT/installed-cpu-a3/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "6f02feb20562b3a4340d084edf248595775f33f7cca3fb6357775cec8d885b95",
+          "schema": "tide-consumer-v1",
+          "scope": "python-native-cpp",
+          "checks": [
+            {
+              "family": "pdg",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "pdg",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "pdg",
+              "state": "passed",
+              "checks": 6
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "timed-dag",
+              "state": "passed",
+              "checks": 6
+            },
+            {
+              "family": "settle",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "settle",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "settle",
+              "state": "passed",
+              "checks": 7
+            },
+            {
+              "implementation": "installed-cpp",
+              "state": "passed",
+              "dtypes": [
+                "float32",
+                "float64"
+              ]
+            }
+          ],
+          "torch": "2.10.0+cpu",
+          "device": "cpu",
+          "wheel_sha256": "286a76526d7083558369d3c55a4505e195fbc3f8bd470a2403a23dc4c5dfd7bd"
+        }
+      }
+    },
+    "installed-cuda-host-a3": {
+      "source": "bf4ac1c4afdb33f3ae4b51f2cea319ceab7797cc",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-installed-cuda-host-a3",
+      "started": "2026-09-28T06:25:59.317390+00:00",
+      "finished": "2026-09-28T06:27:17.900979+00:00",
+      "status_sha256": "5e6026cf8c3d67deee71208d15a2ebe2895384ee87cf457bb9b3ebbec0bb3233",
+      "command_template": [
+        "python",
+        "scripts/library_consumer.py",
+        "--device",
+        "cpu",
+        "--build-dir",
+        "BUILD_ROOT/native-cuda-dev03",
+        "--output-dir",
+        "RUN_ROOT/installed-cuda-host-a3/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "f595128335a960f544ae3ffe75101352d7c1a6793e7eb010eb432bdf55c1eef3",
+          "schema": "tide-consumer-v1",
+          "scope": "python-native-cpp",
+          "checks": [
+            {
+              "family": "pdg",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "pdg",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "pdg",
+              "state": "passed",
+              "checks": 6
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "timed-dag",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "timed-dag",
+              "state": "passed",
+              "checks": 6
+            },
+            {
+              "family": "settle",
+              "implementation": "python",
+              "state": "passed"
+            },
+            {
+              "family": "settle",
+              "implementation": "native",
+              "state": "passed"
+            },
+            {
+              "implementation": "installed-qualifier",
+              "family": "settle",
+              "state": "passed",
+              "checks": 7
+            },
+            {
+              "implementation": "installed-cpp",
+              "state": "passed",
+              "dtypes": [
+                "float32",
+                "float64"
+              ]
+            }
+          ],
+          "torch": "2.10.0+cu128",
+          "device": "cpu",
+          "wheel_sha256": "3d22fa08b1b352bd6590834b29a7fff5f09636e0f75fb6530a4d49da5a26f1ca"
+        }
+      }
+    },
+    "migration-golden-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-migration-golden-a2",
+      "started": "2026-09-28T06:36:39.699858+00:00",
+      "finished": "2026-09-28T06:36:44.368163+00:00",
+      "status_sha256": "e362920e23d958d3175a38d4fd41b29d333d3824a67b76b1042a908f04a2cbcb",
+      "command_template": [
+        "python",
+        "PACKET_TOOLS/golden.py",
+        "--input",
+        "RUN_ROOT/python-cann900-a2/gate/mixed-timed-dag/input.pt",
+        "--output-dir",
+        "RUN_ROOT/migration-golden-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "fe551a5ca3016c99d8e0bdbb8a7bca93d7f8f8beef9e8dd35ef5023e9a24d82b",
+          "schema": null,
+          "scope": "independent CPU reference: mixed TimedDAG, 3 AdamW updates and complete observables",
+          "runtime": {
+            "resolved_device": "cpu",
+            "backend": "cpu",
+            "logical_device_index": null,
+            "resolution_reason": "explicit:cpu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "logical_device_count": 1
+          },
+          "package_sha256": "31be609f3ddf41f6e49e175e3e6c2a014dbaf820c53385b44b56fb30566a050e"
+        }
+      }
+    },
+    "migration-check-cpu-a3": {
+      "source": "bf4ac1c4afdb33f3ae4b51f2cea319ceab7797cc",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-migration-check-cpu-a3",
+      "started": "2026-09-28T06:37:40.824288+00:00",
+      "finished": "2026-09-28T06:37:45.897072+00:00",
+      "status_sha256": "9c74baa0e6464ce1cc2a44e33f3ee55344b6804630a47816cb3a7efa93284eab",
+      "command_template": [
+        "python",
+        "PACKET_TOOLS/check_golden.py",
+        "--fixture-dir",
+        "RUN_ROOT/migration-golden-a2/gate",
+        "--device",
+        "cpu",
+        "--output-dir",
+        "RUN_ROOT/migration-check-cpu-a3/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "7d6390b3495f31b590e33e88257fec6bf887cdc995e9c9611bad3fc209f683cf",
+          "schema": null,
+          "scope": null,
+          "checks": [
+            "CPU-golden-full-trajectory",
+            "CPU-checkpoint-to-target"
+          ],
+          "runtime": {
+            "resolved_device": "cpu",
+            "backend": "cpu",
+            "logical_device_index": null,
+            "resolution_reason": "explicit:cpu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "logical_device_count": 1
+          },
+          "package_sha256": "31be609f3ddf41f6e49e175e3e6c2a014dbaf820c53385b44b56fb30566a050e"
+        }
+      }
+    },
+    "migration-check-npu-a3": {
+      "source": "bf4ac1c4afdb33f3ae4b51f2cea319ceab7797cc",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-migration-check-npu-a3",
+      "started": "2026-09-28T06:37:40.890280+00:00",
+      "finished": "2026-09-28T06:38:05.032657+00:00",
+      "status_sha256": "ac06aff766123d930d8d1a52fa71a575273babd0b628bfc0a994bfa9a61b5092",
+      "command_template": [
+        "python",
+        "PACKET_TOOLS/check_golden.py",
+        "--fixture-dir",
+        "RUN_ROOT/migration-golden-a2/gate",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--native-library",
+        "BUILD_ROOT/native-npu-python-dev03",
+        "--output-dir",
+        "RUN_ROOT/migration-check-npu-a3/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "73e4371c95c1870597ee24c27b7233139349caad46f40e7cb4c4160eabb3da22",
+          "schema": null,
+          "scope": null,
+          "checks": [
+            "CPU-golden-full-trajectory",
+            "CPU-checkpoint-to-target"
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "package_sha256": "31be609f3ddf41f6e49e175e3e6c2a014dbaf820c53385b44b56fb30566a050e"
+        }
+      }
+    },
+    "python-cann850-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-python-cann850-a2",
+      "started": "2026-09-28T06:21:15.678699+00:00",
+      "finished": "2026-09-28T06:29:24.300337+00:00",
+      "status_sha256": "8ad0c756562655c95b907cc8905734db4a8a3ad7bd7fa0cf67a44b7dbacd54e1",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--output-dir",
+        "RUN_ROOT/python-cann850-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "53b2f7d61a8cd7bec8f1dce4188a20f8cf68b6c3cc98bcc6f34c6fc06bff6b08",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay"
+          ],
+          "unsupported": [],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.0",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "native-cann850-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-native-cann850-a2",
+      "started": "2026-09-28T06:21:15.738378+00:00",
+      "finished": "2026-09-28T06:33:57.426037+00:00",
+      "status_sha256": "e864e4cdf482f5d3830c360cc362e5cace0f9589365fb48d61edd88636037f7c",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--output-dir",
+        "RUN_ROOT/native-cann850-a2/gate",
+        "--native-library",
+        "BUILD_ROOT/native-npu29-python-dev03"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "6132d95eaf940ac5ae00463a14276a6e5a92473652e8a47aa3e06b4c075c5486",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay",
+            "worker-streams",
+            "fiber-policy-attention_packing",
+            "fiber-policy-fiber_cache",
+            "fiber-policy-attention_layout"
+          ],
+          "unsupported": [
+            {
+              "id": "fiber-policy-fiber_pooling",
+              "state": "unsupported",
+              "rejection_verified": true,
+              "reason": "NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'",
+              "config": {
+                "schema_version": 1,
+                "family": "timed-dag",
+                "graph": {
+                  "nodes": [
+                    {
+                      "region": 0,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 2,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "source": 0,
+                      "target": 1,
+                      "delay": 1
+                    },
+                    {
+                      "source": 0,
+                      "target": 2,
+                      "delay": 1
+                    },
+                    {
+                      "source": 1,
+                      "target": 3,
+                      "delay": 1
+                    },
+                    {
+                      "source": 2,
+                      "target": 3,
+                      "delay": 1
+                    }
+                  ],
+                  "regions": [
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    }
+                  ],
+                  "inputs": [
+                    0
+                  ],
+                  "outputs": [
+                    3
+                  ],
+                  "layout": {
+                    "edge_source": [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ],
+                    "output": [
+                      0
+                    ]
+                  },
+                  "origins": [],
+                  "source_domain": {
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ]
+                  }
+                },
+                "ranks": [],
+                "model": {
+                  "width": 4,
+                  "dtype": "float32",
+                  "seed": 7,
+                  "projection_layout": "input",
+                  "scale_init": 0.25
+                },
+                "execution": {
+                  "implementation": "native",
+                  "schedule": "auto",
+                  "packed": true,
+                  "prefill": null,
+                  "trace": false,
+                  "mode": "hst",
+                  "zeta": 1.0,
+                  "workers": 2,
+                  "max_events": 1000000,
+                  "full_autograd": "replay",
+                  "aggregate_autograd": "replay",
+                  "parallel_regions": false,
+                  "compact_events": false,
+                  "defer_state_release": false,
+                  "packed_sources": false,
+                  "batch_next": false,
+                  "attention_packing": "exact",
+                  "fiber_pooling": "csr",
+                  "fiber_cache": "cloned",
+                  "attention_layout": "event"
+                }
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.0",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "python-cann851-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-python-cann851-a2",
+      "started": "2026-09-28T06:21:15.801993+00:00",
+      "finished": "2026-09-28T06:29:34.464403+00:00",
+      "status_sha256": "6d31e1c0e9d00570ee575255c4a435e61fef781c0812319363ae4c10c017342f",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--output-dir",
+        "RUN_ROOT/python-cann851-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "d244b3b0c30781fb1c8bd4e5bcd5272f276d60bcfb53bdc730546a35e824bef8",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay"
+          ],
+          "unsupported": [],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.1",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "native-cann851-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-native-cann851-a2",
+      "started": "2026-09-28T06:21:15.864418+00:00",
+      "finished": "2026-09-28T06:34:02.609292+00:00",
+      "status_sha256": "a6d30f3cfb91f955f03ec4ec04aed83326127961b8778c9d73f5b01c4aec3897",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--output-dir",
+        "RUN_ROOT/native-cann851-a2/gate",
+        "--native-library",
+        "BUILD_ROOT/native-npu29-python-dev03"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "8732452a7e695b647b87adc6aa97143df964b7ec6bc49e638457a7a96b08a115",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay",
+            "worker-streams",
+            "fiber-policy-attention_packing",
+            "fiber-policy-fiber_cache",
+            "fiber-policy-attention_layout"
+          ],
+          "unsupported": [
+            {
+              "id": "fiber-policy-fiber_pooling",
+              "state": "unsupported",
+              "rejection_verified": true,
+              "reason": "NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'",
+              "config": {
+                "schema_version": 1,
+                "family": "timed-dag",
+                "graph": {
+                  "nodes": [
+                    {
+                      "region": 0,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 2,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "source": 0,
+                      "target": 1,
+                      "delay": 1
+                    },
+                    {
+                      "source": 0,
+                      "target": 2,
+                      "delay": 1
+                    },
+                    {
+                      "source": 1,
+                      "target": 3,
+                      "delay": 1
+                    },
+                    {
+                      "source": 2,
+                      "target": 3,
+                      "delay": 1
+                    }
+                  ],
+                  "regions": [
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    }
+                  ],
+                  "inputs": [
+                    0
+                  ],
+                  "outputs": [
+                    3
+                  ],
+                  "layout": {
+                    "edge_source": [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ],
+                    "output": [
+                      0
+                    ]
+                  },
+                  "origins": [],
+                  "source_domain": {
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ]
+                  }
+                },
+                "ranks": [],
+                "model": {
+                  "width": 4,
+                  "dtype": "float32",
+                  "seed": 7,
+                  "projection_layout": "input",
+                  "scale_init": 0.25
+                },
+                "execution": {
+                  "implementation": "native",
+                  "schedule": "auto",
+                  "packed": true,
+                  "prefill": null,
+                  "trace": false,
+                  "mode": "hst",
+                  "zeta": 1.0,
+                  "workers": 2,
+                  "max_events": 1000000,
+                  "full_autograd": "replay",
+                  "aggregate_autograd": "replay",
+                  "parallel_regions": false,
+                  "compact_events": false,
+                  "defer_state_release": false,
+                  "packed_sources": false,
+                  "batch_next": false,
+                  "attention_packing": "exact",
+                  "fiber_pooling": "csr",
+                  "fiber_cache": "cloned",
+                  "attention_layout": "event"
+                }
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.1",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "python-cann852-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-python-cann852-a2",
+      "started": "2026-09-28T06:21:15.932417+00:00",
+      "finished": "2026-09-28T06:33:05.931625+00:00",
+      "status_sha256": "756a8edd6b5a1193e71b0fba3cc7826f7d6a6fbbf5e32d95431af26931d3d70b",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--output-dir",
+        "RUN_ROOT/python-cann852-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "3d6433d220a3533355f7a482edd6d99ee3e10128f2a418125081bb03553a1541",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay"
+          ],
+          "unsupported": [],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.2",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "native-cann852-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-native-cann852-a2",
+      "started": "2026-09-28T06:21:16.000429+00:00",
+      "finished": "2026-09-28T06:30:41.199606+00:00",
+      "status_sha256": "8af14bf63cfa4cbbcc41ff85e5391689d813467caa376dc368131fa4e572c4c1",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--output-dir",
+        "RUN_ROOT/native-cann852-a2/gate",
+        "--native-library",
+        "BUILD_ROOT/native-npu29-python-dev03"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "da1bd17a779c4e4d42da2dafa48e42e3c377d5b9c19a59494b392dc1c21295c7",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay",
+            "worker-streams",
+            "fiber-policy-attention_packing",
+            "fiber-policy-fiber_cache",
+            "fiber-policy-attention_layout"
+          ],
+          "unsupported": [
+            {
+              "id": "fiber-policy-fiber_pooling",
+              "state": "unsupported",
+              "rejection_verified": true,
+              "reason": "NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'",
+              "config": {
+                "schema_version": 1,
+                "family": "timed-dag",
+                "graph": {
+                  "nodes": [
+                    {
+                      "region": 0,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 2,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "source": 0,
+                      "target": 1,
+                      "delay": 1
+                    },
+                    {
+                      "source": 0,
+                      "target": 2,
+                      "delay": 1
+                    },
+                    {
+                      "source": 1,
+                      "target": 3,
+                      "delay": 1
+                    },
+                    {
+                      "source": 2,
+                      "target": 3,
+                      "delay": 1
+                    }
+                  ],
+                  "regions": [
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    }
+                  ],
+                  "inputs": [
+                    0
+                  ],
+                  "outputs": [
+                    3
+                  ],
+                  "layout": {
+                    "edge_source": [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ],
+                    "output": [
+                      0
+                    ]
+                  },
+                  "origins": [],
+                  "source_domain": {
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ]
+                  }
+                },
+                "ranks": [],
+                "model": {
+                  "width": 4,
+                  "dtype": "float32",
+                  "seed": 7,
+                  "projection_layout": "input",
+                  "scale_init": 0.25
+                },
+                "execution": {
+                  "implementation": "native",
+                  "schedule": "auto",
+                  "packed": true,
+                  "prefill": null,
+                  "trace": false,
+                  "mode": "hst",
+                  "zeta": 1.0,
+                  "workers": 2,
+                  "max_events": 1000000,
+                  "full_autograd": "replay",
+                  "aggregate_autograd": "replay",
+                  "parallel_regions": false,
+                  "compact_events": false,
+                  "defer_state_release": false,
+                  "packed_sources": false,
+                  "batch_next": false,
+                  "attention_packing": "exact",
+                  "fiber_pooling": "csr",
+                  "fiber_cache": "cloned",
+                  "attention_layout": "event"
+                }
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.9.0+cpu",
+            "torch_git": "0fabc3ba44823f257e70ce397d989c8de5e362c1",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.9.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "8.5.2",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "python-cann900-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-python-cann900-a2",
+      "started": "2026-09-28T06:21:15.526908+00:00",
+      "finished": "2026-09-28T06:32:36.902092+00:00",
+      "status_sha256": "02560ede890029b7567b3270491f6f9a72d3558b2c0f1796febfe9787a988a83",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--output-dir",
+        "RUN_ROOT/python-cann900-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "f2d6924cdf5c987cbad9eadb8eca15e0d425911d432baa4d72a9ef25825d9b4e",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay"
+          ],
+          "unsupported": [],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    },
+    "native-cann900-a2": {
+      "source": "10cd6307ea3ad43646c0fe9f7a3e86023d43a2b7",
+      "state": "passed",
+      "artifacts": "artifacts/accelerator-native-cann900-a2",
+      "started": "2026-09-28T06:21:15.594692+00:00",
+      "finished": "2026-09-28T06:31:18.048163+00:00",
+      "status_sha256": "ff6d23a0e4f813fbd7b4fe83d22a0a08cf032d93970d2e558d647f557a16fd28",
+      "command_template": [
+        "python",
+        "scripts/qualify_accelerator.py",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--native-library",
+        "BUILD_ROOT/native-npu-python-dev03",
+        "--output-dir",
+        "RUN_ROOT/native-cann900-a2/gate"
+      ],
+      "reports": {
+        "gate": {
+          "sha256": "9ac60ecb20414accd398b0856b367b31f4ca65192ad679f153cc0d9491a6a97a",
+          "schema": "tide-accelerator-suite-v1",
+          "scope": "complete named suite",
+          "cases": [
+            "mixed-pdg",
+            "batched-pdg",
+            "mixed-timed-dag",
+            "batched-timed-dag",
+            "mixed-settle",
+            "batched-settle",
+            "specialized-ring",
+            "specialized-self_loop",
+            "specialized-chain",
+            "specialized-diamond",
+            "identity-nodes",
+            "memory-delta-rule-v1",
+            "memory-lh-add-repeat-v1",
+            "memory-lh-fiber-attention-sum-repeat-v1",
+            "memory-lh-fiber-attention-mean-repeat-v1",
+            "memory-lh-fiber-attention-linear-repeat-v1",
+            "memory-lh-fiber-attention-active-softmax-repeat-v1",
+            "memory-lh-fiber-attention-all-softmax-repeat-v1",
+            "full-lh-relu-identity-v1",
+            "full-lh-relu-rms-v1",
+            "full-lh-relu-layer-v1",
+            "full-lh-silu-identity-v1",
+            "full-lh-silu-rms-v1",
+            "full-lh-silu-layer-v1",
+            "full-lh-identity-identity-v1",
+            "full-lh-identity-rms-v1",
+            "full-lh-identity-layer-v1",
+            "aggregate-sum",
+            "aggregate-mean",
+            "aggregate-weighted_mean",
+            "aggregate-active_softmax",
+            "aggregate-all_softmax",
+            "region-positive-v1",
+            "region-tensor-history-v1",
+            "region-lh-count-affect-v1",
+            "next-control-blend",
+            "sparse-emission-reset",
+            "periodic-state-clock",
+            "parallel-edges-delay",
+            "worker-streams",
+            "fiber-policy-attention_packing",
+            "fiber-policy-fiber_cache",
+            "fiber-policy-attention_layout"
+          ],
+          "unsupported": [
+            {
+              "id": "fiber-policy-fiber_pooling",
+              "state": "unsupported",
+              "rejection_verified": true,
+              "reason": "NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'",
+              "config": {
+                "schema_version": 1,
+                "family": "timed-dag",
+                "graph": {
+                  "nodes": [
+                    {
+                      "region": 0,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 1,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    },
+                    {
+                      "region": 2,
+                      "clear": false,
+                      "identity": false,
+                      "memory": "lh-fiber-attention-sum-repeat-v1",
+                      "full": "tanh",
+                      "query_heads": 2,
+                      "kv_heads": 2,
+                      "window": 0,
+                      "emission": "broadcast",
+                      "emit_period": 1,
+                      "emit_phases": [],
+                      "aggregation": "sum",
+                      "readout": "linear-v1",
+                      "next_state": "adopt-v1",
+                      "state_clock": {
+                        "period": 1,
+                        "first": 0,
+                        "count": 1
+                      }
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "source": 0,
+                      "target": 1,
+                      "delay": 1
+                    },
+                    {
+                      "source": 0,
+                      "target": 2,
+                      "delay": 1
+                    },
+                    {
+                      "source": 1,
+                      "target": 3,
+                      "delay": 1
+                    },
+                    {
+                      "source": 2,
+                      "target": 3,
+                      "delay": 1
+                    }
+                  ],
+                  "regions": [
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    },
+                    {
+                      "budget": 1,
+                      "observe_all": true,
+                      "count_priority": true,
+                      "read_mode": "proposal",
+                      "selector": "count-v1"
+                    }
+                  ],
+                  "inputs": [
+                    0
+                  ],
+                  "outputs": [
+                    3
+                  ],
+                  "layout": {
+                    "edge_source": [
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ],
+                    "output": [
+                      0
+                    ]
+                  },
+                  "origins": [],
+                  "source_domain": {
+                    "edge_target": [
+                      0,
+                      0,
+                      0,
+                      1
+                    ],
+                    "input": [
+                      0
+                    ]
+                  }
+                },
+                "ranks": [],
+                "model": {
+                  "width": 4,
+                  "dtype": "float32",
+                  "seed": 7,
+                  "projection_layout": "input",
+                  "scale_init": 0.25
+                },
+                "execution": {
+                  "implementation": "native",
+                  "schedule": "auto",
+                  "packed": true,
+                  "prefill": null,
+                  "trace": false,
+                  "mode": "hst",
+                  "zeta": 1.0,
+                  "workers": 2,
+                  "max_events": 1000000,
+                  "full_autograd": "replay",
+                  "aggregate_autograd": "replay",
+                  "parallel_regions": false,
+                  "compact_events": false,
+                  "defer_state_release": false,
+                  "packed_sources": false,
+                  "batch_next": false,
+                  "attention_packing": "exact",
+                  "fiber_pooling": "csr",
+                  "fiber_cache": "cloned",
+                  "attention_layout": "event"
+                }
+              }
+            }
+          ],
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 1,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "device": "npu:0",
+          "dtype": "float32"
+        }
+      }
+    }
+  },
+  "builds": {
+    "native-cpu-dev03": {
+      "source": "adeb819f9722f80f02508007578a4ab5eee2f05e",
+      "cpp_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70",
+      "backend": "cpu",
+      "npu_runtime": null,
+      "torch": "2.10.0+cpu",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "f42332666b423e3e17c25d60b82a36132893a5dba9ac9c6ad8e436a72737d790",
+        "libtidegraph_runtime.a": "ee92bd217470c43a21f149be146bda17d6d0e02a1baaf42b0e0d8086951c97de",
+        "_tide_native.so": "18c75fd793b4d8fca6aa4a72631226cece9d7c836b4a53e55b67a0cc4e45ec82",
+        "tidegraph-smoke": "160729c7370690a457c4825242d4b53ca03b527d2b57900c5e60fd5c706d9dfe",
+        "tidegraph-kernel-check": "87f2c79cff6430dec182bc74d966997f2f108f40962af43346a334b4c6153f0e",
+        "tidegraph-full-check": "1ce669f39011d87925f3853d9014c3d26621fcbd66bed5a12251ef9e138e601c",
+        "tidegraph-aggregate-check": "00aa908a5dc723e766629a284447cc885eecfd9341c4939e33aaacc4b0ed2644",
+        "tidegraph-optimizer-check": "abd60756325b266927bd2103b24a33649fa8fea2b5d177c0c6f8c93dd3855e69",
+        "tidegraph-checkpoint-check": "6ef0fa9735d8487dcea3a6accf44ec4e325641a940e28955f146f656b3382822",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "c50230807c2b3dc9ab372f685a3d670499ae6e618831bfcd197448ae6cc724f5",
+        "tidegraph-scale-bench": "69d78714836fbefd42fc32a8671758ba7fa9c920cf4753148995a499f9b2c2d8",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "3df67a8a2873b737532c65858ef2203e305de463b4e693fc5ab59d3539cbb100",
+        "tidegraph-accelerator-check": "3ab14472e7535a1b71cedf04dd17b3d1b54dca9e6a19c7878000ba6b69b0e667"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.0.0"
+      },
+      "provenance": "frozen native-dev03 development build; exact C++ content equals implementation commit"
+    },
+    "native-cuda-dev03": {
+      "source": "adeb819f9722f80f02508007578a4ab5eee2f05e",
+      "cpp_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70",
+      "backend": "cuda",
+      "npu_runtime": null,
+      "torch": "2.10.0+cu128",
+      "torch_npu": null,
+      "cuda": "12.8",
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "4e2cf5b954fba5e808689a2819fdcabde0f50f5e188be016bddf674d919a5891",
+        "libtidegraph_runtime.a": "b30333b9f45d6f877b8ba0a87e6e809047238e63119f15dbc1bc73e984d46619",
+        "_tide_native.so": "865ec57962ffbd9642105305fe0d52ed5001add4467a36abb3bc84df243a5dd6",
+        "tidegraph-smoke": "114add25195da7945c83733ae914a925fb88afff011cf403d6d4d6cfc6d9575c",
+        "tidegraph-kernel-check": "6bc6982619ba10503e94a9d48eb72d59c3c4789d75b5058a2977cf3d312b5a87",
+        "tidegraph-full-check": "34dfbed1e00856dfc1aa3782cb64d1bddf8e0d73c773c2015d2aeb2838da2d8d",
+        "tidegraph-aggregate-check": "6730c33b159af60015c109ba65227a9cc2cf48afe792ecb9d5a7d60a18aa19d8",
+        "tidegraph-optimizer-check": "5712c687260728b281ce9031a73af5e0691aa281187c4635fc53b8c4cadf541e",
+        "tidegraph-checkpoint-check": "2c30cc40372b8242f67c2dc8bdaaea707e6c58c9bd383bc4e7e50428e82f54ce",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "9770c03b6f33f62f9ba0567b8a2ff9aa058691386f6f0f1d4ef3ab74990a45ce",
+        "tidegraph-scale-bench": "d427c9db445047a4349ce4366ba095d9e0461692d389591797e6e8054fbc3ed0",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "5aeab1adbceb9b6f487f729c24741274f80239efda5fae206aa31942c77f6e2a",
+        "tidegraph-accelerator-check": "a902b7e83c6962dbc64173e76aa1db74b25041ed4d8b9a02edb08487eb02bceb"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": null
+      },
+      "provenance": "frozen native-dev03 development build; exact C++ content equals implementation commit"
+    },
+    "native-npu-python-dev03": {
+      "source": "adeb819f9722f80f02508007578a4ab5eee2f05e",
+      "cpp_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70",
+      "backend": "npu",
+      "npu_runtime": "python",
+      "torch": "2.10.0+cpu",
+      "torch_npu": "2.10.0",
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "e5a1d360ea465304628be9ac60613b02a04adb1160c5ca8cab1e4bbccc912395",
+        "libtidegraph_runtime.a": "22a6acf84dfd37a0e495374272ad9ea9288d9cd06bc8d15041e742d27d76a604",
+        "_tide_native.so": "be47237097a672c19eb3b0df46eec6f4eab9a400395e1d4effdda14cdb7cdb4c"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.0.0"
+      },
+      "provenance": "frozen native-dev03 development build; exact C++ content equals implementation commit"
+    },
+    "native-npu29-python-dev03": {
+      "source": "adeb819f9722f80f02508007578a4ab5eee2f05e",
+      "cpp_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70",
+      "backend": "npu",
+      "npu_runtime": "python",
+      "torch": "2.9.0+cpu",
+      "torch_npu": "2.9.0",
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "6b06de3f139ebe2fbf33b947055e244f7fe14f331dc15033652a6fb4d38b041e",
+        "libtidegraph_runtime.a": "ad86bbf492f8852447d70c47d7fa3a8af1f6016a64956132535b250fea38fde6",
+        "_tide_native.so": "7fd2a7f768f5f598a148c19bc6aaf6aeb4073c7756d023f903e6c8458055a827"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "8.5.0"
+      },
+      "provenance": "frozen native-dev03 development build; exact C++ content equals implementation commit"
+    },
+    "native-npu-sdk-dev03": {
+      "source": "adeb819f9722f80f02508007578a4ab5eee2f05e",
+      "cpp_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70",
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch": "2.10.0+cpu",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "f2f901f8f630a2f22a3486b2afb4885c99c85b34d1d9cd77a2e279200ea2528c",
+        "libtidegraph_runtime.a": "affb8c9dcb9ea4e2cd88658aeed03d3c6e2e6714c3758c202f83ab33aa4465e8",
+        "tidegraph-smoke": "96585c5ffdd827522c31f65e1c69480ba4d016555605f546f17778bee95ffd35",
+        "tidegraph-kernel-check": "4af17f0cf0b2d774257fed56580f73c967acd9fa17547f8c2c9c87c55fd861f3",
+        "tidegraph-full-check": "188f697339334a6777f9d60ac7ec2d7194ba777dd649caeed591dd4eb7976969",
+        "tidegraph-aggregate-check": "dc89365834b7c321f6be63d93a3be504423e44d4922293d310e8e71f91cadd93",
+        "tidegraph-optimizer-check": "cd2adb5d9568eb930793f316c5fc10cb31d645d5fc32e3fa7fa5cd2e898aefe6",
+        "tidegraph-checkpoint-check": "94016c4a4d7b0cfd1b6a9b45fc4c196d5bf866c5b90b431b7648d711b029c15f",
+        "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+        "tidegraph-streaming-bench": "67d465da45aba51b507d1dc0bb936ea25a9b30344ad8c37601563fd97cf3e333",
+        "tidegraph-scale-bench": "baeda5c7d37937f7a1eedde5f35a9e2666861b8af822674853cfbdf2816a144f",
+        "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+        "tidegraph-settle-check": "643764293208f79f827abef80607e251c17330344f3b34791ee418ea9599742d",
+        "tidegraph-accelerator-check": "c6eb772cc4170d26aa728a2a34ca650330878a6455557ad52fdf6757428e76f2"
+      },
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "cann_version": "9.0.0"
+      },
+      "npu_sdk": {
+        "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+        "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+      },
+      "provenance": "frozen native-dev03 development build; exact C++ content equals implementation commit"
+    }
+  },
+  "device": "Ascend910_9392",
+  "architecture": "aarch64",
+  "driver": "25.3.rc1",
+  "tolerances": {
+    "float32": {
+      "atol": 1e-06,
+      "rtol": 1e-05
+    },
+    "float64": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    }
+  },
+  "limits": [
+    "CUDA device execution pending; local CUDA build/CPU checks only",
+    "x86_64 rebuild and execution pending",
+    "NPU FP64, FP64 Read and CSR fiber pooling unsupported",
+    "finite eager single-device FP32 cases, no distributed/AMP/performance claim",
+    "standalone NPU SDK qualified only with Torch/TorchNPU2.10 and CANN9.0",
+    "CANN8.5.1/8.5.2 are exact-site empirical results, not a broad official compatibility claim"
+  ],
+  "cpu": {
+    "tests": 8636,
+    "seconds": 1618.89,
+    "report_sha256": "8e0ef132c7b61354be04cda09c79f680c050cfda8fdba5257a626b6ea37ae8c6",
+    "complex_cells": 22,
+    "complex_sha256": "8da9af0e3dc34049877c54f460e1e515a7ca8dc7336ea8b66a5de680f5f2fc5a",
+    "installed_checks": 10,
+    "consumer_sha256": "07341c7cd9db2884c8e3ee90e3d2a6996186a299fe6c457c213afc75e240190d",
+    "tests_log_sha256": "c39917312d8bb5fc10830ab9cca5314ed8415609aeba94f64483fa0e27d5f136"
+  },
+  "cuda_host": {
+    "tests": 38,
+    "seconds": 81.73,
+    "tests_log_sha256": "e7dfa4e1c4a5f13ed29a30a8ce7a048bd9794f348fca303ec844dd621b2f7bc8",
+    "device_execution": false
+  },
+  "migration_fixture": {
+    "input.pt": "c7ebce165b8d6208cad72fc3c240f165ff121369793e44bca06f0c252e9e6aa4",
+    "cpu-trajectory.pt": "e8a4ee10f5c52a8552134c47c1940c797a27355098d4fde4c762b6870042ab42",
+    "cpu-continuation.pt": "6ccb343596dff433fc4e02f46860f9872fc8586a7c90984e0b77237afecdf58b",
+    "result.json": "fe551a5ca3016c99d8e0bdbb8a7bca93d7f8f8beef9e8dd35ef5023e9a24d82b"
+  },
+  "standalone_profile": {
+    "operators": 7015,
+    "task_types": {
+      "AI_VECTOR_CORE": 6143,
+      "MIX_AIV": 788,
+      "AI_CORE": 84
+    },
+    "sha256": "a231329d6835aefdfc70763a3e63d921d747603fac8275693b82e9f6f02a13de"
+  }
+}

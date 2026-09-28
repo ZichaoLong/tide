@@ -39,11 +39,17 @@ installed in isolation. Local site paths belong in launch records, not library c
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| A1 | Python CUDA/NPU public runtime and configuration CPU parity, live placement, VJPs, training and checkpoint handoff | implemented; final gate pending |
-| A2 | Native device-neutral execution, isolated backend builds, standalone C++ CUDA/NPU lifecycle and clients | implemented; final gate pending |
-| A3 | Configuration matrix across families/modules/schedules, placement/fallback evidence, installed Python/native/C++ use | planned |
-| A4 | Clean full CPU regression, local NPU acceptance and CUDA compilation without device claims | planned |
-| A5 | Matched local CANN versions and portable target-machine environment/qualification reports | planned |
+| A1 | Python CUDA/NPU public runtime and configuration CPU parity, live placement, VJPs, training and checkpoint handoff | NPU verified across four CANN stacks; CUDA implemented, device gate pending |
+| A2 | Native device-neutral execution, isolated backend builds, standalone C++ CUDA/NPU lifecycle and clients | NPU verified, standalone SDK on 2.10/CANN9.0; CUDA build/CPU checks passed, device gate pending |
+| A3 | Configuration matrix across families/modules/schedules, placement/fallback evidence, installed Python/native/C++ use | verified locally: 328 positive NPU cases, four CSR rejections, hardware traces and installed consumers |
+| A4 | Clean full CPU regression, local NPU acceptance and CUDA compilation without device claims | verified: 8636 CPU tests, 22 complex cells, installed consumers; no CUDA device claim |
+| A5 | Matched local CANN versions and portable target-machine environment/qualification reports | four local stacks verified; migration fixtures/commands delivered, target-machine executions pending |
+
+[Immutable accelerator evidence](evidence/accelerators-20260928.md) records exact
+source, finite scope, failures and environmental boundaries. The remaining external
+acceptance is a rebuild and full device suite on NVIDIA hardware and on each new
+host/software combination, including x86_64; CUDA FP64 needs its own gate.
+Use [the target-machine commands](accelerators.md#target-machine-acceptance).
 
 Initial accelerator contract: single-device eager FP32; CPU FP32/FP64 preserved.
 CUDA FP64 is a separately qualified capability. FP16/BF16/AMP, distributed jobs,

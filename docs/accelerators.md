@@ -30,6 +30,11 @@ python scripts/build.py --backend cuda --build-dir build/cuda --jobs 2
 python scripts/build.py --backend npu --npu-runtime python --build-dir build/npu-python --jobs 2
 ```
 
+The installed-consumer verifier explicitly preserves the selected Torch when
+creating a nested virtual environment. Python's `--system-site-packages` alone
+inherits the base interpreter's environment; confirm `torch.__version__` and
+`torch.__file__` when constructing an experiment environment inside another venv.
+
 Each command is run in its matching environment. CUDA CMake discovery may also
 need a matching CUDA toolkit; on a host without a GPU set a target-specific
 `TORCH_CUDA_ARCH_LIST` supported by that toolkit. Tide uses standard ATen and

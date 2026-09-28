@@ -2,72 +2,106 @@
 
 Updated: 2026-09-28 (Asia/Shanghai). Branch: graph-execution-foundation.
 
-## Authorized work and implementation boundary
+## Delivery and source boundary
 
-Python/LibTorch × CUDA/Ascend NPU for the reusable Tide library. Single-device
-eager FP32 accelerator baseline; CPU FP32/FP64 remains required. Preserve
-independent schedules, graph semantics, public Session and standalone C++ use.
-CUDA live execution belongs to the target machine. Matched local CANN testing
-and installations are authorized. No subagents or pushes.
+Python/LibTorch × CUDA/Ascend NPU implementation and local acceptance are complete.
+The reusable GraphConfig → GraphRuntime → Session contract, independent reference
+schedules, CPU FP32/FP64, graph semantics and checkpoint versions are preserved.
+Experiments continue to own data, heads, losses and training orchestration.
+Accelerator scope is single-device eager FP32. No subagents or pushes.
 
-A1 is adeb819. A2 is ready for its implementation commit: isolated native
-backends, separate standalone/Python NPU lifecycle, checkpoint/optimizer device
-placement, worker streams, CMake exports, finite suites, profiling and consumers.
-NPU FP64/FP64 Read and optional CSR pooling are explicit unsupported capabilities.
-No semantic/checkpoint version changes or task heads/data enter the library.
+Implementation commits: adeb819 (Python qualification), 10cd630 (native runtimes,
+configuration suites, profiling and consumption), bf4ac1c (consumer verifier keeps
+the selected Torch in a nested venv). That last correction changes no runtime,
+Python package or C++ execution code. The subsequent evidence commit changes only
+documentation and the support matrix; see Git HEAD for its exact identity.
 
-Directed evidence (development snapshots, not final release acceptance):
-- native-dev03: CPU/CUDA/NPU Python/NPU standalone and Torch2.9 NPU builds passed.
-  Current C++ hash matches all five build manifests.
-- native-cpu-tests-dev02: 65 passed; follow-up 12 CPU boundary/standalone tests passed.
-- native-dev02/dev04/dev05: every supported expanded NPU case passed across
-  directed runs (39 Python, 43 native); CSR policy rejection verified separately.
-- native-sdk-test-dev04: independent C++ NPU ring/diamond, VJPs, three AdamW
-  updates, nondefault worker streams and same-device/CPU checkpoint passed.
-- native-owners-dev04: native SGD/AdamW aliases, None/zero gradients and restored
-  device slots passed. Installed Python/native (9 checks) and independent CMake
-  NPU consumers passed; loader closure has no Python or stubs.
-- python/native-profile-dev04: 1295/1013 hardware kernels observed; default
-  profiler scratch location polluted the snapshot directory. Fixed to output cwd.
-  Host copies/scalar decisions remain observable; no exhaustive no-fallback claim.
-- Clean adeb819 Python initial 10 cases passed CANN8.5.0/8.5.1/8.5.2/9.0.0.
+Reviewed results: [accelerator report](evidence/accelerators-20260928.md),
+[structured manifests/hashes](evidence/accelerators-20260928.json),
+[build and target-machine commands](accelerators.md).
 
-Task root: /mi/data2T/zlong/tide-accelerator, with sources/, builds/, runs/.
-Each run is exposed by artifacts/accelerator-NAME; status.json, task.log,
-queue.json and gate/result.json retain exact source/environment/device evidence.
-Historical failures remain: missing self-loop size, invalid periodic fixture,
-standalone generic RNG hook, profiler JSON/scratch handling, NPU sparse CSR,
-and cuda-host-dev05 missing pytest. Reproducers retained. GPU environment now
-has pytest9.1.1; no framework upgrades were performed.
+## Terminal acceptance
 
-## Active immutable qualification
+All 22 final qualification jobs passed with exit 0 and inactive systemd units.
+No qualification jobs remain active. Exact names, commands, source identities,
+start/finish times and report hashes are in the structured evidence.
 
-Implementation committed as 10cd630. All A2 jobs read the clean frozen
-sources/accelerator-a2. cpu-a2 runs full CPU regression, 22 complex cells and
-installed consumers against matching builds/native-cpu-dev03. Eight Python/native
-complete suites run CANN850/851/852/900. SDK/profile/owners/installed NPU gates
-also submitted. No active job is a passing result.
+- cpu-a2 at clean 10cd630: 8636 CPU tests (1618.89 s), all 22 complex topology
+  cells and ten installed Python/native/C++ checks.
+- python/native-cann850/851/852/900-a2: 39 Python and 43 native supported cases
+  per stack, totaling 328 positive gates; four explicit unsupported CSR gates.
+  Full observables/VJPs, chunks, three AdamW updates, fresh-process resume and
+  NPU-to-CPU checkpoint handoff pass at unchanged FP32 tolerances.
+- sdk-a2: independent standalone C++ NPU ring/diamond, backward, owner sharing,
+  three AdamW steps, nondefault worker streams and NPU/CPU checkpoint loading.
+  owners-a2 separately covers SGD momentum/AdamW alias/None/zero-gradient slots.
+- installed-python-npu-a2: nine checks. installed-cpp-npu-a2: independent CMake
+  consumer and loader closure without Python/stub dependencies.
+- python/native-profile-a2: 1295/1013 accelerator kernels; standalone msprof:
+  7015 operators. Reviewed traces/logs show no CPU-fallback event or diagnostic;
+  this is finite placement evidence, without performance or exhaustive claims.
+- cuda-host-a2: 38 directed tests on CPU in the CUDA-linked stack.
+  installed-cpp-cuda-host-a2 passed loader/CPU checks. Clean bf4ac1c installed
+  consumers passed ten checks each on CPU and the CUDA-linked CPU stack.
+- migration-golden-a2 and migration-check-cpu/npu-a3: independent CPU mixed
+  TimedDAG three-step trajectory and CPU-to-native-NPU checkpoint restore pass.
 
-Terminal so far: cuda-host-a2 passed; installed-cpp-cuda-host-a2 passed;
-sdk-a2 passed native C++ with msprof trace. installed-cuda-host-a2 failed because
-creating a nested venv inherited the base CPU Torch rather than the selected
-CUDA Torch. Fix is limited to scripts/library_consumer.py: explicit selected
-dependency site path and a distribution assertion. The isolated
-installed-cuda-host-dev06 passed all 10 installed Python/native/C++ checks.
-Commit this verification-only correction, then qualify installed-cuda-host-a3
-and installed-cpu-a3 from a clean accelerator-a3 snapshot.
+Task root: /mi/data2T/zlong/tide-accelerator. Each run is linked as
+artifacts/accelerator-NAME, with status.json, task.log and gate/result.json
+(or profile/result.json); NPU queue.json records physical placement. Units are
+tide-accelerator-NAME.service in background.slice, with two build workers and
+single-thread CPU pools. All five native builds retain their development-origin
+identity and binary hashes; their C++ content exactly equals committed 10cd630.
 
-Units are tide-accelerator-NAME, in background.slice; runs/NAME contains exact
-commands/log/status and NPU queue assignments. Two build workers/one CPU thread.
-Next: inspect all terminal gates, commit tested consumer correction separately,
-qualify its immutable consumer behavior, and commit reviewed evidence/matrix.
-Keep working until full qualification is terminal. No runtime C++ or algorithm
-changes after 10cd630; source hashes/binary reuse remain explicit.
+Earlier failures remain failed and retained: self-loop/periodic fixtures,
+standalone generic RNG hook, profiler list parsing/scratch output, unsupported NPU
+CSR, missing CUDA pytest and nested-venv selection of CPU Torch. Corrected runs
+have separate source/run identities. No tolerance was enlarged.
 
-## Environments
+## Environments and limits
 
-Public CANN8.5.0/8.5.1/8.5.2 + Torch/TorchNPU2.9.0; CANN9.0.0 +2.10.0.
-Standalone SDK libtorch-npu/2.10.0-cann9.0.0; private CUDA
- torch-cuda/2.10.0-cu128. Host aarch64, Ascend910_9392; NVIDIA GPU absent.
-Previous CPU release: 8621 tests +22 complex cells at ff708a1; follow-up at
-aa03a03. Historical results do not qualify A2. See evidence/library-foundation.md.
+Host aarch64, Ascend910_9392 (A3), public driver25.3.rc1; NVIDIA GPU absent.
+Public modules ascend/dev-workspace-8.5.0, -8.5.1 and -8.5.2 use Torch/TorchNPU2.9;
+ascend/dev-workspace-9.0.0 uses 2.10. CANN8.5.1/8.5.2 are exact-site empirical
+results, not an expansion of official compatibility claims. No new CANN install
+was needed. Runtime driver libraries remain under the existing public setup.
+
+Standalone module libtorch-npu/2.10.0-cann9.0.0 is qualified only for that tuple.
+Never load its library into Python's TorchNPU wheel process. Private CUDA module
+is torch-cuda/2.10.0-cu128 via module use ~/privatemodules; the toolkit is 12.8.1.
+CUDA toolchains remain under /mi/data2T/zlong, public NPU stacks under /opt.
+
+NPU FP64, norm-fp64-v1 Read and optional CSR fiber pooling are unsupported;
+public adapters reject explicitly. Standalone C++ callers must avoid CSR.
+Native TIDENCK1 stores named weights/optimizer slots, not graph continuation.
+CUDA hardware execution/FP32/FP64 parity and every x86_64 build remain unverified.
+AMP/low precision, distributed jobs, compilation/fused kernels and performance
+qualification remain separate extensions.
+
+## Migration handoff and next target-machine action
+
+Delivery artifact location: artifacts/accelerator-migration (outside Git, on
+/mi/data2T). Its README.md contains explicit CPU/CUDA/NPU commands;
+packet-manifest.json records the clean export commit and fixture hashes;
+SHA256SUMS covers the transferable source, fixtures and helper. The adjacent
+archive/checksum is for copying to another host. No toolchains or binaries are
+part of the source packet. Delivery verification is recorded in the artifact's
+status.json; it checks relocation against the independent CPU golden fixture.
+
+For a new machine activate a matching toolchain, check the archive/content hashes,
+then use Python3.11 and distinct build/output directories. From the exported source:
+
+```sh
+python scripts/build.py --backend cpu --build-dir build/cpu --jobs 2
+python scripts/qualify_library.py --reuse-build --build-dir build/cpu --output-dir artifacts/cpu-001
+python scripts/build.py --backend cuda --build-dir build/cuda --jobs 2
+python scripts/qualify_accelerator.py --device cuda:0 --implementation python --output-dir artifacts/cuda-python-001
+python scripts/qualify_accelerator.py --device cuda:0 --implementation native --native-library build/cuda --output-dir artifacts/cuda-native-001
+```
+
+Run the packet's golden check, standalone C++/owner/profile/installed-consumer
+commands as well. Qualify CUDA FP64 separately using --dtype float64. For NPU,
+follow the two-runtime recipe in accelerators.md. Record each exact host/device,
+Torch/vendor/driver/ABI tuple and keep target failures; update support claims
+only after its required gates pass. No additional local full regression is
+needed for this documentation-only evidence update.
