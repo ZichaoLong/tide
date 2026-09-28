@@ -70,15 +70,20 @@ reference while adding declared FP32 Read/control placements.
 | --- | --- | --- |
 | P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | verified: immutable CPU/2/8-NPU small and real-topology gates; explicit VJP policy, see [evidence](evidence/accelerator-scale-20260928.md) |
 | P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | verified: local Trackio success and timeout cleanup; immutable consumer build |
-| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | full-size token processing overlapped across disjoint-device a3 pilots; matched repetitions and controlled concurrent throughput pending |
-| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | both models passed CPU-FP32 two/four-card no-grad and four-card memory/locality cells; retained Attention2 grad-forward OOM and successful Attention4 follow-up in [performance evidence](evidence/accelerator-performance-20260928.md); eight-card scaling/repeats pending |
-| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | verified CPU/two-NPU:34 cells and device trace; [qualification](evidence/accelerator-scoring-20260928.md); both full-size models passed all seven inference screens in [performance evidence](evidence/accelerator-performance-20260928.md); matched repetitions pending |
-| P6 | Independent NPU node-selection/event-scheduling candidates; validate then choose by inference/training performance | verified correctness: clean CPU/2/4/8-device gates; [200-cell dispatch/training qualification](evidence/accelerator-dispatch-training-20260928.md); all inference and Add cold-training candidates passed; CPU FP32 advances to repeats, default unchanged |
-| P7 | Full-size backward and optimizer-step performance, independently checked before implementation selection | complete-window CE/backward/SGD/AdamW correctness verified on CPU/2/4/8 devices; Add4 passed seven full12-token cold AdamW updates in [performance evidence](evidence/accelerator-performance-20260928.md); three Add4 warmed repeats passed (median42.080ms/sample-token), Attention8 cold screen running |
+| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | verified finite assessment: three fixed-group inference pairs per model and one concurrent Add2/Attention4 workflow; [54-cell performance evidence](evidence/accelerator-performance-20260928.md), no causal parallel-speedup claim |
+| P4 | Same-model 2/4/8-device memory/locality placement; full-size no-grad and grad-forward windows, explicit limits | verified finite assessment: both models no-grad at 2/4/8 devices, memory/locality at four; retained Attention2 grad-forward OOM and successful Attention4 follow-up; descriptive placement/scaling, not causal speedup |
+| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | verified: [34-cell scoring gates](evidence/accelerator-scoring-20260928.md), seven full-size inference candidates/model and three fixed-group CPU64/CPU32 pairs/model; reference/default retained where selection is unresolved |
+| P6 | Independent NPU node-selection/event-scheduling candidates; validate then choose by inference/training performance | verified: [200-cell correctness gates](evidence/accelerator-dispatch-training-20260928.md), all seven inference and cold-training candidates/model; finite performance choices documented, public CPU defaults unchanged |
+| P7 | Full-size backward and optimizer-step performance, independently checked before implementation selection | verified: full-window training correctness on CPU/2/4/8 devices; seven cold updates/model and three warmed processes/model. Add4 CPU32 median 42.080 and Attention8 mixed32 median 115.678 ms/sample-token; synthetic throughput, not convergence |
 
-Full-size pilot timings are descriptive until matched repetitions complete.
-CPU coordination, configured Read/controls and all device-transfer overhead belong
-in timing; host state is confined to the explicitly named comparison transport.
+The bounded local assessment is complete. Screens and placement/scaling remain
+descriptive; matched inference uses three fresh process pairs per model and
+warmed training uses three processes per selected configuration. The single
+concurrent workflow is not a causal parallel-speedup measurement.
+Resident state/KV/message payloads remain on the assigned devices. Integer
+histories, tensor handles and C++ dispatch remain host-owned. Configured Read,
+controls, dispatch, executor guards and transfers contribute to the declared
+synchronized timing; explicit byte counters do not measure all transport.
 See [the consumer contract](accelerator-scale.md).
 
 ## Six implementation classes

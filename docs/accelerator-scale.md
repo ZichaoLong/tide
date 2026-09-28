@@ -4,8 +4,10 @@ This standalone consumer links the installed Tide C++ core. It does not extend
 the public single-device runtime or import checkpoints. Immutable CPU/2/8-NPU
 small-tensor qualification passed, including the465-node topology with the
 explicit numerical policy below. See [qualification evidence](evidence/accelerator-scale-20260928.md).
-Full-size performance has [completed exploratory screens](evidence/accelerator-performance-20260928.md);
-remaining repeated/training work is tracked in `STATUS.md`.
+The [bounded full-size performance assessment](evidence/accelerator-performance-20260928.md)
+is complete: 54 cells cover inference, placement, complete training, matched
+repetitions and a concurrent workflow. This does not qualify arbitrary scales
+or hardware/software combinations.
 
 The targets are the historical D2048/B512/V50304, 465-node topology:
 17,269,426,339 Attention parameters and 9,468,020,899 Add parameters. The latter
@@ -134,9 +136,15 @@ Formal runs use `scripts/benchmark_accelerator_scale.py`, a clean frozen source,
 explicit device/count, copied topology, bounded time/RSS and fresh output paths.
 There are 12 growing-context tokens: four warmup, eight measured. Every timed
 token includes embedding, body, vocabulary head, transfers and device barriers.
-Setup, IDs, previous-logit release and validation/metrics are outside timing.
+Setup, IDs, previous-logit release and final-logit validation/metrics are outside
+timing. The executor's own descriptor/device guards remain inside the body timer.
 Raw JSONL, atomic run/summary records, binary/input identities, physical mapping,
 per-device allocator memory and an optional local Trackio projection are retained.
+Transfer byte counters cover explicit client requests and metadata paths;
+autograd reverse copies, scalar extractions and internal vendor transport are not
+included in those counters. Remote message bytes are logical forward payload
+volume, not measured fabric traffic. Such work still contributes to synchronized
+timing when it occurs within the timed phases.
 Independent concurrent processes and one model spanning devices are separate
 experiments; comparisons must record contention and physical assignments.
 
@@ -164,7 +172,8 @@ optimizer updates, separately from the historical inference token warmup.
 Timing includes zero_grad, empty-window executor initialization, IDs, embedding,
 body, vocabulary head, cross-entropy, backward and optimizer update, with all-shard
 barriers between phases. Model construction, previous-window loss/graph destruction
-and validation/metrics are excluded. Phase times, total update time, normalized
+and terminal loss validation/metrics are excluded. Executor descriptor guards
+remain inside forward timing. Phase times, total update time, normalized
 ms/sample-token, loss, gradient-owner inventory and optimizer-state inventory are
 recorded. These are throughput measurements of synthetic full training steps, not
 training-convergence evidence. Training phase timings are not interchangeable with
@@ -176,4 +185,6 @@ exact discrete decisions, loss, every parameter gradient including None/zero,
 updated weights and optimizer slots. The ordinary isolated-root VJP check also runs.
 Training/dispatch correctness passed the
 [immutable CPU/two/four/eight-device gates](evidence/accelerator-dispatch-training-20260928.md).
-Performance selection is a separate full-size experiment recorded in STATUS/evidence.
+The [completed full-size assessment](evidence/accelerator-performance-20260928.md)
+records separate inference and training choices, process variance and retained
+capacity failures. Public defaults remain unchanged.

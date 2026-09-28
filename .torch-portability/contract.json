@@ -586,6 +586,34 @@
           "test_command": "tidegraph-accelerator-check --device npu:0 --dtype float32 --output-dir NEW; installed consumer and exact finite consumer commands in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/standalone-sdk29-20260928.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+          "scope": "Standalone historical-topology consumer on TorchNPU2.10/CANN9.0: independent CPU oracle and 2/4/8-NPU gates, 200 total configuration cells plus 4 analytic dispatch gates. Complete values/routes/state/history, isolated VJPs, None/zero connectivity, three optimizer updates and slots. Real 465-node topology uses reduced D8/B1 and explicit basis-conditioned VJP policy. Single-process model sharding; public single-device API unchanged.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "CPU/2/4/8-device consumer qualification commands and immutable input/result identities in the cited report and adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerator-dispatch-training-20260928.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+          "scope": "54 full-size standalone-consumer cells on A3/TorchNPU2.10/CANN9.0: D2048/B512/V50304, Add9.468B and Attention17.269B, seven inference/cold-training choices each, 2/4/8-device measurements, three warmed training processes and three matched inference pairs per model, one concurrent Add2/Attention4 workflow. FP32 payload, 12-token windows, TASK_QUEUE_ENABLE=0. Finite synthetic throughput/capacity only; single-process model sharding, not DDP/HCCL; no arbitrary-shape, convergence or causal scaling claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "workload"
+          ],
+          "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; exact per-cell configurations, source/binary/record hashes and timing scopes in the cited report and adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerator-performance-20260928.md"
         }
       ]
     },
