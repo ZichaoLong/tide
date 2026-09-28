@@ -25,7 +25,7 @@ Never silently shrink topology/dimensions/precision. Contract: accelerator-scale
 
 ## Code and gates
 
-Implementation HEAD a12ee0c; previous handoff08a6a27; baseline bb0ecc6.
+Implementation commit a12ee0c; scoring-qualification handoff2188190; baseline bb0ecc6.
 Frozen perf-a2/client-{cpu,npu}-a2 passed immutable CPU/2/8-NPU tiny gates and
 real465-node D8/B1 gates. Evidence: evidence/accelerator-scale-20260928.{md,json}.
 Default strict VJP remains rtol1e-5/atol1e-6. Wide Add Full squared-norm gradients
@@ -72,36 +72,62 @@ kernels on both chips (softmax includes model operations). Reviewed evidence:
 evidence/accelerator-scoring-20260928.{md,json},separate from implementation.
 NPU8 new scoring mode,full backward/optimizer timing,and CUDA remain unverified.
 
-## Live full-size FP32 Read/control pilots
+## Full-size FP32 Read/control results (inspected 20:09 CST)
 
-All use clean perf-a3/a12ee0c,client-npu-a3,libtorch-npu/2.10.0-cann9.0.0.
-Submitted via launchers/submit-scoring-pilots-a3.py after all immutable gates passed.
-Authoritative exact commands,budgets/prerequisites: task-root/runs/scoring-pilots-a3.json.
-Common command: /home/zlong/venvs/trackio/bin/python scripts/benchmark_accelerator_scale.py
---device npu --devices 2 --placement locality --transport resident
---read-device model --read-dtype float32 --control-device model
---width 2048 --batch 512 --vocab 50304 --steps 12 --warmup 4 --seed 7 --workers 16 --threads 1
---timeout-seconds 1800 --memory-gib 512; exact paths/argv are in the JSON.
-Cwd task-root/sources/perf-a3; wide.txt input SHA256:
-d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4.
+All four a3 pilots have ended. Source perf-a3/a12ee0c,client-npu-a3,
+NPU model-device FP32 Read/controls,locality/resident,D2048/B512/V50304,
+seed7,12 requested tokens,4 warmup,1800s native and512GiB RSS cap.
+Exact commands/prerequisites: task-root/runs/scoring-pilots-a3.json.
 
-Last observed 17:49 CST:
-- pilot-add-g0-n2-a3 RUNNING,physical9,11 (logical0,1),construction92.232s,
-  reached token5. Parameters exactly9,468,020,899.
-- pilot-attention-g0-n2-a3 RUNNING,physical1,5 (logical0,1),construction185.276s,
-  reached token0. Parameters exactly17,269,426,339.
-- pilot-add-g1-n2-a3 RUNNING,physical2,8 (logical0,1),constructing.
-- pilot-attention-g1-n2-a3 QUEUED,position1,insufficient free devices.
-Each has its own background.slice service tide-npu-performance-NAME.service;
-queue max7500s,native max1800s,RSS512GiB,12 tokens;source remains frozen.
-The two no-grad PIDs were confirmed on both assigned chips via npu-smi,including
-113MiB contexts on Attention's second chip during CPU construction. No full-size
-FP32 timing conclusion yet. These are capacity/timing pilots with shared-host
-contention; three-repeat matched2/4/8-card placement/precision comparison pending.
-Next: inspect each runs/NAME/{status.json,queue.json,task.log,run/stdout.log,
-run/run.json,run/summary.json,run/lifecycle.json}; require exit0,12 tokens,8 measured,
-no remaining children,and validate_run_record.py. Preserve OOM/timeouts; do not
-repeat unchanged failures or treat construction overlap as concurrent throughput.
+- pilot-add-g0-n2-a3 PASSED,physical9,11,mean41.6797ms/sample-token,
+  max per-device peak allocation19.874GiB;12 tokens/8 measured,exit0.
+- pilot-attention-g0-n2-a3 PASSED,physical1,5,mean100.0539ms/sample-token,
+  max per-device peak allocation42.653GiB;12 tokens/8 measured,exit0.
+- pilot-add-g1-n2-a3 PASSED,physical2,8,mean64.5930ms/sample-token,
+  max per-device peak allocation27.252GiB;12 tokens/8 measured,exit0.
+- pilot-attention-g1-n2-a3 FAILED (OOM),physical9,11,completed7 tokens
+  (indices0..6),failed during token7. Native log reports logical0 allocated
+  58.66GiB,reserved61.05GiB,free1.71MiB;failed2MiB allocation. This is a
+  capacity limit for the current placement/no-detach grad-forward window,
+  not a correctness failure or a completed latency result.
+
+All four records validated,tracking healthy,no remaining child processes.
+Three successful tests are descriptive concurrent pilots,not controlled speedup
+comparisons. Timing overlap exists beyond construction: Add no_grad/Attention
+no_grad/Add grad-forward produced tokens during overlapping time spans. Token
+end timestamps/raw durations are in each run/metrics.jsonl. Explicit vector
+D2H counter is zero; CPU ranking/scalar extraction remains and is not in that
+counter. Previous CPU FP64 results differ in devices and/or contention.
+
+## Active capacity/control follow-ups (inspected 20:17 CST)
+
+Both jobs use frozen perf-a3/a12ee0c and client-npu-a3. Exact submission
+commands, budgets and launcher hash: task-root/runs/capacity-control-followup-a3.json.
+Both full-size stages retain1800s native/512GiB RSS/12 tokens/4 warmup.
+Unit: tide-npu-performance-NAME.service. These are new capacity/control cases,
+not unchanged reruns of the failed two-device Attention placement.
+
+- pilot-attention-g1-n4-a3: RUNNING, physical1,5,9,11, run run-f49bcacf.
+  Stage states: tiny-gates=passed, wide-attention-gate=passed, full-size=running.
+  Model construction176.396s; token indices0..2 completed at inspection.
+  Four tiny resident cells and465-node D8/B1 Attention gate passed before
+  full-size execution; complete observables/isolated VJPs, explicit basis-conditioned wide gate.
+- pilot-add-g0-n2-cpuctrl-a3: PASSED, physical2,8, run run-823df71d.
+  NPU FP32 Read with CPU FP32 controls; no-grad Add on two devices.
+  Native exit0, 12 tokens/8 measured; tracking=healthy, record validated, no children.
+  Mean27.9618ms/sample-token; exploratory, not a matched speedup comparison.
+
+Inspect: python scripts/status.py; then read task-root/runs/NAME/status.json,
+queue.json and run/{summary.json,stdout.log,metrics.jsonl}; for Attention also
+stages.json and {tiny-gates,wide-attention-gate,full-size}.log. Validate a terminal
+record with python /home/zlong/.agents/skills/run-ml-experiments/scripts/validate_run_record.py
+task-root/runs/NAME/run. Never infer passage from unit inactivity.
+Trackio: project tide-npu-performance, best-effort local, task-root/trackio,
+storage auto; viewer interpreter /home/zlong/venvs/trackio/bin/python.
+Next: inspect Attention terminal records; preserve failure; then matched2/4/8-card
+placement/precision repetitions, complete backward/optimizer measurement, and
+independent NPU ranking/scheduling. CUDA hardware validation stays pending.
+Completed original a3 pilots: evidence/accelerator-scoring-pilots-20260928.{md,json}.
 
 ## Full-size results and concurrency correction
 
@@ -124,7 +150,7 @@ four-card no_grad numbers or claim matched/repeated speedups.
   entered allocated physical2,8 (its pool1,2,5,8). Only our process was stopped.
 Evidence: runs/parallel-pilots-a2c-{results,device-contention}.json.
 Original fixed-four queued a2b grad pilots and earlier a2 pilots cancelled;
-all records retained. Current a3 full-size pilots are recorded above.
+all records retained. Terminal a3 full-size results are recorded above.
 
 The user correctly identified avoidable serialization. New pool is twelve
 eligible devices1,2,5,6,7,8,9,11,12,13,14,15,not twelve allocated chips.

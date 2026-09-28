@@ -70,10 +70,11 @@ reference while adding declared FP32 Read/control placements.
 | --- | --- | --- |
 | P1 | Standalone C++ resident/host placement clients; exact parameter/topology identities; CPU oracle at small sizes | verified: immutable CPU/2/8-NPU small and real-topology gates; explicit VJP policy, see [evidence](evidence/accelerator-scale-20260928.md) |
 | P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | verified: local Trackio success and timeout cleanup; immutable consumer build |
-| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | in progress: disjoint-device pilots overlapped during construction; external device contention recorded; no concurrent throughput claim yet |
-| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | four-card no_grad Add/Attention and two-card Add grad-forward pilots passed; scaling/repeats pending |
-| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | verified CPU/two-NPU:34 cells and device trace; [evidence](evidence/accelerator-scoring-20260928.md); full-size FP32 pilots running |
+| P3 | Independent concurrent configuration benchmarks, with resource interference recorded | full-size token processing overlapped across disjoint-device a3 pilots; matched repetitions and controlled concurrent throughput pending |
+| P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | four-card CPU-Read no_grad Add/Attention and two-card Add grad-forward passed; NPU-Read two-card Attention grad-forward hit capacity; four-card capacity follow-up submitted; scaling/repeats pending |
+| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | verified CPU/two-NPU:34 cells and device trace; [qualification](evidence/accelerator-scoring-20260928.md); full-size FP32 pilots:3 passes/1 OOM, [results](evidence/accelerator-scoring-pilots-20260928.md); CPU-control Add follow-up passed; matched repetitions pending |
 | P6 | Independent NPU node-selection/event-scheduling candidates; validate then choose by inference/training performance | authorized, planned; current sorting/scheduling remains CPU |
+| P7 | Full-size backward and optimizer-step performance, independently checked before implementation selection | pending; current multi-device full-size benchmark measures no_grad or retained-history grad-forward only |
 
 Full-size pilot timings are descriptive until matched repetitions complete.
 CPU coordination, configured Read/controls and all device-transfer overhead belong

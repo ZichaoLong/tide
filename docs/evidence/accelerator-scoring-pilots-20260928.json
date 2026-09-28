@@ -1,0 +1,261 @@
+{
+  "schema": "tide-full-size-scoring-pilots-v1",
+  "date": "2026-09-28",
+  "implementation": "a12ee0c676faa80096db4034595b581db11a5f22",
+  "classification": "individual concurrent pilots; not controlled comparisons",
+  "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+  "environment": {
+    "host_arch": "aarch64",
+    "device": "Ascend910_9392",
+    "torch_npu": "2.10.0",
+    "cann": "9.0.0",
+    "driver": "25.3.rc1",
+    "task_queue_enable": 0
+  },
+  "workload": {
+    "nodes": 465,
+    "logical_edges": 2208,
+    "physical_edges": 4418,
+    "width": 2048,
+    "batch": 512,
+    "vocab": 50304,
+    "parameters": {
+      "add": 9468020899,
+      "attention": 17269426339
+    },
+    "body_ticks_per_token": 2,
+    "requested_tokens": 12,
+    "warmup": 4,
+    "seed": 7,
+    "dtype": "float32",
+    "read_device": "model",
+    "read_dtype": "float32",
+    "control_device": "model",
+    "transport": "resident",
+    "placement": "locality",
+    "devices": 2,
+    "backward": false,
+    "optimizer": false,
+    "detach": false,
+    "workers": 16,
+    "aten_threads": 1,
+    "native_timeout_seconds": 1800,
+    "rss_limit_gib": 512
+  },
+  "timing": {
+    "metric": "perf/ms_per_sample_token",
+    "definition": "all-shard synchronized batch token duration / 512 * 1000",
+    "included": "embedding, body, head, CPU coordination and timed device transfers",
+    "excluded": "construction, ID creation, previous logits disposal, metrics",
+    "single_request_latency": false
+  },
+  "limitations": [
+    "One run per case, seed7 only; timing spans overlap and host resource interference is possible.",
+    "Different card counts/precision/contention prevent causal comparison with earlier CPU-FP64 pilots.",
+    "Explicit vector D2H byte counter excludes scalar extraction and metrics/validation outside timing.",
+    "No backward/optimizer performance; no-detach grad-forward retains growing history.",
+    "OOM pertains to this two-device placement/window, not all two-device configurations."
+  ],
+  "records": [
+    {
+      "name": "pilot-add-g0-n2-a3",
+      "run_id": "run-ac963d7f",
+      "artifact_root": "artifacts/npu-performance-pilot-add-g0-n2-a3",
+      "state": "passed",
+      "native_exit_code": 0,
+      "started_at": "2026-09-28T09:45:56.225868+00:00",
+      "ended_at": "2026-09-28T09:51:20.505298+00:00",
+      "memory": "add",
+      "mode": "no-grad",
+      "physical_ids": [
+        9,
+        11
+      ],
+      "observations": 12,
+      "measured_observations": 8,
+      "token_observation_span": {
+        "first_timestamp": "2026-09-28T09:47:33Z",
+        "last_timestamp": "2026-09-28T09:51:13Z"
+      },
+      "remaining_group_pids": [],
+      "tracking_status": "healthy",
+      "raw_sha256": {
+        "status.json": "cf2a2d17fac121694c68c128c81b520b9df88b7efbfd3ea8ab8059c2c594268f",
+        "queue.json": "b89b82f2b553530a02590229001100178a8602a9443dc651d5b891f5be8154a6",
+        "run/run.json": "88387feb4c1700f1d55c295bacc9ced9b6491c62590f6bff52d4857838ec7dee",
+        "run/summary.json": "eb00346aab25acc2206db8cbc97c65eb801d0cd93b7f54e822dc78ef1f38c203",
+        "run/metrics.jsonl": "ee98b822c35891b4238f91ce48e78e554d4e50498b15179e2860f025b77bdfd4",
+        "run/stdout.log": "483186ca8765f1ad3d268ae18479cd64e47747d0938ca01b5ddb5ba1b8c2164c",
+        "run/lifecycle.json": "f04e4540b96a1e8a1634f21ccb1bcbc45734ce323dca517a68b879815c931315"
+      },
+      "ms_per_sample_token": {
+        "mean": 41.67971556835938,
+        "median": 42.13914165234375,
+        "min": 38.370704177734375,
+        "max": 44.040389917968746,
+        "population_stdev": 1.8220721215319973
+      },
+      "max_per_device_peak_allocated_bytes": 21339149312
+    },
+    {
+      "name": "pilot-attention-g0-n2-a3",
+      "run_id": "run-50c5d9d1",
+      "artifact_root": "artifacts/npu-performance-pilot-attention-g0-n2-a3",
+      "state": "passed",
+      "native_exit_code": 0,
+      "started_at": "2026-09-28T09:46:03.537395+00:00",
+      "ended_at": "2026-09-28T09:58:18.411821+00:00",
+      "memory": "attention",
+      "mode": "no-grad",
+      "physical_ids": [
+        1,
+        5
+      ],
+      "observations": 12,
+      "measured_observations": 8,
+      "token_observation_span": {
+        "first_timestamp": "2026-09-28T09:49:15Z",
+        "last_timestamp": "2026-09-28T09:58:06Z"
+      },
+      "remaining_group_pids": [],
+      "tracking_status": "healthy",
+      "raw_sha256": {
+        "status.json": "0b8f990e149bbf3560280c088c370eeda00a904a3c95d8b0ef9c61694997807d",
+        "queue.json": "f1bc2258f4a6d2984fa11219c800eafe47603cf58575c16caa991b2fb71ee013",
+        "run/run.json": "16204aef4c70758d1eb26c7626deea10ac452eb0ccbab1be93169dc4a22ed1c6",
+        "run/summary.json": "31f3f1bc17e1c69caf4a2fd9e4f5ad68dddf6fb1fc9f565f701c715347033011",
+        "run/metrics.jsonl": "1c40a211a8465365155fbc80114987d066d11db0e9d3d90fa7bf0596d95eeb5c",
+        "run/stdout.log": "d8ca4321f736354e6ded6942971c6e324b95287a0e72c9f9385afabacef84f32",
+        "run/lifecycle.json": "054382317bf7c91b9eb51a35edf9765ee30cc59cb9ccb3db5f7c40d0df3122aa"
+      },
+      "ms_per_sample_token": {
+        "mean": 100.05394200854492,
+        "median": 99.72238789257813,
+        "min": 87.0696993203125,
+        "max": 111.10519385351563,
+        "population_stdev": 7.943115084167112
+      },
+      "max_per_device_peak_allocated_bytes": 45798427648
+    },
+    {
+      "name": "pilot-add-g1-n2-a3",
+      "run_id": "run-f4034d63",
+      "artifact_root": "artifacts/npu-performance-pilot-add-g1-n2-a3",
+      "state": "passed",
+      "native_exit_code": 0,
+      "started_at": "2026-09-28T09:48:58.070126+00:00",
+      "ended_at": "2026-09-28T09:56:40.176011+00:00",
+      "memory": "add",
+      "mode": "grad-forward",
+      "physical_ids": [
+        2,
+        8
+      ],
+      "observations": 12,
+      "measured_observations": 8,
+      "token_observation_span": {
+        "first_timestamp": "2026-09-28T09:50:36Z",
+        "last_timestamp": "2026-09-28T09:56:17Z"
+      },
+      "remaining_group_pids": [],
+      "tracking_status": "healthy",
+      "raw_sha256": {
+        "status.json": "d6fac9108df6be0ae3a9d81560cdecef01ab80fa566840259776f04257d7b71e",
+        "queue.json": "c0cd633c0d756d2801a63e4ab12a69b83d198e3662631435d0e3f7a6ff687b27",
+        "run/run.json": "331ac21d14d36432836cc4db25cff7b842ed50ea637f150953a51ebc7c93fa15",
+        "run/summary.json": "90f0586642a817f0333a576bc33cc94b102792b82a23ebf11aed12d6f6a8c00f",
+        "run/metrics.jsonl": "d652f66b00e8625d9049c27d934f2e4904d6e0c5817a418c3b8eb1b06e829c17",
+        "run/stdout.log": "27d317853393c0457aebf8d901433bcfdd6efe055df94981386ffba60e221f28",
+        "run/lifecycle.json": "fdb9dada32de40096491e2e384e8d38da3890e8ec97b4455da2809772e27e233"
+      },
+      "ms_per_sample_token": {
+        "mean": 64.59302320532227,
+        "median": 65.19967096191407,
+        "min": 57.73888869921875,
+        "max": 69.70726166992188,
+        "population_stdev": 3.3653279872908155
+      },
+      "max_per_device_peak_allocated_bytes": 29261850112
+    },
+    {
+      "name": "pilot-attention-g1-n2-a3",
+      "run_id": "run-c6395c86",
+      "artifact_root": "artifacts/npu-performance-pilot-attention-g1-n2-a3",
+      "state": "failed",
+      "native_exit_code": 1,
+      "started_at": "2026-09-28T09:51:36.290662+00:00",
+      "ended_at": "2026-09-28T10:07:09.007205+00:00",
+      "memory": "attention",
+      "mode": "grad-forward",
+      "physical_ids": [
+        9,
+        11
+      ],
+      "observations": 7,
+      "measured_observations": 3,
+      "token_observation_span": {
+        "first_timestamp": "2026-09-28T09:54:42Z",
+        "last_timestamp": "2026-09-28T10:04:16Z"
+      },
+      "remaining_group_pids": [],
+      "tracking_status": "healthy",
+      "raw_sha256": {
+        "status.json": "97cc405f02199d6bbcdab8e5af66d357a96f9391c15ed0b93c5a55993d5a13e0",
+        "queue.json": "bab902bdab4e10b129f12cda739ebcff83dfddf9462d04619882428d903d5859",
+        "run/run.json": "eeed564aa28323887b530d0386749c9debb905622ec16a2e34695e8aa621ff88",
+        "run/summary.json": "25a058f98f5133bb83c934c6c736cd7d77e4972880336a07188b8138933153bc",
+        "run/metrics.jsonl": "af870569a8d0ce54550e3583d46e279b1d867f073a83a14ccb1c44d8bcda11b3",
+        "run/stdout.log": "e994119121a2eb673a8e6bafb60f7e146610efcd5449e69e7a8d594abcb6b842",
+        "run/lifecycle.json": "a2165aa7d85f93f944ee3dccb79b234a029276d407004dc3984228c42e7fe794"
+      },
+      "failure": {
+        "kind": "NPU OOM",
+        "failed_token_index": 7,
+        "logical_device": 0,
+        "allocated_gib": 58.66,
+        "reserved_gib": 61.05,
+        "free_mib": 1.71,
+        "failed_allocation_mib": 2,
+        "diagnostic_precision": "rounded native allocator log",
+        "completed_window_metric": null
+      }
+    }
+  ],
+  "control_placement_followup": {
+    "name": "pilot-add-g0-n2-cpuctrl-a3",
+    "run_id": "run-823df71d",
+    "artifact_root": "artifacts/npu-performance-pilot-add-g0-n2-cpuctrl-a3",
+    "classification": "exploratory; contention not matched to earlier pilots",
+    "source": "a12ee0c676faa80096db4034595b581db11a5f22",
+    "intentional_delta_from_add_no_grad": "CPU FP32 controls; Read remains NPU FP32",
+    "physical_ids": [
+      2,
+      8
+    ],
+    "state": "passed",
+    "started_at": "2026-09-28T12:11:43.275199+00:00",
+    "ended_at": "2026-09-28T12:15:53.527877+00:00",
+    "observations": 12,
+    "measured_observations": 8,
+    "native_exit_code": 0,
+    "remaining_group_pids": [],
+    "tracking_status": "healthy",
+    "ms_per_sample_token": {
+      "mean": 27.9618306953125,
+      "median": 28.280308752929685,
+      "min": 24.984436158203128,
+      "max": 30.882113828125,
+      "population_stdev": 1.720688861195303
+    },
+    "max_per_device_peak_allocated_bytes": 21334834176,
+    "raw_sha256": {
+      "status.json": "2a2ee67fec9e5549a6c9ff84057639efaf84f0157a75f7ea3c863fa8714a2173",
+      "queue.json": "21f2f4aa184ec9bebcad88b0abcd7b5862e9a00d978c6e0c47192fa841640e25",
+      "run/run.json": "f6506d7e579d670d9a2779986837ec8d8a6c9122f4c78a35031bae99138bba8a",
+      "run/summary.json": "a295ea1532065077c244bb2fe3e9f1d8c014d13af041610b742e6c1963e41207",
+      "run/metrics.jsonl": "1447b4efc37ed1147af623bec5d82bd06f6604a3ec6e18af7b6271fe6c90f262",
+      "run/stdout.log": "9ba6cf4e810c0042b07865228d71b880c5f22ec70bf4cdf10fd2bb6905645509",
+      "run/lifecycle.json": "7e0a1706af6de54eadcb5a636ef2dc6260f334f78a756b5e9c00a5ccd3a450f5"
+    }
+  }
+}
