@@ -10,6 +10,24 @@ its finite profiles do not certify the broader acceptance version.
 Status: verified = cited completed evidence; implemented = code without the full
 required gate; planned = required work remains. No submitted/running job passes.
 
+## Authorized extension: reusable experiment library
+
+Authorized 2026-09-28. Consumers live in separate repositories and depend on a
+pinned Tide version/source. Runtime use must not write into the Tide checkout.
+Existing graph/kernel semantics and independent reference schedules remain.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| L1 | Versioned graph/module configuration, public runtime/session API, explicit backend/policy checks, external inputs and checkpoint lifecycle | implemented; 95 directed tests |
+| L2 | Package-owned configuration equivalence gate: full observables, independent gradients, chunking, multi-step updates and checkpoint continuation, explicit bounded scope | planned |
+| L3 | Python wheel and optional native consumption from another directory; CMake install/export for C++ clients; runnable consumer and version boundary | planned |
+| L4 | Mixed modules and fully active complex topology gates, actual topology with reduced tensor sizes, clean full CPU regression and consumer qualification | planned |
+
+Full-scale performance runs and new backend support are not required for this
+library increment. Reports identify the actual topology, dimensions, inputs,
+source, options, backend and comparisons; reduced-width evidence does not
+certify all shapes or other backends.
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

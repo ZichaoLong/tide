@@ -176,6 +176,7 @@ class Model(nn.Module):
         if projection_layout != "input" and not any(n.memory in FIBER_PROFILES for n in graph.nodes):
             raise ValueError("nondefault projection layout requires same-fiber attention")
         self.width = width
+        self.graph_identity = graph.identity
         generator = torch.Generator().manual_seed(seed)
         programs = {} if full_programs is None else full_programs
         if any(v < 0 or v >= len(graph.nodes) or graph.nodes[v].identity for v in programs):
