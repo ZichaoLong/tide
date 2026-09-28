@@ -48,6 +48,7 @@ def main():
     for name in ('durable_records.py','experiment_record.py'):
         shutil.copyfile(root/'scripts'/name,packet/name)
     shutil.copytree(root/'cpp',packet/'sources/pdg/cpp')
+    shutil.copytree(root/'cmake',packet/'sources/pdg/cmake')
     shutil.copyfile(root/'CMakeLists.txt',packet/'sources/pdg/CMakeLists.txt')
     for name in {**build['source_files_sha256'], **build['added_files_sha256']}:
         prefix = 'Connectome/cpp/'

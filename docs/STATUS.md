@@ -11,33 +11,29 @@ independent consumer example. L1-L4 in ROADMAP owns this active plan.
 Commit each coherent tested increment and push immediately. No subagents.
 Reference repositories and ObsidianVault remain read-only.
 
-L1 `31d7b96` and L2 `ff7c486` committed/pushed. L3 implementation ready.
-L3 directed: CMake core-only configuration passed; external installed generic
-wheel passed all three Python applications and installed per-config gates in
-artifacts/library-installed-directed-003. API/gate FP32 follow-up: 22 passed
-in 49.62s. Earlier -001/-002 failures remain: FP32 sum-loss cancellation at
-strict tolerances. Mean-scaled diagnostic losses now pass original thresholds;
-explicit tolerances and nonfinite rejection are public, recorded options.
-L3 committed/pushed `c08cc90`. Active durable consumption gate:
-- unit: tide-library-consumption-20260928-a.service, running in background.slice,
-  Nice10, KillMode=control-group; build2/ATen+OMP+BLAS1.
-- frozen read-only source: /var/tmp/zlong-graph-execution-foundation/library-l3-source
-- clean source: c08cc90; build: /var/tmp/zlong-graph-execution-foundation/library-l3-build
-- command: python scripts/build.py --jobs 2 --build-dir BUILD &&
-  python scripts/library_consumer.py --build-dir BUILD --output-dir JOB/consumer
-- JOB: artifacts/library-consumption-20260928-a; status.json and task.log there.
-- inspect: systemctl --user show tide-library-consumption-20260928-a.service;
-  tail JOB/task.log; cat JOB/status.json and JOB/consumer/result.json.
-- stop: systemctl --user stop tide-library-consumption-20260928-a.service.
-No pass result yet. Main checkout may develop L4 while frozen job runs.
-L4 implemented; preparing commit. Directed gates: 26 API/config tests passed
-in 11.73s. active64 TimedDAG FP32, active64 Settle FP64 and feedback32 FP64
-native qualification passed (full observables/VJPs, chunks, three AdamW steps,
-fresh-process resume); active node counts 64/64/32, feedback pending79 retained.
-Next: commit/push L4, freeze it, wait for the L3 consumption unit to terminate,
-then run scripts/qualify_library.py --reuse-build using library-l3-build.
-L4 suite is 22 cases at D4/B1/T2; exact P02 includes8192 nodes/four active.
-Status and the authorized L4 implementation are currently uncommitted.
+Implementation commits pushed: L1 `31d7b96`, L2 `ff7c486`, L3 `c08cc90`,
+L4 `67884f3`. Post-review compatibility fix: include new cmake/ templates in
+legacy CPU comparison exports; relocated PDG CMake configuration passed.
+Latest static audit: zero errors,45 warning review leads (new ones are explicit
+backend guards/negative tests). No new hardware support is claimed.
+
+Active durable gate: tide-library-consumption-20260928-a.service.
+Frozen clean source c08cc90 at /var/tmp/zlong-graph-execution-foundation/library-l3-source;
+build /var/tmp/zlong-graph-execution-foundation/library-l3-build. Build109/109 is
+complete; installed Python/native gates and CMake consumer are still running.
+Job/status/log: artifacts/library-consumption-20260928-a/{status.json,task.log};
+consumer/{result.json,commands.log}. background.slice/Nice10/KillMode=control-group,
+build2 and ATen/OMP/BLAS1. No terminal pass claim yet.
+Inspect/stop with systemctl --user show/stop tide-library-consumption-20260928-a.service.
+
+Directed L4:26 API/config tests passed; three mixed active native gates passed:
+64-node/768-edge TimedDAG FP32 and Settle FP64,32-node feedback FP64 (pending79).
+Earlier installed -001/-002 failures remain; normalized diagnostic losses pass
+original strict tolerances in -003. Wheel runtime is independent of source paths.
+Next: commit/push export fix, freeze the new head, wait for the consumption unit,
+then run scripts/qualify_library.py --reuse-build --build-dir library-l3-build
+through a new durable job. It includes full CPU regression,22 complex cells
+(D4/B1/T2/three steps; exact P02 has8192 nodes/four active),installed consumers.
 CPU FP32/FP64, aarch64 Torch/LibTorch2.10.0+cpu; ATen/OMP/BLAS1, build2.
 CPU operator probe passed. Static audit: zero errors, 40 existing review leads.
 About 13 GiB disk free at re-entry; recheck before large writes.
