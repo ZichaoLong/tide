@@ -21,7 +21,7 @@ Existing graph/kernel semantics and independent reference schedules remain.
 | L1 | Versioned graph/module configuration, public runtime/session API, explicit backend/policy checks, external inputs and checkpoint lifecycle | implemented; 95 directed tests |
 | L2 | Package-owned configuration equivalence gate: full observables, independent gradients, chunking, multi-step updates and checkpoint continuation, explicit bounded scope | implemented; 14 directed tests |
 | L3 | Python wheel and optional native consumption from another directory; CMake install/export for C++ clients; runnable consumer and version boundary | implemented; installed Python gate passed, native/C++ qualification next |
-| L4 | Mixed modules and fully active complex topology gates, actual topology with reduced tensor sizes, clean full CPU regression and consumer qualification | planned |
+| L4 | Mixed modules and fully active complex topology gates, actual topology with reduced tensor sizes, clean full CPU regression and consumer qualification | implemented; directed active mixed cases passed, immutable full gate next |
 
 Full-scale performance runs and new backend support are not required for this
 library increment. Reports identify the actual topology, dimensions, inputs,

@@ -55,6 +55,14 @@ Settle requires region ranks for explicit graphs; factories provide ranks.
 Existing [module capabilities](execution-capabilities.md) define legal profiles.
 No configuration interface makes an arbitrary pretrained module supported.
 
+`model.scale_init` optionally initializes all graph-owned input/output,
+Aggregate and edge scalar weights to an explicit finite value. Null retains
+the original reference initializer (.8 + .03 * owner index); large fan-in
+experiments should choose their initialization deliberately. This changes
+initial weights, not graph semantics. A supplied Model owns its existing
+weights; initializer settings do not overwrite it. The manifest records
+whether the model was configured or supplied by the caller.
+
 For PDG/TimedDAG, pass `External(batch, port, position, time, tensor)` records to
 `session.advance(records, stop=cut, sealed_until=cut)`. The half-open logical
 window and complete external-input promise are explicit. Positions per sample
@@ -189,3 +197,22 @@ in a fresh environment reusing the existing Torch stack, run a copied external
 application and installed qualification for all three families, relocate the
 native adapter, install the CMake package, and compile/run the external C++
 client. Consumers never import benchmark scripts or reference repositories.
+
+## Complex topology acceptance
+
+The developer suite `scripts/library_complex.py` runs 22 declared cells:
+fully active 64-node/768-edge layered TimedDAG and Settle, a fully active
+32-node feedback ring with a hub, varied delays and parallel edges, plus exact
+P01/P02/T02/S01/A02 graph records from foundation-v1. The active graphs mix EMA,
+Linear, Gated Delta, DeltaRule, SSM, event Attention, repeat Add and same-fiber
+Attention, with tanh/SwiGLU and multiple Aggregate profiles. Both CPU dtypes
+are required; active mixed graphs use both Python and native candidates.
+
+Every node/edge/region/module is retained while validation uses D4/B1/T2 and
+three optimizer steps. Source scalar initialization is explicit (.25 for mixed
+graphs, .8 for benchmark graphs). The benchmark topology claim does not assert
+the original benchmark initialization, full tensor sizes, trained weights or
+performance. P02 retains all 8192 nodes but only its four-node ring is active;
+the other 8188 nodes cannot count as active-work equivalence evidence. The full
+acceptance command is `scripts/qualify_library.py`, combining the complete CPU
+regression, complex suite and installed consumer checks on frozen source.

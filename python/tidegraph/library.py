@@ -25,6 +25,7 @@ class GraphRuntime:
         if not isinstance(requested, ExecutionOptions):
             requested = ExecutionOptions(**requested)
         self.requested_options = requested
+        self.model_origin = "configured" if model is None else "caller"
         self.device, self.resolution_reason = resolve_device(device)
         if requested.implementation == "native" and self.device.type != "cpu":
             raise ValueError("the native public runtime currently supports CPU only")
@@ -39,6 +40,11 @@ class GraphRuntime:
             self.spec = SettleGraph(c.graph, c.ranks)
         self.model = model if model is not None else Model(c.graph, c.width, c.seed, getattr(torch, c.dtype),
                                                          projection_layout=c.projection_layout, device=self.device)
+        if model is None and c.scale_init is not None:
+            with torch.no_grad():
+                for name in ("input_scale", "output_scale", "agg_scale", "edge_scale"):
+                    for parameter in getattr(self.model, name):
+                        parameter.fill_(c.scale_init)
         if (self.model.width != c.width or self.model.graph_identity != c.graph.identity
                 or any(p.device != self.device or p.dtype != getattr(torch, c.dtype)
                        for p in self.model.state_dict().values())):
@@ -110,6 +116,7 @@ class GraphRuntime:
         for path in sorted(root.glob("*.py")):
             digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
         record = dict(schema="tide-runtime-v1", package_version=__version__, package_sha256=digest.hexdigest(),
+                      model_origin=self.model_origin,
                       configuration=self.config.to_dict(), config_sha256=self.config.identity,
                       runtime=manifest(self.device, self.resolution_reason, getattr(torch, self.config.dtype)),
                       requested_options=self.requested_options.to_dict(), resolved_options=self.options.to_dict(),

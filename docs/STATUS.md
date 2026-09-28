@@ -18,9 +18,26 @@ artifacts/library-installed-directed-003. API/gate FP32 follow-up: 22 passed
 in 49.62s. Earlier -001/-002 failures remain: FP32 sum-loss cancellation at
 strict tolerances. Mean-scaled diagnostic losses now pass original thresholds;
 explicit tolerances and nonfinite rejection are public, recorded options.
-Next: commit/push L3; freeze that commit, durable build2 + library_consumer.py
-(default full Python/native/C++ scope), then L4 complex/full regression.
-No durable job running yet. New L3 work is authorized and uncommitted.
+L3 committed/pushed `c08cc90`. Active durable consumption gate:
+- unit: tide-library-consumption-20260928-a.service, running in background.slice,
+  Nice10, KillMode=control-group; build2/ATen+OMP+BLAS1.
+- frozen read-only source: /var/tmp/zlong-graph-execution-foundation/library-l3-source
+- clean source: c08cc90; build: /var/tmp/zlong-graph-execution-foundation/library-l3-build
+- command: python scripts/build.py --jobs 2 --build-dir BUILD &&
+  python scripts/library_consumer.py --build-dir BUILD --output-dir JOB/consumer
+- JOB: artifacts/library-consumption-20260928-a; status.json and task.log there.
+- inspect: systemctl --user show tide-library-consumption-20260928-a.service;
+  tail JOB/task.log; cat JOB/status.json and JOB/consumer/result.json.
+- stop: systemctl --user stop tide-library-consumption-20260928-a.service.
+No pass result yet. Main checkout may develop L4 while frozen job runs.
+L4 implemented; preparing commit. Directed gates: 26 API/config tests passed
+in 11.73s. active64 TimedDAG FP32, active64 Settle FP64 and feedback32 FP64
+native qualification passed (full observables/VJPs, chunks, three AdamW steps,
+fresh-process resume); active node counts 64/64/32, feedback pending79 retained.
+Next: commit/push L4, freeze it, wait for the L3 consumption unit to terminate,
+then run scripts/qualify_library.py --reuse-build using library-l3-build.
+L4 suite is 22 cases at D4/B1/T2; exact P02 includes8192 nodes/four active.
+Status and the authorized L4 implementation are currently uncommitted.
 CPU FP32/FP64, aarch64 Torch/LibTorch2.10.0+cpu; ATen/OMP/BLAS1, build2.
 CPU operator probe passed. Static audit: zero errors, 40 existing review leads.
 About 13 GiB disk free at re-entry; recheck before large writes.

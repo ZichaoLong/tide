@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 import hashlib
 import json
+import math
 from pathlib import Path
 from .graph import Graph, Node, Region, Edge
 from .clocks import StateClock
@@ -52,6 +53,7 @@ class GraphConfig:
     ranks: tuple[int, ...] = ()
     execution: ExecutionOptions = field(default_factory=ExecutionOptions)
     projection_layout: str = "input"
+    scale_init: float | None = None
 
     def __post_init__(self):
         object.__setattr__(self, "ranks", tuple(self.ranks))
@@ -63,6 +65,8 @@ class GraphConfig:
             raise ValueError("seed must be a nonnegative int64")
         if self.projection_layout not in {"input", "linear"} or not isinstance(self.execution, ExecutionOptions):
             raise ValueError("invalid model layout/execution options")
+        if self.scale_init is not None and (type(self.scale_init) not in (int,float) or not math.isfinite(self.scale_init)):
+            raise ValueError("scale_init must be finite or null")
         if self.family != "pdg":
             self.graph.topological_order()
         if self.family == "settle":
@@ -92,7 +96,7 @@ class GraphConfig:
             family = data["family"]
             ranks = data.get("ranks", ranks if family == "settle" else ())
             model = data.get("model", {})
-            if set(model) - {"width", "dtype", "seed", "projection_layout"}:
+            if set(model) - {"width", "dtype", "seed", "projection_layout", "scale_init"}:
                 raise ValueError("unknown model configuration field")
             return cls(family, graph, ranks=ranks, execution=ExecutionOptions(**data.get("execution", {})), **model)
         except (TypeError, KeyError) as error:
@@ -105,7 +109,8 @@ class GraphConfig:
     def to_dict(self):
         return {"schema_version": 1, "family": self.family, "graph": self.graph.wire(),
                 "ranks": list(self.ranks), "model": {"width": self.width, "dtype": self.dtype,
-                "seed": self.seed, "projection_layout": self.projection_layout}, "execution": self.execution.to_dict()}
+                "seed": self.seed, "projection_layout": self.projection_layout,
+                "scale_init": self.scale_init}, "execution": self.execution.to_dict()}
 
     @property
     def identity(self):

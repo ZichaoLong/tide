@@ -1,10 +1,21 @@
 # Tide
 
-本分支 `graph-execution-foundation` 实现 CPU PyTorch/LibTorch 的图执行与等价性验证。
+本分支 `graph-execution-foundation` 实现 Tide 图执行基座，供独立的训练、推理
+实验仓库安装和调用。实验配置拓扑、节点模块和 PDG / TimedDAG / SettleGraph
+家族，由公共 `GraphConfig → GraphRuntime → Session` 接口执行；数据、任务头、
+损失、优化器和实验记录由实验仓库持有。
 
-图执行基础验收版本已完成：[最终验收报告](docs/evidence/foundation-final.md)。
-CPU FP32/FP64 共 7741 项测试、17 个可搬迁 smoke 变体通过；性能评估保留
-实际规模、超时和未测范围，详见报告。
+Tide 0.2 的 [依赖调用指南](docs/library.md)、[独立 Python 示例](examples/consumer)
+和 [CMake 示例](examples/consumer_cpp) 说明安装、原生适配器、检查点与版本边界。
+安装后的 `python -m tidegraph qualify` 针对具体配置检查完整可观测量、梯度、
+分块、训练更新及新进程恢复；缩维验证保留原拓扑并记录实际触达节点数。
+
+CPU FP32/FP64 是基线。既有[六阶段验收](docs/evidence/foundation-final.md)与
+[跨家族验证](docs/evidence/cross-family-qualification.md)已完成；此次公共库扩展
+的完整门禁进度见当前进度文件。Python NPU FP32 仅有
+[有限配置的 eager 验证](docs/evidence/npu-python-20260925.md)，不能外推为任意
+配置或新接口的 NPU 验收；原生 NPU/CUDA 当前不支持。性能报告保留实际规模、
+超时和未测范围，大拓扑完成不等于全规模训练等价性证明。
 开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
 [路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。
@@ -24,8 +35,9 @@ SettleGraph 编码及拓扑特化；当前局部模块包括 EMA、identity、�
 Linear Attention、DeltaRule/Gated DeltaRule、事件 GQA/window attention、
 same-fiber Attention、tanh FFN 和 SwiGLU。
 [原生 streaming cursor](docs/streaming-cursor.md) 可跨窗口持有状态和消息队列。
-Packed 训练目前使用 [逐事件语义反传图](docs/packed-autograd.md) 保留梯度连接，
-其额外计算单独计数；`no_grad` / `inference_mode` 不需要这部分重放。
+Packed 训练以 [逐事件语义反传图](docs/packed-autograd.md) 为基线，Full/Aggregate
+另有显式 batched VJP 策略；State/Read 仍有重放，其成本单独计数。
+`no_grad` / `inference_mode` 不需要训练重放。
 [Full 程序接口](docs/full-programs.md) 支持逐槽位载荷及缺席，
 通过 [局部端口映射](docs/local-ports.md) 保持 SettleGraph 编码与参数共享的含义。
 [Aggregate 程序接口](docs/aggregate-programs.md) 保留来源标签及逐来源贡献，
