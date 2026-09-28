@@ -30,6 +30,28 @@ library increment. Reports identify the actual topology, dimensions, inputs,
 source, options, backend and comparisons; reduced-width evidence does not
 certify all shapes or other backends.
 
+## Authorized extension: accelerator library paths
+
+Authorized 2026-09-28 after toolchain preparation. Develop on the local aarch64
+host, verify NPU here, and deliver the same qualification entry points for CUDA
+and other host/software versions. Additional compatible CANN stacks may be
+installed in isolation. Local site paths belong in launch records, not library code.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| A1 | Python CUDA/NPU public runtime and configuration CPU parity, live placement, VJPs, training and checkpoint handoff | in progress |
+| A2 | Native device-neutral execution, isolated backend builds, standalone C++ CUDA/NPU lifecycle and clients | planned |
+| A3 | Configuration matrix across families/modules/schedules, placement/fallback evidence, installed Python/native/C++ use | planned |
+| A4 | Clean full CPU regression, local NPU acceptance and CUDA compilation without device claims | planned |
+| A5 | Matched local CANN versions and portable target-machine environment/qualification reports | planned |
+
+Initial accelerator contract: single-device eager FP32; CPU FP32/FP64 preserved.
+CUDA FP64 is a separately qualified capability. FP16/BF16/AMP, distributed jobs,
+graph compilation and custom fused kernels are subsequent extensions. Independent
+schedules and exact discrete graph semantics remain mandatory. Floating tolerance
+and numerical backend settings are explicit. Report finite coverage and unknown
+fallback visibility instead of extrapolating from a small device smoke.
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

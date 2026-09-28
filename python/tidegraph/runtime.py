@@ -12,6 +12,8 @@ import torch
 
 
 def _split_device(spec: str, index: int | None) -> tuple[str, int | None]:
+    if index is not None and (type(index) is not int or not 0 <= index < 2**15):
+        raise ValueError("device index must be a nonnegative integer below 32768")
     if not isinstance(spec, str) or not spec:
         raise ValueError("device must be auto, cpu, cuda[:N] or npu[:N]")
     if ":" in spec:
@@ -21,6 +23,8 @@ def _split_device(spec: str, index: int | None) -> tuple[str, int | None]:
         if not suffix.isdigit():
             raise ValueError("device index must be a nonnegative integer")
         index = int(suffix)
+        if index >= 2**15:
+            raise ValueError("device index must be below 32768")
         spec = backend
     if spec not in {"auto", "cpu", "cuda", "npu"}:
         raise ValueError("device must be auto, cpu, cuda[:N] or npu[:N]")
@@ -118,13 +122,25 @@ def manifest(device: torch.device, reason: str, dtype: torch.dtype) -> dict[str,
         "dtype": str(dtype).split(".")[-1],
         "host_architecture": platform.machine(),
         "torch": torch.__version__,
+        "torch_git": torch.version.git_version,
+        "python": platform.python_version(),
+        "cxx11_abi": torch.compiled_with_cxx11_abi(),
     }
     if device.type == "npu":
         npu = _load_npu()
         record.update(torch_npu=getattr(__import__("torch_npu"), "__version__", "unknown"),
-                      logical_device_count=npu.device_count())
+                      logical_device_count=npu.device_count(), device_name=npu.get_device_name(device))
+        import os
+        record["cann_version"] = os.environ.get("ASCEND_CANN_VERSION", "unknown")
+        record["matmul_allow_hf32"] = getattr(getattr(npu, "matmul", None), "allow_hf32", None)
     elif device.type == "cuda":
         record["logical_device_count"] = torch.cuda.device_count()
+        record.update(cuda_runtime=torch.version.cuda, cudnn=torch.backends.cudnn.version(),
+                      device_name=torch.cuda.get_device_name(device),
+                      capability=list(torch.cuda.get_device_capability(device)),
+                      compiled_architectures=torch.cuda.get_arch_list(),
+                      matmul_allow_tf32=torch.backends.cuda.matmul.allow_tf32,
+                      cudnn_allow_tf32=torch.backends.cudnn.allow_tf32)
     else:
         record["logical_device_count"] = 1
     return record

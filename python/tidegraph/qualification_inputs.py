@@ -55,11 +55,13 @@ class Probe:
         if any(x.device.type != "cpu" or x.dtype != dtype or not torch.isfinite(x).all() for x in tensors):
             raise ValueError("qualification inputs must be finite CPU tensors of configured dtype")
 
-    def clone(self):
+    def clone(self, device=None):
         probe = object.__new__(Probe)
         probe.__dict__ = self.__dict__.copy()
-        probe.values = None if self.values is None else self.values.detach().clone().requires_grad_()
-        probe.records = None if self.records is None else [replace(x, value=x.value.detach().clone().requires_grad_()) for x in self.records]
+        def leaf(value):
+            return value.detach().to(device=device or value.device, copy=True).requires_grad_()
+        probe.values = None if self.values is None else leaf(self.values)
+        probe.records = None if self.records is None else [replace(x, value=leaf(x.value)) for x in self.records]
         return probe
 
     def leaves(self):

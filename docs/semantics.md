@@ -164,3 +164,15 @@ occurrence counter.
 
 `fractal-latcarf` supplies validation design examples (eager/packed/specialized,
 chunk/state/gradient checks). Its historical results do not certify this tree.
+
+## Accelerator execution boundary
+
+The single-device eager extension preserves graph identities, schedules, HST VJP
+and checkpoint schemas. CPU FP32/FP64 remains the reference. CUDA FP32/FP64 and
+NPU FP32 require explicit backend capability; NPU FP64 is rejected. Graph tensor
+payloads and parameters stay on the selected logical device; graph metadata and
+discrete scheduling remain host-owned. Qualification alone moves deterministic
+CPU fixtures to the candidate device and copies observables back for comparison.
+Numerical tolerances never relax routes, owner identities or None connectivity.
+Cross-device checkpoint handoff is tested separately from same-device new-process
+continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.

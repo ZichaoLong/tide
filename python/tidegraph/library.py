@@ -29,8 +29,8 @@ class GraphRuntime:
         self.device, self.resolution_reason = resolve_device(device)
         if requested.implementation == "native" and self.device.type != "cpu":
             raise ValueError("the native public runtime currently supports CPU only")
-        if self.device.type not in {"cpu", "npu"}:
-            raise ValueError("this library release supports CPU and experimental Python NPU only")
+        if self.device.type not in {"cpu", "cuda", "npu"}:
+            raise ValueError("the graph runtime supports CPU, CUDA and NPU")
         if self.device.type == "npu" and c.dtype != "float32":
             raise ValueError("the NPU graph runtime requires float32")
         self.graph = c.graph

@@ -38,7 +38,24 @@ def finite(value, path="root"):
 def compare_finite(a, b, path="root", **tolerances):
     finite(a, path)
     finite(b, path)
-    equivalent(a, b, path, **tolerances)
+    equivalent(a, b, path, check_device=False, **tolerances)
+
+
+def assert_placement(value, device, path="root"):
+    """Check live graph tensors before any host copies used by comparison."""
+    if isinstance(value, torch.Tensor):
+        if value.device != device:
+            raise AssertionError(f"{path}: expected {device}, received {value.device}")
+    elif is_dataclass(value):
+        for field in fields(value):
+            if field.name != "stats":
+                assert_placement(getattr(value, field.name), device, path + "." + field.name)
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            assert_placement(item, device, f"{path}[{key}]")
+    elif isinstance(value, (tuple, list)):
+        for i, item in enumerate(value):
+            assert_placement(item, device, f"{path}[{i}]")
 
 
 def vjp(root, leaves):

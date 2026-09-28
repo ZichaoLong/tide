@@ -51,8 +51,10 @@
   tests. HST is a declared VJP; do not gradcheck its hard forward.
 - Avoid in-place autograd mutation. Compare final states, in-flight messages,
   history, routes and gradients, not just outputs. Check disconnected gradients.
-- CPU FP64/FP32 are required now. Explicit unavailable devices/dtypes must fail.
-  Never silently substitute an algorithm. GPU/NPU support is deferred.
+- CPU FP64/FP32 remain required. The authorized accelerator extension covers
+  Python/LibTorch CUDA and Ascend NPU, initially single-device eager FP32.
+  Explicit unavailable devices/dtypes must fail; never silently substitute an
+  algorithm. Keep compiled, device-verified and target-machine-pending evidence separate.
 
 ## Evidence and housekeeping
 

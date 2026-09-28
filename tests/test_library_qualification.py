@@ -46,9 +46,9 @@ def test_caller_external_data_and_no_overwrite(tmp_path):
     assert report["coverage"]["pending"] > 0
     with pytest.raises(FileExistsError):
         qualify(cfg, device="cpu", output_dir=tmp_path / "gate")
-    with pytest.raises(ValueError, match="explicit CPU"):
-        qualify(cfg, device="npu", output_dir=tmp_path / "npu")
-    assert not (tmp_path / "npu").exists()
+    with pytest.raises(ValueError, match="explicit"):
+        qualify(cfg, device="auto", output_dir=tmp_path / "auto")
+    assert not (tmp_path / "auto").exists()
 
 
 def test_bad_candidate_preserves_failed_report(tmp_path, monkeypatch):
