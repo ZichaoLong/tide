@@ -19,7 +19,7 @@ Do not shrink dimensions or silently change precision to hide capacity failures.
 
 ## Current implementation and development results
 
-Base implementation a12ee0c; latest committed evidence005280d. New uncommitted
+Implementation b4f26b3; latest prior evidence005280d; new dispatch/training evidence records200 clean configuration cells plus4 analytic runs. New committed
 consumer changes add --ranking-device cpu|model and --event-device cpu|model.
 Exact stable lexicographic tensor ranking is batched by candidate width. Selected
 and affected counts remain host int64 history maps. The independent tensor queue
@@ -49,8 +49,10 @@ Frozen training-dev02 adds training and near-ULP tie test; never edit it.
 New verifier CPU-Read/dtype flags have been added after dev02 for qualification.
 No core source/Python-package code changed; do not repeat unchanged-core8636 tests.
 
-Next: commit reviewed implementation,freeze perf-a4,build independent CPU/NPU
-consumers. Run immutable default/scoring/dispatch/training gates on CPU and2/4/8
+Clean perf-a4 is frozen at b4f26b3. build-cpu-a4/build-npu-a4 PASSED all3 CTests.
+qual-cpu-a4(full) and qual-npu4-a4(multicard) PASSED all stages. qual-npu2-a4(full)
+PASSED all stages; profile-dispatch-a4 PASSED, raw operator trace
+retained. qual-npu8-a4(multicard) PASSED on1,2,5,6,7,8,9,11; each has a background.slice unit. Run immutable gates on CPU and2/4/8
 NPUs,real465-node small-tensor gates and actual operator trace. Formal performance
 must use the clean qualified source. Native timeouts/RSS/queue waits stay bounded.
 
@@ -65,8 +67,10 @@ Add2 with CPU FP32 controls,NPU Read PASSED12/8,mean27.9618. Records validated,
 exit0/no children for successful runs. These are concurrent exploratory pilots;
 no causal speedup claim. Evidence: accelerator-scoring-pilots-20260928.{md,json}.
 
-After immutable gates, first run bounded full-size capacity/configuration screening
-for both models. Compare CPU FP64,CPU FP32,mixed Read/control and independently
+Next bounded screen: screen-add-a4 (two devices) and screen-attention-a4 (four),
+seven declared scoring/dispatch choices each, concurrent exploration,12 tokens/4
+warmup. Plans in task-root/plans; run-plan-a4.py preserves per-cell failures.
+Then capacity, placement/scaling and isolated matched finalist repetitions. Compare CPU FP64,CPU FP32,mixed Read/control and independently
 selected tensor ranking/queue; compare2/4/8 cards and memory/locality placement.
 Use three fresh-process repetitions for final matched implementation choices.
 Complete training uses full12-token windows; include backward/optimizer and exact
@@ -82,7 +86,15 @@ TorchNPU2.9/Torch2.9; upstream compatibility row7.3.0/CANN8.5.0 retrieved/hashed
 fetch-sdk29-direct-l1 FAILED only fetching compatibility table (TLS timeout);
 Git source/submodules completed. One proxy retry succeeded; source.json records it.
 Do not relabel the failed fetch. Sources,private torchgen and build-env are isolated.
-build-sdk29-l1 RUNNING,timeout7200,16 compile workers,public ascend/dev-workspace-8.5.0.
+build-sdk29-l1 PASSED. Standalone smoke/build closure: First linker attempt failed on a wheel-bundled libgfortran search
+path; build-sdk29-smoke-l2 PASSED with matched torch.libs in LD_LIBRARY_PATH.
+smoke-sdk29-l2 PASSED real-device forward/backward/SGD/checkpoint on12.
+Public libtorch-npu/2.9.0-cann8.5.0 published; load/unload/conflict checks passed.
+smoke-sdk29-c851-l2/c852-l2 PASSED. build-tide-sdk29-a4 FAILED because SDK2.9 omitted source-path ACL/HCCL headers.
+Exact-source46-header supplement recorded in package/header-supplement.json.
+build-tide-sdk29-a4b resumes the matching standalone core/consumer build with
+two workers and3600s bound.8.5.1/.2 smoke PASSED; public versioned modules published.
+All module loaders contain no Python/stub/unresolved libraries; prior failures retained.
 Do not edit its recipes/source while active. Inspect task.log/status.json before
 SDK loader/smoke/public-module publication and local8.5.x qualification. Existing
 2.10/CANN9 SDK/public environments untouched. No new SDK support claim yet.

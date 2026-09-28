@@ -65,7 +65,8 @@ is normalized for that cross-precision comparison; discrete routes, all other
 observables and gradients retain their checks. Near-tie route changes are failures,
 not silently accepted numerical noise. Read and control roots have isolated VJP
 checks, including connected-zero versus absent gradients. The CPU/two-NPU extension passed [immutable qualification](evidence/accelerator-scoring-20260928.md);
-earlier eight-NPU evidence applies to the historical default only.
+the new dispatch and complete-training candidates also passed CPU/two/four/eight-NPU
+[immutable qualification](evidence/accelerator-dispatch-training-20260928.md).
 
 `--transport host` retains the earlier comparison: CPU state/messages/Aggregate
 and device State/Full through adapters. It necessarily transfers same-card
@@ -172,5 +173,6 @@ the historical grad-forward token timings.
 an independent CPU scalar-slot schedule for three updates: complete observables,
 exact discrete decisions, loss, every parameter gradient including None/zero,
 updated weights and optimizer slots. The ordinary isolated-root VJP check also runs.
-New training/dispatch modes are development candidates until immutable device gates
-and performance evidence are recorded in STATUS/evidence.
+Training/dispatch correctness passed the
+[immutable CPU/two/four/eight-device gates](evidence/accelerator-dispatch-training-20260928.md).
+Performance selection is a separate full-size experiment recorded in STATUS/evidence.

@@ -1,0 +1,157 @@
+{
+  "schema": "tide-dispatch-training-qualification-v1",
+  "implementation": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+  "qualification": [
+    {
+      "job": "qual-cpu-a4",
+      "devices": 1,
+      "physical_devices": [],
+      "configuration_cells": 64,
+      "analytic_dispatch": true,
+      "state": "passed",
+      "stages_sha256": "d9382904441160ea92638f29c7486e94b3b2ba339dfd93017963ffc2d2da2532"
+    },
+    {
+      "job": "qual-npu2-a4",
+      "devices": 2,
+      "physical_devices": [
+        1,
+        9
+      ],
+      "configuration_cells": 64,
+      "analytic_dispatch": true,
+      "state": "passed",
+      "stages_sha256": "43005a94bb7a126ce2d943eb094dc98cb7229dff27d82652b08875145820cdb8"
+    },
+    {
+      "job": "qual-npu4-a4",
+      "devices": 4,
+      "physical_devices": [
+        5,
+        6,
+        7,
+        11
+      ],
+      "configuration_cells": 36,
+      "analytic_dispatch": true,
+      "state": "passed",
+      "stages_sha256": "dc869bff057285a7d8e2f19146e0a822f3408103b131fbe55dd448b6fec558f0"
+    },
+    {
+      "job": "qual-npu8-a4",
+      "devices": 8,
+      "physical_devices": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11
+      ],
+      "configuration_cells": 36,
+      "analytic_dispatch": true,
+      "state": "passed",
+      "stages_sha256": "a657f4edb5f4676ad1cafb20b90411239462bbfac38544b52e0282c263ed51a8"
+    }
+  ],
+  "total_configuration_cells": 200,
+  "profile": {
+    "job": "profile-dispatch-a4",
+    "raw": [
+      {
+        "path": "runs/profile-dispatch-a4/profile/PROF_000001_20260928211514221_01836962CEKMKFAJ/mindstudio_profiler_output/op_summary_20260928211524.csv",
+        "sha256": "eef58a2bc1acb06c34beaa081763d0aa139cd332f791dbec74409371c4f7c0fa"
+      }
+    ],
+    "operators": [
+      {
+        "op": "GatherElements",
+        "engine": "AI_VECTOR_CORE",
+        "input_dtypes": "INT64;INT64",
+        "count": 56,
+        "total_device_us": 146.93999999999997
+      },
+      {
+        "op": "GatherV3",
+        "engine": "AI_VECTOR_CORE",
+        "input_dtypes": "FLOAT;INT64;INT64",
+        "count": 179,
+        "total_device_us": 480.36000000000024
+      },
+      {
+        "op": "GatherV3",
+        "engine": "AI_VECTOR_CORE",
+        "input_dtypes": "INT64;INT64;INT64",
+        "count": 113,
+        "total_device_us": 713.3999999999999
+      },
+      {
+        "op": "LpNormV2",
+        "engine": "MIX_AIV",
+        "input_dtypes": "FLOAT",
+        "count": 41,
+        "total_device_us": 138.82
+      },
+      {
+        "op": "NonZero",
+        "engine": "MIX_AIV",
+        "input_dtypes": "BOOL",
+        "count": 18,
+        "total_device_us": 312.08
+      },
+      {
+        "op": "ReduceAll",
+        "engine": "MIX_AIV",
+        "input_dtypes": "BOOL;INT64",
+        "count": 187,
+        "total_device_us": 356.67999999999984
+      },
+      {
+        "op": "ReduceMean",
+        "engine": "MIX_AIV",
+        "input_dtypes": "FLOAT;INT64",
+        "count": 34,
+        "total_device_us": 102.68000000000004
+      },
+      {
+        "op": "ReduceMin",
+        "engine": "MIX_AIV",
+        "input_dtypes": "INT64;INT64",
+        "count": 12,
+        "total_device_us": 30.0
+      },
+      {
+        "op": "ReduceSum",
+        "engine": "MIX_AIV",
+        "input_dtypes": "FLOAT;INT64",
+        "count": 3,
+        "total_device_us": 10.719999999999999
+      },
+      {
+        "op": "SoftmaxV2",
+        "engine": "AI_VECTOR_CORE",
+        "input_dtypes": "FLOAT",
+        "count": 349,
+        "total_device_us": 1002.8600000000007
+      },
+      {
+        "op": "Sort",
+        "engine": "AI_CPU",
+        "input_dtypes": "INT64",
+        "count": 55,
+        "total_device_us": 3365.8999999999996
+      },
+      {
+        "op": "Sort",
+        "engine": "MIX_AIV",
+        "input_dtypes": "FLOAT",
+        "count": 5,
+        "total_device_us": 21.939999999999998
+      }
+    ],
+    "total_operators": 7012
+  },
+  "scope": "standalone consumer CPU and2/4/8 NPU; small tensor sizes and real465-node D8/B1; not full-size performance or public multi-device runtime"
+}
