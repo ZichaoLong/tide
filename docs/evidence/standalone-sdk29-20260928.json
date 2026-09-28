@@ -1,0 +1,280 @@
+{
+  "schema": "tide-standalone-sdk29-qualification-v1",
+  "implementation": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+  "hardware": {
+    "architecture": "aarch64",
+    "device": "Ascend910_9392",
+    "driver": "25.3.rc1"
+  },
+  "sdk": {
+    "source": "https://github.com/Ascend/pytorch.git",
+    "source_commit": "12d689a08941d4a6e45eab16e3ad6fef96a9affd",
+    "torch": "2.9.0+cpu",
+    "cxx11_abi": 1,
+    "compiler": "g++ (GCC) 10.3.1",
+    "built_cann": "8.5.0",
+    "public_modules": [
+      "libtorch-npu/2.9.0-cann8.5.0",
+      "libtorch-npu/2.9.0-cann8.5.1",
+      "libtorch-npu/2.9.0-cann8.5.2"
+    ],
+    "library_sha256": "affe00e92c2b739db7e52c9e01847a520b6da223d19d657dcea05803d092213f",
+    "cmake_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+    "build_manifest_sha256": "ceab3973ecaaf0d5e57fb754597e67e48da9d0532450fe12b89090bc5f98646d",
+    "header_supplement_sha256": "9eb1ab379e8e0a5047fe9b499bc50ff4c80e9a119a8a317ea0b01b3c2441aef4",
+    "header_supplement_count": 46,
+    "packaging_patch_sha256": "5e0fa5578b25c6a97d28f17b42940b69e51411d060bbd906d20e1631ab4f6576",
+    "compatibility_source": "https://raw.githubusercontent.com/Ascend/pytorch/master/COMPATIBILITY.md",
+    "compatibility_sha256": "365e9c1bb65bc2832c2d451489cfea05ba226745b575c2017e9898678be86e8c"
+  },
+  "client": {
+    "binary_sha256": "2866d24e0f1e1eb27aebb2a10a70c9d04a9031fdeaea53265bf75dca483d871c",
+    "client_source_sha256": "f433e21c788db67eec3c8895a888553b88f14360bfdf3b8f9fa7720d0c22ba1e",
+    "core_source_sha256": "14786cfd96f8216df8a71ff61c3ea10ace4686f0d201699e0be316209bc82b70"
+  },
+  "qualification": [
+    {
+      "cann": "8.5.0",
+      "job": "qual-sdk29-c850-a4",
+      "state": "passed",
+      "physical_devices": [
+        7,
+        11
+      ],
+      "standalone_graph_cases": 2,
+      "training_updates_per_graph": 3,
+      "installed_consumer": true,
+      "consumer_configuration_cells": 64,
+      "analytic_dispatch": true,
+      "stages_sha256": "8ec15ed076989ec42400b73aa1f8b6982f3bbf5294b1c8a29c2b645a66591889",
+      "consumer_stages_sha256": "ade111918efa62e8af8f1128c5e05bb3a14b94ea3475e7f18903ab08e7374c1c",
+      "runtime": {
+        "cann": "8.5.0",
+        "torch": "2.9.0+cpu",
+        "standalone": true,
+        "raw_manifest_sha256": "5344e8a930c0d385238bdf56e32535bf3ab18b1ea2f00eb4fe0a07c489d93924"
+      },
+      "profile": {
+        "job": "profile-sdk29-c850-a4",
+        "raw": [
+          {
+            "path": "runs/profile-sdk29-c850-a4/profile/PROF_000001_20260928220310494_HCJOCBRFPFELNFKB/mindstudio_profiler_output/op_summary_20260928220322.csv",
+            "sha256": "94c2a7f410c09a0a8fd52f2554c1a6c6c93ba3884c9eac482d247d2bd5bbe802"
+          }
+        ],
+        "total_operators": 6946,
+        "selected": [
+          {
+            "op": "LpNormV2",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 41
+          },
+          {
+            "op": "NonZero",
+            "engine": "MIX_AIV",
+            "input_dtypes": "BOOL",
+            "count": 18
+          },
+          {
+            "op": "ReduceMin",
+            "engine": "MIX_AIV",
+            "input_dtypes": "INT64;INT64",
+            "count": 12
+          },
+          {
+            "op": "SoftmaxV2",
+            "engine": "AI_VECTOR_CORE",
+            "input_dtypes": "FLOAT",
+            "count": 349
+          },
+          {
+            "op": "Sort",
+            "engine": "AI_CPU",
+            "input_dtypes": "INT64",
+            "count": 55
+          },
+          {
+            "op": "Sort",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 5
+          }
+        ]
+      },
+      "loader_hashes": {
+        "tidegraph-accelerator-check.loader.txt": "8f7b2681bd0aa99a09b9dcf03a656fc20abff2d0910b21f17fd242adeea72b8b",
+        "tide-accelerator-scale.loader.txt": "3389cb8606531a3caca6c3c6f5eab1218432e0bedfa1337d3e5f81f4b43bfefb"
+      }
+    },
+    {
+      "cann": "8.5.1",
+      "job": "qual-sdk29-c851-a4",
+      "state": "passed",
+      "physical_devices": [
+        7,
+        11
+      ],
+      "standalone_graph_cases": 2,
+      "training_updates_per_graph": 3,
+      "installed_consumer": true,
+      "consumer_configuration_cells": 64,
+      "analytic_dispatch": true,
+      "stages_sha256": "8fca44736f3dd11134ed39d0ff514f4f0d912ac83d900ce4d505dfb6270d23cf",
+      "consumer_stages_sha256": "b7cdbe32c6e6d0c6d2f6fa61ff45dad46f4d440d55777c72c245cc767facf484",
+      "runtime": {
+        "cann": "8.5.1",
+        "torch": "2.9.0+cpu",
+        "standalone": true,
+        "raw_manifest_sha256": "78e77152a2c2d9fd05833cf86e2b6d7a431452a033dabfdc991fcc2e4f130841"
+      },
+      "profile": {
+        "job": "profile-sdk29-c851-a4",
+        "raw": [
+          {
+            "path": "runs/profile-sdk29-c851-a4/profile/PROF_000001_20260928220334400_NIOIOOBGECQCJAEC/mindstudio_profiler_output/op_summary_20260928220346.csv",
+            "sha256": "b9679e99aaf5cc1a794825eb37e97ad178f9c710c21f4274d33def65f35bc555"
+          }
+        ],
+        "total_operators": 6946,
+        "selected": [
+          {
+            "op": "LpNormV2",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 41
+          },
+          {
+            "op": "NonZero",
+            "engine": "MIX_AIV",
+            "input_dtypes": "BOOL",
+            "count": 18
+          },
+          {
+            "op": "ReduceMin",
+            "engine": "MIX_AIV",
+            "input_dtypes": "INT64;INT64",
+            "count": 12
+          },
+          {
+            "op": "SoftmaxV2",
+            "engine": "AI_VECTOR_CORE",
+            "input_dtypes": "FLOAT",
+            "count": 349
+          },
+          {
+            "op": "Sort",
+            "engine": "AI_CPU",
+            "input_dtypes": "INT64",
+            "count": 55
+          },
+          {
+            "op": "Sort",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 5
+          }
+        ]
+      },
+      "loader_hashes": {
+        "tidegraph-accelerator-check.loader.txt": "991cc82b401c0470a0d325396c400639bffb99638916b39d226c0407a36a9c7c",
+        "tide-accelerator-scale.loader.txt": "70d1ba2dbc3941a288b6f6186b2b132e9eaaedf669d7d856a6084f135f2b1f03"
+      }
+    },
+    {
+      "cann": "8.5.2",
+      "job": "qual-sdk29-c852-a4",
+      "state": "passed",
+      "physical_devices": [
+        7,
+        11
+      ],
+      "standalone_graph_cases": 2,
+      "training_updates_per_graph": 3,
+      "installed_consumer": true,
+      "consumer_configuration_cells": 64,
+      "analytic_dispatch": true,
+      "stages_sha256": "48487be1740427d896d5bf37a52f60cbe4d698baedd96da3a4ffbba8bd7bb0e5",
+      "consumer_stages_sha256": "64ec3b3b8815a0509917496542f4970f3439fc7b7ccb1296b2c0bd57ac1eba41",
+      "runtime": {
+        "cann": "8.5.2",
+        "torch": "2.9.0+cpu",
+        "standalone": true,
+        "raw_manifest_sha256": "7682533fead6750b2a268a920994ad861795b0b7e3da016afaa27808d54a2f8c"
+      },
+      "profile": {
+        "job": "profile-sdk29-c852-a4",
+        "raw": [
+          {
+            "path": "runs/profile-sdk29-c852-a4/profile/PROF_000001_20260928220358001_CCHLQHMGMBBRHAMA/mindstudio_profiler_output/op_summary_20260928220409.csv",
+            "sha256": "1515d3bbe048fb011b261028e693d18df84bbd7d7503b5f62057eaa473267f1d"
+          }
+        ],
+        "total_operators": 6946,
+        "selected": [
+          {
+            "op": "LpNormV2",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 41
+          },
+          {
+            "op": "NonZero",
+            "engine": "MIX_AIV",
+            "input_dtypes": "BOOL",
+            "count": 18
+          },
+          {
+            "op": "ReduceMin",
+            "engine": "MIX_AIV",
+            "input_dtypes": "INT64;INT64",
+            "count": 12
+          },
+          {
+            "op": "SoftmaxV2",
+            "engine": "AI_VECTOR_CORE",
+            "input_dtypes": "FLOAT",
+            "count": 349
+          },
+          {
+            "op": "Sort",
+            "engine": "AI_CPU",
+            "input_dtypes": "INT64",
+            "count": 55
+          },
+          {
+            "op": "Sort",
+            "engine": "MIX_AIV",
+            "input_dtypes": "FLOAT",
+            "count": 5
+          }
+        ]
+      },
+      "loader_hashes": {
+        "tidegraph-accelerator-check.loader.txt": "ae35393aa9e36c6182cb1286a3843e2ee4fd48796b40402cf1502ba9c454d2d2",
+        "tide-accelerator-scale.loader.txt": "9368fe74c27fdb142181dfbd2d5bcd1b5154169b4b536d2ae7636d6d03be0afc"
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "job": "fetch-sdk29-direct-l1",
+      "reason": "final direct compatibility-table TLS timeout; source/submodules already fetched; one separately recorded proxy retry succeeded"
+    },
+    {
+      "job": "build-sdk29-smoke-l1",
+      "reason": "wheel-bundled hashed libgfortran absent from linker search path; exact matched torch.libs added, no library replacement"
+    },
+    {
+      "job": "build-tide-sdk29-a4",
+      "reason": "official SDK export omitted ACL/HCCL source-path header closure;46 exact-source headers added; unchanged build succeeded as build-tide-sdk29-a4b"
+    }
+  ],
+  "limits": [
+    "Same2.9 SDK/Torch build tested against three CANN runtimes; no three independent SDK build claim",
+    "Local8.5.1/.2 observations do not expand vendor compatibility guarantees",
+    "Operator traces are tiny placement profiles, not full-size timing",
+    "Standalone core ring/diamond plus named consumer profiles; prior broad Python/native2.9 gates are separate evidence",
+    "NPU FP64 and CSR pooling remain unsupported"
+  ]
+}

@@ -136,3 +136,10 @@ installed headers/targets. CUDA supports the same consumer commands.
 these recipes for another machine. Rebuild there and retain its manifests and
 suite results; x86_64 evidence is separate from aarch64. Current exact support
 claims live in `.torch-portability/contract.json` and the cited evidence.
+
+
+Additional [standalone TorchNPU2.9 qualification](evidence/standalone-sdk29-20260928.md)
+passed on local CANN8.5.0/8.5.1/8.5.2 using one matched SDK/Torch build. It covers
+standalone core ring/diamond training/checkpoint, installed CMake consumption,
+and the separately scoped historical-topology consumer. The earlier broad
+Python/native-adapter matrix remains distinct from these standalone gates.

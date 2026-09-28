@@ -521,7 +521,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0; native core through Python registration also qualified with 2.9/CANN8.5.0/8.5.1/8.5.2. CSR pooling and NPU FP64 unsupported.",
+      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0 and one2.9 SDK across CANN8.5.0/8.5.1/8.5.2; finite scopes in evidence. Broad native-adapter cases are separately qualified across the same four runtimes. NPU FP64 and CSR pooling unsupported.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -569,6 +569,23 @@
           "test_command": "python scripts/qualify_accelerator.py --device npu:0 --implementation native --native-library BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+          "scope": "One standalone2.9 SDK across CANN8.5.0/.1/.2: independent ring/diamond values/gradients/three AdamW updates and device/CPU checkpoint; installed CMake consumer;192 two-NPU historical-consumer configuration cells and3 analytic dispatch gates; three hardware placement traces. Not broad standalone coverage of every public-core module.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "tidegraph-accelerator-check --device npu:0 --dtype float32 --output-dir NEW; installed consumer and exact finite consumer commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/standalone-sdk29-20260928.md"
         }
       ]
     },
