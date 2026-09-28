@@ -18,13 +18,16 @@ def main():
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--build-dir", default="build")
     parser.add_argument("--python-only", action="store_true", help="development scope; full consumption is the default")
+    parser.add_argument("--device", default="cpu", help="explicit accelerator for target-machine consumption")
+    parser.add_argument("--skip-cpp", action="store_true", help="Python-owned NPU adapters need a separate standalone SDK gate")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     out, build = Path(args.output_dir).resolve(), Path(args.build_dir).resolve()
     out.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
     record = dict(schema="tide-consumer-v1", state="running", source=source, dirty=dirty,
-                  scope="python-only" if args.python_only else "python-native-cpp", checks=[])
+                  scope="python-only" if args.python_only else "python-native" if args.skip_cpp else "python-native-cpp",
+                  device=args.device, checks=[])
     write_json(out / "result.json", record)
     env = dict(os.environ, PYTHONNOUSERSITE="1", PYTHONDONTWRITEBYTECODE="1",
                TORCH_DEVICE_BACKEND_AUTOLOAD="0", OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1", MKL_NUM_THREADS="1")
@@ -60,7 +63,7 @@ def main():
             file.write_text(json.dumps(config, indent=2) + "\n")
             for implementation in (("python",) if args.python_only else ("python", "native")):
                 result = out / f"{family}-{implementation}"
-                command = [python, "train.py", "--config", file, "--device", "cpu", "--implementation", implementation, "--output-dir", result]
+                command = [python, "train.py", "--config", file, "--device", args.device, "--implementation", implementation, "--output-dir", result]
                 if implementation == "native":
                     command += ["--native-library", native]
                 run(command, consumer)
@@ -72,7 +75,7 @@ def main():
             if not args.python_only:
                 config["execution"]["implementation"] = "native"
                 file.write_text(json.dumps(config, indent=2) + "\n")
-            command = [python, "-m", "tidegraph", "qualify", file, "--device", "cpu", "--output-dir", out / f"gate-{family}",
+            command = [python, "-m", "tidegraph", "qualify", file, "--device", args.device, "--output-dir", out / f"gate-{family}",
                        "--steps", "2", "--positions", "2"]
             if not args.python_only:
                 command += ["--native-library", native]
@@ -82,15 +85,17 @@ def main():
                 raise RuntimeError("installed qualification failed")
             record["checks"].append(dict(implementation="installed-qualifier", family=family,
                                          state=gate["state"], checks=len(gate["checks"])))
-        if not args.python_only:
+        if not args.python_only and not args.skip_cpp:
             run(["cmake", "--install", build, "--prefix", out / "prefix"])
             shutil.copytree(root / "examples/consumer_cpp", out / "cpp-application")
             import torch
             run(["cmake", "-S", out / "cpp-application", "-B", out / "cpp-build", "-G", "Ninja",
                  "-DCMAKE_BUILD_TYPE=Release", f"-DCMAKE_PREFIX_PATH={out / 'prefix'};{torch.utils.cmake_prefix_path}"])
             run(["cmake", "--build", out / "cpp-build", "--parallel", "2"])
-            run([out / "cpp-build/consumer"])
-            record["checks"].append(dict(implementation="installed-cpp", state="passed", dtypes=["float32", "float64"]))
+            dtypes = ["float32", "float64"] if args.device == "cpu" else ["float32"]
+            for dtype in dtypes:
+                run([out / "cpp-build/consumer", "--device", args.device, "--dtype", dtype])
+            record["checks"].append(dict(implementation="installed-cpp", state="passed", dtypes=dtypes))
         if source_state(root) != (source, dirty):
             raise RuntimeError("source changed during consumer verification")
         record["state"] = "passed"

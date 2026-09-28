@@ -9,10 +9,23 @@ import sys
 import torch
 
 
-def load_native(location=None):
+def _check_backend(module, backend, record=None):
+    compiled = getattr(module, "execution_backend", lambda: "cpu")()
+    if backend not in (None, "cpu", compiled):
+        raise RuntimeError(f"native {backend} requested but the adapter was built for {compiled}")
+    if record and record.get("backend", "cpu") != compiled:
+        raise ValueError("native compiled backend differs from its build manifest")
+    if record and backend == "npu":
+        import torch_npu
+        if record.get("torch_npu") != torch_npu.__version__:
+            raise ValueError("native NPU adapter requires its matching TorchNPU version")
+    return module
+
+
+def load_native(location=None, *, backend=None):
     if location is None:
         try:
-            return importlib.import_module("_tide_native")
+            return _check_backend(importlib.import_module("_tide_native"), backend)
         except ImportError as error:
             raise RuntimeError("native implementation unavailable; build the matching adapter and pass native_library=BUILD_DIR") from error
     path = Path(location).expanduser().resolve()
@@ -38,9 +51,9 @@ def load_native(location=None):
     if loaded is not None:
         if Path(loaded.__file__).resolve() != path:
             raise RuntimeError("a different native library is already loaded; use a fresh process")
-        return loaded
+        return _check_backend(loaded, backend, record)
     spec = importlib.util.spec_from_file_location("_tide_native", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     sys.modules["_tide_native"] = module
-    return module
+    return _check_backend(module, backend, record)

@@ -5,6 +5,7 @@
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/region.h"
+#include "tide/device.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -13,7 +14,7 @@ namespace tide {
 namespace {
 void require(bool ok, const char* message) { if (!ok) throw std::invalid_argument(message); }
 void check_tensor(const Tensor& x, const Tensor& reference, at::IntArrayRef shape) {
-  require(x.defined() && x.device().is_cpu() && x.scalar_type() == reference.scalar_type()
+  require(x.defined() && x.device() == reference.device() && x.scalar_type() == reference.scalar_type()
           && x.sizes() == shape, "incompatible tensor dtype/device/shape");
   require(at::isfinite(x).all().item<bool>(), "nonfinite tensor");
 }
@@ -23,6 +24,10 @@ void validate_model(const Graph& g, const Model& m) {
   const auto& ref = m.nodes[0].bias;
   require(ref.defined() && ref.dim() == 1 && ref.numel() > 0, "invalid model width");
   require(ref.scalar_type() == at::kFloat || ref.scalar_type() == at::kDouble, "FP32/FP64 required");
+  require(supported_payload(ref), "model device/dtype is unsupported by this build (NPU requires FP32)");
+  if (ref.device().type() == c10::DeviceType::PrivateUse1)
+    for (const auto& node : g.nodes)
+      require(node.readout != "norm-fp64-v1", "NPU does not support the declared norm-fp64-v1 Read precision");
   const Index d = ref.numel();
   for (size_t node = 0; node < m.nodes.size(); ++node) {
     const auto& w = m.nodes[node];

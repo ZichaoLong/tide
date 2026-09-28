@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
     if (result.outputs.size() != 3 || !at::isfinite(gradient).all().item<bool>()) throw std::runtime_error("invalid graph/gradient smoke result");
     std::ostringstream report;
     report.precision(17);
-    report << "{\"device\":\"cpu\",\"resolution_reason\":\"" << portable_torch::resolution_reason(args, device)
+    portable_torch::synchronize(device);
+    report << "{\"device\":\"" << device.str() << "\",\"resolution_reason\":\"" << portable_torch::resolution_reason(args, device)
            << "\",\"dtype\":\"" << portable_torch::dtype_name(args.dtype) << "\",\"outputs\":" << result.outputs.size()
            << ",\"loss\":" << loss.item<double>() << ",\"gradient_sum\":" << gradient.sum().item<double>() << "}\n";
     if (!args.output_dir.empty()) {

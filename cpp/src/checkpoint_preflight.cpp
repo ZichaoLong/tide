@@ -1,12 +1,12 @@
 #include "checkpoint_internal.h"
+#include "tide/device.h"
 #include <algorithm>
 #include <cmath>
 #include <set>
 
 namespace tide::checkpoint_detail {
 void validate_value(const Tensor& value, const std::string& where) {
-  if (!value.defined() || !value.device().is_cpu() || value.layout() != at::kStrided
-      || (value.scalar_type() != at::kFloat && value.scalar_type() != at::kDouble))
+  if (!supported_payload(value))
     fail("unsupported tensor in " + where);
   if (!at::isfinite(value).all().item<bool>()) fail("nonfinite tensor in " + where);
 }
@@ -68,16 +68,17 @@ void validate_decoded(const Decoded& decoded, const ParameterRegistry& registry,
   // Dense nonoverlapping destinations make copy_ predictable after preflight.
   // Distinct TensorImpls with overlapping storage are not declared aliases and
   // cannot have independent checkpoint values restored transactionally.
-  std::map<uintptr_t, uintptr_t> storage_ranges;
+  std::map<std::string, std::map<uintptr_t, uintptr_t>> device_ranges;
   for (const auto& owner : decoded.owners) {
     const auto canonical = owner.aliases.front();
     const auto it = values.find(canonical);
     if (it == values.end()) fail("checkpoint has an unknown parameter owner");
     const auto& target = it->second;
-    if (!target.device().is_cpu() || target.layout() != at::kStrided
+    if (!supported_payload(target) || target.layout() != at::kStrided
         || !target.is_non_overlapping_and_dense())
       fail("unsupported destination layout/device: " + canonical);
     if (target.numel()) {
+      auto& storage_ranges = device_ranges[target.device().str()];
       const auto begin = reinterpret_cast<uintptr_t>(target.const_data_ptr());
       const auto end = begin + target.nbytes();
       const auto next = storage_ranges.lower_bound(begin);

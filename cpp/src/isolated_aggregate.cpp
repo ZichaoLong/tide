@@ -1,4 +1,5 @@
 #include "tide/isolated_aggregate.h"
+#include "tide/device.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <stdexcept>
 
@@ -97,9 +98,9 @@ std::vector<Tensor> isolated_aggregate(const std::vector<Tensor>& atoms,
   if (sources < 1 || atoms.empty() || atoms.size()%sources || atoms.size() != scales.size())
     throw std::invalid_argument("isolated Aggregate source layout mismatch");
   const auto& first = atoms.front();
-  if (!first.defined() || first.dim() != 1 || !first.device().is_cpu()
+  if (!first.defined() || first.dim() != 1 || !supported_payload(first)
       || (first.scalar_type() != at::kFloat && first.scalar_type() != at::kDouble))
-    throw std::invalid_argument("isolated Aggregate requires CPU FP32/FP64 vectors");
+    throw std::invalid_argument("isolated Aggregate requires supported FP32/FP64 vectors");
   for (size_t i = 0; i < atoms.size(); ++i)
     if (!atoms[i].defined() || atoms[i].sizes() != first.sizes() || atoms[i].options().dtype() != first.options().dtype()
         || atoms[i].device() != first.device() || !scales[i].defined() || scales[i].dim() != 0

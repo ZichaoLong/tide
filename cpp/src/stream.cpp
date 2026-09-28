@@ -26,6 +26,7 @@ Streaming::Streaming(Graph graph, Model model, Options options)
   graph_.compile();
   configure_model(graph_, model_);
   validate_model(graph_, model_);
+  pool_.set_device(model_.nodes[0].bias.device());
   validate_full_autograd(model_, options_);
   validate_aggregate_autograd(model_, options_);
   if (options_.mode != "hard" && options_.mode != "softp" && options_.mode != "hst")

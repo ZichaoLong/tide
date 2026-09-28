@@ -1,13 +1,19 @@
 #include <tide/stream.h>
+#include <portable_torch/runtime.hpp>
 #include <ATen/Parallel.h>
 #include <torch/csrc/autograd/autograd.h>
 #include <iostream>
 
-int main() {
+int main(int argc, char** argv) {
   try {
+    const auto args = portable_torch::parse_cli(argc, argv, true);
+    if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }
+    const auto device = portable_torch::resolve_device(args);
+    if (args.dtype != at::kFloat && args.dtype != at::kDouble) throw std::invalid_argument("FP32/FP64 required");
     at::set_num_threads(1);
-    for (auto dtype : {at::kFloat, at::kDouble}) {
-      auto options = at::TensorOptions().dtype(dtype).device(at::kCPU);
+    portable_torch::seed_runtime(device, args.seed);
+    {
+      auto options = at::TensorOptions().dtype(args.dtype).device(device);
       tide::Graph graph;
       graph.nodes = {{0}}; graph.edges = {{0, 0, 2}};
       graph.regions = {{1}}; graph.inputs = graph.outputs = {0}; graph.compile();
@@ -29,7 +35,9 @@ int main() {
       if (!at::isfinite(grad).all().item<bool>() || grad.abs().sum().item<double>() == 0)
         throw std::runtime_error("C++ consumer gradient mismatch");
     }
-    std::cout << "{\"state\":\"passed\",\"dtype\":[\"float32\",\"float64\"],\"backend\":\"cpu\"}\n";
+    portable_torch::synchronize(device);
+    std::cout << "{\"state\":\"passed\",\"dtype\":\"" << portable_torch::dtype_name(args.dtype)
+              << "\",\"device\":\"" << device.str() << "\"}\n";
     return 0;
   } catch (const std::exception& error) {
     std::cerr << error.what() << '\n';

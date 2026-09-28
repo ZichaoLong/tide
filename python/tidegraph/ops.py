@@ -213,6 +213,8 @@ class Model(nn.Module):
         self.output_scale = scales(len(graph.outputs))
         if device is not None:
             target = torch.device(device)
+            if target.type == "npu" and any(n.readout == "norm-fp64-v1" for n in graph.nodes):
+                raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
             if target.type == "npu" and dtype == torch.float64:
                 raise ValueError("NPU graph execution currently requires float32; NPU matmul has no FP64 kernel")
             self.to(target)

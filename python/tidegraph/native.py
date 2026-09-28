@@ -26,6 +26,12 @@ class Native:
         if (packed_sources or batch_next) and not packed:
             raise ValueError("packed transport requires packed execution")
         import _tide_native as core
+        backend = model.nodes[0].bias.device.type
+        if backend == "npu" and fiber_pooling == "csr":
+            raise ValueError("NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'")
+        compiled = getattr(core, "execution_backend", lambda: "cpu")()
+        if backend != "cpu" and backend != compiled:
+            raise RuntimeError(f"native {backend} requested but the adapter was built for {compiled}")
         self.core, self.graph, self.model = core, graph, model
         self.algorithm = algorithm
         from .full import ProjectionEmit, validate_program

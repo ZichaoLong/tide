@@ -54,7 +54,7 @@ class AddRepeat final : public StateKernel {
   // report scalar_steps. This is not an associative time scan.
   void validate_weights(const NodeWeights& w) const override {
     auto it = w.extra.find("add_retention");
-    if (it == w.extra.end() || !it->second.defined() || it->second.dim() != 0 || !it->second.device().is_cpu()
+    if (it == w.extra.end() || !it->second.defined() || it->second.dim() != 0
         || (it->second.scalar_type() != at::kFloat && it->second.scalar_type() != at::kDouble)
         || it->second.scalar_type() != w.bias.scalar_type() || it->second.device() != w.bias.device()
         || !at::isfinite(it->second).item<bool>())

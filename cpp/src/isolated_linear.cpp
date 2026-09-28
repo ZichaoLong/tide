@@ -1,4 +1,5 @@
 #include "tide/isolated_linear.h"
+#include "tide/device.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <stdexcept>
 
@@ -48,9 +49,9 @@ class IsolatedLinear final : public torch::autograd::Function<IsolatedLinear> {
 }  // namespace
 std::vector<Tensor> isolated_linear(const std::vector<Tensor>& rows, const Tensor& weight) {
   if (rows.empty()) return {};
-  if (!weight.defined() || weight.dim() != 2 || !weight.device().is_cpu()
+  if (!weight.defined() || weight.dim() != 2 || !supported_payload(weight)
       || (weight.scalar_type() != at::kFloat && weight.scalar_type() != at::kDouble))
-    throw std::invalid_argument("isolated linear requires CPU FP32/FP64 weight matrix");
+    throw std::invalid_argument("isolated linear requires supported FP32/FP64 weight matrix");
   for (const auto& row : rows)
     if (!row.defined() || row.dim() != 1 || row.size(0) != weight.size(1)
         || row.device() != weight.device() || row.scalar_type() != weight.scalar_type())

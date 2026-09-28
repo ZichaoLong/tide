@@ -65,3 +65,15 @@ def test_oracle_stays_cpu_and_independent(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError, match="CUDA"):
         qualify(config(), device="cuda", output_dir=tmp_path / "gate")
     assert calls == [("cuda", None)]
+
+
+def test_native_backend_mismatch_rejected_before_execution():
+    from types import SimpleNamespace
+    from tidegraph.native_loader import _check_backend
+    cpu = SimpleNamespace(execution_backend=lambda: "cpu")
+    with pytest.raises(RuntimeError, match="built for cpu"):
+        _check_backend(cpu, "npu")
+    with pytest.raises(ValueError, match="manifest"):
+        _check_backend(cpu, "cpu", {"backend":"cuda"})
+    cuda = SimpleNamespace(execution_backend=lambda: "cuda")
+    assert _check_backend(cuda, "cpu") is cuda

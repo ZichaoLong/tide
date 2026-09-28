@@ -19,6 +19,7 @@ Specialized::Specialized(Graph g, Model m, Options options, std::string topology
   if ((options.packed_sources || options.batch_next) && !options.packed)
     throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); configure_model(graph_, model_); validate_model(graph_, model_);
+  pool_.set_device(model_.nodes[0].bias.device());
   validate_full_autograd(model_, options);
   validate_aggregate_autograd(model_, options);
   const Index n = graph_.nodes.size();

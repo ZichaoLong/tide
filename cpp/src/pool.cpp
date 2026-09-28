@@ -1,5 +1,7 @@
 #include "tide/pool.h"
 #include <ATen/ThreadLocalState.h>
+#include <c10/core/StreamGuard.h>
+#include <c10/core/impl/VirtualGuardImpl.h>
 #include <stdexcept>
 
 namespace tide {
@@ -32,12 +34,18 @@ void NodePool::run(std::vector<std::function<void()>> jobs) {
     return;
   }
   const at::ThreadLocalState caller;
+  std::optional<c10::Stream> stream;
+  if (device_ && !device_->is_cpu()) {
+    c10::impl::VirtualGuardImpl implementation(device_->type());
+    stream = implementation.getStream(*device_);
+  }
   std::vector<std::future<void>> futures;
   {
     std::lock_guard<std::mutex> lock(mutex_);
     for (auto& job : jobs) {
-      std::packaged_task<void()> task([caller, job = std::move(job)] {
+      std::packaged_task<void()> task([caller, stream, job = std::move(job)] {
         at::ThreadLocalStateGuard guard(caller);
+        c10::OptionalStreamGuard stream_guard(stream);
         job();
       });
       futures.push_back(task.get_future());

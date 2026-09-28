@@ -1,6 +1,8 @@
 # Development gates and immutable qualification
 
-All current targets are CPU FP64/FP32. Use the matching Torch Python for scripts
+The complete regression gate remains CPU FP64/FP32. Accelerator gates and
+installed consumers are specified in [accelerators.md](accelerators.md);
+compilation alone is not accelerator execution evidence. Use the matching Torch Python for scripts
 and LibTorch discovery, one ATen/BLAS thread and two build workers. The active
 source, unit, output paths and exact next commands belong in `STATUS.md`.
 

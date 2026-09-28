@@ -27,12 +27,14 @@ class GraphRuntime:
         self.requested_options = requested
         self.model_origin = "configured" if model is None else "caller"
         self.device, self.resolution_reason = resolve_device(device)
-        if requested.implementation == "native" and self.device.type != "cpu":
-            raise ValueError("the native public runtime currently supports CPU only")
         if self.device.type not in {"cpu", "cuda", "npu"}:
             raise ValueError("the graph runtime supports CPU, CUDA and NPU")
         if self.device.type == "npu" and c.dtype != "float32":
             raise ValueError("the NPU graph runtime requires float32")
+        if self.device.type == "npu" and any(n.readout == "norm-fp64-v1" for n in c.graph.nodes):
+            raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
+        if self.device.type == "npu" and requested.fiber_pooling == "csr":
+            raise ValueError("NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'")
         self.graph = c.graph
         self.spec = None
         if c.family == "settle":
@@ -59,7 +61,7 @@ class GraphRuntime:
         self.engine = None
         if self.options.implementation == "native":
             from .native_loader import load_native
-            load_native(native_library)
+            load_native(native_library, backend=self.device.type)
             from .native import Native
             arguments = self.options.to_dict()
             arguments.pop("implementation")

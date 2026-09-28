@@ -27,7 +27,7 @@ def main():
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
     from tidegraph.qualification import qualify
-    from accelerator_cases import cases
+    from accelerator_cases import cases, fixture_options
     available = dict(cases(args.implementation, args.dtype))
     selected = list(available) if args.case is None else args.case
     if not selected or set(selected) - available.keys():
@@ -37,14 +37,29 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     record = dict(schema="tide-accelerator-suite-v1", source=source, dirty=dirty, state="running",
                   device=args.device, implementation=args.implementation, dtype=args.dtype,
-                  scope="complete named suite" if args.case is None else "development subset", cases=[])
+                  scope="complete named suite" if args.case is None else "development subset", cases=[], unsupported=[])
+    if args.native_library:
+        location = Path(args.native_library).resolve()
+        record["native_build"] = json.loads(((location if location.is_dir() else location.parent) / "build-manifest.json").read_text())
     write_json(out / "result.json", record)
     try:
         for name in selected:
             print(name, flush=True)
+            if args.device.split(":")[0] == "npu" and name == "fiber-policy-fiber_pooling":
+                from tidegraph import GraphRuntime
+                try:
+                    GraphRuntime(available[name], device=args.device, native_library=args.native_library)
+                except ValueError as error:
+                    if "NPU CSR pooling" not in str(error):
+                        raise
+                    record["unsupported"].append(dict(id=name, state="unsupported", rejection_verified=True,
+                                                     reason=str(error), config=available[name].to_dict()))
+                    write_json(out / "result.json", record)
+                    continue
+                raise AssertionError("NPU accepted unsupported CSR policy")
             report = qualify(available[name], device=args.device, output_dir=out / name,
                              native_library=args.native_library, batch_size=1, positions=2, steps=3,
-                             atol=args.atol, rtol=args.rtol)
+                             atol=args.atol, rtol=args.rtol, **fixture_options(name, available[name]))
             record["cases"].append(dict(id=name, state=report["state"], coverage=report["coverage"],
                                         runtime=report["candidate"]["runtime"], checks=report["checks"],
                                         tolerances=report["tolerances"], elapsed_seconds=report["elapsed_seconds"]))
@@ -57,7 +72,7 @@ def main():
         raise
     finally:
         write_json(out / "result.json", record)
-    print(json.dumps(dict(state=record["state"], cases=len(record["cases"]))))
+    print(json.dumps(dict(state=record["state"], cases=len(record["cases"]), unsupported=len(record["unsupported"]))))
 
 
 if __name__ == "__main__":

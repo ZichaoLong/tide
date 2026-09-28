@@ -27,6 +27,13 @@ void Checkpoint::load(const std::filesystem::path& path, ParameterRegistry& regi
   // mutation. Owners retain their TensorImpl, requires_grad and grad buffers.
   const auto values = owner_values(registry);
   at::NoGradGuard guard;
+  for (auto& owner : decoded.owners)
+    owner.value = owner.value.to(values.at(owner.aliases.front()).device());
+  for (auto& [name, state] : decoded.state) {
+    const auto device = values.at(name).device();
+    for (auto* slot : {&state.momentum_buffer, &state.exp_avg, &state.exp_avg_sq, &state.max_exp_avg_sq})
+      if (slot->defined()) *slot = slot->to(device);
+  }
   for (const auto& owner : decoded.owners) values.at(owner.aliases.front()).copy_(owner.value);
   if (optimizer) {
     optimizer->groups_.swap(decoded.groups);

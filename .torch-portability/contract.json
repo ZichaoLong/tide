@@ -253,11 +253,11 @@
       "backend": "cuda",
       "host_arch": "x86_64",
       "policy": "optional",
-      "status": "unsupported",
+      "status": "implemented",
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
     },
     {
       "id": "python-npu-aarch64",
@@ -454,12 +454,12 @@
       "backend": "cuda",
       "host_arch": "x86_64",
       "policy": "optional",
-      "status": "unsupported",
+      "status": "implemented",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Deferred by user; no accelerator support in current implementation scope."
+      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -467,12 +467,12 @@
       "backend": "npu",
       "host_arch": "aarch64",
       "policy": "optional",
-      "status": "unsupported",
+      "status": "implemented",
       "required_tiers": [
         "build",
         "backend-smoke"
       ],
-      "reason": "Installed torch_npu libtorch_npu.so is classified as python-wheel-runtime: no standalone CMake package/public ABI, libtorch_python dependency and CPython symbols; no reproducible C++ NPU build or live-device smoke is currently possible.",
+      "reason": "Standalone SDK runtime and Python-owned native adapter implemented separately; preserve historical unavailable-wheel attempt as prior evidence.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -487,6 +487,31 @@
           ]
         }
       ]
+    },
+    {
+      "id": "python-cuda-aarch64",
+      "language": "python",
+      "backend": "cuda",
+      "host_arch": "aarch64",
+      "policy": "optional",
+      "status": "implemented",
+      "required_tiers": [
+        "backend-smoke"
+      ],
+      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
+    },
+    {
+      "id": "cpp-cuda-aarch64",
+      "language": "cpp",
+      "backend": "cuda",
+      "host_arch": "aarch64",
+      "policy": "optional",
+      "status": "implemented",
+      "required_tiers": [
+        "build",
+        "backend-smoke"
+      ],
+      "reason": "Explicit isolated accelerator build implemented; exact live-device support requires the cited qualification evidence. CUDA hardware is unavailable on the development host."
     }
   ]
 }

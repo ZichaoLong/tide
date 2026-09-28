@@ -176,3 +176,7 @@ CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
+The explicitly FP64 `norm-fp64-v1` Read is also unavailable on NPU with FP32
+payloads. NPU CSR fiber pooling is outside the supported execution policies;
+callers select `event` explicitly. No implicit CSR conversion or host execution
+is used to make an unsupported request pass.

@@ -14,10 +14,9 @@ CPU FP32/FP64 是基线。既有[六阶段验收](docs/evidence/foundation-final
 [跨家族验证](docs/evidence/cross-family-qualification.md)已完成；此次
 [公共库扩展验收](docs/evidence/library-foundation.md)也已完成：8621 项完整回归、
 22 个复杂配置单元和独立安装调用通过；随后验证器补强另经 18 项定向测试验证。
-Python NPU FP32 仅有
-[有限配置的 eager 验证](docs/evidence/npu-python-20260925.md)，不能外推为任意
-配置或新接口的 NPU 验收；原生 NPU/CUDA 当前不支持。性能报告保留实际规模、
-超时和未测范围，大拓扑完成不等于全规模训练等价性证明。
+Python 与 LibTorch 的 CUDA/NPU 路径现已实现，构建、迁移和逐配置验证见
+[加速器指南](docs/accelerators.md)。本机提供 NPU 实测，CUDA 设备执行需在目标机
+验证；有限配置通过不外推为所有模型或性能保证。当前状态与精确证据见下列入口。
 开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
 [路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。

@@ -39,8 +39,8 @@ installed in isolation. Local site paths belong in launch records, not library c
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| A1 | Python CUDA/NPU public runtime and configuration CPU parity, live placement, VJPs, training and checkpoint handoff | in progress |
-| A2 | Native device-neutral execution, isolated backend builds, standalone C++ CUDA/NPU lifecycle and clients | planned |
+| A1 | Python CUDA/NPU public runtime and configuration CPU parity, live placement, VJPs, training and checkpoint handoff | implemented; final gate pending |
+| A2 | Native device-neutral execution, isolated backend builds, standalone C++ CUDA/NPU lifecycle and clients | implemented; final gate pending |
 | A3 | Configuration matrix across families/modules/schedules, placement/fallback evidence, installed Python/native/C++ use | planned |
 | A4 | Clean full CPU regression, local NPU acceptance and CUDA compilation without device claims | planned |
 | A5 | Matched local CANN versions and portable target-machine environment/qualification reports | planned |
@@ -181,10 +181,11 @@ This verifies only the recorded local eager FP32 Python scope. The local
 TorchNPU stack rejects the FP64 graph matmul path, so Python NPU FP64 is
 unsupported by design. The smoke is a correctness/parity result, not a
 throughput, distributed, all-module or host-fallback audit; optimized operator
-traces remain unclaimed. C++ NPU remains unsupported because the installed
+traces were unclaimed at that revision. C++ NPU was unsupported because the installed
 wheel's `libtorch_npu.so` is classified as `python-wheel-runtime` and lacks the
 standalone SDK/CMake/public ABI required for a matching LibTorch build. The
-support matrix records both the verified Python cell and the blocked C++ attempt.
+historical report retains the Python cell and blocked C++ attempt. The authorized
+2026-09-28 accelerator extension above supersedes that implementation boundary.
 
 ## User-requested follow-up: Add scale comparison
 

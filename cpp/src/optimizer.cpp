@@ -1,4 +1,5 @@
 #include "tide/optimizer.h"
+#include "tide/device.h"
 #include <torch/csrc/autograd/grad_mode.h>
 #include <cmath>
 #include <set>
@@ -11,8 +12,8 @@ void finite_nonnegative(double value, const char* name) {
 }
 
 void validate_tensor(const Tensor& parameter, const Tensor& gradient, const std::string& name) {
-  if (!parameter.device().is_cpu() || (parameter.scalar_type() != at::kFloat && parameter.scalar_type() != at::kDouble))
-    throw std::invalid_argument("optimizer requires CPU FP32/FP64 parameter: " + name);
+  if (!supported_payload(parameter))
+    throw std::invalid_argument("optimizer requires supported FP32/FP64 parameter: " + name);
   if (gradient.device() != parameter.device() || gradient.scalar_type() != parameter.scalar_type()
       || gradient.sizes() != parameter.sizes())
     throw std::invalid_argument("gradient shape/device/dtype mismatch for parameter: " + name);

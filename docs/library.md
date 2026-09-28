@@ -3,9 +3,10 @@
 Tide 0.2 is a graph execution dependency. The experiment owns its dataset,
 task head, loss, optimizer, training loop, metrics and artifacts. Tide owns the
 graph/module configuration, execution policy and graph continuation. CPU
-FP32/FP64 is the required baseline. Python NPU FP32 is experimental; historical
-NPU smoke evidence does not certify the new library API or arbitrary configs.
-Native NPU and CUDA are unsupported in this release.
+FP32/FP64 is the required baseline. Python/native CUDA and NPU implementations
+use explicit device selection and independent CPU qualification. See the
+[accelerator guide](accelerators.md) for isolated builds, tested scopes and
+target-machine acceptance. NPU requires FP32; CUDA device results need a CUDA host.
 
 ## Configuration and runtime
 
@@ -156,7 +157,8 @@ accepts the same tensor format as its session; explicit External probes require
 a final logical stop. CPU tensors must already match the effective dtype/shape.
 This gate constructs the modules declared by the config; custom Python objects,
 custom task heads and pretrained weight import require their own differential
-tests. It currently certifies CPU only. Exact application resume still needs the
+tests. Accelerator candidates are compared with an independent CPU oracle,
+including live tensor placement and checkpoint handoff. Exact application resume still needs the
 experiment-owned state described above. Repeat qualification whenever topology,
 modules, execution policy, dtype or dependency version changes.
 
@@ -184,7 +186,8 @@ cmake --install build/tide
 ```
 
 In the consuming CMake project use `find_package(TideGraph 0.2 CONFIG REQUIRED)`
-and `target_link_libraries(my_target PRIVATE tide::tidegraph)`. Include both the
+and `target_link_libraries(my_target PRIVATE tide::tidegraph)` for the graph core,
+or `tide::runtime` when using the standalone device resolver/lifecycle. Include both the
 Tide install prefix and matching Torch prefix in `CMAKE_PREFIX_PATH`. The export
 propagates headers, C++17, ABI flags, Torch and Threads. It validates Torch
 version and architecture; the consumer must still use the exact compatible

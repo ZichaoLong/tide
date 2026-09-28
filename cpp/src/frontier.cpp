@@ -19,6 +19,7 @@ Frontier::Frontier(Graph g, Model m, Options options)
   if ((options.packed_sources || options.batch_next) && !options.packed)
     throw std::invalid_argument("packed transport requires packed execution");
   graph_.compile(); graph_.topological_order(); configure_model(graph_, model_); validate_model(graph_, model_);
+  pool_.set_device(model_.nodes[0].bias.device());
   validate_full_autograd(model_, options);
   validate_aggregate_autograd(model_, options);
   if (options.mode != "hard" && options.mode != "hst" && options.mode != "softp") throw std::invalid_argument("invalid emit mode");

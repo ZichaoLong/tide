@@ -9,9 +9,13 @@ void require(bool ok, const char* what) {
 }
 struct Comparison {
   bool fp32_payload;
-void tensor(const at::Tensor& a, const at::Tensor& b) {
-  require(a.defined() == b.defined(), "tensor presence");
-  if (!a.defined()) return;
+  std::optional<at::Device> candidate_device;
+void tensor(const at::Tensor& actual, const at::Tensor& expected) {
+  require(actual.defined() == expected.defined(), "tensor presence");
+  if (!actual.defined()) return;
+  if (candidate_device) require(actual.device() == *candidate_device, "candidate tensor device");
+  const auto a = actual.detach().to(at::kCPU), b = expected.detach().to(at::kCPU);
+  require(at::isfinite(a).all().item<bool>() && at::isfinite(b).all().item<bool>(), "nonfinite tensor");
   require(a.scalar_type() == b.scalar_type() && a.sizes() == b.sizes(), "tensor metadata");
   // FP64 descriptors computed from FP32 intermediates inherit FP32 error.
   const bool fp64 = a.scalar_type() == at::kDouble && !fp32_payload;
@@ -84,7 +88,8 @@ void result(const tide::Result& a, const tide::Result& b, bool traces) {
 }
 };
 }  // namespace
-void compare(const tide::Result& a, const tide::Result& b, bool traces, at::ScalarType payload_dtype) {
-  Comparison{payload_dtype == at::kFloat}.result(a, b, traces);
+void compare(const tide::Result& a, const tide::Result& b, bool traces, at::ScalarType payload_dtype,
+             std::optional<at::Device> candidate_device) {
+  Comparison{payload_dtype == at::kFloat, candidate_device}.result(a, b, traces);
 }
 }  // namespace tide_bench

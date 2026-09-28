@@ -11,6 +11,7 @@
 #include "tide/parameters.h"
 #include "tide/optimizer.h"
 #include "tide/checkpoint.h"
+#include "tide/device.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -22,6 +23,7 @@ void bind_metrics(py::module_&);
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name, &T::name)
 PYBIND11_MODULE(_tide_native, m) {
+  m.def("execution_backend", &execution_backend);
   py::class_<StateClock>(m, "StateClock").def(py::init<>()).def(py::init<Index, Index, Index>())
     FIELD(StateClock, period) FIELD(StateClock, first) FIELD(StateClock, count)
     .def("validate", &StateClock::validate).def("to_local", &StateClock::to_local)
