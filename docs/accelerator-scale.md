@@ -48,8 +48,8 @@ reporting descriptor error and route mismatches. Only descriptor dtype metadata
 is normalized for that cross-precision comparison; discrete routes, all other
 observables and gradients retain their checks. Near-tie route changes are failures,
 not silently accepted numerical noise. Read and control roots have isolated VJP
-checks, including connected-zero versus absent gradients. This extension is under
-qualification; earlier immutable evidence applies to the historical default only.
+checks, including connected-zero versus absent gradients. The CPU/two-NPU extension passed [immutable qualification](evidence/accelerator-scoring-20260928.md);
+earlier eight-NPU evidence applies to the historical default only.
 
 `--transport host` retains the earlier comparison: CPU state/messages/Aggregate
 and device State/Full through adapters. It necessarily transfers same-card

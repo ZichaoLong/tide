@@ -25,7 +25,7 @@ Never silently shrink topology/dimensions/precision. Contract: accelerator-scale
 
 ## Code and gates
 
-HEAD before current increment08a6a27; baseline implementation bb0ecc6.
+Implementation HEAD a12ee0c; previous handoff08a6a27; baseline bb0ecc6.
 Frozen perf-a2/client-{cpu,npu}-a2 passed immutable CPU/2/8-NPU tiny gates and
 real465-node D8/B1 gates. Evidence: evidence/accelerator-scale-20260928.{md,json}.
 Default strict VJP remains rtol1e-5/atol1e-6. Wide Add Full squared-norm gradients
@@ -63,10 +63,45 @@ scoring-extra-dev11 PASSED on physical9,11: both mixed read/control placements,
 including explicit CPU FP64 comparison,and four465-node Add/Attention seed0/7
 D8/B1 cells with basis-conditioned policy. Every cell has normal exit,complete
 observables and isolated VJPs. Raw results: task-root/runs/scoring-extra-dev11.
-Next immutable qualification: commit implementation,freeze perf-a3,build jobs
-build-cpu-a3/build-npu-a3 into client-{cpu,npu}-a3. Then rerun CPU baseline/FP32,
-NPU2 baseline/FP32,and scoring-extra gates on that source before full-size runs.
-NPU8 new scoring mode and full-size FP32 timings remain unverified.
+Clean perf-a3 frozen at a12ee0c. Immutable qualification ALL PASSED:
+build-cpu-a3/build-npu-a3,check-cpu-default-a3/check-cpu-fp32-a3 (8 cells each),
+check-npu2-default-a3 (8),check-npu2-fp32-a3 (4),scoring-extra-a3 (6),
+scoring-profile-a3. Total34 parity cells; both grad/no_grad,complete observables,
+isolated VJPs. Trace confirms41 FP32 LpNormV2/MIX_AIV and349 SoftmaxV2 vector
+kernels on both chips (softmax includes model operations). Reviewed evidence:
+evidence/accelerator-scoring-20260928.{md,json},separate from implementation.
+NPU8 new scoring mode,full backward/optimizer timing,and CUDA remain unverified.
+
+## Live full-size FP32 Read/control pilots
+
+All use clean perf-a3/a12ee0c,client-npu-a3,libtorch-npu/2.10.0-cann9.0.0.
+Submitted via launchers/submit-scoring-pilots-a3.py after all immutable gates passed.
+Authoritative exact commands,budgets/prerequisites: task-root/runs/scoring-pilots-a3.json.
+Common command: /home/zlong/venvs/trackio/bin/python scripts/benchmark_accelerator_scale.py
+--device npu --devices 2 --placement locality --transport resident
+--read-device model --read-dtype float32 --control-device model
+--width 2048 --batch 512 --vocab 50304 --steps 12 --warmup 4 --seed 7 --workers 16 --threads 1
+--timeout-seconds 1800 --memory-gib 512; exact paths/argv are in the JSON.
+Cwd task-root/sources/perf-a3; wide.txt input SHA256:
+d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4.
+
+Last observed 17:49 CST:
+- pilot-add-g0-n2-a3 RUNNING,physical9,11 (logical0,1),construction92.232s,
+  reached token5. Parameters exactly9,468,020,899.
+- pilot-attention-g0-n2-a3 RUNNING,physical1,5 (logical0,1),construction185.276s,
+  reached token0. Parameters exactly17,269,426,339.
+- pilot-add-g1-n2-a3 RUNNING,physical2,8 (logical0,1),constructing.
+- pilot-attention-g1-n2-a3 QUEUED,position1,insufficient free devices.
+Each has its own background.slice service tide-npu-performance-NAME.service;
+queue max7500s,native max1800s,RSS512GiB,12 tokens;source remains frozen.
+The two no-grad PIDs were confirmed on both assigned chips via npu-smi,including
+113MiB contexts on Attention's second chip during CPU construction. No full-size
+FP32 timing conclusion yet. These are capacity/timing pilots with shared-host
+contention; three-repeat matched2/4/8-card placement/precision comparison pending.
+Next: inspect each runs/NAME/{status.json,queue.json,task.log,run/stdout.log,
+run/run.json,run/summary.json,run/lifecycle.json}; require exit0,12 tokens,8 measured,
+no remaining children,and validate_run_record.py. Preserve OOM/timeouts; do not
+repeat unchanged failures or treat construction overlap as concurrent throughput.
 
 ## Full-size results and concurrency correction
 
@@ -89,7 +124,7 @@ four-card no_grad numbers or claim matched/repeated speedups.
   entered allocated physical2,8 (its pool1,2,5,8). Only our process was stopped.
 Evidence: runs/parallel-pilots-a2c-{results,device-contention}.json.
 Original fixed-four queued a2b grad pilots and earlier a2 pilots cancelled;
-all records retained. No live full-size pilot now.
+all records retained. Current a3 full-size pilots are recorded above.
 
 The user correctly identified avoidable serialization. New pool is twelve
 eligible devices1,2,5,6,7,8,9,11,12,13,14,15,not twelve allocated chips.

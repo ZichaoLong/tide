@@ -72,7 +72,7 @@ reference while adding declared FP32 Read/control placements.
 | P2 | Warm synchronized timing, transfer and allocator metrics, durable records/Trackio, bounded processes | verified: local Trackio success and timeout cleanup; immutable consumer build |
 | P3 | Independent concurrent configuration benchmarks, with resource interference recorded | in progress: disjoint-device pilots overlapped during construction; external device contention recorded; no concurrent throughput claim yet |
 | P4 | Same-model2/4/8-device memory/locality placement; full-size no_grad and grad-forward windows, explicit limits | four-card no_grad Add/Attention and two-card Add grad-forward pilots passed; scaling/repeats pending |
-| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | implemented candidate; CPU/NPU qualification in progress |
+| P5 | Explicit CPU/model-device Read and softmax controls, FP64/FP32, independent CPU reference and cross-precision diagnostics | verified CPU/two-NPU:34 cells and device trace; [evidence](evidence/accelerator-scoring-20260928.md); full-size FP32 pilots running |
 | P6 | Independent NPU node-selection/event-scheduling candidates; validate then choose by inference/training performance | authorized, planned; current sorting/scheduling remains CPU |
 
 Full-size pilot timings are descriptive until matched repetitions complete.
