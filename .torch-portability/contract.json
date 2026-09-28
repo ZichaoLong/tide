@@ -16,6 +16,16 @@
         "requires_explicit_device": true,
         "supports_init_from": false,
         "supports_resume": false
+      },
+      "library_qualify": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
+      },
+      "consumer_example": {
+        "requires_explicit_device": true,
+        "supports_init_from": false,
+        "supports_resume": false
       }
     },
     "cpu_reference": {
@@ -205,6 +215,35 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir FRESH_RELOCATED_BUILD --output-dir NEW; exact export/build/standalone argv in final report",
           "result": "passed",
           "environment_manifest": "docs/evidence/foundation-final.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "ff708a101e243240c94c6cd91fc685cd5218bad5",
+          "scope": "Tide 0.2 configured library: 8621 CPU tests, 22 exact-topology/reduced-tensor cells, installed Python/native/CMake consumers; reused fresh c08cc90 C++ build with identical source hash",
+          "tiers": [
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/library-foundation.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "aa03a03ffe5541720b02994c89f662e509cafe2d",
+          "scope": "Validator-only follow-up: 18 qualifier tests including identical-forward/wrong-backward rejection and trace-disabled native compaction VJPs; installed consumers rerun. Executors unchanged from ff708a1.",
+          "tiers": [
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python -m pytest tests/test_library_qualification.py -q; python scripts/library_consumer.py --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/library-foundation.md"
         }
       ]
     },
@@ -244,7 +283,8 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/npu-python-20260925.md"
         }
-      ]
+      ],
+      "reason": "Verified only for the finite eager FP32 cases at the cited source. The Tide 0.2 public config/runtime API has no additional NPU qualification."
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -389,6 +429,22 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir FRESH_RELOCATED_BUILD --output-dir NEW; exact export/build/standalone argv in final report",
           "result": "passed",
           "environment_manifest": "docs/evidence/foundation-final.md"
+        },
+        {
+          "date": "2026-09-28",
+          "commit": "ff708a101e243240c94c6cd91fc685cd5218bad5",
+          "scope": "Tide 0.2 configured library: 8621 CPU tests, 22 exact-topology/reduced-tensor cells, installed Python/native/CMake consumers; reused fresh c08cc90 C++ build with identical source hash",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "checkpoint-handoff"
+          ],
+          "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/library-foundation.md"
         }
       ]
     },

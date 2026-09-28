@@ -11,8 +11,10 @@ Tide 0.2 的 [依赖调用指南](docs/library.md)、[独立 Python 示例](exam
 分块、训练更新及新进程恢复；缩维验证保留原拓扑并记录实际触达节点数。
 
 CPU FP32/FP64 是基线。既有[六阶段验收](docs/evidence/foundation-final.md)与
-[跨家族验证](docs/evidence/cross-family-qualification.md)已完成；此次公共库扩展
-的完整门禁进度见当前进度文件。Python NPU FP32 仅有
+[跨家族验证](docs/evidence/cross-family-qualification.md)已完成；此次
+[公共库扩展验收](docs/evidence/library-foundation.md)也已完成：8621 项完整回归、
+22 个复杂配置单元和独立安装调用通过；随后验证器补强另经 18 项定向测试验证。
+Python NPU FP32 仅有
 [有限配置的 eager 验证](docs/evidence/npu-python-20260925.md)，不能外推为任意
 配置或新接口的 NPU 验收；原生 NPU/CUDA 当前不支持。性能报告保留实际规模、
 超时和未测范围，大拓扑完成不等于全规模训练等价性证明。

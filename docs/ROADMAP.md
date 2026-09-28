@@ -15,13 +15,15 @@ required gate; planned = required work remains. No submitted/running job passes.
 Authorized 2026-09-28. Consumers live in separate repositories and depend on a
 pinned Tide version/source. Runtime use must not write into the Tide checkout.
 Existing graph/kernel semantics and independent reference schedules remain.
+L1-L4 are complete; [immutable-source qualification](evidence/library-foundation.md)
+records the full gate and the subsequent validator-only hardening separately.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| L1 | Versioned graph/module configuration, public runtime/session API, explicit backend/policy checks, external inputs and checkpoint lifecycle | implemented; 95 directed tests |
-| L2 | Package-owned configuration equivalence gate: full observables, independent gradients, chunking, multi-step updates and checkpoint continuation, explicit bounded scope | implemented; 14 directed tests |
-| L3 | Python wheel and optional native consumption from another directory; CMake install/export for C++ clients; runnable consumer and version boundary | implemented; installed Python gate passed, native/C++ qualification next |
-| L4 | Mixed modules and fully active complex topology gates, actual topology with reduced tensor sizes, clean full CPU regression and consumer qualification | implemented; directed active mixed cases passed, immutable full gate next |
+| L1 | Versioned graph/module configuration, public runtime/session API, explicit backend/policy checks, external inputs and checkpoint lifecycle | verified; library qualification |
+| L2 | Package-owned configuration equivalence gate: full observables, independent gradients, chunking, multi-step updates and checkpoint continuation, explicit bounded scope | verified; library qualification + validator follow-up |
+| L3 | Python wheel and optional native consumption from another directory; CMake install/export for C++ clients; runnable consumer and version boundary | verified; installed Python/native/C++ consumption |
+| L4 | Mixed modules and fully active complex topology gates, actual topology with reduced tensor sizes, clean full CPU regression and consumer qualification | verified; 8621-test full gate and 22 complex cells |
 
 Full-scale performance runs and new backend support are not required for this
 library increment. Reports identify the actual topology, dimensions, inputs,
