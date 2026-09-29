@@ -680,7 +680,7 @@
         {
           "date": "2026-09-29",
           "commit": "595dccd0b23bd809bed28874591ae4f5f268512f",
-          "scope": "Standalone consumer FP32/FP16:100 CPU/2/4/8-NPU configuration cells, four CTests and real loader closure. Same-dtype independent CPU oracle; complete observables, exact routes/None, isolated VJPs, three updates and FP32 master/slot trajectories. FP16 consumer atol.002/rtol.02. Public standalone NamedOptimizer/owner checkpoints remain FP32/FP64; consumer owns FP32 masters.",
+          "scope": "Standalone consumer FP32/FP16:108 CPU/2/4/7/8-NPU configuration cells, four CTests and real loader closure. Same-dtype independent CPU oracle; complete observables, exact routes/None, isolated VJPs, three updates and FP32 master/slot trajectories. FP16 consumer atol.002/rtol.02. Public standalone NamedOptimizer/owner checkpoints remain FP32/FP64; consumer owns FP32 masters.",
           "tiers": [
             "build",
             "backend-smoke",
@@ -688,7 +688,7 @@
             "feature",
             "short-train"
           ],
-          "test_command": "python scripts/verify_accelerator_scale.py --dtype float16 --check-atol .002 --device npu --build-dir MATCHING_BUILD --output-dir NEW; exact CPU/2/4/8-device commands and training policies in report",
+          "test_command": "python scripts/verify_accelerator_scale.py --dtype float16 --check-atol .002 --device npu --build-dir MATCHING_BUILD --output-dir NEW; exact CPU/2/4/7/8-device commands and training policies in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
         }

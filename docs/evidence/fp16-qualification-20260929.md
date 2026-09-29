@@ -24,6 +24,7 @@ environment/terminal records and artifact locators are in the adjacent JSON.
 | Standalone consumer CPU | 36 FP32/FP16 configuration cells |
 | Standalone consumer2 NPU | 36 FP32/FP16 cells: CPU64 and all32 policies |
 | Standalone consumer4 NPU | 20 FP32/FP16 cells: CPU64 inference and CPU32 training |
+| Standalone consumer7 NPU | Eight additional FP32/FP16 mixed32 training cells, after available capacity changed |
 | Standalone consumer8 NPU | Eight FP32/FP16 cells: mixed32 training |
 | Consumer CTests | Four passed, including analytical master SGD, None/zero and overflow checks |
 | CUDA compilation/host checks | CUDA-linked build and22 CPU/CLI tests; no GPU execution |
@@ -31,7 +32,7 @@ environment/terminal records and artifact locators are in the adjacent JSON.
 
 Local NPU qualification is aarch64 Ascend A3, Torch/TorchNPU2.10, CANN9.0,
 driver25.3.rc1, public /opt modules and shared driver. Multi-device consumer
-work uses TASK_QUEUE_ENABLE=0 and dynamically allocated2/4/8 physical devices.
+work uses TASK_QUEUE_ENABLE=0 and dynamically allocated2/4/7/8 physical devices.
 Builds use two workers and isolated directories. Standalone loader closure
 resolves real framework/vendor libraries, without Python or build-time stubs.
 CUDA host build uses Torch2.10.0+cu128 / CUDA Toolkit12.8.1 on aarch64.
@@ -41,7 +42,7 @@ independent isolated VJPs and disconnected gradients, chunking, three SGD/AdamW
 updates, fresh-process checkpoint continuation and CPU handoff. Consumer gates
 compare independent CPU scalar-slot and placed packed-row schedules, logits,
 Read/control precision and device, payload dtype/residency, nonzero/zero VJPs,
-three complete updates, FP32 master trajectories and optimizer slots. These100
+three complete updates, FP32 master trajectories and optimizer slots. These108
 consumer configurations are bounded tensors; full-size performance is a separate
 eight-cell experiment. The public scheduler remains host-owned; consumer tensor
 ranking/event keys still return decisions to a host dispatch loop.

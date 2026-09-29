@@ -93,8 +93,8 @@ Authorized 2026-09-29. Existing FP32 acceptance remains immutable.
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
 | H1 | Public Python/native and consumer FP16 payload; separate consumer Read/control precision; FP32 master optimizer/checkpoints and static loss scale; unchanged integer semantics | verified; [FP16 qualification](evidence/fp16-qualification-20260929.md) |
-| H2 | Independent same-dtype CPU oracle; complete observables, routes, isolated VJPs, None/zero and three optimizer updates; clean CPU/public NPU/consumer gates | verified;8645 CPU tests,82 public NPU cases and100 consumer cells |
-| H3 | Bounded same-placement FP32/FP16 full-size inference and warmed training for Add/Attention; preserve failures and variance | running; both inference pairs complete, both training pairs still required |
+| H2 | Independent same-dtype CPU oracle; complete observables, routes, isolated VJPs, None/zero and three optimizer updates; clean CPU/public NPU/consumer gates | verified;8645 CPU tests,82 public NPU cases and108 consumer cells |
+| H3 | Bounded same-placement FP32/FP16 full-size inference and warmed training for Add/Attention; preserve failures and variance | running; six cells complete, final7-chip Attention training pair queued |
 | H4 | Existing CANN trace engine/API summary; explain host orchestration and attribution limits | verified; [profile analysis](evidence/accelerator-profile-analysis-20260929.md) and two FP16 hardware traces |
 
 ## Six implementation classes
