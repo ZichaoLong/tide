@@ -595,6 +595,19 @@
           "tiers": [
             "static-cli"
           ]
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+          "environment_manifest": "docs/evidence/bounded-scheduler-capacity-20260929.md",
+          "scope": "Thirteen retained failed bounded assessment experiments:8 reduced-tensor12-token notification-capacity probes,4 eight-device full-size OOMs,1 twelve-device full-size FP16 Attention OOM under observed same-device external contention. Ten prerequisite skips are separately recorded and were not native attempts.",
+          "tiers": [
+            "feature",
+            "workload"
+          ],
+          "test_command": "Exact native wrapper commands, frozen plans and skipped inventory in docs/evidence/bounded-scheduler-capacity-20260929.json",
+          "result": "failed",
+          "reason": "Two-device CANN Notify resources exhausted; eight-device replay reached declared16384-channel capacity. Attention inference and Add training OOM in both dtypes on8 chips. The12-device FP16 inference OOM occurred on a device with another process; uncontended12-device fit remains unknown."
         }
       ],
       "evidence": [
@@ -734,6 +747,20 @@
           "test_command": "python scripts/verify_bounded_scheduler.py --device npu --dtype float32 --build-dir MATCHING_BUILD --output-dir NEW; exact FP16/tiny/actual-topology/device-count commands and tolerances in the report/adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/bounded-scheduler-qualification-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+          "environment_manifest": "docs/evidence/bounded-scheduler-capacity-20260929.md",
+          "scope": "Previously qualified standalone build: fullD2048/B512/V50304/T12 Add bounded-eager inference completed on8 A3 devices in FP32/FP16, one warmup/one measured reset window per dtype. Two additional actual-topology D8/B1/V17/T3 Attention eager forward/isolated-VJP checks passed on12 devices at unchanged FP32 and declared FP16 tolerances. No full-size captured replay,12-device complete training, stable speed or convergence claim; failed capacity cells are separately retained as attempts.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "workload"
+          ],
+          "test_command": "python scripts/benchmark_bounded_scheduler.py --device npu --memory add --devices 8 --dtype float32 ...; exact FP32/FP16 benchmark and12-device native parity argv are retained in the adjacent JSON",
+          "result": "passed"
         }
       ]
     },

@@ -1,11 +1,10 @@
 # Current handoff
 
-Updated 2026-09-29 10:16 UTC. Authorized increment: ROADMAP D1-D6, matched-source
+Updated 2026-09-29 11:44 UTC. Authorized increment: ROADMAP D1-D6, matched-source
 full-size CPU/NPU comparison, profiling and bounded device scheduling. Goal active;
 do not finish after submissions. No sub-agents. Reference repositories and
 ObsidianVault read-only. No push by this task; remote-tracking HEAD was observed
-at f8648f7. Runtime/checker source is f8648f7, qualification evidence is being
-committed separately. Preserve all frozen sources, live launchers and old records.
+at f8648f7. Runtime/checker source is f8648f7, qualification evidence committed separately at 158dc76. Preserve all frozen sources, live launchers and old records.
 
 ## Live work and next actions
 
@@ -18,26 +17,82 @@ CPU318/319 outside formal affinities but share host memory/fabric resources.
 
 1. matched-baseline03 is running. Clean sources/baseline02 at951031e,
    builds/client-{cpu,npu}-baseline02, launchers/matched-baseline03.py,
-   inputs/matched-plan-v2.json. Current NPU Attention training1 holds9 devices;
-   construction196.457s completed, first update active. CPU Attention training1
-   reached7200-second native timeout after one complete warmup, no measured
-   update, no remaining child. That cell's later repeats are skipped by the
-   fixed plan; independent cells continue. Do not interrupt valid work.
-2. geometry-bounded-eight03 is queued for8 NPUs after the passed NPU8 gate.
-   Source bounded-qualified03 atf8648f7; plan bounded-geometry-plan-v3.json;
-   launcher geometry-bounded-eight03.py. Actual465-node/4418-wire topology,
-   D8/B1/V17, full12-token window, FP32 Add/Attention infer/train replay,
-   iterations2/warmup1,900s/32GiB RSS per cell,64GiB conservative workspace
-   threshold. Capacity diagnosis only, not full-size timing. It follows the
-   failed two-device geometry02 probes below. Do not edit its live plan/launcher.
-3. Inspect eight-device geometry, then freeze a finite full-size bounded
-   FP32/FP16 capacity/performance plan. None submitted yet. Conservative
-   workspace estimates are not measured HBM or proof of fit/impossibility.
-4. Finish baseline03 repetitions and its four automatic profiles; do not
+   inputs/matched-plan-v2.json. First round:7 passed/CPU Attention training
+   timed out; all4 inference cells of repeat2 also passed. NPU Add training2
+   is running after the bounded12 follow-up. Ten timing cells remain including
+   this live cell, then4 profiles. NPU Attention training1
+   measured update788.123357s (forward647.207837/backward136.951850/
+   optimizer3.915472),128.275286ms/sample-token; warmup857.817752s.
+   CPU Attention training1 hit7200s after one complete warmup, no measured
+   update, no remaining child. Its later repeats are skipped by the fixed plan.
+   Complete the remaining repeats and4 profiles; do not interrupt valid work.
+2. geometry-bounded-eight03 completed10:44:40 UTC. All4 native cells FAILED
+   before any observation: bounded peer notification capacity exceeded16384.
+   Actual465-node/4418-wire topology,D8/B1/V17/T12,FP32 Add/Attention infer/train
+   replay on8 devices. Finite assessment exit0 is not a passing workload.
+   reports/audit-geometry-eight03-final01 passed record/source/binary/Trackio audit.
+   Keep this distinct from the2-device runtime NO_NOTIFY_RESOURCE failure.
+3. bounded-full01 completed11:21:01UTC:6 native attempts,2 passed/4 failed;
+   10 cells skipped by prerequisites. Sourcef8648f7,8 devices,fullD2048/B512/
+   V50304/T12,eager/replay Add/Attention infer/train finite plan preserved.
+   Add eager inference passed: FP3239.380302s andFP1641.778807s per reset-state
+   measured window; max per-device allocator peaks11.760/5.885GiB. Only one
+   process/dtype, same allocation/locality policy; no exact-node-map proof.
+   Attention inference and Add training each OOM in both dtypes before any
+   observations. Attention training skipped after inference OOM; all replay
+   skipped after corresponding small-tensor12-token Notify-capacity failures.
+   Skips are not full-size tests or capacity failures. reports/audit-bounded-
+   full01-final01/audit.json passed all6 records/source/binary/Trackio checks.
+   Add inference overlapped outside processes on physical9; preserve samples.
+   Frozen plan/launcher and original raw files must not be edited.
+4. bounded-twelve01 completed11:34:26UTC. It acquired12 devices after24.16s
+   queue wait. Both actual-topology D8/B1/V17/T3 Attention forward/isolated-VJP
+   prerequisites passed(FP32 unchanged;FP160.02/0.02); no12-device replay or
+   complete-training qualification claim. One fullD2048/B512/V50304/T12 FP16
+   eager inference attempt then FAILED with NPU OOM before observations.
+   Failed logical8=physical9:owned allocation33.95GiB,reserved37.15GiB,free96.98MiB,
+   request178MiB. Observer02 samples11:32:43-11:34:19 show outside processes on
+   that device(also8). Earlier overlap on7 also recorded. Thus this does NOT
+   establish an uncontended12-device capacity limit. Admission was free, but
+   unrelated tasks later entered advisory-locked devices; never stop them.
+   reports/audit-bounded-twelve01-final01 passed1 native record/1 gate(2 cases).
+   Frozen launchers/bounded-twelve01.py and inputs/bounded-twelve-plan-v1.json,
+   allocation/queue/lifecycle/Trackio and failures retained. This one-attempt
+   capacity follow-up is terminal; do not silently rerun under the same load.
+5. Finish baseline03 repetitions and its four automatic profiles; do not
    duplicate them. Analyze exports with scripts/summarize_ascend_profile.py.
-5. Audit final raw records/source/binaries/Trackio, write separate performance
-   evidence, update ROADMAP/STATUS, commit without pushing. Only complete goal
+6. Capacity evidence is complete at docs/evidence/bounded-scheduler-capacity-
+   20260929.{md,json}, with README/contract/navigation updated; commit separately.
+   Reports bounded-analysis-final01 and audit-bounded-capacity-final01 cover
+   all15 experiments(2 success/13 failures),2 new12-device gate cases,10 skips.
+   Resource inputs were copied to hashed immutable snapshots within the analysis
+   report; original observers remain live. Support schema and record audits pass.
+   Finish baseline/profile analysis and audit, then final evidence/ROADMAP/STATUS
+   commit without pushing. Only complete goal
    after authorized local assessment closes; preserve failures and limitations.
+
+The low-frequency observe-resources01 service records npu-smi/queue states and
+project PIDs every30s in runs/observe-resources01/observations.jsonl, starting
+10:38 UTC. It reads only, never stops/changes workloads, and exits when its three
+original jobs terminate (12h wall bound). New observe-resources02 started11:10UTC,
+also tracks bounded-twelve01 and exits after all four workloads terminate. Its
+separate launcher/records preserve the original observer; use02 for follow-up
+allocation reservations and later shared-load evidence. Earlier activity is not covered. At10:38-10:48,other processes used4-6 chips;
+no sampled interval showed12 actually unoccupied chips. Distinguish project
+use/reservations from unrelated load and instantaneous zero AiCore.
+launchers/summarize-bounded01.py reads geometry/full/observer records into a
+new --out; reports/bounded-analysis-pilot02 is partial,not final; includes both observers and12-device job.
+launchers/analyze-profile01.py adds per-device operator interval unions and
+level-separated host API categories using the repo CSV summarizer. Tested on
+retained profile-smoke-dev01 export and1000 independent integer-grid coverage
+sets. The tiny trace remains a helper check,not full-size profile evidence.
+reports/audit-baseline03-pilot02 passed12 terminal records/5 gates;partial only. Observations
+can show outside processes entering an advisory-locked device; no exclusivity claim.
+launchers/summarize-matched01.py builds process-level/warmup-separated analysis;
+reports/matched-analysis-pilot01 is partial (7 terminal timing records), not a
+final report. Use a new --out, omit --allow-live only after matrix completion.
+reports/geometry-notify-diagnostic01 preserves header identity and matching
+project plog error lines for all4 geometry02 failures (8192 Notify IDs).
 
 ## Immutable bounded qualification: complete
 
@@ -77,7 +132,7 @@ Full-size12-token topology-only conservative workspace bounds, GiB:
 FP32 Add infer610.450/train12873.757, Attention5580.700/19091.282;
 FP16 Add305.262/7380.382, Attention2790.387/11112.782.
 --workspace-gib up to32768 is a refusal threshold, not reservation. Physical
-HBM/host RSS/wall limits remain independent. Full-size bounded timings not run.
+HBM/host RSS/wall limits remain independent. Both8-device and12-device bounded assessments are terminal as above. The12-device failure has observed external device contention.
 
 ## Formal baseline and profiles
 

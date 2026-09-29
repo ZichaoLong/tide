@@ -2,7 +2,10 @@
 
 This optional historical-workload consumer passed the finite
 [84-cell CPU/NPU qualification](evidence/bounded-scheduler-qualification-20260929.md).
-Full-size performance and capacity work remain in STATUS and ROADMAP D1-D6.
+The [full-size capacity assessment](evidence/bounded-scheduler-capacity-20260929.md)
+records Add eager inference success, notification limits and OOMs, including a
+12-device attempt affected by external device contention. Full-size captured
+replay is not qualified; CPU/NPU repeated timing and profiles remain separate.
 It does not replace the public eager executors, their independent CPU schedules
 or checkpoint contracts.
 

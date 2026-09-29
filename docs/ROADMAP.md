@@ -111,7 +111,7 @@ compilation or support for unbounded device queues.
 | D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | verified finite scope; [84 immutable CPU/NPU cells](evidence/bounded-scheduler-qualification-20260929.md), both dtypes |
 | D4 | Device-controlled continuation of tasks within a window; graph/capture or compiled backend, no per-event host scalar/index decisions; verify actual replay path and explicit unsupported combinations | verified finite scope; native one/two/eight-device replay, input changes and explicit unsupported combinations; full-size capacity separate |
 | D5 | Multi-device execution with locality and device completion dependencies; complete training with isolated VJPs, None/zero, master/optimizer updates and three-step oracle | verified finite scope; tiny one/two/eight-device FP32/FP16 and actual-topology CPU/two-device three-token gates, SGD/AdamW trajectories |
-| D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | planned |
+| D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | active: [terminal bounded capacity assessment](evidence/bounded-scheduler-capacity-20260929.md), Add eager inference pair passed; notification/OOM/shared-device failures retained; repeated baseline/profile closure pending |
 
 Start with the installed Torch/TorchNPU2.10/CANN9.0 stack; capabilities must be
 probed before relying on graph capture, conditional streams or custom kernels.

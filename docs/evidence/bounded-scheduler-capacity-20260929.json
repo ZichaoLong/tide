@@ -1,0 +1,3259 @@
+{
+  "schema": "tide-bounded-capacity-evidence-v1",
+  "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+  "runtime_source": "ff2517450493543e0dfed3b3bc57f00bcf3787ab",
+  "core_sha256": "5e342902e64abbc384099c3903317955e2eac2c9bfa599cd1a9ddf9eb9fbf439",
+  "environment": {
+    "host_arch": "aarch64",
+    "chip": "Ascend910_9392/A3",
+    "hbm_gib_per_chip": 64,
+    "driver": "25.3.rc1",
+    "torch": "2.10.0",
+    "torch_npu": "2.10.0",
+    "cann": "9.0.0",
+    "standalone": true,
+    "npu_task_queue": 0
+  },
+  "scope": "terminal finite capacity assessment and exploratory whole-window measurements; baseline CPU/NPU repetition/profiling separate",
+  "jobs": [
+    {
+      "name": "geometry-bounded02",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "matrix_state": "completed",
+      "status_sha256": "99c3e83cd1bc26f9ab2914a2e0d6954601cce5aa62f40e3881f95d00e9697d6d",
+      "matrix_sha256": "f41f197f9df7bb2cebc3feae606de0a3984d63eba1a04081499d18c108802b65"
+    },
+    {
+      "name": "geometry-bounded-eight03",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "matrix_state": "completed",
+      "status_sha256": "2d078cf64fe5220db5bd92833ef1b2057d21c0139772c1288d90e6db308b7b19",
+      "matrix_sha256": "ec161fbf55e8c57ea954121bb3d38d91ef17832fc9e90ef5d01c86abd0114074"
+    },
+    {
+      "name": "bounded-full01",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "matrix_state": "completed",
+      "status_sha256": "1d40ca0ce6d4b0b5436d97bc231046a10fedec704b503540da7372aed4c7c90f",
+      "matrix_sha256": "1d501b21352e0db664736bb743008b2714d400bac5fdbec448a8294d3ddaaf7d"
+    },
+    {
+      "name": "bounded-twelve01",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "matrix_state": "completed",
+      "status_sha256": "6b6e96108298d77be5b448d6a4b1c6f3b6785910649deee723633aab9883f81e",
+      "matrix_sha256": "836fb1b3885d0cf9615580afa9948ae91e3d723e3be02df61ad7e1c37f8413f3"
+    }
+  ],
+  "runs": [
+    {
+      "name": "geometry-bounded02/add-train0",
+      "locator": "artifacts/device-scheduler-geometry-bounded02/add-train0",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 2,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1
+        ],
+        "physical_visible_devices": "3,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          61.46,
+          53.73,
+          56.13
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          54.74,
+          52.85,
+          55.76
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "add",
+        "--training",
+        "0",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded02/add-train0",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:04:58.358465+00:00",
+      "finished": "2026-09-29T10:05:31.414942+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU peer create notify: ACL error 207009"
+      ],
+      "host_peak_rss_gib": 1.6078300476074219,
+      "process_seconds": 32.65897585824132,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "5e310c426970522708c3b384abb558ffbf63a32bc5445a4279f75c79911eed1e",
+        "summary.json": "4d6121ce9be921ea3f8be61ccae3fcacd142e137fab2ee7f7b5f83cffa7a6a29",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "acd07a2d49267a198953787fe0badf6101ad728216c258b1552243717d5a194e",
+        "lifecycle.json": "5663976b77ab79d21f8a1634ef30466cccfb8a95483450f475e41b57a088a5aa",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 0,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded02/add-train1",
+      "locator": "artifacts/device-scheduler-geometry-bounded02/add-train1",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 2,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1
+        ],
+        "physical_visible_devices": "3,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          54.74,
+          52.85,
+          55.76
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          69.16,
+          55.86,
+          56.62
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "add",
+        "--training",
+        "1",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded02/add-train1",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:05:31.613837+00:00",
+      "finished": "2026-09-29T10:06:05.158138+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU peer create notify: ACL error 207009"
+      ],
+      "host_peak_rss_gib": 1.8476524353027344,
+      "process_seconds": 33.084962371736765,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "d306b84ad7a9efd0ca10b85f79237f85782dc998140918374473c285fe9b9150",
+        "summary.json": "7d28ca39abf1490cacc7728319717b52661e6182c56dd2c335f6283dddd0b36c",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "147ab6b87b7fc66e3b6133f443af6793e752dd30c97425046274693a26039006",
+        "lifecycle.json": "d68eb4e0f5a7ffb33cd67ce83c6c95529ab2d706b10b32516a3e1fe878305bf0",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 0,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded02/attention-train0",
+      "locator": "artifacts/device-scheduler-geometry-bounded02/attention-train0",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 2,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1
+        ],
+        "physical_visible_devices": "3,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          69.16,
+          55.86,
+          56.62
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          57.89,
+          54.65,
+          56.18
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "attention",
+        "--training",
+        "0",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded02/attention-train0",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:06:05.366896+00:00",
+      "finished": "2026-09-29T10:06:44.964641+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU peer create notify: ACL error 207009"
+      ],
+      "host_peak_rss_gib": 1.6850204467773438,
+      "process_seconds": 39.18743420764804,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "102ee17f4285139d8979cbb37bb19398f514fd63fe6ad13612b7b50faf4e007d",
+        "summary.json": "26b0150027c01201540fa4311b0a4e8b2159b666703e32893748ed351d6dee22",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "e4edf00f9a90c441f9462dec7e0d5125ef69bdd4bdd1c2da6aead1e847269b8a",
+        "lifecycle.json": "6fd142fc793ce5458770ec6de21c44e7b13f19fbaeb2bf163bdc10271aab06a9",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 0,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded02/attention-train1",
+      "locator": "artifacts/device-scheduler-geometry-bounded02/attention-train1",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 2,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1
+        ],
+        "physical_visible_devices": "3,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          57.89,
+          54.65,
+          56.18
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          49.17,
+          52.85,
+          55.5
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "attention",
+        "--training",
+        "1",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded02/attention-train1",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:06:45.179847+00:00",
+      "finished": "2026-09-29T10:07:29.511713+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU peer create notify: ACL error 207009"
+      ],
+      "host_peak_rss_gib": 1.9701080322265625,
+      "process_seconds": 43.910660587251186,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "bdc644d59db9d055f662a06701cb5ac9045e2bc90ab99c6327652c40548a7bc6",
+        "summary.json": "fbce226026c94c0c3fdb5eeee57129e193fb31295d0949c2ec811af8f0e3c3b1",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "80cb8004eb1c1bc65a1bab1e31d461187c45ed83723ead2592ea8bd9ee85c4f1",
+        "lifecycle.json": "5c66daf9fc9ffa106d4bf791c37b1a855f9c1e6890484b5b07d171c35107bea3",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 0,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded-eight03/add-train0",
+      "locator": "artifacts/device-scheduler-geometry-bounded-eight03/add-train0",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          49.09,
+          50.63,
+          52.32
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          45.84,
+          49.64,
+          51.93
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "add",
+        "--training",
+        "0",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded-eight03/add-train0",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:42:13.709748+00:00",
+      "finished": "2026-09-29T10:42:46.911347+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "bounded peer notification capacity exceeded"
+      ],
+      "host_peak_rss_gib": 1.9077835083007812,
+      "process_seconds": 32.8117453455925,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "2ec7d2cada4c2f76faaaf03074d650a207f1ae8a250382029a448c5db4889896",
+        "summary.json": "454598313a862ffb3653251aa8aea972f48cbbeab8d5819fb84f21abe334d711",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "2ef28c13467a6beacc37b62b1199f5cc91190b8e630cb92f08bded9dde3f5c26",
+        "lifecycle.json": "020f3f6b64466f06f207f3a0e1cb630c5555d6e10fe65e2eaf25e4e5c9939e3f",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 1,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T10:42:35.882457+00:00",
+            "physical_ids": [
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded-eight03/add-train1",
+      "locator": "artifacts/device-scheduler-geometry-bounded-eight03/add-train1",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          45.84,
+          49.64,
+          51.93
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          51.45,
+          51.07,
+          52.35
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "add",
+        "--training",
+        "1",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded-eight03/add-train1",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:42:47.094378+00:00",
+      "finished": "2026-09-29T10:43:22.296652+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "bounded peer notification capacity exceeded"
+      ],
+      "host_peak_rss_gib": 2.0509719848632812,
+      "process_seconds": 34.81698193773627,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "1bb4af98ab946f4128f71e6b8eadc77fad58b6f67edcf4f819bf450e10879c32",
+        "summary.json": "2aa7efb3e64a0e121b07f2931b277b474e55f1f1b9d8de46cdf491f957b04856",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "3ecb8d52b512cb01e1fe1334b0223a87e53d424b4991bdeca57d5c13e303dff4",
+        "lifecycle.json": "8e39adf912478a58d932b7819564eefa114be1259f084b43fd6d2a9f479938ad",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 1,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T10:43:07.975623+00:00",
+            "physical_ids": [
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded-eight03/attention-train0",
+      "locator": "artifacts/device-scheduler-geometry-bounded-eight03/attention-train0",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          51.45,
+          51.07,
+          52.35
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          47.12,
+          49.96,
+          51.92
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "attention",
+        "--training",
+        "0",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded-eight03/attention-train0",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:43:22.481671+00:00",
+      "finished": "2026-09-29T10:44:00.229630+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "bounded peer notification capacity exceeded"
+      ],
+      "host_peak_rss_gib": 2.0959739685058594,
+      "process_seconds": 37.35662255063653,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "ea89ca979836cb0ec72a075fe8ba949d579541a45af65b221a6f222f681964f6",
+        "summary.json": "cc7e92b70c44006f80577285aca8241e1e3f1afcdd47b57370152752cbd5ed4a",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "98d3753b00875b22aee3906fdf360a7eb07a0085e8be824c3b590abc37ea1028",
+        "lifecycle.json": "6b87a9d0c619a6d5e198520cfa0ca5e096edd2227575fe72582bc180e3096ac4",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 1,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "geometry-bounded-eight03/attention-train1",
+      "locator": "artifacts/device-scheduler-geometry-bounded-eight03/attention-train1",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 64,
+        "seed": 7,
+        "replay": 1,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          318,
+          319
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          47.12,
+          49.96,
+          51.92
+        ],
+        "memory_budget_gib": 32,
+        "load_average_after": [
+          44.01,
+          48.8,
+          51.45
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--width",
+        "8",
+        "--batch",
+        "1",
+        "--vocab",
+        "17",
+        "--steps",
+        "12",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--dtype",
+        "float32",
+        "--workspace-gib",
+        "64",
+        "--memory-gib",
+        "32",
+        "--timeout-seconds",
+        "900",
+        "--memory",
+        "attention",
+        "--training",
+        "1",
+        "--replay",
+        "1",
+        "--seed",
+        "7",
+        "--optimizer",
+        "adamw",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/geometry-bounded-eight03/attention-train1",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:44:00.413864+00:00",
+      "finished": "2026-09-29T10:44:40.296339+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "bounded peer notification capacity exceeded"
+      ],
+      "host_peak_rss_gib": 2.258007049560547,
+      "process_seconds": 39.494668774306774,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "5bc2720a29fdfbea9cc7440d9b91e70b40ac6eed986238b3875e6e17654af745",
+        "summary.json": "2b9df3dda80398c201c9737ebd1f0c6cade839bd29eb67f37ec07e77e35aa501",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "8d5366f50a78fc1eb9284006a97d8dae8d2a0d320a5fced0f767388cd7594f7d",
+        "lifecycle.json": "40d7ecf6806ec79c3aad913aa49c855d8a0c561b6752cb108d010b00e97d86c5",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 1,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T10:44:12.171891+00:00",
+            "physical_ids": [
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/add-train0-replay0/float16",
+      "locator": "artifacts/device-scheduler-bounded-full01/add-train0-replay0/float16",
+      "status": "completed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float16",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float16",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          42.35,
+          44.59,
+          48.85
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          43.8,
+          45.56,
+          48.32
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--memory",
+        "add",
+        "--training",
+        "0",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "1800",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/add-train0-replay0/float16",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:49:30.979066+00:00",
+      "finished": "2026-09-29T10:53:34.396642+00:00",
+      "observations": 2,
+      "measured_observations": 1,
+      "error": null,
+      "native_errors": [],
+      "host_peak_rss_gib": 22.058963775634766,
+      "process_seconds": 243.01415026560426,
+      "allocator_peak_gib": {
+        "memory/device0/peak_allocated_bytes": 5.199753284454346,
+        "memory/device1/peak_allocated_bytes": 5.243130207061768,
+        "memory/device2/peak_allocated_bytes": 5.348365783691406,
+        "memory/device3/peak_allocated_bytes": 4.353659629821777,
+        "memory/device4/peak_allocated_bytes": 5.884657382965088,
+        "memory/device5/peak_allocated_bytes": 5.7443108558654785,
+        "memory/device6/peak_allocated_bytes": 5.3718695640563965,
+        "memory/device7/peak_allocated_bytes": 5.414638996124268
+      },
+      "metrics": {
+        "memory/retained_peer_buffer_bytes": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "memory/workspace_bound_bytes": {
+          "mean": 327772585984,
+          "median": 327772585984,
+          "min": 327772585984,
+          "max": 327772585984,
+          "population_stdev": 0.0
+        },
+        "model/body_nodes": {
+          "mean": 464,
+          "median": 464,
+          "min": 464,
+          "max": 464,
+          "population_stdev": 0.0
+        },
+        "model/body_ticks_per_token": {
+          "mean": 2,
+          "median": 2,
+          "min": 2,
+          "max": 2,
+          "population_stdev": 0.0
+        },
+        "model/logical_edges": {
+          "mean": 2208,
+          "median": 2208,
+          "min": 2208,
+          "max": 2208,
+          "population_stdev": 0.0
+        },
+        "model/nominal_leaf_activation": {
+          "mean": 0.03125,
+          "median": 0.03125,
+          "min": 0.03125,
+          "max": 0.03125,
+          "population_stdev": 0.0
+        },
+        "model/parameter_bytes": {
+          "mean": 18936041798,
+          "median": 18936041798,
+          "min": 18936041798,
+          "max": 18936041798,
+          "population_stdev": 0.0
+        },
+        "model/parameter_owners": {
+          "mean": 1395,
+          "median": 1395,
+          "min": 1395,
+          "max": 1395,
+          "population_stdev": 0.0
+        },
+        "model/parameters": {
+          "mean": 9468020899,
+          "median": 9468020899,
+          "min": 9468020899,
+          "max": 9468020899,
+          "population_stdev": 0.0
+        },
+        "model/pdg_nodes": {
+          "mean": 465,
+          "median": 465,
+          "min": 465,
+          "max": 465,
+          "population_stdev": 0.0
+        },
+        "model/physical_edges": {
+          "mean": 4418,
+          "median": 4418,
+          "min": 4418,
+          "max": 4418,
+          "population_stdev": 0.0
+        },
+        "model/static_nodes_per_cortex": {
+          "mean": 232,
+          "median": 232,
+          "min": 232,
+          "max": 232,
+          "population_stdev": 0.0
+        },
+        "perf/construction_seconds": {
+          "mean": 105.357926527,
+          "median": 105.357926527,
+          "min": 105.357926527,
+          "max": 105.357926527,
+          "population_stdev": 0.0
+        },
+        "perf/ms_per_sample_token": {
+          "mean": 6.799936084472656,
+          "median": 6.799936084472656,
+          "min": 6.799936084472656,
+          "max": 6.799936084472656,
+          "population_stdev": 0.0
+        },
+        "perf/prepare_seconds": {
+          "mean": 43.889524947,
+          "median": 43.889524947,
+          "min": 43.889524947,
+          "max": 43.889524947,
+          "population_stdev": 0.0
+        },
+        "perf/sample_tokens_per_second": {
+          "mean": 147.06020579861837,
+          "median": 147.06020579861837,
+          "min": 147.06020579861837,
+          "max": 147.06020579861837,
+          "population_stdev": 0.0
+        },
+        "perf/window_seconds": {
+          "mean": 41.778807303,
+          "median": 41.778807303,
+          "min": 41.778807303,
+          "max": 41.778807303,
+          "population_stdev": 0.0
+        },
+        "placement/cut_edges": {
+          "mean": 1556,
+          "median": 1556,
+          "min": 1556,
+          "max": 1556,
+          "population_stdev": 0.0
+        },
+        "placement/cut_fraction": {
+          "mean": 0.35219556360344045,
+          "median": 0.35219556360344045,
+          "min": 0.35219556360344045,
+          "max": 0.35219556360344045,
+          "population_stdev": 0.0
+        },
+        "placement/node_load_limit_bytes": {
+          "mean": 2647710106,
+          "median": 2647710106,
+          "min": 2647710106,
+          "max": 2647710106,
+          "population_stdev": 0.0
+        },
+        "runtime/devices": {
+          "mean": 8,
+          "median": 8,
+          "min": 8,
+          "max": 8,
+          "population_stdev": 0.0
+        },
+        "runtime/graph_replay": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "runtime/peer_channels": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "work/batch": {
+          "mean": 512,
+          "median": 512,
+          "min": 512,
+          "max": 512,
+          "population_stdev": 0.0
+        },
+        "work/window_tokens": {
+          "mean": 12,
+          "median": 12,
+          "min": 12,
+          "max": 12,
+          "population_stdev": 0.0
+        }
+      },
+      "windows": [
+        {
+          "step": 0,
+          "context": {
+            "dtype": "float16",
+            "mode": "inference",
+            "phase": "warmup",
+            "scheduler": "bounded-eager",
+            "window_boundary": "reset"
+          },
+          "timestamp": "2026-09-29T10:52:45Z",
+          "metrics": {
+            "perf/construction_seconds": 105.357926527,
+            "perf/ms_per_sample_token": 6.859575755045573,
+            "perf/prepare_seconds": 43.889524947,
+            "perf/sample_tokens_per_second": 145.78161036627495,
+            "perf/window_seconds": 42.145233439
+          }
+        },
+        {
+          "step": 1,
+          "context": {
+            "dtype": "float16",
+            "mode": "inference",
+            "phase": "measure",
+            "scheduler": "bounded-eager",
+            "window_boundary": "reset"
+          },
+          "timestamp": "2026-09-29T10:53:27Z",
+          "metrics": {
+            "perf/construction_seconds": 105.357926527,
+            "perf/ms_per_sample_token": 6.799936084472656,
+            "perf/prepare_seconds": 43.889524947,
+            "perf/sample_tokens_per_second": 147.06020579861837,
+            "perf/window_seconds": 41.778807303
+          }
+        }
+      ],
+      "hashes": {
+        "run.json": "9f0a5dfa337776b313ba6d44669cbc45f595788ec31bfe8fc8fbe06c5e69e92b",
+        "summary.json": "e8a6885ccca55018c51c1c2eacb7d40b3cea302b2f24f281cfed0d3fefdd891e",
+        "metrics.jsonl": "f6f938413845069dd89387a255c0124acc3e2a67da7493fc4fc7db98b5dd13ce",
+        "stdout.log": "47430d6fc840265e828eda5578ea83219567b723c03304d0e64ae3a2c14a0045",
+        "lifecycle.json": "af0bef6e17d1eef199c15f1c78cbfca0384d2da4c0bb82705f9b79a57183e849",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 8,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T10:50:03.600585+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:51:39.369577+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:52:11.282540+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:53:15.127623+00:00",
+            "physical_ids": [
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/add-train0-replay0/float32",
+      "locator": "artifacts/device-scheduler-bounded-full01/add-train0-replay0/float32",
+      "status": "completed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,3,4,5,7,9,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          41.3,
+          47.03,
+          50.65
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          42.35,
+          44.59,
+          48.85
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float32",
+        "--memory",
+        "add",
+        "--training",
+        "0",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "1800",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/add-train0-replay0/float32",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:45:45.643750+00:00",
+      "finished": "2026-09-29T10:49:30.788835+00:00",
+      "observations": 2,
+      "measured_observations": 1,
+      "error": null,
+      "native_errors": [],
+      "host_peak_rss_gib": 37.78582763671875,
+      "process_seconds": 224.72116000205278,
+      "allocator_peak_gib": {
+        "memory/device0/peak_allocated_bytes": 10.391383647918701,
+        "memory/device1/peak_allocated_bytes": 10.475776195526123,
+        "memory/device2/peak_allocated_bytes": 10.692347049713135,
+        "memory/device3/peak_allocated_bytes": 8.697099685668945,
+        "memory/device4/peak_allocated_bytes": 11.759881496429443,
+        "memory/device5/peak_allocated_bytes": 11.475021839141846,
+        "memory/device6/peak_allocated_bytes": 10.727570533752441,
+        "memory/device7/peak_allocated_bytes": 10.794235706329346
+      },
+      "metrics": {
+        "memory/retained_peer_buffer_bytes": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "memory/workspace_bound_bytes": {
+          "mean": 655465168896,
+          "median": 655465168896,
+          "min": 655465168896,
+          "max": 655465168896,
+          "population_stdev": 0.0
+        },
+        "model/body_nodes": {
+          "mean": 464,
+          "median": 464,
+          "min": 464,
+          "max": 464,
+          "population_stdev": 0.0
+        },
+        "model/body_ticks_per_token": {
+          "mean": 2,
+          "median": 2,
+          "min": 2,
+          "max": 2,
+          "population_stdev": 0.0
+        },
+        "model/logical_edges": {
+          "mean": 2208,
+          "median": 2208,
+          "min": 2208,
+          "max": 2208,
+          "population_stdev": 0.0
+        },
+        "model/nominal_leaf_activation": {
+          "mean": 0.03125,
+          "median": 0.03125,
+          "min": 0.03125,
+          "max": 0.03125,
+          "population_stdev": 0.0
+        },
+        "model/parameter_bytes": {
+          "mean": 37872083596,
+          "median": 37872083596,
+          "min": 37872083596,
+          "max": 37872083596,
+          "population_stdev": 0.0
+        },
+        "model/parameter_owners": {
+          "mean": 1395,
+          "median": 1395,
+          "min": 1395,
+          "max": 1395,
+          "population_stdev": 0.0
+        },
+        "model/parameters": {
+          "mean": 9468020899,
+          "median": 9468020899,
+          "min": 9468020899,
+          "max": 9468020899,
+          "population_stdev": 0.0
+        },
+        "model/pdg_nodes": {
+          "mean": 465,
+          "median": 465,
+          "min": 465,
+          "max": 465,
+          "population_stdev": 0.0
+        },
+        "model/physical_edges": {
+          "mean": 4418,
+          "median": 4418,
+          "min": 4418,
+          "max": 4418,
+          "population_stdev": 0.0
+        },
+        "model/static_nodes_per_cortex": {
+          "mean": 232,
+          "median": 232,
+          "min": 232,
+          "max": 232,
+          "population_stdev": 0.0
+        },
+        "perf/construction_seconds": {
+          "mean": 91.504731793,
+          "median": 91.504731793,
+          "min": 91.504731793,
+          "max": 91.504731793,
+          "population_stdev": 0.0
+        },
+        "perf/ms_per_sample_token": {
+          "mean": 6.409554370279948,
+          "median": 6.409554370279948,
+          "min": 6.409554370279948,
+          "max": 6.409554370279948,
+          "population_stdev": 0.0
+        },
+        "perf/prepare_seconds": {
+          "mean": 42.710230379,
+          "median": 42.710230379,
+          "min": 42.710230379,
+          "max": 42.710230379,
+          "population_stdev": 0.0
+        },
+        "perf/sample_tokens_per_second": {
+          "mean": 156.0170867161742,
+          "median": 156.0170867161742,
+          "min": 156.0170867161742,
+          "max": 156.0170867161742,
+          "population_stdev": 0.0
+        },
+        "perf/window_seconds": {
+          "mean": 39.380302051,
+          "median": 39.380302051,
+          "min": 39.380302051,
+          "max": 39.380302051,
+          "population_stdev": 0.0
+        },
+        "placement/cut_edges": {
+          "mean": 1556,
+          "median": 1556,
+          "min": 1556,
+          "max": 1556,
+          "population_stdev": 0.0
+        },
+        "placement/cut_fraction": {
+          "mean": 0.35219556360344045,
+          "median": 0.35219556360344045,
+          "min": 0.35219556360344045,
+          "max": 0.35219556360344045,
+          "population_stdev": 0.0
+        },
+        "placement/node_load_limit_bytes": {
+          "mean": 5295420212,
+          "median": 5295420212,
+          "min": 5295420212,
+          "max": 5295420212,
+          "population_stdev": 0.0
+        },
+        "runtime/devices": {
+          "mean": 8,
+          "median": 8,
+          "min": 8,
+          "max": 8,
+          "population_stdev": 0.0
+        },
+        "runtime/graph_replay": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "runtime/peer_channels": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "population_stdev": 0.0
+        },
+        "work/batch": {
+          "mean": 512,
+          "median": 512,
+          "min": 512,
+          "max": 512,
+          "population_stdev": 0.0
+        },
+        "work/window_tokens": {
+          "mean": 12,
+          "median": 12,
+          "min": 12,
+          "max": 12,
+          "population_stdev": 0.0
+        }
+      },
+      "windows": [
+        {
+          "step": 0,
+          "context": {
+            "dtype": "float32",
+            "mode": "inference",
+            "phase": "warmup",
+            "scheduler": "bounded-eager",
+            "window_boundary": "reset"
+          },
+          "timestamp": "2026-09-29T10:48:43Z",
+          "metrics": {
+            "perf/construction_seconds": 91.504731793,
+            "perf/ms_per_sample_token": 6.525906722819012,
+            "perf/prepare_seconds": 42.710230379,
+            "perf/sample_tokens_per_second": 153.23541118099644,
+            "perf/window_seconds": 40.095170905
+          }
+        },
+        {
+          "step": 1,
+          "context": {
+            "dtype": "float32",
+            "mode": "inference",
+            "phase": "measure",
+            "scheduler": "bounded-eager",
+            "window_boundary": "reset"
+          },
+          "timestamp": "2026-09-29T10:49:22Z",
+          "metrics": {
+            "perf/construction_seconds": 91.504731793,
+            "perf/ms_per_sample_token": 6.409554370279948,
+            "perf/prepare_seconds": 42.710230379,
+            "perf/sample_tokens_per_second": 156.0170867161742,
+            "perf/window_seconds": 39.380302051
+          }
+        }
+      ],
+      "hashes": {
+        "run.json": "3c6b0d775fa812eb837e6f5659ee7ce42bbab13eaf6ccde8262d4d923bc9ff2c",
+        "summary.json": "e035795ccfeb8ecc1b290547cc3cccca8c90ea9569dc3e59304252707ab7beb7",
+        "metrics.jsonl": "466178ab14a92f729a449c8e6c4d8b2aca52324ce66cf1fe1addd8aa519fca02",
+        "stdout.log": "3205cffdc9bb10b085136dce0bc3e4464d57ef6b19c63b1cf807a7df0482e9b2",
+        "lifecycle.json": "dd111a1037dfb3abd51e3748f3687988a32aff5c75ec33c5bde029799e239673",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 7,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T10:46:20.025531+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:46:51.932439+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:47:55.889985+00:00",
+            "physical_ids": [
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T10:48:27.808811+00:00",
+            "physical_ids": [
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/add-train1-replay0/float16",
+      "locator": "artifacts/device-scheduler-bounded-full01/add-train1-replay0/float16",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float16",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float16",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,2,3,4,5,7,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          56.36,
+          50.47,
+          47.94
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          51.05,
+          55.86,
+          51.32
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--memory",
+        "add",
+        "--training",
+        "1",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "2400",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/add-train1-replay0/float16",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T11:16:39.974735+00:00",
+      "finished": "2026-09-29T11:21:01.646597+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU out of memory. Tried to allocate 20.00 MiB (NPU 5; 61.28 GiB total capacity; 52.95 GiB already allocated; 52.95 GiB current active; 18.33 MiB free; 60.59 GiB reserved in total by PyTorch).If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+      ],
+      "host_peak_rss_gib": 23.742855072021484,
+      "process_seconds": 261.28828006982803,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "bfad2245abda0300b128abdb30c83425490731976b69a88c8d6c7d8edad85559",
+        "summary.json": "ab9e0b937be4cf132f1446f0cb5bdf4529f1813501f7f25e915ea46e3ee3f842",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "76f4d2d81c7624b0fc45ba27af907fcda112a506b913ade8e1ca35bb3c945212",
+        "lifecycle.json": "fe160267d38c84bdf53a6dcf1d3c5869bba2355cffaf38cb42f25cbff7d4636f",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 18,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/add-train1-replay0/float32",
+      "locator": "artifacts/device-scheduler-bounded-full01/add-train1-replay0/float32",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "add",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 1,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,2,3,4,5,7,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          45.68,
+          47.16,
+          46.67
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          56.36,
+          50.47,
+          47.94
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float32",
+        "--memory",
+        "add",
+        "--training",
+        "1",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "2400",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/add-train1-replay0/float32",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T11:14:06.235256+00:00",
+      "finished": "2026-09-29T11:16:39.785493+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU out of memory. Tried to allocate 38.00 MiB (NPU 4; 61.28 GiB total capacity; 54.84 GiB already allocated; 54.84 GiB current active; 8.96 MiB free; 60.73 GiB reserved in total by PyTorch).If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+      ],
+      "host_peak_rss_gib": 37.7861442565918,
+      "process_seconds": 153.16592817008495,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "32c6b6f6b4c1e987630c8b74e9e504ac108377000e50c4dc0ddae773312ae8b5",
+        "summary.json": "8f83d474db64c7bf2f105e4cc650b0eae2421c5fa95cff0539fd8aa4b6627cf0",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "60ccc2ccd650566959dc26d3aae11a2b45448bb7b674f6b0a4875bdc4e3965ed",
+        "lifecycle.json": "152c465a23dc43b1554f8b80877081c5701550b5c755df4fc0a54c525d50058d",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 8,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/attention-train0-replay0/float16",
+      "locator": "artifacts/device-scheduler-bounded-full01/attention-train0-replay0/float16",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float16",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float16",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,2,3,4,5,7,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          49.82,
+          47.85,
+          48.84
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          38.93,
+          44.52,
+          47.31
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--memory",
+        "attention",
+        "--training",
+        "0",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "1800",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/attention-train0-replay0/float16",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T10:55:57.898527+00:00",
+      "finished": "2026-09-29T11:01:01.012338+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU out of memory. Tried to allocate 170.00 MiB (NPU 6; 61.28 GiB total capacity; 55.59 GiB already allocated; 55.59 GiB current active; 58.88 MiB free; 60.05 GiB reserved in total by PyTorch).If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+      ],
+      "host_peak_rss_gib": 40.887168884277344,
+      "process_seconds": 302.72466108202934,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "1a9e1d6f1125a1b0872a78b6f79d244e1c9cc765df8bed5637c5f12956a54386",
+        "summary.json": "91c8dfa6c6fa85bc2b5536d43d56da51c8b74473858507868ba637ab04a4559f",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "8d3a5e731e68182a0d31373dcdff4f65d61ba81887a2dcee9b52524f0f6018c7",
+        "lifecycle.json": "34c24fa55314a11d1936d452f313b9fbc53715875b6627c02875dd132fa0bf9e",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 9,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-full01/attention-train0-replay0/float32",
+      "locator": "artifacts/device-scheduler-bounded-full01/attention-train0-replay0/float32",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float32",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 8,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "physical_visible_devices": "1,2,3,4,5,7,11,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          38.93,
+          44.52,
+          47.31
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          43.64,
+          44.61,
+          46.68
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float32",
+        "--memory",
+        "attention",
+        "--training",
+        "0",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--seed",
+        "7",
+        "--timeout-seconds",
+        "1800",
+        "--memory-gib",
+        "256",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-full01/attention-train0-replay0/float32",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T11:01:01.267863+00:00",
+      "finished": "2026-09-29T11:05:43.807762+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU out of memory. Tried to allocate 270.00 MiB (NPU 6; 61.28 GiB total capacity; 55.59 GiB already allocated; 55.59 GiB current active; 151.42 MiB free; 58.72 GiB reserved in total by PyTorch).If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+      ],
+      "host_peak_rss_gib": 68.67455673217773,
+      "process_seconds": 282.14816193655133,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "1bfb4500a803f6c46ea3bfa92dd57454fb32efb3283e484c9e46f42b15dd3397",
+        "summary.json": "91c0bc634ae87f213917ce3fae2ecef7656a58248f6e31ca2f9593ffe9d7f0cc",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "d037a686d7eee16cb29e7d4ca0fd48eb64e6512389d33415c594e52af956c615",
+        "lifecycle.json": "80119ebc9f5f3da0e5b56521a352c9c0f7ffc3c23ca915f5267ea2df41a36aa3",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 9,
+        "overlap_samples": [],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    },
+    {
+      "name": "bounded-twelve01/attention-infer-float16",
+      "locator": "artifacts/device-scheduler-bounded-twelve01/attention-infer-float16",
+      "status": "failed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "binary_sha256": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730",
+      "config": {
+        "device": "npu",
+        "dtype": "float16",
+        "memory": "attention",
+        "optimizer": "adamw",
+        "devices": 12,
+        "width": 2048,
+        "batch": 512,
+        "vocab": 50304,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "workspace_gib": 32768,
+        "seed": 7,
+        "replay": 0,
+        "training": 0,
+        "warmup": 0,
+        "workers": 1,
+        "threads": 1,
+        "head_workers": 1,
+        "emission": "row",
+        "packed": 1
+      },
+      "runtime": {
+        "resolved_device": "npu",
+        "resolution_reason": "explicit:npu",
+        "dtype": "float16",
+        "logical_devices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "physical_visible_devices": "1,2,3,4,5,6,7,8,9,11,12,13",
+        "host_arch": "aarch64",
+        "cpu_affinity": [
+          0,
+          1,
+          40,
+          41,
+          80,
+          81,
+          120,
+          121,
+          160,
+          161,
+          200,
+          201,
+          240,
+          241,
+          280,
+          281
+        ],
+        "aten_threads": 1,
+        "interop_threads": 1,
+        "npu_task_queue": 0,
+        "load_average_before": [
+          38.21,
+          49.92,
+          50.82
+        ],
+        "memory_budget_gib": 256,
+        "load_average_after": [
+          39.96,
+          43.18,
+          47.47
+        ]
+      },
+      "wrapper_command": [
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/benchmark_bounded_scheduler.py",
+        "--width",
+        "2048",
+        "--batch",
+        "512",
+        "--vocab",
+        "50304",
+        "--steps",
+        "12",
+        "--device",
+        "npu",
+        "--devices",
+        "12",
+        "--memory",
+        "attention",
+        "--dtype",
+        "float16",
+        "--training",
+        "0",
+        "--replay",
+        "0",
+        "--optimizer",
+        "adamw",
+        "--iterations",
+        "2",
+        "--iteration-warmup",
+        "1",
+        "--workspace-gib",
+        "32768",
+        "--memory-gib",
+        "256",
+        "--timeout-seconds",
+        "1800",
+        "--seed",
+        "7",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/bounded-twelve01/attention-infer-float16",
+        "--tracking",
+        "best-effort",
+        "--tracking-root",
+        "$TASK_ROOT/trackio"
+      ],
+      "started": "2026-09-29T11:29:04.877117+00:00",
+      "finished": "2026-09-29T11:34:26.627192+00:00",
+      "observations": 0,
+      "measured_observations": 0,
+      "error": "RuntimeError: native exit 1",
+      "native_errors": [
+        "NPU out of memory. Tried to allocate 178.00 MiB (NPU 8; 61.28 GiB total capacity; 33.95 GiB already allocated; 33.95 GiB current active; 96.98 MiB free; 37.15 GiB reserved in total by PyTorch).If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation."
+      ],
+      "host_peak_rss_gib": 40.998348236083984,
+      "process_seconds": 321.36728820577264,
+      "allocator_peak_gib": {},
+      "metrics": {},
+      "windows": [],
+      "hashes": {
+        "run.json": "f1c870f618915daed62da7e6ecf9c7648582a85745316972cd8dcf075d68bd12",
+        "summary.json": "91cf946749cc830dd5aded98e85453635e3c264b23be9eb07046d1259016ae47",
+        "metrics.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout.log": "92fc247da615852927c07b061079250f708e9283f3239dd556ad22718f188970",
+        "lifecycle.json": "2dbcbb50f1d918870cbcc7fedeb615e042a985afaf101e46914d81b30eed2e61",
+        "topology.txt": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4"
+      },
+      "resource_samples": {
+        "count": 20,
+        "overlap_samples": [
+          {
+            "timestamp": "2026-09-29T11:29:29.203090+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:29:32.235309+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:30:01.127384+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:30:04.235934+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:30:33.457504+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:30:36.216352+00:00",
+            "physical_ids": [
+              7
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:32:09.215853+00:00",
+            "physical_ids": [
+              8
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:32:12.032715+00:00",
+            "physical_ids": [
+              8
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:32:41.181169+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:32:43.929733+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:33:13.192479+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:33:15.868979+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:33:45.101651+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:33:47.952057+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:34:17.021527+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          },
+          {
+            "timestamp": "2026-09-29T11:34:19.932837+00:00",
+            "physical_ids": [
+              8,
+              9
+            ]
+          }
+        ],
+        "interpretation": "PID-based project/external classification sampled at about32s; overlapping devices observed, no continuous exclusivity proof"
+      }
+    }
+  ],
+  "skipped_cells": [
+    {
+      "job": "bounded-full01",
+      "pair": "add-train0-replay1",
+      "dtype": "float32",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "add-train0-replay1",
+      "dtype": "float16",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train0-replay1",
+      "dtype": "float16",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train0-replay1",
+      "dtype": "float32",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train1-replay0",
+      "dtype": "float16",
+      "reason": "same-dtype/scheduler full-size inference prerequisite failed; no training launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train1-replay0",
+      "dtype": "float32",
+      "reason": "same-dtype/scheduler full-size inference prerequisite failed; no training launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "add-train1-replay1",
+      "dtype": "float32",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "add-train1-replay1",
+      "dtype": "float16",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train1-replay1",
+      "dtype": "float16",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    },
+    {
+      "job": "bounded-full01",
+      "pair": "attention-train1-replay1",
+      "dtype": "float32",
+      "reason": "corresponding eight-device12-token geometry probe failed; no full-size launch"
+    }
+  ],
+  "dtype_comparisons": [
+    {
+      "memory": "add",
+      "training": false,
+      "replay": false,
+      "float32_window_seconds": 39.380302051,
+      "float16_window_seconds": 41.778807303,
+      "float16_to_float32_time_ratio": 1.0609062177556126,
+      "scope": "One fresh process per dtype, same pair allocation/locality policy; exploratory whole-window observations, not stable speed estimates."
+    }
+  ],
+  "qualification": [
+    {
+      "record": {
+        "schema": "tide-bounded-capacity-prerequisite-v1",
+        "state": "passed",
+        "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+        "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+        "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+        "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+        "scope": "actual topology, D8/B1/V17/T3; eager Attention forward and independent isolated VJPs only; no replay/training qualification",
+        "started": "2026-09-29T11:26:24.777704+00:00",
+        "cases": [
+          {
+            "name": "attention-infer-eager-float32",
+            "command": [
+              "$TASK_ROOT/builds/client-bounded-npu-qualified03/tide-bounded-schedule-check",
+              "--device",
+              "npu",
+              "--devices",
+              "12",
+              "--dtype",
+              "float32",
+              "--topology",
+              "$TASK_ROOT/runs/bounded-twelve01/qualification/topology.txt",
+              "--memory",
+              "attention",
+              "--width",
+              "8",
+              "--batch",
+              "1",
+              "--vocab",
+              "17",
+              "--steps",
+              "3",
+              "--warmup",
+              "0",
+              "--seed",
+              "7",
+              "--training",
+              "0",
+              "--replay",
+              "0",
+              "--peer-check",
+              "0",
+              "--output-dir",
+              "$TASK_ROOT/runs/bounded-twelve01/qualification/attention-infer-eager-float32",
+              "--run-id",
+              "attention-infer-eager-float32"
+            ],
+            "state": "passed",
+            "started": "2026-09-29T11:26:24.779391+00:00",
+            "exit_code": 0,
+            "finished": "2026-09-29T11:27:42.977547+00:00"
+          },
+          {
+            "name": "attention-infer-eager-float16",
+            "command": [
+              "$TASK_ROOT/builds/client-bounded-npu-qualified03/tide-bounded-schedule-check",
+              "--device",
+              "npu",
+              "--devices",
+              "12",
+              "--dtype",
+              "float16",
+              "--topology",
+              "$TASK_ROOT/runs/bounded-twelve01/qualification/topology.txt",
+              "--memory",
+              "attention",
+              "--width",
+              "8",
+              "--batch",
+              "1",
+              "--vocab",
+              "17",
+              "--steps",
+              "3",
+              "--warmup",
+              "0",
+              "--seed",
+              "7",
+              "--training",
+              "0",
+              "--replay",
+              "0",
+              "--peer-check",
+              "0",
+              "--output-dir",
+              "$TASK_ROOT/runs/bounded-twelve01/qualification/attention-infer-eager-float16",
+              "--run-id",
+              "attention-infer-eager-float16",
+              "--check-atol",
+              "0.02",
+              "--check-rtol",
+              "0.02"
+            ],
+            "state": "passed",
+            "started": "2026-09-29T11:27:42.979370+00:00",
+            "exit_code": 0,
+            "finished": "2026-09-29T11:29:04.779141+00:00"
+          }
+        ],
+        "finished": "2026-09-29T11:29:04.792127+00:00"
+      },
+      "path": "runs/bounded-twelve01/qualification/gates.json",
+      "sha256": "2308f69f0753d2b67fd88077cc8b94256ab636d4d5df484809324d5b1b2e49d0"
+    }
+  ],
+  "limits": [
+    "Assessment completion may contain failed cells and skipped pairs; neither is a passing native workload.",
+    "Reduced-tensor geometry is a notification-capacity diagnosis, not a full-size HBM or speed result.",
+    "Full-size replay skips after failed geometry are not full-size replay tests.",
+    "Workspace thresholds are conservative refusal limits, not actual allocation or a guarantee of fit.",
+    "Whole reset-state windows differ from baseline token-position warmup; do not divide across those timing tables.",
+    "One measured window per dtype gives no stable performance or convergence claim.",
+    "No complete node-map comparison was recorded; common locality policy does not prove identical placement.",
+    "Sampling began at 10:38 UTC; the second observer includes 12-device follow-up reservations. Zero AiCore is not proof of idleness, and gaps cannot certify sustained free devices.",
+    "Other processes can enter allocated devices without honoring the advisory queue; preserve observed overlap."
+  ],
+  "plans": [
+    {
+      "path": "inputs/bounded-geometry-plan-v3.json",
+      "sha256": "fd6c5e4908d094589d48a8ef466880b5adea75e77b2080b40c44c07cd05665c4",
+      "plan": {
+        "schema": "tide-bounded-geometry-capacity-v1",
+        "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+        "scope": "actual topology and full12-token window with reduced tensors across8 devices; follow up two-device ACL207009 Notify-resource exhaustion; capacity diagnosis only",
+        "device": "npu",
+        "devices": 8,
+        "width": 8,
+        "batch": 1,
+        "vocab": 17,
+        "steps": 12,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "dtype": "float32",
+        "workspace_gib": 64,
+        "memory_gib": 32,
+        "timeout_seconds": 900,
+        "cases": [
+          {
+            "memory": "add",
+            "training": 0,
+            "replay": 1
+          },
+          {
+            "memory": "add",
+            "training": 1,
+            "replay": 1
+          },
+          {
+            "memory": "attention",
+            "training": 0,
+            "replay": 1
+          },
+          {
+            "memory": "attention",
+            "training": 1,
+            "replay": 1
+          }
+        ],
+        "stop": "one attempt per independent case; retain failure and continue; full-size timings require separate runs"
+      }
+    },
+    {
+      "path": "inputs/bounded-full-plan-v1.json",
+      "sha256": "909e13466892eaf3aa27f2812ce059b5d848613db8e2cd74416f746314dfe574",
+      "plan": {
+        "schema": "tide-bounded-full-capacity-v1",
+        "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+        "scope": "finite full-size capacity and exploratory whole-window timing, no stable speed claim; one native attempt per admitted configuration",
+        "shape": {
+          "width": 2048,
+          "batch": 512,
+          "vocab": 50304,
+          "steps": 12
+        },
+        "devices": 8,
+        "iterations": 2,
+        "iteration_warmup": 1,
+        "seed": 7,
+        "workspace_gib": 32768,
+        "memory_gib": 256,
+        "inference_timeout_seconds": 1800,
+        "training_timeout_seconds": 2400,
+        "queue_timeout_seconds": 1800,
+        "tracking": "best-effort",
+        "qualifications": [
+          "qualify-bounded-cpu-03",
+          "qualify-bounded-npu1-03",
+          "qualify-bounded-npu2-03",
+          "qualify-bounded-npu8-03",
+          "tracked-smoke-bounded-npu-03"
+        ],
+        "geometry": "geometry-bounded-eight03",
+        "timing": "paired dtypes on same physical allocation; each pair holds task timing.lock; workers/ATen/inter-op1, CPU affinity16; entire reset-state window including optional VJP/optimizer, uploads and shard synchronization",
+        "placement": "same locality policy; do not assert identical node mapping without a recorded mapping comparison",
+        "stop": "retain every failed attempt; skip training when its same-dtype/scheduler full-size inference failed; skip full-size replay when corresponding eight-device12-token small-tensor geometry probe failed; do not relabel either skip as a capacity failure or full-size test",
+        "pairs": [
+          {
+            "memory": "add",
+            "training": 0,
+            "replay": 0,
+            "dtypes": [
+              "float32",
+              "float16"
+            ]
+          },
+          {
+            "memory": "attention",
+            "training": 0,
+            "replay": 0,
+            "dtypes": [
+              "float16",
+              "float32"
+            ]
+          },
+          {
+            "memory": "add",
+            "training": 0,
+            "replay": 1,
+            "dtypes": [
+              "float32",
+              "float16"
+            ]
+          },
+          {
+            "memory": "attention",
+            "training": 0,
+            "replay": 1,
+            "dtypes": [
+              "float16",
+              "float32"
+            ]
+          },
+          {
+            "memory": "add",
+            "training": 1,
+            "replay": 0,
+            "dtypes": [
+              "float32",
+              "float16"
+            ]
+          },
+          {
+            "memory": "attention",
+            "training": 1,
+            "replay": 0,
+            "dtypes": [
+              "float16",
+              "float32"
+            ]
+          },
+          {
+            "memory": "add",
+            "training": 1,
+            "replay": 1,
+            "dtypes": [
+              "float32",
+              "float16"
+            ]
+          },
+          {
+            "memory": "attention",
+            "training": 1,
+            "replay": 1,
+            "dtypes": [
+              "float16",
+              "float32"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "inputs/bounded-twelve-plan-v1.json",
+      "sha256": "4eb15667d34565543afacac7c6b0d2615528b00feb0dae14761a437c8c11f2f8",
+      "plan": {
+        "schema": "tide-bounded-twelve-capacity-v1",
+        "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+        "scope": "one actual-shape FP16 eager Attention inference capacity retry following eight-device OOM; no replay or training claim",
+        "shape": {
+          "width": 2048,
+          "batch": 512,
+          "vocab": 50304,
+          "steps": 12
+        },
+        "devices": 12,
+        "qualification": "same actual topology D8/B1/V17/T3, independent eager Attention forward/observables/isolated VJPs at FP32 and FP16; exact discrete checks; FP32 atol1e-6/rtol1e-5; FP16 atol0.02/rtol0.02",
+        "budget": "one native full-size attempt, two reset-state windows, one warmup; 1800s native, 256GiB maximum dynamic hostRSS, workspace refusal32768GiB; 600s queue; gate600s/32GiB each; parent4200s allocation wall",
+        "resource_policy": "timing.lock across qualification and capacity retry; dynamic16-core balanced affinity; queue chooses12 free physical chips; no preemption",
+        "prerequisite": "bounded-full01 terminal and its FP16 Attention eager inference retains NPU out-of-memory",
+        "interpretation": "success or retained finite failure completes capacity assessment; a queue timeout is not a tested capacity result; no device-count or dtype speedup inference"
+      }
+    }
+  ],
+  "resource_snapshots": [
+    {
+      "observer": "observe-resources01",
+      "snapshot": "observe-resources01-snapshot.jsonl",
+      "sha256": "f4247fcd504ac7488c6bf0de3dd0a1273432afbd20fb0d672793fbab713693a7",
+      "root": "reports/bounded-analysis-final01"
+    },
+    {
+      "observer": "observe-resources02",
+      "snapshot": "observe-resources02-snapshot.jsonl",
+      "sha256": "b10e017d641d5ccdb90df1c49d6d435eec685ea4ddb3d8147aa7226be88ace3f",
+      "root": "reports/bounded-analysis-final01"
+    }
+  ],
+  "audit": {
+    "valid": true,
+    "jobs": 4,
+    "experiment_records": 15,
+    "passed_experiments": 2,
+    "failed_experiments": 13,
+    "gate_groups": 1,
+    "gate_cases": 2,
+    "path": "reports/audit-bounded-capacity-final01/audit.json",
+    "sha256": "10b3d5a8dc1254b59957859ce1b87026876e592c9e971a67535af80d0e05583e",
+    "analysis_path": "reports/bounded-analysis-final01/analysis.json",
+    "analysis_sha256": "39b398ab91f3e28200c65a78e853dfb890a93a68e042efd0f85b3f57c38eb211",
+    "trackio": "0.35.0 local best-effort; SQLite step/metrics verified against raw JSONL; no dashboard"
+  },
+  "twelve_device_contention": {
+    "physical_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12,
+      13
+    ],
+    "queue_wait_seconds": 24.16257031261921,
+    "failed_logical_index": 8,
+    "failed_physical_id": 9,
+    "owned_allocated_gib": 33.95,
+    "reserved_gib": 37.15,
+    "free_mib": 96.98,
+    "requested_mib": 178,
+    "other_process_on_failed_device_samples_utc": [
+      "2026-09-29T11:32:43.929733+00:00",
+      "2026-09-29T11:33:15.868979+00:00",
+      "2026-09-29T11:33:47.952057+00:00",
+      "2026-09-29T11:34:19.932837+00:00"
+    ],
+    "conclusion": "Observed shared-device OOM; does not establish uncontended12-device fit or a12-device intrinsic capacity limit."
+  },
+  "path_aliases": {
+    "TASK_ROOT": "task-local retained source/build/runs/reports tree; raw jobs linked through artifacts/device-scheduler-JOB",
+    "TASK_PYTHON": "matching TorchNPU2.10/CANN9.0 site interpreter",
+    "TRACKIO_PYTHON": "Trackio0.35.0 reporting interpreter",
+    "SITE_SKILLS": "account-local scheduler/operation helpers"
+  },
+  "notify_diagnostic": {
+    "path": "reports/geometry-notify-diagnostic01/diagnostic.json",
+    "sha256": "ec41e58df9a1c6deb88a0db03f2ebdef06e2cb3ec95a900c82ef0874fdcf9a00",
+    "scope": "retained CANN header identity and matching project plog lines for two-device ACL207009 failures"
+  }
+}
