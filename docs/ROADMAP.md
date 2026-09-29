@@ -138,6 +138,41 @@ Use small independent analytic/trace/VJP gates before full-size backend runs.
 Profile one declared token or training phase at a time, with finite wall/RSS/disk
 bounds, and keep these timings out of uninstrumented throughput tables.
 
+## Authorized extension: independent complete flows across all three families
+
+Authorized 2026-09-30. This reopens the explicitly retained capability gaps,
+not the frozen historical results. Each execution flow owns its complete
+computation from the same input/weights/state; the CPU oracle never provides
+candidate decisions or numerical answers to a measured flow. CPU, mixed host/
+accelerator and bounded device-controlled flows remain explicit alternatives.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| F1 | Versioned complete-flow configuration, cold/setup/steady/amortized timing, independently computed inputs/outputs and per-machine recommendations | in progress |
+| F2 | New active-scale ranked/locality topologies and immutable manifests; equivalent Settle -> TimedDAG -> PDG inputs/clocks/owners, plus family-specific stresses; actual reachability/work counters | in progress |
+| F3 | CPU FP64/FP32 independent schedules, full observables/isolated VJPs/None/zero/three optimizer updates; public Python/native and standalone consumer gates at meaningful finite scales | pending |
+| F4 | Bounded replay notification reuse and lower-memory transport/training; changed-input/repeated-replay and exact peer integer tests, no per-event host decisions | in progress |
+| F5 | TimedDAG/Settle complete CPU/multi-NPU flows, locality placement and FP32/FP16, explicit unsupported requests; each backend has independent correctness gates | pending |
+| F6 | Full-size inference and complete training for all three families, matched scope and three fresh processes for recommendations; finish PDG CPU Attention comparison and qualify full-size device replay | pending |
+| F7 | Portable command/fixture packet, target-pending CUDA/version cells, reviewed records/Trackio/profile audit and support claims, no live task jobs | pending |
+
+Retain old large-layered presets as capacity/limited-active-subgraph evidence.
+The new active-scale topology must increase reachable nodes/edges with size,
+record candidate versus selected work and include graph encoding/head costs.
+Common equivalent workloads and family-specific workloads are separate:
+comparable parameter counts alone never establish mathematical equivalence.
+Bounded device control is qualified only for declared finite profiles; general
+unbounded dynamic graph scheduling remains outside these workload contracts.
+
+First fix and independently qualify peer notification/buffer lifetimes, then
+extend active topology and complete-flow consumers. Full-size capacity probes
+follow smaller correctness gates. Benchmark one controlled comparison at a
+time; independent development checks may use disjoint idle resources. Use
+opportunistically available devices (up to 16 compute chips when needed), never
+stop another workload. Three process repeats per accepted configuration;
+failures remain records and trigger diagnosis before retries. Trackio and
+project-owned records remain required delivery artifacts; no external dashboard.
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.
