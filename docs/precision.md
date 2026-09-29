@@ -55,7 +55,10 @@ test itself. A route mismatch still fails. Same-formula FP32 success supports
 the design, but cannot certify FP16 numerical stability or training convergence.
 
 Immutable local [FP16 qualification](evidence/fp16-qualification-20260929.md)
-records the exact supported scopes and retained failures. On another stack, run
+records the exact supported scopes and retained failures. The standalone
+[full-size FP32/FP16 comparison](evidence/accelerator-fp16-performance-20260929.md)
+records inference/training timings and allocator peaks under shared load. It does
+not establish a universal speed or training-memory advantage. On another stack, run
 `scripts/qualify_accelerator.py` with explicit `--device` and `--dtype float32`,
 then `--dtype float16`, for both `--implementation python` and `native` with its
 matching `--native-library`; follow [accelerators.md](accelerators.md) for builds.

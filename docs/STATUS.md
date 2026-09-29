@@ -1,135 +1,102 @@
 # Current handoff
 
-Updated: 2026-09-29. Branch graph-execution-foundation; no push authorized.
-No sub-agents. Reference repositories and ObsidianVault remain read-only.
-The user authorized completing public Python/native and consumer FP16,
-correctness gates, profiling and full-size inference/training comparisons.
-Latest resource authorization: more chips, nine chips, shared devices and
-自主插空 to prioritize completion. No repeated sharing/card-count permission needed.
+Updated 2026-09-29. The authorized local FP16/profiling/performance extension is
+complete. No project benchmark or fallback remains running or queued.
+Branch graph-execution-foundation; no push authorized. No sub-agents; reference
+repositories and ObsidianVault remain read-only. Evidence is committed separately
+from the immutable implementations; no production source changed in this increment.
 
-## Verified implementation
+## Completed scope
 
-fc2a76f: explicit FP16 payload and FP32 masters/slots/loss with static scaling.
-cb58110: profiler copy/stream ordering. 595dccd: matched-dtype consumer VJPs and
-FP32 master trajectories. c8d2b61/4a7dec7: early CPU Half CSR rejection and its
-named CLI case. Matching core hashes permit reuse of the fc2a76f core build.
+Explicit FP16 public Python/native payload and standalone consumer support use
+FP32 masters/slots/loss and static scaling. Read/control placement and precision
+remain independent. Same formulas do not imply cross-dtype route identity or
+training convergence. See precision.md and accelerator-scale.md for API boundaries.
 
-Passed: 8645 CPU tests; 39 Python and 43 native NPU FP16 cases plus CSR rejection;
-five full FP32 representative cases per implementation; 124 consumer cells on
-CPU and 2/4/6/7/8/9 NPUs; four consumer CTests; 20 CSR boundary follow-up tests
-and one CLI rejection. The nine-chip eight-cell gates completed at 02:35:08Z.
-Public FP16 atol .001/rtol .02; consumer explicit atol .002/rtol .02. Discrete
-routes and None/zero checks remain exact. CUDA-linked build and 22 host checks
-passed, without NVIDIA hardware qualification. Python/native tiny FP16 traces
-contain 1644/1638 hardware kernels; host scalar work remains. New FP16 evidence
-covers Torch/TorchNPU 2.10/CANN 9.0 only; prior four-CANN FP32 claims are unchanged.
+Implementation fc2a76f; profiler copy ordering cb58110; matched-dtype consumer
+VJP/master oracle595dccd; early CPU Half CSR rejection c8d2b61/4a7dec7. The full
+C++ source hashes match the reused fc2a76f core build. Nine-chip qualification was
+recorded in7c2d49e. All performance below uses clean595dccd0b23bd809bed28874591ae4f5f268512f.
 
-Qualification JSON, Markdown, ROADMAP and support contract include nine chips
-(124 consumer cells) in this evidence-only increment. Production source is
-unchanged; the final performance report and workload qualification remain pending.
+Passed qualification:8645 CPU tests;39 Python and43 native FP16 NPU cases plus
+explicit CSR rejection;10 FP32 public representatives;124 consumer cells on
+CPU/2/4/6/7/8/9 NPUs;4 consumer CTests;20 CSR boundary follow-ups plus one named
+CLI rejection. FP16 public atol.001/rtol.02; consumer explicit .002/.02; discrete
+and None/zero contracts stay exact. CUDA-linked build and22 host checks passed,
+without NVIDIA hardware qualification. Python/native FP16 tiny profiles contain
+1644/1638 hardware kernels. New FP16 covers Torch/TorchNPU2.10/CANN9.0 only;
+prior CANN8.5.0/.1/.2 FP32 qualification is unchanged.
 
-## Active final performance pair
+## Completed performance
 
-TASK_ROOT=/mi/data2T/zlong/tide-npu-performance.
-Unit tide-npu-performance-pair-train-attention9-fp16-a5g.service is active in
-background.slice. Started 02:33:02Z; physical 0,2,3,4,5,11,12,13,14 map to npu:0..8.
-Nine-chip gates and FP32 full-size training passed; FP16 now runs in
-a fresh process on the same allocation. At 03:03:51Z FP32 passed both updates and exited cleanly (warmup699.126114s;
-measured717.549002s /116.788575ms per sample-token, finite loss10.2228537,
-peak35.854233GiB/chip). Its raw record and Trackio projection both validated.
-FP16 is running on the same allocation; no completed update yet.
-Shared admission permits existing processes; health, used HBM <=24576MiB,
-AiCore <=100%, two snapshots 3s apart and cooperative locks are checked.
-Task-local run-on-shared-npu-a5f.py overrides only process-free eligibility;
-installed helper and other workloads remain untouched. Foreign PIDs are expected;
-record their presence rather than cancelling merely because they exist.
+All eight accepted Add/Attention inference/training cells passed. Full-size
+D2048/B512/V50304,465 nodes/2208 logical/4418 physical edges, seed7, locality,
+resident payload, workers16/ATen1,TASK_QUEUE_ENABLE=0. Add9,468,020,899 and
+Attention17,269,426,339 parameters. Inference uses12 tokens (4 warmup/8 measured);
+training uses two complete12-token AdamW updates (1 warmup/1 measured).
 
-Frozen source TASK_ROOT/sources/fp16-a5b at
-595dccd0b23bd809bed28874591ae4f5f268512f; build TASK_ROOT/builds/client-fp16-a5b.
-Module libtorch-npu/2.10.0-cann9.0.0, public /opt stack/shared /usr/local driver.
-Runtime Python /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-The exact resolved command and cwd follow below; plan is
-TASK_ROOT/launchers/plan-train-attention9-fp16-a5g.json.
+- infer-add, 2 chips: FP32/FP16 17.412729/18.703945 ms/sample-token; peak19.868474/9.954680 GiB/chip.
+- infer-attention, 4 chips: FP32/FP16 54.611865/45.855257 ms/sample-token; peak22.286432/11.192269 GiB/chip.
+- train-add, 4 chips: FP32/FP16 39.482509/42.135417 ms/sample-token; peak41.058367/47.849997 GiB/chip.
+- train-attention, 9 chips: FP32/FP16 105.064709/110.660020 ms/sample-token; peak35.854781/40.230472 GiB/chip.
 
-Attention retains D2048/B512/V50304, 17,269,426,339 parameters, 465 nodes,
-2208 logical/4418 physical edges, locality placement, resident payload, seed7,
-workers16/ATen1, TASK_QUEUE_ENABLE=0. NPU FP32 Read, CPU controls/ranking/events.
-AdamW, two complete 12-token updates per dtype: first warmup, second measured.
-No dimensions, batch or window reduced. Each dtype timeout7200s, RSS256GiB.
-This is shared-load exploratory performance, not exclusive or causal speedup.
+The first three pairs use FP32 then FP16. Final Attention uses FP16 then FP32
+on physical1,2,3,4,5,11,12,13,14, retaining the same logical placement. External
+processes were allowed and their changes recorded; these are shared-load
+exploratory observations, not stable averages, causal speedups or convergence.
+Every accepted raw record and Trackio SQLite step/metric matches its JSONL;
+all native exits are zero and no child process remains. See
+[eight-cell report](evidence/accelerator-fp16-performance-20260929.md) and adjacent
+JSON for exact configuration/source/binary/input/record hashes and work counters.
 
-Seven-chip fallback tide-npu-performance-pair-train-attention7-fp16-a5d.service
-remains queued (priority0, started01:44:19Z, max wait7200s), no cell started.
-The nine-chip launcher cancels that exact fallback only after both dtypes pass.
-If it times out first, preserve its failed terminal state; adapt the collector
-instead of relabelling it cancelled. Do not start duplicate runs.
+TASK_ROOT=/mi/data2T/zlong/tide-npu-performance. Final unit
+`tide-npu-performance-pair-train-attention9-fp16-a5h.service` is terminal/passed;
+run TASK_ROOT/runs/pair-train-attention9-fp16-a5h, linked under ignored artifacts/.
+Exact command/cwd/terminal exit are in status.json; resolved plan and commands
+are in plan.json/stages.json. Frozen source TASK_ROOT/sources/fp16-a5b; matching
+build TASK_ROOT/builds/client-fp16-a5b. Public module libtorch-npu/2.10.0-cann9.0.0
+and shared /usr/local driver were used. The public C++ core has no Python or
+Trackio dependency; the external wrapper owns experiment recording.
 
-## Remaining work
-
-1. Monitor with TASK_ROOT/launchers/inspect-fp16-attempts-a5.py. It appends resource
-   observations; stop appending to completed jobs before collecting their hashes.
-   Inspect status.json, queue.json, pipeline-stages.json, stages.json, task.log,
-   float32|float16/stdout.log and native/metrics.jsonl under the current run.
-2. On terminal success, run TASK_ROOT/launchers/validate-new-records-a5.py JOB
-   and validate-trackio-records-a5.py JOB. Ledger files under runs/ currently
-   hold 11 raw cells (7 success +4 failed/cancelled) and 7 Trackio comparisons.
-3. Run collect-fp16-evidence-a5.py performance pair-train-attention9-fp16-a5g,
-   then write-fp16-report-a5.py. Both passed AST parsing. Review all generated
-   numbers/wording and fallback status. Do not mark H3 verified until eight
-   full-size cells pass. Update support workload evidence at exact 595dccd.
-4. Replace this handoff with final state; schema-check the support contract,
-   git diff --check, review evidence links/scopes, commit evidence only, no push.
-5. If the pair fails, preserve terminal evidence, diagnose resource versus code
-   failure and autonomously choose the next reasonable shared allocation.
-
-Trackio: best-effort local project tide-npu-performance, TASK_ROOT/trackio,
+Trackio best-effort local project tide-npu-performance, TASK_ROOT/trackio,
 SQLite tide-npu-performance.db, version0.35.0; writer/viewer
-/home/zlong/venvs/trackio/bin/python. Raw JSONL is authoritative. No dashboard.
+/home/zlong/venvs/trackio/bin/python. No dashboard was exposed. New-extension
+ledgers retain14 terminal raw cells (9 completed/5 failed or cancelled) and
+10 Trackio checks (9 completed/1 failed warmup). Only eight accepted cells enter
+the primary pair table; the extra successful prior FP32 is separately retained.
+Do not append to finalized resource logs: their hashes are now evidence.
 
-## Retained completed work and unsuccessful attempts
+## Retained resource failures
 
-Three pairs/six cells passed on 595dccd; FP32/FP16 ms/sample-token and peak GiB/chip:
-- infer-add, 2 chips/CPU64 Read: 17.412729/18.703945; peak19.868474/9.954680.
-- infer-attention, 4 chips/CPU64 Read: 54.611865/45.855257; peak22.286432/11.192269.
-- train-add, 4 chips/CPU32 Read: 39.482509/42.135417; peak41.058367/47.849997.
-Add has 9,468,020,899 parameters; FP16 masters alone add35.27GiB total.
-Each pair passed identity/placement/clean-exit checks and raw/Trackio validation.
-One pair per mode cannot establish stable averages or causal dtype speedup.
+The original8-chip waiter and unstarted11-chip waiter were cancelled. Two7-chip
+runs were cancelled after external allocations, with no complete update. The
+6-chip FP32 OOM occurred with external use; its automatically started FP16 was
+cancelled. Their successful small-tensor gates remain valid.
 
-Original 8-chip a5b: cancelled queued, no cell. Seven-chip a5b/a5c: cancelled
-after external processes entered physical1, zero updates; native-15/wrapper143,
-no descendants. See resource-contention-a5.json and a5c/contention.json.
-Six-chip a5e: correctness gates passed; FP32 full-size OOM at02:17:47Z on
-logical0/physical2 while an external process was present. Requested66MiB,
-allocated36.88GiB, reserved38.04GiB, free34.63MiB of61.27GiB usable capacity.
-This does not prove clean six-chip capacity insufficiency. FP32 failed exit1;
-automatically started FP16 was cancelled under the earlier user condition.
-Both zero updates, no descendants; failure-analysis/resource logs retained.
-Outer status and terminal cell summaries override stale running stage snapshots.
-Eleven-chip a5f: cancelled before any gates/cells as only nine chips had room;
-cancellation-reason.json retained. No unrelated process was stopped.
+The first shared9-chip attempt a5g passed FP32 but FP16 failed in its measured
+update on logical0/physical0:82MiB requested,39.39GiB allocated,41.19GiB reserved,
+47.53MiB free of61.27GiB usable capacity, with external processes present.
+It has one FP16 warmup observation and no measured FP16 timing. Its failure and
+successful FP32 sibling remain in the report; neither is silently overwritten.
+The successful retry replaces physical0 with physical1 and checks FP16 first;
+shape/batch/window and implementation are unchanged. No unrelated process was stopped.
+The7-chip fallback a5d timed out at03:44:19Z after7200s, exit3, no cell started;
+its state remains failed. The final launcher verified it was already inactive.
 
-## Interpretation boundaries
+## Boundaries and next work
 
-NPU payload/state/KV/messages and device-to-device copies are implemented;
-Read/controls/ranking/events are independently configurable. Host histories,
-scalar/index returns, tensor handles and dispatch remain; no fully NPU-resident
-control loop. Single-process sharding, not DDP/HCCL. Transfer counters measure
-requested bytes, not physical fabric. Older tiny msprof:55 AiCPU int64 Sort tasks,
-14.62% summed task time, not end-to-end/full-size attribution. New FP16 traces
-use a different path; absence of AiCPU there is not a dtype-causality result.
-Public standalone NamedOptimizer/owner checkpoints remain FP32/FP64; consumer
-owns FP32 masters. BF16/AMP, CUDA real-device and other architectures/stacks
-need separate acceptance. Re-entry: git status --short --branch;
-python scripts/status.py; read this file.
+No authorized local test remains. On a future target machine, follow
+accelerators.md and precision.md for CUDA real-device or other architecture/
+stack/dtype acceptance. CUDA compilation does not qualify GPU execution.
 
-## Exact active command
+NPU payload/state/KV/messages and device copies are implemented. Read/controls/
+ranking/event keys are configurable, but host histories, scalar/index returns,
+tensor handles and dispatch remain. This is not a fully device-resident control
+loop or DDP/HCCL. Explicit byte counters do not measure all physical fabric traffic.
+Tiny old AiCPU int64 Sort tasks are14.62% of summed task time, not end-to-end or
+full-size attribution. New tiny FP16 traces use another path and cannot establish
+that dtype removes AiCPU. Tools and limits are in the profiling report.
+Standalone public NamedOptimizer/owner checkpoints remain FP32/FP64; the consumer
+owns FP32 masters. BF16/AMP and arbitrary-scale/convergence claims remain outside scope.
 
-Working directory: `/mi/data2T/zlong/tide-npu-performance/sources/fp16-a5b`.
-
-```bash
-/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python /mi/data2T/zlong/tide-npu-performance/launchers/run-on-shared-npu-a5f.py --shared-use-authorized --job-id tide-pair-train-attention9-fp16-a5g --project tide-npu-performance --priority 20 --npu-count 9 --max-hbm-mib 24576 --max-aicore-percent 100 --max-wait-seconds 7200 --candidate-ids 0,2,3,4,5,8,9,11,12,13,14 --state-file /mi/data2T/zlong/tide-npu-performance/runs/pair-train-attention9-fp16-a5g/queue.json -- /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python /mi/data2T/zlong/tide-npu-performance/launchers/run-attention9-gated-a5g.py /mi/data2T/zlong/tide-npu-performance/runs/pair-train-attention9-fp16-a5g
-```
-
-Inspect/stop only the identified project unit with systemctl --user show/stop;
-never stop other accelerator workloads.
+Re-entry: git status --short --branch; python scripts/status.py; read this file.

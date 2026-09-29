@@ -230,3 +230,8 @@ The follow-up finite qualification explicitly uses `--check-atol 0.002` with
 rtol0.02; both verifier scripts expose these options. This is a declared relaxed
 numerical gate, not bitwise equivalence. The public API's separate half gate
 retains its own recorded tolerance.
+
+The [completed full-size FP32/FP16 pairs](evidence/accelerator-fp16-performance-20260929.md)
+use this same implementation for both dtypes. They retain fixed allocation per
+pair, measured timing scopes, memory, work counters and resource failures. These
+shared-load observations do not replace independent small-tensor correctness gates.

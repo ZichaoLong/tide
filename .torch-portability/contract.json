@@ -691,6 +691,19 @@
           "test_command": "python scripts/verify_accelerator_scale.py --dtype float16 --check-atol .002 --device npu --build-dir MATCHING_BUILD --output-dir NEW; exact CPU/2/4/6/7/8/9-device commands and training policies in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "595dccd0b23bd809bed28874591ae4f5f268512f",
+          "scope": "Eight accepted full-size FP32/FP16 standalone-consumer cells on A3/TorchNPU2.10/CANN9.0: Add9.468B and Attention17.269B, D2048/B512/V50304, inference on2/4 NPUs and two-update warmed training on4/9 NPUs. Same physical allocation and logical placement within each pair; final Attention runs FP16 then FP32. Shared-load exploratory timings and allocator peaks only, not convergence, stable variance or causal speedup. Independent124-cell bounded correctness evidence remains separate. Resource failures and an additional successful FP32 are retained, not relabelled.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "workload"
+          ],
+          "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --dtype float16 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; both payload dtypes and exact per-cell configurations, source/binary/record hashes and timing scopes in report/adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerator-fp16-performance-20260929.md"
         }
       ]
     },
