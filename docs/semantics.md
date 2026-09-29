@@ -3,6 +3,12 @@
 Authority: `tide-core-3` at the revision in `upstream.json`. Local formulas below
 instantiate the abstract interfaces; changing them is a versioned local change.
 
+The experimental historical-workload bounded scheduler is a separate finite
+representation of these formulas, described in [bounded scheduling](bounded-scheduler.md).
+Its explicit first-order VJP carries structural connectivity independently of
+numeric derivatives. Dense padding alone must not turn absent gradients into
+connected zeros. It does not replace the ordinary eager/autograd interfaces.
+
 ## Common spine
 
 Finite fixed multigraph; strictly positive integer edge delays. Complete fiber

@@ -264,3 +264,13 @@ on child exit, so a sampling-interval overshoot remains possible). A breached
 bound fails and reaps the child while retaining evidence. Trace export is a
 separate bounded operation. Instrumented timings are not throughput baselines.
 Use `msprof --export=on --output=RUN/profile` to decode retained CANN data.
+
+
+## Bounded device scheduler
+
+The optional [bounded historical consumer](bounded-scheduler.md) expands a finite
+window and keeps selection/presence/history decisions on device. Its separate
+checker and benchmark distinguish eager execution from native NPU graph replay.
+It has narrower state, differentiation and capacity limits than this executor;
+consult ROADMAP D3-D6 for qualification rather than treating an NPU placement
+option here as complete device-resident scheduling.

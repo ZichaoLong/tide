@@ -106,11 +106,11 @@ compilation or support for unbounded device queues.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| D1 | Same-source full-size Add/Attention pure-CPU and NPU inference/complete-training baselines; effective CPU parallelism, identical shapes/windows/owners, three process repeats for speed claims | active: CPU node-worker restriction found; independent parity precedes correction and timing |
+| D1 | Same-source full-size Add/Attention pure-CPU and NPU inference/complete-training baselines; effective CPU parallelism, identical shapes/windows/owners, three process repeats for speed claims | active: clean951031e matrix, effective CPU node/head and phase threads; first Add complete-training pair passed |
 | D2 | Bounded full-size NPU trace windows, host decisions/copies/barriers and device engines; instrumentation timing separated from throughput | planned |
-| D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | planned |
-| D4 | Device-controlled continuation of tasks within a window; graph/capture or compiled backend, no per-event host scalar/index decisions; verify actual replay path and explicit unsupported combinations | planned |
-| D5 | Multi-device execution with locality and device completion dependencies; complete training with isolated VJPs, None/zero, master/optimizer updates and three-step oracle | planned |
+| D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | implemented; development CPU/NPU and reduced real-topology gates passed, immutable qualification pending |
+| D4 | Device-controlled continuation of tasks within a window; graph/capture or compiled backend, no per-event host scalar/index decisions; verify actual replay path and explicit unsupported combinations | implemented; native one/two-device replay development gates passed, immutable qualification pending |
+| D5 | Multi-device execution with locality and device completion dependencies; complete training with isolated VJPs, None/zero, master/optimizer updates and three-step oracle | implemented; tiny FP32/FP16 three-update replay passed, real-topology and immutable gates active |
 | D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | planned |
 
 Start with the installed Torch/TorchNPU2.10/CANN9.0 stack; capabilities must be
