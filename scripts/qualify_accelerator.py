@@ -45,18 +45,21 @@ def main():
     try:
         for name in selected:
             print(name, flush=True)
-            if args.device.split(":")[0] == "npu" and name == "fiber-policy-fiber_pooling":
+            backend = args.device.split(":")[0]
+            unsupported_csr = backend == "npu" or (backend == "cpu" and args.dtype == "float16")
+            if unsupported_csr and name == "fiber-policy-fiber_pooling":
                 from tidegraph import GraphRuntime
+                reason = "NPU CSR pooling" if backend == "npu" else "CPU FP16 CSR pooling"
                 try:
                     GraphRuntime(available[name], device=args.device, native_library=args.native_library)
                 except ValueError as error:
-                    if "NPU CSR pooling" not in str(error):
+                    if reason not in str(error):
                         raise
                     record["unsupported"].append(dict(id=name, state="unsupported", rejection_verified=True,
                                                      reason=str(error), config=available[name].to_dict()))
                     write_json(out / "result.json", record)
                     continue
-                raise AssertionError("NPU accepted unsupported CSR policy")
+                raise AssertionError("accepted unsupported CSR policy: " + reason)
             report = qualify(available[name], device=args.device, output_dir=out / name,
                              native_library=args.native_library, batch_size=1, positions=2, steps=3,
                              atol=args.atol, rtol=args.rtol, **fixture_options(name, available[name]))
