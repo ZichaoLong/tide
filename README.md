@@ -23,6 +23,10 @@ CUDA 已完成构建和 CPU 侧检查，GPU 实测留待目标机。见
 [本机 FP16 验证](docs/evidence/fp16-qualification-20260929.md)记录新的 8645 项 CPU 回归、
 公共 NPU 用例及 124 个消费者验证单元。[全尺寸 FP32/FP16 推理与训练对照](docs/evidence/accelerator-fp16-performance-20260929.md)
 记录八个已完成用例、显存及共享负载限制；低精度性能与数值稳定性按具体工作负载验证。
+可选的[有界设备调度消费者](docs/bounded-scheduler.md)已通过
+[84 个 CPU/NPU 验证单元](docs/evidence/bounded-scheduler-qualification-20260929.md)，
+覆盖 FP32/FP16、单卡/多卡 replay 与完整训练。该能力限定于固定拓扑的有限窗口；
+全尺寸容量与性能结论另行记录。
 开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
 [路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。

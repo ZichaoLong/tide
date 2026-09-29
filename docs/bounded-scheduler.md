@@ -1,8 +1,10 @@
 # Bounded device scheduling
 
-This optional historical-workload consumer is under development. Qualification
-status and active gates are in STATUS and ROADMAP D1-D6. It does not replace the
-public eager executors, their independent CPU schedules or checkpoint contracts.
+This optional historical-workload consumer passed the finite
+[84-cell CPU/NPU qualification](evidence/bounded-scheduler-qualification-20260929.md).
+Full-size performance and capacity work remain in STATUS and ROADMAP D1-D6.
+It does not replace the public eager executors, their independent CPU schedules
+or checkpoint contracts.
 
 ## Finite contract
 

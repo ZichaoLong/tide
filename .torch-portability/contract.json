@@ -540,6 +540,21 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW; separate immutable boundary gate in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+          "scope": "Optional finite historical Add/Attention consumer:16 CPU FP32/FP16 eager cells across tiny and actual465-node/4418-wire topology atD8/B1/T3, isolated independent VJPs and three complete SGD/AdamW master/slot/counter updates. Matching-dtype CPU oracle; exact discrete/None contracts. Public eager executors/core unchanged; no new full public regression claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify_bounded_scheduler.py --device cpu --dtype float32 --build-dir MATCHING_BUILD --output-dir NEW; exact FP16/tiny/actual-topology/device-count commands and tolerances in the report/adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/bounded-scheduler-qualification-20260929.md"
         }
       ]
     },
@@ -704,6 +719,21 @@
           "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --dtype float16 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; both payload dtypes and exact per-cell configurations, source/binary/record hashes and timing scopes in report/adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerator-fp16-performance-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+          "scope": "Optional finite historical Add/Attention consumer:68 FP32/FP16 NPU cells at1/2/8 devices, eager/replay, plus independent16-cell CPU oracle qualification. Actual465-node/4418-wire graph is checked onCPU/2 devices atD8/B1/T3; eight-device cases use tiny topology. Captured complete forward/VJP/SGD/AdamW, three-update masters/slots/counters, exact discrete/None and peer int64>2^55 checks. CANN9.0/TorchNPU2.10 only. No full-size/12-token capacity, checkpoint, dynamic queue or higher-order AD claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify_bounded_scheduler.py --device npu --dtype float32 --build-dir MATCHING_BUILD --output-dir NEW; exact FP16/tiny/actual-topology/device-count commands and tolerances in the report/adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/bounded-scheduler-qualification-20260929.md"
         }
       ]
     },

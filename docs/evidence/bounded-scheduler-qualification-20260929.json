@@ -1,0 +1,1757 @@
+{
+  "schema": "tide-bounded-qualification-evidence-v1",
+  "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+  "runtime_source": "ff2517450493543e0dfed3b3bc57f00bcf3787ab",
+  "core_sha256": "5e342902e64abbc384099c3903317955e2eac2c9bfa599cd1a9ddf9eb9fbf439",
+  "environment": {
+    "host_arch": "aarch64",
+    "chip": "Ascend910_9392/A3",
+    "hbm_gib_per_chip": 64,
+    "driver": "25.3.rc1",
+    "torch": "2.10.0",
+    "torch_npu": "2.10.0",
+    "cann": "9.0.0",
+    "standalone": true,
+    "npu_task_queue": 0
+  },
+  "gates": [
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "325b85338799609c1471645e1b76c592c078b63ccb258e78c1ee84f7f32b9089",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "cpu",
+      "dtype": "float16",
+      "devices": 1,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.004,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T09:44:51.937323+00:00",
+      "finished": "2026-09-29T09:44:58.665210+00:00",
+      "path": "runs/qualify-bounded-cpu-03/tiny-float16/gates.json",
+      "sha256": "acfddfc47cab376ed9d81ee82be197424cae5f3162b6d0cf0e2ff69e0894a895",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-cpu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-cpu-03/tiny-float16",
+        "--device",
+        "cpu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.004",
+        "--check-rtol",
+        "0.02"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:51.939208+00:00",
+          "finished": "2026-09-29T09:44:52.973785+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:52.975594+00:00",
+          "finished": "2026-09-29T09:44:54.539613+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:54.541404+00:00",
+          "finished": "2026-09-29T09:44:56.407597+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:56.409470+00:00",
+          "finished": "2026-09-29T09:44:58.651808+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "325b85338799609c1471645e1b76c592c078b63ccb258e78c1ee84f7f32b9089",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "cpu",
+      "dtype": "float32",
+      "devices": 1,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T09:44:44.829034+00:00",
+      "finished": "2026-09-29T09:44:51.859935+00:00",
+      "path": "runs/qualify-bounded-cpu-03/tiny-float32/gates.json",
+      "sha256": "5eff20c65a8b95f3b929b74c6eb7d7b7d72e1afef4ac0254a0de515eeef72f08",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-cpu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-cpu-03/tiny-float32",
+        "--device",
+        "cpu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float32"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:44.831271+00:00",
+          "finished": "2026-09-29T09:44:45.855431+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:45.857337+00:00",
+          "finished": "2026-09-29T09:44:47.711362+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:47.713147+00:00",
+          "finished": "2026-09-29T09:44:49.567228+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:49.569026+00:00",
+          "finished": "2026-09-29T09:44:51.843678+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "325b85338799609c1471645e1b76c592c078b63ccb258e78c1ee84f7f32b9089",
+      "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+      "device": "cpu",
+      "dtype": "float16",
+      "devices": 1,
+      "width": 8,
+      "batch": 1,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.02,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T09:45:36.797646+00:00",
+      "finished": "2026-09-29T09:46:13.984806+00:00",
+      "path": "runs/qualify-bounded-cpu-03/wide-float16/gates.json",
+      "sha256": "36ff422167513cbd4b10bb144180d54de891658e5638e09cbc260caa9b48f941",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-cpu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-cpu-03/wide-float16",
+        "--device",
+        "cpu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.02",
+        "--check-rtol",
+        "0.02",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--batch",
+        "1",
+        "--steps",
+        "3",
+        "--timeout-seconds",
+        "900"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:36.799818+00:00",
+          "finished": "2026-09-29T09:45:40.000100+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:40.005555+00:00",
+          "finished": "2026-09-29T09:45:50.343835+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:50.345696+00:00",
+          "finished": "2026-09-29T09:45:57.108653+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:57.110859+00:00",
+          "finished": "2026-09-29T09:46:13.972051+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "325b85338799609c1471645e1b76c592c078b63ccb258e78c1ee84f7f32b9089",
+      "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+      "device": "cpu",
+      "dtype": "float32",
+      "devices": 1,
+      "width": 8,
+      "batch": 1,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T09:44:58.754755+00:00",
+      "finished": "2026-09-29T09:45:36.636245+00:00",
+      "path": "runs/qualify-bounded-cpu-03/wide-float32/gates.json",
+      "sha256": "9680662135d7e0edd75755cef890db0ccbc16540e2fd3a07151fc95741863acd",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-cpu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-cpu-03/wide-float32",
+        "--device",
+        "cpu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float32",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--batch",
+        "1",
+        "--steps",
+        "3",
+        "--timeout-seconds",
+        "900"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:58.757008+00:00",
+          "finished": "2026-09-29T09:45:02.003378+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:02.005158+00:00",
+          "finished": "2026-09-29T09:45:11.408866+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:11.410759+00:00",
+          "finished": "2026-09-29T09:45:18.563106+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:18.565175+00:00",
+          "finished": "2026-09-29T09:45:36.618091+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float16",
+      "devices": 1,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.004,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T09:46:39.030261+00:00",
+      "finished": "2026-09-29T09:48:02.064613+00:00",
+      "path": "runs/qualify-bounded-npu1-03/tiny-float16/gates.json",
+      "sha256": "98fba9a5515aa7fb3efdff9b33199ed4a43f840fc70bfeced5a142e60bf4ab7c",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu1-03/tiny-float16",
+        "--device",
+        "npu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.004",
+        "--check-rtol",
+        "0.02"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:39.032474+00:00",
+          "finished": "2026-09-29T09:46:45.708233+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:45.710103+00:00",
+          "finished": "2026-09-29T09:46:52.268091+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:52.280719+00:00",
+          "finished": "2026-09-29T09:47:02.252648+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:02.254586+00:00",
+          "finished": "2026-09-29T09:47:17.844020+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:17.846049+00:00",
+          "finished": "2026-09-29T09:47:26.060427+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:26.062816+00:00",
+          "finished": "2026-09-29T09:47:33.119606+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:33.122179+00:00",
+          "finished": "2026-09-29T09:47:43.748025+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:43.756513+00:00",
+          "finished": "2026-09-29T09:48:02.051863+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float32",
+      "devices": 1,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T09:44:55.811193+00:00",
+      "finished": "2026-09-29T09:46:38.936823+00:00",
+      "path": "runs/qualify-bounded-npu1-03/tiny-float32/gates.json",
+      "sha256": "e443dafdf3531df396ad59fc7c857af2a31309f9371faf0537d24263d0700fbb",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu1-03/tiny-float32",
+        "--device",
+        "npu",
+        "--devices",
+        "1",
+        "--dtype",
+        "float32"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:44:55.826102+00:00",
+          "finished": "2026-09-29T09:45:02.371854+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:02.373646+00:00",
+          "finished": "2026-09-29T09:45:09.439964+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:09.442527+00:00",
+          "finished": "2026-09-29T09:45:20.016078+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:20.028756+00:00",
+          "finished": "2026-09-29T09:45:40.877364+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:40.879548+00:00",
+          "finished": "2026-09-29T09:45:52.424032+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:52.436987+00:00",
+          "finished": "2026-09-29T09:46:06.124016+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:06.130142+00:00",
+          "finished": "2026-09-29T09:46:19.600778+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:19.603440+00:00",
+          "finished": "2026-09-29T09:46:38.895151+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float16",
+      "devices": 2,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.004,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T09:47:17.573842+00:00",
+      "finished": "2026-09-29T09:49:04.302294+00:00",
+      "path": "runs/qualify-bounded-npu2-03/tiny-float16/gates.json",
+      "sha256": "b8283e40f4ef762657261b10682efdd65949985e2218d2715d7d18065bd1d167",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu2-03/tiny-float16",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.004",
+        "--check-rtol",
+        "0.02"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay1-peer1",
+          "state": "passed",
+          "started": "2026-09-29T09:47:17.587752+00:00",
+          "finished": "2026-09-29T09:47:23.858145+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:23.860098+00:00",
+          "finished": "2026-09-29T09:47:35.927355+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:35.929739+00:00",
+          "finished": "2026-09-29T09:47:44.640671+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:44.652817+00:00",
+          "finished": "2026-09-29T09:47:55.808712+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:47:55.810652+00:00",
+          "finished": "2026-09-29T09:48:11.521037+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:48:11.525373+00:00",
+          "finished": "2026-09-29T09:48:25.251831+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:48:25.253838+00:00",
+          "finished": "2026-09-29T09:48:33.714419+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:48:33.716344+00:00",
+          "finished": "2026-09-29T09:48:44.511741+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:48:44.513943+00:00",
+          "finished": "2026-09-29T09:49:04.287195+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float32",
+      "devices": 2,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T09:45:04.562279+00:00",
+      "finished": "2026-09-29T09:47:17.485530+00:00",
+      "path": "runs/qualify-bounded-npu2-03/tiny-float32/gates.json",
+      "sha256": "42cc4155bdf9aedf8a859643aef7ccf31d1dfe3ff05b484ada95fe13992c1957",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu2-03/tiny-float32",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--dtype",
+        "float32"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay1-peer1",
+          "state": "passed",
+          "started": "2026-09-29T09:45:04.574935+00:00",
+          "finished": "2026-09-29T09:45:11.500634+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:11.517092+00:00",
+          "finished": "2026-09-29T09:45:25.188286+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:25.190450+00:00",
+          "finished": "2026-09-29T09:45:36.836916+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:36.845472+00:00",
+          "finished": "2026-09-29T09:45:49.840661+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:45:49.852770+00:00",
+          "finished": "2026-09-29T09:46:14.556203+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:14.568805+00:00",
+          "finished": "2026-09-29T09:46:30.343208+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:30.351255+00:00",
+          "finished": "2026-09-29T09:46:40.690801+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:40.692959+00:00",
+          "finished": "2026-09-29T09:46:53.344381+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:46:53.347155+00:00",
+          "finished": "2026-09-29T09:47:17.471312+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+      "device": "npu",
+      "dtype": "float16",
+      "devices": 2,
+      "width": 8,
+      "batch": 1,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.02,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T09:56:55.860143+00:00",
+      "finished": "2026-09-29T10:04:50.954276+00:00",
+      "path": "runs/qualify-bounded-npu2-03/wide-float16/gates.json",
+      "sha256": "160de6348f34c2e5af6d57b2554214968a042739a564c4aef489713aa0fe2335",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu2-03/wide-float16",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.02",
+        "--check-rtol",
+        "0.02",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--batch",
+        "1",
+        "--steps",
+        "3",
+        "--timeout-seconds",
+        "900"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay1-peer1",
+          "state": "passed",
+          "started": "2026-09-29T09:56:55.862126+00:00",
+          "finished": "2026-09-29T09:57:00.390079+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:57:00.392505+00:00",
+          "finished": "2026-09-29T09:57:37.797849+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:57:37.799932+00:00",
+          "finished": "2026-09-29T09:57:59.873282+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:57:59.875347+00:00",
+          "finished": "2026-09-29T09:58:46.581578+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:58:46.583469+00:00",
+          "finished": "2026-09-29T10:00:20.217382+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:00:20.219471+00:00",
+          "finished": "2026-09-29T10:01:12.818555+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:01:12.820572+00:00",
+          "finished": "2026-09-29T10:01:38.056035+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:01:38.057977+00:00",
+          "finished": "2026-09-29T10:02:37.996686+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:02:37.999327+00:00",
+          "finished": "2026-09-29T10:04:50.940177+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "d67fdff4b351ecaa1aeb69d42a5c8bff956aeca8c78e35940077b83048a592a4",
+      "device": "npu",
+      "dtype": "float32",
+      "devices": 2,
+      "width": 8,
+      "batch": 1,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T09:49:04.385692+00:00",
+      "finished": "2026-09-29T09:56:55.782853+00:00",
+      "path": "runs/qualify-bounded-npu2-03/wide-float32/gates.json",
+      "sha256": "c81b9c69228737e244aec6a25953d05620e55e0aacb9b7d0da26e62a6ca3d5f1",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu2-03/wide-float32",
+        "--device",
+        "npu",
+        "--devices",
+        "2",
+        "--dtype",
+        "float32",
+        "--topology",
+        "$TASK_ROOT/inputs/wide.txt",
+        "--batch",
+        "1",
+        "--steps",
+        "3",
+        "--timeout-seconds",
+        "900"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay1-peer1",
+          "state": "passed",
+          "started": "2026-09-29T09:49:04.387695+00:00",
+          "finished": "2026-09-29T09:49:09.624298+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:49:09.625943+00:00",
+          "finished": "2026-09-29T09:49:46.356313+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:49:46.358125+00:00",
+          "finished": "2026-09-29T09:50:09.351508+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:50:09.353576+00:00",
+          "finished": "2026-09-29T09:50:56.332499+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:50:56.334445+00:00",
+          "finished": "2026-09-29T09:52:29.865494+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:52:29.867447+00:00",
+          "finished": "2026-09-29T09:53:21.713849+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:53:21.715844+00:00",
+          "finished": "2026-09-29T09:53:45.889407+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:53:45.891518+00:00",
+          "finished": "2026-09-29T09:54:45.666709+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T09:54:45.668608+00:00",
+          "finished": "2026-09-29T09:56:55.770057+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float16",
+      "devices": 8,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 0.004,
+      "check_rtol": 0.02,
+      "started": "2026-09-29T10:07:09.292662+00:00",
+      "finished": "2026-09-29T10:09:07.313745+00:00",
+      "path": "runs/qualify-bounded-npu8-03/tiny-float16/gates.json",
+      "sha256": "33ae8fb49b499554b17dc91a6557d147f13c965b76c88c916d6ca73172b2a9a9",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu8-03/tiny-float16",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--check-atol",
+        "0.004",
+        "--check-rtol",
+        "0.02"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:07:09.294948+00:00",
+          "finished": "2026-09-29T10:07:22.743566+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:07:22.745484+00:00",
+          "finished": "2026-09-29T10:07:32.788636+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:07:32.790338+00:00",
+          "finished": "2026-09-29T10:07:44.714064+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:07:44.715918+00:00",
+          "finished": "2026-09-29T10:08:02.523831+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:08:02.526005+00:00",
+          "finished": "2026-09-29T10:08:19.329982+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:08:19.332649+00:00",
+          "finished": "2026-09-29T10:08:30.452870+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:08:30.454897+00:00",
+          "finished": "2026-09-29T10:08:44.422716+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:08:44.424574+00:00",
+          "finished": "2026-09-29T10:09:07.301605+00:00",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "schema": "tide-bounded-scheduler-gates-v2",
+      "state": "passed",
+      "source": "f8648f766e6ded55eeb3eb886cb94bd109c55a7d",
+      "dirty": "",
+      "client_source_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "binary_sha256": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+      "topology_sha256": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+      "device": "npu",
+      "dtype": "float32",
+      "devices": 8,
+      "width": 8,
+      "batch": 2,
+      "steps": 3,
+      "isolated_vjp_policy": "two shared output-independent binary-fraction cotangents plus connected zero",
+      "check_atol": 1e-06,
+      "check_rtol": 1e-05,
+      "started": "2026-09-29T10:05:05.153335+00:00",
+      "finished": "2026-09-29T10:07:09.213496+00:00",
+      "path": "runs/qualify-bounded-npu8-03/tiny-float32/gates.json",
+      "sha256": "c92d24bf62182014d04cdd3b52f7a452961966aac0175e6d4f90c0d9ec2f1fb7",
+      "command": [
+        "$TASK_PYTHON",
+        "$TASK_ROOT/sources/bounded-qualified03/scripts/verify_bounded_scheduler.py",
+        "--build-dir",
+        "$TASK_ROOT/builds/client-bounded-npu-qualified03",
+        "--output-dir",
+        "$TASK_ROOT/runs/qualify-bounded-npu8-03/tiny-float32",
+        "--device",
+        "npu",
+        "--devices",
+        "8",
+        "--dtype",
+        "float32"
+      ],
+      "cases": [
+        {
+          "name": "add-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:05:05.155302+00:00",
+          "finished": "2026-09-29T10:05:18.237573+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:05:18.239469+00:00",
+          "finished": "2026-09-29T10:05:28.823837+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:05:28.825801+00:00",
+          "finished": "2026-09-29T10:05:41.704008+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "add-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:05:41.706050+00:00",
+          "finished": "2026-09-29T10:06:00.552273+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:06:00.554398+00:00",
+          "finished": "2026-09-29T10:06:18.344158+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train0-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:06:18.346353+00:00",
+          "finished": "2026-09-29T10:06:30.384152+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay0-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:06:30.386048+00:00",
+          "finished": "2026-09-29T10:06:45.193019+00:00",
+          "exit_code": 0
+        },
+        {
+          "name": "attention-train1-replay1-peer0",
+          "state": "passed",
+          "started": "2026-09-29T10:06:45.194967+00:00",
+          "finished": "2026-09-29T10:07:09.199997+00:00",
+          "exit_code": 0
+        }
+      ]
+    }
+  ],
+  "builds": [
+    {
+      "backend": "cpu",
+      "path": "builds/client-bounded-cpu-qualified03/client-manifest.json",
+      "sha256": "d22721ba38314eec733f1700b0754b94e121fc080371b815ee20409cfb151f31",
+      "client_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "core_sha256": "5e342902e64abbc384099c3903317955e2eac2c9bfa599cd1a9ddf9eb9fbf439",
+      "binaries": {
+        "tide-bounded-schedule-check": "325b85338799609c1471645e1b76c592c078b63ccb258e78c1ee84f7f32b9089",
+        "tide-bounded-scale": "cd62cd617750f6909a755ad05b6127dba8609edfaad3cc3e7321f82e0964e99e"
+      },
+      "ctests_passed": 4,
+      "log": "runs/build-bounded-qualified03/cpu.log",
+      "log_sha256": "f8fa7ae5a01fdbd7dadc3019b5f699ce0f9e5696c4e5fe8c1ec79881835197c3"
+    },
+    {
+      "backend": "npu",
+      "path": "builds/client-bounded-npu-qualified03/client-manifest.json",
+      "sha256": "f88368aca5676d5d3b64dcd601eebb9f0e689c6209ee3312c8083295cc65b8d0",
+      "client_sha256": "b3d6c80dd48f69d7821322d2a56d8f5a7b45fca80b492a1ce8c28b96d0c3792c",
+      "core_sha256": "5e342902e64abbc384099c3903317955e2eac2c9bfa599cd1a9ddf9eb9fbf439",
+      "binaries": {
+        "tide-bounded-schedule-check": "8f9b777ee3d8f76b7f41f76704aad3327cb4468f99773a757935b55133afb1f7",
+        "tide-bounded-scale": "3bedc6993708526d0512464f94522b240d00d1a3f51867535162a12481378730"
+      },
+      "ctests_passed": 4,
+      "log": "runs/build-bounded-qualified03/npu.log",
+      "log_sha256": "c68a2fb461b3d9c75f754b803da2bc3b240cadf2fca0c552b01dc1bdad58ab16"
+    }
+  ],
+  "audit": {
+    "path": "reports/audit-qualified03-final01/audit.json",
+    "sha256": "47d341b40ce8d8a47a50d72bcc988a9abb7150ffccb5c5d8cd306cadaede2279",
+    "valid": true,
+    "runs": 28,
+    "gates": 12,
+    "scope": "84 qualification cases,24 tracked smoke runs and4 failed geometry records; audit validity does not turn failed cases into passes"
+  },
+  "scope": {
+    "cases": 84,
+    "all_passed": true,
+    "oracle": "independent scalar CPU schedule of matching payload dtype",
+    "FP32_tolerances": [
+      1e-06,
+      1e-05
+    ],
+    "FP16_tiny_tolerances": [
+      0.004,
+      0.02
+    ],
+    "FP16_actual_topology_tolerances": [
+      0.02,
+      0.02
+    ],
+    "discrete_and_None": "exact",
+    "actual_topology": {
+      "pdg_nodes": 465,
+      "physical_edges": 4418,
+      "width": 8,
+      "batch": 1,
+      "vocab": 17,
+      "tokens": 3,
+      "devices": [
+        1,
+        2
+      ]
+    },
+    "eight_device_topology": "tiny only",
+    "updates": "three SGD and three AdamW updates with persistent owners, repeated input trials; complete gradient/master/slot/counter comparisons",
+    "not_covered": [
+      "full-size numerical parity",
+      "12-token replay capacity",
+      "dynamic/unbounded queues",
+      "imported states/checkpoints",
+      "higher-order AD",
+      "HST",
+      "CUDA replay",
+      "other CANN/device stacks"
+    ]
+  },
+  "retained_diagnostics": [
+    {
+      "job": "qualify-bounded-cpu-02",
+      "state": "failed",
+      "status_sha256": "5d5429ec11a89a8de5191929fa5f2f09c8a383fd928e1e2fe2edff428c54f986",
+      "files": {
+        "matrix.json": "b93309f693928b31a4788ba593a5d43307053efca785dbfd3989f972046f48b0"
+      }
+    },
+    {
+      "job": "qualify-bounded-npu2-02",
+      "state": "failed",
+      "status_sha256": "cdc549b1b6928d1f006e85b621ebc39b2bd7f97dced4281b6960da0d42f45fe8",
+      "files": {
+        "matrix.json": "cd39f3c8875d00c61fecf01731e98a36d49458ba47434bec666edb059d3d8990"
+      }
+    },
+    {
+      "job": "fp16-vjp-diagnostic19",
+      "state": "passed",
+      "status_sha256": "42ed3838abe41afe43723014bac632560e0add7d6009d2575fd5abe2631b4971",
+      "files": {
+        "matrix.json": "5c9bba6e112de181e7acfb9fa7b1750e875439963e65ecc425da9b321ab58a06"
+      }
+    },
+    {
+      "job": "check-cotangent-cpu-dev20",
+      "state": "passed",
+      "status_sha256": "79ebe8e14bf4c49b5022612f1d78ea7970bb28590e244ec29e5d18eb25a8a958",
+      "files": {
+        "matrix.json": "64abf04d03d153db6648968591bbe0301afe7394f1c09b0960ca5ae1f78f88c0"
+      }
+    },
+    {
+      "job": "check-cotangent-npu-dev20",
+      "state": "failed",
+      "status_sha256": "45613b87e94f8b3fefd9e766898437e581143b07784a7dba3d9f24c39ab80f03",
+      "files": {
+        "matrix.json": "1e561db80d9a74cc116427d43ff1ea643a5a6f370ae5f294679441831a449b18"
+      }
+    },
+    {
+      "job": "norm-probe21",
+      "state": "passed",
+      "status_sha256": "197c309b21cb4bf7aa246280e44b386146bcaa704bad94873d5e89864c31b540",
+      "files": {
+        "probe.log": "5564ea9559848da9f667cac377d1f7d1507defe28e90137a0bb3c4150fc7fc52",
+        "identity.json": "56b5ee0f9ac4b78ba6c27519f5b52cf284d0e3c95fb3aa0f4792a3a3997a9d17"
+      }
+    },
+    {
+      "job": "check-cotangent-cpu-dev22",
+      "state": "passed",
+      "status_sha256": "67ddfc310da64bd1610cbc902887c30689e42ae36a276cc553e72e6999e9561b",
+      "files": {
+        "matrix.json": "bd9df2dfc673c4c93f10adfbc22373ec8bdcb46453041c9231256370f07344ab"
+      }
+    },
+    {
+      "job": "check-cotangent-npu-dev22",
+      "state": "passed",
+      "status_sha256": "0aa58b753bd7d1276820048696e86c99113f495edc68c16e93fdaecb5fa68f0e",
+      "files": {
+        "matrix.json": "9b8ab5c47a3bca79ea805641a50422f2da4e8b2fa3ec17680d5ba0f80e813108"
+      }
+    }
+  ],
+  "numerical_finding": {
+    "old_probe": "candidate1.4*a vs reference AD0.7*sum(b*b); first unequal rounded upstream values, then a cancellation-sensitive radial direction",
+    "primitive_cpu32_error_vs_cpu64": 2.48616e-05,
+    "primitive_npu32_error_vs_cpu64": 1.71172e-05,
+    "primitive_cpu32_vs_npu32": 1.56164e-05,
+    "policy": "two shared output-independent exact binary-fraction cotangents plus connected zero; complete training objectives checked separately",
+    "runtime_change": false,
+    "fp32_tolerance_relaxed": false
+  },
+  "smoke": [
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-add-float16-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "db2a90e29f6a1308cc98a6a431ffca6212dee0533fa2cf9ab242ffc316626364",
+        "summary.json": "f9961f2a8c0c5f308a2eeec3897345f4537b1fa47c13f01250a1349937831275",
+        "metrics.jsonl": "b71fa24132c1bdfbae6c960e9185c0d5d0873152579c160963ec7ab58b529e9b",
+        "stdout.log": "5509dbbf7633927b99630eea8de113043d1faa736b281634b04c9ae5a4941568",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "73006a6670cbba2b7cfbe7253fd61538cc222cf0bff2ffb3b0186307c3d3e6ee",
+        "lifecycle.json": "0907af803692816036596f67ca53ca2bf845ce26a8cfaefe574bd41053fd76fa"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-add-float16-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "8571da7e02aae7afa378bf48cb9726eed7f25506f7e3f2ffef9f78dfe64ff758",
+        "summary.json": "dc9fce4f9ff04ba447b2a1edc80d6f7adcadfe258a7786463fe2b603b5fef170",
+        "metrics.jsonl": "eaf237cf7b335a9fddb81ad92e63fab2f31c9730df8026aa7fe2478c9d9237c8",
+        "stdout.log": "e8d5a612e15201b890c87c7efeb034b8993129dc6e96ec3ffbfa4bb0d842b6b2",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "9458184e54ed104d9e9427b34fd32b41e16f044784c33cb342aec9ff7f74d529",
+        "lifecycle.json": "144e58c554784e4e441fcc820e402645bdec8108a6bd6c565e11cf47efd73d88"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-add-float32-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "dff8910638dc69187106c221d0f2a1ee29089462e84cfe1617c1189201c86d3e",
+        "summary.json": "4bc64232e3a2fbad28cf0a78ac9818ae05dc0bd7ec431e13dbfb60cd1fdd6321",
+        "metrics.jsonl": "930b04627f3939eb859fab3b366e7ed25e342b3046452740328b53c5f5115d4a",
+        "stdout.log": "7340f6114cc6f8b5ed2917f87de71a87a15421eb957634d5d2a4106fa2cf87b1",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "8827bbcd9d9e28dea548f150984e99582cfbbff72c21334e601f196ba72d17c0",
+        "lifecycle.json": "ee339776d1bb4df04facdecf7ff7d674884a2c38ced26a7d06aab6e233d46891"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-add-float32-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "250c5039bfeac99a790f7795a20c9b1412afaa91eaae5dfe1d9d003fa44ec6ba",
+        "summary.json": "c1627f0bd50161b8662bebe0c641eb68421ba0a5d3275706445120c7e5a04c2a",
+        "metrics.jsonl": "40074ca9bd510ed4ae68c5d1690fc56ab2a225b9e82740e1e4c2a286101ec72b",
+        "stdout.log": "ea508a3131158baea00ce09ae539396570d5bc023efe1be8e4e13c03dce7633b",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "968d857e6012d3acbf58b360b909e42d7b5650cff509c36e08e710254118a3c5",
+        "lifecycle.json": "0d8d7fb4300c3ff907351d1c6c4c1f9f79b2045319ee8accde43b96593b4774f"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-attention-float16-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "6d58a0c91743445794b546635b34206915b3196546fdcb4c83743c572ab3a673",
+        "summary.json": "36d2a9dc9e613e5f72f94016fa31e7b064a5720eacf3d42c07d61cd8463fc985",
+        "metrics.jsonl": "da6fadeed2fbcb4a3e6f0ffee195f34c7390287675b4faad3b78ab0f17ae332a",
+        "stdout.log": "d557aea36e03a1bcde18e06d54b1a5c0fd85b5526bc90b33bfe9d3b9ce65a8a7",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "97e635e55e3b013c1fdf78b947383ee1fc93faf70f0e099c3dfe7e2df92375e5",
+        "lifecycle.json": "cfe93345518158df3ff89f69cc742213df77f628a190426e7c91d7f965308b38"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-attention-float16-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "6420aa369f80545a0331447bf220de4811fbb15567a5f53a5cafe8ec752af419",
+        "summary.json": "125b779aab4a2105532e7a1f3352bfc42b313f9351caffa4c4b2e4d2b0303e6a",
+        "metrics.jsonl": "c5458b0fdeca3a025cb3971b8651894e2127206ba8e780dee752ef600abb603a",
+        "stdout.log": "e55bffe1e24dee8398af75f3b76e036692d1f4b76643af6d91723aeadf54c923",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "394856e15605f20264d219261d3b05986945f56ca5f14c853f38115012a1c2ac",
+        "lifecycle.json": "ff5d02fb9e23ec84490723b9cebacc6a2a6be90c595b62c1fb9ed05aa2c00e5b"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-attention-float32-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "59368528e95557f5e599a7d22d9ec9527e3b419b860314d27f1b2c1d60778119",
+        "summary.json": "3d83b690b14fc1412f1d032e76d981b1f29319773e22bcfec893eaed7f833798",
+        "metrics.jsonl": "2758b69dc50aba12f329ca24b4a32a975fd9c5681deb99f835cdb2eb94054f4f",
+        "stdout.log": "a103a9d917d5b43e4e2f84abf94500ce2b34949dcf875d76bf465934d93e125e",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "b3add304f0562da31429dac4728e4e6e0bf3f872095517a227aee40f352aa651",
+        "lifecycle.json": "44360bf494a682e847c61951d7024528e958f20e97a389d297fcb36341dbe5c9"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-cpu-03/cpu-attention-float32-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "2e8cb09abced61223c3d53711b3079b6bf1335cde02eaf62791e7cea2bfd8833",
+        "summary.json": "e19b40fa0482d3fef85362dbc939828b4ade9448d7482d769b7bb3d2c1324a38",
+        "metrics.jsonl": "fd6bc607a8123993ec02b40daa38675c05786d999c0856ec27afdbf45c758db1",
+        "stdout.log": "ec0feb2870382d645e4697dd84b4fed02093ed1ab30bee8974f226107ae0f652",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "79626804795a6b6a13613edc0931ed683f3409ab68a9a6d3c0bccc14af802a57",
+        "lifecycle.json": "201c0ceca38044ffad1fa9930fca1350e336c665b63d6a21ece49ade380c28c3"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float16-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "65e8171dc9c9719c32d0fdc940ca26d1f39622c6e6ca1f7774c48fec3f70aec8",
+        "summary.json": "b940c61436daa52a9883c48522eab1ea34dd173f3b9a5dab6ba4ab669514b5ac",
+        "metrics.jsonl": "7d651f4463e16a1b396b219d9425d8b7df50cee6b2f4f75b4c503b8415cc54ec",
+        "stdout.log": "0515c3c4b435c12045c0d261e2c8ed35a9ae6f39ec37dffccc939c702338c776",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "541e780e56d20d059c8a9a72b692179b40a93925ed19b77c272ee2f5d0827fac",
+        "lifecycle.json": "b4c47843579fa72b5ddfd07f48807980979e152377a997189b3b3db766b98963"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float16-train0-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "0ba4c414d6c67ef1fbc702d6737ac73dba5b896c61b098b953af31279aab01d3",
+        "summary.json": "dac00fe163e18bf0a52a99aa5bdeb8409cbc9410495a0bdbff289db1f02ac684",
+        "metrics.jsonl": "034a027c627ef54403337441378a3e30d1286f8112d2743d82fe986bb17b35ab",
+        "stdout.log": "e64eefa1e0917ccc58fc840c8365a0aaa5c33d9aef13ac32f0cff59d102488a5",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "980771fa3ec315240b9586221bf26cfa3f6b0e72d803d5f37fab7cfe5f3fa030",
+        "lifecycle.json": "96755ca5cf3a60e5d2150e7d36611e4bd58a09553465be1d6da79f89bc667bba"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float16-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "19ad6ec9ea4ed13e7fdd29f516b1d5415247ca6a72ee4e6548d780bcbe9a91fa",
+        "summary.json": "6e89e59445f50612ab927da9da379502b0b0d1f229be6d2c6f9c4c3b426c9353",
+        "metrics.jsonl": "12013211f7b407207570327ab280fdeaa19c6a8a446c602efedada46dcec8aa9",
+        "stdout.log": "f4b8c39cfeab4280eb035450d97cb0452d25dbd62f089b805c9cade63a740689",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "2c2fd439d8b6300a78eb00f57b270f4ea80973bf2bc3dc4397b1ac9cd92c511c",
+        "lifecycle.json": "f976d1dd3900053503bd11cb93c664e59b0dca316920269d1131973f4a8ad27c"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float16-train1-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "c95339bce096ede2ffe5c84c704ec05c4fe537921e31acb53f83d7fa63b311a2",
+        "summary.json": "52bf5703658b42c018b7b91c076f9d61bd85c0498c2e136a4a211f005331808a",
+        "metrics.jsonl": "1f40195e69750f8ee6be0d85a767ba317081224aa3790aa2fd58fccb4e4e63c4",
+        "stdout.log": "05a2f2cb4138536ca29e3eb11a0ce6ede9fc1ecf5a6012b3fdd184e3dd6e3588",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "70b922cdb69a50b5054e477d2b134ab937e461da4af66c437d1542897338735a",
+        "lifecycle.json": "985f23843f60236109de75d4c0eb5c4cbdaee146e9919d00f323f2209bc766db"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float32-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "03b1eb09a8691b644d07aa16d7dfc947580a4c29819a796f0787dbc342c7abca",
+        "summary.json": "e9f7d2db9486dc276d07c9a950237300d263f59b44ffcc2f2347dfb664585e5a",
+        "metrics.jsonl": "85d40e65a793bb71ae3f9789c6d934a9854fda3b9b89c2485909dee87dd8d481",
+        "stdout.log": "a906b7de49a0ac8137bb12fb0cf33620ad0e678f7e1e16ddbf1e6ce3ceb63467",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "43e0d9e112fbdab1620cd42e360fbb36c41164c7deb1b1d644205ed7b4f42218",
+        "lifecycle.json": "e6d4f808d7332db24535e5ccfde0bf45b1f8c61877032112cd4189e3c6bac5fe"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float32-train0-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "e86f03e07a0d27df6f1825b73ae1a71dce61a21a452c435a6633e3e1085b6c75",
+        "summary.json": "523afeb564e49a7bfc30cee0c445ce08dee2f2ea3a284d4db8630311fdb347eb",
+        "metrics.jsonl": "cfd58b46ba227b78783d3544e830c9227452ce61863b58919b2dce85434ce8b9",
+        "stdout.log": "aad9d3a9408953c71f2d178d70d0060fa9a130615c61e64ada2a23912cf9cc02",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "4a3a3ee98de175dc0c52cb8f27e96abe44c3984159cbd4c894926601c96eed8c",
+        "lifecycle.json": "693fec2bc004dd134b7cd7ee49f4cf124b54af71ac98d76c4fa02714df43b081"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float32-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "6360472c08ac1760ae9dc61e76bd8e54fcca1814cd4acaf5820600ddedf56b76",
+        "summary.json": "1f3fb3e0308210baf84bbb362ebce067799a7d37306cc9fdaf7990eee2196363",
+        "metrics.jsonl": "d4f41e1f9ba0a0b32394232332f4a8e172e07a9e851af01591a8f1186ead87dc",
+        "stdout.log": "419c0ee0c847f943db6f711e7b259befc69782b0d783274de0b61f50c953bfd2",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "bec4a786a3b9aba531de5137017ed85817a653e81ef486a8684fb617f07ddf47",
+        "lifecycle.json": "d8504b7471288be6cf5222720bc9f9f89b5dd26d54fdbd64234a2235c0467306"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-add-float32-train1-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "e526ce9d252f3550f62c246030860efed7994c90d29eb4f559856e7e3ca95b89",
+        "summary.json": "c05c71b77337307f029aa8b90d3229c38a39687eafe6574769c5748ab6165f11",
+        "metrics.jsonl": "be11c06c8e423d86b79a1e574a9999fb90019432a81346cc9bff1835a86e4d97",
+        "stdout.log": "a064669054d5d6712cafb1c1a39a1853487bac0906bd329e98e5cc5d95509606",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "0f33e9366993eeae6dbaf768960c1f0199d90425d57827dc99838eea530789a5",
+        "lifecycle.json": "945e0835f6878fafbb6d7a13a3b627f3514100eedd716296f92e3fce4dc75c16"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float16-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "d74e69c5497cf34fe7be468edd33bad38912d13ecc6f24019d61f04e2dbe0b96",
+        "summary.json": "c0fb634b2ff7340dc487df71e8d40ebbe5c236955ba118cfaf7f79eb9ff019ea",
+        "metrics.jsonl": "10b0f45ebc67905c108fb041777ce15f7e901c0757beb928e6e7c1e5aa2b1e56",
+        "stdout.log": "d932e5dedd4f954367ed296109117cd6ffa7679b981ba04787f36dcb15ed24f6",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "df8929776c6899f6512c99b79d43629bd7da909b5ba2e79945df7325da6995af",
+        "lifecycle.json": "991626a917f00f81b5ea43d0fbbc30fdc7dce90d77e1372db33b71779f1d9a86"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float16-train0-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "8453d434631021d8aea1c263f77121b4195bba9704ddc1f204011d158305140c",
+        "summary.json": "45c439f65c821715b7c06e790d8a0e6cda7c9cb3d7303777ea918c3d989124a9",
+        "metrics.jsonl": "606d1cab3c5cf6d9033f85e917bdc2baa413d57d319f91f36e657e1825bfbe70",
+        "stdout.log": "d38c2883080ca1b6ca8d4aa8cec3a6cb1114cf9441f55eeee2b1fc497293fcb3",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "f2cb93d16d9ebb7dfa6c01d03513ea937ccf8009b2686fc25419ec6c4142f2b6",
+        "lifecycle.json": "a4998e58874b4bb7a14234d8979c8930f58ab5a4db451f46ea76f369e46951ee"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float16-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "9edad6f593ea89b00ff325e78ff0cdcd0293a77d292efec8211b317aa5e8a9a8",
+        "summary.json": "394526d7ea0f882bca468599b6cc678af4d3362326f0bdaa13046bf53e1df42d",
+        "metrics.jsonl": "073cde426420972e60bde65e5520c6145994d1a8d537eb9ed4f4b06330219f1f",
+        "stdout.log": "c170fdc7540ba00a07758487ae2e166f6434fe4d684bab8712ef653d61bf6b1c",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "d9c926e515e808205c7532a308cf61057ce10f43e05f02274be1c857d1006499",
+        "lifecycle.json": "a80f97c8b06f1cad5d893d6dcbe145c822104068118af0fec5af47ff500217dc"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float16-train1-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "a644398296f7ab51c8aebac53ad85ff4abe0dc3c61f9d5ff57b95efd464bec04",
+        "summary.json": "c0367fe3f0ff59a1512bb44cd0fdacf016f2174b5c0d979612a45e30cdeedefa",
+        "metrics.jsonl": "6cb38662304b86d12ab9d66b3d3e78f6819ccc4bc7e095853e27916133715147",
+        "stdout.log": "8d8a58607e3ed425da4253c5485976f2eab850d78ecabb0da1dbb26c451e8f69",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "fa26e24a10b0cf7736a94815fc09b9403898007a616c3f5355d7e3a39dad330a",
+        "lifecycle.json": "96c6fc2228e407f813823ea41c9da562a5cf863d5d32579b2eea2b3395ee7a3d"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float32-train0-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "eaa5ae0e69688b013e9afae92904c35b89dbc180b7a35520709a7fa99c9a0367",
+        "summary.json": "385e765c42e39c3a4dc75d670e768c84d2c7833d48e0263c9d4a264083d49d3b",
+        "metrics.jsonl": "fcd7f1c1665bd3906e8d9d8450ed5888da1c81438e05366fe1a046f30f8ea824",
+        "stdout.log": "1b034b913e7306635236d07eccc25d5dd8aa93b8159ea088ed5e9505788eea72",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "658a8c5596d894c3f6613173bd361cd8caaf6eaa5ecdec356bcc3096a04e721b",
+        "lifecycle.json": "e0fc7005e9e873949d987ee21f2f991c854480d05e2d4dd09f0eb64b72a3da2f"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float32-train0-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "c3a45ef6c6ed247c6e82a516135da355a05b3c40b667ee851cf11c0c30e0ceda",
+        "summary.json": "c086ad5c3927b81357b89ac66c1066452a1eaefb32a8461ffb4325588f8b1215",
+        "metrics.jsonl": "2aa2bb20db5507f0b30395dfdd94c4652290d28ce54c8937a7e446980ee01f90",
+        "stdout.log": "e49194f136e7de2b9782be493f9297cd6a7bfc17f850d15a5bf51d21e9de9690",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "8cc4e19afd0391255e37cd2c9b40251c3b8ec8119739dc27751dcdfdeb7ccbdf",
+        "lifecycle.json": "bb39b216e11e85c8bae11fc1410b2ee7c26061fe6467fb495fb7fcbe628a7d86"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float32-train1-replay0",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "d5def8abd1f0c117baa4e3941e75b6b4755229b4197c4ee2e25e71c04676bb4e",
+        "summary.json": "e66d8d378cc1fb52b59a61dae47901bb736b04d58bb125d0e8dadfcd284a0f7d",
+        "metrics.jsonl": "053d29b96c3b2dfe519da5226a417dc29114c630f752e7b87508e649aa1b787d",
+        "stdout.log": "2289fa30c25ae4778aa84796587d99178a99302f2e5cf9638611a221c3336d16",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "7c9ae81764ccb9de461b0739d3cf09f8579c6e8cbd127f30d1d543155e277c9f",
+        "lifecycle.json": "d56762fcff407a985a2d78c19c0c3a7f2e5ba949014af1d97da83f2cba4e9d9f"
+      }
+    },
+    {
+      "path": "runs/tracked-smoke-bounded-npu-03/npu-attention-float32-train1-replay1",
+      "status": "completed",
+      "observations": 3,
+      "tracking": {
+        "status": "healthy",
+        "verified": true,
+        "rows": 3,
+        "expected_rows": 3
+      },
+      "hashes": {
+        "run.json": "8f4f4318e8bd035894ddd2d376cb5ab83cef20725e003b453155b89b784d22ec",
+        "summary.json": "6df74e7d68b1f41eb31c5659f9902e839bdc6e81acbaf9524f4bc0c53d38d8ed",
+        "metrics.jsonl": "d2939d5a3bd0fb2bb43a8166a23c3205f02425e64d53c7f5ed40e738a64559f2",
+        "stdout.log": "8b0acf16e82f67b4e095c219596f40a4f4547cf4ffaa0e305508851a92474c39",
+        "topology.txt": "b3439dd2ec468d83b9ad9e69292d7d087e266d1cb7df3e8ab0b4e2a5c90c585a",
+        "loader.txt": "dc3b36dc245ade5a26a03b458f4528e233a2bb00c886d4090c91c0557b634e58",
+        "lifecycle.json": "8f47689b5e28002e2f2567259b38a9ae03b48a8b2fa15e7e3348db971089c0e2"
+      }
+    }
+  ]
+}

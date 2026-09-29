@@ -12,6 +12,7 @@
 | `tests/` | Analytic formulas, invariant tests and differential qualification |
 | `scripts/` | Configure/build/verify, durable job and re-entry helpers |
 | `docs/verification.md` | Explicit development/full gates and frozen worktree lifecycle |
+| `docs/bounded-scheduler.md` | Optional finite device tensor scheduling, native replay, peer completion and training boundaries |
 | `docs/semantics.md` | Adopted semantics and local formula/gradient contracts |
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |
