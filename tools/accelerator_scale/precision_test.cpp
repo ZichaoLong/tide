@@ -8,11 +8,13 @@ using namespace accelerator_scale;
 void require(bool condition,const char* message) { if(!condition)throw std::runtime_error(message); }
 int main() {
   try {
+    at::set_num_threads(1);
     pdg_scale::Fixture f;
     for(double value:{1.,2.,3.})f.owners.push_back(at::full({1},value,at::TensorOptions().dtype(at::kHalf)).set_requires_grad(true));
     f.embedding=f.owners.front();
     require(!supported_payload(f.embedding) && supported_kernel_payload(f.embedding),"public payload boundary");
     TrainingConfig c;c.optimizer="sgd";c.learning_rate=.1;c.loss_scale=128.;
+    c.backward_threads=3;c.optimizer_threads=2;
     auto duplicated=f;duplicated.owners.push_back(f.owners.front());
     bool duplicate_rejected=false;
     try {TrainingOwners bad(duplicated,c);}catch(const std::invalid_argument&){duplicate_rejected=true;}
@@ -20,6 +22,11 @@ int main() {
     TrainingOwners owners(f,c);owners.zero_grad();
     owners.backward(f.owners[0].to(at::kFloat).sum()*2.+f.owners[2].to(at::kFloat).sum()*0.);
     owners.step();
+    require(owners.backward_threads().aten==3 && owners.optimizer_threads().aten==2
+      && at::get_num_threads()==1,"phase ATen pools must apply then restore");
+    if(owners.backward_threads().openblas)
+      require(owners.backward_threads().openblas==3 && owners.optimizer_threads().openblas==2,
+        "phase OpenBLAS pools must follow their independent budgets");
     const auto& m=owners.masters();
     require(std::abs(m[0].item<double>()-.799)<1e-6,"FP32 master gradient unscale/SGD formula");
     require(m[1].item<double>()==2. && !m[1].grad().defined(),"None owner was updated");

@@ -8,6 +8,7 @@ struct TrainingConfig {
   Index steps=0, warmup=1;
   std::string optimizer="adamw";
   double learning_rate=1e-4, loss_scale=1.;
+  int backward_threads=1, optimizer_threads=1;
   void validate(const pdg_scale::Config&) const;
 };
 struct TrainingWindow { Tensor loss; Result result; };

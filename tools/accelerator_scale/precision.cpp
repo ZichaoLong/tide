@@ -13,6 +13,12 @@ std::unique_ptr<NamedOptimizer> make_optimizer(ParameterRegistry& registry,const
 
 TrainingOwners::TrainingOwners(const pdg_scale::Fixture& f,const TrainingConfig& c)
     : payload_(f.owners),loss_scale_(c.loss_scale),half_(f.embedding.scalar_type()==at::kHalf) {
+  if(c.backward_threads<1 || c.backward_threads>160 || c.optimizer_threads<1 || c.optimizer_threads>160)
+    throw std::invalid_argument("CPU phase thread budget requires1..160");
+  if(f.embedding.device().is_cpu()) {
+    backward_threads_=c.backward_threads;optimizer_threads_=c.optimizer_threads;
+  } else if(c.backward_threads!=1 || c.optimizer_threads!=1)
+    throw std::invalid_argument("phase thread options require CPU training");
   at::NoGradGuard guard;
   std::set<const c10::TensorImpl*> identities;
   for(const auto& p:payload_)
@@ -31,9 +37,11 @@ void TrainingOwners::zero_grad() {
   if(half_)for(auto& p:payload_)p.mutable_grad()=Tensor();
 }
 void TrainingOwners::backward(const Tensor& loss) {
+  CpuPhaseThreads threads(backward_threads_);backward_counts_=threads.current();
   (loss*loss_scale_).backward();
 }
 void TrainingOwners::step() {
+  CpuPhaseThreads threads(optimizer_threads_);optimizer_counts_=threads.current();
   at::NoGradGuard guard;
   // Preflight every gradient before updating any owner. One host extraction per
   // device; neither a nonfinite gradient nor an absent one is silently repaired.

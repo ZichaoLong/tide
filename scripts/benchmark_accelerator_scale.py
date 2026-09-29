@@ -53,12 +53,17 @@ def parse():
     for name, default in [('devices', 1), ('width', 2048), ('batch', 512), ('vocab', 50304),
                           ('steps', 12), ('warmup', 4), ('workers', 16), ('threads', 1),
                           ('head-workers', 1),
+                          ('backward-threads', 1), ('optimizer-threads', 1),
                           ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 256)]:
         p.add_argument('--'+name, type=int, default=default)
     for name, default in [('grad', 0), ('check', 0), ('parallel-regions', 1), ('compact-events', 1),
                           ('defer-state-release', 1), ('packed-sources', 1), ('batch-next', 1)]:
         p.add_argument('--'+name, type=int, choices=(0, 1), default=default)
     a = p.parse_args()
+    if (not 1 <= a.backward_threads <= 160 or not 1 <= a.optimizer_threads <= 160
+            or ((a.device != 'cpu' or not a.training_steps)
+                and (a.backward_threads != 1 or a.optimizer_threads != 1))):
+        p.error('phase thread options require CPU training, each in1..160')
     if a.profile_step is not None:
         if (a.device != 'npu' or not 0 <= a.profile_step < (a.training_steps or a.steps)
                 or (a.training_steps > 0) == (a.profile_phase == 'token')
@@ -125,7 +130,8 @@ def main():
               'vocab', 'steps', 'warmup', 'workers', 'threads', 'seed', 'grad', 'check', 'parallel_regions',
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
               'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device', 'ranking_device', 'event_device', 'training_steps', 'training_warmup', 'optimizer', 'learning_rate')}
-    config.update(dtype=a.dtype, packed=1, emission='row', head_workers=a.head_workers, fiber_pooling='event')
+    config.update(dtype=a.dtype, packed=1, emission='row', head_workers=a.head_workers, fiber_pooling='event',
+                  backward_threads=a.backward_threads, optimizer_threads=a.optimizer_threads)
     if a.profile_step is not None:
         config.update(profile_step=a.profile_step, profile_phase=a.profile_phase,
                       profile_output=str(out/'profile'))
@@ -151,6 +157,7 @@ def main():
                      logical_devices=list(range(a.devices)), physical_visible_devices=visible,
                      host_arch=platform.machine(), cpu_affinity=affinity, node_workers=a.workers,
                      head_workers=a.head_workers,
+                     backward_threads=a.backward_threads, optimizer_threads=a.optimizer_threads,
                      aten_threads=a.threads, interop_threads=1, openblas_num_threads=1,
                      npu_task_queue=a.npu_task_queue if a.device == 'npu' else None,
                      read_device=a.read_device, read_dtype=a.read_dtype, control_device=a.control_device,

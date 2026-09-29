@@ -6,6 +6,9 @@
 
 namespace accelerator_scale {
 void TrainingConfig::validate(const pdg_scale::Config& c) const {
+  if(backward_threads<1 || backward_threads>160 || optimizer_threads<1 || optimizer_threads>160
+      || (!steps && (backward_threads!=1 || optimizer_threads!=1)))
+    throw std::invalid_argument("phase threads require training and1..160 threads");
   if(steps<0 || steps>100 || warmup<0 || (steps && (warmup>=steps || !c.grad || c.warmup!=0))
       || (optimizer!="sgd" && optimizer!="adamw") || !std::isfinite(learning_rate) || learning_rate<=0 || !std::isfinite(loss_scale) || loss_scale<=0)
     throw std::invalid_argument("training requires grad1, token warmup0, positive steps/lr and fewer warmup updates");
@@ -75,7 +78,11 @@ void train(const pdg_scale::Config& c,const pdg_scale::Topology& topology,pdg_sc
       {"train/optimizer_state_owners",double(owners.optimizer().state().size())},
       {"train/window_tokens",double(c.steps)},{"runtime/devices",double(placement.devices.size())}});
     metrics.insert({{"runtime/workers",double(c.workers)}, {"runtime/head_workers",double(c.head_workers)},
-                    {"runtime/aten_threads",double(c.threads)}});
+                    {"runtime/aten_threads",double(c.threads)},
+                    {"runtime/backward_aten_threads",double(owners.backward_threads().aten)},
+                    {"runtime/backward_openblas_threads",double(owners.backward_threads().openblas)},
+                    {"runtime/optimizer_aten_threads",double(owners.optimizer_threads().aten)},
+                    {"runtime/optimizer_openblas_threads",double(owners.optimizer_threads().openblas)}});
     for(const auto& [key,value]:fixture.inventory)metrics["model/"+key]=value;
     for(const auto& [key,value]:window.result.stats)metrics["work/"+key]=value;
     writer.Write(step,metrics,seconds(started),{{"phase",std::string(step<config.warmup?"warmup":"measure")},

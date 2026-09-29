@@ -29,6 +29,15 @@ int run(int argc, char** argv) {
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
       const std::string flag = argv[i];
+      if(flag=="--backward-threads" || flag=="--optimizer-threads") {
+        if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
+        const std::string value=argv[i];
+        if(value.empty() || value.find_first_not_of("0123456789")!=std::string::npos)
+          throw std::invalid_argument("positive phase thread integer required");
+        const auto n=std::stoll(value);if(n<1 || n>160)throw std::invalid_argument("phase threads require1..160");
+        if(flag=="--backward-threads")training.backward_threads=n;else training.optimizer_threads=n;
+        continue;
+      }
       if(flag=="--profile-step" || flag=="--profile-phase" || flag=="--profile-output") {
         if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
         const std::string value=argv[i];
@@ -125,6 +134,7 @@ int run(int argc, char** argv) {
                    "--loss-scale X: static training scale (FP32 1, FP16 128); FP32 master/slots/loss.\n"
                    "--training-steps N --training-warmup N --optimizer sgd|adamw --learning-rate X.\n"
                    "--head-workers N: CPU output-column workers (default1); NPU requires1.\n"
+                   "--backward-threads N --optimizer-threads N: CPU training phase ATen/BLAS threads (default1).\n"
                    "--profile-step N --profile-phase token|forward|backward|optimizer --profile-output NEW: scoped CANN trace.\n"
                    "Training: --grad 1 --warmup 0; each update uses --steps tokens from empty state.\n"
                    "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
@@ -155,6 +165,8 @@ int run(int argc, char** argv) {
       throw std::invalid_argument("this placement client is qualified for CPU/NPU only");
     if (!device.is_cpu() && c.head_workers != 1)
       throw std::invalid_argument("NPU requires head-workers1; use device matrix kernels");
+    if(!device.is_cpu() && (training.backward_threads!=1 || training.optimizer_threads!=1))
+      throw std::invalid_argument("phase thread options require CPU training");
     at::set_num_threads(c.threads); at::set_num_interop_threads(1);
     auto topology = read_topology(c.topology);
     if(seen_vjp && !c.check)throw std::invalid_argument("--vjp-policy requires --check 1");
@@ -181,7 +193,6 @@ int run(int argc, char** argv) {
     portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
     at::AutoGradMode grad(c.grad);
     const auto setup_start = Clock::now();
-    tide::DenseLinear head(c.head_workers);
     auto f = fixture(c, topology);
     accelerator_scale::configure_scoring(f, scoring);
     auto placement = accelerator_scale::place(f, device, count, policy, resident);
@@ -215,6 +226,7 @@ int run(int argc, char** argv) {
       return 0;
     }
     accelerator_scale::Execution cursor(std::move(f.graph),std::move(f.model),options,c.batch,placement);
+    tide::DenseLinear head(c.head_workers);
     at::Tensor previous_logits;
     for (Index token = 0; token < c.steps; ++token) {
       previous_logits = at::Tensor();

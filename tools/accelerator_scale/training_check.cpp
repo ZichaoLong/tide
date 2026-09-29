@@ -42,7 +42,8 @@ struct Side {
     options.batch_next=candidate&&c.batch_next;
     options.full_autograd=candidate?c.full_autograd:"replay";
     options.aggregate_autograd=candidate?c.aggregate_autograd:"replay";
-    owners=std::make_unique<TrainingOwners>(fixture,training);
+    auto threads=training;if(!candidate){threads.backward_threads=1;threads.optimizer_threads=1;}
+    owners=std::make_unique<TrainingOwners>(fixture,threads);
   }
 };
 }
@@ -54,7 +55,8 @@ void check_training(const pdg_scale::Config& c,const pdg_scale::Topology& topolo
   Side actual(c,topology,device,count,true,policies,training);
   for(Index step=0;step<3;++step) {
     expected.owners->zero_grad();actual.owners->zero_grad();
-    auto a=training_window(c,topology,expected.fixture,expected.placement,expected.options);
+    auto reference=c;reference.head_workers=1;
+    auto a=training_window(reference,topology,expected.fixture,expected.placement,expected.options);
     auto b=training_window(c,topology,actual.fixture,actual.placement,actual.options);
     synchronize(actual.placement);tide_bench::compare(b.result,a.result,true,c.runtime.dtype,std::nullopt,c.check_rtol,c.check_atol);
     close(b.loss,a.loss,"loss",c);expected.owners->backward(a.loss);actual.owners->backward(b.loss);synchronize(actual.placement);

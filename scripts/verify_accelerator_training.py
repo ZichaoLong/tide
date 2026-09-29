@@ -17,6 +17,8 @@ def main():
     p.add_argument('--dtype', choices=('float32', 'float16'), default='float32')
     p.add_argument('--device', choices=('cpu', 'npu'), required=True)
     p.add_argument('--devices', type=int, default=1)
+    p.add_argument('--backward-threads', type=int, default=1)
+    p.add_argument('--optimizer-threads', type=int, default=1)
     p.add_argument('--ranking-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--event-device', choices=('cpu', 'model'), default='cpu')
     p.add_argument('--control-device', choices=('cpu', 'model'), default='model')
@@ -39,6 +41,7 @@ def main():
                   ranking_device=a.ranking_device, event_device=a.event_device,
                   control_device=a.control_device, read_device=a.read_device,
                   read_dtype=a.read_dtype, npu_task_queue=0, cases=[])
+    record.update(backward_threads=a.backward_threads,optimizer_threads=a.optimizer_threads)
     write_json(out / 'gates.json', record)
     env = dict(os.environ, TASK_QUEUE_ENABLE='0')
     try:
@@ -50,6 +53,7 @@ def main():
                        '--width', '8', '--batch', '2', '--vocab', '17', '--steps', '3', '--warmup', '0',
                        '--workers', '3', '--threads', '1', '--memory', memory, '--grad', '1', '--check', '1',
                        '--head-workers', '3' if a.device == 'cpu' else '1',
+                       '--backward-threads',str(a.backward_threads),'--optimizer-threads',str(a.optimizer_threads),
                        '--placement', 'locality', '--transport', 'resident', '--read-device', a.read_device,
                        '--read-dtype', a.read_dtype, '--control-device', a.control_device,
                        '--ranking-device', a.ranking_device, '--event-device', a.event_device,

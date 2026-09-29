@@ -246,6 +246,13 @@ uses one stream/worker per shard with phase barriers. Compare actual
 worker configuration and identical source/workloads; old cpu32/cpu64 labels refer
 to control placement while the model itself remains on NPU.
 
+CPU training additionally accepts `--backward-threads N --optimizer-threads N`
+(default1, each1..160). Forward node/head pools join before these phases. Each
+phase applies and restores ATen and, when present, OpenBLAS thread settings;
+metrics report both effective counts (OpenBLAS0 means that API is absent).
+The launcher must bound affinity to its aggregate CPU budget. NPU rejects
+nondefault phase counts. The independent training oracle keeps one thread.
+
 The standalone client optionally accepts `--profile-step N --profile-phase
  token|forward|backward|optimizer --profile-output NEW`. Token profiles select one
 inference token; training profiles select one complete phase of an optimizer
