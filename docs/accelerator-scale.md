@@ -240,7 +240,9 @@ shared-load observations do not replace independent small-tensor correctness gat
 
 The resident consumer uses its requested node-worker pool on CPU. CPU is one
 Torch device, but that does not limit independent node work to one thread.
-NPU still uses one stream/worker per shard with phase barriers. Compare actual
+CPU also accepts explicit `--head-workers N`, reusing the public DenseLinear
+output-column pool in a separate phase; NPU requires head-workers1. NPU still
+uses one stream/worker per shard with phase barriers. Compare actual
 worker configuration and identical source/workloads; old cpu32/cpu64 labels refer
 to control placement while the model itself remains on NPU.
 

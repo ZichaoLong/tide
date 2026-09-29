@@ -15,6 +15,7 @@ TrainingWindow training_window(const pdg_scale::Config& c,const pdg_scale::Topol
   // One independent sequence per optimizer update. State starts empty, while
   // every token within the window retains its complete autograd/KV history.
   Execution cursor(f.graph,f.model,options,c.batch,placement);
+  DenseLinear head(c.head_workers);
   TrainingWindow window;std::vector<Tensor> losses;
   for(Index token=0;token<c.steps;++token) {
     auto ids=at::remainder(at::arange(c.batch,at::TensorOptions().dtype(at::kLong))*3+token*7,c.vocab);
@@ -24,7 +25,7 @@ TrainingWindow training_window(const pdg_scale::Config& c,const pdg_scale::Topol
     auto result=cursor.advance(inputs,(token+1)*(topology.layers+1),(token+1)*(topology.layers+1));
     std::vector<Tensor> hidden(c.batch,at::zeros({c.width},embeddings.options()));
     for(const auto& output:result.outputs)hidden.at(output.batch)=output.value;
-    auto logits=project(at::stack(hidden),f.head,!placement.resident);
+    auto logits=project(at::stack(hidden),f.head,!placement.resident,&head);
     auto targets=at::remainder(ids+1,c.vocab).to(logits.device());
     losses.push_back(at::cross_entropy_loss(logits.to(at::kFloat),targets));
     for(const auto& [name,value]:result.stats)window.result.stats[name]+=value;
@@ -73,6 +74,8 @@ void train(const pdg_scale::Config& c,const pdg_scale::Topology& topology,pdg_sc
       {"train/loss",loss},{"train/loss_scale",config.loss_scale},{"memory/fp32_master_bytes",owners.master_bytes()},{"train/gradient_owners",double(gradients)},
       {"train/optimizer_state_owners",double(owners.optimizer().state().size())},
       {"train/window_tokens",double(c.steps)},{"runtime/devices",double(placement.devices.size())}});
+    metrics.insert({{"runtime/workers",double(c.workers)}, {"runtime/head_workers",double(c.head_workers)},
+                    {"runtime/aten_threads",double(c.threads)}});
     for(const auto& [key,value]:fixture.inventory)metrics["model/"+key]=value;
     for(const auto& [key,value]:window.result.stats)metrics["work/"+key]=value;
     writer.Write(step,metrics,seconds(started),{{"phase",std::string(step<config.warmup?"warmup":"measure")},

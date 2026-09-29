@@ -42,6 +42,7 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
   options.packed_sources = candidate && c.packed_sources;
   options.batch_next = candidate && c.batch_next;
   Execution cursor(f.graph,f.model,options,c.batch,placement);
+  DenseLinear head(candidate ? c.head_workers : 1);
   Run run; run.leaves = f.owners;
   std::vector<Tensor> logits;
   for (Index token = 0; token < c.steps; ++token) {
@@ -57,7 +58,7 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
     run.result.outputs.insert(run.result.outputs.end(),result.outputs.begin(),result.outputs.end());
     std::vector<Tensor> hidden(c.batch,at::zeros({c.width},inputs.options()));
     for (const auto& value : result.outputs) hidden.at(value.batch) = value.value;
-    logits.push_back(project(at::stack(hidden),f.head));
+    logits.push_back(project(at::stack(hidden),f.head,true,&head));
   }
   run.result.continuation = cursor.snapshot();
   if (candidate && resident) {

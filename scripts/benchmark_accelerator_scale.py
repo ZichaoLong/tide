@@ -52,6 +52,7 @@ def parse():
     p.add_argument('--aggregate-autograd', choices=('replay', 'batched'), default='batched')
     for name, default in [('devices', 1), ('width', 2048), ('batch', 512), ('vocab', 50304),
                           ('steps', 12), ('warmup', 4), ('workers', 16), ('threads', 1),
+                          ('head-workers', 1),
                           ('seed', 7), ('timeout-seconds', 1800), ('memory-gib', 256)]:
         p.add_argument('--'+name, type=int, default=default)
     for name, default in [('grad', 0), ('check', 0), ('parallel-regions', 1), ('compact-events', 1),
@@ -86,6 +87,8 @@ def parse():
             or not 4 <= a.width <= 4096 or a.width % 4 or not 1 <= a.batch <= 1024
             or not 2 <= a.vocab <= 100000 or not 0 <= a.warmup < a.steps <= 1000
             or not 1 <= a.workers <= 160 or not 1 <= a.threads <= 160 or a.workers*a.threads > 160
+            or not 1 <= a.head_workers <= 160 or a.head_workers*a.threads > 160
+            or (a.device == 'npu' and a.head_workers != 1)
             or not 0 <= a.seed < 2**64 or not 1 <= a.timeout_seconds <= 7200
             or not 1 <= a.memory_gib <= 1280 or (a.defer_state_release and not a.compact_events)
             or (a.check and (a.width > 64 or a.batch > 8 or a.steps > 6))):
@@ -122,7 +125,7 @@ def main():
               'vocab', 'steps', 'warmup', 'workers', 'threads', 'seed', 'grad', 'check', 'parallel_regions',
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
               'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device', 'ranking_device', 'event_device', 'training_steps', 'training_warmup', 'optimizer', 'learning_rate')}
-    config.update(dtype=a.dtype, packed=1, emission='row', head_workers=1, fiber_pooling='event')
+    config.update(dtype=a.dtype, packed=1, emission='row', head_workers=a.head_workers, fiber_pooling='event')
     if a.profile_step is not None:
         config.update(profile_step=a.profile_step, profile_phase=a.profile_phase,
                       profile_output=str(out/'profile'))
@@ -147,6 +150,7 @@ def main():
                      loss_scale=a.loss_scale, optimizer_dtype='float32' if a.training_steps else None,
                      logical_devices=list(range(a.devices)), physical_visible_devices=visible,
                      host_arch=platform.machine(), cpu_affinity=affinity, node_workers=a.workers,
+                     head_workers=a.head_workers,
                      aten_threads=a.threads, interop_threads=1, openblas_num_threads=1,
                      npu_task_queue=a.npu_task_queue if a.device == 'npu' else None,
                      read_device=a.read_device, read_dtype=a.read_dtype, control_device=a.control_device,

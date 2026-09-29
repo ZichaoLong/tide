@@ -121,7 +121,7 @@ independent eager reference and reject unsupported requests explicitly.
 
 Bounds: historical D2048/B512/V50304, 12-token inference (4 warmup/8 measured),
 complete 12-token AdamW windows (1 warmup/1 measured update per process).
-Initial CPU node budgets:56 for Add,160 for Attention, ATen/BLAS1; report this
+Initial CPU node/head budgets:56 for Add,160 for Attention, ATen/BLAS1; report this
 intentional difference from the NPU16-host-worker configuration. No overlapping
 heavy project jobs during formal timing. Three repetitions establish descriptive
 spread; shared external load prevents a hardware-limit or convergence claim.

@@ -49,6 +49,7 @@ def main():
                        '--topology', str(topology), '--output-dir', str(out / name), '--run-id', name,
                        '--width', '8', '--batch', '2', '--vocab', '17', '--steps', '3', '--warmup', '0',
                        '--workers', '3', '--threads', '1', '--memory', memory, '--grad', '1', '--check', '1',
+                       '--head-workers', '3' if a.device == 'cpu' else '1',
                        '--placement', 'locality', '--transport', 'resident', '--read-device', a.read_device,
                        '--read-dtype', a.read_dtype, '--control-device', a.control_device,
                        '--ranking-device', a.ranking_device, '--event-device', a.event_device,

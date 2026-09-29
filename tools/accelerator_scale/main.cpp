@@ -124,14 +124,15 @@ int run(int argc, char** argv) {
                    "--check-atol X --check-rtol X: FP16 only; default 1e-3/2e-2, routes stay exact.\n"
                    "--loss-scale X: static training scale (FP32 1, FP16 128); FP32 master/slots/loss.\n"
                    "--training-steps N --training-warmup N --optimizer sgd|adamw --learning-rate X.\n"
+                   "--head-workers N: CPU output-column workers (default1); NPU requires1.\n"
                    "--profile-step N --profile-phase token|forward|backward|optimizer --profile-output NEW: scoped CANN trace.\n"
                    "Training: --grad 1 --warmup 0; each update uses --steps tokens from empty state.\n"
                    "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
       return 0;
     }
     if ((c.runtime.dtype != at::kFloat && c.runtime.dtype != at::kHalf) || c.emission != "row" || !c.packed || c.fiber_pooling != "event"
-        || c.profile || c.operator_profile || c.work_count || c.head_workers != 1 || count < 1 || count > 16)
-      throw std::invalid_argument("scale placement requires FP32/FP16, packed row Emit, event pooling, head-workers1 and profiling disabled");
+        || c.profile || c.operator_profile || c.work_count || count < 1 || count > 16)
+      throw std::invalid_argument("scale placement requires FP32/FP16, packed row Emit, event pooling and operator profiling disabled");
     if (c.runtime.device_spec == "auto") throw std::invalid_argument("benchmark requires an explicit backend");
     // Initialize the vendor queue policy before resolving/initializing NPU.
     // An explicitly supplied value remains available for stack qualification.
@@ -152,6 +153,8 @@ int run(int argc, char** argv) {
     used_npu = device.type()==c10::DeviceType::PrivateUse1;
     if (!device.is_cpu() && device.type() != c10::DeviceType::PrivateUse1)
       throw std::invalid_argument("this placement client is qualified for CPU/NPU only");
+    if (!device.is_cpu() && c.head_workers != 1)
+      throw std::invalid_argument("NPU requires head-workers1; use device matrix kernels");
     at::set_num_threads(c.threads); at::set_num_interop_threads(1);
     auto topology = read_topology(c.topology);
     if(seen_vjp && !c.check)throw std::invalid_argument("--vjp-policy requires --check 1");
@@ -178,6 +181,7 @@ int run(int argc, char** argv) {
     portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
     at::AutoGradMode grad(c.grad);
     const auto setup_start = Clock::now();
+    tide::DenseLinear head(c.head_workers);
     auto f = fixture(c, topology);
     accelerator_scale::configure_scoring(f, scoring);
     auto placement = accelerator_scale::place(f, device, count, policy, resident);
@@ -225,7 +229,7 @@ int run(int argc, char** argv) {
       auto result = cursor.advance(inputs, (token+1)*(topology.layers+1), (token+1)*(topology.layers+1));
       std::vector<at::Tensor> hidden(c.batch, at::zeros({c.width}, embeddings.options()));
       for (const auto& output : result.outputs) hidden.at(output.batch) = output.value;
-      previous_logits = accelerator_scale::project(at::stack(hidden), f.head, !resident);
+      previous_logits = accelerator_scale::project(at::stack(hidden), f.head, !resident, &head);
       accelerator_scale::synchronize(placement);
       const auto elapsed = seconds(begin);
       trace.finish();
@@ -238,6 +242,7 @@ int run(int argc, char** argv) {
         {"memory/process_peak_rss_bytes",rss()}, {"check/logits_sum",previous_logits.detach().to(at::kCPU).to(at::kDouble).sum().item<double>()},
         {"check/logits_requires_grad",c.grad ? 1. : 0.}, {"runtime/devices",double(count)},
         {"runtime/workers",double(c.workers)}, {"runtime/aten_threads",double(at::get_num_threads())},
+        {"runtime/head_workers",double(c.head_workers)},
         {"runtime/effective_device_workers",double(resident && !device.is_cpu()?std::min(c.workers,count):c.workers)},
         {"runtime/npu_task_queue",device.is_cpu()?-1.:double(std::atoi(std::getenv("TASK_QUEUE_ENABLE")))},
         {"work/readout_rows",double(result.outputs.size())}});

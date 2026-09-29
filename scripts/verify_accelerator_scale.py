@@ -39,6 +39,7 @@ def main():
     base = [str(binary), '--device', a.device, '--devices', str(a.devices), '--dtype', a.dtype,
             '--topology', str(topology), '--width', '8', '--batch', '2', '--vocab', '17',
             '--steps', '3', '--warmup', '1', '--workers', '3', '--check', '1', '--vjp-policy', a.vjp_policy,
+            '--head-workers', '3' if a.device == 'cpu' else '1',
             '--full-autograd', 'batched', '--aggregate-autograd', 'batched',
             '--packed-sources', '1', '--batch-next', '1']
     for key in ('read_device', 'read_dtype', 'control_device', 'reference_read_dtype', 'ranking_device', 'event_device'):

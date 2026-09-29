@@ -4,6 +4,7 @@
 #include "profiling.h"
 #include <tide/kernel.h>
 #include <tide/full.h>
+#include <tide/dense.h>
 #include <atomic>
 #include <mutex>
 
@@ -73,6 +74,6 @@ std::vector<Tensor> initialize_devices(at::Device first, Index count);
 std::map<std::string, double> memory(const Placement&);
 Tensor host(const Tensor&);
 Tensor embed(const Tensor&, const Tensor& ids, bool host_result = true);
-Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result = true);
+Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result = true, DenseLinear* head = nullptr);
 void check(const pdg_scale::Config&, const pdg_scale::Topology&, at::Device, Index devices, const std::string& policy, bool resident, bool conditioned, const Scoring&, bool reference_fp64, const std::string& ranking_device, const std::string& event_device);
 }  // namespace accelerator_scale

@@ -93,9 +93,9 @@ Tensor embed(const Tensor& weight, const Tensor& ids, bool host_result) {
   auto value = weight.index_select(0, transfer.get(ids));
   return host_result ? host(value) : value;
 }
-Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result) {
+Tensor project(const Tensor& hidden, const Tensor& weight, bool host_result, DenseLinear* head) {
   Transfer transfer(weight.device()); transfer.add(hidden); transfer.execute();
-  auto value = at::linear(transfer.get(hidden), weight);
+  auto value = head ? head->run(transfer.get(hidden), weight) : at::linear(transfer.get(hidden), weight);
   return host_result ? host(value) : value;
 }
 }  // namespace accelerator_scale
