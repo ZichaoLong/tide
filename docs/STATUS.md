@@ -4,7 +4,9 @@ Updated: 2026-09-29. Branch graph-execution-foundation; no push authorized.
 User authorized public Python/native API and standalone consumer FP16, full
 correctness gates, profiling and bounded full-size inference/training pairs.
 No sub-agents; reference repositories and ObsidianVault remain read-only.
-The user explicitly chose to wait for seven/eight chips, not try six.
+The user later authorized trying six chips while retaining the seven-chip
+fallback; cancel the latter only if both six-chip full-size dtypes pass. If the
+six-chip attempt fails, retain its evidence and continue waiting for seven.
 
 ## Implemented and qualified
 
@@ -16,7 +18,7 @@ fc2a76f, and matching core builds are reused by the newer consumer.
 
 All prescribed correctness gates passed:8645 CPU tests;39 Python and43 native
 NPU FP16 cases plus explicit CSR rejection;five complete FP32 representatives
-per implementation;108 consumer cells on CPU and2/4/7/8 NPUs, including three
+per implementation;116 consumer cells on CPU and2/4/6/7/8 NPUs, including three
 optimizer updates;four consumer CTests. Public FP16 atol.001/rtol.02; consumer
 explicit atol.002/rtol.02. Discrete routes and None/zero checks remain exact.
 The CPU CSR follow-ups passed20 focused tests and one named CLI rejection.
@@ -27,14 +29,38 @@ covers Torch/TorchNPU2.10/CANN9.0 only. Evidence commit6203063 is supplemented b
 the7-chip qualification records in this documentation increment; final
 performance documentation is still pending.
 
-## Active final performance pair
+## Active final performance attempts
 
 TASK_ROOT=/mi/data2T/zlong/tide-npu-performance.
 Unit tide-npu-performance-pair-train-attention7-fp16-a5d.service is active in
 background.slice, Nice10. It started2026-09-29T01:44:19Z and is queued at position1
 for seven chips. The site launcher excludes physical1 after two real collisions
-on that chip; all other physical IDs remain candidates. Latest free candidates
-are2,5,8,9,11,12: six chips, no cell started. User explicitly chose to wait.
+on that chip; all other physical IDs remain candidates. The observed free count fluctuated between four and six; no cell has started.
+This remains the fallback during the new user-authorized six-chip attempt.
+
+Six-chip attempt active: tide-npu-performance-pair-train-attention6-fp16-a5e.service,
+new queue priority20, six chips, candidate IDs exclude repeatedly contended1.
+Higher priority permits this new smaller job to overtake the queued priority0
+seven-chip fallback; the fallback priority is unchanged. One allocation runs
+launchers/run-attention6-gated-a5e.py OUT: first scripts/job.py records eight
+mixed32 FP32/FP16 consumer gates in runs/consumer-npu6-fp16-a5e, then the existing
+run-dtype-pair-a5b.py uses plan-train-attention6-fp16-a5e.json. The only workload
+change is six instead of seven chips. Gate deadline5000s; pair deadline15100s
+(two7200s cells plus wrappers), RSS256GiB. Both successful full-size dtypes trigger
+cancellation of only the identified seven-chip fallback; cancellation evidence
+is written to fallback-cancellation.json. Any failure retains seven-chip waiting.
+Six-chip gates passed at2026-09-29T02:02:39Z (eight cells), then the FP32
+full-size process started. Physical2,5,8,9,11,12 map to logical npu:0..5.
+Read pipeline-stages.json, stages.json, queue.json, stdout/native metrics and
+status.json under the six-chip job. Both units were verified in background.slice.
+The FP32 model has17,269,426,339 parameters; construction took167.231151s.
+At02:05:36Z external processes were observed on physical8/9; at02:07:45Z
+neither remained. Continue this user-authorized six-chip attempt to a terminal
+result, retaining contention as a performance confound. Do not misclassify
+an externally contended OOM as proof of intrinsic six-chip insufficiency.
+launchers/inspect-fp16-attempts-a5.py performs short read-only inspections and
+appends selected-device ownership/HBM observations under each job; it does not
+stop processes. No full training update has completed at this inspection.
 
 Frozen source TASK_ROOT/sources/fp16-a5b, commit595dccd0b23bd809bed28874591ae4f5f268512f;
 matching standalone build TASK_ROOT/builds/client-fp16-a5b. Loaded public module
@@ -78,13 +104,20 @@ storage auto resolving SQLite, version0.35.0; writer/viewer
 Monitor the final pair to terminal state, checking actual contention. Preserve
 failures and diagnose before any changed retry. Validate the final terminal raw
 records with launchers/validate-new-records-a5.py JOB and compare every Trackio
-step/metric with raw JSONL; ledgers are runs/record-validations-a5.json and
+step/metric with raw JSONL using launchers/validate-trackio-records-a5.py JOB;
+ledgers are runs/record-validations-a5.json and
 runs/trackio-validations-a5.json. The collector accepts the final successful Attention job as its second argument
 (default pair-train-attention7-fp16-a5d) and retains all three cancelled attempts. Then run
 launchers/collect-fp16-evidence-a5.py qualification and performance, write the
 performance report, update ROADMAP/support contract, validate schema and diffs,
-and commit evidence separately. Do not mark H3 verified until all eight cells
-pass. No production source is currently being edited.
+and commit evidence separately. launchers/write-fp16-report-a5.py renders the
+reviewed report after collection; inspect contention wording against the raw
+resource observations. Do not mark H3 verified until all eight cells
+pass. No production source is currently being edited. Local collector/report helpers
+are prepared but not yet run for final performance. Six-chip gates passed and are
+included in qualification (116 total); if the six-chip pair passes, select it
+as collector argument pair-train-attention6-fp16-a5e and record seven-chip fallback
+cancellation. Do not count an incomplete attempt as a passing pair.
 
 ## Retained limits and attempts
 

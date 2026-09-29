@@ -58,7 +58,10 @@ before the nondefault worker stream). Both succeeded on TorchNPU2.10/CANN9.0:
 | Native adapter | 1638 | 1222 | 252 | 164 | 211 |
 
 These two tiny FP16 traces report no AiCPU kernel type and no named CPU-fallback
-event. Host scalar extractions and copies remain present. This does not prove
+event. They use the public Python/native scheduler, a different path from the
+older standalone all-device dispatch trace. Their absence of AiCPU does not
+show that changing dtype removes int64 Sort from AiCPU. Host scalar extractions
+and copies remain present. This does not prove
 absence of all host work or certify full-size bottlenecks. Exact commands,
 runtime manifests, result/trace hashes and retained artifact paths are in the JSON.
 The analysis tool itself is committed at fc2a76f; it only reads exported CSVs.
