@@ -57,7 +57,6 @@ def main():
             activities = [profiler.ProfilerActivity.CPU, profiler.ProfilerActivity.CUDA]
         api = getattr(torch, runtime.device.type)
         stream = api.Stream(device=runtime.device)
-        stream.wait_stream(api.current_stream(runtime.device))
         session = runtime.session(1)
         probe = Probe(runtime.config, batch_size=1, positions=2,
                       **fixture_options(args.case, runtime.config)).clone(runtime.device)
@@ -71,6 +70,9 @@ def main():
             session.detach()
             opt.step()
             return result
+        # Include probe copies and FP32 master initialization on the caller
+        # stream before the first worker-stream operation consumes them.
+        stream.wait_stream(api.current_stream(runtime.device))
         with api.stream(stream):
             step(0)
             runtime.synchronize()
