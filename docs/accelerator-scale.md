@@ -30,7 +30,7 @@ Read and control placement are independent of payload precision:
 
 | Configuration | Read | Softmax controls | Intended use |
 | --- | --- | --- | --- |
-| `--read-device cpu --read-dtype float64 --control-device cpu` | CPU FP64 | CPU FP64, cast to payload | Historical default/reference |
+| `--read-device cpu --read-dtype float64 --control-device cpu` | CPU FP64 | CPU FP64, controls cast to FP32 | Historical default/reference |
 | `--read-device cpu --read-dtype float32 --control-device cpu` | CPU FP32 | CPU FP32 | Same-precision CPU reference |
 | `--read-device model --read-dtype float32 --control-device model` | Node device FP32 | Fixed region-owner device FP32 | Resident inference/grad-forward candidate |
 

@@ -1,0 +1,1216 @@
+{
+  "schema": "tide-cann-csv-summary-v1",
+  "operators": 7012,
+  "summed_task_us": 23020.06000000006,
+  "engines": {
+    "AI_VECTOR_CORE": {
+      "count": 6247,
+      "summed_task_us": 17538.980000000065,
+      "summed_task_fraction": 0.7618998386624544
+    },
+    "MIX_AIV": {
+      "count": 300,
+      "summed_task_us": 972.9199999999997,
+      "summed_task_fraction": 0.04226400799997903
+    },
+    "AI_CPU": {
+      "count": 55,
+      "summed_task_us": 3365.8999999999996,
+      "summed_task_fraction": 0.1462159525214092
+    },
+    "AI_CORE": {
+      "count": 410,
+      "summed_task_us": 1142.2599999999998,
+      "summed_task_fraction": 0.049620200816157596
+    }
+  },
+  "operators_by_type": [
+    {
+      "engine": "AI_CORE",
+      "operator": "BatchMatMulV2",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 145,
+      "summed_task_us": 536.4999999999998
+    },
+    {
+      "engine": "AI_CORE",
+      "operator": "MatMulV2",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 177,
+      "summed_task_us": 376.0799999999998
+    },
+    {
+      "engine": "AI_CORE",
+      "operator": "MatMulV2",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT",
+      "count": 88,
+      "summed_task_us": 229.67999999999995
+    },
+    {
+      "engine": "AI_CPU",
+      "operator": "Sort",
+      "input_dtypes": "INT64",
+      "count": 55,
+      "summed_task_us": 3365.8999999999996
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Add",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 233,
+      "summed_task_us": 381.3
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "BroadcastTo",
+      "input_dtypes": "FLOAT;INT64",
+      "count": 140,
+      "summed_task_us": 224.00000000000006
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "BroadcastTo",
+      "input_dtypes": "INT32;INT64",
+      "count": 140,
+      "summed_task_us": 211.49999999999994
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Cast",
+      "input_dtypes": "BOOL",
+      "count": 140,
+      "summed_task_us": 166.80000000000004
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Cast",
+      "input_dtypes": "INT32",
+      "count": 200,
+      "summed_task_us": 262.5200000000001
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 236,
+      "summed_task_us": 899.4800000000009
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 23,
+      "summed_task_us": 81.9
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 2,
+      "summed_task_us": 16.3
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 14,
+      "summed_task_us": 156.12
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 5,
+      "summed_task_us": 24.0
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ConcatD",
+      "input_dtypes": "INT64;INT64",
+      "count": 4,
+      "summed_task_us": 51.9
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Equal",
+      "input_dtypes": "INT64;INT64",
+      "count": 9,
+      "summed_task_us": 17.979999999999997
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Fill",
+      "input_dtypes": "INT64;INT64",
+      "count": 27,
+      "summed_task_us": 41.72
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "GatherElements",
+      "input_dtypes": "INT64;INT64",
+      "count": 56,
+      "summed_task_us": 146.93999999999997
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "GatherV3",
+      "input_dtypes": "FLOAT;INT64;INT64",
+      "count": 179,
+      "summed_task_us": 480.36000000000024
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "GatherV3",
+      "input_dtypes": "INT64;INT64;INT64",
+      "count": 113,
+      "summed_task_us": 713.3999999999999
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "IsFinite",
+      "input_dtypes": "FLOAT",
+      "count": 363,
+      "summed_task_us": 763.6600000000004
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Less",
+      "input_dtypes": "INT64;INT64",
+      "count": 176,
+      "summed_task_us": 400.14000000000016
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "LogicalNot",
+      "input_dtypes": "BOOL",
+      "count": 77,
+      "summed_task_us": 97.78000000000003
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "MaskedFill",
+      "input_dtypes": "FLOAT;BOOL;FLOAT",
+      "count": 77,
+      "summed_task_us": 578.8800000000001
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "MemSet",
+      "input_dtypes": "N/A",
+      "count": 18,
+      "summed_task_us": 162.10000000000002
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Mul",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 1322,
+      "summed_task_us": 1756.279999999998
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "NotEqual",
+      "input_dtypes": "INT64;INT64",
+      "count": 9,
+      "summed_task_us": 19.8
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "BOOL",
+      "count": 27,
+      "summed_task_us": 30.940000000000005
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "BOOL;BOOL",
+      "count": 21,
+      "summed_task_us": 34.519999999999996
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "BOOL;BOOL;BOOL",
+      "count": 9,
+      "summed_task_us": 16.900000000000002
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "BOOL;BOOL;BOOL;BOOL",
+      "count": 20,
+      "summed_task_us": 46.44
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT",
+      "count": 434,
+      "summed_task_us": 639.0800000000003
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 127,
+      "summed_task_us": 456.74
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT",
+      "count": 120,
+      "summed_task_us": 360.9200000000001
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 382,
+      "summed_task_us": 1503.719999999999
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 33,
+      "summed_task_us": 269.44
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 4,
+      "summed_task_us": 68.0
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 6,
+      "summed_task_us": 98.83999999999999
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pack",
+      "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+      "count": 2,
+      "summed_task_us": 41.22
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Pows",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 34,
+      "summed_task_us": 71.58
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Range",
+      "input_dtypes": "INT64;INT64;INT64",
+      "count": 86,
+      "summed_task_us": 582.5599999999997
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Rsqrt",
+      "input_dtypes": "FLOAT",
+      "count": 34,
+      "summed_task_us": 41.49999999999999
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Slice",
+      "input_dtypes": "FLOAT;INT64;INT64",
+      "count": 324,
+      "summed_task_us": 553.8199999999996
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Slice",
+      "input_dtypes": "INT64;INT64;INT64",
+      "count": 75,
+      "summed_task_us": 212.42
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "SoftmaxV2",
+      "input_dtypes": "FLOAT",
+      "count": 349,
+      "summed_task_us": 1002.8600000000007
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Sub",
+      "input_dtypes": "FLOAT;FLOAT",
+      "count": 72,
+      "summed_task_us": 102.53999999999995
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Swish",
+      "input_dtypes": "FLOAT",
+      "count": 34,
+      "summed_task_us": 41.62
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "Transpose",
+      "input_dtypes": "FLOAT;INT64",
+      "count": 272,
+      "summed_task_us": 3435.040000000002
+    },
+    {
+      "engine": "AI_VECTOR_CORE",
+      "operator": "ZerosLike",
+      "input_dtypes": "FLOAT",
+      "count": 219,
+      "summed_task_us": 273.41999999999996
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "LpNormV2",
+      "input_dtypes": "FLOAT",
+      "count": 41,
+      "summed_task_us": 138.82
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "NonZero",
+      "input_dtypes": "BOOL",
+      "count": 18,
+      "summed_task_us": 312.08
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "ReduceAll",
+      "input_dtypes": "BOOL;INT64",
+      "count": 187,
+      "summed_task_us": 356.67999999999984
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "ReduceMean",
+      "input_dtypes": "FLOAT;INT64",
+      "count": 34,
+      "summed_task_us": 102.68000000000004
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "ReduceMin",
+      "input_dtypes": "INT64;INT64",
+      "count": 12,
+      "summed_task_us": 30.0
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "ReduceSum",
+      "input_dtypes": "FLOAT;INT64",
+      "count": 3,
+      "summed_task_us": 10.719999999999999
+    },
+    {
+      "engine": "MIX_AIV",
+      "operator": "Sort",
+      "input_dtypes": "FLOAT",
+      "count": 5,
+      "summed_task_us": 21.939999999999998
+    }
+  ],
+  "top_host_apis": [
+    {
+      "level": "acl",
+      "name": "aclrtSetDevice",
+      "summed_us": 305922.6,
+      "count": 2031
+    },
+    {
+      "level": "runtime",
+      "name": "SetDevice",
+      "summed_us": 301603.58,
+      "count": 2031
+    },
+    {
+      "level": "acl",
+      "name": "aclnnAddmm",
+      "summed_us": 120116.56,
+      "count": 88
+    },
+    {
+      "level": "acl",
+      "name": "MatMulV2_Tiling",
+      "summed_us": 115086.69,
+      "count": 80
+    },
+    {
+      "level": "node",
+      "name": "launch",
+      "summed_us": 109063.74,
+      "count": 7012
+    },
+    {
+      "level": "acl",
+      "name": "aclnnInplaceZeroGetWorkspaceSize",
+      "summed_us": 80730.97,
+      "count": 26
+    },
+    {
+      "level": "acl",
+      "name": "aclrtBinaryLoadFromData",
+      "summed_us": 62847.06,
+      "count": 99
+    },
+    {
+      "level": "runtime",
+      "name": "BinaryLoadFromData",
+      "summed_us": 62449.33,
+      "count": 99
+    },
+    {
+      "level": "acl",
+      "name": "aclrtLaunchKernelWithHostArgs",
+      "summed_us": 60962.75,
+      "count": 7012
+    },
+    {
+      "level": "runtime",
+      "name": "LaunchKernelV2",
+      "summed_us": 45163.12,
+      "count": 7012
+    },
+    {
+      "level": "acl",
+      "name": "aclnnMatmul",
+      "summed_us": 44828.84,
+      "count": 367
+    },
+    {
+      "level": "acl",
+      "name": "aclnnCat",
+      "summed_us": 36495.05,
+      "count": 1152
+    },
+    {
+      "level": "acl",
+      "name": "aclnnStack",
+      "summed_us": 32496.15,
+      "count": 1185
+    },
+    {
+      "level": "acl",
+      "name": "aclnnCatGetWorkspaceSize",
+      "summed_us": 32271.98,
+      "count": 729
+    },
+    {
+      "level": "acl",
+      "name": "aclnnAllGetWorkspaceSize",
+      "summed_us": 30310.81,
+      "count": 25
+    },
+    {
+      "level": "acl",
+      "name": "aclnnMinGetWorkspaceSize",
+      "summed_us": 27192.64,
+      "count": 5
+    },
+    {
+      "level": "acl",
+      "name": "aclnnStackGetWorkspaceSize",
+      "summed_us": 26955.1,
+      "count": 294
+    },
+    {
+      "level": "acl",
+      "name": "aclnnMuls",
+      "summed_us": 26621.02,
+      "count": 128
+    },
+    {
+      "level": "acl",
+      "name": "aclnnMin",
+      "summed_us": 25805.55,
+      "count": 12
+    },
+    {
+      "level": "acl",
+      "name": "aclnnMatmulGetWorkspaceSize",
+      "summed_us": 21293.16,
+      "count": 174
+    }
+  ],
+  "inputs": {
+    "op_summary_20260928211524.csv": "eef58a2bc1acb06c34beaa081763d0aa139cd332f791dbec74409371c4f7c0fa",
+    "api_statistic_20260928211524.csv": "b281372dad4391e49fdeeedf64e97858944439480d512f9eb189003c68babfea"
+  },
+  "limits": [
+    "Task durations may overlap across streams/devices; the sum is not wall time.",
+    "Host API levels can nest; never add them into an end-to-end total.",
+    "Scope/warmup must come from the launch record; no full-size extrapolation.",
+    "AiCPU is on the accelerator, distinct from host CPU and AiCore."
+  ],
+  "profile_source_commit": "b4f26b3659cec0549e18560a1a996d5bee0cae6d",
+  "scope": {
+    "model": "attention",
+    "width": 32,
+    "batch": 4,
+    "tokens": 3,
+    "devices": 2,
+    "read": "model float32",
+    "controls": "model",
+    "ranking": "model",
+    "events": "model",
+    "payload": "float32",
+    "stack": "TorchNPU2.10/CANN9.0"
+  },
+  "raw_locator": "TASK_ROOT/runs/profile-dispatch-a4/profile/PROF_000001_20260928211514221_01836962CEKMKFAJ/mindstudio_profiler_output",
+  "fp16_public_profiles": [
+    {
+      "job": "profile-python-fp16-a5b",
+      "source": "cb58110f0f19d42749d3f89d5e479a117d7d026c",
+      "runtime": {
+        "schema": "tide-runtime-v1",
+        "package_version": "0.2.0",
+        "package_sha256": "bb3c3265046b866bd28dcc42d5c54e189c0074dd8f54d954a0b5e8ca044450c7",
+        "model_origin": "configured",
+        "configuration": {
+          "schema_version": 1,
+          "family": "timed-dag",
+          "graph": {
+            "nodes": [
+              {
+                "region": 0,
+                "clear": false,
+                "identity": false,
+                "memory": "linear",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 1,
+                "clear": false,
+                "identity": false,
+                "memory": "ssm",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 1,
+                "clear": false,
+                "identity": false,
+                "memory": "delta",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 2,
+                "clear": false,
+                "identity": false,
+                "memory": "attention",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              }
+            ],
+            "edges": [
+              {
+                "source": 0,
+                "target": 1,
+                "delay": 1
+              },
+              {
+                "source": 0,
+                "target": 2,
+                "delay": 1
+              },
+              {
+                "source": 1,
+                "target": 3,
+                "delay": 1
+              },
+              {
+                "source": 2,
+                "target": 3,
+                "delay": 1
+              }
+            ],
+            "regions": [
+              {
+                "budget": 1,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              },
+              {
+                "budget": 2,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              },
+              {
+                "budget": 1,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              }
+            ],
+            "inputs": [
+              0
+            ],
+            "outputs": [
+              3
+            ],
+            "layout": {
+              "edge_source": [
+                0,
+                1,
+                0,
+                0
+              ],
+              "edge_target": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "input": [
+                0
+              ],
+              "output": [
+                0
+              ]
+            },
+            "origins": [],
+            "source_domain": {
+              "edge_target": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "input": [
+                0
+              ]
+            }
+          },
+          "ranks": [],
+          "model": {
+            "width": 4,
+            "dtype": "float16",
+            "seed": 7,
+            "projection_layout": "input",
+            "scale_init": 0.25
+          },
+          "execution": {
+            "implementation": "python",
+            "schedule": "auto",
+            "packed": true,
+            "prefill": null,
+            "trace": false,
+            "mode": "hst",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event"
+          }
+        },
+        "config_sha256": "cb221fddf86be8d86b806510a98fd4e91fb5ae999329b22bf28dc51dfac73102",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float16",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "requested_options": {
+          "implementation": "python",
+          "schedule": "auto",
+          "packed": true,
+          "prefill": null,
+          "trace": false,
+          "mode": "hst",
+          "zeta": 1.0,
+          "workers": 1,
+          "max_events": 1000000,
+          "full_autograd": "replay",
+          "aggregate_autograd": "replay",
+          "parallel_regions": false,
+          "compact_events": false,
+          "defer_state_release": false,
+          "packed_sources": false,
+          "batch_next": false,
+          "attention_packing": "exact",
+          "fiber_pooling": "event",
+          "fiber_cache": "cloned",
+          "attention_layout": "event"
+        },
+        "resolved_options": {
+          "implementation": "python",
+          "schedule": "frontier",
+          "packed": true,
+          "prefill": true,
+          "trace": false,
+          "mode": "hst",
+          "zeta": 1.0,
+          "workers": 1,
+          "max_events": 1000000,
+          "full_autograd": "replay",
+          "aggregate_autograd": "replay",
+          "parallel_regions": false,
+          "compact_events": false,
+          "defer_state_release": false,
+          "packed_sources": false,
+          "batch_next": false,
+          "attention_packing": "exact",
+          "fiber_pooling": "event",
+          "fiber_cache": "cloned",
+          "attention_layout": "event"
+        },
+        "graph_identity": "7dbf171734ec1169ac7498375f366f6679ad6023de003247418fdfa507cd6e91",
+        "execution_graph_identity": "7dbf171734ec1169ac7498375f366f6679ad6023de003247418fdfa507cd6e91"
+      },
+      "scope": "candidate-only warm eager forward/backward/AdamW",
+      "command": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-profile-python-fp16-a5b",
+        "--project",
+        "tide-npu-performance",
+        "--priority",
+        "0",
+        "--npu-count",
+        "1",
+        "--max-wait-seconds",
+        "1800",
+        "--state-file",
+        "/mi/data2T/zlong/tide-npu-performance/runs/profile-python-fp16-a5b/queue.json",
+        "--",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "scripts/profile_accelerator.py",
+        "--device",
+        "npu",
+        "--implementation",
+        "python",
+        "--dtype",
+        "float16",
+        "--output-dir",
+        "/mi/data2T/zlong/tide-npu-performance/runs/profile-python-fp16-a5b/profile"
+      ],
+      "kernel_events": 1644,
+      "kernel_types": {
+        "KERNEL_AIVEC": 1214,
+        "KERNEL_MIX_AIV": 266,
+        "KERNEL_AICORE": 164
+      },
+      "transfer_and_scalar_events": {
+        "aten::_local_scalar_dense": 242,
+        "MEMCPY_ASYNC": 96
+      },
+      "observed_fallback_events": [],
+      "result_sha256": "c8c5cedee0ca8c8f445836ff82712f742e4f555ece8b4d596c33a3791b8e2b0b",
+      "trace_sha256": "88d5e9ab12feb08f4437388b5a23a4dfcffa4900e6f6db22e35e8f08f0319439",
+      "artifact": "artifacts/npu-performance-profile-python-fp16-a5b/profile/result.json"
+    },
+    {
+      "job": "profile-native-fp16-a5b",
+      "source": "cb58110f0f19d42749d3f89d5e479a117d7d026c",
+      "runtime": {
+        "schema": "tide-runtime-v1",
+        "package_version": "0.2.0",
+        "package_sha256": "bb3c3265046b866bd28dcc42d5c54e189c0074dd8f54d954a0b5e8ca044450c7",
+        "model_origin": "configured",
+        "configuration": {
+          "schema_version": 1,
+          "family": "timed-dag",
+          "graph": {
+            "nodes": [
+              {
+                "region": 0,
+                "clear": false,
+                "identity": false,
+                "memory": "linear",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 1,
+                "clear": false,
+                "identity": false,
+                "memory": "ssm",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 1,
+                "clear": false,
+                "identity": false,
+                "memory": "delta",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              },
+              {
+                "region": 2,
+                "clear": false,
+                "identity": false,
+                "memory": "attention",
+                "full": "swiglu",
+                "query_heads": 1,
+                "kv_heads": 1,
+                "window": 0,
+                "emission": "broadcast",
+                "emit_period": 1,
+                "emit_phases": [],
+                "aggregation": "sum",
+                "readout": "linear-v1",
+                "next_state": "adopt-v1",
+                "state_clock": {
+                  "period": 1,
+                  "first": 0,
+                  "count": 1
+                }
+              }
+            ],
+            "edges": [
+              {
+                "source": 0,
+                "target": 1,
+                "delay": 1
+              },
+              {
+                "source": 0,
+                "target": 2,
+                "delay": 1
+              },
+              {
+                "source": 1,
+                "target": 3,
+                "delay": 1
+              },
+              {
+                "source": 2,
+                "target": 3,
+                "delay": 1
+              }
+            ],
+            "regions": [
+              {
+                "budget": 1,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              },
+              {
+                "budget": 2,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              },
+              {
+                "budget": 1,
+                "observe_all": true,
+                "count_priority": true,
+                "read_mode": "proposal",
+                "selector": "count-v1"
+              }
+            ],
+            "inputs": [
+              0
+            ],
+            "outputs": [
+              3
+            ],
+            "layout": {
+              "edge_source": [
+                0,
+                1,
+                0,
+                0
+              ],
+              "edge_target": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "input": [
+                0
+              ],
+              "output": [
+                0
+              ]
+            },
+            "origins": [],
+            "source_domain": {
+              "edge_target": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "input": [
+                0
+              ]
+            }
+          },
+          "ranks": [],
+          "model": {
+            "width": 4,
+            "dtype": "float16",
+            "seed": 7,
+            "projection_layout": "input",
+            "scale_init": 0.25
+          },
+          "execution": {
+            "implementation": "native",
+            "schedule": "auto",
+            "packed": true,
+            "prefill": null,
+            "trace": false,
+            "mode": "hst",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event"
+          }
+        },
+        "config_sha256": "25866ba84285e1d964c14a0014709795a28e815ceab6ced05c28daa68db287a6",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float16",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 1,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "requested_options": {
+          "implementation": "native",
+          "schedule": "auto",
+          "packed": true,
+          "prefill": null,
+          "trace": false,
+          "mode": "hst",
+          "zeta": 1.0,
+          "workers": 1,
+          "max_events": 1000000,
+          "full_autograd": "replay",
+          "aggregate_autograd": "replay",
+          "parallel_regions": false,
+          "compact_events": false,
+          "defer_state_release": false,
+          "packed_sources": false,
+          "batch_next": false,
+          "attention_packing": "exact",
+          "fiber_pooling": "event",
+          "fiber_cache": "cloned",
+          "attention_layout": "event"
+        },
+        "resolved_options": {
+          "implementation": "native",
+          "schedule": "frontier",
+          "packed": true,
+          "prefill": true,
+          "trace": false,
+          "mode": "hst",
+          "zeta": 1.0,
+          "workers": 1,
+          "max_events": 1000000,
+          "full_autograd": "replay",
+          "aggregate_autograd": "replay",
+          "parallel_regions": false,
+          "compact_events": false,
+          "defer_state_release": false,
+          "packed_sources": false,
+          "batch_next": false,
+          "attention_packing": "exact",
+          "fiber_pooling": "event",
+          "fiber_cache": "cloned",
+          "attention_layout": "event"
+        },
+        "graph_identity": "7dbf171734ec1169ac7498375f366f6679ad6023de003247418fdfa507cd6e91",
+        "execution_graph_identity": "7dbf171734ec1169ac7498375f366f6679ad6023de003247418fdfa507cd6e91",
+        "native_sha256": "9688a08d710b88e12447fdcbcb1c0e11eef0d4aa19a1bb5b9eaae4b2c2bfe409"
+      },
+      "scope": "candidate-only warm eager forward/backward/AdamW",
+      "command": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-profile-native-fp16-a5b",
+        "--project",
+        "tide-npu-performance",
+        "--priority",
+        "0",
+        "--npu-count",
+        "1",
+        "--max-wait-seconds",
+        "1800",
+        "--state-file",
+        "/mi/data2T/zlong/tide-npu-performance/runs/profile-native-fp16-a5b/queue.json",
+        "--",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "scripts/profile_accelerator.py",
+        "--device",
+        "npu",
+        "--implementation",
+        "native",
+        "--dtype",
+        "float16",
+        "--native-library",
+        "/mi/data2T/zlong/tide-npu-performance/builds/adapter-fp16-a5",
+        "--output-dir",
+        "/mi/data2T/zlong/tide-npu-performance/runs/profile-native-fp16-a5b/profile"
+      ],
+      "kernel_events": 1638,
+      "kernel_types": {
+        "KERNEL_AIVEC": 1222,
+        "KERNEL_MIX_AIV": 252,
+        "KERNEL_AICORE": 164
+      },
+      "transfer_and_scalar_events": {
+        "aten::_local_scalar_dense": 211,
+        "MEMCPY_ASYNC": 124
+      },
+      "observed_fallback_events": [],
+      "result_sha256": "67d0f62020843abf40bb70b5545067beaf24841d90195821d24435613fa0df1a",
+      "trace_sha256": "74c6fcd8ceec50fe46df0a4ebc6a5aa60d866debe13887b483096132478a89de",
+      "artifact": "artifacts/npu-performance-profile-native-fp16-a5b/profile/result.json"
+    }
+  ],
+  "analysis_tool_source": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab"
+}

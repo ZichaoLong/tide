@@ -260,6 +260,21 @@
           "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "8645 complete CPU FP64/FP32 regressions including explicit FP16 public Python/native cases and FP32 master checkpoints. c8d2b61 CPU FP16 CSR early-rejection follow-up separately passed20 focused checks. Finite scopes and exact source boundaries in report.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW; separate immutable boundary gate in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
         }
       ]
     },
@@ -273,7 +288,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending."
     },
     {
       "id": "python-npu-aarch64",
@@ -314,9 +329,25 @@
           "test_command": "python scripts/qualify_accelerator.py --device npu:0 --implementation python --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "39 complete Python NPU FP16 cases on TorchNPU2.10/CANN9.0: complete observables, exact discrete/None contracts, isolated VJPs, chunking, three SGD/AdamW updates, fresh-process checkpoint and CPU handoff. Five FP32 representative cases also passed. Public FP16 atol.001/rtol.02; native CSR rejection retained. No new FP16 claim for older CANN stacks.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_accelerator.py --device npu --dtype float16 --implementation python --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
         }
       ],
-      "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim."
+      "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
     },
     {
       "id": "cpp-cpu-x86_64",
@@ -494,6 +525,21 @@
           "test_command": "python scripts/qualify_library.py --reuse-build --build-dir MATCHING_BUILD --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "8645 complete CPU FP64/FP32 regressions including explicit FP16 public Python/native cases and FP32 master checkpoints. c8d2b61 CPU FP16 CSR early-rejection follow-up separately passed20 focused checks. Finite scopes and exact source boundaries in report.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW; separate immutable boundary gate in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
         }
       ]
     },
@@ -508,7 +554,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified."
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending."
     },
     {
       "id": "cpp-npu-aarch64",
@@ -521,7 +567,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0 and one2.9 SDK across CANN8.5.0/8.5.1/8.5.2; finite scopes in evidence. Broad native-adapter cases are separately qualified across the same four runtimes. NPU FP64 and CSR pooling unsupported.",
+      "reason": "Standalone SDK qualified on Torch/TorchNPU2.10/CANN9.0 and one2.9 SDK across CANN8.5.0/8.5.1/8.5.2; finite scopes in evidence. Broad native-adapter cases are separately qualified across the same four runtimes. NPU FP64 and CSR pooling unsupported. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections.",
       "attempts": [
         {
           "date": "2026-09-25",
@@ -614,6 +660,37 @@
           "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; exact per-cell configurations, source/binary/record hashes and timing scopes in the cited report and adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerator-performance-20260928.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "43 complete native-adapter NPU FP16 cases on TorchNPU2.10/CANN9.0: complete observables, exact discrete/None contracts, isolated VJPs, chunking, three SGD/AdamW updates, fresh-process checkpoint and CPU handoff. Five FP32 representative cases also passed. Public FP16 atol.001/rtol.02; native CSR rejection retained. No new FP16 claim for older CANN stacks.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "python scripts/qualify_accelerator.py --device npu --dtype float16 --implementation native --native-library MATCHING_BUILD --output-dir NEW",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "595dccd0b23bd809bed28874591ae4f5f268512f",
+          "scope": "Standalone consumer FP32/FP16:100 CPU/2/4/8-NPU configuration cells, four CTests and real loader closure. Same-dtype independent CPU oracle; complete observables, exact routes/None, isolated VJPs, three updates and FP32 master/slot trajectories. FP16 consumer atol.002/rtol.02. Public standalone NamedOptimizer/owner checkpoints remain FP32/FP64; consumer owns FP32 masters.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "python scripts/verify_accelerator_scale.py --dtype float16 --check-atol .002 --device npu --build-dir MATCHING_BUILD --output-dir NEW; exact CPU/2/4/8-device commands and training policies in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
         }
       ]
     },
@@ -627,7 +704,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified.",
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -641,6 +718,20 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md",
           "reason": "Build and CPU checks passed; real GPU execution awaits target hardware."
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "CUDA-linked build with Torch2.10.0+cu128 / CUDA12.8.1 and22 CPU/CLI checks including FP16 public/native checkpoints. No NVIDIA hardware execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir NEW --jobs 2; exact directed CPU commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md",
+          "reason": "Compiled and host-tested; real GPU operation/parity remains unverified."
         }
       ]
     },
@@ -655,7 +746,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified.",
+      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -670,6 +761,20 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerators-20260928.md",
           "reason": "Build and CPU checks passed; real GPU execution awaits target hardware."
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "fc2a76f2773b4054ba1f2bca20256c33dadbd9ab",
+          "scope": "CUDA-linked build with Torch2.10.0+cu128 / CUDA12.8.1 and22 CPU/CLI checks including FP16 public/native checkpoints. No NVIDIA hardware execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir NEW --jobs 2; exact directed CPU commands in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/fp16-qualification-20260929.md",
+          "reason": "Compiled and host-tested; real GPU operation/parity remains unverified."
         }
       ]
     }

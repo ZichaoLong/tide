@@ -1,67 +1,101 @@
 # Current handoff
 
 Updated: 2026-09-29. Branch graph-execution-foundation; no push authorized.
+No sub-agents or reference-repository changes. User authorized full FP16 scope
+(public Python/native API and standalone full-size consumer), correctness gates,
+profiling and bounded full-size comparisons. Existing FP32 evidence is immutable.
 
-## Active extension
+## Current implementation and verified scope
 
-User requested inspection of NPU selection/event scheduling, performance/AiCPU
-attribution and configurable FP16. The preceding bounded FP32 acceptance remains
-complete at c8c46be (implementation b4f26b3); its 54 records are immutable.
+Implementation fc2a76f adds explicit FP16 payload, FP32 master optimizer and
+static loss scale, same-dtype CPU oracle and configurable floating tolerances.
+cb58110 orders profiler fixture/master copies before its worker stream.
+595dccd strengthens consumer checks with FP32 gradient normalization and master
+weight trajectories. c8d2b61 adds early rejection of CPU FP16 CSR (local Torch
+Half sparse-dense matmul is unavailable); its direct rejection test passed and
+boundary-fp16-a5c passed20 focused immutable regressions;4a7dec7 additionally
+records the expected rejection in the CLI suite, verified by csr-boundary-fp16-a5d. No mathematical kernel
+change after fc2a76f; complete
+C++ core source hash remains identical at 595dccd. Public Python checkpoint
+supports master state; standalone owner-checkpoint/NamedOptimizer stays FP32/64.
 
-Implement a bounded FP16 extension in the standalone historical-topology
-consumer: FP16 payload, independently configured FP32/CPU-FP64 Read, int64 event
-keys, FP32 controls, FP32 master parameters/optimizer slots and explicit static
-loss scaling. User explicitly expanded scope to public Python/PyTorch and native API too.
-Python Session checkpoints support FP32 master optimizer state; existing
-FP32/FP64 defaults and standalone C++ owner checkpoint contract remain.
-Compare complete observables/discrete routes and VJPs against an independent
-CPU oracle at the same dtype. An explicitly selected FP32 quantized-fixture
-oracle remains a cross-precision diagnostic. Numerical
-tolerances are explicit; route or None-connectivity differences are not hidden.
+Immutable sources: TASK_ROOT/sources/fp16-a5 (fc2a76f), fp16-profile-a5b
+(cb58110), fp16-a5b (595dccd). Builds cpu-fp16-a5, adapter-fp16-a5, core-fp16-a5,
+client-fp16-a5b, cuda-fp16-a5b passed with two workers. Latest consumer four CTests
+passed. CUDA build and22 CPU/CLI checks passed; no NVIDIA hardware qualification.
 
-Next: freeze this implementation commit as sources/fp16-a5. Build isolated
-builds/{cpu-fp16-a5,adapter-fp16-a5,core-fp16-a5,client-fp16-a5} with two workers.
-Run scripts/verify.py --device cpu --dtype both with cpu-fp16-a5; run complete
-scripts/qualify_accelerator.py FP16 Python/native NPU suites; run standalone
-FP32/FP16 CPU and two-NPU gates plus the intended 4/8-NPU control strategies.
-Then run four fresh FP32/FP16 pairs (8 cells): Add2/Attention4 inference,
-Add4/Attention8 training, one warmup and one measured complete update. Each
-pair holds one fixed queue allocation. New identities required; no large run
-before applicable gates. CUDA device qualification remains external.
+Public NPU FP16 complete named suites passed: python-npu-fp16-a5 39 cases,
+native-npu-fp16-a5 43 cases and one explicit CSR rejection. Each case covers full
+observables/discrete routes, isolated VJPs, chunking, three updates, fresh-process
+checkpoint and CPU handoff. Five representative FP32 cases each also passed.
+profile-{python,native}-fp16-a5b passed with1644/1638 hardware kernel events;
+no named host-fallback event in those tiny traces. Not full-size attribution.
 
-Development checks passed: 318 directed CPU regressions; five Python and five
-native NPU FP16 complete cases; consumer CPU and two-NPU four scale/four training
-configurations each, explicit atol=.002/rtol=.02. Latest client-fp16-dev06 and four
-CTests passed; consumer-npu-fp16-dev06 and consumer-cpu-fp16-dev06b validated its
-new dtype guards (exit 0). No development jobs remain live. Final comment-only
-header correction does not alter behavior and will be included in clean builds.
+consumer-{cpu,npu2,npu4,npu8}-fp16-a5b all passed:100 positive configuration cells,
+both dtypes; CPU/NPU2 CPU64 and all32, NPU4 CPU64 inference and CPU32 training,
+NPU8 mixed32 training. FP16 atol=.002/rtol=.02; public FP16 atol=.001/rtol=.02.
+Routes/events/None-vs-zero remain exact. Consumers include three optimizer updates
+and FP32 master/slot checks; only configured floating comparisons are relaxed.
 
-Retained failures: dev01 invalid ATen half test literal (fixed), NPU dev01
-cross-precision gradients, CPU Attention cross-precision routes; same-dtype
-CPU/NPU dev03 VJP narrowly failed atol=.001 and passed explicit atol=.002 in
-dev05/dev06. consumer-cpu-fp16-dev06 was rejected for mistaken --devices 2 on CPU;
-corrected one-device dev06b passed. Discrete routes and None/zero stay exact.
+## Active jobs and next action
 
-Implementation commit excludes the two profile-analysis evidence drafts, which
-are reserved for the later evidence commit. No sub-agents, reference-repository
-edits or pushes. Formal job records live under TASK_ROOT/runs/NAME/{status.json,
-task.log}; units tide-npu-performance-NAME.service, all in background.slice.
+cpu-fp16-a5 passed8645 tests in1629.46s; unit inactive, ExecMainStatus0 and no PID.
+The full CPU regression and every scoped correctness gate are now complete.
+Qualification/profile evidence is ready for its separate documentation commit;
+performance records remain independently in progress.
 
-## Existing evidence
+Four bounded performance jobs submitted on595dccd, client-fp16-a5b:
+pair-infer-add-fp16-a5b (2 NPUs), pair-infer-attention-fp16-a5b (4),
+pair-train-add-fp16-a5b (4), pair-train-attention-fp16-a5b (8).
+Every applicable correctness gate passed before submission. Jobs use immutable
+launchers/run-dtype-pair-a5b.py OUT launchers/plan-{MODE}-{MODEL}-fp16-a5.json;
+exact argv/cwd/source/log/state are in runs/NAME/status.json and launchers/NAME.sh.
+A pair holds one cooperative allocation, FP32 then FP16 fresh processes.
+D2048/B512/V50304, locality placement, resident messages/state, workers16/ATen1,
+TASK_QUEUE_ENABLE=0. Inference12tokens/4warmup; training two12-token updates,
+first warmup, second measured. Eight cells total. First completed pair: Add2
+inference FP32 17.412729 vs FP16 18.703945 ms/sample-token; max per-chip allocator
+peak over all events19.868474 vs9.954680 GiB. Same source/topology/parameter count/
+node placement and clean exit checks passed. Selected counts match; other work
+counts change slightly across dtypes. One pair cannot establish causal speedup.
+Attention4 inference also passed:54.611865 vs45.855257 ms/sample-token,
+peak22.286432 vs11.192269 GiB. All pair identity/placement/exit checks passed.
+Both training pairs remain running/queued; do not call them complete.
 
-The FP32 performance and standalone multi-CANN reports remain under docs/evidence:
-accelerator-performance-20260928, accelerator-dispatch-training-20260928 and
-standalone-sdk29-20260928. NPU sort/event tensor work exists, but host-owned
-histories, scalar extraction, tensor handles and dispatch remain. Tiny msprof
-trace contains 7012 operators: 55 AiCPU int64 Sort calls, 3365.9 us of 23020.06 us
-summed operator time (14.62%). This is not end-to-end or full-size attribution.
-No prior FP16 performance data exists.
+All units tide-npu-performance-NAME.service run in background.slice with Nice10.
+Inspect: systemctl --user show UNIT -p ActiveState -p SubState -p ExecMainStatus;
+read TASK_ROOT/runs/NAME/{status.json,task.log,queue.json,stages.json}. Stop only
+an identified task when needed: systemctl --user stop UNIT. Each pair has a7200s
+queue bound, inference3600s/cell or training7200s/cell and256GiB RSS limit.
+Trackio best-effort local project tide-npu-performance, TASK_ROOT/trackio, SQLite;
+writer/viewer /home/zlong/venvs/trackio/bin/python. Raw JSONL is authoritative.
 
-Task root /mi/data2T/zlong/tide-npu-performance; existing sources/perf-a4,
-builds/client-npu-a4 and runs are retained unchanged. New source/build/run suffix
-a5; /opt public modules, shared /usr/local driver. Trackio best-effort local
-project tide-npu-performance, TASK_ROOT/trackio, viewer /home/zlong/venvs/trackio/bin/python.
-Hardware placement must use the account cooperative queue and current inventory.
-CUDA hardware and other host architectures remain external acceptance.
+Next: monitor terminal results; diagnose failures without overwriting attempts.
+After all pass, run launchers/collect-fp16-evidence-a5.py qualification and
+performance, validate every raw experiment record and compare same placement,
+parameter counts, workload, timings/peak memory/loss. Write reviewed small reports,
+update ROADMAP and support contract, commit evidence separately; do not push.
+Qualification and profile reports, support contract and precision wording are
+staged for a separate evidence commit. Two inference pairs are complete; training
+results must still be collected, validated, documented and separately committed.
+All builds/raw outputs remain outside source under ignored artifacts symlinks.
 
-Reentry: git status --short --branch; python scripts/status.py.
+## Retained limits and failures
+
+Task root /mi/data2T/zlong/tide-npu-performance. /opt public modules and shared
+/usr/local driver remain. The preceding b4f26b3 FP32 performance assessment and
+four-CANN qualifications remain separate; new FP16 is tested on2.10/CANN9.0 only.
+NPU ranking/event tensor work exists; host histories, scalar extraction, tensor
+handles and C++ dispatch remain. Tiny old msprof trace:55 AiCPU int64 Sort tasks,
+3365.9/23020.06us summed task time (14.62%), not end-to-end/full-size attribution.
+
+Development failures retained: dev01 invalid ATen half test literal (fixed),
+cross-precision gradient/Attention-route mismatches; same-dtype dev03 VJP narrowly
+failed atol=.001 then explicit .002 passed. consumer-cpu-fp16-dev06 rejected an
+erroneous two-device CPU launch; dev06b passed. cuda-build-fp16-a5 was cancelled
+early to fix a planned test filename; independent cuda-host-fp16-a5b passed.
+No numerical tolerance change hides discrete failure. FP16 does not certify
+convergence or route identity to FP32. CUDA devices/new stacks/other host
+architectures remain target-machine acceptance.
+
+Re-entry: git status --short --branch; python scripts/status.py.
