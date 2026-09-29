@@ -1379,6 +1379,79 @@
           "gates_sha256": "fec7f3a1d1103753957be8af3955718daae5664e760fdb7777ff3f59cbdcebcd"
         }
       ]
+    },
+    {
+      "job": "consumer-npu9-fp16-a5g",
+      "source": "595dccd0b23bd809bed28874591ae4f5f268512f",
+      "dirty": "",
+      "started": "2026-09-29T02:33:27.075646+00:00",
+      "finished": "2026-09-29T02:35:08.663391+00:00",
+      "command": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/mi/data2T/zlong/tide-npu-performance/launchers/run-fp16-gates-a5.py",
+        "/mi/data2T/zlong/tide-npu-performance/runs/consumer-npu9-fp16-a5g",
+        "/mi/data2T/zlong/tide-npu-performance/builds/client-fp16-a5b",
+        "npu",
+        "9",
+        "npu8"
+      ],
+      "status_sha256": "c9f7df71ec364c0c20aa4fbdaf9f852bc23500eb3a89d279cf27bedc4e36e27c",
+      "log_sha256": "ced43690820b020bcd1e5a15ab0b667bc86da22dc88a4f0105a8b3c0ed9b4313",
+      "locator": "artifacts/npu-performance-consumer-npu9-fp16-a5g",
+      "kind": "consumer",
+      "physical_ids": "0,2,3,4,5,11,12,13,14",
+      "stages": [
+        {
+          "name": "float32-training-mixed32",
+          "configuration": {
+            "schema": "tide-accelerator-training-gates-v1",
+            "binary_sha256": "2c839eda35502e5c52851884df74daf6eca66eccf10b8ae08730f848316a05e3",
+            "device": "npu",
+            "devices": 9,
+            "dtype": "float32",
+            "check_atol": null,
+            "check_rtol": null,
+            "ranking_device": "cpu",
+            "event_device": "cpu",
+            "control_device": "cpu",
+            "read_device": "model",
+            "read_dtype": "float32",
+            "npu_task_queue": 0
+          },
+          "cases": [
+            "add-sgd",
+            "add-adamw",
+            "attention-sgd",
+            "attention-adamw"
+          ],
+          "gates_sha256": "f0889763d9d42a8c6447957bdd3768544d3e4a37c91c72ae75b161d0c90d700d"
+        },
+        {
+          "name": "float16-training-mixed32",
+          "configuration": {
+            "schema": "tide-accelerator-training-gates-v1",
+            "binary_sha256": "2c839eda35502e5c52851884df74daf6eca66eccf10b8ae08730f848316a05e3",
+            "device": "npu",
+            "devices": 9,
+            "dtype": "float16",
+            "check_atol": 0.002,
+            "check_rtol": 0.02,
+            "ranking_device": "cpu",
+            "event_device": "cpu",
+            "control_device": "cpu",
+            "read_device": "model",
+            "read_dtype": "float32",
+            "npu_task_queue": 0
+          },
+          "cases": [
+            "add-sgd",
+            "add-adamw",
+            "attention-sgd",
+            "attention-adamw"
+          ],
+          "gates_sha256": "1cf8f89e4fb2d004939aeedb5a5663922c8dfbcdb1fcdd7dc4ecafdf11505d58"
+        }
+      ]
     }
   ]
 }
