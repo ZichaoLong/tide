@@ -199,3 +199,5 @@ See [precision.md](precision.md) for API, master-optimizer/checkpoint boundaries
 and [accelerator-scale.md](accelerator-scale.md) for the separately configured
 Read/control/dispatch consumer. BF16 and automatic mixed precision remain outside
 this extension. NPU FP64 and CSR pooling stay explicitly unsupported.
+CPU FP16 CSR pooling is also explicitly unsupported; selecting event pooling is
+a caller-visible policy choice, not a runtime fallback or implicit promotion.

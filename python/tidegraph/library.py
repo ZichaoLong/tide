@@ -35,6 +35,8 @@ class GraphRuntime:
             raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
         if self.device.type == "npu" and requested.fiber_pooling == "csr":
             raise ValueError("NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'")
+        if self.device.type == "cpu" and c.dtype == "float16" and requested.fiber_pooling == "csr":
+            raise ValueError("CPU FP16 CSR pooling is unsupported; explicitly select fiber_pooling='event'")
         self.graph = c.graph
         self.spec = None
         if c.family == "settle":

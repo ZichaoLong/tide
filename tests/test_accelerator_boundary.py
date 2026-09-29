@@ -29,6 +29,16 @@ def test_explicit_missing_cuda_never_runs_cpu(tmp_path, monkeypatch):
     assert not (tmp_path / "unavailable").exists()
 
 
+def test_cpu_half_csr_rejected_before_execution(tmp_path):
+    cfg = GraphConfig.from_dict(dict(schema_version=1, family="timed-dag",
+        topology=dict(kind="chain", module=dict(memory="lh-fiber-attention-sum-repeat-v1")),
+        model=dict(width=4, dtype="float16"),
+        execution=dict(implementation="native", fiber_pooling="csr")))
+    with pytest.raises(ValueError, match="CPU FP16 CSR pooling is unsupported"):
+        qualify(cfg, device="cpu", output_dir=tmp_path / "unsupported")
+    assert not (tmp_path / "unsupported").exists()
+
+
 def test_probe_transfer_preserves_fixture_and_independent_leaves():
     probe = Probe(config(), positions=3)
     fixture_hash = probe.manifest()["sha256"]

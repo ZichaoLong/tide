@@ -4,6 +4,10 @@
 and `float64`. NPU rejects FP64; BF16 remains unsupported. Public single-device
 Python and native schedules keep their own independent implementations. Support
 is finite and target-specific; implementation is not device qualification.
+CPU FP16 CSR pooling is explicitly unsupported (the local Torch2.10 CPU kernel
+rejects Half sparse-dense matmul); choose `fiber_pooling="event"` explicitly.
+NPU CSR pooling remains unsupported at both payload precisions. No implicit
+promotion or pooling-algorithm substitution is used to satisfy these requests.
 
 FP16 model initialization is the FP32 seeded fixture cast to FP16. Parameters,
 inputs, state, KV slots and messages use the declared dtype; callers supply
