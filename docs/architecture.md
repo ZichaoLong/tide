@@ -13,6 +13,7 @@
 | `scripts/` | Configure/build/verify, durable job and re-entry helpers |
 | `docs/verification.md` | Explicit development/full gates and frozen worktree lifecycle |
 | `docs/bounded-scheduler.md` | Optional finite device tensor scheduling, native replay, peer completion and training boundaries |
+| `docs/evidence/accelerator-cpu-npu-comparison-20260929.md` | Matched full-size CPU/NPU timing, four device traces, source/record audit and retained limitations |
 | `docs/semantics.md` | Adopted semantics and local formula/gradient contracts |
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |

@@ -106,12 +106,21 @@ compilation or support for unbounded device queues.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| D1 | Same-source full-size Add/Attention pure-CPU and NPU inference/complete-training baselines; effective CPU parallelism, identical shapes/windows/owners, three process repeats for speed claims | active: clean951031e matrix, effective CPU node/head and phase threads; first Add complete-training pair passed |
-| D2 | Bounded full-size NPU trace windows, host decisions/copies/barriers and device engines; instrumentation timing separated from throughput | planned |
-| D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | verified finite scope; [84 immutable CPU/NPU cells](evidence/bounded-scheduler-qualification-20260929.md), both dtypes |
+| D1 | Same-source full-size Add/Attention pure-CPU and NPU inference/complete-training baselines; effective CPU parallelism, identical shapes/windows/owners, three process repeats for speed claims | verified finite assessment:21 passed/1 CPU Attention timeout,2 later repeats skipped; [three-process CPU/NPU report](evidence/accelerator-cpu-npu-comparison-20260929.md), no measured CPU Attention training ratio |
+| D2 | Bounded full-size NPU trace windows, host decisions/copies/barriers and device engines; instrumentation timing separated from throughput | verified finite scope:4 full-size collected/analyzed windows with exact device coverage; original export/analysis failures and offline recoveries retained in the CPU/NPU report |
+| D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | verified for finite static expansion/device predication; [84 immutable CPU/NPU cells](evidence/bounded-scheduler-qualification-20260929.md), both dtypes; general device event queue not implemented |
 | D4 | Device-controlled continuation of tasks within a window; graph/capture or compiled backend, no per-event host scalar/index decisions; verify actual replay path and explicit unsupported combinations | verified finite scope; native one/two/eight-device replay, input changes and explicit unsupported combinations; full-size capacity separate |
 | D5 | Multi-device execution with locality and device completion dependencies; complete training with isolated VJPs, None/zero, master/optimizer updates and three-step oracle | verified finite scope; tiny one/two/eight-device FP32/FP16 and actual-topology CPU/two-device three-token gates, SGD/AdamW trajectories |
-| D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | active: [terminal bounded capacity assessment](evidence/bounded-scheduler-capacity-20260929.md), Add eager inference pair passed; notification/OOM/shared-device failures retained; repeated baseline/profile closure pending |
+| D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | finite assessment complete: [capacity report](evidence/bounded-scheduler-capacity-20260929.md) and CPU/NPU/profile audit; Add bounded-eager inference pair passed, full-size captured replay remains unqualified |
+
+This closes the fixed assessment, not the broader full-size resident-scheduling
+objective. The current backend uses host-built static expansion/device predication;
+a general preallocated device event queue is not implemented. Full-size captured
+replay remains unqualified after notification-capacity and memory failures.
+Notification reuse/completion design and lower-memory execution need further
+implementation and independent gates before a usable full-size claim. Uncontended
+12-device fit is unknown. Baseline/profiling and backend development overlapped;
+the original recommendation to finish baselines first was not followed in order.
 
 Start with the installed Torch/TorchNPU2.10/CANN9.0 stack; capabilities must be
 probed before relying on graph capture, conditional streams or custom kernels.

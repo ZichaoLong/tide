@@ -5,7 +5,8 @@ This optional historical-workload consumer passed the finite
 The [full-size capacity assessment](evidence/bounded-scheduler-capacity-20260929.md)
 records Add eager inference success, notification limits and OOMs, including a
 12-device attempt affected by external device contention. Full-size captured
-replay is not qualified; CPU/NPU repeated timing and profiles remain separate.
+replay is not qualified; [CPU/NPU repeated timing and profiles](evidence/accelerator-cpu-npu-comparison-20260929.md)
+are a separate terminal assessment of the existing eager consumer.
 It does not replace the public eager executors, their independent CPU schedules
 or checkpoint contracts.
 
@@ -14,7 +15,10 @@ or checkpoint contracts.
 The program targets fixed Add/Attention topology, hard Full, observe-all/adopt/
 clear, model FP32 Read and controls, positive physical-wire delays, and a finite
 sequence beginning from empty state. Payload supports FP32/FP16. Static topology
-and the finite clock window are expanded once. Presence, candidate and selection
+and the finite clock window are expanded on the host during preparation/capture.
+The host queue builds this static schedule; it is not a general preallocated
+device event queue. Captured replay uses the fixed device program and its storage;
+eager execution rebuilds the static schedule. Presence, candidate and selection
 masks, int64 selected/affected histories, cache visibility and Next decisions are
 tensors. An absent message remains absent even when its padded payload is zero.
 Physical edge identities and parallel edges remain separate.

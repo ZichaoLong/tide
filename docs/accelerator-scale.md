@@ -238,6 +238,13 @@ shared-load observations do not replace independent small-tensor correctness gat
 
 ## Scoped profiling and CPU execution
 
+The [matched-source CPU/NPU report](evidence/accelerator-cpu-npu-comparison-20260929.md)
+records three-process full-size comparisons and four scoped NPU traces. CPU
+Attention training timed out after warmup; no steady CPU ratio is available.
+The report keeps original export failures and independently recovered CSVs.
+The CSV summarizer accepts either one operator file or a consecutive slice set
+from one export, rejecting gaps and mixed exports to avoid missing/doubled counts.
+
 The resident consumer uses its requested node-worker pool on CPU. CPU is one
 Torch device, but that does not limit independent node work to one thread.
 CPU also accepts explicit `--head-workers N`, reusing the public DenseLinear

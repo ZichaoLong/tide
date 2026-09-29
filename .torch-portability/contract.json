@@ -555,6 +555,33 @@
           "test_command": "python scripts/verify_bounded_scheduler.py --device cpu --dtype float32 --build-dir MATCHING_BUILD --output-dir NEW; exact FP16/tiny/actual-topology/device-count commands and tolerances in the report/adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/bounded-scheduler-qualification-20260929.md"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "951031e1f7f8b40365ae6ce7f87e7d162a6d5ab2",
+          "scope": "Same-source CPU FP32-payload forward/isolated-VJP with FP64/FP32 Read and CPU training prerequisites passed before timing. Same-source standalone fullD2048/B512/V50304/T12 FP32 CPU Add/Attention inference and Add complete AdamW training,3 fresh processes/group (9 successes). CPU node/head workers56/160 and backward/optimizer16 are explicit; measured workload counters match NPU. Descriptive shared-host timing only, not full-size numerical parity, optimal CPU tuning or convergence. Attention training failure is a separate attempt.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "workload"
+          ],
+          "test_command": "python scripts/benchmark_accelerator_scale.py --device cpu --dtype float32 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; exact per-cell argv, warmup, affinity and phase thread settings in the adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
+        }
+      ],
+      "attempts": [
+        {
+          "date": "2026-09-29",
+          "commit": "951031e1f7f8b40365ae6ce7f87e7d162a6d5ab2",
+          "scope": "Full-size CPU Attention complete-training process; one complete warmup update, no measured update. Two later repeats skipped by the fixed stop rule.",
+          "tiers": [
+            "workload"
+          ],
+          "test_command": "Exact timing-cpu-attention-train-1 argv and7200s native bound in the adjacent JSON",
+          "result": "failed",
+          "reason": "Process time limit reached after4018.027822s warmup update; no valid steady CPU Attention training throughput or CPU/NPU ratio.",
+          "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
         }
       ]
     },
@@ -761,6 +788,20 @@
           ],
           "test_command": "python scripts/benchmark_bounded_scheduler.py --device npu --memory add --devices 8 --dtype float32 ...; exact FP32/FP16 benchmark and12-device native parity argv are retained in the adjacent JSON",
           "result": "passed"
+        },
+        {
+          "date": "2026-09-29",
+          "commit": "951031e1f7f8b40365ae6ce7f87e7d162a6d5ab2",
+          "scope": "Same-source full-size FP32 Add/Attention inference and complete AdamW training on2/4/4/9 A3 chips,3 fresh processes/group (12 successes), with CPU FP32 Read/control/ranking/events. Four separately instrumented full-size windows cover Add CPU32 token, Attention CPU32/all32 tokens and9-chip Attention backward; accepted operator/API exports cover every allocated device. Original export failures and slice-analyzer failure plus offline recoveries are retained. Descriptive shared-load workload/profile evidence only; no full-size numerical parity or captured resident-scheduler claim. Reporting-only CSV-slice fix381d44a passed10 CPU checks and is separate from measured source.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "feature",
+            "workload"
+          ],
+          "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --dtype float32 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; all exact per-cell argv, scoped profile/export/recovery commands and hashes in the adjacent JSON",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
         }
       ]
     },
