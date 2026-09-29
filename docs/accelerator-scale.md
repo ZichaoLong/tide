@@ -235,3 +235,23 @@ The [completed full-size FP32/FP16 pairs](evidence/accelerator-fp16-performance-
 use this same implementation for both dtypes. They retain fixed allocation per
 pair, measured timing scopes, memory, work counters and resource failures. These
 shared-load observations do not replace independent small-tensor correctness gates.
+
+## Scoped profiling and CPU execution
+
+The resident consumer uses its requested node-worker pool on CPU. CPU is one
+Torch device, but that does not limit independent node work to one thread.
+NPU still uses one stream/worker per shard with phase barriers. Compare actual
+worker configuration and identical source/workloads; old cpu32/cpu64 labels refer
+to control placement while the model itself remains on NPU.
+
+The standalone client optionally accepts `--profile-step N --profile-phase
+ token|forward|backward|optimizer --profile-output NEW`. Token profiles select one
+inference token; training profiles select one complete phase of an optimizer
+update. Only NPU supports the CANN adapter, and explicit unsupported requests
+fail. Normal execution does not load/start the profiler. The Python benchmark
+wrapper takes step/phase and creates `profile/` under the fresh run directory;
+`--profile-max-gib` bounds collection output (default4, checked periodically and
+on child exit, so a sampling-interval overshoot remains possible). A breached
+bound fails and reaps the child while retaining evidence. Trace export is a
+separate bounded operation. Instrumented timings are not throughput baselines.
+Use `msprof --export=on --output=RUN/profile` to decode retained CANN data.

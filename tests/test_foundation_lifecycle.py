@@ -77,3 +77,19 @@ def test_export_identity_rejects_changed_sources(tmp_path):
     assert source_state(tmp_path)==('frozen-test-source','')
     (tmp_path/'a.py').write_text('two')
     with pytest.raises(ValueError,match='source changed'):source_state(tmp_path)
+
+
+@pytest.mark.parametrize('linger', [False, True])
+def test_profile_storage_limit_reaps_writer(tmp_path, linger):
+    script = tmp_path/'writer.py'
+    script.write_text('import pathlib,time\npathlib.Path("trace.bin").write_bytes(b"x"*65536)\n'
+                      + ('time.sleep(20)\n' if linger else ''))
+    audit = {}
+    with (tmp_path/'log').open('w') as log:
+        with pytest.raises(OSError, match='storage budget'):
+            run_child([sys.executable, str(script)], cwd=tmp_path, env=os.environ, log=log,
+                      affinity=[min(os.sched_getaffinity(0))], timeout=5,
+                      memory_budget=2**30, audit=audit, storage_path=tmp_path, storage_budget=32768)
+    assert audit['remaining_group_pids'] == [] and not group_pids(audit['pid'])
+    assert audit['peak_observed_storage_bytes'] >= 65536
+    assert (tmp_path/'trace.bin').stat().st_size == 65536

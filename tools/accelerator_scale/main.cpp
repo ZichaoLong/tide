@@ -20,6 +20,7 @@ int run(int argc, char** argv) {
     std::string policy = "memory", transport = "resident", vjp_policy = "strict";
     accelerator_scale::Scoring scoring;
     accelerator_scale::TrainingConfig training;
+    accelerator_scale::ProfileConfig profile;
     std::string ranking_device="cpu", event_device="cpu";
     bool reference_fp64 = false;
     double check_atol=-1., check_rtol=-1.;
@@ -28,6 +29,17 @@ int run(int argc, char** argv) {
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
       const std::string flag = argv[i];
+      if(flag=="--profile-step" || flag=="--profile-phase" || flag=="--profile-output") {
+        if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
+        const std::string value=argv[i];
+        if(flag=="--profile-step") {
+          if(value.empty() || value.find_first_not_of("0123456789")!=std::string::npos)
+            throw std::invalid_argument("profile step requires a nonnegative integer");
+          profile.step=std::stoll(value);
+        } else if(flag=="--profile-phase")profile.phase=value;
+        else profile.output=value;
+        continue;
+      }
       if(flag=="--reference-payload-dtype") {
         if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
         const std::string value=argv[i];
@@ -112,6 +124,7 @@ int run(int argc, char** argv) {
                    "--check-atol X --check-rtol X: FP16 only; default 1e-3/2e-2, routes stay exact.\n"
                    "--loss-scale X: static training scale (FP32 1, FP16 128); FP32 master/slots/loss.\n"
                    "--training-steps N --training-warmup N --optimizer sgd|adamw --learning-rate X.\n"
+                   "--profile-step N --profile-phase token|forward|backward|optimizer --profile-output NEW: scoped CANN trace.\n"
                    "Training: --grad 1 --warmup 0; each update uses --steps tokens from empty state.\n"
                    "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
       return 0;
@@ -146,6 +159,7 @@ int run(int argc, char** argv) {
       throw std::invalid_argument("--reference-read-dtype requires --check 1");
     const bool resident = transport == "resident";
     scoring.validate(device, resident);training.validate(c);
+    profile.validate(device,c.steps,training.steps);
     if((ranking_device!="cpu" && ranking_device!="model") || (event_device!="cpu" && event_device!="model")
         || (!resident && (ranking_device!="cpu" || event_device!="cpu")))
       throw std::invalid_argument("ranking/event device must be cpu|model; model requires resident transport");
@@ -168,6 +182,7 @@ int run(int argc, char** argv) {
     accelerator_scale::configure_scoring(f, scoring);
     auto placement = accelerator_scale::place(f, device, count, policy, resident);
     placement.scoring = scoring;placement.ranking_device=ranking_device;placement.event_device=event_device;
+    placement.profile=profile;
     tide::Options options; options.workers = c.workers; options.packed = true; options.trace = false;
     options.full_autograd = c.full_autograd; options.aggregate_autograd = c.aggregate_autograd;
     options.parallel_regions = c.parallel_regions; options.compact_events = c.compact_events;
@@ -202,6 +217,7 @@ int run(int argc, char** argv) {
       auto ids = at::remainder(at::arange(c.batch, at::TensorOptions().dtype(at::kLong))*3+token*7, c.vocab);
       accelerator_scale::synchronize(placement);
       accelerator_scale::transfers.reset(); accelerator_scale::reset_memory(placement);
+      accelerator_scale::ProfileScope trace(profile,placement.devices,token,"token");
       const auto begin = Clock::now();
       auto embeddings = accelerator_scale::embed(f.embedding, ids, !resident);
       std::vector<tide::External> inputs;
@@ -212,6 +228,7 @@ int run(int argc, char** argv) {
       previous_logits = accelerator_scale::project(at::stack(hidden), f.head, !resident);
       accelerator_scale::synchronize(placement);
       const auto elapsed = seconds(begin);
+      trace.finish();
       if (!at::isfinite(previous_logits).all().item<bool>() || previous_logits.requires_grad() != c.grad)
         throw std::runtime_error("nonfinite logits or incorrect grad-forward mode");
       auto metrics = accelerator_scale::transfers.metrics();
@@ -221,7 +238,7 @@ int run(int argc, char** argv) {
         {"memory/process_peak_rss_bytes",rss()}, {"check/logits_sum",previous_logits.detach().to(at::kCPU).to(at::kDouble).sum().item<double>()},
         {"check/logits_requires_grad",c.grad ? 1. : 0.}, {"runtime/devices",double(count)},
         {"runtime/workers",double(c.workers)}, {"runtime/aten_threads",double(at::get_num_threads())},
-        {"runtime/effective_device_workers",double(resident?std::min(c.workers,count):c.workers)},
+        {"runtime/effective_device_workers",double(resident && !device.is_cpu()?std::min(c.workers,count):c.workers)},
         {"runtime/npu_task_queue",device.is_cpu()?-1.:double(std::atoi(std::getenv("TASK_QUEUE_ENABLE")))},
         {"work/readout_rows",double(result.outputs.size())}});
       for (const auto& [key,value] : f.inventory) metrics["model/"+key] = value;

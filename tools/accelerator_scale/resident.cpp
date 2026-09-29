@@ -14,7 +14,8 @@
 namespace accelerator_scale {
 Resident::Resident(Graph graph, Model model, Options options, Index batch, Placement placement)
   : graph_(std::move(graph)), model_(std::move(model)), options_(options), placement_(placement),
-    pool_(std::min<Index>(options.workers, placement.devices.size())) {
+    pool_(placement.devices.at(0).is_cpu() ? options.workers
+          : std::min<Index>(options.workers, placement.devices.size())) {
   graph_.compile(); configure_model(graph_, model_);
   validate_full_autograd(model_, options_); validate_aggregate_autograd(model_, options_);
   for (const auto& node : graph_.nodes)
@@ -45,6 +46,16 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
 }
 void Resident::phase(const Groups& groups, const std::function<void(Index,const std::vector<size_t>&)>& fn) {
   std::vector<std::function<void()>> jobs;
+  if (placement_.devices.front().is_cpu()) {
+    // A CPU is one Torch device, but independent nodes use the requested pool.
+    // NPU shards retain their single-stream ownership and phase barriers.
+    for (const auto& entry : groups) {
+      const auto node = entry.first; const auto* ids = &entry.second;
+      jobs.push_back([&, node, ids] { fn(node, *ids); });
+    }
+    pool_.run(std::move(jobs));
+    return;
+  }
   for (Index shard = 0; shard < static_cast<Index>(placement_.devices.size()); ++shard)
     jobs.push_back([&, shard] {
       c10::StreamGuard guard(streams_[shard]);

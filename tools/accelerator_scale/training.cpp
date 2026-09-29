@@ -48,13 +48,19 @@ void train(const pdg_scale::Config& c,const pdg_scale::Topology& topology,pdg_sc
   for(Index step=0;step<config.steps;++step) {
     synchronize(placement);transfers.reset();reset_memory(placement);
     const auto begin=Clock::now();owners.zero_grad();synchronize(placement);
+    ProfileScope forward_trace(placement.profile,placement.devices,step,"forward");
     const auto forward_begin=Clock::now();
     auto window=training_window(c,topology,fixture,placement,options);
     synchronize(placement);const auto forward=seconds(forward_begin);
+    forward_trace.finish();
+    ProfileScope backward_trace(placement.profile,placement.devices,step,"backward");
     const auto backward_begin=Clock::now();owners.backward(window.loss);
     synchronize(placement);const auto backward=seconds(backward_begin);
+    backward_trace.finish();
+    ProfileScope optimizer_trace(placement.profile,placement.devices,step,"optimizer");
     const auto optimizer_begin=Clock::now();owners.step();synchronize(placement);
     const auto update=seconds(optimizer_begin);const auto total=seconds(begin);
+    optimizer_trace.finish();
     const auto loss=window.loss.item<double>();
     if(!std::isfinite(loss))throw std::runtime_error("nonfinite training loss");
     Index gradients=0;for(const auto& p:fixture.owners)gradients+=p.grad().defined();

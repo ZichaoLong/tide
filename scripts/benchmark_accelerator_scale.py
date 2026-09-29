@@ -45,6 +45,9 @@ def parse():
     p.add_argument('--learning-rate', type=float, default=1e-4)
     p.add_argument('--npu-task-queue', type=int, choices=(0, 1, 2), default=0,
                    help='0 is the qualified multi-device mode on the local SDK/CANN stack')
+    p.add_argument('--profile-step', type=int)
+    p.add_argument('--profile-phase', choices=('token', 'forward', 'backward', 'optimizer'), default='token')
+    p.add_argument('--profile-max-gib', type=int, default=4)
     p.add_argument('--full-autograd', choices=('replay', 'batched'), default='batched')
     p.add_argument('--aggregate-autograd', choices=('replay', 'batched'), default='batched')
     for name, default in [('devices', 1), ('width', 2048), ('batch', 512), ('vocab', 50304),
@@ -55,6 +58,13 @@ def parse():
                           ('defer-state-release', 1), ('packed-sources', 1), ('batch-next', 1)]:
         p.add_argument('--'+name, type=int, choices=(0, 1), default=default)
     a = p.parse_args()
+    if a.profile_step is not None:
+        if (a.device != 'npu' or not 0 <= a.profile_step < (a.training_steps or a.steps)
+                or (a.training_steps > 0) == (a.profile_phase == 'token')
+                or not 1 <= a.profile_max_gib <= 16):
+            p.error('scoped profiling requires NPU, a valid token/training phase and step, and 1..16 GiB bound')
+    elif a.profile_phase != 'token' or a.profile_max_gib != 4:
+        p.error('profile configuration requires --profile-step')
     if a.dtype == 'float16' and a.transport != 'resident': p.error('FP16 requires resident transport')
     if a.loss_scale is not None and (not a.training_steps or not 0 < a.loss_scale < float('inf')):
         p.error('positive finite loss scale requires training')
@@ -113,6 +123,9 @@ def main():
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
               'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device', 'ranking_device', 'event_device', 'training_steps', 'training_warmup', 'optimizer', 'learning_rate')}
     config.update(dtype=a.dtype, packed=1, emission='row', head_workers=1, fiber_pooling='event')
+    if a.profile_step is not None:
+        config.update(profile_step=a.profile_step, profile_phase=a.profile_phase,
+                      profile_output=str(out/'profile'))
     for key in ('loss_scale', 'check_atol', 'check_rtol'):
         if getattr(a,key) is not None: config[key]=getattr(a,key)
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
@@ -140,6 +153,8 @@ def main():
                      node_ranking=a.ranking_device, event_scheduler=a.event_device,
                      load_average_before=list(os.getloadavg()), memory_budget_gib=a.memory_gib),
         experiment=dict(config=config, **{'class': 'benchmark'}, primary_metric='perf/ms_per_sample_token',
+                        instrumented=a.profile_step is not None,
+                        profile_storage_budget_bytes=a.profile_max_gib*2**30 if a.profile_step is not None else None,
                         global_step_semantics='optimizer update, independent complete sequence windows' if a.training_steps else 'growing-context token index, warmup retained',
                         stop_condition=f'{a.training_steps} updates of {a.steps} tokens' if a.training_steps else f'{a.steps} tokens or {a.timeout_seconds} seconds or RSS budget',
                         placement='node-shards-v1; '+a.transport+' state/message transport; '
@@ -172,7 +187,9 @@ def main():
         if a.device == 'npu': env['TASK_QUEUE_ENABLE'] = str(a.npu_task_queue)
         with (out/'stdout.log').open('x') as log:
             native_code = run_child(command, cwd=root, env=env, log=log, affinity=affinity,
-                                    timeout=a.timeout_seconds, memory_budget=a.memory_gib*2**30, audit=audit)
+                                    timeout=a.timeout_seconds, memory_budget=a.memory_gib*2**30, audit=audit,
+                                    storage_path=out if a.profile_step is not None else None,
+                                    storage_budget=a.profile_max_gib*2**30)
         if native_code != 0: raise RuntimeError(f'native exit {native_code}')
         events = read_events(out/'native/metrics.jsonl', run_id)
         if len(events) != (a.training_steps or a.steps): raise ValueError('incomplete observation inventory')

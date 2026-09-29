@@ -97,6 +97,38 @@ Authorized 2026-09-29. Existing FP32 acceptance remains immutable.
 | H3 | Bounded same-placement FP32/FP16 full-size inference and warmed training for Add/Attention; preserve failures and variance | verified; [eight accepted full-size cells](evidence/accelerator-fp16-performance-20260929.md), fixed allocation per pair; shared-load exploratory results and all resource failures retained |
 | H4 | Existing CANN trace engine/API summary; explain host orchestration and attribution limits | verified; [profile analysis](evidence/accelerator-profile-analysis-20260929.md) and two FP16 hardware traces |
 
+## Authorized extension: CPU comparison and bounded device scheduling
+
+Authorized 2026-09-29 after the read-only CPU/NPU comparison. Preserve the
+foundation's independent CPU schedules, exact discrete semantics and optional
+backend boundaries. This increment is not a claim of arbitrary dynamic-graph
+compilation or support for unbounded device queues.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| D1 | Same-source full-size Add/Attention pure-CPU and NPU inference/complete-training baselines; effective CPU parallelism, identical shapes/windows/owners, three process repeats for speed claims | active: CPU node-worker restriction found; independent parity precedes correction and timing |
+| D2 | Bounded full-size NPU trace windows, host decisions/copies/barriers and device engines; instrumentation timing separated from throughput | planned |
+| D3 | Optional bounded scheduler: device queue/history/masks, exact int64 keys/ties/edge identities, explicit capacities, single-device Add/Attention inference and independent complete-observable oracle | planned |
+| D4 | Device-controlled continuation of tasks within a window; graph/capture or compiled backend, no per-event host scalar/index decisions; verify actual replay path and explicit unsupported combinations | planned |
+| D5 | Multi-device execution with locality and device completion dependencies; complete training with isolated VJPs, None/zero, master/optimizer updates and three-step oracle | planned |
+| D6 | Full-size accepted-path FP32/FP16 comparison, immutable qualification, source/build/profile/record audit and final support/performance report | planned |
+
+Start with the installed Torch/TorchNPU2.10/CANN9.0 stack; capabilities must be
+probed before relying on graph capture, conditional streams or custom kernels.
+A device tensor sort followed by host dispatch does not pass D4. Forward-only
+capture does not qualify a device-resident backward/optimizer. Preserve the
+independent eager reference and reject unsupported requests explicitly.
+
+Bounds: historical D2048/B512/V50304, 12-token inference (4 warmup/8 measured),
+complete 12-token AdamW windows (1 warmup/1 measured update per process).
+Initial CPU node budgets:56 for Add,160 for Attention, ATen/BLAS1; report this
+intentional difference from the NPU16-host-worker configuration. No overlapping
+heavy project jobs during formal timing. Three repetitions establish descriptive
+spread; shared external load prevents a hardware-limit or convergence claim.
+Use small independent analytic/trace/VJP gates before full-size backend runs.
+Profile one declared token or training phase at a time, with finite wall/RSS/disk
+bounds, and keep these timings out of uninstrumented throughput tables.
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

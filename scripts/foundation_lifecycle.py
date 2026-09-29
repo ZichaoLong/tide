@@ -41,6 +41,18 @@ def group_pids(group):
     return result
 
 
+def storage_bytes(directory):
+    total = 0
+    for parent, _, files in os.walk(directory, followlinks=False):
+        for name in files:
+            path = Path(parent)/name
+            try:
+                if not path.is_symlink(): total += path.stat().st_size
+            except FileNotFoundError:
+                pass  # An active profiler can rotate files.
+    return total
+
+
 def terminate_group(child):
     """Reap adopted grandchildren as well as the direct child, including zombies."""
     for sig, grace in ((signal.SIGTERM, 10), (signal.SIGKILL, 20)):
@@ -66,7 +78,10 @@ def terminate_group(child):
     raise RuntimeError(f'process group {child.pid} still exists after SIGKILL/reap')
 
 
-def run_child(command, *, cwd, env, log, affinity, timeout, memory_budget, audit):
+def run_child(command, *, cwd, env, log, affinity, timeout, memory_budget, audit,
+              storage_path=None, storage_budget=None):
+    if storage_path is not None and (storage_budget is None or storage_budget <= 0):
+        raise ValueError('positive storage budget required')
     taskset = shutil.which('taskset')
     if taskset is None:
         raise RuntimeError('Linux taskset is required for bounded CPU affinity')
@@ -78,16 +93,28 @@ def run_child(command, *, cwd, env, log, affinity, timeout, memory_budget, audit
                              start_new_session=True)
     start = time.monotonic()
     audit.update(pid=child.pid, launch_argv=argv, peak_combined_rss_bytes=0, samples=[])
+    last_storage_check = -5.
     try:
         while True:
             pid, status, used = os.wait4(child.pid, os.WNOHANG)
             if pid:
                 child.returncode = os.waitstatus_to_exitcode(status)
                 audit['process_peak_rss_bytes'] = used.ru_maxrss*1024
+                if storage_path is not None:
+                    stored = storage_bytes(storage_path)
+                    audit['peak_observed_storage_bytes'] = max(audit.get('peak_observed_storage_bytes', 0), stored)
+                    if stored > storage_budget:
+                        raise OSError('profile output exceeded storage budget')
                 break
             current = sum(rss(pid) for pid in descendants(os.getpid()))+rss(os.getpid())
             audit['peak_combined_rss_bytes'] = max(audit['peak_combined_rss_bytes'], current)
             elapsed = time.monotonic()-start
+            if storage_path is not None and elapsed-last_storage_check >= 1:
+                last_storage_check = elapsed
+                stored = storage_bytes(storage_path)
+                audit['peak_observed_storage_bytes'] = max(audit.get('peak_observed_storage_bytes', 0), stored)
+                if stored > storage_budget:
+                    raise OSError('profile output exceeded storage budget')
             if not audit['samples'] or elapsed-audit['samples'][-1]['elapsed_seconds'] >= 1:
                 audit['samples'].append(dict(elapsed_seconds=elapsed, combined_rss_bytes=current))
             if current > memory_budget:

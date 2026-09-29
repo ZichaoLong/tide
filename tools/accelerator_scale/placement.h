@@ -1,6 +1,7 @@
 #pragma once
 #include "../../cpp/scale/scale.h"
 #include "scoring.h"
+#include "profiling.h"
 #include <tide/kernel.h>
 #include <tide/full.h>
 #include <atomic>
@@ -59,6 +60,7 @@ struct Placement {
   int64_t node_load_limit = 0;
   bool resident = false;
   Scoring scoring;
+  ProfileConfig profile;
   std::string ranking_device = "cpu", event_device = "cpu";
 };
 struct Partition { std::vector<Index> shards; int64_t limit; };
