@@ -2,12 +2,15 @@
 import csv
 import importlib.util
 from pathlib import Path
+import sys
 
 import pytest
 
 
+SCRIPTS = Path(__file__).resolve().parents[1]/"scripts"
+sys.path.insert(0, str(SCRIPTS))
 spec = importlib.util.spec_from_file_location(
-    "ascend_profile_summary", Path(__file__).parents[1]/"scripts/summarize_ascend_profile.py")
+    "ascend_profile_summary", SCRIPTS/"summarize_ascend_profile.py")
 profile = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(profile)
 
