@@ -60,10 +60,12 @@ void check_training(const pdg_scale::Config& c,const pdg_scale::Topology& topolo
     close(b.loss,a.loss,"loss",c);expected.owners->backward(a.loss);actual.owners->backward(b.loss);synchronize(actual.placement);
     for(size_t i=0;i<actual.fixture.owners.size();++i)
       close(actual.fixture.owners[i].grad().defined()?actual.fixture.owners[i].grad().to(at::kFloat)/training.loss_scale:Tensor(),
-            expected.fixture.owners[i].grad().defined()?expected.fixture.owners[i].grad()/training.loss_scale:Tensor(),"gradient owner "+std::to_string(i),c);
+            expected.fixture.owners[i].grad().defined()?expected.fixture.owners[i].grad().to(at::kFloat)/training.loss_scale:Tensor(),"gradient owner "+std::to_string(i),c);
     expected.owners->step();actual.owners->step();synchronize(actual.placement);
-    for(size_t i=0;i<actual.fixture.owners.size();++i)
+    for(size_t i=0;i<actual.fixture.owners.size();++i) {
       close(actual.fixture.owners[i],expected.fixture.owners[i],"updated owner "+std::to_string(i),c);
+      close(actual.owners->masters()[i],expected.owners->masters()[i],"updated master "+std::to_string(i),c);
+    }
     const auto& x=expected.owners->optimizer().state();const auto& y=actual.owners->optimizer().state();
     if(x.size()!=y.size())throw std::runtime_error("training optimizer state inventory");
     for(const auto& [name,u]:x) {
