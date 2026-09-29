@@ -14,7 +14,9 @@ void close(const Tensor& a,const Tensor& b,double rtol,double atol,const std::st
   if(!a.defined())return;
   auto x=a.detach().to(at::kCPU).to(at::kFloat),y=b.detach().to(at::kCPU).to(at::kFloat);
   if(x.sizes()!=y.sizes() || !at::isfinite(x).all().item<bool>() || !at::allclose(x,y,rtol,atol))
-    throw std::runtime_error("bounded value mismatch: "+name+" max_error="+std::to_string((x-y).abs().max().item<double>()));
+    throw std::runtime_error("bounded value mismatch: "+name+" max_error="+std::to_string((x-y).abs().max().item<double>())
+      +" reference_max="+std::to_string(y.abs().max().item<double>())
+      +" normalized_violation="+std::to_string(((x-y).abs()/(atol+rtol*y.abs())).max().item<double>()));
 }
 pdg_scale::Fixture fixture(pdg_scale::Config c,const pdg_scale::Topology& t,bool candidate) {
   portable_torch::seed_runtime(at::Device(at::kCPU),c.runtime.seed);
@@ -91,18 +93,28 @@ void check_forward(pdg_scale::Config c,const pdg_scale::Topology& topology,at::D
       roots.push_back({{tensor,dep[b].unsqueeze(0)},value});
     }
     for(Index i=0;i<c.steps;++i)roots.push_back({root(window.logits[i].data,window.logits[i].dependencies),expected.logits[i]});
-    for(size_t i=0;i<roots.size();++i)for(bool zero:{false,true}) {
+    for(size_t i=0;i<roots.size();++i)for(Index direction=0;direction<3;++direction) {
       const auto& [a,b]=roots[i];
       if(!b.requires_grad()) {
         if(a.dependencies.any().item<bool>())throw std::runtime_error("bounded disconnected public root became connected");
         continue;
       }
-      auto ag=p.vjp(a,a.data*(zero?0.:1.4),true,input);
-      auto bg=torch::autograd::grad({b.square().sum()*(zero?0.:.7)},expected.leaves,{},true,false,true);
+      // Two output-independent directions and a connected-zero probe. Share
+      // exact binary fractions across devices/dtypes. A radial norm-squared
+      // loss has cancellation-sensitive upstream arithmetic, so it is not an
+      // isolated Jacobian comparison (complete losses are checked separately).
+      auto index=at::arange(b.numel(),at::TensorOptions().dtype(at::kLong)).reshape(b.sizes());
+      auto cotangent=((index*(direction+1)+Index(i)).remainder(7+4*direction)-(3+2*direction)).to(at::kFloat)/8.;
+      if(direction==2)cotangent=at::zeros_like(cotangent);
+      cotangent=cotangent.to(b.scalar_type());
+      auto ag=p.vjp(a,cotangent.to(a.data.options()),true,input);
+      auto bg=torch::autograd::grad({b},expected.leaves,{cotangent.to(b.options())},true,false,true);
       ag=export_gradients(a,std::move(ag));
-      for(size_t j=0;j<ag.size();++j)close(ag[j],bg[j],rtol,atol,"root "+std::to_string(i)+" leaf "+std::to_string(j));
+      for(size_t j=0;j<ag.size();++j)close(ag[j],bg[j],rtol,atol,"root "+std::to_string(i)
+        +" direction "+std::to_string(direction)+" leaf "+std::to_string(j));
     }
-    std::cout<<"PASS bounded independent isolated VJPs and None/zero roots="<<roots.size()<<" explicit_peer="<<bool(peer)<<'\n'<<std::flush;
+    std::cout<<"PASS bounded independent isolated VJPs and None/zero roots="<<roots.size()
+      <<" directions=2+zero explicit_peer="<<bool(peer)<<'\n'<<std::flush;
   }
 }
 }  // namespace accelerator_scale::bounded

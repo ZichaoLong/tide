@@ -80,7 +80,13 @@ A passing communication primitive is not complete scheduler/training acceptance.
 ## Entry points and evidence boundary
 
 `tide-bounded-schedule-check` compares full observations and isolated VJPs with
-an independent scalar CPU schedule. It also checks three complete SGD/AdamW
+an independent scalar CPU schedule. Isolated VJPs use two deterministic external
+cotangents, independent of the observed output, plus a connected-zero probe.
+Both sides receive the same exact binary fractions. This keeps the Jacobian
+comparison separate from rounding in upstream-loss expressions and from the
+cancellation-sensitive radial direction of a normalized output. Complete training
+losses and their gradients are checked separately.
+It also checks three complete SGD/AdamW
 updates, master/slot values and owner counters. One captured update is replayed three
 times with persistent owners; trials reset owners and change inputs. Optimizer
 guards separately check absent owners, connected zero, missing/nonfinite

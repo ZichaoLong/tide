@@ -56,9 +56,10 @@ def main():
         edges.append((0, 3))  # physical parallel-edge identity
         topology.write_text('TIDE_PDG_SCALE_1\n4 2 2 1 1 2 '+str(len(edges))+'\n'
                             +''.join(f'{s} {t}\n' for s, t in edges))
-    record = dict(schema='tide-bounded-scheduler-gates-v1', state='running', source=source, dirty=dirty,
+    record = dict(schema='tide-bounded-scheduler-gates-v2', state='running', source=source, dirty=dirty,
                   client_source_sha256=identity, binary_sha256=binary_hash, topology_sha256=digest(topology),
                   device=a.device, dtype=a.dtype, devices=a.devices, width=a.width, batch=a.batch, steps=a.steps,
+                  isolated_vjp_policy='two shared output-independent binary-fraction cotangents plus connected zero',
                   check_atol=a.check_atol if a.check_atol is not None else 1e-3 if a.dtype == 'float16' else 1e-6,
                   check_rtol=a.check_rtol if a.check_rtol is not None else 2e-2 if a.dtype == 'float16' else 1e-5,
                   started=utc_now(), cases=[])
