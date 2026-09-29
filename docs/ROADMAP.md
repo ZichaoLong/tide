@@ -86,6 +86,17 @@ controls, dispatch, executor guards and transfers contribute to the declared
 synchronized timing; explicit byte counters do not measure all transport.
 See [the consumer contract](accelerator-scale.md).
 
+## Authorized extension: public/consumer FP16 and profiling interpretation
+
+Authorized 2026-09-29. Existing FP32 acceptance remains immutable.
+
+| Unit | Delivery and acceptance | Status |
+| --- | --- | --- |
+| H1 | Public Python/native and consumer FP16 payload; separate consumer Read/control precision; FP32 master optimizer/checkpoints and static loss scale; unchanged integer semantics | implemented; directed CPU/NPU tests passed |
+| H2 | Independent same-dtype CPU oracle; complete observables, routes, isolated VJPs, None/zero and three optimizer updates; clean CPU/public NPU/consumer gates | implemented; immutable qualification pending |
+| H3 | Bounded same-placement FP32/FP16 full-size inference and warmed training for Add/Attention; preserve failures and variance | planned |
+| H4 | Existing CANN trace engine/API summary; explain host orchestration and attribution limits | analyzer implemented; evidence review pending |
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

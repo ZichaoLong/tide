@@ -12,6 +12,9 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
             Index devices, bool candidate, const std::string& policy, bool resident, const Scoring& scoring,const std::string& ranking_device="cpu",const std::string& event_device="cpu") {
   portable_torch::seed_runtime(at::Device(at::kCPU), c.runtime.seed);
   c.emission = candidate ? "row" : "slot";
+  if(!candidate && c.runtime.dtype==at::kHalf && c.reference_float32) {
+    c.runtime.dtype=at::kFloat;c.quantized_fp16_reference=true;
+  }
   auto f = pdg_scale::fixture(c,topology);
   configure_scoring(f,scoring);
   if (!candidate && at::GradMode::is_enabled()) {
@@ -58,23 +61,36 @@ Run execute(pdg_scale::Config c, const pdg_scale::Topology& topology, at::Device
   }
   run.result.continuation = cursor.snapshot();
   if (candidate && resident) {
+    auto payload=[&](const Tensor& value) {
+      if(value.defined() && value.scalar_type()!=c.runtime.dtype)
+        throw std::runtime_error("resident payload changed configured dtype");
+    };
+    for(const auto& owner:f.owners)payload(owner);
+    for(const auto& value:logits)payload(value);
+    for(const auto& output:run.result.outputs)payload(output.value);
+    for(const auto& a:run.result.messages)payload(a.value);
     for (const auto& e : run.result.trace) {
+      for(const auto& value:{e.content,e.proposal,e.comparison,e.next,e.full})payload(value);
+      if(e.control.scalar_type()!=at::kFloat)throw std::runtime_error("consumer control changed FP32 policy");
       const auto node_device = placement.devices.at(placement.node_device.at(e.node));
       const auto expected_read = scoring.read_device == "cpu" ? at::Device(at::kCPU) : node_device;
       if (e.descriptor.device() != expected_read) throw std::runtime_error("Read left its configured device");
-      const auto dtype = f.graph.nodes[e.node].readout == "linear-v1" ? at::kFloat : scoring.dtype;
+      const auto dtype = f.graph.nodes[e.node].readout == "linear-v1" ? c.runtime.dtype : scoring.dtype;
       if (e.descriptor.scalar_type() != dtype) throw std::runtime_error("Read changed configured precision");
       if (e.control.device() != node_device) throw std::runtime_error("control did not reach node device");
     }
     for (const auto& [owner,s] : run.result.continuation.states) {
       const auto expected = placement.devices.at(placement.node_device.at(owner.second));
+      payload(s.value);for(const auto& [name,t]:s.slots)payload(t);
       if (s.value.device()!=expected) throw std::runtime_error("state is not resident on its shard");
       for (const auto& [name,t] : s.slots)
         if(t.device()!=expected) throw std::runtime_error("cache is not resident on its shard");
     }
-    for(const auto& a : run.result.continuation.pending)
+    for(const auto& a : run.result.continuation.pending) {
+      payload(a.value);
       if(a.value.device()!=placement.devices.at(placement.node_device.at(f.graph.edges.at(a.source).source)))
         throw std::runtime_error("pending message left its source device");
+    }
   }
   for (const auto& event : run.result.trace) if (event.batch == 0 && event.active && !event.emitted.empty()) {
     run.roots.push_back(event.full); run.roots.push_back(event.emitted.front().value);
@@ -110,21 +126,22 @@ void check(const pdg_scale::Config& c,const pdg_scale::Topology& topology,at::De
   }
   std::cout << "CHECK scoring read=" << scoring.read_device << '/' << scoring.dtype_name()
             << " controls=" << scoring.control_device << " reference=cpu/" << reference.dtype_name()
+            << " payload=" << portable_torch::dtype_name(c.runtime.dtype) << " atol=" << c.check_atol << " rtol=" << c.check_rtol
             << " score_max_abs=" << score_max_abs << " route_mismatches=" << route_mismatches << '\n' << std::flush;
-  tide_bench::compare(comparable,expected.result,true,at::kFloat);
+  tide_bench::compare(comparable,expected.result,true,c.runtime.dtype,std::nullopt,c.check_rtol,c.check_atol);
   if (actual.leaves.size()!=expected.leaves.size() || actual.roots.size()!=expected.roots.size())
     throw std::runtime_error("placement changed root/owner count");
   std::set<const c10::TensorImpl*> leaves;
   for (const auto& leaf : actual.leaves) leaves.insert(leaf.unsafeGetTensorImpl());
   if (leaves.size()!=actual.leaves.size()) throw std::runtime_error("placement duplicated parameter owners");
   for (size_t root=0;root<expected.roots.size();++root) {
-    if (!at::allclose(actual.roots[root].to(at::kCPU).to(expected.roots[root].scalar_type()),expected.roots[root],1e-5,1e-6))
+    if (!at::allclose(actual.roots[root].to(at::kCPU).to(expected.roots[root].scalar_type()),expected.roots[root],c.check_rtol,c.check_atol))
       throw std::runtime_error("placement changed public root value");
     if (actual.roots[root].requires_grad()!=expected.roots[root].requires_grad())
       throw std::runtime_error("placement changed public root connectivity");
     if (!expected.roots[root].requires_grad()) continue;
     for (bool zero : {false,true})
-      check_vjp(expected.roots[root],actual.roots[root],expected.leaves,actual.leaves,root,zero,conditioned);
+      check_vjp(expected.roots[root],actual.roots[root],expected.leaves,actual.leaves,root,zero,conditioned,c.check_rtol,c.check_atol,c.runtime.dtype==at::kHalf);
   }
   }
   std::cout << "CHECK complete CPU scalar-slot vs placed packed-row values/routes/state/history/pending, logits, isolated VJPs and None/zero: passed\n" << std::flush;

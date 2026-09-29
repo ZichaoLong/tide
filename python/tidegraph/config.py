@@ -59,8 +59,8 @@ class GraphConfig:
         object.__setattr__(self, "ranks", tuple(self.ranks))
         if self.family not in {"pdg", "timed-dag", "settle"} or not isinstance(self.graph, Graph):
             raise ValueError("family must be pdg, timed-dag or settle with a Graph")
-        if type(self.width) is not int or self.width < 1 or self.dtype not in {"float32", "float64"}:
-            raise ValueError("positive width and float32/float64 required")
+        if type(self.width) is not int or self.width < 1 or self.dtype not in {"float16", "float32", "float64"}:
+            raise ValueError("positive width and float16/float32/float64 required")
         if type(self.seed) is not int or not 0 <= self.seed < 2**63:
             raise ValueError("seed must be a nonnegative int64")
         if self.projection_layout not in {"input", "linear"} or not isinstance(self.execution, ExecutionOptions):

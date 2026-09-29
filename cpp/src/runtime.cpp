@@ -52,7 +52,7 @@ torch::Device resolve_device(const RuntimeOptions& options) {
 #endif
 #if TIDE_NPU_STANDALONE
     if (c10_npu::device_count()) {
-      if (options.dtype != torch::kFloat32) throw std::invalid_argument("NPU requires float32");
+      if (options.dtype != torch::kFloat32 && !(options.allow_npu_float16 && options.dtype == torch::kFloat16)) throw std::invalid_argument("NPU requires float32");
       return initialize_npu(0);
     }
 #endif
@@ -72,7 +72,7 @@ torch::Device resolve_device(const RuntimeOptions& options) {
   if (request == "npu" || request.rfind("npu:", 0) == 0) {
     const int index = index_of(request, "npu");
 #if TIDE_NPU_STANDALONE
-    if (options.dtype != torch::kFloat32) throw std::invalid_argument("NPU requires float32");
+    if (options.dtype != torch::kFloat32 && !(options.allow_npu_float16 && options.dtype == torch::kFloat16)) throw std::invalid_argument("NPU requires float32");
     return initialize_npu(index);
 #else
     (void)index;

@@ -15,7 +15,7 @@ def main():
     qualify.add_argument("--output-dir", required=True)
     qualify.add_argument("--native-library")
     qualify.add_argument("--width", type=int)
-    qualify.add_argument("--dtype", choices=("float32", "float64"))
+    qualify.add_argument("--dtype", choices=("float16", "float32", "float64"))
     qualify.add_argument("--batch-size", type=int, default=2)
     qualify.add_argument("--positions", type=int, default=4)
     qualify.add_argument("--stop", type=int)

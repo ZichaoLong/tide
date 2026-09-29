@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 project(tide_accelerator_scale LANGUAGES CXX)
 find_package(TideGraph 0.2 CONFIG REQUIRED)
-add_executable(tide-accelerator-scale main.cpp transfer.cpp partition.cpp placement.cpp state.cpp full.cpp check.cpp check_vjp.cpp resident.cpp scoring.cpp selection.cpp event_queue.cpp training.cpp training_check.cpp
+add_executable(tide-accelerator-scale main.cpp transfer.cpp partition.cpp placement.cpp state.cpp full.cpp check.cpp check_vjp.cpp resident.cpp scoring.cpp selection.cpp event_queue.cpp training.cpp training_check.cpp precision.cpp
   ../../cpp/scale/config.cpp ../../cpp/scale/model.cpp ../../cpp/bench/compare.cpp)
 target_link_libraries(tide-accelerator-scale PRIVATE tide::runtime)
 target_compile_features(tide-accelerator-scale PRIVATE cxx_std_17)
@@ -18,3 +18,7 @@ add_executable(tide-accelerator-dispatch-test dispatch_test.cpp selection.cpp ev
 target_link_libraries(tide-accelerator-dispatch-test PRIVATE tide::runtime)
 target_compile_features(tide-accelerator-dispatch-test PRIVATE cxx_std_17)
 add_test(NAME accelerator-dispatch COMMAND tide-accelerator-dispatch-test cpu)
+add_executable(tide-accelerator-precision-test precision_test.cpp precision.cpp)
+target_link_libraries(tide-accelerator-precision-test PRIVATE tide::runtime)
+target_compile_features(tide-accelerator-precision-test PRIVATE cxx_std_17)
+add_test(NAME accelerator-precision COMMAND tide-accelerator-precision-test)

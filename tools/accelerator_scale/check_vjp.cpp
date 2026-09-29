@@ -7,16 +7,15 @@
 
 namespace accelerator_scale {
 namespace {
-constexpr double atol=1e-6,rtol=1e-5;
 Tensor cpu(const Tensor& t) {return t.detach().to(at::kCPU);}
-void structure(const Tensor& a,const Tensor& b,size_t root,size_t owner) {
+void structure(const Tensor& a,const Tensor& b,size_t root,size_t owner,bool half) {
   if(a.defined()!=b.defined())
     throw std::runtime_error("placement changed None connectivity: root="+std::to_string(root)+" owner="+std::to_string(owner));
-  if(a.defined() && (a.sizes()!=b.sizes() || a.scalar_type()!=b.scalar_type()
+  if(a.defined() && (a.sizes()!=b.sizes() || (a.scalar_type()!=b.scalar_type() && !(half && a.scalar_type()==at::kFloat && b.scalar_type()==at::kHalf))
       || !at::isfinite(a).all().item<bool>() || !at::isfinite(b).all().item<bool>()))
     throw std::runtime_error("placement changed VJP metadata or finiteness");
 }
-std::string error(const Tensor& a,const Tensor& b,size_t root,size_t owner) {
+std::string error(const Tensor& a,const Tensor& b,size_t root,size_t owner,double rtol,double atol) {
   const auto diff=(b-a).abs();
   std::ostringstream s;
   s << "placement changed VJP: root=" << root << " owner=" << owner << " shape=" << a.sizes()
@@ -28,19 +27,22 @@ struct Contraction {Tensor expected,actual,expected_scale,actual_scale;};
 }
 void check_vjp(const Tensor& expected,const Tensor& actual,
                const std::vector<Tensor>& expected_leaves,const std::vector<Tensor>& actual_leaves,
-               size_t root,bool zero,bool conditioned) {
-  auto a=torch::autograd::grad({expected.square().sum()*(zero?0.:.7)},expected_leaves,{},true,false,true);
-  auto b=torch::autograd::grad({actual.square().sum()*(zero?0.:.7)},actual_leaves,{},true,false,true);
+               size_t root,bool zero,bool conditioned,double rtol,double atol,bool half) {
+  const double scale=half?128.:1.;
+  const auto dtype=half && expected.scalar_type()==at::kHalf?at::kFloat:expected.scalar_type();
+  auto a=torch::autograd::grad({expected.to(dtype).square().sum()*(zero?0.:.7)*scale},expected_leaves,{},true,false,true);
+  auto b=torch::autograd::grad({actual.to(dtype).square().sum()*(zero?0.:.7)*scale},actual_leaves,{},true,false,true);
   std::vector<size_t> failures;
   for(size_t i=0;i<a.size();++i) {
-    structure(a[i],b[i],root,i);
+    structure(a[i],b[i],root,i,half);
     if(!a[i].defined())continue;
-    a[i]=cpu(a[i]);b[i]=cpu(b[i]);
+    a[i]=cpu(a[i]).to(half?at::kFloat:a[i].scalar_type())/scale;
+    b[i]=cpu(b[i]).to(a[i].scalar_type())/scale;
     if(!at::allclose(b[i],a[i],rtol,atol)) failures.push_back(i);
   }
   if(failures.empty())return;
-  if(!conditioned || zero || expected.numel()>64)
-    throw std::runtime_error(error(a[failures[0]],b[failures[0]],root,failures[0]));
+  if(half || !conditioned || zero || expected.numel()>64)
+    throw std::runtime_error(error(a[failures[0]],b[failures[0]],root,failures[0],rtol,atol));
 
   // Explicit diagnostic policy for a cancellation-sensitive contraction. Check
   // every column of the root's VJP (the complete Jacobian), with the ORIGINAL
@@ -58,12 +60,12 @@ void check_vjp(const Tensor& expected,const Tensor& actual,
     auto u=torch::autograd::grad({expected.reshape({-1})[j]},expected_leaves,{},true,false,true);
     auto v=torch::autograd::grad({actual.reshape({-1})[j]},actual_leaves,{},true,false,true);
     for(size_t i=0;i<u.size();++i) {
-      structure(u[i],v[i],root,i);
+      structure(u[i],v[i],root,i,half);
       if(u[i].defined()!=a[i].defined())throw std::runtime_error("basis/quadratic owner connectivity differs");
       if(!u[i].defined())continue;
       auto left=cpu(u[i]),right=cpu(v[i]);
       if(!at::allclose(right,left,rtol,atol))
-        throw std::runtime_error("basis="+std::to_string(j)+" "+error(left,right,root,i));
+        throw std::runtime_error("basis="+std::to_string(j)+" "+error(left,right,root,i,rtol,atol));
       max_basis_ratio=std::max(max_basis_ratio,((right-left).abs()/(atol+rtol*left.abs())).max().item<double>());
       auto e=left.to(at::kDouble)*x[j],c=right.to(at::kDouble)*y[j];
       auto& sum=sums[i];
@@ -82,7 +84,7 @@ void check_vjp(const Tensor& expected,const Tensor& actual,
       throw std::runtime_error("quadratic VJP disagrees with complete basis contraction: owner="+std::to_string(i));
     max_contraction_ratio=std::max(max_contraction_ratio,ratio);
   }
-  for(auto i:failures)std::cout << "NUMERICAL strict_quadratic_failed " << error(a[i],b[i],root,i) << '\n';
+  for(auto i:failures)std::cout << "NUMERICAL strict_quadratic_failed " << error(a[i],b[i],root,i,rtol,atol) << '\n';
   std::cout << "NUMERICAL policy=basis-conditioned root=" << root << " coordinates=" << expected.numel()
             << " max_basis_tolerance_ratio=" << max_basis_ratio
             << " max_contraction_tolerance_ratio=" << max_contraction_ratio << " passed\n" << std::flush;

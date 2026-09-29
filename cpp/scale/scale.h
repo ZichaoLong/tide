@@ -18,6 +18,9 @@ struct Config {
   bool parallel_regions = false, compact_events = false, work_count = false, operator_profile = false;
   bool defer_state_release = false;
   bool packed_sources = false, batch_next = false;
+  // Oracle uses exactly the candidate's initial FP16 values, computing in FP32.
+  bool quantized_fp16_reference = false, reference_float32 = false;
+  double check_atol = 1e-6, check_rtol = 1e-5;
   std::string topology, run_id, emission = "row", attention_packing = "exact", memory = "attention", full_autograd = "replay", aggregate_autograd = "replay";
   std::string fiber_pooling = "event", fiber_cache = "cloned", projection_layout = "input", attention_layout = "event";
 };

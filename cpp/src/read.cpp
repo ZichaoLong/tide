@@ -77,7 +77,8 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
   if (values.size() != ids.size()) throw std::invalid_argument("Read batch changed event count");
   for (size_t j = 0; j < ids.size(); ++j) {
     auto dtype = w.read_kernel->descriptor_dtype(requests[j].content.value.scalar_type());
-    if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble)
+    if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble
+        && !(requests[j].content.value.scalar_type()==at::kHalf && dtype==at::kFloat))
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[j], requests[j], dtype);
     if (packed && at::GradMode::is_enabled()) {

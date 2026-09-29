@@ -13,6 +13,18 @@ bool supported_payload(const Tensor& value) {
 #endif
   return false;
 }
+bool supported_kernel_payload(const Tensor& value) {
+  if (supported_payload(value)) return true;
+  if (!value.defined() || value.layout()!=at::kStrided || value.scalar_type()!=at::kHalf) return false;
+  if (value.device().is_cpu()) return true;
+#if PORTABLE_TORCH_ENABLE_CUDA
+  if (value.device().is_cuda()) return true;
+#endif
+#if PORTABLE_TORCH_ENABLE_NPU
+  if (value.device().type()==c10::DeviceType::PrivateUse1) return true;
+#endif
+  return false;
+}
 const char* execution_backend() noexcept {
 #if PORTABLE_TORCH_ENABLE_CUDA
   return "cuda";

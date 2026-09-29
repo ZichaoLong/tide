@@ -12,6 +12,9 @@ from source_identity import digest
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build-dir', type=Path, required=True)
+    p.add_argument('--check-atol', type=float)
+    p.add_argument('--check-rtol', type=float)
+    p.add_argument('--dtype', choices=('float32', 'float16'), default='float32')
     p.add_argument('--device', choices=('cpu', 'npu'), required=True)
     p.add_argument('--devices', type=int, default=1)
     p.add_argument('--npu-task-queue', type=int, choices=(0, 1, 2), default=0)
@@ -33,24 +36,26 @@ def main():
     topology = out/'topology.txt'
     topology.write_text('TIDE_PDG_SCALE_1\n4 2 2 1 1 2 '+str(len(edges))+'\n'
                         +''.join(f'{src} {dst}\n' for src, dst in edges))
-    base = [str(binary), '--device', a.device, '--devices', str(a.devices), '--dtype', 'float32',
+    base = [str(binary), '--device', a.device, '--devices', str(a.devices), '--dtype', a.dtype,
             '--topology', str(topology), '--width', '8', '--batch', '2', '--vocab', '17',
             '--steps', '3', '--warmup', '1', '--workers', '3', '--check', '1', '--vjp-policy', a.vjp_policy,
             '--full-autograd', 'batched', '--aggregate-autograd', 'batched',
             '--packed-sources', '1', '--batch-next', '1']
     for key in ('read_device', 'read_dtype', 'control_device', 'reference_read_dtype', 'ranking_device', 'event_device'):
         base += ['--'+key.replace('_', '-'), getattr(a, key)]
+    for key in ('check_atol', 'check_rtol'):
+        if getattr(a,key) is not None: base += ['--'+key.replace('_','-'),str(getattr(a,key))]
     results = []; mappings = {}; env = dict(os.environ)
     if a.device == 'npu': env['TASK_QUEUE_ENABLE'] = str(a.npu_task_queue)
     record = dict(schema='tide-accelerator-scale-gates-v1', binary_sha256=digest(binary),
-                  device=a.device, devices=a.devices, npu_task_queue=a.npu_task_queue,
+                  device=a.device, devices=a.devices, dtype=a.dtype, check_atol=a.check_atol, check_rtol=a.check_rtol, npu_task_queue=a.npu_task_queue,
                   vjp_policy=a.vjp_policy, read_device=a.read_device, read_dtype=a.read_dtype,
                   control_device=a.control_device, reference_read_dtype=a.reference_read_dtype,
                   ranking_device=a.ranking_device,event_device=a.event_device,
                   state='running', cases=results)
     write_json(out/'gates.json', record)
     try:
-        transports = ('resident',) if 'model' in (a.read_device, a.control_device,a.ranking_device,a.event_device) else ('resident', 'host')
+        transports = ('resident',) if a.dtype == 'float16' or 'model' in (a.read_device, a.control_device,a.ranking_device,a.event_device) else ('resident', 'host')
         for transport in transports:
             for memory in ('add', 'attention'):
                 for policy in ('memory', 'locality'):

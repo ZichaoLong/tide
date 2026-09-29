@@ -7,10 +7,10 @@ namespace tide {
 Tensor DenseLinear::run(const Tensor& input, const Tensor& weight, const Tensor& bias) {
   std::lock_guard<std::mutex> lock(mutex_);
   if (input.dim() != 2 || weight.dim() != 2 || input.size(1) != weight.size(1)
-      || !supported_payload(input) || weight.device() != input.device()
-      || (input.scalar_type() != at::kFloat && input.scalar_type() != at::kDouble)
+      || !supported_kernel_payload(input) || weight.device() != input.device()
+      || (input.scalar_type() != at::kFloat && input.scalar_type() != at::kDouble && input.scalar_type() != at::kHalf)
       || weight.scalar_type() != input.scalar_type())
-    throw std::invalid_argument("dense projection requires compatible supported FP32/FP64 matrices");
+    throw std::invalid_argument("dense projection requires compatible supported FP16/FP32/FP64 matrices");
   if (bias.defined() && (bias.dim() != 1 || bias.size(0) != weight.size(0)
       || bias.device() != input.device() || bias.scalar_type() != input.scalar_type()))
     throw std::invalid_argument("dense projection bias metadata mismatch");

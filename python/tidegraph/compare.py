@@ -7,7 +7,7 @@ def equivalent(a, b, path="root", *, atol=None, rtol=None, check_device=True):
     if isinstance(a, torch.Tensor):
         if not isinstance(b, torch.Tensor):
             raise AssertionError(f"{path}: missing tensor")
-        tol = (1e-10, 1e-8) if a.dtype == torch.float64 else (1e-6, 1e-5)
+        tol = (1e-10, 1e-8) if a.dtype == torch.float64 else (1e-3, 2e-2) if a.dtype == torch.float16 else (1e-6, 1e-5)
         torch.testing.assert_close(a, b, atol=tol[0] if atol is None else atol,
                                    rtol=tol[1] if rtol is None else rtol, check_device=check_device,
                                    msg=lambda msg: f"{path}: {msg}")
@@ -32,16 +32,18 @@ def equivalent(a, b, path="root", *, atol=None, rtol=None, check_device=True):
 
 
 def objective(result, root="all"):
+    def square(value):
+        return (value.float() if value.dtype == torch.float16 else value).square().sum()
     terms = []
     if root in {"all", "output"}:
-        terms += [x.square().sum() * 0.7 for _, _, _, x in result.outputs]
+        terms += [square(x) * 0.7 for _, _, _, x in result.outputs]
     if root in {"all", "state"}:
-        terms += [s.value.square().sum() * 0.3 for s in result.continuation.states.values()]
-        terms += [v.square().sum() * 0.11 for s in result.continuation.states.values() for v in s.slots.values()]
+        terms += [square(s.value) * 0.3 for s in result.continuation.states.values()]
+        terms += [square(v) * 0.11 for s in result.continuation.states.values() for v in s.slots.values()]
     if root in {"all", "history"}:
-        terms += [v.square().sum() * 0.13 for h in result.continuation.history.values() for v in h.tensors.values()]
+        terms += [square(v) * 0.13 for h in result.continuation.history.values() for v in h.tensors.values()]
     if root in {"all", "pending"}:
-        terms += [m.value.square().sum() * 0.2 for m in result.continuation.pending]
+        terms += [square(m.value) * 0.2 for m in result.continuation.pending]
     if not terms:
         raise ValueError("objective has no tensor roots")
     return sum(terms)

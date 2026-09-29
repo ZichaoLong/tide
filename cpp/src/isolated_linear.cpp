@@ -49,9 +49,9 @@ class IsolatedLinear final : public torch::autograd::Function<IsolatedLinear> {
 }  // namespace
 std::vector<Tensor> isolated_linear(const std::vector<Tensor>& rows, const Tensor& weight) {
   if (rows.empty()) return {};
-  if (!weight.defined() || weight.dim() != 2 || !supported_payload(weight)
-      || (weight.scalar_type() != at::kFloat && weight.scalar_type() != at::kDouble))
-    throw std::invalid_argument("isolated linear requires supported FP32/FP64 weight matrix");
+  if (!weight.defined() || weight.dim() != 2 || !supported_kernel_payload(weight)
+      || (weight.scalar_type() != at::kFloat && weight.scalar_type() != at::kDouble && weight.scalar_type() != at::kHalf))
+    throw std::invalid_argument("isolated linear requires supported FP16/FP32/FP64 weight matrix");
   for (const auto& row : rows)
     if (!row.defined() || row.dim() != 1 || row.size(0) != weight.size(1)
         || row.device() != weight.device() || row.scalar_type() != weight.scalar_type())

@@ -25,6 +25,6 @@ struct Measurement {
 };
 Measurement execute(tide::Streaming&, const Config&, const std::vector<tide::External>&);
 void compare(const tide::Result&, const tide::Result&, bool traces, at::ScalarType payload_dtype = at::kDouble,
-             std::optional<at::Device> candidate_device = std::nullopt);
+             std::optional<at::Device> candidate_device = std::nullopt, double rtol = -1., double atol = -1.);
 void check_work(const Measurement&, const Config&);
 }  // namespace tide_bench

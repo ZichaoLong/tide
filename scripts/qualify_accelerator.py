@@ -15,7 +15,7 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--implementation", choices=("python", "native"), required=True)
     parser.add_argument("--native-library")
-    parser.add_argument("--dtype", choices=("float32", "float64"), default="float32")
+    parser.add_argument("--dtype", choices=("float16", "float32", "float64"), default="float32")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--case", action="append", help="development subset; default runs every named case")
     parser.add_argument("--atol", type=float)

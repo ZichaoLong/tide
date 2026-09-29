@@ -5,6 +5,14 @@ from .qualification_checks import plain, vjp, probe_loss, assert_placement
 
 def optimizer(runtime, kind):
     parameters = runtime.model.parameters()
+    if runtime.config.dtype == "float16":
+        from .precision import FP32MasterOptimizer
+        if kind == "adamw":
+            return FP32MasterOptimizer(parameters, optimizer="adamw", lr=.0002, weight_decay=.01,
+                                       eps=1e-5, betas=(.9,.99), amsgrad=True)
+        if kind in {"sgd", "momentum"}:
+            return FP32MasterOptimizer(parameters, optimizer="sgd", lr=.0002, weight_decay=.01,
+                                       momentum=.8 if kind=="momentum" else 0.)
     if kind == "adamw":
         return torch.optim.AdamW(parameters, lr=.0002, weight_decay=.01, eps=1e-5, betas=(.9,.99), amsgrad=True)
     if kind in {"sgd", "momentum"}:
@@ -27,7 +35,8 @@ def trajectory(runtime, probe, steps, kind, *, checkpoint=None, resume=None):
         loss = probe_loss(result)
         leaves = {k:v for k,v in runtime.model.named_parameters() if v.requires_grad} | inputs.leaves()
         gradient = plain(vjp(loss, leaves))
-        loss.backward()
+        if runtime.config.dtype == "float16": opt.backward(loss)
+        else: loss.backward()
         # Parameter updates never invalidate live sequence autograd graphs.
         session.detach()
         opt.step()

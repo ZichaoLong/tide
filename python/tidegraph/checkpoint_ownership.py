@@ -46,6 +46,9 @@ def _finite(value):
 
 def validate_optimizer_state(optimizer, state):
     """Validate identity and built-in state layouts before loading live objects."""
+    from .precision import FP32MasterOptimizer
+    if isinstance(optimizer, FP32MasterOptimizer):
+        optimizer.validate_state_dict(state)
     groups = state.get("param_groups")
     slots = state.get("state")
     if not isinstance(groups, list) or len(groups) != len(optimizer.param_groups) or not isinstance(slots, dict):
@@ -101,11 +104,14 @@ def optimizer_record(model, optimizer):
             return [cpu(item) for item in value]
         return value
     state = cpu(optimizer.state_dict())
+    from .precision import FP32MasterOptimizer
+    if isinstance(optimizer, FP32MasterOptimizer):
+        optimizer.validate_checkpoint_weights(model, model.state_dict(), state)
     validate_optimizer_state(optimizer, state)
     return layout, state
 
 
-def preflight_optimizer(model, optimizer, layout, state):
+def preflight_optimizer(model, optimizer, layout, state, weights=None):
     if optimizer is None:
         return
     if state is None:
@@ -113,6 +119,9 @@ def preflight_optimizer(model, optimizer, layout, state):
     if layout != optimizer_layout(model, optimizer):
         raise ValueError("checkpoint optimizer ownership/order/class mismatch")
     validate_optimizer_state(optimizer, state)
+    from .precision import FP32MasterOptimizer
+    if isinstance(optimizer, FP32MasterOptimizer) and weights is not None:
+        optimizer.validate_checkpoint_weights(model, weights, state)
     # Standard load hooks and group conversions must succeed before live weights
     # change. Custom hooks with external side effects are outside this contract.
     copy.deepcopy(optimizer).load_state_dict(copy.deepcopy(state))

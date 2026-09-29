@@ -3,6 +3,7 @@
 #include "../../cpp/bench/metrics_jsonl_writer.h"
 #include <ATen/Parallel.h>
 #include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <set>
@@ -21,10 +22,27 @@ int run(int argc, char** argv) {
     accelerator_scale::TrainingConfig training;
     std::string ranking_device="cpu", event_device="cpu";
     bool reference_fp64 = false;
+    double check_atol=-1., check_rtol=-1.;
+    bool reference_float32=false;
     std::set<std::string> scoring_flags;
     std::vector<char*> common{argv[0]};
     for (int i = 1; i < argc; ++i) {
       const std::string flag = argv[i];
+      if(flag=="--reference-payload-dtype") {
+        if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
+        const std::string value=argv[i];
+        if(value!="matched" && value!="float32")throw std::invalid_argument("reference payload requires matched or float32");
+        reference_float32=value=="float32";continue;
+      }
+      if(flag=="--check-atol" || flag=="--check-rtol" || flag=="--loss-scale") {
+        if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
+        size_t used=0;const std::string value=argv[i];const auto number=std::stod(value,&used);
+        if(used!=value.size() || !std::isfinite(number) || number<=0)throw std::invalid_argument("positive finite "+flag+" required");
+        if(flag=="--check-atol")check_atol=number;
+        else if(flag=="--check-rtol")check_rtol=number;
+        else training.loss_scale=number;
+        continue;
+      }
       if(flag=="--training-steps" || flag=="--training-warmup" || flag=="--optimizer" || flag=="--learning-rate") {
         if(!scoring_flags.insert(flag).second || ++i==argc)throw std::invalid_argument("duplicate/missing "+flag);
         const std::string value=argv[i];
@@ -89,19 +107,34 @@ int run(int argc, char** argv) {
                    "--read-device cpu|model --read-dtype float64|float32 --control-device cpu|model (defaults cpu,float64,cpu).\n"
                    "model uses node/region-owner device; NPU requires FP32 Read/controls.\n"
                    "--ranking-device cpu|model --event-device cpu|model (defaults cpu,cpu).\n"
+                   "--dtype float32|float16: payload precision; FP16 requires resident transport.\n"
+                   "--reference-payload-dtype matched|float32: same-dtype oracle or cross-precision diagnostic.\n"
+                   "--check-atol X --check-rtol X: FP16 only; default 1e-3/2e-2, routes stay exact.\n"
+                   "--loss-scale X: static training scale (FP32 1, FP16 128); FP32 master/slots/loss.\n"
                    "--training-steps N --training-warmup N --optimizer sgd|adamw --learning-rate X.\n"
                    "Training: --grad 1 --warmup 0; each update uses --steps tokens from empty state.\n"
                    "--check 1 --vjp-policy strict|basis-conditioned --reference-read-dtype matched|float64.\n";
       return 0;
     }
-    if (c.runtime.dtype != at::kFloat || c.emission != "row" || !c.packed || c.fiber_pooling != "event"
+    if ((c.runtime.dtype != at::kFloat && c.runtime.dtype != at::kHalf) || c.emission != "row" || !c.packed || c.fiber_pooling != "event"
         || c.profile || c.operator_profile || c.work_count || c.head_workers != 1 || count < 1 || count > 16)
-      throw std::invalid_argument("scale placement requires FP32, packed row Emit, event pooling, head-workers1 and profiling disabled");
+      throw std::invalid_argument("scale placement requires FP32/FP16, packed row Emit, event pooling, head-workers1 and profiling disabled");
     if (c.runtime.device_spec == "auto") throw std::invalid_argument("benchmark requires an explicit backend");
     // Initialize the vendor queue policy before resolving/initializing NPU.
     // An explicitly supplied value remains available for stack qualification.
     if (c.runtime.device_spec.rfind("npu",0)==0 && !std::getenv("TASK_QUEUE_ENABLE"))
       if (setenv("TASK_QUEUE_ENABLE","0",0)) throw std::runtime_error("cannot select NPU task queue policy");
+    const bool half=c.runtime.dtype==at::kHalf;
+    c.reference_float32=reference_float32;
+    if(reference_float32 && (!half || !c.check))throw std::invalid_argument("FP32 reference requires FP16 --check 1");
+    if(half && transport!="resident")throw std::invalid_argument("FP16 requires resident transport");
+    if((check_atol>=0 || check_rtol>=0) && (!half || !c.check))
+      throw std::invalid_argument("custom tolerances require --dtype float16 --check 1");
+    c.check_atol=half?(check_atol>=0?check_atol:1e-3):1e-6;
+    c.check_rtol=half?(check_rtol>=0?check_rtol:2e-2):1e-5;
+    if(half && !scoring_flags.count("--loss-scale"))training.loss_scale=128.;
+    if(!training.steps && scoring_flags.count("--loss-scale"))throw std::invalid_argument("--loss-scale requires training");
+    c.runtime.allow_npu_float16=half; // Qualified client capability, not a public-session fallback.
     const auto device = portable_torch::resolve_device(c.runtime);
     used_npu = device.type()==c10::DeviceType::PrivateUse1;
     if (!device.is_cpu() && device.type() != c10::DeviceType::PrivateUse1)
@@ -145,7 +178,7 @@ int run(int argc, char** argv) {
     std::cout << "MODEL parameters=" << std::fixed << f.inventory.at("parameters")
               << " devices=" << count << " construction_seconds=" << construction << '\n' << std::flush;
     std::ofstream mapping(std::filesystem::path(c.runtime.output_dir)/"placement.json");
-    mapping << "{\"node_shards\":[";
+    mapping << "{\"dtype\":\"" << portable_torch::dtype_name(c.runtime.dtype) << "\",\"node_shards\":[";
     for (size_t i = 0; i < placement.node_device.size(); ++i) mapping << (i ? "," : "") << placement.node_device[i];
     mapping << "],\"device_resident_state\":" << (resident ? "true" : "false")
             << ",\"cpu_fp64_read\":" << (scoring.read_device=="cpu" && scoring.dtype==at::kDouble ? "true" : "false")
@@ -194,7 +227,7 @@ int run(int argc, char** argv) {
       for (const auto& [key,value] : f.inventory) metrics["model/"+key] = value;
       for (const auto& [key,value] : result.stats) metrics["work/"+key] = value;
       writer.Write(token,metrics,seconds(started),{{"phase",std::string(token<c.warmup ? "warmup" : "measure")},
-        {"memory",c.memory},{"grad",c.grad},{"transport",transport},
+        {"dtype",portable_torch::dtype_name(c.runtime.dtype)},{"memory",c.memory},{"grad",c.grad},{"transport",transport},
         {"partition_policy",policy},{"read_device",scoring.read_device},{"read_dtype",scoring.dtype_name()},
         {"control_device",scoring.control_device},{"event_scheduler",event_device},{"ranking_device",ranking_device}});
       std::cout << "STEP " << token << " seconds=" << elapsed << " rows=" << result.outputs.size() << '\n' << std::flush;

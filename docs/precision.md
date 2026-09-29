@@ -1,0 +1,51 @@
+# Explicit payload precision
+
+`GraphConfig.model.dtype` and the qualification CLI accept `float16`, `float32`
+and `float64`. NPU rejects FP64; BF16 remains unsupported. Public single-device
+Python and native schedules keep their own independent implementations. Support
+is finite and target-specific; implementation is not device qualification.
+
+FP16 model initialization is the FP32 seeded fixture cast to FP16. Parameters,
+inputs, state, KV slots and messages use the declared dtype; callers supply
+matching inputs. Local ATen operators keep the same formulas. Floating reductions
+follow their declared operator/backend policy; explicit FP64 Read remains FP64
+and is still rejected on NPU. The separately owned full-size consumer additionally
+exposes Read/control placement and precision, as documented in accelerator-scale.md.
+The public scheduler remains host-owned on all devices.
+
+For training, construct `FP32MasterOptimizer(runtime.model.parameters(),
+optimizer="adamw", loss_scale=128, lr=...)`, compute a scalar FP32 loss, call
+`optimizer.backward(loss)`, detach a completed session when required by the
+existing training boundary, then call `optimizer.step()`. `zero_grad()` clears
+both payload and master gradients. SGD and AdamW options are passed to PyTorch.
+The caller owns accumulation, clipping policy, learning-rate schedules and task
+loss; this helper does not create a training loop or hide dynamic loss scaling.
+Construct the optimizer after weight-only initialization; recreating it is required
+after replacing model weights outside its update/checkpoint path. Each unique
+trainable FP16 leaf has one FP32 master. None gradients remain absent;
+connected-zero gradients retain normal optimizer decay/state behavior.
+
+Static loss scaling is explicit and checkpointed. Nonfinite gradients fail before
+any weight update. Overflow while casting updated weights fails explicitly and
+requires restoring a checkpoint; no implicit retry, skip or fallback occurs.
+This policy is mixed precision with FP32 masters/slots/loss, not pure FP16 or AMP.
+Passing an ordinary optimizer over FP16 leaves retains that optimizer's own dtype
+behavior; it does not acquire FP32 masters automatically.
+
+Python Session checkpoints retain schema v5 and add an optimizer-owned
+`tide-fp32-masters-v1` payload when using this helper. They store/check master
+precision, shape, owner order, SGD/AdamW state, static scale and correspondence
+between quantized masters and model weights before mutating live owners.
+Same-stack continuation and CPU handoff need their own qualification. C++ native
+execution through Python uses this same Python checkpoint boundary. The separate
+standalone C++ owner checkpoint/NamedOptimizer interface remains FP32/FP64; the
+full-size consumer supplies its own FP32 masters and does not import checkpoints.
+
+`qualify(..., dtype="float16", atol=..., rtol=...)` runs the ordinary independent
+CPU schedule, complete observables, isolated gradients, chunking, optimizer
+trajectory, and fresh-process checkpoint checks. FP16 defaults are atol1e-3,
+rtol2e-2; they are explicit in the result. Discrete events/routes and None/zero
+connectivity are exact, regardless of tolerance. Diagnostic losses/gradient
+scaling use FP32 to avoid introducing avoidable FP16 reduction underflow into the
+test itself. A route mismatch still fails. Same-formula FP32 success supports
+the design, but cannot certify FP16 numerical stability or training convergence.

@@ -34,7 +34,7 @@ def load(path, graph, model, optimizer=None):
     validate_weights(model, actual, record["aliases"])
     q = decode(record, device=model.nodes[0].bias.device)
     validate_window(graph, model, q, [], q.cut, q.cut)
-    preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"])
+    preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"], actual)
     model.load_state_dict(actual)
     if optimizer is not None:
         optimizer.load_state_dict(record["optimizer"])

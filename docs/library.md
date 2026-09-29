@@ -220,3 +220,9 @@ performance. P02 retains all 8192 nodes but only its four-node ring is active;
 the other 8188 nodes cannot count as active-work equivalence evidence. The full
 acceptance command is `scripts/qualify_library.py`, combining the complete CPU
 regression, complex suite and installed consumer checks on frozen source.
+
+
+Explicit `dtype="float16"` and `FP32MasterOptimizer` are documented in
+[precision.md](precision.md). Their target-specific qualification is separate
+from the original FP32/FP64 acceptance. The optimizer belongs to the caller and
+supports Session checkpoint continuation with FP32 masters and slots.

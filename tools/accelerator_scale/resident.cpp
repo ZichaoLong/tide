@@ -22,7 +22,7 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
         && node.memory != "lh-fiber-attention-all-softmax-repeat-v1"))
       throw std::invalid_argument("resident benchmark supports only its declared historical local programs");
   selection_model_ = model_;
-  selection_model_.nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(at::kCPU));
+  selection_model_.nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(at::kCPU).dtype(at::kFloat));
   for (const auto& region : graph_.regions)
     if (region.selector != "lh-count-affect-v1" && region.selector != "count-v1")
       throw std::invalid_argument("resident benchmark requires count-only CPU histories");
@@ -37,7 +37,7 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
     c10::impl::VirtualGuardImpl api(d.type()); streams_.push_back(api.getStream(d));
     if (placement_.scoring.control_device == "model") {
       device_selection_models_.push_back(model_);
-      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d));
+      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d).dtype(at::kFloat));
     }
   }
   state_.identity = graph_.identity; state_.batch_size = batch;
@@ -111,7 +111,7 @@ AdvanceResult Resident::advance(const std::vector<External>& inputs, Index stop,
     if (x.batch < 0 || x.batch >= state_.batch_size || x.port < 0
         || x.port >= static_cast<Index>(graph_.inputs.size()) || x.position < 0
         || x.time < state_.cut || x.time >= stop || x.value.sizes() != at::IntArrayRef{model_.width()}
-        || x.value.scalar_type() != at::kFloat || !at::isfinite(x.value).all().item<bool>())
+        || x.value.scalar_type() != model_.nodes[graph_.inputs[x.port]].bias.scalar_type() || !at::isfinite(x.value).all().item<bool>())
       throw std::invalid_argument("invalid resident external record");
     Owner owner{x.batch,x.port}; auto it = ledger.find(owner);
     const auto previous = it == ledger.end() ? Owner{-1,-1} : it->second;

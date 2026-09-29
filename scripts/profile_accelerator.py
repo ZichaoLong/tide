@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--implementation", choices=("python", "native"), required=True)
     parser.add_argument("--native-library")
+    parser.add_argument("--dtype", choices=("float16", "float32"), default="float32")
     parser.add_argument("--case", default="mixed-timed-dag")
     parser.add_argument("--output-dir", required=True)
     args = parser.parse_args()
@@ -26,7 +27,7 @@ def main():
     from tidegraph.qualification_checks import probe_loss, assert_placement
     from tidegraph.qualification_training import optimizer
     from accelerator_cases import cases, fixture_options
-    available = dict(cases(args.implementation))
+    available = dict(cases(args.implementation, args.dtype))
     if args.case not in available:
         parser.error("unknown case")
     torch.set_num_threads(1)
@@ -64,7 +65,9 @@ def main():
         def step(cycle):
             opt.zero_grad(set_to_none=True)
             result = probe.advance(session, cycle=cycle)
-            probe_loss(result).backward()
+            loss=probe_loss(result)
+            if args.dtype=="float16": opt.backward(loss)
+            else: loss.backward()
             session.detach()
             opt.step()
             return result

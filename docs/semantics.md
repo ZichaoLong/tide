@@ -187,3 +187,15 @@ The explicitly FP64 `norm-fp64-v1` Read is also unavailable on NPU with FP32
 payloads. NPU CSR fiber pooling is outside the supported execution policies;
 callers select `event` explicitly. No implicit CSR conversion or host execution
 is used to make an unsupported request pass.
+
+## Configurable low precision
+
+The explicitly selected FP16 extension retains the same graph, delay, scheduling,
+HST and owner semantics. FP32/FP64 remain the original required references. FP16
+rounding, overflow and underflow can change values or discrete near-tie decisions;
+FP32 success alone is not FP16 equivalence evidence. Qualification records its
+floating tolerances and never relaxes discrete or None/zero comparisons.
+See [precision.md](precision.md) for API, master-optimizer/checkpoint boundaries,
+and [accelerator-scale.md](accelerator-scale.md) for the separately configured
+Read/control/dispatch consumer. BF16 and automatic mixed precision remain outside
+this extension. NPU FP64 and CSR pooling stay explicitly unsupported.

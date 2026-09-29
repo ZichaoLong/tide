@@ -29,8 +29,8 @@ class GraphRuntime:
         self.device, self.resolution_reason = resolve_device(device)
         if self.device.type not in {"cpu", "cuda", "npu"}:
             raise ValueError("the graph runtime supports CPU, CUDA and NPU")
-        if self.device.type == "npu" and c.dtype != "float32":
-            raise ValueError("the NPU graph runtime requires float32")
+        if self.device.type == "npu" and c.dtype not in {"float16", "float32"}:
+            raise ValueError("the NPU graph runtime requires float16 or float32")
         if self.device.type == "npu" and any(n.readout == "norm-fp64-v1" for n in c.graph.nodes):
             raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
         if self.device.type == "npu" and requested.fiber_pooling == "csr":

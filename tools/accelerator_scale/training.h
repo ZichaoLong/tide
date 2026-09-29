@@ -7,11 +7,10 @@ namespace accelerator_scale {
 struct TrainingConfig {
   Index steps=0, warmup=1;
   std::string optimizer="adamw";
-  double learning_rate=1e-4;
+  double learning_rate=1e-4, loss_scale=1.;
   void validate(const pdg_scale::Config&) const;
 };
 struct TrainingWindow { Tensor loss; Result result; };
-void register_owners(ParameterRegistry&,const pdg_scale::Fixture&);
 std::unique_ptr<NamedOptimizer> make_optimizer(ParameterRegistry&,const TrainingConfig&);
 TrainingWindow training_window(const pdg_scale::Config&,const pdg_scale::Topology&,
                                pdg_scale::Fixture&,const Placement&,Options);

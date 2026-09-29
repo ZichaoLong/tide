@@ -9,11 +9,16 @@ Fixture fixture(const Config& c, const Topology& t) {
   Fixture f; auto& g = f.graph; auto& m = f.model;
   const auto n = t.nodes, body = 2*n, width = c.width, period = t.layers+1;
   auto opts = at::TensorOptions().dtype(c.runtime.dtype).device(at::kCPU);
+  auto scalar = [&](double x) {
+    auto value=at::scalar_tensor(x, opts);
+    return c.quantized_fp16_reference ? value.to(at::kHalf).to(c.runtime.dtype) : value;
+  };
   auto zero = at::zeros({width}, opts), dummy = at::zeros({width, width}, opts);
   auto identity = at::eye(width, opts), one = at::ones({}, opts);
   auto parameter = [&](const std::vector<Index>& shape, bool random = true, bool projection = false) {
-    auto value = at::empty(shape, opts);
+    auto value = at::empty(shape, opts.dtype(c.runtime.dtype==at::kHalf ? at::kFloat : c.runtime.dtype));
     if (random) value.normal_(0, .02); else value.fill_(1);
+    if (c.runtime.dtype==at::kHalf || c.quantized_fp16_reference) value=value.to(at::kHalf).to(c.runtime.dtype);
     // Preserve values/RNG order and one owner. Only its physical storage changes.
     if (projection && c.projection_layout == "linear") value = value.t().contiguous().t();
     value.set_requires_grad(true); f.owners.push_back(value); return value;
@@ -63,7 +68,7 @@ Fixture fixture(const Config& c, const Topology& t) {
     if (c.memory == "add") {
       w.kernel = tide::make_add_repeat_kernel();
       // LH decay is configuration, not a learned owner. Import computed retention.
-      w.extra["add_retention"] = at::scalar_tensor(1.0-.01, opts);
+      w.extra["add_retention"] = scalar(1.0-.01);
       auto pool = parameter({logical_in[v]}, false);
       at::AutoGradMode track_pool_views(true);
       for (Index slot = 0; slot < logical_in[v]; ++slot)
@@ -75,7 +80,7 @@ Fixture fixture(const Config& c, const Topology& t) {
       w.extra["fiber_out"] = parameter({width, width}, true, true);
       w.extra["fiber_qkv_bias"] = at::zeros({3*width}, opts);
       w.extra["fiber_out_bias"] = zero;
-      w.extra["fiber_decay"] = at::full({}, .01, opts);
+      w.extra["fiber_decay"] = scalar(.01);
       w.extra["fiber_pool"] = parameter({logical_in[v]}, false);
     }
     if (v < body) {
@@ -102,7 +107,7 @@ Fixture fixture(const Config& c, const Topology& t) {
   const auto expected = ((c.memory == "attention" ? 4*(body+1) : 0)+static_cast<Index>(t.edges.size()))*width*width
       +body*width+static_cast<Index>(t.edges.size())+1+t.layers+2*c.vocab*width;
   if (count != expected) throw std::logic_error("scale parameter accounting mismatch");
-  f.inventory = {{"parameters", double(count)}, {"parameter_bytes", double(count)*(c.runtime.dtype == at::kDouble ? 8 : 4)},
+  f.inventory = {{"parameters", double(count)}, {"parameter_bytes", double(count)*c10::elementSize(c.runtime.dtype)},
     {"parameter_owners", double(f.owners.size())}, {"static_nodes_per_cortex", double(n)},
     {"body_nodes", double(body)}, {"pdg_nodes", double(g.nodes.size())}, {"logical_edges", double(t.edges.size())},
     {"physical_edges", double(g.edges.size())}, {"body_ticks_per_token", double(t.layers)},

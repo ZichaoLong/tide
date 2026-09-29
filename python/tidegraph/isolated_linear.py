@@ -36,8 +36,8 @@ class _Rows(torch.autograd.Function):
 def linear(rows, weight):
     if not rows:
         return []
-    if weight.ndim != 2 or weight.device.type not in {"cpu", "cuda", "npu"} or weight.dtype not in (torch.float32, torch.float64):
-        raise ValueError("isolated linear requires a supported FP32/FP64 weight matrix")
+    if weight.ndim != 2 or weight.device.type not in {"cpu", "cuda", "npu"} or weight.dtype not in (torch.float16, torch.float32, torch.float64):
+        raise ValueError("isolated linear requires a supported FP16/FP32/FP64 weight matrix")
     if any(r.shape != (weight.shape[1],) or r.device != weight.device or r.dtype != weight.dtype for r in rows):
         raise ValueError("isolated linear row metadata mismatch")
     return list(_Rows.apply(weight, *rows))

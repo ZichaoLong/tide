@@ -12,6 +12,9 @@ from source_identity import digest
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--build-dir', type=Path, required=True)
+    p.add_argument('--check-atol', type=float)
+    p.add_argument('--check-rtol', type=float)
+    p.add_argument('--dtype', choices=('float32', 'float16'), default='float32')
     p.add_argument('--device', choices=('cpu', 'npu'), required=True)
     p.add_argument('--devices', type=int, default=1)
     p.add_argument('--ranking-device', choices=('cpu', 'model'), default='cpu')
@@ -32,7 +35,7 @@ def main():
     topology.write_text('TIDE_PDG_SCALE_1\n4 2 2 1 1 2 '+str(len(edges))+'\n'
                         +''.join(f'{s} {t}\n' for s, t in edges))
     record = dict(schema='tide-accelerator-training-gates-v1', state='running',
-                  binary_sha256=digest(binary), device=a.device, devices=a.devices,
+                  binary_sha256=digest(binary), device=a.device, devices=a.devices, dtype=a.dtype, check_atol=a.check_atol, check_rtol=a.check_rtol,
                   ranking_device=a.ranking_device, event_device=a.event_device,
                   control_device=a.control_device, read_device=a.read_device,
                   read_dtype=a.read_dtype, npu_task_queue=0, cases=[])
@@ -42,7 +45,7 @@ def main():
         for memory in ('add', 'attention'):
             for optimizer in ('sgd', 'adamw'):
                 name = memory+'-'+optimizer
-                cmd = [str(binary), '--device', a.device, '--dtype', 'float32', '--devices', str(a.devices),
+                cmd = [str(binary), '--device', a.device, '--dtype', a.dtype, '--devices', str(a.devices),
                        '--topology', str(topology), '--output-dir', str(out / name), '--run-id', name,
                        '--width', '8', '--batch', '2', '--vocab', '17', '--steps', '3', '--warmup', '0',
                        '--workers', '3', '--threads', '1', '--memory', memory, '--grad', '1', '--check', '1',
@@ -52,6 +55,8 @@ def main():
                        '--full-autograd', 'batched', '--aggregate-autograd', 'batched',
                        '--packed-sources', '1', '--batch-next', '1', '--parallel-regions', '1',
                        '--training-steps', '3', '--training-warmup', '1', '--optimizer', optimizer]
+                for key in ('check_atol', 'check_rtol'):
+                    if getattr(a,key) is not None: cmd += ['--'+key.replace('_','-'),str(getattr(a,key))]
                 item = dict(name=name, command=cmd, state='running'); record['cases'].append(item)
                 write_json(out / 'gates.json', record)
                 with (out / (name+'.log')).open('x') as log:

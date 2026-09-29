@@ -18,6 +18,8 @@ struct RuntimeOptions {
     std::uint64_t seed = 0;
     std::string output_dir;
     bool help = false;
+    // Explicit opt-in for separately qualified consumers, never inferred by CLI.
+    bool allow_npu_float16 = false;
 };
 
 // Pass require_explicit_device=true for training/benchmark entry points.

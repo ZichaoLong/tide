@@ -23,8 +23,8 @@ void validate_model(const Graph& g, const Model& m) {
   require(m.nodes.size() == g.nodes.size() && !m.nodes.empty(), "node weight count mismatch");
   const auto& ref = m.nodes[0].bias;
   require(ref.defined() && ref.dim() == 1 && ref.numel() > 0, "invalid model width");
-  require(ref.scalar_type() == at::kFloat || ref.scalar_type() == at::kDouble, "FP32/FP64 required");
-  require(supported_payload(ref), "model device/dtype is unsupported by this build (NPU requires FP32)");
+  require(ref.scalar_type() == at::kFloat || ref.scalar_type() == at::kDouble || ref.scalar_type() == at::kHalf, "FP16/FP32/FP64 required");
+  require(supported_kernel_payload(ref), "model device/dtype is unsupported by this build (NPU requires FP16/FP32)");
   if (ref.device().type() == c10::DeviceType::PrivateUse1)
     for (const auto& node : g.nodes)
       require(node.readout != "norm-fp64-v1", "NPU does not support the declared norm-fp64-v1 Read precision");

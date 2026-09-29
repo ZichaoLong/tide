@@ -11,7 +11,7 @@ or hardware/software combinations.
 
 The targets are the historical D2048/B512/V50304, 465-node topology:
 17,269,426,339 Attention parameters and 9,468,020,899 Add parameters. The latter
-is the historical "8.8B" count in units of 1024^3. FP32 weights, CPU initialization
+is the historical "8.8B" count in units of 1024^3. FP32 weights by default, CPU initialization
 order/seed, edge identities, two body ticks/token, clear, full-domain softmax,
 four-head Attention are preserved. The default Read remains `norm-fp64-v1`. The measured modes
 are no-grad, grad-forward and explicitly requested complete training windows.
@@ -188,3 +188,45 @@ Training/dispatch correctness passed the
 The [completed full-size assessment](evidence/accelerator-performance-20260928.md)
 records separate inference and training choices, process variance and retained
 capacity failures. Public defaults remain unchanged.
+
+## Explicit FP16 extension
+
+`--dtype float32|float16` selects parameter/state/cache/message and projection
+precision. FP16 requires resident transport. Initialize in the original CPU FP32
+RNG order, then quantize; parameter bytes use the actual element size. Read keeps
+its independent FP32/CPU-FP64 policy, controls are FP32 and event keys remain int64.
+This changes floating representation, not graph topology or logical schedules.
+
+FP16 training uses FP32 cross-entropy, persistent FP32 master parameters and
+SGD/AdamW slots. `--loss-scale` is static (default128 for FP16,1 for FP32), gradients
+are unscaled in FP32 before updates and parameters are copied back to FP16.
+None owners skip update/decay; connected zero remains defined. Gradients are
+checked before any update. Nonfinite gradients or updated payloads explicitly
+fail; no dynamic skip or silent fallback. Timers include these checks, master
+copies and unscaling for the new implementation. Model construction and
+optimizer/master setup are excluded and recorded separately. Full-size FP32 comparisons must
+use this same implementation, not old timings with a different guard policy.
+This is mixed precision, not pure FP16 or AMP; there is no automatic cast policy.
+
+`--check 1 --dtype float16` compares against the independent CPU scalar-slot
+FP16 oracle. `--reference-payload-dtype float32` instead selects a CPU FP32
+oracle with FP16-quantized initial parameters/constants as a cross-precision
+diagnostic; it can fail because rounding changes a route. The default numerical
+policy is atol1e-3, rtol2e-2, configurable with `--check-atol/--check-rtol`; FP32
+keeps its original tolerance. Full trace, edge identity, routes, histories,
+pending membership and None/zero remain exact. Isolated-root VJPs use FP32 losses
+and static scale128. Low precision may change near-tie decisions even if both
+implementations use the same formulas; those differences remain failed parity.
+This finite qualification does not establish convergence or general FP16 stability.
+
+The public Python/session FP16 API and its explicitly owned optimizer are described
+in [precision](precision.md); the standalone scale consumer still owns no checkpoint
+format or general heterogeneous public runtime.
+
+The D8 half-precision consumer gradient probe shows a small packing-dependent
+rounding difference even on CPU: max absolute error0.001953125, maximum default
+tolerance ratio1.02827 for one embedding VJP. Preserve this strict failure.
+The follow-up finite qualification explicitly uses `--check-atol 0.002` with
+rtol0.02; both verifier scripts expose these options. This is a declared relaxed
+numerical gate, not bitwise equivalence. The public API's separate half gate
+retains its own recorded tolerance.

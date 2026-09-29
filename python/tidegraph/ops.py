@@ -169,12 +169,14 @@ class Model(nn.Module):
                  state_programs=None, read_programs=None, next_programs=None, region_programs=None,
                  projection_layout="input", device=None):
         super().__init__()
-        if dtype not in (torch.float32, torch.float64) or width < 1:
-            raise ValueError("FP32/FP64 and positive width required")
+        if dtype not in (torch.float16, torch.float32, torch.float64) or width < 1:
+            raise ValueError("FP16/FP32/FP64 and positive width required")
         if projection_layout not in {"input", "linear"}:
             raise ValueError("unknown projection layout")
         if projection_layout != "input" and not any(n.memory in FIBER_PROFILES for n in graph.nodes):
             raise ValueError("nondefault projection layout requires same-fiber attention")
+        payload_dtype = dtype
+        if dtype == torch.float16: dtype = torch.float32
         self.width = width
         self.graph_identity = graph.identity
         generator = torch.Generator().manual_seed(seed)
@@ -211,12 +213,14 @@ class Model(nn.Module):
         self.agg_scale = scales(len(graph.edges))
         self.edge_scale = scales(len(graph.edges))
         self.output_scale = scales(len(graph.outputs))
+        if payload_dtype != dtype:
+            self.to(dtype=payload_dtype)
         if device is not None:
             target = torch.device(device)
             if target.type == "npu" and any(n.readout == "norm-fp64-v1" for n in graph.nodes):
                 raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
-            if target.type == "npu" and dtype == torch.float64:
-                raise ValueError("NPU graph execution currently requires float32; NPU matmul has no FP64 kernel")
+            if target.type == "npu" and payload_dtype == torch.float64:
+                raise ValueError("NPU graph execution currently requires float16 or float32; NPU matmul has no FP64 kernel")
             self.to(target)
 
 

@@ -37,8 +37,8 @@ def qualify(config, *, device, output_dir, inputs=None, batch_size=2, positions=
     effective = replace(requested, width=requested.width if width is None else width,
                         dtype=requested.dtype if dtype is None else dtype,
                         execution=replace(requested.execution, trace=True))
-    atol = (1e-10 if effective.dtype == "float64" else 1e-6) if atol is None else atol
-    rtol = (1e-8 if effective.dtype == "float64" else 1e-5) if rtol is None else rtol
+    atol = (1e-10 if effective.dtype == "float64" else 1e-3 if effective.dtype == "float16" else 1e-6) if atol is None else atol
+    rtol = (1e-8 if effective.dtype == "float64" else 2e-2 if effective.dtype == "float16" else 1e-5) if rtol is None else rtol
     if any(type(t) not in (int,float) or not math.isfinite(t) or t < 0 for t in (atol,rtol)):
         raise ValueError("tolerances must be finite nonnegative numbers")
     compare = partial(compare_finite, atol=atol, rtol=rtol)

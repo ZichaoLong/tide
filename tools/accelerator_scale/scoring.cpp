@@ -25,6 +25,7 @@ class NormFP32 final : public tide::ReadKernel {
     for (const auto& r : requests) values.push_back(r.state ? r.state->value : r.content.value);
     return at::norm(at::stack(values), 2, {-1}, false, at::kFloat).unbind();
   }
+  at::ScalarType descriptor_dtype(at::ScalarType) const override { return at::kFloat; }
   bool joint_batch() const override { return true; }
   void validate_weights(const tide::NodeWeights&) const override {}
 };

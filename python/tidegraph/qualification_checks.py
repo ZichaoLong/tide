@@ -59,8 +59,11 @@ def assert_placement(value, device, path="root"):
 
 
 def vjp(root, leaves):
-    gradients = (torch.autograd.grad(root, tuple(leaves.values()), allow_unused=True, retain_graph=True)
+    scale = 128. if any(v.dtype == torch.float16 for v in leaves.values()) else 1.
+    gradients = (torch.autograd.grad(root * scale, tuple(leaves.values()), allow_unused=True, retain_graph=True)
                  if root.requires_grad else [None] * len(leaves))
+    if scale != 1.:
+        gradients = [None if g is None else g.float()/scale for g in gradients]
     return dict(zip(leaves, gradients))
 
 
@@ -80,6 +83,8 @@ def probe_loss(result, root="all"):
 
 
 def roots(result):
+    def mean_square(value):
+        return (value.float() if value.dtype==torch.float16 else value).square().mean()
     yield "all", probe_loss(result)
     for name in ("output", "state", "history", "pending"):
         try:
@@ -87,11 +92,11 @@ def roots(result):
         except ValueError:
             continue
     if result.trace:
-        yield "first-content", result.trace[0]["content"].square().mean()
+        yield "first-content", mean_square(result.trace[0]["content"])
     if result.outputs:
-        yield "first-output", result.outputs[0][-1].square().mean()
+        yield "first-output", mean_square(result.outputs[0][-1])
     if result.continuation.pending:
-        yield "first-pending", result.continuation.pending[0].value.square().mean()
+        yield "first-pending", mean_square(result.continuation.pending[0].value)
 
 
 def compare_gradients(a, ar, ap, b, br, bp, *, compare=equivalent):

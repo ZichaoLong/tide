@@ -27,6 +27,10 @@ def parse():
     p.add_argument('--output-dir', type=Path, required=True)
     p.add_argument('--tracking-root', type=Path, required=True)
     p.add_argument('--tracking', choices=('off', 'best-effort', 'required'), default='best-effort')
+    p.add_argument('--dtype', choices=('float32', 'float16'), default='float32')
+    p.add_argument('--loss-scale', type=float, default=None)
+    p.add_argument('--check-atol', type=float, default=None)
+    p.add_argument('--check-rtol', type=float, default=None)
     p.add_argument('--memory', choices=('add', 'attention'), required=True)
     p.add_argument('--placement', choices=('memory', 'locality'), default='memory')
     p.add_argument('--transport', choices=('host', 'resident'), default='resident')
@@ -51,6 +55,13 @@ def parse():
                           ('defer-state-release', 1), ('packed-sources', 1), ('batch-next', 1)]:
         p.add_argument('--'+name, type=int, choices=(0, 1), default=default)
     a = p.parse_args()
+    if a.dtype == 'float16' and a.transport != 'resident': p.error('FP16 requires resident transport')
+    if a.loss_scale is not None and (not a.training_steps or not 0 < a.loss_scale < float('inf')):
+        p.error('positive finite loss scale requires training')
+    if a.training_steps and a.loss_scale is None: a.loss_scale = 128. if a.dtype == 'float16' else 1.
+    if any(x is not None for x in (a.check_atol, a.check_rtol)):
+        if a.dtype != 'float16' or not a.check or any(x is not None and not 0 < x < float('inf') for x in (a.check_atol, a.check_rtol)):
+            p.error('custom tolerances require FP16 check and positive finite values')
     if ((a.read_device == 'model' or a.control_device == 'model')
             and (a.transport != 'resident' or (a.device == 'npu' and a.read_dtype != 'float32'))):
         p.error('model-device Read/controls require resident transport and FP32 on NPU')
@@ -101,7 +112,9 @@ def main():
               'vocab', 'steps', 'warmup', 'workers', 'threads', 'seed', 'grad', 'check', 'parallel_regions',
               'compact_events', 'defer_state_release', 'packed_sources', 'batch_next',
               'full_autograd', 'aggregate_autograd', 'read_device', 'read_dtype', 'control_device', 'ranking_device', 'event_device', 'training_steps', 'training_warmup', 'optimizer', 'learning_rate')}
-    config.update(dtype='float32', packed=1, emission='row', head_workers=1, fiber_pooling='event')
+    config.update(dtype=a.dtype, packed=1, emission='row', head_workers=1, fiber_pooling='event')
+    for key in ('loss_scale', 'check_atol', 'check_rtol'):
+        if getattr(a,key) is not None: config[key]=getattr(a,key)
     run_id = out.name+'-'+uuid.uuid4().hex[:8]; now = utc_now()
     track = LocalTrackio(a.tracking, a.tracking_root, 'tide-npu-performance', run_id, config)
     command = [str(binary), '--topology', str(out/'topology.txt'), '--run-id', run_id,
@@ -116,8 +129,9 @@ def main():
         source=dict(repository='tide/graph-execution-foundation', commit=commit, dirty=False,
                     client_source_sha256=identity, binary_sha256=binary_hash, build=manifest),
         command=dict(argv=command, wrapper_argv=sys.argv, working_directory=str(root)),
-        inputs=dict(topology_sha256=graph_hash, weights='fresh CPU seed; original owner order; normal std .02'),
-        runtime=dict(resolved_device=a.device, resolution_reason='explicit:'+a.device, dtype='float32',
+        inputs=dict(topology_sha256=graph_hash, weights='fresh CPU FP32 seed; original owner order; normal std .02; cast to payload dtype'),
+        runtime=dict(resolved_device=a.device, resolution_reason='explicit:'+a.device, dtype=a.dtype,
+                     loss_scale=a.loss_scale, optimizer_dtype='float32' if a.training_steps else None,
                      logical_devices=list(range(a.devices)), physical_visible_devices=visible,
                      host_arch=platform.machine(), cpu_affinity=affinity, node_workers=a.workers,
                      aten_threads=a.threads, interop_threads=1, openblas_num_threads=1,
@@ -131,7 +145,10 @@ def main():
                         placement='node-shards-v1; '+a.transport+' state/message transport; '
                                   +a.read_device+' '+a.read_dtype+' Read; '+a.control_device+' controls',
                         timed_scope='zero_grad+window reset+IDs+forward+cross_entropy+backward+optimizer; synchronized phase boundaries' if a.training_steps else 'embedding+body+head+CPU/NPU transfers; synchronized all shards',
-                        excluded='construction, previous loss/graph disposal, metrics' if a.training_steps else 'construction, ID creation, previous logits disposal, metrics',
+                        excluded='model construction, optimizer/master setup, previous loss/graph disposal, metrics' if a.training_steps else 'construction, ID creation, previous logits disposal, metrics',
+                        precision=dict(payload=a.dtype, read=a.read_dtype, controls='float32', loss='float32',
+                                       masters='float32', optimizer='float32', loss_scale=a.loss_scale,
+                                       fp16_check_atol=a.check_atol or 1e-3, fp16_check_rtol=a.check_rtol or 2e-2),
                         backward=bool(a.training_steps), optimizer=bool(a.training_steps), detach=False,
                         loss='mean token cross_entropy, targets=(input_id+1)%vocab' if a.training_steps else None,
                         window_boundary='reset graph state per optimizer update; no detach inside window' if a.training_steps else None,
