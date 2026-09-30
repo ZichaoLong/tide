@@ -18,6 +18,7 @@ CHECKS = {
     "clock": ("tide-device-clock-check", ("float32",)),
     "norm32": ("tide-device-norm-check", ("float32",)),
     "lh-full": ("tide-device-lh-full-check", ("float32",)),
+    "origins": ("tide-device-origin-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -34,9 +35,10 @@ MARKERS = {
     "clock": "device-clock: passed",
     "norm32": "device-norm32: passed",
     "lh-full": "device-lh-full: passed",
+    "origins": "device-origins: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
            "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum",
            "add": "tide_vector_state", "clock": "tide_vector_state", "norm32": "tide_vector_read",
-           "lh-full": "tide_full_plan"}
+           "lh-full": "tide_full_plan", "origins": "tide_sum_plan"}

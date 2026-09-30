@@ -3,6 +3,7 @@
 #include "tide/lh_full.h"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
+#include <algorithm>
 #include <stdexcept>
 
 namespace tide::device_online {
@@ -10,8 +11,9 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("content flow requires explicit no-grad NPU");
   graph.compile();
-  if(!graph.origins.empty())throw std::invalid_argument("content flow input-origin projections are not implemented");
   for(const auto& n:graph.nodes) {
+    if(!n.identity&&!n.emit_phases.empty())
+      throw std::invalid_argument("content flow phase-restricted emission is not implemented");
     if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")
         ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&!is_lh_full(n.full))
         ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
@@ -64,6 +66,12 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},at::kFloat));
   }
   sources=at::tensor(metadata,at::kLong).reshape({-1,2}).to(device);scales=at::stack(weights).to(device);
+  if(!graph.origins.empty()) {
+    auto table=at::zeros({std::max<int64_t>(1,graph.edges.size()),2},at::kLong);
+    table.select(1,0).fill_(-1);table.select(1,1).fill_(1);
+    for(const auto& o:graph.origins){table[o.edge][0].fill_(o.port);table[o.edge][1].fill_(o.stride);}
+    origins=table.to(device);
+  }
   read=at::stack(reads).to(device);decay=at::stack(decays).to(device);
   retention=at::stack(retentions).to(device);
   clock_policy=at::tensor(clocks,at::kLong).reshape({-1,3}).to(device);

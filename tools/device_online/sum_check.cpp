@@ -81,7 +81,7 @@ void check(at::Device d) {
   }
   // The entire metadata preflight must precede numerical writes, including
   // failures found in a later group and sticky errors inherited from a stage.
-  for(int failure=0;failure<9;++failure) {
+  for(bool vectorized:{false,true})for(int failure=0;failure<9;++failure) {
     Case c(d,33,{3,2});auto error=at::zeros({1},c.device.counts.options().dtype(at::kInt));
     if(failure==0)c.device.counts[1].fill_(-1);
     if(failure==1)c.device.counts[1].fill_(capacity+1);
@@ -92,7 +92,7 @@ void check(at::Device d) {
     if(failure==6)c.device.atoms.coordinates[4][3].fill_(2);
     if(failure==7)c.device.atoms.coordinates[4][2].fill_(999);
     if(failure==8)error.fill_(9);
-    CannProgram program(d);auto out=append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,true);
+    CannProgram program(d);auto out=append_packed_sum(program,c.device,c.device_sources,c.device_scales,nodes,inputs,edges,error,vectorized);
     program.finish();out.content.fill_(poison);out.weighted.fill_(poison);portable_torch::synchronize(d);program.run();
     require(error.cpu().item<int>()==(failure==8?9:2),"sum metadata refusal lost");
     require(out.content.cpu().isnan().all().item<bool>()&&out.weighted.cpu().isnan().all().item<bool>(),"refused sum executed payload arithmetic");

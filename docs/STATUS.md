@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T10:08:19.491731+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T10:13:56.019694+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -66,12 +66,13 @@ origins-oldcore-regression01 preserves old-library/test-object hashes and failur
 Development core builds build-origins-cpu-dev01 and build-origins-npu-dev01 PASSED,
 frozen origins-core-dev01. origins-cpu-gates-dev01 PASSED eight CTests, two standalone
 Aggregate gates and362 focused source-origin/domain/ports/Settle Python checks.
-NEXT commit the three-file correction separately, then clean core builds named
-build-origins-cpu-clean01/build-origins-npu-clean01 from origins-core-clean01 at that
-commit (jobs2,2100s each). Reuse them for later device qualification by source hash.
-Clean CPU focused gates and standalone NPU Aggregate still required.
+Correction832a881 committed/pushed. build-origins-cpu-clean01 and
+build-origins-npu-clean01 RUNNING from clean origins-core-clean01 at832a881
+(jobs2,2100s each). Reuse them for later device qualification by source hash.
+origins-cpu-gates-clean01 and origins-standalone-npu-clean01 RUNNING with bounded
+core dependency wait before testing; the NPU lease is acquired only after the build.
 
-## Current uncommitted InputOrigin device increment
+## Current InputOrigin device increment ready for commit
 
 Device static origin table; int64 clock preflight/refusal10; stable metadata order
 for Aggregate; scalar/vector sum share preflight/permutation. Physical identities,
@@ -84,16 +85,18 @@ Files: packed_sum.*,ascendc/tide_{sum_plan,vector_sum,content_sum}.cpp,
 content_profile.*,content_stages.cpp,content_export.cpp,content_check.cpp,
 sum_check.cpp,new origin_check.cpp,CMake/build/check scripts,content-flow docs.
 The new gate covers24 ordering/tie/cancellation cases,128 continuation windows,
-8 clock/alias refusals; not yet executed. Sum metadata failures now cover both
+8 clock/alias refusals PASSED. Sum metadata failures now cover both
 scalar and vector options. Default profile is FP32 no-grad only.
 
-build-device-origins-dev01 RUNNING, frozen origins-dev01 (based ond336c37 + recorded
+build-device-origins-dev01 PASSED four CPU CTests/loader, frozen origins-dev01 (based ond336c37 + recorded
 patch), matching origins-npu-dev01 core. Whole bound2400s includes a600s dependency
 wait,build jobs2. Inspect terminal status before launching gates.
-NEXT after build passes: device-origins-gates-dev01, all22 component cells,
-900s/one leased NPU/queue120s; separate profile --check origins,480s/queue120s.
-Diagnose a failure before retry; no timeout or tolerance relaxation.
-If gates pass, commit device increment, then clean immutable build/gates/profile.
+device-origins-gates-dev01 PASSED all22 cells; device-origins-profile-dev01 PASSED
+27256 AIV tasks,no AiCPU/fallback. Raw records remain scoped to frozen development
+source. NEXT commit this device increment, clean-build device-origins-clean01 from
+origins-clean01 at that commit with clean origins-npu-clean01 core; then all22 gates
+and separate origins profile. Build2400s (bounded dependency wait),jobs2; gates900s,
+profile480s/one leased NPU/queue120s. Diagnose failure before retry.
 
 ## Failures retained and prior work
 

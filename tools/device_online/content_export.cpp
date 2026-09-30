@@ -81,9 +81,16 @@ Result ContentFlow::Impl::export_result() const {
     for(auto row:by_fiber.at({e.batch,e.node,e.time})) {
       auto c=atoms[row];Atom a{c[0],c[1],c[2],c[3],c[4],c[5],fv[row].clone()};e.fiber.push_back(a);
       Index slot=a.kind==0?g.source_domain->input[a.source]:g.source_domain->edge_target[a.source];
-      e.sources.push_back({slot,a,a.kind==0?profile.model.input_scale[a.source]:profile.model.agg_scale[a.source]});
+      const auto scale=a.kind==0?profile.model.input_scale[a.source]:profile.model.agg_scale[a.source];
+      if(a.kind==1&&!g.origins.empty()&&g.origin_index[a.source]>=0) {
+        const auto& origin=g.origins[g.origin_index[a.source]];
+        if(a.position%origin.stride)throw std::logic_error("device accepted off-lattice input origin");
+        a.kind=0;a.source=origin.port;a.position/=origin.stride;
+      }
+      e.sources.push_back({slot,a,scale});
       e.contributions.push_back({slot,cv[row].clone()});
     }
+    if(!g.origins.empty())std::stable_sort(e.sources.begin(),e.sources.end(),[](const SourceInput& a,const SourceInput& b){return a.atom.key()<b.atom.key();});
     std::sort(e.contributions.begin(),e.contributions.end(),[](const SlotValue& a,const SlotValue& b){return a.slot<b.slot;});
     out.trace.push_back(std::move(e));
   }

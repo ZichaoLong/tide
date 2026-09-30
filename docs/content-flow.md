@@ -13,9 +13,19 @@ apply their declared activation/normalization to comparison without that residua
 It supports observe-all and active-only state adoption. Inputs are arbitrary
 legal sealed-window values; topology can contain unequal positive delays,
 parallel physical edges, feedback and disconnected components. Input-origin
-projection and other modules/region programs explicitly
+projection is supported; phase-restricted emissions and other modules/region programs explicitly
 fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
+
+For `InputOrigin`, a static edge table declares the visible port and int64 position
+stride. Device metadata preflight refuses an off-lattice position with code10
+before any numerical work or transaction commit. Stable sorting of actual fiber
+metadata creates Aggregate's projected source order. Scalar and vector sum share
+that permutation, while contribution storage, physical receive scales, queue
+coordinates, pending messages and emitted edge identities stay physical. Explicit
+source exports apply the same view at the observation boundary; they never feed
+candidate execution. Equal projected keys retain physical order and remain distinct
+logical sources. A logical-source collision still fails with code2.
 
 Content Read does not depend on the proposed state. Consequently the loop can
 compute actual packed content and scores, select complete region-time frames,
