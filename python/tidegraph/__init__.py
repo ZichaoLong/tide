@@ -7,8 +7,9 @@ from .source_domain import SourceDomain
 from .clocks import StateClock
 from .config import GraphConfig
 from .execution_options import ExecutionOptions
+from .placement import ExecutionPlacement
 from .library import GraphRuntime
 from .precision import FP32MasterOptimizer
 from .version import __version__
 
-__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout", "History", "SourceDomain", "StateClock", "GraphConfig", "ExecutionOptions", "GraphRuntime", "FP32MasterOptimizer", "__version__"]
+__all__ = ["Edge", "Graph", "Node", "Region", "Atom", "Continuation", "External", "State", "PortLayout", "History", "SourceDomain", "StateClock", "GraphConfig", "ExecutionOptions", "ExecutionPlacement", "GraphRuntime", "FP32MasterOptimizer", "__version__"]

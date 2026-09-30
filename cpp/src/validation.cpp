@@ -25,9 +25,6 @@ void validate_model(const Graph& g, const Model& m) {
   require(ref.defined() && ref.dim() == 1 && ref.numel() > 0, "invalid model width");
   require(ref.scalar_type() == at::kFloat || ref.scalar_type() == at::kDouble || ref.scalar_type() == at::kHalf, "FP16/FP32/FP64 required");
   require(supported_kernel_payload(ref), "model device/dtype is unsupported by this build (NPU requires FP16/FP32)");
-  if (ref.device().type() == c10::DeviceType::PrivateUse1)
-    for (const auto& node : g.nodes)
-      require(node.readout != "norm-fp64-v1", "NPU does not support the declared norm-fp64-v1 Read precision");
   const Index d = ref.numel();
   for (size_t node = 0; node < m.nodes.size(); ++node) {
     const auto& w = m.nodes[node];
@@ -37,6 +34,9 @@ void validate_model(const Graph& g, const Model& m) {
     w.kernel->validate_policy(g.nodes[node], g.source_counts[node]);
     w.kernel->validate_weights(w);
     require(static_cast<bool>(w.read_kernel), "Read kernel is not configured");
+    require(w.read_kernel->descriptor_device(ref.device()).type() != c10::DeviceType::PrivateUse1 ||
+            w.read_kernel->descriptor_dtype(ref.scalar_type()) != at::kDouble,
+            "NPU does not support the declared norm-fp64-v1 Read precision");
     w.read_kernel->validate_weights(w);
     require(static_cast<bool>(w.next_kernel), "Next kernel is not configured");
     w.next_kernel->validate_weights(w);

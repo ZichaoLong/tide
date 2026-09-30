@@ -38,8 +38,8 @@ None versus connected-zero. A scalar score with the wrong dtype/device/shape,
 a changed batch length or nonfinite values fails explicitly. Read parameters
 participate in sharing, optimizer state and checkpoints through module ownership.
 
-Mode/profile are part of graph identity. Native graph identity format is v11;
-checkpoint payload is v4. Old identities require explicit reconstruction,
+Mode/profile are part of graph identity. Current graph/checkpoint versions are
+owned by [semantics.md](semantics.md). Old identities require explicit reconstruction,
 not implicit migration. See `tests/test_read_modes.py`, `test_read_contract.py`
 and the standalone `cpp/test/read_programs.cpp` analytic checks.
 
@@ -55,6 +55,14 @@ and returns an FP32 descriptor, including for FP16 or FP64 payloads. Its VJP is
 the ordinary conversion/norm VJP, including connected-zero input gradients at a
 zero norm. The unused linear Read parameter remains disconnected. Region controls
 are converted back to payload dtype by the existing selector contract. The original
-`norm-fp64-v1` formula and NPU rejection remain unchanged. Profile choice is recorded
+`norm-fp64-v1` formula and rejection of FP64 computation on NPU remain unchanged. Profile choice is recorded
 in graph identity; rounded ties may select different nodes across precision profiles.
+
+The optional [placement adapter](execution-placement.md) declares descriptor
+device separately from payload device. Default Read returns a scalar on the
+payload device; validation checks the kernel's declared device rather than
+accepting arbitrary returned placement. CPU FP64 Read/control/ranking with NPU
+payloads is an explicit mixed configuration. Copies preserve the VJP. Placement
+and explicit linear-scoring precision are recorded execution choices, outside
+graph/checkpoint identity; named norm precision cannot be silently overridden.
 Each execution is compared against its independently scheduled matching profile.

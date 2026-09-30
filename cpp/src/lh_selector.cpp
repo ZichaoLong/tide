@@ -1,5 +1,6 @@
 #include "tide/region.h"
 #include "tide/counters.h"
+#include "placement_internal.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -43,5 +44,6 @@ class LHSelector final : public RegionKernel {
   }
 };
 }  // namespace
+bool placement_detail::builtin_lh(const RegionKernel& kernel) { return dynamic_cast<const LHSelector*>(&kernel); }
 std::shared_ptr<const RegionKernel> make_lh_selector() { return std::make_shared<LHSelector>(); }
 }  // namespace tide

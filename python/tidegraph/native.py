@@ -8,7 +8,8 @@ class Native:
     def __init__(self, graph, model, *, workers=1, packed=False, trace=True, mode="hard", zeta=1.0,
                  algorithm="streaming", prefill=True, max_events=1000000, parallel_regions=False, compact_events=False,
                  attention_packing="exact", fiber_pooling="event", fiber_cache="cloned", defer_state_release=False,
-                 attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay", aggregate_autograd="replay"):
+                 attention_layout="event", packed_sources=False, batch_next=False, full_autograd="replay", aggregate_autograd="replay",
+                 placement=None):
         if aggregate_autograd not in {"replay", "batched"} or (aggregate_autograd == "batched" and not packed):
             raise ValueError("invalid Aggregate autograd policy or unpacked execution")
         if full_autograd not in {"replay", "batched"} or (full_autograd == "batched" and not packed):
@@ -92,6 +93,16 @@ class Native:
         for field in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
             setattr(m, field, list(getattr(model, field)))
         core.configure_fiber_attention(g, m, attention_packing, fiber_pooling, fiber_cache, attention_layout)
+        self.placement = None
+        if placement is not None:
+            from .placement import request
+            requested = request(placement)
+            config = core.ExecutionPlacement()
+            for name, value in requested.to_dict().items():
+                setattr(config, name, value)
+            self.placement = dict(requested=requested.to_dict(),
+                                  resolved=core.resolve_placement(config, model.nodes[0].bias.device))
+            m = core.place_model(g, m, config)
         self.weights = m  # Tensor-preserving model record for other native clients.
         options = core.Options()
         options.workers, options.packed, options.trace = workers, packed, trace

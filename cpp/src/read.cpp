@@ -2,6 +2,7 @@
 #include "tide/operator_profile.h"
 #include "tide/read.h"
 #include "tide/autograd.h"
+#include "placement_internal.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 
@@ -32,6 +33,7 @@ class LinearRead final : public ReadKernel {
   }
   bool joint_batch() const override { return true; }
   void validate_weights(const NodeWeights&) const override {}
+  bool identity() const { return identity_; }
  private:
   bool identity_;
 };
@@ -56,12 +58,19 @@ class NormRead final : public ReadKernel {
  private:
   at::ScalarType dtype_;
 };
-void validate(const Tensor& value, const ReadInput& r, at::ScalarType dtype) {
-  if (!value.defined() || value.dim() != 0 || value.device() != r.content.value.device()
+void validate(const Tensor& value, at::Device device, at::ScalarType dtype) {
+  if (!value.defined() || value.dim() != 0 || value.device() != device
       || value.scalar_type() != dtype) throw std::invalid_argument("Read returned incompatible scalar metadata");
   if (!at::isfinite(value).item<bool>()) throw std::invalid_argument("nonfinite selector score from Read");
 }
 }  // namespace
+bool placement_detail::builtin_read(const ReadKernel& kernel, const Node& n) {
+  if (auto k = dynamic_cast<const LinearRead*>(&kernel)) return n.readout == "linear-v1" && n.identity == k->identity();
+  if (auto k = dynamic_cast<const NormRead*>(&kernel))
+    return !n.identity && ((n.readout == "norm-fp32-v1" && k->descriptor_dtype(at::kFloat) == at::kFloat)
+                       || (n.readout == "norm-fp64-v1" && k->descriptor_dtype(at::kFloat) == at::kDouble));
+  return false;
+}
 std::shared_ptr<const ReadKernel> make_read_kernel(const Node& node) {
   if (node.readout == "norm-fp64-v1" && !node.identity) return std::make_shared<NormRead>(at::kDouble);
   if (node.readout == "norm-fp32-v1" && !node.identity) return std::make_shared<NormRead>(at::kFloat);
@@ -85,13 +94,14 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
   if (values.size() != ids.size()) throw std::invalid_argument("Read batch changed event count");
   for (size_t j = 0; j < ids.size(); ++j) {
     auto dtype = w.read_kernel->descriptor_dtype(requests[j].content.value.scalar_type());
+    auto device = w.read_kernel->descriptor_device(requests[j].content.value.device());
     if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble && dtype != at::kFloat)
       throw std::invalid_argument("invalid Read precision policy");
-    validate(values[j], requests[j], dtype);
+    validate(values[j], device, dtype);
     if (packed && at::GradMode::is_enabled()) {
         work::StateReplayTimer replay_timer(work::ReadReplayNs);
       auto semantic = w.read_kernel->step(w, requests[j]);
-      validate(semantic, requests[j], dtype);
+      validate(semantic, device, dtype);
       values[j] = semantic_value(values[j], semantic);
     }
     events[ids[j]].descriptor = values[j];

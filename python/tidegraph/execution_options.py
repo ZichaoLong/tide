@@ -1,6 +1,7 @@
 """Public execution policy, separate from graph/model and checkpoint identity."""
 from dataclasses import asdict, dataclass, replace
 import math
+from .placement import ExecutionPlacement, request as placement_request
 
 
 @dataclass(frozen=True)
@@ -25,8 +26,11 @@ class ExecutionOptions:
     fiber_pooling: str = "event"
     fiber_cache: str = "cloned"
     attention_layout: str = "event"
+    placement: ExecutionPlacement | None = None
 
     def __post_init__(self):
+        if self.placement is not None:
+            object.__setattr__(self, "placement", placement_request(self.placement))
         if self.implementation not in {"python", "native"}:
             raise ValueError("implementation must be python or native")
         if self.schedule not in {"auto", "reference", "streaming", "frontier", "greedy", "chain", "diamond", "ring", "self_loop"}:

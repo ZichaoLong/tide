@@ -14,6 +14,7 @@ class ReadKernel {
   virtual std::vector<Tensor> batch(const NodeWeights&, const std::vector<ReadInput>&) const;
   virtual bool joint_batch() const { return false; }
   virtual at::ScalarType descriptor_dtype(at::ScalarType payload) const { return payload; }
+  virtual at::Device descriptor_device(at::Device payload) const { return payload; }
   virtual void validate_weights(const NodeWeights&) const = 0;
 };
 std::shared_ptr<const ReadKernel> make_read_kernel(const Node&);

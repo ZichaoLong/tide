@@ -195,8 +195,11 @@ CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
-The explicitly FP64 `norm-fp64-v1` Read is also unavailable on NPU with FP32
-payloads. The separate `norm-fp32-v1` Read converts visible values to FP32 before
+The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional
+[placement adapter](execution-placement.md) permits CPU Read/control/ranking
+with NPU payloads and retains autograd across those explicit transfers. Each
+Read kernel declares its descriptor device; default placement remains with the
+payload. The separate `norm-fp32-v1` Read converts visible values to FP32 before
 reduction and returns an FP32 descriptor. Its declared conversion/norm VJP and
 graph identity are independent of the FP64 profile; see `read-programs.md`.
 NPU CSR fiber pooling is outside the supported execution policies;

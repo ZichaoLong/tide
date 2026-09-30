@@ -31,8 +31,9 @@ class GraphRuntime:
             raise ValueError("the graph runtime supports CPU, CUDA and NPU")
         if self.device.type == "npu" and c.dtype not in {"float16", "float32"}:
             raise ValueError("the NPU graph runtime requires float16 or float32")
-        if self.device.type == "npu" and any(n.readout == "norm-fp64-v1" for n in c.graph.nodes):
-            raise ValueError("NPU does not support the declared norm-fp64-v1 Read precision")
+        from .placement import request as placement_request, validate as validate_placement
+        self.placement = placement_request(requested.placement).resolve(self.device)
+        validate_placement(c.graph, getattr(torch, c.dtype), self.placement)
         if self.device.type == "npu" and requested.fiber_pooling == "csr":
             raise ValueError("NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'")
         if self.device.type == "cpu" and c.dtype == "float16" and requested.fiber_pooling == "csr":
@@ -43,7 +44,7 @@ class GraphRuntime:
             from .settle import SettleGraph
             self.spec = SettleGraph(c.graph, c.ranks)
         self.model = model if model is not None else Model(c.graph, c.width, c.seed, getattr(torch, c.dtype),
-                                                         projection_layout=c.projection_layout, device=self.device)
+                                                         projection_layout=c.projection_layout).to(self.device)
         if model is None and c.scale_init is not None:
             with torch.no_grad():
                 for name in ("input_scale", "output_scale", "agg_scale", "edge_scale"):
@@ -71,6 +72,9 @@ class GraphRuntime:
             self.engine = Native(self.execution_graph, self.execution_model, **arguments)
         elif native_library is not None:
             raise ValueError("native_library requires implementation=native")
+        elif self.options.placement is not None:
+            from .placement import place_model
+            self.execution_model = place_model(self.execution_graph, self.execution_model, self.options.placement)
 
     def session(self, batch_size, *, continuation=None):
         from .session import Session
@@ -127,6 +131,7 @@ class GraphRuntime:
                       configuration=self.config.to_dict(), config_sha256=self.config.identity,
                       runtime=manifest(self.device, self.resolution_reason, getattr(torch, self.config.dtype)),
                       requested_options=self.requested_options.to_dict(), resolved_options=self.options.to_dict(),
+                      placement={key: str(value) for key, value in self.placement.items()},
                       graph_identity=self.graph.identity, execution_graph_identity=self.execution_graph.identity)
         if self.engine:
             path = Path(self.engine.core.__file__)

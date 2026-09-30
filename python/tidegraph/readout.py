@@ -25,6 +25,9 @@ class ReadProgram(torch.nn.Module):
     joint_batch = False
     precision = "payload"
 
+    def descriptor_device(self, payload):
+        return payload
+
     def step(self, weights, request):
         raise NotImplementedError
 
@@ -107,14 +110,14 @@ def validate_program(weights, spec, *, native=False):
         raise ValueError("invalid Read precision policy")
 
 
-def validate(value, r, precision="payload"):
+def validate(value, r, precision="payload", device=None):
     ref = r.content.value
     choices = {"payload": ref.dtype, "float32": torch.float32, "float64": torch.float64}
     if precision not in choices:
         raise ValueError("invalid Read precision policy")
     dtype = choices[precision]
     if not isinstance(value, torch.Tensor) or (value.shape, value.dtype, value.device) != (
-            torch.Size([]), dtype, ref.device):
+            torch.Size([]), dtype, ref.device if device is None else device):
         raise ValueError("Read returned incompatible scalar metadata")
     if not torch.isfinite(value):
         raise ValueError("nonfinite selector score from Read")
@@ -130,10 +133,10 @@ def evaluate(weights, requests, *, packed=False):
     if len(values) != len(requests):
         raise ValueError("Read batch changed event count")
     for value, r in zip(values, requests):
-        validate(value, r, program.precision)
+        validate(value, r, program.precision, program.descriptor_device(r.content.value.device))
     if packed and torch.is_grad_enabled():
         semantic = [program.step(weights, r) for r in requests]
         for value, r in zip(semantic, requests):
-            validate(value, r, program.precision)
+            validate(value, r, program.precision, program.descriptor_device(r.content.value.device))
         values = [autograd.value(a, b) for a, b in zip(values, semantic)]
     return values

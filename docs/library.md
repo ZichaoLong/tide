@@ -81,6 +81,11 @@ parameters while another session retains an autograd segment needed backward.
 
 ## Policies and state
 
+`ExecutionOptions.placement` optionally supplies [ExecutionPlacement](execution-placement.md)
+for separate Read/control/selection/event devices, presets and scoring precision.
+Unset placement preserves the original independent implementation. Unsupported
+resident event dispatch fails explicitly at this host-runtime boundary.
+
 `ExecutionOptions` selects Python/native and auto/reference/streaming/frontier/greedy
 or supported chain/diamond/ring/self_loop specializations. Auto resolves to
 streaming for PDG and frontier for the other families. Reference requires

@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T15:33:14.210564+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T16:07:19.928510+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **f1b7168**, normalized Aggregate implementation committed and pushed; fiber evidence7b43f4d pushed.
+HEAD **fdd2b86**, normalized Aggregate evidence committed/pushed; implementationf1b7168; fiber evidence7b43f4d pushed.
 Event batch evidence28295c1 pushed; implementation26aa09f.
 Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
@@ -34,69 +34,61 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
 
 ## Active work and next actions
 
-1. Event node-time batching committed as26aa09f. Full frozen event-batch-dev01
-   build/four CPU CTests/all30 cells and independent profile PASSED,all terminal0.
-   New gate72 analytic/restore cases +216 general windows/restores,18 actual
-   multi-time windows. Profile97,088 AIV+3,075 AI Core,no AiCPU/fallback. Existing
-   memory/attention/fiber/clock/selection/transport/lifecycle regressions all pass.
-2. Event clean26aa09f full build/four CTests/all30 cells/independent profile
-   PASSED,all terminal0. Evidence device-event-batch-20260930.{json,md} reviewed;
-   evidence28295c1 committed/pushed.97,088 AIV+3,075 AI Core,no AiCPU/fallback.
-   Matching core origins-npu-clean01. No throughput or resident training claim.
-3. Event implementation: two device loops pack all actual ready QKV,then queries/
-   output. Immutable old KV plus compact new rows supports causal prefix/window
-   indices even when a stage has more events than semantic window capacity.
-   Only final owner cache commits; all intermediate diagnostic slots are retained.
-   Observe-all without selected clear admits node-time batches; selection-dependent
-   adoption/clear and mixed fiber regions keep legal single-frame fallback.
-   Changed kernels/helpers and event_batch_check.cpp are committed.
-4. Fiber node-time implementation c83aec3: frozen dev01 and exact-commit clean01
-   full builds/four CTests/all31 cells/independent profiles PASSED,all terminal0.
-   New gate96 anchors/restores,480 general windows/restores,31 multi-time windows
-   and3 saturation checks. Clean profile221,788 AIV+8,181 AI Core,no AiCPU/fallback.
-   Evidence device-fiber-batch-20260930.{json,md} committed/pushed as7b43f4d.
-   Runtime retains per-event biases/prefixes and final-only owner KV commits;
-   repeated FP32 decay and same-fiber all-key visibility unchanged.
-5. Normalized Aggregate implementation f1b7168 committed/pushed. Frozen dev02
-   and exact-commit clean01 full builds/four CTests/all32 cells/independent profiles
-   PASSED,all terminal0. New cell180 anchors/restores,160 general windows/restores,
-   4 boundaries,7 domains. Clean profile67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
-   Evidence device-aggregate-20260930.{json,md} ready for separate commit/push.
-   Dev01 compile failure (__gm__ scalar to Muls) retained; local float fixed it.
-   Runtime normalized domains are device-generated; source aliases/order,
-   missing/zero contributions,scalar/vector paths and zero-mass code13 are covered.
-   Public placement draft is integrated, not runtime-verified: cpp/include/tide/placement.h,
-   cpp/src/placement{,_internal,_read,_region}.*, read descriptor-device contract,
-   built-in handle checks in read/region/LH selector, validation and CMake.
-   Preserve independent default CPU selectors. No placement support claim yet.
-   This changes core fingerprint. Launching build-placement-npu-dev01 from frozen
-   placement-dev01 into fresh placement-npu-dev01 (1800s,jobs2).
-   Includes placement checker, native binding, model-adapter factory and manifest fields.
-   build-placement-npu-dev01 PASSED,terminal0. Launching placement-cpp-cpu32-dev01,
-   placement-cpp-cpu64-dev01 and placement-cpp-npu-dev01 from that same snapshot,
-   each bounded900s; NPU lease1,queue120s.
-   Python public placement draft now in python/tidegraph/placement*.py, native.py,
-   library.py, ExecutionOptions/readout/__init__; tests/test_placement.py.
-   Launching placement-python-cpu-dev01 from new placement-python-dev01 frozen source
-   (pytest test_placement.py -k not-native,both CPU dtypes,300s).
-   placement-python-cpu-dev01 FAILED after2 cases: test compared Settle body names
-   to encoded boundary names. Fixed assertion to compare equal encoded domains
-   and exact trainable leaf identity; no production change. Preserve dev01.
-   Launching placement-python-cpu-dev02 from placement-python-dev02 (300s),
-   plus fresh build-placement-cpu-dev02/bindings in placement-cpu-dev02 (1800s,jobs2).
-   Python dev02 FAILED after12 public cases: isolated root test requested Full
-   from an unselected node (correctly absent). Test now picks actual active Full;
-   no production change. Preserve failed records. Launching Python CPU and NPU
-   gates from new placement-python-dev03 (300s/900s;NPU1,queue120s).
-   The five preset resolver accepts resident configuration but host adaptation explicitly
-   refuses device events; public resident integration remains separate.
-
-6. After those module increments: public five presets/matrix,peer progression,
-   resident backward/VJP/optimizer and staged performance. F1–F7 not complete.
-
-7. Shared memory523b323 clean full build/four CTests/all29/profile qualified;
-   evidence0b724a3 committed/pushed. All memory-clean01 jobs terminal0.
-   F1–F7 overall are NOT complete. Historical CPU Attention stays paused.
+1. Completed and pushed: event batches26aa09f/evidence28295c1; fiber batches
+   c83aec3/evidence7b43f4d; normalized Aggregate f1b7168/evidencefdd2b86.
+   Each exact-commit clean full build/four CTests/full component regression/profile
+   passed. Latest Aggregate32 cells;180 anchors/restores,160 general windows,
+   4 boundaries,7 domains;67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
+   Fiber31 cells;96 anchors,480 windows,31 multi-time windows,3 saturation checks;
+   clean221,788 AIV+8,181 AI Core. Reports under docs/evidence. Those jobs terminal0.
+2. Public host placement draft is UNCOMMITTED. C++ placement.h + placement*.cpp,
+   descriptor_device validation, recognized built-in adapters, native binding;
+   Python ExecutionPlacement + GraphRuntime/Native integration, same parameter
+   leaves/checkpoint names; controls/ranking/read placements and scoring precision.
+   Five preset resolver can describe resident, but host adapter refuses device
+   event progression. Resident integration/FP16/multi-device/matrix still pending.
+   cpp/test/placement.cpp,tests/test_placement.py and profile_execution_placement.py
+   are new. Core fingerprint changed: do not reuse origins-npu-clean01 for new code.
+3. Development evidence BEFORE the latest region-policy correction:
+   - build-placement-npu-dev01 and build-placement-cpu-dev02 passed full builds.
+   - placement-cpp-{cpu32,cpu64,npu}-dev01 failed illegal test budget0; preserved.
+   - isolated new checker build-placement-check-dev02 passed after test correction;
+     placement-cpp-cpu32-dev02 and cpu64 each49 schedules/147 updates passed;
+     placement-cpp-npu-dev02 passed121 schedules/363 updates,terminal0.
+   - NPU int64 ArgSort explicitly reports AiCPU. No lossy float count conversion.
+     This is mixed host-dispatched execution,not all-AiCore or resident evidence.
+   - placement-python-cpu-dev01 failed test body-vs-encoded Settle naming after2;
+     dev02 failed test Full lookup on an unselected node after12. Production unchanged.
+     Corrected placement-python-cpu-dev03 passed39; npu-dev03 passed20,terminal0.
+     Three-family Python forward/backward/SGD/resume/schedule-switch passed.
+4. Latest production correction: C++ region budget/count priority now comes from
+   request.layout (as original/Python),not cached construction policy. New test
+   reuses the model with a compatible changed layout. All following use frozen
+   placement-dev03. build-placement-patched-dev03 and
+   build-placement-cpu-patched-dev03 PASSED. Their task-local
+   placement_policy_build.py allows only cpp/src/placement_region.cpp to differ,
+   checks all original production/binary hashes,patches a copied static archive,
+   relinks new checker/CPU binding in new directories. Originals stay unchanged.
+   Builds: placement-patched-dev03 and placement-cpu-patched-dev03;
+   checker-build.json records derivation,hashes,commands. Development evidence only.
+5. Corrected development gates PASSED,all terminal0: placement-cpp-cpu-dev03 (two CPU dtypes),
+   placement-cpp-npu-dev03 (NPU FP32),placement-public-cpu-dev03 (new placement +
+   Read/Region/greedy-library regression with corrected CPU binding),461 tests.
+   CPU C++49 schedules/147 updates per dtype;NPU C++121/363.
+   Fresh build-placement-npu-python-dev03 PASSED (1800s,jobs2),source
+   placement-dev03,build placement-npu-python-dev03. placement-public-npu-dev03
+   PASSED all26 FP32 Python/native cases. All NPU runs one lease,queue120s.
+6. placement-profile-dev03 PASSED,terminal0,from frozen placement-profile-dev03.
+   Corrected checker3 schedules:4,079 AIV+862 MIX_AIV+86 AI Core+66 AiCPU tasks.
+   AiCPU:Sort(INT64)30 tasks/1834.48us;ScatterElements(BOOL,INT64,BOOL)36/3171.42us.
+   Their38.1% is summed device task time,not complete wall-time fraction. No host
+   fallback diagnostic. Mixed host dispatch remains explicit; no speed claim.
+7. Directed gates/profile passed; committing only placement implementation. Then
+   full fresh exact-commit CPU,NPU standalone,NPU Python builds/gates/profile,
+   evidence separate. Do not stage old accelerator_scale dirty files below.
+   Next: public resident integration,remaining F4 adapters/peer progression,
+   resident backward/VJP/optimizer,then representative/full-size timing.
+   F1–F7 overall NOT complete. Historical CPU Attention remains paused.
 
 Memory implementation: CPU-deferred profile tables; reserve all six module minima
 before growing physical chunks; conservative/aggressive surplus headroom; bounded

@@ -1,5 +1,6 @@
 #include "tide/region.h"
 #include "tide/counters.h"
+#include "placement_internal.h"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -18,6 +19,7 @@ namespace {
 class CountSelector final : public RegionKernel {
  public:
   explicit CountSelector(std::string profile) : profile_(std::move(profile)) {}
+  const std::string& profile() const { return profile_; }
   History initial(const RegionWeights&, const RegionLayout&, const Tensor& ref) const override {
     History h; h.node_maps["selected"] = {};
     if (tensor_history()) h.tensors["memory"] = at::zeros({}, ref.options());
@@ -77,6 +79,10 @@ class CountSelector final : public RegionKernel {
   std::string profile_;
 };
 }  // namespace
+bool placement_detail::builtin_region(const RegionKernel& kernel, const Region& spec) {
+  if (auto k = dynamic_cast<const CountSelector*>(&kernel)) return k->profile() == spec.selector;
+  return spec.selector == "lh-count-affect-v1" && builtin_lh(kernel);
+}
 std::shared_ptr<const RegionKernel> make_lh_selector();
 std::shared_ptr<const RegionKernel> make_region_kernel(const Region& spec) {
   if (spec.selector == "lh-count-affect-v1") return make_lh_selector();
