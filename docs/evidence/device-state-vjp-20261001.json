@@ -1,0 +1,79 @@
+{
+  "schema": "tide-device-state-vjp-evidence-v1",
+  "source": "3e2d54d728e82bb90bb1d4c7704d6a0e7599cd77",
+  "scope": "Internal single-NPU FP32 identity/EMA/Add-repeat HARD first-order state-chain VJP; not complete graph backward, autograd, optimizer or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 34,
+    "cpu_autograd_cases": 216,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "actual_device_tapes": 4,
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "b7a5277d850dcf9094d3de37e23a8130c9fef89416e0610a52ebf32c66e4eda3",
+    "component_sha256": "5810c6e0c96ded315416b9a9f10ee6df989a780de83ca7e5c963f1d1eaeabf0f",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-state-vjp-add-clean01",
+      "source": "3e2d54d728e82bb90bb1d4c7704d6a0e7599cd77",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "733bf213ebc9ac904d4a14e0fe03ac45a08d2b07abf5b19dbb926dfe8aaede6c",
+        "task.log": "9d01047fb3b1a28e5243c02f064ae582e0571427452a1dca3a3540a11b9db0d8"
+      }
+    },
+    {
+      "name": "state-vjp-add-clean01",
+      "source": "3e2d54d728e82bb90bb1d4c7704d6a0e7599cd77",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "7a39353975e6b7e032ae3823cbab9e03c769c746496e715abac19f046be65b37",
+        "task.log": "f6beac64b04284a359f21bf7486ffa74325e2b6f59bc18ce01ef6605e31c02e0",
+        "verified/result.json": "7a8dab7f309b3f03c8d3fa0bfe7d737db2ff2ff8977e36d8cbafb7a6e86f0fee"
+      }
+    },
+    {
+      "name": "state-vjp-add-profile-clean01",
+      "source": "3e2d54d728e82bb90bb1d4c7704d6a0e7599cd77",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "a035995e7d2f2ac388206c3a8b65987f3e126eda4d522391e4c317b814c6114a",
+        "task.log": "04fd1cb82b06b3af5bdce1d738cf33c0f54a78e782ec8d3fe9ba634f2d7a8f4c",
+        "profiled/result.json": "547423024ec79fe506a5329a3e92a38fe57b1846446bff61491b18be772ec50a",
+        "profiled/profile.log": "edadf89d99d976a4663c6019dc71585dbc1ed90f424bb3b119615368a6357b95"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 7743,
+        "summed_task_us": 35385.31999999984
+      }
+    },
+    "vjp_kernel_records": 876,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  },
+  "retained_failures": [
+    "state-vjp-dev02: connection/cache-line race, fixed before this source",
+    "state-vjp-clean01 and state-vjp-profile-clean01 at 0459195: incorrect test assertion branch, never qualified",
+    "state-vjp-add-dev01: same assertion failure before Add cases; branch corrected without tolerance change"
+  ]
+}

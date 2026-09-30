@@ -3,7 +3,7 @@
 Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **8b89080**,public resident evidence committed/pushed;identity/EMA implementation0459195;
+HEAD **3e2d54d**,Add state-chain VJP committed/pushed;public resident evidence8b89080;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -130,14 +130,24 @@ single metadata writer. Full graph dependencies/parameter aliases/optimizer rema
 - `state-vjp-add-profile-dev02` PASSED:**7,743 AIV only**,438 state_vjp+438 state_vjp_plan;
   no AiCPU/fallback. This is component placement,not throughput.
 
-Next:commit/push this tested Add increment. Freeze its exact commit as
-**state-vjp-add-clean01**. Run full `build-state-vjp-add-clean01` (1800s,jobs2,no lease)
+Implementation3e2d54d is committed/pushed. Frozen **state-vjp-add-clean01**.
+Full `build-state-vjp-add-clean01` PASSED (1800s,jobs2,no lease; four CTests)
 using scripts/build_device_control.py --core-build TASK/builds/placement-npu-clean01
 --build-dir TASK/builds/state-vjp-add-clean01 --ascendc-soc Ascend910_9392 --jobs2.
-Then `state-vjp-add-clean01` full34-cell verify_device_control.py and
-`state-vjp-add-profile-clean01` --check state-vjp profile,one NPU900s/queue120s each.
+`state-vjp-add-clean01` full34-cell verify_device_control.py PASSED and
+`state-vjp-add-profile-clean01` --check state-vjp profile PASSED;one NPU900s/queue120s each.
 No redundant full CPU gate:portable core/Python code unchanged and public622dbb2 gate passed.
-After terminals and hash audits,commit separate device-state-vjp evidence and update F4.
+Exact-source/hash/terminal audits passed. State VJP qualification reports:
+docs/evidence/device-state-vjp-20261001.{json,md};34 cells,216 isolated cases,4 real tapes,
+7,743 AIV-only profile tasks. Earlier failed clean runs remain failures.
+
+Uncommitted next increment: identity/tanh Full VJP in tools/device_online/full_vjp*,
+three Ascend C plan/payload/reduction kernels, CannProgram zero/tanh_backward,
+ContentFlow borrowed full_tape and PackedFull parameter accessors, build/gate registration.
+Tests cover CPU FP32/FP64 autograd, poison, None/zero, repeated owners, short/empty replay,
+real forward tapes and refusals. Dev full-vjp-dev01 freeze/build via task-local
+full_vjp_relink.py reuses checked unchanged state-vjp-add-clean01 objects, compiles
+three kernels plus changed C++ objects in a new build. No device qualification yet.
 
 Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
 peer progression,FP16 and public matrix,then F6 representative/full-size comparison.
