@@ -3,7 +3,7 @@
 Updated 2026-09-30T15:33:14.210564+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **7b43f4d**, fiber batch evidence committed and pushed.
+HEAD **f1b7168**, normalized Aggregate implementation committed and pushed; fiber evidence7b43f4d pushed.
 Event batch evidence28295c1 pushed; implementation26aa09f.
 Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
@@ -57,20 +57,39 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    Evidence device-fiber-batch-20260930.{json,md} committed/pushed as7b43f4d.
    Runtime retains per-event biases/prefixes and final-only owner KV commits;
    repeated FP32 decay and same-fiber all-key visibility unchanged.
-5. Normalized Aggregate implementation ready for commit: frozen aggregate-dev02
-   full build/four CTests/all32 cells/independent profile PASSED,all terminal0.
-   New cell180 anchors/restores,160 general windows/restores,4 boundaries,7 domains.
-   Profile67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
-   Before this success, build-device-aggregate-dev01 FAILED at Ascend C Muls
-   scalar deduction from a __gm__ reference. Fixed with a local float coefficient;
-   dev01 snapshot/log remains failed. No runtime gate ran in dev01.
-   After commit, freeze aggregate-clean01 and launch build-device-aggregate-clean01,
-   full fresh build device-aggregate-clean01 with core origins-npu-clean01,
-   jobs2,1800s; then all32 gates/aggregate first and independent aggregate profile
-   (900s,NPU1,queue120s). Evidence must be separate from implementation.
+5. Normalized Aggregate implementation f1b7168 committed/pushed. Frozen dev02
+   and exact-commit clean01 full builds/four CTests/all32 cells/independent profiles
+   PASSED,all terminal0. New cell180 anchors/restores,160 general windows/restores,
+   4 boundaries,7 domains. Clean profile67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
+   Evidence device-aggregate-20260930.{json,md} ready for separate commit/push.
+   Dev01 compile failure (__gm__ scalar to Muls) retained; local float fixed it.
    Runtime normalized domains are device-generated; source aliases/order,
    missing/zero contributions,scalar/vector paths and zero-mass code13 are covered.
-   Public placement implementation is next; no placement code has been changed yet.
+   Public placement draft is integrated, not runtime-verified: cpp/include/tide/placement.h,
+   cpp/src/placement{,_internal,_read,_region}.*, read descriptor-device contract,
+   built-in handle checks in read/region/LH selector, validation and CMake.
+   Preserve independent default CPU selectors. No placement support claim yet.
+   This changes core fingerprint. Launching build-placement-npu-dev01 from frozen
+   placement-dev01 into fresh placement-npu-dev01 (1800s,jobs2).
+   Includes placement checker, native binding, model-adapter factory and manifest fields.
+   build-placement-npu-dev01 PASSED,terminal0. Launching placement-cpp-cpu32-dev01,
+   placement-cpp-cpu64-dev01 and placement-cpp-npu-dev01 from that same snapshot,
+   each bounded900s; NPU lease1,queue120s.
+   Python public placement draft now in python/tidegraph/placement*.py, native.py,
+   library.py, ExecutionOptions/readout/__init__; tests/test_placement.py.
+   Launching placement-python-cpu-dev01 from new placement-python-dev01 frozen source
+   (pytest test_placement.py -k not-native,both CPU dtypes,300s).
+   placement-python-cpu-dev01 FAILED after2 cases: test compared Settle body names
+   to encoded boundary names. Fixed assertion to compare equal encoded domains
+   and exact trainable leaf identity; no production change. Preserve dev01.
+   Launching placement-python-cpu-dev02 from placement-python-dev02 (300s),
+   plus fresh build-placement-cpu-dev02/bindings in placement-cpu-dev02 (1800s,jobs2).
+   Python dev02 FAILED after12 public cases: isolated root test requested Full
+   from an unselected node (correctly absent). Test now picks actual active Full;
+   no production change. Preserve failed records. Launching Python CPU and NPU
+   gates from new placement-python-dev03 (300s/900s;NPU1,queue120s).
+   The five preset resolver accepts resident configuration but host adaptation explicitly
+   refuses device events; public resident integration remains separate.
 
 6. After those module increments: public five presets/matrix,peer progression,
    resident backward/VJP/optimizer and staged performance. F1–F7 not complete.

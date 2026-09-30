@@ -1,0 +1,104 @@
+{
+  "schema": "tide-device-aggregate-evidence-v1",
+  "source": "f1b7168575a6bd9e3d02841292ac099abf6fb8ef",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "single-device FP32 HARD online normalized Aggregate; not throughput, resident training or full public matrix",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "204a0b23d803bf95821e64b90e321df421619ea076b0572dd789323bf23ea78c",
+  "build_manifest_sha256": "d843d1bb95ed01f0bf787116024e3c58022293353a9dfe645e4a4a93a028241f",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 32,
+    "analytic_and_restore_cases": 180,
+    "general_windows_and_restores": 160,
+    "boundary_cases": 4,
+    "wide_and_empty_domains": 7
+  },
+  "runs": [
+    {
+      "name": "build-device-aggregate-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "2dedb2862e62e9e817618948902636e4f8d3b264483efff442e465e04f4efbb6",
+        "task.log": "d0179a131294799d85ff6dbf94cd67ef1b30855d9e02ae985656b01baafec972"
+      }
+    },
+    {
+      "name": "device-aggregate-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "87e201f2c23eea6965fbe2176cad4ac55c4a7e3b942c5815bfc1c43e9d1a73b4",
+        "task.log": "075ae1aafc1b200f446f69f5e537d408457ada170ba0df6dbe8bda64049dd66a",
+        "verified/result.json": "0cd8cfd5a0f5ab5e03e1ed4c6029fb417e22964554e56e21c2885d73ded846c6",
+        "verified/aggregate-float32.log": "0f006cdcc75ebb3eb36ab6c0891e2549aa7eee72df722ea9c3021fb433e95911"
+      }
+    },
+    {
+      "name": "device-aggregate-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "11be9faae0813d5d48fea47f8883da2164abc0ec6a174424ca31bc09a1ca25ea",
+        "task.log": "08c4b37bbe41677f08a67fe47b8f3dd79cdbcd0e4c768753b6f87afe8fcf8ebd",
+        "profile/result.json": "e5a434a80f501bdb384c6d33dca49b34d65a47e2fcd9466a62cd61d8a0da0e7f"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 67422,
+      "MIX_AIV": 139,
+      "AI_CORE": 223
+    },
+    "kernels": {
+      "Add": 852,
+      "BatchMatMulV2": 223,
+      "Cast": 2785,
+      "Equal": 2379,
+      "Fill": 1988,
+      "GatherV3": 14122,
+      "Less": 406,
+      "Mul": 682,
+      "OnesLike": 187,
+      "RealDiv": 139,
+      "ReduceSum": 139,
+      "ScatterUpdate": 223,
+      "Sigmoid": 351,
+      "SoftmaxV2": 686,
+      "SoftplusV2": 139,
+      "Tanh": 223,
+      "TensorMove": 43,
+      "ZerosLike": 28169,
+      "tide_aggregate_apply": 382,
+      "tide_aggregate_plan": 2370,
+      "tide_closure": 757,
+      "tide_content_state": 406,
+      "tide_content_sum": 209,
+      "tide_emission_plan": 406,
+      "tide_frame_select": 406,
+      "tide_full_plan": 499,
+      "tide_journal": 4060,
+      "tide_queue_propose": 1569,
+      "tide_read_reduce": 406,
+      "tide_ready_pack": 757,
+      "tide_state_read": 406,
+      "tide_sum_plan": 406,
+      "tide_vector_read": 406,
+      "tide_vector_state": 406,
+      "tide_vector_sum": 197
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930235026.csv": "7e8054b9fa21175bab3c879557f392eebfce461feb7b7007dc782b54af3f719e",
+      "api_statistic_20260930235026.csv": "006146344ee12da0b5836a28466876c14cf814b4bac42b6107ad4ec17943b607"
+    },
+    "host_fallback_diagnostic": false
+  }
+}
