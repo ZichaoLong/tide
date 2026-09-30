@@ -15,7 +15,7 @@ void buffer(const at::Tensor& t,at::IntArrayRef shape,at::ScalarType dtype,at::D
 }
 }
 QueueTransaction::QueueTransaction(int64_t capacity,int64_t width,int64_t nodes,int64_t samples,
-                                 at::TensorOptions opts)
+                                 at::TensorOptions opts,const at::Tensor& shared_error)
     :capacity_(capacity),width_(width),nodes_(nodes),samples_(samples) {
   if(at::GradMode::is_enabled()||opts.device().type()!=c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("device queue transaction requires NPU and explicit no-grad");
@@ -31,9 +31,11 @@ QueueTransaction::QueueTransaction(int64_t capacity,int64_t width,int64_t nodes,
     throw std::runtime_error("device queue kernel differs from actual SoC");
   atoms_={at::zeros({capacity,6},opts.dtype(at::kLong)),at::zeros({capacity,width},opts),
           at::zeros({capacity},opts.dtype(at::kBool))};
-  error_=at::zeros({1},opts.dtype(at::kInt));stats_=at::zeros({2},opts.dtype(at::kLong));
+  if(shared_error.defined()) {buffer(shared_error,{1},at::kInt,opts.device());error_=shared_error;}
+  else error_=at::zeros({1},opts.dtype(at::kInt));
+  stats_=at::zeros({2},opts.dtype(at::kLong));
 }
-void QueueTransaction::append_stage(CannProgram& program,const at::Tensor& consumed,const AtomBatch& in) {
+QueueProposal QueueTransaction::propose_stage(CannProgram& program,const at::Tensor& consumed,const AtomBatch& in) {
   const auto device=atoms_.values.device();
   buffer(consumed,{capacity_},at::kInt,device);
   if(!in.coordinates.defined()||in.coordinates.dim()!=2||in.coordinates.size(0)<1)
@@ -60,12 +62,26 @@ void QueueTransaction::append_stage(CannProgram& program,const at::Tensor& consu
       address(coords),address(valid),address(order),address(old_stats),address(stats),
       address(branch),address(error),capacity,arrivals,nodes,samples),"propose device queue transaction");
   },{old.coordinates,old.valid,consumed,in.coordinates,in.valid,coords,valid,order,old_stats,stats,branch,error});
-  const auto commit=program.label(),done=program.label();
-  program.branch(branch,{done,commit});program.mark(commit);
+  const auto snapshot=program.label(),done=program.label();
+  program.branch(branch,{done,snapshot});program.mark(snapshot);
   program.copy(joined.narrow(0,0,capacity_),old.values);
   program.copy(joined.narrow(0,capacity_,arrivals),in.values);
-  program.index_select(joined,0,order,old.values);
-  program.copy(old.coordinates,coords);program.copy(old.valid,valid);program.copy(old_stats,stats);
   program.mark(done);
+  QueueProposal proposal;proposal.old_=old;proposal.incoming_=in;
+  proposal.proposed_={coords,{},valid};proposal.order_=order;proposal.stats_=stats;proposal.joined_=joined;
+  return proposal;
+}
+void QueueTransaction::commit_stage(CannProgram& program,const QueueProposal& q) {
+  if(!q.old_.values.defined()||q.old_.values.unsafeGetTensorImpl()!=atoms_.values.unsafeGetTensorImpl())
+    throw std::invalid_argument("queue proposal belongs to a different queue");
+  auto zero=at::zeros_like(error_),ok=at::zeros({1},atoms_.valid.options()),branch=at::zeros_like(error_);
+  program.equal(error_,zero,ok);program.cast_index(ok,branch);
+  const auto commit=program.label(),done=program.label();program.branch(branch,{done,commit});program.mark(commit);
+  program.index_select(q.joined_,0,q.order_,atoms_.values);
+  program.copy(atoms_.coordinates,q.proposed_.coordinates);program.copy(atoms_.valid,q.proposed_.valid);
+  program.copy(stats_,q.stats_);program.mark(done);
+}
+void QueueTransaction::append_stage(CannProgram& program,const at::Tensor& consumed,const AtomBatch& in) {
+  auto proposal=propose_stage(program,consumed,in);commit_stage(program,proposal);
 }
 } // namespace tide::device_online

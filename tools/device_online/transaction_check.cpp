@@ -5,6 +5,8 @@
 #include <iostream>
 #include <limits>
 
+void check_transaction_group(at::Device,at::ScalarType);
+
 namespace {
 using namespace tide::device_online;
 using I=int64_t;
@@ -92,6 +94,7 @@ int main(int argc,char** argv) {
       throw std::invalid_argument("device queue check requires explicit NPU and FP32/FP16");
     args.allow_npu_float16=true;auto device=portable_torch::resolve_device(args);
     if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("device queue check requires NPU");
-    at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);return 0;
+    at::set_num_threads(1);at::set_num_interop_threads(1);check(device,args.dtype);
+    check_transaction_group(device,args.dtype);return 0;
   }catch(const std::exception& error){std::cerr<<error.what()<<'\n';return 2;}
 }

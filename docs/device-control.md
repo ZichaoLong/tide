@@ -74,7 +74,11 @@ complete resident flow. Placement/profiling results require actual target traces
 branch. Successful transactions retain survivors and append actual arrivals in
 stable order; one bulk gather places payload rows. Invalid slots gather a zero
 sentinel, so inactive NaNs never leak into padding. Refusal preserves every old
-queue slot and its live/peak counters. Errors remain sticky. Capacity describes
+queue slot and its live/peak counters. For multiple queues, share one sticky
+error buffer and append **all proposals before any commits**. Each proposal
+snapshots payloads before any queue is overwritten, including cross-queue
+aliases. Each commit rechecks the shared error on device. A later capacity
+refusal therefore preserves earlier queues too. Errors remain sticky. Capacity describes
 simultaneous occupancy and can be reused over more cumulative arrivals.
 
 `BroadcastRouter` applies the explicit broadcast Full delivery contract to
@@ -94,6 +98,21 @@ The integration check uses one submission to consume successive ready batches
 and preserve pending messages across windows, with an explicit iteration bound.
 It emits no messages and does not execute Tide numerical modules. That check
 therefore certifies scheduling progression only, not a complete graph flow.
+
+`FrameSelector` implements the `count-v1` and `positive-v1` region contracts
+from actual ready frames and FP32 descriptors. Ranking preserves exact int64
+counts, descending descriptor order and stable node-ID ties. Softmax uses every
+candidate, including candidates excluded by positive-only selection. Separate
+validity bits distinguish missing history from a present zero. Frames advance
+history sequentially; the proposed history commits only after all downstream
+queue/routing checks succeed. Nonfinite scores, malformed metadata and selected
+count overflow explicitly fail. Selector scratch has a declared approximate
+budget; other region programs remain unsupported by this component.
+
+This selector consumes supplied descriptors: real module Read, state updates
+and selected Full computation still need integration. Its AIV metadata kernel
+uses scalar loops; raw ACLNN performs the packed softmax and control gather.
+Component placement does not establish full-graph throughput.
 
 These mutable stages provide no autograd. Model/state updates must eventually
 share a commit boundary with successful delivery; committing state before an

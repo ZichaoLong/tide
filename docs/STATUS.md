@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T04:56:22.554228+00:00. **ACTIVE: continue the user-confirmed execution contract.**
+Updated 2026-09-30T05:26:17.982017+00:00. **ACTIVE: continue the user-confirmed execution contract.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents, no push. Reference repos and ObsidianVault remain read-only.
@@ -13,31 +13,33 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: device queue/router/ready committed **eff5945**. CPU and standalone NPU
-core clean builds PASSED at that commit (CPU six CTests):
-`build-runtime-cpu-clean01`, `build-runtime-npu-clean01` (1800s/two workers each),
-`build-device-ready-clean01` PASSED (four CTests/loader), snapshot `packed-clean01`.
-`runtime-lifecycle-gates-clean01` PASSED eight fresh processes on the clean NPU core.
-`device-components-clean01` PASSED all11 cells on clean eff5945.
-All three clean profiles PASSED on packed-clean01: `device-queue-profile-clean01`,
-`device-broadcast-profile-clean01`, `device-ready-profile-clean01`.
-Clean eff5945 reviewed evidence: [device-packing-20260930](evidence/device-packing-20260930.md).
-Commit this evidence separately from ongoing selector/transaction-group development.
-After builds, run the11-cell component gate and bounded transaction/broadcast/ready
-profiles on the clean binary. Do not reuse an earlier binary under a new source claim.
-New uncommitted FrameSelector development adds device count-v1/positive-v1
-selection, full-candidate FP32 softmax and transactional history proposals.
-`build-device-selector-dev01` PASSED, frozen selector-dev01, using matching
-runtime-npu-dev01 core. Launching `device-selector-gate-dev01`, one FP32 scoring
-cell,120s queue/240s task, verified/result.json: PASSED39 cases.
-`device-selector-profile-dev01` PASSED:39 selector tasks plus softmax/equality/gather
-on AIV; all428 device tasks AIV, no host fallback. Selector remains development.
-New QueueProposal split preflights and snapshots all queues before shared-error
-commit; cross-queue alias/capacity gates added but not yet run. Launching
-`build-device-selector-dev02`, frozen selector-dev02,600s/two workers, matching
-clean runtime-npu-clean01 core. Run all12 component cells after successful build.
-Continue integration with real module work, selection, state/continuation and
-actual emission feedback; the current no-emission drain is not a graph executor.
+NEXT: selector and grouped queue transactions passed development and are ready
+for an implementation commit. `FrameSelector` covers count-v1/positive-v1 with
+FP32 scores, exact int64 counts/ties, complete candidate softmax and proposed
+history. `QueueTransaction` now preflights/snapshots all participating queues
+before any shared-error commit, including cross-queue payload aliases.
+`build-device-selector-dev02` and `device-components-dev02` PASSED all12 cells
+on frozen selector-dev02 with matching clean runtime-npu-clean01 core. Queue
+cells include46 ordinary +6 transaction-group cases per FP32/FP16; selector39.
+`device-queue-profile-dev03` PASSED:63 proposal tasks, all475 device tasks AIV.
+`device-selector-profile-dev01` PASSED:39 selector tasks, all428 tasks AIV.
+These are development component results, not complete graph execution/training.
+
+Commit only the device implementation/docs/build registry (preserve older dirty
+consumer work), then run a clean build and all12 cells plus queue/selector
+profiles at that exact commit. Core has not changed since eff5945; the build
+driver checks source and binary fingerprints before reusing runtime-npu-clean01.
+Use snapshot selector-clean01/build device-selector-clean01, jobs2,900s build;
+queue waits120s, gates900s, profiles480s. If a job fails, preserve it and fix from
+the reproducer before qualifying. Then separately commit evidence. Continue
+integration of real module work/Read, selection, state/continuation and actual
+emission feedback; the no-emission drain is not a graph executor.
+
+Clean eff5945 qualification is committed as f604bfc:
+[device-packing-20260930](evidence/device-packing-20260930.md). All eight jobs
+passed, including CPU six CTests, NPU core/component builds, eight lifecycle
+processes, all11 component cells and three placement profiles. Do not reuse
+an older binary under a new source claim.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
@@ -86,7 +88,7 @@ New stages in `tools/device_online`, described in [device-control.md](device-con
   and explicitly refuses exhausted iteration budgets.
 
 These are mutable inference components. No complete Tide numerical module/state
-loop, sparse slot delivery, selection, VJP, optimizer or peer progression yet.
+loop, sparse slot delivery, VJP, optimizer or peer progression yet.
 Scalar AIV metadata ordering needs throughput optimization; byte budgets for
 model/activation/KV/communication are not covered by queue capacity.
 Runtime timeout handling quarantines uncertain live program owners; injected

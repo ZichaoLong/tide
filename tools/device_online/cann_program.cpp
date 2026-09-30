@@ -157,6 +157,14 @@ void CannProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Ten
   auto& p=*impl_;const auto dtype=a.scalar_type();
   p.op("aclnnMul",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
 }
+void CannProgram::softmax(const at::Tensor& input,int64_t axis,const at::Tensor& out) {
+  auto& p=*impl_;
+  p.op("aclnnSoftmax",p.tensor(input,input.scalar_type()),axis,p.tensor(out,input.scalar_type()));
+}
+void CannProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+  auto& p=*impl_;
+  p.op("aclnnEqTensor",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),p.tensor(out,at::kBool));
+}
 void CannProgram::index_select(const at::Tensor& a,int64_t axis,const at::Tensor& index,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnIndexSelect",p.tensor(a,a.scalar_type()),axis,p.tensor(index,at::kLong),p.tensor(out,a.scalar_type()));

@@ -8,12 +8,14 @@ CHECKS = {
     "transaction": ("tide-device-queue-check", ("float32", "float16")),
     "broadcast": ("tide-device-broadcast-check", ("float32", "float16")),
     "ready": ("tide-device-ready-check", ("float32", "float16")),
+    "selector": ("tide-device-selector-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
     "queue": "packed-queue: passed", "closure": "device-closure: passed",
     "transaction": "device-queue: passed", "broadcast": "device-broadcast: passed",
     "ready": "device-ready: passed",
+    "selector": "device-selector: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
-           "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack"}
+           "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select"}
