@@ -90,7 +90,7 @@ Result ContentFlow::Impl::export_result() const {
   const auto n=events->count.cpu().item<Index>(),na=fibers->count.cpu().item<Index>();
   if(n!=out.stats.at("events"))throw std::logic_error("incomplete content event journal");
   auto em=events->meta.cpu(),ev=events->values.cpu(),fm=fibers->meta.cpu(),fv=fibers->values.cpu(),cv=contributions->values.cpu();
-  auto full_values=full_trace->values.cpu();
+  auto full_values=full_trace->values.cpu(),source_scales=source_scales_before.cpu();
   auto meta=em.accessor<Index,2>(),atoms=fm.accessor<Index,2>();
   using Key=std::array<Index,3>;
   std::map<Key,std::vector<Index>> by_fiber;
@@ -116,7 +116,7 @@ Result ContentFlow::Impl::export_result() const {
     for(auto row:by_fiber.at({e.batch,e.node,e.time})) {
       auto c=atoms[row];Atom a{c[0],c[1],c[2],c[3],c[4],c[5],fv[row].clone()};e.fiber.push_back(a);
       Index slot=a.kind==0?g.source_domain->input[a.source]:g.source_domain->edge_target[a.source];
-      const auto scale=a.kind==0?profile.model.input_scale[a.source]:profile.model.agg_scale[a.source];
+      const auto scale=source_scales[a.kind==0?a.source:Index(g.inputs.size())+a.source].clone();
       if(a.kind==1&&!g.origins.empty()&&g.origin_index[a.source]>=0) {
         const auto& origin=g.origins[g.origin_index[a.source]];
         if(a.position%origin.stride)throw std::logic_error("device accepted off-lattice input origin");

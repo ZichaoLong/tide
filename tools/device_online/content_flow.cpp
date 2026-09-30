@@ -102,6 +102,9 @@ void ContentFlow::Impl::construct() {
   program=std::make_unique<CannProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
   if(limits.diagnostics) {
+    // Preserve the parameters that generated this window's recorded sources;
+    // a later optimizer publish must not rewrite diagnostic provenance.
+    source_scales_before=at::zeros_like(profile.scales);p.copy(source_scales_before,profile.scales);
     p.copy(history_before.counts,history.counts);p.copy(history_before.seen,history.seen);
     p.copy(history_before.last_time,history.last_time);p.copy(history_before.present,history.present);
   }
@@ -221,5 +224,12 @@ ReverseTape ContentFlow::reverse_tape() const {
   return {&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
+}
+ParameterBanks ContentFlow::parameter_banks() const {
+  // Reuse the current narrow training preflight. This internal view does not
+  // make parameter mutation available through public inference sessions.
+  const auto tape=reverse_tape();const auto& s=*impl_;
+  return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
+          s.profile.read,s.profile.scales,s.emission->scales()};
 }
 } // namespace tide::device_online

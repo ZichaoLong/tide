@@ -3,7 +3,7 @@
 Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **1ef23f3**,parameter owner reduction committed/pushed;graph reverse qualification12eb606;
+HEAD **933d6fe**,parameter owner qualification pushed;graph reverse qualification12eb606;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -116,7 +116,7 @@ parameter-vjp-profile-clean01.36 actual aliased graph/root cases,CPU FP32 oracle
 Audit exact sources/binaries/logs/CSVs passed. Evidence:
 docs/evidence/device-parameter-vjp-20261001.{json,md}. Contract resident-parameter-vjp.md.
 
-Current uncommitted device optimizer + publication:
+Device optimizer + publication is this tested implementation increment:
 - device_optimizer.{h,cpp},optimizer_layout.h,optimizer_check.cpp;
   Ascend C optimizer_vector.h and optimizer plan/values/commit kernels.
 - parameter_publish.{h,cpp},Ascend C publisher,training_step_check.cpp;
@@ -130,9 +130,17 @@ Current uncommitted device optimizer + publication:
   against CPU FP32/FP64 and complete chain18 trajectories/72 actual windows,
   including2 wide257 trajectories. Each optimizer boundary explicitly truncates.
   No public training/retained-window/performance qualification implied.
-- Current edits AFTER that snapshot add device rejection of nonfinite Adam bias
-  corrections and regression tests for nonfinite momentum/moments/corrections,
-  checking failure state bitwise. These edits require a new frozen gate before commit.
+- build-training-step-dev02 PASSED checked isolated optimizer plan/check finalization;
+  training-step-dev02 PASSED9 checks,including new nonfinite slot/correction
+  transaction tests. training-step-profile-dev02 PASSED79,156 AIV+1,808 AI_CORE+
+  288 MIX_AIV,288 optimizer records,no AiCPU/fallback;not throughput.
+- After implementation commit,launch build-training-step-clean01 from its exact
+  hash (1800s/jobs2/no lease),then training-step-clean01 full40-cell gate and
+  training-step-profile-clean01 (900s/one NPU/queue120s each),audit and commit evidence.
+- New UNCOMMITTED/UNREGISTERED next increment:retained_tape.{h,cpp},window_bridge.cpp,
+  Ascend C tide_window_bridge_{meta,values}.cpp. Device tape snapshots and
+  actual pending/state cotangent links;no tests/build yet. Keep separate from
+  the tested optimizer increment and review before enabling.
 
 Retain task-local build-optimizer-dev01 failure (static archive after as-needed
 ascendcl) and build-optimizer-dev01b failure (public consumer has no direct
@@ -142,8 +150,7 @@ optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
 32 trajectories/256 updates. Later full training-step development build supersedes
 its limited build scope. Never treat either failed build as clean qualification.
 
-Next: new optimizer finalization gate/profile,commit tested implementation,
-clean immutable build/full40-cell qualification and evidence. Then public training
+Next: commit tested optimizer implementation,then clean immutable build/full40-cell qualification and evidence. Then public training
 ownership and retained-window lifetime/boundary cotangent links. Borrowed tapes
 expire on next advance/close/parameter update. LH/SwiGLU/normalized Aggregate/
 attention/HST/SOFTP adjoints,peer progression,FP16 and the public/performance
@@ -187,4 +194,3 @@ No source/build mutation while jobs read them. `norm32_after_core.py` is a600s
 bounded dependency wrapper:put it BEFORE the queue helper,never hold a card while
 waiting for compilation. All units in background.slice; inspect status plus
 expected result markers/hashes. Re-entry:git status --short --branch;python scripts/status.py.
-

@@ -30,7 +30,7 @@ struct ContentFlow::Impl {
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
   std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,emission_trace;
   AtomBatch external;
-  at::Tensor error,stop,stages,event_count;
+  at::Tensor error,stop,stages,event_count,source_scales_before;
   std::unique_ptr<CannProgram> program;
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false;
