@@ -1,0 +1,138 @@
+{
+  "schema": "tide-public-resident-evidence-v1",
+  "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "single-NPU FP32 HARD inference C++ API and Python-owned client; no training/FP16/peer/throughput claim",
+  "checks": {
+    "cpu_pytest": 8954,
+    "cpu_summary": "8954 passed, 23 skipped in 1690.66s (0:28:10)",
+    "component_cells": 33,
+    "python_cases": 25,
+    "installed_feedback_windows": 3
+  },
+  "builds": {
+    "python": {
+      "source": "740fa87fe02dcfa64f020a13c0fea8e59224e0f5",
+      "component_sha256": "0fdeac8582a0de4cf379ab48fc981ff4e5ef422384222ffe97b701acb1242b4a",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "manifest_sha256": "902537d47c54e753f68d32a48ea7b03678a2907af8a82667b279e181623ba8ec"
+    },
+    "standalone": {
+      "source": "740fa87fe02dcfa64f020a13c0fea8e59224e0f5",
+      "component_sha256": "0fdeac8582a0de4cf379ab48fc981ff4e5ef422384222ffe97b701acb1242b4a",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "manifest_sha256": "6d4e194e54501a6cdcb85736c8e508d63a041dcc42dc273300d25fdacc65895a"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-resident-public-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "740fa87fe02dcfa64f020a13c0fea8e59224e0f5",
+      "files": {
+        "status.json": "1b09614843bf923c76fd5aaccd05f2c2c243e99aec89b53971096dbdc74746fc",
+        "task.log": "7d1bd3fe7502b237be1dfe1d370c8ee40a43f26d2a41846f3db28ce8c041c57b"
+      }
+    },
+    {
+      "name": "build-resident-public-standalone-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "740fa87fe02dcfa64f020a13c0fea8e59224e0f5",
+      "files": {
+        "status.json": "c36cd987fae3f65f8bde8ea98a1fe3a9cedf647fdd609b8261e0f519f3d81c86",
+        "task.log": "4d0a6b2afa95b98fa019350a23bc580531a4a9312629b5b3f242b806fac73e27"
+      }
+    },
+    {
+      "name": "resident-public-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "ce3139feaef33b45781d81c0e125eb2f7e9ccfa152085ade10462c3fe84035d3",
+        "task.log": "1197580add21a74dffe73aee07cf855fc794959f3cb4bd5614a38d20854acd6d",
+        "verified/result.json": "164df1d887c7b7e17e45d205aa1dd849eb3b94cfa7009e4769893a07df0d0fdc",
+        "verified/tests.log": "ce774a66144491b14428d17a1f5f9ba69886691ac8521abf273d276f8532debe"
+      }
+    },
+    {
+      "name": "resident-public-standalone-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "bffe5b13c8646184c4e2163f98c5522cd4827cd1d5038b15f6a5b80fb50b9c9d",
+        "task.log": "65fc40fc5df114d2342a60a18c58abaea22ad3a4b1e766e9143829de14e12b3e",
+        "verified/result.json": "c6cc3d57fbe502110e7afaf28ae52797fc995f633ec15f05949fae63293924d3"
+      }
+    },
+    {
+      "name": "resident-public-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "96ee6f8e89d999d68f5695330d02050c35de06d80f810949a579e65717d49efb",
+        "task.log": "224cf511de0f35f55cd444cf08ebdd7fafff05889810560e67be62e4a909ccc5"
+      }
+    },
+    {
+      "name": "resident-public-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "5424290e06825f51ff80579de86e31af13bd13705109198ed0777e3a9e4a67ff",
+        "task.log": "ff50563b19db9b3540cc1fea388f694c205140f696fb50fdf8c2b5626386507a",
+        "profiled/result.json": "3cb4f2c12a4f8d16cac63cec11947bd7decd44872c15f28632d49e25604f72eb",
+        "profiled/profile.log": "07416428cf71012557b93e5760f0db5f5f2d90530e96c4bcda0995d35ddc3573"
+      }
+    },
+    {
+      "name": "build-resident-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "f667ab3f6da9e4850c46af43cdbf6479cedd98039bd223ea7d657cecee04c742",
+        "task.log": "f4a269a6cb807281088464c23c2d6ceda9d21effdc491e7de2b4542b3b251339",
+        "installed/result.json": "3e1f4190d84c3e9b6643fd777699028242b939c5d01ad5e453705c092de55478",
+        "installed/loader.txt": "3006366ad6b30b21590a26d7a70f17a8139ac4411e4fa7a911369b32c6673f2f"
+      }
+    },
+    {
+      "name": "resident-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "622dbb2a02cab5a627646739d9bda185a5bce76d",
+      "files": {
+        "status.json": "72b26ddcfd6f8de62dabaaf2d2d921bd609347ec9d0d30cfdefe3bd819a5e840",
+        "task.log": "ceeeeaaba05726113263b6efdcc7a7a5230d8335f83af1ca1bb446be3577814c"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 10534,
+        "summed_task_us": 54122.03999999998
+      },
+      "MIX_AIV": {
+        "count": 16,
+        "summed_task_us": 41.540000000000006
+      }
+    },
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire resident correctness-check profile including construction/export/assertions; task sums are not wall time"
+  }
+}

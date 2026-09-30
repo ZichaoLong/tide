@@ -3,8 +3,8 @@
 Updated 2026-09-30T17:29:38.557896+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-Last pushed HEAD **622dbb2** (resident disk restore/reset). This increment adds a
-device identity/EMA state-chain VJP. No pending authorization/pause. No subagents.
+HEAD **0459195**,device identity/EMA state-chain VJP committed/pushed;
+resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
 ## Contract and priorities
@@ -60,7 +60,8 @@ builds `build-resident-public-{python,standalone}-clean01` PASSED;standalone4 CT
 All names below map to `TASK/runs/NAME/{status.json,task.log}` and
 `tide-execution-flows-NAME.service`; inspect actual terminals and output hashes.
 
-- `resident-public-cpu-clean01`: RUNNING,FP32/FP64 full scripts/verify.py,
+- `resident-public-cpu-clean01`: PASSED8,954 tests/23 optional-device skips,1690.66s,
+  FP32/FP64 full scripts/verify.py,
   `TASK/builds/placement-cpu-clean01`,2400s,one ATen/BLAS thread.
   Output RUN/verified/{result.json,tests.log}. Do not start duplicate CPU gate.
 - `resident-public-standalone-clean01`: PASSED terminal0,all33 component cells,
@@ -75,11 +76,11 @@ All names below map to `TASK/runs/NAME/{status.json,task.log}` and
 - Directed restore development `resident-restore-host-dev01`:126 passed/23 optional
   skips;`resident-restore-python-dev01`:25 passed. All terminal0.
 
-After CPU terminal0, run task-local `TASK/launchers/resident_public_evidence.py`.
-It audits exact sources,backend/core fingerprints,raw results/logs/profile CSVs
-and writes docs/evidence/public-resident-20261001.json. Add a short reviewed .md
-report,update ROADMAP F5 and commit/push evidence separately. Do not relabel
-public inference as resident training. Historical development failures remain.
+All public resident qualifications are terminal0. Task-local
+TASK/launchers/resident_public_evidence.py audited exact sources,backend/core
+fingerprints,raw results/logs/profile CSVs. Reports
+`docs/evidence/public-resident-20261001.{json,md}` are ready in this evidence increment.
+Do not relabel public inference as resident training. Historical failures remain.
 
 ## Current device state VJP increment
 
@@ -107,14 +108,24 @@ sample partials; alias reduction/graph message dependencies remain to integrate.
 - `state-vjp-profile-dev03` PASSED:1,664 AIV only;51 state_vjp+51 state_vjp_plan
   tasks,no AiCPU/fallback. Includes forward construction/assertions,not throughput.
 
-Next: commit/push tested increment. Freeze its exact commit as **state-vjp-clean01**;
-full `build-state-vjp-clean01` (1800s,jobs2,no lease) using scripts/build_device_control.py
+Next: implementation0459195 committed/pushed. Frozen **state-vjp-clean01**;
+full `build-state-vjp-clean01` is RUNNING (1800s,jobs2,no lease) using scripts/build_device_control.py
 --core-build TASK/builds/placement-npu-clean01 --build-dir TASK/builds/state-vjp-clean01
 --ascendc-soc Ascend910_9392 --jobs2. Then full34-cell verify_device_control.py
 (one NPU900s,queue120s) and separate --check state-vjp profile. Commit evidence only
 after terminal/hash audit. Existing core/Python code did not change; avoid another
 redundant full CPU run. Continue complete resident training/peer/FP16/public matrix,
 then F6 representative/full-size comparisons. Do not stop at the local VJP.
+
+Next uncommitted production increment: Add-repeat state VJP. Main checkout adds
+retention/clock fields and sample-feature retention partials, device tick bounds,
+and bounded literal-multiply replay chunks (no pow/division shortcut). Configured
+chunk size changes physical replay work only. `build-state-vjp-add-dev01` RUNNING
+from frozen **state-vjp-add-dev01** using the two-kernel relinker;600s,no lease.
+After build,run `--checks state-vjp content window resident` (one NPU900s,queue120s).
+New gate expects216 FP32/FP64 local-autograd cases and4 real device-forward tapes,
+including zero/one/negative/fractional retention,periodic clocks and chunk2/32.
+This Add increment is NOT YET VERIFIED; keep it out of public inference evidence.
 
 ## Preserved older work and interrupted timing
 
