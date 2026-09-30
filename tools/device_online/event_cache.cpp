@@ -1,4 +1,5 @@
 #include "packed_event_attention.h"
+#include "tiled_attention.h"
 #include <algorithm>
 #include <array>
 #include <stdexcept>
@@ -10,36 +11,36 @@ std::map<std::pair<int64_t,int64_t>,int64_t> geometries(const ContentProfile& p)
   for(const auto& n:p.graph.nodes)if(!n.identity&&n.memory=="attention")++result[{n.query_heads,n.kv_heads}];
   return result;
 }
-std::pair<long double,long double> footprint(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
-  long double fixed=0,row=0;const auto w=p.width;
+std::array<long double,3> footprint(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+  long double fixed=0,row=0,key=0;const auto w=p.width;
   for(const auto& [heads,count]:geometries(p)) {
     const auto kv=w/heads.first*heads.second;
     fixed+=24.L*(q.batch_size*static_cast<long double>(count)*l.kv_rows+1)*(2.L*kv+1)
       +64.L*(count+1.L)*w*w+128.L*(l.queue+1.L)*(w+8.L)
       +(l.diagnostics?24.L*l.kv_trace_rows*(2.L*kv+8):0);
-    row+=96.L*w*w+256.L*w+256+32.L*l.kv_rows*w+24.L*heads.first*l.kv_rows;
+    row+=96.L*w*w+512.L*w+256;
+    key+=32.L*w+48.L*heads.first;
   }
-  return {fixed,row};
+  return {fixed,row,key};
 }
 }
 long double PackedEventAttention::minimum_bytes(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
-  const auto [fixed,row]=footprint(p,q,l);return fixed+row;
+  const auto [fixed,row,key]=footprint(p,q,l);return fixed+row+key;
 }
 PackedEventAttention::PackedEventAttention(const ContentProfile& p,const Continuation& q,at::Device d,const ContentLimits& l,int64_t budget)
     :rows_(l.queue),width_(p.width) {
-  if(l.kv_rows<1||l.attention_chunk_rows<1||budget<1||(l.diagnostics&&l.kv_trace_rows<1))
+  if(l.kv_rows<1||l.attention_chunk_rows<1||l.attention_key_rows<1||budget<1||(l.diagnostics&&l.kv_trace_rows<1))
     throw std::invalid_argument("invalid event attention cache limits");
-  const auto [fixed,row]=footprint(p,q,l);
-  if(row<=0||fixed+row>budget)throw std::invalid_argument("event attention cache and one query row exceed workspace budget");
-  chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(rows_),
-    static_cast<long double>(l.attention_chunk_rows),(budget-fixed)/row}));
-  reserved_=static_cast<int64_t>(fixed+row*chunk_);
-  for(const auto& [heads,_]:geometries(p))groups_.push_back(std::make_unique<EventAttentionGroup>(p,q,d,l,heads.first,heads.second,chunk_));
+  const auto [fixed,row,key]=footprint(p,q,l);
+  if(row<=0)throw std::invalid_argument("empty event attention geometry");
+  const auto tiles=plan_attention_tiles(fixed,row,key,budget,rows_,l.attention_chunk_rows,l.kv_rows,l.attention_key_rows);
+  chunk_=tiles.queries;key_rows_=tiles.keys;reserved_=tiles.reserved;
+  for(const auto& [heads,_]:geometries(p))groups_.push_back(std::make_unique<EventAttentionGroup>(p,q,d,l,heads.first,heads.second,chunk_,key_rows_));
 }
 EventAttentionGroup::EventAttentionGroup(const ContentProfile& p,const Continuation& q,at::Device device,
-    const ContentLimits& l,int64_t h,int64_t kh,int64_t c)
+    const ContentLimits& l,int64_t h,int64_t kh,int64_t c,int64_t k)
     :nodes(p.graph.nodes.size()),width(p.width),query_heads(h),kv_heads(kh),head_width(width/h),
-     kv_width(kh*head_width),parameters(0),rows(l.queue),capacity(l.kv_rows),chunk(c) {
+     kv_width(kh*head_width),parameters(0),rows(l.queue),capacity(l.kv_rows),chunk(c),key_rows(k) {
   std::vector<at::Tensor> weights,outputs;std::vector<int64_t> windows_cpu,settings;
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=p.graph.nodes[n];const auto& region=p.graph.regions[node.region];
@@ -66,12 +67,14 @@ EventAttentionGroup::EventAttentionGroup(const ContentProfile& p,const Continuat
   }
   live={key.to(device),value.to(device),lengths.to(device)};
   chunks=at::zeros({1},longs.device(device));peak=lengths.max().reshape({1}).to(device);
+  key_work=at::zeros({3},longs.device(device));
   if(l.diagnostics)journal=std::make_unique<DeviceJournal>(l.kv_trace_rows,5,2*kv_width,device);
 }
-void PackedEventAttention::reset_window(){for(auto& g:groups_){g->chunks.zero_();if(g->journal)g->journal->count.zero_();}}
+void PackedEventAttention::reset_window(){for(auto& g:groups_){g->chunks.zero_();g->key_work.zero_();if(g->journal)g->journal->count.zero_();}}
 // Boundary-only statistics. These downloads never drive the next device stage.
 at::Tensor PackedEventAttention::chunks() const {auto sum=at::zeros({1},at::kLong);for(const auto& g:groups_)sum+=g->chunks.cpu();return sum;}
 at::Tensor PackedEventAttention::peak() const {auto peak=at::zeros({1},at::kLong);for(const auto& g:groups_)peak=at::maximum(peak,g->peak.cpu());return peak;}
+at::Tensor PackedEventAttention::key_work() const {auto sum=at::zeros({3},at::kLong);for(const auto& g:groups_)sum+=g->key_work.cpu();return sum;}
 void PackedEventAttention::export_states(Continuation& q) const {for(const auto& g:groups_)g->export_states(q);}
 void PackedEventAttention::export_trace(std::vector<Event>& events) const {for(const auto& g:groups_)g->export_trace(events);}
 void EventAttentionGroup::export_states(Continuation& q) const {

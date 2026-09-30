@@ -9,14 +9,14 @@ struct EventAttentionStage {at::Tensor values;std::vector<EventGroupStage> group
 // One actual event per owner in a ready stage. Groups share head geometry only;
 // topology/input do not specialize the schedule. KV storage stays compact.
 struct EventAttentionGroup {
-  int64_t nodes,width,query_heads,kv_heads,head_width,kv_width,parameters,owners,rows,capacity,chunk;
+  int64_t nodes,width,query_heads,kv_heads,head_width,kv_width,parameters,owners,rows,capacity,chunk,key_rows;
   std::vector<int64_t> node_map;
   std::vector<bool> adopt_all,clear;
-  at::Tensor mapping,windows,config,qkv,projection,chunks,peak;
+  at::Tensor mapping,windows,config,qkv,projection,chunks,peak,key_work;
   EventCache live;
   std::unique_ptr<DeviceJournal> journal;
   EventAttentionGroup(const ContentProfile&,const Continuation&,at::Device,const ContentLimits&,
-                      int64_t query_heads,int64_t kv_heads,int64_t chunk);
+                      int64_t query_heads,int64_t kv_heads,int64_t chunk,int64_t key_rows);
   EventGroupStage propose(CannProgram&,const ReadyBatch&,const ContentBatch&,const at::Tensor& values,const at::Tensor& error);
   void commit(CannProgram&,const EventGroupStage&,const SelectionProposal&,const at::Tensor& error);
   void export_states(Continuation&) const;
@@ -34,10 +34,12 @@ class PackedEventAttention {
   void export_trace(std::vector<Event>&) const;
   int64_t reserved_bytes() const {return reserved_;}
   int64_t chunk_rows() const {return chunk_;}
+  int64_t key_rows() const {return key_rows_;}
+  at::Tensor key_work() const;
   at::Tensor chunks() const;
   at::Tensor peak() const;
  private:
-  int64_t rows_,width_,chunk_,reserved_;
+  int64_t rows_,width_,chunk_,key_rows_,reserved_;
   std::vector<std::unique_ptr<EventAttentionGroup>> groups_;
 };
 } // namespace tide::device_online

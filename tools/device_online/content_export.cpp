@@ -64,6 +64,15 @@ Result ContentFlow::Impl::export_result() const {
     {"event_attention_kv_peak",event_attention?event_attention->peak().cpu().item<Index>():0},
     {"event_attention_kv_capacity",event_attention?limits.kv_rows:0},
     {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
+  for(const bool event:{false,true}) {
+    const auto work=event?(event_attention?event_attention->key_work():at::zeros({3},at::kLong)):
+      (attention?attention->key_work().cpu():at::zeros({3},at::kLong));
+    const std::string prefix=event?"event_attention_":"attention_";
+    out.stats[prefix+"key_rows"]=event?(event_attention?event_attention->key_rows():0):(attention?attention->key_rows():0);
+    out.stats[prefix+"key_tiles"]=work[0].item<Index>();
+    out.stats[prefix+"tiled_score_entries"]=work[1].item<Index>();
+    out.stats[prefix+"tiled_padding_entries"]=work[2].item<Index>();
+  }
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
   std::sort(out.messages.begin(),out.messages.end(),[&](const Atom& a,const Atom& b){return

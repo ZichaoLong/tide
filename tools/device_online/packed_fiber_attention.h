@@ -25,14 +25,16 @@ class PackedFiberAttention {
   void export_trace(std::vector<Event>&) const;
   int64_t reserved_bytes() const {return reserved_;}
   int64_t chunk_rows() const {return chunk_;}
+  int64_t key_rows() const {return key_rows_;}
+  at::Tensor key_work() const {return key_work_;}
   at::Tensor chunks() const {return chunks_;}
   at::Tensor peak() const {return peak_;}
  private:
-  int64_t nodes_,width_,parameters_,owners_,rows_,capacity_,chunk_,reserved_,max_ticks_;
+  int64_t nodes_,width_,parameters_,owners_,rows_,capacity_,chunk_,key_rows_,reserved_,max_ticks_;
   std::vector<int64_t> node_map_,node_heads_,head_groups_;
   std::vector<bool> adopt_all_,clear_;
   at::Tensor mapping_,heads_,qkv_,qkv_bias_,projection_,projection_bias_,decay_,config_;
-  at::Tensor chunks_,peak_;
+  at::Tensor chunks_,peak_,key_work_;
   FiberCache cache_;
   std::unique_ptr<DeviceJournal> journal_;
   std::unique_ptr<PackedFiberPool> pool_;

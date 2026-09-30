@@ -1,4 +1,5 @@
 #include "packed_fiber_attention.h"
+#include "tiled_attention.h"
 #include <algorithm>
 #include <array>
 #include <stdexcept>
@@ -23,7 +24,7 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
     decay.push_back(w.extra.at("fiber_decay"));heads.push_back(node.query_heads);
     config.insert(config.end(),{int64_t(region.observe_all),int64_t(node.clear)});
   }
-  if(!parameters_||capacity_<1||limits.attention_chunk_rows<1||budget<1
+  if(!parameters_||capacity_<1||limits.attention_chunk_rows<1||limits.attention_key_rows<1||budget<1
       ||(limits.diagnostics&&limits.kv_trace_rows<1))throw std::invalid_argument("invalid fiber cache limits");
   owners_=q.batch_size*parameters_;
   head_groups_=heads;std::sort(head_groups_.begin(),head_groups_.end());
@@ -38,12 +39,10 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   const long double fixed=pool_fixed+24.L*(owners_*static_cast<long double>(capacity_)+1)*(2.L*width_+1)
     +48.L*(parameters_+1.L)*width_*width_+128.L*(rows_+1.L)*(width_+8.L)
     +(limits.diagnostics?24.L*limits.kv_trace_rows*(2.L*width_+8):0);
-  const long double per_row=pool_row+96.L*width_*width_+256.L*width_+256
-    +head_groups_.size()*(24.L*capacity_*width_+24.L*max_heads*capacity_+128.L*width_);
-  if(fixed+per_row>budget)throw std::invalid_argument("fiber cache and one query row exceed workspace budget");
-  chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(rows_),
-    static_cast<long double>(limits.attention_chunk_rows),(budget-fixed)/per_row}));
-  reserved_=static_cast<int64_t>(fixed+per_row*chunk_);
+  const long double row_base=pool_row+96.L*width_*width_+256.L*width_+256+head_groups_.size()*256.L*width_;
+  const long double row_key=head_groups_.size()*(32.L*width_+48.L*max_heads);
+  const auto tiles=plan_attention_tiles(fixed,row_base,row_key,budget,rows_,limits.attention_chunk_rows,capacity_,limits.attention_key_rows);
+  chunk_=tiles.queries;key_rows_=tiles.keys;reserved_=tiles.reserved;
   if(pooled)pool_=std::make_unique<PackedFiberPool>(profile,device,rows_,chunk_);
   auto opts=at::TensorOptions().dtype(at::kFloat);auto longs=opts.dtype(at::kLong);
   qkv.push_back(at::zeros({width_,3*width_},opts));bias.push_back(at::zeros({3*width_},opts));
@@ -65,9 +64,10 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   }
   cache_={key.to(device),value.to(device),log_bias.to(device),lengths.to(device)};
   chunks_=at::zeros({1},longs.device(device));peak_=lengths.max().reshape({1}).to(device);
+  key_work_=at::zeros({3},longs.device(device));
   if(limits.diagnostics)journal_=std::make_unique<DeviceJournal>(limits.kv_trace_rows,5,2*width_+1,device);
 }
-void PackedFiberAttention::reset_window(){chunks_.zero_();if(journal_)journal_->count.zero_();}
+void PackedFiberAttention::reset_window(){chunks_.zero_();key_work_.zero_();if(journal_)journal_->count.zero_();}
 void PackedFiberAttention::export_states(Continuation& q) const {
   auto k=cache_.key.cpu(),v=cache_.value.cpu(),b=cache_.bias.cpu(),lengths=cache_.lengths.cpu();
   for(auto& [owner,s]:q.states) {

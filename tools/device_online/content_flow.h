@@ -10,6 +10,7 @@ struct ContentLimits {
   int64_t full_chunk_rows=16;
   int64_t emission_chunk_rows=16;
   int64_t attention_chunk_rows=8;
+  int64_t attention_key_rows=128; // Physical key tile; never limits logical visibility.
   int64_t kv_rows=128; // Per attention owner; hard bound, no implicit eviction.
   int64_t kv_trace_rows=4096; // Optional cache diagnostics, per window.
   int64_t max_repeat_ticks=65536; // Per Add candidate; explicit work refusal, never a power shortcut.

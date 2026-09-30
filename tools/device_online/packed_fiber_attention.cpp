@@ -1,4 +1,5 @@
 #include "packed_fiber_attention.h"
+#include "tiled_attention.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_fiber_plan.h"
 #include "aclrtlaunch_tide_fiber_chunk.h"
@@ -62,22 +63,30 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
   payload(1,qkv,queries);p.branch(branch,{head});p.mark(done);
   for(const auto h:head_groups_) {
     const auto d=width/h;
-    auto indices=at::empty({chunk,capacity},longs),additive=at::empty({chunk,1,1,capacity},opts);
-    auto q=at::empty({chunk,width},opts),keys=at::empty({chunk,capacity,width},opts),values=at::empty_like(keys);
-    auto kt=at::empty({chunk,h,d,capacity},opts),vt=at::empty({chunk,h,capacity,d},opts);
-    auto scores=at::empty({chunk,h,1,capacity},opts),prob=at::empty_like(scores),result=at::empty({chunk,h,1,d},opts);
+    auto q=at::empty({chunk,width},opts);
     auto begin=p.label(),work=p.label(),end=p.label();p.copy(cursor,zero);p.mark(begin);plan(1,h);p.branch(branch,{end,work});p.mark(work);
-    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_indices)(1,stream,
-      ptr(out.events),ptr(out.tokens),ptr(ids),ptr(out.cache.bias),ptr(indices),ptr(additive),ptr(error),capacity,owners,chunk),"gather complete KV visibility");},
-      {out.events,out.tokens,ids,out.cache.bias,indices,additive,error});
     p.index_select(queries,0,source,q);
-    p.index_select(out.cache.key,0,indices.reshape({-1}),keys.reshape({chunk*capacity,width}));
-    p.index_select(out.cache.value,0,indices.reshape({-1}),values.reshape({chunk*capacity,width}));
-    p.permute(keys.reshape({chunk,capacity,h,d}),{0,2,3,1},kt);
-    p.permute(values.reshape({chunk,capacity,h,d}),{0,2,1,3},vt);
-    p.batch_matmul(q.reshape({chunk*h,1,d}),kt.reshape({chunk*h,d,capacity}),scores.reshape({chunk*h,1,capacity}));
-    p.add(scores,additive);p.softmax(scores,3,prob);
-    p.batch_matmul(prob.reshape({chunk*h,1,capacity}),vt.reshape({chunk*h,capacity,d}),result.reshape({chunk*h,1,d}));
+    at::Tensor result;
+    if(key_rows_<capacity) {
+      result=append_tiled_attention(p,out.events,out.tokens,ids,q,out.cache.key,out.cache.value,
+        out.cache.bias,error,key_work_,{h,h,capacity,owners,key_rows_,true,1.});
+    }else {
+      auto indices=at::empty({chunk,capacity},longs),additive=at::empty({chunk,1,1,capacity},opts);
+      auto keys=at::empty({chunk,capacity,width},opts),values=at::empty_like(keys);
+      auto kt=at::empty({chunk,h,d,capacity},opts),vt=at::empty({chunk,h,capacity,d},opts);
+      auto scores=at::empty({chunk,h,1,capacity},opts),prob=at::empty_like(scores);
+      result=at::empty({chunk,h,1,d},opts);
+      p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_indices)(1,stream,
+        ptr(out.events),ptr(out.tokens),ptr(ids),ptr(out.cache.bias),ptr(indices),ptr(additive),ptr(error),capacity,owners,chunk),"gather complete KV visibility");},
+        {out.events,out.tokens,ids,out.cache.bias,indices,additive,error});
+      p.index_select(out.cache.key,0,indices.reshape({-1}),keys.reshape({chunk*capacity,width}));
+      p.index_select(out.cache.value,0,indices.reshape({-1}),values.reshape({chunk*capacity,width}));
+      p.permute(keys.reshape({chunk,capacity,h,d}),{0,2,3,1},kt);
+      p.permute(values.reshape({chunk,capacity,h,d}),{0,2,1,3},vt);
+      p.batch_matmul(q.reshape({chunk*h,1,d}),kt.reshape({chunk*h,d,capacity}),scores.reshape({chunk*h,1,capacity}));
+      p.add(scores,additive);p.softmax(scores,3,prob);
+      p.batch_matmul(prob.reshape({chunk*h,1,capacity}),vt.reshape({chunk*h,capacity,d}),result.reshape({chunk*h,1,d}));
+    }
     p.index_copy(query_output,0,destination,result.reshape({chunk,width}));p.branch(branch,{begin});p.mark(end);
   }
   if(pool_)coefficients=pool_->append(p,out.events,out.tokens,out.counts,ready,error,chunks);

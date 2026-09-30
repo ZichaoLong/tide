@@ -1,4 +1,5 @@
 #include "packed_event_attention.h"
+#include "tiled_attention.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_event_plan.h"
 #include "aclrtlaunch_tide_event_payload.h"
@@ -30,10 +31,7 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
   auto cursor=at::zeros({1},longs),zero=at::zeros_like(cursor),branch=at::zeros_like(error),tokens=at::zeros({1,4},longs);
   auto contents=at::zeros({n+1,w},opts);p.copy(contents.narrow(0,0,n),content.content);
   auto x=at::empty({c,1,w},opts),weight=at::empty({c,w,w+2*kv},opts),projected=at::empty({c,1,w+2*kv},opts),queries=at::empty({c,w},opts);
-  auto indices=at::empty({c,h,cap},longs),additive=at::empty({c,1,1,cap},opts);
-  auto keys=at::empty({c,h,cap,d},opts),v=at::empty_like(keys),kt=at::empty({c,h,d,cap},opts);
-  auto scores=at::empty({c,h,1,cap},opts),logits=at::empty_like(scores),prob=at::empty_like(scores),result=at::empty({c,h,1,d},opts);
-  auto out_weight=at::empty({c,w,w},opts),output=at::empty({c,1,w},opts),scale=at::full({},1./std::sqrt(double(d)),opts);
+  auto out_weight=at::empty({c,w,w},opts),output=at::empty({c,1,w},opts);
   const auto count_chunks=chunks;
   auto begin=p.label(),work=p.label(),end=p.label();p.copy(cursor,zero);p.mark(begin);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_chunk)(1,stream,
@@ -45,17 +43,27 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_payload)(32,stream,
     ptr(out.events),ptr(ids),ptr(projected),ptr(queries),ptr(out.cache.key),ptr(out.cache.value),ptr(error),w,kv,cap,c),"place compact event QKV");},
     {out.events,ids,projected,queries,out.cache.key,out.cache.value,error});
-  // Scalar metadata stores share cache lines even when their words differ.
-  // One writer avoids cross-core cache-line writeback races in indices/masks.
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_indices)(1,stream,
-    ptr(out.events),ptr(ids),ptr(indices),ptr(additive),ptr(error),h,kh,cap,os,c),"gather GQA head visibility");},
-    {out.events,ids,indices,additive,error});
-  p.index_select(out.cache.key.reshape({-1,d}),0,indices.reshape({-1}),keys.reshape({-1,d}));
-  p.index_select(out.cache.value.reshape({-1,d}),0,indices.reshape({-1}),v.reshape({-1,d}));
-  p.permute(keys,{0,1,3,2},kt);
-  p.batch_matmul(queries.reshape({c*h,1,d}),kt.reshape({c*h,d,cap}),scores.reshape({c*h,1,cap}));
-  p.multiply(scores,scale,logits);p.add(logits,additive);p.softmax(logits,3,prob);
-  p.batch_matmul(prob.reshape({c*h,1,cap}),v.reshape({c*h,cap,d}),result.reshape({c*h,1,d}));
+  at::Tensor result;
+  if(key_rows<cap) {
+    result=append_tiled_attention(p,out.events,tokens,ids,queries,out.cache.key,out.cache.value,
+      dummy,error,key_work,{h,kh,cap,os,key_rows,false,1./std::sqrt(double(d))});
+  }else {
+    auto indices=at::empty({c,h,cap},longs),additive=at::empty({c,1,1,cap},opts);
+    auto keys=at::empty({c,h,cap,d},opts),v=at::empty_like(keys),kt=at::empty({c,h,d,cap},opts);
+    auto scores=at::empty({c,h,1,cap},opts),logits=at::empty_like(scores),prob=at::empty_like(scores);
+    result=at::empty({c,h,1,d},opts);auto scale=at::full({},1./std::sqrt(double(d)),opts);
+    // Scalar metadata stores share cache lines even when their words differ.
+    // One writer avoids cross-core cache-line writeback races in indices/masks.
+    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_indices)(1,stream,
+      ptr(out.events),ptr(ids),ptr(indices),ptr(additive),ptr(error),h,kh,cap,os,c),"gather GQA head visibility");},
+      {out.events,ids,indices,additive,error});
+    p.index_select(out.cache.key.reshape({-1,d}),0,indices.reshape({-1}),keys.reshape({-1,d}));
+    p.index_select(out.cache.value.reshape({-1,d}),0,indices.reshape({-1}),v.reshape({-1,d}));
+    p.permute(keys,{0,1,3,2},kt);
+    p.batch_matmul(queries.reshape({c*h,1,d}),kt.reshape({c*h,d,cap}),scores.reshape({c*h,1,cap}));
+    p.multiply(scores,scale,logits);p.add(logits,additive);p.softmax(logits,3,prob);
+    p.batch_matmul(prob.reshape({c*h,1,cap}),v.reshape({c*h,cap,d}),result.reshape({c*h,1,d}));
+  }
   p.index_select(projection,0,parameter,out_weight);p.batch_matmul(result.reshape({c,1,w}),out_weight,output);
   p.index_copy(values,0,destination,output.reshape({c,w}));p.branch(branch,{begin});p.mark(end);
   if(journal) {

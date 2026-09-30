@@ -25,8 +25,9 @@ output projections are bounded batch matmuls. Device-generated gather indices pa
 each query with its complete proposed cache; head layouts, log biases, softmax and
 value products execute as CANN tensor operations. Every current query sees all old
 keys and all keys in its fiber. Physical query chunking does not add a triangular
-mask or change the global softmax denominator. This first adapter pads the key axis
-to the declared cache capacity; key-axis tiling is still pending.
+mask or change the global softmax denominator. The full-key path pads the key axis
+to the declared cache capacity; the separate tiled path described below bounds
+its physical key scratch without changing the retained cache.
 
 The five existing [post-attention pooling profiles](fiber-pooling.md) share this
 QKV/cache path: sum, mean, linear, active-softmax and all-softmax. Coefficients
@@ -94,6 +95,37 @@ reserved before fiber chunks expand. `event_attention_chunks`, the effective chu
 limit, KV peak and capacity are reported separately from the fiber counters.
 These capabilities require their own completed qualification evidence; they do
 not follow from the earlier fiber-only reports.
+
+### Physical key tiles
+
+`attention_key_rows` is an upper bound on gathered key rows per query, independent
+of `kv_rows` and of the logical visibility/window. When the effective key bound
+covers `kv_rows`, the existing complete-key CANN softmax remains selectable.
+Otherwise both fiber and event adapters use a shared device loop. AIV metadata
+selects actual key intervals and compact GQA head indices; CANN batch matmuls
+compute scores and weighted values. AIV vector work carries the running maximum,
+denominator and unnormalized weighted sum across tiles, rescaling previous sums
+when a new maximum appears. The final division uses the complete denominator.
+Short owners and padding queries may have no keys in a later tile; these rows
+contribute zero without evaluating an empty softmax or adding dummy denominator
+terms. All keys of the current fiber remain visible to every query of that fiber.
+
+The vector reduction adapter limits physical key tiles to256 rows. Requested
+limits are upper bounds; the budget may further reduce the key/query size before
+allocation. A cache plus one query/key row that still exceeds the budget is
+explicitly rejected. This is scratch planning, not eviction, a numerical trace
+prepass or a complete whole-model/training memory planner. Chunk policy never
+changes KV capacity, dtype, cache persistence or optimizer boundaries.
+
+`attention_key_rows` and `event_attention_key_rows` report effective limits.
+Their respective `key_tiles`, `tiled_score_entries` and `tiled_padding_entries`
+counters are int64 device counts reset per window. They count executed key-tile
+calls and real/padded query-head-key entries only on the tiled path; zero tiled
+counts on the full-key path do not mean attention was skipped. The existing
+query/QKV/output chunk counters retain their meaning. Counters are exported at
+the boundary and never drive execution. Changing physical key sizes on restore
+does not alter the checkpoint state contract. Tiled floating reductions require
+their own parity and placement qualification; no throughput claim is implied.
 
 For `InputOrigin`, a static edge table declares the visible port and int64 position
 stride. Device metadata preflight refuses an off-lattice position with code10

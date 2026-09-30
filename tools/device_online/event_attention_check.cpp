@@ -20,6 +20,7 @@ template<class F> void refuses(F f,const std::string& marker) {
 ContentLimits limits(Index chunk=4) {
   ContentLimits l;l.queue=96;l.arrivals=192;l.outputs=192;l.trace=1024;
   l.kv_rows=32;l.kv_trace_rows=8192;l.attention_chunk_rows=chunk;l.workspace_bytes=256*1024*1024;
+  l.attention_key_rows=chunk==1?1:7;
   return l;
 }
 void weights(NodeWeights& w,Index width,Index heads,Index kv_heads) {
