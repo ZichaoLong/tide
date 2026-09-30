@@ -1,0 +1,70 @@
+{
+  "schema": "tide-device-window-evidence-v1",
+  "source": "4e45072c66f6597025465b0d8917027e7cd19b55",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "finite FP32 inference profile, device window advance and optional diagnostics; not throughput/training",
+  "core_cpp_sha256": "8b337446ef421d499ab52f3bd6de3fbfec1e713a68bde6af2f6ee3887297175b",
+  "component_sha256": "8918f307be753038702479aa06ef213ccad337f901663e50c8fd980c15f8f664",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 16,
+    "existing_content_windows": 640,
+    "window_cases": 384,
+    "lean_profile_windows": 192,
+    "expected_failure_executions": 1
+  },
+  "runs": [
+    {
+      "name": "build-device-window-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "65b6f6f484892a28bd6fbeec2baa053208f498c093990f88c39000cc4fff9ef2",
+        "task.log": "78c914e02a30b907a38ba80ef1ccf6f5e092344532f20c2408ee19748890a679"
+      }
+    },
+    {
+      "name": "device-window-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "80c879d08908a3a0f1b3631a35cedc5db661926771f128fee377a6c13991de76",
+        "task.log": "1e95aa96b3196a49c854e56292f9b6007ae5b14452e9377ed6ce1ef9facfe583",
+        "verified/result.json": "dbe7124d27a5401d875c507f71aac112c4d6b3e1431ad42bbe4ee295cdfd42f5"
+      }
+    },
+    {
+      "name": "device-window-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "746f38ac2f3d598ad6183971ae313fe09d54c2765bbd11e0db07a68edf8743cf",
+        "task.log": "5a17f60cf7542a7e2edab49b6901351d3a5645d804eae54320c969425b884f4f",
+        "profile/result.json": "1e50768758d9716b9e933242c531972c8a2f38e45eabf959051d24f5dac50d51"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 26378,
+      "AI_CORE": 360
+    },
+    "journal_tasks": 0,
+    "host_fallback_diagnostic": false,
+    "host_api_counts": {
+      "aclmdlRIExecuteAsync": 193,
+      "aclrtSynchronizeStream": 6044,
+      "aclrtSynchronizeStreamWithTimeout": 193
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930153819.csv": "35ef78d065285c27e21bdc1f12cd83ebba026eb17db02321918120b73531d6ad",
+      "api_statistic_20260930153819.csv": "d32f9c314151a9e0a06c920b5926413a55f4fcb0187b65822fc904e0cbea3041"
+    }
+  }
+}

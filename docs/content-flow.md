@@ -111,7 +111,8 @@ materialization must be separated from future steady-state throughput timing.
 FP16, other module contracts, public Python/native packaging, peer progress and
 training remain independent delivery requirements.
 
-The window-interface development gate passes384 windows across four topologies,
+The window-interface gate on clean `4e45072` ([evidence](evidence/device-window-20260930.md))
+passes384 windows across four topologies,
 two input/state variants, both schedules, all three linear Read modes and both
 diagnostic settings. It checks three successive advances without downloading
 state/history/pending, delayed complete-observable export, isolation after mutating
@@ -120,8 +121,8 @@ The separate lean trace covers192 windows plus one expected failure, with193 mod
 submissions and193 boundary waits. It records26378 AIV and360 AI Core tasks, no
 journal task, no AiCPU task and no host-fallback diagnostic. It still includes
 setup, explicit verification exports and CPU assertions;6044 ordinary stream
-synchronization API calls are also recorded. These are development results on
-frozen `window-dev01`, not immutable qualification or throughput evidence.
+synchronization API calls are also recorded. All16 component cells pass on that immutable source. The trace is placement
+evidence, not throughput.
 
 The clean identity-Full qualification remains scoped to source `4d2f09e`
 ([evidence](evidence/content-loop-20260930.md)). The selected matrix Full increment

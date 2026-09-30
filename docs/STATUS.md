@@ -1,14 +1,14 @@
 # Current handoff
 
-Updated 2026-09-30T07:14:55.495163+00:00. **PAUSED at the window-increment commit boundary — user requested a new alignment before resuming.**
+Updated 2026-09-30T07:31:21.158919+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
-Preserve unrelated dirty work. The latest user request overrides the earlier resume:
-finish this tested window increment, commit/push it, then stop. Do not start new
-implementation or experiments until the user confirms the next alignment.
-Push remains authorized for this commit. The requested discussion covers the
-experiment skill and training scope; model convergence/task quality is downstream.
+Preserve unrelated dirty work. Latest alignment explicitly takes priority over
+run-ml-experiments: retain minimal useful source/input/config/environment identity,
+raw results/failures, declared synchronized timing and bounded jobs. Reuse existing
+records; Trackio and extra experiment infrastructure must not block implementation.
+Training acceptance is infrastructure correctness/performance, not convergence.
 
 ## Contract and priorities
 
@@ -31,46 +31,31 @@ CPU/screened mixed/resident. FP32 main, FP16 separate, CPU FP64 oracle; three fr
 processes before recommendations. CUDA actual execution remains target-machine pending.
 F1–F7 are NOT complete. The current raw device flow is single-device FP32 inference.
 
-## Paused implementation and next steps after renewed authorization
+## Current completed window increment
 
-This commit separates `advance_device()` from explicit CPU `snapshot()`/`result()`.
-Journals can be disabled (`diagnostics=false, trace=0`); state/history/pending stay
-authoritative on device across windows. It does not implement backward/optimizer,
-FP16 integration or general modules. See content-flow.md for the exact API contract.
+Committed/pushed4e45072 separates device advance from optional CPU exports/journals.
+Clean build-device-window-clean01, device-window-components-clean01 and
+ device-window-profile-clean01 all PASSED exit0. Source window-clean01/build
+ device-window-clean01, core runtime-guard-npu-clean01. Four CPU CTests/loader,
+all16 component cells,640 prior content windows plus384 new window cases.
+Lean trace:192 windows +one expected refusal,26378 AIV/360 AI Core,193 model
+submits/boundary waits, no journal/AiCPU/fallback. Not throughput/training.
+Evidence [device-window-20260930](evidence/device-window-20260930.md).
+Earlier window-dev01 directed results remain retained, without replacing clean evidence.
 
-All three directed development jobs are terminal PASSED exit0:
-- build-device-window-dev01: four CPU CTests and standalone loader.
-- device-window-gates-dev01: content640 windows plus window384 comparisons,
-  three successive device advances before state/history/pending export, delayed
-  full diagnostics, poisoned CPU snapshot isolation, failure snapshot/re-entry refusal.
-- device-window-profile-dev01: lean192 windows +one expected refusal;26378 AIV
-  +360 AI Core tasks, zero journal/AiCPU tasks and no host-fallback diagnostic.
-  Exactly193 model submits +193 model-boundary waits;6044 ordinary stream-sync
-  API calls from setup, boundary operations and explicit verification exports.
-  Not throughput; do not compare task sums with the earlier different workload.
+## Active packed-sum development
 
-Frozen input `TASK/sources/window-dev01`, base06db0c2 + hashed dirty overlay;
-build `TASK/builds/device-window-dev01`, matching runtime-guard-npu-clean01 core.
-All exact commands/status/logs are under TASK/runs/NAME. Profile report/raw CSVs
-under device-window-profile-dev01/profile; directed results under
- device-window-gates-dev01/verified. These are development evidence, not clean
-qualification of the implementation commit. No current increment job remains live.
-
-After the user confirms resumption:
-1. Freeze this implementation commit (git log identifies it), build-device-window-clean01
-   with --commit SHA, source window-clean01/build device-window-clean01, jobs2/900s.
-2. On that source run all16 component cells (900s) and separate lean placement
-   (`profile_device_control.py --check window --application-arg=--without-diagnostics`,480s),
-   queue120s. Preserve failures. Commit immutable evidence separately.
-3. Reconsider bounded small/medium continuous-window measurements under the new
-   alignment, then packed computation/module coverage. No full-size timing is queued.
-
-No new throughput experiment ran this increment. A partial draft for a standalone
-online measurement tool was removed before this pause; no benchmark implementation
-or output is being presented as delivered. `run-ml-experiments` and its record,
-Trackio and C++ bridge references were read. Use the existing project recorder when
-measurements resume; raw metrics/manifests are authoritative, Trackio is a projection.
-Training acceptance is infrastructure semantics/performance, not model convergence.
+Uncommitted new PackedSum and Ascend C metadata/vector kernels. Scalar device path
+remains selectable; ContentLimits.vectorized_aggregate defaults true in this draft.
+Payload width tiles256, stable message-order reduction, preflight before parallel
+writes, no arithmetic on absent buffer rows. sum_check.cpp covers72 scalar/vector
+cases,144 input-changing replays, nine malformed/sticky refusals; widths1..2048.
+build-device-sum-dev01 FAILED: Muls template inferred __gm__ float for scale.
+Preserved source/log; fix loads scale into a local float before the vector API.
+Added explicit inference/autograd rejection. RUNNING build-device-sum-dev02 on frozen sum-dev02, matching
+runtime-guard-npu-clean01 core; jobs2/900s. After build run sum/content/window directed
+gates (900s) and sum placement (480s), queue120s. On failure inspect source/log first.
+Minimal source/config/raw results only; no tracking infrastructure or new full-size job.
 
 ## Newly completed immutable qualification
 
@@ -167,4 +152,4 @@ Placeholders {python}/{base}/{source}/{out}; exact source identity/hash stored b
 snapshot. Existing snapshot reused read-only. Qualification requires --commit.
 Handoff writes use scripts/durable_records.py atomic fsynced replacement/read-back.
 Re-entry: git status --short --branch; python scripts/status.py; inspect actual terminal
-records. Remain paused until the user confirms resumption. Submitted/running never means passed.
+records, then continue the authorized contract. Submitted/running never means passed.
