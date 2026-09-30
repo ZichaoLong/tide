@@ -1,0 +1,90 @@
+{
+  "schema": "tide-device-fiber-evidence-v1",
+  "source": "081f5671ebd4f5fcee393cca95a5521b2eced449",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "bounded same-fiber sum attention and persistent KV; FP32 HARD single-device inference; not backward, training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "0899036e521ca5316b4c76c41b1d9502128592316f346f55435c587e45a45603",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 25,
+    "analytic_shape_anchors": 16,
+    "complete_windows": 192,
+    "refusals": 6,
+    "lifecycle_windows": 40
+  },
+  "runs": [
+    {
+      "name": "build-device-fiber-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f204498e5b7fded49c3e9a21f9f6944740632540d974acb2b2fb8b96b6fc59c5",
+        "task.log": "aac516ab2755258aa80b81704150f018bce65638f863c1be57f618da82456686"
+      }
+    },
+    {
+      "name": "device-fiber-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "b897ee42189b864ae00344dece9c2458043c6bd4be969ee4d413de784871a101",
+        "task.log": "2125424289e93252c565e5d2e5ca269c9a8159bfdfa1745b5ca7b51572ab3aa4",
+        "verified/result.json": "a4a7ca837018f57eb7925b6e287213be04b032402f8349d365c1df6d56212567"
+      }
+    },
+    {
+      "name": "device-fiber-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "4d79cbdb0fdf9cb506bdf17400f9c47a15196c956a778a37d3a870cb0b5a51b7",
+        "task.log": "80bdef20ee3ef1447cb76c09c8f748fa0cca898bf4f680a7ff888462cec54a62",
+        "profile/result.json": "69203879f060cab48e81befeae94e71e5d0baf476f8434e18e167a932b609ba5"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 64617,
+      "AI_CORE": 1984
+    },
+    "kernels": {
+      "BatchMatMulV2": 1984,
+      "GatherV3": 17796,
+      "SoftmaxV2": 897,
+      "Transpose": 1090,
+      "tide_fiber_chunk": 2805,
+      "tide_fiber_commit": 356,
+      "tide_fiber_indices": 545,
+      "tide_fiber_payload": 1185,
+      "tide_fiber_plan": 356,
+      "tide_fiber_trace": 352
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930200750.csv": "178f4b92deb7ae97f8855d5b9ea611eac3ff664c2bd101c8a39fd5b2154bd57c",
+      "api_statistic_20260930200750.csv": "c9a558907916cfba4d7d253bc6b9905bbab66ea0192df7b639b7fbf7bf3375a6"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": [
+    {
+      "name": "build-device-fiber-dev01",
+      "reason": "Ascend C Muls scalar argument must be loaded from global memory before use; dependent gates-dev01 never acquired NPU"
+    },
+    {
+      "name": "device-fiber-gates-dev02",
+      "reason": "attention workspace did not reserve minimum tanh Full row; fixed budget reservation"
+    },
+    {
+      "name": "device-fiber-gates-dev03",
+      "reason": "lifecycle fixture used illegal zero region budget; changed fixture to legal empty positive selection"
+    }
+  ]
+}

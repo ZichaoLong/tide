@@ -1,237 +1,163 @@
 # Current handoff
 
-Updated 2026-09-30T11:58:14.647517+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T12:11:02.581334+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
-uncommitted older accelerator_scale/flow consumer work listed below.
+HEAD081f567 committed/pushed. No subagents. Reference repositories and ObsidianVault
+are read-only. Preserve the older accelerator_scale/flow dirty work listed below.
 
-## Authoritative scope
+## Authoritative scope and next actions
 
 [execution-flows.md](execution-flows.md) is the execution contract; [ROADMAP F1–F7](ROADMAP.md)
-is the only backlog. Latest user alignment takes priority over run-ml-experiments:
-minimal source/input/config/environment identity, raw results/failures, synchronized
-timing and bounded resources/stops. Reuse records; Trackio must not block implementation.
-Training acceptance means forward/backward/VJP/optimizer/continuation and complete
-throughput, not convergence. No pending permission or pause.
+is the only backlog. Latest user alignment overrides run-ml-experiments: minimal
+source/input/config/environment identity, raw results/failures, synchronized timing,
+bounded resources/stops. Reuse records; Trackio must not block implementation.
+Training means forward/backward/VJP/optimizer/continuation and complete throughput,
+not convergence or model effects. No pending permission or pause.
 
-Every candidate independently consumes input/state/parameters; no numerical CPU
-route prepass, whole-window potential expansion or fixture-specific schedule.
-General online node-time greedy prefill accepts each family's legal topology/input,
-including PDG positive-delay feedback. Device residence includes online decisions.
+Candidates independently consume input/state/parameters; no numerical CPU route
+prepass, whole-window potential expansion or fixture-specific schedule. General
+online greedy prefill accepts each family's legal topology/input, including PDG
+positive-delay feedback. Device residence includes actual online decisions.
 
-Priorities: finite-profile correctness/failure gates and bounded profiling; actual
-modules/attention/KV and complete safe chunking; public five presets and matrix,
-peer progression and resident backward/optimizer; then representative/full-size
-comparisons. PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill
-× inference/complete training. CPU, mixed A/B/C, resident; FP32 main, FP16 separate,
-CPU FP64 oracle. Three fresh processes before performance recommendations.
-CUDA real execution remains target-machine pending. **F1–F7 are not complete.**
-The raw device flow is still single-device FP32 inference.
+Priorities: independent correctness/failure gates and bounded profiling; actual
+modules/attention/KV and complete safe chunking; public five presets/matrix, peer
+progression and resident backward/optimizer; then representative/full-size timing.
+PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill × inference/
+complete training. CPU,mixed A/B/C,resident; FP32 main,FP16 separate,CPU FP64 oracle.
+Three fresh processes before performance recommendations. CUDA device execution is
+target-machine pending. **F1–F7 are not complete.** Raw device flow is still
+single-device FP32 HARD inference; no resident backward/optimizer.
 
-## Latest qualified increments (committed and pushed)
+1. Clean fiber build/gates/profile all PASSED; evidence in
+   docs/evidence/device-fiber-20260930.{json,md} qualifies081f567.
+2. Continue general post-attention pooling (mean/linear/active/all-softmax), needed
+   by existing attention consumers. Three draft files packed_fiber_pool.{h,cpp}
+   and ascendc/tide_fiber_pool.cpp are not integrated, built or tested yet.
+   Then event-GQA/window attention, safe memory planning and node-time batching.
+3. Public matrix/presets, multi-card peer progression and resident training remain
+   open. Do not resume historical timing merely to occupy a build wait.
 
-- Device periodic clocks, implementation49ff108: four CPU CTests, all19 device
-  cells,480 mapped windows/18 multi-phase windows/12 refusals;95457 AIV+746 AI Core.
+## Current immutable qualification: bounded same-fiber attention
+
+Implementation081f567: packed_fiber_attention.{h,cpp},fiber_cache.cpp,fiber_check.cpp,
+six Ascend C kernels and ContentFlow integration. Source fiber-clean01 at081f567;
+build device-fiber-clean01; matching core origins-npu-clean01.
+
+- build-device-fiber-clean01 PASSED,four CPU CTests,jobs2.
+- device-fiber-gates-clean01 PASSED all25 cells (physical9 -> logical0).
+- device-fiber-profile-clean01 PASSED,64617 AIV+1984 AI Core,no AiCPU/fallback
+  (physical13 -> logical0). Qualification records are terminal, clean081f567.
+
+All records: TASK/runs/NAME/{status.json,task.log}, result verified/result.json or
+profile/result.json. Qualify the clean terminal results, not development records.
+Do not print entire profile JSON; it includes large raw task arrays.
+
+Behavior: lh-fiber-attention-sum-repeat-v1 consumes real per-source weighted rows
+in local slot order. NPU metadata chooses QKV/query/output chunks; batched matrix
+multiplication,gather,head permutation,softmax and vector payload tasks run in the
+runtime model. Each query sees all old keys and all current fiber keys; no triangle.
+Exact repeated bias decay uses local ticks. Bounded owner arenas retain key/value/
+log_bias and int64 lengths; observation count is distinct. Selection determines
+adoption; clear empties the cache after saving comparison for Full. Optional old/
+proposal cache journals export all four state-slot views without feeding execution.
+
+One complete region frame per attention owner per stage is an explicit adapter
+fallback, including content Read. Independent owners/message rows remain batched;
+other regions retain legal prefixes. Full attention node-time state batching and
+key-axis tiling are pending. Queries are chunked with the complete global denominator.
+kv_rows128 default; attention_chunk_rows8; kv_trace_rows4096 for diagnostics. Actual
+query limit can shrink under the byte budget, reserving at least one tanh Full row.
+Capacity11,stage diagnostic12,tick-work8 refuse explicitly; cumulative journal uses
+its existing refusal. Lean windows keep live KV without exporting it.
+Other fiber pools,event-GQA/window,FP16,training are not implied.
+
+Development build-device-fiber-dev04 PASSED CPU/loader checks and reused unchanged
+production objects with recorded hashes. device-fiber-gates-dev04 PASSED all25
+cells:16 analytic/shape anchors,192 full windows,6 refusals,40 lifecycle windows.
+Coverage includes width1/7/33/257,heads1/3,mixed owners,chunk1/4,slot permutation,
+InputOrigin,feedback/DAG,content/old/proposal Read,scalar/vector Read/state,
+clear/selected-only/empty selection,large clocks/counters,periodic phases,
+cache length vs observations,continuation/restore/lean export and repeated recycling.
+Strict rtol1e-5/atol1e-6 and exact discrete comparisons unchanged.
+Profile-dev04 PASSED64617 AIV+1984 AI Core tasks,no AiCPU/fallback; placement only.
+
+Retained development failures:
+- build-device-fiber-dev01: Ascend C Muls cannot accept a __gm__ scalar reference;
+  fixed by reading the scale into a plain float. Dependent gates-dev01 failed
+  without acquiring NPU. Original source/logs remain.
+- gates-dev02: attention budget left too little for one tanh Full row at width257/
+  chunk4. Fixed by reserving PackedFull's own minimum footprint before growing
+  the attention chunk. build-dev03 was an isolated incremental build of three
+  affected C++ files; generated kernels remained byte-identical.
+- gates-dev03: final lifecycle fixture used invalid zero region budget. Corrected
+  test uses positive-v1 and negative content Read for legal empty selection. Build
+  dev04 recompiled that test only; no runtime formula/tolerance change.
+The independent fresh clean build above closes incremental-build provenance.
+Clean qualification repeats16 anchors,192 windows,6 refusals,40 lifecycle windows.
+
+## Earlier immutable qualifications (committed/pushed)
+
+- Norm-FP32 public core0e66d89:8901 CPU tests/eight CTests,Python18/native18 NPU
+  fixtures and standalone6 combinations/18 updates. Host-scheduled tensor training,
+  not resident. [Evidence](evidence/norm32-20260930.md).
+- Native origin stable-sort correction832a881: eight CTests,two CPU Aggregate
+  gates,362 focused tests and NPU Aggregate. Old0e66d89 regression truly fails;
+  wrapper success means the old failure was observed. Not a new full regression.
+  [Evidence](evidence/native-origin-order-20260930.md).
+- Device clocks49ff108: all19 cells;480 mapped/18 multi-phase windows/12 refusals.
   [Evidence](evidence/device-clock-20260930.md).
-- Public norm-fp32-v1, implementation0e66d89:8901 full CPU tests/eight CTests,
-  Python18/native18 NPU fixtures; standalone6 combinations/18 updates. Profile604
-  kernels,97 host scalar/72 memcpy events. Host-scheduled tensor training, not
-  resident training. [Evidence](evidence/norm32-20260930.md), evidence commit543de2b.
-- Device vector Read, implementation8a735ef: all20 cells,530 norm windows;
-  scalar/vector,content/old/proposal,width2048,int64 clocks,overflow/FP64 refusals.
-  Trace96173 AIV+1083 AI Core,no AiCPU/fallback.
-  [Evidence](evidence/device-read-20260930.md), evidence commita117944.
-- Selected LH Full, implementationcd03ca8: nine activation/norm profiles,40
-  component cases/96 strict complete windows,all21 cells. Trace27763 AIV,no AiCPU.
-  34/536 low-variance component rows miss ordinary CPU/NPU tolerance; both CPU and
-  NPU pass an independent FP64 conditioning budget. CPU maxabs1.31656e-5,NPU1.51344e-5.
-  Full graph comparisons and well-conditioned rows retain original tolerances.
-  [Evidence](evidence/device-lh-full-20260930.md), evidence commitd336c37.
+- Vector Read8a735ef: all20 cells,530 windows,96173 AIV+1083 AI Core,no AiCPU.
+  [Evidence](evidence/device-read-20260930.md).
+- LH Fullcd03ca8: nine profiles,40 components/96 strict windows,all21 cells.
+  Low-variance component LayerNorm uses independent FP64 conditioning evidence;
+  full graph tolerances remain unchanged. [Evidence](evidence/device-lh-full-20260930.md).
+- Device origins1be3619: all22 cells,24 ordering cases/128 windows/8 refusals,
+  27256 AIV,no AiCPU. [Evidence](evidence/device-origins-20260930.md).
+- Slot projection/phase emission6445121: all23 cells,16 components/66 windows/
+  6 refusals,14375 AIV+176 AI Core. [Evidence](evidence/device-emission-20260930.md).
+- SwiGLU74cec2f: all24 cells,16 components/256 windows/4 refusals,53667 AIV+1195
+  AI Core,no AiCPU/fallback. [Evidence](evidence/device-swiglu-20260930.md),evidence
+  commit5bfe36d. These device increments qualify finite FP32 HARD inference only.
 
-All LH clean jobs PASSED: build-device-lh-full-clean01,
-device-lh-full-components-clean01,device-lh-full-profile-clean01. Frozen source
-lh-full-clean01 atcd03ca8; build device-lh-full-clean01/core norm32-npu-clean01.
-These finite qualifications do not certify throughput,FP16 flow,slot-affine,
-attention/KV,the full public matrix,peer progression or resident training.
-
-## Current native origin-order correction
-
-Native Aggregate used unstable std::sort for equal InputOrigin keys. It now uses
-stable_sort, matching Python and retaining distinct logical sources. A32-edge
-regression in cpp/test/custom_aggregate.cpp fails against old0e66d89 core (exit2,
-exact expected message) and passes against corrected core, FP32/FP64.
-origins-oldcore-regression01 preserves old-library/test-object hashes and failure.
-
-Development core builds build-origins-cpu-dev01 and build-origins-npu-dev01 PASSED,
-frozen origins-core-dev01. origins-cpu-gates-dev01 PASSED eight CTests, two standalone
-Aggregate gates and362 focused source-origin/domain/ports/Settle Python checks.
-Correction832a881 committed/pushed. Clean CPU/NPU builds from origins-core-clean01
-at832a881 PASSED. origins-cpu-gates-clean01 PASSED eight CTests, two standalone
-Aggregate gates and362 focused tests; origins-standalone-npu-clean01 PASSED.
-[Narrow stable-order evidence](evidence/native-origin-order-20260930.md) records
-these gates separately from full regression.
-
-## Current InputOrigin device increment committed/pushed
-
-Implementation1be3619: static origin table; int64 clock preflight/refusal10;
-stable metadata order for scalar/vector Aggregate. Physical identities,scales,
-contribution rows,pending and emitted messages stay physical. Exported source views
-apply projection only at observation. Logical alias collision remains2.
-Nonempty emit_phases is explicitly refused until phase routing is implemented.
-
-Development build PASSED. device-origins-gates-dev01 PASSED all22 cells including
-24 ordering/tie/cancellation cases,128 continuation windows,8 refusals.
-device-origins-profile-dev01 PASSED27256 AIV tasks,no AiCPU/fallback.
-Frozen origins-dev01 includes the recorded patch; these are development results.
-
-Clean build-device-origins-clean01,device-origins-gates-clean01 and
-device-origins-profile-clean01 PASSED from frozen origins-clean01 at1be3619,
-matching clean core origins-npu-clean01. All22 cells passed; origin gate24 ordering
-cases,128 windows,8 refusals. Profile27256 AIV tasks,no AiCPU/fallback.
-[Device-origin evidence](evidence/device-origins-20260930.md) records the clean qualification.
-
-## Packed slot emission qualified on6445121
-
-Committed/pushed implementation6445121 supports device-planned time-phase presence,
-selected affine projection chunks and batched physical delivery. Unscaled slot
-journals preserve zero-scale diagnostics; Full auxiliary values remain separate.
-Scope: single-device FP32 HARD inference. Old broadcast component remains available.
-
-Clean build-device-emission-clean01,device-emission-gates-clean01 and
-profile-clean01 PASSED from frozen emission-clean01 at6445121,matching core
-origins-npu-clean01. Four CPU CTests,all23 cells;16 emission components,66 complete
-windows,6 refusals. Profile14375 AIV+176 AI Core,no AiCPU/fallback. Source/raw hashes
-and limits are in [emission evidence](evidence/device-emission-20260930.md).
-
-Development build-dev01 failed on test helper ADL ambiguity; two dependent jobs
-failed without acquiring a device. gates/profile-dev04 failed at bool tensor
-initializer construction. Later tests use ordinary bool ones/fill. Pre-run review
-corrected illegal identity phases and placed poison below public finite validation.
-Original snapshots/logs remain; no failure relabeled and no tolerance/formula change.
-Incremental development builds recorded byte-identical production source/relinked
-tests. The final independent clean build above supersedes that provenance for qualification.
-
-## SwiGLU Full committed/pushed at74cec2f
-
-Implementation packed_swiglu_full.{h,cpp},swiglu_check.cpp and flow/profile/build
-integration implement selected-only batched SwiGLU with the original residual.
-Static parameter table packs actual SwiGLU owners; device planner chooses chunks.
-HARD FP32 inference only; no new backward or throughput claim.
-
-build-device-swiglu-dev01 PASSED from frozen swiglu-dev01,matching core
-origins-npu-clean01. Four CPU CTests and standalone loader closure passed.
-device-swiglu-gates-dev01 PASSED all24 cells; new swiglu16 components/256 windows/
-4 refusals. Coverage:width1/7/33/257,chunk1/4,empty/partial selection,inactive NaN
-parameters,large clocks,mixed identity/tanh/LH Full,slot-affine/phase emissions,
-content/proposal Read,feedback/DAG,two inputs,both schedules,clear/adoption,
-continuation and lean export. Existing strict tensor/discrete comparison unchanged.
-device-swiglu-profile-dev01 PASSED53667 AIV+1195 AI Core tasks,no AiCPU/fallback.
-Development source is recorded dirty; no runtime source changed during these jobs.
-
-Clean build-device-swiglu-clean01,device-swiglu-gates-clean01 and
-profile-clean01 PASSED from frozen swiglu-clean01 at74cec2f,matching core
-origins-npu-clean01. Four CPU CTests,all24 cells;16 components,256 complete
-windows,4 refusals. Profile53667 AIV+1195 AI Core,no AiCPU/fallback.
-[Clean SwiGLU evidence](evidence/device-swiglu-20260930.md) records source/raw hashes.
-No new runtime jobs active. Next: attention/KV and complete safe chunking;
-public matrix,peer progression,resident training and scale comparisons remain
-open. Historical timing remains paused while implementation proceeds.
-
-## Current bounded same-fiber attention development
-
-Uncommitted new packed_fiber_attention/fiber_cache and six Ascend C kernels add
-per-attention-owner bounded key/value/log_bias arenas, device source-slot ordering,
-batched QKV/gather/softmax/output projection and selected-only adoption/clear.
-All queries retain the entire candidate cache. One complete region frame per
-attention owner is an explicit adapter capability fallback, not full node-time
-state batching. Other region prefixes and message/owner batches remain packed.
-Optional old/proposal KV journals reconstruct complete diagnostic slots at export.
-Default kv_rows128,attention_chunk_rows8,kv_trace_rows4096; actual chunk bounded by
-workspace. Capacity11,trace12,tick-work8 fail explicitly and poison live owner.
-No FP16, other fiber pooling/event-GQA, backward or throughput claim.
-
-build-device-fiber-dev01 FAILED at Ascend C Muls: global-memory scalar reference
-cannot bind the plain scalar template parameter. device-fiber-gates-dev01 FAILED
-on its build dependency, without acquiring NPU. Fix loads the scale into a local
-float first; retained frozen snapshot/logs remain failed. No numerical test result yet.
-
-PASSED build-device-fiber-dev02 from frozen fiber-dev02,core origins-npu-clean01,
-build device-fiber-dev02,jobs2,1800s. Added periodic-clock,selected-only/empty
-selection,clear and 10-window bounded-cache-reuse gates. Then one-NPU fiber first
-(120s),all25 cells900s and separate placement profile480s;queue120s. device-fiber-gates-dev02 FAILED: one packed Full row exceeds workspace budget.
-This reproduces the independently identified reservation defect; no numeric parity failure reported. No NPU held
-while building. On failure fix identified cause before a new snapshot/run.
-Static budget review found attention could consume the minimum workspace needed
-by the following tanh Full (width257/chunk4 fixture). Worktree now reserves that
-minimum, using the same footprint formula as PackedFull, before growing the
-attention chunk. No formula/tolerance changed. fiber-dev02 remains untouched.
-PASSED build-device-fiber-dev03 uses an isolated
-copy with unchanged-kernel/source hashes, recompiling three affected C++ files
-and relinking consumers. Task-local launcher fiber_incremental_build03.py records
-provenance. device-fiber-gates-dev03 FAILED at lifecycle fixture construction: zero region
-budget is invalid. It passed earlier anchor/window/refusal code but whole gate
-is failed. Correct test uses positive-v1 with negative content Read for legal
-empty selection; no runtime formula or tolerance changes. PASSED build-device-fiber-dev04
-reuses byte-identical dev03 production and recompiles/relinks only fiber_check.cpp.
-device-fiber-gates-dev04 PASSED all25 cells from frozen fiber-dev04,900s,
-one NPU/queue120s. New fiber gate PASSED16 anchors/192 windows/6 refusals/40
-lifecycle windows. Profile-dev04 PASSED64617 AIV+1984 AI Core,no AiCPU/fallback.
-Next commit/push implementation, then fresh clean build-device-fiber-clean01
-from that immutable commit; all25 cells900s and profile480s,queue120s.
-No new task remains active. Historical CPU Attention stays paused.
-Final qualification will still use a fresh clean full build.
-SwiGLU evidence committed/pushed5bfe36d. Preserve old flow/accelerator dirty work.
-
-## Failures retained and prior work
-
-- LH dev01 fixed-tolerance component failed. diagnostic01 isolated LayerNorm;
-  modes0/1 unchanged,mode2 refused161002. precision-dev02 used independent FP64
-  formulas/declared component budget; complete graph equality unchanged. Original
-  logs/snapshots and diagnosis.json remain; no failure is relabeled.
-- device-norm-gates-dev01/profile-dev01 timed out120/180s: malformed test initial
-  clocks caused CPU oracle ~2^55 literal Add ticks (gdb confirmed CPU mul). Fixed
-  fixture and added work-bound guard; no power shortcut or timeout increase.
-- Older closure/build/runtime failures remain in durable records and immutable
-  evidence. In particular raw control does not use the unsupported nested captured
-  NPUGraph bridge; Tensor scatter_reduce host fallback remains rejected.
+## Preserved work and historical timing
 
 Preserve dirty tools/accelerator_scale/flow_*,bounded/resident/peer files,their CMake
-and build script,scripts/benchmark_execution_flow.py,verify_execution_flows.py,
-tests/test_flow_semantics.py. Limited DAG/rank-aligned consumers, not revised general
-online delivery. flow-dev05 CPU24 passed; NPU18 FP32 passed before FP16 resident Add
-gradient failure. dev06 builds passed, no gates. Peer CPU8/NPU16 passed separately.
+and scripts/build_accelerator_scale.py,scripts/benchmark_execution_flow.py,
+verify_execution_flows.py,tests/test_flow_semantics.py. These are limited DAG/
+rank-aligned consumers, not revised general-online delivery. flow-dev05 CPU24
+passed;NPU18 FP32 passed before FP16 resident Add gradient failure. dev06 builds
+passed,no gates. Peer CPU8/NPU16 passed separately. Do not stage/clean this work.
 
 Historical tide-execution-flows-historical-cpu-attention-01.service remains SIGSTOP.
-TASK/runs/historical-cpu-attention-01/pause.json overrides its running status.
-It holds host memory and TASK/timing.lock. Do not blindly resume/stop it. Resolve
-its interrupted timing and lock deliberately before formal timing, preserving logs.
-Historical mixed Add complete training CPU78.793172/NPU4 47.932888 ms/token means
-NPU throughput1.6438× faster. This does not qualify the new resident path.
-Historical Attention has no valid CPU complete-training ratio.
+TASK/runs/historical-cpu-attention-01/pause.json overrides its running status. It
+holds host memory and TASK/timing.lock. Do not blindly resume/stop it; resolve the
+interrupted timing/lock deliberately before formal timing, preserving logs.
+Historical Add complete training CPU78.793172/NPU4 47.932888 ms/token is NPU
+throughput1.6438× faster; it does not qualify this new resident backend. Attention
+has no valid CPU complete-training ratio. Older failure reproducers/logs remain.
 
 ## Environment and durable operation
 
-TASK=/mi/data2T/zlong/tide-execution-flows. Each job: TASK/runs/NAME/{status.json,task.log},
-repository symlink artifacts/execution-flows-NAME. Unit tide-execution-flows-NAME.service,
-background.slice. Frozen snapshots/builds must not be overwritten or modified.
-Last disk check307GB data/27GB root free; recheck before large writes.
-
-Module libtorch-npu/2.10.0-cann9.0.0; Python
+TASK=/mi/data2T/zlong/tide-execution-flows. Job symlink artifacts/execution-flows-NAME;
+unit tide-execution-flows-NAME.service in background.slice. Frozen snapshots/builds
+must not be overwritten/modified. Last disk check302GB data/27GB root free; recheck
+before large writes. Build parallelism2;CPU/BLAS threads1.
+Module libtorch-npu/2.10.0-cann9.0.0;Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
 User-authorized public /opt stack overrides dated guide defaults. TASK_QUEUE_ENABLE=0,
-TORCH_DEVICE_BACKEND_AUTOLOAD=0,CPU/BLAS threads1,build jobs2. Retain module PYTHONPATH
-and prepend snapshot/python. SoC Ascend910_9392;16 chips64GiB. Cooperative leases
-choose physical devices and remap to logical npu:0; no hardcoded placement.
+TORCH_DEVICE_BACKEND_AUTOLOAD=0. Retain module PYTHONPATH and prepend snapshot/python.
+SoC Ascend910_9392;16 chips64GiB. Cooperative leases choose physical devices and
+remap to logical npu:0; no hardcoded placement.
 
 ```
 python TASK/launchers/freeze_run.py --name NAME --snapshot SNAPSHOT [--commit SHA] [--npu --max-wait 120] -- timeout --signal=TERM --kill-after=10s 900s '{python}' scripts/COMMAND ...
 ```
 
-Placeholders {python},{base},{source},{out}. Existing snapshot reused read-only;
-qualification requires --commit. norm32_after_core.py is a reusable bounded600s
-build-dependency wrapper; do not reserve an NPU while waiting for a build.
-origins_cpu_gates.py takes a build path,checks source hash,then runs the focused CPU
-matrix. Handoff writes use scripts/durable_records.py atomic fsync/read-back.
-Re-entry: git status --short --branch;python scripts/status.py;inspect real terminal
-records before continuing. Submitted/running never means passed.
+Placeholders {python},{base},{source},{out}. Existing snapshots reused read-only;
+qualification requires --commit. norm32_after_core.py is a bounded600s dependency
+wrapper; do not reserve NPU while waiting. Profile summaries[].engines is a dict;
+operators_by_type is a list; summaries[].inputs has raw CSV hashes. Preserve failed
+runs; terminal status plus expected outputs are required before reporting success.
+Handoff writes use scripts/durable_records.py atomic fsync/read-back. Re-entry:
+git status --short --branch;python scripts/status.py;inspect actual terminal records.
