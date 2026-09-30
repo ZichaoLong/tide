@@ -1,0 +1,92 @@
+{
+  "schema": "tide-device-graph-vjp-evidence-v1",
+  "source": "37430e1dfab52238874e3a75a52b052ccd09c233",
+  "scope": "Internal single-NPU FP32 HARD sum/broadcast identity/EMA/Add state plus identity/tanh Full whole-window backward; not other modules, retained-window autograd, optimizer or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 37,
+    "whole_graph_windows": 98,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "link_windows": 64,
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "99cf955394b839220ae31bc1373de19b47581bd3fd63ae06222d55dec85e40b1",
+    "component_sha256": "3cc8e0afb4760331e7c616dc116ba8c17140ad951cafc334b7d366c714ba2d2a",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-graph-vjp-clean01",
+      "source": "37430e1dfab52238874e3a75a52b052ccd09c233",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "814a7527d38d08068899ae694d576c555b1f060dd657665fb9a4073405d9bb72",
+        "task.log": "2c94cde9a22bb2f6411ed957ec06640788a3f4a2e4313f39a7e1b8e4550fedde"
+      }
+    },
+    {
+      "name": "graph-vjp-clean01",
+      "source": "37430e1dfab52238874e3a75a52b052ccd09c233",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "18611caeec006b265ae9584dd7589221287102108e996adb171c145ac80e3280",
+        "task.log": "0ebb60d7b015f42ec3d01d6a7da489eadd54092a67b9a0e60525e8716631b228",
+        "verified/result.json": "0b8f88b7fe289e391959a28d3e0c30b736db95d85aef0e2357483a1ddc0f6b51"
+      }
+    },
+    {
+      "name": "graph-vjp-profile-clean01",
+      "source": "37430e1dfab52238874e3a75a52b052ccd09c233",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "4168b9fea517e0bbaef5e2bdbccc9beef048dbfa6acb4ebd5f6060d89759581e",
+        "task.log": "30095507013f0741acde7a0b55d3be1efccc87fd638f991ec370e60ad8802a52",
+        "profiled/result.json": "a2da4fb7ffe9b6778962ba88e50e24ff972ed1076254c0103fef733220b4cce8",
+        "profiled/profile.log": "9c7b73f714ca46d54d5f0aa2cb29cbf0869c69b180f6ebe6a7643f6bd159ec75"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 88699,
+        "summed_task_us": 638341.0159999974
+      },
+      "AI_CORE": {
+        "count": 1269,
+        "summed_task_us": 4552.264000000001
+      },
+      "MIX_AIV": {
+        "count": 792,
+        "summed_task_us": 3470.871999999993
+      }
+    },
+    "vjp_kernel_records": 5934,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  },
+  "retained_failures": [
+    {
+      "run": "build-graph-vjp-dev01",
+      "reason": "Muls template __gm__ scalar type rejected; explicit scalar load fixed"
+    },
+    {
+      "run": "graph-vjp-dev03",
+      "reason": "257-wide forward fixture exceeded default budget; explicit512MiB fixture bound used"
+    }
+  ]
+}

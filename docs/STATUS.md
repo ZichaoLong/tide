@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **658943a**,Full VJP qualification committed/pushed;state-chain qualification4a29b7c;public resident evidence8b89080;
+HEAD **37430e1**,graph reverse implementation committed;Full VJP qualification658943a;state-chain qualification4a29b7c;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -82,128 +82,50 @@ fingerprints,raw results/logs/profile CSVs. Reports
 `docs/evidence/public-resident-20261001.{json,md}` are committed/pushed8b89080.
 Do not relabel public inference as resident training. Historical failures remain.
 
-## Current device state VJP increment
+## Current training increments and next actions
 
-`docs/resident-state-vjp.md` states the narrow first-order identity/EMA HARD
-contract. Borrowed actual forward tape,device predecessor links and reverse
-progression,explicit cotangent connection bits,packed feature tiles. This is
-an internal module,NOT complete graph backward/autograd/optimizer. It returns
-sample partials; alias reduction/graph message dependencies remain to integrate.
+State VJP qualified at3e2d54d:216 CPU FP32/FP64 autograd cases,4 actual tapes,
+all34 device cells and7,743 AIV-only profile tasks. Evidence committed4a29b7c:
+`docs/evidence/device-state-vjp-20261001.{json,md}`.
+Full identity/tanh VJP qualified at3285b13:96 CPU FP32/FP64 cases,2 actual tapes,
+all35 cells;8,036 AIV+288 AI_CORE, no AiCPU/fallback. Evidence658943a:
+`docs/evidence/device-full-vjp-20261001.{json,md}`.
+These are local components,not full training/optimizer/throughput claims.
+Retained failures:state-vjp-dev02 bool-cache race;0459195 clean gate/profile
+and state-vjp-add-dev01 assertion-helper regression (fixed without tolerance changes).
 
-- `build-state-vjp-dev01` PASSED full build and4 CTests.
-- `build-state-vjp-dev02` PASSED isolated relink in a new directory.
-- `state-vjp-dev02` FAILED: content VJP/connection mismatch. Retain this failure.
-- `build-state-vjp-dev03` PASSED isolated rebuild of both VJP kernels plus relink,
-  checking unchanged parent production/kernel hashes,archive and binary identities.
-  Task-local launcher `state_vjp_relink_kernels.py`;all commands/derivation are in
-  `builds/state-vjp-dev03/control-build.json`. Development only.
-- `state-vjp-dev03` PASSED four gates: state-vjp,content,window,resident.
-  State VJP:24 CPU FP32/FP64 autograd cases plus2 actual device-forward tapes;
-  identity/EMA,adopt/clear,connected-zero/absent,poisoned padding,feature tails,
-  >2^55 clocks/counters,empty reverse replay,invalid metadata and bounded allocation.
-  Connection flags now have a single metadata writer; vector cores write only
-  numerical tiles,avoiding scalar bool writes to a shared GM cache line.
-  No formula/tolerance was relaxed. The later failure-diagnostic edit accidentally changed an assertion branch in
-  commit0459195;see the retained Add-dev01 failure and correction below.
-- `state-vjp-profile-dev03` PASSED:1,664 AIV only;51 state_vjp+51 state_vjp_plan
-  tasks,no AiCPU/fallback. Includes forward construction/assertions,not throughput.
+Graph reverse37430e1 is committed/pushed. HARD single-NPU FP32 sum/broadcast,
+identity/EMA/Add state and identity/tanh Full only; actual-stage reverse loop
+and physical message/scale links stay on device. Contract resident-graph-vjp.md.
+Development graph-vjp-dev04 passed98 complete windows against independent CPU
+FP32/FP64,64 link windows,empty/poison/None/replay/refusals and relevant regressions.
+Dev04 profile:88,699 AIV+1,269 AI_CORE+792 MIX_AIV,no AiCPU/host fallback;
+includes correctness assertions and is not throughput. Retain build-dev01
+Muls scalar-template failure and dev03 wide-fixture forward-budget refusal.
 
-The full clean build at0459195 PASSED (including4 CTests), but
-`state-vjp-clean01` and `state-vjp-profile-clean01` both FAILED on the accidentally
-changed assertion helper. Keep these formal failures; no qualification claim at0459195.
-The helper wrongly demanded zero for a defined gradient that matched the oracle;
-this increment fixes the branch without changing the original tolerance/None checks.
+Formal build-graph-vjp-clean01,graph-vjp-clean01 and graph-vjp-profile-clean01
+all PASSED terminal0 from exact37430e1. Clean build4 CTests,full37-cell gate,
+98 graph windows,64 link windows. Audited source/binary/log/CSV hashes match.
+Profile88,699 AIV+1,269 AI_CORE+792 MIX_AIV,5,934 graph reverse records,
+no AiCPU/fallback. Evidence docs/evidence/device-graph-vjp-20261001.{json,md}.
 
-This increment extends the component to Add-repeat. It carries retention/periodic
-clock tables and sample-feature retention partials. Device tick bounds and bounded
-literal-multiply replay chunks preserve the actual multiplication sequence without
-pow/division; chunk2/32 changes physical work only. All connection flags retain a
-single metadata writer. Full graph dependencies/parameter aliases/optimizer remain.
+Current uncommitted parameter-owner reduction:
+`tools/device_online/parameter_vjp.{h,cpp}`,parameter_vjp_check.cpp,
+ascendc/tide_parameter_vjp.cpp plus CMake/build/check registration.
+Uses TensorImpl registry aliases,device flags and feature tiles;None/zero and
+poison remain distinct. Empty registry minimum budget is now checked.
+Tests planned36 aliased real graph/root cases (width1/3/257,two schedules),
+shared-storage distinct owners,replay,subset/empty registry and refusal checks.
+build-parameter-vjp-dev01 and parameter-vjp-dev01 PASSED (36 alias cases and7 regression cells). parameter-vjp-profile-dev01 running (one NPU900s/queue120s). Task-local parameter_vjp_relink.py uses checked graph
+clean objects/archive in a NEW build;never mutates the parent/source.
 
-- `build-state-vjp-add-dev01` PASSED;`state-vjp-add-dev01` FAILED on the same
-  assertion helper before Add cases. Raw failure remains.
-- `build-state-vjp-add-dev02` PASSED isolated kernel build/relink with checked
-  parent sources/binaries. `state-vjp-add-dev02` PASSED state-vjp/content/window/resident.
-  **216** independent CPU FP32/FP64 autograd cases +**4** actual device tapes:
-  identity/EMA/Add,retention0/1/negative/fractional,periodic clocks,tick chunk2/32,
-  adopt/clear,connection semantics,poison/empty replay and malformed/capacity/work bounds.
-- `state-vjp-add-profile-dev02` PASSED:**7,743 AIV only**,438 state_vjp+438 state_vjp_plan;
-  no AiCPU/fallback. This is component placement,not throughput.
-
-Implementation3e2d54d is committed/pushed. Frozen **state-vjp-add-clean01**.
-Full `build-state-vjp-add-clean01` PASSED (1800s,jobs2,no lease; four CTests)
-using scripts/build_device_control.py --core-build TASK/builds/placement-npu-clean01
---build-dir TASK/builds/state-vjp-add-clean01 --ascendc-soc Ascend910_9392 --jobs2.
-`state-vjp-add-clean01` full34-cell verify_device_control.py PASSED and
-`state-vjp-add-profile-clean01` --check state-vjp profile PASSED;one NPU900s/queue120s each.
-No redundant full CPU gate:portable core/Python code unchanged and public622dbb2 gate passed.
-Exact-source/hash/terminal audits passed. State VJP qualification reports:
-docs/evidence/device-state-vjp-20261001.{json,md};34 cells,216 isolated cases,4 real tapes,
-7,743 AIV-only profile tasks. Earlier failed clean runs remain failures.
-
-Committed increment3285b13: identity/tanh Full VJP in tools/device_online/full_vjp*,
-three Ascend C plan/payload/reduction kernels, CannProgram zero/tanh_backward,
-ContentFlow borrowed full_tape and PackedFull parameter accessors, build/gate registration.
-Dev build-full-vjp-dev01 PASSED via task-local full_vjp_relink.py: verified unchanged
-state-vjp-add-clean01 objects plus three new kernels and changed C++ objects in a new directory.
-full-vjp-dev01 PASSED:96 CPU FP32/FP64 autograd cases (each full/short/empty replay),
-2 real device tapes, numerical FP32/FP16,failure,state-vjp,content,window,resident.
-full-vjp-profile-dev01 PASSED:8,036 AIV+288 AI_CORE,no AiCPU/host fallback.
-This is local-component placement,not throughput.
-No immutable qualification yet; contract docs/resident-full-vjp.md.
-build-full-vjp-clean01 PASSED from frozen3285b13 (1800s,jobs2,no NPU,four CTests).
-full-vjp-clean01 full35-cell gate PASSED;full-vjp-profile-clean01 --check full-vjp PASSED,
-each one NPU900s/queue120s. Exact-source/binary/result/profile audits passed.
-Reports docs/evidence/device-full-vjp-20261001.{json,md} committed/pushed658943a.
-
-Uncommitted reverse_links increment: actual forward message/event hash index on NPU,
-stable producer/consumer/scale contributor chains,stage offsets and cut-boundary
-classification; ContentFlow::reverse_tape rejects unavailable modules.
-Device validation tests cover64 actual feedback/DAG/edgeless windows and malformed
-metadata/budget. build-reverse-links-dev01 submitted from reverse-links-dev01,
-900s/2 build jobs,no NPU;600s bounded wait for full-vjp clean build then
-reverse_links_relink.py in a new directory. Build PASSED;reverse-links-dev01
-PASSED64 windows and full-vjp/state-vjp/content/window/resident regressions.
-Uncommitted graph_vjp.cpp/h and three Ascend C kernels now compose actual-stage
-Full -> state-chain -> sum/message adjoints with device loop progression and
-physical parameter reduction. Tests compare whole-window CPU Streaming autograd,
-all input/initial/pending/node/scale gradients for independent roots,zero/None,
-feedback and warm continuation. Graph build-graph-vjp-dev01 from frozen graph-vjp-dev01 is being submitted
-(900s,jobs2,no NPU),using graph_vjp_relink.py against full-vjp-clean01:
-compile four new kernels and changed objects into a new directory.
-build-graph-vjp-dev01 FAILED:Ascend C Muls template cannot accept a __gm__ float
-lvalue directly;load the scale into an ordinary scalar before the vector instruction.
-No numerical/tolerance change. build-graph-vjp-dev02 submitted from a new frozen snapshot
-with the same900s build bound and checked parent. graph-vjp-dev02 waits at most600s
-for that build BEFORE requesting one NPU (queue120s),then runs graph-vjp,reverse-links,
-full-vjp,state-vjp,content,window,resident gates (overall900s). Both build/gate PASSED:
-96 graph windows,independent CPU FP32/FP64 forward/autograd,replay and64 link windows.
-Additional graph tests cover widths1/257,empty connected-zero roots,malformed preflight,
-budget/dtype refusal. build-graph-vjp-dev03 from new snapshot submitted with these tests,
-900s/jobs2/no lease;build passed,graph-vjp-dev03 FAILED on forward budget admission
-for the added257-wide fixture (default64MiB). Explicitly budget512MiB only for
-that wide forward fixture;no numerical changes. Also exercise phase-absent edges/outputs.
-build-graph-vjp-dev04 uses graph_check_relink.py with checked unchanged production/kernels
-from dev03 and recompiles only two test files;new frozen snapshot/output,no lease.
-build-graph-vjp-dev04 and graph-vjp-dev04 PASSED:98 complete graph windows against
-CPU FP32/FP64,empty/poison/zero/None/budget/dtype/malformed checks;64 reverse-link
-windows;full-vjp,state-vjp,content,window,resident. Component/source/binary audit matched.
-graph-vjp-profile-dev04 PASSED:88,699 AIV+1,269 AI_CORE+792 MIX_AIV,no AiCPU/host fallback.
-This is the full correctness checker including forward/CPU assertions,not throughput.
-Next commit this coherent graph reverse increment,then full clean build from its
-immutable commit (1800s,jobs2) and full37-cell gate/separate graph-vjp profile
-(each900s,one NPU,queue120s). Alias/optimizer/public training remain next.
-
-Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
-peer progression,FP16 and public matrix,then F6 representative/full-size comparison.
-A useful graph-backward design is to reverse actual forward stages on device:
-all message dependencies cross to earlier stages; each stage's node-time state
-chains can consume Full cotangents and return prior-state/content cotangents.
-Do not apply a complete state-chain VJP once while ignoring interleaved message
-cotangents. Full VJP must recompute/save tanh itself (full-content subtraction
-would lose precision),pack selected connected rows and keep None/zero flags.
-No implementation of that complete graph reverse loop exists yet. Do not stop
-or claim training complete at the isolated state VJP.
+Uncommitted device_optimizer.{h,cpp},optimizer_layout.h and four optimizer Ascend C headers/kernels are in development,not yet built/registered. Next: qualify owner reduction,then device finite checks/optimizer and forward
+parameter-bank writeback/alias coherence,multiple updates and public training.
+Backward tape is borrowed until next advance/close. Retained-window lifetime,
+LH/SwiGLU/normalized Aggregate/attention/HST/SOFTP adjoints,peer progression,
+FP16 and full public/performance matrix remain. Do not mark F4/F5 complete or
+stop at this restricted HARD backward. Full CPU gate need not be repeated while
+portable core/Python remains unchanged (8,954 tests+23 optional skips passed).
 
 ## Preserved older work and interrupted timing
 
