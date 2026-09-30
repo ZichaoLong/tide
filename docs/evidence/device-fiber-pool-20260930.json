@@ -1,0 +1,83 @@
+{
+  "schema": "tide-device-fiber-pool-evidence-v1",
+  "source": "691cb315cdd028ebcdb8c4b7779d91910d84ec76",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "five existing post-attention fiber pooling profiles; FP32 HARD single-device inference; not backward, training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "2148227342347c7508bb398644d10fc7c1eb981ca4869e5c93c03e2a5b29fdb0",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 26,
+    "analytic_alias_cache_anchors": 80,
+    "wide_extreme_empty_domains": 18,
+    "complete_windows": 160,
+    "refusals": 5
+  },
+  "runs": [
+    {
+      "name": "build-device-fiber-pool-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "c4326f80530dd6f6e5afebb9c0bcf8889b97ae218a26cf198dfe1de757a06af9",
+        "task.log": "833b0d241748e4e80b9b3f92bb0c4926198de15486a96fead7989691f141cdc5"
+      }
+    },
+    {
+      "name": "device-fiber-pool-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "1383cc754d877285ab00c3d1e7594c4cab08d5d6c1ea84f6f6e0c89ffef09e24",
+        "task.log": "0370d5b802c957e70691dc35aac7160a2e150c18e045979fe5617f40dd6952d2",
+        "verified/result.json": "81506384f684e2cb065e9985024843d13054448626efe4ee15f77eb18de82aab"
+      }
+    },
+    {
+      "name": "device-fiber-pool-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "2473a8b58dfa43a0189349d09880a65d0a80db6f3951e8fc4cf4cc93b5da30f4",
+        "task.log": "4fa9dda6446467b16e0c12ceac0d51afcb17a9321d12105d0c3d5f94bc8c0f2c",
+        "profile/result.json": "5fb96f2e04d86b2062d15740e6bc1de6382b2a82d5cacb63244873bf7339f722"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 76953,
+      "AI_CORE": 1586
+    },
+    "kernels": {
+      "BatchMatMulV2": 1586,
+      "GatherV3": 18551,
+      "SoftmaxV2": 1065,
+      "Transpose": 1074,
+      "tide_fiber_chunk": 3533,
+      "tide_fiber_commit": 345,
+      "tide_fiber_indices": 537,
+      "tide_fiber_payload": 1167,
+      "tide_fiber_plan": 345,
+      "tide_fiber_pool": 696,
+      "tide_fiber_trace": 341
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930203950.csv": "1b1797c800464fa2176a877ddfbb5497336676810d6bef644ec4b35b54d5287a",
+      "api_statistic_20260930203950.csv": "643c43244f734d96efb4c3bdbdb6175f09974ad0e5c9d237c9a2a8515af7d1dd"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": [
+    {
+      "name": "device-fiber-pool-gates-dev01",
+      "reason": "fixture applied a periodic clock to existing off-phase event times; 80 anchors and 17 domain cases had passed. Only fixture changed, with added empty-domain/refusal coverage; no runtime formula or tolerance change"
+    }
+  ]
+}

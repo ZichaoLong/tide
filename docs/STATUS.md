@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T12:29:26.360747+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T12:43:37.664024+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-HEADaa1cef3 committed/pushed. No subagents. Reference repositories and ObsidianVault
+HEAD691cb31 committed/pushed. Clean pooling qualification has passed. No subagents. Reference repositories and ObsidianVault
 are read-only. Preserve the older accelerator_scale/flow dirty work listed below.
 
 ## Authoritative scope and next actions
@@ -29,13 +29,29 @@ Three fresh processes before performance recommendations. CUDA device execution 
 target-machine pending. **F1–F7 are not complete.** Raw device flow is still
 single-device FP32 HARD inference; no resident backward/optimizer.
 
-1. Commit/push tested pooling implementation, then launch clean immutable build,
-   all26 cells and separate fiber-pool profile. Evidence follows terminal success.
-2. Continue event-GQA/window attention, safe memory planning and node-time batching.
-3. Public matrix/presets, multi-card peer progression and resident training remain
-   open. Do not resume historical timing merely to occupy a build wait.
+1. Pool clean build/all26 gates/profile PASSED. Evidence for691cb31 is in
+   docs/evidence/device-fiber-pool-20260930.{json,md}; commit/push evidence separately.
+2. Event-GQA/window code and gate are integrated in working tree, UNVERIFIED.
+   build-device-event-dev01 RUNNING,source event-dev01,build device-event-dev01,
+   core origins-npu-clean01,jobs2/timeout1800s. Submit bounded gates/profile only
+   after build is sufficiently advanced or terminal; do not hold NPU waiting.
+3. Continue safe memory planning,node-time batching,public matrix/presets,
+   multi-card progression and resident training. F1–F7 remain open.
 
-## Current development: general post-attention pooling
+New event-GQA files:packed_event_attention.{h,cpp},event_cache.cpp,
+ascendc/tide_event_{plan,payload,indices,cache}.cpp,event_attention_check.cpp.
+Static groups share query/KV head geometry; persistent KV is compact,one row per
+actual event. Device chooses actual chunks,window tail retention and GQA head
+indices. Shared proposal rows use overwrite/copy,never summing stale scratch.
+Distinct logical profiles may coexist. Diagnostics expose exact old/proposed/
+comparison/next slots; selected-only/clear and lean continuation are included.
+One complete attention region frame per stage remains an adapter fallback.
+New gate expects98 anchors,192 complete windows,40 lifecycle windows,5 refusals;
+includes widths1/4/7/33/257,MHA/GQA/MQA,windows0/1/3,chunk1/4,source zeros,
+feedback/DAG,mixed fiber/event attention,three Read modes,large counters,
+InputOrigin,valid periodic lifecycle phases,and compact snapshots.
+
+## Qualified implementation: general post-attention pooling
 
 Implemented sum/mean/linear/active/all-softmax under the five existing profile
 names. Coefficients apply after query attention, before output projection/bias;
@@ -53,14 +69,17 @@ integrated profile/cache/payload/build/check registry and content-flow docs.
   and link commands recorded. Added empty-domain and refusal coverage.
 - device-fiber-pool-gates-dev02 PASSED all26 cells, including80 analytic/alias/cache
   anchors,18 wide/extreme/empty-domain cases,160 complete windows,5 refusals.
-- device-fiber-pool-profile-dev02 RUNNING on physical9/logical0,timeout480s.
-  This is placement, not throughput. Never infer pass until terminal record.
+- device-fiber-pool-profile-dev02 PASSED on physical9/logical0:76953 AIV+1586
+  AI Core tasks,no AiCPU/fallback. Placement only, not throughput.
 
 TASK/sources/fiber-pool-dev02;TASK/builds/device-fiber-pool-dev02;core origins-npu-clean01.
 Gate rtol1e-5/atol1e-6, exact discrete values unchanged. Widths1/7/33/257,heads1/3,
 chunk1/4,missing vs zero,negative/zero weights,source aliases,257-slot domains,
 missing dominant logits,old cache,three Read modes,feedback/DAG,mixed profiles,
 selected-only/clear,large clocks/counters,InputOrigin,restore and lean continuation.
+Clean build-device-fiber-pool-clean01 and device-fiber-pool-gates-clean01 PASSED
+all26 cells;device-fiber-pool-profile-clean01 PASSED. Evidence manifest records
+76953 AIV+1586 AI Core and no AiCPU/fallback on clean691cb31.
 Current scope remains single-device FP32 HARD inference, one attention region frame
 per stage. This does not close node-time batching,key-axis tiling,FP16,VJP/training.
 
