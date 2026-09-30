@@ -12,14 +12,14 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   if(!graph.origins.empty())throw std::invalid_argument("content flow input-origin projections are not implemented");
   for(const auto& n:graph.nodes) {
     if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")||(!n.identity&&n.full!="identity"&&n.full!="tanh")
-        ||n.aggregation!="sum"||n.readout!="linear-v1"||n.next_state!="adopt-v1"
+        ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
         ||n.emission!="broadcast")
       throw std::invalid_argument("content flow module contract unavailable");
     owners.push_back(n.region);
   }
   for(const auto& r:graph.regions) {
     if((r.read_mode!="content"&&r.read_mode!="old"&&r.read_mode!="proposal")||(r.selector!="count-v1"&&r.selector!="positive-v1"))
-      throw std::invalid_argument("content flow requires a built-in linear Read mode and count/positive selection");
+      throw std::invalid_argument("content flow requires a built-in Read mode and count/positive selection");
     policies.push_back({r.budget,r.count_priority,r.selector=="positive-v1"});
     causal_regions.push_back(r.read_mode!="content"&&!r.observe_all);
     all_content&=r.read_mode=="content";
@@ -38,7 +38,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   for(auto& w:model.nodes){w.decay=copy(w.decay);w.weight=copy(w.weight);w.bias=copy(w.bias);w.read=copy(w.read);
     for(auto& [_,x]:w.extra)x=copy(x);}
   for(auto group:{&model.input_scale,&model.agg_scale,&model.edge_scale,&model.output_scale})for(auto& x:*group)x=copy(x);
-  std::vector<int64_t> metadata,settings,modes,clocks;
+  std::vector<int64_t> metadata,settings,modes,read_types,clocks;
   std::vector<Tensor> weights,reads,decays,retentions;
   for(size_t p=0;p<graph.inputs.size();++p) {
     metadata.insert(metadata.end(),{graph.inputs[p],graph.source_domain->input[p]});weights.push_back(model.input_scale[p]);
@@ -57,6 +57,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     reads.push_back(node.identity?at::zeros_like(model.nodes[n].read):model.nodes[n].read);
     const auto& mode=graph.regions[node.region].read_mode;
     modes.push_back(node.identity?-1:mode=="content"?0:mode=="old"?1:2);
+    read_types.push_back(node.readout=="norm-fp32-v1");
     decays.push_back(model.nodes[n].decay);
     retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},at::kFloat));
   }
@@ -65,6 +66,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   retention=at::stack(retentions).to(device);
   clock_policy=at::tensor(clocks,at::kLong).reshape({-1,3}).to(device);
   read_modes=at::tensor(modes,at::kLong).to(device);
+  read_kinds=at::tensor(read_types,at::kLong).to(device);
   config=at::tensor(settings,at::kLong).reshape({-1,3}).to(device);
   auto pack_scales=[&](const std::vector<Tensor>& x){return (x.empty()?at::zeros({1},at::kFloat):at::stack(x)).reshape({-1,1}).to(device);};
   edge_scales=pack_scales(model.edge_scale);output_scales=pack_scales(model.output_scale);

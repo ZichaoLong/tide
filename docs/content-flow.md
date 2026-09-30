@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity, EMA or Add-repeat state; content/old/proposal linear Read; count-v1 or positive-v1
+scales; identity, EMA or Add-repeat state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity or tanh broadcast
 Full (`content + tanh(comparison @ weight + bias)`).
 It supports observe-all and active-only state adoption. Inputs are arbitrary
@@ -33,6 +33,25 @@ keep their legal time batches. This is a module-contract fallback, independent
 of fixture topology or input values; it uses no advance numerical route trace.
 Regions can choose different Read modes in one graph. Identity nodes keep an
 exact zero descriptor.
+
+The explicit `norm-fp32-v1` Read uses FP32 sum-of-squares and square root of
+the visible content/old/proposal vector. Each node declares its Read kind;
+linear and norm Read may coexist. No descriptor is sent to the host for selection. This is
+the FP32 profile from [read-programs.md](read-programs.md), not a replacement for
+`norm-fp64-v1`; the latter remains rejected by this flow. Nonfinite scores refuse
+the window. Rounded ties use the existing stable selector; precision changes
+can change routes. This addition does not supply a resident norm VJP.
+
+`ContentLimits.vectorized_read` defaults to true and retains the scalar device
+path as an explicit alternative. Both run the same clock/work-limit preflight.
+Vector Read assigns independent (owner,width tile) ranges to AIV blocks and uses
+vector multiply/add/reduction on up to256 elements. Each tile follows the owner's
+time sequence in local storage; no per-event state preparation runs on the host.
+One final device task combines tile partials and takes a synchronized vector sqrt
+for norm rows. The selector validates finite scores before committing any state.
+Padded/absent rows and identity-node Read do not load unused parameters into the
+arithmetic. This changes floating reduction order, so parity checks include exact
+route/history agreement as well as the declared FP32 tensor tolerances.
 
 Periodic `StateClock` policies are evaluated on the device using int64 division
 and remainder. Upd sees local ticks; stored last-adopted timestamps, Read, history,
@@ -137,8 +156,8 @@ and any later measured recommendation belong to STATUS/evidence.
 
 This vector path currently implements sum Aggregate inference only. It explicitly
 rejects autograd; its presence does not certify training, FP16 or other Aggregate
-contracts. Read (including state proposal preparation), output, journal and
-state metadata kernels still use scalar AIV loops.
+contracts. Read's scalar alternative, Read metadata/final partial combination,
+output, journal and state metadata kernels still use scalar AIV loops.
 Measured placement and task costs, then complete-flow timing, determine whether
 an implementation is beneficial at a given scale. Trace storage, CPU comparison
 and result materialization stay separate from steady-state throughput timing.

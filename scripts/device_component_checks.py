@@ -16,6 +16,7 @@ CHECKS = {
     "sum": ("tide-packed-sum-check", ("float32",)),
     "add": ("tide-device-add-check", ("float32",)),
     "clock": ("tide-device-clock-check", ("float32",)),
+    "norm32": ("tide-device-norm-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -30,8 +31,9 @@ MARKERS = {
     "sum": "packed-sum: passed",
     "add": "device-add: passed",
     "clock": "device-clock: passed",
+    "norm32": "device-norm32: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
            "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum",
-           "add": "tide_vector_state", "clock": "tide_vector_state"}
+           "add": "tide_vector_state", "clock": "tide_vector_state", "norm32": "tide_vector_read"}

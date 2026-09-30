@@ -13,6 +13,7 @@ struct ContentLimits {
   bool diagnostics=true; // Event/message journals are optional per-window work.
   bool vectorized_aggregate=true; // Scalar device implementation remains selectable.
   bool vectorized_state=true;
+  bool vectorized_read=true;
 };
 // Borrowed read-only NPU buffers, valid until the next advance or owner destruction.
 // Output coordinates use the AtomBatch layout; field4 is the output port.
@@ -23,7 +24,7 @@ struct ContentWindow {
   at::Tensor output_stats,pending_stats,stages,events,full_chunks;
 };
 // Experimental complete forward loop for an explicit existing-module profile:
-// sum Aggregate, identity/EMA/Add-repeat memory, content/old/proposal linear Read, count/positive
+// sum Aggregate, identity/EMA/Add-repeat memory, linear/FP32-norm Read, count/positive
 // selection, adopt/clear Next and identity/tanh broadcast Full. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial
 // state and exported observables are CPU values; persistent runtime data and

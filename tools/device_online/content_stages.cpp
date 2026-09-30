@@ -2,6 +2,8 @@
 #include "cann_api.h"
 #include "packed_sum.h"
 #include "aclrtlaunch_tide_state_read.h"
+#include "aclrtlaunch_tide_vector_read.h"
+#include "aclrtlaunch_tide_read_reduce.h"
 #include "aclrtlaunch_tide_content_state.h"
 #include "aclrtlaunch_tide_vector_state.h"
 #include "aclrtlaunch_tide_content_outputs.h"
@@ -15,16 +17,28 @@ ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const R
   return {sum.content,at::zeros({ready.fibers.size(0)},sum.content.options()),sum.weighted};
 }
 void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const ContentBatch& content,
-                 const ContentState& old,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks) {
+                 const ContentState& old,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized) {
   const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size()),samples=old.values.size(0);
-  auto scratch=profile.all_content?old.values:at::empty_like(old.values);
+  auto scratch=profile.all_content||vectorized?old.values:at::empty_like(old.values);
   auto clocks=profile.all_content?old.clocks:at::empty_like(old.clocks);
-  if(!profile.all_content){p.copy(scratch,old.values);p.copy(clocks,old.clocks);}
-  const auto reads=profile.read,modes=profile.read_modes,config=profile.config,retention=profile.retention,policy=profile.clock_policy;
+  if(!profile.all_content){if(!vectorized)p.copy(scratch,old.values);p.copy(clocks,old.clocks);}
+  auto steps=at::empty({vectorized?capacity:1},ready.fibers.options());
+  const auto reads=profile.read,modes=profile.read_modes,kinds=profile.read_kinds,config=profile.config,retention=profile.retention,policy=profile.clock_policy;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_read)(1,stream,ptr(ready.fibers),ptr(ready.counts),
-    ptr(content.content),ptr(reads),ptr(modes),ptr(config),ptr(coefficients),ptr(retention),ptr(policy),ptr(scratch),ptr(clocks),ptr(content.scores),ptr(error),
-    capacity,width,nodes,samples,max_repeat_ticks),"packed contract-relative Read");},
-    {ready.fibers,ready.counts,content.content,reads,modes,config,coefficients,retention,policy,scratch,clocks,content.scores,error});
+    ptr(content.content),ptr(reads),ptr(modes),ptr(kinds),ptr(config),ptr(coefficients),ptr(retention),ptr(policy),ptr(scratch),ptr(clocks),ptr(content.scores),ptr(steps),ptr(error),
+    capacity,width,nodes,samples,max_repeat_ticks,int64_t(vectorized)),"packed contract-relative Read");},
+    {ready.fibers,ready.counts,content.content,reads,modes,kinds,config,coefficients,retention,policy,scratch,clocks,content.scores,steps,error});
+  if(vectorized) {
+    const int64_t tiles=(width+255)/256;const uint32_t blocks=std::min<int64_t>(32,capacity*tiles);
+    auto partials=at::empty({capacity,tiles},content.content.options());
+    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_vector_read)(blocks,stream,
+      ptr(ready.fibers),ptr(ready.counts),ptr(content.content),ptr(reads),ptr(modes),ptr(kinds),ptr(config),
+      ptr(coefficients),ptr(retention),ptr(old.values),ptr(steps),ptr(partials),ptr(error),width,nodes),"vector Read tiles");},
+      {ready.fibers,ready.counts,content.content,reads,modes,kinds,config,coefficients,retention,old.values,steps,partials,error});
+    p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_read_reduce)(1,stream,
+      ptr(ready.fibers),ptr(ready.counts),ptr(kinds),ptr(partials),ptr(content.scores),ptr(error),tiles),"finish Read tiles");},
+      {ready.fibers,ready.counts,kinds,partials,content.scores,error});
+  }
 }
 ContentUpdate append_content_state(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,
     const ContentBatch& content,const SelectionProposal& selection,const ContentState& old,

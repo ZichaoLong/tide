@@ -74,7 +74,7 @@ void ContentFlow::Impl::construct() {
   p.mark(head);auto ready=planner.append_stage(p,pending->atoms(),stop,error);p.branch(ready.branch,{end,test});
   p.mark(test);p.less(stages,budget,predicate);p.cast_index(predicate,index);p.branch(index,{exhausted,body});p.mark(body);
   auto content=append_content(p,profile,ready,error,limits.vectorized_aggregate);
-  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks);
+  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
