@@ -7,14 +7,14 @@ Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
 scales; identity, EMA or Add-repeat state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
-selection; adopt-v1 Next with optional selected clear; identity, tanh or LH broadcast
-Full. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
+selection; adopt-v1 Next with optional selected clear; identity, tanh or LH
+Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
 apply their declared activation/normalization to comparison without that residual.
 It supports observe-all and active-only state adoption. Inputs are arbitrary
 legal sealed-window values; topology can contain unequal positive delays,
 parallel physical edges, feedback and disconnected components. Input-origin
-projection is supported; phase-restricted emissions and other modules/region programs explicitly
-fail capability validation. This first version accepts FP32 inference with an
+projection and phase-restricted slot emission are supported; other unavailable
+modules/region programs explicitly fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
 
 For `InputOrigin`, a static edge table declares the visible port and int64 position
@@ -26,6 +26,29 @@ coordinates, pending messages and emitted edge identities stay physical. Explici
 source exports apply the same view at the observation boundary; they never feed
 candidate execution. Equal projected keys retain physical order and remain distinct
 logical sources. A logical-source collision still fails with code2.
+
+Emission uses static local-slot bindings, periods and physical edge/output scales.
+The device preflights actual selected actions, decides each slot's presence from
+exact int64 logical time, and packs only present slots. Empty phases mean all;
+-1 means always, -2 means never; identity boundary adapters remain unconditional.
+`slot_affine` computes `Full @ emit_w_slot + emit_b_slot`, then applies the physical
+send scale. Unprojected Full and unscaled emitted-slot values have independent
+diagnostic journals, including when a physical scale is zero. Missing slots create
+no messages; a present numerical zero still does. No emission value is computed on
+the host or reconstructed by dividing a message by its scale.
+
+`emission_chunk_rows` bounds gathered affine matrices and projected rows; the
+remaining workspace budget can reduce it. Actual device metadata chooses each
+chunk and subsequent iteration. Padding reads independent zero sentinels and has
+unique scratch destinations. Absent/inactive poisoned parameters never enter the
+numerical operators. Broadcast uses gathered Full values without matrix work.
+Physical message placement/scaling uses batched gather/multiply for both internal
+edges and outputs. The complete stage is checked for arrival/output capacity and
+actual int64 delay overflow before numerical emission; absent edges cannot cause
+an arrival overflow. Emission storage is bounded by arrivals+outputs. Diagnostic
+`trace` also bounds the number of recorded present slots, independently of events.
+These stage limits remain explicit refusal boundaries, not the future complete
+memory planner. `emission_chunks` and effective `emission_chunk_rows` are reported.
 
 Content Read does not depend on the proposed state. Consequently the loop can
 compute actual packed content and scores, select complete region-time frames,
@@ -155,7 +178,7 @@ result export. Failed execution poisons the owner and refuses snapshots, results
 and further execution; malformed pre-submission input remains retryable.
 
 `ContentLimits.diagnostics` defaults to true for equivalence checking. With false,
-the captured program omits event/fiber/contribution/Full journals and the emitted
+the captured program omits event/fiber/contribution/Full/emission journals and the emitted
 message log; `trace=0` is then legal. Persistent state, selection history, output
 buffers and exact int64 event counts remain. A lean CPU result has no event trace
 or message log and cannot support comparisons of those missing diagnostics.
@@ -196,7 +219,7 @@ and any later measured recommendation belong to STATUS/evidence.
 This vector path currently implements sum Aggregate inference only. It explicitly
 rejects autograd; its presence does not certify training, FP16 or other Aggregate
 contracts. Read's scalar alternative, Read metadata/final partial combination,
-output, journal and state metadata kernels still use scalar AIV loops.
+emission metadata, journal and state metadata kernels still use scalar AIV loops.
 Measured placement and task costs, then complete-flow timing, determine whether
 an implementation is beneficial at a given scale. Trace storage, CPU comparison
 and result materialization stay separate from steady-state throughput timing.

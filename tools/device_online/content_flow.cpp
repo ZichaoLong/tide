@@ -14,7 +14,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   // It is deliberately bounded and is not yet the model/KV/training chunker.
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+(l.diagnostics?l.trace:0))*(width*5.L+32)
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L));
-  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
+  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
@@ -44,6 +44,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     fibers=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
+    emission_trace=std::make_unique<DeviceJournal>(l.trace,6,width,device);
   }
   std::vector<int64_t> kinds,lh_kinds;std::vector<Tensor> weights,biases,norm_weights,norm_biases;bool has_lh=false;
   for(size_t n=0;n<profile.graph.nodes.size();++n){const auto& node=profile.graph.nodes[n];
@@ -51,7 +52,9 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
     norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
-  const auto full_budget=l.workspace_bytes-static_cast<int64_t>(estimate);
+  const auto remaining=l.workspace_bytes-static_cast<int64_t>(estimate);
+  emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,l.emission_chunk_rows,remaining);
+  const auto full_budget=remaining-emission->reserved_bytes();
   if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
   full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,
     full_budget-(lh_full?lh_full->reserved_bytes():0));
@@ -63,7 +66,6 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
 void ContentFlow::Impl::construct() {
   const auto& g=profile.graph;const auto opts=state.values.options();
   DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
-  BroadcastRouter router(g.nodes.size(),boundary.batch_size,profile.wires,limits.arrivals,device);
   program=std::make_unique<CannProgram>(device);auto& p=*program;
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
   if(limits.diagnostics) {
@@ -84,11 +86,11 @@ void ContentFlow::Impl::construct() {
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
   if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
-  auto arrivals=router.append_stage(p,actions,profile.edge_scales,error);
-  auto emitted=append_outputs(p,profile,actions,limits.outputs,error);
+  auto emitted=emission->append_stage(p,actions,error);
+  auto arrivals=emitted.arrivals;
   // Every capacity/error preflight precedes every live state/history/queue/log commit.
   auto pending_proposal=pending->propose_stage(p,ready.consumed,arrivals);
-  auto output_proposal=outputs->propose_stage(p,out_zeros,emitted);
+  auto output_proposal=outputs->propose_stage(p,out_zeros,emitted.outputs);
   if(limits.diagnostics) {
     auto msg_zeros=at::zeros({limits.trace},error.options());
     auto message_proposal=messages->propose_stage(p,msg_zeros,arrivals);
@@ -96,9 +98,11 @@ void ContentFlow::Impl::construct() {
     auto fiber_proposal=fibers->propose(p,ready.atoms.coordinates,ready.atoms.values,ready.counts.narrow(0,0,1),error);
     auto contribution_proposal=contributions->propose(p,ready.atoms.coordinates,content.weighted,ready.counts.narrow(0,0,1),error);
     auto full_proposal=full_trace->propose(p,update.event_meta,actions.values,ready.counts.narrow(0,1,1),error);
+    auto emission_proposal=emission_trace->propose(p,emitted.meta,emitted.values,emitted.count,error);
     messages->commit_stage(p,message_proposal);
     events->commit(p,event_proposal,error);fibers->commit(p,fiber_proposal,error);contributions->commit(p,contribution_proposal,error);
     full_trace->commit(p,full_proposal,error);
+    emission_trace->commit(p,emission_proposal,error);
   }
   pending->commit_stage(p,pending_proposal);outputs->commit_stage(p,output_proposal);
   selector->append_commit(p,history,selection,error);commit_content_state(p,state,update,error);
@@ -122,13 +126,13 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     upload_atoms(validated.atoms,s.external);s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
     if(s.limits.diagnostics) {
       s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
-      s.full_trace->count.zero_();
+      s.full_trace->count.zero_();s.emission_trace->count.zero_();
     }
-    s.event_count.zero_();s.full->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
+    s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
     s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
-    return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full->chunks()};
+    return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full->chunks(),s.emission->chunks()};
   } catch(...) {s.failed=true;throw;}
 }
 Continuation ContentFlow::snapshot() const {

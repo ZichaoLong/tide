@@ -12,12 +12,10 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     throw std::invalid_argument("content flow requires explicit no-grad NPU");
   graph.compile();
   for(const auto& n:graph.nodes) {
-    if(!n.identity&&!n.emit_phases.empty())
-      throw std::invalid_argument("content flow phase-restricted emission is not implemented");
     if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")
         ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&!is_lh_full(n.full))
         ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
-        ||n.emission!="broadcast")
+        ||(n.emission!="broadcast"&&n.emission!="slot_affine"))
       throw std::invalid_argument("content flow module contract unavailable");
     owners.push_back(n.region);
   }
@@ -78,8 +76,5 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   read_modes=at::tensor(modes,at::kLong).to(device);
   read_kinds=at::tensor(read_types,at::kLong).to(device);
   config=at::tensor(settings,at::kLong).reshape({-1,3}).to(device);
-  auto pack_scales=[&](const std::vector<Tensor>& x){return (x.empty()?at::zeros({1},at::kFloat):at::stack(x)).reshape({-1,1}).to(device);};
-  edge_scales=pack_scales(model.edge_scale);output_scales=pack_scales(model.output_scale);
-  output_nodes=at::tensor(graph.outputs.empty()?std::vector<int64_t>{0}:graph.outputs,at::kLong).to(device);
 }
 } // namespace tide::device_online

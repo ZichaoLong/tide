@@ -6,7 +6,6 @@
 #include "aclrtlaunch_tide_read_reduce.h"
 #include "aclrtlaunch_tide_content_state.h"
 #include "aclrtlaunch_tide_vector_state.h"
-#include "aclrtlaunch_tide_content_outputs.h"
 #include <algorithm>
 
 namespace tide::device_online {
@@ -66,15 +65,6 @@ ContentUpdate append_content_state(CannProgram& p,const ContentProfile& profile,
       ptr(out.comparison),ptr(out.event_meta),ptr(out.event_values),ptr(error),width,nodes,int64_t(diagnostics)),"vector state update");},
       {ready.counts,content.content,config,coefficients,retention,policy,out.state.values,out.comparison,out.event_meta,out.event_values,error});
   }
-  return out;
-}
-AtomBatch append_outputs(CannProgram& p,const ContentProfile& profile,const ActionBatch& actions,int64_t capacity,const at::Tensor& error) {
-  AtomBatch out{at::zeros({capacity,6},actions.coordinates.options()),at::zeros({capacity,profile.width},actions.values.options()),
-    at::zeros({capacity},actions.valid.options())};
-  const auto nodes=profile.output_nodes,scales=profile.output_scales;const auto ports=int64_t(profile.graph.outputs.size()),width=profile.width;
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_content_outputs)(1,stream,ptr(actions.coordinates),ptr(actions.values),
-    ptr(actions.valid),ptr(nodes),ptr(scales),ptr(out.coordinates),ptr(out.values),ptr(out.valid),ptr(error),actions.valid.numel(),
-    ports,capacity,width),"content output delivery");},{actions.coordinates,actions.values,actions.valid,nodes,scales,out.coordinates,out.values,out.valid,error});
   return out;
 }
 void commit_content_state(CannProgram& p,const ContentState& old,const ContentUpdate& out,const at::Tensor& error) {

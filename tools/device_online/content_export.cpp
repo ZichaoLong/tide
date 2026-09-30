@@ -51,7 +51,8 @@ Result ContentFlow::Impl::export_result() const {
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",event_count.cpu().item<Index>()},
     {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",limits.diagnostics},
     {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
-    {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0}};
+    {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
+    {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
   std::sort(out.messages.begin(),out.messages.end(),[&](const Atom& a,const Atom& b){return
@@ -63,6 +64,10 @@ Result ContentFlow::Impl::export_result() const {
   auto meta=em.accessor<Index,2>(),atoms=fm.accessor<Index,2>();
   using Key=std::array<Index,3>;
   std::map<Key,std::vector<Index>> by_fiber;
+  std::map<Key,std::vector<SlotValue>> emitted;
+  const auto ne=emission_trace->count.cpu().item<Index>();
+  auto sm=emission_trace->meta.cpu(),sv=emission_trace->values.cpu();auto slots=sm.accessor<Index,2>();
+  for(Index i=0;i<ne;++i)emitted[{slots[i][0],slots[i][1],slots[i][2]}].push_back({slots[i][4],sv[i].clone()});
   std::map<Key,Index> node_batches;Index max_batch=0,max_causal=0,max_state_read=0;
   for(Index i=0;i<na;++i)by_fiber[{atoms[i][0],atoms[i][1],atoms[i][2]}].push_back(i);
   for(Index i=0;i<n;++i) {
@@ -77,7 +82,7 @@ Result ContentFlow::Impl::export_result() const {
     e.comparison_state={ev[i].narrow(0,3*width,width).clone(),meta[i][8],meta[i][9]};e.comparison=e.comparison_state.value;
     e.next_state={ev[i].narrow(0,4*width,width).clone(),meta[i][10],meta[i][11]};e.next=e.next_state.value;
     e.descriptor=ev[i][5*width].clone();e.control=ev[i][5*width+1].clone();
-    if(e.active){e.full=full_values[i].clone();for(Index slot=0;slot<g.outgoing_ports.offsets[e.node+1]-g.outgoing_ports.offsets[e.node];++slot)e.emitted.push_back({slot,e.full});}
+    if(e.active){e.full=full_values[i].clone();e.emitted=std::move(emitted[{e.batch,e.node,e.time}]);}
     for(auto row:by_fiber.at({e.batch,e.node,e.time})) {
       auto c=atoms[row];Atom a{c[0],c[1],c[2],c[3],c[4],c[5],fv[row].clone()};e.fiber.push_back(a);
       Index slot=a.kind==0?g.source_domain->input[a.source]:g.source_domain->edge_target[a.source];

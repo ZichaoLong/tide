@@ -14,7 +14,7 @@ struct ContentProfile {
   std::vector<int64_t> causal_regions;
   bool all_content=true;
   // source rows: [target, logical slot]; source scales ordered input then edge.
-  at::Tensor sources,origins,scales,read,read_modes,read_kinds,decay,retention,clock_policy,config,edge_scales,output_scales,output_nodes;
+  at::Tensor sources,origins,scales,read,read_modes,read_kinds,decay,retention,clock_policy,config;
   ContentProfile(Graph,Model,at::Device);
 };
 struct ContentState {at::Tensor values,clocks,present;};
@@ -33,6 +33,5 @@ void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const Cont
 ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
     const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits&);
-AtomBatch append_outputs(CannProgram&,const ContentProfile&,const ActionBatch&,int64_t capacity,const at::Tensor& error);
 void commit_content_state(CannProgram&,const ContentState&,const ContentUpdate&,const at::Tensor& error);
 } // namespace tide::device_online

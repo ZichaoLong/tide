@@ -61,8 +61,8 @@ void refusal(at::Device device) {
   auto f=fixture(0,0);ContentLimits l;l.queue=64;l.arrivals=64;l.outputs=128;l.trace=512;
   auto bad=f.graph;bad.nodes[0].full="swiglu";
   rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"unsupported Full accepted");
-  bad=f.graph;bad.nodes[0].emit_phases.assign(bad.outgoing_ports.offsets[1]-bad.outgoing_ports.offsets[0],-2);
-  rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"unsupported phase-restricted emission accepted");
+  bad=f.graph;bad.nodes[0].emit_phases.assign(bad.outgoing_ports.offsets[1]-bad.outgoing_ports.offsets[0],bad.nodes[0].emit_period);
+  rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"invalid emission phase accepted");
   auto small=l;small.workspace_bytes=1;rejects([&]{ContentFlow x(f.graph,f.model,f.initial,device,small);},"buffer preflight absent");
   // Fail independently on an output budget, iteration budget and debug capacity.
   for(int kind=0;kind<3;++kind) {
