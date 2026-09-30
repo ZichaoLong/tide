@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T17:29:38.557896+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **0459195**,device identity/EMA state-chain VJP committed/pushed;
+HEAD **8b89080**,public resident evidence committed/pushed;identity/EMA implementation0459195;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -79,7 +79,7 @@ All names below map to `TASK/runs/NAME/{status.json,task.log}` and
 All public resident qualifications are terminal0. Task-local
 TASK/launchers/resident_public_evidence.py audited exact sources,backend/core
 fingerprints,raw results/logs/profile CSVs. Reports
-`docs/evidence/public-resident-20261001.{json,md}` are ready in this evidence increment.
+`docs/evidence/public-resident-20261001.{json,md}` are committed/pushed8b89080.
 Do not relabel public inference as resident training. Historical failures remain.
 
 ## Current device state VJP increment
@@ -103,29 +103,52 @@ sample partials; alias reduction/graph message dependencies remain to integrate.
   >2^55 clocks/counters,empty reverse replay,invalid metadata and bounded allocation.
   Connection flags now have a single metadata writer; vector cores write only
   numerical tiles,avoiding scalar bool writes to a shared GM cache line.
-  No formula/tolerance was relaxed. Current source only adds failure diagnostics
-  after dev03;production bytes match the passing snapshot.
+  No formula/tolerance was relaxed. The later failure-diagnostic edit accidentally changed an assertion branch in
+  commit0459195;see the retained Add-dev01 failure and correction below.
 - `state-vjp-profile-dev03` PASSED:1,664 AIV only;51 state_vjp+51 state_vjp_plan
   tasks,no AiCPU/fallback. Includes forward construction/assertions,not throughput.
 
-Next: implementation0459195 committed/pushed. Frozen **state-vjp-clean01**;
-full `build-state-vjp-clean01` is RUNNING (1800s,jobs2,no lease) using scripts/build_device_control.py
---core-build TASK/builds/placement-npu-clean01 --build-dir TASK/builds/state-vjp-clean01
---ascendc-soc Ascend910_9392 --jobs2. Then full34-cell verify_device_control.py
-(one NPU900s,queue120s) and separate --check state-vjp profile. Commit evidence only
-after terminal/hash audit. Existing core/Python code did not change; avoid another
-redundant full CPU run. Continue complete resident training/peer/FP16/public matrix,
-then F6 representative/full-size comparisons. Do not stop at the local VJP.
+The full clean build at0459195 PASSED (including4 CTests), but
+`state-vjp-clean01` and `state-vjp-profile-clean01` both FAILED on the accidentally
+changed assertion helper. Keep these formal failures; no qualification claim at0459195.
+The helper wrongly demanded zero for a defined gradient that matched the oracle;
+this increment fixes the branch without changing the original tolerance/None checks.
 
-Next uncommitted production increment: Add-repeat state VJP. Main checkout adds
-retention/clock fields and sample-feature retention partials, device tick bounds,
-and bounded literal-multiply replay chunks (no pow/division shortcut). Configured
-chunk size changes physical replay work only. `build-state-vjp-add-dev01` RUNNING
-from frozen **state-vjp-add-dev01** using the two-kernel relinker;600s,no lease.
-After build,run `--checks state-vjp content window resident` (one NPU900s,queue120s).
-New gate expects216 FP32/FP64 local-autograd cases and4 real device-forward tapes,
-including zero/one/negative/fractional retention,periodic clocks and chunk2/32.
-This Add increment is NOT YET VERIFIED; keep it out of public inference evidence.
+This increment extends the component to Add-repeat. It carries retention/periodic
+clock tables and sample-feature retention partials. Device tick bounds and bounded
+literal-multiply replay chunks preserve the actual multiplication sequence without
+pow/division; chunk2/32 changes physical work only. All connection flags retain a
+single metadata writer. Full graph dependencies/parameter aliases/optimizer remain.
+
+- `build-state-vjp-add-dev01` PASSED;`state-vjp-add-dev01` FAILED on the same
+  assertion helper before Add cases. Raw failure remains.
+- `build-state-vjp-add-dev02` PASSED isolated kernel build/relink with checked
+  parent sources/binaries. `state-vjp-add-dev02` PASSED state-vjp/content/window/resident.
+  **216** independent CPU FP32/FP64 autograd cases +**4** actual device tapes:
+  identity/EMA/Add,retention0/1/negative/fractional,periodic clocks,tick chunk2/32,
+  adopt/clear,connection semantics,poison/empty replay and malformed/capacity/work bounds.
+- `state-vjp-add-profile-dev02` PASSED:**7,743 AIV only**,438 state_vjp+438 state_vjp_plan;
+  no AiCPU/fallback. This is component placement,not throughput.
+
+Next:commit/push this tested Add increment. Freeze its exact commit as
+**state-vjp-add-clean01**. Run full `build-state-vjp-add-clean01` (1800s,jobs2,no lease)
+using scripts/build_device_control.py --core-build TASK/builds/placement-npu-clean01
+--build-dir TASK/builds/state-vjp-add-clean01 --ascendc-soc Ascend910_9392 --jobs2.
+Then `state-vjp-add-clean01` full34-cell verify_device_control.py and
+`state-vjp-add-profile-clean01` --check state-vjp profile,one NPU900s/queue120s each.
+No redundant full CPU gate:portable core/Python code unchanged and public622dbb2 gate passed.
+After terminals and hash audits,commit separate device-state-vjp evidence and update F4.
+
+Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
+peer progression,FP16 and public matrix,then F6 representative/full-size comparison.
+A useful graph-backward design is to reverse actual forward stages on device:
+all message dependencies cross to earlier stages; each stage's node-time state
+chains can consume Full cotangents and return prior-state/content cotangents.
+Do not apply a complete state-chain VJP once while ignoring interleaved message
+cotangents. Full VJP must recompute/save tanh itself (full-content subtraction
+would lose precision),pack selected connected rows and keep None/zero flags.
+No implementation of that complete graph reverse loop exists yet. Do not stop
+or claim training complete at the isolated state VJP.
 
 ## Preserved older work and interrupted timing
 

@@ -198,6 +198,9 @@ StateTape ContentFlow::state_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("state tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
   if(!s.limits.diagnostics)throw std::logic_error("state tape requires recorded forward values");
-  return {s.events->meta,s.events->values,s.events->count,s.profile.config,s.profile.decay,s.boundary.batch_size};
+  const bool repeat=std::any_of(s.profile.graph.nodes.begin(),s.profile.graph.nodes.end(),
+    [](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});
+  return {s.events->meta,s.events->values,s.events->count,s.profile.config,s.profile.decay,
+          s.profile.retention,s.profile.clock_policy,s.boundary.batch_size,repeat,s.limits.max_repeat_ticks};
 }
 } // namespace tide::device_online

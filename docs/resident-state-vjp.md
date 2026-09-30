@@ -1,7 +1,7 @@
 # Device state-chain VJP
 
 `tools/device_online/state_vjp.h` is an internal first-order component for the
-resident training path. It currently accepts identity/EMA state, HARD adoption,
+resident training path. It currently accepts identity/EMA/Add-repeat state, HARD adoption,
 observe-all/selected adoption, and selected clear. Other state kinds refuse with
 device error 12. This is not yet a public autograd session or complete graph
 backward/optimizer implementation.
@@ -35,10 +35,23 @@ adjoints are separate sample partials, before alias-aware parameter-owner
 reduction; the public parameter registry remains responsible for ownership.
 Disconnected raw parameters must not receive fabricated zero `.grad` tensors.
 
+Add-repeat uses the declared periodic int64 state clock. A reverse step replays
+the actual literal multiplications from the saved old state into a bounded
+per-core scratch chunk, then differentiates those multiplications in reverse.
+It never divides by retention or substitutes a power formula. Zero, one and
+negative retention therefore keep their ordinary gradient connections.
+`repeat_chunk_ticks` changes physical storage and prefix recomputation, without
+changing the logical state interval or truncating its gradient. The requested
+tensor budget limits concurrent feature tiles before allocation. A gap beyond
+the forward owner's explicit tick-work limit refuses with device error 8.
+Retention adjoints are sample/feature partials; reduction includes both axes
+before accumulating into the scalar parameter owner.
+
 The standalone gate compares the component with independent CPU FP32 and FP64
-autograd, using mixed identity/EMA nodes, selected/unselected adoption, clear,
+autograd, using mixed identity/EMA/Add nodes, selected/unselected adoption, clear,
 connected zeros, poisoned absent values, padding, nonaligned feature widths,
-int64 clocks/counters above 2^55, empty replay and malformed-tape/budget refusals.
+int64 clocks/counters above 2^55, periodic Add clocks, zero/negative retention,
+small/large replay chunks, empty replay and malformed-tape/budget/work refusals.
 Separate integration cases consume a real resident forward journal in streaming
 and greedy modes. Their passing status belongs in the immutable evidence record;
 this document states the contract only. Profiling is separate from timing.
