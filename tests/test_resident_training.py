@@ -29,8 +29,9 @@ def test_resident_python_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path)
 
 
-def training_case(target, family, schedule, kind, tmp_path, full="tanh"):
-    r, cpu = runtime(family, target, schedule, full), runtime(family, "cpu", full=full)
+def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum"):
+    r = runtime(family, target, schedule, full, aggregation)
+    cpu = runtime(family, "cpu", full=full, aggregation=aggregation)
     names, parameters = zip(*((n, p) for n, p in cpu.execution_model.named_parameters() if p.requires_grad))
     options = dict(lr=.001, weight_decay=.01)
     options.update(momentum=.5) if kind == "sgd" else options.update(eps=.0001, amsgrad=True)
@@ -129,9 +130,11 @@ def test_resident_training_rejection_and_export(target, tmp_path):
             tree_equal(expected, restored.checkpoint())
 
 
-@pytest.mark.parametrize("full", ["tanh", "swiglu", "lh-silu-layer-v1"])
-def test_resident_training_new_process(target, tmp_path, full):
-    r = runtime("pdg", target, full=full)
+@pytest.mark.parametrize("full,aggregation", [("tanh", "sum"), ("swiglu", "sum"),
+    ("lh-silu-layer-v1", "sum"), *(('tanh', a) for a in
+        ("mean", "weighted_mean", "active_softmax", "all_softmax"))])
+def test_resident_training_new_process(target, tmp_path, full, aggregation):
+    r = runtime("pdg", target, full=full, aggregation=aggregation)
     values = torch.arange(16, dtype=torch.float32).reshape(1, 4, 4) * .005
     path, output = tmp_path / "prefix.pt", tmp_path / "suffix.pt"
     with torch.no_grad(), r.training_session(1, optimizer="adamw") as s:
@@ -146,7 +149,8 @@ def test_resident_training_new_process(target, tmp_path, full):
         s.backward([roots(s, w, "all")]); assert s.step().applied
         expected = s.checkpoint()
     command = [sys.executable, str(Path(__file__).with_name("resident_training_worker.py")),
-               "--device", target, "--checkpoint", str(path), "--output", str(output), "--full", full]
+               "--device", target, "--checkpoint", str(path), "--output", str(output), "--full", full,
+               "--aggregation", aggregation]
     subprocess.run(command, check=True, timeout=180)
     tree_equal(expected, torch.load(output, weights_only=True))
 
@@ -165,3 +169,11 @@ def test_training_cpu_safe_options():
 @pytest.mark.parametrize("full,kind", [("swiglu", "adamw"), ("lh-silu-layer-v1", "sgd")])
 def test_resident_extended_full_training(target, family, schedule, full, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path, full)
+
+
+@pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
+@pytest.mark.parametrize("schedule", ["streaming", "greedy"])
+@pytest.mark.parametrize("kind", ["sgd", "adamw"])
+@pytest.mark.parametrize("aggregation", ["mean", "weighted_mean", "active_softmax", "all_softmax"])
+def test_resident_normalized_aggregate_training(target, family, schedule, kind, aggregation, tmp_path):
+    training_case(target, family, schedule, kind, tmp_path, aggregation=aggregation)

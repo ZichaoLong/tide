@@ -30,9 +30,11 @@ void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizer
   auto session=std::make_unique<ResidentTrainingSession>(f.graph,f.model,f.initial,device,kind,std::vector<OptimizerGroup>{group},limits);
   const auto original=session->checkpoint();
   auto actual_parameters=original.parameters;
+  std::map<std::pair<Index,Index>,Index> positions;
+  for(const auto& x:f.input)++positions[{x.batch,x.port}];
   for(int step=0;step<4;++step) {
     const auto start=session->cut();const int mode=step==1?5:step==2?0:4;
-    std::vector<External> all=f.input;for(auto& x:all){x.time+=step*11;x.position+=step*(x.batch==0?3:2);}
+    std::vector<External> all=f.input;for(auto& x:all){x.time+=step*11;x.position+=step*positions.at({x.batch,x.port});}
     cpu.input=all;auto ref=test::retained_reference(cpu,mode,dtype);
     std::vector<ResidentCotangents> roots;int w=0;Index cut=start;
     for(auto stop:test::retained_stops(start)) {

@@ -10,10 +10,11 @@ def main():
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--full", default="tanh", choices=("tanh", "swiglu", "lh-silu-layer-v1"))
+    parser.add_argument("--aggregation", default="sum", choices=("sum", "mean", "weighted_mean", "active_softmax", "all_softmax"))
     args = parser.parse_args()
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    r = runtime("pdg", args.device, full=args.full)
+    r = runtime("pdg", args.device, full=args.full, aggregation=args.aggregation)
     values = torch.arange(16, dtype=torch.float32).reshape(1, 4, 4) * .005
     with torch.no_grad(), r.training_session(1, checkpoint=args.checkpoint) as s:
         external, kw = inputs(s, values, 2, 4)

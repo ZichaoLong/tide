@@ -5,8 +5,8 @@ from tidegraph import (Edge, Graph, Node, Region, GraphConfig, GraphRuntime, Ext
                        ExecutionOptions, ExecutionPlacement, ResidentLimits)
 
 
-def configuration(family, full="tanh"):
-    nodes = tuple(Node(i // 2, memory="ema", full=full) for i in range(4))
+def configuration(family, full="tanh", aggregation="sum"):
+    nodes = tuple(Node(i // 2, memory="ema", full=full, aggregation=aggregation) for i in range(4))
     edges = (Edge(0, 2, 1), Edge(0, 2, 1), Edge(1, 2, 1), Edge(1, 3, 1))
     if family != "settle":
         edges += (Edge(0, 3, 2),)
@@ -16,8 +16,8 @@ def configuration(family, full="tanh"):
                        width=4, ranks=(1, 2) if family == "settle" else ())
 
 
-def runtime(family, device, schedule="greedy", full="tanh"):
-    cfg = configuration(family, full)
+def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum"):
+    cfg = configuration(family, full, aggregation)
     if device == "cpu":
         r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True))
     else:
@@ -29,6 +29,10 @@ def runtime(family, device, schedule="greedy", full="tanh"):
     r.model.nodes[2].weight = r.model.nodes[0].weight
     r.model.nodes[3].read = r.model.nodes[0].bias
     r.model.input_scale[1] = r.model.agg_scale[0]
+    if aggregation in ("weighted_mean", "active_softmax", "all_softmax"):
+        prefix = "agg_mass_" if aggregation == "weighted_mean" else "agg_logit_"
+        for node in r.model.nodes:
+            node.extra[prefix + "0"] = r.model.input_scale[0]
     return r
 
 

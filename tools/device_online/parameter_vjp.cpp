@@ -34,6 +34,10 @@ ParameterVjp append_parameter_vjp(CannProgram& p,const Graph& g,const ParameterR
     tensor(gradient.extra.up,device,at::kFloat,{plan.swiglu_count,width,2*width});
     tensor(gradient.extra.down,device,at::kFloat,{plan.swiglu_count,2*width,width});
   }
+  if(plan.aggregate_slots) {
+    tensor(gradient.aggregate.values,device,at::kFloat,{nodes,plan.aggregate_slots});
+    tensor(gradient.aggregate.connected,device,at::kBool,{nodes,plan.aggregate_slots});
+  }
   ParameterVjp out;out.owners=plan.owners;out.offsets=plan.offsets;
   const auto& owners=plan.owner_table;const auto& refs=plan.references;const auto& tiles=plan.tiles;
   const int64_t count=out.owners.size(),tasks=tiles.back(),total=plan.elements;
@@ -46,11 +50,13 @@ ParameterVjp append_parameter_vjp(CannProgram& p,const Graph& g,const ParameterR
   const auto weights=tanh?gradient.weights:dummy,bias=tanh?gradient.biases:dummy;
   const auto lw=plan.has_lh?gradient.extra.lh_weights:dummy,lb=plan.has_lh?gradient.extra.lh_biases:dummy;
   const auto gate=plan.swiglu_count?gradient.extra.gate:dummy,up=plan.swiglu_count?gradient.extra.up:dummy,down=plan.swiglu_count?gradient.extra.down:dummy;
+  const auto aggregate=plan.aggregate_slots?gradient.aggregate.values:dummy;
+  const auto aggregate_connected=plan.aggregate_slots?gradient.aggregate.connected:gradient.full_connected;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_vjp)(32,stream,
     ptr(owner_table),ptr(references),ptr(tile_offsets),ptr(weights),ptr(bias),ptr(gradient.decay),ptr(gradient.retention),ptr(gradient.scales),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),
-    ptr(gradient.full_connected),ptr(gradient.decay_connected),ptr(gradient.retention_connected),ptr(gradient.scale_connected),
+    ptr(aggregate),ptr(aggregate_connected),ptr(gradient.full_connected),ptr(gradient.decay_connected),ptr(gradient.retention_connected),ptr(gradient.scale_connected),
     ptr(out.values),ptr(out.connected),ptr(error),count,tasks),"reduce declared parameter aliases on device");},
-    {owner_table,references,tile_offsets,weights,bias,gradient.decay,gradient.retention,gradient.scales,lw,lb,gate,up,down,gradient.full_connected,
+    {owner_table,references,tile_offsets,weights,bias,gradient.decay,gradient.retention,gradient.scales,lw,lb,gate,up,down,aggregate,aggregate_connected,gradient.full_connected,
      gradient.decay_connected,gradient.retention_connected,gradient.scale_connected,out.values,out.connected,error});
   return out;
 }

@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T22:36:11.124142+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T23:04:49.348134+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`,real path
 `/var/tmp/zlong-graph-execution-foundation/repository`;branch `graph-execution-foundation`.
-Implementation HEAD **5143de3**,pushed; LH/SwiGLU formal evidence accompanies this handoff. No authorization pending. No subagents.
+HEAD **4c00aa5**,pushed; LH/SwiGLU implementation5143de3 is formally qualified. No authorization pending. No subagents.
 Reference repositories and ObsidianVault remain read-only. **F1–F7 are incomplete.**
 
 ## Contract and order
@@ -73,41 +73,65 @@ trajectory tolerance. --full-training-control-check conditioned was explicit:
 routes exact. Strict failures remain failed. Read docs/resident-full-vjp.md.
 Width257 retained SwiGLU requires explicit2GiB reverse budget.
 
-## Active jobs and next commands
+## Normalized Aggregate increment and next commands
+
+Implementation is ready to commit;immutable qualification has not run yet.
+All new development jobs are terminal. No authorization pending.
+
+- aggregate_tape/vjp and packed plan/payload/reduce kernels implement mean,
+  weighted mean,active softmax and all-source softmax. Actual connected rows,
+  missing/all-source denominator gradients,physical/logical source identity,
+  present-zero and zero-scale/raw-message gradients remain distinct.
+- Graph reverse,retained banks,alias-owner reduction and device publication are
+  integrated. Gradient bank10/publish bank12. No public API/checkpoint change.
+- aggregate-vjp-dev04 and strengthened aggregate-vjp-dev05 PASSED39 configurations/
+  117 replays each,CPU FP32/FP64,width1/7/257,domain257,None/zero,poison,replay,
+  budget and duplicate-source refusals. dev05 separates zero scale/nonzero raw
+  data from a different present-zero source. Current component hash matches
+  frozen aggregate-training-diag05 exactly.
+- aggregate-training-dev04 PASSED57 public C++ trajectories/912 windows/228 updates,
+  CPU FP32/FP64,both schedules/SGD+AdamW,mixed profiles,feedback,self-loops,
+  shared coefficient/physical owners,exclusive source aliases and checkpoint
+  continuation. Input stride is now per(batch,port). Explicit AdamW eps1e-5;
+  strict existing tensor/control/route checks,public default unchanged.
+- aggregate-regression-dev04 PASSED7 related components: Aggregate forward,
+  graph/parameter VJP,training-step,retained,resident-training,Full training.
+  The existing Full checker alone explicitly uses conditioned control comparison.
+- build-aggregate-training-python-dev02 PASSED full Python-owned build;
+  aggregate-training-python-dev02 PASSED106 device cases including all three
+  families,both schedules/optimizers,real loss cotangents,disk/fresh-process resume.
+  Python test sources unchanged since that run. Host gate PASSED76/103 optional
+  skips. A separate12-case CPU fixture probe passed after excluding frozen
+  boundary parameters from its autograd request (first probe setup failed).
+- aggregate-profile-dev04 PASSED separate full Aggregate checker profile;
+  observed72,933 AIV+578 AI_CORE+1,213 MIX_AIV;no observed AiCPU/fallback.
+  This correctness profile is not throughput.
+
+Retain failures: build-aggregate-training-dev01/python-dev01 failed Ascend C
+GM-scalar template deduction (fixed local float loads);standalone dev02 failed
+only test initializer/vector<bool> types. build-aggregate-training-diag03 was
+cancelled(exit143): explicit CMake targets recursively repeated vendor builds.
+No numerical/device failure was relabelled. Direct linking in diag04 PASSED
+with source/production artifact hashes and five CPU checks;diag05 changed only
+one test fixture. This development reuse is not a clean-build qualification.
 
 TASK=/mi/data2T/zlong/tide-execution-flows;RUN=TASK/runs/NAME;
-unit=tide-execution-flows-NAME.service. All LH/SwiGLU clean jobs PASSED; evidence
-is audited separately from the normalized Aggregate draft.
-
-Normalized Aggregate adjoints are UNCOMMITTED/in progress;not device-verified.
-New aggregate_tape/vjp and plan/payload/reduce kernels,graph reverse,retained
-banks,alias reduction/publication,independent VJP and public trajectory tests
-are wired. Gradient bank10,publish bank12. Preserve missing all-softmax source
-coefficient gradients,physical/logical identity,present-zero and None/zero;
-never infer coefficients by dividing message values.
-
-Current frozen development jobs in background.slice (jobs2,1800s each):
-- build-aggregate-training-dev01: source/build aggregate-training-dev01;
-  core placement-npu-clean01;full standalone build and five CTests,RUNNING.
-- build-aggregate-training-python-dev01: source/build aggregate-training-python-dev01;
-  core placement-npu-python-clean01;full Python-owned build,RUNNING.
-- aggregate-training-host-dev01: CPU interfaces PASSED76 tests/103 optional skips.
-
-Next: inspect build termination;new shared kernel ABIs require full builds,
-never test-only production reuse. Run verify_device_control.py from standalone
-snapshot with --checks aggregate-vjp aggregate-training aggregate graph-vjp
-parameter-vjp training-step retained resident-training full-training and explicit
---full-training-control-check conditioned,queue120s/run900s. New isolated VJP
-expects39 configurations/117 replays;public normalized training57 trajectories/
-912 windows/228 updates. The latter includes exclusive physical aliases and
-per-(batch,port) input continuation. No passing device claim yet.
-
-After Python build,run tests/test_resident_library.py tests/test_resident_training.py
-with matching Python-owned core/new backend,TIDE_RESIDENT_DEVICE=npu:0,dtypefloat32,
-queue120s/run900s;expect106 cases. Then separate Aggregate profile,review failures
-before broadening,commit implementation,qualify exact clean commit,evidence commit.
-Continue attention/HST/SOFTP,FP16,peer progression and performance per F1–F7.
-Do not rerun unchanged portable core's8954 CPU checks.
+unit=tide-execution-flows-NAME.service. Commit only this increment and push.
+Then freeze the exact new commit for:
+- build-aggregate-training-clean01: snapshot/build aggregate-training-clean01,
+  build_device_control.py --core-build TASK/builds/placement-npu-clean01,
+  --ascendc-soc Ascend910_9392 --jobs2;1800s. Five CTests required.
+- build-aggregate-training-python-clean01: separate matching Python-owned source/
+  build,core placement-npu-python-clean01;same tool and limits.
+- After standalone build: all46-cell verify_device_control.py with explicit
+  --full-training-control-check conditioned;queue120s/run900s. Separate profile
+  --check aggregate-training. Neither is throughput.
+- After Python build:106 tests from tests/test_resident_library.py and
+  tests/test_resident_training.py;matching Python-owned core/backend,explicit
+  npu:0/float32;queue120s/run900s. Host interface gate76/103 optional skips.
+Audit clean-source/core/binary/loader/result/log/profile identities,commit reviewed
+formal evidence separately. Do not repeat unchanged portable core's8954 CPU tests.
+Then attention/HST/SOFTP,FP16,peer progression and F1–F7 performance remain.
 
 ## Older work to preserve
 

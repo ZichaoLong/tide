@@ -107,7 +107,7 @@ if(TIDE_DEVICE_ASCENDC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
   add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
-    retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp
+    retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp aggregate_vjp.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -118,7 +118,7 @@ if(TIDE_DEVICE_ASCENDC)
     tide_fiber_payload_kernel tide_fiber_indices_kernel tide_fiber_trace_kernel tide_fiber_commit_kernel tide_fiber_pool_kernel
     tide_event_plan_kernel tide_event_payload_kernel tide_event_indices_kernel tide_event_cache_kernel
     tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel
-    tide_aggregate_plan_kernel tide_aggregate_apply_kernel
+    tide_aggregate_plan_kernel tide_aggregate_apply_kernel tide_aggregate_vjp_plan_kernel tide_aggregate_vjp_payload_kernel tide_aggregate_vjp_reduce_kernel
     tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel tide_reverse_links_kernel
     tide_extra_full_plan_kernel tide_extra_full_payload_kernel tide_extra_full_reduce_kernel
     tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel tide_parameter_vjp_kernel
@@ -155,6 +155,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-extra-full-vjp-check extra_full_check.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-extra-full-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-extra-full-vjp-check PRIVATE tide-content-flow)
+    add_executable(tide-device-aggregate-vjp-check aggregate_vjp_check.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-device-aggregate-vjp-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-aggregate-vjp-check PRIVATE tide-content-flow)
     add_executable(tide-device-full-vjp-check full_vjp_check.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-full-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-full-vjp-check PRIVATE tide-content-flow)
@@ -237,6 +240,10 @@ if(TIDE_DEVICE_ASCENDC)
       retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-resident-full-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-full-training-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
+    add_executable(tide-resident-aggregate-training-check aggregate_training_check.cpp training_test.cpp training_trajectory.cpp training_compare.cpp
+      retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-resident-aggregate-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-resident-aggregate-training-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
     add_test(NAME resident-control-comparison COMMAND tide-resident-full-training-check --device=cpu --dtype=float32 --control-selftest)
     include(GNUInstallDirs)
     include(CMakePackageConfigHelpers)

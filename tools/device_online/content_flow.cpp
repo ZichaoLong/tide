@@ -218,19 +218,20 @@ FullTape ContentFlow::full_tape() const {
 ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
   for(const auto& n:s.profile.graph.nodes)
-    if(n.aggregation!="sum"||(!n.identity&&n.emission!="broadcast")
+    if((!n.identity&&n.emission!="broadcast")
         ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"))
       throw std::invalid_argument("graph reverse module contract unavailable");
-  return {&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
+  ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
+  if(s.aggregate)tape.aggregate=s.aggregate->tape();return tape;
 }
 ParameterBanks ContentFlow::parameter_banks() const {
   // Reuse the current narrow training preflight. This internal view does not
   // make parameter mutation available through public inference sessions.
   const auto tape=reverse_tape();const auto& s=*impl_;
   return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
-          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra};
+          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra,tape.aggregate};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");

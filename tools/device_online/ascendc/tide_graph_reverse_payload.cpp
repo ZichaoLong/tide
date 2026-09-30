@@ -5,7 +5,8 @@ extern "C" __global__ __aicore__ void tide_graph_reverse_payload(GM_ADDR values,
     GM_ADDR pending_root,GM_ADDR output_root,GM_ADDR final_root,GM_ADDR gradients,GM_ADDR connected,GM_ADDR carry,
     GM_ADDR carry_connected,GM_ADDR stage_values,GM_ADDR full_gradient,GM_ADDR range,GM_ADDR count,GM_ADDR cotangents,
     GM_ADDR cot_connected,GM_ADDR full_h,GM_ADDR full_c,GM_ADDR state_h,GM_ADDR state_connected,GM_ADDR aggregate_partials,
-    GM_ADDR error,int64_t width,int64_t fibers,int64_t pending,int64_t outputs,int64_t nodes,int64_t samples,int64_t mode) {
+    GM_ADDR error,GM_ADDR metadata,GM_ADDR aggregate_kinds,int64_t width,int64_t fibers,int64_t pending,int64_t outputs,
+    int64_t nodes,int64_t samples,int64_t mode,int64_t normalized) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)messages);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -44,6 +45,7 @@ extern "C" __global__ __aicore__ void tide_graph_reverse_payload(GM_ADDR values,
       }
     } else if(mode==3) {
       if(!((__gm__ uint8_t*)state_connected)[row])continue;
+      if(normalized&&((__gm__ I*)aggregate_kinds)[((__gm__ I*)metadata)[(first+row)*13+1]]!=0)continue;
       vector.load(x,(__gm__ float*)state_h,row*width+start,size);
       for(I m=ch[first+row];m>=0;m=cn[m]) {
         const float scale=weights[msg[m*4+2]];

@@ -2,7 +2,7 @@
 
 The internal `append_parameter_vjp` component reduces the physical partials
 from [graph VJP](resident-graph-vjp.md) into `ParameterRegistry` owners. Its
-single-NPU FP32 HARD profile has the same sum/broadcast, identity/EMA/Add state
+single-NPU FP32 HARD profile has the same built-in Aggregate/broadcast, identity/EMA/Add state
 and identity/tanh/LH/SwiGLU Full limits. It is not an optimizer or public training API.
 
 The caller supplies the original graph/model registry, optionally restricted to
@@ -11,6 +11,11 @@ names, as the portable registry does. Distinct TensorImpl objects sharing storag
 stay distinct. A single owner can have differentiable and HARD Read aliases;
 only its differentiable uses contribute to its gradient. Any later update must
 also refresh its forward Read aliases.
+
+Normalized Aggregate coefficients have per-node/logical-slot partials and
+connection bits. An all-source softmax logit can be connected without a message
+on that slot. Physical scale owners remain separate unless the registry explicitly
+shares them, including an owner shared across a coefficient and a physical scale.
 
 Each owner has a device connection bit and a flat gradient slice. An offset of
 `-1` denotes no differentiable use in this profile and avoids allocating unused

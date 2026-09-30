@@ -2,10 +2,11 @@
 
 The internal `append_graph_vjp` composes Full and state-chain adjoints with
 message dependencies from the actual resident forward journals. Its current
-profile is single-device FP32 HARD, sum Aggregate, broadcast emission (including
+profile is single-device FP32 HARD, built-in Aggregate, broadcast emission (including
 static phases), identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Unsupported
-modules refuse when requesting `ContentFlow::reverse_tape()`. Public resident
-sessions remain inference-only until the training API and lifecycle are qualified.
+modules refuse when requesting `ContentFlow::reverse_tape()`. The separate
+[public training owner](resident-training.md) provides retained-window lifecycle;
+qualification is recorded per module in ROADMAP.
 
 Static topology/parameter layout preparation is allowed. A device hash table
 indexes actual `(sample,node,int64 time)` events, associates physical messages
@@ -18,7 +19,9 @@ value is not differentiated with respect to this window's current parameters.
 The device loop processes actual forward stages in reverse order. For each stage,
 it gathers Full cotangents from output/pending roots and already differentiated
 consumers, runs the packed Full VJP, seeds the state-chain VJP, carries earlier
-state adjoints, and differentiates sum Aggregate into physical message gradients.
+state adjoints, and differentiates Aggregate into physical message gradients.
+[Normalized profiles](resident-aggregate-vjp.md) additionally preserve each
+event's logical coefficient domain and reduce its parameter partials.
 Those messages supply earlier stages on subsequent iterations. No event count,
 message association, stage choice or gradient connection bit is returned to the
 host to advance this loop. The CPU reference independently runs the graph; none
@@ -64,7 +67,6 @@ be tied to an immutable source revision; this document is the contract.
 
 Internal [owner updates](resident-optimizer.md) and [retained-window bridges](resident-retained.md)
 now compose with this component under their own qualification scopes. Remaining
-training work includes public autograd/explicit training ownership and checkpoints;
-normalized Aggregate, attention and HST/SOFTP adjoints; FP16 and peer
+training work includes attention and HST/SOFTP adjoints; FP16 and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.

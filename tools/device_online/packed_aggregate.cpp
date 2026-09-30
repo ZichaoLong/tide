@@ -6,17 +6,23 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-namespace {
-uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
-int64_t kind(const std::string& name) {
+int64_t aggregate_kind(const std::string& name) {
   if(name=="sum")return 0;if(name=="mean")return 1;if(name=="weighted_mean")return 2;
   if(name=="active_softmax")return 3;if(name=="all_softmax")return 4;
   throw std::invalid_argument("device Aggregate profile unavailable");
 }
+int64_t aggregate_slots(const Graph& graph) {
+  int64_t slots=1;
+  for(size_t i=0;i<graph.nodes.size();++i)if(aggregate_kind(graph.nodes[i].aggregation))
+    slots=std::max(slots,graph.source_counts.at(i));
+  return slots;
+}
+namespace {
+uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
 struct Footprint {int64_t slots;long double fixed,row;bool enabled;};
 Footprint footprint(const ContentProfile& p,int64_t rows) {
   int64_t slots=1;bool enabled=false;
-  for(size_t i=0;i<p.graph.nodes.size();++i)if(kind(p.graph.nodes[i].aggregation)) {
+  for(size_t i=0;i<p.graph.nodes.size();++i)if(aggregate_kind(p.graph.nodes[i].aggregation)) {
     slots=std::max(slots,p.graph.source_counts[i]);enabled=true;
   }
   return {slots,16.L*(p.graph.nodes.size()+1.L)*(slots+4.L)+32.L*(rows+1.L),
@@ -35,7 +41,7 @@ PackedAggregate::PackedAggregate(const ContentProfile& p,at::Device device,int64
   auto weights=at::zeros({int64_t(p.graph.nodes.size()),slots_},at::kFloat);
   std::vector<int64_t> kinds,lengths;
   for(size_t n=0;n<p.graph.nodes.size();++n) {
-    const auto k=kind(p.graph.nodes[n].aggregation),count=p.graph.source_counts[n];
+    const auto k=aggregate_kind(p.graph.nodes[n].aggregation),count=p.graph.source_counts[n];
     kinds.push_back(k);lengths.push_back(count);
     if(k>=2)for(int64_t slot=0;slot<count;++slot) {
       const auto prefix=k==2?"agg_mass_":"agg_logit_";

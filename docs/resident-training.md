@@ -4,9 +4,11 @@
 `tide/resident_training.h`, linked with `tide::resident`. Its implementation and
 qualification status are recorded in [STATUS](STATUS.md); this contract does not
 by itself certify a build, Python client or throughput. The supported adjoint is
-currently single-NPU FP32 HARD, sum Aggregate, phase-aware broadcast,
+currently single-NPU FP32 HARD, built-in Aggregate, phase-aware broadcast,
 identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
 construction. The wider [execution contract](execution-flows.md) remains required.
+The normalized Aggregate implementation and its separate qualification status
+are described in [its VJP contract](resident-aggregate-vjp.md).
 
 ## Lifecycle and consumers
 

@@ -1,4 +1,5 @@
 #include "graph_vjp.h"
+#include "aggregate_vjp.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_graph_reverse_meta.h"
 #include "aclrtlaunch_tide_graph_reverse_payload.h"
@@ -27,6 +28,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   long double extra_bytes=0;
   for(const auto& x:{t.full.extra.lh_weights,t.full.extra.lh_biases,t.full.extra.gate,t.full.extra.up,t.full.extra.down})
     if(x.defined())extra_bytes+=4.L*x.numel();
+  const bool normalized=t.aggregate.kinds.defined();
+  if(normalized)extra_bytes+=5.L*nodes*t.aggregate.slots+8;
   const long double own=extra_bytes+4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
     +16.L*samples*nodes*width+16.L*nodes*width+(t.full.has_tanh?4.L*nodes*(width*static_cast<long double>(width)+width):0.L)
     +8.L*total+16.L*capacity+32.L*samples*nodes+32.L*nodes+physical+1024;
@@ -37,9 +40,9 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   tensor(roots.final,device,at::kFloat,{samples,nodes,width});tensor(roots.final_connected,device,at::kBool,{samples,nodes});
   tensor(t.full_values,device,at::kFloat,{capacity,width});tensor(t.fiber_values,device,at::kFloat,{fibers,width});
   tensor(t.state.values,device,at::kFloat,{capacity,5*width+2});
-  // Reserve half for the three bounded components. Each rejects before its
+  // Reserve half for the bounded reverse components. Each rejects before its
   // allocations; no nested component can consume another component's reserve.
-  auto links=append_reverse_links(p,t,error,budget/8);
+  auto links=append_reverse_links(p,t,error,budget/(normalized?10:8));
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);
@@ -54,6 +57,10 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   };
   out.extra={extra_output(t.full.extra.lh_weights),extra_output(t.full.extra.lh_biases),
     extra_output(t.full.extra.gate),extra_output(t.full.extra.up),extra_output(t.full.extra.down)};
+  if(normalized) {
+    out.aggregate={at::empty_like(t.aggregate.weights),at::empty(t.aggregate.weights.sizes(),booleans),at::empty({1},longs)};
+    p.zero(out.aggregate.values);p.zero(out.aggregate.connected);p.zero(out.aggregate.chunks);
+  }
   auto stage_meta=at::empty_like(t.state.metadata),stage_values=at::empty_like(t.state.values),stage_count=at::empty_like(t.state.count);
   auto full_grad=at::empty({capacity,width},floats),full_on=at::empty({capacity},booleans);
   auto aggregate_partials=at::empty({fibers,width},floats),scalar_partials=at::empty({physical,width},floats);
@@ -81,26 +88,29 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   };
   StateVjp dummy;dummy.content_connected=full_on;dummy.decay_connected=dcon;dummy.retention_connected=rcon;
   auto payload=[&](int64_t mode,const at::Tensor& fh,const at::Tensor& fc,const at::Tensor& sh,const at::Tensor& shc) {
+    const auto aggregate_kinds=normalized?t.aggregate.kinds:t.full.kinds;
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_payload)(32,stream,
       ptr(t.state.values),ptr(t.fiber_values),ptr(links.messages),ptr(links.scales),ptr(links.producer_head),ptr(links.producer_next),
       ptr(links.consumer_head),ptr(links.consumer_next),ptr(roots.pending),ptr(roots.outputs),ptr(roots.final),
       ptr(messages),ptr(connected),ptr(carry),ptr(carry_on),ptr(stage_values),ptr(full_grad),ptr(range),ptr(stage_count),
-      ptr(cot.events),ptr(cot.connected),ptr(fh),ptr(fc),ptr(sh),ptr(shc),ptr(aggregate_partials),ptr(error),
-      width,fibers,pending,outputs,nodes,samples,mode),"packed graph reverse payload phase");},
+      ptr(cot.events),ptr(cot.connected),ptr(fh),ptr(fc),ptr(sh),ptr(shc),ptr(aggregate_partials),ptr(error),ptr(t.state.metadata),ptr(aggregate_kinds),
+      width,fibers,pending,outputs,nodes,samples,mode,int64_t(normalized)),"packed graph reverse payload phase");},
       {t.state.values,t.fiber_values,links.messages,links.scales,links.producer_head,links.producer_next,links.consumer_head,links.consumer_next,
        roots.pending,roots.outputs,roots.final,messages,connected,carry,carry_on,stage_values,full_grad,range,stage_count,
-       cot.events,cot.connected,fh,fc,sh,shc,aggregate_partials,error});
+       cot.events,cot.connected,fh,fc,sh,shc,aggregate_partials,error,t.state.metadata,aggregate_kinds});
   };
   meta(0,full_on,full_on,out.full_connected,dummy);payload(0,full_grad,full_grad,full_grad,full_on);
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);meta(1,full_on,full_on,out.full_connected,dummy);
   p.branch(branch,{done,body});p.mark(body);payload(1,full_grad,full_grad,full_grad,full_on);
   auto full_tape=t.full;full_tape.metadata=stage_meta;full_tape.values=stage_values;full_tape.count=stage_count;
-  auto full=append_full_vjp(p,full_tape,full_grad,full_on,error,chunk,budget/8);
+  auto full=append_full_vjp(p,full_tape,full_grad,full_on,error,chunk,budget/(normalized?10:8));
   meta(2,full.content_connected,full.comparison_connected,full.parameter_connected,dummy);
   payload(2,full.content,full.comparison,full_grad,full_on);
   auto state_tape=t.state;state_tape.metadata=stage_meta;state_tape.values=stage_values;state_tape.count=stage_count;
-  auto state=append_state_vjp(p,state_tape,cot,error,budget/4);
+  auto state=append_state_vjp(p,state_tape,cot,error,budget/(normalized?5:4));
   payload(3,full.content,full.comparison,state.content,state.content_connected);
+  if(normalized)append_aggregate_vjp(p,t,links,stage_count,range,state.content,state.content_connected,
+    messages,aggregate_partials,out.aggregate,error,chunk,budget/10);
   p.copy(carry,state.initial);p.copy(carry_on,state.initial_connected);
   p.add(dc,state.decay);p.add(rc,state.retention_components);
   if(t.full.has_tanh){p.add(out.weights,full.weights);p.add(out.biases,full.biases);}
