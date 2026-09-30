@@ -27,8 +27,8 @@ screened mixed, resident, both schedules. FP32 primary, FP16 separate; CPU FP64
 reference. Three fresh processes for recommendations. CUDA hardware remains pending.
 Historical slow CPU Attention must not block general implementation.
 
-NEXT: commit the tested host-owned greedy increment, then launch clean fixed-source
-CPU build/directed gate and matching NPU build/semantic gates. Keep source/evidence
+Committed host greedy implementation:**2038d88**. NEXT: launch clean fixed-source
+CPU build/full regression and matching NPU build/semantic gates. Keep source/evidence
 commits separate. Continue byte-budget batching and isolate the proven CANN control
 primitive into a project-owned adapter; then online device queues/packing, complete
 consumers, multi-device/training and staged performance. Do not call the host
@@ -63,8 +63,48 @@ Development results:
   these overlap later611, do not sum them as independent qualification counts.
 
 Task root TASK=/mi/data2T/zlong/tide-execution-flows. Runs/status/logs under
-TASK/runs/NAME, linked from artifacts/execution-flows-NAME. Client/source code is
-now ready for a coherent implementation commit; old consumer edits remain separate.
+TASK/runs/NAME, linked from artifacts/execution-flows-NAME. Implementation is committed as2038d88; old consumer edits remain separate.
+Prepared immutable source greedy-clean01 at2038d88:
+- greedy-clean-cpu01: build greedy-cpu-clean01, CTest four cells, full verify.py.
+  Two workers, build1800s/full-test7200s bounds; results pending.
+- build-greedy-npu-python01 and build-greedy-npu-sdk01: full matching builds
+  into greedy-npu-python01/greedy-npu-sdk01, two workers each,1800s bounds.
+  NPU Python build passed. Prepared greedy-npu-semantic01: six FP32 public
+  Python/native × family cells (all six now PASSED), independent CPU observables/VJPs/optimizer/
+  fresh-process checkpoint/CPU handoff; one card,120s queue/900s workload limit.
+  Standalone NPU build also passed; CPU build, four CTests and full8849-test FP64/FP32 qualification PASSED.
+  Source2038d88; evidence in docs/evidence/online-greedy-20260930.{md,json}.
+  Prepared build-device-control-dev01: frozen control-dev01, standalone core
+  greedy-npu-sdk01, new build device-control-dev01; CMake/help/loader gate only.
+  Build/help/loader PASSED. device-control-gate-dev01 FAILED at first mark:
+  CANN507000, own runtime log requires label-list creation before label mark.
+  Component now defers task emission until all target lists exist; timeout
+  cleanup retains owners/handles if completion cannot be confirmed.
+  Prepared build-device-control-dev02/control-dev02, then gate-dev02:
+  one NPU,120s queue/90s workload. dev02 build and all eight control cases PASSED.
+  Prepared control-dev03/build-device-control-dev03 to add captured numerical
+  submodel calls from the device-controlled loop. dev03 build failed because
+  NPUGraph public header additionally requires active CANN include directory.
+  CMake now discovers it explicitly. Prepared dev04 build/control-dev04, then
+  stage gate. dev04 failed on mixing toolkit/SDK ACL declarations; use SDK
+  vendored ACL include consistently as existing GraphReplay does. Prepared
+  build-device-control-dev05/control-dev05 PASSED. Device-stage gate FAILED107000:
+  CANN forbids RIExecuteAsync on a model-bound stream. Unsupported numerical
+  submodel bridge removed from working source; frozen dev05 retains reproducer.
+  Added portable fixed-capacity packed queue and int64 closure with sample
+  workspace chunking. Prepared dev06 build/CPU gates and NPU queue/control gates.
+  dev06 build failed on omitted ATen grad-mode header; corrected. Prepared
+  dev07 build and CPU queue FP64/FP32 gates PASSED. Prepared
+  device-control-gates-dev07: control eight cases, raw packed numerical
+  FP32/FP16, tensor queue FP32; one NPU120s queue/300s workload bound. All runtime processes returned0;
+  raw control and numerical FP32/FP16 passed. Queue trace reports int64 sort
+  on AiCPU and unsupported scatter_reduce CPU fallback. This is NOT native
+  NPU closure evidence. Tensor closure now explicitly refuses NPU; CPU oracle
+  stays independent. Added optional Ascend C exact-int64 closure/branch kernel
+  (one AIV, metadata only), pending build/device/profiling gates. Prepared
+  build-device-control-dev08/control-dev08, explicit Ascend910_9392 target;
+  600s build bound and two workers; then bounded one-device feature gates. No host-loop substitute for required resident execution. Ascend C
+  queue/control stages are the next integration route to investigate.
 
 ## Device-control feasibility
 
@@ -79,6 +119,11 @@ workload bounds. Scripts under TASK/launchers/device-loop-probeNN.py print hashe
   CANN9.0.0 + TorchNPU2.10. Device int64 count/limit controlled2,5,1 iterations
   of the same compiled loop. No per-iteration host scalar decisions; all cleanup0.
 
+Uncommitted project component:tools/device_online/{cann_api,cann_program,control_check},
+CMake, scripts/build_device_control.py, docs/device-control.md. Fixed scalar buffers,
+int64/bool/int32, raw ACLNN, persistent model lifecycle and bounded-loop checks.
+New build prepared as above; no device test result yet. It does not provide autograd.
+
 This is a capability result, not a graph scheduler, packed queue, full resident
 training or performance result. Next keep buffers/workspaces/model/stream/labels
 alive through execution and establish project-owned lifecycle/continuation tests.
@@ -88,10 +133,9 @@ alive through execution and establish project-owned lifecycle/continuation tests
 Unit `tide-execution-flows-historical-cpu-attention-01.service` is still suspended.
 At this documentation pass, all four cgroup processes were verified in T state;
 systemd reports active/running because SIGSTOP does not terminate the service.
-It retains host memory and TASK/timing.lock. No other active tide-execution-flows
-unit was listed. The pause sidecar is TASK/runs/historical-cpu-attention-01/pause.json;
+It retains host memory and TASK/timing.lock. New greedy jobs are recorded above; inspect their live units independently. The pause sidecar is TASK/runs/historical-cpu-attention-01/pause.json;
 its original timestamp is retained. status.json says running because its writer
-is suspended. No new NPU task was submitted. Do not call this experiment passed.
+is suspended. New isolated NPU probes are separate from this suspended experiment. Do not call it passed.
 
 Historical source951031e, original baseline02 binary; Attention17,269,426,339 params,
 D2048/B512/T12/V50304, FP32, node/head160, ATen1, backward16/optimizer16. Intended
@@ -113,7 +157,7 @@ Uncommitted flow_*.{h,cpp}, tide-complete-flow target, benchmark_execution_flow.
 verify_execution_flows.py, test_flow_semantics.py; modified bounded schedule/select/
 export/update, resident, peer transport and build manifests/CMake. CPU/mixed/finite
 captured complete-window consumers exist at development scope. The current topology
-reader requires DAG/rank-aligned packets; generic PDG online prefill is not delivered.
+reader requires DAG/rank-aligned packets; the consumer does not yet use the new generic PDG greedy scheduler.
 Current bounded windows reset graph state; required continuous online scheduling/
 state carry and equivalent PyTorch large-flow consumers remain incomplete.
 

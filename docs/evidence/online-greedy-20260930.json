@@ -1,0 +1,528 @@
+{
+  "schema": "tide-online-greedy-evidence-v1",
+  "source": "2038d8867ad0133af9b95589379435c95a326f03",
+  "scope": "host online greedy; CPU full regression and six single-NPU FP32 fixture qualifications",
+  "cpu": {
+    "pytest_passed": 8849,
+    "seconds": 1713.58,
+    "ctest_passed": 4
+  },
+  "runs": [
+    {
+      "name": "greedy-clean-cpu01",
+      "source": "2038d8867ad0133af9b95589379435c95a326f03",
+      "state": "passed",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-greedy-clean-cpu01/status.json",
+          "sha256": "27efb97b8b43d4258e07a178d83c018344b529e263174cc1204c7045510bbb9f"
+        },
+        {
+          "path": "artifacts/execution-flows-greedy-clean-cpu01/task.log",
+          "sha256": "037e57d62c6bbf25dd2307fbe750ce36e5715d7b1546582e5d57ecf029addaa0"
+        },
+        {
+          "path": "artifacts/execution-flows-greedy-clean-cpu01/qualification/result.json",
+          "sha256": "f07dda74cdcee114f88407932c3c10b0fd8d02d2066d666f8c46c696c26f4d7f"
+        },
+        {
+          "path": "artifacts/execution-flows-greedy-clean-cpu01/qualification/tests.log",
+          "sha256": "df6f8d30cea558fcc49da92a3ae2aeed81fc03fc0a4bf2dededa48ce96aa5999"
+        }
+      ]
+    },
+    {
+      "name": "build-greedy-npu-python01",
+      "source": "2038d8867ad0133af9b95589379435c95a326f03",
+      "state": "passed",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-greedy-npu-python01/status.json",
+          "sha256": "8d2d9ddb4d0779726628e70e06ff6bbd9e94d23a06f6ecd400031f0431b9d9b9"
+        },
+        {
+          "path": "artifacts/execution-flows-build-greedy-npu-python01/task.log",
+          "sha256": "6858866ec29175e69f29901f17d2cb2558a105c4734bb041781a1e4925e95577"
+        }
+      ]
+    },
+    {
+      "name": "build-greedy-npu-sdk01",
+      "source": "2038d8867ad0133af9b95589379435c95a326f03",
+      "state": "passed",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-greedy-npu-sdk01/status.json",
+          "sha256": "82876230627b1af841216f117bb47f2a9abf8c704cb977077b3a993336fae43b"
+        },
+        {
+          "path": "artifacts/execution-flows-build-greedy-npu-sdk01/task.log",
+          "sha256": "d26831bfac42b4a32a79cc6ca997614750c779b473144569e7bd2e2bf14d9e2b"
+        }
+      ]
+    },
+    {
+      "name": "greedy-npu-semantic01",
+      "source": "2038d8867ad0133af9b95589379435c95a326f03",
+      "state": "passed",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-greedy-npu-semantic01/status.json",
+          "sha256": "fc0b319f10e5da191453a304bcb6f5bffd472c6a34a72722d2cf32b94d7c601b"
+        },
+        {
+          "path": "artifacts/execution-flows-greedy-npu-semantic01/task.log",
+          "sha256": "0e80acab87f50541f9c76f36fcab7a12ed11be01aadcd26c29d23a87adc19310"
+        },
+        {
+          "path": "artifacts/execution-flows-greedy-npu-semantic01/semantic.json",
+          "sha256": "bb4042de8fda79c9eee58c4e0e07e3cc7c591d0735d502b9e4d2b0940027da9b"
+        }
+      ]
+    }
+  ],
+  "npu_cases": [
+    {
+      "case": "native-pdg",
+      "report_sha256": "e53a3e68924179bb1a5449216d2b6bbafc42c2896dcdca16b82d9fe10f7e45d4",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "4ee72c49bf0c41e83f92cd5254a01fa364b58ffd78d0b1d31234082db905b851",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": "436665829d12cdfce604a593f8857b793cbd3f94f3ab4bbfb7614e9e62307245",
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "pending",
+            "first-content",
+            "first-output",
+            "first-pending"
+          ],
+          "leaves": 59,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 6
+    },
+    {
+      "case": "native-settle",
+      "report_sha256": "93973bd9cb13268f57262cc3c9c6b37d0301656ad36573ae1ff404a4cfdef2ec",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "22a4150a61a708bf9e35c12b12fae2c2b22f1469b1fed8eb8922a6e6b50ef086",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": "436665829d12cdfce604a593f8857b793cbd3f94f3ab4bbfb7614e9e62307245",
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "first-content",
+            "first-output"
+          ],
+          "leaves": 58,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "independent-direct-settle",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 5
+    },
+    {
+      "case": "native-timed-dag",
+      "report_sha256": "f39773b6d14b7f959b30dd14434d30e77321c7a20e57397957adea0b18e5108e",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "0fafbc7e241119efe41318277b47be6fdb9fee4b54dd69702ad4ab080654f1b7",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": "436665829d12cdfce604a593f8857b793cbd3f94f3ab4bbfb7614e9e62307245",
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "first-content",
+            "first-output"
+          ],
+          "leaves": 59,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 3
+    },
+    {
+      "case": "python-pdg",
+      "report_sha256": "b9ada8cae12f76dd495ef3463e33f54431c28d8d65f6aeb547d4412540767911",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "17757975fe5946d83099e249fbbc8a6a31e1fd91e0cc7edafcc9bc6907acc8c7",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": null,
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "pending",
+            "first-content",
+            "first-output",
+            "first-pending"
+          ],
+          "leaves": 59,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 6
+    },
+    {
+      "case": "python-settle",
+      "report_sha256": "76897c886e38d94e442434ad1127027a6b7e435616175d5c2ac4b62401b051db",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "21644e016be66f97596d4a4ca59139b5d8ab59421ab4c7706ad883c20db92173",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": null,
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "first-content",
+            "first-output"
+          ],
+          "leaves": 58,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "independent-direct-settle",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 5
+    },
+    {
+      "case": "python-timed-dag",
+      "report_sha256": "479bf140edfc289a1a00ec921be4998bd57bc2bc55ca9253dbf56fc3d12c6584",
+      "runtime": {
+        "resolved_device": "npu:0",
+        "backend": "npu",
+        "logical_device_index": 0,
+        "resolution_reason": "explicit:npu",
+        "dtype": "float32",
+        "host_architecture": "aarch64",
+        "torch": "2.10.0+cpu",
+        "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "torch_npu": "2.10.0",
+        "logical_device_count": 1,
+        "device_name": "Ascend910_9392",
+        "cann_version": "9.0.0",
+        "matmul_allow_hf32": false
+      },
+      "config_sha256": "52637c56307449b4939b9f2136e912723f8bef7946d04965540ac8d0f9f7ac27",
+      "package_sha256": "b7ad8e48a2bee84197fb1c3cd61ddc701bc99341b6b88e89d857bb6a32f7f46f",
+      "native_sha256": null,
+      "checks": [
+        {
+          "name": "complete-observables",
+          "state": "passed"
+        },
+        {
+          "name": "independent-vjps",
+          "state": "passed",
+          "roots": [
+            "all",
+            "output",
+            "state",
+            "first-content",
+            "first-output"
+          ],
+          "leaves": 59,
+          "disconnected": 12
+        },
+        {
+          "name": "chunk-observables-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "requested-trace-disabled-values-and-vjps",
+          "state": "passed"
+        },
+        {
+          "name": "optimizer-trajectory",
+          "state": "passed",
+          "steps": 3,
+          "optimizer": "adamw"
+        },
+        {
+          "name": "fresh-process-checkpoint",
+          "state": "passed",
+          "exit_code": 0
+        },
+        {
+          "name": "checkpoint-handoff-to-cpu",
+          "state": "passed"
+        }
+      ],
+      "tolerances": {
+        "atol": 1e-06,
+        "rtol": 1e-05
+      },
+      "greedy_stages": 3
+    }
+  ]
+}

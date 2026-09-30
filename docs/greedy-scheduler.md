@@ -46,3 +46,7 @@ Counters report `greedy_stages`, `greedy_relaxed_edges`, `max_live_fibers`,
 `max_greedy_frames`, actual candidates/selected events/edges and the existing
 state/Full batching/fallback counts. Complete-window and profiling claims require
 separate measured evidence. Development tests are in `tests/test_greedy.py`.
+
+Clean CPU regression and six NPU FP32 fixture results are recorded in
+[the 2026-09-30 evidence](evidence/online-greedy-20260930.md). These qualify
+host scheduling only; they do not establish device-resident scheduling.
