@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity or EMA state; content/old/proposal linear Read; count-v1 or positive-v1
+scales; identity, EMA or Add-repeat state; content/old/proposal linear Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity or tanh broadcast
 Full (`content + tanh(comparison @ weight + bias)`).
 It supports observe-all and active-only state adoption. Inputs are arbitrary
@@ -113,6 +113,15 @@ atoms/fibers never enter arithmetic, including poisoned unused storage. No atom
 count, source index or chunk decision is downloaded for host dispatch. The scalar
 device implementation remains selectable for comparison.
 
+`ContentLimits.vectorized_state` selects vector state updates (default) or the
+scalar device implementation. Clock/selection metadata is validated first. Payload
+tiles have a single writer per owner/width range, with sequential time updates
+inside the kernel; independent owners and width tiles execute in parallel. The
+pre-clear comparison is preserved for Full. Add uses the literal tick recurrence
+from [lazy-add.md](lazy-add.md), including negative/zero retention, and its own
+int64 last-adopted clock. The configurable positive `max_repeat_ticks` bounds
+work per candidate and explicitly refuses excess work; it never truncates decay.
+
 Directed development passed72 scalar/vector cases,144 input-changing replays and
 nine metadata refusals, plus the existing640 content and384 window cases. Its837-task
 trace is entirely AIV. Small single-message cases can be slower; the scalar switch
@@ -121,7 +130,8 @@ and any later measured recommendation belong to STATUS/evidence.
 
 This vector path currently implements sum Aggregate inference only. It explicitly
 rejects autograd; its presence does not certify training, FP16 or other Aggregate
-contracts. Read, state, output and journal kernels still use scalar AIV loops.
+contracts. Read (including state proposal preparation), output, journal and
+state metadata kernels still use scalar AIV loops.
 Measured placement and task costs, then complete-flow timing, determine whether
 an implementation is beneficial at a given scale. Trace storage, CPU comparison
 and result materialization stay separate from steady-state throughput timing.

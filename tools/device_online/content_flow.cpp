@@ -14,7 +14,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   // It is deliberately bounded and is not yet the model/KV/training chunker.
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+(l.diagnostics?l.trace:0))*(width*5.L+32)
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L));
-  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
+  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
@@ -74,9 +74,9 @@ void ContentFlow::Impl::construct() {
   p.mark(head);auto ready=planner.append_stage(p,pending->atoms(),stop,error);p.branch(ready.branch,{end,test});
   p.mark(test);p.less(stages,budget,predicate);p.cast_index(predicate,index);p.branch(index,{exhausted,body});p.mark(body);
   auto content=append_content(p,profile,ready,error,limits.vectorized_aggregate);
-  append_read(p,profile,ready,content,state,coefficients,error);
+  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
-  auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits.diagnostics);
+  auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
   auto arrivals=router.append_stage(p,actions,profile.edge_scales,error);
   auto emitted=append_outputs(p,profile,actions,limits.outputs,error);

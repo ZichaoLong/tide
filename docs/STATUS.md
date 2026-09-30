@@ -77,9 +77,13 @@ Active implementation: Add repeat state contract, int64 clocks, explicit max_rep
 (default65536, refusal8), vector/scalar state option and exact tick multiplication
 order. Read stays scalar device; default clocks only, FP32/no autograd. New add_check
 covers independent Streaming/Greedy comparisons, widths/tails, work/counter refusals,
-parameter snapshot and literal-rounding witness. build-device-add-dev01 RUNNING on frozen add-dev01, build device-add-dev01 (900s/jobs2).
-NEXT inspect build-device-add-dev01; after it passes launch device-add-gates-dev01
-with --checks add content window, then profile --check add only after passing. Do not alter frozen source/build.
+parameter snapshot and literal-rounding witness. build-device-add-dev01 PASSED exit0: four CPU CTests and loader, frozen add-dev01,
+build device-add-dev01. device-add-gates-dev01 PASSED:560 Add windows, two literal
+rounding checks, six repeat-work refusals and one counter-overflow refusal;640 content
+and384 window regressions. device-add-profile-dev01 RUNNING (480s/queue120s).
+NEXT inspect device-add-profile-dev01. Commit/push the tested Add/vector-state
+implementation, then build-device-add-clean01 from that exact commit, all18 component
+cells and an Add placement profile; evidence separate. Continue core module coverage. Do not alter frozen source/build.
 
 ## Newly completed immutable qualification
 

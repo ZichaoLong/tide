@@ -60,6 +60,25 @@ no large-gap speed claim follows from sparse allocation.
 The profile name already participates in graph identity v11; the value checkpoint (current schema in `semantics.md`) stores
 the required value/time/count. No schema change is needed.
 
+## Experimental resident inference
+
+The optional `tools/device_online` ContentFlow implements the same repeat profile
+with device int64 clocks and observation counts. State payload tiles run across
+independent owners and width ranges; each owner's actual time sequence and each
+tick multiplication remain ordered. `ContentLimits.vectorized_state` selects
+vector tiles or the scalar device reference. Metadata/clock preflight precedes
+vector payload work. Read still uses a scalar device kernel, including proposal
+preparation; its state-causal regions remain restricted to one complete frame.
+
+`max_repeat_ticks` is a positive per-candidate work bound (default65536). An actual
+elapsed Add gap above it produces device refusal8 and poisons the owner, just as
+other execution refusals do. Even zero hidden or retention0/1 cannot bypass the
+bound. Raising the bound permits more literal work; it never substitutes a power,
+truncates time or advances idle nodes. The limit concerns work inside one update,
+not total logical runtime; ordinary windows continue from device-owned clocks.
+This profile currently requires FP32, default state clocks, the declared built-in
+modules and no autograd. It is not resident backward/optimizer support.
+
 ## Original Add comparison
 
 The optional runner `scripts/check_lh_selector.py --component all` also builds

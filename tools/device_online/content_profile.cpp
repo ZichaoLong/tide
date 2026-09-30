@@ -11,7 +11,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   graph.compile();
   if(!graph.origins.empty())throw std::invalid_argument("content flow input-origin projections are not implemented");
   for(const auto& n:graph.nodes) {
-    if((!n.identity&&n.memory!="identity"&&n.memory!="ema")||(!n.identity&&n.full!="identity"&&n.full!="tanh")
+    if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")||(!n.identity&&n.full!="identity"&&n.full!="tanh")
         ||n.aggregation!="sum"||n.readout!="linear-v1"||n.next_state!="adopt-v1"
         ||n.emission!="broadcast"||n.state_clock!=StateClock{})
       throw std::invalid_argument("content flow module contract unavailable");
@@ -35,10 +35,11 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   configure_model(graph,model);validate_model(graph,model);width=model.width();
   // Take independent values, preserving no user-owned mutable parameter alias.
   auto copy=[](const Tensor& x){return x.detach().clone();};
-  for(auto& w:model.nodes){w.decay=copy(w.decay);w.weight=copy(w.weight);w.bias=copy(w.bias);w.read=copy(w.read);}
+  for(auto& w:model.nodes){w.decay=copy(w.decay);w.weight=copy(w.weight);w.bias=copy(w.bias);w.read=copy(w.read);
+    for(auto& [_,x]:w.extra)x=copy(x);}
   for(auto group:{&model.input_scale,&model.agg_scale,&model.edge_scale,&model.output_scale})for(auto& x:*group)x=copy(x);
   std::vector<int64_t> metadata,settings,modes;
-  std::vector<Tensor> weights,reads,decays;
+  std::vector<Tensor> weights,reads,decays,retentions;
   for(size_t p=0;p<graph.inputs.size();++p) {
     metadata.insert(metadata.end(),{graph.inputs[p],graph.source_domain->input[p]});weights.push_back(model.input_scale[p]);
   }
@@ -50,14 +51,17 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   if(weights.empty()){metadata={0,0};weights.push_back(at::zeros({},at::kFloat));}
   for(size_t n=0;n<graph.nodes.size();++n) {
     const auto& node=graph.nodes[n];
-    settings.insert(settings.end(),{!node.identity&&node.memory=="ema",node.clear,graph.regions[node.region].observe_all});
+    const int64_t kind=node.identity?0:node.memory=="ema"?1:node.memory=="lh-add-repeat-v1"?2:0;
+    settings.insert(settings.end(),{kind,node.clear,graph.regions[node.region].observe_all});
     reads.push_back(node.identity?at::zeros_like(model.nodes[n].read):model.nodes[n].read);
     const auto& mode=graph.regions[node.region].read_mode;
     modes.push_back(node.identity?-1:mode=="content"?0:mode=="old"?1:2);
     decays.push_back(model.nodes[n].decay);
+    retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},at::kFloat));
   }
   sources=at::tensor(metadata,at::kLong).reshape({-1,2}).to(device);scales=at::stack(weights).to(device);
   read=at::stack(reads).to(device);decay=at::stack(decays).to(device);
+  retention=at::stack(retentions).to(device);
   read_modes=at::tensor(modes,at::kLong).to(device);
   config=at::tensor(settings,at::kLong).reshape({-1,3}).to(device);
   auto pack_scales=[&](const std::vector<Tensor>& x){return (x.empty()?at::zeros({1},at::kFloat):at::stack(x)).reshape({-1,1}).to(device);};

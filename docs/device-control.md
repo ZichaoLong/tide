@@ -128,7 +128,7 @@ count overflow explicitly fail. Selector scratch has a declared approximate
 budget; other region programs remain unsupported by this component.
 
 This selector component consumes supplied descriptors. The content-driven loop
-connects sum Aggregate, content/old/proposal Read, identity/EMA state and identity/tanh Full;
+connects sum Aggregate, content/old/proposal Read, identity/EMA/Add-repeat state and identity/tanh Full;
 other Read/state/Full contracts still need integration. Its AIV metadata kernel
 uses scalar loops; raw ACLNN performs the packed softmax and control gather.
 
@@ -155,6 +155,13 @@ writes. Its directed check covers tail widths through2048, ragged and empty grou
 changed inputs on replay, unused NaN storage, malformed metadata and autograd refusal.
 It is an inference component; qualification and placement status belong to STATUS.
 
+State updates also offer vector payload tiles after metadata preflight. Add repeats
+literal retention multiplies for the device-computed elapsed ticks, with a declared
+per-candidate work limit and explicit refusal. Independent owner/width tiles share
+no destination; each owner's time sequence remains ordered. Scalar state is an
+explicit comparison option. Read's numerical preparation is still scalar device
+work. See [lazy-add.md](lazy-add.md) for the formula and work-limit boundary.
+
 These mutable stages provide no autograd. Model/state updates must eventually
 share a commit boundary with successful delivery; committing state before an
 overflowing queue transaction would violate the intended executor contract.
@@ -179,6 +186,7 @@ NEW/tide-device-numerical-check --device=npu:0 --dtype=float16
 NEW/tide-packed-queue-check --device=cpu --dtype=float64
 NEW/tide-device-closure-check --device=npu:0 --dtype=float32
 NEW/tide-packed-sum-check --device=npu:0 --dtype=float32
+NEW/tide-device-add-check --device=npu:0 --dtype=float32
 python scripts/verify_device_control.py --build-dir NEW --output-dir GATE \
   --device=npu:0
 python scripts/profile_device_control.py --build-dir NEW --output-dir PROFILE \
