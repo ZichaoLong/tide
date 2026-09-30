@@ -4,6 +4,7 @@
 #include "packed_queue.h"
 #include "state_vjp.h"
 #include "full_vjp.h"
+#include "reverse_links.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -37,6 +38,7 @@ class ContentFlow {
   Result result() const; // Latest window; trace/messages require diagnostics.
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
   FullTape full_tape() const; // Identity/tanh only; other Full contracts refuse.
+  ReverseTape reverse_tape() const; // Narrow HARD profile; actual journals only.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;

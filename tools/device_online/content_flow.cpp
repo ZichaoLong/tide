@@ -10,7 +10,7 @@
 
 namespace tide::device_online {
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
-    :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q) {
+    :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   const auto nodes=int64_t(profile.graph.nodes.size()),regions=int64_t(profile.graph.regions.size()),width=profile.width,samples=q.batch_size;
   // Static CPU validation/planning precedes any profile/payload device upload.
@@ -180,7 +180,7 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
-    s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
+    s.window_start=s.boundary.cut;s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
     return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full->chunks(),s.emission->chunks()};
   } catch(...) {s.failed=true;throw;}
 }
@@ -211,5 +211,15 @@ FullTape ContentFlow::full_tape() const {
     if(!n.identity&&n.full!="identity"&&n.full!="tanh")throw std::invalid_argument("Full VJP contract unavailable");
   return {s.events->meta,s.events->values,s.events->count,s.full->kinds(),s.full->weights(),s.full->biases(),
           s.boundary.batch_size,s.profile.width,s.full->has_tanh()};
+}
+ReverseTape ContentFlow::reverse_tape() const {
+  auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
+  for(const auto& n:s.profile.graph.nodes)
+    if(n.aggregation!="sum"||(!n.identity&&n.emission!="broadcast")
+        ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"))
+      throw std::invalid_argument("graph reverse module contract unavailable");
+  return {&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
+          s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
+          s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
 }
 } // namespace tide::device_online

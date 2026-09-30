@@ -20,6 +20,7 @@ class PackedEmission {
   int64_t reserved_bytes() const {return reserved_;}
   int64_t chunk_rows() const {return chunk_;}
   const at::Tensor& chunks() const {return chunks_;}
+  const at::Tensor& scales() const {return scales_;}
  private:
   int64_t nodes_,samples_,width_,arrivals_,outputs_,capacity_,slots_,parameters_,chunk_,reserved_;
   at::Tensor offsets_,periods_,slots_table_,scales_,weights_,biases_,chunks_;

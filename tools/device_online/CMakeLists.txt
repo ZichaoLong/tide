@@ -106,7 +106,7 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp packed_aggregate.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -118,7 +118,8 @@ if(TIDE_DEVICE_ASCENDC)
     tide_event_plan_kernel tide_event_payload_kernel tide_event_indices_kernel tide_event_cache_kernel
     tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel
     tide_aggregate_plan_kernel tide_aggregate_apply_kernel
-    tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel)
+    tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel tide_reverse_links_kernel
+    tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     add_executable(tide-content-flow-check content_check.cpp)
     target_compile_options(tide-content-flow-check PRIVATE -fPIC)
@@ -129,6 +130,12 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-add-check add_check.cpp)
     target_compile_options(tide-device-add-check PRIVATE -fPIC)
     target_link_libraries(tide-device-add-check PRIVATE tide-content-flow tide-device-test-compare)
+    add_executable(tide-device-graph-vjp-check graph_vjp_check.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-device-graph-vjp-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-graph-vjp-check PRIVATE tide-content-flow tide-device-test-compare)
+    add_executable(tide-device-reverse-links-check reverse_links_check.cpp)
+    target_compile_options(tide-device-reverse-links-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-reverse-links-check PRIVATE tide-content-flow)
     add_executable(tide-device-full-vjp-check full_vjp_check.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-full-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-full-vjp-check PRIVATE tide-content-flow)

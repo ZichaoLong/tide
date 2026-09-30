@@ -3,7 +3,7 @@
 Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **3285b13**,Full VJP implementation committed;state-chain qualification4a29b7c;public resident evidence8b89080;
+HEAD **658943a**,Full VJP qualification committed/pushed;state-chain qualification4a29b7c;public resident evidence8b89080;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -154,7 +154,7 @@ No immutable qualification yet; contract docs/resident-full-vjp.md.
 build-full-vjp-clean01 PASSED from frozen3285b13 (1800s,jobs2,no NPU,four CTests).
 full-vjp-clean01 full35-cell gate PASSED;full-vjp-profile-clean01 --check full-vjp PASSED,
 each one NPU900s/queue120s. Exact-source/binary/result/profile audits passed.
-Reports docs/evidence/device-full-vjp-20261001.{json,md} are ready for evidence commit.
+Reports docs/evidence/device-full-vjp-20261001.{json,md} committed/pushed658943a.
 
 Uncommitted reverse_links increment: actual forward message/event hash index on NPU,
 stable producer/consumer/scale contributor chains,stage offsets and cut-boundary
@@ -176,7 +176,23 @@ lvalue directly;load the scale into an ordinary scalar before the vector instruc
 No numerical/tolerance change. build-graph-vjp-dev02 submitted from a new frozen snapshot
 with the same900s build bound and checked parent. graph-vjp-dev02 waits at most600s
 for that build BEFORE requesting one NPU (queue120s),then runs graph-vjp,reverse-links,
-full-vjp,state-vjp,content,window,resident gates (overall900s). No graph result yet.
+full-vjp,state-vjp,content,window,resident gates (overall900s). Both build/gate PASSED:
+96 graph windows,independent CPU FP32/FP64 forward/autograd,replay and64 link windows.
+Additional graph tests cover widths1/257,empty connected-zero roots,malformed preflight,
+budget/dtype refusal. build-graph-vjp-dev03 from new snapshot submitted with these tests,
+900s/jobs2/no lease;build passed,graph-vjp-dev03 FAILED on forward budget admission
+for the added257-wide fixture (default64MiB). Explicitly budget512MiB only for
+that wide forward fixture;no numerical changes. Also exercise phase-absent edges/outputs.
+build-graph-vjp-dev04 uses graph_check_relink.py with checked unchanged production/kernels
+from dev03 and recompiles only two test files;new frozen snapshot/output,no lease.
+build-graph-vjp-dev04 and graph-vjp-dev04 PASSED:98 complete graph windows against
+CPU FP32/FP64,empty/poison/zero/None/budget/dtype/malformed checks;64 reverse-link
+windows;full-vjp,state-vjp,content,window,resident. Component/source/binary audit matched.
+graph-vjp-profile-dev04 PASSED:88,699 AIV+1,269 AI_CORE+792 MIX_AIV,no AiCPU/host fallback.
+This is the full correctness checker including forward/CPU assertions,not throughput.
+Next commit this coherent graph reverse increment,then full clean build from its
+immutable commit (1800s,jobs2) and full37-cell gate/separate graph-vjp profile
+(each900s,one NPU,queue120s). Alias/optimizer/public training remain next.
 
 Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
 peer progression,FP16 and public matrix,then F6 representative/full-size comparison.
