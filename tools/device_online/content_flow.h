@@ -1,28 +1,12 @@
 #pragma once
 #include "tide/types.h"
+#include "tide/resident.h"
 #include "packed_queue.h"
 #include <memory>
 
 namespace tide::device_online {
-enum class ChunkPolicy { conservative, aggressive };
-struct ContentLimits {
-  int64_t queue=1024, arrivals=1024, outputs=1024, trace=4096, stages=4096;
-  int64_t workspace_bytes=64*1024*1024;
-  ChunkPolicy chunk_policy=ChunkPolicy::conservative;
-  int64_t full_chunk_rows=16;
-  int64_t emission_chunk_rows=16;
-  int64_t aggregate_chunk_rows=8;
-  int64_t attention_chunk_rows=8;
-  int64_t attention_key_rows=128; // Physical key tile; never limits logical visibility.
-  int64_t kv_rows=128; // Per attention owner; hard bound, no implicit eviction.
-  int64_t kv_trace_rows=4096; // Optional cache diagnostics, per window.
-  int64_t max_repeat_ticks=65536; // Per Add candidate; explicit work refusal, never a power shortcut.
-  bool prefill=true;
-  bool diagnostics=true; // Event/message journals are optional per-window work.
-  bool vectorized_aggregate=true; // Scalar device implementation remains selectable.
-  bool vectorized_state=true;
-  bool vectorized_read=true;
-};
+using ChunkPolicy=ResidentChunkPolicy;
+using ContentLimits=ResidentLimits;
 // Borrowed read-only NPU buffers, valid until the next advance or owner destruction.
 // Output coordinates use the AtomBatch layout; field4 is the output port.
 // Clone values before retaining them across calls. No persistent state download
@@ -49,6 +33,7 @@ class ContentFlow {
   ContentWindow advance_device(const std::vector<External>&,Index stop);
   Continuation snapshot() const; // Explicit complete-cut CPU materialization.
   Result result() const; // Latest window; trace/messages require diagnostics.
+  void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;

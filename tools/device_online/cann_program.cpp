@@ -7,8 +7,17 @@
 #include <limits>
 #include <stdexcept>
 #include <unordered_set>
+#include <atomic>
 
 namespace tide::device_online {
+namespace {
+// Also protects Python-owned backend instances, whose runtime finalization is
+// outside portable_torch::RuntimeSession. It cannot intercept direct vendor use.
+std::atomic<bool> quarantined{false};
+void check_process() {
+  if(quarantined.load())throw std::logic_error("CANN backend has quarantined resources; terminate worker");
+}
+}
 struct CannProgram::Impl {
   at::Device device;
   portable_torch::RuntimeResource resource;
@@ -31,6 +40,7 @@ struct CannProgram::Impl {
     CannApi::check(api.bind_stream(model, stream, 0), "bind persistent control stream"); bound = true;
   }
   void building() const {
+    check_process();
     resource.check();
     if (finished || closed || failed) throw std::logic_error("control program is not open for construction");
   }
@@ -103,13 +113,14 @@ struct CannProgram::Impl {
 };
 CannProgram::CannProgram(at::Device device) : CannProgram(device,{}) {}
 CannProgram::CannProgram(at::Device device,const std::function<void(CannApi&)>& configure_api) {
+  check_process();
   if (device.type() != c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("CANN device control requires an explicit NPU");
   impl_ = std::make_unique<Impl>(device);
   try { if(configure_api)configure_api(impl_->api);impl_->initialize(); }
   catch (...) {
     try { impl_->release(); }
-    catch (...) { impl_->resource.quarantine();(void)impl_.release(); }
+    catch (...) { quarantined.store(true);impl_->resource.quarantine();(void)impl_.release(); }
     throw;
   }
 }
@@ -119,6 +130,7 @@ CannProgram::~CannProgram() {
     // Keep runtime handles AND tensor owners alive, even beyond static teardown.
     // Only process exit can reclaim resources after an unconfirmed completion.
     std::cerr << "CANN control resources quarantined until process exit: " << error.what() << '\n';
+    quarantined.store(true);
     impl_->resource.quarantine();
     (void)impl_.release();
   }
@@ -289,6 +301,7 @@ void CannProgram::finish() {
   } catch (...) { p.failed = true; throw; }
 }
 void CannProgram::run(int32_t timeout_ms) {
+  check_process();
   auto& p = *impl_;
   if (!p.finished || p.closed || p.failed || timeout_ms <= 0) throw std::logic_error("control program is not executable");
   p.resource.check();

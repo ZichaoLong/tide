@@ -15,10 +15,12 @@ class GraphRuntime:
 
     Device is explicit. Construct a new runtime to change device/dtype or
     parameter ownership; in-place optimizer updates and load_state_dict are
-    supported. No inputs, task head, optimizer or output directories are hidden
+    supported by host sessions. Resident inference freezes weights at session
+    construction and refuses later changes until explicit reconstruction.
+    No inputs, task head, optimizer or output directories are hidden
     in this object. Several sessions may share its parameters.
     """
-    def __init__(self, config, *, device, options=None, native_library=None, model=None):
+    def __init__(self, config, *, device, options=None, native_library=None, resident_library=None, model=None):
         self.config = config if isinstance(config, GraphConfig) else GraphConfig.from_dict(config)
         c = self.config
         requested = c.execution if options is None else options
@@ -33,7 +35,11 @@ class GraphRuntime:
             raise ValueError("the NPU graph runtime requires float16 or float32")
         from .placement import request as placement_request, validate as validate_placement
         self.placement = placement_request(requested.placement).resolve(self.device)
-        validate_placement(c.graph, getattr(torch, c.dtype), self.placement)
+        self.resident = self.placement["events"].type != "cpu"
+        if not self.resident:
+            validate_placement(c.graph, getattr(torch, c.dtype), self.placement)
+            if resident_library is not None or requested.resident_limits is not None:
+                raise ValueError("resident_library/limits require device-resident event placement")
         if self.device.type == "npu" and requested.fiber_pooling == "csr":
             raise ValueError("NPU CSR pooling is unsupported; explicitly select fiber_pooling='event'")
         if self.device.type == "cpu" and c.dtype == "float16" and requested.fiber_pooling == "csr":
@@ -62,12 +68,19 @@ class GraphRuntime:
             self.execution_graph, self.execution_model = c.graph, self.model
         self.options = requested.resolve(c.family, self.execution_graph)
         self.engine = None
-        if self.options.implementation == "native":
+        if self.resident:
+            from .resident_options import ResidentLimits, validate_resident
+            self.options = replace(self.options, resident_limits=self.options.resident_limits or ResidentLimits())
+            validate_resident(c, self.options, self.device, self.placement)
+            from .resident import ResidentBackend
+            self.engine = ResidentBackend(self, native_library, resident_library)
+        elif self.options.implementation == "native":
             from .native_loader import load_native
             load_native(native_library, backend=self.device.type)
             from .native import Native
             arguments = self.options.to_dict()
             arguments.pop("implementation")
+            arguments.pop("resident_limits")
             arguments["algorithm"] = arguments.pop("schedule")
             self.engine = Native(self.execution_graph, self.execution_model, **arguments)
         elif native_library is not None:
@@ -77,6 +90,8 @@ class GraphRuntime:
             self.execution_model = place_model(self.execution_graph, self.execution_model, self.options.placement)
 
     def session(self, batch_size, *, continuation=None):
+        if self.resident:
+            return self.engine.session(batch_size, continuation)
         from .session import Session
         return Session(self, batch_size, continuation=continuation)
 
@@ -136,4 +151,9 @@ class GraphRuntime:
         if self.engine:
             path = Path(self.engine.core.__file__)
             record["native_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        if self.resident:
+            record["resident"] = dict(runtime_owner="python", dtype="float32", mode="hard",
+                                      autograd=False, devices=1,
+                                      binaries=self.engine.record["binary_sha256"],
+                                      core_sha256=self.engine.record["core"]["cpp_source_sha256"])
         return record

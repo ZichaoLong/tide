@@ -7,6 +7,10 @@ FP32/FP64 is the required baseline. Python/native CUDA and NPU implementations
 use explicit device selection and independent CPU qualification. See the
 [accelerator guide](accelerators.md) for isolated builds, tested scopes and
 target-machine acceptance. NPU requires FP32; CUDA device results need a CUDA host.
+The optional [resident inference library](resident-library.md) exposes device-owned
+windows through the same configuration boundary, with separate capacity,
+parameter-freezing and export rules. Its CANN implementation is built independently
+for Python-owned and standalone runtimes.
 
 ## Configuration and runtime
 

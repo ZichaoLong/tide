@@ -193,6 +193,12 @@ payloads and parameters stay on the selected logical device; graph metadata and
 discrete scheduling remain host-owned. Qualification alone moves deterministic
 CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
+The optional [resident library](resident-library.md) owns device-side online
+progression and continuation for its declared FP32 HARD inference profiles.
+Borrowed device output windows do not export state; snapshot/result are explicit
+boundary materializations. Runtime parameter updates invalidate its frozen
+inference program until an explicit reconstruction. This separate backend does
+not broaden eager training evidence into resident backward or optimizer support.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional

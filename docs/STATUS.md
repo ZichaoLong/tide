@@ -1,9 +1,10 @@
 # Current handoff
 
-Updated 2026-09-30T16:07:19.928510+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T16:51:08.036979+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **fdd2b86**, normalized Aggregate evidence committed/pushed; implementationf1b7168; fiber evidence7b43f4d pushed.
+HEAD **d412541**, public placement implementation committed and pushed.
+Aggregate evidencefdd2b86 and fiber evidence7b43f4d pushed.
 Event batch evidence28295c1 pushed; implementation26aa09f.
 Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
@@ -41,7 +42,7 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    4 boundaries,7 domains;67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
    Fiber31 cells;96 anchors,480 windows,31 multi-time windows,3 saturation checks;
    clean221,788 AIV+8,181 AI Core. Reports under docs/evidence. Those jobs terminal0.
-2. Public host placement draft is UNCOMMITTED. C++ placement.h + placement*.cpp,
+2. Public host placement implementation d412541 is committed. C++ placement.h + placement*.cpp,
    descriptor_device validation, recognized built-in adapters, native binding;
    Python ExecutionPlacement + GraphRuntime/Native integration, same parameter
    leaves/checkpoint names; controls/ranking/read placements and scoring precision.
@@ -83,11 +84,72 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    AiCPU:Sort(INT64)30 tasks/1834.48us;ScatterElements(BOOL,INT64,BOOL)36/3171.42us.
    Their38.1% is summed device task time,not complete wall-time fraction. No host
    fallback diagnostic. Mixed host dispatch remains explicit; no speed claim.
-7. Directed gates/profile passed; committing only placement implementation. Then
-   full fresh exact-commit CPU,NPU standalone,NPU Python builds/gates/profile,
-   evidence separate. Do not stage old accelerator_scale dirty files below.
-   Next: public resident integration,remaining F4 adapters/peer progression,
-   resident backward/VJP/optimizer,then representative/full-size timing.
+7. Running exact-commit qualification from placement-clean01 at d412541:
+   build-placement-cpu-clean01 -> builds/placement-cpu-clean01 (CPU+bindings),
+   build-placement-npu-clean01 -> builds/placement-npu-clean01 (standalone),
+   build-placement-npu-python-clean01 -> builds/placement-npu-python-clean01.
+   Each fresh build1800s,jobs2 (at most6 aggregate workers),no NPU lease for builds.
+   After terminal0: CPU full scripts/verify.py plus10 CTests (bound1800s);
+   NPU standalone placement,Read-precision,accelerator checks (900s,one NPU);
+   NPU public test_placement.py FP32/all26 cases (900s,one NPU); separate profile
+   using clean standalone build. Queue wait120s;dependency before lease.
+   All three builds passed terminal0; placement-public-npu-clean01 passed all26
+   FP32 cases,terminal0. Submitting placement-cpu-clean01 (full verify,1800s),
+   placement-ctest-clean01 (10 CTests,300s),placement-standalone-npu-clean01
+   (three checks,900s),placement-profile-clean01 (separate trace,900s).
+   NPU jobs one lease each,queue120s; source placement-clean01/d412541.
+   Evidence must be committed separately. Do not stage old accelerator_scale dirty.
+   Clean CTests10,standalone three gates,and independent profile now PASSED,terminal0;
+   full CPU pytest still running. Qualification evidence awaits its terminal result.
+8. Public resident integration is under development (uncommitted): optional shared
+   C++ ResidentSession and Python-owned backend binding; GraphRuntime resident
+   sessions; bulk CPU/NPU external payload validation/upload; explicit CPU export,
+   immutable parameter checking and checked close. No resident backward or multi-card.
+   Building frozen resident-public-dev01 against exact matching placement cores,
+   jobs2,1800s each,no NPU lease. New builds resident-public-python-dev01 and
+   resident-public-standalone-dev01. No pass claimed until build and live gates.
+   Python dev01 configuration FAILED: compile definitions referenced a disabled
+   standalone checker; also found wrong auto-selected Python. Both corrected;
+   build-resident-public-python-dev02 uses fresh snapshot resident-public-dev02,
+   explicit matching Python,build resident-public-python-dev02. Original failed
+   record preserved. Standalone dev01 remains running (unaffected correction).
+   New tests/test_resident_library.py covers three families/two schedules,
+   EMA/event/fiber attention,CPU/NPU inputs,non-default stream,export/restore,
+   mutations,capacity poison and unsupported modules. Python dev02 build passed,
+   terminal0; resident-public-python-dev02 launching its20 device tests plus
+   one CPU-only configuration test (900s,one NPU,queue120s). Host regression
+   resident-host-cpu-dev02 passed125,20 optional NPU skips. Main-tree newer
+   content_input.cpp removes dummy per-input CPU numerical validation in favor
+   of metadata-only ledger validation and one packed finite check; pending rebuild.
+   Added lean-no-export and loader guard tests after dev02 snapshot; not run yet.
+   resident-public-python-dev02 FAILED at checkpoint save after three windows
+   matched the CPU oracle: exported CPU state was validated against NPU model.
+   Fixed with memoized CPU model view preserving parameter aliases,only at save.
+   Old failure remains. Building input-only isolated relink resident-public-python-dev03,
+   source resident-public-dev03,from immutable python-dev02;record all production
+   file hashes,parent archive/binary hashes and commands,new directory only.
+   Both parent builds and both dev03 isolated relinks passed,terminal0. Standalone
+   resident-public-standalone-dev03 passed resident/window/content;resident64 windows.
+   resident-profile-dev03 passed10,534 AIV+16 MIX_AIV,no AiCPU/fallback.
+   Python dev03 then FAILED at invalid test Settle ranks (node ranks supplied
+   instead of positive region ranks),after2 cases. Corrected dev04 passed12
+   EMA/event-attention cases then FAILED at test fiber GQA request (fiber requires
+   equal Q/KV heads). Corrected fixture uses equal heads for fiber only; full
+   resident-public-python-dev05 next,23 tests,900s,one NPU,queue120s.
+   Production save fix remains; all original failure logs/snapshots retained.
+   resident-public-python-dev05 passed23;dev06 passed24 after adding invalid
+   CPU/NPU-input transaction checks and numerical continuation after parameter
+   update. All terminal0. build-resident-consumer-dev01 and resident-consumer-dev01
+   PASSED: installed standalone package under a prefix with spaces,public headers
+   only,three live feedback windows. Uses original standalone-dev01 library;
+   final clean installed-consumer must use the final source. No new throughput claim.
+   Ready to commit resident implementation,then full clean component builds from
+   that commit against matching immutable d412541 placement cores (cpp hash same).
+   Python build/core registration and standalone SDK remain separate.
+   Complete CPU d412541 qualification is still running; no result claimed yet.
+   No prior frozen source/build is modified.
+   Then public resident integration,FP16/multi-device,remaining F4 adapters/peer
+   progression,resident backward/VJP/optimizer and representative/full-size timing.
    F1–F7 overall NOT complete. Historical CPU Attention remains paused.
 
 Memory implementation: CPU-deferred profile tables; reserve all six module minima

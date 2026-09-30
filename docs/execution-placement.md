@@ -21,9 +21,10 @@ original Read/selector implementation, including the CPU reference.
 
 Each fine switch accepts `auto` (preset default), `cpu`, `payload`, or the exact
 payload device. This single-device adapter rejects other accelerator devices.
-The resolver can describe `resident`, but `place_model` and current GraphRuntime
-host schedulers explicitly reject device event progression. Callers must select
-a backend implementing that progression; it is never silently simulated on CPU.
+`place_model` and host schedulers explicitly reject device event progression.
+GraphRuntime can select the optional [resident library](resident-library.md) with
+an explicit matching `resident_library` build. That backend currently exposes
+single-NPU FP32 HARD inference; it never simulates device event progression on CPU.
 
 ```python
 from tidegraph import ExecutionOptions, ExecutionPlacement, GraphRuntime

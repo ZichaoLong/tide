@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+find_dependency(TideGraph 0.2 CONFIG REQUIRED)
+if(NOT TARGET TideGraph::NpuSDK)
+  message(FATAL_ERROR "This TideResident installation requires its standalone NPU TideGraph package")
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/TideResidentTargets.cmake")
+check_required_components(TideResident)

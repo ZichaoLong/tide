@@ -2,6 +2,7 @@
 from dataclasses import asdict, dataclass, replace
 import math
 from .placement import ExecutionPlacement, request as placement_request
+from .resident_options import ResidentLimits
 
 
 @dataclass(frozen=True)
@@ -27,8 +28,11 @@ class ExecutionOptions:
     fiber_cache: str = "cloned"
     attention_layout: str = "event"
     placement: ExecutionPlacement | None = None
+    resident_limits: ResidentLimits | None = None
 
     def __post_init__(self):
+        if self.resident_limits is not None and not isinstance(self.resident_limits, ResidentLimits):
+            object.__setattr__(self, "resident_limits", ResidentLimits(**self.resident_limits))
         if self.placement is not None:
             object.__setattr__(self, "placement", placement_request(self.placement))
         if self.implementation not in {"python", "native"}:

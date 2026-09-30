@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build the experimental control component against a matching standalone core."""
+"""Build the optional device backend against a matching NPU core/runtime owner."""
 import argparse
 import hashlib
 import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 from build_environment import cache_values
 from build_identity import source_hash
 from durable_records import write_json
@@ -31,8 +32,11 @@ def main():
     root = Path(__file__).resolve().parents[1]
     core, build = args.core_build.resolve(), args.build_dir.resolve()
     manifest = json.loads((core / "build-manifest.json").read_text())
-    if manifest.get("backend") != "npu" or manifest.get("npu_runtime") != "standalone":
-        parser.error("control component requires a standalone NPU core/SDK")
+    runtime = manifest.get("npu_runtime")
+    if manifest.get("backend") != "npu" or runtime not in {"standalone", "python"}:
+        parser.error("control component requires a matching NPU core")
+    if runtime == "python" and not args.ascendc_soc:
+        parser.error("Python resident backend requires --ascendc-soc")
     if manifest["cpp_source_sha256"] != source_hash(root):
         parser.error("core source differs; rebuild the native core")
     for name, expected in manifest["binary_sha256"].items():
@@ -50,12 +54,15 @@ def main():
                     "-G", "Unix Makefiles" if args.ascendc_soc else "Ninja",
                     "-DCMAKE_BUILD_TYPE=Release", "-DTideGraph_DIR="+str(package),
                     "-DTorch_DIR="+cache_values(core)["Torch_DIR"],
+                    "-DTIDE_DEVICE_RUNTIME="+runtime,
+                    *(["-DPython3_EXECUTABLE="+sys.executable] if runtime == "python" else []),
                     "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
                     *(["-DTIDE_DEVICE_ASCENDC=ON", "-DSOC_VERSION="+args.ascendc_soc]
                       if args.ascendc_soc else [])], check=True)
     subprocess.run(["cmake", "--build", str(build), "--parallel", str(args.jobs)], check=True)
-    subprocess.run(["ctest", "--test-dir", str(build), "--output-on-failure", "--no-tests=error"],
-                   check=True, timeout=120)
+    if runtime == "standalone":
+        subprocess.run(["ctest", "--test-dir", str(build), "--output-on-failure", "--no-tests=error"],
+                       check=True, timeout=120)
     binaries, loaders = {}, {}
     names = ["tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
     if args.ascendc_soc:
@@ -65,11 +72,22 @@ def main():
                       "tide-device-add-check", "tide-device-clock-check", "tide-device-norm-check", "tide-device-lh-full-check",
                       "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
                       "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
+        names.append("libtide-resident.so")
+        names.append("tide-resident-check")
+    if runtime == "python":
+        names = ["_tide_resident.so", "libtide-resident.so"]
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)
-        if any(item in closure.lower() for item in ("not found", "libtorch_python", "libpython", "/stubs/", "/stub/", "/simulator/")):
-            raise RuntimeError("standalone control loader unresolved or depends on Python/stubs")
+        forbidden = ("not found", "/stubs/", "/stub/", "/simulator/")
+        if runtime == "standalone":
+            forbidden += ("libtorch_python", "libpython")
+        else:
+            # NPU registration is provided by the wheel already loaded by the
+            # client. Neither optional library may carry a second NPU owner.
+            forbidden += ("libtorch_npu",)
+        if any(item in closure.lower() for item in forbidden):
+            raise RuntimeError("device loader unresolved or contains a conflicting runtime/stub")
         (build / (name + "-loader.txt")).write_text(closure)
         binaries[name] = digest(binary)
         loaders[name] = digest(build / (name + "-loader.txt"))
@@ -77,6 +95,7 @@ def main():
         raise RuntimeError("control source changed during build")
     write_json(build / "control-build.json", dict(schema="tide-device-control-build-v1",
         source=before[0], dirty=before[1], component_sha256=identity, core=manifest,
+        npu_runtime=runtime,
         ascendc_soc=args.ascendc_soc,
         binary_sha256=binaries, loader_sha256=loaders,
         scope="build/loader/help only; device control check required separately"))

@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.18)
+project(tide_resident_consumer LANGUAGES CXX)
+find_package(TideResident CONFIG REQUIRED)
+add_executable(resident-consumer main.cpp)
+target_link_libraries(resident-consumer PRIVATE tide::resident tide::runtime)

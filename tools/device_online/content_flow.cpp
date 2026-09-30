@@ -3,6 +3,7 @@
 #include "portable_torch/runtime.hpp"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
+#include <c10/core/impl/VirtualGuardImpl.h>
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
@@ -150,18 +151,22 @@ void ContentFlow::Impl::construct() {
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l)) {}
 ContentFlow::~ContentFlow()=default;
+void ContentFlow::close() {
+  if(!impl_)return;
+  impl_->program->close();impl_.reset();
+}
 Result ContentFlow::advance(const std::vector<External>& input,Index until) {
   advance_device(input,until);
   try {return result();}catch(...){impl_->failed=true;throw;}
 }
 ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Index until) {
+  if(!impl_)throw std::logic_error("content flow is closed");
   auto& s=*impl_;
   if(s.failed)throw std::logic_error("content flow failed; restore an earlier complete cut into a new owner");
   if(at::GradMode::is_enabled())throw std::invalid_argument("content flow has no autograd contract");
-  auto validated=validate_external(s.profile.graph,s.profile.model,s.boundary,input,until,until);
-  if(validated.atoms.size()>size_t(s.limits.queue))throw std::invalid_argument("external input buffer capacity exceeded");
+  auto validated=prepare_external(s.profile.graph,s.profile.model,s.boundary,input,until,s.device,s.external);
   try {
-    upload_atoms(validated.atoms,s.external);s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
+    s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
     if(s.limits.diagnostics) {
       s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
       s.full_trace->count.zero_();s.emission_trace->count.zero_();
@@ -169,7 +174,10 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     if(s.attention)s.attention->reset_window();
     if(s.event_attention)s.event_attention->reset_window();
     if(s.aggregate)s.aggregate->chunks().zero_();
-    s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
+    s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);
+    // Dispatch through the process's registered owner. This works with either
+    // the standalone SDK or the Python wheel, never linking both together.
+    c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
     s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
@@ -177,10 +185,12 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
   } catch(...) {s.failed=true;throw;}
 }
 Continuation ContentFlow::snapshot() const {
+  if(!impl_)throw std::logic_error("content flow is closed");
   if(impl_->failed)throw std::logic_error("content flow failed; complete-cut snapshot unavailable");
   return impl_->export_continuation();
 }
 Result ContentFlow::result() const {
+  if(!impl_)throw std::logic_error("content flow is closed");
   if(impl_->failed)throw std::logic_error("content flow failed; result unavailable");
   return impl_->export_result();
 }

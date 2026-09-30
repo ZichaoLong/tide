@@ -1,5 +1,6 @@
 #pragma once
 #include "content_profile.h"
+#include "tide/ops.h"
 #include "device_journal.h"
 #include "queue_transaction.h"
 #include "packed_full.h"
@@ -39,5 +40,7 @@ struct ContentFlow::Impl {
   Result export_result() const;
 };
 void upload_atoms(const std::vector<Atom>&,const AtomBatch&);
+ValidatedInput prepare_external(const Graph&,const Model&,const Continuation&,
+    const std::vector<External>&,Index,at::Device,const AtomBatch&);
 std::vector<Atom> download_atoms(const AtomBatch&);
 } // namespace tide::device_online
