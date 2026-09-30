@@ -203,6 +203,9 @@ The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
 and complete-cut training exports for its narrower FP32 HARD adjoint profile.
 Its supported modules and qualifications are separate from resident inference.
+Its Python client uses a separate `tide-resident-training-v1` CPU checkpoint
+containing updated graph parameters, optimizer state and complete continuation;
+it does not change the eager checkpoint schemas or restore retained tapes.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional

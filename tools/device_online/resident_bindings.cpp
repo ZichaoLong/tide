@@ -5,6 +5,7 @@
 namespace py=pybind11;
 using namespace tide;
 #define FIELD(T, name) .def_readwrite(#name,&T::name)
+void bind_resident_training(py::module_&);
 PYBIND11_MODULE(_tide_resident,m) {
   // Graph/Model/Continuation/Result belong to the matching _tide_native module.
   // The loader validates that core before importing this optional backend.
@@ -31,5 +32,6 @@ PYBIND11_MODULE(_tide_resident,m) {
     .def("result",&ResidentSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&ResidentSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&ResidentSession::cut);
+  bind_resident_training(m);
 }
 #undef FIELD

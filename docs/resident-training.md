@@ -94,5 +94,56 @@ parameters. It copies into a new owner. The original owner and caller model are
 not modified, and consumer changes to an exported checkpoint cannot alter the
 live owner. Changing a compatible schedule or memory limits on reconstruction
 does not change checkpoint identity. This format is an explicit in-memory
-boundary; a disk codec, Python integration and fresh-process disk qualification
-are separate work. RNG, loss heads and consumer data cursors remain consumer-owned.
+boundary. The Python client serializes it as described below; C++ consumers may
+provide their own codec. RNG, loss heads and consumer data cursors remain consumer-owned.
+
+## Python-owned client and disk boundary
+
+Build the optional backend against a matching Python-owned NPU core; its plugin
+must not link the standalone NPU SDK. `GraphRuntime.training_session(...)` is a
+client of this C++/CANN owner. It does not certify an independent pure-PyTorch
+device scheduler. The normal `session()` retains its inference contract.
+
+`ResidentTrainingLimits` configures retained windows, byte budgets and reverse
+chunk rows. The runtime's resident limits still configure forward work. Training
+always records the journals needed for VJP, even with public `trace=False`; this
+is part of training cost. Unsupported placement, dtype, mode and adjoints refuse.
+
+```python
+with torch.no_grad(), runtime.training_session(
+    batch_size=2, optimizer="adamw", limits=ResidentTrainingLimits(windows=4)
+) as session:
+    window = session.advance_device(external, stop=20, sealed_until=20)
+    with torch.enable_grad():
+        leaf = window.outputs.values.detach().requires_grad_(True)
+        visible = torch.where(window.outputs.valid[:, None], leaf, torch.zeros_like(leaf))
+        loss = visible.square().sum()  # Consumer example, not a graph semantic.
+        bar, = torch.autograd.grad(loss, (leaf,))
+    gradients = session.backward([session.cotangents(window, outputs=bar.detach())])
+    update = session.step()
+    if not update.applied:
+        session.detach()  # Explicitly skip a refused update.
+    session.save("new-training-checkpoint.pt")
+```
+
+Multiple windows are retained by collecting one cotangent record per window and
+passing them in forward order to `backward`. Supplying a value without a mask to
+`cotangents` uses that window's actual presence mask. Omitted value/mask pairs
+mean None. Returned parameter and boundary gradients remain packed on NPU.
+The consumer owns any separate head parameters and optimizer. The original
+`runtime.model` is still the construction template; inspect updated graph weights
+through the explicit checkpoint, not the template's stale values.
+
+`checkpoint()` returns a CPU dictionary. `save(path)` uses existing atomic,
+no-overwrite publication. `runtime.training_session(batch_size, checkpoint=path)`
+creates a new owner with restored weights, slots/counters/corrections and graph
+continuation. A dictionary may be supplied instead of a path. Resume is exclusive
+with initialization arguments `continuation`, `optimizer` and `groups`; limits
+may change. It does not mutate an existing session or caller model. Schema
+`tide-resident-training-v1` is distinct from eager `tide-continuation-v5` and the
+standalone named-parameter format. Loading uses `weights_only=True`, strict int64
+metadata and alias/layout checks; no resume through unconsumed tapes is claimed.
+
+Qualification remains indexed by STATUS/ROADMAP, including independent processes.
+Python and C++ clients, disk restoration and training throughput are separately
+verified; code or a successful build does not substitute for those target checks.

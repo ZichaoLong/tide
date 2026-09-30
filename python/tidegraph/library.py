@@ -95,6 +95,13 @@ class GraphRuntime:
         from .session import Session
         return Session(self, batch_size, continuation=continuation)
 
+    def training_session(self, batch_size, **options):
+        """Explicit resident VJP/optimizer owner; host training uses session/autograd."""
+        if not self.resident:
+            raise ValueError("training_session requires resident placement; host sessions use ordinary autograd")
+        from .resident_training import ResidentTrainingSession
+        return ResidentTrainingSession(self, batch_size, **options)
+
     def _run(self, q, external, stop, sealed_until):
         o = self.options
         if self.engine:

@@ -3,7 +3,7 @@
 Updated 2026-09-30T20:34:15.144013+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **7cfec55**,retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
+HEAD **591e907**,retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -161,12 +161,36 @@ and nine directed component checks. Public owner18 trajectories/288 windows/72 u
 compared CPU FP32/FP64,actual updates,SGD/AdamW,both schedules,wide257 and large-int64,
 retained roots plus continuation,checkpoint resume,trainable aliases,empty registry,
 absent initial-state leaves,budgets and failure lifetime. public-training-profile-dev03
-is running; inspect terminal and CSV placement before stating its result.
+PASSED107,345 AIV+1,857 AI_CORE+1,673 MIX_AIV,304 optimizer records,no AiCPU/fallback;checker scope,not throughput. Implementation591e907 committed/pushed.
+build-public-training-clean01 PASSED at exact591e907,full CANN build/four CTests.
+Submitting public-training-clean01 full42-cell gate and public-training-profile-clean01
+(one NPU each/queue120s/run900s), plus build-public-training-consumer-clean01
+(installed package/900s/jobs2) and dependent public-training-consumer-clean01
+(wait before queue,one NPU/120s/300s). Inspect actual terminals.
 Implementation tools/device_online/training_*,include/tide/resident_training.h,
 optimizer checkpoint and static parameter layout; doc resident-training.md.
 New installed consumer source is pending its clean installed-package gate.
 Retained41-cell and optimizer40-cell qualifications are complete and pushed.
-The public Python inference session remains inference-only. LH/SwiGLU/normalized
+Public Python inference remains separate. New Python explicit-training client,
+checkpoint codec and native binding are uncommitted; submitting
+build-public-training-python-dev01, frozen public-training-python-dev01,
+matching placement-npu-python-clean01 core, 1800s/jobs2/no NPU: PASSED.
+Python target tests/qualification are pending; no Python training support claim yet.
+New tests resident_training_cases.py,test_resident_training.py,resident_training_worker.py
+cover real NPU loss cotangents,CPU parameter/input VJPs,all three families,two
+schedules,two optimizers,None/zero,disk resume,new-process suffix and malformed
+records. Submitting public-training-python-host-dev01 from frozen
+public-training-python-tests-dev01: targeted library/resident CPU tests,600s: PASSED76 tests/37 optional NPU skips.
+Use this tests snapshot for the later NPU job against the matching C++ backend
+public-training-python-dev01; production component sources match.
+Submitting public-training-python-dev01 from the tests snapshot: wait for matching
+build BEFORE the NPU queue,then resident inference+training pytest,one card,
+queue120s/run900s: PASSED40 tests, including new-process disk suffix.
+public-training-python-profile-dev01 PASSED one PDG greedy AdamW Python case,
+1,569 AIV+14 AI_CORE+42 MIX_AIV,actual online/reverse/bridge/optimizer kernels,
+no AiCPU/fallback. Scope includes CPU oracle,construction and NPU loss cotangents;
+not throughput. Python implementation is ready to commit,then immutable
+build+40-target-case gate+76-test CPU interface gate+profile before evidence. LH/SwiGLU/normalized
 Aggregate/attention/HST/SOFTP adjoints,FP16,peer progression and full performance
 matrix remain required. Do not mark F4/F5 complete at this HARD subset.
 Portable core/Python unchanged:do not repeat the8,954 CPU tests/23 optional skips.

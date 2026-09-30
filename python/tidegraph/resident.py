@@ -39,12 +39,8 @@ class ResidentSession:
             raise ValueError("Settle resident session requires a complete position boundary")
         self.compiled, weights = encode_model(backend.core, r.execution_graph, r.execution_model)
         self.parameters = parameter_identity(r.execution_model)
-        limits = backend.module.Limits()
-        for name, value in r.options.resident_limits.to_dict().items():
-            if name == "chunk_policy":
-                value = getattr(backend.module.ChunkPolicy, value)
-            setattr(limits, name, value)
-        limits.prefill, limits.diagnostics = r.options.prefill, r.options.trace
+        from .resident_inputs import forward_limits
+        limits = forward_limits(r)
         self.owner = backend.module.Session(self.compiled, weights,
             to_continuation(backend.core, r.execution_graph, self.compiled, q), r.device, limits)
 
@@ -72,22 +68,8 @@ class ResidentSession:
         r = self.runtime
         if parameter_identity(r.execution_model) != self.parameters:
             raise RuntimeError("resident parameters changed; construct a new session from an explicit complete cut")
-        if r.spec:
-            if stop is not None or sealed_until is not None:
-                raise ValueError("Settle advances whole positions; do not supply logical stop/seal")
-            if (not isinstance(inputs, torch.Tensor) or inputs.ndim != 3 or inputs.shape[0] != self.batch_size
-                    or inputs.shape[2] != r.config.width or inputs.dtype != torch.float32
-                    or inputs.device not in (torch.device("cpu"), r.device)):
-                raise ValueError("Settle resident inputs require matching CPU/NPU FP32 [batch,positions,width]")
-            external = r.spec.external(inputs, self.position, encoded=True)
-            stop = sealed_until = (self.position + inputs.shape[1]) * r.spec.stride
-        else:
-            if stop is None or sealed_until is None:
-                raise ValueError("PDG/TimedDAG require explicit stop and sealed_until")
-            from .coordinates import window_inputs
-            external = window_inputs(inputs, stop, sealed_until)
-        core = self.backend.core
-        xs = [core.External(x.batch, x.port, x.position, x.time, x.value) for x in external]
+        from .resident_inputs import external_window
+        xs, stop, sealed_until = external_window(r, self.batch_size, self.cut, inputs, stop, sealed_until)
         return self.owner.advance(xs, stop, sealed_until)
 
     def advance(self, inputs, *, stop=None, sealed_until=None):
