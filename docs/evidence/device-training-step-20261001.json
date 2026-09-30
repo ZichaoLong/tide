@@ -1,0 +1,98 @@
+{
+  "schema": "tide-device-training-step-evidence-v1",
+  "source": "3b31ee2f03157a3854663678e363d6729ec85625",
+  "scope": "Internal single-NPU FP32 HARD device SGD/AdamW and actual forward/backward/owner/update/publication chain with explicit window truncation; not public/retained-window training, other modules or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 40,
+    "optimizer_trajectories": 32,
+    "optimizer_updates": 256,
+    "graph_trajectories": 18,
+    "continued_graph_windows": 72,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "861f9d884b0b234a059e29e4b6d7f927f298e1d13ba8a4f8c4ae24b52aaa0717",
+    "component_sha256": "6bd56c146d5777b0eb9627566a51c8f1090bf899c14740181c6dfe0fcb078bdf",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-training-step-clean01",
+      "source": "3b31ee2f03157a3854663678e363d6729ec85625",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f1f65345ef986a8eb9ed74a6c1900c018c63c9e4ff21561fec71857aa57e96a5",
+        "task.log": "bdb9537d83f3c5b4ff0e7c6d9b4961cd18df791a6b869098572cdc49e0c0bb58"
+      }
+    },
+    {
+      "name": "training-step-clean01",
+      "source": "3b31ee2f03157a3854663678e363d6729ec85625",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "5077cb75f4f4fd6cfe30deffac022339a2f7081ad090e9e72a7b00ee6463f7ad",
+        "task.log": "87ffa3621973d11d7f3c188f882d1bed13df7da122f6cf67fdde1ccc92d9f63a",
+        "verified/result.json": "15a5581f0e5231b07be8acff5bc1ce1b4f02f979f7076d40fb384ec7d5cb5f3f"
+      }
+    },
+    {
+      "name": "training-step-profile-clean01",
+      "source": "3b31ee2f03157a3854663678e363d6729ec85625",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "41a80bcc172568407208916255d6b8127e4b9b04684a60c5b660a71c4001aa3f",
+        "task.log": "437e731af5f7b0ac11944a95b236e6d4b8d009500959bb0ebc278db0483d313e",
+        "profiled/result.json": "62f6daca3b121ff703041182622d1c8e990537b06ff56e6d6f2f90c211389ca9",
+        "profiled/profile.log": "c717f1486eefcdb3d972bb629370fe5120366b2170cbe8aefe2cef711e48e171"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 79156,
+        "summed_task_us": 672540.3999999993
+      },
+      "AI_CORE": {
+        "count": 1808,
+        "summed_task_us": 6359.780000000012
+      },
+      "MIX_AIV": {
+        "count": 288,
+        "summed_task_us": 1424.1799999999996
+      }
+    },
+    "optimizer_kernel_records": 288,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  },
+  "retained_failures": [
+    {
+      "run": "build-optimizer-dev01",
+      "reason": "task-local static archive/as-needed link order"
+    },
+    {
+      "run": "build-optimizer-dev01b",
+      "reason": "task-local relinker expected ascendcl on public consumer link"
+    },
+    {
+      "run": "optimizer-dev01",
+      "reason": "build dependency failed before NPU acquisition"
+    }
+  ]
+}
