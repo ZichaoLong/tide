@@ -65,6 +65,21 @@ void check_origins(const at::TensorOptions& options) {
         || !at::equal(gradient[2], at::full_like(gain, 862))) throw std::runtime_error("source origin changed Aggregate VJP");
   }
 }
+void check_origin_ties(const at::TensorOptions& options) {
+  tide::Graph g;g.nodes={{0}};g.nodes[0].full="identity";g.regions={{1}};g.inputs={0};g.outputs={0};
+  for(tide::Index e=0;e<32;++e){g.edges.push_back({0,0,1});g.origins.push_back({e,7,1});}
+  g.compile();tide::Model m;
+  m.nodes={{at::zeros({2},options),at::zeros({2,2},options),at::zeros({2},options),at::zeros({2},options)}};
+  m.input_scale=m.output_scale={at::ones({},options)};
+  m.agg_scale=m.edge_scale=std::vector<tide::Tensor>(32,at::ones({},options));
+  tide::Continuation q;q.identity=g.identity;tide::Streaming stream(g,m,{});
+  const auto result=stream.run(q,{{0,0,0,0,at::ones({2},options)}},2,2);
+  const auto& sources=result.trace.at(1).sources;
+  if(sources.size()!=32)throw std::runtime_error("projected tie source count");
+  for(tide::Index e=0;e<32;++e)
+    if(sources[e].slot!=e+1||sources[e].atom.source!=7||sources[e].atom.kind!=0)
+      throw std::runtime_error("equal projected keys must retain physical source order");
+}
 }
 int main(int argc, char** argv) {
   portable_torch::RuntimeSession runtime;
@@ -116,6 +131,7 @@ int main(int argc, char** argv) {
       throw std::runtime_error("custom Aggregate contribution identity mismatch");
     }
     check_origins(options);
+    check_origin_ties(options);
     const std::string report = "custom-aggregate-kernel: passed\n";
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("failed to create output");

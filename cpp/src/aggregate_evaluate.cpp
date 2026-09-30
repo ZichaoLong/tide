@@ -26,7 +26,7 @@ AggregateInput request(const Graph& g, const Model& m, const Event& event) {
   }
   if (result.sources.empty()) throw std::invalid_argument("Aggregate requires a nonempty fiber");
   if (!g.origins.empty())
-    std::sort(result.sources.begin(), result.sources.end(), [](const auto& a, const auto& b) { return a.atom.key() < b.atom.key(); });
+    std::stable_sort(result.sources.begin(), result.sources.end(), [](const auto& a, const auto& b) { return a.atom.key() < b.atom.key(); });
   return result;
 }
 void validate(const AggregateResult& result, const AggregateInput& input) {

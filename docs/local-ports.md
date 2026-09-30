@@ -51,6 +51,9 @@ slots become target slots of the source adapter's edges; output-port slots becom
 source slots of edges to the readout adapter. Body parameter modules retain their
 sharing and do not contain these physical mappings. Projection restores source
 tags and re-sorts mixed boundary/internal fibers to the original canonical order.
+When projected source keys compare equal, their original physical-fiber order is
+retained. Logical slots and physical scales still distinguish these sources;
+projection does not merge them.
 
 Layouts participate in Python's graph fingerprint and native structural identity.
 Current graph/checkpoint versions are in `semantics.md`. Checkpoints

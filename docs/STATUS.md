@@ -1,215 +1,149 @@
 # Current handoff
 
-Updated 2026-09-30T10:02:01.061467+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
-Repository `/home/zlong/llm/graph-execution-foundation`, real path
-`/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
-No subagents. Reference repositories and ObsidianVault remain read-only.
-Preserve unrelated dirty work. Latest alignment explicitly takes priority over
-run-ml-experiments: retain minimal useful source/input/config/environment identity,
-raw results/failures, declared synchronized timing and bounded jobs. Reuse existing
-records; Trackio and extra experiment infrastructure must not block implementation.
-Training acceptance is infrastructure correctness/performance, not convergence.
+Updated 2026-09-30T10:08:19.491731+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Repository /home/zlong/llm/graph-execution-foundation, real path
+/var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
+No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
+uncommitted older accelerator_scale/flow consumer work listed below.
 
-## Contract and priorities
+## Authoritative scope
 
-[execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
-is the only backlog. Each candidate independently consumes inputs and initial state;
-no numerical CPU route prepass, whole-window potential expansion or fixture shortcut.
+[execution-flows.md](execution-flows.md) is the execution contract; [ROADMAP F1–F7](ROADMAP.md)
+is the only backlog. Latest user alignment takes priority over run-ml-experiments:
+minimal source/input/config/environment identity, raw results/failures, synchronized
+timing and bounded resources/stops. Reuse records; Trackio must not block implementation.
+Training acceptance means forward/backward/VJP/optimizer/continuation and complete
+throughput, not convergence. No pending permission or pause.
+
+Every candidate independently consumes input/state/parameters; no numerical CPU
+route prepass, whole-window potential expansion or fixture-specific schedule.
 General online node-time greedy prefill accepts each family's legal topology/input,
-including positive-delay PDG feedback. Device residence includes decisions/progression.
+including PDG positive-delay feedback. Device residence includes online decisions.
 
-1. Close finite-profile correctness/failure gates, then remove mandatory diagnostic
-   exports and measure bounded small/medium behavior to guide packed computation.
-2. Expand real module contracts/attention, vectorized computation, FP16 and complete
-   model/KV/activation/communication memory planning with safe chunking.
-3. Complete public five presets and graph/language matrix, peer progression and
-   actual backward/VJP/optimizer; then representative/full-size comparisons.
+Priorities: finite-profile correctness/failure gates and bounded profiling; actual
+modules/attention/KV and complete safe chunking; public five presets and matrix,
+peer progression and resident backward/optimizer; then representative/full-size
+comparisons. PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill
+× inference/complete training. CPU, mixed A/B/C, resident; FP32 main, FP16 separate,
+CPU FP64 oracle. Three fresh processes before performance recommendations.
+CUDA real execution remains target-machine pending. **F1–F7 are not complete.**
+The raw device flow is still single-device FP32 inference.
 
-PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch; CPU/NPU × streaming/prefill ×
-inference/complete training. CPU, mixed A/B/C, resident; small/medium all, full-size
-CPU/screened mixed/resident. FP32 main, FP16 separate, CPU FP64 oracle; three fresh
-processes before recommendations. CUDA actual execution remains target-machine pending.
-F1–F7 are NOT complete. The current raw device flow is single-device FP32 inference.
+## Latest qualified increments (committed and pushed)
 
-## Latest completed device increment
+- Device periodic clocks, implementation49ff108: four CPU CTests, all19 device
+  cells,480 mapped windows/18 multi-phase windows/12 refusals;95457 AIV+746 AI Core.
+  [Evidence](evidence/device-clock-20260930.md).
+- Public norm-fp32-v1, implementation0e66d89:8901 full CPU tests/eight CTests,
+  Python18/native18 NPU fixtures; standalone6 combinations/18 updates. Profile604
+  kernels,97 host scalar/72 memcpy events. Host-scheduled tensor training, not
+  resident training. [Evidence](evidence/norm32-20260930.md), evidence commit543de2b.
+- Device vector Read, implementation8a735ef: all20 cells,530 norm windows;
+  scalar/vector,content/old/proposal,width2048,int64 clocks,overflow/FP64 refusals.
+  Trace96173 AIV+1083 AI Core,no AiCPU/fallback.
+  [Evidence](evidence/device-read-20260930.md), evidence commita117944.
+- Selected LH Full, implementationcd03ca8: nine activation/norm profiles,40
+  component cases/96 strict complete windows,all21 cells. Trace27763 AIV,no AiCPU.
+  34/536 low-variance component rows miss ordinary CPU/NPU tolerance; both CPU and
+  NPU pass an independent FP64 conditioning budget. CPU maxabs1.31656e-5,NPU1.51344e-5.
+  Full graph comparisons and well-conditioned rows retain original tolerances.
+  [Evidence](evidence/device-lh-full-20260930.md), evidence commitd336c37.
 
-Periodic state-clock implementation **49ff108** is committed/pushed. Clean
-build-device-clock-clean01, device-clock-components-clean01 and
-device-clock-profile-clean01 all PASSED exit0. Source clock-clean01/build
- device-clock-clean01, matching core runtime-guard-npu-clean01. Four CPU CTests,
-standalone loader and all19 cells passed:480 mapped windows,18 multi-phase windows,
-12 phase refusals, plus560 Add/640 content/384 window regressions. Trace95457 AIV
-and746 AI Core tasks, no AiCPU/fallback. This is FP32 inference placement/correctness,
-not throughput or resident training. [Evidence](evidence/device-clock-20260930.md).
+All LH clean jobs PASSED: build-device-lh-full-clean01,
+device-lh-full-components-clean01,device-lh-full-profile-clean01. Frozen source
+lh-full-clean01 atcd03ca8; build device-lh-full-clean01/core norm32-npu-clean01.
+These finite qualifications do not certify throughput,FP16 flow,slot-affine,
+attention/KV,the full public matrix,peer progression or resident training.
 
-Identity/EMA/Add converts int64 global timestamps to local ticks on device; persistent
-clocks and message/history/Read coordinates stay global. Invalid event phase refuses
-transaction9; malformed persistent phase rejects restore. Add repeats multiplication
-per local tick with explicit max_repeat_ticks65536/work refusal8. Sum, state and Read have vector/scalar options; linear-v1 and norm-fp32-v1 Read
-are now implemented and clean-qualified below.
+## Current native origin-order correction
 
-Earlier immutable evidence remains scoped to the tested source:
-- [online greedy](evidence/online-greedy-20260930.md),2038d88:8849 CPU tests,
-  four CTests,six native/Python NPU FP32 fixtures incl.VJP/update/continuation;
-  host scheduling with NPU tensors, not resident training.
-- [control](evidence/device-control-20260930.md),5c5b582;
-  [packing](evidence/device-packing-20260930.md),eff5945;
-  [selection](evidence/device-selection-20260930.md),6220011.
-- [content](evidence/content-loop-20260930.md),4d2f09e;
-  [selected Full](evidence/selected-full-20260930.md),5bf61e3.
-- [runtime/Read](evidence/runtime-read-20260930.md),8244f13/06db0c2:
-  clean failure ownership/lifecycle and old/proposal Read gates.
-- [window](evidence/device-window-20260930.md),4e45072:advance separate from exports.
-- [sum](evidence/device-sum-20260930.md),fbc6652:packed vector sum.
-- [Add](evidence/device-add-20260930.md),bbe66e2:literal recurrence/vector state.
+Native Aggregate used unstable std::sort for equal InputOrigin keys. It now uses
+stable_sort, matching Python and retaining distinct logical sources. A32-edge
+regression in cpp/test/custom_aggregate.cpp fails against old0e66d89 core (exit2,
+exact expected message) and passes against corrected core, FP32/FP64.
+origins-oldcore-regression01 preserves old-library/test-object hashes and failure.
 
-## Current public Norm32 increment
+Development core builds build-origins-cpu-dev01 and build-origins-npu-dev01 PASSED,
+frozen origins-core-dev01. origins-cpu-gates-dev01 PASSED eight CTests, two standalone
+Aggregate gates and362 focused source-origin/domain/ports/Settle Python checks.
+NEXT commit the three-file correction separately, then clean core builds named
+build-origins-cpu-clean01/build-origins-npu-clean01 from origins-core-clean01 at that
+commit (jobs2,2100s each). Reuse them for later device qualification by source hash.
+Clean CPU focused gates and standalone NPU Aggregate still required.
 
-Implementation **0e66d89** committed/pushed. norm-fp32-v1 explicitly converts the
-visible value before reduction and returns FP32 for FP16/32/64 payloads. Normal
-conversion/norm VJP, connected-zero at zero, unused linear Read weights disconnected;
-profile belongs to graph identity. norm-fp64-v1 stays unchanged and rejected on NPU.
-Development304 CPU checks,8 CTests,18 Python/18 native NPU fixtures and standalone
-6 combinations/18 updates passed; candidate-only profile604 kernels passed.
+## Current uncommitted InputOrigin device increment
 
-Clean source norm32-clean01 at0e66d89:
-- norm32-cpu-clean01 PASSED full verify.py CPU regression:8901 tests +8 CTests.
-  4200s total/jobs2; build norm32-cpu-clean01, output runs/.../verified.
-- build-norm32-npu-clean01 and build-norm32-native-npu-clean01 PASSED.
-- norm32-python-npu-clean01 and norm32-native-npu-clean01 PASSED18 cases each.
-- norm32-standalone-npu-clean01 PASSED6 schedule/Read combinations,18 updates,
-  FP16/FP32 analytic norm tests. Standalone loader resolves in the authorized module.
-- norm32-native-profile-clean01 PASSED604 kernels,12 Norm tasks,97 host scalar events,
- 72 memcpy events; no AiCPU/fallback. Host-scheduled training, not resident training.
-[Immutable public Norm32 evidence](evidence/norm32-20260930.md).
-No pending permission or pause.
+Device static origin table; int64 clock preflight/refusal10; stable metadata order
+for Aggregate; scalar/vector sum share preflight/permutation. Physical identities,
+scales,contribution rows,pending and emitted messages stay physical. Exported sources
+apply projection only at observation boundary. Logical alias collision remains2.
+Added capability refusal for nonempty emit_phases: current broadcast router does
+not implement phase-restricted emissions and must not silently accept them.
 
-## Current device Norm32/vector Read increment
+Files: packed_sum.*,ascendc/tide_{sum_plan,vector_sum,content_sum}.cpp,
+content_profile.*,content_stages.cpp,content_export.cpp,content_check.cpp,
+sum_check.cpp,new origin_check.cpp,CMake/build/check scripts,content-flow docs.
+The new gate covers24 ordering/tie/cancellation cases,128 continuation windows,
+8 clock/alias refusals; not yet executed. Sum metadata failures now cover both
+scalar and vector options. Default profile is FP32 no-grad only.
 
-Implementation **8a735ef** committed/pushed; clean qualification running. Same explicit FP32 norm profile inside
-the online device loop. ContentLimits.vectorized_read defaults true; scalar Read
-remains selectable. Metadata preflight checks exact int64 clocks/work limits,
-independent owner/width tiles perform vector state preparation and dot/norm partials,
-then device reduction/sqrt completes scores. Actual time order is retained per tile.
-The existing selector checks finite scores before transaction commit. FP32 inference only.
+build-device-origins-dev01 RUNNING, frozen origins-dev01 (based ond336c37 + recorded
+patch), matching origins-npu-dev01 core. Whole bound2400s includes a600s dependency
+wait,build jobs2. Inspect terminal status before launching gates.
+NEXT after build passes: device-origins-gates-dev01, all22 component cells,
+900s/one leased NPU/queue120s; separate profile --check origins,480s/queue120s.
+Diagnose a failure before retry; no timeout or tolerance relaxation.
+If gates pass, commit device increment, then clean immutable build/gates/profile.
 
-Development PASSED on frozen read-vector-dev02, matching core norm32-npu-dev02:
-- build-device-read-vector-dev02:four CPU CTests/loader, build device-read-vector-dev02.
-- device-read-vector-gates-dev02:all20 cells,530 norm windows including width2048,
-  analytic zero/stable ties,overflow/fp64 refusals; clock/Add/content/window regressions.
-- device-read-vector-profile-dev02:bounded norm32 trace PASSED, raw placement retained.
-Earlier read-vector-dev01 regression passed clock/Add/content/window; its Norm fixture
-was not run because it shared the already-diagnosed long-tick test mistake below.
+## Failures retained and prior work
 
-Clean source read-vector-clean01 at8a735ef: build-device-read-vector-clean01 PASSED
-(four CPU CTests/loader; matching norm32-npu-clean01 core),
-device-read-vector-components-clean01 PASSED all20 cells,
-device-read-vector-profile-clean01 PASSED separate norm32 placement profile.
-[Immutable Read evidence](evidence/device-read-20260930.md): 96173 AIV +1083 AI Core;
-410 vector Read/410 reductions, no AiCPU/fallback.
-This does not qualify throughput,attention,FP16,peer progression or resident training.
+- LH dev01 fixed-tolerance component failed. diagnostic01 isolated LayerNorm;
+  modes0/1 unchanged,mode2 refused161002. precision-dev02 used independent FP64
+  formulas/declared component budget; complete graph equality unchanged. Original
+  logs/snapshots and diagnosis.json remain; no failure is relabeled.
+- device-norm-gates-dev01/profile-dev01 timed out120/180s: malformed test initial
+  clocks caused CPU oracle ~2^55 literal Add ticks (gdb confirmed CPU mul). Fixed
+  fixture and added work-bound guard; no power shortcut or timeout increase.
+- Older closure/build/runtime failures remain in durable records and immutable
+  evidence. In particular raw control does not use the unsupported nested captured
+  NPUGraph bridge; Tensor scatter_reduce host fallback remains rejected.
 
-LH implementation cd03ca8 committed/pushed; clean qualification active:
-packed_lh_full.{h,cpp},lh_full_check.cpp, activation/normalization methods in
-cann_program.{h,cpp}, int-array lifetime in cann_api.{h,cpp}, target-kind filtering
-in ascendc/tide_full_plan.cpp and packed_full.cpp. Wired into ContentFlow now, with local LH reservation deducted from tanh budget.
-Grouped selected-only vendor activation/norm, safe sentinel padding and bounded
-chunks;32 component cases/nine profiles plus96 complete windows planned.
-build-device-lh-full-dev01 PASSED four CPU CTests/loader from frozen lh-full-dev01,
-matching norm32-npu-clean01 core. NEXT device-lh-full-gates-dev01: lh-full/full/norm32/failure,
-FAILED first lh-full component numerical equality (exit2, not timeout).
-Original logs retained. diagnostic01 isolated width7 LayerNorm differences about1e-5.
-Bounded mode probe completed: modes0/1 same mismatch; mode2 rejects161002.
-Independent FP64 shows CPU FP32 itself differs above fixed tolerance for low variance.
-Component-only conditioning budget/independent FP64 check added; complete graph
-comparison stays strict. device-lh-full-precision-dev02 PASSED diagnostic-only relink:40 component cases,
-96 strict complete windows,536 normalized rows,34 strict component tolerance misses;
-CPU FP64 maxabs1.31656e-5,NPU1.51344e-5,max conditioning-budget fraction0.0588963.
-Only test/diagnostic files differ from the original production build.
-device-lh-full-regressions-dev01 PASSED all20 existing cells against unchanged
-production implementation. build-device-lh-full-clean01 PASSED four CPU CTests/loader at cd03ca8
-from lh-full-clean01 with norm32-npu-clean01 core. NEXT
-device-lh-full-components-clean01 PASSED all21 cells,
-device-lh-full-profile-clean01 PASSED separate lh-full profile:27763 AIV tasks,
-no AiCPU/fallback; LayerNormV3/V4,RMSNorm and activation tasks present.
-Both use frozen lh-full-clean01/build device-lh-full-clean01. Diagnose any failure.
-[Immutable LH evidence](evidence/device-lh-full-20260930.md) qualifies stated FP32
-broadcast inference. No slot-affine, throughput or training claim.
+Preserve dirty tools/accelerator_scale/flow_*,bounded/resident/peer files,their CMake
+and build script,scripts/benchmark_execution_flow.py,verify_execution_flows.py,
+tests/test_flow_semantics.py. Limited DAG/rank-aligned consumers, not revised general
+online delivery. flow-dev05 CPU24 passed; NPU18 FP32 passed before FP16 resident Add
+gradient failure. dev06 builds passed, no gates. Peer CPU8/NPU16 passed separately.
 
-## Retained failures and older work
-
-Original sources/logs remain; never relabel failures from later successes:
-- device-norm-gates-dev01 FAILED120s and device-norm-profile-dev01 FAILED180s.
-  Gdb found CPU mul: fixture Add owners at cut2^55 lacked near-cut clocks, causing
-  ~2^55 literal ticks. Fixed fixture and added CPU-work guard; no runtime shortcut
-  or timeout relaxation. diagnosis.json retained; diagnostic profile not accepted.
-- device-clock-gates-dev01 rejected fixture identity boundaries with non-global clocks
-  before device execution. Fixture corrected; original source/build/log retained.
-- build-device-sum-dev01 failed Muls scalar deduction; local scalar load fixed it.
-- device-broadcast-gates-dev01 SIGSEGV at static NPU finalizer; gdb debug01 identified
-  main-thread TLS teardown. Fixed07fcae4; later clean runtime qualification above.
-- device-queue-profile-dev01 lacked marker, msprof Resource temporarily unavailable.
-  A later diagnostic did not erase that failure; require exit+marker+termination.
-- control-dev05 nested captured NPUGraph RIExecuteAsync on a bound stream107000;
-  unsupported bridge removed. Raw control uses a global label target list.
-- build-device-content-dev01 failed generated kernel headers on local alias I;
-  explicit int64_t fixed it. Ascend C uses Unix Makefiles/PIC/underscore targets.
-- Tensor scatter_reduce closure host-falls-back on this stack and rejects NPU.
-  Earlier eager exact-int64 sort uses AiCPU; raw Ascend C traces are separate.
-
-Preserve uncommitted tools/accelerator_scale/flow_*, bounded/resident/peer files,
-client CMake/build script, benchmark_execution_flow.py, verify_execution_flows.py,
-tests/test_flow_semantics.py. These are limited DAG/rank-aligned consumers, not
-revised general-online delivery. flow-dev05 CPU24 passed; NPU first18 FP32 passed
-then first FP16 resident Add gradient failed. dev06 builds passed; no dev06 gates.
-Reusable peer CPU8/NPU16 gates passed separately with TASK_QUEUE_ENABLE=0.
-
-Historical `tide-execution-flows-historical-cpu-attention-01.service` stays SIGSTOP.
-`TASK/runs/historical-cpu-attention-01/pause.json` is authoritative despite running
-status.json. Holds host memory and TASK/timing.lock. Do not blindly resume it.
-Before formal timing, resolve its invalid interrupted timing and lock deliberately,
-preserving records. Do not stop other users' or unidentified tasks.
-
-Wide packet:480 body nodes,2208 body edges,two identity boundaries,D2048/B512/T12/V50304.
-Add9,468,053,696; Attention17,521,117,376 parameters. Historical Attention17,269,426,339
-is different. Historical mixed FP32 ms/token: Add inference CPU7.387522/NPU2 17.858098;
-Attention CPU19.531847/NPU4 56.012343; Add complete training CPU78.793172/NPU4 47.932888
-(NPU throughput1.6438× faster); Attention NPU9 128.275286, no valid CPU training ratio.
-These do not qualify the new resident path.
+Historical tide-execution-flows-historical-cpu-attention-01.service remains SIGSTOP.
+TASK/runs/historical-cpu-attention-01/pause.json overrides its running status.
+It holds host memory and TASK/timing.lock. Do not blindly resume/stop it. Resolve
+its interrupted timing and lock deliberately before formal timing, preserving logs.
+Historical mixed Add complete training CPU78.793172/NPU4 47.932888 ms/token means
+NPU throughput1.6438× faster. This does not qualify the new resident path.
+Historical Attention has no valid CPU complete-training ratio.
 
 ## Environment and durable operation
 
-TASK=`/mi/data2T/zlong/tide-execution-flows`; each job logs/status in
-TASK/runs/NAME/{task.log,status.json}, repo symlink artifacts/execution-flows-NAME.
-Units `tide-execution-flows-NAME.service`, detached background.slice. Frozen sources
-must never be modified. Last disk check:311GB data,27GB root free.
+TASK=/mi/data2T/zlong/tide-execution-flows. Each job: TASK/runs/NAME/{status.json,task.log},
+repository symlink artifacts/execution-flows-NAME. Unit tide-execution-flows-NAME.service,
+background.slice. Frozen snapshots/builds must not be overwritten or modified.
+Last disk check307GB data/27GB root free; recheck before large writes.
 
-Module `libtorch-npu/2.10.0-cann9.0.0`, Python
-`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-User-authorized public /opt stack overrides dated personal-stack guide defaults.
-TASK_QUEUE_ENABLE=0, TORCH_DEVICE_BACKEND_AUTOLOAD=0, ATen/BLAS threads1, build jobs2.
-Retain module PYTHONPATH and prepend source/python. SoC Ascend910_9392,16 chips64GiB;
-cooperative leases remap physical devices to logical npu:0. No hardcoded placement.
-Trackio interpreter `/home/zlong/venvs/trackio/bin/python`, project tide-execution-flows.
+Module libtorch-npu/2.10.0-cann9.0.0; Python
+/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
+User-authorized public /opt stack overrides dated guide defaults. TASK_QUEUE_ENABLE=0,
+TORCH_DEVICE_BACKEND_AUTOLOAD=0,CPU/BLAS threads1,build jobs2. Retain module PYTHONPATH
+and prepend snapshot/python. SoC Ascend910_9392;16 chips64GiB. Cooperative leases
+choose physical devices and remap to logical npu:0; no hardcoded placement.
 
 ```
 python TASK/launchers/freeze_run.py --name NAME --snapshot SNAPSHOT [--commit SHA] [--npu --max-wait 120] -- timeout --signal=TERM --kill-after=10s 900s '{python}' scripts/COMMAND ...
 ```
 
-Placeholders {python}/{base}/{source}/{out}; exact source identity/hash stored beside
-snapshot. Existing snapshot reused read-only. Qualification requires --commit.
-Handoff writes use scripts/durable_records.py atomic fsynced replacement/read-back.
-Re-entry: git status --short --branch; python scripts/status.py; inspect actual terminal
-records, then continue the authorized contract. Submitted/running never means passed.
-
-Current InputOrigin implementation work (uncommitted): device origin table, int64
-projection/clock refusal10, stable metadata permutation for sum, physical message
-identity/scales unchanged, projected source export. Complete gates not yet run.
-Native Aggregate now uses stable_sort for equal projected keys, matching Python;
-custom_aggregate.cpp adds32 tied-source regression. This changes core source hash.
-build-origins-cpu-dev01 and build-origins-npu-dev01 RUNNING frozen origins-core-dev01
-(jobs2,2100s each). Current completed source adds origin_check.cpp (ordering witness,
-32 tied sources,128 windows,8 refusals) plus both scalar/vector sum negative gates.
-NEXT component build from a new finished snapshot against origins-npu-dev01 core.
-CPU: run eight CTests, aggregate-check FP32/FP64, focused origin/domain/port tests
-using origins-cpu-dev01 native build; source remains frozen during execution.
+Placeholders {python},{base},{source},{out}. Existing snapshot reused read-only;
+qualification requires --commit. norm32_after_core.py is a reusable bounded600s
+build-dependency wrapper; do not reserve an NPU while waiting for a build.
+origins_cpu_gates.py takes a build path,checks source hash,then runs the focused CPU
+matrix. Handoff writes use scripts/durable_records.py atomic fsync/read-back.
+Re-entry: git status --short --branch;python scripts/status.py;inspect real terminal
+records before continuing. Submitted/running never means passed.
