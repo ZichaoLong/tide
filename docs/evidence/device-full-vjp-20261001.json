@@ -1,0 +1,79 @@
+{
+  "schema": "tide-device-full-vjp-evidence-v1",
+  "source": "3285b13baacfba72266d3dc3377b696a80b23cfb",
+  "scope": "Internal single-NPU FP32 identity/tanh HARD first-order Full VJP; not complete graph backward, autograd, optimizer or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 35,
+    "cpu_autograd_cases": 96,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "actual_device_tapes": 2,
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "dbfb5e49c913ab421e1e044d09046b43ceb9569eabba0c2fa0d3c030e86c63a7",
+    "component_sha256": "2ab50bd562af6765f33c228ab36165aa0a299f0ef2bef4e8f4e505f317f5408a",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-full-vjp-clean01",
+      "source": "3285b13baacfba72266d3dc3377b696a80b23cfb",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f61da5170c35036ebbcc38a5d358ab3d3520b2ad391dd4d7bf7113793b19a44b",
+        "task.log": "519dcb1c8abc013662bb8d514bc993a00aecfb61bc25c93c557c473c4c6b9891"
+      }
+    },
+    {
+      "name": "full-vjp-clean01",
+      "source": "3285b13baacfba72266d3dc3377b696a80b23cfb",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "3e307c6ed849927d801997da55c3cb274af1e28dbd0ff7d4f9e6ebc1310bb5b0",
+        "task.log": "cd1da88e6144b3119ec0635b4685db3b6453985d56f1ad42202584c12e9000f2",
+        "verified/result.json": "0abeb7bd87ed71e55162b473e075738bc6a76f4bc15866be34f5a36b7b6f46a2"
+      }
+    },
+    {
+      "name": "full-vjp-profile-clean01",
+      "source": "3285b13baacfba72266d3dc3377b696a80b23cfb",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "5076ca446764d7bdba26413fc69c05dd34fa7e78958a99e97dcc156fb7a0c84d",
+        "task.log": "f48a1f4fc6de646e580356a428a06dc053f0cc80f00e1cad22b8aa635c63ff67",
+        "profiled/result.json": "9d2b26e745f25df9c9f22d79ca2abb089c5f92f78abaae38c271b29749a77393",
+        "profiled/profile.log": "5fa139c16a2a3743de4e10fd7c2aebf4e8bba0c1ee5f0d4339db92418926a1cc"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 8036,
+        "summed_task_us": 29454.839999999916
+      },
+      "AI_CORE": {
+        "count": 288,
+        "summed_task_us": 1500.1999999999991
+      }
+    },
+    "vjp_kernel_records": 998,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  },
+  "retained_failures": []
+}

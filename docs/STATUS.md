@@ -3,7 +3,7 @@
 Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **4a29b7c**,state-chain VJP qualification committed/pushed;public resident evidence8b89080;
+HEAD **3285b13**,Full VJP implementation committed;state-chain qualification4a29b7c;public resident evidence8b89080;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -141,7 +141,7 @@ Exact-source/hash/terminal audits passed. State VJP qualification reports:
 docs/evidence/device-state-vjp-20261001.{json,md};34 cells,216 isolated cases,4 real tapes,
 7,743 AIV-only profile tasks. Earlier failed clean runs remain failures.
 
-Uncommitted next increment: identity/tanh Full VJP in tools/device_online/full_vjp*,
+Committed increment3285b13: identity/tanh Full VJP in tools/device_online/full_vjp*,
 three Ascend C plan/payload/reduction kernels, CannProgram zero/tanh_backward,
 ContentFlow borrowed full_tape and PackedFull parameter accessors, build/gate registration.
 Dev build-full-vjp-dev01 PASSED via task-local full_vjp_relink.py: verified unchanged
@@ -151,7 +151,32 @@ full-vjp-dev01 PASSED:96 CPU FP32/FP64 autograd cases (each full/short/empty rep
 full-vjp-profile-dev01 PASSED:8,036 AIV+288 AI_CORE,no AiCPU/host fallback.
 This is local-component placement,not throughput.
 No immutable qualification yet; contract docs/resident-full-vjp.md.
-After profile/audit,commit implementation,launch full clean build then component gate/profile.
+build-full-vjp-clean01 PASSED from frozen3285b13 (1800s,jobs2,no NPU,four CTests).
+full-vjp-clean01 full35-cell gate PASSED;full-vjp-profile-clean01 --check full-vjp PASSED,
+each one NPU900s/queue120s. Exact-source/binary/result/profile audits passed.
+Reports docs/evidence/device-full-vjp-20261001.{json,md} are ready for evidence commit.
+
+Uncommitted reverse_links increment: actual forward message/event hash index on NPU,
+stable producer/consumer/scale contributor chains,stage offsets and cut-boundary
+classification; ContentFlow::reverse_tape rejects unavailable modules.
+Device validation tests cover64 actual feedback/DAG/edgeless windows and malformed
+metadata/budget. build-reverse-links-dev01 submitted from reverse-links-dev01,
+900s/2 build jobs,no NPU;600s bounded wait for full-vjp clean build then
+reverse_links_relink.py in a new directory. Build PASSED;reverse-links-dev01
+PASSED64 windows and full-vjp/state-vjp/content/window/resident regressions.
+Uncommitted graph_vjp.cpp/h and three Ascend C kernels now compose actual-stage
+Full -> state-chain -> sum/message adjoints with device loop progression and
+physical parameter reduction. Tests compare whole-window CPU Streaming autograd,
+all input/initial/pending/node/scale gradients for independent roots,zero/None,
+feedback and warm continuation. Graph build-graph-vjp-dev01 from frozen graph-vjp-dev01 is being submitted
+(900s,jobs2,no NPU),using graph_vjp_relink.py against full-vjp-clean01:
+compile four new kernels and changed objects into a new directory.
+build-graph-vjp-dev01 FAILED:Ascend C Muls template cannot accept a __gm__ float
+lvalue directly;load the scale into an ordinary scalar before the vector instruction.
+No numerical/tolerance change. build-graph-vjp-dev02 submitted from a new frozen snapshot
+with the same900s build bound and checked parent. graph-vjp-dev02 waits at most600s
+for that build BEFORE requesting one NPU (queue120s),then runs graph-vjp,reverse-links,
+full-vjp,state-vjp,content,window,resident gates (overall900s). No graph result yet.
 
 Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
 peer progression,FP16 and public matrix,then F6 representative/full-size comparison.
