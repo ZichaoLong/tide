@@ -9,7 +9,7 @@ __aicore__ inline bool finite(float f){return (AscendC::GetScalarBitcodeValue<fl
 // to one complete frame before this task. Scratch never changes persistent state.
 extern "C" __global__ __aicore__ void tide_state_read(GM_ADDR fibers,GM_ADDR lengths,
     GM_ADDR content,GM_ADDR reads,GM_ADDR modes,GM_ADDR kinds,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
-    GM_ADDR scratch,GM_ADDR clocks,GM_ADDR scores,GM_ADDR steps,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t max_ticks,int64_t vectorized) {
+    GM_ADDR scratch,GM_ADDR clocks,GM_ADDR scores,GM_ADDR steps,GM_ADDR proposals,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t max_ticks,int64_t vectorized) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::TPipe pipe;AscendC::TBuf<AscendC::QuePosition::VECCALC> root_buffer;
@@ -46,6 +46,7 @@ extern "C" __global__ __aicore__ void tide_state_read(GM_ADDR fibers,GM_ADDR len
         if(kind==2){float rho=((__gm__ float*)retention)[n];
           for(uint64_t tick=0;tick<ticks;++tick)proposal=proposal*rho;
           proposal=value+proposal;}
+        if(kind==3)proposal=((__gm__ float*)proposals)[i*width+j];
         value=mode==1?old:proposal;state[key*width+j]=proposal;
       }
       float product=norm?value*value:value*w[n*width+j];score=score+product;

@@ -31,6 +31,7 @@ class CannProgram {
   void rms_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
   void layer_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
   void batch_matmul(const at::Tensor&,const at::Tensor&,const at::Tensor& output);
+  void permute(const at::Tensor&,const std::vector<int64_t>& axes,const at::Tensor& output);
   void index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source);
   void equal(const at::Tensor&, const at::Tensor&, const at::Tensor& bool_output);
   void index_select(const at::Tensor&, int64_t axis, const at::Tensor& int64_indices, const at::Tensor& output);

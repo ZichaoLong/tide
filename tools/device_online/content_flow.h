@@ -9,6 +9,9 @@ struct ContentLimits {
   int64_t workspace_bytes=64*1024*1024;
   int64_t full_chunk_rows=16;
   int64_t emission_chunk_rows=16;
+  int64_t attention_chunk_rows=8;
+  int64_t kv_rows=128; // Per attention owner; hard bound, no implicit eviction.
+  int64_t kv_trace_rows=4096; // Optional cache diagnostics, per window.
   int64_t max_repeat_ticks=65536; // Per Add candidate; explicit work refusal, never a power shortcut.
   bool prefill=true;
   bool diagnostics=true; // Event/message journals are optional per-window work.
@@ -25,7 +28,7 @@ struct ContentWindow {
   at::Tensor output_stats,pending_stats,stages,events,full_chunks,emission_chunks;
 };
 // Experimental complete forward loop for an explicit existing-module profile:
-// sum Aggregate, identity/EMA/Add-repeat memory, linear/FP32-norm Read, count/positive
+// sum Aggregate, identity/EMA/Add-repeat/fiber-sum attention, linear/FP32-norm Read, count/positive
 // selection, adopt/clear Next and identity/tanh/SwiGLU/LH Full with broadcast/slot-affine
 // phase-aware HARD emission. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial

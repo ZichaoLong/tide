@@ -29,9 +29,11 @@ struct ContentUpdate {
 };
 ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error,bool vectorized);
 void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const ContentBatch&,
-                 const ContentState&,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized);
+                 const ContentState&,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized,
+                 const at::Tensor& attention_proposals={});
 ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
-    const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits&);
+    const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits&,
+    const at::Tensor& attention_proposals={});
 void commit_content_state(CannProgram&,const ContentState&,const ContentUpdate&,const at::Tensor& error);
 } // namespace tide::device_online

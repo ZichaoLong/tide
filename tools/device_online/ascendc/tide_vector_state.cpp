@@ -7,16 +7,16 @@ class VectorState {
  public:
   __aicore__ inline void run(GM_ADDR lengths,GM_ADDR content,GM_ADDR config,GM_ADDR coefficients,
       GM_ADDR retention,GM_ADDR policy,GM_ADDR state,GM_ADDR comparisons,GM_ADDR metadata,GM_ADDR diagnostics,
-      GM_ADDR error,I width,I nodes,bool trace) {
+      GM_ADDR proposals,GM_ADDR error,I width,I nodes,bool trace) {
     AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)metadata);
     AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
     if(((__gm__ int32_t*)error)[0])return;
     auto events=(__gm__ I*)metadata,cfg=(__gm__ I*)config;
     auto rho=(__gm__ float*)retention;
-    AscendC::GlobalTensor<float> h,a,s,c,v;
+    AscendC::GlobalTensor<float> h,a,s,c,v,ap;
     h.SetGlobalBuffer((__gm__ float*)content);a.SetGlobalBuffer((__gm__ float*)coefficients);
     s.SetGlobalBuffer((__gm__ float*)state);c.SetGlobalBuffer((__gm__ float*)comparisons);
-    v.SetGlobalBuffer((__gm__ float*)diagnostics);
+    v.SetGlobalBuffer((__gm__ float*)diagnostics);ap.SetGlobalBuffer((__gm__ float*)proposals);
     pipe.InitBuffer(input,1,tile*sizeof(float));pipe.InitBuffer(output,1,tile*sizeof(float));
     pipe.InitBuffer(old_buffer,tile*sizeof(float));pipe.InitBuffer(proposal_buffer,tile*sizeof(float));
     pipe.InitBuffer(summary_buffer,tile*sizeof(float));pipe.InitBuffer(coefficient_buffer,tile*sizeof(float));
@@ -50,6 +50,7 @@ class VectorState {
           }
           AscendC::Add(proposal,summary,proposal,size);AscendC::PipeBarrier<PIPE_V>();
         }
+        if(kind==3)load(proposal,ap,i*width+start,size);
         if(trace)save(proposal,v,i*stride+2*width+start,size);
         if(adopt){AscendC::Muls(old,proposal,1.0f,size);AscendC::PipeBarrier<PIPE_V>();}
         save(old,c,i*width+start,size);
@@ -83,7 +84,7 @@ class VectorState {
 }
 extern "C" __global__ __aicore__ void tide_vector_state(GM_ADDR lengths,GM_ADDR content,
     GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,GM_ADDR state,GM_ADDR comparisons,
-    GM_ADDR metadata,GM_ADDR diagnostics,GM_ADDR error,int64_t width,int64_t nodes,int64_t trace) {
+    GM_ADDR metadata,GM_ADDR diagnostics,GM_ADDR proposals,GM_ADDR error,int64_t width,int64_t nodes,int64_t trace) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
-  VectorState op;op.run(lengths,content,config,coefficients,retention,policy,state,comparisons,metadata,diagnostics,error,width,nodes,trace);
+  VectorState op;op.run(lengths,content,config,coefficients,retention,policy,state,comparisons,metadata,diagnostics,proposals,error,width,nodes,trace);
 }

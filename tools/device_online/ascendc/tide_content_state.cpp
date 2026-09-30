@@ -4,7 +4,7 @@ namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR lengths,
     GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
     GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,GM_ADDR comparisons,
-    GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR event_count,GM_ADDR error,
+    GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR event_count,GM_ADDR proposals,GM_ADDR error,
     int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t diagnostics,int64_t metadata_only,int64_t max_ticks) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
@@ -23,7 +23,7 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
     if(b<0||b>=samples||n<0||n>=nodes||time<0){status[0]=2;break;}
     I key=b*nodes+n,old_time=t[key*2],old_count=t[key*2+1];
     const I kind=cfg[n*3];bool clear=cfg[n*3+1]&&on[i],adopt=cfg[n*3+2]||on[i];
-    if(old_count<0||old_time< -1||old_time>=time||kind<0||kind>2){status[0]=2;break;}
+    if(old_count<0||old_time< -1||old_time>=time||kind<0||kind>3){status[0]=2;break;}
     if(i&&(b<fs[(i-1)*4]||(b==fs[(i-1)*4]&&(n<fs[(i-1)*4+1]
         ||(n==fs[(i-1)*4+1]&&time<=fs[(i-1)*4+2]))))){status[0]=2;break;}
     if(kind&&old_count==I(0x7fffffffffffffff)){status[0]=5;break;}
@@ -45,6 +45,7 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
       if(kind==2){float rho=((__gm__ float*)retention)[n];
         for(uint64_t tick=0;tick<ticks;++tick)proposal=proposal*rho;
         proposal=h[i*width+j]+proposal;}
+      if(kind==3)proposal=((__gm__ float*)proposals)[i*width+j];
       float comparison=adopt?proposal:old,next=clear?comparison*0.0f:comparison;
       if(diagnostics) {
         v[i*stride+j]=h[i*width+j];v[i*stride+width+j]=old;v[i*stride+2*width+j]=proposal;

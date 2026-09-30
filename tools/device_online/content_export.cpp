@@ -38,6 +38,7 @@ Continuation ContentFlow::Impl::export_continuation() const {
   auto state_values=state.values.cpu(),clocks=state.clocks.cpu(),present=state.present.cpu();
   for(Index b=0;b<q.batch_size;++b)for(Index n=0;n<Index(g.nodes.size());++n)if(present[b][n].item<bool>())
     q.states[{b,n}]={state_values[b][n].clone(),clocks[b][n][0].item<Index>(),clocks[b][n][1].item<Index>()};
+  if(attention)attention->export_states(q);
   q.history=download_history(g,history,q.batch_size);return q;
 }
 Result ContentFlow::Impl::export_result() const {
@@ -53,6 +54,10 @@ Result ContentFlow::Impl::export_result() const {
     {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
     {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
     {"swiglu_full_chunk_rows",swiglu_full?swiglu_full->chunk_rows():0},
+    {"attention_chunks",attention?attention->chunks().cpu().item<Index>():0},
+    {"attention_chunk_rows",attention?attention->chunk_rows():0},
+    {"attention_kv_peak",attention?attention->peak().cpu().item<Index>():0},
+    {"attention_kv_capacity",attention?limits.kv_rows:0},
     {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
@@ -100,6 +105,7 @@ Result ContentFlow::Impl::export_result() const {
     std::sort(e.contributions.begin(),e.contributions.end(),[](const SlotValue& a,const SlotValue& b){return a.slot<b.slot;});
     out.trace.push_back(std::move(e));
   }
+  if(attention)attention->export_trace(out.trace);
   // Trace histories are materialized from recorded device active bits and the
   // starting history. Final history above is independently read from the NPU.
   std::map<Key,std::vector<size_t>> frames;

@@ -208,6 +208,12 @@ void CannProgram::index_copy(const at::Tensor& target,int64_t axis,const at::Ten
   auto& p=*impl_;
   p.op("aclnnInplaceIndexCopy",p.tensor(target,target.scalar_type()),axis,p.tensor(indices,at::kLong),p.tensor(source,target.scalar_type()));
 }
+void CannProgram::permute(const at::Tensor& input,const std::vector<int64_t>& axes,const at::Tensor& output) {
+  auto& p=*impl_;p.building();
+  auto order=p.api.create_int_array(axes.data(),axes.size());
+  if(!order)throw std::runtime_error("create permutation axes failed");p.arrays.push_back(order);
+  p.op("aclnnPermute",p.tensor(input,input.scalar_type()),order,p.tensor(output,input.scalar_type()));
+}
 void CannProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnEqTensor",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),p.tensor(out,at::kBool));

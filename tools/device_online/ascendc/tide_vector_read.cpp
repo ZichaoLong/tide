@@ -8,16 +8,16 @@ class VectorRead {
  public:
   __aicore__ inline void run(GM_ADDR fibers,GM_ADDR lengths,GM_ADDR content,GM_ADDR reads,
       GM_ADDR modes,GM_ADDR kinds,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,
-      GM_ADDR initial,GM_ADDR ticks,GM_ADDR partials,GM_ADDR error,I width,I nodes) {
+      GM_ADDR initial,GM_ADDR ticks,GM_ADDR partials,GM_ADDR proposals,GM_ADDR error,I width,I nodes) {
     AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)fibers);
     AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
     if(((__gm__ int32_t*)error)[0])return;
     auto f=(__gm__ I*)fibers,m=(__gm__ I*)modes,k=(__gm__ I*)kinds,cfg=(__gm__ I*)config;
     auto steps=(__gm__ I*)ticks;auto rho=(__gm__ float*)retention;
-    AscendC::GlobalTensor<float> h,w,a,s,p;
+    AscendC::GlobalTensor<float> h,w,a,s,p,ap;
     h.SetGlobalBuffer((__gm__ float*)content);w.SetGlobalBuffer((__gm__ float*)reads);
     a.SetGlobalBuffer((__gm__ float*)coefficients);s.SetGlobalBuffer((__gm__ float*)initial);
-    p.SetGlobalBuffer((__gm__ float*)partials);
+    p.SetGlobalBuffer((__gm__ float*)partials);ap.SetGlobalBuffer((__gm__ float*)proposals);
     pipe.InitBuffer(input,1,tile*sizeof(float));pipe.InitBuffer(output,1,32);
     pipe.InitBuffer(old_buffer,tile*sizeof(float));pipe.InitBuffer(proposal_buffer,tile*sizeof(float));
     pipe.InitBuffer(summary_buffer,tile*sizeof(float));pipe.InitBuffer(coefficient_buffer,tile*sizeof(float));
@@ -48,6 +48,7 @@ class VectorRead {
             for(I tick=0;tick<steps[row];++tick){AscendC::Muls(proposal,proposal,retention_value,size);AscendC::PipeBarrier<PIPE_V>();}
             AscendC::Add(proposal,summary,proposal,size);AscendC::PipeBarrier<PIPE_V>();
           }
+          if(kind==3)load(proposal,ap,row*width+start,size);
           visible=mode==1?old:proposal;
         }
         AscendC::Mul(product,visible,norm?visible:weight,size);AscendC::PipeBarrier<PIPE_V>();
@@ -79,7 +80,7 @@ class VectorRead {
 }
 extern "C" __global__ __aicore__ void tide_vector_read(GM_ADDR fibers,GM_ADDR lengths,
     GM_ADDR content,GM_ADDR reads,GM_ADDR modes,GM_ADDR kinds,GM_ADDR config,GM_ADDR coefficients,
-    GM_ADDR retention,GM_ADDR initial,GM_ADDR ticks,GM_ADDR partials,GM_ADDR error,int64_t width,int64_t nodes) {
+    GM_ADDR retention,GM_ADDR initial,GM_ADDR ticks,GM_ADDR partials,GM_ADDR proposals,GM_ADDR error,int64_t width,int64_t nodes) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
-  VectorRead op;op.run(fibers,lengths,content,reads,modes,kinds,config,coefficients,retention,initial,ticks,partials,error,width,nodes);
+  VectorRead op;op.run(fibers,lengths,content,reads,modes,kinds,config,coefficients,retention,initial,ticks,partials,proposals,error,width,nodes);
 }

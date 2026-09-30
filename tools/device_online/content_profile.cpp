@@ -12,7 +12,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     throw std::invalid_argument("content flow requires explicit no-grad NPU");
   graph.compile();
   for(const auto& n:graph.nodes) {
-    if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")
+    if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="lh-fiber-attention-sum-repeat-v1")
         ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&n.full!="swiglu"&&!is_lh_full(n.full))
         ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
         ||(n.emission!="broadcast"&&n.emission!="slot_affine"))
@@ -27,6 +27,9 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     all_content&=r.read_mode=="content";
   }
   for(const auto& n:graph.nodes)if(n.clear&&graph.regions[n.region].read_mode!="content")causal_regions[n.region]=1;
+  // This cache adapter has a one-event-per-owner state contract. It still packs
+  // independent owners and all message rows, and accepts every legal topology.
+  for(const auto& n:graph.nodes)if(!n.identity&&n.memory=="lh-fiber-attention-sum-repeat-v1")causal_regions[n.region]=1;
   for(const auto& w:model.nodes) {
     if(w.kernel||w.read_kernel||w.next_kernel||w.aggregate_kernel||w.full_kernel)
       throw std::invalid_argument("content flow requires built-in module declarations, not custom kernel handles");
@@ -53,7 +56,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   if(weights.empty()){metadata={0,0};weights.push_back(at::zeros({},at::kFloat));}
   for(size_t n=0;n<graph.nodes.size();++n) {
     const auto& node=graph.nodes[n];
-    const int64_t kind=node.identity?0:node.memory=="ema"?1:node.memory=="lh-add-repeat-v1"?2:0;
+    const int64_t kind=node.identity?0:node.memory=="ema"?1:node.memory=="lh-add-repeat-v1"?2:node.memory=="lh-fiber-attention-sum-repeat-v1"?3:0;
     clocks.insert(clocks.end(),{node.state_clock.period,node.state_clock.first,node.state_clock.count});
     settings.insert(settings.end(),{kind,node.clear,graph.regions[node.region].observe_all});
     reads.push_back(node.identity?at::zeros_like(model.nodes[n].read):model.nodes[n].read);

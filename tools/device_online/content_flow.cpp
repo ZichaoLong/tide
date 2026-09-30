@@ -61,8 +61,17 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     full_budget-=swiglu_full->reserved_bytes();
   }
   if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
-  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,
-    full_budget-(lh_full?lh_full->reserved_bytes():0));
+  full_budget-=lh_full?lh_full->reserved_bytes():0;
+  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&n.memory=="lh-fiber-attention-sum-repeat-v1";})) {
+    // Leave the minimum remaining Full work before growing an attention chunk.
+    // Otherwise a legal smaller query chunk could be rejected during Full setup.
+    const auto minimum_full=PackedFull::minimum_bytes(kinds,width);
+    if(minimum_full>=full_budget)throw std::invalid_argument("fiber cache leaves no Full workspace");
+    const auto attention_budget=static_cast<int64_t>(full_budget-minimum_full);
+    attention=std::make_unique<PackedFiberAttention>(profile,q,device,l,attention_budget);
+    full_budget-=attention->reserved_bytes();
+  }
+  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,full_budget);
   construct();
   // Only input-seal/ledger metadata belongs on the host between windows.
   // The authoritative state, history and pending payloads are device owners.
@@ -86,9 +95,11 @@ void ContentFlow::Impl::construct() {
   p.mark(head);auto ready=planner.append_stage(p,pending->atoms(),stop,error);p.branch(ready.branch,{end,test});
   p.mark(test);p.less(stages,budget,predicate);p.cast_index(predicate,index);p.branch(index,{exhausted,body});p.mark(body);
   auto content=append_content(p,profile,ready,error,limits.vectorized_aggregate);
-  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read);
+  FiberStage attended;
+  if(attention)attended=attention->propose(p,profile,ready,content,state,error);
+  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read,attended.values);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
-  auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
+  auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits,attended.values);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
   if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
   if(swiglu_full)actions=swiglu_full->append_stage(p,actions,content.content,update.comparison,error,full->chunks());
@@ -112,6 +123,7 @@ void ContentFlow::Impl::construct() {
   }
   pending->commit_stage(p,pending_proposal);outputs->commit_stage(p,output_proposal);
   selector->append_commit(p,history,selection,error);commit_content_state(p,state,update,error);
+  if(attention)attention->commit(p,attended,selection,error);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);p.finish();
   if(p.workspace_bytes()>limits.workspace_bytes)throw std::invalid_argument("CANN numerical workspace exceeds content budget");
 }
@@ -134,6 +146,7 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
       s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
       s.full_trace->count.zero_();s.emission_trace->count.zero_();
     }
+    if(s.attention)s.attention->reset_window();
     s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));

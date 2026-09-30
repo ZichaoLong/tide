@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity, EMA or Add-repeat state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
+scales; identity, EMA, Add-repeat or LH fiber-sum attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity, tanh, SwiGLU or LH
 Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
 apply their declared activation/normalization to comparison without that residual.
@@ -16,6 +16,43 @@ parallel physical edges, feedback and disconnected components. Input-origin
 projection and phase-restricted slot emission are supported; other unavailable
 modules/region programs explicitly fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
+
+The bounded `lh-fiber-attention-sum-repeat-v1` adapter keeps persistent key/value/
+log-bias tensors and int64 lengths on the device. Static tables contain only actual
+attention owners. Device planning orders the real source-weighted message rows by
+local slot; it never substitutes Aggregate summary content for those rows. QKV and
+output projections are bounded batch matmuls. Device-generated gather indices pack
+each query with its complete proposed cache; head layouts, log biases, softmax and
+value products execute as CANN tensor operations. Every current query sees all old
+keys and all keys in its fiber. Physical query chunking does not add a triangular
+mask or change the global softmax denominator. This first adapter pads the key axis
+to the declared cache capacity; key-axis tiling is still pending.
+
+For this adapter the ready planner exposes at most one complete region-time frame
+per sample and attention region per iteration. This is an explicit implementation
+capability limit, even for content Read; it does not reject legal feedback or input.
+Independent owners and message rows remain packed, and other regions retain their
+legal time prefixes. General multi-time attention state batches are still pending.
+The proposal is computed before Read/selection, then adopted only under observe-all
+or actual selection. Selected clear empties the persistent cache while preserving
+the pre-clear comparison. Bias decay repeats subtraction for each exact local tick;
+empty old caches do no decay work. Cache row count and observation count are distinct.
+
+`kv_rows` bounds each attention owner's simultaneously retained cache, including its
+complete next fiber; it never evicts or drops messages. Exceeding it fails with code11
+before a live-state commit. `attention_chunk_rows` bounds physical message/query/
+output rows; the remaining byte budget can reduce it. Cache/parameter/packed scratch
+reservations leave at least one row of the following tanh Full work, using that
+planner's own footprint, before choosing a larger attention chunk. `attention_chunks`, the effective
+row limit and `attention_kv_peak`/`attention_kv_capacity` expose actual work/capacity.
+`kv_trace_rows` separately bounds optional old/proposed cache diagnostics per window.
+A single stage that exceeds its diagnostic buffer fails with code12; cumulative
+journal capacity retains the shared journal refusal. Lean execution omits these
+copies. Explicit snapshots include exact key/value/log-bias slots; the authoritative
+device cache survives windows that skip host exports. Initial capacity, work-limit
+and runtime refusals preserve the existing restore-after-failure contract.
+Other fiber pooling profiles, event GQA/window attention, FP16 and resident backward
+are separate capabilities and remain rejected by this adapter.
 
 For `InputOrigin`, a static edge table declares the visible port and int64 position
 stride. Device metadata preflight refuses an off-lattice position with code10
@@ -132,8 +169,8 @@ Each node can have a different profile, and identity/tanh nodes can coexist.
 `full_chunks` counts both tanh and LH chunks; `full_chunk_rows` and
 `lh_full_chunk_rows` record their distinct effective limits. LH parameter/vector
 scratch reservation is deducted before planning tanh chunks. These are local
-budgets, not a complete model/KV/training memory plan. Per-slot affine signaling,
-other emission contracts and resident VJPs remain separate capabilities.
+budgets, not a complete model/KV/training memory plan. Slot-affine signaling is
+handled by the separate emission stage; resident VJPs remain pending.
 
 LH component precision checks use an independent FP64 activation/norm formula on
 the exact FP32 input as well as the existing CPU implementation. Low-variance
@@ -190,7 +227,7 @@ result export. Failed execution poisons the owner and refuses snapshots, results
 and further execution; malformed pre-submission input remains retryable.
 
 `ContentLimits.diagnostics` defaults to true for equivalence checking. With false,
-the captured program omits event/fiber/contribution/Full/emission journals and the emitted
+the captured program omits event/fiber/contribution/Full/emission/KV journals and the emitted
 message log; `trace=0` is then legal. Persistent state, selection history, output
 buffers and exact int64 event counts remain. A lean CPU result has no event trace
 or message log and cannot support comparisons of those missing diagnostics.

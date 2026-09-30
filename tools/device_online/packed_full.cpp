@@ -7,6 +7,15 @@
 #include <stdexcept>
 
 namespace tide::device_online {
+namespace {
+std::pair<long double,long double> footprint(int64_t nodes,int64_t width) {
+  return {4.L*(nodes+1.L)*(width*static_cast<long double>(width)+width),8.L*width*width+64.L*width+64};
+}
+}
+long double PackedFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width) {
+  if(std::find(kinds.begin(),kinds.end(),1)==kinds.end())return 1;
+  const auto [fixed,row]=footprint(kinds.size(),width);return fixed+row;
+}
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
 PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const at::Tensor& bias,at::Device device,int64_t max_rows,int64_t budget)
     :nodes_(kinds.size()),width_(bias.defined()&&bias.dim()==2?bias.size(1):0),chunk_(max_rows),any_tanh_(false) {
@@ -16,8 +25,7 @@ PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const
       ||bias.requires_grad()||weight.requires_grad())throw std::invalid_argument("packed Full requires CPU FP32 parameters, NPU and no-grad");
   for(auto kind:kinds){if(kind<0||kind>1)throw std::invalid_argument("unknown packed Full contract");any_tanh_|=kind==1;}
   // Account for gathered matrices and vector work before selecting a chunk.
-  long double persistent=4.L*(nodes_+1.L)*(width_*static_cast<long double>(width_)+width_);
-  long double per_row=8.L*width_*width_+64.L*width_+64;
+  const auto [persistent,per_row]=footprint(nodes_,width_);
   if(any_tanh_&&(persistent+per_row>budget))throw std::invalid_argument("one packed Full row exceeds workspace budget");
   if(any_tanh_)chunk_=std::min<int64_t>(max_rows,static_cast<int64_t>((budget-persistent)/per_row));
   else chunk_=1;

@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T11:23:06.567090+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T11:58:14.647517+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -138,16 +138,50 @@ No new runtime jobs active. Next: attention/KV and complete safe chunking;
 public matrix,peer progression,resident training and scale comparisons remain
 open. Historical timing remains paused while implementation proceeds.
 
-Attention read-only implementation audit (no new attention code): LH fiber
-attention consumes per-source weighted rows sorted by local slot,not Aggregate
-summary. Every query sees all keys in its current fiber; no intra-fiber triangle.
-Persistent key/value/log_bias length is distinct from observation count. Selection
-and clear control cache adoption; Full sees the pre-clear comparison. Proposal Read
-with selected-only adoption/clear has a causal single-frame dependency; content
-Read can know selection before state work. A first packed cache/attention path must
-retain these distinctions and global normalization when physically chunking.
-References:docs/fiber-attention.md,docs/attention.md,cpp/src/fiber_attention.cpp.
-Do not infer a complete attention flow from a stateless matmul/softmax smoke.
+## Current bounded same-fiber attention development
+
+Uncommitted new packed_fiber_attention/fiber_cache and six Ascend C kernels add
+per-attention-owner bounded key/value/log_bias arenas, device source-slot ordering,
+batched QKV/gather/softmax/output projection and selected-only adoption/clear.
+All queries retain the entire candidate cache. One complete region frame per
+attention owner is an explicit adapter capability fallback, not full node-time
+state batching. Other region prefixes and message/owner batches remain packed.
+Optional old/proposal KV journals reconstruct complete diagnostic slots at export.
+Default kv_rows128,attention_chunk_rows8,kv_trace_rows4096; actual chunk bounded by
+workspace. Capacity11,trace12,tick-work8 fail explicitly and poison live owner.
+No FP16, other fiber pooling/event-GQA, backward or throughput claim.
+
+build-device-fiber-dev01 FAILED at Ascend C Muls: global-memory scalar reference
+cannot bind the plain scalar template parameter. device-fiber-gates-dev01 FAILED
+on its build dependency, without acquiring NPU. Fix loads the scale into a local
+float first; retained frozen snapshot/logs remain failed. No numerical test result yet.
+
+PASSED build-device-fiber-dev02 from frozen fiber-dev02,core origins-npu-clean01,
+build device-fiber-dev02,jobs2,1800s. Added periodic-clock,selected-only/empty
+selection,clear and 10-window bounded-cache-reuse gates. Then one-NPU fiber first
+(120s),all25 cells900s and separate placement profile480s;queue120s. device-fiber-gates-dev02 FAILED: one packed Full row exceeds workspace budget.
+This reproduces the independently identified reservation defect; no numeric parity failure reported. No NPU held
+while building. On failure fix identified cause before a new snapshot/run.
+Static budget review found attention could consume the minimum workspace needed
+by the following tanh Full (width257/chunk4 fixture). Worktree now reserves that
+minimum, using the same footprint formula as PackedFull, before growing the
+attention chunk. No formula/tolerance changed. fiber-dev02 remains untouched.
+PASSED build-device-fiber-dev03 uses an isolated
+copy with unchanged-kernel/source hashes, recompiling three affected C++ files
+and relinking consumers. Task-local launcher fiber_incremental_build03.py records
+provenance. device-fiber-gates-dev03 FAILED at lifecycle fixture construction: zero region
+budget is invalid. It passed earlier anchor/window/refusal code but whole gate
+is failed. Correct test uses positive-v1 with negative content Read for legal
+empty selection; no runtime formula or tolerance changes. PASSED build-device-fiber-dev04
+reuses byte-identical dev03 production and recompiles/relinks only fiber_check.cpp.
+device-fiber-gates-dev04 PASSED all25 cells from frozen fiber-dev04,900s,
+one NPU/queue120s. New fiber gate PASSED16 anchors/192 windows/6 refusals/40
+lifecycle windows. Profile-dev04 PASSED64617 AIV+1984 AI Core,no AiCPU/fallback.
+Next commit/push implementation, then fresh clean build-device-fiber-clean01
+from that immutable commit; all25 cells900s and profile480s,queue120s.
+No new task remains active. Historical CPU Attention stays paused.
+Final qualification will still use a fresh clean full build.
+SwiGLU evidence committed/pushed5bfe36d. Preserve old flow/accelerator dirty work.
 
 ## Failures retained and prior work
 
