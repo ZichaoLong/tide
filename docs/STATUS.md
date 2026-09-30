@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T09:51:09.075400+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T10:02:01.061467+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -109,7 +109,7 @@ device-read-vector-profile-clean01 PASSED separate norm32 placement profile.
 410 vector Read/410 reductions, no AiCPU/fallback.
 This does not qualify throughput,attention,FP16,peer progression or resident training.
 
-Current LH increment ready for implementation commit:
+LH implementation cd03ca8 committed/pushed; clean qualification active:
 packed_lh_full.{h,cpp},lh_full_check.cpp, activation/normalization methods in
 cann_program.{h,cpp}, int-array lifetime in cann_api.{h,cpp}, target-kind filtering
 in ascendc/tide_full_plan.cpp and packed_full.cpp. Wired into ContentFlow now, with local LH reservation deducted from tanh budget.
@@ -127,10 +127,14 @@ comparison stays strict. device-lh-full-precision-dev02 PASSED diagnostic-only r
 CPU FP64 maxabs1.31656e-5,NPU1.51344e-5,max conditioning-budget fraction0.0588963.
 Only test/diagnostic files differ from the original production build.
 device-lh-full-regressions-dev01 PASSED all20 existing cells against unchanged
-production implementation. NEXT clean LH build (1800s/jobs2), all21 cells (900s),
-separate lh-full profile (480s); leased NPU queue120s; diagnose any failure.
-Development gates passed for FP32 broadcast inference; immutable qualification
-pending. No slot-affine, throughput or training claim.
+production implementation. build-device-lh-full-clean01 PASSED four CPU CTests/loader at cd03ca8
+from lh-full-clean01 with norm32-npu-clean01 core. NEXT
+device-lh-full-components-clean01 PASSED all21 cells,
+device-lh-full-profile-clean01 PASSED separate lh-full profile:27763 AIV tasks,
+no AiCPU/fallback; LayerNormV3/V4,RMSNorm and activation tasks present.
+Both use frozen lh-full-clean01/build device-lh-full-clean01. Diagnose any failure.
+[Immutable LH evidence](evidence/device-lh-full-20260930.md) qualifies stated FP32
+broadcast inference. No slot-affine, throughput or training claim.
 
 ## Retained failures and older work
 
@@ -197,3 +201,15 @@ snapshot. Existing snapshot reused read-only. Qualification requires --commit.
 Handoff writes use scripts/durable_records.py atomic fsynced replacement/read-back.
 Re-entry: git status --short --branch; python scripts/status.py; inspect actual terminal
 records, then continue the authorized contract. Submitted/running never means passed.
+
+Current InputOrigin implementation work (uncommitted): device origin table, int64
+projection/clock refusal10, stable metadata permutation for sum, physical message
+identity/scales unchanged, projected source export. Complete gates not yet run.
+Native Aggregate now uses stable_sort for equal projected keys, matching Python;
+custom_aggregate.cpp adds32 tied-source regression. This changes core source hash.
+build-origins-cpu-dev01 and build-origins-npu-dev01 RUNNING frozen origins-core-dev01
+(jobs2,2100s each). Current completed source adds origin_check.cpp (ordering witness,
+32 tied sources,128 windows,8 refusals) plus both scalar/vector sum negative gates.
+NEXT component build from a new finished snapshot against origins-npu-dev01 core.
+CPU: run eight CTests, aggregate-check FP32/FP64, focused origin/domain/port tests
+using origins-cpu-dev01 native build; source remains frozen during execution.

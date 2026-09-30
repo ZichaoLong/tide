@@ -1,0 +1,79 @@
+{
+  "schema": "tide-device-lh-full-evidence-v1",
+  "source": "cd03ca88976ec9d54179a4323b539eaa0e115fa4",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "selected-only nine LH Full activation/normalization profiles; single-device FP32 broadcast inference; not throughput, slot-affine or resident training",
+  "core_cpp_sha256": "32d8fe6664032bbcd79f7e576b5ddfa71cadce9e412f1766360e0a59da543138",
+  "component_sha256": "1272fc64eedfd358f5424c782c566b3469c45e496c169225efb17c4bb47dd937",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 21,
+    "lh_full": {
+      "components": "40",
+      "windows": "96",
+      "profiles": "9",
+      "scope": "FP32_broadcast_inference",
+      "norm_rows": "536",
+      "strict_component_misses": "34",
+      "cpu_fp64_max_abs": "1.31656e-05",
+      "device_fp64_max_abs": "1.51344e-05",
+      "max_condition_budget_fraction": "0.0588963"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-device-lh-full-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "50174dccec751c8f8afbf932f027e77b5048dfae782dd5d4ac0dc32b521561bc",
+        "task.log": "8ea6997ce9e5e805bfaf3a697f037957f00b22014c3ee1ee2aadd3d83c02e273"
+      }
+    },
+    {
+      "name": "device-lh-full-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "2fbd1a89b85d263caf10cbc12c6e395be3f7fa5654f01e85c3c62c296f5a74c0",
+        "task.log": "fd35829b9b3d72f5c644c131b5eadb7eaf92e357391245953238805141ab1bbd",
+        "verified/result.json": "379add1b052b54653340ac32fa693b3fb72d974375fded437ba1153ef5562bc6"
+      }
+    },
+    {
+      "name": "device-lh-full-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "ce162b4596b7b7248f6b6a4489689ab8243ce66480cdb8c56f5e52db0459b519",
+        "task.log": "98e53cfeab4cece943f266759581be5a81723e1ef91ced81d45eda386f48cf7d",
+        "profile/result.json": "48c53e1a00218c947a786d59d023a3dcd59ecd00284a3b0a89ea4b3b15cab269"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 27763
+    },
+    "kernels": {
+      "LayerNormV3": 44,
+      "LayerNormV4": 253,
+      "Relu": 258,
+      "RmsNorm": 285,
+      "Sigmoid": 96,
+      "Swish": 328,
+      "tide_full_plan": 1857
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930175923.csv": "233db1c4192d432c91dd4b3cd412e68a4aefe1818ab980ed238d224f41d44f94",
+      "api_statistic_20260930175923.csv": "b1bcdb1bb905079cd4873268c6ce284ed88de4248a90493122c50dd139aabdbb"
+    },
+    "host_fallback_diagnostic": false
+  }
+}
