@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T10:49:57.959559+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T11:01:24.452225+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -91,38 +91,37 @@ matching clean core origins-npu-clean01. All22 cells passed; origin gate24 order
 cases,128 windows,8 refusals. Profile27256 AIV tasks,no AiCPU/fallback.
 [Device-origin evidence](evidence/device-origins-20260930.md) records the clean qualification.
 
-## Packed slot emission ready for commit
+## Packed slot emission qualified on6445121
 
-Uncommitted tools/device_online/packed_emission.*,ascendc/tide_emission_{plan,chunk}.cpp,
-emission_check.cpp and flow integration replace broadcast-only flow delivery.
-Device presence uses exact time phases; selected affine slots are chunked on device.
-Physical scales apply after projection; unscaled slot values have their own journal.
-Full auxiliary values stay separate. Scope remains single-device FP32 HARD inference.
-Old broadcast component remains independently available; obsolete scalar output kernel removed.
+Committed/pushed implementation6445121 supports device-planned time-phase presence,
+selected affine projection chunks and batched physical delivery. Unscaled slot
+journals preserve zero-scale diagnostics; Full auxiliary values remain separate.
+Scope: single-device FP32 HARD inference. Old broadcast component remains available.
 
-Production objects/kernels compiled in frozen emission-dev01. Its build FAILED only
-on a new test helper ADL name collision. Incremental dev03/dev04/dev05 builds retain
-byte-identical production files, copy terminal builds into new directories, compile
-corrected tests and verify four CPU entry checks/loader closure. Provenance is in
-TASK/builds/device-emission-dev05/control-build.json. No failed source/build mutated.
+Clean build-device-emission-clean01,device-emission-gates-clean01 and
+profile-clean01 PASSED from frozen emission-clean01 at6445121,matching core
+origins-npu-clean01. Four CPU CTests,all23 cells;16 emission components,66 complete
+windows,6 refusals. Profile14375 AIV+176 AI Core,no AiCPU/fallback. Source/raw hashes
+and limits are in [emission evidence](evidence/device-emission-20260930.md).
 
-The original22 device cells PASSED in device-emission-gates-dev04. Its final new
-emission cell and profile-dev04 FAILED at ATen bool initializer-list construction;
-fixture changed to bool ones/fill. Additional pre-run fixture review corrected
-identity boundary phases and moved NaN injection below public finite validation.
-Original failures remain failed. No mathematical formula or tolerance changed.
+Development build-dev01 failed on test helper ADL ambiguity; two dependent jobs
+failed without acquiring a device. gates/profile-dev04 failed at bool tensor
+initializer construction. Later tests use ordinary bool ones/fill. Pre-run review
+corrected illegal identity phases and placed poison below public finite validation.
+Original snapshots/logs remain; no failure relabeled and no tolerance/formula change.
+Incremental development builds recorded byte-identical production source/relinked
+tests. The final independent clean build above supersedes that provenance for qualification.
 
-device-emission-focused-dev05 PASSED:16 component cases,66 full windows,6 refusals;
-widths1/7/33/257,chunk1/4,exact large clocks,permuted slots,never/inactive poison,
-zero physical scales,feedback/DAG,streaming/prefill,continuation,diagnostics-off and
-all-absent emission retaining state/history. Frozen emission-dev05 includes final
-source/test. device-emission-profile-dev05 PASSED:14375 AIV+176 AI Core tasks,
-no observed AiCPU/fallback. This is placement evidence,not throughput.
+## SwiGLU Full in development
 
-NEXT commit source; freeze emission-clean01 at that commit and full
-build-device-emission-clean01 (core origins-npu-clean01,jobs2,1800s). Then all23 cells
-900s and separate emission profile480s,one leased NPU each,queue120s. Commit evidence
-separately after terminal success. Broader F1–F7 remain incomplete.
+Uncommitted packed_swiglu_full.{h,cpp},swiglu_check.cpp and flow/profile/build
+integration implement selected-only batched SwiGLU with the original residual.
+Static parameter table packs actual SwiGLU owners; device planner chooses chunks.
+HARD FP32 inference only; no new backward or throughput claim.
+build-device-swiglu-dev01 RUNNING from frozen swiglu-dev01 using core origins-npu-clean01,
+jobs2/bound1800s. Then all24 device cells900s and separate swiglu profile480s,
+one NPU/queue120s; retain failures. This job is independent of immutable emission
+qualification. Never modify either active snapshot/build.
 
 ## Failures retained and prior work
 

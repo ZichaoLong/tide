@@ -1,0 +1,76 @@
+{
+  "schema": "tide-device-emission-evidence-v1",
+  "source": "6445121b328511b7652bc264bd4cf47ce7062068",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "device-planned broadcast/slot-affine time-phase emission; FP32 HARD single-device inference; not VJP, training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "288d8ad97192654305997bf2abfed53313879760f5e672356f1d64240f8e7765",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 23,
+    "emission_components": 16,
+    "complete_windows": 66,
+    "refusals": 6
+  },
+  "runs": [
+    {
+      "name": "build-device-emission-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "d1ca2555e3b67dc68cb689f95a416ffe5eadc8bdd915c9f7cb3bfabe8bfb02a1",
+        "task.log": "4d0613ff1bc0ece85e7f77bf03424f42b64f3dd767921b629b6187acd74006a0"
+      }
+    },
+    {
+      "name": "device-emission-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "31b324d284678e4525c188ee5e07845e1ab58866dc9f22e998ee231a66cd38a4",
+        "task.log": "af6bc1ec130744f069eb507e4d77e59cabe803852b3b487bc1fb19fe5732f88e",
+        "verified/result.json": "e6ac0e4ef6427ced7594b7026029e0cd4b80b5e4c59861eb6b89b3193a1e57f0"
+      }
+    },
+    {
+      "name": "device-emission-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "18fcf23c83cffc4effe866da4fb5c5435eddc9766c98220364ab2dd6e57d5896",
+        "task.log": "a6bcb5dc3ce70b6d2d19d55f289cdb87036a4df420ad26610f35f7b70ed4ff6e",
+        "profile/result.json": "646b9d7fd82f453c6a8e409c165b37b4accf5239481ce816926d4c283e9f1ed7"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 14375,
+      "AI_CORE": 176
+    },
+    "kernels": {
+      "BatchMatMulV2": 176,
+      "GatherV3": 3704,
+      "tide_emission_chunk": 186,
+      "tide_emission_plan": 117
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930185755.csv": "e78722e2cac5dbe7f8f292bb2e917b0f91af2f0be60341b61062de23a00b9b7b",
+      "api_statistic_20260930185755.csv": "4b9ed65653512dea1fd5f2a39a81cb71c57d5df626c89b771db640be93ab6b2b"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": [
+    "build-device-emission-dev01",
+    "device-emission-fixed-dev02",
+    "device-emission-regressions-dev01",
+    "device-emission-gates-dev04",
+    "device-emission-profile-dev04"
+  ]
+}
