@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T14:32:48.002592+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T14:40:01.232703+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **523b323**, memory implementation committed/pushed. No pending authorization or pause. No subagents.
+HEAD **0b724a3**, memory evidence committed/pushed; implementation523b323. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -32,33 +32,34 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
 
 ## Active work and next actions
 
-1. Shared forward budgets/serial workspace reuse523b323 clean qualification
-   PASSED: full build/four CTests,all29 cells and independent memory profile.
-   All three memory-clean01 jobs are terminal0; reviewed evidence recorded in
-   docs/evidence/device-memory-20260930.{json,md}, ready to commit/push separately.
-   This is FP32 HARD inference,not training or throughput.
-2. Event batching development remains uncommitted. Its full build is at host
-   targets after Ascend C kernels compiled. Submitting device-event-batch-gates-dev01
-   with bounded600s dependency,queue120s,one NPU,gate900s; event-batch first then
-   all30 cells. Separate profile follows its semantic pass. Never modify that
-   frozen source/build while it runs.
-3. Event node-time batching implemented but UNTESTED. Submitting full frozen
-   build-device-event-batch-dev01: snapshot event-batch-dev01,build
-   device-event-batch-dev01,core origins-npu-clean01,jobs2,1800s. New event_batch
-   gate planned72 analytic/restore cases and216 general topology windows/restores.
-   Run it first,then all30 cells,then separate placement profile. All jobs use
-   new immutable paths; never mutate memory-clean01 while it runs.
-   Changed event plan/payload/cache/index kernels,shared key tile address adapter,
-   packed_event_attention,profile capability/footprint,registry/CMake; new
-   ascendc/event_sequence.h and event_batch_check.cpp. Actual ready events get
-   packed QKV in one device loop,then causal/window queries in another. Old KV
-   and compact new rows stay immutable until final owner commit; no per-event
-   KV copying. Observe-all without selected clear admits node-time batches;
-   selection-dependent adoption/clear keeps complete single-frame fallback.
-4. After correctness/profile,update content-flow docs and commit implementation;
-   qualify exact source separately. Continue fiber time batches,remaining modules,
-   public presets/matrix,peer progression,resident backward/VJP/optimizer and
-   representative/full-size performance. F1–F7 are not complete.
+1. Event node-time batching is ready to commit. Full frozen event-batch-dev01
+   build/four CPU CTests/all30 cells and independent profile PASSED,all terminal0.
+   New gate72 analytic/restore cases +216 general windows/restores,18 actual
+   multi-time windows. Profile97,088 AIV+3,075 AI Core,no AiCPU/fallback. Existing
+   memory/attention/fiber/clock/selection/transport/lifecycle regressions all pass.
+2. Commit/push only event-batch implementation/registry/CMake/docs, preserving
+   older accelerator dirty work below. Then full exact-commit event-batch-clean01
+   build (1800s,jobs2),all30 cells (900s,one NPU,queue120s) and event-batch profile;
+   record reviewed clean evidence in a separate commit. Matching core remains
+   origins-npu-clean01. No throughput or resident training claim.
+3. Event implementation: two device loops pack all actual ready QKV,then queries/
+   output. Immutable old KV plus compact new rows supports causal prefix/window
+   indices even when a stage has more events than semantic window capacity.
+   Only final owner cache commits; all intermediate diagnostic slots are retained.
+   Observe-all without selected clear admits node-time batches; selection-dependent
+   adoption/clear and mixed fiber regions keep legal single-frame fallback.
+   Changed kernels/helpers and event_batch_check.cpp are not yet committed.
+4. Next implementation is fiber node-time batches, then remaining module/public
+   matrix/peer progression/resident backward/VJP/optimizer and staged performance.
+   Fiber design must preserve same-fiber all-key visibility and exact repeated
+   log-bias subtraction. One vector loop per owner/cache tile can process successive
+   event biases, saving per-event bias rows for later packed queries/diagnostics;
+   account for that bounded scratch before choosing chunks. KV remains append-only
+   within capacity,commit only the last owner event. No exponent/linear-decay
+   shortcut,unproved selection/clear batching,or per-event host control.
+5. Shared memory523b323 clean full build/four CTests/all29/profile qualified;
+   evidence0b724a3 committed/pushed. All memory-clean01 jobs terminal0.
+   F1–F7 overall are NOT complete. Historical CPU Attention stays paused.
 
 Memory implementation: CPU-deferred profile tables; reserve all six module minima
 before growing physical chunks; conservative/aggressive surplus headroom; bounded

@@ -6,8 +6,9 @@ namespace tide::device_online {
 struct EventCache {at::Tensor key,value,lengths;};
 struct EventGroupStage {at::Tensor events,counts;EventCache cache;JournalProposal journal;};
 struct EventAttentionStage {at::Tensor values;std::vector<EventGroupStage> groups;};
-// One actual event per owner in a ready stage. Groups share head geometry only;
-// topology/input do not specialize the schedule. KV storage stays compact.
+// Ordered actual node-time events share a staged immutable prefix plus compact
+// new KV. Groups share head geometry only; topology/input do not specialize the
+// schedule. Selection-dependent adoption/clear retains single-frame fallback.
 struct EventAttentionGroup {
   int64_t nodes,width,query_heads,kv_heads,head_width,kv_width,parameters,owners,rows,capacity,chunk,key_rows;
   std::vector<int64_t> node_map;

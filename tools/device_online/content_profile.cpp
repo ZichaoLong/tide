@@ -29,9 +29,12 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_uplo
     all_content&=r.read_mode=="content";
   }
   for(const auto& n:graph.nodes)if(n.clear&&graph.regions[n.region].read_mode!="content")causal_regions[n.region]=1;
-  // This cache adapter has a one-event-per-owner state contract. It still packs
-  // independent owners and all message rows, and accepts every legal topology.
-  for(const auto& n:graph.nodes)if(!n.identity&&(is_fiber_attention_profile(n.memory)||n.memory=="attention"))causal_regions[n.region]=1;
+  // Event attention can prepare causal node-time KV when adoption is independent
+  // of selection. Fiber attention still has a single-frame adapter contract.
+  for(const auto& n:graph.nodes)if(!n.identity) {
+    if(is_fiber_attention_profile(n.memory))causal_regions[n.region]=1;
+    if(n.memory=="attention"&&(!graph.regions[n.region].observe_all||n.clear))causal_regions[n.region]=1;
+  }
   for(const auto& w:model.nodes) {
     if(w.kernel||w.read_kernel||w.next_kernel||w.aggregate_kernel||w.full_kernel)
       throw std::invalid_argument("content flow requires built-in module declarations, not custom kernel handles");

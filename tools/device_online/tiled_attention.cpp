@@ -25,7 +25,7 @@ at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const 
   p.copy(cursor,zero);p.copy(sum,empty);p.copy(normalization,empty_norm);p.mark(begin);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_tile)(1,stream,
     ptr(events),ptr(tokens),ptr(ids),ptr(bias),ptr(cursor),ptr(indices),ptr(valid),ptr(additive),ptr(go),ptr(work),ptr(error),
-    c,h,s.kv_heads,s.capacity,s.owners,k,int64_t(s.fiber)),"plan actual attention key tile");},
+    c,h,s.kv_heads,s.capacity,s.owners,k,int64_t(s.fiber),s.event_rows),"plan actual attention key tile");},
     {events,tokens,ids,bias,cursor,indices,valid,additive,go,work,error});
   p.branch(go,{done,body});p.mark(body);
   p.index_select(index_key,0,indices.reshape({-1}),keys.reshape({-1,d}));

@@ -28,6 +28,7 @@ struct TiledAttentionSpec {
   int64_t heads,kv_heads,capacity,owners,keys;
   bool fiber;
   double scale;
+  int64_t event_rows=0; // Nonzero selects immutable old + compact node-time KV.
 };
 // Queries already refer to actual packed work. Dummy query/key padding has
 // independent zero storage and never changes a real denominator. work holds

@@ -17,6 +17,7 @@ std::array<long double,3> footprint(const ContentProfile& p,const Continuation& 
     const auto kv=w/heads.first*heads.second;
     fixed+=24.L*(q.batch_size*static_cast<long double>(count)*l.kv_rows+1)*(2.L*kv+1)
       +64.L*(count+1.L)*w*w+128.L*(l.queue+1.L)*(w+8.L)
+      +16.L*(l.queue+1.L)*(2.L*kv+w) // Compact stage QKV for complete time batches.
       +(l.diagnostics?24.L*l.kv_trace_rows*(2.L*kv+8):0);
     row+=96.L*w*w+512.L*w+256;
     key+=32.L*w+48.L*heads.first;

@@ -46,11 +46,12 @@ Pooling reservations are included before choosing the effective attention chunk.
 Sum-only graphs omit the additional pooling stage. These inference paths use
 the same parameter/profile validation as the independent core reference.
 
-For this adapter the ready planner exposes at most one complete region-time frame
+For the fiber adapter the ready planner exposes at most one complete region-time frame
 per sample and attention region per iteration. This is an explicit implementation
 capability limit, even for content Read; it does not reject legal feedback or input.
 Independent owners and message rows remain packed, and other regions retain their
-legal time prefixes. General multi-time attention state batches are still pending.
+legal time prefixes. Fiber multi-time state batches are still pending; the event
+adapter's separate node-time contract is described below.
 The proposal is computed before Read/selection, then adopted only under observe-all
 or actual selection. Selected clear empties the persistent cache while preserving
 the pre-clear comparison. Bias decay repeats subtraction for each exact local tick;
@@ -87,7 +88,7 @@ Event and fiber attention may coexist. Their actual proposal rows overwrite
 their own ready indices; scratch arrays are not added together because unrelated
 rows can retain values from earlier device iterations. Each event group preserves
 selected-only adoption, clear, pre-clear comparison and continuation independently.
-It currently shares the one-complete-region-frame adapter limit. Compact snapshots
+Compact snapshots
 and optional journals expose the two event slots, without a fiber log-bias slot.
 `kv_trace_rows` bounds diagnostics separately per static event head group; their
 combined reservations are included in the workspace estimate. Group minima are
@@ -95,6 +96,35 @@ reserved before fiber chunks expand. `event_attention_chunks`, the effective chu
 limit, KV peak and capacity are reported separately from the fiber counters.
 These capabilities require their own completed qualification evidence; they do
 not follow from the earlier fiber-only reports.
+
+### Event node-time batches
+
+When a region observes all candidate states and its event-attention nodes do not
+clear selected states, the device can prepare a complete certified time prefix
+before selection. The ready planner chooses that prefix online from actual queued
+messages and topology closure. One device loop packs QKV for the actual node-time
+events; a second loop packs queries and output projections. Their physical chunks
+may differ from logical time batches. A time batch may cross many physical chunks.
+
+The stage retains immutable original KV arenas and one compact new KV row per
+actual event. Query metadata selects the appropriate causal prefix and optional
+sliding window through gather indices. Later projected rows are present in scratch
+but cannot enter an earlier query's denominator. Cache windows can slide across
+multiple new rows even when the stage contains more events than `kv_rows`; the
+bound applies to each logical retained cache. The queue separately bounds stage
+events, and the shared memory estimate includes their compact QKV scratch.
+There is no per-event copy of the complete cache. Only the final adopted tail is
+copied back per owner after all preflights succeed. Diagnostics reconstruct every
+old/proposed cache from the same immutable stage before commit.
+
+Selected-only adoption and selected clear retain complete single-frame fallback;
+fiber nodes sharing the region also retain that adapter's restriction. These are
+module capabilities, independent of fixture topology and input values. Other
+regions retain legal time batches, and every legal positive-delay topology still
+works, including feedback. `max_node_time_batch` and `device_stages` distinguish
+the actual schedule; `event_attention_chunks` counts both executed projection
+and query/output chunks. Neither counter is a throughput claim. Full-key and
+tiled-key paths share the same prefix/window addressing and compact continuation.
 
 ### Shared forward allocation budget
 
