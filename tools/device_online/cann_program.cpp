@@ -183,6 +183,9 @@ void CannProgram::copy(const at::Tensor& target, const at::Tensor& source) {
     throw std::invalid_argument("CANN copy requires identical shapes and dtypes");
   p.op("aclnnInplaceCopy",p.tensor(target,target.scalar_type()),p.tensor(source,source.scalar_type()));
 }
+void CannProgram::zero(const at::Tensor& target) {
+  auto& p=*impl_;p.op("aclnnInplaceZero",p.tensor(target,target.scalar_type()));
+}
 void CannProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;const auto dtype=a.scalar_type();
   p.op("aclnnMul",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
@@ -218,6 +221,10 @@ void CannProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
 void CannProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnTanh",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void CannProgram::tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& out) {
+  auto& p=*impl_;const auto dtype=gradient.scalar_type();
+  p.op("aclnnTanhBackward",p.tensor(gradient,dtype),p.tensor(activation,dtype),p.tensor(out,dtype));
 }
 void CannProgram::relu(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.op("aclnnRelu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));

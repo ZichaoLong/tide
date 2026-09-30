@@ -3,6 +3,7 @@
 #include "tide/resident.h"
 #include "packed_queue.h"
 #include "state_vjp.h"
+#include "full_vjp.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -35,6 +36,7 @@ class ContentFlow {
   Continuation snapshot() const; // Explicit complete-cut CPU materialization.
   Result result() const; // Latest window; trace/messages require diagnostics.
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
+  FullTape full_tape() const; // Identity/tanh only; other Full contracts refuse.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;

@@ -69,7 +69,7 @@ def main():
         names.extend(("tide-device-closure-check", "tide-device-queue-check",
                       "tide-device-broadcast-check", "tide-device-ready-check", "tide-device-selector-check",
                       "tide-content-flow-check", "tide-content-window-check", "tide-packed-full-check", "tide-packed-sum-check",
-                      "tide-device-add-check", "tide-device-state-vjp-check", "tide-device-clock-check", "tide-device-norm-check", "tide-device-lh-full-check",
+                      "tide-device-add-check", "tide-device-state-vjp-check", "tide-device-full-vjp-check", "tide-device-clock-check", "tide-device-norm-check", "tide-device-lh-full-check",
                       "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
                       "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
         names.append("libtide-resident.so")

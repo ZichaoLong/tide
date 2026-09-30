@@ -203,4 +203,13 @@ StateTape ContentFlow::state_tape() const {
   return {s.events->meta,s.events->values,s.events->count,s.profile.config,s.profile.decay,
           s.profile.retention,s.profile.clock_policy,s.boundary.batch_size,repeat,s.limits.max_repeat_ticks};
 }
+FullTape ContentFlow::full_tape() const {
+  if(!impl_||impl_->failed)throw std::logic_error("Full tape unavailable on closed/failed content flow");
+  const auto& s=*impl_;
+  if(!s.limits.diagnostics)throw std::logic_error("Full tape requires recorded forward values");
+  for(const auto& n:s.profile.graph.nodes)
+    if(!n.identity&&n.full!="identity"&&n.full!="tanh")throw std::invalid_argument("Full VJP contract unavailable");
+  return {s.events->meta,s.events->values,s.events->count,s.full->kinds(),s.full->weights(),s.full->biases(),
+          s.boundary.batch_size,s.profile.width,s.full->has_tanh()};
+}
 } // namespace tide::device_online

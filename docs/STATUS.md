@@ -3,7 +3,7 @@
 Updated 2026-09-30T17:44:05.205509+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **3e2d54d**,Add state-chain VJP committed/pushed;public resident evidence8b89080;
+HEAD **4a29b7c**,state-chain VJP qualification committed/pushed;public resident evidence8b89080;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -144,10 +144,14 @@ docs/evidence/device-state-vjp-20261001.{json,md};34 cells,216 isolated cases,4 
 Uncommitted next increment: identity/tanh Full VJP in tools/device_online/full_vjp*,
 three Ascend C plan/payload/reduction kernels, CannProgram zero/tanh_backward,
 ContentFlow borrowed full_tape and PackedFull parameter accessors, build/gate registration.
-Tests cover CPU FP32/FP64 autograd, poison, None/zero, repeated owners, short/empty replay,
-real forward tapes and refusals. Dev full-vjp-dev01 freeze/build via task-local
-full_vjp_relink.py reuses checked unchanged state-vjp-add-clean01 objects, compiles
-three kernels plus changed C++ objects in a new build. No device qualification yet.
+Dev build-full-vjp-dev01 PASSED via task-local full_vjp_relink.py: verified unchanged
+state-vjp-add-clean01 objects plus three new kernels and changed C++ objects in a new directory.
+full-vjp-dev01 PASSED:96 CPU FP32/FP64 autograd cases (each full/short/empty replay),
+2 real device tapes, numerical FP32/FP16,failure,state-vjp,content,window,resident.
+full-vjp-profile-dev01 PASSED:8,036 AIV+288 AI_CORE,no AiCPU/host fallback.
+This is local-component placement,not throughput.
+No immutable qualification yet; contract docs/resident-full-vjp.md.
+After profile/audit,commit implementation,launch full clean build then component gate/profile.
 
 Continue F4/F5: Full/Aggregate/transport adjoints and complete resident training,
 peer progression,FP16 and public matrix,then F6 representative/full-size comparison.

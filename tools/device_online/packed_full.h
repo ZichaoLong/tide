@@ -14,6 +14,10 @@ class PackedFull {
   const at::Tensor& chunks() const {return chunks_;}
   int64_t chunk_rows() const {return chunk_;}
   int64_t reserved_bytes() const {return reserved_;}
+  bool has_tanh() const {return any_tanh_;}
+  const at::Tensor& kinds() const {return kinds_;}
+  const at::Tensor& weights() const {return weights_;}
+  const at::Tensor& biases() const {return biases_;}
   static long double minimum_bytes(const std::vector<int64_t>& kinds,int64_t width);
  private:
   int64_t nodes_,width_,chunk_,reserved_=1;

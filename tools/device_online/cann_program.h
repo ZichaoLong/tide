@@ -20,6 +20,7 @@ class CannProgram {
   void branch(const at::Tensor& int32_index, const std::vector<size_t>& labels);
   void add(const at::Tensor& destination, const at::Tensor& increment);
   void copy(const at::Tensor& destination, const at::Tensor& source);
+  void zero(const at::Tensor& destination);
   void multiply(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void divide(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void softplus(const at::Tensor&, const at::Tensor& output); // beta=1, threshold=20
@@ -27,6 +28,7 @@ class CannProgram {
   void softmax(const at::Tensor&, int64_t axis, const at::Tensor& output);
   void sigmoid(const at::Tensor&, const at::Tensor& output);
   void tanh(const at::Tensor&, const at::Tensor& output);
+  void tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& output);
   void relu(const at::Tensor&, const at::Tensor& output);
   void silu(const at::Tensor&, const at::Tensor& output);
   // Normalize the last dimension with unit affine parameters. Per-owner
