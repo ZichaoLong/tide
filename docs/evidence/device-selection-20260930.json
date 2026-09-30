@@ -1,0 +1,201 @@
+{
+  "schema": "tide-device-selection-evidence-v1",
+  "source": "6220011f1843687a634f81ffc96b62ad77b3a006",
+  "scope": "count/positive selector and multi-queue transactions; not complete graph execution, training or throughput",
+  "runtime": {
+    "arch": "aarch64",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0",
+    "soc": "Ascend910_9392"
+  },
+  "core_source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+  "core_cpp_sha256": "d1121e9da4ee03e6e9f229ef97a4c738cde7f1a14afc4b88e66538140b1fe3ed",
+  "component_sha256": "6f18447c7f667c9cb0cb1d7b404da44aa541d7ca3234cea3b25494042e607d28",
+  "binary_sha256": {
+    "tide-device-control-check": "5c0f398afeff2d66652eb5880a491050ed05856763088db04585de9fdb759ad3",
+    "tide-device-numerical-check": "932f16454e5ef5443d72ea913bce6a5f797c1a14a1d10fc239e7f7df76016df7",
+    "tide-packed-queue-check": "b1c533d8e5cf9fbe98512671561de17c59550edc0004aecf9c0e0286576a34d4",
+    "tide-device-closure-check": "9bcc788fbb1911d9dd28fd4b7c8c0b7df25afd0d87801453021281323951e21b",
+    "tide-device-queue-check": "40566758d3f9ad73761ec00f06f714cf901a643f19430488a0632d0677e0c1b5",
+    "tide-device-broadcast-check": "213d8b769f3cd786196fd593f90ce8e9441dcad167c397c7e751a601324ae788",
+    "tide-device-ready-check": "e79a96d582d0a78f687c5b177ab4b5dee90787862ef1c07e9a989834221bdb2a",
+    "tide-device-selector-check": "d19b6cb85a38d8bc1dfb6ab496c401b02162e3f0015db0b119f61e48ad1f06c3"
+  },
+  "runs": [
+    {
+      "name": "build-device-selector-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "6220011f1843687a634f81ffc96b62ad77b3a006",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-selector-clean01/status.json",
+          "sha256": "faa6f9bdd96ee1302c4492da389740c00e918ce30c373591666ba1ae6df3cf93"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-selector-clean01/task.log",
+          "sha256": "e94038f4d6ab4eeab4732ce6e060f34765ab2882b38197069c0e9ddb09124f59"
+        }
+      ]
+    },
+    {
+      "name": "device-components-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "6220011f1843687a634f81ffc96b62ad77b3a006",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/status.json",
+          "sha256": "9ea85b910fd9e275864687eee1a1665106fcf6545054f5ed195d3340b6a3ddf1"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/task.log",
+          "sha256": "a448758843635e75a73dad5db2521c2e60286d3b4444188e29199d27a7d96e66"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/result.json",
+          "sha256": "729a9b01fa8a66659e05483c9d600ea877daa5354fcfa32b70a8f690fe180e4f"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/control-float32.log",
+          "sha256": "9db07259e87a133351226221921f78b7ab201ffc6f90049e6939d0022f702ec3"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/numerical-float32.log",
+          "sha256": "402937a31ea02e4cf608f4d4e00be4db9d1691a17c5b187c2cdfc28620bd612b"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/numerical-float16.log",
+          "sha256": "53c2f190da1f076b0021e93029086ea53217e2c2b87a61c254c6c9db7396cb00"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/queue-float32.log",
+          "sha256": "b27ff5242cb0a12c093680b0926c33ccef22b06c412093d3931edd2176c8c881"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/closure-float32.log",
+          "sha256": "d5dd7013033c64c25f1a9db5f1184d023d5d814c0c443e82f76762ff76a46f87"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/transaction-float32.log",
+          "sha256": "dcd49dd5415f2c548d62453a2ad41402aae9d76170ce0feb9f45b355daa90352"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/transaction-float16.log",
+          "sha256": "fefa839342bc633387eeb2aacc7a658469594cca749585bf54eadc94454142ee"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/broadcast-float32.log",
+          "sha256": "5c84eec0aacacd69f9c5e3e1ef004fe15919a6a0a9c2fc226370700beb29105c"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/broadcast-float16.log",
+          "sha256": "70f167dfa5716187b1aa1af05833e5671993c36d1b91b344ebbea5faaccc459a"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/ready-float32.log",
+          "sha256": "ff7a4062049c46246da23cd2181ce154dc67877343167fafc6e145ee55442707"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/ready-float16.log",
+          "sha256": "7dc5f459343d41ed6cc8d39bd3042d66e97321af502f83c1f6bf2d1ad032dff1"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean02/verified/selector-float32.log",
+          "sha256": "a871bf768b7eb3ee433ce807d42208da7c42cbaa6680c9eb90a1ea931965e140"
+        }
+      ]
+    },
+    {
+      "name": "device-selector-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "6220011f1843687a634f81ffc96b62ad77b3a006",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-selector-profile-clean01/status.json",
+          "sha256": "88d186e93db222862723bff00540d2eb8c2fb90bb96c135c88640d8169bd0226"
+        },
+        {
+          "path": "artifacts/execution-flows-device-selector-profile-clean01/task.log",
+          "sha256": "99352d9d2ddb0536c6cdf31064ab47e03c8a9bd4cba01d0bbb7ffda4dbbb66b3"
+        },
+        {
+          "path": "artifacts/execution-flows-device-selector-profile-clean01/profile/result.json",
+          "sha256": "3ab56c7237ef3246f35487fba267dab31bd95d29afd0c15d3565bd2c94d9260b"
+        },
+        {
+          "path": "artifacts/execution-flows-device-selector-profile-clean01/profile/profile.log",
+          "sha256": "30d03a3053edd711988203d1195db02bf268124ec1f5b29b9c5a2091bca60589"
+        }
+      ]
+    },
+    {
+      "name": "device-queue-profile-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "6220011f1843687a634f81ffc96b62ad77b3a006",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean02/status.json",
+          "sha256": "f2c286993653853b554d49a5eea8e73582cebd573b63c91cea32047464a8a2ad"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean02/task.log",
+          "sha256": "bba1afc768c742d9b985dff19838ac32662e993510145eb8f457de9c1d57ad7f"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean02/profile/result.json",
+          "sha256": "6ebb71d191c2cbc032f9cb8cfff6782503fd6e5f29e1062d36c8c6ed2c2dd36b"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean02/profile/profile.log",
+          "sha256": "7c2112e564c21104e6242c432f58aa74b4b546530ac26a5148761da174700537"
+        }
+      ]
+    }
+  ],
+  "profiles": {
+    "device-selector-profile-clean01": {
+      "component_kernel_tasks": 39,
+      "engines": [
+        {
+          "AI_VECTOR_CORE": {
+            "count": 428,
+            "summed_task_us": 1179.76,
+            "summed_task_fraction": 1.0
+          }
+        }
+      ],
+      "exported_inputs": [
+        {
+          "op_summary_20260930133053.csv": "d66f27c43d2d100b5544b3ef42a87dce01455ade379d733a2974b226f264f1cb",
+          "api_statistic_20260930133053.csv": "1557e946732f0946c78559b56d7a3693daa30ecd0cf3f42359a9ee93b175141b"
+        }
+      ]
+    },
+    "device-queue-profile-clean02": {
+      "component_kernel_tasks": 63,
+      "engines": [
+        {
+          "AI_VECTOR_CORE": {
+            "count": 475,
+            "summed_task_us": 1164.496,
+            "summed_task_fraction": 1.0
+          }
+        }
+      ],
+      "exported_inputs": [
+        {
+          "op_summary_20260930133058.csv": "42b8deeb0c763ee53e9d031848d24858730916dce93f0a31d8532d9d79c45f3b",
+          "api_statistic_20260930133058.csv": "9107e5303e94f0c0a271d939f9a2cb2f06beadcbf61e69e62b3e80971c3b83a1"
+        }
+      ]
+    }
+  }
+}

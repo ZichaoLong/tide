@@ -13,33 +13,30 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: selector and grouped queue transactions passed development and are ready
-for an implementation commit. `FrameSelector` covers count-v1/positive-v1 with
-FP32 scores, exact int64 counts/ties, complete candidate softmax and proposed
-history. `QueueTransaction` now preflights/snapshots all participating queues
-before any shared-error commit, including cross-queue payload aliases.
-`build-device-selector-dev02` and `device-components-dev02` PASSED all12 cells
-on frozen selector-dev02 with matching clean runtime-npu-clean01 core. Queue
-cells include46 ordinary +6 transaction-group cases per FP32/FP16; selector39.
-`device-queue-profile-dev03` PASSED:63 proposal tasks, all475 device tasks AIV.
-`device-selector-profile-dev01` PASSED:39 selector tasks, all428 tasks AIV.
-These are development component results, not complete graph execution/training.
+NEXT: clean6220011 selector/group transactions qualified. All four jobs passed:
+`build-device-selector-clean01`, `device-components-clean02` (all12 cells),
+`device-selector-profile-clean01` (39 tasks/all428 AIV),
+`device-queue-profile-clean02` (63 tasks/all475 AIV). Evidence:
+[device-selection-20260930](evidence/device-selection-20260930.md/json).
+Core runtime-npu-clean01 reused with verified source/binary fingerprints.
 
-Commit only the device implementation/docs/build registry (preserve older dirty
-consumer work), then run a clean build and all12 cells plus queue/selector
-profiles at that exact commit. Core has not changed since eff5945; the build
-driver checks source and binary fingerprints before reusing runtime-npu-clean01.
-Use snapshot selector-clean01/build device-selector-clean01, jobs2,900s build;
-queue waits120s, gates900s, profiles480s. If a job fails, preserve it and fix from
-the reproducer before qualifying. Then separately commit evidence. Continue
-integration of real module work/Read, selection, state/continuation and actual
-emission feedback; the no-emission drain is not a graph executor.
+Uncommitted `tools/device_online/content_*`, `device_journal*` and corresponding
+Ascend C kernels implement a first true device numerical loop for an explicit
+existing-module profile: sum Aggregate, identity/EMA state, linear content Read,
+count/positive selection, adopt/clear Next and identity broadcast Full. FP32
+inference only. Arbitrary positive-delay graphs, online actual emissions,
+transactional queues/state/history, bounded diagnostic logs and cut continuation.
+Still writing the build registry and independent full-observable CPU comparison;
+DO NOT claim compilation or runtime success yet. Next build frozen content-dev01
+with jobs2/900s, then content gate (120s queue/900s task), preserve failures.
+The numerical kernels initially use scalar AIV loops, not optimized throughput.
+Continue real module integration (Add/Attention/Full), general contracts, training
+and multi-device delivery after this vertical gate; do not stop at components.
 
-Clean eff5945 qualification is committed as f604bfc:
+Clean eff5945 earlier qualification is committed as f604bfc:
 [device-packing-20260930](evidence/device-packing-20260930.md). All eight jobs
 passed, including CPU six CTests, NPU core/component builds, eight lifecycle
-processes, all11 component cells and three placement profiles. Do not reuse
-an older binary under a new source claim.
+processes, all11 component cells and three placement profiles.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
