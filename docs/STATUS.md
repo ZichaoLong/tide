@@ -1,63 +1,87 @@
 # Current handoff
 
-Updated 2026-09-30T02:38:10.342592+00:00. **ACTIVE: the user confirmed the consolidated contract and requested execution.**
-General online implementation/correctness work has resumed. The historical CPU
-Attention unit remains suspended deliberately; do not resume it or launch scale
-sweeps ahead of the general algorithm gates. No subagents, no push; reference
-repos and ObsidianVault remain read-only.
+Updated 2026-09-30T03:09:06.578642+00:00. **ACTIVE: user confirmed execution of the general-online contract.**
+Repo /home/zlong/llm/graph-execution-foundation; real path
+/var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
+No subagents, no push. Reference repos and ObsidianVault remain read-only.
 
-## Authoritative scope and next action
+## Contract and next action
 
-Read [execution-flows.md](execution-flows.md): consolidated Chinese review contract,
-2026-09-30. [ROADMAP F1–F7](ROADMAP.md) is the single backlog. Older finite-static
-assessment scope does not supersede this revised general-online delivery.
+[execution-flows.md](execution-flows.md) is the consolidated user-confirmed contract;
+[ROADMAP F1–F7](ROADMAP.md) is the single backlog. General online node-time greedy
+prefill must accept every legal family topology/input, including positive-delay
+PDG feedback. No numerical route prepass, whole-window potential expansion or
+fixture-specific shortcut. Allow natural streaming degeneration. NPU residence
+includes online decisions and progression, not only device tensors/static capture.
 
-Current agreement: general online greedy node-time prefill for every legal graph/
-input in each family, including positive-delay PDG feedback; exact single-action
-fallback may degenerate to streaming. Compress time recursion into legal block
-computation when contracts allow it; do not assume constant stage count for arbitrary
-feedback. No CPU/numerical route discovery pass and no fixture-specific scheduler.
-Static graph/index/owner preparation is allowed. NPU resident means online decisions,
-routing/readiness/batching and progression on device, with correct continuation.
-Existing static expansion/capture remains a scoped optional backend.
+Packing must cover emission/routing/placement/aggregation/compute/peer copies.
+Conservative and aggressive-safe byte-budget chunking remain to implement;
+performance prioritizes larger legal batches with persistent allocations/headroom.
+Do not split complete fibers/attention normalization or change continuation/VJP/
+optimizer boundaries. Profiling throughout; formal timing separately.
 
-Performance scope: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch; CPU/NPU,
-streaming/prefill, inference/training. PDG PyTorch is correctness-only as needed.
-Five selectable presets (CPU, Mixed A/B/C, NPU resident) plus fine-grained switches
-are defined once in the contract. Correctness/medium screening cover all five;
-full-scale compares CPU + screened mixed + resident, both schedules. FP32 primary,
-NPU FP16 separate, CPU FP64 primarily the correctness anchor; GPU execution pending.
+Required matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch; CPU/NPU,
+streaming/prefill, inference/complete training. Five presets CPU + Mixed A/B/C +
+resident, fine switches retained. Small/medium covers all; full size compares CPU,
+screened mixed, resident, both schedules. FP32 primary, FP16 separate; CPU FP64
+reference. Three fresh processes for recommendations. CUDA hardware remains pending.
+Historical slow CPU Attention must not block general implementation.
 
-Packing must cover emission/routing/buffer placement/aggregation/compute/peer copy,
-not only attention. Use bulk primitives and justified isolated backend fusion;
-no per-message host-fill loop disguised as a tensor pool. Logical stages, API calls
-and actual device kernels are distinct. Profiling is an implementation/verification
-feedback loop as well as final evidence; instrumented and timing runs stay separate.
+NEXT: commit the tested host-owned greedy increment, then launch clean fixed-source
+CPU build/directed gate and matching NPU build/semantic gates. Keep source/evidence
+commits separate. Continue byte-budget batching and isolate the proven CANN control
+primitive into a project-owned adapter; then online device queues/packing, complete
+consumers, multi-device/training and staged performance. Do not call the host
+scheduler or scalar device-loop probe complete resident execution.
 
-Both conservative and aggressive-safe chunking are supported policy targets.
-**Performance validation prioritizes aggressive-safe chunking:** use larger legal
-batches within a calibrated explicit memory budget, required persistent allocations
-and headroom; split before over-budget submissions rather than deliberately provoke
-OOM. Exact thresholds/mechanisms remain to implement and validate. Preserve complete
-fibers/normalization, state/KV/messages, loss/VJP/optimizer boundaries. Runtime external
-resource changes can still fail explicitly; never drop work or silently fall back.
+## New greedy implementation and development checks
 
-First implementation increment: audit the general algorithm/continuation contract against
-the existing implementation and pinned semantic sources; identify reusable code and
-actual gaps. Then small/medium correctness + focused profiles, coherent commits,
-complete backend/training paths, staged scale tests and bounded formal comparisons.
-Do not blindly restart dev06 gates or full-size static capture as the main plan.
-Those regressions remain necessary for reused code, but are not the whole task.
-Historical slow CPU Attention is supplementary, not a blocker to implementation.
+Source before this increment:0df0de3 (contract). Optional `schedule=greedy` /
+`tide::Greedy` added in Python and C++, using actual pending fibers, multi-source
+positive-delay region closure, certified region-time prefixes and existing local
+block kernels. Public config/runtime/native and native Settle frontend support it.
+Defaults unchanged. Physical parallel edges remain distinct. max_events limits
+simultaneously live fibers, not total work; it is not a complete memory budget.
+Per-atom host bookkeeping remains. Independent scalar references are retained.
 
-NEXT: implement a separate general greedy scheduler using current pending-message
-metadata and conservative positive-delay closure. Compute earliest possible
-unfinished region events from actual pending events using a multi-source shortest-
-path bound; batch complete ready region-time prefixes, execute once, publish real
-messages, and repeat. No whole-window potential-event expansion or numerical route
-prepass. Reuse existing local region/state/Full kernels, retain independent scalar
-CPU schedules. Gate feedback, arbitrary delays, region-history order, int64 huge
-clock gaps, absence, cuts and isolated VJPs before native/device scaling.
+Development results:
+- build-greedy-cpu-dev01: full CPU core/bindings/clients build passed; frozen
+  greedy-dev01, TASK/builds/greedy-core-cpu-dev01. Dirty snapshot hashes retained.
+- greedy-gates-cpu-dev02:611 pytest checks passed in102.53s, frozen greedy-dev02;
+  directed greedy/public/carried-training/checkpoint/Settle/frontier/cross-family.
+  Prior dev01 failed only because the new rejection test omitted native
+  OverflowError;97 preceding tests passed. Corrected test was rerun in dev02.
+- Additional cyclic packed same-fiber attention/cache/isolated-VJP tests:16 passed
+  (CPU FP64/FP32, Python/native, observe-all/selected/clear/old policies).
+- greedy-client-dev03: direct C++ Greedy feedback/parallel edges/full observables/
+  VJPs/continuation/capacity and extended Settle literal recurrence passed in
+  FP64 and FP32 (four runs). Reused byte-identical core archives are hashed in
+  reused-core.json; development only, not final qualification.
+- dev02 CTest found no registered tests; no CTest pass claim. Current CMake now
+  registers four standalone Greedy/Settle CPU tests, pending clean-build gate.
+- Python-only development initially46 + public25 + route/overflow4 passed;
+  these overlap later611, do not sum them as independent qualification counts.
+
+Task root TASK=/mi/data2T/zlong/tide-execution-flows. Runs/status/logs under
+TASK/runs/NAME, linked from artifacts/execution-flows-NAME. Client/source code is
+now ready for a coherent implementation commit; old consumer edits remain separate.
+
+## Device-control feasibility
+
+All four small probes are terminal and retained, one NPU each,120s queue/90s
+workload bounds. Scripts under TASK/launchers/device-loop-probeNN.py print hashes.
+- probe01 failed107005: NPUGraph stream is not an explicitly bound model stream.
+- probe02 failed107000: ordinary Torch stream cannot be bound in this mode.
+- probe03 raw ACL_STREAM_PERSISTENT + explicit model + ACLNN successfully built,
+  then execute failed507000. Own runtime log:headSqArrMax=0. The probe mistakenly
+  unbound its only stream before execution.
+- probe04 retained binding until completion: **passed**, physical13/logical0,
+  CANN9.0.0 + TorchNPU2.10. Device int64 count/limit controlled2,5,1 iterations
+  of the same compiled loop. No per-iteration host scalar decisions; all cleanup0.
+
+This is a capability result, not a graph scheduler, packed queue, full resident
+training or performance result. Next keep buffers/workspaces/model/stream/labels
+alive through execution and establish project-owned lifecycle/continuation tests.
 
 ## Paused job and evidence
 
@@ -81,13 +105,7 @@ before any SIGCONT. A fresh run may be required; paused elapsed time is not thro
 evidence. Preserve logs and do not let this unit's timing lock silently block future
 formal timing. Stop/restart handling must be deliberate and recorded, not automatic.
 
-## Source and implementation inventory
-
-Repo /home/zlong/llm/graph-execution-foundation; real path
-/var/tmp/zlong-graph-execution-foundation/repository. Branch graph-execution-foundation;
-HEAD 6dbece052d19ff3db5df4364cb62768d7541863c. No new implementation commit during alignment.
-Significant uncommitted code must be preserved. Alignment edits: STATUS, ROADMAP,
-execution-flows.md only; no implementation changes or new device probes/tests.
+## Preserved prior complete-flow work
 
 Prior commits:1700396 scope;d366eb7 hashed reachable topology packets;
 6dbece0 reusable peer notifications with acknowledged buffer lifetime.
@@ -129,33 +147,25 @@ Attention inference CPU19.531847/NPU4 56.012343; Add complete training
 CPU78.793172/NPU4 47.932888 (NPU throughput1.6438x faster). Attention NPU9
 128.275286; no measured CPU training ratio. These do not qualify new complete flows.
 
-## Artifacts, environment and reusable development commands
+## Environment and commands
 
-TASK=/mi/data2T/zlong/tide-execution-flows, with sources/builds/launchers/runs/reports/
-inputs/trackio; linked under repository artifacts/execution-flows-NAME.
-Latest source flow-dev06; builds flow-cpu-dev06/flow-npu-dev06;
-runs/build-flow-{cpu,npu}-dev06/status.json and task.log. Keep all retained failures.
-Historical source TASK/sources/historical951, run TASK/runs/historical-cpu-attention-01.
-Task-private freeze_run.py creates hashed dirty frozen snapshots and launches detached
-background.slice/Nice10 jobs through scripts/job.py; NPU work uses cooperative queue.
-
-Module libtorch-npu/2.10.0-cann9.0.0; explicit Python
+Module libtorch-npu/2.10.0-cann9.0.0; Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-TASK_QUEUE_ENABLE=0, TORCH_DEVICE_BACKEND_AUTOLOAD=0. Preserve module PYTHONPATH and
-prepend source/python; small CPU gates OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1.
-Core builds /mi/data2T/zlong/tide-npu-performance/builds/cpu-fp16-a5 and core-fp16-a5;
-TIDE_BUILD_DIR selects CPU binding build for Python tests. Ambient python lacks full Torch.
-Trackio writer/viewer /home/zlong/venvs/trackio/bin/python; project tide-execution-flows,
-root TASK/trackio. Large writes belong on the data disk; no deletion authorized by pause.
+TASK_QUEUE_ENABLE=0; TORCH_DEVICE_BACKEND_AUTOLOAD=0. Preserve module PYTHONPATH
+and prepend source/python. CPU gates OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1.
+TIDE_BUILD_DIR selects matching binding; old cpu-fp16-a5 lacks Greedy.
+Trackio:/home/zlong/venvs/trackio/bin/python; project tide-execution-flows.
+Large files on data disk; >300GiB free at the first greedy build check.
 
-On re-entry, first run `git status --short --branch`, `python scripts/status.py`
-and read this contract/backlog. Future dev06 commands are retained for reused-code
-regressions only, not the main general-online task:
+Task-private freeze_run.py accepts --name/--snapshot/--commit/--npu/--npu-count/
+--max-wait, creates immutable hashed snapshots and detached background.slice jobs.
+Use --commit for qualification; do not copy unrelated dirty consumer edits into it.
+Example after committing (substitute exact COMMIT):
 
 ```text
-python TASK/launchers/freeze_run.py --name flow-gates-cpu-dev06 --snapshot flow-dev06 -- '{python}' scripts/verify_execution_flows.py --build-dir '{base}/builds/flow-cpu-dev06' --output-dir '{out}/gates' --device cpu --development
-python TASK/launchers/freeze_run.py --name flow-gates-npu-dev06 --snapshot flow-dev06 --npu --npu-count 2 -- '{python}' scripts/verify_execution_flows.py --build-dir '{base}/builds/flow-npu-dev06' --output-dir '{out}/gates' --device npu --devices 2 --development
+python TASK/launchers/freeze_run.py --name build-greedy-cpu-clean01 --snapshot greedy-clean01 --commit COMMIT -- '{python}' scripts/build.py --backend cpu --build-dir '{base}/builds/greedy-cpu-clean01' --jobs 2
 ```
 
-Resolve TASK and verify launcher arguments/current state before use. Newly changed
-source needs a new frozen snapshot/build, not mutation of active inputs.
+On re-entry run git status --short --branch and python scripts/status.py. Inspect
+all active/new terminal task records before further actions; never infer success
+from a missing unit. No new full-size benchmark has been launched in this increment.

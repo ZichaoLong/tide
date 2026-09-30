@@ -29,7 +29,7 @@ class ExecutionOptions:
     def __post_init__(self):
         if self.implementation not in {"python", "native"}:
             raise ValueError("implementation must be python or native")
-        if self.schedule not in {"auto", "reference", "streaming", "frontier", "chain", "diamond", "ring", "self_loop"}:
+        if self.schedule not in {"auto", "reference", "streaming", "frontier", "greedy", "chain", "diamond", "ring", "self_loop"}:
             raise ValueError("unknown execution schedule")
         if self.mode not in {"hard", "hst", "softp"} or type(self.zeta) not in (int, float) or not math.isfinite(self.zeta):
             raise ValueError("invalid mode/zeta")
@@ -57,15 +57,15 @@ class ExecutionOptions:
         schedule = self.schedule
         if schedule == "auto":
             schedule = "streaming" if family == "pdg" else "frontier"
-        prefill = schedule in {"frontier", "chain", "diamond"} if self.prefill is None else self.prefill
+        prefill = schedule in {"frontier", "greedy", "chain", "diamond"} if self.prefill is None else self.prefill
         if schedule in {"reference", "streaming", "ring", "self_loop"} and prefill:
             raise ValueError("this schedule has no time-prefill contract")
         if schedule in {"frontier", "chain", "diamond"}:
             graph.topological_order()
         if schedule == "reference" and (self.implementation != "python" or self.packed):
             raise ValueError("reference requires python and packed=false")
-        if schedule != "frontier" and self.max_events != 1000000:
-            raise ValueError("max_events is only configurable for frontier")
+        if schedule not in {"frontier", "greedy"} and self.max_events != 1000000:
+            raise ValueError("max_events is only configurable for frontier or greedy")
         if self.implementation == "python":
             baseline = ExecutionOptions()
             for key in ("workers", "parallel_regions", "compact_events", "defer_state_release", "packed_sources",

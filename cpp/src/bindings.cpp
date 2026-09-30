@@ -3,6 +3,7 @@
 #include "tide/dense.h"
 #include "tide/ops.h"
 #include "tide/frontier.h"
+#include "tide/greedy.h"
 #include "tide/specialized.h"
 #include "tide/cursor.h"
 #include "tide/lazy_add.h"
@@ -183,6 +184,8 @@ PYBIND11_MODULE(_tide_native, m) {
     .def_property_readonly("failed", &StreamingCursor::failed);
   py::class_<Frontier>(m, "Frontier").def(py::init<Graph, Model, Options>())
     .def("run", &Frontier::run, py::call_guard<py::gil_scoped_release>());
+  py::class_<Greedy>(m, "Greedy").def(py::init<Graph, Model, Options>())
+    .def("run", &Greedy::run, py::call_guard<py::gil_scoped_release>());
   py::class_<Specialized>(m, "Specialized").def(py::init<Graph, Model, Options, std::string>())
     .def("run", &Specialized::run, py::call_guard<py::gil_scoped_release>());
   m.def("emit", &emit);

@@ -70,7 +70,7 @@ void check(at::TensorOptions options) {
   reference_loss = reference_loss + .07 * (state0.square().sum() + state1.square().sum());
   std::vector<Tensor> variables{x, initial, node.decay, node.weight, node.bias, node.read, input_scale, edge_scale};
   auto reference_vjp = torch::autograd::grad({reference_loss}, variables, {}, true, false, true);
-  for (const std::string algorithm : {"frontier", "streaming"}) for (bool packed : {false, true}) {
+  for (const std::string algorithm : {"frontier", "streaming", "greedy"}) for (bool packed : {false, true}) {
     Options execution; execution.workers = packed ? 3 : 1; execution.packed = packed;
     if (packed) {
       execution.full_autograd = "batched"; execution.aggregate_autograd = "batched";
@@ -95,7 +95,7 @@ void check(at::TensorOptions options) {
     auto actual_vjp = torch::autograd::grad({loss}, variables, {}, true, false, true);
     for (size_t i = 0; i < variables.size(); ++i) close(actual_vjp[i], reference_vjp[i]);
     require(!actual_vjp[5].defined(), "HARD unused Read unexpectedly connected");
-    if (algorithm == "frontier") require(encoded.stats.at("max_state_sequence") == 3, "Settle did not execute time prefill");
+    if (algorithm != "streaming") require(encoded.stats.at("max_state_sequence") == 3, "Settle did not execute time prefill");
     auto first = executor.run(eq, x.slice(1, 0, 1));
     SettleExecutor stream(spec, model, execution, "streaming");
     auto last = stream.run(first.continuation, x.slice(1, 1));

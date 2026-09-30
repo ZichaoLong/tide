@@ -148,7 +148,7 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| F1 | General online greedy node-time prefill and independent streaming for every legal family topology/input; complete continuation/configuration/timing contracts | in progress; current DAG/static consumers insufficient |
+| F1 | General online greedy node-time prefill and independent streaming for every legal family topology/input; complete continuation/configuration/timing contracts | host greedy implemented;611 development regressions + focused fiber/C++ checks passed; immutable/device/consumer gates pending |
 | F2 | General topology/input fixtures including PDG feedback and unaligned arrivals; active-scale/locality packets, equivalent family mappings and actual work counts; no fixture-specific scheduler | in progress; reachable packets exist |
 | F3 | Independent CPU FP64/FP32 schedules, full observables/isolated VJPs/None/zero/multi-update optimizer gates; public Python/native and standalone consumers, changes of input and continuation | partial development gates; general-online immutable qualification pending |
 | F4 | Device-resident online queues/readiness/selection/batching/progression, packed transport and peer completion, continuous state and complete training; explicit capacities and safe chunking | reusable finite peer/capture components exist; general online device scheduler pending |

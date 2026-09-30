@@ -84,7 +84,7 @@ def test_native_encoding_ports_parallel_edges_source_domains_and_aliases(dtype):
 
 
 @pytest.mark.parametrize("kind", ["ema", "ssm", "attention", "linear", "delta", "delta-rule-v1"])
-@pytest.mark.parametrize("algorithm", ["frontier", "streaming"])
+@pytest.mark.parametrize("algorithm", ["frontier", "streaming", "greedy"])
 def test_native_settle_isolated_roots_and_all_slots(dtype, kind, algorithm):
     from test_isolated_schedules import fixture as memory_fixture
     g, m, q, x, variables = memory_fixture(dtype, kind)

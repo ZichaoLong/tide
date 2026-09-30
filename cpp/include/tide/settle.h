@@ -1,5 +1,6 @@
 #pragma once
 #include "tide/frontier.h"
+#include "tide/greedy.h"
 #include "tide/stream.h"
 
 namespace tide {
@@ -37,6 +38,7 @@ class SettleExecutor {
  private:
   SettleGraph spec_;
   std::unique_ptr<Frontier> frontier_;
+  std::unique_ptr<Greedy> greedy_;
   std::unique_ptr<Streaming> streaming_;
 };
 }  // namespace tide

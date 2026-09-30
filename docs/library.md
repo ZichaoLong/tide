@@ -81,13 +81,17 @@ parameters while another session retains an autograd segment needed backward.
 
 ## Policies and state
 
-`ExecutionOptions` selects Python/native and auto/reference/streaming/frontier
+`ExecutionOptions` selects Python/native and auto/reference/streaming/frontier/greedy
 or supported chain/diamond/ring/self_loop specializations. Auto resolves to
 streaming for PDG and frontier for the other families. Reference requires
 Python and `packed=False`. Invalid/inapplicable explicit options fail. The
 public Settle session uses encoded executors and retains the complete encoded
 continuation; its result projects body diagnostics. A projected result is not
 the serialized session. Direct Settle remains an independent equivalence oracle.
+
+`schedule="greedy"` enables [online node-time batching](greedy-scheduler.md),
+including positive-delay PDG feedback. It defaults to `prefill=True`; `max_events`
+limits live fibers rather than cumulative work. It is currently host-scheduled.
 
 `GraphRuntime(..., model=model)` accepts an explicitly assembled `Model` with
 custom Python programs or shared owners. It must match graph/device/dtype/width.

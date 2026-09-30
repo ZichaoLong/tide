@@ -38,6 +38,12 @@ Current native structural identity is **v13**; single-graph checkpoint payload i
 Per-port positions start at zero and are contiguous; their times strictly increase.
 It does not yet implement independently advancing per-port online watermarks.
 
+The optional [online greedy schedule](greedy-scheduler.md) certifies complete
+region-time prefixes from actual pending work and positive-delay closure. It
+accepts feedback without a numerical prepass or whole-window event expansion;
+the scalar reference remains independent. Its live-fiber capacity is an explicit
+refusal boundary, separate from future byte-budgeted chunking/device scheduling.
+
 Native cursor ownership changes materialization, not finite-valued event
 semantics. `advance` keeps queues/state native; snapshots explicitly clone tensor
 storage and preserve gradients in ordinary grad mode. Input rejection is

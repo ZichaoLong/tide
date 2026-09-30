@@ -111,7 +111,9 @@ SettleExecutor::SettleExecutor(SettleGraph spec, Model model, Options options, s
     frontier_ = std::make_unique<Frontier>(spec_.encoded_graph(), spec_.embed_model(model), options);
   else if (algorithm == "streaming")
     streaming_ = std::make_unique<Streaming>(spec_.encoded_graph(), spec_.embed_model(model), options);
-  else throw std::invalid_argument("SettleExecutor algorithm must be frontier or streaming");
+  else if (algorithm == "greedy")
+    greedy_ = std::make_unique<Greedy>(spec_.encoded_graph(), spec_.embed_model(model), options);
+  else throw std::invalid_argument("SettleExecutor algorithm must be frontier, greedy or streaming");
 }
 
 Result SettleExecutor::run(const Continuation& initial, const Tensor& values) {
@@ -121,6 +123,7 @@ Result SettleExecutor::run(const Continuation& initial, const Tensor& values) {
   auto inputs = spec_.external(values, start);
   if (initial.batch_size != values.size(0)) throw std::invalid_argument("SettleGraph batch mismatch");
   const auto stop = (start + values.size(1)) * spec_.stride();
+  if (greedy_) return greedy_->run(initial, inputs, stop, stop);
   return frontier_ ? frontier_->run(initial, inputs, stop, stop) : streaming_->run(initial, inputs, stop, stop);
 }
 }  // namespace tide

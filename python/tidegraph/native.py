@@ -103,12 +103,13 @@ class Native:
         options.defer_state_release = defer_state_release
         options.packed_sources, options.batch_next = packed_sources, batch_next
         self.options = options  # Scheduler-only options for native frontend clients.
-        if algorithm not in {"streaming", "frontier", "self_loop", "ring", "chain", "diamond"}:
+        if algorithm not in {"streaming", "frontier", "greedy", "self_loop", "ring", "chain", "diamond"}:
             raise ValueError("unknown native algorithm")
         if algorithm in {"self_loop", "ring", "chain", "diamond"}:
             self.engine = core.Specialized(g, m, options, algorithm)
         else:
-            self.engine = (core.Streaming if algorithm == "streaming" else core.Frontier)(g, m, options)
+            engine = core.Greedy if algorithm == "greedy" else core.Streaming if algorithm == "streaming" else core.Frontier
+            self.engine = engine(g, m, options)
 
     def run(self, continuation, external, stop, *, sealed_until):
         external = window_inputs(external, stop, sealed_until)

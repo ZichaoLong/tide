@@ -8,6 +8,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 option(TIDE_BUILD_CLIENTS "Build repository checks and benchmark clients" ON)
 option(TIDE_PYTHON_BINDINGS "Build the Python test/client adapter" ON)
+include(CTest)
 set(TIDE_BACKEND "CPU" CACHE STRING "Native accelerator family: CPU, CUDA or NPU")
 set_property(CACHE TIDE_BACKEND PROPERTY STRINGS CPU CUDA NPU)
 set(TIDE_NPU_RUNTIME "standalone" CACHE STRING "NPU registration owner: standalone or python")
@@ -39,7 +40,7 @@ add_library(tidegraph STATIC
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
-  cpp/src/block.cpp cpp/src/block_step.cpp cpp/src/frontier.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp
+  cpp/src/block.cpp cpp/src/block_step.cpp cpp/src/frontier.cpp cpp/src/greedy.cpp cpp/src/greedy_plan.cpp cpp/src/specialized.cpp cpp/src/settle.cpp cpp/src/settle_projection.cpp
   cpp/src/kernel.cpp cpp/src/state_evaluate.cpp cpp/src/clock.cpp cpp/src/clocked_kernel.cpp cpp/src/autograd.cpp cpp/src/basic_kernels.cpp cpp/src/matrix_kernels.cpp
   cpp/src/packed.cpp cpp/src/attention.cpp cpp/src/block_prepare.cpp cpp/src/parameters.cpp cpp/src/optimizer.cpp
   cpp/src/checkpoint.cpp cpp/src/checkpoint_codec.cpp cpp/src/checkpoint_preflight.cpp cpp/src/checkpoint_io.cpp)
@@ -74,6 +75,14 @@ add_executable(tidegraph-smoke cpp/src/main.cpp)
 target_link_libraries(tidegraph-smoke PRIVATE tidegraph_runtime)
 add_executable(tidegraph-settle-check cpp/test/settle.cpp)
 target_link_libraries(tidegraph-settle-check PRIVATE tidegraph_runtime)
+add_executable(tidegraph-greedy-check cpp/test/greedy.cpp cpp/bench/compare.cpp)
+target_link_libraries(tidegraph-greedy-check PRIVATE tidegraph_runtime)
+if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
+  foreach(dtype float32 float64)
+    add_test(NAME greedy-${dtype} COMMAND tidegraph-greedy-check --device=cpu --dtype=${dtype})
+    add_test(NAME settle-${dtype} COMMAND tidegraph-settle-check --device=cpu --dtype=${dtype})
+  endforeach()
+endif()
 add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp)
 target_link_libraries(tidegraph-kernel-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-full-check cpp/test/custom_full.cpp)
