@@ -102,12 +102,12 @@ AiCPU task or host-fallback diagnostic. It includes setup and CPU assertions,
 not steady-state timing. Qualification covers all 14 component cells; exact
 source, jobs and reports are in the evidence manifest and [STATUS](STATUS.md).
 
-The later old/proposal/mixed Read increment has directed development coverage of
+The later old/proposal/mixed Read increment is qualified on clean `06db0c2` ([evidence](evidence/runtime-read-20260930.md)) with coverage of
 640 windows, 3252 events and 2012 actual emitted messages against independent CPU
 Streaming/Greedy. There are 66 multi-time windows, including 38 with state-Read
 time batches, and causal-region batches never exceed one time per node. Ready
 packing also passes FP32/FP16 checks; the numerical flow remains FP32 only.
-The development trace records 914 state-Read AIV tasks and exactly one model
+The clean trace records 914 state-Read AIV tasks and exactly one model
 submission/boundary wait for each executed window. No AiCPU task or host-fallback
-diagnostic was found. Clean qualification remains pending in STATUS; the earlier
-immutable evidence above does not certify these added Read modes.
+diagnostic was found. The trace also includes setup and diagnostic stream synchronizations; it is not
+throughput evidence. Earlier immutable evidence remains scoped to its sources.

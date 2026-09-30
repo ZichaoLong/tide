@@ -1,0 +1,550 @@
+{
+  "schema": "tide-runtime-read-evidence-v1",
+  "sources": {
+    "runtime_guard": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+    "state_read": "06db0c25c6bad5b95d34ce63dadc0f7109da1a49"
+  },
+  "runtime": {
+    "arch": "aarch64",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0",
+    "soc": "Ascend910_9392"
+  },
+  "scope": "raw resource/failure handling and finite linear Read FP32 inference profile; not throughput/training or physical hang recovery",
+  "component_sha256": "2176f498b444734b9c450d2ba3ea8ef220a645dc6679d568d4e91fcae910bccf",
+  "core_cpp_sha256": "8b337446ef421d499ab52f3bd6de3fbfec1e713a68bde6af2f6ee3887297175b",
+  "binary_sha256": {
+    "tide-device-control-check": "03ddb3141129501f3f097cd351bb72164ead2f11ec59960c4c4ca1ba1c0bee27",
+    "tide-device-failure-check": "d67a914fd27d2110c1ebd88a0b0da3eb25ea9e76217d2351c6bde3006f8a0ed8",
+    "tide-device-numerical-check": "11fc227d41c065304b79126b4a70cb7519c2677c9b69108b4c1e16655acef063",
+    "tide-packed-queue-check": "9e64ee746054f4de0ebdd0599675546f4486d4663d9718ec30dc85be6097bd47",
+    "tide-device-closure-check": "43ede2407b4001a0b59b6f10ee678272954110ea92b6634c5dfbbac4390f1399",
+    "tide-device-queue-check": "03a449eae125cf5ba6543cffd89ceb0f7ca1e03dd40e7ca5013e02affa9c1598",
+    "tide-device-broadcast-check": "983dbad75e8c06bd51f8b34068a561c705d44057f197216494872a37e59fd82a",
+    "tide-device-ready-check": "24e186b30d24a6aff780361959f1699266a1eeb19e18e76825a8e1da46c9d0a3",
+    "tide-device-selector-check": "c26c9a066e07a15be8d8de44c62b939750298c0010d46db24ee976814b7edb20",
+    "tide-content-flow-check": "cf0403f4aca0ffdaad7645641ac47fa008fc7550dac52bd0b764c78d79867f0e",
+    "tide-packed-full-check": "bd3ac14b50fb2f3f7470d1c36be7cbd63923c7aa7be0deb2a1785e6a8e374ed4"
+  },
+  "checks": {
+    "cpu_core_ctests": 6,
+    "component_cpu_ctests": 4,
+    "lifecycle_processes": 8,
+    "recoverable_faults": 5,
+    "quarantine_exit": 86,
+    "component_cells": 15,
+    "content_windows": 640,
+    "events": 3252,
+    "actual_emissions": 2012,
+    "multi_time_windows": 66,
+    "state_read_multi_time_windows": 38,
+    "state_read_tasks": 914
+  },
+  "runs": [
+    {
+      "name": "build-runtime-guard-cpu-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-runtime-guard-cpu-clean01/status.json",
+          "sha256": "bd9b994bfb79de467380688e213f2f086514ed301c25e0499e4151326af1bc5c"
+        },
+        {
+          "path": "artifacts/execution-flows-build-runtime-guard-cpu-clean01/task.log",
+          "sha256": "3b68514065d35bed8ee1af19fcca86fe30ca6eee5422c526ed81104de77de01a"
+        }
+      ]
+    },
+    {
+      "name": "build-runtime-guard-npu-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-runtime-guard-npu-clean01/status.json",
+          "sha256": "a19889a50ab652917f1ece6ba7158c1c45a324c33907734f982e29d014af32a9"
+        },
+        {
+          "path": "artifacts/execution-flows-build-runtime-guard-npu-clean01/task.log",
+          "sha256": "81defb16145e4f552fb203e6f8123f00e4bee5cec29e8dedd229961beea5b031"
+        }
+      ]
+    },
+    {
+      "name": "build-device-failure-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-failure-clean01/status.json",
+          "sha256": "6bc5d966f1dbd605fb5720108a2fec8155229db699e18ba5a3d416812c5470ed"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-failure-clean01/task.log",
+          "sha256": "be74973749640f12563aac34f7d9422ad59135189431a31505cfbd0cf147a956"
+        }
+      ]
+    },
+    {
+      "name": "runtime-guard-lifecycle-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-runtime-guard-lifecycle-clean01/status.json",
+          "sha256": "d6416b2bfe435c6abde8dc4337983f6cbf5daea10b52855ba98215aa6f85af82"
+        },
+        {
+          "path": "artifacts/execution-flows-runtime-guard-lifecycle-clean01/task.log",
+          "sha256": "33c7323f4d7677ad4185aea05b3c4fc39ba32578a575c792c14449710435975d"
+        }
+      ]
+    },
+    {
+      "name": "device-failure-gates-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-failure-gates-clean01/status.json",
+          "sha256": "bd81e08dbb0c3734d2d91130966a3dd7957ccc778b75895d823066ac20adebab"
+        },
+        {
+          "path": "artifacts/execution-flows-device-failure-gates-clean01/task.log",
+          "sha256": "022fcfd570bcede05c8738f80b4f6e9957bf3295a96a6221e3b4df427571ba98"
+        },
+        {
+          "path": "artifacts/execution-flows-device-failure-gates-clean01/verified/quarantine.log",
+          "sha256": "e5181cafa9ea46f45c66685e0f273daeb0a7e06b3dc16c1d574add52c0982a3c"
+        },
+        {
+          "path": "artifacts/execution-flows-device-failure-gates-clean01/verified/recoverable.log",
+          "sha256": "f3597926fdf7b0f5e2e40fd38ddac29ea0c5d7a487d475a597efe716ad8bdcb2"
+        },
+        {
+          "path": "artifacts/execution-flows-device-failure-gates-clean01/verified/result.json",
+          "sha256": "b99b7df5114feae7e355594495b9fe3010d81cdcc11dd401220c3ed50a71a61b"
+        }
+      ]
+    },
+    {
+      "name": "device-runtime-components-clean01",
+      "source": "8244f1333aaf37414c2f2d7aa44f1036266e16a8",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/status.json",
+          "sha256": "f15c68adc233a4e5587f7b720259be824c3bde563351651f4aee084f70ae7125"
+        },
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/task.log",
+          "sha256": "e86a0b6d76323f54f8d891109ad42ae602a608cf556156cedff24c06545213ab"
+        },
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/verified/control-float32.log",
+          "sha256": "983c49c90e6ed0fe6f45a60610abc32aba2cc181ed5fbaf8d00f095a311dc390"
+        },
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/verified/numerical-float16.log",
+          "sha256": "1f8f1eeacf15826208238eb4fa216301880b4e1fc7ba189f9d9df4a5fb6c21d9"
+        },
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/verified/numerical-float32.log",
+          "sha256": "1821893615089e4466a65cc2216267de6c702574077aa3fac7486a8f08f69090"
+        },
+        {
+          "path": "artifacts/execution-flows-device-runtime-components-clean01/verified/result.json",
+          "sha256": "2d7ffb487ecf163b48b47c1052bf757541c4816ff40c2927ab7c82776300425f"
+        }
+      ]
+    },
+    {
+      "name": "build-device-read-clean01",
+      "source": "06db0c25c6bad5b95d34ce63dadc0f7109da1a49",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-read-clean01/status.json",
+          "sha256": "0a3933b93ca2de17ef953773ad961e6f4f8b6b8b0ca7b8ef89cff98ea3c35548"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-read-clean01/task.log",
+          "sha256": "528760eb52c1b451c3c3309e9810f6f4f86d7da6c449523adc4b4a69a7c6713c"
+        }
+      ]
+    },
+    {
+      "name": "device-read-components-clean01",
+      "source": "06db0c25c6bad5b95d34ce63dadc0f7109da1a49",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/status.json",
+          "sha256": "1b75db76ed36b7292f1e32f13e64642f6503ddb5994d9ada9bf3ce5c9e27aff8"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/task.log",
+          "sha256": "ddcd7c7d7170494c644489613952fd3b48a688db7f2f9409142c72e2c03bf1b5"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/broadcast-float16.log",
+          "sha256": "df0a96a66c3a75e92c3551b0e8f6b4dbca971861f85a7efb07980d4710af4035"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/broadcast-float32.log",
+          "sha256": "ada2fb43fdfd52cbb3938e6ec304ee20a7ea40c50388795c46c1d5264a71927d"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/closure-float32.log",
+          "sha256": "a6920eeaf0e1a76572efcf9d5fcef6b90abca6ee56248af55cd1dfcb6596b630"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/content-float32.log",
+          "sha256": "43c16fb8e22cad112574906173f5bf40ba7bae9d9a459d27f2b7e397cf959a50"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/control-float32.log",
+          "sha256": "b279f6b3680ac53c8ac41a0045a84eb53478fd3e760e87c4a383aaebcbe5a919"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/failure-float32.log",
+          "sha256": "9a7cfda70f458aea8661b269bba74afaeb7df2135618d43e9c4971c8d820d163"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/full-float32.log",
+          "sha256": "981d2ad64f6099e2450070f84466396a28bdce5aea57203c1e2cf8d0bfee246e"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/numerical-float16.log",
+          "sha256": "b1910002018f23b66ac8cc29873e9df24431a2655338781474ad2b13133d525b"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/numerical-float32.log",
+          "sha256": "b326bed7a609c2999424a5cd87d9fd58d2d21a619fc297d94e52554594f0f3bb"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/queue-float32.log",
+          "sha256": "78e0afd97e1b48d31a36e6368a270bbe873ad50222ad6bdd28d78ff1960b8164"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/ready-float16.log",
+          "sha256": "e5c9eeaf60b75e22b426cd4082e6413f96f936588922b4ce2d4202d338c213c3"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/ready-float32.log",
+          "sha256": "cdd71ca5a8db591c38914ca895ca1ce9277d5e41b611454a183f793e562fc4b4"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/result.json",
+          "sha256": "b8c7760c15642106a741cf52f341464502d373377b85678b5aff0c29f5a91364"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/selector-float32.log",
+          "sha256": "242ad66aa1eef8272b27820008735487f8d5166adb3b0e36051694b410beede1"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/transaction-float16.log",
+          "sha256": "848233539e9047491c03c6b1ca26f8d0b48ac200b8af7147cb7c883fc6092f94"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-components-clean01/verified/transaction-float32.log",
+          "sha256": "3e36d79067c8036e14d85dfe674a948cd83119352271158f3e796c3e06e37aed"
+        }
+      ]
+    },
+    {
+      "name": "device-read-profile-clean01",
+      "source": "06db0c25c6bad5b95d34ce63dadc0f7109da1a49",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-read-profile-clean01/status.json",
+          "sha256": "5056899fedf1dcb5614e93a60828ad655d2d5e38419ab3a52dac474cc003b504"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-profile-clean01/task.log",
+          "sha256": "10bae0c07f6c81a4484895535b88594e4150d24f69109ce81d02f05cc074f17e"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-profile-clean01/profile/result.json",
+          "sha256": "6b1c0c9b25bbdc78a54a5ab3ea96b1d31fb02700f33097f682aa19c1f6ba923d"
+        },
+        {
+          "path": "artifacts/execution-flows-device-read-profile-clean01/profile/profile.log",
+          "sha256": "6e7ca974c98f159d04901c3be81a259cf33133bb16f92b3a45b5c099c442bb57"
+        }
+      ]
+    }
+  ],
+  "placement": [
+    {
+      "operators": 102346,
+      "engines": {
+        "AI_VECTOR_CORE": {
+          "count": 101630,
+          "summed_task_us": 430166.57599999715,
+          "summed_task_fraction": 0.9939769834533367
+        },
+        "AI_CORE": {
+          "count": 716,
+          "summed_task_us": 2606.599999999992,
+          "summed_task_fraction": 0.006023016546663256
+        }
+      },
+      "operators_by_type": [
+        {
+          "engine": "AI_CORE",
+          "operator": "BatchMatMulV2",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 716,
+          "summed_task_us": 2606.599999999992
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 1432,
+          "summed_task_us": 1733.1519999999955
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "INT64;INT64",
+          "count": 914,
+          "summed_task_us": 1810.0880000000018
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Cast",
+          "input_dtypes": "BOOL",
+          "count": 6129,
+          "summed_task_us": 6819.6159999998445
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Equal",
+          "input_dtypes": "INT32;INT32",
+          "count": 5214,
+          "summed_task_us": 6935.895999999906
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;BOOL",
+          "count": 292,
+          "summed_task_us": 455.7920000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;INT32",
+          "count": 260,
+          "summed_task_us": 326.1999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;INT64",
+          "count": 1944,
+          "summed_task_us": 2738.816000000011
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "FLOAT;INT64;INT64",
+          "count": 9901,
+          "summed_task_us": 93109.99999999964
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "INT32;INT32;INT64",
+          "count": 16542,
+          "summed_task_us": 36578.75999999973
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Less",
+          "input_dtypes": "INT64;INT64",
+          "count": 915,
+          "summed_task_us": 2019.5199999999957
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Mul",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 914,
+          "summed_task_us": 1751.952000000005
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ScatterUpdate",
+          "input_dtypes": "FLOAT;INT64;FLOAT",
+          "count": 716,
+          "summed_task_us": 4798.583999999996
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Sigmoid",
+          "input_dtypes": "FLOAT",
+          "count": 644,
+          "summed_task_us": 795.8800000000027
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "SoftmaxV2",
+          "input_dtypes": "FLOAT",
+          "count": 914,
+          "summed_task_us": 17067.50400000002
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Tanh",
+          "input_dtypes": "FLOAT",
+          "count": 716,
+          "summed_task_us": 1145.8799999999976
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "BOOL",
+          "count": 6872,
+          "summed_task_us": 9821.7919999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "FLOAT",
+          "count": 7144,
+          "summed_task_us": 9142.688000000056
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT32",
+          "count": 6628,
+          "summed_task_us": 7915.063999999972
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT64",
+          "count": 13072,
+          "summed_task_us": 19788.88000000018
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_broadcast_route",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 13354.776
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_closure",
+          "input_dtypes": "N/A",
+          "count": 1558,
+          "summed_task_us": 6725.856000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_content_outputs",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 2836.6240000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_content_state",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 3968.7039999999997
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_content_sum",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 2384.800000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_frame_select",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 7243.064000000006
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_full_plan",
+          "input_dtypes": "N/A",
+          "count": 1169,
+          "summed_task_us": 2275.567999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_journal",
+          "input_dtypes": "N/A",
+          "count": 7312,
+          "summed_task_us": 15738.647999999945
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_queue_propose",
+          "input_dtypes": "N/A",
+          "count": 3386,
+          "summed_task_us": 126172.79999999989
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_ready_pack",
+          "input_dtypes": "N/A",
+          "count": 1558,
+          "summed_task_us": 22699.471999999954
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_state_read",
+          "input_dtypes": "N/A",
+          "count": 914,
+          "summed_task_us": 2010.2000000000012
+        }
+      ],
+      "inputs": {
+        "op_summary_20260930150553.csv": "6fab7f2368ba846faf19fe35e907b5d4392f767782fcb3ee1af0fe0fa1ca0812",
+        "api_statistic_20260930150553.csv": "e668de310245b233b86da33b828b69267130c2c28d965e8fb638aaeb9b213e40"
+      }
+    }
+  ],
+  "host_api_counts": {
+    "aclmdlRIExecuteAsync": 644,
+    "aclrtSynchronizeStream": 30236,
+    "aclrtSynchronizeStreamWithTimeout": 644
+  },
+  "limits": [
+    "Read flow is FP32 forward only with declared module contracts.",
+    "No physical hung-device or driver-reset recovery qualification.",
+    "Profiling includes construction, CPU references and diagnostic export; no throughput claim.",
+    "Other modules, vectorized numerical kernels, FP16 flow, peer progression and training remain."
+  ]
+}
