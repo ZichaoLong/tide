@@ -1,0 +1,82 @@
+{
+  "schema": "tide-device-retained-evidence-v1",
+  "source": "c2423f042c242a5a9ab893c04cf7962a794e97a8",
+  "scope": "Internal single-NPU FP32 HARD retained-window backward, independent CPU FP32/FP64; not public training, other module adjoints, peers, FP16 or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 41,
+    "graph_trajectories": 26,
+    "retained_graph_windows": 104,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "fc125833412206284a1c0445a2782ee67079291db5b3e53ad11d952ea4c02b6c",
+    "component_sha256": "91ba14116df0f94bd9b1228a8f67c45e39e13ba42b1cca649580d00be84f333d",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-retained-clean01",
+      "source": "c2423f042c242a5a9ab893c04cf7962a794e97a8",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "5ff24ee79ec4ca5606b2f6358ab65e9701e20e288315b615aacdf89ba67673a4",
+        "task.log": "05610eafc8b502d6fbf3665973882183c080bc7dede25ab589776d9c8f94abd9"
+      }
+    },
+    {
+      "name": "retained-clean01",
+      "source": "c2423f042c242a5a9ab893c04cf7962a794e97a8",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "fdbcbe265361f9d4078be96b887a90f280f27175ec55aaa7b764c13d0588d3f0",
+        "task.log": "455fbc8b5260c7e2b70288f3b1f676567d953b36fab2eef4f3653a174289086f",
+        "verified/result.json": "38b195821615fe826513a0b8b1751c789ff9009155ea980144cac61b93f86eab"
+      }
+    },
+    {
+      "name": "retained-profile-clean01",
+      "source": "c2423f042c242a5a9ab893c04cf7962a794e97a8",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "ae264537a2b86c7b26d6952070b873813102291723c83fd252d5295fb82b2a29",
+        "task.log": "ab2a629565109ecb2c3c3f5bd2c74cadc65da05ad0b6eae716c9f6cde100cfbd",
+        "profiled/result.json": "c56cbc200b2ea71e1961d7860ad5d10494b6e5b497bf4616688f1977a3b57ccc",
+        "profiled/profile.log": "504df8c6037f40b12397f6457ea102992a085898609554c5d21560f07fcec154"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 49324,
+        "summed_task_us": 366322.91200000246
+      },
+      "AI_CORE": {
+        "count": 838,
+        "summed_task_us": 3243.9919999999934
+      },
+      "MIX_AIV": {
+        "count": 832,
+        "summed_task_us": 3672.0639999999985
+      }
+    },
+    "window_bridge_kernel_records": 314,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  }
+}

@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T20:20:05.642383+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **c2423f0**,retained device backward implementation pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
+HEAD **2721518**,retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -141,7 +141,7 @@ Device optimizer + publication is this tested implementation increment:
   26 retained trajectories/104 windows planned against independent CPU FP32/FP64.
   build-retained-dev01 PASSED checked isolated build;retained-dev01 PASSED8 checks,26 trajectories/104 retained windows.
   retained-profile-dev01 PASSED49,324 AIV+838 AI_CORE+832 MIX_AIV,314 bridge records,no AiCPU/fallback.
-  Contract docs/resident-retained.md. Implementation c2423f0 committed/pushed. build-retained-clean01 is running from exactc2423f0 (1800s/jobs2/no lease);then launch retained-clean01 full41-cell gate and retained-profile-clean01 (900s/one NPU/queue120s each). These follow-on formal jobs have NOT yet been submitted. This is not the public training lifecycle or a throughput claim.
+  Contract docs/resident-retained.md. Implementation c2423f0 committed/pushed. build-retained-clean01 PASSED from exactc2423f0 (four CTests). retained-clean01 full41-cell gate and retained-profile-clean01 PASSED from the same frozen source; audited source/binary/log/CSV hashes,49,324 AIV+838 AI_CORE+832 MIX_AIV,314 bridge records,no AiCPU/fallback. Evidence docs/evidence/device-retained-20261001.{json,md}. Public C++ training ownership implementation is the concurrent mainline; no public training qualification yet. This is not the public training lifecycle or a throughput claim.
 
 Retain task-local build-optimizer-dev01 failure (static archive after as-needed
 ascendcl) and build-optimizer-dev01b failure (public consumer has no direct
@@ -151,7 +151,7 @@ optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
 32 trajectories/256 updates. Later full training-step development build supersedes
 its limited build scope. Never treat either failed build as clean qualification.
 
-Next: finish the optimizer40-cell and retained41-cell immutable qualification/evidence;then public training ownership,parameter-generation guards and checkpoint integration. Borrowed tapes
+Next: test and finish public C++ training ownership,parameter-generation guards and checkpoint integration. New training_*.cpp,public resident_training.h,parameter layout planning and optimizer checkpoint changes are uncommitted implementation work, not yet tested. Retained41-cell qualification is complete. Optimizer40-cell qualification is complete. Borrowed tapes
 expire on next advance/close/parameter update. LH/SwiGLU/normalized Aggregate/
 attention/HST/SOFTP adjoints,peer progression,FP16 and the public/performance
 matrix remain. Do not mark F4/F5 complete at this restricted HARD chain.
