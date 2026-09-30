@@ -46,6 +46,15 @@ and the standalone `cpp/test/read_programs.cpp` analytic checks.
 Full Next requests and control-sensitive state-prefill gates are implemented
 and [qualified](evidence/next-programs.md) separately in `next-programs.md`.
 
-Explicit Read precision is now `payload | float64`; `norm-fp64-v1` accumulates
+Explicit Read precision is `payload | float32 | float64`; `norm-fp64-v1` accumulates
 the L2 norm in FP64. Payload dtype remains independent of descriptor precision;
 see `lh-selector.md` for controls, histories and the original-selector oracle.
+
+`norm-fp32-v1` explicitly converts the visible value to FP32 before L2 reduction
+and returns an FP32 descriptor, including for FP16 or FP64 payloads. Its VJP is
+the ordinary conversion/norm VJP, including connected-zero input gradients at a
+zero norm. The unused linear Read parameter remains disconnected. Region controls
+are converted back to payload dtype by the existing selector contract. The original
+`norm-fp64-v1` formula and NPU rejection remain unchanged. Profile choice is recorded
+in graph identity; rounded ties may select different nodes across precision profiles.
+Each execution is compared against its independently scheduled matching profile.

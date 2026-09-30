@@ -15,6 +15,16 @@ def cases(implementation, dtype="float32"):
         yield f"mixed-{family}", config
         yield f"batched-{family}", replace(config, execution=replace(config.execution,
             full_autograd="batched", aggregate_autograd="batched"))
+        for read_mode in ("content", "old", "proposal"):
+            for schedule in ("streaming", "greedy"):
+                norm = GraphConfig.from_dict(dict(schema_version=1, family=family,
+                    topology=dict(kind="ring" if family == "pdg" else "diamond", size=4,
+                                  module=dict(memory="lh-add-repeat-v1", readout="norm-fp32-v1")),
+                    model=dict(width=4, dtype=dtype, scale_init=.25),
+                    execution=dict(implementation=implementation, schedule=schedule, mode="hst")))
+                norm = replace(norm, graph=replace(norm.graph, regions=tuple(
+                    replace(region, read_mode=read_mode) for region in norm.graph.regions)))
+                yield f"norm32-{family}-{read_mode}-{schedule}", norm
     for family, topology, schedule in (("pdg","ring","ring"), ("pdg","self_loop","self_loop"),
                                        ("timed-dag","chain","chain"), ("timed-dag","diamond","diamond")):
         yield "specialized-" + schedule, GraphConfig.from_dict(dict(schema_version=1, family=family,

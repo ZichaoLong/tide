@@ -37,17 +37,24 @@ class LinearRead final : public ReadKernel {
 };
 class NormRead final : public ReadKernel {
  public:
+  explicit NormRead(at::ScalarType dtype) : dtype_(dtype) {}
   Tensor step(const NodeWeights&, const ReadInput& r) const override {
-    return at::norm(r.state ? r.state->value : r.content.value, 2, {-1}, false, at::kDouble);
+    auto value=r.state ? r.state->value : r.content.value;
+    if(dtype_==at::kFloat)value=value.to(at::kFloat);
+    return at::norm(value, 2, {-1}, false, dtype_);
   }
   std::vector<Tensor> batch(const NodeWeights&, const std::vector<ReadInput>& requests) const override {
     std::vector<Tensor> values;
     for (const auto& r : requests) values.push_back(r.state ? r.state->value : r.content.value);
-    return at::norm(at::stack(values), 2, {-1}, false, at::kDouble).unbind();
+    auto batch=at::stack(values);
+    if(dtype_==at::kFloat)batch=batch.to(at::kFloat);
+    return at::norm(batch, 2, {-1}, false, dtype_).unbind();
   }
-  at::ScalarType descriptor_dtype(at::ScalarType) const override { return at::kDouble; }
+  at::ScalarType descriptor_dtype(at::ScalarType) const override { return dtype_; }
   bool joint_batch() const override { return true; }
   void validate_weights(const NodeWeights&) const override {}
+ private:
+  at::ScalarType dtype_;
 };
 void validate(const Tensor& value, const ReadInput& r, at::ScalarType dtype) {
   if (!value.defined() || value.dim() != 0 || value.device() != r.content.value.device()
@@ -56,7 +63,8 @@ void validate(const Tensor& value, const ReadInput& r, at::ScalarType dtype) {
 }
 }  // namespace
 std::shared_ptr<const ReadKernel> make_read_kernel(const Node& node) {
-  if (node.readout == "norm-fp64-v1" && !node.identity) return std::make_shared<NormRead>();
+  if (node.readout == "norm-fp64-v1" && !node.identity) return std::make_shared<NormRead>(at::kDouble);
+  if (node.readout == "norm-fp32-v1" && !node.identity) return std::make_shared<NormRead>(at::kFloat);
   if (node.readout != "linear-v1") throw std::invalid_argument("unknown Read profile: " + node.readout);
   return std::make_shared<LinearRead>(node.identity);
 }
@@ -77,8 +85,7 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
   if (values.size() != ids.size()) throw std::invalid_argument("Read batch changed event count");
   for (size_t j = 0; j < ids.size(); ++j) {
     auto dtype = w.read_kernel->descriptor_dtype(requests[j].content.value.scalar_type());
-    if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble
-        && !(requests[j].content.value.scalar_type()==at::kHalf && dtype==at::kFloat))
+    if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble && dtype != at::kFloat)
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[j], requests[j], dtype);
     if (packed && at::GradMode::is_enabled()) {

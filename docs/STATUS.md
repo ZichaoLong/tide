@@ -65,7 +65,7 @@ Earlier immutable evidence remains scoped to the tested source:
 
 ## Current implementation and next commands
 
-Uncommitted Norm32 core: cpp/src/read.cpp, python/tidegraph/readout.py,
+Norm32 core ready to commit: cpp/src/read.cpp, python/tidegraph/readout.py,
  tests/test_norm_precision.py, scripts/accelerator_cases.py, docs/read-programs.md.
 Explicit norm-fp32-v1 converts before reduction/returns FP32, including FP16/FP64
 payloads; norm-fp64-v1 stays unchanged. Normal conversion/norm VJP, connected-zero
@@ -84,16 +84,35 @@ identical cpp hashes; build dirs norm32-cpu-dev01/norm32-npu-dev01/
 norm32-native-npu-dev01. They include recorded dirty overlays. These are development
 gates; commit implementation then qualify a clean exact commit separately.
 
-NEXT: commit clock evidence/this refreshed status, preserve Norm32/older consumer WIP.
-Launch norm32-native-npu-dev01 from frozen norm32-dev02 with scripts/qualify_accelerator.py
+Clock evidence dd063a7 committed/pushed. norm32-native-npu-dev01 PASSED18 cases; source/command from frozen norm32-dev02 with scripts/qualify_accelerator.py
  --device npu:0 --implementation native --dtype float32
  --native-library TASK/builds/norm32-native-npu-dev01 --output-dir OUT/verified
  and all18 --case norm32-{pdg,timed-dag,settle}-{content,old,proposal}-{streaming,greedy}.
 Queue120s/work900s. Candidate-only profile via scripts/profile_accelerator.py,
  case norm32-timed-dag-proposal-greedy, same native build, work480s.
-Add independent standalone C++ Norm32 gates. After core gates commit, perform clean
+norm32-native-profile-dev01 PASSED604 kernels (500 AIVEC,84 mixed AIV,20 AICORE),
+12 Norm kernels,97 host scalar events/72 memcpy events; no AiCPU/fallback. This is
+host-scheduled training placement evidence, not throughput/resident training.
+New cpp/test/read_precision.cpp + CMake target add standalone norm analytic/VJP/
+CPU-oracle/three-update/continuation gates. Frozen norm32-dev03 builds next:
+ build-norm32-cpu-dev02 and build-norm32-npu-dev02 PASSED exit0.
+norm32-cpu-ctests-dev02 PASSED all8; norm32-standalone-npu-dev01 PASSED
+ six schedule/Read combinations,18 updates and FP16/FP32 analytic norms. The test/CMake
+addition changes the core hash; matching new core required for further device work.
+Core gates passed. Commit core first, then run clean
 CPU regression/NPU validation, then integrate norm-fp32-v1 into the raw ContentFlow.
-Raw-device Norm32 is NOT implemented yet; old runtime-guard core is incompatible
+Raw-device Norm32 WIP now includes per-node read_kinds, scalar device sum/sqrt,
+heterogeneous read profiles and norm_check (520 windows,analytic ties/zero/overflow).
+build-device-norm-dev01 next uses frozen norm32-device-dev01 and matching
+ norm32-npu-dev02, waits at most600s for that core, work1800s/jobs2.
+Core prerequisite passed; device build is running. No device execution result yet.
+Unconnected future vector Read kernels tide_vector_read.cpp/tide_read_reduce.cpp
+are WIP; not part of frozen device norm build or any support claim.
+NEXT clean Norm32 source norm32-clean01 at upcoming implementation commit:
+ norm32-cpu-clean01 build+8 CTests+full verify.py CPU regression (4200s/jobs2);
+ build-norm32-npu-clean01 and build-norm32-native-npu-clean01 (1800s/jobs2);
+ norm32-python-npu-clean01 (18 cases,900s/queue120s). After builds launch native
+18-case parity,standalone Read-precision and candidate-only profile. Old runtime-guard core is incompatible
 with changed cpp sources: use matching new norm32 standalone core for later raw work.
 Continue LH Full/attention/KV, packed Read/transport,FP16,memory/public matrix,
 peer progression and resident backward/VJP/optimizer. No pause is active.

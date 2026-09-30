@@ -67,31 +67,52 @@ class NormRead(ReadProgram):
         return list(torch.linalg.vector_norm(values, ord=2, dim=-1, dtype=torch.float64).unbind())
 
 
+class NormFloat32Read(ReadProgram):
+    """Explicit FP32 norm, including conversion before reduction and its VJP."""
+    profile = "norm-fp32-v1"
+    precision = "float32"
+    joint_batch = True
+
+    def step(self, w, r):
+        value = r.content.value if r.state is None else r.state.value
+        return torch.linalg.vector_norm(value.to(torch.float32), ord=2, dim=-1)
+
+    def batch(self, w, requests):
+        values = torch.stack([r.content.value if r.state is None else r.state.value for r in requests])
+        return list(torch.linalg.vector_norm(values.to(torch.float32), ord=2, dim=-1).unbind())
+
+
 def program(profile, identity=False):
     if profile == LinearRead.profile:
         return LinearRead(identity)
     if profile == NormRead.profile and not identity:
         return NormRead()
+    if profile == NormFloat32Read.profile and not identity:
+        return NormFloat32Read()
     raise ValueError("unknown Read profile")
 
 
 def validate_program(weights, spec, *, native=False):
     program = weights.read_program
-    if native and type(program) not in {LinearRead, NormRead}:
+    if native and type(program) not in {LinearRead, NormRead, NormFloat32Read}:
         raise ValueError("Python custom Read has no native implementation")
     if not isinstance(program, ReadProgram) or program.profile != spec.readout:
         raise ValueError("Read program does not match graph profile")
     if isinstance(program, LinearRead) and program.identity != spec.identity:
         raise ValueError("shared Read program does not match identity policy")
-    if (program.precision not in {"payload", "float64"}
+    if (program.precision not in {"payload", "float32", "float64"}
             or isinstance(program, LinearRead) and program.precision != "payload"
-            or isinstance(program, NormRead) and program.precision != "float64"):
+            or isinstance(program, NormRead) and program.precision != "float64"
+            or isinstance(program, NormFloat32Read) and program.precision != "float32"):
         raise ValueError("invalid Read precision policy")
 
 
 def validate(value, r, precision="payload"):
     ref = r.content.value
-    dtype = torch.float64 if precision == "float64" else ref.dtype
+    choices = {"payload": ref.dtype, "float32": torch.float32, "float64": torch.float64}
+    if precision not in choices:
+        raise ValueError("invalid Read precision policy")
+    dtype = choices[precision]
     if not isinstance(value, torch.Tensor) or (value.shape, value.dtype, value.device) != (
             torch.Size([]), dtype, ref.device):
         raise ValueError("Read returned incompatible scalar metadata")
