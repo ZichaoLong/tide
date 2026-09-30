@@ -13,6 +13,7 @@ struct EmissionBatch {
 // presence and selected projection chunks are decided inside the device loop.
 class PackedEmission {
  public:
+  static long double minimum_bytes(const ContentProfile&,int64_t arrivals,int64_t outputs);
   PackedEmission(const ContentProfile&,at::Device,int64_t samples,int64_t arrivals,
                  int64_t outputs,int64_t max_chunk_rows,int64_t budget);
   EmissionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& error);

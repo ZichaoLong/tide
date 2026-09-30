@@ -47,7 +47,11 @@ class CannProgram {
   // checks in its device program. Runtime timeout is an execution error.
   void run(int32_t timeout_ms = 10000);
   void close();
+  // Set before appending any numerical operation; checked before each CANN
+  // workspace allocation. A refusal poisons construction, never executes a prefix.
+  void limit_workspace(int64_t bytes);
   int64_t workspace_bytes() const;
+  int64_t retained_tensor_bytes() const; // Unique tensor storage, excluding vendor internals.
  private:
   // Deterministic API-failure injection belongs to the standalone test adapter;
   // no environment switches or runtime mutation of a live program are exposed.

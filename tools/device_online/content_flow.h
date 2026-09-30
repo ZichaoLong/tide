@@ -4,9 +4,11 @@
 #include <memory>
 
 namespace tide::device_online {
+enum class ChunkPolicy { conservative, aggressive };
 struct ContentLimits {
   int64_t queue=1024, arrivals=1024, outputs=1024, trace=4096, stages=4096;
   int64_t workspace_bytes=64*1024*1024;
+  ChunkPolicy chunk_policy=ChunkPolicy::conservative;
   int64_t full_chunk_rows=16;
   int64_t emission_chunk_rows=16;
   int64_t attention_chunk_rows=8;

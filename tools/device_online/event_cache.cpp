@@ -25,7 +25,10 @@ std::array<long double,3> footprint(const ContentProfile& p,const Continuation& 
 }
 }
 long double PackedEventAttention::minimum_bytes(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
-  const auto [fixed,row,key]=footprint(p,q,l);return fixed+row+key;
+  const auto [fixed,row,key]=footprint(p,q,l);
+  if(row>0&&(l.kv_rows<1||l.attention_chunk_rows<1||l.attention_key_rows<1||(l.diagnostics&&l.kv_trace_rows<1)))
+    throw std::invalid_argument("invalid event attention cache limits");
+  return fixed+row+key;
 }
 PackedEventAttention::PackedEventAttention(const ContentProfile& p,const Continuation& q,at::Device d,const ContentLimits& l,int64_t budget)
     :rows_(l.queue),width_(p.width) {

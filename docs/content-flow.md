@@ -59,9 +59,9 @@ empty old caches do no decay work. Cache row count and observation count are dis
 `kv_rows` bounds each attention owner's simultaneously retained cache, including its
 complete next fiber; it never evicts or drops messages. Exceeding it fails with code11
 before a live-state commit. `attention_chunk_rows` bounds physical message/query/
-output and softmax-pooling event rows; the remaining byte budget can reduce it. Cache/parameter/packed scratch
-reservations leave at least one row of the following tanh Full work, using that
-planner's own footprint, before choosing a larger attention chunk. `attention_chunks` includes
+output and softmax-pooling event rows; the shared byte budget can reduce it. All
+module minima are reserved before physical chunks grow, using the same footprint
+formulas as their constructors. `attention_chunks` includes
 executed pooling chunks as well as QKV/query/output chunks. The effective
 row limit and `attention_kv_peak`/`attention_kv_capacity` expose actual work/capacity.
 `kv_trace_rows` separately bounds optional old/proposed cache diagnostics per window.
@@ -95,6 +95,38 @@ reserved before fiber chunks expand. `event_attention_chunks`, the effective chu
 limit, KV peak and capacity are reported separately from the fiber counters.
 These capabilities require their own completed qualification evidence; they do
 not follow from the earlier fiber-only reports.
+
+### Shared forward allocation budget
+
+`workspace_bytes` bounds the planned forward buffers and retained CANN operator
+workspaces together. CPU validation prepares the static profile before uploading
+device payloads. The planner reserves topology/queue/state/journal estimates and
+the minima for emission, SwiGLU, LH Full, fiber attention, event attention and tanh
+Full before allocating larger physical chunks. Unused module allowances become
+available to later modules. An impossible minimum is refused before these uploads;
+it does not trigger repeated OOM attempts or alter logical capacities.
+
+`chunk_policy=conservative|aggressive` retains respectively25% or10% of surplus
+after mandatory minima and a4096-byte operator minimum. A further share is reserved
+for CANN workspaces; unused chunk allowances also remain available to them.
+Aggressive allocation therefore permits larger chunks within the same declared
+budget. Queue/output capacities also cap the requested physical Full/emission rows.
+The program queries each CANN workspace requirement and checks it against the
+allowance before allocation. Numerical tasks execute in order on one stream and
+reuse a single arena sized to the largest requirement; workspace reservations do
+not sum the disjoint operator lifetimes. Refusal poisons construction: an incomplete program cannot
+be finished or executed. These policies affect physical allocation, never topology,
+actual selection, dtype, KV visibility, time or checkpoint semantics.
+
+Boundary statistics expose requested/usable budget, planned buffers, CANN workspace
+allowance/use, remaining planned headroom and effective chunk policy/row limits.
+`retained_tensor_bytes` counts unique tensor storages referenced by the program;
+aliases and views are counted once. It is not a peak-memory measurement. The memory
+gate separately records TorchNPU allocator peaks, including construction, for its
+finite mixed-module fixtures. Allocator reservation can include cached unused blocks.
+Neither counter observes all vendor/driver internal allocation. The plan currently
+excludes caller-owned device tensors, training and communication buffers; it is not
+a free-HBM guarantee or the complete training-memory planner required by F4/F6.
 
 ### Physical key tiles
 
@@ -240,9 +272,8 @@ unit-affine normalization. Only real selected comparisons enter computation;
 padding reads an independent zero sentinel and writes unique scratch destinations.
 Each node can have a different profile, and identity/tanh nodes can coexist.
 `full_chunks` counts both tanh and LH chunks; `full_chunk_rows` and
-`lh_full_chunk_rows` record their distinct effective limits. LH parameter/vector
-scratch reservation is deducted before planning tanh chunks. These are local
-budgets, not a complete model/KV/training memory plan. Slot-affine signaling is
+`lh_full_chunk_rows` record their distinct effective limits. Both share the forward
+allocation plan above, which does not cover training memory. Slot-affine signaling is
 handled by the separate emission stage; resident VJPs remain pending.
 
 LH component precision checks use an independent FP64 activation/norm formula on

@@ -2,9 +2,34 @@
 #include "tiled_attention.h"
 #include <algorithm>
 #include <array>
+#include <set>
 #include <stdexcept>
 
 namespace tide::device_online {
+namespace {
+std::array<long double,3> footprint(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+  const auto width=p.width;int64_t parameters=0,max_heads=0;std::set<int64_t> groups;bool pooled=false;
+  for(const auto& n:p.graph.nodes)if(!n.identity&&is_fiber_attention_profile(n.memory)) {
+    ++parameters;max_heads=std::max(max_heads,n.query_heads);groups.insert(n.query_heads);
+    pooled|=n.memory!="lh-fiber-attention-sum-repeat-v1";
+  }
+  if(!parameters)return {0,0,0};
+  if(l.kv_rows<1||l.attention_chunk_rows<1||l.attention_key_rows<1||(l.diagnostics&&l.kv_trace_rows<1))
+    throw std::invalid_argument("invalid fiber cache limits");
+  const auto pool_fixed=pooled?PackedFiberPool::reserved_bytes(p,l.queue,0):0.L;
+  const auto pool_row=pooled?PackedFiberPool::reserved_bytes(p,l.queue,1)-pool_fixed:0.L;
+  const auto owners=q.batch_size*static_cast<long double>(parameters);
+  const long double fixed=pool_fixed+24.L*(owners*l.kv_rows+1)*(2.L*width+1)
+    +48.L*(parameters+1.L)*width*width+128.L*(l.queue+1.L)*(width+8.L)
+    +(l.diagnostics?24.L*l.kv_trace_rows*(2.L*width+8):0);
+  const long double row=pool_row+96.L*width*width+256.L*width+256+groups.size()*256.L*width;
+  const long double key=groups.size()*(32.L*width+48.L*max_heads);
+  return {fixed,row,key};
+}
+}
+long double PackedFiberAttention::minimum_bytes(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+  const auto [fixed,row,key]=footprint(p,q,l);return fixed+row+key;
+}
 PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const Continuation& q,
     at::Device device,const ContentLimits& limits,int64_t budget)
     :nodes_(profile.graph.nodes.size()),width_(profile.width),parameters_(0),rows_(limits.queue),
@@ -29,18 +54,9 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   owners_=q.batch_size*parameters_;
   head_groups_=heads;std::sort(head_groups_.begin(),head_groups_.end());
   head_groups_.erase(std::unique(head_groups_.begin(),head_groups_.end()),head_groups_.end());
-  const auto max_heads=*std::max_element(heads.begin(),heads.end());
-  // Include both cache arenas, independent padding, row work, diagnostic copies,
-  // all head-group pack/score buffers and immutable parameter tables.
   const bool pooled=std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){
     return !n.identity&&is_fiber_attention_profile(n.memory)&&n.memory!="lh-fiber-attention-sum-repeat-v1";});
-  const auto pool_fixed=pooled?PackedFiberPool::reserved_bytes(profile,rows_,0):0.L;
-  const auto pool_row=pooled?PackedFiberPool::reserved_bytes(profile,rows_,1)-pool_fixed:0.L;
-  const long double fixed=pool_fixed+24.L*(owners_*static_cast<long double>(capacity_)+1)*(2.L*width_+1)
-    +48.L*(parameters_+1.L)*width_*width_+128.L*(rows_+1.L)*(width_+8.L)
-    +(limits.diagnostics?24.L*limits.kv_trace_rows*(2.L*width_+8):0);
-  const long double row_base=pool_row+96.L*width_*width_+256.L*width_+256+head_groups_.size()*256.L*width_;
-  const long double row_key=head_groups_.size()*(32.L*width_+48.L*max_heads);
+  const auto [fixed,row_base,row_key]=footprint(profile,q,limits);
   const auto tiles=plan_attention_tiles(fixed,row_base,row_key,budget,rows_,limits.attention_chunk_rows,capacity_,limits.attention_key_rows);
   chunk_=tiles.queries;key_rows_=tiles.keys;reserved_=tiles.reserved;
   if(pooled)pool_=std::make_unique<PackedFiberPool>(profile,device,rows_,chunk_);

@@ -8,9 +8,10 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::move(g)),model(std::move(m)) {
+ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_upload):graph(std::move(g)),model(std::move(m)) {
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("content flow requires explicit no-grad NPU");
+  const auto destination=defer_upload?at::Device(at::kCPU):device;
   graph.compile();
   for(const auto& n:graph.nodes) {
     if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"&&!is_fiber_attention_profile(n.memory))
@@ -68,18 +69,24 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
     decays.push_back(model.nodes[n].decay);
     retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},at::kFloat));
   }
-  sources=at::tensor(metadata,at::kLong).reshape({-1,2}).to(device);scales=at::stack(weights).to(device);
+  sources=at::tensor(metadata,at::kLong).reshape({-1,2}).to(destination);scales=at::stack(weights).to(destination);
   if(!graph.origins.empty()) {
     auto table=at::zeros({std::max<int64_t>(1,graph.edges.size()),2},at::kLong);
     table.select(1,0).fill_(-1);table.select(1,1).fill_(1);
     for(const auto& o:graph.origins){table[o.edge][0].fill_(o.port);table[o.edge][1].fill_(o.stride);}
-    origins=table.to(device);
+    origins=table.to(destination);
   }
-  read=at::stack(reads).to(device);decay=at::stack(decays).to(device);
-  retention=at::stack(retentions).to(device);
-  clock_policy=at::tensor(clocks,at::kLong).reshape({-1,3}).to(device);
-  read_modes=at::tensor(modes,at::kLong).to(device);
-  read_kinds=at::tensor(read_types,at::kLong).to(device);
-  config=at::tensor(settings,at::kLong).reshape({-1,3}).to(device);
+  read=at::stack(reads).to(destination);decay=at::stack(decays).to(destination);
+  retention=at::stack(retentions).to(destination);
+  clock_policy=at::tensor(clocks,at::kLong).reshape({-1,3}).to(destination);
+  read_modes=at::tensor(modes,at::kLong).to(destination);
+  read_kinds=at::tensor(read_types,at::kLong).to(destination);
+  config=at::tensor(settings,at::kLong).reshape({-1,3}).to(destination);
+}
+void ContentProfile::upload(at::Device device) {
+  if(!sources.device().is_cpu()||device.type()!=c10::DeviceType::PrivateUse1)
+    throw std::invalid_argument("profile upload requires deferred CPU tables and explicit NPU");
+  for(auto tensor:{&sources,&origins,&scales,&read,&read_modes,&read_kinds,&decay,&retention,&clock_policy,&config})
+    if(tensor->defined())*tensor=tensor->to(device);
 }
 } // namespace tide::device_online

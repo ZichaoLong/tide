@@ -64,6 +64,14 @@ Result ContentFlow::Impl::export_result() const {
     {"event_attention_kv_peak",event_attention?event_attention->peak().cpu().item<Index>():0},
     {"event_attention_kv_capacity",event_attention?limits.kv_rows:0},
     {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
+  out.stats["memory_budget_bytes"]=limits.workspace_bytes;
+  out.stats["usable_memory_budget_bytes"]=usable_memory_budget;
+  out.stats["planned_buffer_bytes"]=planned_buffer_bytes;
+  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget;
+  out.stats["cann_workspace_bytes"]=program->workspace_bytes();
+  out.stats["retained_tensor_bytes"]=program->retained_tensor_bytes();
+  out.stats["planned_headroom_bytes"]=limits.workspace_bytes-planned_buffer_bytes-program->workspace_bytes();
+  out.stats["aggressive_chunking"]=limits.chunk_policy==ChunkPolicy::aggressive;
   for(const bool event:{false,true}) {
     const auto work=event?(event_attention?event_attention->key_work():at::zeros({3},at::kLong)):
       (attention?attention->key_work().cpu():at::zeros({3},at::kLong));

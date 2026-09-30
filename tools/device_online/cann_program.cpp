@@ -6,6 +6,7 @@
 #include <iostream>
 #include <limits>
 #include <stdexcept>
+#include <unordered_set>
 
 namespace tide::device_online {
 struct CannProgram::Impl {
@@ -16,9 +17,11 @@ struct CannProgram::Impl {
   void* target_list = nullptr;
   std::vector<void*> labels, lists, descriptors, scalars, arrays;
   std::vector<bool> marked;
-  std::vector<at::Tensor> owners, workspaces;
+  std::vector<at::Tensor> owners;
+  at::Tensor workspace;
   std::vector<std::function<void()>> commands;
   bool bound = false, finished = false, closed = false, failed = false, in_flight = false;
+  int64_t workspace_limit=std::numeric_limits<int64_t>::max(),workspace_used=0;
   explicit Impl(at::Device d) : device(d) {}
   void initialize() {
     c10::DeviceGuard guard(device);
@@ -59,9 +62,17 @@ struct CannProgram::Impl {
     uint64_t size = 0; void* executor = nullptr;
     CannApi::check(prepare(args..., &size, &executor), name);
     if (size > uint64_t(std::numeric_limits<int64_t>::max())) throw std::overflow_error("control workspace size");
-    auto workspace = at::empty({std::max<int64_t>(1, size)}, at::TensorOptions().device(device).dtype(at::kByte));
-    workspaces.push_back(workspace); // Keep it through all runtime-model executions.
-    commands.push_back([this, execute, workspace, size, executor, name] {
+    const auto allocation=std::max<int64_t>(1,size);
+    if(allocation>workspace_limit) {
+      failed=true;
+      throw std::invalid_argument(std::string("CANN workspace budget exceeded before allocation: ")+name
+        +" required="+std::to_string(allocation)+" limit="+std::to_string(workspace_limit));
+    }
+    // All captured numerical tasks are ordered on this one stream. Workspace
+    // liveness ends with its operator; the same arena is reused on every loop
+    // iteration. Query all requirements before allocating the high-water mark.
+    workspace_used=std::max(workspace_used,allocation);
+    commands.push_back([this, execute, size, executor, name] {
       CannApi::check(execute(workspace.data_ptr(), size, executor, stream), name);
     });
   }
@@ -86,7 +97,7 @@ struct CannProgram::Impl {
     destroy(arrays, api.destroy_int_array, "destroy control shape array");
     if (stream) { CannApi::check(api.destroy_stream(stream), "destroy control stream"); stream = nullptr; }
     if (launch) { CannApi::check(api.destroy_stream(launch), "destroy control launch stream"); launch = nullptr; }
-    commands.clear(); owners.clear(); workspaces.clear(); closed = true;
+    commands.clear(); owners.clear(); workspace=at::Tensor(); workspace_used=0; closed = true;
     resource.close();
   }
 };
@@ -247,6 +258,7 @@ void CannProgram::finish() {
   // CANN requires target-list creation BEFORE the first label is marked.
   // Defer all task emission, preserving source order, until lists are complete.
   try {
+    if(p.workspace_used)p.workspace=at::empty({p.workspace_used},at::TensorOptions().device(p.device).dtype(at::kByte));
     if(!p.labels.empty()) {
       CannApi::check(p.api.create_list(p.labels.data(),p.labels.size(),&p.target_list),"create control target list");
       p.lists.push_back(p.target_list);
@@ -273,8 +285,21 @@ void CannProgram::close() {
   catch (...) {impl_->failed=true;throw;}
 }
 int64_t CannProgram::workspace_bytes() const {
-  int64_t result = 0;
-  for (const auto& workspace : impl_->workspaces) result += workspace.nbytes();
-  return result;
+  return impl_->workspace_used;
+}
+void CannProgram::limit_workspace(int64_t bytes) {
+  auto& p=*impl_;p.building();
+  if(bytes<0||p.workspace_used)throw std::invalid_argument("set workspace budget before numerical operations");
+  p.workspace_limit=bytes;
+}
+int64_t CannProgram::retained_tensor_bytes() const {
+  std::unordered_set<const c10::StorageImpl*> seen;int64_t total=0;
+  for(const auto& tensor:impl_->owners) {
+    const auto storage=tensor.storage();if(!seen.insert(storage.unsafeGetStorageImpl()).second)continue;
+    const auto bytes=storage.nbytes();
+    if(bytes>uint64_t(std::numeric_limits<int64_t>::max()-total))throw std::overflow_error("retained tensor bytes");
+    total+=bytes;
+  }
+  return total;
 }
 }  // namespace tide::device_online

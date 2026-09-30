@@ -5,6 +5,7 @@ namespace tide::device_online {
 struct ContentProfile;
 class PackedSwiGluFull {
  public:
+  static long double minimum_bytes(const ContentProfile&,int64_t capacity);
   PackedSwiGluFull(const ContentProfile&,at::Device,int64_t capacity,int64_t max_rows,int64_t budget);
   ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
       const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);

@@ -15,6 +15,7 @@ struct FiberStage {
 // candidate cache and softmax denominator. No cache eviction is implied.
 class PackedFiberAttention {
  public:
+  static long double minimum_bytes(const ContentProfile&,const Continuation&,const ContentLimits&);
   PackedFiberAttention(const ContentProfile&,const Continuation&,at::Device,
                        const ContentLimits&,int64_t byte_budget);
   FiberStage propose(CannProgram&,const ContentProfile&,const ReadyBatch&,

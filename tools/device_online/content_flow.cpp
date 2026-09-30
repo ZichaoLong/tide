@@ -1,4 +1,5 @@
 #include "content_flow_internal.h"
+#include "content_budget.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
@@ -8,15 +9,30 @@
 
 namespace tide::device_online {
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
-    :profile(std::move(g),std::move(m),d),limits(l),device(d),boundary(q) {
+    :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q) {
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   const auto nodes=int64_t(profile.graph.nodes.size()),regions=int64_t(profile.graph.regions.size()),width=profile.width,samples=q.batch_size;
-  // Conservative arithmetic-only preflight of persistent and packed scratch.
-  // It is deliberately bounded and is not yet the model/KV/training chunker.
+  // Static CPU validation/planning precedes any profile/payload device upload.
+  // These conservative tensor bounds exclude caller CPU storage/vendor internals.
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+(l.diagnostics?l.trace:0))*(width*5.L+32)
-    +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L));
-  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
+    +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L))
+    +160.L*(profile.graph.edges.size()+profile.graph.inputs.size()+profile.graph.outputs.size()+nodes);
+  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes
+      ||(l.chunk_policy!=ChunkPolicy::conservative&&l.chunk_policy!=ChunkPolicy::aggressive))
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
+  std::vector<int64_t> kinds,lh_kinds;std::vector<Tensor> weights,biases,norm_weights,norm_biases;bool has_lh=false;
+  for(size_t n=0;n<profile.graph.nodes.size();++n){const auto& node=profile.graph.nodes[n];
+    const auto& w=profile.model.nodes[n];const auto kind=node.identity?0:lh_full_kind(node.full);has_lh|=kind!=0;lh_kinds.push_back(kind);
+    kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
+    norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
+    norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
+  const std::array<long double,6> minimum={
+    PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs),
+    PackedSwiGluFull::minimum_bytes(profile,l.queue),PackedLhFull::minimum_bytes(lh_kinds,width,l.queue),
+    PackedFiberAttention::minimum_bytes(profile,q,l),PackedEventAttention::minimum_bytes(profile,q,l),
+    PackedFull::minimum_bytes(kinds,width)};
+  ContentBudget budget(l.workspace_bytes,l.chunk_policy==ChunkPolicy::aggressive,estimate,minimum);
+  profile.upload(device);
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
   event_count=at::zeros_like(stop);
@@ -47,38 +63,29 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
     emission_trace=std::make_unique<DeviceJournal>(l.trace,6,width,device);
   }
-  std::vector<int64_t> kinds,lh_kinds;std::vector<Tensor> weights,biases,norm_weights,norm_biases;bool has_lh=false;
-  for(size_t n=0;n<profile.graph.nodes.size();++n){const auto& node=profile.graph.nodes[n];
-    const auto& w=profile.model.nodes[n];const auto kind=node.identity?0:lh_full_kind(node.full);has_lh|=kind!=0;lh_kinds.push_back(kind);
-    kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
-    norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
-    norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
-  const auto remaining=l.workspace_bytes-static_cast<int64_t>(estimate);
-  emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,l.emission_chunk_rows,remaining);
-  auto full_budget=remaining-emission->reserved_bytes();
-  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&n.full=="swiglu";})) {
-    swiglu_full=std::make_unique<PackedSwiGluFull>(profile,device,l.queue,l.full_chunk_rows,full_budget);
-    full_budget-=swiglu_full->reserved_bytes();
+  emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,
+    std::min(l.emission_chunk_rows,l.arrivals+l.outputs),budget.available(0));
+  budget.reserve(0,emission->reserved_bytes());
+  const auto max_full=std::min(l.full_chunk_rows,l.queue);
+  if(minimum[1]>0) {
+    swiglu_full=std::make_unique<PackedSwiGluFull>(profile,device,l.queue,max_full,budget.available(1));
+    budget.reserve(1,swiglu_full->reserved_bytes());
   }
-  if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
-  full_budget-=lh_full?lh_full->reserved_bytes():0;
-  const auto minimum_event=PackedEventAttention::minimum_bytes(profile,q,l);
-  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&is_fiber_attention_profile(n.memory);})) {
-    // Leave the minimum remaining Full work before growing an attention chunk.
-    // Otherwise a legal smaller query chunk could be rejected during Full setup.
-    const auto minimum_full=PackedFull::minimum_bytes(kinds,width)+minimum_event;
-    if(minimum_full>=full_budget)throw std::invalid_argument("fiber cache leaves no Full workspace");
-    const auto attention_budget=static_cast<int64_t>(full_budget-minimum_full);
-    attention=std::make_unique<PackedFiberAttention>(profile,q,device,l,attention_budget);
-    full_budget-=attention->reserved_bytes();
+  if(has_lh) {
+    lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,max_full,budget.available(2));
+    budget.reserve(2,lh_full->reserved_bytes());
   }
-  if(minimum_event>0) {
-    const auto minimum_full=PackedFull::minimum_bytes(kinds,width);
-    if(minimum_full>=full_budget)throw std::invalid_argument("event cache leaves no Full workspace");
-    event_attention=std::make_unique<PackedEventAttention>(profile,q,device,l,static_cast<int64_t>(full_budget-minimum_full));
-    full_budget-=event_attention->reserved_bytes();
+  if(minimum[3]>0) {
+    attention=std::make_unique<PackedFiberAttention>(profile,q,device,l,budget.available(3));
+    budget.reserve(3,attention->reserved_bytes());
   }
-  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,full_budget);
+  if(minimum[4]>0) {
+    event_attention=std::make_unique<PackedEventAttention>(profile,q,device,l,budget.available(4));
+    budget.reserve(4,event_attention->reserved_bytes());
+  }
+  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,max_full,budget.available(5));
+  budget.reserve(5,full->reserved_bytes());
+  planned_buffer_bytes=budget.planned_bytes();operator_workspace_budget=budget.operator_budget();usable_memory_budget=budget.usable_bytes();
   construct();
   // Only input-seal/ledger metadata belongs on the host between windows.
   // The authoritative state, history and pending payloads are device owners.
@@ -87,7 +94,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
 void ContentFlow::Impl::construct() {
   const auto& g=profile.graph;const auto opts=state.values.options();
   DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
-  program=std::make_unique<CannProgram>(device);auto& p=*program;
+  program=std::make_unique<CannProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
   if(limits.diagnostics) {
     p.copy(history_before.counts,history.counts);p.copy(history_before.seen,history.seen);
@@ -135,7 +142,6 @@ void ContentFlow::Impl::construct() {
   if(attention)attention->commit(p,attended,selection,error);
   if(event_attention)event_attention->commit(p,event_attended,selection,error);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);p.finish();
-  if(p.workspace_bytes()>limits.workspace_bytes)throw std::invalid_argument("CANN numerical workspace exceeds content budget");
 }
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l)) {}

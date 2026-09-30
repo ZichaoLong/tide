@@ -7,7 +7,16 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
+namespace {
+uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
+std::pair<long double,long double> footprint(int64_t nodes,int64_t width,int64_t rows) {
+  return {8.L*(nodes+1.L)*width+8.L*(rows+1.L)*width+8.L*nodes,128.L*width+128};
+}
+}
+long double PackedLhFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,int64_t capacity) {
+  if(std::none_of(kinds.begin(),kinds.end(),[](auto k){return k!=0;}))return 0;
+  const auto [fixed,row]=footprint(kinds.size(),width,capacity);return fixed+row;
+}
 int64_t lh_full_kind(const std::string& name) {
   int64_t kind=0;
   for(const std::string act:{"relu","silu","identity"})for(const std::string norm:{"identity","rms","layer"}) {
@@ -27,8 +36,7 @@ PackedLhFull::PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& weight,c
   for(auto kind:kinds){if(kind<0||kind>9)throw std::invalid_argument("unknown packed LH Full contract");if(kind)groups.insert(kind);}
   groups_.assign(groups.begin(),groups.end());
   // Include parameter sentinels, action copies and reusable chunk vectors.
-  const long double fixed=8.L*(nodes_+1.L)*width_+8.L*(rows_+1.L)*width_+8.L*nodes_;
-  const long double per_row=128.L*width_+128;
+  const auto [fixed,per_row]=footprint(nodes_,width_,rows_);
   if(fixed+per_row>budget)throw std::invalid_argument("one packed LH Full row exceeds workspace budget");
   chunk_=std::min<int64_t>({max_rows,capacity,static_cast<int64_t>((budget-fixed)/per_row)});
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);

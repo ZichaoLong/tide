@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T13:54:28.924549+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T14:17:04.366197+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **7b03614**, committed/pushed. No pending authorization or pause. No subagents.
+HEAD **242d851**, committed/pushed (key-tiling evidence). No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -32,31 +32,49 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
 
 ## Active work and next actions
 
-1. Key-axis implementation7b03614 clean qualification PASSED: full build/four
-   CTests,all28 cells and independent profile. All three key-tile-clean01 runs
-   terminal0; evidence now recorded in docs/evidence/device-key-tiling-20260930.{json,md}.
-   Commit/push evidence separately; memory implementation remains uncommitted.
-2. Working tree now adds shared construction memory planning: deferred CPU-only
-   profile preparation, reserve all six module minima before growing physical
-   chunks, conservative/aggressive surplus headroom, CANN workspace cap checked
-   before allocation, unique retained tensor bytes and budget counters. Added
-   memory_check.cpp (mixed modules/feedback, both policies/schedules, bounded
-   refusal/alias tests). Not yet verified. Full build is RUNNING:
-   build-device-memory-dev01, snapshot memory-dev01, build device-memory-dev01,
-   matching core origins-npu-clean01; jobs2,1800s. CMake now compiles the independent
-   test comparator once into a test-only archive, avoiding repeated compilation.
-3. After build advances, run memory first then all29 cells,900s/queue120s/one NPU;
-   independent memory placement profile only after its semantic gate succeeds.
-4. Continue complete calibrated memory planning, node-time attention batching,
-   remaining modules, public presets/matrix, peer progression and resident training.
-   Historical slow CPU Attention is not a build-wait filler. F1–F7 remain open.
+1. Shared forward budgets and serial CANN workspace reuse are ready to commit.
+   Frozen memory-dev06: controlled build/four CPU checks/all29 device cells and
+   independent profile PASSED. New gate72 windows/seven workspace checks,
+   24 allocator calibrations,192/512MiB,widths3/33/257,both policies/schedules.
+   Profile62,714 AIV+4,291 AI Core,no AiCPU/fallback. This is FP32 HARD inference,
+   not training, throughput or all vendor/driver peak memory.
+2. Commit/push only memory implementation/docs/registry files; exclude the older
+   accelerator dirty work below AND next-increment ascendc/event_sequence.h.
+   Then launch exact-commit memory-clean01 full build,all29 gates and memory
+   profile; record clean evidence separately. Matching core origins-npu-clean01.
+3. Continue node-time event attention batching while the clean build runs.
+   New event_sequence.h is only a prepared device index helper, not yet integrated
+   or tested. Design: packed QKV for all actual ready events, immutable old KV plus
+   compact new rows, per-query window/prefix visibility, commit only the final
+   adopted cache per owner. Observe-all without selected clear permits multi-time
+   preparation; state-dependent adoption/clear keeps single-frame fallback.
+   Then continue remaining modules/public presets/matrix,peer progression,resident
+   backward/VJP/optimizer and representative/full-size performance. F1–F7 open.
 
-The memory plan covers declared FP32 forward tensors and CANN workspaces, not
-vendor-internal allocation, allocator fragmentation, caller tensors, training or
-communication buffers. Retained tensor bytes are not a measured peak. The shared
-budget prevents early modules from consuming later modules' minima and reserves
-surplus for operator work/headroom. Actual numerical topology/input decisions are
-unchanged. No free-HBM guarantee or full training-memory completion is implied.
+Memory implementation: CPU-deferred profile tables; reserve all six module minima
+before growing physical chunks; conservative/aggressive surplus headroom; bounded
+CANN workspace size queries and one serial arena allocated at finish; unique
+retained tensor bytes and allocator calibration. Values/capacities are unchanged.
+The plan excludes caller tensors,training,communication,vendor internals and allocator
+fragmentation. Actual peak allocated delta across24 fixtures stays within budget;
+width257/512MiB aggressive uses167,218,688 bytes,while conservative149,631,488.
+No free-HBM guarantee is claimed. Complete calibrated training-memory work remains.
+
+Preserved memory development failures:
+- dev01 full build/four CTests passed; gate rejected incorrect external positions
+  before execution;seven workspace/refusal checks passed. Positions must be0,1,2
+  for sparse logical times0,2,5. dev02 review caught reversed fields before gating.
+- dev03/dev04 gates failed strict FP32 parity in the original symmetric input:
+  node1/time5 SiLU+LayerNorm Full,variance1.6354e-5,middle~-0.0028,error1.45053e-6.
+  Original failure remains reproducible, not relabelled passed. New allocation
+  fixture uses asymmetric square-pattern channels; tolerance remains1e-5/1e-6.
+  Dedicated LH conditioning gate also passes. Production formulas unchanged.
+- dev05 passed48 windows/16 calibrations,then width257 refused a CANN workspace
+  before allocation. Per-op retained workspaces unnecessarily summed serial
+  lifetimes. dev06 fixes that with one maximum-size arena and verifies aliasing,
+  sequential dependent operations and exact-cap repeated execution. All29 pass.
+- prior-workspace regression-dev03 passed all28 preexisting cells. Immutable old
+  snapshots/logs remain; dev06 relinked every program after production hash checks.
 
 ## Key-axis attention tiling: implementation7b03614
 

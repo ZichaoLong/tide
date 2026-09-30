@@ -7,6 +7,7 @@ namespace tide::device_online {
 int64_t lh_full_kind(const std::string&);
 class PackedLhFull {
  public:
+  static long double minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,int64_t capacity);
   PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& cpu_weight,const at::Tensor& cpu_bias,
                at::Device,int64_t capacity,int64_t max_chunk_rows,int64_t workspace_budget_bytes);
   ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& comparison,

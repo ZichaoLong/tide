@@ -15,7 +15,8 @@ struct ContentProfile {
   bool all_content=true;
   // source rows: [target, logical slot]; source scales ordered input then edge.
   at::Tensor sources,origins,scales,read,read_modes,read_kinds,decay,retention,clock_policy,config;
-  ContentProfile(Graph,Model,at::Device);
+  ContentProfile(Graph,Model,at::Device,bool defer_upload=false);
+  void upload(at::Device);
 };
 struct ContentState {at::Tensor values,clocks,present;};
 struct ContentBatch {

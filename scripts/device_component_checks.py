@@ -25,6 +25,7 @@ CHECKS = {
     "fiber-pool": ("tide-device-fiber-pool-check", ("float32",)),
     "event-attention": ("tide-device-event-attention-check", ("float32",)),
     "attention-tile": ("tide-device-attention-tile-check", ("float32",)),
+    "memory": ("tide-device-memory-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -48,6 +49,7 @@ MARKERS = {
     "fiber-pool": "device-fiber-pool: passed",
     "event-attention": "device-event-attention: passed",
     "attention-tile": "device-attention-tile: passed",
+    "memory": "device-memory: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
@@ -55,4 +57,4 @@ KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "add": "tide_vector_state", "clock": "tide_vector_state", "norm32": "tide_vector_read",
            "lh-full": "tide_full_plan", "origins": "tide_sum_plan", "emission": "tide_emission_plan",
            "swiglu": "tide_full_plan", "fiber": "tide_fiber_payload", "fiber-pool": "tide_fiber_pool",
-           "event-attention": "tide_event_payload", "attention-tile": "tide_attention_softmax"}
+           "event-attention": "tide_event_payload", "attention-tile": "tide_attention_softmax", "memory": "tide_attention_softmax"}

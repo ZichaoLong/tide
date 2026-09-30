@@ -7,7 +7,17 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
+namespace {
+uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
+std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t rows,int64_t nodes) {
+  return {24.L*(parameters+1.L)*width*width+16.L*(rows+1.L)*width+16.L*(nodes+1.L),24.L*width*width+128.L*width+128};
+}
+}
+long double PackedSwiGluFull::minimum_bytes(const ContentProfile& p,int64_t capacity) {
+  int64_t count=0;for(const auto& n:p.graph.nodes)count+=!n.identity&&n.full=="swiglu";
+  if(!count)return 0;
+  const auto [fixed,row]=footprint(count,p.width,capacity,p.graph.nodes.size());return fixed+row;
+}
 PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
     :nodes_(profile.graph.nodes.size()),width_(profile.width),rows_(capacity),parameters_(0),chunk_(0),reserved_(0) {
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1||capacity<1||max_rows<1||budget<1)
@@ -22,8 +32,7 @@ PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device devi
     }
   }
   if(!parameters_)throw std::invalid_argument("packed SwiGLU requires at least one declared owner");
-  const long double fixed=24.L*(parameters_+1.L)*width_*width_+16.L*(rows_+1.L)*width_+16.L*(nodes_+1.L);
-  const long double per_row=24.L*width_*width_+128.L*width_+128;
+  const auto [fixed,per_row]=footprint(parameters_,width_,rows_,nodes_);
   if(fixed+per_row>budget)throw std::invalid_argument("one packed SwiGLU row exceeds workspace budget");
   chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(max_rows),static_cast<long double>(capacity),(budget-fixed)/per_row}));
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);

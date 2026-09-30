@@ -29,6 +29,7 @@ struct ContentFlow::Impl {
   AtomBatch external;
   at::Tensor error,stop,stages,event_count;
   std::unique_ptr<CannProgram> program;
+  int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false;
   Impl(Graph,Model,const Continuation&,at::Device,ContentLimits);
   void construct();

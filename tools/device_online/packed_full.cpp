@@ -29,6 +29,7 @@ PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const
   if(any_tanh_&&(persistent+per_row>budget))throw std::invalid_argument("one packed Full row exceeds workspace budget");
   if(any_tanh_)chunk_=std::min<int64_t>(max_rows,static_cast<int64_t>((budget-persistent)/per_row));
   else chunk_=1;
+  if(any_tanh_)reserved_=static_cast<int64_t>(persistent+per_row*chunk_);
   kinds_=at::tensor(kinds,at::kLong).to(device);chunks_=at::zeros({1},kinds_.options());
   if(any_tanh_) {
     weights_=at::cat({weight,at::zeros({1,width_,width_},weight.options())},0).to(device).contiguous();

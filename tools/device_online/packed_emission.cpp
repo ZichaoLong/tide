@@ -9,7 +9,21 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
+namespace {
+uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
+std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t capacity,int64_t slots,int64_t nodes) {
+  const long double persistent=parameters?4.L*(parameters+1.L)*(width*static_cast<long double>(width)+width):0;
+  return {persistent+128.L*capacity+16.L*(capacity+1.L)*width+64.L*(slots+nodes+1.L),
+    parameters?8.L*width*width+80.L*width+64:0.L};
+}
+}
+long double PackedEmission::minimum_bytes(const ContentProfile& p,int64_t arrivals,int64_t outputs) {
+  int64_t parameters=0;const auto& g=p.graph;
+  for(size_t n=0;n<g.nodes.size();++n)if(!g.nodes[n].identity&&g.nodes[n].emission=="slot_affine")
+    parameters+=g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];
+  const auto [fixed,row]=footprint(parameters,p.width,arrivals+outputs,g.outgoing_ports.bindings.size(),g.nodes.size());
+  return fixed+row;
+}
 PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,int64_t samples,
     int64_t arrivals,int64_t outputs,int64_t max_rows,int64_t budget)
     :nodes_(profile.graph.nodes.size()),samples_(samples),width_(profile.width),arrivals_(arrivals),outputs_(outputs),
@@ -38,9 +52,7 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
   }
   // Stage storage is linear in declared message capacities. Matrices are
   // gathered only for present affine rows and bounded by a separate chunk.
-  const long double persistent=parameters_?4.L*(parameters_+1.L)*(width_*static_cast<long double>(width_)+width_):0;
-  const long double fixed=persistent+128.L*capacity_+16.L*(capacity_+1.L)*width_+64.L*(slots_+nodes_+1.L);
-  const long double per_row=8.L*width_*width_+80.L*width_+64;
+  const auto [fixed,per_row]=footprint(parameters_,width_,capacity_,slots_,nodes_);
   if(fixed+(parameters_?per_row:0)>budget)throw std::invalid_argument("packed emission exceeds workspace budget");
   if(parameters_)chunk_=static_cast<int64_t>(std::min<long double>(max_rows,(budget-fixed)/per_row));
   reserved_=static_cast<int64_t>(fixed+chunk_*per_row);
