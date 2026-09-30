@@ -106,7 +106,8 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp device_optimizer.cpp parameter_publish.cpp packed_aggregate.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp device_optimizer.cpp parameter_publish.cpp
+    retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -120,7 +121,8 @@ if(TIDE_DEVICE_ASCENDC)
     tide_aggregate_plan_kernel tide_aggregate_apply_kernel
     tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel tide_reverse_links_kernel
     tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel tide_parameter_vjp_kernel
-    tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_parameter_publish_kernel)
+    tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_parameter_publish_kernel
+    tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide_parameter_accumulate_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     add_executable(tide-content-flow-check content_check.cpp)
     target_compile_options(tide-content-flow-check PRIVATE -fPIC)
@@ -137,6 +139,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-training-step-check training_step_check.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-training-step-check PRIVATE -fPIC)
     target_link_libraries(tide-device-training-step-check PRIVATE tide-content-flow tide-device-test-compare)
+    add_executable(tide-device-retained-check retained_check.cpp retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-device-retained-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-retained-check PRIVATE tide-content-flow tide-device-test-compare)
     add_executable(tide-device-parameter-vjp-check parameter_vjp_check.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-parameter-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-parameter-vjp-check PRIVATE tide-content-flow tide-device-test-compare)

@@ -3,7 +3,7 @@
 Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **933d6fe**,parameter owner qualification pushed;graph reverse qualification12eb606;
+HEAD **3b31ee2**,device optimizer/publication implementation pushed;parameter qualification933d6fe;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -134,13 +134,15 @@ Device optimizer + publication is this tested implementation increment:
   training-step-dev02 PASSED9 checks,including new nonfinite slot/correction
   transaction tests. training-step-profile-dev02 PASSED79,156 AIV+1,808 AI_CORE+
   288 MIX_AIV,288 optimizer records,no AiCPU/fallback;not throughput.
-- After implementation commit,launch build-training-step-clean01 from its exact
-  hash (1800s/jobs2/no lease),then training-step-clean01 full40-cell gate and
+- build-training-step-clean01 PASSED from exact3b31ee2 (four CTests);training-step-clean01 and training-step-profile-clean01 are running after bounded dependency waits (1800s/jobs2/no lease),then training-step-clean01 full40-cell gate and
   training-step-profile-clean01 (900s/one NPU/queue120s each),audit and commit evidence.
-- New UNCOMMITTED/UNREGISTERED next increment:retained_tape.{h,cpp},window_bridge.cpp,
-  Ascend C tide_window_bridge_{meta,values}.cpp. Device tape snapshots and
-  actual pending/state cotangent links;no tests/build yet. Keep separate from
-  the tested optimizer increment and review before enabling.
+- Retained-window backward is this tested implementation increment:retained_tape.{h,cpp},window_bridge.cpp,parameter_accumulate.cpp,
+  retained_fixture/check and three Ascend C kernels,plus parameter_vjp.h and build/check registration.
+  Device tape snapshots after close,actual pending/state cotangent links and alias accumulation;
+  26 retained trajectories/104 windows planned against independent CPU FP32/FP64.
+  build-retained-dev01 PASSED checked isolated build;retained-dev01 PASSED8 checks,26 trajectories/104 retained windows.
+  retained-profile-dev01 PASSED49,324 AIV+838 AI_CORE+832 MIX_AIV,314 bridge records,no AiCPU/fallback.
+  Contract docs/resident-retained.md. After commit,launch build-retained-clean01 from the exact hash (1800s/jobs2/no lease),then retained-clean01 full41-cell gate and retained-profile-clean01 (900s/one NPU/queue120s each). This is not the public training lifecycle or a throughput claim.
 
 Retain task-local build-optimizer-dev01 failure (static archive after as-needed
 ascendcl) and build-optimizer-dev01b failure (public consumer has no direct
@@ -150,8 +152,7 @@ optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
 32 trajectories/256 updates. Later full training-step development build supersedes
 its limited build scope. Never treat either failed build as clean qualification.
 
-Next: commit tested optimizer implementation,then clean immutable build/full40-cell qualification and evidence. Then public training
-ownership and retained-window lifetime/boundary cotangent links. Borrowed tapes
+Next: finish the optimizer40-cell and retained41-cell immutable qualification/evidence;then public training ownership,parameter-generation guards and checkpoint integration. Borrowed tapes
 expire on next advance/close/parameter update. LH/SwiGLU/normalized Aggregate/
 attention/HST/SOFTP adjoints,peer progression,FP16 and the public/performance
 matrix remain. Do not mark F4/F5 complete at this restricted HARD chain.

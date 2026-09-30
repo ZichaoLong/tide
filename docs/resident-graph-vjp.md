@@ -62,8 +62,9 @@ refusals. It checks every boundary input, initial state, Full/state/scale gradie
 and connection, with a separate device placement profile. Passing evidence must
 be tied to an immutable source revision; this document is the contract.
 
-Remaining training work includes alias-owner updates, optimizer/finite checks,
-retained multi-window graphs and public autograd/explicit training interfaces;
+Internal [owner updates](resident-optimizer.md) and [retained-window bridges](resident-retained.md)
+now compose with this component under their own qualification scopes. Remaining
+training work includes public autograd/explicit training ownership and checkpoints;
 normalized Aggregate, LH/SwiGLU, attention and HST/SOFTP adjoints; FP16 and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.

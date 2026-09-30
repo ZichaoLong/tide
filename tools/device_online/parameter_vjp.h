@@ -16,4 +16,6 @@ struct ParameterVjp {
 // it may explicitly select only the trainable subset. No numerical CPU prepass.
 ParameterVjp append_parameter_vjp(CannProgram&,const Graph&,const ParameterRegistry&,
                                  const GraphVjp&,const at::Tensor& error,int64_t tensor_budget_bytes);
+ParameterVjp append_parameter_accumulate(CannProgram&,const ParameterVjp&,const ParameterVjp&,
+                                        const at::Tensor& error,int64_t tensor_budget_bytes);
 } // namespace tide::device_online
