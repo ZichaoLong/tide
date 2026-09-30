@@ -7,6 +7,7 @@
 #include "packed_emission.h"
 #include "packed_swiglu_full.h"
 #include "packed_fiber_attention.h"
+#include "packed_event_attention.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
@@ -22,6 +23,7 @@ struct ContentFlow::Impl {
   std::unique_ptr<PackedEmission> emission;
   std::unique_ptr<PackedSwiGluFull> swiglu_full;
   std::unique_ptr<PackedFiberAttention> attention;
+  std::unique_ptr<PackedEventAttention> event_attention;
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
   std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,emission_trace;
   AtomBatch external;

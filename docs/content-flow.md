@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity, EMA, Add-repeat or LH fiber attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
+scales; identity, EMA, Add-repeat, event-GQA or LH fiber attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity, tanh, SwiGLU or LH
 Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
 apply their declared activation/normalization to comparison without that residual.
@@ -69,8 +69,31 @@ journal capacity retains the shared journal refusal. Lean execution omits these
 copies. Explicit snapshots include exact key/value/log-bias slots; the authoritative
 device cache survives windows that skip host exports. Initial capacity, work-limit
 and runtime refusals preserve the existing restore-after-failure contract.
-Event GQA/window attention, FP16 and resident backward
-are separate capabilities and remain rejected by this adapter.
+FP16 and resident backward remain separate capabilities and are rejected by this
+forward-only adapter.
+
+The separate `memory="attention"` adapter implements the `event-gqa-v1` semantics.
+It consumes the Aggregate summary and appends
+one KV observation per actual event. Static packing groups share `(query_heads,
+kv_heads)` geometry and retain compact `[length,kv_heads,head_width]` caches.
+Device metadata chooses actual query chunks, maps consecutive query-head groups
+to their KV head, and retains the declared sliding-window tail before appending
+the current row. `window=0` has no semantic eviction; a positive window includes
+the current observation. Idle logical-time gaps never consume window slots.
+The declared `kv_rows` capacity never silently shortens that window.
+
+Event and fiber attention may coexist. Their actual proposal rows overwrite
+their own ready indices; scratch arrays are not added together because unrelated
+rows can retain values from earlier device iterations. Each event group preserves
+selected-only adoption, clear, pre-clear comparison and continuation independently.
+It currently shares the one-complete-region-frame adapter limit. Compact snapshots
+and optional journals expose the two event slots, without a fiber log-bias slot.
+`kv_trace_rows` bounds diagnostics separately per static event head group; their
+combined reservations are included in the workspace estimate. Group minima are
+reserved before fiber chunks expand. `event_attention_chunks`, the effective chunk
+limit, KV peak and capacity are reported separately from the fiber counters.
+These capabilities require their own completed qualification evidence; they do
+not follow from the earlier fiber-only reports.
 
 For `InputOrigin`, a static edge table declares the visible port and int64 position
 stride. Device metadata preflight refuses an off-lattice position with code10

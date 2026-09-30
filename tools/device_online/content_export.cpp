@@ -39,6 +39,7 @@ Continuation ContentFlow::Impl::export_continuation() const {
   for(Index b=0;b<q.batch_size;++b)for(Index n=0;n<Index(g.nodes.size());++n)if(present[b][n].item<bool>())
     q.states[{b,n}]={state_values[b][n].clone(),clocks[b][n][0].item<Index>(),clocks[b][n][1].item<Index>()};
   if(attention)attention->export_states(q);
+  if(event_attention)event_attention->export_states(q);
   q.history=download_history(g,history,q.batch_size);return q;
 }
 Result ContentFlow::Impl::export_result() const {
@@ -58,6 +59,10 @@ Result ContentFlow::Impl::export_result() const {
     {"attention_chunk_rows",attention?attention->chunk_rows():0},
     {"attention_kv_peak",attention?attention->peak().cpu().item<Index>():0},
     {"attention_kv_capacity",attention?limits.kv_rows:0},
+    {"event_attention_chunks",event_attention?event_attention->chunks().cpu().item<Index>():0},
+    {"event_attention_chunk_rows",event_attention?event_attention->chunk_rows():0},
+    {"event_attention_kv_peak",event_attention?event_attention->peak().cpu().item<Index>():0},
+    {"event_attention_kv_capacity",event_attention?limits.kv_rows:0},
     {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
@@ -106,6 +111,7 @@ Result ContentFlow::Impl::export_result() const {
     out.trace.push_back(std::move(e));
   }
   if(attention)attention->export_trace(out.trace);
+  if(event_attention)event_attention->export_trace(out.trace);
   // Trace histories are materialized from recorded device active bits and the
   // starting history. Final history above is independently read from the NPU.
   std::map<Key,std::vector<size_t>> frames;

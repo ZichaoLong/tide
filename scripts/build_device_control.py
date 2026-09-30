@@ -64,7 +64,7 @@ def main():
                       "tide-content-flow-check", "tide-content-window-check", "tide-packed-full-check", "tide-packed-sum-check",
                       "tide-device-add-check", "tide-device-clock-check", "tide-device-norm-check", "tide-device-lh-full-check",
                       "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
-                      "tide-device-fiber-pool-check"))
+                      "tide-device-fiber-pool-check", "tide-device-event-attention-check"))
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)

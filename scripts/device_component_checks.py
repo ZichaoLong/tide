@@ -23,6 +23,7 @@ CHECKS = {
     "swiglu": ("tide-device-swiglu-check", ("float32",)),
     "fiber": ("tide-device-fiber-check", ("float32",)),
     "fiber-pool": ("tide-device-fiber-pool-check", ("float32",)),
+    "event-attention": ("tide-device-event-attention-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -44,10 +45,12 @@ MARKERS = {
     "swiglu": "device-swiglu: passed",
     "fiber": "device-fiber: passed",
     "fiber-pool": "device-fiber-pool: passed",
+    "event-attention": "device-event-attention: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
            "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum",
            "add": "tide_vector_state", "clock": "tide_vector_state", "norm32": "tide_vector_read",
            "lh-full": "tide_full_plan", "origins": "tide_sum_plan", "emission": "tide_emission_plan",
-           "swiglu": "tide_full_plan", "fiber": "tide_fiber_payload", "fiber-pool": "tide_fiber_pool"}
+           "swiglu": "tide_full_plan", "fiber": "tide_fiber_payload", "fiber-pool": "tide_fiber_pool",
+           "event-attention": "tide_event_payload"}

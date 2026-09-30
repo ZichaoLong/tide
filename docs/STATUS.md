@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T12:43:37.664024+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T13:07:32.910765+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-HEAD691cb31 committed/pushed. Clean pooling qualification has passed. No subagents. Reference repositories and ObsidianVault
+Event attention implementation is being committed after all27 development gates and profiling passed. Clean pooling qualification691cb31 is recorded. No subagents. Reference repositories and ObsidianVault
 are read-only. Preserve the older accelerator_scale/flow dirty work listed below.
 
 ## Authoritative scope and next actions
@@ -29,27 +29,55 @@ Three fresh processes before performance recommendations. CUDA device execution 
 target-machine pending. **F1–F7 are not complete.** Raw device flow is still
 single-device FP32 HARD inference; no resident backward/optimizer.
 
-1. Pool clean build/all26 gates/profile PASSED. Evidence for691cb31 is in
-   docs/evidence/device-fiber-pool-20260930.{json,md}; commit/push evidence separately.
-2. Event-GQA/window code and gate are integrated in working tree, UNVERIFIED.
-   build-device-event-dev01 RUNNING,source event-dev01,build device-event-dev01,
-   core origins-npu-clean01,jobs2/timeout1800s. Submit bounded gates/profile only
-   after build is sufficiently advanced or terminal; do not hold NPU waiting.
-3. Continue safe memory planning,node-time batching,public matrix/presets,
-   multi-card progression and resident training. F1–F7 remain open.
+1. Commit/push event attention, then launch build-device-event-clean01 from that
+   exact commit. Full build/four CTests, jobs2, bounded1800s. After build advances,
+   submit all27 device-event-gates-clean01 (900s) and event-only profile-clean01
+   (480s), one NPU each, queue120s. Qualify terminal results in separate evidence.
+2. Continue safe memory planning, key-axis tiling, node-time batching, remaining
+   modules, public matrix/presets, multi-card progression and resident training.
+   F1–F7 remain open. Historical CPU Attention timing is not a build-wait filler.
 
-New event-GQA files:packed_event_attention.{h,cpp},event_cache.cpp,
-ascendc/tide_event_{plan,payload,indices,cache}.cpp,event_attention_check.cpp.
+## Event attention implementation: awaiting immutable qualification
+
+Working tree:packed_event_attention.{h,cpp},event_cache.cpp,
+ascendc/tide_event_{plan,payload,indices,cache}.cpp,event_attention_check.cpp;
+ContentFlow/profile/export/CMake/check registry and content-flow docs integrated.
+Canonical Node.memory="attention" implements documented event-gqa-v1 semantics.
 Static groups share query/KV head geometry; persistent KV is compact,one row per
-actual event. Device chooses actual chunks,window tail retention and GQA head
-indices. Shared proposal rows use overwrite/copy,never summing stale scratch.
-Distinct logical profiles may coexist. Diagnostics expose exact old/proposed/
-comparison/next slots; selected-only/clear and lean continuation are included.
-One complete attention region frame per stage remains an adapter fallback.
-New gate expects98 anchors,192 complete windows,40 lifecycle windows,5 refusals;
-includes widths1/4/7/33/257,MHA/GQA/MQA,windows0/1/3,chunk1/4,source zeros,
-feedback/DAG,mixed fiber/event attention,three Read modes,large counters,
-InputOrigin,valid periodic lifecycle phases,and compact snapshots.
+actual event. Device decides actual chunks,window retention and GQA head indices.
+Shared proposals use overwrite/copy,never adding stale scratch arrays. Event and
+fiber attention coexist. Diagnostics export all old/proposal/comparison/next
+slots; selected-only/clear and lean continuation keep their independent caches.
+One complete attention region frame per stage remains the adapter fallback.
+Group minimum workspace is reserved before fiber chunks grow. No VJP/training.
+
+build-device-event-dev01 full snapshot build PASSED;dev02/03/04 are isolated
+incremental builds with checked source/binary hashes. Snapshot event-dev04,
+build device-event-dev04,matching core origins-npu-clean01. Only immutable old
+objects reused; no prior snapshot/build was modified. Final clean rebuild required.
+Device-event-gates-dev04 PASSED:98 MHA/GQA/MQA/shape/window anchors,192 complete
+windows,40 lifecycle windows,5 refusals. Widths1/4/7/33/257,heads1/3/4,window0/1/3,
+chunk1/4,compact KV,message vs event count,three Read modes,feedback/DAG,mixed
+fiber/event profiles,InputOrigin,large int64 counters,clear/selected-only,
+periodic clocks,window recycling,restore and lean continuation. Strict tolerances
+rtol1e-5/atol1e-6 and exact discrete comparisons unchanged.
+
+Device-event-regression-dev04 PASSED all27 cells, including the event gates above.
+Device-event-profile-dev04 PASSED:92569 AIV +2530 AI Core tasks, no AiCPU/fallback.
+These establish placement and parity only, not throughput or resident training.
+Source identity matched the working device sources byte-for-byte before commit.
+
+Retained failures:
+- gates-dev01: semantic doc name event-gqa-v1 mistaken for existing memory value
+  attention. Failed in CPU reference configuration before numerical comparison.
+  Fixed only profile recognition/test config;profile-dev01 dependency-failed.
+- gates-dev02: numeric mismatch;profile-dev02 dependency-failed without a card.
+- gates-dev03: failure-only diagnostics isolated width1/heads1/kv1/window0/chunk1/
+  empty cache. K=.125,V=.25 correct,but read=.083550 vs expected.125, varying
+  between processes. Scalar index/mask words written by32 AIV blocks shared cache
+  lines,causing writeback races. dev04 changes only indices launch to one AIV block;
+  all98 anchors and complete windows then pass. Matrix/vector payload work remains
+  packed. Original failed records/snapshots stay;no formula or tolerance change.
 
 ## Qualified implementation: general post-attention pooling
 
