@@ -1,0 +1,110 @@
+{
+  "schema": "tide-public-resident-training-evidence-v1",
+  "source": "591e90756311cc776026de08c20136f99e1411df",
+  "scope": "Public C++ single-NPU FP32 HARD training owner and installed consumer, independent CPU FP32/FP64; not Python, other module adjoints, peers, FP16 or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 42,
+    "graph_trajectories": 18,
+    "retained_graph_windows": 288,
+    "optimizer_updates": 72,
+    "installed_inference_windows": 3,
+    "installed_training_windows": 3,
+    "cpu_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "8258dc02cfe4b5cb67ed47e98059c88a0bfd2ef562c3fd8a3264a872afd49b35",
+    "component_sha256": "62951dd6e173c115cb2f29ffb97d55a4c4bbbe0f1530761c0acae05f6778119c",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "consumer": {
+    "manifest_sha256": "e9f772880677a7b15a27ae5c57fa4e4cbe9faf6fb9135027d9a7cf75bf069f2b",
+    "binary_sha256": "1bee2cf06dfe375986fb8dde9414b640ebf02899f7d2719e710d918edcd0f4af",
+    "loader_sha256": "d10e4a110bcaa18feec667db4c22b862214f47893b18e0016293334dec8998a2"
+  },
+  "runs": [
+    {
+      "name": "build-public-training-clean01",
+      "source": "591e90756311cc776026de08c20136f99e1411df",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "51c683c6d801ffd6e8a9e500f0041fa3586937b01de042159f446a355133acfe",
+        "task.log": "fcce843f1952ebd3fbd7dcef5b6b7a797d862ff108c75069813dfb200110474f"
+      }
+    },
+    {
+      "name": "public-training-clean01",
+      "source": "591e90756311cc776026de08c20136f99e1411df",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "8fef55ebf107d3d48c6fd21df2db1827f4ef0a772bd336eefbd180457f790fe8",
+        "task.log": "aaceb3dcc9002880e1f8920911e48109e8c058b3cd794830c47830937e4b9ce7",
+        "verified/result.json": "287b331c9d5d191e259dea7ae443a02d08881af60d34c0589d9d77bdc395a65c"
+      }
+    },
+    {
+      "name": "public-training-profile-clean01",
+      "source": "591e90756311cc776026de08c20136f99e1411df",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "0fb295fa7bdf9baf058733f3312f712692d23e21c57e84ef0eba0df215e0b8fe",
+        "task.log": "1ad33eec7a54a54da9768d08a39177735a63eeea440558c94d93ef78d09ac2f5",
+        "profiled/result.json": "cf6c57734306fe45dfdf4dd2d0ce5334b583c75448a7d86aa19c23e17c569017",
+        "profiled/profile.log": "45192fffd825fba25b4675b3763b450fe278d6fd19f56fab0d2f18cd2c56163d"
+      }
+    },
+    {
+      "name": "build-public-training-consumer-clean01",
+      "source": "591e90756311cc776026de08c20136f99e1411df",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "fcfbcc47231f1e023dd491e8a41fdad124280d1cafb177bae7c17906ee9ca1ec",
+        "task.log": "4e17ba1dccfbe195419e8a983309c69971ab7e37e96efcbffed2d09a1a568ecb"
+      }
+    },
+    {
+      "name": "public-training-consumer-clean01",
+      "source": "591e90756311cc776026de08c20136f99e1411df",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "7587baff20dcc3b08e2acbee8cd34c5462abc4b4559a3df3398e9424e386f10a",
+        "task.log": "4b5dd94d8782032c31b8493a47b960a79dcfcc7eaa591f3f9daaf19158ca8a2c"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 107345,
+        "summed_task_us": 868751.9839999907
+      },
+      "AI_CORE": {
+        "count": 1857,
+        "summed_task_us": 7072.6239999999725
+      },
+      "MIX_AIV": {
+        "count": 1673,
+        "summed_task_us": 6324.208000000004
+      }
+    },
+    "optimizer_kernel_records": 304,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  }
+}
