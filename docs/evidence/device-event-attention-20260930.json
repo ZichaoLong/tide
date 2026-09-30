@@ -1,0 +1,103 @@
+{
+  "schema": "tide-device-event-attention-evidence-v1",
+  "source": "b668f2f571d1791b335180ba5d9cd441199958e9",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "existing event attention/GQA/window, single-device FP32 HARD inference; not resident training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "a265787ea4e4dc27e1f57152872d691c78d8ab3f38d5c704dcb8764c5e99d648",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 27,
+    "shape_analytic_cache_anchors": 98,
+    "complete_windows": 192,
+    "lifecycle_windows": 40,
+    "refusals": 5
+  },
+  "runs": [
+    {
+      "name": "build-device-event-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "152f9864193dc0c130702c9102f5f9640090cbd7d9032aa3d67c3368c5267fc1",
+        "task.log": "f1d401188bb7fbf0c05edc379b2f2fbf2772d023870da79e09e4f4b03b7fd2f0"
+      }
+    },
+    {
+      "name": "device-event-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f78c53f7829ed402f06aae3ea722796276306ed9558c4e6bbc54bbaf26d03875",
+        "task.log": "4441be785b9ee50784ada2451efc9622f0d05a86387bd0173d5faf3bd992ee46",
+        "verified/result.json": "4fa44b6c077d2e4728334a2ac140ddab1596b16b969533522c4d7917d897a387"
+      }
+    },
+    {
+      "name": "device-event-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "68e081e2de0fa121392014a77eade5cf4deca5c03e8e37d45812ad92c9ec2974",
+        "task.log": "76a1825694303e70d27abbd900cfbc0c25e9c7bd93c9414cbc43ab40a5f1aa35",
+        "profile/result.json": "bdf696612590534be4b73b1626775f2b2100fac6187ffc47be90741acf47d165"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 92569,
+      "AI_CORE": 2530
+    },
+    "kernels": {
+      "BatchMatMulV2": 2530,
+      "GatherV3": 20364,
+      "SoftmaxV2": 1288,
+      "Transpose": 855,
+      "tide_event_cache": 2223,
+      "tide_event_indices": 569,
+      "tide_event_payload": 569,
+      "tide_event_plan": 741
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930211813.csv": "7722cde657f8896ebe355cff1f9e6349a654d227e8904d321dda879a3ccfa80e",
+      "api_statistic_20260930211813.csv": "efc03b0414d2d6fe788b5a31c4f8f30977ec308a0c09362aab9aab132b355242"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": [
+    {
+      "name": "device-event-gates-dev01",
+      "reason": "Fixture used the documentation semantic label event-gqa-v1 as a Node.memory value. Corrected to the existing attention configuration; CPU reference had refused before parity.",
+      "state": "failed",
+      "files": {
+        "status.json": "4405e5189da4eb4a02b6d95f0ef2e207e391b2d6aa0edf12261479c2f079307f",
+        "task.log": "378ef003a993ab6b45ba13d1c90bdc267060c2f726000b4fdb65f902fdbcc2dc"
+      }
+    },
+    {
+      "name": "device-event-gates-dev02",
+      "reason": "Observed numeric mismatch retained without relaxing tolerances; isolated in dev03.",
+      "state": "failed",
+      "files": {
+        "status.json": "c1639d8705fededa3884c2f8bc4e4992d1d5e6b3872e5cd992523794b2c9aab8",
+        "task.log": "d02e077b113b41486de2125ab7815ed55bf6c33213afc945faf2c46d477052be"
+      }
+    },
+    {
+      "name": "device-event-gates-dev03",
+      "reason": "Failure-only diagnostics showed correct K/V but unstable attention result. Scalar index/mask writes by 32 AIV blocks shared cache lines. Using one metadata writer in dev04 fixed the race; packed payload/matmul work unchanged.",
+      "state": "failed",
+      "files": {
+        "status.json": "cab3822ec05177d8f2dbec3d3b984781be2fce9c3ece44f9723f0b5bb42f17f4",
+        "task.log": "9937c927e37f6cea75e02487471630e38779aeeb0f76aab1898e275aa326bfa4"
+      }
+    }
+  ]
+}

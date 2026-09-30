@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T13:07:32.910765+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T13:21:45.719542+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-Event attention implementation is being committed after all27 development gates and profiling passed. Clean pooling qualification691cb31 is recorded. No subagents. Reference repositories and ObsidianVault
+HEAD b668f2f committed/pushed after all27 development gates and profiling passed. Clean pooling qualification691cb31 is recorded. No subagents. Reference repositories and ObsidianVault
 are read-only. Preserve the older accelerator_scale/flow dirty work listed below.
 
 ## Authoritative scope and next actions
@@ -29,15 +29,20 @@ Three fresh processes before performance recommendations. CUDA device execution 
 target-machine pending. **F1–F7 are not complete.** Raw device flow is still
 single-device FP32 HARD inference; no resident backward/optimizer.
 
-1. Commit/push event attention, then launch build-device-event-clean01 from that
-   exact commit. Full build/four CTests, jobs2, bounded1800s. After build advances,
-   submit all27 device-event-gates-clean01 (900s) and event-only profile-clean01
-   (480s), one NPU each, queue120s. Qualify terminal results in separate evidence.
-2. Continue safe memory planning, key-axis tiling, node-time batching, remaining
-   modules, public matrix/presets, multi-card progression and resident training.
-   F1–F7 remain open. Historical CPU Attention timing is not a build-wait filler.
+1. Clean event implementation b668f2f PASSED full build/four CTests,all27 cells,
+   and independent profile. All three clean01 runs terminal0; evidence recorded
+   in docs/evidence/device-event-attention-20260930.{json,md}. Commit/push evidence.
+2. Working tree now adds shared device key-axis attention tiling with global
+   online softmax normalization, configurable key rows and budget shrinkage.
+   Integration and new tests are ready for build-device-key-tile-dev01 from
+   key-tile-dev01, build device-key-tile-dev01. Full build/CTests, jobs2,1800s.
+   Build is RUNNING, not verified. Dense path retained; key rows1/7/128/300, ragged
+   KV0/5/257, MHA/GQA/MQA, global denominator and extreme logits are tested.
+   Existing fiber/pool/event gates now exercise key tiles1/7.
+   Continue safety, node-time batching, remaining modules, public presets/matrix,
+   multi-card and resident training. F1–F7 remain open.
 
-## Event attention implementation: awaiting immutable qualification
+## Qualified event attention: b668f2f
 
 Working tree:packed_event_attention.{h,cpp},event_cache.cpp,
 ascendc/tide_event_{plan,payload,indices,cache}.cpp,event_attention_check.cpp;
