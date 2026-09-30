@@ -1,9 +1,10 @@
 # Current handoff
 
-Updated 2026-09-30T15:11:18.312342+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T15:33:14.210564+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **28295c1**, event batch evidence committed and pushed; implementation26aa09f.
+HEAD **c83aec3**, fiber batch implementation committed and pushed.
+Event batch evidence28295c1 pushed; implementation26aa09f.
 Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
@@ -49,24 +50,28 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    Observe-all without selected clear admits node-time batches; selection-dependent
    adoption/clear and mixed fiber regions keep legal single-frame fallback.
    Changed kernels/helpers and event_batch_check.cpp are committed.
-4. Fiber node-time implementation staged EXACTLY from frozen fiber-batch-dev01.
-   Full build/four CTests/all31 cells and independent profile PASSED,all terminal0.
-   New gate96 anchors/restores,480 general windows/restores,31 actual multi-time
-   windows and3 saturation checks; profile222,008 AIV+8,228 AI Core,no AiCPU/fallback.
-   Commit the staged17 implementation paths plus this status/ROADMAP,push,then
-   launch build-device-fiber-batch-clean01 at that exact commit (1800s,jobs2),
-   then all31 clean cells/fiber-batch first and independent profile (900s,one NPU,
-   queue120s). Evidence must be committed separately. Core origins-npu-clean01.
+4. Fiber node-time implementation c83aec3: frozen dev01 and exact-commit clean01
+   full builds/four CTests/all31 cells/independent profiles PASSED,all terminal0.
+   New gate96 anchors/restores,480 general windows/restores,31 multi-time windows
+   and3 saturation checks. Clean profile221,788 AIV+8,181 AI Core,no AiCPU/fallback.
+   Evidence device-fiber-batch-20260930.{json,md} ready for separate commit/push.
    Runtime retains per-event biases/prefixes and final-only owner KV commits;
    repeated FP32 decay and same-fiber all-key visibility unchanged.
-5. Next normalized Aggregate draft is UNSTAGED/UNCOMPILED: packed_aggregate,
+5. Next normalized Aggregate draft is integrated and build-verified: packed_aggregate,
    ascendc/tide_aggregate_{plan,apply},aggregate_check,CannProgram softplus/sum/divide,
    PackedSum keys/order and integration in ContentFlow/Profile/Stages,budget,export,
-   CMake/build/check registry. The index keeps the tested FIBER versions of shared
-   files. Do not add their newer working-tree Aggregate changes to the fiber commit.
-   Aggregate has not been frozen/built;finish review/docs then aggregate-dev01
-   full isolated build/all32 gates (aggregate first) and independent profile.
-   Planned gate180 analytic/restores,160 topology windows/restores and4 boundaries.
+   CMake/build/check registry. Those working-tree changes remain separate from
+   the committed/tested fiber implementation.
+   build-device-aggregate-dev01 FAILED at new Ascend C apply kernel: Muls cannot
+   deduce a float scalar from a __gm__ reference. Fixed by loading the coefficient
+   into a local float before Muls. No runtime gate ran; preserve dev01 snapshot/log.
+   build-device-aggregate-dev02/frozen aggregate-dev02/new full build
+   device-aggregate-dev02 PASSED,terminal0,four CTests passed.
+   Launching device-aggregate-gates-dev02 (all32,aggregate first;900s,NPU1,queue120s).
+   Aggregate cell PASSED in dev02 (remaining regression cells running).
+   Launching device-aggregate-profile-dev02 (900s,NPU1,queue120s),same frozen build. Do not run from mutable checkout.
+   Planned gate180 analytic/restores,160 topology windows/restores,4 boundaries,
+   7 wide/empty domains; none run yet.
    Zero-mass failure code13; source aliases/order and scalar/vector paths matter.
    No support claim yet; preserve these drafts during exact-commit fiber testing.
 
@@ -161,8 +166,7 @@ feedback/Read/clear/origin/clock/selection coverage. rtol1e-5/atol1e-6 unchanged
   core build. These finite profiles do not certify all module/training/matrix work.
 
 Earlier attention qualifications used one complete region-time frame per stage.
-Event batching26aa09f now extends that in development evidence; dirty fiber changes
-are not yet verified. These reports establish parity/placement,not throughput or
+Event batching26aa09f and fiber batchingc83aec3 extend that with clean evidence. These reports establish parity/placement,not throughput or
 training. Fiber cache bounds refuse explicitly,not evict.
 
 ## Preserved older work and timing
