@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T07:31:21.158919+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T08:03:14.882485+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -43,7 +43,7 @@ submits/boundary waits, no journal/AiCPU/fallback. Not throughput/training.
 Evidence [device-window-20260930](evidence/device-window-20260930.md).
 Earlier window-dev01 directed results remain retained, without replacing clean evidence.
 
-## Active packed-sum increment
+## Completed packed-sum increment
 
 PackedSum adds metadata preflight followed by payload vector tiles256, preserving
 stable message-order reduction and leaving absent rows untouched. Scalar device
@@ -66,11 +66,20 @@ build-device-sum-dev01 FAILED Muls deduction on __gm__ float scale; original sou
 build and log retained. Fix loads the scalar into a local float before calling Muls.
 No throughput experiment/tracking layer was added.
 
-NEXT commit/push tested implementation; freeze exact commit as sum-clean01,
-build-device-sum-clean01 (jobs2/900s), then device-sum-components-clean01 (all17 cells,
-900s) and device-sum-profile-clean01 (480s), queue120s. After success record compact
+Implementation fbc6652 committed/pushed. Clean frozen source sum-clean01;
+build-device-sum-clean01 PASSED exit0: four CPU CTests and loader.
+device-sum-components-clean01 and device-sum-profile-clean01 PASSED exit0.
+All17 cells,640 content +384 window comparisons; trace837 AIV tasks, no AiCPU/fallback.
+Build device-sum-clean01. Evidence [device-sum-20260930](evidence/device-sum-20260930.md). After success record compact
 immutable evidence. Continue packed numerical/module coverage and training delivery;
 no user pause is active and no new permission is required.
+Active implementation: Add repeat state contract, int64 clocks, explicit max_repeat_ticks
+(default65536, refusal8), vector/scalar state option and exact tick multiplication
+order. Read stays scalar device; default clocks only, FP32/no autograd. New add_check
+covers independent Streaming/Greedy comparisons, widths/tails, work/counter refusals,
+parameter snapshot and literal-rounding witness. build-device-add-dev01 RUNNING on frozen add-dev01, build device-add-dev01 (900s/jobs2).
+NEXT inspect build-device-add-dev01; after it passes launch device-add-gates-dev01
+with --checks add content window, then profile --check add only after passing. Do not alter frozen source/build.
 
 ## Newly completed immutable qualification
 

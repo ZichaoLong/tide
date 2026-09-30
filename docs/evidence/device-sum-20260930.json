@@ -1,0 +1,69 @@
+{
+  "schema": "tide-device-packed-sum-evidence-v1",
+  "source": "fbc66529b5195bac50dbf8d701d0e6211c833c16",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "FP32 inference packed sum and existing content/window regressions; not throughput or training",
+  "core_cpp_sha256": "8b337446ef421d499ab52f3bd6de3fbfec1e713a68bde6af2f6ee3887297175b",
+  "component_sha256": "78f169eb3231da12238bd099311fbe726c652e12932486a373986a4492e51744",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 17,
+    "scalar_vector_cases": 72,
+    "input_changing_replays": 144,
+    "metadata_refusals": 9,
+    "content_windows": 640,
+    "window_cases": 384
+  },
+  "runs": [
+    {
+      "name": "build-device-sum-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "2d7b26f95494f190f9fdec125a3f8486e9188e42db249000efe86ac60f7f1edd",
+        "task.log": "07a8f59417f73f2c2006c6f1a2d66ba017a99a5b9df28446702d7704575e8b66"
+      }
+    },
+    {
+      "name": "device-sum-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "ee55249376e83cc67aad8290a3ec290f67b72473a458a05a038c78297e12c7e4",
+        "task.log": "12ceb4c3d1633ffc5f1c266c8ad0288e941eea696cc6a356a91905a25c8aeba8",
+        "verified/result.json": "d121537da28f1c73ed47a401ccf4b7f677f90d0ea424fce521e812ef0c66e5f9"
+      }
+    },
+    {
+      "name": "device-sum-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "32fd3372d477b9cd2895ecf6f017dfbb62392ed3f1fcca9ad359bc6ba42d0d2c",
+        "task.log": "0018e2f1d6f01eee3d82e834cf61d543ab9394df2958db50c84b730ae53fcc7e",
+        "profile/result.json": "2a3aa56aeec8cc340cc32377a7fc12c013dfb9f322147f1a33d9133dbb526cb1"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 837
+    },
+    "kernels": {
+      "tide_content_sum": 72,
+      "tide_sum_plan": 81,
+      "tide_vector_sum": 81
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930155526.csv": "4762ffabe4c4358ae5dc19f08c75d1cb886add9da5bc93e5bd29ec403a29e907",
+      "api_statistic_20260930155526.csv": "a9ac211d564a19a6002ca42392f55ccd72aa8464101e49c95dbf468e88f3c94f"
+    },
+    "host_fallback_diagnostic": false
+  }
+}
