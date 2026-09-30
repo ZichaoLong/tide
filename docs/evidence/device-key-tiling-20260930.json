@@ -1,0 +1,94 @@
+{
+  "schema": "tide-device-key-tiling-evidence-v1",
+  "source": "7b036141fae032d8b4a176975fcfd9690d80c314",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "device-driven physical key tiling for fiber/event attention; single-device FP32 HARD inference, not resident training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "a4a53aecfe731cb6469babdc8837a5cf16cd1714a35d9d748ff14de0edf7e84c",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 28,
+    "key_tiling_windows": 96,
+    "extreme_saturation_budget_cases": 12,
+    "other_attention_gates": "existing event/fiber/pooling gates retain all anchors/windows/refusals and now use key limits1/7"
+  },
+  "runs": [
+    {
+      "name": "build-device-key-tile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "d9e525856df9975bb79b8f1ca9d84969db3cb04617fbd451df29beb65384abbe",
+        "task.log": "766da5e0db3894a056788c796b2e6ed99d3ca0efd6afc56032a47a3da86b767a"
+      }
+    },
+    {
+      "name": "device-key-tile-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "cbb1441efada5148b190f56af1f6ed6025d409d1fce462f64ad4093f1b0b7966",
+        "task.log": "191db1796961606d1fdd479835385d5d80a61279bc5b5578bb4f70cb37957a84",
+        "verified/result.json": "2774a4681625c4c34d20d57ddc5f913eb852f91793376d46d5939e90914e4f6a"
+      }
+    },
+    {
+      "name": "device-key-tile-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "1259fdab5f4a0b5facec0410d536cf591d0440ee5ba8dd2422af70a482c89c75",
+        "task.log": "a3d10813d1cd5b0df7c50f9754f9618adbb3bfa483dbe6317c0f027e3521785c",
+        "profile/result.json": "e1394e93c27de6570f9121747271c1450a0bc40f5beaec663f9cc49ad1b25147"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 96157,
+      "AI_CORE": 4780
+    },
+    "kernels": {
+      "BatchMatMulV2": 4780,
+      "GatherV3": 25418,
+      "SoftmaxV2": 99,
+      "Transpose": 7263,
+      "tide_attention_merge": 7302,
+      "tide_attention_softmax": 7221,
+      "tide_attention_tile": 7302
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930214744.csv": "1aa45459591d650aa19ca9da37eadb978e8a00fdc2b38b64d50fafdcac69d66b",
+      "api_statistic_20260930214744.csv": "b5e1e3a6561e33e63857ca1f39df32e15fe7019d4585b8ad0c573eb0f5c0222e"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": [
+    {
+      "name": "device-key-tile-gates-dev01",
+      "reason": "Initial event test fixture used 257 old KV rows with only17 observations. The existing state validator rejected it before execution. Corrected to a legal large int64 count.",
+      "state": "failed",
+      "files": {
+        "status.json": "088b8c9b3fc6df72e92af6f4dff0a53b0b0d8aa1dfe23d23f44a71de8e0b40cd",
+        "task.log": "b2b1da7f2a09a9aac03e06c34962b426e3bd1d0e619649f83248779ddd928d26",
+        "verified/result.json": "7e382ad3f87d4195d2bfa792c5bcc578ab067f67c11dd0a4a549679236285a22"
+      }
+    },
+    {
+      "name": "device-key-tile-gates-dev02",
+      "reason": "96 long/ragged/restore windows passed. The general finite-only comparator then refused deliberately saturated -inf bias slots, including the CPU reference. The final exceptional-case checker requires exact bias-slot equality, then applies the unchanged full finite comparator to copies with only those already-equal slots neutralized. No production code or tolerance changed for this correction.",
+      "state": "failed",
+      "files": {
+        "status.json": "eea22f8c9276306b5853de478528ff63bd27a7786aa72214d451c7d5e6a4b6a1",
+        "task.log": "39b57a3540e982a2ede9ee8cf70eae3be1d724b15b576935216b0a7a271f7d58",
+        "verified/result.json": "013db446457b88e98c785118394e7d8a7cc29c83f9b726501af14ee1ee5d0448"
+      }
+    }
+  ]
+}

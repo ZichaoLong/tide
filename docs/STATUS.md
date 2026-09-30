@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T13:36:04.496345+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T13:54:28.924549+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **c0dcd4e**, committed/pushed. No pending authorization or pause. No subagents.
+HEAD **7b03614**, committed/pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -30,29 +30,45 @@ training. CPU,mixed A/B/C,resident; FP32 main,FP16 separate. Three fresh process
 before performance recommendations. CUDA execution remains target-machine pending.
 Current device flow is **single-device FP32 HARD inference**, no resident backward.
 
-## Active work and next actions: key-axis attention tiling
+## Active work and next actions
 
-Working tree adds `tiled_attention.{h,cpp}`, three Ascend C tile/softmax/merge kernels,
-`attention_tile_check.cpp`, fiber/event integration, budget/key limit and counters,
-CMake/check registry and content-flow documentation. Production now matches frozen
-`key-tile-dev03`; build `device-key-tile-dev03`; matching core `origins-npu-clean01`.
-Default key bound128; a tiled key is at most256; a bound covering capacity preserves
-the complete-key CANN path. Device metadata chooses actual key blocks; vector online
-softmax carries maximum/denominator/weighted sum, preserving global normalization.
-The budget may shrink keys/queries, never logical visibility/cache. Key work counters
-report actual tile calls and real/padded score entries at boundaries.
+1. Key-axis implementation7b03614 clean qualification PASSED: full build/four
+   CTests,all28 cells and independent profile. All three key-tile-clean01 runs
+   terminal0; evidence now recorded in docs/evidence/device-key-tiling-20260930.{json,md}.
+   Commit/push evidence separately; memory implementation remains uncommitted.
+2. Working tree now adds shared construction memory planning: deferred CPU-only
+   profile preparation, reserve all six module minima before growing physical
+   chunks, conservative/aggressive surplus headroom, CANN workspace cap checked
+   before allocation, unique retained tensor bytes and budget counters. Added
+   memory_check.cpp (mixed modules/feedback, both policies/schedules, bounded
+   refusal/alias tests). Not yet verified. Full build is RUNNING:
+   build-device-memory-dev01, snapshot memory-dev01, build device-memory-dev01,
+   matching core origins-npu-clean01; jobs2,1800s. CMake now compiles the independent
+   test comparator once into a test-only archive, avoiding repeated compilation.
+3. After build advances, run memory first then all29 cells,900s/queue120s/one NPU;
+   independent memory placement profile only after its semantic gate succeeds.
+4. Continue complete calibrated memory planning, node-time attention batching,
+   remaining modules, public presets/matrix, peer progression and resident training.
+   Historical slow CPU Attention is not a build-wait filler. F1–F7 remain open.
 
-1. `device-key-tile-gates-dev03` PASSED all28 cells; `profile-dev03` PASSED
-   96,157 AIV+4,780 AI Core tasks, no AiCPU/fallback. The new tile gate passes96
-   long/ragged/dense/tiled/restore windows and12 extreme/saturation/budget cases.
-   Device sources matched the tested snapshot byte-for-byte before commit.
-2. Commit/push the key-axis tiling implementation, then create `key-tile-clean01`
-   at that exact commit. Full clean build/four CPU CTests, jobs2,1800s; submit all28
-   gates (900s) and independent profile (480s) after build advances, queue120s/one
-   NPU each. Qualify terminal results in separate evidence. Do not reuse dev claims.
-3. Continue complete memory planning, node-time attention batching, remaining
-   modules, public presets/matrix, peer progression and resident training. The
-   historical slow CPU Attention baseline is not a build-wait filler.
+The memory plan covers declared FP32 forward tensors and CANN workspaces, not
+vendor-internal allocation, allocator fragmentation, caller tensors, training or
+communication buffers. Retained tensor bytes are not a measured peak. The shared
+budget prevents early modules from consuming later modules' minima and reserves
+surplus for operator work/headroom. Actual numerical topology/input decisions are
+unchanged. No free-HBM guarantee or full training-memory completion is implied.
+
+## Key-axis attention tiling: implementation7b03614
+
+`tiled_attention.{h,cpp}`, three Ascend C tile/softmax/merge kernels and
+`attention_tile_check.cpp` are committed. Default key bound128; a tiled key is
+at most256; a bound covering capacity selects complete-key CANN softmax. Device
+metadata chooses actual key blocks; online max/denominator/weighted sums preserve
+global normalization. Budget shrinkage never changes logical visibility/cache.
+Counters report actual tile calls and real/padded score entries at boundaries.
+All28 development cells and profile passed on dev03;96 long/ragged/dense/tiled/
+restore windows and12 extreme/saturation/budget cases, rtol1e-5/atol1e-6 unchanged.
+Clean build/gates/profile on7b03614 also passed; extract exact counts from records.
 
 Development provenance and retained failures:
 - `build-device-key-tile-dev01` PASSED full frozen build/four CTests. Initial
