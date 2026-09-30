@@ -35,7 +35,7 @@ def main():
     source, dirty = source_state(root)
     report = dict(schema="tide-device-components-gate-v1", source=source, dirty=dirty,
                   build=manifest, state="running", device=args.device, cases=[],
-                  scope="component semantics/lifecycle; not complete graph execution or throughput")
+                  scope="components and declared content-flow FP32 inference profile; not general module, training or throughput qualification")
     write_json(out / "result.json", report)
     try:
         for check in args.checks:

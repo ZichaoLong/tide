@@ -161,6 +161,10 @@ void CannProgram::softmax(const at::Tensor& input,int64_t axis,const at::Tensor&
   auto& p=*impl_;
   p.op("aclnnSoftmax",p.tensor(input,input.scalar_type()),axis,p.tensor(out,input.scalar_type()));
 }
+void CannProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;
+  p.op("aclnnSigmoid",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
 void CannProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnEqTensor",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),p.tensor(out,at::kBool));

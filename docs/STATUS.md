@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T05:26:17.982017+00:00. **ACTIVE: continue the user-confirmed execution contract.**
+Updated 2026-09-30T05:54:05.986456+00:00. **ACTIVE: continue the user-confirmed execution contract.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents, no push. Reference repos and ObsidianVault remain read-only.
@@ -13,30 +13,34 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: clean6220011 selector/group transactions qualified. All four jobs passed:
-`build-device-selector-clean01`, `device-components-clean02` (all12 cells),
-`device-selector-profile-clean01` (39 tasks/all428 AIV),
-`device-queue-profile-clean02` (63 tasks/all475 AIV). Evidence:
-[device-selection-20260930](evidence/device-selection-20260930.md/json).
-Core runtime-npu-clean01 reused with verified source/binary fingerprints.
+NEXT: ContentFlow development gates PASSED on frozen content-dev02:
+`build-device-content-dev02` (four CPU CTests/standalone loader),
+`device-content-gates-dev01` (80 full-observable window/continuation comparisons,
+394 events,244 actual emissions,10 nontrivial node-time batches; refusal/retry),
+`device-content-profile-dev01` (120 real content/state/selection/route stages;
+all11606 recorded device tasks AIV). No host fallback warning. These are development
+results for FP32 inference with sum Aggregate, content linear Read, identity/EMA
+state, count/positive selection, adopt/clear Next and identity broadcast Full.
+Other modules, FP16, autograd/optimizer, peer progression and performance remain.
 
-Uncommitted `tools/device_online/content_*`, `device_journal*` and corresponding
-Ascend C kernels implement a first true device numerical loop for an explicit
-existing-module profile: sum Aggregate, identity/EMA state, linear content Read,
-count/positive selection, adopt/clear Next and identity broadcast Full. FP32
-inference only. Arbitrary positive-delay graphs, online actual emissions,
-transactional queues/state/history, bounded diagnostic logs and cut continuation.
-Still writing the build registry and independent full-observable CPU comparison;
-DO NOT claim compilation or runtime success yet. Next build frozen content-dev01
-with jobs2/900s, then content gate (120s queue/900s task), preserve failures.
-The numerical kernels initially use scalar AIV loops, not optimized throughput.
-Continue real module integration (Add/Attention/Full), general contracts, training
-and multi-device delivery after this vertical gate; do not stop at components.
+Commit this coherent implementation with [its explicit scope](content-flow.md),
+then clean-build snapshot content-clean01/build device-content-clean01 using
+fingerprint-matched runtime-npu-clean01 core, jobs2/900s. Run all13 component cells
+(120s queue/900s task) and content placement profile (120s queue/480s task). Commit
+immutable evidence separately. Continue module integration/vectorized kernels,
+general contracts, safe model byte chunking, training and multi-device delivery;
+do not stop at this limited profile. Kernel numeric loops initially scalar AIV.
 
-Clean eff5945 earlier qualification is committed as f604bfc:
-[device-packing-20260930](evidence/device-packing-20260930.md). All eight jobs
-passed, including CPU six CTests, NPU core/component builds, eight lifecycle
-processes, all11 component cells and three placement profiles.
+Retained failure: build-device-content-dev01 FAILED because CANN generated launch
+headers cannot resolve local type alias I in exported signatures. Fixed with
+explicit int64_t and qualified by dev02 build; frozen failing source/logs retained.
+
+Clean6220011 selector/group qualification committed asedeefc0:
+[device-selection-20260930](evidence/device-selection-20260930.md). Four jobs passed:
+build-device-selector-clean01, device-components-clean02 (12 cells),
+selector-profile-clean01 (39 tasks/all428 AIV), queue-profile-clean02 (63/all475 AIV).
+Clean eff5945 earlier packing/lifecycle qualification committed asf604bfc:
+[device-packing-20260930](evidence/device-packing-20260930.md); all eight jobs passed.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
@@ -84,8 +88,9 @@ New stages in `tools/device_online`, described in [device-control.md](device-con
   candidate frames. Device-controlled no-emission consumption continues windows
   and explicitly refuses exhausted iteration budgets.
 
-These are mutable inference components. No complete Tide numerical module/state
-loop, sparse slot delivery, VJP, optimizer or peer progression yet.
+These are mutable inference components. The new content-driven loop closes only
+its explicit FP32 module profile; sparse slot delivery, other module contracts,
+VJP, optimizer and peer progression still require implementation.
 Scalar AIV metadata ordering needs throughput optimization; byte budgets for
 model/activation/KV/communication are not covered by queue capacity.
 Runtime timeout handling quarantines uncertain live program owners; injected

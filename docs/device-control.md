@@ -1,7 +1,8 @@
 # Experimental device queue and CANN control
 
-`tools/device_online` contains separately tested building blocks. It is not yet
-an online graph executor or a resident training backend. It isolates CANN runtime
+`tools/device_online` contains separately tested building blocks and an
+experimental [content-driven forward loop](content-flow.md) for an explicit
+existing-module profile. It is not a general module or resident training backend. It isolates CANN runtime
 models, raw ACLNN numerical stages and optional Ascend C kernels from the portable
 core. The independent CPU scheduler and scalar qualification remain unchanged.
 
@@ -109,8 +110,9 @@ queue/routing checks succeed. Nonfinite scores, malformed metadata and selected
 count overflow explicitly fail. Selector scratch has a declared approximate
 budget; other region programs remain unsupported by this component.
 
-This selector consumes supplied descriptors: real module Read, state updates
-and selected Full computation still need integration. Its AIV metadata kernel
+This selector component consumes supplied descriptors. The content-driven loop
+connects sum Aggregate, content Read, identity/EMA state and identity Full;
+other Read/state/Full contracts still need integration. Its AIV metadata kernel
 uses scalar loops; raw ACLNN performs the packed softmax and control gather.
 Component placement does not establish full-graph throughput.
 
