@@ -1,0 +1,82 @@
+{
+  "schema": "tide-native-origin-order-evidence-v1",
+  "source": "832a881660c0621222d6d3cbcc73178830aac3df",
+  "runtime": {
+    "architecture": "aarch64",
+    "torch": "2.10.0+cpu",
+    "cann": "9.0.0",
+    "soc": "Ascend910_9392",
+    "npu_runtime": "standalone"
+  },
+  "scope": "stable InputOrigin ties; focused CPU FP32/FP64 and standalone NPU FP32 regression, not full qualification or throughput",
+  "checks": {
+    "cpu_ctests": 8,
+    "cpu_aggregate_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "focused_python_tests": 362,
+    "npu_aggregate_dtypes": [
+      "float32"
+    ]
+  },
+  "builds": {
+    "cpu": {
+      "manifest_sha256": "c59484a97136d8e2d64f32ee8a6cd8f13b724aa86350e7c211c42473285bdce1",
+      "cpp_source_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+      "aggregate_binary_sha256": "3b6cb9ed8f6b71fda5f843cda43fcb045be545e9b1a2aa12546a9ac536d2bba7"
+    },
+    "npu": {
+      "manifest_sha256": "c2fb9eb92072f6db34a381adee3f1ffd72c25e9596490e2a7b19cf9c37240eb4",
+      "cpp_source_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+      "aggregate_binary_sha256": "c1e5e5f2948eafaa238ccdc2d8e99e4b5a62669639d6a22df990a3b1aaf56ffc"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-origins-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "2b936ebff236dd4c306b96b01b2b035476dde3983041f7aefcc3c633425f52e0",
+        "task.log": "4a0bc42f2fecf916d3da3a33758e08c4a86487df85e3179e3a8da829f1670491"
+      }
+    },
+    {
+      "name": "build-origins-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "d516abce5e7a70a9372f19b4e0f38877f5fc43262310e52f2bf15e8a79ea23a6",
+        "task.log": "66b5958108479207468e9a9e1254c388fa92977ff05ae2e22a04327dd91f6573"
+      }
+    },
+    {
+      "name": "origins-cpu-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "1b4581cc87be9421c529a8a3d3e0567a83a6adeab015685edabee3bd7c8422bb",
+        "task.log": "b0fd564f1db0b96e2669e2c8d1409a8bfe86dfeb9b227cbc56675302dd2bbe0c"
+      }
+    },
+    {
+      "name": "origins-standalone-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f63ad4c2bbf27b7ff182382a35191ef7422ad325601c23e7cca95cc6f7d0f369",
+        "task.log": "30341cc0eb4dae594dca88f3e6731eef33584553ae9135d17cac7b2cf8fb1feb"
+      }
+    }
+  ],
+  "old_core_reproducer": {
+    "run": "origins-oldcore-regression01",
+    "result_sha256": "19bad2848df025331f5f847edbccfa2880ee4343bd669ade3f494cc204224e40",
+    "expected_old_core_failure": true,
+    "old_source": "0e66d89c680a84c4ee1f2b47b89e224cf633e0eb",
+    "exit_code": 2,
+    "core_sha256": "5d9b61471821ec65598a226c31aff2ce44c320e12a61a63fd8a4484376552557",
+    "test_object_sha256": "266afff784a2994c89285efa0fe5eef1e17b5271f44fe910e5e99284c1c42932"
+  }
+}
