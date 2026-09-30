@@ -5,6 +5,7 @@
 #include "packed_full.h"
 #include "packed_lh_full.h"
 #include "packed_emission.h"
+#include "packed_swiglu_full.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
@@ -18,6 +19,7 @@ struct ContentFlow::Impl {
   std::unique_ptr<PackedFull> full;
   std::unique_ptr<PackedLhFull> lh_full;
   std::unique_ptr<PackedEmission> emission;
+  std::unique_ptr<PackedSwiGluFull> swiglu_full;
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
   std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,emission_trace;
   AtomBatch external;

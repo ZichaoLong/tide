@@ -59,7 +59,7 @@ void parity(at::Device device) {
 template<class F> void rejects(F f,const char* message) {bool rejected=false;try{f();}catch(const std::exception&){rejected=true;}require(rejected,message);}
 void refusal(at::Device device) {
   auto f=fixture(0,0);ContentLimits l;l.queue=64;l.arrivals=64;l.outputs=128;l.trace=512;
-  auto bad=f.graph;bad.nodes[0].full="swiglu";
+  auto bad=f.graph;bad.nodes[0].full="unsupported-full-v1";
   rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"unsupported Full accepted");
   bad=f.graph;bad.nodes[0].emit_phases.assign(bad.outgoing_ports.offsets[1]-bad.outgoing_ports.offsets[0],bad.nodes[0].emit_period);
   rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"invalid emission phase accepted");

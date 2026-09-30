@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T11:01:24.452225+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T11:08:38.918738+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -112,16 +112,29 @@ Original snapshots/logs remain; no failure relabeled and no tolerance/formula ch
 Incremental development builds recorded byte-identical production source/relinked
 tests. The final independent clean build above supersedes that provenance for qualification.
 
-## SwiGLU Full in development
+## SwiGLU Full ready for commit
 
 Uncommitted packed_swiglu_full.{h,cpp},swiglu_check.cpp and flow/profile/build
 integration implement selected-only batched SwiGLU with the original residual.
 Static parameter table packs actual SwiGLU owners; device planner chooses chunks.
 HARD FP32 inference only; no new backward or throughput claim.
-build-device-swiglu-dev01 RUNNING from frozen swiglu-dev01 using core origins-npu-clean01,
-jobs2/bound1800s. Then all24 device cells900s and separate swiglu profile480s,
-one NPU/queue120s; retain failures. This job is independent of immutable emission
-qualification. Never modify either active snapshot/build.
+
+build-device-swiglu-dev01 PASSED from frozen swiglu-dev01,matching core
+origins-npu-clean01. Four CPU CTests and standalone loader closure passed.
+device-swiglu-gates-dev01 PASSED all24 cells; new swiglu16 components/256 windows/
+4 refusals. Coverage:width1/7/33/257,chunk1/4,empty/partial selection,inactive NaN
+parameters,large clocks,mixed identity/tanh/LH Full,slot-affine/phase emissions,
+content/proposal Read,feedback/DAG,two inputs,both schedules,clear/adoption,
+continuation and lean export. Existing strict tensor/discrete comparison unchanged.
+device-swiglu-profile-dev01 PASSED53667 AIV+1195 AI Core tasks,no AiCPU/fallback.
+Development source is recorded dirty; no runtime source changed during these jobs.
+
+NEXT commit the implementation; freeze swiglu-clean01 at that commit,run full
+build-device-swiglu-clean01 (core origins-npu-clean01,jobs2,1800s),all24 cells900s
+(new swiglu first),then separate profile480s,one NPU/queue120s. Qualify exact commit
+and record evidence separately. Then attention/KV and complete safe chunking remain
+priority; public matrix,peer progression,resident training and scale comparison
+are still open. Do not resume historical timing merely to occupy the build wait.
 
 ## Failures retained and prior work
 

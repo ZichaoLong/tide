@@ -2,6 +2,7 @@
 #include "portable_torch/runtime.hpp"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
+#include <algorithm>
 #include <limits>
 #include <stdexcept>
 
@@ -54,7 +55,11 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
   const auto remaining=l.workspace_bytes-static_cast<int64_t>(estimate);
   emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,l.emission_chunk_rows,remaining);
-  const auto full_budget=remaining-emission->reserved_bytes();
+  auto full_budget=remaining-emission->reserved_bytes();
+  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&n.full=="swiglu";})) {
+    swiglu_full=std::make_unique<PackedSwiGluFull>(profile,device,l.queue,l.full_chunk_rows,full_budget);
+    full_budget-=swiglu_full->reserved_bytes();
+  }
   if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
   full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,
     full_budget-(lh_full?lh_full->reserved_bytes():0));
@@ -86,6 +91,7 @@ void ContentFlow::Impl::construct() {
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
   if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
+  if(swiglu_full)actions=swiglu_full->append_stage(p,actions,content.content,update.comparison,error,full->chunks());
   auto emitted=emission->append_stage(p,actions,error);
   auto arrivals=emitted.arrivals;
   // Every capacity/error preflight precedes every live state/history/queue/log commit.

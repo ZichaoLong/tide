@@ -13,7 +13,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   graph.compile();
   for(const auto& n:graph.nodes) {
     if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")
-        ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&!is_lh_full(n.full))
+        ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&n.full!="swiglu"&&!is_lh_full(n.full))
         ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
         ||(n.emission!="broadcast"&&n.emission!="slot_affine"))
       throw std::invalid_argument("content flow module contract unavailable");

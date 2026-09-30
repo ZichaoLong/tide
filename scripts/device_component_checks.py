@@ -20,6 +20,7 @@ CHECKS = {
     "lh-full": ("tide-device-lh-full-check", ("float32",)),
     "origins": ("tide-device-origin-check", ("float32",)),
     "emission": ("tide-device-emission-check", ("float32",)),
+    "swiglu": ("tide-device-swiglu-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -38,9 +39,11 @@ MARKERS = {
     "lh-full": "device-lh-full: passed",
     "origins": "device-origins: passed",
     "emission": "device-emission: passed",
+    "swiglu": "device-swiglu: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
            "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum",
            "add": "tide_vector_state", "clock": "tide_vector_state", "norm32": "tide_vector_read",
-           "lh-full": "tide_full_plan", "origins": "tide_sum_plan", "emission": "tide_emission_plan"}
+           "lh-full": "tide_full_plan", "origins": "tide_sum_plan", "emission": "tide_emission_plan",
+           "swiglu": "tide_full_plan"}

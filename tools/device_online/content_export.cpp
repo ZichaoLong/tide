@@ -52,6 +52,7 @@ Result ContentFlow::Impl::export_result() const {
     {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",limits.diagnostics},
     {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
     {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
+    {"swiglu_full_chunk_rows",swiglu_full?swiglu_full->chunk_rows():0},
     {"emission_chunks",emission->chunks().cpu().item<Index>()},{"emission_chunk_rows",emission->chunk_rows()}};
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());

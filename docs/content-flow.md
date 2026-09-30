@@ -7,7 +7,7 @@ Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
 scales; identity, EMA or Add-repeat state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
-selection; adopt-v1 Next with optional selected clear; identity, tanh or LH
+selection; adopt-v1 Next with optional selected clear; identity, tanh, SwiGLU or LH
 Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
 apply their declared activation/normalization to comparison without that residual.
 It supports observe-all and active-only state adoption. Inputs are arbitrary
@@ -26,6 +26,18 @@ coordinates, pending messages and emitted edge identities stay physical. Explici
 source exports apply the same view at the observation boundary; they never feed
 candidate execution. Equal projected keys retain physical order and remain distinct
 logical sources. A logical-source collision still fails with code2.
+
+The `swiglu` Full profile preserves the existing formula
+`content + (silu(comparison @ ffn_gate) * (comparison @ ffn_up)) @ ffn_down`.
+The device packs only actual selected SwiGLU actions, gathers that owner's three
+matrices and runs bounded batched matrix multiplication. Other Full profiles pass
+through this stage unchanged. Parameter storage packs only declared SwiGLU owners;
+unused graph nodes do not require dummy SwiGLU matrices. Padding uses independent
+zero values/matrices and distinct scratch destinations. `full_chunk_rows` bounds
+this profile too; `swiglu_full_chunk_rows` reports its effective limit, and
+`full_chunks` includes its actual chunks. Its reserved workspace is deducted before
+other Full planners choose limits. This remains inference only; no SwiGLU resident
+VJP or training qualification is implied.
 
 Emission uses static local-slot bindings, periods and physical edge/output scales.
 The device preflights actual selected actions, decides each slot's presence from
