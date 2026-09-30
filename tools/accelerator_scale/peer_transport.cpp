@@ -61,14 +61,19 @@ struct Channel {
   }
   ~Channel(){close();}
 };
+// Both notifications are consumed before either stream may reuse the pair.
+// The acknowledgement also orders source allocator reuse after the remote pull.
+struct Pair {
+  Channel ready,consumed;
+  Pair(Api& api,at::Device from,at::Device to):ready(api,from,to),consumed(api,to,from){}
+};
 #endif
 }
 struct PeerTransport::Impl {
 #if PORTABLE_TORCH_ENABLE_NPU
   Api api;
-  std::map<std::string,std::vector<std::unique_ptr<Channel>>> channels;
-  std::map<std::string,size_t> cursor;
-  std::vector<at::Tensor> retained;
+  std::map<std::string,std::unique_ptr<Pair>> channels;
+  std::map<std::string,size_t> warmup_inventory,capture_inventory;
   std::vector<std::pair<at::Tensor,at::Tensor>> bridges;
   std::mutex mutex;
   size_t count=0,capacity;
@@ -100,20 +105,21 @@ PeerTransport::~PeerTransport(){PeerTransport* expected=this;active.compare_exch
 void PeerTransport::prepare_capture() {
 #if PORTABLE_TORCH_ENABLE_NPU
   std::lock_guard<std::mutex> lock(impl_->mutex);
-  impl_->retained.clear();impl_->bridges.clear();impl_->cursor.clear();impl_->capturing=true;
+  impl_->bridges.clear();impl_->capture_inventory.clear();impl_->capturing=true;
 #endif
 }
 void PeerTransport::finish_capture() {
 #if PORTABLE_TORCH_ENABLE_NPU
-  for(const auto& [key,pool]:impl_->channels)
-    if(impl_->cursor.at(key)!=pool.size())throw std::runtime_error("peer capture transfer inventory differs from warmup");
+  if(impl_->capture_inventory!=impl_->warmup_inventory)
+    throw std::runtime_error("peer capture transfer inventory differs from warmup");
 #endif
 }
 std::pair<size_t,int64_t> PeerTransport::inventory() const {
 #if PORTABLE_TORCH_ENABLE_NPU
-  std::lock_guard<std::mutex> lock(impl_->mutex);int64_t bytes=0;
-  for(const auto& tensor:impl_->retained)bytes+=tensor.nbytes();
-  return {impl_->count,bytes};
+  std::lock_guard<std::mutex> lock(impl_->mutex);
+  // No unconditional window-long raw-API staging retention. Ordinary program
+  // outputs, autograd bridges and graph allocator pools are reported separately.
+  return {impl_->count,0};
 #else
   return {0,0};
 #endif
@@ -124,32 +130,37 @@ at::Tensor PeerTransport::copy(const at::Tensor& input,at::Device destination) {
   const auto source=input.device();if(source==destination)return input;
   if(source.type()!=c10::DeviceType::PrivateUse1 || destination.type()!=source.type())
     throw std::invalid_argument("peer copy requires two NPUs");
-  auto key=source.str()+">"+destination.str()+":"+std::to_string(int(input.scalar_type()));
+  const auto pair_key=source.str()+">"+destination.str();
+  auto key=pair_key+":"+std::to_string(int(input.scalar_type()));
   for(auto dim:input.sizes())key+=":"+std::to_string(dim);
-  auto& pool=impl_->channels[key];const auto index=impl_->cursor[key]++;
-  if(index==pool.size()) {
-    if(impl_->capturing)throw std::runtime_error("peer capture exceeded its warmup transfer inventory");
-    if(impl_->count>=impl_->capacity)throw std::runtime_error("bounded peer notification capacity exceeded");
-    pool.push_back(std::make_unique<Channel>(impl_->api,source,destination));++impl_->count;
+  if(impl_->capturing) {
+    const auto found=impl_->warmup_inventory.find(key);
+    if(found==impl_->warmup_inventory.end() || ++impl_->capture_inventory[key]>found->second)
+      throw std::runtime_error("peer capture exceeded its warmup transfer inventory");
+  } else ++impl_->warmup_inventory[key];
+  auto& pair=impl_->channels[pair_key];
+  if(!pair) {
+    if(impl_->capturing)throw std::runtime_error("peer capture needs an unprepared device pair");
+    if(impl_->count+2>impl_->capacity)throw std::runtime_error("bounded peer notification capacity exceeded");
+    pair=std::make_unique<Pair>(impl_->api,source,destination);impl_->count+=2;
   }
-  auto& channel=*pool.at(index);
-  // Keep all raw-API buffers alive through the window/capture. The peer API
-  // cannot tell Torch's destination allocator about a foreign device stream.
   const bool differentiable=at::GradMode::is_enabled() && input.requires_grad();
   at::NoGradGuard no_grad;at::Tensor x,y;
-  {c10::DeviceGuard guard(source);x=input.clone(at::MemoryFormat::Contiguous);}
+  {c10::DeviceGuard guard(source);x=input.contiguous();}
   {c10::DeviceGuard guard(destination);y=at::empty(input.sizes(),input.options().device(destination));}
   auto src=c10_npu::getCurrentNPUStream(source.index()),dst=c10_npu::getCurrentNPUStream(destination.index());
   {c10::DeviceGuard guard(source);
-   checked(impl_->api.record(channel.remote,src.stream()),"record source readiness");}
+   checked(impl_->api.record(pair->ready.remote,src.stream()),"record source readiness");}
   {c10::DeviceGuard guard(destination);
-   checked(impl_->api.wait_reset(channel.local,dst.stream(),30000),"wait source readiness");
-   // Pull on the consumer stream: its copy and subsequent kernels share one
-   // device ordering domain. The immutable source clone remains retained until
-   // all models finish, so no source-buffer-reuse acknowledgement is needed.
-   checked(impl_->api.copy(y.data_ptr(),y.nbytes(),x.const_data_ptr(),x.nbytes(),ACL_MEMCPY_DEVICE_TO_DEVICE,dst.stream()),"async peer pull");}
+   checked(impl_->api.wait_reset(pair->ready.local,dst.stream(),30000),"wait source readiness");
+   checked(impl_->api.copy(y.data_ptr(),y.nbytes(),x.const_data_ptr(),x.nbytes(),ACL_MEMCPY_DEVICE_TO_DEVICE,dst.stream()),"async peer pull");
+   checked(impl_->api.record(pair->consumed.remote,dst.stream()),"record source consumption");}
+  {c10::DeviceGuard guard(source);
+   checked(impl_->api.wait_reset(pair->consumed.local,src.stream(),30000),"wait source consumption");}
+  // A temporary source can now be returned to its stream's allocator: reuse
+  // follows the acknowledgement. The returned destination has only local use.
   if(differentiable){y.set_requires_grad(true);impl_->bridges.emplace_back(input,y);}
-  impl_->retained.push_back(x);impl_->retained.push_back(y);return y;
+  return y;
 #else
   throw std::logic_error("NPU peer unavailable");
 #endif

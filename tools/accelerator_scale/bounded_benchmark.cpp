@@ -69,6 +69,7 @@ int run(int argc,char** argv) {
   };
   const auto prepare_start=pdg_scale::Clock::now();execute();synchronize(placement);
   if(optimizer)optimizer->reset();
+  window=Window{};loss=Value{};finite=Tensor{};
   if(capture)replay->capture(execute);
   if(optimizer)optimizer->reset();synchronize(placement);
   const auto prepare=pdg_scale::seconds(prepare_start);const auto start=pdg_scale::Clock::now();

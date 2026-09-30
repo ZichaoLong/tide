@@ -12,7 +12,10 @@ Optimizer::Optimizer(const std::vector<Tensor>& payload,std::string kind,double 
   for(const auto& p:payload) {
     if(p.scalar_type()!=at::kFloat && p.scalar_type()!=at::kHalf)
       throw std::invalid_argument("bounded optimizer requires FP32/FP16 payload, FP32 masters");
-    initial_.push_back(p.detach().clone());auto master=p.detach().to(at::kFloat).clone();
+    // Reset is outside capture. Keep its immutable checkpoint on the host;
+    // FP32 payload already provides the master storage used after backward.
+    initial_.push_back(p.detach().to(at::kCPU).clone());
+    auto master=p.scalar_type()==at::kFloat?p.detach():p.detach().to(at::kFloat);
     states_.push_back({master,at::zeros_like(master),at::zeros_like(master),at::zeros({},p.options().dtype(at::kLong))});
     if(!corrections_.count(p.device().str())) {
       // The reference evaluates bias correction in host double then casts its

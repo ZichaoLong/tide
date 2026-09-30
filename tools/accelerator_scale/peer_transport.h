@@ -6,7 +6,9 @@
 
 namespace accelerator_scale {
 // One process-local replay session, with explicit finite notification capacity.
-// Warmup creates IPC notifications; capture only reuses that fixed inventory.
+// Warmup creates two reusable IPC notifications per directed device pair.
+// Each copy includes a consumed acknowledgement, ordering source-buffer reuse.
+// Capture verifies the finite warmup transfer inventory, independent of size.
 class PeerTransport {
  public:
   explicit PeerTransport(const std::vector<at::Device>&, size_t capacity=16384);
