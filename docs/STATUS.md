@@ -43,19 +43,34 @@ submits/boundary waits, no journal/AiCPU/fallback. Not throughput/training.
 Evidence [device-window-20260930](evidence/device-window-20260930.md).
 Earlier window-dev01 directed results remain retained, without replacing clean evidence.
 
-## Active packed-sum development
+## Active packed-sum increment
 
-Uncommitted new PackedSum and Ascend C metadata/vector kernels. Scalar device path
-remains selectable; ContentLimits.vectorized_aggregate defaults true in this draft.
-Payload width tiles256, stable message-order reduction, preflight before parallel
-writes, no arithmetic on absent buffer rows. sum_check.cpp covers72 scalar/vector
-cases,144 input-changing replays, nine malformed/sticky refusals; widths1..2048.
-build-device-sum-dev01 FAILED: Muls template inferred __gm__ float for scale.
-Preserved source/log; fix loads scale into a local float before the vector API.
-Added explicit inference/autograd rejection. RUNNING build-device-sum-dev02 on frozen sum-dev02, matching
-runtime-guard-npu-clean01 core; jobs2/900s. After build run sum/content/window directed
-gates (900s) and sum placement (480s), queue120s. On failure inspect source/log first.
-Minimal source/config/raw results only; no tracking infrastructure or new full-size job.
+PackedSum adds metadata preflight followed by payload vector tiles256, preserving
+stable message-order reduction and leaving absent rows untouched. Scalar device
+path remains explicitly selectable; ContentLimits.vectorized_aggregate defaults true.
+It is FP32 inference only, rejects autograd. Read/state/queue metadata remain scalar.
+
+Development PASSED on frozen sum-dev02 (base4e45072 + hashed dirty overlay), matching
+runtime-guard-npu-clean01 core, build device-sum-dev02:
+- build-device-sum-dev02: four CPU CTests/standalone loader, exit0.
+- device-sum-gates-dev02:72 scalar/vector cases,144 input-changing replays,
+  nine malformed/sticky refusals plus autograd rejection;640 content +384 window cases.
+- device-sum-profile-dev02:837 AIV tasks;72 scalar sum,81 metadata plans,81 vector
+  sum tasks; no AiCPU/fallback. Retained profile/sum-analysis.json maps raw rows to
+  width/group cases using exact frozen test order and preserves two observations.
+  For width2048/groups64,3,5, average scalar15513.38us vs preflight+vector56.64us;
+  tiny single-message cases regress. One profiled process, not complete throughput
+  or a formal backend recommendation. Keep scalar switch; do not extrapolate.
+
+build-device-sum-dev01 FAILED Muls deduction on __gm__ float scale; original source,
+build and log retained. Fix loads the scalar into a local float before calling Muls.
+No throughput experiment/tracking layer was added.
+
+NEXT commit/push tested implementation; freeze exact commit as sum-clean01,
+build-device-sum-clean01 (jobs2/900s), then device-sum-components-clean01 (all17 cells,
+900s) and device-sum-profile-clean01 (480s), queue120s. After success record compact
+immutable evidence. Continue packed numerical/module coverage and training delivery;
+no user pause is active and no new permission is required.
 
 ## Newly completed immutable qualification
 

@@ -13,6 +13,7 @@ CHECKS = {
     "content": ("tide-content-flow-check", ("float32",)),
     "window": ("tide-content-window-check", ("float32",)),
     "full": ("tide-packed-full-check", ("float32",)),
+    "sum": ("tide-packed-sum-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -24,7 +25,8 @@ MARKERS = {
     "content": "content-refusal: passed",
     "window": "device-window: passed",
     "full": "packed-full: passed",
+    "sum": "packed-sum: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
-           "content": "tide_content_sum", "window": "tide_content_sum", "full": "tide_full_plan"}
+           "content": "tide_vector_sum", "window": "tide_vector_sum", "full": "tide_full_plan", "sum": "tide_vector_sum"}

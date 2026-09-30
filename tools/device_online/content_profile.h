@@ -27,7 +27,7 @@ struct ContentUpdate {
   at::Tensor comparison;
   at::Tensor event_meta,event_values;
 };
-ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error);
+ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error,bool vectorized);
 void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const ContentBatch&,
                  const ContentState&,const at::Tensor& coefficients,const at::Tensor& error);
 ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,

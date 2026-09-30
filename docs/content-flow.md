@@ -103,11 +103,28 @@ several advances precede the first result export. Neither presentation path feed
 the next device loop. Restore accepts a complete-cut continuation and a separately
 declared scheduling policy.
 
-The initial content, Read, state, output and journal kernels use scalar AIV loops over
-packed buffers. They establish a forward semantic integration path, not optimized
-compute throughput. Profiling and vectorized numerical kernels are required
-before performance recommendations. Trace storage, CPU comparison and result
-materialization must be separated from future steady-state throughput timing.
+`ContentLimits.vectorized_aggregate` selects the packed sum implementation. Its
+device metadata preflight validates complete offsets, physical source ownership,
+logical-source uniqueness and atom/fiber coordinates before any numerical write.
+Independent AIV blocks then process disjoint (fiber, payload-tile) ranges using
+vector multiply/add and exact-length transfers. Tiles hold up to256 FP32 elements;
+one logical message group keeps its original stable accumulation order. Absent
+atoms/fibers never enter arithmetic, including poisoned unused storage. No atom
+count, source index or chunk decision is downloaded for host dispatch. The scalar
+device implementation remains selectable for comparison.
+
+Directed development passed72 scalar/vector cases,144 input-changing replays and
+nine metadata refusals, plus the existing640 content and384 window cases. Its837-task
+trace is entirely AIV. Small single-message cases can be slower; the scalar switch
+is retained and no complete-flow speed claim follows. Exact clean qualification
+and any later measured recommendation belong to STATUS/evidence.
+
+This vector path currently implements sum Aggregate inference only. It explicitly
+rejects autograd; its presence does not certify training, FP16 or other Aggregate
+contracts. Read, state, output and journal kernels still use scalar AIV loops.
+Measured placement and task costs, then complete-flow timing, determine whether
+an implementation is beneficial at a given scale. Trace storage, CPU comparison
+and result materialization stay separate from steady-state throughput timing.
 FP16, other module contracts, public Python/native packaging, peer progress and
 training remain independent delivery requirements.
 

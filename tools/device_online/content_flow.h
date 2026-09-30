@@ -10,6 +10,7 @@ struct ContentLimits {
   int64_t full_chunk_rows=16;
   bool prefill=true;
   bool diagnostics=true; // Event/message journals are optional per-window work.
+  bool vectorized_aggregate=true; // Scalar device implementation remains selectable.
 };
 // Borrowed read-only NPU buffers, valid until the next advance or owner destruction.
 // Output coordinates use the AtomBatch layout; field4 is the output port.

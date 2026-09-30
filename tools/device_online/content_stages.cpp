@@ -1,22 +1,16 @@
 #include "content_profile.h"
 #include "cann_api.h"
-#include "aclrtlaunch_tide_content_sum.h"
+#include "packed_sum.h"
 #include "aclrtlaunch_tide_state_read.h"
 #include "aclrtlaunch_tide_content_state.h"
 #include "aclrtlaunch_tide_content_outputs.h"
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const at::Tensor& error) {
-  auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size());
-  auto inputs=int64_t(profile.graph.inputs.size()),edges=int64_t(profile.graph.edges.size());
-  auto sources=profile.sources,scales=profile.scales,reads=profile.read;
-  ContentBatch out{at::zeros({capacity,width},reads.options()),at::zeros({capacity},reads.options()),at::zeros_like(ready.atoms.values)};
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_content_sum)(1,stream,ptr(ready.atoms.coordinates),
-    ptr(ready.atoms.values),ptr(ready.fiber_offsets),ptr(ready.fibers),ptr(ready.counts),ptr(sources),ptr(scales),
-    ptr(out.content),ptr(out.weighted),ptr(error),capacity,width,nodes,inputs,edges),"packed content");},
-    {ready.atoms.coordinates,ready.atoms.values,ready.fiber_offsets,ready.fibers,ready.counts,sources,scales,out.content,out.weighted,error});
-  return out;
+ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const at::Tensor& error,bool vectorized) {
+  auto sum=append_packed_sum(p,ready,profile.sources,profile.scales,profile.graph.nodes.size(),
+    profile.graph.inputs.size(),profile.graph.edges.size(),error,vectorized);
+  return {sum.content,at::zeros({ready.fibers.size(0)},sum.content.options()),sum.weighted};
 }
 void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const ContentBatch& content,
                  const ContentState& old,const at::Tensor& coefficients,const at::Tensor& error) {

@@ -148,6 +148,13 @@ event/message journals from the captured program; input validation/upload and
 complete-window error reporting remain host boundaries. See
 [content-flow.md](content-flow.md) for buffer lifetime, failure and export contracts.
 
+`PackedSum` has selectable scalar/vector numerical implementations. The vector
+path splits exact int64 metadata validation from parallel payload tiles, preserving
+the stable message order inside every fiber. Validation errors prevent all payload
+writes. Its directed check covers tail widths through2048, ragged and empty groups,
+changed inputs on replay, unused NaN storage, malformed metadata and autograd refusal.
+It is an inference component; qualification and placement status belong to STATUS.
+
 These mutable stages provide no autograd. Model/state updates must eventually
 share a commit boundary with successful delivery; committing state before an
 overflowing queue transaction would violate the intended executor contract.
@@ -171,6 +178,7 @@ NEW/tide-device-control-check --device=npu:0 --dtype=float32
 NEW/tide-device-numerical-check --device=npu:0 --dtype=float16
 NEW/tide-packed-queue-check --device=cpu --dtype=float64
 NEW/tide-device-closure-check --device=npu:0 --dtype=float32
+NEW/tide-packed-sum-check --device=npu:0 --dtype=float32
 python scripts/verify_device_control.py --build-dir NEW --output-dir GATE \
   --device=npu:0
 python scripts/profile_device_control.py --build-dir NEW --output-dir PROFILE \
