@@ -43,6 +43,7 @@ Result ContentFlow::Impl::export_result(const Continuation& before) {
     std::tie(a.time,a.batch,g.outputs[a.port],a.port)<std::tie(b.time,b.batch,g.outputs[b.port],b.port);});
   const auto n=events->count.cpu().item<Index>(),na=fibers->count.cpu().item<Index>();
   auto em=events->meta.cpu(),ev=events->values.cpu(),fm=fibers->meta.cpu(),fv=fibers->values.cpu(),cv=contributions->values.cpu();
+  auto full_values=full_trace->values.cpu();
   auto meta=em.accessor<Index,2>(),atoms=fm.accessor<Index,2>();
   using Key=std::array<Index,3>;
   std::map<Key,std::vector<Index>> by_fiber;
@@ -57,7 +58,7 @@ Result ContentFlow::Impl::export_result(const Continuation& before) {
     e.comparison_state={ev[i].narrow(0,3*width,width).clone(),meta[i][8],meta[i][9]};e.comparison=e.comparison_state.value;
     e.next_state={ev[i].narrow(0,4*width,width).clone(),meta[i][10],meta[i][11]};e.next=e.next_state.value;
     e.descriptor=ev[i][5*width].clone();e.control=ev[i][5*width+1].clone();
-    if(e.active){e.full=e.content;for(Index slot=0;slot<g.outgoing_ports.offsets[e.node+1]-g.outgoing_ports.offsets[e.node];++slot)e.emitted.push_back({slot,e.full});}
+    if(e.active){e.full=full_values[i].clone();for(Index slot=0;slot<g.outgoing_ports.offsets[e.node+1]-g.outgoing_ports.offsets[e.node];++slot)e.emitted.push_back({slot,e.full});}
     for(auto row:by_fiber.at({e.batch,e.node,e.time})) {
       auto c=atoms[row];Atom a{c[0],c[1],c[2],c[3],c[4],c[5],fv[row].clone()};e.fiber.push_back(a);
       Index slot=a.kind==0?g.source_domain->input[a.source]:g.source_domain->edge_target[a.source];
@@ -79,7 +80,8 @@ Result ContentFlow::Impl::export_result(const Continuation& before) {
   }
   std::sort(out.trace.begin(),out.trace.end(),[](const Event& a,const Event& b){return std::tie(a.time,a.batch,a.node)<std::tie(b.time,b.batch,b.node);});
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",n},{"messages",Index(out.messages.size())},
-    {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"max_node_time_batch",max_batch},{"prefill",limits.prefill}};
+    {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"max_node_time_batch",max_batch},{"prefill",limits.prefill},
+    {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()}};
   return out;
 }
 } // namespace tide::device_online

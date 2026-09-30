@@ -1,9 +1,12 @@
 # Current handoff
 
-Updated 2026-09-30T06:07:17.698392+00:00. **ACTIVE: continue the user-confirmed execution contract.**
+Updated 2026-09-30T06:16:22.753216+00:00. **PAUSED BY USER AT THE NEXT IMPLEMENTATION COMMIT — renewed confirmation required.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents, no push. Reference repos and ObsidianVault remain read-only.
+User now explicitly requests: finish the next commit, then stop and report for
+realignment. Do not resume further implementation/experiments without new user
+confirmation. This overrides the earlier autonomous-continuation instruction.
 
 ## Contract and next action
 
@@ -13,35 +16,66 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: ContentFlow identity-Full profile qualified on clean4d2f09e. All three jobs
-PASSED: build-device-content-clean01 (four CPU CTests/loader),
-device-components-clean03 (all13 cells; content80 windows,394 events,244 actual
-emissions,10 multi-time node batches), device-content-profile-clean01 (all11606
-recorded tasks AIV). Evidence [content-loop-20260930](evidence/content-loop-20260930.md).
+STOP after committing the selected matrix Full increment described below. All
+current-increment jobs are terminal and passed. No clean qualification or further
+implementation/experiment may start until the user confirms the realigned plan.
+At re-entry, inspect HEAD and this handoff; the earlier autonomous-continuation
+permission does not override this pause.
 
-Uncommitted NEXT implementation adds PackedFull for actual selected identity/tanh
-Full, raw ACLNN FP32 KEEP_DTYPE batch matmul/tanh/index-copy, and device-controlled
-bounded physical chunks. Empty/padding rows use independent zero sentinels;
-inactive nodes' weights never participate. ContentFlow now accepts tanh Full,
-records actual Full values and exposes full_chunk_rows. New full_check.cpp checks
-inactive NaN poison and tails at widths1/7/33, chunks1/4. Content loop gate doubled
-to160 windows for identity/tanh. No build/runtime claim yet for this new work.
-Launch build-device-full-dev01, snapshot full-dev01/build device-full-dev01,
-matching runtime-npu-clean01 core, jobs2/900s. Then --checks full content, bounded
-120s queue/900s task. Preserve failure reproducer; profile Full only after parity.
-Full chunking budget is local scratch, not full model/KV/training memory planning.
+## Current increment: selected matrix Full
 
-Retained failure: build-device-content-dev01 failed because generated CANN headers
-cannot resolve local type alias I in exported kernel signatures. Fixed by explicit
-int64_t and passed in development dev02 and clean4d2f09e. Failing source/logs stay.
+`PackedFull` adds actual selected identity/tanh Full, raw ACLNN FP32 KEEP_DTYPE
+batch matmul/tanh/index-copy and device-controlled bounded physical chunks.
+Comparison snapshots are saved before selected clear. Inactive owners never
+enter Full arithmetic; padding uses independent zero sentinels and distinct
+scratch destinations. ContentFlow records actual Full results and per-call
+`full_chunks` / effective `full_chunk_rows`. The scratch estimate may reduce
+requested rows; one-row impossibility explicitly fails. This is local Full
+parameter/scratch budgeting, not full model/KV/training memory planning.
 
-Previous clean6220011 selector/group qualification committed asedeefc0:
-[device-selection-20260930](evidence/device-selection-20260930.md). All four jobs
-passed. Clean eff5945 packing/lifecycle qualification committed asf604bfc:
-[device-packing-20260930](evidence/device-packing-20260930.md); all eight jobs passed.
-Continue other module contracts, vectorized numerical paths, FP16, public matrix,
-failure-lifetime injection, safe model byte chunking, training and peer delivery.
-Do not stop at these explicit finite profiles or launch full-size timings yet.
+Development source: HEAD base `61ee767` plus frozen dirty overlay
+`TASK/sources/full-dev01`; per-file hashes `TASK/sources/full-dev01.snapshot.json`.
+Build `TASK/builds/device-full-dev01`, matching `runtime-npu-clean01` core.
+All services use prefix `tide-execution-flows-` and suffix `.service`:
+
+| Job | Terminal result and retained output |
+| --- | --- |
+| build-device-full-dev01 | PASSED exit0; four CPU CTests and standalone loader checks; jobs2,900s bound; TASK/runs/build-device-full-dev01/{status.json,task.log} |
+| device-full-gates-dev01 | PASSED exit0; `--checks full content`; 24 Full cases,160 window/continuation comparisons,788 events,488 actual emissions,20 windows with multi-time node batches; TASK/runs/device-full-gates-dev01/verified/result.json and per-cell logs |
+| device-full-profile-dev01 | PASSED exit0; `--check full`; 426 task records:410 AIV +16 AI Core, including48 Full planners,16 BatchMatMulV2,24 Tanh,24 ScatterUpdate; TASK/runs/device-full-profile-dev01/profile/result.json and hashed raw CSVs |
+
+NPU jobs leased physical1 as logical npu:0; module and runtime are below.
+Gates cover widths1/7/33, chunks1/4, empty/identity/tanh/tail masks and inactive
+NaN poison; content continuation uses chunks1/3 against independent CPU Streaming
+and Greedy. Content cases preserve feedback, parallel edges, unequal delays,
+missing/present-zero inputs, exact large clocks/counts, active-only adoption,
+selected clear and restoring the candidate's own cut under the other schedule.
+Both selected FP32 cells passed; this was not a fresh all14-cell regression.
+Profiling found no AiCPU task or host-fallback diagnostic. It includes construction
+and CPU assertions; no throughput or complete-flow placement claim follows.
+
+These are **development** results on the frozen overlay, not qualification of a
+clean implementation commit. That qualification intentionally waits for renewed
+authorization. The existing identity-Full qualification remains on clean4d2f09e:
+[content-loop-20260930](evidence/content-loop-20260930.md), all13 component cells;
+content80 windows/394 events/244 emissions/10 multi-time windows and11606 AIV
+placement records. Selector/group evidence on clean6220011 is
+[device-selection-20260930](evidence/device-selection-20260930.md); earlier clean
+eff5945 packing/lifecycle evidence is
+[device-packing-20260930](evidence/device-packing-20260930.md).
+
+Suggested order FOR REALIGNMENT ONLY (not authorization to execute):
+
+1. Qualify this implementation commit on a clean frozen source; then close the
+   outstanding injected-failure/runtime-lifetime gate before broad promotion.
+2. Expand real module contracts/attention and packed numerical kernels, full
+   memory planning and FP16; retain arbitrary legal topology/input handling.
+3. Complete public graph/language/preset coverage, peer progression and actual
+   backward/VJP/optimizer training; then representative/full-size comparisons.
+
+Retained build-device-content-dev01 failed because CANN generated launch headers
+could not resolve local alias I. Explicit int64_t fixed it; dev02 and clean4d2f09e
+passed. Original failing source/logs are unchanged.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
@@ -176,5 +210,5 @@ Trackio `/home/zlong/venvs/trackio/bin/python`, project `tide-execution-flows`.
 background.slice service. Use --commit for qualification. Placeholders:
 {python}, {base}, {source}, {out}. Long jobs retain exact commands/status/logs.
 On re-entry run `git status --short --branch` and `python scripts/status.py`, read
-this handoff and actual terminal records, then continue F1–F7. Do not ask again
-for authorization. Submitted/running jobs are never passing evidence.
+this handoff and actual terminal records, then honor the user pause. Resume F1–F7
+only after renewed user confirmation. Submitted/running jobs are never passing evidence.

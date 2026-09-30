@@ -59,14 +59,17 @@ if(TIDE_DEVICE_ASCENDC)
   target_compile_options(tide-device-selector-check PRIVATE -fPIC)
   target_link_libraries(tide-device-selector-check PRIVATE tide-device-selector tide::tidegraph)
   add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp
-    content_flow.cpp content_export.cpp device_journal.cpp)
+    content_flow.cpp content_export.cpp device_journal.cpp packed_full.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-ready tide-device-broadcast
     tide-device-selector tide-device-queue tide::tidegraph tide_content_sum_kernel
-    tide_content_state_kernel tide_content_outputs_kernel tide_journal_kernel)
+    tide_content_state_kernel tide_content_outputs_kernel tide_journal_kernel tide_full_kernel)
   add_executable(tide-content-flow-check content_check.cpp ../../cpp/bench/compare.cpp)
   target_compile_options(tide-content-flow-check PRIVATE -fPIC)
   target_link_libraries(tide-content-flow-check PRIVATE tide-content-flow)
+  add_executable(tide-packed-full-check full_check.cpp)
+  target_compile_options(tide-packed-full-check PRIVATE -fPIC)
+  target_link_libraries(tide-packed-full-check PRIVATE tide-content-flow)
   # CANN's generated kernel library has a runtime-registration constructor;
   # even its --help belongs in a device-leased gate, not a CPU build CTest.
 endif()

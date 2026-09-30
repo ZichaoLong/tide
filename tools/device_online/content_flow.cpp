@@ -14,7 +14,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   // It is deliberately bounded and is not yet the model/KV/training chunker.
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+l.trace)*(width*5.L+32)
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L));
-  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<1||l.stages<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
+  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<1||l.stages<1||l.full_chunk_rows<1||l.workspace_bytes<1||estimate>l.workspace_bytes)
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
@@ -40,6 +40,12 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   events=std::make_unique<DeviceJournal>(l.trace,13,5*width+2,device);
   fibers=std::make_unique<DeviceJournal>(l.trace,6,width,device);
   contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
+  full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
+  std::vector<int64_t> kinds;std::vector<Tensor> weights,biases;
+  for(size_t n=0;n<profile.graph.nodes.size();++n){const auto& node=profile.graph.nodes[n];
+    kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(profile.model.nodes[n].weight);biases.push_back(profile.model.nodes[n].bias);}
+  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,
+    l.workspace_bytes-static_cast<int64_t>(estimate));
   construct();
 }
 void ContentFlow::Impl::construct() {
@@ -59,8 +65,9 @@ void ContentFlow::Impl::construct() {
   auto content=append_content(p,profile,ready,error);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,error);
-  auto arrivals=router.append_stage(p,update.actions,profile.edge_scales,error);
-  auto emitted=append_outputs(p,profile,update.actions,limits.outputs,error);
+  auto actions=full->append_stage(p,update.actions,update.comparison,error);
+  auto arrivals=router.append_stage(p,actions,profile.edge_scales,error);
+  auto emitted=append_outputs(p,profile,actions,limits.outputs,error);
   // Every capacity/error preflight precedes every live state/history/queue/log commit.
   auto pending_proposal=pending->propose_stage(p,ready.consumed,arrivals);
   auto output_proposal=outputs->propose_stage(p,out_zeros,emitted);
@@ -68,9 +75,11 @@ void ContentFlow::Impl::construct() {
   auto event_proposal=events->propose(p,update.event_meta,update.event_values,ready.counts.narrow(0,1,1),error);
   auto fiber_proposal=fibers->propose(p,ready.atoms.coordinates,ready.atoms.values,ready.counts.narrow(0,0,1),error);
   auto contribution_proposal=contributions->propose(p,ready.atoms.coordinates,content.weighted,ready.counts.narrow(0,0,1),error);
+  auto full_proposal=full_trace->propose(p,update.event_meta,actions.values,ready.counts.narrow(0,1,1),error);
   pending->commit_stage(p,pending_proposal);outputs->commit_stage(p,output_proposal);messages->commit_stage(p,message_proposal);
   selector->append_commit(p,history,selection,error);commit_content_state(p,state,update,error);
   events->commit(p,event_proposal,error);fibers->commit(p,fiber_proposal,error);contributions->commit(p,contribution_proposal,error);
+  full_trace->commit(p,full_proposal,error);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);p.finish();
   if(p.workspace_bytes()>limits.workspace_bytes)throw std::invalid_argument("CANN numerical workspace exceeds content budget");
 }
@@ -87,7 +96,7 @@ Result ContentFlow::advance(const std::vector<External>& input,Index until) {
   try {
     upload_atoms(validated.atoms,s.external);s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
     s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
-    s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
+    s.full_trace->count.zero_();s.full->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
     s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;

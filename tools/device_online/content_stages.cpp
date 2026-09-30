@@ -23,15 +23,16 @@ ContentUpdate append_content_state(CannProgram& p,const ContentProfile& profile,
   const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size()),samples=old.values.size(0);
   ContentUpdate out{{at::empty_like(old.values),at::empty_like(old.clocks),at::empty_like(old.present)},
     {at::zeros({capacity,4},ready.fibers.options()),content.content,selection.active},
+    at::zeros_like(content.content),
     at::zeros({capacity,13},ready.fibers.options()),at::zeros({capacity,5*width+2},content.content.options())};
   p.copy(out.state.values,old.values);p.copy(out.state.clocks,old.clocks);p.copy(out.state.present,old.present);
   auto config=profile.config;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_content_state)(1,stream,ptr(ready.fibers),ptr(ready.counts),
     ptr(content.content),ptr(content.scores),ptr(selection.controls),ptr(selection.active),ptr(config),ptr(coefficients),
-    ptr(out.state.values),ptr(out.state.clocks),ptr(out.state.present),ptr(out.actions.coordinates),ptr(out.event_meta),
+    ptr(out.state.values),ptr(out.state.clocks),ptr(out.state.present),ptr(out.actions.coordinates),ptr(out.comparison),ptr(out.event_meta),
     ptr(out.event_values),ptr(stages),ptr(error),capacity,width,nodes,samples),"content state proposal");},
     {ready.fibers,ready.counts,content.content,content.scores,selection.controls,selection.active,config,coefficients,
-      out.state.values,out.state.clocks,out.state.present,out.actions.coordinates,out.event_meta,out.event_values,stages,error});
+      out.state.values,out.state.clocks,out.state.present,out.actions.coordinates,out.comparison,out.event_meta,out.event_values,stages,error});
   return out;
 }
 AtomBatch append_outputs(CannProgram& p,const ContentProfile& profile,const ActionBatch& actions,int64_t capacity,const at::Tensor& error) {

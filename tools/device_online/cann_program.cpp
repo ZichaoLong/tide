@@ -165,6 +165,20 @@ void CannProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnSigmoid",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
+void CannProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;
+  p.op("aclnnTanh",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void CannProgram::batch_matmul(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+  auto& p=*impl_;
+  // CANN cubeMathType=0 is KEEP_DTYPE. Never silently enable HF32/FP16.
+  p.op("aclnnBatchMatMul",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),
+       p.tensor(out,a.scalar_type()),int8_t(0));
+}
+void CannProgram::index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source) {
+  auto& p=*impl_;
+  p.op("aclnnInplaceIndexCopy",p.tensor(target,target.scalar_type()),axis,p.tensor(indices,at::kLong),p.tensor(source,target.scalar_type()));
+}
 void CannProgram::equal(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnEqTensor",p.tensor(a,a.scalar_type()),p.tensor(b,a.scalar_type()),p.tensor(out,at::kBool));

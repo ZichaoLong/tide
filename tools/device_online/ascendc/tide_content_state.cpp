@@ -2,7 +2,7 @@
 namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR lengths,
     GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,
-    GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,
+    GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,GM_ADDR comparisons,
     GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t samples) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
@@ -31,6 +31,7 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
       float comparison=adopt?proposal:old,next=clear?comparison*0.0f:comparison;
       v[i*stride+j]=h[i*width+j];v[i*stride+width+j]=old;v[i*stride+2*width+j]=proposal;
       v[i*stride+3*width+j]=comparison;v[i*stride+4*width+j]=next;s[key*width+j]=next;
+      ((__gm__ float*)comparisons)[i*width+j]=comparison;
     }
     v[i*stride+5*width]=((__gm__ float*)scores)[i];v[i*stride+5*width+1]=((__gm__ float*)controls)[i];
     t[key*2]=next_time;t[key*2+1]=next_count;valid[key]=1;

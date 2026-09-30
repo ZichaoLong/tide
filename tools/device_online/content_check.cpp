@@ -46,9 +46,11 @@ Fixture fixture(int shape,int variant) {
 }
 void parity(at::Device device) {
   Index cases=0,total_events=0,total_messages=0,batched=0;
-  for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true}) {
+  for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})for(bool nonlinear:{false,true}) {
     auto f=fixture(shape,variant);ContentLimits limits;limits.queue=96;limits.arrivals=128;limits.outputs=256;limits.trace=1024;limits.prefill=prefill;
-    std::cerr<<"content-case shape="<<shape<<" variant="<<variant<<" prefill="<<prefill<<'\n';
+    limits.full_chunk_rows=prefill?3:1;
+    if(nonlinear){for(auto& n:f.graph.nodes)if(!n.identity)n.full="tanh";f.graph.compile();f.initial.identity=f.graph.identity;}
+    std::cerr<<"content-case shape="<<shape<<" variant="<<variant<<" prefill="<<prefill<<" nonlinear="<<nonlinear<<'\n';
     ContentFlow candidate(f.graph,f.model,f.initial,device,limits);
     Streaming oracle(f.graph,f.model,{});Greedy cpu_prefill(f.graph,f.model,{});
     auto q=f.initial;Index previous=q.cut;
@@ -58,6 +60,7 @@ void parity(at::Device device) {
       auto reference=oracle.run(q,input,stop,stop);
       tide_bench::compare(cpu_prefill.run(q,input,stop,stop),reference,true,at::kFloat);
       auto actual=candidate.advance(input,stop);
+      if(nonlinear&&!actual.trace.empty())require(actual.stats.at("full_chunk_rows")==limits.full_chunk_rows,"Full chunk selection changed");
       require(actual.continuation.identity==reference.continuation.identity,"graph identity changed");
       tide_bench::compare(actual,reference,true,at::kFloat);
       total_events+=actual.trace.size();total_messages+=actual.messages.size();
@@ -73,12 +76,12 @@ void parity(at::Device device) {
   }
   require(total_messages>0&&batched>0,"test did not exercise real recursive messages and batches");
   std::cout<<"content-flow: passed cases="<<cases<<" events="<<total_events<<" emitted_messages="<<total_messages
-    <<" nontrivial_batches="<<batched<<" scope=FP32_sum_content_read_identity_full_ema_or_identity_state_inference\n";
+    <<" nontrivial_batches="<<batched<<" scope=FP32_sum_content_read_identity_or_tanh_full_ema_or_identity_state_inference\n";
 }
 template<class F> void rejects(F f,const char* message) {bool rejected=false;try{f();}catch(const std::exception&){rejected=true;}require(rejected,message);}
 void refusal(at::Device device) {
   auto f=fixture(0,0);ContentLimits l;l.queue=64;l.arrivals=64;l.outputs=128;l.trace=512;
-  auto bad=f.graph;bad.nodes[0].full="tanh";
+  auto bad=f.graph;bad.nodes[0].full="swiglu";
   rejects([&]{ContentFlow x(bad,f.model,f.initial,device,l);},"unsupported Full accepted");
   auto small=l;small.workspace_bytes=1;rejects([&]{ContentFlow x(f.graph,f.model,f.initial,device,small);},"buffer preflight absent");
   // Fail independently on an output budget, iteration budget and debug capacity.

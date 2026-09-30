@@ -111,10 +111,18 @@ count overflow explicitly fail. Selector scratch has a declared approximate
 budget; other region programs remain unsupported by this component.
 
 This selector component consumes supplied descriptors. The content-driven loop
-connects sum Aggregate, content Read, identity/EMA state and identity Full;
+connects sum Aggregate, content Read, identity/EMA state and identity/tanh Full;
 other Read/state/Full contracts still need integration. Its AIV metadata kernel
 uses scalar loops; raw ACLNN performs the packed softmax and control gather.
-Component placement does not establish full-graph throughput.
+
+`PackedFull` adds device selection of bounded physical chunks from actual active
+actions. Bulk gathers feed FP32 KEEP_DTYPE batch matmul and tanh; index-copy writes
+results to distinct destinations. Comparison snapshots precede selected clear.
+Inactive owners are excluded from numerical work, with independent zero sentinels
+for padding. The local Full scratch estimate can reduce the requested chunk rows;
+it is not a complete model-memory budget. See [content-flow.md](content-flow.md)
+for the finite contract and development coverage. Component placement does not
+establish full-graph throughput.
 
 These mutable stages provide no autograd. Model/state updates must eventually
 share a commit boundary with successful delivery; committing state before an

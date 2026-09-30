@@ -22,6 +22,7 @@ struct ContentBatch {
 struct ContentUpdate {
   ContentState state;
   ActionBatch actions;
+  at::Tensor comparison;
   at::Tensor event_meta,event_values;
 };
 ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error);

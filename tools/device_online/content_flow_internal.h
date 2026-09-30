@@ -2,6 +2,7 @@
 #include "content_profile.h"
 #include "device_journal.h"
 #include "queue_transaction.h"
+#include "packed_full.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
@@ -12,8 +13,9 @@ struct ContentFlow::Impl {
   ContentState state;
   SelectionHistory history;
   std::unique_ptr<FrameSelector> selector;
+  std::unique_ptr<PackedFull> full;
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
-  std::unique_ptr<DeviceJournal> events,fibers,contributions;
+  std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace;
   AtomBatch external;
   at::Tensor error,stop,stages;
   std::unique_ptr<CannProgram> program;

@@ -11,7 +11,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   graph.compile();
   if(!graph.origins.empty())throw std::invalid_argument("content flow input-origin projections are not implemented");
   for(const auto& n:graph.nodes) {
-    if((!n.identity&&n.memory!="identity"&&n.memory!="ema")||(!n.identity&&n.full!="identity")
+    if((!n.identity&&n.memory!="identity"&&n.memory!="ema")||(!n.identity&&n.full!="identity"&&n.full!="tanh")
         ||n.aggregation!="sum"||n.readout!="linear-v1"||n.next_state!="adopt-v1"
         ||n.emission!="broadcast"||n.state_clock!=StateClock{})
       throw std::invalid_argument("content flow module contract unavailable");
