@@ -1,0 +1,312 @@
+{
+  "schema": "tide-device-control-evidence-v1",
+  "source": "5c5b58275e78b3fc8643ccd488bf7d6eb29985e7",
+  "scope": "standalone device components; not integrated graph execution/training or throughput",
+  "runs": [
+    {
+      "name": "build-device-control-clean01",
+      "state": "passed",
+      "source": "5c5b58275e78b3fc8643ccd488bf7d6eb29985e7",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-control-clean01/status.json",
+          "sha256": "baeefe2483eb5f8e4c441e53571d31247e352322cc35adaf46a4415189197055"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-control-clean01/task.log",
+          "sha256": "73c307f09737e8ad2903f069fc530ac08ed74d318d59379d06ea7b0880ebe07d"
+        }
+      ]
+    },
+    {
+      "name": "device-control-gates-clean01",
+      "state": "passed",
+      "source": "5c5b58275e78b3fc8643ccd488bf7d6eb29985e7",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-control-gates-clean01/status.json",
+          "sha256": "872597f1d85a39428f9a04c4b04bb1663ea1f9093398779502dadedf3b52fd60"
+        },
+        {
+          "path": "artifacts/execution-flows-device-control-gates-clean01/task.log",
+          "sha256": "1315b9e5f53379768a121a7e9ece11ad37f24743ffabaecd2373b29a67968852"
+        },
+        {
+          "path": "artifacts/execution-flows-device-control-gates-clean01/cases.json",
+          "sha256": "ad9672b5036d3a936658e709b5e8de98404193f1ca6b1ad35da8865c016d1546"
+        }
+      ]
+    },
+    {
+      "name": "device-closure-profile-clean01",
+      "state": "passed",
+      "source": "5c5b58275e78b3fc8643ccd488bf7d6eb29985e7",
+      "dirty": false,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-closure-profile-clean01/status.json",
+          "sha256": "a94933265a8a931904d22973b8c6b698e3d859df305bae530a5ada52bab7b048"
+        },
+        {
+          "path": "artifacts/execution-flows-device-closure-profile-clean01/task.log",
+          "sha256": "774fcd89574616ffa531ca95eb0c310de230ab7b9b94257386e715bb3d68b8bf"
+        },
+        {
+          "path": "artifacts/execution-flows-device-closure-profile-clean01/profile/result.json",
+          "sha256": "f59c05e84ddef2887b0b24516a6f840c7a0ccae2c8992eb1ca3c6b7c5fab3265"
+        },
+        {
+          "path": "artifacts/execution-flows-device-closure-profile-clean01/profile/profile.log",
+          "sha256": "bc3bc86317f21df8f49e7664e3f4f02f7d952541c77839a540ac08115faa7cdb"
+        }
+      ]
+    }
+  ],
+  "component_sha256": "368ef3768ff656d656a061297471be445e99d5e2eaffe5349419c24e3c07ffd0",
+  "binary_sha256": {
+    "tide-device-control-check": "8447a41344d8e533c298f301a0ab6466a785b60a58160162c9a9a81a043b25e2",
+    "tide-device-numerical-check": "beae066454bc2df1fa52034c985c6537a120ba21f9d00d785b45bcc1193b5656",
+    "tide-packed-queue-check": "d7dc0ba3214d324f9a166788d6e0cbfc6ccd75ad864761c3718574abea39c28a",
+    "tide-device-closure-check": "c91bc3b9a5ca2a42945e66ed13b368c7e0c28478dbf87edc34735fff833f9942"
+  },
+  "ascendc_soc": "Ascend910_9392",
+  "runtime": {
+    "arch": "aarch64",
+    "cann": "9.0.0",
+    "torch": "2.10.0",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "cpu_ctests": 4,
+    "control": 8,
+    "numerical_fp32": 4,
+    "numerical_fp16": 4,
+    "closure": 60
+  },
+  "profile_summaries": [
+    {
+      "path": "raw/PROF_000001_20260930122214830_04191537QLHNQMQC/mindstudio_profiler_output",
+      "schema": "tide-cann-csv-summary-v1",
+      "operators": 390,
+      "summed_task_us": 2367.3839999999996,
+      "engines": {
+        "AI_VECTOR_CORE": {
+          "count": 370,
+          "summed_task_us": 918.9159999999991,
+          "summed_task_fraction": 0.3881567164431285
+        },
+        "AI_CPU": {
+          "count": 20,
+          "summed_task_us": 1448.4680000000005,
+          "summed_task_fraction": 0.6118432835568716
+        }
+      },
+      "operators_by_type": [
+        {
+          "engine": "AI_CPU",
+          "operator": "OnesLike",
+          "input_dtypes": "INT64",
+          "count": 20,
+          "summed_task_us": 1448.4680000000005
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "INT64;INT64",
+          "count": 30,
+          "summed_task_us": 61.96400000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;BOOL",
+          "count": 20,
+          "summed_task_us": 32.888
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;INT64",
+          "count": 10,
+          "summed_task_us": 18.904000000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "INT32;INT32;INT64",
+          "count": 60,
+          "summed_task_us": 183.772
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ViewCopy",
+          "input_dtypes": "INT64;INT64;INT64;INT64;INT64;INT64;INT64;INT64",
+          "count": 10,
+          "summed_task_us": 87.41999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "BOOL",
+          "count": 20,
+          "summed_task_us": 31.212000000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT32",
+          "count": 40,
+          "summed_task_us": 53.456
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT64",
+          "count": 120,
+          "summed_task_us": 181.54399999999995
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_closure",
+          "input_dtypes": "N/A",
+          "count": 60,
+          "summed_task_us": 267.756
+        }
+      ],
+      "top_host_apis": [
+        {
+          "level": "acl",
+          "name": "aclnnInplaceZeroGetWorkspaceSize",
+          "summed_us": 81265.9,
+          "count": 6
+        },
+        {
+          "level": "acl",
+          "name": "aclrtCreateStreamWithConfig",
+          "summed_us": 13664.29,
+          "count": 22
+        },
+        {
+          "level": "runtime",
+          "name": "StreamCreate",
+          "summed_us": 13574.78,
+          "count": 22
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceOneGetWorkspaceSize",
+          "summed_us": 10736.59,
+          "count": 20
+        },
+        {
+          "level": "acl",
+          "name": "aclrtBinaryLoadFromFile",
+          "summed_us": 9139.83,
+          "count": 1
+        },
+        {
+          "level": "runtime",
+          "name": "BinaryLoadFromFile",
+          "summed_us": 9133.58,
+          "count": 1
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceFillScalarGetWorkspaceSize",
+          "summed_us": 8758.52,
+          "count": 2
+        },
+        {
+          "level": "acl",
+          "name": "aclrtDestroyStream",
+          "summed_us": 8539.52,
+          "count": 20
+        },
+        {
+          "level": "runtime",
+          "name": "StreamDestroy",
+          "summed_us": 8502.0,
+          "count": 20
+        },
+        {
+          "level": "acl",
+          "name": "aclrtMemcpy",
+          "summed_us": 4577.79,
+          "count": 310
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceFillScalar",
+          "summed_us": 4572.33,
+          "count": 30
+        },
+        {
+          "level": "node",
+          "name": "launch",
+          "summed_us": 4280.93,
+          "count": 270
+        },
+        {
+          "level": "runtime",
+          "name": "MemCopySync",
+          "summed_us": 4159.52,
+          "count": 310
+        },
+        {
+          "level": "runtime",
+          "name": "StreamSynchronize",
+          "summed_us": 4022.88,
+          "count": 370
+        },
+        {
+          "level": "acl",
+          "name": "aclrtSynchronizeStreamWithTimeout",
+          "summed_us": 3828.93,
+          "count": 60
+        },
+        {
+          "level": "acl",
+          "name": "aclnnIndexSelectGetWorkspaceSize",
+          "summed_us": 3439.44,
+          "count": 10
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceZero",
+          "summed_us": 3118.51,
+          "count": 180
+        },
+        {
+          "level": "acl",
+          "name": "aclnnAddGetWorkspaceSize",
+          "summed_us": 2234.81,
+          "count": 10
+        },
+        {
+          "level": "acl",
+          "name": "aclrtLaunchKernelWithHostArgs",
+          "summed_us": 2222.5,
+          "count": 260
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceAdd",
+          "summed_us": 2192.04,
+          "count": 10
+        }
+      ],
+      "inputs": {
+        "op_summary_20260930122220.csv": "37e9c36f0f95b706409e668c7a499546c88de43322311398ad4000e094499aec",
+        "api_statistic_20260930122220.csv": "6619cdfb4e98f71217985c2110f26b430958a166484bcb296e86090f524f32e8"
+      },
+      "limits": [
+        "Task durations may overlap across streams/devices; the sum is not wall time.",
+        "Host API levels can nest; never add them into an end-to-end total.",
+        "Scope/warmup must come from the launch record; no full-size extrapolation.",
+        "AiCPU is on the accelerator, distinct from host CPU and AiCore."
+      ]
+    }
+  ]
+}

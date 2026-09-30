@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T04:11:10.632204+00:00. **ACTIVE: continue the user-confirmed execution contract.**
+Updated 2026-09-30T04:27:01.860062+00:00. **ACTIVE: continue the user-confirmed execution contract.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents, no push. Reference repos and ObsidianVault remain read-only.
@@ -14,15 +14,18 @@ No numerical route prepass, whole-window potential expansion or fixture shortcut
 Natural streaming degeneration is legal. Residency includes online decisions and
 progression, not just NPU tensor storage or fixed capture.
 
-NEXT: commit the tested device component, rebuild/test that clean commit and
-commit evidence separately. dev14 closure/profile gates passed; all60 custom
-closure tasks are AI_VECTOR_CORE. The20 AiCPU OnesLike tasks are construction
-initializers (two per program). This is placement evidence, not throughput. Continue generic queue consumption/emit/
-packing and numerical dispatch; do not stop at the readiness primitive.
+NEXT: clean5c5b582 device qualification PASSED all five cells and msprof placement.
+Evidence: [device-control-20260930](evidence/device-control-20260930.md).
+Continue actual queue consumption/emit/packing and numerical dispatch.
+New QueueTransaction sources are under development: fixed-capacity proposal on
+AIV, device commit/refuse branch and bulk payload gather. Preparing
+`build-device-queue-dev01`, snapshot queue-dev01,600s bound/two workers; runtime
+FP32/FP16 gate follows a successful build. No automatic repeat after failure.
 
-Current HEAD `7aeb27c` is immutable host-greedy evidence. Implementation `2038d88`
-is qualified as below. Uncommitted `tools/device_online`, build/profile scripts
-and its document are our current increment. Preserve the older consumer edits.
+Device component implementation is `5c5b582`; `7aeb27c` is
+immutable host-greedy evidence. Implementation `2038d88`
+is qualified as below. The device component/build/profile scripts are now committed. Only older
+consumer development edits and the active handoff remain uncommitted.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
@@ -55,7 +58,13 @@ Host Greedy uses actual pending fibers, positive-delay region closure and safe
 region-time prefixes with existing local block kernels. `max_events` limits live
 fibers, not cumulative work or byte usage. Host per-atom bookkeeping remains.
 
-## Device component: implemented and developmental results
+## Device component: clean qualification and development
+
+Prepared `build-device-control-clean01`: clean snapshot `control-clean01` at
+5c5b582; output `builds/device-control-clean01`, matching immutable core
+`greedy-npu-sdk01`;600s build, two workers. Build PASSED at04:15:57Z; four CPU
+CTests and standalone loader passed. Clean device and profile qualification PASSED;60 closure tasks on AIV.
+See immutable evidence above. New queue transaction development is not yet qualified.
 
 `tools/device_online` contains CANN runtime control, raw ACLNN packed arithmetic,
 fixed-capacity tensor queue and an optional Ascend C metadata-closure kernel.
