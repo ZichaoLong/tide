@@ -6,13 +6,13 @@
 namespace tide::device_online {
 struct FiberCache {at::Tensor key,value,bias,lengths;};
 struct FiberStage {
-  at::Tensor values,events,tokens,counts;
+  at::Tensor values,events,tokens,counts,query_bias;
   FiberCache cache;
   JournalProposal journal;
 };
-// Bounded same-fiber attention. One event per owner in a ready stage; independent
-// owners and all message rows are packed. Physical query chunks retain the full
-// candidate cache and softmax denominator. No cache eviction is implied.
+// Bounded same-fiber attention with ordered node-time prefixes when adoption is
+// selection-independent. Physical chunks preserve complete current-fiber
+// visibility and each event's exact repeated bias decay. No cache eviction.
 class PackedFiberAttention {
  public:
   static long double minimum_bytes(const ContentProfile&,const Continuation&,const ContentLimits&);

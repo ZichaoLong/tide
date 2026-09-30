@@ -13,12 +13,14 @@ extern "C" __global__ __aicore__ void tide_fiber_commit(GM_ADDR events,GM_ADDR c
   if(AscendC::GetBlockIdx()==0)for(I i=0;i<c[1];++i) {
     const I parameter=e[i*7+2],fiber=e[i*7],owner=e[i*7+1];
     if(e[i*7+4]>maximum[0])maximum[0]=e[i*7+4];
+    if(i+1<c[1]&&e[(i+1)*7+1]==owner)continue;
     if(!(cfg[parameter*2]||on[fiber]))continue;
     const I length=cfg[parameter*2+1]&&on[fiber]?0:e[i*7+4];n[owner]=length;
     for(I row=0;row<length;++row)((__gm__ float*)live_bias)[owner*capacity+row]=((__gm__ float*)bias)[owner*capacity+row];
   }
   for(I task=AscendC::GetBlockIdx();task<c[1]*tiles;task+=AscendC::GetBlockNum()) {
     const I event=task/tiles,start=(task%tiles)*256,parameter=e[event*7+2],owner=e[event*7+1],fiber=e[event*7];
+    if(event+1<c[1]&&e[(event+1)*7+1]==owner)continue;
     const bool adopt=cfg[parameter*2]||on[fiber],clear=cfg[parameter*2+1]&&on[fiber];
     if(!adopt)continue;
     const I length=clear?0:e[event*7+4];

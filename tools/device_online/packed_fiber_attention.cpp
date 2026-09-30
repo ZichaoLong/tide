@@ -18,16 +18,17 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
   FiberStage out;
   out.values=at::zeros({rows+chunk,width},opts);
   out.events=at::zeros({rows,7},longs);out.tokens=at::zeros({rows,4},longs);out.counts=at::zeros({2},longs);
+  out.query_bias=at::empty({rows,capacity},opts);
   out.cache={at::empty_like(cache_.key),at::empty_like(cache_.value),at::empty_like(cache_.bias),at::empty_like(cache_.lengths)};
   p.copy(out.cache.key,cache_.key);p.copy(out.cache.value,cache_.value);p.copy(out.cache.bias,cache_.bias);
   p.copy(out.cache.lengths,cache_.lengths);
-  const auto mapping=mapping_,policy=profile.clock_policy,sources=profile.sources;
+  const auto mapping=mapping_,policy=profile.clock_policy,sources=profile.sources,config=config_;
   const auto live=cache_;const auto inputs=int64_t(profile.graph.inputs.size());
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_plan)(1,stream,
     ptr(ready.fibers),ptr(ready.fiber_offsets),ptr(ready.counts),ptr(ready.atoms.coordinates),ptr(sources),ptr(mapping),
-    ptr(live.lengths),ptr(state.clocks),ptr(policy),ptr(out.events),ptr(out.tokens),ptr(out.counts),ptr(error),
+    ptr(live.lengths),ptr(state.clocks),ptr(policy),ptr(config),ptr(out.events),ptr(out.tokens),ptr(out.counts),ptr(error),
     nodes,parameters,capacity,rows,inputs,ticks),"plan complete fiber attention");},
-    {ready.fibers,ready.fiber_offsets,ready.counts,ready.atoms.coordinates,sources,mapping,live.lengths,state.clocks,policy,
+    {ready.fibers,ready.fiber_offsets,ready.counts,ready.atoms.coordinates,sources,mapping,live.lengths,state.clocks,policy,config,
      out.events,out.tokens,out.counts,error});
   auto source=at::empty({chunk},longs),parameter=at::empty_like(source),destination=at::empty_like(source),ids=at::empty_like(source);
   auto cursor=at::zeros({1},longs),zero=at::zeros_like(cursor),branch=at::zeros_like(error);
@@ -44,8 +45,8 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
   auto payload=[&](int64_t mode,const at::Tensor& projected,const at::Tensor& q) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_payload)(32,stream,
       ptr(out.events),ptr(out.tokens),ptr(out.counts),ptr(ids),ptr(heads),ptr(scales),ptr(projected),ptr(q),
-      ptr(out.cache.key),ptr(out.cache.value),ptr(out.cache.bias),ptr(decay),ptr(pool_kinds),ptr(coefficients),ptr(pooled),ptr(error),width,capacity,chunk,mode),"packed fiber payload");},
-      {out.events,out.tokens,out.counts,ids,heads,scales,projected,q,out.cache.key,out.cache.value,out.cache.bias,decay,pool_kinds,coefficients,pooled,error});
+      ptr(out.cache.key),ptr(out.cache.value),ptr(out.cache.bias),ptr(out.query_bias),ptr(decay),ptr(pool_kinds),ptr(coefficients),ptr(pooled),ptr(error),width,capacity,chunk,mode),"packed fiber payload");},
+      {out.events,out.tokens,out.counts,ids,heads,scales,projected,q,out.cache.key,out.cache.value,out.cache.bias,out.query_bias,decay,pool_kinds,coefficients,pooled,error});
   };
   payload(0,queries,queries);
   auto plan=[&](int64_t mode,int64_t target) {
@@ -69,7 +70,7 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
     at::Tensor result;
     if(key_rows_<capacity) {
       result=append_tiled_attention(p,out.events,out.tokens,ids,q,out.cache.key,out.cache.value,
-        out.cache.bias,error,key_work_,{h,h,capacity,owners,key_rows_,true,1.});
+        out.query_bias,error,key_work_,{h,h,capacity,owners,key_rows_,true,1.,0,true});
     }else {
       auto indices=at::empty({chunk,capacity},longs),additive=at::empty({chunk,1,1,capacity},opts);
       auto keys=at::empty({chunk,capacity,width},opts),values=at::empty_like(keys);
@@ -77,8 +78,8 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
       auto scores=at::empty({chunk,h,1,capacity},opts),prob=at::empty_like(scores);
       result=at::empty({chunk,h,1,d},opts);
       p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_indices)(1,stream,
-        ptr(out.events),ptr(out.tokens),ptr(ids),ptr(out.cache.bias),ptr(indices),ptr(additive),ptr(error),capacity,owners,chunk),"gather complete KV visibility");},
-        {out.events,out.tokens,ids,out.cache.bias,indices,additive,error});
+        ptr(out.events),ptr(out.tokens),ptr(ids),ptr(out.query_bias),ptr(indices),ptr(additive),ptr(error),capacity,owners,chunk),"gather complete KV visibility");},
+        {out.events,out.tokens,ids,out.query_bias,indices,additive,error});
       p.index_select(out.cache.key,0,indices.reshape({-1}),keys.reshape({chunk*capacity,width}));
       p.index_select(out.cache.value,0,indices.reshape({-1}),values.reshape({chunk*capacity,width}));
       p.permute(keys.reshape({chunk,capacity,h,d}),{0,2,3,1},kt);
@@ -100,9 +101,9 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
     auto meta=at::empty_like(journal_->meta),values=at::empty_like(journal_->values),count=at::zeros({1},longs);
     const auto trace_rows=meta.size(0);
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_trace)(1,stream,
-      ptr(out.events),ptr(out.counts),ptr(ready.fibers),ptr(live.key),ptr(live.value),ptr(live.bias),ptr(out.cache.key),ptr(out.cache.value),ptr(out.cache.bias),
+      ptr(out.events),ptr(out.counts),ptr(ready.fibers),ptr(live.key),ptr(live.value),ptr(live.bias),ptr(out.cache.key),ptr(out.cache.value),ptr(out.query_bias),
       ptr(meta),ptr(values),ptr(count),ptr(error),width,capacity,trace_rows),"record fiber cache observables");},
-      {out.events,out.counts,ready.fibers,live.key,live.value,live.bias,out.cache.key,out.cache.value,out.cache.bias,meta,values,count,error});
+      {out.events,out.counts,ready.fibers,live.key,live.value,live.bias,out.cache.key,out.cache.value,out.query_bias,meta,values,count,error});
     out.journal=journal_->propose(p,meta,values,count,error);
   }
   out.values=out.values.narrow(0,0,rows);return out;

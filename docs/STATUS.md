@@ -1,9 +1,10 @@
 # Current handoff
 
-Updated 2026-09-30T14:58:00.251704+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T15:11:18.312342+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **26aa09f**, event batch implementation committed and pushed. Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
+HEAD **28295c1**, event batch evidence committed and pushed; implementation26aa09f.
+Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -39,7 +40,7 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    memory/attention/fiber/clock/selection/transport/lifecycle regressions all pass.
 2. Event clean26aa09f full build/four CTests/all30 cells/independent profile
    PASSED,all terminal0. Evidence device-event-batch-20260930.{json,md} reviewed;
-   next commit/push evidence separately.97,088 AIV+3,075 AI Core,no AiCPU/fallback.
+   evidence28295c1 committed/pushed.97,088 AIV+3,075 AI Core,no AiCPU/fallback.
    Matching core origins-npu-clean01. No throughput or resident training claim.
 3. Event implementation: two device loops pack all actual ready QKV,then queries/
    output. Immutable old KV plus compact new rows supports causal prefix/window
@@ -48,21 +49,31 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    Observe-all without selected clear admits node-time batches; selection-dependent
    adoption/clear and mixed fiber regions keep legal single-frame fallback.
    Changed kernels/helpers and event_batch_check.cpp are committed.
-4. Fiber node-time batch changes are dirty; build-device-fiber-batch-dev01 RUNNING: packed_fiber_attention,
-   fiber_cache,content_profile,tiled_attention and six Ascend C kernels. They add
-   per-event query_bias,prefix lengths and final-only owner commits. fiber_batch_check and build/registry added:96 anchors/restores,480 general windows
-   and3 multi-event saturation checks. NOT YET RUN. Build-device-fiber-batch-dev01 uses
-   frozen fiber-batch-dev01/full independent build (1800s,jobs2),then all31 cells
-   with fiber-batch first (900s,one NPU,queue120s),then independent profile. Then
-   remaining module/public
-   matrix/peer progression/resident backward/VJP/optimizer and staged performance.
-   Fiber design must preserve same-fiber all-key visibility and exact repeated
-   log-bias subtraction. One vector loop per owner/cache tile can process successive
-   event biases, saving per-event bias rows for later packed queries/diagnostics;
-   account for that bounded scratch before choosing chunks. KV remains append-only
-   within capacity,commit only the last owner event. No exponent/linear-decay
-   shortcut,unproved selection/clear batching,or per-event host control.
-5. Shared memory523b323 clean full build/four CTests/all29/profile qualified;
+4. Fiber node-time implementation staged EXACTLY from frozen fiber-batch-dev01.
+   Full build/four CTests/all31 cells and independent profile PASSED,all terminal0.
+   New gate96 anchors/restores,480 general windows/restores,31 actual multi-time
+   windows and3 saturation checks; profile222,008 AIV+8,228 AI Core,no AiCPU/fallback.
+   Commit the staged17 implementation paths plus this status/ROADMAP,push,then
+   launch build-device-fiber-batch-clean01 at that exact commit (1800s,jobs2),
+   then all31 clean cells/fiber-batch first and independent profile (900s,one NPU,
+   queue120s). Evidence must be committed separately. Core origins-npu-clean01.
+   Runtime retains per-event biases/prefixes and final-only owner KV commits;
+   repeated FP32 decay and same-fiber all-key visibility unchanged.
+5. Next normalized Aggregate draft is UNSTAGED/UNCOMPILED: packed_aggregate,
+   ascendc/tide_aggregate_{plan,apply},aggregate_check,CannProgram softplus/sum/divide,
+   PackedSum keys/order and integration in ContentFlow/Profile/Stages,budget,export,
+   CMake/build/check registry. The index keeps the tested FIBER versions of shared
+   files. Do not add their newer working-tree Aggregate changes to the fiber commit.
+   Aggregate has not been frozen/built;finish review/docs then aggregate-dev01
+   full isolated build/all32 gates (aggregate first) and independent profile.
+   Planned gate180 analytic/restores,160 topology windows/restores and4 boundaries.
+   Zero-mass failure code13; source aliases/order and scalar/vector paths matter.
+   No support claim yet; preserve these drafts during exact-commit fiber testing.
+
+6. After those module increments: public five presets/matrix,peer progression,
+   resident backward/VJP/optimizer and staged performance. F1–F7 not complete.
+
+7. Shared memory523b323 clean full build/four CTests/all29/profile qualified;
    evidence0b724a3 committed/pushed. All memory-clean01 jobs terminal0.
    F1–F7 overall are NOT complete. Historical CPU Attention stays paused.
 

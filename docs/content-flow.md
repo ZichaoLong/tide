@@ -46,12 +46,23 @@ Pooling reservations are included before choosing the effective attention chunk.
 Sum-only graphs omit the additional pooling stage. These inference paths use
 the same parameter/profile validation as the independent core reference.
 
-For the fiber adapter the ready planner exposes at most one complete region-time frame
-per sample and attention region per iteration. This is an explicit implementation
-capability limit, even for content Read; it does not reject legal feedback or input.
-Independent owners and message rows remain packed, and other regions retain their
-legal time prefixes. Fiber multi-time state batches are still pending; the event
-adapter's separate node-time contract is described below.
+For observe-all fiber regions without selected clear, the ready planner may expose
+the entire certified node-time prefix. This is decided online from actual messages
+and topology closure. Each owner's KV arena appends every real message once;
+each event retains its own prefix length and bias row. One vector task per owner/
+cache tile follows that owner's time sequence and repeats the declared subtraction
+for each exact local tick. Newly appended biases start at zero. The scratch bias
+rows are included in the shared budget before selecting physical chunks.
+
+QKV, queries, pooling and projections process the actual packed rows in bounded
+device loops. A query sees all keys in its own fiber plus earlier fibers, never a
+later fiber; neither query chunk boundaries nor key tiles alter that visibility.
+Only the last event's cache is committed per owner. Optional journals retain every
+intermediate old/proposed cache and bias, including before a selected clear.
+Selected-only adoption or selected clear keeps complete single-frame fallback,
+including with content Read. This capability restriction does not reject a legal
+topology/input; other regions keep their legal prefixes. The event adapter's
+separate compact sliding-window contract is described below.
 The proposal is computed before Read/selection, then adopted only under observe-all
 or actual selection. Selected clear empties the persistent cache while preserving
 the pre-clear comparison. Bias decay repeats subtraction for each exact local tick;
@@ -118,7 +129,7 @@ copied back per owner after all preflights succeed. Diagnostics reconstruct ever
 old/proposed cache from the same immutable stage before commit.
 
 Selected-only adoption and selected clear retain complete single-frame fallback;
-fiber nodes sharing the region also retain that adapter's restriction. These are
+fiber nodes sharing the region obey the same adoption/clear restrictions. These are
 module capabilities, independent of fixture topology and input values. Other
 regions retain legal time batches, and every legal positive-delay topology still
 works, including feedback. `max_node_time_batch` and `device_stages` distinguish

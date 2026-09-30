@@ -14,7 +14,7 @@ extern "C" __global__ __aicore__ void tide_fiber_indices(GM_ADDR events,GM_ADDR 
     I source=owners*capacity;float value=minus_inf;
     if(token>=0) {
       const I event=t[token*4+1],length=e[event*7+4],owner=e[event*7+1];
-      if(k<length){source=owner*capacity+k;value=b[source];}
+      if(k<length){source=owner*capacity+k;value=b[event*capacity+k];}
     }else if(k==0)value=0.f; // Padding has its own finite denominator and zero KV.
     out[i]=source;a[i]=value;
   }

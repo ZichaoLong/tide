@@ -21,6 +21,7 @@ std::array<long double,3> footprint(const ContentProfile& p,const Continuation& 
   const auto owners=q.batch_size*static_cast<long double>(parameters);
   const long double fixed=pool_fixed+24.L*(owners*l.kv_rows+1)*(2.L*width+1)
     +48.L*(parameters+1.L)*width*width+128.L*(l.queue+1.L)*(width+8.L)
+    +8.L*(l.queue+1.L)*(l.kv_rows+1.L) // Per-event bias, not duplicated KV vectors.
     +(l.diagnostics?24.L*l.kv_trace_rows*(2.L*width+8):0);
   const long double row=pool_row+96.L*width*width+256.L*width+256+groups.size()*256.L*width;
   const long double key=groups.size()*(32.L*width+48.L*max_heads);

@@ -3,7 +3,7 @@ namespace {using I=int64_t;}
 // mode0: decay real old biases, mode1: QKV placement, mode2: pool query rows.
 extern "C" __global__ __aicore__ void tide_fiber_payload(GM_ADDR events,GM_ADDR tokens,GM_ADDR counts,
     GM_ADDR ids,GM_ADDR heads,GM_ADDR scales,GM_ADDR projection,GM_ADDR queries,GM_ADDR key,GM_ADDR value,
-    GM_ADDR bias,GM_ADDR decay,GM_ADDR pool_kinds,GM_ADDR coefficients,GM_ADDR pooled,GM_ADDR error,
+    GM_ADDR bias,GM_ADDR query_bias,GM_ADDR decay,GM_ADDR pool_kinds,GM_ADDR coefficients,GM_ADDR pooled,GM_ADDR error,
     int64_t width,int64_t capacity,int64_t chunk,int64_t mode) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)events);
@@ -15,14 +15,22 @@ extern "C" __global__ __aicore__ void tide_fiber_payload(GM_ADDR events,GM_ADDR 
   const I tasks=mode==0?c[1]*cache_tiles:(mode==1?chunk:c[1])*tiles;
   for(I task=AscendC::GetBlockIdx();task<tasks;task+=AscendC::GetBlockNum()) {
     if(mode==0) {
-      const I event=task/cache_tiles,start=(task%cache_tiles)*256,old=e[event*7+3],length=e[event*7+4];if(start>=length)continue;
-      const uint32_t size=length-start<256?length-start:256;const I owner=e[event*7+1],parameter=e[event*7+2];
+      const I first=task/cache_tiles,start=(task%cache_tiles)*256,owner=e[first*7+1],parameter=e[first*7+2];
+      if(first&&e[(first-1)*7+1]==owner)continue;
+      // Only the existing prefix is decayed. The untouched tail stays zero
+      // until a later event appends its keys; no per-message host placement.
       AscendC::Duplicate(x,0.f,256);AscendC::PipeBarrier<PIPE_V>();
-      const uint32_t old_size=start<old?(old-start<256?old-start:256):0;
-      if(old_size)op.load(x,(__gm__ float*)bias,owner*capacity+start,old_size);
+      const I initial=e[first*7+3];
+      const uint32_t initial_size=start<initial?(initial-start<256?initial-start:256):0;
+      if(initial_size)op.load(x,(__gm__ float*)bias,owner*capacity+start,initial_size);
       const float rate=((__gm__ float*)decay)[parameter];
-      if(old_size)for(I tick=0;tick<e[event*7+6];++tick){AscendC::Adds(x,x,-rate,old_size);AscendC::PipeBarrier<PIPE_V>();}
-      op.save(x,(__gm__ float*)bias,owner*capacity+start,size);
+      for(I event=first;event<c[1]&&e[event*7+1]==owner;++event) {
+        const I old=e[event*7+3],length=e[event*7+4];if(start>=length)continue;
+        const uint32_t size=length-start<256?length-start:256,old_size=start<old?(old-start<256?old-start:256):0;
+        if(old_size)for(I tick=0;tick<e[event*7+6];++tick){AscendC::Adds(x,x,-rate,old_size);AscendC::PipeBarrier<PIPE_V>();}
+        op.save(x,(__gm__ float*)query_bias,event*capacity+start,size);
+        if(event+1==c[1]||e[(event+1)*7+1]!=owner)op.save(x,(__gm__ float*)bias,owner*capacity+start,size);
+      }
     }else if(mode==1) {
       const I row=task/tiles,start=(task%tiles)*256,token=index[row];if(token<0)continue;
       const I event=t[token*4+1],owner=e[event*7+1],position=t[token*4+2],parameter=t[token*4+3];
