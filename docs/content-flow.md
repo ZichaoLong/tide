@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity or EMA state; content-mode linear Read; count-v1 or positive-v1
+scales; identity or EMA state; content/old/proposal linear Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity or tanh broadcast
 Full (`content + tanh(comparison @ weight + bias)`).
 It supports observe-all and active-only state adoption. Inputs are arbitrary
@@ -21,8 +21,24 @@ compute actual packed content and scores, select complete region-time frames,
 then execute each node's ordered state sequence with the actual active bits.
 Each action saves its comparison before selected clear; Full consumes that
 snapshot, never the cleared next state. This preserves active-only adoption and
-clear dependencies between successive actions. It is not a license to perform
-the same reordering for proposal/old Read or arbitrary Full/state contracts.
+clear dependencies between successive actions.
+
+Old/proposal Read uses ordered device scratch state. A region with observe-all,
+no selected clear and the supported comparison-identity Next can prepare its
+whole certified state sequence before selection. Otherwise the device ready
+packer retains only the earliest complete region-time frame for that sample and
+region; it preserves every candidate in that frame. After the actual selection
+and state commit, the next iteration decides the following frame. Other regions
+keep their legal time batches. This is a module-contract fallback, independent
+of fixture topology or input values; it uses no advance numerical route trace.
+Regions can choose different Read modes in one graph. Identity nodes keep an
+exact zero descriptor.
+
+`state_read_single_frame_regions` records the static contract restriction;
+`max_causal_node_time_batch` and `max_state_read_node_time_batch` report actual
+observed batches. The former is at most one. These counters distinguish legal
+state time batches from causal fallback; they are not throughput measurements.
+This capability does not extend to arbitrary custom state/Read/Next programs.
 
 `PackedFull` scans the actual selected actions on device. Identity Full returns
 content; selected tanh actions are gathered into bounded physical chunks for
@@ -66,7 +82,7 @@ history is independently downloaded from persistent device storage. Neither
 presentation path feeds the next device loop. Restore accepts the returned
 complete-cut continuation and a separately declared scheduling policy.
 
-The initial content, state, output and journal kernels use scalar AIV loops over
+The initial content, Read, state, output and journal kernels use scalar AIV loops over
 packed buffers. They establish a forward semantic integration path, not optimized
 compute throughput. Profiling and vectorized numerical kernels are required
 before performance recommendations. Trace storage, CPU comparison and result
@@ -85,3 +101,13 @@ The component placement trace has 410 AIV and 16 AI Core tasks, with no recorded
 AiCPU task or host-fallback diagnostic. It includes setup and CPU assertions,
 not steady-state timing. Qualification covers all 14 component cells; exact
 source, jobs and reports are in the evidence manifest and [STATUS](STATUS.md).
+
+The later old/proposal/mixed Read increment has directed development coverage of
+640 windows, 3252 events and 2012 actual emitted messages against independent CPU
+Streaming/Greedy. There are 66 multi-time windows, including 38 with state-Read
+time batches, and causal-region batches never exceed one time per node. Ready
+packing also passes FP32/FP16 checks; the numerical flow remains FP32 only.
+The development trace records 914 state-Read AIV tasks and exactly one model
+submission/boundary wait for each executed window. No AiCPU task or host-fallback
+diagnostic was found. Clean qualification remains pending in STATUS; the earlier
+immutable evidence above does not certify these added Read modes.

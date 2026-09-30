@@ -15,7 +15,7 @@ struct ReadyBatch {
 class DeviceReady {
  public:
   DeviceReady(const std::vector<int64_t>& owners,int64_t regions,const std::vector<Wire>&,
-              int64_t samples,at::Device,bool prefill);
+              int64_t samples,at::Device,bool prefill,const std::vector<int64_t>& causal_regions={});
   // Complete sealed input through stop. Produces whole fibers AND complete
   // region-time candidate sets. Numerical state/Full contracts remain separate.
   ReadyBatch append_stage(CannProgram&,const AtomBatch&,const at::Tensor& stop,
@@ -25,5 +25,6 @@ class DeviceReady {
   at::Device device_;
   bool prefill_;
   QueueClosure topology_;
+  at::Tensor causal_regions_;
 };
 } // namespace tide::device_online

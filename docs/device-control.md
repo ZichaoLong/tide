@@ -107,7 +107,10 @@ window. Sparse/per-slot Full contracts are a separate missing delivery path.
 `DeviceReady` connects the closure task to stable exact-int64 atom packing,
 fiber offsets and complete region-time frame offsets. Fiber traversal supports
 node-state sequences; a separate frame permutation groups complete candidate
-sets for selection. Device lengths and valid bits identify real work. Packing
+sets for selection. A static per-region module capability can restrict a ready
+prefix to its earliest whole frame; the filter runs on device before payload
+packing and does not split candidate sets. Unrestricted regions keep their
+certified time prefixes. Device lengths and valid bits identify real work. Packing
 currently uses scalar AIV insertion ordering; it is not optimized parallel sort.
 The integration check uses one submission to consume successive ready batches
 and preserve pending messages across windows, with an explicit iteration bound.
@@ -125,7 +128,7 @@ count overflow explicitly fail. Selector scratch has a declared approximate
 budget; other region programs remain unsupported by this component.
 
 This selector component consumes supplied descriptors. The content-driven loop
-connects sum Aggregate, content Read, identity/EMA state and identity/tanh Full;
+connects sum Aggregate, content/old/proposal Read, identity/EMA state and identity/tanh Full;
 other Read/state/Full contracts still need integration. Its AIV metadata kernel
 uses scalar loops; raw ACLNN performs the packed softmax and control gather.
 

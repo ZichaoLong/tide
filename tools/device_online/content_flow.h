@@ -10,7 +10,7 @@ struct ContentLimits {
   bool prefill=true;
 };
 // Experimental complete forward loop for an explicit existing-module profile:
-// sum Aggregate, identity/EMA memory, content linear Read, count/positive
+// sum Aggregate, identity/EMA memory, content/old/proposal linear Read, count/positive
 // selection, adopt/clear Next and identity/tanh broadcast Full. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial
 // state and exported observables are CPU values; persistent runtime data and

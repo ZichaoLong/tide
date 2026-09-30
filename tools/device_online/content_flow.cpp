@@ -50,7 +50,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
 }
 void ContentFlow::Impl::construct() {
   const auto& g=profile.graph;const auto opts=state.values.options();
-  DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill);
+  DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
   BroadcastRouter router(g.nodes.size(),boundary.batch_size,profile.wires,limits.arrivals,device);
   program=std::make_unique<CannProgram>(device);auto& p=*program;
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options()),msg_zeros=at::zeros({limits.trace},error.options());
@@ -63,6 +63,7 @@ void ContentFlow::Impl::construct() {
   p.mark(head);auto ready=planner.append_stage(p,pending->atoms(),stop,error);p.branch(ready.branch,{end,test});
   p.mark(test);p.less(stages,budget,predicate);p.cast_index(predicate,index);p.branch(index,{exhausted,body});p.mark(body);
   auto content=append_content(p,profile,ready,error);
+  append_read(p,profile,ready,content,state,coefficients,error);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,error);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);

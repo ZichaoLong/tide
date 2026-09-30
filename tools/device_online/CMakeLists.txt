@@ -64,7 +64,7 @@ if(TIDE_DEVICE_ASCENDC)
     content_flow.cpp content_export.cpp device_journal.cpp packed_full.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-ready tide-device-broadcast
-    tide-device-selector tide-device-queue tide::tidegraph tide_content_sum_kernel
+    tide-device-selector tide-device-queue tide::tidegraph tide_content_sum_kernel tide_state_read_kernel
     tide_content_state_kernel tide_content_outputs_kernel tide_journal_kernel tide_full_kernel)
   add_executable(tide-content-flow-check content_check.cpp ../../cpp/bench/compare.cpp)
   target_compile_options(tide-content-flow-check PRIVATE -fPIC)

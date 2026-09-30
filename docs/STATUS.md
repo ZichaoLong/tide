@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T06:43:42.869668+00:00. **ACTIVE — user resumed the execution contract; push each tested commit.**
+Updated 2026-09-30T06:53:13.061456+00:00. **ACTIVE — user resumed the execution contract; push each tested commit.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repos and ObsidianVault remain read-only. The user has
@@ -29,17 +29,30 @@ runtime-guard-dev01 (base5bf61e3 dirty overlay):
   worker retains owners/refuses finalization and exits86 as required.
 - device-runtime-components-dev01: control FP32 + numerical FP32/FP16.
 Reports/logs/status under TASK/runs/NAME, failure/component results in verified/.
-The runtime last-session guard and close poisoning are ready for a separate
-implementation commit/push; then clean CPU/NPU core and failure qualification.
+Runtime guard committed/pushed as8244f13. Submit build-runtime-guard-{cpu,npu}-clean01
+from clean8244f13 source runtime-guard-clean01, jobs2/1800s, then clean component
+build/all15 cells and failure qualification. Preserve originals and inspect failures.
 No physical hung-kernel/driver-reset recovery claim is made.
 
-Read-mode increment remains UNCOMMITTED and unqualified. build-device-read-dev01
-is RUNNING on frozen read-dev01 (basebc9150b overlay) with core runtime-guard-npu-dev01,
-build device-read-dev01, SoC Ascend910_9392, jobs2/900s. New content/old/proposal/mixed
-Read uses device per-region earliest-frame fallback for active-only adoption or
-selected clear, and multi-time preparation otherwise. Intended content gate640
-windows, including exact causal batch assertions. After build run --checks content
-ready with queue120s/task900s, then bounded content placement if parity passes.
+Read-mode increment PASSED directed development, frozen read-dev01 (basebc9150b
+plus dirty overlay), build device-read-dev01, matching runtime-guard-npu-dev01.
+- build-device-read-dev01: four CPU CTests + standalone loader.
+- device-read-gates-dev01: content FP32 + ready FP32/16;640 windows,3252 events,
+  2012 actual emissions,66 multi-time windows including38 state-Read time batches.
+  Exact causal-region batch assertion passed; independent CPU Streaming/Greedy.
+- device-read-profile-dev01:101630 AIV +716 AI Core tasks;914 state-Read kernels.
+  Exactly644 model submits and644 boundary waits for640 window tests +4 refusal/
+  recovery executions. No AiCPU task/host-fallback diagnostic. Includes setup,
+  diagnostics and CPU references; not throughput.
+
+This increment adds all built-in linear Read modes and mixed-region modes.
+DeviceReady restricts only state-causal regions to their earliest complete frame;
+observe-all/no-clear regions keep their legal multi-time state preparation.
+Commit/push this tested increment, then clean read qualification using the matching
+clean runtime guard core once its ongoing build completes. Keep build/test/profile
+jobs bounded and preserve their frozen input. After that, separate device-resident
+window advance/snapshot from optional diagnostic export so throughput consumers
+need not download persistent graph state or collect full event journals each call.
 No full-size timing is scheduled; historical CPU Attention stays suspended.
 
 ## Current increment: selected matrix Full

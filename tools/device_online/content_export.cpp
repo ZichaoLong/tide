@@ -47,10 +47,13 @@ Result ContentFlow::Impl::export_result(const Continuation& before) {
   auto meta=em.accessor<Index,2>(),atoms=fm.accessor<Index,2>();
   using Key=std::array<Index,3>;
   std::map<Key,std::vector<Index>> by_fiber;
-  std::map<Key,Index> node_batches;Index max_batch=0;
+  std::map<Key,Index> node_batches;Index max_batch=0,max_causal=0,max_state_read=0;
   for(Index i=0;i<na;++i)by_fiber[{atoms[i][0],atoms[i][1],atoms[i][2]}].push_back(i);
   for(Index i=0;i<n;++i) {
-    max_batch=std::max(max_batch,++node_batches[{meta[i][12],meta[i][0],meta[i][1]}]);
+    const auto size=++node_batches[{meta[i][12],meta[i][0],meta[i][1]}],region=g.nodes[meta[i][1]].region;
+    max_batch=std::max(max_batch,size);
+    if(profile.causal_regions[region])max_causal=std::max(max_causal,size);
+    if(g.regions[region].read_mode!="content")max_state_read=std::max(max_state_read,size);
     Event e;e.batch=meta[i][0];e.node=meta[i][1];e.time=meta[i][2];e.active=meta[i][3];
     e.content=ev[i].narrow(0,0,width).clone();
     e.old={ev[i].narrow(0,width,width).clone(),meta[i][4],meta[i][5]};
@@ -81,6 +84,8 @@ Result ContentFlow::Impl::export_result(const Continuation& before) {
   std::sort(out.trace.begin(),out.trace.end(),[](const Event& a,const Event& b){return std::tie(a.time,a.batch,a.node)<std::tie(b.time,b.batch,b.node);});
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",n},{"messages",Index(out.messages.size())},
     {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"max_node_time_batch",max_batch},{"prefill",limits.prefill},
+    {"state_read_single_frame_regions",std::count(profile.causal_regions.begin(),profile.causal_regions.end(),1)},
+    {"max_causal_node_time_batch",max_causal},{"max_state_read_node_time_batch",max_state_read},
     {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()}};
   return out;
 }

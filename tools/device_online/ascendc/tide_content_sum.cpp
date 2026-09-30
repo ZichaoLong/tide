@@ -1,21 +1,20 @@
 #include "kernel_operator.h"
 namespace {
 using I=int64_t;
-__aicore__ inline bool finite(float f){return (AscendC::GetScalarBitcodeValue<float,uint32_t>(f)&0x7f800000)!=0x7f800000;}
 }
 // Initial exact-order packed implementation. A single task handles actual
 // ragged fibers, never host-per-message placement. Scalar AIV numerical loops
 // are a correctness implementation, not a throughput optimization claim.
 extern "C" __global__ __aicore__ void tide_content_sum(GM_ADDR coordinates,GM_ADDR values,
-    GM_ADDR offsets,GM_ADDR fibers,GM_ADDR lengths,GM_ADDR sources,GM_ADDR scales,GM_ADDR reads,
-    GM_ADDR content,GM_ADDR weighted,GM_ADDR scores,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t inputs,int64_t edges) {
+    GM_ADDR offsets,GM_ADDR fibers,GM_ADDR lengths,GM_ADDR sources,GM_ADDR scales,
+    GM_ADDR content,GM_ADDR weighted,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t inputs,int64_t edges) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)coordinates);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
   auto status=(__gm__ int32_t*)error;auto c=(__gm__ I*)coordinates,o=(__gm__ I*)offsets,f=(__gm__ I*)fibers;
-  auto src=(__gm__ I*)sources;auto x=(__gm__ float*)values,w=(__gm__ float*)scales,r=(__gm__ float*)reads;
-  auto h=(__gm__ float*)content,z=(__gm__ float*)weighted,d=(__gm__ float*)scores;
+  auto src=(__gm__ I*)sources;auto x=(__gm__ float*)values,w=(__gm__ float*)scales;
+  auto h=(__gm__ float*)content,z=(__gm__ float*)weighted;
   I count=((__gm__ I*)lengths)[1];
   if(status[0]==0&&(count<0||count>capacity))status[0]=2;
   for(I i=0;i<count&&status[0]==0;++i) {
@@ -33,13 +32,11 @@ extern "C" __global__ __aicore__ void tide_content_sum(GM_ADDR coordinates,GM_AD
       for(I j=0;j<width;++j)z[a*width+j]=x[a*width+j]*w[key];
     }
     if(status[0])break;
-    float score=0;
     for(I j=0;j<width;++j) {
       float sum=z[first*width+j];
       for(I a=first+1;a<end;++a)sum=sum+z[a*width+j];
-      h[i*width+j]=sum;float product=sum*r[node*width+j];score=score+product;
+      h[i*width+j]=sum;
     }
-    d[i]=score;if(!finite(score))status[0]=6;
   }
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
 }

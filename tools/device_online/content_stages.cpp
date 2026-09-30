@@ -1,6 +1,7 @@
 #include "content_profile.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_content_sum.h"
+#include "aclrtlaunch_tide_state_read.h"
 #include "aclrtlaunch_tide_content_state.h"
 #include "aclrtlaunch_tide_content_outputs.h"
 
@@ -12,10 +13,21 @@ ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const R
   auto sources=profile.sources,scales=profile.scales,reads=profile.read;
   ContentBatch out{at::zeros({capacity,width},reads.options()),at::zeros({capacity},reads.options()),at::zeros_like(ready.atoms.values)};
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_content_sum)(1,stream,ptr(ready.atoms.coordinates),
-    ptr(ready.atoms.values),ptr(ready.fiber_offsets),ptr(ready.fibers),ptr(ready.counts),ptr(sources),ptr(scales),ptr(reads),
-    ptr(out.content),ptr(out.weighted),ptr(out.scores),ptr(error),capacity,width,nodes,inputs,edges),"packed content and Read");},
-    {ready.atoms.coordinates,ready.atoms.values,ready.fiber_offsets,ready.fibers,ready.counts,sources,scales,reads,out.content,out.weighted,out.scores,error});
+    ptr(ready.atoms.values),ptr(ready.fiber_offsets),ptr(ready.fibers),ptr(ready.counts),ptr(sources),ptr(scales),
+    ptr(out.content),ptr(out.weighted),ptr(error),capacity,width,nodes,inputs,edges),"packed content");},
+    {ready.atoms.coordinates,ready.atoms.values,ready.fiber_offsets,ready.fibers,ready.counts,sources,scales,out.content,out.weighted,error});
   return out;
+}
+void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const ContentBatch& content,
+                 const ContentState& old,const at::Tensor& coefficients,const at::Tensor& error) {
+  const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size()),samples=old.values.size(0);
+  auto scratch=profile.all_content?old.values:at::empty_like(old.values);
+  if(!profile.all_content)p.copy(scratch,old.values);
+  const auto reads=profile.read,modes=profile.read_modes,config=profile.config;
+  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_read)(1,stream,ptr(ready.fibers),ptr(ready.counts),
+    ptr(content.content),ptr(reads),ptr(modes),ptr(config),ptr(coefficients),ptr(scratch),ptr(content.scores),ptr(error),
+    capacity,width,nodes,samples),"packed contract-relative Read");},
+    {ready.fibers,ready.counts,content.content,reads,modes,config,coefficients,scratch,content.scores,error});
 }
 ContentUpdate append_content_state(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,
     const ContentBatch& content,const SelectionProposal& selection,const ContentState& old,

@@ -15,13 +15,17 @@ void validate(const at::Tensor& x,at::IntArrayRef shape,at::ScalarType dtype,at:
 }
 }
 DeviceReady::DeviceReady(const std::vector<int64_t>& owners,int64_t regions,const std::vector<Wire>& wires,
-                         int64_t samples,at::Device device,bool prefill)
+                         int64_t samples,at::Device device,bool prefill,const std::vector<int64_t>& causal_regions)
     :nodes_(owners.size()),regions_(regions),samples_(samples),device_(device),prefill_(prefill),
      topology_(owners,regions,wires,samples,device) {
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("device ready stage requires NPU and explicit no-grad");
   CannApi api;auto soc=CannApi::symbol<const char*(*)()>(api.runtime,"aclrtGetSocName")();
   if(!soc||std::string(soc)!=TIDE_ASCENDC_SOC)throw std::runtime_error("ready kernel differs from actual SoC");
+  auto policy=causal_regions.empty()?std::vector<int64_t>(regions,0):causal_regions;
+  if(policy.size()!=size_t(regions))throw std::invalid_argument("ready region contract shape differs");
+  for(auto value:policy)if(value!=0&&value!=1)throw std::invalid_argument("invalid ready region contract");
+  causal_regions_=at::tensor(policy,at::kLong).to(device);
 }
 ReadyBatch DeviceReady::append_stage(CannProgram& p,const AtomBatch& q,const at::Tensor& stop,
                                     const at::Tensor& error) const {
@@ -41,6 +45,7 @@ ReadyBatch DeviceReady::append_stage(CannProgram& p,const AtomBatch& q,const at:
   out.frame_offsets=at::zeros({capacity+1},longs);out.frame_fibers=at::zeros({capacity},longs);
   out.frames=at::zeros({capacity,3},longs);out.counts=at::zeros({3},longs);
   auto work=at::empty({samples_*regions_*2+samples_},longs),order=at::empty({capacity},longs);
+  auto first=at::empty({samples_,regions_},longs);const auto causal=causal_regions_;
   auto joined=at::zeros({capacity+1,width},q.values.options());
   const auto owners=topology_.owners(),distances=topology_.distances();
   const auto nodes=nodes_,regions=regions_,samples=samples_;const int64_t prefill=prefill_;
@@ -53,9 +58,10 @@ ReadyBatch DeviceReady::append_stage(CannProgram& p,const AtomBatch& q,const at:
     CannApi::check(ACLRT_LAUNCH_KERNEL(tide_ready_pack)(1,stream,address(q.coordinates),address(q.valid),
       address(out.consumed),address(owners),address(order),address(out.atoms.coordinates),address(out.atoms.valid),
       address(out.fiber_offsets),address(out.fibers),address(out.frame_offsets),address(out.frame_fibers),
-      address(out.frames),address(out.counts),address(out.branch),address(error),capacity),"pack device ready fibers");
+      address(out.frames),address(out.counts),address(out.branch),address(error),address(causal),address(first),
+      capacity,regions,samples),"pack device ready fibers");
   },{q.coordinates,q.valid,out.consumed,owners,order,out.atoms.coordinates,out.atoms.valid,out.fiber_offsets,
-     out.fibers,out.frame_offsets,out.frame_fibers,out.frames,out.counts,out.branch,error});
+     out.fibers,out.frame_offsets,out.frame_fibers,out.frames,out.counts,out.branch,error,causal,first});
   auto pack=p.label(),done=p.label();p.branch(out.branch,{done,pack});p.mark(pack);
   p.copy(joined.narrow(0,0,capacity),q.values);p.index_select(joined,0,order,out.atoms.values);
   p.mark(done);return out;

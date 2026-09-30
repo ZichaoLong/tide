@@ -11,8 +11,10 @@ struct ContentProfile {
   std::vector<int64_t> owners;
   std::vector<Wire> wires;
   std::vector<SelectionPolicy> policies;
+  std::vector<int64_t> causal_regions;
+  bool all_content=true;
   // source rows: [target, logical slot]; source scales ordered input then edge.
-  at::Tensor sources,scales,read,decay,config,edge_scales,output_scales,output_nodes;
+  at::Tensor sources,scales,read,read_modes,decay,config,edge_scales,output_scales,output_nodes;
   ContentProfile(Graph,Model,at::Device);
 };
 struct ContentState {at::Tensor values,clocks,present;};
@@ -26,6 +28,8 @@ struct ContentUpdate {
   at::Tensor event_meta,event_values;
 };
 ContentBatch append_content(CannProgram&,const ContentProfile&,const ReadyBatch&,const at::Tensor& error);
+void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const ContentBatch&,
+                 const ContentState&,const at::Tensor& coefficients,const at::Tensor& error);
 ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
     const at::Tensor& stages,const at::Tensor& error);

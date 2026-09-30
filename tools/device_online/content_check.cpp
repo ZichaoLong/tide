@@ -45,12 +45,15 @@ Fixture fixture(int shape,int variant) {
   return f;
 }
 void parity(at::Device device) {
-  Index cases=0,total_events=0,total_messages=0,batched=0;
-  for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})for(bool nonlinear:{false,true}) {
+  Index cases=0,total_events=0,total_messages=0,batched=0,state_batched=0;
+  for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})
+  for(bool nonlinear:{false,true})for(const std::string mode:{"content","old","proposal","mixed"}) {
     auto f=fixture(shape,variant);ContentLimits limits;limits.queue=96;limits.arrivals=128;limits.outputs=256;limits.trace=1024;limits.prefill=prefill;
     limits.full_chunk_rows=prefill?3:1;
-    if(nonlinear){for(auto& n:f.graph.nodes)if(!n.identity)n.full="tanh";f.graph.compile();f.initial.identity=f.graph.identity;}
-    std::cerr<<"content-case shape="<<shape<<" variant="<<variant<<" prefill="<<prefill<<" nonlinear="<<nonlinear<<'\n';
+    if(nonlinear)for(auto& n:f.graph.nodes)if(!n.identity)n.full="tanh";
+    for(size_t r=0;r<f.graph.regions.size();++r)f.graph.regions[r].read_mode=mode=="mixed"?(r?"proposal":"content"):mode;
+    f.graph.compile();f.initial.identity=f.graph.identity;
+    std::cerr<<"content-case shape="<<shape<<" variant="<<variant<<" prefill="<<prefill<<" nonlinear="<<nonlinear<<" read="<<mode<<'\n';
     ContentFlow candidate(f.graph,f.model,f.initial,device,limits);
     Streaming oracle(f.graph,f.model,{});Greedy cpu_prefill(f.graph,f.model,{});
     auto q=f.initial;Index previous=q.cut;
@@ -60,11 +63,13 @@ void parity(at::Device device) {
       auto reference=oracle.run(q,input,stop,stop);
       tide_bench::compare(cpu_prefill.run(q,input,stop,stop),reference,true,at::kFloat);
       auto actual=candidate.advance(input,stop);
+      require(actual.stats.at("max_causal_node_time_batch")<=1,"state-dependent selection was prepared across causal Next");
       if(nonlinear&&!actual.trace.empty())require(actual.stats.at("full_chunk_rows")==limits.full_chunk_rows,"Full chunk selection changed");
       require(actual.continuation.identity==reference.continuation.identity,"graph identity changed");
       tide_bench::compare(actual,reference,true,at::kFloat);
       total_events+=actual.trace.size();total_messages+=actual.messages.size();
       if(prefill&&actual.stats.at("max_node_time_batch")>1)++batched;
+      if(prefill&&actual.stats.at("max_state_read_node_time_batch")>1)++state_batched;
       q=reference.continuation;previous=stop;++cases;
     }
     auto empty=candidate.advance({},previous);auto reference=oracle.run(q,{},previous,previous);
@@ -74,9 +79,10 @@ void parity(at::Device device) {
     auto continuation=switched.advance({},previous+3);auto continued=oracle.run(q,{},previous+3,previous+3);
     tide_bench::compare(continuation,continued,true,at::kFloat);++cases;
   }
-  require(total_messages>0&&batched>0,"test did not exercise real recursive messages and batches");
+  require(total_messages>0&&batched>0&&state_batched>0,"test did not exercise recursive messages and content/state Read batches");
   std::cout<<"content-flow: passed cases="<<cases<<" events="<<total_events<<" emitted_messages="<<total_messages
-    <<" nontrivial_batches="<<batched<<" scope=FP32_sum_content_read_identity_or_tanh_full_ema_or_identity_state_inference\n";
+    <<" nontrivial_batches="<<batched<<" state_read_batches="<<state_batched
+    <<" scope=FP32_sum_content_old_proposal_read_identity_or_tanh_full_ema_or_identity_state_inference\n";
 }
 template<class F> void rejects(F f,const char* message) {bool rejected=false;try{f();}catch(const std::exception&){rejected=true;}require(rejected,message);}
 void refusal(at::Device device) {

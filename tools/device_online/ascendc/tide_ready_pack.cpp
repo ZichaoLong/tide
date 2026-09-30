@@ -58,7 +58,7 @@ __aicore__ inline void pack(__gm__ I* input,__gm__ int32_t* ready,__gm__ I* owne
 extern "C" __global__ __aicore__ void tide_ready_pack(GM_ADDR input,GM_ADDR live,
     GM_ADDR ready,GM_ADDR owner,GM_ADDR order,GM_ADDR coords,GM_ADDR valid,GM_ADDR offsets,
     GM_ADDR fibers,GM_ADDR frame_offsets,GM_ADDR frame_fibers,GM_ADDR frames,GM_ADDR counts,
-    GM_ADDR branch,GM_ADDR error,int64_t capacity) {
+    GM_ADDR branch,GM_ADDR error,GM_ADDR causal,GM_ADDR first,int64_t capacity,int64_t regions,int64_t samples) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<int64_t> cache;cache.SetGlobalBuffer((__gm__ I*)coords);
@@ -69,6 +69,20 @@ extern "C" __global__ __aicore__ void tide_ready_pack(GM_ADDR input,GM_ADDR live
   // Coordinates and complete region-time membership were checked by closure
   // immediately before this task. No user-supplied arbitrary ready mask here.
   if(status[0]==0) {
+    // Contract-relative fallback: a state-dependent Read whose next state
+    // depends on selection may expose only its first complete region frame.
+    // Other regions retain their complete certified multi-time prefixes.
+    auto c=(__gm__ I*)input,r=(__gm__ I*)owner,policy=(__gm__ I*)causal,t=(__gm__ I*)first;
+    auto selected=(__gm__ int32_t*)ready;
+    for(I i=0;i<samples*regions;++i)t[i]=-1;
+    for(I i=0;i<capacity;++i)if(selected[i]) {
+      I region=r[c[i*6+1]],key=c[i*6]*regions+region,time=c[i*6+2];
+      if(policy[region]&&(t[key]<0||time<t[key]))t[key]=time;
+    }
+    for(I i=0;i<capacity;++i)if(selected[i]) {
+      I region=r[c[i*6+1]],key=c[i*6]*regions+region;
+      if(policy[region]&&c[i*6+2]!=t[key])selected[i]=0;
+    }
     pack((__gm__ I*)input,(__gm__ int32_t*)ready,(__gm__ I*)owner,(__gm__ I*)order,
       (__gm__ I*)coords,(__gm__ uint8_t*)valid,(__gm__ I*)offsets,(__gm__ I*)fibers,
       (__gm__ I*)frame_offsets,(__gm__ I*)frame_fibers,(__gm__ I*)frames,n,capacity);
