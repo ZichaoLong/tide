@@ -106,13 +106,13 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp packed_aggregate.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-ready tide-device-broadcast
     tide-device-selector tide-device-queue tide::tidegraph tide-packed-sum tide_state_read_kernel tide_vector_read_kernel tide_read_reduce_kernel
-    tide_content_state_kernel tide_vector_state_kernel tide_journal_kernel tide_full_kernel
+    tide_content_state_kernel tide_vector_state_kernel tide_state_vjp_plan_kernel tide_state_vjp_kernel tide_journal_kernel tide_full_kernel
     tide_emission_plan_kernel tide_emission_chunk_kernel tide_fiber_plan_kernel tide_fiber_chunk_kernel
     tide_fiber_payload_kernel tide_fiber_indices_kernel tide_fiber_trace_kernel tide_fiber_commit_kernel tide_fiber_pool_kernel
     tide_event_plan_kernel tide_event_payload_kernel tide_event_indices_kernel tide_event_cache_kernel
@@ -128,6 +128,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-add-check add_check.cpp)
     target_compile_options(tide-device-add-check PRIVATE -fPIC)
     target_link_libraries(tide-device-add-check PRIVATE tide-content-flow tide-device-test-compare)
+    add_executable(tide-device-state-vjp-check state_vjp_check.cpp)
+    target_compile_options(tide-device-state-vjp-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-state-vjp-check PRIVATE tide-content-flow)
     add_executable(tide-device-clock-check clock_check.cpp)
     target_compile_options(tide-device-clock-check PRIVATE -fPIC)
     target_link_libraries(tide-device-clock-check PRIVATE tide-content-flow tide-device-test-compare)

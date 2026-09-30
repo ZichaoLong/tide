@@ -194,4 +194,10 @@ Result ContentFlow::result() const {
   if(impl_->failed)throw std::logic_error("content flow failed; result unavailable");
   return impl_->export_result();
 }
+StateTape ContentFlow::state_tape() const {
+  if(!impl_||impl_->failed)throw std::logic_error("state tape unavailable on closed/failed content flow");
+  const auto& s=*impl_;
+  if(!s.limits.diagnostics)throw std::logic_error("state tape requires recorded forward values");
+  return {s.events->meta,s.events->values,s.events->count,s.profile.config,s.profile.decay,s.boundary.batch_size};
+}
 } // namespace tide::device_online

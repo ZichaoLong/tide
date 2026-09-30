@@ -2,6 +2,7 @@
 #include "tide/types.h"
 #include "tide/resident.h"
 #include "packed_queue.h"
+#include "state_vjp.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -33,6 +34,7 @@ class ContentFlow {
   ContentWindow advance_device(const std::vector<External>&,Index stop);
   Continuation snapshot() const; // Explicit complete-cut CPU materialization.
   Result result() const; // Latest window; trace/messages require diagnostics.
+  StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;
