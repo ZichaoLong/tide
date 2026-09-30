@@ -69,8 +69,8 @@ components before admitting their bounded row work. Graph reverse includes
 persistent parameter partials in its own budget. A wide retained SwiGLU example
 needs a larger explicit reverse budget than tanh; insufficient capacity refuses
 before submitting a partial backward. This is additive module support within
-the existing single-device FP32 HARD training contract; qualification remains
-separate from implementation and from throughput evidence.
+the existing single-device FP32 HARD training contract. [Immutable qualification](evidence/resident-extra-full-20261001.md)
+records the numerical conditions below; it is separate from throughput evidence.
 
 ## Training numerical checks
 
