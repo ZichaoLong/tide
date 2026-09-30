@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T10:21:43.910230+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T10:32:56.066966+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -85,16 +85,27 @@ Development build PASSED. device-origins-gates-dev01 PASSED all22 cells includin
 device-origins-profile-dev01 PASSED27256 AIV tasks,no AiCPU/fallback.
 Frozen origins-dev01 includes the recorded patch; these are development results.
 
-build-device-origins-clean01 is RUNNING from frozen origins-clean01 at1be3619,
-matching clean core origins-npu-clean01. Unit tide-execution-flows-build-device-origins-clean01.service;
-records TASK/runs/build-device-origins-clean01/{status.json,task.log}.
-NEXT after terminal build success launch all22 checks and a separate origins profile:
-  scripts/verify_device_control.py --build-dir TASK/builds/device-origins-clean01 --output-dir OUT/verified --device npu:0
-  scripts/profile_device_control.py --build-dir TASK/builds/device-origins-clean01 --output-dir OUT/profile --device npu:0 --check origins
-Use freeze_run.py --snapshot origins-clean01 --commit1be3619,one leased NPU,
-queue120s; gates900s,profile480s. Record qualification evidence only after success.
-Then implement actual packed slot-affine and time-phase emission. Retain capacity,
-missing/zero,physical scale and pre-clear Full semantics; no resident VJP claim.
+Clean build-device-origins-clean01,device-origins-gates-clean01 and
+device-origins-profile-clean01 PASSED from frozen origins-clean01 at1be3619,
+matching clean core origins-npu-clean01. All22 cells passed; origin gate24 ordering
+cases,128 windows,8 refusals. Profile27256 AIV tasks,no AiCPU/fallback.
+[Device-origin evidence](evidence/device-origins-20260930.md) records the clean qualification.
+
+## Packed slot emission in development
+
+Uncommitted tools/device_online/packed_emission.*,ascendc/tide_emission_{plan,chunk}.cpp,
+emission_check.cpp and flow integration replace the broadcast-only flow delivery.
+Device presence uses exact time phases; selected affine slots are chunked on device.
+Physical scales apply after projection; unscaled slot values have their own journal.
+Full auxiliary values stay separate. Scope remains single-device FP32 HARD inference.
+Old broadcast component is retained independently; obsolete scalar output kernel removed.
+
+build-device-emission-dev01 RUNNING from frozen emission-dev01 using
+TASK/builds/origins-npu-clean01 core; build jobs2/bound1800s. No NPU lease during build.
+Then scripts/verify_device_control.py --build-dir TASK/builds/device-emission-dev01
+--output-dir OUT/verified --device npu:0 (all23 cells,900s,one NPU,queue120s).
+Separate scripts/profile_device_control.py with --check emission,480s.
+Record any failure before fixing/retrying. Do not claim this increment verified yet.
 
 ## Failures retained and prior work
 

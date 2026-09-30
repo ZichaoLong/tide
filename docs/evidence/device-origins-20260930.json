@@ -1,0 +1,62 @@
+{
+  "schema": "tide-device-origins-evidence-v1",
+  "source": "1be361990b58b7f7d64e6bdab642a11541281ac6",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "stable device InputOrigin projection; single-device FP32 inference; not throughput or resident training",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "94e368f180844451f944cef78f85a4ab5e11fbd4061e895c4850ccea096a017d",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 22,
+    "origin_ordering_cases": 24,
+    "continuation_windows": 128,
+    "origin_refusals": 8
+  },
+  "runs": [
+    {
+      "name": "build-device-origins-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "d6c0bacfc8465c0da9265864d11a41c63aacb192f9ed790a9deb9bb96c3d5f26",
+        "task.log": "ca14d72482539dde2d93e9e552d5275ec473ab97f5d1eecfb8b63eaa32a73a72"
+      }
+    },
+    {
+      "name": "device-origins-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "e20cd1874e02fc9726a04367bc4ceb3929ec6f5d5f2a7e085f05f0394bd574b7",
+        "task.log": "b7aff85c668e846790d7d3119e4cdce088b5d4b9e4b619fc065d821c1c2f8bbd",
+        "verified/result.json": "9383031a18db864a3030de6d00106831ff071358ff509c7937bd636078677383"
+      }
+    },
+    {
+      "name": "device-origins-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "a54d6ba3acc8e82398f4379614a11cec6655acfb819f6d82c1b1c4d5bbdbb028",
+        "task.log": "0b5e243792dd28d8b6d78b1e1bc2f509bc10714e58fe8f0e689f9d1b98bf43a5",
+        "profile/result.json": "5adb4114e7035ddc9497c4c03501262a8d0a3ea8110ff62aa077689466dee43c"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 27256
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930182432.csv": "3dc89cddc0ee9d8df44c77c4bb370451d43b530008c47bc107da8a4fa7373892",
+      "api_statistic_20260930182432.csv": "e104404200843c097c21bdff64c05ad90fa73186d9ce2a2e7c1349bb13a02fed"
+    },
+    "host_fallback_diagnostic": false
+  }
+}
