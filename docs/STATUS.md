@@ -13,12 +13,29 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: commit the tested device queue/router/ready increment, then clean-build CPU
-and standalone NPU core and components at that commit. Planned jobs:
+NEXT: device queue/router/ready committed **eff5945**. CPU and standalone NPU
+core clean builds PASSED at that commit (CPU six CTests):
 `build-runtime-cpu-clean01`, `build-runtime-npu-clean01` (1800s/two workers each),
-then `build-device-ready-clean01` (600s/two workers), snapshot `packed-clean01`.
+`build-device-ready-clean01` PASSED (four CTests/loader), snapshot `packed-clean01`.
+`runtime-lifecycle-gates-clean01` PASSED eight fresh processes on the clean NPU core.
+`device-components-clean01` PASSED all11 cells on clean eff5945.
+All three clean profiles PASSED on packed-clean01: `device-queue-profile-clean01`,
+`device-broadcast-profile-clean01`, `device-ready-profile-clean01`.
+Clean eff5945 reviewed evidence: [device-packing-20260930](evidence/device-packing-20260930.md).
+Commit this evidence separately from ongoing selector/transaction-group development.
 After builds, run the11-cell component gate and bounded transaction/broadcast/ready
 profiles on the clean binary. Do not reuse an earlier binary under a new source claim.
+New uncommitted FrameSelector development adds device count-v1/positive-v1
+selection, full-candidate FP32 softmax and transactional history proposals.
+`build-device-selector-dev01` PASSED, frozen selector-dev01, using matching
+runtime-npu-dev01 core. Launching `device-selector-gate-dev01`, one FP32 scoring
+cell,120s queue/240s task, verified/result.json: PASSED39 cases.
+`device-selector-profile-dev01` PASSED:39 selector tasks plus softmax/equality/gather
+on AIV; all428 device tasks AIV, no host fallback. Selector remains development.
+New QueueProposal split preflights and snapshots all queues before shared-error
+commit; cross-queue alias/capacity gates added but not yet run. Launching
+`build-device-selector-dev02`, frozen selector-dev02,600s/two workers, matching
+clean runtime-npu-clean01 core. Run all12 component cells after successful build.
 Continue integration with real module work, selection, state/continuation and
 actual emission feedback; the current no-emission drain is not a graph executor.
 

@@ -1,0 +1,572 @@
+{
+  "schema": "tide-packed-device-evidence-v1",
+  "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+  "scope": "bounded device components and standalone runtime lifecycle; not complete graph execution/training or throughput",
+  "runtime": {
+    "arch": "aarch64",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0",
+    "soc": "Ascend910_9392"
+  },
+  "core_cpp_source_sha256": "d1121e9da4ee03e6e9f229ef97a4c738cde7f1a14afc4b88e66538140b1fe3ed",
+  "component_source_sha256": "0262121bb9de4667ac9eb0274e7b9dfd62ee2df5023dc310ab98c108ab3e0cf8",
+  "binary_sha256": {
+    "tide-device-control-check": "0aab95291e18319f403f597d418e5aa6a65d84a5cfd72c104176fb2b3e516e14",
+    "tide-device-numerical-check": "dfab41d6bff3baa07e7d8d31290a3c535829eeddf03c2ee2bb4cf1811b5bfe21",
+    "tide-packed-queue-check": "b1c533d8e5cf9fbe98512671561de17c59550edc0004aecf9c0e0286576a34d4",
+    "tide-device-closure-check": "a63196914578d1a440842e985c630c745b085b0f7471e6aede22fe5ded66f121",
+    "tide-device-queue-check": "78e3b77b16dc2030651533c659edc241efe2ab9fbbb62ef6ef1ef7be575669d6",
+    "tide-device-broadcast-check": "5ca67c68a784bdcea0048d91ac5566f3423043b4ace9b4cd6e310ac0cff2052c",
+    "tide-device-ready-check": "df9445e50979ac197f73c375a5e9375419502a563061e012431eb5477a940da0"
+  },
+  "checks": {
+    "cpu_core_ctests": 6,
+    "cpu_component_ctests": 4,
+    "npu_lifecycle_fresh_processes": 8,
+    "npu_component_cells": 11,
+    "control": 8,
+    "numerical_per_dtype": 4,
+    "closure": 60,
+    "transaction_per_dtype": 46,
+    "broadcast_per_dtype": 37,
+    "ready_per_dtype": 54
+  },
+  "runs": [
+    {
+      "name": "build-runtime-cpu-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-runtime-cpu-clean01/status.json",
+          "sha256": "b8f907702a550177d3037276d90636ce7bda8113cd2056d9551af9f9938595f8"
+        },
+        {
+          "path": "artifacts/execution-flows-build-runtime-cpu-clean01/task.log",
+          "sha256": "4c88823017170b3125777bbf0ace7a2e022d698654516e434f821bacb05671d6"
+        }
+      ]
+    },
+    {
+      "name": "build-runtime-npu-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-runtime-npu-clean01/status.json",
+          "sha256": "7ddbd2907ac98eb13838186e9be4223500a0f1b59d8800f5ddd543f7f10fbd49"
+        },
+        {
+          "path": "artifacts/execution-flows-build-runtime-npu-clean01/task.log",
+          "sha256": "61e26f7f4f5a03d29df2942307c5b6fa5a47656d596ad0b4fd1aadb4ca95f78a"
+        }
+      ]
+    },
+    {
+      "name": "build-device-ready-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-ready-clean01/status.json",
+          "sha256": "4d2cdc3628862e0aa8caa4e5a068d1b194dd046b6c92c2412757717d0cf7d590"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-ready-clean01/task.log",
+          "sha256": "edaac17fd34cbe3d1d9170c688160f5214e8df8509189e9f82593e44714d8c44"
+        }
+      ]
+    },
+    {
+      "name": "runtime-lifecycle-gates-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-runtime-lifecycle-gates-clean01/status.json",
+          "sha256": "a8fb2314d062b99cb03838d25336779bca5ad653333a78f49a1ffe953b17412c"
+        },
+        {
+          "path": "artifacts/execution-flows-runtime-lifecycle-gates-clean01/task.log",
+          "sha256": "2d69d577b8725c82dd17a9a4ed04c286608cb814bf7be3a6dd2373917c4d961a"
+        },
+        {
+          "path": "artifacts/execution-flows-runtime-lifecycle-gates-clean01/cases.json",
+          "sha256": "3898f1ec486168079a4a7cd7eac6bfb560871764f417cf2b2d9810eea3cb9ed8"
+        }
+      ]
+    },
+    {
+      "name": "device-components-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-components-clean01/status.json",
+          "sha256": "353888a7cbe1288f0aae681de42e9c937aa7acbf2f75a3cac7ebdb68097800c2"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean01/task.log",
+          "sha256": "d79834b14fb921a4c107ab2656411b3042bdf3e90c9c069a6f80eec5996bc3fd"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean01/verified/result.json",
+          "sha256": "cfd8e29ba24a813225ef0948cbe87658d0f1d65ee6dd5fc445fce821733c5c0c"
+        }
+      ]
+    },
+    {
+      "name": "device-queue-profile-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean01/status.json",
+          "sha256": "7cb6b977c1abd4c726d9630a026c228e0d68ee00ec5df3f04e0634ccb1e2f824"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean01/task.log",
+          "sha256": "e3606d25a0573675bea7f3554952c6a6e727658cc54aaf063de9e625d38d4788"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean01/profile/result.json",
+          "sha256": "0098c73be10f6e26eb23fc1191cc59433b82ed1696d7fcab170dd84f078730f2"
+        },
+        {
+          "path": "artifacts/execution-flows-device-queue-profile-clean01/profile/profile.log",
+          "sha256": "f491e8ddff7b2ce9ab9c0e21e8a18324694010a654ade4d302e25b4860410bca"
+        }
+      ]
+    },
+    {
+      "name": "device-broadcast-profile-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-broadcast-profile-clean01/status.json",
+          "sha256": "4730478f4daf58a583fdc385497f4f12b2370ed189fd1279a25f4636366b2386"
+        },
+        {
+          "path": "artifacts/execution-flows-device-broadcast-profile-clean01/task.log",
+          "sha256": "36c3753816c4a31cdabecc3e791bd05c7dfdf28d6f57607ece9862d0afd93d9e"
+        },
+        {
+          "path": "artifacts/execution-flows-device-broadcast-profile-clean01/profile/result.json",
+          "sha256": "c73545c58a31535718d972a89370242ef377f51755a7c17637630fdff56ba994"
+        },
+        {
+          "path": "artifacts/execution-flows-device-broadcast-profile-clean01/profile/profile.log",
+          "sha256": "258d6e1bbba49743e176e6808196227ea1b5f2fd969928db43044a94575d8baf"
+        }
+      ]
+    },
+    {
+      "name": "device-ready-profile-clean01",
+      "source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+      "dirty": false,
+      "state": "passed",
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-ready-profile-clean01/status.json",
+          "sha256": "07dbffc2c645b388d07fa520b1543e7f163083d36b86a3aa9ab53f7db5d5623a"
+        },
+        {
+          "path": "artifacts/execution-flows-device-ready-profile-clean01/task.log",
+          "sha256": "26cc89f981e7ae3aec7cfc048a4ba717bd491cdef6651ece83c3331940caca52"
+        },
+        {
+          "path": "artifacts/execution-flows-device-ready-profile-clean01/profile/result.json",
+          "sha256": "4d5ed95b97e6f7b54bef9bab2e181d82517e15c4dc58faa90427a3f0bfdac510"
+        },
+        {
+          "path": "artifacts/execution-flows-device-ready-profile-clean01/profile/profile.log",
+          "sha256": "8c261559c240bd892b6f681eb697711e44c422aff1a721fc06266b8f9fa014a8"
+        }
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "run": "device-queue-profile-clean01",
+      "component_kernel_records": 51,
+      "operators": [
+        {
+          "engines": {
+            "AI_VECTOR_CORE": {
+              "count": 218,
+              "summed_task_us": 706.8240000000004,
+              "summed_task_fraction": 1.0
+            }
+          },
+          "operators_by_type": [
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;BOOL",
+              "count": 10,
+              "summed_task_us": 16.22
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;FLOAT",
+              "count": 10,
+              "summed_task_us": 16.74
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;INT32",
+              "count": 7,
+              "summed_task_us": 10.32
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;INT64",
+              "count": 8,
+              "summed_task_us": 13.520000000000001
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "FLOAT;INT64;INT64",
+              "count": 41,
+              "summed_task_us": 174.68
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "INT32;INT32;INT64",
+              "count": 51,
+              "summed_task_us": 125.60399999999997
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ViewCopy",
+              "input_dtypes": "INT64;INT64;INT64;INT64;INT64;INT64;INT64;INT64",
+              "count": 3,
+              "summed_task_us": 33.0
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "BOOL",
+              "count": 8,
+              "summed_task_us": 15.284
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "FLOAT",
+              "count": 3,
+              "summed_task_us": 7.859999999999999
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT32",
+              "count": 13,
+              "summed_task_us": 22.3
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT64",
+              "count": 13,
+              "summed_task_us": 27.343999999999998
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_queue_propose",
+              "input_dtypes": "N/A",
+              "count": 51,
+              "summed_task_us": 243.952
+            }
+          ],
+          "inputs": {
+            "op_summary_20260930131014.csv": "21a48dcde098f98e8ac3358df28c22d159fdf2a15bb27b174a6bceab3a974450",
+            "api_statistic_20260930131014.csv": "0d87c75e052ddf30d6feef9af9d7a7447cd5761624a8d7b946a2bbf3d548fcc1"
+          }
+        }
+      ]
+    },
+    {
+      "run": "device-broadcast-profile-clean01",
+      "component_kernel_records": 37,
+      "operators": [
+        {
+          "engines": {
+            "AI_VECTOR_CORE": {
+              "count": 394,
+              "summed_task_us": 1391.0199999999993,
+              "summed_task_fraction": 1.0
+            }
+          },
+          "operators_by_type": [
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;BOOL",
+              "count": 3,
+              "summed_task_us": 5.68
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;INT64",
+              "count": 7,
+              "summed_task_us": 12.600000000000001
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "FLOAT;INT64;INT64",
+              "count": 96,
+              "summed_task_us": 559.4600000000002
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "INT32;INT32;INT64",
+              "count": 74,
+              "summed_task_us": 172.28
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Mul",
+              "input_dtypes": "FLOAT;FLOAT",
+              "count": 32,
+              "summed_task_us": 61.07999999999999
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "OnesLike",
+              "input_dtypes": "BOOL",
+              "count": 2,
+              "summed_task_us": 3.2800000000000002
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "OnesLike",
+              "input_dtypes": "FLOAT",
+              "count": 4,
+              "summed_task_us": 5.32
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "OnesLike",
+              "input_dtypes": "INT32",
+              "count": 4,
+              "summed_task_us": 6.500000000000001
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "BOOL",
+              "count": 19,
+              "summed_task_us": 34.459999999999994
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "FLOAT",
+              "count": 38,
+              "summed_task_us": 65.94
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT32",
+              "count": 20,
+              "summed_task_us": 29.96
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT64",
+              "count": 21,
+              "summed_task_us": 43.7
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_broadcast_route",
+              "input_dtypes": "N/A",
+              "count": 37,
+              "summed_task_us": 190.89999999999998
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_queue_propose",
+              "input_dtypes": "N/A",
+              "count": 37,
+              "summed_task_us": 199.85999999999999
+            }
+          ],
+          "inputs": {
+            "op_summary_20260930131019.csv": "b63802d96b19f0d7890ec5fc8d4381f174ed9616b7e6ba8185c6c84743dddf75",
+            "api_statistic_20260930131019.csv": "9a0114e4217cbc32d66e4b16c4ceafb1e8f71f8112d37c83bb26fcc4f24dad35"
+          }
+        }
+      ]
+    },
+    {
+      "run": "device-ready-profile-clean01",
+      "component_kernel_records": 65,
+      "operators": [
+        {
+          "engines": {
+            "AI_VECTOR_CORE": {
+              "count": 538,
+              "summed_task_us": 2054.1279999999997,
+              "summed_task_fraction": 0.7497123970030891
+            },
+            "AI_CPU": {
+              "count": 2,
+              "summed_task_us": 685.76,
+              "summed_task_fraction": 0.25028760299691083
+            }
+          },
+          "operators_by_type": [
+            {
+              "engine": "AI_CPU",
+              "operator": "OnesLike",
+              "input_dtypes": "INT64",
+              "count": 2,
+              "summed_task_us": 685.76
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Add",
+              "input_dtypes": "INT32;INT32",
+              "count": 2,
+              "summed_task_us": 2.56
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Add",
+              "input_dtypes": "INT64;INT64",
+              "count": 11,
+              "summed_task_us": 21.387999999999998
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Cast",
+              "input_dtypes": "BOOL",
+              "count": 13,
+              "summed_task_us": 14.5
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;BOOL",
+              "count": 4,
+              "summed_task_us": 7.38
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;INT32",
+              "count": 2,
+              "summed_task_us": 2.8040000000000003
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Fill",
+              "input_dtypes": "INT64;INT64",
+              "count": 6,
+              "summed_task_us": 10.228
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "FLOAT;INT64;INT64",
+              "count": 56,
+              "summed_task_us": 466.952
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "GatherV3",
+              "input_dtypes": "INT32;INT32;INT64",
+              "count": 106,
+              "summed_task_us": 244.5840000000001
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "Less",
+              "input_dtypes": "INT64;INT64",
+              "count": 13,
+              "summed_task_us": 28.699999999999996
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "BOOL",
+              "count": 24,
+              "summed_task_us": 43.744
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "FLOAT",
+              "count": 34,
+              "summed_task_us": 50.788
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT32",
+              "count": 34,
+              "summed_task_us": 54.05999999999998
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "ZerosLike",
+              "input_dtypes": "INT64",
+              "count": 92,
+              "summed_task_us": 173.07999999999993
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_closure",
+              "input_dtypes": "N/A",
+              "count": 65,
+              "summed_task_us": 349.252
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_queue_propose",
+              "input_dtypes": "N/A",
+              "count": 11,
+              "summed_task_us": 77.51999999999998
+            },
+            {
+              "engine": "AI_VECTOR_CORE",
+              "operator": "tide_ready_pack",
+              "input_dtypes": "N/A",
+              "count": 65,
+              "summed_task_us": 506.5880000000001
+            }
+          ],
+          "inputs": {
+            "op_summary_20260930131026.csv": "e52422b7ec0cc7b02456cd3af70c7392748431806f49e3246b277db3f5244c78",
+            "api_statistic_20260930131026.csv": "8b26b2461b1c8b0f404c712b10eb7423340318ab27801fb341648cf48dd868bb"
+          }
+        }
+      ]
+    }
+  ],
+  "external_drivers": {
+    "build-runtime-cpu-dev01.py": "99581f44e4a8a416401dcbdb7a51e7eab233123c6fb97c71b5db474632d82396",
+    "runtime-lifecycle-gates-dev01.py": "d840a567cd7f85ddfe4c14084ec2e5664c214d290ab5e2c7038865e7478a377b"
+  }
+}
