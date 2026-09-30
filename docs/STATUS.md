@@ -3,7 +3,7 @@
 Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **37430e1**,graph reverse implementation committed;Full VJP qualification658943a;state-chain qualification4a29b7c;
+HEAD **12eb606**,graph reverse qualification pushed; parameter owner reduction is this increment;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -116,7 +116,7 @@ Uses TensorImpl registry aliases,device flags and feature tiles;None/zero and
 poison remain distinct. Empty registry minimum budget is now checked.
 Tests planned36 aliased real graph/root cases (width1/3/257,two schedules),
 shared-storage distinct owners,replay,subset/empty registry and refusal checks.
-build-parameter-vjp-dev01 and parameter-vjp-dev01 PASSED (36 alias cases and7 regression cells). parameter-vjp-profile-dev01 running (one NPU900s/queue120s). Task-local parameter_vjp_relink.py uses checked graph
+build-parameter-vjp-dev01 and parameter-vjp-dev01 PASSED (36 alias cases and7 regression cells). parameter-vjp-profile-dev01 PASSED:23,580 AIV+334 AI_CORE+144 MIX_AIV,74 owner-reduction records,no AiCPU/fallback;correctness profile,not throughput. Implementation will receive build-parameter-vjp-clean01 from the new commit (1800s/jobs2/no NPU),then full38-cell gate and separate profile (900s/one NPU/queue120s each). Task-local parameter_vjp_relink.py uses checked graph
 clean objects/archive in a NEW build;never mutates the parent/source.
 
 Uncommitted device_optimizer.{h,cpp},optimizer_layout.h and four optimizer Ascend C headers/kernels are in development,not yet built/registered. Next: qualify owner reduction,then device finite checks/optimizer and forward
