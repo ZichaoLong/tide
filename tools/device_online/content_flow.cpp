@@ -232,4 +232,8 @@ ParameterBanks ContentFlow::parameter_banks() const {
   return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
           s.profile.read,s.profile.scales,s.emission->scales()};
 }
+std::pair<Tensor,Tensor> ContentFlow::state_device() const {
+  if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");
+  return {impl_->state.values,impl_->state.present};
+}
 } // namespace tide::device_online

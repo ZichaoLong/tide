@@ -9,6 +9,9 @@ not consume per-event scalars or decide the next event.
 This increment exposes **single-device FP32 HARD inference**. It does not
 implement resident backward, an optimizer, FP16 or peer progression. Current
 build and device verification status is recorded in [STATUS](STATUS.md).
+The separate [explicit C++ training owner](resident-training.md) composes the
+restricted graph VJP, optimizer and retained-window lifecycle; it does not change
+this inference session's ownership or autograd contract.
 The broader delivery contract remains [execution-flows.md](execution-flows.md).
 
 ## Python client

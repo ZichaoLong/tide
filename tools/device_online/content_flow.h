@@ -41,6 +41,7 @@ class ContentFlow {
   FullTape full_tape() const; // Identity/tanh only; other Full contracts refuse.
   ReverseTape reverse_tape() const; // Narrow HARD profile; actual journals only.
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
+  std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;

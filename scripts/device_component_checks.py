@@ -38,6 +38,7 @@ CHECKS = {
     "fiber-batch": ("tide-device-fiber-batch-check", ("float32",)),
     "aggregate": ("tide-device-aggregate-check", ("float32",)),
     "resident": ("tide-resident-check", ("float32",)),
+    "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
@@ -74,6 +75,7 @@ MARKERS = {
     "fiber-batch": "device-fiber-batch: passed",
     "aggregate": "device-aggregate: passed",
     "resident": "public-resident: passed",
+    "resident-training": "public-resident-training: passed",
 }
 KERNELS = {"retained": "tide_window_bridge", "training-step": "tide_optimizer", "optimizer": "tide_optimizer", "parameter-vjp": "tide_parameter_vjp", "closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
@@ -83,4 +85,4 @@ KERNELS = {"retained": "tide_window_bridge", "training-step": "tide_optimizer", 
            "swiglu": "tide_full_plan", "fiber": "tide_fiber_payload", "fiber-pool": "tide_fiber_pool",
            "event-attention": "tide_event_payload", "attention-tile": "tide_attention_softmax", "memory": "tide_attention_softmax",
            "event-batch": "tide_event_plan", "fiber-batch": "tide_fiber_plan", "aggregate": "tide_aggregate_apply",
-           "resident": "tide_ready_pack"}
+           "resident": "tide_ready_pack", "resident-training": "tide_optimizer"}

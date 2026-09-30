@@ -199,6 +199,10 @@ Borrowed device output windows do not export state; snapshot/result are explicit
 boundary materializations. Runtime parameter updates invalidate its frozen
 inference program until an explicit reconstruction. This separate backend does
 not broaden eager training evidence into resident backward or optimizer support.
+The separate [explicit resident training owner](resident-training.md) defines
+retained-window root tokens, parameter generations, alias-aware device updates
+and complete-cut training exports for its narrower FP32 HARD adjoint profile.
+Its supported modules and qualifications are separate from resident inference.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional

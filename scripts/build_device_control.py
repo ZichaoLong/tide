@@ -74,6 +74,7 @@ def main():
                       "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
         names.append("libtide-resident.so")
         names.append("tide-resident-check")
+        names.append("tide-resident-training-check")
     if runtime == "python":
         names = ["_tide_resident.so", "libtide-resident.so"]
     for name in names:

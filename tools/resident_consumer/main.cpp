@@ -1,5 +1,6 @@
 // Installed-package client: no private backend header or repository include.
 #include <tide/resident.h>
+#include <tide/resident_training.h>
 #include <tide/stream.h>
 #include <portable_torch/runtime.hpp>
 #include <ATen/Parallel.h>
@@ -43,7 +44,23 @@ int main(int argc,char** argv) {
         }
       }
       session.close();
+      for(const auto& owner:model.parameters(false).owners())owner.value.set_requires_grad(true);
+      tide::ResidentTrainingLimits training_limits;training_limits.forward=limits;
+      tide::ResidentTrainingSession training(graph,model,q,device,tide::ResidentOptimizerKind::adamw,{},training_limits);
+      auto before=training.checkpoint();std::vector<tide::ResidentCotangents> roots;
+      for(tide::Index step=3;step<5;++step) {
+        const auto stop=3*(step+1);
+        auto window=training.advance({{0,0,step,step*3,at::tensor({.5f,-.25f})}},stop,stop);
+        tide::ResidentCotangents cot;cot.token=window.token;cot.outputs=at::ones_like(window.outputs.values);
+        cot.outputs_connected=window.outputs.valid.clone();roots.push_back(cot);
+      }
+      auto gradient=training.backward(roots);
+      if(gradient.values.device()!=device||!training.step().applied)throw std::runtime_error("installed training step failed");
+      auto checkpoint=training.checkpoint();training.close();
+      if(at::equal(before.state.values,checkpoint.state.values))throw std::runtime_error("installed training made no parameter update");
+      tide::ResidentTrainingSession restored(graph,model,checkpoint,device,training_limits);
+      restored.advance({{0,0,5,15,at::tensor({.5f,-.25f})}},18,18);restored.detach();restored.close();
     }
-    runtime.close();std::cout<<"installed-resident: passed windows=3 feedback=true\n";return 0;
+    runtime.close();std::cout<<"installed-resident: passed windows=3 feedback=true training_windows=3 retained_backward=true optimizer_restore=true\n";return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

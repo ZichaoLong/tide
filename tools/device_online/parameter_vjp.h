@@ -11,6 +11,8 @@ struct ParameterVjp {
   std::vector<int64_t> offsets;
   at::Tensor values,connected;
 };
+// Static shape/alias planning; no numerical graph execution.
+ParameterVjp parameter_layout(const Graph&,const ParameterRegistry&,int64_t width,at::Device,int64_t tensor_budget_bytes);
 // Sum graph partials into physical parameter owners on device. The registry
 // must describe the same single graph/model used to create the forward owner;
 // it may explicitly select only the trainable subset. No numerical CPU prepass.

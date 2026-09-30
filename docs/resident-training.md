@@ -1,0 +1,98 @@
+# Explicit resident training owner
+
+`tide::ResidentTrainingSession` is an optional installed C++ API in
+`tide/resident_training.h`, linked with `tide::resident`. Its implementation and
+qualification status are recorded in [STATUS](STATUS.md); this contract does not
+by itself certify a build, Python client or throughput. The supported adjoint is
+currently single-NPU FP32 HARD, sum Aggregate, phase-aware broadcast,
+identity/EMA/Add-repeat state and identity/tanh Full. Other adjoints fail at
+construction. The wider [execution contract](execution-flows.md) remains required.
+
+## Lifecycle and consumers
+
+Construct from a graph, model and complete continuation, optimizer kind/groups,
+explicit logical device and training limits. Construction preserves TensorImpl
+alias identity while freezing parameters on CPU and packing them onto the NPU.
+All aliases of an owner whose tensor requires gradients enter the registry.
+An omitted group list selects these owners; explicit groups retain the portable
+named optimizer's meaning, including an empty group's selecting no parameters.
+Distinct TensorImpl owners sharing storage are refused. Caller parameter updates
+invalidate the session. The owner updates its own device parameters; it does not
+silently copy them into the caller's original model.
+
+All owner methods require explicit no-grad. This is a first-order VJP interface,
+not an eager autograd node. A consumer computes its head/loss and supplies
+cotangents for the outputs, pending messages and final state of retained windows.
+It may use its own autograd on detached output views; it must not mutate the
+owner's output storage. No particular head, loss or convergence task is required.
+
+1. `advance(inputs, stop, seal)` performs independent online execution and saves
+   its actual device tape. Windows carry session, sequence and parameter-generation
+   tokens. Outputs, pending payloads and state values/presence remain on NPU.
+2. `backward(roots)` accepts exactly one cotangent record per retained window in
+   forward order. Both value and connection tensors of each root pair are supplied,
+   or neither. Missing pairs mean None; connected zero remains connected. Root
+   shape/device/dtype and absent-coordinate validation happens before execution.
+   All reverse event decisions, pending-boundary links and shared-owner reductions
+   use the candidate's own device records. No CPU reference supplies routes.
+3. `step()` requires completed backward. Device SGD/AdamW proposals, finite gate,
+   commit and parameter publication precede the next forward. A successful step
+   consumes gradients and explicitly ends this differentiation generation, even
+   when all gradients are None. A step cannot cross outstanding forward tapes.
+4. `detach()` explicitly discards tapes or unapplied gradients, preserving numeric
+   state/history/pending and current parameters. It invalidates their root tokens.
+
+Advancing with unapplied gradients and repeated backward of consumed windows
+are refused. Step establishes the explicit truncation boundary; differentiation
+through optimizer updates and higher-order gradients are outside this profile.
+Repeated retained backward within one generation is not offered by this owner.
+
+Parameter gradients use canonical names, alias sets, packed offsets and separate
+connection flags. Offset -1 identifies an owner without a differentiable use in
+this profile. Boundary gradients retain all six physical coordinates and flags
+for actual incoming leaves. Later windows also expose their incoming pending
+adjoints for inspection; these are already connected to earlier tapes internally.
+Initial-state gradients bind only states present at the generation's initial cut;
+automatic zero initializers do not become caller leaves.
+
+Returned tensors are read-only consumer views. Keeping exports beyond their
+consumption holds device storage and belongs to the consumer's memory budget.
+They do not grant permission to mutate saved tapes, parameters or gradients.
+The owner is not safe for concurrent calls or concurrent consumer mutation.
+
+## Budgets and failures
+
+Forward limits continue to govern queues, journals, workspaces and physical
+chunks. Training additionally bounds retained-window count and aggregate tape
+bytes, reverse tensor bytes, optimizer tensors and CANN reverse/update workspace.
+Each tape currently copies parameter banks. Shapes admit a complete saved window
+before advance. Reverse components divide the total declared budget into disjoint
+per-window allocations; a small budget rejects before executing a partial VJP.
+Budgets measure declared tensor/workspace footprints, excluding allocator and
+vendor runtime overhead. They do not promise immunity to external device pressure.
+
+Invalid seals/inputs, root tokens/layouts and admission failures are retryable
+without advancing live numerical state. Exhausting retained capacity requires
+backward or explicit detach, never silent truncation. Device forward/reverse or
+runtime failures poison the owner; recover a prior checkpoint in a new session.
+Optimizer refusal20 (nonfinite) or21 (counter violation) commits no live parameter
+or slot, keeps the current gradients and returns `applied=false`. The consumer
+can explicitly detach to skip that update. No hidden loss scaling is applied.
+
+## Complete-cut checkpoints
+
+`checkpoint()` exports a detached CPU `ResidentTrainingCheckpoint` only with no
+outstanding tapes or gradients. It includes the actual updated parameters,
+all aliases/trainable names, complete continuation and input ledger, optimizer
+kind/groups, packed offsets, moments/momentum/AMSGrad slots, int64 counters,
+Adam bias corrections, generation and next window sequence. Unused parameter
+owners retain their frozen initial values; updated values always come from NPU.
+
+The checkpoint constructor validates schema, ownership, graph/continuation,
+options and tensor layouts, including agreement between named and packed
+parameters. It copies into a new owner. The original owner and caller model are
+not modified, and consumer changes to an exported checkpoint cannot alter the
+live owner. Changing a compatible schedule or memory limits on reconstruction
+does not change checkpoint identity. This format is an explicit in-memory
+boundary; a disk codec, Python integration and fresh-process disk qualification
+are separate work. RNG, loss heads and consumer data cursors remain consumer-owned.

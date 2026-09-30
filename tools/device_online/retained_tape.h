@@ -11,6 +11,7 @@ struct RetainedTape {
   int64_t tensor_bytes=0;
 };
 RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes);
+int64_t reverse_tape_bytes(const ReverseTape&); // Shape-only admission before advance/copy.
 // Add a later window's boundary adjoints to the earlier window's own roots.
 // The actual pending-message match and every connection decision are device work.
 GraphCotangents append_window_bridge(CannProgram&,const ReverseTape& earlier,

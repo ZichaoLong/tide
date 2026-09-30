@@ -106,7 +106,7 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp device_optimizer.cpp parameter_publish.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
     retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
@@ -208,7 +208,7 @@ if(TIDE_DEVICE_ASCENDC)
 endif()
 
 if(TIDE_DEVICE_ASCENDC)
-  add_library(tide-resident SHARED resident.cpp)
+  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp)
   target_link_libraries(tide-resident PRIVATE tide-content-flow)
   target_link_libraries(tide-resident PUBLIC tide::tidegraph)
   target_include_directories(tide-resident PUBLIC
@@ -225,6 +225,10 @@ if(TIDE_DEVICE_ASCENDC)
   else()
     add_executable(tide-resident-check resident_check.cpp)
     target_link_libraries(tide-resident-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
+    add_executable(tide-resident-training-check training_check.cpp training_test.cpp training_failures.cpp
+      retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-resident-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-resident-training-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
     include(GNUInstallDirs)
     include(CMakePackageConfigHelpers)
     install(TARGETS tide-resident EXPORT TideResidentTargets LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

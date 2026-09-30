@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T20:20:05.642383+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T20:34:15.144013+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **2721518**,retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
+HEAD **7cfec55**,retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -151,10 +151,24 @@ optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
 32 trajectories/256 updates. Later full training-step development build supersedes
 its limited build scope. Never treat either failed build as clean qualification.
 
-Next: test and finish public C++ training ownership,parameter-generation guards and checkpoint integration. New training_*.cpp,public resident_training.h,parameter layout planning and optimizer checkpoint changes are uncommitted implementation work, not yet tested. Retained41-cell qualification is complete. Optimizer40-cell qualification is complete. Borrowed tapes
-expire on next advance/close/parameter update. LH/SwiGLU/normalized Aggregate/
-attention/HST/SOFTP adjoints,peer progression,FP16 and the public/performance
-matrix remain. Do not mark F4/F5 complete at this restricted HARD chain.
+Next: public C++ training owner is this implementation increment; fixed-source full
+qualification and installed consumer, then Python-owned binding/client and disk
+checkpoint integration. build-public-training-dev01 FAILED test Tensor assignment;
+build-public-training-dev02 FAILED missing PIC in test object; public-training-dev02
+FAILED its build dependency before acquiring NPU. Preserve all failures.
+build-public-training-dev03 and public-training-dev03 PASSED isolated checked relink
+and nine directed component checks. Public owner18 trajectories/288 windows/72 updates
+compared CPU FP32/FP64,actual updates,SGD/AdamW,both schedules,wide257 and large-int64,
+retained roots plus continuation,checkpoint resume,trainable aliases,empty registry,
+absent initial-state leaves,budgets and failure lifetime. public-training-profile-dev03
+is running; inspect terminal and CSV placement before stating its result.
+Implementation tools/device_online/training_*,include/tide/resident_training.h,
+optimizer checkpoint and static parameter layout; doc resident-training.md.
+New installed consumer source is pending its clean installed-package gate.
+Retained41-cell and optimizer40-cell qualifications are complete and pushed.
+The public Python inference session remains inference-only. LH/SwiGLU/normalized
+Aggregate/attention/HST/SOFTP adjoints,FP16,peer progression and full performance
+matrix remain required. Do not mark F4/F5 complete at this HARD subset.
 Portable core/Python unchanged:do not repeat the8,954 CPU tests/23 optional skips.
 
 ## Preserved older work and interrupted timing

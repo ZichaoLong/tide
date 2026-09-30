@@ -36,6 +36,7 @@ RetainedReference retained_reference(Fixture f,int mode,at::ScalarType dtype) {
   for(auto& owner:f.model.parameters(false).owners()){leaves.push_back(owner.value);names.push_back(owner.canonical);}
   auto leaf=[&](const std::string& name,Tensor& x){x=x.detach().to(dtype).clone().set_requires_grad(true);leaves.push_back(x);names.push_back(name);};
   for(auto& [owner,s]:f.initial.states)leaf("state/"+std::to_string(owner.first)+"/"+std::to_string(owner.second),s.value);
+  for(auto& a:f.initial.pending)leaf(boundary_name(a),a.value);
   for(auto& x:f.input)leaf(boundary_name({x.batch,f.graph.inputs[x.port],x.time,0,x.port,x.position,x.value}),x.value);
   auto q=f.initial;int window=0;
   for(auto stop:retained_stops(q.cut)) {

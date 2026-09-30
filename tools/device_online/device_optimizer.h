@@ -1,6 +1,7 @@
 #pragma once
 #include "parameter_vjp.h"
 #include "tide/optimizer.h"
+#include "tide/resident_training.h"
 
 namespace tide::device_online {
 enum class DeviceOptimizerKind {sgd,adamw};
@@ -18,6 +19,8 @@ class DeviceOptimizer {
   const at::Tensor& steps() const {return steps_;}
   const at::Tensor& corrections() const {return corrections_;}
   const std::vector<OptimizerGroup>& groups() const {return groups_;}
+  ResidentOptimizerState snapshot() const;
+  void restore(const ResidentOptimizerState&); // Validate all CPU fields before device writes.
  private:
   ParameterVjp identity_;
   std::vector<OptimizerGroup> groups_;
