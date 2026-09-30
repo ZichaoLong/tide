@@ -1,4 +1,5 @@
 #include "kernel_operator.h"
+#include "state_clock.h"
 namespace {
 using I=int64_t;
 __aicore__ inline bool finite(float f){return (AscendC::GetScalarBitcodeValue<float,uint32_t>(f)&0x7f800000)!=0x7f800000;}
@@ -7,7 +8,7 @@ __aicore__ inline bool finite(float f){return (AscendC::GetScalarBitcodeValue<fl
 // only for observe-all + no clear; DeviceReady narrows all other such regions
 // to one complete frame before this task. Scratch never changes persistent state.
 extern "C" __global__ __aicore__ void tide_state_read(GM_ADDR fibers,GM_ADDR lengths,
-    GM_ADDR content,GM_ADDR reads,GM_ADDR modes,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,
+    GM_ADDR content,GM_ADDR reads,GM_ADDR modes,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
     GM_ADDR scratch,GM_ADDR clocks,GM_ADDR scores,GM_ADDR error,int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t max_ticks) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
@@ -27,7 +28,10 @@ extern "C" __global__ __aicore__ void tide_state_read(GM_ADDR fibers,GM_ADDR len
     if(mode>0) {
       if(t[key*2]< -1||t[key*2]>=time||t[key*2+1]<0){status[0]=2;break;}
       if(kind&&t[key*2+1]==I(0x7fffffffffffffff)){status[0]=5;break;}
-      ticks=(uint64_t(time)+1)-uint64_t(t[key*2]+1);
+      I local,local_old;
+      if(!tide_device::local_time(time,(__gm__ I*)policy,n,local)
+          ||!tide_device::local_time(t[key*2],(__gm__ I*)policy,n,local_old)){status[0]=9;break;}
+      ticks=(uint64_t(local)+1)-uint64_t(local_old+1);
       if(kind==2&&ticks>uint64_t(max_ticks)){status[0]=8;break;}
     }
     if(mode>=0)for(I j=0;j<width;++j) {

@@ -76,7 +76,9 @@ other execution refusals do. Even zero hidden or retention0/1 cannot bypass the
 bound. Raising the bound permits more literal work; it never substitutes a power,
 truncates time or advances idle nodes. The limit concerns work inside one update,
 not total logical runtime; ordinary windows continue from device-owned clocks.
-This profile currently requires FP32, default state clocks, the declared built-in
+Periodic state clocks convert elapsed time to local ticks on device, while stored
+timestamps and message coordinates stay global. The repeat-work limit applies to
+these local ticks. This profile currently requires FP32, the declared built-in
 modules and no autograd. It is not resident backward/optimizer support.
 
 ## Original Add comparison

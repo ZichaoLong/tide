@@ -56,3 +56,9 @@ phase-edge fixture combines SourceDomain aliases with one/two-tick delays and
 compares every global cut, including the reserved phase and pending messages.
 Qualification: [CPU FP64/FP32 evidence](evidence/state-clocks.md). These primitives alone do not establish the
 whole-model single-PDG projection or phase-occurrence ledger reconstruction.
+
+The experimental resident ContentFlow applies this policy on device for its
+identity, EMA and Add-repeat inference modules. Actual event/old timestamps are
+validated before the provisional state commits; global metadata is preserved.
+The Add work bound counts local ticks. See [STATUS](STATUS.md) for current device
+qualification; this extension does not certify resident training or other modules.

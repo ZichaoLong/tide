@@ -1,11 +1,12 @@
 #include "kernel_operator.h"
+#include "state_clock.h"
 namespace {
 using I=int64_t;
 constexpr uint32_t tile=256;
 class VectorState {
  public:
   __aicore__ inline void run(GM_ADDR lengths,GM_ADDR content,GM_ADDR config,GM_ADDR coefficients,
-      GM_ADDR retention,GM_ADDR state,GM_ADDR comparisons,GM_ADDR metadata,GM_ADDR diagnostics,
+      GM_ADDR retention,GM_ADDR policy,GM_ADDR state,GM_ADDR comparisons,GM_ADDR metadata,GM_ADDR diagnostics,
       GM_ADDR error,I width,I nodes,bool trace) {
     AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)metadata);
     AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -41,7 +42,9 @@ class VectorState {
           AscendC::Add(proposal,proposal,summary,size);AscendC::PipeBarrier<PIPE_V>();
         } else if(kind==2) {
           const float retention_value=rho[n];
-          const uint64_t ticks=(uint64_t(events[i*13+2])+1)-uint64_t(events[i*13+4]+1);
+          const auto local=tide_device::local_time_unchecked(events[i*13+2],(__gm__ I*)policy,n);
+          const auto local_old=tide_device::local_time_unchecked(events[i*13+4],(__gm__ I*)policy,n);
+          const uint64_t ticks=(uint64_t(local)+1)-uint64_t(local_old+1);
           for(uint64_t tick=0;tick<ticks;++tick) {
             AscendC::Muls(proposal,proposal,retention_value,size);AscendC::PipeBarrier<PIPE_V>();
           }
@@ -79,8 +82,8 @@ class VectorState {
 };
 }
 extern "C" __global__ __aicore__ void tide_vector_state(GM_ADDR lengths,GM_ADDR content,
-    GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR state,GM_ADDR comparisons,
+    GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,GM_ADDR state,GM_ADDR comparisons,
     GM_ADDR metadata,GM_ADDR diagnostics,GM_ADDR error,int64_t width,int64_t nodes,int64_t trace) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
-  VectorState op;op.run(lengths,content,config,coefficients,retention,state,comparisons,metadata,diagnostics,error,width,nodes,trace);
+  VectorState op;op.run(lengths,content,config,coefficients,retention,policy,state,comparisons,metadata,diagnostics,error,width,nodes,trace);
 }

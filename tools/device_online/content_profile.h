@@ -14,7 +14,7 @@ struct ContentProfile {
   std::vector<int64_t> causal_regions;
   bool all_content=true;
   // source rows: [target, logical slot]; source scales ordered input then edge.
-  at::Tensor sources,scales,read,read_modes,decay,retention,config,edge_scales,output_scales,output_nodes;
+  at::Tensor sources,scales,read,read_modes,decay,retention,clock_policy,config,edge_scales,output_scales,output_nodes;
   ContentProfile(Graph,Model,at::Device);
 };
 struct ContentState {at::Tensor values,clocks,present;};

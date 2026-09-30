@@ -1,7 +1,8 @@
 #include "kernel_operator.h"
+#include "state_clock.h"
 namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR lengths,
-    GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,
+    GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
     GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,GM_ADDR comparisons,
     GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR event_count,GM_ADDR error,
     int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t diagnostics,int64_t metadata_only,int64_t max_ticks) {
@@ -26,7 +27,10 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
     if(i&&(b<fs[(i-1)*4]||(b==fs[(i-1)*4]&&(n<fs[(i-1)*4+1]
         ||(n==fs[(i-1)*4+1]&&time<=fs[(i-1)*4+2]))))){status[0]=2;break;}
     if(kind&&old_count==I(0x7fffffffffffffff)){status[0]=5;break;}
-    const uint64_t ticks=(uint64_t(time)+1)-uint64_t(old_time+1);
+    I local,local_old;
+    if(!tide_device::local_time(time,(__gm__ I*)policy,n,local)
+        ||!tide_device::local_time(old_time,(__gm__ I*)policy,n,local_old)){status[0]=9;break;}
+    const uint64_t ticks=(uint64_t(local)+1)-uint64_t(local_old+1);
     if(kind==2&&ticks>uint64_t(max_ticks)){status[0]=8;break;}
     I proposed_time=kind?time:old_time,proposed_count=old_count+(kind?1:0);
     I next_time=adopt?proposed_time:old_time,next_count=adopt?proposed_count:old_count;

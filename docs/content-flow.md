@@ -12,7 +12,7 @@ Full (`content + tanh(comparison @ weight + bias)`).
 It supports observe-all and active-only state adoption. Inputs are arbitrary
 legal sealed-window values; topology can contain unequal positive delays,
 parallel physical edges, feedback and disconnected components. Input-origin
-projection, other modules/region programs and nontrivial state clocks explicitly
+projection and other modules/region programs explicitly
 fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
 
@@ -33,6 +33,13 @@ keep their legal time batches. This is a module-contract fallback, independent
 of fixture topology or input values; it uses no advance numerical route trace.
 Regions can choose different Read modes in one graph. Identity nodes keep an
 exact zero descriptor.
+
+Periodic `StateClock` policies are evaluated on the device using int64 division
+and remainder. Upd sees local ticks; stored last-adopted timestamps, Read, history,
+message coordinates and continuation cuts remain global. Every candidate validates
+its event phase and previous state phase before commit; an off-phase event fails
+with refusal9. Idle states are also validated when restoring the continuation.
+Add's repeat-work budget counts local ticks, so reserved phases never add decay.
 
 `state_read_single_frame_regions` records the static contract restriction;
 `max_causal_node_time_batch` and `max_state_read_node_time_batch` report actual

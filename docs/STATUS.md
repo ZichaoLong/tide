@@ -91,9 +91,25 @@ In parallel, periodic state-clock implementation is in the working tree: exact
 int64 event/old conversion on device, global metadata retained, refusal9 on invalid
 phases; Add repeat budget counts local ticks. clock_check compares480 mapped
 windows plus18 multi-phase windows and phase refusals. Not yet qualified.
-build-device-clock-dev01 RUNNING, frozen clock-dev01/build device-clock-dev01
-(900s/jobs2). NEXT after pass --checks clock add content window.
-Then attention/KV, packed Read, FP16/public matrix/training/peer delivery. No pause is active. Do not alter frozen source/build.
+build-device-clock-dev01 PASSED exit0 (four CPU CTests/loader), frozen clock-dev01/
+build device-clock-dev01. device-clock-gates-dev01 FAILED before device execution:
+fixture assigned non-global clocks to graph identity boundaries, rejected correctly.
+Original clock-dev01/build/log retained. Fix preserves global identity-boundary
+clocks and uses independent physical phases to map edge/input times.
+build-device-clock-dev02 PASSED exit0 (four CPU CTests/loader), frozen clock-dev02.
+device-clock-gates-dev02 PASSED exit0:480 mapped windows,18 multi-phase windows,
+12 phase refusals plus560 Add/640 content/384 window regressions. Only fixture fix
+was needed. NEXT commit/push clock paths separately, freeze exact commit as clock-clean01,
+build-device-clock-clean01; after pass all19 cells and --check clock profile.
+Norm32 is now a separate uncommitted core increment: cpp/src/read.cpp,
+python/tidegraph/readout.py, tests/test_norm_precision.py and docs/read-programs.md.
+Explicit norm-fp32-v1 casts before reduction and returns FP32; norm-fp64-v1 stays
+unchanged. Tests cover Python/native streaming/greedy, VJPs/None/zero, continuation,
+precision-induced stable ties and FP16/32/64 conversion.
+norm32-cpu-dev01 RUNNING on frozen norm32-dev01 via scripts/develop.py (1800s/jobs2),
+fresh core build norm32-cpu-dev01. Selected norm/Read CPU tests after the build. This changes core source identity; clock jobs use their earlier
+frozen matching core. Commit clock paths separately before the norm32 core increment.
+Integrate FP32 norm in raw device flow only after core parity/VJP gates. Then LH Full/attention/KV, packed Read, FP16/public matrix/training/peer delivery. No pause is active. Do not alter frozen source/build.
 
 ## Newly completed immutable qualification
 
