@@ -50,7 +50,8 @@ Result ContentFlow::Impl::export_result() const {
     std::tie(a.time,a.batch,g.outputs[a.port],a.port)<std::tie(b.time,b.batch,g.outputs[b.port],b.port);});
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",event_count.cpu().item<Index>()},
     {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",limits.diagnostics},
-    {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()}};
+    {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
+    {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0}};
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
   std::sort(out.messages.begin(),out.messages.end(),[&](const Atom& a,const Atom& b){return

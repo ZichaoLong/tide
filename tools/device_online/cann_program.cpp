@@ -14,7 +14,7 @@ struct CannProgram::Impl {
   CannApi api;
   void *stream = nullptr, *launch = nullptr, *model = nullptr;
   void* target_list = nullptr;
-  std::vector<void*> labels, lists, descriptors, scalars;
+  std::vector<void*> labels, lists, descriptors, scalars, arrays;
   std::vector<bool> marked;
   std::vector<at::Tensor> owners, workspaces;
   std::vector<std::function<void()>> commands;
@@ -83,6 +83,7 @@ struct CannProgram::Impl {
     destroy(labels, api.destroy_label, "destroy control label");
     destroy(descriptors, api.destroy_tensor, "destroy control tensor descriptor");
     destroy(scalars, api.destroy_scalar, "destroy control scalar");
+    destroy(arrays, api.destroy_int_array, "destroy control shape array");
     if (stream) { CannApi::check(api.destroy_stream(stream), "destroy control stream"); stream = nullptr; }
     if (launch) { CannApi::check(api.destroy_stream(launch), "destroy control launch stream"); launch = nullptr; }
     commands.clear(); owners.clear(); workspaces.clear(); closed = true;
@@ -174,6 +175,28 @@ void CannProgram::sigmoid(const at::Tensor& input,const at::Tensor& out) {
 void CannProgram::tanh(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnTanh",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void CannProgram::relu(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnRelu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void CannProgram::silu(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.op("aclnnSilu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
+}
+void CannProgram::rms_norm(const at::Tensor& input,double epsilon,const at::Tensor& out) {
+  auto& p=*impl_;p.building();
+  if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN RMS norm requires nonempty rows and positive epsilon");
+  auto weight=at::ones({input.size(1)},input.options()),rstd=at::empty({input.size(0),1},input.options().dtype(at::kFloat));
+  p.op("aclnnRmsNorm",p.tensor(input,input.scalar_type()),p.tensor(weight,weight.scalar_type()),epsilon,
+       p.tensor(out,input.scalar_type()),p.tensor(rstd,at::kFloat));
+}
+void CannProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Tensor& out) {
+  auto& p=*impl_;p.building();
+  if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN layer norm requires nonempty rows and positive epsilon");
+  const int64_t width=input.size(1);auto shape=p.api.create_int_array(&width,1);
+  if(!shape)throw std::runtime_error("create normalization shape failed");p.arrays.push_back(shape);
+  auto mean=at::empty({input.size(0),1},input.options().dtype(at::kFloat)),rstd=at::empty_like(mean);
+  p.op("aclnnLayerNorm",p.tensor(input,input.scalar_type()),shape,static_cast<void*>(nullptr),static_cast<void*>(nullptr),epsilon,
+       p.tensor(out,input.scalar_type()),p.tensor(mean,at::kFloat),p.tensor(rstd,at::kFloat));
 }
 void CannProgram::batch_matmul(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;

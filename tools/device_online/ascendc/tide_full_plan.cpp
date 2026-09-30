@@ -2,7 +2,7 @@
 namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_full_plan(GM_ADDR coordinates,GM_ADDR active,GM_ADDR kinds,
     GM_ADDR cursor,GM_ADDR source_order,GM_ADDR parameter_order,GM_ADDR destination_order,
-    GM_ADDR branch,GM_ADDR chunks,GM_ADDR error,int64_t rows,int64_t nodes,int64_t chunk) {
+    GM_ADDR branch,GM_ADDR chunks,GM_ADDR error,int64_t rows,int64_t nodes,int64_t chunk,int64_t target_kind) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)cursor);
@@ -17,7 +17,7 @@ extern "C" __global__ __aicore__ void tide_full_plan(GM_ADDR coordinates,GM_ADDR
   while(status[0]==0&&pos[0]<rows&&count<chunk) {
     I row=pos[0]++;if(!live[row])continue;
     I node=c[row*4+1];if(node<0||node>=nodes){status[0]=2;break;}
-    if(k[node]==0)continue;
+    if(k[node]!=target_kind)continue;
     s[count]=row;p[count]=node;d[count]=row;++count;
   }
   if(status[0]==0&&count>0) {

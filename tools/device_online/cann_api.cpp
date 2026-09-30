@@ -37,6 +37,8 @@ CannApi::CannApi() {
     destroy_tensor = symbol<decltype(destroy_tensor)>(metadata, "aclDestroyTensor");
     create_scalar = symbol<decltype(create_scalar)>(metadata, "aclCreateScalar");
     destroy_scalar = symbol<decltype(destroy_scalar)>(metadata, "aclDestroyScalar");
+    create_int_array = symbol<decltype(create_int_array)>(metadata, "aclCreateIntArray");
+    destroy_int_array = symbol<decltype(destroy_int_array)>(metadata, "aclDestroyIntArray");
   } catch (...) { release(); throw; }
 }
 void CannApi::release() noexcept {

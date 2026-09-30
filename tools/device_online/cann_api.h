@@ -38,6 +38,8 @@ struct CannApi {
   int (*destroy_tensor)(const void*);
   void* (*create_scalar)(void*, int);
   int (*destroy_scalar)(const void*);
+  void* (*create_int_array)(const int64_t*, uint64_t);
+  int (*destroy_int_array)(const void*);
  private:
   static void* find(void*, const std::string&);
   void release() noexcept;

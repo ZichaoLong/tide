@@ -24,6 +24,12 @@ class CannProgram {
   void softmax(const at::Tensor&, int64_t axis, const at::Tensor& output);
   void sigmoid(const at::Tensor&, const at::Tensor& output);
   void tanh(const at::Tensor&, const at::Tensor& output);
+  void relu(const at::Tensor&, const at::Tensor& output);
+  void silu(const at::Tensor&, const at::Tensor& output);
+  // Normalize the last dimension with unit affine parameters. Per-owner
+  // learned affine values are separately packed and applied by the caller.
+  void rms_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
+  void layer_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
   void batch_matmul(const at::Tensor&,const at::Tensor&,const at::Tensor& output);
   void index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source);
   void equal(const at::Tensor&, const at::Tensor&, const at::Tensor& bool_output);

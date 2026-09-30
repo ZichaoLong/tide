@@ -25,7 +25,7 @@ struct ContentWindow {
 };
 // Experimental complete forward loop for an explicit existing-module profile:
 // sum Aggregate, identity/EMA/Add-repeat memory, linear/FP32-norm Read, count/positive
-// selection, adopt/clear Next and identity/tanh broadcast Full. FP32, no autograd.
+// selection, adopt/clear Next and identity/tanh/LH broadcast Full. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial
 // state and exported observables are CPU values; persistent runtime data and
 // all decisions between submission and the complete-cut boundary stay on NPU.

@@ -45,11 +45,16 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
   }
-  std::vector<int64_t> kinds;std::vector<Tensor> weights,biases;
+  std::vector<int64_t> kinds,lh_kinds;std::vector<Tensor> weights,biases,norm_weights,norm_biases;bool has_lh=false;
   for(size_t n=0;n<profile.graph.nodes.size();++n){const auto& node=profile.graph.nodes[n];
-    kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(profile.model.nodes[n].weight);biases.push_back(profile.model.nodes[n].bias);}
+    const auto& w=profile.model.nodes[n];const auto kind=node.identity?0:lh_full_kind(node.full);has_lh|=kind!=0;lh_kinds.push_back(kind);
+    kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
+    norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
+    norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
+  const auto full_budget=l.workspace_bytes-static_cast<int64_t>(estimate);
+  if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
   full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,l.full_chunk_rows,
-    l.workspace_bytes-static_cast<int64_t>(estimate));
+    full_budget-(lh_full?lh_full->reserved_bytes():0));
   construct();
   // Only input-seal/ledger metadata belongs on the host between windows.
   // The authoritative state, history and pending payloads are device owners.
@@ -78,6 +83,7 @@ void ContentFlow::Impl::construct() {
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits);
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
+  if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
   auto arrivals=router.append_stage(p,actions,profile.edge_scales,error);
   auto emitted=append_outputs(p,profile,actions,limits.outputs,error);
   // Every capacity/error preflight precedes every live state/history/queue/log commit.

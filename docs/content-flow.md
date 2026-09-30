@@ -7,8 +7,9 @@ Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
 scales; identity, EMA or Add-repeat state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
-selection; adopt-v1 Next with optional selected clear; identity or tanh broadcast
-Full (`content + tanh(comparison @ weight + bias)`).
+selection; adopt-v1 Next with optional selected clear; identity, tanh or LH broadcast
+Full. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
+apply their declared activation/normalization to comparison without that residual.
 It supports observe-all and active-only state adoption. Inputs are arbitrary
 legal sealed-window values; topology can contain unequal positive delays,
 parallel physical edges, feedback and disconnected components. Input-origin
@@ -74,6 +75,34 @@ zero sentinel inputs/parameters and writes distinct scratch destinations, so an
 inactive owner's NaN parameters never enter the arithmetic and padding writes
 cannot collide. CANN batch matmul explicitly uses KEEP_DTYPE, with no implicit
 HF32/FP16 enablement. This is hard inference only; no new emit-mode or VJP claim.
+
+`PackedLhFull` groups actual selected actions by their graph-declared Full contract.
+Each group uses the same device chunk planner; actual counts and repeat decisions
+stay on NPU. Batched CANN ReLU/SiLU, RMSNorm (epsilon1e-7) and LayerNorm
+(epsilon1e-5) implement the nine [LH profiles](lh-full.md), including norm-only
+Full. Per-owner normalization weight/bias rows are gathered and applied after
+unit-affine normalization. Only real selected comparisons enter computation;
+padding reads an independent zero sentinel and writes unique scratch destinations.
+Each node can have a different profile, and identity/tanh nodes can coexist.
+`full_chunks` counts both tanh and LH chunks; `full_chunk_rows` and
+`lh_full_chunk_rows` record their distinct effective limits. LH parameter/vector
+scratch reservation is deducted before planning tanh chunks. These are local
+budgets, not a complete model/KV/training memory plan. Per-slot affine signaling,
+other emission contracts and resident VJPs remain separate capabilities.
+
+LH component precision checks use an independent FP64 activation/norm formula on
+the exact FP32 input as well as the existing CPU implementation. Low-variance
+LayerNorm amplifies input/mean rounding; the CPU FP32 result can itself differ
+from FP64 by more than the usual absolute tolerance. For these isolated component
+checks, both CPU and NPU must satisfy a declared engineering error budget:
+`1e-6 + 1e-5*abs(y64) + 4*u*(1+ceil(log2(width)))*max(abs(x64))/s*abs(weight)*(1+abs(z64))`,
+where `u` is FP32 epsilon, `s` is the normalization denominator, `z64` is the
+normalized activation and `y64` includes learned affine values. This is a
+finite-fixture estimate, not a universal error theorem. Reports retain the number
+of ordinary CPU/NPU tolerance misses and each implementation's FP64 error.
+Well-conditioned component rows and complete graph windows still require the
+ordinary rtol1e-5/atol1e-6 comparison; all routing/discrete observables stay exact.
+No runtime dtype or normalization formula changes are hidden by this test policy.
 
 Static graph/source tables, immutable parameters and buffers are prepared on the host.
 Within a call, NPU tasks certify readiness, pack real fibers, compute content

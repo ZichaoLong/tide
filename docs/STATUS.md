@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T09:48:03.980178+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T09:51:09.075400+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -109,7 +109,7 @@ device-read-vector-profile-clean01 PASSED separate norm32 placement profile.
 410 vector Read/410 reductions, no AiCPU/fallback.
 This does not qualify throughput,attention,FP16,peer progression or resident training.
 
-Uncommitted next LH increment must be excluded from the Read commit:
+Current LH increment ready for implementation commit:
 packed_lh_full.{h,cpp},lh_full_check.cpp, activation/normalization methods in
 cann_program.{h,cpp}, int-array lifetime in cann_api.{h,cpp}, target-kind filtering
 in ascendc/tide_full_plan.cpp and packed_full.cpp. Wired into ContentFlow now, with local LH reservation deducted from tanh budget.
@@ -122,9 +122,15 @@ Original logs retained. diagnostic01 isolated width7 LayerNorm differences about
 Bounded mode probe completed: modes0/1 same mismatch; mode2 rejects161002.
 Independent FP64 shows CPU FP32 itself differs above fixed tolerance for low variance.
 Component-only conditioning budget/independent FP64 check added; complete graph
-comparison stays strict. device-lh-full-precision-dev02 RUNNING diagnostic-only relink,
-300s/queue120s; after success rebuild frozen source and run full gates/profile.
-This is unverified FP32 broadcast inference; no slot-affine or training claim.
+comparison stays strict. device-lh-full-precision-dev02 PASSED diagnostic-only relink:40 component cases,
+96 strict complete windows,536 normalized rows,34 strict component tolerance misses;
+CPU FP64 maxabs1.31656e-5,NPU1.51344e-5,max conditioning-budget fraction0.0588963.
+Only test/diagnostic files differ from the original production build.
+device-lh-full-regressions-dev01 PASSED all20 existing cells against unchanged
+production implementation. NEXT clean LH build (1800s/jobs2), all21 cells (900s),
+separate lh-full profile (480s); leased NPU queue120s; diagnose any failure.
+Development gates passed for FP32 broadcast inference; immutable qualification
+pending. No slot-affine, throughput or training claim.
 
 ## Retained failures and older work
 

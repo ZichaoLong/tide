@@ -67,7 +67,7 @@ if(TIDE_DEVICE_ASCENDC)
   target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
   target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp
-    content_flow.cpp content_export.cpp device_journal.cpp packed_full.cpp)
+    content_flow.cpp content_export.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-ready tide-device-broadcast
     tide-device-selector tide-device-queue tide::tidegraph tide-packed-sum tide_state_read_kernel tide_vector_read_kernel tide_read_reduce_kernel
@@ -87,6 +87,9 @@ if(TIDE_DEVICE_ASCENDC)
   add_executable(tide-device-norm-check norm_check.cpp ../../cpp/bench/compare.cpp)
   target_compile_options(tide-device-norm-check PRIVATE -fPIC)
   target_link_libraries(tide-device-norm-check PRIVATE tide-content-flow)
+  add_executable(tide-device-lh-full-check lh_full_check.cpp ../../cpp/bench/compare.cpp)
+  target_compile_options(tide-device-lh-full-check PRIVATE -fPIC)
+  target_link_libraries(tide-device-lh-full-check PRIVATE tide-content-flow)
   add_executable(tide-packed-full-check full_check.cpp)
   target_compile_options(tide-packed-full-check PRIVATE -fPIC)
   target_link_libraries(tide-packed-full-check PRIVATE tide-content-flow)

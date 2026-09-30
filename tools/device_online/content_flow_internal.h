@@ -3,6 +3,7 @@
 #include "device_journal.h"
 #include "queue_transaction.h"
 #include "packed_full.h"
+#include "packed_lh_full.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
@@ -14,6 +15,7 @@ struct ContentFlow::Impl {
   SelectionHistory history,history_before;
   std::unique_ptr<FrameSelector> selector;
   std::unique_ptr<PackedFull> full;
+  std::unique_ptr<PackedLhFull> lh_full;
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
   std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace;
   AtomBatch external;

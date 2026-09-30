@@ -1,5 +1,6 @@
 #include "content_profile.h"
 #include "tide/kernel.h"
+#include "tide/lh_full.h"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
@@ -11,7 +12,8 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device):graph(std::mov
   graph.compile();
   if(!graph.origins.empty())throw std::invalid_argument("content flow input-origin projections are not implemented");
   for(const auto& n:graph.nodes) {
-    if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")||(!n.identity&&n.full!="identity"&&n.full!="tanh")
+    if((!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1")
+        ||(!n.identity&&n.full!="identity"&&n.full!="tanh"&&!is_lh_full(n.full))
         ||n.aggregation!="sum"||(n.readout!="linear-v1"&&(n.identity||n.readout!="norm-fp32-v1"))||n.next_state!="adopt-v1"
         ||n.emission!="broadcast")
       throw std::invalid_argument("content flow module contract unavailable");

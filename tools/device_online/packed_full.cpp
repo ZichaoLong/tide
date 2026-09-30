@@ -50,7 +50,7 @@ ActionBatch PackedFull::append_stage(CannProgram& p,const ActionBatch& content,c
   const auto kinds=kinds_,chunks=chunks_;
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_full_plan)(1,stream,ptr(content.coordinates),ptr(content.valid),
-    ptr(kinds),ptr(cursor),ptr(source),ptr(parameters),ptr(destination),ptr(branch),ptr(chunks),ptr(error),rows,nodes,chunk),
+    ptr(kinds),ptr(cursor),ptr(source),ptr(parameters),ptr(destination),ptr(branch),ptr(chunks),ptr(error),rows,nodes,chunk,int64_t(1)),
     "pack selected Full actions");},{content.coordinates,content.valid,kinds,cursor,source,parameters,destination,branch,chunks,error});
   p.branch(branch,{done,body});p.mark(body);
   p.index_select(comparisons,0,source,x);p.index_select(contents,0,source,h);
