@@ -1,0 +1,95 @@
+{
+  "schema": "tide-python-resident-training-evidence-v1",
+  "source": "0f363b89253cf887ecc62c5d6d08835a5823fefd",
+  "scope": "Python-owned C++/CANN single-NPU FP32 HARD training client and disk/new-process resume; not an independent PyTorch scheduler,other adjoints,FP16,peers or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "cpu_interface_tests": 76,
+    "optional_npu_skips_in_cpu_job": 37,
+    "device_suite_tests": 40,
+    "profile_cases": 1,
+    "new_process_resume": true
+  },
+  "build": {
+    "manifest_sha256": "19fa7c9bc060080f114cad6db02b8b5bdd19a79c9c658203e3fad3575b35cab6",
+    "component_sha256": "7f7f71f7e0c7292bd104a8712eaf18398cf1014ef05e81ef0fc32415a896ed0c",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-public-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "0f363b89253cf887ecc62c5d6d08835a5823fefd",
+      "files": {
+        "status.json": "baa543cd979694a1453a528a98c986d9e7264aa653cb74b7c628d889d0d9e45a",
+        "task.log": "df2acbb6bf728009301ddc9eb3e05581aa6d89082b67f3ec0cd303ae08c14e6f"
+      }
+    },
+    {
+      "name": "public-training-python-host-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "0f363b89253cf887ecc62c5d6d08835a5823fefd",
+      "files": {
+        "status.json": "c07711b7ba9c04156d5455d7771fec1a87e95dd7d7cb9a38df12c8ae8b2ff6a9",
+        "task.log": "1f0b30a253b45ea3edc3aec561c229d3ad2a3c50001dda09b44ce109b4e24966"
+      }
+    },
+    {
+      "name": "public-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "0f363b89253cf887ecc62c5d6d08835a5823fefd",
+      "files": {
+        "status.json": "dafe6505fd250881bd5ca7d9f85b7d94c2592ccfce44052b97687dc18c43e71e",
+        "task.log": "1cfbdf79ada0a318d4a58dcba395624ebfed4a57eb55e1b966e259bbc0ba6149"
+      }
+    },
+    {
+      "name": "public-training-python-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "0f363b89253cf887ecc62c5d6d08835a5823fefd",
+      "files": {
+        "status.json": "b4e2ea77e6750f495510d971ee3db6b5403709474dd7a9eb363e75190eea1577",
+        "task.log": "8f11b1e0e133539574a35c47079df113c227172e2a558c26c2f28ff54abd082d",
+        "profiled/result.json": "a6a7a6bc39edf7c03219c428e4b23d755d8a637cc9ed694a3f25a387e01585dd",
+        "profiled/profile.log": "0e9433eb2e8f114b47cef050c14082d891cdd063f9d50e698e844d403edd9f6a",
+        "profiled/application/status.json": "f4ca4a71eba772c27b041c1ee45d9c986927f17229f633c1ef02562e4e18fd65",
+        "profiled/application/task.log": "67a07108e3fe3fd645caa0bcc59a24fc112299247064854b0d13fbc8cde34dea"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 1569,
+        "summed_task_us": 5981.219999999997
+      },
+      "AI_CORE": {
+        "count": 14,
+        "summed_task_us": 80.6
+      },
+      "MIX_AIV": {
+        "count": 42,
+        "summed_task_us": 162.868
+      }
+    },
+    "kernel_records": {
+      "tide_optimizer": 12,
+      "tide_graph_reverse": 66,
+      "tide_window_bridge": 6,
+      "tide_ready_pack": 12
+    },
+    "host_fallback_diagnostic": false,
+    "interpretation": "one PDG greedy AdamW correctness case including CPU oracle,construction and NPU loss cotangents; task time sums are not wall time"
+  }
+}

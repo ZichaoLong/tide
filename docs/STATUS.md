@@ -3,7 +3,7 @@
 Updated 2026-09-30T21:00:14.855828+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **0f363b8**, Python resident training/disk resume pushed;retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
+HEAD **243cdb3**, public C++ training qualification pushed;Python implementation0f363b8 pushed;retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -158,7 +158,7 @@ public-training-consumer-clean01 all PASSED from exact591e907. Four CTests,
 42 component cells,18 trajectories/288 windows/72 updates against CPU FP32/FP64;
 installed consumer3 inference+3 training windows/retained backward/optimizer restore.
 Profile107,345 AIV+1,857 AI_CORE+1,673 MIX_AIV,304 optimizer records,no AiCPU/fallback;
-checker scope,not throughput. Source/binary/loader/log/CSV audit passed; evidence public-resident-training-20261001.{json,md} is this commit.
+checker scope,not throughput. Source/binary/loader/log/CSV audit passed; evidence public-resident-training-20261001.{json,md} committed/pushed243cdb3.
 Retain failed build-public-training-dev01 Tensor assignment ambiguity,
 build-public-training-dev02 missing PIC,and public-training-dev02 dependency failure.
 
@@ -176,16 +176,29 @@ Submitting immutable Python qualification from exact0f363b8:
 - build-public-training-python-clean01: snapshot public-training-python-clean01,
   matching core placement-npu-python-clean01,build public-training-python-clean01,
   build_device_control.py,SoC Ascend910_9392,jobs2,1800s,no NPU.
-- public-training-python-host-clean01: same snapshot,CPU core placement-cpu-clean01,
+- public-training-python-host-clean01 PASSED76 tests/37 optional skips: same snapshot,CPU core placement-cpu-clean01,
   pytest library/greedy/resident/resident-training,both dtypes,600s.
-When build passes,submit public-training-python-clean01: resident inference+training
+build-public-training-python-clean01 PASSED. public-training-python-clean01 PASSED40 cases: resident inference+training
 pytest,float32,one NPU,queue120s/run900s,TIDE_RESIDENT_LIBRARY points to clean build.
-Then public-training-python-profile-clean01 via launchers/profile_python_training.py,
+public-training-python-profile-clean01 PASSED via launchers/profile_python_training.py,
 with the same Python core/backend and one-card bounds. Inspect actual terminals.
+Python exact-source/binary/loader/log/CSV audit passed; evidence
+python-resident-training-20261001.{json,md} is this commit.
 Commands use launchers/freeze_run.py below. All paths are TASK/runs/NAME and
 units tide-execution-flows-NAME.service;no submission is a passed check.
 
-Concurrent mainline:extend LH/SwiGLU Full and normalized Aggregate adjoints,then
+Concurrent mainline:uncommitted LH/SwiGLU Full adjoints plus parameter-owner
+reduction/publication/retained-tape integration. Adds extra_full_vjp,lh_full_vjp,
+swiglu_vjp and three packed Ascend C kernels; shared training_trajectory checker.
+build-full-training-dev01 FAILED at C++ compile (const threshold pointer to void*);
+fixed without changing numerical semantics. Preserve the failed run. Added isolated
+Full VJP CPU FP32/FP64,poison,None/zero,short/empty replay and width1/7/257 checks.
+Submitting build-full-training-dev02 from frozen full-training-dev02,standalone
+placement-npu-clean01 core,SoC Ascend910_9392,jobs2,1800s. Development only;
+no new support claim before actual gates. Follow with full-training and impacted
+HARD Full/graph/owner/optimizer/retained/public-training checks,one NPU120s/900s.
+Then separate full-training profile. No per-event host branch was introduced.
+Continue with normalized Aggregate adjoints,then
 attention/HST/SOFTP,FP16,peer progression and complete performance matrix.
 These remain required;do not mark F4/F5 complete at this HARD subset.
 Portable core unchanged:do not repeat8,954 CPU tests/23 optional skips without
