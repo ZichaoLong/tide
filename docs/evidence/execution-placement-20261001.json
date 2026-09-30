@@ -1,0 +1,152 @@
+{
+  "schema": "tide-execution-placement-evidence-v1",
+  "source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "public host-dispatched CPU/mixed execution placement; three-family forward/backward/optimizer/continuation; not resident training or throughput",
+  "checks": {
+    "cpu_pytest": 8952,
+    "cpu_ctest": 10,
+    "npu_python": 26,
+    "npu_cpp_schedules": 121,
+    "npu_cpp_updates": 363,
+    "npu_read_precision_schedules": 6,
+    "npu_read_precision_updates": 18,
+    "standalone_accelerator_parity_optimizer_checkpoint": true
+  },
+  "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+  "builds": {
+    "cpu": "0ec5c99d17045f54e4cca6768da0c19ae80f33852fd14056f6eef367e3d142dc",
+    "npu": "bf6bef954ee62dfc828a7d1d92eba23a8a013dae457bc34a7bfa88946a669b79",
+    "npu-python": "28a7112b8e96349456bb7a1a95e9ada3de1b79594730caac414114f32e63a389"
+  },
+  "runs": [
+    {
+      "name": "build-placement-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "3cccc9e7135a2a74e2911695dc3071f2f078fb30ae19376e0a56e0291f56b44c",
+        "task.log": "376ca29dda1c22b1d6fd5e55922bd45fd8fcddb851a0bdacb69ea6f4ef347f56"
+      }
+    },
+    {
+      "name": "build-placement-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "84152d0ea984f9328cf39b783b4d674493650f4c91577735e1f3564d5fb70b43",
+        "task.log": "56d973a2f83d1d22022002e4429898bb14dc544467f5951966f322d878f0b757"
+      }
+    },
+    {
+      "name": "build-placement-npu-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "53170dac96bb8a156d9a791c0fecc1e05c6c5ce3e25fdd95d13bd239329b79f9",
+        "task.log": "e20e1a90d6b97d1dd4273ce58cea34795b15a1441963322ffd27bd530c5dde0b"
+      }
+    },
+    {
+      "name": "placement-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "0f2733da0c326072d07aa788069b4dc470ad7b199e236d576c2766ac53f73379",
+        "task.log": "7187858f44392e2c5f02730442e5cc7fb47648bc77a02258c56ee29c86ac9122",
+        "verified/result.json": "c13b908165fdd8a52b6a4f48ed97169ca006469ec2c702c7252bcd6c3f544ba7",
+        "verified/tests.log": "9e2539d4c75df4e8af13fbb95a910607862fbe31af03f233373ae5dda1d009f1"
+      }
+    },
+    {
+      "name": "placement-ctest-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "f604b067700ffd60066dc49c31b0bb1ef307430cf813584f157665afadd4fa40",
+        "task.log": "c2179f7d0ebc3eba0e9c665148405b26d2a3026d42784fe1eaeb453a807d8faf"
+      }
+    },
+    {
+      "name": "placement-standalone-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "fbbd2d7603e9bebeefc7fce257c0230db64e5aa20c960e05c811b6d1c33db695",
+        "task.log": "78ff33f9935d1fac41756aaadfc66663c9ec12176623d95bda87ba5ccd4bbea7"
+      }
+    },
+    {
+      "name": "placement-public-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "8db75f7152b39eb92559da7d44f24de1ce4f09d0aa565bbdbb8e8f989a6bd265",
+        "task.log": "2fb85bdcf310f866e0f1da3bec9ff3fcf5fd62e4e0fcfa3e962c5979381fb13f"
+      }
+    },
+    {
+      "name": "placement-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "5662c63b22e5a62852fddaaa14a081b9c5f4aa23d6754c8679ee2c7bfb48dd2b",
+        "task.log": "8f74bd1b88a42b57f9ab6263a5a5ff559a9b81e5ce4e2166617966e4d2b4b01d",
+        "profile/result.json": "daf0d307fcc24fec24030e6ef0222c48790849c8f40fabdc3fdba8cd9c000a61",
+        "profile/profile.log": "42fd9a0490bf729ec98de270385570efdc0a5c7b80a013970322594016e5d97c"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 4079,
+        "summed_task_us": 6511.139999999989,
+        "summed_task_fraction": 0.4913912162784271
+      },
+      "MIX_AIV": {
+        "count": 862,
+        "summed_task_us": 1482.1399999999974,
+        "summed_task_fraction": 0.11185607701491718
+      },
+      "AI_CPU": {
+        "count": 66,
+        "summed_task_us": 5077.939999999999,
+        "summed_task_fraction": 0.3832286070932094
+      },
+      "AI_CORE": {
+        "count": 86,
+        "summed_task_us": 179.20000000000007,
+        "summed_task_fraction": 0.013524099613446234
+      }
+    },
+    "aicpu_operators": [
+      {
+        "engine": "AI_CPU",
+        "operator": "ScatterElements",
+        "input_dtypes": "BOOL;INT64;BOOL",
+        "count": 36,
+        "summed_task_us": 3130.44
+      },
+      {
+        "engine": "AI_CPU",
+        "operator": "Sort",
+        "input_dtypes": "INT64",
+        "count": 30,
+        "summed_task_us": 1947.5
+      }
+    ],
+    "raw_inputs": {
+      "op_summary_20261001002834.csv": "c8ea5d81bb818e0c3a5fd5068dfbd44962b539e1d1478d5b45de7aece3469f55",
+      "api_statistic_20261001002834.csv": "d980534a3d3746d10bedd935e9db7f19d31bb03071ada1dfd69c1946b1a01bfd"
+    },
+    "host_fallback_diagnostic": false,
+    "interpretation": "summed task durations include assertions/construction and overlap; not an end-to-end wall-time fraction or throughput"
+  }
+}
