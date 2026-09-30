@@ -1,69 +1,195 @@
-# Independent complete execution flows
+# 完整执行流程契约
 
-This is the active F1-F7 delivery contract in [ROADMAP](ROADMAP.md). Individual
-implementation and qualification results are recorded separately; this document
-does not claim that the full delivery is already verified.
+本文汇总 2026-09-30 与用户确认的交付要求。
+用户已确认并要求执行；按第 10 节顺序推进，历史慢任务暂不恢复。
+[STATUS](STATUS.md) 记录现场和下一步，[ROADMAP F1–F7](ROADMAP.md) 是唯一待办表。
+本文描述目标能力；已有实现、开发测试和正式资格证据分别记录，不互相替代。
 
-Each flow independently consumes the same inputs, initial weights and declared
-state. CPU reference outputs, routes, queue traces and gradients never become
-candidate inputs. The CPU oracle is a correctness client only. A mixed flow
-includes its CPU work, transfers and synchronization in its measured execution.
-Device replay caches a computation structure and stable storage, not answers.
+## 1. 定位与总体目标
 
-## Workload identity
+本项目是 20-tide 后续训练、推理实验的公共调用与等价性验证基座。
+提供数学语义一致、可配置的 CPU、CPU/NPU 混合、NPU 常驻完整流程。
+每个候选独立消费相同输入、初始状态和参数，完成其声明的计算。
+CPU 参考只用于独立验证，其输出、路由、事件轨迹和梯度不成为候选的运行输入。
 
-`prepare_execution_flow.py` prepares a dependency-free, hashed packet. It leaves
-the old foundation-v1/v2 capacity presets unchanged. The new ranked-local graph
-has every body node on an input-to-output path. Adjacent local wires, sparse
-cross-neighborhood wires and skip-layer wires expose locality without replacing
-physical edge identity. Node reachability and actual selected work are distinct.
+调度器、局部计算模块、设备适配和实验消费者分层；模型头、loss 和性能实验不侵入核心语义。
+保留独立 CPU 参考与既有被引用的正确性证据。数学依据及固定版本见
+[semantics.md](semantics.md) 和 [upstream.json](upstream.json)；采用变更须明确记录。
+CUDA 保留可移植源码、配置和构建入口；本机没有 GPU，真实 GPU 执行仍待目标机验证。
+
+## 2. streaming 与在线贪心 prefill
+
+prefill 指节点级时间批，采用正典中的在线贪心／契约相对最大前沿算法。
+根据当前 continuation、已公开消息、已完成作用及有效封闭下界，组成可安全执行的
+状态块、Full 时间批、联合节点块或区域块；返回结果后继续推进。
+只使用本轮实际已知信息，不提前运行整个模型取得真实事件轨迹后离线打包。
+
+算法须接受各图类别定义内的任意合法拓扑和输入，且使用已实现模块的声明契约：
+
+- PDG 包括严格正时延反馈环；不能把通用支持限制成 DAG。
+- TimedDAG 保持其无环定义，SettleGraph 保持自身结构条件。
+- 模块没有某种精确批量契约时，使用合法单作用后备；不因此拒绝合法拓扑。
+- 特定拓扑或输入自然退化为 streaming 可以接受，并记录实际批长度和原因。
+- 不为性能 fixture 的拓扑、节点编号或输入内容定制调度捷径。
+
+在合法联合契约允许时，尽量把沿逻辑时间逐项暴露的递归压入块内计算，
+用较少的自适应阶段和批量调用推进有限窗口。整段逻辑时间可以持续增长；
+以正确的 continuation 续接窗口。阶段数不机械对应算子数，算子数也不等于内核数。
+不承诺任意反馈图都具有与序列长度无关的固定阶段数，不追求全局最少批次或最优墙钟时间。
+计算模块与调度模块可以采用不同的实现方式、批量粒度与设备机制，但共享语义契约。
+
+## 3. 静态准备、动态决定与设备常驻
+
+| 内容 | 要求 |
+| --- | --- |
+| 拓扑、边延迟、owner、索引和模块批量能力 | 可静态检查、预处理、缓存 |
+| 通用 locality 放置、缓冲区配置、算子编译 | 可提前准备，成本单列 |
+| 实际消息、候选、选择、就绪条件、批边界 | 根据实际输入和当前状态在线决定 |
+| 同一拓扑更换输入或更新参数 | 同一算法可以产生不同事件与批次 |
+| NPU 常驻流程 | 在线路由、就绪判断、合批、节点选择和执行推进由设备完成 |
+| 现有静态展开／有限捕获 | 保留为受限可选后端，不替代通用在线流程交付 |
+
+动态调度不要求运行中增删拓扑。常驻流程允许主机负责构造、输入/输出边界、
+顶层提交和状态报告；不能依赖逐事件标量回传及主机分支推进。
+前向常驻、跨卡推进、反向与优化器常驻分别验证，不能用前向结果替代完整训练结论。
+
+## 4. 支持与性能矩阵
+
+下表是必做性能范围，不是已经完成的支持声明。每个“必做”均覆盖 CPU/NPU、
+streaming/prefill、推理/完整训练，并保留跨阶段续接与配置选择。
+
+| 图类别 | LibTorch | PyTorch |
+| --- | --- | --- |
+| PDG | 必做 | 正确性参考按需保留，不做必需性能扫描 |
+| TimedDAG | 必做 | 必做 |
+| SettleGraph | 必做 | 必做 |
+
+正确性可覆盖更多独立参考与特化路径。独立 C++、Python 调用 native、纯 PyTorch
+分别记录实际使用的运行环境与证据。已有适配器结果不自动认证独立 C++ 的全部入口。
+CPU FP64/FP32 保留为参考；NPU FP32/FP16 有独立精度契约与验证。
+不把数学语义一致解释成跨 dtype 位级一致；离散结构及连接关系按其对应参考严格检查。
+
+## 5. 五套常用组合与细开关
+
+| 常用组合 | 节点主体计算、消息载荷 | Read／控制 | 节点选择 | 事件队列与推进 |
+| --- | --- | --- | --- | --- |
+| CPU 基线 | CPU | CPU | CPU | CPU |
+| 混合 A | NPU | CPU | CPU | CPU |
+| 混合 B | NPU | NPU | CPU | CPU |
+| 混合 C | NPU | NPU | NPU | CPU |
+| NPU 常驻 | NPU | NPU | NPU | NPU |
+
+每套支持矩阵要求的 streaming/prefill。快捷组合不取消细开关：Read、控制、
+节点选择和事件调度位置分别配置；另有 payload/scoring dtype、卡数、通用放置、
+队列/工作区容量和切分策略。记录请求及最终生效配置；不支持的组合提前明确拒绝。
+另一台机器可以重新测量并选择流程，不强制套用本机推荐。
+
+## 6. 全路径打包与实现要求
+
+打包覆盖消息生成、路由、放置、聚合、状态/Full 计算和跨卡传输。
+连续或分块张量缓冲区只是数据组织方式；不能由逐消息主机循环填充后就宣称打包完成。
+
+优先验证批量索引、计数/前缀和、gather/scatter、分段操作和批量计算的实际能力。
+静态路由索引可复用，动态计数、路由和分组在线产生。CSR 风格 offsets 是表示方式，
+不等于要求某个稀疏矩阵算子；当前 NPU CSR pooling 限制不能成为逐消息执行的理由。
+缺少能力或实测成本需要时，隔离后端专用融合内核，并保留独立参考及前后向验证。
+
+尽量每个合法组/阶段提交少量批量工作；依赖允许时按目标卡合并通信。
+内核内部循环和依赖结果的阶段循环允许存在。混合路径如有主机工作，应计入完整时间；
+NPU 常驻路径不通过主机逐消息/逐事件进行组织、选择或搬运。
+
+消息保留物理边身份、稳定次序、缺失与零的区别；不得用冲突 scatter 写入或
+未证明安全的掩码计算改变结果、溢出行为或梯度连接关系。
+
+## 7. 容量、切分与连续状态
+
+队列/就绪表记录待办和张量范围，消息载荷由独立缓冲区承载。
+容量限制同时在途/待处理的数据，不是累计事件数或总运行时长；空间可回收复用。
+参数、持久状态、KV、通信缓冲和训练激活也有各自的内存成本。
+
+保留两种可配置策略，具体阈值由实现和测量确定：
+
+| 策略 | 行为与用途 |
+| --- | --- |
+| 保守切分 | 留较大余量，较小物理批；用于正确性、诊断及资源不确定环境 |
+| 偏激进切分 | 在已验证的安全预算内优先组成较大批；性能验证优先采用 |
+
+预算估算可近似、批划分不必最优。偏激进不是故意顶到 OOM：扣除参数、梯度/优化器、
+持久状态、通信和必要工作区，保留余量；通过较小规模的峰值观测校准估计，
+在分配/提交超预算工作前缩批或切分。不得以反复 OOM 搜索作为默认性能流程。
+记录声明容量、实际有效长度、峰值内存、切分次数和实际批大小。
+共享资源变化或确实不可容纳时，明确终止/报告，不能声称可以绝对消除外部 OOM。
+
+达到单批预算通常应分批执行，必要时在合法依赖条件下先消费、回收再继续产生消息。
+一个逻辑 attention 消息组仍完整；query/KV 分块保留可见性和全局归一化。
+不丢消息、不隐式截断 KV，不因显存限制静默改变模型或精度。
+窗口续接保留所需状态、history、在途消息与 KV；梯度 detach 必须按训练配置显式定义。
+物理切块不改变逻辑 batch、loss 归约、梯度汇总或优化器更新边界。
+真实不可消解的容量不足明确失败，不返回貌似完整的结果。
+
+## 8. 验证、profiling 与性能范围
+
+正确性先于规模性能。比较完整状态、输出、消息、history、路由、pending、
+int64 时间/计数、稳定平票、重复边、缺失/零消息、独立 VJP、None/零梯度，
+以及多步参数、master、优化器 slots/counters。覆盖反馈、非对齐延迟、空/不齐长度、
+并行边、不同输入、分块续接、prefill/streaming 切换及保留/截断反向图。
+NPU 常驻还要检查设备侧实际决定、跨卡完成通知、训练和真正执行的路径。
+
+Profiling 贯穿实现、验证和测试：先用小中规模闭环定位计算与调度各自的成本，
+检查实际批量和设备位置，实施通用改进，再做独立正确性与性能复验。
+不只在最后导出一份报告。记录实际批长度、主机提交/同步、设备内核数、
+packing/通信字节与耗时、padding、峰值内存、各阶段及完整吞吐。
+高层 API 数量不等于硬件内核数；AiCPU/AiCore 等归属以实际 trace 为依据。
+带 profiling 的运行与正式吞吐测量分开，必要计数开销也明确说明。
+
+| 层次 | 固定范围 |
+| --- | --- |
+| 正确性 | 五套组合、两种调度及关键细开关交互；续接、训练和容量边界 |
+| 中等规模筛选 | 五套均测；推理/训练分别选择混合候选 |
+| 全尺寸正式对照 | CPU 基线、筛出的混合候选、NPU 常驻，各自 streaming/prefill |
+| 其他手动组合 | 支持时可运行并记录，不自动扩成所有开关的排列组合 |
+
+性能主对照优先偏激进安全切分，报告各方案的实际切分与成本；保守模式保留为可选对照。
+FP32 为主要基线，NPU FP16 单列；CPU FP64 主要承担正确性参考。
+每个正式推荐配置至少三个独立进程，报告分布。主对照固定能容纳模型的卡数；
+额外卡数/环境版本实验有明确问题、有限范围和停止条件。
+独立 CPU 参考、profiling 不混入吞吐计时。
+
+## 9. 工作负载与计时
+
+工作负载覆盖一般合法结构与输入，不仅是规则分层图；生成式小图用于正确性，
+可达大图用于容量和性能。通过通用 locality 放置利用连接局部性。
+公共等价图和类别特有压力图分开，不以参数量相近冒充数学等价。
+既有 foundation-v1/v2 与历史 PDG 记录保留，不改写为新拓扑证据。
+
+`prepare_execution_flow.py` 已有带哈希 packet：
 
 ```bash
 python scripts/prepare_execution_flow.py --preset smoke --memory add --output-dir NEW
 python scripts/prepare_execution_flow.py --preset wide --memory attention --output-dir NEW
 ```
 
-The common wide graph has 15 regions of 32 nodes, 480 reachable body nodes,
-four local next-layer wires per source and one skip-layer wire where applicable.
-It includes the same declared embedding/head in every flow. Parameter counts are
-derived from actual module owners; padding with disconnected trainable nodes is
-forbidden. Width, batch, window, budget, locality and layer counts are configurable.
-`many-nodes` independently stresses graph scheduling with narrower tensors.
+当前 wide packet 为 15×32=480 个可达 body 节点、2208 条 body 边和两个身份边界；
+D2048/B512/T12/V50304，Add 9,468,053,696 参数，Attention 17,521,117,376 参数。
+可达不等于实际被选择；按实际工作量计数。rank-aligned 可提供三图等价编码；
+timed-local 的延迟扰动只用于 PDG/TimedDAG，不能声称 Settle 等价。
+这些现有 packet 是 fixture，不限定通用调度器接受的全部拓扑。
 
-A rank-aligned body permits SettleGraph and its explicitly encoded TimedDAG/PDG
-representations. Boundary nodes, clocks, source tags, output summation and owner
-identity must survive encoding. Timed-local deliberately perturbs arrival delays;
-it is a separate TimedDAG/PDG workload and explicitly cannot be selected as Settle.
-Comparable parameter counts or separate family stress tests do not imply equal
-functions. Historical PDG remains a separate preserved workload.
+完整计时包括必要输入准备/上传、数据依赖调度、packing、计算、通信、清理与同步；
+完整训练包括 forward/loss、backward、finite checks 和 optimizer。
+构造、编译/捕获、warmup 单列，另报冷启动和有限运行摊销成本。
+状态 reset/continuation 与训练边界保持可比；主流程不再只测重置窗口后外推持续生成。
 
-## Execution and measurement
+## 10. 实施顺序与完成标准
 
-The complete-flow interface keeps family, implementation, schedule, device,
-dtype, device count, Read/control/ranking placement and CPU threads explicit.
-Unsupported requests fail before timing. A named recommendation resolves to a
-recorded configuration for the current hardware/software/workload identity;
-another machine retains access to every qualified alternative.
+1. 校正通用算法、模块批量契约和支持矩阵，审查现有代码可复用部分。
+2. 完成独立小中规模语义闭环；profiling 辅助计算与调度设计，提交可审查增量。
+3. 补齐矩阵内完整路径、在线设备常驻、多卡通信与训练。
+4. 分阶段跑通代表性规模和全尺寸，再做有限组合对照、重复测量与解释。
+5. 补充历史慢基线，完成干净不可变构建/资格、迁移命令、Trackio 与证据审计。
 
-All comparable cells use the same reset/continuation and training boundary.
-Complete training includes forward/loss, backward, finite checks and optimizer
-updates. End-to-end iteration timing includes required input preparation,
-transfers, data-dependent host work, cleanup and completion synchronization.
-Construction, reusable compilation/capture and warmup are separately measured;
-cold and finite-run amortized times include them. Rebuilding per request belongs
-inside that request's timing. Instrumented profiling and oracle comparisons are
-separate passes, never mixed into throughput.
-
-Mandatory correctness gates compare complete observables, physical identities,
-int64 times/counts, stable ties, absent versus zero messages, isolated VJPs and
-None versus zero gradients, then multiple optimizer updates. FP32/FP64 reference
-contracts remain unchanged; FP16 has explicit floating tolerances and retains
-exact discrete tests. Changed inputs and successive optimizer updates must be
-tested through the actual replay path.
-
-Full-size benchmarks follow those gates. Report reachable, touched, candidate
-and selected nodes/events, edge work, output completion, parameter ownership,
-memory and communication as well as throughput. Three independent processes
-support a machine-specific recommendation; a capacity probe or single run does
-not. Frozen failures, source/build identities and local Trackio records remain
-part of the delivery. CUDA target execution stays target-pending on this server.
+历史 CPU Attention 慢基线不阻塞主线。不以排队/等待替代可推进的实现工作。
+每个长任务事先声明问题、上限、停止条件和失败后的动作；保留原始失败，不机械重试。
+正式重型计时不互相干扰；可并行推进不影响计时的独立开发工作，不停止他人任务。
+本机可完成的范围须真正闭环，不能仅以失败容量评估宣布完成。
+核心实现先提交，再以干净固定源码验证，证据单独提交；未获授权不 push。

@@ -140,38 +140,44 @@ bounds, and keep these timings out of uninstrumented throughput tables.
 
 ## Authorized extension: independent complete flows across all three families
 
-Authorized 2026-09-30. This reopens the explicitly retained capability gaps,
-not the frozen historical results. Each execution flow owns its complete
-computation from the same input/weights/state; the CPU oracle never provides
-candidate decisions or numerical answers to a measured flow. CPU, mixed host/
-accelerator and bounded device-controlled flows remain explicit alternatives.
+Authorized and confirmed 2026-09-30; consolidated contract in
+[execution-flows.md](execution-flows.md). General-online implementation has resumed.
+This general-online delivery supersedes the earlier finite-static assessment scope;
+all historical evidence remains scoped and unchanged. STATUS owns current job/source
+state. The contract owns definitions, matrices, presets, batching/memory and test scope.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| F1 | Versioned complete-flow configuration, cold/setup/steady/amortized timing, independently computed inputs/outputs and per-machine recommendations | in progress |
-| F2 | New active-scale ranked/locality topologies and immutable manifests; equivalent Settle -> TimedDAG -> PDG inputs/clocks/owners, plus family-specific stresses; actual reachability/work counters | in progress |
-| F3 | CPU FP64/FP32 independent schedules, full observables/isolated VJPs/None/zero/three optimizer updates; public Python/native and standalone consumer gates at meaningful finite scales | pending |
-| F4 | Bounded replay notification reuse and lower-memory transport/training; changed-input/repeated-replay and exact peer integer tests, no per-event host decisions | in progress |
-| F5 | TimedDAG/Settle complete CPU/multi-NPU flows, locality placement and FP32/FP16, explicit unsupported requests; each backend has independent correctness gates | pending |
-| F6 | Full-size inference and complete training for all three families, matched scope and three fresh processes for recommendations; finish PDG CPU Attention comparison and qualify full-size device replay | pending |
-| F7 | Portable command/fixture packet, target-pending CUDA/version cells, reviewed records/Trackio/profile audit and support claims, no live task jobs | pending |
+| F1 | General online greedy node-time prefill and independent streaming for every legal family topology/input; complete continuation/configuration/timing contracts | in progress; current DAG/static consumers insufficient |
+| F2 | General topology/input fixtures including PDG feedback and unaligned arrivals; active-scale/locality packets, equivalent family mappings and actual work counts; no fixture-specific scheduler | in progress; reachable packets exist |
+| F3 | Independent CPU FP64/FP32 schedules, full observables/isolated VJPs/None/zero/multi-update optimizer gates; public Python/native and standalone consumers, changes of input and continuation | partial development gates; general-online immutable qualification pending |
+| F4 | Device-resident online queues/readiness/selection/batching/progression, packed transport and peer completion, continuous state and complete training; explicit capacities and safe chunking | reusable finite peer/capture components exist; general online device scheduler pending |
+| F5 | Complete CPU/NPU streaming/prefill matrix: PDG LibTorch, TimedDAG/Settle LibTorch and PyTorch; fine switches and five presets, multi-device/locality/FP32/FP16 | pending; finite consumers do not close matrix |
+| F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | pending; historical CPU Attention remains supplementary |
+| F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed Trackio/profile/evidence/support claims and no live task jobs | pending |
 
-Retain old large-layered presets as capacity/limited-active-subgraph evidence.
-The new active-scale topology must increase reachable nodes/edges with size,
-record candidate versus selected work and include graph encoding/head costs.
-Common equivalent workloads and family-specific workloads are separate:
-comparable parameter counts alone never establish mathematical equivalence.
-Bounded device control is qualified only for declared finite profiles; general
-unbounded dynamic graph scheduling remains outside these workload contracts.
+Apply canonical online greedy algorithms; large blocks when legal, single-action
+fallback and natural streaming degeneration otherwise. Compress logical-time
+recursion into block computation where possible; do not claim universal constant
+stage count or identify one stage with one operator/kernel. Never use an advance
+numerical trace, input-specific scheduler or static capture as a substitute.
+Computational and scheduling kernels can use different backend mechanisms.
 
-First fix and independently qualify peer notification/buffer lifetimes, then
-extend active topology and complete-flow consumers. Full-size capacity probes
-follow smaller correctness gates. Benchmark one controlled comparison at a
-time; independent development checks may use disjoint idle resources. Use
-opportunistically available devices (up to 16 compute chips when needed), never
-stop another workload. Three process repeats per accepted configuration;
-failures remain records and trigger diagnosis before retries. Trackio and
-project-owned records remain required delivery artifacts; no external dashboard.
+Both conservative and aggressive-safe chunking remain configurable. Formal performance
+prioritizes larger batches within calibrated safe budgets, persistent allocation
+accounting and headroom, splitting before over-budget work. Profiling is part of
+the implementation/verification loop, including batching itself, actual kernels,
+host decisions/sync, transfers, padding and memory; instrumented timings stay separate.
+No discarded events, hidden KV truncation, dtype changes or gradient-boundary changes.
+
+Prioritize general algorithm/independent correctness, complete public/device/multi-card
+training paths, staged full-size comparisons, then final records and supplementary
+historical baselines. Preserve current development code and failures. Every long job
+has a concrete question, bounds/stops and failure response; waiting is not the main
+work. Keep formal heavy timing uncontended; independent development work may proceed
+without contaminating it. Use available devices within the resource budget, never
+stop unrelated jobs. Commit tested implementation, qualify clean source, commit
+evidence separately; no push. Do not call a failed finite capacity assessment delivery.
 
 ## Six implementation classes
 
