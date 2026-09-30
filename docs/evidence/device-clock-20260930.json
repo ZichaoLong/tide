@@ -1,0 +1,71 @@
+{
+  "schema": "tide-device-clock-evidence-v1",
+  "source": "49ff1086d5053a8f1f52c3b3970c56d5dfc9d9d1",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "single-device FP32 inference with periodic state clocks; not training or throughput",
+  "core_cpp_sha256": "8b337446ef421d499ab52f3bd6de3fbfec1e713a68bde6af2f6ee3887297175b",
+  "component_sha256": "98bf0a69c89aa10a064f5761f7ee3d8ef05ba76d53b7746619aca9f3473623d6",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 19,
+    "mapped_windows": 480,
+    "multi_phase_windows": 18,
+    "phase_refusals": 12,
+    "add_windows": 560,
+    "content_windows": 640,
+    "window_cases": 384
+  },
+  "runs": [
+    {
+      "name": "build-device-clock-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "260699455b444b2f4125fee01ea3a6307adde153a411dd820a358051e726c634",
+        "task.log": "56b7687b6e22f8829ca424b16735dce9ef69be041eb870c1a3e4945f769a41d0"
+      }
+    },
+    {
+      "name": "device-clock-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "7fd081bdd96c82aaa61c9dfbb41f176e204105d741c6456d4ed05c3b54409f7f",
+        "task.log": "4ecc9fbd9e8b4fc68df6a24194d7d6c28cd85b7820f106b1ef0c4ea4357f3356",
+        "verified/result.json": "16b5928680959ebe96b4f4ce685136e430db15d3d413e5980468c11a63890c2c"
+      }
+    },
+    {
+      "name": "device-clock-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "c00649ac12330cf87357c9e9e2d0342ecb27bb88f0d4de4069282f1a1d5af1d4",
+        "task.log": "a84dbecfbe00cf2c69e720b8495f1708ee012052ce7eb9a76ec7819353b3ea89",
+        "profile/result.json": "5803e22d9c1e60d9c2cd7cf12f57d2d01c08473ce01d1acee3e76aee015bd6b9"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 95457,
+      "AI_CORE": 746
+    },
+    "kernels": {
+      "tide_content_state": 882,
+      "tide_state_read": 882,
+      "tide_vector_state": 441
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930164341.csv": "d08f7e65f8f2b7c7be5097356eea63affb67b2940230236f4ba3563b983d8386",
+      "api_statistic_20260930164341.csv": "1441e9c19b725345a3e37608cd72df980138697f20bcea185f6f5cbd82c9362a"
+    },
+    "host_fallback_diagnostic": false
+  }
+}
