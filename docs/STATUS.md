@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T05:54:05.986456+00:00. **ACTIVE: continue the user-confirmed execution contract.**
+Updated 2026-09-30T06:07:17.698392+00:00. **ACTIVE: continue the user-confirmed execution contract.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents, no push. Reference repos and ObsidianVault remain read-only.
@@ -13,34 +13,35 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-NEXT: ContentFlow development gates PASSED on frozen content-dev02:
-`build-device-content-dev02` (four CPU CTests/standalone loader),
-`device-content-gates-dev01` (80 full-observable window/continuation comparisons,
-394 events,244 actual emissions,10 nontrivial node-time batches; refusal/retry),
-`device-content-profile-dev01` (120 real content/state/selection/route stages;
-all11606 recorded device tasks AIV). No host fallback warning. These are development
-results for FP32 inference with sum Aggregate, content linear Read, identity/EMA
-state, count/positive selection, adopt/clear Next and identity broadcast Full.
-Other modules, FP16, autograd/optimizer, peer progression and performance remain.
+NEXT: ContentFlow identity-Full profile qualified on clean4d2f09e. All three jobs
+PASSED: build-device-content-clean01 (four CPU CTests/loader),
+device-components-clean03 (all13 cells; content80 windows,394 events,244 actual
+emissions,10 multi-time node batches), device-content-profile-clean01 (all11606
+recorded tasks AIV). Evidence [content-loop-20260930](evidence/content-loop-20260930.md).
 
-Commit this coherent implementation with [its explicit scope](content-flow.md),
-then clean-build snapshot content-clean01/build device-content-clean01 using
-fingerprint-matched runtime-npu-clean01 core, jobs2/900s. Run all13 component cells
-(120s queue/900s task) and content placement profile (120s queue/480s task). Commit
-immutable evidence separately. Continue module integration/vectorized kernels,
-general contracts, safe model byte chunking, training and multi-device delivery;
-do not stop at this limited profile. Kernel numeric loops initially scalar AIV.
+Uncommitted NEXT implementation adds PackedFull for actual selected identity/tanh
+Full, raw ACLNN FP32 KEEP_DTYPE batch matmul/tanh/index-copy, and device-controlled
+bounded physical chunks. Empty/padding rows use independent zero sentinels;
+inactive nodes' weights never participate. ContentFlow now accepts tanh Full,
+records actual Full values and exposes full_chunk_rows. New full_check.cpp checks
+inactive NaN poison and tails at widths1/7/33, chunks1/4. Content loop gate doubled
+to160 windows for identity/tanh. No build/runtime claim yet for this new work.
+Launch build-device-full-dev01, snapshot full-dev01/build device-full-dev01,
+matching runtime-npu-clean01 core, jobs2/900s. Then --checks full content, bounded
+120s queue/900s task. Preserve failure reproducer; profile Full only after parity.
+Full chunking budget is local scratch, not full model/KV/training memory planning.
 
-Retained failure: build-device-content-dev01 FAILED because CANN generated launch
-headers cannot resolve local type alias I in exported signatures. Fixed with
-explicit int64_t and qualified by dev02 build; frozen failing source/logs retained.
+Retained failure: build-device-content-dev01 failed because generated CANN headers
+cannot resolve local type alias I in exported kernel signatures. Fixed by explicit
+int64_t and passed in development dev02 and clean4d2f09e. Failing source/logs stay.
 
-Clean6220011 selector/group qualification committed asedeefc0:
-[device-selection-20260930](evidence/device-selection-20260930.md). Four jobs passed:
-build-device-selector-clean01, device-components-clean02 (12 cells),
-selector-profile-clean01 (39 tasks/all428 AIV), queue-profile-clean02 (63/all475 AIV).
-Clean eff5945 earlier packing/lifecycle qualification committed asf604bfc:
+Previous clean6220011 selector/group qualification committed asedeefc0:
+[device-selection-20260930](evidence/device-selection-20260930.md). All four jobs
+passed. Clean eff5945 packing/lifecycle qualification committed asf604bfc:
 [device-packing-20260930](evidence/device-packing-20260930.md); all eight jobs passed.
+Continue other module contracts, vectorized numerical paths, FP16, public matrix,
+failure-lifetime injection, safe model byte chunking, training and peer delivery.
+Do not stop at these explicit finite profiles or launch full-size timings yet.
 
 Required performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/NPU × streaming/prefill × inference/complete training. Five presets CPU,
