@@ -141,8 +141,8 @@ bounds, and keep these timings out of uninstrumented throughput tables.
 ## Authorized extension: independent complete flows across all three families
 
 Authorized and confirmed 2026-09-30; consolidated contract in
-[execution-flows.md](execution-flows.md). At the user-requested next-commit
-checkpoint, implementation pauses pending renewed confirmation; see STATUS.
+[execution-flows.md](execution-flows.md). The user has resumed implementation
+after the checkpoint and authorized pushing tested commits; see STATUS.
 This general-online delivery supersedes the earlier finite-static assessment scope;
 all historical evidence remains scoped and unchanged. STATUS owns current job/source
 state. The contract owns definitions, matrices, presets, batching/memory and test scope.
@@ -152,7 +152,7 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F1 | General online greedy node-time prefill and independent streaming for every legal family topology/input; complete continuation/configuration/timing contracts | host greedy implemented;8849 clean CPU checks + four CTests + six NPU FP32 fixtures passed; resident/consumer delivery pending |
 | F2 | General topology/input fixtures including PDG feedback and unaligned arrivals; active-scale/locality packets, equivalent family mappings and actual work counts; no fixture-specific scheduler | in progress; reachable packets exist |
 | F3 | Independent CPU FP64/FP32 schedules, full observables/isolated VJPs/None/zero/multi-update optimizer gates; public Python/native and standalone consumers, changes of input and continuation | host greedy immutable CPU/NPU fixtures qualified; complete consumer/resident gates pending |
-| F4 | Device-resident online queues/readiness/selection/batching/progression, packed transport and peer completion, continuous state and complete training; explicit capacities and safe chunking | device control, packed queue and Ascend C readiness qualified on clean5c5b582; [evidence](evidence/device-control-20260930.md); device queue transactions, broadcast delivery and ready fiber/frame packing qualified on clean eff5945 ([evidence](evidence/device-packing-20260930.md)); count/positive selector and grouped queue commits qualified on clean6220011 ([evidence](evidence/device-selection-20260930.md)); content-driven identity/EMA state + identity-Full forward loop qualified on clean4d2f09e ([evidence](evidence/content-loop-20260930.md)); selected tanh Full with device chunk progression passed directed development parity/placement (24 Full cases,160 window comparisons); its clean qualification and general modules/training/peer progression pending |
+| F4 | Device-resident online queues/readiness/selection/batching/progression, packed transport and peer completion, continuous state and complete training; explicit capacities and safe chunking | device control, packed queue and Ascend C readiness qualified on clean5c5b582; [evidence](evidence/device-control-20260930.md); device queue transactions, broadcast delivery and ready fiber/frame packing qualified on clean eff5945 ([evidence](evidence/device-packing-20260930.md)); count/positive selector and grouped queue commits qualified on clean6220011 ([evidence](evidence/device-selection-20260930.md)); content-driven identity/EMA state + identity-Full forward loop qualified on clean4d2f09e ([evidence](evidence/content-loop-20260930.md)); selected tanh Full and device chunk progression qualified on clean5bf61e3 ([evidence](evidence/selected-full-20260930.md)); general modules/training/peer progression pending |
 | F5 | Complete CPU/NPU streaming/prefill matrix: PDG LibTorch, TimedDAG/Settle LibTorch and PyTorch; fine switches and five presets, multi-device/locality/FP32/FP16 | pending; finite consumers do not close matrix |
 | F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | pending; historical CPU Attention remains supplementary |
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed Trackio/profile/evidence/support claims and no live task jobs | pending |
@@ -178,7 +178,7 @@ has a concrete question, bounds/stops and failure response; waiting is not the m
 work. Keep formal heavy timing uncontended; independent development work may proceed
 without contaminating it. Use available devices within the resource budget, never
 stop unrelated jobs. Commit tested implementation, qualify clean source, commit
-evidence separately; no push. Do not call a failed finite capacity assessment delivery.
+evidence separately; push tested commits under the renewed user authorization. Do not call a failed finite capacity assessment delivery.
 
 ## Six implementation classes
 

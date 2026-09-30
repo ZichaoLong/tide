@@ -76,11 +76,12 @@ training remain independent delivery requirements.
 
 The clean identity-Full qualification remains scoped to source `4d2f09e`
 ([evidence](evidence/content-loop-20260930.md)). The selected matrix Full increment
-has directed development checks: 24 component cases at widths 1/7/33 and chunk
+is qualified on clean `5bf61e3` ([evidence](evidence/selected-full-20260930.md)):
+24 component cases at widths 1/7/33 and chunk
 limits 1/4, plus 160 window/continuation comparisons against independent CPU
 Streaming and Greedy. The latter cover identity/tanh Full, feedback, unequal
 delays, parallel edges, active-only adoption, selected clear and schedule changes.
 The component placement trace has 410 AIV and 16 AI Core tasks, with no recorded
 AiCPU task or host-fallback diagnostic. It includes setup and CPU assertions,
-not steady-state timing. Clean qualification of this increment is pending;
-exact frozen source, jobs and reports are recorded in [STATUS](STATUS.md).
+not steady-state timing. Qualification covers all 14 component cells; exact
+source, jobs and reports are in the evidence manifest and [STATUS](STATUS.md).

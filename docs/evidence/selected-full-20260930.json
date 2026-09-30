@@ -1,0 +1,271 @@
+{
+  "schema": "tide-selected-full-evidence-v1",
+  "source": "5bf61e3bafaa4beda5f5ab8780e34f854582f62f",
+  "runtime": {
+    "arch": "aarch64",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0",
+    "soc": "Ascend910_9392"
+  },
+  "scope": "FP32 inference identity/tanh selected Full and finite content-flow profile; not generic modules/training/throughput",
+  "core_source": "eff5945c741886bf15d6095da38f44ab565ab8e0",
+  "core_cpp_sha256": "d1121e9da4ee03e6e9f229ef97a4c738cde7f1a14afc4b88e66538140b1fe3ed",
+  "component_sha256": "42de78f442568c39cbd77dc799f3b699108518c5ac2896deae1b79af0d14fc05",
+  "binary_sha256": {
+    "tide-device-control-check": "c8ef8ec2709cbe78fc1609a075e94d0415d265814ee790ae88a28d8427286724",
+    "tide-device-numerical-check": "5142929deb69dc3f249f8018e4c915d0d8e75a5905ccb5d88113328691ac1a56",
+    "tide-packed-queue-check": "b1c533d8e5cf9fbe98512671561de17c59550edc0004aecf9c0e0286576a34d4",
+    "tide-device-closure-check": "62c6595434eb16261af81134f785451a4bb2f9a4347e58eda4c4dbc3b2437b87",
+    "tide-device-queue-check": "1e5e05e1049f4d121267a5b99b36c84db3818cd3632d0912acb74df43475199a",
+    "tide-device-broadcast-check": "cf56a0059adaec62f3c713f35e508f5b3340e5e65d6b52758e36cf11f6c12902",
+    "tide-device-ready-check": "4abfdbcc332768d871163634c0127b5a3d26673b4fc1aa3c5559c37c26ef8c44",
+    "tide-device-selector-check": "181ab9ebe5deaec4fbb664075182129b45ce3c2e540bc2d71e4b55af13ee477f",
+    "tide-content-flow-check": "f05d547223be165d7c9c4d75117e7e094aae8356505c7f8a3a59eed145c7ef1d",
+    "tide-packed-full-check": "2219534cbf3732b94880e7451eb149c20a6db0ca8142472880f40a3784232441"
+  },
+  "checks": {
+    "all_component_cells": 14,
+    "cpu_ctests": 4,
+    "selected_full_cases": 24,
+    "content_windows": 160,
+    "events": 788,
+    "actual_emissions": 488,
+    "multi_time_windows": 20
+  },
+  "runs": [
+    {
+      "name": "build-device-full-clean01",
+      "source": "5bf61e3bafaa4beda5f5ab8780e34f854582f62f",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-build-device-full-clean01/status.json",
+          "sha256": "6b4c4ee753b3b73127ea1a5b6bdb5f993bd4618e09b73fad4139fe21140e7612"
+        },
+        {
+          "path": "artifacts/execution-flows-build-device-full-clean01/task.log",
+          "sha256": "baac51fb1d0955e3a9cd74ad61cd7b7474e39110f471c46def691e97a5f2e6b6"
+        }
+      ]
+    },
+    {
+      "name": "device-components-clean04",
+      "source": "5bf61e3bafaa4beda5f5ab8780e34f854582f62f",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/status.json",
+          "sha256": "8b47282be63a3e53efd7eab51adb9a4be8daf28c28fdf48b176bf5a8cde40de2"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/task.log",
+          "sha256": "87020c1ae034e1dd880fdd3df22f45202149117e06a65869140246d705077851"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/result.json",
+          "sha256": "4995a73b458994ea2629462a63137714a78708291fd48dc273fdb4ac29d67e4f"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/control-float32.log",
+          "sha256": "0b1ed177e9b383909e8be4bc9ff6326f13e64fe19f0b3989ec4517a26a5209c7"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/numerical-float32.log",
+          "sha256": "b01dbe4e162f7199a4290b2ed3a2753062a6ef97228f0d17ec6b06e642e6bc68"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/numerical-float16.log",
+          "sha256": "c4ff6543097428541cea0d0494007fc8822d0d07874b9faec10b84e543f57b16"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/queue-float32.log",
+          "sha256": "d3ea5f36f0e4c6b8f9bd0864cb7377a50ddf82a2383f97323792b22525b974f0"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/closure-float32.log",
+          "sha256": "ad0cd3a406e4b1b862acdc93f7a59150fc8e3d4e5fda6323aa1f9e5fd8114faf"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/transaction-float32.log",
+          "sha256": "a30100f5daa462f8e65b7c84382e27d605c879431155cd7c0d7e23d4a7b7f3ec"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/transaction-float16.log",
+          "sha256": "36c928dfc90af5f28944feb6140dafe8bd71cab9b44c634eee08d69f9c128b84"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/broadcast-float32.log",
+          "sha256": "86437064862647ade8994b7e991cfc85018db94b82be994ac231bd25f485f3ee"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/broadcast-float16.log",
+          "sha256": "cf254690990530184cb58eae40b412451df55a47f18bc2e6b87e39ca15f34980"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/ready-float32.log",
+          "sha256": "6c80f3de369866dc53f4decba8efa97d7e8a683d3249fb276a6bab2b15ae9b0e"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/ready-float16.log",
+          "sha256": "56a29cd817315b06ad6b12ac9dd542864049eb384c12ef39e92953e07325d58d"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/selector-float32.log",
+          "sha256": "b109b535c140e9dfd2f49b8f58ef1c4dfcdba84aa062ec915cbfd0e192e0f085"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/content-float32.log",
+          "sha256": "f3e7b102ade64004d0bf7ae27d7a1991ff97392efc34ddd00d38fb7546381119"
+        },
+        {
+          "path": "artifacts/execution-flows-device-components-clean04/verified/full-float32.log",
+          "sha256": "69b1814d46c2e3a4d8668d02b173a314124d77ad3303e5ce2893c9726ffd80f2"
+        }
+      ]
+    },
+    {
+      "name": "device-full-profile-clean01",
+      "source": "5bf61e3bafaa4beda5f5ab8780e34f854582f62f",
+      "dirty": false,
+      "state": "passed",
+      "exit_code": 0,
+      "files": [
+        {
+          "path": "artifacts/execution-flows-device-full-profile-clean01/status.json",
+          "sha256": "3dedfee1bb920bf7d1c8230f8ac4784c27099bb37dbd0660debcd4209bc7946f"
+        },
+        {
+          "path": "artifacts/execution-flows-device-full-profile-clean01/task.log",
+          "sha256": "6c9f6e99fc89e46d443c6a05bbeaf0c58bf5bb34cc4c6268fa23d02325d8ef2e"
+        },
+        {
+          "path": "artifacts/execution-flows-device-full-profile-clean01/profile/result.json",
+          "sha256": "3348cd78500700981c5f889e826fbd64f9bf8c8a702e7c73d3fa56a7a8d1dfe0"
+        },
+        {
+          "path": "artifacts/execution-flows-device-full-profile-clean01/profile/profile.log",
+          "sha256": "7060e3af43225473f45b5e3fadbc364182c7360b5411da455ce092ac9f8b79fc"
+        }
+      ]
+    }
+  ],
+  "placement": [
+    {
+      "operators": 426,
+      "engines": {
+        "AI_VECTOR_CORE": {
+          "count": 410,
+          "summed_task_us": 921.28,
+          "summed_task_fraction": 0.9343989614183131
+        },
+        "AI_CORE": {
+          "count": 16,
+          "summed_task_us": 64.67999999999999,
+          "summed_task_fraction": 0.06560103858168688
+        }
+      },
+      "operators_by_type": [
+        {
+          "engine": "AI_CORE",
+          "operator": "BatchMatMulV2",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 16,
+          "summed_task_us": 64.67999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 48,
+          "summed_task_us": 68.01999999999998
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "FLOAT;INT64;INT64",
+          "count": 96,
+          "summed_task_us": 267.7999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "INT32;INT32;INT64",
+          "count": 48,
+          "summed_task_us": 123.22
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Mul",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 8,
+          "summed_task_us": 13.5
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ScatterUpdate",
+          "input_dtypes": "FLOAT;INT64;FLOAT",
+          "count": 24,
+          "summed_task_us": 68.16000000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Tanh",
+          "input_dtypes": "FLOAT",
+          "count": 24,
+          "summed_task_us": 45.02
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "BOOL",
+          "count": 6,
+          "summed_task_us": 10.58
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "FLOAT",
+          "count": 30,
+          "summed_task_us": 52.52000000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT32",
+          "count": 12,
+          "summed_task_us": 18.439999999999998
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT64",
+          "count": 66,
+          "summed_task_us": 116.98000000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_full_plan",
+          "input_dtypes": "N/A",
+          "count": 48,
+          "summed_task_us": 137.04
+        }
+      ],
+      "inputs": {
+        "op_summary_20260930143022.csv": "6f32a189d37086c99a69cad5674f136e35e651c52920a1d44ccffe2ebd65d93a",
+        "api_statistic_20260930143022.csv": "bedc44a8d0b540c0ef83637721142a82e8b299b6cbc0ee6b520dce964ea5a596"
+      }
+    }
+  ],
+  "limits": [
+    "Placement includes setup and CPU assertions, not throughput.",
+    "Scalar AIV Aggregate/state and metadata loops remain.",
+    "No FP16 content loop, general Read/modules, peer delivery or training qualification.",
+    "Local Full scratch estimate does not cover full model/KV/training memory.",
+    "Abnormal runtime finalization is outside this source and is under separate development."
+  ]
+}

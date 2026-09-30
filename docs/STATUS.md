@@ -1,12 +1,11 @@
 # Current handoff
 
-Updated 2026-09-30T06:16:22.753216+00:00. **PAUSED BY USER AT THE NEXT IMPLEMENTATION COMMIT — renewed confirmation required.**
+Updated 2026-09-30T06:23:33.804715+00:00. **ACTIVE — user resumed the execution contract; push each tested commit.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
-No subagents, no push. Reference repos and ObsidianVault remain read-only.
-User now explicitly requests: finish the next commit, then stop and report for
-realignment. Do not resume further implementation/experiments without new user
-confirmation. This overrides the earlier autonomous-continuation instruction.
+No subagents. Reference repos and ObsidianVault remain read-only. The user has
+explicitly resumed work toward the agreed contract and authorized pushing future
+commits. The previous next-commit pause is revoked. Preserve unrelated dirty work.
 
 ## Contract and next action
 
@@ -16,11 +15,22 @@ family's legal topology/input, including positive-delay PDG feedback. No numeric
 route prepass, whole-window potential expansion or fixture shortcuts. Residency
 includes online decisions and progression, not just tensor storage or fixed capture.
 
-STOP after committing the selected matrix Full increment described below. All
-current-increment jobs are terminal and passed. No clean qualification or further
-implementation/experiment may start until the user confirms the realigned plan.
-At re-entry, inspect HEAD and this handoff; the earlier autonomous-continuation
-permission does not override this pause.
+Clean `5bf61e3` qualification PASSED: build-device-full-clean01,
+device-components-clean04 (all14 cells), device-full-profile-clean01.
+Evidence [selected-full-20260930](evidence/selected-full-20260930.md). All three
+jobs are terminal exit0. Source full-clean01/build device-full-clean01 retained.
+NEXT: finish runtime-resource guard; inspect two active core builds below,
+then build-device-failure-dev01 and its bounded failure/component gates.
+
+New uncommitted runtime-resource guard and deterministic CANN failure gate:
+last-session finalization refuses live/quarantined raw owners, quarantined workers
+refuse new work, failed close poisons its program. Tests inject partial creation,
+finish/submission errors, wait failure, retriable unbind and permanent unknown
+completion. No physical device hang is induced. Submit independent CPU/NPU core
+builds build-runtime-guard-{cpu,npu}-dev01 from frozen runtime-guard-dev01,
+base5bf61e3 dirty overlay, jobs2/1800s. Then build component and run failure gates.
+No runtime-result claim for this increment yet. No new full-size timing;
+historical CPU Attention remains suspended.
 
 ## Current increment: selected matrix Full
 
@@ -50,13 +60,12 @@ NaN poison; content continuation uses chunks1/3 against independent CPU Streamin
 and Greedy. Content cases preserve feedback, parallel edges, unequal delays,
 missing/present-zero inputs, exact large clocks/counts, active-only adoption,
 selected clear and restoring the candidate's own cut under the other schedule.
-Both selected FP32 cells passed; this was not a fresh all14-cell regression.
+These directed development cells were followed by the clean all14-cell qualification above.
 Profiling found no AiCPU task or host-fallback diagnostic. It includes construction
 and CPU assertions; no throughput or complete-flow placement claim follows.
 
-These are **development** results on the frozen overlay, not qualification of a
-clean implementation commit. That qualification intentionally waits for renewed
-authorization. The existing identity-Full qualification remains on clean4d2f09e:
+The table above preserves the earlier development results. Clean implementation
+qualification is now recorded in the selected-full evidence linked above. The existing identity-Full qualification remains on clean4d2f09e:
 [content-loop-20260930](evidence/content-loop-20260930.md), all13 component cells;
 content80 windows/394 events/244 emissions/10 multi-time windows and11606 AIV
 placement records. Selector/group evidence on clean6220011 is
@@ -64,10 +73,10 @@ placement records. Selector/group evidence on clean6220011 is
 eff5945 packing/lifecycle evidence is
 [device-packing-20260930](evidence/device-packing-20260930.md).
 
-Suggested order FOR REALIGNMENT ONLY (not authorization to execute):
+Confirmed execution order:
 
-1. Qualify this implementation commit on a clean frozen source; then close the
-   outstanding injected-failure/runtime-lifetime gate before broad promotion.
+1. Close the injected-failure/runtime-lifetime gate before broad promotion;
+   selected-Full clean qualification is complete.
 2. Expand real module contracts/attention and packed numerical kernels, full
    memory planning and FP16; retain arbitrary legal topology/input handling.
 3. Complete public graph/language/preset coverage, peer progression and actual
@@ -210,5 +219,5 @@ Trackio `/home/zlong/venvs/trackio/bin/python`, project `tide-execution-flows`.
 background.slice service. Use --commit for qualification. Placeholders:
 {python}, {base}, {source}, {out}. Long jobs retain exact commands/status/logs.
 On re-entry run `git status --short --branch` and `python scripts/status.py`, read
-this handoff and actual terminal records, then honor the user pause. Resume F1–F7
-only after renewed user confirmation. Submitted/running jobs are never passing evidence.
+this handoff and actual terminal records, then continue F1–F7 under the renewed
+user authorization. Push tested commits; do not resume the historical slow job blindly. Submitted/running jobs are never passing evidence.
