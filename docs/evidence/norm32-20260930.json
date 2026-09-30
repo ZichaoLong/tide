@@ -1,0 +1,111 @@
+{
+  "schema": "tide-public-norm32-evidence-v1",
+  "source": "0e66d89c680a84c4ee1f2b47b89e224cf633e0eb",
+  "scope": "public Python, native adapter and standalone host-scheduled norm-fp32-v1 Read; training fixtures, not device-resident training or throughput",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "cpu_tests": 8901,
+    "cpu_ctests": 8,
+    "python_npu_cases": 18,
+    "native_npu_cases": 18,
+    "standalone_schedule_read_combinations": 6,
+    "standalone_updates": 18,
+    "standalone_analytic_payload_dtypes": [
+      "float16",
+      "float32"
+    ]
+  },
+  "runs": [
+    {
+      "name": "norm32-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "c31ee28201121cf93bbc227846801a55285365c006329fc245df04f47f7d23a1",
+        "task.log": "ada4fd373dd35b7ea3a90742a05e1da0685e8147c5010ad51968b22ca92b22b8",
+        "verified/result.json": "0e5b78f657f44dd43025a748529cd6f776152f59d3fd7f8fb1ee6100634690c2",
+        "verified/tests.log": "da9ec5b88af5e5f3c5da38d0e62e4ed9f6206a1a0f975680f2e8af4ca9bf0ce7"
+      }
+    },
+    {
+      "name": "build-norm32-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "d4c98fe909130fb15aadf04293631e5a46515ef469741e7f0493473abd6cc654",
+        "task.log": "0441c0ea94974cdf0cd3240859628a0a8c12d5b08270809c52f2dba67dc03784"
+      }
+    },
+    {
+      "name": "build-norm32-native-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "ecbdc12934988f482bfb2e4751aff0ea06f82ba1adc308448429b30c923fc60f",
+        "task.log": "3e711e4221930ae3eed4f02069a1c95264929554eb5e9549c92c3110da2dc50b"
+      }
+    },
+    {
+      "name": "norm32-python-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "be15ccec91b6545254904bba19dbe4bcb5c11b6760d5458447f5a6284a5dcba7",
+        "task.log": "74944d2ed62f186497d89fddbdabb4da77d4473d9658d524987a5c204181b921",
+        "verified/result.json": "15987e9c2bc6666c2d89c18bffa62cdca314d3b25e76891c8b4848f0ccf555fd"
+      }
+    },
+    {
+      "name": "norm32-native-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "9b43e320aec400047f5b7fac5d8982990974238601fedfefb579390d5f638d14",
+        "task.log": "9cbf79fa0b493ed1752dee27bf7cb63b328bb0a9024907038fd2c63ba0b929a5",
+        "verified/result.json": "1c94e8b0242cfc547f7b54caee5e8562ee2f49e3e1e080c4f52d5f353afdb6bb"
+      }
+    },
+    {
+      "name": "norm32-standalone-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "cf19f94583f51e160782208232edd3c3e5b53a5a7878b88744c5a5e92ddbb7a8",
+        "task.log": "e612954a3e52cf3c23ce0c4df969560b242914f1fa2044c1c993c879c89286cd"
+      }
+    },
+    {
+      "name": "norm32-native-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "089632a4a581bc879905474479a30536aae8aa05dd2b59480bfcdb90cde48c16",
+        "task.log": "317c36b8278185b1b89e2d18b03dfb3d04d4d33fc68e7e6b12c1a2d5379412c8",
+        "profile/result.json": "64ffc08bbd60ead82b55cfdad79ad8d601932f9a418cc4debbefaee7d7259fbe",
+        "profile/trace.json": "0653e8f813d998a3391f182409b07aff9929498b56d6487a97e4714f9fc1fe43"
+      }
+    }
+  ],
+  "placement": {
+    "case": "norm32-timed-dag-proposal-greedy",
+    "scope": "candidate-only warm eager forward/backward/AdamW",
+    "caveat": "device kernels and host transfers are evidence for this case; not exhaustive absence of fallback",
+    "kernel_events": 604,
+    "kernel_types": {
+      "KERNEL_AIVEC": 500,
+      "KERNEL_MIX_AIV": 84,
+      "KERNEL_AICORE": 20
+    },
+    "transfer_and_scalar_events": {
+      "aten::_local_scalar_dense": 97,
+      "MEMCPY_ASYNC": 72
+    },
+    "observed_fallback_events": []
+  }
+}

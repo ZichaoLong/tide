@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T09:37:20.136523+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T09:48:03.980178+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -73,7 +73,7 @@ Development304 CPU checks,8 CTests,18 Python/18 native NPU fixtures and standalo
 6 combinations/18 updates passed; candidate-only profile604 kernels passed.
 
 Clean source norm32-clean01 at0e66d89:
-- norm32-cpu-clean01 RUNNING full verify.py CPU regression; build/8 CTests PASSED.
+- norm32-cpu-clean01 PASSED full verify.py CPU regression:8901 tests +8 CTests.
   4200s total/jobs2; build norm32-cpu-clean01, output runs/.../verified.
 - build-norm32-npu-clean01 and build-norm32-native-npu-clean01 PASSED.
 - norm32-python-npu-clean01 and norm32-native-npu-clean01 PASSED18 cases each.
@@ -81,8 +81,8 @@ Clean source norm32-clean01 at0e66d89:
   FP16/FP32 analytic norm tests. Standalone loader resolves in the authorized module.
 - norm32-native-profile-clean01 PASSED604 kernels,12 Norm tasks,97 host scalar events,
  72 memcpy events; no AiCPU/fallback. Host-scheduled training, not resident training.
-NEXT inspect CPU terminal result, then commit compact immutable core evidence.
-No pending permission or pause. Do not relabel live regression as passed.
+[Immutable public Norm32 evidence](evidence/norm32-20260930.md).
+No pending permission or pause.
 
 ## Current device Norm32/vector Read increment
 
@@ -118,9 +118,12 @@ chunks;32 component cases/nine profiles plus96 complete windows planned.
 build-device-lh-full-dev01 PASSED four CPU CTests/loader from frozen lh-full-dev01,
 matching norm32-npu-clean01 core. NEXT device-lh-full-gates-dev01: lh-full/full/norm32/failure,
 FAILED first lh-full component numerical equality (exit2, not timeout).
-Original logs retained. device-lh-full-diagnostic01 RUNNING, frozen lh-full-diagnostic01,
-links original implementation with diagnostic-only check to identify width/profile/row.
-300s total/queue120s. No tolerance relaxation. After a diagnosed fix, new build/gates.
+Original logs retained. diagnostic01 isolated width7 LayerNorm differences about1e-5.
+Bounded mode probe completed: modes0/1 same mismatch; mode2 rejects161002.
+Independent FP64 shows CPU FP32 itself differs above fixed tolerance for low variance.
+Component-only conditioning budget/independent FP64 check added; complete graph
+comparison stays strict. device-lh-full-precision-dev02 RUNNING diagnostic-only relink,
+300s/queue120s; after success rebuild frozen source and run full gates/profile.
 This is unverified FP32 broadcast inference; no slot-affine or training claim.
 
 ## Retained failures and older work
