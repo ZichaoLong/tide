@@ -1,0 +1,91 @@
+{
+  "schema": "tide-device-event-batch-evidence-v1",
+  "source": "26aa09f5a4dc8074fa49235e0b117ad72a9bf7ae",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "single-device FP32 HARD online event-attention node-time batches; not throughput, resident training or full public matrix",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "44d0027b111f302c36ca92ba2e70333688d885b97f8f31d77075198867cc1e1c",
+  "build_manifest_sha256": "a23c54e578de2bf7bd603c9c89a1bee82ae166722025e3d7eb7da0e0293f855d",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 30,
+    "analytic_and_restore_cases": 72,
+    "general_windows_and_restores": 216,
+    "general_multi_time_windows": 18
+  },
+  "runs": [
+    {
+      "name": "build-device-event-batch-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "971433c3a59d510bb645070d3be7e7a96e79bcb039171ad204e559fc4ae59c27",
+        "task.log": "5023f5e13106bb9a0a4251ad0acd9199be7041573b08d90c99b69a3db6e33278"
+      }
+    },
+    {
+      "name": "device-event-batch-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "3aa6f58d8f19a8e539117ed820917033c8e2a6a16a9f2cf008746782c0648b7b",
+        "task.log": "9e47bef75143fcf6eda73ef48e07d274801208e41905426042286794f6b06fa2",
+        "verified/result.json": "023f52c74ea43f84582a1c28566be72039a7b072c4207fe63a1a13e91cd86237",
+        "verified/event-batch-float32.log": "ed67ff0bd86513845009e0218d35d7e563c6dae51067d8e682ef015465111504"
+      }
+    },
+    {
+      "name": "device-event-batch-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "be925443e53881afb6c77e6455cf6b85108725087c27f915e790dbadc882d2c1",
+        "task.log": "99338ff63a34e58e1be96cbc0fa232e6bcf182edb7de5b7e6b13baeab74fbfb4",
+        "profile/result.json": "612161888007634f7f16efebc1f0dac4503a03df9347d2b93c4f03e18ef76582"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 97088,
+      "AI_CORE": 3075
+    },
+    "kernels": {
+      "BatchMatMulV2": 3075,
+      "GatherV3": 23346,
+      "tide_attention_merge": 1501,
+      "tide_attention_softmax": 806,
+      "tide_attention_tile": 1501,
+      "tide_closure": 741,
+      "tide_content_state": 453,
+      "tide_emission_plan": 453,
+      "tide_event_cache": 1668,
+      "tide_event_indices": 84,
+      "tide_event_payload": 779,
+      "tide_event_plan": 834,
+      "tide_fiber_chunk": 3226,
+      "tide_frame_select": 453,
+      "tide_full_plan": 680,
+      "tide_journal": 6198,
+      "tide_queue_propose": 1647,
+      "tide_read_reduce": 453,
+      "tide_ready_pack": 741,
+      "tide_state_read": 453,
+      "tide_sum_plan": 453,
+      "tide_vector_read": 453,
+      "tide_vector_state": 453,
+      "tide_vector_sum": 453
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930225620.csv": "c17350379721f8dbb54fd4ca4fda0da9df84fac90ecae606c9dba079befd55ce",
+      "api_statistic_20260930225620.csv": "bdffde87a6bb72cfca8c719f30154f2a10c98cbf1636a63d65bfce4c6d82e074"
+    },
+    "host_fallback_diagnostic": false
+  }
+}

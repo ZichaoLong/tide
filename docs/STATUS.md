@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T14:40:01.232703+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T14:58:00.251704+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **0b724a3**, memory evidence committed/pushed; implementation523b323. No pending authorization or pause. No subagents.
+HEAD **26aa09f**, event batch implementation committed and pushed. Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -32,24 +32,29 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
 
 ## Active work and next actions
 
-1. Event node-time batching is ready to commit. Full frozen event-batch-dev01
+1. Event node-time batching committed as26aa09f. Full frozen event-batch-dev01
    build/four CPU CTests/all30 cells and independent profile PASSED,all terminal0.
    New gate72 analytic/restore cases +216 general windows/restores,18 actual
    multi-time windows. Profile97,088 AIV+3,075 AI Core,no AiCPU/fallback. Existing
    memory/attention/fiber/clock/selection/transport/lifecycle regressions all pass.
-2. Commit/push only event-batch implementation/registry/CMake/docs, preserving
-   older accelerator dirty work below. Then full exact-commit event-batch-clean01
-   build (1800s,jobs2),all30 cells (900s,one NPU,queue120s) and event-batch profile;
-   record reviewed clean evidence in a separate commit. Matching core remains
-   origins-npu-clean01. No throughput or resident training claim.
+2. Event clean26aa09f full build/four CTests/all30 cells/independent profile
+   PASSED,all terminal0. Evidence device-event-batch-20260930.{json,md} reviewed;
+   next commit/push evidence separately.97,088 AIV+3,075 AI Core,no AiCPU/fallback.
+   Matching core origins-npu-clean01. No throughput or resident training claim.
 3. Event implementation: two device loops pack all actual ready QKV,then queries/
    output. Immutable old KV plus compact new rows supports causal prefix/window
    indices even when a stage has more events than semantic window capacity.
    Only final owner cache commits; all intermediate diagnostic slots are retained.
    Observe-all without selected clear admits node-time batches; selection-dependent
    adoption/clear and mixed fiber regions keep legal single-frame fallback.
-   Changed kernels/helpers and event_batch_check.cpp are not yet committed.
-4. Next implementation is fiber node-time batches, then remaining module/public
+   Changed kernels/helpers and event_batch_check.cpp are committed.
+4. Fiber node-time batch changes are dirty; build-device-fiber-batch-dev01 RUNNING: packed_fiber_attention,
+   fiber_cache,content_profile,tiled_attention and six Ascend C kernels. They add
+   per-event query_bias,prefix lengths and final-only owner commits. fiber_batch_check and build/registry added:96 anchors/restores,480 general windows
+   and3 multi-event saturation checks. NOT YET RUN. Build-device-fiber-batch-dev01 uses
+   frozen fiber-batch-dev01/full independent build (1800s,jobs2),then all31 cells
+   with fiber-batch first (900s,one NPU,queue120s),then independent profile. Then
+   remaining module/public
    matrix/peer progression/resident backward/VJP/optimizer and staged performance.
    Fiber design must preserve same-fiber all-key visibility and exact repeated
    log-bias subtraction. One vector loop per owner/cache tile can process successive
@@ -144,9 +149,10 @@ feedback/Read/clear/origin/clock/selection coverage. rtol1e-5/atol1e-6 unchanged
   Native core norm32 is0e66d89; stable origin-order fix832a881 underlies the matching
   core build. These finite profiles do not certify all module/training/matrix work.
 
-All device attention adapters still use one complete region-time frame per stage.
-Independent owners/messages remain packed. These clean reports establish parity/
-placement, not throughput or training. Cache bounds refuse explicitly, not evict.
+Earlier attention qualifications used one complete region-time frame per stage.
+Event batching26aa09f now extends that in development evidence; dirty fiber changes
+are not yet verified. These reports establish parity/placement,not throughput or
+training. Fiber cache bounds refuse explicitly,not evict.
 
 ## Preserved older work and timing
 
