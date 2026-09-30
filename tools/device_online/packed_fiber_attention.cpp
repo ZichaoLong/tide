@@ -36,11 +36,15 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
   for(int64_t n=0;n<nodes;++n)if(node_map_[n]>=0)
     factors[node_map_[n]]=float(1.0/std::sqrt(double(width/node_heads_[n])));
   auto scales=at::tensor(factors,at::kFloat).to(opts.device());
+  // Sum-only graphs retain their original path. Other profiles share the same
+  // QKV/cache work and apply coefficients only to the completed query outputs.
+  const auto pool_kinds=pool_?pool_->kinds():at::zeros({parameters},longs);
+  auto coefficients=at::ones({rows},opts);
   auto payload=[&](int64_t mode,const at::Tensor& projected,const at::Tensor& q) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_payload)(32,stream,
       ptr(out.events),ptr(out.tokens),ptr(out.counts),ptr(ids),ptr(heads),ptr(scales),ptr(projected),ptr(q),
-      ptr(out.cache.key),ptr(out.cache.value),ptr(out.cache.bias),ptr(decay),ptr(pooled),ptr(error),width,capacity,chunk,mode),"packed fiber payload");},
-      {out.events,out.tokens,out.counts,ids,heads,scales,projected,q,out.cache.key,out.cache.value,out.cache.bias,decay,pooled,error});
+      ptr(out.cache.key),ptr(out.cache.value),ptr(out.cache.bias),ptr(decay),ptr(pool_kinds),ptr(coefficients),ptr(pooled),ptr(error),width,capacity,chunk,mode),"packed fiber payload");},
+      {out.events,out.tokens,out.counts,ids,heads,scales,projected,q,out.cache.key,out.cache.value,out.cache.bias,decay,pool_kinds,coefficients,pooled,error});
   };
   payload(0,queries,queries);
   auto plan=[&](int64_t mode,int64_t target) {
@@ -76,6 +80,7 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
     p.batch_matmul(prob.reshape({chunk*h,1,capacity}),vt.reshape({chunk*h,capacity,d}),result.reshape({chunk*h,1,d}));
     p.index_copy(query_output,0,destination,result.reshape({chunk,width}));p.branch(branch,{begin});p.mark(end);
   }
+  if(pool_)coefficients=pool_->append(p,out.events,out.tokens,out.counts,ready,error,chunks);
   payload(2,queries,query_output);
   auto ow=at::empty({chunk,width,width},opts),ob=at::empty({chunk,1,width},opts),value=at::empty_like(x);
   auto begin=p.label(),work=p.label(),end=p.label();p.copy(cursor,zero);p.mark(begin);plan(2,0);p.branch(branch,{end,work});p.mark(work);

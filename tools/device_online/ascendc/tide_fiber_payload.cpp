@@ -1,9 +1,10 @@
 #include "fiber_vector.h"
 namespace {using I=int64_t;}
-// mode0: decay real old biases, mode1: QKV placement, mode2: sum query rows.
+// mode0: decay real old biases, mode1: QKV placement, mode2: pool query rows.
 extern "C" __global__ __aicore__ void tide_fiber_payload(GM_ADDR events,GM_ADDR tokens,GM_ADDR counts,
     GM_ADDR ids,GM_ADDR heads,GM_ADDR scales,GM_ADDR projection,GM_ADDR queries,GM_ADDR key,GM_ADDR value,
-    GM_ADDR bias,GM_ADDR decay,GM_ADDR pooled,GM_ADDR error,int64_t width,int64_t capacity,int64_t chunk,int64_t mode) {
+    GM_ADDR bias,GM_ADDR decay,GM_ADDR pool_kinds,GM_ADDR coefficients,GM_ADDR pooled,GM_ADDR error,
+    int64_t width,int64_t capacity,int64_t chunk,int64_t mode) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)events);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -36,10 +37,14 @@ extern "C" __global__ __aicore__ void tide_fiber_payload(GM_ADDR events,GM_ADDR 
       op.save(x,(__gm__ float*)value,(owner*capacity+position)*width+start,size);
     }else {
       const I event=task/tiles,start=(task%tiles)*256,first=e[event*7+5],count=e[event*7+4]-e[event*7+3];
+      const I kind=((__gm__ I*)pool_kinds)[e[event*7+2]];
       const uint32_t size=width-start<256?width-start:256;
       AscendC::Duplicate(x,0.f,size);AscendC::PipeBarrier<PIPE_V>();
       for(I row=first;row<first+count;++row){op.load(y,(__gm__ float*)queries,row*width+start,size);
+        if(kind>=2){const float coefficient=((__gm__ float*)coefficients)[row];
+          AscendC::Muls(y,y,coefficient,size);AscendC::PipeBarrier<PIPE_V>();}
         AscendC::Add(x,x,y,size);AscendC::PipeBarrier<PIPE_V>();}
+      if(kind==1){AscendC::Muls(x,x,1.f/static_cast<float>(count),size);AscendC::PipeBarrier<PIPE_V>();}
       op.save(x,(__gm__ float*)pooled,e[event*7]*width+start,size);
     }
   }

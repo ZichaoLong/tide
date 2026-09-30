@@ -6,7 +6,7 @@ and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.
 Its finite module scope does not close the complete execution-flow contract.
 
 The accepted profile uses existing semantics: sum Aggregate with physical source
-scales; identity, EMA, Add-repeat or LH fiber-sum attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
+scales; identity, EMA, Add-repeat or LH fiber attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity, tanh, SwiGLU or LH
 Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
 apply their declared activation/normalization to comparison without that residual.
@@ -17,7 +17,7 @@ projection and phase-restricted slot emission are supported; other unavailable
 modules/region programs explicitly fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
 
-The bounded `lh-fiber-attention-sum-repeat-v1` adapter keeps persistent key/value/
+The bounded `lh-fiber-attention-*-repeat-v1` adapter keeps persistent key/value/
 log-bias tensors and int64 lengths on the device. Static tables contain only actual
 attention owners. Device planning orders the real source-weighted message rows by
 local slot; it never substitutes Aggregate summary content for those rows. QKV and
@@ -27,6 +27,23 @@ value products execute as CANN tensor operations. Every current query sees all o
 keys and all keys in its fiber. Physical query chunking does not add a triangular
 mask or change the global softmax denominator. This first adapter pads the key axis
 to the declared cache capacity; key-axis tiling is still pending.
+
+The five existing [post-attention pooling profiles](fiber-pooling.md) share this
+QKV/cache path: sum, mean, linear, active-softmax and all-softmax. Coefficients
+apply only to the completed query output rows, before the output projection and
+its once-per-event bias. Mean counts present logical sources; active-softmax
+normalizes only their logits, while all-softmax includes absent logical slots.
+Physical aliases do not enlarge that logical domain. A zero-valued source or
+zero linear coefficient still contributes its full Q/K/V row. Negative linear
+weights are supported. Aggregate and its observable contributions remain unchanged.
+
+Softmax pooling packs only actual events of the requested profile in a device
+loop. Logits and coefficients use bounded buffers; absent slots use negative
+infinity, while independent padding rows have their own finite denominator.
+Actual local slots determine gathering and coefficient placement on-device.
+Pooling reservations are included before choosing the effective attention chunk.
+Sum-only graphs omit the additional pooling stage. These inference paths use
+the same parameter/profile validation as the independent core reference.
 
 For this adapter the ready planner exposes at most one complete region-time frame
 per sample and attention region per iteration. This is an explicit implementation
@@ -41,9 +58,10 @@ empty old caches do no decay work. Cache row count and observation count are dis
 `kv_rows` bounds each attention owner's simultaneously retained cache, including its
 complete next fiber; it never evicts or drops messages. Exceeding it fails with code11
 before a live-state commit. `attention_chunk_rows` bounds physical message/query/
-output rows; the remaining byte budget can reduce it. Cache/parameter/packed scratch
+output and softmax-pooling event rows; the remaining byte budget can reduce it. Cache/parameter/packed scratch
 reservations leave at least one row of the following tanh Full work, using that
-planner's own footprint, before choosing a larger attention chunk. `attention_chunks`, the effective
+planner's own footprint, before choosing a larger attention chunk. `attention_chunks` includes
+executed pooling chunks as well as QKV/query/output chunks. The effective
 row limit and `attention_kv_peak`/`attention_kv_capacity` expose actual work/capacity.
 `kv_trace_rows` separately bounds optional old/proposed cache diagnostics per window.
 A single stage that exceeds its diagnostic buffer fails with code12; cumulative
@@ -51,7 +69,7 @@ journal capacity retains the shared journal refusal. Lean execution omits these
 copies. Explicit snapshots include exact key/value/log-bias slots; the authoritative
 device cache survives windows that skip host exports. Initial capacity, work-limit
 and runtime refusals preserve the existing restore-after-failure contract.
-Other fiber pooling profiles, event GQA/window attention, FP16 and resident backward
+Event GQA/window attention, FP16 and resident backward
 are separate capabilities and remain rejected by this adapter.
 
 For `InputOrigin`, a static edge table declares the visible port and int64 position

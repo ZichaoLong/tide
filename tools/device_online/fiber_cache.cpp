@@ -12,7 +12,7 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   std::vector<int64_t> heads,config;
   for(int64_t n=0;n<nodes_;++n) {
     const auto& node=profile.graph.nodes[n];
-    const bool enabled=!node.identity&&node.memory=="lh-fiber-attention-sum-repeat-v1";
+    const bool enabled=!node.identity&&is_fiber_attention_profile(node.memory);
     node_map_.push_back(enabled?parameters_++:-1);node_heads_.push_back(node.query_heads);
     const auto& region=profile.graph.regions[node.region];
     adopt_all_.push_back(region.observe_all);clear_.push_back(node.clear);
@@ -31,15 +31,20 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   const auto max_heads=*std::max_element(heads.begin(),heads.end());
   // Include both cache arenas, independent padding, row work, diagnostic copies,
   // all head-group pack/score buffers and immutable parameter tables.
-  const long double fixed=24.L*(owners_*static_cast<long double>(capacity_)+1)*(2.L*width_+1)
+  const bool pooled=std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){
+    return !n.identity&&is_fiber_attention_profile(n.memory)&&n.memory!="lh-fiber-attention-sum-repeat-v1";});
+  const auto pool_fixed=pooled?PackedFiberPool::reserved_bytes(profile,rows_,0):0.L;
+  const auto pool_row=pooled?PackedFiberPool::reserved_bytes(profile,rows_,1)-pool_fixed:0.L;
+  const long double fixed=pool_fixed+24.L*(owners_*static_cast<long double>(capacity_)+1)*(2.L*width_+1)
     +48.L*(parameters_+1.L)*width_*width_+128.L*(rows_+1.L)*(width_+8.L)
     +(limits.diagnostics?24.L*limits.kv_trace_rows*(2.L*width_+8):0);
-  const long double per_row=96.L*width_*width_+256.L*width_+256
+  const long double per_row=pool_row+96.L*width_*width_+256.L*width_+256
     +head_groups_.size()*(24.L*capacity_*width_+24.L*max_heads*capacity_+128.L*width_);
   if(fixed+per_row>budget)throw std::invalid_argument("fiber cache and one query row exceed workspace budget");
   chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(rows_),
     static_cast<long double>(limits.attention_chunk_rows),(budget-fixed)/per_row}));
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);
+  if(pooled)pool_=std::make_unique<PackedFiberPool>(profile,device,rows_,chunk_);
   auto opts=at::TensorOptions().dtype(at::kFloat);auto longs=opts.dtype(at::kLong);
   qkv.push_back(at::zeros({width_,3*width_},opts));bias.push_back(at::zeros({3*width_},opts));
   out.push_back(at::zeros({width_,width_},opts));ob.push_back(at::zeros({width_},opts));

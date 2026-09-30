@@ -1,6 +1,7 @@
 #pragma once
 #include "content_profile.h"
 #include "device_journal.h"
+#include "packed_fiber_pool.h"
 
 namespace tide::device_online {
 struct FiberCache {at::Tensor key,value,bias,lengths;};
@@ -34,5 +35,6 @@ class PackedFiberAttention {
   at::Tensor chunks_,peak_;
   FiberCache cache_;
   std::unique_ptr<DeviceJournal> journal_;
+  std::unique_ptr<PackedFiberPool> pool_;
 };
 } // namespace tide::device_online

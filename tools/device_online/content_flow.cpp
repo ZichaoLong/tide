@@ -62,7 +62,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   }
   if(has_lh)lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,l.full_chunk_rows,full_budget);
   full_budget-=lh_full?lh_full->reserved_bytes():0;
-  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&n.memory=="lh-fiber-attention-sum-repeat-v1";})) {
+  if(std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){return !n.identity&&is_fiber_attention_profile(n.memory);})) {
     // Leave the minimum remaining Full work before growing an attention chunk.
     // Otherwise a legal smaller query chunk could be rejected during Full setup.
     const auto minimum_full=PackedFull::minimum_bytes(kinds,width);

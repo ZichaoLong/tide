@@ -11,13 +11,13 @@ extern "C" __global__ __aicore__ void tide_fiber_chunk(GM_ADDR events,GM_ADDR to
   auto e=(__gm__ I*)events,t=(__gm__ I*)tokens,c=(__gm__ I*)counts,pos=(__gm__ I*)cursor;
   auto s=(__gm__ I*)source,p=(__gm__ I*)parameter,d=(__gm__ I*)destination,index=(__gm__ I*)ids;
   go[0]=0;for(I i=0;i<chunk;++i){s[i]=rows;p[i]=parameters;d[i]=rows+i;index[i]=-1;}
-  I filled=0;const I length=c[mode==2?1:0];
+  I filled=0;const I length=c[mode>=2?1:0];
   while(status[0]==0&&pos[0]<length&&filled<chunk) {
-    const I row=pos[0]++,owner=mode==2?e[row*7+2]:t[row*4+3];
-    if(mode==1&&((__gm__ I*)heads)[owner]!=target_heads)continue;
+    const I row=pos[0]++,owner=mode>=2?e[row*7+2]:t[row*4+3];
+    if((mode==1||mode==3)&&((__gm__ I*)heads)[owner]!=target_heads)continue;
     index[filled]=row;p[filled]=owner;
-    s[filled]=mode==2?e[row*7]:mode==0?t[row*4]:row;
-    d[filled]=mode==2?e[row*7]:row;++filled;
+    s[filled]=mode>=2?e[row*7]:mode==0?t[row*4]:row;
+    d[filled]=mode>=2?e[row*7]:row;++filled;
   }
   if(status[0]==0&&filled) {
     auto n=(__gm__ I*)chunks;if(n[0]==I(0x7fffffffffffffff))status[0]=5;

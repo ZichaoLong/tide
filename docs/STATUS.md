@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T12:11:02.581334+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T12:29:26.360747+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-HEAD081f567 committed/pushed. No subagents. Reference repositories and ObsidianVault
+HEADaa1cef3 committed/pushed. No subagents. Reference repositories and ObsidianVault
 are read-only. Preserve the older accelerator_scale/flow dirty work listed below.
 
 ## Authoritative scope and next actions
@@ -29,14 +29,40 @@ Three fresh processes before performance recommendations. CUDA device execution 
 target-machine pending. **F1–F7 are not complete.** Raw device flow is still
 single-device FP32 HARD inference; no resident backward/optimizer.
 
-1. Clean fiber build/gates/profile all PASSED; evidence in
-   docs/evidence/device-fiber-20260930.{json,md} qualifies081f567.
-2. Continue general post-attention pooling (mean/linear/active/all-softmax), needed
-   by existing attention consumers. Three draft files packed_fiber_pool.{h,cpp}
-   and ascendc/tide_fiber_pool.cpp are not integrated, built or tested yet.
-   Then event-GQA/window attention, safe memory planning and node-time batching.
+1. Commit/push tested pooling implementation, then launch clean immutable build,
+   all26 cells and separate fiber-pool profile. Evidence follows terminal success.
+2. Continue event-GQA/window attention, safe memory planning and node-time batching.
 3. Public matrix/presets, multi-card peer progression and resident training remain
    open. Do not resume historical timing merely to occupy a build wait.
+
+## Current development: general post-attention pooling
+
+Implemented sum/mean/linear/active/all-softmax under the five existing profile
+names. Coefficients apply after query attention, before output projection/bias;
+QKV/cache/source presence are unchanged. Device loops pack actual softmax events,
+normalize actual/all logical domains and place coefficients. Physical aliases do
+not enlarge the domain. Pool workspace is reserved before selecting query chunk.
+Files: packed_fiber_pool.{h,cpp},ascendc/tide_fiber_pool.cpp,fiber_pool_check.cpp;
+integrated profile/cache/payload/build/check registry and content-flow docs.
+
+- build-device-fiber-pool-dev01 PASSED clean-from-snapshot full build/four CTests.
+- device-fiber-pool-gates-dev01 FAILED at known illegal fixture clock phases,
+  after80 anchors and17 domains passed. Original logs/snapshot are retained.
+- build-device-fiber-pool-dev02 PASSED isolated incremental build; only corrected
+  fiber_pool_check.cpp recompiled; production source/objects unchanged, hashes
+  and link commands recorded. Added empty-domain and refusal coverage.
+- device-fiber-pool-gates-dev02 PASSED all26 cells, including80 analytic/alias/cache
+  anchors,18 wide/extreme/empty-domain cases,160 complete windows,5 refusals.
+- device-fiber-pool-profile-dev02 RUNNING on physical9/logical0,timeout480s.
+  This is placement, not throughput. Never infer pass until terminal record.
+
+TASK/sources/fiber-pool-dev02;TASK/builds/device-fiber-pool-dev02;core origins-npu-clean01.
+Gate rtol1e-5/atol1e-6, exact discrete values unchanged. Widths1/7/33/257,heads1/3,
+chunk1/4,missing vs zero,negative/zero weights,source aliases,257-slot domains,
+missing dominant logits,old cache,three Read modes,feedback/DAG,mixed profiles,
+selected-only/clear,large clocks/counters,InputOrigin,restore and lean continuation.
+Current scope remains single-device FP32 HARD inference, one attention region frame
+per stage. This does not close node-time batching,key-axis tiling,FP16,VJP/training.
 
 ## Current immutable qualification: bounded same-fiber attention
 
@@ -70,7 +96,8 @@ kv_rows128 default; attention_chunk_rows8; kv_trace_rows4096 for diagnostics. Ac
 query limit can shrink under the byte budget, reserving at least one tanh Full row.
 Capacity11,stage diagnostic12,tick-work8 refuse explicitly; cumulative journal uses
 its existing refusal. Lean windows keep live KV without exporting it.
-Other fiber pools,event-GQA/window,FP16,training are not implied.
+Other fiber pools are currently development work;event-GQA/window,FP16,training
+are not implied.
 
 Development build-device-fiber-dev04 PASSED CPU/loader checks and reused unchanged
 production objects with recorded hashes. device-fiber-gates-dev04 PASSED all25
