@@ -1,5 +1,6 @@
 #pragma once
 #include "tide/types.h"
+#include "packed_queue.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -8,6 +9,15 @@ struct ContentLimits {
   int64_t workspace_bytes=64*1024*1024;
   int64_t full_chunk_rows=16;
   bool prefill=true;
+  bool diagnostics=true; // Event/message journals are optional per-window work.
+};
+// Borrowed read-only NPU buffers, valid until the next advance or owner destruction.
+// Output coordinates use the AtomBatch layout; field4 is the output port.
+// Clone values before retaining them across calls. No persistent state download
+// or event journal materialization is required to consume this view.
+struct ContentWindow {
+  AtomBatch outputs;
+  at::Tensor output_stats,pending_stats,stages,events,full_chunks;
 };
 // Experimental complete forward loop for an explicit existing-module profile:
 // sum Aggregate, identity/EMA memory, content/old/proposal linear Read, count/positive
@@ -23,6 +33,9 @@ class ContentFlow {
   ContentFlow(const ContentFlow&)=delete;
   ContentFlow& operator=(const ContentFlow&)=delete;
   Result advance(const std::vector<External>&,Index stop);
+  ContentWindow advance_device(const std::vector<External>&,Index stop);
+  Continuation snapshot() const; // Explicit complete-cut CPU materialization.
+  Result result() const; // Latest window; trace/messages require diagnostics.
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;

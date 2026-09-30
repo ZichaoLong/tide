@@ -11,6 +11,7 @@ CHECKS = {
     "ready": ("tide-device-ready-check", ("float32", "float16")),
     "selector": ("tide-device-selector-check", ("float32",)),
     "content": ("tide-content-flow-check", ("float32",)),
+    "window": ("tide-content-window-check", ("float32",)),
     "full": ("tide-packed-full-check", ("float32",)),
 }
 MARKERS = {
@@ -21,8 +22,9 @@ MARKERS = {
     "ready": "device-ready: passed",
     "selector": "device-selector: passed",
     "content": "content-refusal: passed",
+    "window": "device-window: passed",
     "full": "packed-full: passed",
 }
 KERNELS = {"closure": "tide_closure", "transaction": "tide_queue_propose",
            "broadcast": "tide_broadcast_route", "ready": "tide_ready_pack", "selector": "tide_frame_select",
-           "content": "tide_content_sum", "full": "tide_full_plan"}
+           "content": "tide_content_sum", "window": "tide_content_sum", "full": "tide_full_plan"}

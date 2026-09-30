@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--check", choices=tuple(CHECKS), required=True)
     parser.add_argument("--dtype", choices=("float32", "float16"), default="float32")
+    parser.add_argument("--application-arg", action="append", default=[], help="Additional recorded component argument")
     args = parser.parse_args()
     if args.device != "npu" and not args.device.startswith("npu:"):
         parser.error("CANN component profiling requires explicit NPU")
@@ -43,7 +44,7 @@ def main():
     source, dirty = source_state(root)
     command = [msprof, "--output="+str(out / "raw"), "--runtime-api=on", "--task-time=l1",
                "--aicpu=on", "--storage-limit=200MB", str(binary), "--device="+args.device,
-               "--dtype="+args.dtype]
+               "--dtype="+args.dtype, *args.application_arg]
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

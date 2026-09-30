@@ -1,10 +1,14 @@
 # Current handoff
 
-Updated 2026-09-30T07:09:28.457478+00:00. **ACTIVE — user resumed the execution contract and authorized pushing tested commits.**
+Updated 2026-09-30T07:14:55.495163+00:00. **PAUSED at the window-increment commit boundary — user requested a new alignment before resuming.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
-Preserve unrelated dirty work. The old next-commit pause is revoked.
+Preserve unrelated dirty work. The latest user request overrides the earlier resume:
+finish this tested window increment, commit/push it, then stop. Do not start new
+implementation or experiments until the user confirms the next alignment.
+Push remains authorized for this commit. The requested discussion covers the
+experiment skill and training scope; model convergence/task quality is downstream.
 
 ## Contract and priorities
 
@@ -27,35 +31,46 @@ CPU/screened mixed/resident. FP32 main, FP16 separate, CPU FP64 oracle; three fr
 processes before recommendations. CUDA actual execution remains target-machine pending.
 F1–F7 are NOT complete. The current raw device flow is single-device FP32 inference.
 
-## Current increment and next commands
+## Paused implementation and next steps after renewed authorization
 
-Uncommitted device-window increment separates `advance_device()` from explicit
-CPU `snapshot()`/`result()`. Journals can be disabled (`diagnostics=false, trace=0`);
-state/history/pending stay authoritative on device. New window_check.cpp compares
-384 windows, delayed exports and independent CPU Streaming; exported CPU snapshots
-are deliberately mutated to verify isolation. These tests have NOT yet run.
+This commit separates `advance_device()` from explicit CPU `snapshot()`/`result()`.
+Journals can be disabled (`diagnostics=false, trace=0`); state/history/pending stay
+authoritative on device across windows. It does not implement backward/optimizer,
+FP16 integration or general modules. See content-flow.md for the exact API contract.
 
-RUNNING at last observation: `build-device-window-dev01`, source frozen
-`TASK/sources/window-dev01` (base06db0c2 + hashed dirty overlay), build
-`TASK/builds/device-window-dev01`, matching runtime-guard-npu-clean01 core.
-Build jobs2, timeout900s; unit prefix below. On failure inspect retained logs first.
-After build success launch unique jobs on the SAME frozen source:
+All three directed development jobs are terminal PASSED exit0:
+- build-device-window-dev01: four CPU CTests and standalone loader.
+- device-window-gates-dev01: content640 windows plus window384 comparisons,
+  three successive device advances before state/history/pending export, delayed
+  full diagnostics, poisoned CPU snapshot isolation, failure snapshot/re-entry refusal.
+- device-window-profile-dev01: lean192 windows +one expected refusal;26378 AIV
+  +360 AI Core tasks, zero journal/AiCPU tasks and no host-fallback diagnostic.
+  Exactly193 model submits +193 model-boundary waits;6044 ordinary stream-sync
+  API calls from setup, boundary operations and explicit verification exports.
+  Not throughput; do not compare task sums with the earlier different workload.
 
-```
-verify_device_control.py --checks content window --build-dir TASK/builds/device-window-dev01 --output-dir OUT/verified --device npu:0
-profile_device_control.py --check window --application-arg=--without-diagnostics --build-dir TASK/builds/device-window-dev01 --output-dir OUT/profile --device npu:0
-```
+Frozen input `TASK/sources/window-dev01`, base06db0c2 + hashed dirty overlay;
+build `TASK/builds/device-window-dev01`, matching runtime-guard-npu-clean01 core.
+All exact commands/status/logs are under TASK/runs/NAME. Profile report/raw CSVs
+under device-window-profile-dev01/profile; directed results under
+ device-window-gates-dev01/verified. These are development evidence, not clean
+qualification of the implementation commit. No current increment job remains live.
 
-Queue120s; gate900s/profile480s. Confirm no `tide_journal` tasks in the lean trace
-and exactly one model submission/boundary wait per executed window. This includes
-CPU assertions and explicit snapshots, not throughput. After directed passes,
-update content-flow/device-control docs, commit/push implementation, qualify the
-exact commit (all16 cells and lean placement), then commit evidence separately.
+After the user confirms resumption:
+1. Freeze this implementation commit (git log identifies it), build-device-window-clean01
+   with --commit SHA, source window-clean01/build device-window-clean01, jobs2/900s.
+2. On that source run all16 component cells (900s) and separate lean placement
+   (`profile_device_control.py --check window --application-arg=--without-diagnostics`,480s),
+   queue120s. Preserve failures. Commit immutable evidence separately.
+3. Reconsider bounded small/medium continuous-window measurements under the new
+   alignment, then packed computation/module coverage. No full-size timing is queued.
 
-Next bounded small/medium benchmark should measure continuous windows, construction,
-explicit diagnostics and actual work separately against the independent CPU paths;
-use project experiment records/Trackio. No full-size timing is scheduled.
-`run-ml-experiments` and its record/Trackio/C++ bridge references have been read.
+No new throughput experiment ran this increment. A partial draft for a standalone
+online measurement tool was removed before this pause; no benchmark implementation
+or output is being presented as delivered. `run-ml-experiments` and its record,
+Trackio and C++ bridge references were read. Use the existing project recorder when
+measurements resume; raw metrics/manifests are authoritative, Trackio is a projection.
+Training acceptance is infrastructure semantics/performance, not model convergence.
 
 ## Newly completed immutable qualification
 
@@ -152,4 +167,4 @@ Placeholders {python}/{base}/{source}/{out}; exact source identity/hash stored b
 snapshot. Existing snapshot reused read-only. Qualification requires --commit.
 Handoff writes use scripts/durable_records.py atomic fsynced replacement/read-back.
 Re-entry: git status --short --branch; python scripts/status.py; inspect actual terminal
-records before continuing. Push tested commits; submitted/running never means passed.
+records. Remain paused until the user confirms resumption. Submitted/running never means passed.

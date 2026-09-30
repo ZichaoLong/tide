@@ -32,7 +32,7 @@ void append_read(CannProgram&,const ContentProfile&,const ReadyBatch&,const Cont
                  const ContentState&,const at::Tensor& coefficients,const at::Tensor& error);
 ContentUpdate append_content_state(CannProgram&,const ContentProfile&,const ReadyBatch&,
     const ContentBatch&,const SelectionProposal&,const ContentState&,const at::Tensor& coefficients,
-    const at::Tensor& stages,const at::Tensor& error);
+    const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,bool diagnostics);
 AtomBatch append_outputs(CannProgram&,const ContentProfile&,const ActionBatch&,int64_t capacity,const at::Tensor& error);
 void commit_content_state(CannProgram&,const ContentState&,const ContentUpdate&,const at::Tensor& error);
 } // namespace tide::device_online

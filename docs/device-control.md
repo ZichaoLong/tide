@@ -141,6 +141,13 @@ it is not a complete model-memory budget. See [content-flow.md](content-flow.md)
 for the finite contract and development coverage. Component placement does not
 establish full-graph throughput.
 
+The content flow separates `advance_device()` from CPU `snapshot()`/`result()`
+exports. Callers may consume device output buffers across successive windows
+without downloading the persistent graph state. Optional diagnostics remove the
+event/message journals from the captured program; input validation/upload and
+complete-window error reporting remain host boundaries. See
+[content-flow.md](content-flow.md) for buffer lifetime, failure and export contracts.
+
 These mutable stages provide no autograd. Model/state updates must eventually
 share a commit boundary with successful delivery; committing state before an
 overflowing queue transaction would violate the intended executor contract.
@@ -168,6 +175,8 @@ python scripts/verify_device_control.py --build-dir NEW --output-dir GATE \
   --device=npu:0
 python scripts/profile_device_control.py --build-dir NEW --output-dir PROFILE \
   --device=npu:0 --check ready
+python scripts/profile_device_control.py --build-dir NEW --output-dir LEAN_PROFILE \
+  --device=npu:0 --check window --application-arg=--without-diagnostics
 python scripts/verify_device_failures.py --build-dir NEW --output-dir FAILURES \
   --device=npu:0
 ```

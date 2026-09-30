@@ -74,13 +74,34 @@ one row explicitly fails. This does not bound all model/KV/training memory or
 replace the requested calibrated conservative/aggressive-safe planner. Actual
 `full_chunks` and effective `full_chunk_rows` are reported per call.
 
-Returned CPU `Result` values are diagnostic boundary materialization. State,
-pending, outputs, emitted messages, numeric event snapshots, activity and source
-contributions come from device records. Per-event history maps are reconstructed
-from recorded activity and the initial history only for presentation; the final
-history is independently downloaded from persistent device storage. Neither
-presentation path feeds the next device loop. Restore accepts the returned
-complete-cut continuation and a separately declared scheduling policy.
+`advance_device(inputs, stop)` returns borrowed, read-only device output buffers
+and device counters. Their storage is reused by the next advance; consumers must
+copy anything they retain beyond that boundary. State, history and pending
+payloads are never downloaded to prepare the following window. CPU metadata
+retains only the graph identity, batch size, complete cut and external-input
+ledger. Inputs are still validated and uploaded at the host boundary. A call
+waits for completion and checks the device error flag; it is not an asynchronous
+host interface, nor a claim that the whole API has only one synchronization.
+
+`snapshot()` explicitly materializes an independent complete-cut CPU continuation.
+`result()` materializes the latest window's outputs and continuation, plus its
+diagnostics when enabled. The existing `advance()` combines device advance with
+result export. Failed execution poisons the owner and refuses snapshots, results
+and further execution; malformed pre-submission input remains retryable.
+
+`ContentLimits.diagnostics` defaults to true for equivalence checking. With false,
+the captured program omits event/fiber/contribution/Full journals and the emitted
+message log; `trace=0` is then legal. Persistent state, selection history, output
+buffers and exact int64 event counts remain. A lean CPU result has no event trace
+or message log and cannot support comparisons of those missing diagnostics.
+
+Diagnostic state, outputs, emitted messages, activity and contributions come from
+device records. Per-event history maps are reconstructed from recorded activity
+and a device-captured window-start history only for presentation; final history
+is independently downloaded from persistent device storage. This works even when
+several advances precede the first result export. Neither presentation path feeds
+the next device loop. Restore accepts a complete-cut continuation and a separately
+declared scheduling policy.
 
 The initial content, Read, state, output and journal kernels use scalar AIV loops over
 packed buffers. They establish a forward semantic integration path, not optimized
@@ -89,6 +110,18 @@ before performance recommendations. Trace storage, CPU comparison and result
 materialization must be separated from future steady-state throughput timing.
 FP16, other module contracts, public Python/native packaging, peer progress and
 training remain independent delivery requirements.
+
+The window-interface development gate passes384 windows across four topologies,
+two input/state variants, both schedules, all three linear Read modes and both
+diagnostic settings. It checks three successive advances without downloading
+state/history/pending, delayed complete-observable export, isolation after mutating
+an exported CPU snapshot, and refusal of snapshots/re-entry after a failed window.
+The separate lean trace covers192 windows plus one expected failure, with193 model
+submissions and193 boundary waits. It records26378 AIV and360 AI Core tasks, no
+journal task, no AiCPU task and no host-fallback diagnostic. It still includes
+setup, explicit verification exports and CPU assertions;6044 ordinary stream
+synchronization API calls are also recorded. These are development results on
+frozen `window-dev01`, not immutable qualification or throughput evidence.
 
 The clean identity-Full qualification remains scoped to source `4d2f09e`
 ([evidence](evidence/content-loop-20260930.md)). The selected matrix Full increment

@@ -61,7 +61,7 @@ def main():
     if args.ascendc_soc:
         names.extend(("tide-device-closure-check", "tide-device-queue-check",
                       "tide-device-broadcast-check", "tide-device-ready-check", "tide-device-selector-check",
-                      "tide-content-flow-check", "tide-packed-full-check"))
+                      "tide-content-flow-check", "tide-content-window-check", "tide-packed-full-check"))
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)
