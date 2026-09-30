@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T14:17:04.366197+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T14:32:48.002592+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **242d851**, committed/pushed (key-tiling evidence). No pending authorization or pause. No subagents.
+HEAD **523b323**, memory implementation committed/pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
 
 ## Contract and priorities
@@ -32,24 +32,33 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
 
 ## Active work and next actions
 
-1. Shared forward budgets and serial CANN workspace reuse are ready to commit.
-   Frozen memory-dev06: controlled build/four CPU checks/all29 device cells and
-   independent profile PASSED. New gate72 windows/seven workspace checks,
-   24 allocator calibrations,192/512MiB,widths3/33/257,both policies/schedules.
-   Profile62,714 AIV+4,291 AI Core,no AiCPU/fallback. This is FP32 HARD inference,
-   not training, throughput or all vendor/driver peak memory.
-2. Commit/push only memory implementation/docs/registry files; exclude the older
-   accelerator dirty work below AND next-increment ascendc/event_sequence.h.
-   Then launch exact-commit memory-clean01 full build,all29 gates and memory
-   profile; record clean evidence separately. Matching core origins-npu-clean01.
-3. Continue node-time event attention batching while the clean build runs.
-   New event_sequence.h is only a prepared device index helper, not yet integrated
-   or tested. Design: packed QKV for all actual ready events, immutable old KV plus
-   compact new rows, per-query window/prefix visibility, commit only the final
-   adopted cache per owner. Observe-all without selected clear permits multi-time
-   preparation; state-dependent adoption/clear keeps single-frame fallback.
-   Then continue remaining modules/public presets/matrix,peer progression,resident
-   backward/VJP/optimizer and representative/full-size performance. F1–F7 open.
+1. Shared forward budgets/serial workspace reuse523b323 clean qualification
+   PASSED: full build/four CTests,all29 cells and independent memory profile.
+   All three memory-clean01 jobs are terminal0; reviewed evidence recorded in
+   docs/evidence/device-memory-20260930.{json,md}, ready to commit/push separately.
+   This is FP32 HARD inference,not training or throughput.
+2. Event batching development remains uncommitted. Its full build is at host
+   targets after Ascend C kernels compiled. Submitting device-event-batch-gates-dev01
+   with bounded600s dependency,queue120s,one NPU,gate900s; event-batch first then
+   all30 cells. Separate profile follows its semantic pass. Never modify that
+   frozen source/build while it runs.
+3. Event node-time batching implemented but UNTESTED. Submitting full frozen
+   build-device-event-batch-dev01: snapshot event-batch-dev01,build
+   device-event-batch-dev01,core origins-npu-clean01,jobs2,1800s. New event_batch
+   gate planned72 analytic/restore cases and216 general topology windows/restores.
+   Run it first,then all30 cells,then separate placement profile. All jobs use
+   new immutable paths; never mutate memory-clean01 while it runs.
+   Changed event plan/payload/cache/index kernels,shared key tile address adapter,
+   packed_event_attention,profile capability/footprint,registry/CMake; new
+   ascendc/event_sequence.h and event_batch_check.cpp. Actual ready events get
+   packed QKV in one device loop,then causal/window queries in another. Old KV
+   and compact new rows stay immutable until final owner commit; no per-event
+   KV copying. Observe-all without selected clear admits node-time batches;
+   selection-dependent adoption/clear keeps complete single-frame fallback.
+4. After correctness/profile,update content-flow docs and commit implementation;
+   qualify exact source separately. Continue fiber time batches,remaining modules,
+   public presets/matrix,peer progression,resident backward/VJP/optimizer and
+   representative/full-size performance. F1–F7 are not complete.
 
 Memory implementation: CPU-deferred profile tables; reserve all six module minima
 before growing physical chunks; conservative/aggressive surplus headroom; bounded
