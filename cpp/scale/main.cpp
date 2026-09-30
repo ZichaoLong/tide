@@ -17,6 +17,7 @@ double rss() {
 }
 }
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   using namespace pdg_scale;
   try {
     auto c = parse(argc, argv);

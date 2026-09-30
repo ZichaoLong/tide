@@ -117,6 +117,7 @@ Counts check_ragged(const Fixture& f, int schedule, const std::string& export_pa
 }  // namespace
 
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   try {
     auto scope = lh_iocortex::oracle_scope(argc, argv);
     const auto args = portable_torch::parse_cli(scope.arguments.size(), scope.arguments.data());

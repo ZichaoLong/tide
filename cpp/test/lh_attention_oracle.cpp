@@ -181,6 +181,7 @@ void check_original_fp64_assertion_limit(const at::TensorOptions& opts) {
 #endif
 }  // namespace
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   try {
     const auto args = portable_torch::parse_cli(argc, argv);
     if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }

@@ -14,13 +14,28 @@ No numerical route prepass, whole-window potential expansion or fixture shortcut
 Natural streaming degeneration is legal. Residency includes online decisions and
 progression, not just NPU tensor storage or fixed capture.
 
-NEXT: clean5c5b582 device qualification PASSED all five cells and msprof placement.
-Evidence: [device-control-20260930](evidence/device-control-20260930.md).
-Continue actual queue consumption/emit/packing and numerical dispatch.
-New QueueTransaction sources are under development: fixed-capacity proposal on
-AIV, device commit/refuse branch and bulk payload gather. Preparing
-`build-device-queue-dev01`, snapshot queue-dev01,600s bound/two workers; runtime
-FP32/FP16 gate follows a successful build. No automatic repeat after failure.
+NEXT: fix standalone NPU shutdown order, then rerun broadcast/queue/profile gates.
+Gdb `device-broadcast-debug01` located SIGSEGV in getCurrentNPUStream called by
+DestroyUsedStreams -> finalize_npu -> static NpuShutdown destructor at process exit.
+New RuntimeSession owns teardown before main-thread TLS destruction; nested/idempotent
+lifecycle checks added. `build-runtime-npu-dev01` PASSED (1800s/two workers),
+frozen runtime-dev01. `build-runtime-cpu-dev01` PASSED CPU build and all six CTests.
+`runtime-lifecycle-gates-dev01` PASSED eight fresh NPU processes. Component build follows
+with the matching new NPU core. Launch `runtime-lifecycle-gates-dev01`, eight fresh
+NPU processes to check the exit-order defect,120s queue/400s task.
+`build-device-ready-dev01` PASSED (four CPU CTests/loader), snapshot ready-dev01,
+using core runtime-npu-dev01. Launch `device-components-dev01`, full11-cell FP32/FP16
+component gate via scripts/verify_device_control.py,120s queue/900s task.
+Includes closure/fiber/frame packing and device no-emission drain loop. Inspect
+its verified/result.json and per-cell logs; a printed marker without process exit0 is insufficient.
+Develop ready-fiber/region packing while the core builds; no formal heavy timing.
+
+Clean5c5b582 qualification remains the historical result in
+[evidence](evidence/device-control-20260930.md); it did not expose the exit bug.
+QueueTransaction dev01 passed46 FP32 and46 FP16 cases. Broadcast dev01 built but
+its first gate ended SIGSEGV; it is NOT passed. Queue profile dev01 also failed
+before marker; separate gdb diagnostic completed normally but does not erase it.
+All reproducer snapshots/logs are retained. Runtime/profile repeat requires the fix.
 
 Device component implementation is `5c5b582`; `7aeb27c` is
 immutable host-greedy evidence. Implementation `2038d88`

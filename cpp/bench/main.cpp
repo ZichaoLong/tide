@@ -21,6 +21,7 @@ tide::Options options(const tide_bench::Config& c, bool trace) {
 }
 }
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   using namespace tide_bench;
   try {
     auto c = parse(argc, argv);

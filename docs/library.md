@@ -199,6 +199,17 @@ Torch distribution and runtime loader environment. C++ constructs graphs/models
 through its typed API; schema-v1 JSON configuration is the Python frontend.
 `examples/consumer_cpp` exercises standalone forward, chunking and backward.
 
+Standalone clients should declare `portable_torch::RuntimeSession runtime;` at
+the start of `main`, before tensor and worker owners. Its last active scope
+finalizes an initialized LibTorch-NPU runtime after those owners are destroyed
+and before main-thread TLS disappears. `close()` provides checked, idempotent
+cleanup after all NPU work/owners have ended; an initialized NPU runtime cannot
+be reopened after finalization. CPU/CUDA scopes perform no vendor teardown.
+An embedding application can own teardown itself without creating this scope.
+Device resolution no longer registers a process-exit finalizer: TorchNPU2.10's
+finalizer accesses thread-local streams, which are already destroyed at that
+late boundary. Do not place `RuntimeSession` in static/global storage.
+
 `scripts/library_consumer.py --output-dir NEW --build-dir MATCHING_BUILD` is
 the developer consumption gate: build a generic wheel in staging, install it
 in a fresh environment reusing the existing Torch stack, run a copied external

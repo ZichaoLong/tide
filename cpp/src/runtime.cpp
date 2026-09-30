@@ -3,6 +3,7 @@
 #include <ATen/Context.h>
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <charconv>
+#include <iostream>
 #include <mutex>
 #include <stdexcept>
 #if PORTABLE_TORCH_ENABLE_CUDA
@@ -26,22 +27,55 @@ int index_of(const std::string& request, const std::string& backend) {
   return index;
 }
 #if TIDE_NPU_STANDALONE
-struct NpuShutdown {
-  ~NpuShutdown() { try { torch_npu::finalize_npu(); } catch (...) {} }
+struct NpuRuntime {
+  std::mutex mutex;
+  size_t sessions = 0;
+  bool initialized = false, finalized = false;
 };
+NpuRuntime& npu_runtime() {static NpuRuntime runtime;return runtime;}
 torch::Device initialize_npu(int index) {
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(runtime.finalized)throw std::logic_error("standalone NPU runtime has been finalized");
   if (index >= c10_npu::device_count()) throw std::runtime_error("NPU logical device is unavailable");
-  static std::once_flag initialized;
-  std::call_once(initialized, [index] {
+  if(!runtime.initialized) {
     torch_npu::init_npu(static_cast<c10::DeviceIndex>(index));
-    static NpuShutdown shutdown;
-  });
+    runtime.initialized=true;
+  }
   auto device = torch::Device(c10::DeviceType::PrivateUse1, index);
   c10::impl::VirtualGuardImpl(device.type()).setDevice(device);
   return device;
 }
 #endif
 }  // namespace
+
+RuntimeSession::RuntimeSession() {
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(runtime.finalized)throw std::logic_error("standalone NPU runtime has been finalized");
+  ++runtime.sessions;
+#endif
+}
+void RuntimeSession::close() {
+  if(!open_)return;
+  open_=false;
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(--runtime.sessions==0&&runtime.initialized&&!runtime.finalized) {
+    // Global destructors run after main-thread TLS destruction. TorchNPU
+    // Finalize accesses its thread-local current-stream table, so this must
+    // happen at the client scope boundary, never in an atexit/static hook.
+    runtime.finalized=true;
+    torch_npu::finalize_npu();
+  }
+#endif
+}
+RuntimeSession::~RuntimeSession() {
+  try {close();}
+  catch(const std::exception& error) {
+    std::cerr<<"standalone runtime cleanup failed: "<<error.what()<<std::endl;
+    std::terminate(); // Never turn failed cleanup into a successful process.
+  }
+}
 
 torch::Device resolve_device(const RuntimeOptions& options) {
   const auto& request = options.device_spec;

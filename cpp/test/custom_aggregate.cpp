@@ -67,6 +67,7 @@ void check_origins(const at::TensorOptions& options) {
 }
 }
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   try {
     auto args = portable_torch::parse_cli(argc, argv);
     if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }

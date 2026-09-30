@@ -34,6 +34,22 @@ std::string resolution_reason(
 void seed_runtime(const torch::Device& device, std::uint64_t seed);
 void synchronize(const torch::Device& device);
 
+// Optional process-level owner for standalone clients. Declare before tensors
+// and worker owners, so teardown happens after them but before main-thread TLS.
+// Nested sessions share the runtime; closing the last one finalizes NPU once.
+// An embedding application may instead own runtime teardown itself. CPU/CUDA
+// sessions do not shut down vendor runtimes. NPU cannot reopen after finalization.
+class RuntimeSession {
+ public:
+    RuntimeSession();
+    ~RuntimeSession();
+    RuntimeSession(const RuntimeSession&) = delete;
+    RuntimeSession& operator=(const RuntimeSession&) = delete;
+    void close(); // Call after destroying all NPU owners for checked cleanup.
+ private:
+    bool open_ = true;
+};
+
 const char* compiled_backend() noexcept;
 std::string dtype_name(torch::ScalarType dtype);
 

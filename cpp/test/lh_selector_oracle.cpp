@@ -108,6 +108,7 @@ Index check_case(const at::TensorOptions& opts, bool lead, Index budget, int sch
 }  // namespace
 
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   try {
     const auto args = portable_torch::parse_cli(argc, argv);
     if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }
