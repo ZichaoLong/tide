@@ -78,6 +78,7 @@ int64_t check(at::Device device) {
 }
 }  // namespace
 int main(int argc, char** argv) {
+  portable_torch::RuntimeSession runtime;
   try {
     const auto args = portable_torch::parse_cli(argc, argv, true);
     if (args.help) { portable_torch::print_usage(std::cout, argv[0]); return 0; }
@@ -89,6 +90,7 @@ int main(int argc, char** argv) {
     if (device.type() != c10::DeviceType::PrivateUse1) throw std::invalid_argument("control check requires NPU");
     at::set_num_threads(1); at::set_num_interop_threads(1);
     const auto cases = check(device);
+    runtime.close();
     if (!args.output_dir.empty()) {
       if (!std::filesystem::create_directories(args.output_dir)) throw std::runtime_error("cannot create output");
       std::ofstream file(std::filesystem::path(args.output_dir)/"result.json");

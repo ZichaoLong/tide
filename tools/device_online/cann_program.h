@@ -18,6 +18,7 @@ class CannProgram {
   void mark(size_t);
   void branch(const at::Tensor& int32_index, const std::vector<size_t>& labels);
   void add(const at::Tensor& destination, const at::Tensor& increment);
+  void copy(const at::Tensor& destination, const at::Tensor& source);
   void multiply(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void index_select(const at::Tensor&, int64_t axis, const at::Tensor& int64_indices, const at::Tensor& output);
   // Submit a backend kernel once at model construction; its device task is

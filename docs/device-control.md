@@ -18,6 +18,12 @@ to free anything if completion remains unconfirmed. Destruction then quarantines
 the entire owner until process exit. An errored worker must not resume execution.
 This failure-lifetime policy still needs its own injected-failure gate.
 
+Standalone checks own a `portable_torch::RuntimeSession` in `main`, outside all
+tensor/program owners. Normal finalization must precede main-thread TLS teardown;
+a former static finalizer could segfault in TorchNPU's current-stream lookup.
+The lifecycle check covers nested owners, idempotent close and rejected reopen.
+Abnormal/quarantined-resource teardown remains part of the pending failure gate.
+
 The kernel hook submits work once during model construction. Subsequent execution
 is a device task; it is not a per-iteration host callback. `run()` submits once
 and waits at the complete call boundary. The caller finishes input writes first.
@@ -58,9 +64,42 @@ one AIV kernel, using preallocated metadata workspace and an exact int64 scalar
 pipeline. This initial implementation prioritizes correctness, not optimized
 parallel throughput. Invalid live coordinates set a device error before topology
 indexing. Full graph dispatch, payload generation, grouped numerical contracts,
-queue progression, peer completion, semantic VJPs and optimizer integration still
+model state, peer completion, semantic VJPs and optimizer integration still
 require implementation and separate gates. A readiness kernel alone is not a
 complete resident flow. Placement/profiling results require actual target traces.
+
+## Packed stages and bounded progression
+
+`QueueTransaction` composes an AIV metadata proposal with a device commit/refuse
+branch. Successful transactions retain survivors and append actual arrivals in
+stable order; one bulk gather places payload rows. Invalid slots gather a zero
+sentinel, so inactive NaNs never leak into padding. Refusal preserves every old
+queue slot and its live/peak counters. Errors remain sticky. Capacity describes
+simultaneous occupancy and can be reused over more cumulative arrivals.
+
+`BroadcastRouter` applies the explicit broadcast Full delivery contract to
+already selected/computed actions. Device CSR traversal generates physical edge
+identities, target coordinates and gather indices; payload gathering and edge
+scaling are bulk operations. The CSR table contains only static topology. Cycles,
+unequal delays and physical parallel edges need no special case. Arrival-time
+overflow is checked before addition and fails, including beyond the current
+window. Sparse/per-slot Full contracts are a separate missing delivery path.
+
+`DeviceReady` connects the closure task to stable exact-int64 atom packing,
+fiber offsets and complete region-time frame offsets. Fiber traversal supports
+node-state sequences; a separate frame permutation groups complete candidate
+sets for selection. Device lengths and valid bits identify real work. Packing
+currently uses scalar AIV insertion ordering; it is not optimized parallel sort.
+The integration check uses one submission to consume successive ready batches
+and preserve pending messages across windows, with an explicit iteration bound.
+It emits no messages and does not execute Tide numerical modules. That check
+therefore certifies scheduling progression only, not a complete graph flow.
+
+These mutable stages provide no autograd. Model/state updates must eventually
+share a commit boundary with successful delivery; committing state before an
+overflowing queue transaction would violate the intended executor contract.
+Byte budgets for parameters, state, KV, activations and communication are still
+separate from these bounded metadata/payload capacities.
 
 ## Build and checks
 
@@ -79,6 +118,10 @@ NEW/tide-device-control-check --device=npu:0 --dtype=float32
 NEW/tide-device-numerical-check --device=npu:0 --dtype=float16
 NEW/tide-packed-queue-check --device=cpu --dtype=float64
 NEW/tide-device-closure-check --device=npu:0 --dtype=float32
+python scripts/verify_device_control.py --build-dir NEW --output-dir GATE \
+  --device=npu:0
+python scripts/profile_device_control.py --build-dir NEW --output-dir PROFILE \
+  --device=npu:0 --check ready
 ```
 
 Ascend C is optional and requires an explicit matching SoC; the closure check
@@ -89,5 +132,8 @@ Ascend C check covers NPU closure against the independently gated CPU reference.
 Use `scripts/profile_device_control.py` for a bounded msprof placement trace
 with exact binary/source checks and hashed exported operator records. Its scope
 includes setup and CPU assertions, so task sums are not steady-state throughput.
+Both markers and process termination matter: msprof may itself exit zero after
+an application failure. The profile driver rejects its application-failure
+warning even when an earlier acceptance marker was printed.
 The active source, terminal results, failures and remaining work live in STATUS.
 No resident-training or speed claim follows from these component checks.

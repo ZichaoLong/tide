@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Bounded standalone component acceptance, independently of graph qualification."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+
+from build_device_control import component_hash
+from build_identity import source_hash
+from device_component_checks import CHECKS, MARKERS
+from durable_records import write_json
+from source_identity import digest, source_state
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--build-dir", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--device", required=True)
+    parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS), default=list(CHECKS))
+    args = parser.parse_args()
+    if args.device != "npu" and not args.device.startswith("npu:"):
+        parser.error("component qualification requires explicit NPU")
+    root = Path(__file__).resolve().parents[1]
+    build = args.build_dir.resolve()
+    manifest = json.loads((build / "control-build.json").read_text())
+    if manifest["component_sha256"] != component_hash(root) or manifest["core"]["cpp_source_sha256"] != source_hash(root):
+        parser.error("component/core source differs from recorded build")
+    for check in args.checks:
+        name, _ = CHECKS[check]
+        if not (build / name).is_file() or digest(build / name) != manifest["binary_sha256"].get(name):
+            parser.error("component unavailable or changed: " + name)
+    out = args.output_dir.resolve()
+    out.mkdir(parents=True, exist_ok=False)
+    source, dirty = source_state(root)
+    report = dict(schema="tide-device-components-gate-v1", source=source, dirty=dirty,
+                  build=manifest, state="running", device=args.device, cases=[],
+                  scope="component semantics/lifecycle; not complete graph execution or throughput")
+    write_json(out / "result.json", report)
+    try:
+        for check in args.checks:
+            name, dtypes = CHECKS[check]
+            for dtype in dtypes:
+                command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
+                log_path = out / (check+"-"+dtype+".log")
+                with log_path.open("w") as log:
+                    result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120)
+                text = log_path.read_text()
+                passed = result.returncode == 0 and MARKERS[check] in text
+                if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:
+                    passed = False
+                report["cases"].append(dict(check=check, dtype=dtype, command=command,
+                    state="passed" if passed else "failed", exit_code=result.returncode,
+                    log=log_path.name, log_sha256=digest(log_path)))
+                write_json(out / "result.json", report)
+                print(check, dtype, report["cases"][-1]["state"], flush=True)
+                if not passed:
+                    raise RuntimeError("device gate failed: " + str(log_path))
+        if source_state(root) != (source, dirty):
+            raise RuntimeError("source changed during device gate")
+        report["state"] = "passed"
+    except BaseException as error:
+        report.update(state="failed", error=repr(error))
+        raise
+    finally:
+        write_json(out / "result.json", report)
+
+
+if __name__ == "__main__":
+    main()

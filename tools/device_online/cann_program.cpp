@@ -39,7 +39,7 @@ struct CannProgram::Impl {
         || !value.is_contiguous() || value.requires_grad() || value.numel()<1)
       throw std::invalid_argument("CANN buffer requires matching device/dtype, contiguous nonempty storage and no autograd");
     const int type = dtype==at::kLong?9:dtype==at::kBool?12:dtype==at::kInt?3:
-                     dtype==at::kFloat?0:dtype==at::kHalf?1:-1;
+                     dtype==at::kFloat?0:dtype==at::kHalf?1:dtype==at::kByte?4:-1;
     if(type<0)throw std::invalid_argument("CANN buffer dtype is unavailable");
     auto sizes=value.sizes(),strides=value.strides();
     auto handle = api.create_tensor(sizes.data(), sizes.size(), type, strides.data(), 0, 2,
@@ -146,6 +146,12 @@ void CannProgram::add(const at::Tensor& target, const at::Tensor& increment) {
   if (!scalar) throw std::runtime_error("create control scalar failed");
   p.scalars.push_back(scalar);
   p.op("aclnnInplaceAdd", p.tensor(target, target.scalar_type()), p.tensor(increment, target.scalar_type()), scalar);
+}
+void CannProgram::copy(const at::Tensor& target, const at::Tensor& source) {
+  auto& p=*impl_;p.building();
+  if(target.sizes()!=source.sizes()||target.scalar_type()!=source.scalar_type())
+    throw std::invalid_argument("CANN copy requires identical shapes and dtypes");
+  p.op("aclnnInplaceCopy",p.tensor(target,target.scalar_type()),p.tensor(source,source.scalar_type()));
 }
 void CannProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
   auto& p=*impl_;const auto dtype=a.scalar_type();
