@@ -1,4 +1,5 @@
 #include "full_vjp.h"
+#include "extra_full_vjp.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_full_vjp_plan.h"
 #include "aclrtlaunch_tide_full_vjp_payload.h"
@@ -15,7 +16,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType dtype,at::IntAr
       ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("invalid Full VJP buffer");
 }
 }
-FullVjp append_full_vjp(CannProgram& p,const FullTape& tape,const at::Tensor& gradient,
+static FullVjp append_basic_full_vjp(CannProgram& p,const FullTape& tape,const at::Tensor& gradient,
                        const at::Tensor& connected,const at::Tensor& error,int64_t max_rows,int64_t budget) {
   if(at::GradMode::is_enabled()||!tape.values.defined()||tape.values.dim()!=2
       ||!tape.kinds.defined()||tape.kinds.dim()!=1)
@@ -76,6 +77,14 @@ FullVjp append_full_vjp(CannProgram& p,const FullTape& tape,const at::Tensor& gr
     ptr(owners),ptr(owner_count),ptr(parameters),ptr(dw),ptr(dactivation),ptr(out.weights),ptr(out.biases),ptr(error),width,chunk),
     "ordered Full parameter-owner partial reduction");},{owners,owner_count,parameters,dw,dactivation,out.weights,out.biases,error});
   plan();p.branch(branch,{head});p.mark(done);
+  return out;
+}
+FullVjp append_full_vjp(CannProgram& p,const FullTape& t,const at::Tensor& gradient,
+    const at::Tensor& connected,const at::Tensor& error,int64_t chunk,int64_t budget) {
+  const int parts=1+int(t.extra.lh_kinds.defined())+int(t.extra.swiglu_kinds.defined());
+  auto out=append_basic_full_vjp(p,t,gradient,connected,error,chunk,budget/parts);
+  append_lh_full_vjp(p,t,gradient,connected,out,error,chunk,budget/parts);
+  append_swiglu_vjp(p,t,gradient,connected,out,error,chunk,budget/parts);
   return out;
 }
 } // namespace tide::device_online

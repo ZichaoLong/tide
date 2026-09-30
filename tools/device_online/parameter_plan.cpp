@@ -1,4 +1,5 @@
 #include "parameter_plan.h"
+#include "packed_lh_full.h"
 #include <algorithm>
 #include <map>
 #include <stdexcept>
@@ -9,12 +10,24 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   const int64_t nodes=g.nodes.size(),inputs=g.inputs.size(),edges=g.edges.size();
   if(nodes<1||width<1||budget<1)throw std::invalid_argument("invalid parameter layout budget/shape");
   std::map<std::string,Ref> by_name;
-  bool tanh=false;
+  bool tanh=false,lh=false;int64_t swiglu=0;
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
-    if(!node.identity&&node.full!="identity"&&node.full!="tanh")throw std::invalid_argument("parameter Full VJP contract unavailable");
+    const auto kind=node.identity?0:lh_full_kind(node.full);
+    if(!node.identity&&node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)throw std::invalid_argument("parameter Full VJP contract unavailable");
     if(!node.identity&&node.full=="tanh") {
       tanh=true;by_name[prefix+"weight"]={0,n,n*width*width,{width,width}};by_name[prefix+"bias"]={1,n,n*width,{width}};
+    }
+    if(kind) {
+      lh=true;const auto norm=(kind-1)%3;
+      if(norm)by_name[prefix+"extra.lh_norm_weight"]={5,n,n*width,{width}};
+      if(norm==2)by_name[prefix+"extra.lh_norm_bias"]={6,n,n*width,{width}};
+    }
+    if(!node.identity&&node.full=="swiglu") {
+      const auto offset=swiglu++*2*width*width;
+      by_name[prefix+"extra.ffn_gate"]={7,n,offset,{width,2*width}};
+      by_name[prefix+"extra.ffn_up"]={8,n,offset,{width,2*width}};
+      by_name[prefix+"extra.ffn_down"]={9,n,offset,{2*width,width}};
     }
     if(!node.identity&&node.memory=="ema")by_name[prefix+"decay"]={2,n,n*width,{width}};
     else if(!node.identity&&node.memory=="lh-add-repeat-v1")by_name[prefix+"extra.add_retention"]={3,n,n,{}};
@@ -27,7 +40,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
     const auto binding=g.outgoing_ports.bindings[slot];const int64_t i=inputs+edges+slot;
     by_name[(binding.kind?"edge_scale.":"output_scale.")+std::to_string(binding.id)]={4,i,i,{}};
   }
-  ParameterPlan out;out.owners=registry.owners();out.has_tanh=tanh;
+  ParameterPlan out;out.owners=registry.owners();out.has_tanh=tanh;out.has_lh=lh;out.swiglu_count=swiglu;
   std::vector<int64_t> owners,refs,tiles{0};int64_t total=0;
   for(const auto& owner:out.owners) {
     if(owner.value.scalar_type()!=at::kFloat)throw std::invalid_argument("parameter registry must describe FP32 owners");

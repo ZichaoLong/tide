@@ -7,6 +7,7 @@ namespace tide::device_online {
 struct ParameterBanks {
   const Graph* graph=nullptr;
   at::Tensor weights,biases,decay,retention,read,sources,emission;
+  FullExtraTape extra;
 };
 // Publish a packed owner vector, including every used alias (HARD Read too).
 // On a sticky reverse/optimizer error this records no live bank writes.

@@ -38,7 +38,7 @@ class ContentFlow {
   Continuation snapshot() const; // Explicit complete-cut CPU materialization.
   Result result() const; // Latest window; trace/messages require diagnostics.
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
-  FullTape full_tape() const; // Identity/tanh only; other Full contracts refuse.
+  FullTape full_tape() const; // Built-in identity/tanh/LH/SwiGLU journals and banks.
   ReverseTape reverse_tape() const; // Narrow HARD profile; actual journals only.
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
   std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.

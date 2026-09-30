@@ -1,5 +1,6 @@
 #pragma once
 #include "broadcast_router.h"
+#include "full_extra.h"
 #include <string>
 
 namespace tide::device_online {
@@ -14,6 +15,7 @@ class PackedLhFull {
                            const at::Tensor& error,const at::Tensor& chunks);
   int64_t chunk_rows() const {return chunk_;}
   int64_t reserved_bytes() const {return reserved_;}
+  void tape(FullExtraTape& t) const {t.lh_kinds=kinds_;t.lh_weights=weights_;t.lh_biases=biases_;t.lh_groups=groups_;}
  private:
   int64_t nodes_,width_,rows_,chunk_,reserved_;
   std::vector<int64_t> groups_;

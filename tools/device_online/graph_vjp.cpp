@@ -24,7 +24,10 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   const int64_t nodes=t.graph->nodes.size(),samples=t.state.samples,fibers=t.fiber_values.size(0);
   const auto pending=t.pending.valid.numel(),outputs=t.outputs.valid.numel(),total=fibers+pending+outputs;
   const int64_t parameters=t.graph->inputs.size()+2*t.graph->edges.size()+t.graph->outputs.size(),physical=std::max<int64_t>(1,parameters);
-  const long double own=4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
+  long double extra_bytes=0;
+  for(const auto& x:{t.full.extra.lh_weights,t.full.extra.lh_biases,t.full.extra.gate,t.full.extra.up,t.full.extra.down})
+    if(x.defined())extra_bytes+=4.L*x.numel();
+  const long double own=extra_bytes+4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
     +16.L*samples*nodes*width+16.L*nodes*width+(t.full.has_tanh?4.L*nodes*(width*static_cast<long double>(width)+width):0.L)
     +8.L*total+16.L*capacity+32.L*samples*nodes+32.L*nodes+physical+1024;
   if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||width<1||nodes<1||samples<1||chunk<1||budget<1||own>budget/2.L)
@@ -44,6 +47,13 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
     at::empty({nodes,width},floats),at::empty({nodes},booleans),at::empty({nodes},floats),at::empty({nodes},booleans),
     at::empty({physical},floats),at::empty({physical},booleans),at::empty({1},longs)};
   if(t.full.has_tanh){out.weights=at::empty({nodes,width,width},floats);out.biases=at::empty({nodes,width},floats);p.zero(out.weights);p.zero(out.biases);}
+  auto extra_output=[&](const at::Tensor& bank) {
+    if(!bank.defined())return at::Tensor();
+    auto shape=bank.sizes().vec();if(shape.empty()||shape[0]<2)throw std::invalid_argument("invalid Full extra bank extent");
+    --shape[0];auto x=at::empty(shape,floats);p.zero(x);return x;
+  };
+  out.extra={extra_output(t.full.extra.lh_weights),extra_output(t.full.extra.lh_biases),
+    extra_output(t.full.extra.gate),extra_output(t.full.extra.up),extra_output(t.full.extra.down)};
   auto stage_meta=at::empty_like(t.state.metadata),stage_values=at::empty_like(t.state.values),stage_count=at::empty_like(t.state.count);
   auto full_grad=at::empty({capacity,width},floats),full_on=at::empty({capacity},booleans);
   auto aggregate_partials=at::empty({fibers,width},floats),scalar_partials=at::empty({physical,width},floats);
@@ -94,6 +104,9 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   p.copy(carry,state.initial);p.copy(carry_on,state.initial_connected);
   p.add(dc,state.decay);p.add(rc,state.retention_components);
   if(t.full.has_tanh){p.add(out.weights,full.weights);p.add(out.biases,full.biases);}
+  for(const auto& pair:{std::make_pair(out.extra.lh_weights,full.extra.lh_weights),std::make_pair(out.extra.lh_biases,full.extra.lh_biases),
+    std::make_pair(out.extra.gate,full.extra.gate),std::make_pair(out.extra.up,full.extra.up),std::make_pair(out.extra.down,full.extra.down)})
+    if(pair.first.defined())p.add(pair.first,pair.second);
   meta(3,full.content_connected,full.comparison_connected,full.parameter_connected,state);p.branch(branch,{head});p.mark(done);
   meta(4,full_on,full_on,out.full_connected,dummy);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_scales)(32,stream,

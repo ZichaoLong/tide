@@ -1,244 +1,162 @@
 # Current handoff
 
-Updated 2026-09-30T21:00:14.855828+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
-Repository `/home/zlong/llm/graph-execution-foundation`, real path
-`/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **243cdb3**, public C++ training qualification pushed;Python implementation0f363b8 pushed;retained device backward implementation c2423f0 pushed;optimizer3b31ee2 qualified;parameter qualification933d6fe;
-resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
-Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
+Updated 2026-09-30T22:08:21.589854+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Repository `/home/zlong/llm/graph-execution-foundation`,real path
+`/var/tmp/zlong-graph-execution-foundation/repository`;branch `graph-execution-foundation`.
+HEAD **9022636**,pushed. No authorization pending. No subagents.
+Reference repositories and ObsidianVault remain read-only. **F1–F7 are incomplete.**
 
-## Contract and priorities
+## Contract and order
 
-[execution-flows.md](execution-flows.md) is the contract; [ROADMAP F1–F7](ROADMAP.md)
-is the only backlog. Current user alignment takes precedence over run-ml-experiments:
-keep source/input/config/environment identity, raw results/failures, synchronized
-complete timing, bounded resources/stops. Trackio must not block implementation.
+[execution-flows.md](execution-flows.md) is the contract;[ROADMAP F1–F7](ROADMAP.md)
+is the only backlog. Current user alignment outranks run-ml-experiments: retain
+source/input/config/environment identity,raw results/failures,synchronized complete
+timing,bounded resources/stops. Trackio never blocks implementation.
 Training means independent forward/backward/VJP/optimizer/continuation and complete
-throughput; task convergence is a later experiment.
+throughput. Model convergence is a later consumer experiment.
 
-Candidates consume their own inputs/state/parameters, with no CPU numerical routing
-prepass. General online greedy accepts legal arbitrary topology/input, including
-PDG positive-delay feedback, and may degenerate to streaming. Preserve int64,
-stable order, duplicate edges, missing/zero and None/zero gradients. CPU FP64/FP32
-remain independent anchors. Device residence includes actual online decisions.
-PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill ×
-inference/complete training. Five presets/fine switches; FP32 main, FP16 separate;
-three independent processes for recommendations. CUDA execution is target-pending.
-Prioritize complete semantic/ownership gates, public/device integration, peer
-progression and resident training, then representative/full-size performance.
+Candidates consume their own inputs,state and parameters: no CPU numerical routing
+prepass. General online greedy accepts legal arbitrary topology/input,including
+positive-delay PDG feedback,and may degenerate to streaming. Preserve int64,
+stable order,duplicate edges,missing/zero and None/zero. CPU FP64/FP32 stay independent.
+Residence includes actual online decisions. PDG LibTorch;TimedDAG/Settle LibTorch
+and PyTorch;CPU/NPU × streaming/prefill × inference/complete training. Five presets
+and fine switches;FP32 main,FP16 separate;three processes for recommendations.
+Prioritize semantic/ownership/public/device closure,peer progression and resident
+training,then representative/full-size performance. CUDA execution is target-pending.
 
-## Completed increments
+## Completed and qualified
 
-- Placement d412541 qualified and evidence pushed **7b31f48**:
-  `docs/evidence/execution-placement-20261001.{json,md}`.8,952 CPU tests,10 CTests,
-  26 NPU Python cases,C++121 schedules/363 updates,Read precision6/18 and accelerator
-  parity/gradient/optimizer/checkpoint/non-default-stream. All clean placement jobs
-  terminal0. Its profile includes66 AiCPU INT64 sort/scatter tasks;38.32% is summed
-  device task time, not wall time; no host CPU fallback.
-- Public resident backend **740fa87**,disk restore/reset **622dbb2**,both pushed.
-  `tide::ResidentSession` is a separate installed C++/CANN package; Python-owned
-  `_tide_resident` never links standalone SDK into a torch_npu wheel process.
-  GraphRuntime.advance_device retains device state; result/snapshot explicitly
-  export CPU values, never feed them back into execution. Parameter mutation
-  requires rebuilding; poisoned owners cannot silently continue. Disk load validates
-  CPU complete cuts/aliases/weights before close, then restores weights/state;
-  construction failure leaves closed. Invalid checkpoints leave live state unchanged.
-  **Single NPU FP32 HARD inference only. Python is a native client, not an
-  independently qualified pure-PyTorch resident scheduler.**
-- Prior device forward increments and immutable evidence are indexed in ROADMAP F4:
-  general online queues/selection,vector Read/state/sum,normalized Aggregate,
-  clocks,identity/tanh/LH/SwiGLU Full,phase/slot-affine emission,InputOrigin,
-  event/fiber attention with pooling/key-axis tiling/node-time batches,budgets.
-  These do not certify training,FP16,peer progression or full-size throughput.
+All earlier forward/placement/VJP evidence and exact commits are indexed by ROADMAP.
+Do not rerun the unchanged portable core's **8,954 CPU tests/23 optional skips**.
 
-## Public resident formal qualification
+- Placement d412541 qualified;public resident inference740fa87 and disk restore622dbb2
+  qualified. Public package is separate from the portable core.
+- State VJP3e2d54d,identity/tanh Full3285b13,graph reverse37430e1,parameter alias
+  reduction1ef23f3,device optimizer/publication3b31ee2 and retained windowsc2423f0
+  have immutable full component gates and separate profiles. Reports in docs/evidence.
+- Public C++ training591e907 qualified and evidence pushed243cdb3:
+  docs/evidence/public-resident-training-20261001. Four CTests,42 component cells,
+  18 CPU FP32/FP64 trajectories/288 windows/72 updates;installed consumer3 inference
+  and3 training windows/retained backward/optimizer restore. Profile107,345 AIV+
+  1,857 AI_CORE+1,673 MIX_AIV,304 optimizer records,no AiCPU/fallback. Checker scope.
+- Python client0f363b8 qualified and evidence pushed9022636:
+  docs/evidence/python-resident-training-20261001. Clean Python-owned build,
+  76 CPU interface tests/37 optional skips,40 device cases,real NPU loss cotangents,
+  three families/both schedules/SGD+AdamW,aliases,None/zero,disk and new-process
+  continuation. One PDG greedy AdamW profile1,569 AIV+14 AI_CORE+42 MIX_AIV;
+  optimizer12/graph_reverse66/window_bridge6/ready_pack12,no AiCPU/fallback.
 
-Frozen source **resident-restore-clean01 at622dbb2**, unchanged compiled backend
-**resident-public-clean01 at740fa87**,matching cores **d412541**. Full clean backend
-builds `build-resident-public-{python,standalone}-clean01` PASSED;standalone4 CTests.
+Those training qualifications cover single-NPU FP32 HARD,sum/broadcast,
+identity/EMA/Add state and identity/tanh Full. Python is a C++/CANN client,
+not an independently qualified pure-PyTorch resident scheduler. These profiles
+are not throughput. Updated device parameters export through checkpoints;the
+caller's original model is a frozen construction template. Step/detach explicitly
+truncate generations. All trainable aliases matter;an explicit empty optimizer
+group selects no parameters. Do not regress these ownership details.
 
-All names below map to `TASK/runs/NAME/{status.json,task.log}` and
-`tide-execution-flows-NAME.service`; inspect actual terminals and output hashes.
+## LH/SwiGLU implementation increment
 
-- `resident-public-cpu-clean01`: PASSED8,954 tests/23 optional-device skips,1690.66s,
-  FP32/FP64 full scripts/verify.py,
-  `TASK/builds/placement-cpu-clean01`,2400s,one ATen/BLAS thread.
-  Output RUN/verified/{result.json,tests.log}. Do not start duplicate CPU gate.
-- `resident-public-standalone-clean01`: PASSED terminal0,all33 component cells,
-  including resident64 windows,window/content and other forward regressions.
-- `resident-public-python-clean01`: PASSED25 cases,three graph families,two schedules,
-  EMA/event/fiber attention,CPU/NPU input,non-default stream,restore/reset,
-  frozen-parameter/alias/config/capacity and no-implicit-export behavior.
-- `resident-public-profile-clean01`: PASSED.10,534 AIV+16 MIX_AIV,no AiCPU/fallback.
-  This is the resident checker scope,not all module performance or throughput.
-- `build-resident-consumer-clean01` + `resident-consumer-clean01`: PASSED;
-  installed public-header-only client,prefix with spaces,loader and3 feedback windows.
-- Directed restore development `resident-restore-host-dev01`:126 passed/23 optional
-  skips;`resident-restore-python-dev01`:25 passed. All terminal0.
+Implementation is ready to commit after development gates;immutable qualification
+has not run yet. Prior qualified HEAD9022636 remains pushed. No authorization pending.
 
-All public resident qualifications are terminal0. Task-local
-TASK/launchers/resident_public_evidence.py audited exact sources,backend/core
-fingerprints,raw results/logs/profile CSVs. Reports
-`docs/evidence/public-resident-20261001.{json,md}` are committed/pushed8b89080.
-Do not relabel public inference as resident training. Historical failures remain.
+- FullExtraTape/Vjp,packed LH activation/norm and SwiGLU matrix VJPs are wired into
+  graph reverse,retained tapes,alias-owner reduction,device optimizer publication
+  and public C++/Python training. No public API or checkpoint schema change.
+- Isolated extra-full-vjp-dev02 PASSED90 configurations/270 long-short-empty replays,
+  each CPU FP32/FP64 (540 comparisons),width1/7/257,None/zero,poisoned absent owners.
+- Full production standalone dev02 build/four CTests PASSED. Python-owned
+  full-training-python-dev01 build PASSED;host76 tests/51 optional skips;device54
+  tests PASSED including three families,both schedules,real NPU loss cotangents,
+  new module cases and disk/new-process continuation. No standalone/wheel mixing.
+- build-full-training-diag07 PASSED audited test-only relink plus CPU control-policy
+  guards. Production binaries are byte-verified dev02;source full-training-diag07.
+- full-training-dev07 PASSED11 selected component gates: full-training,
+  resident-training,full-vjp,graph-vjp,parameter-vjp,training-step,retained,state-vjp,
+  norm32,lh-full,swiglu. Full gate46 trajectories/736 windows/184 updates includes
+  all9 LH profiles,SwiGLU,mixed,shared owners,both schedules and CPU FP32/FP64.
+  Width257 SwiGLU uses explicit2GiB reverse budget for four retained programs.
 
-## Current training increments and next actions
+Numerical conditions are explicit;do not overstate a strict pass:
+- Full trajectories use AdamW eps1e-5 (test fixture only);public default1e-8 and
+  norm eps1e-7/1e-5 unchanged. The retained kind7 eps1e-8 near-zero reproducer
+  fails independent end-to-end parameter tolerance;CPU FP32/FP64 themselves differ
+  more than twice that tolerance. Actual device gradient and same-gradient CPU
+  optimizer checks PASS both schedules and dtypes. Read training_numerics.cpp.
+- Full qualification selects --full-training-control-check conditioned. Strict
+  control checks remain default and original width257 LH failures remain failed.
+  Scores/other tensors/gradients/updates use original tolerance;routes exact.
+  For mismatched controls,check both own-score complete-candidate softmaxes in
+  FP64 and the rigorous range(score error)/4 propagation bound plus local rounding.
+  Maximum recorded control difference4.470348e-6;13 frames used this comparison.
+  No candidate value or next-step state receives reference data.
+- Original failures are retained in full-training-dev05/dev06,profiles dev04/dev06,
+  rms-float32/float64-diag01,wide-5-diag03/04/06. Build-dev01 constness,build-dev03
+  comment audit,dev04 wrong CLI and build-diag05 reuse-metadata failures are also
+  retained. Passing later scopes do not relabel any of these failures.
 
-State VJP qualified at3e2d54d:216 CPU FP32/FP64 autograd cases,4 actual tapes,
-all34 device cells and7,743 AIV-only profile tasks. Evidence committed4a29b7c:
-`docs/evidence/device-state-vjp-20261001.{json,md}`.
-Full identity/tanh VJP qualified at3285b13:96 CPU FP32/FP64 cases,2 actual tapes,
-all35 cells;8,036 AIV+288 AI_CORE, no AiCPU/fallback. Evidence658943a:
-`docs/evidence/device-full-vjp-20261001.{json,md}`.
-These are local components,not full training/optimizer/throughput claims.
-Retained failures:state-vjp-dev02 bool-cache race;0459195 clean gate/profile
-and state-vjp-add-dev01 assertion-helper regression (fixed without tolerance changes).
+## Next commands and qualification
 
-Graph reverse37430e1 is committed/pushed. HARD single-NPU FP32 sum/broadcast,
-identity/EMA/Add state and identity/tanh Full only; actual-stage reverse loop
-and physical message/scale links stay on device. Contract resident-graph-vjp.md.
-Development graph-vjp-dev04 passed98 complete windows against independent CPU
-FP32/FP64,64 link windows,empty/poison/None/replay/refusals and relevant regressions.
-Dev04 profile:88,699 AIV+1,269 AI_CORE+792 MIX_AIV,no AiCPU/host fallback;
-includes correctness assertions and is not throughput. Retain build-dev01
-Muls scalar-template failure and dev03 wide-fixture forward-budget refusal.
+TASK=/mi/data2T/zlong/tide-execution-flows;RUN=TASK/runs/NAME;
+unit=tide-execution-flows-NAME.service. All new development jobs are terminal.
+Commit only this increment,then push and freeze that exact commit twice:
 
-Formal build-graph-vjp-clean01,graph-vjp-clean01 and graph-vjp-profile-clean01
-all PASSED terminal0 from exact37430e1. Clean build4 CTests,full37-cell gate,
-98 graph windows,64 link windows. Audited source/binary/log/CSV hashes match.
-Profile88,699 AIV+1,269 AI_CORE+792 MIX_AIV,5,934 graph reverse records,
-no AiCPU/fallback. Evidence docs/evidence/device-graph-vjp-20261001.{json,md}.
+- build-full-training-clean01: snapshot/build full-training-clean01,
+  scripts/build_device_control.py --core-build TASK/builds/placement-npu-clean01
+  --build-dir TASK/builds/full-training-clean01 --ascendc-soc Ascend910_9392 --jobs2.
+- build-full-training-python-clean01: same tool with matching Python-owned core
+  TASK/builds/placement-npu-python-clean01,own snapshot/build. Both1800s.
+- After standalone build: full44-cell verify_device_control.py gate with explicit
+  --full-training-control-check conditioned;queue120s/run900s. Separate profile
+  --check full-training --application-arg=--control-check=conditioned. The profile
+  includes correctness oracles and is not throughput. Check five build CTests.
+- After Python build: same54 tests from tests/test_resident_library.py and
+  tests/test_resident_training.py,with TIDE_RESIDENT_DEVICE=npu:0 and the new
+  TIDE_RESIDENT_LIBRARY;matching Python-owned core. 76 CPU interface tests were
+  already passed in development;recheck unchanged-source provenance before reuse.
 
-Parameter-owner reduction1ef23f3 committed/pushed;all formal jobs terminal0:
-build-parameter-vjp-clean01 (4 CTests),parameter-vjp-clean01 (38 cells),
-parameter-vjp-profile-clean01.36 actual aliased graph/root cases,CPU FP32 oracle;
-23,580 AIV+334 AI_CORE+144 MIX_AIV,74 owner kernel records,no AiCPU/fallback.
-Audit exact sources/binaries/logs/CSVs passed. Evidence:
-docs/evidence/device-parameter-vjp-20261001.{json,md}. Contract resident-parameter-vjp.md.
+Audit exact source/component/core/binary/loader/result/log hashes,all exit codes,
+explicit numerical scope and actual placement. Commit reviewed evidence separately.
+Do not repeat unchanged portable core's8954 CPU tests. Then continue normalized
+Aggregate adjoints,attention/HST/SOFTP,FP16,peer progression and the full performance
+matrix. None of those later adjoints has new implementation yet. Normalized
+Aggregate must retain absent all-softmax denominator gradients,physical/logical
+source identity,and present-zero contributions;never recover coefficients by
+message-value division. F4/F5 remain incomplete.
 
-Device optimizer + publication is this tested implementation increment:
-- device_optimizer.{h,cpp},optimizer_layout.h,optimizer_check.cpp;
-  Ascend C optimizer_vector.h and optimizer plan/values/commit kernels.
-- parameter_publish.{h,cpp},Ascend C publisher,training_step_check.cpp;
-  ContentFlow parameter-bank view and per-window source-scale diagnostic snapshot;
-  build/check registration and docs/resident-optimizer.md.
-- Packed SGD/AdamW finite proposals and all-owner commit;None skips every update,
-  connected zero advances slots/counters/decay. Shared TensorImpl update once;
-  distinct owners sharing storage explicitly refused. Publication includes Read aliases.
-- build-training-step-dev01 PASSED isolated checked build;
-  training-step-dev01 PASSED9 component checks,optimizer32 trajectories/256 updates
-  against CPU FP32/FP64 and complete chain18 trajectories/72 actual windows,
-  including2 wide257 trajectories. Each optimizer boundary explicitly truncates.
-  No public training/retained-window/performance qualification implied.
-- build-training-step-dev02 PASSED checked isolated optimizer plan/check finalization;
-  training-step-dev02 PASSED9 checks,including new nonfinite slot/correction
-  transaction tests. training-step-profile-dev02 PASSED79,156 AIV+1,808 AI_CORE+
-  288 MIX_AIV,288 optimizer records,no AiCPU/fallback;not throughput.
-- build-training-step-clean01,training-step-clean01 and training-step-profile-clean01 all PASSED from exact3b31ee2. Four CTests,all40 cells,optimizer32 trajectories/256 updates,18 actual continued trajectories/72 windows. Audited source/binary/log/CSV hashes match. Evidence docs/evidence/device-training-step-20261001.{json,md}.
-- Retained-window backward is this tested implementation increment:retained_tape.{h,cpp},window_bridge.cpp,parameter_accumulate.cpp,
-  retained_fixture/check and three Ascend C kernels,plus parameter_vjp.h and build/check registration.
-  Device tape snapshots after close,actual pending/state cotangent links and alias accumulation;
-  26 retained trajectories/104 windows planned against independent CPU FP32/FP64.
-  build-retained-dev01 PASSED checked isolated build;retained-dev01 PASSED8 checks,26 trajectories/104 retained windows.
-  retained-profile-dev01 PASSED49,324 AIV+838 AI_CORE+832 MIX_AIV,314 bridge records,no AiCPU/fallback.
-  Contract docs/resident-retained.md. Implementation c2423f0 committed/pushed. build-retained-clean01 PASSED from exactc2423f0 (four CTests). retained-clean01 full41-cell gate and retained-profile-clean01 PASSED from the same frozen source; audited source/binary/log/CSV hashes,49,324 AIV+838 AI_CORE+832 MIX_AIV,314 bridge records,no AiCPU/fallback. Evidence docs/evidence/device-retained-20261001.{json,md}. Public C++ training ownership implementation is the concurrent mainline; no public training qualification yet. This is not the public training lifecycle or a throughput claim.
-
-Retain task-local build-optimizer-dev01 failure (static archive after as-needed
-ascendcl) and build-optimizer-dev01b failure (public consumer has no direct
-ascendcl option). External relinker fixed;the old runs remain failed.
-optimizer-dev01 failed before acquiring NPU due to its build dependency.
-optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
-32 trajectories/256 updates. Later full training-step development build supersedes
-its limited build scope. Never treat either failed build as clean qualification.
-
-Current public C++ training owner591e907 and Python client0f363b8 are committed/pushed.
-Formal C++ build-public-training-clean01,public-training-clean01,
-public-training-profile-clean01,build-public-training-consumer-clean01 and
-public-training-consumer-clean01 all PASSED from exact591e907. Four CTests,
-42 component cells,18 trajectories/288 windows/72 updates against CPU FP32/FP64;
-installed consumer3 inference+3 training windows/retained backward/optimizer restore.
-Profile107,345 AIV+1,857 AI_CORE+1,673 MIX_AIV,304 optimizer records,no AiCPU/fallback;
-checker scope,not throughput. Source/binary/loader/log/CSV audit passed; evidence public-resident-training-20261001.{json,md} committed/pushed243cdb3.
-Retain failed build-public-training-dev01 Tensor assignment ambiguity,
-build-public-training-dev02 missing PIC,and public-training-dev02 dependency failure.
-
-Python development build-public-training-python-dev01 PASSED. Test snapshot
-public-training-python-tests-dev01 matches its production component bytes.
-public-training-python-host-dev01 PASSED76 tests/37 optional NPU skips;
-public-training-python-dev01 PASSED40 cases (old inference25,new training15),
-including three graph families,two schedules,SGD/AdamW,NPU loss cotangents,
-CPU parameter/input VJPs,None/zero,aliases,disk and new-process restoration.
-public-training-python-profile-dev01 PASSED1,569 AIV+14 AI_CORE+42 MIX_AIV;
-no AiCPU/fallback;one PDG greedy AdamW case,not throughput.
-Python is a C++/CANN client,not an independent pure-PyTorch resident scheduler.
-
-Submitting immutable Python qualification from exact0f363b8:
-- build-public-training-python-clean01: snapshot public-training-python-clean01,
-  matching core placement-npu-python-clean01,build public-training-python-clean01,
-  build_device_control.py,SoC Ascend910_9392,jobs2,1800s,no NPU.
-- public-training-python-host-clean01 PASSED76 tests/37 optional skips: same snapshot,CPU core placement-cpu-clean01,
-  pytest library/greedy/resident/resident-training,both dtypes,600s.
-build-public-training-python-clean01 PASSED. public-training-python-clean01 PASSED40 cases: resident inference+training
-pytest,float32,one NPU,queue120s/run900s,TIDE_RESIDENT_LIBRARY points to clean build.
-public-training-python-profile-clean01 PASSED via launchers/profile_python_training.py,
-with the same Python core/backend and one-card bounds. Inspect actual terminals.
-Python exact-source/binary/loader/log/CSV audit passed; evidence
-python-resident-training-20261001.{json,md} is this commit.
-Commands use launchers/freeze_run.py below. All paths are TASK/runs/NAME and
-units tide-execution-flows-NAME.service;no submission is a passed check.
-
-Concurrent mainline:uncommitted LH/SwiGLU Full adjoints plus parameter-owner
-reduction/publication/retained-tape integration. Adds extra_full_vjp,lh_full_vjp,
-swiglu_vjp and three packed Ascend C kernels; shared training_trajectory checker.
-build-full-training-dev01 FAILED at C++ compile (const threshold pointer to void*);
-fixed without changing numerical semantics. Preserve the failed run. Added isolated
-Full VJP CPU FP32/FP64,poison,None/zero,short/empty replay and width1/7/257 checks.
-Submitting build-full-training-dev02 from frozen full-training-dev02,standalone
-placement-npu-clean01 core,SoC Ascend910_9392,jobs2,1800s. Development only;
-no new support claim before actual gates. Follow with full-training and impacted
-HARD Full/graph/owner/optimizer/retained/public-training checks,one NPU120s/900s.
-Then separate full-training profile. No per-event host branch was introduced.
-Continue with normalized Aggregate adjoints,then
-attention/HST/SOFTP,FP16,peer progression and complete performance matrix.
-These remain required;do not mark F4/F5 complete at this HARD subset.
-Portable core unchanged:do not repeat8,954 CPU tests/23 optional skips without
-new core changes or unresolved failures. Continue on useful implementation while
-bounded qualification runs;do not fill the turn with queue polling.
-
-## Preserved older work and interrupted timing
+## Older work to preserve
 
 Do not stage/clean old dirty scripts/build_accelerator_scale.py,
 tools/accelerator_scale/{CMakeLists.txt,bounded.h,bounded_export.cpp,bounded_program.cpp,
 bounded_select.cpp,bounded_update.cpp,peer_transport.cpp,resident.cpp},
 scripts/{benchmark_execution_flow.py,verify_execution_flows.py},
 tests/test_flow_semantics.py and tools/accelerator_scale/flow_*.
-They are restricted DAG/rank-aligned consumers,not general-online delivery.
-Keep strict FP32 near-zero failures and FP16 Add-gradient failures/reproducers.
+They are restricted DAG/rank-aligned consumers,not the general-online delivery.
+All historical failed jobs remain in TASK/runs,including state/graph/optimizer
+and public-training build failures. Preserve strict FP32 near-zero and FP16
+Add-gradient failures/reproducers;later passing scopes do not relabel them.
 
-`tide-execution-flows-historical-cpu-attention-01.service` is deliberately SIGSTOP.
-TASK/runs/historical-cpu-attention-01/pause.json overrides its running record.
-It holds host memory and TASK/timing.lock. Do not blindly resume/stop; resolve the
-interrupted timing deliberately before formal performance. Historical Add full
-training CPU78.793172/NPU4 47.932888 ms/token means NPU throughput1.6438× faster;
-it does not qualify the new resident backend. Attention has no valid full CPU ratio.
+historical-cpu-attention-01 is deliberately SIGSTOP. Its pause.json overrides
+running status;it holds host memory and TASK/timing.lock. Do not blindly resume
+or stop. Resolve interrupted timing deliberately before formal performance.
+Historical Add CPU78.793172/NPU4 47.932888 ms/token means NPU throughput1.6438×
+faster;it does not certify this resident backend. No valid CPU Attention train ratio.
 
-## Environment and commands
+## Environment and bounded execution
 
-TASK=/mi/data2T/zlong/tide-execution-flows. Builds and frozen sources live there;
-artifact links artifacts/execution-flows-NAME. Use scripts/durable_records.py for
-atomic fsync/read-back handoffs. Latest disk check278GB data/25GB root; recheck large writes.
-Module libtorch-npu/2.10.0-cann9.0.0;Python
+Module libtorch-npu/2.10.0-cann9.0.0;PYTHON=
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-User-authorized public /opt stack overrides dated personal-anaconda defaults.
-TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;retain module PYTHONPATH and
-prepend snapshot/python. SoC Ascend910_9392;16 chips64GiB. Queue selects physical
-cards; programs use logical npu:0. Never mix standalone SDK with torch_npu wheels.
+User-authorized public /opt stack takes precedence over the dated personal guide.
+TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;preserve module PYTHONPATH and
+prepend snapshot/python. SoC Ascend910_9392;16 chips64GiB. Queue picks physical
+cards;programs use logical npu:0. Recent disk266GiB data/24GiB root;recheck large writes.
 
-```
-python TASK/launchers/freeze_run.py --name NAME --snapshot SNAPSHOT [--commit SHA] [--npu --max-wait 120] -- timeout --signal=TERM --kill-after=10s 900s '{python}' scripts/COMMAND ...
-```
+`python TASK/launchers/freeze_run.py --name NAME --snapshot SNAPSHOT [--commit SHA]
+[--npu --max-wait 120] -- timeout --signal=TERM --kill-after=10s 900s '{python}' ...`
 
-No source/build mutation while jobs read them. `norm32_after_core.py` is a600s
-bounded dependency wrapper:put it BEFORE the queue helper,never hold a card while
-waiting for compilation. All units in background.slice; inspect status plus
-expected result markers/hashes. Re-entry:git status --short --branch;python scripts/status.py.
+All jobs use background.slice,Nice10,isolated frozen sources/builds,jobs2 and bounded
+stops. Never mutate files read by active jobs. norm32_after_core.py waits at most600s;
+place dependencies before the NPU queue and do not submit it when a long build has
+just begun. Source/core/binary/loader hashes and actual exit/markers are authoritative.
+Use scripts/durable_records.py atomic fsync/read-back for handoffs. Re-entry:
+git status --short --branch;python scripts/status.py;read this file.

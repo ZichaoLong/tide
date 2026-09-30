@@ -5,8 +5,8 @@ from tidegraph import (Edge, Graph, Node, Region, GraphConfig, GraphRuntime, Ext
                        ExecutionOptions, ExecutionPlacement, ResidentLimits)
 
 
-def configuration(family):
-    nodes = tuple(Node(i // 2, memory="ema", full="tanh") for i in range(4))
+def configuration(family, full="tanh"):
+    nodes = tuple(Node(i // 2, memory="ema", full=full) for i in range(4))
     edges = (Edge(0, 2, 1), Edge(0, 2, 1), Edge(1, 2, 1), Edge(1, 3, 1))
     if family != "settle":
         edges += (Edge(0, 3, 2),)
@@ -16,8 +16,8 @@ def configuration(family):
                        width=4, ranks=(1, 2) if family == "settle" else ())
 
 
-def runtime(family, device, schedule="greedy"):
-    cfg = configuration(family)
+def runtime(family, device, schedule="greedy", full="tanh"):
+    cfg = configuration(family, full)
     if device == "cpu":
         r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True))
     else:

@@ -12,6 +12,7 @@ struct GraphVjp {
   at::Tensor messages,message_connected,initial,initial_connected;
   at::Tensor weights,biases,full_connected,decay,decay_connected,retention,retention_connected;
   at::Tensor scales,scale_connected,reverse_stages;
+  FullExtraVjp extra;
 };
 // Internal first-order single-window HARD graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter

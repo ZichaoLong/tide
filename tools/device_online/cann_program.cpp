@@ -232,19 +232,29 @@ void CannProgram::relu(const at::Tensor& input,const at::Tensor& out) {
 void CannProgram::silu(const at::Tensor& input,const at::Tensor& out) {
   auto& p=*impl_;p.op("aclnnSilu",p.tensor(input,input.scalar_type()),p.tensor(out,input.scalar_type()));
 }
-void CannProgram::rms_norm(const at::Tensor& input,double epsilon,const at::Tensor& out) {
+void CannProgram::silu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;const auto type=input.scalar_type();
+  p.op("aclnnSiluBackward",p.tensor(gradient,type),p.tensor(input,type),p.tensor(out,type));
+}
+void CannProgram::relu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.building();float zero=0;auto scalar=p.api.create_scalar(&zero,0);
+  if(!scalar)throw std::runtime_error("create ReLU threshold failed");p.scalars.push_back(scalar);
+  const auto type=input.scalar_type();
+  p.op("aclnnThresholdBackward",p.tensor(gradient,type),p.tensor(input,type),scalar,p.tensor(out,type));
+}
+void CannProgram::rms_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
   auto& p=*impl_;p.building();
   if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN RMS norm requires nonempty rows and positive epsilon");
-  auto weight=at::ones({input.size(1)},input.options()),rstd=at::empty({input.size(0),1},input.options().dtype(at::kFloat));
+  auto weight=at::ones({input.size(1)},input.options()),rstd=saved_rstd.defined()?saved_rstd:at::empty({input.size(0),1},input.options().dtype(at::kFloat));
   p.op("aclnnRmsNorm",p.tensor(input,input.scalar_type()),p.tensor(weight,weight.scalar_type()),epsilon,
        p.tensor(out,input.scalar_type()),p.tensor(rstd,at::kFloat));
 }
-void CannProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Tensor& out) {
+void CannProgram::layer_norm(const at::Tensor& input,double epsilon,const at::Tensor& out,const at::Tensor& saved_rstd) {
   auto& p=*impl_;p.building();
   if(input.dim()!=2||input.size(1)<1||!(epsilon>0))throw std::invalid_argument("CANN layer norm requires nonempty rows and positive epsilon");
   const int64_t width=input.size(1);auto shape=p.api.create_int_array(&width,1);
   if(!shape)throw std::runtime_error("create normalization shape failed");p.arrays.push_back(shape);
-  auto mean=at::empty({input.size(0),1},input.options().dtype(at::kFloat)),rstd=at::empty_like(mean);
+  auto mean=at::empty({input.size(0),1},input.options().dtype(at::kFloat)),rstd=saved_rstd.defined()?saved_rstd:at::empty_like(mean);
   p.op("aclnnLayerNorm",p.tensor(input,input.scalar_type()),shape,static_cast<void*>(nullptr),static_cast<void*>(nullptr),epsilon,
        p.tensor(out,input.scalar_type()),p.tensor(mean,at::kFloat),p.tensor(rstd,at::kFloat));
 }

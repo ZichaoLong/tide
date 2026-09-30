@@ -62,6 +62,7 @@ void full_same(const at::Tensor& value,const at::Tensor& connected,const at::Ten
   if(expected.defined()) {
     if(!at::allclose(value,expected.to(at::kFloat),1e-5,1e-6)) {
       std::cerr<<field<<" max_abs_error="<<(value-expected.to(at::kFloat)).abs().max().item<double>()<<'\n';
+      if(value.numel()<=8)std::cerr<<"actual="<<value<<" expected="<<expected.to(at::kFloat)<<'\n';
       throw std::runtime_error(std::string(field)+" numerical mismatch");
     }
   } else if(!at::equal(value,at::zeros_like(value)))throw std::runtime_error(std::string(field)+" evaluated absent poison");

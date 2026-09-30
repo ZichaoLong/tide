@@ -86,3 +86,11 @@ KERNELS = {"retained": "tide_window_bridge", "training-step": "tide_optimizer", 
            "event-attention": "tide_event_payload", "attention-tile": "tide_attention_softmax", "memory": "tide_attention_softmax",
            "event-batch": "tide_event_plan", "fiber-batch": "tide_fiber_plan", "aggregate": "tide_aggregate_apply",
            "resident": "tide_ready_pack", "resident-training": "tide_optimizer"}
+
+CHECKS["full-training"] = ("tide-resident-full-training-check", ("float32",))
+MARKERS["full-training"] = "resident-full-training: passed"
+KERNELS["full-training"] = "tide_extra_full"
+
+CHECKS["extra-full-vjp"] = ("tide-device-extra-full-vjp-check", ("float32",))
+MARKERS["extra-full-vjp"] = "device-extra-full-vjp: passed"
+KERNELS["extra-full-vjp"] = "tide_extra_full"

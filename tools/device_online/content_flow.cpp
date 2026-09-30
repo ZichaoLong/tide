@@ -210,10 +210,10 @@ FullTape ContentFlow::full_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("Full tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
   if(!s.limits.diagnostics)throw std::logic_error("Full tape requires recorded forward values");
-  for(const auto& n:s.profile.graph.nodes)
-    if(!n.identity&&n.full!="identity"&&n.full!="tanh")throw std::invalid_argument("Full VJP contract unavailable");
-  return {s.events->meta,s.events->values,s.events->count,s.full->kinds(),s.full->weights(),s.full->biases(),
+  FullTape out{s.events->meta,s.events->values,s.events->count,s.full->kinds(),s.full->weights(),s.full->biases(),
           s.boundary.batch_size,s.profile.width,s.full->has_tanh()};
+  if(s.lh_full)s.lh_full->tape(out.extra);if(s.swiglu_full)s.swiglu_full->tape(out.extra);
+  return out;
 }
 ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
@@ -230,7 +230,7 @@ ParameterBanks ContentFlow::parameter_banks() const {
   // make parameter mutation available through public inference sessions.
   const auto tape=reverse_tape();const auto& s=*impl_;
   return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
-          s.profile.read,s.profile.scales,s.emission->scales()};
+          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");

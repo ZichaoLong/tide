@@ -5,7 +5,7 @@
 qualification status are recorded in [STATUS](STATUS.md); this contract does not
 by itself certify a build, Python client or throughput. The supported adjoint is
 currently single-NPU FP32 HARD, sum Aggregate, phase-aware broadcast,
-identity/EMA/Add-repeat state and identity/tanh Full. Other adjoints fail at
+identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
 construction. The wider [execution contract](execution-flows.md) remains required.
 
 ## Lifecycle and consumers

@@ -18,6 +18,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS), default=list(CHECKS))
+    parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
     if args.device != "npu" and not args.device.startswith("npu:"):
         parser.error("component qualification requires explicit NPU")
@@ -42,6 +43,8 @@ def main():
             name, dtypes = CHECKS[check]
             for dtype in dtypes:
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
+                if check == "full-training":
+                    command.append("--control-check=" + args.full_training_control_check)
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120)

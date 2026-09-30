@@ -106,7 +106,7 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
     retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
@@ -120,6 +120,7 @@ if(TIDE_DEVICE_ASCENDC)
     tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel
     tide_aggregate_plan_kernel tide_aggregate_apply_kernel
     tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel tide_reverse_links_kernel
+    tide_extra_full_plan_kernel tide_extra_full_payload_kernel tide_extra_full_reduce_kernel
     tide_graph_reverse_meta_kernel tide_graph_reverse_payload_kernel tide_graph_reverse_scales_kernel tide_parameter_vjp_kernel
     tide_optimizer_plan_kernel tide_optimizer_values_kernel tide_optimizer_commit_kernel tide_parameter_publish_kernel
     tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide_parameter_accumulate_kernel)
@@ -151,6 +152,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-reverse-links-check reverse_links_check.cpp)
     target_compile_options(tide-device-reverse-links-check PRIVATE -fPIC)
     target_link_libraries(tide-device-reverse-links-check PRIVATE tide-content-flow)
+    add_executable(tide-device-extra-full-vjp-check extra_full_check.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-device-extra-full-vjp-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-extra-full-vjp-check PRIVATE tide-content-flow)
     add_executable(tide-device-full-vjp-check full_vjp_check.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-device-full-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-full-vjp-check PRIVATE tide-content-flow)
@@ -225,10 +229,15 @@ if(TIDE_DEVICE_ASCENDC)
   else()
     add_executable(tide-resident-check resident_check.cpp)
     target_link_libraries(tide-resident-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
-    add_executable(tide-resident-training-check training_check.cpp training_test.cpp training_failures.cpp
+    add_executable(tide-resident-training-check training_check.cpp training_test.cpp training_trajectory.cpp training_compare.cpp training_failures.cpp
       retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
     target_compile_options(tide-resident-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-training-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
+    add_executable(tide-resident-full-training-check full_training_check.cpp training_test.cpp training_trajectory.cpp training_compare.cpp training_numerics.cpp
+      retained_fixture.cpp graph_vjp_fixture.cpp full_vjp_fixture.cpp)
+    target_compile_options(tide-resident-full-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-resident-full-training-check PRIVATE tide-resident tide-device-test-compare tide::runtime)
+    add_test(NAME resident-control-comparison COMMAND tide-resident-full-training-check --device=cpu --dtype=float32 --control-selftest)
     include(GNUInstallDirs)
     include(CMakePackageConfigHelpers)
     install(TARGETS tide-resident EXPORT TideResidentTargets LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

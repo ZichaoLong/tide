@@ -3,7 +3,7 @@
 The internal `append_parameter_vjp` component reduces the physical partials
 from [graph VJP](resident-graph-vjp.md) into `ParameterRegistry` owners. Its
 single-NPU FP32 HARD profile has the same sum/broadcast, identity/EMA/Add state
-and identity/tanh Full limits. It is not an optimizer or public training API.
+and identity/tanh/LH/SwiGLU Full limits. It is not an optimizer or public training API.
 
 The caller supplies the original graph/model registry, optionally restricted to
 trainable owners. Static alias metadata uses TensorImpl identity and canonical

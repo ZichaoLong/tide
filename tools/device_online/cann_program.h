@@ -31,10 +31,12 @@ class CannProgram {
   void tanh_backward(const at::Tensor& gradient,const at::Tensor& activation,const at::Tensor& output);
   void relu(const at::Tensor&, const at::Tensor& output);
   void silu(const at::Tensor&, const at::Tensor& output);
+  void silu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& output);
+  void relu_backward(const at::Tensor& gradient,const at::Tensor& input,const at::Tensor& output);
   // Normalize the last dimension with unit affine parameters. Per-owner
   // learned affine values are separately packed and applied by the caller.
-  void rms_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
-  void layer_norm(const at::Tensor&, double epsilon, const at::Tensor& output);
+  void rms_norm(const at::Tensor&, double epsilon, const at::Tensor& output,const at::Tensor& rstd = {});
+  void layer_norm(const at::Tensor&, double epsilon, const at::Tensor& output,const at::Tensor& rstd = {});
   void batch_matmul(const at::Tensor&,const at::Tensor&,const at::Tensor& output);
   void permute(const at::Tensor&,const std::vector<int64_t>& axes,const at::Tensor& output);
   void index_copy(const at::Tensor& target,int64_t axis,const at::Tensor& indices,const at::Tensor& source);

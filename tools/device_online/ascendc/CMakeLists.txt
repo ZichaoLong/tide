@@ -57,3 +57,7 @@ ascendc_library(tide_parameter_publish_kernel STATIC tide_parameter_publish.cpp)
 ascendc_library(tide_window_bridge_meta_kernel STATIC tide_window_bridge_meta.cpp)
 ascendc_library(tide_window_bridge_values_kernel STATIC tide_window_bridge_values.cpp)
 ascendc_library(tide_parameter_accumulate_kernel STATIC tide_parameter_accumulate.cpp)
+
+ascendc_library(tide_extra_full_plan_kernel STATIC tide_extra_full_plan.cpp)
+ascendc_library(tide_extra_full_payload_kernel STATIC tide_extra_full_payload.cpp)
+ascendc_library(tide_extra_full_reduce_kernel STATIC tide_extra_full_reduce.cpp)

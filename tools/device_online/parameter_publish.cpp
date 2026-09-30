@@ -1,4 +1,5 @@
 #include "parameter_publish.h"
+#include "packed_lh_full.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_parameter_publish.h"
 #include <ATen/core/grad_mode.h>
@@ -25,19 +26,33 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   buffer(values,device,at::kFloat,registry.values.sizes());buffer(error,device,at::kInt,{1});
   buffer(b.decay,device,at::kFloat,{nodes,width});buffer(b.retention,device,at::kFloat,{nodes});buffer(b.read,device,at::kFloat,{nodes,width});
   buffer(b.sources,device,at::kFloat,{std::max<int64_t>(1,inputs+edges)});buffer(b.emission,device,at::kFloat,{edges+ports+1,1});
-  std::map<std::string,Ref> refs;bool tanh=false;
+  std::map<std::string,Ref> refs;bool tanh=false,lh=false;int64_t swiglu=0;
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto name="nodes."+std::to_string(n)+".";
+    const auto kind=node.identity?0:lh_full_kind(node.full);
     if(node.aggregation!="sum"||(!node.identity&&(node.emission!="broadcast"||
-        (node.full!="identity"&&node.full!="tanh")||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"))))
+        (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"))))
       throw std::invalid_argument("parameter publication module contract unavailable");
     if(node.identity)continue;
     refs[name+"read"]={4,n*width,{width}};
     if(node.full=="tanh"){tanh=true;refs[name+"weight"]={0,n*width*width,{width,width}};refs[name+"bias"]={1,n*width,{width}};}
+    if(kind) {
+      lh=true;const auto norm=(kind-1)%3;
+      if(norm)refs[name+"extra.lh_norm_weight"]={7,n*width,{width}};
+      if(norm==2)refs[name+"extra.lh_norm_bias"]={8,n*width,{width}};
+    }
+    if(node.full=="swiglu") {
+      const auto offset=swiglu++*2*width*width;
+      refs[name+"extra.ffn_gate"]={9,offset,{width,2*width}};refs[name+"extra.ffn_up"]={10,offset,{width,2*width}};
+      refs[name+"extra.ffn_down"]={11,offset,{2*width,width}};
+    }
     if(node.memory=="ema")refs[name+"decay"]={2,n*width,{width}};
     if(node.memory=="lh-add-repeat-v1")refs[name+"extra.add_retention"]={3,n,{}};
   }
   if(tanh){buffer(b.weights,device,at::kFloat,{nodes+1,width,width});buffer(b.biases,device,at::kFloat,{nodes+1,width});}
+  if(lh){buffer(b.extra.lh_weights,device,at::kFloat,{nodes+1,width});buffer(b.extra.lh_biases,device,at::kFloat,{nodes+1,width});}
+  if(swiglu){buffer(b.extra.gate,device,at::kFloat,{swiglu+1,width,2*width});buffer(b.extra.up,device,at::kFloat,{swiglu+1,width,2*width});
+    buffer(b.extra.down,device,at::kFloat,{swiglu+1,2*width,width});}
   for(int64_t i=0;i<inputs;++i)refs["input_scale."+std::to_string(i)]={5,i,{}};
   for(int64_t i=0;i<edges;++i)refs["agg_scale."+std::to_string(i)]={5,inputs+i,{}};
   for(size_t i=0;i<g.outgoing_ports.bindings.size();++i) {
@@ -57,8 +72,10 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   auto table=at::tensor(plan.empty()?std::vector<int64_t>(4,0):plan,at::kLong).reshape({-1,4}).to(device);
   auto offsets=at::tensor(tiles,at::kLong).to(device),dummy=at::zeros({1},values.options());
   const auto w=tanh?b.weights:dummy,bias=tanh?b.biases:dummy;
+  const auto lw=lh?b.extra.lh_weights:dummy,lb=lh?b.extra.lh_biases:dummy;
+  const auto gate=swiglu?b.extra.gate:dummy,up=swiglu?b.extra.up:dummy,down=swiglu?b.extra.down:dummy;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
-    ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(error),count,tasks),
-    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,error});
+    ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(error),count,tasks),
+    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,error});
 }
 } // namespace tide::device_online

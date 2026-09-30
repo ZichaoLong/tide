@@ -3,7 +3,7 @@
 The internal `append_graph_vjp` composes Full and state-chain adjoints with
 message dependencies from the actual resident forward journals. Its current
 profile is single-device FP32 HARD, sum Aggregate, broadcast emission (including
-static phases), identity/EMA/Add-repeat state and identity/tanh Full. Unsupported
+static phases), identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Unsupported
 modules refuse when requesting `ContentFlow::reverse_tape()`. Public resident
 sessions remain inference-only until the training API and lifecycle are qualified.
 
@@ -65,6 +65,6 @@ be tied to an immutable source revision; this document is the contract.
 Internal [owner updates](resident-optimizer.md) and [retained-window bridges](resident-retained.md)
 now compose with this component under their own qualification scopes. Remaining
 training work includes public autograd/explicit training ownership and checkpoints;
-normalized Aggregate, LH/SwiGLU, attention and HST/SOFTP adjoints; FP16 and peer
+normalized Aggregate, attention and HST/SOFTP adjoints; FP16 and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.

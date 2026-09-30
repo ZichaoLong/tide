@@ -9,10 +9,11 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--checkpoint", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--full", default="tanh", choices=("tanh", "swiglu", "lh-silu-layer-v1"))
     args = parser.parse_args()
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    r = runtime("pdg", args.device)
+    r = runtime("pdg", args.device, full=args.full)
     values = torch.arange(16, dtype=torch.float32).reshape(1, 4, 4) * .005
     with torch.no_grad(), r.training_session(1, checkpoint=args.checkpoint) as s:
         external, kw = inputs(s, values, 2, 4)

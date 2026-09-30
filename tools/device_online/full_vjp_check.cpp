@@ -63,8 +63,7 @@ void actual_tape(at::Device device,bool prefill) {
   require(refused,"unrecorded forward exposed Full tape");
   f.graph.nodes[0].full="lh-relu-identity-v1";f.graph.compile();f.initial.identity=f.graph.identity;limits.diagnostics=true;
   ContentFlow unsupported(f.graph,f.model,f.initial,device,limits);
-  refused=false;try{unsupported.full_tape();}catch(const std::invalid_argument&){refused=true;}
-  require(refused,"unimplemented Full VJP became identity");
+  require(unsupported.full_tape().extra.lh_kinds.defined(),"LH Full tape lost its explicit adjoint contract");
 }
 }
 int main(int argc,char** argv) {
