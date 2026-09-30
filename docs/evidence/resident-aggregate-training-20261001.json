@@ -1,0 +1,283 @@
+{
+  "schema": "tide-aggregate-training-evidence-v1",
+  "source": "0ba9fc62fb583036d6b906a2e182bf5982b0d1a7",
+  "scope": "single-NPU FP32 HARD built-in normalized Aggregate adjoints, public C++/Python client, alias-aware updates and retained continuation; not pure-PyTorch resident scheduling, attention adjoints, HST/SOFTP, FP16, peers or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 46,
+    "build_ctests": 5,
+    "isolated_configurations": 39,
+    "isolated_replays": 117,
+    "isolated_cpu_comparisons": 234,
+    "trajectories": 57,
+    "windows": 912,
+    "updates": 228,
+    "cpu_references": [
+      "float32",
+      "float64"
+    ],
+    "cpu_interface_tests": 76,
+    "optional_npu_skips_in_cpu_job": 103,
+    "python_device_cases": 106,
+    "new_process_resume": true
+  },
+  "numerics": {
+    "adamw_trajectory_epsilon": 1e-05,
+    "public_adamw_default_epsilon": 1e-08,
+    "aggregate_control_policy": "strict",
+    "strict_tensor_tolerances": true,
+    "exact_routes": true,
+    "candidate_receives_reference_results": false,
+    "existing_full_dependency": {
+      "control_policy": "conditioned",
+      "affected_frames": 13,
+      "maximum_control_abs": 4.470348358154297e-06,
+      "report": "resident-extra-full-20261001.md"
+    }
+  },
+  "builds": {
+    "standalone": {
+      "manifest_sha256": "769148df089004682d33c8155ef1f2e88f0d13f7821e76ced827c0339b917552",
+      "component_sha256": "a1411a9f0ed7d2e3fa965e152b56758e1c61729ac81a2e5155711407ab7bfbf1",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "tide-device-control-check": "19c72cbf8d36e0e9c16bca1a5daae24e55c968d9994c1bbdabddb3cd73d31c0c",
+        "tide-device-failure-check": "4b3410fbf04dcd0251a97004d15eca67222d28bd1e848e6ab21da53aadcb9dbd",
+        "tide-device-numerical-check": "aefe425434a7af2cf17060fc2387989f548e28b02de67dde7ff537d486e34ed0",
+        "tide-packed-queue-check": "9e64ee746054f4de0ebdd0599675546f4486d4663d9718ec30dc85be6097bd47",
+        "tide-device-closure-check": "3a32422d70ea49cb0ef0b0d87b93a006cdf34beb53c625f9619aff692b3f3f7d",
+        "tide-device-queue-check": "9301f0f5240632ba6794183d032ad3125bd602bafc024a23571fdcaf23357229",
+        "tide-device-broadcast-check": "4b5c468cc58db5888f84e01554ee0e4be869fb4baea67f68b7faa41250c4cbf1",
+        "tide-device-ready-check": "d8aa5f0ba2303036466f980b1580549e28be7b209d0fa15d179a87402c6d6f43",
+        "tide-device-selector-check": "024cf4b4cd67eda8faace27269820b71ca42d91b0fdcb96a35ef19a650d30156",
+        "tide-content-flow-check": "868540b97301bedd08489fbe65d8dfd02e6bbad1868bc2a452c39798839fa5b5",
+        "tide-content-window-check": "962c6393cce1dcd882682c0938fee19a12b18726c351ccc3cd84b82fd3423dce",
+        "tide-packed-full-check": "bff32cdb2a2b24c435c4e3f8f6380757f9d006084f9eb2319c5f3e5e28a763be",
+        "tide-packed-sum-check": "56f616371eeb7b25f415c73e597d2c1a68d915c619123ada61e6861664569788",
+        "tide-device-add-check": "4fb9ef5ee5a2e0dab15100b2b1f346c32403dab84087ca901473100e7259e72c",
+        "tide-device-state-vjp-check": "5a030504598fcc0342aab078a3b3a876ef6df70257e8f637b4ab17c9dc9419bc",
+        "tide-device-full-vjp-check": "3ed5a1419b9a8d565120d2912c18e55e28b3185ca3aaf9b0062ead474527aa5f",
+        "tide-device-extra-full-vjp-check": "24eedcc796b7d08d8e4c5507fbfb30aea3dc87d1c11af3059467345af1bf465b",
+        "tide-device-reverse-links-check": "9ff129ba296bf102fc019604e20a55215bc2525527f5e5b6815cb7928119e4f5",
+        "tide-device-graph-vjp-check": "400bc8fbecd550eb12837bec5f06acc5266fe0822844cb4bb4f24f80b8463553",
+        "tide-device-parameter-vjp-check": "75859b40af295536db9d6b1888213b8294e979646ec20e5ef7fdcb473bdd1eee",
+        "tide-device-optimizer-check": "fa4332bae70166c7f7645c228c0389938690ea7c045165b3a7018e20f69babb5",
+        "tide-device-training-step-check": "06f7ad5d57380db3e67fd1eb640040f18c9f2113ffa7e39e9b9a4a2819557b4c",
+        "tide-device-retained-check": "c026156e9ba93da2c0ea5af6276215e31aa67ec21228a864e4658e132623c34d",
+        "tide-device-clock-check": "3c38377e756b2eaf19109b7ecd7bda793c7e5a02b07590ebe62bdfa07702a32e",
+        "tide-device-norm-check": "b8129e5b31768881f61d3c1da280ffa14c026dd86902a0800f58dfe164a2cd72",
+        "tide-device-lh-full-check": "510ca95f95ecd49bd8c8e9f4da3d3bb26a094da87a98989e0974d3fadb9b4910",
+        "tide-device-origin-check": "886f28eaae26cf6290b6dc9c7d2cd25b654d8375d38e2fa26d28d3bb299bf314",
+        "tide-device-emission-check": "7c40b9566e02bbfedd20c64dce6c122885817c4d723539845f420964fae2e107",
+        "tide-device-swiglu-check": "6ea2cbfeaafdfa55d0aa6270c540829aad403ba9edbed1f7ebe269348f298442",
+        "tide-device-fiber-check": "8eac9a45839ce8c7375a92929004a42684092c53e068ead917242f04b037736e",
+        "tide-device-fiber-pool-check": "bd98d999fed1c7375fe02a727a1a312ce6ca06c7d15d18a9dd9bdc122f5e81b4",
+        "tide-device-event-attention-check": "64ea8b5249965b656c7fc2ada5e3352262157658e2533a2020afc73589775a58",
+        "tide-device-attention-tile-check": "6f934909820b09fa6bd6812d9a97d3dbc2ed54a0abfaa481ed16fd7783560330",
+        "tide-device-memory-check": "be314a5e122ff0a34a82340fde02ae4fd6497d3effd98789a95a11f20b57b397",
+        "tide-device-event-batch-check": "28e3c764b09b66a5733adc40b6dc43149fdefab9bced0cef678d3eb242e0fafc",
+        "tide-device-fiber-batch-check": "a9a29f57b72e41dbc97486b93876af3d9e96c1d5ebe8c31e26cc77177cc816d8",
+        "tide-device-aggregate-check": "61dbaad17a494af46400b89e1a10d32eae604ebe70525d035a4e13a6dba73025",
+        "libtide-resident.so": "5354f39ef4c5ec237844dcd2393aae09e04d9e33eec6d49659737bc9c2c4d3f4",
+        "tide-resident-check": "24b0b203b6c35aa3995ff77f63ed554237a6ee94077d29faa2bd809ac63840f3",
+        "tide-resident-training-check": "d7f2fcfd10d7aa803b8dbf70f35d4bf178e49e7fad9be797944e87cb221c235f",
+        "tide-resident-full-training-check": "21fc83b2a40bab291715cc74f6df7695d6bdadf445d1535816bebac4819733a4",
+        "tide-device-aggregate-vjp-check": "188399f7fcce2c817c5ac40ac67cb1031e231d186292715315620125afd23e9d",
+        "tide-resident-aggregate-training-check": "199ed2442515d338710dc38671ed7239377162d2bb7232bbc9c0634071296964"
+      },
+      "loader_sha256": {
+        "tide-device-control-check": "e0a9a02cf92b8b2d6a37e3fe0f85c0c2c2143544ca36cb4bbf517c0c73509932",
+        "tide-device-failure-check": "eb6dd69898835ba5c52995ebb0ba160c26f924bbbda16ec71546676f997f4f22",
+        "tide-device-numerical-check": "42d6a5bc48abef9720cd0eead879de33322f128154ca456c15cf43724b266fa8",
+        "tide-packed-queue-check": "93bf5efb62b527dc0e8b073be92a0415bedb62ef64fe116a679c9a002ba6ba55",
+        "tide-device-closure-check": "0b7cb32f85c0023176e43cb0230fc4cf70d417d8f23c382a3190f075aed15dee",
+        "tide-device-queue-check": "465d9f5befa1eb837640f7b8c68375a3f2bf83bff3650932ed275bdd83cd032d",
+        "tide-device-broadcast-check": "70757ac06a5a9dd45b8e96ab1009df3bdcec9d332b849c820badc615bebd7883",
+        "tide-device-ready-check": "aa231150041c56690516a64fb9f6a1e976e9004082ddbdfeee20461ef26f8e38",
+        "tide-device-selector-check": "b79f2eb280571fabd2ae0057c14dc85c11e28f371effa09e852906488875a7b0",
+        "tide-content-flow-check": "c005d480bec7e5158145f0dfed0af27170dae6b6b6ad62c069e19dbb2474501f",
+        "tide-content-window-check": "61f5af454bc7521a749e3607ebbc404bd19637b0664b8d91bbd47d2bc25416fd",
+        "tide-packed-full-check": "b0fdfd65d29eb6accf797d7282ac44b7cfc11637bcc29e1b01b21d76f2a650c0",
+        "tide-packed-sum-check": "c405bf525f05828f2b366e7c13bb7a02152d092ed9004a047d1dc16bd1f08552",
+        "tide-device-add-check": "42fcae2ae9ce818673d3d648d97031274a9319bb5bb7319236ec68e7bc59cf09",
+        "tide-device-state-vjp-check": "b1a4e40954a69e087331b64b14002baddbaf0cb389d0a0265b424e6e5fe4a923",
+        "tide-device-full-vjp-check": "c1c1bc8078ea3c6cfaf7a24f01886ee44fb048fbff629a352754d68f0ec90940",
+        "tide-device-extra-full-vjp-check": "9b0614d5028aec3576cf45f9a60cbb57e8ae5c168fe7e17e7ffd02fe6a6392cd",
+        "tide-device-reverse-links-check": "9f00a1a009436c75abe3cd0b7fea4ee426d0c5df84aba8642b9e66d1f89f4371",
+        "tide-device-graph-vjp-check": "e51d7fa33606892bb9b3bb6f7c97af549e6edddf57d8b0ef490d39da7478a27a",
+        "tide-device-parameter-vjp-check": "41852a59ad05213df9864363fffc6f3e0573d775f0d0d3375d52c9bb908c390d",
+        "tide-device-optimizer-check": "ad01b325ebaa3218e2c44754ffdac95fed68bfbe1e2f68b170aa9f29a341bd83",
+        "tide-device-training-step-check": "b37f8f135fe78ebc9354fa71ffc14ad287c2ac23fdbd6e0f8a2137659645171e",
+        "tide-device-retained-check": "5573f83efa4f2da18c5e151060e2357657c436991d61a3778436fe86f5fe0011",
+        "tide-device-clock-check": "1bb4fae48b1b743279566846ecab11d51a6a50394215824b571a4c26aee08398",
+        "tide-device-norm-check": "2bd977b998f086e15a545f0d55d05cfd5ba28ab3ec7b2a66b5ccefede43b83d6",
+        "tide-device-lh-full-check": "d5ecac9a04c9debe95b29b8738ab0759d49536d916665c2b9769bf2528c479cf",
+        "tide-device-origin-check": "8f4fd68993a9577933f3ae4f6364c580aaae3255d66842f2c8d57c238de77e50",
+        "tide-device-emission-check": "e9346da2b2b75a4d4b2054528082fd7a409d910f1f7bd13531640a6e6af0f1ee",
+        "tide-device-swiglu-check": "2e5820da4186c0481b6646d211a7647946486ba529d0c76fbbd740bd66177eb8",
+        "tide-device-fiber-check": "d026d5abd281d0e164b3a0a232c8a31d385b6d677d88c75449511f9160458acb",
+        "tide-device-fiber-pool-check": "0e93498e1efa6273eab469d3540ae69370c6b6eed6bf725b2e76c3b976b76843",
+        "tide-device-event-attention-check": "de78b8cc36607a1c48f6b841893fb0434893c66f26548a0cf931d7d1b44578cf",
+        "tide-device-attention-tile-check": "2cb3498babf27cf3532556bd29758c4be36765171cf2a2c42af2e25f89c4d836",
+        "tide-device-memory-check": "05fdeb7beb7dcc1b83de631636af907e665d9bd4f284c052301730d498434c48",
+        "tide-device-event-batch-check": "ef95aa8487000872002a1a2fce6e1dfae8ef66630d830eee17a1e26929ddee62",
+        "tide-device-fiber-batch-check": "0488eeeb4b193cf273e1ff74915040af76072d660c5d9a77579e9eee46607cc7",
+        "tide-device-aggregate-check": "6788de488e3f71ea7f7609ef3f3ec1191870df776e346e695f9891c558f7cb72",
+        "libtide-resident.so": "1660c483d41926f50090474bdd90a378b1aa43e662c0635f19982b27b7092fea",
+        "tide-resident-check": "496a6664d7851a98a9b33a95469e9f567baac51408addfb4bd69779c5424061a",
+        "tide-resident-training-check": "c469134e3e22b7e3d78aaa097f615607cc33ef29f6a6a330f6118746ae48a1bb",
+        "tide-resident-full-training-check": "ec05b58f05913534f4c4c09ac07924fba82a0fb3bf55e5fe362e6e959fa8341c",
+        "tide-device-aggregate-vjp-check": "2135ac4167c12950cd7eab6e80ce61c995754f4d7f9c16db013bf9ca5ccb1ba1",
+        "tide-resident-aggregate-training-check": "037ad7989da7f1bb4a1aa4d33a691032d78a7117e6ec89fc69c349892e023044"
+      }
+    },
+    "python": {
+      "manifest_sha256": "6acef6301bc03dcde47644eeead237a23706c5584a3e28e50696eec2cb3aa8dd",
+      "component_sha256": "a1411a9f0ed7d2e3fa965e152b56758e1c61729ac81a2e5155711407ab7bfbf1",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "_tide_resident.so": "9085d8eb39b03f6ff1bbe8c4effff8f6d166eca17257078c336e97d42c4a3d55",
+        "libtide-resident.so": "77290f0b3060774e4cb191ac1828888daa08dbede45e16c7a4a15c9545b8f0ea"
+      },
+      "loader_sha256": {
+        "_tide_resident.so": "802b67e4b3b35c68c3b19511c64877a627cf5da41175f8ced32c95f85284454c",
+        "libtide-resident.so": "32c8e3d38c4f8e85db3c0eb1da63600e66e5f818232833ce6a47c566b08ccb40"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-aggregate-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "cdb7b0ceaab3243ce97fa042a3cd561532ff369c046585a4ee4f3cacb584ca0b",
+        "task.log": "b82bc6ca976a5d77e5905f16d48d4afec8a47c221e72902989177eef21059bd9"
+      }
+    },
+    {
+      "name": "build-aggregate-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "783e1553e3c0722f632b9cedcd32c26dd2d356bd1c0dfedf3e68bf8ae35df7fd",
+        "task.log": "600e8bacaec01474a4e588767fb3e6b8c93e42edc718c4e8e6dd52ec924a527b"
+      }
+    },
+    {
+      "name": "aggregate-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9d139fe919fba56a813f14c64163cf54de3592b9ba93e074fba9e945050ed0f9",
+        "task.log": "33842ac89fbe42fabb0382195d73bfabd0a047f696784252b1280301b77eaff0",
+        "gate/result.json": "ba1d702009d3264168532dd19e3557c0d35ae577f78f936dd32047f22ee80768"
+      }
+    },
+    {
+      "name": "aggregate-training-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "72139046c0ee352dfe6ad5ebe5352272dfed463c0a2ed788182b6f04d0911769",
+        "task.log": "84457a945f1e923bc6193a8b68eed6b67e4f4b8d99be935df17c1ae8702e6846",
+        "profile/result.json": "7ed63ff037aeef2ab44915d2656c2840351db175c15e8cc40e9881e3aed8caa0",
+        "profile/profile.log": "c8ff18f77a628b6b02911c371416167a4f2f55ba2a5ac8c66162ecf3a21a544d"
+      }
+    },
+    {
+      "name": "aggregate-training-host-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2af9e82879a90a6bc4dc3cfd2788caf342ee6492e1d1e5c536ef1f942cdacbed",
+        "task.log": "d8f3a8a9f361c87e282faa235eb6febd85714bd27b3e94086662e377d7b75360"
+      }
+    },
+    {
+      "name": "aggregate-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ae482de6cca2681cb806b5957c38848e0ffbd874c7109bf9cd8dd9ec228925ca",
+        "task.log": "032e02776152ec827765f9d4395a38447ec487bf41b58d119b83383c71300d9e"
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "build-aggregate-training-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "f9ea40b117a63f64b8479d26552dd3a2befebce591157ac75eee53fe1ce57478",
+        "task.log": "c5601ac37f67ef4cbcef91a0e3cc8d6874382fbe84295e1d94d233f418e6c197"
+      }
+    },
+    {
+      "name": "build-aggregate-training-python-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "e0a73ed9be590ecc092ae1eb8044b80058a25df8163d4c2ac7cf5ef9fd6a5d53",
+        "task.log": "e4f737c874dd8f8d3fe45671fb4eba570b2cc4ef2a5c8b8c6543ec40f16504cc"
+      }
+    },
+    {
+      "name": "build-aggregate-training-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "e2f4dd238427584205ed34fcfe8c5667d9d5c2c4869eab36e5cd28359536ad16",
+        "task.log": "6db2bf473b9d9c0801cae416dc3a3775d007b12ed766c88cc4fcf99fcc589a83"
+      }
+    },
+    {
+      "name": "build-aggregate-training-diag03",
+      "state": "cancelled",
+      "exit_code": 143,
+      "files_sha256": {
+        "status.json": "d1e2c27f1effa8239789dd8eb6e786802d2a59b08173f357b3f69c1b65202a09",
+        "task.log": "80879996dd388199e1aad6ab34897d464edf63edf720f34524c8382a6a5a7c35",
+        "cancellation.json": "776022edc97d72c946f5ce32803fff224fe42a877d1c34eb48ccc4668cfee4be"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 72933,
+        "summed_task_us": 282430.64000000706
+      },
+      "MIX_AIV": {
+        "count": 1213,
+        "summed_task_us": 2574.1200000000117
+      },
+      "AI_CORE": {
+        "count": 578,
+        "summed_task_us": 1937.4199999999985
+      }
+    },
+    "kernel_records": {
+      "tide_aggregate_vjp": 1153,
+      "tide_optimizer": 1704,
+      "tide_graph_reverse": 2867,
+      "tide_window_bridge": 410,
+      "tide_ready_pack": 47
+    },
+    "raw_csv_sha256": {
+      "raw/PROF_000001_20261001072753077_03355711CDPCLJQH/mindstudio_profiler_output/op_summary_20261001072900.csv": "7062f8e08acd0aa23d921fc258a94780353b9a079e3a5b0fd67ba45f83ccbd28",
+      "raw/PROF_000001_20261001072753077_03355711CDPCLJQH/mindstudio_profiler_output/api_statistic_20261001072900.csv": "417002bc52fad62c503e8bbec8ddbdf4486abd9357bcbf7d4b78d66409d44d3e"
+    },
+    "host_fallback_diagnostic": false,
+    "interpretation": "observed correctness-check trace includes construction and CPU oracles; task sums are not wall time or throughput"
+  }
+}

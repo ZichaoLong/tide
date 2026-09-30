@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-09-30T23:04:49.348134+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T23:35:23.136021+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`,real path
 `/var/tmp/zlong-graph-execution-foundation/repository`;branch `graph-execution-foundation`.
-HEAD **4c00aa5**,pushed; LH/SwiGLU implementation5143de3 is formally qualified. No authorization pending. No subagents.
+HEAD **0ba9fc6**, pushed; normalized Aggregate implementation committed. LH/SwiGLU5143de3 is formally qualified. No authorization pending. No subagents.
 Reference repositories and ObsidianVault remain read-only. **F1–F7 are incomplete.**
 
 ## Contract and order
@@ -73,65 +73,61 @@ trajectory tolerance. --full-training-control-check conditioned was explicit:
 routes exact. Strict failures remain failed. Read docs/resident-full-vjp.md.
 Width257 retained SwiGLU requires explicit2GiB reverse budget.
 
-## Normalized Aggregate increment and next commands
+## Normalized Aggregate immutable qualification
 
-Implementation is ready to commit;immutable qualification has not run yet.
-All new development jobs are terminal. No authorization pending.
+Implementation0ba9fc6 is committed/pushed and formally qualified. Evidence:
+docs/evidence/resident-aggregate-training-20261001.{md,json}. Task-local audit:
+TASK/launchers/aggregate_training_evidence.py (pinned to0ba9fc6, audit PASSED).
 
-- aggregate_tape/vjp and packed plan/payload/reduce kernels implement mean,
-  weighted mean,active softmax and all-source softmax. Actual connected rows,
-  missing/all-source denominator gradients,physical/logical source identity,
-  present-zero and zero-scale/raw-message gradients remain distinct.
-- Graph reverse,retained banks,alias-owner reduction and device publication are
-  integrated. Gradient bank10/publish bank12. No public API/checkpoint change.
-- aggregate-vjp-dev04 and strengthened aggregate-vjp-dev05 PASSED39 configurations/
-  117 replays each,CPU FP32/FP64,width1/7/257,domain257,None/zero,poison,replay,
-  budget and duplicate-source refusals. dev05 separates zero scale/nonzero raw
-  data from a different present-zero source. Current component hash matches
-  frozen aggregate-training-diag05 exactly.
-- aggregate-training-dev04 PASSED57 public C++ trajectories/912 windows/228 updates,
-  CPU FP32/FP64,both schedules/SGD+AdamW,mixed profiles,feedback,self-loops,
-  shared coefficient/physical owners,exclusive source aliases and checkpoint
-  continuation. Input stride is now per(batch,port). Explicit AdamW eps1e-5;
-  strict existing tensor/control/route checks,public default unchanged.
-- aggregate-regression-dev04 PASSED7 related components: Aggregate forward,
-  graph/parameter VJP,training-step,retained,resident-training,Full training.
-  The existing Full checker alone explicitly uses conditioned control comparison.
-- build-aggregate-training-python-dev02 PASSED full Python-owned build;
-  aggregate-training-python-dev02 PASSED106 device cases including all three
-  families,both schedules/optimizers,real loss cotangents,disk/fresh-process resume.
-  Python test sources unchanged since that run. Host gate PASSED76/103 optional
-  skips. A separate12-case CPU fixture probe passed after excluding frozen
-  boundary parameters from its autograd request (first probe setup failed).
-- aggregate-profile-dev04 PASSED separate full Aggregate checker profile;
-  observed72,933 AIV+578 AI_CORE+1,213 MIX_AIV;no observed AiCPU/fallback.
-  This correctness profile is not throughput.
+Both clean standalone and Python-owned builds PASSED;five CTests,all46 component
+cells,39 VJP configs/117 replays/234 CPU FP32+FP64 comparisons. Public C++:
+57 trajectories/912 retained windows/228 updates;Python106 NPU cases with no
+skips;host76/103 optional NPU skips. Aggregate uses strict tensor/control/route
+checks and explicit AdamW eps1e-5. The existing Full cell alone uses its explicit
+conditioned control policy;its older failures remain failures.
 
-Retain failures: build-aggregate-training-dev01/python-dev01 failed Ascend C
-GM-scalar template deduction (fixed local float loads);standalone dev02 failed
-only test initializer/vector<bool> types. build-aggregate-training-diag03 was
-cancelled(exit143): explicit CMake targets recursively repeated vendor builds.
-No numerical/device failure was relabelled. Direct linking in diag04 PASSED
-with source/production artifact hashes and five CPU checks;diag05 changed only
-one test fixture. This development reuse is not a clean-build qualification.
+Coverage:mean/weighted mean/active and all-source softmax;None/zero,missing and
+present-zero,zero scale with nonzero raw data,physical/logical permutations,
+exclusive aliases,shared coefficient/physical owners,feedback/self-loops,
+width1/7/257,logical domain257,capacity refusals and checkpoint continuation.
+Separate full Aggregate checker profile PASSED:72,933 AIV+578 AI_CORE+1,213 MIX_AIV;
+1,153 Aggregate-VJP,1,704 optimizer,2,867 graph-reverse,410 window-bridge records;
+no observed AiCPU/fallback. Not throughput or pure-PyTorch scheduling.
 
-TASK=/mi/data2T/zlong/tide-execution-flows;RUN=TASK/runs/NAME;
-unit=tide-execution-flows-NAME.service. Commit only this increment and push.
-Then freeze the exact new commit for:
-- build-aggregate-training-clean01: snapshot/build aggregate-training-clean01,
-  build_device_control.py --core-build TASK/builds/placement-npu-clean01,
-  --ascendc-soc Ascend910_9392 --jobs2;1800s. Five CTests required.
-- build-aggregate-training-python-clean01: separate matching Python-owned source/
-  build,core placement-npu-python-clean01;same tool and limits.
-- After standalone build: all46-cell verify_device_control.py with explicit
-  --full-training-control-check conditioned;queue120s/run900s. Separate profile
-  --check aggregate-training. Neither is throughput.
-- After Python build:106 tests from tests/test_resident_library.py and
-  tests/test_resident_training.py;matching Python-owned core/backend,explicit
-  npu:0/float32;queue120s/run900s. Host interface gate76/103 optional skips.
-Audit clean-source/core/binary/loader/result/log/profile identities,commit reviewed
-formal evidence separately. Do not repeat unchanged portable core's8954 CPU tests.
-Then attention/HST/SOFTP,FP16,peer progression and F1–F7 performance remain.
+All six immutable runs are PASSED under TASK/runs:
+build-aggregate-training-clean01,build-aggregate-training-python-clean01,
+aggregate-training-clean01,aggregate-training-profile-clean01,
+aggregate-training-host-clean01,aggregate-training-python-clean01.
+Their status.json/task.log and gate/profile records are hashed in the audit.
+The gate/Python used physical9 and profile13,each remapped to logical0.
+Retain compiler failures dev01/python-dev01/dev02 and cancelled diag03(exit143),
+with cancellation.json. Development archive reuse is separate from qualification.
+
+## Active development after Aggregate
+
+Uncommitted control/read increment in tools/device_online and Python resident clients:
+HST/SOFTP forward, complete-frame softmax VJP, content/old/proposal linear and
+FP32-norm Read adjoints, graph/alias/optimizer connections, retained raw Full values,
+and checkpoint mode/zeta validation. Device testing is PENDING the builds.
+Identity boundaries bypass Emit; connected zero HST and zero-norm VJPs remain explicit.
+Local control-vjp checker:36 configs/108 replays planned, CPU FP32/FP64.
+Public control-training checker:98 trajectories planned plus Python three-family
+cases and fresh-process resume. HARD remains the default and its parameter layout
+is unchanged. New checkpoint fields default legacy records to HARD/zeta1.
+
+RUNNING:build-control-training-dev01 and build-control-training-python-dev01,
+frozen sources/control-training-dev01 and sources/control-training-python-dev01
+(base0ba9fc6 plus recorded dirty source). Matching placement cores,jobs2/1800s.
+PASSED:control-training-host-dev01,76 tests/135 optional NPU skips.
+Next after builds:verify_device_control.py --checks control-vjp control-training;
+then targeted HARD graph/parameter/retained/training regressions and separate
+--check control-training profile. Python:tests/test_resident_library.py plus
+tests/test_resident_training.py (138 cases expected),matching Python-owned core
+and backend. Every device run uses queue120s and runtime900s;unique names.
+Do not repeat unchanged portable core tests or the older Aggregate qualification.
+Commit only Aggregate evidence/status/roadmap now; do not stage the untested
+control/read code. No automatic pause at this commit.
+Attention adjoints, FP16, device peer progression and performance remain after it.
 
 ## Older work to preserve
 
@@ -152,6 +148,9 @@ Historical Add CPU78.793172/NPU4 47.932888 ms/token means NPU throughput1.6438×
 faster;it does not certify this resident backend. No valid CPU Attention train ratio.
 
 ## Environment and bounded execution
+
+TASK=/mi/data2T/zlong/tide-execution-flows; RUN=TASK/runs/NAME;
+unit=tide-execution-flows-NAME.service. Status/logs are RUN/status.json and RUN/task.log.
 
 Module libtorch-npu/2.10.0-cann9.0.0;PYTHON=
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
