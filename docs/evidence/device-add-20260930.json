@@ -1,0 +1,71 @@
+{
+  "schema": "tide-device-add-evidence-v1",
+  "source": "bbe66e26b9db9c445c1fe6428df11d2192682619",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "single-device FP32 inference: Add-repeat, scalar/vector state; default clocks at this source; not throughput or training",
+  "core_cpp_sha256": "8b337446ef421d499ab52f3bd6de3fbfec1e713a68bde6af2f6ee3887297175b",
+  "component_sha256": "7dd035240c1d22e77e6ea837c30a543f451a46d064470c5597eb2b5a894a6a4b",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 18,
+    "add_windows": 560,
+    "literal_rounding_cases": 2,
+    "repeat_work_refusals": 6,
+    "counter_overflow_refusals": 1,
+    "existing_content_windows": 640,
+    "window_cases": 384
+  },
+  "runs": [
+    {
+      "name": "build-device-add-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "3346fa023c71a038296201f70243244a7cdc257223973acec0627c9bbec0c28e",
+        "task.log": "a756a9891c04050f924ef851283c2b0247e3ff617918b96861c88e4764cd4ae4"
+      }
+    },
+    {
+      "name": "device-add-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "4ba551dc8d9ed0760adb9ba36b3fcdccf792298074275f3c3777a0a9a76f233a",
+        "task.log": "226c8f0331a5320f7c827bdab46b5b34ec34cd20dc0b26c6f5074369a21c4b0f",
+        "verified/result.json": "3d123173ce9c85c795b2bc5bce00dcb9cb0f9d3a199b22dc7b57b8fd88975eae"
+      }
+    },
+    {
+      "name": "device-add-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "718983b84b7d09c08fc4eb2a58135569f2e4ebdf66ba226558d351bd81cb8bf4",
+        "task.log": "66dacdc72115dbdfb65c17cd14adc39984df3f5b660af957a85e884057e7990e",
+        "profile/result.json": "57f0b8eca7479e5088edd7bebbf9dd4b86cd4b89a8c074c68ded2d365634bfec"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 90080,
+      "AI_CORE": 768
+    },
+    "kernels": {
+      "tide_content_state": 727,
+      "tide_state_read": 727,
+      "tide_vector_state": 364
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930161729.csv": "4145bf029ee3b0a2d6acd56e5f6bfe5293dd24fef25d78ea6f9af85b55ddd749",
+      "api_statistic_20260930161729.csv": "bc45bfd31591e90e4c598f85489c99788148990400c5786521bd96a87008bc62"
+    },
+    "host_fallback_diagnostic": false
+  }
+}

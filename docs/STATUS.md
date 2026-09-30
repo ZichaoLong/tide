@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T08:03:14.882485+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T08:19:15.472195+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -80,10 +80,20 @@ covers independent Streaming/Greedy comparisons, widths/tails, work/counter refu
 parameter snapshot and literal-rounding witness. build-device-add-dev01 PASSED exit0: four CPU CTests and loader, frozen add-dev01,
 build device-add-dev01. device-add-gates-dev01 PASSED:560 Add windows, two literal
 rounding checks, six repeat-work refusals and one counter-overflow refusal;640 content
-and384 window regressions. device-add-profile-dev01 RUNNING (480s/queue120s).
-NEXT inspect device-add-profile-dev01. Commit/push the tested Add/vector-state
-implementation, then build-device-add-clean01 from that exact commit, all18 component
-cells and an Add placement profile; evidence separate. Continue core module coverage. Do not alter frozen source/build.
+and384 window regressions. device-add-profile-dev01 PASSED:90080 AIV +768 AI Core tasks, no AiCPU/fallback.
+Profile includes CPU assertions/exports, not throughput. Implementation bbe66e2
+committed/pushed. build-device-add-clean01 PASSED (four CPU CTests/loader), exact source
+add-clean01/build device-add-clean01; core runtime-guard-npu-clean01.
+device-add-components-clean01 and device-add-profile-clean01 PASSED exit0: all18
+cells and90080 AIV/768 AI Core tasks, no AiCPU/fallback. Evidence
+[device-add-20260930](evidence/device-add-20260930.md) qualifies bbe66e2 only.
+In parallel, periodic state-clock implementation is in the working tree: exact
+int64 event/old conversion on device, global metadata retained, refusal9 on invalid
+phases; Add repeat budget counts local ticks. clock_check compares480 mapped
+windows plus18 multi-phase windows and phase refusals. Not yet qualified.
+build-device-clock-dev01 RUNNING, frozen clock-dev01/build device-clock-dev01
+(900s/jobs2). NEXT after pass --checks clock add content window.
+Then attention/KV, packed Read, FP16/public matrix/training/peer delivery. No pause is active. Do not alter frozen source/build.
 
 ## Newly completed immutable qualification
 
