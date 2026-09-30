@@ -1,0 +1,70 @@
+{
+  "schema": "tide-device-swiglu-evidence-v1",
+  "source": "74cec2fb32aca6d2545eda4cd16013df4910156f",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "npu_runtime": "standalone"
+  },
+  "scope": "device-selected bounded SwiGLU Full batches; FP32 HARD single-device inference; not VJP, training or throughput",
+  "core_cpp_sha256": "856034c556270c00437320d086c71dc26b902178e10ad811c48c647e321eba4b",
+  "component_sha256": "1a67520f408cf8e27b4f76becaa2ee2874ec376461c91f2a3643cff598a62ad1",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 24,
+    "swiglu_components": 16,
+    "complete_windows": 256,
+    "refusals": 4
+  },
+  "runs": [
+    {
+      "name": "build-device-swiglu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "13d863c27e5ba6a920bd5e51a80f428f26a11a14e37c5d8cda0c137d70dc3049",
+        "task.log": "df3e7ee85d7cfa6b7a0707ddeab19d533f03658c354e9c0a31b569d096eace94"
+      }
+    },
+    {
+      "name": "device-swiglu-gates-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "be924da217a7ae06651af6a837724389d99146292b23eb97ce993b9c1c4b944a",
+        "task.log": "a0418904ec6be8d815d0bd19718a17fd41308516ec77d1eb7513736da0b4768b",
+        "verified/result.json": "2d80a8e87e02e23b63d8f810a406b6525d4faeb63444ede61fa20a4280de9cdc"
+      }
+    },
+    {
+      "name": "device-swiglu-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "847e8b0a28ab35c1dd8f94d3878443b5959ea2e789e9222172a0593f23997cd5",
+        "task.log": "ffb462cd8f28174f19a789df22256ec7ecb6c785bcf7c45ac86ee435abbd09c9",
+        "profile/result.json": "5f1d5693eb2f1286a65a54a609a770451ff8b084da9b4fcdb2f319913abba7d2"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 53667,
+      "AI_CORE": 1195
+    },
+    "kernels": {
+      "BatchMatMulV2": 1195,
+      "Swish": 328,
+      "GatherV3": 14097,
+      "tide_full_plan": 1433
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930191708.csv": "ef26aa719643200b8853a69256d382d8334216aa8f92351a0d194289715be967",
+      "api_statistic_20260930191708.csv": "c849401c18dc24e305ece64737aefcae0954e5e5811d2c63011cd12f55773ff7"
+    },
+    "host_fallback_diagnostic": false
+  },
+  "retained_failures": []
+}

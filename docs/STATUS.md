@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T11:08:38.918738+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T11:23:06.567090+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository /home/zlong/llm/graph-execution-foundation, real path
 /var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 No subagents. Reference repositories and ObsidianVault are read-only. Preserve the
@@ -112,9 +112,9 @@ Original snapshots/logs remain; no failure relabeled and no tolerance/formula ch
 Incremental development builds recorded byte-identical production source/relinked
 tests. The final independent clean build above supersedes that provenance for qualification.
 
-## SwiGLU Full ready for commit
+## SwiGLU Full committed/pushed at74cec2f
 
-Uncommitted packed_swiglu_full.{h,cpp},swiglu_check.cpp and flow/profile/build
+Implementation packed_swiglu_full.{h,cpp},swiglu_check.cpp and flow/profile/build
 integration implement selected-only batched SwiGLU with the original residual.
 Static parameter table packs actual SwiGLU owners; device planner chooses chunks.
 HARD FP32 inference only; no new backward or throughput claim.
@@ -129,12 +129,25 @@ continuation and lean export. Existing strict tensor/discrete comparison unchang
 device-swiglu-profile-dev01 PASSED53667 AIV+1195 AI Core tasks,no AiCPU/fallback.
 Development source is recorded dirty; no runtime source changed during these jobs.
 
-NEXT commit the implementation; freeze swiglu-clean01 at that commit,run full
-build-device-swiglu-clean01 (core origins-npu-clean01,jobs2,1800s),all24 cells900s
-(new swiglu first),then separate profile480s,one NPU/queue120s. Qualify exact commit
-and record evidence separately. Then attention/KV and complete safe chunking remain
-priority; public matrix,peer progression,resident training and scale comparison
-are still open. Do not resume historical timing merely to occupy the build wait.
+Clean build-device-swiglu-clean01,device-swiglu-gates-clean01 and
+profile-clean01 PASSED from frozen swiglu-clean01 at74cec2f,matching core
+origins-npu-clean01. Four CPU CTests,all24 cells;16 components,256 complete
+windows,4 refusals. Profile53667 AIV+1195 AI Core,no AiCPU/fallback.
+[Clean SwiGLU evidence](evidence/device-swiglu-20260930.md) records source/raw hashes.
+No new runtime jobs active. Next: attention/KV and complete safe chunking;
+public matrix,peer progression,resident training and scale comparisons remain
+open. Historical timing remains paused while implementation proceeds.
+
+Attention read-only implementation audit (no new attention code): LH fiber
+attention consumes per-source weighted rows sorted by local slot,not Aggregate
+summary. Every query sees all keys in its current fiber; no intra-fiber triangle.
+Persistent key/value/log_bias length is distinct from observation count. Selection
+and clear control cache adoption; Full sees the pre-clear comparison. Proposal Read
+with selected-only adoption/clear has a causal single-frame dependency; content
+Read can know selection before state work. A first packed cache/attention path must
+retain these distinctions and global normalization when physically chunking.
+References:docs/fiber-attention.md,docs/attention.md,cpp/src/fiber_attention.cpp.
+Do not infer a complete attention flow from a stateless matmul/softmax smoke.
 
 ## Failures retained and prior work
 
