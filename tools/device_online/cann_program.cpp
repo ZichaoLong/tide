@@ -175,6 +175,26 @@ void CannProgram::multiply(const at::Tensor& a,const at::Tensor& b,const at::Ten
   auto& p=*impl_;const auto dtype=a.scalar_type();
   p.op("aclnnMul",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
 }
+void CannProgram::divide(const at::Tensor& a,const at::Tensor& b,const at::Tensor& out) {
+  auto& p=*impl_;const auto dtype=a.scalar_type();
+  p.op("aclnnDiv",p.tensor(a,dtype),p.tensor(b,dtype),p.tensor(out,dtype));
+}
+void CannProgram::softplus(const at::Tensor& input,const at::Tensor& out) {
+  auto& p=*impl_;p.building();float one=1.f,threshold=20.f;
+  auto beta=p.api.create_scalar(&one,0);
+  if(!beta)throw std::runtime_error("create softplus beta failed");p.scalars.push_back(beta);
+  auto limit=p.api.create_scalar(&threshold,0);
+  if(!limit)throw std::runtime_error("create softplus threshold failed");p.scalars.push_back(limit);
+  p.op("aclnnSoftplus",p.tensor(input,input.scalar_type()),beta,limit,p.tensor(out,input.scalar_type()));
+}
+void CannProgram::sum(const at::Tensor& input,int64_t axis,bool keep,const at::Tensor& out) {
+  auto& p=*impl_;p.building();const auto dtype=input.scalar_type();
+  if((dtype!=at::kFloat&&dtype!=at::kHalf)||axis<0||axis>=input.dim())
+    throw std::invalid_argument("CANN sum requires a floating tensor and valid axis");
+  auto dims=p.api.create_int_array(&axis,1);
+  if(!dims)throw std::runtime_error("create reduction axes failed");p.arrays.push_back(dims);
+  p.op("aclnnReduceSum",p.tensor(input,dtype),dims,keep,int(dtype==at::kFloat?0:1),p.tensor(out,dtype));
+}
 void CannProgram::softmax(const at::Tensor& input,int64_t axis,const at::Tensor& out) {
   auto& p=*impl_;
   p.op("aclnnSoftmax",p.tensor(input,input.scalar_type()),axis,p.tensor(out,input.scalar_type()));

@@ -1,6 +1,7 @@
 #include "content_profile.h"
 #include "cann_api.h"
 #include "packed_sum.h"
+#include "packed_aggregate.h"
 #include "aclrtlaunch_tide_state_read.h"
 #include "aclrtlaunch_tide_vector_read.h"
 #include "aclrtlaunch_tide_read_reduce.h"
@@ -10,9 +11,11 @@
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const at::Tensor& error,bool vectorized) {
+ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const at::Tensor& error,bool vectorized,
+                            const PackedAggregate* aggregate) {
   auto sum=append_packed_sum(p,ready,profile.sources,profile.scales,profile.graph.nodes.size(),
     profile.graph.inputs.size(),profile.graph.edges.size(),error,vectorized,profile.origins);
+  if(aggregate)aggregate->append(p,ready,sum,error,vectorized);
   return {sum.content,at::zeros({ready.fibers.size(0)},sum.content.options()),sum.weighted};
 }
 void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const ContentBatch& content,

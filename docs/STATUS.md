@@ -3,7 +3,7 @@
 Updated 2026-09-30T15:33:14.210564+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **c83aec3**, fiber batch implementation committed and pushed.
+HEAD **7b43f4d**, fiber batch evidence committed and pushed.
 Event batch evidence28295c1 pushed; implementation26aa09f.
 Memory evidence0b724a3 is pushed. No pending authorization or pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Preserve older dirty work below.
@@ -54,26 +54,23 @@ Current device flow is **single-device FP32 HARD inference**, no resident backwa
    full builds/four CTests/all31 cells/independent profiles PASSED,all terminal0.
    New gate96 anchors/restores,480 general windows/restores,31 multi-time windows
    and3 saturation checks. Clean profile221,788 AIV+8,181 AI Core,no AiCPU/fallback.
-   Evidence device-fiber-batch-20260930.{json,md} ready for separate commit/push.
+   Evidence device-fiber-batch-20260930.{json,md} committed/pushed as7b43f4d.
    Runtime retains per-event biases/prefixes and final-only owner KV commits;
    repeated FP32 decay and same-fiber all-key visibility unchanged.
-5. Next normalized Aggregate draft is integrated and build-verified: packed_aggregate,
-   ascendc/tide_aggregate_{plan,apply},aggregate_check,CannProgram softplus/sum/divide,
-   PackedSum keys/order and integration in ContentFlow/Profile/Stages,budget,export,
-   CMake/build/check registry. Those working-tree changes remain separate from
-   the committed/tested fiber implementation.
-   build-device-aggregate-dev01 FAILED at new Ascend C apply kernel: Muls cannot
-   deduce a float scalar from a __gm__ reference. Fixed by loading the coefficient
-   into a local float before Muls. No runtime gate ran; preserve dev01 snapshot/log.
-   build-device-aggregate-dev02/frozen aggregate-dev02/new full build
-   device-aggregate-dev02 PASSED,terminal0,four CTests passed.
-   Launching device-aggregate-gates-dev02 (all32,aggregate first;900s,NPU1,queue120s).
-   Aggregate cell PASSED in dev02 (remaining regression cells running).
-   Launching device-aggregate-profile-dev02 (900s,NPU1,queue120s),same frozen build. Do not run from mutable checkout.
-   Planned gate180 analytic/restores,160 topology windows/restores,4 boundaries,
-   7 wide/empty domains; none run yet.
-   Zero-mass failure code13; source aliases/order and scalar/vector paths matter.
-   No support claim yet; preserve these drafts during exact-commit fiber testing.
+5. Normalized Aggregate implementation ready for commit: frozen aggregate-dev02
+   full build/four CTests/all32 cells/independent profile PASSED,all terminal0.
+   New cell180 anchors/restores,160 general windows/restores,4 boundaries,7 domains.
+   Profile67,422 AIV+139 MIX_AIV+223 AI Core,no AiCPU/fallback.
+   Before this success, build-device-aggregate-dev01 FAILED at Ascend C Muls
+   scalar deduction from a __gm__ reference. Fixed with a local float coefficient;
+   dev01 snapshot/log remains failed. No runtime gate ran in dev01.
+   After commit, freeze aggregate-clean01 and launch build-device-aggregate-clean01,
+   full fresh build device-aggregate-clean01 with core origins-npu-clean01,
+   jobs2,1800s; then all32 gates/aggregate first and independent aggregate profile
+   (900s,NPU1,queue120s). Evidence must be separate from implementation.
+   Runtime normalized domains are device-generated; source aliases/order,
+   missing/zero contributions,scalar/vector paths and zero-mass code13 are covered.
+   Public placement implementation is next; no placement code has been changed yet.
 
 6. After those module increments: public five presets/matrix,peer progression,
    resident backward/VJP/optimizer and staged performance. F1–F7 not complete.

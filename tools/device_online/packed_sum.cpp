@@ -34,6 +34,7 @@ PackedSum append_packed_sum(CannProgram& p,const ReadyBatch& r,const at::Tensor&
     throw std::invalid_argument("packed sum origin table requires colocated int64 [edges,2]");
   PackedSum out{at::zeros({capacity,width},scales.options()),at::zeros_like(r.atoms.values)};
   auto keys=at::zeros({capacity},r.counts.options()),order=at::zeros_like(keys);
+  out.keys=keys;out.order=order;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_sum_plan)(1,stream,
     ptr(r.atoms.coordinates),ptr(r.fiber_offsets),ptr(r.fibers),ptr(r.counts),ptr(sources),ptr(origins),
     ptr(keys),ptr(order),ptr(error),capacity,nodes,inputs,edges,project),"packed sum metadata preflight");},

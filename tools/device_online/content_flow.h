@@ -11,6 +11,7 @@ struct ContentLimits {
   ChunkPolicy chunk_policy=ChunkPolicy::conservative;
   int64_t full_chunk_rows=16;
   int64_t emission_chunk_rows=16;
+  int64_t aggregate_chunk_rows=8;
   int64_t attention_chunk_rows=8;
   int64_t attention_key_rows=128; // Physical key tile; never limits logical visibility.
   int64_t kv_rows=128; // Per attention owner; hard bound, no implicit eviction.
@@ -31,7 +32,7 @@ struct ContentWindow {
   at::Tensor output_stats,pending_stats,stages,events,full_chunks,emission_chunks;
 };
 // Experimental complete forward loop for an explicit existing-module profile:
-// sum Aggregate, identity/EMA/Add-repeat/fiber/event attention, linear/FP32-norm Read, count/positive
+// built-in Aggregate, identity/EMA/Add-repeat/fiber/event attention, linear/FP32-norm Read, count/positive
 // selection, adopt/clear Next and identity/tanh/SwiGLU/LH Full with broadcast/slot-affine
 // phase-aware HARD emission. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial

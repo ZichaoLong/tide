@@ -21,6 +21,9 @@ class CannProgram {
   void add(const at::Tensor& destination, const at::Tensor& increment);
   void copy(const at::Tensor& destination, const at::Tensor& source);
   void multiply(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
+  void divide(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
+  void softplus(const at::Tensor&, const at::Tensor& output); // beta=1, threshold=20
+  void sum(const at::Tensor&, int64_t axis, bool keep_dimension, const at::Tensor& output);
   void softmax(const at::Tensor&, int64_t axis, const at::Tensor& output);
   void sigmoid(const at::Tensor&, const at::Tensor& output);
   void tanh(const at::Tensor&, const at::Tensor& output);

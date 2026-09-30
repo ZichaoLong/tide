@@ -55,6 +55,8 @@ Result ContentFlow::Impl::export_result() const {
     {"full_chunks",full->chunks().cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
     {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
     {"swiglu_full_chunk_rows",swiglu_full?swiglu_full->chunk_rows():0},
+    {"aggregate_chunks",aggregate?aggregate->chunks().cpu().item<Index>():0},
+    {"aggregate_chunk_rows",aggregate?aggregate->chunk_rows():0},
     {"attention_chunks",attention?attention->chunks().cpu().item<Index>():0},
     {"attention_chunk_rows",attention?attention->chunk_rows():0},
     {"attention_kv_peak",attention?attention->peak().cpu().item<Index>():0},

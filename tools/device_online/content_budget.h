@@ -9,7 +9,7 @@ namespace tide::device_online {
 // any module grows a physical chunk. All arithmetic precedes device allocation.
 class ContentBudget {
  public:
-  ContentBudget(int64_t total,bool aggressive,long double common,std::array<long double,6> minimum)
+  ContentBudget(int64_t total,bool aggressive,long double common,std::array<long double,7> minimum)
       :minimum_(minimum),remaining_(0),pending_(0) {
     if(total<1||common<0)throw std::invalid_argument("invalid content memory budget");
     for(auto x:minimum_){if(x<0)throw std::invalid_argument("invalid module minimum");pending_+=x;}
@@ -37,7 +37,7 @@ class ContentBudget {
   int64_t usable_bytes() const {return usable_;}
  private:
   int64_t usable_,reserved_=0;
-  std::array<long double,6> minimum_;
+  std::array<long double,7> minimum_;
   long double remaining_,pending_,common_=0;
 };
 } // namespace tide::device_online

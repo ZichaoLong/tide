@@ -17,7 +17,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+(l.diagnostics?l.trace:0))*(width*5.L+32)
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L))
     +160.L*(profile.graph.edges.size()+profile.graph.inputs.size()+profile.graph.outputs.size()+nodes);
-  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes
+  if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.aggregate_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes
       ||(l.chunk_policy!=ChunkPolicy::conservative&&l.chunk_policy!=ChunkPolicy::aggressive))
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
   std::vector<int64_t> kinds,lh_kinds;std::vector<Tensor> weights,biases,norm_weights,norm_biases;bool has_lh=false;
@@ -26,11 +26,11 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
     norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
-  const std::array<long double,6> minimum={
+  const std::array<long double,7> minimum={
     PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs),
     PackedSwiGluFull::minimum_bytes(profile,l.queue),PackedLhFull::minimum_bytes(lh_kinds,width,l.queue),
     PackedFiberAttention::minimum_bytes(profile,q,l),PackedEventAttention::minimum_bytes(profile,q,l),
-    PackedFull::minimum_bytes(kinds,width)};
+    PackedFull::minimum_bytes(kinds,width),PackedAggregate::minimum_bytes(profile,l.queue)};
   ContentBudget budget(l.workspace_bytes,l.chunk_policy==ChunkPolicy::aggressive,estimate,minimum);
   profile.upload(device);
   const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
@@ -85,6 +85,10 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   }
   full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,max_full,budget.available(5));
   budget.reserve(5,full->reserved_bytes());
+  if(minimum[6]>0) {
+    aggregate=std::make_unique<PackedAggregate>(profile,device,l.queue,l.aggregate_chunk_rows,budget.available(6));
+    budget.reserve(6,aggregate->reserved_bytes());
+  }
   planned_buffer_bytes=budget.planned_bytes();operator_workspace_budget=budget.operator_budget();usable_memory_budget=budget.usable_bytes();
   construct();
   // Only input-seal/ledger metadata belongs on the host between windows.
@@ -108,7 +112,7 @@ void ContentFlow::Impl::construct() {
   auto head=p.label(),test=p.label(),body=p.label(),exhausted=p.label(),end=p.label();
   p.mark(head);auto ready=planner.append_stage(p,pending->atoms(),stop,error);p.branch(ready.branch,{end,test});
   p.mark(test);p.less(stages,budget,predicate);p.cast_index(predicate,index);p.branch(index,{exhausted,body});p.mark(body);
-  auto content=append_content(p,profile,ready,error,limits.vectorized_aggregate);
+  auto content=append_content(p,profile,ready,error,limits.vectorized_aggregate,aggregate.get());
   FiberStage attended;
   if(attention)attended=attention->propose(p,profile,ready,content,state,error);
   EventAttentionStage event_attended;auto proposals=attended.values;
@@ -164,6 +168,7 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     }
     if(s.attention)s.attention->reset_window();
     if(s.event_attention)s.event_attention->reset_window();
+    if(s.aggregate)s.aggregate->chunks().zero_();
     s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);portable_torch::synchronize(s.device);s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));

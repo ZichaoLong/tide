@@ -70,7 +70,7 @@ if(TIDE_DEVICE_ASCENDC)
   add_executable(tide-packed-sum-check sum_check.cpp)
   target_compile_options(tide-packed-sum-check PRIVATE -fPIC)
   target_link_libraries(tide-packed-sum-check PRIVATE tide-packed-sum)
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp packed_aggregate.cpp
     content_flow.cpp content_export.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -80,7 +80,8 @@ if(TIDE_DEVICE_ASCENDC)
     tide_emission_plan_kernel tide_emission_chunk_kernel tide_fiber_plan_kernel tide_fiber_chunk_kernel
     tide_fiber_payload_kernel tide_fiber_indices_kernel tide_fiber_trace_kernel tide_fiber_commit_kernel tide_fiber_pool_kernel
     tide_event_plan_kernel tide_event_payload_kernel tide_event_indices_kernel tide_event_cache_kernel
-    tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel)
+    tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel
+    tide_aggregate_plan_kernel tide_aggregate_apply_kernel)
   add_executable(tide-content-flow-check content_check.cpp)
   target_compile_options(tide-content-flow-check PRIVATE -fPIC)
   target_link_libraries(tide-content-flow-check PRIVATE tide-content-flow tide-device-test-compare)
@@ -129,6 +130,9 @@ if(TIDE_DEVICE_ASCENDC)
   add_executable(tide-device-fiber-batch-check fiber_batch_check.cpp)
   target_compile_options(tide-device-fiber-batch-check PRIVATE -fPIC)
   target_link_libraries(tide-device-fiber-batch-check PRIVATE tide-content-flow tide-device-test-compare)
+  add_executable(tide-device-aggregate-check aggregate_check.cpp)
+  target_compile_options(tide-device-aggregate-check PRIVATE -fPIC)
+  target_link_libraries(tide-device-aggregate-check PRIVATE tide-content-flow tide-device-test-compare)
   add_executable(tide-packed-full-check full_check.cpp)
   target_compile_options(tide-packed-full-check PRIVATE -fPIC)
   target_link_libraries(tide-packed-full-check PRIVATE tide-content-flow)

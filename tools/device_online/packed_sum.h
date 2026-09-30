@@ -2,7 +2,7 @@
 #include "ready_batch.h"
 
 namespace tide::device_online {
-struct PackedSum {at::Tensor content,weighted;};
+struct PackedSum {at::Tensor content,weighted,keys,order;};
 // Consume actual packed fibers in their stable order. Vectorization tiles the
 // payload dimension, never the logical message group or its summation order.
 // Optional [edge,2] origins declare (visible port or -1, positive stride).

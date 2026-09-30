@@ -5,7 +5,7 @@ state and delivery stages into a single submitted forward loop. Implementation
 and qualification status belong to [STATUS](STATUS.md) and [ROADMAP F4](ROADMAP.md).
 Its finite module scope does not close the complete execution-flow contract.
 
-The accepted profile uses existing semantics: sum Aggregate with physical source
+The accepted profile uses existing semantics: built-in Aggregate with physical source
 scales; identity, EMA, Add-repeat, event-GQA or LH fiber attention state; content/old/proposal linear or FP32-norm Read; count-v1 or positive-v1
 selection; adopt-v1 Next with optional selected clear; identity, tanh, SwiGLU or LH
 Full with HARD broadcast or slot-affine emission. Tanh is `content + tanh(comparison @ weight + bias)`; the nine LH Full profiles
@@ -16,6 +16,30 @@ parallel physical edges, feedback and disconnected components. Input-origin
 projection and phase-restricted slot emission are supported; other unavailable
 modules/region programs explicitly fail capability validation. This first version accepts FP32 inference with an
 explicit no-grad scope. It has no VJP or optimizer contract.
+
+Normalized Aggregate supports the existing mean, positive weighted mean,
+active-source softmax and all-source softmax formulas alongside sum. Physical
+source scaling happens first. Actual device fiber metadata determines which
+logical slots participate; all-source softmax alone includes missing slots in
+its denominator. Exclusive physical aliases do not enlarge that domain. Missing
+and present-zero sources remain distinct, including the observable contribution
+for a zero coefficient/value. Summation retains canonical projected atom order.
+
+An optional `PackedAggregate` stage forms bounded chunks of actual normalized
+events on device. CANN softplus/reduce/divide or softmax computes coefficients;
+the payload kernel scales contributions and folds the ordered result. Mean needs
+no nonlinear coefficient operation. Sum-only graphs omit the stage entirely.
+The scalar numerical option remains available; both options share metadata and
+normalization. `aggregate_chunk_rows` bounds coefficient-domain scratch, whose
+minimum is reserved with the other modules before physical chunks expand.
+`aggregate_chunks` counts nonlinear coefficient chunks, so zero does not imply
+that mean or sum was skipped. Effective row limits are recorded separately.
+
+Weighted mean with a numerically zero total mass fails with code13 before live
+state/history/queue commits; it is never silently converted to a uniform mean.
+The source-aware contribution journal contains normalized values, while the raw
+fiber journal remains unchanged. This extension requires independent complete
+parity and profiling evidence; it supplies no normalized-Aggregate resident VJP.
 
 The bounded `lh-fiber-attention-*-repeat-v1` adapter keeps persistent key/value/
 log-bias tensors and int64 lengths on the device. Static tables contain only actual
@@ -142,8 +166,8 @@ tiled-key paths share the same prefix/window addressing and compact continuation
 `workspace_bytes` bounds the planned forward buffers and retained CANN operator
 workspaces together. CPU validation prepares the static profile before uploading
 device payloads. The planner reserves topology/queue/state/journal estimates and
-the minima for emission, SwiGLU, LH Full, fiber attention, event attention and tanh
-Full before allocating larger physical chunks. Unused module allowances become
+the minima for emission, SwiGLU, LH Full, fiber attention, event attention, tanh
+Full and normalized Aggregate before allocating larger physical chunks. Unused module allowances become
 available to later modules. An impossible minimum is refused before these uploads;
 it does not trigger repeated OOM attempts or alter logical capacities.
 
@@ -410,7 +434,7 @@ trace is entirely AIV. Small single-message cases can be slower; the scalar swit
 is retained and no complete-flow speed claim follows. Exact clean qualification
 and any later measured recommendation belong to STATUS/evidence.
 
-This vector path currently implements sum Aggregate inference only. It explicitly
+That immutable vector-sum qualification covers sum Aggregate inference only. It explicitly
 rejects autograd; its presence does not certify training, FP16 or other Aggregate
 contracts. Read's scalar alternative, Read metadata/final partial combination,
 emission metadata, journal and state metadata kernels still use scalar AIV loops.
