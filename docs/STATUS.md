@@ -1,9 +1,10 @@
 # Current handoff
 
-Updated 2026-09-30T16:59:58.741144+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
+Updated 2026-09-30T17:04:04.399828+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **740fa87**, optional public resident inference committed and pushed.
+Last pushed HEAD **7b31f48** (placement evidence); this increment adds disk restore/reset
+to optional resident inference740fa87. Both directed restore gates passed.
 No pending authorization/pause. No subagents. Reference repositories and ObsidianVault
 are read-only. Preserve unrelated older dirty work below. **F1–F7 are not complete.**
 
@@ -36,8 +37,7 @@ separate; three processes for recommendations. CUDA execution is target-machine 
   `placement-standalone-npu-clean01` placement **121 schedules/363 updates**, Read
   precision6/18 plus accelerator parity/gradients/optimizer/checkpoint/non-default
   stream; `placement-profile-clean01` independent trace.
-  Reports `docs/evidence/execution-placement-20261001.{json,md}` ready for evidence
-  commit; source d412541, not the later resident implementation.
+  Reports `docs/evidence/execution-placement-20261001.{json,md}` committed/pushed7b31f48; source d412541, not the later resident implementation.
 - Formal placement profile:4,079 AIV+862 MIX_AIV+86 AI Core+66 AiCPU. AiCPU:
   INT64 Sort30/1947.50us; BOOL,INT64,BOOL ScatterElements36/3130.44us.38.32% is
   summed device task time, NOT complete wall-time. No host CPU fallback. Keep
@@ -93,29 +93,29 @@ or tolerance changes. All failed logs/snapshots remain failed.
 
 ## Running qualification and next exact actions
 
-Two full clean component builds from **resident-public-clean01 at740fa87**:
+Two full clean component builds PASSED terminal0 from **resident-public-clean01 at740fa87**:
 - `build-resident-public-python-clean01` -> `builds/resident-public-python-clean01`.
 - `build-resident-public-standalone-clean01` -> `builds/resident-public-standalone-clean01`.
-Each1800s/jobs2,no NPU lease; inspect real terminal status before submitting gates.
+Each1800s/jobs2,no NPU lease; Python ended16:57:04UTC and standalone17:01:58UTC.
+Standalone also passed all four CTests.
 Both use matching immutable d412541 placement cores; C++ hash matches.
 
-A following Python-only increment is uncommitted: `ResidentSession.load/reset`,
+This Python-only increment adds: `ResidentSession.load/reset`,
 `resident_checkpoint.py`, tests and docs. Disk restore validates schema, parameter
 aliases and CPU complete-cut semantics before closing/mutating live state. Device
 construction failure after preflight leaves session closed. Invalid records leave
 it unchanged. Tests now restore continuation from the file itself, not merely
 exported memory plus a weight file. New run snapshot **resident-restore-dev01**:
 - `resident-restore-python-dev01` PASSED **25 cases**,terminal0,dev03 plugin.
-- `resident-restore-host-dev01`:125+ host-surface regression,inspect terminal.
-After its pass, commit/push that Python-only increment. It does not change the
+- `resident-restore-host-dev01`:PASSED126 host-surface tests,23 optional-device skips,terminal0.
+Commit/push the Python-only increment after review. It does not change the
 C++ component hash; the clean740fa87 compiled backend is reusable with provenance.
 
 Next:
-1. Commit/push placement evidence separately (d412541); keep resident uncommitted
-   files out of that evidence commit.
-2. Verify/commit the restore increment. Freeze its exact commit for final Python
+1. Placement evidence is committed/pushed7b31f48.
+2. Commit/push restore; freeze its exact commit for final Python
    qualification; reuse unchanged compiled backend fingerprints transparently.
-3. Once clean component builds finish, run full standalone gate (33 cells):
+3. Clean component builds passed; run full standalone gate (33 cells):
    `scripts/verify_device_control.py --build-dir BUILD --output-dir NEW --device npu:0`.
    Run Python `tests/test_resident_library.py --dtype float32` with TIDE_BUILD_DIR
    set to matching NPU Python core,TIDE_RESIDENT_DEVICE=npu:0 and

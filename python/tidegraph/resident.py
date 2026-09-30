@@ -115,6 +115,34 @@ class ResidentSession:
     def close(self):
         self.owner.close()
 
+    def load(self, path, optimizer=None):
+        """Restore weights and the complete cut; other frozen sessions expire.
+
+        Invalid checkpoint values leave the live owner unchanged. After CPU
+        validation, the old owner closes before allocating its replacement;
+        a device/construction failure leaves this session closed.
+        """
+        if optimizer is not None:
+            raise ValueError("resident inference does not own a training optimizer")
+        if torch.is_grad_enabled():
+            raise ValueError("resident inference requires explicit torch.no_grad()")
+        from .resident_checkpoint import prepare_restore
+        q, weights = prepare_restore(path, self.runtime, self.batch_size)
+        self.close()
+        self.runtime.execution_model.load_state_dict(weights)
+        self._replace(q)
+
+    def reset(self):
+        """Explicit fresh sequence with the current weights and limits."""
+        if torch.is_grad_enabled():
+            raise ValueError("resident inference requires explicit torch.no_grad()")
+        self.close()
+        self._replace(None)
+
+    def _replace(self, continuation):
+        other = ResidentSession(self.backend, self.batch_size, continuation)
+        self.compiled, self.parameters, self.owner = other.compiled, other.parameters, other.owner
+
     def __enter__(self):
         return self
 

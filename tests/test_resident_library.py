@@ -79,8 +79,9 @@ def test_resident_public_online_windows(target, family, schedule, memory, tmp_pa
             session.save(checkpoint)
             final = session.snapshot()
         other = runtime(cfg,target,"streaming" if schedule=="greedy" else "greedy")
-        other.load_weights(checkpoint)
-        with other.session(2,continuation=final) as restored:
+        with other.session(2) as restored:
+            restored.load(checkpoint)
+            equivalent(final,restored.snapshot())
             args,kw = inputs(restored,x,8,8 if family=="settle" else 11)
             actual = restored.advance(*args,**kw)
             args,kw = inputs(baseline,x,8,8 if family=="settle" else 11)
@@ -206,3 +207,26 @@ def test_resident_invalid_input_preserves_complete_cut(target):
         equivalent(before,session.snapshot())
         session.advance_device([External(0,0,0,0,torch.ones(4,device=target))],stop=1,sealed_until=1)
         assert session.cut == 1
+
+
+def test_resident_checkpoint_preflight_and_reset(target, tmp_path):
+    r = runtime(config("settle"),target)
+    with torch.no_grad(), r.session(1) as session:
+        x = torch.ones(1,2,4,device=target)*.1
+        session.advance_device(x)
+        before = session.snapshot()
+        weights = {k:v.cpu().clone() for k,v in r.model.state_dict().items()}
+        path = tmp_path / "complete.pt"
+        session.save(path)
+        record = torch.load(path,weights_only=True)
+        record["cut"] -= 1  # Incomplete Settle position must not change weights/state.
+        invalid = tmp_path / "invalid.pt"
+        torch.save(record,invalid)
+        with pytest.raises(ValueError,match="complete position"):
+            session.load(invalid)
+        equivalent(before,session.snapshot())
+        equivalent(weights,{k:v.cpu() for k,v in r.model.state_dict().items()})
+        session.reset()
+        assert session.position == 0 and not session.snapshot().states
+        session.load(path)
+        equivalent(before,session.snapshot())

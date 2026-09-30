@@ -67,9 +67,16 @@ Construction validates and freezes parameter values. Normal in-place updates and
 Python parameter replacements are detected before advance; recreate a session
 from an explicit complete cut to use new weights or another schedule. Writes
 through `.data` or external pointers are outside this ownership contract.
-`save()` uses the existing checkpoint schema and rejects an optimizer or changed
-weights. Restore by `runtime.load_weights(path)` and a validated continuation
-passed to `runtime.session(..., continuation=q)`. Checkpoint exports may be changed
+`save()` and `load()` use the existing checkpoint schema and reject an optimizer
+argument. Saving rejects changed weights. `load()` validates the CPU checkpoint,
+parameter aliases and a complete family boundary before closing the old owner;
+it restores weights and continuation together. It then releases the old device
+buffers before constructing new ones, so a device failure at that point leaves
+the session closed. Loading shared weights invalidates other frozen sessions.
+`reset()` explicitly starts a fresh sequence with current weights and limits.
+Both operations require `torch.no_grad()`. Weight-only initialization remains
+`runtime.load_weights(path)`; a caller-owned continuation may also be passed to
+`runtime.session(..., continuation=q)`. Checkpoint exports may be changed
 by callers without altering the device owner. No hidden detach or implicit
 `no_grad()` context substitutes for training support.
 
