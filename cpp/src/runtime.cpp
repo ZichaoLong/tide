@@ -29,13 +29,14 @@ int index_of(const std::string& request, const std::string& backend) {
 #if TIDE_NPU_STANDALONE
 struct NpuRuntime {
   std::mutex mutex;
-  size_t sessions = 0;
-  bool initialized = false, finalized = false;
+  size_t sessions = 0, resources = 0;
+  bool initialized = false, finalized = false, quarantined = false;
 };
 NpuRuntime& npu_runtime() {static NpuRuntime runtime;return runtime;}
 torch::Device initialize_npu(int index) {
   auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
   if(runtime.finalized)throw std::logic_error("standalone NPU runtime has been finalized");
+  if(runtime.quarantined)throw std::logic_error("standalone NPU runtime has quarantined resources; terminate worker");
   if (index >= c10_npu::device_count()) throw std::runtime_error("NPU logical device is unavailable");
   if(!runtime.initialized) {
     torch_npu::init_npu(static_cast<c10::DeviceIndex>(index));
@@ -52,14 +53,17 @@ RuntimeSession::RuntimeSession() {
 #if TIDE_NPU_STANDALONE
   auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
   if(runtime.finalized)throw std::logic_error("standalone NPU runtime has been finalized");
+  if(runtime.quarantined)throw std::logic_error("standalone NPU runtime has quarantined resources; terminate worker");
   ++runtime.sessions;
 #endif
 }
 void RuntimeSession::close() {
   if(!open_)return;
-  open_=false;
 #if TIDE_NPU_STANDALONE
   auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(runtime.sessions==1&&runtime.resources)
+    throw std::logic_error("cannot finalize standalone NPU runtime with live or quarantined raw resources");
+  open_=false;
   if(--runtime.sessions==0&&runtime.initialized&&!runtime.finalized) {
     // Global destructors run after main-thread TLS destruction. TorchNPU
     // Finalize accesses its thread-local current-stream table, so this must
@@ -67,6 +71,8 @@ void RuntimeSession::close() {
     runtime.finalized=true;
     torch_npu::finalize_npu();
   }
+#else
+  open_=false;
 #endif
 }
 RuntimeSession::~RuntimeSession() {
@@ -75,6 +81,40 @@ RuntimeSession::~RuntimeSession() {
     std::cerr<<"standalone runtime cleanup failed: "<<error.what()<<std::endl;
     std::terminate(); // Never turn failed cleanup into a successful process.
   }
+}
+
+RuntimeResource::RuntimeResource() {
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(runtime.finalized||runtime.quarantined)
+    throw std::logic_error("standalone NPU runtime cannot accept raw resources");
+  ++runtime.resources;
+#endif
+}
+RuntimeResource::~RuntimeResource() {close();}
+void RuntimeResource::check() const {
+  if(!open_||quarantined_)throw std::logic_error("runtime resource is closed or quarantined");
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  if(runtime.finalized||runtime.quarantined)
+    throw std::logic_error("standalone NPU runtime is unavailable; terminate worker");
+#endif
+}
+void RuntimeResource::close() noexcept {
+  if(!open_||quarantined_)return;
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  --runtime.resources;
+#endif
+  open_=false;
+}
+void RuntimeResource::quarantine() noexcept {
+  if(!open_)return;
+  quarantined_=true;
+#if TIDE_NPU_STANDALONE
+  auto& runtime=npu_runtime();std::lock_guard<std::mutex> lock(runtime.mutex);
+  runtime.quarantined=true;
+#endif
 }
 
 torch::Device resolve_device(const RuntimeOptions& options) {

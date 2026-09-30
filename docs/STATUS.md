@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T06:23:33.804715+00:00. **ACTIVE — user resumed the execution contract; push each tested commit.**
+Updated 2026-09-30T06:43:42.869668+00:00. **ACTIVE — user resumed the execution contract; push each tested commit.**
 Repo `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repos and ObsidianVault remain read-only. The user has
@@ -19,18 +19,28 @@ Clean `5bf61e3` qualification PASSED: build-device-full-clean01,
 device-components-clean04 (all14 cells), device-full-profile-clean01.
 Evidence [selected-full-20260930](evidence/selected-full-20260930.md). All three
 jobs are terminal exit0. Source full-clean01/build device-full-clean01 retained.
-NEXT: finish runtime-resource guard; inspect two active core builds below,
-then build-device-failure-dev01 and its bounded failure/component gates.
+Runtime-resource guard development PASSED all six jobs on frozen
+runtime-guard-dev01 (base5bf61e3 dirty overlay):
+- build-runtime-guard-cpu-dev01: CPU core/bindings + six CTests.
+- build-runtime-guard-npu-dev01: standalone core build.
+- build-device-failure-dev01: component build + four CPU CTests/loader.
+- runtime-guard-lifecycle-dev01: eight fresh NPU processes.
+- device-failure-gates-dev01: five recoverable fault cases; separate quarantined
+  worker retains owners/refuses finalization and exits86 as required.
+- device-runtime-components-dev01: control FP32 + numerical FP32/FP16.
+Reports/logs/status under TASK/runs/NAME, failure/component results in verified/.
+The runtime last-session guard and close poisoning are ready for a separate
+implementation commit/push; then clean CPU/NPU core and failure qualification.
+No physical hung-kernel/driver-reset recovery claim is made.
 
-New uncommitted runtime-resource guard and deterministic CANN failure gate:
-last-session finalization refuses live/quarantined raw owners, quarantined workers
-refuse new work, failed close poisons its program. Tests inject partial creation,
-finish/submission errors, wait failure, retriable unbind and permanent unknown
-completion. No physical device hang is induced. Submit independent CPU/NPU core
-builds build-runtime-guard-{cpu,npu}-dev01 from frozen runtime-guard-dev01,
-base5bf61e3 dirty overlay, jobs2/1800s. Then build component and run failure gates.
-No runtime-result claim for this increment yet. No new full-size timing;
-historical CPU Attention remains suspended.
+Read-mode increment remains UNCOMMITTED and unqualified. build-device-read-dev01
+is RUNNING on frozen read-dev01 (basebc9150b overlay) with core runtime-guard-npu-dev01,
+build device-read-dev01, SoC Ascend910_9392, jobs2/900s. New content/old/proposal/mixed
+Read uses device per-region earliest-frame fallback for active-only adoption or
+selected clear, and multi-time preparation otherwise. Intended content gate640
+windows, including exact causal batch assertions. After build run --checks content
+ready with queue120s/task900s, then bounded content placement if parity passes.
+No full-size timing is scheduled; historical CPU Attention stays suspended.
 
 ## Current increment: selected matrix Full
 
@@ -137,9 +147,9 @@ its explicit FP32 module profile; sparse slot delivery, other module contracts,
 VJP, optimizer and peer progression still require implementation.
 Scalar AIV metadata ordering needs throughput optimization; byte budgets for
 model/activation/KV/communication are not covered by queue capacity.
-Runtime timeout handling quarantines uncertain live program owners; injected
-failure/lifetime testing, including runtime-scope finalization of such workers,
-is still required before promoting the complete backend.
+Runtime-resource guard development now verifies deterministic API failure and
+quarantine handling; its clean qualification is next. Physical hardware hangs
+and driver resets remain outside that gate, requiring failed-worker termination.
 
 ## Retained failures and operational lessons
 

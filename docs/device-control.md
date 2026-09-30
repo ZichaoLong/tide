@@ -17,13 +17,27 @@ Labels, descriptors, payload owners and workspaces live through every execution.
 A timed-out wait is not completion: release first tries to drain, and refuses
 to free anything if completion remains unconfirmed. Destruction then quarantines
 the entire owner until process exit. An errored worker must not resume execution.
-This failure-lifetime policy still needs its own injected-failure gate.
+A registered `RuntimeResource` lease remains live through raw-resource teardown
+and is retained permanently by quarantine. The last `RuntimeSession.close()`
+refuses finalization while such resources exist. After orderly resource close it
+can be retried; quarantine requires a failed worker exit. New session/device
+resolution and program construction/execution refuse a quarantined runtime.
+An unsuccessful program close also forbids another execution. Direct vendor
+finalization by an embedding application remains that application's responsibility.
 
 Standalone checks own a `portable_torch::RuntimeSession` in `main`, outside all
 tensor/program owners. Normal finalization must precede main-thread TLS teardown;
 a former static finalizer could segfault in TorchNPU's current-stream lookup.
 The lifecycle check covers nested owners, idempotent close and rejected reopen.
-Abnormal/quarantined-resource teardown remains part of the pending failure gate.
+The separate `verify_device_failures.py` gate runs finite real CANN programs with
+deterministically injected API errors: partial stream creation, build completion,
+asynchronous submission, boundary wait and unbind. It checks that accepted work
+executes once, failed owners cannot rerun, drains precede resource destruction,
+and a retried close releases retained tensors. A separate process withholds all
+completion confirmations, verifies retained owners and rejected finalization,
+then exits with the explicit failure code 86. This tests library error handling;
+it does not certify recovery from a physically hung device, driver reset or
+external vendor calls. Exact development/qualification results are in STATUS.
 
 The kernel hook submits work once during model construction. Subsequent execution
 is a device task; it is not a per-iteration host callback. `run()` submits once
@@ -151,6 +165,8 @@ python scripts/verify_device_control.py --build-dir NEW --output-dir GATE \
   --device=npu:0
 python scripts/profile_device_control.py --build-dir NEW --output-dir PROFILE \
   --device=npu:0 --check ready
+python scripts/verify_device_failures.py --build-dir NEW --output-dir FAILURES \
+  --device=npu:0
 ```
 
 Ascend C is optional and requires an explicit matching SoC; the closure check

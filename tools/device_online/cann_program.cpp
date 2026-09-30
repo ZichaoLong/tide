@@ -1,5 +1,6 @@
 #include "cann_program.h"
 #include "cann_api.h"
+#include "portable_torch/runtime.hpp"
 #include <c10/core/DeviceGuard.h>
 #include <functional>
 #include <iostream>
@@ -9,6 +10,7 @@
 namespace tide::device_online {
 struct CannProgram::Impl {
   at::Device device;
+  portable_torch::RuntimeResource resource;
   CannApi api;
   void *stream = nullptr, *launch = nullptr, *model = nullptr;
   void* target_list = nullptr;
@@ -26,6 +28,7 @@ struct CannProgram::Impl {
     CannApi::check(api.bind_stream(model, stream, 0), "bind persistent control stream"); bound = true;
   }
   void building() const {
+    resource.check();
     if (finished || closed || failed) throw std::logic_error("control program is not open for construction");
   }
   void validate(const at::Tensor& value, at::ScalarType dtype) const {
@@ -83,16 +86,18 @@ struct CannProgram::Impl {
     if (stream) { CannApi::check(api.destroy_stream(stream), "destroy control stream"); stream = nullptr; }
     if (launch) { CannApi::check(api.destroy_stream(launch), "destroy control launch stream"); launch = nullptr; }
     commands.clear(); owners.clear(); workspaces.clear(); closed = true;
+    resource.close();
   }
 };
-CannProgram::CannProgram(at::Device device) {
+CannProgram::CannProgram(at::Device device) : CannProgram(device,{}) {}
+CannProgram::CannProgram(at::Device device,const std::function<void(CannApi&)>& configure_api) {
   if (device.type() != c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("CANN device control requires an explicit NPU");
   impl_ = std::make_unique<Impl>(device);
-  try { impl_->initialize(); }
+  try { if(configure_api)configure_api(impl_->api);impl_->initialize(); }
   catch (...) {
     try { impl_->release(); }
-    catch (...) { (void)impl_.release(); } // Quarantine possibly live resources.
+    catch (...) { impl_->resource.quarantine();(void)impl_.release(); }
     throw;
   }
 }
@@ -102,6 +107,7 @@ CannProgram::~CannProgram() {
     // Keep runtime handles AND tensor owners alive, even beyond static teardown.
     // Only process exit can reclaim resources after an unconfirmed completion.
     std::cerr << "CANN control resources quarantined until process exit: " << error.what() << '\n';
+    impl_->resource.quarantine();
     (void)impl_.release();
   }
 }
@@ -224,6 +230,7 @@ void CannProgram::finish() {
 void CannProgram::run(int32_t timeout_ms) {
   auto& p = *impl_;
   if (!p.finished || p.closed || p.failed || timeout_ms <= 0) throw std::logic_error("control program is not executable");
+  p.resource.check();
   c10::DeviceGuard guard(p.device);
   try {
     p.in_flight = true; // Even a failed asynchronous submission needs a drain.
@@ -232,7 +239,10 @@ void CannProgram::run(int32_t timeout_ms) {
     p.in_flight = false;
   } catch (...) { p.failed = true; throw; }
 }
-void CannProgram::close() { impl_->release(); }
+void CannProgram::close() {
+  try {impl_->release();}
+  catch (...) {impl_->failed=true;throw;}
+}
 int64_t CannProgram::workspace_bytes() const {
   int64_t result = 0;
   for (const auto& workspace : impl_->workspaces) result += workspace.nbytes();

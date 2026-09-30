@@ -22,6 +22,13 @@ int main(int argc,char** argv) {
       portable_torch::synchronize(device);
       if(value.sum().cpu().item<double>()!=8)throw std::runtime_error("nested session ended runtime");
     }
+    if(device.type()==c10::DeviceType::PrivateUse1) {
+      portable_torch::RuntimeResource raw;
+      bool rejected=false;
+      try {runtime.close();}catch(const std::logic_error&){rejected=true;}
+      if(!rejected)throw std::runtime_error("runtime finalized with a live raw resource");
+      raw.check();raw.close();raw.close();
+    }
     runtime.close();runtime.close();
     if(device.type()==c10::DeviceType::PrivateUse1) {
       bool rejected=false;

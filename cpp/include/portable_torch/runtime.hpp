@@ -39,6 +39,9 @@ void synchronize(const torch::Device& device);
 // Nested sessions share the runtime; closing the last one finalizes NPU once.
 // An embedding application may instead own runtime teardown itself. CPU/CUDA
 // sessions do not shut down vendor runtimes. NPU cannot reopen after finalization.
+// Closing the last session while a registered raw resource is live is refused;
+// the session stays open so an orderly resource close can be retried. An
+// unresolved quarantine requires terminating that worker, without finalization.
 class RuntimeSession {
  public:
     RuntimeSession();
@@ -48,6 +51,25 @@ class RuntimeSession {
     void close(); // Call after destroying all NPU owners for checked cleanup.
  private:
     bool open_ = true;
+};
+
+// Backend adapters register raw resources which TorchNPU cannot otherwise see.
+// Release only after draining and destroying their device owners. A quarantined
+// lease is intentionally never released, even by its destructor; session close
+// and new runtime work then fail instead of tearing down possibly live buffers.
+// This protects this library's standalone lifecycle, not an embedder's own
+// direct vendor-finalization calls. CPU/CUDA builds perform no vendor actions.
+class RuntimeResource {
+ public:
+    RuntimeResource();
+    ~RuntimeResource();
+    RuntimeResource(const RuntimeResource&) = delete;
+    RuntimeResource& operator=(const RuntimeResource&) = delete;
+    void check() const;
+    void close() noexcept;
+    void quarantine() noexcept;
+ private:
+    bool open_ = true, quarantined_ = false;
 };
 
 const char* compiled_backend() noexcept;

@@ -5,6 +5,7 @@
 #include <vector>
 
 namespace tide::device_online {
+struct CannApi;
 // Experimental single-device control component, not a graph executor. It owns
 // model/stream/label/descriptor/workspace lifetimes. Operations below affect
 // fixed-size control buffers only; no autograd or hidden CPU fallback.
@@ -41,6 +42,10 @@ class CannProgram {
   void close();
   int64_t workspace_bytes() const;
  private:
+  // Deterministic API-failure injection belongs to the standalone test adapter;
+  // no environment switches or runtime mutation of a live program are exposed.
+  friend struct CannProgramTestAccess;
+  CannProgram(at::Device, const std::function<void(CannApi&)>& configure_api);
   struct Impl;
   std::unique_ptr<Impl> impl_;
 };

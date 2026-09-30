@@ -57,7 +57,7 @@ def main():
     subprocess.run(["ctest", "--test-dir", str(build), "--output-on-failure", "--no-tests=error"],
                    check=True, timeout=120)
     binaries, loaders = {}, {}
-    names = ["tide-device-control-check", "tide-device-numerical-check", "tide-packed-queue-check"]
+    names = ["tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
     if args.ascendc_soc:
         names.extend(("tide-device-closure-check", "tide-device-queue-check",
                       "tide-device-broadcast-check", "tide-device-ready-check", "tide-device-selector-check",

@@ -2,6 +2,7 @@
 
 CHECKS = {
     "control": ("tide-device-control-check", ("float32",)),
+    "failure": ("tide-device-failure-check", ("float32",)),
     "numerical": ("tide-device-numerical-check", ("float32", "float16")),
     "queue": ("tide-packed-queue-check", ("float32",)),
     "closure": ("tide-device-closure-check", ("float32",)),
@@ -14,6 +15,7 @@ CHECKS = {
 }
 MARKERS = {
     "control": "device-control: passed", "numerical": "device-numerical: passed",
+    "failure": "device-failure: passed",
     "queue": "packed-queue: passed", "closure": "device-closure: passed",
     "transaction": "device-queue: passed", "broadcast": "device-broadcast: passed",
     "ready": "device-ready: passed",
