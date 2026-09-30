@@ -1,0 +1,69 @@
+{
+  "schema": "tide-device-read-evidence-v1",
+  "source": "8a735ef7f0739e446fe7dfce0eccb5d4f9dc61b3",
+  "runtime": {
+    "arch": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "scope": "single-device FP32 inference: explicit norm-fp32-v1 and scalar/vector Read; not training or throughput",
+  "core_cpp_sha256": "32d8fe6664032bbcd79f7e576b5ddfa71cadce9e412f1766360e0a59da543138",
+  "component_sha256": "5f3dfdfbb345daafff406beb1ebfb5c5f6b5ebbc5e3285bf8037850a8d0b4b0a",
+  "checks": {
+    "cpu_ctests": 4,
+    "component_cells": 20,
+    "norm_windows": 530,
+    "analytic_cases": 2,
+    "overflow_refusals": 2,
+    "fp64_refusals": 2
+  },
+  "runs": [
+    {
+      "name": "build-device-read-vector-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "37a6187960984450787bfd2ee34a0c460dcecf78531a4a49d8deed4253fe9021",
+        "task.log": "5b9483af33c1289a5789b359ce4a904f8db0987b6096eb4e31e133678358b23b"
+      }
+    },
+    {
+      "name": "device-read-vector-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "e4d817ebb345c0b30a1bfcb0ad8bc64c87fbd1914aa288810db9cbc9be4e2fbf",
+        "task.log": "6f9beef327e9b1ce516087b3c3e32d6c59b62b7c906568e67afaf2adfbd9cef9",
+        "verified/result.json": "39099d86e833a4f26b71ea27f543e729ce5ada175956dd7b20fdac20649374ee"
+      }
+    },
+    {
+      "name": "device-read-vector-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "0c147339653f9d0174f6ed20ccedb2b98c5e71486955fb2ef6b5a39991a4e21d",
+        "task.log": "a9397cbd30b52edb3f5f4f48455585abbfb2ff6e0eb5d081e18be5dc91e8e195",
+        "profile/result.json": "89b15551d15690e18d18e2eee1ea87df3ec82c4864f1123e94d4fec8d06e38f8"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": 96173,
+      "AI_CORE": 1083
+    },
+    "kernels": {
+      "tide_read_reduce": 410,
+      "tide_state_read": 802,
+      "tide_vector_read": 410
+    },
+    "raw_csv_sha256": {
+      "op_summary_20260930173204.csv": "523a8c060c4f0c943c37484d2eb15ea4c030f7079a7f399f807a939a9806613f",
+      "api_statistic_20260930173204.csv": "038e50e3620e6ece24fedd650366dc094330779e6b193277e5fea6e7a44359e8"
+    },
+    "host_fallback_diagnostic": false
+  }
+}

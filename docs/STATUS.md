@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-09-30T08:51:25.997731+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
+Updated 2026-09-30T09:37:20.136523+00:00. **ACTIVE — user resumed execution; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch `graph-execution-foundation`.
 No subagents. Reference repositories and ObsidianVault remain read-only.
@@ -45,8 +45,8 @@ not throughput or resident training. [Evidence](evidence/device-clock-20260930.m
 Identity/EMA/Add converts int64 global timestamps to local ticks on device; persistent
 clocks and message/history/Read coordinates stay global. Invalid event phase refuses
 transaction9; malformed persistent phase rejects restore. Add repeats multiplication
-per local tick with explicit max_repeat_ticks65536/work refusal8. Sum and state have
-vector/scalar options; current Read is scalar, linear-v1 only.
+per local tick with explicit max_repeat_ticks65536/work refusal8. Sum, state and Read have vector/scalar options; linear-v1 and norm-fp32-v1 Read
+are now implemented and clean-qualified below.
 
 Earlier immutable evidence remains scoped to the tested source:
 - [online greedy](evidence/online-greedy-20260930.md),2038d88:8849 CPU tests,
@@ -86,7 +86,7 @@ No pending permission or pause. Do not relabel live regression as passed.
 
 ## Current device Norm32/vector Read increment
 
-Ready to commit separately from LH work. Same explicit FP32 norm profile inside
+Implementation **8a735ef** committed/pushed; clean qualification running. Same explicit FP32 norm profile inside
 the online device loop. ContentLimits.vectorized_read defaults true; scalar Read
 remains selectable. Metadata preflight checks exact int64 clocks/work limits,
 independent owner/width tiles perform vector state preparation and dot/norm partials,
@@ -101,17 +101,27 @@ Development PASSED on frozen read-vector-dev02, matching core norm32-npu-dev02:
 Earlier read-vector-dev01 regression passed clock/Add/content/window; its Norm fixture
 was not run because it shared the already-diagnosed long-tick test mistake below.
 
-NEXT commit device Read paths only, then clean source read-vector-clean01 at that
-commit: build-device-read-vector-clean01 (matching norm32-npu-clean01 core,1800s/jobs2),
-all20 device cells (900s/queue120s) and separate norm32 profile (480s/queue120s).
+Clean source read-vector-clean01 at8a735ef: build-device-read-vector-clean01 PASSED
+(four CPU CTests/loader; matching norm32-npu-clean01 core),
+device-read-vector-components-clean01 PASSED all20 cells,
+device-read-vector-profile-clean01 PASSED separate norm32 placement profile.
+[Immutable Read evidence](evidence/device-read-20260930.md): 96173 AIV +1083 AI Core;
+410 vector Read/410 reductions, no AiCPU/fallback.
 This does not qualify throughput,attention,FP16,peer progression or resident training.
 
 Uncommitted next LH increment must be excluded from the Read commit:
 packed_lh_full.{h,cpp},lh_full_check.cpp, activation/normalization methods in
 cann_program.{h,cpp}, int-array lifetime in cann_api.{h,cpp}, target-kind filtering
-in ascendc/tide_full_plan.cpp and packed_full.cpp. Not wired into ContentFlow or
-built/tested yet. Plan: grouped selected-only vendor activation/norm, safe sentinel
-padding and bounded chunks; then independent formulas/complete windows/profiling.
+in ascendc/tide_full_plan.cpp and packed_full.cpp. Wired into ContentFlow now, with local LH reservation deducted from tanh budget.
+Grouped selected-only vendor activation/norm, safe sentinel padding and bounded
+chunks;32 component cases/nine profiles plus96 complete windows planned.
+build-device-lh-full-dev01 PASSED four CPU CTests/loader from frozen lh-full-dev01,
+matching norm32-npu-clean01 core. NEXT device-lh-full-gates-dev01: lh-full/full/norm32/failure,
+FAILED first lh-full component numerical equality (exit2, not timeout).
+Original logs retained. device-lh-full-diagnostic01 RUNNING, frozen lh-full-diagnostic01,
+links original implementation with diagnostic-only check to identify width/profile/row.
+300s total/queue120s. No tolerance relaxation. After a diagnosed fix, new build/gates.
+This is unverified FP32 broadcast inference; no slot-affine or training claim.
 
 ## Retained failures and older work
 
