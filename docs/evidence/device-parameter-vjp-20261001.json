@@ -1,0 +1,85 @@
+{
+  "schema": "tide-device-parameter-vjp-evidence-v1",
+  "source": "1ef23f3ab57024fedd9bda439976aff95ceb7795",
+  "scope": "Internal single-NPU FP32 parameter owner reduction for the HARD sum/broadcast identity/EMA/Add plus identity/tanh graph backward; not optimizer, public training or throughput",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 38,
+    "aliased_graph_cases": 36,
+    "cpu_reference_dtypes": [
+      "float32"
+    ],
+    "graph_backward_reference_dtypes": [
+      "float32",
+      "float64"
+    ],
+    "build_ctests": 4
+  },
+  "build": {
+    "manifest_sha256": "9b2f927d4add88d1d87a16087bcc7afbb9b841da3be133553fc03f53875c60f0",
+    "component_sha256": "20d0ff16a7a0af27247f953cde52e466711247b8de0e92f44f5849b36ad73938",
+    "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e"
+  },
+  "runs": [
+    {
+      "name": "build-parameter-vjp-clean01",
+      "source": "1ef23f3ab57024fedd9bda439976aff95ceb7795",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "e5841daf6770498253629d6215303f98d033dedc74093dea49e8dc100d96ef78",
+        "task.log": "009c201eda8bed518e35a12fab7f7496c31ee0a54cf56379d0de72bc49180819"
+      }
+    },
+    {
+      "name": "parameter-vjp-clean01",
+      "source": "1ef23f3ab57024fedd9bda439976aff95ceb7795",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "563a1f3a8c475ae57e9bad8c622b2cc1ed93ee4da507ab23aa1ac696604e07e9",
+        "task.log": "56f4caebfd71dfd97c77e1931b9e17556e94abb4242a4deece6f60dc7a2424e3",
+        "verified/result.json": "057dad0e87bebd2f6c303f9c122c5ca6bf4d375789833f728251b2efaf163006"
+      }
+    },
+    {
+      "name": "parameter-vjp-profile-clean01",
+      "source": "1ef23f3ab57024fedd9bda439976aff95ceb7795",
+      "state": "passed",
+      "exit_code": 0,
+      "files": {
+        "status.json": "ddfeb4b319c2a95ef11fb2fa0e86c8385767297c1e2016d0d92bf3c6e51a2d76",
+        "task.log": "164d80f48d9ca858fac95de16b1c2423888597b387e1d3cd4f1cc3335ef2f3ae",
+        "profiled/result.json": "b36a8c2dba0ec1ed04e1155344f0ebb05e9a3401336bdb84959e13b7b6dc436b",
+        "profiled/profile.log": "19875ea65f71af7efffeb2e74a44b6382b699046bc268ee0690426dfa4f1a0c8"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 23580,
+        "summed_task_us": 163853.09999999814
+      },
+      "MIX_AIV": {
+        "count": 144,
+        "summed_task_us": 774.4599999999997
+      },
+      "AI_CORE": {
+        "count": 334,
+        "summed_task_us": 1831.0799999999997
+      }
+    },
+    "vjp_kernel_records": 74,
+    "host_fallback_diagnostic": false,
+    "interpretation": "entire correctness-check profile; task sums are not wall time"
+  },
+  "retained_failures": []
+}

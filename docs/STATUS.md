@@ -3,7 +3,7 @@
 Updated 2026-09-30T18:57:04.182526+00:00. **ACTIVE — user resumed; tested commits may be pushed.**
 Repository `/home/zlong/llm/graph-execution-foundation`, real path
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-HEAD **12eb606**,graph reverse qualification pushed; parameter owner reduction is this increment;
+HEAD **1ef23f3**,parameter owner reduction committed/pushed;graph reverse qualification12eb606;
 resident disk restore/reset622dbb2 qualified; evidence is this increment. No pending authorization/pause. No subagents.
 Reference repositories and ObsidianVault are read-only. **Overall F1–F7 remain incomplete.**
 
@@ -109,23 +109,46 @@ all PASSED terminal0 from exact37430e1. Clean build4 CTests,full37-cell gate,
 Profile88,699 AIV+1,269 AI_CORE+792 MIX_AIV,5,934 graph reverse records,
 no AiCPU/fallback. Evidence docs/evidence/device-graph-vjp-20261001.{json,md}.
 
-Current uncommitted parameter-owner reduction:
-`tools/device_online/parameter_vjp.{h,cpp}`,parameter_vjp_check.cpp,
-ascendc/tide_parameter_vjp.cpp plus CMake/build/check registration.
-Uses TensorImpl registry aliases,device flags and feature tiles;None/zero and
-poison remain distinct. Empty registry minimum budget is now checked.
-Tests planned36 aliased real graph/root cases (width1/3/257,two schedules),
-shared-storage distinct owners,replay,subset/empty registry and refusal checks.
-build-parameter-vjp-dev01 and parameter-vjp-dev01 PASSED (36 alias cases and7 regression cells). parameter-vjp-profile-dev01 PASSED:23,580 AIV+334 AI_CORE+144 MIX_AIV,74 owner-reduction records,no AiCPU/fallback;correctness profile,not throughput. Implementation will receive build-parameter-vjp-clean01 from the new commit (1800s/jobs2/no NPU),then full38-cell gate and separate profile (900s/one NPU/queue120s each). Task-local parameter_vjp_relink.py uses checked graph
-clean objects/archive in a NEW build;never mutates the parent/source.
+Parameter-owner reduction1ef23f3 committed/pushed;all formal jobs terminal0:
+build-parameter-vjp-clean01 (4 CTests),parameter-vjp-clean01 (38 cells),
+parameter-vjp-profile-clean01.36 actual aliased graph/root cases,CPU FP32 oracle;
+23,580 AIV+334 AI_CORE+144 MIX_AIV,74 owner kernel records,no AiCPU/fallback.
+Audit exact sources/binaries/logs/CSVs passed. Evidence:
+docs/evidence/device-parameter-vjp-20261001.{json,md}. Contract resident-parameter-vjp.md.
 
-Uncommitted device_optimizer.{h,cpp},optimizer_layout.h and four optimizer Ascend C headers/kernels are in development,not yet built/registered. Next: qualify owner reduction,then device finite checks/optimizer and forward
-parameter-bank writeback/alias coherence,multiple updates and public training.
-Backward tape is borrowed until next advance/close. Retained-window lifetime,
-LH/SwiGLU/normalized Aggregate/attention/HST/SOFTP adjoints,peer progression,
-FP16 and full public/performance matrix remain. Do not mark F4/F5 complete or
-stop at this restricted HARD backward. Full CPU gate need not be repeated while
-portable core/Python remains unchanged (8,954 tests+23 optional skips passed).
+Current uncommitted device optimizer + publication:
+- device_optimizer.{h,cpp},optimizer_layout.h,optimizer_check.cpp;
+  Ascend C optimizer_vector.h and optimizer plan/values/commit kernels.
+- parameter_publish.{h,cpp},Ascend C publisher,training_step_check.cpp;
+  ContentFlow parameter-bank view and per-window source-scale diagnostic snapshot;
+  build/check registration and docs/resident-optimizer.md.
+- Packed SGD/AdamW finite proposals and all-owner commit;None skips every update,
+  connected zero advances slots/counters/decay. Shared TensorImpl update once;
+  distinct owners sharing storage explicitly refused. Publication includes Read aliases.
+- build-training-step-dev01 PASSED isolated checked build;
+  training-step-dev01 PASSED9 component checks,optimizer32 trajectories/256 updates
+  against CPU FP32/FP64 and complete chain18 trajectories/72 actual windows,
+  including2 wide257 trajectories. Each optimizer boundary explicitly truncates.
+  No public training/retained-window/performance qualification implied.
+- Current edits AFTER that snapshot add device rejection of nonfinite Adam bias
+  corrections and regression tests for nonfinite momentum/moments/corrections,
+  checking failure state bitwise. These edits require a new frozen gate before commit.
+
+Retain task-local build-optimizer-dev01 failure (static archive after as-needed
+ascendcl) and build-optimizer-dev01b failure (public consumer has no direct
+ascendcl option). External relinker fixed;the old runs remain failed.
+optimizer-dev01 failed before acquiring NPU due to its build dependency.
+optimizer-kernel-dev01 separately PASSED the already linked optimizer binary:
+32 trajectories/256 updates. Later full training-step development build supersedes
+its limited build scope. Never treat either failed build as clean qualification.
+
+Next: new optimizer finalization gate/profile,commit tested implementation,
+clean immutable build/full40-cell qualification and evidence. Then public training
+ownership and retained-window lifetime/boundary cotangent links. Borrowed tapes
+expire on next advance/close/parameter update. LH/SwiGLU/normalized Aggregate/
+attention/HST/SOFTP adjoints,peer progression,FP16 and the public/performance
+matrix remain. Do not mark F4/F5 complete at this restricted HARD chain.
+Portable core/Python unchanged:do not repeat the8,954 CPU tests/23 optional skips.
 
 ## Preserved older work and interrupted timing
 
@@ -164,3 +187,4 @@ No source/build mutation while jobs read them. `norm32_after_core.py` is a600s
 bounded dependency wrapper:put it BEFORE the queue helper,never hold a card while
 waiting for compilation. All units in background.slice; inspect status plus
 expected result markers/hashes. Re-entry:git status --short --branch;python scripts/status.py.
+
