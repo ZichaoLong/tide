@@ -27,7 +27,14 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   const auto device=gradient.values.device();count_=gradient.owners.size();const auto physical=std::max<int64_t>(1,count_);
   buffer(gradient.values,device,at::kFloat,gradient.values.sizes());buffer(gradient.connected,device,at::kBool,{physical});
   ParameterRegistry registry;
-  for(const auto& owner:gradient.owners)for(const auto& name:owner.aliases)registry.add(name,owner.value);
+  for(const auto& owner:gradient.owners) {
+    if(!owner.value.device().is_cpu()||(owner.value.scalar_type()!=at::kFloat&&owner.value.scalar_type()!=at::kHalf))
+      throw std::invalid_argument("device optimizer requires CPU FP32/FP16 payload owners");
+    // The portable NamedOptimizer validates canonical groups against FP32
+    // masters. Original payload TensorImpl identities remain in identity_.
+    auto master=owner.value.to(at::kFloat);
+    for(const auto& name:owner.aliases)registry.add(name,master);
+  }
   std::unique_ptr<NamedOptimizer> validator;
   if(kind==DeviceOptimizerKind::sgd)validator=std::make_unique<SGD>(registry,std::move(groups));
   else if(kind==DeviceOptimizerKind::adamw)validator=std::make_unique<AdamW>(registry,std::move(groups));
@@ -46,9 +53,9 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   std::vector<int64_t> table,tiles{0};int64_t used=0;std::set<const void*> storage;
   for(size_t i=0;i<gradient.owners.size();++i) {
     const auto& owner=gradient.owners[i];const auto offset=gradient.offsets[i],size=owner.value.numel();
-    if(!owner.value.device().is_cpu()||owner.value.scalar_type()!=at::kFloat||size<1||offset < -1
+    if(size<1||offset < -1
         ||offset>=0&&(offset!=used||size>gradient.values.numel()-offset))
-      throw std::invalid_argument("invalid CPU FP32 optimizer owner/offset");
+      throw std::invalid_argument("invalid optimizer payload owner/offset");
     // Separate TensorImpl owners can overlap storage. The gradient registry
     // preserves that distinction, but independent packed updates cannot yet
     // reproduce sequential shared-storage mutations. Refuse before allocation.
@@ -56,13 +63,14 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
       throw std::invalid_argument("device optimizer does not support distinct owners sharing storage");
     if(offset>=0)used+=size;
     const auto found=group_of.find(owner.canonical);const int64_t group=found==group_of.end()?-1:found->second;
-    table.insert(table.end(),{offset,size,group});tiles.push_back(tiles.back()+(offset>=0&&group>=0?(size+255)/256:0));
+    table.insert(table.end(),{offset,size,group,int64_t(owner.value.scalar_type()==at::kHalf)});
+    tiles.push_back(tiles.back()+(offset>=0&&group>=0?(size+255)/256:0));
   }
   if(std::max<int64_t>(1,used)!=gradient.values.numel())throw std::invalid_argument("optimizer owner extent mismatch");
   tasks_=tiles.back();const bool adam=kind==DeviceOptimizerKind::adamw;
   const int64_t elements=gradient.values.numel(),first=(adam||momentum)?elements:1,second=adam?elements:1,max=adam&&maximum?elements:1;
   const long double bytes=8.L*(elements+static_cast<long double>(first)+second+max)+32.L*physical+
-    64.L*std::max<int64_t>(1,tasks_)+8.L*(std::max<size_t>(3,table.size())+tiles.size()+flags.size())+4.L*options.size();
+    64.L*std::max<int64_t>(1,tasks_)+8.L*(std::max<size_t>(tide_device::OWNER_FIELDS,table.size())+tiles.size()+flags.size())+4.L*options.size();
   if(bytes>budget)throw std::invalid_argument("device optimizer tensor budget exceeded");
   auto cpu=at::zeros({elements},at::kFloat);
   for(size_t i=0;i<gradient.owners.size();++i)if(gradient.offsets[i]>=0)
@@ -73,7 +81,7 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   next_steps_=at::empty_like(steps_);next_corrections_=at::empty_like(corrections_);
   // A separate cache line per vector tile avoids concurrent scalar cache-line writes.
   tile_errors_=at::zeros({std::max<int64_t>(1,tasks_),16},values_.options().dtype(at::kInt));
-  table_=at::tensor(table.empty()?std::vector<int64_t>{-1,0,-1}:table,at::kLong).reshape({-1,3}).to(device);
+  table_=at::tensor(table.empty()?std::vector<int64_t>{-1,0,-1,0}:table,at::kLong).reshape({-1,tide_device::OWNER_FIELDS}).to(device);
   tiles_=at::tensor(tiles,at::kLong).to(device);options_=at::tensor(options,at::kFloat).reshape({-1,tide_device::OPTION_COUNT}).to(device);
   flags_=at::tensor(flags,at::kLong).reshape({-1,tide_device::FLAG_COUNT}).to(device);
 }

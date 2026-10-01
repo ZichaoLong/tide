@@ -11,6 +11,14 @@
 #include <stdexcept>
 
 namespace tide::device_online {
+namespace {
+void validate_reverse_modules(const Graph& graph) {
+  for(const auto& n:graph.nodes)
+    if((!n.identity&&n.emission!="broadcast")
+        ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"&&!is_fiber_attention_profile(n.memory)))
+      throw std::invalid_argument("graph reverse module contract unavailable");
+}
+}
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
   if(profile.dtype==at::kHalf&&l.mode!="hard")
@@ -234,10 +242,7 @@ FullTape ContentFlow::full_tape() const {
 }
 ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
-  for(const auto& n:s.profile.graph.nodes)
-    if((!n.identity&&n.emission!="broadcast")
-        ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"&&!is_fiber_attention_profile(n.memory)))
-      throw std::invalid_argument("graph reverse module contract unavailable");
+  validate_reverse_modules(s.profile.graph);
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
@@ -249,11 +254,13 @@ ReverseTape ContentFlow::reverse_tape() const {
   return tape;
 }
 ParameterBanks ContentFlow::parameter_banks() const {
-  // Reuse the current narrow training preflight. This internal view does not
-  // make parameter mutation available through public inference sessions.
-  const auto tape=reverse_tape();const auto& s=*impl_;
-  return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
-          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra,tape.aggregate,tape.attention,
+  // Publication is independently testable before a dtype's VJP is available.
+  // This internal view does not expose mutation through public inference.
+  const auto full=full_tape();const auto& s=*impl_;validate_reverse_modules(s.profile.graph);
+  return {&s.profile.graph,full.weights,full.biases,s.profile.decay,s.profile.retention,
+          s.profile.read,s.profile.scales,s.emission->scales(),full.extra,
+          s.aggregate?s.aggregate->tape():AggregateTape{},
+          s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
           s.attention?s.attention->banks():FiberParameterBanks{}};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {

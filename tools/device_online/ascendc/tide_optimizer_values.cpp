@@ -54,7 +54,17 @@ extern "C" __global__ __aicore__ void tide_optimizer_values(GM_ADDR table,GM_ADD
       AscendC::Div(tmp,m,den,size);AscendC::Muls(w,w,decay,size);AscendC::PipeBarrier<PIPE_V>();
       AscendC::Muls(tmp,tmp,-lr/c1,size);AscendC::PipeBarrier<PIPE_V>();AscendC::Add(w,w,tmp,size);AscendC::PipeBarrier<PIPE_V>();
     }
-    finite=finite&&vector.finite(w,size);vector.save(w,(__gm__ float*)next_values,offset,size);
+    finite=finite&&vector.finite(w,size);
+    if(t[i*OWNER_FIELDS+PAYLOAD_HALF]) {
+      // Check the actual rounding boundary, not abs(w)<=65504: FP32 masters
+      // such as 65512 still round to finite half. Refuse before any owner/slot
+      // commit if publication would produce Inf/NaN. Keep the master unrounded.
+      auto rounded=den.ReinterpretCast<half>();
+      AscendC::Cast(rounded,w,AscendC::RoundMode::CAST_RINT,size);AscendC::PipeBarrier<PIPE_V>();
+      AscendC::Cast(tmp,rounded,AscendC::RoundMode::CAST_NONE,size);AscendC::PipeBarrier<PIPE_V>();
+      finite=finite&&vector.finite(tmp,size);
+    }
+    vector.save(w,(__gm__ float*)next_values,offset,size);
     if(!finite)((__gm__ int32_t*)tile_errors)[task*16]=1;
   }
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);

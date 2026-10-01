@@ -13,6 +13,8 @@ struct ParameterBanks {
   FiberParameterBanks fiber;
 };
 // Publish a packed owner vector, including every used alias (HARD Read too).
+// Values are validated FP32 masters; banks retain the declared payload dtype.
+// FP32 normalization banks receive widened quantized payload parameters.
 // On a sticky reverse/optimizer error this records no live bank writes.
 void append_parameter_publish(CannProgram&,const ParameterBanks&,const ParameterVjp&,
                               const at::Tensor& values,const at::Tensor& error,int64_t tensor_budget_bytes);

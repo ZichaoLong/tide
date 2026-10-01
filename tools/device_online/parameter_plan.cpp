@@ -69,7 +69,8 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();out.fiber_elements=fiber.back();
   std::vector<int64_t> owners,refs,tiles{0};int64_t total=0;
   for(const auto& owner:out.owners) {
-    if(owner.value.scalar_type()!=at::kFloat)throw std::invalid_argument("parameter registry must describe FP32 owners");
+    if(owner.value.scalar_type()!=at::kFloat&&owner.value.scalar_type()!=at::kHalf)
+      throw std::invalid_argument("parameter registry must describe FP32/FP16 payload owners");
     const auto first=int64_t(refs.size()/3),size=owner.value.numel();
     for(const auto& name:owner.aliases)if(auto it=by_name.find(name);it!=by_name.end()) {
       const auto& ref=it->second;if(owner.value.sizes()!=at::IntArrayRef(ref.shape))throw std::invalid_argument("parameter alias shape disagrees with graph VJP");

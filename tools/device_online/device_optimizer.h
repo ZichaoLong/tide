@@ -5,7 +5,7 @@
 
 namespace tide::device_online {
 enum class DeviceOptimizerKind {sgd,adamw};
-// Internal first-order FP32 owner update. Mutable numerical state and decisions
+// Internal FP32 master update for FP32/FP16 payload owners. State and decisions
 // remain on device; a finite-check failure commits no parameter or slot. This
 // does not itself publish parameters into a forward owner's frozen banks.
 class DeviceOptimizer {

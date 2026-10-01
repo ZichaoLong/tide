@@ -1,6 +1,6 @@
 #include "fiber_vector.h"
 extern "C" __global__ __aicore__ void tide_event_publish(GM_ADDR plan,GM_ADDR tiles,GM_ADDR source,
-    GM_ADDR qkv,GM_ADDR projection,GM_ADDR error,int64_t count,int64_t tasks) {
+    GM_ADDR qkv,GM_ADDR projection,GM_ADDR error,int64_t count,int64_t tasks,int64_t fp16) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);using I=int64_t;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)plan);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -11,6 +11,7 @@ extern "C" __global__ __aicore__ void tide_event_publish(GM_ADDR plan,GM_ADDR ti
     auto row=p+lo*6;const I tile=task-off[lo],cols=row[4],per=(cols+255)/256,r=tile/per,start=(tile%per)*256;
     const uint32_t size=cols-start<256?cols-start:256;
     op.load(x,(__gm__ float*)source,row[0]+r*cols+start,size);
-    op.save(x,(__gm__ float*)(row[1]?projection:qkv),row[2]+r*row[5]+start,size);
+    if(fp16)op.save(x,(__gm__ half*)(row[1]?projection:qkv),row[2]+r*row[5]+start,size);
+    else op.save(x,(__gm__ float*)(row[1]?projection:qkv),row[2]+r*row[5]+start,size);
   }
 }

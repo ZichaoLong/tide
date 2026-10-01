@@ -23,6 +23,10 @@ void DeviceOptimizer::restore(const ResidentOptimizerState& s) {
       ||(s.corrections<0).any().item<bool>()||(s.corrections>1).any().item<bool>())
     throw std::invalid_argument("invalid optimizer checkpoint slots/counters");
   for(int64_t i=0;i<count_;++i) {
+    const auto offset=identity_.offsets[i];const auto& owner=identity_.owners[i];
+    if(offset>=0&&owner.value.scalar_type()==at::kHalf
+        &&!at::isfinite(s.values.narrow(0,offset,owner.value.numel()).to(at::kHalf)).all().item<bool>())
+      throw std::invalid_argument("optimizer checkpoint master cannot publish finite FP16 payload");
     const auto step=s.steps[i].item<int64_t>();
     if((identity_.offsets[i]<0&&step!=0)||(step==0&&s.corrections[i].ne(0).any().item<bool>())
         ||(kind_==DeviceOptimizerKind::sgd&&s.corrections[i].ne(0).any().item<bool>())

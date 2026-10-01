@@ -25,10 +25,13 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
       ||registry.owners.size()!=registry.offsets.size()||!registry.values.defined())
     throw std::invalid_argument("parameter publication requires explicit no-grad owner/banks");
   const auto& g=*b.graph;const int64_t nodes=g.nodes.size(),width=b.decay.size(1),inputs=g.inputs.size(),edges=g.edges.size(),ports=g.outputs.size();
-  const auto device=b.decay.device();if(device.type()!=c10::DeviceType::PrivateUse1||width<1||nodes<1)throw std::invalid_argument("parameter publication requires NPU FP32");
+  const auto device=b.decay.device();const auto dtype=b.decay.scalar_type();
+  if(device.type()!=c10::DeviceType::PrivateUse1||width<1||nodes<1||(dtype!=at::kFloat&&dtype!=at::kHalf))
+    throw std::invalid_argument("parameter publication requires NPU FP32/FP16 payload banks");
+  const int64_t fp16=dtype==at::kHalf;
   buffer(values,device,at::kFloat,registry.values.sizes());buffer(error,device,at::kInt,{1});
-  buffer(b.decay,device,at::kFloat,{nodes,width});buffer(b.retention,device,at::kFloat,{nodes});buffer(b.read,device,at::kFloat,{nodes,width});
-  buffer(b.sources,device,at::kFloat,{std::max<int64_t>(1,inputs+edges)});buffer(b.emission,device,at::kFloat,{edges+ports+1,1});
+  buffer(b.decay,device,dtype,{nodes,width});buffer(b.retention,device,dtype,{nodes});buffer(b.read,device,dtype,{nodes,width});
+  buffer(b.sources,device,dtype,{std::max<int64_t>(1,inputs+edges)});buffer(b.emission,device,dtype,{edges+ports+1,1});
   std::map<std::string,Ref> refs;bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;
   const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
@@ -56,21 +59,21 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
     if(node.memory=="ema")refs[name+"decay"]={2,n*width,{width}};
     if(node.memory=="lh-add-repeat-v1")refs[name+"extra.add_retention"]={3,n,{}};
   }
-  if(tanh){buffer(b.weights,device,at::kFloat,{nodes+1,width,width});buffer(b.biases,device,at::kFloat,{nodes+1,width});}
-  if(lh){buffer(b.extra.lh_weights,device,at::kFloat,{nodes+1,width});buffer(b.extra.lh_biases,device,at::kFloat,{nodes+1,width});}
-  if(swiglu){buffer(b.extra.gate,device,at::kFloat,{swiglu+1,width,2*width});buffer(b.extra.up,device,at::kFloat,{swiglu+1,width,2*width});
-    buffer(b.extra.down,device,at::kFloat,{swiglu+1,2*width,width});}
+  if(tanh){buffer(b.weights,device,dtype,{nodes+1,width,width});buffer(b.biases,device,dtype,{nodes+1,width});}
+  if(lh){buffer(b.extra.lh_weights,device,dtype,{nodes+1,width});buffer(b.extra.lh_biases,device,dtype,{nodes+1,width});}
+  if(swiglu){buffer(b.extra.gate,device,dtype,{swiglu+1,width,2*width});buffer(b.extra.up,device,dtype,{swiglu+1,width,2*width});
+    buffer(b.extra.down,device,dtype,{swiglu+1,2*width,width});}
   if(normalized)buffer(b.aggregate.weights,device,at::kFloat,{nodes,slots});
   std::vector<int64_t> fiber_nodes;
   for(int64_t n=0;n<nodes;++n)if(!g.nodes[n].identity&&is_fiber_attention_profile(g.nodes[n].memory))fiber_nodes.push_back(n);
   if(b.fiber.nodes!=fiber_nodes)throw std::invalid_argument("fiber publication node map mismatch");
   const int64_t fibers=fiber_nodes.size();bool learned_pool=false;
   if(fibers) {
-    buffer(b.fiber.qkv,device,at::kFloat,{fibers+1,width,3*width});
-    buffer(b.fiber.qkv_bias,device,at::kFloat,{fibers+1,3*width});
-    buffer(b.fiber.projection,device,at::kFloat,{fibers+1,width,width});
-    buffer(b.fiber.projection_bias,device,at::kFloat,{fibers+1,width});
-    buffer(b.fiber.decay,device,at::kFloat,{fibers});
+    buffer(b.fiber.qkv,device,dtype,{fibers+1,width,3*width});
+    buffer(b.fiber.qkv_bias,device,dtype,{fibers+1,3*width});
+    buffer(b.fiber.projection,device,dtype,{fibers+1,width,width});
+    buffer(b.fiber.projection_bias,device,dtype,{fibers+1,width});
+    buffer(b.fiber.decay,device,dtype,{fibers});
     int64_t pool_slots=1;for(const auto n:fiber_nodes)pool_slots=std::max(pool_slots,g.source_counts[n]);
     for(int64_t i=0;i<fibers;++i) {
       const auto n=fiber_nodes[i];const auto name="nodes."+std::to_string(n)+".extra.";
@@ -93,6 +96,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   std::vector<int64_t> plan,tiles{0};
   for(size_t i=0;i<registry.owners.size();++i) {
     const auto& owner=registry.owners[i];const auto offset=registry.offsets[i],size=owner.value.numel();if(offset==-1)continue;
+    if(owner.value.scalar_type()!=dtype)throw std::invalid_argument("publication payload owner dtype disagrees with banks");
     if(offset<0||size<1||offset>values.numel()-size)throw std::invalid_argument("invalid parameter publication owner offset");
     for(const auto& name:owner.aliases)if(auto it=refs.find(name);it!=refs.end()) {
       if(owner.value.sizes()!=at::IntArrayRef(it->second.shape))throw std::invalid_argument("parameter publication alias shape mismatch");
@@ -112,7 +116,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   const auto fd=fibers?b.fiber.decay:dummy,fp=learned_pool?b.fiber.pool:dummy;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
     ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),
-    ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(error),count,tasks),
+    ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(error),count,tasks,fp16),
     "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,fq,fqb,fo,fob,fd,fp,error});
   if(!b.attention.empty())append_event_publish(p,b.attention,registry,values,error,budget/2);
 }

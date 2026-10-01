@@ -16,11 +16,12 @@ void same(const Tensor& actual,const Tensor& expected,const std::string& field) 
   }
 }
 struct Fixture {ParameterRegistry registry;ParameterVjp gradient;};
-Fixture fixture(at::Device device,int64_t width) {
+Fixture fixture(at::Device device,int64_t width,at::ScalarType payload=at::kFloat) {
   Fixture f;
   auto a=at::arange(width,at::kFloat).remainder(11)*.03125-.125;
-  f.registry.add("a",a);f.registry.add("alias",a);f.registry.add("b",at::full({width+2},.0625f,at::kFloat));
-  f.registry.add("c",at::full({},.03125f,at::kFloat));f.registry.add("dead",at::full({},.5f,at::kFloat));
+  a=a.to(payload);
+  f.registry.add("a",a);f.registry.add("alias",a);f.registry.add("b",at::full({width+2},.0625f,payload));
+  f.registry.add("c",at::full({},.03125f,payload));f.registry.add("dead",at::full({},.5f,payload));
   f.gradient.owners=f.registry.owners();int64_t size=0;
   for(const auto& o:f.gradient.owners){f.gradient.offsets.push_back(o.canonical=="dead"?-1:size);if(o.canonical!="dead")size+=o.value.numel();}
   f.gradient.values=at::zeros({size},at::TensorOptions().device(device).dtype(at::kFloat));
@@ -41,8 +42,8 @@ std::vector<OptimizerGroup> groups(DeviceOptimizerKind kind,int variant) {
   if(kind==DeviceOptimizerKind::adamw)b.amsgrad=!a.amsgrad;
   return {a,b};
 }
-void trajectory(at::Device device,DeviceOptimizerKind kind,int variant,int64_t width,at::ScalarType dtype) {
-  at::NoGradGuard guard;auto f=fixture(device,width);auto gs=groups(kind,variant);ParameterRegistry cpu;
+int trajectory(at::Device device,DeviceOptimizerKind kind,int variant,int64_t width,at::ScalarType dtype,at::ScalarType payload) {
+  at::NoGradGuard guard;auto f=fixture(device,width,payload);auto gs=groups(kind,variant);ParameterRegistry cpu;
   for(const auto& o:f.registry.owners()){auto x=o.value.to(dtype).clone();for(const auto& name:o.aliases)cpu.add(name,x);}
   std::unique_ptr<NamedOptimizer> reference;
   if(kind==DeviceOptimizerKind::sgd)reference=std::make_unique<SGD>(cpu,gs);else reference=std::make_unique<AdamW>(cpu,gs);
@@ -59,8 +60,23 @@ void trajectory(at::Device device,DeviceOptimizerKind kind,int variant,int64_t w
         parameter.mutable_grad()=g.to(dtype).reshape(parameter.sizes());flags[i].fill_(true);++counts[i];
         gradient.narrow(0,f.gradient.offsets[i],g.numel()).copy_(g);}
     }
+    std::vector<Tensor> before;
+    if(payload==at::kHalf)for(auto x:{optimizer.values(),optimizer.first(),optimizer.second(),optimizer.maximum(),optimizer.steps(),optimizer.corrections()})before.push_back(x.cpu());
     f.gradient.values.copy_(gradient);f.gradient.connected.copy_(flags);portable_torch::synchronize(device);p.run();
-    require(!error.cpu().item<int>(),"finite optimizer trajectory refused");reference->step();
+    reference->step();
+    bool representable=true;
+    if(payload==at::kHalf)for(size_t i=0;i<f.gradient.owners.size();++i)if(flags[i].item<bool>())
+      representable&=at::isfinite(cpu.value(f.gradient.owners[i].canonical).to(at::kHalf)).all().item<bool>();
+    if(!representable) {
+      // Tiny AdamW epsilon/beta2=0 can make finite FP32 masters overflow half.
+      // The independent CPU proposal establishes the expected refusal; all
+      // device fields must stay at the preceding complete update.
+      require(error.cpu().item<int>()==tide_device::optimizer_finite_error,"CPU half overflow was not refused on device");
+      size_t i=0;for(auto x:{optimizer.values(),optimizer.first(),optimizer.second(),optimizer.maximum(),optimizer.steps(),optimizer.corrections()})
+        require(at::equal(x.cpu().view(at::kByte),before[i++].view(at::kByte)),"half overflow partially committed optimizer state");
+      return step;
+    }
+    require(!error.cpu().item<int>(),"finite representable optimizer trajectory refused");
     auto values=optimizer.values().cpu(),first=optimizer.first().cpu(),second=optimizer.second().cpu(),maximum=optimizer.maximum().cpu();
     auto steps=optimizer.steps().cpu();
     for(size_t i=0;i<f.gradient.owners.size();++i) {
@@ -98,6 +114,46 @@ void trajectory(at::Device device,DeviceOptimizerKind kind,int variant,int64_t w
     error.zero_();optimizer.steps()[0].fill_(std::numeric_limits<int64_t>::max());before=snapshot();portable_torch::synchronize(device);p.run();
     require(error.cpu().item<int>()==tide_device::optimizer_step_error,"int64 optimizer step overflow accepted");unchanged();
   }
+  return 8;
+}
+void master_boundaries(at::Device device) {
+  at::NoGradGuard guard;auto f=fixture(device,3,at::kHalf);
+  f.registry.value("a").fill_(65504.f);
+  OptimizerGroup group;group.parameters={"a","b"};group.lr=1.;group.momentum=.5;
+  DeviceOptimizer optimizer(f.gradient,DeviceOptimizerKind::sgd,{group},1024*1024);
+  auto error=at::zeros({1},f.gradient.values.options().dtype(at::kInt));
+  CannProgram program(device);optimizer.append_step(program,f.gradient,error);program.finish();
+  auto snapshot=[](const DeviceOptimizer& owner){const auto s=owner.snapshot();return
+    std::vector<Tensor>{s.values,s.first,s.second,s.maximum,s.steps,s.corrections};};
+  auto unchanged=[&](const auto& before,const DeviceOptimizer& owner){const auto after=snapshot(owner);
+    for(size_t i=0;i<after.size();++i)require(at::equal(after[i].view(at::kByte),before[i].view(at::kByte)),"FP16 master transaction mutated a live field");};
+  f.gradient.values.zero_();f.gradient.connected.zero_();
+  for(size_t i=0;i<f.gradient.owners.size();++i) {
+    const auto& owner=f.gradient.owners[i];
+    if(owner.canonical=="a"||owner.canonical=="b") {
+      f.gradient.connected[i].fill_(true);
+      f.gradient.values.narrow(0,f.gradient.offsets[i],owner.value.numel()).fill_(owner.canonical=="a"?-8.f:-.25f);
+    }
+  }
+  portable_torch::synchronize(device);program.run();
+  require(!error.cpu().item<int>(),"finite rounded half master was over-rejected");
+  const auto master=optimizer.values().cpu();
+  require(master[0].item<float>()==65512.f&&master[0].to(at::kHalf).item<float>()==65504.f,
+    "FP32 master lost sub-ULP progress or published a nonfinite payload");
+  const auto before=snapshot(optimizer);const auto checkpoint=optimizer.snapshot();
+  DeviceOptimizer restored(f.gradient,DeviceOptimizerKind::sgd,{group},1024*1024);
+  restored.restore(checkpoint);unchanged(before,restored);
+  auto bad=optimizer.snapshot();bad.values[0].fill_(65520.f);bool rejected=false;
+  try{restored.restore(bad);}catch(const std::invalid_argument&){rejected=true;}
+  require(rejected,"nonrepresentable FP16 checkpoint master accepted");unchanged(before,restored);
+  // The second momentum update overflows half while remaining finite FP32.
+  // Every owner, slot and counter must remain at the first complete update.
+  portable_torch::synchronize(device);program.run();
+  require(error.cpu().item<int>()==tide_device::optimizer_finite_error,"half publication overflow not refused");
+  unchanged(before,optimizer);
+  error.zero_();f.gradient.connected.zero_();f.gradient.values.fill_(std::numeric_limits<float>::quiet_NaN());
+  portable_torch::synchronize(device);program.run();
+  require(!error.cpu().item<int>(),"None poison reached half representability gate");unchanged(before,optimizer);
 }
 void refusals(at::Device device) {
   at::NoGradGuard guard;auto f=fixture(device,3);
@@ -122,15 +178,19 @@ int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("device optimizer gate requires explicit NPU FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("device optimizer gate requires explicit NPU FP32/FP16 payload owners");
+    args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("optimizer gate requires NPU");
-    at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
+    at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0,updates=0,refusals_count=0;
     for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})for(int variant=0;variant<4;++variant)
       for(int64_t width:{1,257})for(auto dtype:{at::kFloat,at::kDouble}) {
-        try{trajectory(device,kind,variant,width,dtype);++cases;}
+        try{const int accepted=trajectory(device,kind,variant,width,dtype,args.dtype);updates+=accepted;refusals_count+=accepted<8;++cases;}
         catch(...){std::cerr<<"optimizer kind="<<int(kind)<<" variant="<<variant<<" width="<<width<<" reference="<<dtype<<'\n';throw;}
       }
-    refusals(device);std::cout<<"device-optimizer: passed trajectories="<<cases<<" updates="<<cases*8<<" CPU=FP32_FP64 finite_transaction=true scope=owner_updates_not_public_training\n";
+    refusals(device);if(args.dtype==at::kHalf)master_boundaries(device);
+    std::cout<<"device-optimizer: passed trajectories="<<cases<<" updates="<<updates<<" expected_half_refusals="<<refusals_count
+      <<" CPU=FP32_FP64 master_dtype=FP32 finite_transaction=true half_boundaries="<<(args.dtype==at::kHalf)
+      <<" scope=owner_updates_not_public_training\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }
