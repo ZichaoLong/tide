@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "peer": ("tide-device-peer-check", ("float32", "float16")),
     "control": ("tide-device-control-check", ("float32",)),
     "failure": ("tide-device-failure-check", ("float32",)),
     "numerical": ("tide-device-numerical-check", ("float32", "float16")),
@@ -52,6 +53,7 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "peer": "device-peer: passed",
     "control": "device-control: passed", "numerical": "device-numerical: passed",
     "failure": "device-failure: passed",
     "queue": "packed-queue: passed", "closure": "device-closure: passed",

@@ -55,6 +55,11 @@ class CannProgram {
   // device tasks. Caller must finish input writes before run and keep capacity
   // checks in its device program. Runtime timeout is an execution error.
   void run(int32_t timeout_ms = 10000);
+  // Multi-device windows submit every peer before waiting for any peer.
+  // Construction, submission, waiting and close stay on the constructing
+  // thread, whose TorchNPU/CANN contexts own the model and its streams.
+  void submit();
+  void wait(int32_t timeout_ms = 10000);
   void close();
   // Set before appending any numerical operation; checked before each CANN
   // workspace allocation. A refusal poisons construction, never executes a prefix.

@@ -197,6 +197,9 @@ The optional [resident library](resident-library.md) owns device-side online
 progression and continuation for its declared FP32 inference profiles and explicit Emit mode,
 and FP16 inference with FP32 Read/normalization. Payloads and cache slots
 retain the configured dtype; discrete scheduling and identities are unchanged.
+Resident owners remain on their constructing host thread; CANN submission from
+another thread fails before a runtime task is issued. The internal peer transport
+submits all devices asynchronously before waiting at the window boundary.
 Borrowed device output windows do not export state; snapshot/result are explicit
 boundary materializations. Runtime parameter updates invalidate its frozen
 inference program until an explicit reconstruction. This separate backend does

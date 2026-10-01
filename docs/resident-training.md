@@ -30,6 +30,7 @@ invalidate the session. The owner updates its own device parameters; it does not
 silently copy them into the caller's original model.
 
 All owner methods require explicit no-grad. This is a first-order VJP interface,
+and construction,use and close belong to the same host thread/CANN contexts,
 not an eager autograd node. A consumer computes its head/loss and supplies
 cotangents for the outputs, pending messages, final state and attention caches of retained windows.
 It may use its own autograd on detached output views; it must not mutate the

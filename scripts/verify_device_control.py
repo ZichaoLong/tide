@@ -17,7 +17,9 @@ def main():
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
-    parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS), default=list(CHECKS))
+    parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
+                        default=[name for name in CHECKS if name != "peer"],
+                        help="Single-device checks by default; peer explicitly requires two visible NPUs")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
     if args.device != "npu" and not args.device.startswith("npu:"):

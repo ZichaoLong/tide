@@ -50,17 +50,29 @@ ROADMAP indexes immutable evidence. No mechanical rerun of earlier suites.
 
 ## Active work and next action
 
-Device-side peer completion/communication is next. Current uncommitted draft:
-peer_api.h/.cpp and peer_exchange.h/.cpp under tools/device_online. They adapt
-the historical ready/pull/consumed Notify handshake to CannProgram device loops,
-with fixed packet capacity and shared ownership through program drain. Not yet
-compiled or run;no graph,training or multi-device qualification claim.
-Next add an independent two-device dynamic-loop checker,integrate optional
-build/check entry points,then freeze/build/run a bounded two-NPU development gate.
-Exercise input-dependent iteration counts,empty continuation,capacity refusal,
-exact int64 keys/bool masks,FP32/FP16 payloads and repeated buffer/notify reuse.
-A raw transport gate is prerequisite only;graph integration and distributed
-training still require independent semantic checks. No CPU reference events.
+Device-side peer completion/communication increment is uncommitted.
+peer_api/peer_exchange implement fixed packet ready/pull/consumed Notify pairs
+captured by CannProgram. Peer/check CMake and explicit --checks peer entry point
+added;default single-device gate excludes peer. Full-build manifest also includes
+the existing half-training executable. No portable core or CANN kernels changed.
+Development builds01/02 passed. Dev01 runtime failed in CPU Bool fixture setup;
+fixed initializer and added offset views. Dev02 failed during submission from a
+fresh host thread:vendor plog confirms107002 CONTEXT_NULL;other peer wait timed
+out507046 and runtime resources were quarantined. Both original failures retained.
+Fix:split CannProgram submit/wait,require its constructing thread and submit both
+models before any wait. Synchronous run remains submit+wait. Checker verifies
+cross-thread refusal,duplicate-submit/empty-wait guards and11 dynamic windows per
+dtype including empty/limited continuation,int64>2^55,bool and FP16/FP32 packets.
+Development dev03 now passed:both FP32/FP16 two-device cells,11 dynamic
+windows each;all4 single-device control/failure/numerical regression cells.
+The former thread-context failure is fixed,not suppressed. No live development
+jobs. Next commit/push,freeze peer-control-clean01 to the exact revision,build
+ --checks peer control failure numerical --jobs2,then run peer(two cards),
+regression(one card) and a separate peer FP32 placement profile(two cards).
+Build900s,run600s,lease120s,profile256MiB. Source/build/terminal/CSV audit and
+separate evidence commit follow. No graph or multi-device training claim yet.
+After transport gate,integrate actual graph task loops and independent gradients;
+raw packet success alone does not complete F4/F5.
 
 Remaining main work:device peer progression,completion/communication and training;
 five-preset consumer screening;representative/full-size performance;version/

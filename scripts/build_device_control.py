@@ -42,7 +42,7 @@ def main():
         parser.error("Python resident backend requires --ascendc-soc")
     if args.checks and runtime != "standalone":
         parser.error("component subsets require a standalone runtime owner")
-    if args.checks and not args.ascendc_soc and any(check not in {"control", "failure", "numerical", "queue"} for check in args.checks):
+    if args.checks and not args.ascendc_soc and any(check not in {"peer", "control", "failure", "numerical", "queue"} for check in args.checks):
         parser.error("selected component requires --ascendc-soc")
     if manifest["cpp_source_sha256"] != source_hash(root):
         parser.error("core source differs; rebuild the native core")
@@ -71,7 +71,7 @@ def main():
     subprocess.run(["cmake", "--build", str(build), "--parallel", str(args.jobs),
                     *(["--target", "tide-device-selected-checks"] if targets else [])], check=True)
     if runtime == "standalone":
-        subset_tests = {"control": "device-control-help", "numerical": "device-numerical-help",
+        subset_tests = {"peer": "device-peer-help", "control": "device-control-help", "numerical": "device-numerical-help",
                         "queue": "packed-queue-cpu-fp32|packed-queue-cpu-fp64",
                         "full-training": "resident-control-comparison"}
         tests = [subset_tests[check] for check in args.checks or [] if check in subset_tests]
@@ -80,7 +80,7 @@ def main():
                             *(["-R", "^(" + "|".join(tests) + ")$"] if targets else [])],
                            check=True, timeout=120)
     binaries, loaders = {}, {}
-    names = ["tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
+    names = ["tide-device-peer-check", "tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
     if args.ascendc_soc:
         names.extend(("tide-device-closure-check", "tide-device-queue-check",
                       "tide-device-broadcast-check", "tide-device-ready-check", "tide-device-selector-check",
@@ -93,6 +93,7 @@ def main():
         names.append("tide-master-publication-check")
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
+        names.append("tide-resident-half-training-check")
         names.append("tide-resident-full-training-check")
         names.extend(("tide-device-aggregate-vjp-check", "tide-resident-aggregate-training-check"))
         names.extend(("tide-device-control-vjp-check", "tide-resident-control-training-check"))

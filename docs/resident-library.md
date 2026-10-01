@@ -8,7 +8,8 @@ not consume per-event scalars or decide the next event.
 
 This backend exposes **single-device FP32/FP16 inference**, defaulting to HARD.
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
-broadcast emission in FP32/FP16. Peer progression
+broadcast emission in FP32/FP16. [Device-loop peer packets](resident-peers.md)
+are a separately checked transport component; multi-device graph integration
 remains separate work. Current build and device verification status is recorded
 in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
@@ -53,6 +54,9 @@ chunk sizes. These do not truncate logical visibility. Irrecoverable capacity
 refusals poison the owner; restore an earlier complete cut into a new session.
 Invalid input coordinates, dtype/shape or finite-value checks fail before device
 state execution. A closed session cannot advance or export; `close()` is idempotent.
+Construct,use and close resident owners on the same host thread so their CANN
+runtime contexts remain valid. Device program submission from another thread
+is explicitly refused.
 
 `advance_device()` returns borrowed, read-only packed output buffers. Coordinates
 are int64 `[sample, node, time, kind, output-port, position]`; `valid` distinguishes

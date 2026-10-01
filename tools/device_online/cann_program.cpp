@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <unordered_set>
 #include <atomic>
+#include <thread>
 
 namespace tide::device_online {
 namespace {
@@ -20,6 +21,7 @@ void check_process() {
 }
 struct CannProgram::Impl {
   at::Device device;
+  const std::thread::id owner_thread=std::this_thread::get_id();
   portable_torch::RuntimeResource resource;
   CannApi api;
   void *stream = nullptr, *launch = nullptr, *model = nullptr;
@@ -32,6 +34,10 @@ struct CannProgram::Impl {
   bool bound = false, finished = false, closed = false, failed = false, in_flight = false;
   int64_t workspace_limit=std::numeric_limits<int64_t>::max(),workspace_used=0;
   explicit Impl(at::Device d) : device(d) {}
+  void check_thread() const {
+    if(std::this_thread::get_id()!=owner_thread)
+      throw std::logic_error("CANN program requires its constructing thread's runtime contexts");
+  }
   void initialize() {
     c10::DeviceGuard guard(device);
     CannApi::check(api.create_stream(&stream, 0, 4), "create persistent control stream");
@@ -40,6 +46,7 @@ struct CannProgram::Impl {
     CannApi::check(api.bind_stream(model, stream, 0), "bind persistent control stream"); bound = true;
   }
   void building() const {
+    check_thread();
     check_process();
     resource.check();
     if (finished || closed || failed) throw std::logic_error("control program is not open for construction");
@@ -88,6 +95,7 @@ struct CannProgram::Impl {
   }
   void release() {
     if (closed) return;
+    check_thread();
     c10::DeviceGuard guard(device);
     // Bound streams must remain attached until executions have finished.
     // A timeout is NOT completion. Stop before freeing anything in that case.
@@ -326,14 +334,26 @@ void CannProgram::finish() {
   } catch (...) { p.failed = true; throw; }
 }
 void CannProgram::run(int32_t timeout_ms) {
+  if(timeout_ms<=0)throw std::logic_error("control wait requires a positive timeout");
+  submit();wait(timeout_ms);
+}
+void CannProgram::submit() {
   check_process();
   auto& p = *impl_;
-  if (!p.finished || p.closed || p.failed || timeout_ms <= 0) throw std::logic_error("control program is not executable");
+  p.check_thread();
+  if (!p.finished || p.closed || p.failed || p.in_flight) throw std::logic_error("control program is not executable");
   p.resource.check();
   c10::DeviceGuard guard(p.device);
   try {
     p.in_flight = true; // Even a failed asynchronous submission needs a drain.
     CannApi::check(p.api.execute(p.model, p.launch), "execute control model");
+  } catch (...) { p.failed = true; throw; }
+}
+void CannProgram::wait(int32_t timeout_ms) {
+  check_process();auto& p=*impl_;p.check_thread();p.resource.check();
+  if(p.closed||p.failed||!p.in_flight||timeout_ms<=0)throw std::logic_error("control program has no waitable submission");
+  c10::DeviceGuard guard(p.device);
+  try {
     CannApi::check(p.api.sync_stream(p.launch, timeout_ms), "wait for control boundary");
     p.in_flight = false;
   } catch (...) { p.failed = true; throw; }
