@@ -108,7 +108,8 @@ Full owners; no dense coordinator replica is assembled. This is qualified on
 [cleanacb84f3](evidence/resident-projection-shards-20261002.md). Total-memory admission
 remains pending. Local reverse safe splitting is qualified below; public multi-device
 inference is qualified on [clean7329c71](evidence/public-sharded-inference-20261002.md).
-The latest FP16 consumer qualification is tracked in STATUS; full-size performance
+Actual FP16 consumers and bounded packed head rows are qualified on
+[cleand178b86](evidence/resident-consumer-head-20261002.md); full-size performance
 remains pending.
 
 ## Commands and records

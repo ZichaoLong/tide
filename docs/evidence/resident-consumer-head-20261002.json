@@ -1,0 +1,2739 @@
+{
+  "schema": "tide-consumer-head-evidence-v1",
+  "source": "d178b863402157f0f92b60b7dbff12c8e8d7a60e",
+  "backends": {
+    "standalone": {
+      "manifest_sha256": "a7ef831c982a548e3b607c9186e37094d724e53548d36e02c97f057524aee99b",
+      "source": "acb84f30475c03e91cba5c35964565ab1b6316cf",
+      "binary_sha256": {
+        "libtide-resident.so": "63266d8b91c27f97046e33a54d6df872d5d6181ce2d89e4998db1afc8326a9b7",
+        "tide-resident-half-training-check": "e03a11c09708e9fa28e3f5ac970a446e71f93567a8d8e7324bb5c41cb87cf38d",
+        "tide-resident-sharded-session-check": "bd29ee011ed012b27cfacda0186cff76a7bd197496675962fe74c0a4403fd0ab"
+      }
+    },
+    "python": {
+      "manifest_sha256": "994f62aece4cbae22994827fb2e7818eab2f15449e5e0ea4fb9ac86d8b6d0588",
+      "source": "acb84f30475c03e91cba5c35964565ab1b6316cf",
+      "binary_sha256": {
+        "libtide-resident.so": "ffc0a27eac00f21974809f701812e5d2ee08ffcf3bd5f9f2b97d182daca3f5e4",
+        "_tide_resident.so": "e6bf3f2915f65d82460354fcd9533dbb3664eadfb7439904adc02044920b2425"
+      }
+    }
+  },
+  "client": {
+    "manifest_sha256": "1629e7ccef81a7903da30075192265fc75b47ba94ae4caa203bca43e83e05c0f",
+    "binary_sha256": "76eb3704f53aed116ac7bf11dbf96d08f95e120e9a80d3019785a63fdec7c868",
+    "loader_sha256": "90126830df5b854a3ba7afc379d2dd9248af3c7131db781d19ab7c46999dc4ff",
+    "reused_objects_sha256": {
+      "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "951a4a5adc9cfb0124171c465deb7b615320e72f4094f72843a4891b068020d0",
+      "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "f48a12bf3243986358b2d799eb06ecb1ff847acb7ae259f42a819bd035f3413e",
+      "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+      "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "0bdb92ae16a2fca3707539d88a378d24d37dec70e070d4e0d9e4b39729ea132f",
+      "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "9490edd973773436b64ad0a18b3d0a25b0297ed07e88d0fd28d6127387429e45",
+      "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "cca451ff863dd4603f43d7caa05dedf7ffeffd8a79d2da3981bf228b35f249e2",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "c317dbe3fec105806262a4d5252d949eae627a4293cdb3f6aefaeb1d514d9864",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "a4d58a2236bf44b18ffda87ad9f3d7b269c1a406f7c2c32a99c3aaef968c3fe6",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "6e3d5142bbc29d7ccc438896d37c9d983e1ea76f859d735b180be128f43203cd"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-consumer-head-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "eeb5299e4c9654a892248ff4d8ae90ae6873f8328a1c1cd58fbcb3e1c832eef8",
+        "task.log": "f950414140c65b1cff338bb21b66899f86928981df3cb398d85aa4f93a3bec48"
+      }
+    },
+    {
+      "name": "consumer-head-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "850bd9e8866d7396bb38815788784f6dd4580c6417b877037b34ce2ed11f9a70",
+        "task.log": "5c8986b17d1fc40845328efbe17f82b5f31fa538bcf4f98aeaf505fd39fe0a36"
+      }
+    },
+    {
+      "name": "consumer-head-native-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6e0590fbd84a7eacde5f0b37fcb5a52d178406c6a5dc566bff4c50c916fe4ad6",
+        "task.log": "1c0bc082b020c9ca302d0326c1ec8424e603ecc36fdf2b1e25dd8f7bdd70bc02",
+        "queue.json": "13137b382579d95478a422efedb600b1d482c7be5d777302de6df1f4791943d5"
+      }
+    },
+    {
+      "name": "consumer-head-libtorch-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ca5bfd8bc35ee53f055c527a3b2efe20e4eed343a1ef57d3d8621d1dd77f9f85",
+        "task.log": "af3b71fd3a2e01240225d1f22f1842e74f1a523d1600b561c3ecbc91e034c406",
+        "queue.json": "964c8a1b61aad4c9ed2595968865858df1aea4642b864942f8e5ba25a0d7cac0"
+      }
+    },
+    {
+      "name": "consumer-head-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ae04efdf2f097780e46952829be0042da3b3e35ca0eb6612cff7aa3a99db70ef",
+        "task.log": "82235bff87b8764207a4e7486546baf3708e93ba6df789e0d1d4e349d531bce1",
+        "queue.json": "0bc0e52af0ff8d745bdf2267fa94c2bb94346af00639df32ca25675f09cd71f9",
+        "profile/result.json": "cfd8a689ea7dac6edee9ce0fbae6946a4e81a78cb55a8609b666227bcf1fb4b6",
+        "profile/profile.log": "90937d17dd0aca9031de1f82bbe6b5100150cc4897479332a5b29c369d4431ec"
+      }
+    },
+    {
+      "name": "consumer-head-scale-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "3543ef221986f657ec637497249c9ec1e8cbb363c34354e760c3efae00461722",
+        "task.log": "f1fae929d4e9d0863bfebd2a48f2c592f42a4c8beda8022af310a58ab395a2d5",
+        "queue.json": "23e544ec832e39ac1b686f94d7393e2fd79b815bf0d2913dc540bcbaebb7a089"
+      }
+    }
+  ],
+  "cpu_cases": 10,
+  "npu_cases": 59,
+  "skipped": 0,
+  "model_observations": [
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "df16b40177a94b1bccc3d3ebe7d45b1316b73942833e1b9ea52a06bdcb4582d4"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "1244fa3d2840538436bca9ad77b85544ee89b3f22c1064f6ad01b7fa404b387f"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "cf1b0314cb90faca98ccd405af6570c4d48e0a2a1528fef56980d07096801451"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "d6e783043edeb40dfc7bcf36dca5c25dcff597118ce59aab9f15c5481109589d"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "66ce52b28dfef645f2d241c5910f383dd99c312c31f33f6a14d5ad39d58aefee"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "7a259f6aa06cbc5519c05a46330f54f746f3d395f41aa9d5e3a2458b551cf2e6"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "aa63be3a4cc75f2a7adb695c0ddfb03de5a6584bee2cb691eb36e4666460933d"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "a3b6247e196851ef859d735321cc9cd9d497087cbd36822e805bbb8655347f92"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "5abe94bb696fd0149915e8d44d26ba12ce4b7441aafd98af5a38264d0908791d"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "0d3f54bafe919b103127ed384eba30d5af84e7c37d07b86a581b15541034e1da"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "7e171c2e5a2fd2ae8810038b091da657ddf7e247b1570af03d1f68c00aaa9a64"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "4bea31a40f42bbd81e892ce6cac7dbb4a301eae167de187d3088bd71acf791fc"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "ffb1de48ac499bebe55e8c6e1b6542214160cd2391effc4aa0c5722d30a43e44"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "bab77e14f4d585ee1863c8356ef3bca09b69f834010791d4c5ba9d1119ec19f0"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "e26ae7d0187f0709dfe8c1b7bf59b1d9d619fc95775e52ef66d04f26bfa518ae"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "9ad42e2e983872f3c246a19597ef2db027d07ca374d3ad06013e4a3b4d5667b4"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "c9cf7e29677446a874842a407c2cd4631bf402050abb7105f9656fb5851238bd"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "d96ee3432cf1e541a6cccea23024d637cef75999f7ad81f99e271f0b049650b9"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "396aef22955783fc81385dcd5432f5f7bcb7a277f8445daa6eb26ef69b5615d4"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "730d76036b4bbb9e73888bb276e6ebc79963443f86c1bf7670c52d14a76b57fa"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "d90ed959fd7d366467d7ae6af2af48d4ce986a6ff1ddee9303236ad7f8dc0937"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "685a9cc7dfd90e4521c2f2e56bb0b0111f1aac5767a350fd2503de63d41cf53f"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "4ec109c1dac07b3ce5bddecba27b5bdda4f57e0023433b4720bee164deff12f6"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "a4f0eeb62decf543b2a618ddb60b7566c123a355eeb288dd92732b742d1c1592"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "a3395aaadb5ce6d402045fa4dd664a90722aa25e5ff671ab220bef04372cbf21"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "263ad9c35e8ea37c2456eb5541860c96060a9fe2998dce152b4564feaa9680ef"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "90756a4e1e0a1a3bdc22c17f42818d89d791460f9b3762e01bf42b8cbe94752a"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "3d1d8a0343b14ddb481a0db3642689f6c64c3d010d8319b20e3d596ca994c1c0"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "43f9eedcc1db07da68f3d38d8c00584d85059254ec00ea279101c4a821101bbf"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "a5d945e1913c148f45a22846d30f9e6b86d20bd2a7d9a61a3abc1b3165ec03a0"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "bf76605c569f42490e21a81670bdb9358231d776b406d206896e40dfbf0a9224"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "4b7e193699aa295ed4c852c155609bb913c54a953624133b2bb812d668378909"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "4d6422c9e5b2a82ff14ac2fac7b6b5629650d6f48ca361ff2ea1b902236ed2d4"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "66478608790631385807c1b65d95292a02a6515a9e76cb4191086347f88cade3"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "d9774614f69d15727a597e027feb1f77a0d8551fcf21ed2187a6957f5fcee3a2"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "2547766e441e1d0d6900cf41ec2ad0ba91447ea810ddd8191612e87ed2f4c041"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "cda915e6f5dbd2681ab84dcf1574fe06d40e9d8ff349cda5f147f8ccc4d37dd2"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "add",
+      "sha256": "a2ef5518b975c404efe1f64707fc62ec16c7c57bdec5ae6e45115767d0c9ab14"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "ede2e7243e56096e0d862cca395d4f1f4e85a89568d76a1c2158c2f5cfecab73"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "add",
+      "sha256": "1f5ce8a7bb36742817a767068dbebd87bff4f988f10fc4ccf16a61b50176055e"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "d6a2917be4ba8586fd7372489d129ff6728d94b97572ff0f0011e95d4f9d637f"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "f51c9f148a434269f39dd607d99eb60fed402799adf25eb94e1159d91a846a59"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": false,
+      "memory": "attention",
+      "sha256": "b838bf86afed1fb98162aadffd9080e5c0eac39f5aec13410a36f8bf0b7e2265"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "attention",
+      "sha256": "df33091b4f8e4b1d98e54515c3830b1c0976e8224ca6ed72ca7d8354cea2e315"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "add",
+      "sha256": "f33e0b51ee7515a4465143548b7d4a1313c013adc3ff69bdfdef9835dfef7d3d"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": true,
+      "memory": "attention",
+      "sha256": "e26ca331f9148cf0c7f8d99f649a7559d5040b88a6ddbec16f4d45c1391975c4"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "training": true,
+      "memory": "attention",
+      "sha256": "b0addcb32c10caf8409a95ef74c614c7741942932a0282c655cf931de5913915"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "training": false,
+      "memory": "add",
+      "sha256": "ac35369740161a99152bdd43d81cdfc16aed7c5b2705fcbc2230a00dde743766"
+    }
+  ],
+  "split_head": [
+    {
+      "sha256": "0e38ef3e73867553e326f377dcc5a45db9327fd98a2ab7f19848ac321f875c8f",
+      "candidate": {
+        "schema": "tide-online-consumer-v1",
+        "workload_sha256": "2684608f696456c0440c745b3195e0a9999994f093cf727fe00d8962c3352ffd",
+        "implementation": "native",
+        "family": "settle",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 636,
+        "windows_per_step": 2,
+        "warmup_steps": 0,
+        "measured_steps": 2,
+        "construction_seconds": 0.09237923845648766,
+        "seconds": [
+          0.23344284668564796,
+          0.2417246252298355
+        ],
+        "warmup_seconds": [],
+        "losses": [
+          1.9459254741668701,
+          1.9459216594696045
+        ],
+        "outputs": [
+          8,
+          8
+        ],
+        "statistics": [
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "retained_bytes": 4180052,
+            "retained_projection_bytes": 560,
+            "retained_window_bytes": 2089746,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 3034752,
+            "head_chunks": 8
+          },
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "retained_bytes": 4180052,
+            "retained_projection_bytes": 560,
+            "retained_window_bytes": 2089746,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 3034752,
+            "head_chunks": 8
+          }
+        ],
+        "parameter_budget": 1073741824,
+        "head_memory": {
+          "rows": 1,
+          "fixed_bytes": 33559360,
+          "row_bytes": 440,
+          "reserved_bytes": 33559800,
+          "budget": 37289103,
+          "operator_allowance_bytes": 33554432
+        },
+        "precision": {
+          "payload": "float16",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "input_tokens_per_step": 8,
+        "final_cut": 40,
+        "runtime": {
+          "schema": "tide-runtime-v1",
+          "package_version": "0.2.0",
+          "package_sha256": "738c8df15efaf464a0a5274f43ef4d1e8a94b4c969baf359c7176249eeb64090",
+          "model_origin": "caller",
+          "model_storage": {
+            "requested": "cpu",
+            "resolved": "cpu"
+          },
+          "configuration": {
+            "schema_version": 1,
+            "family": "settle",
+            "graph": {
+              "nodes": [
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "source": 0,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 4,
+                  "delay": 2
+                },
+                {
+                  "source": 1,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 5,
+                  "delay": 2
+                },
+                {
+                  "source": 2,
+                  "target": 4,
+                  "delay": 1
+                },
+                {
+                  "source": 2,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 4,
+                  "delay": 1
+                }
+              ],
+              "regions": [
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                }
+              ],
+              "inputs": [
+                0,
+                1
+              ],
+              "outputs": [
+                4,
+                5
+              ],
+              "layout": {
+                "edge_source": [
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  0,
+                  1
+                ],
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2
+                ],
+                "input": [
+                  0,
+                  0
+                ],
+                "output": [
+                  0,
+                  0
+                ]
+              },
+              "origins": [],
+              "source_domain": {
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2
+                ],
+                "input": [
+                  0,
+                  0
+                ]
+              }
+            },
+            "ranks": [
+              1,
+              2,
+              3
+            ],
+            "model": {
+              "width": 4,
+              "dtype": "float16",
+              "seed": 7,
+              "projection_layout": "input",
+              "scale_init": null
+            },
+            "execution": {
+              "implementation": "python",
+              "schedule": "auto",
+              "packed": true,
+              "prefill": null,
+              "trace": false,
+              "mode": "hard",
+              "zeta": 1.0,
+              "workers": 1,
+              "max_events": 1000000,
+              "full_autograd": "replay",
+              "aggregate_autograd": "replay",
+              "parallel_regions": false,
+              "compact_events": false,
+              "defer_state_release": false,
+              "packed_sources": false,
+              "batch_next": false,
+              "attention_packing": "exact",
+              "fiber_pooling": "event",
+              "fiber_cache": "cloned",
+              "attention_layout": "event",
+              "placement": null,
+              "resident_limits": null
+            }
+          },
+          "config_sha256": "e5681905e60aa228aa7dd725ac82be71b6b1fca0fbb8c5bdc884f546c50d5202",
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float16",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": true,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 16,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "aggressive",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "resolved_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": true,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 16,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "aggressive",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "npu:0",
+            "scoring_dtype": "profile"
+          },
+          "graph_identity": "75a9b038ccac1b0f73e7d3ef03e77f1787e150bf65e1c0f44806cef7586376c1",
+          "execution_graph_identity": "e80ec1ebe5a79a32eb900dd7589bb09c2b2d0e3c7b15683a9cb7e605b1899bb9",
+          "native_sha256": "65a1d9edd2c713fe77bd8cfe8104f2a4d5a11610899f59959ad97a4809b6d564",
+          "resident": {
+            "runtime_owner": "python",
+            "dtype": "float16",
+            "mode": "hard",
+            "zeta": 1.0,
+            "autograd": false,
+            "devices": 2,
+            "scoring_dtype": "float32",
+            "exported_control_dtype": "float16",
+            "binaries": {
+              "libtide-resident.so": "ffc0a27eac00f21974809f701812e5d2ee08ffcf3bd5f9f2b97d182daca3f5e4",
+              "_tide_resident.so": "e6bf3f2915f65d82460354fcd9533dbb3664eadfb7439904adc02044920b2425"
+            },
+            "core_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+            "training": true,
+            "requested_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [],
+              "state_owners": []
+            },
+            "resolved_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "state_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            "training_limits": {
+              "windows": 2,
+              "retained_bytes": 134217728,
+              "backward_bytes": 2147483648,
+              "optimizer_bytes": 134217728,
+              "program_workspace_bytes": 67108864,
+              "reverse_chunk_rows": 16
+            }
+          }
+        },
+        "diagnostics": true,
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners"
+      }
+    },
+    {
+      "sha256": "e03ac71412e4abfbc893e4b279d9dae2b61b09432f562568c382f40ecabd0828",
+      "candidate": {
+        "schema": "tide-online-consumer-v1",
+        "workload_sha256": "2684608f696456c0440c745b3195e0a9999994f093cf727fe00d8962c3352ffd",
+        "implementation": "native",
+        "family": "settle",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 636,
+        "windows_per_step": 2,
+        "warmup_steps": 0,
+        "measured_steps": 2,
+        "construction_seconds": 0.090504951775074,
+        "seconds": [
+          0.22735249996185303,
+          0.23385827988386154
+        ],
+        "warmup_seconds": [],
+        "losses": [
+          1.9459259510040283,
+          1.9459222555160522
+        ],
+        "outputs": [
+          8,
+          8
+        ],
+        "statistics": [
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "retained_bytes": 4256120,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2127500,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "head_chunks": 4
+          },
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "retained_bytes": 4256120,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2127500,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "head_chunks": 4
+          }
+        ],
+        "parameter_budget": 1073741824,
+        "head_memory": {
+          "rows": 2,
+          "fixed_bytes": 33559248,
+          "row_bytes": 448,
+          "reserved_bytes": 33560144,
+          "budget": 37289103,
+          "operator_allowance_bytes": 33554432
+        },
+        "precision": {
+          "payload": "float32",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "input_tokens_per_step": 8,
+        "final_cut": 40,
+        "runtime": {
+          "schema": "tide-runtime-v1",
+          "package_version": "0.2.0",
+          "package_sha256": "738c8df15efaf464a0a5274f43ef4d1e8a94b4c969baf359c7176249eeb64090",
+          "model_origin": "caller",
+          "model_storage": {
+            "requested": "cpu",
+            "resolved": "cpu"
+          },
+          "configuration": {
+            "schema_version": 1,
+            "family": "settle",
+            "graph": {
+              "nodes": [
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "source": 0,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 4,
+                  "delay": 2
+                },
+                {
+                  "source": 1,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 5,
+                  "delay": 2
+                },
+                {
+                  "source": 2,
+                  "target": 4,
+                  "delay": 1
+                },
+                {
+                  "source": 2,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 4,
+                  "delay": 1
+                }
+              ],
+              "regions": [
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                }
+              ],
+              "inputs": [
+                0,
+                1
+              ],
+              "outputs": [
+                4,
+                5
+              ],
+              "layout": {
+                "edge_source": [
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  0,
+                  1
+                ],
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2
+                ],
+                "input": [
+                  0,
+                  0
+                ],
+                "output": [
+                  0,
+                  0
+                ]
+              },
+              "origins": [],
+              "source_domain": {
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2
+                ],
+                "input": [
+                  0,
+                  0
+                ]
+              }
+            },
+            "ranks": [
+              1,
+              2,
+              3
+            ],
+            "model": {
+              "width": 4,
+              "dtype": "float32",
+              "seed": 7,
+              "projection_layout": "input",
+              "scale_init": null
+            },
+            "execution": {
+              "implementation": "python",
+              "schedule": "auto",
+              "packed": true,
+              "prefill": null,
+              "trace": false,
+              "mode": "hard",
+              "zeta": 1.0,
+              "workers": 1,
+              "max_events": 1000000,
+              "full_autograd": "replay",
+              "aggregate_autograd": "replay",
+              "parallel_regions": false,
+              "compact_events": false,
+              "defer_state_release": false,
+              "packed_sources": false,
+              "batch_next": false,
+              "attention_packing": "exact",
+              "fiber_pooling": "event",
+              "fiber_cache": "cloned",
+              "attention_layout": "event",
+              "placement": null,
+              "resident_limits": null
+            }
+          },
+          "config_sha256": "99251f468f23dce383816fda1de83bf367c0f85a60771e9de8a83696b99c3ca6",
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": true,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 16,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "aggressive",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "resolved_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": true,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 16,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "aggressive",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "npu:0",
+            "scoring_dtype": "profile"
+          },
+          "graph_identity": "75a9b038ccac1b0f73e7d3ef03e77f1787e150bf65e1c0f44806cef7586376c1",
+          "execution_graph_identity": "e80ec1ebe5a79a32eb900dd7589bb09c2b2d0e3c7b15683a9cb7e605b1899bb9",
+          "native_sha256": "65a1d9edd2c713fe77bd8cfe8104f2a4d5a11610899f59959ad97a4809b6d564",
+          "resident": {
+            "runtime_owner": "python",
+            "dtype": "float32",
+            "mode": "hard",
+            "zeta": 1.0,
+            "autograd": false,
+            "devices": 2,
+            "scoring_dtype": "float32",
+            "exported_control_dtype": "float32",
+            "binaries": {
+              "libtide-resident.so": "ffc0a27eac00f21974809f701812e5d2ee08ffcf3bd5f9f2b97d182daca3f5e4",
+              "_tide_resident.so": "e6bf3f2915f65d82460354fcd9533dbb3664eadfb7439904adc02044920b2425"
+            },
+            "core_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+            "training": true,
+            "requested_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [],
+              "state_owners": []
+            },
+            "resolved_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "state_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            "training_limits": {
+              "windows": 2,
+              "retained_bytes": 134217728,
+              "backward_bytes": 2147483648,
+              "optimizer_bytes": 134217728,
+              "program_workspace_bytes": 67108864,
+              "reverse_chunk_rows": 16
+            }
+          }
+        },
+        "diagnostics": true,
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners"
+      }
+    },
+    {
+      "sha256": "30516cfb243cf12351b90ac479dfc4408825cf7b27524ffd395709396ec4ffd7",
+      "candidate": {
+        "schema": "tide-online-consumer-v1",
+        "state": "passed",
+        "workload_sha256": "2684608f696456c0440c745b3195e0a9999994f093cf727fe00d8962c3352ffd",
+        "packet_identity": "declared; launcher must verify v2 text against hashed JSON",
+        "implementation": "libtorch",
+        "family": "settle",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 636,
+        "construction_seconds": 0.869028682,
+        "seconds": [
+          0.457075529,
+          0.232580411
+        ],
+        "warmup_seconds": [],
+        "outputs": [
+          8,
+          8
+        ],
+        "losses": [
+          1.9459254741668701,
+          1.9459216594696045
+        ],
+        "statistics": [
+          {
+            "emission_chunks": 6,
+            "events": 64,
+            "full_chunks": 12,
+            "head_chunks": 8,
+            "retained_bytes": 4180052,
+            "retained_projection_bytes": 560,
+            "retained_window_bytes": 2089746,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 3034752,
+            "stages": 10
+          },
+          {
+            "emission_chunks": 6,
+            "events": 64,
+            "full_chunks": 12,
+            "head_chunks": 8,
+            "retained_bytes": 4180052,
+            "retained_projection_bytes": 560,
+            "retained_window_bytes": 2089746,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 3034752,
+            "stages": 10
+          }
+        ],
+        "windows_per_step": 2,
+        "warmup_steps": 0,
+        "measured_steps": 2,
+        "input_tokens_per_step": 8,
+        "final_cut": 40,
+        "threads": 1,
+        "parameter_budget": 1073741824,
+        "diagnostics": true,
+        "precision": {
+          "payload": "float16",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "head_memory": {
+          "rows": 1,
+          "fixed_bytes": 33559360,
+          "row_bytes": 440,
+          "reserved_bytes": 33559800,
+          "budget": 37289103,
+          "operator_allowance_bytes": 33554432
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float16",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "resident",
+          "placement": {
+            "control": "npu:0",
+            "events": "npu:0",
+            "payload": "npu:0",
+            "read": "npu:0",
+            "scoring_dtype": "profile",
+            "selection": "npu:0"
+          },
+          "resident": {
+            "runtime_owner": "standalone",
+            "requested_devices": 2,
+            "requested_owner_policy": "locality",
+            "devices": [
+              "npu:0",
+              "npu:1"
+            ],
+            "full_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "state_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "owner_policy": "locality",
+            "chunk_policy": "aggressive",
+            "limits": {
+              "aggregate_chunk_rows": 8,
+              "arrivals": 1024,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "backward_bytes": 2147483648,
+              "emission_chunk_rows": 16,
+              "full_chunk_rows": 16,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536,
+              "optimizer_bytes": 134217728,
+              "outputs": 16,
+              "program_workspace_bytes": 67108864,
+              "queue": 1024,
+              "retained_bytes": 134217728,
+              "reverse_chunk_rows": 16,
+              "stages": 4096,
+              "trace": 4096,
+              "windows": 2,
+              "workspace_bytes": 536870912
+            }
+          }
+        },
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners"
+      }
+    },
+    {
+      "sha256": "18fc3a0bde1801715f078606bde07eeb027376ed4ae1af1ad16df014342a4bc1",
+      "candidate": {
+        "schema": "tide-online-consumer-v1",
+        "state": "passed",
+        "workload_sha256": "2684608f696456c0440c745b3195e0a9999994f093cf727fe00d8962c3352ffd",
+        "packet_identity": "declared; launcher must verify v2 text against hashed JSON",
+        "implementation": "libtorch",
+        "family": "settle",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 636,
+        "construction_seconds": 0.843516546,
+        "seconds": [
+          0.438569359,
+          0.221373139
+        ],
+        "warmup_seconds": [],
+        "outputs": [
+          8,
+          8
+        ],
+        "losses": [
+          1.9459259510040283,
+          1.9459222555160522
+        ],
+        "statistics": [
+          {
+            "emission_chunks": 6,
+            "events": 64,
+            "full_chunks": 12,
+            "head_chunks": 4,
+            "retained_bytes": 4256120,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2127500,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "stages": 10
+          },
+          {
+            "emission_chunks": 6,
+            "events": 64,
+            "full_chunks": 12,
+            "head_chunks": 4,
+            "retained_bytes": 4256120,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2127500,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "stages": 10
+          }
+        ],
+        "windows_per_step": 2,
+        "warmup_steps": 0,
+        "measured_steps": 2,
+        "input_tokens_per_step": 8,
+        "final_cut": 40,
+        "threads": 1,
+        "parameter_budget": 1073741824,
+        "diagnostics": true,
+        "precision": {
+          "payload": "float32",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "head_memory": {
+          "rows": 2,
+          "fixed_bytes": 33559248,
+          "row_bytes": 448,
+          "reserved_bytes": 33560144,
+          "budget": 37289103,
+          "operator_allowance_bytes": 33554432
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float32",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "resident",
+          "placement": {
+            "control": "npu:0",
+            "events": "npu:0",
+            "payload": "npu:0",
+            "read": "npu:0",
+            "scoring_dtype": "profile",
+            "selection": "npu:0"
+          },
+          "resident": {
+            "runtime_owner": "standalone",
+            "requested_devices": 2,
+            "requested_owner_policy": "locality",
+            "devices": [
+              "npu:0",
+              "npu:1"
+            ],
+            "full_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "state_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "owner_policy": "locality",
+            "chunk_policy": "aggressive",
+            "limits": {
+              "aggregate_chunk_rows": 8,
+              "arrivals": 1024,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "backward_bytes": 2147483648,
+              "emission_chunk_rows": 16,
+              "full_chunk_rows": 16,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536,
+              "optimizer_bytes": 134217728,
+              "outputs": 16,
+              "program_workspace_bytes": 67108864,
+              "queue": 1024,
+              "retained_bytes": 134217728,
+              "reverse_chunk_rows": 16,
+              "stages": 4096,
+              "trace": 4096,
+              "windows": 2,
+              "workspace_bytes": 536870912
+            }
+          }
+        },
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners"
+      }
+    }
+  ],
+  "allocator_calibration": [
+    {
+      "dtype": "torch.float32",
+      "training": true,
+      "plan": {
+        "rows": 19,
+        "fixed_bytes": 35148800,
+        "row_bytes": 131744,
+        "reserved_bytes": 37651936,
+        "budget": 41943040,
+        "operator_allowance_bytes": 33554432
+      },
+      "baseline_allocated": 548864,
+      "peak_allocated_delta": 18263040,
+      "peak_reserved": 98566144,
+      "sha256": "4f939950a0a80e925983d2385cfdb9689e048e9c47a86e051b96041a09c3fb53"
+    },
+    {
+      "dtype": "torch.float16",
+      "training": true,
+      "plan": {
+        "rows": 15,
+        "fixed_bytes": 35673088,
+        "row_bytes": 131680,
+        "reserved_bytes": 37648288,
+        "budget": 41943040,
+        "operator_allowance_bytes": 33554432
+      },
+      "baseline_allocated": 278528,
+      "peak_allocated_delta": 18466816,
+      "peak_reserved": 98566144,
+      "sha256": "6005d85900bc638243da9b7ab996693c80da6ff0f713e57c4897576790e7bd68"
+    },
+    {
+      "dtype": "torch.float16",
+      "training": false,
+      "plan": {
+        "rows": 63,
+        "fixed_bytes": 33559552,
+        "row_bytes": 65888,
+        "reserved_bytes": 37710496,
+        "budget": 41943040,
+        "operator_allowance_bytes": 33554432
+      },
+      "baseline_allocated": 278528,
+      "peak_allocated_delta": 18338816,
+      "peak_reserved": 98566144,
+      "sha256": "b52ebad59eaa276bb8cd43fd2f3ea8fc5b923953459fb27012901894caacb3a6"
+    },
+    {
+      "dtype": "torch.float32",
+      "training": false,
+      "plan": {
+        "rows": 63,
+        "fixed_bytes": 33559552,
+        "row_bytes": 65952,
+        "reserved_bytes": 37714528,
+        "budget": 41943040,
+        "operator_allowance_bytes": 33554432
+      },
+      "baseline_allocated": 548864,
+      "peak_allocated_delta": 18859008,
+      "peak_reserved": 98566144,
+      "sha256": "2ddeaca3ea75f42713f7e01249711e867d44b3b76940e628acc9a8d1fb42dfa2"
+    }
+  ],
+  "large_head_calibration": {
+    "source": "d178b863402157f0f92b60b7dbff12c8e8d7a60e",
+    "dirty": "",
+    "state": "passed",
+    "cases": [
+      {
+        "dtype": "torch.float32",
+        "rows": 256,
+        "width": 2048,
+        "vocab": 50304,
+        "plan": {
+          "rows": 108,
+          "fixed_bytes": 1271928832,
+          "row_bytes": 1642656,
+          "reserved_bytes": 1449335680,
+          "budget": 1610612736,
+          "operator_allowance_bytes": 33554432
+        },
+        "baseline_allocated": 415249920,
+        "peak_allocated_delta": 915439104,
+        "peak_reserved": 1524629504,
+        "passed": true
+      },
+      {
+        "dtype": "torch.float16",
+        "rows": 256,
+        "width": 2048,
+        "vocab": 50304,
+        "plan": {
+          "rows": 151,
+          "fixed_bytes": 1684019200,
+          "row_bytes": 1638560,
+          "reserved_bytes": 1931441760,
+          "budget": 2147483648,
+          "operator_allowance_bytes": 33554432
+        },
+        "baseline_allocated": 208155648,
+        "peak_allocated_delta": 1340316160,
+        "peak_reserved": 1937768448,
+        "passed": true
+      }
+    ],
+    "scope": "D2048/V50304 packed consumer head VJP allocator calibration, no graph or throughput claim"
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 17399,
+      "MIX_AIV": 258,
+      "AI_CORE": 667
+    },
+    "physical_devices": [
+      3,
+      9
+    ],
+    "operator_counts_by_device": {
+      "3": {
+        "ZerosLike": 2402,
+        "Fill": 42,
+        "OnesLike": 33,
+        "Range": 5,
+        "Mul": 527,
+        "Add": 565,
+        "GatherV3": 2458,
+        "Cast": 1045,
+        "GatherV2": 4,
+        "Pack": 12,
+        "IsFinite": 30,
+        "ReduceAll": 32,
+        "tide_queue_propose": 64,
+        "Equal": 286,
+        "tide_closure": 24,
+        "tide_ready_pack": 24,
+        "Less": 24,
+        "tide_sum_plan": 20,
+        "tide_vector_sum": 20,
+        "tide_state_shard_pack": 40,
+        "Sigmoid": 40,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 61,
+        "tide_fiber_chunk": 178,
+        "tide_fiber_pool": 56,
+        "tide_fiber_trace": 20,
+        "tide_journal": 240,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "ScatterUpdate": 363,
+        "tide_frame_select": 20,
+        "SoftmaxV2": 89,
+        "tide_state_shard_selection": 40,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "tide_state_shard_merge": 60,
+        "tide_full_shard_pack": 40,
+        "tide_full_plan": 32,
+        "tide_emission_plan": 20,
+        "tide_emission_chunk": 36,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 327,
+        "tide_fiber_indices": 21,
+        "Transpose": 172,
+        "Swish": 24,
+        "RmsNorm": 24,
+        "tide_projection_shard_plan": 30,
+        "MemSet": 8,
+        "NonZero": 8,
+        "FloorDiv": 24,
+        "BroadcastTo": 28,
+        "FloorMod": 28,
+        "MatMulV2": 48,
+        "LogSoftmaxV2": 24,
+        "GatherElementsV2": 24,
+        "ReduceSum": 118,
+        "Neg": 48,
+        "RealDiv": 56,
+        "Exp": 24,
+        "LinearIndex": 24,
+        "ScatterElementsV2": 24,
+        "LogicalNot": 4,
+        "LogicalAnd": 28,
+        "ReduceAny": 4,
+        "tide_reverse_links": 4,
+        "tide_state_reverse_pack": 8,
+        "tide_cache_merge": 12,
+        "tide_cache_bias_merge": 12,
+        "tide_fiber_reverse_links": 4,
+        "tide_emission_reverse_links": 4,
+        "tide_graph_reverse_meta": 72,
+        "tide_graph_reverse_payload": 64,
+        "tide_emission_vjp_payload": 40,
+        "tide_emission_vjp_plan": 34,
+        "tide_full_reverse_pack": 40,
+        "tide_full_vjp_plan": 20,
+        "tide_full_vjp_payload": 20,
+        "tide_extra_full_plan": 32,
+        "tide_control_merge": 60,
+        "tide_full_reverse_merge": 32,
+        "tide_state_reverse_stage": 40,
+        "tide_state_vjp_plan": 20,
+        "tide_state_vjp": 20,
+        "tide_fiber_reverse_plan": 50,
+        "tide_state_reverse_merge": 164,
+        "TransposeV2": 74,
+        "tide_full_vjp_reduce": 14,
+        "tide_extra_full_payload": 12,
+        "tide_extra_full_reduce": 12,
+        "SiluGrad": 12,
+        "tide_fiber_reverse_pack": 60,
+        "tide_fiber_vjp_plan": 176,
+        "tide_fiber_vjp_state": 60,
+        "tide_fiber_vjp_pool": 90,
+        "tide_fiber_vjp_pack": 82,
+        "tide_attention_reverse_plan": 156,
+        "tide_attention_reverse_pack": 78,
+        "tide_attention_softmax": 26,
+        "tide_attention_merge": 52,
+        "tide_attention_reverse_weights": 26,
+        "tide_attention_reverse_reduce": 26,
+        "tide_fiber_vjp_queries": 26,
+        "tide_fiber_vjp_sources": 30,
+        "tide_fiber_reverse_fold": 60,
+        "tide_graph_reverse_scales": 4,
+        "tide_state_reverse_flags": 4,
+        "tide_window_bridge_meta": 2,
+        "tide_window_bridge_values": 2,
+        "tide_owner_gradient_pack": 8,
+        "tide_owner_gradient_reduce": 2,
+        "SelectV2": 8,
+        "Slice": 16,
+        "ConcatD": 4,
+        "InplaceScatterAdd": 4,
+        "Pows": 4,
+        "Sqrt": 4,
+        "Sub": 4,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 2,
+        "tide_optimizer_commit": 2,
+        "tide_owner_parameter_publish": 2
+      },
+      "9": {
+        "ZerosLike": 1455,
+        "OnesLike": 9,
+        "Range": 5,
+        "Mul": 358,
+        "Add": 267,
+        "GatherV3": 983,
+        "Sigmoid": 40,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 59,
+        "tide_fiber_chunk": 170,
+        "Cast": 547,
+        "tide_fiber_pool": 52,
+        "tide_fiber_trace": 20,
+        "tide_journal": 40,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "Equal": 22,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 292,
+        "tide_fiber_indices": 19,
+        "Transpose": 158,
+        "SoftmaxV2": 61,
+        "ScatterUpdate": 83,
+        "tide_full_plan": 28,
+        "Swish": 24,
+        "RmsNorm": 24,
+        "tide_projection_shard_plan": 30,
+        "Fill": 8,
+        "tide_cache_merge": 12,
+        "tide_cache_bias_merge": 12,
+        "tide_fiber_reverse_links": 4,
+        "tide_full_vjp_plan": 16,
+        "tide_full_vjp_payload": 16,
+        "tide_extra_full_plan": 28,
+        "tide_control_merge": 56,
+        "tide_state_reverse_merge": 20,
+        "tide_state_vjp_plan": 20,
+        "tide_state_vjp": 20,
+        "tide_fiber_reverse_plan": 46,
+        "TransposeV2": 63,
+        "tide_full_vjp_reduce": 12,
+        "tide_extra_full_payload": 12,
+        "ReduceSum": 72,
+        "tide_extra_full_reduce": 12,
+        "SiluGrad": 12,
+        "tide_fiber_reverse_pack": 52,
+        "tide_fiber_vjp_plan": 153,
+        "tide_fiber_vjp_state": 52,
+        "tide_fiber_vjp_pool": 78,
+        "tide_fiber_vjp_pack": 73,
+        "tide_attention_reverse_plan": 144,
+        "tide_attention_reverse_pack": 72,
+        "tide_attention_softmax": 24,
+        "tide_attention_merge": 48,
+        "tide_attention_reverse_weights": 24,
+        "tide_attention_reverse_reduce": 24,
+        "tide_fiber_vjp_queries": 24,
+        "tide_fiber_vjp_sources": 25,
+        "tide_fiber_reverse_fold": 52,
+        "tide_state_reverse_flags": 4,
+        "tide_owner_gradient_pack": 8,
+        "tide_owner_gradient_reduce": 2,
+        "SelectV2": 8,
+        "LogicalAnd": 8,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 2,
+        "tide_optimizer_commit": 2,
+        "tide_owner_parameter_publish": 2
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 17399,
+      "MODEL_MAINTAINCE": 84,
+      "MEMCPY_ASYNC": 4952,
+      "MIX_AIV": 258,
+      "MODEL_EXECUTE": 40,
+      "NOTIFY_WAIT": 714,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 2506,
+      "LABEL_SET": 3500,
+      "NOTIFY_RECORD": 714,
+      "AI_CORE": 667,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 54,
+      "BatchMatMulV2_Tiling": 38,
+      "BroadcastTo_Tiling": 2,
+      "Cast_Tiling": 103,
+      "ConcatD_Tiling": 1,
+      "Equal_Tiling": 16,
+      "Exp_Tiling": 1,
+      "Fill_Tiling": 17,
+      "FloorDiv_Tiling": 1,
+      "FloorMod_Tiling": 2,
+      "GatherElementsV2_Tiling": 2,
+      "GatherV2_Tiling": 1,
+      "GatherV3_Tiling": 340,
+      "InplaceScatterAdd_Tiling": 8,
+      "IsFinite_Tiling": 8,
+      "Less_Tiling": 2,
+      "LinearIndex_Tiling": 48,
+      "LogSoftmaxV2_Tiling": 2,
+      "LogicalAnd_Tiling": 7,
+      "LogicalNot_Tiling": 1,
+      "MatMulV2_Tiling": 3,
+      "Mul_Tiling": 65,
+      "Neg_Tiling": 2,
+      "NonZero_Tiling": 16,
+      "OnesLike_Tiling": 7,
+      "Pack_Tiling": 4,
+      "Pows_Tiling": 2,
+      "Range_Tiling": 2,
+      "RealDiv_Tiling": 5,
+      "ReduceAll_Tiling": 8,
+      "ReduceAny_Tiling": 2,
+      "ReduceSum_Tiling": 44,
+      "ScatterElementsV2_Tiling": 48,
+      "ScatterUpdate_Tiling": 77,
+      "SelectV2_Tiling": 6,
+      "Sigmoid_Tiling": 1,
+      "SiluGrad_Tiling": 1,
+      "Slice_Tiling": 4,
+      "SoftmaxV2_Tiling": 16,
+      "Sqrt_Tiling": 1,
+      "Sub_Tiling": 1,
+      "Swish_Tiling": 1,
+      "TransposeV2_Tiling": 18,
+      "Transpose_Tiling": 44,
+      "ZerosLike_Tiling": 482,
+      "aclmdlRIBindStream": 28,
+      "aclmdlRIBuildBegin": 28,
+      "aclmdlRIBuildEnd": 28,
+      "aclmdlRIDestroy": 28,
+      "aclmdlRIEndTask": 28,
+      "aclmdlRIExecuteAsync": 40,
+      "aclmdlRIUnbindStream": 28,
+      "aclnnAdd": 64,
+      "aclnnAddGetWorkspaceSize": 116,
+      "aclnnAdds": 28,
+      "aclnnAddsGetWorkspaceSize": 2,
+      "aclnnAll": 32,
+      "aclnnAllGetWorkspaceSize": 4,
+      "aclnnAny": 4,
+      "aclnnAnyGetWorkspaceSize": 1,
+      "aclnnArange": 10,
+      "aclnnArangeGetWorkspaceSize": 2,
+      "aclnnBatchMatMul": 122,
+      "aclnnBatchMatMulGetWorkspaceSize": 122,
+      "aclnnBitwiseAndTensor": 36,
+      "aclnnBitwiseAndTensorGetWorkspaceSize": 7,
+      "aclnnCast": 220,
+      "aclnnCastGetWorkspaceSize": 220,
+      "aclnnCat": 4,
+      "aclnnCatGetWorkspaceSize": 1,
+      "aclnnDiv": 4,
+      "aclnnDivGetWorkspaceSize": 1,
+      "aclnnDivs": 28,
+      "aclnnDivsGetWorkspaceSize": 4,
+      "aclnnEmbedding": 4,
+      "aclnnEmbeddingGetWorkspaceSize": 1,
+      "aclnnEqScalar": 4,
+      "aclnnEqScalarGetWorkspaceSize": 1,
+      "aclnnEqTensor": 31,
+      "aclnnEqTensorGetWorkspaceSize": 31,
+      "aclnnExp": 24,
+      "aclnnExpGetWorkspaceSize": 1,
+      "aclnnFloorDivides": 24,
+      "aclnnFloorDividesGetWorkspaceSize": 1,
+      "aclnnGather": 24,
+      "aclnnGatherGetWorkspaceSize": 1,
+      "aclnnIndexAdd": 4,
+      "aclnnIndexAddGetWorkspaceSize": 4,
+      "aclnnIndexSelect": 518,
+      "aclnnIndexSelectGetWorkspaceSize": 362,
+      "aclnnInplaceAdd": 135,
+      "aclnnInplaceCopy": 833,
+      "aclnnInplaceCopyGetWorkspaceSize": 776,
+      "aclnnInplaceDivs": 24,
+      "aclnnInplaceFillScalar": 50,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 17,
+      "aclnnInplaceIndexCopy": 77,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 77,
+      "aclnnInplaceOne": 42,
+      "aclnnInplaceOneGetWorkspaceSize": 7,
+      "aclnnInplaceZero": 1872,
+      "aclnnInplaceZeroGetWorkspaceSize": 914,
+      "aclnnIsFinite": 30,
+      "aclnnIsFiniteGetWorkspaceSize": 4,
+      "aclnnLogSoftmax": 24,
+      "aclnnLogSoftmaxGetWorkspaceSize": 1,
+      "aclnnLogicalNot": 4,
+      "aclnnLogicalNotGetWorkspaceSize": 1,
+      "aclnnLtScalar": 4,
+      "aclnnLtScalarGetWorkspaceSize": 1,
+      "aclnnLtTensor": 1,
+      "aclnnLtTensorGetWorkspaceSize": 1,
+      "aclnnMatmul": 72,
+      "aclnnMatmulGetWorkspaceSize": 3,
+      "aclnnMul": 108,
+      "aclnnMulGetWorkspaceSize": 108,
+      "aclnnMuls": 86,
+      "aclnnMulsGetWorkspaceSize": 13,
+      "aclnnNeg": 48,
+      "aclnnNegGetWorkspaceSize": 2,
+      "aclnnNonzero": 8,
+      "aclnnNonzeroGetWorkspaceSize": 8,
+      "aclnnPermute": 68,
+      "aclnnPermuteGetWorkspaceSize": 68,
+      "aclnnPowTensorScalar": 4,
+      "aclnnPowTensorScalarGetWorkspaceSize": 1,
+      "aclnnReduceSum": 90,
+      "aclnnReduceSumGetWorkspaceSize": 66,
+      "aclnnRemainderTensorScalar": 28,
+      "aclnnRemainderTensorScalarGetWorkspaceSize": 2,
+      "aclnnRmsNorm": 10,
+      "aclnnRmsNormGetWorkspaceSize": 10,
+      "aclnnRmsNormTiling": 2,
+      "aclnnSWhere": 16,
+      "aclnnSWhereGetWorkspaceSize": 6,
+      "aclnnScatterAdd": 24,
+      "aclnnScatterAddGetWorkspaceSize": 24,
+      "aclnnSigmoid": 10,
+      "aclnnSigmoidGetWorkspaceSize": 10,
+      "aclnnSilu": 10,
+      "aclnnSiluBackward": 8,
+      "aclnnSiluBackwardGetWorkspaceSize": 8,
+      "aclnnSiluGetWorkspaceSize": 10,
+      "aclnnSoftmax": 15,
+      "aclnnSoftmaxGetWorkspaceSize": 15,
+      "aclnnSqrt": 4,
+      "aclnnSqrtGetWorkspaceSize": 1,
+      "aclnnStack": 12,
+      "aclnnStackGetWorkspaceSize": 4,
+      "aclnnSub": 4,
+      "aclnnSubGetWorkspaceSize": 1,
+      "aclrtBinaryLoadFromData": 113,
+      "aclrtCreateEventExWithFlag": 1,
+      "aclrtCreateLabel": 384,
+      "aclrtCreateLabelList": 26,
+      "aclrtCreateNotify": 126,
+      "aclrtCreateStreamWithConfig": 60,
+      "aclrtCtxGetFloatOverflowAddr": 1,
+      "aclrtCtxGetSysParamOpt": 1312,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 384,
+      "aclrtDestroyLabelList": 26,
+      "aclrtDestroyNotify": 250,
+      "aclrtDestroyStream": 56,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 126,
+      "aclrtDeviceEnablePeerAccess": 4,
+      "aclrtFree": 703,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 158,
+      "aclrtGetResInCurrentThread": 6084,
+      "aclrtGetStreamAttribute": 4906,
+      "aclrtLaunchKernelWithHostArgs": 4272,
+      "aclrtMalloc": 666,
+      "aclrtMemcpy": 566,
+      "aclrtMemcpyAsync": 1049,
+      "aclrtNotifyGetExportKey": 124,
+      "aclrtNotifyImportByKey": 124,
+      "aclrtNotifySetImportPid": 124,
+      "aclrtRecordNotify": 141,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 8928,
+      "aclrtSetLabel": 384,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 235,
+      "aclrtSynchronizeDeviceWithTimeout": 73,
+      "aclrtSynchronizeStream": 554,
+      "aclrtSynchronizeStreamWithTimeout": 68,
+      "aclrtWaitAndResetNotify": 141
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261002061603659_03254338QEBFFCCO/mindstudio_profiler_output/task_time_20261002061615.csv": "815b742b56005d0dcc26c9d40a8aeb62f2d6f7bdd34c96a2eb8c023db79392c9",
+      "raw/PROF_000001_20261002061603659_03254338QEBFFCCO/mindstudio_profiler_output/op_summary_20261002061615.csv": "facde93c310687012d370aa45a192208f05a85ce4ce97328f4c78ea8444f7124",
+      "raw/PROF_000001_20261002061603659_03254338QEBFFCCO/mindstudio_profiler_output/api_statistic_20261002061615.csv": "6f397eb794c4c5bb9e34e3b669c1ec0b41090bafe66c88e6048b51785d4d56ef"
+    },
+    "scope": "per-edge-affine attention with embedding/head, public standalone online greedy resident; two complete AdamW updates/four continued windows, construction included, diagnostics off; instrumented, not throughput",
+    "aicpu_operators": {},
+    "consumer": {
+      "schema": "tide-online-consumer-v1",
+      "state": "passed",
+      "workload_sha256": "7c379ee613d9c738f0a40a87b1c215450e27114cca893081fa7ee2f09b74b855",
+      "packet_identity": "declared; launcher must verify v2 text against hashed JSON",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "training": true,
+      "optimizer": "adamw",
+      "parameters": 71128,
+      "construction_seconds": 0.961930962,
+      "seconds": [
+        0.468334429,
+        0.205008017
+      ],
+      "warmup_seconds": [],
+      "outputs": [
+        12,
+        12
+      ],
+      "losses": [
+        2.8324356079101562,
+        2.8288469314575195
+      ],
+      "statistics": [
+        {
+          "emission_chunks": 8,
+          "events": 120,
+          "full_chunks": 12,
+          "head_chunks": 12,
+          "retained_bytes": 3657612,
+          "retained_projection_bytes": 54912,
+          "retained_window_bytes": 1801350,
+          "retained_windows": 2,
+          "reverse_fiber_budget_bytes": 44739240,
+          "reverse_fiber_groups": 4,
+          "reverse_fiber_key_rows_max": 64,
+          "reverse_fiber_key_rows_min": 64,
+          "reverse_fiber_owner_rows_max": 12,
+          "reverse_fiber_owner_rows_min": 12,
+          "reverse_fiber_query_rows_max": 11,
+          "reverse_fiber_query_rows_min": 11,
+          "reverse_fiber_requested_max": 16,
+          "reverse_fiber_tensor_bytes": 20373984,
+          "stages": 10
+        },
+        {
+          "emission_chunks": 8,
+          "events": 121,
+          "full_chunks": 12,
+          "head_chunks": 12,
+          "retained_bytes": 3657612,
+          "retained_projection_bytes": 54912,
+          "retained_window_bytes": 1801350,
+          "retained_windows": 2,
+          "reverse_fiber_budget_bytes": 44739240,
+          "reverse_fiber_groups": 4,
+          "reverse_fiber_key_rows_max": 64,
+          "reverse_fiber_key_rows_min": 64,
+          "reverse_fiber_owner_rows_max": 12,
+          "reverse_fiber_owner_rows_min": 12,
+          "reverse_fiber_query_rows_max": 11,
+          "reverse_fiber_query_rows_min": 11,
+          "reverse_fiber_requested_max": 16,
+          "reverse_fiber_tensor_bytes": 20373984,
+          "stages": 10
+        }
+      ],
+      "windows_per_step": 2,
+      "warmup_steps": 0,
+      "measured_steps": 2,
+      "input_tokens_per_step": 12,
+      "final_cut": 60,
+      "threads": 1,
+      "parameter_budget": 1073741824,
+      "diagnostics": false,
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "head_memory": {
+        "rows": 1,
+        "fixed_bytes": 33584640,
+        "row_bytes": 1152,
+        "reserved_bytes": 33585792,
+        "budget": 37317703,
+        "operator_allowance_bytes": 33554432
+      },
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float16",
+        "backend": "npu",
+        "resolution_reason": "explicit:npu",
+        "schedule": "prefill",
+        "preset": "resident",
+        "placement": {
+          "control": "npu:0",
+          "events": "npu:0",
+          "payload": "npu:0",
+          "read": "npu:0",
+          "scoring_dtype": "profile",
+          "selection": "npu:0"
+        },
+        "resident": {
+          "runtime_owner": "standalone",
+          "requested_devices": 2,
+          "requested_owner_policy": "locality",
+          "devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "full_owners": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "state_owners": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "owner_policy": "locality",
+          "chunk_policy": "aggressive",
+          "limits": {
+            "aggregate_chunk_rows": 8,
+            "arrivals": 128,
+            "attention_chunk_rows": 8,
+            "attention_key_rows": 128,
+            "backward_bytes": 2147483648,
+            "emission_chunk_rows": 16,
+            "full_chunk_rows": 16,
+            "kv_rows": 128,
+            "kv_trace_rows": 1024,
+            "max_repeat_ticks": 65536,
+            "optimizer_bytes": 134217728,
+            "outputs": 128,
+            "program_workspace_bytes": 67108864,
+            "queue": 128,
+            "retained_bytes": 134217728,
+            "reverse_chunk_rows": 16,
+            "stages": 4096,
+            "trace": 512,
+            "windows": 2,
+            "workspace_bytes": 536870912
+          }
+        }
+      },
+      "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+      "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+      "projection_placement": "compact banks on Full owners"
+    },
+    "workload_sha256": "7c379ee613d9c738f0a40a87b1c215450e27114cca893081fa7ee2f09b74b855",
+    "consumer_sha256": "9897f91bcd06520791681aec654187617f1c16a2d2ff92a9fb12d729caf52d72"
+  },
+  "retained_failures": [
+    {
+      "name": "consumer-head-native-dev01",
+      "reason": "28 semantics passed;8MiB tensor envelope omitted observed16MiB operator floor; planner now reserves32MiB plus policy headroom",
+      "status_sha256": "e785188d1798a1fa0947fb5986e22b30cd125eb26ffd8b07611a3f5f9e6efe0a",
+      "log_sha256": "d50d8de6916ffedc49f981d5d57947208acd85e3667163c9a5df2dc3613e3425"
+    },
+    {
+      "name": "consumer-head-profile-dev02",
+      "reason": "consumer passed; profiler fixture selected8 head rows and did not trigger split; changed only explicit budget to select1 row",
+      "status_sha256": "7d9c647eb94f9bb6ed96f6dab1a4b23c95cd4115d381c9dacc105cc8b10d620e",
+      "log_sha256": "c7c68fafc489e264d4941070078c138dfcd770042e5d0c4e05632e09ce223313"
+    }
+  ],
+  "scope": "Actual resident FP32/FP16 payload consumers,FP32 loss/adjoints/masters,packed head row envelope and unchanged update boundary",
+  "limits": "Head-only calibrated envelope,not total per-device HBM admission. Eager FP16 training remains explicitly unavailable; no full-size graph throughput claim."
+}

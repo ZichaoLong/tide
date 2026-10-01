@@ -95,44 +95,34 @@ artifact paths/hashes. No live qualification jobs; do not duplicate completed wo
 
 Projection shard evidence commitdd24e50 is pushed.
 
-Current consumer-head implementation is ready to commit. Actual resident
-FP32/FP16 consumers now use bounded packed head rows,FP32 loss/adjoints/masters
-and recorded precision/head reservation/chunk counts. --head-workspace-bytes
-(default4GiB) includes calibrated32MiB operator allowance plus10/25% policy
-headroom. This is head-only,not total HBM. No logical window/loss/update split.
+Consumer head implementationd178b863402157f0f92b60b7dbff12c8e8d7a60e is pushed.
+All6 fixed-source qualification jobs PASSED; consumer_head_evidence.py audit exited0.
+Evidence docs/evidence/resident-consumer-head-20261002.{md,json}. No live jobs except
+intentionally suspended historical CPU. Do not duplicate completed qualification.
 
-Development: installed client builds consumer-head-dev01/dev02 PASSED; CPU-dev02
-PASSED10; native-dev02 PASSED32,LibTorch-dev02 PASSED27. native-dev03 PASSED3
-checks later Python temporary release and both CLI budget refusals; C++ unchanged.
-No backend rebuild: byte-identical acb84f3 backends reused. Client dev02 rebuilt
-only affected units,after source/include/compiler audit; other objects reused.
-D2048/V50304,256-output head VJP calibration PASSED both dtypes: FP32 selected108
-rows,peak915439104 under1536MiB; FP16 selected151 rows,peak1340316160 under2048MiB.
-Small head calibration4 passed. These are allocator deltas,not total driver HBM.
+Actual resident FP32/FP16 consumers now use bounded packed head rows,FP32 loss/
+adjoints/masters and recorded precision/head reservations/chunk counts. Optional
+--head-workspace-bytes (default4GiB) includes calibrated32MiB operator allowance
+and10/25% headroom; it is head-only,not total HBM. No logical window/update split.
+Source sources/consumer-head-clean01; installed client builds/consumer-head-clean01.
+Reuse byte-identical acb84f3 backends projection-shards-{,python-}clean02 and
+placement-npu-python-clean01 core. No backend rebuild. Source/header/compiler-
+verified client object reuse,fresh link/loader. Build/cpu10/native32/libtorch27/
+scale/profile jobs all terminal PASSED.59 NPU cases include48 whole-model and4
+split-head trajectories. D2048/V50304,256-output head VJP calibration: FP32 selected
+108 rows,peak915439104 under1536MiB; FP16 selected151 rows,peak1340316160 under2048MiB.
+Four small head calibrations also passed. These are allocator deltas,not driver HBM.
+Independent D32 FP16/two-card training trace: head chunk1,12 chunks/update,
+17,399 AI_VECTOR_CORE/667 AI_CORE/258 MIX_AIV,no observed AiCPU; not throughput.
 
-Retain consumer-head-native-dev01 FAILED:28 semantic cases passed,8MiB tensor
-plan omitted observed16MiB operator floor. Corrected planner includes32MiB.
-Retain consumer-head-profile-dev02 FAILED: actual consumer completed,fixture
-budget selected8 rows so no head split; fix external profile budget to select1
-row (37317703 bytes). No backend/numerical correction or tolerance relaxation.
-All development jobs are terminal. No live job except suspended historical CPU.
+Retain failures: consumer-head-native-dev01 (28 semantic cases passed,then8MiB
+plan missed16MiB operator floor; corrected allowance32MiB); profile-dev02 (actual
+consumer passed but8-row fixture did not split; changed only explicit budget to
+37317703 bytes to select1 row). Development dev02 builds/CPU10/native32/LibTorch27/
+scale2 passed; dev03 native3 tests later temporary release and CLI refusal checks.
+No tolerance relaxation or implicit dtype fallback.
 
-Next commit/push implementation,freeze consumer-head-clean01. Use freeze_run.py:
-- build-consumer-head-clean01: build_projection_retention_client.py
-  --build TASK/builds/projection-shards-clean02 --out TASK/builds/consumer-head-clean01
-  --reuse-client TASK/builds/consumer-head-dev02; no changed native source/header.
-- consumer-head-cpu-clean01: test_online_resident_loss.py (10).
-- consumer-head-native-clean01: test_online_resident_consumer.py -k 'not libtorch' (32),2 cards.
-- consumer-head-libtorch-clean01: same -k libtorch (27),new installed client,2 cards.
-- consumer-head-scale-clean01: qualify_large_head.py SOURCE RUN,1 card,run180s.
-- consumer-head-profile-clean01: profile_consumer_head.py --preset resident
-  --reverse-chunk-rows16 --source SOURCE --build TASK/builds/consumer-head-clean01
-  --out RUN/profile,2 cards (FP16 training,head chunk1; independent trace).
-All use matching placement-npu-python-clean01 core/projection-shards-python-clean02
-Python backend as applicable. Queue120/run600/build900. After all passed run
-consumer_head_evidence.py FULL_COMMIT;review md/json and commit/push evidence.
-
-Then total per-device memory admission/safe splitting,representative five-preset
+Next: total per-device memory admission/safe splitting,representative five-preset
 screening and full-size F6. Current CPU/mixed consumers use one payload device;
 full-size multi-card mixed consumers may still need generic placement integration.
 Do not conflate historical restricted graph executors with general online flows.
