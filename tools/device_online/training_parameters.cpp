@@ -1,9 +1,18 @@
-#include "training_internal.h"
+#include "training_parameters.h"
 #include <ATen/core/grad_mode.h>
 #include <set>
+#include <atomic>
+#include <limits>
 #include <stdexcept>
 
 namespace tide::training_detail {
+uint64_t session_id() {
+  static std::atomic<uint64_t> next{1};auto value=next.load();
+  for(;;) {
+    if(value==std::numeric_limits<uint64_t>::max())throw std::overflow_error("resident session IDs exhausted");
+    if(next.compare_exchange_weak(value,value+1))return value;
+  }
+}
 void no_grad() {
   if(at::GradMode::is_enabled())throw std::invalid_argument("explicit resident VJP requires no-grad; compute consumer cotangents separately");
 }

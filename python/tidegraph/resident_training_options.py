@@ -1,6 +1,7 @@
 """Explicit first-order resident training storage; no runtime imports."""
 from dataclasses import asdict, dataclass
 import math
+import re
 
 
 @dataclass(frozen=True)
@@ -48,3 +49,44 @@ def optimizer_groups(core, groups):
             setattr(group, name, value)
         result.append(group)
     return result
+
+
+@dataclass(frozen=True)
+class ResidentPlacement:
+    """Logical NPU owners; empty devices keeps the single-device implementation."""
+    devices: tuple[str, ...] = ()
+    policy: str = "locality"
+    full_owners: tuple[int, ...] = ()
+    state_owners: tuple[int, ...] = ()
+
+    def __post_init__(self):
+        for name in ("devices", "full_owners", "state_owners"):
+            value = getattr(self, name)
+            if not isinstance(value, (list, tuple)):
+                raise ValueError(f"resident {name} requires a sequence")
+            object.__setattr__(self, name, tuple(value))
+        if self.policy not in {"memory", "locality"}:
+            raise ValueError("resident placement policy must be memory or locality")
+        if (len(self.devices) > 16 or any(not isinstance(d, str) or not re.fullmatch(r"npu:(0|[1-9][0-9]*)", d)
+                                         or int(d.split(":")[1]) > 127 for d in self.devices)
+                or len(set(self.devices)) != len(self.devices)):
+            raise ValueError("resident placement requires distinct explicit logical NPUs")
+        for name in ("full_owners", "state_owners"):
+            if any(type(x) is not int or not 0 <= x < len(self.devices) for x in getattr(self, name)):
+                raise ValueError(f"invalid resident {name} indices")
+
+    def to_dict(self):
+        return {"devices": list(self.devices), "policy": self.policy,
+                "full_owners": list(self.full_owners), "state_owners": list(self.state_owners)}
+
+    def native(self, module, coordinator, nodes):
+        import torch
+        if self.devices and torch.device(self.devices[0]) != coordinator:
+            raise ValueError("resident placement must start with the runtime coordinator")
+        for name in ("full_owners", "state_owners"):
+            if getattr(self, name) and len(getattr(self, name)) != nodes:
+                raise ValueError(f"resident {name} must describe every execution node")
+        value = module.TrainingPlacement()
+        value.devices = [torch.device(d) for d in self.devices]
+        value.policy, value.full_owners, value.state_owners = self.policy, self.full_owners, self.state_owners
+        return value

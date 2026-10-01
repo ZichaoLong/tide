@@ -59,6 +59,7 @@ class ContentFlow {
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
   ShardedParameterBanks sharded_parameter_banks() const;
   std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.
+  std::vector<StateOwnerValues> state_shards_device() const; // Borrowed owner-local views.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:
   struct Impl;

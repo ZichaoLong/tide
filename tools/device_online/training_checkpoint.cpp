@@ -4,6 +4,7 @@
 namespace tide {
 ResidentTrainingCheckpoint ResidentTrainingSession::checkpoint() const {
   const auto& s=*impl_;s.check();
+  if(s.sharded)return s.sharded->checkpoint();
   if(!s.saved.empty()||s.gradients_ready)throw std::logic_error("checkpoint requires explicit detach or a completed optimizer step");
   ResidentTrainingCheckpoint out;
   out.generation=s.generation;out.next_token=s.next_token;out.continuation=s.flow->snapshot();

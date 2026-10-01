@@ -129,7 +129,7 @@ if(TIDE_DEVICE_ASCENDC)
   add_library(tide-content-flow STATIC content_profile.cpp state_profile.cpp state_profile_compat.cpp state_reverse_view.cpp state_reverse_compat.cpp state_owner_tape.cpp state_reverse_pack.cpp state_reverse_stage.cpp state_reverse_merge.cpp state_owner_read.cpp state_owner_reverse.cpp sharded_state_vjp.cpp state_shard_pack.cpp state_owner.cpp remote_state.cpp sharded_state.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
     retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp control_scores.cpp
     content_flow.cpp content_export.cpp content_input.cpp remote_full.cpp full_placement.cpp full_shard_pack.cpp sharded_full.cpp full_shard_tape.cpp full_reverse_pack.cpp full_reverse_merge.cpp sharded_full_vjp.cpp
-    sharded_parameter_sources.cpp owner_gradient_packet.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp owner_parameter_publish.cpp device_journal.cpp packed_emission.cpp packed_swiglu_full.cpp
+    sharded_parameter_sources.cpp sharded_parameter_layout.cpp owner_gradient_packet.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp owner_parameter_publish.cpp device_journal.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp fiber_tape.cpp fiber_reverse.cpp fiber_cache_reverse.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp fiber_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-peer tide-packed-full tide-packed-lh tide-device-ready tide-device-broadcast
@@ -280,8 +280,10 @@ if(TIDE_DEVICE_ASCENDC)
 endif()
 
 if(TIDE_DEVICE_ASCENDC)
-  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp)
+  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp
+    sharded_training_owner.cpp sharded_training_backward.cpp sharded_training_checkpoint.cpp)
   target_link_libraries(tide-resident PRIVATE tide-content-flow)
+  target_link_options(tide-resident PRIVATE -Wl,-z,defs)
   target_link_libraries(tide-resident PUBLIC tide::tidegraph)
   target_include_directories(tide-resident PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -327,6 +329,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-resident-control-training-check control_training_check.cpp)
     target_compile_options(tide-resident-control-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-control-training-check PRIVATE tide-device-test-fixtures tide-resident-test-support tide-resident tide-device-test-compare tide::runtime)
+    add_executable(tide-resident-sharded-session-check sharded_session_check.cpp)
+    target_compile_options(tide-resident-sharded-session-check PRIVATE -fPIC)
+    target_link_libraries(tide-resident-sharded-session-check PRIVATE tide-resident-test-support)
     add_executable(tide-resident-half-training-check precision_training_check.cpp)
     target_compile_options(tide-resident-half-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-half-training-check PRIVATE tide-resident-test-support)

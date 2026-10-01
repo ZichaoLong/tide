@@ -186,3 +186,12 @@ mean HARD with zeta1; the HARD packed-owner layout is preserved.
 Qualification remains indexed by STATUS/ROADMAP, including independent processes.
 Python and C++ clients, disk restoration and training throughput are separately
 verified; code or a successful build does not substitute for those target checks.
+
+
+## Multiple logical devices
+
+The optional [sharded training owner](resident-sharded-training.md) uses the same
+public session and checkpoint schema with an explicit logical placement. Its
+qualification is separate from earlier single-device evidence. Empty placement
+preserves the original single-device path; sharded windows/roots expose local
+state and KV instead of a dense coordinator copy.

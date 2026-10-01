@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
-                        default=[name for name in CHECKS if not name.startswith("peer")],
+                        default=[name for name in CHECKS if not name.startswith("peer") and name != "resident-sharded-training"],
                         help="Single-device checks by default; peer explicitly requires two visible NPUs")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
@@ -64,7 +64,7 @@ def main():
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=360 if check in ("peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                                            timeout=360 if check in ("resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

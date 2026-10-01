@@ -3,6 +3,7 @@
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 #include <set>
+#include <tuple>
 
 namespace tide::device_online::test {
 void train_require(bool b,const char* why){if(!b)throw std::runtime_error(why);}
@@ -27,11 +28,17 @@ ResidentCotangents train_roots(const ResidentTrainingWindow& w,int window,int mo
   ResidentCotangents r;r.token=w.token;
   const float scale=w.outputs.values.scalar_type()==at::kHalf?256.f:1.f;
   auto full=[&](const Tensor& x,float value){return at::full(x.sizes(),value*scale,x.options().dtype(at::kFloat));};
+  if(!w.states.empty()) {
+    for(const auto& state:w.states) {
+      auto local=w;local.states.clear();local.state_values=state.values;local.state_present=state.present;local.cache=state.cache;
+      const auto root=train_roots(local,window,mode);r.states.push_back({root.final,root.final_connected,root.cache});
+    }
+  }
   if(mode==4||mode==9) {
     r.outputs=full(w.outputs.values,.0625);r.outputs_connected=w.outputs.valid.clone();
     r.pending=full(w.pending_values,.015625);r.pending_connected=w.pending_valid.clone();
-    r.final=full(w.state_values,.03125);r.final_connected=w.state_present.clone();
-  } else if(mode==5&&window==3) {r.final=full(w.state_values,0.);r.final_connected=w.state_present.clone();}
+    if(w.states.empty()){r.final=full(w.state_values,.03125);r.final_connected=w.state_present.clone();}
+  } else if(mode==5&&window==3&&w.states.empty()) {r.final=full(w.state_values,0.);r.final_connected=w.state_present.clone();}
   if(mode==9||window==3&&(mode>=6&&mode<=8||mode==10))for(const auto& c:w.cache) {
     ResidentCacheCotangents a;
     if(mode!=7&&mode!=10){a.key=full(c.key,mode==8?0.:.0078125);a.key_connected=c.present.clone();}
@@ -44,6 +51,35 @@ ResidentCotangents train_roots(const ResidentTrainingWindow& w,int window,int mo
   return r;
 }
 void train_gradients(const ResidentGradients& g,const RetainedReference& ref,const Fixture& f) {
+  if(!g.parameter_shards.empty()) {
+    // Comparison-only CPU assembly. No reference or assembled tensor is used by
+    // candidate execution, optimizer, or continuation.
+    ResidentGradients dense;dense.boundaries=g.boundaries;
+    std::map<std::string,std::tuple<std::vector<std::string>,Tensor,Tensor>> parts;
+    for(const auto& p:g.parameter_shards) {
+      auto values=p.values.cpu(),connected=p.connected.cpu();
+      for(size_t i=0;i<p.names.size();++i) {
+        const auto value=f.model.parameters(true).value(p.names[i]);
+        auto local=p.offsets[i]<0?at::zeros_like(value).to(at::kFloat):values.narrow(0,p.offsets[i],value.numel());
+        train_require(parts.emplace(p.names[i],std::make_tuple(p.aliases[i],local.reshape({-1}),connected[i])).second,"duplicate gradient owner");
+      }
+    }
+    std::vector<Tensor> values,flags;Index offset=0;
+    for(const auto& [name,part]:parts) {
+      dense.names.push_back(name);dense.aliases.push_back(std::get<0>(part));dense.offsets.push_back(offset);
+      values.push_back(std::get<1>(part));flags.push_back(std::get<2>(part));offset+=values.back().numel();
+    }
+    dense.values=values.empty()?at::zeros({1},at::kFloat):at::cat(values);
+    dense.connected=flags.empty()?at::zeros({1},at::kBool):at::stack(flags);
+    dense.initial=at::zeros({f.initial.batch_size,int64_t(f.graph.nodes.size()),f.model.width()},at::kFloat);
+    dense.initial_connected=at::zeros({f.initial.batch_size,int64_t(f.graph.nodes.size())},at::kBool);
+    for(const auto& state:g.initial_shards) {
+      auto ids=at::tensor(state.nodes,at::kLong);
+      dense.initial.index_copy_(1,ids,state.initial.cpu());dense.initial_connected.index_copy_(1,ids,state.initial_connected.cpu());
+      dense.initial_cache.insert(dense.initial_cache.end(),state.cache.begin(),state.cache.end());
+    }
+    train_gradients(dense,ref,f);return;
+  }
   const bool half=f.model.nodes.at(0).bias.scalar_type()==at::kHalf;
   auto same=[&](const Tensor& value,const Tensor& on,const Tensor& expected,const char* name){full_same_precision(value,on,expected,name,half);};
   auto values=g.values.cpu(),on=g.connected.cpu(),initial=g.initial.cpu(),ic=g.initial_connected.cpu();

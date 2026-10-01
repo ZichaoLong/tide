@@ -364,4 +364,9 @@ ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {
   return {std::move(b),s.sharded_full->tapes(s.boundary.batch_size,s.profile.width),
     s.sharded_state?s.sharded_state->parameter_banks():std::vector<StateOwnerBanks>{}};
 }
+std::vector<StateOwnerValues> ContentFlow::state_shards_device() const {
+  if(!impl_||impl_->failed)throw std::logic_error("state shard view unavailable on closed/failed flow");
+  if(!impl_->sharded_state)throw std::invalid_argument("state shard view requires explicit compact ownership");
+  return impl_->sharded_state->state_values();
+}
 } // namespace tide::device_online

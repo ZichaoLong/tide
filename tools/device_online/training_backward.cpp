@@ -28,6 +28,7 @@ GraphCotangents roots(const ResidentCotangents& r,const ReverseTape& t,const Ten
 }
 ResidentGradients ResidentTrainingSession::backward(const std::vector<ResidentCotangents>& input) {
   auto& s=*impl_;s.check();
+  if(s.sharded)return s.sharded->backward(input);
   if(s.gradients_ready||s.saved.empty())throw std::logic_error("backward requires unconsumed retained windows");
   try{return s.reverse(input);}
   catch(const std::invalid_argument&){throw;} // Preflight/construction has not submitted a reverse program.
@@ -39,6 +40,7 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
   const auto per=s.limits.backward_bytes/static_cast<Index>(s.saved.size());
   for(size_t i=0;i<input.size();++i) {
     const auto& r=input[i];const auto& w=s.saved[i];const auto& t=w.tape.tape;
+    if(!r.states.empty())throw std::invalid_argument("owner-local roots require a sharded session");
     if(r.token.session!=w.token.session||r.token.index!=w.token.index||r.token.generation!=w.token.generation)
       throw std::invalid_argument("stale, foreign or out-of-order resident window token");
     // Admission covers zero roots, exported boundary coordinates/masks and

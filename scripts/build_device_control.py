@@ -96,7 +96,7 @@ def main():
         names.extend(("tide-sharded-optimizer-check", "tide-sharded-training-check"))
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
-        names.append("tide-resident-half-training-check")
+        names.extend(("tide-resident-half-training-check", "tide-resident-sharded-session-check"))
         names.append("tide-resident-full-training-check")
         names.extend(("tide-device-aggregate-vjp-check", "tide-resident-aggregate-training-check"))
         names.extend(("tide-device-control-vjp-check", "tide-resident-control-training-check"))

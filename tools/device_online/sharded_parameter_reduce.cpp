@@ -129,6 +129,32 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
   s.consensus();
 }
 ShardedParameterReduce::~ShardedParameterReduce()=default;
+ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradient,const at::Tensor& upstream,
+    int64_t budget,int64_t workspace):impl_(std::make_unique<Impl>()) {
+  if(at::GradMode::is_enabled()||gradient.empty()||gradient.size()>16||budget<1||workspace<1)
+    throw std::invalid_argument("canonical update requires bounded no-grad gradients");
+  validate_sharded_optimizer_owners(gradient);std::set<int> indices;auto& s=*impl_;s.budget=budget;
+  if(4096.L*gradient.size()>budget)throw std::invalid_argument("canonical update metadata exceeds tensor budget");
+  for(const auto& g:gradient) {
+    if(!g.values.defined()||g.values.device().type()!=c10::DeviceType::PrivateUse1||g.values.device().index()<0
+        ||!indices.insert(g.values.device().index()).second||g.values.scalar_type()!=at::kFloat||g.values.dim()!=1
+        ||!g.connected.defined()||g.connected.device()!=g.values.device()||g.connected.scalar_type()!=at::kBool
+        ||g.connected.sizes()!=at::IntArrayRef({std::max<int64_t>(1,g.owners.size())})
+        ||!g.values.is_contiguous()||!g.connected.is_contiguous()||g.values.requires_grad()||g.connected.requires_grad())
+      throw std::invalid_argument("invalid completed canonical gradient partition");
+    s.devices.push_back(g.values.device());
+  }
+  if(!upstream.defined()||upstream.device()!=s.devices[0]||upstream.scalar_type()!=at::kInt
+      ||upstream.sizes()!=at::IntArrayRef({1})||!upstream.is_contiguous()||upstream.requires_grad())
+    throw std::invalid_argument("invalid canonical update upstream status");
+  s.outputs=std::move(gradient);
+  for(auto d:s.devices) {
+    s.programs.push_back(std::make_unique<CannProgram>(d));s.programs.back()->limit_workspace(workspace);
+    s.errors.push_back(at::zeros({1},upstream.options().device(d)));
+  }
+  s.programs[0]->copy(s.errors[0],upstream);
+  for(size_t d=1;d<s.devices.size();++d)s.transfer(0,d,{{s.errors[0],s.errors[d]}});
+}
 const std::vector<ParameterVjp>& ShardedParameterReduce::gradients() const{return impl_->outputs;}
 const std::vector<at::Tensor>& ShardedParameterReduce::errors() const{return impl_->errors;}
 void ShardedParameterReduce::append_step(const std::vector<DeviceOptimizer*>& optimizers) {

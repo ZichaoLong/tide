@@ -10,6 +10,10 @@ class ShardedParameterReduce {
  public:
   ShardedParameterReduce(ShardedParameterSources,std::vector<at::Device>,const at::Tensor& upstream_error,
                         int64_t tensor_budget,int64_t per_program_workspace);
+  // Completed canonical gradients: build an update/publication program without
+  // repeating alias reduction or copying masters back to the coordinator.
+  ShardedParameterReduce(std::vector<ParameterVjp>,const at::Tensor& upstream_error,
+                        int64_t tensor_budget,int64_t per_program_workspace);
   ~ShardedParameterReduce();
   const std::vector<ParameterVjp>& gradients() const;
   const std::vector<at::Tensor>& errors() const;

@@ -62,28 +62,52 @@ Forward62935e9 and canonical Full-only a365e2f retain their independent evidence
 
 ## Current work and next action
 
-No new live jobs. Frozen qualification source TASK/sources/program-chain-clean01;
-standalone/Python builds TASK/builds/program-chain{,-python}-clean01. Audit command:
-`python TASK/launchers/state_reverse_evidence.py 49541be3c465548ac0179c29ab0239e8b37d70f6`.
-Commit/push only the reviewed evidence/ROADMAP/STATUS now; preserve current code edits.
+Previous compact reverse evidence2aa248a is pushed. The public multi-device
+training implementation is ready for its implementation commit; formal fixed-source
+qualification remains next. No new live jobs; historical CPU task stays paused.
 
-Public multi-device training is being implemented, **unbuilt/unverified**:
-- public placement, owner-local state/cache root/output and parameter-gradient structs;
-- shared parameter freeze/session-ID helpers and single-session delegation;
-- borrowed compact state views, static canonical layout, update-only composition;
-- ShardedTrainingOwner forward/backward/step and portable schema1 checkpoint draft.
-Files include public resident_training.h, training_{owner,parameters,backward,
-checkpoint,internal}, sharded_training_{owner,internal,backward,checkpoint},
-sharded_parameter_{layout,sources,reduce}, state_owner_tape/sharded_state/content_flow.
-These are this task's edits; do not discard them or claim public support yet.
-Next: review/fix draft compilation (notably mixed auto declarations), register new
-CMake units, add Python bindings/client placement and owner roots, and meaningful
-public multi-card oracle/update/repartitioned checkpoint/continuation checks.
-Python GraphRuntime currently materializes all model parameters on runtime.device;
-large sharded consumers need explicit CPU initial-parameter storage (no CPU events)
-or a suitable new construction boundary. Finish that before claiming model-scale use.
-Use affected builds/gates; do not rerun unchanged CPU core suites. Then commit
-implementation, qualify fixed source, publish evidence, and continue consumers/F6.
+Implemented: public C++ session/placement/owner-local state and KV roots/gradients,
+canonical static parameter owners, separate backward/atomic step, portable schema1
+checkpoint with changed cards/maps/schedule; Python client/manifest and explicit
+model_device=cpu parameter construction; installed external C++ consumer and tests.
+No coordinator forward state/KV replica and no CPU-reference event/gradient input.
+Public struct ABI changed: clients/bindings and recursive header dependents rebuilt.
+
+Development PASSED (not immutable-source qualification):
+- standalone build-public-shards-dev09; Python build-public-shards-python-dev09;
+  sources/public-shards-dev09, byte-verified affected host objects and old kernels.
+- public-shards-cpp-dev06: FP32/FP16 each32 trajectories/512 windows/128 updates,
+  independent CPU FP32/FP64, both schedules/optimizers and state/cache roots.
+- public-shards-repartition-dev06: FP16 two-to-three owners;
+  public-shards-maps-dev07: FP32 separate Full/state maps,three-to-legacy-single.
+- public-shards-python-dev07:41 cases,three families/both schedules,FP16 loss,
+  independent CPU oracle,None/zero/refusal,legacy regressions and fresh-process
+  single-to-two/two-to-three disk restore. Four affected cases passed again on dev09.
+- build-public-shards-consumer-dev08 + public-shards-consumer-dev08: current CMake
+  package install and external public-header-only two-card training/restore.
+- CPU interface25 passed. No tolerance changes.
+- public-shards-profile-dev10 PASSED on source snapshot public-shards-dev10,
+  build dev09; separate half-cache training trace. Prior profiledev07 found16
+  Bool ScatterUpdate AiCPU tasks in consumer-root assembly; integer flags/cast
+  removed those tasks. Confirm exact final counts in profile CSV; not throughput.
+
+All development failures retained. Dev01/02 launcher/include mismatches,dev03
+missing ParameterVjp dependency,standalonedev04 test-only const,dev05 link missing
+new TUs,Pythondev04 import unresolved symbol,consumerdev07 vendor-static install,
+profiledev09 source guard refusal from concurrent vendor fusion_result.json in
+snapshot. No source code changed in that profile; its failed status remains.
+Future device commands run via env -C RUN using absolute source script/test paths,
+keeping vendor files outside frozen source. Builders still use source cwd.
+Current external builders: launchers/build_public_shards_v3.py and
+build_public_consumer.py. Partial compiled-object reuse is explicitly recorded;
+clean builds may reuse byte-identical successful dev09 host objects, not failures.
+
+Next: commit/push implementation, freeze clean public-shards-clean01; build
+public-shards-clean01/public-shards-python-clean01 with --reuse-host matching dev09;
+qualify public C++ both dtypes,3/1-device placements,41 Python cases,CPU25,
+installed consumer and separate profile. Commit reviewed evidence separately and
+push. Then continue public scale consumers and F6 representative/full-size five-
+preset screening. No new resident throughput/full-size claim has been established.
 
 Historical CPU Attention stays deliberately paused; resolve its retained memory/
 timing lock before formal timing. No full-size CPU/mixed/resident result yet.

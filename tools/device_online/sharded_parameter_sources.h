@@ -1,5 +1,6 @@
 #pragma once
 #include "sharded_full_vjp.h"
+#include "parameter_vjp.h"
 #include "tide/parameters.h"
 
 namespace tide::device_online {
@@ -18,4 +19,8 @@ ShardedParameterSources sharded_parameter_sources(const Graph&,const ParameterRe
 // Deterministic LPT balance of FP32 canonical owner storage. Owners without a
 // differentiable use remain in the registry but need no gradient/master slot.
 std::vector<int64_t> place_parameter_owners(const ShardedParameterSources&,int64_t devices);
+std::vector<int64_t> place_parameter_owners(const std::vector<ParameterOwner>&,
+    const std::vector<bool>& differentiable_use,int64_t devices);
+std::vector<ParameterVjp> sharded_parameter_layout(const Graph&,const ParameterRegistry&,int64_t width,
+    const std::vector<at::Device>&,int64_t tensor_budget,bool controls);
 } // namespace tide::device_online

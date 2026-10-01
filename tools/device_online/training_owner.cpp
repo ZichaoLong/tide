@@ -1,15 +1,13 @@
 #include "training_internal.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
-#include <atomic>
 #include <limits>
 #include <stdexcept>
 
 namespace tide {
 using namespace device_online;
-namespace {std::atomic<uint64_t> next_session{1};}
 ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ResidentOptimizerKind k,
     std::vector<OptimizerGroup> groups,ResidentTrainingLimits l,const ResidentTrainingCheckpoint* checkpoint)
-    :graph(std::move(g)),device(d),limits(l),kind(k),session(next_session.fetch_add(1)),cut(q.cut) {
+    :graph(std::move(g)),device(d),limits(l),kind(k),session(training_detail::session_id()),cut(q.cut) {
   training_detail::no_grad();
   if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0)
     throw std::invalid_argument("resident training requires an explicit logical NPU");
@@ -17,6 +15,11 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
       ||l.program_workspace_bytes<1||l.reverse_chunk_rows<1)
     throw std::invalid_argument("resident training requires recorded journals and positive memory/window limits");
   if(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw)throw std::invalid_argument("unknown resident optimizer");
+  if(!l.placement.devices.empty()) {
+    sharded=std::make_unique<training_detail::ShardedTrainingOwner>(graph,std::move(m),q,d,k,std::move(groups),l,checkpoint);return;
+  }
+  if(!l.placement.full_owners.empty()||!l.placement.state_owners.empty())
+    throw std::invalid_argument("explicit owner maps require a logical device list");
   model=training_detail::freeze_model(std::move(m),d,versions);
   if(checkpoint) {
     if(checkpoint->mode!=l.forward.mode||checkpoint->zeta!=l.forward.zeta)
@@ -49,6 +52,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   bytes_per_window=static_cast<Index>(bytes);initial_present=state.second.clone();
 }
 void ResidentTrainingSession::Impl::check() const {
+  if(sharded){sharded->check();return;}
   training_detail::no_grad();
   if(!flow)throw std::logic_error("resident training session is closed");
   if(failed)throw std::logic_error("resident training failed; restore a prior checkpoint into a new owner");
@@ -67,6 +71,7 @@ ResidentTrainingSession::ResidentTrainingSession(Graph g,Model m,const ResidentT
 ResidentTrainingSession::~ResidentTrainingSession()=default;
 ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<External>& input,Index stop,Index seal) {
   auto& s=*impl_;s.check();
+  if(s.sharded)return s.sharded->advance(input,stop,seal);
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
   if(s.saved.size()>=size_t(s.limits.windows)||s.bytes_per_window>s.limits.retained_bytes-s.saved_bytes)
@@ -98,6 +103,7 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
 }
 ResidentStep ResidentTrainingSession::step() {
   auto& s=*impl_;s.check();
+  if(s.sharded)return s.sharded->step();
   if(!s.gradients_ready)throw std::logic_error("resident step requires completed backward");
   if(s.generation==std::numeric_limits<Index>::max())throw std::overflow_error("resident parameter generation exhausted");
   try {
@@ -114,12 +120,17 @@ ResidentStep ResidentTrainingSession::step() {
   }catch(const std::invalid_argument&){throw;}
   catch(...){s.failed=true;throw;}
 }
-void ResidentTrainingSession::detach() {auto& s=*impl_;s.check();try{s.discard();}catch(...){s.failed=true;throw;}}
-Result ResidentTrainingSession::result() const {impl_->check();return impl_->flow->result();}
-Index ResidentTrainingSession::cut() const {impl_->check();return impl_->cut;}
-Index ResidentTrainingSession::generation() const {impl_->check();return impl_->generation;}
-Index ResidentTrainingSession::retained_windows() const {impl_->check();return impl_->saved.size();}
+void ResidentTrainingSession::detach() {auto& s=*impl_;s.check();if(s.sharded){s.sharded->detach();return;}try{s.discard();}catch(...){s.failed=true;throw;}}
+Result ResidentTrainingSession::result() const {impl_->check();return impl_->sharded?impl_->sharded->result():impl_->flow->result();}
+Index ResidentTrainingSession::cut() const {impl_->check();return impl_->sharded?impl_->sharded->cut():impl_->cut;}
+Index ResidentTrainingSession::generation() const {impl_->check();return impl_->sharded?impl_->sharded->generation():impl_->generation;}
+Index ResidentTrainingSession::retained_windows() const {impl_->check();return impl_->sharded?impl_->sharded->retained_windows():impl_->saved.size();}
+ResidentPlacement ResidentTrainingSession::placement() const {
+  impl_->check();if(impl_->sharded)return impl_->sharded->placement();
+  return {{impl_->device},"locality",std::vector<Index>(impl_->graph.nodes.size(),0),std::vector<Index>(impl_->graph.nodes.size(),0)};
+}
 void ResidentTrainingSession::close() {
+  if(impl_->sharded){impl_->sharded->close();return;}
   if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->optimizer.reset();impl_->gradient={};}
 }
 } // namespace tide

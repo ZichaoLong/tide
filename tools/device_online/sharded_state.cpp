@@ -55,6 +55,11 @@ ShardedState::ShardedState(const ContentProfile& p,FullPlacement placement,const
   if(impl_->reserved>budget)throw std::logic_error("state shards exceeded admission");
 }
 ShardedState::~ShardedState()=default;
+std::vector<StateOwnerValues> ShardedState::state_values() const {
+  std::vector<StateOwnerValues> out;
+  for(const auto& s:impl_->shards)out.push_back({s.owner->global_nodes(),s.owner->state().values,s.owner->state().present});
+  return out;
+}
 void ShardedState::append_read(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,const at::Tensor& stage,
     const at::Tensor& error,int64_t operator_budget) {
   const auto rows=ready.fibers.size(0);auto scores=at::zeros({rows*2},content.scores.options());p.zero(scores);

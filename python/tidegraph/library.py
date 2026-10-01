@@ -17,10 +17,13 @@ class GraphRuntime:
     parameter ownership; in-place optimizer updates and load_state_dict are
     supported by host sessions. Resident inference freezes weights at session
     construction and refuses later changes until explicit reconstruction.
+    Resident initialization may explicitly store caller parameters on CPU with
+    model_device="cpu"; persistent execution banks live on session NPUs.
     No inputs, task head, optimizer or output directories are hidden
     in this object. Several sessions may share its parameters.
     """
-    def __init__(self, config, *, device, options=None, native_library=None, resident_library=None, model=None):
+    def __init__(self, config, *, device, options=None, native_library=None, resident_library=None, model=None,
+                 model_device=None):
         self.config = config if isinstance(config, GraphConfig) else GraphConfig.from_dict(config)
         c = self.config
         requested = c.execution if options is None else options
@@ -36,6 +39,10 @@ class GraphRuntime:
         from .placement import request as placement_request, validate as validate_placement
         self.placement = placement_request(requested.placement).resolve(self.device)
         self.resident = self.placement["events"].type != "cpu"
+        self.requested_model_device = None if model_device is None else str(model_device)
+        self.model_device = self.device if model_device is None else torch.device(model_device)
+        if self.model_device != self.device and not (self.resident and self.model_device == torch.device("cpu")):
+            raise ValueError("model_device must match execution device, or be cpu for resident initialization")
         if not self.resident:
             validate_placement(c.graph, getattr(torch, c.dtype), self.placement)
             if resident_library is not None or requested.resident_limits is not None:
@@ -50,20 +57,20 @@ class GraphRuntime:
             from .settle import SettleGraph
             self.spec = SettleGraph(c.graph, c.ranks)
         self.model = model if model is not None else Model(c.graph, c.width, c.seed, getattr(torch, c.dtype),
-                                                         projection_layout=c.projection_layout).to(self.device)
+                                                         projection_layout=c.projection_layout).to(self.model_device)
         if model is None and c.scale_init is not None:
             with torch.no_grad():
                 for name in ("input_scale", "output_scale", "agg_scale", "edge_scale"):
                     for parameter in getattr(self.model, name):
                         parameter.fill_(c.scale_init)
         if (self.model.width != c.width or self.model.graph_identity != c.graph.identity
-                or any(p.device != self.device or p.dtype != getattr(torch, c.dtype)
+                or any(p.device != self.model_device or p.dtype != getattr(torch, c.dtype)
                        for p in self.model.state_dict().values())):
             raise ValueError("supplied model does not match configured width/nodes/device/dtype")
         if self.spec:
             self.execution_graph, self.execution_model = self.spec.embed(self.model)
             # The identity boundary buffers belong on the selected device too.
-            self.execution_model.to(self.device)
+            self.execution_model.to(self.model_device)
         else:
             self.execution_graph, self.execution_model = c.graph, self.model
         self.options = requested.resolve(c.family, self.execution_graph)
@@ -150,6 +157,7 @@ class GraphRuntime:
             digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
         record = dict(schema="tide-runtime-v1", package_version=__version__, package_sha256=digest.hexdigest(),
                       model_origin=self.model_origin,
+                      model_storage=dict(requested=self.requested_model_device, resolved=str(self.model_device)),
                       configuration=self.config.to_dict(), config_sha256=self.config.identity,
                       runtime=manifest(self.device, self.resolution_reason, getattr(torch, self.config.dtype)),
                       requested_options=self.requested_options.to_dict(), resolved_options=self.options.to_dict(),

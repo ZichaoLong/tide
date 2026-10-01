@@ -97,9 +97,13 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
   return out;
 }
 std::vector<int64_t> place_parameter_owners(const ShardedParameterSources& p,int64_t devices) {
-  if(devices<1||devices>16||p.owners.size()!=p.contributions.size())throw std::invalid_argument("invalid canonical owner placement");
+  std::vector<bool> active;for(const auto& parts:p.contributions)active.push_back(!parts.empty());
+  return place_parameter_owners(p.owners,active,devices);
+}
+std::vector<int64_t> place_parameter_owners(const std::vector<ParameterOwner>& owners,const std::vector<bool>& active,int64_t devices) {
+  if(devices<1||devices>16||owners.size()!=active.size())throw std::invalid_argument("invalid canonical owner placement");
   std::set<const void*> identities;std::set<std::string> names;
-  for(const auto& owner:p.owners) {
+  for(const auto& owner:owners) {
     if(!owner.value.defined()||owner.value.numel()<1||!owner.value.device().is_cpu()
         ||(owner.value.scalar_type()!=at::kFloat&&owner.value.scalar_type()!=at::kHalf)
         ||owner.aliases.empty()||owner.canonical!=owner.aliases.front()
@@ -108,8 +112,8 @@ std::vector<int64_t> place_parameter_owners(const ShardedParameterSources& p,int
       throw std::invalid_argument("invalid canonical parameter owner");
     for(const auto& name:owner.aliases)if(!names.insert(name).second)throw std::invalid_argument("duplicate parameter alias");
   }
-  std::vector<size_t> order(p.owners.size());std::iota(order.begin(),order.end(),0);
-  auto cost=[&](size_t i){return p.contributions[i].empty()?0:p.owners[i].value.numel();};
+  std::vector<size_t> order(owners.size());std::iota(order.begin(),order.end(),0);
+  auto cost=[&](size_t i){return active[i]?owners[i].value.numel():0;};
   std::stable_sort(order.begin(),order.end(),[&](size_t a,size_t b){return cost(a)>cost(b);});
   std::vector<long double> load(devices,0);std::vector<int64_t> out(order.size());
   for(auto i:order) {

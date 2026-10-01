@@ -17,16 +17,18 @@ def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", 
                        width=4, ranks=(1, 2) if family == "settle" else ())
 
 
-def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", mode="hard", zeta=1.0, **read_options):
+def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", mode="hard", zeta=1.0,
+            model_device=None, resident_workspace_bytes=64*1024*1024, **read_options):
     cfg = configuration(family, full, aggregation, **read_options)
     if device == "cpu":
         r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True, mode=mode, zeta=zeta))
     else:
-        r = GraphRuntime(cfg, device=device, native_library=os.environ["TIDE_BUILD_DIR"],
+        r = GraphRuntime(cfg, device=device, model_device=model_device, native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
             options=ExecutionOptions(implementation="native", schedule=schedule, trace=True, mode=mode, zeta=zeta,
                 placement=ExecutionPlacement(preset="resident"),
-                resident_limits=ResidentLimits(queue=96, arrivals=128, outputs=128, trace=512)))
+                resident_limits=ResidentLimits(queue=96, arrivals=128, outputs=128, trace=512,
+                                                workspace_bytes=resident_workspace_bytes)))
     r.model.nodes[2].weight = r.model.nodes[0].weight
     r.model.nodes[3].read = r.model.nodes[0].bias
     r.model.input_scale[1] = r.model.agg_scale[0]
@@ -53,9 +55,10 @@ def roots(session, window, mode):
         loss = safe.square().sum() * (0 if mode == "zero" else .0625)
         gradient, = torch.autograd.grad(loss, (leaf,))
     factor = 0 if mode == "zero" else 1
+    state_roots = (dict(states=[dict(final=torch.full_like(s.values, factor*.03125)) for s in window.states])
+                   if window.states else dict(final=torch.full_like(window.state_values, factor*.03125)))
     return session.cotangents(window, outputs=gradient.detach(),
-        pending=torch.full_like(window.pending_values, factor * .015625),
-        final=torch.full_like(window.state_values, factor * .03125))
+        pending=torch.full_like(window.pending_values, factor * .015625), **state_roots)
 
 
 def terms(result, continuation, mode):
@@ -75,13 +78,19 @@ def compare_parameters(actual, model):
 
 def compare_gradients(gradient, model, expected, input_leaf, input_gradient):
     named = model.state_dict(keep_vars=True)
-    packed, connected = gradient.values.cpu(), gradient.connected.cpu()
-    for i, name in enumerate(gradient.names):
-        ref = expected[id(named[name])]
-        assert connected[i].item() == (ref is not None), name
-        if ref is not None:
-            value = packed.narrow(0, gradient.offsets[i], ref.numel()).reshape(ref.shape)
-            torch.testing.assert_close(value, ref, atol=1e-6, rtol=1e-5)
+    shards = gradient.parameter_shards or [gradient]
+    seen = set()
+    for shard in shards:
+        packed, connected = shard.values.cpu(), shard.connected.cpu()
+        for i, name in enumerate(shard.names):
+            assert name not in seen
+            seen.add(name)
+            ref = expected[id(named[name])]
+            assert connected[i].item() == (ref is not None), name
+            if ref is not None:
+                value = packed.narrow(0, shard.offsets[i], ref.numel()).reshape(ref.shape)
+                torch.testing.assert_close(value, ref, atol=1e-6, rtol=1e-5)
+    assert len(seen) == len(expected)
     actual = torch.zeros_like(input_leaf)
     for boundary in gradient.boundaries:
         coordinates, valid = boundary.coordinates.cpu(), boundary.valid.cpu()

@@ -2,6 +2,7 @@
 #include "state_reverse_view.h"
 
 namespace tide::device_online {
+struct StateOwnerValues {std::vector<int64_t> nodes;at::Tensor values,present;};
 // Local parameter/cache records, with a static inverse node map. Actual event
 // and source journals are packed from the candidate's coordinator tape later;
 // state.metadata/values/count are intentionally absent in this owner fragment.

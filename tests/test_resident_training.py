@@ -29,8 +29,9 @@ def test_resident_python_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path)
 
 
-def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, **read_options):
-    r = runtime(family, target, schedule, full, aggregation, emit_mode, zeta, **read_options)
+def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, placement=None, model_device=None, **read_options):
+    r = runtime(family, target, schedule, full, aggregation, emit_mode, zeta, model_device=model_device,
+                resident_workspace_bytes=1024**3 if placement else 64*1024**2, **read_options)
     cpu = runtime(family, "cpu", full=full, aggregation=aggregation, mode=emit_mode, zeta=zeta, **read_options)
     record = r.manifest()["resident"]
     assert record["mode"] == emit_mode and record["zeta"] == zeta
@@ -42,7 +43,9 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
     values[0, 1].zero_()
     oracle = cpu.session(2)
     with torch.no_grad():
-        session = r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **options)])
+        training_limits = ResidentTrainingLimits(backward_bytes=8*1024**3) if placement else None
+        session = r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **options)],
+                                     placement=placement, limits=training_limits)
         original = session.checkpoint()
         for step, mode in enumerate(("all", "zero", "none")):
             x = values.clone().requires_grad_(True)
@@ -82,7 +85,7 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
                 with pytest.raises(FileExistsError):
                     session.save(path)
                 session.close()
-                session = r.training_session(2, checkpoint=path)
+                session = r.training_session(2, checkpoint=path, placement=placement, limits=training_limits)
                 tree_equal(checkpoint, session.checkpoint())
                 checkpoint["state"]["values"].fill_(123)
             oracle.detach()

@@ -6,9 +6,10 @@ from tidegraph import ResidentTrainingLimits
 from test_resident_library import config, runtime as make_runtime, inputs
 
 
-def runtime(family, target, schedule="greedy", memory="ema", mode="hard"):
+def runtime(family, target, schedule="greedy", memory="ema", mode="hard", model_device=None):
     return make_runtime(replace(config(family, memory), dtype="float16"), target, schedule, mode,
-                        native_library=os.environ["TIDE_BUILD_DIR"])
+                     native_library=os.environ["TIDE_BUILD_DIR"], model_device=model_device,
+                        resident_workspace_bytes=1024**3 if model_device == "cpu" else 64*1024**2)
 
 
 def limits():
@@ -26,24 +27,29 @@ def roots(session, window, mode="all"):
         safe = torch.where(window.outputs.valid[:, None], leaf, torch.zeros_like(leaf))
         gradient, = torch.autograd.grad(safe.square().sum() * (factor*.0625), (leaf,))
     full = lambda x, value: torch.full(x.shape, factor*value, dtype=torch.float32, device=x.device)
-    cache = []
-    for group in window.cache:
-        item = dict(key=full(group.key, .0078125), value=full(group.value, -.015625))
-        if group.log_bias is not None:
-            item["log_bias"] = full(group.log_bias, .0234375)
-        padding = torch.arange(group.key.shape[1], device=group.key.device)[None, :] >= group.lengths[:, None]
-        for name in item:
-            item[name].masked_fill_(padding if name == "log_bias" else padding[:, :, None, None], float("nan"))
-        cache.append(item)
+    def state(values, groups):
+        cache = []
+        for group in groups:
+            item = dict(key=full(group.key, .0078125), value=full(group.value, -.015625))
+            if group.log_bias is not None:
+                item["log_bias"] = full(group.log_bias, .0234375)
+            padding = torch.arange(group.key.shape[1], device=group.key.device)[None, :] >= group.lengths[:, None]
+            for name in item:
+                item[name].masked_fill_(padding if name == "log_bias" else padding[:, :, None, None], float("nan"))
+            cache.append(item)
+        return dict(final=full(values, .03125), cache=cache)
+    state_roots = (dict(states=[state(s.values, s.cache) for s in window.states])
+                   if window.states else state(window.state_values, window.cache))
     return session.cotangents(window, outputs=gradient.detach(),
-        pending=full(window.pending_values, .015625), final=full(window.state_values, .03125), cache=cache)
+        pending=full(window.pending_values, .015625), **state_roots)
+
 
 
 def update(session, values, start, stop, mode="all"):
     args, kw = inputs(session, values, start, stop)
     window = session.advance_device(*args, **kw)
     gradient = session.backward([roots(session, window, mode)])
-    assert gradient.values.dtype == torch.float32
+    assert all(p.values.dtype == torch.float32 for p in (gradient.parameter_shards or [gradient]))
     assert session.step().applied
     return gradient
 

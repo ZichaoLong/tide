@@ -199,3 +199,7 @@ KERNELS["peer-state-vjp"] = KERNELS["peer-state-training"] = "tide_state_reverse
 
 CHECKS["sequence"] = ("tide-device-sequence-check", ("float32",))
 MARKERS["sequence"] = "device-sequence: passed"
+
+CHECKS["resident-sharded-training"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
+MARKERS["resident-sharded-training"] = "resident-sharded-session: passed"
+KERNELS["resident-sharded-training"] = "tide_state_reverse_"

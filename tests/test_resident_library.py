@@ -31,10 +31,11 @@ def config(family, memory="ema"):
     return GraphConfig(family, graph, width=4, ranks=(1,2) if family == "settle" else ())
 
 
-def runtime(cfg, target, schedule="greedy", mode="hard", **kwargs):
+def runtime(cfg, target, schedule="greedy", mode="hard", resident_workspace_bytes=64*1024*1024, **kwargs):
     options = ExecutionOptions(implementation="native", schedule=schedule, mode=mode, trace=True,
         placement=ExecutionPlacement(preset="resident"), resident_limits=ResidentLimits(
-            queue=96, arrivals=128, outputs=128, trace=2048, kv_rows=64, kv_trace_rows=2048))
+            queue=96, arrivals=128, outputs=128, trace=2048, kv_rows=64, kv_trace_rows=2048,
+            workspace_bytes=resident_workspace_bytes))
     return GraphRuntime(cfg, device=target, options=options,
                         resident_library=os.environ["TIDE_RESIDENT_LIBRARY"], **kwargs)
 

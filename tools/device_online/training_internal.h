@@ -3,16 +3,12 @@
 #include "content_flow.h"
 #include "device_optimizer.h"
 #include "retained_tape.h"
+#include "training_parameters.h"
+#include "sharded_training_owner.h"
 
 namespace tide {
-namespace training_detail {
-struct Version {Tensor value;int64_t version;const void* data;};
-Model freeze_model(Model,at::Device,std::vector<Version>&);
-Continuation freeze_continuation(Continuation);
-void restore_parameters(Model&,const ResidentTrainingCheckpoint&);
-void no_grad();
-}
 struct ResidentTrainingSession::Impl {
+  std::unique_ptr<training_detail::ShardedTrainingOwner> sharded;
   struct Saved {
     ResidentToken token;
     device_online::RetainedTape tape;

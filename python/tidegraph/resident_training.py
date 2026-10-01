@@ -7,12 +7,12 @@ from .native_records import from_continuation, to_continuation, window_records
 from .records import Continuation, Result
 from .resident import parameter_identity
 from .resident_inputs import external_window, forward_limits
-from .resident_training_options import ResidentTrainingLimits, optimizer_groups
+from .resident_training_options import ResidentTrainingLimits, ResidentPlacement, optimizer_groups
 
 
 class ResidentTrainingSession:
     def __init__(self, runtime, batch_size, *, continuation=None, optimizer=None,
-                 groups=None, limits=None, checkpoint=None):
+                 groups=None, limits=None, checkpoint=None, placement=None):
         from .coordinates import integers
         integers("training batch size", batch_size)
         if batch_size < 1:
@@ -28,6 +28,8 @@ class ResidentTrainingSession:
         elif not isinstance(limits, ResidentTrainingLimits):
             limits = ResidentTrainingLimits(**limits)
         self.runtime, self.batch_size, self.limits = runtime, batch_size, limits
+        self.requested_placement = (placement if isinstance(placement, ResidentPlacement)
+                                    else ResidentPlacement(**({} if placement is None else placement)))
         core, module = runtime.engine.core, runtime.engine.module
         if not hasattr(module, "TrainingSession"):
             raise ValueError("resident backend was built without the explicit training API")
@@ -35,6 +37,8 @@ class ResidentTrainingSession:
         self.parameters = parameter_identity(runtime.execution_model)
         native_limits = module.TrainingLimits()
         native_limits.forward = forward_limits(runtime, training=True)
+        native_limits.placement = self.requested_placement.native(
+            module, runtime.device, len(runtime.execution_graph.nodes))
         for name, value in limits.to_dict().items():
             setattr(native_limits, name, value)
         if checkpoint is not None:
@@ -83,46 +87,29 @@ class ResidentTrainingSession:
         external, stop, sealed_until = external_window(self.runtime, self.batch_size, self.cut, inputs, stop, sealed_until)
         return self.owner.advance(external, stop, sealed_until)
 
-    def cotangents(self, window, *, outputs=None, outputs_connected=None, pending=None,
-                   pending_connected=None, final=None, final_connected=None, cache=None):
-        """Make explicit roots; supplied values default to the window's presence mask.
+    @property
+    def placement(self):
+        value = self.owner.placement
+        return dict(devices=[str(d) for d in value.devices], policy=value.policy,
+                    full_owners=value.full_owners, state_owners=value.state_owners)
 
-        Omitted values and masks mean None. All tensors must be detached FP32
-        values/boolean masks on the session NPU. No host event lookup is required.
+    def manifest(self):
+        record = self.runtime.manifest()
+        record["resident"].update(devices=len(self.placement["devices"]), training=True,
+                                  requested_training_placement=self.requested_placement.to_dict(),
+                                  resolved_training_placement=self.placement,
+                                  training_limits=self.limits.to_dict())
+        return record
+
+    def cotangents(self, window, **values):
+        """Detached FP32 roots, including optional owner-local ``states`` dicts.
+
+        Supplied values default to their owner's presence mask. Omitted values
+        and masks mean None; connected zero remains distinct. State/cache roots
+        stay on the device of the corresponding window tensor.
         """
-        r = self.runtime.engine.module.Cotangents()
-        r.token = window.token
-        for name, value, connected, valid in (
-                ("outputs", outputs, outputs_connected, window.outputs.valid),
-                ("pending", pending, pending_connected, window.pending_valid),
-                ("final", final, final_connected, window.state_present)):
-            if value is None:
-                if connected is not None:
-                    raise ValueError("a cotangent connection mask requires values")
-            else:
-                setattr(r, name, value)
-                setattr(r, name + "_connected", valid if connected is None else connected)
-        if cache is not None:
-            cache = list(cache)
-            if len(cache) != len(window.cache):
-                raise ValueError("cache cotangents must match the window's cache groups")
-            packed = []
-            for values, group in zip(cache, window.cache):
-                values = {} if values is None else dict(values)
-                if set(values) - {"key", "value", "log_bias", "key_connected", "value_connected", "log_bias_connected"}:
-                    raise ValueError("unknown cache cotangent field")
-                item = self.runtime.engine.module.CacheCotangents()
-                for name in ("key", "value", "log_bias"):
-                    value, connected = values.get(name), values.get(name + "_connected")
-                    if value is None:
-                        if connected is not None:
-                            raise ValueError("a cache connection mask requires values")
-                    else:
-                        setattr(item, name, value)
-                        setattr(item, name + "_connected", group.present if connected is None else connected)
-                packed.append(item)
-            r.cache = packed
-        return r
+        from .resident_training_roots import cotangents
+        return cotangents(self.runtime.engine.module, window, **values)
 
     def backward(self, roots):
         self._check()
