@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T05:04:58.924272+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T05:12:56.237804+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,82 +29,60 @@ qualify clean immutable source,commit evidence separately.
 
 ## Latest clean qualification
 
-Pushed implementation **9f010c9cf41d6077df90cb8228b8c250663a333b** adds FP16 state/Read,
-SwiGLU/emission,normalized Aggregate and the single selected CMake check target.
-Clean qualification/audit is complete:
-[report](evidence/resident-fp16-forward-components-20261001.md),
-[audit](evidence/resident-fp16-forward-components-20261001.json).
-Snapshot:low-precision-forward-clean01. All12 jobs terminal PASSED/exit0:
-- build-low-precision-forward-clean01:normal full standalone build,5 CTests,loader.
-- build-low-precision-forward-python-clean01:separate Python-owned build,loader.
-- low-precision-forward-{components,windows,adjoints,updates}-clean01:
-  all62 registered cells split23/20/13/6;physical9/1/3/13->logical0.
-- low-precision-forward-python-clean01:196 NPU cases,zero skips,physical9.
-- low-precision-forward-host-clean01:76 interface tests,193 optional NPU skips.
-- low-precision-{state,aggregate,swiglu,emission}-profile-clean02:four separate FP16
-  traces,256MB/180s each. State98 vector;Aggregate4736 vector+128 MIX_AIV;
-  SwiGLU326 vector+40 AI_CORE;emission665 vector+27 AI_CORE. No observed AiCPU or
-  logged CPU fallback. Construction/CPU assertions included;not throughput.
-State/Read48 configurations/336 windows/18 refusals per dtype;Aggregate64/192;
-SwiGLU16 components/4 refusals and256 FP32 windows;emission16/6 and66 FP32 windows.
-Only the existing Full training regression uses conditioned controls:13 frames,
-max4.470348358154297e-6. Other training controls remain strict. AdamW trajectories
-keep eps1e-5;public default eps1e-8/normalization epsilons unchanged.
-Audit launcher:TASK/launchers/low_precision_forward_evidence.py.
+Implementation **8b05c0495fd5bc3cb874f6cb1548b25f3d5ac4b5** is pushed.
+FP16 single-device HARD resident inference is qualified:
+[report](evidence/resident-fp16-inference-20261001.md),
+[audit](evidence/resident-fp16-inference-20261001.json).
+Seven immutable-source jobs all PASSED/exit0:
+- build-low-precision-inference-clean02:standalone,affected host objects rebuilt,
+  six consumers relinked,byte-verified terminal dependencies reused.
+- build-low-precision-inference-python-clean01:separate Python-owned runtime.
+  Both manifests record reuse;neither is a from-scratch vendor rebuild.
+- low-precision-inference-components-clean01:four FP32/FP16 cells,physical3.
+- low-precision-inference-regression-clean01:four affected FP32 cells,physical13.
+- low-precision-inference-python-clean01:215 passed,zero skips,physical9.
+- low-precision-inference-host-clean01:76 passed,212 optional NPU skips.
+- low-precision-inference-profile-clean01:two configurations/eight windows,physical9;
+  2390 AI_VECTOR_CORE,76 AI_CORE,2 MIX_AIV,no observed AiCPU/logged CPU fallback.
+Each selected physical device maps to logical0. Profiling is not throughput.
 
-Prior milestones remain scoped:66a6ca5 complete FP32 event/fiber attention training
-([evidence](evidence/resident-attention-training-20261001.md));466b4c3 FP16 numerical/
-Full/LH/sum components ([evidence](evidence/resident-fp16-components-20261001.md)).
-The clean9f010c9 qualification does NOT enable complete resident FP16 sessions.
-Raw state-dev01 FAILED/exit1 (implicit half Read operand) and state-dev02
-CANCELLED/exit143 (repeated vendor builds) remain preserved. Later dev03 passed.
+Complete flow:78 configurations/312 windows per dtype. Attention payload:
+64 configurations/192 replays per dtype. Includes all9 LH profiles;public controls
+export to payload dtype after FP32 softmax;Read descriptors stay FP32. State,
+messages,KV and outputs retain FP16;bias ticks round individually;normalization/
+weighted attention merge use FP32. Full/LH minima use actual dtype.
+Source/core/binary/loader/raw logs/profiler CSVs and every reused content-archive
+member audited by TASK/launchers/precision_inference_evidence.py8b05c04(full hash).
 
-## Current increment and next action
+Retained failures:build-low-precision-attention-dev01 missing header;
+low-precision-inference-flow-dev03 mismatched minimum dtype;
+low-precision-inference-python-dev04 exported control dtype;
+build-low-precision-inference-clean01 task-local loader assertion incorrectly
+required shared linkage on static components. Each remains FAILED/exit1.
+Successful corrected runs do not relabel them. No task job is currently live
+except the deliberately paused historical CPU baseline below.
 
-FP16 HARD resident inference implementation is ready to commit. It adds half
-QKV/cache/state/input/output and FP32 attention normalization/weighted merge;
-per-tick fiber-bias half rounding; diagnostic journals widen on device and restore
-public payload/control dtype at export; Read descriptors remain FP32. Full/LH
-minimum budget calls now use the actual payload dtype. Runtime manifest states
-payload/scoring/exported-control precision. FP16 HST/SOFTP and training still fail
-explicitly; FP32-master publication/VJPs remain pending. Python is a C++ client.
+Prior milestones:9f010c9 forward components ([evidence](evidence/resident-fp16-forward-components-20261001.md));
+66a6ca5 FP32 event/fiber training ([evidence](evidence/resident-attention-training-20261001.md)).
+Only the older Full training trajectory uses conditioned-control comparison;
+this increment's event/fiber training is strict. No new speed ratio exists.
 
-Development builds/gates,all based on dirty97293d0,are terminal:
-- dev03 attention-payload PASSED both dtypes;FP32 attention-tile,event/fiber
-  training and resident regressions PASSED.
-- dev05 standalone/Python builds PASSED;content_flow/content_export/checker only
-  rebuilt against byte-matched terminal source/objects,without repeated CANN work.
-- dev05 precision-flow PASSED FP32 and FP16,each78 configurations/312 windows,
-  physical9->logical0. Covers EMA/Add,event/five fiber profiles,normalized
-  Aggregate,SwiGLU/slot-affine/phase,all9 LH Full profiles,three shapes including
-  feedback/parallel edges,scalar/vector,dense/tiled,both schedules and own restore.
-- dev05 Python inference:48 PASSED,0 skips,physical9.
-- dev06 new Python FP16 cases with final manifest/refusal assertions:19 PASSED,
-  0 skips,physical9. This is not an independent PyTorch device scheduler.
-- dev05 profile PASSED,physical1:2390 AI_VECTOR_CORE,76 AI_CORE,2 MIX_AIV;
-  no observed AiCPU or logged CPU fallback. Two attention configurations/eight
-  windows,256MB/180s,includes construction/CPU assertions;not throughput.
+## Next action
 
-Preserved failures:attention-dev01 build FAILED missing grad_mode include;
-flow-dev03 FAILED mismatched Full/LH minimum dtype;Python-dev04 FAILED exported
-control FP32 vs public payload dtype. All fixed;raw failures remain unchanged.
-The obsolete dev02 Add fixture was corrected before any run,not a runtime change.
+Commit/push this clean evidence separately. Continue implementation;no requested
+pause. Next required integration is FP16 training:FP32 master optimizer,
+finite/representability gate before commits,payload-aware parameter publication,
+actual-half-forward VJPs and retained-window/checkpoint/control support. Do not
+merely remove dtype guards or widen a whole half forward into FP32:recomputed
+VJP intermediates must respect forward rounding. Begin with bounded optimizer/
+publication components and independent CPU master-update comparisons,then
+integrate the complete training owner. FP16 HARD inference remains supported;
+FP16 HST/SOFTP and training explicitly refuse until implemented/verified.
 
-Next:commit/push implementation,then freeze low-precision-inference-clean01 at
-that exact commit. Build two runtimes with TASK/launchers/qualify_precision_inference.py
-standalone low-precision-inference-clean01 / python low-precision-inference-python-clean01.
-It byte-verifies all component inputs versus terminal source and rebuilds changed
-host objects/relinks six standalone consumers;archive/object provenance is saved
-in build-reuse.json. Do not describe this as a from-scratch vendor rebuild.
-Run eight affected standalone cells (attention-payload,precision-flow,
-attention-tile,event-training,fiber-training,resident),Python resident inference/
-training plus new FP16 cases,CPU interfaces and separate precision-flow FP16 trace.
-Core source is unchanged;do not rerun8954 CPU cases. Commit clean evidence separately.
-
-Continue FP16 VJP/master publication/control modes after inference qualification;
-then peer progression/communication/training,five-preset screening,full-size
-CPU/mixed/resident comparisons and migration/version/CUDA evidence. F1–F7 remain
-incomplete. No new whole-model speed comparison exists.
+Then peer progression/communication/training,five-preset screening,representative
+and full-size CPU/mixed/resident comparisons and migration/version/CUDA evidence.
+F1–F7 remain incomplete. Use affected-path checks/terminal byte-verified reuse;
+never restart all core tests or historical slow timing without a concrete reason.
 
 ## Environment and bounded execution
 

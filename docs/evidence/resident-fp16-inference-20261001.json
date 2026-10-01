@@ -1,0 +1,292 @@
+{
+  "schema": "tide-resident-fp16-inference-evidence-v1",
+  "source": "8b05c0495fd5bc3cb874f6cb1548b25f3d5ac4b5",
+  "scope": "single-device FP16 HARD resident inference and affected FP32 regression; independent CPU schedules; not FP16 training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-inference-clean02",
+      "manifest_sha256": "ff94f963a826ef5126b2074e2f25427747833ab4b1da04a7298d899cd4c5b4c6",
+      "reuse_sha256": "f81d7239d2ba05d6b8e077e38e8c62277f33e87a450e43f321dbb1604f32dff0",
+      "source_input_files": 268,
+      "component_sha256": "32182d7920a5d018ae33541f1168dd85a34872dfd38f1fe83666295378633d03",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "5f1c19b02ea459d3057b2375b7f55a525e4a0a8744179ba5353ce4c5cd4d76f4",
+        "tide-precision-flow-check": "7f318d6f4dce52e4947b0c001b779c97e7d34a9859334739441f65952bbe76d0",
+        "tide-attention-payload-check": "3b09c5c658e553ad23e02820f7eb11ea3f96b82cab8dac7b30026b88fb690953",
+        "tide-device-attention-tile-check": "b777923da718d61ac47a7d54b1225d303705308b736c6ef3625de1333922aaba",
+        "tide-resident-event-training-check": "b2f363c9bf43839473e4d081e47c1f7db6c612490cbc358b1577f6e1feaf8218",
+        "tide-resident-fiber-training-check": "33029653dbd593e3e297c3b6398bf4fc8c12bf3708c5b712a21da5bdbbaf01c6",
+        "tide-resident-check": "a63daf951385ecfddbb19058ce12e03c0a6a2c61087b7acc9b4e312e2c86f0c1"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "ff33cb3944575711c31dd74e3113f25ebe5ea1c4e5005a8cf999c9b3a0cf3e11",
+        "tide-precision-flow-check": "d3e5038141d0417eb712f63fcd0ff615ee51f78c2096c74cb78f17ef00c05498",
+        "tide-attention-payload-check": "ae6fb49870d0aec96d8ec760fcf1008f4755ba72fddab2b46edeb8cfd44ec49a",
+        "tide-device-attention-tile-check": "c2d7c1349d1a4ab61fda9c580363d53e791762441bfb1f41046c62d6c6c537b8",
+        "tide-resident-event-training-check": "a75ebb3e40ddec54f58929d0f9a2aca0e706f535ddea1618cb6b3f8af8482d68",
+        "tide-resident-fiber-training-check": "757424f3b24f4c15cbc0ed639d5f80f1d716608ed44eb73eb99d37601633c793",
+        "tide-resident-check": "0eb438f300cb1d468c709ef445b8b28990a12523f81778fb5bb553745600d743"
+      },
+      "parent_content_archive_sha256": "01f4506f59bdd32d2d3cb345d402466a3baf7a5db2a7b002bac968aae8eeaf7c",
+      "content_archive_sha256": "0f7ed25862c6ad9c836b8550302e7128d1dbaeb69fd63ee04ce6fe9645546d7c",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "ad368e72e8e42b97605ecf1c321cbbbb0e0ed65185f1d2f1401f097fe2fe2813",
+        "content_flow.cpp.o": "c61e54dc97230c100b9de015eb1467e967453f9eb68000c16c7504f5ef649e45"
+      }
+    },
+    "python": {
+      "name": "low-precision-inference-python-clean01",
+      "manifest_sha256": "ccd6255e3448d9ed76771c5b6de8786db9b8e1ba3cf0c5044fd1079890b3a4cd",
+      "reuse_sha256": "dae85974a102569b7fb48f927c74f3f029964aa0f103875c4468f0fa3424d91a",
+      "source_input_files": 268,
+      "component_sha256": "32182d7920a5d018ae33541f1168dd85a34872dfd38f1fe83666295378633d03",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "b61533b1c0182279b4c1962b280f7c972c86be31076b5eb55146fa6daf478fd2",
+        "_tide_resident.so": "49525c78c5e55666c048cf36cc24dd6792f86c8f4261d636cfde0e0f1c91a8ee"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "f23d59440806824c27f062570c1cd2ae755d99c7994294ea51243e5f157bc61f",
+        "_tide_resident.so": "eb2d6b7b6890339155cd17c828aa1253288842d19e2af987bc5ad2ffd75ef06e"
+      },
+      "parent_content_archive_sha256": "34082da8cd0fc144d1163ea014ad38c3e07b8318c7b13d8863b3fb11765e96b8",
+      "content_archive_sha256": "801b26811e7794158454464e16117e264d5160e5415afb2ebdcd6958eb2794c3",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "ad368e72e8e42b97605ecf1c321cbbbb0e0ed65185f1d2f1401f097fe2fe2813",
+        "content_flow.cpp.o": "c61e54dc97230c100b9de015eb1467e967453f9eb68000c16c7504f5ef649e45"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-inference-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b7ceb2c090f656bf0eb4bfbd4b6b0908a3907a8685a9bfb71a0d60ecfa28cd20",
+        "task.log": "c00b9e37a353fd1e4d1e24f244c941fbd20098c1e533cbe2241680a19a68c3b2"
+      }
+    },
+    {
+      "name": "build-low-precision-inference-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "3e2846f1624e0fd6b0c6facfcda9fe539a7d62980689214b5024ddeed19bcdda",
+        "task.log": "c00b9e37a353fd1e4d1e24f244c941fbd20098c1e533cbe2241680a19a68c3b2"
+      }
+    },
+    {
+      "name": "low-precision-inference-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "63affefdbc962b9d8c9d91bd5b5bb255e0bdba0eff1da75e37f06883403af117",
+        "task.log": "a73823dca496069294d6d6db2c127f467dedce27b6280e5222873c559251aedb",
+        "queue.json": "8721af8aea4e44ae6424f33584fe12fb31e419a8c3b3faf9d432e0ce00721e15",
+        "gate/result.json": "d6b82fe6e8cdfd8f7a046c500a4361aafd67dae55bb89b924c09b367fdc2071e"
+      }
+    },
+    {
+      "name": "low-precision-inference-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4d3cbc8762d865c0655f1604ff825038846909495f16d254f3d6c80d296c44f8",
+        "task.log": "f3a01d33d4b2ed0d052afe7711fbc2ed80408721cb2fc729e0bde28d8496bb39",
+        "queue.json": "62ff7a7e56864a9824f45f0e7560977595d557beaa784faa04900cfd5f0d4f54",
+        "gate/result.json": "00b0dda1d39e5b7f9152b6010dc9a06f7a14c4535119f0a1d228078222030b98"
+      }
+    },
+    {
+      "name": "low-precision-inference-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ee6afbdb9807c87dcd95389469720892c9997f1fe297f0eeb2288c38ae49cca1",
+        "task.log": "aee9ce91db1f8b922d0b08a2905394c0566d6b8fb67971c73ac6df0eee67ae92",
+        "queue.json": "eec631f8d34c1693c7882dfd77b128668b1b24f9faa1f51f7895f05e5933a8e9"
+      }
+    },
+    {
+      "name": "low-precision-inference-host-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f8128eab99aa595698968a1de0aec6fb97ac9e371f61191d0871a9e775889ee7",
+        "task.log": "cbba9fe3c155b02675d67601edb9b85c9df03d7c9959429831aca6c6dbbdc933"
+      }
+    },
+    {
+      "name": "low-precision-inference-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "180dc1b810dffd44b65f142bca9c7ef1f58b69d774238de94c0c7001df3d4722",
+        "task.log": "62e1d1e873296317f6fd505203dd8a109bd6ba7d44421c42830e24c1074ae98f",
+        "queue.json": "39d1ef93584aef04d9d6085e857cef189deff827f3e92bffcfc40073782eed16",
+        "profile/result.json": "7a5be557ee8a7f19c13a1e401b272b8125c9c133109be1967c1607f94c6bde6d",
+        "profile/profile.log": "ea14d5c060f3b968f8674a969e57bf6d3b7c2c71ed82acf022dce6f0d6ba7ecc"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "attention-payload",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-attention-payload-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "attention-payload-float32.log",
+      "log_sha256": "7177f1f13ccee666a750fb65fd36f9ba485f1a22c4c3b6167061231c5f8c333f"
+    },
+    {
+      "check": "attention-payload",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-attention-payload-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "attention-payload-float16.log",
+      "log_sha256": "c5d72c44db811fcfa9c841f4e229626b1c13fb32d47b0a0c49ff441e04be3b60"
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-flow-float32.log",
+      "log_sha256": "8a351aa45bb67163e30069581709eaaf8dbc9cbb414074e9bf4fcc64eede9ed6"
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-flow-float16.log",
+      "log_sha256": "e64d13bb4996fded63bc59d998ba1c775f6c72603c8052c9fa8175f787d7ef73"
+    },
+    {
+      "check": "attention-tile",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-device-attention-tile-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "attention-tile-float32.log",
+      "log_sha256": "3cf31ed22dbcbae500c80dd5fdc2e75e91597a1096bad6c7b9b593ffde113aee"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "08ee95e85f296deb64170d52c24d870d1674544bea1b204d79e5305ab4c459d7"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "ea378cc37a4490cbc0c1ee6c1485402e830d0c80d28c5055fb55be9242f87846"
+    },
+    {
+      "check": "resident",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-inference-clean02/tide-resident-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "resident-float32.log",
+      "log_sha256": "1b32b7c636f6282f7ef48acab864cac13679a9335507a95275109797b1ca244f"
+    }
+  ],
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 2390,
+      "AI_CORE": 76,
+      "MIX_AIV": 2
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261001130946196_00804916AMHPFPPG/mindstudio_profiler_output/op_summary_20261001130952.csv": "f15736f486ed9ff15672a665850841187aef21c35eed9fa9439fa65ba0d497e6",
+      "raw/PROF_000001_20261001130946196_00804916AMHPFPPG/mindstudio_profiler_output/api_statistic_20261001130952.csv": "fd696c6dd19ce60f39c74b28748422d5870fa17934a70d7e6ca484b2a5aef289"
+    },
+    "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-attention-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "90f0c6221d90514e19f03ca7f47906043f1cf81726b0863bc53371b8474cb04b",
+        "task.log": "046942bdefd4c75b2433ca7b94c768812a84a0372e47a736529ea67860f2d276"
+      }
+    },
+    {
+      "name": "low-precision-inference-flow-dev03",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "f47eb4bbcb91590de7eebd82ce4b42ceb708bfa96b9e5ccda73887ba5c3bd74a",
+        "task.log": "72b980f23f0d8acfcb63e9e410563cc43b7808e0f932a9acd4cfce278acb9bee"
+      }
+    },
+    {
+      "name": "low-precision-inference-python-dev04",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "7f85f2e532ef8ce8d5c291e45edd051cb5c03a041f99d39e76d2e349490ca067",
+        "task.log": "077c22d1b461f25d3d6c0e65760616d8372ed8a313acbcbb2fc0f0d60081ad0b"
+      }
+    },
+    {
+      "name": "build-low-precision-inference-clean01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "8bdd62039659529a5b71adab3fd39b5c75e6d71725fc9f2519fdb523ea5efe51",
+        "task.log": "4536f0868f11827561ca89a2783843155d1d83411ca525ce912b64d3bb99bad8"
+      }
+    }
+  ]
+}
