@@ -8,8 +8,10 @@ int main(int argc,char** argv) {
   try {
     auto c=tide_flow::parse(argc,argv);
     if(c.runtime.help){portable_torch::print_usage(std::cout,argv[0]);
-      std::cout<<"--packet PATH --family pdg|timed-dag|settle --preset cpu|mixed-a|mixed-b|mixed-c --schedule streaming|prefill\n"
-        "--training --optimizer sgd|adamw --steps N --warmup N --windows-per-step N --threads N --parameter-budget BYTES --diagnostics\n";return 0;}
+      std::cout<<"--packet PATH --family pdg|timed-dag|settle --preset cpu|mixed-a|mixed-b|mixed-c|resident --schedule streaming|prefill\n"
+        "--training --optimizer sgd|adamw --steps N --warmup N --windows-per-step N --threads N --parameter-budget BYTES --diagnostics\n"
+        "--devices N --owner-policy memory|locality --chunk-policy conservative|aggressive\n"
+        "--resident-{queue,arrivals,outputs,trace,stages,workspace-bytes,full-chunk-rows,emission-chunk-rows,aggregate-chunk-rows,attention-chunk-rows,attention-key-rows,kv-rows,kv-trace-rows,max-repeat-ticks,retained-bytes,backward-bytes,optimizer-bytes,program-workspace-bytes,reverse-chunk-rows} N\n";return 0;}
     auto p=tide_flow::read_packet(c.packet);auto device=portable_torch::resolve_device(c.runtime);
     at::set_num_threads(c.threads);at::set_num_interop_threads(1);
     if(!std::filesystem::create_directory(c.runtime.output_dir))throw std::invalid_argument("output directory must be new");

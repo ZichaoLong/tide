@@ -74,12 +74,36 @@ it does not claim to serialize an application bundle with head/data cursor.
 
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
 switches `--read`, `--control`, `--selection`, `--events`, `--scoring-dtype` retained.
-The current consumer is single-device. The consumer has not yet integrated resident
-training and sharding; `--preset resident` fails explicitly.
-Broadcast resident qualifications cannot certify this per-edge model. [HARD slot-affine reverse/publication](resident-emission-vjp.md) is being developed
-and tested separately; compact projection owners and consumer integration are
-prerequisites to
-the resident wide comparison, alongside total memory and chunk admission.
+CPU/mixed consumers currently use one payload device. `--preset resident` now
+has a separate public C++/CANN consumer: FP32 single-device inference and
+single/multi-device complete training. Python uses `--implementation native` as
+a client of that same backend, not an independent PyTorch resident scheduler.
+Implementation,development results and fixed-source qualification remain distinct
+in [STATUS](STATUS.md). [HARD slot-affine reverse/publication](resident-emission-vjp.md)
+is independently qualified; broadcast evidence is not used for this model.
+
+The resident graph supplies actual packed output coordinates,values and presence.
+Only present rows enter head/loss arithmetic. Output cotangents are scattered back
+to the public window; its backward returns actual boundary input gradients.
+External input coordinates map those gradients to embedding rows in one packed
+accumulation per window,including repeated token IDs. Previous-cut pending leaves
+stay detached. Head/embedding use staged FP32 SGD/AdamW proposals; all consumer
+values and slots must be finite before requesting the graph's atomic optimizer
+step. Consumer publication follows graph acceptance. None and connected zero are
+distinct; no CPU reference result or gradient becomes a candidate input.
+
+Output compaction and its count observation occur at the public window boundary.
+Online graph readiness,selection and recursive event progression remain device
+controlled. The current external-input adapter prepares host coordinates and
+stacks payload rows in bulk. Neither boundary adapter is a claim of zero host
+work across the entire application. Optional diagnostics explicitly materialize
+CPU observables; normal training does not export graph state.
+
+Projection banks and physical partial gradients remain on the coordinator.
+Multi-device Full/state/KV and canonical optimizer support does not yet make this
+wide model fully sharded. Compact projection owners,total-memory admission,safe
+chunking and multi-device inference remain pending. FP16 consumer qualification
+and full-size performance are also pending.
 
 ## Commands and records
 
@@ -103,6 +127,23 @@ python scripts/run_execution_flow.py --packet artifacts/flow-input/workload.json
   --implementation libtorch --native-binary build/online/tidegraph-online-bench \
   --preset cpu --schedule streaming --training
 ```
+
+For the optional resident consumer,build with `-DTIDE_ONLINE_RESIDENT=ON` against
+installed matching TideGraph and TideResident packages. The Python client supplies
+`--resident-library BUILD_DIR` alongside its native library. Use `--preset resident`
+and `--device npu:0`; training can request `--devices 2` (or another declared count)
+and `--owner-policy memory|locality`. The launcher leases/remaps physical devices
+outside this portable command. Multi-device inference is explicitly refused until
+its public consumer is implemented; it is not simulated with retained training tapes.
+
+`--chunk-policy conservative|aggressive` and `--resident-...` options expose the
+public queue,arrival,output,journal,stage,KV,physical-chunk and workspace capacities,
+plus retained/backward/optimizer/program budgets. See `--help` for exact names.
+Consumer defaults reserve a forward budget of512MiB and backward budget of2GiB;
+these allow vendor workspace and nested reverse reservations at the default journal
+capacity. They are limits,not a total peak-memory estimate or a guarantee of scale
+admission. Exhaustion is explicit; increasing only one limit may leave another
+unsatisfied. Requested and effective placement/limits are recorded.
 
 The LibTorch launcher does not import Torch. It derives and hashes the exact v2
 text input from the validated JSON, records the executable digest, and launches

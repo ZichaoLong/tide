@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 from durable_records import write_json
 from flow_protocol import validate_packet
+from flow_resident_options import add_arguments, validate as validate_resident_options
 
 
 def main():
@@ -28,6 +29,7 @@ def main():
     p.add_argument("--native-library", type=Path)
     p.add_argument("--native-binary", type=Path)
     p.add_argument("--diagnostics", action="store_true")
+    add_arguments(p)
     for name in ("read", "control", "selection", "events"):
         p.add_argument("--"+name, default="auto")
     p.add_argument("--scoring-dtype", choices=("profile", "payload", "float32", "float64"), default="profile")
@@ -42,6 +44,7 @@ def main():
     a.output_dir = a.output_dir.resolve()
     a.output_dir.mkdir(parents=True, exist_ok=False)
     try:
+        validate_resident_options(a)
         if a.implementation == "libtorch":
             from run_flow_native import run as run_native
             result = run_native(packet,a)
@@ -62,6 +65,7 @@ def python_run(packet,a):
     from tidegraph.runtime import resolve_device
     from tools.online_bench.host import run
     from tools.online_bench.records import observer
+    from flow_resident_options import python_arguments
     from durable_records import replace_text
     torch.set_num_threads(a.threads);torch.set_num_interop_threads(1)
     device,_ = resolve_device(a.device)
@@ -71,7 +75,8 @@ def python_run(packet,a):
                schedule=a.schedule,preset=a.preset,training=a.training,optimizer=a.optimizer,
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
-               parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None)
+               parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None,
+               **python_arguments(a,device))
     if a.diagnostics:
         replace_text(a.output_dir/"diagnostics.jsonl","".join(json.dumps(row,allow_nan=False)+"\n" for row in rows))
     return result

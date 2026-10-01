@@ -7,16 +7,18 @@ from .fixture import build_model, encode
 
 
 def runtime_for(packet, *, family, implementation, device, dtype, schedule, preset, trace=False,
-                native_library=None, placement=None):
+                native_library=None, placement=None, resident_library=None, resident_limits=None):
     if family not in packet["families"]:
         raise ValueError("workload is not equivalent in the requested family")
     if schedule not in ("streaming", "prefill"):
         raise ValueError("schedule must be streaming or prefill")
     if packet["schema"] != "tide-complete-flow-workload-v2":
         raise ValueError("continuous consumer requires v2; legacy v1 declares reset windows")
-    if preset == "resident":
-        raise ValueError("edge-affine resident training/sharding is not implemented; no broadcast substitution")
-    graph, model, embedding, head = build_model(packet, dtype=getattr(torch, dtype), device=device)
+    resident = preset == "resident"
+    graph, model, embedding, head = build_model(packet, dtype=getattr(torch, dtype), device="cpu" if resident else device)
+    if resident:
+        embedding = embedding.detach().to(device)
+        head = head.detach().to(device)
     ranks = tuple(packet["graph"]["ranks"]) if family == "settle" else ()
     if family != "settle":
         graph, model = encode(packet, graph, model)
@@ -24,9 +26,11 @@ def runtime_for(packet, *, family, implementation, device, dtype, schedule, pres
                          seed=packet["workload"]["seed"])
     options = ExecutionOptions(implementation=implementation, schedule="greedy" if schedule == "prefill" else "streaming",
                                prefill=schedule == "prefill", packed=True, trace=trace,
-                               full_autograd="batched", aggregate_autograd="batched",
+                               full_autograd="replay" if resident else "batched", aggregate_autograd="replay" if resident else "batched",
+                               resident_limits=resident_limits,
                                placement=placement or ExecutionPlacement(preset=preset))
-    runtime = GraphRuntime(config, device=str(device), model=model, options=options, native_library=native_library)
+    runtime = GraphRuntime(config, device=str(device), model=model, options=options, native_library=native_library,
+                           resident_library=resident_library, model_device="cpu" if resident else None)
     return runtime, embedding, head
 
 
@@ -70,7 +74,18 @@ def parameters(runtime, embedding, head):
 
 def run(packet, *, family, implementation, device, dtype="float32", schedule="prefill", preset="cpu",
         training=False, optimizer="sgd", steps=3, warmup=1, windows_per_step=2,
-        native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3):
+        native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
+        resident_library=None, resident_limits=None, training_limits=None, resident_placement=None):
+    if preset == "resident":
+        from .resident import run as run_resident
+        return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
+            schedule=schedule, training=training, optimizer=optimizer, steps=steps, warmup=warmup,
+            windows_per_step=windows_per_step, native_library=native_library, diagnostics=diagnostics,
+            placement=placement, observer=observer, parameter_budget=parameter_budget,
+            resident_library=resident_library, resident_limits=resident_limits, training_limits=training_limits,
+            resident_placement=resident_placement)
+    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)):
+        raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
         raise ValueError("invalid bounded run/optimizer configuration")
     if dtype == "float16" and training:

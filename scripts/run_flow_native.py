@@ -6,6 +6,7 @@ import subprocess
 import time
 from durable_records import replace_text
 from flow_protocol import native_text
+from flow_resident_options import native_arguments
 
 
 def run(packet, args):
@@ -30,6 +31,7 @@ def run(packet, args):
         command.append("--"+name.replace("_", "-")+"="+getattr(args,name))
     if args.training: command.append("--training")
     if args.diagnostics: command.append("--diagnostics")
+    command.extend(native_arguments(args))
     start = time.perf_counter()
     with (args.output_dir/"consumer.log").open("w") as stream:
         process = subprocess.run(command, cwd=args.output_dir, stdout=stream, stderr=subprocess.STDOUT)

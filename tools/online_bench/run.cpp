@@ -30,6 +30,13 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   if(diagnostics&&p.parameters()>100000)throw std::invalid_argument("diagnostics require at most 100000 learned parameters");
   if(static_cast<long double>(c.steps+c.warmup)*c.windows*p.tokens*p.stride>std::numeric_limits<Index>::max()/8.L)
     throw std::invalid_argument("requested continuation would overflow logical coordinates/token formula");
+  if(c.placement.preset=="resident") {
+#ifdef TIDE_ONLINE_RESIDENT
+    return run_resident(p,c,device,diagnostics);
+#else
+    throw std::invalid_argument("resident consumer requires a build with TIDE_ONLINE_RESIDENT=ON");
+#endif
+  }
   auto start=Clock::now();auto f=fixture(p,c,device);
   auto placement=tide::resolve_placement(c.placement,device);auto placed=tide::place_model(f.graph,f.model,c.placement);
   tide::Options options;options.packed=true;options.prefill=c.schedule=="prefill";options.trace=c.diagnostics;
