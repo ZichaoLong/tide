@@ -1,0 +1,299 @@
+{
+  "schema": "tide-resident-fp16-training-evidence-v1",
+  "source": "00950483711a835027b9d570b08042f141dd1838",
+  "scope": "single-device public FP16 payload/FP32 adjoints and masters, independent CPU FP32/FP64 full training, Python loss/disk lifecycle; not peers, performance matrix or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-training-clean01",
+      "manifest_sha256": "d44b58cb876ae1eb5dd3e8508a7900e478c08d1677c53367e5c0c100ab872e00",
+      "reuse_sha256": "6fe302d69df62b8abe1418d1dcc888be2d5d5f501e5649758b2f528db3e037e8",
+      "source_inputs": 279,
+      "component_sha256": "977cb45e82d995d5f68f70c42a90d67908d5950b67651798a6e000fdb845d537",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "e32692f0563bba72bf7c87139281c137294cc212dd2dd80b308072b0a851f52a",
+        "tide-resident-half-training-check": "d0115c3aadf44fdae09d576e4c378f8f97436199924d49d46a9c78b7a3629a25",
+        "tide-resident-control-training-check": "631b93db50076f5f01075673aa433a77779028b6cab0061168bd62b648b40f14",
+        "tide-resident-event-training-check": "deaebe2fbdd2b2174ebe5cf2d3e0715a741a6c7ecec85e51cb527e7a35f7c349",
+        "tide-resident-fiber-training-check": "1ba77199cdbe9ac9a455516a97cd7eae101260f849858cc444c7bfc3c09a9dc8"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "8d4458017414b4f313416f258518ed67e5e9017b2234b87a49b1d256efd42afc",
+        "tide-resident-half-training-check": "1a57432a18cc472ff505ea124b9989b47d0315741c148ae4c8426fe2b3a1bb41",
+        "tide-resident-control-training-check": "5207067c6d884819d52423eb4f3c4bf98b5a8f9fa99993ae3b8a6ea5d8c79e32",
+        "tide-resident-event-training-check": "577f52c64ad33c811f3f890271bd9da921aee4046bdc5391aad3990966efc8ed",
+        "tide-resident-fiber-training-check": "74259f3460ffb64d46e703b934100b0b9c87f99bd61e2dbd7de88ad428113678"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "69652a3ea13094d0b4816fc16553bef07aff33444b73163e45b29825b79b6f35",
+      "parent_manifest_sha256": "268715564deaa1df49d35d57811787f3f590ec43f0809cca17f459a82202f232",
+      "parent_content_archive_sha256": "3a45401d2bf83d610b5c75558db075ab4c3155d0e36c3652ec1d668e02f85183",
+      "rebuilt_object_sha256": {
+        "training_owner.cpp.o": "e450e6145c6134ed9ee8c52b28a0eb4a389f24bc9efe46c7d1dcfff51e183f44",
+        "training_backward.cpp.o": "5bb070a97b2e6194cfd361ba1a7bc95b4c5701c2a41364e0ee52e659c77e3e81",
+        "training_parameters.cpp.o": "27ff395508be10c48285616e50d8bf109755693e0bf3563b894f449a2faa9553",
+        "training_checkpoint.cpp.o": "3d92f980999104ba8a4aee29df1aa17543e75d59e69dc7186ba47e17b6e8f815"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "a57358bcf6936ff62765cdfcf4a1bfef0cb603af2a7eaa6056a2403400f0a793",
+      "training_support_archive_sha256": "66bcfe220fb6caebad55dbc4d33b1a5485c2963133caa5b153ae79149c8e3597"
+    },
+    "python": {
+      "name": "low-precision-training-python-clean01",
+      "manifest_sha256": "c1c2d3fb5b33e40de105d428cba44f38455d34d8fc62335931fa051cf7889979",
+      "reuse_sha256": "1894484783d1e742f61f00507d33ffd09e920031c66773abab5c95adcc377694",
+      "source_inputs": 279,
+      "component_sha256": "977cb45e82d995d5f68f70c42a90d67908d5950b67651798a6e000fdb845d537",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "225596833bd1553d7c64b2accc91c238dbc0d9fd4dd161998013df45a9a047f3",
+        "_tide_resident.so": "fad10e9637e73b4373e71d71159df95db214261d9bbfc89119e616ec9096848a"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "84099862e935735b4d42a7c319b5322dc8c5d8b8ff4accb70aa99248a44b379a",
+        "_tide_resident.so": "c5ce150140e7b64bf78df95786da510a5ed7385c449691b5c69fb7ebd1769f62"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "d3ac42a4c0fff31de7a0484fb9cffa29bfd32cb7908fab02e59274f8a88cb921",
+      "parent_manifest_sha256": "658e8b28657b313e540b73ae366a1c8f1c60ef7d7c363cc751eeb0c7e65ffbd1",
+      "parent_content_archive_sha256": "d3ac42a4c0fff31de7a0484fb9cffa29bfd32cb7908fab02e59274f8a88cb921",
+      "rebuilt_object_sha256": {
+        "training_owner.cpp.o": "e450e6145c6134ed9ee8c52b28a0eb4a389f24bc9efe46c7d1dcfff51e183f44",
+        "training_backward.cpp.o": "5bb070a97b2e6194cfd361ba1a7bc95b4c5701c2a41364e0ee52e659c77e3e81",
+        "training_parameters.cpp.o": "27ff395508be10c48285616e50d8bf109755693e0bf3563b894f449a2faa9553",
+        "training_checkpoint.cpp.o": "3d92f980999104ba8a4aee29df1aa17543e75d59e69dc7186ba47e17b6e8f815"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9f71715f98059b2facdc331eaa715bb520fea34d8de9f51a6a1adb72d01c87c8",
+        "task.log": "77f03aac64c4e17efcb5cfb40ad94810ee1f4a01a865401009865c97d187a186"
+      }
+    },
+    {
+      "name": "build-low-precision-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f1bfc71054f52975bfd1d9aceb7c4cda14f53a0b93100c9fe64896ab756235f2",
+        "task.log": "d9df643a237f24272ba74055f50fb9315b3f2c75e0d5fa2636791a9e6eecdf15"
+      }
+    },
+    {
+      "name": "low-precision-training-basic-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8430f053776ad01fe2ea829c0c2d6a61111ceb6032791c8f7d295a16a4341dba",
+        "task.log": "ad6b44a647f8b381fb5c4e8c88dae7c7994d0daed11015c9da97c630b7573693",
+        "queue.json": "f8b6d0d10f4fd2791d358bf0fe828d3dd621a2cae137379d0ea5dafa7c4cc3d1",
+        "gate/result.json": "3e98e210d7253559e4e9b83c766cdc20cf8e9fd3f6d8ab7a8749a3572a9c34df"
+      }
+    },
+    {
+      "name": "low-precision-training-cache-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f22df3c2c25baab3c752ea0820b7be711f8c525161eb91bb3be6e622d3fd5a22",
+        "task.log": "629858a29fc6c7cb2e86cdb266bc9c4e81cb39581bbf7230c3c0466189d428a3",
+        "queue.json": "50166715e3e49b384ed095123af6d651cdf0d75ffec1c5ed2ad1d3f1707d6234",
+        "gate/result.json": "1824e0515abfabb5278119f5952f8c39822bf4c6c83308ff774da2100b82d9e8"
+      }
+    },
+    {
+      "name": "low-precision-training-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "15fdf5247ef91de119ed5ccfd6275d07ce58fbdfa1e9fb054c6f9fdac3c9719e",
+        "task.log": "ac88bd9348820d5bd32506f5932703a25053152a7d1cc157f04c81f78db2f88e",
+        "queue.json": "d7fe583893e1ea2842dc0f97629b205c9bf21f0e8370a3584e8110eff549c912",
+        "gate/result.json": "9716b3937542c598151aaefbef5e07458ea0c002c328a26e3f554fd7dd18e9ac"
+      }
+    },
+    {
+      "name": "low-precision-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bb1cecec1b85c72c0d234fe86d5bd0d34b9108bed6785be8ad86d081e2334709",
+        "task.log": "ef0d1da04189f473bc2af52b0044e096ce8f9376674794ffd0c6fb725bcce69b",
+        "queue.json": "4de5601c67e8c3a36021c60e73d3ddb777241d0433f0297c3af7da2adf5da306"
+      }
+    },
+    {
+      "name": "low-precision-training-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "99e09543fc90871ea93982e75ef64a39ddea5f217dc9f4178d0c3110f57c88ea",
+        "task.log": "31a6d5961c8ac00f69b9f675bfdd688d60f9ed6d6dc0dd506e3d575197ad9130",
+        "queue.json": "d44c05ac3da47ce77a21f3370a400624c20046bf027c6916465afbb3d4d9723d",
+        "profile/result.json": "f89044f9d485a20a2009efcadab21999749840d8523451dd09151686b6656e62",
+        "profile/profile.log": "e4271ee4508cdd19edd7c5c6c957fc192b2881ab5b6b0f55e259aedc77116636"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "half-training",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-training-clean01/tide-resident-half-training-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "half-training-float16.log",
+      "log_sha256": "4a095ad8453cbabc45efce58ebeb3dd4295e1909ee34524d8c3f19d863ab5f19"
+    },
+    {
+      "check": "half-cache-training",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-training-clean01/tide-resident-half-training-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--cache"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "half-cache-training-float16.log",
+      "log_sha256": "d6250ea9e7996b5d54cd5932be8224317645783c5f1416dbd4c7d45fc1889e4b"
+    },
+    {
+      "check": "control-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-training-clean01/tide-resident-control-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "control-training-float32.log",
+      "log_sha256": "8227eacff8238228e03304d21d2388dc23760a4451d55a486749270442d7e952"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-training-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "3af5525211dcc74b89d6641bf4661f7553aa066b7fa4bfcf9b6ba1a9c03f075b"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-training-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "b2a960b9b800a5bf2fc20d17e9579fe771d93a10b13abd45369962025a2802b1"
+    }
+  ],
+  "python_passed": 138,
+  "profiles": {
+    "half-cache-training": {
+      "engines": {
+        "AI_VECTOR_CORE": 35415,
+        "AI_CORE": 2076,
+        "MIX_AIV": 298
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001175329935_01490285KCNRKRLL/mindstudio_profiler_output/op_summary_20261001175342.csv": "67a340774564491ceaf75e2dca154caa4036c1a12c035c4730e7a2ee478aecf2",
+        "raw/PROF_000001_20261001175329935_01490285KCNRKRLL/mindstudio_profiler_output/api_statistic_20261001175342.csv": "790f701e178fcc263b4ac16e575514b1300218c97b32a741c02e9666e6e34165"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-training-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "bba8a39e7b522db1f1ef89e602bdb5689ee7bb16d1565b6af570a4b13c38a72a",
+        "task.log": "96e3999e16f84ee4e6884dec17ea6e2291fb53e960eba5124a8b838d2efca0f2"
+      }
+    },
+    {
+      "name": "low-precision-training-python-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "a2ded1888c25c2652241accc0f2f94b6afd28ab01f3004873ef8423204f59d20",
+        "task.log": "b585b7966bd9cdb17ea76255491334d2e937c21b6ffe0ad312a562544ef82fd4"
+      }
+    },
+    {
+      "name": "low-precision-training-python-dev03",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "d2df5974fe6a2532bafc67d6187acd71174b27678e4608165bf782c2255ec3f8",
+        "task.log": "fbec255957cbabaee75a986bf907461a9b6c607a487a75a0c6c49649b2c1e1f5"
+      }
+    },
+    {
+      "name": "low-precision-training-python-dev04",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "ddcd240b9008feabac5fd5693378b941907c4f2c72b9e1566779f5b5c9e79b9c",
+        "task.log": "e82ce6f60b5d51488afa4ac0795824ef78a3e4d285f7da2c78bc3d85c2b3fdec"
+      }
+    }
+  ]
+}

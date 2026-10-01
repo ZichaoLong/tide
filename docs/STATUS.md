@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01; attention cache qualification complete, public FP16 training active. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01; public FP16 training qualified, device peer progression active. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,66 +29,44 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Attention graph/retained cache reverse is qualified on
-f26f3b07f5e24a2ea835dbbfe352f3acf478eb57; evidence committed/pushed as d8cb3ae.
-[Report](evidence/resident-fp16-cache-graph-20261001.md) and
-[audit](evidence/resident-fp16-cache-graph-20261001.json): all5 immutable jobs
-PASSED/exit0,10 cells. Per dtype:event66 trajectories/264 windows;
-fiber/mixed152/608;6 base/extended regressions passed. Two-case half profile:
-9557 AI_VECTOR_CORE/430 AI_CORE/156 MIX_AIV; no observed AiCPU/logged fallback.
-Production unchanged from25e996c. No throughput conclusion.
-Prior [extended graph evidence](evidence/resident-fp16-extended-graph-20261001.md)
-qualifies db9e985:110 trajectories/440 windows per dtype,6 cells,4 terminal jobs.
-The corresponding task-local audit scripts passed. Earlier qualification is
-indexed in ROADMAP; no earlier suite needs a mechanical rerun.
+Public FP16 training qualified on00950483711a835027b9d570b08042f141dd1838,
+implementation committed/pushed. [Report](evidence/resident-fp16-training-20261001.md)
+and [audit](evidence/resident-fp16-training-20261001.json). All7 fixed-source
+jobs PASSED/exit0:two builds,basic/cache,FP32 regressions,Python and placement profile.
+Half83 trajectories/1328 windows/332 updates,independent CPU FP32/FP64 half-forward
+adjoints and separate FP32 masters. FP32 control98/1568/392,event66 roots/8
+trajectories,fiber172 roots/20 trajectories. Python138 passed,no skips.
+Half-cache profile1 trajectory/16 windows/4 updates:35415 AI_VECTOR_CORE,
+2076 AI_CORE,298 MIX_AIV,no observed AiCPU/logged fallback;not throughput.
+TASK/launchers/precision_training_evidence.py FULL_REV passed. Clean source
+low-precision-training-clean01;standalone build same name;Python-owned build
+low-precision-training-python-clean01. Four public objects rebuilt per runtime;
+byte-verified terminal core/CANN/fixture/support reuse. All qualification jobs terminal.
+Development failures retained in audit:dev01 missing checker link object;
+Python dev02 library path omission;dev03/dev04 unsupported identity fixture.
+No tolerance relaxation or failed production-build reuse.
+Prior cache reverse f26f3b0 and extended graph db9e985 are separately qualified;
+ROADMAP indexes immutable evidence. No mechanical rerun of earlier suites.
 
 ## Active work and next action
 
-Public FP16 training implementation is ready for its clean qualification.
-Four public C++ training objects now accept FP16 payload owners, require FP32
-roots, retain FP32 masters/slots and export half named checkpoint parameters.
-Restore checks exact master-to-payload correspondence. Python exposes the same
-boundary; this is a C++/CANN client, not an independent Python device scheduler.
-Tests keep actual half forward rounding, independent CPU FP32/FP64 adjoints,
-separate CPU FP32 masters, None/zero distinction and checkpoint continuation.
+Device-side peer completion/communication is next. Current uncommitted draft:
+peer_api.h/.cpp and peer_exchange.h/.cpp under tools/device_online. They adapt
+the historical ready/pull/consumed Notify handshake to CannProgram device loops,
+with fixed packet capacity and shared ownership through program drain. Not yet
+compiled or run;no graph,training or multi-device qualification claim.
+Next add an independent two-device dynamic-loop checker,integrate optional
+build/check entry points,then freeze/build/run a bounded two-NPU development gate.
+Exercise input-dependent iteration counts,empty continuation,capacity refusal,
+exact int64 keys/bool masks,FP32/FP16 payloads and repeated buffer/notify reuse.
+A raw transport gate is prerequisite only;graph integration and distributed
+training still require independent semantic checks. No CPU reference events.
 
-Development gates passed:basic43 trajectories/688 windows/172 updates;
-cache40/640/160;FP32 control98/1568/392,event66 roots/8 trajectories,
-fiber172 roots/20 trajectories. Latest basic dev03 verifies nonfinite-root
-refusal through the public API without mutating returned gradient views.
-Python dev03 passed36 lifecycle+3 fresh-process cases;dev05 passed2 independent
-scalar autograd/master cases+97 existing affected cases (99, no skips).
-All development jobs terminal. Do not claim immutable public half qualification yet.
-Retained failures:dev01 build missing checker object;Python dev02 missing explicit
-native library path;dev03 unsupported identity memory fixture;dev04 unsupported
-ordinary identity Full fixture. Final fixture uses public Node(identity=True).
-No tolerance relaxation or production from failed builds reused.
-
-Next:commit/push this implementation, freeze low-precision-training-clean01 at
-its40-digit revision, and qualify only affected paths. Build launchers:
-TASK/launchers/build_precision_training_v2.py low-precision-training-clean01;
-TASK/launchers/build_precision_training_python_v1.py low-precision-training-python-clean01.
-Standalone parent low-precision-cache-graph-clean01;Python-owned parent
-low-precision-graph-python-clean01. Rebuild4 public objects and affected checkers;
-reuse byte-matched terminal CANN/core, without a vendor rebuild.
-Seven planned jobs:build-low-precision-training-clean01,
-build-low-precision-training-python-clean01, and low-precision-training-
-{basic,cache,regression,python,profile}-clean01. Each uses the same clean snapshot.
-Basic/cache select half-training/half-cache-training;regression selects
-control-training,event-training,fiber-training. Python runs
- test_resident_half_training.py,test_resident_precision.py,
- test_resident_event_training.py,test_resident_fiber_training.py (138 expected).
-Profile half-cache-training --dtype float16 --storage-limit-mb512
- --application-arg=--profile-smoke:one trajectory/16 windows/4 updates,placement only.
-NPU lease120s,run600s,build900s. Terminal audit:
-`python TASK/launchers/precision_training_evidence.py FULL_REV`.
-Then write the report/update backlog and commit/push evidence separately.
-
-Remaining main work after public half qualification:device peer progression,
-completion/communication and training;five-preset consumer screening;representative
-and full-size performance;version/migration/CUDA records. F1–F7 remain incomplete.
-Historical CPU Attention stays paused and does not block implementation.
-No pause requested;continue after qualification and each authorized push.
+Remaining main work:device peer progression,completion/communication and training;
+five-preset consumer screening;representative/full-size performance;version/
+migration/CUDA records. F1–F7 remain incomplete. Historical CPU Attention stays
+paused and does not block implementation. No pause requested;continue after
+qualification and each authorized push.
 
 ## Environment and bounded execution
 
