@@ -9,9 +9,9 @@ not consume per-event scalars or decide the next event.
 This backend exposes **single-device FP32/FP16 inference**, defaulting to HARD.
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
 broadcast emission in FP32/FP16. [Device-loop peer packets](resident-peers.md)
-are a separately checked transport component; multi-device graph integration
-remains separate work. Current build and device verification status is recorded
-in [STATUS](STATUS.md).
+and internal remote Full inference are separately qualified; general multi-device
+graph ownership and training remain separate work. Current build and device
+verification status is recorded in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
 restricted graph VJP, optimizer and retained-window lifecycle; it does not change
 this inference session's ownership or autograd contract.
@@ -116,8 +116,9 @@ backend are rejected rather than ignored.
 
 FP16 state, messages, KV and output buffers retain the configured dtype. Read,
 normalized Aggregate and attention normalization/weighted accumulation use FP32;
-attention QK and projections use the payload dtype. Explicit half scoring,
-HST/SOFTP and training requests fail. Diagnostic journals widen payloads on device
+attention QK and projections use the payload dtype. Explicit half scoring fails.
+HST/SOFTP require broadcast emission; training uses the separate training owner
+with FP32 roots, masters and optimizer slots. Diagnostic journals widen payloads on device
 and restore payload/control fields to their public dtype at export; they do not
 drive recursive execution. A dtype
 change does not change int64 metadata, stable selection or physical-edge identity.
