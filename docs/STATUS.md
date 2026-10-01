@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T06:47:11.941016+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T06:54:09.846907+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,75 +29,70 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **5ce5346208fe73b33c9a5a85f1fef56441d76073** committed/pushed.
-[FP16 normalized Aggregate/LH/SwiGLU adjoints](evidence/resident-fp16-extended-vjp-20261001.md)
-and [audit](evidence/resident-fp16-extended-vjp-20261001.json).
-All seven clean-source jobs PASSED/exit0:
-- build-low-precision-extended-vjp-clean01:two affected host objects, shared
-  comparison fixture and two checkers rebuilt; byte-matched terminal kernels reused.
-- build-low-precision-extended-vjp-python-clean01:three affected Python-owned
-  host objects rebuilt; client relinked, matching CANN archives reused.
-- low-precision-extended-vjp-components-clean01:four dtype cells,physical9→logical0.
-- low-precision-extended-vjp-regression-clean01:FP32 event/fiber training,physical13.
-- low-precision-extended-vjp-python-clean01:215 passed,zero skips,physical1.
-- low-precision-aggregate-vjp-profile-clean01:physical3,2277 AI_VECTOR_CORE/182 MIX_AIV.
-- low-precision-extra-full-vjp-profile-clean01:physical9,8966 AI_VECTOR_CORE/
-  88 AI_CORE/195 MIX_AIV. No observed AiCPU/logged CPU fallback. Not throughput.
-All selected physical devices map to logical0.
+Implementation **f20c2cc227a400d08c200475be56976ffe4ccc07** committed/pushed.
+[FP16 local attention adjoint](evidence/resident-fp16-attention-vjp-20261001.md)
+and [audit](evidence/resident-fp16-attention-vjp-20261001.json).
+All six fixed-clean-source jobs PASSED/exit0:
+- build-low-precision-attention-vjp-clean01:checker rebuilt, byte-matched terminal
+  dev01 host/kernel archive reused. Not a full vendor rebuild.
+- build-low-precision-attention-vjp-python-clean01:Python-owned attention host
+  rebuilt and client relinked; matching CANN archives reused.
+- low-precision-attention-vjp-components-clean01:two dtype cells,physical9→logical0.
+- low-precision-attention-vjp-regression-clean01:FP32 event/fiber training,physical13.
+- low-precision-attention-vjp-python-clean01:61 passed,zero skips,physical9.
+- low-precision-attention-vjp-profile-clean01:physical1,1178 AI_VECTOR_CORE/
+  94 AI_CORE/24 MIX_AIV. No observed AiCPU/logged CPU fallback. Not throughput.
+All selected physical devices map to logical0. Each dtype4 geometries/12 replays;
+half adds2 strict QK-rounding fixtures, each with3 replays, physical key tiles1/2.
+Ordinary half2e-3/2e-5; unchanged FP32 and anchors2e-5/2e-6. Independent CPU
+FP32/FP64 quantized-forward references compare forward and four local gradients.
+FP32 training66/172 roots,8/20 trajectories. Complete half graph/public training
+remains guarded. Source/core/archive/loader/log/CSV audit passed.
 
-Per dtype:Aggregate39 cases/117 replays; LH/SwiGLU90 cases/270 replays. Half
-adds three strict rounding/cancellation fixtures, each with19/7/0 replay.
-Aggregate tolerances remain1e-5/1e-6; Full half2e-3/2e-5; FP32/FP64 and anchors
-1e-5/1e-6. CPU independent quantized-forward FP32/FP64 adjoints; actual candidate
-operands are half, adjoint accumulation FP32. Preserve all None/zero/poison checks.
-FP32 event/fiber regression has66/172 roots,8/20 trajectories,strict controls.
+Preserved attention dev01 failure: ordinary cases passed, then fixture sensitivity
+check failed. Two QK rounding errors nearly canceled; CPU arithmetic justified
+changing one public key from-2.71875 to-2.703125. No candidate/tolerance change.
+Build/gate dev02 passed. First audit assumed fixture archive copy, but linker uses
+a direct immutable dependency; audit corrected to verify that hash and link path.
+No artifact or test result was altered to satisfy the audit.
 
-Preserved failures:Aggregate dev01 build name collision; extended dev01 shared
-test helper still static; extended dev02/dev03 half LayerNorm numerical mismatch.
-CANN half LayerNorm returned half-rounded mean/rstd inside FP32 buffers,
-input-gradient error8.75e-4. Fix computes only Jacobian statistics in FP32 on
-actual half activation and retains half normalized output for weight VJP.
-Original failure records remain; no tolerance change. Audit passed all source,
-core,binary,loader,archive members,raw logs and profiler CSV checks.
-
-Prior qualifications: d2a1afc state/basic Full adjoints,
-[report](evidence/resident-fp16-basic-vjp-20261001.md);9a84432 master/publication,
-[report](evidence/resident-fp16-master-publication-20261001.md);8b05c04 HARD half
-inference;66a6ca5 FP32 event/fiber training. These scopes do not enable complete
-FP16 graph reverse or public training. No new full-size speed ratio.
+Prior: **5ce5346**, evidence commit588ed1d, normalized Aggregate/LH/SwiGLU;
+[report](evidence/resident-fp16-extended-vjp-20261001.md). All7 jobs passed,6
+standalone cells,215 Python cases,2 traces. Aggregate39 cases/117 replays per
+dtype; Full90/270 plus3 strict half anchors. Half LayerNorm returns half-rounded
+mean/rstd inside FP32 buffers; compute Jacobian statistics separately in FP32
+on actual half activation, keep half normalized output for weight gradient.
+Raw extended dev02/dev03 failures retained. Earlier d2a1afc state/basic Full,
+9a84432 master/publication,8b05c04 HARD half inference,66a6ca5 FP32 full attention
+training remain separately qualified. No new full-size speed ratio.
 
 ## Active work and next action
 
-Uncommitted next increment: local attention half VJP. Q/K/V and QK products use
-payload precision; softmax/global key-tile normalization and adjoints use FP32.
-Returned output rounds to actual payload after global derivative correction.
-Whole-graph, event/fiber cache reverse and public FP16 training remain guarded.
+Commit/push reviewed attention evidence separately. No new active NPU/build jobs;
+the historical CPU Attention job is intentionally paused as recorded below.
+Continue implementing FP16 event/fiber cache and projection adjoints, control/
+graph reverse, retained windows, FP32-master checkpoint/public training. Never
+remove whole-graph/public guards merely because local components passed.
 
-Build-low-precision-attention-vjp-dev01 PASSED. Its component gate passed all
-ordinary FP32/FP16 geometries, then FAILED its strict fixture's own required
-sensitivity check. CPU analysis found nearly equal score-rounding errors; one
-key changed from-2.71875 to-2.703125 to distinguish omitted QK rounding. Candidate
-math/tolerances unchanged. Raw failure retained. FP32 event/fiber regression
-low-precision-attention-vjp-regression-dev01 PASSED/exit0.
-Build-low-precision-attention-vjp-dev02 PASSED; checker-only rebuild with
-byte-verified dev01 host/kernel reuse. Gate low-precision-attention-vjp-dev02 PASSED/exit0, physical9→logical0.
-Each dtype4 geometries/12 replays; half adds2 strict QK anchors at tile1/2. Frozen source/build:
-TASK/{sources,builds}/low-precision-attention-vjp-dev02. Inspect RUN/status.json
-and gate/result.json before claiming success. Lease max120s; run600s.
+Investigation for the next increment:
+- event_reverse.cpp rejects half banks/cache and currently allocates cache
+  cotangents with payload dtype. Keep cache roots/carry/parameter partials FP32.
+- tide_event_reverse_pack.cpp needs half parameter loads, followed by actual half
+  QKV projection recomputation. Saved cache journal is already widened FP32.
+- Local attention now accepts half Q/K/V and returns payload-rounded output
+  widened to FP32 for output-projection gradients. Its internal softmax correction
+  stays unrounded FP32. Do not feed it all-FP32 QK recomputation for a half graph.
+- ContentFlow::parameter_banks().attention exposes actual forward EventAttentionTape
+  even for half; state_tape/full_tape also work. This permits independent local
+  cache/projection tests while reverse_tape() keeps its complete-graph guard.
+- complete()/merge() cache helpers must preserve missing roots and zero gradients;
+  arbitrary poisoned padding stays unread. Bridges/eviction/adoption/clear need
+  explicit tests, not only a projection formula check.
 
-Extended-VJP evidence committed/pushed as588ed1d. Next commit/push the tested
-attention implementation, freeze low-precision-attention-vjp-clean01 at that exact
-revision, qualify standalone (build_precision_attention_recheck.py:checker plus
-byte-matched terminal dev01 host/kernel reuse) and Python-owned
-(build_precision_attention_vjp_python.py:attention host rebuild,matching CANN
-archive reuse). Each build900s. Then attention-vjp, separately event-training
-fiber-training, affected Python precision/event/fiber modules and independent
-half attention-vjp profile. Device leases120s/tasks600s. Audit and evidence commit
-separate; no repeated unchanged portable-core or full215-case client sweep.
-Then event/fiber/control/graph half adjoints, retained windows, master checkpoint/
-public FP16 training; peer progression/communication/training,five-preset screening,
+Then peer progression/communication/training, five-preset screening,
 representative/full-size CPU/mixed/resident performance and version/migration/CUDA
-records. F1–F7 incomplete. Authorization remains active. No subagents or requested pause.
+records. F1–F7 incomplete. Authorization remains active; continue after commits
+without asking to resume. No subagents or requested pause.
 
 ## Environment and bounded execution
 

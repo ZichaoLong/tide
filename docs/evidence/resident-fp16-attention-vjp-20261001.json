@@ -1,0 +1,221 @@
+{
+  "schema": "tide-resident-fp16-attention-vjp-evidence-v1",
+  "source": "f20c2cc227a400d08c200475be56976ffe4ccc07",
+  "scope": "single-device packed local attention adjoints at actual FP16 forward rounding with FP32 accumulation; affected FP32 training/client regression; not complete FP16 graph VJP/training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-attention-vjp-clean01",
+      "manifest_sha256": "227d5d1acd5d852fe0153ef7cffa28fc99012c17a3d0a539940c76ed601202a3",
+      "reuse_sha256": "53664b88a2db39ec0b330e13bd9fa32a3b6420a339fd874145d533d9b1279e6d",
+      "source_inputs": 269,
+      "component_sha256": "59f7f86aefc7fc5da14d92d3bcffd6c19067a664fb310114dbdc93efc06454a0",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "55d9e7ee71366d18860db4aac40deae83ec16c663ac932d4066132b187204865",
+        "tide-device-attention-vjp-check": "e60c401a1b3e03ec289154995979c5bc7cc239f724c5f9a4d2b404be04d960e8",
+        "tide-resident-event-training-check": "cf8168d3bff63f02d505669328cc013223855d45a5a87968fcf2b6ba21dcb65c",
+        "tide-resident-fiber-training-check": "03701c8a2897586182b875a8854fc47bc92fbc0a60bc508bd8989b16bca6ff6e"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "5d3636274226134418a0543befd3ff63325cb51f14ab4b96641f6818aa371fff",
+        "tide-device-attention-vjp-check": "892988dfe23826745dceafd3704f4509cb1f5d4eb7fba841905b21a95de95f7c",
+        "tide-resident-event-training-check": "b37415ae25f58f109661bbb271372dc135c80c71e9bdb1567bc4cb4fdc32fa42",
+        "tide-resident-fiber-training-check": "1d74a0423916965e06d242a1e7151696431c27cdca64abfe8c53f72865144854"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "f5e1d7c92c5731bdb369fbe41908d5e24986d279a54c9009bcf93dcdde58217c",
+      "parent_manifest_sha256": "89811cd7d5f8e05209d6bfdb57e07017e1bb38357502f298ab0f3acf5393f735",
+      "parent_content_archive_sha256": "d3cb2f60db44d831921007586918689bd5c508738dd4f3186e4731f754bc5ba6",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "2b03369983687ff2e3e920839268a8b5214e8a2b19edc1508b99f6a2f2815b31"
+    },
+    "python": {
+      "name": "low-precision-attention-vjp-python-clean01",
+      "manifest_sha256": "e663ba916a2b613d2cb59a3ee203c2ed3f19653c5bdffd7ffb11793eeb2330b8",
+      "reuse_sha256": "26cdfb85e6740c5d4b2f2ef36b6b49fda3981bf7f711404aae5821e895fefd9c",
+      "source_inputs": 269,
+      "component_sha256": "59f7f86aefc7fc5da14d92d3bcffd6c19067a664fb310114dbdc93efc06454a0",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "9e1083f9ad88bbd1ba5b5066efd89ccdb4caf8e47302d7d802de3085d196fa14",
+        "_tide_resident.so": "818a18f430c712717ca638313d0151a4012806a604ddfdebb133477842e8fd82"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "e7b4bd1e14bc493d05a20976d9eb9edba8eacc034f2fd2d66105717e7092be83",
+        "_tide_resident.so": "084d92cb21e0f8146de61ba91635ecc8d113f4c80c441e0fce627c695c9d5122"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "2182fb28bdce30bf1179036600a0f04f3e5af9bb119716f7c9ffd7616d8b0e0b",
+      "parent_manifest_sha256": "f52b616eb7565809d17e8b7f71824a76a4d6d35773c63e4caa7c1cafdc0c3aff",
+      "parent_content_archive_sha256": "56313f963626e1aaefb1a77d57417727ca8cb712fe58a99a5b87713d3d910751",
+      "rebuilt_object_sha256": {
+        "attention_vjp.cpp.o": "0166f43c7c0d0981f4ec46d5171afa2fb35eb0dca97f4932fd840273162265a9"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-attention-vjp-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2b00fcd100b46648c033fbf755d834f15713cb3bec562cdba5f69c580a248df0",
+        "task.log": "fc5be025eee4e422ea1c8eced5f197bf27f63e95cd1af8089d9084042e66c5b8"
+      }
+    },
+    {
+      "name": "build-low-precision-attention-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b32984cc2f34e1dccc8079aac770523fa0337750fd62eee35438a41a1a9cc94a",
+        "task.log": "f04c5c308c3bc7a20b4ef79aa3bd1dd1b145490a1e433285ce3ceafb3c59c2da"
+      }
+    },
+    {
+      "name": "low-precision-attention-vjp-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "da0884ce55af99cb68dd3d029a969050ee568e95e40104fd35ff0ddb1a5f4a75",
+        "task.log": "bcd95a7cbb059767d7dcfd39b2bd92db238051909c6ffc04d4de21f8a6d3745c",
+        "queue.json": "bdcc85a72a1d801460258a19857ff32bdc91681d64ecdb546fe4ea7b05233527",
+        "gate/result.json": "b04c632784fc8d707240ce285d237297ffbaa83350a1f655b9a3f665d855e8f9"
+      }
+    },
+    {
+      "name": "low-precision-attention-vjp-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "16c040dcd5b4f316726340b9b303429e5978509f067e1f1d9ca707a4d3f9caa2",
+        "task.log": "7994d95b6d26b99460b3ea81e5f865d9631c8a0479bf28a5ed7b2094576eda9c",
+        "queue.json": "7a13124cd36e0322210dc26f6fef5d77233854c711ce69ed8202afc0d57c24df",
+        "gate/result.json": "d142aad61472cfcf1122a0a11104d67c99cd0786759e8f855baab5072370a1dd"
+      }
+    },
+    {
+      "name": "low-precision-attention-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6c215e7110b804bf53e02722230dc1dc16a68241ce5a2e2c35b4b2dc2c96088c",
+        "task.log": "e83de98674ac5df91c86e0f06c60a17120a373a424f8da85cd2559f767ecfd94",
+        "queue.json": "5d3ecc88b6fe7a7216c03cc516b37b564070c259968c88790618bc5d6ba91f7e"
+      }
+    },
+    {
+      "name": "low-precision-attention-vjp-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "82abfa6277d537732901af0f1a9506d39761411f062cace289fe8cc825c96bce",
+        "task.log": "e0f8e5272bfe6461613faab09a77adcfe3136427d7afd7ef81823156ee8266df",
+        "queue.json": "43563d969a3adbb69d7beba2c56ea0521191154cf3f8ad75f779b1e305a133df",
+        "profile/result.json": "ca50eaa27b4d985ee04f74a7b72fd04239ede90619718bfdc5f8521460977a7b",
+        "profile/profile.log": "08607285a5fff404d9c6feb6f72f6da547227243b3929a13cb5dcd5e4701f80b"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "attention-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-attention-vjp-clean01/tide-device-attention-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "attention-vjp-float32.log",
+      "log_sha256": "c2e659e3a3c59d827506b0d61597c0f398657d454859f6757ee063c0c5e4eb41"
+    },
+    {
+      "check": "attention-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-attention-vjp-clean01/tide-device-attention-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "attention-vjp-float16.log",
+      "log_sha256": "3f89d7cf2aa6027cc2d160abe6e95fb5e9798f16ca114a702662b2a097a55f53"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-attention-vjp-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "623dbee8bb5a90a29be7fa3ad9c0af2069e59f1d413ad452eba7afc6b03fe9f9"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-attention-vjp-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "9ef9f3556916f6726a264ef6f03949b7284c9fe664ab268edffc9fbcbc1102b6"
+    }
+  ],
+  "profiles": {
+    "attention-vjp": {
+      "engines": {
+        "AI_VECTOR_CORE": 1178,
+        "AI_CORE": 94,
+        "MIX_AIV": 24
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001145050090_01042544HFFEQGIR/mindstudio_profiler_output/op_summary_20261001145055.csv": "1c765b08656b7819569bcaf54f08880f671729bfe7a402636af01041019ee4ea",
+        "raw/PROF_000001_20261001145050090_01042544HFFEQGIR/mindstudio_profiler_output/api_statistic_20261001145055.csv": "0f6f532ebd743380fc51b851bbd5e9ff4a050c7d903aa12254f3a2313d6c2810"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "low-precision-attention-vjp-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "556dd02cad08243655931a8434d6e28739c1e99befd826afdb76ad047b78e9d6",
+        "task.log": "23d32e1483676e12d0fd4406f89edc54d64c03430db024e5f537b8572c2e2eea",
+        "gate/result.json": "a8c911c97a63c44a2e60784ef94d10042ce790b617cb3ec5334b3475216083c8",
+        "gate/attention-vjp-float16.log": "db69b36e33825de3a2eba6bd6334a901fb193c075d779c42b0b4d9599bed9d1c"
+      }
+    }
+  ]
+}
