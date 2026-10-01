@@ -30,36 +30,33 @@ placement/cost; formal full-size repetitions follow integration/capacity calibra
 
 ## Latest completed qualification
 
-Compact Full parameter shards on **2617a11e58b5ffe04cc1d752645cff0d6c15f427**;
-[report](evidence/device-full-shards-20261001.md), [audit](evidence/device-full-shards-20261001.json).
-All ten fixed-source jobs PASSED/exit 0: two runtime builds, two two-device gates,
-single-device inference regression, three-device placement smoke, one-shard smoke,
-half-cache training regression smoke, Python regression and three-device profile.
-FP32/FP16 each: two-device HARD 84 configurations/420 windows, HST/SOFTP 36/180.
-Three-device memory/locality × two dtypes: four cells, each 3 configurations/15 windows.
-One-shard 3/15; single-device training 1 trajectory/16 windows/4 updates;
-Python 96 passed/no skips. Development also passed without tolerance relaxation.
+Retained cross-card Full VJP on **5591319c2821f40f3f5fa93317e2d745de7e4559**,
+implementation committed/pushed; [report](evidence/device-full-reverse-20261001.md),
+[audit](evidence/device-full-reverse-20261001.json). All ten immutable jobs
+PASSED/exit0. FP32/FP16 each50 trajectories/200 windows; three-device
+memory/locality × two dtypes four cells,each2/8; one-owner half2/8;
+four single-device inference cells; half-cache training1/16/4; Python96/no skips.
+Independent CPU FP32/FP64 autograd,after-close retention,window bridges,exact
+candidate replay,empty/malformed/duplicate/budget/dtype/single-device misuse refusals.
+No numerical threshold changed. Parameter partials remain on Full owners;
+canonical alias reduction and optimizer publication are not yet multi-device.
 
-Actual selected actions are packed stably into compact owner banks. All nonempty
-peer requests precede local Full and result waits. Memory/locality placement is
-static and generic; continuation changes schedule and placement. Per-shard memory,
-chunk and actual/capacity work are recorded. The coordinator retains state/KV,
-Read, readiness, selection and queues. This is Full-only inference sharding;
-remote/sharded reverse remains explicitly refused, public defaults single-device.
+Profile3 devices,two fixtures/eight windows,60 host model submissions,336 notify
+records/waits,1713 switches,3258 DMA tasks. Engines11562 AI_VECTOR_CORE,
+366 AI_CORE,196 MIX_AIV,120 AiCPU. All AiCPU rows are coordinator Bool ScatterUpdate
+connection merges,approximately9.048ms summed task time. This is device AiCPU,
+not logged host fallback,not wall time or throughput. Immediate improvement:
+replace Bool scatter/error/chunk merge with one metadata kernel per shard stage.
 
-Profile: three fixtures/15 windows, 45 host model submissions, three devices;
-4067 AI_VECTOR_CORE,86 AI_CORE,3 MIX_AIV; no observed AiCPU. Full work on all cards,
-packing/selection on coordinator,165 device notify records/waits,713 switches,
-1419 DMA tasks. Counts include setup/boundaries; no throughput/overlap claim.
-
-TASK/launchers/full_shards_evidence.py FULL_REV passed. Frozen standalone source/
-build full-shards-clean01 and Python build full-shards-python-clean01. Eight host
-objects rebuilt per runtime; new kernel reused with source/archive checks from
-successful full-shards-dev01. Other source/object/archive reuse is byte-verified.
-
-Earlier qualified foundations: remote Full a8fa371, reusable peer packets 5c3662b,
-public FP16 full training 0095048 (83 trajectories/1328 windows/332 updates,FP32
-masters/slots and actual half rounding). Their reports retain earlier failures.
+Standalone/Python fixed builds full-reverse-clean01/full-reverse-python-clean01;
+source full-reverse-clean01. Six host objects rebuilt per runtime; source/hash
+checked kernel reuse from passed full-reverse-dev01. Audit script:
+TASK/launchers/full_reverse_evidence.py FULL_REV. All qualification jobs terminal.
+Development failures preserved: unsupported CPU Bool test constructor in dev01,
+missing explicit NoGradGuard include in dev02,wrong three-card wrapper marker
+in dev03 despite successful first child. Fixed in dev03/dev03b; no observed
+production numerical failure. Earlier Full shards2617a11,remote Fulla8fa371,
+peer packets5c3662b,public single-device FP16 training0095048 remain qualified.
 
 ## Current next work
 
@@ -75,36 +72,14 @@ masters/slots and actual half rounding). Their reports retain earlier failures.
    records, final delivery audit.
 
 Before performance, deliberately resolve historical CPU Attention's retained
-host memory and timing lock; do not blindly resume/kill it. No qualification jobs
-remain live. Evidence commit c57f6b0 pushed. Current implementation: explicit sharded tapes
-and per-device retention, Full-stage graph-VJP seam, stable connected-row packing,
-owner-local Full parameter partials, coordinator state/message/cache reverse and
-retained-window bridges. Public single-device ABI/defaults unchanged. No device
-alias reduction/optimizer/public multi-device training claim yet.
+host memory and timing lock; do not blindly resume/kill it. No current qualification
+jobs remain live. Evidence/STATUS/ROADMAP changes are the only uncommitted work.
 
-Development full-reverse-dev03 standalone/Python builds PASSED; two dtype smoke
-runs passed, then full FP32/FP16 gates each50 trajectories/200 retained windows
-plus empty/malformed/budget/type/owner refusals and exact replay. Three-device
-memory/locality × two dtypes smoke passed (four cells,each2 trajectories/8 windows).
-Four single-device inference cells and half-cache training1/16/4 also passed.
-Python runtime regression is deferred to immutable qualification, avoiding a
-redundant dev pass. Only follow-up since dev03: initialize unused accumulator
-chunk_rows to zero and clarify internal capability comments; no numerical change.
-
-Retained development failures: both dev01 dtype smoke tasks stopped in the CPU
-assertion's unsupported at::tensor(bool), fixed with at::full; dev02 build missed
-an explicit NoGradGuard header; dev03 three-card wrapper used the old forward
-success marker although its first child passed, fixed in the separate
-full_reverse_policy_smoke.py and verified by full-reverse-three-dev03b.
-No observed production numerical/runtime failure or tolerance relaxation.
-
-Next: commit/push this coherent retained cross-card VJP increment; qualify clean
-source full-reverse-clean01 with both runtime builds,full FP32/FP16 gates,3-device
-policy smoke,1-shard degeneration,affected inference/training/Python regressions
-and a separate3-device profile. Use TASK/launchers/build_full_reverse.py NAME
-[--runtime python] --kernel-build full-reverse-dev01; preserve prior failures.
-Existing qualification_audit.py supports trajectory counts. Then continue the
-owner alias reduction/optimizer/publication main work without requesting a pause.
+Next action: record/commit/push the audited5591319 evidence. Apply the observed
+Bool scatter metadata fusion with affected checks/profile, then continue the main
+owner alias reduction,atomic optimizer and bank publication integration. Do not
+pause or ask for new permission after a commit. Use existing build/lease launchers
+and fixed-source evidence; no repeat of unrelated old gates.
 
 ## Environment and bounded execution
 
