@@ -1,0 +1,219 @@
+{
+  "schema": "tide-resident-fp16-fiber-vjp-evidence-v1",
+  "source": "f2ec4f161c86c0af6bfaf9ec2ff9755b1cb4d0ea",
+  "scope": "single-device local fiber adjoints preserving FP16 QKV, pre-QK scaling and completed pooling with FP32 accumulation; affected FP32 training/client regression; not complete FP16 graph VJP/training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-fiber-vjp-clean01",
+      "manifest_sha256": "491a8ad9bc912ab581d33d6d09026bb61535b2f6341b921976fea839055bcc27",
+      "reuse_sha256": "c6a7fd8206cd6d111fc2a73c4f421e1318080c9114d82e84be35bdd8da00523d",
+      "source_inputs": 270,
+      "component_sha256": "1bc665024660ac61a1ef87db698546ce0db62ffd364eb3a86ef92a0e4fc66ddd",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "004aac6ab09bb68f882962a273933f2d07775e08149b53b7730aa8cb830774e1",
+        "tide-device-fiber-vjp-check": "25a296cd3461af96ba5a86d447b359824cdc5a4ef10cca25393a8327c1b536d4",
+        "tide-resident-event-training-check": "493d51a0decc08401af4608b1e3e661cecf440b0931d3626549d7525d5ed9fcd",
+        "tide-resident-fiber-training-check": "e34fc8b6969f2e51a326c2647e09b2b62be3250bc9092530daf79380736a56e1"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "54d53393ffcfe3e6aeb1d8a05d2d76e6b1cf0380f8e18ac417459de516cf88f9",
+        "tide-device-fiber-vjp-check": "5d1c2eb87cc1e63cd62726706aa5b1da91469b2c64ab219f746fc234601e83d8",
+        "tide-resident-event-training-check": "f8eba6f01975faf2b16351fe79b5ca07b517a98895c5d5dccaf74129db43f925",
+        "tide-resident-fiber-training-check": "f5e150c4ac30400a9f608949ad9740dd6ad6bd8837010a2d2706850050f740e3"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "18879c0d19089d5db557bf6e5c94ac6e466dbf2ef0fe6003a507bf1d6d26eeac",
+      "parent_manifest_sha256": "45e6973139a4c65c6c460fe1ad90726c9527fee169f93c54a44cd54ff71b7a54",
+      "parent_content_archive_sha256": "5978e5d715ebe19a9a291c82cad8d90f50895ec1f870f28ca18fb2e3cfa13c65",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "2b03369983687ff2e3e920839268a8b5214e8a2b19edc1508b99f6a2f2815b31"
+    },
+    "python": {
+      "name": "low-precision-fiber-vjp-python-clean01",
+      "manifest_sha256": "6738007c23f4c969f1ac8ec9bf3d13d2eb1674440d81c2da50be379cf3a36b6c",
+      "reuse_sha256": "ad6c0f6aaff564b751a93ef901498d167695572c47a9293458130fadd02ba909",
+      "source_inputs": 270,
+      "component_sha256": "1bc665024660ac61a1ef87db698546ce0db62ffd364eb3a86ef92a0e4fc66ddd",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "6cb350d970818e774a26b891cd1e92c81c67494efdb1dc422e81a48cd86a5d2e",
+        "_tide_resident.so": "b0d49db96dc78f44b7aa5b8d25636a2f3dee4a4f5379b6d80623a074b189f9a4"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "9848d55390d2b452a4098d812396852881b611104c7c695448f2474e962589d4",
+        "_tide_resident.so": "0e35b5a005d01b2cc418b8e14a2523f0a2b9961adc5b35be76b9761475bfbbd8"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "ee49fbb30b9c248b351c0566ac93a8292188675fcfc81bb126d6a6878da3c6cb",
+      "parent_manifest_sha256": "d1e8657aab4a579d02a7bfca878e43ae8fa4a08d3b776c8a7c8b0f69cf806ccc",
+      "parent_content_archive_sha256": "b05f4066f242a8be4441f58dac9a998ac1a738f4b6cb417f237b7d8c099164b9",
+      "rebuilt_object_sha256": {
+        "fiber_vjp.cpp.o": "f42feecbbd1a4b8d3f0420a37d6f188e1eee6b15f996af8fa9b180786d9b942a"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-fiber-vjp-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4adc783759a8496ad8e027525a538bbb427bef71f726ba4006fbedf89274c126",
+        "task.log": "09c496bb438764f3a2f70b4afe86a6b729428eccce759ac25454d664b38b61fa"
+      }
+    },
+    {
+      "name": "build-low-precision-fiber-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "36aeaaedc6a3106cf66213b7a0df91add15e0bcdd3977a52a2ffe36942a07c17",
+        "task.log": "fa71fc37a6acd8999636966830408c35a749a7a4435003a747f99cebee86043d"
+      }
+    },
+    {
+      "name": "low-precision-fiber-vjp-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1e8d61513ec39b3665005eefb3b8df9bff27c8081f1c1f5999b5bde32456fe85",
+        "task.log": "dba27ad6a361c90f83e33a1f8d5d2e3fce2ba2dfc39836bd79450be7b2c70dff",
+        "queue.json": "128055eebdbbd75174c3491197b83296e6ba23d31ce6412aa8b26ca56f231943",
+        "gate/result.json": "c68ec6275193c0a6b8a4b1f80182814e5fb7cadfcd1e384a53f6e67408ced3a7"
+      }
+    },
+    {
+      "name": "low-precision-fiber-vjp-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8da45a121eb565f702d60d9d7e5516a6505f20c1c1dbe59aaeb06d05ec815c04",
+        "task.log": "659533c3f08e45fd91c70dd7904936fbfa81b07b51424b11fca1e97a1bc9771e",
+        "queue.json": "fb1c8f158201b9bd8323d68830569d535fd890ffe1adf92b88ed0e67223542f8",
+        "gate/result.json": "039db713d25cc1fb315c489084096daf765b6b51667786539bdbd8dd0b6f9fd8"
+      }
+    },
+    {
+      "name": "low-precision-fiber-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "772f58edf14c65c8d265dd08b764683e5a848cb1cf653ade0d50c38670e14243",
+        "task.log": "15efa0ad5d93073447f2f5ff95ee6680278d33e9ae0296ab655d60df770886a7",
+        "queue.json": "3a432c9753b23010d1898ce445c807b36d7b68b057b8e37d9b470f0f761ad1da"
+      }
+    },
+    {
+      "name": "low-precision-fiber-vjp-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2d8c5d36c2102b6d87d395690bef5c097297348f4736c734541951178850f719",
+        "task.log": "05d3b29136ca47a1ce7ff6fa8f0676c256714378baf73daa3ab181be42795af2",
+        "queue.json": "ab0c8156ab87722919d99e9f21f8cec3e3cb3abfeb40d8530005d6816d9139df",
+        "profile/result.json": "32759346ec2a690d937be335872e23f8ba63148b8d9fc67ec2b5e02dbaf33b39",
+        "profile/profile.log": "eab97d1e195c6b1e2f13ba82fa1e3d94b5bbc4ee3eb2ce372e34120a387efad9"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "fiber-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-vjp-clean01/tide-device-fiber-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-vjp-float32.log",
+      "log_sha256": "4abb94efea7f451a8a2f5490c1970aefae5bd961932dc03c0c3d7fb5ac5343e3"
+    },
+    {
+      "check": "fiber-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-vjp-clean01/tide-device-fiber-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-vjp-float16.log",
+      "log_sha256": "81210fe01d35fd95e45ea0edcb16161cdad20bc9de2a6c2f44099bd5e2fccfb4"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-vjp-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "a1ccb7fb5dc2c62d1e1a60f45fccedd230b124ca5d087898af42255d94b65dfa"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-vjp-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "5e283db2ee9a94eba4649e4d2cbd88c75561995cb92e1ee5a8b8d3f4318ba91b"
+    }
+  ],
+  "profiles": {
+    "fiber-vjp": {
+      "engines": {
+        "AI_CORE": 1405,
+        "AI_VECTOR_CORE": 15017,
+        "MIX_AIV": 170
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001152731520_01129217LHGAINOK/mindstudio_profiler_output/op_summary_20261001152740.csv": "39ca4c153b0d6cd61960016ef2295c45dd33c6fd11fcf0541166ff0c38f58f29",
+        "raw/PROF_000001_20261001152731520_01129217LHGAINOK/mindstudio_profiler_output/api_statistic_20261001152740.csv": "76a7ce501f148999357746b1248dc77d740c30a19ce030f8932dc244c7782ec2"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": []
+}

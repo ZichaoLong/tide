@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T07:18:06.338093+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T07:31:09.249898+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,57 +29,53 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **4f195d22961d66495b30ecc447ececf684eac969** committed/pushed.
-[FP16 event cache/projection report](evidence/resident-fp16-event-vjp-20261001.md)
-and [audit](evidence/resident-fp16-event-vjp-20261001.json).
-All6 fixed-clean-source jobs PASSED/exit0: standalone/Python builds,event-vjp
-both dtypes,FP32 event/fiber training,61 Python cases(no skips),half profile.
-Each dtype51 cases/102 replays plus6 cache boundary cases/12 replays/12 refusals.
-Actual independent forward journals; CPU FP32/FP64 quantized-forward reference.
-None/zero,large int64,adopt/clear/window/GQA,poison padding,FP32 cache sums beyond
-half range and mismatched lengths covered. Half rtol2e-3/atol2e-5,original FP32
-1e-5/1e-6. Regression66/172 roots,8/20 trajectories. Profile52140 AI_VECTOR_CORE,
-2088 AI_CORE,450 MIX_AIV; no observed AiCPU/logged CPU fallback,not throughput.
-Runtime jobs physical1/3/9/13→logical0. Source/archive/loader/log/CSV audit passed.
-Standalone checker rebuilt with byte-matched terminal host/kernel reuse;
-Python-owned event host rebuilt/client relinked. No portable-core changes.
+Implementation **f2ec4f161c86c0af6bfaf9ec2ff9755b1cb4d0ea** committed/pushed.
+[FP16 local same-fiber report](evidence/resident-fp16-fiber-vjp-20261001.md)
+and [audit](evidence/resident-fp16-fiber-vjp-20261001.json). All6 jobs PASSED/exit0:
+standalone/Python-owned builds,two dtype cells,FP32 event/fiber regression,
+61 Python cases(no skips),separate half profile. Each dtype37 configurations/
+74 replays,five pooling modes,seven roots,width1/4/257,multihead,changing
+lengths,None/zero,poison padding,tick/budget refusal. Half roots×256;
+rtol2e-3/atol2e-5 half,unchanged2e-5/2e-6 FP32. FP32 training66/172 roots,
+8/20 trajectories. Profile15017 AI_VECTOR_CORE,1405 AI_CORE,170 MIX_AIV;
+no observed AiCPU/logged CPU fallback,not throughput. Physical9/1/3/9→logical0.
+Source/archive/object/loader/log/CSV audit passed. Byte-matched terminal host/
+kernel reuse plus checker/Python host rebuild; not a full vendor rebuild.
+Development fiber dev01/dev02 and regression passed; no failed fiber jobs.
 
-Preserved test-scaffold failures: build dev02 ambiguous empty Tensor assignment,
-gate dev03 unsupported vector-to-bool factory; fixed without algorithm/tolerance
-changes. Dev04 passed. Early audit refused live regression; terminal audit passed.
-Previous local attention implementation f20c2cc/evidence63824ba remains qualified;
-normalized Aggregate/LH/SwiGLU5ce5346/evidence588ed1d. See their evidence,not new
-complete graph/public FP16 training claims. No full-size speed ratio changed.
+Prior event cache/projection implementation4f195d2,evidence3a8f2e8,all6 jobs
+passed; [report](evidence/resident-fp16-event-vjp-20261001.md). Local attention
+f20c2cc/evidence63824ba,normalized Aggregate/LH/SwiGLU5ce5346/evidence588ed1d
+remain separately qualified. Complete graph/public FP16 training remains guarded.
+No new full-size speed ratio.
 
 ## Active work and next action
 
-Event evidence committed/pushed as3a8f2e8. Local FP16 same-fiber VJP is ready
-for implementation commit. fiber_vjp.cpp and four kernels keep adjoints FP32,
-recompute actual half QKV+bias,scale/round Q before half QK,round each query
-output and completed pooling. Mean sums before division. No complete-graph or
-public half training guards removed.
+Local fiber evidence is ready for its separate commit. Uncommitted next increment:
+FP16 actual fiber cache/source reverse integration. Changed content_flow.cpp,
+graph_vjp.cpp,reverse_links.cpp,fiber_cache_reverse.cpp,fiber_reverse.cpp,
+fiber_tape.cpp,AscendC tide_fiber_reverse_pack,reverse_links_check.cpp and mapping.
+Actual half journal access now possible; complete-graph dtype guard moved to
+append_graph_vjp,not removed. Reverse links widen half scales to FP32. Fiber
+packing rounds physical source products,loads half params/cache; all roots/carry/
+returned gradients FP32. Sum-only dummy pooling banks are FP32.
 
-Development build/gate dev01 and root-amplified checker build/gate dev02 all
-PASSED/exit0:37 configurations/74 replays per dtype,five pooling modes,seven
-root modes,width1/4/257,multihead,None/zero,poison padding,changing lengths,
-bounded tick/budget refusal. Half roots×256,CPU FP32/FP64 references;
-rtol2e-3/atol2e-5 half,original2e-5/2e-6 FP32. FP32 event/fiber regression dev01
-PASSED/exit0:66/172 roots,8/20 trajectories. No fiber failures so far.
+Reverse-link checker extended to both dtypes,64 actual feedback/parallel-edge/
+empty/policy/continuation windows each. Actual fiber reverse checker still needs
+implementation: independent ContentFlow tapes,physical input/scales and six
+parameter groups,cache None/zero/adopt/clear/ticks,CPU quantized-forward FP32/FP64.
+Also test FP32 cache-bias bridge and complete-half-graph rejection. No new build
+or device result for this integration. Do not claim public training/continuation.
 
-Next clean builds at NEW_REV: freeze_run.py --commit NEW_REV --snapshot
-low-precision-fiber-vjp-clean01, launchers/build_precision_fiber_recheck.py
-low-precision-fiber-vjp-clean01 and build_precision_fiber_vjp_python.py
-low-precision-fiber-vjp-python-clean01. Build900s;lease120s;gates/profile600s.
-Then fiber-vjp two dtypes,FP32 event/fiber regression,Python precision/event/fiber
-three modules(61 prior cases),separate half fiber profile. Terminal audit:
-TASK/launchers/precision_fiber_vjp_evidence.py NEW_REV; evidence separate commit.
-Do not claim qualification before terminal results. No full-size speed claim.
+Next: finish checker and component/CMake mapping, bounded frozen dev build;
+run fiber-reverse/reverse-links both dtypes and separate FP32 event/fiber training.
+Build900s,two workers;lease120s;gate600s. After passing implement commit→clean
+standalone/Python checks/profile→evidence commit. Authorization remains ACTIVE.
 
-Remaining: fiber cache/projection integration,control/graph half adjoints,
-retained windows,master checkpoint/public FP16 training; then peer progression/
-communication/training,five-preset screening,representative/full-size
-CPU/mixed/resident performance,version/migration/CUDA records. F1–F7 incomplete.
-No subagents or requested pause. Authorization remains active after commits.
+Remaining: finish fiber integration,control/graph half adjoints,retained windows,
+master checkpoint/public FP16 training; then peer progression/communication/
+training,five-preset screening,representative/full-size CPU/mixed/resident
+performance,version/migration/CUDA records. F1–F7 incomplete. No subagents/pause.
 
 ## Environment and bounded execution
 
