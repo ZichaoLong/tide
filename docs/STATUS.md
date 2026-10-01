@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T07:55:04.988735+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T08:18:53.660904+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -54,10 +54,33 @@ local attentionf20c2cc/evidence63824ba,normalized Aggregate/LH/SwiGLU
 
 ## Active work and next action
 
-Current evidence ready for separate commit/push. No uncommitted production code.
-Next:half Emit/control/Read adjoints and actual HST/SOFTP forward rounding,
+Fiber integration evidence committed/pushed as60f13da. Current uncommitted
+increment:half Emit/control/Read adjoints and actual HST/SOFTP forward rounding,
 then complete graph reverse,retained windows,master/checkpoint/public FP16
 training. Keep full graph/public training guards until real integration passes.
+Dev02 standalone/Python builds,all4 component cells,FP32 control training98
+trajectories/1568 windows/392 updates,and97 Python cases all PASSED/exit0.
+Retain failed dev01 launcher:absent control-training checker object;dev02
+recompiled it and rebuilt production,no failed object reuse.
+Dev03 tried to bypass Emit for ordinary identity Full. Component checks passed,
+but full FP32 training correctly FAILED (variant2/HST:Read None/zero mismatch).
+The public FullKernel still applies Emit when g==h;only identity boundary nodes
+bypass. Restored ALL production bytes to qualified dev02. The two checkers now
+explicitly include ordinary identity Full,connected zero controls and identity
+boundary bypass. No core or mathematical-contract change.
+Build-low-precision-control-dev04 and component gate dev04 PASSED/exit0.
+Source/build same suffix;launcher build_precision_control_v4.py,900s/two
+checker workers. Each dtype36 VJP cases/108 replays,3 forward cases/9 replays,
+36 independent whole-flow configurations/144 windows. Fixed implementation
+ready to commit;no new production change after the passing dev02 regression. It proves only the two
+checkers differ from dev02 and reuses its terminal production archive/kernels.
+Next:implementation commit,then clean qualification.
+Clean launchers:build_precision_control_recheck_v4.py and
+build_precision_control_python_v4.py. Snapshot low-precision-control-clean01
+at NEW_REV. Run components,FP32 control-training,97 Python precision/event/fiber
+cases,and two half profiles(control-vjp,precision-control-flow),600s/lease120s.
+Audit precision_control_evidence.py REV expects all7 terminal jobs,5 standalone
+cells,97 Python cases,and retains failed dev01/dev03 records.
 Control probabilities stay FP32 for complete-frame softmax;half Emit must use
 rounded public controls/delta and actual unmixed Full values. All adjoints FP32.
 Do not turn half forward into a whole-FP32 recomputation to bypass integration.

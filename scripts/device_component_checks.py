@@ -115,9 +115,12 @@ CHECKS["aggregate-training"] = ("tide-resident-aggregate-training-check", ("floa
 MARKERS["aggregate-training"] = "resident-aggregate-training: passed"
 KERNELS["aggregate-training"] = "tide_aggregate_vjp"
 
-CHECKS["control-vjp"] = ("tide-device-control-vjp-check", ("float32",))
+CHECKS["control-vjp"] = ("tide-device-control-vjp-check", ("float32", "float16"))
 MARKERS["control-vjp"] = "device-control-vjp: passed"
 KERNELS["control-vjp"] = "tide_control_"
+CHECKS["precision-control-flow"] = ("tide-precision-flow-check", ("float32", "float16"))
+MARKERS["precision-control-flow"] = "scope=HST_SOFTP_inference"
+KERNELS["precision-control-flow"] = "tide_emit_mix"
 
 CHECKS["control-training"] = ("tide-resident-control-training-check", ("float32",))
 MARKERS["control-training"] = "resident-control-training: passed"

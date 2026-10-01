@@ -21,8 +21,6 @@ void validate_reverse_modules(const Graph& graph) {
 }
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
-  if(profile.dtype==at::kHalf&&l.mode!="hard")
-    throw std::invalid_argument("resident FP16 inference currently requires HARD emission; FP16 control adjoints are unavailable");
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   if((l.mode!="hard"&&l.mode!="hst"&&l.mode!="softp")||!std::isfinite(l.zeta))
     throw std::invalid_argument("invalid resident Emit mode/zeta");

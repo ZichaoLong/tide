@@ -8,7 +8,7 @@ not consume per-event scalars or decide the next event.
 
 This backend exposes **single-device FP32/FP16 inference**, defaulting to HARD.
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
-broadcast emission in FP32; FP16 currently requires HARD. Peer progression
+broadcast emission in FP32/FP16. Peer progression
 remains separate work. Current build and device verification status is recorded
 in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the

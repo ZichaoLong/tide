@@ -1,13 +1,15 @@
 # Device Emit, control and Read adjoints
 
-This component extends the resident FP32 broadcast path with HST and SOFTP.
+This component extends the resident FP32/FP16 broadcast path with HST and SOFTP.
 HARD remains the default. [STATUS](STATUS.md) distinguishes implementation,
 development checks and immutable qualification; this document defines the
 contract and does not certify a build or throughput.
 
 Select `ResidentLimits.mode` and `zeta` in C++, or the existing
 `ExecutionOptions(mode=..., zeta=...)` in Python. Identity boundary nodes bypass
-Emit. Other nodes apply the formulas in [semantics](semantics.md):
+Emit. Ordinary identity Full still passes its `g==h` value through Emit and keeps
+the declared connected zero control gradient. Other selected Full values use
+the same formulas in [semantics](semantics.md):
 
 - HST returns the fresh Full value `g` exactly. Its declared VJP sends `u` to
   `g`, a connected zero to content `h`, and `zeta*dot(u,g-h)` to control `p`.
@@ -19,6 +21,15 @@ not evaluate their payloads or create connections. A zero root, zero `zeta`,
 or `g==h` still has the declared connected gradient. SOFTP retains the actual
 unmixed Full value alongside the emitted value; no division or subtraction
 from a rounded mixture attempts to reconstruct `g`.
+
+FP16 stores actual half payloads and Read weights. SOFTP rounds the public
+control, `g-h`, its product with that control and the final addition to half.
+HST still returns `g` exactly; its declared saved difference also rounds to
+half. Internal frame probabilities and Read scores remain FP32. The control
+VJP uses the rounded control/difference for Emit and the original FP32 frame
+probabilities for the softmax Jacobian. Cast VJPs are first-order identity;
+all cotangents, Read partials and owner reductions remain FP32. This does not
+claim bitwise equality to a backward that accumulates in half.
 
 The reverse program groups the candidate's own event records by
 `(sample,region,int64 time)` on device. It builds bounded hash/linked tables and
@@ -52,7 +63,8 @@ resident v1 record. Restore requires the same values. Legacy records that omit
 them mean HARD with `zeta=1`; the HARD parameter layout remains unchanged.
 Graph identity, eager checkpoint schemas and the independent CPU reference are
 unchanged. Non-HARD slot-affine emission is explicitly unavailable in this
-increment. Attention adjoints, FP16 and peer reverse progression remain separate.
+increment. Complete FP16 graph/retained-window/public training and peer reverse
+progression remain separate from this component and forward inference.
 
 The isolated checker covers complete and ragged frames, all three Read modes,
 linear/norm/identity descriptors, zero norms, None/zero roots, zero surrogate
@@ -67,3 +79,8 @@ VJP, never a finite-difference derivative of its hard forward.
 from timing. Its bounded `--storage-limit-mb` defaults to 200; a complete training
 gate may require a larger explicit limit to retain the task/metadata association.
 Missing operator records are a failed profile, even if the training checks pass.
+`--check control-vjp --dtype float16` separately covers selected Emit rounding,
+identity/invalid/error bypass and FP32 adjoints. `--check precision-control-flow`
+covers actual independent CPU/NPU inference with both Emit modes, state and
+attention profiles, both schedules and continuation. These checks do not
+certify complete FP16 training or throughput.

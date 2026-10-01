@@ -49,6 +49,8 @@ def main():
     command = [msprof, "--output="+str(out / "raw"), "--runtime-api=on", "--task-time=l1",
                "--aicpu=on", f"--storage-limit={args.storage_limit_mb}MB", str(binary), "--device="+args.device,
                "--dtype="+args.dtype, *args.application_arg]
+    if args.check == "precision-control-flow":
+        command.append("--control-modes")
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

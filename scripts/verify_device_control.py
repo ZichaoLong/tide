@@ -45,6 +45,8 @@ def main():
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
                 if check == "full-training":
                     command.append("--control-check=" + args.full_training_control_check)
+                if check == "precision-control-flow":
+                    command.append("--control-modes")
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120)

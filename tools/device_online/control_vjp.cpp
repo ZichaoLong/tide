@@ -28,7 +28,9 @@ ControlVjp append_control_vjp(CannProgram& p,const Graph& g,const StateTape& t,c
     throw std::invalid_argument("control VJP tensor budget or mode unavailable");
   int64_t buckets=1;while(buckets<2*capacity)buckets*=2;
   tensor(t.metadata,d,at::kLong,{capacity,13});tensor(t.values,d,at::kFloat,{capacity,5*width+2});
-  tensor(c.raw_full,d,at::kFloat,{capacity,width});tensor(c.read,d,at::kFloat,{nodes,width});
+  const auto dtype=c.read.scalar_type();const int64_t fp16=dtype==at::kHalf;
+  if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("control VJP Read requires FP32/FP16");
+  tensor(c.raw_full,d,at::kFloat,{capacity,width});tensor(c.read,d,dtype,{nodes,width});
   tensor(count,d,at::kLong,{1});tensor(range,d,at::kLong,{2});tensor(gradient,d,at::kFloat,{capacity,width});
   tensor(on,d,at::kBool,{capacity});tensor(error,d,at::kInt,{1});
   std::vector<int64_t> settings;
@@ -57,7 +59,7 @@ ControlVjp append_control_vjp(CannProgram& p,const Graph& g,const StateTape& t,c
   auto payload=[&](int64_t mode) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_control_payload)(32,stream,
       ptr(t.metadata),ptr(t.values),ptr(c.raw_full),ptr(c.read),ptr(count),ptr(range),ptr(config),ptr(gradient),ptr(on),ptr(read_on),ptr(ds),
-      ptr(out.fresh),ptr(out.events),ptr(products),ptr(partials),ptr(error),capacity,width,mode,c.mode),"packed Emit and Read adjoints");},
+      ptr(out.fresh),ptr(out.events),ptr(products),ptr(partials),ptr(error),capacity,width,mode,c.mode,fp16),"packed Emit and Read adjoints");},
       {t.metadata,t.values,c.raw_full,c.read,count,range,config,gradient,on,read_on,ds,out.fresh,out.events,products,partials,error});
   };
   plan(0);payload(0);p.sum(products,1,false,dp);plan(1);payload(1);

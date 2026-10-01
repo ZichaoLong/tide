@@ -9,7 +9,7 @@ ActionBatch append_control_forward(CannProgram& p,const ContentProfile& profile,
   const auto identities=profile.read_modes;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_emit_mix)(32,stream,
     ptr(actions.coordinates),ptr(actions.valid),ptr(identities),ptr(content),ptr(actions.values),ptr(controls),ptr(output),ptr(error),
-    content.size(0),content.size(1)),"packed selected SOFTP emission");},
+    content.size(0),content.size(1),content.scalar_type()==at::kHalf),"packed selected SOFTP emission");},
     {actions.coordinates,actions.valid,identities,content,actions.values,controls,output,error});
   return {actions.coordinates,output,actions.valid};
 }

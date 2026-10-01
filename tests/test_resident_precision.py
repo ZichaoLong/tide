@@ -10,10 +10,11 @@ from test_resident_library import target, config, runtime, inputs
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
 @pytest.mark.parametrize("schedule", ["streaming", "greedy"])
 @pytest.mark.parametrize("memory", ["ema", "attention", "lh-fiber-attention-all-softmax-repeat-v1"])
-def test_resident_fp16_continuation(target, family, schedule, memory, tmp_path):
+@pytest.mark.parametrize("mode", ["hard", "hst", "softp"])
+def test_resident_fp16_continuation(target, family, schedule, memory, mode, tmp_path):
     cfg = replace(config(family, memory), dtype="float16")
-    r = runtime(cfg, target, schedule)
-    oracle = GraphRuntime(cfg, device="cpu", options=ExecutionOptions(schedule="reference", packed=False, trace=True))
+    r = runtime(cfg, target, schedule, mode)
+    oracle = GraphRuntime(cfg, device="cpu", options=ExecutionOptions(schedule="reference", packed=False, trace=True, mode=mode))
     values = (torch.sin(torch.arange(64, dtype=torch.float32).reshape(2, 8, 4)*.37)*.2).half()
     values[0, 1].zero_()
     assert r.manifest()["resident"]["dtype"] == "float16"
@@ -31,7 +32,7 @@ def test_resident_fp16_continuation(target, family, schedule, memory, tmp_path):
         checkpoint = tmp_path / "resident-half.pt"
         session.save(checkpoint)
         final = session.snapshot()
-        other = runtime(cfg, target, "streaming" if schedule == "greedy" else "greedy")
+        other = runtime(cfg, target, "streaming" if schedule == "greedy" else "greedy", mode)
         with other.session(2) as restored:
             restored.load(checkpoint)
             equivalent(final, restored.snapshot(), atol=0, rtol=0)
@@ -43,9 +44,6 @@ def test_resident_fp16_continuation(target, family, schedule, memory, tmp_path):
 
 def test_resident_fp16_scope_refusals(target):
     cfg = replace(config("pdg"), dtype="float16")
-    for mode in ("hst", "softp"):
-        with pytest.raises(ValueError, match="HARD"):
-            runtime(cfg, target, mode=mode)
     r = runtime(cfg, target)
     options = replace(r.options, placement=ExecutionPlacement(preset="resident", scoring_dtype="payload"))
     with pytest.raises(ValueError, match="FP32"):

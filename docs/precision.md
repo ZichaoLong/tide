@@ -65,7 +65,8 @@ not establish a universal speed or training-memory advantage. On another stack, 
 then `--dtype float16`, for both `--implementation python` and `native` with its
 matching `--native-library`; follow [accelerators.md](accelerators.md) for builds.
 
-The resident C++/CANN owner and its Python client accept FP16 **HARD inference**.
+The resident C++/CANN owner and its Python client accept FP16 inference with
+HARD, HST and broadcast SOFTP emission.
 State, parameters, inputs, messages and KV retain FP16. EMA/Add and fiber-bias
 updates round at each declared operation/tick, including within a node-time batch.
 Read and normalized Aggregate use FP32 on the stored payload values. Attention
@@ -76,8 +77,11 @@ it does not prevent overflow in the half QK product itself.
 
 Device journals keep FP32 diagnostic storage and restore payload fields to FP16
 at the explicit CPU export. Scores stay FP32; exported Region controls round to
-the public payload dtype after FP32 softmax. FP16 HST/SOFTP and complete resident
-training remain unavailable and fail explicitly. Internal
+the public payload dtype after FP32 softmax. SOFTP rounds each declared payload
+operation to half; HST preserves the hard forward. Internal control adjoints
+use the rounded control/difference but FP32 complete-frame softmax and Read
+derivatives; see [control VJP](resident-control-vjp.md). Complete resident FP16
+training remains unavailable and fails explicitly. Internal
 [FP32-master publication](resident-optimizer.md) has separate component
 qualification. The [state](resident-state-vjp.md), normalized
 [Aggregate](resident-aggregate-vjp.md) and identity/tanh/LH/SwiGLU

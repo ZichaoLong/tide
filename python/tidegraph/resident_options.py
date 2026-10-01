@@ -35,8 +35,6 @@ class ResidentLimits:
 def validate_resident(config, options, device, placement):
     if device.type != "npu" or config.dtype not in {"float32", "float16"}:
         raise ValueError("resident backend requires NPU FP32/FP16")
-    if config.dtype == "float16" and options.mode != "hard":
-        raise ValueError("resident FP16 inference currently requires HARD emission")
     if config.dtype == "float16" and placement["scoring_dtype"] == "payload":
         raise ValueError("resident FP16 payload requires explicit FP32 or profile scoring")
     if any(placement[key] != device for key in ("read", "control", "selection", "events")):

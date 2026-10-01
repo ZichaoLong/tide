@@ -89,18 +89,26 @@ void compare(const Result& actual,const Result& expected,at::ScalarType dtype,bo
     require(e.descriptor.scalar_type()==at::kFloat,"resident changed FP32 Read dtype");
   }
 }
-void check(at::Device device,at::ScalarType dtype,bool smoke) {
+void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled) {
   Index cases=0,windows=0;
-  for(int shape:{0,1,3})for(int kind=0;kind<13;++kind)for(bool prefill:{false,true}) {
+  const std::vector<std::string> modes=controlled?std::vector<std::string>{"hst","softp"}:std::vector<std::string>{"hard"};
+  for(int shape:{0,1,3})for(int kind=0;kind<13;++kind)for(bool prefill:{false,true})for(const auto& mode:modes) {
+    if(controlled&&kind!=0&&kind!=2&&kind!=7)continue;
     if(smoke&&(shape!=1||(kind!=2&&kind!=7)||!prefill))continue;
     auto f=fixture(shape,kind,dtype);ResidentLimits l;
+    if(controlled) {
+      for(auto& region:f.graph.regions)region.read_mode=shape==0?"content":shape==1?"old":"proposal";
+      if(kind==0)f.graph.nodes[0].full="identity";
+      f.graph.compile();f.initial.identity=f.graph.identity;
+    }
+    l.mode=mode;l.zeta=.375;Options options;options.mode=mode;options.zeta=l.zeta;
     l.queue=128;l.arrivals=256;l.outputs=256;l.trace=2048;l.kv_rows=96;l.kv_trace_rows=16384;
     l.prefill=prefill;l.attention_key_rows=prefill?7:96;l.attention_chunk_rows=prefill?4:1;
     l.full_chunk_rows=prefill?4:1;l.workspace_bytes=512*1024*1024;
     l.chunk_policy=prefill?ChunkPolicy::aggressive:ChunkPolicy::conservative;
     l.vectorized_state=prefill;l.vectorized_read=prefill;l.vectorized_aggregate=prefill;
-    std::cout<<"precision flow shape="<<shape<<" kind="<<kind<<" prefill="<<prefill<<std::endl;
-    ResidentSession candidate(f.graph,f.model,f.initial,device,l);Streaming cpu(f.graph,f.model,{});
+    std::cout<<"precision flow shape="<<shape<<" kind="<<kind<<" prefill="<<prefill<<" mode="<<mode<<std::endl;
+    ResidentSession candidate(f.graph,f.model,f.initial,device,l);Streaming cpu(f.graph,f.model,options);
     auto q=f.initial;Index previous=q.cut;
     for(Index offset:{2,6,11}) {
       const auto stop=f.initial.cut+offset;std::vector<External> xs;
@@ -122,18 +130,19 @@ void check(at::Device device,at::ScalarType dtype,bool smoke) {
     compare(restored.result(),expected,dtype,false);++windows;++cases;
   }
   std::cout<<"precision-flow: passed configurations="<<cases<<" windows="<<windows
-    <<" source=independent_CPU_streaming schedules=streaming,greedy scope="<<(smoke?"profile-smoke":"HARD_inference")<<'\n';
+    <<" source=independent_CPU_streaming schedules=streaming,greedy scope="<<(smoke?"profile-smoke":controlled?"HST_SOFTP_inference":"HARD_inference")<<'\n';
 }
 }
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    bool smoke=false;std::vector<char*> argsv{argv[0]};
-    for(int i=1;i<argc;++i)if(std::string(argv[i])=="--profile-smoke")smoke=true;else argsv.push_back(argv[i]);
+    bool smoke=false,controlled=false;std::vector<char*> argsv{argv[0]};
+    for(int i=1;i<argc;++i)if(std::string(argv[i])=="--profile-smoke")smoke=true;
+      else if(std::string(argv[i])=="--control-modes")controlled=true;else argsv.push_back(argv[i]);
     auto args=portable_torch::parse_cli(argsv.size(),argsv.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("precision flow requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);
     if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("precision flow requires NPU");
-    at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;check(d,args.dtype,smoke);runtime.close();return 0;
+    at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;check(d,args.dtype,smoke,controlled);runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

@@ -195,7 +195,7 @@ CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
 The optional [resident library](resident-library.md) owns device-side online
 progression and continuation for its declared FP32 inference profiles and explicit Emit mode,
-and FP16 HARD inference with FP32 Read/normalization. Payloads and cache slots
+and FP16 inference with FP32 Read/normalization. Payloads and cache slots
 retain the configured dtype; discrete scheduling and identities are unchanged.
 Borrowed device output windows do not export state; snapshot/result are explicit
 boundary materializations. Runtime parameter updates invalidate its frozen
@@ -217,6 +217,9 @@ adjoints and boundary sums; complete half graph reverse and
 retained-window training remain separate, unavailable integrations.
 [Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
 softmax and linear/FP32-norm Read under the same mathematical contracts.
+Their half component preserves payload/control/difference rounding while
+retaining FP32 cotangents and internal frame probabilities. This component
+and half HST/SOFTP inference do not enable complete half graph training.
 Its supported modules and qualifications are separate from resident inference.
 Its Python client uses a separate `tide-resident-training-v1` CPU checkpoint
 containing updated graph parameters, optimizer state and complete continuation;
