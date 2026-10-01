@@ -47,10 +47,12 @@ def main():
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
                 if check == "full-training":
                     command.append("--control-check=" + args.full_training_control_check)
-                if check in ("precision-control-flow", "peer-control-flow"):
+                if check in ("precision-control-flow", "peer-control-flow", "peer-shard-control-flow"):
                     command.append("--control-modes")
                 if check in ("peer-flow", "peer-control-flow"):
                     command.append("--peer-full")
+                if check in ("peer-shard-flow", "peer-shard-control-flow"):
+                    command.append("--full-shards=2")
                 if check == "extended-retained":
                     command.append("--extended")
                 if check in ("event-retained", "fiber-retained"):

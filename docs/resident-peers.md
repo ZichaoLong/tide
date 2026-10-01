@@ -75,3 +75,33 @@ No Full reverse tape is exposed for remote placement. A caller requesting it is
 refused explicitly;single-device tapes/optimizer publication keep their existing
 behavior. Cross-device VJPs and master publication need a separate implementation
 and independent qualification before this placement can support training.
+
+## Compact Full shards
+
+The internal `ContentFlow(..., FullPlacement)` overload assigns every node to
+exactly one explicitly selected logical device. `place_full(..., "memory" |
+"locality")` constructs a deterministic topology-only plan. Locality refinement
+counts physical parallel edges separately, accepts strict cut reductions and
+does not exceed the initial peak parameter estimate; balanced swaps allow equal
+size nodes to move. An explicit owner vector is also accepted. Invalid owners,
+duplicate devices and empty shards are refused before device allocation.
+
+Each device receives only its assigned Full bank rows. The coordinator's device
+planner packs actual selected actions in stable order, maps global node IDs to
+local bank rows and emits gather/scatter indices. It sends all nonempty peer
+requests before local Full work or any peer response wait. Responses scatter to
+distinct original rows; unused rows have private scratch destinations. There is
+no whole-model compute-and-mask path and no per-event host packing. Independent
+peer stages can overlap; actual overlap and speedup require profiling/measurement.
+
+An empty shard stage sends no work request; every peer still receives the window
+terminal command. Per-shard errors merge without clearing an earlier error. Packet
+fields retain fixed capacity and include padding. Exports report selected/capacity
+rows, parameter bytes per shard, actual physical chunk limits and summed program
+workspace; the total tensor admission includes both packet endpoints and scratch.
+The same complete continuation can be recreated with another valid Full placement.
+
+This is Full parameter placement and computation. Read, state/KV, readiness,
+selection and queues remain coordinator-owned. It is not complete model sharding,
+distributed training, a public multi-device client or a throughput qualification.
+Current development/qualification status is recorded in STATUS.

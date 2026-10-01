@@ -52,7 +52,7 @@ Result ContentFlow::Impl::export_result() const {
     std::tie(a.time,a.batch,g.outputs[a.port],a.port)<std::tie(b.time,b.batch,g.outputs[b.port],b.port);});
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",event_count.cpu().item<Index>()},
     {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",limits.diagnostics},
-    {"full_chunks",full_chunks.cpu().item<Index>()},{"full_chunk_rows",full->chunk_rows()},
+    {"full_chunks",full_chunks.cpu().item<Index>()},{"full_chunk_rows",full?full->chunk_rows():0},
     {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
     {"swiglu_full_chunk_rows",swiglu_full?swiglu_full->chunk_rows():0},
     {"aggregate_chunks",aggregate?aggregate->chunks().cpu().item<Index>():0},
@@ -69,12 +69,13 @@ Result ContentFlow::Impl::export_result() const {
   out.stats["memory_budget_bytes"]=limits.workspace_bytes;
   out.stats["usable_memory_budget_bytes"]=usable_memory_budget;
   out.stats["planned_buffer_bytes"]=planned_buffer_bytes;
-  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*(remote_full?2:1);
-  const auto cann_bytes=program->workspace_bytes()+(remote_full?remote_full->workspace_bytes():0);
+  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*(sharded_full?sharded_full->program_count():remote_full?2:1);
+  const auto cann_bytes=program->workspace_bytes()+(sharded_full?sharded_full->workspace_bytes():remote_full?remote_full->workspace_bytes():0);
   out.stats["cann_workspace_bytes"]=cann_bytes;
-  out.stats["full_peer_devices"]=remote_full?2:1;
-  out.stats["full_peer_packet_bytes"]=remote_full?remote_full->packet_bytes():0;
-  out.stats["full_peer_retained_tensor_bytes"]=remote_full?remote_full->retained_tensor_bytes():0;
+  out.stats["full_peer_devices"]=sharded_full?sharded_full->program_count():remote_full?2:1;
+  out.stats["full_peer_packet_bytes"]=sharded_full?sharded_full->packet_bytes():remote_full?remote_full->packet_bytes():0;
+  if(sharded_full)for(const auto& [name,value]:sharded_full->stats())out.stats[name]=value;
+  out.stats["full_peer_retained_tensor_bytes"]=sharded_full?sharded_full->retained_tensor_bytes():remote_full?remote_full->retained_tensor_bytes():0;
   out.stats["retained_tensor_bytes"]=program->retained_tensor_bytes();
   out.stats["planned_headroom_bytes"]=limits.workspace_bytes-planned_buffer_bytes-cann_bytes;
   out.stats["aggressive_chunking"]=limits.chunk_policy==ChunkPolicy::aggressive;

@@ -1,6 +1,8 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "peer-shard-flow": ("tide-precision-flow-check", ("float32", "float16")),
+    "peer-shard-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer": ("tide-device-peer-check", ("float32", "float16")),
     "peer-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
@@ -55,6 +57,8 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "peer-shard-flow": "peer-flow: passed",
+    "peer-shard-control-flow": "peer-flow: passed",
     "peer": "device-peer: passed",
     "peer-flow": "peer-flow: passed",
     "peer-control-flow": "peer-flow: passed",

@@ -16,32 +16,40 @@ std::pair<long double,long double> footprint(int64_t parameters,int64_t width,in
 }
 }
 long double PackedSwiGluFull::minimum_bytes(const ContentProfile& p,int64_t capacity) {
-  int64_t count=0;for(const auto& n:p.graph.nodes)count+=!n.identity&&n.full=="swiglu";
+  return minimum_bytes(p.graph.nodes,p.width,p.dtype,capacity);
+}
+long double PackedSwiGluFull::minimum_bytes(const std::vector<Node>& nodes,int64_t width,at::ScalarType dtype,int64_t capacity) {
+  int64_t count=0;for(const auto& n:nodes)count+=!n.identity&&n.full=="swiglu";
   if(!count)return 0;
-  const auto [fixed,row]=footprint(count,p.width,capacity,p.graph.nodes.size(),p.dtype);return fixed+row;
+  const auto [fixed,row]=footprint(count,width,capacity,nodes.size(),dtype);return fixed+row;
 }
 PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
-    :nodes_(profile.graph.nodes.size()),width_(profile.width),rows_(capacity),parameters_(0),chunk_(0),reserved_(0) {
+    :PackedSwiGluFull(profile.graph.nodes,profile.model.nodes,profile.width,profile.dtype,device,capacity,max_rows,budget){}
+PackedSwiGluFull::PackedSwiGluFull(const std::vector<Node>& nodes,const std::vector<NodeWeights>& weights,
+    int64_t width,at::ScalarType dtype,at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
+    :nodes_(nodes.size()),width_(width),rows_(capacity),parameters_(0),chunk_(0),reserved_(0) {
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1||capacity<1||max_rows<1||budget<1)
     throw std::invalid_argument("packed SwiGLU requires bounded dimensions and no-grad NPU");
+  if(nodes.empty()||weights.size()!=nodes.size()||width<1||(dtype!=at::kFloat&&dtype!=at::kHalf))
+    throw std::invalid_argument("invalid compact SwiGLU bank");
   std::vector<int64_t> kinds,mapping;std::vector<at::Tensor> gate,up,down;
   for(int64_t n=0;n<nodes_;++n) {
-    const auto& node=profile.graph.nodes[n];const bool enabled=!node.identity&&node.full=="swiglu";
+    const auto& node=nodes[n];const bool enabled=!node.identity&&node.full=="swiglu";
     kinds.push_back(enabled);mapping.push_back(enabled?parameters_++:-1);
     if(enabled) {
-      const auto& w=profile.model.nodes[n];gate.push_back(w.extra.at("ffn_gate"));
+      const auto& w=weights[n];gate.push_back(w.extra.at("ffn_gate"));
       up.push_back(w.extra.at("ffn_up"));down.push_back(w.extra.at("ffn_down"));
     }
   }
   if(!parameters_)throw std::invalid_argument("packed SwiGLU requires at least one declared owner");
-  const auto [fixed,per_row]=footprint(parameters_,width_,rows_,nodes_,profile.dtype);
+  const auto [fixed,per_row]=footprint(parameters_,width_,rows_,nodes_,dtype);
   if(fixed+per_row>budget)throw std::invalid_argument("one packed SwiGLU row exceeds workspace budget");
   chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(max_rows),static_cast<long double>(capacity),(budget-fixed)/per_row}));
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);
   for(auto& index:mapping)if(index<0)index=parameters_;
   mapping.push_back(parameters_); // Planner's independent zero parameter sentinel.
   kinds_=at::tensor(kinds,at::kLong).to(device);mapping_=at::tensor(mapping,at::kLong).to(device);
-  auto options=at::TensorOptions().dtype(profile.dtype);
+  auto options=at::TensorOptions().dtype(dtype);
   gate.push_back(at::zeros({width_,2*width_},options));up.push_back(at::zeros({width_,2*width_},options));
   down.push_back(at::zeros({2*width_,width_},options));
   gate_=at::stack(gate).to(device);up_=at::stack(up).to(device);down_=at::stack(down).to(device);

@@ -6,6 +6,7 @@
 #include "full_vjp.h"
 #include "reverse_links.h"
 #include "parameter_publish.h"
+#include "full_placement.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -34,6 +35,9 @@ class ContentFlow {
   // graph control/state; the peer executes selected Full batches. Not public
   // multi-device training or complete model/parameter sharding.
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device full_device);
+  // Compact Full banks on the explicit node owners; state/KV stay coordinator
+  // owned. Inference only until the separate distributed reverse is qualified.
+  ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,FullPlacement);
   ~ContentFlow();
   ContentFlow(const ContentFlow&)=delete;
   ContentFlow& operator=(const ContentFlow&)=delete;

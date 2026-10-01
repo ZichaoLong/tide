@@ -6,6 +6,11 @@ RemoteFull::RemoteFull(PackedFull& full,PackedLhFull* lh,PackedSwiGluFull* swigl
   :full_(full),lh_(lh),swiglu_(swiglu),workspace_budget_(budget){}
 ActionBatch RemoteFull::append_stage(CannProgram& coordinator,const ActionBatch& actions,
     const at::Tensor& content,const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
+  auto result=append_send_stage(coordinator,actions,content,comparison,error,chunks);
+  append_receive_stage(coordinator);return result;
+}
+ActionBatch RemoteFull::append_send_stage(CannProgram& coordinator,const ActionBatch& actions,
+    const at::Tensor& content,const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
   if(program_)throw std::logic_error("remote Full stage already constructed");
   const auto remote=full_.kinds().device();
   if(actions.values.device()==remote)throw std::invalid_argument("remote Full requires a distinct peer");
@@ -27,9 +32,10 @@ ActionBatch RemoteFull::append_stage(CannProgram& coordinator,const ActionBatch&
   response_=std::make_unique<PeerExchange>(PeerExchange::Fields{{result.values,output},
     {remote_error,error},{full_.chunks(),chunks}},workspace_budget_);
   response_->append_send(p);p.branch(again,{head});p.mark(end);p.finish();
-  coordinator.copy(command_,work);request_->append_send(coordinator);response_->append_receive(coordinator);
+  coordinator.copy(command_,work);request_->append_send(coordinator);
   return {actions.coordinates,output,actions.valid};
 }
+void RemoteFull::append_receive_stage(CannProgram& p){response_->append_receive(p);}
 void RemoteFull::append_stop(CannProgram& p) {
   if(!program_)throw std::logic_error("remote Full has no stage");
   p.copy(command_,stop_);request_->append_send(p);

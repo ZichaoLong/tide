@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-10-01. **PAUSED at the user's request after this evidence commit/push.**
-Do not resume implementation or submit new experiments until the user confirms
-the progress/goal/priority/contract alignment. All current qualification jobs are
-terminal. The historical CPU Attention task remains intentionally paused.
+Updated 2026-10-01. **ACTIVE: user confirmed the progress/contract and resumed execution.**
+Implement and qualify coherent vertical multi-device increments;commit/push remains
+authorized. All previous qualification jobs are terminal. The historical CPU
+Attention task remains intentionally paused and is not resumed by this request.
 No subagents. Reference repositories and ObsidianVault are read-only.
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
@@ -27,8 +27,7 @@ No duplicate tracking or Trackio blocker. Training means forward/loss interface/
 backward/VJP/optimizer/continuation/throughput;downstream convergence is out of scope.
 Use affected checks and byte-verified terminal build reuse. Do not rerun the
 unchanged portable core's8,954 CPU checks/23 optional skips. Commit implementation,
-qualify clean immutable source,commit evidence separately. Subsequent pushes remain
-authorized after execution resumes;this pause requires renewed user confirmation.
+qualify clean immutable source,commit evidence separately. Push tested commits under the renewed user authorization.
 
 ## Latest qualification
 
@@ -71,7 +70,7 @@ Immediately preceding completed increments:
   Prior dev failures retained:Bool fixture and cross-thread CANN107002/507046.
   Same-thread construction/submit-all/wait fixes the context failure.
 
-## Remaining main work and next action after confirmation
+## Remaining main work and current action
 
 1. General multi-device owner/parameter/state/cache placement and packed transport,
    exploiting topology locality without fixture-specific routing. The remote Full
@@ -87,12 +86,34 @@ Historical CPU Attention remains supplementary,not an implementation blocker.
 Before performance,resolve its preserved timing lock and host-memory interference
 with a deliberate policy;do not blindly resume/kill it.
 
-Suggested overhead reduction after confirmation:group related multi-device work
+Accepted overhead reduction:group related multi-device work
 into vertical graph/training milestones;reuse fixtures/assertions and one audit
 path;only affected checks per increment,broader regression at integration gates.
 Do not add another tracking framework or repeat already qualified core gates.
 Formal full-size repetitions follow functional integration and capacity calibration.
-No new milestone has been started after the user's pause request.
+Active increment:compact per-owner Full parameter shards and device packing/merge,
+with generic static memory/locality placement and existing independent graph fixtures.
+Coordinator retains online readiness/selection. Group transport/packing/placement
+changes into one actual multi-device inference qualification before cross-card
+reverse/optimizer integration;do not label Full-only placement as state/KV sharding.
+Development full-shards-dev01:all6 jobs PASSED/exit0 (affected build,two2-NPU
+full gates,3-NPU memory/locality × FP32/FP16 smoke,1-NPU inference regression,
+1-NPU half-cache training smoke). Peer per dtype120 configurations/600 windows;
+three-device4 cells,3 configurations/15 windows each. No runtime failure or
+changed tolerance. New working-source follow-up reports peer retained bytes,
+adds a balanced locality/parallel-edge/refusal assertion,and restores candidate
+continuation with the other placement policy. Only measurement/test follow-up;
+no numerical kernel change.
+full-shards-dev02 standalone/Python affected builds both PASSED/exit0,using
+TASK/launchers/build_full_shards.py NAME [--runtime python] --kernel-build full-shards-dev01.
+All dev02 jobs PASSED/exit0:full-shards-three-dev02(3 NPUs,both policies/dtypes),
+full-shards-one-dev02(1-NPU shard smoke),full-shards-python-dev02(96 tests,no skips).
+Balanced locality cuts,placement-policy continuation and peer retained-byte reporting
+passed. No production/runtime development failures. Commit/push implementation;
+qualify immutable source full-shards-clean01 with affected standalone and Python
+builds,two2-device gates,3-device policy smoke,1-device shard/inference/training/
+Python regressions,and separate3-device profile. Shared task-local helpers
+qualification_audit.py validate existing receipts;no additional tracking system. No full-size or distributed-training claim yet.
 
 ## Environment and bounded execution
 

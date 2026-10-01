@@ -13,6 +13,11 @@ class RemoteFull {
   RemoteFull(PackedFull&,PackedLhFull*,PackedSwiGluFull*,int64_t workspace_budget);
   ActionBatch append_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
                            const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);
+  // Construct/send every independent shard before receiving any result. The
+  // returned values may be consumed only after append_receive_stage.
+  ActionBatch append_send_stage(CannProgram&,const ActionBatch&,const at::Tensor& content,
+                               const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks);
+  void append_receive_stage(CannProgram&);
   void append_stop(CannProgram&);
   void submit();
   void wait();

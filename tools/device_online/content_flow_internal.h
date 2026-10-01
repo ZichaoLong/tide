@@ -11,6 +11,7 @@
 #include "packed_event_attention.h"
 #include "packed_aggregate.h"
 #include "remote_full.h"
+#include "sharded_full.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
@@ -34,11 +35,12 @@ struct ContentFlow::Impl {
   AtomBatch external;
   at::Tensor error,stop,stages,event_count,source_scales_before,full_chunks;
   std::unique_ptr<RemoteFull> remote_full;
+  std::unique_ptr<ShardedFull> sharded_full;
   std::unique_ptr<CannProgram> program;
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false;
   int64_t window_start=0;
-  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device);
+  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device,FullPlacement={});
   void construct();
   Continuation export_continuation() const;
   Result export_result() const;
