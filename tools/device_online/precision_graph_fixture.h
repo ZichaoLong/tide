@@ -8,4 +8,5 @@ namespace tide::device_online::test {
 void fixture_dtype(Fixture&,at::ScalarType);
 void configure_half_reference(Fixture&);
 void round_half_transport(Result&);
+void check_half_reference_norm();
 } // namespace tide::device_online::test

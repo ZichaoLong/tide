@@ -11,7 +11,8 @@ qualification is recorded per module in ROADMAP.
 FP32 and FP16 forward tapes use FP32 cotangents and adjoint accumulation;
 half roots fail explicitly. Half forward values, parameter banks and per-operation
 rounding remain intact. The integration gate covers sum Aggregate, identity/EMA/
-Add-repeat state and identity/tanh Full, with all three Emit modes. Other half
+Add-repeat state and identity/tanh Full, with all three Emit modes. The separate
+extended retained gate adds normalized Aggregate, LH and SwiGLU. Half attention
 modules have local component checks and require their own whole-graph integration
 qualification. Public FP16 training and master/checkpoint lifecycle remain guarded.
 

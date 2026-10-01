@@ -1,6 +1,7 @@
 #include "retained_fixture.h"
 #include "full_vjp_fixture.h"
 #include "precision_graph_fixture.h"
+#include "precision_graph_profiles.h"
 #include "parameter_vjp.h"
 #include "portable_torch/runtime.hpp"
 #include "../../cpp/bench/streaming.h"
@@ -12,8 +13,8 @@
 namespace {
 using namespace tide;using namespace tide::device_online;
 void require(bool x,const char* message){if(!x)throw std::runtime_error(message);}
-void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefill,int mode,at::ScalarType payload,std::string emit="hard") {
-  at::NoGradGuard guard;auto f=test::retained_fixture(shape,variant,width);
+void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefill,int mode,at::ScalarType payload,std::string emit="hard",int profile=0) {
+  at::NoGradGuard guard;auto f=test::precision_graph_profile(shape,variant,width,profile);
   if(emit!="hard") {
     for(auto& r:f.graph.regions)r.read_mode=shape==0?"old":"proposal";
     f.graph.compile();f.initial.identity=f.graph.identity;
@@ -37,11 +38,14 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
   live.state.values.fill_(std::numeric_limits<float>::quiet_NaN());live.state.count.fill_(-1);
   if(live.full.has_tanh)live.full.weights.fill_(std::numeric_limits<float>::quiet_NaN());
   auto error=at::zeros({1},saved[0].tape.state.count.options().dtype(at::kInt));CannProgram p(device);p.limit_workspace(128*1024*1024);
+  // Wide SwiGLU needs at least one matrix row plus its parameter accumulators
+  // within the nested Full reserve. This is an explicit admission budget.
+  const Index reverse_bytes=(width>3?256:128)*1024*1024;
   std::vector<GraphCotangents> roots;for(size_t i=0;i<saved.size();++i)roots.push_back(test::retained_roots(saved[i].tape,i,mode));
   std::vector<GraphVjp> gradients(saved.size());ParameterVjp total;
   for(size_t i=saved.size();i>0;) {--i;auto cot=roots[i];
     if(i+1<saved.size())cot=append_window_bridge(p,saved[i].tape,cot,saved[i+1].tape,gradients[i+1],error,16*1024*1024);
-    gradients[i]=append_graph_vjp(p,saved[i].tape,cot,error,3,128*1024*1024);
+    gradients[i]=append_graph_vjp(p,saved[i].tape,cot,error,3,reverse_bytes);
     auto partial=append_parameter_vjp(p,f.graph,registry,gradients[i],error,16*1024*1024);
     total=total.values.defined()?append_parameter_accumulate(p,total,partial,error,16*1024*1024):partial;
   }
@@ -75,7 +79,7 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
     for(const auto& [name,_]:expected.gradients)if(name.rfind("boundary/",0)==0)require(seen[name],"retained reverse lost an external leaf");
   }
   portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>()&&at::equal(total.values.cpu(),values)&&at::equal(total.connected.cpu(),on),"retained reverse replay changed gradients");
-  if(shape==0&&variant==0&&width==3&&!prefill&&mode==4) {
+  if(!profile&&shape==0&&variant==0&&width==3&&!prefill&&mode==4) {
     auto reject=[&](auto fn){bool failed=false;try{fn();}catch(const std::invalid_argument&){failed=true;}require(failed,"retained preflight refusal missing");};
     reject([&]{retain_reverse_tape(saved[0].tape,1);});
     reject([&]{CannProgram small(device);append_window_bridge(small,saved[0].tape,roots[0],saved[1].tape,gradients[1],error,1);});
@@ -95,11 +99,31 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
+    bool extended=false;std::vector<char*> forwarded{argv[0]};
+    for(int i=1;i<argc;++i)if(std::string(argv[i])=="--extended")extended=true;else forwarded.push_back(argv[i]);
+    auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("retained gate requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("retained gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
+    if(extended) {
+      test::check_half_reference_norm();
+      for(int profile=1;profile<=16;++profile)for(bool prefill:{false,true})for(int mode:{0,4,5}) {
+        try{trajectory(device,profile%2?0:3,0,3,prefill,mode,args.dtype,"hard",profile);++cases;}
+        catch(...){std::cerr<<"extended retained profile="<<profile<<" prefill="<<prefill<<" roots="<<mode<<'\n';throw;}
+      }
+      for(int profile:{4,11,16})for(const std::string emit:{"hst","softp"})for(bool prefill:{false,true}) {
+        try{trajectory(device,0,1,3,prefill,4,args.dtype,emit,profile);++cases;}
+        catch(...){std::cerr<<"extended retained profile="<<profile<<" prefill="<<prefill<<" emit="<<emit<<'\n';throw;}
+      }
+      for(int profile:{4,15}) {
+        try{trajectory(device,0,0,257,true,4,args.dtype,"hard",profile);++cases;}
+        catch(...){std::cerr<<"extended retained profile="<<profile<<" width=257\n";throw;}
+      }
+      std::cout<<"device-extended-retained: passed trajectories="<<cases<<" windows="<<cases*4<<" dtype="<<args.dtype
+        <<" CPU=FP32_FP64 after_close=true replay=true scope=normalized_Aggregate_LH_SwiGLU_retained_backward\n";
+      runtime.close();return 0;
+    }
     for(int shape:{0,3})for(bool prefill:{false,true})for(int mode=0;mode<6;++mode) {
       try{trajectory(device,shape,0,3,prefill,mode,args.dtype);++cases;}
       catch(...){std::cerr<<"retained shape="<<shape<<" prefill="<<prefill<<" mode="<<mode<<'\n';throw;}

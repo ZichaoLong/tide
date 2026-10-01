@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T08:47:25.498737+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T09:00:14.088683+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -53,30 +53,45 @@ remain separately qualified.
 
 ## Active work and next action
 
-Commit/push current graph/retained evidence,then extend the same independent
-quantized CPU reference and retained checker to normalized Aggregate,LH and
-SwiGLU,then event/fiber cache graph integration. Existing graph_vjp accepts half;
-local module adjoints are qualified but whole-graph coverage is currently only
-the base profile above. Public training/master/checkpoint guards remain.
-Next production/test code not yet edited. precision_graph_fixture.cpp contains
-CPU-only HalfState/HalfSum/HalfFull and physical transport rounding;
-retained_check.cpp already checks all named owners/aliases,initial and physical
-boundary gradients. Reuse these checks;do not duplicate schedulers or CPU core.
-Normalized Aggregate must round raw source product to half before multiplying
-FP32 coefficients,then accumulate unrounded coefficient products in FP32;sum's
-source products are not rounded before accumulation. LH uses standalone
-normalization→half→weight multiply→half→optional bias→half. SwiGLU uses actual
-half matmuls/SiLU/product/residual. Local independent references exist in
-extra_full_check.cpp and aggregate_vjp_check.cpp. Internal graph roots/adjoints
-always FP32,including retained roots;do not recompute whole forward in FP32.
-Training future:training_backward.cpp must accept FP32 cotangents independent
-of payload dtype;training_parameters.cpp and training_owner.cpp still FP32-only,
-master/named half correspondence and checkpoint validation need explicit handling.
+Base graph evidence committed/pushed as742b789. Current test-only extension to
+independent CPU precision oracle/retained checker:all normalized Aggregate,
+9 LH profiles,SwiGLU,mixed modules and shared owners. Production source unchanged
+from25e996c. New extended-retained check uses --extended on retained checker.
+Dev03 build and both dtype cells PASSED/exit0:110 trajectories/440 windows each,
+FP32/FP64 leaves,HARD/HST/SOFTP,None/zero,feedback,shared owners,widths3/257.
+Dev02 all4 base graph-vjp/retained cells passed;unchanged base code in dev03.
+
+Retain dev01 wide SwiGLU capacity failure:128MiB nested reverse reserve was too
+small;wide257 checker now explicitly uses256MiB,small3 remains128MiB.
+Retain dev02 half failure:CPU native FP32 LayerNorm backward introduced-6.1035e-5
+in an analytically zero middle component;NPU returned0. Independent CPU probe
+x=[.015625]*3,w=[.75,.8125,.875],loss=2*sum(layernorm(x)*w) reproduces it;
+FP64 gives1.14e-13. Half CPU oracle now keeps actual FP32→half forward values
+and differentiates independent CPU normalization in FP64;analytic zero-component
+anchor added. No production/tolerance change. Existing CPU FP32 oracle unchanged.
+
+Next commit/push test implementation;freeze low-precision-extended-graph-clean01.
+Build launcher TASK/launchers/build_precision_extended_graph_v2.py,900s;only
+precision oracle and retained checker compile;source-matched clean25e996c
+production reused. Run extended-retained (2 cells) and graph-vjp/retained
+regression (4 cells),600s/lease120s;one half extended-retained profile,512MB.
+Audit TASK/launchers/precision_extended_graph_evidence.py REV expects4 terminal
+jobs and6 cells. No Python-owned build/97-test repeat for unchanged production.
+Unit tide-execution-flows-NAME.service;TASK/runs/NAME/status.json and task.log.
+All current development jobs terminal;historical baseline intentionally paused.
+Further:event/fiber cache whole-graph integration,then public FP16 training/master/
+checkpoint. Half state adapter candidates/references already located in
+ event_vjp_check.cpp,fiber_reverse_check.cpp and event_training_check.cpp.
+Current precision_graph_fixture.cpp has CPU-only base kernels and physical
+transport rounding;retained checker must add cache roots and initial KV/bias
+checks when extending it. Public training remains guarded. training_backward.cpp
+must accept FP32 roots independently of payload dtype;freeze_model/restore and
+checkpoint master↔named half correspondence need explicit handling.
 No portable core changes;do not repeat unchanged8,954 CPU checks.
-Remaining F1–F7:all-module half graph/public training/master/checkpoint integrations,
-device peer progression/communication/training,five-preset screening,representative/
-full-size CPU/mixed/resident performance,version/migration/CUDA records.
-Implementation commit→immutable qualification→separate evidence commit,push each.
+Remaining F1–F7:half cache/public training/master/checkpoint,device peer progression/
+communication/training,five-preset screening,representative/full-size performance,
+version/migration/CUDA records. Commit implementation→immutable qualification→
+separate evidence commit;push each. No pause requested.
 
 ## Environment and bounded execution
 

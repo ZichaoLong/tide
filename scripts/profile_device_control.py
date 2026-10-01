@@ -51,6 +51,8 @@ def main():
                "--dtype="+args.dtype, *args.application_arg]
     if args.check == "precision-control-flow":
         command.append("--control-modes")
+    if args.check == "extended-retained":
+        command.append("--extended")
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

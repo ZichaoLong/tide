@@ -26,6 +26,7 @@ CHECKS = {
     "master-publication": ("tide-master-publication-check", ("float32", "float16")),
     "training-step": ("tide-device-training-step-check", ("float32",)),
     "retained": ("tide-device-retained-check", ("float32", "float16")),
+    "extended-retained": ("tide-device-retained-check", ("float32", "float16")),
     "reverse-links": ("tide-device-reverse-links-check", ("float32", "float16")),
     "full-vjp": ("tide-device-full-vjp-check", ("float32", "float16")),
     "state-vjp": ("tide-device-state-vjp-check", ("float32", "float16")),
@@ -69,6 +70,7 @@ MARKERS = {
     "master-publication": "master-publication: passed",
     "training-step": "device-training-step: passed",
     "retained": "device-retained: passed",
+    "extended-retained": "device-extended-retained: passed",
     "reverse-links": "device-reverse-links: passed",
     "full-vjp": "device-full-vjp: passed",
     "state-vjp": "device-state-vjp: passed",
@@ -102,6 +104,7 @@ KERNELS = {"master-publication": "tide_parameter_publish", "precision-flow": "ti
 CHECKS["full-training"] = ("tide-resident-full-training-check", ("float32",))
 MARKERS["full-training"] = "resident-full-training: passed"
 KERNELS["full-training"] = "tide_extra_full"
+KERNELS["extended-retained"] = "tide_window_bridge"
 
 CHECKS["extra-full-vjp"] = ("tide-device-extra-full-vjp-check", ("float32", "float16"))
 MARKERS["extra-full-vjp"] = "device-extra-full-vjp: passed"

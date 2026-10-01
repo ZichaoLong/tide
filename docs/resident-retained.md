@@ -49,6 +49,20 @@ oracle preserves forward rounding with wide adjoints as described in
 [graph reverse](resident-graph-vjp.md). Added checks are implementation scope
 until accompanied by immutable-source qualification.
 
+The separate `extended-retained` gate adds all four normalized Aggregate profiles,
+nine LH activation/normalization profiles, SwiGLU and mixed modules. It retains
+shared coefficients/projection/normalization owners across four windows and checks
+None/zero roots, input/state gradients, physical messages and all named owners.
+Its CPU half oracle preserves the normalized path's source-product rounding,
+FP32 coefficients, separately rounded LH normalization/affine operations and
+actual half SwiGLU matmuls/SiLU/products. This extends whole-graph qualification
+coverage without changing the production scheduler or using reference routes.
+For the half normalization oracle, forward statistics remain FP32 before half
+storage, while CPU autograd differentiates normalization in FP64. A constant
+input with linear upstream weights has an analytically zero middle gradient;
+native CPU FP32 LayerNorm backward can introduce a6.1e-5 cancellation residual
+there. The test includes that analytic anchor; existing VJP tolerances remain.
+
 This is an internal retained-backward component. It does not supply the public
 training lifecycle, optimizer-generation guards, checkpoint controller, additional
 module integration, public FP16 training, peer progression or full-size throughput. Qualification and
