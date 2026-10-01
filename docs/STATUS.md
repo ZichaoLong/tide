@@ -10,164 +10,78 @@ is the only backlog. Overall task remains incomplete.
 
 ## Contract and focus
 
-Candidates independently consume common inputs/parameters/initial state,never
+Candidates independently consume common inputs/parameters/initial state, never
 CPU reference events/routes/results/gradients. General online greedy accepts legal
 topology/input including positive-delay feedback and natural streaming fallback.
-Preserve int64,stable ordering,parallel-edge identity,missing/zero messages,None/zero
-gradients. Matrix: PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU ×
-streaming/prefill × inference/complete training. Python resident is a C++/CANN client,
-not an independent PyTorch scheduler. Five presets retain fine switches; FP32 main,
-FP16 separate. CUDA execution is target-machine-pending. Training means loss/VJP/
-optimizer/continuation/throughput,not downstream convergence. Contract outranks
-run-ml-experiments: minimal existing durable records;Trackio does not block.
-Public complete consumers and F6 take priority over repeated internal polishing.
-Only affected checks,not unchanged8,954 CPU checks. Implementation commit →
-immutable qualification → evidence commit;push each.
+Preserve int64, stable ordering, parallel-edge identity, missing/zero messages,
+None/zero gradients. Matrix: PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch;
+CPU/NPU × streaming/prefill × inference/complete training. Python resident is a
+C++/CANN client, not an independent PyTorch scheduler. Five presets retain fine
+switches; FP32 main, FP16 separate. CUDA execution is target-machine-pending.
+Training means loss/VJP/optimizer/continuation/throughput, not model convergence.
+Contract outranks run-ml-experiments: minimal existing durable records; Trackio
+is not blocking. Public complete consumers and F6 take priority over repeated
+internal polishing. Only affected checks, not unchanged8,954 CPU checks.
+Implementation commit → immutable qualification → evidence commit; push each.
 
 ## Latest qualified work
 
-Actual CPU/mixed Add/Attention consumers: cleanfe2d886,CPU120/NPU18;
-[evidence](evidence/online-consumers-20261002.md). Actual resident FP32 consumers:
-clean0d61cb9,CPU59/resident19/mixed18;[evidence](evidence/online-resident-consumers-20261002.md).
-Public multi-device training and portable repartition: clean0d7c45e;
-[evidence](evidence/public-sharded-training-20261002.md). HARD slot-affine adjoints
-and publication: clean96c75f8;[evidence](evidence/resident-emission-training-20261002.md).
+All earlier gates/citations are indexed in ROADMAP F1–F5. Do not repeat them.
+Actual CPU/mixed and resident consumers, public multi-device inference/training,
+FP16 master/publication, retained VJP and checkpoint/repartition are qualified.
+Recent scale enablers:
 
-Reverse budget splitting: clean106cbeb293847e054525fce21f68a8d1c8a13b13;
-[evidence](evidence/resident-reverse-budget-20261002.md),evidence commitb538906 pushed.
-Eight jobs passed:CPU1,cache83,consumer21,FP32/FP16 each16 retained trajectories,
-512 windows/128 updates total. D32 requested reverse16 selects owner12/query12/key64
-and matches explicit1-row plus independent CPU. Separate actual two-card training
-trace has no observed AiCPU. Local tensor reservation splitting,not total-memory
-admission. Public Gradients ABI changed;clients must match/rebuild. Statistics are
-physical capacities/estimates,not observed active rows or allocator peaks.
+- Projection banks/adjoints/publication: acb84f3, evidence dd24e50,
+  [report](evidence/resident-projection-shards-20261002.md).
+- FP16 actual consumers/bounded head: d178b86, evidence0c0a428,
+  [report](evidence/resident-consumer-head-20261002.md).
+- Canonical streaming:7e375f5, evidence7b96565,
+  [report](evidence/resident-owner-stream-20261002.md). Eight jobs passed;
+  64MiB endpoint cap, ordinal alias accumulation, no full contribution banks.
+- Complete-consumer phase memory:fdfc74802934cf145c052eb3ae966ff94c323e0a,
+  [report/audit](evidence/consumer-memory-20261002.md). Five fixed-source jobs
+  PASSED; CPU4/NPU7, no skips. No backend ABI change or core rebuild.
+  C++ CPU rebuilt; NPU client source/header/options-verified object reuse, fresh
+  link/loader. Both reuse existing qualified backend. No live task jobs except
+  the intentionally suspended historical CPU task.
 
-Public multi-device inference: implementation7329c71f5f48267fed23a1656a821ae059364b2f,
-committed/pushed. [Report/audit](evidence/public-sharded-inference-20261002.md).
-All7 immutable-source jobs PASSED; audit sharded_inference_evidence.py exited0.
-CPU74/library47/actual consumers27,no skips or tolerance changes. Library FP32/FP16
-covers3 families,both schedules,distinct Full/state maps,save/reset/load,and2→1/3
-card continuation. Actual standalone/Python clients:12 FP32 multi-card inference
-plus12 complete-training trajectories,96 windows/24 updates. Legacy single-device
-C++ constructor and TrainingPlacement binding alias retained. Model freeze keeps
-TensorImpl aliases. Placement persists through Python reset/load;manifests report
-requested/resolved maps. Consumer timing distinguishes inference/training.
-Separate D32 Attention2-card inference profile,4 windows,diagnostics off:
-4,790 AI_VECTOR_CORE/170 AI_CORE/16 MIX_AIV,no observed AiCPU,no reverse/VJP/
-optimizer/journal operators;12 model executions,332 notification pairs,1,172
-switches,2,432 async copies. Includes construction,not formal throughput.
+Memory calibration:128 body nodes/544 edges,D64/B2/T2/V257,4,367,024 parameters,
+Attention,2-card FP32 AdamW,online prefill,4 continued windows/2 updates including
+warmup. Peak allocated construction146456576/123725312 bytes; measured training
+408049152/392550400; peak reserved461373440/432013312. Not formal throughput.
+Initial/construction/warmup/measured sampling occurs outside step timers.
+Counters exclude untracked vendor/driver HBM; CPU RSS is process-lifetime peak.
 
-Source sources/sharded-inference-clean01; backend builds sharded-inference-clean01
-and sharded-inference-python-clean01; installed client sharded-inference-consumer-clean01.
-Backend links reused recursively byte-verified development objects and unchanged
-kernels/core. Runs build-sharded-inference-{,python-,consumer-}clean01 and
-sharded-inference-{cpu,library,consumer,profile}-clean01. Do not rerun completed jobs.
-Development CPU dev01 fixture-name collection failure retained;corrected dev02
-PASSED74. All other development jobs passed. No current build/test/profile jobs live.
+Source consumer-memory-clean01; builds consumer-memory-{cpu,npu}-clean01.
+Runs build-consumer-memory-{cpu,npu}-clean01 and
+consumer-memory-{cpu,npu,calibration}-clean01 all PASSED. Audit:
+python TASK/launchers/consumer_memory_evidence.py fdfc74802934cf145c052eb3ae966ff94c323e0a
 
-## Current work and next commands
+Retain failures: memory dev01 collection dtype collision; NPU dev02 Python fixture
+passed native_library incorrectly (other6 passed, corrected case passed dev03).
+Calibration-dev01 reverse-packet budget refusal at trace4096/backward8GiB;
+dev02 cache-adjoint boundary refusal at trace1024/backward8GiB. Neither OOM.
+Nested budget divisions reviewed; clean calibration passed with32GiB backward,
+trace1024 and unchanged KV128. Actual per-card training peak<400MiB demonstrates
+that local envelopes cannot simply be summed to obtain total HBM admission.
 
-Projection retention implementation3f85852552c607e7e44dc9480d41eafca1027081 and
-qualification5f8ff8a are pushed. All8 fixed-source jobs passed; see
-[evidence](evidence/resident-projection-retention-20261002.md). Do not repeat them.
+## Next work
 
-Compact projection banks and adjoints implementationacb84f30475c03e91cba5c35964565ab1b6316cf
-is pushed. Full owners hold physical forward/gradient banks; actual projection rows
-and vectors use device chunk services. Immutable retained snapshots, canonical
-alias reduction and optimizer publication are connected. No explicit placement
-retains the dense path. Reservations are not allocator peak measurements.
+Total per-device memory admission and safe physical splitting → representative
+five-preset screening → full-size F6 → F7 final qualification/target handoff.
+Include parameters,state/KV,retained immutable banks/journals/roots,physical and
+canonical gradients,FP32 masters/slots/proposals,communication,embedding/head/loss,
+construction transients,CANN workspace and calibrated headroom. Existing local
+ContentBudget,reverse budgets and head budget are not total admission.
+Avoid repeated trial launches for nested budget limits; inspect shape formulas
+and distinguish declared envelopes from simultaneous live allocations.
 
-Fixed source sources/projection-shards-clean01. Successful backends are
-builds/projection-shards-clean02 and projection-shards-python-clean02;
-installed client builds/projection-shards-consumer-clean01. All3 builds PASSED.
-Library-clean01 PASSED31; matrix-clean01 PASSED32 trajectories,legacy-clean01
-PASSED12,placements-clean01 PASSED4. Total48 trajectories/768 windows/192 updates.
-Do not repeat these completed jobs. All source is immutable during qualification.
-
-All9 fixed-source qualification jobs PASSED. Actual consumer-clean01 PASSED27;
-profile-clean01 PASSED (D32 Attention/two-card,four windows/two AdamW updates).
-Audit projection_shards_evidence.py acb84f30475c03e91cba5c35964565ab1b6316cf exited0.
-Evidence docs/evidence/resident-projection-shards-20261002.{md,json}; profile reports
-15,615 AI_VECTOR_CORE/631 AI_CORE/218 MIX_AIV,no observed AiCPU. No formal timing claim.
-Retain failures: library-dev02 CPU oracle fixture missing packed=False; clean01
-backend reuse launcher assumed a copied kernel archive. clean02 follows recorded
-artifact paths/hashes. No live qualification jobs; do not duplicate completed work.
-
-Projection shard evidence commitdd24e50 is pushed.
-
-Consumer head implementationd178b863402157f0f92b60b7dbff12c8e8d7a60e is pushed.
-All6 fixed-source qualification jobs PASSED; consumer_head_evidence.py audit exited0.
-Evidence docs/evidence/resident-consumer-head-20261002.{md,json}. No live jobs except
-intentionally suspended historical CPU. Do not duplicate completed qualification.
-
-Actual resident FP32/FP16 consumers now use bounded packed head rows,FP32 loss/
-adjoints/masters and recorded precision/head reservations/chunk counts. Optional
---head-workspace-bytes (default4GiB) includes calibrated32MiB operator allowance
-and10/25% headroom; it is head-only,not total HBM. No logical window/update split.
-Source sources/consumer-head-clean01; installed client builds/consumer-head-clean01.
-Reuse byte-identical acb84f3 backends projection-shards-{,python-}clean02 and
-placement-npu-python-clean01 core. No backend rebuild. Source/header/compiler-
-verified client object reuse,fresh link/loader. Build/cpu10/native32/libtorch27/
-scale/profile jobs all terminal PASSED.59 NPU cases include48 whole-model and4
-split-head trajectories. D2048/V50304,256-output head VJP calibration: FP32 selected
-108 rows,peak915439104 under1536MiB; FP16 selected151 rows,peak1340316160 under2048MiB.
-Four small head calibrations also passed. These are allocator deltas,not driver HBM.
-Independent D32 FP16/two-card training trace: head chunk1,12 chunks/update,
-17,399 AI_VECTOR_CORE/667 AI_CORE/258 MIX_AIV,no observed AiCPU; not throughput.
-
-Retain failures: consumer-head-native-dev01 (28 semantic cases passed,then8MiB
-plan missed16MiB operator floor; corrected allowance32MiB); profile-dev02 (actual
-consumer passed but8-row fixture did not split; changed only explicit budget to
-37317703 bytes to select1 row). Development dev02 builds/CPU10/native32/LibTorch27/
-scale2 passed; dev03 native3 tests later temporary release and CLI refusal checks.
-No tolerance relaxation or implicit dtype fallback.
-
-Bounded canonical streaming implementation7e375f5abeea76c2c5406ef91d1919facba56470
-is pushed and all8 fixed-source qualification jobs PASSED. Audit
-owner_stream_evidence.py exited0; report/evidence resident-owner-stream-20261002.
-Source owner-stream-clean01; backends owner-stream-clean01 and owner-stream-python-clean01;
-installed client owner-stream-consumer-clean01. No current live task jobs except
-intentionally suspended historical CPU. Do not rerun completed qualification.
-
-Canonical reduction/publication uses reusable CANN packets,ordinal contribution
-order,sticky errors,poisoned None and FP16 strided aliases. Optimizer releases its
-obsolete initial gradient bank; public training layout shares master geometry.
-Component20 cases/100 replays/order2 plus FP32/FP16 each4 optimizer trajectories/
-32 updates; public32 trajectories/512 windows/128 updates2→3 cards; native17 and
-LibTorch14 actual/projection training checks.16MiB/65-packet allocator calibration:
-reservation528402;peak deltas344576/347136 bytes;workspace77312 per program.
-Independent actual FP16 Attention2-card training trace18,449 AI_VECTOR_CORE/
-704 AI_CORE/258 MIX_AIV,no observed AiCPU;not formal throughput.
-Retain build-dev01 failure (ambiguous Tensor assignment,corrected explicit Tensor{}).
-
-Consumer phase-memory increment ready for implementation commit: memory.{h,cpp,py}
-and hooks record each logical device's allocator current/peak allocated/reserved
-across initial/construction/warmup/measured phases,plus process-lifetime CPU peak
-RSS. Sampling is outside step timers; no backend/core ABI change. Development
-build-consumer-memory-{cpu,npu}-dev01 PASSED; cpu-dev02 PASSED4; npu-dev02 PASSED6
-with one fixture failure,then npu-dev03 PASSED that corrected Python mixed case.
-Retain dev01 collection failures (global dtype parametrization collision),dev02
-Python fixture passing native_library incorrectly. No production or numeric failure.
-Frozen latest development source consumer-memory-dev03,unchanged C++ artifacts
-from dev01. Calibration128 nodes/544 edges,D64/B2/T2/V257,Attention,2-card FP32
-AdamW: calibration-dev01 refused reverse pack budget at trace4096,not OOM;
-calibration-dev02 active with trace1024 and unchanged8GiB backward budget. Bounded
-queue120/run600; task.log/status.json plus consumer/result.json/consumer.log.
-Next implementation commit,clean source CPU/NPU builds and directed CPU4/NPU7,
-then immutable calibration and evidence commit. Reuse byte-identical qualified
-owner-stream backend; no core rebuild. CUDA counter branch target-machine-pending.
-Observations are not total-memory admission. Existing snapshots/records only.
-
-Next: total per-device memory admission/safe splitting,representative five-preset
-screening and full-size F6. Current CPU/mixed consumers use one payload device;
-full-size multi-card mixed consumers may still need generic placement integration.
-Do not conflate historical restricted graph executors with general online flows.
-No new formal full-size throughput result. Include parameters,state/KV,tapes,
-master/optimizer/proposals,communication,head/loss,construction transients and
-headroom. NPUCachingAllocator exposes current/peak allocated/reserved,not all
-vendor/driver HBM. ContentBudget is still a module envelope,not total per-device
-admission. Eager consumer FP16 training still explicitly refuses an unqualified
-master path. Do not duplicate tracking or rerun unchanged8,954 CPU tests.
+Current CPU/mixed consumers have one payload device; full-size17B FP32 does not
+fit one64GiB card. Generic multi-card mixed placement may remain necessary.
+Eager/mixed FP16 training explicitly refuses the unqualified master path.
+Historical restricted accelerator_scale executors do not replace online flows.
+No new formal full-size throughput result. Do not finish merely on capacity refusal.
+Current evidence commit pending: memory report/JSON,ROADMAP and this handoff.
 
 ## Environment and job bounds
 
@@ -177,16 +91,17 @@ Module libtorch-npu/2.10.0-cann9.0.0;Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
 Default shell Python cannot run Torch tests. Public /opt stack supersedes dated
 personal guide by user authorization. TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;
-preserve module PYTHONPATH,prepend snapshot/python. SoC Ascend910_9392;leased logical
-NPUs only. Separate standalone/Python runtimes. Core builds placement-cpu-clean01,
-placement-npu-clean01(standalone),placement-npu-python-clean01(Python-owned).
+preserve module PYTHONPATH,prepend snapshot/python. SoC Ascend910_9392,16 logical
+chips ×64GiB; leased/remapped NPUs only. Standalone/Python runtimes stay separate.
+Core builds placement-cpu-clean01,placement-npu-clean01,placement-npu-python-clean01.
+Qualified resident backends owner-stream-clean01 / owner-stream-python-clean01.
 freeze_run.py;runtime cwd env -C RUN prevents vendor files polluting snapshots.
 background.slice/Nice10,2 build workers,queue120s/run600s/build900s. Last disk:
-data222GiB/root14GiB;check before heavy writes. Atomic handoff durable_records.replace_text.
+data220GiB/root14GiB;check before heavy writes. Atomic writes:durable_records.replace_text.
 
-Historical historical-cpu-attention-01 remains intentionally SIGSTOP;pause.json
-outweighs running status and retains memory/TASK/timing.lock. Do not resume or kill.
+Historical historical-cpu-attention-01 remains deliberately SIGSTOP; pause.json
+outweighs running status,retains memory/TASK/timing.lock. Do not resume/kill/clean.
 Historical Add CPU78.793172/NPU4 47.932888ms/token = throughput1.6438× faster;
-it does not certify resident. Earlier24 dirty files retained on pushed archive/
-restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37,sha256 inventory
-TASK/restricted-flow-archive.json. Preserve all cited artifacts and failures.
+it does not certify resident. Earlier24 dirty files are preserved on pushed
+archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37,
+sha256 inventory TASK/restricted-flow-archive.json. Preserve cited artifacts/failures.

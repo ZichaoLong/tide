@@ -1,0 +1,4152 @@
+{
+  "schema": "tide-consumer-memory-evidence-v1",
+  "source": "fdfc74802934cf145c052eb3ae966ff94c323e0a",
+  "clients": {
+    "cpu": {
+      "manifest_sha256": "25c7f7fc8e69d2dbb72e8f10a526cdd0ba525c44f436dacb32781b72656ba09f",
+      "binary_sha256": "e12436039ed74f5893e1d5d1477ec9268856d3a80d97068c571fbdc245aa9877",
+      "loader_sha256": "8d3820ca6de510cf29e5234ca2c4a5a13935245eabd1c759adaad68611e58bea"
+    },
+    "npu": {
+      "manifest_sha256": "f524781b73403e57e361817634b941374d5bb9a727cf2ab5a515d2c509260bf0",
+      "binary_sha256": "7ba1f0ab3dd7e924913d5a9052c9b9f1e4cafdef5010564974abf3724f5e5905",
+      "loader_sha256": "f872ff7d1fe93372bd319ae399036a34594a93fdfdcb5a815e5a02c389f14158"
+    }
+  },
+  "backends": {
+    "owner-stream-clean01": {
+      "source": "7e375f5abeea76c2c5406ef91d1919facba56470",
+      "manifest_sha256": "8932fe2d8d8429bef29fd3c2879a06c1482e64eb97c6e5a7ea8b35fd3ae3cde6",
+      "binary_sha256": {
+        "libtide-resident.so": "4ab2e81fce0d49fa2a88d55e29f4c1d49287363f6b0a2ce5409b532843ebef30",
+        "tide-resident-half-training-check": "23e73a9b58e9091ceb8c0e86afa95efb1f66e9702884ab9e1325681b36743698",
+        "tide-resident-sharded-session-check": "83a3ec7278096fb527f38b80566e2c33691f3d7c2c8a6a432832869ee20e7d87",
+        "tide-owner-stream-check": "fb163b099e41c2937901c8bfcf2214cf89ec88f8af4d9a2d4dc21a9bc6b9e0e5",
+        "tide-sharded-optimizer-check": "447af526075f526bdac53290382efe01b544df06d812dd739442131f801ecd21"
+      }
+    },
+    "owner-stream-python-clean01": {
+      "source": "7e375f5abeea76c2c5406ef91d1919facba56470",
+      "manifest_sha256": "0f9610b536e2c785dc74123e9d9dffbb561f9b4a538f7240b6b570135f0b0dba",
+      "binary_sha256": {
+        "libtide-resident.so": "ef1909f95231772ac567218752f47b42962013c5095a69a386df5923f078fd9c",
+        "_tide_resident.so": "08858394e98603534b43039dd1b2606bb5265bcd9734b3b488f60a318a12886d"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-consumer-memory-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0318a83a1db497b2a25d7794275f710f38b7dbc1d606d3977df306e18275691a",
+        "task.log": "53505da2d368b3fae567100631002f79ccd31f6efac24de31ac3170ab088587f"
+      }
+    },
+    {
+      "name": "build-consumer-memory-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "7832607a9948f167cff22bd0e32c16f6271af34b268c65502eb4b413f3ebcf22",
+        "task.log": "e06424aa6f7afe018def003b2c2734d3db9485abbbfa68bd5f1de2121489e651"
+      }
+    },
+    {
+      "name": "consumer-memory-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "af2a9046df8973c5db5149d1027344f01bce6e4f560944ef114763929a50bada",
+        "task.log": "0b5b29db722a8fe75b6ec7345f94b66c5b39042fafd768c54e261172e750fbf2"
+      }
+    },
+    {
+      "name": "consumer-memory-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fc1f4b004c1162e253993bcfd8e337ee0bc0ea017008f78f0ee56b2a3d6d0812",
+        "task.log": "ccf2e0875dd7db960f00f5217e26310ad0a98b96bc9a94c0ea27b15ec712d708",
+        "queue.json": "3c0f3ea9520c79461ccdb4442799f570d15028c3e7025573a06196aada3fce8f"
+      }
+    },
+    {
+      "name": "consumer-memory-calibration-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a45d88724bc042f7e7c80071b53e99f1f740ae1c17c794997dcf6a41b9945eef",
+        "task.log": "57e10eb50bd2f44f8cfa9d6a28428bb0df0ce48bd765dbd7e0c53a6b3e664a1e",
+        "queue.json": "7400596a8fcebde1ed59355d5b440d8cefa2ae89c3e10adce1b5512ccb369565"
+      }
+    }
+  ],
+  "cpu_cases": 4,
+  "npu_cases": 7,
+  "skipped": 0,
+  "observations": [
+    {
+      "backend": "cpu",
+      "case": "test_cpu_consumer_memory_False0",
+      "sha256": "97d06421b29d9a400234dc2a6169ad9c5222343d74f5ba59d9762c1b52def10f",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [],
+            "cpu_peak_rss_bytes": 388571136
+          },
+          {
+            "phase": "construction",
+            "devices": [],
+            "cpu_peak_rss_bytes": 388571136
+          },
+          {
+            "phase": "warmup",
+            "devices": [],
+            "cpu_peak_rss_bytes": 388571136
+          },
+          {
+            "phase": "measured",
+            "devices": [],
+            "cpu_peak_rss_bytes": 388571136
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_consumer_memory_False1",
+      "sha256": "743b2c6475262754ba3bdf744b60398956a3403c5205b5610679e77a46976b8d",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+        "phases": [
+          {
+            "phase": "initial",
+            "cpu_peak_rss_bytes": 388878336,
+            "devices": []
+          },
+          {
+            "phase": "construction",
+            "cpu_peak_rss_bytes": 388878336,
+            "devices": []
+          },
+          {
+            "phase": "warmup",
+            "cpu_peak_rss_bytes": 388878336,
+            "devices": []
+          },
+          {
+            "phase": "measured",
+            "cpu_peak_rss_bytes": 388878336,
+            "devices": []
+          }
+        ]
+      }
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_consumer_memory_True_0",
+      "sha256": "3554ae8c41f993620a8abbebe2c926e03872729627bac69ac5563f72e39d1486",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [],
+            "cpu_peak_rss_bytes": 396537856
+          },
+          {
+            "phase": "construction",
+            "devices": [],
+            "cpu_peak_rss_bytes": 396537856
+          },
+          {
+            "phase": "warmup",
+            "devices": [],
+            "cpu_peak_rss_bytes": 396537856
+          },
+          {
+            "phase": "measured",
+            "devices": [],
+            "cpu_peak_rss_bytes": 396808192
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_consumer_memory_True_1",
+      "sha256": "bad407a3a9adec2b16b151fada0a166f86f1345d698b5b3ec0831c1a6dac922a",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+        "phases": [
+          {
+            "phase": "initial",
+            "cpu_peak_rss_bytes": 396808192,
+            "devices": []
+          },
+          {
+            "phase": "construction",
+            "cpu_peak_rss_bytes": 396808192,
+            "devices": []
+          },
+          {
+            "phase": "warmup",
+            "cpu_peak_rss_bytes": 396808192,
+            "devices": []
+          },
+          {
+            "phase": "measured",
+            "cpu_peak_rss_bytes": 396808192,
+            "devices": []
+          }
+        ]
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_libto0",
+      "sha256": "023d3e4f0ea271086c6fb84c2602080f43c4ba418b741fe14c2e83410dfa46df",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+        "phases": [
+          {
+            "phase": "initial",
+            "cpu_peak_rss_bytes": 1938067456,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              }
+            ]
+          },
+          {
+            "phase": "construction",
+            "cpu_peak_rss_bytes": 1938067456,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 33792,
+                "peak_allocated_bytes": 33589760,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ]
+          },
+          {
+            "phase": "warmup",
+            "cpu_peak_rss_bytes": 1938067456,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 116224,
+                "peak_allocated_bytes": 33936896,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ]
+          },
+          {
+            "phase": "measured",
+            "cpu_peak_rss_bytes": 1938067456,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 115712,
+                "peak_allocated_bytes": 33973760,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_libto1",
+      "sha256": "94c04b18a0ee8362a47f953639b30a2ffd15acd3b3b29f49da0df89a0f9f3f1b",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+        "phases": [
+          {
+            "phase": "initial",
+            "cpu_peak_rss_bytes": 2137411584,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              }
+            ]
+          },
+          {
+            "phase": "construction",
+            "cpu_peak_rss_bytes": 2137411584,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 23827968,
+                "peak_allocated_bytes": 23926784,
+                "reserved_bytes": 27262976,
+                "peak_reserved_bytes": 27262976
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19181056,
+                "peak_allocated_bytes": 19280896,
+                "reserved_bytes": 23068672,
+                "peak_reserved_bytes": 23068672
+              }
+            ]
+          },
+          {
+            "phase": "warmup",
+            "cpu_peak_rss_bytes": 2137411584,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 23868928,
+                "peak_allocated_bytes": 92532224,
+                "reserved_bytes": 98566144,
+                "peak_reserved_bytes": 98566144
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19181056,
+                "peak_allocated_bytes": 130957312,
+                "reserved_bytes": 146800640,
+                "peak_reserved_bytes": 146800640
+              }
+            ]
+          },
+          {
+            "phase": "measured",
+            "cpu_peak_rss_bytes": 2137411584,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 23830016,
+                "peak_allocated_bytes": 92534272,
+                "reserved_bytes": 98566144,
+                "peak_reserved_bytes": 98566144
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19181056,
+                "peak_allocated_bytes": 130957312,
+                "reserved_bytes": 146800640,
+                "peak_reserved_bytes": 146800640
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_nativ0",
+      "sha256": "8fe561f0c0c0ad73fd263fa3cd292655745af47bb6bb232763919bc73fd68561",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1884065792
+          },
+          {
+            "phase": "construction",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 28672,
+                "peak_allocated_bytes": 33584640,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1888358400
+          },
+          {
+            "phase": "warmup",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 163328,
+                "peak_allocated_bytes": 33933824,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1932390400
+          },
+          {
+            "phase": "measured",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 163328,
+                "peak_allocated_bytes": 33989120,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1934635008
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_nativ1",
+      "sha256": "6d1158eeb1a0bea092ed38274c1d6e33f157719bfa7b407063a3350ef1f03c1d",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              }
+            ],
+            "cpu_peak_rss_bytes": 1938186240
+          },
+          {
+            "phase": "construction",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 24071680,
+                "peak_allocated_bytes": 24184832,
+                "reserved_bytes": 44040192,
+                "peak_reserved_bytes": 44040192
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19070464,
+                "peak_allocated_bytes": 19184640,
+                "reserved_bytes": 23068672,
+                "peak_reserved_bytes": 23068672
+              }
+            ],
+            "cpu_peak_rss_bytes": 2093912064
+          },
+          {
+            "phase": "warmup",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 24094208,
+                "peak_allocated_bytes": 92752384,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19070464,
+                "peak_allocated_bytes": 130786304,
+                "reserved_bytes": 146800640,
+                "peak_reserved_bytes": 146800640
+              }
+            ],
+            "cpu_peak_rss_bytes": 2129268736
+          },
+          {
+            "phase": "measured",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 24094208,
+                "peak_allocated_bytes": 92754944,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 19070464,
+                "peak_allocated_bytes": 130786304,
+                "reserved_bytes": 146800640,
+                "peak_reserved_bytes": 146800640
+              }
+            ],
+            "cpu_peak_rss_bytes": 2133352448
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_nativ2",
+      "sha256": "31d0ba1f333f1ecf1eeb0e25755a3e83dff786649630437263c223693dd70565",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              }
+            ],
+            "cpu_peak_rss_bytes": 2137415680
+          },
+          {
+            "phase": "construction",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 19218432,
+                "peak_allocated_bytes": 19218432,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              }
+            ],
+            "cpu_peak_rss_bytes": 2147622912
+          },
+          {
+            "phase": "warmup",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 19220992,
+                "peak_allocated_bytes": 52776960,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              }
+            ],
+            "cpu_peak_rss_bytes": 2152783872
+          },
+          {
+            "phase": "measured",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 19220992,
+                "peak_allocated_bytes": 52776960,
+                "reserved_bytes": 115343360,
+                "peak_reserved_bytes": 115343360
+              }
+            ],
+            "cpu_peak_rss_bytes": 2152783872
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_consumer_memory_pytho0",
+      "sha256": "657bac70e5b5a02b25288654e0da0058083411719f7706196b9c2d61bdc0d4f0",
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "phases": [
+          {
+            "phase": "initial",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              }
+            ],
+            "cpu_peak_rss_bytes": 1723678720
+          },
+          {
+            "phase": "construction",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 28672,
+                "peak_allocated_bytes": 33584640,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1755377664
+          },
+          {
+            "phase": "warmup",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 58880,
+                "peak_allocated_bytes": 33674752,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1873133568
+          },
+          {
+            "phase": "measured",
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 58880,
+                "peak_allocated_bytes": 33674752,
+                "reserved_bytes": 37748736,
+                "peak_reserved_bytes": 37748736
+              }
+            ],
+            "cpu_peak_rss_bytes": 1873506304
+          }
+        ],
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+      }
+    }
+  ],
+  "calibration": {
+    "packet": {
+      "schema": "tide-complete-flow-workload-v2",
+      "graph": {
+        "nodes": 128,
+        "regions": 8,
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "ranks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "edges": [
+          [
+            0,
+            16,
+            1
+          ],
+          [
+            0,
+            17,
+            1
+          ],
+          [
+            0,
+            18,
+            1
+          ],
+          [
+            0,
+            27,
+            1
+          ],
+          [
+            0,
+            32,
+            2
+          ],
+          [
+            1,
+            17,
+            1
+          ],
+          [
+            1,
+            18,
+            1
+          ],
+          [
+            1,
+            19,
+            1
+          ],
+          [
+            1,
+            20,
+            1
+          ],
+          [
+            1,
+            33,
+            2
+          ],
+          [
+            2,
+            18,
+            1
+          ],
+          [
+            2,
+            19,
+            1
+          ],
+          [
+            2,
+            20,
+            1
+          ],
+          [
+            2,
+            21,
+            1
+          ],
+          [
+            2,
+            34,
+            2
+          ],
+          [
+            3,
+            19,
+            1
+          ],
+          [
+            3,
+            20,
+            1
+          ],
+          [
+            3,
+            21,
+            1
+          ],
+          [
+            3,
+            22,
+            1
+          ],
+          [
+            3,
+            35,
+            2
+          ],
+          [
+            4,
+            20,
+            1
+          ],
+          [
+            4,
+            21,
+            1
+          ],
+          [
+            4,
+            22,
+            1
+          ],
+          [
+            4,
+            23,
+            1
+          ],
+          [
+            4,
+            36,
+            2
+          ],
+          [
+            5,
+            21,
+            1
+          ],
+          [
+            5,
+            22,
+            1
+          ],
+          [
+            5,
+            23,
+            1
+          ],
+          [
+            5,
+            16,
+            1
+          ],
+          [
+            5,
+            37,
+            2
+          ],
+          [
+            6,
+            22,
+            1
+          ],
+          [
+            6,
+            23,
+            1
+          ],
+          [
+            6,
+            16,
+            1
+          ],
+          [
+            6,
+            17,
+            1
+          ],
+          [
+            6,
+            38,
+            2
+          ],
+          [
+            7,
+            23,
+            1
+          ],
+          [
+            7,
+            16,
+            1
+          ],
+          [
+            7,
+            17,
+            1
+          ],
+          [
+            7,
+            18,
+            1
+          ],
+          [
+            7,
+            39,
+            2
+          ],
+          [
+            8,
+            24,
+            1
+          ],
+          [
+            8,
+            25,
+            1
+          ],
+          [
+            8,
+            26,
+            1
+          ],
+          [
+            8,
+            19,
+            1
+          ],
+          [
+            8,
+            40,
+            2
+          ],
+          [
+            9,
+            25,
+            1
+          ],
+          [
+            9,
+            26,
+            1
+          ],
+          [
+            9,
+            27,
+            1
+          ],
+          [
+            9,
+            28,
+            1
+          ],
+          [
+            9,
+            41,
+            2
+          ],
+          [
+            10,
+            26,
+            1
+          ],
+          [
+            10,
+            27,
+            1
+          ],
+          [
+            10,
+            28,
+            1
+          ],
+          [
+            10,
+            29,
+            1
+          ],
+          [
+            10,
+            42,
+            2
+          ],
+          [
+            11,
+            27,
+            1
+          ],
+          [
+            11,
+            28,
+            1
+          ],
+          [
+            11,
+            29,
+            1
+          ],
+          [
+            11,
+            30,
+            1
+          ],
+          [
+            11,
+            43,
+            2
+          ],
+          [
+            12,
+            28,
+            1
+          ],
+          [
+            12,
+            29,
+            1
+          ],
+          [
+            12,
+            30,
+            1
+          ],
+          [
+            12,
+            31,
+            1
+          ],
+          [
+            12,
+            44,
+            2
+          ],
+          [
+            13,
+            29,
+            1
+          ],
+          [
+            13,
+            30,
+            1
+          ],
+          [
+            13,
+            31,
+            1
+          ],
+          [
+            13,
+            24,
+            1
+          ],
+          [
+            13,
+            45,
+            2
+          ],
+          [
+            14,
+            30,
+            1
+          ],
+          [
+            14,
+            31,
+            1
+          ],
+          [
+            14,
+            24,
+            1
+          ],
+          [
+            14,
+            25,
+            1
+          ],
+          [
+            14,
+            46,
+            2
+          ],
+          [
+            15,
+            31,
+            1
+          ],
+          [
+            15,
+            24,
+            1
+          ],
+          [
+            15,
+            25,
+            1
+          ],
+          [
+            15,
+            26,
+            1
+          ],
+          [
+            15,
+            47,
+            2
+          ],
+          [
+            16,
+            32,
+            1
+          ],
+          [
+            16,
+            33,
+            1
+          ],
+          [
+            16,
+            34,
+            1
+          ],
+          [
+            16,
+            43,
+            1
+          ],
+          [
+            16,
+            48,
+            2
+          ],
+          [
+            17,
+            33,
+            1
+          ],
+          [
+            17,
+            34,
+            1
+          ],
+          [
+            17,
+            35,
+            1
+          ],
+          [
+            17,
+            36,
+            1
+          ],
+          [
+            17,
+            49,
+            2
+          ],
+          [
+            18,
+            34,
+            1
+          ],
+          [
+            18,
+            35,
+            1
+          ],
+          [
+            18,
+            36,
+            1
+          ],
+          [
+            18,
+            37,
+            1
+          ],
+          [
+            18,
+            50,
+            2
+          ],
+          [
+            19,
+            35,
+            1
+          ],
+          [
+            19,
+            36,
+            1
+          ],
+          [
+            19,
+            37,
+            1
+          ],
+          [
+            19,
+            38,
+            1
+          ],
+          [
+            19,
+            51,
+            2
+          ],
+          [
+            20,
+            36,
+            1
+          ],
+          [
+            20,
+            37,
+            1
+          ],
+          [
+            20,
+            38,
+            1
+          ],
+          [
+            20,
+            39,
+            1
+          ],
+          [
+            20,
+            52,
+            2
+          ],
+          [
+            21,
+            37,
+            1
+          ],
+          [
+            21,
+            38,
+            1
+          ],
+          [
+            21,
+            39,
+            1
+          ],
+          [
+            21,
+            32,
+            1
+          ],
+          [
+            21,
+            53,
+            2
+          ],
+          [
+            22,
+            38,
+            1
+          ],
+          [
+            22,
+            39,
+            1
+          ],
+          [
+            22,
+            32,
+            1
+          ],
+          [
+            22,
+            33,
+            1
+          ],
+          [
+            22,
+            54,
+            2
+          ],
+          [
+            23,
+            39,
+            1
+          ],
+          [
+            23,
+            32,
+            1
+          ],
+          [
+            23,
+            33,
+            1
+          ],
+          [
+            23,
+            34,
+            1
+          ],
+          [
+            23,
+            55,
+            2
+          ],
+          [
+            24,
+            40,
+            1
+          ],
+          [
+            24,
+            41,
+            1
+          ],
+          [
+            24,
+            42,
+            1
+          ],
+          [
+            24,
+            35,
+            1
+          ],
+          [
+            24,
+            56,
+            2
+          ],
+          [
+            25,
+            41,
+            1
+          ],
+          [
+            25,
+            42,
+            1
+          ],
+          [
+            25,
+            43,
+            1
+          ],
+          [
+            25,
+            44,
+            1
+          ],
+          [
+            25,
+            57,
+            2
+          ],
+          [
+            26,
+            42,
+            1
+          ],
+          [
+            26,
+            43,
+            1
+          ],
+          [
+            26,
+            44,
+            1
+          ],
+          [
+            26,
+            45,
+            1
+          ],
+          [
+            26,
+            58,
+            2
+          ],
+          [
+            27,
+            43,
+            1
+          ],
+          [
+            27,
+            44,
+            1
+          ],
+          [
+            27,
+            45,
+            1
+          ],
+          [
+            27,
+            46,
+            1
+          ],
+          [
+            27,
+            59,
+            2
+          ],
+          [
+            28,
+            44,
+            1
+          ],
+          [
+            28,
+            45,
+            1
+          ],
+          [
+            28,
+            46,
+            1
+          ],
+          [
+            28,
+            47,
+            1
+          ],
+          [
+            28,
+            60,
+            2
+          ],
+          [
+            29,
+            45,
+            1
+          ],
+          [
+            29,
+            46,
+            1
+          ],
+          [
+            29,
+            47,
+            1
+          ],
+          [
+            29,
+            40,
+            1
+          ],
+          [
+            29,
+            61,
+            2
+          ],
+          [
+            30,
+            46,
+            1
+          ],
+          [
+            30,
+            47,
+            1
+          ],
+          [
+            30,
+            40,
+            1
+          ],
+          [
+            30,
+            41,
+            1
+          ],
+          [
+            30,
+            62,
+            2
+          ],
+          [
+            31,
+            47,
+            1
+          ],
+          [
+            31,
+            40,
+            1
+          ],
+          [
+            31,
+            41,
+            1
+          ],
+          [
+            31,
+            42,
+            1
+          ],
+          [
+            31,
+            63,
+            2
+          ],
+          [
+            32,
+            48,
+            1
+          ],
+          [
+            32,
+            49,
+            1
+          ],
+          [
+            32,
+            50,
+            1
+          ],
+          [
+            32,
+            59,
+            1
+          ],
+          [
+            32,
+            64,
+            2
+          ],
+          [
+            33,
+            49,
+            1
+          ],
+          [
+            33,
+            50,
+            1
+          ],
+          [
+            33,
+            51,
+            1
+          ],
+          [
+            33,
+            52,
+            1
+          ],
+          [
+            33,
+            65,
+            2
+          ],
+          [
+            34,
+            50,
+            1
+          ],
+          [
+            34,
+            51,
+            1
+          ],
+          [
+            34,
+            52,
+            1
+          ],
+          [
+            34,
+            53,
+            1
+          ],
+          [
+            34,
+            66,
+            2
+          ],
+          [
+            35,
+            51,
+            1
+          ],
+          [
+            35,
+            52,
+            1
+          ],
+          [
+            35,
+            53,
+            1
+          ],
+          [
+            35,
+            54,
+            1
+          ],
+          [
+            35,
+            67,
+            2
+          ],
+          [
+            36,
+            52,
+            1
+          ],
+          [
+            36,
+            53,
+            1
+          ],
+          [
+            36,
+            54,
+            1
+          ],
+          [
+            36,
+            55,
+            1
+          ],
+          [
+            36,
+            68,
+            2
+          ],
+          [
+            37,
+            53,
+            1
+          ],
+          [
+            37,
+            54,
+            1
+          ],
+          [
+            37,
+            55,
+            1
+          ],
+          [
+            37,
+            48,
+            1
+          ],
+          [
+            37,
+            69,
+            2
+          ],
+          [
+            38,
+            54,
+            1
+          ],
+          [
+            38,
+            55,
+            1
+          ],
+          [
+            38,
+            48,
+            1
+          ],
+          [
+            38,
+            49,
+            1
+          ],
+          [
+            38,
+            70,
+            2
+          ],
+          [
+            39,
+            55,
+            1
+          ],
+          [
+            39,
+            48,
+            1
+          ],
+          [
+            39,
+            49,
+            1
+          ],
+          [
+            39,
+            50,
+            1
+          ],
+          [
+            39,
+            71,
+            2
+          ],
+          [
+            40,
+            56,
+            1
+          ],
+          [
+            40,
+            57,
+            1
+          ],
+          [
+            40,
+            58,
+            1
+          ],
+          [
+            40,
+            51,
+            1
+          ],
+          [
+            40,
+            72,
+            2
+          ],
+          [
+            41,
+            57,
+            1
+          ],
+          [
+            41,
+            58,
+            1
+          ],
+          [
+            41,
+            59,
+            1
+          ],
+          [
+            41,
+            60,
+            1
+          ],
+          [
+            41,
+            73,
+            2
+          ],
+          [
+            42,
+            58,
+            1
+          ],
+          [
+            42,
+            59,
+            1
+          ],
+          [
+            42,
+            60,
+            1
+          ],
+          [
+            42,
+            61,
+            1
+          ],
+          [
+            42,
+            74,
+            2
+          ],
+          [
+            43,
+            59,
+            1
+          ],
+          [
+            43,
+            60,
+            1
+          ],
+          [
+            43,
+            61,
+            1
+          ],
+          [
+            43,
+            62,
+            1
+          ],
+          [
+            43,
+            75,
+            2
+          ],
+          [
+            44,
+            60,
+            1
+          ],
+          [
+            44,
+            61,
+            1
+          ],
+          [
+            44,
+            62,
+            1
+          ],
+          [
+            44,
+            63,
+            1
+          ],
+          [
+            44,
+            76,
+            2
+          ],
+          [
+            45,
+            61,
+            1
+          ],
+          [
+            45,
+            62,
+            1
+          ],
+          [
+            45,
+            63,
+            1
+          ],
+          [
+            45,
+            56,
+            1
+          ],
+          [
+            45,
+            77,
+            2
+          ],
+          [
+            46,
+            62,
+            1
+          ],
+          [
+            46,
+            63,
+            1
+          ],
+          [
+            46,
+            56,
+            1
+          ],
+          [
+            46,
+            57,
+            1
+          ],
+          [
+            46,
+            78,
+            2
+          ],
+          [
+            47,
+            63,
+            1
+          ],
+          [
+            47,
+            56,
+            1
+          ],
+          [
+            47,
+            57,
+            1
+          ],
+          [
+            47,
+            58,
+            1
+          ],
+          [
+            47,
+            79,
+            2
+          ],
+          [
+            48,
+            64,
+            1
+          ],
+          [
+            48,
+            65,
+            1
+          ],
+          [
+            48,
+            66,
+            1
+          ],
+          [
+            48,
+            75,
+            1
+          ],
+          [
+            48,
+            80,
+            2
+          ],
+          [
+            49,
+            65,
+            1
+          ],
+          [
+            49,
+            66,
+            1
+          ],
+          [
+            49,
+            67,
+            1
+          ],
+          [
+            49,
+            68,
+            1
+          ],
+          [
+            49,
+            81,
+            2
+          ],
+          [
+            50,
+            66,
+            1
+          ],
+          [
+            50,
+            67,
+            1
+          ],
+          [
+            50,
+            68,
+            1
+          ],
+          [
+            50,
+            69,
+            1
+          ],
+          [
+            50,
+            82,
+            2
+          ],
+          [
+            51,
+            67,
+            1
+          ],
+          [
+            51,
+            68,
+            1
+          ],
+          [
+            51,
+            69,
+            1
+          ],
+          [
+            51,
+            70,
+            1
+          ],
+          [
+            51,
+            83,
+            2
+          ],
+          [
+            52,
+            68,
+            1
+          ],
+          [
+            52,
+            69,
+            1
+          ],
+          [
+            52,
+            70,
+            1
+          ],
+          [
+            52,
+            71,
+            1
+          ],
+          [
+            52,
+            84,
+            2
+          ],
+          [
+            53,
+            69,
+            1
+          ],
+          [
+            53,
+            70,
+            1
+          ],
+          [
+            53,
+            71,
+            1
+          ],
+          [
+            53,
+            64,
+            1
+          ],
+          [
+            53,
+            85,
+            2
+          ],
+          [
+            54,
+            70,
+            1
+          ],
+          [
+            54,
+            71,
+            1
+          ],
+          [
+            54,
+            64,
+            1
+          ],
+          [
+            54,
+            65,
+            1
+          ],
+          [
+            54,
+            86,
+            2
+          ],
+          [
+            55,
+            71,
+            1
+          ],
+          [
+            55,
+            64,
+            1
+          ],
+          [
+            55,
+            65,
+            1
+          ],
+          [
+            55,
+            66,
+            1
+          ],
+          [
+            55,
+            87,
+            2
+          ],
+          [
+            56,
+            72,
+            1
+          ],
+          [
+            56,
+            73,
+            1
+          ],
+          [
+            56,
+            74,
+            1
+          ],
+          [
+            56,
+            67,
+            1
+          ],
+          [
+            56,
+            88,
+            2
+          ],
+          [
+            57,
+            73,
+            1
+          ],
+          [
+            57,
+            74,
+            1
+          ],
+          [
+            57,
+            75,
+            1
+          ],
+          [
+            57,
+            76,
+            1
+          ],
+          [
+            57,
+            89,
+            2
+          ],
+          [
+            58,
+            74,
+            1
+          ],
+          [
+            58,
+            75,
+            1
+          ],
+          [
+            58,
+            76,
+            1
+          ],
+          [
+            58,
+            77,
+            1
+          ],
+          [
+            58,
+            90,
+            2
+          ],
+          [
+            59,
+            75,
+            1
+          ],
+          [
+            59,
+            76,
+            1
+          ],
+          [
+            59,
+            77,
+            1
+          ],
+          [
+            59,
+            78,
+            1
+          ],
+          [
+            59,
+            91,
+            2
+          ],
+          [
+            60,
+            76,
+            1
+          ],
+          [
+            60,
+            77,
+            1
+          ],
+          [
+            60,
+            78,
+            1
+          ],
+          [
+            60,
+            79,
+            1
+          ],
+          [
+            60,
+            92,
+            2
+          ],
+          [
+            61,
+            77,
+            1
+          ],
+          [
+            61,
+            78,
+            1
+          ],
+          [
+            61,
+            79,
+            1
+          ],
+          [
+            61,
+            72,
+            1
+          ],
+          [
+            61,
+            93,
+            2
+          ],
+          [
+            62,
+            78,
+            1
+          ],
+          [
+            62,
+            79,
+            1
+          ],
+          [
+            62,
+            72,
+            1
+          ],
+          [
+            62,
+            73,
+            1
+          ],
+          [
+            62,
+            94,
+            2
+          ],
+          [
+            63,
+            79,
+            1
+          ],
+          [
+            63,
+            72,
+            1
+          ],
+          [
+            63,
+            73,
+            1
+          ],
+          [
+            63,
+            74,
+            1
+          ],
+          [
+            63,
+            95,
+            2
+          ],
+          [
+            64,
+            80,
+            1
+          ],
+          [
+            64,
+            81,
+            1
+          ],
+          [
+            64,
+            82,
+            1
+          ],
+          [
+            64,
+            91,
+            1
+          ],
+          [
+            64,
+            96,
+            2
+          ],
+          [
+            65,
+            81,
+            1
+          ],
+          [
+            65,
+            82,
+            1
+          ],
+          [
+            65,
+            83,
+            1
+          ],
+          [
+            65,
+            84,
+            1
+          ],
+          [
+            65,
+            97,
+            2
+          ],
+          [
+            66,
+            82,
+            1
+          ],
+          [
+            66,
+            83,
+            1
+          ],
+          [
+            66,
+            84,
+            1
+          ],
+          [
+            66,
+            85,
+            1
+          ],
+          [
+            66,
+            98,
+            2
+          ],
+          [
+            67,
+            83,
+            1
+          ],
+          [
+            67,
+            84,
+            1
+          ],
+          [
+            67,
+            85,
+            1
+          ],
+          [
+            67,
+            86,
+            1
+          ],
+          [
+            67,
+            99,
+            2
+          ],
+          [
+            68,
+            84,
+            1
+          ],
+          [
+            68,
+            85,
+            1
+          ],
+          [
+            68,
+            86,
+            1
+          ],
+          [
+            68,
+            87,
+            1
+          ],
+          [
+            68,
+            100,
+            2
+          ],
+          [
+            69,
+            85,
+            1
+          ],
+          [
+            69,
+            86,
+            1
+          ],
+          [
+            69,
+            87,
+            1
+          ],
+          [
+            69,
+            80,
+            1
+          ],
+          [
+            69,
+            101,
+            2
+          ],
+          [
+            70,
+            86,
+            1
+          ],
+          [
+            70,
+            87,
+            1
+          ],
+          [
+            70,
+            80,
+            1
+          ],
+          [
+            70,
+            81,
+            1
+          ],
+          [
+            70,
+            102,
+            2
+          ],
+          [
+            71,
+            87,
+            1
+          ],
+          [
+            71,
+            80,
+            1
+          ],
+          [
+            71,
+            81,
+            1
+          ],
+          [
+            71,
+            82,
+            1
+          ],
+          [
+            71,
+            103,
+            2
+          ],
+          [
+            72,
+            88,
+            1
+          ],
+          [
+            72,
+            89,
+            1
+          ],
+          [
+            72,
+            90,
+            1
+          ],
+          [
+            72,
+            83,
+            1
+          ],
+          [
+            72,
+            104,
+            2
+          ],
+          [
+            73,
+            89,
+            1
+          ],
+          [
+            73,
+            90,
+            1
+          ],
+          [
+            73,
+            91,
+            1
+          ],
+          [
+            73,
+            92,
+            1
+          ],
+          [
+            73,
+            105,
+            2
+          ],
+          [
+            74,
+            90,
+            1
+          ],
+          [
+            74,
+            91,
+            1
+          ],
+          [
+            74,
+            92,
+            1
+          ],
+          [
+            74,
+            93,
+            1
+          ],
+          [
+            74,
+            106,
+            2
+          ],
+          [
+            75,
+            91,
+            1
+          ],
+          [
+            75,
+            92,
+            1
+          ],
+          [
+            75,
+            93,
+            1
+          ],
+          [
+            75,
+            94,
+            1
+          ],
+          [
+            75,
+            107,
+            2
+          ],
+          [
+            76,
+            92,
+            1
+          ],
+          [
+            76,
+            93,
+            1
+          ],
+          [
+            76,
+            94,
+            1
+          ],
+          [
+            76,
+            95,
+            1
+          ],
+          [
+            76,
+            108,
+            2
+          ],
+          [
+            77,
+            93,
+            1
+          ],
+          [
+            77,
+            94,
+            1
+          ],
+          [
+            77,
+            95,
+            1
+          ],
+          [
+            77,
+            88,
+            1
+          ],
+          [
+            77,
+            109,
+            2
+          ],
+          [
+            78,
+            94,
+            1
+          ],
+          [
+            78,
+            95,
+            1
+          ],
+          [
+            78,
+            88,
+            1
+          ],
+          [
+            78,
+            89,
+            1
+          ],
+          [
+            78,
+            110,
+            2
+          ],
+          [
+            79,
+            95,
+            1
+          ],
+          [
+            79,
+            88,
+            1
+          ],
+          [
+            79,
+            89,
+            1
+          ],
+          [
+            79,
+            90,
+            1
+          ],
+          [
+            79,
+            111,
+            2
+          ],
+          [
+            80,
+            96,
+            1
+          ],
+          [
+            80,
+            97,
+            1
+          ],
+          [
+            80,
+            98,
+            1
+          ],
+          [
+            80,
+            107,
+            1
+          ],
+          [
+            80,
+            112,
+            2
+          ],
+          [
+            81,
+            97,
+            1
+          ],
+          [
+            81,
+            98,
+            1
+          ],
+          [
+            81,
+            99,
+            1
+          ],
+          [
+            81,
+            100,
+            1
+          ],
+          [
+            81,
+            113,
+            2
+          ],
+          [
+            82,
+            98,
+            1
+          ],
+          [
+            82,
+            99,
+            1
+          ],
+          [
+            82,
+            100,
+            1
+          ],
+          [
+            82,
+            101,
+            1
+          ],
+          [
+            82,
+            114,
+            2
+          ],
+          [
+            83,
+            99,
+            1
+          ],
+          [
+            83,
+            100,
+            1
+          ],
+          [
+            83,
+            101,
+            1
+          ],
+          [
+            83,
+            102,
+            1
+          ],
+          [
+            83,
+            115,
+            2
+          ],
+          [
+            84,
+            100,
+            1
+          ],
+          [
+            84,
+            101,
+            1
+          ],
+          [
+            84,
+            102,
+            1
+          ],
+          [
+            84,
+            103,
+            1
+          ],
+          [
+            84,
+            116,
+            2
+          ],
+          [
+            85,
+            101,
+            1
+          ],
+          [
+            85,
+            102,
+            1
+          ],
+          [
+            85,
+            103,
+            1
+          ],
+          [
+            85,
+            96,
+            1
+          ],
+          [
+            85,
+            117,
+            2
+          ],
+          [
+            86,
+            102,
+            1
+          ],
+          [
+            86,
+            103,
+            1
+          ],
+          [
+            86,
+            96,
+            1
+          ],
+          [
+            86,
+            97,
+            1
+          ],
+          [
+            86,
+            118,
+            2
+          ],
+          [
+            87,
+            103,
+            1
+          ],
+          [
+            87,
+            96,
+            1
+          ],
+          [
+            87,
+            97,
+            1
+          ],
+          [
+            87,
+            98,
+            1
+          ],
+          [
+            87,
+            119,
+            2
+          ],
+          [
+            88,
+            104,
+            1
+          ],
+          [
+            88,
+            105,
+            1
+          ],
+          [
+            88,
+            106,
+            1
+          ],
+          [
+            88,
+            99,
+            1
+          ],
+          [
+            88,
+            120,
+            2
+          ],
+          [
+            89,
+            105,
+            1
+          ],
+          [
+            89,
+            106,
+            1
+          ],
+          [
+            89,
+            107,
+            1
+          ],
+          [
+            89,
+            108,
+            1
+          ],
+          [
+            89,
+            121,
+            2
+          ],
+          [
+            90,
+            106,
+            1
+          ],
+          [
+            90,
+            107,
+            1
+          ],
+          [
+            90,
+            108,
+            1
+          ],
+          [
+            90,
+            109,
+            1
+          ],
+          [
+            90,
+            122,
+            2
+          ],
+          [
+            91,
+            107,
+            1
+          ],
+          [
+            91,
+            108,
+            1
+          ],
+          [
+            91,
+            109,
+            1
+          ],
+          [
+            91,
+            110,
+            1
+          ],
+          [
+            91,
+            123,
+            2
+          ],
+          [
+            92,
+            108,
+            1
+          ],
+          [
+            92,
+            109,
+            1
+          ],
+          [
+            92,
+            110,
+            1
+          ],
+          [
+            92,
+            111,
+            1
+          ],
+          [
+            92,
+            124,
+            2
+          ],
+          [
+            93,
+            109,
+            1
+          ],
+          [
+            93,
+            110,
+            1
+          ],
+          [
+            93,
+            111,
+            1
+          ],
+          [
+            93,
+            104,
+            1
+          ],
+          [
+            93,
+            125,
+            2
+          ],
+          [
+            94,
+            110,
+            1
+          ],
+          [
+            94,
+            111,
+            1
+          ],
+          [
+            94,
+            104,
+            1
+          ],
+          [
+            94,
+            105,
+            1
+          ],
+          [
+            94,
+            126,
+            2
+          ],
+          [
+            95,
+            111,
+            1
+          ],
+          [
+            95,
+            104,
+            1
+          ],
+          [
+            95,
+            105,
+            1
+          ],
+          [
+            95,
+            106,
+            1
+          ],
+          [
+            95,
+            127,
+            2
+          ],
+          [
+            96,
+            112,
+            1
+          ],
+          [
+            96,
+            113,
+            1
+          ],
+          [
+            96,
+            114,
+            1
+          ],
+          [
+            96,
+            123,
+            1
+          ],
+          [
+            97,
+            113,
+            1
+          ],
+          [
+            97,
+            114,
+            1
+          ],
+          [
+            97,
+            115,
+            1
+          ],
+          [
+            97,
+            116,
+            1
+          ],
+          [
+            98,
+            114,
+            1
+          ],
+          [
+            98,
+            115,
+            1
+          ],
+          [
+            98,
+            116,
+            1
+          ],
+          [
+            98,
+            117,
+            1
+          ],
+          [
+            99,
+            115,
+            1
+          ],
+          [
+            99,
+            116,
+            1
+          ],
+          [
+            99,
+            117,
+            1
+          ],
+          [
+            99,
+            118,
+            1
+          ],
+          [
+            100,
+            116,
+            1
+          ],
+          [
+            100,
+            117,
+            1
+          ],
+          [
+            100,
+            118,
+            1
+          ],
+          [
+            100,
+            119,
+            1
+          ],
+          [
+            101,
+            117,
+            1
+          ],
+          [
+            101,
+            118,
+            1
+          ],
+          [
+            101,
+            119,
+            1
+          ],
+          [
+            101,
+            112,
+            1
+          ],
+          [
+            102,
+            118,
+            1
+          ],
+          [
+            102,
+            119,
+            1
+          ],
+          [
+            102,
+            112,
+            1
+          ],
+          [
+            102,
+            113,
+            1
+          ],
+          [
+            103,
+            119,
+            1
+          ],
+          [
+            103,
+            112,
+            1
+          ],
+          [
+            103,
+            113,
+            1
+          ],
+          [
+            103,
+            114,
+            1
+          ],
+          [
+            104,
+            120,
+            1
+          ],
+          [
+            104,
+            121,
+            1
+          ],
+          [
+            104,
+            122,
+            1
+          ],
+          [
+            104,
+            115,
+            1
+          ],
+          [
+            105,
+            121,
+            1
+          ],
+          [
+            105,
+            122,
+            1
+          ],
+          [
+            105,
+            123,
+            1
+          ],
+          [
+            105,
+            124,
+            1
+          ],
+          [
+            106,
+            122,
+            1
+          ],
+          [
+            106,
+            123,
+            1
+          ],
+          [
+            106,
+            124,
+            1
+          ],
+          [
+            106,
+            125,
+            1
+          ],
+          [
+            107,
+            123,
+            1
+          ],
+          [
+            107,
+            124,
+            1
+          ],
+          [
+            107,
+            125,
+            1
+          ],
+          [
+            107,
+            126,
+            1
+          ],
+          [
+            108,
+            124,
+            1
+          ],
+          [
+            108,
+            125,
+            1
+          ],
+          [
+            108,
+            126,
+            1
+          ],
+          [
+            108,
+            127,
+            1
+          ],
+          [
+            109,
+            125,
+            1
+          ],
+          [
+            109,
+            126,
+            1
+          ],
+          [
+            109,
+            127,
+            1
+          ],
+          [
+            109,
+            120,
+            1
+          ],
+          [
+            110,
+            126,
+            1
+          ],
+          [
+            110,
+            127,
+            1
+          ],
+          [
+            110,
+            120,
+            1
+          ],
+          [
+            110,
+            121,
+            1
+          ],
+          [
+            111,
+            127,
+            1
+          ],
+          [
+            111,
+            120,
+            1
+          ],
+          [
+            111,
+            121,
+            1
+          ],
+          [
+            111,
+            122,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "outputs": [
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "kind": "ranked-local",
+        "counts": {
+          "body_nodes": 128,
+          "body_edges": 544,
+          "reachable_nodes": 128,
+          "output_reachable_nodes": 128,
+          "longest_body_delay": 7,
+          "encoded_nodes": 130,
+          "encoded_edges": 576
+        }
+      },
+      "workload": {
+        "memory": "attention",
+        "width": 64,
+        "batch": 2,
+        "tokens": 2,
+        "vocab": 257,
+        "budget": 1,
+        "seed": 7,
+        "clear": false,
+        "stride": 10
+      },
+      "families": [
+        "settle",
+        "timed-dag",
+        "pdg"
+      ],
+      "counts": {
+        "body_nodes": 128,
+        "body_edges": 544,
+        "reachable_nodes": 128,
+        "output_reachable_nodes": 128,
+        "longest_body_delay": 7,
+        "encoded_nodes": 130,
+        "encoded_edges": 576,
+        "parameters": 4367024,
+        "parameter_sharing": "none"
+      },
+      "input_policy": "(absolute_position*7+sample*3)%vocab; embedding/head included",
+      "state_boundary": "continuous state/history/pending/KV; explicit detach after each optimizer update",
+      "parameter_policy": "named-lcg31-v1; FP32 source values cast to payload dtype",
+      "model_profile": "edge-affine-lh-silu-rms-norm-fp32-v1",
+      "loss_policy": "next-token cross entropy; sum over present outputs / requested tokens",
+      "sha256": "0ae3ffbd50427dc0f870542f5b1dfb1bd5ee9f32214477ffb99ecf39c7c988c9"
+    },
+    "result": {
+      "schema": "tide-online-consumer-v1",
+      "state": "passed",
+      "workload_sha256": "0ae3ffbd50427dc0f870542f5b1dfb1bd5ee9f32214477ffb99ecf39c7c988c9",
+      "packet_identity": "hash-validated JSON; exact derived v2 text",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "training": true,
+      "optimizer": "adamw",
+      "parameters": 4367024,
+      "construction_seconds": 1.330963697,
+      "seconds": [
+        0.381025048
+      ],
+      "warmup_seconds": [
+        0.645756277
+      ],
+      "outputs": [
+        8
+      ],
+      "losses": [
+        5.537569999694824
+      ],
+      "statistics": [
+        {
+          "canonical_stream_chunks": 8,
+          "canonical_stream_reserved_bytes": 51213096,
+          "emission_chunks": 28,
+          "events": 396,
+          "full_chunks": 29,
+          "head_chunks": 2,
+          "retained_bytes": 75964592,
+          "retained_projection_bytes": 9351680,
+          "retained_window_bytes": 33306456,
+          "retained_windows": 2,
+          "reverse_fiber_budget_bytes": 715827880,
+          "reverse_fiber_groups": 4,
+          "reverse_fiber_key_rows_max": 64,
+          "reverse_fiber_key_rows_min": 64,
+          "reverse_fiber_owner_rows_max": 16,
+          "reverse_fiber_owner_rows_min": 16,
+          "reverse_fiber_query_rows_max": 16,
+          "reverse_fiber_query_rows_min": 16,
+          "reverse_fiber_requested_max": 16,
+          "reverse_fiber_tensor_bytes": 65580064,
+          "stages": 20
+        }
+      ],
+      "windows_per_step": 2,
+      "warmup_steps": 1,
+      "measured_steps": 1,
+      "input_tokens_per_step": 8,
+      "final_cut": 80,
+      "threads": 1,
+      "parameter_budget": 1073741824,
+      "diagnostics": false,
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "head_memory": {
+        "rows": 1024,
+        "fixed_bytes": 34026240,
+        "row_bytes": 9408,
+        "reserved_bytes": 43660032,
+        "budget": 268435456,
+        "operator_allowance_bytes": 33554432
+      },
+      "memory": {
+        "schema": "tide-consumer-memory-v1",
+        "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+        "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+        "phases": [
+          {
+            "phase": "initial",
+            "cpu_peak_rss_bytes": 1375916032,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 0,
+                "peak_allocated_bytes": 0,
+                "reserved_bytes": 0,
+                "peak_reserved_bytes": 0
+              }
+            ]
+          },
+          {
+            "phase": "construction",
+            "cpu_peak_rss_bytes": 1667497984,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 132684800,
+                "peak_allocated_bytes": 146456576,
+                "reserved_bytes": 150994944,
+                "peak_reserved_bytes": 150994944
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 109382656,
+                "peak_allocated_bytes": 123725312,
+                "reserved_bytes": 132120576,
+                "peak_reserved_bytes": 132120576
+              }
+            ]
+          },
+          {
+            "phase": "warmup",
+            "cpu_peak_rss_bytes": 1766146048,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 133544960,
+                "peak_allocated_bytes": 407110144,
+                "reserved_bytes": 425721856,
+                "peak_reserved_bytes": 425721856
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 109382656,
+                "peak_allocated_bytes": 392367616,
+                "reserved_bytes": 432013312,
+                "peak_reserved_bytes": 432013312
+              }
+            ]
+          },
+          {
+            "phase": "measured",
+            "cpu_peak_rss_bytes": 1772683264,
+            "devices": [
+              {
+                "device": "npu:0",
+                "allocated_bytes": 132948992,
+                "peak_allocated_bytes": 408049152,
+                "reserved_bytes": 461373440,
+                "peak_reserved_bytes": 461373440
+              },
+              {
+                "device": "npu:1",
+                "allocated_bytes": 109382656,
+                "peak_allocated_bytes": 392550400,
+                "reserved_bytes": 432013312,
+                "peak_reserved_bytes": 432013312
+              }
+            ]
+          }
+        ]
+      },
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "backend": "npu",
+        "resolution_reason": "explicit:npu",
+        "schedule": "prefill",
+        "preset": "resident",
+        "placement": {
+          "control": "npu:0",
+          "events": "npu:0",
+          "payload": "npu:0",
+          "read": "npu:0",
+          "scoring_dtype": "profile",
+          "selection": "npu:0"
+        },
+        "resident": {
+          "runtime_owner": "standalone",
+          "requested_devices": 2,
+          "requested_owner_policy": "locality",
+          "devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "full_owners": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "state_owners": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "owner_policy": "locality",
+          "chunk_policy": "aggressive",
+          "limits": {
+            "aggregate_chunk_rows": 8,
+            "arrivals": 1024,
+            "attention_chunk_rows": 8,
+            "attention_key_rows": 128,
+            "backward_bytes": 34359738368,
+            "emission_chunk_rows": 16,
+            "full_chunk_rows": 16,
+            "kv_rows": 128,
+            "kv_trace_rows": 4096,
+            "max_repeat_ticks": 65536,
+            "optimizer_bytes": 1073741824,
+            "outputs": 1024,
+            "program_workspace_bytes": 67108864,
+            "queue": 1024,
+            "retained_bytes": 536870912,
+            "reverse_chunk_rows": 16,
+            "stages": 4096,
+            "trace": 1024,
+            "windows": 2,
+            "workspace_bytes": 2147483648
+          }
+        }
+      },
+      "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+      "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+      "projection_placement": "compact banks on Full owners",
+      "binary_sha256": "7ba1f0ab3dd7e924913d5a9052c9b9f1e4cafdef5010564974abf3724f5e5905",
+      "native_input_sha256": "5a2fc843c80459a7e290f62d2b7bab2e5864deeace2b4b1aeb6fb5d6e19d476c",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/consumer-memory-npu-clean01/consumer/tidegraph-online-bench",
+        "--packet=/mi/data2T/zlong/tide-execution-flows/runs/consumer-memory-calibration-clean01/consumer/topology.txt",
+        "--output-dir=/mi/data2T/zlong/tide-execution-flows/runs/consumer-memory-calibration-clean01/consumer/consumer",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--family=timed-dag",
+        "--preset=resident",
+        "--schedule=prefill",
+        "--optimizer=adamw",
+        "--steps=1",
+        "--warmup=1",
+        "--windows-per-step=2",
+        "--threads=1",
+        "--parameter-budget=1073741824",
+        "--read=auto",
+        "--control=auto",
+        "--selection=auto",
+        "--events=auto",
+        "--scoring-dtype=profile",
+        "--training",
+        "--devices=2",
+        "--owner-policy=locality",
+        "--chunk-policy=aggressive",
+        "--head-workspace-bytes=268435456",
+        "--resident-trace=1024",
+        "--resident-workspace-bytes=2147483648",
+        "--resident-retained-bytes=536870912",
+        "--resident-backward-bytes=34359738368",
+        "--resident-optimizer-bytes=1073741824"
+      ],
+      "process_wall_seconds": 7.637620497494936
+    },
+    "sha256": "adfac932a729622bbdf6466a2bc26742df479f35b939574ae15eeb89d8805e9a"
+  },
+  "retained_failures": [
+    {
+      "name": "consumer-memory-cpu-dev01",
+      "reason": "test collection: dtype conflicts with global fixture parametrization",
+      "status_sha256": "993ca4a13ae884c0adec73001d63ab3e451e0b059c4b494125e563abb6655684",
+      "log_sha256": "19e0a19ddbe44295dc5105a2d92f7520bd358e95e306cdec9949d82b70c11671"
+    },
+    {
+      "name": "consumer-memory-npu-dev01",
+      "reason": "same collection error; no NPU semantic test ran",
+      "status_sha256": "c99fea10eaa093ad8d07884fccf0c3c820601b6ab205172eff4d041a249b0cdb",
+      "log_sha256": "227dcb4a310a3eeb5abea5377318f3fb3e251f77d8472e48d137673735a5dcff"
+    },
+    {
+      "name": "consumer-memory-npu-dev02",
+      "reason": "6 passed; pure Python fixture incorrectly supplied native_library; corrected case passed dev03",
+      "status_sha256": "ca0380ab3cdbfe8c85b7ad8ac671a6bdfc48b4a8646145ffd39e992a17b8ca64",
+      "log_sha256": "dcb7a43288206f1db078a02414423ead23cd7b33069d6a1701aa85f381d64e48"
+    },
+    {
+      "name": "consumer-memory-calibration-dev01",
+      "reason": "explicit reverse-packet tensor-budget refusal at trace4096,backward8GiB; not OOM",
+      "status_sha256": "c9f20f51b385567c1613c555875136720a2096900c45bad4645adbfe73f67527",
+      "log_sha256": "4eab606389177761ddc27530430481d406d7f265be26720c57fbee4991039840"
+    },
+    {
+      "name": "consumer-memory-calibration-dev02",
+      "reason": "explicit cache-adjoint nested budget refusal at trace1024,backward8GiB; not OOM",
+      "status_sha256": "41958707a2cd05275c74b22f8e3299d5f252c689c0238d081108f4f388ccc991",
+      "log_sha256": "22327dff6d3dba8bd54038cb02be7db2032387bb6125fdce8fff395ecd2f7db3"
+    }
+  ],
+  "scope": "phase allocator observations for complete CPU, mixed and resident consumers; 128-node actual Attention/AdamW two-device calibration",
+  "limits": "Counters exclude untracked vendor/driver memory. CPU RSS is lifetime peak. Not total HBM admission or formal throughput. CUDA counter branch not compiled/executed here."
+}
