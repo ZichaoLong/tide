@@ -28,7 +28,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   return append_graph_vjp(p,t,roots,error,chunk,budget,full_stage,{});
 }
 GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
-    const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner) {
+    const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner,int64_t projection_workspace) {
   const bool sharded=bool(state_owner.stage);
   if(sharded&&(!state_owner.prepare||!state_owner.sources))throw std::invalid_argument("incomplete compact state reverse executor");
   if(!sharded&&!t.state.decay.defined())throw std::invalid_argument("compact state tape requires its reverse executor");
@@ -54,7 +54,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   const bool fiber=!t.fiber.empty();const auto fiber_offsets=fiber_parameter_offsets(*t.graph,width);
   if(fiber)extra_bytes+=4.L*fiber_offsets.back()+6.L*nodes;
   const bool normalized=t.aggregate.kinds.defined();
-  const bool controlled=t.control.mode!=0,affine=t.emission.weights.defined();
+  const bool controlled=t.control.mode!=0,affine=t.emission.weights.defined()||!t.emission.shards.empty();
   bool needs_emission=false;
   for(size_t n=0;n<t.graph->nodes.size();++n)needs_emission|=!t.graph->nodes[n].identity&&t.graph->nodes[n].emission=="slot_affine"
     &&t.graph->outgoing_ports.offsets[n+1]>t.graph->outgoing_ports.offsets[n];
@@ -78,7 +78,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto links=append_reverse_links(p,t,error,budget/divisor);
   if(sharded)state_owner.prepare(p,links);
   EmissionReverse emission;
-  if(affine)emission=prepare_emission_reverse(p,t,links,error,budget/divisor);
+  if(affine)emission=prepare_emission_reverse(p,t,links,error,budget/divisor,chunk,projection_workspace);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);
@@ -196,6 +196,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
     std::make_pair(out.extra.gate,full.extra.gate),std::make_pair(out.extra.up,full.extra.up),std::make_pair(out.extra.down,full.extra.down)})
     if(pair.first.defined())p.add(pair.first,pair.second);
   meta(3,full.content_connected,full.comparison_connected,full.parameter_connected,state);p.branch(branch,{head});p.mark(done);
+  if(emission.gradient.program)emission.gradient.program->append_stop(p);
   meta(4,full_on,full_on,out.full_connected,dummy);
   const auto emission_rows=affine?emission.rows:links.messages,emission_values=affine?t.emission.values:t.full_values;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_scales)(32,stream,

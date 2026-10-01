@@ -87,18 +87,37 @@ no observed AiCPU; no timing claim. Builds/snapshot projection-retention-clean01
 projection-retention-python-clean01,projection-retention-consumer-clean01. Reused
 client objects after source/header/compiler-option audit,fresh link/loader.
 
-Current uncommitted next implementation: compact projection banks and a shared
-ProjectionStage device packet service for forward/reverse chunks. New Ascend C
-projection owner packer plus content-flow lifecycle,emission adjoint and retained
-snapshot hooks are partially connected. Not yet built or tested. Remaining wiring:
-canonical physical-gradient sources and parameter publication,build manifests and
-kernel build support; then directed full inference/training gates and profile.
-These files are unrelated to the evidence-only commit. Do not claim shard support
-until the complete path passes. Generic Full/state ownership maps supply static
-projection placement; runtime actual row filtering remains device-side.
+Current uncommitted next implementation: compact projection banks and shared
+ProjectionStage forward/reverse device chunk services; Ascend C actual-owner row
+packing,content-flow lifecycle,retained immutable shard copies,canonical sources/
+publication and Full placement cost all connected. Test projection_shards3 adds
+physical bank distribution/full-state checks plus three nonzero updates and restore.
+Consumer records now distinguish dense vs compact projection placement.
 
-After retention increment: compact projection owners/partial gradients,total
-per-device memory admission,actual consumer FP16,representative five-preset
+Compact projection implementation is ready to commit/push. All development work
+terminal: standalone/Python builds dev01/dev02 and installed consumer dev02 PASSED;
+library-dev03 PASSED30,lean-dev04 PASSED2(no-journal FP32/FP16 remote-only bank),
+matrix-dev02 PASSED32 trajectories,legacy-dev02 PASSED12,placements-dev02 PASSED3,
+three-dev02 PASSED1(FP16 3→2 cards),actual consumers-dev02 PASSED27. Total standalone
+48 trajectories/768 windows/192 updates. Keep library-dev02 failure(3 passed then
+CPU reference fixture omitted packed=False); only test configuration was corrected.
+Backend sources are unchanged since frozen projection-shards-dev02. dev03/dev04
+change tests only. Latest live test also writes physical-bank reservation JSON for
+qualification; no numeric or tolerance changes. No current jobs live other than
+intentionally suspended historical CPU run.
+
+Next commit implementation,push,freeze projection-shards-clean01. Build standalone
+and Python via build_projection_shards.py --reuse-host corresponding-dev02
+--kernel-build corresponding-dev02. Install/fresh-link consumer with
+build_projection_retention_client.py --reuse-client projection-shards-consumer-dev02;
+client C++/public headers remain byte-identical. Clean library31,standalone matrix32/
+legacy12/placements4 via projection_shard_gates.py,actual consumer27,separate
+profile_resident_consumer.py --preset resident --reverse-chunk-rows16. Audit using
+projection_shards_evidence.py COMMIT,then evidence-only commit/push. No unchanged
+CPU full suite. Do not duplicate terminal development jobs.
+
+After projection shard qualification: total per-device memory admission,actual
+consumer FP16,representative five-preset
 screening and full-size F6. No new formal full-size throughput result. place_full
 currently counts only Full parameter bytes. ContentBudget accounts module tensor
 reservations,not total per-device allocator peaks; state/KV,tapes,optimizer proposals,

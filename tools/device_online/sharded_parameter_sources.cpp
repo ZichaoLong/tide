@@ -58,6 +58,17 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
       state_map[global]={s,int64_t(n)};
     }
     if(!states.empty())for(auto entry:state_map)if(entry.second<0)throw std::invalid_argument("incomplete state contributions");
+    std::vector<std::pair<size_t,int64_t>> projection_map;
+    if(!g.emission.shards.empty()) {
+      projection_map.resize(g.emission.connected.numel(),{0,-1});
+      for(size_t s=0;s<g.emission.shards.size();++s)for(size_t i=0;i<g.emission.shards[s].rows.size();++i) {
+        const auto row=g.emission.shards[s].rows[i];
+        if(row<0||row>=int64_t(projection_map.size())||projection_map[row].second>=0)
+          throw std::invalid_argument("invalid compact projection contribution map");
+        projection_map[row]={s,int64_t(i)};
+      }
+      for(auto entry:projection_map)if(entry.second<0)throw std::invalid_argument("incomplete projection contributions");
+    }
     const auto event_offsets=event_parameter_offsets(graph,width),fiber_offsets=fiber_parameter_offsets(graph,width);
     used+=64.L*plan.references.size();if(used>budget)throw std::invalid_argument("parameter contribution metadata budget exceeded");
     for(size_t i=0;i<out.owners.size();++i) {
@@ -83,6 +94,9 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
           const int64_t local_offset=bank==12?offset-event_offsets[node]+state.layout.event_offsets[local]:
             bank==13?offset-fiber_offsets[node]+state.layout.fiber_offsets[local]:local*(bank==3?1:width);
           part=slice(values,flags,local_offset,size,local*stride+connection%stride);
+        } else if(!projection_map.empty()&&(bank==14||bank==15)) {
+          const auto [owner,local]=projection_map.at(connection);const auto& projection=g.emission.shards[owner];
+          part=slice(bank==14?projection.weights:projection.biases,projection.connected,local*size,size,local);
         } else {
           const auto values=bank==2?g.decay:bank==3?g.retention:bank==4?g.scales:bank==10?g.aggregate.values:
             bank==11?g.read:bank==12?g.attention:bank==13?g.fiber:bank==14?g.emission.weights:g.emission.biases;

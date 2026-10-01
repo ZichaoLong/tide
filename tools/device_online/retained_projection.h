@@ -4,6 +4,7 @@
 #include <map>
 #include <limits>
 #include <stdexcept>
+#include <vector>
 
 namespace tide::device_online {
 // Internal update-scoped immutable copies, never borrowed forward banks. Public
@@ -43,6 +44,12 @@ class RetainedProjection {
   void seed(std::map<const void*,at::Tensor>& copies) const {
     if(ready_)for(size_t i=0;i<2;++i)copies.at(source_[i].unsafeGetTensorImpl())=copies_[i];
   }
+  RetainedProjection& shard(size_t index,size_t count) {
+    if(shards_.empty())shards_.resize(count);
+    if(shards_.size()!=count)throw std::logic_error("retained projection partition changed within update");
+    return shards_.at(index);
+  }
+  const std::array<at::Tensor,2>& retained() const {return copies_;}
  private:
   void check(const at::Tensor& weights,const at::Tensor& biases) const {
     const std::array<at::Tensor,2> current{weights,biases};
@@ -58,5 +65,6 @@ class RetainedProjection {
   std::array<at::Tensor,2> source_,copies_;
   std::array<int64_t,2> versions_{};
   std::array<const void*,2> data_{};
+  std::vector<RetainedProjection> shards_;
 };
 } // namespace tide::device_online

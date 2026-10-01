@@ -62,6 +62,7 @@ ShardedTrainingOwner::Impl::Impl(Graph g,Model m,const Continuation& q,at::Devic
   for(const auto& v:values)bytes+=static_cast<long double>(v.values.nbytes())+v.present.nbytes();
   if(bytes>l.retained_bytes)throw std::invalid_argument("sharded training cannot retain one window within budget");
   projection_bytes=RetainedProjection::bytes(tape.coordinator.emission.weights,tape.coordinator.emission.biases);
+  for(const auto& bank:tape.coordinator.emission.shards)projection_bytes+=RetainedProjection::bytes(bank.weights,bank.biases);
   bytes_per_window=static_cast<Index>(bytes)-projection_bytes;discard();
 }
 void ShardedTrainingOwner::Impl::check() const {

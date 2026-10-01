@@ -39,9 +39,9 @@ Retained admission charges projection snapshot bytes once, plus per-window
 reservations. A window that would exceed the declared budget is rejected before
 device progress. Backward statistics expose `retained_projection_bytes`,
 `retained_window_bytes`, `retained_windows` and `retained_bytes`; these are tape
-reservations, not total allocator peaks. This removes repeated projection copies,
-but does not partition the projection bank or its physical gradients. Current
-implementation and qualification status remains in [STATUS](STATUS.md).
+reservations, not total allocator peaks. With explicit multi-device placement,
+this immutable snapshot is also compact and remains on each physical owner.
+Implementation and qualification status remains in [STATUS](STATUS.md).
 
 FP16 keeps actual half forward operands and stored slot values. Cast VJPs and
 parameter accumulation use FP32, as with other resident modules; this does not
@@ -49,9 +49,20 @@ claim equality to half-gradient accumulation. CPU FP32/FP64 autograd and an
 independent rounded-forward reference check the declared first-order semantics.
 
 Full/state/cache execution and canonical optimizer owners may span devices.
-**Projection forward banks and their physical partial gradients currently remain
-on the coordinator.** Compact projection placement and a total scale budget are
-still needed before full-size resident delivery. HST/SOFTP slot-affine emission
+Explicit placement now assigns each node's physical projection rows to its Full
+owner, with independent compact weight/bias banks and a sentinel row per active
+owner. Automatic Full placement includes physical projection bytes. Aliases across
+owners remain separate physical copies and merge through canonical gradient
+reduction before one optimizer update publishes to every destination.
+
+The coordinator packs actual connected/present projection rows in bounded chunks.
+A device-controlled packet service sends row IDs and input/cotangent vectors to
+compact owners, which filter their actual rows, batch matrix work and retain local
+parameter gradients. Only projected vectors return; completion notifications and
+loop/stop decisions remain on device. Empty owner subsets skip arithmetic. This
+extends both inference and complete training, with the original dense path when
+no placement is requested. It is not yet total per-device allocator admission;
+that and full-size performance qualification remain separate work. HST/SOFTP slot-affine emission
 remains explicitly refused: mixing before projection would mishandle bias/control
 adjoints. Existing broadcast HST/SOFTP behavior is unchanged.
 

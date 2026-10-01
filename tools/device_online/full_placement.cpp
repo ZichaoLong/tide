@@ -34,6 +34,8 @@ FullPlacement place_full(const Graph& graph,const Model& model,std::vector<at::D
         if((kind-1)%3)size+=w.extra.at("lh_norm_weight").nbytes();
         if((kind-1)%3==2)size+=w.extra.at("lh_norm_bias").nbytes();
       }
+      if(node.emission=="slot_affine")for(int64_t j=0;j<graph.outgoing_ports.offsets.at(n+1)-graph.outgoing_ports.offsets.at(n);++j)
+        size+=w.extra.at("emit_w_"+std::to_string(j)).nbytes()+w.extra.at("emit_b_"+std::to_string(j)).nbytes();
     }
     if(size>std::numeric_limits<int64_t>::max()-total)throw std::overflow_error("Full placement size overflow");
     total+=bytes[n]=int64_t(size);

@@ -107,7 +107,9 @@ a checkpoint can be loaded into a separately constructed session with another
 placement or device count. Checkpoints retain global node/edge identities and
 complete continuation, including state/KV and pending messages. Inference creates
 no training owner, retained backward tape or optimizer. Diagnostics are optional.
-Input/output boundaries and projection banks remain on the coordinator; this
+Input/output boundaries remain on the coordinator. Explicit placement stores
+projection banks on Full owners and includes their physical bytes in automatic
+placement; peer chunk services retain the corresponding gradients there. This
 interface does not establish whole-model memory admission or full-size throughput.
 
 ## Independent C++ client

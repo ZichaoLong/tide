@@ -52,7 +52,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
   const std::array<long double,8> minimum={
-    PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs),
+    PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs,placement),
     sharded?0:PackedSwiGluFull::minimum_bytes(profile,l.queue),sharded?0:PackedLhFull::minimum_bytes(lh_kinds,width,l.queue,profile.dtype),
     state_sharded?0:PackedFiberAttention::minimum_bytes(profile,q,l),state_sharded?0:PackedEventAttention::minimum_bytes(profile,q,l),
     sharded?ShardedFull::minimum_bytes(profile,placement,l.queue):PackedFull::minimum_bytes(kinds,width,profile.dtype),PackedAggregate::minimum_bytes(profile,l.queue),
@@ -96,7 +96,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     emission_trace=std::make_unique<DeviceJournal>(l.trace,6,width,device);
   }
   emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,
-    std::min(l.emission_chunk_rows,l.arrivals+l.outputs),budget.available(0));
+    std::min(l.emission_chunk_rows,l.arrivals+l.outputs),budget.available(0),placement);
   budget.reserve(0,emission->reserved_bytes());
   const auto max_full=std::min(l.full_chunk_rows,l.queue);
   if(minimum[1]>0) {
@@ -128,11 +128,9 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   }
   planned_buffer_bytes=budget.planned_bytes();operator_workspace_budget=budget.operator_budget();usable_memory_budget=budget.usable_bytes();
   full_chunks=sharded_full?sharded_full->chunks():full->chunks();
-  if(sharded_full) {
-    operator_workspace_budget/=(sharded_full->program_count()+(sharded_state?sharded_state->program_count()-1:0));
-    if(operator_workspace_budget<1)throw std::invalid_argument("insufficient shard operator workspace");
-  }
-  if(sharded_state&&!sharded_full)operator_workspace_budget/=sharded_state->program_count();
+  operator_workspace_budget/=(sharded_full?sharded_full->program_count():1)
+    +(sharded_state?sharded_state->program_count()-1:0)+emission->program_count()-1;
+  if(operator_workspace_budget<1)throw std::invalid_argument("insufficient shard operator workspace");
   if(fd!=d) {
     operator_workspace_budget/=2;
     if(operator_workspace_budget<1)throw std::invalid_argument("insufficient peer operator workspace");
@@ -185,7 +183,7 @@ void ContentFlow::Impl::construct() {
   }
   const auto raw_full=actions.values;
   if(limits.mode=="softp")actions=append_control_forward(p,profile,actions,content.content,selection.controls,error);
-  auto emitted=emission->append_stage(p,actions,error);
+  auto emitted=emission->append_stage(p,actions,error,operator_workspace_budget);
   auto arrivals=emitted.arrivals;
   // Every capacity/error preflight precedes every live state/history/queue/log commit.
   auto pending_proposal=pending->propose_stage(p,ready.consumed,arrivals);
@@ -212,6 +210,7 @@ void ContentFlow::Impl::construct() {
   if(attention)attention->commit(p,attended,selection,error);
   if(event_attention)event_attention->commit(p,event_attended,selection,error);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);
+  if(emission->peer())emission->peer()->append_stop(p);
   if(remote_full)remote_full->append_stop(p);
   if(sharded_full)sharded_full->append_stop(p);
   if(sharded_state)sharded_state->append_stop(p);
@@ -230,7 +229,8 @@ void ContentFlow::close() {
   if(!impl_)return;
   impl_->program->close();if(impl_->remote_full)impl_->remote_full->close();
   if(impl_->sharded_full)impl_->sharded_full->close();
-  if(impl_->sharded_state)impl_->sharded_state->close();impl_.reset();
+  if(impl_->sharded_state)impl_->sharded_state->close();
+  if(impl_->emission->peer())impl_->emission->peer()->close();impl_.reset();
 }
 Result ContentFlow::advance(const std::vector<External>& input,Index until) {
   advance_device(input,until);
@@ -259,15 +259,17 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     // Dispatch through the process's registered owner. This works with either
     // the standalone SDK or the Python wheel, never linking both together.
     c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());
-    if(s.remote_full||s.sharded_full||s.sharded_state) {
+    auto projection=s.emission->peer();
+    if(s.remote_full||s.sharded_full||s.sharded_state||projection) {
+      if(projection)projection->synchronize_inputs();
       if(s.remote_full)s.remote_full->synchronize_inputs();
       if(s.sharded_full)s.sharded_full->synchronize_inputs();
       if(s.sharded_state)s.sharded_state->synchronize_inputs();
-      s.program->submit();if(s.remote_full)s.remote_full->submit();
+      s.program->submit();if(projection)projection->submit();if(s.remote_full)s.remote_full->submit();
       if(s.sharded_full)s.sharded_full->submit();if(s.sharded_state)s.sharded_state->submit();
       std::exception_ptr failure;
       auto wait=[&](auto& owner){if(owner)try{owner->wait();}catch(...){if(!failure)failure=std::current_exception();}};
-      wait(s.program);wait(s.remote_full);wait(s.sharded_full);wait(s.sharded_state);
+      wait(s.program);wait(s.remote_full);wait(s.sharded_full);wait(s.sharded_state);wait(projection);
       if(failure)std::rethrow_exception(failure);
     } else s.program->run();
     const auto error=s.error.cpu().item<int>();
@@ -330,8 +332,8 @@ ReverseTape ContentFlow::Impl::reverse_view(const StateTape& state,const FullTap
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
-  if(s.emission->weights().defined())tape.emission={s.emission_trace->meta,s.emission_trace->values,s.emission_trace->count,
-    s.emission->weights(),s.emission->biases()};
+  if(s.emission->weights().defined()||!s.emission->shards().empty())tape.emission={s.emission_trace->meta,s.emission_trace->values,s.emission_trace->count,
+    s.emission->weights(),s.emission->biases(),s.emission->shards()};
   if(s.aggregate)tape.aggregate=s.aggregate->tape();
   if(s.event_attention)tape.attention=s.event_attention->tape();
   if(s.attention)tape.fiber=s.attention->tape();
@@ -349,7 +351,7 @@ ParameterBanks ContentFlow::parameter_banks() const {
           s.aggregate?s.aggregate->tape():AggregateTape{},
           s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
           s.attention?s.attention->banks():FiberParameterBanks{},
-          {{},{},{},s.emission->weights(),s.emission->biases()}};
+          {{},{},{},s.emission->weights(),s.emission->biases(),s.emission->shards()}};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");
@@ -363,7 +365,7 @@ ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {
   ParameterBanks b{&s.profile.graph,{},{},s.profile.decay,s.profile.retention,s.profile.read,s.profile.scales,s.emission->scales(),{},
     s.aggregate?s.aggregate->tape():AggregateTape{},s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
     s.attention?s.attention->banks():FiberParameterBanks{},
-    {{},{},{},s.emission->weights(),s.emission->biases()}};
+    {{},{},{},s.emission->weights(),s.emission->biases(),s.emission->shards()}};
   if(s.sharded_state){b.decay=at::Tensor();b.retention=at::Tensor();b.read=at::Tensor();}
   return {std::move(b),s.sharded_full->tapes(s.boundary.batch_size,s.profile.width),
     s.sharded_state?s.sharded_state->parameter_banks():std::vector<StateOwnerBanks>{}};

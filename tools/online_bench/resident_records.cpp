@@ -59,7 +59,7 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
      <<(c.training?"graph/input/embedding VJP + finite staged optimizer + ":"finite loss check + ")
      <<"synchronization; no reference\""
      <<",\"boundary_policy\":\"dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host\""
-     <<",\"projection_placement\":\"coordinator; compact projection owners pending\"}\n";
+     <<",\"projection_placement\":"<<quoted(r.limits.placement.devices.empty()?"coordinator dense":"compact banks on Full owners")<<"}\n";
   return out.str();
 }
 } // namespace tide_flow

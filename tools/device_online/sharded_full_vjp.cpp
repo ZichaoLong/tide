@@ -161,20 +161,21 @@ ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape
     hooks.sources=[state](CannProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials){state->append_sources(p,messages,on,partials);};
   } else if(next||!state_roots.empty())throw std::invalid_argument("state roots require compact state ownership");
   auto g=append_graph_vjp(p,t.coordinator,roots,error,chunk,budget/split,
-    [full](CannProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);},hooks);
+    [full](CannProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);},hooks,workspace);
   full->append_stop(p);if(state)state->append_stop(p);return {std::move(g),std::move(full),std::move(state)};
 }
 void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>& gradients) {
-  for(const auto& g:gradients){g.full->close();if(g.state)g.state->close();}
+  for(const auto& g:gradients){g.full->close();if(g.state)g.state->close();if(g.coordinator.emission.program)g.coordinator.emission.program->close();}
 }
 
 template<class Program>void run_sharded(Program& p,const std::vector<ShardedGraphVjp>& gradients) {
   if(gradients.empty())throw std::invalid_argument("no sharded reverse programs");
-  for(const auto& g:gradients){g.full->synchronize_inputs();if(g.state)g.state->synchronize_inputs();}
-  p.submit();for(const auto& g:gradients){g.full->submit();if(g.state)g.state->submit();}
+  for(const auto& g:gradients){g.full->synchronize_inputs();if(g.state)g.state->synchronize_inputs();if(g.coordinator.emission.program)g.coordinator.emission.program->synchronize_inputs();}
+  p.submit();for(const auto& g:gradients){g.full->submit();if(g.state)g.state->submit();if(g.coordinator.emission.program)g.coordinator.emission.program->submit();}
   std::exception_ptr failure;try{p.wait();}catch(...){failure=std::current_exception();}
   for(const auto& g:gradients)try{g.full->wait();}catch(...){if(!failure)failure=std::current_exception();}
   for(const auto& g:gradients)if(g.state)try{g.state->wait();}catch(...){if(!failure)failure=std::current_exception();}
+  for(const auto& g:gradients)if(g.coordinator.emission.program)try{g.coordinator.emission.program->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
 void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}

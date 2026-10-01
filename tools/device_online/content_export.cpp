@@ -71,9 +71,14 @@ Result ContentFlow::Impl::export_result() const {
   out.stats["memory_budget_bytes"]=limits.workspace_bytes;
   out.stats["usable_memory_budget_bytes"]=usable_memory_budget;
   out.stats["planned_buffer_bytes"]=planned_buffer_bytes;
-  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*((sharded_full?sharded_full->program_count():remote_full?2:1)+(sharded_state?sharded_state->program_count()-1:0));
-  const auto cann_bytes=program->workspace_bytes()+(sharded_full?sharded_full->workspace_bytes():remote_full?remote_full->workspace_bytes():0)+(sharded_state?sharded_state->workspace_bytes():0);
+  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*((sharded_full?sharded_full->program_count():remote_full?2:1)+(sharded_state?sharded_state->program_count()-1:0)+emission->program_count()-1);
+  const auto cann_bytes=program->workspace_bytes()+(sharded_full?sharded_full->workspace_bytes():remote_full?remote_full->workspace_bytes():0)+(sharded_state?sharded_state->workspace_bytes():0)+(emission->peer()?emission->peer()->workspace_bytes():0);
   out.stats["cann_workspace_bytes"]=cann_bytes;
+  out.stats["projection_peer_packet_bytes"]=emission->peer()?emission->peer()->packet_bytes():0;
+  out.stats["projection_peer_devices"]=emission->program_count();
+  out.stats["projection_shards"]=emission->shards().size();
+  for(const auto& bank:emission->shards())
+    out.stats["projection_parameter_bytes_device_"+std::to_string(bank.weights.device().index())]=bank.weights.nbytes()+bank.biases.nbytes();
   out.stats["full_peer_devices"]=sharded_full?sharded_full->program_count():remote_full?2:1;
   out.stats["full_peer_packet_bytes"]=sharded_full?sharded_full->packet_bytes():remote_full?remote_full->packet_bytes():0;
   if(sharded_full)for(const auto& [name,value]:sharded_full->stats())out.stats[name]=value;

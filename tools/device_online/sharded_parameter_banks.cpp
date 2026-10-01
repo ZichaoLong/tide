@@ -44,6 +44,16 @@ std::map<std::string,ParameterDestination> sharded_parameter_destinations(const 
     state_map[n]={s,int64_t(i)};
   }
   if(!banks.states.empty())for(auto entry:state_map)if(entry.second<0)throw std::invalid_argument("incomplete state publication map");
+  int64_t projection_count=0;
+  for(size_t n=0;n<g.nodes.size();++n)if(!g.nodes[n].identity&&g.nodes[n].emission=="slot_affine")
+    projection_count+=g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];
+  std::vector<std::pair<size_t,int64_t>> projections(projection_count,{0,-1});
+  for(size_t s=0;s<b.projections.shards.size();++s)for(size_t i=0;i<b.projections.shards[s].rows.size();++i) {
+    const auto row=b.projections.shards[s].rows[i];
+    if(row<0||row>=projection_count||projections[row].second>=0)throw std::invalid_argument("invalid projection publication map");
+    projections[row]={s,int64_t(i)};
+  }
+  if(!b.projections.shards.empty())for(auto entry:projections)if(entry.second<0)throw std::invalid_argument("incomplete projection publication map");
   int64_t projection=0;
   for(size_t n=0;n<g.nodes.size();++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
@@ -52,8 +62,14 @@ std::map<std::string,ParameterDestination> sharded_parameter_destinations(const 
       add(prefix+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot),b.aggregate.weights[n][slot]);
     if(node.identity)continue;
     if(node.emission=="slot_affine")for(int64_t slot=0;slot<g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];++slot,++projection) {
-      add(prefix+"extra.emit_w_"+std::to_string(slot),b.projections.weights[projection]);
-      add(prefix+"extra.emit_b_"+std::to_string(slot),b.projections.biases[projection]);
+      if(b.projections.shards.empty()) {
+        add(prefix+"extra.emit_w_"+std::to_string(slot),b.projections.weights[projection]);
+        add(prefix+"extra.emit_b_"+std::to_string(slot),b.projections.biases[projection]);
+      } else {
+        const auto [owner,local]=projections[projection];const auto& bank=b.projections.shards[owner];
+        add(prefix+"extra.emit_w_"+std::to_string(slot),bank.weights[local]);
+        add(prefix+"extra.emit_b_"+std::to_string(slot),bank.biases[local]);
+      }
     }
     const auto [owner,local]=state_map[n];
     add(prefix+"read",banks.states.empty()?b.read[n]:banks.states[owner].read[local]);

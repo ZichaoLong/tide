@@ -46,6 +46,7 @@ def test_resident_complete_training(family,memory,schedule,implementation,tmp_pa
             observer=observer(actual),native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_placement=owners,**kw)
     same(actual,expected)
+    assert candidate["projection_placement"] == ("compact banks on Full owners" if owners else "coordinator dense")
     assert candidate["outputs"]==reference["outputs"] and candidate["final_cut"]==reference["final_cut"]
     torch.testing.assert_close(torch.tensor(candidate["losses"]),torch.tensor(reference["losses"]),atol=1e-6,rtol=1e-5)
     (tmp_path/"observed.json").write_text(json.dumps(dict(packet=p,candidate=candidate,observations=actual)))
@@ -70,6 +71,7 @@ def test_resident_continuous_inference(memory,implementation,family,tmp_path):
     same(actual,expected)
     assert a["outputs"]==b["outputs"] and a["final_cut"]==b["final_cut"]
     assert len(owners)==2 and "VJP" not in b["timing"] and "optimizer" not in b["timing"]
+    assert b["projection_placement"] == "compact banks on Full owners"
     (tmp_path/"observed.json").write_text(json.dumps(dict(packet=p,candidate=b,observations=actual)))
 
 

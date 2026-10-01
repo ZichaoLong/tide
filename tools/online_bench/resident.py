@@ -139,4 +139,4 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 + ("graph/input/embedding VJP + finite staged optimizer + " if training else "finite loss check + ")
                 + "synchronization; no reference"),
         boundary_policy="dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
-        projection_placement="coordinator; compact projection owners pending")
+        projection_placement="compact banks on Full owners" if owners.devices else "coordinator dense")
