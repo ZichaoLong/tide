@@ -30,65 +30,58 @@ Implementation commit → immutable qualification → evidence commit;push each.
 
 ## Latest verified work
 
-Full reverse metadata fusion **fe68065fbf41eebbba003051a84d3567e59028d1** committed/
-pushed;[report](evidence/device-full-reverse-merge-20261001.md),
-[audit](evidence/device-full-reverse-merge-20261001.json). All4 fixed jobs PASSED:
-two runtime builds,two-dtype gate,3-device profile. FP32/FP16 each50 trajectories/
-200 retained windows plus empty/malformed/budget/dtype/owner refusals and replay.
-Profile:120 Bool ScatterUpdate AiCPU tasks replaced by40 metadata merges;
-11418 AI_VECTOR_CORE,366 AI_CORE,196 MIX_AIV,zero observed AiCPU. Host submissions60,
-notify records/waits336,DMA3258 unchanged;switches1713→1673. Counts include setup/
-assertions,not throughput. No tolerance changes or development failure in fusion.
-Only2 host objects rebuilt;source/hash-checked kernel reuse from passed
-full-reverse-merge-dev01. Snapshot/build full-reverse-merge-clean01;Python build
-full-reverse-merge-python-clean01. Audit command:
-TASK/launchers/full_reverse_merge_evidence.py FULL_REV. No qualification jobs live.
+Canonical device owners **a365e2f1635f3ef8f9b66176662b058ef1b39645** committed/pushed.
+[Report](evidence/device-canonical-owners-20261001.md) and
+[audit](evidence/device-canonical-owners-20261001.json). All9 fixed jobs PASSED:
+two isolated runtime builds,standard CMake preflight,eight two-card component
+cells,three-card memory/locality,fixed three-card profile,one-owner degeneration,
+public half-cache smoke and five Python scalar-oracle/fresh-process checks.
+Each dtype: canonical retained VJP50 trajectories/200 windows; SGD/AdamW4/32
+updates; actual sharded training40 trajectories/640 windows/160 updates.
+CPU FP32/FP64 are independent. Exact master-to-bank publication,None/zero,
+shared HARD Read,strided QKV,FP16 widened normalization and all-device atomic
+nonfinite/half-overflow refusal passed. Masters/partials never feed through CPU.
+State/KV/readiness remain coordinator-owned; public multi-card API is still absent.
 
-Preceding retained cross-card VJP5591319:FP32/FP16 each50 trajectories/200 windows,
-3-card memory/locality × two dtypes,1-owner degeneration,four inference cells,
-FP16 single-card cache training1/16/4,Python96/no skips. Full parameters/partials
-remain on owners;state/message/control/cache reverse and window bridges remain
-coordinator-owned. After-close retention and exact replay verified against CPU
-FP32/FP64. CPU alias sums in the assertion adapter never feed candidates. This
-is not device canonical owner reduction or multi-device optimizer training.
-[Report](evidence/device-full-reverse-20261001.md) preserves120-AiCPU trace and
-prior development failures:CPU Bool assertion constructor,missing test include,
-wrong wrapper marker despite successful child. Numerical tolerances unchanged.
+Profile:28187 AI_VECTOR_CORE/802 AI_CORE/409 MIX_AIV,zero observed AiCPU.
+Every card runs canonical gather/reduce,optimizer,publication.198 submissions,
+1282 matching notify records/waits,4419 switches,10575 DMA. Two trajectories:
+8 accepted updates +2 refused replays;counts include construction/assertions,
+not throughput. Full raw records in TASK; audit verifies hashes and terminals.
 
-Earlier Full shards2617a11,remote Fulla8fa371,peer packets5c3662b and public
-single-device FP16 training0095048 remain qualified. Prior raw failures are retained.
+Development failures retained: dev01 test initializer brace;dev03 empty-partition
+64KiB workspace below77312-byte operator requirement (test arena raised to1MiB);
+graph-training-dev03 scalar CPU byte-view assertion (reshape fixed). No candidate
+numerical failure or tolerance change. Source snapshot canonical-owners-clean01;
+builds canonical-owners-clean01/canonical-owners-python-clean01. Audit command:
+TASK/launchers/canonical_owners_evidence.py a365e2f1635f3ef8f9b66176662b058ef1b39645.
+No qualification job is live. Implementation→evidence lifecycle is preserved.
+
+Earlier Full reverse5591319,metadata fusionfe68065,Full shards2617a11 and public
+single-device FP16 training0095048 remain scoped qualified evidence. The former
+120 Bool ScatterUpdate AiCPU finding/failures are retained in their own reports.
 
 ## Current work and next action
 
-Implementation ready to commit/push: canonical device owner reduction,globally
-validated groups/shared-storage refusal,all-device finite consensus,FP32 master
-SGD/AdamW and packed publication to used aliases. Explicit sharded bank views
-cover HARD Read,strided QKV and FP16 values widened into FP32 normalization banks.
-No CPU numerical gradients/masters feed candidates. State/KV remain coordinator-
-owned; public multi-card training/whole-model placement are not delivered yet.
+Commit/push this reviewed evidence/STATUS/ROADMAP,then continue overall F1–F7.
+No user pause instruction. No implementation changes remain uncommitted.
+Next priority: partition state/attention parameters and persistent KV while
+preserving device queue/readiness and boundary VJP links; expose a coherent public
+C++/Python multi-card owner and consumer. Reuse the now-verified canonical reducer,
+optimizer consensus and publication instead of reimplementing alias handling.
+Do not call Full-only placement whole-model sharding. CPU independent reference
+and old eager/host presets remain available. Bounded medium/full-size complete
+CPU/mixed/resident comparisons follow public-path/placement correctness.
 
-Development PASSED:
-- build canonical-owners-dev02 and canonical-owners-dev02 gate: FP32/FP16 retained
-  canonical VJP each50 trajectories/200 windows plus original optimizer gates.
-- build canonical-owners-dev05 and canonical-training-dev05 gate: global optimizer
-  each4 trajectories/32 updates; actual graph training each40 trajectories/
-  640 windows/160 updates,independent CPU FP32/FP64,exact alias publication,
-  None/zero,empty partitions,nonfinite/half-overflow atomic refusals,continuation.
-
-Retained development failures: dev01 test initializer missing brace;dev03 empty-
-partition test's64KiB arena versus required77312bytes (raised only test arena to
-1MiB);graph-training-dev03 CPU byte assertion on0-d Float bank (reshape fixed).
-No candidate numerical failure or tolerance change. All development jobs terminal.
-
-Next after implementation commit: freeze canonical-owners-clean01 at exact HEAD;
-standalone build reuses hash-matched passed dev05 host objects and dev02 kernels;
-Python-owned build rebuilds affected8 host objects against its own runtime.
-Qualify affected8 standalone cells,3-card memory/locality smoke and profile,
-1-owner training smoke and single-card public half-cache regression. Configure
-standard CMake targets; audit hashes/terminal records,then evidence commit/push.
-Use existing launchers/build_canonical_owners.py,freeze_run.py and
-sharded_training_policy_smoke.py. Builds900s,gates120s queue/600s run. Continue
-F1–F7 afterwards; no user pause instruction. No unchanged full CPU/96-Python rerun.
+Implementation entry points: content_flow_internal.h/content_stages.cpp and
+packed_event_attention/packed_fiber_attention own coordinator state; remote_full/
+sharded_full provide reusable device command/peer completion patterns.
+sharded_parameter_banks.cpp currently maps state/Read/attention to coordinator;
+sharded_parameter_sources.cpp maps non-Full gradients there. Those assumptions
+must evolve explicitly with state/KV ownership; avoid assembling full banks on
+coordinator or copying candidate parameters back to CPU between updates.
+Current canonical budget is for fixed retained-window device-pair packets; full
+scale needs calibrated peak estimates/safe splitting,not OOM search.
 
 Before formal performance,resolve historical CPU Attention's retained memory and
 timing lock deliberately;do not blindly resume/kill. Additional CANN environments,
