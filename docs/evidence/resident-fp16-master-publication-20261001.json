@@ -1,0 +1,268 @@
+{
+  "schema": "tide-resident-fp16-master-publication-evidence-v1",
+  "source": "9a84432167a82900c0472b02b2e33ddace6da3eb",
+  "scope": "single-device FP32 masters and FP16 payload publication with synthetic public gradients/continued inference; affected FP32 training/client regression; not FP16 graph VJP or complete training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-publication-clean01",
+      "manifest_sha256": "733567de6f02bbef98dcd1269f1fee56afad5c2cdcf82e98ea4a36389edfcede",
+      "reuse_sha256": "264c221e33fdb4c2dee0f07db50495ef5c708b55a811225e6e3f494f721a3122",
+      "source_inputs": 269,
+      "component_sha256": "b590b56fb8e4b13a18da0a5079c7043503baff620d80631d91daf91ca681b9cf",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "3ae6d17d45f8be0d6ebd98f47c0af95ecf7e3f59dafc3e24dc2999d98d5a233b",
+        "tide-device-optimizer-check": "852d3b17afac91bdcf3e73cef3b39f36ac64f96b2dbd1e1370dafbd9c721833d",
+        "tide-master-publication-check": "db7c17c20ae6e92ad0e10d45fa6741dc2efc582c0b1e91b2e520ce0812350f42",
+        "tide-resident-event-training-check": "f7666955ac3ec4b91b10166229b97e83ce8e21438f877de2d6f55a8fc1fc5dd3",
+        "tide-resident-fiber-training-check": "3f54c0c5c8970e5a2f9318dbdd8d84f10ea0788dff69bdf274acd6f1d84d1b8f"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "604c5ed26410dc7b618d7a5530e6073dd4c64655a73ff70ccbf5042b640d444c",
+        "tide-device-optimizer-check": "3e70a5aaa9b1c06fb30104240ed671056a0b732299b46a4125c21ee6ebecc832",
+        "tide-master-publication-check": "ce4e46c99c13c6e72afe9438b48c9e939f15c356b8b588e9c761eef159d3bb25",
+        "tide-resident-event-training-check": "f5320f76d1fe36780c83451a992a3085f032bd0e88a237c8dea6ed5135779473",
+        "tide-resident-fiber-training-check": "61916a4d373c17cfff943a084daad163a8322baf0fbd3175cd712177bcce7c38"
+      },
+      "kernel_sha256": {
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c"
+      },
+      "content_archive_sha256": "358a608a0f1777495f80e71c765a17c0476975cbfaf64f6193c45837e48927ff",
+      "parent_manifest_sha256": "ff94f963a826ef5126b2074e2f25427747833ab4b1da04a7298d899cd4c5b4c6",
+      "parent_content_archive_sha256": "0f7ed25862c6ad9c836b8550302e7128d1dbaeb69fd63ee04ce6fe9645546d7c",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "469380b75179ef94409de2de5e1132f286b42ad3232a0aab929368dc014689ee",
+        "device_optimizer.cpp.o": "806d1478ca15e95ca6214e8ddce1ba6a2c68909d97eb8556a12a8d44f73eb870",
+        "event_publish.cpp.o": "8b0854d3a9b1b44a04a419a8e4fd4485ea9be28deabb1aace7339600f8554ea6",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "parameter_plan.cpp.o": "89a7f31e904aaabf4de15363d68d5b0bf930fd954a1fc658e6f35e3529183c8d",
+        "parameter_publish.cpp.o": "f56545b0ecfd142f8aa62e2a647e05b8500583586172bc9d26156ca6d7a075a4"
+      },
+      "scope": "six host objects rebuilt; standalone rebuilds two publication kernels and reuses three optimizer kernels; Python reuses all five byte-matched kernels; remaining terminal dependencies reused"
+    },
+    "python": {
+      "name": "low-precision-publication-python-clean01",
+      "manifest_sha256": "da06b5b4a0528b2b8cd83959cf6862a333821e32f0afc2b2b8c05c67de3c3eb1",
+      "reuse_sha256": "bcedb8495ba0101ec93dcf3036305ae719b21065f44783522917d1d64dc4a02b",
+      "source_inputs": 269,
+      "component_sha256": "b590b56fb8e4b13a18da0a5079c7043503baff620d80631d91daf91ca681b9cf",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "3be6797524f4257aaec404897501c20bcbf58ec53f6e4c7a9e60be71304745bb",
+        "_tide_resident.so": "03e444461272ed446f87923f9059400658dd9c866d39f53ca232bd88ad944ab4"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "965c72f74811fac5831db082322a555fc873d616fbf23ef83009f96f3a526473",
+        "_tide_resident.so": "59cc7559a03507ff9d0ac89bf903671b5289a0bb12d8a9b53e25f93f54c98b54"
+      },
+      "kernel_sha256": {
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "367e3374bae8942f5257e4dc632eb1cb35df4fb414e4f300d16b46a248597ae2",
+        "libtide_event_publish_kernel.a": "35e18315651769fcb332c0bf8aa65a9337ef911caa600ae19bf18213967673ca"
+      },
+      "content_archive_sha256": "6856f08a69d58c45c948c1d04fa7c8195a493172934938b970aebc2b4a0abf7a",
+      "parent_manifest_sha256": "ccd6255e3448d9ed76771c5b6de8786db9b8e1ba3cf0c5044fd1079890b3a4cd",
+      "parent_content_archive_sha256": "801b26811e7794158454464e16117e264d5160e5415afb2ebdcd6958eb2794c3",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "469380b75179ef94409de2de5e1132f286b42ad3232a0aab929368dc014689ee",
+        "device_optimizer.cpp.o": "806d1478ca15e95ca6214e8ddce1ba6a2c68909d97eb8556a12a8d44f73eb870",
+        "event_publish.cpp.o": "8b0854d3a9b1b44a04a419a8e4fd4485ea9be28deabb1aace7339600f8554ea6",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "parameter_plan.cpp.o": "89a7f31e904aaabf4de15363d68d5b0bf930fd954a1fc658e6f35e3529183c8d",
+        "parameter_publish.cpp.o": "f56545b0ecfd142f8aa62e2a647e05b8500583586172bc9d26156ca6d7a075a4"
+      },
+      "scope": "six host objects rebuilt; standalone rebuilds two publication kernels and reuses three optimizer kernels; Python reuses all five byte-matched kernels; remaining terminal dependencies reused"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-publication-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6c798b1693c8e0e68005464317d200e243720540cf0038f133c8b1418ad1d0d6",
+        "task.log": "765c5125d7783d9b145893391a6235b691d1d3fa2dffe5a2d03f622bc6dd421a"
+      }
+    },
+    {
+      "name": "build-low-precision-publication-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "69d5dedbc8a7a494e2e22aa9eb622e6f8225841783ad7cb677e76defb18bc292",
+        "task.log": "ae87834e2d99acac8fc04136054bfd7fc9d9e118a963236d3d5567d87da27c20"
+      }
+    },
+    {
+      "name": "low-precision-publication-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "85add2d8a620824b6cac79593c6eedaa379e07243717dfa213c8b1b347afd8d4",
+        "task.log": "16290a0ce19f069e4fcaf689c5eb61a10ab8e99c3468e92cb096d5fe795f33de",
+        "queue.json": "ffc2cfb69da426b7b7000fa47ec3caec6b5538eff6dddc1ece67dfcf151ce9e8",
+        "gate/result.json": "b5f3de6f2fdf4ee9850599a8e8cf208ba9732ce84872546c82d336e147c52452"
+      }
+    },
+    {
+      "name": "low-precision-publication-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "23267c9a72bcaf477d3d41a6f5579a2681b8a92d085098cdc639ca3320bf41cb",
+        "task.log": "a8a831e10a4177d8d0b4c6f7fcbc306a6f2122f3a4e4a453bd453f06852c0228",
+        "queue.json": "4c2fbd0595ceeb0167032fe8acd856c8f8b0ebae9a2ac363b0ad100a9b68fc12",
+        "gate/result.json": "29ee72460e418cc672699f511c50a092eb848da02a2ec3913adc1da1fd3b26f1"
+      }
+    },
+    {
+      "name": "low-precision-publication-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "cf35724a3a154ad44817773af7e55c0827d11565e48f9106c2978ebbc8e77d33",
+        "task.log": "3c149efafd7d5a61728045673d823f7245861c3f36e99493f02d7430f3835c10",
+        "queue.json": "9e46ea8be78743656a1fc3aefda466599d3db21ea7e2c0b2e1b6b62ca57a7ddb"
+      }
+    },
+    {
+      "name": "low-precision-publication-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1e11768f5b147a3e14847b9d48d9db0bade4e6651d6d0eb40d0fafb4f74ffbb9",
+        "task.log": "bef6934bbd7a3ae8c3cacdd04af2f76e9efea3bd9e198e157575b50a27aeadb2",
+        "queue.json": "2152e2114c8f21d123c1714fe98064225a0cd39e10b31100beb0a6cd5cbb534a",
+        "profile/result.json": "850cdeeb1218a10ed43f6a8fe1863f0b8200c289ba44e54c4a77ffd8d4622483",
+        "profile/profile.log": "4b6a1f54d8948a37ba2402e41409a62efd2ae3ebcea81435cc61d98222662d84"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "optimizer",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-device-optimizer-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "optimizer-float32.log",
+      "log_sha256": "2aa857ccdd2b939ebf64f512c17572f7eb5143688e2c3955e27829dbc98e83d7"
+    },
+    {
+      "check": "optimizer",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-device-optimizer-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "optimizer-float16.log",
+      "log_sha256": "926cbc12d190b34984795df1db89c4cae930a3564a5d821804de68e1ae362091"
+    },
+    {
+      "check": "master-publication",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-master-publication-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "master-publication-float32.log",
+      "log_sha256": "2e93e7faf70aa1e43d97893aab07bd36da6435d5442115a9af3a00a1d54e2323"
+    },
+    {
+      "check": "master-publication",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-master-publication-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "master-publication-float16.log",
+      "log_sha256": "b2750a26a003ce4a7d65d13a165c97d60b4ca30c2c6f4d0a7e7db2cbf3097f13"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "7bd3edcf4faadece609d04ee527db54f3a0cfc4ad16f9306202cc9960c9cb2ad"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-publication-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "2714cc423462aa0c9073039a8c3a875a26bab568c242a546f055fbd2267a2a26"
+    }
+  ],
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 6718,
+      "AI_CORE": 288,
+      "MIX_AIV": 5
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261001134547344_00891613PMGHNFCP/mindstudio_profiler_output/op_summary_20261001134554.csv": "e442c59e6af8f6a5cad6101a75015d87d3e2115e30af8dfab184770fe8da27bd",
+      "raw/PROF_000001_20261001134547344_00891613PMGHNFCP/mindstudio_profiler_output/api_statistic_20261001134554.csv": "c577739e25fdc076b0d4df4c7bbe5ec25827fd8d3ca1cc5fcb101b08978dbd9d"
+    },
+    "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+  },
+  "retained_failures": [
+    {
+      "name": "low-precision-master-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "636448a373af471574e09c294437b055cf28e8431f8d8603eaf01005a001313d",
+        "task.log": "b52261eaccf7bcf52a143b9703e28a84d227e1e2e84790ed807462be4facf93c"
+      }
+    },
+    {
+      "name": "build-low-precision-publication-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "8558728fef3e244fea02ef8e1d214043a0c03cbbfd515c60d080b87137c5f39d",
+        "task.log": "5a709a31c007f4805bced8037cc12b63ced92e076f080af3bdeefa46a8e45feb"
+      }
+    },
+    {
+      "name": "low-precision-publication-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "7dd13a99274fd8605d7b0bfbbbeda32b40517cc37440e2e8c9d39e501c1896b7",
+        "task.log": "5ff357ede17e05786269fcab82d6598b1038cf027e1f93edf89aacdafd464ec8"
+      }
+    }
+  ]
+}

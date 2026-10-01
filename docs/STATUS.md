@@ -29,73 +29,68 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Pushed implementation 8b05c0495fd5bc3cb874f6cb1548b25f3d5ac4b5 and evidence b645e9a:
-[FP16 inference report](evidence/resident-fp16-inference-20261001.md),
-[audit](evidence/resident-fp16-inference-20261001.json).
-Seven immutable-source jobs passed: byte-verified standalone/Python build reuse,
-eight standalone cells, 215 Python device cases (zero skips), 76 host cases
-(212 optional NPU skips), and separate FP16 trace (2390 AI_VECTOR_CORE,76 AI_CORE,
-2 MIX_AIV; no observed AiCPU or logged CPU fallback). Full flow covers 78
-configurations/312 windows per dtype; attention payload 64 configurations/192
-replays per dtype. Only single-device FP16 HARD inference is qualified.
-The event/fiber FP32 training regressions retain strict comparisons. Profiling
-is not throughput; no new speed ratio exists. Original failures remain recorded.
+Implementation **9a84432167a82900c0472b02b2e33ddace6da3eb** is pushed.
+[FP32 master/FP16 publication report](evidence/resident-fp16-master-publication-20261001.md),
+[audit](evidence/resident-fp16-master-publication-20261001.json).
+All six clean qualification jobs PASSED/exit0:
+- build-low-precision-publication-clean01: standalone, two publication kernels,
+  six host objects/checkers rebuilt; byte-matched terminal dependencies reused.
+- build-low-precision-publication-python-clean01: independent Python-owned host
+  rebuild/client relink, byte-matched CANN archives reused.
+- low-precision-publication-components-clean01: four cells,physical9→logical0.
+- low-precision-publication-regression-clean01: FP32 event/fiber,physical3→logical0.
+- low-precision-publication-python-clean01:215 passed,zero skips,physical13→logical0.
+- low-precision-publication-profile-clean01:two trajectories/ten windows/eight
+  updates,physical1→logical0;6718 AI_VECTOR_CORE,288 AI_CORE,5 MIX_AIV; no observed
+  AiCPU or logged CPU fallback. This is not a throughput measurement.
 
-## Current implementation increment
+Per dtype publication:48 trajectories/240 continued inference windows/192 public
+synthetic gradient updates, both schedules/optimizers, six module groups,widths3/33.
+FP32 optimizer:32 trajectories/256 updates. FP16:32 trajectories/248 updates/two
+independently predicted range refusals. Master65512 publishes finite65504;65520
+refuses before any live owner/slot commit. Checkpoint refusal/sub-ULP retention,
+None poison, exact payload aliases and normalization-bank rounding passed.
+Synthetic-gradient update/publication is not FP16 graph VJP or complete training.
+Public FP16 training and HST/SOFTP guards remain. All retained master/publication
+failures and their causes are in the report; none were relabelled successful.
+Source/core/binary/loader/raw log/CSV and every reused content-archive member were
+audited by TASK/launchers/precision_publication_evidence.py9a84432(full hash).
+No repeat of the unchanged core gate and no new full-size speed ratio.
 
-FP32 master optimizer plus FP16 payload publication is development-tested; clean
-qualification is next. Public FP16 training and HST/SOFTP guards remain in place.
-DeviceOptimizer preserves FP32 master/gradient/slots, rounds only at payload
-publication, and refuses a nonfinite half proposal before committing any live
-owner/slot/counter. Restore validates half representability. A 65512 master
-rounds to finite 65504; 65520 refuses. Sub-ULP master progress is retained.
-Fused publication updates ordinary/event/fiber banks and HARD Read aliases;
-FP32 normalization banks round to payload dtype before widening.
+Prior:FP16 HARD inference qualified on8b05c04
+([report](evidence/resident-fp16-inference-20261001.md)); FP32 event/fiber training
+qualified on66a6ca5 ([report](evidence/resident-attention-training-20261001.md)).
+The older Full trajectory's conditioned-control policy is separate; this
+increment's event/fiber regressions retain strict comparisons.
 
-Terminal development jobs (TASK/runs/NAME):
-- build-low-precision-master-dev01 and dev02: PASSED.
-- low-precision-master-dev02: PASSED, FP32 32 trajectories/256 updates; FP16
-  32 trajectories/248 updates/two independently predicted half-range refusals.
-- low-precision-master-regression-dev01: PASSED FP32 event/fiber training.
-- build-low-precision-publication-dev02: PASSED, two publication kernels/six
-  host objects rebuilt; byte-matched terminal master/inference dependencies reused.
-- build-low-precision-publication-dev03: PASSED, checker only rebuilt.
-- low-precision-publication-dev03: PASSED, four cells, physical9→logical0;
-  each dtype publication has 48 trajectories/240 continued inference windows/
-  192 public synthetic gradient updates, both schedules/optimizers, six module
-  groups, widths3/33, exact quantized aliases and sticky-error no-write checks.
-- low-precision-publication-regression-dev02: PASSED, physical3→logical0;
-  FP32 event/fiber complete training:66/172 roots and8/20 trajectories.
+## Active work and next action
 
-These synthetic-gradient update/publication checks are not graph VJP or full
-FP16 training evidence. CPU master updates and Streaming run independently.
-Preserved new failures:
-- low-precision-master-dev01: old test incorrectly required every finite FP32
-  AdamW result to fit half; CPU-predicted refusal checks replaced that assertion.
-- build-low-precision-publication-dev01: const checker registry failed compilation.
-- low-precision-publication-dev02: checker used stride3 for a sample with2 inputs;
-  corrected per-port continuation counts. Runtime validation remained unchanged.
-No new task job is live; historical CPU baseline below remains deliberately paused.
+Uncommitted FP16 state-VJP component work:
+- state_tape accepts half forward banks/journals; graph reverse still refuses half.
+- EMA reads coefficients in forward precision; Add replay rounds every literal
+  forward tick. Cotangents/adjoints stay FP32. No FP32 whole-forward substitution.
+- state-vjp adds108 CPU half autograd cases, four actual half tapes and two
+  1024-tick rounding-sensitive lifted-autograd anchors at strict FP32 tolerance.
+  FP32/FP64 cases/tolerances remain. Not yet runtime-qualified.
+- build-low-precision-state-vjp-dev01 FAILED in checker compilation: ambiguous
+  mixed int/int64 tensor initializer. Fixed with explicit vector<Index>; preserve log.
+- build-low-precision-state-vjp-dev02 is RUNNING, frozen dirty snapshot/build
+  low-precision-state-vjp-dev02, launcher build_precision_state_vjp.py,900s/two workers.
+  One state reverse kernel,two host objects/checker rebuilt; other dependencies
+  byte-verified against terminal publication clean01. Inspect status/task.log.
 
-## Next action
+Commit the master/publication evidence separately (only docs). On state build
+success run verify_device_control.py --checks state-vjp and separately
+--checks event-training fiber-training from that frozen snapshot/build, each
+max120s lease wait/600s execution. Fix actual failures without relaxing FP32
+checks. Then commit state implementation, qualify clean fixed source, profile
+separately and commit reviewed evidence. Do not reopen global CPU qualification.
 
-Commit/push this coherent implementation, then freeze its clean full hash as
-low-precision-publication-clean01. Build standalone via
-TASK/launchers/build_precision_publication_v2.py low-precision-publication-clean01;
-Python-owned runtime via build_precision_publication_python.py
-low-precision-publication-python-clean01. Both 900s, max2 build workers.
-The latter reuses byte-identical publication kernels from terminal dev02,
-optimizer kernels from terminal master-dev01, and remaining qualified dependencies.
-Run standalone optimizer/master-publication and FP32 event/fiber training gates,
-Python affected resident tests, and separate master-publication FP16 profile-smoke.
-Commit reviewed evidence separately after source/binary/loader/log/CSV audit.
-
-Then implement actual-half-forward VJPs, retained windows, master checkpoint,
-HST/SOFTP and public complete FP16 training. Do not merely remove dtype guards
-or widen half forward into FP32: recomputed adjoints must respect each actual
-forward rounding point. Next peer progression/communication/training, five-preset
-screening, representative/full-size CPU/mixed/resident performance and version/
-migration/CUDA evidence. F1–F7 remain incomplete.
+After state adjoints, complete the remaining actual-half-forward Full/Aggregate/
+attention/control adjoints, retained windows, master checkpoint and public FP16
+training. Then peer progression/communication/training,five-preset screening,
+representative/full-size CPU/mixed/resident performance and version/migration/
+CUDA evidence. F1–F7 remain incomplete; authorization active, no requested pause.
 
 ## Environment and bounded execution
 
