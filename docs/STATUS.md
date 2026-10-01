@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01; extended-graph qualification complete, attention integration next. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01; attention cache qualification complete, public FP16 training active. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -67,30 +67,32 @@ for width257. Retain dev02 CPU FP32 LayerNorm cancellation failure;half oracle
 keeps FP32→half forward and native CPU FP64 normalization derivative,with
 analytic-zero anchor. No production/tolerance change.
 
-Attention cache integration implemented;dev02 build and event/fiber gates all
-PASSED/exit0. Per dtype:event66 trajectories/264 windows,fiber152/608;independent
-CPU FP32/FP64 references,shared owners,feedback,HARD/HST/SOFTP,both schedules,
-GQA/eviction,all five pools,mixed modules,periodic clocks,widths1/4/257,None/zero,
-poisoned live journals/padding,after-close reverse and exact cache replay.
-New precision_cache_fixture.cpp and retained_cache_fixture.cpp;existing retained
-checker shares graph/parameter/boundary checks. Production source unchanged;
-fixture CMake extended. Dev01 failed only on test-helper matmul ADL ambiguity;
-renamed half_matmul in dev02,no failed production artifact reused.
+Attention cache reverse qualified on f26f3b07f5e24a2ea835dbbfe352f3acf478eb57;
+[report](evidence/resident-fp16-cache-graph-20261001.md)/[audit](evidence/resident-fp16-cache-graph-20261001.json).
+All5 immutable jobs PASSED/exit0. Per dtype:event66 trajectories/264 windows,
+fiber152/608;6 base/extended regression cells also passed,total10 cells.
+Half2-case mixed/periodic profile9557 AI_VECTOR_CORE/430 AI_CORE/156 MIX_AIV;
+no observed AiCPU/logged fallback. Production unchanged from25e996c. Audit
+TASK/launchers/precision_cache_graph_evidence.py REV passed. All jobs terminal.
+Dev01 test-helper matmul ADL ambiguity retained;dev02 half_matmul fix passed.
+Snapshot/build low-precision-cache-graph-clean01;new CPU-only half cache oracle
+and retained_cache_fixture helpers are reusable for complete public training.
 
-Next commit/push implementation,freeze low-precision-cache-graph-clean01.
-Build TASK/launchers/build_precision_cache_graph_v1.py SNAPSHOT(900s),then separate
-bounded event/fiber/regression checks(600s,lease120s). Regression checks graph-vjp,
-retained,extended-retained. One half fiber-retained --profile-smoke placement
-trace(2 trajectories:mixed HST/periodic SOFTP;512MB). Audit
-TASK/launchers/precision_cache_graph_evidence.py REV expects5 terminal jobs,
-10 standalone cells and the separate2-case profile. Commit/push evidence separately.
-No repeat Python-owned build/client tests or portable core for test-only source.
-All current development jobs terminal;historical CPU baseline remains paused.
-Current public training remains guarded. training_backward.cpp must accept FP32
-roots independently of payload dtype;freeze_model/restore and checkpoint
-master↔named half correspondence need explicit handling before lifting guards.
-No portable core changes;do not repeat unchanged8,954 CPU checks or97 Python
-client tests for test-only source changes.
+Active uncommitted public FP16 training increment:training_backward.cpp now
+validates/zeros FP32 roots independently of payload;training_parameters.cpp
+accepts half owner parameters and exact matching checkpoint dtype;training_owner
+compares master.to(payload_dtype) with named payload;training_checkpoint exports
+actual payload dtype. Python guard/header and half root refusal test updated.
+Not yet built/verified;do not claim public half training delivered.
+Next add independent multi-update FP32-master/half-payload training checker,
+checkpoint resume/mismatch/finite guards,Python actual-loss and disk lifecycle
+checks. Reuse retained_reference_precision with true half forward and wide
+adjoints;CPU master updates independent of NPU outputs/gradients. Compile only
+4 affected public C++ objects plus checkers in standalone and Python-owned
+runtimes,source-matched terminal CANN/core dependencies. Regression relevant
+FP32 training/interfaces;no unchanged8,954-core-test repeat. Qualification
+implementation commit first,immutable source tests,then evidence separately.
+Historical CPU Attention stays paused;no new throughput conclusions.
 Remaining F1–F7:half cache/public training/master/checkpoint,device peer progression/
 communication/training,five-preset screening,representative/full-size performance,
 version/migration/CUDA records. Commit implementation→immutable qualification→

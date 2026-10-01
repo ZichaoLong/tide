@@ -1,0 +1,274 @@
+{
+  "schema": "tide-resident-fp16-cache-graph-evidence-v1",
+  "source": "f26f3b07f5e24a2ea835dbbfe352f3acf478eb57",
+  "scope": "single-device FP16 event and fiber attention whole-graph/retained KV and bias reverse; production unchanged from25e996c; not public half training/checkpoint, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-cache-graph-clean01",
+      "manifest_sha256": "268715564deaa1df49d35d57811787f3f590ec43f0809cca17f459a82202f232",
+      "reuse_sha256": "96294cc3d5ef8b2969837f047ef6c4d1b7cd04898c380d6c7df53c1841142bdd",
+      "source_inputs": 278,
+      "component_sha256": "ecd83a010ff4f61958ef1d5efe7ebae97fb45a476d308e68c920f6f543979f36",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "b0da842428a9588c781ee8b136ce4c7c6ac7a7c75cdde20ee23338bf1b9a1ac3",
+        "tide-device-retained-check": "b733d024f185e496e2e77a7a6212665c9aa73a262d7d60f89bf461e9f8aa27ef",
+        "tide-device-graph-vjp-check": "75af10961f98fbbcf07df77d520c6cc52ce604b2d8def2794425bffcd192c9fc"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "48869235ef1223e8ee00748b4090cf42de380ef1c13b821a4cd51d0f01c109e9",
+        "tide-device-retained-check": "8e2859bed6472d85b745ccba879e3b6317edb13fcbcfb29e9a6abee3d3aa52a2",
+        "tide-device-graph-vjp-check": "2a39b4dab94c65eea1b9e8d6deaa31b43ce7957e8278f8f4c2730801154ae3d8"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "3a45401d2bf83d610b5c75558db075ab4c3155d0e36c3652ec1d668e02f85183",
+      "parent_manifest_sha256": "560ffbb263ce121be2ba3deda0a59af46ab7226380ca4e73d39c217728fd4ce1",
+      "parent_content_archive_sha256": "b90df7d6200511493412b714ee024cc4ecce92acbb9740317cbd90f45f055848",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "a57358bcf6936ff62765cdfcf4a1bfef0cb603af2a7eaa6056a2403400f0a793",
+      "oracle_object_sha256": {
+        "precision_graph_fixture.cpp.o": "9e8dc978bb5648cb7ea0441e07779aba390cde9e2de0930dd354a7cbad4fdf4a",
+        "precision_cache_fixture.cpp.o": "11206ed948a6ff97ba338d485b60ece7ff5b5444ad858851f388ce66c323fb4f",
+        "retained_fixture.cpp.o": "30557ee95bf1cb978ceea87a4006d27cb7dd8d935a999e1eb154e23ce94b26b3",
+        "retained_cache_fixture.cpp.o": "a2c51f9f341e23c3ea01693a3d0f7601d042de3b5b4634e6f38d670751bd5718"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-cache-graph-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2ae9cbdc9b0a53e3fad64b9e333eafaa48956d04bef9d2ed3ec6fa2765544118",
+        "task.log": "9c425b060b6c14d520e2bd0d783b4d24abc4ff25cb94217c138d8caae88f5a51"
+      }
+    },
+    {
+      "name": "low-precision-cache-graph-event-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f63db09e9facc7bc62596f1a77b397d25029acebd7cbe6d6fef0cd73b2efa0b1",
+        "task.log": "13d4e49b11fa558ea4c82b62ffb20bc866fe3cd86788aa3aa18d9e04027bd913",
+        "queue.json": "b836cefe89ea82410ca0c9ede9e10b3236ba71b2e67844840e60a4b9857e72dc",
+        "gate/result.json": "98b004ea4d0814034c0b344fc4853570487daca0c32ac9ebc84c2ab97752ff9c"
+      }
+    },
+    {
+      "name": "low-precision-cache-graph-fiber-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "73b9c6b2f71378ecf2ce0e4180a697b7d07954da9ed00f079c8d419e7680de6e",
+        "task.log": "9ea72dcc4e6d918939ec32c9dca66adb3eda6232a069fbe54a07113152429013",
+        "queue.json": "18286bfc9faa9fc43e4ab763d3deddeb91b0293ec94640a4ad4bc358ba4bd08f",
+        "gate/result.json": "f313d3e0989747862a193d407f4e9dbc567018151ac0bef57f0a4fa032abc649"
+      }
+    },
+    {
+      "name": "low-precision-cache-graph-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "17e692a3d7c050c4b4d927d5fc5657f4844ec8c8e43e82d65878691726f61b9a",
+        "task.log": "1a038b9a7d3e11dc27f2cf9366810a98a704e75438876371f5aeb34f64ee469e",
+        "queue.json": "efbc952563c2b5499d351031ce1e1f8db34ca69842f38e5ed611a5108b197cd1",
+        "gate/result.json": "a64d63c0a8a151d60e73e1d04a1992122050934bece707c5fe46d26c55f85b0a"
+      }
+    },
+    {
+      "name": "low-precision-cache-graph-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f6643adc1b720bd83a79e326251e39689370f6af05113f1b5b18d2d3a195ceac",
+        "task.log": "2cbbf06002b225cc65287bf3d19478bd1171092e46d236f4f129b319328cb492",
+        "queue.json": "4af0fcaadd7459c02b3c11ca2d83093391d8def7d8d959f6c42a8cd21d989411",
+        "profile/result.json": "b6017281cca7ebdd0e1a742ffa6890cb74412716bce4786415424fa116c69e66",
+        "profile/profile.log": "805045c98bb949f5dddc638460263cda21f2974175c0ecb856ec1d60fa8f8afd"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "event-retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--event-cache"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-retained-float32.log",
+      "log_sha256": "6190a87fa7769a971aa87acf2ae9bbffa5704dd850a627bdd2c591c39640afe5"
+    },
+    {
+      "check": "event-retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--event-cache"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-retained-float16.log",
+      "log_sha256": "8b6b60eb6f5f8a76cce6f49f04c55846ff6d097a0527ea455d6f040bd645b99b"
+    },
+    {
+      "check": "fiber-retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--fiber-cache"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-retained-float32.log",
+      "log_sha256": "078e263a8b44487661cca825053812972483b5c5f2df05a8e06565e7329d0a31"
+    },
+    {
+      "check": "fiber-retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--fiber-cache"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-retained-float16.log",
+      "log_sha256": "a89aa3f2adf3851b69066f6828fd9a317b904bd33be19a17ec9141eb69851027"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float32.log",
+      "log_sha256": "952e332b83c3164102fb614aae76eaa8b8584ac7ad74659a7c7b7de5c4c9bdd1"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float16.log",
+      "log_sha256": "2bee327d62e39ba4382bedb156db4dcc99304538239cc5534903d50c1800ecde"
+    },
+    {
+      "check": "retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float32.log",
+      "log_sha256": "c32f45dab8a174844526f6f385030932fb63c7f84193e718c6371256dd45825d"
+    },
+    {
+      "check": "retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float16.log",
+      "log_sha256": "a3140201d54f83be51c88520424b41a7bafd4049b19fe3d942809e9482d3168a"
+    },
+    {
+      "check": "extended-retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--extended"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "extended-retained-float32.log",
+      "log_sha256": "ffd2853b4e3b05d6930c8c2880b1ed6d85eef7b8f4019aec4962b023440d8339"
+    },
+    {
+      "check": "extended-retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-cache-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--extended"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "extended-retained-float16.log",
+      "log_sha256": "e25bff6f4810429da8536d341cdbda88be1420ce8ca8130f3f529c7783ab3653"
+    }
+  ],
+  "profiles": {
+    "fiber-retained": {
+      "engines": {
+        "AI_VECTOR_CORE": 9557,
+        "AI_CORE": 430,
+        "MIX_AIV": 156
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001171949850_01404143QIHBEKFK/mindstudio_profiler_output/op_summary_20261001171956.csv": "9ace14f29ce63ee167347a65e6ee59971323e3efd74eddb469c18a016a415a11",
+        "raw/PROF_000001_20261001171949850_01404143QIHBEKFK/mindstudio_profiler_output/api_statistic_20261001171956.csv": "cc76955cfaeebb49b4ae2162e4722084fbc3afac6b9a277ac3a98d987f2cf65e"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-cache-graph-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "30624afe069d371866851e02ead439c3c2d88224e8c7f98c7aaf6be4b8004f57",
+        "task.log": "f3e053ad34fb18e51c6ea0f5c21ec46b9781825d714eb815e14979bf78718499"
+      }
+    }
+  ]
+}
