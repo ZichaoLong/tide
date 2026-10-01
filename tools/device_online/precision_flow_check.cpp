@@ -101,7 +101,7 @@ test::Fixture mixed_full_fixture(int shape,at::ScalarType dtype) {
   }
   f.graph.compile();f.initial.identity=f.graph.identity;return f;
 }
-void peer_refusals(at::Device device,at::ScalarType dtype,int shards,const std::string& policy) {
+void peer_refusals(at::Device device,at::ScalarType dtype,int shards,const std::string& policy,bool state_shards) {
   const auto peer=at::Device(device.type(),device.index()+1);auto f=fixture(0,0,dtype);
   auto make=[&](ContentLimits l) {
     if(!shards)return std::make_unique<ContentFlow>(f.graph,f.model,f.initial,device,l,peer);
@@ -110,6 +110,11 @@ void peer_refusals(at::Device device,at::ScalarType dtype,int shards,const std::
     auto invalid=placement;invalid.owners[0]=shards;bool refused=false;
     try{ContentFlow bad(f.graph,f.model,f.initial,device,l,invalid);}catch(const std::invalid_argument&){refused=true;}
     require(refused,"invalid Full shard assignment accepted");
+    if(state_shards) {
+      bool bad=false;try{ContentFlow rejected(f.graph,f.model,f.initial,device,l,ModelPlacement{placement,invalid});}
+      catch(const std::invalid_argument&){bad=true;}require(bad,"invalid state owner accepted");
+      return std::make_unique<ContentFlow>(f.graph,f.model,f.initial,device,l,ModelPlacement{placement,placement});
+    }
     return std::make_unique<ContentFlow>(f.graph,f.model,f.initial,device,l,std::move(placement));
   };
   for(int failure=0;failure<3;++failure) {
@@ -125,11 +130,11 @@ void peer_refusals(at::Device device,at::ScalarType dtype,int shards,const std::
   }
   ContentLimits l;l.workspace_bytes=512*1024*1024;
   auto flow=make(l);bool refused=false;
-  try{flow->reverse_tape();}catch(const std::invalid_argument& e){refused=std::string(e.what())=="remote Full adjoint is not implemented";}
+  try{flow->reverse_tape();}catch(const std::invalid_argument& e){refused=std::string(e.what())==(state_shards?"compact state/cache reverse requires owner tape integration":"remote Full adjoint is not implemented");}
   require(refused,"peer inference silently exposed an incomplete adjoint");flow->close();
   std::cout<<"peer-flow-refusals: passed capacity=3 remote_adjoint_refused=true\n";
 }
-void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,bool peer,int shards,const std::string& policy) {
+void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,bool peer,int shards,const std::string& policy,bool state_shards) {
   if(shards)test::full_placement_check(fixture(0,0,dtype).model,device);
   Index cases=0,windows=0;
   const std::vector<std::string> modes=controlled?std::vector<std::string>{"hst","softp"}:std::vector<std::string>{"hard"};
@@ -149,7 +154,7 @@ void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,boo
     l.chunk_policy=prefill?ChunkPolicy::aggressive:ChunkPolicy::conservative;
     l.vectorized_state=prefill;l.vectorized_read=prefill;l.vectorized_aggregate=prefill;
     std::cout<<"precision flow shape="<<shape<<" kind="<<kind<<" prefill="<<prefill<<" mode="<<mode<<std::endl;
-    test::InferenceCandidate candidate(f.graph,f.model,f.initial,device,l,peer,shards,policy);Streaming cpu(f.graph,f.model,options);
+    test::InferenceCandidate candidate(f.graph,f.model,f.initial,device,l,peer,shards,policy,state_shards);Streaming cpu(f.graph,f.model,options);
     auto q=f.initial;Index previous=q.cut;
     if(peer) {
       candidate.advance({},previous,previous);
@@ -171,7 +176,7 @@ void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,boo
     auto saved=candidate.snapshot();candidate.close();l.prefill=!prefill;l.attention_key_rows=prefill?96:1;
     l.diagnostics=false;l.trace=0;l.kv_trace_rows=0;
     test::InferenceCandidate restored(f.graph,f.model,saved,device,l,peer,shards,
-      shards?(policy=="memory"?"locality":"memory"):policy);
+      shards?(policy=="memory"?"locality":"memory"):policy,state_shards);
     const auto expected=cpu.run(q,{},previous+3,previous+3);restored.advance({},previous+3,previous+3);
     compare(restored.result(),expected,dtype,false);++windows;++cases;
   }
@@ -182,10 +187,11 @@ void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,boo
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    bool smoke=false,controlled=false,peer=false;int shards=0;std::string policy="locality";std::vector<char*> argsv{argv[0]};
+    bool smoke=false,controlled=false,peer=false,state_shards=false;int shards=0;std::string policy="locality";std::vector<char*> argsv{argv[0]};
     for(int i=1;i<argc;++i)if(std::string(argv[i])=="--profile-smoke")smoke=true;
       else if(std::string(argv[i])=="--control-modes")controlled=true;
       else if(std::string(argv[i])=="--peer-full")peer=true;
+      else if(std::string(argv[i])=="--state-shards")state_shards=true;
       else if(std::string(argv[i]).find("--full-shards=")==0){shards=std::stoi(std::string(argv[i]).substr(14));if(shards<1||shards>16)throw std::invalid_argument("invalid Full shard count");peer=true;}
       else if(std::string(argv[i]).find("--full-placement=")==0)policy=std::string(argv[i]).substr(17);
       else argsv.push_back(argv[i]);
@@ -194,7 +200,8 @@ int main(int argc,char** argv) {
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);
     if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("precision flow requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
-    check(d,args.dtype,smoke,controlled,peer,shards,policy);if(peer&&!smoke&&!controlled)peer_refusals(d,args.dtype,shards,policy);
+    if(state_shards&&!shards)throw std::invalid_argument("state shard fixture requires explicit --full-shards");
+    check(d,args.dtype,smoke,controlled,peer,shards,policy,state_shards);if(peer&&!smoke&&!controlled)peer_refusals(d,args.dtype,shards,policy,state_shards);
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

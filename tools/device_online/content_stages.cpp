@@ -13,7 +13,7 @@
 namespace tide::device_online {
 namespace {
 uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
-void payloads(const ContentProfile& p,std::initializer_list<at::Tensor> values) {
+void payloads(const StateKernelProfile& p,std::initializer_list<at::Tensor> values) {
   for(const auto& value:values)if(value.scalar_type()!=p.dtype||value.device()!=p.sources.device()
       ||!value.is_contiguous()||value.requires_grad())
     throw std::invalid_argument("state/Read requires matching colocated contiguous payload dtype");
@@ -26,9 +26,9 @@ ContentBatch append_content(CannProgram& p,const ContentProfile& profile,const R
   if(aggregate)aggregate->append(p,ready,sum,error,vectorized);
   return {sum.content,at::zeros({ready.fibers.size(0)},sum.content.options().dtype(at::kFloat)),sum.weighted};
 }
-void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,const ContentBatch& content,
+void append_read(CannProgram& p,const StateKernelProfile& profile,const ReadyBatch& ready,const ContentBatch& content,
                  const ContentState& old,const at::Tensor& coefficients,const at::Tensor& error,int64_t max_repeat_ticks,bool vectorized,const at::Tensor& attention_proposals) {
-  const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size()),samples=old.values.size(0);
+  const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.nodes.size()),samples=old.values.size(0);
   const auto proposals=attention_proposals.defined()?attention_proposals:content.content;
   payloads(profile,{content.content,old.values,coefficients,proposals});
   const int64_t fp16=profile.dtype==at::kHalf;
@@ -54,12 +54,12 @@ void append_read(CannProgram& p,const ContentProfile& profile,const ReadyBatch& 
       {ready.fibers,ready.counts,kinds,partials,content.scores,error});
   }
 }
-ContentUpdate append_content_state(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,
+ContentUpdate append_content_state(CannProgram& p,const StateKernelProfile& profile,const ReadyBatch& ready,
     const ContentBatch& content,const SelectionProposal& selection,const ContentState& old,
     const at::Tensor& coefficients,const at::Tensor& stages,const at::Tensor& event_count,const at::Tensor& error,const ContentLimits& limits,const at::Tensor& attention_proposals) {
   const bool diagnostics=limits.diagnostics,vectorized=limits.vectorized_state;
   const auto max_ticks=limits.max_repeat_ticks;
-  const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.graph.nodes.size()),samples=old.values.size(0);
+  const auto capacity=ready.fibers.size(0),width=profile.width,nodes=int64_t(profile.nodes.size()),samples=old.values.size(0);
   const auto proposals=attention_proposals.defined()?attention_proposals:content.content;
   payloads(profile,{content.content,old.values,coefficients,proposals});
   const int64_t fp16=profile.dtype==at::kHalf;

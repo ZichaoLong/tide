@@ -47,12 +47,14 @@ def main():
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
                 if check == "full-training":
                     command.append("--control-check=" + args.full_training_control_check)
-                if check in ("precision-control-flow", "peer-control-flow", "peer-shard-control-flow"):
+                if check in ("precision-control-flow", "peer-control-flow", "peer-shard-control-flow", "peer-state-control-flow"):
                     command.append("--control-modes")
                 if check in ("peer-flow", "peer-control-flow"):
                     command.append("--peer-full")
                 if check in ("peer-shard-flow", "peer-shard-control-flow"):
                     command.append("--full-shards=2")
+                if check in ("peer-state-flow", "peer-state-control-flow"):
+                    command.extend(("--full-shards=2", "--state-shards"))
                 if check == "extended-retained":
                     command.append("--extended")
                 if check in ("event-retained", "fiber-retained"):
@@ -62,7 +64,7 @@ def main():
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=360 if check in ("peer-sharded-vjp", "peer-sharded-training") else 120)
+                                            timeout=360 if check in ("peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

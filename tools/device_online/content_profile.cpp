@@ -96,4 +96,9 @@ void ContentProfile::upload(at::Device device) {
   for(auto tensor:{&sources,&origins,&scales,&read,&read_modes,&read_kinds,&decay,&retention,&clock_policy,&config})
     if(tensor->defined())*tensor=tensor->to(device);
 }
+void ContentProfile::upload_routing(at::Device device) {
+  if(!sources.device().is_cpu()||device.type()!=c10::DeviceType::PrivateUse1)
+    throw std::invalid_argument("routing upload requires deferred CPU profile and explicit NPU");
+  for(auto tensor:{&sources,&origins,&scales,&read_modes})if(tensor->defined())*tensor=tensor->to(device);
+}
 } // namespace tide::device_online

@@ -30,6 +30,7 @@ struct ContentWindow {
 // state and exported observables are CPU values; persistent runtime data and
 // all decisions between submission and the complete-cut boundary stay on NPU.
 // An execution failure poisons this owner; restore a prior cut into a new one.
+struct ModelPlacement;
 class ContentFlow {
  public:
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits={});
@@ -41,6 +42,9 @@ class ContentFlow {
   // owned. Explicit sharded tapes support the internal reverse executor;
   // optimizer publication and public multi-device training are separate.
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,FullPlacement);
+  // Internal full + state/KV forward placement; reverse/public training uses a
+  // separate capability gate until compact owner tapes are integrated.
+  ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,ModelPlacement);
   ~ContentFlow();
   ContentFlow(const ContentFlow&)=delete;
   ContentFlow& operator=(const ContentFlow&)=delete;

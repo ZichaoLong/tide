@@ -19,9 +19,11 @@ void validate_reverse_modules(const Graph& graph) {
       throw std::invalid_argument("graph reverse module contract unavailable");
 }
 }
-ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd,FullPlacement placement)
+ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd,FullPlacement placement,FullPlacement state_placement)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),full_device(fd),boundary(q),window_start(q.cut) {
-  const bool sharded=!placement.devices.empty();
+  const bool sharded=!placement.devices.empty(),state_sharded=!state_placement.devices.empty();
+  if(state_sharded)validate_full_placement(state_placement,profile.graph.nodes.size(),d);
+  else if(!state_placement.owners.empty())throw std::invalid_argument("state shard owners without devices");
   if(sharded)validate_full_placement(placement,profile.graph.nodes.size(),d);
   else if(!placement.owners.empty())throw std::invalid_argument("Full shard owners without devices");
   if(fd.type()!=d.type()||fd.index()<0)throw std::invalid_argument("Full peer requires an explicit NPU");
@@ -49,13 +51,17 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     kinds.push_back(!node.identity&&node.full=="tanh");weights.push_back(w.weight);biases.push_back(w.bias);
     norm_weights.push_back(kind&&(kind-1)%3? w.extra.at("lh_norm_weight"):at::ones_like(w.bias));
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
-  const std::array<long double,7> minimum={
+  const std::array<long double,8> minimum={
     PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs),
     sharded?0:PackedSwiGluFull::minimum_bytes(profile,l.queue),sharded?0:PackedLhFull::minimum_bytes(lh_kinds,width,l.queue,profile.dtype),
-    PackedFiberAttention::minimum_bytes(profile,q,l),PackedEventAttention::minimum_bytes(profile,q,l),
-    sharded?ShardedFull::minimum_bytes(profile,placement,l.queue):PackedFull::minimum_bytes(kinds,width,profile.dtype),PackedAggregate::minimum_bytes(profile,l.queue)};
+    state_sharded?0:PackedFiberAttention::minimum_bytes(profile,q,l),state_sharded?0:PackedEventAttention::minimum_bytes(profile,q,l),
+    sharded?ShardedFull::minimum_bytes(profile,placement,l.queue):PackedFull::minimum_bytes(kinds,width,profile.dtype),PackedAggregate::minimum_bytes(profile,l.queue),
+    state_sharded?ShardedState::minimum_bytes(profile,state_placement,q,l):0};
   ContentBudget budget(l.workspace_bytes,l.chunk_policy==ChunkPolicy::aggressive,estimate,minimum);
-  profile.upload(device);
+  if(state_sharded) {
+    sharded_state=std::make_unique<ShardedState>(profile,std::move(state_placement),q,device,l,budget.available(7));
+    budget.reserve(7,sharded_state->reserved_bytes());profile.upload_routing(device);
+  } else profile.upload(device);
   const auto opts=at::TensorOptions().device(device).dtype(profile.dtype);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
   event_count=at::zeros_like(stop);
@@ -65,6 +71,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   selector=std::make_unique<FrameSelector>(profile.owners,profile.policies,samples,device,l.workspace_bytes);
   history=selector->initial();
   if(l.diagnostics)history_before=selector->initial();
+  if(!state_sharded) {
   state={at::zeros({samples,nodes,width},opts),at::zeros({samples,nodes,2},opts.dtype(at::kLong)),
          at::zeros({samples,nodes},opts.dtype(at::kBool))};
   auto values=at::zeros({samples,nodes,width},at::TensorOptions().dtype(profile.dtype)),clocks=at::zeros({samples,nodes,2},at::kLong),present=at::zeros({samples,nodes},at::kBool);
@@ -72,6 +79,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   for(const auto& [owner,s]:q.states){auto [b,n]=owner;values[b][n].copy_(s.value);clocks[b][n][0].fill_(s.last_time);
     clocks[b][n][1].fill_(s.observations);present[b][n].fill_(true);}
   state.values.copy_(values);state.clocks.copy_(clocks);state.present.copy_(present);
+  }
   auto counts=at::zeros({samples,nodes},at::kLong),seen=at::zeros({samples,nodes},at::kBool);
   auto last=at::full({samples,regions},-1,at::kLong),has=at::zeros({samples,regions},at::kBool);
   for(const auto& [owner,h]:q.history){auto [b,r]=owner;has[b][r].fill_(true);last[b][r].fill_(h.last_time);
@@ -121,9 +129,10 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   planned_buffer_bytes=budget.planned_bytes();operator_workspace_budget=budget.operator_budget();usable_memory_budget=budget.usable_bytes();
   full_chunks=sharded_full?sharded_full->chunks():full->chunks();
   if(sharded_full) {
-    operator_workspace_budget/=sharded_full->program_count();
+    operator_workspace_budget/=(sharded_full->program_count()+(sharded_state?sharded_state->program_count()-1:0));
     if(operator_workspace_budget<1)throw std::invalid_argument("insufficient shard operator workspace");
   }
+  if(sharded_state&&!sharded_full)operator_workspace_budget/=sharded_state->program_count();
   if(fd!=d) {
     operator_workspace_budget/=2;
     if(operator_workspace_budget<1)throw std::invalid_argument("insufficient peer operator workspace");
@@ -136,7 +145,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   boundary.states.clear();boundary.history.clear();boundary.pending.clear();
 }
 void ContentFlow::Impl::construct() {
-  const auto& g=profile.graph;const auto opts=state.values.options();
+  const auto& g=profile.graph;const auto opts=error.options().dtype(profile.dtype);
   DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
   program=std::make_unique<CannProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
@@ -149,7 +158,8 @@ void ContentFlow::Impl::construct() {
   }
   // Inputs are boundary uploads; all recursive messages below are generated on device.
   pending->append_stage(p,zeros,external);
-  auto coefficients=at::empty_like(profile.decay);p.sigmoid(profile.decay,coefficients);
+  at::Tensor coefficients;
+  if(!sharded_state){coefficients=at::empty_like(profile.decay);p.sigmoid(profile.decay,coefficients);}
   auto budget=at::full({1},limits.stages,stop.options()),one=at::ones_like(stop),budget_error=at::full_like(error,4);
   auto predicate=at::zeros({1},opts.dtype(at::kBool)),index=at::zeros_like(error);
   auto head=p.label(),test=p.label(),body=p.label(),exhausted=p.label(),end=p.label();
@@ -160,9 +170,11 @@ void ContentFlow::Impl::construct() {
   if(attention)attended=attention->propose(p,profile,ready,content,state,error);
   EventAttentionStage event_attended;auto proposals=attended.values;
   if(event_attention){event_attended=event_attention->propose(p,ready,content,error,proposals);proposals=event_attended.values;}
-  append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read,proposals);
+  if(sharded_state)sharded_state->append_read(p,ready,content,stages,error,operator_workspace_budget);
+  else append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read,proposals);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
-  auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits,proposals);
+  auto update=sharded_state?sharded_state->append_update(p,ready,content,selection,stages,event_count,error):
+    append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits,proposals);
   auto actions=update.actions;
   if(sharded_full)actions=sharded_full->append_stage(p,actions,content.content,update.comparison,error,operator_workspace_budget);
   else if(remote_full)actions=remote_full->append_stage(p,actions,content.content,update.comparison,error,full_chunks);
@@ -195,12 +207,14 @@ void ContentFlow::Impl::construct() {
     emission_trace->commit(p,emission_proposal,error);
   }
   pending->commit_stage(p,pending_proposal);outputs->commit_stage(p,output_proposal);
-  selector->append_commit(p,history,selection,error);commit_content_state(p,state,update,error);
+  selector->append_commit(p,history,selection,error);
+  if(sharded_state)sharded_state->append_commit(p,error);else commit_content_state(p,state,update,error);
   if(attention)attention->commit(p,attended,selection,error);
   if(event_attention)event_attention->commit(p,event_attended,selection,error);
   p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);
   if(remote_full)remote_full->append_stop(p);
   if(sharded_full)sharded_full->append_stop(p);
+  if(sharded_state)sharded_state->append_stop(p);
   p.finish();
 }
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
@@ -209,11 +223,14 @@ ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,Cont
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,fd)) {}
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,FullPlacement placement)
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,std::move(placement))) {}
+ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,ModelPlacement placement)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,std::move(placement.full),std::move(placement.state))) {}
 ContentFlow::~ContentFlow()=default;
 void ContentFlow::close() {
   if(!impl_)return;
   impl_->program->close();if(impl_->remote_full)impl_->remote_full->close();
-  if(impl_->sharded_full)impl_->sharded_full->close();impl_.reset();
+  if(impl_->sharded_full)impl_->sharded_full->close();
+  if(impl_->sharded_state)impl_->sharded_state->close();impl_.reset();
 }
 Result ContentFlow::advance(const std::vector<External>& input,Index until) {
   advance_device(input,until);
@@ -237,16 +254,20 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     if(s.aggregate)s.aggregate->chunks().zero_();
     s.event_count.zero_();if(s.full)s.full->chunks().zero_();if(s.remote_full)s.full_chunks.zero_();
     if(s.sharded_full)s.sharded_full->reset_window();
+    if(s.sharded_state)s.sharded_state->reset_window();
     s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);
     // Dispatch through the process's registered owner. This works with either
     // the standalone SDK or the Python wheel, never linking both together.
     c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());
-    if(s.remote_full||s.sharded_full) {
-      if(s.remote_full)s.remote_full->synchronize_inputs();else s.sharded_full->synchronize_inputs();
-      s.program->submit();if(s.remote_full)s.remote_full->submit();else s.sharded_full->submit();
+    if(s.remote_full||s.sharded_full||s.sharded_state) {
+      if(s.remote_full)s.remote_full->synchronize_inputs();
+      if(s.sharded_full)s.sharded_full->synchronize_inputs();
+      if(s.sharded_state)s.sharded_state->synchronize_inputs();
+      s.program->submit();if(s.remote_full)s.remote_full->submit();
+      if(s.sharded_full)s.sharded_full->submit();if(s.sharded_state)s.sharded_state->submit();
       std::exception_ptr failure;
-      try{s.program->wait();}catch(...){failure=std::current_exception();}
-      try{if(s.remote_full)s.remote_full->wait();else s.sharded_full->wait();}catch(...){if(!failure)failure=std::current_exception();}
+      auto wait=[&](auto& owner){if(owner)try{owner->wait();}catch(...){if(!failure)failure=std::current_exception();}};
+      wait(s.program);wait(s.remote_full);wait(s.sharded_full);wait(s.sharded_state);
       if(failure)std::rethrow_exception(failure);
     } else s.program->run();
     const auto error=s.error.cpu().item<int>();
@@ -268,6 +289,7 @@ Result ContentFlow::result() const {
 StateTape ContentFlow::state_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("state tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
+  if(s.sharded_state)throw std::invalid_argument("compact state/cache reverse requires owner tape integration");
   if(!s.limits.diagnostics)throw std::logic_error("state tape requires recorded forward values");
   const bool repeat=std::any_of(s.profile.graph.nodes.begin(),s.profile.graph.nodes.end(),
     [](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});
@@ -313,6 +335,7 @@ ReverseTape ContentFlow::Impl::reverse_view(const StateTape& state,const FullTap
 ParameterBanks ContentFlow::parameter_banks() const {
   // Publication is independently testable before a dtype's VJP is available.
   // This internal view does not expose mutation through public inference.
+  if(impl_&&impl_->sharded_state)throw std::invalid_argument("compact state publication requires owner bank integration");
   const auto full=full_tape();const auto& s=*impl_;validate_reverse_modules(s.profile.graph);
   return {&s.profile.graph,full.weights,full.biases,s.profile.decay,s.profile.retention,
           s.profile.read,s.profile.scales,s.emission->scales(),full.extra,
@@ -322,6 +345,7 @@ ParameterBanks ContentFlow::parameter_banks() const {
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");
+  if(impl_->sharded_state)throw std::invalid_argument("compact state has multiple owners; no coordinator state replica");
   return {impl_->state.values,impl_->state.present};
 }
 ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {

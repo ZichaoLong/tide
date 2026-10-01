@@ -35,11 +35,13 @@ std::vector<Atom> download_atoms(const AtomBatch& q) {
 Continuation ContentFlow::Impl::export_continuation() const {
   const auto& g=profile.graph;auto q=boundary;
   q.pending=download_atoms(pending->atoms());
+  if(sharded_state)sharded_state->export_states(q);else {
   auto state_values=state.values.cpu(),clocks=state.clocks.cpu(),present=state.present.cpu();
   for(Index b=0;b<q.batch_size;++b)for(Index n=0;n<Index(g.nodes.size());++n)if(present[b][n].item<bool>())
     q.states[{b,n}]={state_values[b][n].clone(),clocks[b][n][0].item<Index>(),clocks[b][n][1].item<Index>()};
   if(attention)attention->export_states(q);
   if(event_attention)event_attention->export_states(q);
+  }
   q.history=download_history(g,history,q.batch_size);return q;
 }
 Result ContentFlow::Impl::export_result() const {
@@ -69,12 +71,13 @@ Result ContentFlow::Impl::export_result() const {
   out.stats["memory_budget_bytes"]=limits.workspace_bytes;
   out.stats["usable_memory_budget_bytes"]=usable_memory_budget;
   out.stats["planned_buffer_bytes"]=planned_buffer_bytes;
-  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*(sharded_full?sharded_full->program_count():remote_full?2:1);
-  const auto cann_bytes=program->workspace_bytes()+(sharded_full?sharded_full->workspace_bytes():remote_full?remote_full->workspace_bytes():0);
+  out.stats["cann_workspace_budget_bytes"]=operator_workspace_budget*((sharded_full?sharded_full->program_count():remote_full?2:1)+(sharded_state?sharded_state->program_count()-1:0));
+  const auto cann_bytes=program->workspace_bytes()+(sharded_full?sharded_full->workspace_bytes():remote_full?remote_full->workspace_bytes():0)+(sharded_state?sharded_state->workspace_bytes():0);
   out.stats["cann_workspace_bytes"]=cann_bytes;
   out.stats["full_peer_devices"]=sharded_full?sharded_full->program_count():remote_full?2:1;
   out.stats["full_peer_packet_bytes"]=sharded_full?sharded_full->packet_bytes():remote_full?remote_full->packet_bytes():0;
   if(sharded_full)for(const auto& [name,value]:sharded_full->stats())out.stats[name]=value;
+
   out.stats["full_peer_retained_tensor_bytes"]=sharded_full?sharded_full->retained_tensor_bytes():remote_full?remote_full->retained_tensor_bytes():0;
   out.stats["retained_tensor_bytes"]=program->retained_tensor_bytes();
   out.stats["planned_headroom_bytes"]=limits.workspace_bytes-planned_buffer_bytes-cann_bytes;
@@ -88,6 +91,7 @@ Result ContentFlow::Impl::export_result() const {
     out.stats[prefix+"tiled_score_entries"]=work[1].item<Index>();
     out.stats[prefix+"tiled_padding_entries"]=work[2].item<Index>();
   }
+  if(sharded_state)for(const auto& [name,value]:sharded_state->stats())out.stats[name]=value;
   if(!limits.diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
   std::sort(out.messages.begin(),out.messages.end(),[&](const Atom& a,const Atom& b){return
@@ -137,6 +141,7 @@ Result ContentFlow::Impl::export_result() const {
     std::sort(e.contributions.begin(),e.contributions.end(),[](const SlotValue& a,const SlotValue& b){return a.slot<b.slot;});
     out.trace.push_back(std::move(e));
   }
+  if(sharded_state)sharded_state->export_trace(out.trace);
   if(attention)attention->export_trace(out.trace);
   if(event_attention)event_attention->export_trace(out.trace);
   // Trace histories are materialized from recorded device active bits and the

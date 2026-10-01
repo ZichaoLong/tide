@@ -7,9 +7,9 @@
 
 namespace tide::device_online {
 namespace {
-std::array<long double,3> footprint(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+std::array<long double,3> footprint(const StateKernelProfile& p,const Continuation& q,const ContentLimits& l) {
   const auto width=p.width;int64_t parameters=0,max_heads=0;std::set<int64_t> groups;bool pooled=false;
-  for(const auto& n:p.graph.nodes)if(!n.identity&&is_fiber_attention_profile(n.memory)) {
+  for(const auto& n:p.nodes)if(!n.identity&&is_fiber_attention_profile(n.memory)) {
     ++parameters;max_heads=std::max(max_heads,n.query_heads);groups.insert(n.query_heads);
     pooled|=n.memory!="lh-fiber-attention-sum-repeat-v1";
   }
@@ -28,24 +28,24 @@ std::array<long double,3> footprint(const ContentProfile& p,const Continuation& 
   return {fixed,row,key};
 }
 }
-long double PackedFiberAttention::minimum_bytes(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+long double PackedFiberAttention::minimum_bytes(const StateKernelProfile& p,const Continuation& q,const ContentLimits& l) {
   const auto [fixed,row,key]=footprint(p,q,l);return fixed+row+key;
 }
-PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const Continuation& q,
+PackedFiberAttention::PackedFiberAttention(const StateKernelProfile& profile,const Continuation& q,
     at::Device device,const ContentLimits& limits,int64_t budget)
-    :nodes_(profile.graph.nodes.size()),width_(profile.width),parameters_(0),rows_(limits.queue),
+    :nodes_(profile.nodes.size()),width_(profile.width),parameters_(0),rows_(limits.queue),
      capacity_(limits.kv_rows),max_ticks_(limits.max_repeat_ticks) {
   std::vector<at::Tensor> qkv,bias,out,ob,decay;
-  source_lengths_=profile.graph.source_counts;
+  source_lengths_=profile.source_counts;
   std::vector<int64_t> heads,config;
   for(int64_t n=0;n<nodes_;++n) {
-    const auto& node=profile.graph.nodes[n];
+    const auto& node=profile.nodes[n];
     const bool enabled=!node.identity&&is_fiber_attention_profile(node.memory);
     node_map_.push_back(enabled?parameters_++:-1);node_heads_.push_back(node.query_heads);
-    const auto& region=profile.graph.regions[node.region];
+    const auto& region=profile.regions[node.region];
     adopt_all_.push_back(region.observe_all);clear_.push_back(node.clear);
     if(!enabled)continue;
-    const auto& w=profile.model.nodes[n];
+    const auto& w=profile.weights[n];
     qkv.push_back(w.extra.at("fiber_qkv"));bias.push_back(w.extra.at("fiber_qkv_bias"));
     out.push_back(w.extra.at("fiber_out"));ob.push_back(w.extra.at("fiber_out_bias"));
     decay.push_back(w.extra.at("fiber_decay"));heads.push_back(node.query_heads);
@@ -56,7 +56,7 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   owners_=q.batch_size*parameters_;
   head_groups_=heads;std::sort(head_groups_.begin(),head_groups_.end());
   head_groups_.erase(std::unique(head_groups_.begin(),head_groups_.end()),head_groups_.end());
-  const bool pooled=std::any_of(profile.graph.nodes.begin(),profile.graph.nodes.end(),[](const Node& n){
+  const bool pooled=std::any_of(profile.nodes.begin(),profile.nodes.end(),[](const Node& n){
     return !n.identity&&is_fiber_attention_profile(n.memory)&&n.memory!="lh-fiber-attention-sum-repeat-v1";});
   const auto [fixed,row_base,row_key]=footprint(profile,q,limits);
   const auto tiles=plan_attention_tiles(fixed,row_base,row_key,budget,rows_,limits.attention_chunk_rows,capacity_,limits.attention_key_rows);

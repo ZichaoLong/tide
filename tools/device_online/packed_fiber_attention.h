@@ -17,9 +17,14 @@ struct FiberStage {
 class PackedFiberAttention {
  public:
   static long double minimum_bytes(const ContentProfile&,const Continuation&,const ContentLimits&);
+  static long double minimum_bytes(const StateKernelProfile&,const Continuation&,const ContentLimits&);
   PackedFiberAttention(const ContentProfile&,const Continuation&,at::Device,
                        const ContentLimits&,int64_t byte_budget);
+  PackedFiberAttention(const StateKernelProfile&,const Continuation&,at::Device,
+                       const ContentLimits&,int64_t byte_budget);
   FiberStage propose(CannProgram&,const ContentProfile&,const ReadyBatch&,
+                     const ContentBatch&,const ContentState&,const at::Tensor& error);
+  FiberStage propose(CannProgram&,const StateKernelProfile&,const ReadyBatch&,
                      const ContentBatch&,const ContentState&,const at::Tensor& error);
   void commit(CannProgram&,const FiberStage&,const SelectionProposal&,const at::Tensor& error);
   void reset_window();

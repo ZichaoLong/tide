@@ -183,3 +183,10 @@ KERNELS["peer-sharded-optimizer"] = "tide_owner_gradient_reduce"
 CHECKS["peer-sharded-training"] = ("tide-sharded-training-check", ("float32", "float16"))
 MARKERS["peer-sharded-training"] = "sharded-training: passed"
 KERNELS["peer-sharded-training"] = "tide_owner_parameter_publish"
+
+CHECKS["peer-state-flow"] = ("tide-precision-flow-check", ("float32", "float16"))
+CHECKS["peer-state-control-flow"] = ("tide-precision-flow-check", ("float32", "float16"))
+CHECKS["peer-state-transaction"] = ("tide-state-shard-check", ("float32", "float16"))
+MARKERS["peer-state-flow"] = MARKERS["peer-state-control-flow"] = "peer-flow: passed"
+MARKERS["peer-state-transaction"] = "state-shard: passed"
+KERNELS["peer-state-flow"] = KERNELS["peer-state-control-flow"] = KERNELS["peer-state-transaction"] = "tide_state_shard_"

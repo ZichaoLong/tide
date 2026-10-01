@@ -123,14 +123,14 @@ if(TIDE_DEVICE_ASCENDC)
     target_compile_options(tide-packed-lh-check PRIVATE -fPIC)
     target_link_libraries(tide-packed-lh-check PRIVATE tide-packed-lh tide::tidegraph)
   endif()
-  add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
+  add_library(tide-content-flow STATIC content_profile.cpp state_profile.cpp state_profile_compat.cpp state_shard_pack.cpp state_owner.cpp remote_state.cpp sharded_state.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
     retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp
     content_flow.cpp content_export.cpp content_input.cpp remote_full.cpp full_placement.cpp full_shard_pack.cpp sharded_full.cpp full_shard_tape.cpp full_reverse_pack.cpp full_reverse_merge.cpp sharded_full_vjp.cpp
     sharded_parameter_sources.cpp owner_gradient_packet.cpp sharded_parameter_reduce.cpp sharded_optimizer.cpp sharded_parameter_banks.cpp owner_parameter_publish.cpp device_journal.cpp packed_emission.cpp packed_swiglu_full.cpp
     fiber_cache.cpp fiber_tape.cpp fiber_reverse.cpp fiber_cache_reverse.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp fiber_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-peer tide-packed-full tide-packed-lh tide-device-ready tide-device-broadcast
-    tide-device-selector tide-device-queue tide::tidegraph tide-packed-sum tide_state_read_kernel tide_vector_read_kernel tide_read_reduce_kernel
+    tide-device-selector tide-device-queue tide::tidegraph tide-packed-sum tide_state_shard_pack_kernel tide_state_shard_selection_kernel tide_state_shard_merge_kernel tide_state_read_kernel tide_vector_read_kernel tide_read_reduce_kernel
     tide_content_state_kernel tide_vector_state_kernel tide_state_vjp_plan_kernel tide_state_vjp_kernel tide_journal_kernel tide_full_kernel tide_full_shard_kernel tide_full_reverse_pack_kernel tide_full_reverse_merge_kernel
     tide_emission_plan_kernel tide_emission_chunk_kernel tide_fiber_plan_kernel tide_fiber_chunk_kernel
     tide_fiber_payload_kernel tide_fiber_indices_kernel tide_fiber_trace_kernel tide_fiber_commit_kernel tide_fiber_pool_kernel
@@ -154,6 +154,9 @@ if(TIDE_DEVICE_ASCENDC)
       precision_graph_fixture.cpp precision_cache_fixture.cpp retained_cache_fixture.cpp)
     set_target_properties(tide-device-test-fixtures PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(tide-device-test-fixtures PUBLIC tide-content-flow)
+    add_executable(tide-state-shard-check state_shard_check.cpp)
+    target_compile_options(tide-state-shard-check PRIVATE -fPIC)
+    target_link_libraries(tide-state-shard-check PRIVATE tide-content-flow tide::runtime)
     add_executable(tide-attention-payload-check attention_payload_check.cpp)
     target_compile_options(tide-attention-payload-check PRIVATE -fPIC)
     target_link_libraries(tide-attention-payload-check PRIVATE tide-content-flow)

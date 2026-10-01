@@ -100,3 +100,7 @@ ascendc_library(tide_fiber_reverse_plan_kernel STATIC tide_fiber_reverse_plan.cp
 ascendc_library(tide_fiber_reverse_pack_kernel STATIC tide_fiber_reverse_pack.cpp)
 ascendc_library(tide_fiber_reverse_fold_kernel STATIC tide_fiber_reverse_fold.cpp)
 ascendc_library(tide_cache_bias_merge_kernel STATIC tide_cache_bias_merge.cpp)
+
+ascendc_library(tide_state_shard_pack_kernel STATIC tide_state_shard_pack.cpp)
+ascendc_library(tide_state_shard_selection_kernel STATIC tide_state_shard_selection.cpp)
+ascendc_library(tide_state_shard_merge_kernel STATIC tide_state_shard_merge.cpp)

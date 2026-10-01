@@ -214,6 +214,10 @@ finite/representability decision before committing, and publishes rounded values
 to every used forward alias. State/KV remain on the coordinator. Its independent
 qualification does not certify public multi-device training/checkpoint clients
 or complete model sharding; graph identities and checkpoint schemas are unchanged.
+The separate internal [compact state/Read/KV placement](resident-peers.md#compact-state-read-and-kv-owners)
+keeps complete fibers and global region selection, then adopts state/cache proposals
+only after a common device decision. It has no coordinator state/KV replica and
+explicitly refuses monolithic reverse APIs pending compact owner tape integration.
 Internal FP16 state, normalized Aggregate and identity/tanh/LH/SwiGLU Full adjoints retain the actual
 quantized forward operands/results and use FP32 cotangents/accumulation. Their
 cast VJP is the ordinary first-order identity, not a derivative of rounding's

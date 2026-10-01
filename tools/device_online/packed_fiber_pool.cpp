@@ -15,27 +15,27 @@ int64_t kind(const Node& node) {
   if(node.memory=="lh-fiber-attention-all-softmax-repeat-v1")return 4;
   throw std::invalid_argument("unknown device fiber pooling profile");
 }
-std::pair<int64_t,int64_t> dimensions(const ContentProfile& p) {
+std::pair<int64_t,int64_t> dimensions(const StateKernelProfile& p) {
   int64_t parameters=0,slots=1;
-  for(size_t i=0;i<p.graph.nodes.size();++i)if(!p.graph.nodes[i].identity&&is_fiber_attention_profile(p.graph.nodes[i].memory)) {
-    ++parameters;slots=std::max(slots,p.graph.source_counts[i]);
+  for(size_t i=0;i<p.nodes.size();++i)if(!p.nodes[i].identity&&is_fiber_attention_profile(p.nodes[i].memory)) {
+    ++parameters;slots=std::max(slots,p.source_counts[i]);
   }
   return {parameters,slots};
 }
 } // namespace
-long double PackedFiberPool::reserved_bytes(const ContentProfile& p,int64_t rows,int64_t chunk) {
+long double PackedFiberPool::reserved_bytes(const StateKernelProfile& p,int64_t rows,int64_t chunk) {
   const auto [parameters,slots]=dimensions(p);
   return 8.L*(parameters+1.L)*slots+64.L*(rows+parameters+chunk+1.L)+32.L*chunk*slots;
 }
-PackedFiberPool::PackedFiberPool(const ContentProfile& profile,at::Device device,int64_t rows,int64_t chunk)
-    :rows_(rows),chunk_(chunk),inputs_(profile.graph.inputs.size()),sources_(profile.sources) {
+PackedFiberPool::PackedFiberPool(const StateKernelProfile& profile,at::Device device,int64_t rows,int64_t chunk)
+    :rows_(rows),chunk_(chunk),inputs_(profile.input_count),sources_(profile.sources) {
   std::tie(parameters_,slots_)=dimensions(profile);
   auto weights=at::zeros({parameters_+1,slots_},at::kFloat);
   std::vector<int64_t> kinds,lengths;int64_t parameter=0;
-  for(size_t n=0;n<profile.graph.nodes.size();++n) {
-    const auto& node=profile.graph.nodes[n];if(node.identity||!is_fiber_attention_profile(node.memory))continue;
-    const auto k=kind(node),length=profile.graph.source_counts[n];kinds.push_back(k);lengths.push_back(length);
-    if(k>=2)weights[parameter].narrow(0,0,length).copy_(profile.model.nodes[n].extra.at("fiber_pool"));
+  for(size_t n=0;n<profile.nodes.size();++n) {
+    const auto& node=profile.nodes[n];if(node.identity||!is_fiber_attention_profile(node.memory))continue;
+    const auto k=kind(node),length=profile.source_counts[n];kinds.push_back(k);lengths.push_back(length);
+    if(k>=2)weights[parameter].narrow(0,0,length).copy_(profile.weights[n].extra.at("fiber_pool"));
     ++parameter;
   }
   kinds_=at::tensor(kinds,at::kLong).to(device);lengths_=at::tensor(lengths,at::kLong).to(device);weights_=weights.to(device);

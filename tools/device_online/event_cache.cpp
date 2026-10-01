@@ -6,12 +6,12 @@
 
 namespace tide::device_online {
 namespace {
-std::map<std::pair<int64_t,int64_t>,int64_t> geometries(const ContentProfile& p) {
+std::map<std::pair<int64_t,int64_t>,int64_t> geometries(const StateKernelProfile& p) {
   std::map<std::pair<int64_t,int64_t>,int64_t> result;
-  for(const auto& n:p.graph.nodes)if(!n.identity&&n.memory=="attention")++result[{n.query_heads,n.kv_heads}];
+  for(const auto& n:p.nodes)if(!n.identity&&n.memory=="attention")++result[{n.query_heads,n.kv_heads}];
   return result;
 }
-std::array<long double,3> footprint(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+std::array<long double,3> footprint(const StateKernelProfile& p,const Continuation& q,const ContentLimits& l) {
   long double fixed=0,row=0,key=0;const auto w=p.width;
   for(const auto& [heads,count]:geometries(p)) {
     const auto kv=w/heads.first*heads.second;
@@ -25,13 +25,13 @@ std::array<long double,3> footprint(const ContentProfile& p,const Continuation& 
   return {fixed,row,key};
 }
 }
-long double PackedEventAttention::minimum_bytes(const ContentProfile& p,const Continuation& q,const ContentLimits& l) {
+long double PackedEventAttention::minimum_bytes(const StateKernelProfile& p,const Continuation& q,const ContentLimits& l) {
   const auto [fixed,row,key]=footprint(p,q,l);
   if(row>0&&(l.kv_rows<1||l.attention_chunk_rows<1||l.attention_key_rows<1||(l.diagnostics&&l.kv_trace_rows<1)))
     throw std::invalid_argument("invalid event attention cache limits");
   return fixed+row+key;
 }
-PackedEventAttention::PackedEventAttention(const ContentProfile& p,const Continuation& q,at::Device d,const ContentLimits& l,int64_t budget)
+PackedEventAttention::PackedEventAttention(const StateKernelProfile& p,const Continuation& q,at::Device d,const ContentLimits& l,int64_t budget)
     :rows_(l.queue),width_(p.width) {
   if(l.kv_rows<1||l.attention_chunk_rows<1||l.attention_key_rows<1||budget<1||(l.diagnostics&&l.kv_trace_rows<1))
     throw std::invalid_argument("invalid event attention cache limits");
@@ -41,17 +41,17 @@ PackedEventAttention::PackedEventAttention(const ContentProfile& p,const Continu
   chunk_=tiles.queries;key_rows_=tiles.keys;reserved_=tiles.reserved;
   for(const auto& [heads,_]:geometries(p))groups_.push_back(std::make_unique<EventAttentionGroup>(p,q,d,l,heads.first,heads.second,chunk_,key_rows_));
 }
-EventAttentionGroup::EventAttentionGroup(const ContentProfile& p,const Continuation& q,at::Device device,
+EventAttentionGroup::EventAttentionGroup(const StateKernelProfile& p,const Continuation& q,at::Device device,
     const ContentLimits& l,int64_t h,int64_t kh,int64_t c,int64_t k)
-    :nodes(p.graph.nodes.size()),width(p.width),query_heads(h),kv_heads(kh),head_width(width/h),
+    :nodes(p.nodes.size()),width(p.width),query_heads(h),kv_heads(kh),head_width(width/h),
      kv_width(kh*head_width),parameters(0),rows(l.queue),capacity(l.kv_rows),chunk(c),key_rows(k) {
   std::vector<at::Tensor> weights,outputs;std::vector<int64_t> windows_cpu,settings;
   for(int64_t n=0;n<nodes;++n) {
-    const auto& node=p.graph.nodes[n];const auto& region=p.graph.regions[node.region];
+    const auto& node=p.nodes[n];const auto& region=p.regions[node.region];
     const bool match=!node.identity&&node.memory=="attention"&&node.query_heads==h&&node.kv_heads==kh;
     node_map.push_back(match?parameters++:-1);adopt_all.push_back(region.observe_all);clear.push_back(node.clear);
     if(!match)continue;
-    const auto& w=p.model.nodes[n];
+    const auto& w=p.weights[n];
     weights.push_back(at::cat({w.extra.at("attn_q"),w.extra.at("attn_k"),w.extra.at("attn_v")},1));
     outputs.push_back(w.extra.at("attn_out"));windows_cpu.push_back(node.window);
     settings.insert(settings.end(),{int64_t(region.observe_all),int64_t(node.clear)});

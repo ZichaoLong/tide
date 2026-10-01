@@ -203,3 +203,53 @@ This closes an internal Full-sharded training mechanism once qualified. Online
 forward scheduling and state/KV still reside on the coordinator. Whole-model
 state/KV placement, public multi-device training/checkpoint clients and medium/
 full-size consumer throughput remain separate work under the execution contract.
+
+## Compact state, Read and KV owners
+
+`ContentFlow(..., ModelPlacement{full,state})` adds an internal forward placement.
+Each plan names explicit logical devices and a static owner for every node. Full
+and state ownership can differ. The coordinator retains queues, region history,
+global selection, Aggregate and emission; state values/clocks, Read/Upd banks
+and persistent event/fiber KV live only on their assigned owners. Static source
+identity metadata is replicated; there is no complete coordinator state/KV bank.
+
+`StateKernelProfile` is an explicit kernel view of an already validated graph.
+Its compact node IDs follow global node order. It is never compiled as a Graph:
+physical ports/parallel edges, logical source slots and region identity retain
+their global meaning. `state_shard_initial` projects only the common initial
+state; candidate events, routes and selection never come from the CPU reference.
+
+The device program packs whole ready fibers and their atoms, preserving their
+order and exact int64 coordinates. Numerical payloads use batched gather;
+padding has separate zero source/discard rows and cannot overwrite real rows.
+Exceeding capacity refuses the proposal instead of splitting an attention group
+or publishing a partial fiber. No host loop places individual runtime messages.
+
+Each remote owner follows three device-controlled phases:
+
+1. Receive the current packed work; propose attention/Read and return scores.
+2. Receive the global region selection; propose adoption/clear and return
+   comparison values plus event observables, restored to global row identities.
+3. Receive the common decision after queue/emission/journal preflights. Commit
+   state and KV only on success, acknowledge completion, then await more work.
+
+All peers are submitted before the host waits for the complete window. Stop
+commands terminate empty and refused windows too. Snapshots explicitly export
+owner states/caches at a complete boundary and may restore with another layout;
+exports never feed normal window progression. KV stage copies stay on their
+owners. Current communication is bounded capacity-sized packets, so padding
+and per-phase communication costs remain visible optimization targets.
+
+`peer-state-flow`, `peer-state-control-flow` and `peer-state-transaction` are
+explicit two-NPU gates, both FP32 and FP16. They cover independent CPU forward
+comparison, repartitioned continuation, empty/error termination, exact int64 and
+physical-edge packing, whole-fiber capacity rejection, and unchanged state/KV
+bytes after a downstream refusal. A profile smoke is separate from throughput.
+Distributed attention counters sum work; chunk/key rows and KV peaks report the
+maximum across owners. State tensors and peer packets have separate byte counts.
+
+This forward path explicitly refuses the old monolithic reverse/state-view
+interfaces. Compact owner tapes, cache boundary adjoints, canonical publication
+and public multi-device training/checkpoint clients require the next integration.
+It does not broaden the qualified Full-only training path into whole-model
+training support. Graph/checkpoint identities and the CPU reference are unchanged.

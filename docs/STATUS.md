@@ -63,29 +63,39 @@ single-device FP16 training0095048 remain scoped qualified evidence. The former
 
 ## Current work and next action
 
-Commit/push this reviewed evidence/STATUS/ROADMAP,then continue overall F1–F7.
-No user pause instruction. No implementation changes remain uncommitted.
-Next priority: partition state/attention parameters and persistent KV while
-preserving device queue/readiness and boundary VJP links; expose a coherent public
-C++/Python multi-card owner and consumer. Reuse the now-verified canonical reducer,
-optimizer consensus and publication instead of reimplementing alias handling.
-Do not call Full-only placement whole-model sharding. CPU independent reference
-and old eager/host presets remain available. Bounded medium/full-size complete
-CPU/mixed/resident comparisons follow public-path/placement correctness.
+Compact state/Read/KV owner increment ready for implementation commit/push.
+Explicit kernel view (not a fake Graph), whole-fiber packing, compact owners,
+three-phase device request/selection/commit and ContentFlow ModelPlacement.
+No complete coordinator state/KV replica. Old Full-only training remains available;
+compact-state reverse/public multi-device training are explicitly gated pending
+owner tapes/adjoints/publication. Contract: resident-peers.md.
 
-Implementation entry points: content_flow_internal.h/content_stages.cpp and
-packed_event_attention/packed_fiber_attention own coordinator state; remote_full/
-sharded_full provide reusable device command/peer completion patterns.
-sharded_parameter_banks.cpp currently maps state/Read/attention to coordinator;
-sharded_parameter_sources.cpp maps non-Full gradients there. Those assumptions
-must evolve explicitly with state/KV ownership; avoid assembling full banks on
-coordinator or copying candidate parameters back to CPU between updates.
-Current canonical budget is for fixed retained-window device-pair packets; full
-scale needs calibrated peak estimates/safe splitting,not OOM search.
+Development terminal checks: builds dev01/dev03/dev04/dev05 PASSED. dev01 two-card
+FP32/FP16 smoke each3 configurations/15 windows PASSED. state-flow-dev04 four cells
+PASSED: each dtype84 HARD/420 windows +36 HST/SOFTP/180 windows, plus3 real capacity
+refusals and incomplete-adjoint refusal. state-transaction-dev05 both dtypes PASSED:
+whole-fiber/int64/parallel-edge/padding tests, each28 windows/16 refused commits,
+byte-exact unchanged state/KV and independent CPU accepted steps. No numerical
+mismatch or changed tolerance. No new development job is live.
+Failures retained: build-state-owners-dev02 test omitted Streaming Options;
+state-gates-dev03 test reused compiled port layout after changing ports (fixed by
+fresh Graph). Packing checks passed before that fixture failure.
 
-Before formal performance,resolve historical CPU Attention's retained memory and
-timing lock deliberately;do not blindly resume/kill. Additional CANN environments,
-CUDA target-pending records and final delivery audit remain F1–F7 work.
+Next: commit/push implementation, use that immutable commit in freeze_run.py for
+state-owners-clean01. Build command: timeout900 python TASK/launchers/
+build_state_owners.py state-owners-clean01 --kernel-build state-owners-dev01
+--reuse-host state-owners-dev05. Python runtime build uses --runtime python with
+its isolated parent; never reuse standalone host objects. Then six affected cells
+(peer-state-transaction/flow/control-flow),1/3-owner smoke via state_owner_policy_smoke.py,
+state_cmake_preflight.py, separate two-card profile and small existing public
+training/Python regressions. Queue120/run600/build900. Evidence separate commit/push.
+Raw development records remain TASK/runs and source snapshots TASK/sources.
+
+Continue next with compact retained owner state/cache tapes and boundary adjoints,
+canonical publication and public multi-device training/consumer integration, then
+F6 throughput/full-size work. No forward/profile smoke throughput claim. Canonical
+source a365e2f and pushed evidence bc778d3 stay valid. Historical CPU Attention stays
+paused. Do not repeat unrelated CPU tests or run an unbounded queue.
 
 ## Environment and bounded execution
 

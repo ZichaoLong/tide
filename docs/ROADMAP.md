@@ -158,6 +158,12 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | pending; historical CPU Attention remains supplementary |
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed minimal records/profile/evidence/support claims and no live task jobs | pending |
 
+F4 next increment: compact state/Read/KV owners and three-phase device commit are
+implemented; development checks pass both dtypes (each120 forward configurations/
+600 windows and28 transaction windows/16 refused commits). Immutable qualification
+is next. Compact cache/state reverse, canonical publication into these banks and
+public multi-device training remain pending; see [placement contract](resident-peers.md#compact-state-read-and-kv-owners).
+
 Apply canonical online greedy algorithms; large blocks when legal, single-action
 fallback and natural streaming degeneration otherwise. Compress logical-time
 recursion into block computation where possible; do not claim universal constant

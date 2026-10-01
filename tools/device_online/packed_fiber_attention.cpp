@@ -11,7 +11,7 @@
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& profile,const ReadyBatch& ready,
+FiberStage PackedFiberAttention::propose(CannProgram& p,const StateKernelProfile& profile,const ReadyBatch& ready,
     const ContentBatch& content,const ContentState& state,const at::Tensor& error) {
   const auto width=width_,rows=rows_,capacity=capacity_,chunk=chunk_,parameters=parameters_,owners=owners_,nodes=nodes_,ticks=max_ticks_;
   const auto opts=cache_.key.options(),longs=cache_.lengths.options();const int64_t fp16=cache_.key.scalar_type()==at::kHalf;
@@ -23,7 +23,7 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const ContentProfile& pr
   p.copy(out.cache.key,cache_.key);p.copy(out.cache.value,cache_.value);p.copy(out.cache.bias,cache_.bias);
   p.copy(out.cache.lengths,cache_.lengths);
   const auto mapping=mapping_,policy=profile.clock_policy,sources=profile.sources,config=config_;
-  const auto live=cache_;const auto inputs=int64_t(profile.graph.inputs.size());
+  const auto live=cache_;const auto inputs=int64_t(profile.input_count);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_plan)(1,stream,
     ptr(ready.fibers),ptr(ready.fiber_offsets),ptr(ready.counts),ptr(ready.atoms.coordinates),ptr(sources),ptr(mapping),
     ptr(live.lengths),ptr(state.clocks),ptr(policy),ptr(config),ptr(out.events),ptr(out.tokens),ptr(out.counts),ptr(error),
