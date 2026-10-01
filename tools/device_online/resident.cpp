@@ -37,8 +37,8 @@ struct ResidentSession::Impl {
       throw std::invalid_argument("resident inference requires an explicit logical NPU index");
     for(const auto& owner:model.parameters(false).owners()) {
       const auto& v=owner.value;
-      if(v.scalar_type()!=at::kFloat||(!v.device().is_cpu()&&v.device()!=device))
-        throw std::invalid_argument("resident parameters require FP32 on CPU or the session NPU");
+      if((v.scalar_type()!=at::kFloat&&v.scalar_type()!=at::kHalf)||(!v.device().is_cpu()&&v.device()!=device))
+        throw std::invalid_argument("resident parameters require FP32/FP16 on CPU or the session NPU");
       parameters.push_back({v,v._version(),v.const_data_ptr()});
     }
     flow=std::make_unique<device_online::ContentFlow>(std::move(graph),freeze(model),freeze(q),device,limits);

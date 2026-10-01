@@ -1,11 +1,11 @@
 #include "fiber_vector.h"
-namespace {using I=int64_t;}
+namespace {using I=int64_t;
 // Optional exact cache observability. Both old and proposed rows are retained;
 // comparison/clear views are chosen from recorded selection at export only.
-extern "C" __global__ __aicore__ void tide_fiber_trace(GM_ADDR events,GM_ADDR counts,GM_ADDR fibers,
+template<class T>
+__aicore__ inline void run(GM_ADDR events,GM_ADDR counts,GM_ADDR fibers,
     GM_ADDR old_key,GM_ADDR old_value,GM_ADDR old_bias,GM_ADDR key,GM_ADDR value,GM_ADDR query_bias,
     GM_ADDR meta,GM_ADDR payload,GM_ADDR count,GM_ADDR error,int64_t width,int64_t capacity,int64_t trace_rows) {
-  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)events);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -22,8 +22,8 @@ extern "C" __global__ __aicore__ void tide_fiber_trace(GM_ADDR events,GM_ADDR co
     const I length=e[i*7+3+kind],owner=e[i*7+1],fiber=e[i*7];
     const bool next=i>0&&e[(i-1)*7+1]==owner;
     // KV only appends, so the staged prefix is also every intermediate old KV.
-    auto k=(__gm__ float*)key,val=(__gm__ float*)value;
-    auto b=(__gm__ float*)((kind||next)?query_bias:old_bias);
+    auto k=(__gm__ T*)key,val=(__gm__ T*)value;
+    auto b=(__gm__ T*)((kind||next)?query_bias:old_bias);
     const I bias_owner=kind?i:next?i-1:owner;
     for(I row=0;row<length;++row) {
       const I dst=n[0]++,src=owner*capacity+row;
@@ -37,4 +37,12 @@ extern "C" __global__ __aicore__ void tide_fiber_trace(GM_ADDR events,GM_ADDR co
     }
   }
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
+}
+} // namespace
+extern "C" __global__ __aicore__ void tide_fiber_trace(GM_ADDR events,GM_ADDR counts,GM_ADDR fibers,
+    GM_ADDR old_key,GM_ADDR old_value,GM_ADDR old_bias,GM_ADDR key,GM_ADDR value,GM_ADDR query_bias,
+    GM_ADDR meta,GM_ADDR payload,GM_ADDR count,GM_ADDR error,int64_t width,int64_t capacity,int64_t trace_rows,int64_t fp16) {
+  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
+  if(fp16)run<half>(events,counts,fibers,old_key,old_value,old_bias,key,value,query_bias,meta,payload,count,error,width,capacity,trace_rows);
+  else run<float>(events,counts,fibers,old_key,old_value,old_bias,key,value,query_bias,meta,payload,count,error,width,capacity,trace_rows);
 }

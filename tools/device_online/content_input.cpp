@@ -26,10 +26,10 @@ ValidatedInput prepare_external(const Graph& g,const Model& m,const Continuation
     if((x.position==0?last.first!=-1:x.position-1!=last.first)||x.time<=last.second)
       throw std::invalid_argument("noncontiguous/nonmonotonic port history");
     const auto& v=x.value;
-    if(!v.defined()||v.scalar_type()!=at::kFloat||v.sizes()!=at::IntArrayRef{m.width()}
+    if(!v.defined()||v.scalar_type()!=out.values.scalar_type()||v.sizes()!=at::IntArrayRef{m.width()}
         ||(!v.device().is_cpu()&&v.device()!=device)
         ||(!values.empty()&&v.device()!=values[0].device()))
-      throw std::invalid_argument("resident input requires FP32 [width] on one CPU or session NPU device");
+      throw std::invalid_argument("resident input requires matching payload dtype [width] on one CPU or session NPU device");
     values.push_back(v);
     checked.ledger_updates[owner]={x.position,x.time};
     checked.atoms.push_back({x.batch,g.inputs[x.port],x.time,0,x.port,x.position,v});

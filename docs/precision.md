@@ -15,7 +15,9 @@ matching inputs. Local ATen operators keep the same formulas. Floating reduction
 follow their declared operator/backend policy; explicit FP64 Read remains FP64
 and is still rejected on NPU. The separately owned full-size consumer additionally
 exposes Read/control placement and precision, as documented in accelerator-scale.md.
-The public scheduler remains host-owned on all devices.
+The eager public scheduler remains host-owned on all devices. The optional
+[resident backend](resident-library.md) independently advances online device
+queues and batches; its FP16 inference contract is described below.
 
 For training, construct `FP32MasterOptimizer(runtime.model.parameters(),
 optimizer="adamw", loss_scale=128, lr=...)`, compute a scalar FP32 loss, call
@@ -62,3 +64,21 @@ not establish a universal speed or training-memory advantage. On another stack, 
 `scripts/qualify_accelerator.py` with explicit `--device` and `--dtype float32`,
 then `--dtype float16`, for both `--implementation python` and `native` with its
 matching `--native-library`; follow [accelerators.md](accelerators.md) for builds.
+
+The resident C++/CANN owner and its Python client accept FP16 **HARD inference**.
+State, parameters, inputs, messages and KV retain FP16. EMA/Add and fiber-bias
+updates round at each declared operation/tick, including within a node-time batch.
+Read and normalized Aggregate use FP32 on the stored payload values. Attention
+QK/projections use the payload dtype; softmax, weighted accumulation and merging
+physical key tiles use FP32, then cast the completed attention result. This avoids
+overflowing an unnormalized half partial when the normalized output is finite;
+it does not prevent overflow in the half QK product itself.
+
+Device journals keep FP32 diagnostic storage and restore payload fields to FP16
+at the explicit CPU export. Scores stay FP32; exported Region controls round to
+the public payload dtype after FP32 softmax. FP16 HST/SOFTP,
+resident adjoints and FP32-master publication remain unavailable and fail
+explicitly. Inference continuation/checkpoints do not enable training. The
+complete-flow gate compares an independent CPU streaming schedule with exact
+discrete/identity checks and FP16 atol2e-3/rtol2e-2; FP32 retains its original
+thresholds. Build, device qualification and performance evidence remain distinct.

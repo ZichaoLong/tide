@@ -89,14 +89,14 @@ Result ContentFlow::Impl::export_result() const {
     std::tie(a.position,a.batch,g.edges[a.source].source,a.source)<std::tie(b.position,b.batch,g.edges[b.source].source,b.source);});
   const auto n=events->count.cpu().item<Index>(),na=fibers->count.cpu().item<Index>();
   if(n!=out.stats.at("events"))throw std::logic_error("incomplete content event journal");
-  auto em=events->meta.cpu(),ev=events->values.cpu(),fm=fibers->meta.cpu(),fv=fibers->values.cpu(),cv=contributions->values.cpu();
-  auto full_values=full_trace->values.cpu(),source_scales=source_scales_before.cpu();
+  auto em=events->meta.cpu(),ev=events->values.cpu(),fm=fibers->meta.cpu(),fv=fibers->values.cpu().to(profile.dtype),cv=contributions->values.cpu().to(profile.dtype);
+  auto full_values=full_trace->values.cpu().to(profile.dtype),source_scales=source_scales_before.cpu();
   auto meta=em.accessor<Index,2>(),atoms=fm.accessor<Index,2>();
   using Key=std::array<Index,3>;
   std::map<Key,std::vector<Index>> by_fiber;
   std::map<Key,std::vector<SlotValue>> emitted;
   const auto ne=emission_trace->count.cpu().item<Index>();
-  auto sm=emission_trace->meta.cpu(),sv=emission_trace->values.cpu();auto slots=sm.accessor<Index,2>();
+  auto sm=emission_trace->meta.cpu(),sv=emission_trace->values.cpu().to(profile.dtype);auto slots=sm.accessor<Index,2>();
   for(Index i=0;i<ne;++i)emitted[{slots[i][0],slots[i][1],slots[i][2]}].push_back({slots[i][4],sv[i].clone()});
   std::map<Key,Index> node_batches;Index max_batch=0,max_causal=0,max_state_read=0;
   for(Index i=0;i<na;++i)by_fiber[{atoms[i][0],atoms[i][1],atoms[i][2]}].push_back(i);
@@ -106,12 +106,15 @@ Result ContentFlow::Impl::export_result() const {
     if(profile.causal_regions[region])max_causal=std::max(max_causal,size);
     if(g.regions[region].read_mode!="content")max_state_read=std::max(max_state_read,size);
     Event e;e.batch=meta[i][0];e.node=meta[i][1];e.time=meta[i][2];e.active=meta[i][3];
-    e.content=ev[i].narrow(0,0,width).clone();
-    e.old={ev[i].narrow(0,width,width).clone(),meta[i][4],meta[i][5]};
-    e.proposed_state={ev[i].narrow(0,2*width,width).clone(),meta[i][6],meta[i][7]};e.proposal=e.proposed_state.value;
-    e.comparison_state={ev[i].narrow(0,3*width,width).clone(),meta[i][8],meta[i][9]};e.comparison=e.comparison_state.value;
-    e.next_state={ev[i].narrow(0,4*width,width).clone(),meta[i][10],meta[i][11]};e.next=e.next_state.value;
-    e.descriptor=ev[i][5*width].clone();e.control=ev[i][5*width+1].clone();
+    e.content=ev[i].narrow(0,0,width).to(profile.dtype).clone();
+    e.old={ev[i].narrow(0,width,width).to(profile.dtype).clone(),meta[i][4],meta[i][5]};
+    e.proposed_state={ev[i].narrow(0,2*width,width).to(profile.dtype).clone(),meta[i][6],meta[i][7]};e.proposal=e.proposed_state.value;
+    e.comparison_state={ev[i].narrow(0,3*width,width).to(profile.dtype).clone(),meta[i][8],meta[i][9]};e.comparison=e.comparison_state.value;
+    e.next_state={ev[i].narrow(0,4*width,width).to(profile.dtype).clone(),meta[i][10],meta[i][11]};e.next=e.next_state.value;
+    e.descriptor=ev[i][5*width].clone();
+    // Region controls are public payload scalars even though the resident
+    // selector computes/stores its softmax in FP32.
+    e.control=ev[i][5*width+1].to(profile.dtype).clone();
     if(e.active){e.full=full_values[i].clone();e.emitted=std::move(emitted[{e.batch,e.node,e.time}]);}
     for(auto row:by_fiber.at({e.batch,e.node,e.time})) {
       auto c=atoms[row];Atom a{c[0],c[1],c[2],c[3],c[4],c[5],fv[row].clone()};e.fiber.push_back(a);

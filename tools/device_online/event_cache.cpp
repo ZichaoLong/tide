@@ -57,7 +57,7 @@ EventAttentionGroup::EventAttentionGroup(const ContentProfile& p,const Continuat
     settings.insert(settings.end(),{int64_t(region.observe_all),int64_t(node.clear)});
   }
   owners=q.batch_size*parameters;
-  auto opts=at::TensorOptions().dtype(at::kFloat),longs=opts.dtype(at::kLong);
+  auto opts=at::TensorOptions().dtype(p.dtype),longs=opts.dtype(at::kLong);
   weights.push_back(at::zeros({width,width+2*kv_width},opts));outputs.push_back(at::zeros({width,width},opts));
   qkv=at::stack(weights).to(device);projection=at::stack(outputs).to(device);
   mapping=at::tensor(node_map,longs).to(device);windows=at::tensor(windows_cpu,longs).to(device);
@@ -113,6 +113,7 @@ void EventAttentionGroup::export_trace(std::vector<Event>& events) const {
       auto& ids=rows[{e.batch,e.node,e.time,kind}];
       std::sort(ids.begin(),ids.end(),[&](auto a,auto b){return c[a][4]<c[b][4];});
       auto data=ids.empty()?at::empty({0,2*kv_width},at::kFloat):v.index_select(0,at::tensor(ids,at::kLong));
+      data=data.to(live.key.scalar_type());
       auto& s=kind?e.proposed_state:e.old;const auto size=int64_t(ids.size());
       s.slots={{"key",data.narrow(1,0,kv_width).reshape({size,kv_heads,head_width}).clone()},
         {"value",data.narrow(1,kv_width,kv_width).reshape({size,kv_heads,head_width}).clone()}};

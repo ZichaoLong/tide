@@ -14,7 +14,7 @@ namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data
 EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& ready,const ContentBatch& content,
     const at::Tensor& values,const at::Tensor& error) {
   const auto w=width,kv=kv_width,h=query_heads,kh=kv_heads,d=head_width,cap=capacity,c=chunk,ps=parameters,n=rows,os=owners;
-  const auto opts=live.key.options(),longs=live.lengths.options();const auto old=live;
+  const auto opts=live.key.options(),longs=live.lengths.options();const int64_t fp16=live.key.scalar_type()==at::kHalf;const auto old=live;
   const auto map=mapping,window=windows,cfg=config;
   EventGroupStage out;out.events=at::zeros({n,7},longs);out.counts=at::zeros({2},longs);
   // Preserve the old arenas once, followed by one compact projected row per
@@ -44,7 +44,7 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
   const auto project=loop();
   p.index_select(contents,0,source,x.reshape({c,w}));p.index_select(qkv,0,parameter,weight);p.batch_matmul(x,weight,projected);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_payload)(32,stream,
-    ptr(out.events),ptr(ids),ptr(projected),ptr(all_queries),ptr(out.cache.key),ptr(out.cache.value),ptr(error),w,kv,cap,os,c),"place compact event QKV");},
+    ptr(out.events),ptr(ids),ptr(projected),ptr(all_queries),ptr(out.cache.key),ptr(out.cache.value),ptr(error),w,kv,cap,os,c,fp16),"place compact event QKV");},
     {out.events,ids,projected,all_queries,out.cache.key,out.cache.value,error});
   p.branch(branch,{project[0]});p.mark(project[2]);
   const auto attend=loop();p.index_select(all_queries,0,source,queries);
@@ -53,10 +53,8 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
     result=append_tiled_attention(p,out.events,tokens,ids,queries,out.cache.key,out.cache.value,
       dummy,error,key_work,{h,kh,cap,os,key_rows,false,1./std::sqrt(double(d)),n});
   }else {
-    auto indices=at::empty({c,h,cap},longs),additive=at::empty({c,1,1,cap},opts);
+    auto indices=at::empty({c,h,cap},longs),additive=at::empty({c,1,1,cap},opts.dtype(at::kFloat));
     auto keys=at::empty({c,h,cap,d},opts),v=at::empty_like(keys),kt=at::empty({c,h,d,cap},opts);
-    auto scores=at::empty({c,h,1,cap},opts),logits=at::empty_like(scores),prob=at::empty_like(scores);
-    result=at::empty({c,h,1,d},opts);auto scale=at::full({},1./std::sqrt(double(d)),opts);
     // Scalar metadata stores share cache lines even when their words differ.
     // One writer avoids cross-core cache-line writeback races in indices/masks.
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_indices)(1,stream,
@@ -65,9 +63,7 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
     p.index_select(out.cache.key.reshape({-1,d}),0,indices.reshape({-1}),keys.reshape({-1,d}));
     p.index_select(out.cache.value.reshape({-1,d}),0,indices.reshape({-1}),v.reshape({-1,d}));
     p.permute(keys,{0,1,3,2},kt);
-    p.batch_matmul(queries.reshape({c*h,1,d}),kt.reshape({c*h,d,cap}),scores.reshape({c*h,1,cap}));
-    p.multiply(scores,scale,logits);p.add(logits,additive);p.softmax(logits,3,prob);
-    p.batch_matmul(prob.reshape({c*h,1,cap}),v.reshape({c*h,cap,d}),result.reshape({c*h,1,d}));
+    result=append_dense_attention(p,queries.reshape({c,h,d}),kt,v,additive,1./std::sqrt(double(d)));
   }
   p.index_select(projection,0,parameter,out_weight);p.batch_matmul(result.reshape({c,1,w}),out_weight,output);
   p.index_copy(values,0,destination,output.reshape({c,w}));p.branch(branch,{attend[0]});p.mark(attend[2]);
@@ -75,17 +71,18 @@ EventGroupStage EventAttentionGroup::propose(CannProgram& p,const ReadyBatch& re
     auto meta=at::empty_like(journal->meta),data=at::empty_like(journal->values),size=at::zeros({1},longs);const auto trace_rows=meta.size(0);
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_cache)(1,stream,
       ptr(out.events),ptr(out.counts),ptr(cfg),ptr(inactive),ptr(ready.fibers),ptr(out.cache.key),ptr(out.cache.value),ptr(old.key),ptr(old.value),
-      ptr(old.lengths),ptr(dummy),ptr(meta),ptr(data),ptr(size),ptr(error),kv,cap,os,trace_rows,int64_t(2)),"record event KV observables");},
+      ptr(old.lengths),ptr(dummy),ptr(meta),ptr(data),ptr(size),ptr(error),kv,cap,os,trace_rows,int64_t(2),fp16),"record event KV observables");},
       {out.events,out.counts,cfg,inactive,ready.fibers,out.cache.key,out.cache.value,old.key,old.value,old.lengths,dummy,meta,data,size,error});
     out.journal=journal->propose(p,meta,data,size,error);
   }
   return out;
 }
 void EventAttentionGroup::commit(CannProgram& p,const EventGroupStage& out,const SelectionProposal& selection,const at::Tensor& error) {
+  const int64_t fp16=live.key.scalar_type()==at::kHalf;
   const auto old=live;const auto cfg=config,maximum=peak;const auto kv=kv_width,cap=capacity,os=owners;auto dummy=at::zeros({1},live.lengths.options());
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_cache)(32,stream,
     ptr(out.events),ptr(out.counts),ptr(cfg),ptr(selection.active),ptr(dummy),ptr(out.cache.key),ptr(out.cache.value),ptr(old.key),ptr(old.value),
-    ptr(old.lengths),ptr(maximum),ptr(dummy),ptr(dummy),ptr(dummy),ptr(error),kv,cap,os,int64_t(0),int64_t(1)),"commit selected event KV");},
+    ptr(old.lengths),ptr(maximum),ptr(dummy),ptr(dummy),ptr(dummy),ptr(error),kv,cap,os,int64_t(0),int64_t(1),fp16),"commit selected event KV");},
     {out.events,out.counts,cfg,selection.active,out.cache.key,out.cache.value,old.key,old.value,old.lengths,maximum,dummy,error});
   if(journal)journal->commit(p,out.journal,error);
 }

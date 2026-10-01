@@ -36,7 +36,7 @@ def main():
     source, dirty = source_state(root)
     report = dict(schema="tide-device-components-gate-v1", source=source, dirty=dirty,
                   build=manifest, state="running", device=args.device, cases=[],
-                  scope="components and declared resident FP32 profiles; not complete module/dtype/multi-device matrix or throughput qualification")
+                  scope="selected components and declared resident profiles/dtypes; not complete module/dtype/multi-device matrix or throughput qualification")
     write_json(out / "result.json", report)
     try:
         for check in args.checks:

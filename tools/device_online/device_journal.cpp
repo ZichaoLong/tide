@@ -23,11 +23,15 @@ DeviceJournal::DeviceJournal(int64_t capacity,int64_t columns,int64_t width,at::
 JournalProposal DeviceJournal::propose(CannProgram& p,const at::Tensor& m,const at::Tensor& v,
                                       const at::Tensor& n,const at::Tensor& error) const {
   if(m.dim()!=2||v.dim()!=2||m.size(0)!=v.size(0)||m.size(1)!=meta.size(1)||v.size(1)!=values.size(1)
-      ||m.scalar_type()!=at::kLong||v.scalar_type()!=at::kFloat||n.sizes()!=at::IntArrayRef{1}||n.scalar_type()!=at::kLong
+      ||m.scalar_type()!=at::kLong||(v.scalar_type()!=at::kFloat&&v.scalar_type()!=at::kHalf)||n.sizes()!=at::IntArrayRef{1}||n.scalar_type()!=at::kLong
       ||m.device()!=meta.device()||v.device()!=meta.device()||n.device()!=meta.device()
       ||!m.is_contiguous()||!v.is_contiguous()||!n.is_contiguous()
       ||m.is_alias_of(meta)||v.is_alias_of(values))throw std::invalid_argument("invalid journal input");
-  JournalProposal in{m,v,n};stage(p,*this,in,error,false);return in;
+  // Diagnostics and future adjoints retain exact stored half values widened
+  // to FP32. This bulk cast is part of the device program, not a host loop.
+  auto data=v;
+  if(v.scalar_type()==at::kHalf){data=at::empty(v.sizes(),values.options());p.cast(v,data);}
+  JournalProposal in{m,data,n};stage(p,*this,in,error,false);return in;
 }
 void DeviceJournal::commit(CannProgram& p,const JournalProposal& in,const at::Tensor& error) const {stage(p,*this,in,error,true);}
 } // namespace tide::device_online

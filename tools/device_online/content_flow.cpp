@@ -13,8 +13,8 @@
 namespace tide::device_online {
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
-  // Individual FP16 components do not yet establish a complete session contract.
-  if(profile.dtype!=at::kFloat)throw std::invalid_argument("content flow currently requires CPU FP32 parameter inputs");
+  if(profile.dtype==at::kHalf&&l.mode!="hard")
+    throw std::invalid_argument("resident FP16 inference currently requires HARD emission; FP16 control adjoints are unavailable");
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   if((l.mode!="hard"&&l.mode!="hst"&&l.mode!="softp")||!std::isfinite(l.zeta))
     throw std::invalid_argument("invalid resident Emit mode/zeta");
@@ -38,12 +38,12 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     norm_biases.push_back(kind&&(kind-1)%3==2? w.extra.at("lh_norm_bias"):at::zeros_like(w.bias));}
   const std::array<long double,7> minimum={
     PackedEmission::minimum_bytes(profile,l.arrivals,l.outputs),
-    PackedSwiGluFull::minimum_bytes(profile,l.queue),PackedLhFull::minimum_bytes(lh_kinds,width,l.queue),
+    PackedSwiGluFull::minimum_bytes(profile,l.queue),PackedLhFull::minimum_bytes(lh_kinds,width,l.queue,profile.dtype),
     PackedFiberAttention::minimum_bytes(profile,q,l),PackedEventAttention::minimum_bytes(profile,q,l),
-    PackedFull::minimum_bytes(kinds,width),PackedAggregate::minimum_bytes(profile,l.queue)};
+    PackedFull::minimum_bytes(kinds,width,profile.dtype),PackedAggregate::minimum_bytes(profile,l.queue)};
   ContentBudget budget(l.workspace_bytes,l.chunk_policy==ChunkPolicy::aggressive,estimate,minimum);
   profile.upload(device);
-  const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
+  const auto opts=at::TensorOptions().device(device).dtype(profile.dtype);
   error=at::zeros({1},opts.dtype(at::kInt));stop=at::full({1},q.cut,opts.dtype(at::kLong));stages=at::zeros_like(stop);
   event_count=at::zeros_like(stop);
   pending=std::make_unique<QueueTransaction>(l.queue,width,nodes,samples,opts,error);
@@ -54,7 +54,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   if(l.diagnostics)history_before=selector->initial();
   state={at::zeros({samples,nodes,width},opts),at::zeros({samples,nodes,2},opts.dtype(at::kLong)),
          at::zeros({samples,nodes},opts.dtype(at::kBool))};
-  auto values=at::zeros({samples,nodes,width},at::kFloat),clocks=at::zeros({samples,nodes,2},at::kLong),present=at::zeros({samples,nodes},at::kBool);
+  auto values=at::zeros({samples,nodes,width},at::TensorOptions().dtype(profile.dtype)),clocks=at::zeros({samples,nodes,2},at::kLong),present=at::zeros({samples,nodes},at::kBool);
   clocks.select(2,0).fill_(-1);
   for(const auto& [owner,s]:q.states){auto [b,n]=owner;values[b][n].copy_(s.value);clocks[b][n][0].fill_(s.last_time);
     clocks[b][n][1].fill_(s.observations);present[b][n].fill_(true);}
@@ -216,6 +216,7 @@ Result ContentFlow::result() const {
 StateTape ContentFlow::state_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("state tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
+  if(s.profile.dtype!=at::kFloat)throw std::invalid_argument("resident FP16 adjoints are not implemented");
   if(!s.limits.diagnostics)throw std::logic_error("state tape requires recorded forward values");
   const bool repeat=std::any_of(s.profile.graph.nodes.begin(),s.profile.graph.nodes.end(),
     [](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});

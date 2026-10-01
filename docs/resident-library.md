@@ -6,11 +6,11 @@ recursive advancement on one NPU. It accepts legal positive-delay feedback
 as well as DAG/Settle encodings. Host code submits a sealed window; it does
 not consume per-event scalars or decide the next event.
 
-This backend exposes **single-device FP32 inference**, defaulting to HARD.
+This backend exposes **single-device FP32/FP16 inference**, defaulting to HARD.
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
-broadcast emission; its verification is recorded separately. It does not
-implement resident backward, an optimizer, FP16 or peer progression. Current
-build and device verification status is recorded in [STATUS](STATUS.md).
+broadcast emission in FP32; FP16 currently requires HARD. Peer progression
+remains separate work. Current build and device verification status is recorded
+in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
 restricted graph VJP, optimizer and retained-window lifecycle; it does not change
 this inference session's ownership or autograd contract.
@@ -94,7 +94,7 @@ Declare `portable_torch::RuntimeSession` before tensors and resident owners, the
 close all owners before closing the standalone runtime.
 
 `tide::ResidentSession(graph, model, continuation, device, limits)` accepts declared
-built-in modules, FP32 parameters on CPU or the target NPU and an imported complete
+built-in modules, FP32/FP16 parameters on CPU or the target NPU and an imported complete
 cut. It freezes values at construction. Normal in-place parameter changes are
 refused; replacing tensors in the original C++ model does not replace captured
 owners. `advance(inputs, stop, seal)` returns `ResidentWindow`; snapshot/result
@@ -109,6 +109,15 @@ non-HARD slot-affine combinations are explicitly rejected. Custom or unavailable
 module declarations fail explicitly. FP32 scoring and all four placement stages
 must remain on the selected NPU. Host scheduler switches unavailable to this
 backend are rejected rather than ignored.
+
+FP16 state, messages, KV and output buffers retain the configured dtype. Read,
+normalized Aggregate and attention normalization/weighted accumulation use FP32;
+attention QK and projections use the payload dtype. Explicit half scoring,
+HST/SOFTP and training requests fail. Diagnostic journals widen payloads on device
+and restore payload/control fields to their public dtype at export; they do not
+drive recursive execution. A dtype
+change does not change int64 metadata, stable selection or physical-edge identity.
+See [precision.md](precision.md) for rounding and verification limits.
 
 The Python wrapper is a client of this C++/CANN implementation. Its results do
 not certify an independent pure-PyTorch device scheduler. Neither import nor a

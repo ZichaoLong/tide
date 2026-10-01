@@ -194,7 +194,9 @@ discrete scheduling remain host-owned. Qualification alone moves deterministic
 CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
 The optional [resident library](resident-library.md) owns device-side online
-progression and continuation for its declared FP32 inference profiles and explicit Emit mode.
+progression and continuation for its declared FP32 inference profiles and explicit Emit mode,
+and FP16 HARD inference with FP32 Read/normalization. Payloads and cache slots
+retain the configured dtype; discrete scheduling and identities are unchanged.
 Borrowed device output windows do not export state; snapshot/result are explicit
 boundary materializations. Runtime parameter updates invalidate its frozen
 inference program until an explicit reconstruction. This separate backend does

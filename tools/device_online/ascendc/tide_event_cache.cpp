@@ -1,13 +1,13 @@
 #include "fiber_vector.h"
 #include "event_sequence.h"
-namespace {using I=int64_t;}
+namespace {using I=int64_t;
 // mode1 commits the final adopted cache/clear for each owner;
 // mode2 writes optional old/proposed diagnostic rows, without committing state.
-extern "C" __global__ __aicore__ void tide_event_cache(GM_ADDR events,GM_ADDR counts,GM_ADDR config,
+template<class T>
+__aicore__ inline void run(GM_ADDR events,GM_ADDR counts,GM_ADDR config,
     GM_ADDR active,GM_ADDR fibers,GM_ADDR key,GM_ADDR value,GM_ADDR live_key,GM_ADDR live_value,
     GM_ADDR lengths,GM_ADDR peak,GM_ADDR meta,GM_ADDR trace,GM_ADDR trace_count,GM_ADDR error,
     int64_t width,int64_t capacity,int64_t owners,int64_t trace_rows,int64_t mode) {
-  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)events);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
   auto status=(__gm__ int32_t*)error;if(status[0])return;
@@ -21,7 +21,7 @@ extern "C" __global__ __aicore__ void tide_event_cache(GM_ADDR events,GM_ADDR co
     }
     if(!status[0])for(I event=0;event<c[1];++event)for(I kind=0;kind<2;++kind) {
       const I fiber=e[event*7],length=e[event*7+3+kind];
-      auto k=(__gm__ float*)key,v=(__gm__ float*)value;
+      auto k=(__gm__ T*)key,v=(__gm__ T*)value;
       for(I row=0;row<length;++row) {
         const I target=size[0]++;auto m=(__gm__ I*)meta+target*5;
         m[0]=f[fiber*4];m[1]=f[fiber*4+1];m[2]=f[fiber*4+2];m[3]=kind;m[4]=row;
@@ -44,8 +44,8 @@ extern "C" __global__ __aicore__ void tide_event_cache(GM_ADDR events,GM_ADDR co
       if(!(cfg[parameter*2]||on[fiber])||(cfg[parameter*2+1]&&on[fiber]))continue;
       const I length=e[event*7+4];
       const uint32_t size=width-start<256?width-start:256;
-      auto src_k=(__gm__ float*)key,src_v=(__gm__ float*)value;
-      auto dst_k=(__gm__ float*)live_key,dst_v=(__gm__ float*)live_value;
+      auto src_k=(__gm__ T*)key,src_v=(__gm__ T*)value;
+      auto dst_k=(__gm__ T*)live_key,dst_v=(__gm__ T*)live_value;
       for(I row=0;row<length;++row) {
         const I src=tide_device::event_key_row(e,event,row,capacity,owners)*width+start,dst=(owner*capacity+row)*width+start;
         op.load(x,src_k,src,size);op.save(x,dst_k,dst,size);op.load(x,src_v,src,size);op.save(x,dst_v,dst,size);
@@ -53,4 +53,13 @@ extern "C" __global__ __aicore__ void tide_event_cache(GM_ADDR events,GM_ADDR co
     }
   }
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
+}
+} // namespace
+extern "C" __global__ __aicore__ void tide_event_cache(GM_ADDR events,GM_ADDR counts,GM_ADDR config,
+    GM_ADDR active,GM_ADDR fibers,GM_ADDR key,GM_ADDR value,GM_ADDR live_key,GM_ADDR live_value,
+    GM_ADDR lengths,GM_ADDR peak,GM_ADDR meta,GM_ADDR trace,GM_ADDR trace_count,GM_ADDR error,
+    int64_t width,int64_t capacity,int64_t owners,int64_t trace_rows,int64_t mode,int64_t fp16) {
+  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
+  if(fp16)run<half>(events,counts,config,active,fibers,key,value,live_key,live_value,lengths,peak,meta,trace,trace_count,error,width,capacity,owners,trace_rows,mode);
+  else run<float>(events,counts,config,active,fibers,key,value,live_key,live_value,lengths,peak,meta,trace,trace_count,error,width,capacity,owners,trace_rows,mode);
 }

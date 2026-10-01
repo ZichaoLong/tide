@@ -62,7 +62,7 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
   const auto tiles=plan_attention_tiles(fixed,row_base,row_key,budget,rows_,limits.attention_chunk_rows,capacity_,limits.attention_key_rows);
   chunk_=tiles.queries;key_rows_=tiles.keys;reserved_=tiles.reserved;
   if(pooled)pool_=std::make_unique<PackedFiberPool>(profile,device,rows_,chunk_);
-  auto opts=at::TensorOptions().dtype(at::kFloat);auto longs=opts.dtype(at::kLong);
+  auto opts=at::TensorOptions().dtype(profile.dtype);auto longs=opts.dtype(at::kLong);
   qkv.push_back(at::zeros({width_,3*width_},opts));bias.push_back(at::zeros({3*width_},opts));
   out.push_back(at::zeros({width_,width_},opts));ob.push_back(at::zeros({width_},opts));
   qkv_=at::stack(qkv).to(device);qkv_bias_=at::stack(bias).to(device);
@@ -107,6 +107,7 @@ void PackedFiberAttention::export_trace(std::vector<Event>& events) const {
       auto& ids=rows[{e.batch,e.node,e.time,kind}];
       std::sort(ids.begin(),ids.end(),[&](auto a,auto b){return c[a][4]<c[b][4];});
       auto data=ids.empty()?at::empty({0,2*width_+1},at::kFloat):v.index_select(0,at::tensor(ids,at::kLong));
+      data=data.to(cache_.key.scalar_type());
       auto& state=kind?e.proposed_state:e.old;const auto count=int64_t(ids.size());
       state.slots={{"key",data.narrow(1,0,width_).reshape({count,h,width_/h}).clone()},
         {"value",data.narrow(1,width_,width_).reshape({count,h,width_/h}).clone()},

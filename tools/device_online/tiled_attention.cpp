@@ -3,23 +3,53 @@
 #include "aclrtlaunch_tide_attention_tile.h"
 #include "aclrtlaunch_tide_attention_softmax.h"
 #include "aclrtlaunch_tide_attention_merge.h"
+#include <ATen/core/grad_mode.h>
 
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
+at::Tensor append_dense_attention(CannProgram& p,const at::Tensor& query,const at::Tensor& key,
+    const at::Tensor& value,const at::Tensor& additive,double scale) {
+  const auto c=query.size(0),h=query.size(1),d=query.size(2),k=key.size(3);
+  const auto opts=query.options(),floats=opts.dtype(at::kFloat);const bool half=query.scalar_type()==at::kHalf;
+  auto scores=at::empty({c,h,1,k},opts),logits=half?at::empty({c,h,1,k},floats):scores;
+  p.batch_matmul(query.reshape({c*h,1,d}),key.reshape({c*h,d,k}),scores.reshape({c*h,1,k}));
+  if(half)p.cast(scores,logits);
+  if(scale!=1.){auto scaled=at::empty_like(logits);p.multiply(logits,at::full({},scale,floats),scaled);logits=scaled;}
+  auto prob=at::empty_like(logits),values=half?at::empty(value.sizes(),floats):value;
+  auto total=at::empty({c,h,1,d},floats);
+  p.add(logits,additive);p.softmax(logits,3,prob);if(half)p.cast(value,values);
+  p.batch_matmul(prob.reshape({c*h,1,k}),values.reshape({c*h,k,d}),total.reshape({c*h,1,d}));
+  if(!half)return total;
+  auto result=at::empty({c,h,1,d},opts);p.cast(total,result);return result;
+}
 at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const at::Tensor& tokens,
     const at::Tensor& ids,const at::Tensor& query,const at::Tensor& key,const at::Tensor& value,
     const at::Tensor& bias,const at::Tensor& error,const at::Tensor& work,TiledAttentionSpec s) {
-  const auto c=query.size(0),h=s.heads,d=query.size(1)/h,k=s.keys;
-  if(k<1||k>256||query.size(1)%h||h%s.kv_heads)throw std::invalid_argument("invalid tiled attention geometry");
-  const auto opts=query.options(),longs=ids.options();
+  const auto h=s.heads,k=s.keys;
+  if(query.dim()!=2||query.size(0)<1||h<1||s.kv_heads<1||k<1||k>256
+      ||query.size(1)<1||query.size(1)%h||h%s.kv_heads||s.capacity<1||s.owners<1||s.event_rows<0)
+    throw std::invalid_argument("invalid tiled attention geometry");
+  const auto c=query.size(0),d=query.size(1)/h;const auto dtype=query.scalar_type();
+  if(at::GradMode::is_enabled()||(dtype!=at::kFloat&&dtype!=at::kHalf)
+      ||query.device().type()!=c10::DeviceType::PrivateUse1)
+    throw std::invalid_argument("tiled attention requires no-grad NPU FP32/FP16 payloads");
+  for(const auto& x:{query,key,value})if(x.scalar_type()!=dtype||x.device()!=query.device()
+      ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("mismatched tiled attention payload");
+  if(key.sizes()!=value.sizes()||key.numel()!=(s.owners*s.capacity+s.event_rows+1)*s.kv_heads*d
+      ||ids.sizes()!=at::IntArrayRef{c}||ids.scalar_type()!=at::kLong
+      ||(s.fiber&&bias.scalar_type()!=at::kFloat))
+    throw std::invalid_argument("invalid tiled attention cache/ids or non-FP32 bias");
+  const auto opts=query.options(),floats=opts.dtype(at::kFloat),longs=ids.options();
   auto cursor=at::zeros({1},longs),zero=at::zeros_like(cursor),go=at::zeros_like(error);
-  auto indices=at::empty({c,h,k},longs),valid=at::empty({c},longs),additive=at::empty({c,1,1,k},opts);
+  auto indices=at::empty({c,h,k},longs),valid=at::empty({c},longs),additive=at::empty({c,1,1,k},floats);
   auto keys=at::empty({c,h,k,d},opts),values=at::empty_like(keys),kt=at::empty({c,h,d,k},opts);
-  auto scores=at::empty({c,h,1,k},opts),scaled=at::empty_like(scores),weights=at::empty_like(scores);
-  auto partial=at::empty({c,h,1,d},opts),sum=at::zeros_like(partial),empty=at::zeros_like(partial);
+  auto scores=at::empty({c,h,1,k},opts),scaled=at::empty({c,h,1,k},floats),weights=at::empty_like(scaled);
+  auto score32=dtype==at::kFloat?scores:at::empty_like(scaled);
+  auto value32=dtype==at::kFloat?values:at::empty({c,h,k,d},floats);
+  auto partial=at::empty({c,h,1,d},floats),sum=at::zeros_like(partial),empty=at::zeros_like(partial);
   // Vector DMA owns each full stat row; no adjacent scalar GM cache-line writes.
-  auto normalization=at::zeros({c*h,8},opts),empty_norm=at::zeros_like(normalization);
-  auto factor=at::full({},s.scale,opts);
+  auto normalization=at::zeros({c*h,8},floats),empty_norm=at::zeros_like(normalization);
+  auto factor=at::full({},s.scale,floats);
   const auto index_key=key.reshape({-1,d}),index_value=value.reshape({-1,d});
   auto begin=p.label(),body=p.label(),done=p.label();
   p.copy(cursor,zero);p.copy(sum,empty);p.copy(normalization,empty_norm);p.mark(begin);
@@ -31,17 +61,22 @@ at::Tensor append_tiled_attention(CannProgram& p,const at::Tensor& events,const 
   p.index_select(index_key,0,indices.reshape({-1}),keys.reshape({-1,d}));
   p.index_select(index_value,0,indices.reshape({-1}),values.reshape({-1,d}));p.permute(keys,{0,1,3,2},kt);
   p.batch_matmul(query.reshape({c*h,1,d}),kt.reshape({c*h,d,k}),scores.reshape({c*h,1,k}));
-  p.multiply(scores,factor,scaled);p.add(scaled,additive);
+  // Payload QK matmul retains its dtype. Global normalization and weighted
+  // accumulation use FP32: a finite normalized result must not overflow just
+  // because one physical tile sums unnormalized half values before division.
+  if(dtype==at::kHalf){p.cast(scores,score32);p.cast(values,value32);}
+  p.multiply(score32,factor,scaled);p.add(scaled,additive);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_softmax)(32,stream,
     ptr(scaled),ptr(valid),ptr(normalization),ptr(weights),ptr(error),c,h,k),"update global attention denominator");},
     {scaled,valid,normalization,weights,error});
-  p.batch_matmul(weights.reshape({c*h,1,k}),values.reshape({c*h,k,d}),partial.reshape({c*h,1,d}));
+  p.batch_matmul(weights.reshape({c*h,1,k}),value32.reshape({c*h,k,d}),partial.reshape({c*h,1,d}));
   auto merge=[&](int64_t mode) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_attention_merge)(32,stream,
       ptr(partial),ptr(normalization),ptr(sum),ptr(error),c*h,d,mode),"merge globally normalized attention tiles");},
       {partial,normalization,sum,error});
   };
   merge(0);p.branch(go,{begin});p.mark(done);merge(1);
-  return sum.reshape({c,h*d});
+  if(dtype==at::kFloat)return sum.reshape({c,h*d});
+  auto result=at::empty({c,h*d},opts);p.cast(sum.reshape({c,h*d}),result);return result;
 }
 } // namespace tide::device_online

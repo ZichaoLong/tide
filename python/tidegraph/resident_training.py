@@ -17,6 +17,8 @@ class ResidentTrainingSession:
         integers("training batch size", batch_size)
         if batch_size < 1:
             raise ValueError("batch_size must be positive")
+        if runtime.config.dtype != "float32":
+            raise ValueError("resident FP16 adjoints and FP32-master publication are not implemented")
         if torch.is_grad_enabled():
             raise ValueError("explicit resident VJP requires torch.no_grad(); compute consumer cotangents separately")
         if checkpoint is not None and any(x is not None for x in (continuation, optimizer, groups)):

@@ -68,7 +68,7 @@ zero sentinels and chunk loop are shared. Parameter and numerical buffers retain
 the selected dtype; byte budgets account for element size. ACLNN matmul keeps
 the declared dtype. The FP16 component checks compare both CPU storage-dtype
 arithmetic and an independent FP64 formula with explicit lower-precision
-tolerances. This does not yet enable FP16 in the complete resident session.
+tolerances. Complete-session coverage is provided separately by `precision-flow`.
 
 `PackedLhFull` uses the same selected-action planner for all nine activation /
 normalization profiles in both dtypes, with FP32 normalization statistics and
@@ -81,7 +81,7 @@ and stable ordered accumulation use FP32; per-source contributions and final
 summaries independently round when stored in the selected payload dtype. Scalar
 and vector paths share the same metadata preflight and source order. Vector
 loads/stores convert whole tiles, including non-aligned tails, without host
-per-message work. Complete resident FP16 Aggregate/state/VJP integration remains
+per-message work. Complete resident inference and VJP qualification remain
 separate from these building blocks.
 
 `PackedSwiGluFull` and `PackedEmission` also retain the requested FP32/FP16 dtype
@@ -104,8 +104,11 @@ It does not promise equality with a half-accumulated selector near a tie.
 continued single-time windows, empty/NaN padding and failed commits. It is an
 isolated component gate, not an independently scheduling graph engine.
 The `emission`/`swiglu` FP16 cells are component-only; their FP32 cells also
-retain the complete graph-window regressions. Complete resident FP16 sessions,
-attention, backward and FP32-master publication remain separate integration work.
+retain the complete graph-window regressions. `precision-flow` integrates these
+modules with FP16 HARD resident inference, dense/tiled event and fiber attention,
+scalar/vector stages, both schedules and candidate-owned checkpoint continuation.
+Its `--profile-smoke` selects two attention fixtures for bounded placement traces,
+not throughput. FP16 backward and FP32-master publication remain pending.
 
 Normalized Aggregate widens the stored model's mass/logit parameters into FP32
 normalization banks. Softplus/softmax, denominators, coefficients and ordered

@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T04:48:52.388029+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T05:04:58.924272+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -59,40 +59,52 @@ The clean9f010c9 qualification does NOT enable complete resident FP16 sessions.
 Raw state-dev01 FAILED/exit1 (implicit half Read operand) and state-dev02
 CANCELLED/exit143 (repeated vendor builds) remain preserved. Later dev03 passed.
 
-## Current uncommitted development and next action
+## Current increment and next action
 
-Uncommitted production/tests implement FP16 tiled/dense attention with FP32
-normalization/weighted accumulation, half event/fiber KV, per-tick half bias
-rounding, widened diagnostic journals and HARD public inference sessions.
-New checks:attention-payload,precision-flow,test_resident_precision.py.
-FP16 HST/SOFTP and training explicitly refuse; FP32 master publication/VJP remain.
-These changes are UNVERIFIED, not support promotion. Docs/evidence above are for
-committed9f010c9 only and may be committed separately from this working code.
+FP16 HARD resident inference implementation is ready to commit. It adds half
+QKV/cache/state/input/output and FP32 attention normalization/weighted merge;
+per-tick fiber-bias half rounding; diagnostic journals widen on device and restore
+public payload/control dtype at export; Read descriptors remain FP32. Full/LH
+minimum budget calls now use the actual payload dtype. Runtime manifest states
+payload/scoring/exported-control precision. FP16 HST/SOFTP and training still fail
+explicitly; FP32-master publication/VJPs remain pending. Python is a C++ client.
 
-build-low-precision-attention-dev01 FAILED/exit1:missing grad_mode include in new
-attention helper;fixed,raw failure preserved.
-build-low-precision-inference-dev02 RUNNING from immutable dirty snapshot
-low-precision-inference-dev02;build same suffix. Uses byte-verified terminal CANN
-archives,two workers,900s;task-local launcher build_precision_overlay_v4.py.
-Do not edit its source/build. It targets attention-payload,precision-flow,
-attention-tile,event/fiber training and public resident check.
-**Do not run its precision-flow checker:** review caught the large-int64 Add
-fixture would ask the CPU oracle to replay2^55 empty ticks. Working source now
-initializes all Add owner clocks at the common cut. This is a test-only correction,
-not a runtime shortcut. Other dev02 binaries remain eligible after build success.
-Next freeze low-precision-inference-dev03 and compile only the corrected checker
-against terminal dev02 libraries after byte-comparing all other component inputs;
-record the reuse and source identity. Then run affected FP32/FP16 gates.
-Python build launcher prepared:TASK/launchers/build_precision_python_overlay.py;
-it requires completed dev02 and clean forward builds,targets _tide_resident,
-uses Python-owned core placement-npu-python-clean01 and verified CANN archives.
-Run new19 FP16 client checks plus affected existing resident tests after build.
-No new FP16 inference or throughput result exists yet.
+Development builds/gates,all based on dirty97293d0,are terminal:
+- dev03 attention-payload PASSED both dtypes;FP32 attention-tile,event/fiber
+  training and resident regressions PASSED.
+- dev05 standalone/Python builds PASSED;content_flow/content_export/checker only
+  rebuilt against byte-matched terminal source/objects,without repeated CANN work.
+- dev05 precision-flow PASSED FP32 and FP16,each78 configurations/312 windows,
+  physical9->logical0. Covers EMA/Add,event/five fiber profiles,normalized
+  Aggregate,SwiGLU/slot-affine/phase,all9 LH Full profiles,three shapes including
+  feedback/parallel edges,scalar/vector,dense/tiled,both schedules and own restore.
+- dev05 Python inference:48 PASSED,0 skips,physical9.
+- dev06 new Python FP16 cases with final manifest/refusal assertions:19 PASSED,
+  0 skips,physical9. This is not an independent PyTorch device scheduler.
+- dev05 profile PASSED,physical1:2390 AI_VECTOR_CORE,76 AI_CORE,2 MIX_AIV;
+  no observed AiCPU or logged CPU fallback. Two attention configurations/eight
+  windows,256MB/180s,includes construction/CPU assertions;not throughput.
 
-Continue FP16 VJP/master publication/control modes after inference closure;
+Preserved failures:attention-dev01 build FAILED missing grad_mode include;
+flow-dev03 FAILED mismatched Full/LH minimum dtype;Python-dev04 FAILED exported
+control FP32 vs public payload dtype. All fixed;raw failures remain unchanged.
+The obsolete dev02 Add fixture was corrected before any run,not a runtime change.
+
+Next:commit/push implementation,then freeze low-precision-inference-clean01 at
+that exact commit. Build two runtimes with TASK/launchers/qualify_precision_inference.py
+standalone low-precision-inference-clean01 / python low-precision-inference-python-clean01.
+It byte-verifies all component inputs versus terminal source and rebuilds changed
+host objects/relinks six standalone consumers;archive/object provenance is saved
+in build-reuse.json. Do not describe this as a from-scratch vendor rebuild.
+Run eight affected standalone cells (attention-payload,precision-flow,
+attention-tile,event-training,fiber-training,resident),Python resident inference/
+training plus new FP16 cases,CPU interfaces and separate precision-flow FP16 trace.
+Core source is unchanged;do not rerun8954 CPU cases. Commit clean evidence separately.
+
+Continue FP16 VJP/master publication/control modes after inference qualification;
 then peer progression/communication/training,five-preset screening,full-size
-CPU/mixed/resident comparisons and migration/version/CUDA evidence. Do not stop at
-this component increment or revive the historical slow timing as the main task.
+CPU/mixed/resident comparisons and migration/version/CUDA evidence. F1–F7 remain
+incomplete. No new whole-model speed comparison exists.
 
 ## Environment and bounded execution
 

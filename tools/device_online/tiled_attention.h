@@ -34,7 +34,14 @@ struct TiledAttentionSpec {
 // Queries already refer to actual packed work. Dummy query/key padding has
 // independent zero storage and never changes a real denominator. work holds
 // int64 [executed key tiles, real score entries, padding score entries].
+// Payload Q/K/V and QK matmul use FP32/FP16. Bias, normalization, weighted
+// accumulation and cross-tile merge use FP32; only the final result rounds to
+// payload dtype. QK overflow retains the selected dtype's numerical boundary.
 at::Tensor append_tiled_attention(CannProgram&,const at::Tensor& events,const at::Tensor& tokens,
     const at::Tensor& ids,const at::Tensor& query,const at::Tensor& key,const at::Tensor& value,
     const at::Tensor& bias,const at::Tensor& error,const at::Tensor& work,TiledAttentionSpec);
+// Dense physical key block with the same precision policy. Shapes are
+// query[C,H,D], key[C,H,D,K], value[C,H,K,D], FP32 additive[C,1,1,K].
+at::Tensor append_dense_attention(CannProgram&,const at::Tensor& query,const at::Tensor& key,
+    const at::Tensor& value,const at::Tensor& additive,double scale);
 } // namespace tide::device_online
