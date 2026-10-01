@@ -1,5 +1,6 @@
 #include "retained_fixture.h"
 #include "full_vjp_fixture.h"
+#include "precision_graph_fixture.h"
 #include "parameter_vjp.h"
 #include "portable_torch/runtime.hpp"
 #include "../../cpp/bench/streaming.h"
@@ -11,14 +12,24 @@
 namespace {
 using namespace tide;using namespace tide::device_online;
 void require(bool x,const char* message){if(!x)throw std::runtime_error(message);}
-void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefill,int mode) {
-  at::NoGradGuard guard;auto f=test::retained_fixture(shape,variant,width);auto registry=f.model.parameters(false);
+void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefill,int mode,at::ScalarType payload,std::string emit="hard") {
+  at::NoGradGuard guard;auto f=test::retained_fixture(shape,variant,width);
+  if(emit!="hard") {
+    for(auto& r:f.graph.regions)r.read_mode=shape==0?"old":"proposal";
+    f.graph.compile();f.initial.identity=f.graph.identity;
+  }
+  test::fixture_dtype(f,payload);auto registry=f.model.parameters(false);
+  const bool half=payload==at::kHalf;
   ContentLimits limits;limits.prefill=prefill;limits.trace=512;limits.full_chunk_rows=3;if(width>3)limits.workspace_bytes=512*1024*1024;
+  limits.mode=emit;
   ContentFlow flow(f.graph,f.model,f.initial,device,limits);std::vector<RetainedTape> saved;std::vector<Result> forward;
   int64_t cut=f.initial.cut;ReverseTape live{};
   for(auto stop:test::retained_stops(cut)) {
     std::vector<External> input;for(const auto& x:f.input)if(x.time>=cut&&x.time<stop)input.push_back(x);
     flow.advance_device(input,stop);live=flow.reverse_tape();saved.push_back(retain_reverse_tape(live,64*1024*1024));forward.push_back(flow.result());cut=stop;
+    require(saved.back().tensor_bytes==reverse_tape_bytes(live),"retained byte accounting differs from actual tensors");
+    require(saved.back().tape.source_scales.scalar_type()==payload&&saved.back().tape.state.values.scalar_type()==at::kFloat,
+      "retained tape changed forward/journal precision");
   }
   flow.close();
   // Saved records remain valid after close and after all live journal/parameter
@@ -37,17 +48,18 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
   p.finish();portable_torch::synchronize(device);p.run();require(!error.cpu().item<int>(),"valid retained graph reverse refused");
   auto values=total.values.cpu(),on=total.connected.cpu();
   for(auto dtype:{at::kFloat,at::kDouble}) {
-    auto expected=test::retained_reference(f,mode,dtype);
-    if(dtype==at::kFloat)for(size_t i=0;i<saved.size();++i)tide_bench::compare(forward[i],expected.windows[i],true,at::kFloat);
+    Options options;options.mode=emit;auto expected=test::retained_reference_precision(f,mode,dtype,half,options);
+    if(dtype==at::kFloat)for(size_t i=0;i<saved.size();++i)tide_bench::compare(forward[i],expected.windows[i],true,payload,
+      std::nullopt,half?2e-2:1e-5,half?2e-3:1e-6);
     for(size_t i=0;i<total.owners.size();++i) {
-      const auto& owner=total.owners[i];auto value=total.offsets[i]<0?at::zeros_like(owner.value):
+      const auto& owner=total.owners[i];auto value=total.offsets[i]<0?at::zeros(owner.value.sizes(),at::kFloat):
         values.narrow(0,total.offsets[i],owner.value.numel()).reshape(owner.value.sizes());
-      test::full_same(value,on[i],expected.gradients.at(owner.canonical),owner.canonical.c_str());
+      test::full_same_precision(value,on[i],expected.gradients.at(owner.canonical),owner.canonical.c_str(),half);
     }
     auto initial=gradients.front().initial.cpu(),ic=gradients.front().initial_connected.cpu();
     for(const auto& [owner,_]:f.initial.states) {
       const auto name="state/"+std::to_string(owner.first)+"/"+std::to_string(owner.second);
-      test::full_same(initial[owner.first][owner.second],ic[owner.first][owner.second],expected.gradients.at(name),name.c_str());
+      test::full_same_precision(initial[owner.first][owner.second],ic[owner.first][owner.second],expected.gradients.at(name),name.c_str(),half);
     }
     std::map<std::string,bool> seen;
     for(size_t w=0;w<saved.size();++w) {
@@ -57,7 +69,7 @@ void trajectory(at::Device device,int shape,int variant,int64_t width,bool prefi
         const auto row=i<g.links.fibers?fm[i]:pm[i-g.links.fibers];if(row[3].item<Index>()!=0)continue;
         Atom a{row[0].item<Index>(),row[1].item<Index>(),row[2].item<Index>(),0,row[4].item<Index>(),row[5].item<Index>(),{}};
         const auto name=test::boundary_name(a);require(!seen[name],"external leaf appeared in two windows");seen[name]=true;
-        test::full_same(value[i],connected[i],expected.gradients.at(name),name.c_str());
+        test::full_same_precision(value[i],connected[i],expected.gradients.at(name),name.c_str(),half);
       }
     }
     for(const auto& [name,_]:expected.gradients)if(name.rfind("boundary/",0)==0)require(seen[name],"retained reverse lost an external leaf");
@@ -84,15 +96,20 @@ int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("retained gate requires explicit NPU FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("retained gate requires explicit NPU FP32/FP16");
+    args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("retained gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int shape:{0,3})for(bool prefill:{false,true})for(int mode=0;mode<6;++mode) {
-      try{trajectory(device,shape,0,3,prefill,mode);++cases;}
+      try{trajectory(device,shape,0,3,prefill,mode,args.dtype);++cases;}
       catch(...){std::cerr<<"retained shape="<<shape<<" prefill="<<prefill<<" mode="<<mode<<'\n';throw;}
     }
-    trajectory(device,0,0,257,true,4);++cases;trajectory(device,3,1,3,true,4);++cases;
-    std::cout<<"device-retained: passed trajectories="<<cases<<" windows="<<cases*4<<" CPU=FP32_FP64 after_close=true replay=true scope=internal_retained_HARD_backward\n";
+    trajectory(device,0,0,257,true,4,args.dtype);++cases;trajectory(device,3,1,3,true,4,args.dtype);++cases;
+    for(const std::string emit:{"hst","softp"})for(int shape:{0,3})for(bool prefill:{false,true})for(int mode:{4,5}) {
+      try{trajectory(device,shape,0,3,prefill,mode,args.dtype,emit);++cases;}
+      catch(...){std::cerr<<"retained control shape="<<shape<<" prefill="<<prefill<<" roots="<<mode<<" mode="<<emit<<'\n';throw;}
+    }
+    std::cout<<"device-retained: passed trajectories="<<cases<<" windows="<<cases*4<<" dtype="<<args.dtype<<" CPU=FP32_FP64 after_close=true replay=true scope=internal_retained_HARD_HST_SOFTP_backward\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

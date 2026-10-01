@@ -23,6 +23,8 @@ struct GraphVjp {
 // Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter
 // rows require the public registry's alias accumulation before optimizer use.
+// FP16/FP32 forward tapes retain actual payload precision; roots, journals and
+// returned adjoints are FP32. Public training has separate capability gates.
 GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
                          const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

@@ -118,7 +118,7 @@ void check(at::Device device,Index width,int pool,int variant,int mode,at::Scala
   }
   auto error=at::zeros({1},floats.dtype(at::kInt)),stage=at::tensor({Index(0),count},at::kLong).to(device);
   if(half){bool refused=false;try{CannProgram bad(device);append_graph_vjp(bad,t,{},error,2,budget);}catch(const std::invalid_argument&){refused=true;}
-    if(!refused)throw std::runtime_error("complete half graph guard was lost");}
+    if(!refused)throw std::runtime_error("graph VJP accepted missing mandatory cotangents");}
   CannProgram p(device);p.limit_workspace(budget);auto links=append_reverse_links(p,t,error,budget/4);
   auto reverse=prepare_fiber_reverse(p,t,links,g,roots,error,budget);
   auto messages=at::empty({links.messages.size(0),width},floats),on=at::empty({links.messages.size(0)},booleans);

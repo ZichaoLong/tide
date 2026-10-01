@@ -37,12 +37,19 @@ actual event/stage reverse decisions still execute on device.
 
 The development checker retains four windows (including an empty final window),
 closes and poisons the original owner, then reverses them in one device program.
-Its 26 trajectories cover104 windows, feedback/self/parallel edges, both schedules,
+Its 42 trajectories per dtype cover168 windows, feedback/self/parallel edges, both schedules,
 widths3/257, large int64 times, independent/all/None/zero roots, shared parameters,
 initial-state and every external-input gradient, replay, budgets and missing-boundary
-refusal. CPU FP32/FP64 Streaming autograd retains its own graph independently.
+refusal. HARD/HST/SOFTP are covered for sum Aggregate, identity/EMA/Add-repeat
+state and identity/tanh Full. FP16 payloads remain half in the owned tapes;
+journals, boundary roots and alias/parameter sums remain FP32. Byte admission
+counts each actual tensor's element size, including mixed-precision tapes.
+CPU FP32/FP64 Streaming autograd retains its own graph independently; its half
+oracle preserves forward rounding with wide adjoints as described in
+[graph reverse](resident-graph-vjp.md). Added checks are implementation scope
+until accompanied by immutable-source qualification.
 
 This is an internal retained-backward component. It does not supply the public
 training lifecycle, optimizer-generation guards, checkpoint controller, additional
-module VJPs, FP16, peer progression or full-size throughput. Qualification and
+module integration, public FP16 training, peer progression or full-size throughput. Qualification and
 remaining work are indexed in ROADMAP; submission or profiling alone is not a pass.

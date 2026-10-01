@@ -1,4 +1,5 @@
 #include "retained_fixture.h"
+#include "precision_graph_fixture.h"
 #include "tide/stream.h"
 #include "tide/parameters.h"
 #include <ATen/core/grad_mode.h>
@@ -21,15 +22,20 @@ bool pending_root(int window,int mode){return mode==4||mode==9||window==3&&mode=
 }
 GraphCotangents retained_roots(const ReverseTape& t,int window,int mode) {
   auto opts=t.fiber_values.options();const float nan=std::numeric_limits<float>::quiet_NaN();
-  GraphCotangents r{at::full_like(t.outputs.values,nan),at::zeros_like(t.outputs.valid),at::full_like(t.pending.values,nan),at::zeros_like(t.pending.valid),
+  const float scale=t.source_scales.scalar_type()==at::kHalf?256.f:1.f;
+  GraphCotangents r{at::full(t.outputs.values.sizes(),nan,opts),at::zeros_like(t.outputs.valid),at::full(t.pending.values.sizes(),nan,opts),at::zeros_like(t.pending.valid),
     at::full({t.state.samples,int64_t(t.graph->nodes.size()),t.full.width},nan,opts),at::zeros({t.state.samples,int64_t(t.graph->nodes.size())},opts.dtype(at::kBool))};
-  if(output_root(mode)){r.outputs.fill_(.0625f);r.outputs_connected.copy_(t.outputs.valid);}
-  if(pending_root(window,mode)){r.pending.fill_(.015625f);r.pending_connected.copy_(t.pending.valid);}
-  if(final_root(window,mode)){r.final.fill_(mode==5?0.f:.03125f);r.final_connected.fill_(true);}
+  if(output_root(mode)){r.outputs.fill_(.0625f*scale);r.outputs_connected.copy_(t.outputs.valid);}
+  if(pending_root(window,mode)){r.pending.fill_(.015625f*scale);r.pending_connected.copy_(t.pending.valid);}
+  if(final_root(window,mode)){r.final.fill_(mode==5?0.f:.03125f*scale);r.final_connected.fill_(true);}
   return r;
 }
 RetainedReference retained_reference(Fixture f,int mode,at::ScalarType dtype,Options options) {
+  return retained_reference_precision(std::move(f),mode,dtype,false,options);
+}
+RetainedReference retained_reference_precision(Fixture f,int mode,at::ScalarType dtype,bool half,Options options) {
   at::AutoGradMode enabled(true);RetainedReference result;std::vector<Tensor> leaves,terms;std::vector<std::string> names;
+  const double scale=half?256.:1.;
   std::map<const void*,Tensor> copies;
   auto copy=[&](Tensor& x){auto key=x.unsafeGetTensorImpl();auto it=copies.find(key);
     if(it==copies.end())it=copies.emplace(key,x.detach().to(dtype).clone().set_requires_grad(true)).first;x=it->second;};
@@ -44,13 +50,15 @@ RetainedReference retained_reference(Fixture f,int mode,at::ScalarType dtype,Opt
   }
   for(auto& a:f.initial.pending)leaf(boundary_name(a),a.value);
   for(auto& x:f.input)leaf(boundary_name({x.batch,f.graph.inputs[x.port],x.time,0,x.port,x.position,x.value}),x.value);
+  if(half)configure_half_reference(f);
   auto q=f.initial;int window=0;
   for(auto stop:retained_stops(q.cut)) {
     std::vector<External> input;for(const auto& x:f.input)if(x.time>=q.cut&&x.time<stop)input.push_back(x);
     Streaming cpu(f.graph,f.model,options);auto r=cpu.run(q,input,stop,stop);
-    if(output_root(mode))for(const auto& o:r.outputs)terms.push_back(o.value.sum()*.0625);
-    if(pending_root(window,mode))for(const auto& a:r.continuation.pending)terms.push_back(a.value.sum()*.015625);
-    if(final_root(window,mode))for(const auto& [_,s]:r.continuation.states)terms.push_back(s.value.sum()*(mode==5?0.:.03125));
+    if(half)round_half_transport(r);
+    if(output_root(mode))for(const auto& o:r.outputs)terms.push_back(o.value.sum()*(.0625*scale));
+    if(pending_root(window,mode))for(const auto& a:r.continuation.pending)terms.push_back(a.value.sum()*(.015625*scale));
+    if(final_root(window,mode))for(const auto& [_,s]:r.continuation.states)terms.push_back(s.value.sum()*(mode==5?0.:.03125*scale));
     if(mode==9||window==3&&(mode>=6&&mode<=8||mode==10))for(const auto& [_,s]:r.continuation.states) {
       if(s.slots.count("key")&&mode!=7&&mode!=10)terms.push_back(s.slots.at("key").sum()*(mode==8?0.:.0078125));
       if(s.slots.count("value")&&mode!=6&&mode!=10)terms.push_back(s.slots.at("value").sum()*(mode==8?0.:-.015625));

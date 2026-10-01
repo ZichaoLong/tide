@@ -2,11 +2,18 @@
 
 The internal `append_graph_vjp` composes Full and state-chain adjoints with
 message dependencies from the actual resident forward journals. Its current
-profile is single-device FP32 HARD/HST/SOFTP, built-in Aggregate, broadcast emission (including
-static phases), identity/EMA/Add-repeat/event-attention state and identity/tanh/LH/SwiGLU Full. Unsupported
+profile is single-device HARD/HST/SOFTP, built-in Aggregate, broadcast emission (including
+static phases), identity/EMA/Add-repeat/event/fiber-attention state and identity/tanh/LH/SwiGLU Full. Unsupported
 modules refuse when requesting `ContentFlow::reverse_tape()`. The separate
 [public training owner](resident-training.md) provides retained-window lifecycle;
 qualification is recorded per module in ROADMAP.
+
+FP32 and FP16 forward tapes use FP32 cotangents and adjoint accumulation;
+half roots fail explicitly. Half forward values, parameter banks and per-operation
+rounding remain intact. The integration gate covers sum Aggregate, identity/EMA/
+Add-repeat state and identity/tanh Full, with all three Emit modes. Other half
+modules have local component checks and require their own whole-graph integration
+qualification. Public FP16 training and master/checkpoint lifecycle remain guarded.
 
 Static topology/parameter layout preparation is allowed. A device hash table
 indexes actual `(sample,node,int64 time)` events, associates physical messages
@@ -68,11 +75,16 @@ feedback, self-loop, DAG and edgeless cases; streaming/greedy; separate output,
 state and pending roots, combined roots, absent and connected-zero roots; warm
 continuation above 2^55; replay; widths 1/3/257; explicit malformed/budget/dtype
 refusals. It checks every boundary input, initial state, Full/state/scale gradient
-and connection, with a separate device placement profile. Passing evidence must
+and connection, with a separate device placement profile. The half oracle uses
+independent CPU Streaming plus test-only kernels that retain each declared half
+rounding boundary with FP32/FP64 autograd leaves. Sum accumulates FP32 source
+products before rounding its result; physical delivery rounds before a later
+Aggregate consumes it. Half roots are scaled by256, with VJP rtol2e-3/atol2e-5;
+FP32 thresholds remain unchanged. Passing evidence must
 be tied to an immutable source revision; this document is the contract.
 
 Internal [owner updates](resident-optimizer.md) and [retained-window bridges](resident-retained.md)
 now compose with this component under their own qualification scopes. Remaining
-training work includes fiber attention adjoints, FP16 and peer
+training work includes the remaining half graph modules, public FP16 training and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.

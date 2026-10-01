@@ -25,8 +25,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
     throw std::invalid_argument("graph VJP requires no-grad actual device tape");
   // Identity/LH/SwiGLU-only graphs need no tanh weight bank. Physical source
   // scales always exist (including the source-free sentinel) and own dtype.
-  if(t.source_scales.scalar_type()!=at::kFloat)
-    throw std::invalid_argument("resident FP16 adjoints for complete graphs are not implemented");
+  if(t.source_scales.scalar_type()!=at::kFloat&&t.source_scales.scalar_type()!=at::kHalf)
+    throw std::invalid_argument("graph VJP requires FP32/FP16 forward parameters and FP32 cotangents");
   const auto device=t.state.metadata.device();const int64_t capacity=t.state.metadata.size(0),width=t.full.width;
   const int64_t nodes=t.graph->nodes.size(),samples=t.state.samples,fibers=t.fiber_values.size(0);
   const auto pending=t.pending.valid.numel(),outputs=t.outputs.valid.numel(),total=fibers+pending+outputs;

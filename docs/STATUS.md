@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T08:25:27.730825+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T08:43:19.404042+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -49,21 +49,40 @@ Prior actual fiber reverse2d7cee1/evidence60f13da remains qualified separately.
 
 ## Active work and next action
 
-Commit/push current evidence,then implement actual half complete-graph reverse,
-retained windows,and FP32 master/checkpoint/public FP16 training in tested increments.
-Local half state/Full/normalized Aggregate/attention/event/fiber/control adjoints
-are qualified;graph_vjp.cpp and public training still explicitly reject half.
-Journals/roots/adjoints stay FP32;forward payload/parameters/cache stay real half.
-Do not widen the entire half forward to FP32 to bypass integration. Inspect
-normalized Aggregate gradient allocation and public roots/owner master handling.
-For graph reference,use independent scheduling and declared per-operation rounding;
-sum Aggregate accumulates FP32 source products and casts only the final content,
-not each contribution before the sum. Preserve None/zero and physical identities.
-Update fiber_reverse_check's old empty-root guard test when enabling graph VJP.
-Next production code not yet edited. No task runtime jobs active beyond historical
-intentionally paused baseline. Remaining F1–F7:half integrations,device peer
-progression/communication/training,five-preset screening,representative/full-size
-CPU/mixed/resident performance,version/migration/CUDA records.
+FP16 control evidence committed/pushed as e77cd41. Current implementation:
+actual half complete-graph reverse and retained-window sum/identity/EMA/Add/tanh
+integration,including HARD/HST/SOFTP. CPU-only precision_graph_fixture adapts
+independent Streaming with real half forward rounding and FP32/FP64 leaves;
+never feeds candidate events/results. Actual source/delivery payloads stay half,
+journals/cotangents/parameter alias accumulation stay FP32. Retained tests cover
+four windows including empty continuation,after-close/overwritten-live journals,
+aliases,connected-zero/None,physical message identities and byte accounting.
+Public training/master/checkpoint guards remain until full integration.
+
+Dev04 build and all4 graph/retained cells PASSED/exit0. Each dtype122 graph windows
+and42 retained trajectories/168 windows;replay,all three Read coordinates and mixed
+linear/norm,HARD/HST/SOFTP,FP32/FP64 independent references. Dev02 standalone/Python
+builds,fiber reverse both dtypes,FP32 control training98 trajectories/1568 windows/
+392 updates and97 Python tests all PASSED/exit0. Only checker sources changed
+since dev02 production/oracle build. Dev03 intermediate component gate also passed.
+Retain dev01 launcher failure:old CMake template lacked new fiber-reverse target;
+production rebuilt in dev02. Dev02 half gate failed before execution because
+checkers omitted allow_npu_float16;fixed explicitly,not a changed runtime default.
+
+Next commit/push implementation;freeze low-precision-graph-clean01 at that revision.
+Clean build launchers:build_precision_graph_v3.py(standalone,source-verified dev02
+production/oracle reuse,two checker workers) and build_precision_graph_python_v1.py
+(Python-owned graph reverse rebuild);900s. Then graph-vjp/retained all4 cells,
+fiber-reverse both dtypes/control-training FP32,97 Python tests,two half profiles
+(graph-vjp,retained;512MB each),600s/lease120s. Audit
+`python TASK/launchers/precision_graph_evidence.py REV` expects7 terminal jobs,
+7 standalone cells and97 Python tests. Raw logs: TASK/runs/NAME/status.json and
+ task.log; unit tide-execution-flows-NAME.service. Commit evidence separately.
+All current development jobs terminal;historical baseline remains intentionally paused.
+No portable core changes;do not repeat unchanged8,954 CPU checks.
+Remaining F1–F7:all-module half graph/public training/master/checkpoint integrations,
+device peer progression/communication/training,five-preset screening,representative/
+full-size CPU/mixed/resident performance,version/migration/CUDA records.
 Implementation commit→immutable qualification→separate evidence commit,push each.
 
 ## Environment and bounded execution

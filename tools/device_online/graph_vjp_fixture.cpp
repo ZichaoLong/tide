@@ -1,5 +1,6 @@
 #include "graph_vjp_fixture.h"
 #include "full_vjp_fixture.h"
+#include "precision_graph_fixture.h"
 #include "tide/stream.h"
 #include <ATen/core/grad_mode.h>
 #include <torch/csrc/autograd/autograd.h>
@@ -31,15 +32,21 @@ Fixture graph_vjp_fixture(int shape,int variant,int64_t width) {
   f.graph.compile();f.initial.identity=f.graph.identity;return f;
 }
 GraphReference graph_reference(Fixture f,int mode,bool warm,at::ScalarType dtype) {
+  return graph_reference_precision(std::move(f),mode,warm,dtype,false);
+}
+GraphReference graph_reference_precision(Fixture f,int mode,bool warm,at::ScalarType dtype,bool half,Options options) {
   const auto initial_cut=f.initial.cut,stop=initial_cut+11;
+  const double scale=half?256.:1.;
   auto clone=[&](const Tensor& x){return x.detach().to(dtype).clone();};
   for(auto& w:f.model.nodes){w.decay=clone(w.decay);w.weight=clone(w.weight);w.bias=clone(w.bias);w.read=clone(w.read);
     for(auto& [_,x]:w.extra)x=clone(x);}
   for(auto group:{&f.model.input_scale,&f.model.agg_scale,&f.model.edge_scale,&f.model.output_scale})for(auto& x:*group)x=clone(x);
   for(auto& x:f.input)x.value=clone(x.value);for(auto& [_,s]:f.initial.states)s.value=clone(s.value);
+  if(half)configure_half_reference(f);
   if(warm) {
     at::NoGradGuard guard;std::vector<External> first;for(const auto& x:f.input)if(x.time<initial_cut+2)first.push_back(x);
-    Streaming cpu(f.graph,f.model,{});f.initial=cpu.run(f.initial,first,initial_cut+2,initial_cut+2).continuation;
+    Streaming cpu(f.graph,f.model,options);auto r=cpu.run(f.initial,first,initial_cut+2,initial_cut+2);
+    if(half)round_half_transport(r);f.initial=std::move(r.continuation);
   }
   at::AutoGradMode grad(true);std::vector<Tensor> leaves;std::vector<std::string> names;
   auto leaf=[&](const std::string& name,Tensor& x){x=clone(x).set_requires_grad(true);leaves.push_back(x);names.push_back(name);};
@@ -56,20 +63,24 @@ GraphReference graph_reference(Fixture f,int mode,bool warm,at::ScalarType dtype
   for(auto& a:f.initial.pending)leaf(boundary_name(a),a.value);
   std::vector<External> input;
   for(auto x:f.input)if(x.time>=f.initial.cut){leaf(boundary_name({x.batch,f.graph.inputs[x.port],x.time,0,x.port,x.position,x.value}),x.value);input.push_back(x);}
-  Streaming cpu(f.graph,f.model,{});GraphReference expected;expected.result=cpu.run(f.initial,input,stop,stop);
+  Streaming cpu(f.graph,f.model,options);GraphReference expected;expected.result=cpu.run(f.initial,input,stop,stop);
+  if(half)round_half_transport(expected.result);
   std::vector<Tensor> terms;
-  if(mode==1||mode==4||mode==5)for(const auto& x:expected.result.outputs)terms.push_back(x.value.sum()*(mode==4?0.:.0625));
-  if(mode==2||mode==5)for(const auto& [_,s]:expected.result.continuation.states)terms.push_back(s.value.sum()*.03125);
-  if(mode==3||mode==5)for(const auto& a:expected.result.continuation.pending)terms.push_back(a.value.sum()*.015625);
+  if(mode==1||mode==4||mode==5)for(const auto& x:expected.result.outputs)terms.push_back(x.value.sum()*(mode==4?0.:.0625*scale));
+  if(mode==2||mode==5)for(const auto& [_,s]:expected.result.continuation.states)terms.push_back(s.value.sum()*(.03125*scale));
+  if(mode==3||mode==5)for(const auto& a:expected.result.continuation.pending)terms.push_back(a.value.sum()*(.015625*scale));
   std::vector<Tensor> result(leaves.size());if(!terms.empty())result=torch::autograd::grad({at::stack(terms).sum()},leaves,{},false,false,true);
   for(size_t i=0;i<names.size();++i)expected.gradients.emplace(names[i],result[i]);
   return expected;
 }
 void compare_graph_vjp(const ReverseTape& t,const GraphVjp& out,const GraphReference& expected) {
+  compare_graph_vjp_precision(t,out,expected,false);
+}
+void compare_graph_vjp_precision(const ReverseTape& t,const GraphVjp& out,const GraphReference& expected,bool half) {
   const auto& g=*t.graph;
   auto check=[&](const Tensor& value,const Tensor& connected,const std::string& name){
     const auto found=expected.gradients.find(name);if(found==expected.gradients.end())throw std::runtime_error("missing CPU leaf: "+name);
-    full_same(value,connected,found->second,name.c_str());};
+    full_same_precision(value,connected,found->second,name.c_str(),half);};
   auto initial=out.initial.cpu(),ic=out.initial_connected.cpu();
   for(Index b=0;b<t.state.samples;++b)for(size_t n=0;n<g.nodes.size();++n)check(initial[b][n],ic[b][n],"state/"+std::to_string(b)+"/"+std::to_string(n));
   auto decay=out.decay.cpu(),dc=out.decay_connected.cpu(),ret=out.retention.cpu(),rc=out.retention_connected.cpu();
@@ -79,7 +90,8 @@ void compare_graph_vjp(const ReverseTape& t,const GraphVjp& out,const GraphRefer
     if(weights.defined()){check(weights[n],wc[n],prefix+"weight");check(biases[n],wc[n],prefix+"bias");}
     else if(expected.gradients.at(prefix+"weight").defined()||expected.gradients.at(prefix+"bias").defined())throw std::runtime_error("identity profile lost a Full gradient");
     if(expected.gradients.count(prefix+"add_retention"))check(ret[n],rc[n],prefix+"add_retention");
-    if(expected.gradients.at(prefix+"read").defined())throw std::runtime_error("HARD CPU Read unexpectedly connected");
+    if(out.read.defined())check(out.read[n].cpu(),out.read_connected[n].cpu(),prefix+"read");
+    else if(expected.gradients.at(prefix+"read").defined())throw std::runtime_error("HARD CPU Read unexpectedly connected");
   }
   auto scales=out.scales.cpu(),sc=out.scale_connected.cpu();Index offset=0;
   for(size_t i=0;i<g.inputs.size();++i,++offset)check(scales[offset],sc[offset],"input/"+std::to_string(i));
