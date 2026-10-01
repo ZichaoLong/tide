@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T07:08:11.262591+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T07:18:06.338093+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,83 +29,48 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **f20c2cc227a400d08c200475be56976ffe4ccc07** committed/pushed.
-[FP16 local attention adjoint](evidence/resident-fp16-attention-vjp-20261001.md)
-and [audit](evidence/resident-fp16-attention-vjp-20261001.json).
-All six fixed-clean-source jobs PASSED/exit0:
-- build-low-precision-attention-vjp-clean01:checker rebuilt, byte-matched terminal
-  dev01 host/kernel archive reused. Not a full vendor rebuild.
-- build-low-precision-attention-vjp-python-clean01:Python-owned attention host
-  rebuilt and client relinked; matching CANN archives reused.
-- low-precision-attention-vjp-components-clean01:two dtype cells,physical9→logical0.
-- low-precision-attention-vjp-regression-clean01:FP32 event/fiber training,physical13.
-- low-precision-attention-vjp-python-clean01:61 passed,zero skips,physical9.
-- low-precision-attention-vjp-profile-clean01:physical1,1178 AI_VECTOR_CORE/
-  94 AI_CORE/24 MIX_AIV. No observed AiCPU/logged CPU fallback. Not throughput.
-All selected physical devices map to logical0. Each dtype4 geometries/12 replays;
-half adds2 strict QK-rounding fixtures, each with3 replays, physical key tiles1/2.
-Ordinary half2e-3/2e-5; unchanged FP32 and anchors2e-5/2e-6. Independent CPU
-FP32/FP64 quantized-forward references compare forward and four local gradients.
-FP32 training66/172 roots,8/20 trajectories. Complete half graph/public training
-remains guarded. Source/core/archive/loader/log/CSV audit passed.
+Implementation **4f195d22961d66495b30ecc447ececf684eac969** committed/pushed.
+[FP16 event cache/projection report](evidence/resident-fp16-event-vjp-20261001.md)
+and [audit](evidence/resident-fp16-event-vjp-20261001.json).
+All6 fixed-clean-source jobs PASSED/exit0: standalone/Python builds,event-vjp
+both dtypes,FP32 event/fiber training,61 Python cases(no skips),half profile.
+Each dtype51 cases/102 replays plus6 cache boundary cases/12 replays/12 refusals.
+Actual independent forward journals; CPU FP32/FP64 quantized-forward reference.
+None/zero,large int64,adopt/clear/window/GQA,poison padding,FP32 cache sums beyond
+half range and mismatched lengths covered. Half rtol2e-3/atol2e-5,original FP32
+1e-5/1e-6. Regression66/172 roots,8/20 trajectories. Profile52140 AI_VECTOR_CORE,
+2088 AI_CORE,450 MIX_AIV; no observed AiCPU/logged CPU fallback,not throughput.
+Runtime jobs physical1/3/9/13→logical0. Source/archive/loader/log/CSV audit passed.
+Standalone checker rebuilt with byte-matched terminal host/kernel reuse;
+Python-owned event host rebuilt/client relinked. No portable-core changes.
 
-Preserved attention dev01 failure: ordinary cases passed, then fixture sensitivity
-check failed. Two QK rounding errors nearly canceled; CPU arithmetic justified
-changing one public key from-2.71875 to-2.703125. No candidate/tolerance change.
-Build/gate dev02 passed. First audit assumed fixture archive copy, but linker uses
-a direct immutable dependency; audit corrected to verify that hash and link path.
-No artifact or test result was altered to satisfy the audit.
-
-Prior: **5ce5346**, evidence commit588ed1d, normalized Aggregate/LH/SwiGLU;
-[report](evidence/resident-fp16-extended-vjp-20261001.md). All7 jobs passed,6
-standalone cells,215 Python cases,2 traces. Aggregate39 cases/117 replays per
-dtype; Full90/270 plus3 strict half anchors. Half LayerNorm returns half-rounded
-mean/rstd inside FP32 buffers; compute Jacobian statistics separately in FP32
-on actual half activation, keep half normalized output for weight gradient.
-Raw extended dev02/dev03 failures retained. Earlier d2a1afc state/basic Full,
-9a84432 master/publication,8b05c04 HARD half inference,66a6ca5 FP32 full attention
-training remain separately qualified. No new full-size speed ratio.
+Preserved test-scaffold failures: build dev02 ambiguous empty Tensor assignment,
+gate dev03 unsupported vector-to-bool factory; fixed without algorithm/tolerance
+changes. Dev04 passed. Early audit refused live regression; terminal audit passed.
+Previous local attention implementation f20c2cc/evidence63824ba remains qualified;
+normalized Aggregate/LH/SwiGLU5ce5346/evidence588ed1d. See their evidence,not new
+complete graph/public FP16 training claims. No full-size speed ratio changed.
 
 ## Active work and next action
 
-Uncommitted FP16 event cache/projection adjoints accept half forward banks/cache,
-keep roots/carry/parameter partials FP32 and recompute QKV in actual half before
-local half attention. No complete-graph/public guard removed. New event-vjp
-checker/CMake target/component map uses independent ContentFlow forward journals,
-2 samples/3 events, GQA, widths1/4/7/257,4 adopt/selection/clear variants,
-6 proposal/final-cache None/zero/root modes and streaming/greedy.
+Event evidence is ready for its separate commit. Uncommitted next increment:
+FP16 local same-fiber VJP in fiber_vjp.cpp and four fiber_vjp AscendC kernels.
+All adjoints remain FP32. QKV matmul/bias,Q scaling before QK,completed query
+outputs and final pooling must reproduce half rounding. Mean pooling sums
+before dividing; cache bias retains actual half tick rounding. Independent
+CPU quantized-forward checks still need updating. No device result yet for fiber.
+Do not claim integration or remove complete-graph/public guards.
 
-Development build-low-precision-event-vjp-dev01, event-vjp gate dev01 and
-FP32 event/fiber regression dev01 all PASSED/exit0. Both dtypes51 cases/102
-replays against CPU FP32/FP64; FP32 regression66/172 roots,8/20 trajectories.
-Added isolated cache boundary cases: FP32 sums beyond half range, disconnected
-and connected empty/zero roots, poisoned padding, replay reset, length mismatch,
-invalid lengths/roots and budget refusal. This is not a retained half graph claim.
+Next: finish local fiber checker, freeze bounded development build and run
+fiber-vjp two dtype cells plus affected FP32 event/fiber training. Use max120s
+lease waits,900s build/600s gate bounds. Then implementation commit,clean immutable
+standalone/Python checks,separate profile,evidence commit. Continue autonomously.
 
-Build and gate low-precision-event-vjp-dev04 PASSED/exit0 from frozen
-TASK/sources/low-precision-event-vjp-dev04; both dtype cells include6 cache
-boundary cases/12 replays/12 refusals. Byte-matched terminal host/kernel reused;
-only checker rebuilt. Preserved test-only failures: build dev02 ambiguous empty
-Tensor assignment, gate dev03 ATen vector-to-bool factory. Fixed with explicit
-Tensor{} and int64-then-bool conversion; no candidate/tolerance change.
-
-This implementation is ready to commit. Next fixed-clean-source builds:
-TASK/launchers/build_precision_event_recheck.py low-precision-event-vjp-clean01
-and build_precision_event_vjp_python.py low-precision-event-vjp-python-clean01.
-Use freeze_run.py --commit NEW_REV --snapshot low-precision-event-vjp-clean01,
-900s build bounds; then independent event-vjp, FP32 event/fiber regression,
-affected Python precision/event/fiber tests and separate half event profile.
-Lease waits max120s; tests/profile600s. Audit using
-TASK/launchers/precision_event_vjp_evidence.py NEW_REV, commit evidence separately.
-No qualification result is claimed yet. Complete half public training guards
-remain, and no new full-size speed ratio is established.
-
-Remaining sequence: fiber cache/projection, control/graph half adjoints,
-retained windows, master checkpoint/public FP16 training; then peer progression/
-communication/training, five-preset screening, representative/full-size
-CPU/mixed/resident performance, version/migration/CUDA records. F1–F7 incomplete.
-Authorization remains active; continue after commits without asking to resume.
-No subagents or requested pause.
+Remaining: fiber cache/projection integration,control/graph half adjoints,
+retained windows,master checkpoint/public FP16 training; then peer progression/
+communication/training,five-preset screening,representative/full-size
+CPU/mixed/resident performance,version/migration/CUDA records. F1–F7 incomplete.
+No subagents or requested pause. Authorization remains active after commits.
 
 ## Environment and bounded execution
 
