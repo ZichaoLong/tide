@@ -121,7 +121,7 @@ class HalfFull final : public FullKernel {
   Node node_;
  public:
   explicit HalfFull(Node n):node_(std::move(n)) {
-    if(node_.emission!="broadcast"||(node_.full!="identity"&&node_.full!="tanh"&&node_.full!="swiglu"&&!is_lh_full(node_.full)))
+    if((node_.emission!="broadcast"&&node_.emission!="slot_affine")||(node_.full!="identity"&&node_.full!="tanh"&&node_.full!="swiglu"&&!is_lh_full(node_.full)))
       throw std::invalid_argument("half CPU graph reference Full unavailable");
   }
   FullResult step(const NodeWeights& w,const FullInput& in,Index slots,const Options& options) const override {
@@ -149,7 +149,15 @@ class HalfFull final : public FullKernel {
     FullResult out{value,{}};
     for(Index slot=0;slot<slots;++slot) {
       const auto phase=node_.emit_phases.empty()?-1:node_.emit_phases[slot];
-      if(phase==-1||(phase>=0&&in.time%node_.emit_period==phase))out.emitted.push_back({slot,value});
+      if(phase!=-1&&!(phase>=0&&in.time%node_.emit_period==phase))continue;
+      auto payload=value;
+      if(!node_.identity&&node_.emission=="slot_affine") {
+        const auto& weight=w.extra.at("emit_w_"+std::to_string(slot));
+        auto held=half_matmul(h,weight),active=rounded(half_matmul(fresh,weight)+w.extra.at("emit_b_"+std::to_string(slot)));
+        payload=options.mode=="hst"?HalfHst::apply(held,active,rounded(in.control),options.zeta):
+          options.mode=="softp"?rounded(held+rounded(rounded(in.control)*rounded(active-held))):active;
+      }
+      out.emitted.push_back({slot,payload});
     }
     return out;
   }

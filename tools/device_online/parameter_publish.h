@@ -11,6 +11,7 @@ struct ParameterBanks {
   AggregateTape aggregate;
   std::vector<EventAttentionTape> attention;
   FiberParameterBanks fiber;
+  EmissionTape projections;
 };
 // Publish a packed owner vector, including every used alias (HARD Read too).
 // Values are validated FP32 masters; banks retain the declared payload dtype.

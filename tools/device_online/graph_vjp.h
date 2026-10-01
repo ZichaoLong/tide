@@ -19,6 +19,7 @@ struct GraphVjp {
   std::vector<CacheGradient> cache;
   at::Tensor attention,attention_connected;
   at::Tensor fiber,fiber_connected;
+  EmissionVjp emission;
 };
 // Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter

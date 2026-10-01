@@ -1,4 +1,5 @@
 #include "graph_vjp.h"
+#include "emission_vjp.h"
 #include "aggregate_vjp.h"
 #include "event_reverse.h"
 #include "fiber_reverse.h"
@@ -53,7 +54,12 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   const bool fiber=!t.fiber.empty();const auto fiber_offsets=fiber_parameter_offsets(*t.graph,width);
   if(fiber)extra_bytes+=4.L*fiber_offsets.back()+6.L*nodes;
   const bool normalized=t.aggregate.kinds.defined();
-  const bool controlled=t.control.mode!=0;
+  const bool controlled=t.control.mode!=0,affine=t.emission.weights.defined();
+  bool needs_emission=false;
+  for(size_t n=0;n<t.graph->nodes.size();++n)needs_emission|=!t.graph->nodes[n].identity&&t.graph->nodes[n].emission=="slot_affine"
+    &&t.graph->outgoing_ports.offsets[n+1]>t.graph->outgoing_ports.offsets[n];
+  if(needs_emission&&!affine)throw std::invalid_argument("slot-affine graph reverse requires its emission journal");
+  if(affine&&controlled)throw std::invalid_argument("controlled slot-affine reverse is not implemented");
   if(controlled)extra_bytes+=5.L*nodes*width;
   if(normalized)extra_bytes+=5.L*nodes*t.aggregate.slots+8;
   const long double own=extra_bytes+4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
@@ -68,15 +74,18 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   tensor(t.state.values,device,at::kFloat,{capacity,5*width+2});
   // Reserve half for the bounded reverse components. Each rejects before its
   // allocations; no nested component can consume another component's reserve.
-  const int divisor=attention||fiber?24:controlled?12:normalized?10:8;
+  const int divisor=(attention||fiber?24:controlled?12:normalized?10:8)+(affine?4:0);
   auto links=append_reverse_links(p,t,error,budget/divisor);
   if(sharded)state_owner.prepare(p,links);
+  EmissionReverse emission;
+  if(affine)emission=prepare_emission_reverse(p,t,links,error,budget/divisor);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);
   GraphVjp out{links,messages,connected,carry,carry_on,{}, {},at::empty({nodes},booleans),
     at::empty({nodes,width},floats),at::empty({nodes},booleans),at::empty({nodes},floats),at::empty({nodes},booleans),
     at::empty({physical},floats),at::empty({physical},booleans),at::empty({1},longs)};
+  if(affine)out.emission=emission.gradient;
   if(t.full.has_tanh){out.weights=at::empty({nodes,width,width},floats);out.biases=at::empty({nodes,width},floats);p.zero(out.weights);p.zero(out.biases);}
   auto extra_output=[&](const at::Tensor& bank) {
     if(!bank.defined())return at::Tensor();
@@ -153,6 +162,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   meta(0,full_on,full_on,out.full_connected,dummy);payload(0,full_grad,full_grad,full_grad,full_on);
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);meta(1,full_on,full_on,out.full_connected,dummy);
   p.branch(branch,{done,body});p.mark(body);payload(1,full_grad,full_grad,full_grad,full_on);
+  if(affine)append_emission_reverse(p,t,links,emission,messages,connected,range,full_grad,error,chunk,budget/divisor);
   auto full_tape=t.full;full_tape.metadata=stage_meta;full_tape.values=stage_values;full_tape.count=stage_count;
   ControlVjp control;ControlScores scores;
   if(controlled) {
@@ -187,10 +197,11 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
     if(pair.first.defined())p.add(pair.first,pair.second);
   meta(3,full.content_connected,full.comparison_connected,full.parameter_connected,state);p.branch(branch,{head});p.mark(done);
   meta(4,full_on,full_on,out.full_connected,dummy);
+  const auto emission_rows=affine?emission.rows:links.messages,emission_values=affine?t.emission.values:t.full_values;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_scales)(32,stream,
     ptr(links.messages),ptr(links.scale_head),ptr(links.scale_next),ptr(messages),ptr(connected),ptr(aggregate_partials),
-    ptr(t.full_values),ptr(scalar_partials),ptr(error),physical,width),"ordered physical scale adjoints");},
-    {links.messages,links.scale_head,links.scale_next,messages,connected,aggregate_partials,t.full_values,scalar_partials,error});
+    ptr(t.full_values),ptr(scalar_partials),ptr(error),ptr(emission_rows),ptr(emission_values),physical,width,int64_t(affine)),"ordered physical scale adjoints");},
+    {links.messages,links.scale_head,links.scale_next,messages,connected,aggregate_partials,t.full_values,scalar_partials,error,emission_rows,emission_values});
   p.sum(scalar_partials,1,false,out.scales);p.sum(dc,0,false,out.decay);
   auto retention_features=at::empty_like(out.decay);p.sum(rc,0,false,retention_features);p.sum(retention_features,1,false,out.retention);
   return out;

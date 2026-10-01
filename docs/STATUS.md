@@ -73,10 +73,9 @@ runs build-online-consumer-{cpu,npu}-clean01,online-consumer-cpu-clean01,
 online-consumer-mixed-clean01,online-consumer-profile-clean01. All source fe2d886.
 Audit reproduction: python "$TASK/launchers/online_consumer_evidence.py" fe2d8869f2c0bdb5f59da525a7687d91e341fc78.
 
-Next: finish evidence-only commit/push, then implement resident slot-affine reverse,
-canonical emission parameter publication and compact projection owners. Current
-resident reverse is broadcast-only; the real model has independent per-edge D×D
-projections. Existing broadcast training evidence cannot qualify this model.
+Consumer evidence **73966a2** committed/pushed. Implement resident slot-affine reverse,
+canonical emission parameter publication and compact projection owners. The real model has independent per-edge D×D projections. Existing broadcast
+training evidence cannot qualify this model.
 Use tools/device_online/{content_flow,parameter_plan,graph_vjp,packed_emission,
 full_placement} and the existing sharded Full/state reverse seams. Preserve HST/
 SOFTP projected held/fresh semantics and zero delivery scales; do not substitute
@@ -84,7 +83,43 @@ broadcast or approximate parameter counts. Integrate public consumers, total-mem
 admission and safe chunking before staged representative/full-size F6 comparisons.
 Consumer FP16 training/head master updates and multi-card entry remain pending.
 
-Current uncommitted work is consumer evidence and status/roadmap documentation only.
+Active implementation: HARD slot-affine graph VJP, actual unscaled emission journal,
+parameter alias reduction/publication and retained tapes; current projections still
+on coordinator. HST/SOFTP slot-affine remain refused. New device kernels are packed
+projection reverse linking/planning/payload; existing ordered parameter reduction
+is reused. Independent public trajectory checks add --emission for mixed slots,
+zero scales/shared owners/phases and FP16 cast reference. No qualification yet.
+
+HARD emission development: build-emission-reverse-{dev01,dev02} PASSED; dev02
+reuses byte-verified kernels/unchanged host objects and fixes zero-output-slot
+admission. emission-reverse-smoke-dev01 PASSED (2-card FP32 Attention,16 windows/
+4 updates). dev02 matrix PASSED32 trajectories (16 per FP32/FP16),512 windows/
+128 updates; placements PASSED3 trajectories (2→legacy single each dtype,1→2
+FP32),48 windows/12 updates; legacy PASSED12 single FP16 trajectories,192 windows/
+48 updates. No tolerance changes. dev02 separate 2-card FP16 profile PASSED:
+19,022 vector/357 AI_CORE/288 MIX_AIV, no observed AiCPU; actual new emission
+reverse link/payload/plan tasks16/56/42. These are not throughput measurements.
+
+All development jobs now terminal PASSED: isolated Python build and broadcast/cache
+regressions passed; Python public gate emission-reverse-python-dev02 passed10/no
+skips on physical3/13→logical0/1. Three families/both schedules, aliases, zero
+scales, controls refusal, capacity and no-output slots covered. No tolerance change.
+Frozen source sources/emission-reverse-dev02; all records TASK/runs/NAME.
+
+Next: commit implementation, then freeze emission-reverse-clean01 at that exact
+commit. Build standalone emission-reverse-clean01 with --runtime standalone
+--kernel-build emission-reverse-dev01 --reuse-host emission-reverse-dev02;
+Python emission-reverse-python-clean01 with --runtime python --kernel-build
+emission-reverse-dev01 --reuse-host emission-reverse-python-dev02. Use
+launchers/build_emission_reverse.py through freeze_run.py (timeout900,2 workers).
+Then run emission_reverse_gates.py scopes matrix/placements/legacy/regression,
+Python10 public cases (TIDE_BUILD_DIR=placement-npu-python-clean01, resident library
+=new Python build), and separate FP16 profile with --emission --profile-smoke.
+Queue120/run600; two leased cards per sharded gate. Audit and evidence-only commit.
+No immutable emission qualification yet. No new formal throughput job.
+Continue real public consumer integration (head/loss/embedding gradients) and
+compact projection owners/total budget; do not stop at component qualification.
+
 Historical CPU Attention remains deliberately paused. No formal new full-size
 throughput established. Keep focus on complete public flows; affected gates first,
 not repeated full unchanged suites or endless internal component polishing.

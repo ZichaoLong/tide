@@ -5,6 +5,7 @@
 #include "full_vjp.h"
 #include "aggregate_tape.h"
 #include "control_vjp.h"
+#include "emission_tape.h"
 #include "packed_queue.h"
 #include "tide/types.h"
 
@@ -25,6 +26,7 @@ struct ReverseTape {
   ControlTape control;
   std::vector<EventAttentionTape> attention;
   std::vector<FiberAttentionTape> fiber;
+  EmissionTape emission; // Defined for HARD slot-affine graphs; broadcast stays unchanged.
 };
 struct ReverseLinks {
   // Physical rows: all fiber capacity, pending capacity, output capacity.

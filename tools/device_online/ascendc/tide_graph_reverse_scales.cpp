@@ -24,7 +24,7 @@ class ScaleVectors {
 }
 extern "C" __global__ __aicore__ void tide_graph_reverse_scales(GM_ADDR messages,GM_ADDR heads,GM_ADDR next,
     GM_ADDR gradients,GM_ADDR connected,GM_ADDR aggregate_partials,GM_ADDR full_values,GM_ADDR partials,GM_ADDR error,
-    int64_t parameters,int64_t width) {
+    GM_ADDR emission_rows,GM_ADDR emission_values,int64_t parameters,int64_t width,int64_t affine) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)messages);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -39,7 +39,8 @@ extern "C" __global__ __aicore__ void tide_graph_reverse_scales(GM_ADDR messages
       const I row=entry/2;if(!((__gm__ uint8_t*)connected)[row])continue;
       if(entry%2==0)vector.load(part,(__gm__ float*)aggregate_partials,row*width+start,size);
       else {vector.load(part,(__gm__ float*)gradients,row*width+start,size);
-        vector.load(value,(__gm__ float*)full_values,m[row*4+1]*width+start,size);
+        const I value_row=affine?((__gm__ I*)emission_rows)[row]:m[row*4+1];
+        vector.load(value,(__gm__ float*)(affine?emission_values:full_values),value_row*width+start,size);
         AscendC::Mul(part,part,value,size);AscendC::PipeBarrier<PIPE_V>();}
       AscendC::Add(total,total,part,size);AscendC::PipeBarrier<PIPE_V>();
     }

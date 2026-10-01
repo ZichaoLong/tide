@@ -5,8 +5,8 @@ from tidegraph import (Edge, Graph, Node, Region, GraphConfig, GraphRuntime, Ext
                        ExecutionOptions, ExecutionPlacement, ResidentLimits)
 
 
-def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", readout="linear-v1", observe_all=True):
-    nodes = tuple(Node(i // 2, memory="ema", full=full, aggregation=aggregation, readout=readout) for i in range(4))
+def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", readout="linear-v1", observe_all=True, emission="broadcast"):
+    nodes = tuple(Node(i // 2, memory="ema", full=full, aggregation=aggregation, readout=readout, emission=emission) for i in range(4))
     edges = (Edge(0, 2, 1), Edge(0, 2, 1), Edge(1, 2, 1), Edge(1, 3, 1))
     if family != "settle":
         edges += (Edge(0, 3, 2),)
@@ -36,6 +36,13 @@ def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", m
         prefix = "agg_mass_" if aggregation == "weighted_mean" else "agg_logit_"
         for node in r.model.nodes:
             node.extra[prefix + "0"] = r.model.input_scale[0]
+    if read_options.get("emission") == "slot_affine":
+        with torch.no_grad():
+            r.model.edge_scale[0].zero_()
+            r.model.output_scale[0].zero_()
+        # Slot-to-slot and cross-bank aliases are canonical parameter owners.
+        r.model.nodes[2].extra["emit_w_0"] = r.model.nodes[0].extra["emit_w_0"]
+        r.model.nodes[3].extra["emit_b_0"] = r.model.nodes[0].bias
     return r
 
 

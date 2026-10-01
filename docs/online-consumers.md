@@ -74,10 +74,11 @@ it does not claim to serialize an application bundle with head/data cursor.
 
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
 switches `--read`, `--control`, `--selection`, `--events`, `--scoring-dtype` retained.
-The current consumer is single-device. Resident training and sharding for its
-slot-affine emission are not implemented; `--preset resident` fails explicitly.
-Broadcast resident qualifications cannot certify this per-edge model. Completing
-slot-affine reverse/parameter publication/sharding is the next prerequisite to
+The current consumer is single-device. The consumer has not yet integrated resident
+training and sharding; `--preset resident` fails explicitly.
+Broadcast resident qualifications cannot certify this per-edge model. [HARD slot-affine reverse/publication](resident-emission-vjp.md) is being developed
+and tested separately; compact projection owners and consumer integration are
+prerequisites to
 the resident wide comparison, alongside total memory and chunk admission.
 
 ## Commands and records

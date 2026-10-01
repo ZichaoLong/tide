@@ -208,6 +208,9 @@ The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
 and complete-cut training exports for its declared FP32/FP16 payload profiles,
 with FP32 cotangents and optimizer masters.
+[HARD physical-slot projection adjoints](resident-emission-vjp.md) use the actual
+unscaled emission journal, preserving zero delivery-scale and absent-slot
+connectivity. Their qualified scope is separate from compact projection placement.
 The internal [Full-sharded training composition](resident-peers.md#canonical-owners-and-complete-internal-training-steps)
 reduces aliases into one canonical FP32 master owner, reaches an all-device
 finite/representability decision before committing, and publishes rounded values

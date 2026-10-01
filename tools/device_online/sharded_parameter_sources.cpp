@@ -85,9 +85,9 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
           part=slice(values,flags,local_offset,size,local*stride+connection%stride);
         } else {
           const auto values=bank==2?g.decay:bank==3?g.retention:bank==4?g.scales:bank==10?g.aggregate.values:
-            bank==11?g.read:bank==12?g.attention:g.fiber;
+            bank==11?g.read:bank==12?g.attention:bank==13?g.fiber:bank==14?g.emission.weights:g.emission.biases;
           const auto on=bank==2?g.decay_connected:bank==3?g.retention_connected:bank==4?g.scale_connected:
-            bank==10?g.aggregate.connected:bank==11?g.read_connected:bank==12?g.attention_connected:g.fiber_connected;
+            bank==10?g.aggregate.connected:bank==11?g.read_connected:bank==12?g.attention_connected:bank==13?g.fiber_connected:g.emission.connected;
           part=slice(values,on,offset,size,connection);
         }
         out.contributions[i].push_back(std::move(part));

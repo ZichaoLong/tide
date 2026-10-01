@@ -1,4 +1,5 @@
 #include "training_test.h"
+#include "emission_training_fixture.h"
 #include "precision_graph_fixture.h"
 #include "precision_graph_profiles.h"
 #include "retained_cache_fixture.h"
@@ -140,9 +141,9 @@ void trajectory(at::Device device,test::Fixture f,bool prefill,ResidentOptimizer
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    bool cache=false,profile=false;std::vector<char*> forwarded{argv[0]};
+    bool cache=false,profile=false,emission=false;std::vector<char*> forwarded{argv[0]};
     for(int i=1;i<argc;++i) {
-      const std::string arg=argv[i];if(arg=="--cache")cache=true;else if(arg=="--profile-smoke")profile=true;else forwarded.push_back(argv[i]);
+      const std::string arg=argv[i];if(arg=="--cache")cache=true;else if(arg=="--profile-smoke")profile=true;else if(arg=="--emission")emission=true;else forwarded.push_back(argv[i]);
     }
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
@@ -153,10 +154,14 @@ int main(int argc,char** argv) {
     auto run=[&](int p,bool prefill,ResidentOptimizerKind opt,const std::string& mode="hard") {
       try {
         auto f=cache?test::retained_cache_fixture(p%2?0:3,p%2,4,p):test::precision_graph_profile(p%2?0:3,p%2,3,p);
+        if(emission)test::emission_training_fixture(f,p%3);
         trajectory(device,std::move(f),prefill,opt,mode);++cases;
       }catch(...){std::cerr<<"half training cache="<<cache<<" profile="<<p<<" prefill="<<prefill<<" optimizer="<<int(opt)<<" mode="<<mode<<'\n';throw;}
     };
-    if(profile)run(cache?6:16,true,ResidentOptimizerKind::adamw,"softp");
+    if(emission) {
+      if(profile)run(cache?6:0,true,ResidentOptimizerKind::adamw);
+      else for(int p:{0,4,11})for(bool prefill:{false,true})for(auto opt:{ResidentOptimizerKind::sgd,ResidentOptimizerKind::adamw})run(p,prefill,opt);
+    } else if(profile)run(cache?6:16,true,ResidentOptimizerKind::adamw,"softp");
     else if(cache) {
       for(int p=0;p<=6;++p)for(bool prefill:{false,true})for(auto opt:{ResidentOptimizerKind::sgd,ResidentOptimizerKind::adamw})run(p,prefill,opt);
       for(int p:{0,5,6})for(const std::string mode:{"hst","softp"})for(bool prefill:{false,true})run(p,prefill,ResidentOptimizerKind::adamw,mode);

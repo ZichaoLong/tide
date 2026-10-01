@@ -44,12 +44,17 @@ std::map<std::string,ParameterDestination> sharded_parameter_destinations(const 
     state_map[n]={s,int64_t(i)};
   }
   if(!banks.states.empty())for(auto entry:state_map)if(entry.second<0)throw std::invalid_argument("incomplete state publication map");
+  int64_t projection=0;
   for(size_t n=0;n<g.nodes.size();++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
     const auto aggregate=aggregate_kind(node.aggregation);
     if(aggregate>=2)for(int64_t slot=0;slot<g.source_counts[n];++slot)
       add(prefix+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot),b.aggregate.weights[n][slot]);
     if(node.identity)continue;
+    if(node.emission=="slot_affine")for(int64_t slot=0;slot<g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];++slot,++projection) {
+      add(prefix+"extra.emit_w_"+std::to_string(slot),b.projections.weights[projection]);
+      add(prefix+"extra.emit_b_"+std::to_string(slot),b.projections.biases[projection]);
+    }
     const auto [owner,local]=state_map[n];
     add(prefix+"read",banks.states.empty()?b.read[n]:banks.states[owner].read[local]);
     if(node.memory=="ema")add(prefix+"decay",banks.states.empty()?b.decay[n]:banks.states[owner].decay[local]);

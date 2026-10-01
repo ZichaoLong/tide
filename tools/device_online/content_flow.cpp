@@ -14,7 +14,7 @@ namespace tide::device_online {
 namespace {
 void validate_reverse_modules(const Graph& graph) {
   for(const auto& n:graph.nodes)
-    if((!n.identity&&n.emission!="broadcast")
+    if((!n.identity&&n.emission!="broadcast"&&n.emission!="slot_affine")
         ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"&&!is_fiber_attention_profile(n.memory)))
       throw std::invalid_argument("graph reverse module contract unavailable");
 }
@@ -330,6 +330,8 @@ ReverseTape ContentFlow::Impl::reverse_view(const StateTape& state,const FullTap
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
+  if(s.emission->weights().defined())tape.emission={s.emission_trace->meta,s.emission_trace->values,s.emission_trace->count,
+    s.emission->weights(),s.emission->biases()};
   if(s.aggregate)tape.aggregate=s.aggregate->tape();
   if(s.event_attention)tape.attention=s.event_attention->tape();
   if(s.attention)tape.fiber=s.attention->tape();
@@ -346,7 +348,8 @@ ParameterBanks ContentFlow::parameter_banks() const {
           s.profile.read,s.profile.scales,s.emission->scales(),full.extra,
           s.aggregate?s.aggregate->tape():AggregateTape{},
           s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
-          s.attention?s.attention->banks():FiberParameterBanks{}};
+          s.attention?s.attention->banks():FiberParameterBanks{},
+          {{},{},{},s.emission->weights(),s.emission->biases()}};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");
@@ -359,7 +362,8 @@ ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {
   validate_reverse_modules(s.profile.graph);
   ParameterBanks b{&s.profile.graph,{},{},s.profile.decay,s.profile.retention,s.profile.read,s.profile.scales,s.emission->scales(),{},
     s.aggregate?s.aggregate->tape():AggregateTape{},s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
-    s.attention?s.attention->banks():FiberParameterBanks{}};
+    s.attention?s.attention->banks():FiberParameterBanks{},
+    {{},{},{},s.emission->weights(),s.emission->biases()}};
   if(s.sharded_state){b.decay=at::Tensor();b.retention=at::Tensor();b.read=at::Tensor();}
   return {std::move(b),s.sharded_full->tapes(s.boundary.batch_size,s.profile.width),
     s.sharded_state?s.sharded_state->parameter_banks():std::vector<StateOwnerBanks>{}};

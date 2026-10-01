@@ -14,7 +14,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   std::map<std::string,Ref> by_name;
   const auto attention=event_parameter_offsets(g,width);
   const auto fiber=fiber_parameter_offsets(g,width);
-  bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;const auto slots=aggregate_slots(g);
+  bool tanh=false,lh=false,normalized=false;int64_t swiglu=0,emission=0;const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
     if(controls&&!node.identity&&node.readout=="linear-v1")by_name[prefix+"read"]={11,n,n*width,{width}};
@@ -57,7 +57,13 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
         by_name[prefix+"extra.fiber_pool"]={13,n*6+5,at+4*width*width+4*width+1,{g.source_counts[n]}};
     }
     else if(!node.identity&&node.memory!="identity")throw std::invalid_argument("parameter state VJP contract unavailable");
-    if(!node.identity&&node.emission!="broadcast")throw std::invalid_argument("parameter graph VJP contract unavailable");
+    if(!node.identity&&node.emission=="slot_affine") {
+      if(controls)throw std::invalid_argument("controlled slot-affine parameter VJP unavailable");
+      for(int64_t slot=0;slot<g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];++slot,++emission) {
+        by_name[prefix+"extra.emit_w_"+std::to_string(slot)]={14,emission,emission*width*width,{width,width}};
+        by_name[prefix+"extra.emit_b_"+std::to_string(slot)]={15,emission,emission*width,{width}};
+      }
+    } else if(!node.identity&&node.emission!="broadcast")throw std::invalid_argument("parameter graph VJP contract unavailable");
   }
   for(int64_t i=0;i<inputs;++i)by_name["input_scale."+std::to_string(i)]={4,i,i,{}};
   for(int64_t i=0;i<edges;++i)by_name["agg_scale."+std::to_string(i)]={4,inputs+i,inputs+i,{}};
@@ -66,7 +72,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
     by_name[(binding.kind?"edge_scale.":"output_scale.")+std::to_string(binding.id)]={4,i,i,{}};
   }
   ParameterPlan out;out.owners=registry.owners();out.has_tanh=tanh;out.has_lh=lh;out.swiglu_count=swiglu;
-  out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();out.fiber_elements=fiber.back();
+  out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();out.fiber_elements=fiber.back();out.emission_rows=emission;
   std::vector<int64_t> owners,refs,tiles{0};int64_t total=0;
   for(const auto& owner:out.owners) {
     if(owner.value.scalar_type()!=at::kFloat&&owner.value.scalar_type()!=at::kHalf)

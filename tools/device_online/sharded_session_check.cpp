@@ -1,4 +1,5 @@
 #include "training_test.h"
+#include "emission_training_fixture.h"
 #include "precision_graph_fixture.h"
 #include "precision_graph_profiles.h"
 #include "retained_cache_fixture.h"
@@ -45,9 +46,10 @@ ResidentTrainingLimits limits(ResidentPlacement placement,bool prefill,bool cach
   return l;
 }
 void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtype,int profile,int cache,bool prefill,
-                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners) {
+                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners,bool emission) {
   at::NoGradGuard guard;const auto d=placement.devices[0];const bool half=dtype==at::kHalf;
   auto f=cache<0?test::precision_graph_profile(profile%2?0:3,profile%2,4,profile):test::retained_cache_fixture(0,1,4,cache);
+  if(emission)test::emission_training_fixture(f,profile%3);
   if(explicit_owners)for(size_t n=0;n<f.graph.nodes.size();++n) {
     placement.full_owners.push_back(n%placement.devices.size());
     placement.state_owners.push_back((n+1)%placement.devices.size());
@@ -122,10 +124,10 @@ void refusal(ResidentPlacement placement,at::ScalarType dtype) {
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    int count=2,resume=2;bool smoke=false,explicit_owners=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
+    int count=2,resume=2;bool smoke=false,explicit_owners=false,emission=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
     for(int i=1;i<argc;++i){std::string a=argv[i];if(a.rfind("--devices=",0)==0)count=std::stoi(a.substr(10));
       else if(a.rfind("--resume-devices=",0)==0)resume=std::stoi(a.substr(17));else if(a.rfind("--placement=",0)==0)policy=a.substr(12);
-      else if(a=="--profile-smoke")smoke=true;else if(a=="--explicit-owners")explicit_owners=true;else forwarded.push_back(argv[i]);}
+      else if(a=="--profile-smoke")smoke=true;else if(a=="--explicit-owners")explicit_owners=true;else if(a=="--emission")emission=true;else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4||resume<0||resume>4)throw std::invalid_argument("explicit NPU FP32/FP16 and 1..4 owners required; resume=0 tests legacy single owner");
@@ -133,11 +135,17 @@ int main(int argc,char** argv) {
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);
     int cases=0;auto run=[&](int profile,int cache,bool prefill,ResidentOptimizerKind kind,const std::string& emit) {
-      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners);++cases;
+      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission);++cases;
         std::cout<<"public-sharded trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<std::endl;}
       catch(...){std::cerr<<"public-sharded failed profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<'\n';throw;}
     };
-    if(smoke)run(0,6,true,ResidentOptimizerKind::adamw,"softp");
+    if(emission) {
+      if(smoke)run(0,6,true,ResidentOptimizerKind::adamw,"hard");
+      else {
+        for(int profile:{0,4,11})for(bool prefill:{false,true})for(auto kind:{ResidentOptimizerKind::sgd,ResidentOptimizerKind::adamw})run(profile,-1,prefill,kind,"hard");
+        for(int cache:{0,6})for(bool prefill:{false,true})run(0,cache,prefill,ResidentOptimizerKind::adamw,"hard");
+      }
+    } else if(smoke)run(0,6,true,ResidentOptimizerKind::adamw,"softp");
     else {
       refusal(placement,args.dtype);
       for(int profile:{0,4,11,16})for(bool prefill:{false,true})for(auto kind:{ResidentOptimizerKind::sgd,ResidentOptimizerKind::adamw})run(profile,-1,prefill,kind,"hard");
@@ -145,7 +153,7 @@ int main(int argc,char** argv) {
       for(auto emit:{"hst","softp"}){run(16,-1,true,ResidentOptimizerKind::adamw,emit);run(0,6,true,ResidentOptimizerKind::adamw,emit);}
     }
     std::cout<<"resident-sharded-session: passed trajectories="<<cases<<" windows="<<cases*16<<" updates="<<cases*4
-      <<" devices="<<count<<" resume_devices="<<resume<<" CPU=FP32_FP64 payload="<<args.dtype<<" public_api=true\n";
+      <<" devices="<<count<<" resume_devices="<<resume<<" CPU=FP32_FP64 payload="<<args.dtype<<" emission="<<emission<<" public_api=true\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

@@ -89,3 +89,7 @@ now compose with this component under their own qualification scopes. Remaining
 training work includes the remaining half graph modules, public FP16 training and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.
+
+[Physical-slot HARD adjoints](resident-emission-vjp.md) extend this path with
+slot-affine projection gradients, unscaled delivery values and parameter publication.
+Controlled slot-affine and compact projection placement remain separate work.

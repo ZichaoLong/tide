@@ -32,7 +32,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   buffer(values,device,at::kFloat,registry.values.sizes());buffer(error,device,at::kInt,{1});
   buffer(b.decay,device,dtype,{nodes,width});buffer(b.retention,device,dtype,{nodes});buffer(b.read,device,dtype,{nodes,width});
   buffer(b.sources,device,dtype,{std::max<int64_t>(1,inputs+edges)});buffer(b.emission,device,dtype,{edges+ports+1,1});
-  std::map<std::string,Ref> refs;bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;
+  std::map<std::string,Ref> refs;bool tanh=false,lh=false,normalized=false;int64_t swiglu=0,emission=0;
   const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto name="nodes."+std::to_string(n)+".";
@@ -40,11 +40,15 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
     if(aggregate>=2)for(int64_t slot=0;slot<g.source_counts[n];++slot)
       refs[name+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot)]={12,n*slots+slot,{}};
     const auto kind=node.identity?0:lh_full_kind(node.full);
-    if(!node.identity&&(node.emission!="broadcast"||
+    if(!node.identity&&((node.emission!="broadcast"&&node.emission!="slot_affine")||
         (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"&&node.memory!="attention"&&!is_fiber_attention_profile(node.memory))))
       throw std::invalid_argument("parameter publication module contract unavailable");
     if(node.identity)continue;
     refs[name+"read"]={4,n*width,{width}};
+    if(node.emission=="slot_affine")for(int64_t slot=0;slot<g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];++slot,++emission) {
+      refs[name+"extra.emit_w_"+std::to_string(slot)]={19,emission*width*width,{width,width}};
+      refs[name+"extra.emit_b_"+std::to_string(slot)]={20,emission*width,{width}};
+    }
     if(node.full=="tanh"){tanh=true;refs[name+"weight"]={0,n*width*width,{width,width}};refs[name+"bias"]={1,n*width,{width}};}
     if(kind) {
       lh=true;const auto norm=(kind-1)%3;
@@ -59,6 +63,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
     if(node.memory=="ema")refs[name+"decay"]={2,n*width,{width}};
     if(node.memory=="lh-add-repeat-v1")refs[name+"extra.add_retention"]={3,n,{}};
   }
+  if(emission){buffer(b.projections.weights,device,dtype,{emission+1,width,width});buffer(b.projections.biases,device,dtype,{emission+1,width});}
   if(tanh){buffer(b.weights,device,dtype,{nodes+1,width,width});buffer(b.biases,device,dtype,{nodes+1,width});}
   if(lh){buffer(b.extra.lh_weights,device,dtype,{nodes+1,width});buffer(b.extra.lh_biases,device,dtype,{nodes+1,width});}
   if(swiglu){buffer(b.extra.gate,device,dtype,{swiglu+1,width,2*width});buffer(b.extra.up,device,dtype,{swiglu+1,width,2*width});
@@ -114,10 +119,11 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   const auto fq=fibers?b.fiber.qkv:dummy,fqb=fibers?b.fiber.qkv_bias:dummy;
   const auto fo=fibers?b.fiber.projection:dummy,fob=fibers?b.fiber.projection_bias:dummy;
   const auto fd=fibers?b.fiber.decay:dummy,fp=learned_pool?b.fiber.pool:dummy;
+  const auto ew=emission?b.projections.weights:dummy,eb=emission?b.projections.biases:dummy;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
     ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),
-    ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(error),count,tasks,fp16),
-    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,fq,fqb,fo,fob,fd,fp,error});
+    ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(ew),ptr(eb),ptr(error),count,tasks,fp16),
+    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,fq,fqb,fo,fob,fd,fp,ew,eb,error});
   if(!b.attention.empty())append_event_publish(p,b.attention,registry,values,error,budget/2);
 }
 } // namespace tide::device_online
