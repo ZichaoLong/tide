@@ -123,7 +123,7 @@ an FP32-widened journal. Tanh recomputation runs matrix product, bias addition a
 tanh in payload precision, preserving each rounding point. Only saved operands
 and activation widen for FP32 adjoints/owner reduction. Half scratch is included
 in row admission. None/zero, sentinel sanitization and device chunk progression
-retain the same contracts; this does not enable the remaining half LH/SwiGLU,
+retain the same contracts; this does not enable the remaining half
 whole-graph reverse or public training.
 
 The independent CPU oracle constructs quantized matmul/add/tanh/residual forward
@@ -134,3 +134,29 @@ from whole-forward FP32 recomputation and pass strict FP32 adjoint checks.
 A32768 residual also prevents recovering the activation by subtraction. Actual
 half forward journals cover streaming and greedy. Qualification remains separate
 from this contract and from training/throughput claims.
+
+## FP16 LH and SwiGLU components
+
+The extended Full components accept half parameter banks and exact widened
+half comparison journals. They use FP32 cotangents, local adjoints and ordered
+owner reduction. Recompute only the local saved forward values in payload
+precision: LH activation and unit-affine normalization, and SwiGLU gate/up
+products, SiLU and its product with the up projection. Additional half scratch
+is included in the existing bounded tensor budget.
+
+LH affine-weight gradients use the actual rounded normalized output. The norm
+Jacobian uses the unrounded normalized value and FP32 statistics of half activation.
+CANN half LayerNorm can return half-rounded mean/rstd even in FP32 buffers;
+the adjoint computes separate FP32 LayerNorm statistics instead of using those
+rounded values. Its weight VJP still uses the real half normalization output.
+Using the rounded output for this Jacobian would introduce a different gradient,
+especially when its terms nearly cancel. SiLU differentiates its saved half
+input with FP32 arithmetic. Output casts have the ordinary identity VJP.
+
+Independent CPU autograd mirrors these forward rounding boundaries with FP32
+or FP64 adjoints. The ordinary half component budget is rtol2e-3/atol2e-5;
+existing FP32/FP64 comparisons remain1e-5/1e-6. Three dedicated half fixtures
+use strict1e-5/1e-6: RMSNorm/LayerNorm cancellation and a SwiGLU saved-product
+case. Each must distinguish incorrect full-FP32 recomputation. All components
+retain absent/connected-zero/poison checks and19/7/0-row replay. This local scope
+does not enable complete half graph reverse, retained training or public resume.

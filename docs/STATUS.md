@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T05:41:00.069455+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T06:37:31.108690+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -71,29 +71,39 @@ The older Full trajectory's conditioned-control policy remains separate.
 
 ## Active work and next action
 
-Uncommitted next increment: normalized Aggregate FP16 local adjoint. Host
-validates half physical source scales; kernel reconstructs the source product
-with half rounding before coefficient differentiation. Normalization and
-message/scale/coefficient adjoints remain FP32. New39-case/117-replay half cell
-uses non-dyadic payload fixtures and independent quantized-forward CPU FP32/FP64
-references at unchanged1e-5/1e-6. Whole-graph reverse remains guarded.
+Ready-to-commit increment: FP16 normalized Aggregate + LH/SwiGLU local adjoints.
+Development build-low-precision-extended-vjp-dev04 and component gate
+low-precision-extended-vjp-dev04 PASSED/exit0. Both dtypes: Aggregate39 cases/
+117 replays, extended Full90 cases/270 replays; half adds three strict anchors.
+All candidates accumulate FP32 adjoints, preserve actual half forward operands,
+None/zero/poison and19/7/0-row replay. Graph/public FP16 training remains guarded.
+FP32 event/fiber training regression low-precision-extended-vjp-regression-dev02
+PASSED/exit0 (unchanged FP32 arithmetic). No unchanged portable-core full gate.
 
-Active unit: tide-execution-flows-build-low-precision-aggregate-vjp-dev01.service.
-Snapshot/build: TASK/{sources,builds}/low-precision-aggregate-vjp-dev01.
-Launcher: TASK/launchers/build_precision_aggregate_vjp.py,900s/two workers.
-One payload kernel/host/checker rebuilt; remaining terminal basic-VJP dependencies
-byte-verified. Inspect TASK/runs/build-low-precision-aggregate-vjp-dev01/{status.json,task.log}.
-On success run verify_device_control.py --checks aggregate-vjp and separately
---checks event-training fiber-training, frozen snapshot/build,max120s lease wait,
-600s execution. Preserve failures,do not loosen established FP32 comparisons.
+Preserve failed build-low-precision-aggregate-vjp-dev01 (name collision),
+build-low-precision-extended-vjp-dev01 (test helper static linkage), and component
+low-precision-extended-vjp-dev02/dev03. The last two reproduced half LayerNorm
+mean/rstd rounded to half even inside FP32 buffers: rstd32.09375 versus32.0815,
+input-gradient max error8.75e-4. Fixed by computing Jacobian statistics in FP32
+on actual half activation while retaining actual half normalized output for
+weight VJP. Existing tolerances remain unchanged; diagnostic raw records retained.
 
-Commit the completed basic-VJP evidence separately (only docs) and push.
-Continue Aggregate development,then LH/SwiGLU,attention/control/graph adjoints,
-retained windows,master checkpoint/public FP16 training. Do not just remove guards
-or recompute an entire half forward in FP32. Use actual rounded saved operands.
-Then peer progression/communication/training,five-preset screening,representative/
-full-size CPU/mixed/resident performance and version/migration/CUDA evidence.
-F1–F7 remain incomplete. Authorization active; no requested pause.
+Next: commit/push this implementation, freeze that exact clean commit as
+low-precision-extended-vjp-clean01. Bounded standalone build via
+TASK/launchers/build_precision_extended_vjp.py NAME (900s); then Python-owned
+build via build_precision_extended_vjp_python.py NAME (900s). Rebuild affected
+host/checker/fixture objects, byte-verify terminal dependencies. No vendor full
+rebuild. Device checks: aggregate-vjp extra-full-vjp, separately event-training
+fiber-training; Python affected five modules (same215 cases); independent half
+aggregate-vjp and extra-full-vjp profiles. All device leases max120s and task
+limits600s. Audit TASK/launchers/precision_extended_vjp_evidence.py FULL_HASH,
+then record evidence in a separate commit. No new throughput claim.
+
+After qualification: attention/control/graph half adjoints, retained windows,
+master checkpoint/public FP16 training; then peer progression/communication/
+training, five-preset screening, representative/full-size CPU/mixed/resident
+performance and version/migration/CUDA evidence. F1–F7 incomplete. Authorization
+remains active; continue after commits without asking to resume. No subagents.
 
 ## Environment and bounded execution
 
@@ -122,4 +132,3 @@ outweighs running status. Do not blindly resume/stop. It retains host memory and
 TASK/timing.lock. Resolve interrupted timing before formal throughput.
 Historical Add CPU78.793172/NPU4 47.932888ms/token is throughput1.6438x faster;
 it does not certify resident execution. No complete CPU Attention training ratio.
-

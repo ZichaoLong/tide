@@ -2,7 +2,7 @@
 extern "C" __global__ __aicore__ void tide_aggregate_vjp_payload(GM_ADDR ids,GM_ADDR message_ids,GM_ADDR links,
     GM_ADDR source_scales,GM_ADDR fiber_values,GM_ADDR content_gradient,GM_ADDR packed_gradient,GM_ADDR weighted,
     GM_ADDR probabilities,GM_ADDR messages,GM_ADDR scale_partials,GM_ADDR error,
-    int64_t chunk,int64_t slots,int64_t width,int64_t mode) {
+    int64_t chunk,int64_t slots,int64_t width,int64_t mode,int64_t fp16) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);using I=int64_t;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)ids);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -19,13 +19,23 @@ extern "C" __global__ __aicore__ void tide_aggregate_vjp_payload(GM_ADDR ids,GM_
         v.save(x,(__gm__ float*)packed_gradient,row*width+start,size);
       }
       if(message>=0){v.load(x,(__gm__ float*)fiber_values,message*width+start,size);
-        const float scale=scales[link[message*4+2]];
-        AscendC::Muls(x,x,scale,size);AscendC::PipeBarrier<PIPE_V>();}
+        const auto index=link[message*4+2];
+        const float scale=fp16?float(((__gm__ half*)source_scales)[index]):scales[index];
+        AscendC::Muls(x,x,scale,size);AscendC::PipeBarrier<PIPE_V>();
+        if(fp16) {
+          // Source transport rounds before FP32 coefficient normalization.
+          // The coefficient adjoint must see that actual half weighted value.
+          auto rounded=y.ReinterpretCast<half>();
+          AscendC::Cast(rounded,x,AscendC::RoundMode::CAST_RINT,size);AscendC::PipeBarrier<PIPE_V>();
+          AscendC::Cast(x,rounded,AscendC::RoundMode::CAST_NONE,size);AscendC::PipeBarrier<PIPE_V>();
+        }}
       else {AscendC::Duplicate(x,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
       v.save(x,(__gm__ float*)weighted,fiber*width+start,size);
     } else if(message>=0) {
       v.load(x,(__gm__ float*)packed_gradient,row*width+start,size);
-      const float probability=((__gm__ float*)probabilities)[fiber],scale=scales[link[message*4+2]];
+      const auto index=link[message*4+2];
+      const float probability=((__gm__ float*)probabilities)[fiber];
+      const float scale=fp16?float(((__gm__ half*)source_scales)[index]):scales[index];
       AscendC::Muls(x,x,probability,size);AscendC::PipeBarrier<PIPE_V>();
       AscendC::Muls(y,x,scale,size);AscendC::PipeBarrier<PIPE_V>();
       v.save(y,(__gm__ float*)messages,message*width+start,size);

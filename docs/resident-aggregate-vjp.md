@@ -58,3 +58,20 @@ The training gate uses explicit AdamW epsilon1e-5, retaining the public default
 and ordinary comparison tolerances. It does not claim arbitrary optimizer
 trajectory agreement, attention adjoints, HST/SOFTP, FP16, peer progression or
 throughput. Those remain separate parts of the execution contract.
+
+
+## FP16 payload component
+
+The component accepts FP16 physical source scales and exact widened half message
+journals. Coefficient banks contain payload-rounded FP32 values, as in the
+forward. The coefficient adjoint reconstructs the source-scale product with its
+actual half rounding before applying the FP32 normalization derivative. Message,
+physical-scale and coefficient adjoints accumulate in FP32. Missing domains and
+present-zero/zero-scale messages preserve their distinct connection bits.
+
+The half checker uses public non-dyadic payload fixtures and independent CPU
+FP32/FP64 autograd with explicit half source-product rounding and an identity
+cast adjoint. Normalization and derivative comparisons retain the existing
+1e-5/1e-6 tolerances. This is a local component scope; it does not remove the
+FP16 whole-graph reverse or public training guard. Qualification is recorded
+separately in STATUS/evidence.

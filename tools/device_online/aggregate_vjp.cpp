@@ -26,6 +26,9 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
       ||!links.messages.defined()||links.messages.dim()!=2)
     throw std::invalid_argument("Aggregate VJP requires actual no-grad device tape");
   const auto device=t.fiber_values.device();const int64_t capacity=t.state.metadata.size(0),nodes=t.graph->nodes.size(),slots=a.slots,d=t.full.width;
+  const auto payload_dtype=t.source_scales.scalar_type();const int64_t fp16=payload_dtype==at::kHalf;
+  if(payload_dtype!=at::kFloat&&payload_dtype!=at::kHalf)
+    throw std::invalid_argument("Aggregate VJP requires FP32/FP16 forward scales");
   const long double row_bytes=32.L*slots*d+96.L*slots+16.L*d+256.L;
   if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||nodes<1||d<1||slots<1||rows<1||budget<row_bytes+256)
     throw std::invalid_argument("one Aggregate VJP row exceeds tensor budget");
@@ -37,7 +40,7 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
   tensor(error,device,at::kInt,{1});tensor(scale_partials,device,at::kFloat,{t.fiber_values.size(0),d});
   tensor(messages,device,at::kFloat,{links.messages.size(0),d});
   tensor(t.fiber_values,device,at::kFloat,{t.fiber_values.size(0),d});
-  tensor(t.sources,device,at::kLong,{t.sources.size(0),2});tensor(t.source_scales,device,at::kFloat,{t.sources.size(0)});
+  tensor(t.sources,device,at::kLong,{t.sources.size(0),2});tensor(t.source_scales,device,payload_dtype,{t.sources.size(0)});
   tensor(links.messages,device,at::kLong,{links.messages.size(0),4});
   tensor(links.consumer_head,device,at::kLong,{capacity});
   tensor(links.consumer_next,device,at::kLong,{t.fiber_values.size(0)});
@@ -54,7 +57,7 @@ void append_aggregate_vjp(CannProgram& p,const ReverseTape& t,const ReverseLinks
   auto payload=[&](int64_t mode) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_vjp_payload)(32,stream,
       ptr(ids),ptr(message_ids),ptr(links.messages),ptr(t.source_scales),ptr(t.fiber_values),ptr(gradient),ptr(packed),ptr(weighted),
-      ptr(prob),ptr(messages),ptr(scale_partials),ptr(error),chunk,slots,d,mode),"packed Aggregate VJP payload");},
+      ptr(prob),ptr(messages),ptr(scale_partials),ptr(error),chunk,slots,d,mode,fp16),"packed Aggregate VJP payload");},
       {ids,message_ids,links.messages,t.source_scales,t.fiber_values,gradient,packed,weighted,prob,messages,scale_partials,error});
   };
   for(auto kind:groups) {

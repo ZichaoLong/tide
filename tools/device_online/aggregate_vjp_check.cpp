@@ -18,7 +18,7 @@ struct Fixture {
   std::vector<std::vector<Index>> fibers;
   std::vector<Index> source;
 };
-Fixture fixture(Index d,Index slots,int kind,int mode) {
+Fixture fixture(Index d,Index slots,int kind,int mode,at::ScalarType payload) {
   const float nan=std::numeric_limits<float>::quiet_NaN();Fixture f;
   f.graph.nodes={{0},{0},{0}};f.graph.regions={{3}};
   for(Index n=0;n<3;++n){f.graph.nodes[n].aggregation=names[kind];for(Index s=0;s<slots;++s)f.graph.inputs.push_back(n);}
@@ -58,10 +58,18 @@ Fixture fixture(Index d,Index slots,int kind,int mode) {
     }
   }
   if(kind==2||kind==3)for(Index n=0;n<2;++n)for(Index slot=2;slot<slots-1;++slot)t.aggregate.weights[n][slot].fill_(nan);
+  if(payload==at::kHalf) {
+    // Non-dyadic values exercise the source-product rounding boundary; retain
+    // present-zero messages and zero scales as separate connected cases.
+    t.fiber_values=at::where(t.fiber_values.ne(0),t.fiber_values+.00091f,t.fiber_values).to(at::kHalf).to(at::kFloat);
+    t.source_scales=at::where(t.source_scales.ne(0),t.source_scales+.03113f,t.source_scales).to(at::kHalf);
+    t.aggregate.weights=t.aggregate.weights.to(at::kHalf).to(at::kFloat);
+    f.gradient=f.gradient*256.f;
+  }
   f.connected[capacity-1].fill_(true); // Stale tail must never become a row.
   return f;
 }
-std::vector<Tensor> reference(const Fixture& f,at::ScalarType dtype) {
+std::vector<Tensor> reference(const Fixture& f,at::ScalarType dtype,bool quantized=true) {
   at::AutoGradMode enabled(true);const auto& t=f.tape;const auto slots=t.aggregate.slots;
   std::vector<Tensor> x,scales,weights,leaves,terms;
   auto leaf=[&](const Tensor& v){return v.detach().to(dtype).clone().set_requires_grad(true);};
@@ -80,7 +88,10 @@ std::vector<Tensor> reference(const Fixture& f,at::ScalarType dtype) {
       for(size_t i=0;i<domain.size();++i)coefficient[domain[i]]=p[i];
     }
     std::vector<Tensor> contributions;for(size_t i=0;i<f.fibers[row].size();++i) {
-      const auto m=f.fibers[row][i];contributions.push_back(x[m]*scales[f.source[m]]*coefficient[present[i]]);
+      const auto m=f.fibers[row][i];auto weighted=x[m]*scales[f.source[m]];
+      if(quantized&&t.source_scales.scalar_type()==at::kHalf)
+        weighted=weighted+(weighted.detach().to(at::kHalf).to(dtype)-weighted.detach());
+      contributions.push_back(weighted*coefficient[present[i]]);
     }
     terms.push_back((at::stack(contributions).sum(0)*f.gradient[row].to(dtype)).sum());
   }
@@ -88,8 +99,13 @@ std::vector<Tensor> reference(const Fixture& f,at::ScalarType dtype) {
   if(terms.empty())return std::vector<Tensor>(leaves.size());
   return torch::autograd::grad({at::stack(terms).sum()},leaves,{},false,false,true);
 }
-void run(at::Device device,Index d,Index slots,int kind,int mode) {
-  at::NoGradGuard guard;auto f=fixture(d,slots,kind,mode);f.tape.graph=&f.graph;
+void run(at::Device device,Index d,Index slots,int kind,int mode,at::ScalarType payload) {
+  at::NoGradGuard guard;auto f=fixture(d,slots,kind,mode,payload);f.tape.graph=&f.graph;
+  if(payload==at::kHalf&&d==257&&kind==2&&mode==1) {
+    auto exact=reference(f,at::kFloat),wrong=reference(f,at::kFloat,false);bool different=false;
+    for(size_t i=0;i<exact.size();++i)if(exact[i].defined()&&!at::allclose(exact[i],wrong[i],1e-5,1e-6))different=true;
+    if(!different)throw std::runtime_error("Aggregate half fixture does not distinguish unrounded source products");
+  }
   auto t=f.tape;auto links=f.links;
   for(auto* x:{&t.state.metadata,&t.fiber_values,&t.sources,&t.source_scales,&t.aggregate.kinds,&t.aggregate.lengths,&t.aggregate.weights,
       &links.messages,&links.consumer_head,&links.consumer_next})*x=x->to(device);
@@ -135,12 +151,13 @@ int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("Aggregate VJP requires explicit NPU FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("Aggregate VJP requires explicit NPU FP32/FP16");
+    args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     for(int kind=1;kind<5;++kind)for(Index d:{1,7,257})for(int mode:{0,1,2}) {
-      try{run(device,d,5,kind,mode);++cases;}catch(...){std::cerr<<"Aggregate kind="<<kind<<" width="<<d<<" mode="<<mode<<'\n';throw;}
+      try{run(device,d,5,kind,mode,args.dtype);++cases;}catch(...){std::cerr<<"Aggregate kind="<<kind<<" width="<<d<<" mode="<<mode<<'\n';throw;}
     }
-    for(int kind:{2,3,4}){run(device,7,257,kind,1);++cases;}
+    for(int kind:{2,3,4}){run(device,7,257,kind,1,args.dtype);++cases;}
     std::cout<<"device-aggregate-vjp: passed cases="<<cases<<" replays="<<cases*3<<" CPU=FP32_FP64 None_zero=true absent_domains=true\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}

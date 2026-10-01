@@ -79,7 +79,8 @@ at the explicit CPU export. Scores stay FP32; exported Region controls round to
 the public payload dtype after FP32 softmax. FP16 HST/SOFTP and complete resident
 training remain unavailable and fail explicitly. Internal
 [FP32-master publication](resident-optimizer.md) has separate component
-qualification. The [state](resident-state-vjp.md) and identity/tanh
+qualification. The [state](resident-state-vjp.md), normalized
+[Aggregate](resident-aggregate-vjp.md) and identity/tanh/LH/SwiGLU
 [Full](resident-full-vjp.md) components preserve actual half forward rounding
 while accumulating adjoints in FP32; their tests use the corresponding quantized
 forward/FP32-adjoint reference. This is not a claim of bitwise equivalence to

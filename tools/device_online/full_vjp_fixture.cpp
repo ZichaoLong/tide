@@ -78,7 +78,7 @@ std::vector<at::Tensor> full_reference(const FullFixture& f,at::ScalarType dtype
   if(loss.empty())return std::vector<at::Tensor>(leaves.size());
   return torch::autograd::grad({at::stack(loss).sum()},leaves,{},false,false,true);
 }
-static void full_same_precision(const at::Tensor& value,const at::Tensor& connected,const at::Tensor& expected,const char* field,bool half) {
+void full_same_precision(const at::Tensor& value,const at::Tensor& connected,const at::Tensor& expected,const char* field,bool half) {
   if(connected.item<bool>()!=expected.defined())throw std::runtime_error(std::string(field)+" connection mismatch");
   if(expected.defined()) {
     if(!at::allclose(value,expected.to(at::kFloat),half?2e-3:1e-5,half?2e-5:1e-6)) {

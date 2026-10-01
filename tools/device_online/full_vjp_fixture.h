@@ -12,5 +12,6 @@ FullFixture full_fixture(int64_t width,int mode,bool tanh);
 // content rows, comparison rows, weight owners and bias owners in that order.
 std::vector<at::Tensor> full_reference(const FullFixture&,at::ScalarType);
 void full_same(const at::Tensor&,const at::Tensor& connected,const at::Tensor& expected,const char* field);
+void full_same_precision(const at::Tensor&,const at::Tensor& connected,const at::Tensor& expected,const char* field,bool half);
 void full_compare(const FullFixture&,const FullVjp&,at::ScalarType);
 } // namespace tide::device_online::test

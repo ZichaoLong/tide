@@ -204,7 +204,7 @@ not broaden eager training evidence into resident backward or optimizer support.
 The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
 and complete-cut training exports for its declared FP32 adjoint profile.
-Internal FP16 state and identity/tanh Full adjoints separately retain the actual
+Internal FP16 state, normalized Aggregate and identity/tanh/LH/SwiGLU Full adjoints retain the actual
 quantized forward operands/results and use FP32 cotangents/accumulation. Their
 cast VJP is the ordinary first-order identity, not a derivative of rounding's
 staircase. [Precision scopes](precision.md) distinguish those components and

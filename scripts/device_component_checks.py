@@ -103,11 +103,11 @@ CHECKS["full-training"] = ("tide-resident-full-training-check", ("float32",))
 MARKERS["full-training"] = "resident-full-training: passed"
 KERNELS["full-training"] = "tide_extra_full"
 
-CHECKS["extra-full-vjp"] = ("tide-device-extra-full-vjp-check", ("float32",))
+CHECKS["extra-full-vjp"] = ("tide-device-extra-full-vjp-check", ("float32", "float16"))
 MARKERS["extra-full-vjp"] = "device-extra-full-vjp: passed"
 KERNELS["extra-full-vjp"] = "tide_extra_full"
 
-CHECKS["aggregate-vjp"] = ("tide-device-aggregate-vjp-check", ("float32",))
+CHECKS["aggregate-vjp"] = ("tide-device-aggregate-vjp-check", ("float32", "float16"))
 MARKERS["aggregate-vjp"] = "device-aggregate-vjp: passed"
 KERNELS["aggregate-vjp"] = "tide_aggregate_vjp"
 
