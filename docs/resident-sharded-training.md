@@ -3,8 +3,9 @@
 This extends `tide::ResidentTrainingSession` and its Python client. It reuses the
 online scheduler, compact state/Full owners, retained VJP and canonical atomic
 optimizer described in [resident-training.md](resident-training.md) and
-[execution-flows.md](execution-flows.md). Development implementation is not yet
-immutable-source qualification; earlier internal tests do not certify this API.
+[execution-flows.md](execution-flows.md). Public C++/Python-owned FP32/FP16 training and portable repartition are qualified
+on clean source 0d7c45e ([evidence](evidence/public-sharded-training-20261002.md)).
+Model-scale throughput remains separately pending.
 
 ## Construction and ownership
 
