@@ -58,14 +58,14 @@ CacheCotangents append_cache_bridge(CannProgram& p,const EventAttentionTape& t,c
     const CacheGradient& extra,const at::Tensor& error,int64_t budget) {
   return merge(p,t,local,&extra,error,budget);
 }
-EventReverse prepare_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttentionTape& a,
+EventReverse prepare_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
   if(roots.bias.defined()||roots.bias_connected.defined())throw std::invalid_argument("event attention has no log-bias cache roots");
-  const auto device=t.state.metadata.device();const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.graph->nodes.size();
+  const auto device=t.state.metadata.device();const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.layout.nodes;
   const int64_t ps=a.nodes.size(),owners=a.samples*ps;int64_t buckets=1;
   while(buckets<2.L*events){if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("KV reverse hash overflow");buckets*=2;}
   if(a.heads<1||a.kv_heads<1||a.width<1||a.width%a.heads||a.heads%a.kv_heads||a.capacity<1||ps<1||a.samples!=t.state.samples
-      ||a.width!=t.full.width||48.L*events+8.L*buckets+32.L*owners+8.L*(nodes+1)+8.L*a.key.numel()+4096>budget)
+      ||a.width!=t.layout.width||48.L*events+8.L*buckets+32.L*owners+8.L*(nodes+1)+8.L*a.key.numel()+4096>budget)
     throw std::invalid_argument("event reverse geometry/tensor budget exceeded");
   const auto kv=a.width/a.heads*a.kv_heads;
   const auto payload=a.key.scalar_type();
@@ -75,7 +75,7 @@ EventReverse prepare_event_reverse(CannProgram& p,const ReverseTape& t,const Eve
   EventReverse out;static_cast<CacheCotangents&>(out.cache)=merge(p,a,roots,nullptr,error,budget);
   out.cache.lengths=at::empty_like(a.lengths);out.previous=at::empty({events},a.lengths.options());
   out.tails=at::empty({owners},a.lengths.options());out.ranges=at::empty({events,4},a.lengths.options());
-  out.node_offsets=at::tensor(event_parameter_offsets(*t.graph,a.width),at::kLong).to(device);auto hash=at::empty({buckets},a.lengths.options());
+  out.node_offsets=at::tensor(t.layout.event_offsets,at::kLong).to(device);auto hash=at::empty({buckets},a.lengths.options());
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(a.mapping),ptr(a.config),ptr(a.windows),ptr(a.metadata),ptr(a.count),ptr(a.lengths),
     ptr(hash),ptr(out.ranges),ptr(out.previous),ptr(out.tails),ptr(out.cache.lengths),ptr(error),events,rows,a.capacity,nodes,ps,a.samples,buckets),
@@ -83,10 +83,10 @@ EventReverse prepare_event_reverse(CannProgram& p,const ReverseTape& t,const Eve
       hash,out.ranges,out.previous,out.tails,out.cache.lengths,error});
   return out;
 }
-void append_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttentionTape& a,const EventReverse& reverse,
+void append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,const EventReverse& reverse,
     const at::Tensor& range,StateVjp& state,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
-  const int64_t w=a.width,h=a.heads,kh=a.kv_heads,d=w/h,kv=kh*d,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps,nodes=t.graph->nodes.size();
+  const int64_t w=a.width,h=a.heads,kh=a.kv_heads,d=w/h,kv=kh*d,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps,nodes=t.layout.nodes;
   const int64_t c=std::min(chunk,owners),cols=w+2*kv;
   const bool half=a.qkv.scalar_type()==at::kHalf;
   const long double own=4.L*c*(4.L*w*cols+4.L*w*w+8.L*w+4.L*kh*k*d)+128.L*c

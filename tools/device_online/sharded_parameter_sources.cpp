@@ -1,4 +1,5 @@
 #include "sharded_parameter_sources.h"
+#include "sharded_state_vjp.h"
 #include "parameter_plan.h"
 #include <algorithm>
 #include <numeric>
@@ -49,6 +50,15 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
     // separately admits its actual partition's numerical storage.
     const auto width=g.decay.size(1);const auto plan=plan_parameters(graph,registry,width,std::numeric_limits<int64_t>::max(),g.read.defined());
     const auto shards=window.full->gradients();const auto mapping=full_nodes(graph,shards);
+    const auto states=window.state?window.state->gradients():std::vector<StateShardGradient>{};
+    std::vector<std::pair<size_t,int64_t>> state_map(graph.nodes.size(),{0,-1});
+    for(size_t s=0;s<states.size();++s)for(size_t n=0;n<states[s].nodes.size();++n) {
+      const auto global=states[s].nodes[n];
+      if(global<0||global>=int64_t(state_map.size())||state_map[global].second!=-1)throw std::invalid_argument("invalid state contribution map");
+      state_map[global]={s,int64_t(n)};
+    }
+    if(!states.empty())for(auto entry:state_map)if(entry.second<0)throw std::invalid_argument("incomplete state contributions");
+    const auto event_offsets=event_parameter_offsets(graph,width),fiber_offsets=fiber_parameter_offsets(graph,width);
     used+=64.L*plan.references.size();if(used>budget)throw std::invalid_argument("parameter contribution metadata budget exceeded");
     for(size_t i=0;i<out.owners.size();++i) {
       const auto first=plan.owner_table[i*4],last=plan.owner_table[i*4+1],size=out.owners[i].value.numel();
@@ -63,6 +73,16 @@ ShardedParameterSources sharded_parameter_sources(const Graph& graph,const Param
           const int64_t local=bank>=7?m.swiglu:m.local;
           if(local<0)throw std::invalid_argument("SwiGLU contribution has no local owner");
           part=slice(values,f.parameter_connected,local*size,size,m.local);
+        } else if(!states.empty()&&(bank==2||bank==3||bank==11||bank==12||bank==13)) {
+          const int64_t stride=bank==12?4:bank==13?6:1,node=connection/stride;
+          if(node<0||node>=int64_t(state_map.size()))throw std::invalid_argument("state contribution node outside graph");
+          const auto [owner,local]=state_map[node];const auto& state=states[owner];
+          const auto values=bank==2?state.decay:bank==3?state.retention:bank==11?state.read:bank==12?state.attention:state.fiber;
+          const auto flags=bank==2?state.decay_connected:bank==3?state.retention_connected:bank==11?state.read_connected:
+            bank==12?state.attention_connected:state.fiber_connected;
+          const int64_t local_offset=bank==12?offset-event_offsets[node]+state.layout.event_offsets[local]:
+            bank==13?offset-fiber_offsets[node]+state.layout.fiber_offsets[local]:local*(bank==3?1:width);
+          part=slice(values,flags,local_offset,size,local*stride+connection%stride);
         } else {
           const auto values=bank==2?g.decay:bank==3?g.retention:bank==4?g.scales:bank==10?g.aggregate.values:
             bank==11?g.read:bank==12?g.attention:g.fiber;

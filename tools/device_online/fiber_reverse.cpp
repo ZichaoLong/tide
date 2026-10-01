@@ -17,15 +17,15 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
     throw std::invalid_argument("invalid fiber reverse tape");
 }
 }
-FiberReverse prepare_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,const FiberAttentionTape& g,
+FiberReverse prepare_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
   const auto& a=g.cache;const auto device=a.key.device();
   const auto payload=a.key.scalar_type();
-  const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.graph->nodes.size(),ps=a.nodes.size();
+  const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.layout.nodes,ps=a.nodes.size();
   const int64_t owners=a.samples*ps,fibers=t.fiber_values.size(0),w=a.width,k=a.capacity;int64_t buckets=1;
   while(buckets<2.L*events){if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("fiber reverse hash overflow");buckets*=2;}
   const long double own=64.L*events+8.L*buckets+16.L*fibers+8.L*(nodes+1)+32.L*owners+4096;
-  if(ps<1||a.heads<1||a.kv_heads!=a.heads||w<1||w%a.heads||k<1||a.samples!=t.state.samples||w!=t.full.width||own>budget/2.L)
+  if(ps<1||a.heads<1||a.kv_heads!=a.heads||w<1||w%a.heads||k<1||a.samples!=t.state.samples||w!=t.layout.width||own>budget/2.L)
     throw std::invalid_argument("fiber reverse geometry/tensor budget exceeded");
   tensor(a.mapping,device,at::kLong,{nodes});tensor(a.config,device,at::kLong,{ps,2});
   tensor(a.metadata,device,at::kLong,{rows,5});tensor(a.values,device,at::kFloat,{rows,2*w+1});tensor(a.count,device,at::kLong,{1});
@@ -37,9 +37,9 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const ReverseTape& t,const Rev
   out.cache.lengths=at::empty_like(a.lengths);out.ranges=at::empty({events,6},a.lengths.options());
   out.previous=at::empty({events},a.lengths.options());out.tails=at::empty({owners},a.lengths.options());
   out.tokens=at::empty({fibers},a.lengths.options());out.ticks=at::empty({events},a.lengths.options());
-  out.node_offsets=at::tensor(fiber_parameter_offsets(*t.graph,w),at::kLong).to(device);
+  out.node_offsets=at::tensor(t.layout.fiber_offsets,at::kLong).to(device);
   auto hash=at::empty({buckets},a.lengths.options()),scratch=at::empty_like(out.tokens);
-  const int64_t inputs=t.graph->inputs.size(),sources=inputs+t.graph->edges.size();
+  const int64_t inputs=t.layout.inputs,sources=t.layout.sources;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(a.mapping),ptr(a.config),ptr(a.metadata),ptr(a.count),ptr(a.lengths),ptr(t.state.clock_policy),
     ptr(links.consumer_head),ptr(links.consumer_next),ptr(t.fiber_meta),ptr(t.sources),ptr(hash),ptr(out.ranges),ptr(out.previous),ptr(out.tails),
@@ -49,13 +49,13 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const ReverseTape& t,const Rev
      t.fiber_meta,t.sources,hash,out.ranges,out.previous,out.tails,out.cache.lengths,out.tokens,scratch,out.ticks,error});
   return out;
 }
-void append_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
+void append_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
     const at::Tensor& stage,const StateVjp& state,const at::Tensor& messages,const at::Tensor& message_on,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
   const auto& a=g.cache;const int64_t w=a.width,h=a.heads,d=w/h,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps;
-  const int64_t c=std::min(chunk,owners),domain=g.pool_weights.size(1),s=std::min(k,domain),inputs=t.graph->inputs.size();
-  const long double own=4.L*c*(s*w+4.L*k*w+4.L*k+4.L*w*w+4.L*w+domain)+512.L*c+8.L*c*s+8.L*t.graph->nodes.size()+4096;
+  const int64_t c=std::min(chunk,owners),domain=g.pool_weights.size(1),s=std::min(k,domain),inputs=t.layout.inputs;
+  const long double own=4.L*c*(s*w+4.L*k*w+4.L*k+4.L*w*w+4.L*w+domain)+512.L*c+8.L*c*s+8.L*t.layout.nodes+4096;
   if(c<1||budget<2||own>budget/2.L)throw std::invalid_argument("fiber reverse batch tensor budget exceeded");
   const auto payload=a.key.options();const int64_t fp16=a.key.scalar_type()==at::kHalf;
   auto f=payload.dtype(at::kFloat),l=a.lengths.options(),b=f.dtype(at::kBool);
@@ -69,7 +69,7 @@ void append_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks
   in.cotangent=at::empty({c,w},f);in.connected=at::empty({c},b);
   in.key_root=at::empty(in.key.sizes(),f);in.value_root=at::empty(in.value.sizes(),f);in.bias_root=at::empty(in.bias.sizes(),f);
   in.key_on=at::empty({c},b);in.value_on=at::empty_like(in.key_on);in.bias_on=at::empty_like(in.key_on);in.max_repeat_ticks=t.state.max_repeat_ticks;
-  auto source_counts=at::tensor(t.graph->source_counts,at::kLong).to(a.key.device());
+  auto source_counts=at::tensor(t.layout.source_counts,at::kLong).to(a.key.device());
   auto table=at::empty({c*6,5},l),tiles=at::empty({c*6+1},l),table_count=at::empty({2},l);
   const auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_plan)(1,stream,

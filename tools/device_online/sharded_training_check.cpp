@@ -1,3 +1,4 @@
+#include "state_reverse_test.h"
 #include "sharded_parameter_compare.h"
 #include "sharded_optimizer.h"
 #include "precision_graph_profiles.h"
@@ -54,7 +55,7 @@ void publication(const std::map<std::string,ParameterDestination>& destinations,
   }
 }
 void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile,int cache,bool prefill,
-                DeviceOptimizerKind kind,const std::string& emit,const std::string& policy,Index width=4) {
+                DeviceOptimizerKind kind,const std::string& emit,const std::string& policy,Index width=4,bool state_shards=false) {
   at::NoGradGuard guard;const bool half=dtype==at::kHalf;
   auto f=cache<0?test::precision_graph_profile(profile%2?0:3,profile%2,width,profile):test::retained_cache_fixture(0,1,width,cache);
   test::fixture_dtype(f,dtype);auto registry=f.model.parameters(false);
@@ -68,7 +69,8 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
   ContentLimits limits;limits.prefill=prefill;limits.mode=emit;limits.trace=512;limits.full_chunk_rows=3;limits.zeta=.75;
   if(cache>=0){limits.queue=96;limits.arrivals=192;limits.outputs=192;limits.kv_rows=128;limits.kv_trace_rows=8192;limits.attention_key_rows=2;limits.attention_chunk_rows=3;}
   if(width>64)limits.workspace_bytes=512*1024*1024;
-  ContentFlow flow(f.graph,f.model,f.initial,devices[0],limits,place_full(f.graph,f.model,devices,policy));
+  if(state_shards)limits.workspace_bytes=Index(width>64?2:1)*1024*1024*1024;
+  auto candidate=test::reverse_candidate(f,devices[0],limits,place_full(f.graph,f.model,devices,policy),state_shards);auto& flow=*candidate;
   auto banks=flow.sharded_parameter_banks();const auto destinations=sharded_parameter_destinations(banks);
   auto bank_snapshot=[&](){std::vector<Tensor> out;for(const auto& [_,b]:destinations)out.push_back(b.values.cpu());return out;};
   std::vector<std::unique_ptr<DeviceOptimizer>> optimizers;std::map<std::pair<Index,Index>,Index> positions;
@@ -91,7 +93,8 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
     for(size_t w=saved.size();w>0;) {--w;const auto& t=saved[w].tape.coordinator;
       auto roots=test::retained_roots(t,w,mode);test::retained_cache_roots(roots,t,w,mode);
       if(w+1<saved.size())roots=append_window_bridge(p,t,roots,saved[w+1].tape.coordinator,gradient[w+1].coordinator,error,32*1024*1024);
-      gradient[w]=append_sharded_graph_vjp(p,saved[w].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024);
+      gradient[w]=append_sharded_graph_vjp(p,saved[w].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024,
+        w+1<saved.size()?gradient[w+1].state:nullptr,test::owner_cache_roots(saved[w].tape,w,mode));
     }
     p.finish();run_sharded_graph_vjp(p,gradient);require(!error.cpu().item<int>(),"training reverse refused");
     auto sources=sharded_parameter_sources(f.graph,registry,gradient,64*1024*1024);
@@ -117,7 +120,7 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
       for(auto e:reduction.errors())require(e.cpu().item<int>()!=0,"nonfinite training update committed");
       exact(state,snapshots(optimizers));exact(payload,bank_snapshot());
     }
-    reduction.close();p.close();for(auto& g:gradient)g.full->close();
+    reduction.close();p.close();close_sharded_graph_vjp(gradient);
   }
   if(half)require(fractional,"canonical FP32 masters lost sub-half increments");flow.close();
 }
@@ -125,15 +128,15 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    int count=2;bool smoke=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
-    for(int i=1;i<argc;++i){std::string a=argv[i];if(a.rfind("--full-shards=",0)==0)count=std::stoi(a.substr(14));else if(a=="--profile-smoke")smoke=true;
+    int count=2;bool smoke=false,state_shards=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
+    for(int i=1;i<argc;++i){std::string a=argv[i];if(a.rfind("--full-shards=",0)==0)count=std::stoi(a.substr(14));else if(a=="--state-shards")state_shards=true;else if(a=="--profile-smoke")smoke=true;
       else if(a.rfind("--full-placement=",0)==0)policy=a.substr(17);else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4)throw std::invalid_argument("explicit 1..4 NPU FP32/FP16 required");
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);std::vector<at::Device> devices;for(int i=0;i<count;++i)devices.emplace_back(d.type(),d.index()+i);int cases=0;
     auto run=[&](int profile,int cache,bool prefill,DeviceOptimizerKind kind,const std::string& emit,Index width=4) {
-      try{trajectory(devices,args.dtype,profile,cache,prefill,kind,emit,policy,width);++cases;}
+      try{trajectory(devices,args.dtype,profile,cache,prefill,kind,emit,policy,width,state_shards);++cases;std::cout<<"completed trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" width="<<width<<std::endl;}
       catch(...){std::cerr<<"sharded training profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" kind="<<int(kind)<<" emit="<<emit<<'\n';throw;}
     };
     if(smoke){run(16,-1,true,DeviceOptimizerKind::adamw,"hst");run(0,6,true,DeviceOptimizerKind::sgd,"softp");}
@@ -144,8 +147,8 @@ int main(int argc,char** argv) {
       for(auto emit:{"hst","softp"})run(0,6,true,DeviceOptimizerKind::adamw,emit);
       for(Index width:{1,257})run(0,-1,true,DeviceOptimizerKind::sgd,"hard",width);
     }
-    std::cout<<"sharded-training: passed trajectories="<<cases<<" windows="<<cases*16<<" updates="<<cases*4<<" devices="<<count
-      <<" payload="<<args.dtype<<" CPU=FP32_FP64 atomic=true publication=true continuation=true scope="<<(smoke?"profile-smoke":"internal_Full_shards_coordinator_state_KV")<<'\n';
+    std::cout<<"sharded-training: passed trajectories="<<cases<<" windows="<<cases*16<<" updates="<<cases*4<<" state_shards="<<state_shards<<" devices="<<count
+      <<" payload="<<args.dtype<<" CPU=FP32_FP64 atomic=true publication=true continuation=true scope="<<(smoke?"profile-smoke":state_shards?"internal_compact_state_KV_canonical_training":"internal_Full_shards_coordinator_state_KV")<<'\n';
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

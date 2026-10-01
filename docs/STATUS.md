@@ -44,7 +44,7 @@ Global region selection,queue/readiness,history,Aggregate and emission stay on t
 coordinator NPU. Three-phase device Read→selection→common-commit protocol.
 Explicit StateKernelProfile is a view,never a fake compiled Graph. Old monolithic
 reverse/state/publication interfaces refuse this new placement. Compact-state
-reverse and public multi-device training are NOT yet implemented.
+reverse is implemented with development checks below; public multi-device training remains pending.
 
 Profile:5283 AI_VECTOR_CORE/110 AI_CORE/3 MIX_AIV,no observed AiCPU. Both cards run
 Read,state,event/fiber KV commits.45 model submissions for15 windows;305 matching
@@ -63,35 +63,48 @@ retain their scoped evidence. No new qualification job is live.
 
 ## Current work and next action
 
-Commit/push reviewed evidence/STATUS/ROADMAP; implementation already pushed.
-Then continue F1–F7, no pause instruction. Next main implementation: retained
-compact state/cache owner tapes, reverse progression and cache boundary adjoints;
-reuse canonical reduction/atomic optimizer/publication and expose public multi-card
-C++/Python consumers. Do not spend another increment polishing forward fragments.
+Forward qualification evidence **8f6768c** is committed and pushed. The current
+implementation connects compact state/cache reverse to the actual device graph
+stage loop, splits global control scores from owner-local Read, preserves cache
+bridges across retained windows, and extends canonical parameter sources and
+publication. Actual journal/stage packing and fused gradient/None-flag merging
+are covered by the new `peer-state-vjp` and `peer-state-training` gates.
 
-Reverse design inspected only, not implemented: graph_vjp.cpp has a FullStageVjp
-seam but state/control/cache reverse are still monolithic. Event/fiber reverse read
-Graph primarily for node count,source counts/input sizes and parameter offsets.
-Introduce an explicit compact reverse view instead of compiling an invalid local
-Graph. Actual coordinator device journals can be packed by owner on device at
-reverse preparation, preserving global event/atom row maps; existing owner KV
-journals/caches must remain local. Never send full KV to the coordinator or use CPU
-reference tapes. State cotangents/None flags and per-stage message gradients need
-batched pack/return; local cache adjoints must bridge retained windows on owners.
-Control/read derivatives require their own split,while global selection/softmax
-semantics remain unchanged. StateOwner currently exposes neither retained cache
-tapes nor bank publication; add these explicit seams with reverse integration.
-ShardedParameterSources/Banks still assume non-Full gradients/banks on coordinator;
-extend ownership maps without reimplementing canonical alias/optimizer rules.
+Development build **state-reverse-dev04 PASSED** (standalone,
+25 affected host objects/five kernels, loader closure; unchanged host/kernel
+bytes reused from passed dev03). Two-card FP32 and FP16 each passed full retained
+VJP:50 trajectories/200 windows; complete training:40 trajectories/640 windows/
+160 updates. Same independent CPU FP32/FP64 assertions, no relaxed thresholds.
+Large-int64, empty/refused reverse, actual packet capacity refusal, cached roots,
+after-close retention, replay, alias reduction, atomic SGD/AdamW, exact publication
+and continuation covered. Earlier one/two-card dev03 smoke each2/8 also passed.
+Old public half-cache training smoke `state-reverse-public-dev04` also PASSED/exit0:
+1 trajectory/16 windows/4 updates, CPU FP32/FP64 and resume. No new live jobs.
+All records are TASK/runs/NAME; units tide-execution-flows-NAME.service;
+queue120s/run600s/build900s. No public multi-device session yet.
 
-Fixed source TASK/sources/state-owners-clean01. Builds state-owners-clean01 and
-state-owners-python-clean01; audit TASK/launchers/state_owners_evidence.py 62935e98772fdacff742be915d588109aee63300.
-Affected builder build_state_owners.py compiles15 host objects/3 new kernels;
-clean standalone reused passed dev05 source/header/object hashes,Python rebuilt15.
-CMake gate is configure/link dependency generation,not full fresh compile.
-No unrelated8,954-check CPU rerun. Next complete training/consumer correctness,
-then medium/full-size CPU/mixed/resident performance. Historical CPU Attention
-stays deliberately paused; resolve retained memory/timing lock before formal timing.
+Next: commit/push this tested implementation, freeze `state-reverse-clean01` at
+that commit, use TASK/launchers/build_state_reverse.py with byte-verified
+`--reuse-host state-reverse-dev04 --kernel-build state-reverse-dev03`, and build
+Python-owned host objects separately (`--runtime python`, no SDK mixing).
+Run two-card full state VJP/training both dtypes, three-card memory/locality and
+one-owner subsets, affected public/client regressions, CMake dependency closure,
+and separate profiling. Do not repeat the completed dirty-source development
+checks. Qualification evidence is a separate commit; then continue public
+multi-device training/consumers and complete performance.
+
+Failures retained: build-dev01 stale generated headers/Tensor initialization;
+build-dev02 checker missing header. Full32-dev03 VJP stopped before RmsNorm
+workspace allocation (16777472 required vs6591583 admitted), training stopped at
+width257 forward module minimum. Explicit compact test forward admission1GiB,
+2GiB for wide tensors, fixed both in dev04. Reverse/workspace tolerances unchanged;
+no observed candidate numerical mismatch or OOM. Do not relabel old failures.
+
+Development source TASK/sources/state-reverse-dev04; build TASK/builds/state-reverse-dev04.
+Affected builder TASK/launchers/build_state_reverse.py; runner run_state_reverse.py.
+Previous qualified state-owner sources/builds remain unchanged and reusable.
+No unrelated8,954-check CPU rerun. Historical CPU Attention stays deliberately
+paused; resolve its retained memory/timing lock before formal timing.
 
 ## Environment and bounded execution
 
@@ -102,7 +115,7 @@ Module libtorch-npu/2.10.0-cann9.0.0; Python
 Public /opt stack supersedes dated personal guide by user authorization.
 TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0; preserve module PYTHONPATH,
 prepend snapshot/python. SoC Ascend910_9392. Use leased logical devices only.
-Last space: data227GiB/root14GiB; large writes go under TASK, recheck capacity.
+Last space: data225GiB/root14GiB; large writes go under TASK, recheck capacity.
 Core builds: placement-cpu-clean01,placement-npu-clean01(standalone),
 placement-npu-python-clean01(Python-owned). Never mix SDK and Python runtimes.
 Use existing launchers/freeze_run.py, frozen sources, background.slice/Nice10,

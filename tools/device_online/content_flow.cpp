@@ -310,11 +310,16 @@ ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();return impl_->reverse_view(state,full);
 }
 ShardedReverseTape ContentFlow::sharded_reverse_tape() const {
-  auto state=state_tape();const auto& s=*impl_;
+  if(!impl_||impl_->failed)throw std::logic_error("sharded tape unavailable on closed/failed content flow");
+  const auto& s=*impl_;if(!s.limits.diagnostics)throw std::logic_error("sharded reverse requires actual journals");
+  auto state=s.sharded_state?StateTape{s.events->meta,s.events->values,s.events->count,{},{},{},{},s.boundary.batch_size}:state_tape();
   if(!s.sharded_full)throw std::invalid_argument("sharded reverse requires explicit Full shards");
   FullTape shape{state.metadata,state.values,state.count,{},{},{},
     s.boundary.batch_size,s.profile.width,false};
-  return {s.reverse_view(state,shape),s.sharded_full->tapes(shape.samples,shape.width)};
+  auto tape=s.reverse_view(state,shape);
+  if(s.sharded_state)tape.control.read=at::Tensor();
+  return {std::move(tape),s.sharded_full->tapes(shape.samples,shape.width),
+    s.sharded_state?s.sharded_state->reverse_parameters(s.limits.workspace_bytes):std::vector<StateOwnerTape>{}};
 }
 ReverseTape ContentFlow::Impl::reverse_view(const StateTape& state,const FullTape& full) const {
   const auto& s=*this;
@@ -349,12 +354,14 @@ std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   return {impl_->state.values,impl_->state.present};
 }
 ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {
-  const auto state=state_tape();const auto& s=*impl_;
-  if(!s.sharded_full)throw std::invalid_argument("sharded publication requires explicit Full shards");
+  if(!impl_||impl_->failed)throw std::logic_error("sharded banks unavailable on closed/failed flow");
+  const auto& s=*impl_;if(!s.sharded_full)throw std::invalid_argument("sharded publication requires explicit Full shards");
   validate_reverse_modules(s.profile.graph);
   ParameterBanks b{&s.profile.graph,{},{},s.profile.decay,s.profile.retention,s.profile.read,s.profile.scales,s.emission->scales(),{},
     s.aggregate?s.aggregate->tape():AggregateTape{},s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
     s.attention?s.attention->banks():FiberParameterBanks{}};
-  return {std::move(b),s.sharded_full->tapes(state.samples,s.profile.width)};
+  if(s.sharded_state){b.decay=at::Tensor();b.retention=at::Tensor();b.read=at::Tensor();}
+  return {std::move(b),s.sharded_full->tapes(s.boundary.batch_size,s.profile.width),
+    s.sharded_state?s.sharded_state->parameter_banks():std::vector<StateOwnerBanks>{}};
 }
 } // namespace tide::device_online

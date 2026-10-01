@@ -55,7 +55,7 @@ def main():
         command.append("--peer-full")
     if args.check in ("peer-shard-flow", "peer-shard-control-flow"):
         command.append("--full-shards=2")
-    if args.check in ("peer-state-flow", "peer-state-control-flow"):
+    if args.check in ("peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training"):
         command.extend(("--full-shards=2", "--state-shards"))
     if args.check == "extended-retained":
         command.append("--extended")

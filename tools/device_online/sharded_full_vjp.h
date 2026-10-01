@@ -22,10 +22,15 @@ class ShardedFullVjp {
  private:
   struct Impl;std::unique_ptr<Impl> impl_;
 };
-struct ShardedGraphVjp {GraphVjp coordinator;std::shared_ptr<ShardedFullVjp> full;};
+class ShardedStateVjp;
+struct ShardedGraphVjp {GraphVjp coordinator;std::shared_ptr<ShardedFullVjp> full;std::shared_ptr<ShardedStateVjp> state;};
 ShardedGraphVjp append_sharded_graph_vjp(CannProgram&,const ShardedReverseTape&,
     const GraphCotangents&,const at::Tensor& error,int64_t chunk_rows,
     int64_t tensor_budget,int64_t per_program_workspace);
+ShardedGraphVjp append_sharded_graph_vjp(CannProgram&,const ShardedReverseTape&,
+    const GraphCotangents&,const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget,int64_t per_program_workspace,
+    const std::shared_ptr<ShardedStateVjp>& next_state,const std::vector<std::vector<CacheCotangents>>& state_roots);
+void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>&); // Coordinator must already be closed.
 // Submit all device programs before any wait, including retained windows.
 void run_sharded_graph_vjp(CannProgram&,const std::vector<ShardedGraphVjp>&);
 } // namespace tide::device_online

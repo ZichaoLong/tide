@@ -1,5 +1,6 @@
 #pragma once
 #include "retained_tape.h"
+#include "state_owner_tape.h"
 
 namespace tide::device_online {
 // Static global node IDs and the compact banks actually used by forward.
@@ -8,6 +9,7 @@ struct FullShardTape {std::vector<int64_t> nodes;FullTape full;};
 struct ShardedReverseTape {
   ReverseTape coordinator; // No Full banks: use append_sharded_graph_vjp only.
   std::vector<FullShardTape> shards;
+  std::vector<StateOwnerTape> states; // Empty for historical coordinator state/KV.
 };
 struct RetainedShardedTape {
   std::shared_ptr<const Graph> graph;

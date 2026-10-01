@@ -6,8 +6,8 @@
 namespace tide::device_online {
 std::map<std::string,ParameterDestination> sharded_parameter_destinations(const ShardedParameterBanks& banks) {
   const auto& b=banks.coordinator;
-  if(!b.graph||!b.decay.defined()||b.decay.dim()!=2)throw std::invalid_argument("incomplete sharded parameter banks");
-  const auto& g=*b.graph;const auto dtype=b.decay.scalar_type();const auto width=b.decay.size(1);
+  if(!b.graph||banks.full.empty()||!b.sources.defined())throw std::invalid_argument("incomplete sharded parameter banks");
+  const auto& g=*b.graph;const auto dtype=b.sources.scalar_type();const auto width=banks.full.front().full.width;
   if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("sharded publication requires FP32/FP16 payloads");
   std::map<std::string,ParameterDestination> out;
   auto add=[&](const std::string& name,at::Tensor value) {
@@ -37,36 +37,49 @@ std::map<std::string,ParameterDestination> sharded_parameter_destinations(const 
     }
   }
   for(bool yes:seen)if(!yes)throw std::invalid_argument("incomplete Full publication node map");
+  std::vector<std::pair<size_t,int64_t>> state_map(g.nodes.size(),{0,-1});
+  for(size_t s=0;s<banks.states.size();++s)for(size_t i=0;i<banks.states[s].global_nodes.size();++i) {
+    const auto n=banks.states[s].global_nodes[i];
+    if(n<0||n>=int64_t(g.nodes.size())||state_map[n].second>=0)throw std::invalid_argument("invalid state publication map");
+    state_map[n]={s,int64_t(i)};
+  }
+  if(!banks.states.empty())for(auto entry:state_map)if(entry.second<0)throw std::invalid_argument("incomplete state publication map");
   for(size_t n=0;n<g.nodes.size();++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
     const auto aggregate=aggregate_kind(node.aggregation);
     if(aggregate>=2)for(int64_t slot=0;slot<g.source_counts[n];++slot)
       add(prefix+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot),b.aggregate.weights[n][slot]);
     if(node.identity)continue;
-    add(prefix+"read",b.read[n]);
-    if(node.memory=="ema")add(prefix+"decay",b.decay[n]);
-    if(node.memory=="lh-add-repeat-v1")add(prefix+"extra.add_retention",b.retention[n]);
+    const auto [owner,local]=state_map[n];
+    add(prefix+"read",banks.states.empty()?b.read[n]:banks.states[owner].read[local]);
+    if(node.memory=="ema")add(prefix+"decay",banks.states.empty()?b.decay[n]:banks.states[owner].decay[local]);
+    if(node.memory=="lh-add-repeat-v1")add(prefix+"extra.add_retention",banks.states.empty()?b.retention[n]:banks.states[owner].retention[local]);
   }
   for(size_t i=0;i<g.inputs.size();++i)add("input_scale."+std::to_string(i),b.sources[i]);
   for(size_t i=0;i<g.edges.size();++i)add("agg_scale."+std::to_string(i),b.sources[g.inputs.size()+i]);
   for(size_t i=0;i<g.outgoing_ports.bindings.size();++i) {
     const auto binding=g.outgoing_ports.bindings[i];add((binding.kind?"edge_scale.":"output_scale.")+std::to_string(binding.id),b.emission[i][0]);
   }
-  for(const auto& a:b.attention) {
+  auto caches=[&](const std::vector<EventAttentionTape>& attention,const FiberParameterBanks& fiber,const std::vector<int64_t>& ids) {
+  auto global=[&](int64_t n){return ids.empty()?n:ids.at(n);};
+  for(const auto& a:attention) {
     const int64_t kv=width/a.heads*a.kv_heads;
     for(size_t i=0;i<a.nodes.size();++i) {
-      const auto prefix="nodes."+std::to_string(a.nodes[i])+".extra.";
+      const auto prefix="nodes."+std::to_string(global(a.nodes[i]))+".extra.";
       add(prefix+"attn_q",a.qkv[i].narrow(1,0,width));add(prefix+"attn_k",a.qkv[i].narrow(1,width,kv));
       add(prefix+"attn_v",a.qkv[i].narrow(1,width+kv,kv));add(prefix+"attn_out",a.projection[i]);
     }
   }
-  for(size_t i=0;i<b.fiber.nodes.size();++i) {
-    const auto n=b.fiber.nodes[i];const auto prefix="nodes."+std::to_string(n)+".extra.";
-    add(prefix+"fiber_qkv",b.fiber.qkv[i]);add(prefix+"fiber_qkv_bias",b.fiber.qkv_bias[i]);
-    add(prefix+"fiber_out",b.fiber.projection[i]);add(prefix+"fiber_out_bias",b.fiber.projection_bias[i]);add(prefix+"fiber_decay",b.fiber.decay[i]);
+  for(size_t i=0;i<fiber.nodes.size();++i) {
+    const auto n=global(fiber.nodes[i]);const auto prefix="nodes."+std::to_string(n)+".extra.";
+    add(prefix+"fiber_qkv",fiber.qkv[i]);add(prefix+"fiber_qkv_bias",fiber.qkv_bias[i]);
+    add(prefix+"fiber_out",fiber.projection[i]);add(prefix+"fiber_out_bias",fiber.projection_bias[i]);add(prefix+"fiber_decay",fiber.decay[i]);
     if(g.nodes[n].memory!="lh-fiber-attention-sum-repeat-v1"&&g.nodes[n].memory!="lh-fiber-attention-mean-repeat-v1")
-      add(prefix+"fiber_pool",b.fiber.pool[i].narrow(0,0,g.source_counts[n]));
+      add(prefix+"fiber_pool",fiber.pool[i].narrow(0,0,g.source_counts[n]));
   }
+  };
+  if(banks.states.empty())caches(b.attention,b.fiber,{});
+  else for(const auto& owner:banks.states)caches(owner.attention,owner.fiber,owner.global_nodes);
   return out;
 }
 } // namespace tide::device_online

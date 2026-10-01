@@ -1,3 +1,5 @@
+#include "state_reverse_test.h"
+#include "state_reverse_boundaries.h"
 #include "sharded_vjp_compare.h"
 #include "sharded_parameter_compare.h"
 #include "precision_graph_profiles.h"
@@ -14,7 +16,7 @@ namespace {
 using namespace tide;using namespace tide::device_online;
 void require(bool x,const char* message){if(!x)throw std::runtime_error(message);}
 void check(at::Device device,int devices,at::ScalarType dtype,int shape,int variant,int profile,int cache,
-           bool prefill,int mode,const std::string& emit,const std::string& policy,Index width=4) {
+           bool prefill,int mode,const std::string& emit,const std::string& policy,Index width=4,bool state_shards=false) {
   at::NoGradGuard guard;
   auto f=cache<0?test::precision_graph_profile(shape,variant,width,profile):test::retained_cache_fixture(shape,variant,width,cache);
   if(emit!="hard"){for(auto& r:f.graph.regions)r.read_mode=shape==0?"old":"proposal";f.graph.compile();f.initial.identity=f.graph.identity;}
@@ -22,8 +24,9 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
   ContentLimits limits;limits.prefill=prefill;limits.mode=emit;limits.trace=512;limits.full_chunk_rows=3;
   if(cache>=0){limits.queue=96;limits.arrivals=192;limits.outputs=192;limits.kv_rows=64;limits.kv_trace_rows=8192;limits.attention_key_rows=2;limits.attention_chunk_rows=3;}
   if(width>64)limits.workspace_bytes=1024*1024*1024;
+  if(state_shards)limits.workspace_bytes=Index(width>64?2:1)*1024*1024*1024;
   std::vector<at::Device> placement;for(int i=0;i<devices;++i)placement.emplace_back(device.type(),device.index()+i);
-  ContentFlow flow(f.graph,f.model,f.initial,device,limits,place_full(f.graph,f.model,placement,policy));
+  auto candidate=test::reverse_candidate(f,device,limits,place_full(f.graph,f.model,placement,policy),state_shards);auto& flow=*candidate;
   std::vector<RetainedShardedTape> saved;std::vector<Result> forward;ShardedReverseTape live{};
   auto cut=f.initial.cut;
   for(auto stop:test::retained_stops(cut)) {
@@ -35,13 +38,14 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
   flow.close();live.coordinator.state.values.fill_(std::numeric_limits<float>::quiet_NaN());live.coordinator.state.count.fill_(-1);
   for(auto& shard:live.shards)for(auto& x:{shard.full.weights,shard.full.biases,shard.full.extra.lh_weights,shard.full.extra.gate,shard.full.extra.up,shard.full.extra.down})
     if(x.defined())x.fill_(std::numeric_limits<float>::quiet_NaN());
-  test::poison_live_cache(live.coordinator);
+  test::poison_live_cache(live.coordinator);test::poison_owner_cache(live);
   auto error=at::zeros({1},saved[0].tape.coordinator.state.count.options().dtype(at::kInt));
   CannProgram p(device);p.limit_workspace(128*1024*1024);std::vector<ShardedGraphVjp> gradients(saved.size());
   for(size_t i=saved.size();i>0;) {--i;const auto& t=saved[i].tape.coordinator;
     auto roots=test::retained_roots(t,i,mode);test::retained_cache_roots(roots,t,i,mode);
     if(i+1<saved.size())roots=append_window_bridge(p,t,roots,saved[i+1].tape.coordinator,gradients[i+1].coordinator,error,32*1024*1024);
-    gradients[i]=append_sharded_graph_vjp(p,saved[i].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024);
+    gradients[i]=append_sharded_graph_vjp(p,saved[i].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024,
+      i+1<saved.size()?gradients[i+1].state:nullptr,test::owner_cache_roots(saved[i].tape,i,mode));
   }
   p.finish();run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph reverse refused");
   ShardedParameterReduce reduction(sharded_parameter_sources(f.graph,registry,gradients,64*1024*1024),
@@ -58,7 +62,7 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
       const auto name="state/"+std::to_string(owner.first)+"/"+std::to_string(owner.second);
       test::full_same_precision(initial[owner.first][owner.second],on[owner.first][owner.second],expected.gradients.at(name),name.c_str(),half);
     }
-    test::compare_retained_cache(first,saved.front().tape.coordinator,expected,f,half);
+    test::compare_owner_cache(gradients.front(),saved.front().tape,expected,f,half);
     std::map<std::string,bool> seen;
     for(size_t w=0;w<saved.size();++w) {
       const auto& g=gradients[w].coordinator;const auto& t=saved[w].tape.coordinator;
@@ -77,21 +81,21 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
   run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph replay refused");
   reduction.run();auto replay=test::sharded_parameter_observations(reduction.gradients());
   for(const auto& [name,value]:values)require(value.defined()==replay.at(name).defined()&&(!value.defined()||at::equal(value,replay.at(name))),"sharded reverse replay accumulated stale gradients");
-  reduction.close();p.close();for(auto& g:gradients)g.full->close();
+  reduction.close();p.close();close_sharded_graph_vjp(gradients);
 }
 }
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    int devices=2;bool smoke=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
+    int devices=2;bool smoke=false,state_shards=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
     for(int i=1;i<argc;++i){std::string arg=argv[i];if(arg.rfind("--full-shards=",0)==0)devices=std::stoi(arg.substr(14));
-      else if(arg=="--profile-smoke")smoke=true;else if(arg.rfind("--full-placement=",0)==0)policy=arg.substr(17);else forwarded.push_back(argv[i]);}
+      else if(arg=="--state-shards")state_shards=true;else if(arg=="--profile-smoke")smoke=true;else if(arg.rfind("--full-placement=",0)==0)policy=arg.substr(17);else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||devices<1||devices>4)throw std::invalid_argument("sharded VJP gate requires explicit NPU FP32/FP16 and 1..4 Full owners");
     args.allow_npu_float16=true;const auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("sharded VJP gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
     auto run=[&](int shape,int variant,int profile,int cache,bool prefill,int mode,const std::string& emit,Index width=4) {
-      try{check(d,devices,args.dtype,shape,variant,profile,cache,prefill,mode,emit,policy,width);++cases;}
+      try{check(d,devices,args.dtype,shape,variant,profile,cache,prefill,mode,emit,policy,width,state_shards);++cases;std::cout<<"completed trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" width="<<width<<std::endl;}
       catch(...){std::cerr<<"sharded reverse shape="<<shape<<" variant="<<variant<<" profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" roots="<<mode<<" emit="<<emit<<'\n';throw;}
     };
     if(smoke){run(0,1,16,-1,true,4,"hst");run(0,1,0,6,true,9,"softp");}
@@ -100,10 +104,10 @@ int main(int argc,char** argv) {
       for(int profile=1;profile<=16;++profile)run(profile%2,1,profile,-1,profile%2,4,profile%2?"hst":"softp");
       for(int cache:{0,1,5,6})for(bool prefill:{false,true})run(0,1,0,cache,prefill,9,prefill?"hst":"softp");
       for(Index width:{1,257})run(0,1,16,-1,true,4,"hard",width);
-      test::sharded_vjp_boundaries(d,devices,args.dtype);
+      if(state_shards)test::state_reverse_boundaries(d,devices,args.dtype);else test::sharded_vjp_boundaries(d,devices,args.dtype);
     }
-    std::cout<<"sharded-graph-vjp: passed trajectories="<<cases<<" windows="<<cases*4<<" devices="<<devices
-      <<" dtype="<<args.dtype<<" CPU=FP32_FP64 after_close=true replay=true scope="<<(smoke?"profile-smoke":"device_canonical_owners_retained_graph_not_optimizer")<<'\n';
+    std::cout<<"sharded-graph-vjp: passed trajectories="<<cases<<" windows="<<cases*4<<" state_shards="<<state_shards<<" devices="<<devices
+      <<" dtype="<<args.dtype<<" CPU=FP32_FP64 after_close=true replay=true scope="<<(smoke?"profile-smoke":state_shards?"compact_state_KV_retained_graph":"device_canonical_owners_retained_graph_not_optimizer")<<'\n';
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

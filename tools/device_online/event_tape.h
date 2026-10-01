@@ -21,4 +21,5 @@ struct CacheGradient : CacheCotangents {
 };
 // Flattened Q,K,V,O parameter layout in node order, without padded KV heads.
 std::vector<int64_t> event_parameter_offsets(const Graph&,int64_t width);
+std::vector<int64_t> event_parameter_offsets(const std::vector<Node>&,int64_t width);
 } // namespace tide::device_online

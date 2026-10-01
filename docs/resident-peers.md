@@ -248,8 +248,51 @@ bytes after a downstream refusal. A profile smoke is separate from throughput.
 Distributed attention counters sum work; chunk/key rows and KV peaks report the
 maximum across owners. State tensors and peer packets have separate byte counts.
 
-This forward path explicitly refuses the old monolithic reverse/state-view
-interfaces. Compact owner tapes, cache boundary adjoints, canonical publication
-and public multi-device training/checkpoint clients require the next integration.
-It does not broaden the qualified Full-only training path into whole-model
-training support. Graph/checkpoint identities and the CPU reference are unchanged.
+This placement still refuses the old monolithic reverse/state-view interfaces.
+The separate compact reverse integration below has its own development and
+qualification scope; forward evidence alone does not certify its training.
+Graph/checkpoint identities and the CPU reference are unchanged.
+
+## Compact state/cache reverse and internal training
+
+The implementation adds `StateOwnerTape` fragments to `ShardedReverseTape`.
+They contain local parameters and actual KV records, without a replicated global
+state bank. `StateReverseLayout` is a static kernel view, never a locally compiled
+Graph. Retention clones numerical records on their original devices and preserves
+parameter versions. Grouped fiber gathers have shape-only admission before their
+allocation; retained tape bytes are checked separately before cloning.
+
+Reverse preparation packs actual coordinator event/source journals by owner on
+device, preserving stable order, global physical source identity and row maps.
+Per-stage packets carry cotangents, explicit None flags and visible-state carry.
+Owners execute state, event/fiber KV and Read VJPs, retaining cache adjoints and
+parameter partials locally. Returned content/source adjoints join the coordinator
+routing and physical-scale reduction. Fiber source derivatives add to direct
+Aggregate derivatives; neither contribution replaces the other.
+
+HST/SOFTP Emit and softmax derivatives use the complete global region frame.
+Only the resulting per-event score derivative moves to the Read owner. Partitioning
+nodes must not partition a region's normalization or invent gradient connections.
+FP16 keeps actual forward payloads and FP32 cotangents/accumulators.
+
+Retained windows explicitly bridge local cache adjoints in reverse order. Their
+owner/group layout must match; a layout change inside a retained backward is
+refused. Complete-cut forward snapshots may still restore with a different
+layout. Empty/error windows send stop and completion packets. Repeat execution
+resets accumulators and cache seeds; no host event polling drives backward.
+
+`sharded_parameter_sources` maps local state/Read/event/fiber partials into the
+existing canonical alias reducer. `sharded_parameter_banks` publishes back into
+actual forward storage on each owner, including grouped event projections and
+original fiber banks. The existing all-device atomic optimizer decision governs
+these publications as well as Full banks. No CPU gradient or parameter copy is
+used to drive an update.
+
+The retained VJP and complete training checkers accept `--state-shards`, with
+Full and state owners deliberately different when more than one device is used.
+They compare independent CPU FP32/FP64 trajectories, cache/input/state gradients,
+None/zero roots, actual aliases, optimizer state, exact master publication,
+continued windows, retained snapshots after forward close, and repeated backward.
+Current implemented/verified status belongs to STATUS and source-specific evidence.
+Public multi-device training/checkpoint clients and throughput remain separate
+F4–F7 obligations; this internal interface is not that public delivery.

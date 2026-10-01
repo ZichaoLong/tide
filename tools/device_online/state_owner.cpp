@@ -1,6 +1,7 @@
 #include "state_owner.h"
 #include <algorithm>
 #include <stdexcept>
+#include <limits>
 
 namespace tide::device_online {
 namespace {
@@ -29,7 +30,7 @@ StateOwner::StateOwner(const ContentProfile& p,std::vector<int64_t> owned,const 
       if(global_nodes_.empty()||minimum_bytes(p,global_nodes_,q,l)>budget)
         throw std::invalid_argument("state owner is empty or exceeds tensor budget");
       return StateKernelProfile(p,global_nodes_,d);
-    }()),limits_(l) {
+    }()),limits_(l),physical_edges_(p.graph.edges.size()) {
   auto initial=state_shard_initial(q,global_nodes_);const auto nodes=int64_t(global_nodes_.size());
   auto opts=at::TensorOptions().dtype(profile_.dtype);
   auto values=at::zeros({q.batch_size,nodes,profile_.width},opts),clocks=at::zeros({q.batch_size,nodes,2},at::kLong);
@@ -98,5 +99,27 @@ std::map<std::string,int64_t> StateOwner::stats() const {
     out[prefix+"tiled_padding_entries"]=work[2].item<int64_t>();
   }
   return out;
+}
+int64_t StateOwner::reverse_parameter_bytes() const {
+  StateOwnerTape t{global_nodes_,StateReverseLayout(profile_.nodes,profile_.source_counts,profile_.width,profile_.input_count,physical_edges_),
+    StateTape{{},{},{},profile_.config,profile_.decay,profile_.retention,profile_.clock_policy,state_.values.size(0)},
+    profile_.read,profile_.read_modes,profile_.read_kinds,profile_.sources,event_?event_->tape():std::vector<EventAttentionTape>{},{}};
+  const long double bytes=state_owner_tape_bytes(t)+static_cast<long double>(fiber_?fiber_->tape_bytes():0);
+  if(bytes>std::numeric_limits<int64_t>::max())throw std::invalid_argument("state owner reverse extent overflow");
+  return int64_t(bytes);
+}
+StateOwnerTape StateOwner::reverse_parameters(int64_t budget) const {
+  if(budget<1||2.L*reverse_parameter_bytes()>budget)throw std::invalid_argument("state owner gather/retention exceeds tensor budget");
+  if(!limits_.diagnostics)throw std::invalid_argument("state owner reverse requires actual cache journals");
+  StateReverseLayout layout(profile_.nodes,profile_.source_counts,profile_.width,profile_.input_count,physical_edges_);
+  const bool repeat=std::any_of(profile_.nodes.begin(),profile_.nodes.end(),[](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});
+  StateTape state{{},{},{},profile_.config,profile_.decay,profile_.retention,profile_.clock_policy,state_.values.size(0),repeat,
+    limits_.max_repeat_ticks,bool(fiber_)||bool(event_)};
+  return {global_nodes_,std::move(layout),state,profile_.read,profile_.read_modes,profile_.read_kinds,profile_.sources,
+    event_?event_->tape():std::vector<EventAttentionTape>{},fiber_?fiber_->tape():std::vector<FiberAttentionTape>{}};
+}
+StateOwnerBanks StateOwner::parameter_banks() const {
+  return {global_nodes_,profile_.decay,profile_.retention,profile_.read,
+    event_?event_->tape():std::vector<EventAttentionTape>{},fiber_?fiber_->banks():FiberParameterBanks{}};
 }
 } // namespace tide::device_online

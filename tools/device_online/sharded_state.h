@@ -20,6 +20,8 @@ class ShardedState {
   void export_states(Continuation&) const;void export_trace(std::vector<Event>&) const;
   int64_t reserved_bytes() const;int64_t program_count() const;int64_t workspace_bytes() const;int64_t packet_bytes() const;
   std::map<std::string,int64_t> stats() const;
+  std::vector<StateOwnerTape> reverse_parameters(int64_t tensor_budget) const;
+  std::vector<StateOwnerBanks> parameter_banks() const;
  private:
   struct Impl;std::unique_ptr<Impl> impl_;
 };

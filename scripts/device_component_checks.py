@@ -190,3 +190,9 @@ CHECKS["peer-state-transaction"] = ("tide-state-shard-check", ("float32", "float
 MARKERS["peer-state-flow"] = MARKERS["peer-state-control-flow"] = "peer-flow: passed"
 MARKERS["peer-state-transaction"] = "state-shard: passed"
 KERNELS["peer-state-flow"] = KERNELS["peer-state-control-flow"] = KERNELS["peer-state-transaction"] = "tide_state_shard_"
+
+CHECKS["peer-state-vjp"] = ("tide-sharded-vjp-check", ("float32", "float16"))
+CHECKS["peer-state-training"] = ("tide-sharded-training-check", ("float32", "float16"))
+MARKERS["peer-state-vjp"] = "sharded-graph-vjp: passed"
+MARKERS["peer-state-training"] = "sharded-training: passed"
+KERNELS["peer-state-vjp"] = KERNELS["peer-state-training"] = "tide_state_reverse_"

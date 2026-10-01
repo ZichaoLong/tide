@@ -159,8 +159,10 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed minimal records/profile/evidence/support claims and no live task jobs | pending |
 
 F4 compact state/Read/KV forward is verified at62935e9; [evidence](evidence/device-state-owners-20261001.md).
-Compact retained state/cache reverse, canonical publication into these banks and
-public multi-device training are next. Forward placement does not certify training.
+Compact retained state/cache reverse and canonical publication into these banks
+are implemented with passing directed FP32/FP16 development checks; immutable
+qualification is pending (STATUS owns exact jobs/counts). Public multi-device
+training remains next. Forward placement alone does not certify training.
 
 Apply canonical online greedy algorithms; large blocks when legal, single-action
 fallback and natural streaming degeneration otherwise. Compress logical-time

@@ -34,4 +34,15 @@ using FullStageVjp=std::function<FullVjp(CannProgram&,const FullTape&,const at::
 GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
                          const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,
                          const FullStageVjp&);
+// State/cache owners prepare once, consume each actual reverse stage, and
+// publish fiber adjoints after coordinator Aggregate processing. Callbacks only
+// construct device programs; they never dispatch individual events on the host.
+struct GraphStateVjp {
+  std::function<void(CannProgram&,const ReverseLinks&)> prepare;
+  std::function<StateVjp(CannProgram&,const at::Tensor&,const StateCotangents&,const ControlScores&)> stage;
+  std::function<void(CannProgram&,const at::Tensor&,const at::Tensor&,const at::Tensor&)> sources;
+};
+GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+    const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,const FullStageVjp&,const GraphStateVjp&);
+
 } // namespace tide::device_online

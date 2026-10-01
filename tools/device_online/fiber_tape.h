@@ -16,4 +16,5 @@ struct FiberParameterBanks {
   at::Tensor qkv,qkv_bias,projection,projection_bias,decay,pool;
 };
 std::vector<int64_t> fiber_parameter_offsets(const Graph&,int64_t width);
+std::vector<int64_t> fiber_parameter_offsets(const std::vector<Node>&,const std::vector<int64_t>& source_counts,int64_t width);
 } // namespace tide::device_online

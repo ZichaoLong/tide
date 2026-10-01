@@ -137,4 +137,12 @@ std::map<std::string,int64_t> ShardedState::stats() const {
   }
   out["state_peer_packet_bytes"]=packet_bytes();return out;
 }
+std::vector<StateOwnerTape> ShardedState::reverse_parameters(int64_t budget) const {
+  long double bytes=0;for(const auto& s:impl_->shards)bytes+=s.owner->reverse_parameter_bytes();
+  if(budget<1||2.L*bytes>budget)throw std::invalid_argument("compact owner tape gather/retention exceeds total tensor budget");
+  std::vector<StateOwnerTape> out;for(const auto& s:impl_->shards)out.push_back(s.owner->reverse_parameters(budget));return out;
+}
+std::vector<StateOwnerBanks> ShardedState::parameter_banks() const {
+  std::vector<StateOwnerBanks> out;for(const auto& s:impl_->shards)out.push_back(s.owner->parameter_banks());return out;
+}
 } // namespace tide::device_online

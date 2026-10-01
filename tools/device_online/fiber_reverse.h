@@ -1,4 +1,5 @@
 #pragma once
+#include "state_reverse_view.h"
 #include "fiber_tape.h"
 #include "graph_vjp.h"
 
@@ -11,7 +12,13 @@ CacheCotangents append_fiber_cache_seed(CannProgram&,const FiberAttentionTape&,c
     const CacheGradient* later,const at::Tensor& error,int64_t tensor_budget_bytes);
 FiberReverse prepare_fiber_reverse(CannProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,
     const CacheCotangents&,const at::Tensor& error,int64_t tensor_budget_bytes);
+FiberReverse prepare_fiber_reverse(CannProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,
+    const CacheCotangents&,const at::Tensor& error,int64_t tensor_budget_bytes);
 void append_fiber_reverse(CannProgram&,const ReverseTape&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
+    const at::Tensor& stage,const StateVjp&,const at::Tensor& messages,const at::Tensor& message_connected,
+    const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_connected,
+    const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);
+void append_fiber_reverse(CannProgram&,const StateReverseView&,const ReverseLinks&,const FiberAttentionTape&,const FiberReverse&,
     const at::Tensor& stage,const StateVjp&,const at::Tensor& messages,const at::Tensor& message_connected,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_connected,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);

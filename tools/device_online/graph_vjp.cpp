@@ -24,6 +24,13 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
 }
 GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
                          const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage) {
+  return append_graph_vjp(p,t,roots,error,chunk,budget,full_stage,{});
+}
+GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+    const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner) {
+  const bool sharded=bool(state_owner.stage);
+  if(sharded&&(!state_owner.prepare||!state_owner.sources))throw std::invalid_argument("incomplete compact state reverse executor");
+  if(!sharded&&!t.state.decay.defined())throw std::invalid_argument("compact state tape requires its reverse executor");
   if(at::GradMode::is_enabled()||!t.graph||!t.state.metadata.defined()||t.state.metadata.dim()!=2
       ||!t.fiber_values.defined()||t.fiber_values.dim()!=2)
     throw std::invalid_argument("graph VJP requires no-grad actual device tape");
@@ -63,6 +70,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   // allocations; no nested component can consume another component's reserve.
   const int divisor=attention||fiber?24:controlled?12:normalized?10:8;
   auto links=append_reverse_links(p,t,error,budget/divisor);
+  if(sharded)state_owner.prepare(p,links);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);
@@ -146,15 +154,18 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);meta(1,full_on,full_on,out.full_connected,dummy);
   p.branch(branch,{done,body});p.mark(body);payload(1,full_grad,full_grad,full_grad,full_on);
   auto full_tape=t.full;full_tape.metadata=stage_meta;full_tape.values=stage_values;full_tape.count=stage_count;
-  ControlVjp control;
-  if(controlled)control=append_control_vjp(p,*t.graph,t.state,t.control,stage_count,range,full_grad,full_on,error,budget/divisor);
+  ControlVjp control;ControlScores scores;
+  if(controlled) {
+    if(sharded){scores=append_control_scores(p,*t.graph,t.state,t.control,t.source_scales.scalar_type(),stage_count,range,full_grad,full_on,error,budget/divisor);control=scores.emit;}
+    else control=append_control_vjp(p,*t.graph,t.state,t.control,stage_count,range,full_grad,full_on,error,budget/divisor);
+  }
   auto full=full_stage?full_stage(p,full_tape,controlled?control.fresh:full_grad,full_on,error):
     append_full_vjp(p,full_tape,controlled?control.fresh:full_grad,full_on,error,chunk,budget/divisor);
   meta(2,full.content_connected,full.comparison_connected,full.parameter_connected,dummy);
   payload(2,full.content,full.comparison,full_grad,full_on);
   if(controlled)append_control_merge(p,control,cot,error);
   auto state_tape=t.state;state_tape.metadata=stage_meta;state_tape.values=stage_values;state_tape.count=stage_count;
-  auto state=append_state_vjp(p,state_tape,cot,error,budget/(divisor/2));
+  auto state=sharded?state_owner.stage(p,range,cot,scores):append_state_vjp(p,state_tape,cot,error,budget/(divisor/2));
   for(size_t i=0;i<t.attention.size();++i)
     append_event_reverse(p,t,t.attention[i],attention_reverse[i],range,state,out.attention,out.attention_connected,error,chunk,budget/(divisor/2)/t.attention.size());
   payload(3,full.content,full.comparison,state.content,state.content_connected);
@@ -163,9 +174,10 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   for(size_t i=0;i<t.fiber.size();++i)
     append_fiber_reverse(p,t,links,t.fiber[i],fiber_reverse[i],range,state,messages,connected,aggregate_partials,
       out.fiber,out.fiber_connected,error,chunk,budget/(divisor/2)/t.fiber.size());
+  if(sharded)state_owner.sources(p,messages,connected,aggregate_partials);
   p.copy(carry,state.initial);p.copy(carry_on,state.initial_connected);
   p.add(dc,state.decay);p.add(rc,state.retention_components);
-  if(controlled) {
+  if(controlled&&!sharded) {
     p.add(out.read,control.read);
     append_connection_union(p,control.read_connected,out.read_connected,error);
   }

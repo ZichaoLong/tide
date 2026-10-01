@@ -1,4 +1,5 @@
 #include "sharded_full_vjp.h"
+#include "sharded_state_vjp.h"
 #include "full_reverse_pack.h"
 #include "full_reverse_merge.h"
 #include "peer_exchange.h"
@@ -145,16 +146,35 @@ std::vector<at::Tensor> ShardedFullVjp::work() const {std::vector<at::Tensor> ou
 int64_t ShardedFullVjp::packet_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.request)n+=s.request->packet_bytes()+s.response->packet_bytes();return n;}
 ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace) {
-  auto full=std::make_shared<ShardedFullVjp>(p,t,chunk,budget/2,workspace);
-  auto g=append_graph_vjp(p,t.coordinator,roots,error,chunk,budget/2,
-    [full](CannProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);});
-  full->append_stop(p);return {std::move(g),std::move(full)};
+  return append_sharded_graph_vjp(p,t,roots,error,chunk,budget,workspace,{},{});
 }
+ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+    const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
+    const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots) {
+  const int split=t.states.empty()?2:3;
+  auto full=std::make_shared<ShardedFullVjp>(p,t,chunk,budget/split,workspace);
+  std::shared_ptr<ShardedStateVjp> state;GraphStateVjp hooks;
+  if(!t.states.empty()) {
+    state=std::make_shared<ShardedStateVjp>(t,error,chunk,budget/3,workspace,next,state_roots);
+    hooks.prepare=[state](CannProgram& p,const ReverseLinks& links){state->prepare(p,links);};
+    hooks.stage=[state](CannProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores){return state->append_stage(p,range,cot,scores);};
+    hooks.sources=[state](CannProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials){state->append_sources(p,messages,on,partials);};
+  } else if(next||!state_roots.empty())throw std::invalid_argument("state roots require compact state ownership");
+  auto g=append_graph_vjp(p,t.coordinator,roots,error,chunk,budget/split,
+    [full](CannProgram& p,const FullTape& stage,const at::Tensor& dy,const at::Tensor& on,const at::Tensor& error){return full->append_stage(p,stage,dy,on,error);},hooks);
+  full->append_stop(p);if(state)state->append_stop(p);return {std::move(g),std::move(full),std::move(state)};
+}
+void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>& gradients) {
+  for(const auto& g:gradients){g.full->close();if(g.state)g.state->close();}
+}
+
 void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& gradients) {
   if(gradients.empty())throw std::invalid_argument("no sharded reverse programs");
-  for(const auto& g:gradients)g.full->synchronize_inputs();p.submit();for(const auto& g:gradients)g.full->submit();
+  for(const auto& g:gradients){g.full->synchronize_inputs();if(g.state)g.state->synchronize_inputs();}
+  p.submit();for(const auto& g:gradients){g.full->submit();if(g.state)g.state->submit();}
   std::exception_ptr failure;try{p.wait();}catch(...){failure=std::current_exception();}
   for(const auto& g:gradients)try{g.full->wait();}catch(...){if(!failure)failure=std::current_exception();}
+  for(const auto& g:gradients)if(g.state)try{g.state->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
 } // namespace tide::device_online

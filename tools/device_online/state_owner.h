@@ -1,6 +1,7 @@
 #pragma once
 #include "packed_fiber_attention.h"
 #include "packed_event_attention.h"
+#include "state_owner_tape.h"
 
 namespace tide::device_online {
 struct StateReadProposal {
@@ -29,6 +30,9 @@ class StateOwner {
   const std::vector<int64_t>& global_nodes() const {return global_nodes_;}
   int64_t reserved_bytes() const {return reserved_;}
   std::map<std::string,int64_t> stats() const;
+  int64_t reverse_parameter_bytes() const;
+  StateOwnerTape reverse_parameters(int64_t tensor_budget) const;
+  StateOwnerBanks parameter_banks() const;
  private:
   std::vector<int64_t> global_nodes_;
   StateKernelProfile profile_;
@@ -37,6 +41,6 @@ class StateOwner {
   at::Tensor coefficients_,event_count_;
   std::unique_ptr<PackedFiberAttention> fiber_;
   std::unique_ptr<PackedEventAttention> event_;
-  int64_t reserved_=0;
+  int64_t reserved_=0,physical_edges_=0;
 };
 } // namespace tide::device_online

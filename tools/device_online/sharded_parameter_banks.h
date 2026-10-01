@@ -2,7 +2,7 @@
 #include "parameter_publish.h"
 #include "full_shard_tape.h"
 namespace tide::device_online {
-struct ShardedParameterBanks {ParameterBanks coordinator;std::vector<FullShardTape> full;};
+struct ShardedParameterBanks {ParameterBanks coordinator;std::vector<FullShardTape> full;std::vector<StateOwnerBanks> states;};
 struct ParameterDestination {at::Tensor values;at::ScalarType payload_dtype;};
 // Static named tensor views, including strided Q/K/V columns and HARD Read.
 // Construction reads shape/placement only; no master returns through the CPU.

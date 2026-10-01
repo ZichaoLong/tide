@@ -36,6 +36,7 @@ class PackedFiberAttention {
   at::Tensor key_work() const {return key_work_;}
   at::Tensor chunks() const {return chunks_;}
   at::Tensor peak() const {return peak_;}
+  int64_t tape_bytes() const; // Shape-only upper bound, before grouped gathers.
   std::vector<FiberAttentionTape> tape() const;
   FiberParameterBanks banks() const;
  private:

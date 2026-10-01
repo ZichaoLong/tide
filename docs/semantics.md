@@ -217,7 +217,12 @@ or complete model sharding; graph identities and checkpoint schemas are unchange
 The separate internal [compact state/Read/KV placement](resident-peers.md#compact-state-read-and-kv-owners)
 keeps complete fibers and global region selection, then adopts state/cache proposals
 only after a common device decision. It has no coordinator state/KV replica and
-explicitly refuses monolithic reverse APIs pending compact owner tape integration.
+explicitly refuses monolithic reverse APIs. Its separate compact reverse path
+packs actual device journals, retains owner-local KV adjoints across windows and
+keeps complete-region HST/SOFTP normalization on the coordinator. Canonical alias
+reduction/publication consumes these local partials; development and immutable
+qualification are recorded separately in STATUS. Public multi-device training
+and throughput are not inferred from this internal implementation.
 Internal FP16 state, normalized Aggregate and identity/tanh/LH/SwiGLU Full adjoints retain the actual
 quantized forward operands/results and use FP32 cotangents/accumulation. Their
 cast VJP is the ordinary first-order identity, not a derivative of rounding's

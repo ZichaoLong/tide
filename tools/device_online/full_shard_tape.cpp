@@ -14,6 +14,7 @@ int64_t sharded_reverse_tape_bytes(const ShardedReverseTape& source) {
   long double bytes=reverse_tape_bytes(source.coordinator);auto shards=source.shards;
   std::map<const void*,at::Tensor> seen;
   for(auto& s:shards)for(auto* x:banks(s.full))if(x->defined()&&seen.emplace(x->unsafeGetTensorImpl(),*x).second)bytes+=x->nbytes();
+  for(const auto& s:source.states)bytes+=state_owner_tape_bytes(s);
   if(bytes>std::numeric_limits<int64_t>::max())throw std::invalid_argument("sharded retained extent overflow");
   return int64_t(bytes);
 }
@@ -34,6 +35,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source
   for(auto& s:out.tape.shards)for(auto* x:banks(s.full))if(x->defined()) {
     auto& copy=copies[x->unsafeGetTensorImpl()];if(!copy.defined())copy=x->clone();*x=copy;
   }
+  for(const auto& s:source.states)out.tape.states.push_back(retain_state_owner_tape(s,budget).tape);
   return out;
 }
 } // namespace tide::device_online
