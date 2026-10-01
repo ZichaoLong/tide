@@ -4,7 +4,9 @@
 command interface for independent Python execution, a Python native adapter,
 and an independently linked LibTorch program. These are experiment consumers of
 the public library. They do not add a scheduler, a loss requirement or a model
-head to core graph semantics. Qualification is recorded separately in evidence.
+head to core graph semantics. CPU FP32/FP64 and directed mixed NPU FP32 complete-training qualification is
+recorded at [clean fe2d886](evidence/online-consumers-20261002.md):120 CPU checks
+and18 NPU cases, no skips. This is small-model correctness, not full-size throughput.
 
 ## Workload and parameters
 
