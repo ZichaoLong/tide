@@ -39,7 +39,8 @@ LH/SwiGLU and normalized Aggregate. Python resident is a C++/CANN client, not an
 independent pure-PyTorch resident schedule.
 
 Fixed **4b8ced41f422301a4ced2bf2999c5d1d3cb63e3d** control/Read training qualification
-is complete; evidence publication is next:
+is complete; evidence is published in
+[resident-control-training-20261001](evidence/resident-control-training-20261001.md):
 
 - build-control-training-clean01 / build-control-training-python-clean01 PASSED;
   separate standalone and Python-owned builds; standalone five CTests.
@@ -52,7 +53,7 @@ is complete; evidence publication is next:
   no observed AiCPU or host fallback. Includes construction/CPU assertions;
   not throughput. Physical 9 for gate, 13 for profile, each logical npu:0.
 - TASK/launchers/control_training_evidence.py audits the 40-character revision,
-  builds, all results and retained failures; prepared but not yet executed.
+  builds, all results and retained failures; PASSED and evidence written.
 
 Numerical limits remain: LH/SwiGLU, Aggregate and control trajectories use
 AdamW eps1e-5; public eps1e-8 and normalization epsilons are unchanged. RMSNorm
@@ -67,7 +68,7 @@ identity fixture; control-training-profile-dev02 application passed but 200 MB
 aging/CANN task association prevented profiler export. Their later successful
 runs do not relabel these records. The evidence audit includes all three.
 
-## Old-work cleanup — ready for commit
+## Old-work cleanup — committed and pushed e0afef4
 
 All 24 old dirty files were SHA256-verified and pushed in
 `archive/restricted-flow-20260930` at **964bf628c67270200dabe55b1bca026bd403cd37**;
@@ -104,19 +105,18 @@ Snapshot sources/attention-vjp-dev01; isolated build/attention overlay records
 reused unchanged sources/archives in builds/attention-vjp-dev01/development.json.
 Main CMake now shares fixtures among 12 checkers; that full build is not tested yet.
 
-1. Commit/push cleanup separately from unfinished attention/CMake changes.
-2. Run the fixed-4b8ced4 evidence audit; publish evidence and ROADMAP separately.
-3. Integrate attention graph adjoints, KV final roots/initial gradients, retained
+1. Cleanup is pushed; commit/push the separate control-training evidence.
+2. Integrate attention graph adjoints, KV final roots/initial gradients, retained
    KV window links, parameter reduction/publication and optimizer. Attention
    proposal depends on old KV, not old visible state.value: EMA carry is invalid.
    Preserve sliced/cleared/empty-cache None/zero. Event then fiber coverage;
    do not stop at another local formula check. Register checker in build inventory.
-4. Complete multi-device progression/communication/training, resident FP16 and
+3. Complete multi-device progression/communication/training, resident FP16 and
    declared module/capacity combinations, then the full required matrix.
-5. Representative screening before full-size independent CPU/mixed/resident
+4. Representative screening before full-size independent CPU/mixed/resident
    streaming/prefill; continuous state, aggressive-safe chunks, separate profiles
    and three fresh processes for recommendations. No new full-size speedup exists.
-6. Portable commands, immutable qualification/evidence audit and environment
+5. Portable commands, immutable qualification/evidence audit and environment
    version coverage. Real CUDA remains for another machine.
 
 ## Environment and bounded execution
