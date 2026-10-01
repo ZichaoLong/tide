@@ -73,10 +73,20 @@ peer packets5c3662b,public single-device FP16 training0095048 remain qualified.
 
 Before performance, deliberately resolve historical CPU Attention's retained
 host memory and timing lock; do not blindly resume/kill it. No current qualification
-jobs remain live. Evidence/STATUS/ROADMAP changes are the only uncommitted work.
+jobs remain live. Evidence9fb690b committed/pushed. Current uncommitted work is the measured
+Bool-scatter replacement: one metadata kernel merges flags,sticky error and
+exact int64 chunk counts. Development full-reverse-merge-dev01 build/full gate
+and full-reverse-merge-profile-dev01 all PASSED/exit0. Gate FP32/FP16 each50
+trajectories/200 windows with retained/replay/refusal checks; three-card profile
+checks actual placement. Builder TASK/launchers/build_full_reverse_merge.py:
+only sharded_full_vjp.cpp/full_reverse_merge.cpp and the new merge kernel change;
+other terminal dependencies reused by byte/source hash. Old120-AiCPU evidence
+is unchanged; its repository JSON now retains aggregates/two examples instead
+of120 full CSV rows. Raw CSVs remain hash-bound under TASK.
 
-Next action: record/commit/push the audited5591319 evidence. Apply the observed
-Bool scatter metadata fusion with affected checks/profile, then continue the main
+Next action: commit/push the tested metadata fusion; qualify immutable
+full-reverse-merge-clean01 with two runtime builds,two-dtype gate and3-card
+profile. Do not repeat unaffected single-device core/public tests. Then continue the main
 owner alias reduction,atomic optimizer and bank publication integration. Do not
 pause or ask for new permission after a commit. Use existing build/lease launchers
 and fixed-source evidence; no repeat of unrelated old gates.

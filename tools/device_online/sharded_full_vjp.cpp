@@ -1,5 +1,6 @@
 #include "sharded_full_vjp.h"
 #include "full_reverse_pack.h"
+#include "full_reverse_merge.h"
 #include "peer_exchange.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <ATen/core/grad_mode.h>
@@ -26,11 +27,6 @@ void accumulate(CannProgram& p,FullVjp& total,FullVjp& partial,const at::Tensor&
   auto a=parameters(total),b=parameters(partial);
   for(size_t i=0;i<a.size();++i)if(a[i]->defined())p.add(*a[i],*b[i]);
   append_connection_union(p,partial.parameter_connected,total.parameter_connected,error);p.add(total.chunks,partial.chunks);
-}
-void merge_error(CannProgram& p,const at::Tensor& src,const at::Tensor& dst) {
-  auto zero=at::zeros_like(src),equal=at::empty({1},src.options().dtype(at::kBool)),branch=at::empty_like(src);
-  p.equal(src,zero,equal);p.cast_index(equal,branch);auto failed=p.label(),done=p.label();
-  p.branch(branch,{failed,done});p.mark(failed);p.copy(dst,src);p.mark(done);
 }
 }
 struct ShardedFullVjp::Impl {
@@ -128,10 +124,11 @@ FullVjp ShardedFullVjp::append_stage(CannProgram& p,const FullTape& stage,const 
   }
   for(size_t i=0;i<s.shards.size();++i) {
     auto& owner=s.shards[i];auto& x=stages[i];auto receive=p.label(),skip=p.label();p.branch(x.packed.branch,{skip,receive});p.mark(receive);
-    if(owner.response)owner.response->append_receive(p);merge_error(p,x.error,error);
-    for(const auto& pair:{std::make_pair(content,x.result.content),std::make_pair(comparison,x.result.comparison),
-        std::make_pair(con,x.result.content_connected),std::make_pair(comp,x.result.comparison_connected)})p.index_copy(pair.first,0,x.packed.destinations,pair.second);
-    p.index_copy(out.parameter_connected,0,owner.ids,x.result.parameter_connected);p.add(out.chunks,x.result.chunks);p.mark(skip);
+    if(owner.response)owner.response->append_receive(p);
+    append_full_reverse_merge(p,x.packed.destinations,owner.ids,x.result,out,x.error,error);
+    for(const auto& pair:{std::make_pair(content,x.result.content),std::make_pair(comparison,x.result.comparison)})
+      p.index_copy(pair.first,0,x.packed.destinations,pair.second);
+    p.mark(skip);
   }
   return out;
 }
