@@ -15,7 +15,7 @@ namespace {
 using namespace tide;
 using namespace tide::device_online;
 void require(bool ok,const char* text){if(!ok)throw std::runtime_error(text);}
-void check_tensor(const Tensor& a,const Tensor& b){require(b.scalar_type()==at::kLong?at::equal(a.cpu(),b):at::allclose(a.cpu(),b,1e-5,1e-6),"emission value mismatch");}
+void check_tensor(const Tensor& a,const Tensor& b){require(b.scalar_type()==at::kLong?at::equal(a.cpu(),b):a.scalar_type()==b.scalar_type()&&at::allclose(a.cpu(),b,b.scalar_type()==at::kHalf?3e-3:1e-5,b.scalar_type()==at::kHalf?2e-3:1e-6),"emission value mismatch");}
 void configure(test::Fixture& f,Index width) {
   auto& g=f.graph;g.compile();
   for(Index n=0;n<Index(g.nodes.size());++n) {
@@ -43,17 +43,17 @@ test::Fixture component_fixture(Index width) {
   g.compile();g.layout->edge_source={3,2,1};g.layout->output={1,0,0,0};
   configure(f,width);return f;
 }
-Index components(at::Device device) {
+Index components(at::Device device,at::ScalarType dtype) {
   Index cases=0;const Index base=(Index(1)<<55)/3*3;
   for(Index width:{1,7,33,257})for(Index chunk:{1,4}) {
-    auto f=component_fixture(width);ContentProfile profile(f.graph,f.model,device);
+    auto f=component_fixture(width);test::model_dtype(f.model,dtype);ContentProfile profile(f.graph,f.model,device);
     // Fault injection is below the public finite-parameter boundary. Whole
     // graph construction must continue to reject any nonfinite input model.
     profile.model.nodes[0].extra.at("emit_w_2").fill_(std::numeric_limits<float>::quiet_NaN());
     profile.model.nodes[0].extra.at("emit_b_2").fill_(std::numeric_limits<float>::quiet_NaN());
     PackedEmission emission(profile,device,2,16,16,chunk,64*1024*1024);
     auto coordinates=at::tensor(std::vector<Index>{0,0,base,base,0,0,base+1,base+1,1,1,base,base,1,2,base,base,-9,-9,-9,-9},at::kLong).reshape({5,4});
-    auto x=(at::arange(5*width,at::kFloat).reshape({5,width}).remainder(11)-5)*.03125f;x[4].fill_(std::numeric_limits<float>::quiet_NaN());
+    auto x=(at::arange(5*width,at::kFloat).reshape({5,width}).remainder(11)-5)*.03125f;x=x.to(dtype);x[4].fill_(std::numeric_limits<float>::quiet_NaN());
     auto valid=at::ones({5},at::kBool);valid[4].fill_(false);
     ActionBatch action{coordinates.to(device),x.to(device),valid.to(device)};
     auto error=at::zeros({1},action.coordinates.options().dtype(at::kInt));
@@ -129,19 +129,19 @@ Index windows(at::Device device) {
   }
   return cases;
 }
-Index refusals(at::Device device) {
+Index refusals(at::Device device,at::ScalarType dtype) {
   Index cases=0;
-  {auto f=component_fixture(3);f.graph.nodes[2].emit_phases={-2,-2};bool refused=false;
+  {auto f=component_fixture(3);test::model_dtype(f.model,dtype);f.graph.nodes[2].emit_phases={-2,-2};bool refused=false;
     try{ContentProfile invalid(f.graph,f.model,device);}catch(const std::invalid_argument&){refused=true;}
     require(refused,"identity boundary accepted conditional emission");++cases;}
   for(int kind=0;kind<5;++kind) {
-    auto f=component_fixture(3);
-    if(kind>=3){f.graph.nodes[0].emit_phases={-2,-2,kind==3?-1:-2,-2};configure(f,3);}
+    auto f=component_fixture(3);test::model_dtype(f.model,dtype);
+    if(kind>=3){f.graph.nodes[0].emit_phases={-2,-2,kind==3?-1:-2,-2};configure(f,3);test::model_dtype(f.model,dtype);}
     ContentProfile profile(f.graph,f.model,device);
     PackedEmission emission(profile,device,1,kind==0?1:16,kind==1?1:16,1,64*1024*1024);
     const Index time=kind>=3?std::numeric_limits<Index>::max()-1:0;
     auto coords=at::tensor(std::vector<Index>{0,kind==2?99:0,time,time,0,0,time,time},at::kLong).reshape({2,4}).to(device);
-    ActionBatch action{coords,at::ones({2,3},coords.options().dtype(at::kFloat)),at::ones({2},coords.options().dtype(at::kBool))};
+    ActionBatch action{coords,at::ones({2,3},coords.options().dtype(dtype)),at::ones({2},coords.options().dtype(at::kBool))};
     auto error=at::zeros({1},coords.options().dtype(at::kInt));CannProgram program(device);
     auto out=emission.append_stage(program,action,error);program.finish();program.run();
     const auto expected=kind<2?1:kind==2?2:kind==3?3:0;
@@ -157,11 +157,12 @@ int main(int argc,char** argv) {
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("emission gate requires explicit NPU FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("emission gate requires explicit NPU FP32/FP16");
+    args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("emission gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
-    const auto a=components(device),b=windows(device),c=refusals(device);
-    std::cout<<"device-emission: passed components="<<a<<" windows="<<b<<" refusals="<<c<<" scope=FP32_HARD_inference\n";
+    const auto a=components(device,args.dtype),b=args.dtype==at::kFloat?windows(device):0,c=refusals(device,args.dtype);
+    std::cout<<"device-emission: passed components="<<a<<" windows="<<b<<" refusals="<<c<<" scope="<<(args.dtype==at::kFloat?"FP32_HARD_inference":"FP16_component_only")<<" keep_dtype=true\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

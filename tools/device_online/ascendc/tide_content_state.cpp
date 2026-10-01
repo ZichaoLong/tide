@@ -1,17 +1,18 @@
 #include "kernel_operator.h"
 #include "state_clock.h"
-namespace {using I=int64_t;}
-extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR lengths,
+namespace {
+using I=int64_t;
+template<class T>
+__aicore__ inline void content_state(GM_ADDR fibers,GM_ADDR lengths,
     GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
     GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,GM_ADDR comparisons,
     GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR event_count,GM_ADDR proposals,GM_ADDR error,
     int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t diagnostics,int64_t metadata_only,int64_t max_ticks) {
-  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)clocks);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
   auto status=(__gm__ int32_t*)error;auto fs=(__gm__ I*)fibers,cfg=(__gm__ I*)config,t=(__gm__ I*)clocks;
-  auto s=(__gm__ float*)state,h=(__gm__ float*)content,a=(__gm__ float*)coefficients;
+  auto s=(__gm__ T*)state,h=(__gm__ T*)content,a=(__gm__ T*)coefficients;
   auto valid=(__gm__ uint8_t*)present,on=(__gm__ uint8_t*)active;
   auto events=(__gm__ I*)event_meta,actions=(__gm__ I*)action_coordinates;auto v=(__gm__ float*)event_values;
   I count=((__gm__ I*)lengths)[1],stride=5*width+2;
@@ -41,18 +42,18 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
     }
     for(I j=0;j<width&&!metadata_only;++j) {
       float old=s[key*width+j],proposal=old;
-      if(kind==1){float decayed=a[n*width+j]*old;proposal=decayed+h[i*width+j];}
-      if(kind==2){float rho=((__gm__ float*)retention)[n];
-        for(uint64_t tick=0;tick<ticks;++tick)proposal=proposal*rho;
-        proposal=h[i*width+j]+proposal;}
-      if(kind==3)proposal=((__gm__ float*)proposals)[i*width+j];
+      if(kind==1){float decayed=float(T(float(a[n*width+j])*old));proposal=float(T(decayed+float(h[i*width+j])));}
+      if(kind==2){float rho=float(((__gm__ T*)retention)[n]);
+        for(uint64_t tick=0;tick<ticks;++tick)proposal=float(T(proposal*rho));
+        proposal=float(T(float(h[i*width+j])+proposal));}
+      if(kind==3)proposal=float(((__gm__ T*)proposals)[i*width+j]);
       float comparison=adopt?proposal:old,next=clear?comparison*0.0f:comparison;
       if(diagnostics) {
         v[i*stride+j]=h[i*width+j];v[i*stride+width+j]=old;v[i*stride+2*width+j]=proposal;
         v[i*stride+3*width+j]=comparison;v[i*stride+4*width+j]=next;
       }
-      s[key*width+j]=next;
-      ((__gm__ float*)comparisons)[i*width+j]=comparison;
+      s[key*width+j]=T(next);
+      ((__gm__ T*)comparisons)[i*width+j]=T(comparison);
     }
     if(diagnostics){v[i*stride+5*width]=((__gm__ float*)scores)[i];v[i*stride+5*width+1]=((__gm__ float*)controls)[i];}
     t[key*2]=next_time;t[key*2+1]=next_count;valid[key]=1;
@@ -60,4 +61,18 @@ extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR 
   }
   if(status[0]==0)total[0]+=count;
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
+}
+} // namespace
+extern "C" __global__ __aicore__ void tide_content_state(GM_ADDR fibers,GM_ADDR lengths,
+    GM_ADDR content,GM_ADDR scores,GM_ADDR controls,GM_ADDR active,GM_ADDR config,GM_ADDR coefficients,GM_ADDR retention,GM_ADDR policy,
+    GM_ADDR state,GM_ADDR clocks,GM_ADDR present,GM_ADDR action_coordinates,GM_ADDR comparisons,
+    GM_ADDR event_meta,GM_ADDR event_values,GM_ADDR stage,GM_ADDR event_count,GM_ADDR proposals,GM_ADDR error,
+    int64_t capacity,int64_t width,int64_t nodes,int64_t samples,int64_t diagnostics,int64_t metadata_only,int64_t max_ticks,int64_t fp16) {
+  KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
+  if(fp16)content_state<half>(fibers,lengths,content,scores,controls,active,config,coefficients,retention,policy,
+    state,clocks,present,action_coordinates,comparisons,event_meta,event_values,stage,event_count,proposals,error,
+    capacity,width,nodes,samples,diagnostics,metadata_only,max_ticks);
+  else content_state<float>(fibers,lengths,content,scores,controls,active,config,coefficients,retention,policy,
+    state,clocks,present,action_coordinates,comparisons,event_meta,event_values,stage,event_count,proposals,error,
+    capacity,width,nodes,samples,diagnostics,metadata_only,max_ticks);
 }

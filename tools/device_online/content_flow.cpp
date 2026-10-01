@@ -13,6 +13,8 @@
 namespace tide::device_online {
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
+  // Individual FP16 components do not yet establish a complete session contract.
+  if(profile.dtype!=at::kFloat)throw std::invalid_argument("content flow currently requires CPU FP32 parameter inputs");
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   if((l.mode!="hard"&&l.mode!="hst"&&l.mode!="softp")||!std::isfinite(l.zeta))
     throw std::invalid_argument("invalid resident Emit mode/zeta");

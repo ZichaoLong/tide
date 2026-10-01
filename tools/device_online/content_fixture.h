@@ -3,6 +3,14 @@
 
 namespace tide::device_online::test {
 struct Fixture {Graph graph;Model model;Continuation initial;std::vector<External> input;};
+inline void model_dtype(Model& model,at::ScalarType dtype) {
+  for(auto& w:model.nodes) {
+    for(auto x:{&w.decay,&w.weight,&w.bias,&w.read})*x=x->to(dtype);
+    for(auto& [_,x]:w.extra)x=x.to(dtype);
+  }
+  for(auto group:{&model.input_scale,&model.agg_scale,&model.edge_scale,&model.output_scale})
+    for(auto& x:*group)x=x.to(dtype);
+}
 inline Fixture fixture(int shape,int variant) {
   Fixture f;auto& g=f.graph;g.nodes={{0},{1},{0},{1}};
   g.regions={{1,variant==0,variant==0,"content","count-v1"},{1,true,true,"content","positive-v1"}};

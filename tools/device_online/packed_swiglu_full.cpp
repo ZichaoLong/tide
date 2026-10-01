@@ -9,14 +9,16 @@
 namespace tide::device_online {
 namespace {
 uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
-std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t rows,int64_t nodes) {
-  return {24.L*(parameters+1.L)*width*width+16.L*(rows+1.L)*width+16.L*(nodes+1.L),24.L*width*width+128.L*width+128};
+std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t rows,int64_t nodes,at::ScalarType dtype) {
+  const long double bytes=dtype==at::kHalf?2:4;
+  return {6*bytes*(parameters+1.L)*width*width+4*bytes*(rows+1.L)*width+16.L*(nodes+1.L),
+    6*bytes*width*width+32*bytes*width+128};
 }
 }
 long double PackedSwiGluFull::minimum_bytes(const ContentProfile& p,int64_t capacity) {
   int64_t count=0;for(const auto& n:p.graph.nodes)count+=!n.identity&&n.full=="swiglu";
   if(!count)return 0;
-  const auto [fixed,row]=footprint(count,p.width,capacity,p.graph.nodes.size());return fixed+row;
+  const auto [fixed,row]=footprint(count,p.width,capacity,p.graph.nodes.size(),p.dtype);return fixed+row;
 }
 PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
     :nodes_(profile.graph.nodes.size()),width_(profile.width),rows_(capacity),parameters_(0),chunk_(0),reserved_(0) {
@@ -32,14 +34,14 @@ PackedSwiGluFull::PackedSwiGluFull(const ContentProfile& profile,at::Device devi
     }
   }
   if(!parameters_)throw std::invalid_argument("packed SwiGLU requires at least one declared owner");
-  const auto [fixed,per_row]=footprint(parameters_,width_,rows_,nodes_);
+  const auto [fixed,per_row]=footprint(parameters_,width_,rows_,nodes_,profile.dtype);
   if(fixed+per_row>budget)throw std::invalid_argument("one packed SwiGLU row exceeds workspace budget");
   chunk_=static_cast<int64_t>(std::min<long double>({static_cast<long double>(max_rows),static_cast<long double>(capacity),(budget-fixed)/per_row}));
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);
   for(auto& index:mapping)if(index<0)index=parameters_;
   mapping.push_back(parameters_); // Planner's independent zero parameter sentinel.
   kinds_=at::tensor(kinds,at::kLong).to(device);mapping_=at::tensor(mapping,at::kLong).to(device);
-  auto options=at::TensorOptions().dtype(at::kFloat);
+  auto options=at::TensorOptions().dtype(profile.dtype);
   gate.push_back(at::zeros({width_,2*width_},options));up.push_back(at::zeros({width_,2*width_},options));
   down.push_back(at::zeros({2*width_,width_},options));
   gate_=at::stack(gate).to(device);up_=at::stack(up).to(device);down_=at::stack(down).to(device);
@@ -48,7 +50,7 @@ ActionBatch PackedSwiGluFull::append_stage(CannProgram& p,const ActionBatch& inp
     const at::Tensor& comparison,const at::Tensor& error,const at::Tensor& chunks) {
   const auto rows=rows_,width=width_,chunk=chunk_,nodes=nodes_;
   if(input.values.sizes()!=at::IntArrayRef{rows,width}||content.sizes()!=input.values.sizes()||comparison.sizes()!=input.values.sizes()
-      ||input.values.scalar_type()!=at::kFloat||content.scalar_type()!=at::kFloat||comparison.scalar_type()!=at::kFloat
+      ||input.values.scalar_type()!=gate_.scalar_type()||content.scalar_type()!=gate_.scalar_type()||comparison.scalar_type()!=gate_.scalar_type()
       ||input.coordinates.sizes()!=at::IntArrayRef{rows,4}||input.coordinates.scalar_type()!=at::kLong
       ||input.valid.sizes()!=at::IntArrayRef{rows}||input.valid.scalar_type()!=at::kBool
       ||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt||chunks.sizes()!=at::IntArrayRef{1}||chunks.scalar_type()!=at::kLong)

@@ -84,9 +84,44 @@ loads/stores convert whole tiles, including non-aligned tails, without host
 per-message work. Complete resident FP16 Aggregate/state/VJP integration remains
 separate from these building blocks.
 
+`PackedSwiGluFull` and `PackedEmission` also retain the requested FP32/FP16 dtype
+through parameter banks, selected-row matmuls, activations, slot projections,
+physical scales and payload stores. Their numerical byte budgets use the actual
+element size; int64 planners, phase tests and edge identities are shared.
+
+The state/Read building blocks accept FP32/FP16 payloads. Identity, EMA and
+Add-repeat use the same scalar/vector algorithms; half arithmetic rounds after
+each product/add, including every repeated tick and event. A vector time batch
+therefore cannot retain extra precision merely because an intermediate state
+stays in a local tile. Full-width state and message buffers keep the payload
+dtype. Linear/norm Read products and reductions, selection scores/controls and
+diagnostic event fields use FP32. This is an explicit scoring policy, compared
+against an independent CPU FP32 Read on the stored state/content values.
+It does not promise equality with a half-accumulated selector near a tie.
+
+`state-read` checks the canonical CPU StateKernel steps, exact clocks above
+2^55, observe/adopt/clear, scalar/vector execution, node-time batches versus
+continued single-time windows, empty/NaN padding and failed commits. It is an
+isolated component gate, not an independently scheduling graph engine.
+The `emission`/`swiglu` FP16 cells are component-only; their FP32 cells also
+retain the complete graph-window regressions. Complete resident FP16 sessions,
+attention, backward and FP32-master publication remain separate integration work.
+
+Normalized Aggregate widens the stored model's mass/logit parameters into FP32
+normalization banks. Softplus/softmax, denominators, coefficients and ordered
+accumulation stay in FP32. Physical source products first enter the payload-dtype
+contribution buffer; normalization multiplies those stored values in FP32,
+then rounds contribution and summary stores independently. `aggregate-payload`
+compares canonical CPU FP32 Aggregate on those stored products and a separate
+FP64 formula. Logical-slot contributions are matched to physical rows by identity;
+the two orderings are not interchangeable. These banks still need explicit
+low-precision optimizer publication before complete FP16 training can be enabled.
+
 `build_device_control.py --checks numerical full` builds only those standalone
 components and their dependencies; the manifest records the requested subset.
 The PackedFull target does not rebuild unrelated attention/VJP kernels.
+Multiple requested checks use one aggregate CMake target so GNU Make does not
+repeat CANN ExternalProject work for each separate top-level target.
 Omitting `--checks` still builds the full backend. A subset result never replaces
 the complete registered gate; verify it with the same explicit `--checks` list.
 

@@ -8,6 +8,7 @@ struct ContentProfile {
   Graph graph;
   Model model; // validated immutable CPU parameter snapshot
   int64_t width;
+  at::ScalarType dtype;
   std::vector<int64_t> owners;
   std::vector<Wire> wires;
   std::vector<SelectionPolicy> policies;
@@ -20,6 +21,7 @@ struct ContentProfile {
 };
 struct ContentState {at::Tensor values,clocks,present;};
 struct ContentBatch {
+  // Payload/weighted use the model dtype; Read scores always accumulate in FP32.
   at::Tensor content,scores,weighted;
 };
 struct ContentUpdate {

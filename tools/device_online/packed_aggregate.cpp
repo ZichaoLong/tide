@@ -33,7 +33,7 @@ long double PackedAggregate::minimum_bytes(const ContentProfile& p,int64_t rows)
   const auto f=footprint(p,rows);return f.enabled?f.fixed+f.row:0;
 }
 PackedAggregate::PackedAggregate(const ContentProfile& p,at::Device device,int64_t rows,int64_t chunk,int64_t budget)
-    :rows_(rows),sources_(p.sources) {
+    :rows_(rows),dtype_(p.dtype),sources_(p.sources) {
   const auto f=footprint(p,rows);slots_=f.slots;
   if(!f.enabled||rows<1||chunk<1||budget<f.fixed+f.row)throw std::invalid_argument("device Aggregate minimum exceeds budget");
   chunk_=std::min({rows,chunk,int64_t((budget-f.fixed)/f.row)});
@@ -46,7 +46,7 @@ PackedAggregate::PackedAggregate(const ContentProfile& p,at::Device device,int64
     if(k>=2)for(int64_t slot=0;slot<count;++slot) {
       const auto prefix=k==2?"agg_mass_":"agg_logit_";
       const auto& value=p.model.nodes[n].extra.at(prefix+std::to_string(slot));
-      if(value.dim()!=0||value.scalar_type()!=at::kFloat||!value.device().is_cpu()
+      if(value.dim()!=0||value.scalar_type()!=p.dtype||!value.device().is_cpu()
           ||!at::isfinite(value).item<bool>())throw std::invalid_argument("invalid device Aggregate slot parameter");
       weights[n][slot].copy_(value);
     }
@@ -55,6 +55,10 @@ PackedAggregate::PackedAggregate(const ContentProfile& p,at::Device device,int64
   weights_=weights.to(device);chunks_=at::zeros({1},kinds_.options());
 }
 void PackedAggregate::append(CannProgram& p,const ReadyBatch& ready,const PackedSum& sum,const at::Tensor& error,bool vectorized) const {
+  for(const auto& x:{sum.content,sum.weighted})if(x.scalar_type()!=dtype_||x.device()!=weights_.device()
+      ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("Aggregate requires matching payload buffers");
+  // Normalization coefficients retain FP32 range even with half payloads.
+  const int64_t fp16=dtype_==at::kHalf;
   const auto chunk=chunk_,slots=slots_;
   const auto kinds=kinds_,lengths=lengths_,weights=weights_,sources=sources_,chunks=chunks_;
   auto coefficient=at::ones({rows_},weights.options()),ids=at::empty({chunk},kinds.options());
@@ -79,7 +83,7 @@ void PackedAggregate::append(CannProgram& p,const ReadyBatch& ready,const Packed
   const auto width=sum.content.size(1);const auto blocks=uint32_t(vectorized?std::min<int64_t>(32,rows_):1);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_aggregate_apply)(blocks,stream,
     ptr(ready.fibers),ptr(ready.fiber_offsets),ptr(ready.counts),ptr(sum.order),ptr(kinds),ptr(coefficient),
-    ptr(sum.weighted),ptr(sum.content),ptr(error),width,int64_t(vectorized)),"apply normalized Aggregate contributions");},
+    ptr(sum.weighted),ptr(sum.content),ptr(error),width,int64_t(vectorized),fp16),"apply normalized Aggregate contributions");},
     {ready.fibers,ready.fiber_offsets,ready.counts,sum.order,kinds,coefficient,sum.weighted,sum.content,error});
 }
 } // namespace tide::device_online

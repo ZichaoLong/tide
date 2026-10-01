@@ -20,6 +20,7 @@ class PackedAggregate {
   AggregateTape tape() const {return {kinds_,lengths_,weights_,slots_};}
  private:
   int64_t rows_,chunk_,slots_,reserved_;
+  at::ScalarType dtype_;
   at::Tensor kinds_,lengths_,weights_,sources_,chunks_;
 };
 } // namespace tide::device_online

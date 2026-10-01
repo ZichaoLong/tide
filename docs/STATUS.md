@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T03:30:54.724200+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T04:03:54.217529+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -90,13 +90,60 @@ TASK/launchers/low_precision_components_evidence.py verified source/core/build/
 loader/log/CSV identities and exact eight-cell inventory. No new live jobs.
 Development jobs dev01–04 remain terminal passed; raw records preserved.
 
-Next implementation:FP16 state/Read and remaining Full/emission components,
-then Aggregate/attention/VJP/master publication and complete sessions. Public
-resident session FP16 is still refused. Full FP32 resident gates were last
-qualified at66a6ca5;466b4c3 needs affected graph/library integration checks at the
-next milestone. Continue peer progression/communication/training,representative
-five-preset screening and full-size CPU/mixed/resident comparisons,then
-migration/version/CUDA-pending evidence under F1–F7. No full-size speed claim.
+Active development increment after pushed evidence727b1eb:FP16 content profiles,
+SwiGLU/emission banks and budgets,scalar/vector state and Read with per-operation
+half rounding and FP32 scores/journals. Now also normalized Aggregate half payloads
+with FP32 coefficients/ordered accumulation; tests cover canonical CPU FP32/FP64,
+physical/logical source order,exclusive source aliases,missing versus zero and empty
+replays. Public complete resident FP16 still refuses; no support promotion yet.
+Uncommitted files are exclusively this implementation/tests/build batching/docs.
+
+build-low-precision-state-dev01 is terminal FAILED/exit1:Ascend C rejected an
+implicit half scalar Read operand; fixed by explicit float widening. The new
+checker identity boundary now keeps the required global clock.
+build-low-precision-state-dev02 is terminal CANCELLED/exit143:after completing
+state-read target,Make repeated CANN dependency builds for the next top-level
+target. Stopped with MainPID0/no cgroup; cancellation preserved,not passed.
+low-precision-state-probe-dev02 passed on physical9/logical0:half state/Read
+48 configurations,336 windows,18 refusals,canonical CPU storage-dtype StateKernel
+reference. This direct component probe does not qualify the cancelled whole build.
+Only a later test input adds FP32 scores above half range;production state bytes
+remain those of the passing probe.
+
+build-low-precision-state-dev03 is terminal PASSED/exit0:all host units rebuilt,
+only byte-matching completed CANN archives reused,one aggregate build target.
+Source/build suffix low-precision-state-dev03. Source component bytes match the
+working implementation; this is dirty-source development,not clean qualification.
+All three directed gates are terminal PASSED/exit0:
+- low-precision-state-components-dev03:8 FP32/FP16 cells (physical9/logical0).
+  State/Read48 configurations/336 windows/18 refusals per dtype,including FP32
+  scores above half range; normalized Aggregate64/192 replays per dtype,CPU
+  FP32/FP64; SwiGLU16 component cases/4 refusals per dtype and256 FP32 windows;
+  emission16 component cases/6 refusals per dtype and66 FP32 windows.
+- low-precision-state-windows-dev03:6 FP32 gates,content/window/add/clock/norm32/
+  lh-full (physical1/logical0).
+- low-precision-state-training-dev03:6 complete FP32 gates,resident/full/aggregate/
+  control/event/fiber training (physical13/logical0). Only the existing Full gate
+  uses its declared conditioned controls; other training controls remain strict.
+All four separate FP16 profiles terminal PASSED/exit0:
+low-precision-{state,aggregate,swiglu,emission}-profile-dev03.
+State98 vector tasks; Aggregate4736 vector+128 MIX_AIV; SwiGLU326 vector+40
+AI_CORE; emission665 vector+27 AI_CORE. No observed AiCPU/logged fallback.
+All include construction/CPU assertions; none measures throughput.
+
+Next commit the implementation,then normal clean full builds of that immutable
+commit from NEW low-precision-forward-clean01 snapshot:
+- build-low-precision-forward-clean01:standalone core placement-npu-clean01,
+  build same suffix,Ascend910_9392,jobs2,1800s,omitted --checks for full backend.
+- build-low-precision-forward-python-clean01:Python core placement-npu-python-clean01,
+  build same suffix,jobs2,1200s,full Python-owned backend.
+After build success run all62 registered standalone cells (Full control-check
+conditioned),public Python resident tests and separate bounded FP16 profiles.
+Clean build/gate results are unknown until terminal records are inspected.
+The portable core source is unchanged; do not repeat8954 CPU checks.
+Continue complete FP16 attention/VJP/master publication and sessions,then peer
+progression/communication/training,five-preset/full-size CPU/mixed/resident
+comparisons and migration/version/CUDA evidence. F1–F7 remain incomplete.
 
 ## Environment and bounded execution
 

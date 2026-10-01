@@ -39,11 +39,14 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_uplo
   for(const auto& w:model.nodes) {
     if(w.kernel||w.read_kernel||w.next_kernel||w.aggregate_kernel||w.full_kernel)
       throw std::invalid_argument("content flow requires built-in module declarations, not custom kernel handles");
-    if(!w.bias.defined()||w.bias.device()!=at::Device(at::kCPU)||w.bias.scalar_type()!=at::kFloat)
-      throw std::invalid_argument("content flow currently requires CPU FP32 parameter inputs");
+    if(!w.bias.defined()||w.bias.device()!=at::Device(at::kCPU)
+        ||(w.bias.scalar_type()!=at::kFloat&&w.bias.scalar_type()!=at::kHalf))
+      throw std::invalid_argument("content profile requires CPU FP32/FP16 parameter inputs");
   }
   for(const auto& w:model.regions)if(w.kernel)throw std::invalid_argument("custom region kernel unavailable");
   configure_model(graph,model);validate_model(graph,model);width=model.width();
+  dtype=model.nodes.front().bias.scalar_type();
+  const auto options=at::TensorOptions().dtype(dtype);
   // Take independent values, preserving no user-owned mutable parameter alias.
   auto copy=[](const Tensor& x){return x.detach().clone();};
   for(auto& w:model.nodes){w.decay=copy(w.decay);w.weight=copy(w.weight);w.bias=copy(w.bias);w.read=copy(w.read);
@@ -59,7 +62,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_uplo
     metadata.insert(metadata.end(),{edge.target,graph.source_domain->edge_target[e]});weights.push_back(model.agg_scale[e]);
   }
   // Physical nonempty tensors are required even for a graph with no sources.
-  if(weights.empty()){metadata={0,0};weights.push_back(at::zeros({},at::kFloat));}
+  if(weights.empty()){metadata={0,0};weights.push_back(at::zeros({},options));}
   for(size_t n=0;n<graph.nodes.size();++n) {
     const auto& node=graph.nodes[n];
     const int64_t kind=node.identity?0:node.memory=="ema"?1:node.memory=="lh-add-repeat-v1"?2:
@@ -71,7 +74,7 @@ ContentProfile::ContentProfile(Graph g,Model m,at::Device device,bool defer_uplo
     modes.push_back(node.identity?-1:mode=="content"?0:mode=="old"?1:2);
     read_types.push_back(node.readout=="norm-fp32-v1");
     decays.push_back(model.nodes[n].decay);
-    retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},at::kFloat));
+    retentions.push_back(kind==2?model.nodes[n].extra.at("add_retention"):at::zeros({},options));
   }
   sources=at::tensor(metadata,at::kLong).reshape({-1,2}).to(destination);scales=at::stack(weights).to(destination);
   if(!graph.origins.empty()) {

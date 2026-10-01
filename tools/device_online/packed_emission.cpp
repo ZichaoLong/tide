@@ -11,17 +11,18 @@
 namespace tide::device_online {
 namespace {
 uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
-std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t capacity,int64_t slots,int64_t nodes) {
-  const long double persistent=parameters?4.L*(parameters+1.L)*(width*static_cast<long double>(width)+width):0;
-  return {persistent+128.L*capacity+16.L*(capacity+1.L)*width+64.L*(slots+nodes+1.L),
-    parameters?8.L*width*width+80.L*width+64:0.L};
+std::pair<long double,long double> footprint(int64_t parameters,int64_t width,int64_t capacity,int64_t slots,int64_t nodes,at::ScalarType dtype) {
+  const long double bytes=dtype==at::kHalf?2:4;
+  const long double persistent=parameters?bytes*(parameters+1.L)*(width*static_cast<long double>(width)+width):0;
+  return {persistent+128.L*capacity+4*bytes*(capacity+1.L)*width+64.L*(slots+nodes+1.L),
+    parameters?2*bytes*width*width+20*bytes*width+64:0.L};
 }
 }
 long double PackedEmission::minimum_bytes(const ContentProfile& p,int64_t arrivals,int64_t outputs) {
   int64_t parameters=0;const auto& g=p.graph;
   for(size_t n=0;n<g.nodes.size();++n)if(!g.nodes[n].identity&&g.nodes[n].emission=="slot_affine")
     parameters+=g.outgoing_ports.offsets[n+1]-g.outgoing_ports.offsets[n];
-  const auto [fixed,row]=footprint(parameters,p.width,arrivals+outputs,g.outgoing_ports.bindings.size(),g.nodes.size());
+  const auto [fixed,row]=footprint(parameters,p.width,arrivals+outputs,g.outgoing_ports.bindings.size(),g.nodes.size(),p.dtype);
   return fixed+row;
 }
 PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,int64_t samples,
@@ -31,7 +32,7 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
   const auto maximum=std::numeric_limits<int64_t>::max();
   if(at::GradMode::is_enabled()||device.type()!=c10::DeviceType::PrivateUse1||samples<1||arrivals<1||outputs<1||max_rows<1
       ||budget<1||arrivals>maximum-outputs||width_<1||nodes_<1)
-    throw std::invalid_argument("packed emission requires bounded dimensions, no-grad NPU FP32");
+    throw std::invalid_argument("packed emission requires bounded dimensions, no-grad NPU FP32/FP16");
   capacity_=arrivals+outputs;
   const auto& g=profile.graph;std::vector<int64_t> table,periods;std::vector<at::Tensor> weights,biases,scales;
   for(int64_t node=0;node<nodes_;++node) {
@@ -52,11 +53,11 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
   }
   // Stage storage is linear in declared message capacities. Matrices are
   // gathered only for present affine rows and bounded by a separate chunk.
-  const auto [fixed,per_row]=footprint(parameters_,width_,capacity_,slots_,nodes_);
+  const auto [fixed,per_row]=footprint(parameters_,width_,capacity_,slots_,nodes_,profile.dtype);
   if(fixed+(parameters_?per_row:0)>budget)throw std::invalid_argument("packed emission exceeds workspace budget");
   if(parameters_)chunk_=static_cast<int64_t>(std::min<long double>(max_rows,(budget-fixed)/per_row));
   reserved_=static_cast<int64_t>(fixed+chunk_*per_row);
-  auto options=at::TensorOptions().dtype(at::kFloat);
+  auto options=at::TensorOptions().dtype(profile.dtype);
   scales.push_back(at::zeros({},options));
   offsets_=at::tensor(g.outgoing_ports.offsets,at::kLong).to(device);
   periods_=at::tensor(periods,at::kLong).to(device);
@@ -72,7 +73,7 @@ PackedEmission::PackedEmission(const ContentProfile& profile,at::Device device,i
 EmissionBatch PackedEmission::append_stage(CannProgram& p,const ActionBatch& actions,const at::Tensor& error) {
   const auto rows=actions.valid.numel(),width=width_,capacity=capacity_,chunk=chunk_,parameters=parameters_;
   if(rows<1||actions.coordinates.sizes()!=at::IntArrayRef{rows,4}||actions.values.sizes()!=at::IntArrayRef{rows,width}
-      ||actions.coordinates.scalar_type()!=at::kLong||actions.values.scalar_type()!=at::kFloat||actions.valid.scalar_type()!=at::kBool
+      ||actions.coordinates.scalar_type()!=at::kLong||actions.values.scalar_type()!=scales_.scalar_type()||actions.valid.scalar_type()!=at::kBool
       ||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt)
     throw std::invalid_argument("invalid packed emission actions");
   for(const auto& x:{actions.coordinates,actions.values,actions.valid,error})

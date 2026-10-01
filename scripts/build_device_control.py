@@ -55,6 +55,7 @@ def main():
     subprocess.run(["cmake", "--install", str(core), "--prefix", str(prefix)], check=True)
     package, = prefix.glob("lib*/cmake/TideGraph")
     prefixes = [str(prefix), *os.environ.get("CMAKE_PREFIX_PATH", "").split(os.pathsep)]
+    targets = [CHECKS[check][0] for check in dict.fromkeys(args.checks or [])]
     subprocess.run(["cmake", "-S", str(root / "tools/device_online"), "-B", str(build),
                     # CANN9 legacy host-stub extraction uses literal object
                     # paths; Ninja emits /./ paths inconsistent with its JSON.
@@ -62,13 +63,13 @@ def main():
                     "-DCMAKE_BUILD_TYPE=Release", "-DTideGraph_DIR="+str(package),
                     "-DTorch_DIR="+cache_values(core)["Torch_DIR"],
                     "-DTIDE_DEVICE_RUNTIME="+runtime,
+                    *(["-DTIDE_DEVICE_CHECK_TARGETS="+";".join(targets)] if targets else []),
                     *(["-DPython3_EXECUTABLE="+sys.executable] if runtime == "python" else []),
                     "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
                     *(["-DTIDE_DEVICE_ASCENDC=ON", "-DSOC_VERSION="+args.ascendc_soc]
                       if args.ascendc_soc else [])], check=True)
-    targets = [CHECKS[check][0] for check in dict.fromkeys(args.checks or [])]
     subprocess.run(["cmake", "--build", str(build), "--parallel", str(args.jobs),
-                    *(["--target", *targets] if targets else [])], check=True)
+                    *(["--target", "tide-device-selected-checks"] if targets else [])], check=True)
     if runtime == "standalone":
         subset_tests = {"control": "device-control-help", "numerical": "device-numerical-help",
                         "queue": "packed-queue-cpu-fp32|packed-queue-cpu-fp64",
@@ -88,7 +89,7 @@ def main():
                       "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
                       "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
         names.append("libtide-resident.so")
-        names.append("tide-packed-lh-check")
+        names.extend(("tide-packed-lh-check", "tide-state-read-check", "tide-aggregate-payload-check"))
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
         names.append("tide-resident-full-training-check")

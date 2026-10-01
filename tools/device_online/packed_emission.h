@@ -9,7 +9,7 @@ struct EmissionBatch {
   at::Tensor meta,values,count;
   AtomBatch arrivals,outputs;
 };
-// HARD FP32 emission, after Full. Static tables describe local slots only;
+// HARD FP32/FP16 emission, after Full. Static tables describe local slots only;
 // presence and selected projection chunks are decided inside the device loop.
 class PackedEmission {
  public:
