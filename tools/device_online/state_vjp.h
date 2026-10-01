@@ -30,6 +30,9 @@ struct StateVjp {
 // adopt/clear choices and reverse progression are device work. This component
 // alone is not a graph-training backend: routing/Full/Read/optimizer VJPs are
 // separate obligations. Unsupported state kinds fail on device before writes.
+// FP16 forward parameters retain their dtype; journal values are exact FP32
+// widenings. Add replay rounds each forward tick, while all cotangents and
+// returned adjoints accumulate in FP32. No whole-forward FP32 substitution.
 StateVjp append_state_vjp(CannProgram&, const StateTape&, const StateCotangents&,
                          const at::Tensor& error, int64_t workspace_bytes,
                          int64_t repeat_chunk_ticks=256);

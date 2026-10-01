@@ -1,7 +1,8 @@
 # Device built-in Full VJPs
 
-`tools/device_online/full_vjp.h` is an internal first-order FP32 component for
-resident training. `ContentFlow::full_tape()` borrows the actual device event
+`tools/device_online/full_vjp.h` is an internal first-order component for
+resident training. Identity/tanh accept FP32/FP16 forward payload; the other
+module adjoints described below currently retain their FP32 contract. `ContentFlow::full_tape()` borrows the actual device event
 journal and frozen built-in Full parameter banks; diagnostics are required.
 The owner rejects unsupported Full kinds before exposing this tape. Closed or
 failed owners cannot expose it. The next advance overwrites the journal;
@@ -38,7 +39,7 @@ nonaligned widths, large residual content, poisoned unused parameters and rows,
 None/zero cotangents, chunk sizes 1/5, short/empty replay, explicit refusals and
 actual resident forward tapes in streaming/greedy modes. Profiling is separate.
 The component does not itself implement graph message backward,HST/SOFTP,
-public autograd,optimizer,FP16 or peer reverse progression. Integration and
+public autograd,optimizer or peer reverse progression. Integration and
 qualification are separately indexed by STATUS/ROADMAP.
 
 
@@ -114,3 +115,22 @@ softmax values, scores outside tolerance, changed routes and missing candidates.
 The component runner records an explicit selection through
 `--full-training-control-check conditioned`; profiling uses
 `--application-arg=--control-check=conditioned`. Raw strict failures remain evidence.
+
+## FP16 identity and tanh components
+
+The basic Full component also accepts actual FP16 forward parameter banks with
+an FP32-widened journal. Tanh recomputation runs matrix product, bias addition and
+tanh in payload precision, preserving each rounding point. Only saved operands
+and activation widen for FP32 adjoints/owner reduction. Half scratch is included
+in row admission. None/zero, sentinel sanitization and device chunk progression
+retain the same contracts; this does not enable the remaining half LH/SwiGLU,
+whole-graph reverse or public training.
+
+The independent CPU oracle constructs quantized matmul/add/tanh/residual forward
+with FP32 adjoints and the ordinary cast VJP. Half comparisons use2e-3/2e-5;
+FP32/FP64 retain1e-5/1e-6. A separate cancellation fixture makes an FP32 matmul
+produce100.03125, rounds it to half100, then adds-97 before tanh. It must differ
+from whole-forward FP32 recomputation and pass strict FP32 adjoint checks.
+A32768 residual also prevents recovering the activation by subtraction. Actual
+half forward journals cover streaming and greedy. Qualification remains separate
+from this contract and from training/throughput claims.

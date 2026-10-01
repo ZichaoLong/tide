@@ -20,6 +20,9 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
       ||!tape.config.defined()||tape.config.dim()!=2||!tape.decay.defined()||tape.decay.dim()!=2)
     throw std::invalid_argument("state VJP requires explicit no-grad, packed device buffers");
   const auto device=tape.values.device();
+  const auto payload=tape.decay.scalar_type();
+  if(payload!=at::kFloat&&payload!=at::kHalf)
+    throw std::invalid_argument("state VJP requires FP32/FP16 forward parameters");
   const auto capacity=tape.values.size(0),nodes=tape.config.size(0),width=tape.decay.size(1),samples=tape.samples;
   // Includes persistent partials, reverse indices and sigmoid coefficients.
   const long double estimate=16.L*capacity*(width+8.L)+32.L*samples*nodes*(width+4.L)+8.L*nodes*width;
@@ -34,8 +37,8 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
   if(blocks<1)throw std::invalid_argument("one state VJP repeat tile exceeds workspace budget");
   tensor(tape.metadata,device,at::kLong,{capacity,13});tensor(tape.values,device,at::kFloat,{capacity,5*width+2});
   tensor(tape.count,device,at::kLong,{1});tensor(tape.config,device,at::kLong,{nodes,3});
-  tensor(tape.decay,device,at::kFloat,{nodes,width});
-  tensor(tape.retention,device,at::kFloat,{nodes});tensor(tape.clock_policy,device,at::kLong,{nodes,3});
+  tensor(tape.decay,device,payload,{nodes,width});
+  tensor(tape.retention,device,payload,{nodes});tensor(tape.clock_policy,device,at::kLong,{nodes,3});
   tensor(cot.events,device,at::kFloat,{capacity,5,width});tensor(cot.connected,device,at::kBool,{capacity,5});
   tensor(cot.final,device,at::kFloat,{samples,nodes,width});tensor(cot.final_connected,device,at::kBool,{samples,nodes});
   tensor(error,device,at::kInt,{1});
@@ -65,7 +68,7 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
     ptr(tape.metadata),ptr(tape.values),ptr(tape.config),ptr(coefficients),ptr(previous),ptr(tail),
     ptr(cot.events),ptr(cot.connected),ptr(cot.final),ptr(cot.final_connected),ptr(out.content),ptr(out.content_connected),
     ptr(out.initial),ptr(out.initial_connected),ptr(out.decay),ptr(out.decay_connected),ptr(tape.retention),ptr(ticks),ptr(replay),
-    ptr(out.retention_components),ptr(out.proposal),ptr(error),nodes,samples,width,repeat_rows,scratch_width),
+    ptr(out.retention_components),ptr(out.proposal),ptr(error),nodes,samples,width,repeat_rows,scratch_width,int64_t(payload==at::kHalf)),
     "packed reverse state VJP");},{tape.metadata,tape.values,tape.config,coefficients,previous,tail,cot.events,cot.connected,
       cot.final,cot.final_connected,out.content,out.content_connected,out.initial,out.initial_connected,out.decay,out.decay_connected,
       tape.retention,ticks,replay,out.retention_components,out.proposal,error});

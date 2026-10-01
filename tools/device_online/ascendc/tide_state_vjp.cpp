@@ -1,8 +1,9 @@
 #include "kernel_operator.h"
+#include "state_payload.h"
 namespace {
 using I=int64_t;
 constexpr uint32_t tile=256;
-class StateVjp {
+template<class T> class StateVjp {
  public:
   __aicore__ inline void run(GM_ADDR metadata,GM_ADDR values,GM_ADDR config,GM_ADDR coefficients,
       GM_ADDR previous,GM_ADDR tails,GM_ADDR cotangents,GM_ADDR connections,GM_ADDR final,GM_ADDR final_connections,
@@ -15,7 +16,7 @@ class StateVjp {
     auto m=(__gm__ I*)metadata,cfg=(__gm__ I*)config,prev=(__gm__ I*)previous,tail=(__gm__ I*)tails;
     auto flags=(__gm__ uint8_t*)connections,fc=(__gm__ uint8_t*)final_connections;
     auto v=(__gm__ float*)values,cot=(__gm__ float*)cotangents;
-    pipe.InitBuffer(input,1,tile*4);pipe.InitBuffer(output,1,tile*4);pipe.InitBuffer(storage,10*tile*4);
+    io.init(pipe);pipe.InitBuffer(input,1,tile*4);pipe.InitBuffer(output,1,tile*4);pipe.InitBuffer(storage,10*tile*4);
     auto space=storage.Get<float>();
     auto carry=space[0],h=space[tile],old=space[2*tile],proposal=space[3*tile],comparison=space[4*tile];
     auto scratch=space[5*tile],a=space[6*tile],dg=space[7*tile],tmp=space[8*tile];
@@ -30,7 +31,7 @@ class StateVjp {
       const uint32_t size=width-start<tile?width-start:tile;
       bool carry_on=fc[key];
       read(carry,(__gm__ float*)final,key*width+start,size,carry_on);zero(dg,size);zero(rg,size);
-      if(kind==1)load(a,(__gm__ float*)coefficients,n*width+start,size);
+      if(kind==1)io.load(a,(__gm__ T*)coefficients,n*width+start,size);
       for(I i=tail[key];i>=0;i=prev[i]) {
         const bool active=m[i*13+3],adopt=cfg[n*3+2]||active,clear=cfg[n*3+1]&&active;
         const I at=i*5*width+start;
@@ -58,7 +59,7 @@ class StateVjp {
               AscendC::Mul(tmp,tmp,a,size);barrier();AscendC::Mul(scratch,scratch,tmp,size);barrier();add(dg,scratch,size);
               AscendC::Mul(scratch,proposal,a,size);barrier();add(old,scratch,size);
             } else {
-              const float rho=((__gm__ float*)retention)[n];
+              const float rho=((__gm__ T*)retention)[n];
               AscendC::Muls(tmp,proposal,1.f,size);barrier();
               // Reconstruct literal multiplication inputs in bounded chunks.
               // No division by rho or pow shortcut, including rho=0/negative.
@@ -67,10 +68,10 @@ class StateVjp {
               for(I end=((__gm__ I*)ticks)[i];end>0;) {
                 const I first=end>replay_rows?end-replay_rows:0;
                 load(scratch,v,i*stride+width+start,size);
-                for(I tick=0;tick<first;++tick){AscendC::Muls(scratch,scratch,rho,size);barrier();}
+                for(I tick=0;tick<first;++tick){AscendC::Muls(scratch,scratch,rho,size);barrier();io.round<T>(scratch,size);}
                 for(I tick=first;tick<end;++tick) {
                   save(scratch,(__gm__ float*)replay,(I(AscendC::GetBlockIdx())*replay_rows+tick-first)*scratch_width,size);
-                  AscendC::Muls(scratch,scratch,rho,size);barrier();
+                  AscendC::Muls(scratch,scratch,rho,size);barrier();io.round<T>(scratch,size);
                 }
                 AscendC::PipeBarrier<PIPE_ALL>();
                 for(I tick=end;tick>first;--tick) {
@@ -109,6 +110,7 @@ class StateVjp {
     output.EnQue(x);x=output.DeQue<float>();AscendC::DataCopyPad(gm[offset],x,AscendC::DataCopyExtParams{1,size*4,0,0,0});output.FreeTensor(x);
   }
   AscendC::TPipe pipe;
+  tide_device::StatePayload io;
   AscendC::TQue<AscendC::QuePosition::VECIN,1> input;
   AscendC::TQue<AscendC::QuePosition::VECOUT,1> output;
   AscendC::TBuf<AscendC::QuePosition::VECCALC> storage;
@@ -118,9 +120,12 @@ extern "C" __global__ __aicore__ void tide_state_vjp(GM_ADDR metadata,GM_ADDR va
     GM_ADDR previous,GM_ADDR tails,GM_ADDR cotangents,GM_ADDR connections,GM_ADDR final,GM_ADDR final_connections,
     GM_ADDR content,GM_ADDR content_connections,GM_ADDR initial,GM_ADDR initial_connections,
     GM_ADDR decay,GM_ADDR decay_connections,GM_ADDR retention,GM_ADDR ticks,GM_ADDR replay,
-    GM_ADDR retention_components,GM_ADDR proposal_gradient,GM_ADDR error,int64_t nodes,int64_t samples,int64_t width,int64_t replay_rows,int64_t scratch_width) {
+    GM_ADDR retention_components,GM_ADDR proposal_gradient,GM_ADDR error,int64_t nodes,int64_t samples,int64_t width,int64_t replay_rows,int64_t scratch_width,int64_t fp16) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
-  StateVjp op;op.run(metadata,values,config,coefficients,previous,tails,cotangents,connections,final,final_connections,
+  if(fp16){StateVjp<half> op;op.run(metadata,values,config,coefficients,previous,tails,cotangents,connections,final,final_connections,
     content,content_connections,initial,initial_connections,decay,decay_connections,retention,ticks,replay,
-    retention_components,proposal_gradient,error,nodes,samples,width,replay_rows,scratch_width);
+    retention_components,proposal_gradient,error,nodes,samples,width,replay_rows,scratch_width);}
+  else {StateVjp<float> op;op.run(metadata,values,config,coefficients,previous,tails,cotangents,connections,final,final_connections,
+    content,content_connections,initial,initial_connections,decay,decay_connections,retention,ticks,replay,
+    retention_components,proposal_gradient,error,nodes,samples,width,replay_rows,scratch_width);}
 }

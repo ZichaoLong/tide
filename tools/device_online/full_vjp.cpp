@@ -22,12 +22,16 @@ static FullVjp append_basic_full_vjp(CannProgram& p,const FullTape& tape,const a
       ||!tape.kinds.defined()||tape.kinds.dim()!=1)
     throw std::invalid_argument("Full VJP requires explicit no-grad and packed device buffers");
   const auto device=tape.values.device();
+  const auto payload=tape.has_tanh?tape.weights.scalar_type():at::kFloat;
+  if(payload!=at::kFloat&&payload!=at::kHalf)
+    throw std::invalid_argument("Full VJP requires FP32/FP16 forward parameters");
+  const bool half=payload==at::kHalf;
   const auto capacity=tape.values.size(0),nodes=tape.kinds.size(0),width=tape.width,samples=tape.samples;
   // Persistent outputs, sanitized gather banks, flags and bounded matrix work.
   // Caller-owned tape/cotangents and CannProgram operator workspace are separate.
   const long double fixed=12.L*(capacity+2.L)*width+2.L*capacity+nodes+256
       +(tape.has_tanh?4.L*nodes*(width*static_cast<long double>(width)+width):0.L);
-  const long double per_row=tape.has_tanh?12.L*width*width+48.L*width+64.L:64.L;
+  const long double per_row=tape.has_tanh?(12.L+2.L*half)*width*width+(48.L+8.L*half)*width+64.L:64.L;
   if(device.type()!=c10::DeviceType::PrivateUse1||capacity<1||nodes<1||width<1||samples<1
       ||budget<1||max_rows<1||fixed+per_row>budget)
     throw std::invalid_argument("one Full VJP row exceeds tensor workspace budget");
@@ -35,7 +39,7 @@ static FullVjp append_basic_full_vjp(CannProgram& p,const FullTape& tape,const a
   tensor(tape.metadata,device,at::kLong,{capacity,13});tensor(tape.values,device,at::kFloat,{capacity,5*width+2});
   tensor(tape.count,device,at::kLong,{1});tensor(tape.kinds,device,at::kLong,{nodes});
   tensor(gradient,device,at::kFloat,{capacity,width});tensor(connected,device,at::kBool,{capacity});tensor(error,device,at::kInt,{1});
-  if(tape.has_tanh){tensor(tape.weights,device,at::kFloat,{nodes+1,width,width});tensor(tape.biases,device,at::kFloat,{nodes+1,width});}
+  if(tape.has_tanh){tensor(tape.weights,device,payload,{nodes+1,width,width});tensor(tape.biases,device,payload,{nodes+1,width});}
   else if(tape.weights.defined()||tape.biases.defined())throw std::invalid_argument("identity Full has no parameter banks");
   auto floats=tape.values.options(),longs=tape.kinds.options(),booleans=connected.options();
   auto contents=at::empty({capacity+1,width},floats),comparisons=at::empty_like(contents);
@@ -63,11 +67,20 @@ static FullVjp append_basic_full_vjp(CannProgram& p,const FullTape& tape,const a
   auto x=at::empty({chunk,width},floats),upstream=at::empty_like(x),bias=at::empty_like(x),product=at::empty_like(x);
   auto activation=at::empty_like(x),dactivation=at::empty_like(x),dx=at::empty_like(x);
   auto weights=at::empty({chunk,width,width},floats),transposed=at::empty_like(weights),dw=at::empty_like(weights);
+  // Recompute the actual half forward, preserving matmul, bias and activation
+  // rounding. Only its saved operands/results widen for FP32 adjoints.
+  const auto forward=floats.dtype(payload);
+  auto fx=half?at::empty({chunk,width},forward):x,fb=half?at::empty({chunk,width},forward):bias;
+  auto fw=half?at::empty({chunk,width,width},forward):weights;
+  auto fp=half?at::empty({chunk,width},forward):product,fa=half?at::empty({chunk,width},forward):activation;
   const auto head=p.label(),body=p.label(),done=p.label();p.mark(head);p.branch(branch,{done,body});p.mark(body);
   p.index_select(comparisons,0,source,x);p.index_select(contents,0,source,upstream);
-  p.index_select(tape.weights,0,parameters,weights);p.index_select(tape.biases,0,parameters,bias);
-  p.batch_matmul(x.reshape({chunk,1,width}),weights,product.reshape({chunk,1,width}));
-  p.add(product,bias);p.tanh(product,activation);p.tanh_backward(upstream,activation,dactivation);
+  p.index_select(tape.weights,0,parameters,fw);p.index_select(tape.biases,0,parameters,fb);
+  if(half)p.cast(x,fx);
+  p.batch_matmul(fx.reshape({chunk,1,width}),fw,fp.reshape({chunk,1,width}));
+  p.add(fp,fb);p.tanh(fp,fa);
+  if(half){p.cast(fa,activation);p.cast(fw,weights);}
+  p.tanh_backward(upstream,activation,dactivation);
   p.permute(weights,{0,2,1},transposed);
   p.batch_matmul(dactivation.reshape({chunk,1,width}),transposed,dx.reshape({chunk,1,width}));
   p.batch_matmul(x.reshape({chunk,width,1}),dactivation.reshape({chunk,1,width}),dw);

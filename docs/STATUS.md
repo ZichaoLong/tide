@@ -65,28 +65,39 @@ increment's event/fiber regressions retain strict comparisons.
 
 ## Active work and next action
 
-Uncommitted FP16 state-VJP component work:
-- state_tape accepts half forward banks/journals; graph reverse still refuses half.
-- EMA reads coefficients in forward precision; Add replay rounds every literal
-  forward tick. Cotangents/adjoints stay FP32. No FP32 whole-forward substitution.
-- state-vjp adds108 CPU half autograd cases, four actual half tapes and two
-  1024-tick rounding-sensitive lifted-autograd anchors at strict FP32 tolerance.
-  FP32/FP64 cases/tolerances remain. Not yet runtime-qualified.
-- build-low-precision-state-vjp-dev01 FAILED in checker compilation: ambiguous
-  mixed int/int64 tensor initializer. Fixed with explicit vector<Index>; preserve log.
-- build-low-precision-state-vjp-dev02 is RUNNING, frozen dirty snapshot/build
-  low-precision-state-vjp-dev02, launcher build_precision_state_vjp.py,900s/two workers.
-  One state reverse kernel,two host objects/checker rebuilt; other dependencies
-  byte-verified against terminal publication clean01. Inspect status/task.log.
+Uncommitted FP16 state and basic Full adjoints:
+- State: half parameters/journals, forward-precision EMA coefficients, each Add
+  tick rounded; FP32 adjoints. Graph reverse continues to refuse half.
+- state-vjp dev03 PASSED both dtypes:216 FP32/FP64 cases;108 quantized-forward/
+  FP32-adjoint CPU cases;four actual tapes per dtype;two strict 1024-tick rounding
+  anchors. Dev02 FP32 event/fiber training regression PASSED.
+- Preserve build-state-vjp-dev01 ambiguous int/int64 initializer failure and
+  state-vjp-dev02 pure-half backward comparison failure (about5.05e-5). Oracle
+  now matches the FP32-adjoint contract with identical half forward inputs;
+  original FP32 and half tolerances unchanged;runtime unchanged in dev03.
+- Basic Full: identity/tanh half matmul,bias,tanh recomputation;FP32 adjoints.
+  A cancellation-sensitive half rounding anchor has strict FP32 checks. Runtime
+  and new fixture/checker not yet built. LH/SwiGLU half adjoints still unavailable.
 
-Commit the master/publication evidence separately (only docs). On state build
-success run verify_device_control.py --checks state-vjp and separately
---checks event-training fiber-training from that frozen snapshot/build, each
-max120s lease wait/600s execution. Fix actual failures without relaxing FP32
-checks. Then commit state implementation, qualify clean fixed source, profile
-separately and commit reviewed evidence. Do not reopen global CPU qualification.
+Basic-vjp-dev01 build FAILED: new fixture omitted at:: on Tensor (header has
+no tide::Tensor alias). Fixed fixture declaration;runtime unchanged. Preserve log.
+Build-low-precision-basic-vjp-dev02 PASSED. Low-precision-basic-vjp-dev02 PASSED
+four cells,physical9→logical0: state216/108 cases and4 actual tapes per dtype;
+Full96/48 cases and2 actual tapes per dtype;three strict half rounding anchors.
+Low-precision-basic-vjp-regression-dev02 PASSED both FP32 Attention training
+cells,physical1→logical0. No task live job except the deliberately paused history.
 
-After state adjoints, complete the remaining actual-half-forward Full/Aggregate/
+Next commit/push this coherent state/basic Full increment. Freeze clean full hash
+as low-precision-basic-vjp-clean01. Build standalone via
+build_precision_basic_vjp.py low-precision-basic-vjp-clean01; Python via
+build_precision_basic_vjp_python.py low-precision-basic-vjp-python-clean01.
+Both rebuild only affected host/checker objects and use byte-verified terminal
+CANN/remaining dependencies; two single-worker host builds may run together.
+Then four state/full dtype cells, FP32 event/fiber training, affected Python
+resident tests, separate FP16 state/full traces. Commit evidence separately after
+the source/binary/archive/loader/log/CSV audit. No global CPU repeat.
+
+After basic state/Full adjoints, complete actual-half-forward LH/SwiGLU/Aggregate/
 attention/control adjoints, retained windows, master checkpoint and public FP16
 training. Then peer progression/communication/training,five-preset screening,
 representative/full-size CPU/mixed/resident performance and version/migration/

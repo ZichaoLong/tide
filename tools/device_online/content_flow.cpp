@@ -224,7 +224,6 @@ Result ContentFlow::result() const {
 StateTape ContentFlow::state_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("state tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
-  if(s.profile.dtype!=at::kFloat)throw std::invalid_argument("resident FP16 adjoints are not implemented");
   if(!s.limits.diagnostics)throw std::logic_error("state tape requires recorded forward values");
   const bool repeat=std::any_of(s.profile.graph.nodes.begin(),s.profile.graph.nodes.end(),
     [](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});
@@ -242,6 +241,7 @@ FullTape ContentFlow::full_tape() const {
 }
 ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
+  if(s.profile.dtype!=at::kFloat)throw std::invalid_argument("resident FP16 adjoints for complete graphs are not implemented");
   validate_reverse_modules(s.profile.graph);
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),

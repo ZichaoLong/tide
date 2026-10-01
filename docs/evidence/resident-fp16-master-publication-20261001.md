@@ -17,8 +17,8 @@ FP16 training, peer execution or throughput. Public FP16 training remains refuse
 Masters, gradients and optimizer slots stay FP32. Payload owners may be FP16.
 SGD/momentum/AdamW, canonical aliases, None versus connected zero, poisoned absent
 gradients and update counters retain their contracts. Before any live commit,
-the device checks finite proposals and their actual FP16 rounding. A65512 master
-remains65512 while publishing finite65504;65520 refuses. Rejected updates leave
+the device checks finite proposals and their actual FP16 rounding. A 65512 master
+remains 65512 while publishing finite 65504; 65520 refuses. Rejected updates leave
 all live owners, slots and counters bitwise unchanged. Restore validates the same
 boundary. Small master updates are not lost to premature half quantization.
 
@@ -79,7 +79,7 @@ exact executed commands remain in the audit/raw records.
 ## Profiling and retained failures
 
 `profile_device_control.py --dtype float16 --check master-publication
---application-arg=--profile-smoke --storage-limit-mb256` records two trajectories,
+--application-arg=--profile-smoke --storage-limit-mb 256` records two trajectories,
 ten continued windows and eight updates. Observed task counts:6718 AI_VECTOR_CORE,
 288 AI_CORE,5 MIX_AIV. No AiCPU task or logged CPU fallback was observed in this
 trace. Device classification is scoped to these recorded tasks; this is not a
