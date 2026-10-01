@@ -26,6 +26,7 @@ struct Config {
   bool training=false,diagnostics=false;
   Index steps=3,warmup=1,windows=2,threads=1;
   Index parameter_budget=1024LL*1024*1024;
+  Index head_workspace_bytes=4LL*1024*1024*1024;
   Index devices=1;
   std::string owner_policy="locality",chunk_policy="conservative";
   std::map<std::string,Index> resident_limits;

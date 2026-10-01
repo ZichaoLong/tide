@@ -38,6 +38,11 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
   out<<",\"windows_per_step\":"<<c.windows<<",\"warmup_steps\":"<<c.warmup<<",\"measured_steps\":"<<c.steps
      <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<r.cut
      <<",\"threads\":"<<c.threads<<",\"parameter_budget\":"<<c.parameter_budget<<",\"diagnostics\":"<<(c.diagnostics?"true":"false")
+     <<",\"precision\":{\"payload\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
+     <<",\"loss\":\"float32\",\"adjoints\":\"float32\",\"optimizer_masters\":\"float32\"}"
+     <<",\"head_memory\":{\"rows\":"<<r.head.rows<<",\"fixed_bytes\":"<<r.head.fixed_bytes
+     <<",\"row_bytes\":"<<r.head.row_bytes<<",\"reserved_bytes\":"<<r.head.reserved_bytes<<",\"budget\":"<<r.head.budget
+     <<",\"operator_allowance_bytes\":"<<r.head.operator_allowance_bytes<<'}'
      <<",\"runtime\":{\"device\":"<<quoted(device.str())<<",\"dtype\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":\"resident\",\"placement\":{";

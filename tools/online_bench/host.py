@@ -75,7 +75,7 @@ def parameters(runtime, embedding, head):
 def run(packet, *, family, implementation, device, dtype="float32", schedule="prefill", preset="cpu",
         training=False, optimizer="sgd", steps=3, warmup=1, windows_per_step=2,
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
-        resident_library=None, resident_limits=None, training_limits=None, resident_placement=None):
+        resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3):
     if preset == "resident":
         from .resident import run as run_resident
         return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
@@ -83,8 +83,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             windows_per_step=windows_per_step, native_library=native_library, diagnostics=diagnostics,
             placement=placement, observer=observer, parameter_budget=parameter_budget,
             resident_library=resident_library, resident_limits=resident_limits, training_limits=training_limits,
-            resident_placement=resident_placement)
-    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)):
+            resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes)
+    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3:
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
         raise ValueError("invalid bounded run/optimizer configuration")

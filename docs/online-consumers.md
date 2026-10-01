@@ -67,15 +67,16 @@ all learned graph, embedding and head parameters; None gradients are preserved.
 Gradients must be finite before any optimizer update. This short synthetic loss
 checks the training mechanism, not downstream convergence or model quality.
 
-FP32/FP64 eager training is implemented. FP16 master/head consumer updates remain
-pending and are explicitly refused. This does not remove the separately verified
-public resident FP16 training API. The consumer is a bounded benchmark runner;
+FP32/FP64 eager training is implemented. The resident consumer also implements
+FP16 payloads with FP32 loss, explicit adjoints and optimizer masters; its whole
+consumer qualification is separate from the public resident FP16 library gates.
+Eager FP16 consumer training still explicitly refuses its unqualified master path. The consumer is a bounded benchmark runner;
 it does not claim to serialize an application bundle with head/data cursor.
 
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
 switches `--read`, `--control`, `--selection`, `--events`, `--scoring-dtype` retained.
 CPU/mixed consumers currently use one payload device. `--preset resident` now
-has a separate public C++/CANN consumer: FP32 single/multi-device inference and
+has a separate public C++/CANN consumer: FP32/FP16 single/multi-device inference and
 single/multi-device complete training. Python uses `--implementation native` as
 a client of that same backend, not an independent PyTorch resident scheduler.
 Fixed-source qualification at [clean0d61cb9](evidence/online-resident-consumers-20261002.md)
@@ -102,13 +103,13 @@ stacks payload rows in bulk. Neither boundary adapter is a claim of zero host
 work across the entire application. Optional diagnostics explicitly materialize
 CPU observables; normal training does not export graph state.
 
-Projection banks and physical partial gradients remain on the coordinator.
-Multi-device Full/state/KV and canonical optimizer support does not yet make this
-wide model fully sharded. Compact projection owners and total-memory admission
-remain pending. Local reverse safe splitting is qualified below; public multi-device
+Explicit placement partitions physical projection banks and partial gradients on
+Full owners; no dense coordinator replica is assembled. This is qualified on
+[cleanacb84f3](evidence/resident-projection-shards-20261002.md). Total-memory admission
+remains pending. Local reverse safe splitting is qualified below; public multi-device
 inference is qualified on [clean7329c71](evidence/public-sharded-inference-20261002.md).
-FP16 consumer qualification
-and full-size performance are also pending.
+The latest FP16 consumer qualification is tracked in STATUS; full-size performance
+remains pending.
 
 ## Commands and records
 
@@ -150,6 +151,25 @@ these allow vendor workspace and nested reverse reservations at the default jour
 capacity. They are limits,not a total peak-memory estimate or a guarantee of scale
 admission. Exhaustion is explicit; increasing only one limit may leave another
 unsatisfied. Requested and effective placement/limits are recorded.
+
+The resident consumer head also accepts `--head-workspace-bytes` (default4GiB).
+Before model construction, a tensor planner reserves output cotangents, head
+parameter-gradient accumulation/partial storage, the optional FP32 head copy,
+row scratch,a32MiB operator allowance and10% aggressive or25% conservative
+headroom. The operator allowance is twice the16MiB floor observed on the local
+CANN matmul path; other environments still require peak calibration. It selects the largest
+physical output-row chunk that fits, and rejects a budget unable to hold one row.
+Only present outputs enter each packed matrix multiply. Every row retains the
+complete vocabulary softmax; denominator and update boundary remain unchanged.
+This is a consumer-head envelope, not total HBM admission or a vendor-workspace
+guarantee. It excludes graph tapes, embedding/optimizer and caller parameter banks.
+
+FP16 head matmul uses FP16 operands/results; log-softmax/loss, the explicit
+first-order cast VJP and its accumulations use FP32. FP32 master updates publish
+rounded payloads only after all graph/consumer finite checks succeed. Low-precision
+whole-model comparisons use the declared FP16 tolerance and exact discrete/None
+checks; FP32 retains its existing strict tolerance. `precision`, `head_memory` and
+per-step `head_chunks` distinguish effective dtype, reserved bytes and actual work.
 
 Attention reverse now treats `--resident-reverse-chunk-rows` as a physical upper
 bound. Before allocating stage buffers, a shared planner fits complete owners,

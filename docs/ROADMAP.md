@@ -475,4 +475,5 @@ target-scale success claim.
 F4/F5 compact projection banks/adjoints are qualified on cleanacb84f3
 ([evidence](evidence/resident-projection-shards-20261002.md)):31 library checks,
 48 standalone trajectories,27 actual-consumer checks and a separate two-card
-training trace. Total per-device admission,actual consumer FP16 and F6 remain pending.
+training trace. Actual resident consumer FP16 and budgeted packed head/loss are implemented;
+immutable qualification pending. Total per-device admission and F6 remain pending.

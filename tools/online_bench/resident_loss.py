@@ -4,26 +4,33 @@ The graph alone determines output presence and input connectivity. Invalid rows
 are removed before arithmetic; they are never evaluated and then multiplied by 0.
 """
 import torch
+from .head_budget import head_budget
 
 
-def head_loss(window, head, *, stride, denominator, backward):
+def head_loss(window, head, *, stride, denominator, backward, plan=None):
+    plan = plan or head_budget(len(window.valid), head.shape[1], head.shape[0], head.element_size(), backward, 4*1024**3)
     indices = window.valid.nonzero().flatten()
     if not indices.numel():
         return None, None, None, 0
-    coordinates = window.coordinates.index_select(0, indices)
-    rows = window.values.index_select(0, indices)
-    targets = ((coordinates[:, 2] // stride + 1)*7 + coordinates[:, 0]*3) % head.shape[0]
-    logits = rows @ head.t()
-    logp = logits.float().log_softmax(1)
-    loss = -logp.gather(1, targets[:, None]).sum() / denominator
-    if not backward:
-        return loss, None, None, indices.numel()
-    dl = logp.exp()
-    dl.scatter_add_(1, targets[:, None], -torch.ones_like(targets[:, None], dtype=dl.dtype))
-    dl.div_(denominator)
-    root = torch.zeros(window.values.shape, dtype=torch.float32, device=head.device)
-    root.index_copy_(0, indices, dl @ head.float())
-    return loss, root, dl.t() @ rows.float(), indices.numel()
+    master = head.float() if backward else None
+    root = torch.zeros(window.values.shape, dtype=torch.float32, device=head.device) if backward else None
+    dh = torch.zeros_like(master) if backward else None
+    loss = None
+    for selected in indices.split(plan.rows):
+        coordinates = window.coordinates.index_select(0, selected)
+        rows = window.values.index_select(0, selected)
+        targets = ((coordinates[:, 2] // stride + 1)*7 + coordinates[:, 0]*3) % head.shape[0]
+        logits = rows @ head.t()
+        logp = logits.float().log_softmax(1)
+        value = -logp.gather(1, targets[:, None]).sum() / denominator
+        loss = value if loss is None else loss+value
+        if backward:
+            dl = logp.exp()
+            dl.scatter_add_(1, targets[:, None], -torch.ones_like(targets[:, None], dtype=dl.dtype))
+            dl.div_(denominator)
+            root.index_copy_(0, selected, dl @ master)
+            dh.add_(dl.t() @ rows.float())
+    return loss, root, dh, indices.numel()
 
 
 def embedding_gradient(boundaries, embedding):

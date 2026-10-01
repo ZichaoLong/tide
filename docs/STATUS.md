@@ -93,14 +93,55 @@ Retain failures: library-dev02 CPU oracle fixture missing packed=False; clean01
 backend reuse launcher assumed a copied kernel archive. clean02 follows recorded
 artifact paths/hashes. No live qualification jobs; do not duplicate completed work.
 
-Next: total per-device memory admission and safe splitting,actual
-consumer FP16,representative five-preset screening,full-size F6. No new formal
-full-size throughput result. ContentBudget accounts module reservations,not total
-per-device peaks. Include parameters,state/KV,tapes,master/optimizer/proposals,
-communication,head/loss and construction transients plus headroom. Existing
-NPUCachingAllocator statistics expose current/peak allocated/reserved bytes;
-they do not include all vendor/driver HBM. Consumer head optimizer has FP32 masters,
-but the actual consumer still rejects FP16. Do not duplicate experiment tracking.
+Projection shard evidence commitdd24e50 is pushed.
+
+Current consumer-head implementation is ready to commit. Actual resident
+FP32/FP16 consumers now use bounded packed head rows,FP32 loss/adjoints/masters
+and recorded precision/head reservation/chunk counts. --head-workspace-bytes
+(default4GiB) includes calibrated32MiB operator allowance plus10/25% policy
+headroom. This is head-only,not total HBM. No logical window/loss/update split.
+
+Development: installed client builds consumer-head-dev01/dev02 PASSED; CPU-dev02
+PASSED10; native-dev02 PASSED32,LibTorch-dev02 PASSED27. native-dev03 PASSED3
+checks later Python temporary release and both CLI budget refusals; C++ unchanged.
+No backend rebuild: byte-identical acb84f3 backends reused. Client dev02 rebuilt
+only affected units,after source/include/compiler audit; other objects reused.
+D2048/V50304,256-output head VJP calibration PASSED both dtypes: FP32 selected108
+rows,peak915439104 under1536MiB; FP16 selected151 rows,peak1340316160 under2048MiB.
+Small head calibration4 passed. These are allocator deltas,not total driver HBM.
+
+Retain consumer-head-native-dev01 FAILED:28 semantic cases passed,8MiB tensor
+plan omitted observed16MiB operator floor. Corrected planner includes32MiB.
+Retain consumer-head-profile-dev02 FAILED: actual consumer completed,fixture
+budget selected8 rows so no head split; fix external profile budget to select1
+row (37317703 bytes). No backend/numerical correction or tolerance relaxation.
+All development jobs are terminal. No live job except suspended historical CPU.
+
+Next commit/push implementation,freeze consumer-head-clean01. Use freeze_run.py:
+- build-consumer-head-clean01: build_projection_retention_client.py
+  --build TASK/builds/projection-shards-clean02 --out TASK/builds/consumer-head-clean01
+  --reuse-client TASK/builds/consumer-head-dev02; no changed native source/header.
+- consumer-head-cpu-clean01: test_online_resident_loss.py (10).
+- consumer-head-native-clean01: test_online_resident_consumer.py -k 'not libtorch' (32),2 cards.
+- consumer-head-libtorch-clean01: same -k libtorch (27),new installed client,2 cards.
+- consumer-head-scale-clean01: qualify_large_head.py SOURCE RUN,1 card,run180s.
+- consumer-head-profile-clean01: profile_consumer_head.py --preset resident
+  --reverse-chunk-rows16 --source SOURCE --build TASK/builds/consumer-head-clean01
+  --out RUN/profile,2 cards (FP16 training,head chunk1; independent trace).
+All use matching placement-npu-python-clean01 core/projection-shards-python-clean02
+Python backend as applicable. Queue120/run600/build900. After all passed run
+consumer_head_evidence.py FULL_COMMIT;review md/json and commit/push evidence.
+
+Then total per-device memory admission/safe splitting,representative five-preset
+screening and full-size F6. Current CPU/mixed consumers use one payload device;
+full-size multi-card mixed consumers may still need generic placement integration.
+Do not conflate historical restricted graph executors with general online flows.
+No new formal full-size throughput result. Include parameters,state/KV,tapes,
+master/optimizer/proposals,communication,head/loss,construction transients and
+headroom. NPUCachingAllocator exposes current/peak allocated/reserved,not all
+vendor/driver HBM. ContentBudget is still a module envelope,not total per-device
+admission. Eager consumer FP16 training still explicitly refuses an unqualified
+master path. Do not duplicate tracking or rerun unchanged8,954 CPU tests.
 
 ## Environment and job bounds
 

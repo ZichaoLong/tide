@@ -2,18 +2,27 @@
 #include <cmath>
 #include <stdexcept>
 namespace tide_flow {
-ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,const Packet& p,Index denominator,bool backward) {
+ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,const Packet& p,Index denominator,bool backward,const HeadBudget& plan) {
   auto indices=at::nonzero(window.valid).reshape({-1});ConsumerLoss out;out.count=indices.numel();
   if(!out.count)return out;
-  auto coordinates=window.coordinates.index_select(0,indices),rows=window.values.index_select(0,indices);
-  auto labels=((at::floor_divide(coordinates.select(1,2),p.stride)+1)*7+coordinates.select(1,0)*3).remainder(p.vocab);
-  auto logp=at::log_softmax(at::matmul(rows,head.t()).to(at::kFloat),1);
-  out.value=-logp.gather(1,labels.unsqueeze(1)).sum()/double(denominator);
-  if(!backward)return out;
-  auto gradient=logp.exp();gradient.scatter_add_(1,labels.unsqueeze(1),-at::ones({out.count,1},gradient.options()));
-  gradient.div_(double(denominator));out.root=at::zeros(window.values.sizes(),head.options().dtype(at::kFloat));
-  out.root.index_copy_(0,indices,at::matmul(gradient,head.to(at::kFloat)));
-  out.head_gradient=at::matmul(gradient.t(),rows.to(at::kFloat));return out;
+  Tensor master;
+  if(backward) {
+    master=head.to(at::kFloat);out.root=at::zeros(window.values.sizes(),master.options());
+    out.head_gradient=at::zeros_like(master);
+  }
+  for(Index begin=0;begin<out.count;begin+=plan.rows) {
+    auto selected=indices.narrow(0,begin,std::min(plan.rows,out.count-begin));
+    auto coordinates=window.coordinates.index_select(0,selected),rows=window.values.index_select(0,selected);
+    auto labels=((at::floor_divide(coordinates.select(1,2),p.stride)+1)*7+coordinates.select(1,0)*3).remainder(p.vocab);
+    auto logp=at::log_softmax(at::matmul(rows,head.t()).to(at::kFloat),1);
+    auto value=-logp.gather(1,labels.unsqueeze(1)).sum()/double(denominator);
+    out.value=out.value.defined()?out.value+value:value;++out.chunks;
+    if(!backward)continue;
+    auto gradient=logp.exp();gradient.scatter_add_(1,labels.unsqueeze(1),-at::ones({selected.numel(),1},gradient.options()));
+    gradient.div_(double(denominator));out.root.index_copy_(0,selected,at::matmul(gradient,master));
+    out.head_gradient.add_(at::matmul(gradient.t(),rows.to(at::kFloat)));
+  }
+  return out;
 }
 Tensor embedding_gradient(const tide::ResidentGradients& gradient,const Tensor& embedding) {
   Tensor output;

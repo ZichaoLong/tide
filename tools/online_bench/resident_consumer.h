@@ -1,10 +1,11 @@
 #pragma once
 #include "consumer.h"
+#include "head_budget.h"
 #include <tide/resident_training.h>
 #include <array>
 namespace tide_flow {
-struct ConsumerLoss {Tensor value,root,head_gradient;Index count=0;};
-ConsumerLoss head_loss(const tide::ResidentWindow&,const Tensor&,const Packet&,Index denominator,bool backward);
+struct ConsumerLoss {Tensor value,root,head_gradient;Index count=0,chunks=0;};
+ConsumerLoss head_loss(const tide::ResidentWindow&,const Tensor&,const Packet&,Index denominator,bool backward,const HeadBudget&);
 Tensor embedding_gradient(const tide::ResidentGradients&,const Tensor&);
 class ConsumerOptimizer {
  public:
@@ -27,6 +28,7 @@ struct ResidentMeasurements {
   std::vector<std::map<std::string,Index>> statistics;
   tide::ResidentTrainingLimits limits;
   tide::ResidentPlacement placement;
+  HeadBudget head;
 };
 tide::ResidentTrainingLimits resident_limits(const Config&,at::Device);
 std::string resident_record(const Packet&,const Config&,at::Device,const ResidentMeasurements&);

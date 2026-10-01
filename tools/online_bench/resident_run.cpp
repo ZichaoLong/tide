@@ -22,19 +22,22 @@ tide::ResidentTrainingLimits resident_limits(const Config& c,at::Device device) 
   out.placement.policy=c.owner_policy;return out;
 }
 std::string run_resident(const Packet& p,const Config& c,at::Device device,std::ostream* diagnostics) {
-  if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0||c.runtime.dtype!=at::kFloat)
-    throw std::invalid_argument("resident consumer requires explicit logical NPU FP32");
+  if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0||(c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf))
+    throw std::invalid_argument("resident consumer requires explicit logical NPU FP32/FP16");
   auto placement=tide::resolve_placement(c.placement,device);
   if(placement.read!=device||placement.control!=device||placement.selection!=device||placement.events!=device
       ||placement.scoring_dtype=="float64")throw std::invalid_argument("resident consumer requires all phases on NPU with FP32 scoring");
-  at::NoGradGuard no_grad;auto begin=Clock::now();auto f=fixture(p,c,at::Device(at::kCPU));
+  at::NoGradGuard no_grad;auto begin=Clock::now();
+  ResidentMeasurements result;result.limits=resident_limits(c,device);
+  result.head=head_budget(result.limits.forward.outputs,p.width,p.vocab,c.runtime.dtype==at::kHalf?2:4,
+    c.training,c.head_workspace_bytes,c.chunk_policy=="aggressive");
+  auto f=fixture(p,c,at::Device(at::kCPU));
   // The fixture installs eager built-in handles during validation/embedding.
   // Resident reconstructs these same declared modules from graph metadata.
   for(auto& w:f.model.nodes){w.kernel.reset();w.read_kernel.reset();w.next_kernel.reset();w.aggregate_kernel.reset();w.full_kernel.reset();}
   for(auto& w:f.model.regions)w.kernel.reset();
   auto embedding=f.embedding.detach().to(device),head=f.head.detach().to(device);
   tide::Continuation q;q.identity=f.graph.identity;q.batch_size=p.batch;
-  ResidentMeasurements result;result.limits=resident_limits(c,device);
   std::unique_ptr<tide::ResidentTrainingSession> training;
   std::unique_ptr<tide::ResidentSession> inference;
   std::unique_ptr<ConsumerOptimizer> optimizer;
@@ -51,7 +54,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   auto sync=[&]{for(const auto& d:result.placement.devices)portable_torch::synchronize(d);};
   sync();result.construction=seconds(begin);Index position=0;
   for(Index step=0;step<c.steps+c.warmup;++step) {
-    sync();begin=Clock::now();Tensor loss,gh;Index count=0;std::vector<Tensor> counters;
+    sync();begin=Clock::now();Tensor loss,gh;Index count=0,head_chunks=0;std::vector<Tensor> counters;
     std::vector<tide::ResidentCotangents> roots;std::map<std::string,Index> reverse_statistics;
     for(Index window=0;window<c.windows;++window) {
       auto positions=at::arange(position,position+p.tokens,at::kLong).reshape({1,-1});
@@ -64,9 +67,9 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       tide::ResidentWindow output;
       if(training){retained=training->advance(external,stop,stop);output=retained.outputs;}
       else output=inference->advance(external,stop,stop);
-      auto item=head_loss(output,head,p,p.batch*p.tokens*c.windows,c.training);
+      auto item=head_loss(output,head,p,p.batch*p.tokens*c.windows,c.training,result.head);head_chunks+=item.chunks;
       if(item.value.defined())loss=loss.defined()?loss+item.value:item.value;
-      if(item.head_gradient.defined())gh=gh.defined()?gh+item.head_gradient:item.head_gradient;
+      if(item.head_gradient.defined()){if(gh.defined())gh.add_(item.head_gradient);else gh=item.head_gradient;}
       if(training) {
         tide::ResidentCotangents root;root.token=retained.token;root.outputs=item.root;
         if(item.root.defined())root.outputs_connected=output.valid;roots.push_back(root);
@@ -98,6 +101,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       auto counts=at::stack(counters).sum(0).cpu().contiguous();auto values=counts.data_ptr<Index>();
       result.statistics.push_back({{"stages",values[0]},{"events",values[1]},{"full_chunks",values[2]},{"emission_chunks",values[3]}});
       result.statistics.back().insert(reverse_statistics.begin(),reverse_statistics.end());
+      result.statistics.back()["head_chunks"]=head_chunks;
     }else result.warmup.push_back(elapsed);
   }
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();

@@ -25,7 +25,7 @@ Config parse(int argc,char** argv) {
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
       ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--parameter-budget"
       ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
-      ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||limit;
+      ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
     if(equal==std::string::npos){if(++i==argc)throw std::invalid_argument("missing option value");value=argv[i];}
     if(key=="--packet")c.packet=value;else if(key=="--family")c.family=value;
@@ -37,6 +37,7 @@ Config parse(int argc,char** argv) {
     else if(key=="--steps")c.steps=integer(value);else if(key=="--warmup")c.warmup=integer(value);
     else if(key=="--windows-per-step")c.windows=integer(value);else if(key=="--threads")c.threads=integer(value);
     else if(key=="--parameter-budget")c.parameter_budget=integer(value);
+    else if(key=="--head-workspace-bytes")c.head_workspace_bytes=integer(value);
     else if(key=="--devices")c.devices=integer(value);
     else if(key=="--owner-policy")c.owner_policy=value;
     else if(key=="--chunk-policy")c.chunk_policy=value;
@@ -48,17 +49,18 @@ Config parse(int argc,char** argv) {
       ||(c.family!="pdg"&&c.family!="timed-dag"&&c.family!="settle")
       ||(c.schedule!="streaming"&&c.schedule!="prefill")
       ||(c.optimizer!="sgd"&&c.optimizer!="adamw")||c.steps<1||c.windows<1||c.threads<1||c.threads>1024
-      ||c.steps>1000000||c.warmup>1000000||c.windows>1000000||c.parameter_budget<1)
+      ||c.steps>1000000||c.warmup>1000000||c.windows>1000000||c.parameter_budget<1||c.head_workspace_bytes<1)
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive"))throw std::invalid_argument("invalid device/owner/chunk policy");
-  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"))
+  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024))
     throw std::invalid_argument("resident capacities and placement require resident preset");
-  if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat)
-    throw std::invalid_argument("resident consumer currently requires FP32; half head/embedding qualification pending");
-  if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)||(c.training&&c.runtime.dtype==at::kHalf))
-    throw std::invalid_argument("consumer FP16 master/head updates pending; training requires FP32/FP64");
-  c.runtime.allow_npu_float16=!c.training;
+  if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
+    throw std::invalid_argument("resident consumer requires FP32/FP16 payload");
+  if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
+      ||(c.training&&c.runtime.dtype==at::kHalf&&c.placement.preset!="resident"))
+    throw std::invalid_argument("eager consumer FP16 training requires a qualified master optimizer");
+  c.runtime.allow_npu_float16=!c.training||c.placement.preset=="resident";
   return c;
 }
 } // namespace tide_flow
