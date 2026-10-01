@@ -102,3 +102,11 @@ KERNELS["aggregate-vjp"] = "tide_aggregate_vjp"
 CHECKS["aggregate-training"] = ("tide-resident-aggregate-training-check", ("float32",))
 MARKERS["aggregate-training"] = "resident-aggregate-training: passed"
 KERNELS["aggregate-training"] = "tide_aggregate_vjp"
+
+CHECKS["control-vjp"] = ("tide-device-control-vjp-check", ("float32",))
+MARKERS["control-vjp"] = "device-control-vjp: passed"
+KERNELS["control-vjp"] = "tide_control_"
+
+CHECKS["control-training"] = ("tide-resident-control-training-check", ("float32",))
+MARKERS["control-training"] = "resident-control-training: passed"
+KERNELS["control-training"] = "tide_control_"

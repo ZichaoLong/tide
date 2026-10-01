@@ -6,5 +6,5 @@ struct RetainedReference {std::vector<Result> windows;std::map<std::string,Tenso
 Fixture retained_fixture(int shape,int variant,int64_t width);
 std::vector<int64_t> retained_stops(int64_t start);
 GraphCotangents retained_roots(const ReverseTape&,int window,int mode);
-RetainedReference retained_reference(Fixture,int mode,at::ScalarType);
+RetainedReference retained_reference(Fixture,int mode,at::ScalarType,Options={});
 } // namespace tide::device_online::test

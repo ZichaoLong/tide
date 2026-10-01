@@ -1,10 +1,12 @@
 #include "content_flow_internal.h"
 #include "content_budget.h"
+#include "control_forward.h"
 #include "portable_torch/runtime.hpp"
 #include "tide/ops.h"
 #include <ATen/core/grad_mode.h>
 #include <c10/core/impl/VirtualGuardImpl.h>
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <stdexcept>
 
@@ -12,12 +14,17 @@ namespace tide::device_online {
 ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
+  if((l.mode!="hard"&&l.mode!="hst"&&l.mode!="softp")||!std::isfinite(l.zeta))
+    throw std::invalid_argument("invalid resident Emit mode/zeta");
+  if(l.mode!="hard")for(const auto& n:profile.graph.nodes)if(n.emission!="broadcast")
+    throw std::invalid_argument("resident control modes require broadcast emission");
   const auto nodes=int64_t(profile.graph.nodes.size()),regions=int64_t(profile.graph.regions.size()),width=profile.width,samples=q.batch_size;
   // Static CPU validation/planning precedes any profile/payload device upload.
   // These conservative tensor bounds exclude caller CPU storage/vendor internals.
   long double estimate=64.L*(l.queue+static_cast<long double>(l.arrivals)+l.outputs+(l.diagnostics?l.trace:0))*(width*5.L+32)
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L))
     +160.L*(profile.graph.edges.size()+profile.graph.inputs.size()+profile.graph.outputs.size()+nodes);
+  if(l.mode=="softp")estimate+=4.L*l.queue*width+(l.diagnostics?l.trace*(4.L*width+104.L):0.L);
   if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.aggregate_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes
       ||(l.chunk_policy!=ChunkPolicy::conservative&&l.chunk_policy!=ChunkPolicy::aggressive))
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
@@ -62,6 +69,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     fibers=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
+    if(l.mode=="softp")raw_full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
     emission_trace=std::make_unique<DeviceJournal>(l.trace,6,width,device);
   }
   emission=std::make_unique<PackedEmission>(profile,device,samples,l.arrivals,l.outputs,
@@ -127,6 +135,8 @@ void ContentFlow::Impl::construct() {
   auto actions=full->append_stage(p,update.actions,update.comparison,error);
   if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
   if(swiglu_full)actions=swiglu_full->append_stage(p,actions,content.content,update.comparison,error,full->chunks());
+  const auto raw_full=actions.values;
+  if(limits.mode=="softp")actions=append_control_forward(p,profile,actions,content.content,selection.controls,error);
   auto emitted=emission->append_stage(p,actions,error);
   auto arrivals=emitted.arrivals;
   // Every capacity/error preflight precedes every live state/history/queue/log commit.
@@ -139,10 +149,13 @@ void ContentFlow::Impl::construct() {
     auto fiber_proposal=fibers->propose(p,ready.atoms.coordinates,ready.atoms.values,ready.counts.narrow(0,0,1),error);
     auto contribution_proposal=contributions->propose(p,ready.atoms.coordinates,content.weighted,ready.counts.narrow(0,0,1),error);
     auto full_proposal=full_trace->propose(p,update.event_meta,actions.values,ready.counts.narrow(0,1,1),error);
+    JournalProposal raw_proposal;
+    if(raw_full_trace)raw_proposal=raw_full_trace->propose(p,update.event_meta,raw_full,ready.counts.narrow(0,1,1),error);
     auto emission_proposal=emission_trace->propose(p,emitted.meta,emitted.values,emitted.count,error);
     messages->commit_stage(p,message_proposal);
     events->commit(p,event_proposal,error);fibers->commit(p,fiber_proposal,error);contributions->commit(p,contribution_proposal,error);
     full_trace->commit(p,full_proposal,error);
+    if(raw_full_trace)raw_full_trace->commit(p,raw_proposal,error);
     emission_trace->commit(p,emission_proposal,error);
   }
   pending->commit_stage(p,pending_proposal);outputs->commit_stage(p,output_proposal);
@@ -173,6 +186,7 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     if(s.limits.diagnostics) {
       s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
       s.full_trace->count.zero_();s.emission_trace->count.zero_();
+      if(s.raw_full_trace)s.raw_full_trace->count.zero_();
     }
     if(s.attention)s.attention->reset_window();
     if(s.event_attention)s.event_attention->reset_window();
@@ -224,7 +238,10 @@ ReverseTape ContentFlow::reverse_tape() const {
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
-  if(s.aggregate)tape.aggregate=s.aggregate->tape();return tape;
+  if(s.aggregate)tape.aggregate=s.aggregate->tape();
+  if(s.limits.mode!="hard")tape.control={s.profile.read,s.raw_full_trace?s.raw_full_trace->values:s.full_trace->values,
+    s.limits.mode=="hst"?1:2,s.limits.zeta};
+  return tape;
 }
 ParameterBanks ContentFlow::parameter_banks() const {
   // Reuse the current narrow training preflight. This internal view does not

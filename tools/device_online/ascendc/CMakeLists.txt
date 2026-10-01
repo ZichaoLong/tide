@@ -64,3 +64,9 @@ ascendc_library(tide_parameter_accumulate_kernel STATIC tide_parameter_accumulat
 ascendc_library(tide_extra_full_plan_kernel STATIC tide_extra_full_plan.cpp)
 ascendc_library(tide_extra_full_payload_kernel STATIC tide_extra_full_payload.cpp)
 ascendc_library(tide_extra_full_reduce_kernel STATIC tide_extra_full_reduce.cpp)
+
+ascendc_library(tide_emit_mix_kernel STATIC tide_emit_mix.cpp)
+ascendc_library(tide_control_plan_kernel STATIC tide_control_plan.cpp)
+ascendc_library(tide_control_payload_kernel STATIC tide_control_payload.cpp)
+ascendc_library(tide_control_read_reduce_kernel STATIC tide_control_read_reduce.cpp)
+ascendc_library(tide_control_merge_kernel STATIC tide_control_merge.cpp)

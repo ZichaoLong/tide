@@ -29,9 +29,11 @@ def test_resident_python_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path)
 
 
-def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum"):
-    r = runtime(family, target, schedule, full, aggregation)
-    cpu = runtime(family, "cpu", full=full, aggregation=aggregation)
+def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, **read_options):
+    r = runtime(family, target, schedule, full, aggregation, emit_mode, zeta, **read_options)
+    cpu = runtime(family, "cpu", full=full, aggregation=aggregation, mode=emit_mode, zeta=zeta, **read_options)
+    record = r.manifest()["resident"]
+    assert record["mode"] == emit_mode and record["zeta"] == zeta
     names, parameters = zip(*((n, p) for n, p in cpu.execution_model.named_parameters() if p.requires_grad))
     options = dict(lr=.001, weight_decay=.01)
     options.update(momentum=.5) if kind == "sgd" else options.update(eps=.0001, amsgrad=True)
@@ -102,6 +104,12 @@ def test_resident_training_rejection_and_export(target, tmp_path):
         bad["state"]["steps"].fill_(-1)
         with pytest.raises(ValueError, match="counter"):
             r.training_session(1, checkpoint=bad)
+        for bad in (dict(initial, mode="hst"), dict(initial, zeta=0.), dict(initial, zeta=True)):
+            with pytest.raises(ValueError, match="mode/zeta"):
+                r.training_session(1, checkpoint=bad)
+        legacy = {k: v for k, v in initial.items() if k not in {"mode", "zeta"}}
+        with r.training_session(1, checkpoint=legacy) as restored:
+            tree_equal(initial, restored.checkpoint())
         tree_equal(initial, s.checkpoint())
         with pytest.raises(ValueError, match="exclusive"):
             r.training_session(1, checkpoint=initial, optimizer="sgd")
@@ -130,11 +138,12 @@ def test_resident_training_rejection_and_export(target, tmp_path):
             tree_equal(expected, restored.checkpoint())
 
 
-@pytest.mark.parametrize("full,aggregation", [("tanh", "sum"), ("swiglu", "sum"),
-    ("lh-silu-layer-v1", "sum"), *(('tanh', a) for a in
-        ("mean", "weighted_mean", "active_softmax", "all_softmax"))])
-def test_resident_training_new_process(target, tmp_path, full, aggregation):
-    r = runtime("pdg", target, full=full, aggregation=aggregation)
+@pytest.mark.parametrize("full,aggregation,emit_mode", [("tanh", "sum", "hard"), ("swiglu", "sum", "hard"),
+    ("lh-silu-layer-v1", "sum", "hard"), *(("tanh", a, "hard") for a in
+        ("mean", "weighted_mean", "active_softmax", "all_softmax")),
+    ("tanh", "all_softmax", "hst"), ("tanh", "all_softmax", "softp")])
+def test_resident_training_new_process(target, tmp_path, full, aggregation, emit_mode):
+    r = runtime("pdg", target, full=full, aggregation=aggregation, mode=emit_mode)
     values = torch.arange(16, dtype=torch.float32).reshape(1, 4, 4) * .005
     path, output = tmp_path / "prefix.pt", tmp_path / "suffix.pt"
     with torch.no_grad(), r.training_session(1, optimizer="adamw") as s:
@@ -150,7 +159,7 @@ def test_resident_training_new_process(target, tmp_path, full, aggregation):
         expected = s.checkpoint()
     command = [sys.executable, str(Path(__file__).with_name("resident_training_worker.py")),
                "--device", target, "--checkpoint", str(path), "--output", str(output), "--full", full,
-               "--aggregation", aggregation]
+               "--aggregation", aggregation, "--mode", emit_mode]
     subprocess.run(command, check=True, timeout=180)
     tree_equal(expected, torch.load(output, weights_only=True))
 
@@ -177,3 +186,26 @@ def test_resident_extended_full_training(target, family, schedule, full, kind, t
 @pytest.mark.parametrize("aggregation", ["mean", "weighted_mean", "active_softmax", "all_softmax"])
 def test_resident_normalized_aggregate_training(target, family, schedule, kind, aggregation, tmp_path):
     training_case(target, family, schedule, kind, tmp_path, aggregation=aggregation)
+
+
+@pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
+@pytest.mark.parametrize("schedule", ["streaming", "greedy"])
+@pytest.mark.parametrize("kind", ["sgd", "adamw"])
+@pytest.mark.parametrize("emit_mode", ["hst", "softp"])
+def test_resident_control_training(target, family, schedule, kind, emit_mode, tmp_path):
+    training_case(target, family, schedule, kind, tmp_path, emit_mode=emit_mode, zeta=.375)
+
+
+@pytest.mark.parametrize("emit_mode", ["hst", "softp"])
+@pytest.mark.parametrize("full", ["swiglu", "lh-silu-layer-v1", "lh-identity-identity-v1"])
+def test_resident_control_full_interaction(target, emit_mode, full, tmp_path):
+    training_case(target, "pdg", "greedy", "adamw", tmp_path, full=full, aggregation="all_softmax",
+                  emit_mode=emit_mode, zeta=0.)
+
+
+@pytest.mark.parametrize("emit_mode", ["hst", "softp"])
+@pytest.mark.parametrize("read_mode", ["content", "old", "proposal"])
+@pytest.mark.parametrize("readout", ["linear-v1", "norm-fp32-v1"])
+def test_resident_control_unselected_read(target, emit_mode, read_mode, readout, tmp_path):
+    training_case(target, "pdg", "greedy", "adamw", tmp_path, emit_mode=emit_mode, zeta=.375,
+                  read_mode=read_mode, readout=readout, observe_all=False)

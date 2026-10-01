@@ -9,5 +9,5 @@ struct ParameterPlan {
   int64_t swiglu_count;
   int64_t aggregate_slots=0;
 };
-ParameterPlan plan_parameters(const Graph&,const ParameterRegistry&,int64_t width,int64_t tensor_budget_bytes);
+ParameterPlan plan_parameters(const Graph&,const ParameterRegistry&,int64_t width,int64_t tensor_budget_bytes,bool controls=false);
 } // namespace tide::device_online

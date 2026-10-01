@@ -9,7 +9,7 @@ namespace tide::device_online::test {
 void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizerKind kind,at::ScalarType dtype) {
   train_trajectory(device,std::move(f),prefill,kind,dtype,1e-8);
 }
-void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizerKind kind,at::ScalarType dtype,double adam_epsilon,bool conditioned_controls) {
+void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizerKind kind,at::ScalarType dtype,double adam_epsilon,bool conditioned_controls,Options options) {
   at::NoGradGuard guard;const auto width=f.model.nodes.at(0).bias.numel();f.model=test::train_model(f.model,at::kFloat);
   auto cpu=f;cpu.model=test::train_model(f.model,dtype);cpu.initial=test::train_boundary(f.initial,dtype);
   auto registry=cpu.model.parameters(true);OptimizerGroup group;
@@ -20,6 +20,7 @@ void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizer
   else optimizer=std::make_unique<AdamW>(registry,std::vector<OptimizerGroup>{group});
   ResidentTrainingLimits limits;limits.forward.prefill=prefill;limits.forward.trace=512;limits.forward.full_chunk_rows=3;
   limits.reverse_chunk_rows=3;
+  limits.forward.mode=options.mode;limits.forward.zeta=options.zeta;
   if(width>3) {
     limits.forward.workspace_bytes=512*1024*1024;
     // Four retained reverse programs each reserve disjoint component budgets.
@@ -35,7 +36,7 @@ void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizer
   for(int step=0;step<4;++step) {
     const auto start=session->cut();const int mode=step==1?5:step==2?0:4;
     std::vector<External> all=f.input;for(auto& x:all){x.time+=step*11;x.position+=step*positions.at({x.batch,x.port});}
-    cpu.input=all;auto ref=test::retained_reference(cpu,mode,dtype);
+    cpu.input=all;auto ref=test::retained_reference(cpu,mode,dtype,options);
     std::vector<ResidentCotangents> roots;int w=0;Index cut=start;
     for(auto stop:test::retained_stops(start)) {
       std::vector<External> input;for(auto x:all)if(cut<=x.time&&x.time<stop){if(step==1)x.value=x.value.to(device);input.push_back(x);}

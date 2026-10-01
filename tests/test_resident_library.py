@@ -31,8 +31,8 @@ def config(family, memory="ema"):
     return GraphConfig(family, graph, width=4, ranks=(1,2) if family == "settle" else ())
 
 
-def runtime(cfg, target, schedule="greedy", **kwargs):
-    options = ExecutionOptions(implementation="native", schedule=schedule, trace=True,
+def runtime(cfg, target, schedule="greedy", mode="hard", **kwargs):
+    options = ExecutionOptions(implementation="native", schedule=schedule, mode=mode, trace=True,
         placement=ExecutionPlacement(preset="resident"), resident_limits=ResidentLimits(
             queue=96, arrivals=128, outputs=128, trace=2048, kv_rows=64, kv_trace_rows=2048))
     return GraphRuntime(cfg, device=target, options=options,
@@ -51,9 +51,19 @@ def inputs(session, x, start, stop):
 @pytest.mark.parametrize("schedule", ["streaming", "greedy"])
 @pytest.mark.parametrize("memory", ["ema", "attention", "lh-fiber-attention-all-softmax-repeat-v1"])
 def test_resident_public_online_windows(target, family, schedule, memory, tmp_path):
+    online_windows(target, family, schedule, memory, tmp_path)
+
+
+@pytest.mark.parametrize("mode", ["hst", "softp"])
+@pytest.mark.parametrize("memory", ["attention", "lh-fiber-attention-all-softmax-repeat-v1"])
+def test_resident_control_attention_windows(target, mode, memory, tmp_path):
+    online_windows(target, "pdg", "greedy", memory, tmp_path, mode)
+
+
+def online_windows(target, family, schedule, memory, tmp_path, mode="hard"):
     cfg = config(family, memory)
-    r = runtime(cfg,target,schedule)
-    oracle = GraphRuntime(cfg,device="cpu",options=ExecutionOptions(schedule="reference",packed=False,trace=True))
+    r = runtime(cfg,target,schedule,mode)
+    oracle = GraphRuntime(cfg,device="cpu",options=ExecutionOptions(schedule="reference",packed=False,trace=True,mode=mode))
     x = torch.sin(torch.arange(64,dtype=torch.float32).reshape(2,8,4)*.37)*.2
     x[0,1].zero_()  # A present-zero input is still an event.
     with torch.no_grad():
@@ -78,7 +88,7 @@ def test_resident_public_online_windows(target, family, schedule, memory, tmp_pa
             checkpoint = tmp_path / "resident.pt"
             session.save(checkpoint)
             final = session.snapshot()
-        other = runtime(cfg,target,"streaming" if schedule=="greedy" else "greedy")
+        other = runtime(cfg,target,"streaming" if schedule=="greedy" else "greedy",mode)
         with other.session(2) as restored:
             restored.load(checkpoint)
             equivalent(final,restored.snapshot())

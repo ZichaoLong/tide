@@ -1,7 +1,7 @@
 # Retained device windows and boundary adjoints
 
 `retain_reverse_tape` owns a snapshot of the actual device records used by the
-[restricted HARD graph VJP](resident-graph-vjp.md). It copies dynamic values and
+[declared graph VJP](resident-graph-vjp.md). It copies dynamic values and
 parameter banks on NPU and owns a copy of the static graph metadata. Repeated
 TensorImpl references within one tape share one snapshot. Advancing, closing or
 overwriting the original forward owner does not invalidate this saved tape.

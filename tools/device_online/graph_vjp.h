@@ -14,8 +14,9 @@ struct GraphVjp {
   at::Tensor scales,scale_connected,reverse_stages;
   FullExtraVjp extra;
   AggregateVjp aggregate;
+  at::Tensor read,read_connected;
 };
-// Internal first-order single-window HARD graph adjoint. All reverse stage,
+// Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter
 // rows require the public registry's alias accumulation before optimizer use.
 GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,

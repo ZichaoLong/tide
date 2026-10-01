@@ -18,7 +18,8 @@ PYBIND11_MODULE(_tide_resident,m) {
     FIELD(ResidentLimits,aggregate_chunk_rows) FIELD(ResidentLimits,attention_chunk_rows)
     FIELD(ResidentLimits,attention_key_rows) FIELD(ResidentLimits,kv_rows) FIELD(ResidentLimits,kv_trace_rows)
     FIELD(ResidentLimits,max_repeat_ticks) FIELD(ResidentLimits,prefill) FIELD(ResidentLimits,diagnostics)
-    FIELD(ResidentLimits,vectorized_aggregate) FIELD(ResidentLimits,vectorized_state) FIELD(ResidentLimits,vectorized_read);
+    FIELD(ResidentLimits,vectorized_aggregate) FIELD(ResidentLimits,vectorized_state) FIELD(ResidentLimits,vectorized_read)
+    FIELD(ResidentLimits,mode) FIELD(ResidentLimits,zeta);
   py::class_<ResidentWindow>(m,"Window")
     .def_readonly("coordinates",&ResidentWindow::coordinates).def_readonly("values",&ResidentWindow::values)
     .def_readonly("valid",&ResidentWindow::valid).def_readonly("output_stats",&ResidentWindow::output_stats)

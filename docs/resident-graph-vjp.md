@@ -2,7 +2,7 @@
 
 The internal `append_graph_vjp` composes Full and state-chain adjoints with
 message dependencies from the actual resident forward journals. Its current
-profile is single-device FP32 HARD, built-in Aggregate, broadcast emission (including
+profile is single-device FP32 HARD/HST/SOFTP, built-in Aggregate, broadcast emission (including
 static phases), identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Unsupported
 modules refuse when requesting `ContentFlow::reverse_tape()`. The separate
 [public training owner](resident-training.md) provides retained-window lifecycle;
@@ -33,7 +33,9 @@ Contribution lists provide unique feature-tile writers without conflicting
 scatter. Parameter contributions retain deterministic row order. Node parameters
 are per-node partials; physical input/Aggregate/delivery scales are reduced on
 device. A public parameter registry must still accumulate aliases before optimizer
-use. Read parameters have no gradient for this HARD profile.
+use. Read parameters have no gradient in HARD. The [control/Read component](resident-control-vjp.md)
+adds complete-frame softmax and linear/FP32-norm Read adjoints for HST/SOFTP,
+merging direct content/old/proposal roots before state-chain reverse.
 
 Outputs include dense initial-state adjoints and all physical message adjoints;
 `producer == -1` identifies boundary leaves. The caller binds dense initial rows
@@ -67,6 +69,6 @@ be tied to an immutable source revision; this document is the contract.
 
 Internal [owner updates](resident-optimizer.md) and [retained-window bridges](resident-retained.md)
 now compose with this component under their own qualification scopes. Remaining
-training work includes attention and HST/SOFTP adjoints; FP16 and peer
+training work includes attention adjoints, FP16 and peer
 reverse progression. This is neither complete matrix qualification nor full-size
 training throughput evidence.

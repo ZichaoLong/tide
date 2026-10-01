@@ -22,7 +22,7 @@ struct ContentWindow {
 // Experimental complete forward loop for an explicit existing-module profile:
 // built-in Aggregate, identity/EMA/Add-repeat/fiber/event attention, linear/FP32-norm Read, count/positive
 // selection, adopt/clear Next and identity/tanh/SwiGLU/LH Full with broadcast/slot-affine
-// phase-aware HARD emission. FP32, no autograd.
+// phase-aware emission; HST/SOFTP require broadcast. FP32, no autograd.
 // Arbitrary legal positive-delay topology, including feedback. Inputs/initial
 // state and exported observables are CPU values; persistent runtime data and
 // all decisions between submission and the complete-cut boundary stay on NPU.
@@ -39,7 +39,7 @@ class ContentFlow {
   Result result() const; // Latest window; trace/messages require diagnostics.
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
   FullTape full_tape() const; // Built-in identity/tanh/LH/SwiGLU journals and banks.
-  ReverseTape reverse_tape() const; // Narrow HARD profile; actual journals only.
+  ReverseTape reverse_tape() const; // Declared training profile; actual journals only.
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
   std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.
   void close(); // Explicit checked drain; all operations except close then fail.

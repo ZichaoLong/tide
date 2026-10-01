@@ -13,6 +13,7 @@ std::vector<at::Tensor*> tensors(ReverseTape& t) {
     &t.full.extra.lh_kinds,&t.full.extra.lh_weights,&t.full.extra.lh_biases,
     &t.full.extra.swiglu_kinds,&t.full.extra.swiglu_mapping,&t.full.extra.gate,&t.full.extra.up,&t.full.extra.down,
     &t.aggregate.kinds,&t.aggregate.lengths,&t.aggregate.weights,
+    &t.control.read,&t.control.raw_full,
     &t.full_values,&t.fiber_meta,&t.fiber_values,&t.fiber_count,&t.sources,&t.source_scales,&t.delivery_scales,
     &t.pending.coordinates,&t.pending.values,&t.pending.valid,&t.pending_count,
     &t.outputs.coordinates,&t.outputs.values,&t.outputs.valid,&t.output_count};

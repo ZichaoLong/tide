@@ -18,11 +18,15 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
     throw std::invalid_argument("resident training requires recorded journals and positive memory/window limits");
   if(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw)throw std::invalid_argument("unknown resident optimizer");
   model=training_detail::freeze_model(std::move(m),d,versions);
-  if(checkpoint)training_detail::restore_parameters(model,*checkpoint);
+  if(checkpoint) {
+    if(checkpoint->mode!=l.forward.mode||checkpoint->zeta!=l.forward.zeta)
+      throw std::invalid_argument("resident checkpoint Emit mode/zeta mismatch");
+    training_detail::restore_parameters(model,*checkpoint);
+  }
   // Filtering by TensorImpl requires_grad retains every alias of each selected
   // owner, including HARD Read aliases that need publication but have no VJP.
   registry=model.parameters(true);
-  layout=parameter_layout(graph,registry,model.width(),device,l.optimizer_bytes/4);
+  layout=parameter_layout(graph,registry,model.width(),device,l.optimizer_bytes/4,l.forward.mode!="hard");
   optimizer=std::make_unique<DeviceOptimizer>(layout,k==ResidentOptimizerKind::sgd?DeviceOptimizerKind::sgd:DeviceOptimizerKind::adamw,
                                              std::move(groups),l.optimizer_bytes/2);
   if(checkpoint) {

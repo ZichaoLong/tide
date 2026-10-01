@@ -5,25 +5,26 @@ from tidegraph import (Edge, Graph, Node, Region, GraphConfig, GraphRuntime, Ext
                        ExecutionOptions, ExecutionPlacement, ResidentLimits)
 
 
-def configuration(family, full="tanh", aggregation="sum"):
-    nodes = tuple(Node(i // 2, memory="ema", full=full, aggregation=aggregation) for i in range(4))
+def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", readout="linear-v1", observe_all=True):
+    nodes = tuple(Node(i // 2, memory="ema", full=full, aggregation=aggregation, readout=readout) for i in range(4))
     edges = (Edge(0, 2, 1), Edge(0, 2, 1), Edge(1, 2, 1), Edge(1, 3, 1))
     if family != "settle":
         edges += (Edge(0, 3, 2),)
     if family == "pdg":
         edges += (Edge(3, 0, 3),)
-    return GraphConfig(family, Graph(nodes, edges, (Region(1), Region(1)), (0, 1), (2, 3)),
+    regions = tuple(Region(1, read_mode=read_mode, observe_all=observe_all) for _ in range(2))
+    return GraphConfig(family, Graph(nodes, edges, regions, (0, 1), (2, 3)),
                        width=4, ranks=(1, 2) if family == "settle" else ())
 
 
-def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum"):
-    cfg = configuration(family, full, aggregation)
+def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", mode="hard", zeta=1.0, **read_options):
+    cfg = configuration(family, full, aggregation, **read_options)
     if device == "cpu":
-        r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True))
+        r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True, mode=mode, zeta=zeta))
     else:
         r = GraphRuntime(cfg, device=device, native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
-            options=ExecutionOptions(implementation="native", schedule=schedule, trace=True,
+            options=ExecutionOptions(implementation="native", schedule=schedule, trace=True, mode=mode, zeta=zeta,
                 placement=ExecutionPlacement(preset="resident"),
                 resident_limits=ResidentLimits(queue=96, arrivals=128, outputs=128, trace=512)))
     r.model.nodes[2].weight = r.model.nodes[0].weight

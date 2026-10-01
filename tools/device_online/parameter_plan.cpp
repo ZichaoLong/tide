@@ -7,13 +7,14 @@
 
 namespace tide::device_online {
 namespace {struct Ref {int64_t bank,connection,offset;std::vector<int64_t> shape;};}
-ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,int64_t width,int64_t budget) {
+ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,int64_t width,int64_t budget,bool controls) {
   const int64_t nodes=g.nodes.size(),inputs=g.inputs.size(),edges=g.edges.size();
   if(nodes<1||width<1||budget<1)throw std::invalid_argument("invalid parameter layout budget/shape");
   std::map<std::string,Ref> by_name;
   bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
+    if(controls&&!node.identity&&node.readout=="linear-v1")by_name[prefix+"read"]={11,n,n*width,{width}};
     const auto aggregate=aggregate_kind(node.aggregation);normalized|=aggregate!=0;
     if(aggregate>=2)for(int64_t slot=0;slot<g.source_counts[n];++slot)
       by_name[prefix+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot)]={10,n*slots+slot,n*slots+slot,{}};
@@ -69,9 +70,9 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   if(bytes>budget)throw std::invalid_argument("parameter owner adjoint tensor budget exceeded");
   out.owner_table=std::move(owners);out.references=std::move(refs);out.tiles=std::move(tiles);out.elements=std::max<int64_t>(1,total);return out;
 }
-ParameterVjp parameter_layout(const Graph& graph,const ParameterRegistry& registry,int64_t width,at::Device device,int64_t budget) {
+ParameterVjp parameter_layout(const Graph& graph,const ParameterRegistry& registry,int64_t width,at::Device device,int64_t budget,bool controls) {
   if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0)throw std::invalid_argument("parameter layout requires an explicit NPU");
-  auto p=plan_parameters(graph,registry,width,budget);auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
+  auto p=plan_parameters(graph,registry,width,budget,controls);auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
   return {p.owners,p.offsets,at::zeros({p.elements},opts),at::zeros({std::max<int64_t>(1,p.owners.size())},opts.dtype(at::kBool))};
 }
 } // namespace tide::device_online

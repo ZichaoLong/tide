@@ -28,7 +28,7 @@ struct ContentFlow::Impl {
   std::unique_ptr<PackedEventAttention> event_attention;
   std::unique_ptr<PackedAggregate> aggregate;
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
-  std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,emission_trace;
+  std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,raw_full_trace,emission_trace;
   AtomBatch external;
   at::Tensor error,stop,stages,event_count,source_scales_before;
   std::unique_ptr<CannProgram> program;

@@ -39,8 +39,8 @@ def validate_resident(config, options, device, placement):
         raise ValueError("resident backend requires Read/control/selection/events on the payload NPU")
     if placement["scoring_dtype"] not in {"profile", "payload", "float32"}:
         raise ValueError("resident backend requires FP32 scoring")
-    if options.implementation != "native" or options.mode != "hard":
-        raise ValueError("resident backend currently requires native HARD inference")
+    if options.implementation != "native":
+        raise ValueError("resident backend currently requires a native implementation")
     if options.schedule not in {"streaming", "greedy"}:
         raise ValueError("resident backend requires streaming or general greedy schedule")
     if not options.packed or options.workers != 1:

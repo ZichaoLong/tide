@@ -4,11 +4,14 @@
 `tide/resident_training.h`, linked with `tide::resident`. Its implementation and
 qualification status are recorded in [STATUS](STATUS.md); this contract does not
 by itself certify a build, Python client or throughput. The supported adjoint is
-currently single-NPU FP32 HARD, built-in Aggregate, phase-aware broadcast,
+currently single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate, phase-aware broadcast,
 identity/EMA/Add-repeat state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
 construction. The wider [execution contract](execution-flows.md) remains required.
 The normalized Aggregate implementation and its separate qualification status
 are described in [its VJP contract](resident-aggregate-vjp.md).
+[Emit/control/Read adjoints](resident-control-vjp.md) retain complete candidate
+frames, including unselected Read connections and connected-zero HST paths.
+Mode and `zeta` are execution options; HARD remains the default.
 
 ## Lifecycle and consumers
 
@@ -87,7 +90,7 @@ can explicitly detach to skip that update. No hidden loss scaling is applied.
 outstanding tapes or gradients. It includes the actual updated parameters,
 all aliases/trainable names, complete continuation and input ledger, optimizer
 kind/groups, packed offsets, moments/momentum/AMSGrad slots, int64 counters,
-Adam bias corrections, generation and next window sequence. Unused parameter
+Adam bias corrections, generation, next window sequence and explicit Emit mode/zeta. Unused parameter
 owners retain their frozen initial values; updated values always come from NPU.
 
 The checkpoint constructor validates schema, ownership, graph/continuation,
@@ -145,6 +148,8 @@ may change. It does not mutate an existing session or caller model. Schema
 `tide-resident-training-v1` is distinct from eager `tide-continuation-v5` and the
 standalone named-parameter format. Loading uses `weights_only=True`, strict int64
 metadata and alias/layout checks; no resume through unconsumed tapes is claimed.
+Mode/zeta must match on restore. Legacy v1 records without these additive fields
+mean HARD with zeta1; the HARD packed-owner layout is preserved.
 
 Qualification remains indexed by STATUS/ROADMAP, including independent processes.
 Python and C++ clients, disk restoration and training throughput are separately

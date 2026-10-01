@@ -194,14 +194,16 @@ discrete scheduling remain host-owned. Qualification alone moves deterministic
 CPU fixtures to the candidate device and copies observables back for comparison.
 Numerical tolerances never relax routes, owner identities or None connectivity.
 The optional [resident library](resident-library.md) owns device-side online
-progression and continuation for its declared FP32 HARD inference profiles.
+progression and continuation for its declared FP32 inference profiles and explicit Emit mode.
 Borrowed device output windows do not export state; snapshot/result are explicit
 boundary materializations. Runtime parameter updates invalidate its frozen
 inference program until an explicit reconstruction. This separate backend does
 not broaden eager training evidence into resident backward or optimizer support.
 The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
-and complete-cut training exports for its narrower FP32 HARD adjoint profile.
+and complete-cut training exports for its declared FP32 adjoint profile.
+[Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
+softmax and linear/FP32-norm Read under the same mathematical contracts.
 Its supported modules and qualifications are separate from resident inference.
 Its Python client uses a separate `tide-resident-training-v1` CPU checkpoint
 containing updated graph parameters, optimizer state and complete continuation;

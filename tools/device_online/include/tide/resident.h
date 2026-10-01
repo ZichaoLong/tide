@@ -13,6 +13,8 @@ struct ResidentLimits {
   int64_t max_repeat_ticks=65536;
   bool prefill=true, diagnostics=true;
   bool vectorized_aggregate=true, vectorized_state=true, vectorized_read=true;
+  std::string mode="hard";
+  double zeta=1.;
 };
 // Read-only borrowed device buffers. A view expires on advance/close/destruction;
 // clone the tensors to retain them. valid distinguishes absent and zero outputs.

@@ -38,7 +38,8 @@ void bind_resident_training(py::module_& m) {
     FIELD(ResidentTrainingCheckpoint,schema) FIELD(ResidentTrainingCheckpoint,generation) FIELD(ResidentTrainingCheckpoint,next_token)
     FIELD(ResidentTrainingCheckpoint,continuation) FIELD(ResidentTrainingCheckpoint,parameters) FIELD(ResidentTrainingCheckpoint,aliases)
     FIELD(ResidentTrainingCheckpoint,trainable) FIELD(ResidentTrainingCheckpoint,optimizer) FIELD(ResidentTrainingCheckpoint,groups)
-    FIELD(ResidentTrainingCheckpoint,offsets) FIELD(ResidentTrainingCheckpoint,state);
+    FIELD(ResidentTrainingCheckpoint,offsets) FIELD(ResidentTrainingCheckpoint,state)
+    FIELD(ResidentTrainingCheckpoint,mode) FIELD(ResidentTrainingCheckpoint,zeta);
   py::class_<ResidentStep>(m,"TrainingStep")
     VIEW(ResidentStep,applied) VIEW(ResidentStep,refusal_code) VIEW(ResidentStep,generation);
   py::class_<ResidentTrainingSession>(m,"TrainingSession")

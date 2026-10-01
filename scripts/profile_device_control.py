@@ -21,8 +21,12 @@ def main():
     parser.add_argument("--device", required=True)
     parser.add_argument("--check", choices=tuple(CHECKS), required=True)
     parser.add_argument("--dtype", choices=("float32", "float16"), default="float32")
+    parser.add_argument("--storage-limit-mb", type=int, default=200,
+                        help="Bounded raw collection storage; larger gates may need more than 200 MB")
     parser.add_argument("--application-arg", action="append", default=[], help="Additional recorded component argument")
     args = parser.parse_args()
+    if not 1 <= args.storage_limit_mb <= 4096:
+        parser.error("storage limit must be between 1 and 4096 MB")
     if args.device != "npu" and not args.device.startswith("npu:"):
         parser.error("CANN component profiling requires explicit NPU")
     executable, dtypes = CHECKS[args.check]
@@ -43,7 +47,7 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     source, dirty = source_state(root)
     command = [msprof, "--output="+str(out / "raw"), "--runtime-api=on", "--task-time=l1",
-               "--aicpu=on", "--storage-limit=200MB", str(binary), "--device="+args.device,
+               "--aicpu=on", f"--storage-limit={args.storage_limit_mb}MB", str(binary), "--device="+args.device,
                "--dtype="+args.dtype, *args.application_arg]
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,

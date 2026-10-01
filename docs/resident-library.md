@@ -6,7 +6,9 @@ recursive advancement on one NPU. It accepts legal positive-delay feedback
 as well as DAG/Settle encodings. Host code submits a sealed window; it does
 not consume per-event scalars or decide the next event.
 
-This increment exposes **single-device FP32 HARD inference**. It does not
+This backend exposes **single-device FP32 inference**, defaulting to HARD.
+The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
+broadcast emission; its verification is recorded separately. It does not
 implement resident backward, an optimizer, FP16 or peer progression. Current
 build and device verification status is recorded in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
@@ -102,7 +104,8 @@ Supported local modules are those already qualified by the device content flow:
 sum/mean/weighted-mean/active/all-softmax Aggregate; identity/EMA/Add-repeat/event
 attention and five fiber pooling profiles; linear/FP32 norm Read; count/positive
 selection; adopt/clear Next; identity/tanh/LH/SwiGLU Full; broadcast/slot-affine,
-phase-aware HARD emission and supported state clocks. Custom or unavailable
+phase-aware HARD emission and supported state clocks. HST/SOFTP use broadcast;
+non-HARD slot-affine combinations are explicitly rejected. Custom or unavailable
 module declarations fail explicitly. FP32 scoring and all four placement stages
 must remain on the selected NPU. Host scheduler switches unavailable to this
 backend are rejected rather than ignored.

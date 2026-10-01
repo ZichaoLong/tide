@@ -9,6 +9,7 @@ ResidentTrainingCheckpoint ResidentTrainingSession::checkpoint() const {
   out.generation=s.generation;out.next_token=s.next_token;out.continuation=s.flow->snapshot();
   out.aliases=s.model.parameters(false).alias_partitions();out.trainable=s.registry.names();
   out.optimizer=s.kind;out.groups=s.optimizer->groups();out.offsets=s.layout.offsets;out.state=s.optimizer->snapshot();
+  out.mode=s.limits.forward.mode;out.zeta=s.limits.forward.zeta;
   for(const auto& owner:s.model.parameters(false).owners())out.parameters.emplace(owner.canonical,owner.value.detach().clone());
   // Only fixed unused owners retain their initial CPU value. Every optimizer
   // owner with a differentiable use is read from the current device parameter.

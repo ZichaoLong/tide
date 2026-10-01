@@ -29,6 +29,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   for(const auto& x:{t.full.extra.lh_weights,t.full.extra.lh_biases,t.full.extra.gate,t.full.extra.up,t.full.extra.down})
     if(x.defined())extra_bytes+=4.L*x.numel();
   const bool normalized=t.aggregate.kinds.defined();
+  const bool controlled=t.control.mode!=0;
+  if(controlled)extra_bytes+=5.L*nodes*width;
   if(normalized)extra_bytes+=5.L*nodes*t.aggregate.slots+8;
   const long double own=extra_bytes+4.L*(total+fibers+physical)*width+4.L*capacity*(11.L*width+15)
     +16.L*samples*nodes*width+16.L*nodes*width+(t.full.has_tanh?4.L*nodes*(width*static_cast<long double>(width)+width):0.L)
@@ -42,7 +44,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   tensor(t.state.values,device,at::kFloat,{capacity,5*width+2});
   // Reserve half for the bounded reverse components. Each rejects before its
   // allocations; no nested component can consume another component's reserve.
-  auto links=append_reverse_links(p,t,error,budget/(normalized?10:8));
+  const int divisor=controlled?12:normalized?10:8;
+  auto links=append_reverse_links(p,t,error,budget/divisor);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);
@@ -60,6 +63,10 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   if(normalized) {
     out.aggregate={at::empty_like(t.aggregate.weights),at::empty(t.aggregate.weights.sizes(),booleans),at::empty({1},longs)};
     p.zero(out.aggregate.values);p.zero(out.aggregate.connected);p.zero(out.aggregate.chunks);
+  }
+  if(controlled) {
+    out.read=at::empty({nodes,width},floats);out.read_connected=at::empty({nodes},booleans);
+    p.zero(out.read);p.zero(out.read_connected);
   }
   auto stage_meta=at::empty_like(t.state.metadata),stage_values=at::empty_like(t.state.values),stage_count=at::empty_like(t.state.count);
   auto full_grad=at::empty({capacity,width},floats),full_on=at::empty({capacity},booleans);
@@ -103,16 +110,23 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto head=p.label(),body=p.label(),done=p.label();p.mark(head);meta(1,full_on,full_on,out.full_connected,dummy);
   p.branch(branch,{done,body});p.mark(body);payload(1,full_grad,full_grad,full_grad,full_on);
   auto full_tape=t.full;full_tape.metadata=stage_meta;full_tape.values=stage_values;full_tape.count=stage_count;
-  auto full=append_full_vjp(p,full_tape,full_grad,full_on,error,chunk,budget/(normalized?10:8));
+  ControlVjp control;
+  if(controlled)control=append_control_vjp(p,*t.graph,t.state,t.control,stage_count,range,full_grad,full_on,error,budget/divisor);
+  auto full=append_full_vjp(p,full_tape,controlled?control.fresh:full_grad,full_on,error,chunk,budget/divisor);
   meta(2,full.content_connected,full.comparison_connected,full.parameter_connected,dummy);
   payload(2,full.content,full.comparison,full_grad,full_on);
+  if(controlled)append_control_merge(p,control,cot,error);
   auto state_tape=t.state;state_tape.metadata=stage_meta;state_tape.values=stage_values;state_tape.count=stage_count;
-  auto state=append_state_vjp(p,state_tape,cot,error,budget/(normalized?5:4));
+  auto state=append_state_vjp(p,state_tape,cot,error,budget/(divisor/2));
   payload(3,full.content,full.comparison,state.content,state.content_connected);
   if(normalized)append_aggregate_vjp(p,t,links,stage_count,range,state.content,state.content_connected,
-    messages,aggregate_partials,out.aggregate,error,chunk,budget/10);
+    messages,aggregate_partials,out.aggregate,error,chunk,budget/divisor);
   p.copy(carry,state.initial);p.copy(carry_on,state.initial_connected);
   p.add(dc,state.decay);p.add(rc,state.retention_components);
+  if(controlled) {
+    p.add(out.read,control.read);
+    append_connection_union(p,control.read_connected,out.read_connected,error);
+  }
   if(t.full.has_tanh){p.add(out.weights,full.weights);p.add(out.biases,full.biases);}
   for(const auto& pair:{std::make_pair(out.extra.lh_weights,full.extra.lh_weights),std::make_pair(out.extra.lh_biases,full.extra.lh_biases),
     std::make_pair(out.extra.gate,full.extra.gate),std::make_pair(out.extra.up,full.extra.up),std::make_pair(out.extra.down,full.extra.down)})

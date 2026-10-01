@@ -52,12 +52,15 @@ struct ResidentTrainingCheckpoint {
   std::vector<OptimizerGroup> groups;
   std::vector<Index> offsets;
   ResidentOptimizerState state;
+  // Legacy v1 records omitted these fields and mean HARD with zeta=1.
+  std::string mode="hard";
+  double zeta=1.;
 };
 struct ResidentStep { bool applied=false; int refusal_code=0; Index generation=0; };
 
 // Explicit first-order VJP API, separate from eager/autograd and inference.
 // All methods require no-grad; a consumer computes loss/head cotangents outside
-// this owner. Single-NPU FP32 HARD, built-in Aggregate/broadcast, identity/EMA/Add state and
+// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add state and
 // identity/tanh/LH/SwiGLU Full. Other adjoints are rejected before the first advance.
 class ResidentTrainingSession {
  public:

@@ -31,4 +31,5 @@ def forward_limits(runtime, *, training=False):
         setattr(limits, name, value)
     limits.prefill = runtime.options.prefill
     limits.diagnostics = training or runtime.options.trace
+    limits.mode, limits.zeta = runtime.options.mode, runtime.options.zeta
     return limits

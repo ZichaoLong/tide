@@ -159,7 +159,7 @@ class GraphRuntime:
             path = Path(self.engine.core.__file__)
             record["native_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
         if self.resident:
-            record["resident"] = dict(runtime_owner="python", dtype="float32", mode="hard",
+            record["resident"] = dict(runtime_owner="python", dtype="float32", mode=self.options.mode, zeta=self.options.zeta,
                                       autograd=False, devices=1,
                                       binaries=self.engine.record["binary_sha256"],
                                       core_sha256=self.engine.record["core"]["cpp_source_sha256"])

@@ -1,4 +1,5 @@
 """Portable CPU record for explicit resident VJP/optimizer continuation."""
+import math
 import torch
 from .checkpoint_values import encode, decode
 from .coordinates import integers
@@ -14,7 +15,8 @@ def export(runtime, checkpoint):
                 parameters=c.parameters, aliases=c.aliases, trainable=c.trainable,
                 optimizer="sgd" if c.optimizer == runtime.engine.module.OptimizerKind.sgd else "adamw",
                 groups=[{name: getattr(g, name) for name in GROUP_FIELDS} for g in c.groups],
-                offsets=c.offsets, state={name: getattr(c.state, name) for name in STATE_FIELDS})
+                offsets=c.offsets, state={name: getattr(c.state, name) for name in STATE_FIELDS},
+                mode=c.mode, zeta=c.zeta)
 
 
 def prepare(runtime, compiled, record, batch_size):
@@ -22,6 +24,10 @@ def prepare(runtime, compiled, record, batch_size):
         raise ValueError("resident training checkpoint schema mismatch")
     core, module = runtime.engine.core, runtime.engine.module
     try:
+        mode, zeta = record.get("mode", "hard"), record.get("zeta", 1.0)
+        if (mode not in {"hard", "hst", "softp"} or type(zeta) not in (int, float)
+                or not math.isfinite(zeta) or mode != runtime.options.mode or zeta != runtime.options.zeta):
+            raise ValueError("resident checkpoint Emit mode/zeta mismatch")
         integers("resident checkpoint progress", record["native_schema"], record["generation"], record["next_token"])
         if record["native_schema"] != 1 or min(record["generation"], record["next_token"]) < 0:
             raise ValueError("invalid resident checkpoint progress")
@@ -50,6 +56,7 @@ def prepare(runtime, compiled, record, batch_size):
             raise ValueError("Settle training checkpoint requires a complete position boundary")
         native = module.TrainingCheckpoint()
         native.schema = record["native_schema"]
+        native.mode, native.zeta = mode, zeta
         native.generation, native.next_token = record["generation"], record["next_token"]
         native.continuation = to_continuation(core, runtime.execution_graph, compiled, q)
         for name in ("parameters", "aliases", "trainable", "offsets"):
