@@ -59,14 +59,17 @@ class SettleGraph:
         encoded = Graph(g.nodes + (Node(r, identity=True), Node(r + 1, identity=True)), edges,
                         g.regions + (Region(1), Region(1)), (n,), (n + 1,), layout,
                         g.origins + tuple(InputOrigin(len(g.edges)+p, p, self.stride) for p in range(len(g.inputs))), domain)
-        em = Model(encoded, model.width, dtype=model.nodes[0].bias.dtype,
-                   full_programs={v: w.full_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   aggregate_programs={v: w.aggregate_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   state_programs={v: w.kernel for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   read_programs={v: w.read_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   next_programs={v: w.next_program for v, w in enumerate(model.nodes) if not g.nodes[v].identity},
-                   region_programs={r: p for r, p in enumerate(model.regions)})
-        em.nodes = torch.nn.ModuleList(list(model.nodes) + list(em.nodes[-2:]))
+        # Preserve body owners directly. Constructing another full random body
+        # before replacing its nodes temporarily duplicates large model banks.
+        from .ops import BoundaryWeights
+        from .region import program as region_program
+        em = Model.__new__(Model)
+        torch.nn.Module.__init__(em)
+        em.width, em.graph_identity = model.width, encoded.identity
+        em.nodes = torch.nn.ModuleList([*model.nodes, *(BoundaryWeights(model.width, model.nodes[0].bias.dtype)
+                                      .to(model.nodes[0].bias.device) for _ in range(2))])
+        em.regions = torch.nn.ModuleList([*model.regions, *(region_program(layout, model.nodes[0].bias.dtype)
+                                        for layout in encoded.region_layouts[-2:])])
         def one():
             return torch.nn.Parameter(model.nodes[0].bias.new_ones(()), requires_grad=False)
         em.input_scale = torch.nn.ParameterList([one()])

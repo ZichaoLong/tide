@@ -54,21 +54,51 @@ Earlier forward/canonical/internal qualifications remain in ROADMAP and evidence
 
 ## Current work and next action
 
-Public qualification source: TASK/sources/public-shards-clean01 (clean0d7c45e).
-Builds: TASK/builds/public-shards-clean01 and public-shards-python-clean01.
-All public-shards-*-clean01 jobs passed, including installed consumer and legacy.
-Audit command: python TASK/launchers/public_shards_evidence.py
-0d7c45eb417e827f6bc77c1ee9f876d9663ab215. Evidence-only commit/push is next.
-No new build/test job remains live. Historical CPU Attention stays paused.
+Public training evidence **b4aa8c1** committed/pushed. All ten clean0d7c45e jobs
+passed and audited; no outstanding public training qualification job.
 
-Then implement actual consumers under tools/online_bench (currently empty) using
-public APIs and common independently consumed parameter/input packet. Inspect
-cpp/scale/model.cpp, scripts/flow_topology.py and current native/Python interfaces.
-The wide v1 packet has per-edge D×D projections; match real models and parameter
-counts rather than calling approximate counts equivalent. v1 state_boundary says
-empty state per window: extend/version the packet for continuous operation without
-reinterpreting historical evidence. Preserve general topology/online scheduling.
-No new full-size CPU/mixed/resident throughput claim has been established.
+Active development: continuous v2 workload packet and common public scale consumers
+under tools/online_bench (Python/native adapter/independent installed C++). Real
+per-edge D×D projections, Add/fiber Attention, embedding/head and exact materialized
+parameter count. Shared named CPU initializer, independently consumed inputs, full
+loss/backward/finite/optimizer and continuous windows with explicit update detach.
+Legacy v1 packet remains reset-window. Settle Python embedding now preserves body
+owners directly without constructing a second full body. Uncommitted files belong
+to this increment; affected tests/builds are next.
+
+Important discovered gap: current resident reverse admits broadcast emission only;
+wide packets use slot_affine. Scale resident training/emission parameter sharding
+must be implemented and qualified; existing public tests do not certify this model.
+No substitution of broadcast or approximate parameter counts. CPU/mixed consumers
+first expose the actual workload and make this prerequisite concrete.
+
+Development results: online-consumer-python-dev01 PASSED93 CPU checks;
+build-online-consumer-{cpu,npu}-dev02 PASSED; online-consumer-cpp-dev02 PASSED24
+independent standalone CPU FP32/FP64 trajectories; online-consumer-mixed-dev02
+PASSED18 NPU FP32 complete training cases, independent Python/native/LibTorch,
+three families/two memories/both schedules/three mixed presets, strict gradients
+and updated parameters. No tolerance change. First CPU/NPUdev01 builds failed on
+missing tide/kernel.h include; both failures retained, fixed in dev02.
+
+Final development source online-consumer-dev03: CPU build PASSED; combined
+CPU consumer/packet/Settle gate PASSED120 checks, no skips, including independent
+standalone FP32/FP64, delayed arrivals, unified CLI, preserved failure output and
+bounded diagnostics. No numerical changes after the18-case NPU gate; subsequent
+C++ changes only simplify the equivalent dtype guard/add pre-allocation diagnostic
+capacity refusal. All implementation development jobs are terminal. Next commit
+this coherent implementation and push, then qualify an immutable clean snapshot.
+
+Fixed-source plan: sources/online-consumer-clean01; independent CPU/NPU consumer
+builds online-consumer-{cpu,npu}-clean01; online-consumer-cpu-clean01 (120 checks),
+online-consumer-mixed-clean01 (18 NPU FP32 trajectories), separate bounded profile
+of actual edge-affine attention training. Every job has build600s/run600s/queue120s
+bounds. Only affected checks; no full-size or formal throughput job. External
+builder launchers/build_online_consumer.py installs unchanged byte-verified core
+and compiles public-header-only clients. Runtime commands use task output cwd.
+Historical CPU Attention remains deliberately paused. No formal new full-size
+throughput has been established. Next: consumer equivalence/continuation gates,
+commit implementation, fixed-source qualification/evidence, then emission resident
+support and F6 screening. Do not endlessly expand internal component gates.
 
 ## Environment and bounded execution
 

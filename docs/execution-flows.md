@@ -173,7 +173,9 @@ FP32 为主要基线，NPU FP16 单列；CPU FP64 主要承担正确性参考。
 公共等价图和类别特有压力图分开，不以参数量相近冒充数学等价。
 既有 foundation-v1/v2 与历史 PDG 记录保留，不改写为新拓扑证据。
 
-`prepare_execution_flow.py` 已有带哈希 packet：
+`prepare_execution_flow.py` 已有带哈希 packet；默认 v2 连续状态协议，
+`--protocol reset-v1` 保留旧版重置窗口含义。[公共消费者](online-consumers.md)
+按实际张量检查参数量，独立消费同一参数与输入规则：
 
 ```bash
 python scripts/prepare_execution_flow.py --preset smoke --memory add --output-dir NEW
