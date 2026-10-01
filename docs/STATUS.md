@@ -76,7 +76,35 @@ masters/slots and actual half rounding). Their reports retain earlier failures.
 
 Before performance, deliberately resolve historical CPU Attention's retained
 host memory and timing lock; do not blindly resume/kill it. No qualification jobs
-remain live. Evidence files/STATUS/ROADMAP are the only current uncommitted work.
+remain live. Evidence commit c57f6b0 pushed. Current implementation: explicit sharded tapes
+and per-device retention, Full-stage graph-VJP seam, stable connected-row packing,
+owner-local Full parameter partials, coordinator state/message/cache reverse and
+retained-window bridges. Public single-device ABI/defaults unchanged. No device
+alias reduction/optimizer/public multi-device training claim yet.
+
+Development full-reverse-dev03 standalone/Python builds PASSED; two dtype smoke
+runs passed, then full FP32/FP16 gates each50 trajectories/200 retained windows
+plus empty/malformed/budget/type/owner refusals and exact replay. Three-device
+memory/locality × two dtypes smoke passed (four cells,each2 trajectories/8 windows).
+Four single-device inference cells and half-cache training1/16/4 also passed.
+Python runtime regression is deferred to immutable qualification, avoiding a
+redundant dev pass. Only follow-up since dev03: initialize unused accumulator
+chunk_rows to zero and clarify internal capability comments; no numerical change.
+
+Retained development failures: both dev01 dtype smoke tasks stopped in the CPU
+assertion's unsupported at::tensor(bool), fixed with at::full; dev02 build missed
+an explicit NoGradGuard header; dev03 three-card wrapper used the old forward
+success marker although its first child passed, fixed in the separate
+full_reverse_policy_smoke.py and verified by full-reverse-three-dev03b.
+No observed production numerical/runtime failure or tolerance relaxation.
+
+Next: commit/push this coherent retained cross-card VJP increment; qualify clean
+source full-reverse-clean01 with both runtime builds,full FP32/FP16 gates,3-device
+policy smoke,1-shard degeneration,affected inference/training/Python regressions
+and a separate3-device profile. Use TASK/launchers/build_full_reverse.py NAME
+[--runtime python] --kernel-build full-reverse-dev01; preserve prior failures.
+Existing qualification_audit.py supports trajectory counts. Then continue the
+owner alias reduction/optimizer/publication main work without requesting a pause.
 
 ## Environment and bounded execution
 

@@ -285,7 +285,17 @@ FullTape ContentFlow::full_tape() const {
   return out;
 }
 ReverseTape ContentFlow::reverse_tape() const {
-  auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
+  auto state=state_tape();auto full=full_tape();return impl_->reverse_view(state,full);
+}
+ShardedReverseTape ContentFlow::sharded_reverse_tape() const {
+  auto state=state_tape();const auto& s=*impl_;
+  if(!s.sharded_full)throw std::invalid_argument("sharded reverse requires explicit Full shards");
+  FullTape shape{state.metadata,state.values,state.count,{},{},{},
+    s.boundary.batch_size,s.profile.width,false};
+  return {s.reverse_view(state,shape),s.sharded_full->tapes(shape.samples,shape.width)};
+}
+ReverseTape ContentFlow::Impl::reverse_view(const StateTape& state,const FullTape& full) const {
+  const auto& s=*this;
   // Journal access is distinct from complete graph reverse capability. Local
   // half components consume their own actual tapes; append_graph_vjp retains
   // the complete-graph dtype gate until every integration is qualified.

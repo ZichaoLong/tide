@@ -91,6 +91,7 @@ def main():
         names.append("libtide-resident.so")
         names.extend(("tide-packed-lh-check", "tide-state-read-check", "tide-aggregate-payload-check", "tide-attention-payload-check", "tide-precision-flow-check"))
         names.append("tide-master-publication-check")
+        names.append("tide-sharded-vjp-check")
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
         names.append("tide-resident-half-training-check")

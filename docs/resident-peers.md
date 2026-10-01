@@ -105,3 +105,47 @@ This is Full parameter placement and computation. Read, state/KV, readiness,
 selection and queues remain coordinator-owned. It is not complete model sharding,
 distributed training, a public multi-device client or a throughput qualification.
 Current development/qualification status is recorded in STATUS.
+
+## Compact Full reverse and retained windows
+
+`ContentFlow::sharded_reverse_tape()` explicitly borrows the actual coordinator
+journals and the compact Full banks on their forward owners. Ordinary
+`reverse_tape()` still refuses sharded placement. The coordinator view has no
+Full kind bank and the single-device reverse API rejects it without the explicit
+sharded executor, preventing an accidental identity-Full backward.
+
+`retain_sharded_reverse_tape` admits the sum of coordinator records and owner
+banks before copying. Each numerical bank stays on its NPU; static node IDs and
+graph structure are host metadata. Retention preserves parameter versions and
+allows backward after forward close or subsequent window overwrites. Existing
+window bridges connect pending messages, state and attention caches on device.
+State/KV and their reverse computation remain on the coordinator.
+
+`append_sharded_graph_vjp` uses the ordinary graph reverse stage loop with a
+Full-stage executor. One device packing kernel stably collects actual connected
+rows, translates global node IDs and creates gather/scatter indices. Fixed-size
+packets carry the compact journal, FP32 cotangents, exact counts and connection
+bits. Every nonempty remote request precedes local Full reverse and response
+waits. Peers run the existing FP32/FP16 Full VJPs and accumulate per-node parameter
+partials on their own NPU. Only content/comparison adjoints, connections, errors
+and chunk counts return per stage. Parameter matrices do not round-trip per stage.
+Padding has distinct scratch destinations and cannot create gradient connections.
+
+Each retained window has its own peer service programs. Submit all programs on
+the constructing thread before any boundary wait. Empty/error windows still
+terminate every service via a device command. Replay resets per-window partials
+and work counters; capacity and malformed-tape errors remain explicit. Parameter
+partials are physical Full-node contributions, not independently trainable copies
+of shared parameters. Shared-owner reduction and atomic multi-device optimizer
+publication are subsequent, separately qualified responsibilities.
+
+The standalone `--checks peer-sharded-vjp` gate requires two visible NPUs and is
+excluded from default single-device checks. Its checker also accepts
+`--full-shards=1|2|3|4` and `--full-placement=memory|locality`. It reuses independent
+CPU FP32/FP64 retained-graph oracles, both payload precisions, None/zero roots,
+normalized Aggregate, mixed Full, control modes and attention cache fixtures.
+The comparison adapter downloads completed partials and sums aliases only for
+assertions; these CPU values never feed the candidate or an optimizer. This gate
+therefore verifies retained graph VJPs, not device alias reduction, multi-device
+training steps, a public training client or throughput. Passing source-specific
+evidence is recorded separately in STATUS/ROADMAP.

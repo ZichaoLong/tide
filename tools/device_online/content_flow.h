@@ -7,6 +7,7 @@
 #include "reverse_links.h"
 #include "parameter_publish.h"
 #include "full_placement.h"
+#include "full_shard_tape.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -36,7 +37,8 @@ class ContentFlow {
   // multi-device training or complete model/parameter sharding.
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device full_device);
   // Compact Full banks on the explicit node owners; state/KV stay coordinator
-  // owned. Inference only until the separate distributed reverse is qualified.
+  // owned. Explicit sharded tapes support the internal reverse executor;
+  // optimizer publication and public multi-device training are separate.
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,FullPlacement);
   ~ContentFlow();
   ContentFlow(const ContentFlow&)=delete;
@@ -48,6 +50,7 @@ class ContentFlow {
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.
   FullTape full_tape() const; // Built-in identity/tanh/LH/SwiGLU journals and banks.
   ReverseTape reverse_tape() const; // Declared training profile; actual journals only.
+  ShardedReverseTape sharded_reverse_tape() const; // Explicit compact multi-device banks.
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
   std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.
   void close(); // Explicit checked drain; all operations except close then fail.

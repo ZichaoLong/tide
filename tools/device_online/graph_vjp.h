@@ -27,4 +27,11 @@ struct GraphVjp {
 // returned adjoints are FP32. Public training has separate capability gates.
 GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
                          const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes);
+// Internal composition seam: invoked once while constructing the device stage
+// loop. The returned Full tensors participate in that loop, not host dispatch.
+using FullStageVjp=std::function<FullVjp(CannProgram&,const FullTape&,const at::Tensor&,
+                                       const at::Tensor&,const at::Tensor&)>;
+GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+                         const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,
+                         const FullStageVjp&);
 } // namespace tide::device_online

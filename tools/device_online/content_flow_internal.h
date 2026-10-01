@@ -44,6 +44,7 @@ struct ContentFlow::Impl {
   void construct();
   Continuation export_continuation() const;
   Result export_result() const;
+  ReverseTape reverse_view(const StateTape&,const FullTape&) const;
 };
 void upload_atoms(const std::vector<Atom>&,const AtomBatch&);
 ValidatedInput prepare_external(const Graph&,const Model&,const Continuation&,

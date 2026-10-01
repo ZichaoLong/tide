@@ -43,6 +43,7 @@ struct ShardedFull::Impl {
     at::Device device;
     at::Tensor mapping,work,chunks;
     int64_t nodes,parameter_bytes=0;
+    std::vector<int64_t> global_nodes;
     std::unique_ptr<PackedFull> full;
     std::unique_ptr<PackedLhFull> lh;
     std::unique_ptr<PackedSwiGluFull> swiglu;
@@ -72,6 +73,7 @@ ShardedFull::ShardedFull(const ContentProfile& p,FullPlacement placement,at::Dev
   for(size_t i=0;i<specs.size();++i) {
     const auto& s=specs[i];Impl::Shard shard{placement.devices[i],at::tensor(s.mapping,at::kLong).to(coordinator),
       at::zeros({2},longs),at::zeros({1},longs),int64_t(s.nodes.size())};
+    for(size_t n=0;n<s.mapping.size();++n)if(s.mapping[n]>=0)shard.global_nodes.push_back(n);
     std::vector<Tensor> weights,biases,norm_weights,norm_biases;
     for(size_t n=0;n<s.nodes.size();++n) {
       const auto& w=s.weights[n];const auto kind=s.lh[n];weights.push_back(w.weight);biases.push_back(w.bias);
@@ -146,6 +148,15 @@ int64_t ShardedFull::workspace_bytes() const {int64_t n=0;for(const auto& s:impl
 int64_t ShardedFull::packet_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.remote)n+=s.remote->packet_bytes();return n;}
 int64_t ShardedFull::retained_tensor_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.remote)n+=s.remote->retained_tensor_bytes();return n;}
 const at::Tensor& ShardedFull::chunks() const{return impl_->chunks;}
+std::vector<FullShardTape> ShardedFull::tapes(int64_t samples,int64_t width) const {
+  std::vector<FullShardTape> out;
+  for(const auto& s:impl_->shards) {
+    FullTape t{{},{},{},s.full->kinds(),s.full->weights(),s.full->biases(),samples,width,s.full->has_tanh()};
+    if(s.lh)s.lh->tape(t.extra);if(s.swiglu)s.swiglu->tape(t.extra);
+    out.push_back({s.global_nodes,std::move(t)});
+  }
+  return out;
+}
 std::map<std::string,int64_t> ShardedFull::stats() const {
   std::map<std::string,int64_t> out{{"full_shards",int64_t(impl_->shards.size())},{"full_shard_parameter_bytes",0},{"full_shard_max_parameter_bytes",0},
     {"full_shard_selected_rows",0},{"full_shard_capacity_rows",0}};

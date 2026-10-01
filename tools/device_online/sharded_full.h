@@ -1,6 +1,7 @@
 #pragma once
 #include "full_placement.h"
 #include "broadcast_router.h"
+#include "full_shard_tape.h"
 #include <memory>
 namespace tide::device_online {
 struct ContentProfile;
@@ -25,6 +26,7 @@ class ShardedFull {
   int64_t retained_tensor_bytes() const;
   const at::Tensor& chunks() const;
   std::map<std::string,int64_t> stats() const;
+  std::vector<FullShardTape> tapes(int64_t samples,int64_t width) const;
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;

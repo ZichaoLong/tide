@@ -20,9 +20,15 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
 }
 GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
                          const at::Tensor& error,int64_t chunk,int64_t budget) {
+  return append_graph_vjp(p,t,roots,error,chunk,budget,{});
+}
+GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+                         const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage) {
   if(at::GradMode::is_enabled()||!t.graph||!t.state.metadata.defined()||t.state.metadata.dim()!=2
       ||!t.fiber_values.defined()||t.fiber_values.dim()!=2)
     throw std::invalid_argument("graph VJP requires no-grad actual device tape");
+  if(!t.full.kinds.defined()&&!full_stage)
+    throw std::invalid_argument("sharded tape requires its Full reverse executor");
   // Identity/LH/SwiGLU-only graphs need no tanh weight bank. Physical source
   // scales always exist (including the source-free sentinel) and own dtype.
   if(t.source_scales.scalar_type()!=at::kFloat&&t.source_scales.scalar_type()!=at::kHalf)
@@ -125,7 +131,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   };
   StateVjp dummy;dummy.content_connected=full_on;dummy.decay_connected=dcon;dummy.retention_connected=rcon;
   auto payload=[&](int64_t mode,const at::Tensor& fh,const at::Tensor& fc,const at::Tensor& sh,const at::Tensor& shc) {
-    const auto aggregate_kinds=normalized?t.aggregate.kinds:t.full.kinds;
+    const auto aggregate_kinds=normalized?t.aggregate.kinds:t.state.count;
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_graph_reverse_payload)(32,stream,
       ptr(t.state.values),ptr(t.fiber_values),ptr(links.messages),ptr(links.scales),ptr(links.producer_head),ptr(links.producer_next),
       ptr(links.consumer_head),ptr(links.consumer_next),ptr(roots.pending),ptr(roots.outputs),ptr(roots.final),
@@ -142,7 +148,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto full_tape=t.full;full_tape.metadata=stage_meta;full_tape.values=stage_values;full_tape.count=stage_count;
   ControlVjp control;
   if(controlled)control=append_control_vjp(p,*t.graph,t.state,t.control,stage_count,range,full_grad,full_on,error,budget/divisor);
-  auto full=append_full_vjp(p,full_tape,controlled?control.fresh:full_grad,full_on,error,chunk,budget/divisor);
+  auto full=full_stage?full_stage(p,full_tape,controlled?control.fresh:full_grad,full_on,error):
+    append_full_vjp(p,full_tape,controlled?control.fresh:full_grad,full_on,error,chunk,budget/divisor);
   meta(2,full.content_connected,full.comparison_connected,full.parameter_connected,dummy);
   payload(2,full.content,full.comparison,full_grad,full_on);
   if(controlled)append_control_merge(p,control,cot,error);

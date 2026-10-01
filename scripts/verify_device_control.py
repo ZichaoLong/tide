@@ -61,7 +61,8 @@ def main():
                     command.append("--cache")
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
-                    result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120)
+                    result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
+                                            timeout=360 if check == "peer-sharded-vjp" else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

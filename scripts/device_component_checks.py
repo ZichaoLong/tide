@@ -1,6 +1,7 @@
 """Standalone device component gate names; these are not graph backend claims."""
 
 CHECKS = {
+    "peer-sharded-vjp": ("tide-sharded-vjp-check", ("float32", "float16")),
     "peer-shard-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer-shard-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "peer": ("tide-device-peer-check", ("float32", "float16")),
@@ -57,6 +58,7 @@ CHECKS = {
     "resident-training": ("tide-resident-training-check", ("float32",)),
 }
 MARKERS = {
+    "peer-sharded-vjp": "sharded-graph-vjp: passed",
     "peer-shard-flow": "peer-flow: passed",
     "peer-shard-control-flow": "peer-flow: passed",
     "peer": "device-peer: passed",
@@ -173,3 +175,5 @@ KERNELS["fiber-reverse"] = "tide_fiber_reverse_"
 CHECKS["fiber-training"] = ("tide-resident-fiber-training-check", ("float32",))
 MARKERS["fiber-training"] = "resident-fiber-training: passed"
 KERNELS["fiber-training"] = "tide_fiber_reverse_"
+
+KERNELS["peer-sharded-vjp"] = "tide_full_reverse_pack"
