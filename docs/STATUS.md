@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T08:18:53.660904+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T08:25:27.730825+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,65 +29,41 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **2d7cee1ab9838dcaeacf639781053a53a822c308** committed/pushed.
-[FP16 actual fiber reverse report](evidence/resident-fp16-fiber-reverse-20261001.md)
-and [audit](evidence/resident-fp16-fiber-reverse-20261001.json). All6 jobs PASSED/exit0:
-standalone/Python-owned builds,4 component cells,FP32 event/fiber regression,
-61 Python cases(no skips),separate half profile. Each dtype90 cases/180 replays;
-bias bridge3 cases/6 replays/6 refusals;reverse links64 windows. Five pools,
-7 root modes,streaming/greedy,adopt/clear,width1/4/257,int64 above2^55,
-permuted slots,missing/zero-scale sources,FP32 cache boundary sums beyond half.
-Half roots×256;rtol2e-3/atol2e-5 half,unchanged1e-5/1e-6 FP32.
-Profile162004 AI_VECTOR_CORE,11706 AI_CORE,1560 MIX_AIV;no observed AiCPU/
-logged CPU fallback,not throughput. Physical9/1/13/11→logical0.
-Source/archive/object/loader/log/CSV audit passed,including authenticated
-production objects recovered from checker-failed dev01. FP32 event/fiber
-regression66/172 roots,8/20 trajectories. All jobs terminal;no new speed ratio.
-
-Retained dev01 compile failure:string/const-char helper mismatch. Dev02 FP32
-fiber training failed because complete-graph dtype guard read an optional tanh
-bank;changed to always-present source scales. Dev03 build/gate/regression
-passed. No tolerance relaxation or failed-job relabeling.
-Prior local fiber f2ec4f1/evidencecaa6088,event4f195d2/evidence3a8f2e8,
-local attentionf20c2cc/evidence63824ba,normalized Aggregate/LH/SwiGLU
-5ce5346/evidence588ed1d remain separately qualified.
+Implementation **3e3397378f8b6545230b3ba543a9b0c72296cc94** committed/pushed.
+[FP16 Emit/control report](evidence/resident-fp16-control-20261001.md) and
+[audit](evidence/resident-fp16-control-20261001.json). All7 jobs PASSED/exit0:
+standalone/Python-owned builds,4 component cells,FP32 control-training regression,
+97 Python tests(no skips),two half profiles. Per dtype36 VJP cases/108 replays,
+3 forward cases/9 replays,36 complete-flow configurations/144 windows.
+FP32 training98 trajectories/1568 windows/392 updates. Profile control2499
+AI_VECTOR_CORE/144 MIX_AIV;flow75735 AI_VECTOR_CORE/3042 AI_CORE/36 MIX_AIV.
+No observed AiCPU/logged CPU fallback;not throughput. All jobs terminal.
+Audit: `python TASK/launchers/precision_control_evidence.py 3e3397378f8b6545230b3ba543a9b0c72296cc94`.
+Source/archive/kernel/loader/log/CSV hashes authenticated. Clean snapshot/build
+low-precision-control-clean01;Python-owned build low-precision-control-python-clean01.
+Retain dev01 missing-checker-object build failure and dev03 FP32 regression failure.
+Dev03 incorrectly bypassed ordinary identity Full Emit;restored passing dev02
+production bytes and strengthened identity/connected-zero checks. Only boundary
+identity bypasses Emit;public cpp/src/full_kernel.cpp owns this behavior.
+Prior actual fiber reverse2d7cee1/evidence60f13da remains qualified separately.
 
 ## Active work and next action
 
-Fiber integration evidence committed/pushed as60f13da. Current uncommitted
-increment:half Emit/control/Read adjoints and actual HST/SOFTP forward rounding,
-then complete graph reverse,retained windows,master/checkpoint/public FP16
-training. Keep full graph/public training guards until real integration passes.
-Dev02 standalone/Python builds,all4 component cells,FP32 control training98
-trajectories/1568 windows/392 updates,and97 Python cases all PASSED/exit0.
-Retain failed dev01 launcher:absent control-training checker object;dev02
-recompiled it and rebuilt production,no failed object reuse.
-Dev03 tried to bypass Emit for ordinary identity Full. Component checks passed,
-but full FP32 training correctly FAILED (variant2/HST:Read None/zero mismatch).
-The public FullKernel still applies Emit when g==h;only identity boundary nodes
-bypass. Restored ALL production bytes to qualified dev02. The two checkers now
-explicitly include ordinary identity Full,connected zero controls and identity
-boundary bypass. No core or mathematical-contract change.
-Build-low-precision-control-dev04 and component gate dev04 PASSED/exit0.
-Source/build same suffix;launcher build_precision_control_v4.py,900s/two
-checker workers. Each dtype36 VJP cases/108 replays,3 forward cases/9 replays,
-36 independent whole-flow configurations/144 windows. Fixed implementation
-ready to commit;no new production change after the passing dev02 regression. It proves only the two
-checkers differ from dev02 and reuses its terminal production archive/kernels.
-Next:implementation commit,then clean qualification.
-Clean launchers:build_precision_control_recheck_v4.py and
-build_precision_control_python_v4.py. Snapshot low-precision-control-clean01
-at NEW_REV. Run components,FP32 control-training,97 Python precision/event/fiber
-cases,and two half profiles(control-vjp,precision-control-flow),600s/lease120s.
-Audit precision_control_evidence.py REV expects all7 terminal jobs,5 standalone
-cells,97 Python cases,and retains failed dev01/dev03 records.
-Control probabilities stay FP32 for complete-frame softmax;half Emit must use
-rounded public controls/delta and actual unmixed Full values. All adjoints FP32.
-Do not turn half forward into a whole-FP32 recomputation to bypass integration.
-
-Remaining F1–F7:above half integrations,device peer progression/communication/
-training,five-preset screening,representative/full-size CPU/mixed/resident
-performance,version/migration/CUDA records. No subagents or requested pause.
+Commit/push current evidence,then implement actual half complete-graph reverse,
+retained windows,and FP32 master/checkpoint/public FP16 training in tested increments.
+Local half state/Full/normalized Aggregate/attention/event/fiber/control adjoints
+are qualified;graph_vjp.cpp and public training still explicitly reject half.
+Journals/roots/adjoints stay FP32;forward payload/parameters/cache stay real half.
+Do not widen the entire half forward to FP32 to bypass integration. Inspect
+normalized Aggregate gradient allocation and public roots/owner master handling.
+For graph reference,use independent scheduling and declared per-operation rounding;
+sum Aggregate accumulates FP32 source products and casts only the final content,
+not each contribution before the sum. Preserve None/zero and physical identities.
+Update fiber_reverse_check's old empty-root guard test when enabling graph VJP.
+Next production code not yet edited. No task runtime jobs active beyond historical
+intentionally paused baseline. Remaining F1–F7:half integrations,device peer
+progression/communication/training,five-preset screening,representative/full-size
+CPU/mixed/resident performance,version/migration/CUDA records.
 Implementation commit→immutable qualification→separate evidence commit,push each.
 
 ## Environment and bounded execution
