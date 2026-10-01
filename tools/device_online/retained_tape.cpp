@@ -37,6 +37,9 @@ int64_t reverse_tape_bytes(const ReverseTape& source) {
 }
 
 RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget) {
+  return retain_reverse_tape(source,budget,nullptr);
+}
+RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget,RetainedProjection* projection) {
   if(at::GradMode::is_enabled()||!source.graph||!source.fiber_values.defined()||budget<1
       ||source.fiber_values.device().type()!=c10::DeviceType::PrivateUse1)
     throw std::invalid_argument("retained tape requires bounded no-grad NPU forward records");
@@ -44,6 +47,7 @@ RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget) {
   auto& t=out.tape;
   auto buffers=tensors(t);
   std::map<const void*,at::Tensor> copies;long double bytes=0;
+  if(projection)projection->reuse(copies,source.emission.weights,source.emission.biases);
   for(auto* x:buffers)if(x->defined()) {
     if(x->device()!=source.fiber_values.device()||x->requires_grad())throw std::invalid_argument("invalid retained tape ownership");
     const auto key=x->unsafeGetTensorImpl();
@@ -51,6 +55,10 @@ RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget) {
   }
   if(bytes>budget)throw std::invalid_argument("retained tape tensor budget exceeded");
   out.tensor_bytes=static_cast<int64_t>(bytes);
+  if(projection) {
+    projection->capture(source.emission.weights,source.emission.biases);
+    projection->seed(copies);
+  }
   for(auto* x:buffers)if(x->defined()) {
     auto& copy=copies.at(x->unsafeGetTensorImpl());if(!copy.defined())copy=x->clone();*x=copy;
   }

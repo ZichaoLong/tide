@@ -19,7 +19,11 @@ int64_t sharded_reverse_tape_bytes(const ShardedReverseTape& source) {
   return int64_t(bytes);
 }
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source,int64_t budget) {
-  const auto bytes=sharded_reverse_tape_bytes(source);
+  return retain_sharded_reverse_tape(source,budget,nullptr);
+}
+RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source,int64_t budget,RetainedProjection* projection) {
+  const auto bytes=sharded_reverse_tape_bytes(source)-(projection?
+    projection->reusable_bytes(source.coordinator.emission.weights,source.coordinator.emission.biases):0);
   if(budget<1||bytes>budget||source.shards.empty())throw std::invalid_argument("sharded retained tape budget exceeded");
   // Validate every owner before copying any numerical bank.
   auto shards=source.shards;
@@ -29,7 +33,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source
     for(auto* x:banks(s.full))if(x->defined()&&(x->device()!=s.full.kinds.device()||x->requires_grad()))
       throw std::invalid_argument("invalid Full shard retained ownership");
   }
-  auto base=retain_reverse_tape(source.coordinator,budget);
+  auto base=retain_reverse_tape(source.coordinator,budget,projection);
   RetainedShardedTape out{base.graph,{base.tape,std::move(shards)},bytes};
   std::map<const void*,at::Tensor> copies;
   for(auto& s:out.tape.shards)for(auto* x:banks(s.full))if(x->defined()) {

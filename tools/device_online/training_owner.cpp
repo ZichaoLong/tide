@@ -49,7 +49,8 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   const auto tape=flow->reverse_tape();const auto state=flow->state_device();
   const long double bytes=reverse_tape_bytes(tape)+static_cast<long double>(state.first.numel())*state.first.element_size()+state.second.numel()+256;
   if(bytes>l.retained_bytes)throw std::invalid_argument("resident training cannot retain one window within budget");
-  bytes_per_window=static_cast<Index>(bytes);initial_present=state.second.clone();
+  projection_bytes=RetainedProjection::bytes(tape.emission.weights,tape.emission.biases);
+  bytes_per_window=static_cast<Index>(bytes)-projection_bytes;initial_present=state.second.clone();
 }
 void ResidentTrainingSession::Impl::check() const {
   if(sharded){sharded->check();return;}
@@ -60,7 +61,7 @@ void ResidentTrainingSession::Impl::check() const {
     throw std::logic_error("caller parameters changed after resident training construction");
 }
 void ResidentTrainingSession::Impl::discard() {
-  saved.clear();saved_bytes=0;gradient={};gradients_ready=false;
+  saved.clear();projection_snapshot={};saved_bytes=0;gradient={};gradients_ready=false;
   initial_present=flow->state_device().second.clone();
 }
 ResidentTrainingSession::ResidentTrainingSession(Graph g,Model m,const Continuation& q,at::Device d,
@@ -74,7 +75,8 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
   if(s.sharded)return s.sharded->advance(input,stop,seal);
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
-  if(s.saved.size()>=size_t(s.limits.windows)||s.bytes_per_window>s.limits.retained_bytes-s.saved_bytes)
+  const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes:0);
+  if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
   ContentWindow window;
@@ -82,7 +84,7 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
   catch(const std::invalid_argument&){throw;} // Complete input preflight is retryable.
   catch(...){s.failed=true;throw;}
   try {
-    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes);
+    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot);
     const auto state=s.flow->state_device();auto final=state.first.clone(),present=state.second.clone();
     ResidentToken token{s.session,s.next_token++,s.generation};
     auto outputs=ResidentWindow{tape.tape.outputs.coordinates,tape.tape.outputs.values,tape.tape.outputs.valid,
@@ -98,7 +100,7 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
       const auto& a=f.cache;auto ids=at::tensor(a.nodes,at::kLong).to(s.device);
       result.cache.push_back({a.nodes,a.key,a.value,a.lengths,present.index_select(1,ids).reshape({-1}),f.bias});
     }
-    s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=s.bytes_per_window;s.cut=stop;return result;
+    s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=required;s.cut=stop;return result;
   }catch(...){s.failed=true;throw;}
 }
 ResidentStep ResidentTrainingSession::step() {
@@ -131,6 +133,6 @@ ResidentPlacement ResidentTrainingSession::placement() const {
 }
 void ResidentTrainingSession::close() {
   if(impl_->sharded){impl_->sharded->close();return;}
-  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->optimizer.reset();impl_->gradient={};}
+  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->projection_snapshot={};impl_->optimizer.reset();impl_->gradient={};}
 }
 } // namespace tide

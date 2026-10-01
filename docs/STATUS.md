@@ -67,20 +67,34 @@ PASSED74. All other development jobs passed. No current build/test/profile jobs 
 
 ## Next work
 
-Evidence-only commit/push for7329c71,then continue scale blockers:
-compact projection owners/partial gradients,total-memory admission,actual consumer
-FP16,representative five-preset screening and full-size F6. No new formal full-size
-throughput result. Public multi-device inference is now done;do not reopen it.
+Evidence commit f3ea9cb for7329c71 is pushed. Public multi-device inference is done.
+Projection-retention development passed: both backend builds, installed standalone
+consumer build, library26, actual consumers27, FP32/FP16 matrix32 trajectories plus
+single-device FP16 legacy12 (704 windows/176 updates). Snapshot projection-retention-dev01
+contains the exact changed source; every development job is terminal PASSED.
+RetainedProjection owns one immutable projection-bank copy per training update,
+shared by retained windows; backward/detach/close release it. Three family cases
+validate exact two-window capacity, one-byte-short refusal before progress, three
+nonzero updates and optimizer restore against independent CPU autograd. No-projection
+training and inference consumer regressions also passed. Reservations are not
+allocator peak measurements; parameters/physical gradients are still coordinator-owned.
 
-Read-only scale investigation found PackedEmission::weights_/biases_ and physical
-EmissionVjp banks still dense on coordinator; retain_reverse_tape also clones the
-whole projection bank per window. Existing ShardedFull/RemoteFull/ShardedFullVjp
-provide device packet/completion patterns. Required next work must cover actual
-projection forward,reverse,canonical gradient reduction/publication and retention,
-not merely API placement. place_full currently counts only Full parameter bytes.
-ContentBudget accounts module tensor reservations,not total per-device allocator
-peaks. State/KV,tapes,optimizer proposals,communication,head/loss need total admission.
-No scale implementation edits yet;only docs evidence are uncommitted.
+Implementation ready to commit/push. Next freeze projection-retention-clean01 on
+that commit, use build_projection_retention.py with --reuse-host for byte-identical
+standalone/Python dev objects, then build_projection_retention_client.py with
+--reuse-client projection-retention-consumer-dev01 (source/public-header/flags audit,
+fresh Ninja link and loader). Run the same directed library26, standalone matrix/legacy,
+consumer27, and separate profile_resident_consumer.py --preset resident. Audit with
+launchers/projection_retention_evidence.py COMMIT, then evidence commit/push.
+Do not rerun unrelated CPU core gates or completed development jobs.
+
+After retention increment: compact projection owners/partial gradients,total
+per-device memory admission,actual consumer FP16,representative five-preset
+screening and full-size F6. No new formal full-size throughput result. place_full
+currently counts only Full parameter bytes. ContentBudget accounts module tensor
+reservations,not total per-device allocator peaks; state/KV,tapes,optimizer proposals,
+communication,head/loss need total admission. Existing ShardedFull/RemoteFull/
+ShardedFullVjp provide device packet/completion patterns for projection partitioning.
 
 ## Environment and job bounds
 

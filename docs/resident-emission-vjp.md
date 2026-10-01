@@ -27,6 +27,22 @@ forward bank. Shared or unused owners retain the existing None/zero contract.
 Retained tapes preserve projection parameters and unscaled slot values. Checkpoint
 restore and continuation retain the same public schema and generation guards.
 
+Public training retains one immutable copy of the physical projection weights
+and biases for all windows in an update. Dynamic journals/state/cache still get
+independent window copies. This is a frozen copy, not a borrowed forward bank;
+the owner prohibits parameter publication while those windows are live. Backward,
+detach and close release the shared snapshot, and the next update captures the
+new parameter version. The general internal tape-copy API keeps its original
+independent-copy contract unless the guarded training owner supplies this cache.
+
+Retained admission charges projection snapshot bytes once, plus per-window
+reservations. A window that would exceed the declared budget is rejected before
+device progress. Backward statistics expose `retained_projection_bytes`,
+`retained_window_bytes`, `retained_windows` and `retained_bytes`; these are tape
+reservations, not total allocator peaks. This removes repeated projection copies,
+but does not partition the projection bank or its physical gradients. Current
+implementation and qualification status remains in [STATUS](STATUS.md).
+
 FP16 keeps actual half forward operands and stored slot values. Cast VJPs and
 parameter accumulation use FP32, as with other resident modules; this does not
 claim equality to half-gradient accumulation. CPU FP32/FP64 autograd and an

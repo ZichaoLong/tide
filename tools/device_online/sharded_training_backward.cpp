@@ -132,7 +132,11 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
       out.boundaries.push_back({s.saved[i].token,at::cat({t.fiber_meta,t.pending.coordinates}),g.messages.narrow(0,0,n),valid,g.message_connected.narrow(0,0,n)&valid});
     }
     s.gradient=parts;reduction.close();sequence.close();close_sharded_graph_vjp(gradients);
-    s.gradients_ready=true;s.saved.clear();s.saved_bytes=0;return out;
+    out.statistics["retained_projection_bytes"]=s.projection_bytes;
+    out.statistics["retained_window_bytes"]=s.bytes_per_window;
+    out.statistics["retained_windows"]=s.saved.size();
+    out.statistics["retained_bytes"]=s.saved_bytes;
+    s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.saved_bytes=0;return out;
   }catch(...){s.failed=true;throw;}
 }
 } // namespace tide::training_detail

@@ -27,7 +27,8 @@ struct ResidentTrainingSession::Impl {
   std::vector<Saved> saved;
   Tensor initial_present;
   uint64_t session;
-  Index cut, generation=0, next_token=0, saved_bytes=0, bytes_per_window=0;
+  Index cut, generation=0, next_token=0, saved_bytes=0, bytes_per_window=0, projection_bytes=0;
+  device_online::RetainedProjection projection_snapshot;
   bool gradients_ready=false, failed=false;
   Impl(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,
        std::vector<OptimizerGroup>,ResidentTrainingLimits,const ResidentTrainingCheckpoint* = nullptr);

@@ -61,7 +61,8 @@ ShardedTrainingOwner::Impl::Impl(Graph g,Model m,const Continuation& q,at::Devic
   long double bytes=sharded_reverse_tape_bytes(tape)+256;
   for(const auto& v:values)bytes+=static_cast<long double>(v.values.nbytes())+v.present.nbytes();
   if(bytes>l.retained_bytes)throw std::invalid_argument("sharded training cannot retain one window within budget");
-  bytes_per_window=static_cast<Index>(bytes);discard();
+  projection_bytes=RetainedProjection::bytes(tape.coordinator.emission.weights,tape.coordinator.emission.biases);
+  bytes_per_window=static_cast<Index>(bytes)-projection_bytes;discard();
 }
 void ShardedTrainingOwner::Impl::check() const {
   no_grad();if(!flow)throw std::logic_error("sharded resident training is closed");
@@ -70,7 +71,7 @@ void ShardedTrainingOwner::Impl::check() const {
     throw std::logic_error("caller parameters changed after resident training construction");
 }
 void ShardedTrainingOwner::Impl::discard() {
-  saved.clear();gradient.clear();saved_bytes=0;gradients_ready=false;initial_present.clear();
+  saved.clear();projection_snapshot={};gradient.clear();saved_bytes=0;gradients_ready=false;initial_present.clear();
   for(const auto& s:flow->state_shards_device())initial_present.push_back(s.present.clone());
 }
 ShardedTrainingOwner::ShardedTrainingOwner(Graph g,Model m,const Continuation& q,at::Device d,ResidentOptimizerKind k,
@@ -82,19 +83,20 @@ ResidentTrainingWindow ShardedTrainingOwner::advance(const std::vector<External>
   auto& s=*impl_;s.check();
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
-  if(s.saved.size()>=size_t(s.limits.windows)||s.bytes_per_window>s.limits.retained_bytes-s.saved_bytes)
+  const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes:0);
+  if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
   ContentWindow w;
   try{w=s.flow->advance_device(input,stop);}catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   try {
-    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes);
+    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot);
     auto states=state_windows(s.flow->state_shards_device(),tape.tape);const auto& t=tape.tape.coordinator;
     ResidentToken token{s.session,s.next_token++,s.generation};
     ResidentTrainingWindow out{token,s.cut,stop,{t.outputs.coordinates,t.outputs.values,t.outputs.valid,
       w.output_stats.clone(),w.pending_stats.clone(),w.stages.clone(),w.events.clone(),w.full_chunks.clone(),w.emission_chunks.clone()},
       t.pending.coordinates,t.pending.values,t.pending.valid};
-    out.states=states;s.saved.push_back({token,std::move(tape),std::move(states)});s.saved_bytes+=s.bytes_per_window;s.cut=stop;return out;
+    out.states=states;s.saved.push_back({token,std::move(tape),std::move(states)});s.saved_bytes+=required;s.cut=stop;return out;
   }catch(...){s.failed=true;throw;}
 }
 ResidentStep ShardedTrainingOwner::step() {
@@ -119,6 +121,6 @@ Index ShardedTrainingOwner::retained_windows() const {impl_->check();return impl
 ResidentPlacement ShardedTrainingOwner::placement() const {impl_->check();return impl_->placement;}
 void ShardedTrainingOwner::close() {
   auto& s=*impl_;
-  if(s.flow){s.flow->close();s.flow.reset();s.saved.clear();s.optimizers.clear();s.gradient.clear();s.layout.clear();}
+  if(s.flow){s.flow->close();s.flow.reset();s.saved.clear();s.projection_snapshot={};s.optimizers.clear();s.gradient.clear();s.layout.clear();}
 }
 } // namespace tide::training_detail

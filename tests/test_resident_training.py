@@ -29,7 +29,7 @@ def test_resident_python_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path)
 
 
-def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, placement=None, model_device=None, **read_options):
+def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, placement=None, model_device=None, training_limits=None, root_modes=("all", "zero", "none"), **read_options):
     r = runtime(family, target, schedule, full, aggregation, emit_mode, zeta, model_device=model_device,
                 resident_workspace_bytes=1024**3 if placement else 64*1024**2, **read_options)
     cpu = runtime(family, "cpu", full=full, aggregation=aggregation, mode=emit_mode, zeta=zeta, **read_options)
@@ -42,12 +42,14 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
     values = torch.sin(torch.arange(48, dtype=torch.float32).reshape(2, 6, 4) * .37) * .1
     values[0, 1].zero_()
     oracle = cpu.session(2)
+    statistics = []
     with torch.no_grad():
-        training_limits = ResidentTrainingLimits(backward_bytes=8*1024**3) if placement else None
+        if training_limits is None and placement:
+            training_limits = ResidentTrainingLimits(backward_bytes=8*1024**3)
         session = r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **options)],
                                      placement=placement, limits=training_limits)
         original = session.checkpoint()
-        for step, mode in enumerate(("all", "zero", "none")):
+        for step, mode in enumerate(root_modes):
             x = values.clone().requires_grad_(True)
             cotangents, objectives = [], []
             for start, stop in ((step*2, step*2+1), (step*2+1, step*2+2)):
@@ -68,6 +70,7 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
                 expected = (torch.autograd.grad(torch.stack(objectives).sum(), (*parameters, x), allow_unused=True)
                             if objectives else (None,) * (len(parameters)+1))
             grad = session.backward(cotangents)
+            statistics.append(dict(grad.statistics))
             compare_gradients(grad, cpu.execution_model, {id(p): g for p, g in zip(parameters, expected)}, x, expected[-1])
             optimizer.zero_grad(set_to_none=True)
             for p, g in zip(parameters, expected):
@@ -90,6 +93,7 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
                 checkpoint["state"]["values"].fill_(123)
             oracle.detach()
         session.close()
+    return statistics
 
 
 def test_resident_training_rejection_and_export(target, tmp_path):
