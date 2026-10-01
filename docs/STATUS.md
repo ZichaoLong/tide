@@ -80,16 +80,20 @@ key changed from-2.71875 to-2.703125 to distinguish omitted QK rounding. Candida
 math/tolerances unchanged. Raw failure retained. FP32 event/fiber regression
 low-precision-attention-vjp-regression-dev01 PASSED/exit0.
 Build-low-precision-attention-vjp-dev02 PASSED; checker-only rebuild with
-byte-verified dev01 host/kernel reuse. Active gate: low-precision-attention-vjp-dev02,
-physical assignment in RUN/queue.json. Frozen source/build:
+byte-verified dev01 host/kernel reuse. Gate low-precision-attention-vjp-dev02 PASSED/exit0, physical9→logical0.
+Each dtype4 geometries/12 replays; half adds2 strict QK anchors at tile1/2. Frozen source/build:
 TASK/{sources,builds}/low-precision-attention-vjp-dev02. Inspect RUN/status.json
 and gate/result.json before claiming success. Lease max120s; run600s.
 
-First commit the reviewed extended-VJP evidence separately, preserving uncommitted
-attention work. Once attention gate passes, commit its implementation, qualify
-fixed clean standalone/Python builds, affected attention clients and profile.
-Build launcher:build_precision_attention_vjp.py (full affected kernel/host/checker)
-or build_precision_attention_recheck.py (checker-only, terminal dev01 dependencies).
+Extended-VJP evidence committed/pushed as588ed1d. Next commit/push the tested
+attention implementation, freeze low-precision-attention-vjp-clean01 at that exact
+revision, qualify standalone (build_precision_attention_recheck.py:checker plus
+byte-matched terminal dev01 host/kernel reuse) and Python-owned
+(build_precision_attention_vjp_python.py:attention host rebuild,matching CANN
+archive reuse). Each build900s. Then attention-vjp, separately event-training
+fiber-training, affected Python precision/event/fiber modules and independent
+half attention-vjp profile. Device leases120s/tasks600s. Audit and evidence commit
+separate; no repeated unchanged portable-core or full215-case client sweep.
 Then event/fiber/control/graph half adjoints, retained windows, master checkpoint/
 public FP16 training; peer progression/communication/training,five-preset screening,
 representative/full-size CPU/mixed/resident performance and version/migration/CUDA

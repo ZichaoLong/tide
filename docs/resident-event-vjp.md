@@ -78,3 +78,21 @@ silently truncated to make training fit. This implementation retains complete
 per-event cache journals and bounded batched reverse prefixes. Reducing that
 training storage or adding key recomputation is a separate optimization with
 the same roots, connections and continuation contract.
+
+## FP16 local attention component
+
+The packed attention adjoint also accepts FP16 Q/K/V, with FP32 additive bias
+and public cotangents. It recomputes QK in actual payload precision before FP32
+scaling and global softmax. Its adjoints and GQA head reductions stay FP32.
+The softmax correction uses the complete unrounded weighted sum across all key
+tiles; only the saved output for a downstream projection is half-rounded and
+widened. A separate softmax per physical tile, an unrounded QK product or a
+rounded softmax correction would change this contract.
+
+The component gate uses independent CPU quantized-forward/FP32 and FP64 adjoint
+references. Ordinary half tolerances are2e-3/2e-5; the original FP32/FP64 checks
+remain2e-5/2e-6. Two strict half fixtures use different physical key tilings and
+must distinguish missing QK rounding. Empty/short/full prefixes, connected-zero
+roots, poisoned padding, GQA, memory refusal and replay reuse remain checked.
+This local component does not enable half event/fiber cache reverse, complete
+graph backward or public training. Those integrations have separate gates.

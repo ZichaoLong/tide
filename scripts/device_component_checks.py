@@ -123,7 +123,7 @@ CHECKS["control-training"] = ("tide-resident-control-training-check", ("float32"
 MARKERS["control-training"] = "resident-control-training: passed"
 KERNELS["control-training"] = "tide_control_"
 
-CHECKS["attention-vjp"] = ("tide-device-attention-vjp-check", ("float32",))
+CHECKS["attention-vjp"] = ("tide-device-attention-vjp-check", ("float32", "float16"))
 MARKERS["attention-vjp"] = "device-attention-vjp: passed"
 KERNELS["attention-vjp"] = "tide_attention_reverse_"
 

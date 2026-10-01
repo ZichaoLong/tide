@@ -210,6 +210,8 @@ cast VJP is the ordinary first-order identity, not a derivative of rounding's
 staircase. [Precision scopes](precision.md) distinguish those components and
 FP32-master publication from the still-unavailable complete resident FP16
 training interface; no graph identity or eager checkpoint schema is changed.
+The half local attention adjoint similarly preserves QK rounding and global
+normalization; its support does not enable half cache/graph reverse.
 [Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
 softmax and linear/FP32-norm Read under the same mathematical contracts.
 Its supported modules and qualifications are separate from resident inference.

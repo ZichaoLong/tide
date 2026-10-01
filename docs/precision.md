@@ -86,6 +86,9 @@ while accumulating adjoints in FP32; their tests use the corresponding quantized
 forward/FP32-adjoint reference. This is not a claim of bitwise equivalence to
 pure-half backward accumulation. Component support does not enable public
 training, retained-window training or checkpoint resume. The
+local [attention adjoint](resident-event-vjp.md) separately preserves half QK
+rounding with FP32 global softmax/adjoints; event/fiber cache integration remains
+outside that half component scope. The
 complete-flow gate compares an independent CPU streaming schedule with exact
 discrete/identity checks and FP16 atol2e-3/rtol2e-2; FP32 retains its original
 thresholds. Build, device qualification and performance evidence remain distinct.
