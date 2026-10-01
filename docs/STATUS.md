@@ -1,140 +1,103 @@
 # Current handoff
 
-Updated 2026-10-01. **ACTIVE: user confirmed the progress/contract and resumed execution.**
-Implement and qualify coherent vertical multi-device increments;commit/push remains
-authorized. All previous qualification jobs are terminal. The historical CPU
-Attention task remains intentionally paused and is not resumed by this request.
-No subagents. Reference repositories and ObsidianVault are read-only.
-Repository `/home/zlong/llm/graph-execution-foundation` resolves to
+Updated 2026-10-01. **ACTIVE: user resumed execution and accepted overhead reduction.**
+Continue coherent multi-device graph/training increments; commit and push authorized.
+No new pause instruction. No subagents. Reference repositories and ObsidianVault
+are read-only. Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
 [execution-flows.md](execution-flows.md) owns the contract;
-[ROADMAP F1–F7](ROADMAP.md) is the only backlog. F1–F7 remain incomplete.
+[ROADMAP F1–F7](ROADMAP.md) is the only backlog and remains incomplete.
 
-## Contract and scope
+## Contract
 
-Candidates independently consume common inputs/initial state/parameters; no CPU
-reference events,routes,numerical results or gradients become candidate inputs.
-Online greedy accepts legal topology/input,including positive-delay PDG feedback;
-it may naturally degenerate to streaming. Preserve int64,stable order,parallel
-edge identity,missing/zero messages and None/zero gradients. Performance matrix:
-PDG LibTorch;TimedDAG/Settle LibTorch and PyTorch;CPU/NPU × streaming/prefill ×
-inference/complete training. Python resident is a C++/CANN client,not an independent
-PyTorch device scheduler. Five placement presets retain finer switches. FP32 main;
-FP16 separate. CUDA execution is target-machine-pending.
-Current alignment outranks run-ml-experiments: minimal source/input/config/environment
-identity,raw failures/results,synchronized complete timing,bounded resources/stops.
-No duplicate tracking or Trackio blocker. Training means forward/loss interface/
-backward/VJP/optimizer/continuation/throughput;downstream convergence is out of scope.
-Use affected checks and byte-verified terminal build reuse. Do not rerun the
-unchanged portable core's8,954 CPU checks/23 optional skips. Commit implementation,
-qualify clean immutable source,commit evidence separately. Push tested commits under the renewed user authorization.
+Candidates independently consume common inputs, initial state and parameters;
+never CPU reference events, routes, results or gradients. Online greedy accepts
+legal topology/input, including positive-delay PDG feedback; natural streaming
+degeneration is valid. Preserve int64, stable ordering, parallel-edge identity,
+missing/zero messages and None/zero gradients. Matrix: PDG LibTorch;
+TimedDAG/Settle LibTorch and PyTorch; CPU/NPU × streaming/prefill × inference/full
+training. Python resident is a C++/CANN client, not a separate PyTorch scheduler.
+Five presets retain fine switches; FP32 main, FP16 separate; CUDA target-pending.
+Training covers forward/loss interface/backward/VJP/optimizer/continuation/throughput;
+downstream convergence is outside this task. Current alignment outranks
+run-ml-experiments: minimal existing records, no additional tracking framework.
 
-## Latest qualification
+Use affected checks and source/object/hash-verified terminal build reuse. Do not
+rerun the unchanged core's 8,954 CPU checks/23 optional skips. Commit implementation,
+qualify immutable source, commit evidence separately and push. Group related work
+into vertical increments; reuse fixtures/assertions/audits. Early profiles diagnose
+placement/cost; formal full-size repetitions follow integration/capacity calibration.
 
-Internal remote Full inference qualified on
-**a8fa371e0088b9e3f1b2ca8cb8b540f6211064db**;implementation committed/pushed.
-[Report](evidence/device-peer-full-20261001.md) and [audit](evidence/device-peer-full-20261001.json).
-All8 fixed-source jobs PASSED/exit0:two runtime builds,two peer gates,single-device
-inference regression,half-cache training smoke,Python regressions,separate profile.
-Peer HARD84 configurations/420 windows and HST/SOFTP36/180 per dtype:
-combined120 configurations/600 windows each for FP32 and FP16.
-Single-device4 inference cells,half-cache1 trajectory/16 windows/4 updates,
-Python96 passed/no skips. Capacity and remote-adjoint refusals passed.
-No runtime development failure or tolerance relaxation in this increment.
+## Latest completed qualification
 
-Coordinator NPU owns online readiness/selection/state/attention/emission/queues;
-peer owns/executes existing packed Full banks and returns selected results through
-device-loop packets. Empty/error windows send a terminal command;all programs
-submit before boundary waits. Host has no per-stage dispatch. Fixed packet padding
-is transferred;actual Full computation is selected. Total packet/arena budget is
-charged before allocation. Public single-device defaults are unchanged.
-This is one remote Full phase,not general owner/state sharding or peer training;
-remote reverse tapes explicitly fail.
+Compact Full parameter shards on **2617a11e58b5ffe04cc1d752645cff0d6c15f427**;
+[report](evidence/device-full-shards-20261001.md), [audit](evidence/device-full-shards-20261001.json).
+All ten fixed-source jobs PASSED/exit 0: two runtime builds, two two-device gates,
+single-device inference regression, three-device placement smoke, one-shard smoke,
+half-cache training regression smoke, Python regression and three-device profile.
+FP32/FP16 each: two-device HARD 84 configurations/420 windows, HST/SOFTP 36/180.
+Three-device memory/locality × two dtypes: four cells, each 3 configurations/15 windows.
+One-shard 3/15; single-device training 1 trajectory/16 windows/4 updates;
+Python 96 passed/no skips. Development also passed without tolerance relaxation.
 
-Profile2 fixtures/10 windows,20 host model submissions,2 physical devices:
-2435 AI_VECTOR_CORE,76 AI_CORE,2 MIX_AIV;no observed AiCPU/logged fallback.
-Peer has Full planner/matmul/tanh;coordinator has closure/readiness/selection/queue
-and attention. Device76 notify records/76 waits,461 label switches,744 DMA tasks.
-These include setup and boundary work;not throughput or overlap measurements.
-TASK/launchers/peer_flow_evidence.py FULL_REV passed. Frozen source and standalone
-build peer-flow-clean01;Python-owned build peer-flow-python-clean01. Four content
-objects rebuilt per runtime;Python control/peer objects rebuilt,standalone reused
-qualified control/peer archives. Core/CANN/public-training reuse is byte-verified.
+Actual selected actions are packed stably into compact owner banks. All nonempty
+peer requests precede local Full and result waits. Memory/locality placement is
+static and generic; continuation changes schedule and placement. Per-shard memory,
+chunk and actual/capacity work are recorded. The coordinator retains state/KV,
+Read, readiness, selection and queues. This is Full-only inference sharding;
+remote/sharded reverse remains explicitly refused, public defaults single-device.
 
-Immediately preceding completed increments:
-- Public FP16 full training on0095048:83 trajectories/1328 windows/332 updates,
-  FP32 regressions,138 Python tests;[evidence](evidence/resident-fp16-training-20261001.md).
-  FP16 payload/parameters and real forward rounding,FP32 roots/masters/slots.
-- Reusable peer packets on5c3662b:ready/pull/consumed protocol,int64/bool/FP32/FP16,
-  129 same-notify loop reuses;[evidence](evidence/device-peer-control-20261001.md).
-  Prior dev failures retained:Bool fixture and cross-thread CANN107002/507046.
-  Same-thread construction/submit-all/wait fixes the context failure.
+Profile: three fixtures/15 windows, 45 host model submissions, three devices;
+4067 AI_VECTOR_CORE,86 AI_CORE,3 MIX_AIV; no observed AiCPU. Full work on all cards,
+packing/selection on coordinator,165 device notify records/waits,713 switches,
+1419 DMA tasks. Counts include setup/boundaries; no throughput/overlap claim.
 
-## Remaining main work and current action
+TASK/launchers/full_shards_evidence.py FULL_REV passed. Frozen standalone source/
+build full-shards-clean01 and Python build full-shards-python-clean01. Eight host
+objects rebuilt per runtime; new kernel reused with source/archive checks from
+successful full-shards-dev01. Other source/object/archive reuse is byte-verified.
 
-1. General multi-device owner/parameter/state/cache placement and packed transport,
-   exploiting topology locality without fixture-specific routing. The remote Full
-   phase above is only the first graph integration;fixed capacity traffic is not
-   yet communication minimization or concurrent shard execution.
-2. Cross-card VJPs,shared-owner gradient reduction,FP32 masters/optimizer publication,
-   continuation/checkpoint and public C++/Python client qualification.
-3. Complete experiment consumers and bounded middle-scale five-preset screening,
-   then representative/full-size CPU + selected mixed + resident comparisons:
-   both schedules,inference/complete training,FP32 and separate FP16.
-4. Additional CANN/environment/target-pending CUDA records and final delivery audit.
-Historical CPU Attention remains supplementary,not an implementation blocker.
-Before performance,resolve its preserved timing lock and host-memory interference
-with a deliberate policy;do not blindly resume/kill it.
+Earlier qualified foundations: remote Full a8fa371, reusable peer packets 5c3662b,
+public FP16 full training 0095048 (83 trajectories/1328 windows/332 updates,FP32
+masters/slots and actual half rounding). Their reports retain earlier failures.
 
-Accepted overhead reduction:group related multi-device work
-into vertical graph/training milestones;reuse fixtures/assertions and one audit
-path;only affected checks per increment,broader regression at integration gates.
-Do not add another tracking framework or repeat already qualified core gates.
-Formal full-size repetitions follow functional integration and capacity calibration.
-Active increment:compact per-owner Full parameter shards and device packing/merge,
-with generic static memory/locality placement and existing independent graph fixtures.
-Coordinator retains online readiness/selection. Group transport/packing/placement
-changes into one actual multi-device inference qualification before cross-card
-reverse/optimizer integration;do not label Full-only placement as state/KV sharding.
-Development full-shards-dev01:all6 jobs PASSED/exit0 (affected build,two2-NPU
-full gates,3-NPU memory/locality × FP32/FP16 smoke,1-NPU inference regression,
-1-NPU half-cache training smoke). Peer per dtype120 configurations/600 windows;
-three-device4 cells,3 configurations/15 windows each. No runtime failure or
-changed tolerance. New working-source follow-up reports peer retained bytes,
-adds a balanced locality/parallel-edge/refusal assertion,and restores candidate
-continuation with the other placement policy. Only measurement/test follow-up;
-no numerical kernel change.
-full-shards-dev02 standalone/Python affected builds both PASSED/exit0,using
-TASK/launchers/build_full_shards.py NAME [--runtime python] --kernel-build full-shards-dev01.
-All dev02 jobs PASSED/exit0:full-shards-three-dev02(3 NPUs,both policies/dtypes),
-full-shards-one-dev02(1-NPU shard smoke),full-shards-python-dev02(96 tests,no skips).
-Balanced locality cuts,placement-policy continuation and peer retained-byte reporting
-passed. No production/runtime development failures. Commit/push implementation;
-qualify immutable source full-shards-clean01 with affected standalone and Python
-builds,two2-device gates,3-device policy smoke,1-device shard/inference/training/
-Python regressions,and separate3-device profile. Shared task-local helpers
-qualification_audit.py validate existing receipts;no additional tracking system. No full-size or distributed-training claim yet.
+## Current next work
+
+1. Cross-card Full reverse integrated with actual graph reverse stages, owner
+   parameter gradients and shared-parameter reduction; FP32 master optimizer,
+   atomic finite/error decision and alias publication. Do not keep polishing only
+   forward components. Shared aliases cannot be assumed local to one shard.
+2. General persistent state/KV placement and packed transport, continuation and
+   public C++/Python multi-device consumers, then complete experiment consumers.
+3. Bounded middle-scale five-preset screening followed by representative/full-size
+   CPU + selected mixed + resident comparisons, both schedules/inference/training,
+   FP32 and separate FP16. Additional CANN/environment and target-pending CUDA
+   records, final delivery audit.
+
+Before performance, deliberately resolve historical CPU Attention's retained
+host memory and timing lock; do not blindly resume/kill it. No qualification jobs
+remain live. Evidence files/STATUS/ROADMAP are the only current uncommitted work.
 
 ## Environment and bounded execution
 
-TASK=/mi/data2T/zlong/tide-execution-flows;RUN=TASK/runs/NAME;
-unit=tide-execution-flows-NAME.service;RUN/status.json and task.log own lifecycle.
-Module libtorch-npu/2.10.0-cann9.0.0;Python
+TASK=/mi/data2T/zlong/tide-execution-flows; RUN=TASK/runs/NAME;
+unit=tide-execution-flows-NAME.service; RUN/status.json/task.log own lifecycle.
+Module libtorch-npu/2.10.0-cann9.0.0; Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-Public /opt stack supersedes dated personal guide under user authorization.
-TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;preserve module PYTHONPATH,
-prepend snapshot/python. SoC Ascend910_9392. Use leased logical device indices.
-Last space check:227GiB data,23GiB root;recheck before large writes.
-Core builds:placement-cpu-clean01,placement-npu-clean01(standalone),
-placement-npu-python-clean01(Python-owned). Never load standalone SDK into Python.
-Long jobs use frozen source,background.slice/Nice10,lease120s/run600s/build900s.
-Never mutate active snapshots or terminal evidence. Atomic writes:durable_records.py.
+Public /opt stack supersedes dated personal guide by user authorization.
+TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0; preserve module PYTHONPATH,
+prepend snapshot/python. SoC Ascend910_9392. Use leased logical devices only.
+Last space: data227GiB/root14GiB; large writes go under TASK, recheck capacity.
+Core builds: placement-cpu-clean01,placement-npu-clean01(standalone),
+placement-npu-python-clean01(Python-owned). Never mix SDK and Python runtimes.
+Use existing launchers/freeze_run.py, frozen sources, background.slice/Nice10,
+queue120s/run600s/build900s. Atomic handoff writes via scripts/durable_records.py.
 
 ## Preserved historical boundaries
 
-The24 earlier dirty files are SHA256-verified on pushed archive/restricted-flow-20260930
-at964bf628c67270200dabe55b1bca026bd403cd37;TASK/restricted-flow-archive.json owns hashes.
-Historical historical-cpu-attention-01 remains intentionally SIGSTOP;pause.json
-outweighs running status. It retains host memory and TASK/timing.lock.
-Historical Add CPU78.793172/NPU4 47.932888ms/token is throughput1.6438x faster;
-it does not certify resident execution. No complete CPU Attention training ratio.
+Earlier24 dirty files are SHA256-verified on pushed archive/restricted-flow-20260930
+at964bf628c67270200dabe55b1bca026bd403cd37; TASK/restricted-flow-archive.json.
+Historical historical-cpu-attention-01 remains intentionally SIGSTOP; pause.json
+outweighs running status and retains host memory/TASK/timing.lock.
+Historical Add CPU78.793172/NPU4 47.932888ms/token is throughput1.6438× faster;
+it does not certify the new resident path. No full CPU Attention training ratio.

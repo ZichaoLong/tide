@@ -1,0 +1,626 @@
+{
+  "schema": "tide-full-shards-evidence-v1",
+  "source": "2617a11e58b5ffe04cc1d752645cff0d6c15f427",
+  "scope": "compact Full banks, device packing and peer graph inference; not state/KV sharding, distributed training or throughput",
+  "builds": {
+    "standalone": {
+      "name": "full-shards-clean01",
+      "manifest_sha256": "b41cb5e70c789021b79e69394e3e078ad7aaa47d1dd139676d065426396fb228",
+      "reuse_sha256": "c758c6c68d7bb7893c01dd5db8cb574bba9ac8d72ddbb9e8facab93f261e39ab",
+      "component_sha256": "f8f463dcb044c78c7e40a56362189502226b6c2c0a499cde38bcf2b518ee252a",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "aa3c91b00f4b7dd3bb6443c9cd270fbaf8b6d82a832e04b8da9c88ed697b3d34",
+        "tide-precision-flow-check": "ce8b52e6c04ed7259a34889227c8cf42c056b44fd4c3f8822b4fd03d8fc8940b",
+        "tide-resident-half-training-check": "156e5b04d952eaa409a809168a27beac97dc6fe19eba6e84b731c808f47471dd"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "920a777d6955a9781ca34cbfc557ac34a52cbd0bd62019a810e026049e4790d3",
+        "tide-precision-flow-check": "08fd65303eb35d57df35118a2285f63ce71fe4298179462add1b1c35c2782381",
+        "tide-resident-half-training-check": "69df171d4508fcf3722f2dcffed6f73a625f50abac4930d928157138dc70e987"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063"
+      },
+      "content_archive_sha256": "ddaa4ebbdbb3e267479dd49cb130201dbafcfb669f07a6106c92a86a27608a81",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "a5d91be05b9356117f996adac2ad8cde6dd4dfd0d94aba286177846bf6ba8617",
+        "content_flow.cpp.o": "3a0de7002ee3bb487c821620c0ac9a3b90383dc0aa27ddc9ae59fbc0c9c85901",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "full_placement.cpp.o": "f8a971c3efb9773e75ce04e90d4ce39ed988d47f7ee13cd4cdd4acd28cfda00b",
+        "full_shard_pack.cpp.o": "90e899a27eb78cc782b5710261f4a953548bf1ea625afa75992f88bb67f50740",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "remote_full.cpp.o": "ad43c7756b914d0a5ba4e9f95685bc5977ef0c7fa475d12412d2b8f619ca1d9c",
+        "sharded_full.cpp.o": "c5d146f2ef2ed5d62a846e64a8fc3d22bcffcdd4454983f40718ea5d1cf26564"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused"
+    },
+    "python": {
+      "name": "full-shards-python-clean01",
+      "manifest_sha256": "3bd6386a2d26f6b84f8cd811e6cb1c51946d2b2a65b93294d5311e97519032ce",
+      "reuse_sha256": "e495493472bbd53a05a9949011425d54c4046b0aa15fd0c402ee3caf6f04e31f",
+      "component_sha256": "f8f463dcb044c78c7e40a56362189502226b6c2c0a499cde38bcf2b518ee252a",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "724b7d227777988a2ba3ce2fa92e0ebaee099d9bc9e3a4c31c6a1bc822ae3dd8",
+        "_tide_resident.so": "66215e609daccb5108563ee581aafcbd9979fcd284a7212d1c4ab37d4009ed64"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "e98f50b764858f0e8e42f29034acaece26e539a6dc217ea9067aa0fb5b458009",
+        "_tide_resident.so": "2f50df4f84960c9d9223d534d049c1c0aa742133f9f7371b1d2040f9b3ff0af2"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063"
+      },
+      "content_archive_sha256": "0bc0522eaec403f159c927ca044f32a7dda849930f47dea52390cbb50edc10e2",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "a5d91be05b9356117f996adac2ad8cde6dd4dfd0d94aba286177846bf6ba8617",
+        "content_flow.cpp.o": "3a0de7002ee3bb487c821620c0ac9a3b90383dc0aa27ddc9ae59fbc0c9c85901",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "full_placement.cpp.o": "f8a971c3efb9773e75ce04e90d4ce39ed988d47f7ee13cd4cdd4acd28cfda00b",
+        "full_shard_pack.cpp.o": "90e899a27eb78cc782b5710261f4a953548bf1ea625afa75992f88bb67f50740",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "remote_full.cpp.o": "ad43c7756b914d0a5ba4e9f95685bc5977ef0c7fa475d12412d2b8f619ca1d9c",
+        "sharded_full.cpp.o": "c5d146f2ef2ed5d62a846e64a8fc3d22bcffcdd4454983f40718ea5d1cf26564"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-full-shards-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fb5bf46c7f076c5797ba1813e4c9ffa0da3eee4926b8364d4a0cd593d4a76051",
+        "task.log": "1958f9249e4abe1b1e2c094b1488c7ba259b0c0e2b452afc8bba43ad07a1e627"
+      }
+    },
+    {
+      "name": "build-full-shards-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8923044a8b80fffadc8bd7fcbe35a8ad380dc526e098b7f48e4ab3c5deecd0e4",
+        "task.log": "09badc455b7b973a54e266353cb233f7b88be7c36b9e80a25ad2795df0519b10"
+      }
+    },
+    {
+      "name": "full-shards-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2878a8bda9915d3ba4c8c652a5baa747db04271e92432a286cfc5cc42472986f",
+        "task.log": "cbe82c188fc282d516a8a0bec6e9a8b55e5df7abb7452a16f95a53f409ac068f",
+        "queue.json": "b68b203dad30f75f6253fa75f4e63949531c1386131244ba5a9e3cbcffe3c9e4",
+        "gate/result.json": "887c677a1909c94c0f5d447b10f7ba4567b81a23b093217eb9eb2d01eceb06dd"
+      }
+    },
+    {
+      "name": "full-shards-control-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "398754ed565afaa98f740f3007ef06f90b72e2e948d903a2babacfad68e226d7",
+        "task.log": "14e3d82f408f3faeb82993d9d3a302782976bd3ca40c018161340c834df3a630",
+        "queue.json": "2af80a97694432bdd9ed0b7b25515d137eb0feb2b285ce8e0f1b4b8e9fdd1fcd",
+        "gate/result.json": "815fb0c67b5bf0af6a15bbd1f7bb439c676ca8a0b4872eefd35e15dcb93eb4e0"
+      }
+    },
+    {
+      "name": "full-shards-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4d394f168f16fd6eef91dc9c987f737d14af74b2ebac5ddb15b469f81eb1ecc2",
+        "task.log": "2063d5e9734137116933f978033899fc583018261f955174fc4fa607ac445024",
+        "queue.json": "18ef69f1b416c3985161fe277e83a62a7483e8f9fcaf52f08a3cf47d52c4abaf",
+        "gate/result.json": "d9fa8a66f74238a0a408677e328d246ef94e19ad2f7bdde8899e8417933d65d8"
+      }
+    },
+    {
+      "name": "full-shards-three-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1fbfd071d7a1fb286be9754e7340ec7d505f985e257ab248fb0aca9d328e34ca",
+        "task.log": "cec77d16e4767c0ed45a7024bad77855451a09e9dc519a91fa3af8943b50794e",
+        "queue.json": "f5f40b011604bd087fb4451781a15c1c448492b5c350a892a947c956055afc1a",
+        "gate/result.json": "76310823246b5c37ad27f7c8c073f1b169d9a47d604cc20323e1ae7da7e13b04"
+      }
+    },
+    {
+      "name": "full-shards-one-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a016c14cda0de8dc8d4c43fd8fe9b54d54b139f3637c741044f513f5fd5061d5",
+        "task.log": "1cafc91f6ef1008b3853b5b282a64fb6b4c30024ececb0ad3b0dd302af2d8cfb",
+        "queue.json": "e76d36de76c9ab8c503db2e120d5e64f369ccecd643daafc6b2288b4c8d681eb"
+      }
+    },
+    {
+      "name": "full-shards-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b75287c1633403eecddd1677a6c1ba6298f829beb748f9e5fea2eee08cceec56",
+        "task.log": "acb9222741bde28c1ee9a68871b7ad42c45715dd93979e85cb52a1e04d2dbf7a",
+        "queue.json": "96df1b7bb4019e407c1961c40306a3eee53872abc14872ee92bb8e43d564b946"
+      }
+    },
+    {
+      "name": "full-shards-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "77cbedc78830a35bb7184c2538d663e40361ce39ffb705a0ae527c564efbc834",
+        "task.log": "acebd0a1f663b3d5e9011952746ddad6fdc3ca85f931a9ce709ab5c7d8fbcb21",
+        "queue.json": "3a9b09426ad37998ade9930f72f06e0f268394dddffe74b5622bc4487a3da354"
+      }
+    },
+    {
+      "name": "full-shards-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "e26c4edf3122f4ec96fe05283198aed3aa2eab836026e8c8d56b09acbe0f0f40",
+        "task.log": "be79a33641a95f0f5c11b7ae0b69b6e906afdcdc942f5670e890e22cd78a8d59",
+        "queue.json": "1a2310c3d99d362437b6b4d441191b165f1a7fef56f55d6c3de37ac9a65bb109",
+        "profile/result.json": "19864a6ff1a16f54b3d8381f5e01bca22ba42b41ca7c414dfcaa458df55ff4ea",
+        "profile/profile.log": "b6814e88c3163662f06a7a9a0734dca9b567926d595bc54ccd6c0f2a940eb67d"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "peer-shard-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=2"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-shard-flow-float32.log",
+      "log_sha256": "82439bd49872e6b6b531c9c20c4704aa598b274ac44d15fcb90463cfc365822c",
+      "configurations": 84,
+      "windows": 420
+    },
+    {
+      "check": "peer-shard-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=2"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-shard-flow-float16.log",
+      "log_sha256": "0171c675f43910f7188987aa9c416edb7ed00df74cdd3d2005518a76044978bd",
+      "configurations": 84,
+      "windows": 420
+    },
+    {
+      "check": "peer-shard-control-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--control-modes",
+        "--full-shards=2"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-shard-control-flow-float32.log",
+      "log_sha256": "51c174c5678c27537b31e614b656269f6f7a6f6fdf59ed2887a5898a1b0833f1",
+      "configurations": 36,
+      "windows": 180
+    },
+    {
+      "check": "peer-shard-control-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--control-modes",
+        "--full-shards=2"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-shard-control-flow-float16.log",
+      "log_sha256": "1291e9543603c0c958d1b5695663b55a3235ddb3e5ca055539be137a9715b846",
+      "configurations": 36,
+      "windows": 180
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-flow-float32.log",
+      "log_sha256": "382c0f01900f2e753d7895b48e9b3cba80e5a634ea57bf343a218cb7c8662438",
+      "configurations": 78,
+      "windows": 312
+    },
+    {
+      "check": "precision-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-flow-float16.log",
+      "log_sha256": "d16bd5d275ec3c8672e139012cb6f8c8cad651d50832f2d7c27123a387b6a9d1",
+      "configurations": 78,
+      "windows": 312
+    },
+    {
+      "check": "precision-control-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--control-modes"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-control-flow-float32.log",
+      "log_sha256": "15d754014e2fcd5498439850af282a6f2779ad5d01170e930e81484b177c816a",
+      "configurations": 36,
+      "windows": 144
+    },
+    {
+      "check": "precision-control-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--control-modes"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "precision-control-flow-float16.log",
+      "log_sha256": "10ccc52a13f8af54c91a72bce607842004d68fc8696b03b783d5d71e190b161d",
+      "configurations": 36,
+      "windows": 144
+    }
+  ],
+  "three_device_cells": [
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=3",
+        "--full-placement=memory",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "memory-float32.log",
+      "log_sha256": "3531514879a683912b199319595c9b88adf9034a5ef320f7489626da53f0da66",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=3",
+        "--full-placement=memory",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "memory-float16.log",
+      "log_sha256": "aa7cdfa7c9d164f8c1b9ae09807e29538dc9db06d9c0934b4cc4ae9ee5d85071",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=3",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float32.log",
+      "log_sha256": "c9c19fbc0ebeb09f01fa57b87d49162d810c239f4b9d65a359f061ac8fd70002",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/full-shards-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=3",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float16.log",
+      "log_sha256": "f0393a776edda2cbeed1581088bac747c6430dc820be53b2d6981afd793dcd98",
+      "configurations": 3,
+      "windows": 15
+    }
+  ],
+  "python_passed": 96,
+  "single_shard_smoke": {
+    "configurations": 3,
+    "windows": 15
+  },
+  "single_device_training_smoke": {
+    "trajectories": 1,
+    "windows": 16,
+    "updates": 4
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 4067,
+      "AI_CORE": 86,
+      "MIX_AIV": 3
+    },
+    "physical_devices": [
+      1,
+      3,
+      9
+    ],
+    "operator_counts_by_device": {
+      "1": {
+        "ZerosLike": 1296,
+        "Fill": 77,
+        "tide_queue_propose": 53,
+        "GatherV3": 921,
+        "Equal": 101,
+        "Cast": 114,
+        "Sigmoid": 15,
+        "tide_closure": 28,
+        "tide_ready_pack": 28,
+        "Less": 13,
+        "tide_sum_plan": 13,
+        "tide_vector_sum": 13,
+        "tide_event_plan": 8,
+        "tide_fiber_chunk": 105,
+        "BatchMatMulV2": 70,
+        "tide_event_payload": 9,
+        "tide_attention_tile": 38,
+        "Transpose": 21,
+        "Mul": 56,
+        "Add": 110,
+        "tide_attention_softmax": 19,
+        "tide_attention_merge": 38,
+        "ScatterUpdate": 61,
+        "tide_event_cache": 16,
+        "tide_journal": 144,
+        "tide_state_read": 13,
+        "tide_vector_read": 13,
+        "tide_read_reduce": 13,
+        "tide_frame_select": 13,
+        "SoftmaxV2": 24,
+        "tide_content_state": 13,
+        "tide_vector_state": 13,
+        "tide_full_shard_pack": 39,
+        "tide_full_plan": 22,
+        "Tanh": 9,
+        "tide_emission_plan": 13,
+        "Pack": 3,
+        "IsFinite": 3,
+        "ReduceAll": 3,
+        "OnesLike": 4,
+        "tide_fiber_plan": 5,
+        "tide_fiber_payload": 20,
+        "tide_fiber_pool": 25,
+        "tide_fiber_trace": 4,
+        "tide_fiber_commit": 5,
+        "tide_fiber_indices": 1
+      },
+      "3": {
+        "ZerosLike": 131,
+        "GatherV3": 97,
+        "tide_full_plan": 28,
+        "BatchMatMulV2": 10,
+        "Add": 20,
+        "Tanh": 10,
+        "ScatterUpdate": 15
+      },
+      "9": {
+        "ZerosLike": 121,
+        "GatherV3": 57,
+        "tide_full_plan": 12,
+        "BatchMatMulV2": 6,
+        "Add": 12,
+        "Tanh": 6,
+        "ScatterUpdate": 6
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 3,
+      "TASK_TIMEOUT_SET": 3,
+      "AI_VECTOR_CORE": 4067,
+      "MODEL_MAINTAINCE": 54,
+      "MODEL_EXECUTE": 45,
+      "MEMCPY_ASYNC": 1419,
+      "NOTIFY_WAIT": 165,
+      "LABEL_SET": 1060,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 713,
+      "NOTIFY_RECORD": 165,
+      "AI_CORE": 86,
+      "MIX_AIV": 3,
+      "PLACE_HOLDER_SQE": 2,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 14,
+      "BatchMatMulV2_Tiling": 18,
+      "Cast_Tiling": 10,
+      "Equal_Tiling": 9,
+      "Fill_Tiling": 18,
+      "GatherV3_Tiling": 194,
+      "IsFinite_Tiling": 2,
+      "LayerNormV4_Tiling": 2,
+      "Less_Tiling": 1,
+      "Mul_Tiling": 11,
+      "OnesLike_Tiling": 1,
+      "Pack_Tiling": 1,
+      "ReduceAll_Tiling": 2,
+      "ScatterUpdate_Tiling": 48,
+      "Sigmoid_Tiling": 1,
+      "SoftmaxV2_Tiling": 12,
+      "Swish_Tiling": 2,
+      "Tanh_Tiling": 1,
+      "Transpose_Tiling": 18,
+      "ZerosLike_Tiling": 71,
+      "aclmdlRIBindStream": 18,
+      "aclmdlRIBuildBegin": 18,
+      "aclmdlRIBuildEnd": 18,
+      "aclmdlRIDestroy": 18,
+      "aclmdlRIEndTask": 18,
+      "aclmdlRIExecuteAsync": 45,
+      "aclmdlRIUnbindStream": 18,
+      "aclnnAddGetWorkspaceSize": 68,
+      "aclnnAll": 3,
+      "aclnnAllGetWorkspaceSize": 1,
+      "aclnnBatchMatMul": 48,
+      "aclnnBatchMatMulGetWorkspaceSize": 48,
+      "aclnnCast": 57,
+      "aclnnCastGetWorkspaceSize": 57,
+      "aclnnEqTensor": 51,
+      "aclnnEqTensorGetWorkspaceSize": 51,
+      "aclnnIndexSelect": 435,
+      "aclnnIndexSelectGetWorkspaceSize": 435,
+      "aclnnInplaceAdd": 68,
+      "aclnnInplaceCopy": 489,
+      "aclnnInplaceCopyGetWorkspaceSize": 489,
+      "aclnnInplaceFillScalar": 77,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 16,
+      "aclnnInplaceIndexCopy": 48,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 48,
+      "aclnnInplaceOne": 4,
+      "aclnnInplaceOneGetWorkspaceSize": 1,
+      "aclnnInplaceZero": 1541,
+      "aclnnInplaceZeroGetWorkspaceSize": 76,
+      "aclnnIsFinite": 3,
+      "aclnnIsFiniteGetWorkspaceSize": 1,
+      "aclnnLayerNorm": 2,
+      "aclnnLayerNormWithImplModeGetWorkspaceSize": 2,
+      "aclnnLtTensor": 6,
+      "aclnnLtTensorGetWorkspaceSize": 6,
+      "aclnnMul": 20,
+      "aclnnMulGetWorkspaceSize": 20,
+      "aclnnPermute": 10,
+      "aclnnPermuteGetWorkspaceSize": 10,
+      "aclnnSigmoid": 6,
+      "aclnnSigmoidGetWorkspaceSize": 6,
+      "aclnnSilu": 4,
+      "aclnnSiluGetWorkspaceSize": 4,
+      "aclnnSoftmax": 14,
+      "aclnnSoftmaxGetWorkspaceSize": 14,
+      "aclnnStack": 3,
+      "aclnnStackGetWorkspaceSize": 1,
+      "aclnnTanh": 14,
+      "aclnnTanhGetWorkspaceSize": 14,
+      "aclrtBinaryLoadFromData": 50,
+      "aclrtCreateLabel": 444,
+      "aclrtCreateLabelList": 18,
+      "aclrtCreateNotify": 48,
+      "aclrtCreateStreamWithConfig": 42,
+      "aclrtCtxGetSysParamOpt": 526,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 444,
+      "aclrtDestroyLabelList": 18,
+      "aclrtDestroyNotify": 96,
+      "aclrtDestroyStream": 36,
+      "aclrtDestroyStreamForce": 3,
+      "aclrtDeviceCanAccessPeer": 48,
+      "aclrtDeviceEnablePeerAccess": 4,
+      "aclrtFree": 242,
+      "aclrtGetCurrentContext": 3,
+      "aclrtGetDeviceCount": 4,
+      "aclrtGetHardwareSyncAddr": 3,
+      "aclrtGetResInCurrentThread": 2736,
+      "aclrtGetStreamAttribute": 2903,
+      "aclrtLaunchKernelWithHostArgs": 2429,
+      "aclrtMalloc": 236,
+      "aclrtMemcpy": 1610,
+      "aclrtMemcpyAsync": 609,
+      "aclrtNotifyGetExportKey": 48,
+      "aclrtNotifyImportByKey": 48,
+      "aclrtNotifySetImportPid": 48,
+      "aclrtRecordNotify": 60,
+      "aclrtResetDevice": 3,
+      "aclrtSetDevice": 2282,
+      "aclrtSetLabel": 444,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 6,
+      "aclrtSwitchLabelByIndex": 256,
+      "aclrtSynchronizeDeviceWithTimeout": 64,
+      "aclrtSynchronizeStream": 1607,
+      "aclrtSynchronizeStreamWithTimeout": 48,
+      "aclrtWaitAndResetNotify": 60
+    },
+    "aicpu_rows": [],
+    "csv_sha256": {
+      "raw/PROF_000001_20261001214803828_02058473AFLHCFMG/mindstudio_profiler_output/task_time_20261001214813.csv": "86e71922be88ec4b7cc79b5c6456aa778c388b9d61d9be39fd8bf0843c4c0ee5",
+      "raw/PROF_000001_20261001214803828_02058473AFLHCFMG/mindstudio_profiler_output/op_summary_20261001214813.csv": "f5d191a4023a6371edf0cb80836b1479f3f6aa31c90110cfa95cf51e03220454",
+      "raw/PROF_000001_20261001214803828_02058473AFLHCFMG/mindstudio_profiler_output/api_statistic_20261001214813.csv": "8abc62adff1618c628bf0cbca5473169e47b6fe07b3706110b5f900d810bd27a"
+    },
+    "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+  },
+  "development_failures": []
+}
