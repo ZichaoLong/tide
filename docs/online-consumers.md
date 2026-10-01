@@ -209,3 +209,14 @@ formal timing mode. Profiler runs and three fresh-process recommendation repeats
 remain separate requirements; one process's step timings do not satisfy them.
 Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
 pending. The deliberately paused historical CPU job is not managed by this CLI.
+
+Consumer results also include `memory` phase records. Each logical accelerator
+reports process allocator current/peak allocated and reserved bytes before model
+construction,after construction,after warmup (when present),and after measured
+steps. Peaks reset at phase boundaries; these samples occur outside step timers.
+Initial counter setup belongs to construction. They include caller allocations
+in the same process,with the initial record as baseline,exclude untracked vendor/
+driver memory,and are observations rather than admission guarantees. CPU peak RSS
+is a process-lifetime high-water mark and cannot be reset per phase. Formal runs
+use fresh processes; benchmark functions own/reset the selected allocator counters.
+No per-event synchronization or graph-kernel instrumentation is added.

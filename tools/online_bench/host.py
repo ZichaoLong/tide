@@ -4,6 +4,7 @@ import torch
 from tidegraph import GraphConfig, GraphRuntime, ExecutionOptions, ExecutionPlacement, External
 from tidegraph.runtime import synchronize
 from .fixture import build_model, encode
+from .memory import MemoryRecord
 
 
 def runtime_for(packet, *, family, implementation, device, dtype, schedule, preset, trace=False,
@@ -97,6 +98,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     if (steps+warmup)*windows_per_step*packet["workload"]["tokens"]*packet["workload"]["stride"] > (2**63-1)//8:
         raise ValueError("requested continuation would overflow coordinates/token formula")
     start = time.perf_counter()
+    memory = MemoryRecord([device])
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement)
     c = packet["workload"]; session = runtime.session(c["batch"])
@@ -106,6 +108,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             torch.optim.AdamW(named.values(), eps=1e-6, **options)) if training else None)
     synchronize(runtime.device)
     construction = time.perf_counter() - start
+    memory.capture("construction")
     durations, losses, output_counts, statistics, warmup_times = [], [], [], [], []
     position = 0
     for step in range(warmup+steps):
@@ -148,6 +151,9 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             output_counts.append(outputs); statistics.append(stats)
         else:
             warmup_times.append(elapsed)
+        if step+1 == warmup:
+            memory.capture("warmup")
+    memory.capture("measured", reset_peak=False)
     return dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"],
                 implementation=implementation, family=family, training=training, optimizer=optimizer if training else None,
                 windows_per_step=windows_per_step, warmup_steps=warmup, measured_steps=steps,
@@ -156,4 +162,5 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step,
                 final_cut=session.continuation.cut, parameters=sum(p.numel() for p in named.values()),
                 runtime=runtime.manifest(), diagnostics=diagnostics or observer is not None,
+                memory=memory.record(),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")

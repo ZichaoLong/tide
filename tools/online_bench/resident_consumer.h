@@ -21,6 +21,7 @@ class ConsumerOptimizer {
   std::string kind_;
 };
 struct ResidentMeasurements {
+  std::string memory;
   double construction=0;
   Index cut=0;
   std::vector<double> seconds,warmup,losses;

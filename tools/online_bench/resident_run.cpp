@@ -1,4 +1,5 @@
 #include "resident_consumer.h"
+#include "memory.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 namespace tide_flow {
@@ -28,6 +29,9 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   if(placement.read!=device||placement.control!=device||placement.selection!=device||placement.events!=device
       ||placement.scoring_dtype=="float64")throw std::invalid_argument("resident consumer requires all phases on NPU with FP32 scoring");
   at::NoGradGuard no_grad;auto begin=Clock::now();
+  std::vector<at::Device> memory_devices;
+  for(Index i=0;i<c.devices;++i)memory_devices.emplace_back(device.type(),device.index()+i);
+  MemoryRecord memory(memory_devices);
   ResidentMeasurements result;result.limits=resident_limits(c,device);
   result.head=head_budget(result.limits.forward.outputs,p.width,p.vocab,c.runtime.dtype==at::kHalf?2:4,
     c.training,c.head_workspace_bytes,c.chunk_policy=="aggressive");
@@ -53,6 +57,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   }
   auto sync=[&]{for(const auto& d:result.placement.devices)portable_torch::synchronize(d);};
   sync();result.construction=seconds(begin);Index position=0;
+  memory.capture("construction");
   for(Index step=0;step<c.steps+c.warmup;++step) {
     sync();begin=Clock::now();Tensor loss,gh;Index count=0,head_chunks=0;std::vector<Tensor> counters;
     std::vector<tide::ResidentCotangents> roots;std::map<std::string,Index> reverse_statistics;
@@ -103,7 +108,9 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       result.statistics.back().insert(reverse_statistics.begin(),reverse_statistics.end());
       result.statistics.back()["head_chunks"]=head_chunks;
     }else result.warmup.push_back(elapsed);
+    if(step+1==c.warmup)memory.capture("warmup");
   }
+  memory.capture("measured",false);result.memory=memory.json();
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();
   return resident_record(p,c,device,result);
 }

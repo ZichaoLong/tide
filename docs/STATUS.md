@@ -140,14 +140,23 @@ Independent actual FP16 Attention2-card training trace18,449 AI_VECTOR_CORE/
 704 AI_CORE/258 MIX_AIV,no observed AiCPU;not formal throughput.
 Retain build-dev01 failure (ambiguous Tensor assignment,corrected explicit Tensor{}).
 
-Current uncommitted next increment: tools/online_bench/memory.{h,cpp,py} and consumer
-hooks are draft per-logical-device allocator observations across construction,
-warmup and measured phases,plus process-lifetime CPU peak RSS. Not yet compiled
-or tested. No core/backend ABI changes. Next review these hooks,build installed
-consumer against qualified owner-stream backend,and run affected CPU/NPU consumer
-checks plus a bounded representative-size calibration. Keep observations distinct
-from memory admission; do not allocate full-size models before calibrated plans.
-Use existing build_projection_retention_client.py/source snapshots/job records.
+Consumer phase-memory increment ready for implementation commit: memory.{h,cpp,py}
+and hooks record each logical device's allocator current/peak allocated/reserved
+across initial/construction/warmup/measured phases,plus process-lifetime CPU peak
+RSS. Sampling is outside step timers; no backend/core ABI change. Development
+build-consumer-memory-{cpu,npu}-dev01 PASSED; cpu-dev02 PASSED4; npu-dev02 PASSED6
+with one fixture failure,then npu-dev03 PASSED that corrected Python mixed case.
+Retain dev01 collection failures (global dtype parametrization collision),dev02
+Python fixture passing native_library incorrectly. No production or numeric failure.
+Frozen latest development source consumer-memory-dev03,unchanged C++ artifacts
+from dev01. Calibration128 nodes/544 edges,D64/B2/T2/V257,Attention,2-card FP32
+AdamW: calibration-dev01 refused reverse pack budget at trace4096,not OOM;
+calibration-dev02 active with trace1024 and unchanged8GiB backward budget. Bounded
+queue120/run600; task.log/status.json plus consumer/result.json/consumer.log.
+Next implementation commit,clean source CPU/NPU builds and directed CPU4/NPU7,
+then immutable calibration and evidence commit. Reuse byte-identical qualified
+owner-stream backend; no core rebuild. CUDA counter branch target-machine-pending.
+Observations are not total-memory admission. Existing snapshots/records only.
 
 Next: total per-device memory admission/safe splitting,representative five-preset
 screening and full-size F6. Current CPU/mixed consumers use one payload device;

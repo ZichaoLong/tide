@@ -6,6 +6,7 @@ from tidegraph.runtime import synchronize
 from .host import runtime_for, token_values
 from .resident_loss import head_loss, embedding_gradient, ConsumerOptimizer
 from .head_budget import head_budget
+from .memory import MemoryRecord
 
 
 def advance(session, values, packet, position):
@@ -53,6 +54,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
     if not isinstance(owners, ResidentPlacement):
         owners = ResidentPlacement(**owners)
     begin = time.perf_counter()
+    memory = MemoryRecord(list(owners.devices) or [device])
     forward = resident_limits or ResidentLimits(workspace_bytes=512*1024*1024)
     if not isinstance(forward, ResidentLimits):
         forward = ResidentLimits(**forward)
@@ -75,6 +77,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
             synchronize(torch.device(d))
     optimizer_owner = ConsumerOptimizer(embedding, head, optimizer) if training else None
     sync(); construction = time.perf_counter()-begin
+    memory.capture("construction")
     durations, warmup_times, losses, counts, statistics = [], [], [], [], []
     position = 0
     try:
@@ -138,6 +141,9 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 statistics[-1]["head_chunks"] = head_chunks
             else:
                 warmup_times.append(elapsed)
+            if step+1 == warmup:
+                memory.capture("warmup")
+        memory.capture("measured", reset_peak=False)
         cut = session.cut
         manifest = session.manifest()
     finally:
@@ -148,6 +154,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         construction_seconds=construction, seconds=durations, warmup_seconds=warmup_times, losses=losses,
         outputs=counts, statistics=statistics, parameter_budget=parameter_budget,
         head_memory=vars(head_plan),
+        memory=memory.record(),
         precision=dict(payload=dtype, loss="float32", adjoints="float32", optimizer_masters="float32"),
         input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step, final_cut=cut,
         runtime=manifest, diagnostics=diagnostics or observer is not None,

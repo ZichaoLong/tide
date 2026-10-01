@@ -1,4 +1,5 @@
 #include "consumer.h"
+#include "memory.h"
 #include <tide/greedy.h>
 #include <tide/stream.h>
 #include <ATen/core/grad_mode.h>
@@ -37,7 +38,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     throw std::invalid_argument("resident consumer requires a build with TIDE_ONLINE_RESIDENT=ON");
 #endif
   }
-  auto start=Clock::now();auto f=fixture(p,c,device);
+  auto start=Clock::now();MemoryRecord memory({device});auto f=fixture(p,c,device);
   auto placement=tide::resolve_placement(c.placement,device);auto placed=tide::place_model(f.graph,f.model,c.placement);
   tide::Options options;options.packed=true;options.prefill=c.schedule=="prefill";options.trace=c.diagnostics;
   options.full_autograd="batched";options.aggregate_autograd="batched";
@@ -53,6 +54,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   }
   tide::Continuation q;q.identity=f.graph.identity;q.batch_size=p.batch;
   portable_torch::synchronize(device);const auto construction=seconds(start);
+  memory.capture("construction");
   std::vector<double> durations,losses,warmup_times;std::vector<Index> outputs;std::vector<std::map<std::string,Index>> statistics;
   Index position=0;at::AutoGradMode mode(c.training);
   for(Index step=0;step<c.steps+c.warmup;++step) {
@@ -87,7 +89,9 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     if(diagnostics)parameters_json(*diagnostics,step,f.parameters,false);
     if(step>=c.warmup){durations.push_back(elapsed);losses.push_back(loss.defined()?loss.detach().cpu().item<double>():0.);outputs.push_back(count);statistics.push_back(stats);}
     else warmup_times.push_back(elapsed);
+    if(step+1==c.warmup)memory.capture("warmup");
   }
+  memory.capture("measured",false);
   std::ostringstream out;out<<std::setprecision(17);
   out<<"{\"schema\":\"tide-online-consumer-v1\",\"state\":\"passed\",\"workload_sha256\":"<<quoted(p.sha)
      <<",\"packet_identity\":\"declared; launcher must verify v2 text against hashed JSON\",\"implementation\":\"libtorch\",\"family\":"<<quoted(c.family)
@@ -106,6 +110,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";
   bool first=true;for(const auto& [name,value]:placement.record()){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<quoted(value);}out<<"}}"
+     <<",\"memory\":"<<memory.json()
      <<",\"timing\":\"input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference\"}\n";
   return out.str();
 }

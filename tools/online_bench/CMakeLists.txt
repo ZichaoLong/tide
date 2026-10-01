@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 project(tide_online_consumer LANGUAGES CXX)
 find_package(TideGraph CONFIG REQUIRED)
-add_executable(tidegraph-online-bench main.cpp config.cpp packet.cpp model.cpp run.cpp records.cpp)
+add_executable(tidegraph-online-bench main.cpp config.cpp packet.cpp model.cpp run.cpp records.cpp memory.cpp)
 target_link_libraries(tidegraph-online-bench PRIVATE tide::runtime)
 target_compile_features(tidegraph-online-bench PRIVATE cxx_std_17)
 option(TIDE_ONLINE_RESIDENT "Build the optional public CANN resident consumer" OFF)
