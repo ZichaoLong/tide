@@ -169,7 +169,7 @@ complete performance matrix remain pending.
 The scale model uses per-edge slot-affine projections. HARD resident slot-affine
 adjoints and canonical publication are qualified on clean96c75f8
 ([evidence](evidence/resident-emission-training-20261002.md)). Compact projection
-owners remain pending. Actual FP32 public consumers are qualified on clean0d61cb9
+owners are qualified on cleanacb84f3 ([evidence](evidence/resident-projection-shards-20261002.md)). Actual FP32 public consumers are qualified on clean0d61cb9
 ([evidence](evidence/online-resident-consumers-20261002.md)); full-size performance
 remains pending ([consumer contract](online-consumers.md)). Do not substitute a broadcast model.
 
@@ -177,8 +177,8 @@ F4/F5 public multi-device inference is qualified on clean7329c71
 ([evidence](evidence/public-sharded-inference-20261002.md)): CPU74,library47,
 actual consumers27 and a separate two-card inference trace. Full/state/KV
 placement,one/three-card complete-cut restore and Python-owned FP32/FP16 are
-covered; actual consumers remain FP32. Compact projections,total-memory admission
-and F6 remain pending.
+covered; actual consumers remain FP32. Compact projections are separately qualified
+on cleanacb84f3; total-memory admission and F6 remain pending.
 
 F4/F5 local reverse owner/query/key budget splitting is qualified on clean106cbeb
 ([evidence](evidence/resident-reverse-budget-20261002.md)): CPU1,public cache83,
@@ -471,3 +471,8 @@ honestly terminal fixed performance assessment. Every option need not speed up.
 This extension is complete. The bounded narrow Settle target timeout is part of
 the delivery evidence; it leaves no live task and does not establish a general
 target-scale success claim.
+
+F4/F5 compact projection banks/adjoints are qualified on cleanacb84f3
+([evidence](evidence/resident-projection-shards-20261002.md)):31 library checks,
+48 standalone trajectories,27 actual-consumer checks and a separate two-card
+training trace. Total per-device admission,actual consumer FP16 and F6 remain pending.

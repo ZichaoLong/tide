@@ -65,64 +65,42 @@ sharded-inference-{cpu,library,consumer,profile}-clean01. Do not rerun completed
 Development CPU dev01 fixture-name collection failure retained;corrected dev02
 PASSED74. All other development jobs passed. No current build/test/profile jobs live.
 
-## Next work
+## Current work and next commands
 
-Evidence commit f3ea9cb for7329c71 is pushed. Public multi-device inference is done.
-Projection-retention development passed: both backend builds, installed standalone
-consumer build, library26, actual consumers27, FP32/FP16 matrix32 trajectories plus
-single-device FP16 legacy12 (704 windows/176 updates). Snapshot projection-retention-dev01
-contains the exact changed source; every development job is terminal PASSED.
-RetainedProjection owns one immutable projection-bank copy per training update,
-shared by retained windows; backward/detach/close release it. Three family cases
-validate exact two-window capacity, one-byte-short refusal before progress, three
-nonzero updates and optimizer restore against independent CPU autograd. No-projection
-training and inference consumer regressions also passed. Reservations are not
-allocator peak measurements; parameters/physical gradients are still coordinator-owned.
+Projection retention implementation3f85852552c607e7e44dc9480d41eafca1027081 and
+qualification5f8ff8a are pushed. All8 fixed-source jobs passed; see
+[evidence](evidence/resident-projection-retention-20261002.md). Do not repeat them.
 
-Projection retention implementation3f85852552c607e7e44dc9480d41eafca1027081 is pushed.
-All8 clean qualification jobs PASSED; projection_retention_evidence.py audit exited0.
-Evidence docs/evidence/resident-projection-retention-20261002.{md,json}. No current
-qualification jobs live. Separate trace14,782 AI_VECTOR_CORE/607 AI_CORE/218 MIX_AIV,
-no observed AiCPU; no timing claim. Builds/snapshot projection-retention-clean01,
-projection-retention-python-clean01,projection-retention-consumer-clean01. Reused
-client objects after source/header/compiler-option audit,fresh link/loader.
+Compact projection banks and adjoints implementationacb84f30475c03e91cba5c35964565ab1b6316cf
+is pushed. Full owners hold physical forward/gradient banks; actual projection rows
+and vectors use device chunk services. Immutable retained snapshots, canonical
+alias reduction and optimizer publication are connected. No explicit placement
+retains the dense path. Reservations are not allocator peak measurements.
 
-Current uncommitted next implementation: compact projection banks and shared
-ProjectionStage forward/reverse device chunk services; Ascend C actual-owner row
-packing,content-flow lifecycle,retained immutable shard copies,canonical sources/
-publication and Full placement cost all connected. Test projection_shards3 adds
-physical bank distribution/full-state checks plus three nonzero updates and restore.
-Consumer records now distinguish dense vs compact projection placement.
+Fixed source sources/projection-shards-clean01. Successful backends are
+builds/projection-shards-clean02 and projection-shards-python-clean02;
+installed client builds/projection-shards-consumer-clean01. All3 builds PASSED.
+Library-clean01 PASSED31; matrix-clean01 PASSED32 trajectories,legacy-clean01
+PASSED12,placements-clean01 PASSED4. Total48 trajectories/768 windows/192 updates.
+Do not repeat these completed jobs. All source is immutable during qualification.
 
-Compact projection implementation is ready to commit/push. All development work
-terminal: standalone/Python builds dev01/dev02 and installed consumer dev02 PASSED;
-library-dev03 PASSED30,lean-dev04 PASSED2(no-journal FP32/FP16 remote-only bank),
-matrix-dev02 PASSED32 trajectories,legacy-dev02 PASSED12,placements-dev02 PASSED3,
-three-dev02 PASSED1(FP16 3→2 cards),actual consumers-dev02 PASSED27. Total standalone
-48 trajectories/768 windows/192 updates. Keep library-dev02 failure(3 passed then
-CPU reference fixture omitted packed=False); only test configuration was corrected.
-Backend sources are unchanged since frozen projection-shards-dev02. dev03/dev04
-change tests only. Latest live test also writes physical-bank reservation JSON for
-qualification; no numeric or tolerance changes. No current jobs live other than
-intentionally suspended historical CPU run.
+All9 fixed-source qualification jobs PASSED. Actual consumer-clean01 PASSED27;
+profile-clean01 PASSED (D32 Attention/two-card,four windows/two AdamW updates).
+Audit projection_shards_evidence.py acb84f30475c03e91cba5c35964565ab1b6316cf exited0.
+Evidence docs/evidence/resident-projection-shards-20261002.{md,json}; profile reports
+15,615 AI_VECTOR_CORE/631 AI_CORE/218 MIX_AIV,no observed AiCPU. No formal timing claim.
+Retain failures: library-dev02 CPU oracle fixture missing packed=False; clean01
+backend reuse launcher assumed a copied kernel archive. clean02 follows recorded
+artifact paths/hashes. No live qualification jobs; do not duplicate completed work.
 
-Next commit implementation,push,freeze projection-shards-clean01. Build standalone
-and Python via build_projection_shards.py --reuse-host corresponding-dev02
---kernel-build corresponding-dev02. Install/fresh-link consumer with
-build_projection_retention_client.py --reuse-client projection-shards-consumer-dev02;
-client C++/public headers remain byte-identical. Clean library31,standalone matrix32/
-legacy12/placements4 via projection_shard_gates.py,actual consumer27,separate
-profile_resident_consumer.py --preset resident --reverse-chunk-rows16. Audit using
-projection_shards_evidence.py COMMIT,then evidence-only commit/push. No unchanged
-CPU full suite. Do not duplicate terminal development jobs.
-
-After projection shard qualification: total per-device memory admission,actual
-consumer FP16,representative five-preset
-screening and full-size F6. No new formal full-size throughput result. place_full
-currently counts only Full parameter bytes. ContentBudget accounts module tensor
-reservations,not total per-device allocator peaks; state/KV,tapes,optimizer proposals,
-communication,head/loss need total admission. Existing ShardedFull/RemoteFull/
-ShardedFullVjp provide device packet/completion patterns for projection partitioning.
+Next: total per-device memory admission and safe splitting,actual
+consumer FP16,representative five-preset screening,full-size F6. No new formal
+full-size throughput result. ContentBudget accounts module reservations,not total
+per-device peaks. Include parameters,state/KV,tapes,master/optimizer/proposals,
+communication,head/loss and construction transients plus headroom. Existing
+NPUCachingAllocator statistics expose current/peak allocated/reserved bytes;
+they do not include all vendor/driver HBM. Consumer head optimizer has FP32 masters,
+but the actual consumer still rejects FP16. Do not duplicate experiment tracking.
 
 ## Environment and job bounds
 
