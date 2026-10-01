@@ -91,8 +91,9 @@ rounding with FP32 global softmax/adjoints. Event cache/projection components
 recompute actual half QKV and accumulate cache roots/carry in FP32; isolated
 cache boundary checks do not certify retained-window graph training. Fiber
 local adjoints separately preserve pre-QK query scaling, per-tick cache bias,
-query-output and final pooling rounding; full fiber cache/graph integration
-remains outside that component scope. The
+query-output and final pooling rounding. Their actual cache/source reverse
+component rounds physical source products before QKV and accumulates KV/log-bias
+carry in FP32. Complete graph/retained-window integration remains separate. The
 complete-flow gate compares an independent CPU streaming schedule with exact
 discrete/identity checks and FP16 atol2e-3/rtol2e-2; FP32 retains its original
 thresholds. Build, device qualification and performance evidence remain distinct.

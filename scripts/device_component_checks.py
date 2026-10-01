@@ -26,7 +26,7 @@ CHECKS = {
     "master-publication": ("tide-master-publication-check", ("float32", "float16")),
     "training-step": ("tide-device-training-step-check", ("float32",)),
     "retained": ("tide-device-retained-check", ("float32",)),
-    "reverse-links": ("tide-device-reverse-links-check", ("float32",)),
+    "reverse-links": ("tide-device-reverse-links-check", ("float32", "float16")),
     "full-vjp": ("tide-device-full-vjp-check", ("float32", "float16")),
     "state-vjp": ("tide-device-state-vjp-check", ("float32", "float16")),
     "clock": ("tide-device-clock-check", ("float32",)),
@@ -138,6 +138,10 @@ KERNELS["event-training"] = "tide_event_reverse_"
 CHECKS["fiber-vjp"] = ("tide-device-fiber-vjp-check", ("float32", "float16"))
 MARKERS["fiber-vjp"] = "device-fiber-vjp: passed"
 KERNELS["fiber-vjp"] = "tide_fiber_vjp_"
+
+CHECKS["fiber-reverse"] = ("tide-device-fiber-reverse-check", ("float32", "float16"))
+MARKERS["fiber-reverse"] = "device-fiber-reverse: passed"
+KERNELS["fiber-reverse"] = "tide_fiber_reverse_"
 
 CHECKS["fiber-training"] = ("tide-resident-fiber-training-check", ("float32",))
 MARKERS["fiber-training"] = "resident-fiber-training: passed"

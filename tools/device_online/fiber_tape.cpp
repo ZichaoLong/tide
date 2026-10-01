@@ -30,7 +30,7 @@ std::vector<FiberAttentionTape> PackedFiberAttention::tape() const {
     a.qkv=qkv_.index_select(0,index);g.qkv_bias=qkv_bias_.index_select(0,index);
     a.projection=projection_.index_select(0,index);g.projection_bias=projection_bias_.index_select(0,index);
     const int64_t slots=std::max<int64_t>(1,*std::max_element(lengths.begin(),lengths.end()));
-    g.pool_weights=pool_?pool_->weights().index_select(0,index):at::zeros({ps+1,slots},cache_.key.options());
+    g.pool_weights=pool_?pool_->weights().index_select(0,index):at::zeros({ps+1,slots},cache_.key.options().dtype(at::kFloat));
     out.push_back(std::move(g));
   }
   return out;

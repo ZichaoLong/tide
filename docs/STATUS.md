@@ -51,7 +51,7 @@ No new full-size speed ratio.
 
 ## Active work and next action
 
-Local fiber evidence is ready for its separate commit. Uncommitted next increment:
+Local fiber evidence committed/pushed as caa6088. Uncommitted next increment:
 FP16 actual fiber cache/source reverse integration. Changed content_flow.cpp,
 graph_vjp.cpp,reverse_links.cpp,fiber_cache_reverse.cpp,fiber_reverse.cpp,
 fiber_tape.cpp,AscendC tide_fiber_reverse_pack,reverse_links_check.cpp and mapping.
@@ -61,16 +61,42 @@ packing rounds physical source products,loads half params/cache; all roots/carry
 returned gradients FP32. Sum-only dummy pooling banks are FP32.
 
 Reverse-link checker extended to both dtypes,64 actual feedback/parallel-edge/
-empty/policy/continuation windows each. Actual fiber reverse checker still needs
-implementation: independent ContentFlow tapes,physical input/scales and six
-parameter groups,cache None/zero/adopt/clear/ticks,CPU quantized-forward FP32/FP64.
-Also test FP32 cache-bias bridge and complete-half-graph rejection. No new build
-or device result for this integration. Do not claim public training/continuation.
+empty/policy/continuation windows each. New actual fiber reverse checker covers
+90 cases/180 replays per dtype:5 pools,7 roots,streaming/greedy,adopt/clear,
+permuted slots,missing/zero-scale physical inputs,large int64 times,nonempty/
+empty caches,CPU FP32/FP64 quantized-forward gradients. Separate bias bridge:
+3 cases/6 replays/6 refusals,FP32 sums beyond half range,capacity257,padding and
+None/zero. Half complete-graph guard remains explicitly checked. No device result yet.
 
-Next: finish checker and component/CMake mapping, bounded frozen dev build;
-run fiber-reverse/reverse-links both dtypes and separate FP32 event/fiber training.
-Build900s,two workers;lease120s;gate600s. After passing implement commit→clean
-standalone/Python checks/profile→evidence commit. Authorization remains ACTIVE.
+Preserved build dev01 failure: new checker passed std::string to const char*
+helper; fixed with c_str(),also check physical input position. Kernel/six host
+objects completed before the checker failure; never relabel failed dev01.
+Recovered build-low-precision-fiber-reverse-dev02 PASSED/exit0 from frozen
+TASK/sources/low-precision-fiber-reverse-dev02 into matching build directory.
+Launcher TASK/launchers/build_precision_fiber_reverse_recover.py,900s. Validate
+all source bytes except fixed checker and every completed archive member against
+its object or qualified parent;reuse production objects from terminal failed
+dev01,compile both checkers. Keep failed status/log/source unchanged. Dev02 component gate PASSED:90/180 actual fiber cases/replays and64 reverse-link
+windows per dtype;bias bridge3/6/6. Regression event passed,then fiber failed:
+new complete-graph dtype guard checked the optional tanh weight bank,which is
+undefined for identity-only graphs. Fix uses always-present source scales to
+identify payload dtype. No numerical/tolerance change. Preserve original failure.
+Corrected dev03 build,component gate and FP32 training regression all PASSED/
+exit0. Source/build low-precision-fiber-reverse-dev03,launcher
+build_precision_fiber_reverse_fix.py. Rebuilt only graph_vjp.cpp/checkers;
+remaining authenticated production objects reused. FP32 identity-only full
+training now passes; half complete graph remains rejected. No tolerance change.
+
+Implementation ready to commit. Next fixed clean source:
+freeze_run.py --commit NEW_REV --snapshot low-precision-fiber-reverse-clean01;
+launchers/build_precision_fiber_reverse_recheck.py low-precision-fiber-reverse-clean01
+and build_precision_fiber_reverse_python.py low-precision-fiber-reverse-python-clean01.
+Build900s,two Python host compiler workers;gates/profile600s,lease120s. Run
+fiber-reverse/reverse-links both dtypes,FP32 event/fiber regression,Python
+precision/event/fiber three modules,and separate half fiber-reverse profile.
+Audit precision_fiber_reverse_evidence.py NEW_REV after every job is terminal;
+it reauthenticates the completed objects from checker-failed dev01 too.
+Implementation commit→immutable qualification→separate evidence commit,push each.
 
 Remaining: finish fiber integration,control/graph half adjoints,retained windows,
 master checkpoint/public FP16 training; then peer progression/communication/

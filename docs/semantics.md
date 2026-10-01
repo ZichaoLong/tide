@@ -211,8 +211,9 @@ staircase. [Precision scopes](precision.md) distinguish those components and
 FP32-master publication from the still-unavailable complete resident FP16
 training interface; no graph identity or eager checkpoint schema is changed.
 The half local attention adjoint similarly preserves QK rounding and global
-normalization. Event cache/projection components preserve actual half QKV and
-use FP32 cache adjoints and boundary sums; complete half graph reverse and
+normalization. Event and same-fiber cache/projection components preserve actual
+half operands,including physical source-product rounding,and use FP32 cache
+adjoints and boundary sums; complete half graph reverse and
 retained-window training remain separate, unavailable integrations.
 [Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
 softmax and linear/FP32-norm Read under the same mathematical contracts.

@@ -53,11 +53,17 @@ void compare(const ReverseTape& t,const ReverseLinks& links) {
   if(edges+Index(g.outputs.size()))require(at::equal(weights.narrow(0,inputs+edges,edges+g.outputs.size()),
     t.delivery_scales.cpu().narrow(0,0,edges+g.outputs.size()).view({-1})),"delivery parameter identity changed");
 }
-int windows(at::Device device,int shape,int variant,bool prefill) {
+void precision(test::Fixture& f,at::ScalarType dtype) {
+  test::model_dtype(f.model,dtype);
+  for(auto& [_,s]:f.initial.states){s.value=s.value.to(dtype);for(auto& [__,v]:s.slots)v=v.to(dtype);}
+  for(auto& x:f.input)x.value=x.value.to(dtype);
+}
+int windows(at::Device device,int shape,int variant,bool prefill,at::ScalarType dtype) {
   at::NoGradGuard guard;auto f=test::fixture(shape,variant);
   for(size_t n=0;n<f.graph.nodes.size();++n)if(!f.graph.nodes[n].identity){f.graph.nodes[n].full="tanh";f.model.nodes[n].weight.mul_(.125);}
   // Present zero messages keep their physical connections and edge identity.
   if(!f.model.edge_scale.empty())f.model.edge_scale[0].zero_();
+  precision(f,dtype);
   f.graph.compile();f.initial.identity=f.graph.identity;ContentLimits limits;limits.prefill=prefill;limits.trace=512;
   ContentFlow flow(f.graph,f.model,f.initial,device,limits);Index previous=f.initial.cut;int cases=0;
   for(Index delta:{2,6,11,11}) {
@@ -69,8 +75,8 @@ int windows(at::Device device,int shape,int variant,bool prefill) {
   }
   return cases;
 }
-void refusals(at::Device device) {
-  at::NoGradGuard guard;auto f=test::fixture(0,0);ContentFlow flow(f.graph,f.model,f.initial,device);flow.advance_device(f.input,11);
+void refusals(at::Device device,at::ScalarType dtype) {
+  at::NoGradGuard guard;auto f=test::fixture(0,0);precision(f,dtype);ContentFlow flow(f.graph,f.model,f.initial,device);flow.advance_device(f.input,11);
   auto tape=flow.reverse_tape();auto error=at::zeros({1},tape.state.count.options().dtype(at::kInt));
   // Clone metadata before corrupting it: these probes must not alter the live owner.
   auto malformed=tape;malformed.state.metadata=tape.state.metadata.clone();malformed.state.count=tape.state.count.clone();
@@ -84,11 +90,12 @@ int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
     auto args=portable_torch::parse_cli(argc,argv,true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
-    if(args.device_spec=="auto"||args.dtype!=at::kFloat)throw std::invalid_argument("reverse-link gate requires explicit NPU FP32");
+    if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("reverse-link gate requires explicit NPU FP32/FP16");
+    args.allow_npu_float16=true;
     const auto device=portable_torch::resolve_device(args);if(device.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("reverse-link gate requires NPU");
     at::set_num_threads(1);at::set_num_interop_threads(1);int cases=0;
-    for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})cases+=windows(device,shape,variant,prefill);
-    refusals(device);std::cout<<"device-reverse-links: passed windows="<<cases<<" scope=device_message_stage_links_not_graph_training\n";
+    for(int shape=0;shape<4;++shape)for(int variant=0;variant<2;++variant)for(bool prefill:{false,true})cases+=windows(device,shape,variant,prefill,args.dtype);
+    refusals(device,args.dtype);std::cout<<"device-reverse-links: passed windows="<<cases<<" scope=device_message_stage_links_not_graph_training\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

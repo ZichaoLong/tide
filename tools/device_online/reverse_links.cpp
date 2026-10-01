@@ -18,6 +18,8 @@ ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::
       ||!t.fiber_meta.defined()||t.fiber_meta.dim()!=2||!t.pending.valid.defined()||!t.outputs.valid.defined())
     throw std::invalid_argument("reverse links require actual no-grad device journals");
   const auto device=t.state.metadata.device();const auto& g=*t.graph;
+  const auto payload=t.source_scales.scalar_type();
+  if(payload!=at::kFloat&&payload!=at::kHalf)throw std::invalid_argument("reverse links require FP32/FP16 forward payloads");
   const int64_t capacity=t.state.metadata.size(0),fibers=t.fiber_meta.size(0),pending=t.pending.valid.numel(),outputs=t.outputs.valid.numel();
   const int64_t nodes=g.nodes.size(),inputs=g.inputs.size(),edges=g.edges.size(),ports=g.outputs.size(),samples=t.state.samples;
   const int64_t parameters=inputs+2*edges+ports;
@@ -30,10 +32,10 @@ ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::
   tensor(t.state.metadata,device,at::kLong,{capacity,13});tensor(t.state.count,device,at::kLong,{1});
   tensor(t.fiber_meta,device,at::kLong,{fibers,6});tensor(t.fiber_count,device,at::kLong,{1});
   tensor(t.sources,device,at::kLong,{std::max<int64_t>(1,inputs+edges),2});
-  tensor(t.source_scales,device,at::kFloat,{std::max<int64_t>(1,inputs+edges)});
-  tensor(t.delivery_scales,device,at::kFloat,{edges+ports+1,1});
+  tensor(t.source_scales,device,payload,{std::max<int64_t>(1,inputs+edges)});
+  tensor(t.delivery_scales,device,payload,{edges+ports+1,1});
   for(const auto& a:{t.pending,t.outputs}){tensor(a.coordinates,device,at::kLong,{a.valid.numel(),6});tensor(a.valid,device,at::kBool,{a.valid.numel()});
-    tensor(a.values,device,at::kFloat,{a.valid.numel(),width});}
+    tensor(a.values,device,payload,{a.valid.numel(),width});}
   tensor(t.pending_count,device,at::kLong,{1});tensor(t.output_count,device,at::kLong,{1});tensor(error,device,at::kInt,{1});
   std::vector<int64_t> edge_table(std::max<int64_t>(1,edges)*4),port_table(std::max<int64_t>(1,ports)*2);
   for(int64_t n=0;n<nodes;++n)for(int64_t j=g.outgoing_ports.offsets[n];j<g.outgoing_ports.offsets[n+1];++j) {
@@ -49,10 +51,11 @@ ReverseLinks append_reverse_links(CannProgram& p,const ReverseTape& t,const at::
   ReverseLinks out{at::empty({messages,4},longs),at::empty({messages},booleans),at::empty({capacity},longs),
     at::empty({messages},longs),at::empty({capacity},longs),at::empty({fibers},longs),at::empty({std::max<int64_t>(1,parameters)},longs),
     at::empty({2*messages},longs),at::empty({capacity+1},longs),at::empty({1},longs),
-    at::empty({std::max<int64_t>(1,parameters)},t.source_scales.options()),fibers,pending,outputs,parameters};
+    at::empty({std::max<int64_t>(1,parameters)},t.source_scales.options().dtype(at::kFloat)),fibers,pending,outputs,parameters};
   p.zero(out.scales);
-  if(inputs+edges)p.copy(out.scales.narrow(0,0,inputs+edges),t.source_scales);
-  if(edges+ports)p.copy(out.scales.narrow(0,inputs+edges,edges+ports),t.delivery_scales.narrow(0,0,edges+ports).view({-1}));
+  auto copy_scale=[&](const at::Tensor& dst,const at::Tensor& src){if(payload==at::kHalf)p.cast(src,dst);else p.copy(dst,src);};
+  if(inputs+edges)copy_scale(out.scales.narrow(0,0,inputs+edges),t.source_scales);
+  if(edges+ports)copy_scale(out.scales.narrow(0,inputs+edges,edges+ports),t.delivery_scales.narrow(0,0,edges+ports).view({-1}));
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_reverse_links)(1,stream,
     ptr(t.state.metadata),ptr(t.state.count),ptr(t.fiber_meta),ptr(t.fiber_count),ptr(t.pending.coordinates),ptr(t.pending.valid),ptr(t.pending_count),
     ptr(t.outputs.coordinates),ptr(t.outputs.valid),ptr(t.output_count),ptr(t.sources),ptr(edge_data),ptr(port_data),ptr(hash),

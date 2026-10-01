@@ -20,6 +20,7 @@ void tensor(const at::Tensor& x,at::Device device,at::ScalarType type,at::IntArr
 FiberReverse prepare_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,const FiberAttentionTape& g,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
   const auto& a=g.cache;const auto device=a.key.device();
+  const auto payload=a.key.scalar_type();
   const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.graph->nodes.size(),ps=a.nodes.size();
   const int64_t owners=a.samples*ps,fibers=t.fiber_values.size(0),w=a.width,k=a.capacity;int64_t buckets=1;
   while(buckets<2.L*events){if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("fiber reverse hash overflow");buckets*=2;}
@@ -28,8 +29,8 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const ReverseTape& t,const Rev
     throw std::invalid_argument("fiber reverse geometry/tensor budget exceeded");
   tensor(a.mapping,device,at::kLong,{nodes});tensor(a.config,device,at::kLong,{ps,2});
   tensor(a.metadata,device,at::kLong,{rows,5});tensor(a.values,device,at::kFloat,{rows,2*w+1});tensor(a.count,device,at::kLong,{1});
-  tensor(a.qkv,device,at::kFloat,{ps+1,w,3*w});tensor(a.projection,device,at::kFloat,{ps+1,w,w});
-  tensor(g.qkv_bias,device,at::kFloat,{ps+1,3*w});tensor(g.pool_kinds,device,at::kLong,{ps});tensor(g.pool_lengths,device,at::kLong,{ps});
+  tensor(a.qkv,device,payload,{ps+1,w,3*w});tensor(a.projection,device,payload,{ps+1,w,w});
+  tensor(g.qkv_bias,device,payload,{ps+1,3*w});tensor(g.pool_kinds,device,at::kLong,{ps});tensor(g.pool_lengths,device,at::kLong,{ps});
   if(g.pool_weights.dim()!=2||g.pool_weights.size(1)<1)throw std::invalid_argument("invalid fiber pool reverse bank");
   tensor(g.pool_weights,device,at::kFloat,{ps+1,g.pool_weights.size(1)});
   FiberReverse out;static_cast<CacheCotangents&>(out.cache)=append_fiber_cache_seed(p,g,roots,nullptr,error,budget/2);
@@ -56,16 +57,17 @@ void append_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks
   const int64_t c=std::min(chunk,owners),domain=g.pool_weights.size(1),s=std::min(k,domain),inputs=t.graph->inputs.size();
   const long double own=4.L*c*(s*w+4.L*k*w+4.L*k+4.L*w*w+4.L*w+domain)+512.L*c+8.L*c*s+8.L*t.graph->nodes.size()+4096;
   if(c<1||budget<2||own>budget/2.L)throw std::invalid_argument("fiber reverse batch tensor budget exceeded");
-  auto f=a.key.options(),l=a.lengths.options(),b=f.dtype(at::kBool);
+  const auto payload=a.key.options();const int64_t fp16=a.key.scalar_type()==at::kHalf;
+  auto f=payload.dtype(at::kFloat),l=a.lengths.options(),b=f.dtype(at::kBool);
   auto plan=at::empty({c,10},l),flags=at::empty({c,4},b),branch=at::empty_like(error);
   FiberVjpInput in;
-  in.rows=at::empty({c,s,w},f);in.slots=at::empty({c,s},l);in.counts=at::empty({c},l);
-  in.key=at::empty({c,h,k,d},f);in.value=at::empty_like(in.key);in.bias=at::empty({c,k},f);
+  in.rows=at::empty({c,s,w},payload);in.slots=at::empty({c,s},l);in.counts=at::empty({c},l);
+  in.key=at::empty({c,h,k,d},payload);in.value=at::empty_like(in.key);in.bias=at::empty({c,k},payload);
   in.lengths=at::empty({c},l);in.old_lengths=at::empty_like(in.lengths);in.ticks=at::empty_like(in.lengths);
-  in.qkv=at::empty({c,w,3*w},f);in.qkv_bias=at::empty({c,3*w},f);in.projection=at::empty({c,w,w},f);
+  in.qkv=at::empty({c,w,3*w},payload);in.qkv_bias=at::empty({c,3*w},payload);in.projection=at::empty({c,w,w},payload);
   in.pool_kinds=at::empty({c},l);in.pool_lengths=at::empty_like(in.pool_kinds);in.pool_weights=at::empty({c,domain},f);
   in.cotangent=at::empty({c,w},f);in.connected=at::empty({c},b);
-  in.key_root=at::empty_like(in.key);in.value_root=at::empty_like(in.value);in.bias_root=at::empty_like(in.bias);
+  in.key_root=at::empty(in.key.sizes(),f);in.value_root=at::empty(in.value.sizes(),f);in.bias_root=at::empty(in.bias.sizes(),f);
   in.key_on=at::empty({c},b);in.value_on=at::empty_like(in.key_on);in.bias_on=at::empty_like(in.key_on);in.max_repeat_ticks=t.state.max_repeat_ticks;
   auto source_counts=at::tensor(t.graph->source_counts,at::kLong).to(a.key.device());
   auto table=at::empty({c*6,5},l),tiles=at::empty({c*6+1},l),table_count=at::empty({2},l);
@@ -83,7 +85,7 @@ void append_fiber_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks
     ptr(state.proposal),ptr(reverse.cache.key),ptr(reverse.cache.value),ptr(reverse.cache.bias),ptr(in.rows),ptr(in.slots),ptr(in.counts),
     ptr(in.key),ptr(in.value),ptr(in.bias),ptr(in.lengths),ptr(in.old_lengths),ptr(in.ticks),ptr(in.qkv),ptr(in.qkv_bias),ptr(in.projection),
     ptr(in.pool_kinds),ptr(in.pool_lengths),ptr(in.pool_weights),ptr(in.cotangent),ptr(in.connected),ptr(in.key_root),ptr(in.value_root),ptr(in.bias_root),
-    ptr(in.key_on),ptr(in.value_on),ptr(in.bias_on),ptr(error),c,s,w,h,k,domain,inputs,phase),"pack actual source and KV fiber adjoint operands");},
+    ptr(in.key_on),ptr(in.value_on),ptr(in.bias_on),ptr(error),c,s,w,h,k,domain,inputs,phase,fp16),"pack actual source and KV fiber adjoint operands");},
     {plan,flags,t.state.metadata,a.config,reverse.tokens,t.fiber_meta,t.sources,links.messages,links.scales,t.fiber_values,a.values,reverse.ticks,
      a.qkv,g.qkv_bias,a.projection,g.pool_kinds,g.pool_lengths,g.pool_weights,state.proposal,reverse.cache.key,reverse.cache.value,reverse.cache.bias,
      in.rows,in.slots,in.counts,in.key,in.value,in.bias,in.lengths,in.old_lengths,in.ticks,in.qkv,in.qkv_bias,in.projection,in.pool_kinds,in.pool_lengths,

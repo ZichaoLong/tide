@@ -1,5 +1,14 @@
 #include "fiber_vector.h"
-namespace {using I=int64_t;}
+namespace {using I=int64_t;
+__aicore__ inline void load(tide_device::FiberVector& op,AscendC::LocalTensor<float> x,
+    GM_ADDR data,I offset,uint32_t size,I fp16) {
+  if(fp16)op.load(x,(__gm__ half*)data,offset,size);else op.load(x,(__gm__ float*)data,offset,size);
+}
+__aicore__ inline void save(tide_device::FiberVector& op,AscendC::LocalTensor<float> x,
+    GM_ADDR data,I offset,uint32_t size,I fp16) {
+  if(fp16)op.save(x,(__gm__ half*)data,offset,size);else op.save(x,(__gm__ float*)data,offset,size);
+}
+}
 extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_ADDR flags,GM_ADDR events,GM_ADDR config,
     GM_ADDR tokens,GM_ADDR fiber_meta,GM_ADDR sources,GM_ADDR messages,GM_ADDR scales,GM_ADDR fiber_values,
     GM_ADDR journal,GM_ADDR ticks,GM_ADDR qkv,GM_ADDR qkv_bias,GM_ADDR projection,GM_ADDR kinds,GM_ADDR domains,GM_ADDR weights,
@@ -7,7 +16,7 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
     GM_ADDR x,GM_ADDR slots,GM_ADDR counts,GM_ADDR key,GM_ADDR value,GM_ADDR bias,GM_ADDR lengths,GM_ADDR old_lengths,GM_ADDR elapsed,
     GM_ADDR wqkv,GM_ADDR bqkv,GM_ADDR wo,GM_ADDR pool_kinds,GM_ADDR pool_lengths,GM_ADDR pool_weights,
     GM_ADDR root,GM_ADDR on,GM_ADDR key_root,GM_ADDR value_root,GM_ADDR bias_root,GM_ADDR key_on,GM_ADDR value_on,GM_ADDR bias_on,
-    GM_ADDR error,int64_t chunk,int64_t source_capacity,int64_t width,int64_t heads,int64_t capacity,int64_t domain,int64_t inputs,int64_t mode) {
+    GM_ADDR error,int64_t chunk,int64_t source_capacity,int64_t width,int64_t heads,int64_t capacity,int64_t domain,int64_t inputs,int64_t mode,int64_t fp16) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)plan);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -41,7 +50,8 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
         const I row=t[p[i*10+8]+j],scale=((__gm__ I*)messages)[row*4+2];const float factor=((__gm__ float*)scales)[scale];
         op.load(a,(__gm__ float*)fiber_values,row*width+start,size);AscendC::Muls(a,a,factor,size);AscendC::PipeBarrier<PIPE_V>();
       }else {AscendC::Duplicate(a,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
-      op.save(a,(__gm__ float*)x,(i*source_capacity+j)*width+start,size);
+      // The physical source product is rounded before QKV, just as forward.
+      save(op,a,x,(i*source_capacity+j)*width+start,size,fp16);
     }
     for(I task=AscendC::GetBlockIdx();task<chunk*wt;task+=AscendC::GetBlockNum()) {
       const I i=task/wt,start=(task%wt)*256;const uint32_t size=width-start<256?width-start:256;
@@ -53,9 +63,9 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
       const I start=(task%wt)*256,kind=(task/wt)%4,row=(task/wt/4)%width,i=task/wt/4/width,param=p[i*10+2];
       const uint32_t size=width-start<256?width-start:256;
       if(prop[i]||(kind==1&&ko[i])||(kind==2&&vo[i]))
-        op.load(a,(__gm__ float*)(kind==3?projection:qkv),(param*width+row)*(kind==3?width:3*width)+(kind==3?0:kind*width)+start,size);
+        load(op,a,kind==3?projection:qkv,(param*width+row)*(kind==3?width:3*width)+(kind==3?0:kind*width)+start,size,fp16);
       else {AscendC::Duplicate(a,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
-      op.save(a,(__gm__ float*)(kind==3?wo:wqkv),(i*width+row)*(kind==3?width:3*width)+(kind==3?0:kind*width)+start,size);
+      save(op,a,kind==3?wo:wqkv,(i*width+row)*(kind==3?width:3*width)+(kind==3?0:kind*width)+start,size,fp16);
     }
     const I bt=(3*width+255)/256,pt=(domain+255)/256;
     for(I task=AscendC::GetBlockIdx();task<chunk*(bt+pt);task+=AscendC::GetBlockNum()) {
@@ -63,9 +73,9 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
       const I start=(pool?tile-bt:tile)*256,size0=(pool?domain:3*width)-start;
       const uint32_t size=size0<256?size0:256;
       if(prop[i]&&(!pool||((__gm__ I*)pool_kinds)[i]>=2))
-        op.load(a,(__gm__ float*)(pool?weights:qkv_bias),param*(pool?domain:3*width)+start,size);
+        load(op,a,pool?weights:qkv_bias,param*(pool?domain:3*width)+start,size,pool?0:fp16);
       else {AscendC::Duplicate(a,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
-      op.save(a,(__gm__ float*)(pool?pool_weights:bqkv),i*(pool?domain:3*width)+start,size);
+      save(op,a,pool?pool_weights:bqkv,i*(pool?domain:3*width)+start,size,pool?0:fp16);
     }
     for(I task=AscendC::GetBlockIdx();task<chunk*heads*capacity*dt;task+=AscendC::GetBlockNum()) {
       const I start=(task%dt)*256,k=(task/dt)%capacity,h=(task/dt/capacity)%heads,i=task/dt/capacity/heads;
@@ -74,7 +84,7 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
       for(I which=0;which<2;++which) {
         if(prop[i]&&k<p[i*10+7])op.load(a,(__gm__ float*)journal,(p[i*10+6]+k)*(2*width+1)+which*width+h*d+start,size);
         else {AscendC::Duplicate(a,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
-        op.save(a,(__gm__ float*)(which?value:key),((i*heads+h)*capacity+k)*d+start,size);
+        save(op,a,which?value:key,((i*heads+h)*capacity+k)*d+start,size,fp16);
         if(!clear&&(which?vo[i]:ko[i])&&k<p[i*10+7])
           op.load(a,(__gm__ float*)(which?carry_value:carry_key),(owner*capacity+k)*width+h*d+start,size);
         else {AscendC::Duplicate(a,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
@@ -86,7 +96,8 @@ extern "C" __global__ __aicore__ void tide_fiber_reverse_pack(GM_ADDR plan,GM_AD
       const bool clear=event>=0&&cfg[param*2+1]&&e[event*13+3];
       for(I k=0;k<capacity;++k) {
         const bool valid=event>=0&&k<p[i*10+7];
-        ((__gm__ float*)bias)[i*capacity+k]=valid&&prop[i]?((__gm__ float*)journal)[(p[i*10+6]+k)*(2*width+1)+2*width]:0.f;
+        const float log_bias=valid&&prop[i]?((__gm__ float*)journal)[(p[i*10+6]+k)*(2*width+1)+2*width]:0.f;
+        if(fp16)((__gm__ half*)bias)[i*capacity+k]=half(log_bias);else ((__gm__ float*)bias)[i*capacity+k]=log_bias;
         ((__gm__ float*)bias_root)[i*capacity+k]=valid&&!clear&&((__gm__ uint8_t*)bias_on)[i]?
           ((__gm__ float*)carry_bias)[owner*capacity+k]:0.f;
       }

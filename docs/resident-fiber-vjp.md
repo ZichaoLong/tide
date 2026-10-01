@@ -83,5 +83,23 @@ pooling modes, seven root modes, widths1/4/257, multiple heads, actual NPU-built
 cache values, None/zero and poisoned padding. Replays change source/cache lengths
 in the same program. Half roots are multiplied by256 to expose small gradients;
 half rtol2e-3/atol2e-5 is separate from original FP32 rtol2e-5/atol2e-6.
-Tick and workspace limits refuse explicitly. Component qualification does not
-enable complete half fiber-cache/graph/retained-window training or checkpoints.
+Tick and workspace limits refuse explicitly.
+
+## FP16 actual cache/source reverse integration
+
+The internal forward owner exposes its actual half journals independently of
+complete graph-backward capability. Device reverse links retain integer message,
+edge and stage identities, widening stored source/delivery scales to FP32 for
+adjoints. Complete half graph reverse still refuses explicitly at its own entry.
+
+Fiber reverse packs original messages with their physical scales and rounds
+that product before QKV. It loads the actual half projection banks and cache
+journals, then composes the local adjoint with adoption, selected clear and
+recorded cache predecessors. Source, physical-scale and all six parameter-group
+partials remain FP32, as do initial KV/log-bias gradients. The log-bias boundary
+bridge accepts half forward caches but validates/sums FP32 roots and carry.
+Invalid lengths, dtype/pair mismatches and small budgets refuse explicitly.
+
+This is a component integration with independent quantized-forward CPU references;
+it does not enable complete half graph/retained-window training or checkpoints.
+Isolated boundary sums do not certify a full retained-window differentiation path.

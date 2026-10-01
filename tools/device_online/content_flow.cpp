@@ -241,7 +241,9 @@ FullTape ContentFlow::full_tape() const {
 }
 ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
-  if(s.profile.dtype!=at::kFloat)throw std::invalid_argument("resident FP16 adjoints for complete graphs are not implemented");
+  // Journal access is distinct from complete graph reverse capability. Local
+  // half components consume their own actual tapes; append_graph_vjp retains
+  // the complete-graph dtype gate until every integration is qualified.
   validate_reverse_modules(s.profile.graph);
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
