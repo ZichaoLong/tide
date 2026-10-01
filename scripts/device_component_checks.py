@@ -118,3 +118,11 @@ KERNELS["attention-vjp"] = "tide_attention_reverse_"
 CHECKS["event-training"] = ("tide-resident-event-training-check", ("float32",))
 MARKERS["event-training"] = "resident-event-training: passed"
 KERNELS["event-training"] = "tide_event_reverse_"
+
+CHECKS["fiber-vjp"] = ("tide-device-fiber-vjp-check", ("float32",))
+MARKERS["fiber-vjp"] = "device-fiber-vjp: passed"
+KERNELS["fiber-vjp"] = "tide_fiber_vjp_"
+
+CHECKS["fiber-training"] = ("tide-resident-fiber-training-check", ("float32",))
+MARKERS["fiber-training"] = "resident-fiber-training: passed"
+KERNELS["fiber-training"] = "tide_fiber_reverse_"

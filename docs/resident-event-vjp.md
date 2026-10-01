@@ -43,7 +43,9 @@ and optimizer state; cached keys are not reprojected using newer weights.
 ## Public cache roots and initial gradients
 
 `ResidentTrainingWindow.cache` is a list grouped by static head geometry. Each
-group exposes a static `nodes` list and device `key`, `value`, `lengths`, `present`:
+group exposes a static `nodes` list and device `key`, `value`, `lengths`, `present`.
+Event groups precede any [fiber groups](resident-fiber-vjp.md); their additional
+`log_bias` field is undefined and event groups reject log-bias cotangents:
 
 - Key/value shape: `[sample_count * len(nodes), capacity, kv_heads, head_width]`.
 - Owner order: sample first, then the node order in `nodes`.

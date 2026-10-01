@@ -1,4 +1,5 @@
 #include "parameter_publish.h"
+#include "tide/fiber_attention.h"
 #include "packed_lh_full.h"
 #include "event_reverse.h"
 #include "packed_aggregate.h"
@@ -37,7 +38,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
       refs[name+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot)]={12,n*slots+slot,{}};
     const auto kind=node.identity?0:lh_full_kind(node.full);
     if(!node.identity&&(node.emission!="broadcast"||
-        (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"&&node.memory!="attention")))
+        (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"&&node.memory!="attention"&&!is_fiber_attention_profile(node.memory))))
       throw std::invalid_argument("parameter publication module contract unavailable");
     if(node.identity)continue;
     refs[name+"read"]={4,n*width,{width}};
@@ -60,6 +61,30 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   if(swiglu){buffer(b.extra.gate,device,at::kFloat,{swiglu+1,width,2*width});buffer(b.extra.up,device,at::kFloat,{swiglu+1,width,2*width});
     buffer(b.extra.down,device,at::kFloat,{swiglu+1,2*width,width});}
   if(normalized)buffer(b.aggregate.weights,device,at::kFloat,{nodes,slots});
+  std::vector<int64_t> fiber_nodes;
+  for(int64_t n=0;n<nodes;++n)if(!g.nodes[n].identity&&is_fiber_attention_profile(g.nodes[n].memory))fiber_nodes.push_back(n);
+  if(b.fiber.nodes!=fiber_nodes)throw std::invalid_argument("fiber publication node map mismatch");
+  const int64_t fibers=fiber_nodes.size();bool learned_pool=false;
+  if(fibers) {
+    buffer(b.fiber.qkv,device,at::kFloat,{fibers+1,width,3*width});
+    buffer(b.fiber.qkv_bias,device,at::kFloat,{fibers+1,3*width});
+    buffer(b.fiber.projection,device,at::kFloat,{fibers+1,width,width});
+    buffer(b.fiber.projection_bias,device,at::kFloat,{fibers+1,width});
+    buffer(b.fiber.decay,device,at::kFloat,{fibers});
+    int64_t pool_slots=1;for(const auto n:fiber_nodes)pool_slots=std::max(pool_slots,g.source_counts[n]);
+    for(int64_t i=0;i<fibers;++i) {
+      const auto n=fiber_nodes[i];const auto name="nodes."+std::to_string(n)+".extra.";
+      refs[name+"fiber_qkv"]={13,i*3*width*width,{width,3*width}};
+      refs[name+"fiber_qkv_bias"]={14,i*3*width,{3*width}};
+      refs[name+"fiber_out"]={15,i*width*width,{width,width}};
+      refs[name+"fiber_out_bias"]={16,i*width,{width}};
+      refs[name+"fiber_decay"]={17,i,{}};
+      if(g.nodes[n].memory!="lh-fiber-attention-sum-repeat-v1"&&g.nodes[n].memory!="lh-fiber-attention-mean-repeat-v1") {
+        learned_pool=true;refs[name+"fiber_pool"]={18,i*pool_slots,{g.source_counts[n]}};
+      }
+    }
+    if(learned_pool)buffer(b.fiber.pool,device,at::kFloat,{fibers+1,pool_slots});
+  }
   for(int64_t i=0;i<inputs;++i)refs["input_scale."+std::to_string(i)]={5,i,{}};
   for(int64_t i=0;i<edges;++i)refs["agg_scale."+std::to_string(i)]={5,inputs+i,{}};
   for(size_t i=0;i<g.outgoing_ports.bindings.size();++i) {
@@ -82,9 +107,13 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   const auto lw=lh?b.extra.lh_weights:dummy,lb=lh?b.extra.lh_biases:dummy;
   const auto gate=swiglu?b.extra.gate:dummy,up=swiglu?b.extra.up:dummy,down=swiglu?b.extra.down:dummy;
   const auto aggregate=normalized?b.aggregate.weights:dummy;
+  const auto fq=fibers?b.fiber.qkv:dummy,fqb=fibers?b.fiber.qkv_bias:dummy;
+  const auto fo=fibers?b.fiber.projection:dummy,fob=fibers?b.fiber.projection_bias:dummy;
+  const auto fd=fibers?b.fiber.decay:dummy,fp=learned_pool?b.fiber.pool:dummy;
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
-    ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),ptr(error),count,tasks),
-    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,error});
+    ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),
+    ptr(fq),ptr(fqb),ptr(fo),ptr(fob),ptr(fd),ptr(fp),ptr(error),count,tasks),
+    "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,fq,fqb,fo,fob,fd,fp,error});
   if(!b.attention.empty())append_event_publish(p,b.attention,registry,values,error,budget/2);
 }
 } // namespace tide::device_online

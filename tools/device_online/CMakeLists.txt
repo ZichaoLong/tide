@@ -109,7 +109,7 @@ if(TIDE_DEVICE_ASCENDC)
   add_library(tide-content-flow STATIC content_profile.cpp content_stages.cpp state_vjp.cpp full_vjp.cpp extra_full_vjp.cpp lh_full_vjp.cpp swiglu_vjp.cpp reverse_links.cpp graph_vjp.cpp parameter_vjp.cpp parameter_plan.cpp device_optimizer.cpp optimizer_checkpoint.cpp parameter_publish.cpp
     retained_tape.cpp window_bridge.cpp parameter_accumulate.cpp packed_aggregate.cpp aggregate_vjp.cpp control_forward.cpp control_vjp.cpp
     content_flow.cpp content_export.cpp content_input.cpp device_journal.cpp packed_full.cpp packed_lh_full.cpp packed_emission.cpp packed_swiglu_full.cpp
-    fiber_cache.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
+    fiber_cache.cpp fiber_tape.cpp fiber_reverse.cpp fiber_cache_reverse.cpp packed_fiber_attention.cpp packed_fiber_pool.cpp event_cache.cpp packed_event_attention.cpp tiled_attention.cpp attention_vjp.cpp fiber_vjp.cpp event_layout.cpp event_reverse.cpp event_publish.cpp)
   set_target_properties(tide-content-flow PROPERTIES POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(tide-content-flow PUBLIC tide-device-ready tide-device-broadcast
     tide-device-selector tide-device-queue tide::tidegraph tide-packed-sum tide_state_read_kernel tide_vector_read_kernel tide_read_reduce_kernel
@@ -121,6 +121,8 @@ if(TIDE_DEVICE_ASCENDC)
     tide_event_reverse_reduce_kernel tide_cache_merge_kernel tide_event_publish_kernel
     tide_attention_tile_kernel tide_attention_softmax_kernel tide_attention_merge_kernel
     tide_attention_reverse_plan_kernel tide_attention_reverse_pack_kernel tide_attention_reverse_weights_kernel tide_attention_reverse_reduce_kernel
+    tide_fiber_reverse_links_kernel tide_fiber_reverse_plan_kernel tide_fiber_reverse_pack_kernel tide_fiber_reverse_fold_kernel tide_cache_bias_merge_kernel
+    tide_fiber_vjp_plan_kernel tide_fiber_vjp_pool_kernel tide_fiber_vjp_pack_kernel tide_fiber_vjp_state_kernel tide_fiber_vjp_queries_kernel tide_fiber_vjp_sources_kernel
     tide_aggregate_plan_kernel tide_aggregate_apply_kernel tide_aggregate_vjp_plan_kernel tide_aggregate_vjp_payload_kernel tide_aggregate_vjp_reduce_kernel
     tide_full_vjp_plan_kernel tide_full_vjp_payload_kernel tide_full_vjp_reduce_kernel tide_reverse_links_kernel
     tide_extra_full_plan_kernel tide_extra_full_payload_kernel tide_extra_full_reduce_kernel
@@ -137,6 +139,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-device-attention-vjp-check attention_vjp_check.cpp)
     target_compile_options(tide-device-attention-vjp-check PRIVATE -fPIC)
     target_link_libraries(tide-device-attention-vjp-check PRIVATE tide-content-flow)
+    add_executable(tide-device-fiber-vjp-check fiber_vjp_check.cpp)
+    target_compile_options(tide-device-fiber-vjp-check PRIVATE -fPIC)
+    target_link_libraries(tide-device-fiber-vjp-check PRIVATE tide-content-flow)
     target_compile_options(tide-content-flow-check PRIVATE -fPIC)
     target_link_libraries(tide-content-flow-check PRIVATE tide-content-flow tide-device-test-compare)
     add_executable(tide-content-window-check window_check.cpp)
@@ -261,6 +266,9 @@ if(TIDE_DEVICE_ASCENDC)
     add_executable(tide-resident-event-training-check event_training_check.cpp)
     target_compile_options(tide-resident-event-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-event-training-check PRIVATE tide-resident-test-support)
+    add_executable(tide-resident-fiber-training-check fiber_training_check.cpp)
+    target_compile_options(tide-resident-fiber-training-check PRIVATE -fPIC)
+    target_link_libraries(tide-resident-fiber-training-check PRIVATE tide-resident-test-support)
     add_executable(tide-resident-control-training-check control_training_check.cpp)
     target_compile_options(tide-resident-control-training-check PRIVATE -fPIC)
     target_link_libraries(tide-resident-control-training-check PRIVATE tide-device-test-fixtures tide-resident-test-support tide-resident tide-device-test-compare tide::runtime)

@@ -41,7 +41,7 @@ extern "C" __global__ __aicore__ void tide_graph_reverse_meta(GM_ADDR metadata,G
     for(I i=0;i<capacity;++i)for(I j=0;j<5;++j)cc[i*5+j]=0;
     for(I i=0;i<n[0];++i){cc[i*5]=((__gm__ uint8_t*)full_h)[i];cc[i*5+3]=((__gm__ uint8_t*)full_c)[i];}
   } else if(mode==3) {
-    for(I i=0;i<n[0];++i)for(I m=ch[r[0]+i];m>=0;m=cn[m])on[m]=((__gm__ uint8_t*)state_h)[i];
+    for(I i=0;i<n[0];++i)for(I m=ch[r[0]+i];m>=0;m=cn[m])on[m]|=((__gm__ uint8_t*)state_h)[i];
     for(I node=0;node<nodes;++node)((__gm__ uint8_t*)weight_connected)[node]|=((__gm__ uint8_t*)full_parameters)[node];
     for(I key=0;key<samples*nodes;++key){((__gm__ uint8_t*)decay_accum)[key]|=((__gm__ uint8_t*)state_decay)[key];
       ((__gm__ uint8_t*)retention_accum)[key]|=((__gm__ uint8_t*)state_retention)[key];}

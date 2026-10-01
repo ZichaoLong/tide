@@ -1,6 +1,7 @@
 #pragma once
 #include "state_vjp.h"
 #include "event_tape.h"
+#include "fiber_tape.h"
 #include "full_vjp.h"
 #include "aggregate_tape.h"
 #include "control_vjp.h"
@@ -11,7 +12,7 @@ namespace tide::device_online {
 // Borrowed actual forward journals and frozen static topology/parameter tables.
 // Valid only while the owner lives and before its next advance. This first
 // reverse profile is HARD/HST/SOFTP, built-in Aggregate, broadcast (including phases),
-// identity/EMA/Add/event-attention state and identity/tanh/LH/SwiGLU Full; no CPU event trace is accepted.
+// identity/EMA/Add/event/fiber-attention state and identity/tanh/LH/SwiGLU Full; no CPU event trace is accepted.
 struct ReverseTape {
   const Graph* graph;
   StateTape state;
@@ -23,6 +24,7 @@ struct ReverseTape {
   AggregateTape aggregate;
   ControlTape control;
   std::vector<EventAttentionTape> attention;
+  std::vector<FiberAttentionTape> fiber;
 };
 struct ReverseLinks {
   // Physical rows: all fiber capacity, pending capacity, output capacity.

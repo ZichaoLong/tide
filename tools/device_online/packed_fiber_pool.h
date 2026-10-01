@@ -13,6 +13,8 @@ class PackedFiberPool {
                     const at::Tensor& counts,const ReadyBatch&,const at::Tensor& error,
                     const at::Tensor& chunks) const;
   const at::Tensor& kinds() const {return kinds_;}
+  const at::Tensor& lengths() const {return lengths_;}
+  const at::Tensor& weights() const {return weights_;}
  private:
   int64_t rows_,chunk_,parameters_,slots_,inputs_;
   at::Tensor kinds_,weights_,lengths_,sources_;

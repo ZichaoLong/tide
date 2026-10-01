@@ -17,13 +17,15 @@ void bind_resident_training(py::module_& m) {
     VIEW(ResidentToken,session) VIEW(ResidentToken,index) VIEW(ResidentToken,generation);
   py::class_<ResidentCacheWindow>(m,"CacheWindow")
     VIEW(ResidentCacheWindow,nodes) VIEW(ResidentCacheWindow,key) VIEW(ResidentCacheWindow,value)
-    VIEW(ResidentCacheWindow,lengths) VIEW(ResidentCacheWindow,present);
+    VIEW(ResidentCacheWindow,lengths) VIEW(ResidentCacheWindow,present) VIEW(ResidentCacheWindow,log_bias);
   py::class_<ResidentCacheCotangents>(m,"CacheCotangents").def(py::init<>())
     FIELD(ResidentCacheCotangents,key) FIELD(ResidentCacheCotangents,value)
-    FIELD(ResidentCacheCotangents,key_connected) FIELD(ResidentCacheCotangents,value_connected);
+    FIELD(ResidentCacheCotangents,key_connected) FIELD(ResidentCacheCotangents,value_connected)
+    FIELD(ResidentCacheCotangents,log_bias) FIELD(ResidentCacheCotangents,log_bias_connected);
   py::class_<ResidentCacheGradient>(m,"CacheGradient")
     VIEW(ResidentCacheGradient,nodes) VIEW(ResidentCacheGradient,key) VIEW(ResidentCacheGradient,value)
-    VIEW(ResidentCacheGradient,lengths) VIEW(ResidentCacheGradient,key_connected) VIEW(ResidentCacheGradient,value_connected);
+    VIEW(ResidentCacheGradient,lengths) VIEW(ResidentCacheGradient,key_connected) VIEW(ResidentCacheGradient,value_connected)
+    VIEW(ResidentCacheGradient,log_bias) VIEW(ResidentCacheGradient,log_bias_connected);
   py::class_<ResidentTrainingWindow>(m,"TrainingWindow")
     VIEW(ResidentTrainingWindow,token) VIEW(ResidentTrainingWindow,start) VIEW(ResidentTrainingWindow,stop)
     VIEW(ResidentTrainingWindow,outputs) VIEW(ResidentTrainingWindow,pending_coordinates)

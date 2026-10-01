@@ -14,6 +14,7 @@ struct EventAttentionTape {
 };
 struct CacheCotangents {
   at::Tensor key,value,key_connected,value_connected;
+  at::Tensor bias,bias_connected; // same-fiber log-bias only
 };
 struct CacheGradient : CacheCotangents {
   at::Tensor lengths;

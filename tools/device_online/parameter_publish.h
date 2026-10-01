@@ -10,6 +10,7 @@ struct ParameterBanks {
   FullExtraTape extra;
   AggregateTape aggregate;
   std::vector<EventAttentionTape> attention;
+  FiberParameterBanks fiber;
 };
 // Publish a packed owner vector, including every used alias (HARD Read too).
 // On a sticky reverse/optimizer error this records no live bank writes.

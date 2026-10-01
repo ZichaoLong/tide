@@ -12,13 +12,17 @@ def main():
     parser.add_argument("--full", default="tanh", choices=("tanh", "swiglu", "lh-silu-layer-v1"))
     parser.add_argument("--aggregation", default="sum", choices=("sum", "mean", "weighted_mean", "active_softmax", "all_softmax"))
     parser.add_argument("--mode", default="hard", choices=("hard", "hst", "softp"))
-    parser.add_argument("--memory", choices=("ema", "event"), default="ema")
+    parser.add_argument("--memory", choices=("ema", "event", "fiber"), default="ema")
+    parser.add_argument("--pooling", default="sum", choices=("sum", "mean", "linear", "active-softmax", "all-softmax"))
     args = parser.parse_args()
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
     if args.memory == "event":
         from resident_event_cases import runtime, roots
         r = runtime("pdg", args.device, mode=args.mode)
+    elif args.memory == "fiber":
+        from resident_fiber_cases import runtime, roots
+        r = runtime("pdg", args.device, mode=args.mode, pooling=args.pooling)
     else:
         roots = ordinary_roots
         r = ordinary_runtime("pdg", args.device, full=args.full, aggregation=args.aggregation, mode=args.mode)

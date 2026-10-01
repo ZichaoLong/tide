@@ -1,4 +1,5 @@
-"""Complete event attention/KV training through the public Python client."""
+"""Public fiber training, numerical/cache continuation and independent restart."""
+from functools import partial
 import os
 from pathlib import Path
 import subprocess
@@ -6,7 +7,7 @@ import sys
 import pytest
 import torch
 from resident_training_cases import inputs, tree_equal
-from resident_event_cases import runtime, roots, terms
+from resident_fiber_cases import runtime, roots, terms
 from resident_cache_training import training_case
 
 
@@ -23,19 +24,19 @@ def target():
 @pytest.mark.parametrize("family", ["pdg", "timed-dag", "settle"])
 @pytest.mark.parametrize("schedule", ["streaming", "greedy"])
 @pytest.mark.parametrize("kind", ["sgd", "adamw"])
-def test_event_training(target, family, schedule, kind, tmp_path):
+def test_fiber_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path, runtime=runtime, roots=roots, terms=terms)
 
 
-@pytest.mark.parametrize("mode", ["hst", "softp"])
-@pytest.mark.parametrize("clear", [False, True])
-def test_event_control_and_clear(target, mode, clear, tmp_path):
-    training_case(target, "pdg", "greedy", "adamw", tmp_path, runtime=runtime, roots=roots, terms=terms, mode=mode, clear=clear)
+@pytest.mark.parametrize("pooling", ["mean", "linear", "active-softmax", "all-softmax"])
+@pytest.mark.parametrize("mode", ["hard", "hst", "softp"])
+def test_fiber_pool_control_clear(target, pooling, mode, tmp_path):
+    training_case(target, "pdg", "greedy", "adamw", tmp_path, mode=mode, clear=True,
+                  runtime=partial(runtime, pooling=pooling), roots=roots, terms=terms)
 
 
-
-def test_event_new_process(target, tmp_path):
-    r = runtime("pdg", target)
+def test_fiber_new_process(target, tmp_path):
+    r = runtime("pdg", target, pooling="all-softmax")
     values = torch.arange(16, dtype=torch.float32).reshape(1, 4, 4) * .005
     path, output = tmp_path / "prefix.pt", tmp_path / "suffix.pt"
     with torch.no_grad(), r.training_session(1, optimizer="adamw") as session:
@@ -51,6 +52,6 @@ def test_event_new_process(target, tmp_path):
         assert session.step().applied
         expected = session.checkpoint()
     subprocess.run([sys.executable, str(Path(__file__).with_name("resident_training_worker.py")),
-        "--device", target, "--checkpoint", str(path), "--output", str(output), "--memory", "event"],
-        check=True, timeout=180)
+        "--device", target, "--checkpoint", str(path), "--output", str(output),
+        "--memory", "fiber", "--pooling", "all-softmax"], check=True, timeout=180)
     tree_equal(expected, torch.load(output, weights_only=True))

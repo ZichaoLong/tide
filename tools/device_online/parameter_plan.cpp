@@ -1,4 +1,5 @@
 #include "parameter_plan.h"
+#include "tide/fiber_attention.h"
 #include "packed_lh_full.h"
 #include "packed_aggregate.h"
 #include <algorithm>
@@ -12,6 +13,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   if(nodes<1||width<1||budget<1)throw std::invalid_argument("invalid parameter layout budget/shape");
   std::map<std::string,Ref> by_name;
   const auto attention=event_parameter_offsets(g,width);
+  const auto fiber=fiber_parameter_offsets(g,width);
   bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
@@ -44,6 +46,16 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
       by_name[prefix+"extra.attn_v"]={12,n*4+2,at+width*(width+kv),{width,kv}};
       by_name[prefix+"extra.attn_out"]={12,n*4+3,at+width*(width+2*kv),{width,width}};
     }
+    else if(!node.identity&&is_fiber_attention_profile(node.memory)) {
+      const auto at=fiber[n];
+      by_name[prefix+"extra.fiber_qkv"]={13,n*6,at,{width,3*width}};
+      by_name[prefix+"extra.fiber_qkv_bias"]={13,n*6+1,at+3*width*width,{3*width}};
+      by_name[prefix+"extra.fiber_out"]={13,n*6+2,at+3*width*width+3*width,{width,width}};
+      by_name[prefix+"extra.fiber_out_bias"]={13,n*6+3,at+4*width*width+3*width,{width}};
+      by_name[prefix+"extra.fiber_decay"]={13,n*6+4,at+4*width*width+4*width,{}};
+      if(node.memory!="lh-fiber-attention-sum-repeat-v1"&&node.memory!="lh-fiber-attention-mean-repeat-v1")
+        by_name[prefix+"extra.fiber_pool"]={13,n*6+5,at+4*width*width+4*width+1,{g.source_counts[n]}};
+    }
     else if(!node.identity&&node.memory!="identity")throw std::invalid_argument("parameter state VJP contract unavailable");
     if(!node.identity&&node.emission!="broadcast")throw std::invalid_argument("parameter graph VJP contract unavailable");
   }
@@ -54,7 +66,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
     by_name[(binding.kind?"edge_scale.":"output_scale.")+std::to_string(binding.id)]={4,i,i,{}};
   }
   ParameterPlan out;out.owners=registry.owners();out.has_tanh=tanh;out.has_lh=lh;out.swiglu_count=swiglu;
-  out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();
+  out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();out.fiber_elements=fiber.back();
   std::vector<int64_t> owners,refs,tiles{0};int64_t total=0;
   for(const auto& owner:out.owners) {
     if(owner.value.scalar_type()!=at::kFloat)throw std::invalid_argument("parameter registry must describe FP32 owners");

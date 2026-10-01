@@ -36,6 +36,7 @@ PackedFiberAttention::PackedFiberAttention(const ContentProfile& profile,const C
     :nodes_(profile.graph.nodes.size()),width_(profile.width),parameters_(0),rows_(limits.queue),
      capacity_(limits.kv_rows),max_ticks_(limits.max_repeat_ticks) {
   std::vector<at::Tensor> qkv,bias,out,ob,decay;
+  source_lengths_=profile.graph.source_counts;
   std::vector<int64_t> heads,config;
   for(int64_t n=0;n<nodes_;++n) {
     const auto& node=profile.graph.nodes[n];

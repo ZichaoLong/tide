@@ -107,10 +107,10 @@ class ResidentTrainingSession:
             packed = []
             for values, group in zip(cache, window.cache):
                 values = {} if values is None else dict(values)
-                if set(values) - {"key", "value", "key_connected", "value_connected"}:
+                if set(values) - {"key", "value", "log_bias", "key_connected", "value_connected", "log_bias_connected"}:
                     raise ValueError("unknown cache cotangent field")
                 item = self.runtime.engine.module.CacheCotangents()
-                for name in ("key", "value"):
+                for name in ("key", "value", "log_bias"):
                     value, connected = values.get(name), values.get(name + "_connected")
                     if value is None:
                         if connected is not None:

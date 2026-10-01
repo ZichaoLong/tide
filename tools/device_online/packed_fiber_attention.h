@@ -2,6 +2,7 @@
 #include "content_profile.h"
 #include "device_journal.h"
 #include "packed_fiber_pool.h"
+#include "fiber_tape.h"
 
 namespace tide::device_online {
 struct FiberCache {at::Tensor key,value,bias,lengths;};
@@ -30,9 +31,11 @@ class PackedFiberAttention {
   at::Tensor key_work() const {return key_work_;}
   at::Tensor chunks() const {return chunks_;}
   at::Tensor peak() const {return peak_;}
+  std::vector<FiberAttentionTape> tape() const;
+  FiberParameterBanks banks() const;
  private:
   int64_t nodes_,width_,parameters_,owners_,rows_,capacity_,chunk_,key_rows_,reserved_,max_ticks_;
-  std::vector<int64_t> node_map_,node_heads_,head_groups_;
+  std::vector<int64_t> node_map_,node_heads_,head_groups_,source_lengths_;
   std::vector<bool> adopt_all_,clear_;
   at::Tensor mapping_,heads_,qkv_,qkv_bias_,projection_,projection_bias_,decay_,config_;
   at::Tensor chunks_,peak_,key_work_;

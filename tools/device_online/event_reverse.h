@@ -2,6 +2,8 @@
 #include "parameter_vjp.h"
 
 namespace tide::device_online {
+CacheCotangents append_cache_seed(CannProgram&,const EventAttentionTape&,const CacheCotangents&,
+    const at::Tensor& error,int64_t tensor_budget_bytes);
 struct EventReverse {
   CacheGradient cache;
   at::Tensor previous,tails,ranges,node_offsets;

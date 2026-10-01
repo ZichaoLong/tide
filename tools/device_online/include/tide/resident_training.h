@@ -13,15 +13,19 @@ struct ResidentTrainingLimits {
 struct ResidentToken { uint64_t session=0; Index index=0, generation=0; };
 // Owner order is sample-major, followed by the static nodes list. Key/value
 // are [owners,capacity,kv_heads,head_width]; lengths and present are [owners].
-// Empty-but-present caches may have connected-zero gradients.
+// Empty-but-present caches may have connected-zero gradients. Same-fiber groups
+// additionally expose log_bias [owners,capacity]; event groups leave it undefined.
+// Event groups precede fiber groups, each grouped by head geometry.
 struct ResidentCacheWindow {
   std::vector<Index> nodes;
   Tensor key,value,lengths,present;
+  Tensor log_bias;
 };
-struct ResidentCacheCotangents {Tensor key,value,key_connected,value_connected;};
+struct ResidentCacheCotangents {Tensor key,value,key_connected,value_connected,log_bias,log_bias_connected;};
 struct ResidentCacheGradient {
   std::vector<Index> nodes;
   Tensor key,value,lengths,key_connected,value_connected;
+  Tensor log_bias,log_bias_connected;
 };
 struct ResidentTrainingWindow {
   ResidentToken token;
@@ -75,7 +79,7 @@ struct ResidentStep { bool applied=false; int refusal_code=0; Index generation=0
 
 // Explicit first-order VJP API, separate from eager/autograd and inference.
 // All methods require no-grad; a consumer computes loss/head cotangents outside
-// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add/event-attention state and
+// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add/event/fiber-attention state and
 // identity/tanh/LH/SwiGLU Full. Other adjoints are rejected before the first advance.
 class ResidentTrainingSession {
  public:

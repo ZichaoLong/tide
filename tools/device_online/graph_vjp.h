@@ -18,6 +18,7 @@ struct GraphVjp {
   at::Tensor read,read_connected;
   std::vector<CacheGradient> cache;
   at::Tensor attention,attention_connected;
+  at::Tensor fiber,fiber_connected;
 };
 // Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter

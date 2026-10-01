@@ -47,12 +47,15 @@ CacheCotangents merge(CannProgram& p,const EventAttentionTape& t,const CacheCota
   return out;
 }
 }
+CacheCotangents append_cache_seed(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
+    const at::Tensor& error,int64_t budget) {return merge(p,t,local,nullptr,error,budget);}
 CacheCotangents append_cache_bridge(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
     const CacheGradient& extra,const at::Tensor& error,int64_t budget) {
   return merge(p,t,local,&extra,error,budget);
 }
 EventReverse prepare_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttentionTape& a,
     const CacheCotangents& roots,const at::Tensor& error,int64_t budget) {
+  if(roots.bias.defined()||roots.bias_connected.defined())throw std::invalid_argument("event attention has no log-bias cache roots");
   const auto device=t.state.metadata.device();const int64_t events=t.state.metadata.size(0),rows=a.metadata.size(0),nodes=t.graph->nodes.size();
   const int64_t ps=a.nodes.size(),owners=a.samples*ps;int64_t buckets=1;
   while(buckets<2.L*events){if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("KV reverse hash overflow");buckets*=2;}

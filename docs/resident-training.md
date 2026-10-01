@@ -5,7 +5,7 @@
 qualification status are recorded in [STATUS](STATUS.md); this contract does not
 by itself certify a build, Python client or throughput. The supported adjoint is
 currently single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate, phase-aware broadcast,
-identity/EMA/Add-repeat/event-attention state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
+identity/EMA/Add-repeat/event/fiber-attention state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
 construction. The wider [execution contract](execution-flows.md) remains required.
 The normalized Aggregate implementation and its separate qualification status
 are described in [its VJP contract](resident-aggregate-vjp.md).
@@ -14,7 +14,8 @@ frames, including unselected Read connections and connected-zero HST paths.
 Mode and `zeta` are execution options; HARD remains the default.
 [Event attention/KV adjoints](resident-event-vjp.md) add Q/K/V/O parameters,
 separate key/value roots and initial cache gradients, including retained-window
-links. Fiber attention remains outside the training profile.
+links. [Same-fiber attention adjoints](resident-fiber-vjp.md) add all five pooling
+profiles, repeated-tick decay and separate log-bias roots/initial gradients.
 
 ## Lifecycle and consumers
 
@@ -30,7 +31,7 @@ silently copy them into the caller's original model.
 
 All owner methods require explicit no-grad. This is a first-order VJP interface,
 not an eager autograd node. A consumer computes its head/loss and supplies
-cotangents for the outputs, pending messages, final state and event KV caches of retained windows.
+cotangents for the outputs, pending messages, final state and attention caches of retained windows.
 It may use its own autograd on detached output views; it must not mutate the
 owner's output storage. No particular head, loss or convergence task is required.
 
@@ -63,7 +64,7 @@ for actual incoming leaves. Later windows also expose their incoming pending
 adjoints for inspection; these are already connected to earlier tapes internally.
 Initial-state gradients bind only states present at the generation's initial cut;
 automatic zero initializers do not become caller leaves.
-`initial_cache` follows the same rule for key/value leaves, with independent
+`initial_cache` follows the same rule for key/value and fiber log-bias leaves, with independent
 connection flags and actual initial lengths. Cache groups and owner order are
 defined in [the event VJP contract](resident-event-vjp.md).
 
@@ -143,7 +144,7 @@ passing them in forward order to `backward`. Supplying a value without a mask to
 `cotangents` uses that window's actual presence mask. Omitted value/mask pairs
 mean None. Returned parameter and boundary gradients remain packed on NPU.
 The optional `cache` argument supplies one dictionary per `window.cache` group;
-each dictionary may contain `key`, `value` and their separate connection masks.
+each dictionary may contain `key`, `value`, fiber `log_bias` and their separate connection masks.
 Omitting `cache` disconnects all cache roots. Padding is outside the logical
 cache: losses must select the prefix described by each owner's `lengths`.
 The consumer owns any separate head parameters and optimizer. The original

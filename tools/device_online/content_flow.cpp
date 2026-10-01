@@ -218,7 +218,7 @@ StateTape ContentFlow::state_tape() const {
   const bool repeat=std::any_of(s.profile.graph.nodes.begin(),s.profile.graph.nodes.end(),
     [](const auto& n){return !n.identity&&n.memory=="lh-add-repeat-v1";});
   return {s.events->meta,s.events->values,s.events->count,s.profile.config,s.profile.decay,
-          s.profile.retention,s.profile.clock_policy,s.boundary.batch_size,repeat,s.limits.max_repeat_ticks,bool(s.event_attention)};
+          s.profile.retention,s.profile.clock_policy,s.boundary.batch_size,repeat,s.limits.max_repeat_ticks,bool(s.event_attention)||bool(s.attention)};
 }
 FullTape ContentFlow::full_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("Full tape unavailable on closed/failed content flow");
@@ -233,13 +233,14 @@ ReverseTape ContentFlow::reverse_tape() const {
   auto state=state_tape();auto full=full_tape();const auto& s=*impl_;
   for(const auto& n:s.profile.graph.nodes)
     if((!n.identity&&n.emission!="broadcast")
-        ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"))
+        ||(!n.identity&&n.memory!="identity"&&n.memory!="ema"&&n.memory!="lh-add-repeat-v1"&&n.memory!="attention"&&!is_fiber_attention_profile(n.memory)))
       throw std::invalid_argument("graph reverse module contract unavailable");
   ReverseTape tape{&s.profile.graph,state,full,s.full_trace->values,s.fibers->meta,s.fibers->values,s.fibers->count,
           s.profile.sources,s.profile.scales,s.emission->scales(),s.pending->atoms(),s.outputs->atoms(),
           s.pending->stats().narrow(0,0,1),s.outputs->stats().narrow(0,0,1),s.window_start,s.boundary.cut};
   if(s.aggregate)tape.aggregate=s.aggregate->tape();
   if(s.event_attention)tape.attention=s.event_attention->tape();
+  if(s.attention)tape.fiber=s.attention->tape();
   if(s.limits.mode!="hard")tape.control={s.profile.read,s.raw_full_trace?s.raw_full_trace->values:s.full_trace->values,
     s.limits.mode=="hst"?1:2,s.limits.zeta};
   return tape;
@@ -249,7 +250,8 @@ ParameterBanks ContentFlow::parameter_banks() const {
   // make parameter mutation available through public inference sessions.
   const auto tape=reverse_tape();const auto& s=*impl_;
   return {&s.profile.graph,tape.full.weights,tape.full.biases,s.profile.decay,s.profile.retention,
-          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra,tape.aggregate,tape.attention};
+          s.profile.read,s.profile.scales,s.emission->scales(),tape.full.extra,tape.aggregate,tape.attention,
+          s.attention?s.attention->banks():FiberParameterBanks{}};
 }
 std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");

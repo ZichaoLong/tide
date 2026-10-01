@@ -19,6 +19,11 @@ std::vector<at::Tensor*> tensors(ReverseTape& t) {
     &t.outputs.coordinates,&t.outputs.values,&t.outputs.valid,&t.output_count};
   for(auto& a:t.attention)for(auto* x:{&a.mapping,&a.windows,&a.config,&a.qkv,&a.projection,
       &a.metadata,&a.values,&a.count,&a.key,&a.value,&a.lengths})out.push_back(x);
+  for(auto& f:t.fiber) {
+    auto& a=f.cache;
+    for(auto* x:{&a.mapping,&a.windows,&a.config,&a.qkv,&a.projection,&a.metadata,&a.values,&a.count,&a.key,&a.value,&a.lengths,
+        &f.bias,&f.qkv_bias,&f.projection_bias,&f.decay,&f.pool_kinds,&f.pool_lengths,&f.pool_weights})out.push_back(x);
+  }
   return out;
 }
 }

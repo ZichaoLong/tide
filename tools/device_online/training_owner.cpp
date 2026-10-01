@@ -89,6 +89,10 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
       auto ids=at::tensor(a.nodes,at::kLong).to(s.device);
       result.cache.push_back({a.nodes,a.key,a.value,a.lengths,present.index_select(1,ids).reshape({-1})});
     }
+    for(const auto& f:tape.tape.fiber) {
+      const auto& a=f.cache;auto ids=at::tensor(a.nodes,at::kLong).to(s.device);
+      result.cache.push_back({a.nodes,a.key,a.value,a.lengths,present.index_select(1,ids).reshape({-1}),f.bias});
+    }
     s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=s.bytes_per_window;s.cut=stop;return result;
   }catch(...){s.failed=true;throw;}
 }
