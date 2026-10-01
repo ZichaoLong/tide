@@ -11,7 +11,9 @@ This backend exposes **single/multi-device FP32/FP16 inference**, defaulting to 
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
 broadcast emission in FP32/FP16. [Device-loop peer packets](resident-peers.md)
 and internal remote Full inference are separately qualified. The public placement
-entry point reuses these device completion chains. Current build and device
+entry point reuses these device completion chains;
+[clean7329c71 qualification](evidence/public-sharded-inference-20261002.md) covers
+Python-owned FP32/FP16 and actual standalone FP32 consumers. Current build and device
 verification status is recorded in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
 restricted graph VJP, optimizer and retained-window lifecycle; it does not change

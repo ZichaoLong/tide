@@ -1,0 +1,1064 @@
+{
+  "schema": "tide-sharded-inference-evidence-v1",
+  "source": "7329c71f5f48267fed23a1656a821ae059364b2f",
+  "builds": {
+    "standalone": {
+      "name": "sharded-inference-clean01",
+      "manifest_sha256": "e3349b8efb4f5be6f31c8d508770f764edb7e562b684b42ff6b658ffb16cbe3c",
+      "reuse_sha256": "08f70d17b8eca06bc21fbeaef125ea07a6a4c5f8fe6dc524239e46dc96a04a1a",
+      "component_sha256": "568af9c495789d1a70444769b9e263338aabb2825d6196a8ec08363f1a14b42a",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "101b35bb73a011fc4f961dc42cba7ea2d9a71917a741d924926ff52c5b7f1084",
+        "tide-resident-half-training-check": "0c1ba74da6a2b93718578c96c28e5b6143739fb84bdb11ec1c22442ca04dbaf6",
+        "tide-resident-sharded-session-check": "151402464392031809651a0b1007e08ccab8a117c3783768b384089df42bca86"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "dff334be2aad4ef7bae161fcdc5a6d74161c8920ed449610baa9826b04cca9b2",
+        "tide-resident-half-training-check": "b82a93b2f0e9c3a59fa4b9df97f6c948bed14382ae9f3f1c36df1400373948b3",
+        "tide-resident-sharded-session-check": "0e487f084d561e7e6846e38abcb696a9c71dd1ee128ea19023029ffef91bdf0e"
+      },
+      "kernel_sha256": {
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "173ec7c9cba7362dea085a389d82599613c6a4dd2b6886d82c9a39ba92507ef9",
+      "rebuilt_object_sha256": {
+        "aggregate_vjp.cpp.o": "f17f4b652bc64febe7a94709fae1076acc80f00de90e94c188c155232d0e91a7",
+        "content_export.cpp.o": "4f01242f000c897b06a74f40b504d07597bb89a5130b3c936dac27cc9ba87543",
+        "content_flow.cpp.o": "df3229d5ff006318dcc1ecfa96232cfde559d9b41a6ac06462128f3192907873",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "control_forward.cpp.o": "05987e022189577048e5a8d1b6620ed8b5c1bbafcfa62e53223811d49db40657",
+        "device_optimizer.cpp.o": "83b9e76d2d21cd1d41a4684d07205b288127c112fab26b5fe4f8add72a5cc0e0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "fiber_tape.cpp.o": "1f46dc5c121525a2d06a922ed024ce795980b2c95fbf3b7aef36654f1ee01012",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "packed_aggregate.cpp.o": "e823dd61965eda0bb767a648967966170b86e6d5825ca0d58f55114dd3efa6a6",
+        "packed_emission.cpp.o": "38175200db970107c7efa47651835217d5b5c43c379a3c6c9645f1cb85abc063",
+        "packed_event_attention.cpp.o": "0d22a9a529322def5b8463fb47334bab43e7e0c18a9dedfe7cc743ddba0da1f2",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "parameter_plan.cpp.o": "7217106a1b98b5cc5ad13ea2e0a0e62099d0887096d072eb7a70abf64e5e4ab2",
+        "parameter_publish.cpp.o": "81e3e6f90f21e1f44cf1a12b26e8c2773ba6f4125bc884ccbc8b430514158c03",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "sharded_full.cpp.o": "b18bd6eedef2fd01fc81dc706f4915f046de9976ad9b1a97a9d03e8241a7fec2",
+        "sharded_optimizer.cpp.o": "b5d025f4b1c6a7994e46f652dbed8fcde3dbc3a832309ca23a3e7f8fecea3102",
+        "sharded_parameter_banks.cpp.o": "0485abf793d2c67f4e0be49f00a859f30ed105c17712c60f8e2aaa434fa4d2af",
+        "sharded_parameter_reduce.cpp.o": "65c83bb165d8cd88a29f3ad326c59eb2b6398115786a755bdacab2c763c620e5",
+        "sharded_state.cpp.o": "00fc938a984fa8af152102cfb1373ac3ddd54db2cd732107979b5e8e09c23915",
+        "state_owner.cpp.o": "7cc02195bec640dfaf8d518eea7bb0bcb20fcd9f37e3b9c08cac6bec25e3a796",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused",
+      "all_archive_sha256": {
+        "libtide-content-flow.a": "173ec7c9cba7362dea085a389d82599613c6a4dd2b6886d82c9a39ba92507ef9",
+        "libtide-device-test-fixtures.a": "d0378675af476ee538e6cda87c0b15bcb53491b13b4fcead126da2cc92983d87",
+        "libtide-resident-test-support.a": "372192f547ccc50b4a182a29deaaa1df797279f4e0eba5856ecfc9016dfd7969"
+      },
+      "compiled_objects_sha256": {
+        "aggregate_vjp.cpp.o": "f17f4b652bc64febe7a94709fae1076acc80f00de90e94c188c155232d0e91a7",
+        "content_export.cpp.o": "4f01242f000c897b06a74f40b504d07597bb89a5130b3c936dac27cc9ba87543",
+        "content_flow.cpp.o": "df3229d5ff006318dcc1ecfa96232cfde559d9b41a6ac06462128f3192907873",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "control_forward.cpp.o": "05987e022189577048e5a8d1b6620ed8b5c1bbafcfa62e53223811d49db40657",
+        "device_optimizer.cpp.o": "83b9e76d2d21cd1d41a4684d07205b288127c112fab26b5fe4f8add72a5cc0e0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "fiber_tape.cpp.o": "1f46dc5c121525a2d06a922ed024ce795980b2c95fbf3b7aef36654f1ee01012",
+        "graph_vjp_fixture.cpp.o": "f6d8c0007b587c2dcf5f50841d94d453d50d979cf35dddffaeb74ad8896658a6",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "packed_aggregate.cpp.o": "e823dd61965eda0bb767a648967966170b86e6d5825ca0d58f55114dd3efa6a6",
+        "packed_emission.cpp.o": "38175200db970107c7efa47651835217d5b5c43c379a3c6c9645f1cb85abc063",
+        "packed_event_attention.cpp.o": "0d22a9a529322def5b8463fb47334bab43e7e0c18a9dedfe7cc743ddba0da1f2",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "parameter_plan.cpp.o": "7217106a1b98b5cc5ad13ea2e0a0e62099d0887096d072eb7a70abf64e5e4ab2",
+        "parameter_publish.cpp.o": "81e3e6f90f21e1f44cf1a12b26e8c2773ba6f4125bc884ccbc8b430514158c03",
+        "precision_graph_fixture.cpp.o": "78ffc672a0fc2085b933bc8b2f42691d80c0cab571c2d652894fc7d3e3cdd67e",
+        "precision_training_check.cpp.o": "a812d0598a72829853c605add72b840ddc55c2f7d2e960cd5ad6b290ddeed60c",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "resident.cpp.o": "f8b7172e25ba21dcf3ed919c66df9dfb15280f450a1d12a1d16e16c2ab6c57bf",
+        "retained_cache_fixture.cpp.o": "a2c51f9f341e23c3ea01693a3d0f7601d042de3b5b4634e6f38d670751bd5718",
+        "retained_fixture.cpp.o": "cc4c1558500c636cf6c7fa3f4463eb5e75895ffd61e0e06295621b0dbe04decb",
+        "sharded_full.cpp.o": "b18bd6eedef2fd01fc81dc706f4915f046de9976ad9b1a97a9d03e8241a7fec2",
+        "sharded_optimizer.cpp.o": "b5d025f4b1c6a7994e46f652dbed8fcde3dbc3a832309ca23a3e7f8fecea3102",
+        "sharded_parameter_banks.cpp.o": "0485abf793d2c67f4e0be49f00a859f30ed105c17712c60f8e2aaa434fa4d2af",
+        "sharded_parameter_reduce.cpp.o": "65c83bb165d8cd88a29f3ad326c59eb2b6398115786a755bdacab2c763c620e5",
+        "sharded_session_check.cpp.o": "32736eb7733df711a1785097690b88dcdbb8004e6fe5acdeaba4603e9fb3f50c",
+        "sharded_state.cpp.o": "00fc938a984fa8af152102cfb1373ac3ddd54db2cd732107979b5e8e09c23915",
+        "sharded_training_backward.cpp.o": "b947383c842c5e820c673c0d19c396187f96746d2d1fa6cde67b30142d3cf984",
+        "sharded_training_checkpoint.cpp.o": "4494072e3b8b32fe439e85d4648234a20b026b1aef20fb174cd11ca9170b2996",
+        "sharded_training_owner.cpp.o": "8153bc4e50b99b1af5f623a2fd38a07f3ba21d1c004258352407c3f2d5be176d",
+        "state_owner.cpp.o": "7cc02195bec640dfaf8d518eea7bb0bcb20fcd9f37e3b9c08cac6bec25e3a796",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414",
+        "training_backward.cpp.o": "48696b198744635d6577eebc132ad8444446995632eaca6fc819f8e6837d818d",
+        "training_checkpoint.cpp.o": "77b91b58d91ff06d401c76959ef30960ba9d8b9ef3581604ff3ff5677b728813",
+        "training_compare.cpp.o": "09eb0a8327dbcccc55f4f469a202042d61554cf634ce9ce58f1c1094742e5748",
+        "training_numerics.cpp.o": "717c2cf28f2bd7735e54e00f29735674bacd02e7dcf4e52cbc3b1d679d7c1d9f",
+        "training_owner.cpp.o": "b82019f736f0ee4aacff9c9d391b32ef7d8f0a9f516eb161895e4e17227ee4dc",
+        "training_parameters.cpp.o": "b74aa6970f2fdfa270cd1e8b674caf2da91db56d4a093d4c06f768f2ddc1eb70",
+        "training_test.cpp.o": "c20a2af44f7783f72bd5b999d3a9ef854616d94eff9740aa4bb07c4f16e3682e",
+        "training_trajectory.cpp.o": "1c673c87eb5cc71364ee2904299de7fea40d9877ffc7d91d44fad56781ae8cc7"
+      }
+    },
+    "python": {
+      "name": "sharded-inference-python-clean01",
+      "manifest_sha256": "8aad4fdab43315ecc775f608f6cfa8125de87ff74a01ed1bf7aa9bfc5c44882c",
+      "reuse_sha256": "e9d178523e8cb065ac903d3eedb777889d5aac9f93a8efec14fde2186ca2a181",
+      "component_sha256": "568af9c495789d1a70444769b9e263338aabb2825d6196a8ec08363f1a14b42a",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "a5f40d46ef156eaf3d419273bce2ac1989220395b848f744544dee2178f55f9a",
+        "_tide_resident.so": "19fb1781918d290844577ff1fa29c0580d15d93507548388c43184a4fbb6f719"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "5263d1b98a09b15a421e9296e92d4594d79d00b54182c278b9ee6f3c52b8e5b3",
+        "_tide_resident.so": "d52aceabce1744f64adbe1dc13cdd677cab8272ac19534671a16db475e5c1b06"
+      },
+      "kernel_sha256": {
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "ac53e8f9d14a2f7c00566a65eca1dc962d8fdf9e3d224baaa741a1d00e2c33dd",
+      "rebuilt_object_sha256": {
+        "aggregate_vjp.cpp.o": "f17f4b652bc64febe7a94709fae1076acc80f00de90e94c188c155232d0e91a7",
+        "content_export.cpp.o": "4f01242f000c897b06a74f40b504d07597bb89a5130b3c936dac27cc9ba87543",
+        "content_flow.cpp.o": "df3229d5ff006318dcc1ecfa96232cfde559d9b41a6ac06462128f3192907873",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "control_forward.cpp.o": "05987e022189577048e5a8d1b6620ed8b5c1bbafcfa62e53223811d49db40657",
+        "device_optimizer.cpp.o": "83b9e76d2d21cd1d41a4684d07205b288127c112fab26b5fe4f8add72a5cc0e0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "fiber_tape.cpp.o": "1f46dc5c121525a2d06a922ed024ce795980b2c95fbf3b7aef36654f1ee01012",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "packed_aggregate.cpp.o": "e823dd61965eda0bb767a648967966170b86e6d5825ca0d58f55114dd3efa6a6",
+        "packed_emission.cpp.o": "38175200db970107c7efa47651835217d5b5c43c379a3c6c9645f1cb85abc063",
+        "packed_event_attention.cpp.o": "0d22a9a529322def5b8463fb47334bab43e7e0c18a9dedfe7cc743ddba0da1f2",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "parameter_plan.cpp.o": "7217106a1b98b5cc5ad13ea2e0a0e62099d0887096d072eb7a70abf64e5e4ab2",
+        "parameter_publish.cpp.o": "81e3e6f90f21e1f44cf1a12b26e8c2773ba6f4125bc884ccbc8b430514158c03",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "sharded_full.cpp.o": "b18bd6eedef2fd01fc81dc706f4915f046de9976ad9b1a97a9d03e8241a7fec2",
+        "sharded_optimizer.cpp.o": "b5d025f4b1c6a7994e46f652dbed8fcde3dbc3a832309ca23a3e7f8fecea3102",
+        "sharded_parameter_banks.cpp.o": "0485abf793d2c67f4e0be49f00a859f30ed105c17712c60f8e2aaa434fa4d2af",
+        "sharded_parameter_reduce.cpp.o": "65c83bb165d8cd88a29f3ad326c59eb2b6398115786a755bdacab2c763c620e5",
+        "sharded_state.cpp.o": "00fc938a984fa8af152102cfb1373ac3ddd54db2cd732107979b5e8e09c23915",
+        "state_owner.cpp.o": "7cc02195bec640dfaf8d518eea7bb0bcb20fcd9f37e3b9c08cac6bec25e3a796",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused",
+      "all_archive_sha256": {
+        "libtide-content-flow.a": "ac53e8f9d14a2f7c00566a65eca1dc962d8fdf9e3d224baaa741a1d00e2c33dd"
+      },
+      "compiled_objects_sha256": {
+        "aggregate_vjp.cpp.o": "f17f4b652bc64febe7a94709fae1076acc80f00de90e94c188c155232d0e91a7",
+        "content_export.cpp.o": "4f01242f000c897b06a74f40b504d07597bb89a5130b3c936dac27cc9ba87543",
+        "content_flow.cpp.o": "df3229d5ff006318dcc1ecfa96232cfde559d9b41a6ac06462128f3192907873",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "control_forward.cpp.o": "05987e022189577048e5a8d1b6620ed8b5c1bbafcfa62e53223811d49db40657",
+        "device_optimizer.cpp.o": "83b9e76d2d21cd1d41a4684d07205b288127c112fab26b5fe4f8add72a5cc0e0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "fiber_tape.cpp.o": "1f46dc5c121525a2d06a922ed024ce795980b2c95fbf3b7aef36654f1ee01012",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "packed_aggregate.cpp.o": "e823dd61965eda0bb767a648967966170b86e6d5825ca0d58f55114dd3efa6a6",
+        "packed_emission.cpp.o": "38175200db970107c7efa47651835217d5b5c43c379a3c6c9645f1cb85abc063",
+        "packed_event_attention.cpp.o": "0d22a9a529322def5b8463fb47334bab43e7e0c18a9dedfe7cc743ddba0da1f2",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "packed_swiglu_full.cpp.o": "278bd1664c5b4a254232005d7d67b2d070c156a0da191945cc21665ef1475c82",
+        "parameter_plan.cpp.o": "7217106a1b98b5cc5ad13ea2e0a0e62099d0887096d072eb7a70abf64e5e4ab2",
+        "parameter_publish.cpp.o": "81e3e6f90f21e1f44cf1a12b26e8c2773ba6f4125bc884ccbc8b430514158c03",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "resident.cpp.o": "f8b7172e25ba21dcf3ed919c66df9dfb15280f450a1d12a1d16e16c2ab6c57bf",
+        "resident_bindings.cpp.o": "898ab126c439ba35df3638bbaaed445191ec74a52efaeab00439a2b7b8717ad1",
+        "sharded_full.cpp.o": "b18bd6eedef2fd01fc81dc706f4915f046de9976ad9b1a97a9d03e8241a7fec2",
+        "sharded_optimizer.cpp.o": "b5d025f4b1c6a7994e46f652dbed8fcde3dbc3a832309ca23a3e7f8fecea3102",
+        "sharded_parameter_banks.cpp.o": "0485abf793d2c67f4e0be49f00a859f30ed105c17712c60f8e2aaa434fa4d2af",
+        "sharded_parameter_reduce.cpp.o": "65c83bb165d8cd88a29f3ad326c59eb2b6398115786a755bdacab2c763c620e5",
+        "sharded_state.cpp.o": "00fc938a984fa8af152102cfb1373ac3ddd54db2cd732107979b5e8e09c23915",
+        "sharded_training_backward.cpp.o": "b947383c842c5e820c673c0d19c396187f96746d2d1fa6cde67b30142d3cf984",
+        "sharded_training_checkpoint.cpp.o": "4494072e3b8b32fe439e85d4648234a20b026b1aef20fb174cd11ca9170b2996",
+        "sharded_training_owner.cpp.o": "8153bc4e50b99b1af5f623a2fd38a07f3ba21d1c004258352407c3f2d5be176d",
+        "state_owner.cpp.o": "7cc02195bec640dfaf8d518eea7bb0bcb20fcd9f37e3b9c08cac6bec25e3a796",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414",
+        "training_backward.cpp.o": "48696b198744635d6577eebc132ad8444446995632eaca6fc819f8e6837d818d",
+        "training_bindings.cpp.o": "646724a8412d00819d0eeb0fb2a205e616c96a8fb445638b9d2da307e1eba2f4",
+        "training_checkpoint.cpp.o": "77b91b58d91ff06d401c76959ef30960ba9d8b9ef3581604ff3ff5677b728813",
+        "training_owner.cpp.o": "b82019f736f0ee4aacff9c9d391b32ef7d8f0a9f516eb161895e4e17227ee4dc",
+        "training_parameters.cpp.o": "b74aa6970f2fdfa270cd1e8b674caf2da91db56d4a093d4c06f768f2ddc1eb70"
+      }
+    },
+    "consumer": {
+      "manifest_sha256": "f91eb46e7592a8be1b95d1bc6f8a1202457cac52b478a4fe16e8c95947da1bee",
+      "binary_sha256": "469299da187fe06c7e0e0ddea4e4c05e230bc2d8c0d36d08a5a86d64698930cf",
+      "loader_sha256": "01d6198d63d6d7a9df40b7b9f6f8c8ca6ffa57115f6574e56ec16a5bc85c4b4e",
+      "installed_library_sha256": "101b35bb73a011fc4f961dc42cba7ea2d9a71917a741d924926ff52c5b7f1084",
+      "generated_links_sha256": {
+        "tide-resident": "3657d1ec9d9e3a163ca420c470e117b96360bdbdf7a52500fc5733a43f3aac78",
+        "tide-resident-sharded-session-check": "2b1d89c2cf1de733bb8abe25e75a49e313ef8f94d7c5821676fe20f9e7b46929"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-sharded-inference-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a260ea6227598f49e248aeeb514c5a104581b8d9088c8ca6006cfbab78acee1d",
+        "task.log": "3fc65625099e811ba48e0b0dcc722cfb421ad2adbf2f2481eeaadbb0efc1e53b"
+      }
+    },
+    {
+      "name": "build-sharded-inference-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6c1fe3c8dd0523d6ca6ff5f919e15a4a4ee7d072db6cff0e08b6b49fc690be5a",
+        "task.log": "c9e5b121d6d17dd38598927d83c6f7d9b7fdb27b307a1cd8852e0495367dba09"
+      }
+    },
+    {
+      "name": "build-sharded-inference-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "5d86bdf7960e75b867502ab9984166fc23c831c36f73bd0801ceda701bb8de83",
+        "task.log": "a397a39a6d37df45dcb476561a1e19d1b95900031a016eef6813b351914c5db7"
+      }
+    },
+    {
+      "name": "sharded-inference-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "909b627ac020cfd96c6bc497bae420dc6be311487658992bf921d0eb0714d54c",
+        "task.log": "c9d2cdfd61f1aec66fb79a0e392288e8c04384a34b17e7391beeb1d7702f2b73"
+      }
+    },
+    {
+      "name": "sharded-inference-library-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "e7196ecbadd1f551d8ea67f146b2d6ec943b3d958ea8c1f8f56bdf39111288e1",
+        "task.log": "ef7110dcb7e8dd17bb10d841b16acadeb983ad54864d3aa5622a227a5934fa17",
+        "queue.json": "d65bb232851b5bb8f3f52db869a9e7d2db6e9c3c4f8788af4b68c388a4b6dd91"
+      }
+    },
+    {
+      "name": "sharded-inference-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "3e06702735426e6746124c2166aa46f9b69a24d5bb7937984e306ad2f8a2e664",
+        "task.log": "3aebc18980a900c79086968ded887a03f83acd87fb3e51eca95b7f7001973842",
+        "queue.json": "8dc2b22b4b6a820d0ec3370da7601f25d53c8ea0cb51ca612f811d6f6cc946f4"
+      }
+    },
+    {
+      "name": "sharded-inference-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bfaf7e7b9d79871e22b50a048e1b3b1936b9397d8c00e07f932e484d26dd7a9a",
+        "task.log": "8f889fcc8166cc7f6442901a959c51c2f3670521bd6925227dca87a4c3786a77",
+        "queue.json": "2035b45e18997b1934787a1566764adbcdaa67def067d549b68aa3d396066c90",
+        "profile/result.json": "56cf831ff8fb92751e358bc8ef04661138cc2c48de624a2601dbc282c322d7e1",
+        "profile/profile.log": "3a5253cf8d786cbb8f336464b0eeda23fb1ce2d00fe44aaeb6040f717f73f2f9"
+      }
+    }
+  ],
+  "cpu_checks": 74,
+  "library_cases": 47,
+  "consumer_cases": 27,
+  "skipped": 0,
+  "model_trajectories": [
+    {
+      "implementation": "native",
+      "family": "pdg",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "pdg",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "settle",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "settle",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "timed-dag",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "timed-dag",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "settle",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "settle",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "pdg",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "pdg",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "memory": "add",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "memory": "attention",
+      "training": true,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "pdg",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "native",
+      "family": "pdg",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "libtorch",
+      "family": "settle",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "settle",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "libtorch",
+      "family": "pdg",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "libtorch",
+      "family": "pdg",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "native",
+      "family": "timed-dag",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "native",
+      "family": "timed-dag",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        14,
+        14
+      ],
+      "final_cut": 48
+    },
+    {
+      "implementation": "native",
+      "family": "settle",
+      "memory": "add",
+      "training": false,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    },
+    {
+      "implementation": "native",
+      "family": "settle",
+      "memory": "attention",
+      "training": false,
+      "outputs": [
+        8,
+        8
+      ],
+      "final_cut": 40
+    }
+  ],
+  "model_observations_sha256": {
+    "test_resident_complete_trainin0/observed.json": "27a2a904b8a1608437e863fcd09ca882327651554b4f1dcc97d61ef2b18c96e4",
+    "test_resident_complete_trainin1/observed.json": "1420f548ae380480c89021f95aa5a3020660fd6e8f4402e488fb41007ebab3c2",
+    "test_resident_complete_trainin10/observed.json": "51aa4767bd800c3392cc7baa2d4982be809cb25027868f7173fb3e12cec1f35f",
+    "test_resident_complete_trainin11/observed.json": "c688d3ea90192635566bf628f7386ce16bdcb17ab11bfb8887f30754985e24d9",
+    "test_resident_complete_trainin2/observed.json": "ca40dc07c244dd6a41679ea6b44bcae24284d2afb76a4b2e81e8949b9cb018ba",
+    "test_resident_complete_trainin3/observed.json": "8c018d1df5a3b961419b9f0c990c4e02f875cf00306104bdc3c40906ad29c0c2",
+    "test_resident_complete_trainin4/observed.json": "d1ec586c9fe290b943807816699fb0b97ad4784fa5e046d53501da77a4a74f92",
+    "test_resident_complete_trainin5/observed.json": "43306a06ab8bc62cd65e203be8e041efa0ef86fa475b40764d31e3dce68a0378",
+    "test_resident_complete_trainin6/observed.json": "2d8e2795543577af75aa9d035bc899efee0637a7b3bcdf1a2adbfdf9757717cb",
+    "test_resident_complete_trainin7/observed.json": "00042e10ec0f78f59e0999ee70bfac5ae28695513e88f68038ec6674a673f2e1",
+    "test_resident_complete_trainin8/observed.json": "ddcec9d38157c6f782aa88365baf886e44f5302fd8749fd28746740578dd5207",
+    "test_resident_complete_trainin9/observed.json": "cdc35e93826b8467f8785768bff6219fba4e14d48bfcfb2fde6fad4d7761e0ee",
+    "test_resident_continuous_infer0/observed.json": "f5b0cd691382cf62a8f8667f795316955dfc31e5cadd46e876cae58537f6b637",
+    "test_resident_continuous_infer1/observed.json": "059211987b8dc6f9cb2fd6b86c950b69140364890843c265ceec661bc618dda8",
+    "test_resident_continuous_infer10/observed.json": "add233f3c72eb9ccd811dc98275ca01eebca5e7bdaf62882755f5dde44aab6ee",
+    "test_resident_continuous_infer11/observed.json": "b0dc7bc6403b2e062ec8533d2351727299298f56ab53cfbfa33f2a50c16d7f38",
+    "test_resident_continuous_infer2/observed.json": "c3c5cc8d31e8cf37ac5ce5256c0ffaba0a3d11e970e69d56ac414e9c041cc1dc",
+    "test_resident_continuous_infer3/observed.json": "f8d49bfef32ae0139b23cd1e58e26ed7cb617a2166c15613b887ac97af85c803",
+    "test_resident_continuous_infer4/observed.json": "36e1cacb42b43783b1f24ce6939dd517255dd7cc26ed6b19497222068fa15d92",
+    "test_resident_continuous_infer5/observed.json": "b7003a9569a4ffc553899182ca1ce06c100f96cfbf06aa1c828a937a1caf9bfa",
+    "test_resident_continuous_infer6/observed.json": "a461b1bfe5a563c9436f860442973726f3a2099244a104ac9f41a783874518d8",
+    "test_resident_continuous_infer7/observed.json": "3d5ff9aea304a162316b722794b5a9c6fc60677a431d4edbb86f9f9953fc784c",
+    "test_resident_continuous_infer8/observed.json": "f887b79dbcef2421b48c62daebf16d4c37d64939e1e9a751a81f60b0cc8db0f7",
+    "test_resident_continuous_infer9/observed.json": "09320c702ab2f174dfc5c0b471539713bfd6c2f97f9ec018725768bcb7686309"
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 4790,
+      "AI_CORE": 170,
+      "MIX_AIV": 16
+    },
+    "physical_devices": [
+      9,
+      13
+    ],
+    "operator_counts_by_device": {
+      "13": {
+        "ZerosLike": 72,
+        "OnesLike": 3,
+        "GatherV3": 448,
+        "Sigmoid": 20,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 59,
+        "tide_fiber_chunk": 170,
+        "tide_fiber_pool": 52,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "Equal": 20,
+        "Cast": 20,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 73,
+        "Add": 54,
+        "tide_fiber_indices": 19,
+        "Transpose": 38,
+        "SoftmaxV2": 35,
+        "ScatterUpdate": 47,
+        "tide_full_plan": 28,
+        "Swish": 12,
+        "RmsNorm": 12,
+        "Mul": 12
+      },
+      "9": {
+        "ZerosLike": 280,
+        "Fill": 16,
+        "OnesLike": 3,
+        "GatherV2": 4,
+        "Pack": 10,
+        "IsFinite": 6,
+        "ReduceAll": 6,
+        "tide_queue_propose": 44,
+        "GatherV3": 1345,
+        "Equal": 196,
+        "Cast": 220,
+        "tide_closure": 24,
+        "tide_ready_pack": 24,
+        "Less": 20,
+        "tide_sum_plan": 20,
+        "tide_vector_sum": 20,
+        "tide_state_shard_pack": 40,
+        "Sigmoid": 20,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 60,
+        "tide_fiber_chunk": 174,
+        "tide_fiber_pool": 54,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "ScatterUpdate": 177,
+        "tide_frame_select": 20,
+        "SoftmaxV2": 57,
+        "tide_state_shard_selection": 40,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "tide_state_shard_merge": 60,
+        "tide_full_shard_pack": 40,
+        "tide_full_plan": 32,
+        "Add": 143,
+        "tide_emission_plan": 20,
+        "tide_emission_chunk": 36,
+        "Mul": 60,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 93,
+        "tide_fiber_indices": 20,
+        "Transpose": 40,
+        "Swish": 12,
+        "RmsNorm": 12,
+        "MemSet": 4,
+        "NonZero": 4,
+        "Slice": 8,
+        "FloorDiv": 4,
+        "BroadcastTo": 4,
+        "FloorMod": 4,
+        "MatMulV2": 4,
+        "LogSoftmaxV2": 4,
+        "GatherElementsV2": 4,
+        "ReduceSum": 6,
+        "Neg": 4,
+        "RealDiv": 4
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 4790,
+      "MODEL_MAINTAINCE": 9,
+      "MIX_AIV": 16,
+      "MEMCPY_ASYNC": 2432,
+      "MODEL_EXECUTE": 12,
+      "NOTIFY_WAIT": 332,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 1172,
+      "LABEL_SET": 1696,
+      "NOTIFY_RECORD": 332,
+      "AI_CORE": 170,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 10,
+      "BatchMatMulV2_Tiling": 5,
+      "BroadcastTo_Tiling": 1,
+      "Cast_Tiling": 14,
+      "Equal_Tiling": 12,
+      "Fill_Tiling": 12,
+      "FloorDiv_Tiling": 1,
+      "FloorMod_Tiling": 1,
+      "GatherElementsV2_Tiling": 2,
+      "GatherV2_Tiling": 1,
+      "GatherV3_Tiling": 154,
+      "IsFinite_Tiling": 4,
+      "Less_Tiling": 1,
+      "LogSoftmaxV2_Tiling": 2,
+      "MatMulV2_Tiling": 1,
+      "Mul_Tiling": 5,
+      "Neg_Tiling": 1,
+      "NonZero_Tiling": 8,
+      "OnesLike_Tiling": 4,
+      "Pack_Tiling": 3,
+      "RealDiv_Tiling": 1,
+      "ReduceAll_Tiling": 4,
+      "ReduceSum_Tiling": 4,
+      "ScatterUpdate_Tiling": 13,
+      "Sigmoid_Tiling": 1,
+      "Slice_Tiling": 2,
+      "SoftmaxV2_Tiling": 8,
+      "Swish_Tiling": 1,
+      "Transpose_Tiling": 4,
+      "ZerosLike_Tiling": 51,
+      "aclmdlRIBindStream": 3,
+      "aclmdlRIBuildBegin": 3,
+      "aclmdlRIBuildEnd": 3,
+      "aclmdlRIDestroy": 3,
+      "aclmdlRIEndTask": 3,
+      "aclmdlRIExecuteAsync": 12,
+      "aclmdlRIUnbindStream": 3,
+      "aclnnAdd": 6,
+      "aclnnAddGetWorkspaceSize": 12,
+      "aclnnAdds": 4,
+      "aclnnAddsGetWorkspaceSize": 1,
+      "aclnnAll": 6,
+      "aclnnAllGetWorkspaceSize": 2,
+      "aclnnBatchMatMul": 9,
+      "aclnnBatchMatMulGetWorkspaceSize": 9,
+      "aclnnCast": 13,
+      "aclnnCastGetWorkspaceSize": 13,
+      "aclnnDivs": 4,
+      "aclnnDivsGetWorkspaceSize": 1,
+      "aclnnEmbedding": 4,
+      "aclnnEmbeddingGetWorkspaceSize": 1,
+      "aclnnEqTensor": 12,
+      "aclnnEqTensorGetWorkspaceSize": 12,
+      "aclnnFloorDivides": 4,
+      "aclnnFloorDividesGetWorkspaceSize": 1,
+      "aclnnGather": 4,
+      "aclnnGatherGetWorkspaceSize": 1,
+      "aclnnIndexSelect": 94,
+      "aclnnIndexSelectGetWorkspaceSize": 88,
+      "aclnnInplaceAdd": 10,
+      "aclnnInplaceCopy": 109,
+      "aclnnInplaceCopyGetWorkspaceSize": 109,
+      "aclnnInplaceFillScalar": 16,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 12,
+      "aclnnInplaceIndexCopy": 13,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 13,
+      "aclnnInplaceOne": 6,
+      "aclnnInplaceOneGetWorkspaceSize": 4,
+      "aclnnInplaceZero": 314,
+      "aclnnInplaceZeroGetWorkspaceSize": 51,
+      "aclnnIsFinite": 6,
+      "aclnnIsFiniteGetWorkspaceSize": 2,
+      "aclnnLogSoftmax": 4,
+      "aclnnLogSoftmaxGetWorkspaceSize": 1,
+      "aclnnLtTensor": 1,
+      "aclnnLtTensorGetWorkspaceSize": 1,
+      "aclnnMatmul": 4,
+      "aclnnMatmulGetWorkspaceSize": 1,
+      "aclnnMul": 4,
+      "aclnnMulGetWorkspaceSize": 4,
+      "aclnnMuls": 8,
+      "aclnnMulsGetWorkspaceSize": 2,
+      "aclnnNeg": 4,
+      "aclnnNegGetWorkspaceSize": 1,
+      "aclnnNonzero": 4,
+      "aclnnNonzeroGetWorkspaceSize": 4,
+      "aclnnPermute": 4,
+      "aclnnPermuteGetWorkspaceSize": 4,
+      "aclnnReduceSum": 6,
+      "aclnnReduceSumGetWorkspaceSize": 2,
+      "aclnnRemainderTensorScalar": 4,
+      "aclnnRemainderTensorScalarGetWorkspaceSize": 1,
+      "aclnnRmsNorm": 2,
+      "aclnnRmsNormGetWorkspaceSize": 2,
+      "aclnnRmsNormTiling": 1,
+      "aclnnSigmoid": 2,
+      "aclnnSigmoidGetWorkspaceSize": 2,
+      "aclnnSilu": 2,
+      "aclnnSiluGetWorkspaceSize": 2,
+      "aclnnSoftmax": 7,
+      "aclnnSoftmaxGetWorkspaceSize": 7,
+      "aclnnStack": 10,
+      "aclnnStackGetWorkspaceSize": 3,
+      "aclrtBinaryLoadFromData": 59,
+      "aclrtCreateLabel": 93,
+      "aclrtCreateLabelList": 3,
+      "aclrtCreateNotify": 16,
+      "aclrtCreateStreamWithConfig": 10,
+      "aclrtCtxGetFloatOverflowAddr": 1,
+      "aclrtCtxGetSysParamOpt": 1077,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 93,
+      "aclrtDestroyLabelList": 3,
+      "aclrtDestroyNotify": 32,
+      "aclrtDestroyStream": 6,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 16,
+      "aclrtDeviceEnablePeerAccess": 2,
+      "aclrtFree": 70,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 16,
+      "aclrtGetResInCurrentThread": 740,
+      "aclrtGetStreamAttribute": 700,
+      "aclrtLaunchKernelWithHostArgs": 619,
+      "aclrtMalloc": 63,
+      "aclrtMemcpy": 170,
+      "aclrtMemcpyAsync": 141,
+      "aclrtNotifyGetExportKey": 16,
+      "aclrtNotifyImportByKey": 16,
+      "aclrtNotifySetImportPid": 16,
+      "aclrtRecordNotify": 18,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 776,
+      "aclrtSetLabel": 93,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 55,
+      "aclrtSynchronizeDeviceWithTimeout": 33,
+      "aclrtSynchronizeStream": 164,
+      "aclrtSynchronizeStreamWithTimeout": 22,
+      "aclrtWaitAndResetNotify": 18
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261002045334499_03028952NHPOKFQE/mindstudio_profiler_output/task_time_20261002045343.csv": "18e1cba50a4724fd2c018e4e274392c9b9f93b12900a426feef00787602438a2",
+      "raw/PROF_000001_20261002045334499_03028952NHPOKFQE/mindstudio_profiler_output/op_summary_20261002045343.csv": "883906778cd6b3e482eabe7ca852b1916fc7d3bcd3afc7010780420b95a30836",
+      "raw/PROF_000001_20261002045334499_03028952NHPOKFQE/mindstudio_profiler_output/api_statistic_20261002045343.csv": "ad63a6c24f9f04a0349570894a6381d90336ce11840dddb21b23e88a97b19f62"
+    },
+    "scope": "per-edge-affine attention with embedding/head, public standalone online greedy resident; four continued inference windows without training owner, construction included, diagnostics off; instrumented, not throughput",
+    "aicpu_operators": {},
+    "consumer": {
+      "schema": "tide-online-consumer-v1",
+      "state": "passed",
+      "workload_sha256": "7c379ee613d9c738f0a40a87b1c215450e27114cca893081fa7ee2f09b74b855",
+      "packet_identity": "declared; launcher must verify v2 text against hashed JSON",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "training": false,
+      "optimizer": null,
+      "parameters": 71128,
+      "construction_seconds": 0.95966101,
+      "seconds": [
+        0.17102765,
+        0.016623828
+      ],
+      "warmup_seconds": [],
+      "outputs": [
+        12,
+        12
+      ],
+      "losses": [
+        2.8324365615844727,
+        2.8323898315429688
+      ],
+      "statistics": [
+        {
+          "emission_chunks": 8,
+          "events": 120,
+          "full_chunks": 12,
+          "stages": 10
+        },
+        {
+          "emission_chunks": 8,
+          "events": 121,
+          "full_chunks": 12,
+          "stages": 10
+        }
+      ],
+      "windows_per_step": 2,
+      "warmup_steps": 0,
+      "measured_steps": 2,
+      "input_tokens_per_step": 12,
+      "final_cut": 60,
+      "threads": 1,
+      "parameter_budget": 1073741824,
+      "diagnostics": false,
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "backend": "npu",
+        "resolution_reason": "explicit:npu",
+        "schedule": "prefill",
+        "preset": "resident",
+        "placement": {
+          "control": "npu:0",
+          "events": "npu:0",
+          "payload": "npu:0",
+          "read": "npu:0",
+          "scoring_dtype": "profile",
+          "selection": "npu:0"
+        },
+        "resident": {
+          "runtime_owner": "standalone",
+          "requested_devices": 2,
+          "requested_owner_policy": "locality",
+          "devices": [
+            "npu:0",
+            "npu:1"
+          ],
+          "full_owners": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "state_owners": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "owner_policy": "locality",
+          "chunk_policy": "conservative",
+          "limits": {
+            "aggregate_chunk_rows": 8,
+            "arrivals": 128,
+            "attention_chunk_rows": 8,
+            "attention_key_rows": 128,
+            "backward_bytes": 2147483648,
+            "emission_chunk_rows": 16,
+            "full_chunk_rows": 16,
+            "kv_rows": 128,
+            "kv_trace_rows": 1024,
+            "max_repeat_ticks": 65536,
+            "optimizer_bytes": 134217728,
+            "outputs": 128,
+            "program_workspace_bytes": 67108864,
+            "queue": 128,
+            "retained_bytes": 134217728,
+            "reverse_chunk_rows": 4,
+            "stages": 4096,
+            "trace": 512,
+            "windows": 2,
+            "workspace_bytes": 536870912
+          }
+        }
+      },
+      "timing": "input preparation/upload + online resident graph + packed output head/loss + finite loss check + synchronization; no reference",
+      "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+      "projection_placement": "coordinator; compact projection owners pending"
+    },
+    "workload_sha256": "7c379ee613d9c738f0a40a87b1c215450e27114cca893081fa7ee2f09b74b855",
+    "consumer_sha256": "e80f93ba55a2b91a50d435c8cabdbf6a562f7fafc6ddc0ae1536d0ef0790a476"
+  },
+  "retained_development_failures": [
+    {
+      "name": "sharded-inference-cpu-dev01",
+      "status_sha256": "01dd888eaf48388e659a8ccf6ad6871fdab81e1605ab8469881ff59d3a6edb71",
+      "log_sha256": "d352907fb613146076e9f4868c0740ee6862690e0366f6743298d373e4eb5da2"
+    }
+  ],
+  "public_scope": "Python-owned FP32/FP16 Full/state/KV inference; three families, both schedules, two-to-one/three-owner complete-cut handoff; standalone actual FP32 Add/Attention inference and training regression",
+  "limits": "Projection banks remain coordinator-owned. Not total-memory admission, actual FP16 consumers or formal full-size throughput."
+}

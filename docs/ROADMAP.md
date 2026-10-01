@@ -173,6 +173,13 @@ owners remain pending. Actual FP32 public consumers are qualified on clean0d61cb
 ([evidence](evidence/online-resident-consumers-20261002.md)); full-size performance
 remains pending ([consumer contract](online-consumers.md)). Do not substitute a broadcast model.
 
+F4/F5 public multi-device inference is qualified on clean7329c71
+([evidence](evidence/public-sharded-inference-20261002.md)): CPU74,library47,
+actual consumers27 and a separate two-card inference trace. Full/state/KV
+placement,one/three-card complete-cut restore and Python-owned FP32/FP16 are
+covered; actual consumers remain FP32. Compact projections,total-memory admission
+and F6 remain pending.
+
 F4/F5 local reverse owner/query/key budget splitting is qualified on clean106cbeb
 ([evidence](evidence/resident-reverse-budget-20261002.md)): CPU1,public cache83,
 actual consumers21,32 FP32/FP16 trajectories and a separate actual D32 two-card

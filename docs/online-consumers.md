@@ -106,7 +106,8 @@ Projection banks and physical partial gradients remain on the coordinator.
 Multi-device Full/state/KV and canonical optimizer support does not yet make this
 wide model fully sharded. Compact projection owners and total-memory admission
 remain pending. Local reverse safe splitting is qualified below; public multi-device
-inference qualification is tracked in STATUS. FP16 consumer qualification
+inference is qualified on [clean7329c71](evidence/public-sharded-inference-20261002.md).
+FP16 consumer qualification
 and full-size performance are also pending.
 
 ## Commands and records
