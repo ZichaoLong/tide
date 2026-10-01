@@ -59,5 +59,29 @@ This first implementation retains complete per-event cache journals. Forward,
 retained tape, reverse tensor and CANN workspace budgets are separate and finite;
 capacity refusal is explicit. It does not silently truncate KV, roots or the
 differentiation horizon. Cache dependency loops can have more iterations than
-forward prefill. Storage/recomputation optimization, FP16 and peer training are
-separate work in ROADMAP, not claims established by this implementation.
+forward prefill. Storage/recomputation optimization, complete FP16 and peer
+training are separate work in ROADMAP.
+
+## FP16 local same-fiber adjoint
+
+The local component accepts one FP32/FP16 dtype for scaled source rows,
+QKV/bias, output projection and proposed KV/log-bias. Pooling banks, public
+cotangents and every returned adjoint stay FP32. Cache adoption, source scaling,
+retained-window links and the public training owner are separate integrations.
+
+Half recomputation preserves each QKV matmul and bias-add rounding. Fiber
+attention scales and rounds Q before the half QK product; it does not move
+that scaling after QK. The local attention adjoint supplies FP32 softmax and
+gradients plus the half-rounded query output. Pooling keeps its complete FP32
+sum, divides mean pooling after summation, then rounds the completed pooled
+value for the output-projection VJP. Pool parameter gradients use the actual
+rounded query outputs. The cache's log-bias already contains its half-rounded
+per-tick forward subtractions; decay/old-bias adjoints accumulate in FP32.
+
+Independent CPU quantized-forward FP32/FP64 autograd checks cover all five
+pooling modes, seven root modes, widths1/4/257, multiple heads, actual NPU-built
+cache values, None/zero and poisoned padding. Replays change source/cache lengths
+in the same program. Half roots are multiplied by256 to expose small gradients;
+half rtol2e-3/atol2e-5 is separate from original FP32 rtol2e-5/atol2e-6.
+Tick and workspace limits refuse explicitly. Component qualification does not
+enable complete half fiber-cache/graph/retained-window training or checkpoints.

@@ -5,6 +5,9 @@ namespace tide::device_online {
 // Local same-fiber adjoint. Rows are already physically scaled, in stable slot
 // order. The proposed cache/bias comes from this candidate's actual forward.
 // Graph adoption/clear and old-cache carry are composed outside this component.
+// Rows/QKV/projection/cache use one FP32 or FP16 payload dtype; pooling banks,
+// public cotangents and all returned adjoints are FP32. Half recomputation keeps
+// QKV/bias, pre-QK query scaling, query output and final pooling rounding.
 struct FiberVjpInput {
   at::Tensor rows,slots,counts;          // [B,S,D], [B,S], [B]
   at::Tensor key,value,bias;            // [B,H,K,d], [B,H,K,d], [B,K]

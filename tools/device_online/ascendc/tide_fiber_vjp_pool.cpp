@@ -2,7 +2,7 @@
 namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_fiber_vjp_pool(GM_ADDR counts,GM_ADDR slots,GM_ADDR kinds,
     GM_ADDR lengths,GM_ADDR weights,GM_ADDR on,GM_ADDR logits,GM_ADDR probabilities,GM_ADDR coefficients,
-    GM_ADDR partials,GM_ADDR gradient,GM_ADDR error,int64_t batch,int64_t sources,int64_t domain,int64_t mode) {
+    GM_ADDR partials,GM_ADDR gradient,GM_ADDR pool_scale,GM_ADDR error,int64_t batch,int64_t sources,int64_t domain,int64_t mode) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)counts);
@@ -15,6 +15,7 @@ extern "C" __global__ __aicore__ void tide_fiber_vjp_pool(GM_ADDR counts,GM_ADDR
   for(I b=0;b<batch;++b) {
     const bool active=((__gm__ uint8_t*)on)[b];
     if(mode==0) {
+      ((__gm__ float*)pool_scale)[b]=active&&k[b]==1?1.f/float(c[b]):1.f;
       for(I j=0;j<domain;++j)l[b*domain+j]=minus_inf;
       if(!active||k[b]<3)l[b*domain]=0.f;
       else if(k[b]==4)for(I j=0;j<n[b];++j)l[b*domain+j]=w[b*domain+j];

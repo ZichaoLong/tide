@@ -53,18 +53,27 @@ complete graph/public FP16 training claims. No full-size speed ratio changed.
 
 ## Active work and next action
 
-Event evidence is ready for its separate commit. Uncommitted next increment:
-FP16 local same-fiber VJP in fiber_vjp.cpp and four fiber_vjp AscendC kernels.
-All adjoints remain FP32. QKV matmul/bias,Q scaling before QK,completed query
-outputs and final pooling must reproduce half rounding. Mean pooling sums
-before dividing; cache bias retains actual half tick rounding. Independent
-CPU quantized-forward checks still need updating. No device result yet for fiber.
-Do not claim integration or remove complete-graph/public guards.
+Event evidence committed/pushed as3a8f2e8. Local FP16 same-fiber VJP is ready
+for implementation commit. fiber_vjp.cpp and four kernels keep adjoints FP32,
+recompute actual half QKV+bias,scale/round Q before half QK,round each query
+output and completed pooling. Mean sums before division. No complete-graph or
+public half training guards removed.
 
-Next: finish local fiber checker, freeze bounded development build and run
-fiber-vjp two dtype cells plus affected FP32 event/fiber training. Use max120s
-lease waits,900s build/600s gate bounds. Then implementation commit,clean immutable
-standalone/Python checks,separate profile,evidence commit. Continue autonomously.
+Development build/gate dev01 and root-amplified checker build/gate dev02 all
+PASSED/exit0:37 configurations/74 replays per dtype,five pooling modes,seven
+root modes,width1/4/257,multihead,None/zero,poison padding,changing lengths,
+bounded tick/budget refusal. Half roots×256,CPU FP32/FP64 references;
+rtol2e-3/atol2e-5 half,original2e-5/2e-6 FP32. FP32 event/fiber regression dev01
+PASSED/exit0:66/172 roots,8/20 trajectories. No fiber failures so far.
+
+Next clean builds at NEW_REV: freeze_run.py --commit NEW_REV --snapshot
+low-precision-fiber-vjp-clean01, launchers/build_precision_fiber_recheck.py
+low-precision-fiber-vjp-clean01 and build_precision_fiber_vjp_python.py
+low-precision-fiber-vjp-python-clean01. Build900s;lease120s;gates/profile600s.
+Then fiber-vjp two dtypes,FP32 event/fiber regression,Python precision/event/fiber
+three modules(61 prior cases),separate half fiber profile. Terminal audit:
+TASK/launchers/precision_fiber_vjp_evidence.py NEW_REV; evidence separate commit.
+Do not claim qualification before terminal results. No full-size speed claim.
 
 Remaining: fiber cache/projection integration,control/graph half adjoints,
 retained windows,master checkpoint/public FP16 training; then peer progression/

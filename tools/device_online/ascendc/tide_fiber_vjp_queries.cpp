@@ -3,8 +3,8 @@ namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_fiber_vjp_queries(GM_ADDR plan,GM_ADDR coefficients,
     GM_ADDR output,GM_ADDR query,GM_ADDR key,GM_ADDR value,GM_ADDR bias,GM_ADDR pool_partial,
     GM_ADDR pooled,GM_ADDR source_gradient,GM_ADDR cache_key,GM_ADDR cache_value,GM_ADDR cache_bias,
-    GM_ADDR pool_gradient,GM_ADDR error,int64_t batch,int64_t sources,int64_t width,int64_t heads,
-    int64_t capacity,int64_t domain,int64_t chunk) {
+    GM_ADDR pool_gradient,GM_ADDR pool_kinds,GM_ADDR error,int64_t batch,int64_t sources,int64_t width,int64_t heads,
+    int64_t capacity,int64_t domain,int64_t chunk,int64_t fp16,float query_scale) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)plan);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -15,6 +15,7 @@ extern "C" __global__ __aicore__ void tide_fiber_vjp_queries(GM_ADDR plan,GM_ADD
     const I i=task/wt,start=(task%wt)*256,b=ids[i*3],r=ids[i*3+1];if(b<0)continue;
     const uint32_t size=width-start<256?width-start:256;
     op.load(x,(__gm__ float*)query,i*width+start,size);
+    if(fp16){AscendC::Muls(x,x,query_scale,size);AscendC::PipeBarrier<PIPE_V>();}
     op.save(x,(__gm__ float*)source_gradient,(b*sources+r)*width+start,size);
   }
   for(I task=AscendC::GetBlockIdx();task<batch*wt;task+=AscendC::GetBlockNum()) {
@@ -22,7 +23,10 @@ extern "C" __global__ __aicore__ void tide_fiber_vjp_queries(GM_ADDR plan,GM_ADD
     op.load(x,(__gm__ float*)pooled,b*width+start,size);
     for(I i=0;i<chunk;++i)if(ids[i*3]==b) {
       op.load(y,(__gm__ float*)output,i*width+start,size);
-      const float coefficient=((__gm__ float*)coefficients)[b*sources+ids[i*3+1]];
+      // Forward mean pools the whole FP32 sum before dividing and rounding;
+      // the query cotangents above still use the ordinary 1/count coefficient.
+      const float coefficient=fp16&&((__gm__ I*)pool_kinds)[b]==1?1.f:
+        ((__gm__ float*)coefficients)[b*sources+ids[i*3+1]];
       AscendC::Muls(y,y,coefficient,size);AscendC::PipeBarrier<PIPE_V>();
       AscendC::Add(x,x,y,size);AscendC::PipeBarrier<PIPE_V>();
     }
