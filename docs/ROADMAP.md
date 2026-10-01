@@ -173,6 +173,11 @@ owners remain pending. Actual FP32 public consumers are qualified on clean0d61cb
 ([evidence](evidence/online-resident-consumers-20261002.md)); full-size performance
 remains pending ([consumer contract](online-consumers.md)). Do not substitute a broadcast model.
 
+F4/F5 local reverse owner/query/key budget splitting is qualified on clean106cbeb
+([evidence](evidence/resident-reverse-budget-20261002.md)): CPU1,public cache83,
+actual consumers21,32 FP32/FP16 trajectories and a separate actual D32 two-card
+profile. Total-memory admission and the F6 performance matrix remain pending.
+
 Apply canonical online greedy algorithms; large blocks when legal, single-action
 fallback and natural streaming degeneration otherwise. Compress logical-time
 recursion into block computation where possible; do not claim universal constant

@@ -54,7 +54,7 @@ Audit: python "$TASK/launchers/online_resident_evidence.py" full0d61cb9 hash.
 
 ## Current change and next commands
 
-Uncommitted implementation: reverse_budget.h centralizes original event/fiber
+Implementation **106cbeb293847e054525fce21f68a8d1c8a13b13** committed/pushed. reverse_budget.h centralizes original event/fiber
 reservation formulas and selects safe physical owner/query/key caps before
 allocation. Logical fibers/KV/loss/update boundaries unchanged; smallest complete
 owner still refuses explicitly. Existing disjoint budgets retained. Backward
@@ -75,25 +75,24 @@ All development jobs terminal PASSED from frozen sources/reverse-budget-dev01:
 D32 auto-selected12 owner/query rows (64 key rows) and matched independent CPU
 full training plus manual1-row execution. No tolerance relaxation. No new failures.
 
-Next commit implementation,push;freeze reverse-budget-clean01 at exact commit.
-Build using launchers/build_reverse_budget.py:
-  reverse-budget-clean01 --reuse-host reverse-budget-dev01
-  reverse-budget-python-clean01 --runtime python --reuse-host reverse-budget-python-dev01
-Then build_online_resident.py --build builds/reverse-budget-clean01
-  --out builds/reverse-budget-consumer-clean01. These fresh links reuse byte-identical
-completed development objects only after recursive source/header validation.
+Fixed source sources/reverse-budget-clean01 at106cbeb: all8 qualification jobs
+terminal PASSED. CPU1,public cache83,actual consumers21; FP32/FP16 matrix16
+trajectories per dtype,512 windows/128 updates total. No skips/tolerance changes.
+Separate D32 Attention two-card profile with requested reverse16 passed and
+selected owner12/query12/key64. Trace14,782 vector/607 AI_CORE/218 MIX_AIV,
+no observed AiCPU;32 model executions,570 notification pairs,2,318 device
+switches,4,552 async copies. Construction included,not formal throughput.
+Audit launchers/reverse_budget_evidence.py full106cbeb hash completed successfully.
+Report/audit: docs/evidence/resident-reverse-budget-20261002.{md,json}.
+Builds reuse recursively byte-verified development host objects and unchanged
+kernels/core,then relink. No test/build/profile jobs live. Do not rerun them.
 
-Fixed-source jobs to launch: reverse-budget-cpu-clean01(test_reverse_budget.py,1),
-reverse-budget-cache-clean01(test_resident_{event,fiber,half}_training.py,83,one card),
-reverse-budget-matrix-clean01(emission_reverse_gates.py --scope matrix,two cards),
-reverse-budget-consumer-clean01(test_online_resident_consumer.py +
-test_online_resident_chunking.py,21,two cards),reverse-budget-profile-clean01
-(profile_resident_consumer.py --preset resident --reverse-chunk-rows16,no development,
-two cards). Use new Python resident build plus placement-npu-python-clean01 core;
-TIDE_ONLINE_DEVICE=npu:0 for consumers,TIDE_RESIDENT_DEVICE=npu:0 for public cache.
-Audit launchers/reverse_budget_evidence.py full implementation hash,write reviewed
-report/update support boundaries,then evidence-only commit/push. No immutable
-qualification claim for this change yet.
+Immediate next implementation: expose already-qualified ContentFlow multi-device
+forward through public ResidentSession,Python GraphRuntime.session and both
+actual inference consumers,without training tapes. Preserve legacy single-device
+constructor,placement through reset/load,and separate requested/resolved records.
+Qualify focused multi-device continuation/restore FP32/FP16 and actual consumers,
+then continue scale preparation. Projection banks remain coordinator-owned.
 
 Continue compact projection owners,total-memory admission,consumer FP16,multi-device
 public inference and representative/full-size F6. Do not end at small qualification.

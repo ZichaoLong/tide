@@ -155,7 +155,7 @@ the largest owner batch that admits at least one query, then the largest query
 batch and key tile that fit. It never retries OOM or truncates a logical fiber,
 KV visibility, loss reduction or retained window. A single owner that cannot fit
 still fails explicitly. This is local safe splitting, not total-memory admission.
-Implementation and qualification status are tracked separately in [STATUS](STATUS.md).
+Qualified on clean `106cbeb`: [reverse budget evidence](evidence/resident-reverse-budget-20261002.md).
 
 Backward results expose `statistics`; consumer step records include
 `reverse_event_*`/`reverse_fiber_*` group counts, requested maximum, effective
