@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T06:54:09.846907+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T07:08:11.262591+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -68,31 +68,44 @@ training remain separately qualified. No new full-size speed ratio.
 
 ## Active work and next action
 
-Commit/push reviewed attention evidence separately. No new active NPU/build jobs;
-the historical CPU Attention job is intentionally paused as recorded below.
-Continue implementing FP16 event/fiber cache and projection adjoints, control/
-graph reverse, retained windows, FP32-master checkpoint/public training. Never
-remove whole-graph/public guards merely because local components passed.
+Uncommitted FP16 event cache/projection adjoints accept half forward banks/cache,
+keep roots/carry/parameter partials FP32 and recompute QKV in actual half before
+local half attention. No complete-graph/public guard removed. New event-vjp
+checker/CMake target/component map uses independent ContentFlow forward journals,
+2 samples/3 events, GQA, widths1/4/7/257,4 adopt/selection/clear variants,
+6 proposal/final-cache None/zero/root modes and streaming/greedy.
 
-Investigation for the next increment:
-- event_reverse.cpp rejects half banks/cache and currently allocates cache
-  cotangents with payload dtype. Keep cache roots/carry/parameter partials FP32.
-- tide_event_reverse_pack.cpp needs half parameter loads, followed by actual half
-  QKV projection recomputation. Saved cache journal is already widened FP32.
-- Local attention now accepts half Q/K/V and returns payload-rounded output
-  widened to FP32 for output-projection gradients. Its internal softmax correction
-  stays unrounded FP32. Do not feed it all-FP32 QK recomputation for a half graph.
-- ContentFlow::parameter_banks().attention exposes actual forward EventAttentionTape
-  even for half; state_tape/full_tape also work. This permits independent local
-  cache/projection tests while reverse_tape() keeps its complete-graph guard.
-- complete()/merge() cache helpers must preserve missing roots and zero gradients;
-  arbitrary poisoned padding stays unread. Bridges/eviction/adoption/clear need
-  explicit tests, not only a projection formula check.
+Development build-low-precision-event-vjp-dev01, event-vjp gate dev01 and
+FP32 event/fiber regression dev01 all PASSED/exit0. Both dtypes51 cases/102
+replays against CPU FP32/FP64; FP32 regression66/172 roots,8/20 trajectories.
+Added isolated cache boundary cases: FP32 sums beyond half range, disconnected
+and connected empty/zero roots, poisoned padding, replay reset, length mismatch,
+invalid lengths/roots and budget refusal. This is not a retained half graph claim.
 
-Then peer progression/communication/training, five-preset screening,
-representative/full-size CPU/mixed/resident performance and version/migration/CUDA
-records. F1–F7 incomplete. Authorization remains active; continue after commits
-without asking to resume. No subagents or requested pause.
+Build and gate low-precision-event-vjp-dev04 PASSED/exit0 from frozen
+TASK/sources/low-precision-event-vjp-dev04; both dtype cells include6 cache
+boundary cases/12 replays/12 refusals. Byte-matched terminal host/kernel reused;
+only checker rebuilt. Preserved test-only failures: build dev02 ambiguous empty
+Tensor assignment, gate dev03 ATen vector-to-bool factory. Fixed with explicit
+Tensor{} and int64-then-bool conversion; no candidate/tolerance change.
+
+This implementation is ready to commit. Next fixed-clean-source builds:
+TASK/launchers/build_precision_event_recheck.py low-precision-event-vjp-clean01
+and build_precision_event_vjp_python.py low-precision-event-vjp-python-clean01.
+Use freeze_run.py --commit NEW_REV --snapshot low-precision-event-vjp-clean01,
+900s build bounds; then independent event-vjp, FP32 event/fiber regression,
+affected Python precision/event/fiber tests and separate half event profile.
+Lease waits max120s; tests/profile600s. Audit using
+TASK/launchers/precision_event_vjp_evidence.py NEW_REV, commit evidence separately.
+No qualification result is claimed yet. Complete half public training guards
+remain, and no new full-size speed ratio is established.
+
+Remaining sequence: fiber cache/projection, control/graph half adjoints,
+retained windows, master checkpoint/public FP16 training; then peer progression/
+communication/training, five-preset screening, representative/full-size
+CPU/mixed/resident performance, version/migration/CUDA records. F1–F7 incomplete.
+Authorization remains active; continue after commits without asking to resume.
+No subagents or requested pause.
 
 ## Environment and bounded execution
 

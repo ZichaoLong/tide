@@ -4,7 +4,7 @@ extern "C" __global__ __aicore__ void tide_event_reverse_pack(GM_ADDR plan,GM_AD
     GM_ADDR values,GM_ADDR proposals,GM_ADDR qkv,GM_ADDR projection,GM_ADDR journal,
     GM_ADDR content,GM_ADDR weights,GM_ADDR output_weights,GM_ADDR cotangent,GM_ADDR projected,
     GM_ADDR query,GM_ADDR key,GM_ADDR value,GM_ADDR connected,GM_ADDR error,
-    int64_t chunk,int64_t width,int64_t heads,int64_t kv_heads,int64_t capacity,int64_t mode) {
+    int64_t chunk,int64_t width,int64_t heads,int64_t kv_heads,int64_t capacity,int64_t mode,int64_t fp16) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)plan);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
@@ -30,8 +30,11 @@ extern "C" __global__ __aicore__ void tide_event_reverse_pack(GM_ADDR plan,GM_AD
       const I length=segment==0||segment==3?width:kv;if(start>=length)continue;
       const uint32_t size=length-start<256?length-start:256;const I param=rows[i*8+2];
       const I offset=segment==0?0:segment==1?width:width+kv;
-      if(f[i*6+segment])op.load(x,(__gm__ float*)(segment==3?projection:qkv),
-        segment==3?(param*width+row)*width+start:(param*width+row)*cols+offset+start,size);
+      if(f[i*6+segment]) {
+        const auto bank=segment==3?projection:qkv;
+        const I at=segment==3?(param*width+row)*width+start:(param*width+row)*cols+offset+start;
+        if(fp16)op.load(x,(__gm__ half*)bank,at,size);else op.load(x,(__gm__ float*)bank,at,size);
+      }
       else {AscendC::Duplicate(x,0.f,size);AscendC::PipeBarrier<PIPE_V>();}
       op.save(x,(__gm__ float*)(segment==3?output_weights:weights),
         segment==3?(i*width+row)*width+start:(i*width+row)*cols+offset+start,size);

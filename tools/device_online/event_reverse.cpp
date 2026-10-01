@@ -24,19 +24,24 @@ CacheCotangents complete(const EventAttentionTape& t,CacheCotangents x) {
     auto& data=*pair.first;auto& flag=*pair.second;
     if(data.defined()!=flag.defined())throw std::invalid_argument("incomplete cache cotangent pair");
     if(data.defined()){tensor(data,device,at::kFloat,t.key.sizes());tensor(flag,device,at::kBool,{owners});}
-    else {data=t.key;flag=at::zeros({owners},t.key.options().dtype(at::kBool));}
+    // A disconnected pointer is never read by cache_merge. Keep even this
+    // sentinel FP32 when the forward cache itself stores half payloads.
+    else {data=at::empty({1},t.key.options().dtype(at::kFloat));flag=at::zeros({owners},t.key.options().dtype(at::kBool));}
   }
   return x;
 }
 CacheCotangents merge(CannProgram& p,const EventAttentionTape& t,const CacheCotangents& local,
     const CacheGradient* extra,const at::Tensor& error,int64_t budget) {
   const auto device=t.key.device();const int64_t owners=t.samples*t.nodes.size(),kv=t.width/t.heads*t.kv_heads;
+  const auto payload=t.key.scalar_type();
+  if(payload!=at::kFloat&&payload!=at::kHalf)throw std::invalid_argument("cache reverse requires FP32/FP16 forward payloads");
   if(budget<1||8.L*t.key.numel()+8.L*owners+1024>budget)throw std::invalid_argument("cache adjoint boundary budget exceeded");
-  tensor(t.key,device,at::kFloat,{owners,t.capacity,t.kv_heads,t.width/t.heads});
-  tensor(t.value,device,at::kFloat,t.key.sizes());tensor(t.lengths,device,at::kLong,{owners});
+  tensor(t.key,device,payload,{owners,t.capacity,t.kv_heads,t.width/t.heads});
+  tensor(t.value,device,payload,t.key.sizes());tensor(t.lengths,device,at::kLong,{owners});
   auto a=complete(t,local),b=extra?complete(t,*extra):a;const auto lengths=extra?extra->lengths:t.lengths;
   tensor(lengths,device,at::kLong,{owners});
-  CacheCotangents out{at::empty_like(t.key),at::empty_like(t.value),at::empty_like(a.key_connected),at::empty_like(a.value_connected)};
+  CacheCotangents out{at::empty(t.key.sizes(),t.key.options().dtype(at::kFloat)),
+    at::empty(t.value.sizes(),t.value.options().dtype(at::kFloat)),at::empty_like(a.key_connected),at::empty_like(a.value_connected)};
   for(auto x:{out.key,out.value,out.key_connected,out.value_connected})p.zero(x);
   for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_cache_merge)(phase?32:1,stream,
     ptr(t.lengths),ptr(lengths),ptr(a.key),ptr(a.value),ptr(a.key_connected),ptr(a.value_connected),
@@ -63,9 +68,10 @@ EventReverse prepare_event_reverse(CannProgram& p,const ReverseTape& t,const Eve
       ||a.width!=t.full.width||48.L*events+8.L*buckets+32.L*owners+8.L*(nodes+1)+8.L*a.key.numel()+4096>budget)
     throw std::invalid_argument("event reverse geometry/tensor budget exceeded");
   const auto kv=a.width/a.heads*a.kv_heads;
+  const auto payload=a.key.scalar_type();
   tensor(a.mapping,device,at::kLong,{nodes});tensor(a.windows,device,at::kLong,{ps});tensor(a.config,device,at::kLong,{ps,2});
   tensor(a.metadata,device,at::kLong,{rows,5});tensor(a.values,device,at::kFloat,{rows,2*kv});tensor(a.count,device,at::kLong,{1});
-  tensor(a.qkv,device,at::kFloat,{ps+1,a.width,a.width+2*kv});tensor(a.projection,device,at::kFloat,{ps+1,a.width,a.width});
+  tensor(a.qkv,device,payload,{ps+1,a.width,a.width+2*kv});tensor(a.projection,device,payload,{ps+1,a.width,a.width});
   EventReverse out;static_cast<CacheCotangents&>(out.cache)=merge(p,a,roots,nullptr,error,budget);
   out.cache.lengths=at::empty_like(a.lengths);out.previous=at::empty({events},a.lengths.options());
   out.tails=at::empty({owners},a.lengths.options());out.ranges=at::empty({events,4},a.lengths.options());
@@ -82,7 +88,9 @@ void append_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttenti
     const at::Tensor& error,int64_t chunk,int64_t budget) {
   const int64_t w=a.width,h=a.heads,kh=a.kv_heads,d=w/h,kv=kh*d,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps,nodes=t.graph->nodes.size();
   const int64_t c=std::min(chunk,owners),cols=w+2*kv;
-  const long double own=4.L*c*(4.L*w*cols+4.L*w*w+8.L*w+4.L*kh*k*d)+128.L*c;
+  const bool half=a.qkv.scalar_type()==at::kHalf;
+  const long double own=4.L*c*(4.L*w*cols+4.L*w*w+8.L*w+4.L*kh*k*d)+128.L*c
+    +2.L*half*c*(2.L*w+w*static_cast<long double>(cols)+cols+2.L*kh*k*d);
   if(c<1||budget<1||own>budget/2.L)throw std::invalid_argument("event reverse batch tensor budget exceeded");
   auto f=a.values.options(),l=a.lengths.options(),b=f.dtype(at::kBool);
   auto plan=at::empty({c,8},l),flags=at::empty({c,6},b),lengths=at::empty({c},l),branch=at::empty_like(error);
@@ -92,6 +100,11 @@ void append_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttenti
   auto wot=at::empty_like(wo),cot=at::empty_like(query),dprojected=at::empty_like(projected);
   auto wt=at::empty({c,cols,w},f),dx=at::empty_like(x),xt=at::empty({c,w,1},f);
   auto dw=at::empty_like(weights),dwo=at::empty_like(wo),ot=at::empty_like(xt);
+  const auto forward=f.dtype(a.qkv.scalar_type());
+  auto fx=half?at::empty(x.sizes(),forward):x,fw=half?at::empty(weights.sizes(),forward):weights;
+  auto fp=half?at::empty(projected.sizes(),forward):projected;
+  auto fq=half?at::empty(query.sizes(),forward):query;
+  auto fk=half?at::empty(key.sizes(),forward):key,fv=half?at::empty(value.sizes(),forward):value;
   const auto head=p.label(),body=p.label(),done=p.label();p.mark(head);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_plan)(1,stream,
     ptr(t.state.metadata),ptr(a.config),ptr(reverse.ranges),ptr(reverse.previous),ptr(reverse.tails),ptr(range),ptr(state.proposal_connected),
@@ -102,13 +115,15 @@ void append_event_reverse(CannProgram& p,const ReverseTape& t,const EventAttenti
   auto pack=[&](int64_t mode) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_pack)(32,stream,
       ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(t.state.values),ptr(state.proposal),ptr(a.qkv),ptr(a.projection),ptr(a.values),
-      ptr(x),ptr(weights),ptr(wo),ptr(u),ptr(projected),ptr(query),ptr(key),ptr(value),ptr(on),ptr(error),c,w,h,kh,k,mode),
+      ptr(x),ptr(weights),ptr(wo),ptr(u),ptr(projected),ptr(query),ptr(key),ptr(value),ptr(on),ptr(error),c,w,h,kh,k,mode,int64_t(half)),
       "pack event attention adjoint operands");},{plan,flags,t.state.metadata,t.state.values,state.proposal,a.qkv,a.projection,a.values,
         x,weights,wo,u,projected,query,key,value,on,error});
   };
-  pack(0);p.batch_matmul(x,weights,projected);pack(1);
+  pack(0);if(half){p.cast(x,fx);p.cast(weights,fw);}
+  p.batch_matmul(fx,fw,fp);if(half)p.cast(fp,projected);pack(1);
+  if(half){p.cast(query,fq);p.cast(key,fk);p.cast(value,fv);}
   p.permute(wo,{0,2,1},wot);p.batch_matmul(u,wot,cot.reshape({c,1,w}));
-  auto local=append_attention_vjp(p,{query,key,value,bias,lengths,cot,on},error,1./std::sqrt(double(d)),std::min<int64_t>(64,k),budget/2);
+  auto local=append_attention_vjp(p,{fq,fk,fv,bias,lengths,cot,on},error,1./std::sqrt(double(d)),std::min<int64_t>(64,k),budget/2);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_fold)(32,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(local.query),ptr(local.key),ptr(local.value),
     ptr(reverse.cache.key),ptr(reverse.cache.value),ptr(dprojected),ptr(error),c,w,h,kh,k),"reverse cache adoption window and clear");},

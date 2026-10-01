@@ -94,5 +94,24 @@ references. Ordinary half tolerances are2e-3/2e-5; the original FP32/FP64 checks
 remain2e-5/2e-6. Two strict half fixtures use different physical key tilings and
 must distinguish missing QK rounding. Empty/short/full prefixes, connected-zero
 roots, poisoned padding, GQA, memory refusal and replay reuse remain checked.
-This local component does not enable half event/fiber cache reverse, complete
-graph backward or public training. Those integrations have separate gates.
+## FP16 event cache and projection components
+
+Event reverse also accepts actual half forward cache/projection banks. The
+candidate independently generates its event/state/cache journals from public
+inputs. Reverse restores half operands and recomputes the QKV projection in
+half, then uses the local attention adjoint above. The output projection VJP
+uses the actual half-rounded attention result. Projection/content gradients,
+cache roots, cache carry and boundary sums remain FP32; disconnected operands
+are sanitized before projection, without evaluating unused parameters.
+
+The event component gate compares its actual journals with independent CPU
+quantized-forward FP32/FP64 autograd. It covers adoption, selection, clear,
+window eviction, GQA, streaming/greedy, independent-owner reverse batches,
+None/zero roots, empty incoming caches, poisoned padding and replay reset.
+Half uses rtol2e-3/atol2e-5; FP32 retains rtol1e-5/atol1e-6. An isolated cache
+boundary gate checks FP32 sums outside the half range, connected empty/zero
+caches and rejection of incompatible lengths, invalid roots and small budgets.
+
+These components do not enable half fiber reverse, complete graph backward,
+retained-window graph training or the public training owner. Each integration
+has a separate gate; isolated cache sums do not certify end-to-end continuation.

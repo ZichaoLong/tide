@@ -127,6 +127,10 @@ CHECKS["attention-vjp"] = ("tide-device-attention-vjp-check", ("float32", "float
 MARKERS["attention-vjp"] = "device-attention-vjp: passed"
 KERNELS["attention-vjp"] = "tide_attention_reverse_"
 
+CHECKS["event-vjp"] = ("tide-device-event-vjp-check", ("float32", "float16"))
+MARKERS["event-vjp"] = "device-event-vjp: passed"
+KERNELS["event-vjp"] = "tide_event_reverse_"
+
 CHECKS["event-training"] = ("tide-resident-event-training-check", ("float32",))
 MARKERS["event-training"] = "resident-event-training: passed"
 KERNELS["event-training"] = "tide_event_reverse_"
