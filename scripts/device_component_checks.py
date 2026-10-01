@@ -177,3 +177,9 @@ MARKERS["fiber-training"] = "resident-fiber-training: passed"
 KERNELS["fiber-training"] = "tide_fiber_reverse_"
 
 KERNELS["peer-sharded-vjp"] = "tide_full_reverse_pack"
+CHECKS["peer-sharded-optimizer"] = ("tide-sharded-optimizer-check", ("float32", "float16"))
+MARKERS["peer-sharded-optimizer"] = "sharded-optimizer: passed"
+KERNELS["peer-sharded-optimizer"] = "tide_owner_gradient_reduce"
+CHECKS["peer-sharded-training"] = ("tide-sharded-training-check", ("float32", "float16"))
+MARKERS["peer-sharded-training"] = "sharded-training: passed"
+KERNELS["peer-sharded-training"] = "tide_owner_parameter_publish"

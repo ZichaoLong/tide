@@ -1,4 +1,5 @@
 #include "sharded_vjp_compare.h"
+#include "sharded_parameter_compare.h"
 #include "precision_graph_profiles.h"
 #include "precision_graph_fixture.h"
 #include "retained_cache_fixture.h"
@@ -43,7 +44,11 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
     gradients[i]=append_sharded_graph_vjp(p,saved[i].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024);
   }
   p.finish();run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph reverse refused");
-  const auto values=test::sharded_owner_observations(f.graph,registry,gradients);
+  ShardedParameterReduce reduction(sharded_parameter_sources(f.graph,registry,gradients,64*1024*1024),
+      placement,error,256*1024*1024,32*1024*1024);
+  reduction.finish();reduction.run();
+  for(const auto& e:reduction.errors())require(!e.cpu().item<int>(),"device canonical owner reduction refused");
+  const auto values=test::sharded_parameter_observations(reduction.gradients());
   for(auto reference_dtype:{at::kFloat,at::kDouble}) {
     Options options;options.mode=emit;auto expected=test::retained_reference_precision(f,mode,reference_dtype,half,options);
     for(const auto& [name,value]:values)test::full_same_precision(value.defined()?value:at::zeros({},at::kFloat),at::full({},value.defined(),at::kBool),expected.gradients.at(name),name.c_str(),half);
@@ -70,9 +75,9 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
     for(const auto& [name,_]:expected.gradients)if(name.rfind("boundary/",0)==0)require(seen[name],"missing external boundary gradient");
   }
   run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph replay refused");
-  auto replay=test::sharded_owner_observations(f.graph,registry,gradients);
+  reduction.run();auto replay=test::sharded_parameter_observations(reduction.gradients());
   for(const auto& [name,value]:values)require(value.defined()==replay.at(name).defined()&&(!value.defined()||at::equal(value,replay.at(name))),"sharded reverse replay accumulated stale gradients");
-  p.close();for(auto& g:gradients)g.full->close();
+  reduction.close();p.close();for(auto& g:gradients)g.full->close();
 }
 }
 int main(int argc,char** argv) {
@@ -98,7 +103,7 @@ int main(int argc,char** argv) {
       test::sharded_vjp_boundaries(d,devices,args.dtype);
     }
     std::cout<<"sharded-graph-vjp: passed trajectories="<<cases<<" windows="<<cases*4<<" devices="<<devices
-      <<" dtype="<<args.dtype<<" CPU=FP32_FP64 after_close=true replay=true scope="<<(smoke?"profile-smoke":"Full_owner_partials_retained_graph_not_optimizer")<<'\n';
+      <<" dtype="<<args.dtype<<" CPU=FP32_FP64 after_close=true replay=true scope="<<(smoke?"profile-smoke":"device_canonical_owners_retained_graph_not_optimizer")<<'\n';
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

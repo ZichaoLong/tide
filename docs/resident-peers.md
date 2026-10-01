@@ -136,16 +136,70 @@ the constructing thread before any boundary wait. Empty/error windows still
 terminate every service via a device command. Replay resets per-window partials
 and work counters; capacity and malformed-tape errors remain explicit. Parameter
 partials are physical Full-node contributions, not independently trainable copies
-of shared parameters. Shared-owner reduction and atomic multi-device optimizer
-publication are subsequent, separately qualified responsibilities.
+of shared parameters. Canonical owner reduction and atomic optimizer publication
+are separate phases described below.
 
 The standalone `--checks peer-sharded-vjp` gate requires two visible NPUs and is
 excluded from default single-device checks. Its checker also accepts
 `--full-shards=1|2|3|4` and `--full-placement=memory|locality`. It reuses independent
 CPU FP32/FP64 retained-graph oracles, both payload precisions, None/zero roots,
 normalized Aggregate, mixed Full, control modes and attention cache fixtures.
-The comparison adapter downloads completed partials and sums aliases only for
-assertions; these CPU values never feed the candidate or an optimizer. This gate
-therefore verifies retained graph VJPs, not device alias reduction, multi-device
-training steps, a public training client or throughput. Passing source-specific
-evidence is recorded separately in STATUS/ROADMAP.
+The current checker downloads completed canonical device gradients for assertions;
+no CPU sum feeds a candidate. Earlier evidence retains its original partial-only
+scope. Passing source-specific evidence is recorded separately in STATUS/ROADMAP.
+
+## Canonical owners and complete internal training steps
+
+`sharded_parameter_sources` maps the actual retained reverse results to the
+registry's TensorImpl owners, in reverse-window and alias order. It reads static
+shapes/identities only. `ShardedParameterReduce` places canonical owners by
+stable largest-first FP32 storage cost, independently of Full-node placement.
+Each device pair packs one group of numerical partials and connection bits.
+The receiving device reduces each owner in the declared order, without atomics.
+None payloads are not read; connected zero remains an observable connection.
+
+Static gather/publication descriptors contain addresses of retained tensors on
+the same NPU. They are not checkpoints and never directly name remote memory.
+Cross-device copies use `PeerExchange` and a common device-pair order. Each
+canonical gradient/master is stored once; aliases on other forward owners do
+not acquire independent optimizer states. Groups are validated globally before
+partitioning, including aliases and explicit empty subsets. Distinct TensorImpl
+owners sharing storage are refused across the entire optimizer, not just within
+one partition. Empty registries and devices without trainable owners are valid.
+
+`DeviceOptimizer` separates proposals from commit. Every owner first checks
+its update, slots, int64 counters and payload representability. Device error
+consensus then broadcasts one decision before any master, slot or counter can
+change. A numerical refusal updates no card. This is not a distributed recovery
+protocol for hardware/runtime failure; a failed runtime must be discarded.
+
+`append_publish` packs only masters used by each receiving card and publishes all
+its aliases after the common decision. The explicit `sharded_parameter_banks`
+view includes compact Full rows, coordinator state/Read/scales, strided event
+Q/K/V and same-fiber parameters. HARD Read aliases are updated even when their
+own Read use has no VJP. FP32 masters/slots persist; FP16 banks receive rounded
+values, and FP32 normalization banks receive that rounded value widened again.
+Publication is gated by the same error, including None/zero and half-overflow
+refusals. No CPU parameter export/reconstruction participates between updates.
+
+All tensor groups have explicit admission budgets; per-program operator arenas
+have separate bounds. Exceeding capacity fails before large buffer allocation.
+Replay replaces previous partials and error decisions rather than accumulating
+stale gradients. Host construction/submission and complete-boundary reporting
+are allowed; no numerical result controls a host branch inside these programs.
+
+`--checks peer-sharded-optimizer peer-sharded-training` requires two visible
+NPUs, is excluded from default single-device checks, and tests FP32/FP16.
+Executables additionally accept `--full-shards=1|2|3|4`; the training checker
+accepts generic memory/locality Full placement. The optimizer gate tests global
+finite/overflow rejection, shared-owner groups, None/zero and empty partitions.
+The training gate executes four updates, each retaining four real windows,
+against independent CPU FP32/FP64 references and their own continuations. It
+checks gradient/slot/counter parity, exact master-to-bank publication, and that
+a refused update changes no live bank. Profiling smoke is a separate subset,
+not throughput evidence.
+
+This closes an internal Full-sharded training mechanism once qualified. Online
+forward scheduling and state/KV still reside on the coordinator. Whole-model
+state/KV placement, public multi-device training/checkpoint clients and medium/
+full-size consumer throughput remain separate work under the execution contract.

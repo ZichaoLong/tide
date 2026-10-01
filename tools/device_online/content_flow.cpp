@@ -324,4 +324,13 @@ std::pair<Tensor,Tensor> ContentFlow::state_device() const {
   if(!impl_||impl_->failed)throw std::logic_error("state view unavailable on closed/failed content flow");
   return {impl_->state.values,impl_->state.present};
 }
+ShardedParameterBanks ContentFlow::sharded_parameter_banks() const {
+  const auto state=state_tape();const auto& s=*impl_;
+  if(!s.sharded_full)throw std::invalid_argument("sharded publication requires explicit Full shards");
+  validate_reverse_modules(s.profile.graph);
+  ParameterBanks b{&s.profile.graph,{},{},s.profile.decay,s.profile.retention,s.profile.read,s.profile.scales,s.emission->scales(),{},
+    s.aggregate?s.aggregate->tape():AggregateTape{},s.event_attention?s.event_attention->tape():std::vector<EventAttentionTape>{},
+    s.attention?s.attention->banks():FiberParameterBanks{}};
+  return {std::move(b),s.sharded_full->tapes(state.samples,s.profile.width)};
+}
 } // namespace tide::device_online

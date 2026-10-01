@@ -60,24 +60,35 @@ single-device FP16 training0095048 remain qualified. Prior raw failures are reta
 
 ## Current work and next action
 
-Fusion evidence/STATUS/ROADMAP are ready to commit and push. Continue afterwards.
-Untracked draft for next canonical owner increment:
-- sharded_parameter_sources.h/.cpp maps actual per-window Full/coordinator
-  partials to global registry owners in reverse-window/alias order and assigns
-  canonical owners with deterministic LPT. Static tensor views only,no host
-  numerical gradient reads. Metadata budget is separate from partition tensors.
-- owner_gradient_packet.h/.cpp and ascendc/tide_owner_gradient_pack.cpp,
-  ascendc/tide_owner_gradient_reduce.cpp draft one packed gather/reduce per group.
-  The source pointer descriptors refer only to retained tensors on the same NPU;
-  cross-card copying must use PeerExchange. None payloads are not evaluated.
+Implementation ready to commit/push: canonical device owner reduction,globally
+validated groups/shared-storage refusal,all-device finite consensus,FP32 master
+SGD/AdamW and packed publication to used aliases. Explicit sharded bank views
+cover HARD Read,strided QKV and FP16 values widened into FP32 normalization banks.
+No CPU numerical gradients/masters feed candidates. State/KV remain coordinator-
+owned; public multi-card training/whole-model placement are not delivered yet.
 
-These drafts are NOT wired into CMake or built/tested. Next implement bounded
-per-source/per-target packet assembly and ordered owner reduction on the assigned
-cards,then global finite/error decision before any optimizer commit and publication
-to all aliased banks. Reuse actual graph/retained fixtures and independent CPU
-oracles;no CPU comparison sum may become a candidate training input. Check budget,
-None/zero,aliases across Full and state/Read,FP32 masters/slots and FP16 publication.
-Do not call the draft a functioning reduction or complete training.
+Development PASSED:
+- build canonical-owners-dev02 and canonical-owners-dev02 gate: FP32/FP16 retained
+  canonical VJP each50 trajectories/200 windows plus original optimizer gates.
+- build canonical-owners-dev05 and canonical-training-dev05 gate: global optimizer
+  each4 trajectories/32 updates; actual graph training each40 trajectories/
+  640 windows/160 updates,independent CPU FP32/FP64,exact alias publication,
+  None/zero,empty partitions,nonfinite/half-overflow atomic refusals,continuation.
+
+Retained development failures: dev01 test initializer missing brace;dev03 empty-
+partition test's64KiB arena versus required77312bytes (raised only test arena to
+1MiB);graph-training-dev03 CPU byte assertion on0-d Float bank (reshape fixed).
+No candidate numerical failure or tolerance change. All development jobs terminal.
+
+Next after implementation commit: freeze canonical-owners-clean01 at exact HEAD;
+standalone build reuses hash-matched passed dev05 host objects and dev02 kernels;
+Python-owned build rebuilds affected8 host objects against its own runtime.
+Qualify affected8 standalone cells,3-card memory/locality smoke and profile,
+1-owner training smoke and single-card public half-cache regression. Configure
+standard CMake targets; audit hashes/terminal records,then evidence commit/push.
+Use existing launchers/build_canonical_owners.py,freeze_run.py and
+sharded_training_policy_smoke.py. Builds900s,gates120s queue/600s run. Continue
+F1–F7 afterwards; no user pause instruction. No unchanged full CPU/96-Python rerun.
 
 Before formal performance,resolve historical CPU Attention's retained memory and
 timing lock deliberately;do not blindly resume/kill. Additional CANN environments,

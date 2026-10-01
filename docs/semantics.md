@@ -208,6 +208,12 @@ The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
 and complete-cut training exports for its declared FP32/FP16 payload profiles,
 with FP32 cotangents and optimizer masters.
+The internal [Full-sharded training composition](resident-peers.md#canonical-owners-and-complete-internal-training-steps)
+reduces aliases into one canonical FP32 master owner, reaches an all-device
+finite/representability decision before committing, and publishes rounded values
+to every used forward alias. State/KV remain on the coordinator. Its independent
+qualification does not certify public multi-device training/checkpoint clients
+or complete model sharding; graph identities and checkpoint schemas are unchanged.
 Internal FP16 state, normalized Aggregate and identity/tanh/LH/SwiGLU Full adjoints retain the actual
 quantized forward operands/results and use FP32 cotangents/accumulation. Their
 cast VJP is the ordinary first-order identity, not a derivative of rounding's

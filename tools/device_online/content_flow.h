@@ -8,6 +8,7 @@
 #include "parameter_publish.h"
 #include "full_placement.h"
 #include "full_shard_tape.h"
+#include "sharded_parameter_banks.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -52,6 +53,7 @@ class ContentFlow {
   ReverseTape reverse_tape() const; // Declared training profile; actual journals only.
   ShardedReverseTape sharded_reverse_tape() const; // Explicit compact multi-device banks.
   ParameterBanks parameter_banks() const; // Internal explicit training owner only.
+  ShardedParameterBanks sharded_parameter_banks() const;
   std::pair<Tensor,Tensor> state_device() const; // Borrowed values/presence, no CPU export.
   void close(); // Explicit checked drain; all operations except close then fail.
  private:

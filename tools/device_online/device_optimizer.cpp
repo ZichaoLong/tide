@@ -86,6 +86,11 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   flags_=at::tensor(flags,at::kLong).reshape({-1,tide_device::FLAG_COUNT}).to(device);
 }
 void DeviceOptimizer::append_step(CannProgram& p,const ParameterVjp& g,const at::Tensor& error) {
+  append_propose(p,g,error);append_commit(p,g,error);
+}
+void DeviceOptimizer::append_propose(CannProgram& p,const ParameterVjp& g,const at::Tensor& error){append_phase(p,g,error,false);}
+void DeviceOptimizer::append_commit(CannProgram& p,const ParameterVjp& g,const at::Tensor& error){append_phase(p,g,error,true);}
+void DeviceOptimizer::append_phase(CannProgram& p,const ParameterVjp& g,const at::Tensor& error,bool commit) {
   const auto device=values_.device();buffer(error,device,at::kInt,{1});
   buffer(g.values,device,at::kFloat,values_.sizes());buffer(g.connected,device,at::kBool,steps_.sizes());
   if(at::GradMode::is_enabled()||g.offsets!=identity_.offsets||g.owners.size()!=identity_.owners.size())
@@ -99,15 +104,18 @@ void DeviceOptimizer::append_step(CannProgram& p,const ParameterVjp& g,const at:
   auto plan=[&](int64_t mode){p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_plan)(1,stream,
     ptr(table),ptr(options),ptr(g.connected),ptr(steps),ptr(corrections),ptr(nt),ptr(nc),ptr(errors),ptr(error),count,tasks,kind,mode),
     "device optimizer preflight/finite gate");},{table,options,g.connected,steps,corrections,nt,nc,errors,error});};
+  if(!commit) {
   plan(0);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_values)(32,stream,
     ptr(table),ptr(tiles),ptr(options),ptr(flags),ptr(g.values),ptr(g.connected),ptr(values),ptr(first),ptr(second),ptr(maximum),ptr(steps),ptr(nc),
     ptr(nv),ptr(nf),ptr(ns),ptr(nm),ptr(errors),ptr(error),count,tasks,kind),"packed device optimizer proposals");},
     {table,tiles,options,flags,g.values,g.connected,values,first,second,maximum,steps,nc,nv,nf,ns,nm,errors,error});
   plan(1);
+  } else {
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_commit)(32,stream,
     ptr(table),ptr(tiles),ptr(options),ptr(flags),ptr(g.connected),ptr(values),ptr(first),ptr(second),ptr(maximum),ptr(steps),ptr(corrections),
     ptr(nv),ptr(nf),ptr(ns),ptr(nm),ptr(nt),ptr(nc),ptr(error),count,tasks,kind),"commit finite device optimizer owners");},
     {table,tiles,options,flags,g.connected,values,first,second,maximum,steps,corrections,nv,nf,ns,nm,nt,nc,error});
+  }
 }
 } // namespace tide::device_online
