@@ -26,7 +26,7 @@ resources/stops. No duplicate tracking or Trackio blocker. Training means
 forward/loss interface/backward/VJP/optimizer/continuation/throughput; downstream
 model convergence is outside this foundation's delivery scope.
 Use affected-path development checks and byte-verified terminal build reuse.
-Do not rerun the unchanged portable core's8,954 CPU checks/23 optional skips.
+Do not rerun the unchanged portable core's 8,954 CPU checks/23 optional skips.
 Commit implementation, qualify clean immutable source, commit evidence separately.
 
 ## Qualified attention milestone
@@ -68,50 +68,35 @@ regression uses conditioned controls (13 frames,max4.470348e-6); new attention
 checks remain strict. RMSNorm eps1e-8 near-zero strict trajectory failure remains
 in the earlier evidence. Width257 SwiGLU declares2GiB reverse budget.
 
-## FP16 component increment — development passed, commit next
+## FP16 component qualification and next work
 
-Working tree contains explicit CANN FP32/FP16 conversion, real half PackedFull /
-PackedLhFull buffers and byte budgets, FP16 scalar/vector packed sum with FP32
-products/ordered accumulation, and shared vector tile conversion overloads.
-Full/LH selection/chunk logic remains shared with FP32; inactive NaN and exact
-int64 metadata checks remain. Entire resident session FP16 is still refused.
-The normal build script now supports explicit standalone --checks and records
-only the requested binaries; Full/LH have separate CMake targets. Omitted
---checks retains the complete build. Docs describe the component-only boundary.
+Implementation466b4c3e89d71adf4ca48d188638b93089841748 and prior attention
+evidence6cb3e2d are pushed. Clean standalone subset qualification is complete:
+[evidence](evidence/resident-fp16-components-20261001.md),
+[audit](evidence/resident-fp16-components-20261001.json).
+All five clean jobs terminal PASSED/exit0:
+- build-low-precision-components-clean01:normal --checks numerical full packed-lh
+  sum,two workers,fresh CANN archive,one applicable CTest,loader closure.
+- low-precision-components-clean01:all eight requested FP32/FP16 cells.
+- low-precision-{full,lh,sum}-profile-clean01:separate bounded half traces.
+Snapshot/build suffix low-precision-components-clean01; fixed clean466b4c3.
+Full32 cases/dtype; LH40 cases/9 profiles/536 normalized rows/dtype;
+sum72 configurations/144 replays/18 refusals/dtype. Sum FP32 products/ordered
+accumulation,half payload/output. LH conditioning budgets remain explicit:
+FP16 CPU/device-vs-FP64 max abs0.0276378,270 strict component misses;
+FP32 thresholds unchanged. Profiles Full544 vector+24 AI_CORE,LH5364 vector,
+sum1205 vector tasks; no observed AiCPU/logged fallback,not throughput.
+TASK/launchers/low_precision_components_evidence.py verified source/core/build/
+loader/log/CSV identities and exact eight-cell inventory. No new live jobs.
+Development jobs dev01–04 remain terminal passed; raw records preserved.
 
-All development jobs below are terminal PASSED/exit0:
-- build-low-precision-components-dev01 / low-precision-components-dev01:
-  recompiled host units with byte-verified qualified Full planner reuse;
-  numerical/full FP32/FP16 passed. Separate low-precision-full-profile-dev01:
-  544 AI_VECTOR_CORE/24 AI_CORE tasks,no AiCPU/logged fallback.
-- build-low-precision-components-dev02 / low-precision-components-dev02:
-  normal directed build,no reused CANN archive,one CTest,four dtype cells passed.
-- build-low-precision-components-dev03 / low-precision-components-dev03:
-  normal numerical/full/packed-lh build,one CTest,six dtype cells passed.
-  Full32 cases per dtype; LH40 cases/9 profiles/536 norm rows per dtype.
-  FP16 LH max CPU/device-vs-FP64 abs0.0276378 in conditioned fixtures;
-  separate half budget,FP32 thresholds unchanged. low-precision-lh-profile-dev03:
-  5364 AI_VECTOR_CORE tasks,no AiCPU/logged fallback.
-- build-low-precision-sum-dev04 / low-precision-sum-dev04:
-  normal --checks sum build,both dtypes passed (72 configurations/144 replays/
-  18 refusals per dtype,widths1..2048,tails,empty/zero/NaN isolation).
-  low-precision-sum-profile-dev04 passed separately:1205 AI_VECTOR_CORE tasks,
-  no AiCPU/logged fallback. All three profiles include CPU assertions,not throughput.
-
-Sources/builds use the same suffix under TASK/sources and TASK/builds.
-Earlier Full/LH production bytes match dev03; subsequent changes affect sum,
-shared vector helper and registry/build selection only. Current sum bytes match
-low-precision-sum-dev04. These are dirty-source development checks,not a clean
-complete-resident FP16 qualification. No new job remains live.
-
-Attention evidence commit6cb3e2d is pushed.
-Next: commit/push the tested FP16 component increment,then use a clean exact source
-with scripts/build_device_control.py --checks numerical full packed-lh sum
-(standalone core below,Ascend910_9392,jobs2,new build dir). Qualify that explicit
-subset; do not call it full resident support. Continue FP16 state/attention/Read/
-VJP/master publication and complete sessions,peer progression/communication/
-training,representative five-preset screening and full-size CPU/mixed/resident
-comparisons,then migration/version/CUDA-pending evidence per F1–F7.
+Next implementation:FP16 state/Read and remaining Full/emission components,
+then Aggregate/attention/VJP/master publication and complete sessions. Public
+resident session FP16 is still refused. Full FP32 resident gates were last
+qualified at66a6ca5;466b4c3 needs affected graph/library integration checks at the
+next milestone. Continue peer progression/communication/training,representative
+five-preset screening and full-size CPU/mixed/resident comparisons,then
+migration/version/CUDA-pending evidence under F1–F7. No full-size speed claim.
 
 ## Environment and bounded execution
 

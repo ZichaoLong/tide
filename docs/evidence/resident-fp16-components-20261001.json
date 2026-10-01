@@ -1,0 +1,214 @@
+{
+  "schema": "tide-low-precision-components-evidence-v1",
+  "source": "466b4c3e89d71adf4ca48d188638b93089841748",
+  "scope": "standalone C++ FP32/FP16 numerical, Full, nine LH profiles and sum components only; no complete resident FP16, backward, peers, whole-library regression or throughput claim",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0",
+    "npu_runtime": "standalone"
+  },
+  "checks": {
+    "cells": 8,
+    "build_ctests": 1,
+    "full_cases_per_dtype": 32,
+    "lh_cases_per_dtype": 40,
+    "lh_profiles": 9,
+    "lh_norm_rows_per_dtype": 536,
+    "sum_configurations_per_dtype": 72,
+    "sum_replays_per_dtype": 144,
+    "sum_refusals_per_dtype": 18
+  },
+  "numerical_policy": {
+    "sum_products_and_ordered_accumulation": "float32",
+    "storage_and_output": "requested dtype",
+    "lh_statistics": "float32",
+    "fp32_thresholds_unchanged": true,
+    "lh_fp16_cpu_and_device_vs_fp64_max_abs": 0.0276378,
+    "lh_fp16_strict_component_misses": 270,
+    "lh_fp32_strict_component_misses": 34,
+    "lh_near_zero": "explicit per-dtype conditioning budgets; not allclose at FP32 strict thresholds"
+  },
+  "build": {
+    "manifest_sha256": "21186a1ce768a014f9f7953334f26ad4d8315bb359586009fb2cfabaa51778e4",
+    "component_sha256": "7355bcd52247452ba4ab5a33135644c9d2f85ede211c9022b07ebc802705164d",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+    "binary_sha256": {
+      "tide-device-numerical-check": "d3685e7652f64513c5037d67b0aadab33e4a4ea134ac8048452a69bd71ffab80",
+      "tide-packed-full-check": "f3b43bb5879e19310dd49d5a3615d2e2465fe8b29b8bc09f3d63f04b0bf8a8d4",
+      "tide-packed-lh-check": "29ccd27ac34c46da43d527f58de5732a4b37990c075d2b8a3c64b0062b627882",
+      "tide-packed-sum-check": "82fad4b96bc05946550a95ad91ecfb594a228c40c1eb487231453523e7b06b6d"
+    },
+    "loader_sha256": {
+      "tide-device-numerical-check": "ba27cc22f63caed1d10f399c14403dbd49f37ca76526d7975a5ae227f680cbe2",
+      "tide-packed-full-check": "6f0a137b58980925099f8efb729bf033d6ec2f52740f5516b9b848cf61628788",
+      "tide-packed-lh-check": "966f9f0cfc38605aa8eb77ca35405dd2e0c6625084234374bf93ed44c6dfaca1",
+      "tide-packed-sum-check": "0ae6c8d6d994dcd6487eae6e4968a2e589ef8198815fd395b505050155f58091"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "00207ef10c7da87b756f31970f9c23a0008d5cef876bf28ddf39632000cc9386",
+        "task.log": "a5613e53b6b217761c0c2bfcb977a9f5b0e0cf576407934f9980e2c3da67129c"
+      }
+    },
+    {
+      "name": "low-precision-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "7e10048bc3deb51321c49c944b2a7a8de8e79e696c62f5eec62d56928847184c",
+        "task.log": "9ee358f769b93a52620c1509a417a627b52973184a7a0f6bb679664731e8f0db",
+        "gate/result.json": "6c453cd27e374d2e7e905cdbc20524de25584db53f3b0f5b75ed91b746268dde",
+        "queue.json": "6b91a0b808069280e42623167870566a9c55ff447feaf212800dad1f2b8eb966"
+      }
+    },
+    {
+      "name": "low-precision-full-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0413959f92c1d6f45d6b6336f5a8696b07fc9d9605ca8f737e44662571b80d98",
+        "task.log": "c2ed21d66b3257f7373f99fa85e5af4f01944f0d5d3c5e051e012360c2b19d84",
+        "profile/result.json": "361f313afe05614934a01c9090aa433ccf6f5a1e43304b7a54fc4b7d67c0d983",
+        "profile/profile.log": "821af6cef70c7e6a58f55e8e338a34e525cb5ef8dae57af06da6dead89a86057",
+        "queue.json": "75c2391d66d613ef50b19bc64de910d1ed3902a26e48021c2aa20829fd79c398"
+      }
+    },
+    {
+      "name": "low-precision-lh-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "28514515b4560e34aa26f53377dcb1451f2334f9bf66955749e02400b7ea5f42",
+        "task.log": "80f07c572f57c11106f05c953a57f3b7bdd69f296ddce03201dbe1551725b1c9",
+        "profile/result.json": "269362f9d1d6fe516c689523e043b5ea61e31d3236e1586182beaa7061556d0e",
+        "profile/profile.log": "2c8e083812103cabaecbf6cefc70a66db7a735ce2d3eb9b1eeb9fa6d266b5afe",
+        "queue.json": "65169b1011b0e2c045f8ee4de280bdce43ac3101c7520175aea643b2e47ec377"
+      }
+    },
+    {
+      "name": "low-precision-sum-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "745ec6ee25acd3cba5b1867d867eac67e3df8044fb411d80f2d95752ba8845f8",
+        "task.log": "fab6a459e4674bad8c5ce9863ad387d5fd50c2c021c5af67ccecec809862b779",
+        "profile/result.json": "1568a2ef4bd02d6eab385c4c9333cb9109388993ab7fbd448e26c0c38fecf8d0",
+        "profile/profile.log": "87f89cc67d6a11fc0971814b26ac3f9d84796be1c000a0ec845ecd10a4442fa0",
+        "queue.json": "7d88bd81eb63d651d35a29cb2eb38d09f193e4768fbad20ad3a6c0c35e08f6eb"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "numerical",
+      "dtype": "float32",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "numerical-float32.log",
+      "log_sha256": "73a16c9ad541d456b76c0f3c34120f3d73d22063310eafb23a4c5bf3d4fbb11d"
+    },
+    {
+      "check": "numerical",
+      "dtype": "float16",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "numerical-float16.log",
+      "log_sha256": "ada16f66af16aa0055e22fd024aea3617cf12fddc2045ed5878e017f6f8f15c5"
+    },
+    {
+      "check": "full",
+      "dtype": "float32",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "full-float32.log",
+      "log_sha256": "e5cb764c2bc7d6a9b103650e01034d7fd3b6c1d7b8c3ffea6c10c05459846daf"
+    },
+    {
+      "check": "full",
+      "dtype": "float16",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "full-float16.log",
+      "log_sha256": "aa436a8f7b5cc4a3a089b97f6733e4eb1f4e51873562880a3900ac97560790b0"
+    },
+    {
+      "check": "packed-lh",
+      "dtype": "float32",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "packed-lh-float32.log",
+      "log_sha256": "fbeae7d8c814f47de0be96e282320d49c3ade2c0c11102bb7dfb981bef965a3f"
+    },
+    {
+      "check": "packed-lh",
+      "dtype": "float16",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "packed-lh-float16.log",
+      "log_sha256": "44edc60aa01f1d098a29797569936beba4f354a16ba193f3481f15bfb39b55a3"
+    },
+    {
+      "check": "sum",
+      "dtype": "float32",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "sum-float32.log",
+      "log_sha256": "fdaab02d0157a82594acaa7caca34e777e65d806ba4e7eb45465e8640330a973"
+    },
+    {
+      "check": "sum",
+      "dtype": "float16",
+      "state": "passed",
+      "exit_code": 0,
+      "log": "sum-float16.log",
+      "log_sha256": "e2b75123db3ec1cf857b47e000d3a45c4aa0d9972db80d7f799d80826d722d58"
+    }
+  ],
+  "profiles": [
+    {
+      "check": "full",
+      "dtype": "float16",
+      "engines": {
+        "AI_VECTOR_CORE": 544,
+        "AI_CORE": 24
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001113707306_00421504RHFJIGKQ/mindstudio_profiler_output/op_summary_20261001113711.csv": "32d1f8be53c5554259763e820b5c825ceddeca4175db6939da45e4aefebb1dc5",
+        "raw/PROF_000001_20261001113707306_00421504RHFJIGKQ/mindstudio_profiler_output/api_statistic_20261001113711.csv": "04ffcd4f69cd63b1e20219ecd652e2ef94fa5c39e29baa24eee8ad97a226643f"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    },
+    {
+      "check": "packed-lh",
+      "dtype": "float16",
+      "engines": {
+        "AI_VECTOR_CORE": 5364
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001113713826_00422177DHFNRBFK/mindstudio_profiler_output/op_summary_20261001113719.csv": "179fdb66a4461f00297ca5d6379f4e6ec3e4e167ba918776546cc56b752d55be",
+        "raw/PROF_000001_20261001113713826_00422177DHFNRBFK/mindstudio_profiler_output/api_statistic_20261001113719.csv": "703522695bf6938b1900e3f171799aa553b4f36850621f9e3ba5d72ac1740586"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    },
+    {
+      "check": "sum",
+      "dtype": "float16",
+      "engines": {
+        "AI_VECTOR_CORE": 1205
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001113720651_00422711JDLPLQMB/mindstudio_profiler_output/op_summary_20261001113726.csv": "dd46ffd7a188de9eb5d783aad9bb478de03294b1d0d71673aa9d197739a00d51",
+        "raw/PROF_000001_20261001113720651_00422711JDLPLQMB/mindstudio_profiler_output/api_statistic_20261001113726.csv": "fbd9ed39e93c254814ae5ff1c473e17fc8402a59d650164bf11711fb793db393"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  ]
+}
