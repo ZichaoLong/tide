@@ -47,3 +47,31 @@ state evolution covers data-dependent loop counts,empty windows,bounded work and
 continuation,keys above2^55,bool masks and FP32/FP16 values. This is a transport
 prerequisite;complete graph observables,VJPs,optimizer/continuation and throughput
 need their own multi-device qualification under [the execution contract](execution-flows.md).
+
+## Internal remote Full inference
+
+`ContentFlow(..., coordinator, limits, full_device)` is an internal experimental
+inference entry point. Its public single-device client defaults remain unchanged.
+The coordinator owns online readiness,selection,state,attention caches,emission
+and event queues. The peer owns and executes the declared identity/tanh/LH/SwiGLU
+Full banks. This is a first graph integration,not general owner/parameter/state
+sharding or distributed training. Current qualification is in STATUS.
+
+Actual selected packed actions,content,comparison and sticky error travel in a
+fixed request packet. The peer runs the same packed Full implementations and
+returns values,error and chunk counts. The coordinator's compiled program then
+continues emission and queue commits. Empty and failed windows still send a
+device terminal packet so the peer service exits. Both models are submitted
+before either window wait;there is no host dispatch between graph stages.
+
+Packet endpoint buffers are included in the conservative total memory estimate.
+The remaining operator workspace is divided between both serial arenas;exports
+report their sum and the peer's fixed packet size. Full capacity is transferred,
+including unused rows;only actual selected actions are computed. This first
+integration does not claim minimized communication or parallel stage overlap.
+Actual work,packing and throughput remain measurement questions.
+
+No Full reverse tape is exposed for remote placement. A caller requesting it is
+refused explicitly;single-device tapes/optimizer publication keep their existing
+behavior. Cross-device VJPs and master publication need a separate implementation
+and independent qualification before this placement can support training.

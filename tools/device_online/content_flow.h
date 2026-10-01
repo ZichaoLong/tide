@@ -30,6 +30,10 @@ struct ContentWindow {
 class ContentFlow {
  public:
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits={});
+  // Experimental inference-only peer Full placement. The coordinator retains
+  // graph control/state; the peer executes selected Full batches. Not public
+  // multi-device training or complete model/parameter sharding.
+  ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device full_device);
   ~ContentFlow();
   ContentFlow(const ContentFlow&)=delete;
   ContentFlow& operator=(const ContentFlow&)=delete;

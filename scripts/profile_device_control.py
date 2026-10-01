@@ -49,8 +49,10 @@ def main():
     command = [msprof, "--output="+str(out / "raw"), "--runtime-api=on", "--task-time=l1",
                "--aicpu=on", f"--storage-limit={args.storage_limit_mb}MB", str(binary), "--device="+args.device,
                "--dtype="+args.dtype, *args.application_arg]
-    if args.check == "precision-control-flow":
+    if args.check in ("precision-control-flow", "peer-control-flow"):
         command.append("--control-modes")
+    if args.check in ("peer-flow", "peer-control-flow"):
+        command.append("--peer-full")
     if args.check == "extended-retained":
         command.append("--extended")
     if args.check in ("event-retained", "fiber-retained"):

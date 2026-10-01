@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
     parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
-                        default=[name for name in CHECKS if name != "peer"],
+                        default=[name for name in CHECKS if not name.startswith("peer")],
                         help="Single-device checks by default; peer explicitly requires two visible NPUs")
     parser.add_argument("--full-training-control-check", choices=("strict", "conditioned"), default="strict")
     args = parser.parse_args()
@@ -47,8 +47,10 @@ def main():
                 command = [str(build / name), "--device="+args.device, "--dtype="+dtype]
                 if check == "full-training":
                     command.append("--control-check=" + args.full_training_control_check)
-                if check == "precision-control-flow":
+                if check in ("precision-control-flow", "peer-control-flow"):
                     command.append("--control-modes")
+                if check in ("peer-flow", "peer-control-flow"):
+                    command.append("--peer-full")
                 if check == "extended-retained":
                     command.append("--extended")
                 if check in ("event-retained", "fiber-retained"):

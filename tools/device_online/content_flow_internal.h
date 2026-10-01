@@ -10,12 +10,14 @@
 #include "packed_fiber_attention.h"
 #include "packed_event_attention.h"
 #include "packed_aggregate.h"
+#include "remote_full.h"
 
 namespace tide::device_online {
 struct ContentFlow::Impl {
   ContentProfile profile;
   ContentLimits limits;
   at::Device device;
+  at::Device full_device;
   Continuation boundary;
   ContentState state;
   SelectionHistory history,history_before;
@@ -30,12 +32,13 @@ struct ContentFlow::Impl {
   std::unique_ptr<QueueTransaction> pending,outputs,messages;
   std::unique_ptr<DeviceJournal> events,fibers,contributions,full_trace,raw_full_trace,emission_trace;
   AtomBatch external;
-  at::Tensor error,stop,stages,event_count,source_scales_before;
+  at::Tensor error,stop,stages,event_count,source_scales_before,full_chunks;
+  std::unique_ptr<RemoteFull> remote_full;
   std::unique_ptr<CannProgram> program;
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false;
   int64_t window_start=0;
-  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits);
+  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device);
   void construct();
   Continuation export_continuation() const;
   Result export_result() const;

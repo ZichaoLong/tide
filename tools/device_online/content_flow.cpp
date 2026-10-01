@@ -19,8 +19,9 @@ void validate_reverse_modules(const Graph& graph) {
       throw std::invalid_argument("graph reverse module contract unavailable");
 }
 }
-ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
-    :profile(std::move(g),std::move(m),d,true),limits(l),device(d),boundary(q),window_start(q.cut) {
+ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd)
+    :profile(std::move(g),std::move(m),d,true),limits(l),device(d),full_device(fd),boundary(q),window_start(q.cut) {
+  if(fd.type()!=d.type()||fd.index()<0)throw std::invalid_argument("Full peer requires an explicit NPU");
   validate_window(profile.graph,profile.model,boundary,{},q.cut,q.cut);
   if((l.mode!="hard"&&l.mode!="hst"&&l.mode!="softp")||!std::isfinite(l.zeta))
     throw std::invalid_argument("invalid resident Emit mode/zeta");
@@ -33,6 +34,9 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     +64.L*samples*(nodes*(width+4.L)+regions*(regions+4.L))
     +160.L*(profile.graph.edges.size()+profile.graph.inputs.size()+profile.graph.outputs.size()+nodes);
   if(l.mode=="softp")estimate+=4.L*l.queue*width+(l.diagnostics?l.trace*(4.L*width+104.L):0.L);
+  // Both endpoint packet storage and the returned payload are charged to the
+  // same total bound before allocation. Operator arenas share the remainder.
+  if(fd!=d)estimate+=8.L*l.queue*(4.L*width+64)+4096;
   if(l.queue<1||l.arrivals<1||l.outputs<1||l.trace<0||(l.diagnostics&&l.trace<1)||l.stages<1||l.full_chunk_rows<1||l.emission_chunk_rows<1||l.aggregate_chunk_rows<1||l.max_repeat_ticks<1||l.workspace_bytes<1||estimate>l.workspace_bytes
       ||(l.chunk_policy!=ChunkPolicy::conservative&&l.chunk_policy!=ChunkPolicy::aggressive))
     throw std::invalid_argument("content flow buffer budget exceeded or invalid limits");
@@ -85,11 +89,11 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   budget.reserve(0,emission->reserved_bytes());
   const auto max_full=std::min(l.full_chunk_rows,l.queue);
   if(minimum[1]>0) {
-    swiglu_full=std::make_unique<PackedSwiGluFull>(profile,device,l.queue,max_full,budget.available(1));
+    swiglu_full=std::make_unique<PackedSwiGluFull>(profile,full_device,l.queue,max_full,budget.available(1));
     budget.reserve(1,swiglu_full->reserved_bytes());
   }
   if(has_lh) {
-    lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),device,l.queue,max_full,budget.available(2));
+    lh_full=std::make_unique<PackedLhFull>(lh_kinds,at::stack(norm_weights),at::stack(norm_biases),full_device,l.queue,max_full,budget.available(2));
     budget.reserve(2,lh_full->reserved_bytes());
   }
   if(minimum[3]>0) {
@@ -100,13 +104,20 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
     event_attention=std::make_unique<PackedEventAttention>(profile,q,device,l,budget.available(4));
     budget.reserve(4,event_attention->reserved_bytes());
   }
-  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),device,max_full,budget.available(5));
+  full=std::make_unique<PackedFull>(kinds,at::stack(weights),at::stack(biases),full_device,max_full,budget.available(5));
   budget.reserve(5,full->reserved_bytes());
   if(minimum[6]>0) {
     aggregate=std::make_unique<PackedAggregate>(profile,device,l.queue,l.aggregate_chunk_rows,budget.available(6));
     budget.reserve(6,aggregate->reserved_bytes());
   }
   planned_buffer_bytes=budget.planned_bytes();operator_workspace_budget=budget.operator_budget();usable_memory_budget=budget.usable_bytes();
+  full_chunks=full->chunks();
+  if(fd!=d) {
+    operator_workspace_budget/=2;
+    if(operator_workspace_budget<1)throw std::invalid_argument("insufficient peer operator workspace");
+    full_chunks=at::zeros({1},stop.options());
+    remote_full=std::make_unique<RemoteFull>(*full,lh_full.get(),swiglu_full.get(),operator_workspace_budget);
+  }
   construct();
   // Only input-seal/ledger metadata belongs on the host between windows.
   // The authoritative state, history and pending payloads are device owners.
@@ -140,9 +151,13 @@ void ContentFlow::Impl::construct() {
   append_read(p,profile,ready,content,state,coefficients,error,limits.max_repeat_ticks,limits.vectorized_read,proposals);
   auto selection=selector->append_stage(p,ready,content.scores,history,error);
   auto update=append_content_state(p,profile,ready,content,selection,state,coefficients,stages,event_count,error,limits,proposals);
-  auto actions=full->append_stage(p,update.actions,update.comparison,error);
-  if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full->chunks());
-  if(swiglu_full)actions=swiglu_full->append_stage(p,actions,content.content,update.comparison,error,full->chunks());
+  auto actions=update.actions;
+  if(remote_full)actions=remote_full->append_stage(p,actions,content.content,update.comparison,error,full_chunks);
+  else {
+    actions=full->append_stage(p,actions,update.comparison,error);
+    if(lh_full)actions=lh_full->append_stage(p,actions,update.comparison,error,full_chunks);
+    if(swiglu_full)actions=swiglu_full->append_stage(p,actions,content.content,update.comparison,error,full_chunks);
+  }
   const auto raw_full=actions.values;
   if(limits.mode=="softp")actions=append_control_forward(p,profile,actions,content.content,selection.controls,error);
   auto emitted=emission->append_stage(p,actions,error);
@@ -170,14 +185,18 @@ void ContentFlow::Impl::construct() {
   selector->append_commit(p,history,selection,error);commit_content_state(p,state,update,error);
   if(attention)attention->commit(p,attended,selection,error);
   if(event_attention)event_attention->commit(p,event_attended,selection,error);
-  p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);p.finish();
+  p.add(stages,one);p.branch(index,{head});p.mark(exhausted);p.copy(error,budget_error);p.mark(end);
+  if(remote_full)remote_full->append_stop(p);
+  p.finish();
 }
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l)
-    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l)) {}
+    :ContentFlow(std::move(g),std::move(m),q,d,l,d) {}
+ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,fd)) {}
 ContentFlow::~ContentFlow()=default;
 void ContentFlow::close() {
   if(!impl_)return;
-  impl_->program->close();impl_.reset();
+  impl_->program->close();if(impl_->remote_full)impl_->remote_full->close();impl_.reset();
 }
 Result ContentFlow::advance(const std::vector<External>& input,Index until) {
   advance_device(input,until);
@@ -199,14 +218,22 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
     if(s.attention)s.attention->reset_window();
     if(s.event_attention)s.event_attention->reset_window();
     if(s.aggregate)s.aggregate->chunks().zero_();
-    s.event_count.zero_();s.full->chunks().zero_();s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);
+    s.event_count.zero_();s.full->chunks().zero_();if(s.remote_full)s.full_chunks.zero_();
+    s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);
     // Dispatch through the process's registered owner. This works with either
     // the standalone SDK or the Python wheel, never linking both together.
-    c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());s.program->run();
+    c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());
+    if(s.remote_full) {
+      s.remote_full->synchronize_inputs();s.program->submit();s.remote_full->submit();
+      std::exception_ptr failure;
+      try{s.program->wait();}catch(...){failure=std::current_exception();}
+      try{s.remote_full->wait();}catch(...){if(!failure)failure=std::current_exception();}
+      if(failure)std::rethrow_exception(failure);
+    } else s.program->run();
     const auto error=s.error.cpu().item<int>();
     if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
     s.window_start=s.boundary.cut;s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
-    return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full->chunks(),s.emission->chunks()};
+    return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full_chunks,s.emission->chunks()};
   } catch(...) {s.failed=true;throw;}
 }
 Continuation ContentFlow::snapshot() const {
@@ -231,6 +258,7 @@ StateTape ContentFlow::state_tape() const {
 FullTape ContentFlow::full_tape() const {
   if(!impl_||impl_->failed)throw std::logic_error("Full tape unavailable on closed/failed content flow");
   const auto& s=*impl_;
+  if(s.remote_full)throw std::invalid_argument("remote Full adjoint is not implemented");
   if(!s.limits.diagnostics)throw std::logic_error("Full tape requires recorded forward values");
   FullTape out{s.events->meta,s.events->values,s.events->count,s.full->kinds(),s.full->weights(),s.full->biases(),
           s.boundary.batch_size,s.profile.width,s.full->has_tanh()};

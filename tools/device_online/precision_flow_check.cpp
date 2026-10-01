@@ -1,4 +1,5 @@
 #include "content_fixture.h"
+#include "peer_flow_candidate.h"
 #include "tide/resident.h"
 #include "tide/resident_training.h"
 #include "tide/stream.h"
@@ -89,13 +90,42 @@ void compare(const Result& actual,const Result& expected,at::ScalarType dtype,bo
     require(e.descriptor.scalar_type()==at::kFloat,"resident changed FP32 Read dtype");
   }
 }
-void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled) {
+test::Fixture mixed_full_fixture(int shape,at::ScalarType dtype) {
+  auto f=fixture(shape,0,dtype);
+  for(int n=1;n<4;++n) {
+    const auto other=fixture(shape,n==1?9:n==2?11:12,dtype);
+    f.graph.nodes[n].full=other.graph.nodes[n].full;
+    for(const auto& [name,value]:other.model.nodes[n].extra)
+      if(name.find("ffn_")==0||name.find("lh_norm_")==0)f.model.nodes[n].extra[name]=value;
+  }
+  f.graph.compile();f.initial.identity=f.graph.identity;return f;
+}
+void peer_refusals(at::Device device,at::ScalarType dtype) {
+  const auto peer=at::Device(device.type(),device.index()+1);auto f=fixture(0,0,dtype);
+  for(int failure=0;failure<3;++failure) {
+    ContentLimits l;l.queue=128;l.arrivals=256;l.outputs=256;l.trace=2048;l.workspace_bytes=512*1024*1024;
+    if(failure==0)l.outputs=1;else if(failure==1)l.stages=1;else l.trace=1;
+    ContentFlow flow(f.graph,f.model,f.initial,device,l,peer);bool refused=false;
+    try{flow.advance_device(f.input,f.initial.cut+11);}catch(const std::runtime_error& e) {
+      if(std::string(e.what()).find("content flow device refusal code=")!=0)throw;refused=true;
+    }
+    require(refused,"peer capacity error did not terminate both programs");
+    bool poisoned=false;try{flow.snapshot();}catch(const std::logic_error&){poisoned=true;}
+    require(poisoned,"failed peer window exported a complete cut");flow.close();
+  }
+  ContentLimits l;l.workspace_bytes=512*1024*1024;
+  ContentFlow flow(f.graph,f.model,f.initial,device,l,peer);bool refused=false;
+  try{flow.reverse_tape();}catch(const std::invalid_argument& e){refused=std::string(e.what())=="remote Full adjoint is not implemented";}
+  require(refused,"peer inference silently exposed an incomplete adjoint");flow.close();
+  std::cout<<"peer-flow-refusals: passed capacity=3 remote_adjoint_refused=true\n";
+}
+void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled,bool peer) {
   Index cases=0,windows=0;
   const std::vector<std::string> modes=controlled?std::vector<std::string>{"hst","softp"}:std::vector<std::string>{"hard"};
-  for(int shape:{0,1,3})for(int kind=0;kind<13;++kind)for(bool prefill:{false,true})for(const auto& mode:modes) {
+  for(int shape:{0,1,3})for(int kind=0;kind<(peer?14:13);++kind)for(bool prefill:{false,true})for(const auto& mode:modes) {
     if(controlled&&kind!=0&&kind!=2&&kind!=7)continue;
     if(smoke&&(shape!=1||(kind!=2&&kind!=7)||!prefill))continue;
-    auto f=fixture(shape,kind,dtype);ResidentLimits l;
+    auto f=kind==13?mixed_full_fixture(shape,dtype):fixture(shape,kind,dtype);ResidentLimits l;
     if(controlled) {
       for(auto& region:f.graph.regions)region.read_mode=shape==0?"content":shape==1?"old":"proposal";
       if(kind==0)f.graph.nodes[0].full="identity";
@@ -108,8 +138,12 @@ void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled) {
     l.chunk_policy=prefill?ChunkPolicy::aggressive:ChunkPolicy::conservative;
     l.vectorized_state=prefill;l.vectorized_read=prefill;l.vectorized_aggregate=prefill;
     std::cout<<"precision flow shape="<<shape<<" kind="<<kind<<" prefill="<<prefill<<" mode="<<mode<<std::endl;
-    ResidentSession candidate(f.graph,f.model,f.initial,device,l);Streaming cpu(f.graph,f.model,options);
+    test::InferenceCandidate candidate(f.graph,f.model,f.initial,device,l,peer);Streaming cpu(f.graph,f.model,options);
     auto q=f.initial;Index previous=q.cut;
+    if(peer) {
+      candidate.advance({},previous,previous);
+      compare(candidate.result(),cpu.run(q,{},previous,previous),dtype);++windows;
+    }
     for(Index offset:{2,6,11}) {
       const auto stop=f.initial.cut+offset;std::vector<External> xs;
       for(const auto& x:f.input)if(previous<=x.time&&x.time<stop)xs.push_back(x);
@@ -125,24 +159,27 @@ void check(at::Device device,at::ScalarType dtype,bool smoke,bool controlled) {
     // and keep recursive pending messages alive across the new owner.
     auto saved=candidate.snapshot();candidate.close();l.prefill=!prefill;l.attention_key_rows=prefill?96:1;
     l.diagnostics=false;l.trace=0;l.kv_trace_rows=0;
-    ResidentSession restored(f.graph,f.model,saved,device,l);
+    test::InferenceCandidate restored(f.graph,f.model,saved,device,l,peer);
     const auto expected=cpu.run(q,{},previous+3,previous+3);restored.advance({},previous+3,previous+3);
     compare(restored.result(),expected,dtype,false);++windows;++cases;
   }
-  std::cout<<"precision-flow: passed configurations="<<cases<<" windows="<<windows
+  std::cout<<(peer?"peer-flow: passed configurations=":"precision-flow: passed configurations=")<<cases<<" windows="<<windows
     <<" source=independent_CPU_streaming schedules=streaming,greedy scope="<<(smoke?"profile-smoke":controlled?"HST_SOFTP_inference":"HARD_inference")<<'\n';
 }
 }
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    bool smoke=false,controlled=false;std::vector<char*> argsv{argv[0]};
+    bool smoke=false,controlled=false,peer=false;std::vector<char*> argsv{argv[0]};
     for(int i=1;i<argc;++i)if(std::string(argv[i])=="--profile-smoke")smoke=true;
-      else if(std::string(argv[i])=="--control-modes")controlled=true;else argsv.push_back(argv[i]);
+      else if(std::string(argv[i])=="--control-modes")controlled=true;
+      else if(std::string(argv[i])=="--peer-full")peer=true;else argsv.push_back(argv[i]);
     auto args=portable_torch::parse_cli(argsv.size(),argsv.data(),true);if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf))throw std::invalid_argument("precision flow requires explicit NPU FP32/FP16");
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);
     if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("precision flow requires NPU");
-    at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;check(d,args.dtype,smoke,controlled);runtime.close();return 0;
+    at::set_num_threads(1);at::set_num_interop_threads(1);at::NoGradGuard guard;
+    check(d,args.dtype,smoke,controlled,peer);if(peer&&!smoke&&!controlled)peer_refusals(d,args.dtype);
+    runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

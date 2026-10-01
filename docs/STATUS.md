@@ -66,31 +66,49 @@ failure and dev02 CANN107002 no-context/507046 timeout;fixed by same-thread
 submit-all then wait,explicit cross-thread refusal,unchanged synchronous run API.
 CANN CSVs merge devices in one directory;inspect Device_id rather than dirname.
 
-Next main increment:connect peer packets to actual ContentFlow online actions.
-Start with a reusable remote Full service,not a fixture-specific scheduler:
-coordinator NPU owns readiness/selection/queue and sends actual selected packed
-ActionBatch/content/comparison;peer runs existing PackedFull/PackedLhFull/
-PackedSwiGluFull with its own parameter banks and returns values/error/chunks.
-A device terminal packet ends the peer loop even for an empty/error window.
-Submit both models before waiting;no per-stage host values/branches. Keep this
-first graph integration internal/explicit and reject unsupported remote adjoints
-until backward is implemented. Public single-device defaults stay qualified.
+Uncommitted graph peer increment:RemoteFull service and internal ContentFlow
+constructor overload place existing PackedFull/PackedLhFull/PackedSwiGluFull
+banks on a second NPU. Coordinator owns actual online readiness/selection/queue;
+packed selected actions/content/comparison travel through fixed peer packets.
+Returned values/error/chunks feed the same device stage. Device end label sends
+terminal packet,including empty/error windows. Both programs are submitted before
+waiting;no per-stage host values/branches. Total packet/arena workspace charged
+before allocation. Full reverse explicitly refused in this inference increment.
+Public single-device owner/config defaults are unchanged.
 
-Relevant files:content_flow.cpp/content_flow_internal.h,packed_full.cpp,
-packed_lh_full.cpp,packed_swiglu_full.cpp,peer_exchange.h,cann_program.h.
-ContentFlow currently allocates all Full banks on its one device and calls them
-inside its compiled ready/selection loop. Internal overload/hook can place those
-banks on a peer,replace only the Full stage and add peer stop at the end label.
-Do not feed CPU reference routes. Test full CPU observables for arbitrary legal
-feedback/unaligned inputs,both schedules/dtypes,continued windows and mixed Full.
-Then generalize owner/locality partitioning and distributed adjoints/training;
-a single remote module service is not full multi-card scale acceptance.
+Shared precision_flow_check now has --peer-full,using its existing independent
+CPU fixtures/assertions. New peer-flow/peer-control-flow select HARD and HST/SOFTP;
+they explicitly require2 NPUs and are excluded from default single-device gate.
+Includes attention/normalized Aggregate,all built-in Fulls,feedback/unaligned
+arrivals,high int64 clocks,CPU/device input,continuation and schedule switching.
+Peer-only output/stage/trace capacity refusals require an actual device refusal,
+poison snapshot and orderly two-program close;remote adjoint is explicitly tested.
+
+Development peer-flow-dev01 all5 tasks PASSED/exit0:affected build,
+HARD peer2 dtype cells(78 configs/312 windows each),HST/SOFTP peer2 dtype
+cells(36/144 each),single-device4 inference regression cells and one half-cache
+training smoke(1 trajectory/16 windows/4 updates). Capacity/adjoint refusals
+passed. No tolerance changes;no peer runtime failure in this increment.
+
+Test-only follow-up peer-flow-dev02 completed: affected checker build and both
+2-NPU gates PASSED/exit0. Each dtype HARD84 configs/420 windows and control36/180;
+combined120 configurations/600 windows per dtype. Explicit zero-length windows
+before work and mixed Tanh/SwiGLU/LH Full nodes passed. Production byte-identical
+to peer-flow-dev01; no new runtime failure or tolerance change.
+
+Next commit/push this implementation,freeze peer-flow-clean01 on that full
+revision,and run TASK/launchers/build_peer_flow_v1.py peer-flow-clean01.
+Qualify separate peer-flow and peer-control-flow two-device gates,single-device
+precision-flow/precision-control-flow and half-cache training smoke,plus a separate
+peer-flow placement profile. Also rebuild affected Python-owned objects and run
+resident precision/half-training client regressions without mixing runtimes.
+Lease120s/run600s/build900s; immutable source/evidence split.
 
 Remaining main work:graph peer integration,parameter/state sharding and training;
 five-preset consumer screening;representative/full-size performance;version/
 migration/CUDA records. F1–F7 remain incomplete. Historical CPU Attention stays
 paused and does not block implementation. No pause requested;continue after
-qualification and each authorized push. No uncommitted production increment yet.
+qualification and each authorized push. The graph peer increment above is uncommitted and unqualified.
 
 ## Environment and bounded execution
 
@@ -102,7 +120,7 @@ Module libtorch-npu/2.10.0-cann9.0.0; Python
 Public /opt stack supersedes dated personal guide under user authorization.
 TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0; preserve module PYTHONPATH,
 prepend snapshot/python. SoC Ascend910_9392. Use leased logical device indices.
-Last space check:232GiB data,25GiB root; recheck before large writes.
+Last space check:227GiB data,23GiB root; recheck before large writes.
 Core builds:placement-cpu-clean01,placement-npu-clean01 (standalone),
 placement-npu-python-clean01 (Python-owned). Never load standalone SDK into Python.
 Freeze with `python TASK/launchers/freeze_run.py --name NAME --snapshot SNAPSHOT

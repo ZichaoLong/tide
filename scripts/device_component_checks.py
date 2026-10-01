@@ -2,6 +2,8 @@
 
 CHECKS = {
     "peer": ("tide-device-peer-check", ("float32", "float16")),
+    "peer-flow": ("tide-precision-flow-check", ("float32", "float16")),
+    "peer-control-flow": ("tide-precision-flow-check", ("float32", "float16")),
     "control": ("tide-device-control-check", ("float32",)),
     "failure": ("tide-device-failure-check", ("float32",)),
     "numerical": ("tide-device-numerical-check", ("float32", "float16")),
@@ -54,6 +56,8 @@ CHECKS = {
 }
 MARKERS = {
     "peer": "device-peer: passed",
+    "peer-flow": "peer-flow: passed",
+    "peer-control-flow": "peer-flow: passed",
     "control": "device-control: passed", "numerical": "device-numerical: passed",
     "failure": "device-failure: passed",
     "queue": "packed-queue: passed", "closure": "device-closure: passed",
