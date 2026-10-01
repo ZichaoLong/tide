@@ -1,0 +1,216 @@
+{
+  "schema": "tide-resident-fp16-extended-graph-evidence-v1",
+  "source": "db9e985e9d7163563ed8877be28b5f8148f490fd",
+  "scope": "single-device FP16 normalized Aggregate/LH/SwiGLU and mixed-module retained reverse; production unchanged from25e996c; not attention graph integration, public half training/checkpoint, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-extended-graph-clean01",
+      "manifest_sha256": "560ffbb263ce121be2ba3deda0a59af46ab7226380ca4e73d39c217728fd4ce1",
+      "reuse_sha256": "627b0d333c292fbf732401c0fc68c1cbdab03f91bd7529dc0123fb9d974f806c",
+      "source_inputs": 274,
+      "component_sha256": "2fdb822328be696b239173f84e67e5a33cc65117501f1890638c7dcc717d0647",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "b0da842428a9588c781ee8b136ce4c7c6ac7a7c75cdde20ee23338bf1b9a1ac3",
+        "tide-device-retained-check": "eccf13ec206d0909f66aa68c377bcc793424d95c006cb64547498be459b1510f",
+        "tide-device-graph-vjp-check": "160d6109abb17c07f8e153b687380437039f06143ef38bf7e5f62240c2468e06"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "be323f823b6e399b662067b6481cd775bb6a23c610c04e638416bbbb8caa764e",
+        "tide-device-retained-check": "4e3cddd1e4eca6a84ab59b238bb819eeb9b7e6475a1dc39d845cb777fda36129",
+        "tide-device-graph-vjp-check": "743586951266692682b76a7d0f480b111e354e5206a80b3fdc737df0974155c3"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "b90df7d6200511493412b714ee024cc4ecce92acbb9740317cbd90f45f055848",
+      "parent_manifest_sha256": "1672bceac95f2b9429a1de16b43780d2e55ae6ae6a1652a9f768e142e18f67d0",
+      "parent_content_archive_sha256": "7943b7950072ac10e0b24ff27b22065c83923102b605964d3ac5bc2547f3c6c3",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "7418c24d8a310acd2b7c8251ab1df25898cdf215b8a91d4a818bcb00940a0964",
+      "oracle_object_sha256": "3a67a06716e184fa728b51cf8f2b4f7d4249fcc2805c85a2c2ab43965a66d8d1"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-extended-graph-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "edfa01579a375ff6ffdeee78454fba43ff11a6a9f8c445d4a8f61177b30889e0",
+        "task.log": "afc92687058e6ed1a4cf6bd54108bac2c30306fd0e5367dec54468dcd82aa373"
+      }
+    },
+    {
+      "name": "low-precision-extended-graph-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "5c510e3ef3562a90c25a14d9bd35a476d17fbc00e6bfe456d84f248c8dffb0ba",
+        "task.log": "fed889d8dc2f6a4a1c7f561b053b03718c395b72ee3de4ed19bdf0c3c9105865",
+        "queue.json": "c130aef9a77ee2ed3907292cfbdb688d57af3b88ff9f76452b9b3ec87c6df398",
+        "gate/result.json": "6a1f4b78eaabe69707212c7b21e372129f1c7cfd9e39afd8cb35e0e3136402b1"
+      }
+    },
+    {
+      "name": "low-precision-extended-graph-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "c70a8f2f736a8e660e43fedb5b6c178bb9540d15bab85a1b6dc6383d64c76351",
+        "task.log": "3eac4758b60f376c9af3de096789064c22f05e6e57bf79450949c07c31b35d95",
+        "queue.json": "df14b50c5d0c9e292395d77efcd4eeb78bf1473eb18d18afcdd59e57fde5e71a",
+        "gate/result.json": "b3df3ac9024f65a397e796c123abc18dc30b8a40476cd8ec4819d0efd630ec9a"
+      }
+    },
+    {
+      "name": "low-precision-extended-graph-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a0858e1e2f7aba32d6ef0428f4f5fb717cfe163a8952ae1c1df99891c022ae55",
+        "task.log": "f6c3111961370461f56fe311912bf065178c787b8717c17e9701cd0bc54c7df1",
+        "queue.json": "3af0bbb67c1d47e58bfc8d26795bc5950d27bde27afab31c100f4ed62cc99ed0",
+        "profile/result.json": "8cf5ea8f313481c661dfc63acb8d20e587b595b1d1e23a33a621609777a9e210",
+        "profile/profile.log": "d6a4b3d9a7a2d1e35e0934a60b042b80d78236983c83705df9e9bab9d7b4bf28"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "extended-retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--extended"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "extended-retained-float32.log",
+      "log_sha256": "e96bc40153e648b11dee4f47405c88c9a6257cfa39a4ffc6db42166dad62fb32"
+    },
+    {
+      "check": "extended-retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--extended"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "extended-retained-float16.log",
+      "log_sha256": "585a4846c85fef7bb6f6a7db4b43d8a89e896ea33397892a2b4016278a9b575b"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float32.log",
+      "log_sha256": "c37f397d263995d562f78ac0f9e92645be3bcced9815ba0373cb2a6fa79eda80"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float16.log",
+      "log_sha256": "ff171939a60a352bd8b0676469c0e64a9796c88a28c6a6ed28a0ce16608e000f"
+    },
+    {
+      "check": "retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float32.log",
+      "log_sha256": "4f29ba5229df011aeaf387f94c7e3d2ea1552873510e877164f7b3ebfce8416a"
+    },
+    {
+      "check": "retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-extended-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float16.log",
+      "log_sha256": "146af2c1d847293f643b97cab00861e72ee6f623e67dac73125d5e0ecc7ee822"
+    }
+  ],
+  "profiles": {
+    "extended-retained": {
+      "engines": {
+        "AI_VECTOR_CORE": 254571,
+        "AI_CORE": 2391,
+        "MIX_AIV": 6057
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001170446387_01369973QADLOMBF/mindstudio_profiler_output/op_summary_20261001170553.csv": "15e91aa076b60b1b4b02f5ce3f78a1392dc6148a2d24610c9c3a1b204fe133ae",
+        "raw/PROF_000001_20261001170446387_01369973QADLOMBF/mindstudio_profiler_output/api_statistic_20261001170553.csv": "03a34a8ec986e4a293b0e82c77177b1da290ce5b342e950f7d5da7286b3df643"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "low-precision-extended-graph-components-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "c0cf26ab915109858ba57287044569808bb0bce2fbc485b9ce71e6d08248f210",
+        "task.log": "5733d223ea94fa9c2fa8b39a32aa432947db1a8627b36ab4f04683e2a7b9b428",
+        "gate/result.json": "ea31313e961fa903cbbdaf9b35a8579b2ce80889527aea5c4b21f5fd42e8d718",
+        "gate/extended-retained-float32.log": "a147fa8911246f948494263bc1a8914fd8ac18a996f1ee3948b701b65ac70437"
+      }
+    },
+    {
+      "name": "low-precision-extended-graph-components-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "88f9f15895ed83e6fa1ac282502d4e8cda2dfb4b9aeeb3306cf1be71d43b3f0a",
+        "task.log": "417a10dd1cba98e3cbb22cb60eb781c056d00ef2c6833ae47958f49b116199c5",
+        "gate/result.json": "8a65e7c847df5a6aa891a387ce7e23202eecbaec3687da2ff393167698d36776",
+        "gate/extended-retained-float32.log": "545ab73d1ef8f8ed89461c6cc1b5185f421cf6856ce828fd1742f9fdcf932641",
+        "gate/extended-retained-float16.log": "e8608e87d467e5076a4a8b566ce4b91534327e28d1505f67262a2e0e85bb33ab"
+      }
+    }
+  ]
+}

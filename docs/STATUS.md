@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T09:00:14.088683+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01; extended-graph qualification complete, attention integration next. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -53,41 +53,31 @@ remain separately qualified.
 
 ## Active work and next action
 
-Base graph evidence committed/pushed as742b789. Current test-only extension to
-independent CPU precision oracle/retained checker:all normalized Aggregate,
-9 LH profiles,SwiGLU,mixed modules and shared owners. Production source unchanged
-from25e996c. New extended-retained check uses --extended on retained checker.
-Dev03 build and both dtype cells PASSED/exit0:110 trajectories/440 windows each,
-FP32/FP64 leaves,HARD/HST/SOFTP,None/zero,feedback,shared owners,widths3/257.
-Dev02 all4 base graph-vjp/retained cells passed;unchanged base code in dev03.
+Extended graph qualification on db9e985e9d7163563ed8877be28b5f8148f490fd is
+complete:all4 immutable jobs PASSED/exit0. [Report](evidence/resident-fp16-extended-graph-20261001.md)
+and [audit](evidence/resident-fp16-extended-graph-20261001.json). Each dtype110
+extended trajectories/440 windows,122 base graph windows,42 base retained
+trajectories/168 windows. All6 cells passed. Half extended profile254571
+AI_VECTOR_CORE/2391 AI_CORE/6057 MIX_AIV,no observed AiCPU/logged fallback.
+Production unchanged from25e996c;only oracle/retained checker rebuilt. Audit
+TASK/launchers/precision_extended_graph_evidence.py REV passed. All current
+qualification jobs terminal. No new full-size throughput conclusion.
+Retain dev01 insufficient128MiB wide SwiGLU reverse budget;explicit256MiB used
+for width257. Retain dev02 CPU FP32 LayerNorm cancellation failure;half oracle
+keeps FP32→half forward and native CPU FP64 normalization derivative,with
+analytic-zero anchor. No production/tolerance change.
 
-Retain dev01 wide SwiGLU capacity failure:128MiB nested reverse reserve was too
-small;wide257 checker now explicitly uses256MiB,small3 remains128MiB.
-Retain dev02 half failure:CPU native FP32 LayerNorm backward introduced-6.1035e-5
-in an analytically zero middle component;NPU returned0. Independent CPU probe
-x=[.015625]*3,w=[.75,.8125,.875],loss=2*sum(layernorm(x)*w) reproduces it;
-FP64 gives1.14e-13. Half CPU oracle now keeps actual FP32→half forward values
-and differentiates independent CPU normalization in FP64;analytic zero-component
-anchor added. No production/tolerance change. Existing CPU FP32 oracle unchanged.
-
-Next commit/push test implementation;freeze low-precision-extended-graph-clean01.
-Build launcher TASK/launchers/build_precision_extended_graph_v2.py,900s;only
-precision oracle and retained checker compile;source-matched clean25e996c
-production reused. Run extended-retained (2 cells) and graph-vjp/retained
-regression (4 cells),600s/lease120s;one half extended-retained profile,512MB.
-Audit TASK/launchers/precision_extended_graph_evidence.py REV expects4 terminal
-jobs and6 cells. No Python-owned build/97-test repeat for unchanged production.
-Unit tide-execution-flows-NAME.service;TASK/runs/NAME/status.json and task.log.
-All current development jobs terminal;historical baseline intentionally paused.
-Further:event/fiber cache whole-graph integration,then public FP16 training/master/
-checkpoint. Half state adapter candidates/references already located in
- event_vjp_check.cpp,fiber_reverse_check.cpp and event_training_check.cpp.
-Current precision_graph_fixture.cpp has CPU-only base kernels and physical
-transport rounding;retained checker must add cache roots and initial KV/bias
-checks when extending it. Public training remains guarded. training_backward.cpp
-must accept FP32 roots independently of payload dtype;freeze_model/restore and
-checkpoint master↔named half correspondence need explicit handling.
-No portable core changes;do not repeat unchanged8,954 CPU checks.
+Next:event/fiber cache whole-graph and retained-window half reverse,then public
+FP16 training/master/checkpoint. Reuse independent CPU Streaming,adding test-only
+half cache kernels and cache root/initial KV/bias checks. Candidate consumes common
+public fixtures only. Keep actual half QKV/QK/output/source/bias rounding and
+FP32 cotangents. Include cache eviction,adopt/clear,all five fiber pools,mixed
+modules,shared owners,feedback,both schedules,HARD/HST/SOFTP,None/zero and replay.
+Current public training remains guarded. training_backward.cpp must accept FP32
+roots independently of payload dtype;freeze_model/restore and checkpoint
+master↔named half correspondence need explicit handling before lifting guards.
+No portable core changes;do not repeat unchanged8,954 CPU checks or97 Python
+client tests for test-only source changes.
 Remaining F1–F7:half cache/public training/master/checkpoint,device peer progression/
 communication/training,five-preset screening,representative/full-size performance,
 version/migration/CUDA records. Commit implementation→immutable qualification→
