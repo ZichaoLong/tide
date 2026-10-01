@@ -34,11 +34,20 @@ struct Window {
   std::vector<Message> messages, pending;
   std::vector<Value> logits;
   std::vector<Tensor> output_present;
+  // Compact diagnostic masks; reductions happen only at the completed window
+  // boundary. They never supply a decision to the execution schedule.
+  std::vector<Tensor> candidates, selected, edge_presence;
 };
 struct Limits {
   Index tokens = 3, batch = 2;
   int64_t max_workspace_bytes = int64_t(4) << 30;
   bool trace = true, connectivity = true;
+};
+// Public graph identity remains independent of this finite execution plan.
+struct Schedule {
+  Index period;
+  std::vector<Index> edge_rows; // -1 broadcasts; otherwise the owner's projection row.
+  int64_t workspace_bound;
 };
 // Topology-only refusal bound; callers can check it before allocating weights.
 int64_t estimate_workspace(const pdg_scale::Topology&,const std::string& memory,
@@ -46,10 +55,12 @@ int64_t estimate_workspace(const pdg_scale::Topology&,const std::string& memory,
 class Program {
  public:
   Program(pdg_scale::Fixture&, const pdg_scale::Topology&, Placement, Limits);
+  Program(pdg_scale::Fixture&, Schedule, Placement, Limits);
   Window run(const Tensor& ids, const std::vector<Tensor>& external_roots = {}) const;
   const std::vector<Tensor>& leaves() const { return leaves_; }
   const Graph& graph() const { return f_.graph; }
   const Limits& limits() const { return limits_; }
+  Index period() const { return period_; }
   const std::vector<std::vector<Index>>& members() const { return members_; }
   int64_t workspace_bound() const { return workspace_bound_; }
   Value loss(const Window&, const Tensor& ids) const;
@@ -60,7 +71,7 @@ class Program {
   Value copy(const Value&, at::Device) const;
  private:
   pdg_scale::Fixture& f_;
-  pdg_scale::Topology topology_;
+  Index period_;
   Placement placement_;
   Limits limits_;
   int64_t workspace_bound_ = 0;

@@ -35,7 +35,7 @@ std::vector<Atom> atoms(const std::vector<Message>& messages,Index batch) {
 Result export_result(const Program& p,const Window& w) {
   Result out;auto& q=out.continuation;const auto batch=p.limits().batch;
   q.identity=p.graph().identity;q.batch_size=batch;
-  const auto period=p.graph().nodes[0].state_clock.period;
+  const auto period=p.period();
   q.cut=p.limits().tokens*period;
   for(Index b=0;b<batch;++b)q.ledger[{b,0}]={p.limits().tokens-1,(p.limits().tokens-1)*period};
   for(size_t n=0;n<w.states.size();++n)for(Index b=0;b<batch;++b)
@@ -55,10 +55,17 @@ Result export_result(const Program& p,const Window& w) {
     e.descriptor=event.descriptor.data[b].detach();e.control=event.control.data[b].detach();e.history=history(p,event.history,region,b);
     for(size_t i=0;i<event.fiber.size();++i)if(yes(event.fiber[i].present,b)) {
       const auto& m=event.fiber[i];auto a=atom(m,b);e.fiber.push_back(a);
-      e.sources.push_back({m.slot,a,at::ones({},a.value.options())});
+      auto visible=a;const auto& graph=p.graph();
+      if(a.kind==1 && !graph.origins.empty() && graph.origin_index[a.source]!=-1) {
+        const auto& origin=graph.origins[graph.origin_index[a.source]];
+        if(a.position%origin.stride)throw std::logic_error("bounded input origin clock mismatch");
+        visible.kind=0;visible.source=origin.port;visible.position/=origin.stride;
+      }
+      e.sources.push_back({m.slot,visible,at::ones({},a.value.options())});
       e.contributions.push_back({m.slot,event.contributions[i].data[b].detach()});
     }
     std::sort(e.contributions.begin(),e.contributions.end(),[](const auto& a,const auto& b){return a.slot<b.slot;});
+    if(!p.graph().origins.empty())std::sort(e.sources.begin(),e.sources.end(),[](const auto& a,const auto& b){return a.atom.key()<b.atom.key();});
     if(e.active) {
       e.full=event.fresh.data[b].detach();
       for(size_t i=0;i<event.emitted.size();++i) {

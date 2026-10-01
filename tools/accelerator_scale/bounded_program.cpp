@@ -24,17 +24,36 @@ int64_t estimate_workspace(const pdg_scale::Topology& topology,const std::string
   if(bound>std::numeric_limits<int64_t>::max())throw std::overflow_error("bounded workspace accounting overflow");
   return static_cast<int64_t>(bound);
 }
-Program::Program(pdg_scale::Fixture& f, const pdg_scale::Topology& topology,
-                 Placement placement, Limits limits)
-    : f_(f), topology_(topology), placement_(placement), limits_(limits), leaves_(f.owners) {
+namespace {
+Schedule historical_schedule(const pdg_scale::Fixture& f,const pdg_scale::Topology& topology,const Limits& limits) {
+  Schedule plan{topology.layers+1,{},estimate_workspace(topology,
+    f.graph.nodes[0].memory=="lh-add-repeat-v1"?"add":"attention",
+    f.model.width(),f.embedding.scalar_type(),limits,at::GradMode::is_enabled())};
+  std::vector<Index> rows(f.graph.nodes.size());
+  for(const auto& edge:topology.edges) {
+    const auto row=rows[edge.source]++;
+    for(Index phase=0;phase<topology.layers;++phase)plan.edge_rows.push_back(row);
+  }
+  for(Index phase=0;phase<topology.layers;++phase)plan.edge_rows.push_back(-1);
+  return plan;
+}
+}
+Program::Program(pdg_scale::Fixture& f,const pdg_scale::Topology& topology,Placement placement,Limits limits)
+    :Program(f,historical_schedule(f,topology,limits),std::move(placement),limits){}
+Program::Program(pdg_scale::Fixture& f,Schedule schedule,Placement placement,Limits limits)
+    : f_(f), period_(schedule.period), placement_(placement), limits_(limits),
+      workspace_bound_(schedule.workspace_bound), leaves_(f.owners), edge_rows_(std::move(schedule.edge_rows)) {
   if (!placement.resident || limits.tokens < 1 || limits.tokens > 32 || limits.batch < 1
-      || limits.batch > 512 || limits.max_workspace_bytes <= 0)
+      || limits.batch > 512 || limits.max_workspace_bytes <= 0 || period_<1
+      || period_>std::numeric_limits<Index>::max()/limits.tokens)
     throw std::invalid_argument("bounded scheduler requires resident transport and explicit positive finite capacities");
   f_.graph.compile(); configure_model(f_.graph, f_.model);
+  if(f_.graph.inputs.size()!=1 || f_.graph.outputs.size()!=1 || edge_rows_.size()!=f_.graph.edges.size())
+    throw std::invalid_argument("bounded schedule requires one encoded input/output and exact physical edge rows");
   for (const auto& n : f_.graph.nodes)
-    if ((n.memory != "lh-add-repeat-v1" && n.memory != "lh-fiber-attention-all-softmax-repeat-v1")
-        || n.next_state != "adopt-v1" || n.identity)
-      throw std::invalid_argument("bounded scheduler supports only the historical Add/Attention hard profile");
+    if ((!n.identity && n.memory != "lh-add-repeat-v1" && n.memory != "lh-fiber-attention-all-softmax-repeat-v1")
+        || n.next_state != "adopt-v1")
+      throw std::invalid_argument("bounded scheduler supports Add/Attention and identity boundaries only");
   for (const auto& r : f_.graph.regions)
     if (!r.observe_all || r.read_mode != "proposal"
         || (r.selector != "lh-count-affect-v1" && r.selector != "count-v1"))
@@ -51,20 +70,10 @@ Program::Program(pdg_scale::Fixture& f, const pdg_scale::Topology& topology,
       at::TensorOptions().dtype(at::kLong).device(d)));
   members_.resize(f_.graph.regions.size());
   for (size_t n=0; n<f_.graph.nodes.size(); ++n) members_[f_.graph.nodes[n].region].push_back(n);
-  std::vector<Index> rows(f_.graph.nodes.size());
-  for (const auto& e : topology.edges) {
-    const auto row=rows[e.source]++;
-    for (Index phase=0; phase<topology.layers; ++phase) edge_rows_.push_back(row);
-  }
-  for (Index phase=0; phase<topology.layers; ++phase) edge_rows_.push_back(-1);
-  if (edge_rows_.size()!=f_.graph.edges.size()) throw std::logic_error("bounded physical edge identity");
   // Conservative tensor arena bound, including dense predication, cache growth,
   // training activations and connectivity. It is a refusal bound, not an OOM
   // guarantee; the launcher also enforces measured RSS/time/device limits.
-  workspace_bound_=estimate_workspace(topology,
-    f_.graph.nodes[0].memory=="lh-add-repeat-v1"?"add":"attention",
-    f_.model.width(),f.embedding.scalar_type(),limits,at::GradMode::is_enabled());
-  if (workspace_bound_>limits.max_workspace_bytes)
+  if (workspace_bound_<0 || workspace_bound_>limits.max_workspace_bytes)
     throw std::invalid_argument("bounded workspace estimate exceeds explicit capacity: "+std::to_string(workspace_bound_));
 }
 Tensor Program::empty_dependencies(at::Device d) const {
@@ -88,7 +97,7 @@ State Program::initial(Index node) const {
   State s; s.value={at::zeros({limits_.batch,f_.model.width()},opts),dep};
   s.last=at::full({limits_.batch},-1,opts.dtype(at::kLong));
   s.observations=at::zeros_like(s.last);s.seen=at::zeros({limits_.batch},opts.dtype(at::kBool));
-  if (f_.graph.nodes[node].memory!="lh-add-repeat-v1") {
+  if (!f_.graph.nodes[node].identity && f_.graph.nodes[node].memory!="lh-add-repeat-v1") {
     s.key=at::zeros({limits_.batch,0,4,f_.model.width()/4},opts);s.cache_value=at::zeros_like(s.key);
     s.bias=at::zeros({limits_.batch,0},opts);s.valid=at::zeros({limits_.batch,0},opts.dtype(at::kBool));
     s.cache_dependencies=dep;
@@ -108,7 +117,7 @@ Window Program::run(const Tensor& ids, const std::vector<Tensor>& external_roots
       at::full({limits_.batch},-1,opts.dtype(at::kLong)),at::zeros({limits_.batch},opts.dtype(at::kBool))});
   }
   std::map<Index,std::map<Index,std::vector<Message>>> queue;
-  const Index period=topology_.layers+1, stop=limits_.tokens*period, width=f_.model.width();
+  const Index period=period_, stop=limits_.tokens*period, width=f_.model.width();
   for (Index token=0;token<limits_.tokens;++token) {
     const auto d=f_.embedding.device();
     auto x=f_.embedding.index_select(0,move(ids[token],d));
@@ -118,7 +127,8 @@ Window Program::run(const Tensor& ids, const std::vector<Tensor>& external_roots
       if(limits_.connectivity)deps=deps | (leaf_ids_.at(d.str())==Index(leaves_.size())+token).unsqueeze(0);
     }
     auto yes=at::ones({limits_.batch},x.options().dtype(at::kBool));
-    queue[token*period][0].push_back({0,token*period,0,0,token,f_.graph.source_domain->input[0],{x,deps},yes});
+    const auto input_node=f_.graph.inputs[0];
+    queue[token*period][input_node].push_back({input_node,token*period,0,0,token,f_.graph.source_domain->input[0],{x,deps},yes});
   }
   std::vector<Value> hidden(limits_.tokens);
   for (Index time=0;time<stop;++time) {
@@ -129,17 +139,22 @@ Window Program::run(const Tensor& ids, const std::vector<Tensor>& external_roots
     for (Index r=0;r<Index(members_.size());++r) select(r,time,events,out.histories[r]);
     for (auto& [node,event]:events) {
       finish(event);out.states[node]=event.next;
+      out.candidates.push_back(event.candidate);out.selected.push_back(event.active);
       const auto first=f_.graph.outgoing_ports.offsets[node];
       for(size_t j=0;j<event.emitted.size();++j) {
         const auto binding=f_.graph.outgoing_ports.bindings[first+event.emit_slots[j]];
         if(binding.kind==0) {
           auto v=event.emitted[j];v.data=masked_rows(v.data,event.active);
           v.dependencies=v.dependencies & event.active.unsqueeze(1);
-          hidden[time/period]=v;out.output_present.push_back(event.active);
+          auto& h=hidden[time/period];
+          if(h.data.defined()){h.data=h.data+v.data;h.dependencies=h.dependencies|v.dependencies;}
+          else h=v;
+          out.output_present.push_back(event.active);
         } else {
           const auto edge=binding.id;const auto& wire=f_.graph.edges[edge];
           Message m{wire.target,time+wire.delay,1,edge,time,f_.graph.source_domain->edge_target[edge],event.emitted[j],event.active};
           queue[m.time][m.node].push_back(m);if(limits_.trace)out.messages.push_back(m);
+          out.edge_presence.push_back(event.active);
         }
       }
       if(limits_.trace)out.events.push_back(std::move(event));

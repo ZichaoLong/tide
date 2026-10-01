@@ -52,7 +52,11 @@ void Program::finish(Event& e) const {
     e.next.value.data=at::where(e.active.unsqueeze(1),e.proposal.value.data*0,e.proposal.value.data);
     if(e.next.valid.defined())e.next.valid=e.next.valid & ~e.active.unsqueeze(1);
   }
-  auto fresh=lh_full_fresh(w,e.proposal.value.data);auto dep=e.proposal.value.dependencies;
+  // Inactive Full is not part of the semantic program. Give its predicated
+  // arithmetic a harmless input before nonlinear/projection work: masking an
+  // already overflowed result would leave NaNs in an otherwise absent VJP.
+  auto fresh=node.identity?e.content.data:lh_full_fresh(w,masked_rows(e.proposal.value.data,e.active));
+  auto dep=node.identity?e.content.dependencies:e.proposal.value.dependencies;
   auto norm=w.extra.find("lh_norm_weight");if(norm!=w.extra.end())dep=dep|dependency(norm->second,d);
   e.fresh={fresh,dep};Tensor projected;
   auto weight=w.extra.find("row_emit_weight");
@@ -60,7 +64,7 @@ void Program::finish(Event& e) const {
   const auto first=f_.graph.outgoing_ports.offsets[e.node];
   for(Index j=first;j<f_.graph.outgoing_ports.offsets[e.node+1];++j) {
     const auto slot=j-first;const auto binding=f_.graph.outgoing_ports.bindings[j];
-    if(binding.kind==1 && e.time%node.emit_period!=node.emit_phases[slot])continue;
+    if(binding.kind==1 && !node.emit_phases.empty() && e.time%node.emit_period!=node.emit_phases[slot])continue;
     auto row=binding.kind==1?edge_rows_[binding.id]:-1;
     e.emit_slots.push_back(slot);
     if(row<0)e.emitted.push_back(e.fresh);

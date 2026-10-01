@@ -51,7 +51,7 @@ def main():
     write_json(build / 'client-manifest.json', dict(schema='tide-accelerator-scale-build-v1',
         source=commit, dirty=dirty, client_source_sha256=identity, core=manifest,
         binary_sha256=digest(binary), loader_sha256=digest(build / 'loader.txt'),
-        additional_binaries={name: digest(build / name) for name in ('tide-bounded-schedule-check','tide-bounded-scale')
+        additional_binaries={name: digest(build / name) for name in ('tide-bounded-schedule-check','tide-bounded-scale','tide-complete-flow')
                              if (build / name).is_file()}))
     print('Built standalone benchmark:', binary)
 

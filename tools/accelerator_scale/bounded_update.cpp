@@ -46,7 +46,11 @@ Event Program::update(Index node,Index time,const State& old,std::vector<Message
   State proposal=old;
   proposal.last=at::where(present,at::full_like(old.last,time),old.last);
   proposal.observations=old.observations+present.to(at::kLong);proposal.seen=old.seen|present;
-  if(coefficients.defined()) {
+  if(spec.identity) {
+    // Identity boundaries emit content but own no evolving numeric state.
+    // The public identity StateKernel returns the old state unchanged.
+    proposal=old;proposal.seen=old.seen|present;
+  } else if(coefficients.defined()) {
     auto decayed=old.value.data;
     for(Index k=0;k<=local_time;++k)
       decayed=at::where((gap>k).unsqueeze(-1),decayed*w.extra.at("add_retention"),decayed);
@@ -88,7 +92,9 @@ Event Program::update(Index node,Index time,const State& old,std::vector<Message
   proposal.value.data=at::where(present.unsqueeze(1),proposal.value.data,old.value.data);
   proposal.value.dependencies=choose_dependencies(present,proposal.value.dependencies,old.value.dependencies);
   e.proposal=proposal;
-  if(spec.readout=="scale-norm-fp32-v1")
+  if(spec.identity)
+    e.descriptor={at::zeros({limits_.batch},w.bias.options()),empty_dependencies(d)};
+  else if(spec.readout=="scale-norm-fp32-v1")
     e.descriptor={at::norm(proposal.value.data,2,{-1},false,at::kFloat),proposal.value.dependencies};
   else if(spec.readout=="linear-v1")
     e.descriptor={(proposal.value.data*w.read).sum(-1),proposal.value.dependencies};

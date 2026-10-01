@@ -17,6 +17,9 @@ add_executable(tide-bounded-schedule-check bounded_check.cpp bounded_train_check
 target_link_libraries(tide-bounded-schedule-check PRIVATE tide-bounded-scheduler ${CMAKE_DL_LIBS})
 add_executable(tide-bounded-scale bounded_benchmark.cpp)
 target_link_libraries(tide-bounded-scale PRIVATE tide-bounded-scheduler)
+add_executable(tide-complete-flow flow_main.cpp flow_config.cpp flow_fixture.cpp flow_execution.cpp
+  flow_check.cpp flow_roots.cpp flow_poison.cpp flow_benchmark.cpp precision.cpp profiling.cpp)
+target_link_libraries(tide-complete-flow PRIVATE tide-bounded-scheduler ${CMAKE_DL_LIBS})
 enable_testing()
 add_executable(tide-accelerator-vjp-test check_vjp_test.cpp check_vjp.cpp)
 target_link_libraries(tide-accelerator-vjp-test PRIVATE tide::runtime)
