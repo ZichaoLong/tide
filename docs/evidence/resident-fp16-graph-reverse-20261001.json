@@ -1,0 +1,311 @@
+{
+  "schema": "tide-resident-fp16-graph-reverse-evidence-v1",
+  "source": "25e996c6a55b56ede9b689c94b8085ff45a56908",
+  "scope": "single-device FP16 graph/retained reverse for sum Aggregate, identity/EMA/Add state, identity/tanh Full, all Emit modes and shared owners; not remaining half modules, public training/checkpoint, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-graph-clean01",
+      "manifest_sha256": "1672bceac95f2b9429a1de16b43780d2e55ae6ae6a1652a9f768e142e18f67d0",
+      "reuse_sha256": "b2173ac9dcbffdba1562d3e9c7c8e7b97edb826a86d8c38a5052abed4a119fce",
+      "source_inputs": 273,
+      "component_sha256": "d8b0b22bedd856bb3e378cd9abf65dcea2bf5f3a82172ab4d569e1b0e00de390",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "b0da842428a9588c781ee8b136ce4c7c6ac7a7c75cdde20ee23338bf1b9a1ac3",
+        "tide-device-graph-vjp-check": "68a366bc7e8cbd33b0a22351050f5672c667a3f130df4874ced72762d9927c08",
+        "tide-device-retained-check": "c6423ac5f42c7bdf4a8785fed216bcbc4d2eed3a95a6b06159434ddb0973fdae",
+        "tide-device-fiber-reverse-check": "068bbd3afbe62755ea158c59d9c27e57147e11d19122e83139f8cece161f529a",
+        "tide-resident-control-training-check": "665c52391becb0d1b36c90f07dc105f495a70055ac1cc1e4f9418a35e435e6a9"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "76ae289c379cdf01c849304467edc11371e54cb1cfecee11bc92804cc579d48b",
+        "tide-device-graph-vjp-check": "567777781a4665d59e13623cde6758fdc5e89313835d7abd3b3f38deb20e7cbe",
+        "tide-device-retained-check": "28baba4c989d68290d6e8cb48ba895c2722231e7c7c93ca00bf09a30ddfbe9a3",
+        "tide-device-fiber-reverse-check": "5ed58eb72ddd2ad93ff1e7ca9656cf341c7b1634cf416758b5126b9ff272f501",
+        "tide-resident-control-training-check": "366c8a5af8df2c81f721a89679766d23e775a8ba4cbe9b6fdf2426a2f83d6f97"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "7943b7950072ac10e0b24ff27b22065c83923102b605964d3ac5bc2547f3c6c3",
+      "parent_manifest_sha256": "03266d3a51564ce6036e8a2b2c55f4e4a4d5eb83f11f820ee9b704a0f80fe4d8",
+      "parent_content_archive_sha256": "c9489a87edb82da716955ece095d28e685ef7f0b84ffb9051185eb6ead52b801",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "af308419e871e6e63b9c0700ca682435e34d562ae0b92e990b7b71af0521911d"
+    },
+    "python": {
+      "name": "low-precision-graph-python-clean01",
+      "manifest_sha256": "658e8b28657b313e540b73ae366a1c8f1c60ef7d7c363cc751eeb0c7e65ffbd1",
+      "reuse_sha256": "09e907f0422d817d0add883a1cea5e6335c6c97852f986b5d3b7487001c431ca",
+      "source_inputs": 273,
+      "component_sha256": "d8b0b22bedd856bb3e378cd9abf65dcea2bf5f3a82172ab4d569e1b0e00de390",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "baed94b77ba1b9d9d10845a059718d8e799394beaedc639ee9885685b29aeffe",
+        "_tide_resident.so": "ee56395d11507cf44c9020ca3ac223a2bd9310f4c8966bba5c92b06949f1e2cc"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "30a824e93ba9392f84acc4715a2b7fe6d5981759d11a0f59e0ab23367ec64c06",
+        "_tide_resident.so": "7425a956480414157362f3fb58afcff24c10a50932b22ec1079c017880fb545d"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "d3ac42a4c0fff31de7a0484fb9cffa29bfd32cb7908fab02e59274f8a88cb921",
+      "parent_manifest_sha256": "bcf3b630ba802d6cc2c53d155f0b8bf07ca13cf5d8b4f8998881c0c49c1c79e8",
+      "parent_content_archive_sha256": "17870e5a25e1d8d1b7847b7c9966116833d589031dfe5de4c63596bb72721d35",
+      "rebuilt_object_sha256": {
+        "graph_vjp.cpp.o": "17a4bb6caa69fc17287d6078c0b1b60fffb90d7ebdac600799851069a34ac933"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-graph-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8c7a22acec8c1c0bdb5f7e188c7fac63a4259812d576eaca658fe83eef1d2b45",
+        "task.log": "afc92687058e6ed1a4cf6bd54108bac2c30306fd0e5367dec54468dcd82aa373"
+      }
+    },
+    {
+      "name": "build-low-precision-graph-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9a0cb32da2c20e508aa967116556bbce8d9878278f5d03f7fcd08cc89d0f9821",
+        "task.log": "7650dae8c05ecf98a112be8a7f37e1bc09ad7b441f06f070b136d6109d65dc22"
+      }
+    },
+    {
+      "name": "low-precision-graph-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "552e04ae0bc4d81538fd21e540bba2930ce9824a5bcec992b3321f55f09bb2e6",
+        "task.log": "1757fe433e0c5b905065055124f3da2e2bcb07e49003d55af629d9f87e5420d8",
+        "queue.json": "6f065bcca8d8a221e076fb54b2c9bcaea26f5c00bc2e0d9d03b1273a23026dc7",
+        "gate/result.json": "4b3733ccddcbc6b6c719a017ae9d847ef56581a346bba568e10af389f6b2c727"
+      }
+    },
+    {
+      "name": "low-precision-graph-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a9ef53b4f69e74408b10e54909ac387143e4d8fb52cd102b5f96d1c36910be99",
+        "task.log": "35572748ff7e77c51b389ca2d57ac148342d1a90b7ed1c5d6f0d0063df05d7c4",
+        "queue.json": "72c0ddb0a4ea902647d101de71cc9c9a29a14aedaad32288ca9748bc7275c486",
+        "gate/result.json": "0d67b9aa9ebd27e5ad237c0a3ddae04b6a26e30784bfced6c095db772074de6c"
+      }
+    },
+    {
+      "name": "low-precision-graph-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "75be3610b3d28f577fb6e7d8d00820adba64c7b20d9cd304b70ee341e8dc7dd3",
+        "task.log": "8d1c4e8ea12056524ef72cdeab5bd1dbdbc802960da44d3233e4907002b47705",
+        "queue.json": "304d953670acbb5a947447e05cfdabcbc82df8341fd5ae86b7730d561e79e0b8"
+      }
+    },
+    {
+      "name": "low-precision-graph-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6236c5b2e9f0df70535f058c2d41aabd7c704df9df762e443f113924b5f281df",
+        "task.log": "b3827f18678b4a196db08f8515d7533f434c1073724566d010cabfa589a97010",
+        "queue.json": "11d53ef25bd17bb0605f181876ef44b8afb8f3ec0700dd499b9522a36d48ed56",
+        "profile/result.json": "299202b30891d28f27cbefe66311348430b65014ea0b67832ed7c8e2d0648370",
+        "profile/profile.log": "fae6388457bfb19c17583b3eace445aa748777a4c9201d61a2e98ce39253ca89"
+      }
+    },
+    {
+      "name": "low-precision-graph-retained-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "c97934b30c49eb1189f7dc33449731c9b7735f3acc002fcfff2d537bba5c2bed",
+        "task.log": "bad7b7cca3f8196d0e32476e4d9e44d32297a6c3fe29d6bd43af1e28f2c4b7d7",
+        "queue.json": "178960ce5014e8c16a03494039cdfe80f273760978b77eca5d40721786b6f3f7",
+        "profile/result.json": "4e0ee0d973a8ee1482457c035137ce53e86c63f94f8edc11438ac23eda816fd7",
+        "profile/profile.log": "0133ffd4eb3cddda7d01fa93c8fc884cb967c34863f96202b68e2bb608ebb9fe"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "graph-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float32.log",
+      "log_sha256": "c1828c209620040c20407bb15658d635e82466b365ce19ad5fa20e238f9efd52"
+    },
+    {
+      "check": "graph-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-graph-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "graph-vjp-float16.log",
+      "log_sha256": "1a8b35190a6cc3df8865308691bf2a5d5aaac55545d30db8d5eadcc404d8218c"
+    },
+    {
+      "check": "retained",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float32.log",
+      "log_sha256": "efa0a79ce11b70f0bdbecc8a8f4daa536300bb1f4c647c69936dedb97b942ffd"
+    },
+    {
+      "check": "retained",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-retained-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "retained-float16.log",
+      "log_sha256": "60d028d8b6f3d989a1cf42e948f3bce0366c78254214c7ee0dc4c3e9493e58e2"
+    },
+    {
+      "check": "fiber-reverse",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-fiber-reverse-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-reverse-float32.log",
+      "log_sha256": "f72087ddd43eba7dd74b38cecf77174fe3b0762927763c9be5b1043bc3079399"
+    },
+    {
+      "check": "fiber-reverse",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-device-fiber-reverse-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-reverse-float16.log",
+      "log_sha256": "17af3640f103f1c81a545978fe00491ef18b0467777ab137482d9f880dd4f6b7"
+    },
+    {
+      "check": "control-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-graph-clean01/tide-resident-control-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "control-training-float32.log",
+      "log_sha256": "09e87f27467389e424643f338a350c21bcc7fdc22d178a881d4350beccbebd5e"
+    }
+  ],
+  "profiles": {
+    "graph-vjp": {
+      "engines": {
+        "AI_VECTOR_CORE": 124237,
+        "AI_CORE": 1941,
+        "MIX_AIV": 1176
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001164503119_01326581PLLPQRLA/mindstudio_profiler_output/op_summary_20261001164539.csv": "63e3fab20cb0464488102fbac33526514aaabac97b0a12ee3c43ebd9baeb0d89",
+        "raw/PROF_000001_20261001164503119_01326581PLLPQRLA/mindstudio_profiler_output/api_statistic_20261001164539.csv": "9e7c10111c7a762d99284f19d06d777a8dfb114704f7d1b2eafb92d3c460e0b3"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    },
+    "retained": {
+      "engines": {
+        "AI_VECTOR_CORE": 95158,
+        "AI_CORE": 1666,
+        "MIX_AIV": 1656
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001164510195_01327072RHJNKLQK/mindstudio_profiler_output/op_summary_20261001164538.csv": "4c0686bdb192f271dc621136020b392aad7f51351866f65f3b32f7c1192b62d7",
+        "raw/PROF_000001_20261001164510195_01327072RHJNKLQK/mindstudio_profiler_output/api_statistic_20261001164538.csv": "1a30a805771df10794a24c6d895677c9e49fbc3517f3d41ce69fc36ca55f7d59"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-graph-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "ee0d449bc436adf1344293b4393efc9efd79fab31aa8af2758c4233c5510fc0f",
+        "task.log": "1d11595d153a4d931d9ab28ee146e9f3d42f0ac649c8b98b238ed9c1c7307716"
+      }
+    },
+    {
+      "name": "low-precision-graph-components-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "750678caf82e95246ce70617c2920aaead452277d17fbb85926defb9967c7023",
+        "task.log": "17c785cc1d6996f0aa412fe39f3e63849d1925a5a66e6b3c88c622430dc0fd31",
+        "gate/result.json": "9d35d472b36c787e47351d8ac1efede58a76575b0699d11da6e7d07ee11200f8",
+        "gate/graph-vjp-float16.log": "6fa6ca40354994d6259240f8ed79c25ccd1060696c694506cfbb86aa4a425c56"
+      }
+    }
+  ]
+}

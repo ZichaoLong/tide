@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T08:43:19.404042+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T08:47:25.498737+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,56 +29,49 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **3e3397378f8b6545230b3ba543a9b0c72296cc94** committed/pushed.
-[FP16 Emit/control report](evidence/resident-fp16-control-20261001.md) and
-[audit](evidence/resident-fp16-control-20261001.json). All7 jobs PASSED/exit0:
-standalone/Python-owned builds,4 component cells,FP32 control-training regression,
-97 Python tests(no skips),two half profiles. Per dtype36 VJP cases/108 replays,
-3 forward cases/9 replays,36 complete-flow configurations/144 windows.
-FP32 training98 trajectories/1568 windows/392 updates. Profile control2499
-AI_VECTOR_CORE/144 MIX_AIV;flow75735 AI_VECTOR_CORE/3042 AI_CORE/36 MIX_AIV.
-No observed AiCPU/logged CPU fallback;not throughput. All jobs terminal.
-Audit: `python TASK/launchers/precision_control_evidence.py 3e3397378f8b6545230b3ba543a9b0c72296cc94`.
-Source/archive/kernel/loader/log/CSV hashes authenticated. Clean snapshot/build
-low-precision-control-clean01;Python-owned build low-precision-control-python-clean01.
-Retain dev01 missing-checker-object build failure and dev03 FP32 regression failure.
-Dev03 incorrectly bypassed ordinary identity Full Emit;restored passing dev02
-production bytes and strengthened identity/connected-zero checks. Only boundary
-identity bypasses Emit;public cpp/src/full_kernel.cpp owns this behavior.
-Prior actual fiber reverse2d7cee1/evidence60f13da remains qualified separately.
+Implementation **25e996c6a55b56ede9b689c94b8085ff45a56908** committed/pushed.
+[FP16 graph/retained reverse report](evidence/resident-fp16-graph-reverse-20261001.md)
+and [audit](evidence/resident-fp16-graph-reverse-20261001.json). All7 fixed-source
+jobs PASSED/exit0:standalone/Python builds,4 graph/retained cells,3 regression
+cells,97 Python tests(no skips),2 half profiles. Each dtype122 graph windows,
+42 retained trajectories/168 windows,FP32/FP64 references,replay. Sum Aggregate,
+identity/EMA/Add state,identity/tanh Full,HARD/HST/SOFTP,all Read coordinates and
+mixed norm/linear,feedback,aliases,after-close/poisoned-live tapes,None/zero.
+Half roots×256;VJP rtol2e-3/atol2e-5;FP32 unchanged. Graph profile124237
+AI_VECTOR_CORE/1941 AI_CORE/1176 MIX_AIV;retained95158/1666/1656 respectively.
+No observed AiCPU/logged CPU fallback;placement only,not throughput.
+Fiber regression90 cases/180 replays per dtype;FP32 control training98 trajectories/
+1568 windows/392 updates. All7 jobs terminal. Source/archive/object/kernel/loader/
+log/CSV hashes authenticated by TASK/launchers/precision_graph_evidence.py REV.
+Clean snapshot/build low-precision-graph-clean01;Python-owned build
+low-precision-graph-python-clean01. Retain dev01 missing-template build failure;
+dev02 half gate refused at CLI before execution due missing explicit
+allow_npu_float16;fixed in checker only. Dev04 strengthened Read coverage and passed.
+No production from failed build reused,no tolerance relaxation.
+Prior control3e33973/evidencee77cd41 and actual fiber2d7cee1/evidence60f13da
+remain separately qualified.
 
 ## Active work and next action
 
-FP16 control evidence committed/pushed as e77cd41. Current implementation:
-actual half complete-graph reverse and retained-window sum/identity/EMA/Add/tanh
-integration,including HARD/HST/SOFTP. CPU-only precision_graph_fixture adapts
-independent Streaming with real half forward rounding and FP32/FP64 leaves;
-never feeds candidate events/results. Actual source/delivery payloads stay half,
-journals/cotangents/parameter alias accumulation stay FP32. Retained tests cover
-four windows including empty continuation,after-close/overwritten-live journals,
-aliases,connected-zero/None,physical message identities and byte accounting.
-Public training/master/checkpoint guards remain until full integration.
-
-Dev04 build and all4 graph/retained cells PASSED/exit0. Each dtype122 graph windows
-and42 retained trajectories/168 windows;replay,all three Read coordinates and mixed
-linear/norm,HARD/HST/SOFTP,FP32/FP64 independent references. Dev02 standalone/Python
-builds,fiber reverse both dtypes,FP32 control training98 trajectories/1568 windows/
-392 updates and97 Python tests all PASSED/exit0. Only checker sources changed
-since dev02 production/oracle build. Dev03 intermediate component gate also passed.
-Retain dev01 launcher failure:old CMake template lacked new fiber-reverse target;
-production rebuilt in dev02. Dev02 half gate failed before execution because
-checkers omitted allow_npu_float16;fixed explicitly,not a changed runtime default.
-
-Next commit/push implementation;freeze low-precision-graph-clean01 at that revision.
-Clean build launchers:build_precision_graph_v3.py(standalone,source-verified dev02
-production/oracle reuse,two checker workers) and build_precision_graph_python_v1.py
-(Python-owned graph reverse rebuild);900s. Then graph-vjp/retained all4 cells,
-fiber-reverse both dtypes/control-training FP32,97 Python tests,two half profiles
-(graph-vjp,retained;512MB each),600s/lease120s. Audit
-`python TASK/launchers/precision_graph_evidence.py REV` expects7 terminal jobs,
-7 standalone cells and97 Python tests. Raw logs: TASK/runs/NAME/status.json and
- task.log; unit tide-execution-flows-NAME.service. Commit evidence separately.
-All current development jobs terminal;historical baseline remains intentionally paused.
+Commit/push current graph/retained evidence,then extend the same independent
+quantized CPU reference and retained checker to normalized Aggregate,LH and
+SwiGLU,then event/fiber cache graph integration. Existing graph_vjp accepts half;
+local module adjoints are qualified but whole-graph coverage is currently only
+the base profile above. Public training/master/checkpoint guards remain.
+Next production/test code not yet edited. precision_graph_fixture.cpp contains
+CPU-only HalfState/HalfSum/HalfFull and physical transport rounding;
+retained_check.cpp already checks all named owners/aliases,initial and physical
+boundary gradients. Reuse these checks;do not duplicate schedulers or CPU core.
+Normalized Aggregate must round raw source product to half before multiplying
+FP32 coefficients,then accumulate unrounded coefficient products in FP32;sum's
+source products are not rounded before accumulation. LH uses standalone
+normalization→half→weight multiply→half→optional bias→half. SwiGLU uses actual
+half matmuls/SiLU/product/residual. Local independent references exist in
+extra_full_check.cpp and aggregate_vjp_check.cpp. Internal graph roots/adjoints
+always FP32,including retained roots;do not recompute whole forward in FP32.
+Training future:training_backward.cpp must accept FP32 cotangents independent
+of payload dtype;training_parameters.cpp and training_owner.cpp still FP32-only,
+master/named half correspondence and checkpoint validation need explicit handling.
 No portable core changes;do not repeat unchanged8,954 CPU checks.
 Remaining F1–F7:all-module half graph/public training/master/checkpoint integrations,
 device peer progression/communication/training,five-preset screening,representative/
