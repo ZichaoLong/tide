@@ -16,9 +16,10 @@ PackedSum append_packed_sum(CannProgram& p,const ReadyBatch& r,const at::Tensor&
   const auto device=r.atoms.values.device();
   for(const auto& t:{r.atoms.values,r.atoms.coordinates,r.fiber_offsets,r.fibers,r.counts,sources,scales,error})
     if(!t.is_contiguous()||t.device()!=device||t.requires_grad())throw std::invalid_argument("packed sum requires contiguous colocated inference buffers");
-  if(device.type()!=c10::DeviceType::PrivateUse1||r.atoms.values.scalar_type()!=at::kFloat
-      ||scales.scalar_type()!=at::kFloat||r.atoms.values.dim()!=2||nodes<1||inputs<0||edges<0)
-    throw std::invalid_argument("packed sum requires NPU FP32 and valid dimensions");
+  const auto dtype=r.atoms.values.scalar_type();const int64_t fp16=dtype==at::kHalf;
+  if(device.type()!=c10::DeviceType::PrivateUse1||(dtype!=at::kFloat&&dtype!=at::kHalf)
+      ||scales.scalar_type()!=dtype||r.atoms.values.dim()!=2||nodes<1||inputs<0||edges<0)
+    throw std::invalid_argument("packed sum requires matching NPU FP32/FP16 buffers and valid dimensions");
   const auto capacity=r.atoms.values.size(0),width=r.atoms.values.size(1);
   if(capacity<1||width<1||r.atoms.coordinates.sizes()!=at::IntArrayRef({capacity,6})
       ||r.fibers.sizes()!=at::IntArrayRef({capacity,4})||r.fiber_offsets.sizes()!=at::IntArrayRef({capacity+1})
@@ -43,7 +44,7 @@ PackedSum append_packed_sum(CannProgram& p,const ReadyBatch& r,const at::Tensor&
   if(!vectorized) {
     p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_content_sum)(1,stream,
       ptr(r.atoms.values),ptr(r.fiber_offsets),ptr(r.counts),ptr(keys),ptr(order),
-      ptr(scales),ptr(out.content),ptr(out.weighted),ptr(error),width),
+      ptr(scales),ptr(out.content),ptr(out.weighted),ptr(error),width,fp16),
       "scalar packed sum");},buffers);
     return out;
   }
@@ -52,7 +53,7 @@ PackedSum append_packed_sum(CannProgram& p,const ReadyBatch& r,const at::Tensor&
   const uint32_t blocks=std::min<int64_t>(32,capacity);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_vector_sum)(blocks,stream,
     ptr(r.atoms.values),ptr(r.fiber_offsets),ptr(r.counts),ptr(keys),ptr(order),ptr(scales),ptr(out.content),
-    ptr(out.weighted),ptr(error),width),"vector packed sum");},
+    ptr(out.weighted),ptr(error),width,fp16),"vector packed sum");},
     buffers);
   return out;
 }

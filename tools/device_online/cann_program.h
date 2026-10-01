@@ -20,6 +20,8 @@ class CannProgram {
   void branch(const at::Tensor& int32_index, const std::vector<size_t>& labels);
   void add(const at::Tensor& destination, const at::Tensor& increment);
   void copy(const at::Tensor& destination, const at::Tensor& source);
+  // Explicit floating conversion, never used for logical indices/counters.
+  void cast(const at::Tensor& input, const at::Tensor& output);
   void zero(const at::Tensor& destination);
   void multiply(const at::Tensor&, const at::Tensor&, const at::Tensor& output);
   void divide(const at::Tensor&, const at::Tensor&, const at::Tensor& output);

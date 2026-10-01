@@ -5,6 +5,27 @@
 #include <iostream>
 
 namespace {
+void casts(at::Device device) {
+  using tide::device_online::CannProgram;
+  at::NoGradGuard guard;
+  const auto opts=at::TensorOptions().device(device).dtype(at::kFloat);
+  // Tail lengths, signed zeros, half rounding boundaries, subnormals and overflow.
+  auto values=at::tensor({0.f,-0.f,1.f,1.0006f,-2.0006f,0.00000006f,65504.f,65520.f,-65520.f},at::kFloat);
+  auto input=at::zeros({9},opts),packed=at::zeros({9},opts.dtype(at::kHalf)),output=at::zeros_like(input);
+  CannProgram program(device);program.cast(input,packed);program.cast(packed,output);program.finish();
+  for(float scale:{1.f,-.5f,0.f}) {
+    auto host=values*scale;input.copy_(host);portable_torch::synchronize(device);program.run();
+    if(!at::equal(packed.cpu(),host.to(at::kHalf))||!at::equal(output.cpu(),host.to(at::kHalf).to(at::kFloat)))
+      throw std::runtime_error("device floating cast disagrees with CPU conversion");
+  }
+  program.close();
+  CannProgram refusal(device);int refused=0;
+  for(const auto& target:{at::zeros({8},opts.dtype(at::kHalf)),at::zeros({9},opts.dtype(at::kLong))}) {
+    try {refusal.cast(input,target);}catch(const std::invalid_argument&){++refused;}
+  }
+  if(refused!=2)throw std::runtime_error("floating cast accepted shape or integer coercion");
+  refusal.close();
+}
 void check(at::Device device,at::ScalarType dtype) {
   using tide::device_online::CannProgram;
   at::NoGradGuard no_grad;
@@ -46,6 +67,6 @@ int main(int argc,char** argv) {
     args.allow_npu_float16=true;
     auto device=portable_torch::resolve_device(args);
     at::set_num_threads(1);at::set_num_interop_threads(1);
-    check(device,args.dtype);return 0;
+    check(device,args.dtype);casts(device);return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

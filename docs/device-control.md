@@ -2,7 +2,9 @@
 
 `tools/device_online` contains separately tested building blocks and an
 experimental [content-driven forward loop](content-flow.md) for an explicit
-existing-module profile. It is not a general module or resident training backend. It isolates CANN runtime
+existing-module profile. The public [resident training owner](resident-training.md)
+has its own graph, adjoint and optimizer gates; passing a component does not
+certify that complete path. This backend isolates CANN runtime
 models, raw ACLNN numerical stages and optional Ascend C kernels from the portable
 core. The independent CPU scheduler and scalar qualification remain unchanged.
 
@@ -52,6 +54,42 @@ budget is separate from queue capacity or model memory. CANN9 rejected nesting a
 captured NPUGraph through RIExecuteAsync on a model-bound stream; the failed
 bridge is retained in the development artifacts, not exposed as a supported API.
 
+### Precision and directed builds
+
+Floating conversion is explicit: `CannProgram::cast` accepts matching shapes
+with FP32/FP16 input and output, and refuses integer coercion. Queue metadata,
+timestamps and counters never pass through this conversion. Copies continue
+to require identical dtypes. Conversion checks include half rounding boundaries,
+subnormals, overflow and reuse with changed inputs.
+
+`PackedFull` accepts matching FP32 or FP16 parameters, payloads and state
+comparisons. Its selected-action planner, stable indices, empty-work branches,
+zero sentinels and chunk loop are shared. Parameter and numerical buffers retain
+the selected dtype; byte budgets account for element size. ACLNN matmul keeps
+the declared dtype. The FP16 component checks compare both CPU storage-dtype
+arithmetic and an independent FP64 formula with explicit lower-precision
+tolerances. This does not yet enable FP16 in the complete resident session.
+
+`PackedLhFull` uses the same selected-action planner for all nine activation /
+normalization profiles in both dtypes, with FP32 normalization statistics and
+unchanged epsilons. Its shared component fixtures retain the original FP32
+thresholds; FP16 has a separate conditioning budget against the FP64 expression.
+The complete FP32 LH graph gate still runs independently of these component tests.
+
+Packed sum accepts matching FP32/FP16 payloads and source scales. Multiplication
+and stable ordered accumulation use FP32; per-source contributions and final
+summaries independently round when stored in the selected payload dtype. Scalar
+and vector paths share the same metadata preflight and source order. Vector
+loads/stores convert whole tiles, including non-aligned tails, without host
+per-message work. Complete resident FP16 Aggregate/state/VJP integration remains
+separate from these building blocks.
+
+`build_device_control.py --checks numerical full` builds only those standalone
+components and their dependencies; the manifest records the requested subset.
+The PackedFull target does not rebuild unrelated attention/VJP kernels.
+Omitting `--checks` still builds the full backend. A subset result never replaces
+the complete registered gate; verify it with the same explicit `--checks` list.
+
 ## Actual messages and closure
 
 `PackedQueue` stores int64 `(sample,node,time,kind,physical source,position)`,
@@ -79,9 +117,11 @@ one AIV kernel, using preallocated metadata workspace and an exact int64 scalar
 pipeline. This initial implementation prioritizes correctness, not optimized
 parallel throughput. Invalid live coordinates set a device error before topology
 indexing. Full graph dispatch, payload generation, grouped numerical contracts,
-model state, peer completion, semantic VJPs and optimizer integration still
-require implementation and separate gates. A readiness kernel alone is not a
-complete resident flow. Placement/profiling results require actual target traces.
+model state, peer completion, semantic VJPs and optimizer integration are outside
+this readiness kernel's scope. The implemented profiles and their separate
+qualification are described by the content-flow and resident-training contracts.
+A readiness kernel alone is not a complete resident flow. Placement/profiling
+results require actual target traces.
 
 ## Packed stages and bounded progression
 

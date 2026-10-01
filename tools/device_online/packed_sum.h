@@ -5,6 +5,8 @@ namespace tide::device_online {
 struct PackedSum {at::Tensor content,weighted,keys,order;};
 // Consume actual packed fibers in their stable order. Vectorization tiles the
 // payload dimension, never the logical message group or its summation order.
+// FP32/FP16 payloads/scales share FP32 products and ordered FP32 accumulation;
+// contribution and summary storage independently round to the payload dtype.
 // Optional [edge,2] origins declare (visible port or -1, positive stride).
 // Sorting affects the Aggregate view; weighted rows retain physical atom order.
 // Inference only: rejects autograd and tensors requiring gradients.

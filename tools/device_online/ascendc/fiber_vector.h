@@ -21,6 +21,18 @@ class FiberVector {
     AscendC::Muls(v,from,1.f,count);output.EnQue(v);v=output.DeQue<float>();
     AscendC::DataCopyPad(gm[offset],v,AscendC::DataCopyExtParams{1,count*4,0,0,0});output.FreeTensor(v);
   }
+  __aicore__ inline void load(AscendC::LocalTensor<float> to,__gm__ half* from,int64_t offset,uint32_t count){
+    AscendC::GlobalTensor<half> gm;gm.SetGlobalBuffer(from);auto v=input.AllocTensor<half>();
+    AscendC::DataCopyPad(v,gm[offset],AscendC::DataCopyExtParams{1,count*2,0,0,0},
+      AscendC::DataCopyPadExtParams<half>{true,0,uint8_t((16-count%16)%16),half(0)});
+    input.EnQue(v);v=input.DeQue<half>();AscendC::Cast(to,v,AscendC::RoundMode::CAST_NONE,count);
+    AscendC::PipeBarrier<PIPE_V>();input.FreeTensor(v);
+  }
+  __aicore__ inline void save(AscendC::LocalTensor<float> from,__gm__ half* to,int64_t offset,uint32_t count){
+    AscendC::GlobalTensor<half> gm;gm.SetGlobalBuffer(to);auto v=output.AllocTensor<half>();
+    AscendC::Cast(v,from,AscendC::RoundMode::CAST_RINT,count);output.EnQue(v);v=output.DeQue<half>();
+    AscendC::DataCopyPad(gm[offset],v,AscendC::DataCopyExtParams{1,count*2,0,0,0});output.FreeTensor(v);
+  }
  private:
   AscendC::TPipe pipe;
   AscendC::TQue<AscendC::QuePosition::VECIN,1> input;

@@ -9,6 +9,7 @@ import subprocess
 import sys
 from build_environment import cache_values
 from build_identity import source_hash
+from device_component_checks import CHECKS
 from durable_records import write_json
 from source_identity import source_state, digest
 
@@ -28,6 +29,8 @@ def main():
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--jobs", type=int, choices=(1, 2, 4), default=2)
     parser.add_argument("--ascendc-soc", help="Explicit target SoC; enable Ascend C closure")
+    parser.add_argument("--checks", nargs="+", choices=tuple(CHECKS),
+                        help="Build only named standalone components; omitted builds the complete backend")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     core, build = args.core_build.resolve(), args.build_dir.resolve()
@@ -37,6 +40,10 @@ def main():
         parser.error("control component requires a matching NPU core")
     if runtime == "python" and not args.ascendc_soc:
         parser.error("Python resident backend requires --ascendc-soc")
+    if args.checks and runtime != "standalone":
+        parser.error("component subsets require a standalone runtime owner")
+    if args.checks and not args.ascendc_soc and any(check not in {"control", "failure", "numerical", "queue"} for check in args.checks):
+        parser.error("selected component requires --ascendc-soc")
     if manifest["cpp_source_sha256"] != source_hash(root):
         parser.error("core source differs; rebuild the native core")
     for name, expected in manifest["binary_sha256"].items():
@@ -59,10 +66,18 @@ def main():
                     "-DCMAKE_PREFIX_PATH="+";".join(p for p in prefixes if p),
                     *(["-DTIDE_DEVICE_ASCENDC=ON", "-DSOC_VERSION="+args.ascendc_soc]
                       if args.ascendc_soc else [])], check=True)
-    subprocess.run(["cmake", "--build", str(build), "--parallel", str(args.jobs)], check=True)
+    targets = [CHECKS[check][0] for check in dict.fromkeys(args.checks or [])]
+    subprocess.run(["cmake", "--build", str(build), "--parallel", str(args.jobs),
+                    *(["--target", *targets] if targets else [])], check=True)
     if runtime == "standalone":
-        subprocess.run(["ctest", "--test-dir", str(build), "--output-on-failure", "--no-tests=error"],
-                       check=True, timeout=120)
+        subset_tests = {"control": "device-control-help", "numerical": "device-numerical-help",
+                        "queue": "packed-queue-cpu-fp32|packed-queue-cpu-fp64",
+                        "full-training": "resident-control-comparison"}
+        tests = [subset_tests[check] for check in args.checks or [] if check in subset_tests]
+        if not targets or tests:
+            subprocess.run(["ctest", "--test-dir", str(build), "--output-on-failure", "--no-tests=error",
+                            *(["-R", "^(" + "|".join(tests) + ")$"] if targets else [])],
+                           check=True, timeout=120)
     binaries, loaders = {}, {}
     names = ["tide-device-control-check", "tide-device-failure-check", "tide-device-numerical-check", "tide-packed-queue-check"]
     if args.ascendc_soc:
@@ -73,6 +88,7 @@ def main():
                       "tide-device-origin-check", "tide-device-emission-check", "tide-device-swiglu-check", "tide-device-fiber-check",
                       "tide-device-fiber-pool-check", "tide-device-event-attention-check", "tide-device-attention-tile-check", "tide-device-memory-check", "tide-device-event-batch-check", "tide-device-fiber-batch-check", "tide-device-aggregate-check"))
         names.append("libtide-resident.so")
+        names.append("tide-packed-lh-check")
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
         names.append("tide-resident-full-training-check")
@@ -81,6 +97,8 @@ def main():
         names.extend(("tide-device-attention-vjp-check", "tide-resident-event-training-check", "tide-device-fiber-vjp-check", "tide-resident-fiber-training-check"))
     if runtime == "python":
         names = ["_tide_resident.so", "libtide-resident.so"]
+    if targets:
+        names = targets
     for name in names:
         binary = build / name
         closure = subprocess.check_output(["ldd", str(binary)], text=True)
@@ -103,6 +121,7 @@ def main():
         npu_runtime=runtime,
         ascendc_soc=args.ascendc_soc,
         binary_sha256=binaries, loader_sha256=loaders,
+        requested_checks=args.checks,
         scope="build/loader/help only; device control check required separately"))
 
 

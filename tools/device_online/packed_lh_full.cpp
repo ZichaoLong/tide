@@ -9,13 +9,16 @@
 namespace tide::device_online {
 namespace {
 uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
-std::pair<long double,long double> footprint(int64_t nodes,int64_t width,int64_t rows) {
-  return {8.L*(nodes+1.L)*width+8.L*(rows+1.L)*width+8.L*nodes,128.L*width+128};
+std::pair<long double,long double> footprint(int64_t nodes,int64_t width,int64_t rows,at::ScalarType dtype) {
+  if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("packed LH Full dtype requires FP32 or FP16");
+  const long double bytes=dtype==at::kHalf?2:4;
+  return {2*bytes*(nodes+1.L)*width+2*bytes*(rows+1.L)*width+8.L*nodes,32*bytes*width+128};
 }
 }
-long double PackedLhFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,int64_t capacity) {
+long double PackedLhFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,int64_t capacity,at::ScalarType dtype) {
+  const auto [fixed,row]=footprint(kinds.size(),width,capacity,dtype);
   if(std::none_of(kinds.begin(),kinds.end(),[](auto k){return k!=0;}))return 0;
-  const auto [fixed,row]=footprint(kinds.size(),width,capacity);return fixed+row;
+  return fixed+row;
 }
 int64_t lh_full_kind(const std::string& name) {
   int64_t kind=0;
@@ -28,15 +31,15 @@ PackedLhFull::PackedLhFull(std::vector<int64_t> kinds,const at::Tensor& weight,c
     at::Device device,int64_t capacity,int64_t max_rows,int64_t budget)
     :nodes_(kinds.size()),width_(weight.defined()&&weight.dim()==2?weight.size(1):0),rows_(capacity),chunk_(max_rows),reserved_(0) {
   if(at::GradMode::is_enabled()||nodes_<1||width_<1||capacity<1||max_rows<1||budget<1
-      ||device.type()!=c10::DeviceType::PrivateUse1||!weight.device().is_cpu()||weight.scalar_type()!=at::kFloat
+      ||device.type()!=c10::DeviceType::PrivateUse1||!weight.device().is_cpu()||(weight.scalar_type()!=at::kFloat&&weight.scalar_type()!=at::kHalf)
       ||weight.sizes()!=at::IntArrayRef{nodes_,width_}||bias.sizes()!=weight.sizes()||bias.device()!=weight.device()
-      ||bias.scalar_type()!=at::kFloat||weight.requires_grad()||bias.requires_grad())
-    throw std::invalid_argument("packed LH Full requires CPU FP32 affine values and no-grad NPU");
+      ||bias.scalar_type()!=weight.scalar_type()||weight.requires_grad()||bias.requires_grad())
+    throw std::invalid_argument("packed LH Full requires matching CPU FP32/FP16 affine values and no-grad NPU");
   std::set<int64_t> groups;
   for(auto kind:kinds){if(kind<0||kind>9)throw std::invalid_argument("unknown packed LH Full contract");if(kind)groups.insert(kind);}
   groups_.assign(groups.begin(),groups.end());
   // Include parameter sentinels, action copies and reusable chunk vectors.
-  const auto [fixed,per_row]=footprint(nodes_,width_,rows_);
+  const auto [fixed,per_row]=footprint(nodes_,width_,rows_,weight.scalar_type());
   if(fixed+per_row>budget)throw std::invalid_argument("one packed LH Full row exceeds workspace budget");
   chunk_=std::min<int64_t>({max_rows,capacity,static_cast<int64_t>((budget-fixed)/per_row)});
   reserved_=static_cast<int64_t>(fixed+per_row*chunk_);
@@ -48,7 +51,7 @@ ActionBatch PackedLhFull::append_stage(CannProgram& p,const ActionBatch& input,c
     const at::Tensor& error,const at::Tensor& chunks) {
   const auto rows=rows_,width=width_,chunk=chunk_,nodes=nodes_;
   if(input.values.sizes()!=at::IntArrayRef{rows,width}||comparison.sizes()!=input.values.sizes()
-      ||input.values.scalar_type()!=at::kFloat||comparison.scalar_type()!=at::kFloat
+      ||input.values.scalar_type()!=weights_.scalar_type()||comparison.scalar_type()!=weights_.scalar_type()
       ||input.coordinates.sizes()!=at::IntArrayRef{rows,4}||input.coordinates.scalar_type()!=at::kLong
       ||input.valid.sizes()!=at::IntArrayRef{rows}||input.valid.scalar_type()!=at::kBool
       ||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt

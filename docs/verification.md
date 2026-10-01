@@ -14,6 +14,11 @@ source, unit, output paths and exact next commands belong in `STATUS.md`.
 | `develop_lh.py --component iocortex --scope smoke` | Archive source, run six IOCortex configurations per dtype with original assertions on and off; no exports |
 | `develop_lh.py --component iocortex` | Full IOCortex matrix, both assertion variants, complete fixtures and independent Python comparison |
 | `qualify.py --lh-snapshot SNAPSHOT` | Full CPU regression and all original LH component gates, including IOCortex/Python |
+| `build_device_control.py --checks CHECKS...` | Build only the named standalone device components; follow with `verify_device_control.py --checks CHECKS...` |
+
+The device build defaults to the full backend. Its optional component subset
+records only binaries actually built, runs the applicable host CTests, and does
+not certify unbuilt components, public clients or the complete graph matrix.
 
 `full` remains the default; the clean qualification entry point has no smoke
 switch. The six smoke configurations collectively include all six pooling

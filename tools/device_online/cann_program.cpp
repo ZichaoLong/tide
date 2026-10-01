@@ -183,6 +183,14 @@ void CannProgram::copy(const at::Tensor& target, const at::Tensor& source) {
     throw std::invalid_argument("CANN copy requires identical shapes and dtypes");
   p.op("aclnnInplaceCopy",p.tensor(target,target.scalar_type()),p.tensor(source,source.scalar_type()));
 }
+void CannProgram::cast(const at::Tensor& input,const at::Tensor& output) {
+  auto& p=*impl_;p.building();
+  auto floating=[](const at::Tensor& value){return value.defined()&&(value.scalar_type()==at::kFloat||value.scalar_type()==at::kHalf);};
+  if(!floating(input)||!floating(output)||input.sizes()!=output.sizes())
+    throw std::invalid_argument("CANN floating cast requires matching shapes and explicit FP32/FP16 buffers");
+  p.op("aclnnCast",p.tensor(input,input.scalar_type()),int(output.scalar_type()==at::kFloat?0:1),
+       p.tensor(output,output.scalar_type()));
+}
 void CannProgram::zero(const at::Tensor& target) {
   auto& p=*impl_;p.op("aclnnInplaceZero",p.tensor(target,target.scalar_type()));
 }

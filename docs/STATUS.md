@@ -68,7 +68,7 @@ regression uses conditioned controls (13 frames,max4.470348e-6); new attention
 checks remain strict. RMSNorm eps1e-8 near-zero strict trajectory failure remains
 in the earlier evidence. Width257 SwiGLU declares2GiB reverse budget.
 
-## Uncommitted FP16 components — development passed
+## FP16 component increment — development passed, commit next
 
 Working tree contains explicit CANN FP32/FP16 conversion, real half PackedFull /
 PackedLhFull buffers and byte budgets, FP16 scalar/vector packed sum with FP32
@@ -95,7 +95,8 @@ All development jobs below are terminal PASSED/exit0:
 - build-low-precision-sum-dev04 / low-precision-sum-dev04:
   normal --checks sum build,both dtypes passed (72 configurations/144 replays/
   18 refusals per dtype,widths1..2048,tails,empty/zero/NaN isolation).
-  low-precision-sum-profile-dev04 passed separately; inspect its engine summary.
+  low-precision-sum-profile-dev04 passed separately:1205 AI_VECTOR_CORE tasks,
+  no AiCPU/logged fallback. All three profiles include CPU assertions,not throughput.
 
 Sources/builds use the same suffix under TASK/sources and TASK/builds.
 Earlier Full/LH production bytes match dev03; subsequent changes affect sum,
@@ -103,8 +104,8 @@ shared vector helper and registry/build selection only. Current sum bytes match
 low-precision-sum-dev04. These are dirty-source development checks,not a clean
 complete-resident FP16 qualification. No new job remains live.
 
-Next: commit/push the attention evidence separately from these code changes.
-Review/commit the tested FP16 component increment,then use a clean exact source
+Attention evidence commit6cb3e2d is pushed.
+Next: commit/push the tested FP16 component increment,then use a clean exact source
 with scripts/build_device_control.py --checks numerical full packed-lh sum
 (standalone core below,Ascend910_9392,jobs2,new build dir). Qualify that explicit
 subset; do not call it full resident support. Continue FP16 state/attention/Read/

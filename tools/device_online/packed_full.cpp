@@ -8,24 +8,28 @@
 
 namespace tide::device_online {
 namespace {
-std::pair<long double,long double> footprint(int64_t nodes,int64_t width) {
-  return {4.L*(nodes+1.L)*(width*static_cast<long double>(width)+width),8.L*width*width+64.L*width+64};
+std::pair<long double,long double> footprint(int64_t nodes,int64_t width,at::ScalarType dtype) {
+  if(dtype!=at::kFloat&&dtype!=at::kHalf)throw std::invalid_argument("packed Full dtype requires FP32 or FP16");
+  const long double bytes=dtype==at::kHalf?2:4;
+  return {bytes*(nodes+1.L)*(width*static_cast<long double>(width)+width),2*bytes*width*width+16*bytes*width+64};
 }
 }
-long double PackedFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width) {
+long double PackedFull::minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,at::ScalarType dtype) {
+  const auto [fixed,row]=footprint(kinds.size(),width,dtype);
   if(std::find(kinds.begin(),kinds.end(),1)==kinds.end())return 1;
-  const auto [fixed,row]=footprint(kinds.size(),width);return fixed+row;
+  return fixed+row;
 }
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
 PackedFull::PackedFull(std::vector<int64_t> kinds,const at::Tensor& weight,const at::Tensor& bias,at::Device device,int64_t max_rows,int64_t budget)
-    :nodes_(kinds.size()),width_(bias.defined()&&bias.dim()==2?bias.size(1):0),chunk_(max_rows),any_tanh_(false) {
+    :nodes_(kinds.size()),width_(bias.defined()&&bias.dim()==2?bias.size(1):0),chunk_(max_rows),any_tanh_(false),
+     dtype_(bias.defined()?bias.scalar_type():at::kFloat) {
   if(at::GradMode::is_enabled()||nodes_<1||width_<1||max_rows<1||budget<1||device.type()!=c10::DeviceType::PrivateUse1||!bias.device().is_cpu()
-      ||bias.scalar_type()!=at::kFloat||bias.sizes()!=at::IntArrayRef{nodes_,width_}
-      ||weight.sizes()!=at::IntArrayRef{nodes_,width_,width_}||weight.device()!=bias.device()||weight.scalar_type()!=at::kFloat
-      ||bias.requires_grad()||weight.requires_grad())throw std::invalid_argument("packed Full requires CPU FP32 parameters, NPU and no-grad");
+      ||(dtype_!=at::kFloat&&dtype_!=at::kHalf)||bias.sizes()!=at::IntArrayRef{nodes_,width_}
+      ||weight.sizes()!=at::IntArrayRef{nodes_,width_,width_}||weight.device()!=bias.device()||weight.scalar_type()!=dtype_
+      ||bias.requires_grad()||weight.requires_grad())throw std::invalid_argument("packed Full requires matching CPU FP32/FP16 parameters, NPU and no-grad");
   for(auto kind:kinds){if(kind<0||kind>1)throw std::invalid_argument("unknown packed Full contract");any_tanh_|=kind==1;}
   // Account for gathered matrices and vector work before selecting a chunk.
-  const auto [persistent,per_row]=footprint(nodes_,width_);
+  const auto [persistent,per_row]=footprint(nodes_,width_,dtype_);
   if(any_tanh_&&(persistent+per_row>budget))throw std::invalid_argument("one packed Full row exceeds workspace budget");
   if(any_tanh_)chunk_=std::min<int64_t>(max_rows,static_cast<int64_t>((budget-persistent)/per_row));
   else chunk_=1;
@@ -42,7 +46,7 @@ ActionBatch PackedFull::append_stage(CannProgram& p,const ActionBatch& content,c
   if(rows<1||rows>std::numeric_limits<int64_t>::max()/4/width-chunk||content.values.size(1)!=width||comparison.sizes()!=content.values.sizes()
       ||content.coordinates.sizes()!=at::IntArrayRef{rows,4}||content.valid.sizes()!=at::IntArrayRef{rows}
       ||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt
-      ||content.values.scalar_type()!=at::kFloat||comparison.scalar_type()!=at::kFloat
+      ||content.values.scalar_type()!=dtype_||comparison.scalar_type()!=dtype_
       ||content.coordinates.scalar_type()!=at::kLong||content.valid.scalar_type()!=at::kBool)
     throw std::invalid_argument("invalid packed Full action shapes");
   for(const auto& x:{content.values,comparison,content.coordinates,content.valid,error})

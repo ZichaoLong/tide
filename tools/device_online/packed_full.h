@@ -18,10 +18,11 @@ class PackedFull {
   const at::Tensor& kinds() const {return kinds_;}
   const at::Tensor& weights() const {return weights_;}
   const at::Tensor& biases() const {return biases_;}
-  static long double minimum_bytes(const std::vector<int64_t>& kinds,int64_t width);
+  static long double minimum_bytes(const std::vector<int64_t>& kinds,int64_t width,at::ScalarType dtype=at::kFloat);
  private:
   int64_t nodes_,width_,chunk_,reserved_=1;
   bool any_tanh_;
+  at::ScalarType dtype_;
   at::Tensor kinds_,weights_,biases_,chunks_;
 };
 } // namespace tide::device_online
