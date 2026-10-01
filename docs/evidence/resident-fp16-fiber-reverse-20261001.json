@@ -1,0 +1,275 @@
+{
+  "schema": "tide-resident-fp16-fiber-reverse-evidence-v1",
+  "source": "2d7cee1ab9838dcaeacf639781053a53a822c308",
+  "scope": "single-device actual fiber cache/source reverse, half dependency links and FP32 cache-bias boundary sums; affected FP32 training/client regression; not complete FP16 graph VJP/training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-fiber-reverse-clean01",
+      "manifest_sha256": "00841dc7c307b34419279991c7c897a27964d27eda6da4b458f4c9afbebaa458",
+      "reuse_sha256": "dac7fdbe1d3fb847cdbe3fa57bb7968ac392b985a2fdd88094bd7e60b8cd535d",
+      "source_inputs": 271,
+      "component_sha256": "ae204dff13e61f0c13e31c5a01bbbe26f0c8fdd6de701da53b479631f6fbdad6",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "51db64499b24c4cb13af8ae21ae2ae3ff90e38e13ca4693d8ae44376b16c3ae0",
+        "tide-device-fiber-reverse-check": "203f4e976e56c4563224dd325a871e28568c423ea91a9c30c182954ce7b75453",
+        "tide-device-reverse-links-check": "137a507a5b57752d09c4a9058d015a71ab2755d273f2d5e88dbe1c15d26934fe",
+        "tide-resident-event-training-check": "95f3f786481baceb5c9d0e4ea94a7a26d85c8ade58959e78a57cb4e3f0c6fdb9",
+        "tide-resident-fiber-training-check": "043bd182346bca74c0766ea378daf17650513881fec2b105088323521940bfbd"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "02e761163ea2d7e57fc817ed09a2d56281bdb3158c6bf5f0f4fa2a1c0974c8f6",
+        "tide-device-fiber-reverse-check": "5790b0abaa3751893b0954b92dedc40ec00a10f834d2f030dcaa4e7002267e9d",
+        "tide-device-reverse-links-check": "9f795394971d7dc48638ae4681a25cd9fab2ee958a583413b589ebc0eee2c6ad",
+        "tide-resident-event-training-check": "90022028cec920701806ab86f063720930bd2a794e7c0417b8dff2d5f78dd766",
+        "tide-resident-fiber-training-check": "bf01e71cf0bbc0b51c25caa98144422d27db501344fbc713e060f9ae73d9ae31"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "f65628c42c39bf4c8d285e32df64fa7d83651df6ab47e0b85e0492c2c4a35c49",
+      "parent_manifest_sha256": "da2080d9fd794dd40591be5cee2e69695bcfae7217725f01e35b2e3550c3b637",
+      "parent_content_archive_sha256": "a760c8de532e5309e87025b4a8ee9c989c52aabc8554e4663161b5f883f8fd28",
+      "rebuilt_object_sha256": {},
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "2b03369983687ff2e3e920839268a8b5214e8a2b19edc1508b99f6a2f2815b31"
+    },
+    "python": {
+      "name": "low-precision-fiber-reverse-python-clean01",
+      "manifest_sha256": "ce2d79fad406a85ee58044143d01df49a79154f2aae657690dd89852e294d33d",
+      "reuse_sha256": "d064d9cdd2bcf9f914fa7624579e7fd69304ebc55de721c04b2c2b3d79ba7c58",
+      "source_inputs": 271,
+      "component_sha256": "ae204dff13e61f0c13e31c5a01bbbe26f0c8fdd6de701da53b479631f6fbdad6",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "53b8efb353f37794f53e5aad4c1739dcb95291715e341e0e6bc4b186aef35226",
+        "_tide_resident.so": "41118e7b1975909416e1954edf2b2ab636c5e00cc602f48ae3e2f11a2e78fe0a"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "a2ccc7078ad4d528d5b47177406d76c1afaf4c68a6635d9a593407325c29b032",
+        "_tide_resident.so": "347a12ef2b029fe499f40baef2c74158a68cd7dcf5f78860ffa38892ed298a24"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "4c003b5a6e0f9c9c52e351eaf7f05431126a719ba9feb2d669bf465486061ffb",
+      "parent_manifest_sha256": "6738007c23f4c969f1ac8ec9bf3d13d2eb1674440d81c2da50be379cf3a36b6c",
+      "parent_content_archive_sha256": "ee49fbb30b9c248b351c0566ac93a8292188675fcfc81bb126d6a6878da3c6cb",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "5f58a3fa432ad48270a002c672adf63a9a23e9620854f8005d20a041902f5b07",
+        "fiber_cache_reverse.cpp.o": "6f6a580f13f5966d44c7182d7648fa2c758c92ac6b68269f2429a6e74b1fa519",
+        "fiber_reverse.cpp.o": "7892878491c9516c71cc91995d839c844e6a95fabba24afb8cdac90f659e5298",
+        "fiber_tape.cpp.o": "0f68214584923474cf81a968ccc616706239e7b73170da3639c22a930e1a8169",
+        "graph_vjp.cpp.o": "f65dd6782a7ab5e01fcb42e31f75dd30b599f718ac3cfb8fee7b4d1d44acbef6",
+        "reverse_links.cpp.o": "30d02a29ef5ce3a8aab815d87d6511259758f016cdf16d179a53d6f43e5f0b4e"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-fiber-reverse-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9f0b48d61bc8b5e6b8f468e170aa33ee30753a54ae9bb8a7fc1daeb18d3605b9",
+        "task.log": "0e0424c764893153670393b315aeb90c719870e1abb4cb970b1f6167b33488c1"
+      }
+    },
+    {
+      "name": "build-low-precision-fiber-reverse-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ca10627a349f8beb1c976131f87cb11d80c5a5384a32d71d3d64de1b0b6b1041",
+        "task.log": "8a2e4997565f8ce050ac7d3dc135e82310b12e4a2af2b3458e3e52274d06ea39"
+      }
+    },
+    {
+      "name": "low-precision-fiber-reverse-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f5196ae255e90d8c2c90f429a1d9eb91619a38b4e851c7d614c445f98d38a969",
+        "task.log": "ad305a27c79efb19fb216adf92cce7fd5de0dd0cad6b4f53433f588ddabaed2d",
+        "queue.json": "071511147adadec6426a0532f5a3671da30715379f20a329a2626aab9763749d",
+        "gate/result.json": "2f105b4a6f1857b3dbed71abd3bff10f8f5bb95036305f60e08fc8f74cb06738"
+      }
+    },
+    {
+      "name": "low-precision-fiber-reverse-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6795a55b0bdf511b669ad983e61d7d0cb41766e76cfbf37ba0c315d16ce6c0ef",
+        "task.log": "d1f53aeaa9c95d924664c675dc68428cdc0778b5a16ef243007791ee49b5586e",
+        "queue.json": "51d15a3c281d118be79cff841013dfe3167edb7dff555c3eae2f2e45eb993450",
+        "gate/result.json": "90f6dc8c10f7c00f9350e1a298bce02521d5e385ec45a557215fda008fa28832"
+      }
+    },
+    {
+      "name": "low-precision-fiber-reverse-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9754d58ace115c7c484e50650d0985d9214925a1998d591a37df6e7c7a460485",
+        "task.log": "fa0a6d833ef2dd5d299b740161bd431a483816dff3da3cf6b7e1bfffc6d92b7d",
+        "queue.json": "64f292638a4caa2318b3e3e23915c83bbc3556a8939346fac374e95653f1a7e3"
+      }
+    },
+    {
+      "name": "low-precision-fiber-reverse-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "33ac5d99daa308c7b413c8b6abc79ee848fb116bf7e28ef5b94445582c490836",
+        "task.log": "f458bbcb7c5c276b0ed050863d0986d9e64d4e846b2678f1b99952798a86aaec",
+        "queue.json": "2ad8a3bbfe52cda38f68c495ce29f9aa8b7441f884627548b0ac16d9785018a1",
+        "profile/result.json": "077c611de29b802e9e5d2396b48fb19b0b9bb34a98174fd8ac21505663d27782",
+        "profile/profile.log": "565d916c55daacf6f8d75f52f76bf01e39ecefcbc5d7b4e105c4995ab8fe0bd9"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "fiber-reverse",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-device-fiber-reverse-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-reverse-float32.log",
+      "log_sha256": "5296b60b2dfc71ea3265fe04887306c56ba0f7366bfb529e548ff648d3b9497e"
+    },
+    {
+      "check": "fiber-reverse",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-device-fiber-reverse-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-reverse-float16.log",
+      "log_sha256": "dfee4c9f3db79f3b45b93dfd1b1555aeae428e331cd2ca07ed6e0cfb19d69a39"
+    },
+    {
+      "check": "reverse-links",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-device-reverse-links-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "reverse-links-float32.log",
+      "log_sha256": "3c03aa7ec0c1baa8d0a22749ca9d5973a2a3f61f932f61d29d12a183c7e3eae8"
+    },
+    {
+      "check": "reverse-links",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-device-reverse-links-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "reverse-links-float16.log",
+      "log_sha256": "2150125f99d9aba5561884ca781a5c7b66a757e227cf5bb476ae4c62479ef54e"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "bfe386a7f9a9ed77e4f7960c3433cbc70962565103b6c7670107f70d664fb200"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-fiber-reverse-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "c1f83562b6def5637ef1f795bd2f13a2dab4057e43d37ec0a106eaa45d653880"
+    }
+  ],
+  "profiles": {
+    "fiber-reverse": {
+      "engines": {
+        "AI_VECTOR_CORE": 162004,
+        "AI_CORE": 11706,
+        "MIX_AIV": 1560
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001155236781_01192595JNAILNOF/mindstudio_profiler_output/op_summary_20261001155314.csv": "a5673016902cec3d9f0e56f1fedacc2364b253a8b881b36ad891d3036cdc2716",
+        "raw/PROF_000001_20261001155236781_01192595JNAILNOF/mindstudio_profiler_output/api_statistic_20261001155314.csv": "f333f022fb4dfbc115f39eaf5337758a8876a52efe863c18c5e011bc9412fdda"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-fiber-reverse-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "f7004d4050a070959dd2192db41c97d66e86c1b645e5e202212dc0a01777823a",
+        "task.log": "41cf177049c4826f97cc03bb59c2f0f5e8239c9e7456a560da8b63891bfc7a70"
+      }
+    },
+    {
+      "name": "low-precision-fiber-reverse-regression-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "91884e5a92f79e6461b3e8d769f4ae76182b8cd968eb69b4c81600a7faacee9e",
+        "task.log": "091d40d4ab5987b40664c0607938f1c5b20658a106030156bf1eb0548cb1e6a2",
+        "gate/result.json": "3d4d06d079d94e734193faa999ccd29e52b5c305e434ba1a85e9007cebf2abcf",
+        "gate/fiber-training-float32.log": "6d7bbe0917d556dbf9f3fee093e87bf79194e3ec9761236e87de80dc9c610162"
+      }
+    }
+  ]
+}

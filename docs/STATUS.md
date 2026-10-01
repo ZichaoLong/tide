@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01T07:31:09.249898+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01T07:55:04.988735+00:00. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -29,79 +29,43 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **f2ec4f161c86c0af6bfaf9ec2ff9755b1cb4d0ea** committed/pushed.
-[FP16 local same-fiber report](evidence/resident-fp16-fiber-vjp-20261001.md)
-and [audit](evidence/resident-fp16-fiber-vjp-20261001.json). All6 jobs PASSED/exit0:
-standalone/Python-owned builds,two dtype cells,FP32 event/fiber regression,
-61 Python cases(no skips),separate half profile. Each dtype37 configurations/
-74 replays,five pooling modes,seven roots,width1/4/257,multihead,changing
-lengths,None/zero,poison padding,tick/budget refusal. Half roots×256;
-rtol2e-3/atol2e-5 half,unchanged2e-5/2e-6 FP32. FP32 training66/172 roots,
-8/20 trajectories. Profile15017 AI_VECTOR_CORE,1405 AI_CORE,170 MIX_AIV;
-no observed AiCPU/logged CPU fallback,not throughput. Physical9/1/3/9→logical0.
-Source/archive/object/loader/log/CSV audit passed. Byte-matched terminal host/
-kernel reuse plus checker/Python host rebuild; not a full vendor rebuild.
-Development fiber dev01/dev02 and regression passed; no failed fiber jobs.
+Implementation **2d7cee1ab9838dcaeacf639781053a53a822c308** committed/pushed.
+[FP16 actual fiber reverse report](evidence/resident-fp16-fiber-reverse-20261001.md)
+and [audit](evidence/resident-fp16-fiber-reverse-20261001.json). All6 jobs PASSED/exit0:
+standalone/Python-owned builds,4 component cells,FP32 event/fiber regression,
+61 Python cases(no skips),separate half profile. Each dtype90 cases/180 replays;
+bias bridge3 cases/6 replays/6 refusals;reverse links64 windows. Five pools,
+7 root modes,streaming/greedy,adopt/clear,width1/4/257,int64 above2^55,
+permuted slots,missing/zero-scale sources,FP32 cache boundary sums beyond half.
+Half roots×256;rtol2e-3/atol2e-5 half,unchanged1e-5/1e-6 FP32.
+Profile162004 AI_VECTOR_CORE,11706 AI_CORE,1560 MIX_AIV;no observed AiCPU/
+logged CPU fallback,not throughput. Physical9/1/13/11→logical0.
+Source/archive/object/loader/log/CSV audit passed,including authenticated
+production objects recovered from checker-failed dev01. FP32 event/fiber
+regression66/172 roots,8/20 trajectories. All jobs terminal;no new speed ratio.
 
-Prior event cache/projection implementation4f195d2,evidence3a8f2e8,all6 jobs
-passed; [report](evidence/resident-fp16-event-vjp-20261001.md). Local attention
-f20c2cc/evidence63824ba,normalized Aggregate/LH/SwiGLU5ce5346/evidence588ed1d
-remain separately qualified. Complete graph/public FP16 training remains guarded.
-No new full-size speed ratio.
+Retained dev01 compile failure:string/const-char helper mismatch. Dev02 FP32
+fiber training failed because complete-graph dtype guard read an optional tanh
+bank;changed to always-present source scales. Dev03 build/gate/regression
+passed. No tolerance relaxation or failed-job relabeling.
+Prior local fiber f2ec4f1/evidencecaa6088,event4f195d2/evidence3a8f2e8,
+local attentionf20c2cc/evidence63824ba,normalized Aggregate/LH/SwiGLU
+5ce5346/evidence588ed1d remain separately qualified.
 
 ## Active work and next action
 
-Local fiber evidence committed/pushed as caa6088. Uncommitted next increment:
-FP16 actual fiber cache/source reverse integration. Changed content_flow.cpp,
-graph_vjp.cpp,reverse_links.cpp,fiber_cache_reverse.cpp,fiber_reverse.cpp,
-fiber_tape.cpp,AscendC tide_fiber_reverse_pack,reverse_links_check.cpp and mapping.
-Actual half journal access now possible; complete-graph dtype guard moved to
-append_graph_vjp,not removed. Reverse links widen half scales to FP32. Fiber
-packing rounds physical source products,loads half params/cache; all roots/carry/
-returned gradients FP32. Sum-only dummy pooling banks are FP32.
+Current evidence ready for separate commit/push. No uncommitted production code.
+Next:half Emit/control/Read adjoints and actual HST/SOFTP forward rounding,
+then complete graph reverse,retained windows,master/checkpoint/public FP16
+training. Keep full graph/public training guards until real integration passes.
+Control probabilities stay FP32 for complete-frame softmax;half Emit must use
+rounded public controls/delta and actual unmixed Full values. All adjoints FP32.
+Do not turn half forward into a whole-FP32 recomputation to bypass integration.
 
-Reverse-link checker extended to both dtypes,64 actual feedback/parallel-edge/
-empty/policy/continuation windows each. New actual fiber reverse checker covers
-90 cases/180 replays per dtype:5 pools,7 roots,streaming/greedy,adopt/clear,
-permuted slots,missing/zero-scale physical inputs,large int64 times,nonempty/
-empty caches,CPU FP32/FP64 quantized-forward gradients. Separate bias bridge:
-3 cases/6 replays/6 refusals,FP32 sums beyond half range,capacity257,padding and
-None/zero. Half complete-graph guard remains explicitly checked. No device result yet.
-
-Preserved build dev01 failure: new checker passed std::string to const char*
-helper; fixed with c_str(),also check physical input position. Kernel/six host
-objects completed before the checker failure; never relabel failed dev01.
-Recovered build-low-precision-fiber-reverse-dev02 PASSED/exit0 from frozen
-TASK/sources/low-precision-fiber-reverse-dev02 into matching build directory.
-Launcher TASK/launchers/build_precision_fiber_reverse_recover.py,900s. Validate
-all source bytes except fixed checker and every completed archive member against
-its object or qualified parent;reuse production objects from terminal failed
-dev01,compile both checkers. Keep failed status/log/source unchanged. Dev02 component gate PASSED:90/180 actual fiber cases/replays and64 reverse-link
-windows per dtype;bias bridge3/6/6. Regression event passed,then fiber failed:
-new complete-graph dtype guard checked the optional tanh weight bank,which is
-undefined for identity-only graphs. Fix uses always-present source scales to
-identify payload dtype. No numerical/tolerance change. Preserve original failure.
-Corrected dev03 build,component gate and FP32 training regression all PASSED/
-exit0. Source/build low-precision-fiber-reverse-dev03,launcher
-build_precision_fiber_reverse_fix.py. Rebuilt only graph_vjp.cpp/checkers;
-remaining authenticated production objects reused. FP32 identity-only full
-training now passes; half complete graph remains rejected. No tolerance change.
-
-Implementation ready to commit. Next fixed clean source:
-freeze_run.py --commit NEW_REV --snapshot low-precision-fiber-reverse-clean01;
-launchers/build_precision_fiber_reverse_recheck.py low-precision-fiber-reverse-clean01
-and build_precision_fiber_reverse_python.py low-precision-fiber-reverse-python-clean01.
-Build900s,two Python host compiler workers;gates/profile600s,lease120s. Run
-fiber-reverse/reverse-links both dtypes,FP32 event/fiber regression,Python
-precision/event/fiber three modules,and separate half fiber-reverse profile.
-Audit precision_fiber_reverse_evidence.py NEW_REV after every job is terminal;
-it reauthenticates the completed objects from checker-failed dev01 too.
-Implementation commit→immutable qualification→separate evidence commit,push each.
-
-Remaining: finish fiber integration,control/graph half adjoints,retained windows,
-master checkpoint/public FP16 training; then peer progression/communication/
+Remaining F1–F7:above half integrations,device peer progression/communication/
 training,five-preset screening,representative/full-size CPU/mixed/resident
-performance,version/migration/CUDA records. F1–F7 incomplete. No subagents/pause.
+performance,version/migration/CUDA records. No subagents or requested pause.
+Implementation commit→immutable qualification→separate evidence commit,push each.
 
 ## Environment and bounded execution
 
