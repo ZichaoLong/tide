@@ -83,36 +83,42 @@ Historical restricted accelerator_scale executors do not replace online flows.
 No new formal full-size throughput result. Do not finish merely on capacity refusal.
 Memory evidence2b6dae2 is committed/pushed. No pending memory qualification.
 
-Optimizer recompute increment ready for implementation commit. DeviceOptimizer
-now evaluates finite candidates, reaches the existing local/cross-card gate, then
-recomputes and commits from frozen gradient/old-state inputs. A separate following
-counter kernel avoids first-use momentum races. SGD/AdamW,FP16 representability,
-None/zero and sticky errors remain. Ordinary AdamW removes12 bytes/active parameter;
-this is a fixed-memory reduction,not total-memory admission or a throughput claim.
-Changed private optimizer layout/C++ and2 Ascend C kernels; public ABI unchanged.
+Optimizer recomputation implementation81f4736b3ed3afd3ed3cf2a7b56a243d3f10b3f2
+is committed/pushed. All8 immutable-source jobs PASSED; audit
+optimizer_recompute_evidence.py exited0. [Report/audit](evidence/resident-optimizer-recompute-20261002.md).
+No live task jobs except the intentionally suspended historical CPU.
 
-Development standalone builds dev01/dev02,Python and installed consumer dev01
-PASSED. Frozen optimizer-recompute-dev02 fixes only a calibration test group;
-production source is identical to dev01. Component-dev02 PASSED4 cells:32 local
-trajectories per payload plus peer optimizer checks. Four1,048,579-element
-calibrations fit one live state set plus2MiB,including last-tile-Inf byte-identical
-refusal. Actual consumer-dev01 PASSED28 native/LibTorch training/split-head cases.
-Retain component-dev01 failure: new test supplied an empty named group, correctly
-updated nothing; explicitly naming weight fixed it. No production semantic failure.
+DeviceOptimizer evaluates finite candidates, reaches local/cross-card consensus,
+then recomputes and commits from frozen gradient/old-state inputs. A following
+counter kernel avoids first-use momentum races. No full numerical proposal banks;
+ordinary AdamW removes12 bytes/active parameter. Public ABI is unchanged,private
+optimizer-dependent objects and2 CANN kernels are rebuilt or byte-verified reused.
+Local32 trajectories per dtype (FP32 updates256,FP16 updates248 with2 expected
+half refusals);peer4 trajectories/32 updates per dtype; public32 trajectories/
+512 windows/128 updates with2→3-card restore; actual consumers28 passed; no skips.
+Four1,048,579-element allocator/last-tile-Inf checks fit one live bank set plus2MiB.
+Independent D32 FP16 training profile:18,453 AI_VECTOR_CORE/704 AI_CORE/258 MIX_AIV,
+no observed AiCPU; each device4 numerical passes/2 counter commits for2 updates.
 
-Fixed old-source D128 baseline and independent CPU calibration both PASSED at
-fdfc748. Input optimizer-recompute-calibration01 has128 body nodes/544 edges,
-D128/B2/T2/V257,17,384,240 parameters. Four windows/two AdamW updates including
-warmup. New calibration-dev01 PASSED; losses/outputs/cut match both old NPU and
-independent CPU. Per-card allocated peak decreases106955264 bytes in construction,
-warmup and measured phases. New measured peaks938704896/844491776 bytes.
-One sample,concurrent development: no formal performance claim.
+Source optimizer-recompute-clean01; backends optimizer-recompute-clean01 and
+optimizer-recompute-python-clean01; installed client optimizer-recompute-consumer-clean01.
+Runs build-optimizer-recompute{,-python,-consumer}-clean01 plus
+optimizer-recompute-{component,session,consumer,calibration,profile}-clean01.
+Do not repeat these completed qualification jobs. Implementation/evidence use
+existing records and recursive dependency audits,not new full-core builds.
 
-Next commit implementation,then frozen optimizer-recompute-clean01; byte-verified
-reuse of both development backends' affected objects/kernels with fresh links,
-installed client,component4/public2→3 checkpoint/consumer28 gates,new D128
-calibration and separate actual FP16 training profile. All development jobs terminal.
-Then evidence commit and continue total-memory planning/F6; no pause authorized.
+D128 calibration128 nodes/544 edges,B2/T2/V257,17,384,240 parameters,FP32 AdamW,
+2-card prefill,4 windows/2 updates including warmup. New measured allocator peaks
+938704896/844491776 bytes; construction298747904/256794624. Each card drops
+106955264 bytes in every noninitial phase against fixed fdfc748 baseline.
+Loss/output/cut also match independent CPU; one timing sample is not a formal
+throughput conclusion. Input optimizer-recompute-calibration01. Retain component
+dev01 test failure: empty named group correctly selected no parameters; corrected
+explicit weight group. No production semantic failure or tolerance relaxation.
+
+Optimizer evidence report/JSON,ROADMAP and this status ready for evidence commit.
+Continue total per-device memory planning and safe chunk selection,then F6.
+No new pause or user approval is required.
 
 ## Environment and job bounds
 
@@ -125,7 +131,8 @@ personal guide by user authorization. TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_A
 preserve module PYTHONPATH,prepend snapshot/python. SoC Ascend910_9392,16 logical
 chips ×64GiB; leased/remapped NPUs only. Standalone/Python runtimes stay separate.
 Core builds placement-cpu-clean01,placement-npu-clean01,placement-npu-python-clean01.
-Qualified resident backends owner-stream-clean01 / owner-stream-python-clean01.
+Qualified resident backends optimizer-recompute-clean01 / optimizer-recompute-python-clean01.
+CPU standalone consumer remains consumer-memory-cpu-clean01 (unchanged core/source).
 freeze_run.py;runtime cwd env -C RUN prevents vendor files polluting snapshots.
 background.slice/Nice10,2 build workers,queue120s/run600s/build900s. Last disk:
 data220GiB/root14GiB;check before heavy writes. Atomic writes:durable_records.replace_text.

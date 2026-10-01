@@ -1,0 +1,5167 @@
+{
+  "schema": "tide-optimizer-recompute-evidence-v1",
+  "source": "81f4736b3ed3afd3ed3cf2a7b56a243d3f10b3f2",
+  "backends": {
+    "standalone": {
+      "name": "optimizer-recompute-clean01",
+      "manifest_sha256": "f0b9cad0f1e9a4f67b53eb31f85e3a24ccfe7c1fd5c6b06c6ceb805534eefef7",
+      "reuse_sha256": "239b1f8f6beefebe79e8ba0a2e8c6487f348cf0b17316240806d5df8d96616fa",
+      "component_sha256": "929c65eef06a60b9de07f7215453dbf0d55b73657c70355f6bd8a226845a56ac",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "d96f886ae185296d80ed4261b2aa159776e3e3a94e63e13a962845ab0d31d0e5",
+        "tide-resident-half-training-check": "139ecf15d26705c044948d7857e824beb4d0092a055e439320c70d4d52210c04",
+        "tide-resident-sharded-session-check": "0213ad27c42280bf5cdec801a70aeae311cacbf05d72706ae883720fe054e746",
+        "tide-device-optimizer-check": "beb3232539187f314919f413993847b71435dd69a9990a099842709cb0f9068c",
+        "tide-sharded-optimizer-check": "2a517c93ab36c899d73068adff5aba0fed7a0d249dcce4208e1ad4643534bdf5"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "8ee8b4ffd9678fcf672df8835774aea5de1b2b41262b40edca0866c3ac0100e6",
+        "tide-resident-half-training-check": "0b40a17261294c96f13c3f78cfe61814ecf6dda0bc708ad614b4d523ac22cbe9",
+        "tide-resident-sharded-session-check": "b7d6961d7c0788b87f55d91746b45a6162ef242f11a1bd01af211a044749fdeb",
+        "tide-device-optimizer-check": "e0093e7d6cf944976a35c46f4f5d65b7ae19268fe2928d4c50587b02e1890f2b",
+        "tide-sharded-optimizer-check": "c67589f18f2575a562149b0ab4d14e6a35619b00ca5b809aad44ff02cd554374"
+      },
+      "kernel_sha256": {
+        "libtide_owner_stream_kernel.a": "9ba1fecd7eb84d1e83a4233cdddd1cfda42c3b48905f6b96c61fc82eab403012",
+        "libtide_projection_shard_plan_kernel.a": "495b2250cba3f847ba43fd523c79ec4adb2caf788ed3adb5f11f796ac07dccde",
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "c61a415d1439c61f916c53d5acae14b169a32177dff551abf9e75da7609abf41",
+        "libtide_optimizer_commit_kernel.a": "9ba3fc00dca1b271e893b026a8f49ddf29392d01a51ecbfbc70f6cf42707c725",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "c6dcb46bf91e718d5a8534a088f5eccac6e62a7add7ec4eba643e6d6a8b24add",
+      "rebuilt_object_sha256": {
+        "device_optimizer.cpp.o": "cdd9e0c17e07ffa894a4083972ac09c9e8823b250ddd92e9174d1e5830eaf021",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "sharded_optimizer.cpp.o": "43544e2fdc65b1feb450d01d1fe084303ad4575e6a4e943d124e067868ef68c4",
+        "sharded_parameter_reduce.cpp.o": "af0a49ca34def09f25c2bfddc73058c0927b74ec6842fb75656630cbd9c6f271"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused"
+    },
+    "python": {
+      "name": "optimizer-recompute-python-clean01",
+      "manifest_sha256": "54153affec4a5a41270ebcfba2c93475ec4913392ba049d95e3a1b9d709a8bb8",
+      "reuse_sha256": "c721945e5ef9ec2ecb20c428c134d4088436cd855f13dbb771ca80d667e958a4",
+      "component_sha256": "929c65eef06a60b9de07f7215453dbf0d55b73657c70355f6bd8a226845a56ac",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "b2cca9e0b6f6da1f5058a32c9eb6772d447ed96383d18a250c2c2958027fa8d1",
+        "_tide_resident.so": "7fb8f961fc8a62eb026506b0f3770470d651ca2ee074924c1361e88046e6c613"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "755f0a1c16d02dea111534489de322d12509119019be70f522d5b13c2c36ca74",
+        "_tide_resident.so": "ed56c7b2e5a99933d811882d5ac4e97f894b34cbdb0c9f41ac31a4deab1818ec"
+      },
+      "kernel_sha256": {
+        "libtide_owner_stream_kernel.a": "9ba1fecd7eb84d1e83a4233cdddd1cfda42c3b48905f6b96c61fc82eab403012",
+        "libtide_projection_shard_plan_kernel.a": "b0b322b3abcd33301b13ec78a6e8c848ff63e06794d88dc902645ec7410a6c35",
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "c61a415d1439c61f916c53d5acae14b169a32177dff551abf9e75da7609abf41",
+        "libtide_optimizer_commit_kernel.a": "9ba3fc00dca1b271e893b026a8f49ddf29392d01a51ecbfbc70f6cf42707c725",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "20789221090edf8fbb3fab3bb6c00123c1e8eef790a5efa1261f167c56600269",
+      "rebuilt_object_sha256": {
+        "device_optimizer.cpp.o": "cdd9e0c17e07ffa894a4083972ac09c9e8823b250ddd92e9174d1e5830eaf021",
+        "optimizer_checkpoint.cpp.o": "2693a6ae32f6f54891180ecac930ad787883b533752edc1ac389f65493eafe28",
+        "sharded_optimizer.cpp.o": "43544e2fdc65b1feb450d01d1fe084303ad4575e6a4e943d124e067868ef68c4",
+        "sharded_parameter_reduce.cpp.o": "af0a49ca34def09f25c2bfddc73058c0927b74ec6842fb75656630cbd9c6f271"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused"
+    }
+  },
+  "client": {
+    "manifest_sha256": "8d2f81e5bddf0500588747c049f4919709b0df0e5b6156f8adce876b53125d88",
+    "binary_sha256": "a70f69f2a58fc6d02ddb177dba57d08e8f4bf03e18b1a094c7042602ac450e6a",
+    "loader_sha256": "1dce7b9a0df94d5d291c01c0fe7413a1ff4a1d2ba54eb499dfcf4690dfa10d5b"
+  },
+  "runs": [
+    {
+      "name": "build-optimizer-recompute-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "932b544feff21f5adef00ebd63a04942e554cbe3296a327dfa6c36d779ccc3c3",
+        "task.log": "8ba9372acbf0b8d8ddad80d01403a1a895be30e5ab560d8e69672c26a60392a5"
+      }
+    },
+    {
+      "name": "build-optimizer-recompute-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1129245152d67ef6d85913e0bcf8d9098a59343eb1cf8162d52ef9094b410ee5",
+        "task.log": "94734a84decf4df9b0262f86dfe7c6ecea5944ca1d0700d0183eca203c0cd857"
+      }
+    },
+    {
+      "name": "build-optimizer-recompute-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fbeab9add01581ec0a330d33e714e0f6aabea977e23fff8f555f83c01bc12c87",
+        "task.log": "62c933ed1d83952b2a98666af1ed9ced747db4a04668f0f99be2950405f1cad2"
+      }
+    },
+    {
+      "name": "optimizer-recompute-component-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "31b470e236af8e69e97b314a1f46ae3c6846815cc7788a7b6d2f1d34bd4c0b06",
+        "task.log": "245b81c66e0316c027066c994adb7448a7d10f95f63705aa7f194d04cde8710a",
+        "queue.json": "4626d48ed49fb564c4b9b0efda27b743c54fb42446702a62a14762c44cee9831",
+        "gate/result.json": "8a1e4f9ac7b1499e7ee527816a4d4480fb58741a21edc3ecc072247083d49a8a"
+      }
+    },
+    {
+      "name": "optimizer-recompute-session-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0d7674657d13bd418c2c793b552199738c0649e41d02f453113aa03bf06c488d",
+        "task.log": "ccdfedcbcfcae49d834c1f6d9ce13b36269626392eba3953c14783cfb882ffaa",
+        "queue.json": "7bcde09d0ab0bfffd6751e3ac2e550c93e0f16d5f01e9e3873f147d7d6524aa7"
+      }
+    },
+    {
+      "name": "optimizer-recompute-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f7353f48acfec68b9381e3b719c36b89bb769b07e582e94764c2ec9ed42ddcc4",
+        "task.log": "21121679ed2c9d850261e994bf69f2034add9f8daf888d9d1569c94b8e703f7b",
+        "queue.json": "69f86c4fc1944b6493f48d75951fc8dbbeb9b3a195c61785de8b8a6d6e7b2e1a"
+      }
+    },
+    {
+      "name": "optimizer-recompute-calibration-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "e2b46abb7ffeba57010b5fb751db585a38fbba381d6f854f6aab0b6fba035ac8",
+        "task.log": "85ab188e57b3a7d121df203bcdfa6bfbcb4a8dddd0ac4d75d6e653005b7b6272",
+        "queue.json": "8032fcb87917466c5c3ed168efe22cd795ab74bb1caaa67192b8169213cbed9d"
+      }
+    },
+    {
+      "name": "optimizer-recompute-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "c904856991fa6b946c2dd402c86f961a770820179982af64607fec8feb405148",
+        "task.log": "afe8e60ca1e49d82603c16cdc38bceb5240f322b4f3581f5329818745217cde0",
+        "queue.json": "5cf02b6a9e8a134180464065a4a15f9bea977d7e3b933ea6814fb63ddd7a0114",
+        "profile/result.json": "4d7b1d3defd82fd816f659c4079fd0400d80b05f9f50cbe6e02430c340eb903e",
+        "profile/profile.log": "a9502da9d783a93bbb56d66ddb646848e2bdf64e85efdefe324fa3cbce9a4e65"
+      }
+    }
+  ],
+  "component": {
+    "schema": "tide-device-components-gate-v1",
+    "source": "81f4736b3ed3afd3ed3cf2a7b56a243d3f10b3f2",
+    "dirty": "",
+    "build": {
+      "schema": "tide-device-control-build-v1",
+      "source": "81f4736b3ed3afd3ed3cf2a7b56a243d3f10b3f2",
+      "dirty": "",
+      "component_sha256": "929c65eef06a60b9de07f7215453dbf0d55b73657c70355f6bd8a226845a56ac",
+      "core": {
+        "source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+        "cpp_source_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+        "torch": "2.10.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.0.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+          }
+        },
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "0cbd37cd2bb3c32f0351e8032ae5597c5ead148d6a12e0991d55f40e55cfcf10",
+          "libtidegraph_runtime.a": "8fc1afa0a2cd093737fdc63454f31051e9d9af7a3e54e3ced093b889e94b9b1b",
+          "tidegraph-smoke": "44e09969b913902d3968feb9517b159e5524341990b4eabe5ff90bb98d56ec5b",
+          "tidegraph-kernel-check": "57b032684ef3aba27b684a378ad0db38543295a4cf96a638deab9de3d476b7f0",
+          "tidegraph-full-check": "a91a93236bb3451178dc2528ea6c428a520d93b545256b531aa80fdb2eee73a5",
+          "tidegraph-aggregate-check": "e4cc2ed3c577e926c7854a7e4fddc9932993df8b6fa6ff84625d5950354dbbd9",
+          "tidegraph-optimizer-check": "e31eaa1e68fed614e9aa0cea237105925eb7cd16dd5b5bff92d7913e7487a1b9",
+          "tidegraph-checkpoint-check": "f1157b77fd0cc84469a48549a27d3cee27567168510e1bc8a2b7f5bc90308c0f",
+          "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+          "tidegraph-streaming-bench": "c6225252be5f1bbf609258c010d231ac8c7e25c97e88d101857b39a33c598434",
+          "tidegraph-scale-bench": "3347f9c80156cde6f4b736571e5ad0bcdbccad9b59a0f4fcea2fc605849eb1cf",
+          "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+          "tidegraph-settle-check": "46c85e50056beb5c2975acfd85ee2d1b352574b1586bdcbe099ef04a77011e58",
+          "tidegraph-greedy-check": "8ee7300a9964603890bd0177b8766d48bd3c63b89079df410624f0d90acf9dd0",
+          "tidegraph-accelerator-check": "f5cb655e48ce1415cafd1f3cb067b810a2114e02b160adb3582d1d2062196d49",
+          "tidegraph-runtime-check": "526f2a57170d518d2790ad47401137ef4b928e0fc4bcc190045788776085f3eb",
+          "tidegraph-read-precision-check": "5d7c5e10b382aa1494115e0a6b4041a1efe429c11218c0a73ddb6c3342c6343b",
+          "tidegraph-placement-check": "973c560604f1bc7491637805d24e434ba7e31a8821df04b44423c94427056fe8"
+        }
+      },
+      "npu_runtime": "standalone",
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "libtide-resident.so": "d96f886ae185296d80ed4261b2aa159776e3e3a94e63e13a962845ab0d31d0e5",
+        "tide-resident-half-training-check": "139ecf15d26705c044948d7857e824beb4d0092a055e439320c70d4d52210c04",
+        "tide-resident-sharded-session-check": "0213ad27c42280bf5cdec801a70aeae311cacbf05d72706ae883720fe054e746",
+        "tide-device-optimizer-check": "beb3232539187f314919f413993847b71435dd69a9990a099842709cb0f9068c",
+        "tide-sharded-optimizer-check": "2a517c93ab36c899d73068adff5aba0fed7a0d249dcce4208e1ad4643534bdf5"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "8ee8b4ffd9678fcf672df8835774aea5de1b2b41262b40edca0866c3ac0100e6",
+        "tide-resident-half-training-check": "0b40a17261294c96f13c3f78cfe61814ecf6dda0bc708ad614b4d523ac22cbe9",
+        "tide-resident-sharded-session-check": "b7d6961d7c0788b87f55d91746b45a6162ef242f11a1bd01af211a044749fdeb",
+        "tide-device-optimizer-check": "e0093e7d6cf944976a35c46f4f5d65b7ae19268fe2928d4c50587b02e1890f2b",
+        "tide-sharded-optimizer-check": "c67589f18f2575a562149b0ab4d14e6a35619b00ca5b809aad44ff02cd554374"
+      },
+      "scope": "recomputed transactional optimizer without proposal banks; two device kernels rebuilt, recursively affected host units rebuilt, remaining artifacts verified; runtime qualification separate"
+    },
+    "state": "passed",
+    "device": "npu:0",
+    "cases": [
+      {
+        "check": "optimizer",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/optimizer-recompute-clean01/tide-device-optimizer-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "optimizer-float32.log",
+        "log_sha256": "3af45b9d322a65dd3ab75261a1faa5812adf9722a3c37ee225e68e17250db5a3"
+      },
+      {
+        "check": "optimizer",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/optimizer-recompute-clean01/tide-device-optimizer-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "optimizer-float16.log",
+        "log_sha256": "d3605ab3c7dd7160bf77d333b65c0caac3f89ea85656b8453b76f642af3bbebb"
+      },
+      {
+        "check": "peer-sharded-optimizer",
+        "dtype": "float32",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/optimizer-recompute-clean01/tide-sharded-optimizer-check",
+          "--device=npu:0",
+          "--dtype=float32"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "peer-sharded-optimizer-float32.log",
+        "log_sha256": "40b59045cf2686182f2b873a61870c20dc4c403d818666ad352a249d731c4e57"
+      },
+      {
+        "check": "peer-sharded-optimizer",
+        "dtype": "float16",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/optimizer-recompute-clean01/tide-sharded-optimizer-check",
+          "--device=npu:0",
+          "--dtype=float16"
+        ],
+        "state": "passed",
+        "exit_code": 0,
+        "log": "peer-sharded-optimizer-float16.log",
+        "log_sha256": "280caa3b6bc8d2ff31254b16ce3df9ee019e203670fa10ca6c3b31aab1ee3e49"
+      }
+    ],
+    "scope": "selected components and declared resident profiles/dtypes; not complete module/dtype/multi-device matrix or throughput qualification"
+  },
+  "optimizer_allocator_calibration": [
+    {
+      "elements": 1048579,
+      "kind": 0,
+      "extra_slot": 0,
+      "budget": 6291468,
+      "peak_allocated_delta": 4463616,
+      "program_workspace_bytes": 0
+    },
+    {
+      "elements": 1048579,
+      "kind": 0,
+      "extra_slot": 1,
+      "budget": 10485784,
+      "peak_allocated_delta": 8657920,
+      "program_workspace_bytes": 0
+    },
+    {
+      "elements": 1048579,
+      "kind": 1,
+      "extra_slot": 0,
+      "budget": 14680100,
+      "peak_allocated_delta": 12852224,
+      "program_workspace_bytes": 0
+    },
+    {
+      "elements": 1048579,
+      "kind": 1,
+      "extra_slot": 1,
+      "budget": 18874416,
+      "peak_allocated_delta": 17046528,
+      "program_workspace_bytes": 0
+    }
+  ],
+  "public_training": {
+    "trajectories": 32,
+    "windows": 512,
+    "updates": 128,
+    "resume": "2 to 3 devices"
+  },
+  "model_observations": [
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "4ec16dc04fde74abc8f6d11f6ef5c31956694d5bdb66b51c17452b008a279c45"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "cc422491afc7af3f465f4badcac141fe5a63fc410ff9924a17205b37588b899d"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "cd72c0bfd454e5abda8bf6c786d06d433e0ee11485838ec906e1530961205b67"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "5254d7cd23185b3af223a0ea4f32bffff967219c32268619f26a06da8ae74099"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "1cc3ff9fd9e1b85b1b2cefec988d01424b5bc84ef6b6f038130a0ed7a40b8785"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "5239654eb9443d9e616d2b7f818fcb2375d7e4740d0cb21882773bea7a1a2336"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "f3249d6972d05c8317057388b48877ba4cb049bb279c61b0664eddb968b10c2b"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "b5d916997d6707bc72e22653e2bd82cd39e2e7b2eacaff45c9057d3379c2c870"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "d3115cbc1b47f95de51af0f9ee738781b681a13ad06dd883f5db678b17b6178d"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "7c7ee1952170b294c03efdac00bd13d28145c86c1faa989cdf16e60b65d16358"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "839d948ee1dbdb4988d5a2e895ba9e82f422a282181c64865a504e8d7d048fee"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "c2fb8134aa21a7ade15e5ca5838d6bff4bcd0cffe052f0f41fe8539c818844f2"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "27a727940a0255557c24fc5b309d739a1626877137d275ad553862594ef9fcd0"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "f87071fa2fc3c4ec4be79cec58c002780a01c169917e5e3882315c7c12075675"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "60e6250828d859b2afb630a79dbfbcceeff4af0d693cf1377afbf676164ba78d"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "78827ac1905c2c4086e9460c3c7fda178ee06453ac1251b1f4becf31e2f71937"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "57a1856faafbd37713d626c106ddf969aee380fca69580a7416ccc2502566e56"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "88b90ba4765bba17a7dd3e77d26dcda8f900b1a1d1a9d45431b36f596a06748c"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "12679151967d9261474860b7bcdf1fc4fad2d5414b24350c47ba1423c284dcea"
+    },
+    {
+      "family": "pdg",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "add",
+      "sha256": "0957896377b4493c79746b85528f0261a60a8abaa24d9c988ca719b8d08dca30"
+    },
+    {
+      "family": "pdg",
+      "implementation": "native",
+      "dtype": "float16",
+      "memory": "attention",
+      "sha256": "1d3c006062216e435925d26b069eb7beb9da12656ea6f50fe1f06a0260e03f87"
+    },
+    {
+      "family": "settle",
+      "implementation": "native",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "34850166ef22154b121791252319a8ac091dbf4b7da6d0a9b1087c50ed0dc72c"
+    },
+    {
+      "family": "timed-dag",
+      "implementation": "libtorch",
+      "dtype": "float16",
+      "memory": "add",
+      "sha256": "3ce7873ed87c209e698ecf83ddedb402886f354848cbb179ad32579b88215326"
+    },
+    {
+      "family": "settle",
+      "implementation": "libtorch",
+      "dtype": "float32",
+      "memory": "attention",
+      "sha256": "550c0c6d9ab5ffc61684d479054a2a91d0be66d9e16f0bd421f434731fd8003e"
+    }
+  ],
+  "split_head_sha256": [
+    "9fa5f3bc03b55d6a6498ccf41acdbceeea54491efd16ac5ed9e6d621ba41ff34",
+    "706ad5f501a1059fe51e6a5e7b579273f37a7dfc8308b825506d3f97e31822ea",
+    "a4aaea9556abe439cf0a903e9bd5578b6bbe415405ade06dff6d01b1589eac7d",
+    "e92150e1ad3d874625d4530452d3a08805d3119b5528b0c1aacaab87d4d28ab0"
+  ],
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 18453,
+      "MIX_AIV": 258,
+      "AI_CORE": 704
+    },
+    "physical_devices": [
+      2,
+      4
+    ],
+    "operator_counts_by_device": {
+      "2": {
+        "ZerosLike": 2524,
+        "Fill": 54,
+        "OnesLike": 33,
+        "Range": 5,
+        "Mul": 548,
+        "Add": 609,
+        "GatherV3": 2677,
+        "Cast": 1118,
+        "GatherV2": 4,
+        "Pack": 12,
+        "IsFinite": 30,
+        "ReduceAll": 32,
+        "tide_queue_propose": 64,
+        "Equal": 340,
+        "tide_closure": 24,
+        "tide_ready_pack": 24,
+        "Less": 24,
+        "tide_sum_plan": 20,
+        "tide_vector_sum": 20,
+        "tide_state_shard_pack": 40,
+        "Sigmoid": 40,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 61,
+        "tide_fiber_chunk": 178,
+        "tide_fiber_pool": 56,
+        "tide_fiber_trace": 20,
+        "tide_journal": 240,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "ScatterUpdate": 404,
+        "tide_frame_select": 20,
+        "SoftmaxV2": 89,
+        "tide_state_shard_selection": 40,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "tide_state_shard_merge": 60,
+        "tide_full_shard_pack": 40,
+        "tide_full_plan": 32,
+        "tide_emission_plan": 20,
+        "tide_emission_chunk": 36,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 348,
+        "tide_fiber_indices": 21,
+        "Transpose": 172,
+        "Swish": 24,
+        "RmsNorm": 24,
+        "tide_projection_shard_plan": 52,
+        "MemSet": 8,
+        "NonZero": 8,
+        "FloorDiv": 24,
+        "BroadcastTo": 28,
+        "FloorMod": 28,
+        "MatMulV2": 48,
+        "LogSoftmaxV2": 24,
+        "GatherElementsV2": 24,
+        "ReduceSum": 118,
+        "Neg": 48,
+        "RealDiv": 56,
+        "Exp": 24,
+        "LinearIndex": 24,
+        "ScatterElementsV2": 24,
+        "LogicalNot": 4,
+        "LogicalAnd": 28,
+        "ReduceAny": 4,
+        "tide_reverse_links": 4,
+        "tide_state_reverse_pack": 8,
+        "tide_cache_merge": 12,
+        "tide_cache_bias_merge": 12,
+        "tide_fiber_reverse_links": 4,
+        "tide_emission_reverse_links": 4,
+        "tide_graph_reverse_meta": 72,
+        "tide_graph_reverse_payload": 64,
+        "tide_emission_vjp_payload": 40,
+        "tide_emission_vjp_plan": 56,
+        "tide_full_reverse_pack": 40,
+        "tide_full_vjp_plan": 20,
+        "tide_full_vjp_payload": 20,
+        "tide_extra_full_plan": 32,
+        "tide_control_merge": 60,
+        "tide_full_reverse_merge": 32,
+        "tide_state_reverse_stage": 40,
+        "tide_state_vjp_plan": 20,
+        "tide_state_vjp": 20,
+        "tide_fiber_reverse_plan": 50,
+        "tide_state_reverse_merge": 164,
+        "TransposeV2": 95,
+        "tide_full_vjp_reduce": 33,
+        "tide_extra_full_payload": 12,
+        "tide_extra_full_reduce": 12,
+        "SiluGrad": 12,
+        "tide_fiber_reverse_pack": 60,
+        "tide_fiber_vjp_plan": 178,
+        "tide_fiber_vjp_state": 60,
+        "tide_fiber_vjp_pool": 90,
+        "tide_fiber_vjp_pack": 84,
+        "tide_attention_reverse_plan": 156,
+        "tide_attention_reverse_pack": 78,
+        "tide_attention_softmax": 26,
+        "tide_attention_merge": 52,
+        "tide_attention_reverse_weights": 26,
+        "tide_attention_reverse_reduce": 26,
+        "tide_fiber_vjp_queries": 26,
+        "tide_fiber_vjp_sources": 32,
+        "tide_fiber_reverse_fold": 60,
+        "tide_graph_reverse_scales": 4,
+        "tide_state_reverse_flags": 4,
+        "tide_window_bridge_meta": 2,
+        "tide_window_bridge_values": 2,
+        "tide_owner_stream": 24,
+        "SelectV2": 8,
+        "Slice": 16,
+        "ConcatD": 4,
+        "InplaceScatterAdd": 4,
+        "Pows": 4,
+        "Sqrt": 4,
+        "Sub": 4,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 4,
+        "tide_optimizer_commit": 2
+      },
+      "4": {
+        "ZerosLike": 1555,
+        "OnesLike": 9,
+        "Range": 5,
+        "Mul": 374,
+        "Add": 267,
+        "GatherV3": 1099,
+        "Sigmoid": 40,
+        "tide_fiber_plan": 20,
+        "tide_fiber_payload": 59,
+        "tide_fiber_chunk": 170,
+        "Cast": 571,
+        "tide_fiber_pool": 52,
+        "tide_fiber_trace": 20,
+        "tide_journal": 40,
+        "tide_state_read": 20,
+        "tide_vector_read": 20,
+        "tide_read_reduce": 20,
+        "tide_content_state": 20,
+        "tide_vector_state": 20,
+        "Equal": 32,
+        "tide_fiber_commit": 20,
+        "BatchMatMulV2": 308,
+        "tide_fiber_indices": 19,
+        "Transpose": 158,
+        "SoftmaxV2": 61,
+        "ScatterUpdate": 97,
+        "tide_full_plan": 28,
+        "Swish": 24,
+        "RmsNorm": 24,
+        "tide_projection_shard_plan": 52,
+        "Fill": 20,
+        "tide_cache_merge": 12,
+        "tide_cache_bias_merge": 12,
+        "tide_fiber_reverse_links": 4,
+        "tide_full_vjp_plan": 16,
+        "tide_full_vjp_payload": 16,
+        "tide_extra_full_plan": 28,
+        "tide_control_merge": 56,
+        "tide_state_reverse_merge": 20,
+        "tide_state_vjp_plan": 20,
+        "tide_state_vjp": 20,
+        "tide_fiber_reverse_plan": 46,
+        "TransposeV2": 79,
+        "tide_full_vjp_reduce": 26,
+        "tide_extra_full_payload": 12,
+        "ReduceSum": 72,
+        "tide_extra_full_reduce": 12,
+        "SiluGrad": 12,
+        "tide_fiber_reverse_pack": 52,
+        "tide_fiber_vjp_plan": 155,
+        "tide_fiber_vjp_state": 52,
+        "tide_fiber_vjp_pool": 78,
+        "tide_fiber_vjp_pack": 75,
+        "tide_attention_reverse_plan": 144,
+        "tide_attention_reverse_pack": 72,
+        "tide_attention_softmax": 24,
+        "tide_attention_merge": 48,
+        "tide_attention_reverse_weights": 24,
+        "tide_attention_reverse_reduce": 24,
+        "tide_fiber_vjp_queries": 24,
+        "tide_fiber_vjp_sources": 27,
+        "tide_fiber_reverse_fold": 52,
+        "tide_state_reverse_flags": 4,
+        "tide_owner_stream": 24,
+        "SelectV2": 8,
+        "LogicalAnd": 8,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 4,
+        "tide_optimizer_commit": 2
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 18453,
+      "MODEL_MAINTAINCE": 84,
+      "MEMCPY_ASYNC": 5282,
+      "MIX_AIV": 258,
+      "MODEL_EXECUTE": 40,
+      "NOTIFY_WAIT": 810,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 2746,
+      "LABEL_SET": 3809,
+      "NOTIFY_RECORD": 810,
+      "AI_CORE": 704,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 54,
+      "BatchMatMulV2_Tiling": 34,
+      "BroadcastTo_Tiling": 2,
+      "Cast_Tiling": 95,
+      "ConcatD_Tiling": 1,
+      "Equal_Tiling": 16,
+      "Exp_Tiling": 1,
+      "Fill_Tiling": 22,
+      "FloorDiv_Tiling": 1,
+      "FloorMod_Tiling": 2,
+      "GatherElementsV2_Tiling": 2,
+      "GatherV2_Tiling": 1,
+      "GatherV3_Tiling": 344,
+      "InplaceScatterAdd_Tiling": 8,
+      "IsFinite_Tiling": 8,
+      "Less_Tiling": 2,
+      "LinearIndex_Tiling": 48,
+      "LogSoftmaxV2_Tiling": 2,
+      "LogicalAnd_Tiling": 7,
+      "LogicalNot_Tiling": 1,
+      "MatMulV2_Tiling": 3,
+      "Mul_Tiling": 53,
+      "Neg_Tiling": 2,
+      "NonZero_Tiling": 16,
+      "OnesLike_Tiling": 7,
+      "Pack_Tiling": 4,
+      "Pows_Tiling": 2,
+      "Range_Tiling": 2,
+      "RealDiv_Tiling": 5,
+      "ReduceAll_Tiling": 8,
+      "ReduceAny_Tiling": 2,
+      "ReduceSum_Tiling": 44,
+      "ScatterElementsV2_Tiling": 48,
+      "ScatterUpdate_Tiling": 77,
+      "SelectV2_Tiling": 6,
+      "Sigmoid_Tiling": 1,
+      "SiluGrad_Tiling": 1,
+      "Slice_Tiling": 4,
+      "SoftmaxV2_Tiling": 16,
+      "Sqrt_Tiling": 1,
+      "Sub_Tiling": 1,
+      "Swish_Tiling": 2,
+      "TransposeV2_Tiling": 10,
+      "Transpose_Tiling": 44,
+      "ZerosLike_Tiling": 471,
+      "aclmdlRIBindStream": 28,
+      "aclmdlRIBuildBegin": 28,
+      "aclmdlRIBuildEnd": 28,
+      "aclmdlRIDestroy": 28,
+      "aclmdlRIEndTask": 28,
+      "aclmdlRIExecuteAsync": 40,
+      "aclmdlRIUnbindStream": 28,
+      "aclnnAdd": 64,
+      "aclnnAddGetWorkspaceSize": 140,
+      "aclnnAdds": 28,
+      "aclnnAddsGetWorkspaceSize": 2,
+      "aclnnAll": 32,
+      "aclnnAllGetWorkspaceSize": 4,
+      "aclnnAny": 4,
+      "aclnnAnyGetWorkspaceSize": 1,
+      "aclnnArange": 10,
+      "aclnnArangeGetWorkspaceSize": 2,
+      "aclnnBatchMatMul": 122,
+      "aclnnBatchMatMulGetWorkspaceSize": 122,
+      "aclnnBitwiseAndTensor": 36,
+      "aclnnBitwiseAndTensorGetWorkspaceSize": 7,
+      "aclnnCast": 240,
+      "aclnnCastGetWorkspaceSize": 240,
+      "aclnnCat": 4,
+      "aclnnCatGetWorkspaceSize": 1,
+      "aclnnDiv": 4,
+      "aclnnDivGetWorkspaceSize": 1,
+      "aclnnDivs": 28,
+      "aclnnDivsGetWorkspaceSize": 4,
+      "aclnnEmbedding": 4,
+      "aclnnEmbeddingGetWorkspaceSize": 1,
+      "aclnnEqScalar": 4,
+      "aclnnEqScalarGetWorkspaceSize": 1,
+      "aclnnEqTensor": 51,
+      "aclnnEqTensorGetWorkspaceSize": 51,
+      "aclnnExp": 24,
+      "aclnnExpGetWorkspaceSize": 1,
+      "aclnnFloorDivides": 24,
+      "aclnnFloorDividesGetWorkspaceSize": 1,
+      "aclnnGather": 24,
+      "aclnnGatherGetWorkspaceSize": 1,
+      "aclnnIndexAdd": 4,
+      "aclnnIndexAddGetWorkspaceSize": 4,
+      "aclnnIndexSelect": 598,
+      "aclnnIndexSelectGetWorkspaceSize": 442,
+      "aclnnInplaceAdd": 159,
+      "aclnnInplaceCopy": 853,
+      "aclnnInplaceCopyGetWorkspaceSize": 796,
+      "aclnnInplaceDivs": 24,
+      "aclnnInplaceFillScalar": 74,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 22,
+      "aclnnInplaceIndexCopy": 77,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 77,
+      "aclnnInplaceOne": 42,
+      "aclnnInplaceOneGetWorkspaceSize": 7,
+      "aclnnInplaceZero": 2028,
+      "aclnnInplaceZeroGetWorkspaceSize": 911,
+      "aclnnIsFinite": 30,
+      "aclnnIsFiniteGetWorkspaceSize": 4,
+      "aclnnLogSoftmax": 24,
+      "aclnnLogSoftmaxGetWorkspaceSize": 1,
+      "aclnnLogicalNot": 4,
+      "aclnnLogicalNotGetWorkspaceSize": 1,
+      "aclnnLtScalar": 4,
+      "aclnnLtScalarGetWorkspaceSize": 1,
+      "aclnnLtTensor": 1,
+      "aclnnLtTensorGetWorkspaceSize": 1,
+      "aclnnMatmul": 72,
+      "aclnnMatmulGetWorkspaceSize": 3,
+      "aclnnMul": 108,
+      "aclnnMulGetWorkspaceSize": 108,
+      "aclnnMuls": 86,
+      "aclnnMulsGetWorkspaceSize": 13,
+      "aclnnNeg": 48,
+      "aclnnNegGetWorkspaceSize": 2,
+      "aclnnNonzero": 8,
+      "aclnnNonzeroGetWorkspaceSize": 8,
+      "aclnnPermute": 68,
+      "aclnnPermuteGetWorkspaceSize": 68,
+      "aclnnPowTensorScalar": 4,
+      "aclnnPowTensorScalarGetWorkspaceSize": 1,
+      "aclnnReduceSum": 90,
+      "aclnnReduceSumGetWorkspaceSize": 66,
+      "aclnnRemainderTensorScalar": 28,
+      "aclnnRemainderTensorScalarGetWorkspaceSize": 2,
+      "aclnnRmsNorm": 10,
+      "aclnnRmsNormGetWorkspaceSize": 10,
+      "aclnnRmsNormTiling": 3,
+      "aclnnSWhere": 16,
+      "aclnnSWhereGetWorkspaceSize": 6,
+      "aclnnScatterAdd": 24,
+      "aclnnScatterAddGetWorkspaceSize": 24,
+      "aclnnSigmoid": 10,
+      "aclnnSigmoidGetWorkspaceSize": 10,
+      "aclnnSilu": 10,
+      "aclnnSiluBackward": 8,
+      "aclnnSiluBackwardGetWorkspaceSize": 8,
+      "aclnnSiluGetWorkspaceSize": 10,
+      "aclnnSoftmax": 15,
+      "aclnnSoftmaxGetWorkspaceSize": 15,
+      "aclnnSqrt": 4,
+      "aclnnSqrtGetWorkspaceSize": 1,
+      "aclnnStack": 12,
+      "aclnnStackGetWorkspaceSize": 4,
+      "aclnnSub": 4,
+      "aclnnSubGetWorkspaceSize": 1,
+      "aclrtBinaryLoadFromData": 114,
+      "aclrtCreateEventExWithFlag": 1,
+      "aclrtCreateLabel": 520,
+      "aclrtCreateLabelList": 28,
+      "aclrtCreateNotify": 134,
+      "aclrtCreateStreamWithConfig": 60,
+      "aclrtCtxGetFloatOverflowAddr": 1,
+      "aclrtCtxGetSysParamOpt": 1312,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 520,
+      "aclrtDestroyLabelList": 28,
+      "aclrtDestroyNotify": 266,
+      "aclrtDestroyStream": 56,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 134,
+      "aclrtDeviceEnablePeerAccess": 4,
+      "aclrtFree": 725,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 158,
+      "aclrtGetResInCurrentThread": 6416,
+      "aclrtGetStreamAttribute": 5250,
+      "aclrtLaunchKernelWithHostArgs": 4596,
+      "aclrtMalloc": 694,
+      "aclrtMemcpy": 690,
+      "aclrtMemcpyAsync": 1101,
+      "aclrtNotifyGetExportKey": 132,
+      "aclrtNotifyImportByKey": 132,
+      "aclrtNotifySetImportPid": 132,
+      "aclrtRecordNotify": 149,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 10196,
+      "aclrtSetLabel": 520,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 315,
+      "aclrtSynchronizeDeviceWithTimeout": 73,
+      "aclrtSynchronizeStream": 678,
+      "aclrtSynchronizeStreamWithTimeout": 68,
+      "aclrtWaitAndResetNotify": 149
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261002072838027_03420707IRBPMDPI/mindstudio_profiler_output/task_time_20261002072850.csv": "37d4af2b3809abb5412c10fca5d369e7785a521a4181d02116dcf98869048f0e",
+      "raw/PROF_000001_20261002072838027_03420707IRBPMDPI/mindstudio_profiler_output/op_summary_20261002072850.csv": "f50d5a086955ecfde8f4b34b67b9cbf876a673845082ee67df38fe7a2ba2be7b",
+      "raw/PROF_000001_20261002072838027_03420707IRBPMDPI/mindstudio_profiler_output/api_statistic_20261002072850.csv": "2e82c4b66785a74ec6aeafce424b79f84f9454fa85fb2bcf9525d05b949e45ef"
+    },
+    "scope": "per-edge-affine attention with embedding/head, public standalone online greedy resident; two complete AdamW updates/four continued windows, construction included, diagnostics off; instrumented, not throughput",
+    "aicpu_operators": {},
+    "consumer_sha256": "a3b047488ffd5a40794976a1eab03025693cd892449fefc7bd055b7aeb609d00",
+    "workload_sha256": "7c379ee613d9c738f0a40a87b1c215450e27114cca893081fa7ee2f09b74b855"
+  },
+  "actual_consumer_calibration": {
+    "packet": {
+      "schema": "tide-complete-flow-workload-v2",
+      "graph": {
+        "nodes": 128,
+        "regions": 8,
+        "node_regions": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "ranks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "edges": [
+          [
+            0,
+            16,
+            1
+          ],
+          [
+            0,
+            17,
+            1
+          ],
+          [
+            0,
+            18,
+            1
+          ],
+          [
+            0,
+            27,
+            1
+          ],
+          [
+            0,
+            32,
+            2
+          ],
+          [
+            1,
+            17,
+            1
+          ],
+          [
+            1,
+            18,
+            1
+          ],
+          [
+            1,
+            19,
+            1
+          ],
+          [
+            1,
+            20,
+            1
+          ],
+          [
+            1,
+            33,
+            2
+          ],
+          [
+            2,
+            18,
+            1
+          ],
+          [
+            2,
+            19,
+            1
+          ],
+          [
+            2,
+            20,
+            1
+          ],
+          [
+            2,
+            21,
+            1
+          ],
+          [
+            2,
+            34,
+            2
+          ],
+          [
+            3,
+            19,
+            1
+          ],
+          [
+            3,
+            20,
+            1
+          ],
+          [
+            3,
+            21,
+            1
+          ],
+          [
+            3,
+            22,
+            1
+          ],
+          [
+            3,
+            35,
+            2
+          ],
+          [
+            4,
+            20,
+            1
+          ],
+          [
+            4,
+            21,
+            1
+          ],
+          [
+            4,
+            22,
+            1
+          ],
+          [
+            4,
+            23,
+            1
+          ],
+          [
+            4,
+            36,
+            2
+          ],
+          [
+            5,
+            21,
+            1
+          ],
+          [
+            5,
+            22,
+            1
+          ],
+          [
+            5,
+            23,
+            1
+          ],
+          [
+            5,
+            16,
+            1
+          ],
+          [
+            5,
+            37,
+            2
+          ],
+          [
+            6,
+            22,
+            1
+          ],
+          [
+            6,
+            23,
+            1
+          ],
+          [
+            6,
+            16,
+            1
+          ],
+          [
+            6,
+            17,
+            1
+          ],
+          [
+            6,
+            38,
+            2
+          ],
+          [
+            7,
+            23,
+            1
+          ],
+          [
+            7,
+            16,
+            1
+          ],
+          [
+            7,
+            17,
+            1
+          ],
+          [
+            7,
+            18,
+            1
+          ],
+          [
+            7,
+            39,
+            2
+          ],
+          [
+            8,
+            24,
+            1
+          ],
+          [
+            8,
+            25,
+            1
+          ],
+          [
+            8,
+            26,
+            1
+          ],
+          [
+            8,
+            19,
+            1
+          ],
+          [
+            8,
+            40,
+            2
+          ],
+          [
+            9,
+            25,
+            1
+          ],
+          [
+            9,
+            26,
+            1
+          ],
+          [
+            9,
+            27,
+            1
+          ],
+          [
+            9,
+            28,
+            1
+          ],
+          [
+            9,
+            41,
+            2
+          ],
+          [
+            10,
+            26,
+            1
+          ],
+          [
+            10,
+            27,
+            1
+          ],
+          [
+            10,
+            28,
+            1
+          ],
+          [
+            10,
+            29,
+            1
+          ],
+          [
+            10,
+            42,
+            2
+          ],
+          [
+            11,
+            27,
+            1
+          ],
+          [
+            11,
+            28,
+            1
+          ],
+          [
+            11,
+            29,
+            1
+          ],
+          [
+            11,
+            30,
+            1
+          ],
+          [
+            11,
+            43,
+            2
+          ],
+          [
+            12,
+            28,
+            1
+          ],
+          [
+            12,
+            29,
+            1
+          ],
+          [
+            12,
+            30,
+            1
+          ],
+          [
+            12,
+            31,
+            1
+          ],
+          [
+            12,
+            44,
+            2
+          ],
+          [
+            13,
+            29,
+            1
+          ],
+          [
+            13,
+            30,
+            1
+          ],
+          [
+            13,
+            31,
+            1
+          ],
+          [
+            13,
+            24,
+            1
+          ],
+          [
+            13,
+            45,
+            2
+          ],
+          [
+            14,
+            30,
+            1
+          ],
+          [
+            14,
+            31,
+            1
+          ],
+          [
+            14,
+            24,
+            1
+          ],
+          [
+            14,
+            25,
+            1
+          ],
+          [
+            14,
+            46,
+            2
+          ],
+          [
+            15,
+            31,
+            1
+          ],
+          [
+            15,
+            24,
+            1
+          ],
+          [
+            15,
+            25,
+            1
+          ],
+          [
+            15,
+            26,
+            1
+          ],
+          [
+            15,
+            47,
+            2
+          ],
+          [
+            16,
+            32,
+            1
+          ],
+          [
+            16,
+            33,
+            1
+          ],
+          [
+            16,
+            34,
+            1
+          ],
+          [
+            16,
+            43,
+            1
+          ],
+          [
+            16,
+            48,
+            2
+          ],
+          [
+            17,
+            33,
+            1
+          ],
+          [
+            17,
+            34,
+            1
+          ],
+          [
+            17,
+            35,
+            1
+          ],
+          [
+            17,
+            36,
+            1
+          ],
+          [
+            17,
+            49,
+            2
+          ],
+          [
+            18,
+            34,
+            1
+          ],
+          [
+            18,
+            35,
+            1
+          ],
+          [
+            18,
+            36,
+            1
+          ],
+          [
+            18,
+            37,
+            1
+          ],
+          [
+            18,
+            50,
+            2
+          ],
+          [
+            19,
+            35,
+            1
+          ],
+          [
+            19,
+            36,
+            1
+          ],
+          [
+            19,
+            37,
+            1
+          ],
+          [
+            19,
+            38,
+            1
+          ],
+          [
+            19,
+            51,
+            2
+          ],
+          [
+            20,
+            36,
+            1
+          ],
+          [
+            20,
+            37,
+            1
+          ],
+          [
+            20,
+            38,
+            1
+          ],
+          [
+            20,
+            39,
+            1
+          ],
+          [
+            20,
+            52,
+            2
+          ],
+          [
+            21,
+            37,
+            1
+          ],
+          [
+            21,
+            38,
+            1
+          ],
+          [
+            21,
+            39,
+            1
+          ],
+          [
+            21,
+            32,
+            1
+          ],
+          [
+            21,
+            53,
+            2
+          ],
+          [
+            22,
+            38,
+            1
+          ],
+          [
+            22,
+            39,
+            1
+          ],
+          [
+            22,
+            32,
+            1
+          ],
+          [
+            22,
+            33,
+            1
+          ],
+          [
+            22,
+            54,
+            2
+          ],
+          [
+            23,
+            39,
+            1
+          ],
+          [
+            23,
+            32,
+            1
+          ],
+          [
+            23,
+            33,
+            1
+          ],
+          [
+            23,
+            34,
+            1
+          ],
+          [
+            23,
+            55,
+            2
+          ],
+          [
+            24,
+            40,
+            1
+          ],
+          [
+            24,
+            41,
+            1
+          ],
+          [
+            24,
+            42,
+            1
+          ],
+          [
+            24,
+            35,
+            1
+          ],
+          [
+            24,
+            56,
+            2
+          ],
+          [
+            25,
+            41,
+            1
+          ],
+          [
+            25,
+            42,
+            1
+          ],
+          [
+            25,
+            43,
+            1
+          ],
+          [
+            25,
+            44,
+            1
+          ],
+          [
+            25,
+            57,
+            2
+          ],
+          [
+            26,
+            42,
+            1
+          ],
+          [
+            26,
+            43,
+            1
+          ],
+          [
+            26,
+            44,
+            1
+          ],
+          [
+            26,
+            45,
+            1
+          ],
+          [
+            26,
+            58,
+            2
+          ],
+          [
+            27,
+            43,
+            1
+          ],
+          [
+            27,
+            44,
+            1
+          ],
+          [
+            27,
+            45,
+            1
+          ],
+          [
+            27,
+            46,
+            1
+          ],
+          [
+            27,
+            59,
+            2
+          ],
+          [
+            28,
+            44,
+            1
+          ],
+          [
+            28,
+            45,
+            1
+          ],
+          [
+            28,
+            46,
+            1
+          ],
+          [
+            28,
+            47,
+            1
+          ],
+          [
+            28,
+            60,
+            2
+          ],
+          [
+            29,
+            45,
+            1
+          ],
+          [
+            29,
+            46,
+            1
+          ],
+          [
+            29,
+            47,
+            1
+          ],
+          [
+            29,
+            40,
+            1
+          ],
+          [
+            29,
+            61,
+            2
+          ],
+          [
+            30,
+            46,
+            1
+          ],
+          [
+            30,
+            47,
+            1
+          ],
+          [
+            30,
+            40,
+            1
+          ],
+          [
+            30,
+            41,
+            1
+          ],
+          [
+            30,
+            62,
+            2
+          ],
+          [
+            31,
+            47,
+            1
+          ],
+          [
+            31,
+            40,
+            1
+          ],
+          [
+            31,
+            41,
+            1
+          ],
+          [
+            31,
+            42,
+            1
+          ],
+          [
+            31,
+            63,
+            2
+          ],
+          [
+            32,
+            48,
+            1
+          ],
+          [
+            32,
+            49,
+            1
+          ],
+          [
+            32,
+            50,
+            1
+          ],
+          [
+            32,
+            59,
+            1
+          ],
+          [
+            32,
+            64,
+            2
+          ],
+          [
+            33,
+            49,
+            1
+          ],
+          [
+            33,
+            50,
+            1
+          ],
+          [
+            33,
+            51,
+            1
+          ],
+          [
+            33,
+            52,
+            1
+          ],
+          [
+            33,
+            65,
+            2
+          ],
+          [
+            34,
+            50,
+            1
+          ],
+          [
+            34,
+            51,
+            1
+          ],
+          [
+            34,
+            52,
+            1
+          ],
+          [
+            34,
+            53,
+            1
+          ],
+          [
+            34,
+            66,
+            2
+          ],
+          [
+            35,
+            51,
+            1
+          ],
+          [
+            35,
+            52,
+            1
+          ],
+          [
+            35,
+            53,
+            1
+          ],
+          [
+            35,
+            54,
+            1
+          ],
+          [
+            35,
+            67,
+            2
+          ],
+          [
+            36,
+            52,
+            1
+          ],
+          [
+            36,
+            53,
+            1
+          ],
+          [
+            36,
+            54,
+            1
+          ],
+          [
+            36,
+            55,
+            1
+          ],
+          [
+            36,
+            68,
+            2
+          ],
+          [
+            37,
+            53,
+            1
+          ],
+          [
+            37,
+            54,
+            1
+          ],
+          [
+            37,
+            55,
+            1
+          ],
+          [
+            37,
+            48,
+            1
+          ],
+          [
+            37,
+            69,
+            2
+          ],
+          [
+            38,
+            54,
+            1
+          ],
+          [
+            38,
+            55,
+            1
+          ],
+          [
+            38,
+            48,
+            1
+          ],
+          [
+            38,
+            49,
+            1
+          ],
+          [
+            38,
+            70,
+            2
+          ],
+          [
+            39,
+            55,
+            1
+          ],
+          [
+            39,
+            48,
+            1
+          ],
+          [
+            39,
+            49,
+            1
+          ],
+          [
+            39,
+            50,
+            1
+          ],
+          [
+            39,
+            71,
+            2
+          ],
+          [
+            40,
+            56,
+            1
+          ],
+          [
+            40,
+            57,
+            1
+          ],
+          [
+            40,
+            58,
+            1
+          ],
+          [
+            40,
+            51,
+            1
+          ],
+          [
+            40,
+            72,
+            2
+          ],
+          [
+            41,
+            57,
+            1
+          ],
+          [
+            41,
+            58,
+            1
+          ],
+          [
+            41,
+            59,
+            1
+          ],
+          [
+            41,
+            60,
+            1
+          ],
+          [
+            41,
+            73,
+            2
+          ],
+          [
+            42,
+            58,
+            1
+          ],
+          [
+            42,
+            59,
+            1
+          ],
+          [
+            42,
+            60,
+            1
+          ],
+          [
+            42,
+            61,
+            1
+          ],
+          [
+            42,
+            74,
+            2
+          ],
+          [
+            43,
+            59,
+            1
+          ],
+          [
+            43,
+            60,
+            1
+          ],
+          [
+            43,
+            61,
+            1
+          ],
+          [
+            43,
+            62,
+            1
+          ],
+          [
+            43,
+            75,
+            2
+          ],
+          [
+            44,
+            60,
+            1
+          ],
+          [
+            44,
+            61,
+            1
+          ],
+          [
+            44,
+            62,
+            1
+          ],
+          [
+            44,
+            63,
+            1
+          ],
+          [
+            44,
+            76,
+            2
+          ],
+          [
+            45,
+            61,
+            1
+          ],
+          [
+            45,
+            62,
+            1
+          ],
+          [
+            45,
+            63,
+            1
+          ],
+          [
+            45,
+            56,
+            1
+          ],
+          [
+            45,
+            77,
+            2
+          ],
+          [
+            46,
+            62,
+            1
+          ],
+          [
+            46,
+            63,
+            1
+          ],
+          [
+            46,
+            56,
+            1
+          ],
+          [
+            46,
+            57,
+            1
+          ],
+          [
+            46,
+            78,
+            2
+          ],
+          [
+            47,
+            63,
+            1
+          ],
+          [
+            47,
+            56,
+            1
+          ],
+          [
+            47,
+            57,
+            1
+          ],
+          [
+            47,
+            58,
+            1
+          ],
+          [
+            47,
+            79,
+            2
+          ],
+          [
+            48,
+            64,
+            1
+          ],
+          [
+            48,
+            65,
+            1
+          ],
+          [
+            48,
+            66,
+            1
+          ],
+          [
+            48,
+            75,
+            1
+          ],
+          [
+            48,
+            80,
+            2
+          ],
+          [
+            49,
+            65,
+            1
+          ],
+          [
+            49,
+            66,
+            1
+          ],
+          [
+            49,
+            67,
+            1
+          ],
+          [
+            49,
+            68,
+            1
+          ],
+          [
+            49,
+            81,
+            2
+          ],
+          [
+            50,
+            66,
+            1
+          ],
+          [
+            50,
+            67,
+            1
+          ],
+          [
+            50,
+            68,
+            1
+          ],
+          [
+            50,
+            69,
+            1
+          ],
+          [
+            50,
+            82,
+            2
+          ],
+          [
+            51,
+            67,
+            1
+          ],
+          [
+            51,
+            68,
+            1
+          ],
+          [
+            51,
+            69,
+            1
+          ],
+          [
+            51,
+            70,
+            1
+          ],
+          [
+            51,
+            83,
+            2
+          ],
+          [
+            52,
+            68,
+            1
+          ],
+          [
+            52,
+            69,
+            1
+          ],
+          [
+            52,
+            70,
+            1
+          ],
+          [
+            52,
+            71,
+            1
+          ],
+          [
+            52,
+            84,
+            2
+          ],
+          [
+            53,
+            69,
+            1
+          ],
+          [
+            53,
+            70,
+            1
+          ],
+          [
+            53,
+            71,
+            1
+          ],
+          [
+            53,
+            64,
+            1
+          ],
+          [
+            53,
+            85,
+            2
+          ],
+          [
+            54,
+            70,
+            1
+          ],
+          [
+            54,
+            71,
+            1
+          ],
+          [
+            54,
+            64,
+            1
+          ],
+          [
+            54,
+            65,
+            1
+          ],
+          [
+            54,
+            86,
+            2
+          ],
+          [
+            55,
+            71,
+            1
+          ],
+          [
+            55,
+            64,
+            1
+          ],
+          [
+            55,
+            65,
+            1
+          ],
+          [
+            55,
+            66,
+            1
+          ],
+          [
+            55,
+            87,
+            2
+          ],
+          [
+            56,
+            72,
+            1
+          ],
+          [
+            56,
+            73,
+            1
+          ],
+          [
+            56,
+            74,
+            1
+          ],
+          [
+            56,
+            67,
+            1
+          ],
+          [
+            56,
+            88,
+            2
+          ],
+          [
+            57,
+            73,
+            1
+          ],
+          [
+            57,
+            74,
+            1
+          ],
+          [
+            57,
+            75,
+            1
+          ],
+          [
+            57,
+            76,
+            1
+          ],
+          [
+            57,
+            89,
+            2
+          ],
+          [
+            58,
+            74,
+            1
+          ],
+          [
+            58,
+            75,
+            1
+          ],
+          [
+            58,
+            76,
+            1
+          ],
+          [
+            58,
+            77,
+            1
+          ],
+          [
+            58,
+            90,
+            2
+          ],
+          [
+            59,
+            75,
+            1
+          ],
+          [
+            59,
+            76,
+            1
+          ],
+          [
+            59,
+            77,
+            1
+          ],
+          [
+            59,
+            78,
+            1
+          ],
+          [
+            59,
+            91,
+            2
+          ],
+          [
+            60,
+            76,
+            1
+          ],
+          [
+            60,
+            77,
+            1
+          ],
+          [
+            60,
+            78,
+            1
+          ],
+          [
+            60,
+            79,
+            1
+          ],
+          [
+            60,
+            92,
+            2
+          ],
+          [
+            61,
+            77,
+            1
+          ],
+          [
+            61,
+            78,
+            1
+          ],
+          [
+            61,
+            79,
+            1
+          ],
+          [
+            61,
+            72,
+            1
+          ],
+          [
+            61,
+            93,
+            2
+          ],
+          [
+            62,
+            78,
+            1
+          ],
+          [
+            62,
+            79,
+            1
+          ],
+          [
+            62,
+            72,
+            1
+          ],
+          [
+            62,
+            73,
+            1
+          ],
+          [
+            62,
+            94,
+            2
+          ],
+          [
+            63,
+            79,
+            1
+          ],
+          [
+            63,
+            72,
+            1
+          ],
+          [
+            63,
+            73,
+            1
+          ],
+          [
+            63,
+            74,
+            1
+          ],
+          [
+            63,
+            95,
+            2
+          ],
+          [
+            64,
+            80,
+            1
+          ],
+          [
+            64,
+            81,
+            1
+          ],
+          [
+            64,
+            82,
+            1
+          ],
+          [
+            64,
+            91,
+            1
+          ],
+          [
+            64,
+            96,
+            2
+          ],
+          [
+            65,
+            81,
+            1
+          ],
+          [
+            65,
+            82,
+            1
+          ],
+          [
+            65,
+            83,
+            1
+          ],
+          [
+            65,
+            84,
+            1
+          ],
+          [
+            65,
+            97,
+            2
+          ],
+          [
+            66,
+            82,
+            1
+          ],
+          [
+            66,
+            83,
+            1
+          ],
+          [
+            66,
+            84,
+            1
+          ],
+          [
+            66,
+            85,
+            1
+          ],
+          [
+            66,
+            98,
+            2
+          ],
+          [
+            67,
+            83,
+            1
+          ],
+          [
+            67,
+            84,
+            1
+          ],
+          [
+            67,
+            85,
+            1
+          ],
+          [
+            67,
+            86,
+            1
+          ],
+          [
+            67,
+            99,
+            2
+          ],
+          [
+            68,
+            84,
+            1
+          ],
+          [
+            68,
+            85,
+            1
+          ],
+          [
+            68,
+            86,
+            1
+          ],
+          [
+            68,
+            87,
+            1
+          ],
+          [
+            68,
+            100,
+            2
+          ],
+          [
+            69,
+            85,
+            1
+          ],
+          [
+            69,
+            86,
+            1
+          ],
+          [
+            69,
+            87,
+            1
+          ],
+          [
+            69,
+            80,
+            1
+          ],
+          [
+            69,
+            101,
+            2
+          ],
+          [
+            70,
+            86,
+            1
+          ],
+          [
+            70,
+            87,
+            1
+          ],
+          [
+            70,
+            80,
+            1
+          ],
+          [
+            70,
+            81,
+            1
+          ],
+          [
+            70,
+            102,
+            2
+          ],
+          [
+            71,
+            87,
+            1
+          ],
+          [
+            71,
+            80,
+            1
+          ],
+          [
+            71,
+            81,
+            1
+          ],
+          [
+            71,
+            82,
+            1
+          ],
+          [
+            71,
+            103,
+            2
+          ],
+          [
+            72,
+            88,
+            1
+          ],
+          [
+            72,
+            89,
+            1
+          ],
+          [
+            72,
+            90,
+            1
+          ],
+          [
+            72,
+            83,
+            1
+          ],
+          [
+            72,
+            104,
+            2
+          ],
+          [
+            73,
+            89,
+            1
+          ],
+          [
+            73,
+            90,
+            1
+          ],
+          [
+            73,
+            91,
+            1
+          ],
+          [
+            73,
+            92,
+            1
+          ],
+          [
+            73,
+            105,
+            2
+          ],
+          [
+            74,
+            90,
+            1
+          ],
+          [
+            74,
+            91,
+            1
+          ],
+          [
+            74,
+            92,
+            1
+          ],
+          [
+            74,
+            93,
+            1
+          ],
+          [
+            74,
+            106,
+            2
+          ],
+          [
+            75,
+            91,
+            1
+          ],
+          [
+            75,
+            92,
+            1
+          ],
+          [
+            75,
+            93,
+            1
+          ],
+          [
+            75,
+            94,
+            1
+          ],
+          [
+            75,
+            107,
+            2
+          ],
+          [
+            76,
+            92,
+            1
+          ],
+          [
+            76,
+            93,
+            1
+          ],
+          [
+            76,
+            94,
+            1
+          ],
+          [
+            76,
+            95,
+            1
+          ],
+          [
+            76,
+            108,
+            2
+          ],
+          [
+            77,
+            93,
+            1
+          ],
+          [
+            77,
+            94,
+            1
+          ],
+          [
+            77,
+            95,
+            1
+          ],
+          [
+            77,
+            88,
+            1
+          ],
+          [
+            77,
+            109,
+            2
+          ],
+          [
+            78,
+            94,
+            1
+          ],
+          [
+            78,
+            95,
+            1
+          ],
+          [
+            78,
+            88,
+            1
+          ],
+          [
+            78,
+            89,
+            1
+          ],
+          [
+            78,
+            110,
+            2
+          ],
+          [
+            79,
+            95,
+            1
+          ],
+          [
+            79,
+            88,
+            1
+          ],
+          [
+            79,
+            89,
+            1
+          ],
+          [
+            79,
+            90,
+            1
+          ],
+          [
+            79,
+            111,
+            2
+          ],
+          [
+            80,
+            96,
+            1
+          ],
+          [
+            80,
+            97,
+            1
+          ],
+          [
+            80,
+            98,
+            1
+          ],
+          [
+            80,
+            107,
+            1
+          ],
+          [
+            80,
+            112,
+            2
+          ],
+          [
+            81,
+            97,
+            1
+          ],
+          [
+            81,
+            98,
+            1
+          ],
+          [
+            81,
+            99,
+            1
+          ],
+          [
+            81,
+            100,
+            1
+          ],
+          [
+            81,
+            113,
+            2
+          ],
+          [
+            82,
+            98,
+            1
+          ],
+          [
+            82,
+            99,
+            1
+          ],
+          [
+            82,
+            100,
+            1
+          ],
+          [
+            82,
+            101,
+            1
+          ],
+          [
+            82,
+            114,
+            2
+          ],
+          [
+            83,
+            99,
+            1
+          ],
+          [
+            83,
+            100,
+            1
+          ],
+          [
+            83,
+            101,
+            1
+          ],
+          [
+            83,
+            102,
+            1
+          ],
+          [
+            83,
+            115,
+            2
+          ],
+          [
+            84,
+            100,
+            1
+          ],
+          [
+            84,
+            101,
+            1
+          ],
+          [
+            84,
+            102,
+            1
+          ],
+          [
+            84,
+            103,
+            1
+          ],
+          [
+            84,
+            116,
+            2
+          ],
+          [
+            85,
+            101,
+            1
+          ],
+          [
+            85,
+            102,
+            1
+          ],
+          [
+            85,
+            103,
+            1
+          ],
+          [
+            85,
+            96,
+            1
+          ],
+          [
+            85,
+            117,
+            2
+          ],
+          [
+            86,
+            102,
+            1
+          ],
+          [
+            86,
+            103,
+            1
+          ],
+          [
+            86,
+            96,
+            1
+          ],
+          [
+            86,
+            97,
+            1
+          ],
+          [
+            86,
+            118,
+            2
+          ],
+          [
+            87,
+            103,
+            1
+          ],
+          [
+            87,
+            96,
+            1
+          ],
+          [
+            87,
+            97,
+            1
+          ],
+          [
+            87,
+            98,
+            1
+          ],
+          [
+            87,
+            119,
+            2
+          ],
+          [
+            88,
+            104,
+            1
+          ],
+          [
+            88,
+            105,
+            1
+          ],
+          [
+            88,
+            106,
+            1
+          ],
+          [
+            88,
+            99,
+            1
+          ],
+          [
+            88,
+            120,
+            2
+          ],
+          [
+            89,
+            105,
+            1
+          ],
+          [
+            89,
+            106,
+            1
+          ],
+          [
+            89,
+            107,
+            1
+          ],
+          [
+            89,
+            108,
+            1
+          ],
+          [
+            89,
+            121,
+            2
+          ],
+          [
+            90,
+            106,
+            1
+          ],
+          [
+            90,
+            107,
+            1
+          ],
+          [
+            90,
+            108,
+            1
+          ],
+          [
+            90,
+            109,
+            1
+          ],
+          [
+            90,
+            122,
+            2
+          ],
+          [
+            91,
+            107,
+            1
+          ],
+          [
+            91,
+            108,
+            1
+          ],
+          [
+            91,
+            109,
+            1
+          ],
+          [
+            91,
+            110,
+            1
+          ],
+          [
+            91,
+            123,
+            2
+          ],
+          [
+            92,
+            108,
+            1
+          ],
+          [
+            92,
+            109,
+            1
+          ],
+          [
+            92,
+            110,
+            1
+          ],
+          [
+            92,
+            111,
+            1
+          ],
+          [
+            92,
+            124,
+            2
+          ],
+          [
+            93,
+            109,
+            1
+          ],
+          [
+            93,
+            110,
+            1
+          ],
+          [
+            93,
+            111,
+            1
+          ],
+          [
+            93,
+            104,
+            1
+          ],
+          [
+            93,
+            125,
+            2
+          ],
+          [
+            94,
+            110,
+            1
+          ],
+          [
+            94,
+            111,
+            1
+          ],
+          [
+            94,
+            104,
+            1
+          ],
+          [
+            94,
+            105,
+            1
+          ],
+          [
+            94,
+            126,
+            2
+          ],
+          [
+            95,
+            111,
+            1
+          ],
+          [
+            95,
+            104,
+            1
+          ],
+          [
+            95,
+            105,
+            1
+          ],
+          [
+            95,
+            106,
+            1
+          ],
+          [
+            95,
+            127,
+            2
+          ],
+          [
+            96,
+            112,
+            1
+          ],
+          [
+            96,
+            113,
+            1
+          ],
+          [
+            96,
+            114,
+            1
+          ],
+          [
+            96,
+            123,
+            1
+          ],
+          [
+            97,
+            113,
+            1
+          ],
+          [
+            97,
+            114,
+            1
+          ],
+          [
+            97,
+            115,
+            1
+          ],
+          [
+            97,
+            116,
+            1
+          ],
+          [
+            98,
+            114,
+            1
+          ],
+          [
+            98,
+            115,
+            1
+          ],
+          [
+            98,
+            116,
+            1
+          ],
+          [
+            98,
+            117,
+            1
+          ],
+          [
+            99,
+            115,
+            1
+          ],
+          [
+            99,
+            116,
+            1
+          ],
+          [
+            99,
+            117,
+            1
+          ],
+          [
+            99,
+            118,
+            1
+          ],
+          [
+            100,
+            116,
+            1
+          ],
+          [
+            100,
+            117,
+            1
+          ],
+          [
+            100,
+            118,
+            1
+          ],
+          [
+            100,
+            119,
+            1
+          ],
+          [
+            101,
+            117,
+            1
+          ],
+          [
+            101,
+            118,
+            1
+          ],
+          [
+            101,
+            119,
+            1
+          ],
+          [
+            101,
+            112,
+            1
+          ],
+          [
+            102,
+            118,
+            1
+          ],
+          [
+            102,
+            119,
+            1
+          ],
+          [
+            102,
+            112,
+            1
+          ],
+          [
+            102,
+            113,
+            1
+          ],
+          [
+            103,
+            119,
+            1
+          ],
+          [
+            103,
+            112,
+            1
+          ],
+          [
+            103,
+            113,
+            1
+          ],
+          [
+            103,
+            114,
+            1
+          ],
+          [
+            104,
+            120,
+            1
+          ],
+          [
+            104,
+            121,
+            1
+          ],
+          [
+            104,
+            122,
+            1
+          ],
+          [
+            104,
+            115,
+            1
+          ],
+          [
+            105,
+            121,
+            1
+          ],
+          [
+            105,
+            122,
+            1
+          ],
+          [
+            105,
+            123,
+            1
+          ],
+          [
+            105,
+            124,
+            1
+          ],
+          [
+            106,
+            122,
+            1
+          ],
+          [
+            106,
+            123,
+            1
+          ],
+          [
+            106,
+            124,
+            1
+          ],
+          [
+            106,
+            125,
+            1
+          ],
+          [
+            107,
+            123,
+            1
+          ],
+          [
+            107,
+            124,
+            1
+          ],
+          [
+            107,
+            125,
+            1
+          ],
+          [
+            107,
+            126,
+            1
+          ],
+          [
+            108,
+            124,
+            1
+          ],
+          [
+            108,
+            125,
+            1
+          ],
+          [
+            108,
+            126,
+            1
+          ],
+          [
+            108,
+            127,
+            1
+          ],
+          [
+            109,
+            125,
+            1
+          ],
+          [
+            109,
+            126,
+            1
+          ],
+          [
+            109,
+            127,
+            1
+          ],
+          [
+            109,
+            120,
+            1
+          ],
+          [
+            110,
+            126,
+            1
+          ],
+          [
+            110,
+            127,
+            1
+          ],
+          [
+            110,
+            120,
+            1
+          ],
+          [
+            110,
+            121,
+            1
+          ],
+          [
+            111,
+            127,
+            1
+          ],
+          [
+            111,
+            120,
+            1
+          ],
+          [
+            111,
+            121,
+            1
+          ],
+          [
+            111,
+            122,
+            1
+          ]
+        ],
+        "inputs": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "outputs": [
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127
+        ],
+        "kind": "ranked-local",
+        "counts": {
+          "body_nodes": 128,
+          "body_edges": 544,
+          "reachable_nodes": 128,
+          "output_reachable_nodes": 128,
+          "longest_body_delay": 7,
+          "encoded_nodes": 130,
+          "encoded_edges": 576
+        }
+      },
+      "workload": {
+        "memory": "attention",
+        "width": 128,
+        "batch": 2,
+        "tokens": 2,
+        "vocab": 257,
+        "budget": 1,
+        "seed": 7,
+        "clear": false,
+        "stride": 10
+      },
+      "families": [
+        "settle",
+        "timed-dag",
+        "pdg"
+      ],
+      "counts": {
+        "body_nodes": 128,
+        "body_edges": 544,
+        "reachable_nodes": 128,
+        "output_reachable_nodes": 128,
+        "longest_body_delay": 7,
+        "encoded_nodes": 130,
+        "encoded_edges": 576,
+        "parameters": 17384240,
+        "parameter_sharing": "none"
+      },
+      "input_policy": "(absolute_position*7+sample*3)%vocab; embedding/head included",
+      "state_boundary": "continuous state/history/pending/KV; explicit detach after each optimizer update",
+      "parameter_policy": "named-lcg31-v1; FP32 source values cast to payload dtype",
+      "model_profile": "edge-affine-lh-silu-rms-norm-fp32-v1",
+      "loss_policy": "next-token cross entropy; sum over present outputs / requested tokens",
+      "sha256": "9ece57526ac45e5a67148225e88fafc0e227cf859b99952f39258fc1c8b7a649"
+    },
+    "prior_source": "fdfc74802934cf145c052eb3ae966ff94c323e0a",
+    "prior_runs": [
+      {
+        "name": "optimizer-recompute-baseline-clean01",
+        "state": "passed",
+        "exit_code": 0,
+        "files_sha256": {
+          "status.json": "529725b22d6f572f2e557f551f91599dfb21c1518078cbf7e9013b987c129584",
+          "task.log": "f043bd499d3e2d4d715a852b10e3db827fd11da86c4c2f75a239de3a85113a7d",
+          "queue.json": "47a0274fa08921a507a39bc306e6c2b78c984e1bb7f5e34b85e62ebc37129273"
+        }
+      },
+      {
+        "name": "optimizer-recompute-cpu-calibration-clean01",
+        "state": "passed",
+        "exit_code": 0,
+        "files_sha256": {
+          "status.json": "d70b635648ea3fa56bf8a0c6df4021af6049d4608cd6a9b4cebe89bfca810af5",
+          "task.log": "d088dd4cc4e28469176afe767187381fa6929bb233fb697b710b950b9ba084ce"
+        }
+      }
+    ],
+    "before": {
+      "result": {
+        "schema": "tide-online-consumer-v1",
+        "state": "passed",
+        "workload_sha256": "9ece57526ac45e5a67148225e88fafc0e227cf859b99952f39258fc1c8b7a649",
+        "packet_identity": "hash-validated JSON; exact derived v2 text",
+        "implementation": "libtorch",
+        "family": "timed-dag",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 17384240,
+        "construction_seconds": 1.941688462,
+        "seconds": [
+          0.425273039
+        ],
+        "warmup_seconds": [
+          0.662250531
+        ],
+        "outputs": [
+          8
+        ],
+        "losses": [
+          5.662106513977051
+        ],
+        "statistics": [
+          {
+            "canonical_stream_chunks": 8,
+            "canonical_stream_reserved_bytes": 203679528,
+            "emission_chunks": 28,
+            "events": 398,
+            "full_chunks": 30,
+            "head_chunks": 2,
+            "retained_bytes": 202703536,
+            "retained_projection_bytes": 37118976,
+            "retained_window_bytes": 82792280,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 715827880,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 16,
+            "reverse_fiber_owner_rows_min": 16,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 180284448,
+            "stages": 20
+          }
+        ],
+        "windows_per_step": 2,
+        "warmup_steps": 1,
+        "measured_steps": 1,
+        "input_tokens_per_step": 8,
+        "final_cut": 80,
+        "threads": 1,
+        "parameter_budget": 1073741824,
+        "diagnostics": false,
+        "precision": {
+          "payload": "float32",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "head_memory": {
+          "rows": 1024,
+          "fixed_bytes": 34485760,
+          "row_bytes": 10432,
+          "reserved_bytes": 45168128,
+          "budget": 268435456,
+          "operator_allowance_bytes": 33554432
+        },
+        "memory": {
+          "schema": "tide-consumer-memory-v1",
+          "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+          "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+          "phases": [
+            {
+              "phase": "initial",
+              "cpu_peak_rss_bytes": 1376468992,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                }
+              ]
+            },
+            {
+              "phase": "construction",
+              "cpu_peak_rss_bytes": 1885102080,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 371859456,
+                  "peak_allocated_bytes": 405703168,
+                  "reserved_bytes": 429916160,
+                  "peak_reserved_bytes": 429916160
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 329641984,
+                  "peak_allocated_bytes": 363749888,
+                  "reserved_bytes": 379584512,
+                  "peak_reserved_bytes": 379584512
+                }
+              ]
+            },
+            {
+              "phase": "warmup",
+              "cpu_peak_rss_bytes": 1970827264,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 373574144,
+                  "peak_allocated_bytes": 1047283712,
+                  "reserved_bytes": 1075838976,
+                  "peak_reserved_bytes": 1075838976
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 329641984,
+                  "peak_allocated_bytes": 952525312,
+                  "reserved_bytes": 977272832,
+                  "peak_reserved_bytes": 977272832
+                }
+              ]
+            },
+            {
+              "phase": "measured",
+              "cpu_peak_rss_bytes": 1976741888,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 372387840,
+                  "peak_allocated_bytes": 1045660160,
+                  "reserved_bytes": 1075838976,
+                  "peak_reserved_bytes": 1075838976
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 329641984,
+                  "peak_allocated_bytes": 951447040,
+                  "reserved_bytes": 998244352,
+                  "peak_reserved_bytes": 998244352
+                }
+              ]
+            }
+          ]
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float32",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "resident",
+          "placement": {
+            "control": "npu:0",
+            "events": "npu:0",
+            "payload": "npu:0",
+            "read": "npu:0",
+            "scoring_dtype": "profile",
+            "selection": "npu:0"
+          },
+          "resident": {
+            "runtime_owner": "standalone",
+            "requested_devices": 2,
+            "requested_owner_policy": "locality",
+            "devices": [
+              "npu:0",
+              "npu:1"
+            ],
+            "full_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "state_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "owner_policy": "locality",
+            "chunk_policy": "aggressive",
+            "limits": {
+              "aggregate_chunk_rows": 8,
+              "arrivals": 1024,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "backward_bytes": 34359738368,
+              "emission_chunk_rows": 16,
+              "full_chunk_rows": 16,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536,
+              "optimizer_bytes": 1073741824,
+              "outputs": 1024,
+              "program_workspace_bytes": 67108864,
+              "queue": 1024,
+              "retained_bytes": 536870912,
+              "reverse_chunk_rows": 16,
+              "stages": 4096,
+              "trace": 1024,
+              "windows": 2,
+              "workspace_bytes": 2147483648
+            }
+          }
+        },
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners",
+        "binary_sha256": "7ba1f0ab3dd7e924913d5a9052c9b9f1e4cafdef5010564974abf3724f5e5905",
+        "native_input_sha256": "6d37e4e081f9cb53fab722d57478ef8e13c147d0b8db29b7624c9750f7dabe5c",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/consumer-memory-npu-clean01/consumer/tidegraph-online-bench",
+          "--packet=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-baseline-clean01/consumer/topology.txt",
+          "--output-dir=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-baseline-clean01/consumer/consumer",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--family=timed-dag",
+          "--preset=resident",
+          "--schedule=prefill",
+          "--optimizer=adamw",
+          "--steps=1",
+          "--warmup=1",
+          "--windows-per-step=2",
+          "--threads=1",
+          "--parameter-budget=1073741824",
+          "--read=auto",
+          "--control=auto",
+          "--selection=auto",
+          "--events=auto",
+          "--scoring-dtype=profile",
+          "--training",
+          "--devices=2",
+          "--owner-policy=locality",
+          "--chunk-policy=aggressive",
+          "--head-workspace-bytes=268435456",
+          "--resident-trace=1024",
+          "--resident-workspace-bytes=2147483648",
+          "--resident-retained-bytes=536870912",
+          "--resident-backward-bytes=34359738368",
+          "--resident-optimizer-bytes=1073741824"
+        ],
+        "process_wall_seconds": 7.803991969674826
+      },
+      "sha256": "b10cc9d3236fa38bfb97f4251cf93188bcc9b17469df7b3f83055d153998a35f"
+    },
+    "after": {
+      "result": {
+        "schema": "tide-online-consumer-v1",
+        "state": "passed",
+        "workload_sha256": "9ece57526ac45e5a67148225e88fafc0e227cf859b99952f39258fc1c8b7a649",
+        "packet_identity": "hash-validated JSON; exact derived v2 text",
+        "implementation": "libtorch",
+        "family": "timed-dag",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 17384240,
+        "construction_seconds": 1.879626565,
+        "seconds": [
+          0.430099601
+        ],
+        "warmup_seconds": [
+          0.666666216
+        ],
+        "outputs": [
+          8
+        ],
+        "losses": [
+          5.662106513977051
+        ],
+        "statistics": [
+          {
+            "canonical_stream_chunks": 8,
+            "canonical_stream_reserved_bytes": 203679528,
+            "emission_chunks": 28,
+            "events": 398,
+            "full_chunks": 30,
+            "head_chunks": 2,
+            "retained_bytes": 202703536,
+            "retained_projection_bytes": 37118976,
+            "retained_window_bytes": 82792280,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 715827880,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 16,
+            "reverse_fiber_owner_rows_min": 16,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 180284448,
+            "stages": 20
+          }
+        ],
+        "windows_per_step": 2,
+        "warmup_steps": 1,
+        "measured_steps": 1,
+        "input_tokens_per_step": 8,
+        "final_cut": 80,
+        "threads": 1,
+        "parameter_budget": 1073741824,
+        "diagnostics": false,
+        "precision": {
+          "payload": "float32",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "head_memory": {
+          "rows": 1024,
+          "fixed_bytes": 34485760,
+          "row_bytes": 10432,
+          "reserved_bytes": 45168128,
+          "budget": 268435456,
+          "operator_allowance_bytes": 33554432
+        },
+        "memory": {
+          "schema": "tide-consumer-memory-v1",
+          "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+          "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+          "phases": [
+            {
+              "phase": "initial",
+              "cpu_peak_rss_bytes": 1376260096,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                }
+              ]
+            },
+            {
+              "phase": "construction",
+              "cpu_peak_rss_bytes": 1884639232,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 264904192,
+                  "peak_allocated_bytes": 298747904,
+                  "reserved_bytes": 322961408,
+                  "peak_reserved_bytes": 322961408
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 222686720,
+                  "peak_allocated_bytes": 256794624,
+                  "reserved_bytes": 272629760,
+                  "peak_reserved_bytes": 272629760
+                }
+              ]
+            },
+            {
+              "phase": "warmup",
+              "cpu_peak_rss_bytes": 1970372608,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 266618880,
+                  "peak_allocated_bytes": 940328448,
+                  "reserved_bytes": 968884224,
+                  "peak_reserved_bytes": 968884224
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 222686720,
+                  "peak_allocated_bytes": 845570048,
+                  "reserved_bytes": 870318080,
+                  "peak_reserved_bytes": 870318080
+                }
+              ]
+            },
+            {
+              "phase": "measured",
+              "cpu_peak_rss_bytes": 1976320000,
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 265432576,
+                  "peak_allocated_bytes": 938704896,
+                  "reserved_bytes": 968884224,
+                  "peak_reserved_bytes": 968884224
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 222686720,
+                  "peak_allocated_bytes": 844491776,
+                  "reserved_bytes": 891289600,
+                  "peak_reserved_bytes": 891289600
+                }
+              ]
+            }
+          ]
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float32",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "resident",
+          "placement": {
+            "control": "npu:0",
+            "events": "npu:0",
+            "payload": "npu:0",
+            "read": "npu:0",
+            "scoring_dtype": "profile",
+            "selection": "npu:0"
+          },
+          "resident": {
+            "runtime_owner": "standalone",
+            "requested_devices": 2,
+            "requested_owner_policy": "locality",
+            "devices": [
+              "npu:0",
+              "npu:1"
+            ],
+            "full_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "state_owners": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            "owner_policy": "locality",
+            "chunk_policy": "aggressive",
+            "limits": {
+              "aggregate_chunk_rows": 8,
+              "arrivals": 1024,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "backward_bytes": 34359738368,
+              "emission_chunk_rows": 16,
+              "full_chunk_rows": 16,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536,
+              "optimizer_bytes": 1073741824,
+              "outputs": 1024,
+              "program_workspace_bytes": 67108864,
+              "queue": 1024,
+              "retained_bytes": 536870912,
+              "reverse_chunk_rows": 16,
+              "stages": 4096,
+              "trace": 1024,
+              "windows": 2,
+              "workspace_bytes": 2147483648
+            }
+          }
+        },
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners",
+        "binary_sha256": "a70f69f2a58fc6d02ddb177dba57d08e8f4bf03e18b1a094c7042602ac450e6a",
+        "native_input_sha256": "6d37e4e081f9cb53fab722d57478ef8e13c147d0b8db29b7624c9750f7dabe5c",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/optimizer-recompute-consumer-clean01/consumer/tidegraph-online-bench",
+          "--packet=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-calibration-clean01/consumer/topology.txt",
+          "--output-dir=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-calibration-clean01/consumer/consumer",
+          "--device=npu:0",
+          "--dtype=float32",
+          "--family=timed-dag",
+          "--preset=resident",
+          "--schedule=prefill",
+          "--optimizer=adamw",
+          "--steps=1",
+          "--warmup=1",
+          "--windows-per-step=2",
+          "--threads=1",
+          "--parameter-budget=1073741824",
+          "--read=auto",
+          "--control=auto",
+          "--selection=auto",
+          "--events=auto",
+          "--scoring-dtype=profile",
+          "--training",
+          "--devices=2",
+          "--owner-policy=locality",
+          "--chunk-policy=aggressive",
+          "--head-workspace-bytes=268435456",
+          "--resident-trace=1024",
+          "--resident-workspace-bytes=2147483648",
+          "--resident-retained-bytes=536870912",
+          "--resident-backward-bytes=34359738368",
+          "--resident-optimizer-bytes=1073741824"
+        ],
+        "process_wall_seconds": 8.425046652555466
+      },
+      "sha256": "bcdc857707dcf47280567f1e5ecc73a02214403c82b8d914a2d445b2cccc0405"
+    },
+    "cpu": {
+      "result": {
+        "schema": "tide-online-consumer-v1",
+        "state": "passed",
+        "workload_sha256": "9ece57526ac45e5a67148225e88fafc0e227cf859b99952f39258fc1c8b7a649",
+        "packet_identity": "hash-validated JSON; exact derived v2 text",
+        "implementation": "libtorch",
+        "family": "timed-dag",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 17384240,
+        "construction_seconds": 0.968971214,
+        "seconds": [
+          0.273840255
+        ],
+        "warmup_seconds": [
+          0.261918488
+        ],
+        "losses": [
+          5.662106513977051
+        ],
+        "outputs": [
+          8
+        ],
+        "statistics": [
+          {
+            "aggregate_calls": 202,
+            "attention_score_elements": 6532,
+            "batched_aggregate_events": 398,
+            "batched_full_events": 80,
+            "body_candidate_events": 382,
+            "body_selected_events": 64,
+            "candidate_events": 398,
+            "full_blocks": 64,
+            "full_calls": 64,
+            "greedy_relaxed_edges": 288,
+            "greedy_stages": 20,
+            "max_full_batch": 4,
+            "max_greedy_frames": 4,
+            "max_live_fibers": 64,
+            "max_state_batch": 2,
+            "max_state_sequence": 2,
+            "next_steps": 398,
+            "read_calls": 202,
+            "region_blocks": 20,
+            "region_steps": 80,
+            "selected_events": 80,
+            "semantic_read_replays": 398,
+            "semantic_state_replays": 398,
+            "source_rows": 416,
+            "state_blocks": 294,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 250,
+            "visited_edges": 408
+          }
+        ],
+        "windows_per_step": 2,
+        "warmup_steps": 1,
+        "measured_steps": 1,
+        "input_tokens_per_step": 8,
+        "final_cut": 80,
+        "threads": 1,
+        "parameter_budget": 1073741824,
+        "diagnostics": false,
+        "runtime": {
+          "device": "cpu",
+          "dtype": "float32",
+          "backend": "cpu",
+          "resolution_reason": "explicit:cpu",
+          "schedule": "prefill",
+          "preset": "cpu",
+          "placement": {
+            "control": "cpu",
+            "events": "cpu",
+            "payload": "cpu",
+            "read": "cpu",
+            "scoring_dtype": "profile",
+            "selection": "cpu"
+          }
+        },
+        "memory": {
+          "schema": "tide-consumer-memory-v1",
+          "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+          "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction",
+          "phases": [
+            {
+              "phase": "initial",
+              "cpu_peak_rss_bytes": 116842496,
+              "devices": []
+            },
+            {
+              "phase": "construction",
+              "cpu_peak_rss_bytes": 210714624,
+              "devices": []
+            },
+            {
+              "phase": "warmup",
+              "cpu_peak_rss_bytes": 314150912,
+              "devices": []
+            },
+            {
+              "phase": "measured",
+              "cpu_peak_rss_bytes": 348360704,
+              "devices": []
+            }
+          ]
+        },
+        "timing": "input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference",
+        "binary_sha256": "e12436039ed74f5893e1d5d1477ec9268856d3a80d97068c571fbdc245aa9877",
+        "native_input_sha256": "6d37e4e081f9cb53fab722d57478ef8e13c147d0b8db29b7624c9750f7dabe5c",
+        "command": [
+          "/mi/data2T/zlong/tide-execution-flows/builds/consumer-memory-cpu-clean01/consumer/tidegraph-online-bench",
+          "--packet=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-cpu-calibration-clean01/consumer/topology.txt",
+          "--output-dir=/mi/data2T/zlong/tide-execution-flows/runs/optimizer-recompute-cpu-calibration-clean01/consumer/consumer",
+          "--device=cpu",
+          "--dtype=float32",
+          "--family=timed-dag",
+          "--preset=cpu",
+          "--schedule=prefill",
+          "--optimizer=adamw",
+          "--steps=1",
+          "--warmup=1",
+          "--windows-per-step=2",
+          "--threads=1",
+          "--parameter-budget=1073741824",
+          "--read=auto",
+          "--control=auto",
+          "--selection=auto",
+          "--events=auto",
+          "--scoring-dtype=profile",
+          "--training",
+          "--devices=1",
+          "--owner-policy=locality",
+          "--chunk-policy=conservative",
+          "--head-workspace-bytes=4294967296"
+        ],
+        "process_wall_seconds": 1.8657203987240791
+      },
+      "sha256": "245d1a5011b8576033795e859d8efc1cfd2239cc6dfa18c8e49367e1b1d8ae8a"
+    },
+    "peak_reductions": [
+      {
+        "phase": "initial",
+        "per_device_peak_allocated_reduction": [
+          0,
+          0
+        ]
+      },
+      {
+        "phase": "construction",
+        "per_device_peak_allocated_reduction": [
+          106955264,
+          106955264
+        ]
+      },
+      {
+        "phase": "warmup",
+        "per_device_peak_allocated_reduction": [
+          106955264,
+          106955264
+        ]
+      },
+      {
+        "phase": "measured",
+        "per_device_peak_allocated_reduction": [
+          106955264,
+          106955264
+        ]
+      }
+    ]
+  },
+  "retained_failures": [
+    {
+      "name": "optimizer-recompute-component-dev01",
+      "reason": "new large optimizer test supplied an empty named group, correctly selecting no parameters; fixed explicit weight group; production code unchanged",
+      "status_sha256": "c36f5ec33cca22ea6712d8cd9c0e01a83bfb79fe85e4aea6d048edf28adecc50",
+      "log_sha256": "7c46e237b08ce3b48939ebc18b1383c0403d0d89f85acfe81ef8e5a66669fcc9"
+    }
+  ],
+  "scope": "Device finite evaluation plus global consensus plus identical-kernel recomputation; separate counter commit; no full numerical proposal banks",
+  "limits": "Caller must freeze gradients/connection bits/old state between passes. Allocator counters exclude untracked driver/vendor HBM. Calibration single samples are not throughput recommendations or full-size results. Total-memory admission and F6 remain pending."
+}
