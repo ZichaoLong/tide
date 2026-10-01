@@ -92,7 +92,11 @@ chunks. Training additionally bounds retained-window count and aggregate tape
 bytes, reverse tensor bytes, optimizer tensors and CANN reverse/update workspace.
 Each tape currently copies parameter banks. Shapes admit a complete saved window
 before advance. Reverse components divide the total declared budget into disjoint
-per-window allocations; a small budget rejects before executing a partial VJP.
+per-window allocations. Event/fiber attention now shrinks physical owner/query/key
+batches inside those reservations before allocation; full logical fibers and
+normalization stay intact. A budget too small for one complete owner rejects
+before executing a partial VJP. `gradients.statistics` reports effective physical
+maxima and estimates, as detailed in [online-consumers.md](online-consumers.md).
 Budgets measure declared tensor/workspace footprints, excluding allocator and
 vendor runtime overhead. They do not promise immunity to external device pressure.
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "reverse_statistics.h"
 #include "reverse_links.h"
 
 namespace tide::device_online {
@@ -20,6 +21,7 @@ struct GraphVjp {
   at::Tensor attention,attention_connected;
   at::Tensor fiber,fiber_connected;
   EmissionVjp emission;
+  ReverseStatistics statistics;
 };
 // Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter

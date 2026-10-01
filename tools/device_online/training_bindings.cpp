@@ -58,7 +58,7 @@ void bind_resident_training(py::module_& m) {
     VIEW(ResidentGradients,names) VIEW(ResidentGradients,aliases) VIEW(ResidentGradients,offsets)
     VIEW(ResidentGradients,values) VIEW(ResidentGradients,connected) VIEW(ResidentGradients,initial)
     VIEW(ResidentGradients,initial_connected) VIEW(ResidentGradients,boundaries) VIEW(ResidentGradients,initial_cache)
-    VIEW(ResidentGradients,parameter_shards) VIEW(ResidentGradients,initial_shards);
+    VIEW(ResidentGradients,parameter_shards) VIEW(ResidentGradients,initial_shards) VIEW(ResidentGradients,statistics);
   py::class_<ResidentOptimizerState>(m,"DeviceOptimizerState").def(py::init<>())
     FIELD(ResidentOptimizerState,values) FIELD(ResidentOptimizerState,first) FIELD(ResidentOptimizerState,second)
     FIELD(ResidentOptimizerState,maximum) FIELD(ResidentOptimizerState,steps) FIELD(ResidentOptimizerState,corrections);

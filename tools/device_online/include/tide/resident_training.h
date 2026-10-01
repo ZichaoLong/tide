@@ -91,6 +91,9 @@ struct ResidentGradients {
   std::vector<ResidentCacheGradient> initial_cache;
   std::vector<ResidentParameterGradient> parameter_shards;
   std::vector<ResidentStateGradient> initial_shards;
+  // Construction-time reverse physical row/tile maxima and tensor reservations.
+  // These do not count active rows or measure total allocator peak memory.
+  std::map<std::string,Index> statistics;
 };
 struct ResidentOptimizerState {
   // Values and floating slots remain FP32 masters, including FP16 payload runs.

@@ -1,4 +1,5 @@
 #pragma once
+#include "reverse_statistics.h"
 #include "state_owner_read.h"
 #include "event_reverse.h"
 #include "fiber_reverse.h"
@@ -10,6 +11,7 @@ struct StateShardGradient {
   at::Tensor decay,decay_connected,retention,retention_connected,read,read_connected;
   at::Tensor attention,attention_connected,fiber,fiber_connected;
   std::vector<CacheGradient> cache;
+  ReverseStatistics statistics;
 };
 struct StateOwnerVjp {StateVjp state;at::Tensor messages,connected,scale_partials;};
 // All actual KV records, parameter versions and cache boundary adjoints remain

@@ -1,4 +1,5 @@
 #include "fiber_vjp.h"
+#include "reverse_budget.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_fiber_vjp_plan.h"
 #include "aclrtlaunch_tide_fiber_vjp_pool.h"
@@ -23,16 +24,14 @@ FiberVjp append_fiber_vjp(CannProgram& p,const FiberVjpInput& in,const at::Tenso
   if(at::GradMode::is_enabled()||in.rows.dim()!=3||in.key.dim()!=4||in.pool_weights.dim()!=2)
     throw std::invalid_argument("fiber VJP requires explicit no-grad packed sources/KV");
   const auto device=in.rows.device();const int64_t b=in.rows.size(0),s=in.rows.size(1),w=in.rows.size(2);
-  const int64_t h=in.key.size(1),k=in.key.size(2),domain=in.pool_weights.size(1),c=chunk;
+  const int64_t h=in.key.size(1),k=in.key.size(2),domain=in.pool_weights.size(1);
   const auto payload=in.rows.scalar_type();const bool half=payload==at::kHalf;
   if(device.type()!=c10::DeviceType::PrivateUse1||b<1||s<1||w<1||h<1||w%h||k<1||s>k
-      ||domain<1||c<1||tile<1||tile>256||in.max_repeat_ticks<1||budget<1||(!half&&payload!=at::kFloat))
+      ||domain<1||chunk<1||tile<1||tile>256||in.max_repeat_ticks<1||budget<1||(!half&&payload!=at::kFloat))
     throw std::invalid_argument("invalid fiber VJP geometry/limits");
   const auto d=w/h;
-  const long double own=4.L*(4.L*b*s*w+8.L*b*w*w+16.L*b*w+4.L*b*k*w+4.L*b*k+8.L*b*domain+4.L*b*s
-      +12.L*c*w*w+32.L*c*w+4.L*c*k*w+4.L*c*k)+64.L*(b+c)+4096
-      +2.L*half*(c*(3.L*w+w*static_cast<long double>(w)+2.L*k*w)+3.L*b*w)+4.L*b;
-  if(own>budget/2.L)throw std::invalid_argument("fiber VJP tensor budget exceeded");
+  const auto reservation=plan_fiber_vjp(b,s,w,h,k,domain,chunk,tile,half,budget);
+  const auto c=reservation.query_rows;tile=reservation.key_rows;
   tensor(in.rows,device,payload,{b,s,w});tensor(in.slots,device,at::kLong,{b,s});
   for(const auto& x:{in.counts,in.lengths,in.old_lengths,in.ticks,in.pool_kinds,in.pool_lengths})tensor(x,device,at::kLong,{b});
   for(const auto& x:{in.key,in.value})tensor(x,device,payload,{b,h,k,d});

@@ -49,14 +49,14 @@ FiberReverse prepare_fiber_reverse(CannProgram& p,const StateReverseView& t,cons
      t.fiber_meta,t.sources,hash,out.ranges,out.previous,out.tails,out.cache.lengths,out.tokens,scratch,out.ticks,error});
   return out;
 }
-void append_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
+ReverseBatchPlan append_fiber_reverse(CannProgram& p,const StateReverseView& t,const ReverseLinks& links,const FiberAttentionTape& g,const FiberReverse& reverse,
     const at::Tensor& stage,const StateVjp& state,const at::Tensor& messages,const at::Tensor& message_on,
     const at::Tensor& scale_partials,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
   const auto& a=g.cache;const int64_t w=a.width,h=a.heads,d=w/h,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps;
-  const int64_t c=std::min(chunk,owners),domain=g.pool_weights.size(1),s=std::min(k,domain),inputs=t.layout.inputs;
-  const long double own=4.L*c*(s*w+4.L*k*w+4.L*k+4.L*w*w+4.L*w+domain)+512.L*c+8.L*c*s+8.L*t.layout.nodes+4096;
-  if(c<1||budget<2||own>budget/2.L)throw std::invalid_argument("fiber reverse batch tensor budget exceeded");
+  const int64_t domain=g.pool_weights.size(1),s=std::min(k,domain),inputs=t.layout.inputs;
+  const auto reservation=plan_fiber_reverse(owners,s,w,h,k,domain,t.layout.nodes,chunk,a.key.scalar_type()==at::kHalf,budget);
+  const auto c=reservation.owner_rows;
   const auto payload=a.key.options();const int64_t fp16=a.key.scalar_type()==at::kHalf;
   auto f=payload.dtype(at::kFloat),l=a.lengths.options(),b=f.dtype(at::kBool);
   auto plan=at::empty({c,10},l),flags=at::empty({c,4},b),branch=at::empty_like(error);
@@ -90,7 +90,7 @@ void append_fiber_reverse(CannProgram& p,const StateReverseView& t,const Reverse
      a.qkv,g.qkv_bias,a.projection,g.pool_kinds,g.pool_lengths,g.pool_weights,state.proposal,reverse.cache.key,reverse.cache.value,reverse.cache.bias,
      in.rows,in.slots,in.counts,in.key,in.value,in.bias,in.lengths,in.old_lengths,in.ticks,in.qkv,in.qkv_bias,in.projection,in.pool_kinds,in.pool_lengths,
      in.pool_weights,in.cotangent,in.connected,in.key_root,in.value_root,in.bias_root,in.key_on,in.value_on,in.bias_on,error});
-  auto local=append_fiber_vjp(p,in,error,std::min(chunk,c*s),std::min<int64_t>(64,k),budget/2);
+  auto local=append_fiber_vjp(p,in,error,reservation.query_rows,reservation.key_rows,budget/2);
   for(int64_t phase:{0,1})p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_fiber_reverse_fold)(phase?32:1,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(reverse.tokens),ptr(links.messages),ptr(links.scales),ptr(t.fiber_values),ptr(reverse.node_offsets),ptr(source_counts),
     ptr(local.rows),ptr(local.rows_connected),ptr(local.key),ptr(local.value),ptr(local.bias),ptr(local.cache_connected),ptr(local.qkv),ptr(local.qkv_bias),
@@ -101,6 +101,6 @@ void append_fiber_reverse(CannProgram& p,const StateReverseView& t,const Reverse
      local.key,local.value,local.bias,local.cache_connected,local.qkv,local.qkv_bias,local.projection,local.projection_bias,local.decay,local.pool,local.parameter_connected,
      messages,message_on,scale_partials,reverse.cache.key,reverse.cache.value,reverse.cache.bias,reverse.cache.key_connected,reverse.cache.value_connected,
      reverse.cache.bias_connected,parameters,parameter_on,table,tiles,table_count,error});
-  p.branch(branch,{head});p.mark(done);
+  p.branch(branch,{head});p.mark(done);return reservation;
 }
 } // namespace tide::device_online

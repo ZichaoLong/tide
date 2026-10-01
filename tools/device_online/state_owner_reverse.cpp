@@ -48,10 +48,11 @@ StateOwnerVjp StateOwnerReverse::append_stage(CannProgram& p,const StateReverseS
   for(const auto& x:{messages_,connected_,partials_})p.zero(x);
   auto state=append_state_vjp(p,stage.tape,stage.cot,error,budget_/4);
   for(size_t i=0;i<events_.size();++i)
-    append_event_reverse(p,view_,owner_.attention[i],events_[i],stage.range,state,total_.attention,total_.attention_connected,error,chunk_,budget_/4/events_.size());
+    record_reverse_plan(total_.statistics,append_event_reverse(p,view_,owner_.attention[i],events_[i],stage.range,state,
+      total_.attention,total_.attention_connected,error,chunk_,budget_/4/events_.size()),"event");
   for(size_t i=0;i<fibers_.size();++i)
-    append_fiber_reverse(p,view_,links_,owner_.fiber[i],fibers_[i],stage.range,state,messages_,connected_,partials_,
-      total_.fiber,total_.fiber_connected,error,chunk_,budget_/4/fibers_.size());
+    record_reverse_plan(total_.statistics,append_fiber_reverse(p,view_,links_,owner_.fiber[i],fibers_[i],stage.range,state,
+      messages_,connected_,partials_,total_.fiber,total_.fiber_connected,error,chunk_,budget_/4/fibers_.size()),"fiber");
   p.add(decay_,state.decay);p.add(retention_,state.retention_components);
   append_connection_union(p,state.decay_connected,decay_on_,error);append_connection_union(p,state.retention_connected,retention_on_,error);
   return {state,messages_,connected_,partials_};

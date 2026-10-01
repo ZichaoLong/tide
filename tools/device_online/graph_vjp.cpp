@@ -177,13 +177,13 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto state_tape=t.state;state_tape.metadata=stage_meta;state_tape.values=stage_values;state_tape.count=stage_count;
   auto state=sharded?state_owner.stage(p,range,cot,scores):append_state_vjp(p,state_tape,cot,error,budget/(divisor/2));
   for(size_t i=0;i<t.attention.size();++i)
-    append_event_reverse(p,t,t.attention[i],attention_reverse[i],range,state,out.attention,out.attention_connected,error,chunk,budget/(divisor/2)/t.attention.size());
+    record_reverse_plan(out.statistics,append_event_reverse(p,t,t.attention[i],attention_reverse[i],range,state,out.attention,out.attention_connected,error,chunk,budget/(divisor/2)/t.attention.size()),"event");
   payload(3,full.content,full.comparison,state.content,state.content_connected);
   if(normalized)append_aggregate_vjp(p,t,links,stage_count,range,state.content,state.content_connected,
     messages,aggregate_partials,out.aggregate,error,chunk,budget/divisor);
   for(size_t i=0;i<t.fiber.size();++i)
-    append_fiber_reverse(p,t,links,t.fiber[i],fiber_reverse[i],range,state,messages,connected,aggregate_partials,
-      out.fiber,out.fiber_connected,error,chunk,budget/(divisor/2)/t.fiber.size());
+    record_reverse_plan(out.statistics,append_fiber_reverse(p,t,links,t.fiber[i],fiber_reverse[i],range,state,messages,connected,aggregate_partials,
+      out.fiber,out.fiber_connected,error,chunk,budget/(divisor/2)/t.fiber.size()),"fiber");
   if(sharded)state_owner.sources(p,messages,connected,aggregate_partials);
   p.copy(carry,state.initial);p.copy(carry_on,state.initial_connected);
   p.add(dc,state.decay);p.add(rc,state.retention_components);

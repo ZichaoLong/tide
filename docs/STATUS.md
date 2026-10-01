@@ -1,156 +1,125 @@
 # Current handoff
 
 Updated 2026-10-02. **ACTIVE: user resumed and accepted overhead reduction.**
-Continue the overall goal; commit/push authorized. No current pause instruction.
+Continue the overall goal; commits/pushes authorized. No current pause instruction.
 No subagents. Reference repositories and ObsidianVault are read-only.
-Repository `/home/zlong/llm/graph-execution-foundation` resolves to
-`/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
+Repository /home/zlong/llm/graph-execution-foundation resolves to
+/var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
 [execution-flows.md](execution-flows.md) is the contract; [ROADMAP F1–F7](ROADMAP.md)
-is the only backlog and remains incomplete.
+is the only backlog. Overall task remains incomplete.
 
-## Contract and priorities
+## Contract and focus
 
-Candidates independently consume common inputs/parameters/initial state, never
-CPU reference events/routes/results/gradients. General online greedy permits legal
-feedback/input and natural streaming degeneration. Preserve int64, stable ordering,
-parallel-edge identity, missing/zero messages, None/zero gradients. Matrix: PDG
-LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill × inference/
-complete training. Python resident is a C++/CANN client, not independent PyTorch
-scheduling. Five presets retain fine switches. FP32 main, FP16 separate; CUDA
-execution remains target-machine-pending. Training includes loss interface,
-backward/VJP, optimizer, continuation and throughput; downstream convergence excluded.
-Current alignment outranks run-ml-experiments; use minimal existing records.
-
-Next priority: public scale consumers, then bounded representative/full-size F6
-five-preset screening. Reuse qualified APIs and atomic updates; do not continually
-polish internal fragments. Use affected checks and byte-verified terminal builds,
-not repeated unchanged 8,954 CPU checks. Profiling guides implementation.
+Every candidate independently consumes common inputs/parameters/initial state,
+never CPU reference events/routes/results/gradients. General online greedy accepts
+legal topology/input including positive-delay feedback and natural streaming
+fallback. Preserve int64,stable ordering,parallel-edge identity,missing/zero messages,
+None/zero gradients. Matrix: PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch;
+CPU/NPU × streaming/prefill × inference/complete training. Python resident is a
+C++/CANN client,not an independent PyTorch scheduler. Five presets retain fine
+switches; FP32 main,FP16 separate. CUDA real execution remains target-machine-pending.
+Training means loss/VJP/optimizer/continuation/throughput,not downstream convergence.
+Current contract outranks run-ml-experiments: minimal existing durable records;
+Trackio does not block. Public complete consumers and F6 take priority over
+repeated internal polishing. Only affected checks,not unchanged8,954 CPU checks.
 Implementation commit → immutable qualification → evidence commit; push each.
 
-## Latest verified work
+## Latest qualified work
 
-Public multi-device training implementation **0d7c45eb417e827f6bc77c1ee9f876d9663ab215**
-is committed/pushed. Its ten fixed-source jobs are now terminal PASSED and audited:
-[report](evidence/public-sharded-training-20261002.md),
-[audit](evidence/public-sharded-training-20261002.json). Two isolated runtime builds,
-CPU25 checks, C++ FP32/FP16 each32 trajectories/512 windows/128 updates, four explicit
-owner/card-count transitions, Python41 cases/no skips, installed two-card C++ client,
-legacy single-card FP16 cache training, separate two-card profile. No tolerance change.
+Public multi-device FP32/FP16 training,canonical atomic optimizer,compact
+Full/state/KV and portable repartition: clean0d7c45e,
+[evidence](evidence/public-sharded-training-20261002.md). Earlier internal device
+completion,retained reverse and other qualifications remain in ROADMAP.
+HARD slot-affine emission reverse/publication: clean96c75f8,
+[evidence](evidence/resident-emission-training-20261002.md);8 audited terminal jobs.
+Projection weights and physical partial gradients still live on coordinator.
 
-Public C++/Python loss roots, owner-local state/KV/gradients, canonical parameters,
-separate backward/atomic SGD or AdamW, actual forward publication, continued windows
-and portable schema1 restore across placement/card count/legacy single owner verified.
-Initial model may explicitly stay CPU; no coordinator forward state/KV replica and
-no CPU-reference prepass. Public struct ABI changed: rebuild clients and bindings.
-Profiling found16 AiCPU boolean scatters; integer flags/exact cast removed fallback.
-Clean trace:17,690 AI_VECTOR_CORE/256 AI_CORE/302 MIX_AIV, no observed AiCPU;
-112 model executes/816 matching device notify pairs/1,909 switches/7,063 DMA.
-Includes setup/checks/refusals, not throughput. Eight development failures preserved.
-
-Prior compact retained state/cache reverse and device completion chain qualified at
-49541be ([evidence](evidence/device-state-reverse-20261002.md)); single persistent
-CANN task buffer overflow507002 was fixed by one device-chained program per window.
-Earlier forward/canonical/internal qualifications remain in ROADMAP and evidence.
-
-## Current work and next action
-
-Continuous public consumers implementation **fe2d8869f2c0bdb5f59da525a7687d91e341fc78**
-is committed/pushed. All five fixed-source jobs PASSED and were audited:
-[report](evidence/online-consumers-20261002.md),
-[audit](evidence/online-consumers-20261002.json). CPU120 checks, NPU18 directed
-FP32 trajectories, no skips or tolerance changes. Standalone CPU includes26
-trajectories/104 windows/52 updates; Python/native/LibTorch NPU includes72 windows/
-36 updates. Two fresh independent installed client builds reuse unchanged,
-byte-verified core. Complete actual parameters, gradients/None, continuations and
-independent v2 input generation compared. Separate actual attention training trace
-records192 AiCPU tasks (72 int64 Sort,120 bool ScatterElements),18,927 vector,
-1,712 AI_CORE,2,974 MIX_AIV; setup included, no throughput/bottleneck-share claim.
-
-No consumer qualification job remains live. Two development build failures
-(missing tide/kernel.h declaration include) retained; fixed-source builds pass.
-Frozen source sources/online-consumer-clean01; builds online-consumer-{cpu,npu}-clean01;
-runs build-online-consumer-{cpu,npu}-clean01,online-consumer-cpu-clean01,
-online-consumer-mixed-clean01,online-consumer-profile-clean01. All source fe2d886.
-Audit reproduction: python "$TASK/launchers/online_consumer_evidence.py" fe2d8869f2c0bdb5f59da525a7687d91e341fc78.
-
-HARD slot-affine resident training implementation **96c75f8d9c2bee54a5000f4c410fe3d5764ec552**
-committed/pushed and all eight immutable qualification jobs PASSED:
-[report](evidence/resident-emission-training-20261002.md),
-[audit](evidence/resident-emission-training-20261002.json). Two isolated fresh links
-reuse recursively validated terminal objects/kernels. Two-card FP32/FP16 each16
-trajectories (total512 windows/128 updates);3 placement transitions (48/12);
-legacy FP16 12 trajectories (192/48);2 broadcast/cache regressions (32/8);
-Python10/no skips. No tolerance change. Separate profile:19,022 vector/357 AI_CORE/
-288 MIX_AIV,no observed AiCPU; actual emission link/plan/payload16/42/56.
-Setup/checkpoint/checks included,not throughput. No emission job remains live.
-
-Frozen source sources/emission-reverse-clean01; builds emission-reverse-clean01,
-emission-reverse-python-clean01. Runs build-emission-reverse-{clean01,python-clean01}
-and emission-reverse-{matrix,placements,legacy,regression,python,profile}-clean01.
-Reproduce audit: python "$TASK/launchers/emission_reverse_evidence.py" 96c75f8d9c2bee54a5000f4c410fe3d5764ec552.
-
-Actual public resident consumers implementation **0d61cb94e7b911ff883de9af7b81042f87897a36**
-is committed/pushed. HARD FP32 actual edge-affine Add/Attention head/loss, compact
-output roots, boundary input→embedding VJP, staged external optimizer publication.
-Single-device inference and single/multi-device training, both client runtimes.
-Candidate does not consume reference intermediates. Projection banks/partials remain
-coordinator-owned; consumer FP16 and multi-device inference remain pending.
-
-All six immutable qualification jobs PASSED and were audited:
+Continuous actual edge-affine Add/Attention CPU/mixed consumers: cleanfe2d886,
+[evidence](evidence/online-consumers-20261002.md),CPU120/NPU18 passed.
+Actual FP32 resident consumers: clean0d61cb94e7b911ff883de9af7b81042f87897a36,
 [evidence](evidence/online-resident-consumers-20261002.md),
-[audit](evidence/online-resident-consumers-20261002.json). CPU59,resident19,mixed18,
-no skips/no tolerance change. Resident16 model trajectories,64 windows/24 updates;
-CLI success/refusals and >2^54 int64 gradient check. Separate D32 actual Attention
-2-card trace:15,004 vector/633 AI_CORE/218 MIX_AIV,no observed AiCPU;32 model
-executions,570 notify pairs,2,370 switches,4,552 async copies. Not throughput.
+[audit](evidence/online-resident-consumers-20261002.json);6 jobs terminal PASSED,
+CPU59/resident19/mixed18,no skips/no tolerance change.16 actual model trajectories,
+64 windows/24 updates,CLI refusals and >2^54 integer/gradient boundary. Two installed
+clients reuse byte-verified backend96c75f8. Separate actual D32 Attention2-card
+trace:15,004 vector/633 AI_CORE/218 MIX_AIV,no observed AiCPU;32 model executes,
+570 notify pairs,2,370 switches,4,552 async copies. Not formal throughput.
+Evidence commit f7173d8 is pushed.
 
-Source sources/online-resident-clean01 at0d61cb9. Builds online-resident-cpu-clean01,
-online-resident-clean01; tasks build-online-resident-{cpu-,}clean01 and
-online-resident-{cpu,matrix,profile}-clean01,online-resident-mixed-clean02.
-All are terminal. Backend libraries reused from immutable emission-reverse-clean01
-(standalone) and emission-reverse-python-clean01 with hashes verified. Python core:
-placement-npu-python-clean01. Audit: python "$TASK/launchers/online_resident_evidence.py"
-0d61cb94e7b911ff883de9af7b81042f87897a36.
+Resident source sources/online-resident-clean01; builds online-resident-{cpu-,}clean01,
+emission-reverse-{,python-}clean01. Gate runs online-resident-{cpu,matrix,profile}-clean01
+and mixed-clean02. mixed-clean01 omitted target and skipped18;excluded,retained.
+Other five development failures remain failed,including D32 reverse16-row rejection.
+Audit: python "$TASK/launchers/online_resident_evidence.py" full0d61cb9 hash.
 
-Five development failures preserved; D32 reverse16-row budget rejection passes at
-explicit4 without logical changes. mixed-clean01 omitted explicit target and skipped
-all18; excluded,retained,corrected clean02 passed18. New qualification complete;
-no consumer jobs live. Next: budget-aware physical reverse chunk selection before
-scale trials,then compact projection owners and total memory admission. Avoid
-manually guessing reverse rows or increasing budgets to bypass a fixable split.
+## Current change and next commands
 
-Continue compact projection owners,total-memory admission,safe chunking,FP16 consumer
-and representative/full-size F6; do not end the task at small consumer qualification.
+Uncommitted implementation: reverse_budget.h centralizes original event/fiber
+reservation formulas and selects safe physical owner/query/key caps before
+allocation. Logical fibers/KV/loss/update boundaries unchanged; smallest complete
+owner still refuses explicitly. Existing disjoint budgets retained. Backward
+statistics expose effective caps and reservation estimates;these are not measured
+active row counts or total allocator peaks. Public ResidentGradients ABI changed:
+rebuild clients/bindings. Consumer records these statistics without per-event reads.
 
-Historical CPU Attention remains deliberately paused. No formal new full-size
-throughput established. Keep focus on complete public flows; affected gates first,
-not repeated full unchanged suites or endless internal component polishing.
+All development jobs terminal PASSED from frozen sources/reverse-budget-dev01:
+- build-reverse-budget-dev01 and build-reverse-budget-python-dev01:60/69 recursive
+  affected objects rebuilt;unchanged kernels/core byte-verified.
+- build-reverse-budget-consumer-dev01:installed standalone client.
+- reverse-budget-cpu-dev01:1 CPU reservation gate,geometry throughD2048.
+- reverse-budget-native-dev01:1 D32 actual consumer case (2 trajectories).
+- reverse-budget-consumer-dev01:10 selected standalone consumer cases.
+- reverse-budget-cache-dev01:83 event/fiber/FP16 public cases,no skips.
+- reverse-budget-matrix-dev01:FP32/FP16 each16 trajectories,512 windows/128 updates total.
+- reverse-budget-profile-dev01:actual D32 two-card training,reverse maximum16.
+D32 auto-selected12 owner/query rows (64 key rows) and matched independent CPU
+full training plus manual1-row execution. No tolerance relaxation. No new failures.
 
-## Environment and bounded execution
+Next commit implementation,push;freeze reverse-budget-clean01 at exact commit.
+Build using launchers/build_reverse_budget.py:
+  reverse-budget-clean01 --reuse-host reverse-budget-dev01
+  reverse-budget-python-clean01 --runtime python --reuse-host reverse-budget-python-dev01
+Then build_online_resident.py --build builds/reverse-budget-clean01
+  --out builds/reverse-budget-consumer-clean01. These fresh links reuse byte-identical
+completed development objects only after recursive source/header validation.
 
-TASK=/mi/data2T/zlong/tide-execution-flows; RUN=TASK/runs/NAME;
-unit=tide-execution-flows-NAME.service; RUN/status.json/task.log own lifecycle.
-Module libtorch-npu/2.10.0-cann9.0.0; Python
+Fixed-source jobs to launch: reverse-budget-cpu-clean01(test_reverse_budget.py,1),
+reverse-budget-cache-clean01(test_resident_{event,fiber,half}_training.py,83,one card),
+reverse-budget-matrix-clean01(emission_reverse_gates.py --scope matrix,two cards),
+reverse-budget-consumer-clean01(test_online_resident_consumer.py +
+test_online_resident_chunking.py,21,two cards),reverse-budget-profile-clean01
+(profile_resident_consumer.py --preset resident --reverse-chunk-rows16,no development,
+two cards). Use new Python resident build plus placement-npu-python-clean01 core;
+TIDE_ONLINE_DEVICE=npu:0 for consumers,TIDE_RESIDENT_DEVICE=npu:0 for public cache.
+Audit launchers/reverse_budget_evidence.py full implementation hash,write reviewed
+report/update support boundaries,then evidence-only commit/push. No immutable
+qualification claim for this change yet.
+
+Continue compact projection owners,total-memory admission,consumer FP16,multi-device
+public inference and representative/full-size F6. Do not end at small qualification.
+Projection banks/partials and per-window copied projection versions are still scale
+bottlenecks; place_full currently counts Full parameters only. Safe reverse splitting
+is local,not total-memory admission. Multi-device inference must not use training tapes.
+No new formal full-size performance result. Historical CPU Attention is supplementary.
+
+## Environment and job bounds
+
+TASK=/mi/data2T/zlong/tide-execution-flows;RUN=TASK/runs/NAME;
+unit=tide-execution-flows-NAME.service;RUN/status.json/task.log and queue.json.
+Module libtorch-npu/2.10.0-cann9.0.0;Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-Public /opt stack supersedes dated personal guide by user authorization.
-TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0; preserve module PYTHONPATH,
-prepend snapshot/python. SoC Ascend910_9392. Use leased logical devices only.
-Last space: data224GiB/root14GiB; heavy writes go under TASK, recheck capacity.
-Core builds: placement-cpu-clean01,placement-npu-clean01(standalone),
-placement-npu-python-clean01(Python-owned). Never mix SDK and Python runtimes.
-Existing builders: launchers/build_public_shards_v3.py, build_public_consumer.py;
-recursive header dependencies, byte-verified objects, fresh links; not full vendor
-rebuilds. Builds read frozen source cwd. Device/test commands use env -C RUN and
-absolute source paths: vendor fusion_result.json must not contaminate the snapshot.
-Use freeze_run.py, frozen sources, background.slice/Nice10, queue120s/run600s/build900s.
-Atomic handoff writes via scripts/durable_records.py.
+Default shell Python cannot run Torch tests. Public /opt stack supersedes dated
+personal guide by user authorization. TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;
+preserve module PYTHONPATH,prepend snapshot/python. SoC Ascend910_9392;leased logical
+NPUs only. Separate standalone and Python runtimes. Core builds placement-cpu-clean01,
+placement-npu-clean01(standalone),placement-npu-python-clean01(Python-owned).
+Frozen-source launcher freeze_run.py;runtime cwd env -C RUN avoids vendor files in
+source. background.slice/Nice10,build2 workers,queue120s/run600s/build900s. Last disk:
+data223GiB/root14GiB;check before heavy writes. Atomic handoff durable_records.replace_text.
 
-## Preserved historical boundaries
-
-Earlier24 dirty files are SHA256-verified on pushed archive/restricted-flow-20260930
-at964bf628c67270200dabe55b1bca026bd403cd37; TASK/restricted-flow-archive.json.
-Historical historical-cpu-attention-01 remains intentionally SIGSTOP; pause.json
-outweighs running status and retains host memory/TASK/timing.lock. Do not resume or
-terminate it while developing the new consumers.
-Historical Add CPU78.793172/NPU4 47.932888ms/token is throughput1.6438× faster;
-it does not certify the new resident path. No full CPU Attention training ratio.
+Historical historical-cpu-attention-01 remains intentionally SIGSTOP;pause.json
+outweighs running status and retains memory/TASK/timing.lock. Do not resume or kill.
+Historical Add CPU78.793172/NPU4 47.932888ms/token = throughput1.6438× faster;
+it does not certify resident. Earlier24 dirty files retained on pushed archive/
+restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37,sha256 inventory
+TASK/restricted-flow-archive.json. Preserve all cited artifacts and failures.

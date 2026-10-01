@@ -53,7 +53,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   sync();result.construction=seconds(begin);Index position=0;
   for(Index step=0;step<c.steps+c.warmup;++step) {
     sync();begin=Clock::now();Tensor loss,gh;Index count=0;std::vector<Tensor> counters;
-    std::vector<tide::ResidentCotangents> roots;
+    std::vector<tide::ResidentCotangents> roots;std::map<std::string,Index> reverse_statistics;
     for(Index window=0;window<c.windows;++window) {
       auto positions=at::arange(position,position+p.tokens,at::kLong).reshape({1,-1});
       auto samples=at::arange(p.batch,at::kLong).reshape({-1,1});
@@ -82,7 +82,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
     }
     if(loss.defined()&&!at::isfinite(loss).all().item<bool>())throw std::runtime_error("nonfinite consumer loss; optimizer not applied");
     if(training) {
-      const auto gradient=training->backward(roots);auto ge=embedding_gradient(gradient,embedding);
+      const auto gradient=training->backward(roots);reverse_statistics=gradient.statistics;auto ge=embedding_gradient(gradient,embedding);
       optimizer->prepare(ge,gh);
       if(diagnostics)resident_gradients_json(*diagnostics,step,f,gradient,ge,gh);
       const auto accepted=training->step();
@@ -98,6 +98,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       result.seconds.push_back(elapsed);result.losses.push_back(loss.defined()?loss.cpu().item<double>():0.);result.outputs.push_back(count);
       auto counts=at::stack(counters).sum(0).cpu().contiguous();auto values=counts.data_ptr<Index>();
       result.statistics.push_back({{"stages",values[0]},{"events",values[1]},{"full_chunks",values[2]},{"emission_chunks",values[3]}});
+      result.statistics.back().insert(reverse_statistics.begin(),reverse_statistics.end());
     }else result.warmup.push_back(elapsed);
   }
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();

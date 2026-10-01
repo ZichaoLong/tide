@@ -126,6 +126,8 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     }
     for(size_t i=0;i<s.saved.size();++i) {
       const auto& t=s.saved[i].tape.tape.coordinator;const auto& g=gradients[i].coordinator;const auto n=g.links.fibers+g.links.pending;
+      merge_reverse_statistics(out.statistics,g.statistics);
+      for(const auto& state:gradients[i].state->gradients())merge_reverse_statistics(out.statistics,state.statistics);
       auto valid=g.links.valid.narrow(0,0,n)&g.links.messages.narrow(0,0,n).select(1,1).lt(0);
       out.boundaries.push_back({s.saved[i].token,at::cat({t.fiber_meta,t.pending.coordinates}),g.messages.narrow(0,0,n),valid,g.message_connected.narrow(0,0,n)&valid});
     }

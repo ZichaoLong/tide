@@ -148,6 +148,23 @@ capacity. They are limits,not a total peak-memory estimate or a guarantee of sca
 admission. Exhaustion is explicit; increasing only one limit may leave another
 unsatisfied. Requested and effective placement/limits are recorded.
 
+Attention reverse now treats `--resident-reverse-chunk-rows` as a physical upper
+bound. Before allocating stage buffers, a shared planner fits complete owners,
+queries and key tiles into the existing disjoint tensor reservations. It chooses
+the largest owner batch that admits at least one query, then the largest query
+batch and key tile that fit. It never retries OOM or truncates a logical fiber,
+KV visibility, loss reduction or retained window. A single owner that cannot fit
+still fails explicitly. This is local safe splitting, not total-memory admission.
+Implementation and qualification status are tracked separately in [STATUS](STATUS.md).
+
+Backward results expose `statistics`; consumer step records include
+`reverse_event_*`/`reverse_fiber_*` group counts, requested maximum, effective
+owner/query/key row minima/maxima, estimated tensor bytes and assigned budgets.
+These are construction-time physical capacities across retained windows/owners,
+not observed active row counts or allocator peaks. Their extraction requires no
+per-event device scalar read. The public C++ gradient layout changed; rebuild
+clients and bindings against the matching resident library.
+
 The LibTorch launcher does not import Torch. It derives and hashes the exact v2
 text input from the validated JSON, records the executable digest, and launches
 the independent runtime. Direct C++ invocation validates structure but treats the

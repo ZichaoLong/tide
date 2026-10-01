@@ -83,15 +83,14 @@ EventReverse prepare_event_reverse(CannProgram& p,const StateReverseView& t,cons
       hash,out.ranges,out.previous,out.tails,out.cache.lengths,error});
   return out;
 }
-void append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,const EventReverse& reverse,
+ReverseBatchPlan append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAttentionTape& a,const EventReverse& reverse,
     const at::Tensor& range,StateVjp& state,const at::Tensor& parameters,const at::Tensor& parameter_on,
     const at::Tensor& error,int64_t chunk,int64_t budget) {
   const int64_t w=a.width,h=a.heads,kh=a.kv_heads,d=w/h,kv=kh*d,k=a.capacity,ps=a.nodes.size(),owners=a.samples*ps,nodes=t.layout.nodes;
-  const int64_t c=std::min(chunk,owners),cols=w+2*kv;
+  const int64_t cols=w+2*kv;
   const bool half=a.qkv.scalar_type()==at::kHalf;
-  const long double own=4.L*c*(4.L*w*cols+4.L*w*w+8.L*w+4.L*kh*k*d)+128.L*c
-    +2.L*half*c*(2.L*w+w*static_cast<long double>(cols)+cols+2.L*kh*k*d);
-  if(c<1||budget<1||own>budget/2.L)throw std::invalid_argument("event reverse batch tensor budget exceeded");
+  const auto reservation=plan_event_reverse(owners,w,h,kh,k,chunk,half,budget);
+  const auto c=reservation.owner_rows;
   auto f=a.values.options(),l=a.lengths.options(),b=f.dtype(at::kBool);
   auto plan=at::empty({c,8},l),flags=at::empty({c,6},b),lengths=at::empty({c},l),branch=at::empty_like(error);
   auto x=at::empty({c,1,w},f),weights=at::empty({c,w,cols},f),wo=at::empty({c,w,w},f);
@@ -123,7 +122,7 @@ void append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAt
   p.batch_matmul(fx,fw,fp);if(half)p.cast(fp,projected);pack(1);
   if(half){p.cast(query,fq);p.cast(key,fk);p.cast(value,fv);}
   p.permute(wo,{0,2,1},wot);p.batch_matmul(u,wot,cot.reshape({c,1,w}));
-  auto local=append_attention_vjp(p,{fq,fk,fv,bias,lengths,cot,on},error,1./std::sqrt(double(d)),std::min<int64_t>(64,k),budget/2);
+  auto local=append_attention_vjp(p,{fq,fk,fv,bias,lengths,cot,on},error,1./std::sqrt(double(d)),reservation.key_rows,budget/2);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_event_reverse_fold)(32,stream,
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(a.config),ptr(local.query),ptr(local.key),ptr(local.value),
     ptr(reverse.cache.key),ptr(reverse.cache.value),ptr(dprojected),ptr(error),c,w,h,kh,k),"reverse cache adoption window and clear");},
@@ -135,6 +134,6 @@ void append_event_reverse(CannProgram& p,const StateReverseView& t,const EventAt
     ptr(plan),ptr(flags),ptr(t.state.metadata),ptr(reverse.node_offsets),ptr(dx),ptr(dw),ptr(dwo),ptr(state.content),ptr(state.content_connected),
     ptr(parameters),ptr(parameter_on),ptr(error),c,w,kv,nodes),"reduce event projection and content adjoints");},
     {plan,flags,t.state.metadata,reverse.node_offsets,dx,dw,dwo,state.content,state.content_connected,parameters,parameter_on,error});
-  p.branch(branch,{head});p.mark(done);
+  p.branch(branch,{head});p.mark(done);return reservation;
 }
 } // namespace tide::device_online

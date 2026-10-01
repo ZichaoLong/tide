@@ -98,6 +98,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 raise RuntimeError("nonfinite consumer loss; optimizer not applied")
             if training:
                 gradient = session.backward(roots)
+                reverse_statistics = dict(gradient.statistics)
                 ge = embedding_gradient(gradient.boundaries, embedding)
                 optimizer_owner.prepare((ge, gh))
                 if observer:
@@ -121,6 +122,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 durations.append(elapsed); losses.append(None if loss is None else float(loss.cpu())); counts.append(count)
                 statistics.append(dict(zip(("stages", "events", "full_chunks", "emission_chunks"),
                                            torch.stack(counters).sum(0).cpu().tolist())))
+                if training:
+                    statistics[-1].update(reverse_statistics)
             else:
                 warmup_times.append(elapsed)
         cut = session.cut

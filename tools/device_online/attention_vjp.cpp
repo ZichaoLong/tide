@@ -1,4 +1,5 @@
 #include "attention_vjp.h"
+#include "reverse_budget.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_attention_reverse_plan.h"
 #include "aclrtlaunch_tide_attention_reverse_pack.h"
@@ -35,10 +36,9 @@ AttentionVjp append_attention_vjp(CannProgram& p,const AttentionVjpInput& in,con
   tensor(in.connected,device,at::kBool,{q});tensor(error,device,at::kInt,{1});
   // Outputs plus all retained numerical/metadata scratch; original inputs and
   // the separately bounded CANN operator workspace are outside this reservation.
-  const long double bytes=4.L*(2.L*in.key.numel()+in.bias.numel()+12.L*in.query.numel()
-      +8.L*q*h*tile*d+10.L*q*h*tile+q*static_cast<long double>(tile)+8.L*q*h)+32.L*q+1024
-      +2.L*half*(in.query.numel()+q*h*static_cast<long double>(tile)*(d+1));
-  if(budget<1||bytes>budget)throw std::invalid_argument("attention VJP tensor budget exceeded");
+  if(budget<1)throw std::invalid_argument("attention VJP tensor budget exceeded");
+  tile=reverse_budget::key_rows(q,h,d,kh,k,tile,half,budget);
+  if(!tile)throw std::invalid_argument("one attention VJP key tile exceeds tensor budget");
   auto f=in.query.options().dtype(at::kFloat),l=in.lengths.options();
   AttentionVjp out{at::empty(in.query.sizes(),f),at::empty(in.key.sizes(),f),at::empty(in.value.sizes(),f),at::empty_like(in.bias),
     at::empty_like(in.connected),at::empty({1},l)};

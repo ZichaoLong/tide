@@ -74,6 +74,12 @@ dense parameter/initial fields are undefined in this mode. Canonical owners can
 differ from Full/state owners and alias contributions are reduced exactly once.
 Backward and step are separate calls; step consumes the completed reduction.
 
+`ResidentGradients::statistics` exposes the reverse attention reservations also
+recorded by the [public consumers](online-consumers.md). Physical owner/query/key
+caps can shrink to fit their tensor budget while preserving complete fibers and
+global attention normalization. These estimates exclude the separately bounded
+vendor workspace and do not certify a total model-memory budget.
+
 Forward state/KV values remain owner-local. State root cotangents may use bounded
 coordinator scratch for reverse routing; this is not a forward state replica.
 Host loops traverse static owner/module groups and retained windows, not actual
