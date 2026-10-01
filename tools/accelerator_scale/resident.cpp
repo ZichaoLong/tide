@@ -23,7 +23,8 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
         && node.memory != "lh-fiber-attention-all-softmax-repeat-v1"))
       throw std::invalid_argument("resident benchmark supports only its declared historical local programs");
   selection_model_ = model_;
-  selection_model_.nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(at::kCPU).dtype(at::kFloat));
+  const auto control_dtype=model_.nodes[0].bias.scalar_type()==at::kDouble?at::kDouble:at::kFloat;
+  selection_model_.nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(at::kCPU).dtype(control_dtype));
   for (const auto& region : graph_.regions)
     if (region.selector != "lh-count-affect-v1" && region.selector != "count-v1")
       throw std::invalid_argument("resident benchmark requires count-only CPU histories");
@@ -38,7 +39,7 @@ Resident::Resident(Graph graph, Model model, Options options, Index batch, Place
     c10::impl::VirtualGuardImpl api(d.type()); streams_.push_back(api.getStream(d));
     if (placement_.scoring.control_device == "model") {
       device_selection_models_.push_back(model_);
-      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d).dtype(at::kFloat));
+      device_selection_models_.back().nodes[0].bias = at::zeros_like(model_.nodes[0].bias, at::TensorOptions().device(d).dtype(control_dtype));
     }
   }
   state_.identity = graph_.identity; state_.batch_size = batch;

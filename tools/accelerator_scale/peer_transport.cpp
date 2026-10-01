@@ -203,6 +203,9 @@ std::vector<at::Tensor> PeerTransport::vjp(const at::Tensor& value,
     auto gradients=torch::autograd::grad(outputs,inputs,weights,retain,false,true);
     for(size_t i=0;i<indices.size();++i)result[indices[i]]=gradients[i];
   }
+  // A completed update must not retain the previous window's local autograd
+  // graphs through this transport registry. Isolated VJPs keep their tape.
+  if(!retain)impl_->bridges.clear();
   return result;
 #else
   throw std::logic_error("NPU peer VJP unavailable");

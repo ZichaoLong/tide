@@ -157,7 +157,10 @@ int main(int argc,char** argv) {
     if(peer_check)accelerator_scale::bounded::check_peer(device,c.runtime.dtype);
     else if(training)accelerator_scale::bounded::check_training(c,topology,device,devices,replay);
     else if(replay)accelerator_scale::bounded::check_replay(c,topology,device,devices);
-    else accelerator_scale::bounded::check_forward(c,topology,device,devices);
+    else {
+      accelerator_scale::bounded::check_forward(c,topology,device,devices);
+      accelerator_scale::bounded::check_inactive_full(c,topology,device,devices);
+    }
   } catch(const std::exception& e){std::cerr<<e.what()<<'\n';code=1;}
   if(npu)try{accelerator_scale::finalize();}catch(const std::exception& e){std::cerr<<e.what()<<'\n';code=1;}
   return code;

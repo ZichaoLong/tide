@@ -52,7 +52,9 @@ void Program::finish(Event& e) const {
     e.next.value.data=at::where(e.active.unsqueeze(1),e.proposal.value.data*0,e.proposal.value.data);
     if(e.next.valid.defined())e.next.valid=e.next.valid & ~e.active.unsqueeze(1);
   }
-  auto fresh=lh_full_fresh(w,e.proposal.value.data);auto dep=e.proposal.value.dependencies;
+  // Mask absent rows before nonlinear arithmetic; masking overflowed results
+  // afterwards can still poison a connected VJP with NaNs.
+  auto fresh=lh_full_fresh(w,masked_rows(e.proposal.value.data,e.active));auto dep=e.proposal.value.dependencies;
   auto norm=w.extra.find("lh_norm_weight");if(norm!=w.extra.end())dep=dep|dependency(norm->second,d);
   e.fresh={fresh,dep};Tensor projected;
   auto weight=w.extra.find("row_emit_weight");
