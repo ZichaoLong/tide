@@ -1,4 +1,5 @@
 #pragma once
+#include "cann_sequence.h"
 #include "full_shard_tape.h"
 namespace tide::device_online {
 struct FullShardGradient {std::vector<int64_t> nodes;FullVjp values;};
@@ -33,4 +34,5 @@ ShardedGraphVjp append_sharded_graph_vjp(CannProgram&,const ShardedReverseTape&,
 void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>&); // Coordinator must already be closed.
 // Submit all device programs before any wait, including retained windows.
 void run_sharded_graph_vjp(CannProgram&,const std::vector<ShardedGraphVjp>&);
+void run_sharded_graph_vjp(CannSequence&,const std::vector<ShardedGraphVjp>&);
 } // namespace tide::device_online

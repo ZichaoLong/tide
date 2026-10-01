@@ -40,14 +40,14 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
     if(x.defined())x.fill_(std::numeric_limits<float>::quiet_NaN());
   test::poison_live_cache(live.coordinator);test::poison_owner_cache(live);
   auto error=at::zeros({1},saved[0].tape.coordinator.state.count.options().dtype(at::kInt));
-  CannProgram p(device);p.limit_workspace(128*1024*1024);std::vector<ShardedGraphVjp> gradients(saved.size());
-  for(size_t i=saved.size();i>0;) {--i;const auto& t=saved[i].tape.coordinator;
+  CannSequence programs(device,saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradients(saved.size());
+  for(size_t i=saved.size();i>0;) {--i;auto& p=programs.append();const auto& t=saved[i].tape.coordinator;
     auto roots=test::retained_roots(t,i,mode);test::retained_cache_roots(roots,t,i,mode);
     if(i+1<saved.size())roots=append_window_bridge(p,t,roots,saved[i+1].tape.coordinator,gradients[i+1].coordinator,error,32*1024*1024);
     gradients[i]=append_sharded_graph_vjp(p,saved[i].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024,
       i+1<saved.size()?gradients[i+1].state:nullptr,test::owner_cache_roots(saved[i].tape,i,mode));
   }
-  p.finish();run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph reverse refused");
+  programs.finish();run_sharded_graph_vjp(programs,gradients);require(!error.cpu().item<int>(),"sharded graph reverse refused");
   ShardedParameterReduce reduction(sharded_parameter_sources(f.graph,registry,gradients,64*1024*1024),
       placement,error,256*1024*1024,32*1024*1024);
   reduction.finish();reduction.run();
@@ -78,10 +78,10 @@ void check(at::Device device,int devices,at::ScalarType dtype,int shape,int vari
     }
     for(const auto& [name,_]:expected.gradients)if(name.rfind("boundary/",0)==0)require(seen[name],"missing external boundary gradient");
   }
-  run_sharded_graph_vjp(p,gradients);require(!error.cpu().item<int>(),"sharded graph replay refused");
+  run_sharded_graph_vjp(programs,gradients);require(!error.cpu().item<int>(),"sharded graph replay refused");
   reduction.run();auto replay=test::sharded_parameter_observations(reduction.gradients());
   for(const auto& [name,value]:values)require(value.defined()==replay.at(name).defined()&&(!value.defined()||at::equal(value,replay.at(name))),"sharded reverse replay accumulated stale gradients");
-  reduction.close();p.close();close_sharded_graph_vjp(gradients);
+  reduction.close();programs.close();close_sharded_graph_vjp(gradients);
 }
 }
 int main(int argc,char** argv) {

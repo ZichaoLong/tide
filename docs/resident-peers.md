@@ -281,6 +281,16 @@ refused. Complete-cut forward snapshots may still restore with a different
 layout. Empty/error windows send stop and completion packets. Repeat execution
 resets accumulators and cache seeds; no host event polling drives backward.
 
+The retained composition uses `CannSequence`: one coordinator program per window,
+joined in reverse-window order by reusable local device notifications. It submits
+all programs and peer services before waiting at the complete backward boundary.
+This bounds each persistent stream's static task list without truncating gradients
+or returning intermediate values to the CPU. The sequence has an explicit program
+capacity; individual programs and graph buffers still have finite vendor/tensor
+limits. Logical event queues and static runtime task storage are different limits.
+On the local CANN9 stack, adding the vendor HUGE flag did not remove a demonstrated
+three-owner retained-program task-buffer failure; no such fallback is claimed.
+
 `sharded_parameter_sources` maps local state/Read/event/fiber partials into the
 existing canonical alias reducer. `sharded_parameter_banks` publishes back into
 actual forward storage on each owner, including grouped event projections and

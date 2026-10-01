@@ -83,15 +83,51 @@ Old public half-cache training smoke `state-reverse-public-dev04` also PASSED/ex
 All records are TASK/runs/NAME; units tide-execution-flows-NAME.service;
 queue120s/run600s/build900s. No public multi-device session yet.
 
-Next: commit/push this tested implementation, freeze `state-reverse-clean01` at
-that commit, use TASK/launchers/build_state_reverse.py with byte-verified
-`--reuse-host state-reverse-dev04 --kernel-build state-reverse-dev03`, and build
-Python-owned host objects separately (`--runtime python`, no SDK mixing).
-Run two-card full state VJP/training both dtypes, three-card memory/locality and
-one-owner subsets, affected public/client regressions, CMake dependency closure,
-and separate profiling. Do not repeat the completed dirty-source development
-checks. Qualification evidence is a separate commit; then continue public
-multi-device training/consumers and complete performance.
+Implementation **7cb79090757f0a0a46d106e51438d0a533b27fb7** committed/pushed.
+Frozen qualification at TASK/sources/state-reverse-clean01: standalone and Python
+host builds PASSED; two-card full FP32/FP16 VJP/training, one-owner subsets, old
+public training and CMake closure PASSED. Three-card placement stopped in FP16
+memory VJP with CANN507002: runtime plog confirms **stream task buffer full**
+while constructing the accumulated retained-window program, not a numerical
+mismatch. Preserve `state-reverse-placement-clean01` failure and its plog.
+Python client check `state-reverse-python-clean01` failed before execution: the
+affected builder omitted `_tide_resident.so`; fix the launcher artifact list,
+not candidate semantics. No current new live jobs.
+
+Current fix is implemented: bounded `CannSequence`, one coordinator program
+per retained reverse window, connected by reusable local device completion/reset.
+All coordinators/peers submit before the complete-backward wait; no intermediate
+CPU numerical or event decision. Existing state/cache bridges remain unchanged.
+Development standalone `program-chain-dev03` and Python `program-chain-python-dev01`
+builds PASSED. `program-chain-control-dev03` PASSED: sequence (4096 static adds
+across8 programs,four dynamic/replay cases,int64,capacity rejection,one-program),
+control,failure lifecycle,numerical FP32/FP16. Original three-card FP16 memory VJP
+failure now PASSED at `program-chain-reverse-dev03` (2 trajectories/8 windows).
+Python scalar-oracle/fresh-process gate `program-chain-python-dev01` PASSED5/no skips.
+Only a final defensive close-failure poison guard follows that development build;
+clean qualification recompiles its one changed host unit in each runtime.
+
+No live new jobs. Commit/push this fix, then freeze `program-chain-clean01` at the
+exact commit. Build using TASK/launchers/build_program_chain.py NAME with
+`--reuse-host program-chain-dev03` (standalone), or `--runtime python
+--reuse-host program-chain-python-dev01`; two workers/build,900s. Planned jobs:
+`build-program-chain-clean01`, `build-program-chain-python-clean01`,
+`program-chain-gates-clean01` (two cards/full both dtypes),
+`program-chain-placement-clean01` (three cards/memory+locality subsets),
+`program-chain-single-clean01`, `program-chain-control-clean01`,
+`program-chain-public-clean01`, `program-chain-python-clean01`,
+`program-chain-profile-clean01` (separate two-card training trace),
+`program-chain-cmake-clean01`. Device queue120s/run600s. Audit with
+TASK/launchers/state_reverse_evidence.py COMMIT; evidence separately committed.
+Then public multi-card training/session/checkpoint/client and complete consumers/
+performance remain the priority; do not stop at this internal mechanism.
+
+Expanded-stream attempt was removed: `task-storage-control-dev01` and
+`task-storage-reverse-dev01` prove the vendor HUGE flag did not remove507002.
+`build-program-chain-dev01` failed on a missing old peer-link template; dev02
+finished its affected compilation but old control checker object was absent.
+Dev03 reused that exact frozen compile phase and compiled the missing checkers;
+all failed jobs stay failed. Python affected builder now includes its extension.
 
 Failures retained: build-dev01 stale generated headers/Tensor initialization;
 build-dev02 checker missing header. Full32-dev03 VJP stopped before RmsNorm

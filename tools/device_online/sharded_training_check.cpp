@@ -89,14 +89,14 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
       tide_bench::compare(flow.result(),expected.windows[window++],true,dtype,std::nullopt,half?2e-2:1e-5,half?2e-3:1e-6);start=stop;
     }
     auto error=at::zeros({1},at::TensorOptions().device(devices[0]).dtype(at::kInt));
-    CannProgram p(devices[0]);p.limit_workspace(128*1024*1024);std::vector<ShardedGraphVjp> gradient(saved.size());
-    for(size_t w=saved.size();w>0;) {--w;const auto& t=saved[w].tape.coordinator;
+    CannSequence programs(devices[0],saved.size(),128*1024*1024);std::vector<ShardedGraphVjp> gradient(saved.size());
+    for(size_t w=saved.size();w>0;) {--w;auto& p=programs.append();const auto& t=saved[w].tape.coordinator;
       auto roots=test::retained_roots(t,w,mode);test::retained_cache_roots(roots,t,w,mode);
       if(w+1<saved.size())roots=append_window_bridge(p,t,roots,saved[w+1].tape.coordinator,gradient[w+1].coordinator,error,32*1024*1024);
       gradient[w]=append_sharded_graph_vjp(p,saved[w].tape,roots,error,prefill?3:1,Index(width>64?4:1)*1024*1024*1024,128*1024*1024,
         w+1<saved.size()?gradient[w+1].state:nullptr,test::owner_cache_roots(saved[w].tape,w,mode));
     }
-    p.finish();run_sharded_graph_vjp(p,gradient);require(!error.cpu().item<int>(),"training reverse refused");
+    programs.finish();run_sharded_graph_vjp(programs,gradient);require(!error.cpu().item<int>(),"training reverse refused");
     auto sources=sharded_parameter_sources(f.graph,registry,gradient,64*1024*1024);
     ShardedParameterReduce reduction(sources,devices,error,256*1024*1024,32*1024*1024);
     if(optimizers.empty())optimizers=make_sharded_optimizers(reduction.gradients(),kind,groups,256*1024*1024);
@@ -120,7 +120,7 @@ void trajectory(std::vector<at::Device> devices,at::ScalarType dtype,int profile
       for(auto e:reduction.errors())require(e.cpu().item<int>()!=0,"nonfinite training update committed");
       exact(state,snapshots(optimizers));exact(payload,bank_snapshot());
     }
-    reduction.close();p.close();close_sharded_graph_vjp(gradient);
+    reduction.close();programs.close();close_sharded_graph_vjp(gradient);
   }
   if(half)require(fractional,"canonical FP32 masters lost sub-half increments");flow.close();
 }

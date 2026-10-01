@@ -196,3 +196,6 @@ CHECKS["peer-state-training"] = ("tide-sharded-training-check", ("float32", "flo
 MARKERS["peer-state-vjp"] = "sharded-graph-vjp: passed"
 MARKERS["peer-state-training"] = "sharded-training: passed"
 KERNELS["peer-state-vjp"] = KERNELS["peer-state-training"] = "tide_state_reverse_"
+
+CHECKS["sequence"] = ("tide-device-sequence-check", ("float32",))
+MARKERS["sequence"] = "device-sequence: passed"

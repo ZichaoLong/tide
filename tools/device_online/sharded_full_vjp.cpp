@@ -168,7 +168,7 @@ void close_sharded_graph_vjp(const std::vector<ShardedGraphVjp>& gradients) {
   for(const auto& g:gradients){g.full->close();if(g.state)g.state->close();}
 }
 
-void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& gradients) {
+template<class Program>void run_sharded(Program& p,const std::vector<ShardedGraphVjp>& gradients) {
   if(gradients.empty())throw std::invalid_argument("no sharded reverse programs");
   for(const auto& g:gradients){g.full->synchronize_inputs();if(g.state)g.state->synchronize_inputs();}
   p.submit();for(const auto& g:gradients){g.full->submit();if(g.state)g.state->submit();}
@@ -177,4 +177,6 @@ void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& gr
   for(const auto& g:gradients)if(g.state)try{g.state->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
+void run_sharded_graph_vjp(CannProgram& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
+void run_sharded_graph_vjp(CannSequence& p,const std::vector<ShardedGraphVjp>& g){run_sharded(p,g);}
 } // namespace tide::device_online
