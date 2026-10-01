@@ -1,95 +1,87 @@
 # Current handoff
 
-Updated 2026-10-01. **ACTIVE: user resumed execution and accepted overhead reduction.**
-Continue coherent multi-device graph/training increments; commit and push authorized.
-No new pause instruction. No subagents. Reference repositories and ObsidianVault
-are read-only. Repository `/home/zlong/llm/graph-execution-foundation` resolves to
+Updated 2026-10-01. **ACTIVE: user resumed and accepted overhead reduction.**
+Continue the overall goal; commit/push authorized. No current pause instruction.
+No subagents. Reference repositories and ObsidianVault are read-only.
+Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-[execution-flows.md](execution-flows.md) owns the contract;
-[ROADMAP F1–F7](ROADMAP.md) is the only backlog and remains incomplete.
+[execution-flows.md](execution-flows.md) is the contract; [ROADMAP F1–F7](ROADMAP.md)
+is the only backlog and remains incomplete.
 
-## Contract
+## Contract and priorities
 
-Candidates independently consume common inputs, initial state and parameters;
-never CPU reference events, routes, results or gradients. Online greedy accepts
-legal topology/input, including positive-delay PDG feedback; natural streaming
-degeneration is valid. Preserve int64, stable ordering, parallel-edge identity,
-missing/zero messages and None/zero gradients. Matrix: PDG LibTorch;
-TimedDAG/Settle LibTorch and PyTorch; CPU/NPU × streaming/prefill × inference/full
-training. Python resident is a C++/CANN client, not a separate PyTorch scheduler.
-Five presets retain fine switches; FP32 main, FP16 separate; CUDA target-pending.
-Training covers forward/loss interface/backward/VJP/optimizer/continuation/throughput;
-downstream convergence is outside this task. Current alignment outranks
-run-ml-experiments: minimal existing records, no additional tracking framework.
+Candidates independently consume common inputs/parameters/initial state, never
+CPU reference events/routes/results/gradients. General online greedy permits legal
+feedback/input and natural streaming degeneration. Preserve int64,stable ordering,
+parallel-edge identity,missing/zero messages,None/zero gradients. Matrix: PDG
+LibTorch;TimedDAG/Settle LibTorch+PyTorch;CPU/NPU × streaming/prefill × inference/
+complete training. Python resident is a C++/CANN client,not independent PyTorch
+scheduling. Five presets retain fine switches. FP32 main,FP16 separate;CUDA
+execution remains target-machine-pending. Training includes loss interface,
+backward/VJP,optimizer,continuation and throughput;downstream convergence excluded.
+Current alignment outranks run-ml-experiments;use minimal existing records.
 
-Use affected checks and source/object/hash-verified terminal build reuse. Do not
-rerun the unchanged core's 8,954 CPU checks/23 optional skips. Commit implementation,
-qualify immutable source, commit evidence separately and push. Group related work
-into vertical increments; reuse fixtures/assertions/audits. Early profiles diagnose
-placement/cost; formal full-size repetitions follow integration/capacity calibration.
+Priorities: canonical device owners/alias reduction and atomic multi-card updates,
+full state/KV placement and public consumers,then bounded medium/full-size five-
+preset screening and complete CPU/mixed/resident performance. Do not continually
+polish forward fragments. Profiling is an implementation feedback loop. Use affected
+checks/byte-verified terminal builds,not repeated unchanged8,954 CPU checks/23 skips.
+Implementation commit → immutable qualification → evidence commit;push each.
 
-## Latest completed qualification
+## Latest verified work
 
-Retained cross-card Full VJP on **5591319c2821f40f3f5fa93317e2d745de7e4559**,
-implementation committed/pushed; [report](evidence/device-full-reverse-20261001.md),
-[audit](evidence/device-full-reverse-20261001.json). All ten immutable jobs
-PASSED/exit0. FP32/FP16 each50 trajectories/200 windows; three-device
-memory/locality × two dtypes four cells,each2/8; one-owner half2/8;
-four single-device inference cells; half-cache training1/16/4; Python96/no skips.
-Independent CPU FP32/FP64 autograd,after-close retention,window bridges,exact
-candidate replay,empty/malformed/duplicate/budget/dtype/single-device misuse refusals.
-No numerical threshold changed. Parameter partials remain on Full owners;
-canonical alias reduction and optimizer publication are not yet multi-device.
+Full reverse metadata fusion **fe68065fbf41eebbba003051a84d3567e59028d1** committed/
+pushed;[report](evidence/device-full-reverse-merge-20261001.md),
+[audit](evidence/device-full-reverse-merge-20261001.json). All4 fixed jobs PASSED:
+two runtime builds,two-dtype gate,3-device profile. FP32/FP16 each50 trajectories/
+200 retained windows plus empty/malformed/budget/dtype/owner refusals and replay.
+Profile:120 Bool ScatterUpdate AiCPU tasks replaced by40 metadata merges;
+11418 AI_VECTOR_CORE,366 AI_CORE,196 MIX_AIV,zero observed AiCPU. Host submissions60,
+notify records/waits336,DMA3258 unchanged;switches1713→1673. Counts include setup/
+assertions,not throughput. No tolerance changes or development failure in fusion.
+Only2 host objects rebuilt;source/hash-checked kernel reuse from passed
+full-reverse-merge-dev01. Snapshot/build full-reverse-merge-clean01;Python build
+full-reverse-merge-python-clean01. Audit command:
+TASK/launchers/full_reverse_merge_evidence.py FULL_REV. No qualification jobs live.
 
-Profile3 devices,two fixtures/eight windows,60 host model submissions,336 notify
-records/waits,1713 switches,3258 DMA tasks. Engines11562 AI_VECTOR_CORE,
-366 AI_CORE,196 MIX_AIV,120 AiCPU. All AiCPU rows are coordinator Bool ScatterUpdate
-connection merges,approximately9.048ms summed task time. This is device AiCPU,
-not logged host fallback,not wall time or throughput. Immediate improvement:
-replace Bool scatter/error/chunk merge with one metadata kernel per shard stage.
+Preceding retained cross-card VJP5591319:FP32/FP16 each50 trajectories/200 windows,
+3-card memory/locality × two dtypes,1-owner degeneration,four inference cells,
+FP16 single-card cache training1/16/4,Python96/no skips. Full parameters/partials
+remain on owners;state/message/control/cache reverse and window bridges remain
+coordinator-owned. After-close retention and exact replay verified against CPU
+FP32/FP64. CPU alias sums in the assertion adapter never feed candidates. This
+is not device canonical owner reduction or multi-device optimizer training.
+[Report](evidence/device-full-reverse-20261001.md) preserves120-AiCPU trace and
+prior development failures:CPU Bool assertion constructor,missing test include,
+wrong wrapper marker despite successful child. Numerical tolerances unchanged.
 
-Standalone/Python fixed builds full-reverse-clean01/full-reverse-python-clean01;
-source full-reverse-clean01. Six host objects rebuilt per runtime; source/hash
-checked kernel reuse from passed full-reverse-dev01. Audit script:
-TASK/launchers/full_reverse_evidence.py FULL_REV. All qualification jobs terminal.
-Development failures preserved: unsupported CPU Bool test constructor in dev01,
-missing explicit NoGradGuard include in dev02,wrong three-card wrapper marker
-in dev03 despite successful first child. Fixed in dev03/dev03b; no observed
-production numerical failure. Earlier Full shards2617a11,remote Fulla8fa371,
-peer packets5c3662b,public single-device FP16 training0095048 remain qualified.
+Earlier Full shards2617a11,remote Fulla8fa371,peer packets5c3662b and public
+single-device FP16 training0095048 remain qualified. Prior raw failures are retained.
 
-## Current next work
+## Current work and next action
 
-1. Cross-card Full reverse integrated with actual graph reverse stages, owner
-   parameter gradients and shared-parameter reduction; FP32 master optimizer,
-   atomic finite/error decision and alias publication. Do not keep polishing only
-   forward components. Shared aliases cannot be assumed local to one shard.
-2. General persistent state/KV placement and packed transport, continuation and
-   public C++/Python multi-device consumers, then complete experiment consumers.
-3. Bounded middle-scale five-preset screening followed by representative/full-size
-   CPU + selected mixed + resident comparisons, both schedules/inference/training,
-   FP32 and separate FP16. Additional CANN/environment and target-pending CUDA
-   records, final delivery audit.
+Fusion evidence/STATUS/ROADMAP are ready to commit and push. Continue afterwards.
+Untracked draft for next canonical owner increment:
+- sharded_parameter_sources.h/.cpp maps actual per-window Full/coordinator
+  partials to global registry owners in reverse-window/alias order and assigns
+  canonical owners with deterministic LPT. Static tensor views only,no host
+  numerical gradient reads. Metadata budget is separate from partition tensors.
+- owner_gradient_packet.h/.cpp and ascendc/tide_owner_gradient_pack.cpp,
+  ascendc/tide_owner_gradient_reduce.cpp draft one packed gather/reduce per group.
+  The source pointer descriptors refer only to retained tensors on the same NPU;
+  cross-card copying must use PeerExchange. None payloads are not evaluated.
 
-Before performance, deliberately resolve historical CPU Attention's retained
-host memory and timing lock; do not blindly resume/kill it. No current qualification
-jobs remain live. Evidence9fb690b committed/pushed. Current uncommitted work is the measured
-Bool-scatter replacement: one metadata kernel merges flags,sticky error and
-exact int64 chunk counts. Development full-reverse-merge-dev01 build/full gate
-and full-reverse-merge-profile-dev01 all PASSED/exit0. Gate FP32/FP16 each50
-trajectories/200 windows with retained/replay/refusal checks; three-card profile
-checks actual placement. Builder TASK/launchers/build_full_reverse_merge.py:
-only sharded_full_vjp.cpp/full_reverse_merge.cpp and the new merge kernel change;
-other terminal dependencies reused by byte/source hash. Old120-AiCPU evidence
-is unchanged; its repository JSON now retains aggregates/two examples instead
-of120 full CSV rows. Raw CSVs remain hash-bound under TASK.
+These drafts are NOT wired into CMake or built/tested. Next implement bounded
+per-source/per-target packet assembly and ordered owner reduction on the assigned
+cards,then global finite/error decision before any optimizer commit and publication
+to all aliased banks. Reuse actual graph/retained fixtures and independent CPU
+oracles;no CPU comparison sum may become a candidate training input. Check budget,
+None/zero,aliases across Full and state/Read,FP32 masters/slots and FP16 publication.
+Do not call the draft a functioning reduction or complete training.
 
-Next action: commit/push the tested metadata fusion; qualify immutable
-full-reverse-merge-clean01 with two runtime builds,two-dtype gate and3-card
-profile. Do not repeat unaffected single-device core/public tests. Then continue the main
-owner alias reduction,atomic optimizer and bank publication integration. Do not
-pause or ask for new permission after a commit. Use existing build/lease launchers
-and fixed-source evidence; no repeat of unrelated old gates.
+Before formal performance,resolve historical CPU Attention's retained memory and
+timing lock deliberately;do not blindly resume/kill. Additional CANN environments,
+CUDA target-pending records and final delivery audit remain F1–F7 work.
 
 ## Environment and bounded execution
 
