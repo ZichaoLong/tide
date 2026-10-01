@@ -1,4 +1,5 @@
 #include "precision_graph_fixture.h"
+#include "precision_cache_fixture.h"
 #include "tide/aggregate.h"
 #include "tide/kernel.h"
 #include "tide/full.h"
@@ -180,7 +181,9 @@ void fixture_dtype(Fixture& f,at::ScalarType dtype) {
 void configure_half_reference(Fixture& f) {
   for(size_t n=0;n<f.graph.nodes.size();++n) {
     const auto& spec=f.graph.nodes[n];auto& w=f.model.nodes[n];
-    w.kernel=std::make_shared<HalfState>(spec);w.aggregate_kernel=std::make_shared<HalfAggregate>(spec.aggregation);
+    w.kernel=half_cache_kernel(spec,f.graph.source_counts[n]);
+    if(!w.kernel)w.kernel=std::make_shared<HalfState>(spec);
+    w.aggregate_kernel=std::make_shared<HalfAggregate>(spec.aggregation);
     w.full_kernel=std::make_shared<HalfFull>(spec);
   }
 }

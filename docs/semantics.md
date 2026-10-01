@@ -213,8 +213,9 @@ training interface; no graph identity or eager checkpoint schema is changed.
 The half local attention adjoint similarly preserves QK rounding and global
 normalization. Event and same-fiber cache/projection components preserve actual
 half operands,including physical source-product rounding,and use FP32 cache
-adjoints and boundary sums; complete half graph reverse and
-retained-window training remain separate, unavailable integrations.
+adjoints and boundary sums. [Retained-window checks](resident-retained.md)
+separately exercise whole-graph and cache continuation integration; public half
+training remains gated until its master/checkpoint lifecycle is qualified.
 [Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
 softmax and linear/FP32-norm Read under the same mathematical contracts.
 Their half component preserves payload/control/difference rounding while

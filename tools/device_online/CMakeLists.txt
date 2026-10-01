@@ -143,7 +143,8 @@ if(TIDE_DEVICE_ASCENDC)
     tide_window_bridge_meta_kernel tide_window_bridge_values_kernel tide_parameter_accumulate_kernel)
   if(TIDE_DEVICE_RUNTIME STREQUAL "standalone")
     # Shared, independent CPU-oracle fixtures compile once per runtime build.
-    add_library(tide-device-test-fixtures STATIC full_vjp_fixture.cpp graph_vjp_fixture.cpp retained_fixture.cpp precision_graph_fixture.cpp)
+    add_library(tide-device-test-fixtures STATIC full_vjp_fixture.cpp graph_vjp_fixture.cpp retained_fixture.cpp
+      precision_graph_fixture.cpp precision_cache_fixture.cpp retained_cache_fixture.cpp)
     set_target_properties(tide-device-test-fixtures PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(tide-device-test-fixtures PUBLIC tide-content-flow)
     add_executable(tide-attention-payload-check attention_payload_check.cpp)

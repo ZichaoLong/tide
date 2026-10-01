@@ -27,6 +27,8 @@ CHECKS = {
     "training-step": ("tide-device-training-step-check", ("float32",)),
     "retained": ("tide-device-retained-check", ("float32", "float16")),
     "extended-retained": ("tide-device-retained-check", ("float32", "float16")),
+    "event-retained": ("tide-device-retained-check", ("float32", "float16")),
+    "fiber-retained": ("tide-device-retained-check", ("float32", "float16")),
     "reverse-links": ("tide-device-reverse-links-check", ("float32", "float16")),
     "full-vjp": ("tide-device-full-vjp-check", ("float32", "float16")),
     "state-vjp": ("tide-device-state-vjp-check", ("float32", "float16")),
@@ -71,6 +73,8 @@ MARKERS = {
     "training-step": "device-training-step: passed",
     "retained": "device-retained: passed",
     "extended-retained": "device-extended-retained: passed",
+    "event-retained": "device-event-retained: passed",
+    "fiber-retained": "device-fiber-retained: passed",
     "reverse-links": "device-reverse-links: passed",
     "full-vjp": "device-full-vjp: passed",
     "state-vjp": "device-state-vjp: passed",
@@ -105,6 +109,8 @@ CHECKS["full-training"] = ("tide-resident-full-training-check", ("float32",))
 MARKERS["full-training"] = "resident-full-training: passed"
 KERNELS["full-training"] = "tide_extra_full"
 KERNELS["extended-retained"] = "tide_window_bridge"
+KERNELS["event-retained"] = "tide_event_reverse"
+KERNELS["fiber-retained"] = "tide_fiber_reverse"
 
 CHECKS["extra-full-vjp"] = ("tide-device-extra-full-vjp-check", ("float32", "float16"))
 MARKERS["extra-full-vjp"] = "device-extra-full-vjp: passed"

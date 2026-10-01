@@ -67,12 +67,25 @@ for width257. Retain dev02 CPU FP32 LayerNorm cancellation failure;half oracle
 keeps FP32→half forward and native CPU FP64 normalization derivative,with
 analytic-zero anchor. No production/tolerance change.
 
-Next:event/fiber cache whole-graph and retained-window half reverse,then public
-FP16 training/master/checkpoint. Reuse independent CPU Streaming,adding test-only
-half cache kernels and cache root/initial KV/bias checks. Candidate consumes common
-public fixtures only. Keep actual half QKV/QK/output/source/bias rounding and
-FP32 cotangents. Include cache eviction,adopt/clear,all five fiber pools,mixed
-modules,shared owners,feedback,both schedules,HARD/HST/SOFTP,None/zero and replay.
+Attention cache integration implemented;dev02 build and event/fiber gates all
+PASSED/exit0. Per dtype:event66 trajectories/264 windows,fiber152/608;independent
+CPU FP32/FP64 references,shared owners,feedback,HARD/HST/SOFTP,both schedules,
+GQA/eviction,all five pools,mixed modules,periodic clocks,widths1/4/257,None/zero,
+poisoned live journals/padding,after-close reverse and exact cache replay.
+New precision_cache_fixture.cpp and retained_cache_fixture.cpp;existing retained
+checker shares graph/parameter/boundary checks. Production source unchanged;
+fixture CMake extended. Dev01 failed only on test-helper matmul ADL ambiguity;
+renamed half_matmul in dev02,no failed production artifact reused.
+
+Next commit/push implementation,freeze low-precision-cache-graph-clean01.
+Build TASK/launchers/build_precision_cache_graph_v1.py SNAPSHOT(900s),then separate
+bounded event/fiber/regression checks(600s,lease120s). Regression checks graph-vjp,
+retained,extended-retained. One half fiber-retained --profile-smoke placement
+trace(2 trajectories:mixed HST/periodic SOFTP;512MB). Audit
+TASK/launchers/precision_cache_graph_evidence.py REV expects5 terminal jobs,
+10 standalone cells and the separate2-case profile. Commit/push evidence separately.
+No repeat Python-owned build/client tests or portable core for test-only source.
+All current development jobs terminal;historical CPU baseline remains paused.
 Current public training remains guarded. training_backward.cpp must accept FP32
 roots independently of payload dtype;freeze_model/restore and checkpoint
 master↔named half correspondence need explicit handling before lifting guards.

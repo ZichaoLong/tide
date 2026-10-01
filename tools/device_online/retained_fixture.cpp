@@ -60,9 +60,9 @@ RetainedReference retained_reference_precision(Fixture f,int mode,at::ScalarType
     if(pending_root(window,mode))for(const auto& a:r.continuation.pending)terms.push_back(a.value.sum()*(.015625*scale));
     if(final_root(window,mode))for(const auto& [_,s]:r.continuation.states)terms.push_back(s.value.sum()*(mode==5?0.:.03125*scale));
     if(mode==9||window==3&&(mode>=6&&mode<=8||mode==10))for(const auto& [_,s]:r.continuation.states) {
-      if(s.slots.count("key")&&mode!=7&&mode!=10)terms.push_back(s.slots.at("key").sum()*(mode==8?0.:.0078125));
-      if(s.slots.count("value")&&mode!=6&&mode!=10)terms.push_back(s.slots.at("value").sum()*(mode==8?0.:-.015625));
-      if(s.slots.count("log_bias")&&(mode==8||mode==9||mode==10))terms.push_back(s.slots.at("log_bias").sum()*(mode==8?0.:.0234375));
+      if(s.slots.count("key")&&mode!=7&&mode!=10)terms.push_back(s.slots.at("key").sum()*(mode==8?0.:.0078125*scale));
+      if(s.slots.count("value")&&mode!=6&&mode!=10)terms.push_back(s.slots.at("value").sum()*(mode==8?0.:-.015625*scale));
+      if(s.slots.count("log_bias")&&(mode==8||mode==9||mode==10))terms.push_back(s.slots.at("log_bias").sum()*(mode==8?0.:.0234375*scale));
     }
     q=r.continuation;result.windows.push_back(std::move(r));++window;
   }

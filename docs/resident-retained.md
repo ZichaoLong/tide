@@ -63,6 +63,25 @@ input with linear upstream weights has an analytically zero middle gradient;
 native CPU FP32 LayerNorm backward can introduce a6.1e-5 cancellation residual
 there. The test includes that analytic anchor; existing VJP tolerances remain.
 
+The `event-retained` and `fiber-retained` gates extend the same independent
+Streaming comparison through attention caches. Test-only CPU state programs
+preserve half QKV, QK and output matmuls, FP32 global normalization/weighted
+accumulation, half source products and query scaling, and each actual log-bias
+decay tick. They compute their own events and use a dense attention reference,
+independently of device key tiling. Named-owner, physical-boundary and initial
+state checks are joined by every initial key/value/log-bias gradient and actual
+cache lengths. Roots and cache carry remain FP32, including empty connected
+caches; poisoned padding must not acquire gradients.
+
+Coverage includes event GQA/eviction, all five fiber pools, mixed event/fiber
+groups, shared QKV/Full/decay owners, feedback and parallel edges, HARD/HST/SOFTP,
+both schedules, periodic clocks and widths1/4/257. Four windows include an empty
+final one. After retaining them, the checker closes the forward owner and
+poisons its live cache journals, projection banks and payloads before running
+reverse twice. The separate `--profile-smoke` option covers mixed attention and
+periodic bias continuation for placement inspection; it does not replace the
+complete correctness gate. Qualification is recorded separately in ROADMAP.
+
 This is an internal retained-backward component. It does not supply the public
 training lifecycle, optimizer-generation guards, checkpoint controller, additional
 module integration, public FP16 training, peer progression or full-size throughput. Qualification and
