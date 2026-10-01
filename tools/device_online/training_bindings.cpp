@@ -9,9 +9,6 @@ using namespace tide;
 void bind_resident_training(py::module_& m) {
   py::enum_<ResidentOptimizerKind>(m,"OptimizerKind")
     .value("sgd",ResidentOptimizerKind::sgd).value("adamw",ResidentOptimizerKind::adamw);
-  py::class_<ResidentPlacement>(m,"TrainingPlacement").def(py::init<>())
-    FIELD(ResidentPlacement,devices) FIELD(ResidentPlacement,policy)
-    FIELD(ResidentPlacement,full_owners) FIELD(ResidentPlacement,state_owners);
   py::class_<ResidentTrainingLimits>(m,"TrainingLimits").def(py::init<>())
     FIELD(ResidentTrainingLimits,forward) FIELD(ResidentTrainingLimits,windows) FIELD(ResidentTrainingLimits,retained_bytes)
     FIELD(ResidentTrainingLimits,backward_bytes) FIELD(ResidentTrainingLimits,optimizer_bytes)

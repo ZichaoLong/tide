@@ -96,9 +96,11 @@ class GraphRuntime:
             from .placement import place_model
             self.execution_model = place_model(self.execution_graph, self.execution_model, self.options.placement)
 
-    def session(self, batch_size, *, continuation=None):
+    def session(self, batch_size, *, continuation=None, placement=None):
         if self.resident:
-            return self.engine.session(batch_size, continuation)
+            return self.engine.session(batch_size, continuation, placement)
+        if placement is not None:
+            raise ValueError("session placement requires resident execution")
         from .session import Session
         return Session(self, batch_size, continuation=continuation)
 

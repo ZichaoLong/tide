@@ -20,12 +20,12 @@ class ResidentBackend:
         self.module, self.record = load_resident(resident_library, self.core)
         self.runtime = runtime
 
-    def session(self, batch_size, continuation=None):
-        return ResidentSession(self, batch_size, continuation)
+    def session(self, batch_size, continuation=None, placement=None):
+        return ResidentSession(self, batch_size, continuation, placement)
 
 
 class ResidentSession:
-    def __init__(self, backend, batch_size, continuation=None):
+    def __init__(self, backend, batch_size, continuation=None, placement=None):
         if type(batch_size) is not int or batch_size < 1:
             raise ValueError("batch_size must be a positive integer")
         if torch.is_grad_enabled():
@@ -39,10 +39,27 @@ class ResidentSession:
             raise ValueError("Settle resident session requires a complete position boundary")
         self.compiled, weights = encode_model(backend.core, r.execution_graph, r.execution_model)
         self.parameters = parameter_identity(r.execution_model)
+        from .resident_training_options import ResidentPlacement
+        self.requested_placement = (placement if isinstance(placement, ResidentPlacement)
+                                    else ResidentPlacement(**({} if placement is None else placement)))
+        native_placement = self.requested_placement.native(backend.module, r.device, len(r.execution_graph.nodes))
         from .resident_inputs import forward_limits
         limits = forward_limits(r)
         self.owner = backend.module.Session(self.compiled, weights,
-            to_continuation(backend.core, r.execution_graph, self.compiled, q), r.device, limits)
+            to_continuation(backend.core, r.execution_graph, self.compiled, q), r.device, limits, native_placement)
+
+    @property
+    def placement(self):
+        value = self.owner.placement
+        return dict(devices=[str(d) for d in value.devices], policy=value.policy,
+                    full_owners=value.full_owners, state_owners=value.state_owners)
+
+    def manifest(self):
+        record = self.runtime.manifest()
+        record["resident"].update(devices=len(self.placement["devices"]), training=False,
+                                  requested_inference_placement=self.requested_placement.to_dict(),
+                                  resolved_inference_placement=self.placement)
+        return record
 
     @property
     def cut(self):
@@ -122,7 +139,7 @@ class ResidentSession:
         self._replace(None)
 
     def _replace(self, continuation):
-        other = ResidentSession(self.backend, self.batch_size, continuation)
+        other = ResidentSession(self.backend, self.batch_size, continuation, self.requested_placement)
         self.compiled, self.parameters, self.owner = other.compiled, other.parameters, other.owner
 
     def __enter__(self):

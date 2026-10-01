@@ -14,14 +14,15 @@ from tidegraph import ResidentPlacement
 from flow_protocol import native_text
 
 
-def standalone(p,device,family,schedule,training,optimizer,tmp_path):
+def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None):
     binary=os.environ.get("TIDE_ONLINE_BINARY")
     if not binary:pytest.skip("standalone resident consumer not explicitly selected")
     path=tmp_path/"packet.txt";path.write_text(native_text(p));out=tmp_path/"consumer"
     command=[binary,"--device="+str(device),"--dtype=float32","--packet="+str(path),"--output-dir="+str(out),
              "--family="+family,"--preset=resident","--schedule="+schedule,"--steps=2","--warmup=0",
              "--windows-per-step=2","--diagnostics","--optimizer="+optimizer]
-    if training:command.extend(["--training","--devices="+str(2 if schedule=="prefill" else 1)])
+    if training:command.append("--training")
+    command.append("--devices="+str(devices if devices is not None else (2 if training and schedule=="prefill" else 1)))
     done=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=120)
     assert done.returncode==0,done.stdout
     return json.loads((out/"result.json").read_text()),[json.loads(s) for s in (out/"diagnostics.jsonl").read_text().splitlines()]
@@ -52,17 +53,23 @@ def test_resident_complete_training(family,memory,schedule,implementation,tmp_pa
 
 @pytest.mark.parametrize("memory",["add","attention"])
 @pytest.mark.parametrize("implementation",["native","libtorch"])
-def test_resident_continuous_inference(memory,implementation,tmp_path):
-    p=packet(memory,delayed=True);device=target();expected=[];actual=[]
-    kw=dict(family="timed-dag",training=False,steps=2,warmup=0,diagnostics=True)
+@pytest.mark.parametrize("family",["pdg","timed-dag","settle"])
+def test_resident_continuous_inference(memory,implementation,family,tmp_path):
+    p=packet(memory,delayed=family!="settle");device=target();expected=[];actual=[]
+    kw=dict(family=family,training=False,steps=2,warmup=0,diagnostics=True)
+    schedule="streaming" if memory=="add" else "prefill"
     a=run(p,implementation="python",device="cpu",schedule="streaming",observer=observer(expected),**kw)
     if implementation=="libtorch":
-        b,actual=standalone(p,device,"timed-dag","prefill",False,"sgd",tmp_path)
+        b,actual=standalone(p,device,family,schedule,False,"sgd",tmp_path,devices=2)
+        owners=b["runtime"]["resident"]["devices"]
     else:
-        b=run(p,implementation="native",device=device,schedule="prefill",preset="resident",observer=observer(actual),
-              native_library=os.environ["TIDE_BUILD_DIR"],resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],**kw)
+        b=run(p,implementation="native",device=device,schedule=schedule,preset="resident",observer=observer(actual),
+              native_library=os.environ["TIDE_BUILD_DIR"],resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
+              resident_placement=ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")),**kw)
+        owners=b["runtime"]["resident"]["resolved_inference_placement"]["devices"]
     same(actual,expected)
     assert a["outputs"]==b["outputs"] and a["final_cut"]==b["final_cut"]
+    assert len(owners)==2 and "VJP" not in b["timing"] and "optimizer" not in b["timing"]
     (tmp_path/"observed.json").write_text(json.dumps(dict(packet=p,candidate=b,observations=actual)))
 
 

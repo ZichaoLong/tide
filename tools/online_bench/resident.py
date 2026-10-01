@@ -51,8 +51,6 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
     owners = resident_placement or ResidentPlacement()
     if not isinstance(owners, ResidentPlacement):
         owners = ResidentPlacement(**owners)
-    if not training and owners.devices:
-        raise ValueError("multi-device resident inference consumer pending; no training-tape substitution")
     begin = time.perf_counter()
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset="resident", trace=diagnostics, native_library=native_library,
@@ -64,8 +62,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
     group = dict(parameters=[k for k,p in runtime.execution_model.named_parameters() if p.requires_grad],
                  lr=.0001, weight_decay=.001, momentum=.25, eps=1e-6)
     session = (runtime.training_session(c["batch"], optimizer=optimizer, groups=[group], limits=limits, placement=owners)
-               if training else runtime.session(c["batch"]))
-    devices = session.placement["devices"] if training else [str(runtime.device)]
+               if training else runtime.session(c["batch"], placement=owners))
+    devices = session.placement["devices"]
     def sync():
         for d in devices:
             synchronize(torch.device(d))
@@ -127,7 +125,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
             else:
                 warmup_times.append(elapsed)
         cut = session.cut
-        manifest = session.manifest() if training else runtime.manifest()
+        manifest = session.manifest()
     finally:
         session.close()
     return dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"], implementation="native",
@@ -137,6 +135,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         outputs=counts, statistics=statistics, parameter_budget=parameter_budget,
         input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step, final_cut=cut,
         runtime=manifest, diagnostics=diagnostics or observer is not None,
-        timing="input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        timing=("input preparation/upload + online resident graph + packed output head/loss + "
+                + ("graph/input/embedding VJP + finite staged optimizer + " if training else "finite loss check + ")
+                + "synchronization; no reference"),
         boundary_policy="dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
         projection_placement="coordinator; compact projection owners pending")

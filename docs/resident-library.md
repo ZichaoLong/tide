@@ -2,15 +2,16 @@
 
 The CANN backend is an optional library alongside the portable Tide core. It
 owns the actual online queue, readiness, node-time batches, selection and
-recursive advancement on one NPU. It accepts legal positive-delay feedback
+recursive advancement on a coordinator NPU with optional Full/state/KV owners
+on additional NPUs. It accepts legal positive-delay feedback
 as well as DAG/Settle encodings. Host code submits a sealed window; it does
 not consume per-event scalars or decide the next event.
 
-This backend exposes **single-device FP32/FP16 inference**, defaulting to HARD.
+This backend exposes **single/multi-device FP32/FP16 inference**, defaulting to HARD.
 The [control extension](resident-control-vjp.md) adds explicit HST/SOFTP for
 broadcast emission in FP32/FP16. [Device-loop peer packets](resident-peers.md)
-and internal remote Full inference are separately qualified; general multi-device
-graph ownership and training remain separate work. Current build and device
+and internal remote Full inference are separately qualified. The public placement
+entry point reuses these device completion chains. Current build and device
 verification status is recorded in [STATUS](STATUS.md).
 The separate [explicit C++ training owner](resident-training.md) composes the
 restricted graph VJP, optimizer and retained-window lifecycle; it does not change
@@ -89,6 +90,24 @@ Both operations require `torch.no_grad()`. Weight-only initialization remains
 by callers without altering the device owner. No hidden detach or implicit
 `no_grad()` context substitutes for training support.
 
+Pass `ResidentPlacement(devices=("npu:0", "npu:1"), policy="locality")` as
+`runtime.session(..., placement=...)` to request static generic ownership.
+`policy="memory"` balances estimated Full parameter bytes; locality also uses
+physical graph edges. This planner does not yet account for all model memory.
+Optional `full_owners` and `state_owners` assign every execution graph node to an
+index in the device list; each owner must receive a node. Full and state/KV maps
+may differ. The first device must be the runtime coordinator. Empty devices
+preserves the existing dense single-device path. Host sessions reject this option.
+
+`session.placement` and `session.manifest()` expose the resolved maps and requested
+configuration. `load()` and `reset()` preserve the session's requested placement;
+a checkpoint can be loaded into a separately constructed session with another
+placement or device count. Checkpoints retain global node/edge identities and
+complete continuation, including state/KV and pending messages. Inference creates
+no training owner, retained backward tape or optimizer. Diagnostics are optional.
+Input/output boundaries and projection banks remain on the coordinator; this
+interface does not establish whole-model memory admission or full-size throughput.
+
 ## Independent C++ client
 
 Build the core with `--npu-runtime standalone`, then use the same backend build
@@ -103,6 +122,8 @@ cut. It freezes values at construction. Normal in-place parameter changes are
 refused; replacing tensors in the original C++ model does not replace captured
 owners. `advance(inputs, stop, seal)` returns `ResidentWindow`; snapshot/result
 are explicit CPU exports, with the same buffer and failure rules as Python.
+An additional constructor accepts `ResidentPlacement` after `limits`; the old
+five-argument constructor remains available. `placement()` returns resolved maps.
 
 Supported local modules are those already qualified by the device content flow:
 sum/mean/weighted-mean/active/all-softmax Aggregate; identity/EMA/Add-repeat/event

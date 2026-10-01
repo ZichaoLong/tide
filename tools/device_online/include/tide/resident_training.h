@@ -4,14 +4,6 @@
 
 namespace tide {
 enum class ResidentOptimizerKind { sgd, adamw };
-// Empty devices keeps the original single-device owner. Otherwise devices[0]
-// must equal the session coordinator. Empty owner maps request generic planning;
-// explicit maps index this logical device list, one entry per graph node.
-struct ResidentPlacement {
-  std::vector<at::Device> devices;
-  std::string policy="locality";
-  std::vector<Index> full_owners,state_owners;
-};
 struct ResidentTrainingLimits {
   ResidentLimits forward;
   Index windows=8, retained_bytes=128*1024*1024, backward_bytes=512*1024*1024;

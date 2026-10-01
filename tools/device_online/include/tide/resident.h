@@ -16,6 +16,14 @@ struct ResidentLimits {
   std::string mode="hard";
   double zeta=1.;
 };
+// Empty devices keeps the original single-device implementation. Otherwise
+// devices[0] must equal the coordinator. Empty owner maps request static generic
+// planning; explicit maps index this list, one entry per execution graph node.
+struct ResidentPlacement {
+  std::vector<at::Device> devices;
+  std::string policy="locality";
+  std::vector<Index> full_owners,state_owners;
+};
 // Read-only borrowed device buffers. A view expires on advance/close/destruction;
 // clone the tensors to retain them. valid distinguishes absent and zero outputs.
 // coordinates: [sample,node,time,kind,output-port,position]. No state export.
@@ -23,14 +31,15 @@ struct ResidentWindow {
   Tensor coordinates, values, valid;
   Tensor output_stats, pending_stats, stages, events, full_chunks, emission_chunks;
 };
-// Optional CANN backend, built separately from the portable core. Single NPU,
-// FP32 HARD inference; construction and execution require explicit no-grad.
+// Optional CANN backend, built separately from the portable core. Single/sharded
+// NPU FP32/FP16 inference; construction and execution require explicit no-grad.
 // Accepts the documented built-in module profiles and arbitrary legal topology.
 // Construction freezes parameter values; normal in-place updates are refused
 // until a new session is constructed. No training/autograd is implied.
 class ResidentSession {
  public:
   ResidentSession(Graph, Model, const Continuation&, at::Device, ResidentLimits={});
+  ResidentSession(Graph, Model, const Continuation&, at::Device, ResidentLimits, ResidentPlacement);
   ~ResidentSession();
   ResidentSession(const ResidentSession&)=delete;
   ResidentSession& operator=(const ResidentSession&)=delete;
@@ -40,6 +49,7 @@ class ResidentSession {
   Continuation snapshot() const; // Explicit CPU checkpoint materialization.
   Result result() const;         // Explicit latest-window CPU diagnostics.
   Index cut() const;
+  ResidentPlacement placement() const; // Resolved static placement; no device read.
   void close();                  // Checked resource drain; idempotent.
  private:
   struct Impl;

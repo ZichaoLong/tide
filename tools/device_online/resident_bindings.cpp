@@ -11,6 +11,10 @@ PYBIND11_MODULE(_tide_resident,m) {
   // The loader validates that core before importing this optional backend.
   py::enum_<ResidentChunkPolicy>(m,"ChunkPolicy")
     .value("conservative",ResidentChunkPolicy::conservative).value("aggressive",ResidentChunkPolicy::aggressive);
+  py::class_<ResidentPlacement>(m,"Placement").def(py::init<>())
+    FIELD(ResidentPlacement,devices) FIELD(ResidentPlacement,policy)
+    FIELD(ResidentPlacement,full_owners) FIELD(ResidentPlacement,state_owners);
+  m.attr("TrainingPlacement")=m.attr("Placement"); // Preserve existing clients.
   py::class_<ResidentLimits>(m,"Limits").def(py::init<>())
     FIELD(ResidentLimits,queue) FIELD(ResidentLimits,arrivals) FIELD(ResidentLimits,outputs)
     FIELD(ResidentLimits,trace) FIELD(ResidentLimits,stages) FIELD(ResidentLimits,workspace_bytes)
@@ -28,11 +32,13 @@ PYBIND11_MODULE(_tide_resident,m) {
     .def_readonly("emission_chunks",&ResidentWindow::emission_chunks);
   py::class_<ResidentSession>(m,"Session")
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentLimits>(),py::call_guard<py::gil_scoped_release>())
+    .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentLimits,ResidentPlacement>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&ResidentSession::advance,py::call_guard<py::gil_scoped_release>())
     .def("snapshot",&ResidentSession::snapshot,py::call_guard<py::gil_scoped_release>())
     .def("result",&ResidentSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&ResidentSession::close,py::call_guard<py::gil_scoped_release>())
-    .def_property_readonly("cut",&ResidentSession::cut);
+    .def_property_readonly("cut",&ResidentSession::cut)
+    .def_property_readonly("placement",&ResidentSession::placement);
   bind_resident_training(m);
 }
 #undef FIELD

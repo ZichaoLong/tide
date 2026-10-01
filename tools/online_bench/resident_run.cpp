@@ -24,7 +24,6 @@ tide::ResidentTrainingLimits resident_limits(const Config& c,at::Device device) 
 std::string run_resident(const Packet& p,const Config& c,at::Device device,std::ostream* diagnostics) {
   if(device.type()!=c10::DeviceType::PrivateUse1||device.index()<0||c.runtime.dtype!=at::kFloat)
     throw std::invalid_argument("resident consumer requires explicit logical NPU FP32");
-  if(!c.training&&c.devices>1)throw std::invalid_argument("multi-device resident inference consumer pending; no training-tape substitution");
   auto placement=tide::resolve_placement(c.placement,device);
   if(placement.read!=device||placement.control!=device||placement.selection!=device||placement.events!=device
       ||placement.scoring_dtype=="float64")throw std::invalid_argument("resident consumer requires all phases on NPU with FP32 scoring");
@@ -46,8 +45,8 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       c.optimizer=="sgd"?tide::ResidentOptimizerKind::sgd:tide::ResidentOptimizerKind::adamw,std::vector<tide::OptimizerGroup>{group},result.limits);
     result.placement=training->placement();optimizer=std::make_unique<ConsumerOptimizer>(embedding,head,c.optimizer);
   } else {
-    inference=std::make_unique<tide::ResidentSession>(f.graph,f.model,q,device,result.limits.forward);
-    result.placement.devices={device};result.placement.policy=c.owner_policy;
+    inference=std::make_unique<tide::ResidentSession>(f.graph,f.model,q,device,result.limits.forward,result.limits.placement);
+    result.placement=inference->placement();
   }
   auto sync=[&]{for(const auto& d:result.placement.devices)portable_torch::synchronize(d);};
   sync();result.construction=seconds(begin);Index position=0;

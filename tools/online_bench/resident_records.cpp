@@ -55,7 +55,9 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
     {"program_workspace_bytes",r.limits.program_workspace_bytes},{"reverse_chunk_rows",r.limits.reverse_chunk_rows}};
   out<<",\"owner_policy\":"<<quoted(r.placement.policy)<<",\"chunk_policy\":"<<quoted(c.chunk_policy)<<",\"limits\":{";first=true;
   for(const auto& [k,v]:limits){if(!first)out<<',';first=false;out<<quoted(k)<<':'<<v;}out<<"}}}"
-     <<",\"timing\":\"input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference\""
+     <<",\"timing\":\"input preparation/upload + online resident graph + packed output head/loss + "
+     <<(c.training?"graph/input/embedding VJP + finite staged optimizer + ":"finite loss check + ")
+     <<"synchronization; no reference\""
      <<",\"boundary_policy\":\"dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host\""
      <<",\"projection_placement\":\"coordinator; compact projection owners pending\"}\n";
   return out.str();

@@ -87,12 +87,34 @@ Report/audit: docs/evidence/resident-reverse-budget-20261002.{md,json}.
 Builds reuse recursively byte-verified development host objects and unchanged
 kernels/core,then relink. No test/build/profile jobs live. Do not rerun them.
 
-Immediate next implementation: expose already-qualified ContentFlow multi-device
-forward through public ResidentSession,Python GraphRuntime.session and both
-actual inference consumers,without training tapes. Preserve legacy single-device
-constructor,placement through reset/load,and separate requested/resolved records.
-Qualify focused multi-device continuation/restore FP32/FP16 and actual consumers,
-then continue scale preparation. Projection banks remain coordinator-owned.
+Evidence commit b538906 is pushed. Current uncommitted implementation exposes
+ContentFlow multi-device inference through ResidentSession,GraphRuntime.session,
+and both actual consumers. Placement survives load/reset and is exported in
+session manifests. TrainingPlacement binding alias and legacy C++ constructor
+retained; Full/state/KV ownership reuses existing device kernels. Model freeze
+preserves tensor aliases. Projection banks remain coordinator-owned.
+
+Development backend snapshot sources/sharded-inference-dev01; tests/client use
+sources/sharded-inference-dev02 (only test fixture naming differs). Both backend
+builds and installed consumer build PASSED. CPU dev01 failed collection (reserved
+dtype fixture name),preserved; corrected sharded-inference-cpu-dev02 PASSED74.
+sharded-inference-library-dev01 PASSED47 with3 leased NPUs,including12 dtype/
+family/schedule trajectories,2 lean inference cases and invalid placements.
+sharded-inference-consumer-dev01 PASSED27 actual Add/Attention
+consumer checks with2 NPUs:12 training regressions,12 multi-device inference
+trajectories,CLI refusal/success and int64 boundary. Queue120/run600,source dev02;
+TIDE_BUILD_DIR=placement-npu-python-clean01,resident sharded-inference-python-dev01,
+installed standalone sharded-inference-consumer-dev01. All development tasks terminal;no live task jobs.
+
+Development gate passed with no skips/tolerance changes. Commit/push implementation,then freeze exact source
+as sharded-inference-clean01. Build sharded-inference-{,python-}clean01 with
+build_sharded_inference.py --reuse-host corresponding dev01 (recursive deps/bytes),
+then installed sharded-inference-consumer-clean01. Fixed-source gates CPU74,
+library47,consumer27 and separate actual two-card inference profile via
+profile_resident_consumer.py --preset resident --inference (no development flag).
+Audit launchers/sharded_inference_evidence.py full implementation hash; all jobs
+must be terminal before evidence-only commit/push. No immutable qualification
+claim for public multi-device inference yet.
 
 Continue compact projection owners,total-memory admission,consumer FP16,multi-device
 public inference and representative/full-size F6. Do not end at small qualification.

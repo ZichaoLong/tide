@@ -75,7 +75,7 @@ it does not claim to serialize an application bundle with head/data cursor.
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
 switches `--read`, `--control`, `--selection`, `--events`, `--scoring-dtype` retained.
 CPU/mixed consumers currently use one payload device. `--preset resident` now
-has a separate public C++/CANN consumer: FP32 single-device inference and
+has a separate public C++/CANN consumer: FP32 single/multi-device inference and
 single/multi-device complete training. Python uses `--implementation native` as
 a client of that same backend, not an independent PyTorch resident scheduler.
 Fixed-source qualification at [clean0d61cb9](evidence/online-resident-consumers-20261002.md)
@@ -104,8 +104,9 @@ CPU observables; normal training does not export graph state.
 
 Projection banks and physical partial gradients remain on the coordinator.
 Multi-device Full/state/KV and canonical optimizer support does not yet make this
-wide model fully sharded. Compact projection owners,total-memory admission,safe
-chunking and multi-device inference remain pending. FP16 consumer qualification
+wide model fully sharded. Compact projection owners and total-memory admission
+remain pending. Local reverse safe splitting is qualified below; public multi-device
+inference qualification is tracked in STATUS. FP16 consumer qualification
 and full-size performance are also pending.
 
 ## Commands and records
@@ -134,10 +135,11 @@ python scripts/run_execution_flow.py --packet artifacts/flow-input/workload.json
 For the optional resident consumer,build with `-DTIDE_ONLINE_RESIDENT=ON` against
 installed matching TideGraph and TideResident packages. The Python client supplies
 `--resident-library BUILD_DIR` alongside its native library. Use `--preset resident`
-and `--device npu:0`; training can request `--devices 2` (or another declared count)
+and `--device npu:0`; inference and training can request `--devices 2` (or another declared count)
 and `--owner-policy memory|locality`. The launcher leases/remaps physical devices
-outside this portable command. Multi-device inference is explicitly refused until
-its public consumer is implemented; it is not simulated with retained training tapes.
+outside this portable command. Multi-device inference uses its own public forward
+session without retained training tapes; all resolved devices are synchronized
+at timing boundaries. Requested and effective ownership are recorded.
 
 `--chunk-policy conservative|aggressive` and `--resident-...` options expose the
 public queue,arrival,output,journal,stage,KV,physical-chunk and workspace capacities,
