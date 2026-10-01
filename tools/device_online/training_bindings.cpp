@@ -15,22 +15,31 @@ void bind_resident_training(py::module_& m) {
     FIELD(ResidentTrainingLimits,program_workspace_bytes) FIELD(ResidentTrainingLimits,reverse_chunk_rows);
   py::class_<ResidentToken>(m,"TrainingToken")
     VIEW(ResidentToken,session) VIEW(ResidentToken,index) VIEW(ResidentToken,generation);
+  py::class_<ResidentCacheWindow>(m,"CacheWindow")
+    VIEW(ResidentCacheWindow,nodes) VIEW(ResidentCacheWindow,key) VIEW(ResidentCacheWindow,value)
+    VIEW(ResidentCacheWindow,lengths) VIEW(ResidentCacheWindow,present);
+  py::class_<ResidentCacheCotangents>(m,"CacheCotangents").def(py::init<>())
+    FIELD(ResidentCacheCotangents,key) FIELD(ResidentCacheCotangents,value)
+    FIELD(ResidentCacheCotangents,key_connected) FIELD(ResidentCacheCotangents,value_connected);
+  py::class_<ResidentCacheGradient>(m,"CacheGradient")
+    VIEW(ResidentCacheGradient,nodes) VIEW(ResidentCacheGradient,key) VIEW(ResidentCacheGradient,value)
+    VIEW(ResidentCacheGradient,lengths) VIEW(ResidentCacheGradient,key_connected) VIEW(ResidentCacheGradient,value_connected);
   py::class_<ResidentTrainingWindow>(m,"TrainingWindow")
     VIEW(ResidentTrainingWindow,token) VIEW(ResidentTrainingWindow,start) VIEW(ResidentTrainingWindow,stop)
     VIEW(ResidentTrainingWindow,outputs) VIEW(ResidentTrainingWindow,pending_coordinates)
     VIEW(ResidentTrainingWindow,pending_values) VIEW(ResidentTrainingWindow,pending_valid)
-    VIEW(ResidentTrainingWindow,state_values) VIEW(ResidentTrainingWindow,state_present);
+    VIEW(ResidentTrainingWindow,state_values) VIEW(ResidentTrainingWindow,state_present) VIEW(ResidentTrainingWindow,cache);
   py::class_<ResidentCotangents>(m,"Cotangents").def(py::init<>())
     FIELD(ResidentCotangents,token) FIELD(ResidentCotangents,outputs) FIELD(ResidentCotangents,outputs_connected)
     FIELD(ResidentCotangents,pending) FIELD(ResidentCotangents,pending_connected)
-    FIELD(ResidentCotangents,final) FIELD(ResidentCotangents,final_connected);
+    FIELD(ResidentCotangents,final) FIELD(ResidentCotangents,final_connected) FIELD(ResidentCotangents,cache);
   py::class_<ResidentBoundaryGradient>(m,"BoundaryGradient")
     VIEW(ResidentBoundaryGradient,token) VIEW(ResidentBoundaryGradient,coordinates) VIEW(ResidentBoundaryGradient,values)
     VIEW(ResidentBoundaryGradient,valid) VIEW(ResidentBoundaryGradient,connected);
   py::class_<ResidentGradients>(m,"Gradients")
     VIEW(ResidentGradients,names) VIEW(ResidentGradients,aliases) VIEW(ResidentGradients,offsets)
     VIEW(ResidentGradients,values) VIEW(ResidentGradients,connected) VIEW(ResidentGradients,initial)
-    VIEW(ResidentGradients,initial_connected) VIEW(ResidentGradients,boundaries);
+    VIEW(ResidentGradients,initial_connected) VIEW(ResidentGradients,boundaries) VIEW(ResidentGradients,initial_cache);
   py::class_<ResidentOptimizerState>(m,"DeviceOptimizerState").def(py::init<>())
     FIELD(ResidentOptimizerState,values) FIELD(ResidentOptimizerState,first) FIELD(ResidentOptimizerState,second)
     FIELD(ResidentOptimizerState,maximum) FIELD(ResidentOptimizerState,steps) FIELD(ResidentOptimizerState,corrections);

@@ -4,6 +4,7 @@
 namespace tide::device_online {
 struct GraphCotangents {
   at::Tensor outputs,outputs_connected,pending,pending_connected,final,final_connected;
+  std::vector<CacheCotangents> cache;
 };
 struct GraphVjp {
   ReverseLinks links;
@@ -15,6 +16,8 @@ struct GraphVjp {
   FullExtraVjp extra;
   AggregateVjp aggregate;
   at::Tensor read,read_connected;
+  std::vector<CacheGradient> cache;
+  at::Tensor attention,attention_connected;
 };
 // Internal first-order single-window HARD/HST/SOFTP graph adjoint. All reverse stage,
 // state-chain and message progression remains on device. Returned parameter

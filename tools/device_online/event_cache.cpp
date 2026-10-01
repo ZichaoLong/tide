@@ -74,6 +74,20 @@ EventAttentionGroup::EventAttentionGroup(const ContentProfile& p,const Continuat
   key_work=at::zeros({3},longs.device(device));
   if(l.diagnostics)journal=std::make_unique<DeviceJournal>(l.kv_trace_rows,5,2*kv_width,device);
 }
+std::vector<EventAttentionTape> PackedEventAttention::tape() const {
+  std::vector<EventAttentionTape> out;
+  for(const auto& g:groups_) {
+    if(!g->journal)throw std::logic_error("event attention reverse requires recorded KV");
+    std::vector<int64_t> nodes;
+    for(int64_t n=0;n<g->nodes;++n)if(g->node_map[n]>=0)nodes.push_back(n);
+    out.push_back({std::move(nodes),g->mapping,g->windows,g->config,g->qkv,g->projection,
+      g->journal->meta,g->journal->values,g->journal->count,
+      g->live.key.narrow(0,0,g->owners*g->capacity).reshape({g->owners,g->capacity,g->kv_heads,g->head_width}),
+      g->live.value.narrow(0,0,g->owners*g->capacity).reshape({g->owners,g->capacity,g->kv_heads,g->head_width}),
+      g->live.lengths,g->owners/g->parameters,g->query_heads,g->kv_heads,g->width,g->capacity});
+  }
+  return out;
+}
 void PackedEventAttention::reset_window(){for(auto& g:groups_){g->chunks.zero_();g->key_work.zero_();if(g->journal)g->journal->count.zero_();}}
 // Boundary-only statistics. These downloads never drive the next device stage.
 at::Tensor PackedEventAttention::chunks() const {auto sum=at::zeros({1},at::kLong);for(const auto& g:groups_)sum+=g->chunks.cpu();return sum;}

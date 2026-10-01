@@ -15,9 +15,9 @@ Fixture retained_fixture(int shape,int variant,int64_t width) {
 }
 std::vector<int64_t> retained_stops(int64_t start){return {start+3,start+7,start+11,start+11};}
 namespace {
-bool output_root(int mode){return mode==1||mode==4;}
-bool final_root(int window,int mode){return mode==4||window==3&&(mode==2||mode==5);}
-bool pending_root(int window,int mode){return mode==4||window==3&&mode==3;}
+bool output_root(int mode){return mode==1||mode==4||mode==9;}
+bool final_root(int window,int mode){return mode==4||mode==9||window==3&&(mode==2||mode==5);}
+bool pending_root(int window,int mode){return mode==4||mode==9||window==3&&mode==3;}
 }
 GraphCotangents retained_roots(const ReverseTape& t,int window,int mode) {
   auto opts=t.fiber_values.options();const float nan=std::numeric_limits<float>::quiet_NaN();
@@ -37,7 +37,11 @@ RetainedReference retained_reference(Fixture f,int mode,at::ScalarType dtype,Opt
   for(auto* group:{&f.model.input_scale,&f.model.agg_scale,&f.model.edge_scale,&f.model.output_scale})for(auto& x:*group)copy(x);
   for(auto& owner:f.model.parameters(false).owners()){leaves.push_back(owner.value);names.push_back(owner.canonical);}
   auto leaf=[&](const std::string& name,Tensor& x){x=x.detach().to(dtype).clone().set_requires_grad(true);leaves.push_back(x);names.push_back(name);};
-  for(auto& [owner,s]:f.initial.states)leaf("state/"+std::to_string(owner.first)+"/"+std::to_string(owner.second),s.value);
+  for(auto& [owner,s]:f.initial.states) {
+    const auto suffix=std::to_string(owner.first)+"/"+std::to_string(owner.second);
+    leaf("state/"+suffix,s.value);
+    for(auto& [name,x]:s.slots)leaf("cache/"+name+"/"+suffix,x);
+  }
   for(auto& a:f.initial.pending)leaf(boundary_name(a),a.value);
   for(auto& x:f.input)leaf(boundary_name({x.batch,f.graph.inputs[x.port],x.time,0,x.port,x.position,x.value}),x.value);
   auto q=f.initial;int window=0;
@@ -47,6 +51,10 @@ RetainedReference retained_reference(Fixture f,int mode,at::ScalarType dtype,Opt
     if(output_root(mode))for(const auto& o:r.outputs)terms.push_back(o.value.sum()*.0625);
     if(pending_root(window,mode))for(const auto& a:r.continuation.pending)terms.push_back(a.value.sum()*.015625);
     if(final_root(window,mode))for(const auto& [_,s]:r.continuation.states)terms.push_back(s.value.sum()*(mode==5?0.:.03125));
+    if(mode==9||window==3&&(mode>=6&&mode<=8))for(const auto& [_,s]:r.continuation.states) {
+      if(s.slots.count("key")&&mode!=7)terms.push_back(s.slots.at("key").sum()*(mode==8?0.:.0078125));
+      if(s.slots.count("value")&&mode!=6)terms.push_back(s.slots.at("value").sum()*(mode==8?0.:-.015625));
+    }
     q=r.continuation;result.windows.push_back(std::move(r));++window;
   }
   std::vector<Tensor> gradients(leaves.size());if(!terms.empty())gradients=torch::autograd::grad({at::stack(terms).sum()},leaves,{},false,false,true);

@@ -82,7 +82,7 @@ class ResidentTrainingSession:
         return self.owner.advance(external, stop, sealed_until)
 
     def cotangents(self, window, *, outputs=None, outputs_connected=None, pending=None,
-                   pending_connected=None, final=None, final_connected=None):
+                   pending_connected=None, final=None, final_connected=None, cache=None):
         """Make explicit roots; supplied values default to the window's presence mask.
 
         Omitted values and masks mean None. All tensors must be detached FP32
@@ -100,6 +100,26 @@ class ResidentTrainingSession:
             else:
                 setattr(r, name, value)
                 setattr(r, name + "_connected", valid if connected is None else connected)
+        if cache is not None:
+            cache = list(cache)
+            if len(cache) != len(window.cache):
+                raise ValueError("cache cotangents must match the window's cache groups")
+            packed = []
+            for values, group in zip(cache, window.cache):
+                values = {} if values is None else dict(values)
+                if set(values) - {"key", "value", "key_connected", "value_connected"}:
+                    raise ValueError("unknown cache cotangent field")
+                item = self.runtime.engine.module.CacheCotangents()
+                for name in ("key", "value"):
+                    value, connected = values.get(name), values.get(name + "_connected")
+                    if value is None:
+                        if connected is not None:
+                            raise ValueError("a cache connection mask requires values")
+                    else:
+                        setattr(item, name, value)
+                        setattr(item, name + "_connected", group.present if connected is None else connected)
+                packed.append(item)
+            r.cache = packed
         return r
 
     def backward(self, roots):

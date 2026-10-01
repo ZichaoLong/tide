@@ -25,11 +25,17 @@ Continuation train_boundary(Continuation q,at::ScalarType dtype) {
 }
 ResidentCotangents train_roots(const ResidentTrainingWindow& w,int window,int mode) {
   ResidentCotangents r;r.token=w.token;
-  if(mode==4) {
+  if(mode==4||mode==9) {
     r.outputs=at::full_like(w.outputs.values,.0625);r.outputs_connected=w.outputs.valid.clone();
     r.pending=at::full_like(w.pending_values,.015625);r.pending_connected=w.pending_valid.clone();
     r.final=at::full_like(w.state_values,.03125);r.final_connected=w.state_present.clone();
   } else if(mode==5&&window==3) {r.final=at::zeros_like(w.state_values);r.final_connected=w.state_present.clone();}
+  if(mode==9||window==3&&(mode>=6&&mode<=8))for(const auto& c:w.cache) {
+    ResidentCacheCotangents a;
+    if(mode!=7){a.key=at::full_like(c.key,mode==8?0.:.0078125);a.key_connected=c.present.clone();}
+    if(mode!=6){a.value=at::full_like(c.value,mode==8?0.:-.015625);a.value_connected=c.present.clone();}
+    r.cache.push_back(a);
+  }
   return r;
 }
 void train_gradients(const ResidentGradients& g,const RetainedReference& ref,const Fixture& f) {
@@ -43,6 +49,18 @@ void train_gradients(const ResidentGradients& g,const RetainedReference& ref,con
   for(const auto& [o,_]:f.initial.states) {
     auto name="state/"+std::to_string(o.first)+"/"+std::to_string(o.second);
     full_same(initial[o.first][o.second],ic[o.first][o.second],ref.gradients.at(name),name.c_str());
+  }
+  for(const auto& a:g.initial_cache) {
+    auto key=a.key.cpu(),value=a.value.cpu(),lengths=a.lengths.cpu(),kc=a.key_connected.cpu(),vc=a.value_connected.cpu();
+    for(Index b=0;b<f.initial.batch_size;++b)for(size_t i=0;i<a.nodes.size();++i) {
+      const Index n=a.nodes[i],owner=b*a.nodes.size()+i;const auto found=f.initial.states.find({b,n});
+      if(found==f.initial.states.end()) {train_require(!kc[owner].item<bool>()&&!vc[owner].item<bool>(),"absent initial cache acquired gradient");continue;}
+      const auto length=found->second.slots.at("key").size(0);train_require(lengths[owner].item<Index>()==length,"initial cache length changed");
+      for(const auto& name:{std::string("key"),std::string("value")}) {
+        const auto leaf="cache/"+name+"/"+std::to_string(b)+"/"+std::to_string(n);
+        full_same((name=="key"?key:value)[owner].narrow(0,0,length),(name=="key"?kc:vc)[owner],ref.gradients.at(leaf),leaf.c_str());
+      }
+    }
   }
   std::set<std::string> seen;
   for(size_t w=0;w<g.boundaries.size();++w) {

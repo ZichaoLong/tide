@@ -44,29 +44,31 @@ StateVjp append_state_vjp(CannProgram& p,const StateTape& tape,const StateCotang
     at::zeros({samples,nodes,width},floats),at::zeros({samples,nodes},booleans),
     at::zeros({samples,nodes,width},floats),at::zeros({samples,nodes},booleans),
     at::zeros({samples,nodes,width},floats),at::zeros({samples,nodes},booleans)};
+  out.proposal=at::zeros({tape.has_attention?capacity:1,tape.has_attention?width:1},floats);
+  out.proposal_connected=at::zeros({tape.has_attention?capacity:1},booleans);
   auto previous=at::empty({capacity},longs),tail=at::empty({samples,nodes},longs),ticks=at::empty({capacity},longs);
   auto replay=at::empty({tape.has_repeat?blocks:1,repeat_rows,tape.has_repeat?scratch_width:1},floats);
   auto coefficients=at::empty_like(tape.decay);
   // A program can be invoked again after the forward owner records a shorter
   // window. Clear the entire output capacity, including now-absent rows.
   for(const auto& value:{out.content,out.content_connected,out.initial,out.initial_connected,
-                        out.decay,out.decay_connected,out.retention_components,out.retention_connected})
+                        out.decay,out.decay_connected,out.retention_components,out.retention_connected,out.proposal,out.proposal_connected})
     p.copy(value,at::zeros_like(value));
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_vjp_plan)(1,stream,
     ptr(tape.metadata),ptr(tape.count),ptr(tape.config),ptr(previous),ptr(tail),ptr(cot.connected),ptr(cot.final_connected),
     ptr(out.content_connected),ptr(out.initial_connected),ptr(out.decay_connected),ptr(out.retention_connected),
-    ptr(tape.clock_policy),ptr(ticks),ptr(error),capacity,nodes,samples,int64_t(tape.has_repeat),tape.max_repeat_ticks),
+    ptr(tape.clock_policy),ptr(ticks),ptr(out.proposal_connected),ptr(error),capacity,nodes,samples,int64_t(tape.has_repeat),tape.max_repeat_ticks,int64_t(tape.has_attention)),
     "validate and link reverse state chains");},{tape.metadata,tape.count,tape.config,previous,tail,cot.connected,cot.final_connected,
-      out.content_connected,out.initial_connected,out.decay_connected,out.retention_connected,tape.clock_policy,ticks,error});
+      out.content_connected,out.initial_connected,out.decay_connected,out.retention_connected,tape.clock_policy,ticks,out.proposal_connected,error});
   p.sigmoid(tape.decay,coefficients);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_state_vjp)(blocks,stream,
     ptr(tape.metadata),ptr(tape.values),ptr(tape.config),ptr(coefficients),ptr(previous),ptr(tail),
     ptr(cot.events),ptr(cot.connected),ptr(cot.final),ptr(cot.final_connected),ptr(out.content),ptr(out.content_connected),
     ptr(out.initial),ptr(out.initial_connected),ptr(out.decay),ptr(out.decay_connected),ptr(tape.retention),ptr(ticks),ptr(replay),
-    ptr(out.retention_components),ptr(error),nodes,samples,width,repeat_rows,scratch_width),
+    ptr(out.retention_components),ptr(out.proposal),ptr(error),nodes,samples,width,repeat_rows,scratch_width),
     "packed reverse state VJP");},{tape.metadata,tape.values,tape.config,coefficients,previous,tail,cot.events,cot.connected,
       cot.final,cot.final_connected,out.content,out.content_connected,out.initial,out.initial_connected,out.decay,out.decay_connected,
-      tape.retention,ticks,replay,out.retention_components,error});
+      tape.retention,ticks,replay,out.retention_components,out.proposal,error});
   return out;
 }
 } // namespace tide::device_online

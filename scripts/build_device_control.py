@@ -78,6 +78,7 @@ def main():
         names.append("tide-resident-full-training-check")
         names.extend(("tide-device-aggregate-vjp-check", "tide-resident-aggregate-training-check"))
         names.extend(("tide-device-control-vjp-check", "tide-resident-control-training-check"))
+        names.extend(("tide-device-attention-vjp-check", "tide-resident-event-training-check"))
     if runtime == "python":
         names = ["_tide_resident.so", "libtide-resident.so"]
     for name in names:

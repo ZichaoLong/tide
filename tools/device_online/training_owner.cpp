@@ -85,6 +85,10 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
       window.full_chunks.clone(),window.emission_chunks.clone()};
     ResidentTrainingWindow result{token,s.cut,stop,outputs,tape.tape.pending.coordinates,tape.tape.pending.values,
       tape.tape.pending.valid,final,present};
+    for(const auto& a:tape.tape.attention) {
+      auto ids=at::tensor(a.nodes,at::kLong).to(s.device);
+      result.cache.push_back({a.nodes,a.key,a.value,a.lengths,present.index_select(1,ids).reshape({-1})});
+    }
     s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=s.bytes_per_window;s.cut=stop;return result;
   }catch(...){s.failed=true;throw;}
 }

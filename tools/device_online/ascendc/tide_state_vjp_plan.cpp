@@ -4,7 +4,7 @@ namespace {using I=int64_t;}
 extern "C" __global__ __aicore__ void tide_state_vjp_plan(GM_ADDR metadata,GM_ADDR count,GM_ADDR config,
     GM_ADDR previous,GM_ADDR tails,GM_ADDR connections,GM_ADDR final_connections,GM_ADDR content_connections,
     GM_ADDR initial_connections,GM_ADDR decay_connections,GM_ADDR retention_connections,GM_ADDR clock_policy,GM_ADDR ticks,
-    GM_ADDR error,int64_t capacity,int64_t nodes,int64_t samples,int64_t allow_repeat,int64_t max_ticks) {
+    GM_ADDR proposal_connections,GM_ADDR error,int64_t capacity,int64_t nodes,int64_t samples,int64_t allow_repeat,int64_t max_ticks,int64_t allow_attention) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   if(AscendC::GetBlockIdx()!=0)return;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)metadata);
@@ -14,7 +14,7 @@ extern "C" __global__ __aicore__ void tide_state_vjp_plan(GM_ADDR metadata,GM_AD
   const I size=((__gm__ I*)count)[0];
   if(status[0]==0&&(size<0||size>capacity))status[0]=2;
   for(I n=0;n<nodes&&status[0]==0;++n)
-    if(cfg[n*3]<0||cfg[n*3]>(allow_repeat?2:1)||(cfg[n*3+1]!=0&&cfg[n*3+1]!=1)||(cfg[n*3+2]!=0&&cfg[n*3+2]!=1))status[0]=12;
+    if(cfg[n*3]<0||(cfg[n*3]>3||(cfg[n*3]==2&&!allow_repeat)||(cfg[n*3]==3&&!allow_attention))||(cfg[n*3+1]!=0&&cfg[n*3+1]!=1)||(cfg[n*3+2]!=0&&cfg[n*3+2]!=1))status[0]=12;
   for(I key=0;key<samples*nodes;++key)tail[key]=-1;
   for(I i=0;i<size&&status[0]==0;++i) {
     auto row=m+i*13;const I b=row[0],n=row[1],time=row[2];
@@ -46,8 +46,9 @@ extern "C" __global__ __aicore__ void tide_state_vjp_plan(GM_ADDR metadata,GM_AD
       const bool adopt=cfg[node*3+2]||m[i*13+3];
       const bool comp=flags[i*5+3]||flags[i*5+4]||carry;
       const bool proposal=flags[i*5+2]||(adopt&&comp);
-      hc[i]=flags[i*5]||(cfg[node*3]!=0&&proposal);
-      carry=flags[i*5+1]||(!adopt&&comp)||proposal;
+      hc[i]=flags[i*5]||((cfg[node*3]==1||cfg[node*3]==2)&&proposal);
+      if(allow_attention)((__gm__ uint8_t*)proposal_connections)[i]=cfg[node*3]==3&&proposal;
+      carry=flags[i*5+1]||(!adopt&&comp)||(cfg[node*3]!=3&&proposal);
       decay|=cfg[node*3]==1&&proposal;
       retention|=cfg[node*3]==2&&proposal&&((__gm__ I*)ticks)[i]>0;
     }

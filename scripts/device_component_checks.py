@@ -110,3 +110,11 @@ KERNELS["control-vjp"] = "tide_control_"
 CHECKS["control-training"] = ("tide-resident-control-training-check", ("float32",))
 MARKERS["control-training"] = "resident-control-training: passed"
 KERNELS["control-training"] = "tide_control_"
+
+CHECKS["attention-vjp"] = ("tide-device-attention-vjp-check", ("float32",))
+MARKERS["attention-vjp"] = "device-attention-vjp: passed"
+KERNELS["attention-vjp"] = "tide_attention_reverse_"
+
+CHECKS["event-training"] = ("tide-resident-event-training-check", ("float32",))
+MARKERS["event-training"] = "resident-event-training: passed"
+KERNELS["event-training"] = "tide_event_reverse_"

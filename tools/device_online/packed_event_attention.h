@@ -1,6 +1,7 @@
 #pragma once
 #include "content_profile.h"
 #include "device_journal.h"
+#include "event_tape.h"
 
 namespace tide::device_online {
 struct EventCache {at::Tensor key,value,lengths;};
@@ -31,6 +32,7 @@ class PackedEventAttention {
                               const at::Tensor& initial_values={});
   void commit(CannProgram&,const EventAttentionStage&,const SelectionProposal&,const at::Tensor& error);
   void reset_window();
+  std::vector<EventAttentionTape> tape() const;
   void export_states(Continuation&) const;
   void export_trace(std::vector<Event>&) const;
   int64_t reserved_bytes() const {return reserved_;}

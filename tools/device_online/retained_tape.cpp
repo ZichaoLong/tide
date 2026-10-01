@@ -8,7 +8,7 @@
 namespace tide::device_online {
 namespace {
 std::vector<at::Tensor*> tensors(ReverseTape& t) {
-  return{&t.state.metadata,&t.state.values,&t.state.count,&t.state.config,&t.state.decay,&t.state.retention,&t.state.clock_policy,
+  std::vector<at::Tensor*> out{&t.state.metadata,&t.state.values,&t.state.count,&t.state.config,&t.state.decay,&t.state.retention,&t.state.clock_policy,
     &t.full.metadata,&t.full.values,&t.full.count,&t.full.kinds,&t.full.weights,&t.full.biases,
     &t.full.extra.lh_kinds,&t.full.extra.lh_weights,&t.full.extra.lh_biases,
     &t.full.extra.swiglu_kinds,&t.full.extra.swiglu_mapping,&t.full.extra.gate,&t.full.extra.up,&t.full.extra.down,
@@ -17,6 +17,9 @@ std::vector<at::Tensor*> tensors(ReverseTape& t) {
     &t.full_values,&t.fiber_meta,&t.fiber_values,&t.fiber_count,&t.sources,&t.source_scales,&t.delivery_scales,
     &t.pending.coordinates,&t.pending.values,&t.pending.valid,&t.pending_count,
     &t.outputs.coordinates,&t.outputs.values,&t.outputs.valid,&t.output_count};
+  for(auto& a:t.attention)for(auto* x:{&a.mapping,&a.windows,&a.config,&a.qkv,&a.projection,
+      &a.metadata,&a.values,&a.count,&a.key,&a.value,&a.lengths})out.push_back(x);
+  return out;
 }
 }
 int64_t reverse_tape_bytes(const ReverseTape& source) {

@@ -1,10 +1,12 @@
 # Current handoff
 
-Updated 2026-10-01T00:48:17.563465+00:00. **ACTIVE: implementation resumed by user; tested commits may be pushed.**
+Updated 2026-10-01T01:43:40.665537+00:00. **ACTIVE: user confirmed alignment and explicitly resumed implementation.**
 No subagents. Reference repositories and ObsidianVault remain read-only.
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch `graph-execution-foundation`.
-F1–F7 remain incomplete. All new jobs are terminal; no active NPU job remains.
+F1–F7 remain incomplete. Cleanup e0afef4 and evidence e53abf5 are pushed.
+Event-training development checks are complete; placement profiling is running.
+Event/fiber fixed-commit qualification will be grouped at the attention milestone.
 Historical CPU Attention is deliberately SIGSTOP; do not resume or stop blindly.
 
 ## Contract and iteration policy
@@ -94,30 +96,48 @@ errors were fixed without production changes; original failure logs remain.
 Cleanup dev03 uses sources/cleanup-dev03 and builds/cleanup-{cpu,npu}-dev03;
 this is directed development verification with byte-checked reused objects.
 
-## Next implementation: complete attention training
+## Event attention increment — development verified, qualification pending
 
-Local tiled GQA Q/K/V/log-bias VJP is implemented, development verified but not
-integrated into graph reverse, parameter ownership or public training.
-`build-attention-vjp-dev01` and `attention-vjp-dev01` PASSED: four configurations,
-12 long/short/empty replays against CPU FP32/FP64, GQA, tiled keys, D257,
-connected-zero/None, NaN padding and budget refusal. No full-training claim.
-Snapshot sources/attention-vjp-dev01; isolated build/attention overlay records
-reused unchanged sources/archives in builds/attention-vjp-dev01/development.json.
-Main CMake now shares fixtures among 12 checkers; that full build is not tested yet.
+The candidate now trains aggregated-event GQA/window attention through actual
+KV tape associations, device cache-chain reverse, Q/K/V/O alias reduction and
+optimizer publication. Public cache roots/initial gradients and retained KV
+bridges preserve None/zero, clear/eviction, empty caches and parameter-epoch
+continuation. [Contract](resident-event-vjp.md). This is single-NPU FP32;
+fiber adjoints, resident FP16 and peer progression/training remain pending.
 
-1. Cleanup is pushed; commit/push the separate control-training evidence.
-2. Integrate attention graph adjoints, KV final roots/initial gradients, retained
-   KV window links, parameter reduction/publication and optimizer. Attention
-   proposal depends on old KV, not old visible state.value: EMA carry is invalid.
-   Preserve sliced/cleared/empty-cache None/zero. Event then fiber coverage;
-   do not stop at another local formula check. Register checker in build inventory.
-3. Complete multi-device progression/communication/training, resident FP16 and
-   declared module/capacity combinations, then the full required matrix.
-4. Representative screening before full-size independent CPU/mixed/resident
-   streaming/prefill; continuous state, aggressive-safe chunks, separate profiles
-   and three fresh processes for recommendations. No new full-size speedup exists.
-5. Portable commands, immutable qualification/evidence audit and environment
-   version coverage. Real CUDA remains for another machine.
+All of these development jobs PASSED with exit0:
+- build-event-training-dev01 / build-event-training-python-dev01: complete
+  separate runtime-owner builds; standalone five host CTests also passed.
+- build-event-training-dev02 / build-event-training-python-dev02: directed
+  relinks, reusing byte-checked terminal objects; budget/checker-only fixes.
+  development.json records reused hashes and loader closure. All current backend
+  bytes match frozen sources/event-training-dev02.
+- event-training-standalone-dev02:66 isolated/combined root cases and8 complete
+  trajectories (32 updates,128 retained windows), CPU FP32/FP64, two schedules,
+  feedback/DAG, initial and final independent KV, empty/clear/evicted caches,
+  HST/SOFTP, cross-role aliases, widths1/4/257 and checkpoint continuation.
+- event-training-python-new-dev02:17 cases passed, three families/both
+  schedules/optimizers, device loss cotangents, None/zero, fresh-process resume.
+- event-training-python-regression-dev02:154 old public cases passed.
+- event-training-components-dev02:all8 affected attention/state/graph/parameter/
+  retained/public/control/Aggregate component cells passed.
+
+`event-training-profile-dev02` is RUNNING (queue120s/run360s,1024MB collection).
+Inspect runs/NAME/status.json and profile/result.json before claiming placement.
+Correctness and profile are separate; neither is complete throughput evidence.
+NPU tests leased physical9 or13, each remapped npu:0. No long queue remains.
+
+Next: commit/push this coherent implementation after these directed checks;
+inspect the ongoing profile. Continue same-fiber attention training, including
+complete current-fiber visibility, sum/mean/learned pooling, bias/decay slots and
+source/scale adjoints, with independent CPU FP32/FP64 references. Reuse current
+local attention VJP, never event aggregation as a substitute for a real fiber.
+Group clean immutable builds/gates/profile for event+fiber at the attention
+milestone instead of repeating all CANN compilation per intermediate module.
+Development evidence does not certify a fixed commit. Then continue resident
+FP16/peer progression, complete matrix, representative and full-size performance.
+All new attention sources/tests/docs and shared-fixture CMake changes belong
+to this increment; no unrelated dirty work or discarded files remain.
 
 ## Environment and bounded execution
 

@@ -16,11 +16,13 @@ void root_pair(const Tensor& value,const Tensor& on,const Tensor& shape,const Te
   if((on&present.logical_not()).any().item<bool>())throw std::invalid_argument("cotangent connects an absent output/state/message");
 }
 GraphCotangents roots(const ResidentCotangents& r,const ReverseTape& t,const Tensor& state,const Tensor& present) {
-  return {r.outputs.defined()?r.outputs:at::zeros_like(t.outputs.values),
+  GraphCotangents out{r.outputs.defined()?r.outputs:at::zeros_like(t.outputs.values),
     r.outputs_connected.defined()?r.outputs_connected:at::zeros_like(t.outputs.valid),
     r.pending.defined()?r.pending:at::zeros_like(t.pending.values),
     r.pending_connected.defined()?r.pending_connected:at::zeros_like(t.pending.valid),
     r.final.defined()?r.final:at::zeros_like(state),r.final_connected.defined()?r.final_connected:at::zeros_like(present)};
+  for(const auto& cache:r.cache)out.cache.push_back({cache.key,cache.value,cache.key_connected,cache.value_connected});
+  return out;
 }
 }
 ResidentGradients ResidentTrainingSession::backward(const std::vector<ResidentCotangents>& input) {
@@ -40,12 +42,19 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
       throw std::invalid_argument("stale, foreign or out-of-order resident window token");
     // Admission covers zero roots, exported boundary coordinates/masks and
     // initial connection masking. Component allocations use disjoint budgets.
-    const long double own=5.L*(t.outputs.values.numel()+static_cast<long double>(t.pending.values.numel()))+13.L*w.final.numel()
+    long double cache_bytes=0;for(const auto& a:t.attention)cache_bytes+=16.L*a.key.numel()+32.L*a.lengths.numel();
+    const long double own=cache_bytes+5.L*(t.outputs.values.numel()+static_cast<long double>(t.pending.values.numel()))+13.L*w.final.numel()
       +64.L*(t.fiber_values.size(0)+static_cast<long double>(t.pending.valid.numel()))+4.L*w.present.numel()+1024;
     if(per<8||own>per/8)throw std::invalid_argument("resident backward root/export budget exceeded");
     root_pair(r.outputs,r.outputs_connected,t.outputs.values,t.outputs.valid);
     root_pair(r.pending,r.pending_connected,t.pending.values,t.pending.valid);
     root_pair(r.final,r.final_connected,w.final,w.present);
+    if(!r.cache.empty()&&r.cache.size()!=t.attention.size())throw std::invalid_argument("resident cache root group count mismatch");
+    for(size_t j=0;j<r.cache.size();++j) {
+      const auto& a=t.attention[j];const auto& c=r.cache[j];
+      auto ids=at::tensor(a.nodes,at::kLong).to(s.device),present=w.present.index_select(1,ids).reshape({-1});
+      root_pair(c.key,c.key_connected,a.key,present);root_pair(c.value,c.value_connected,a.value,present);
+    }
   }
   auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));
   CannProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
@@ -66,6 +75,13 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
     out.offsets=total.offsets;out.values=total.values;out.connected=total.connected;
     out.initial=at::where(s.initial_present.unsqueeze(-1),gradients.front().initial,at::zeros_like(gradients.front().initial));
     out.initial_connected=gradients.front().initial_connected&s.initial_present;
+    for(size_t i=0;i<gradients.front().cache.size();++i) {
+      const auto& a=s.saved.front().tape.tape.attention[i];const auto& g=gradients.front().cache[i];
+      auto ids=at::tensor(a.nodes,at::kLong).to(s.device),present=s.initial_present.index_select(1,ids).reshape({-1});
+      auto mask=present.reshape({-1,1,1,1});
+      out.initial_cache.push_back({a.nodes,at::where(mask,g.key,at::zeros_like(g.key)),at::where(mask,g.value,at::zeros_like(g.value)),
+        g.lengths,g.key_connected&present,g.value_connected&present});
+    }
     for(size_t i=0;i<s.saved.size();++i) {
       const auto& t=s.saved[i].tape.tape;const auto& g=gradients[i];const auto n=g.links.fibers+g.links.pending;
       auto valid=g.links.valid.narrow(0,0,n)&g.links.messages.narrow(0,0,n).select(1,1).lt(0);

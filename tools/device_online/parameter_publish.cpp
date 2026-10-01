@@ -1,5 +1,6 @@
 #include "parameter_publish.h"
 #include "packed_lh_full.h"
+#include "event_reverse.h"
 #include "packed_aggregate.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_parameter_publish.h"
@@ -36,7 +37,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
       refs[name+"extra."+(aggregate==2?"agg_mass_":"agg_logit_")+std::to_string(slot)]={12,n*slots+slot,{}};
     const auto kind=node.identity?0:lh_full_kind(node.full);
     if(!node.identity&&(node.emission!="broadcast"||
-        (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1")))
+        (node.full!="identity"&&node.full!="tanh"&&node.full!="swiglu"&&!kind)||(node.memory!="identity"&&node.memory!="ema"&&node.memory!="lh-add-repeat-v1"&&node.memory!="attention")))
       throw std::invalid_argument("parameter publication module contract unavailable");
     if(node.identity)continue;
     refs[name+"read"]={4,n*width,{width}};
@@ -74,7 +75,7 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
     }
   }
   const int64_t count=plan.size()/4,tasks=tiles.back();
-  if(8.L*(std::max<size_t>(4,plan.size())+tiles.size())+4>budget)throw std::invalid_argument("parameter publication tensor budget exceeded");
+  if(8.L*(std::max<size_t>(4,plan.size())+tiles.size())+4>(b.attention.empty()?budget:budget/2))throw std::invalid_argument("parameter publication tensor budget exceeded");
   auto table=at::tensor(plan.empty()?std::vector<int64_t>(4,0):plan,at::kLong).reshape({-1,4}).to(device);
   auto offsets=at::tensor(tiles,at::kLong).to(device),dummy=at::zeros({1},values.options());
   const auto w=tanh?b.weights:dummy,bias=tanh?b.biases:dummy;
@@ -84,5 +85,6 @@ void append_parameter_publish(CannProgram& p,const ParameterBanks& b,const Param
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_publish)(32,stream,
     ptr(table),ptr(offsets),ptr(values),ptr(w),ptr(bias),ptr(b.decay),ptr(b.retention),ptr(b.read),ptr(b.sources),ptr(b.emission),ptr(lw),ptr(lb),ptr(gate),ptr(up),ptr(down),ptr(aggregate),ptr(error),count,tasks),
     "publish updated parameter owners into forward banks");},{table,offsets,values,w,bias,b.decay,b.retention,b.read,b.sources,b.emission,lw,lb,gate,up,down,aggregate,error});
+  if(!b.attention.empty())append_event_publish(p,b.attention,registry,values,error,budget/2);
 }
 } // namespace tide::device_online

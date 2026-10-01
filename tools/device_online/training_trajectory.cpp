@@ -20,6 +20,12 @@ void train_trajectory(at::Device device,Fixture f,bool prefill,ResidentOptimizer
   else optimizer=std::make_unique<AdamW>(registry,std::vector<OptimizerGroup>{group});
   ResidentTrainingLimits limits;limits.forward.prefill=prefill;limits.forward.trace=512;limits.forward.full_chunk_rows=3;
   limits.reverse_chunk_rows=3;
+  if(std::any_of(f.graph.nodes.begin(),f.graph.nodes.end(),[](const auto& n){return !n.identity&&n.memory=="attention";})) {
+    limits.forward.queue=96;limits.forward.arrivals=192;limits.forward.outputs=192;limits.forward.trace=512;
+    limits.forward.kv_rows=32;limits.forward.kv_trace_rows=8192;limits.forward.attention_chunk_rows=3;
+    limits.forward.attention_key_rows=2;limits.forward.workspace_bytes=256*1024*1024;
+    limits.backward_bytes=Index(1)*1024*1024*1024;
+  }
   limits.forward.mode=options.mode;limits.forward.zeta=options.zeta;
   if(width>3) {
     limits.forward.workspace_bytes=512*1024*1024;

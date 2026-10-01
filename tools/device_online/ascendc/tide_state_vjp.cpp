@@ -8,7 +8,7 @@ class StateVjp {
       GM_ADDR previous,GM_ADDR tails,GM_ADDR cotangents,GM_ADDR connections,GM_ADDR final,GM_ADDR final_connections,
       GM_ADDR content,GM_ADDR content_connections,GM_ADDR initial,GM_ADDR initial_connections,
       GM_ADDR decay,GM_ADDR decay_connections,GM_ADDR retention,GM_ADDR ticks,GM_ADDR replay,
-      GM_ADDR retention_components,GM_ADDR error,I nodes,I samples,I width,I replay_rows,I scratch_width) {
+      GM_ADDR retention_components,GM_ADDR proposal_gradient,GM_ADDR error,I nodes,I samples,I width,I replay_rows,I scratch_width) {
     AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)metadata);
     AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
     if(((__gm__ int32_t*)error)[0])return;
@@ -46,7 +46,8 @@ class StateVjp {
         if(comp_on){if(adopt){add(proposal,comparison,size);prop_on=true;}
           else {add(old,comparison,size);old_on=true;}}
         if(prop_on) {
-          if(kind==0)add(old,proposal,size);
+          if(kind==3)save(proposal,(__gm__ float*)proposal_gradient,i*width+start,size);
+          else if(kind==0)add(old,proposal,size);
           else {
             add(h,proposal,size);h_on=true;
             if(kind==1) {
@@ -82,7 +83,7 @@ class StateVjp {
               add(old,tmp,size);
             }
           }
-          old_on=true;
+          if(kind!=3)old_on=true;
         }
         save(h,(__gm__ float*)content,i*width+start,size);
         AscendC::Muls(carry,old,1.f,size);barrier();carry_on=old_on;
@@ -117,9 +118,9 @@ extern "C" __global__ __aicore__ void tide_state_vjp(GM_ADDR metadata,GM_ADDR va
     GM_ADDR previous,GM_ADDR tails,GM_ADDR cotangents,GM_ADDR connections,GM_ADDR final,GM_ADDR final_connections,
     GM_ADDR content,GM_ADDR content_connections,GM_ADDR initial,GM_ADDR initial_connections,
     GM_ADDR decay,GM_ADDR decay_connections,GM_ADDR retention,GM_ADDR ticks,GM_ADDR replay,
-    GM_ADDR retention_components,GM_ADDR error,int64_t nodes,int64_t samples,int64_t width,int64_t replay_rows,int64_t scratch_width) {
+    GM_ADDR retention_components,GM_ADDR proposal_gradient,GM_ADDR error,int64_t nodes,int64_t samples,int64_t width,int64_t replay_rows,int64_t scratch_width) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   StateVjp op;op.run(metadata,values,config,coefficients,previous,tails,cotangents,connections,final,final_connections,
     content,content_connections,initial,initial_connections,decay,decay_connections,retention,ticks,replay,
-    retention_components,error,nodes,samples,width,replay_rows,scratch_width);
+    retention_components,proposal_gradient,error,nodes,samples,width,replay_rows,scratch_width);
 }

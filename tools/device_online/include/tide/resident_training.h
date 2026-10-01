@@ -11,18 +11,32 @@ struct ResidentTrainingLimits {
   Index reverse_chunk_rows=16;
 };
 struct ResidentToken { uint64_t session=0; Index index=0, generation=0; };
+// Owner order is sample-major, followed by the static nodes list. Key/value
+// are [owners,capacity,kv_heads,head_width]; lengths and present are [owners].
+// Empty-but-present caches may have connected-zero gradients.
+struct ResidentCacheWindow {
+  std::vector<Index> nodes;
+  Tensor key,value,lengths,present;
+};
+struct ResidentCacheCotangents {Tensor key,value,key_connected,value_connected;};
+struct ResidentCacheGradient {
+  std::vector<Index> nodes;
+  Tensor key,value,lengths,key_connected,value_connected;
+};
 struct ResidentTrainingWindow {
   ResidentToken token;
   Index start=0, stop=0;
   ResidentWindow outputs;
   Tensor pending_coordinates, pending_values, pending_valid;
   Tensor state_values, state_present;
+  std::vector<ResidentCacheWindow> cache;
 };
 // Both tensors of each pair must be supplied, or neither. Undefined pairs mean
 // disconnected roots. Connected zero and disconnected poison remain distinct.
 struct ResidentCotangents {
   ResidentToken token;
   Tensor outputs, outputs_connected, pending, pending_connected, final, final_connected;
+  std::vector<ResidentCacheCotangents> cache;
 };
 struct ResidentBoundaryGradient {
   ResidentToken token;
@@ -36,6 +50,7 @@ struct ResidentGradients {
   std::vector<Index> offsets;
   Tensor values, connected, initial, initial_connected;
   std::vector<ResidentBoundaryGradient> boundaries;
+  std::vector<ResidentCacheGradient> initial_cache;
 };
 struct ResidentOptimizerState {
   Tensor values, first, second, maximum, steps, corrections;
@@ -60,7 +75,7 @@ struct ResidentStep { bool applied=false; int refusal_code=0; Index generation=0
 
 // Explicit first-order VJP API, separate from eager/autograd and inference.
 // All methods require no-grad; a consumer computes loss/head cotangents outside
-// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add state and
+// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add/event-attention state and
 // identity/tanh/LH/SwiGLU Full. Other adjoints are rejected before the first advance.
 class ResidentTrainingSession {
  public:

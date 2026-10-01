@@ -1,4 +1,5 @@
 #include "retained_tape.h"
+#include "event_reverse.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_window_bridge_meta.h"
 #include "aclrtlaunch_tide_window_bridge_values.h"
@@ -27,7 +28,7 @@ GraphCotangents append_window_bridge(CannProgram& p,const ReverseTape& a,const G
     if(buckets>std::numeric_limits<int64_t>::max()/2)throw std::invalid_argument("window bridge hash capacity overflow");buckets*=2;
   }
   const long double bytes=8.L*buckets+8.L*rows+(4.L*width+1)*(rows+static_cast<long double>(samples)*nodes);
-  if(bytes>budget)throw std::invalid_argument("retained-window bridge tensor budget exceeded");
+  if(bytes>(a.attention.empty()?budget:budget/2))throw std::invalid_argument("retained-window bridge tensor budget exceeded");
   buffer(error,device,at::kInt,{1});buffer(a.pending.coordinates,device,at::kLong,{rows,6});buffer(a.pending.valid,device,at::kBool,{rows});
   buffer(b.fiber_meta,device,at::kLong,{fibers,6});buffer(b.pending.coordinates,device,at::kLong,{pending,6});
   buffer(grad.links.messages,device,at::kLong,{total,4});buffer(grad.links.valid,device,at::kBool,{total});
@@ -48,6 +49,12 @@ GraphCotangents append_window_bridge(CannProgram& p,const ReverseTape& a,const G
     ptr(local.pending),ptr(local.pending_connected),ptr(local.final),ptr(local.final_connected),ptr(out.pending),ptr(out.final),ptr(error),rows,samples*nodes,width),
     "pack retained-window state and pending adjoints");},{map,a.pending.valid,grad.messages,grad.message_connected,grad.initial,grad.initial_connected,
       local.pending,local.pending_connected,local.final,local.final_connected,out.pending,out.final,error});
+  if(a.attention.size()!=b.attention.size()||a.attention.size()!=grad.cache.size()
+      ||(!local.cache.empty()&&local.cache.size()!=a.attention.size()))throw std::invalid_argument("retained cache groups disagree");
+  for(size_t i=0;i<a.attention.size();++i) {
+    if(a.attention[i].nodes!=b.attention[i].nodes)throw std::invalid_argument("retained cache owners disagree");
+    out.cache.push_back(append_cache_bridge(p,a.attention[i],local.cache.empty()?CacheCotangents{}:local.cache[i],grad.cache[i],error,budget/2/a.attention.size()));
+  }
   return out;
 }
 } // namespace tide::device_online

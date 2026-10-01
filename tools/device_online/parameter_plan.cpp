@@ -11,6 +11,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
   const int64_t nodes=g.nodes.size(),inputs=g.inputs.size(),edges=g.edges.size();
   if(nodes<1||width<1||budget<1)throw std::invalid_argument("invalid parameter layout budget/shape");
   std::map<std::string,Ref> by_name;
+  const auto attention=event_parameter_offsets(g,width);
   bool tanh=false,lh=false,normalized=false;int64_t swiglu=0;const auto slots=aggregate_slots(g);
   for(int64_t n=0;n<nodes;++n) {
     const auto& node=g.nodes[n];const auto prefix="nodes."+std::to_string(n)+".";
@@ -36,6 +37,13 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
     }
     if(!node.identity&&node.memory=="ema")by_name[prefix+"decay"]={2,n,n*width,{width}};
     else if(!node.identity&&node.memory=="lh-add-repeat-v1")by_name[prefix+"extra.add_retention"]={3,n,n,{}};
+    else if(!node.identity&&node.memory=="attention") {
+      const auto kv=width/node.query_heads*node.kv_heads,at=attention[n];
+      by_name[prefix+"extra.attn_q"]={12,n*4,at,{width,width}};
+      by_name[prefix+"extra.attn_k"]={12,n*4+1,at+width*width,{width,kv}};
+      by_name[prefix+"extra.attn_v"]={12,n*4+2,at+width*(width+kv),{width,kv}};
+      by_name[prefix+"extra.attn_out"]={12,n*4+3,at+width*(width+2*kv),{width,width}};
+    }
     else if(!node.identity&&node.memory!="identity")throw std::invalid_argument("parameter state VJP contract unavailable");
     if(!node.identity&&node.emission!="broadcast")throw std::invalid_argument("parameter graph VJP contract unavailable");
   }
@@ -46,7 +54,7 @@ ParameterPlan plan_parameters(const Graph& g,const ParameterRegistry& registry,i
     by_name[(binding.kind?"edge_scale.":"output_scale.")+std::to_string(binding.id)]={4,i,i,{}};
   }
   ParameterPlan out;out.owners=registry.owners();out.has_tanh=tanh;out.has_lh=lh;out.swiglu_count=swiglu;
-  out.aggregate_slots=normalized?slots:0;
+  out.aggregate_slots=normalized?slots:0;out.attention_elements=attention.back();
   std::vector<int64_t> owners,refs,tiles{0};int64_t total=0;
   for(const auto& owner:out.owners) {
     if(owner.value.scalar_type()!=at::kFloat)throw std::invalid_argument("parameter registry must describe FP32 owners");

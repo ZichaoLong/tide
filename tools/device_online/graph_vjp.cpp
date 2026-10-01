@@ -1,5 +1,6 @@
 #include "graph_vjp.h"
 #include "aggregate_vjp.h"
+#include "event_reverse.h"
 #include "cann_api.h"
 #include "aclrtlaunch_tide_graph_reverse_meta.h"
 #include "aclrtlaunch_tide_graph_reverse_payload.h"
@@ -28,6 +29,9 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   long double extra_bytes=0;
   for(const auto& x:{t.full.extra.lh_weights,t.full.extra.lh_biases,t.full.extra.gate,t.full.extra.up,t.full.extra.down})
     if(x.defined())extra_bytes+=4.L*x.numel();
+  const bool attention=!t.attention.empty();
+  const auto attention_offsets=event_parameter_offsets(*t.graph,width);
+  if(attention)extra_bytes+=4.L*attention_offsets.back()+4.L*nodes;
   const bool normalized=t.aggregate.kinds.defined();
   const bool controlled=t.control.mode!=0;
   if(controlled)extra_bytes+=5.L*nodes*width;
@@ -44,7 +48,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   tensor(t.state.values,device,at::kFloat,{capacity,5*width+2});
   // Reserve half for the bounded reverse components. Each rejects before its
   // allocations; no nested component can consume another component's reserve.
-  const int divisor=controlled?12:normalized?10:8;
+  const int divisor=attention?16:controlled?12:normalized?10:8;
   auto links=append_reverse_links(p,t,error,budget/divisor);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
@@ -67,6 +71,16 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   if(controlled) {
     out.read=at::empty({nodes,width},floats);out.read_connected=at::empty({nodes},booleans);
     p.zero(out.read);p.zero(out.read_connected);
+  }
+  if(!roots.cache.empty()&&roots.cache.size()!=t.attention.size())throw std::invalid_argument("cache root group count mismatch");
+  std::vector<EventReverse> attention_reverse;
+  if(attention) {
+    out.attention=at::empty({attention_offsets.back()},floats);out.attention_connected=at::empty({nodes,4},booleans);
+    p.zero(out.attention);p.zero(out.attention_connected);
+    for(size_t i=0;i<t.attention.size();++i) {
+      attention_reverse.push_back(prepare_event_reverse(p,t,t.attention[i],roots.cache.empty()?CacheCotangents{}:roots.cache[i],error,budget/divisor/t.attention.size()));
+      out.cache.push_back(attention_reverse.back().cache);
+    }
   }
   auto stage_meta=at::empty_like(t.state.metadata),stage_values=at::empty_like(t.state.values),stage_count=at::empty_like(t.state.count);
   auto full_grad=at::empty({capacity,width},floats),full_on=at::empty({capacity},booleans);
@@ -118,6 +132,8 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   if(controlled)append_control_merge(p,control,cot,error);
   auto state_tape=t.state;state_tape.metadata=stage_meta;state_tape.values=stage_values;state_tape.count=stage_count;
   auto state=append_state_vjp(p,state_tape,cot,error,budget/(divisor/2));
+  for(size_t i=0;i<t.attention.size();++i)
+    append_event_reverse(p,t,t.attention[i],attention_reverse[i],range,state,out.attention,out.attention_connected,error,chunk,budget/(divisor/2)/t.attention.size());
   payload(3,full.content,full.comparison,state.content,state.content_connected);
   if(normalized)append_aggregate_vjp(p,t,links,stage_count,range,state.content,state.content_connected,
     messages,aggregate_partials,out.aggregate,error,chunk,budget/divisor);

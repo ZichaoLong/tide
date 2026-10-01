@@ -9,6 +9,7 @@ struct ParameterBanks {
   at::Tensor weights,biases,decay,retention,read,sources,emission;
   FullExtraTape extra;
   AggregateTape aggregate;
+  std::vector<EventAttentionTape> attention;
 };
 // Publish a packed owner vector, including every used alias (HARD Read too).
 // On a sticky reverse/optimizer error this records no live bank writes.
