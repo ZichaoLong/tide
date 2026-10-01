@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-01; public FP16 training qualified, device peer progression active. **ACTIVE: user confirmed the execution contract and resumed implementation.**
+Updated 2026-10-01; public FP16 training and peer packets qualified; graph peer integration active. **ACTIVE: user confirmed the execution contract and resumed implementation.**
 Commit/push authorization remains active; no requested pause. No subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -50,35 +50,47 @@ ROADMAP indexes immutable evidence. No mechanical rerun of earlier suites.
 
 ## Active work and next action
 
-Device-side peer completion/communication increment is uncommitted.
-peer_api/peer_exchange implement fixed packet ready/pull/consumed Notify pairs
-captured by CannProgram. Peer/check CMake and explicit --checks peer entry point
-added;default single-device gate excludes peer. Full-build manifest also includes
-the existing half-training executable. No portable core or CANN kernels changed.
-Development builds01/02 passed. Dev01 runtime failed in CPU Bool fixture setup;
-fixed initializer and added offset views. Dev02 failed during submission from a
-fresh host thread:vendor plog confirms107002 CONTEXT_NULL;other peer wait timed
-out507046 and runtime resources were quarantined. Both original failures retained.
-Fix:split CannProgram submit/wait,require its constructing thread and submit both
-models before any wait. Synchronous run remains submit+wait. Checker verifies
-cross-thread refusal,duplicate-submit/empty-wait guards and11 dynamic windows per
-dtype including empty/limited continuation,int64>2^55,bool and FP16/FP32 packets.
-Development dev03 now passed:both FP32/FP16 two-device cells,11 dynamic
-windows each;all4 single-device control/failure/numerical regression cells.
-The former thread-context failure is fixed,not suppressed. No live development
-jobs. Next commit/push,freeze peer-control-clean01 to the exact revision,build
- --checks peer control failure numerical --jobs2,then run peer(two cards),
-regression(one card) and a separate peer FP32 placement profile(two cards).
-Build900s,run600s,lease120s,profile256MiB. Source/build/terminal/CSV audit and
-separate evidence commit follow. No graph or multi-device training claim yet.
-After transport gate,integrate actual graph task loops and independent gradients;
-raw packet success alone does not complete F4/F5.
+Peer packet primitive qualified on5c3662bd1162a9155c933f4953f8ff191b6fdc40,
+implementation committed/pushed. [Report](evidence/device-peer-control-20261001.md)
+and [audit](evidence/device-peer-control-20261001.json). All4 fixed jobs PASSED:
+build,2 peer dtype cells,4 single-device control/failure/numerical cells,profile.
+Each dtype11 dynamic windows,int64>2^55,capacity/empty continuation,offset views,
+129-iteration same-notify reuse. No graph/peer training/performance claim yet.
+Profile2 devices:1946 AI_VECTOR_CORE and2 AI_CPU INT64 OnesLike initializers,
+both before first device MODEL_EXECUTE. Host22 model submissions(11×2),4 notify
+creates/records/waits each;device636 record/636 wait/614 label switches/1535 DMA.
+No logged CPU fallback. This is placement only;task totals include setup/boundaries.
+TASK/launchers/peer_control_evidence.py FULL_REV passed. Snapshot/build
+peer-control-clean01. All current tasks terminal. Retained dev01 CPU Bool fixture
+failure and dev02 CANN107002 no-context/507046 timeout;fixed by same-thread
+submit-all then wait,explicit cross-thread refusal,unchanged synchronous run API.
+CANN CSVs merge devices in one directory;inspect Device_id rather than dirname.
 
-Remaining main work:device peer progression,completion/communication and training;
+Next main increment:connect peer packets to actual ContentFlow online actions.
+Start with a reusable remote Full service,not a fixture-specific scheduler:
+coordinator NPU owns readiness/selection/queue and sends actual selected packed
+ActionBatch/content/comparison;peer runs existing PackedFull/PackedLhFull/
+PackedSwiGluFull with its own parameter banks and returns values/error/chunks.
+A device terminal packet ends the peer loop even for an empty/error window.
+Submit both models before waiting;no per-stage host values/branches. Keep this
+first graph integration internal/explicit and reject unsupported remote adjoints
+until backward is implemented. Public single-device defaults stay qualified.
+
+Relevant files:content_flow.cpp/content_flow_internal.h,packed_full.cpp,
+packed_lh_full.cpp,packed_swiglu_full.cpp,peer_exchange.h,cann_program.h.
+ContentFlow currently allocates all Full banks on its one device and calls them
+inside its compiled ready/selection loop. Internal overload/hook can place those
+banks on a peer,replace only the Full stage and add peer stop at the end label.
+Do not feed CPU reference routes. Test full CPU observables for arbitrary legal
+feedback/unaligned inputs,both schedules/dtypes,continued windows and mixed Full.
+Then generalize owner/locality partitioning and distributed adjoints/training;
+a single remote module service is not full multi-card scale acceptance.
+
+Remaining main work:graph peer integration,parameter/state sharding and training;
 five-preset consumer screening;representative/full-size performance;version/
 migration/CUDA records. F1–F7 remain incomplete. Historical CPU Attention stays
 paused and does not block implementation. No pause requested;continue after
-qualification and each authorized push.
+qualification and each authorized push. No uncommitted production increment yet.
 
 ## Environment and bounded execution
 

@@ -1,0 +1,409 @@
+{
+  "schema": "tide-device-peer-control-evidence-v1",
+  "source": "5c3662bd1162a9155c933f4953f8ff191b6fdc40",
+  "scope": "two-NPU reusable fixed packets in device-controlled loops, FP32/FP16; not complete graph, training or performance qualification",
+  "build": {
+    "manifest_sha256": "a8bba66dee260cc0385e53ba220d896e74ccb422985e039130060e13510591be",
+    "component_sha256": "4c1218210efc4221e27ed32d44abf5f5a793031c8f3b782073ce694f6a5eac07",
+    "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+    "binary_sha256": {
+      "tide-device-peer-check": "6d1dc41f1d593ca80d56b2837b83c351a2ac5d5b3c10f00cd330650ac6aeb85f",
+      "tide-device-control-check": "41959663d519ce96c58b6aac976c20c13abb8f05e4472827c6b741e47a143c04",
+      "tide-device-failure-check": "149d2510a281d3ac563d57d07325970c2dc9a7223d581bbb6d63907fce913802",
+      "tide-device-numerical-check": "de530c6809951bd3fe02c56e55459719d1da58d85f8045c9a318c27e0e90846e"
+    },
+    "loader_sha256": {
+      "tide-device-peer-check": "34abf29fb2d0515e2eec78b54f48ebec57bf654a62d326c615f3a734264a89f7",
+      "tide-device-control-check": "8aa830d6228b201ffe03e673424aff17f150c06e4018f81dfe9e0cbf3172941c",
+      "tide-device-failure-check": "c74a6fdeb139c50af363b218e2a64d75ebe4b460c7432eb482fb979b0b0ba728",
+      "tide-device-numerical-check": "4257913f0a9b589fa04fbe3e67bd4ed5191063e664b0a93978b7884c018db209"
+    },
+    "archive_sha256": {
+      "libtide-device-control.a": "66e00d58bf702bfc7a43fed81d257d5ea551b0d1d5fc885030df6575d43d5464",
+      "libtide-device-peer.a": "7bfffa0ca7824dc79cd64228573b84def4919a5c2c52397e2c6ef083bde09099"
+    },
+    "scope": "fresh affected CANN host/peer component build; byte-verified unchanged core reused; no Ascend C kernels in this increment"
+  },
+  "runs": [
+    {
+      "name": "build-peer-control-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "ab987767c54b48e4f698e2921e10d8c9cc11b8a052193629c92040c99da2a83c",
+        "task.log": "2413a8495da3a5548a6d0fc04325735e7348485e6593720d1db72fdcbe8a4fa2"
+      }
+    },
+    {
+      "name": "peer-control-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bb648f88f8b5d246a965317dd31875e3e0f222938e9ecc642a61eb3a1cf3173c",
+        "task.log": "204af0885f74792c99c6f1abdb0c677fa773291e9e2c821f7369e4118552a816",
+        "queue.json": "7acb732281dd3de983092ab1210df65e51bb1ec5e948e2a49e89a32190abc2e1",
+        "gate/result.json": "87da5035b6d993fe46c3916b375fb3c3ddab30c03155fd38166aabdb82667c44"
+      }
+    },
+    {
+      "name": "peer-control-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1e10587a7ec61fd826a5c4b2bf42adf14694406f5528e29b39a90521b69afe05",
+        "task.log": "3aedf909ecf05e759fe12781724f53e5f21694fa219ad8a34a4e7a69d9d7ee1d",
+        "queue.json": "b79e071caa5e38d9c936c30419c40a7265e9df0ea3147d7a16e53dfef82c382c",
+        "gate/result.json": "697c845cda2990ded557fd26ea44b9a17fbd8d3566cec4a4af0f5f3e54763557"
+      }
+    },
+    {
+      "name": "peer-control-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4c4915025d8eb6c512841e0dd93d530c0519c00b3bd3c89cd0a19ba542fd5869",
+        "task.log": "e2816bd4bf214be6e8abdef4c88c7e7f6679f87a4e963ee0450dd0491792168f",
+        "queue.json": "ee2daeb14d13620841faee4c0c5570a128aae6acaa6874b8eedbc483dea21105",
+        "profile/result.json": "77a829a4b0b2c6f99078fccdabbbfb21efa7576db6b087390aae2936d3afd74a",
+        "profile/profile.log": "a1d166b779dc48ec2326a05ca91aa8bc7339c54cd7a5a65412aac8f97526356b"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "peer",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-peer-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-float32.log",
+      "log_sha256": "aa0c45d409bdb58c86cdff6c58029951044ae3561e265e8132a2ca195d4e5556"
+    },
+    {
+      "check": "peer",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-peer-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-float16.log",
+      "log_sha256": "40e528889c6446a935c44e98011f0a1344b128c8a28361cc5152b6bb1995e057"
+    },
+    {
+      "check": "control",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-control-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "control-float32.log",
+      "log_sha256": "e46fafa34fd02e840ccfc8682f2ed88c9c895830ce5a3fd43a3deea165f4f2e1"
+    },
+    {
+      "check": "failure",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-failure-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "failure-float32.log",
+      "log_sha256": "6763be754d00b62e2d7c2e0a7065a3c681acf0e1bfce1f8fd8348f360d5537ae"
+    },
+    {
+      "check": "numerical",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-numerical-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "numerical-float32.log",
+      "log_sha256": "1a64a6f215be5f0cde795b6b6cca0a74959b2c04df4d59bd82428a59ff92c7ce"
+    },
+    {
+      "check": "numerical",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-clean01/tide-device-numerical-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "numerical-float16.log",
+      "log_sha256": "03c29843ead8e211b23fcd2a2a69cc27d4d923bbc9e684d5331dc07475918fb9"
+    }
+  ],
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 1946,
+      "AI_CPU": 2
+    },
+    "physical_devices": [
+      "11",
+      "13"
+    ],
+    "csv_sha256": {
+      "raw/PROF_000001_20261001180933080_01535641GPNFPALP/mindstudio_profiler_output/task_time_20261001180939.csv": "41144e8856efac49561f922192ff5c937601e18735bea1c80699d551995fa385",
+      "raw/PROF_000001_20261001180933080_01535641GPNFPALP/mindstudio_profiler_output/op_summary_20261001180939.csv": "15f98cb12963b5062a4eb7a2d1b71bd86697b78e05f331784e7d90f16b5ef48e",
+      "raw/PROF_000001_20261001180933080_01535641GPNFPALP/mindstudio_profiler_output/api_statistic_20261001180939.csv": "ed4a7e9cf8ed37df74cb7ccd50af43e2955c9be9e8109b8e6be149c12b909102"
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 5,
+      "Cast_Tiling": 3,
+      "Equal_Tiling": 1,
+      "Fill_Tiling": 17,
+      "GatherV3_Tiling": 4,
+      "Less_Tiling": 3,
+      "LogicalAnd_Tiling": 1,
+      "ZerosLike_Tiling": 11,
+      "aclmdlRIBindStream": 2,
+      "aclmdlRIBuildBegin": 2,
+      "aclmdlRIBuildEnd": 2,
+      "aclmdlRIDestroy": 2,
+      "aclmdlRIEndTask": 2,
+      "aclmdlRIExecuteAsync": 22,
+      "aclmdlRIUnbindStream": 2,
+      "aclnnAddGetWorkspaceSize": 5,
+      "aclnnCast": 2,
+      "aclnnCastGetWorkspaceSize": 2,
+      "aclnnEqTensor": 1,
+      "aclnnEqTensorGetWorkspaceSize": 1,
+      "aclnnIndexSelect": 2,
+      "aclnnIndexSelectGetWorkspaceSize": 2,
+      "aclnnInplaceAdd": 5,
+      "aclnnInplaceCopy": 2,
+      "aclnnInplaceCopyGetWorkspaceSize": 2,
+      "aclnnInplaceFillScalar": 37,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 17,
+      "aclnnInplaceOne": 2,
+      "aclnnInplaceOneGetWorkspaceSize": 2,
+      "aclnnInplaceZero": 44,
+      "aclnnInplaceZeroGetWorkspaceSize": 11,
+      "aclnnLogicalAnd": 1,
+      "aclnnLogicalAndGetWorkspaceSize": 1,
+      "aclnnLtTensor": 3,
+      "aclnnLtTensorGetWorkspaceSize": 3,
+      "aclrtBinaryLoadFromData": 21,
+      "aclrtBinaryLoadFromFile": 1,
+      "aclrtCreateLabel": 6,
+      "aclrtCreateLabelList": 2,
+      "aclrtCreateNotify": 4,
+      "aclrtCreateStreamWithConfig": 8,
+      "aclrtCtxGetSysParamOpt": 185,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 6,
+      "aclrtDestroyLabelList": 2,
+      "aclrtDestroyNotify": 8,
+      "aclrtDestroyStream": 4,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 4,
+      "aclrtDeviceEnablePeerAccess": 2,
+      "aclrtFree": 2,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetResInCurrentThread": 92,
+      "aclrtGetStreamAttribute": 99,
+      "aclrtLaunchKernelWithHostArgs": 98,
+      "aclrtMemcpy": 84,
+      "aclrtMemcpyAsync": 10,
+      "aclrtNotifyGetExportKey": 4,
+      "aclrtNotifyImportByKey": 4,
+      "aclrtNotifySetImportPid": 4,
+      "aclrtRecordNotify": 4,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 228,
+      "aclrtSetLabel": 6,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 4,
+      "aclrtSynchronizeDeviceWithTimeout": 25,
+      "aclrtSynchronizeStream": 84,
+      "aclrtSynchronizeStreamWithTimeout": 22,
+      "aclrtWaitAndResetNotify": 4
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 1946,
+      "AI_CPU": 2,
+      "MODEL_MAINTAINCE": 6,
+      "MODEL_EXECUTE": 22,
+      "LABEL_SET": 636,
+      "NOTIFY_WAIT": 636,
+      "NOTIFY_RECORD": 636,
+      "MEMCPY_ASYNC": 1535,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 614,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "aicpu_setup_rows": [
+      {
+        "Device_id": "11",
+        "Model ID": "4294967295",
+        "Task ID": "12",
+        "Stream ID": "283",
+        "Op Name": "aclnnInplaceOne_OnesLikeAiCPU_OnesLike",
+        "OP Type": "OnesLike",
+        "OP State": "dynamic",
+        "Task Type": "AI_CPU",
+        "Task Start Time(us)": "1790849373768269.550\t",
+        "Task Duration(us)": "477.360",
+        "Task Wait Time(us)": "12948.960000",
+        "Block Num": "0",
+        "Mix Block Num": "0",
+        "HF32 Eligible": "NO",
+        "Input Shapes": "\"1\"",
+        "Input Data Types": "INT64",
+        "Input Formats": "ND",
+        "Output Shapes": "\"1\"",
+        "Output Data Types": "INT64",
+        "Output Formats": "ND",
+        "Context ID": "N/A",
+        "aicore_time(us)": "N/A",
+        "aic_total_cycles": "N/A",
+        "aic_mac_time(us)": "N/A",
+        "aic_mac_ratio": "N/A",
+        "aic_scalar_time(us)": "N/A",
+        "aic_scalar_ratio": "N/A",
+        "aic_mte1_time(us)": "N/A",
+        "aic_mte1_ratio": "N/A",
+        "aic_mte2_time(us)": "N/A",
+        "aic_mte2_ratio": "N/A",
+        "aic_fixpipe_time(us)": "N/A",
+        "aic_fixpipe_ratio": "N/A",
+        "aic_icache_miss_rate": "N/A",
+        "aiv_time(us)": "N/A",
+        "aiv_total_cycles": "N/A",
+        "aiv_vec_time(us)": "N/A",
+        "aiv_vec_ratio": "N/A",
+        "aiv_scalar_time(us)": "N/A",
+        "aiv_scalar_ratio": "N/A",
+        "aiv_mte2_time(us)": "N/A",
+        "aiv_mte2_ratio": "N/A",
+        "aiv_mte3_time(us)": "N/A",
+        "aiv_mte3_ratio": "N/A",
+        "aiv_icache_miss_rate": "N/A",
+        "cube_utilization(%)": "N/A"
+      },
+      {
+        "Device_id": "13",
+        "Model ID": "4294967295",
+        "Task ID": "6",
+        "Stream ID": "375",
+        "Op Name": "aclnnInplaceOne_OnesLikeAiCPU_OnesLike",
+        "OP Type": "OnesLike",
+        "OP State": "dynamic",
+        "Task Type": "AI_CPU",
+        "Task Start Time(us)": "1790849373769265.622\t",
+        "Task Duration(us)": "455.336",
+        "Task Wait Time(us)": "803.950000",
+        "Block Num": "0",
+        "Mix Block Num": "0",
+        "HF32 Eligible": "NO",
+        "Input Shapes": "\"1\"",
+        "Input Data Types": "INT64",
+        "Input Formats": "ND",
+        "Output Shapes": "\"1\"",
+        "Output Data Types": "INT64",
+        "Output Formats": "ND",
+        "Context ID": "N/A",
+        "aicore_time(us)": "N/A",
+        "aic_total_cycles": "N/A",
+        "aic_mac_time(us)": "N/A",
+        "aic_mac_ratio": "N/A",
+        "aic_scalar_time(us)": "N/A",
+        "aic_scalar_ratio": "N/A",
+        "aic_mte1_time(us)": "N/A",
+        "aic_mte1_ratio": "N/A",
+        "aic_mte2_time(us)": "N/A",
+        "aic_mte2_ratio": "N/A",
+        "aic_fixpipe_time(us)": "N/A",
+        "aic_fixpipe_ratio": "N/A",
+        "aic_icache_miss_rate": "N/A",
+        "aiv_time(us)": "N/A",
+        "aiv_total_cycles": "N/A",
+        "aiv_vec_time(us)": "N/A",
+        "aiv_vec_ratio": "N/A",
+        "aiv_scalar_time(us)": "N/A",
+        "aiv_scalar_ratio": "N/A",
+        "aiv_mte2_time(us)": "N/A",
+        "aiv_mte2_ratio": "N/A",
+        "aiv_mte3_time(us)": "N/A",
+        "aiv_mte3_ratio": "N/A",
+        "aiv_icache_miss_rate": "N/A",
+        "cube_utilization(%)": "N/A"
+      }
+    ],
+    "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+  },
+  "retained_failures": [
+    {
+      "name": "peer-control-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "cases": [
+        {
+          "check": "peer",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-dev01/tide-device-peer-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "failed",
+          "exit_code": 2,
+          "log": "peer-float32.log",
+          "log_sha256": "8ea163ec6912edfe297b66a341e419c458338a1364041e107f8592e826b45b9a"
+        }
+      ],
+      "files_sha256": {
+        "status.json": "ff56e7ed96ee350a6e363e6e3c93f7752995be4236eb8c957f5305aa47aa1fed",
+        "task.log": "94723f82d3270ca76dbde0c41f74faab9cd533a281a47388c631aa403a0707a8",
+        "gate/result.json": "2770fd05c6e83c94530fdfee980198c9e92614c3c104edd3b591a0028b8f2ebb",
+        "gate/peer-float32.log": "8ea163ec6912edfe297b66a341e419c458338a1364041e107f8592e826b45b9a"
+      }
+    },
+    {
+      "name": "peer-control-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "cases": [
+        {
+          "check": "peer",
+          "dtype": "float32",
+          "command": [
+            "/mi/data2T/zlong/tide-execution-flows/builds/peer-control-dev02/tide-device-peer-check",
+            "--device=npu:0",
+            "--dtype=float32"
+          ],
+          "state": "failed",
+          "exit_code": -6,
+          "log": "peer-float32.log",
+          "log_sha256": "befc56599379d2765cb1ca6832b582bb86c1414d103b92cc8df5876a945d113e"
+        }
+      ],
+      "files_sha256": {
+        "status.json": "f2c13be81c365c91a5da101f939c67967d9827b3846e315e3b82e17a8e599196",
+        "task.log": "ef7183e0126e5e54877c0fda587bea3fb92066aa3cf716c356439b8d2d97f17a",
+        "gate/result.json": "9a3419cca29b4417cb34a206d1f5a479bb5be77fd8df385b4277690c7b8f540d",
+        "gate/peer-float32.log": "befc56599379d2765cb1ca6832b582bb86c1414d103b92cc8df5876a945d113e"
+      }
+    }
+  ]
+}
