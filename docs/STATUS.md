@@ -122,35 +122,32 @@ consumer passed but8-row fixture did not split; changed only explicit budget to
 scale2 passed; dev03 native3 tests later temporary release and CLI refusal checks.
 No tolerance relaxation or implicit dtype fallback.
 
-Bounded canonical owner streaming is ready for implementation commit. New
-owner_stream.{h,cpp}/Ascend C kernel replace full contribution/publication staging
-banks; preserve ordinal order,poisoned None,FP16 alias rounding and sticky errors.
-Packet endpoints<=64MiB each,shrink within aggregate tensor budget. Added public
-reverse reservation/packet counters; not measured total-memory admission.
-Optimizer no longer retains obsolete initial gradient storage; training layout
-shares master geometry. CPU-safe build/verify/profile help registers peer-owner-stream.
+Bounded canonical streaming implementation7e375f5abeea76c2c5406ef91d1919facba56470
+is pushed and all8 fixed-source qualification jobs PASSED. Audit
+owner_stream_evidence.py exited0; report/evidence resident-owner-stream-20261002.
+Source owner-stream-clean01; backends owner-stream-clean01 and owner-stream-python-clean01;
+installed client owner-stream-consumer-clean01. No current live task jobs except
+intentionally suspended historical CPU. Do not rerun completed qualification.
 
-Development complete: standalone-dev02/dev03/dev04,Python-dev01,installed client
-consumer-dev01 all PASSED. Component-dev01 PASSED20 stream cases/100 replays,
-2 order-sensitive replays,FP32/FP16 each4 optimizer trajectories/32 updates.
-Component-dev02 PASSED final stream test plus16MiB/65-packet calibration:
-reservation528402 bytes; allocator deltas344576/347136 bytes; CANN workspace
-77312 bytes per program. Deltas exclude caller buffers and all-driver HBM.
-Native-dev01 PASSED17,LibTorch-dev01 PASSED14 actual/projection training checks.
-Session-dev01 PASSED32 trajectories/512 windows/128 updates,2→3 card restore.
-Retain build-dev01 failure: ambiguous empty Tensor assignment,fixed with Tensor{}.
-No live new jobs. Only historical CPU remains intentionally suspended.
+Canonical reduction/publication uses reusable CANN packets,ordinal contribution
+order,sticky errors,poisoned None and FP16 strided aliases. Optimizer releases its
+obsolete initial gradient bank; public training layout shares master geometry.
+Component20 cases/100 replays/order2 plus FP32/FP16 each4 optimizer trajectories/
+32 updates; public32 trajectories/512 windows/128 updates2→3 cards; native17 and
+LibTorch14 actual/projection training checks.16MiB/65-packet allocator calibration:
+reservation528402;peak deltas344576/347136 bytes;workspace77312 per program.
+Independent actual FP16 Attention2-card training trace18,449 AI_VECTOR_CORE/
+704 AI_CORE/258 MIX_AIV,no observed AiCPU;not formal throughput.
+Retain build-dev01 failure (ambiguous Tensor assignment,corrected explicit Tensor{}).
 
-Next commands after implementation commit/push: freeze_run.py --commit HEAD
---snapshot owner-stream-clean01. Build owner-stream-clean01 (reuse-host
-owner-stream-dev04,kernel-build owner-stream-dev02),owner-stream-python-clean01
-(runtime python,reuse-host owner-stream-python-dev01,same kernel). Install consumer
-owner-stream-consumer-clean01,reuse client owner-stream-consumer-dev01. Run fixed
-component3 checks,native17,LibTorch14,session32 and separate actual FP16 Attention
-2-card profile. run600/build900/queue120,two build workers,2/3 device leases.
-All jobs use tide-execution-flows-NAME.service,logs/status TASK/runs/NAME.
-Audit: python TASK/launchers/owner_stream_evidence.py IMPLEMENTATION_SHA.
-Core implementation then clean qualification then separate evidence commit.
+Current uncommitted next increment: tools/online_bench/memory.{h,cpp,py} and consumer
+hooks are draft per-logical-device allocator observations across construction,
+warmup and measured phases,plus process-lifetime CPU peak RSS. Not yet compiled
+or tested. No core/backend ABI changes. Next review these hooks,build installed
+consumer against qualified owner-stream backend,and run affected CPU/NPU consumer
+checks plus a bounded representative-size calibration. Keep observations distinct
+from memory admission; do not allocate full-size models before calibrated plans.
+Use existing build_projection_retention_client.py/source snapshots/job records.
 
 Next: total per-device memory admission/safe splitting,representative five-preset
 screening and full-size F6. Current CPU/mixed consumers use one payload device;

@@ -181,8 +181,8 @@ covered; actual consumer FP16 is separately qualified on cleand178b86
 ([evidence](evidence/resident-consumer-head-20261002.md)). Compact projections are separately qualified
 on cleanacb84f3; total-memory admission and F6 remain pending.
 
-F4 bounded device-loop canonical contribution/publication streaming is implemented
-and development-tested; immutable qualification pending. It preserves reverse-window/alias
+F4 bounded device-loop canonical contribution/publication streaming is qualified
+on clean7e375f5 ([evidence](evidence/resident-owner-stream-20261002.md)). It preserves reverse-window/alias
 addition order, bounds both packet endpoints, and releases obsolete optimizer gradient
 storage. This does not replace total per-device memory admission or F6.
 
