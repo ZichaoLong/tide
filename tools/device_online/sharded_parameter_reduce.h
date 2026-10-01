@@ -25,6 +25,8 @@ class ShardedParameterReduce {
   void run();
   void close();
   int64_t packet_bytes() const;
+  int64_t stream_reserved_bytes() const; // Both endpoints + metadata, not allocator peak.
+  int64_t stream_chunks() const; // Planned packet iterations, not numerical activity.
  private:
   struct Impl;std::unique_ptr<Impl> impl_;
 };

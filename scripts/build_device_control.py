@@ -93,7 +93,7 @@ def main():
         names.append("tide-master-publication-check")
         names.append("tide-sharded-vjp-check")
         names.append("tide-state-shard-check")
-        names.extend(("tide-sharded-optimizer-check", "tide-sharded-training-check"))
+        names.extend(("tide-sharded-optimizer-check", "tide-sharded-training-check", "tide-owner-stream-check"))
         names.append("tide-resident-check")
         names.append("tide-resident-training-check")
         names.extend(("tide-resident-half-training-check", "tide-resident-sharded-session-check"))

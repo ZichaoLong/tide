@@ -122,6 +122,36 @@ consumer passed but8-row fixture did not split; changed only explicit budget to
 scale2 passed; dev03 native3 tests later temporary release and CLI refusal checks.
 No tolerance relaxation or implicit dtype fallback.
 
+Bounded canonical owner streaming is ready for implementation commit. New
+owner_stream.{h,cpp}/Ascend C kernel replace full contribution/publication staging
+banks; preserve ordinal order,poisoned None,FP16 alias rounding and sticky errors.
+Packet endpoints<=64MiB each,shrink within aggregate tensor budget. Added public
+reverse reservation/packet counters; not measured total-memory admission.
+Optimizer no longer retains obsolete initial gradient storage; training layout
+shares master geometry. CPU-safe build/verify/profile help registers peer-owner-stream.
+
+Development complete: standalone-dev02/dev03/dev04,Python-dev01,installed client
+consumer-dev01 all PASSED. Component-dev01 PASSED20 stream cases/100 replays,
+2 order-sensitive replays,FP32/FP16 each4 optimizer trajectories/32 updates.
+Component-dev02 PASSED final stream test plus16MiB/65-packet calibration:
+reservation528402 bytes; allocator deltas344576/347136 bytes; CANN workspace
+77312 bytes per program. Deltas exclude caller buffers and all-driver HBM.
+Native-dev01 PASSED17,LibTorch-dev01 PASSED14 actual/projection training checks.
+Session-dev01 PASSED32 trajectories/512 windows/128 updates,2→3 card restore.
+Retain build-dev01 failure: ambiguous empty Tensor assignment,fixed with Tensor{}.
+No live new jobs. Only historical CPU remains intentionally suspended.
+
+Next commands after implementation commit/push: freeze_run.py --commit HEAD
+--snapshot owner-stream-clean01. Build owner-stream-clean01 (reuse-host
+owner-stream-dev04,kernel-build owner-stream-dev02),owner-stream-python-clean01
+(runtime python,reuse-host owner-stream-python-dev01,same kernel). Install consumer
+owner-stream-consumer-clean01,reuse client owner-stream-consumer-dev01. Run fixed
+component3 checks,native17,LibTorch14,session32 and separate actual FP16 Attention
+2-card profile. run600/build900/queue120,two build workers,2/3 device leases.
+All jobs use tide-execution-flows-NAME.service,logs/status TASK/runs/NAME.
+Audit: python TASK/launchers/owner_stream_evidence.py IMPLEMENTATION_SHA.
+Core implementation then clean qualification then separate evidence commit.
+
 Next: total per-device memory admission/safe splitting,representative five-preset
 screening and full-size F6. Current CPU/mixed consumers use one payload device;
 full-size multi-card mixed consumers may still need generic placement integration.

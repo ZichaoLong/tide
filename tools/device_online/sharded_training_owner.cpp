@@ -50,6 +50,7 @@ ShardedTrainingOwner::Impl::Impl(Graph g,Model m,const Continuation& q,at::Devic
   layout=sharded_parameter_layout(graph,registry,model.width(),placement.devices,l.optimizer_bytes/4,l.forward.mode!="hard");
   optimizers=make_sharded_optimizers(layout,k==ResidentOptimizerKind::sgd?DeviceOptimizerKind::sgd:DeviceOptimizerKind::adamw,
     std::move(optimizer_groups),l.optimizer_bytes/2/placement.devices.size());
+  for(size_t i=0;i<layout.size();++i)layout[i].values=optimizers[i]->values();
   groups=optimizers.front()->groups();for(auto& group:groups)group.parameters.clear();
   for(const auto& optimizer:optimizers)for(size_t i=0;i<groups.size();++i) {
     const auto& names=optimizer->groups().at(i).parameters;groups[i].parameters.insert(groups[i].parameters.end(),names.begin(),names.end());

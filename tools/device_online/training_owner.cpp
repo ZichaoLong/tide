@@ -32,6 +32,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   layout=parameter_layout(graph,registry,model.width(),device,l.optimizer_bytes/4,l.forward.mode!="hard");
   optimizer=std::make_unique<DeviceOptimizer>(layout,k==ResidentOptimizerKind::sgd?DeviceOptimizerKind::sgd:DeviceOptimizerKind::adamw,
                                              std::move(groups),l.optimizer_bytes/2);
+  layout.values=optimizer->values(); // Shape/device metadata; no dummy gradient bank.
   if(checkpoint) {
     if(checkpoint->offsets!=layout.offsets)throw std::invalid_argument("checkpoint parameter layout mismatch");
     const auto& packed=checkpoint->state.values;

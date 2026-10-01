@@ -154,8 +154,11 @@ scope. Passing source-specific evidence is recorded separately in STATUS/ROADMAP
 registry's TensorImpl owners, in reverse-window and alias order. It reads static
 shapes/identities only. `ShardedParameterReduce` places canonical owners by
 stable largest-first FP32 storage cost, independently of Full-node placement.
-Each device pair packs one group of numerical partials and connection bits.
-The receiving device reduces each owner in the declared order, without atomics.
+Each contribution ordinal groups independent owners by device pair. A CANN
+loop packs, transfers and consumes a bounded FP32 packet, reusing its storage
+until that group is complete. Only then can the next contribution ordinal
+accumulate into an owner. The receiver therefore preserves declared floating
+addition order, without atomics or grouping all contributions by source card.
 None payloads are not read; connected zero remains an observable connection.
 
 Static gather/publication descriptors contain addresses of retained tensors on
@@ -181,6 +184,22 @@ own Read use has no VJP. FP32 masters/slots persist; FP16 banks receive rounded
 values, and FP32 normalization banks receive that rounded value widened again.
 Publication is gated by the same error, including None/zero and half-overflow
 refusals. No CPU parameter export/reconstruction participates between updates.
+Publication also reuses bounded packets and writes directly to local alias
+views, including strided Q/K/V columns and incomplete final packets. Each
+packet endpoint holds at most 64 MiB of FP32 values and shrinks to fit its
+share of the tensor budget. Descriptors, flags and both endpoints are admitted
+together; this is not a total per-card HBM admission policy. Canonical gradient
+outputs are stored once. Optimizer identity checks keep owner metadata without
+retaining the original gradient bank; training layout geometry shares master
+storage instead of keeping a dummy FP32 gradient allocation.
+
+Public reverse statistics include `canonical_stream_reserved_bytes` (both
+endpoints and metadata allowance) and `canonical_stream_chunks` (planned device
+packet iterations). They exclude caller-owned tensors, operator workspaces and
+vendor allocations, and do not claim measured peaks or active numerical work.
+The separate `--checks peer-owner-stream` gate exercises odd packet capacities,
+strided publication/FP16 rounding, poisoned None payloads, connected zero,
+sticky errors, replay and order-sensitive canonical accumulation on two NPUs.
 
 All tensor groups have explicit admission budgets; per-program operator arenas
 have separate bounds. Exceeding capacity fails before large buffer allocation.

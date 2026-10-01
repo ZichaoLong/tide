@@ -84,6 +84,9 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   table_=at::tensor(table.empty()?std::vector<int64_t>{-1,0,-1,0}:table,at::kLong).reshape({-1,tide_device::OWNER_FIELDS}).to(device);
   tiles_=at::tensor(tiles,at::kLong).to(device);options_=at::tensor(options,at::kFloat).reshape({-1,tide_device::OPTION_COUNT}).to(device);
   flags_=at::tensor(flags,at::kLong).reshape({-1,tide_device::FLAG_COUNT}).to(device);
+  // Identity checks need names/TensorImpl/offsets, not the initial gradient
+  // storage. Retaining it here keeps an entire obsolete FP32 parameter bank.
+  identity_.values=at::Tensor{};identity_.connected=at::Tensor{};
 }
 void DeviceOptimizer::append_step(CannProgram& p,const ParameterVjp& g,const at::Tensor& error) {
   append_propose(p,g,error);append_commit(p,g,error);
