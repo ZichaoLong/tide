@@ -1,0 +1,738 @@
+{
+  "schema": "tide-compact-state-owners-evidence-v1",
+  "source": "62935e98772fdacff742be915d588109aee63300",
+  "scope": "internal multi-device forward with compact state/Read/KV owners and device three-phase commit; no public multi-device training or throughput claim",
+  "builds": {
+    "standalone": {
+      "name": "state-owners-clean01",
+      "manifest_sha256": "e694a34dbdb622fb10e12d88ba13c26126df09e87783b2560fb4ddc49dd9eb6f",
+      "reuse_sha256": "f55b4dc99aea994f4ef2f35a0b4cde5565962e049a65563e4d32415f2c38f01a",
+      "component_sha256": "d40604a8927c2dc6e89adf23df4b5d458483cd56f61f5078a322eba60a30be84",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "9675cd08d29fcde574356a1f8bf65a6058997e93cb5a532a345d2e063ebfcdbb",
+        "tide-precision-flow-check": "8b9d60ac677123debe0004c7ceb00fe7adde82618457aa1a574b23ea3e5e588a",
+        "tide-resident-half-training-check": "2512cfbb086df9af5034dc8497e765d14aa59f7e1ae8ae8ae21e4f2e1e412f1f",
+        "tide-sharded-vjp-check": "d24c3b557821d007d657a4304e62644c193f712a06b76faef0b33b06ae999efe",
+        "tide-sharded-optimizer-check": "4bf55daf589c4446215272513eed04ff9e8eba74cdfc61b074fff554f6c7eae4",
+        "tide-device-optimizer-check": "bfd4390f03971902d25aa3751e21b5ff0d882ca9d2fb529003309622ae1c2ea5",
+        "tide-sharded-training-check": "ec3b1f6862cc27bedc156123f221344d84618022872d528d24d8c39f46e73877",
+        "tide-state-shard-check": "1e37a5c2d2be7710d8ce6c6b683a0fc07dd8ebbf6b5c4d59fd854349cf681bbd"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "e2f2d16371796e537d8289625beb97a514b99c721ee0e72d4688729af13c04f2",
+        "tide-precision-flow-check": "ca6f2fa796888ef55e25a7e67fe6e564c0de9534bbf64aceac862989baeda660",
+        "tide-resident-half-training-check": "217761029f6c615df76638f8d088921d548f08bc2d59809943dab7dabd8ece3f",
+        "tide-sharded-vjp-check": "f1cae1e42602a87d2e9f9e01240cb9082ac29d09f3dec242770ae4e2dd988bda",
+        "tide-sharded-optimizer-check": "dffb5b4ffe3339e6d824de9df7506b4e6acd2a2087aad862af19e0006358d19e",
+        "tide-device-optimizer-check": "ad9626e2ff15cb1265f7a315408c737dba1df541d02872d6ce7f5753f955a01e",
+        "tide-sharded-training-check": "6c590995d10200c27c6edeec1fcf1ec517549a4d7c63f0a90fa9f386c3d49cb5",
+        "tide-state-shard-check": "098559156c46bc9fcabafe1d5af52b7e4dd2f871c70218c77fceba96ab43e456"
+      },
+      "kernel_sha256": {
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b"
+      },
+      "content_archive_sha256": "27ed73ad8eb46e5ac9c5ce0e05d38546f693643eef1118bf7ab229858efd49d7",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "8b5b1287c697ab664656d523fbb76c7b890c66c93af2ea5f16f835f79c956c8b",
+        "content_flow.cpp.o": "139e8729f4fd992a745d621258eb957005047021d92321467a4a3d35a803b2c8",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "sharded_state.cpp.o": "e3fdca8f0fc6207d085107990f663cb0fd2f3eca5092204b3e99b57c197212be",
+        "state_owner.cpp.o": "8d7b5b7e77feb7cf0f19fef1a1432e36fdb9e210ef284901378ec63cd9e9d088",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414"
+      },
+      "scope": "affected host objects reused after passed dev05 source/header/object hashes; immutable relink; isolated core/CANN dependencies byte-verified"
+    },
+    "python": {
+      "name": "state-owners-python-clean01",
+      "manifest_sha256": "1100adba56bf37e91319e0170849673db8434e631f6e8e8e126980e0445842d6",
+      "reuse_sha256": "83762d25a33bae475f3ef22dc38fba335064d2656213bd576fa744f8d1cd9e09",
+      "component_sha256": "d40604a8927c2dc6e89adf23df4b5d458483cd56f61f5078a322eba60a30be84",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "0dcdd8972a56294a58818a619a95751aa2ec7020a9137b179375d84fb9bb7a4d",
+        "_tide_resident.so": "27f81eed5fe86f366ede38d3278919d26c37302f87d101e44a23cc65d959295f"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "0e38b401638a4a8e3781cfd2b3281d564f73caec9e4521827cb8fa7209694936",
+        "_tide_resident.so": "73495093d9cb0ccfe7dbbbfc95df5d27097a78c566e1bf1eb4b6271aeea1aa51"
+      },
+      "kernel_sha256": {
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b"
+      },
+      "content_archive_sha256": "dcde613fb0f9460d456cd4b13cd04dc3a4be284ba1fe389d3b2784ec9af2afe3",
+      "rebuilt_object_sha256": {
+        "content_export.cpp.o": "8b5b1287c697ab664656d523fbb76c7b890c66c93af2ea5f16f835f79c956c8b",
+        "content_flow.cpp.o": "139e8729f4fd992a745d621258eb957005047021d92321467a4a3d35a803b2c8",
+        "content_input.cpp.o": "1b6bb5e3be611a033384838a14d79066c62fde6d0afffa8f0d34cea4477c05aa",
+        "content_profile.cpp.o": "b6770dbcfb81be496229362677c7ba44ba0504a1d6dd6fadbe15f7de17667052",
+        "content_stages.cpp.o": "2d2460dfddd7a0c52fb78ce60ebc18bea13a862c2a57497509361c1d3f0488f0",
+        "event_cache.cpp.o": "264b4b9ee315f8a1ad669369d28a3269e2b1a2eb6c6905b9c8b9f446dd743585",
+        "fiber_cache.cpp.o": "2396cc705c61f481712309714e256000067dd11a5aa272176dfe871b205924e3",
+        "packed_fiber_attention.cpp.o": "a47d05c30bc62b3e101e7ca3dcf19bcb0fbcb66677d6aeeb18a7d6bad4a3fa86",
+        "packed_fiber_pool.cpp.o": "f74c45f547bb995cb7ebe2f32e7f1433565d05f0d000fc030bfe8cefcabf6d3c",
+        "remote_state.cpp.o": "fbe6e3c99f02b6e26af357aea04ccd36a28ae3f7337af606ac8c0cbebc2ac7c3",
+        "sharded_state.cpp.o": "e3fdca8f0fc6207d085107990f663cb0fd2f3eca5092204b3e99b57c197212be",
+        "state_owner.cpp.o": "8d7b5b7e77feb7cf0f19fef1a1432e36fdb9e210ef284901378ec63cd9e9d088",
+        "state_profile.cpp.o": "c12abb5c414e2a09d7c0a83506caa327a2001c6cdbd26010082109c1a4135cc8",
+        "state_profile_compat.cpp.o": "6883a8b3982ff9334f803b6146293c48c77757a6471990fe66c360f2ab72bccc",
+        "state_shard_pack.cpp.o": "7786648570496f2138048d84a3b90f8897167dcd44671daacf71019cf20ca414"
+      },
+      "scope": "affected host objects rebuilt; byte-verified terminal core/CANN dependencies reused"
+    }
+  },
+  "cmake": {
+    "state": "passed",
+    "source": "62935e98772fdacff742be915d588109aee63300",
+    "dirty": "",
+    "command": [
+      "cmake",
+      "-S",
+      "/mi/data2T/zlong/tide-execution-flows/sources/state-owners-clean01/tools/device_online",
+      "-B",
+      "/mi/data2T/zlong/tide-execution-flows/runs/state-cmake-clean02/preflight/cmake",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DTIDE_DEVICE_RUNTIME=standalone",
+      "-DTIDE_DEVICE_ASCENDC=ON",
+      "-DSOC_VERSION=Ascend910_9392",
+      "-DTideGraph_DIR=/mi/data2T/zlong/tide-execution-flows/builds/attention-training-clean01/core-prefix/lib64/cmake/TideGraph",
+      "-DTorch_DIR=/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch"
+    ],
+    "configure_log_sha256": "531bcab039c55ed160d44a799739ba908e517cd423b52eef86da029753f8c99c",
+    "link_sha256": {
+      "tide-state-shard-check": "04f590f7653bf07607403a711ebd258fe54d8e2bfab4a83076f5f363bd18b710",
+      "tide-resident": "1c5407c50299c6b08912095d446fef462a4d2ad4880de94ad1bcb1fc0002a000",
+      "tide-precision-flow-check": "b6b5833d6bda0b86054bc167102b202b3f1f3433ac6added71185fbfb000cb68"
+    },
+    "scope": "standard standalone CMake configuration/link dependency generation; compilation/device checks separate"
+  },
+  "runs": [
+    {
+      "name": "build-state-owners-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6fe71348ff824717d96844fa0eb4fd5ed8f9e260f238fad9c3bd60fc1b365237",
+        "task.log": "dbcebf2e50494f656da06c73e0f8d62f257289318d1490b8a18d79beec062abe"
+      }
+    },
+    {
+      "name": "build-state-owners-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6fbd99f7ace69062abc19141ba2bac036c152c0e682f3dee55c12545442606e8",
+        "task.log": "14db225bff40e4f9d40f8e7c1c10cc41b6aaa19323790079409a289fcd666a63"
+      }
+    },
+    {
+      "name": "state-cmake-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b9fbd3caaa21f8703540a604ab24aa583a2510d89326d1fbfad5c9030949c9ca",
+        "task.log": "abcaa3572965362454ef68d6f578cd3a4e846b6b84a4068f24fc55cc7a5e736b"
+      }
+    },
+    {
+      "name": "state-owners-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "62e480b911bb638074e629812cfff28cf5fe9067f205b8cba7400817113d5b89",
+        "task.log": "ff1d603337c82ba192ecdb85cdd3be6602e12a55e8f12dc45c5290dd2092d11e",
+        "queue.json": "247085dee2d048a3763d2c7a23141f3d5d779c28790c4a2cb6dbdf1519bc9514",
+        "gate/result.json": "cc1e84c856572a1da6ccb6dac91638e3d7065f785f4c20fed0e5384acf341c80"
+      }
+    },
+    {
+      "name": "state-policy-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d3cde9862bcab6b5f8811ab396e6f1e965af8bc3b98f0337dca1f5d1af7a1f66",
+        "task.log": "13cdf95a493fcd03ca92519881cf44f9d405df2fb6df4331ea4f412ff2eadec1",
+        "queue.json": "0d46c4f2a67ba248cbe19312c6b67d43c3b9934a5566374fb9d91545046f23b6",
+        "gate/result.json": "19e3d90c62755252bf434e12083ce2423bc41236deb2c10c58bae129d83857af"
+      }
+    },
+    {
+      "name": "state-single-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "575c546138b3e962966d557f7c6763fcfa4a2d9ec1f3715266b34f54e0d73efa",
+        "task.log": "d38a36c29cefacb8becf301a73cc3bc555bb893f05ffe8393c5517a5ebc339c4",
+        "queue.json": "383f8f7903d94d0a67444d2ffcc501ba3ea7a2c9e41fcf353763ba8800b5d340",
+        "gate/result.json": "dd253ac45b16d0eeeca77d322c67656bf75af05466501760f6ef76d4a668ce71"
+      }
+    },
+    {
+      "name": "state-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "c88c4be088d640a695ec2525d912d121bf300bfa9d3b5302df5be6e2f2dbb82e",
+        "task.log": "d9ba2797f685349e3282814418eb621d6d17dcaafa574f91e2897744846a52a2",
+        "queue.json": "5393bb1f15b80651d432f6cb61000fbd2c95c51f7cb761c120ed481c5f967b1a",
+        "profile/result.json": "4bd48a53337f624a8c91dec2ac1e25422bb15bc2959b1ed42f3b717f7313908f",
+        "profile/profile.log": "1051086d98a532f7a5024eee5380b087a78a3c05bf05b2676fa8e16ba1bc5dd4"
+      }
+    },
+    {
+      "name": "state-public-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "a4f60d33c44bfadc241611b21c6b27b5d479ef44c0892422758eda1aabd7d5b2",
+        "task.log": "7b6cd27d8a39594ae5d7ec6548fa3e8a3227b4a5451767d37ac2323ae73f6d69",
+        "queue.json": "2b80596c00fcfa49f3218571327063670f94a65d46b7eab6935c8192c0aab0ac"
+      }
+    },
+    {
+      "name": "state-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8f7dc424f1f32fff3fdbfb39a0ed78a5f8cb2d4db503fc3e92a1e1aacc1d0eb6",
+        "task.log": "07f64321cede4915a6bc8614db792c38c81dae44ab53a1861b9dfdf1de4b21ec",
+        "queue.json": "15cb0f28feacbd28633aa95286083256fff396ff1fcc575c80d4003efef5dd8b"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "peer-state-transaction",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-state-shard-check",
+        "--device=npu",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-transaction-float32.log",
+      "log_sha256": "02e5702f786e21229ad19aca3dd889ea9cec0db288c39cbe501304176179fa57",
+      "windows": 28,
+      "refused_commits": 16,
+      "accepted_updates": 8,
+      "empty_windows": 4,
+      "packing_boundaries": true
+    },
+    {
+      "check": "peer-state-transaction",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-state-shard-check",
+        "--device=npu",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-transaction-float16.log",
+      "log_sha256": "63b145170b3b32ecc0d4961a03f9dfcadd159da68e2e02f96dc641adc959b4af",
+      "windows": 28,
+      "refused_commits": 16,
+      "accepted_updates": 8,
+      "empty_windows": 4,
+      "packing_boundaries": true
+    },
+    {
+      "check": "peer-state-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu",
+        "--dtype=float32",
+        "--full-shards=2",
+        "--state-shards"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-flow-float32.log",
+      "log_sha256": "3251ff7e7933f297403b99b1b8d9b7b7b7783aea9f37b15052237539450de9d9",
+      "configurations": 84,
+      "windows": 420,
+      "capacity_refusals": 3,
+      "incomplete_adjoint_refused": true
+    },
+    {
+      "check": "peer-state-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu",
+        "--dtype=float16",
+        "--full-shards=2",
+        "--state-shards"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-flow-float16.log",
+      "log_sha256": "88c53e564045cdaf580cda07bf008171141bb3ae7072046b618a36d09d4b7db3",
+      "configurations": 84,
+      "windows": 420,
+      "capacity_refusals": 3,
+      "incomplete_adjoint_refused": true
+    },
+    {
+      "check": "peer-state-control-flow",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu",
+        "--dtype=float32",
+        "--control-modes",
+        "--full-shards=2",
+        "--state-shards"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-control-flow-float32.log",
+      "log_sha256": "e681da0209a7dc706142b99493df8cd1d08b9d4b1e49748f19c54fdf8f7242f1",
+      "configurations": 36,
+      "windows": 180
+    },
+    {
+      "check": "peer-state-control-flow",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu",
+        "--dtype=float16",
+        "--control-modes",
+        "--full-shards=2",
+        "--state-shards"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "peer-state-control-flow-float16.log",
+      "log_sha256": "26376eeca03ab2e6b01655e1d83bdab3873a7970215093a5e4eb68518e70d889",
+      "configurations": 36,
+      "windows": 180
+    }
+  ],
+  "three_device_policy": [
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=3",
+        "--state-shards",
+        "--full-placement=memory",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "memory-float32.log",
+      "log_sha256": "2252ae245f90c4fc1cf71534b380354206ef12e222053b87908a5e913a0e824f",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=3",
+        "--state-shards",
+        "--full-placement=memory",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "memory-float16.log",
+      "log_sha256": "6d33feec77e1ee4d59161d178d2ccbdcf42be0a8151e52007bb30945bd1f03b7",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=3",
+        "--state-shards",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float32.log",
+      "log_sha256": "39dc4b31a03d3c8d51b2c5c58b4f4f13ac6372de610089c7671f657bba3b9217",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=3",
+        "--state-shards",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float16.log",
+      "log_sha256": "a817b481615acd83fb4e964e36614311529d04da44787ffad81ab47053fc19b6",
+      "configurations": 3,
+      "windows": 15
+    }
+  ],
+  "single_owner": [
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float32",
+        "--full-shards=1",
+        "--state-shards",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float32.log",
+      "log_sha256": "6e10a9e6615e8e92b5dbdd498c9f5460f47d557114118ec2e0560f2906890ac9",
+      "configurations": 3,
+      "windows": 15
+    },
+    {
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/state-owners-clean01/tide-precision-flow-check",
+        "--device=npu:0",
+        "--dtype=float16",
+        "--full-shards=1",
+        "--state-shards",
+        "--full-placement=locality",
+        "--profile-smoke"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "locality-float16.log",
+      "log_sha256": "851ef9f829a0d3e30e0f96478d7296973055f57b94e765afa3cea44df467c43e",
+      "configurations": 3,
+      "windows": 15
+    }
+  ],
+  "public_regression": {
+    "standalone_half_cache": {
+      "trajectories": 1,
+      "windows": 16,
+      "updates": 4
+    },
+    "python_passed": 5,
+    "python_skipped": 0
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 5283,
+      "AI_CORE": 110,
+      "MIX_AIV": 3
+    },
+    "physical_devices": [
+      4,
+      7
+    ],
+    "operator_counts_by_device": {
+      "4": {
+        "ZerosLike": 1523,
+        "Fill": 77,
+        "tide_queue_propose": 53,
+        "GatherV3": 923,
+        "Equal": 149,
+        "Cast": 162,
+        "tide_closure": 28,
+        "tide_ready_pack": 28,
+        "Less": 13,
+        "tide_sum_plan": 13,
+        "tide_vector_sum": 13,
+        "tide_state_shard_pack": 26,
+        "Sigmoid": 13,
+        "tide_event_plan": 8,
+        "tide_fiber_chunk": 88,
+        "BatchMatMulV2": 57,
+        "tide_event_payload": 8,
+        "tide_attention_tile": 32,
+        "Transpose": 18,
+        "Mul": 50,
+        "Add": 86,
+        "tide_attention_softmax": 16,
+        "tide_attention_merge": 32,
+        "ScatterUpdate": 126,
+        "tide_event_cache": 16,
+        "tide_journal": 144,
+        "tide_state_read": 13,
+        "tide_vector_read": 13,
+        "tide_read_reduce": 13,
+        "tide_frame_select": 13,
+        "SoftmaxV2": 20,
+        "tide_state_shard_selection": 26,
+        "tide_content_state": 13,
+        "tide_vector_state": 13,
+        "tide_state_shard_merge": 39,
+        "tide_full_shard_pack": 26,
+        "tide_full_plan": 22,
+        "Tanh": 9,
+        "tide_emission_plan": 13,
+        "Pack": 3,
+        "IsFinite": 3,
+        "ReduceAll": 3,
+        "OnesLike": 4,
+        "tide_fiber_plan": 5,
+        "tide_fiber_payload": 16,
+        "tide_fiber_pool": 17,
+        "tide_fiber_trace": 4,
+        "tide_fiber_commit": 5,
+        "tide_fiber_indices": 1
+      },
+      "7": {
+        "ZerosLike": 451,
+        "Fill": 4,
+        "GatherV3": 358,
+        "Sigmoid": 13,
+        "tide_event_plan": 8,
+        "tide_fiber_chunk": 81,
+        "BatchMatMulV2": 53,
+        "tide_event_payload": 7,
+        "tide_attention_tile": 28,
+        "Transpose": 14,
+        "Mul": 25,
+        "Add": 48,
+        "tide_attention_softmax": 14,
+        "tide_attention_merge": 28,
+        "ScatterUpdate": 36,
+        "tide_event_cache": 16,
+        "tide_journal": 24,
+        "tide_state_read": 13,
+        "tide_vector_read": 13,
+        "tide_read_reduce": 13,
+        "tide_content_state": 13,
+        "tide_vector_state": 13,
+        "tide_full_plan": 36,
+        "Tanh": 12,
+        "Equal": 13,
+        "Cast": 13,
+        "OnesLike": 4,
+        "tide_fiber_plan": 5,
+        "tide_fiber_payload": 15,
+        "tide_fiber_pool": 15,
+        "SoftmaxV2": 5,
+        "tide_fiber_trace": 4,
+        "tide_fiber_commit": 5
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 5283,
+      "MODEL_MAINTAINCE": 54,
+      "MODEL_EXECUTE": 45,
+      "MEMCPY_ASYNC": 2064,
+      "NOTIFY_WAIT": 305,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 875,
+      "LABEL_SET": 1282,
+      "NOTIFY_RECORD": 305,
+      "AI_CORE": 110,
+      "MIX_AIV": 3,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 12,
+      "BatchMatMulV2_Tiling": 14,
+      "Cast_Tiling": 14,
+      "Equal_Tiling": 13,
+      "Fill_Tiling": 19,
+      "GatherV3_Tiling": 200,
+      "IsFinite_Tiling": 2,
+      "LayerNormV4_Tiling": 2,
+      "Less_Tiling": 1,
+      "Mul_Tiling": 10,
+      "OnesLike_Tiling": 2,
+      "Pack_Tiling": 1,
+      "ReduceAll_Tiling": 2,
+      "ScatterUpdate_Tiling": 74,
+      "Sigmoid_Tiling": 3,
+      "SoftmaxV2_Tiling": 18,
+      "Swish_Tiling": 2,
+      "Tanh_Tiling": 1,
+      "Transpose_Tiling": 16,
+      "ZerosLike_Tiling": 88,
+      "aclmdlRIBindStream": 18,
+      "aclmdlRIBuildBegin": 18,
+      "aclmdlRIBuildEnd": 18,
+      "aclmdlRIDestroy": 18,
+      "aclmdlRIEndTask": 18,
+      "aclmdlRIExecuteAsync": 45,
+      "aclmdlRIUnbindStream": 18,
+      "aclnnAddGetWorkspaceSize": 62,
+      "aclnnAll": 3,
+      "aclnnAllGetWorkspaceSize": 1,
+      "aclnnBatchMatMul": 60,
+      "aclnnBatchMatMulGetWorkspaceSize": 60,
+      "aclnnCast": 81,
+      "aclnnCastGetWorkspaceSize": 81,
+      "aclnnEqTensor": 75,
+      "aclnnEqTensorGetWorkspaceSize": 75,
+      "aclnnIndexSelect": 493,
+      "aclnnIndexSelectGetWorkspaceSize": 493,
+      "aclnnInplaceAdd": 62,
+      "aclnnInplaceCopy": 631,
+      "aclnnInplaceCopyGetWorkspaceSize": 631,
+      "aclnnInplaceFillScalar": 81,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 17,
+      "aclnnInplaceIndexCopy": 74,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 74,
+      "aclnnInplaceOne": 8,
+      "aclnnInplaceOneGetWorkspaceSize": 2,
+      "aclnnInplaceZero": 1960,
+      "aclnnInplaceZeroGetWorkspaceSize": 98,
+      "aclnnIsFinite": 3,
+      "aclnnIsFiniteGetWorkspaceSize": 1,
+      "aclnnLayerNorm": 2,
+      "aclnnLayerNormWithImplModeGetWorkspaceSize": 2,
+      "aclnnLtTensor": 6,
+      "aclnnLtTensorGetWorkspaceSize": 6,
+      "aclnnMul": 24,
+      "aclnnMulGetWorkspaceSize": 24,
+      "aclnnPermute": 14,
+      "aclnnPermuteGetWorkspaceSize": 14,
+      "aclnnSigmoid": 12,
+      "aclnnSigmoidGetWorkspaceSize": 12,
+      "aclnnSilu": 4,
+      "aclnnSiluGetWorkspaceSize": 4,
+      "aclnnSoftmax": 18,
+      "aclnnSoftmaxGetWorkspaceSize": 18,
+      "aclnnStack": 3,
+      "aclnnStackGetWorkspaceSize": 1,
+      "aclnnTanh": 10,
+      "aclnnTanhGetWorkspaceSize": 10,
+      "aclrtBinaryLoadFromData": 47,
+      "aclrtCreateLabel": 510,
+      "aclrtCreateLabelList": 18,
+      "aclrtCreateNotify": 96,
+      "aclrtCreateStreamWithConfig": 40,
+      "aclrtCtxGetSysParamOpt": 526,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 510,
+      "aclrtDestroyLabelList": 18,
+      "aclrtDestroyNotify": 192,
+      "aclrtDestroyStream": 36,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 96,
+      "aclrtDeviceEnablePeerAccess": 2,
+      "aclrtFree": 369,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 3,
+      "aclrtGetResInCurrentThread": 3372,
+      "aclrtGetStreamAttribute": 3624,
+      "aclrtLaunchKernelWithHostArgs": 3010,
+      "aclrtMalloc": 363,
+      "aclrtMemcpy": 1937,
+      "aclrtMemcpyAsync": 823,
+      "aclrtNotifyGetExportKey": 96,
+      "aclrtNotifyImportByKey": 96,
+      "aclrtNotifySetImportPid": 96,
+      "aclrtRecordNotify": 108,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 4932,
+      "aclrtSetLabel": 510,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 296,
+      "aclrtSynchronizeDeviceWithTimeout": 78,
+      "aclrtSynchronizeStream": 1934,
+      "aclrtSynchronizeStreamWithTimeout": 48,
+      "aclrtWaitAndResetNotify": 108
+    },
+    "aicpu_rows": [],
+    "csv_sha256": {
+      "raw/PROF_000001_20261001235616047_02352923RHBOIIMH/mindstudio_profiler_output/task_time_20261001235625.csv": "ebe1266efe2719fadedd9119120840c4777ad03bb3a23d995e94b0fe5edb868e",
+      "raw/PROF_000001_20261001235616047_02352923RHBOIIMH/mindstudio_profiler_output/op_summary_20261001235625.csv": "6429dbec457f0e49f810ed57fa3dabf86a92871c72c2ce2f412c2c6279f273a5",
+      "raw/PROF_000001_20261001235616047_02352923RHBOIIMH/mindstudio_profiler_output/api_statistic_20261001235625.csv": "1a794483af9ebfeb8c43296cfdee89d195e446948708f9f9909b131eaa7aa3b4"
+    },
+    "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+  },
+  "preserved_failures": [
+    {
+      "name": "build-state-owners-dev02",
+      "reason": "new test omitted required CPU Streaming Options argument",
+      "status_sha256": "7b4e27e17457facad993cdfd716d46bcfc5c7492cf7dd97aed0560148caa2f94",
+      "log_sha256": "61bcbf8638bfc97f3238f750663dc3fa3af58f9f375939e79254209437fe8de1"
+    },
+    {
+      "name": "state-gates-dev03",
+      "reason": "test changed ports on an already compiled graph; stale local slot layout",
+      "status_sha256": "58fabbc99eedf37e8a5a5c1d96ca3f3651c98c24c02d90cd9c227dc284971ae2",
+      "log_sha256": "186b9f65bf5a516f7f299710b495e50b708aaa23b7901f24ad19186a0ed719fb"
+    },
+    {
+      "name": "state-cmake-clean01",
+      "reason": "preflight expected static dependencies on consumer; they correctly reside in libtide-resident link closure",
+      "status_sha256": "1a02c36668046b46816bed4c36417d2c66cbd53c8bfad97823364f495d3cb405",
+      "log_sha256": "2a8c5cf383d92d9911a20570cbb1ff8feb91e489566143785f62c239f2dc72ad"
+    }
+  ]
+}
