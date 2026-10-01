@@ -79,14 +79,23 @@ nonzero updates and optimizer restore against independent CPU autograd. No-proje
 training and inference consumer regressions also passed. Reservations are not
 allocator peak measurements; parameters/physical gradients are still coordinator-owned.
 
-Implementation ready to commit/push. Next freeze projection-retention-clean01 on
-that commit, use build_projection_retention.py with --reuse-host for byte-identical
-standalone/Python dev objects, then build_projection_retention_client.py with
---reuse-client projection-retention-consumer-dev01 (source/public-header/flags audit,
-fresh Ninja link and loader). Run the same directed library26, standalone matrix/legacy,
-consumer27, and separate profile_resident_consumer.py --preset resident. Audit with
-launchers/projection_retention_evidence.py COMMIT, then evidence commit/push.
-Do not rerun unrelated CPU core gates or completed development jobs.
+Projection retention implementation3f85852552c607e7e44dc9480d41eafca1027081 is pushed.
+All8 clean qualification jobs PASSED; projection_retention_evidence.py audit exited0.
+Evidence docs/evidence/resident-projection-retention-20261002.{md,json}. No current
+qualification jobs live. Separate trace14,782 AI_VECTOR_CORE/607 AI_CORE/218 MIX_AIV,
+no observed AiCPU; no timing claim. Builds/snapshot projection-retention-clean01,
+projection-retention-python-clean01,projection-retention-consumer-clean01. Reused
+client objects after source/header/compiler-option audit,fresh link/loader.
+
+Current uncommitted next implementation: compact projection banks and a shared
+ProjectionStage device packet service for forward/reverse chunks. New Ascend C
+projection owner packer plus content-flow lifecycle,emission adjoint and retained
+snapshot hooks are partially connected. Not yet built or tested. Remaining wiring:
+canonical physical-gradient sources and parameter publication,build manifests and
+kernel build support; then directed full inference/training gates and profile.
+These files are unrelated to the evidence-only commit. Do not claim shard support
+until the complete path passes. Generic Full/state ownership maps supply static
+projection placement; runtime actual row filtering remains device-side.
 
 After retention increment: compact projection owners/partial gradients,total
 per-device memory admission,actual consumer FP16,representative five-preset
