@@ -1,0 +1,332 @@
+{
+  "schema": "tide-attention-training-evidence-v1",
+  "source": "66a6ca5702d3618ca72ad57ac87f01a7190f9166",
+  "scope": "single-NPU FP32 event and complete-current-fiber attention adjoints, independent cache roots, retained windows and public C++/Python client training; no independent PyTorch resident scheduler, resident FP16, peers or throughput claim",
+  "runtime": {
+    "architecture": "aarch64",
+    "soc": "Ascend910_9392",
+    "cann": "9.0.0",
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0"
+  },
+  "checks": {
+    "component_cells": 52,
+    "build_ctests": 5,
+    "cpu_interface_tests": 76,
+    "optional_npu_skips_in_cpu_job": 193,
+    "python_device_cases": 196,
+    "new_python_attention_cases": 42,
+    "new_process_resume": true,
+    "installed_cpp_client": true,
+    "event_root_cases": 66,
+    "event_trajectories": 8,
+    "fiber_root_cases": 172,
+    "fiber_trajectories": 20,
+    "event_local_configurations": 4,
+    "event_local_replays": 12,
+    "fiber_local_configurations": 37,
+    "fiber_local_replays": 74,
+    "cpu_references": [
+      "float32",
+      "float64"
+    ]
+  },
+  "numerics": {
+    "adamw_trajectory_epsilon": 1e-05,
+    "public_adamw_default_epsilon": 1e-08,
+    "attention_control_policy": "strict",
+    "strict_tensor_tolerances": true,
+    "exact_routes": true,
+    "candidate_receives_reference_results": false,
+    "existing_full_dependency": {
+      "control_policy": "conditioned",
+      "affected_frames": 13,
+      "maximum_control_abs": 4.470348358154297e-06,
+      "report": "resident-extra-full-20261001.md"
+    }
+  },
+  "builds": {
+    "standalone": {
+      "manifest_sha256": "3301d191a01f9306d3c1d09e6308969f9acefdffee018e91865c3e956688bd28",
+      "component_sha256": "620f5adb729c51f0915b42bd528c5f9b6adcf4148e501e8844ec9c0ed1c06500",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "tide-device-control-check": "19c72cbf8d36e0e9c16bca1a5daae24e55c968d9994c1bbdabddb3cd73d31c0c",
+        "tide-device-failure-check": "4b3410fbf04dcd0251a97004d15eca67222d28bd1e848e6ab21da53aadcb9dbd",
+        "tide-device-numerical-check": "aefe425434a7af2cf17060fc2387989f548e28b02de67dde7ff537d486e34ed0",
+        "tide-packed-queue-check": "9e64ee746054f4de0ebdd0599675546f4486d4663d9718ec30dc85be6097bd47",
+        "tide-device-closure-check": "3a32422d70ea49cb0ef0b0d87b93a006cdf34beb53c625f9619aff692b3f3f7d",
+        "tide-device-queue-check": "9301f0f5240632ba6794183d032ad3125bd602bafc024a23571fdcaf23357229",
+        "tide-device-broadcast-check": "4b5c468cc58db5888f84e01554ee0e4be869fb4baea67f68b7faa41250c4cbf1",
+        "tide-device-ready-check": "d8aa5f0ba2303036466f980b1580549e28be7b209d0fa15d179a87402c6d6f43",
+        "tide-device-selector-check": "024cf4b4cd67eda8faace27269820b71ca42d91b0fdcb96a35ef19a650d30156",
+        "tide-content-flow-check": "bf629a112f9017f8edfa0b8b793b75d9be12959ad5d0ab2f3298bde52246808f",
+        "tide-content-window-check": "1dd708067748924477a30d72e2d4fe7182ab0d628f4e424ae13ec047a27bbcc9",
+        "tide-packed-full-check": "bff32cdb2a2b24c435c4e3f8f6380757f9d006084f9eb2319c5f3e5e28a763be",
+        "tide-packed-sum-check": "56f616371eeb7b25f415c73e597d2c1a68d915c619123ada61e6861664569788",
+        "tide-device-add-check": "0426022981a2662e43cb2b30c0208c5947a1dc8c4d80843bbb6d28ffe6d9b308",
+        "tide-device-state-vjp-check": "4012cf6917bc0d00df0f9ee34c47173869eefb06149e62ce958ec9bba14f2036",
+        "tide-device-full-vjp-check": "10cac8b73ec627f82456ae2b5f69c0927a43bd872c8355c4530a476041e1e7cd",
+        "tide-device-extra-full-vjp-check": "24eedcc796b7d08d8e4c5507fbfb30aea3dc87d1c11af3059467345af1bf465b",
+        "tide-device-reverse-links-check": "196a3affac4a1bb8a78f4db7406fb7bff169d66502e179461594080a8fba60e9",
+        "tide-device-graph-vjp-check": "a2a110c908496f0eca8b3b24e305430e0382d47fd3ee8de91eaf1960d58fca83",
+        "tide-device-parameter-vjp-check": "e2b8b0003a56d8bac8fe09008b6e147b3624a0868d9ac39a9891d3ec36894967",
+        "tide-device-optimizer-check": "fa4332bae70166c7f7645c228c0389938690ea7c045165b3a7018e20f69babb5",
+        "tide-device-training-step-check": "cc34236197005bf04f163d7b494ac2c128ad43a2d2ecbd02e22ca9c3644057bc",
+        "tide-device-retained-check": "3b2befcbfad1026c00374749f24d47d11441c3903a2ef6c8c761172da21cfb2a",
+        "tide-device-clock-check": "9c8529ce1661011da3a121ac66a590476863331eeab21fdff3426d24b0a4db99",
+        "tide-device-norm-check": "da161e21960015974ede5bb334313c521729fa5e95121770faa49f92b20128e7",
+        "tide-device-lh-full-check": "f4a9ce3eef2170ecf542d749fb890b8fc0ba026545671918aab417c4df20c5b8",
+        "tide-device-origin-check": "4c0df512bf9f30ca3a945d0f15ce4b6fbf36fd8f77e43fa7ac79e60f6f67eb5c",
+        "tide-device-emission-check": "dab87b94adaaa287613a7c0491bc2c042a23b7a4be9498bee96c0e449e9852b3",
+        "tide-device-swiglu-check": "b0b11f9a9ba5251c68cc631381d977dbf0da96a21bad9cf4fbff433636da76da",
+        "tide-device-fiber-check": "c782c818f397399b0e2c8a28d6afb63808ce5dd7432b6389a1b148c40a9bc790",
+        "tide-device-fiber-pool-check": "178f2aba7f854124ce52d8b8e5a0e091feaf9668109085ae51a9d38827662421",
+        "tide-device-event-attention-check": "281bfbe78ff9992411220bcd51e80557ae7f103aa51cddf3e14d62adf1541a57",
+        "tide-device-attention-tile-check": "ef8b791d401d15b3721c44b97637d16788c7b992d6d14f9fc12087cc2e5ac4a9",
+        "tide-device-memory-check": "09c2fe6677fae0733d5c13b673b17b259cb32ddab48d5c3d1419ba847f7367bd",
+        "tide-device-event-batch-check": "be9683ca43f8823b7f6ad0ab9cec2178a69a2967cc0081285e7704c2f7560062",
+        "tide-device-fiber-batch-check": "f1599a51cf40aecb8100bcbfd55078175b35e9e721ba121eef003c606b93f8de",
+        "tide-device-aggregate-check": "aaf5c8a912120a8aa2502d1cc28dbb3039165cdb8a7b4cc5a884b924535300c5",
+        "libtide-resident.so": "e83959aa085291f7a87500df6491a615e695c7a23b543f1d652d9337b964d2ad",
+        "tide-resident-check": "1fdc08fd7e7750db6e43732265d39de3ae73e4a483e0dcc63cab9d959244af7c",
+        "tide-resident-training-check": "4ea09408329af4baa9efb6bd70fbf4cc672af41bf11f76ffea767dbe44caa63a",
+        "tide-resident-full-training-check": "bed89c66c5883ce8152766e0200920f644f6197e16ddf59d3460d1e99266431f",
+        "tide-device-aggregate-vjp-check": "bac95fadaa2a08fa513040135ac34169309a3f96fc6b2b8659d8e1a6e8ac200f",
+        "tide-resident-aggregate-training-check": "8fc5cacd60c6c01c27897ec973c61d2f2cdd794defe6483c8ba7ec181499f9db",
+        "tide-device-control-vjp-check": "2dc69376311aab3b310e4f78f73d5d550fe81b20cbacebf684d8668c69de31e3",
+        "tide-resident-control-training-check": "30098c017e996fb0d5947c3b8c3a2069dd7f4d9fa885790f013969c93f3edffc",
+        "tide-device-attention-vjp-check": "fe45fe346832b971124a990df6b84a8f425e8e52f72060d03d0fdc6438af6401",
+        "tide-resident-event-training-check": "bc5ff83406b376450073a0e4dac6677e96086c5b2f4bacdb4c36903e26c1b5ed",
+        "tide-device-fiber-vjp-check": "06efda0e780b66ad5ad1f197c5ac1d016108fe1741a9e195af4ec022ff2585d7",
+        "tide-resident-fiber-training-check": "5fe738a6e0cf8c6c5dea0598a82b9169de88f7b334873a73bae22e090c9ee155"
+      },
+      "loader_sha256": {
+        "tide-device-control-check": "77c1c6562194440831917b74164c892d0e8940f5cfb56fac090f8750d4894fb1",
+        "tide-device-failure-check": "3a42d015f2ebbb73587080ec396b851eccc1cbf77f549cfb55f8930393e007ab",
+        "tide-device-numerical-check": "d94295de4da5b4e28a3f89aa3dda22c41c16ab9d380eed99e413488e1a222822",
+        "tide-packed-queue-check": "651ae4dfa8aa7e9dbb6b88a342053a4e9a278db507b9bdf2e1926c63d83de5cb",
+        "tide-device-closure-check": "0d73730f82bc14e083751287146fca705206481202b8729730c37fd1435202e7",
+        "tide-device-queue-check": "3c8f3bc788134bf15c36d8c5b5bb307f8e7f2c12d0506566c556ca7083bd302a",
+        "tide-device-broadcast-check": "5cd1b496e5c47ae807bf37e4914e74423edefb2bc84d18fddc35650023638da2",
+        "tide-device-ready-check": "1fb58bcc2c6333789af98e212df27a8076870916a7a008142d517ed43249bdfd",
+        "tide-device-selector-check": "c03d1abead73d9b475cfef4307b9de7b484926856385d95c4ca76e5e5b265002",
+        "tide-content-flow-check": "9ca314ad44f0b7be6487942c050c82814b372dc568fa4bd58c8df757ddb5dd42",
+        "tide-content-window-check": "b62d42dc23e3448bd34dd4a2e9c42d1b92a1043738427be9116d4a7f416c3a7f",
+        "tide-packed-full-check": "036b9c0bfeb0d244d4a56518018305b177c10346033212277417d1db85f68a15",
+        "tide-packed-sum-check": "6daa78e4e3fa112cc79aa6385398a7d7b779e74ae3e93378039ade3100943233",
+        "tide-device-add-check": "8b4a17c4db83a4687083fcbf83019849b1200bf5b0b28d85ec6844452054623b",
+        "tide-device-state-vjp-check": "a22510411ae829fe85de512ecfaf1d308fa91f941acc3e75ea430bf65f4b99ef",
+        "tide-device-full-vjp-check": "3347f21535d073ca635a6f2b2ee921e8c78e419482c501cb876f5f4fc298ecd3",
+        "tide-device-extra-full-vjp-check": "42bd5c0da8e3a054707df834669f7ad1e883fdcdbb1dd51ff7c04486899e20cd",
+        "tide-device-reverse-links-check": "90a974bd8d495c0272818a0c144d09efadad3c88ea4f723c3ee2cfa26aeb3e4d",
+        "tide-device-graph-vjp-check": "8eb3ee28713150e14694674b7dbd5f1bd8115484e5e659956c6894810fa6f5ac",
+        "tide-device-parameter-vjp-check": "33c1ae54658ed962cf89b93122bbb470baa056edd442b60ae1206ded68e535d4",
+        "tide-device-optimizer-check": "e91b15ce5e88a26aa78344d83b869a3c85ef9e91b44daa69ade3494896aaea1b",
+        "tide-device-training-step-check": "9b6fff8d52d760081dff82893d548f37ae72d5a69af00c030539ef83863352a1",
+        "tide-device-retained-check": "5feb16562608199e528d919022b8aa375fb220767e057d58504626691b0df922",
+        "tide-device-clock-check": "a213ae1a23ce89c8d83f491a7905c26b6b4a884dccf8ab876ac8a5fa5e844b24",
+        "tide-device-norm-check": "af3431fd0e7b9f0997df319bc1e212c55c22bf4dafca8984a9e72ed931ce012e",
+        "tide-device-lh-full-check": "0a3bab6596a2c215e540bcc5930bd8f9cee7dcf4bafd6a8279240a6a5bbad4e6",
+        "tide-device-origin-check": "8d612c8229607513b9bd7db1b8179d2c8fee903fd990ab761d33cebf8dfe4d19",
+        "tide-device-emission-check": "a0ea64d54aa38bcf17f59283b6482d9236c77cf46e9aaca9c3d0acd4521c957f",
+        "tide-device-swiglu-check": "f25c2a6f8599ff0cd9c6c31eff41f3f047f84e346e1350cdead3175165563476",
+        "tide-device-fiber-check": "0494c8aad50f223af1e34a98184585008cba427b8278dd5af538095521e1adbc",
+        "tide-device-fiber-pool-check": "f27ccb85a8221c14f35233be26b8ec8aec619602312367e74cac2c25157b137b",
+        "tide-device-event-attention-check": "53d7ce978b4c2b975a8063aca4d79b4fa8c3020031546c0b6c309348f41bd40a",
+        "tide-device-attention-tile-check": "d0c38aa0e0486f9103b1e3b438701c0e75edb02f738b9d1bdf35f3ed23092555",
+        "tide-device-memory-check": "763018c62948f8f95731777036e83123e41fb9c612b988596fb521921c93f9c8",
+        "tide-device-event-batch-check": "af8aacb7095ed359a34bf348dc7a7687c0eb0ddff828be1e852e8701abdda04e",
+        "tide-device-fiber-batch-check": "c58d7e8e6deeb4aa306bae63a2d1f2dc1b0688834712299df994e6cf0d22d9f8",
+        "tide-device-aggregate-check": "0d04a3afcc9faf1522ca19c193bf9ee7d0db62c596a823a832a6164dea33b0a2",
+        "libtide-resident.so": "6c39c39e88a2c4f5c547899b3858f13f476d6d0fb9ae5ac36ec9cdc74277757c",
+        "tide-resident-check": "3cabd1e15d20570a98499316fa95166cf27815f0b70a0b16b930b7138cff8fcf",
+        "tide-resident-training-check": "3d45ada92ba16901a35186c2f73f0d4607c0ecfd95a608c7690ff2082fa83c42",
+        "tide-resident-full-training-check": "c03db521370e57ae7564fd46d9ff4f1556a923cab926735153e4344cd90804d9",
+        "tide-device-aggregate-vjp-check": "987992c1d53aa9e46dce75c796fc0ceda9eec1023e9a78c52d98372a98d32978",
+        "tide-resident-aggregate-training-check": "141d834f961ec84f655196b2337923043a0c88de2ce3696eb72d6b8635f0db23",
+        "tide-device-control-vjp-check": "8ee78371d8e5f2befc933696bbfc64d472bb9d3b4a1bcda79add4bf1c9369cdf",
+        "tide-resident-control-training-check": "784bd386516143d05441d418788ac5b994e9115a9e1521f1f4c015cd351d089f",
+        "tide-device-attention-vjp-check": "b14b0aace87dbe6f1c0888e0f27101936b810fd3da15d649df23ea1d24409882",
+        "tide-resident-event-training-check": "d8a47909e8cf15eb72d332f9bf621bf9b6a266fbe7fdb80a6b160a34c456cdd2",
+        "tide-device-fiber-vjp-check": "58cd9436385081c4855e2102fa03f0b4f46e6494d44b9463498b00f08a7a2f0b",
+        "tide-resident-fiber-training-check": "d497287c91690e67b0c3d80cdb7de79df9c9b6387135ea98d2043ab9fb39e3df"
+      }
+    },
+    "python": {
+      "manifest_sha256": "bc786a8665bcd0775046795fecce73f2648c6b5616a97fe79cc39d00724834c4",
+      "component_sha256": "620f5adb729c51f0915b42bd528c5f9b6adcf4148e501e8844ec9c0ed1c06500",
+      "core_source": "d4125412a1b842e9da71bc5926aba31c9016de0e",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "_tide_resident.so": "7aa036379f1d11f95a513f082d514efde30e1bf03df3fb1986a1c4202fba3d94",
+        "libtide-resident.so": "26cfba7b47cceb914ce2ff984b135ae3c1fafd54f2931f6ac8c312630ca70df9"
+      },
+      "loader_sha256": {
+        "_tide_resident.so": "1db05e0f097402459e4b8da95f14231ac6773c027b327dc4211313b92a75868a",
+        "libtide-resident.so": "601abfbaece4c277d306235d1e59d18388723a0666a5b0c8b14c42b15503c583"
+      }
+    }
+  },
+  "runs": [
+    {
+      "name": "build-attention-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "18d99ea5fe8b24ff39e252d2aafa5a974e0261d641375c700dc122e5eaef69a9",
+        "task.log": "af7a0efabe9a4db2179769553c6bdf5089302181e5659cb5470434979b027605"
+      }
+    },
+    {
+      "name": "build-attention-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9ea69f87e1c1a4994924256d7296b49b8e0dd06faec677646bed1469e435c218",
+        "task.log": "68fde5de3fc59e1a8e2cc9c815b823830c2b2e4771e6780e580c8cb658246b20"
+      }
+    },
+    {
+      "name": "attention-training-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "580fe807d0e07861f7e5b5eabae3a704514e8cf3960dc4f61505999db82e619c",
+        "task.log": "21d2b387dc6633a7eab3411267a22b19c0852030dbdb14853e277373de8aba65",
+        "gate/result.json": "32cff784f49b31522807f6b4d05e3136036704665b05db1f43cf8532e1df99c7",
+        "queue.json": "5bbfaa2f76d4faf4ee3e109b93a524efcaafb320b6d6a7ef88b680b7db02b091"
+      }
+    },
+    {
+      "name": "attention-training-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b1e4000fabfbe9bef687d16c8ada7889bee629915bbdb137b80cc3f757773881",
+        "task.log": "4964367a1c413b47b79b4ebe79d08e2b0831cc00ad8576a9b7b4b855c02f3182",
+        "queue.json": "760854a4e9a4bb0ab7ba7a47c6fc9d8eab0c91077e66013314f98266aaea4267"
+      }
+    },
+    {
+      "name": "attention-training-host-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b9eb785919c05f6a5a332a7421889c0ff9648604c9cf08da15593ba455ee09d9",
+        "task.log": "778969a19794b03c8d81edac227064661849d6bcfe6f922cdd777197e1389734"
+      }
+    },
+    {
+      "name": "attention-training-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "eac1909a5e0cfed1bbeaa201e7bec9bbc5e4b720d787dcbe0f1f04a50c0cdd51",
+        "task.log": "b924b9ae5c9617149293d57a5f32395179e9f69d294ca0931ba43ec2d7035e85",
+        "profile/result.json": "edac41d6dbe3ed5a716aa021990e19331a3733d9faba45c727d30d55cc82b3dc",
+        "profile/profile.log": "c9a1090c193ee317aa357dc7d79ffa9574f5a9f1b94badd54555d7509942fa72",
+        "queue.json": "cefc648151635d8f058452f9b5a112ad0759f93ee61dc8a6260ed9a0b1b2c150"
+      }
+    },
+    {
+      "name": "build-attention-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "104ea7ed74353a6578ef32d17dba60bccbc71f1ab29fb20fa511909d876efa66",
+        "task.log": "cf4c31a8b16caf839e1047d82a5517bfff770cd057dbd4a19581276dddcdd8e8",
+        "installed/result.json": "250c011c214640958d92421353902c5159b40b00ee1a8e865335868aab1b4a79",
+        "installed/loader.txt": "f71cb65378966aeb04728ad9d86065031447d18a826e4065940dca9de95e302f"
+      }
+    },
+    {
+      "name": "attention-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "3dfdec84cfbb75b06c27e86e18ae3329af6a78db25d5eb7af1ca8bedb61d338b",
+        "task.log": "4210c8554f9426d06c7f9555a678a6d20f91a95fb20ce25cfc6729349e0e3445",
+        "queue.json": "2026d2ed6c18bed8611d842281fabddc8d48766617a4c6a19e7f38dfc5170e9a"
+      }
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "build-fiber-vjp-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "3fa532c98b9b7481b0b25d88f84ca39178dc908b2d2eaa1a6b2a5246877569c1",
+        "task.log": "23c5b507c4f854bec88ee3bcfdad3d0fc295c5f800847109e5cd2fd9f2725545"
+      }
+    },
+    {
+      "name": "build-fiber-training-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "067e068e41b91225219fb67a639eb1f642e20f538bbb445336d380af9f7ca57c",
+        "task.log": "510ab5892736779b53da1fe2eb4a435715423f688c9ce25771998cee295bc8af"
+      }
+    },
+    {
+      "name": "build-fiber-training-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "bd3ab643ccb0472113eeb8c4470bcc414c70c6d13f364ed3fe45815369e9157d",
+        "task.log": "a5a7ff466cb8fddbf1eee79feba2a6e799f251e5e55a83c2f6c03553e74988fc"
+      }
+    },
+    {
+      "name": "build-fiber-training-dev03",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "1a8dd64c3fe51af88260a5feee03cd0c118f7d64d9597aaabc0e482ca31d177f",
+        "task.log": "e91f439e0f38981479360457b57c08987d1d459cf695839708f5ad5d39483638"
+      }
+    },
+    {
+      "name": "fiber-training-standalone-dev04",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "f7607ac6b947f5758572298199bf846a51949ab94029111b89b09d2be8c2354a",
+        "task.log": "99754e2c0b9e4eacc002fda30e8475fcea92903769158cc564816da114aa097b",
+        "gate/result.json": "660b790a4f0ccd192e92a0c08387d09d797a2ec1e17b041ce25ecc77a71abe6f"
+      }
+    }
+  ],
+  "placement": {
+    "engines": {
+      "AI_VECTOR_CORE": {
+        "count": 12658,
+        "summed_task_us": 52460.18400000006
+      },
+      "AI_CORE": {
+        "count": 424,
+        "summed_task_us": 1634.791999999998
+      },
+      "MIX_AIV": {
+        "count": 185,
+        "summed_task_us": 616.9760000000003
+      }
+    },
+    "kernel_records": {
+      "tide_fiber_reverse_": 275,
+      "tide_event_reverse_": 25,
+      "tide_optimizer": 16,
+      "tide_cache_bias_merge": 126
+    },
+    "raw_csv_sha256": {
+      "raw/PROF_000001_20261001111951323_00375081EHCMNEOB/mindstudio_profiler_output/op_summary_20261001111959.csv": "6fd967cc17ecf1995d82d77a3cb2d1d13e373e7d35f8ed4e6843e731b84d26cb",
+      "raw/PROF_000001_20261001111951323_00375081EHCMNEOB/mindstudio_profiler_output/api_statistic_20261001111959.csv": "9bf0fcb0400befeb4974b95f01bb63ac4927c44e0fdbe7ba11be434c7dd88305"
+    },
+    "host_fallback_diagnostic": false,
+    "profile_scope": "mixed event/fiber roots and one full AdamW trajectory",
+    "interpretation": "bounded correctness trace includes construction and CPU assertions; task sums are not wall time or throughput"
+  }
+}
