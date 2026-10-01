@@ -15,7 +15,7 @@ ResidentTrainingCheckpoint ResidentTrainingSession::checkpoint() const {
   // owner with a differentiable use is read from the current device parameter.
   for(size_t i=0;i<s.layout.owners.size();++i)if(s.layout.offsets[i]>=0) {
     const auto& owner=s.layout.owners[i];
-    out.parameters.at(owner.canonical)=out.state.values.narrow(0,s.layout.offsets[i],owner.value.numel()).reshape(owner.value.sizes()).clone();
+    out.parameters.at(owner.canonical)=out.state.values.narrow(0,s.layout.offsets[i],owner.value.numel()).reshape(owner.value.sizes()).to(owner.value.scalar_type()).clone();
   }
   return out;
 }

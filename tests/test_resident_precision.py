@@ -1,4 +1,4 @@
-"""Resident FP16 inference is separate from the FP32 training qualification."""
+"""Resident FP16 inference and explicit FP32 training-root boundaries."""
 from dataclasses import replace
 import pytest
 import torch
@@ -48,5 +48,11 @@ def test_resident_fp16_scope_refusals(target):
     options = replace(r.options, placement=ExecutionPlacement(preset="resident", scoring_dtype="payload"))
     with pytest.raises(ValueError, match="FP32"):
         GraphRuntime(cfg, device=target, options=options)
-    with torch.no_grad(), pytest.raises(ValueError, match="FP16 adjoints"):
-        r.training_session(1)
+    with torch.no_grad(), r.training_session(1) as session:
+        window = session.advance_device([], stop=0, sealed_until=0)
+        with pytest.raises(ValueError, match="cotangent layout"):
+            session.backward([session.cotangents(window, outputs=torch.zeros_like(window.outputs.values))])
+        gradient = session.backward([session.cotangents(window)])
+        assert gradient.values.dtype == torch.float32
+        assert not gradient.connected.any()
+        session.detach()

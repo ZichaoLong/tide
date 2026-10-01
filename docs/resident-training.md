@@ -4,7 +4,7 @@
 `tide/resident_training.h`, linked with `tide::resident`. Its implementation and
 qualification status are recorded in [STATUS](STATUS.md); this contract does not
 by itself certify a build, Python client or throughput. The supported adjoint is
-currently single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate, phase-aware broadcast,
+currently single-NPU FP32/FP16 HARD/HST/SOFTP, built-in Aggregate, phase-aware broadcast,
 identity/EMA/Add-repeat/event/fiber-attention state and identity/tanh/LH/SwiGLU Full. Other adjoints fail at
 construction. The wider [execution contract](execution-flows.md) remains required.
 The normalized Aggregate implementation and its separate qualification status
@@ -33,7 +33,7 @@ All owner methods require explicit no-grad. This is a first-order VJP interface,
 not an eager autograd node. A consumer computes its head/loss and supplies
 cotangents for the outputs, pending messages, final state and attention caches of retained windows.
 It may use its own autograd on detached output views; it must not mutate the
-owner's output storage. No particular head, loss or convergence task is required.
+owner’s output storage. No particular head, loss or convergence task is required.
 
 1. `advance(inputs, stop, seal)` performs independent online execution and saves
    its actual device tape. Windows carry session, sequence and parameter-generation
@@ -43,6 +43,8 @@ owner's output storage. No particular head, loss or convergence task is required
    forward order. Both value and connection tensors of each root pair are supplied,
    or neither. Missing pairs mean None; connected zero remains connected. Root
    shape/device/dtype and absent-coordinate validation happens before execution.
+   Root values are FP32 and masks are bool for both FP32 and FP16 forward
+   payloads. Missing values allocate FP32 zero roots; half cotangents are refused.
    All reverse event decisions, pending-boundary links and shared-owner reductions
    use the candidate's own device records. No CPU reference supplies routes.
 3. `step()` requires completed backward. Device SGD/AdamW proposals, finite gate,
@@ -67,6 +69,15 @@ automatic zero initializers do not become caller leaves.
 `initial_cache` follows the same rule for key/value and fiber log-bias leaves, with independent
 connection flags and actual initial lengths. Cache groups and owner order are
 defined in [the event VJP contract](resident-event-vjp.md).
+
+FP16 forward parameters, state, messages and caches retain their actual half
+values. Reverse uses those recorded values and the declared cast VJPs, with FP32
+cotangents, accumulation and SGD/AdamW masters/slots. Each successful update
+publishes the master's half-rounded value into all forward parameter banks;
+sub-half increments remain in the master across updates and checkpoint resume.
+Loss scaling is not implicit: a consumer supplies FP32 cotangents for the
+objective it intends to differentiate. Half autograd leaves in a consumer head
+would already round its returned cotangents; use FP32 loss leaves as below.
 
 Returned tensors are read-only consumer views. Keeping exports beyond their
 consumption holds device storage and belongs to the consumer's memory budget.
@@ -110,6 +121,14 @@ does not change checkpoint identity. This format is an explicit in-memory
 boundary. The Python client serializes it as described below; C++ consumers may
 provide their own codec. RNG, loss heads and consumer data cursors remain consumer-owned.
 
+Named parameters retain the configured payload dtype; packed parameters and
+floating optimizer slots are FP32. Restore requires matching named shapes/dtypes
+and `master.to(payload_dtype) == named_parameter`, rather than discarding the
+master's low bits. Nonfinite masters, invalid slots/counters and masters that
+cannot publish a finite half value are rejected. The existing v1 record is
+self-describing through its tensor dtypes; changing the runtime payload dtype
+is not an implicit checkpoint conversion.
+
 ## Python-owned client and disk boundary
 
 Build the optional backend against a matching Python-owned NPU core; its plugin
@@ -128,7 +147,7 @@ with torch.no_grad(), runtime.training_session(
 ) as session:
     window = session.advance_device(external, stop=20, sealed_until=20)
     with torch.enable_grad():
-        leaf = window.outputs.values.detach().requires_grad_(True)
+        leaf = window.outputs.values.detach().float().requires_grad_(True)
         visible = torch.where(window.outputs.valid[:, None], leaf, torch.zeros_like(leaf))
         loss = visible.square().sum()  # Consumer example, not a graph semantic.
         bar, = torch.autograd.grad(loss, (leaf,))

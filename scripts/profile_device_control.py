@@ -55,6 +55,8 @@ def main():
         command.append("--extended")
     if args.check in ("event-retained", "fiber-retained"):
         command.append("--" + args.check.split("-")[0] + "-cache")
+    if args.check == "half-cache-training":
+        command.append("--cache")
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

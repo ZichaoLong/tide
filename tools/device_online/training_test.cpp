@@ -25,33 +25,37 @@ Continuation train_boundary(Continuation q,at::ScalarType dtype) {
 }
 ResidentCotangents train_roots(const ResidentTrainingWindow& w,int window,int mode) {
   ResidentCotangents r;r.token=w.token;
+  const float scale=w.outputs.values.scalar_type()==at::kHalf?256.f:1.f;
+  auto full=[&](const Tensor& x,float value){return at::full(x.sizes(),value*scale,x.options().dtype(at::kFloat));};
   if(mode==4||mode==9) {
-    r.outputs=at::full_like(w.outputs.values,.0625);r.outputs_connected=w.outputs.valid.clone();
-    r.pending=at::full_like(w.pending_values,.015625);r.pending_connected=w.pending_valid.clone();
-    r.final=at::full_like(w.state_values,.03125);r.final_connected=w.state_present.clone();
-  } else if(mode==5&&window==3) {r.final=at::zeros_like(w.state_values);r.final_connected=w.state_present.clone();}
+    r.outputs=full(w.outputs.values,.0625);r.outputs_connected=w.outputs.valid.clone();
+    r.pending=full(w.pending_values,.015625);r.pending_connected=w.pending_valid.clone();
+    r.final=full(w.state_values,.03125);r.final_connected=w.state_present.clone();
+  } else if(mode==5&&window==3) {r.final=full(w.state_values,0.);r.final_connected=w.state_present.clone();}
   if(mode==9||window==3&&(mode>=6&&mode<=8||mode==10))for(const auto& c:w.cache) {
     ResidentCacheCotangents a;
-    if(mode!=7&&mode!=10){a.key=at::full_like(c.key,mode==8?0.:.0078125);a.key_connected=c.present.clone();}
-    if(mode!=6&&mode!=10){a.value=at::full_like(c.value,mode==8?0.:-.015625);a.value_connected=c.present.clone();}
+    if(mode!=7&&mode!=10){a.key=full(c.key,mode==8?0.:.0078125);a.key_connected=c.present.clone();}
+    if(mode!=6&&mode!=10){a.value=full(c.value,mode==8?0.:-.015625);a.value_connected=c.present.clone();}
     if(c.log_bias.defined()&&(mode==8||mode==9||mode==10)) {
-      a.log_bias=at::full_like(c.log_bias,mode==8?0.:.0234375);a.log_bias_connected=c.present.clone();
+      a.log_bias=full(c.log_bias,mode==8?0.:.0234375);a.log_bias_connected=c.present.clone();
     }
     r.cache.push_back(a);
   }
   return r;
 }
 void train_gradients(const ResidentGradients& g,const RetainedReference& ref,const Fixture& f) {
+  const bool half=f.model.nodes.at(0).bias.scalar_type()==at::kHalf;
+  auto same=[&](const Tensor& value,const Tensor& on,const Tensor& expected,const char* name){full_same_precision(value,on,expected,name,half);};
   auto values=g.values.cpu(),on=g.connected.cpu(),initial=g.initial.cpu(),ic=g.initial_connected.cpu();
   const auto owners=f.model.parameters(true).owners();train_require(owners.size()==g.names.size(),"public trainable owner count differs");
   for(size_t i=0;i<owners.size();++i) {
     const auto& o=owners[i];train_require(o.canonical==g.names[i]&&o.aliases==g.aliases[i],"public owner alias layout differs");
     auto v=g.offsets[i]<0?at::zeros_like(o.value).to(at::kFloat):values.narrow(0,g.offsets[i],o.value.numel()).reshape(o.value.sizes());
-    full_same(v,on[i],ref.gradients.at(o.canonical),o.canonical.c_str());
+    same(v,on[i],ref.gradients.at(o.canonical),o.canonical.c_str());
   }
   for(const auto& [o,_]:f.initial.states) {
     auto name="state/"+std::to_string(o.first)+"/"+std::to_string(o.second);
-    full_same(initial[o.first][o.second],ic[o.first][o.second],ref.gradients.at(name),name.c_str());
+    same(initial[o.first][o.second],ic[o.first][o.second],ref.gradients.at(name),name.c_str());
   }
   for(const auto& a:g.initial_cache) {
     auto key=a.key.cpu(),value=a.value.cpu(),lengths=a.lengths.cpu(),kc=a.key_connected.cpu(),vc=a.value_connected.cpu();
@@ -62,11 +66,11 @@ void train_gradients(const ResidentGradients& g,const RetainedReference& ref,con
       const auto length=found->second.slots.at("key").size(0);train_require(lengths[owner].item<Index>()==length,"initial cache length changed");
       for(const auto& name:{std::string("key"),std::string("value")}) {
         const auto leaf="cache/"+name+"/"+std::to_string(b)+"/"+std::to_string(n);
-        full_same((name=="key"?key:value)[owner].narrow(0,0,length),(name=="key"?kc:vc)[owner],ref.gradients.at(leaf),leaf.c_str());
+        same((name=="key"?key:value)[owner].narrow(0,0,length),(name=="key"?kc:vc)[owner],ref.gradients.at(leaf),leaf.c_str());
       }
       if(bias.defined()) {
         const auto leaf="cache/log_bias/"+std::to_string(b)+"/"+std::to_string(n);
-        full_same(bias[owner].narrow(0,0,length),bc[owner],ref.gradients.at(leaf),leaf.c_str());
+        same(bias[owner].narrow(0,0,length),bc[owner],ref.gradients.at(leaf),leaf.c_str());
       }
     }
   }
@@ -77,7 +81,7 @@ void train_gradients(const ResidentGradients& g,const RetainedReference& ref,con
       const auto row=meta[i];if(w&&row[3].item<Index>()!=0)continue; // Later pending leaves link internally.
       Atom a{row[0].item<Index>(),row[1].item<Index>(),row[2].item<Index>(),row[3].item<Index>(),row[4].item<Index>(),row[5].item<Index>(),{}};
       auto name=boundary_name(a);train_require(seen.insert(name).second,"duplicate public boundary leaf");
-      full_same(v[i],c[i],ref.gradients.at(name),name.c_str());
+      same(v[i],c[i],ref.gradients.at(name),name.c_str());
     }
   }
   for(const auto& [name,_]:ref.gradients)if(name.rfind("boundary/",0)==0)train_require(seen.count(name),"public backward lost boundary leaf");

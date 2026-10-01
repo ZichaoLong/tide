@@ -29,74 +29,66 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **25e996c6a55b56ede9b689c94b8085ff45a56908** committed/pushed.
-[FP16 graph/retained reverse report](evidence/resident-fp16-graph-reverse-20261001.md)
-and [audit](evidence/resident-fp16-graph-reverse-20261001.json). All7 fixed-source
-jobs PASSED/exit0:standalone/Python builds,4 graph/retained cells,3 regression
-cells,97 Python tests(no skips),2 half profiles. Each dtype122 graph windows,
-42 retained trajectories/168 windows,FP32/FP64 references,replay. Sum Aggregate,
-identity/EMA/Add state,identity/tanh Full,HARD/HST/SOFTP,all Read coordinates and
-mixed norm/linear,feedback,aliases,after-close/poisoned-live tapes,None/zero.
-Half roots×256;VJP rtol2e-3/atol2e-5;FP32 unchanged. Graph profile124237
-AI_VECTOR_CORE/1941 AI_CORE/1176 MIX_AIV;retained95158/1666/1656 respectively.
-No observed AiCPU/logged CPU fallback;placement only,not throughput.
-Fiber regression90 cases/180 replays per dtype;FP32 control training98 trajectories/
-1568 windows/392 updates. All7 jobs terminal. Source/archive/object/kernel/loader/
-log/CSV hashes authenticated by TASK/launchers/precision_graph_evidence.py REV.
-Clean snapshot/build low-precision-graph-clean01;Python-owned build
-low-precision-graph-python-clean01. Retain dev01 missing-template build failure;
-dev02 half gate refused at CLI before execution due missing explicit
-allow_npu_float16;fixed in checker only. Dev04 strengthened Read coverage and passed.
-No production from failed build reused,no tolerance relaxation.
-Prior control3e33973/evidencee77cd41 and actual fiber2d7cee1/evidence60f13da
-remain separately qualified.
+Attention graph/retained cache reverse is qualified on
+f26f3b07f5e24a2ea835dbbfe352f3acf478eb57; evidence committed/pushed as d8cb3ae.
+[Report](evidence/resident-fp16-cache-graph-20261001.md) and
+[audit](evidence/resident-fp16-cache-graph-20261001.json): all5 immutable jobs
+PASSED/exit0,10 cells. Per dtype:event66 trajectories/264 windows;
+fiber/mixed152/608;6 base/extended regressions passed. Two-case half profile:
+9557 AI_VECTOR_CORE/430 AI_CORE/156 MIX_AIV; no observed AiCPU/logged fallback.
+Production unchanged from25e996c. No throughput conclusion.
+Prior [extended graph evidence](evidence/resident-fp16-extended-graph-20261001.md)
+qualifies db9e985:110 trajectories/440 windows per dtype,6 cells,4 terminal jobs.
+The corresponding task-local audit scripts passed. Earlier qualification is
+indexed in ROADMAP; no earlier suite needs a mechanical rerun.
 
 ## Active work and next action
 
-Extended graph qualification on db9e985e9d7163563ed8877be28b5f8148f490fd is
-complete:all4 immutable jobs PASSED/exit0. [Report](evidence/resident-fp16-extended-graph-20261001.md)
-and [audit](evidence/resident-fp16-extended-graph-20261001.json). Each dtype110
-extended trajectories/440 windows,122 base graph windows,42 base retained
-trajectories/168 windows. All6 cells passed. Half extended profile254571
-AI_VECTOR_CORE/2391 AI_CORE/6057 MIX_AIV,no observed AiCPU/logged fallback.
-Production unchanged from25e996c;only oracle/retained checker rebuilt. Audit
-TASK/launchers/precision_extended_graph_evidence.py REV passed. All current
-qualification jobs terminal. No new full-size throughput conclusion.
-Retain dev01 insufficient128MiB wide SwiGLU reverse budget;explicit256MiB used
-for width257. Retain dev02 CPU FP32 LayerNorm cancellation failure;half oracle
-keeps FP32→half forward and native CPU FP64 normalization derivative,with
-analytic-zero anchor. No production/tolerance change.
+Public FP16 training implementation is ready for its clean qualification.
+Four public C++ training objects now accept FP16 payload owners, require FP32
+roots, retain FP32 masters/slots and export half named checkpoint parameters.
+Restore checks exact master-to-payload correspondence. Python exposes the same
+boundary; this is a C++/CANN client, not an independent Python device scheduler.
+Tests keep actual half forward rounding, independent CPU FP32/FP64 adjoints,
+separate CPU FP32 masters, None/zero distinction and checkpoint continuation.
 
-Attention cache reverse qualified on f26f3b07f5e24a2ea835dbbfe352f3acf478eb57;
-[report](evidence/resident-fp16-cache-graph-20261001.md)/[audit](evidence/resident-fp16-cache-graph-20261001.json).
-All5 immutable jobs PASSED/exit0. Per dtype:event66 trajectories/264 windows,
-fiber152/608;6 base/extended regression cells also passed,total10 cells.
-Half2-case mixed/periodic profile9557 AI_VECTOR_CORE/430 AI_CORE/156 MIX_AIV;
-no observed AiCPU/logged fallback. Production unchanged from25e996c. Audit
-TASK/launchers/precision_cache_graph_evidence.py REV passed. All jobs terminal.
-Dev01 test-helper matmul ADL ambiguity retained;dev02 half_matmul fix passed.
-Snapshot/build low-precision-cache-graph-clean01;new CPU-only half cache oracle
-and retained_cache_fixture helpers are reusable for complete public training.
+Development gates passed:basic43 trajectories/688 windows/172 updates;
+cache40/640/160;FP32 control98/1568/392,event66 roots/8 trajectories,
+fiber172 roots/20 trajectories. Latest basic dev03 verifies nonfinite-root
+refusal through the public API without mutating returned gradient views.
+Python dev03 passed36 lifecycle+3 fresh-process cases;dev05 passed2 independent
+scalar autograd/master cases+97 existing affected cases (99, no skips).
+All development jobs terminal. Do not claim immutable public half qualification yet.
+Retained failures:dev01 build missing checker object;Python dev02 missing explicit
+native library path;dev03 unsupported identity memory fixture;dev04 unsupported
+ordinary identity Full fixture. Final fixture uses public Node(identity=True).
+No tolerance relaxation or production from failed builds reused.
 
-Active uncommitted public FP16 training increment:training_backward.cpp now
-validates/zeros FP32 roots independently of payload;training_parameters.cpp
-accepts half owner parameters and exact matching checkpoint dtype;training_owner
-compares master.to(payload_dtype) with named payload;training_checkpoint exports
-actual payload dtype. Python guard/header and half root refusal test updated.
-Not yet built/verified;do not claim public half training delivered.
-Next add independent multi-update FP32-master/half-payload training checker,
-checkpoint resume/mismatch/finite guards,Python actual-loss and disk lifecycle
-checks. Reuse retained_reference_precision with true half forward and wide
-adjoints;CPU master updates independent of NPU outputs/gradients. Compile only
-4 affected public C++ objects plus checkers in standalone and Python-owned
-runtimes,source-matched terminal CANN/core dependencies. Regression relevant
-FP32 training/interfaces;no unchanged8,954-core-test repeat. Qualification
-implementation commit first,immutable source tests,then evidence separately.
-Historical CPU Attention stays paused;no new throughput conclusions.
-Remaining F1–F7:half cache/public training/master/checkpoint,device peer progression/
-communication/training,five-preset screening,representative/full-size performance,
-version/migration/CUDA records. Commit implementation→immutable qualification→
-separate evidence commit;push each. No pause requested.
+Next:commit/push this implementation, freeze low-precision-training-clean01 at
+its40-digit revision, and qualify only affected paths. Build launchers:
+TASK/launchers/build_precision_training_v2.py low-precision-training-clean01;
+TASK/launchers/build_precision_training_python_v1.py low-precision-training-python-clean01.
+Standalone parent low-precision-cache-graph-clean01;Python-owned parent
+low-precision-graph-python-clean01. Rebuild4 public objects and affected checkers;
+reuse byte-matched terminal CANN/core, without a vendor rebuild.
+Seven planned jobs:build-low-precision-training-clean01,
+build-low-precision-training-python-clean01, and low-precision-training-
+{basic,cache,regression,python,profile}-clean01. Each uses the same clean snapshot.
+Basic/cache select half-training/half-cache-training;regression selects
+control-training,event-training,fiber-training. Python runs
+ test_resident_half_training.py,test_resident_precision.py,
+ test_resident_event_training.py,test_resident_fiber_training.py (138 expected).
+Profile half-cache-training --dtype float16 --storage-limit-mb512
+ --application-arg=--profile-smoke:one trajectory/16 windows/4 updates,placement only.
+NPU lease120s,run600s,build900s. Terminal audit:
+`python TASK/launchers/precision_training_evidence.py FULL_REV`.
+Then write the report/update backlog and commit/push evidence separately.
+
+Remaining main work after public half qualification:device peer progression,
+completion/communication and training;five-preset consumer screening;representative
+and full-size performance;version/migration/CUDA records. F1–F7 remain incomplete.
+Historical CPU Attention stays paused and does not block implementation.
+No pause requested;continue after qualification and each authorized push.
 
 ## Environment and bounded execution
 

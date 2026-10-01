@@ -11,8 +11,8 @@ Model freeze_model(Model model,at::Device device,std::vector<Version>& versions)
   std::map<const void*,Tensor> copies;std::set<const void*> storage;
   for(const auto& owner:model.parameters(false).owners()) {
     const auto& x=owner.value;
-    if(x.scalar_type()!=at::kFloat||(!x.device().is_cpu()&&x.device()!=device))
-      throw std::invalid_argument("resident training parameters require CPU/session NPU FP32");
+    if((x.scalar_type()!=at::kFloat&&x.scalar_type()!=at::kHalf)||(!x.device().is_cpu()&&x.device()!=device))
+      throw std::invalid_argument("resident training parameters require CPU/session NPU FP32/FP16");
     if(!storage.insert(x.storage().unsafeGetStorageImpl()).second)
       throw std::invalid_argument("resident training refuses distinct owners sharing storage");
     versions.push_back({x,x._version(),x.const_data_ptr()});
@@ -41,7 +41,7 @@ void restore_parameters(Model& model,const ResidentTrainingCheckpoint& c) {
     auto it=c.parameters.find(owner.canonical);
     if(it==c.parameters.end())throw std::invalid_argument("missing checkpoint parameter");
     const auto& x=it->second;
-    if(!x.defined()||!x.device().is_cpu()||x.scalar_type()!=at::kFloat||x.sizes()!=owner.value.sizes()
+    if(!x.defined()||!x.device().is_cpu()||x.scalar_type()!=owner.value.scalar_type()||x.sizes()!=owner.value.sizes()
         ||x.requires_grad()||!at::isfinite(x).all().item<bool>())throw std::invalid_argument("invalid checkpoint parameter");
   }
   for(const auto& owner:all.owners())owner.value.copy_(c.parameters.at(owner.canonical));

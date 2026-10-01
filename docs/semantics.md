@@ -203,24 +203,26 @@ inference program until an explicit reconstruction. This separate backend does
 not broaden eager training evidence into resident backward or optimizer support.
 The separate [explicit resident training owner](resident-training.md) defines
 retained-window root tokens, parameter generations, alias-aware device updates
-and complete-cut training exports for its declared FP32 adjoint profile.
+and complete-cut training exports for its declared FP32/FP16 payload profiles,
+with FP32 cotangents and optimizer masters.
 Internal FP16 state, normalized Aggregate and identity/tanh/LH/SwiGLU Full adjoints retain the actual
 quantized forward operands/results and use FP32 cotangents/accumulation. Their
 cast VJP is the ordinary first-order identity, not a derivative of rounding's
-staircase. [Precision scopes](precision.md) distinguish those components and
-FP32-master publication from the still-unavailable complete resident FP16
-training interface; no graph identity or eager checkpoint schema is changed.
+staircase. [Precision scopes](precision.md) distinguish component qualifications
+from the complete public training/master/checkpoint lifecycle; no graph identity
+or eager checkpoint schema is changed.
 The half local attention adjoint similarly preserves QK rounding and global
 normalization. Event and same-fiber cache/projection components preserve actual
 half operands,including physical source-product rounding,and use FP32 cache
 adjoints and boundary sums. [Retained-window checks](resident-retained.md)
-separately exercise whole-graph and cache continuation integration; public half
-training remains gated until its master/checkpoint lifecycle is qualified.
+separately exercise whole-graph and cache continuation integration. Public half
+training exports half named values with FP32 master/slots and validates exact
+rounded correspondence on restore; qualification remains separately indexed.
 [Resident control adjoints](resident-control-vjp.md) add HST/SOFTP, complete-frame
 softmax and linear/FP32-norm Read under the same mathematical contracts.
 Their half component preserves payload/control/difference rounding while
 retaining FP32 cotangents and internal frame probabilities. This component
-and half HST/SOFTP inference do not enable complete half graph training.
+and half HST/SOFTP inference alone do not certify complete half graph training.
 Its supported modules and qualifications are separate from resident inference.
 Its Python client uses a separate `tide-resident-training-v1` CPU checkpoint
 containing updated graph parameters, optimizer state and complete continuation;

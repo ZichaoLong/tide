@@ -37,6 +37,7 @@ struct ResidentTrainingWindow {
 };
 // Both tensors of each pair must be supplied, or neither. Undefined pairs mean
 // disconnected roots. Connected zero and disconnected poison remain distinct.
+// Values are FP32 and masks are bool, independently of the forward payload dtype.
 struct ResidentCotangents {
   ResidentToken token;
   Tensor outputs, outputs_connected, pending, pending_connected, final, final_connected;
@@ -57,6 +58,7 @@ struct ResidentGradients {
   std::vector<ResidentCacheGradient> initial_cache;
 };
 struct ResidentOptimizerState {
+  // Values and floating slots remain FP32 masters, including FP16 payload runs.
   Tensor values, first, second, maximum, steps, corrections;
 };
 // An explicit CPU export at a detached complete cut. All fields belong to the
@@ -79,7 +81,8 @@ struct ResidentStep { bool applied=false; int refusal_code=0; Index generation=0
 
 // Explicit first-order VJP API, separate from eager/autograd and inference.
 // All methods require no-grad; a consumer computes loss/head cotangents outside
-// this owner. Single-NPU FP32 HARD/HST/SOFTP, built-in Aggregate/broadcast, identity/EMA/Add/event/fiber-attention state and
+// this owner. Single-NPU FP32/FP16 HARD/HST/SOFTP, FP32 adjoints/masters,
+// built-in Aggregate/broadcast, identity/EMA/Add/event/fiber-attention state and
 // identity/tanh/LH/SwiGLU Full. Other adjoints are rejected before the first advance.
 class ResidentTrainingSession {
  public:

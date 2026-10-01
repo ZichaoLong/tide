@@ -10,17 +10,18 @@ void root_pair(const Tensor& value,const Tensor& on,const Tensor& shape,const Te
   if(!value.defined())return;
   for(const auto& pair:std::vector<std::pair<Tensor,Tensor>>{{value,shape},{on,present}}) {
     const auto& x=pair.first;const auto& ref=pair.second;
-    if(x.device()!=ref.device()||x.scalar_type()!=ref.scalar_type()||x.sizes()!=ref.sizes()
+    const auto dtype=ref.scalar_type()==at::kBool?at::kBool:at::kFloat;
+    if(x.device()!=ref.device()||x.scalar_type()!=dtype||x.sizes()!=ref.sizes()
         ||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("invalid resident cotangent layout");
   }
   if((on&present.logical_not()).any().item<bool>())throw std::invalid_argument("cotangent connects an absent output/state/message");
 }
 GraphCotangents roots(const ResidentCotangents& r,const ReverseTape& t,const Tensor& state,const Tensor& present) {
-  GraphCotangents out{r.outputs.defined()?r.outputs:at::zeros_like(t.outputs.values),
+  GraphCotangents out{r.outputs.defined()?r.outputs:at::zeros_like(t.outputs.values,t.outputs.values.options().dtype(at::kFloat)),
     r.outputs_connected.defined()?r.outputs_connected:at::zeros_like(t.outputs.valid),
-    r.pending.defined()?r.pending:at::zeros_like(t.pending.values),
+    r.pending.defined()?r.pending:at::zeros_like(t.pending.values,t.pending.values.options().dtype(at::kFloat)),
     r.pending_connected.defined()?r.pending_connected:at::zeros_like(t.pending.valid),
-    r.final.defined()?r.final:at::zeros_like(state),r.final_connected.defined()?r.final_connected:at::zeros_like(present)};
+    r.final.defined()?r.final:at::zeros_like(state,state.options().dtype(at::kFloat)),r.final_connected.defined()?r.final_connected:at::zeros_like(present)};
   for(const auto& cache:r.cache)out.cache.push_back({cache.key,cache.value,cache.key_connected,cache.value_connected,cache.log_bias,cache.log_bias_connected});
   return out;
 }

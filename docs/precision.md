@@ -80,16 +80,15 @@ at the explicit CPU export. Scores stay FP32; exported Region controls round to
 the public payload dtype after FP32 softmax. SOFTP rounds each declared payload
 operation to half; HST preserves the hard forward. Internal control adjoints
 use the rounded control/difference but FP32 complete-frame softmax and Read
-derivatives; see [control VJP](resident-control-vjp.md). Complete resident FP16
-training remains unavailable and fails explicitly. Internal
-[FP32-master publication](resident-optimizer.md) has separate component
-qualification. The [state](resident-state-vjp.md), normalized
+derivatives; see [control VJP](resident-control-vjp.md). The explicit
+[resident training owner](resident-training.md) connects these adjoints to
+FP32 master updates and half publication; its complete lifecycle qualification
+is recorded separately from the internal components. The [state](resident-state-vjp.md), normalized
 [Aggregate](resident-aggregate-vjp.md) and identity/tanh/LH/SwiGLU
 [Full](resident-full-vjp.md) components preserve actual half forward rounding
 while accumulating adjoints in FP32; their tests use the corresponding quantized
 forward/FP32-adjoint reference. This is not a claim of bitwise equivalence to
-pure-half backward accumulation. Component support does not enable public
-training or checkpoint resume. The
+pure-half backward accumulation. The
 local [attention adjoint](resident-event-vjp.md) separately preserves half QK
 rounding with FP32 global softmax/adjoints. Event cache/projection components
 recompute actual half QKV and accumulate cache roots/carry in FP32; isolated
@@ -99,10 +98,13 @@ query-output and final pooling rounding. Their actual cache/source reverse
 component rounds physical source products before QKV and accumulates KV/log-bias
 carry in FP32. Internal [graph reverse](resident-graph-vjp.md) and
 [retained windows](resident-retained.md) now accept half forward tapes and FP32
-roots; integration checks cover sum Aggregate, identity/EMA/Add-repeat state,
-identity/tanh Full, HARD/HST/SOFTP, physical messages and shared owners. The
-remaining half modules and public training/master/checkpoint integration require
-separate qualification. The
+roots; integration checks cover built-in Aggregate, identity/EMA/Add-repeat and
+event/fiber state, identity/tanh/LH/SwiGLU Full, HARD/HST/SOFTP, physical messages,
+shared owners and retained KV/log-bias. Public training keeps named checkpoint
+parameters in half and masters/slots in FP32, checking exact rounded
+correspondence on resume. It accepts only FP32 roots, with no hidden loss scaling.
+Complete training, Python disk lifecycle and throughput require their own
+qualification. The
 complete-flow gate compares an independent CPU streaming schedule with exact
 discrete/identity checks and FP16 atol2e-3/rtol2e-2; FP32 retains its original
 thresholds. Build, device qualification and performance evidence remain distinct.

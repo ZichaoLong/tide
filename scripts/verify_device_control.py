@@ -51,6 +51,8 @@ def main():
                     command.append("--extended")
                 if check in ("event-retained", "fiber-retained"):
                     command.append("--" + check.split("-")[0] + "-cache")
+                if check == "half-cache-training":
+                    command.append("--cache")
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=120)

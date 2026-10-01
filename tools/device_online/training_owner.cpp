@@ -36,7 +36,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
       throw std::invalid_argument("checkpoint packed parameter layout mismatch");
     for(size_t i=0;i<layout.owners.size();++i)if(layout.offsets[i]>=0) {
       const auto& owner=layout.owners[i];
-      if(!at::equal(packed.narrow(0,layout.offsets[i],owner.value.numel()).reshape(owner.value.sizes()),owner.value))
+      if(!at::equal(packed.narrow(0,layout.offsets[i],owner.value.numel()).reshape(owner.value.sizes()).to(owner.value.scalar_type()),owner.value))
         throw std::invalid_argument("checkpoint named and packed parameter values disagree");
     }
     optimizer->restore(checkpoint->state);generation=checkpoint->generation;next_token=checkpoint->next_token;
@@ -44,7 +44,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   flow=std::make_unique<ContentFlow>(graph,model,training_detail::freeze_continuation(q),device,l.forward);
   // Profile preflight happens before any input window can be executed.
   const auto tape=flow->reverse_tape();const auto state=flow->state_device();
-  const long double bytes=reverse_tape_bytes(tape)+static_cast<long double>(state.first.numel())*4+state.second.numel()+256;
+  const long double bytes=reverse_tape_bytes(tape)+static_cast<long double>(state.first.numel())*state.first.element_size()+state.second.numel()+256;
   if(bytes>l.retained_bytes)throw std::invalid_argument("resident training cannot retain one window within budget");
   bytes_per_window=static_cast<Index>(bytes);initial_present=state.second.clone();
 }
