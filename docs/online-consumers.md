@@ -78,8 +78,11 @@ CPU/mixed consumers currently use one payload device. `--preset resident` now
 has a separate public C++/CANN consumer: FP32 single-device inference and
 single/multi-device complete training. Python uses `--implementation native` as
 a client of that same backend, not an independent PyTorch resident scheduler.
-Implementation,development results and fixed-source qualification remain distinct
-in [STATUS](STATUS.md). [HARD slot-affine reverse/publication](resident-emission-vjp.md)
+Fixed-source qualification at [clean0d61cb9](evidence/online-resident-consumers-20261002.md)
+passed59 affected CPU,19 resident and18 mixed regression checks,with no skips or
+tolerance changes. A separate actual two-card Attention training trace observed
+no AiCPU; this is not a full-size performance conclusion.
+[HARD slot-affine reverse/publication](resident-emission-vjp.md)
 is independently qualified; broadcast evidence is not used for this model.
 
 The resident graph supplies actual packed output coordinates,values and presence.

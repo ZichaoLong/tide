@@ -89,57 +89,35 @@ emission-reverse-python-clean01. Runs build-emission-reverse-{clean01,python-cle
 and emission-reverse-{matrix,placements,legacy,regression,python,profile}-clean01.
 Reproduce audit: python "$TASK/launchers/emission_reverse_evidence.py" 96c75f8d9c2bee54a5000f4c410fe3d5764ec552.
 
-Emission evidence **7b76dd9** committed/pushed. Active uncommitted work is actual
-public resident consumer integration in tools/online_bench/{resident*,host.py,
-consumer.h,config.cpp,run.cpp,CMakeLists.txt,main.cpp}, scripts/flow_resident_options.py
-and unified launcher wiring, tests/test_online_resident_{loss,consumer}.py.
-HARD FP32 head/loss device output compaction, explicit output VJP, packed boundary
-input→embedding gradient and staged head/embedding updates after graph agreement.
-Single-device inference and single/multi-device training. CPU reference never
-feeds intermediate values. Projection banks/partials remain coordinator-owned;
-consumer FP16, compact projection owners, multi-device inference and F6 still pending.
+Actual public resident consumers implementation **0d61cb94e7b911ff883de9af7b81042f87897a36**
+is committed/pushed. HARD FP32 actual edge-affine Add/Attention head/loss, compact
+output roots, boundary input→embedding VJP, staged external optimizer publication.
+Single-device inference and single/multi-device training, both client runtimes.
+Candidate does not consume reference intermediates. Projection banks/partials remain
+coordinator-owned; consumer FP16 and multi-device inference remain pending.
 
-CPU boundary math/optimizer tests4 PASSED. online-resident-python-dev01 failed
-forward operator budget (RmsNorm required16MiB but divided budget1MiB); dev02
-failed bounded compact reverse-packet allocation. Both preserved. Consumer
-config defaults now forward512MiB/backward2GiB (declared limits,not total-memory
-admission); trace/capacity/chunk/budgets and locality/memory ownership are explicit
-CLI options. dev03 Python8 PASSED with unchanged thresholds: actual three-family
-Add/Attention complete training and delayed continuous inference. Standalone
-build-online-resident-dev03 PASSED,installed public packages plus unchanged
-byte-verified resident/core libraries; new consumer compile/link/loader passes.
+All six immutable qualification jobs PASSED and were audited:
+[evidence](evidence/online-resident-consumers-20261002.md),
+[audit](evidence/online-resident-consumers-20261002.json). CPU59,resident19,mixed18,
+no skips/no tolerance change. Resident16 model trajectories,64 windows/24 updates;
+CLI success/refusals and >2^54 int64 gradient check. Separate D32 actual Attention
+2-card trace:15,004 vector/633 AI_CORE/218 MIX_AIV,no observed AiCPU;32 model
+executions,570 notify pairs,2,370 switches,4,552 async copies. Not throughput.
 
-Standalone dev03 built but actual resident execution failed (retained eager builtin
-kernel handles from fixture configuration). Matrix dev04 failed after6 Python
-passes; profile-dev04 independently caught the same startup refusal. These remain
-failed. Fixed only the known builtin consumer fixture: clear eager handles and
-let resident construct the declared graph modules. No generic custom-kernel bypass.
+Source sources/online-resident-clean01 at0d61cb9. Builds online-resident-cpu-clean01,
+online-resident-clean01; tasks build-online-resident-{cpu-,}clean01 and
+online-resident-{cpu,matrix,profile}-clean01,online-resident-mixed-clean02.
+All are terminal. Backend libraries reused from immutable emission-reverse-clean01
+(standalone) and emission-reverse-python-clean01 with hashes verified. Python core:
+placement-npu-python-clean01. Audit: python "$TASK/launchers/online_resident_evidence.py"
+0d61cb94e7b911ff883de9af7b81042f87897a36.
 
-build-online-resident-dev05 PASSED. CPU consumer build and affected59 CPU checks
-PASSED (online-consumer + boundary loss/optimizer). Development gates terminal: matrix-dev05 PASSED18 (12 actual model training
-trajectories +4 continuous inference +2 CLI success/refusal paths); mixed-dev05
-PASSED18; CPU-dev04 PASSED59. int64-dev06 PASSED1 at coordinates beyond2^54
-with vocab17,independent integer/gradient reference. No skips or tolerance changes.
-Profile-dev05 preserved as failed: D32 fiber reverse workspace refused16-row
-physical batches. Same actual workload preflight PASSED with explicit reverse rows4;
-no logical batch/loss/window/update change. Automatic budget-aware reverse chunk
-selection remains part of scale admission. No consumer profiling conclusion yet.
-
-No current consumer job is live. Next commit implementation,then freeze
-online-resident-clean01 at that exact commit. Build CPU with
-launchers/build_online_consumer.py --backend cpu --name online-resident-cpu-clean01;
-standalone resident with build_online_resident.py --build builds/emission-reverse-clean01
---out builds/online-resident-clean01. Reuse byte-verified unchanged libraries;
-these are new installed-client compiles/links,not a backend source change.
-
-Fixed-source gates: CPU tests/test_online_consumer.py +test_online_resident_loss.py
-(expect59); NPU tests/test_online_resident_consumer.py (expect19,2 leased cards,
-TIDE_BUILD_DIR=placement-npu-python-clean01,TIDE_RESIDENT_LIBRARY=emission-reverse-python-clean01,
-TIDE_ONLINE_BINARY=new resident consumer,TIDE_ONLINE_DEVICE=npu:0); mixed18 via
-existing test_online_consumer_npu.py. Separate profile_resident_consumer.py --preset
-resident (no --development),2 cards. It uses D32 actual Attention,4 windows/2 updates,
-trace512,reverse rows4. Source/status/log/hashes and failed development runs must
-be audited; evidence-only commit. Queue120/run600/build900 and2 build workers.
+Five development failures preserved; D32 reverse16-row budget rejection passes at
+explicit4 without logical changes. mixed-clean01 omitted explicit target and skipped
+all18; excluded,retained,corrected clean02 passed18. New qualification complete;
+no consumer jobs live. Next: budget-aware physical reverse chunk selection before
+scale trials,then compact projection owners and total memory admission. Avoid
+manually guessing reverse rows or increasing budgets to bypass a fixable split.
 
 Continue compact projection owners,total-memory admission,safe chunking,FP16 consumer
 and representative/full-size F6; do not end the task at small consumer qualification.
