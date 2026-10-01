@@ -1,0 +1,287 @@
+{
+  "schema": "tide-resident-fp16-basic-vjp-evidence-v1",
+  "source": "d2a1afccac85c1e53afe45968d6ff0d5f256ce09",
+  "scope": "single-device identity/EMA/Add state and identity/tanh Full adjoints at actual FP16 forward rounding with FP32 accumulation; affected FP32 training/client regression; not complete FP16 graph VJP/training, peers or throughput",
+  "builds": {
+    "standalone": {
+      "name": "low-precision-basic-vjp-clean01",
+      "manifest_sha256": "91e13c0fd57862cf09b8e0e44f0ee040bbf5aee5e562eec2fa6c67a240e46e54",
+      "reuse_sha256": "ebf777cf7eeba0f8890c3c79584f866ac5cc2a521825258aef64e7098a42d17c",
+      "source_inputs": 269,
+      "component_sha256": "e6348932b272c7ecfbef310657e94ef4ded7a4104bcf5bf8d8d5ef5921968faa",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "6692fe07f24018e4d3d47d13328a9e85ecce9d7e334fbb31a8353f3182247aab",
+        "tide-device-state-vjp-check": "b3299cdac0522f0490b669a6a3a7f12eb7b9a3c626920dbcb8097b869c11bef8",
+        "tide-device-full-vjp-check": "b7ede9e1a3cd6de5786205f241819d528ec56302bfa7d4f8bc0cbfdef991807d",
+        "tide-resident-event-training-check": "ef30a4c991ea909d1365228a2ca9298cd682aadb51f00da2d783e9e783ab187e",
+        "tide-resident-fiber-training-check": "f1a7b496b35c826a1f8c5d4a1cd2755718946c07ffa85cd437b5a8bc80c5ed4a"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "10070eda13d7a2d341fbafc440b173464d79b1f6a8f2449511fd838e115b016c",
+        "tide-device-state-vjp-check": "354eb2b1827fd76cdebf6b49b74a6053c479fce170dcf4ba10c1359b366d924d",
+        "tide-device-full-vjp-check": "fe24c3960598d3a8035e8b54dd8393491dc4d9ce2052104c430e3c4ecae58b24",
+        "tide-resident-event-training-check": "dd0695f1c4b4469fc66355ca6b1032c111cd115e0ef4c3128fc61f1b86ae70e1",
+        "tide-resident-fiber-training-check": "64347c7c7c621eb447f879efa9425ac45d9cf84da47d866993ccfa80d5e64723"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "e43f8690f4c1e85b3dbb25847afc7048cb8fa491565f6b2c24894140b2759bc7",
+      "parent_manifest_sha256": "1080de74cce53d193a9687f5067f8b5e55f7f0ab8dba7475801e1e35208e2a74",
+      "parent_content_archive_sha256": "e06aa0110bf2b0ce590e99eacec6c42b8408287c4891d4f4e681c1002196fb8f",
+      "rebuilt_object_sha256": {
+        "full_vjp.cpp.o": "4f473b50713f7d6fc6dd5dde07efdb6d90205595b0e586ba670555919b73cc2c"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build",
+      "fixture_archive_sha256": "1da34ba6ffb9e3ed807105101aa5dba6f2b620e3c42c90ff2df1e82cce093b43",
+      "fixture_object_sha256": "d75976b81ed8ef0e45a11432f0f17e14a4f3df894c5cdefa76d12c0657bce53d"
+    },
+    "python": {
+      "name": "low-precision-basic-vjp-python-clean01",
+      "manifest_sha256": "e415253420467abcf1043ac44480e0cce9dfd551872862f38e9b23db2cf8097f",
+      "reuse_sha256": "dc6c48e21dc7f6bc279257d95f0576ccc314f2c99567424cf322017d53cfd1ec",
+      "source_inputs": 269,
+      "component_sha256": "e6348932b272c7ecfbef310657e94ef4ded7a4104bcf5bf8d8d5ef5921968faa",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "044fa96184451188ec32365f19230b13c6e9d80671911b2f541c8293ca7c0afe",
+        "_tide_resident.so": "a37fca4e1a646b475888c92afdc7d3720b7a690a0383c2f57a230651e23c1470"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "ab31fef989ca28f56bc28b1c95efcb620edc5d38cceaf8c13f4ba9c8a920eaf0",
+        "_tide_resident.so": "59cde01ddc0740e5421963a61071aa92d2f272bcc1fb1c647104ff3f035b00c5"
+      },
+      "kernel_sha256": {
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_optimizer_values_kernel.a": "fb546cabbe47c14b0c42e4459f250a84bcf5c2a35635104ffd725db3579052c3",
+        "libtide_optimizer_commit_kernel.a": "6dac3c4df432a9b4adc73314803f53b4da7930b0a3dc2b9e5f4a93f24f708441",
+        "libtide_parameter_publish_kernel.a": "e1774fa34ee4559d136d6e2ef0a7a164460792cd3b491f1b54347ee153022c9a"
+      },
+      "content_archive_sha256": "a0ad8c479f55371ef6e7505459d190f5a4956a2bd50552f313bcde8e08aee6ac",
+      "parent_manifest_sha256": "da06b5b4a0528b2b8cd83959cf6862a333821e32f0afc2b2b8c05c67de3c3eb1",
+      "parent_content_archive_sha256": "6856f08a69d58c45c948c1d04fa7c8195a493172934938b970aebc2b4a0abf7a",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "d00073d38ed1f1e8d90a0b88fb3b4aa55235b3bb172dc54b63b134e221a4aab8",
+        "full_vjp.cpp.o": "4f473b50713f7d6fc6dd5dde07efdb6d90205595b0e586ba670555919b73cc2c",
+        "state_vjp.cpp.o": "a4f87b2830f68eb3953fdf019b53a59237e16f3f7c4d816bf5f794642186f11b"
+      },
+      "scope": "affected host/checker objects rebuilt; all CANN archives/source-matched terminal dependencies reused; not a from-scratch vendor build"
+    }
+  },
+  "runs": [
+    {
+      "name": "build-low-precision-basic-vjp-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0cc4fc2a9ad463feec547fec1bfaf51af1314e5e60269115699ad988367e267c",
+        "task.log": "fa075e922a9aad3cef508500b4ba9ed34ef43dbaba9122f5f455b2aac4d9eb2b"
+      }
+    },
+    {
+      "name": "build-low-precision-basic-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "56fe8a9d4c1353cdc8dae80de877b6a501921cffde5afd7c36f1ab945a7ac20a",
+        "task.log": "8a3041a783c4c4c0f788c68f55eb6a1bc11be5b797ecd47ee737d0021915d794"
+      }
+    },
+    {
+      "name": "low-precision-basic-vjp-components-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "af43c74950ae86ba6e8ad97533b82c3b27db62de51ef747221ed037887d56ac8",
+        "task.log": "980e3be33a332fdc7363a2727317b80bd756d7e578edce3c961c891aa57207f0",
+        "queue.json": "01232fd50d82e1ccc6d4aeb2b8a663daa9b464b612109aad703a060c32b4880c",
+        "gate/result.json": "f5ef4168cbeb5069ec687fed377ca19131ee973223849051221acbb571593884"
+      }
+    },
+    {
+      "name": "low-precision-basic-vjp-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2b86e761f118613055ff8ce7ce34bc7b8117f6a8d87069f34202cf83d58dec78",
+        "task.log": "776df17178f5f6d4ee94759541759e102f20472f5bfad381ca1baa129d8cb081",
+        "queue.json": "1598c37bad5c96c583381340c401bc1aafd1defda59a0c409b8f836d82184342",
+        "gate/result.json": "7d3ced674ad633b1a76962deb1e42876bf76db866d792909074f8c4ca1f5dbf6"
+      }
+    },
+    {
+      "name": "low-precision-basic-vjp-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "b0441bf563ccab99ebe0b0868c8eed41a64a44f470eeebfa12666de65b427f50",
+        "task.log": "9139fb97bd27bd4900d0611256ea9f7044f9bee9af968a64d299a6e5c33f55a6",
+        "queue.json": "cae0f5a2588a676c131602b2d81708c956de0435ace4ea5af533be8434096b34"
+      }
+    },
+    {
+      "name": "low-precision-state-vjp-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "50933ec27ff0b1c4ebaa9e756230cf2dbe684789d767a8b3924b02c50378044d",
+        "task.log": "1ddefd080795fe070f5b0c018b7d090bb3c843e5cc22a0e2940c6d552d682d25",
+        "queue.json": "81ff3b2665cd47de4d8eb6be4c7484dc0bdf53404a48e45a7d01ca0cbbda0769",
+        "profile/result.json": "dd62e7c1cb9f1cddb914fd1a63d7c1bea7542eb17a275587ea8f644153b3f67c",
+        "profile/profile.log": "e7e4da453f690a71f5123ed41f9f1723de5fdfd16afcaa5fa665c59b59b5396f"
+      }
+    },
+    {
+      "name": "low-precision-full-vjp-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "26f563f216bf1f72cd29cfac5d46934153c98b842859a21a33e5961900717cc7",
+        "task.log": "88f838bf0dd83a13e9282cb2527c03f725d5d292beb173e4d5f894bde65087ca",
+        "queue.json": "9fa666589fb2a5d9b71ae7234fc1d6c35fc9859e0ad1f8cd55b48b31c0291a00",
+        "profile/result.json": "1aeadf461aa542be133f337dc49d565327f35395a528f375fa35755faa5956c7",
+        "profile/profile.log": "6bd1911ac53d73f40b10671b034ed41ca354f22925a27693b3bd204f89ca6aba"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "check": "state-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-device-state-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "state-vjp-float32.log",
+      "log_sha256": "ab07bd1f916cc6f85f03c13b4aadc4930f0ab365d882d6113ccc1da610f80482"
+    },
+    {
+      "check": "state-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-device-state-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "state-vjp-float16.log",
+      "log_sha256": "1f86df2b4e16bd4549e2851c718f200a6083b57fa64217b4ae8f4189ecf217ec"
+    },
+    {
+      "check": "full-vjp",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-device-full-vjp-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "full-vjp-float32.log",
+      "log_sha256": "e47ea64657e23a4d1e9dadafab9f5f4c1e9149767adb5845516a6f0f92d465a2"
+    },
+    {
+      "check": "full-vjp",
+      "dtype": "float16",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-device-full-vjp-check",
+        "--device=npu:0",
+        "--dtype=float16"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "full-vjp-float16.log",
+      "log_sha256": "ad3094c036107bb8c499beab9f352bb9db2699988e5e928c8815ffe7e23753cb"
+    },
+    {
+      "check": "event-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-resident-event-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "event-training-float32.log",
+      "log_sha256": "29ed2f4ca3a0396f4ea05b4b52086ba7525f3937ddcac28268f62a64c5db29e9"
+    },
+    {
+      "check": "fiber-training",
+      "dtype": "float32",
+      "command": [
+        "/mi/data2T/zlong/tide-execution-flows/builds/low-precision-basic-vjp-clean01/tide-resident-fiber-training-check",
+        "--device=npu:0",
+        "--dtype=float32"
+      ],
+      "state": "passed",
+      "exit_code": 0,
+      "log": "fiber-training-float32.log",
+      "log_sha256": "850950ca3ea807518a46a89035fd63e6eec7e5dfcd6e214c4c6273adc17c6b21"
+    }
+  ],
+  "profiles": {
+    "state-vjp": {
+      "engines": {
+        "AI_VECTOR_CORE": 5614
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001140750468_00943075QMGRLMBE/mindstudio_profiler_output/op_summary_20261001140757.csv": "0380ae1323c93800f67c1d7277fc294ae81579bfd0a0059fad89dae71b4810e3",
+        "raw/PROF_000001_20261001140750468_00943075QMGRLMBE/mindstudio_profiler_output/api_statistic_20261001140757.csv": "a0b8db6486da83054e3171979bcdf9883a4cbb1e2dcd9fa4c2badbf0512a7782"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    },
+    "full-vjp": {
+      "engines": {
+        "AI_VECTOR_CORE": 5424,
+        "AI_CORE": 162
+      },
+      "csv_sha256": {
+        "raw/PROF_000001_20261001140757102_00943806QNQHIEQQ/mindstudio_profiler_output/op_summary_20261001140804.csv": "b19940dd0deb5edb5ba451ca25467198e31b1548dc23f7f4631b3a90e6be4af6",
+        "raw/PROF_000001_20261001140757102_00943806QNQHIEQQ/mindstudio_profiler_output/api_statistic_20261001140804.csv": "b7a1b2555e61b9ee5dc0d96f9b9fe8697138b7b571fb34ff4d3e43dcb9ca4d60"
+      },
+      "scope": "component placement; includes construction, inputs and CPU assertions; not throughput"
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "build-low-precision-state-vjp-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "c5323d435bb6d1a4109c7b4cc90f785cab05502cd3ac3be56b19f9e37316c346",
+        "task.log": "407e9e7619d095037e6d4e3f1b6ba1166d4c08bdc59b2848191a4d328550dc91"
+      }
+    },
+    {
+      "name": "low-precision-state-vjp-dev02",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "276bfacefcca20c1314a5495e20ef345424d2443e703f664b7d081f0c327a8fc",
+        "task.log": "8f7177ccdf4a8cd2b5c2819b940aee8d837c53b76d5120d23379ca4ab5415b90"
+      }
+    },
+    {
+      "name": "build-low-precision-basic-vjp-dev01",
+      "state": "failed",
+      "exit_code": 1,
+      "files_sha256": {
+        "status.json": "fb16c829c0a24847e31a50bad268edf3c1f7ddd41f40308ba853c0f184ffcaae",
+        "task.log": "9c3ba6ddc18d4134b3783678be029e962250cb812db181a9ce85b1451e76fefb"
+      }
+    }
+  ]
+}

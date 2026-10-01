@@ -29,79 +29,71 @@ qualify clean immutable source, commit evidence separately.
 
 ## Latest clean qualification
 
-Implementation **9a84432167a82900c0472b02b2e33ddace6da3eb** is pushed.
-[FP32 master/FP16 publication report](evidence/resident-fp16-master-publication-20261001.md),
-[audit](evidence/resident-fp16-master-publication-20261001.json).
-All six clean qualification jobs PASSED/exit0:
-- build-low-precision-publication-clean01: standalone, two publication kernels,
-  six host objects/checkers rebuilt; byte-matched terminal dependencies reused.
-- build-low-precision-publication-python-clean01: independent Python-owned host
-  rebuild/client relink, byte-matched CANN archives reused.
-- low-precision-publication-components-clean01: four cells,physical9→logical0.
-- low-precision-publication-regression-clean01: FP32 event/fiber,physical3→logical0.
-- low-precision-publication-python-clean01:215 passed,zero skips,physical13→logical0.
-- low-precision-publication-profile-clean01:two trajectories/ten windows/eight
-  updates,physical1→logical0;6718 AI_VECTOR_CORE,288 AI_CORE,5 MIX_AIV; no observed
-  AiCPU or logged CPU fallback. This is not a throughput measurement.
+Implementation **d2a1afccac85c1e53afe45968d6ff0d5f256ce09** is committed/pushed.
+[State/basic Full half-adjoint report](evidence/resident-fp16-basic-vjp-20261001.md),
+[audit](evidence/resident-fp16-basic-vjp-20261001.json).
+All seven clean-source jobs PASSED/exit0:
+- build-low-precision-basic-vjp-clean01: affected Full host/fixtures/checkers
+  rebuilt; terminal source-byte-matched state kernel/other dependencies reused.
+- build-low-precision-basic-vjp-python-clean01: three affected Python-owned host
+  objects rebuilt; matching CANN archives reused; client relinked.
+- low-precision-basic-vjp-components-clean01:four cells,physical1→logical0.
+- low-precision-basic-vjp-regression-clean01:two FP32 cells,physical3→logical0.
+- low-precision-basic-vjp-python-clean01:215 passed,zero skips,physical9→logical0.
+- low-precision-state-vjp-profile-clean01:physical13→logical0,5614 AI_VECTOR_CORE.
+- low-precision-full-vjp-profile-clean01:physical11→logical0,5424 AI_VECTOR_CORE,
+  162 AI_CORE. No observed AiCPU/logged CPU fallback. Profiling is not throughput.
 
-Per dtype publication:48 trajectories/240 continued inference windows/192 public
-synthetic gradient updates, both schedules/optimizers, six module groups,widths3/33.
-FP32 optimizer:32 trajectories/256 updates. FP16:32 trajectories/248 updates/two
-independently predicted range refusals. Master65512 publishes finite65504;65520
-refuses before any live owner/slot commit. Checkpoint refusal/sub-ULP retention,
-None poison, exact payload aliases and normalization-bank rounding passed.
-Synthetic-gradient update/publication is not FP16 graph VJP or complete training.
-Public FP16 training and HST/SOFTP guards remain. All retained master/publication
-failures and their causes are in the report; none were relabelled successful.
-Source/core/binary/loader/raw log/CSV and every reused content-archive member were
-audited by TASK/launchers/precision_publication_evidence.py9a84432(full hash).
-No repeat of the unchanged core gate and no new full-size speed ratio.
+State:216 CPU FP32/FP64 cases;108 half quantized-forward/FP32-adjoint cases;
+four real forward tapes per dtype;two strict1024-tick rounding anchors.
+Identity/tanh Full:96/48 cases,each with19/7/0-row replay;two real tapes per dtype;
+one strict matmul/bias/tanh rounding anchor. Both retain None/zero/poison and
+exact discrete checks. Half tolerances2e-3/2e-5; FP32/FP64 1e-5/1e-6; anchors strict.
+Whole-graph half reverse and public training guards remain. Event/fiber FP32
+training regressions retain strict comparisons. No new full-size speed ratio.
+Audit: TASK/launchers/precision_basic_vjp_evidence.py d2a1afc(full hash),including
+source/core/binary/loader/CSV/logs and every reused content/fixture archive member.
 
-Prior:FP16 HARD inference qualified on8b05c04
-([report](evidence/resident-fp16-inference-20261001.md)); FP32 event/fiber training
-qualified on66a6ca5 ([report](evidence/resident-attention-training-20261001.md)).
-The older Full trajectory's conditioned-control policy is separate; this
-increment's event/fiber regressions retain strict comparisons.
+Preserved failures:build-low-precision-state-vjp-dev01 ambiguous int/int64 tensor
+initializer;low-precision-state-vjp-dev02 CPU pure-half backward reference mismatch
+(max about5.05e-5),corrected to the declared quantized-forward/FP32-adjoint oracle
+without changing forward inputs/runtime/tolerances;build-low-precision-basic-vjp-dev01
+missing at::Tensor in fixture. Raw failures remain in TASK/runs.
+
+Prior clean qualifications:
+- 9a84432 master/publication,[report](evidence/resident-fp16-master-publication-20261001.md).
+  Per dtype publication48 trajectories/240 windows/192 synthetic gradient calls;
+  FP32 optimizer256 updates,half248 updates/two predicted range refusals.
+  Master65512 publishes finite65504;65520 refuses transactionally. Not full training.
+- 8b05c04 FP16 HARD inference,[report](evidence/resident-fp16-inference-20261001.md).
+- 66a6ca5 FP32 event/fiber training,[report](evidence/resident-attention-training-20261001.md).
+The older Full trajectory's conditioned-control policy remains separate.
 
 ## Active work and next action
 
-Uncommitted FP16 state and basic Full adjoints:
-- State: half parameters/journals, forward-precision EMA coefficients, each Add
-  tick rounded; FP32 adjoints. Graph reverse continues to refuse half.
-- state-vjp dev03 PASSED both dtypes:216 FP32/FP64 cases;108 quantized-forward/
-  FP32-adjoint CPU cases;four actual tapes per dtype;two strict 1024-tick rounding
-  anchors. Dev02 FP32 event/fiber training regression PASSED.
-- Preserve build-state-vjp-dev01 ambiguous int/int64 initializer failure and
-  state-vjp-dev02 pure-half backward comparison failure (about5.05e-5). Oracle
-  now matches the FP32-adjoint contract with identical half forward inputs;
-  original FP32 and half tolerances unchanged;runtime unchanged in dev03.
-- Basic Full: identity/tanh half matmul,bias,tanh recomputation;FP32 adjoints.
-  A cancellation-sensitive half rounding anchor has strict FP32 checks. Runtime
-  and new fixture/checker not yet built. LH/SwiGLU half adjoints still unavailable.
+Uncommitted next increment: normalized Aggregate FP16 local adjoint. Host
+validates half physical source scales; kernel reconstructs the source product
+with half rounding before coefficient differentiation. Normalization and
+message/scale/coefficient adjoints remain FP32. New39-case/117-replay half cell
+uses non-dyadic payload fixtures and independent quantized-forward CPU FP32/FP64
+references at unchanged1e-5/1e-6. Whole-graph reverse remains guarded.
 
-Basic-vjp-dev01 build FAILED: new fixture omitted at:: on Tensor (header has
-no tide::Tensor alias). Fixed fixture declaration;runtime unchanged. Preserve log.
-Build-low-precision-basic-vjp-dev02 PASSED. Low-precision-basic-vjp-dev02 PASSED
-four cells,physical9→logical0: state216/108 cases and4 actual tapes per dtype;
-Full96/48 cases and2 actual tapes per dtype;three strict half rounding anchors.
-Low-precision-basic-vjp-regression-dev02 PASSED both FP32 Attention training
-cells,physical1→logical0. No task live job except the deliberately paused history.
+Active unit: tide-execution-flows-build-low-precision-aggregate-vjp-dev01.service.
+Snapshot/build: TASK/{sources,builds}/low-precision-aggregate-vjp-dev01.
+Launcher: TASK/launchers/build_precision_aggregate_vjp.py,900s/two workers.
+One payload kernel/host/checker rebuilt; remaining terminal basic-VJP dependencies
+byte-verified. Inspect TASK/runs/build-low-precision-aggregate-vjp-dev01/{status.json,task.log}.
+On success run verify_device_control.py --checks aggregate-vjp and separately
+--checks event-training fiber-training, frozen snapshot/build,max120s lease wait,
+600s execution. Preserve failures,do not loosen established FP32 comparisons.
 
-Next commit/push this coherent state/basic Full increment. Freeze clean full hash
-as low-precision-basic-vjp-clean01. Build standalone via
-build_precision_basic_vjp.py low-precision-basic-vjp-clean01; Python via
-build_precision_basic_vjp_python.py low-precision-basic-vjp-python-clean01.
-Both rebuild only affected host/checker objects and use byte-verified terminal
-CANN/remaining dependencies; two single-worker host builds may run together.
-Then four state/full dtype cells, FP32 event/fiber training, affected Python
-resident tests, separate FP16 state/full traces. Commit evidence separately after
-the source/binary/archive/loader/log/CSV audit. No global CPU repeat.
-
-After basic state/Full adjoints, complete actual-half-forward LH/SwiGLU/Aggregate/
-attention/control adjoints, retained windows, master checkpoint and public FP16
-training. Then peer progression/communication/training,five-preset screening,
-representative/full-size CPU/mixed/resident performance and version/migration/
-CUDA evidence. F1–F7 remain incomplete; authorization active, no requested pause.
+Commit the completed basic-VJP evidence separately (only docs) and push.
+Continue Aggregate development,then LH/SwiGLU,attention/control/graph adjoints,
+retained windows,master checkpoint/public FP16 training. Do not just remove guards
+or recompute an entire half forward in FP32. Use actual rounded saved operands.
+Then peer progression/communication/training,five-preset screening,representative/
+full-size CPU/mixed/resident performance and version/migration/CUDA evidence.
+F1–F7 remain incomplete. Authorization active; no requested pause.
 
 ## Environment and bounded execution
 
@@ -130,3 +122,4 @@ outweighs running status. Do not blindly resume/stop. It retains host memory and
 TASK/timing.lock. Resolve interrupted timing before formal throughput.
 Historical Add CPU78.793172/NPU4 47.932888ms/token is throughput1.6438x faster;
 it does not certify resident execution. No complete CPU Attention training ratio.
+
