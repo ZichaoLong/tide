@@ -173,7 +173,10 @@ one partition. Empty registries and devices without trainable owners are valid.
 `DeviceOptimizer` separates proposals from commit. Every owner first checks
 its update, slots, int64 counters and payload representability. Device error
 consensus then broadcasts one decision before any master, slot or counter can
-change. A numerical refusal updates no card. This is not a distributed recovery
+change. After consensus the numerical kernel recomputes from frozen inputs;
+no full parameter/slot proposal banks remain. Counters commit after all value
+tiles finish, preserving SGD first-use momentum. A numerical refusal updates
+no card. This is not a distributed recovery
 protocol for hardware/runtime failure; a failed runtime must be discarded.
 
 `append_publish` packs only masters used by each receiving card and publishes all

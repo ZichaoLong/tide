@@ -2,17 +2,19 @@
 #include "../optimizer_layout.h"
 extern "C" __global__ __aicore__ void tide_optimizer_values(GM_ADDR table,GM_ADDR tiles,GM_ADDR options,GM_ADDR flags,
     GM_ADDR gradients,GM_ADDR connected,GM_ADDR values,GM_ADDR first,GM_ADDR second,GM_ADDR maximum,GM_ADDR steps,GM_ADDR corrections,
-    GM_ADDR next_values,GM_ADDR next_first,GM_ADDR next_second,GM_ADDR next_maximum,GM_ADDR tile_errors,GM_ADDR error,
-    int64_t count,int64_t tasks,int64_t kind) {
+    GM_ADDR tile_errors,GM_ADDR error,int64_t count,int64_t tasks,int64_t kind,int64_t commit) {
   KERNEL_TASK_TYPE_DEFAULT(KERNEL_TYPE_AIV_ONLY);
   using namespace tide_device;using I=int64_t;
   AscendC::GlobalTensor<I> cache;cache.SetGlobalBuffer((__gm__ I*)table);
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
   if(((__gm__ int32_t*)error)[0])return;
   auto t=(__gm__ I*)table,offsets=(__gm__ I*)tiles,fl=(__gm__ I*)flags;auto opt=(__gm__ float*)options;
+  // Both passes execute the same arithmetic from frozen gradients/old masters.
+  // First pass checks all proposals; only the post-consensus pass writes values.
+  // Counters commit in a separate following kernel, after every tile finishes.
   OptimizerVector vector;vector.init();auto w=vector.at(0),g=vector.at(1),m=vector.at(2),v=vector.at(3),mx=vector.at(4),tmp=vector.at(5),den=vector.at(6);
   for(I task=AscendC::GetBlockIdx();task<tasks;task+=AscendC::GetBlockNum()) {
-    ((__gm__ int32_t*)tile_errors)[task*16]=0;
+    if(!commit)((__gm__ int32_t*)tile_errors)[task*16]=0;
     I lo=0,hi=count;while(lo+1<hi){I mid=lo+(hi-lo)/2;if(offsets[mid]<=task)lo=mid;else hi=mid;}
     const I i=lo;if(!((__gm__ uint8_t*)connected)[i])continue;
     const I start=(task-offsets[i])*256,offset=t[i*OWNER_FIELDS+OFFSET]+start,remaining=t[i*OWNER_FIELDS+SIZE]-start;
@@ -29,7 +31,7 @@ extern "C" __global__ __aicore__ void tide_optimizer_values(GM_ADDR table,GM_ADD
         else {vector.load(m,(__gm__ float*)first,offset,size);finite=finite&&vector.finite(m,size);
           AscendC::Muls(m,m,momentum,size);AscendC::Muls(tmp,g,damp,size);AscendC::PipeBarrier<PIPE_V>();
           AscendC::Add(m,m,tmp,size);AscendC::PipeBarrier<PIPE_V>();}
-        finite=finite&&vector.finite(m,size);vector.save(m,(__gm__ float*)next_first,offset,size);
+        finite=finite&&vector.finite(m,size);if(commit)vector.save(m,(__gm__ float*)first,offset,size);
         if(fl[f+NESTEROV]){AscendC::Muls(tmp,m,momentum,size);AscendC::PipeBarrier<PIPE_V>();AscendC::Add(g,g,tmp,size);}
         else AscendC::Muls(g,m,1.f,size);
         AscendC::PipeBarrier<PIPE_V>();
@@ -43,10 +45,10 @@ extern "C" __global__ __aicore__ void tide_optimizer_values(GM_ADDR table,GM_ADD
       AscendC::Mul(tmp,g,g,size);AscendC::Muls(v,v,b2,size);AscendC::PipeBarrier<PIPE_V>();
       AscendC::Muls(tmp,tmp,b2c,size);AscendC::PipeBarrier<PIPE_V>();AscendC::Add(v,v,tmp,size);AscendC::PipeBarrier<PIPE_V>();
       finite=finite&&vector.finite(m,size)&&vector.finite(v,size);
-      vector.save(m,(__gm__ float*)next_first,offset,size);vector.save(v,(__gm__ float*)next_second,offset,size);
+      if(commit)vector.save(m,(__gm__ float*)first,offset,size);if(commit)vector.save(v,(__gm__ float*)second,offset,size);
       if(fl[f+AMSGRAD]) {
         vector.load(mx,(__gm__ float*)maximum,offset,size);finite=finite&&vector.finite(mx,size);
-        AscendC::Max(v,v,mx,size);AscendC::PipeBarrier<PIPE_V>();vector.save(v,(__gm__ float*)next_maximum,offset,size);
+        AscendC::Max(v,v,mx,size);AscendC::PipeBarrier<PIPE_V>();if(commit)vector.save(v,(__gm__ float*)maximum,offset,size);
       }
       const float c1=((__gm__ float*)corrections)[i*2],c2=((__gm__ float*)corrections)[i*2+1];
       AscendC::Sqrt(den,v,size);AscendC::Duplicate(tmp,c2,size);AscendC::PipeBarrier<PIPE_V>();AscendC::Sqrt(tmp,tmp,size);AscendC::PipeBarrier<PIPE_V>();
@@ -64,8 +66,8 @@ extern "C" __global__ __aicore__ void tide_optimizer_values(GM_ADDR table,GM_ADD
       AscendC::Cast(tmp,rounded,AscendC::RoundMode::CAST_NONE,size);AscendC::PipeBarrier<PIPE_V>();
       finite=finite&&vector.finite(tmp,size);
     }
-    vector.save(w,(__gm__ float*)next_values,offset,size);
-    if(!finite)((__gm__ int32_t*)tile_errors)[task*16]=1;
+    if(commit)vector.save(w,(__gm__ float*)values,offset,size);
+    if(!commit&&!finite)((__gm__ int32_t*)tile_errors)[task*16]=1;
   }
   AscendC::DataCacheCleanAndInvalid<I,AscendC::CacheLine::ENTIRE_DATA_CACHE>(cache);
 }

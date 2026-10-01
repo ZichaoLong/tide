@@ -81,7 +81,38 @@ fit one64GiB card. Generic multi-card mixed placement may remain necessary.
 Eager/mixed FP16 training explicitly refuses the unqualified master path.
 Historical restricted accelerator_scale executors do not replace online flows.
 No new formal full-size throughput result. Do not finish merely on capacity refusal.
-Current evidence commit pending: memory report/JSON,ROADMAP and this handoff.
+Memory evidence2b6dae2 is committed/pushed. No pending memory qualification.
+
+Optimizer recompute increment ready for implementation commit. DeviceOptimizer
+now evaluates finite candidates, reaches the existing local/cross-card gate, then
+recomputes and commits from frozen gradient/old-state inputs. A separate following
+counter kernel avoids first-use momentum races. SGD/AdamW,FP16 representability,
+None/zero and sticky errors remain. Ordinary AdamW removes12 bytes/active parameter;
+this is a fixed-memory reduction,not total-memory admission or a throughput claim.
+Changed private optimizer layout/C++ and2 Ascend C kernels; public ABI unchanged.
+
+Development standalone builds dev01/dev02,Python and installed consumer dev01
+PASSED. Frozen optimizer-recompute-dev02 fixes only a calibration test group;
+production source is identical to dev01. Component-dev02 PASSED4 cells:32 local
+trajectories per payload plus peer optimizer checks. Four1,048,579-element
+calibrations fit one live state set plus2MiB,including last-tile-Inf byte-identical
+refusal. Actual consumer-dev01 PASSED28 native/LibTorch training/split-head cases.
+Retain component-dev01 failure: new test supplied an empty named group, correctly
+updated nothing; explicitly naming weight fixed it. No production semantic failure.
+
+Fixed old-source D128 baseline and independent CPU calibration both PASSED at
+fdfc748. Input optimizer-recompute-calibration01 has128 body nodes/544 edges,
+D128/B2/T2/V257,17,384,240 parameters. Four windows/two AdamW updates including
+warmup. New calibration-dev01 PASSED; losses/outputs/cut match both old NPU and
+independent CPU. Per-card allocated peak decreases106955264 bytes in construction,
+warmup and measured phases. New measured peaks938704896/844491776 bytes.
+One sample,concurrent development: no formal performance claim.
+
+Next commit implementation,then frozen optimizer-recompute-clean01; byte-verified
+reuse of both development backends' affected objects/kernels with fresh links,
+installed client,component4/public2→3 checkpoint/consumer28 gates,new D128
+calibration and separate actual FP16 training profile. All development jobs terminal.
+Then evidence commit and continue total-memory planning/F6; no pause authorized.
 
 ## Environment and job bounds
 

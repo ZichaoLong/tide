@@ -3,6 +3,7 @@
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
+#include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
 #include <iostream>
 #include <limits>
 
@@ -155,6 +156,55 @@ void master_boundaries(at::Device device) {
   portable_torch::synchronize(device);program.run();
   require(!error.cpu().item<int>(),"None poison reached half representability gate");unchanged(before,optimizer);
 }
+void memory_calibration(at::Device device,DeviceOptimizerKind kind,bool extra) {
+  at::NoGradGuard guard;constexpr int64_t n=1048579;
+  auto value=at::full({n},.125f,at::kFloat);ParameterRegistry registry;registry.add("weight",value);
+  auto f=at::TensorOptions().device(device).dtype(at::kFloat);
+  ParameterVjp gradient;gradient.owners=registry.owners();gradient.offsets={0};
+  gradient.values=at::full({n},.0625f,f);gradient.connected=at::ones({1},f.dtype(at::kBool));
+  OptimizerGroup group;group.parameters={"weight"};group.lr=.003125;group.weight_decay=.0125;group.eps=1e-5;
+  group.momentum=extra?.875:0.;group.amsgrad=extra;
+  const int64_t banks=kind==DeviceOptimizerKind::adamw?(extra?4:3):(extra?2:1);
+  // One live set plus bounded tile/metadata/operator overhead. A full proposal
+  // set would exceed this envelope, even for SGD without momentum.
+  const int64_t budget=4*banks*n+2*1024*1024;
+  portable_torch::synchronize(device);
+  auto baseline=c10_npu::NPUCachingAllocator::getDeviceStats(device.index()).allocated_bytes[0].current;
+  c10_npu::NPUCachingAllocator::resetPeakStats(device.index());
+  DeviceOptimizer optimizer(gradient,kind,{group},budget);
+  auto error=at::zeros({1},f.dtype(at::kInt));CannProgram p(device);
+  p.limit_workspace(1024*1024);optimizer.append_step(p,gradient,error);p.finish();
+  std::unique_ptr<NamedOptimizer> reference;
+  if(kind==DeviceOptimizerKind::sgd)reference=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group});
+  else reference=std::make_unique<AdamW>(registry,std::vector<OptimizerGroup>{group});
+  for(int step=0;step<3;++step) {
+    const bool live=step!=1;gradient.connected.fill_(live);
+    gradient.values.fill_(live?(step==2?0.f:.0625f):std::numeric_limits<float>::quiet_NaN());
+    value.mutable_grad()=live?at::full_like(value,step==2?0.f:.0625f):Tensor{};
+    portable_torch::synchronize(device);p.run();reference->step();
+    require(!error.cpu().item<int>(),"large recomputed update refused");same(optimizer.values().cpu(),value,"large master");
+    if(extra||kind==DeviceOptimizerKind::adamw) {
+      const auto& state=reference->state().at("weight");
+      same(optimizer.first().cpu(),kind==DeviceOptimizerKind::sgd?state.momentum_buffer:state.exp_avg,"large first");
+      if(kind==DeviceOptimizerKind::adamw){same(optimizer.second().cpu(),state.exp_avg_sq,"large second");if(extra)same(optimizer.maximum().cpu(),state.max_exp_avg_sq,"large maximum");}
+    }
+    require(optimizer.steps().cpu().item<int64_t>()==(step==2?2:1),"large update counter raced value tiles");
+  }
+  const auto before=optimizer.snapshot();gradient.connected.fill_(true);gradient.values.zero_();
+  gradient.values[n-1].fill_(std::numeric_limits<float>::infinity());portable_torch::synchronize(device);p.run();
+  require(error.cpu().item<int>()==tide_device::optimizer_finite_error,"last-tile infinity was accepted");
+  const auto after=optimizer.snapshot();
+  for(auto pair:{std::make_pair(before.values,after.values),std::make_pair(before.first,after.first),std::make_pair(before.second,after.second),
+      std::make_pair(before.maximum,after.maximum),std::make_pair(before.steps,after.steps),std::make_pair(before.corrections,after.corrections)})
+    require(at::equal(pair.first.view(at::kByte),pair.second.view(at::kByte)),"last tile partially committed another tile");
+  portable_torch::synchronize(device);
+  const auto peak=c10_npu::NPUCachingAllocator::getDeviceStats(device.index()).allocated_bytes[0].peak-baseline;
+  require(peak<=budget,"optimizer retained parameter-sized proposals");
+  std::cout<<"optimizer-memory: {\"elements\":"<<n<<",\"kind\":"<<int(kind)<<",\"extra_slot\":"<<extra
+    <<",\"budget\":"<<budget<<",\"peak_allocated_delta\":"<<peak<<",\"program_workspace_bytes\":"<<p.workspace_bytes()<<"}\n";
+  p.close();
+}
+
 void refusals(at::Device device) {
   at::NoGradGuard guard;auto f=fixture(device,3);
   auto reject=[&](auto fn){bool failed=false;try{fn();}catch(const std::invalid_argument&){failed=true;}require(failed,"invalid optimizer preflight accepted");};
@@ -188,6 +238,7 @@ int main(int argc,char** argv) {
         catch(...){std::cerr<<"optimizer kind="<<int(kind)<<" variant="<<variant<<" width="<<width<<" reference="<<dtype<<'\n';throw;}
       }
     refusals(device);if(args.dtype==at::kHalf)master_boundaries(device);
+    else for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})for(bool extra:{false,true})memory_calibration(device,kind,extra);
     std::cout<<"device-optimizer: passed trajectories="<<cases<<" updates="<<updates<<" expected_half_refusals="<<refusals_count
       <<" CPU=FP32_FP64 master_dtype=FP32 finite_transaction=true half_boundaries="<<(args.dtype==at::kHalf)
       <<" scope=owner_updates_not_public_training\n";

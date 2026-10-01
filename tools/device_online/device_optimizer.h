@@ -12,9 +12,11 @@ class DeviceOptimizer {
  public:
   DeviceOptimizer(const ParameterVjp&,DeviceOptimizerKind,std::vector<OptimizerGroup>,int64_t tensor_budget_bytes);
   void append_step(CannProgram&,const ParameterVjp&,const at::Tensor& error);
-  // Distributed composition: append proposals on all owners, reach a common
+  // Distributed composition: evaluate proposals on all owners, reach a common
   // device error decision, then append every commit. No master/slot changes
-  // occur in propose. Caller owns this ordering and failure lifecycle.
+  // occur in propose. Gradients/connection bits/old masters remain frozen until
+  // commit recomputes the same elementwise update. Caller owns this ordering
+  // and failure lifecycle; no full parameter-sized proposal bank is retained.
   void append_propose(CannProgram&,const ParameterVjp&,const at::Tensor& error);
   void append_commit(CannProgram&,const ParameterVjp&,const at::Tensor& error);
   const at::Tensor& values() const {return values_;}
@@ -33,6 +35,6 @@ class DeviceOptimizer {
   DeviceOptimizerKind kind_;
   int64_t tasks_,count_;
   at::Tensor table_,tiles_,options_,flags_,values_,first_,second_,maximum_,steps_,corrections_;
-  at::Tensor next_values_,next_first_,next_second_,next_maximum_,next_steps_,next_corrections_,tile_errors_;
+  at::Tensor next_steps_,next_corrections_,tile_errors_;
 };
 } // namespace tide::device_online

@@ -69,7 +69,7 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
   if(std::max<int64_t>(1,used)!=gradient.values.numel())throw std::invalid_argument("optimizer owner extent mismatch");
   tasks_=tiles.back();const bool adam=kind==DeviceOptimizerKind::adamw;
   const int64_t elements=gradient.values.numel(),first=(adam||momentum)?elements:1,second=adam?elements:1,max=adam&&maximum?elements:1;
-  const long double bytes=8.L*(elements+static_cast<long double>(first)+second+max)+32.L*physical+
+  const long double bytes=4.L*(elements+static_cast<long double>(first)+second+max)+32.L*physical+
     64.L*std::max<int64_t>(1,tasks_)+8.L*(std::max<size_t>(tide_device::OWNER_FIELDS,table.size())+tiles.size()+flags.size())+4.L*options.size();
   if(bytes>budget)throw std::invalid_argument("device optimizer tensor budget exceeded");
   auto cpu=at::zeros({elements},at::kFloat);
@@ -77,7 +77,6 @@ DeviceOptimizer::DeviceOptimizer(const ParameterVjp& gradient,DeviceOptimizerKin
     cpu.narrow(0,gradient.offsets[i],gradient.owners[i].value.numel()).copy_(gradient.owners[i].value.detach().reshape({-1}));
   values_=cpu.to(device);first_=at::zeros({first},values_.options());second_=at::zeros({second},values_.options());maximum_=at::zeros({max},values_.options());
   steps_=at::zeros({physical},values_.options().dtype(at::kLong));corrections_=at::zeros({physical,2},values_.options());
-  next_values_=at::empty_like(values_);next_first_=at::empty_like(first_);next_second_=at::empty_like(second_);next_maximum_=at::empty_like(maximum_);
   next_steps_=at::empty_like(steps_);next_corrections_=at::empty_like(corrections_);
   // A separate cache line per vector tile avoids concurrent scalar cache-line writes.
   tile_errors_=at::zeros({std::max<int64_t>(1,tasks_),16},values_.options().dtype(at::kInt));
@@ -102,23 +101,19 @@ void DeviceOptimizer::append_phase(CannProgram& p,const ParameterVjp& g,const at
       g.owners[i].value.unsafeGetTensorImpl()!=identity_.owners[i].value.unsafeGetTensorImpl())
     throw std::invalid_argument("optimizer gradient owner changed");
   const auto table=table_,tiles=tiles_,options=options_,flags=flags_,values=values_,first=first_,second=second_,maximum=maximum_;
-  const auto steps=steps_,corrections=corrections_,nv=next_values_,nf=next_first_,ns=next_second_,nm=next_maximum_;
+  const auto steps=steps_,corrections=corrections_;
   const auto nt=next_steps_,nc=next_corrections_,errors=tile_errors_;const auto count=count_,tasks=tasks_,kind=int64_t(kind_);
   auto plan=[&](int64_t mode){p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_plan)(1,stream,
     ptr(table),ptr(options),ptr(g.connected),ptr(steps),ptr(corrections),ptr(nt),ptr(nc),ptr(errors),ptr(error),count,tasks,kind,mode),
     "device optimizer preflight/finite gate");},{table,options,g.connected,steps,corrections,nt,nc,errors,error});};
-  if(!commit) {
-  plan(0);
+  if(!commit)plan(0);
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_values)(32,stream,
     ptr(table),ptr(tiles),ptr(options),ptr(flags),ptr(g.values),ptr(g.connected),ptr(values),ptr(first),ptr(second),ptr(maximum),ptr(steps),ptr(nc),
-    ptr(nv),ptr(nf),ptr(ns),ptr(nm),ptr(errors),ptr(error),count,tasks,kind),"packed device optimizer proposals");},
-    {table,tiles,options,flags,g.values,g.connected,values,first,second,maximum,steps,nc,nv,nf,ns,nm,errors,error});
-  plan(1);
-  } else {
-  p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_commit)(32,stream,
-    ptr(table),ptr(tiles),ptr(options),ptr(flags),ptr(g.connected),ptr(values),ptr(first),ptr(second),ptr(maximum),ptr(steps),ptr(corrections),
-    ptr(nv),ptr(nf),ptr(ns),ptr(nm),ptr(nt),ptr(nc),ptr(error),count,tasks,kind),"commit finite device optimizer owners");},
-    {table,tiles,options,flags,g.connected,values,first,second,maximum,steps,corrections,nv,nf,ns,nm,nt,nc,error});
-  }
+    ptr(errors),ptr(error),count,tasks,kind,int64_t(commit)),"evaluate or recompute finite device optimizer update");},
+    {table,tiles,options,flags,g.values,g.connected,values,first,second,maximum,steps,nc,errors,error});
+  if(!commit)plan(1);
+  else p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_optimizer_commit)(1,stream,
+    ptr(table),ptr(g.connected),ptr(steps),ptr(corrections),ptr(nt),ptr(nc),ptr(error),count,kind),"commit device optimizer counters after all value tiles");},
+    {table,g.connected,steps,corrections,nt,nc,error});
 }
 } // namespace tide::device_online

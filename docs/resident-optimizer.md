@@ -24,16 +24,26 @@ coefficients. Adam bias correction uses the stable recurrence
 double, avoiding cancellation in `1 - rounded_beta_power`. FP32 rounding is
 validated against independent CPU FP32/FP64 updates; bitwise identity is not promised.
 
-Each step has device metadata preflight, packed numerical proposals, one finite
-gate and a commit phase. Nonfinite participating values/gradients/slots/proposals
+Each step has device metadata preflight, packed proposal evaluation, one finite
+gate and a commit phase. Evaluation retains per-tile finite flags and small
+proposed counters/corrections, without full proposed parameter or slot banks.
+After all owners agree on the device finite gate, the same numerical kernel
+recomputes each elementwise update and writes the live masters/slots. Gradients,
+connection flags and old state must stay unchanged between these two passes;
+the internal single/multi-device training owners enforce that execution order.
+A separate following kernel commits counters after every numerical tile, avoiding
+a race with SGD first-use momentum on other vector cores. Nonfinite participating values/gradients/slots/proposals
 refuse before any live parameter or slot changes. Disconnected poison is skipped.
 Counters remain int64; negative or exhausted counters refuse. Existing error
 codes remain sticky. Finite and counter errors are20 and21. A runtime failure
 still requires the enclosing training owner to become unusable; the component
 does not promise recovery from a partially executed runtime submission.
 
-Tensor admission includes live and proposed parameter/slot buffers, counters,
-bias corrections, static tables and per-tile status. Per-tile scalar status has
+Tensor admission includes live parameter/slot buffers, live/proposed counters,
+bias corrections, static tables and per-tile status. Numerical proposal storage
+is bounded vector-core scratch, independent of parameter count. For AdamW without
+AMSGrad this removes12 bytes per active parameter; it does not remove gradients,
+forward banks, retained tapes or consumer-head allocations. Per-tile scalar status has
 separate cache-line storage. Empty registries have bounded dummy arguments and
 produce no update. Construction rejects invalid groups, dtype, shape, identity
 or budget before recording updates.
