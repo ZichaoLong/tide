@@ -52,3 +52,11 @@ Reusing storage across serially ordered packet groups is a possible general
 improvement, pending ordering, replay, error-propagation and allocator checks.
 Original B512 training, Attention training and the required full-size CPU/mixed/
 resident comparisons remain open. No throughput recommendation follows here.
+
+A later bounded **B4/physical B2** pilot on ten cards, clean `c3ed0f2`,
+failed the post-run allocator calibration check: observed allocation exceeded
+the estimate. [The retained failure record](original-width-add-b2-refusal-20261002.json)
+pins its source, command, planner and logs. It reported neither OOM nor timeout;
+the original B512 stage was never entered. That version's error writer discarded
+the collected peak and timing details, so they cannot be inferred from this
+failed run. Reporting and estimation require diagnosis before another large run.

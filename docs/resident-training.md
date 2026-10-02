@@ -119,8 +119,9 @@ complete consumer planner charges this separately and still uses dense bounds;
 this optimization alone does not admit a previously refused full-size run.
 Compact retained journals are [qualified on fixed source](evidence/resident-retained-journals-20261002.md),
 including independent VJPs, multi-update/continuation checks and allocator calibration.
-Attention snapshot reuse requires separate immutable qualification and allocator
-calibration (pending; see STATUS). Its implementation/lifetime contract is in [retained windows](resident-retained.md). A retained-byte decrease
+Attention snapshot reuse is [qualified on clean38858d0](evidence/resident-attention-snapshots-20261002.md),
+including independent multi-update/restore checks and same-lease allocator calibration.
+Its implementation/lifetime contract is in [retained windows](resident-retained.md). A retained-byte decrease
 alone does not establish a complete allocator-peak decrease or a throughput gain.
 
 `snapshot_device(max_bytes=...)` saves a detached numerical continuation in opaque

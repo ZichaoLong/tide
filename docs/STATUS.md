@@ -1,238 +1,154 @@
 # Current handoff
 
-Updated 2026-10-02. **PAUSED at the user's requested next-commit boundary.**
-The current attention snapshot increment is committed/pushed; do not start
-qualification, builds, benchmarks or another implementation until the user
-confirms resumption. No subagents. Repository
-/home/zlong/llm/graph-execution-foundation resolves to
-/var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Reference repositories and ObsidianVault remain read-only. Re-entry:
+Updated 2026-10-02. **ACTIVE: user confirmed resumption.** Continue implementation,
+qualification, commits and pushes under [execution-flows.md](execution-flows.md).
+No subagents. Overall goal incomplete. Repository
+`/home/zlong/llm/graph-execution-foundation` resolves to
+`/var/tmp/zlong-graph-execution-foundation/repository`, branch
+`graph-execution-foundation`. Latest pushed implementation: **38858d0**.
+Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
-[execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
-is the sole backlog. Overall goal incomplete.
+[ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
 
-## Contract
+## Contract and resource rules
 
-Candidates independently consume common inputs/parameters/initial state, never
-reference events/routes/results/gradients. General online greedy covers legal
-family topology/input including positive-delay PDG feedback. Preserve int64,
-stable order, duplicate edges, missing/zero messages, None/zero gradients,
-complete continuation and explicit differentiation boundaries. Performance:
-PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill ×
-inference/complete training. Five presets plus fine switches; FP32 main, FP16
-separate. Python resident uses native C++/CANN. No convergence requirement.
-Implementation commit → immutable affected qualification → separate evidence
-commit; push each. Contract outranks run-ml-experiments; reuse minimal records.
-Do not rerun unchanged8,954 CPU checks or completed representative timings.
-Own formal heavy timings are serial; no unbounded queue/scale/automatic retry.
+Every candidate independently consumes common inputs, parameters and initial state;
+reference events/routes/results/gradients never supply execution. General online
+greedy supports legal family topology/input, including positive-delay PDG feedback.
+Preserve int64, stable order, duplicate edges, missing/zero messages, None/zero
+gradients and complete continuation. Performance: PDG LibTorch; TimedDAG/Settle
+LibTorch+PyTorch; CPU/NPU × streaming/prefill × inference/complete training.
+Five presets plus fine switches; FP32 main, FP16 separate. No convergence requirement.
 
-## Completed scale evidence; do not repeat
+Implementation commit → fixed clean affected qualification → separate evidence
+commit; push each. Current user contract outranks run-ml-experiments; reuse minimal
+records. No repeated unchanged8,954 CPU checks or completed representative timings.
+Formal heavy timings are serial. No unbounded queue, automatic OOM search or blind
+retry. CANN/runtime jobs use `env -C {out}` to keep vendor files out of frozen source.
 
-All10 required representative family/client/schedule submatrices completed and
-were audited. Last matrix-remaining02 PASSED/released at05:45:32UTC; no live
-matrix recipe/hold remains. Last evidence270ee2e;frozen80dae6e.
-[Settle/Python report](evidence/representative-settle-python-20261002.md) links
-other completed matrices. Warm resident2.698–8.848× versus defaultPythonCPU is
-not versus tunedLibTorchCPU, later memory-source timing, or original-wide timing.
+`TASK=/mi/data2T/zlong/tide-execution-flows`. Module `libtorch-npu/2.10.0-cann9.0.0`;
+Python `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
+User-authorized public /opt stack supersedes the older account guide. Preserve
+module PYTHONPATH, prepend frozen source/python. `TASK_QUEUE_ENABLE=0`,
+`TORCH_DEVICE_BACKEND_AUTOLOAD=0`. Sixteen logical64GiB Ascend910_9392; lease/remap
+only. `launchers/freeze_run.py`: immutable snapshot, background.slice, Nice10,
+two build workers. Last disk check: data180GiB/root13GiB free.
+Formal timing lock: `TASK/online-measurement.lock`.
 
-Both original-wide FP32LibTorch resident TimedDAG/prefill inference runs passed:
-480body/2208edges,D2048/B512/T12/V50304,two connectedwindows,128physicalB4groups.
-- Attention17,521,117,376params:source48e44b0,jobwide-inference-staged01,
-  construction817.996s,step325.278s,12,288outputs,1,184,430events,cut408,
-  loss21.380956649780273,maxallocator14.562GiB,CPUpeak208.770GiB.
-  [Report](evidence/original-wide-inference-20261002.md).
-- Add9,468,053,696params:sourcebe380db,jobwide-add-inference02,
-  construction182.038s,step278.574s,12,288outputs,1,183,429events,cut408,
-  loss30.508380889892578,maxallocator7.812GiB,CPUpeak93.725GiB.
-  Evidenceaab2ed2 [report](evidence/original-wide-add-inference-20261002.md).
-These are cold execution/capacity evidence; no warm repeats, full-sizeCPUoracle,
-profile or throughput recommendation. Neither logical batch nor KV was reduced.
+**Preserve historical-cpu-attention-01:** deliberately SIGSTOP, holds old timing.lock.
+Its durable record says running; never resume, kill or clean it. Historical1.6438×
+was faster throughput, not evidence for current general-online flows. Restricted
+history remains on pushed archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 
-## Latest qualified source and dependencies
+## Original-width Add failure: investigate before retry
 
-- Per-device saved-context pool48e44b0/evidenceca559b5:all8jobs passed,CPU17/NPU64,
-  independent C++ trajectories and0AiCPU trace. Context buffers may compact at
-  explicit boundaries; caps apply across all live saved handles per card.
-- Valid-prefix retained journals0fbc1b2/evidencefe8a08b:all8jobs passed,CPU17/NPU44,
-  native64trajectories/1,024windows/256updates,CPUFP32/FP64,0AiCPUtrace.
-  Representative128node AttentionD128/B8/T4/V257,fourB2slices,oneAdamW/twowindows:
-  allocator1,868,793,344→1,455,752,704bytes(-22.10%),retained388,563,192→184,628,448.
-  [Report](evidence/resident-retained-journals-20261002.md). Dense admission stays;
-  nonzero extent sync only at retention boundaries, not per-event scheduling.
-- Exact C++ named initializerbe380db/evidencec307fde:all5jobs passed,CPU25/NPU30,
-  unchanged independent Python byte oracle;380scalar cases+actual consumers.
-  3fresh CPUprocesses:6.25–6.51× for initializer only, not whole construction.
+`wide-add-training-b2-01` FAILED at09:09:48UTC on clean **c3ed0f2** after
+B4/physicalB2 pilot. Exact reason: `consumer memory estimate underestimated
+allocator peak; retain failed run and recalibrate`. It did not time out and
+reported no OOM. B512 never ran. The consumer overwrote details with a minimal
+error result, so actual peak/phase values are not retained; inspect estimator
+and failure-report path before any bounded diagnostic. Preserve original records.
+
+Snapshot `TASK/sources/add-capacity-clean01`; unit
+`tide-execution-flows-wide-add-training-b2-01`; helper `launchers/wide_add_training_b2.py`.
+Released ten-card lease physical[1,2,3,5,6,7,8,9,11,12]. Records:
+`runs/wide-add-training-b2-01/{status.json,task.log,training/stages.json}` and
+`training/original-width/{result.json,consumer.log,consumer/result.json}`.
+Original9,468,053,696parameters,D2048/T12/V50304,FP32SGD,TimedDAG/prefill,
+two connected windows/one update; B4 pilot then unchanged originalB512 planned.
+60GiB/card physicalcap,context4GiB/card; static maximum52.0119GiB/card was
+an estimate, disproved at pilot. Keep margins; no blind retry/budget relaxation.
+
+## Attention snapshots: fully qualified
+
+Implementation **38858d0** is qualified by nine PASSED clean jobs. Immutable
+QKV/output matrices, parameter biases, decay and pooling weights share one
+snapshot per backward group; dynamic KV/log-bias/lengths/journals stay separate.
+Forward-bank identity/version/layout guards plus no publication with live tapes
+protect lifetime; backward/detach/close reset caches. Public ABI/core/CANN unchanged.
+Consumer physical admission remains unchanged.
+
+Source `TASK/sources/attention-snapshot-clean01`; three clean builds and six runs
+`attention-snapshot-{native,python,consumer,restore,memory,profile}-clean01` passed.
+Python16/consumer24 checks, native128trajectories/2048windows/512updates and
+explicit2→3 restore32trajectories/512windows/128updates, FP32/FP16 and independent
+CPUFP32/FP64. Same-lease D512/B8/T4/V257 Attention FP32AdamW two-window update:
+allocator/card reduced275,262,464B; exact loss/non-memory counters unchanged.
+Separate FP16 two-update profile:53,274operators; no observed AiCPU.
+`launchers/attention_snapshot_evidence.py` audited all source/object/kernel/loader,
+JUnit, trajectory, allocator and CSV identities. [Report](evidence/resident-attention-snapshots-20261002.md).
+This is not original-size training or throughput proof. No attention jobs remain live.
+
+## Active failure-reporting increment
+
+Snapshot `TASK/sources/failure-records-dev01` (38858d0 plus preserved patch).
+CPU18 checks PASSED (`failure-records-cpu-dev01`). Installed consumer build
+`build-failure-records-consumer-dev01` PASSED; output
+`TASK/builds/failure-records-consumer-dev01`, logs/status under matching runs/name.
+Change preserves complete results with a FAILED state when post-run memory
+calibration refuses, in both consumers and wrapper; memory caps/estimates unchanged.
+NPU integration and fixed clean qualification remain. No retry of wide Add yet.
+
+## Completed evidence; do not repeat
+
+All ten required representative family/client/schedule matrices completed on
+80dae6e; last evidence270ee2e, last matrix-remaining02 passed/released.
+[Settle/Python report](evidence/representative-settle-python-20261002.md) links the
+matrix set. Warm resident2.698–8.848× versus default PythonCPU is not versus tuned
+LibTorchCPU or original-wide performance.
+
+Both original-wide FP32 LibTorch resident TimedDAG/prefill inference runs passed:
+480body/2208edges,D2048/B512/T12/V50304,two windows,128physicalB4 groups.
+- Attention17.521B: source48e44b0, wide-inference-staged01; construction817.996s,
+  step325.278s, peak14.562GiB/card. [Report](evidence/original-wide-inference-20261002.md).
+- Add9.468B: sourcebe380db, wide-add-inference02; construction182.038s,
+  step278.574s, peak7.812GiB/card. [Report](evidence/original-wide-add-inference-20261002.md).
+Both produced12,288outputs/cut408. Cold capacity evidence, not formal throughput
+or all-family/client/schedule certification. Original packet files are unchanged.
+Region(budget) defaultsobserve_all=true: unselected nodes retainKV. Never shrink
+logicalB512, dropKV or change precision silently to claim original size passed.
+
+Original-width AddB2 training (11cards,physicalB1,source475d4af) passed in staged02:
+construction249.211s, step20.2794s, peak42.216GiB/card,48outputs,cut408,
+pending384/maxevents1177. B512 cost gate5191.5s>3000 stopped parent.
+Ten-card profile02 passed:701,139operators/zero observed AiCPU; trace includes
+construction/cleanup, not throughput. Profile01 queue timeout and staged01
+reverse-capability refusal remain FAILED. [Report](evidence/original-width-add-training-20261002.md).
+
+Recent qualified increments (retain cited artifacts/failures):
+- compact context pool48e44b0: CPU17/NPU64, allocator−5.39% at its fixture.
+  [Report](evidence/resident-context-pool-20261002.md).
+- retained journals0fbc1b2: CPU17/NPU44, representative allocator−22.10%.
+  [Report](evidence/resident-retained-journals-20261002.md).
+- exact initializerbe380db: CPU25/NPU30;6.25–6.51× initializer-only CPU gain.
   [Report](evidence/exact-initializer-20261002.md).
-- Window capacity counters475d4af:cleanbuild-window-peaks-consumer-clean01 and
-  window-peaks-npu-clean01 PASSED;34checks,no skips,bothclients/precisions,
-  sample slicing,whole/warmup,complete independentCPU updates and pool refusal.
-  Auditlaunchers/window_peaks_evidence.py passed;
-  [report](evidence/resident-window-peaks-20261002.md). Evidence9f305ab committed/pushed.
-  New window_events_max/window_stages_max/window_outputs_max/pending_peak use
-  int64 device counters,one transfer after timing. Pending history follows
-  contexts;Settle encoded counts include boundary nodes omitted by body diagnostics.
-  Core/library/ABI/kernels unchanged. Dev01 remains FAILED for6wrong newSettle
-  assertions(160encoded vs120body);corrected6dev02 andall34clean passed.
+- window peaks475d4af:34checks; actual device counts at boundaries.
+  [Report](evidence/resident-window-peaks-20261002.md).
+- automatic sample admission3c3b4e7: CPU9/NPU18; fixed logical semantics.
+  [Report](evidence/resident-auto-samples-20261002.md).
+- shared packetsa72868f: eight jobs passed; representative D512/B8 Attention
+  old/new each card−268,437,504bytes; no speed claim. [Report](evidence/resident-shared-packets-20261002.md).
+- Add-specific admissionc3ed0f2: CPU10/NPU9; remove nonexistent Attention matrix
+  gradients only. [Report](evidence/consumer-add-capacity-20261002.md).
 
-## Original-width Add training and profiling
+Latest fully qualified resident libraries: attention-snapshot-{standalone,python}-clean01;
+NPUconsumer attention-snapshot-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
+CPUconsumer source-values-cpu-clean01. Previous builds remain for cited evidence.
+Standalone LibTorch and Python-native runtimes are separate.
 
-Reviewed [training/profile evidence](evidence/original-width-add-training-20261002.md),
-source475d4af,original11card standaloneconsumerwindow-peaks-consumer-clean01.
-Two parent stagedjobs remain FAILED:staged01 D512/B8child passed butoriginalD2048/B2
-refused2TiBreversecapability;staged02 originalD2048/B2child PASSED after8TiB
-hierarchicalcapability allowance withunchanged60GiB/card physicaladmission.
-9,468,053,696params,FP32SGD,physicalB1,two connectedwindows:
-construction249.211s,step20.2794s,48outputs,cut408,loss32.0892944,
-maxallocator42.216GiB,pending384,maxevents1177.
-PredeclaredB512cost gate5191.5s>3000s stoppedparent;no originalB512training.
-RecordsTASK/runs/wide-add-training-staged0{1,2};originalhelpersunchanged.
+## Next implementation and remaining delivery
 
-Profile01 FAILED120s eleven-cardqueue;Profile02 PASSEDten cards07:31:52UTC.
-Source475d4af,helperlaunchers/profile_original_width_v2.py;records
-TASK/runs/original-width-profile02/profile/{result.json,consumer/result.json,raw/}.
-OriginalD2048/B2 FP32SGD:construction201.214s,instrumentedstep21.8897s,
-48outputs,loss32.0892944,maxallocator43.431GiB.701139operators/zeroobservedAiCPU;
-includes construction/cleanup,not throughputrecommendation. Allleases released.
-Canonicalstreampacket reservations total25.504GB(10cards)/31.007GB(11cards).
-Next examine reuse across globallyorderedpairs/ordinals;source/receive arenas
-must beseparate,preplan phase maxima,retain metadata/status and error/replay semantics.
-Never lower admission constants or assert speedup withoutnewallocator evidence.
+Finish and qualify failed-memory-report retention, then diagnose Add underestimation
+from a bounded diagnostic; preserve the original failure. Full originalB512 training/formal comparisons remain.
+AttentionFP32 still statically refuses at minimal rows: inspect real lifetime of
+physical/canonical gradients and optimizer/accumulation storage, not arbitrary
+safety reductions. Read-only inspection found accumulation keeps independent
+old/replacement banks so public backward views remain stable; aliasing flags in
+its kernel would race. No accumulation change implemented or admitted yet.
+Eager mixed multi-device parameter/payload placement remains open. Finish required
+full-size family/client/schedule comparisons and three-process recommendations,
+then F7 migration/evidence/support audit. CUDA and other environment tuples require
+target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-## Automatic sample admission qualified
-
-Implementation3c3b4e7 committed/pushed;frozenTASK/sources/auto-samples-clean01.
-CPU9/NPU18 checks PASSED,0skips;cleaninstalledconsumerbuildpassed. Audited
-[evidence](evidence/resident-auto-samples-20261002.md),helperauto_samples_evidence.py.
-Bothclients/precisions,inference/fullupdates plusfixedpath regressions,
-16 independent complete trajectories;automatic training17→9sample rows.
-New explicit resident-only --auto-sample-chunks triesoperatoradmission then
-boundedhalving onMemoryRefusal,reaccountsalllogicalstate;firstfit orB1refusal.
-Fixeddefault,no logicalbatch/KV/capacity/dtype/window/updatechanges.
-Dev01 remainsFAILED8queuecapacity128 cases;testcapacitycorrected withsamecode/
-tolerances;dev02all9passed. Allrecords retained;no activetestjob.
-LatestNPUconsumerTASK/builds/auto-samples-consumer-clean01;core/deviceABI unchanged.
-
-## Shared canonical packet arenas qualified
-
-Implementationa72868f committed/pushed;frozenTASK/sources/shared-packets-clean01.
-Alleightqualificationjobs PASSED;reviewed[evidence](evidence/resident-shared-packets-20261002.md).
-Standalone/Python/clientbuilds,7componentcells,33consumerchecks,explicitFP32/FP16
-2→3restore32trajectories,independentprofile. Per-phase unique send/receive arenas
-preserve contributionorder anderrors;no devicekernel/publicABIchange.
-D512/B8Attention two-card old/newallocator comparison:eachcard -268,437,504bytes;
-packetreservation805,629,352→268,758,440bytes,allothercounters/loss identical.
-New36group/5replaycheck peak4,720,640bytes. FP16trace53,274operators/zeroobservedAiCPU.
-Retaincomponentdev01 failure(vendorfusion_result.json in sourcecwd;allchildrenpassed,
-frozenfilesunchanged) andmemoryclean01capabilityrefusal. Successfulclean gates
-useoutputcwd;memoryclean02usedsame60GiB/card physicalcap withlargerhierarchicalceilings.
-No live shared-packet jobs;leasesreleased. Latestlibraries shared-packets-{standalone,python}-clean01,
-client shared-packets-consumer-clean01. Original-width orB512memorybenefitnotyetmeasured.
-
-## Add-specific gradient admission qualified
-
-Implementationc3ed0f2 committed/pushed;capacity.{h,py} removes fictitiousAttentionQKV/O gradientcharge fromAdd;
-newattention_parameter_gradients subtotal includedinexisting physicalgradientcomponent.
-ScalarAggregate,vectorLH/state/Read,projections,canonicalbanks andsafetymargins unchanged.
-Cleanactualmodelinventory/C++Python10CPUchecks and9NPUchecks PASSED,0skips;
-standaloneclientbuildpassed. [Evidence](evidence/consumer-add-capacity-20261002.md).
-SnapshotTASK/sources/add-capacity-clean01;clientbuilds/add-capacity-consumer-clean01.
-No live taskjobs. OriginalD2048trainingruntime validation remainspending. StaticoriginalB512 withphysicalB2:
-10cardsqueue896/arrivals896/outputs64/trace3072,KV256/KVtrace8192,4GiBcontext,
-60GiB/card admits52.0119GiBmax. Thisisnotexecutionproof. Earlier512queue/B1observed
-pending384/maxwindowevents1177;largerbatchrequires explicitcapacities andchecks.
-Prepared immutableTASK/launchers/wide_add_training_b2.py:originalwidthB4 pilot
-(900s),thenunchangedoriginalB512(3600s) onlyifstep*128*1.15<=3000s and
-pending<=768/windowevents<=2560. SamephysicalB2andoriginal-selectedoperator/head
-maxima inbothstages. Requires10leasedcards/120squeue;whole4600s. Do notsubmit
-whileobviouslyshort:08:20UTC inspectiononly6free(1,2,3,5,11,12);no newqueuejob.
-When10free:freeze_run.py --name wide-add-training-b2-01 --snapshot add-capacity-clean01
---commit c3ed0f2 --npu --npu-count10 --max-wait120 -- env -C {out} timeout4600
-{python} TASK/launchers/wide_add_training_b2.py --source {source} --output {out}/training.
-Next independentlyinspectAttention retained state parameter/KVlifetimes;do not
-blindly lower its admission constants or wait idle forcards.
-HistoricalCPU remainsdeliberatelystopped.
-
-## Attention parameter snapshots: implementation checkpoint, qualification pending
-
-This commit implements update-scoped immutable attention parameter snapshots in
-single/sharded training owners. Actual forward banks guard identity/version,
-including fresh grouped fiber gathers. QKV/output matrices, parameter biases,
-decay and pool weights share an immutable clone; dynamic KV/log-bias/lengths/
-journals remain independent per-window. CANN publication cannot rely on ATen
-versions alone: public owners forbid updates while tapes remain outstanding.
-Backward/detach/close reset the snapshot. Dense pre-advance admission charges
-attention snapshots once; `retained_attention_bytes` reports that storage.
-Complete-consumer memory admission has NOT been reduced.
-
-All five frozen development jobs passed on snapshotTASK/sources/attention-snapshot-dev01
-(based on c0c54da with preserved dirty-source inventory):
-- build-attention-snapshot-{standalone,python,consumer}-dev01.
-- attention-snapshot-python-dev01:16checks,0skips,including6new event/fiber
-  mixed-head independentCPU-autograd,3nonzero updates,checkpoint suffix,exact
-  retained-byte budget,one-byte-short pre-advance refusal anddetach/retry.
-- attention-snapshot-native-dev01:4cells,128trajectories/2,048windows/512updates,
-  FP32/FP16 against independentCPUFP32/FP64;dense/compact journals,2→2 and2→legacy
-  single-owner restore,all/None/zero roots,metadata guards andsnapshot poisoning.
-  Direct synthetic checks prove fresh-gather sharing,clone ownership,version/
-  replacement rejection andpost-release tape survival. Allleases released.
-
-The current implementation/test sources were hash-compared to the frozen dev
-snapshot before commit. Only handoff/docs differ. **Not yet clean immutable
-qualification,allocator calibration,new profiling,or original-size training.**
-No active new taskjobs;historicalCPU remains deliberatelySIGSTOP and untouched.
-Public core/CANN kernels/ABI unchanged;all8private training-Impl users and3retention
-objects rebuilt. Existing clean dependencies remain below;do not call dev builds
-qualified. Task-local helpersprepared,notlaunched:
-`launchers/build_attention_snapshot.py`, `launchers/attention_snapshot_memory.py`.
-After user confirmation,create attention-snapshot-clean01 at THIS implementation
-commit;reuse byte-verified dev objects via --reuse-host,then independently run
-clean native/Python/client gates,memory comparison,profile,and evidence commit.
-Planned buildshape:
-`freeze_run.py --name build-attention-snapshot-standalone-clean01 --snapshot
-attention-snapshot-clean01 --commit IMPLEMENTATION_COMMIT -- {python}
-TASK/launchers/build_attention_snapshot.py attention-snapshot-standalone-clean01
---reuse-host attention-snapshot-standalone-dev01`
-Repeat with --runtime python andcorresponding Python names;clientbuildhelper
-`build_capacity_client.py --build TASK/builds/attention-snapshot-standalone-clean01
---out TASK/builds/attention-snapshot-consumer-clean01 --reuse-client
-TASK/builds/attention-snapshot-consumer-dev01`.
-Existing preparedten-card Add task above remains unsubmitted;do notqueue while
-paused. Full AttentionFP32 trainingstill exceeds theconservative admission even
-atminimalphysicalrows;sharingattention snapshots alone doesnotclose thatgap.
-
-## Next work after user confirmation and remaining goal
-
-Reduce proven storage/lifecycle overheads,then continue bounded original training assessment. Continue actual
-full-size complete training and finite CPU/screened-mixed/resident comparisons;
-all required other family/client/schedule flows remain separate. Attention dense
-training plan still refuses despite B1; investigate true allocation lifetimes,
-retained immutable banks/gradient buffers rather than lowering safety constants.
-Original inference context peaks≈1.53–1.58GiB/card at8cards, not a training proof.
-Eager mixed multi-device parameter/payload placement remains open. F7 final migration/evidence audit;CUDA execution and other environment
-tuples require target machines. HistoricalCPUAttention supplementary does not block.
-
-Original packetsTASK/inputs/fullsize-{add,attention}01/workload.json are unchanged.
-Region(budget) defaultsobserve_all=true:unselected nodes retainKV;clear only applies
-to selected nodes. Do not reduce logicalB512 or silently dropKV to claim wide passed.
-
-## Environment and preservation
-
-TASK=/mi/data2T/zlong/tide-execution-flows. Public module
-libtorch-npu/2.10.0-cann9.0.0;Python
-/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-User-authorized /opt stack supersedes dated personalguide. Preserve module
-PYTHONPATH,prepend frozen source/python. TASK_QUEUE_ENABLE=0,
-TORCH_DEVICE_BACKEND_AUTOLOAD=0.16logical64GiBAscend910_9392;lease/remap only.
-freeze_run.py:background.slice/Nice10,2buildworkers,boundedtasks. Lastfree:
-data190GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
-Formal timing lockTASK/online-measurement.lock.
-
-Latest resident librariesshared-packets-{standalone,python}-clean01;core
-placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumeradd-capacity-consumer-clean01;
-CPUsource-values-cpu-clean01. Earlier source-values-npu/context-pool consumers
-stay qualified for their evidence. Standalone/Python runtimes remain separate.
-
-historical-cpu-attention-01 is intentionallySIGSTOP,holding oldtiming.lock;
-never resume/kill/clean it. Historical1.6438× meant fasterthroughput,not current
-online-flow evidence. Restricted history remains on pushed
-archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
+Uncommitted code: failure reporting plus directed tests; CPU18/build passed, NPU
+checks pending. Evidence for38858d0 is committed separately from this increment.
