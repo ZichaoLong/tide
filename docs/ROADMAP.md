@@ -189,6 +189,12 @@ API limits/margins. Actual peaks are unchanged; no allocation or throughput gain
 claimed ([evidence](evidence/consumer-training-storage-20261002.md)). Original-width
 training still needs a real storage/compute improvement.
 
+F4/F5/F6 physical parameter-gradient lifetime accounting is qualified on clean789e1a5:
+CPU23/NPU25 and D512 calibration passed; aggressive multi-device consumers charge
+reused projection/Attention adjoints once, conservative/legacy paths stay per-window.
+All safety/API budgets stay unchanged. Actual peaks and results are unchanged;
+no new runtime/profile or scale claim ([evidence](evidence/consumer-gradient-lifetime-20261003.md)).
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU

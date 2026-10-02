@@ -5,7 +5,7 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **6b9224c** pushed; latest qualified implementation **233bf01**, its reviewed evidence **d0f9485** is pushed. [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest implementation **789e1a5** is pushed and qualified; its reviewed evidence is ready for the separate evidence commit. Previous backend evidence **9b8151a** is pushed. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -64,10 +64,13 @@ New included component`projection_parameter_gradients`; the Attention component
 now follows actual lifetime. Materialized inventory and paired C++/Python plans
 cover both policies and one/three devices. Runtime backend bytes are unchanged.
 
-Next: commit/push, freeze `gradient-lifetime-clean01`, CPU23 + installed-consumer
-build against qualified6b9224c, NPU25 and D512 calibration. Helpers
-`gradient_lifetime_calibration.py` and `gradient_lifetime_evidence.py SHA` compare
-unchanged allocator observations and corrected estimates. Commit evidence separately.
+Implementation **789e1a5** is committed/pushed and qualified: all four clean jobs
+passed, CPU23, installed-consumer build, NPU25 and D512 calibration; no skips.
+[Evidence](evidence/consumer-gradient-lifetime-20261003.md).
+Audit: `python TASK/launchers/gradient_lifetime_evidence.py 789e1a56a8e9f72e20814dd863f614a7cf366df2`.
+Estimates [25138936228,17266531620] → [24575275428,16702870820]; observed peaks remain
+[7804784128,6957622784]. Loss/statistics/chunks/continuation unchanged. No new
+profile needed: qualified backend bytes are unchanged. No active qualification jobs.
 
 Then one bounded original-width Add nine-card B4/physicalB2 pilot using the new
 static B512 plan and previously exercised B2 capacities (queue/arrivals896,
@@ -107,18 +110,22 @@ User-authorized /opt stack supersedes old private guide.
 prepend frozen source/python. Lease/remap devices; runtime `env -C {out}`.
 Long jobs: frozen source,background.slice,Nice10,two build workers,queue120s.
 Formal timing lock `TASK/online-measurement.lock`.
-Last free disk:data151GiB/root7.7GiB; check before large writes.
+Last free disk:data149GiB/root7.7GiB; check before large writes.
 
-Qualified source `TASK/sources/attention-adjoints-clean01`; consumer
-`TASK/builds/attention-adjoints-consumer-clean01`. Resident binaries
+Qualified consumer source `TASK/sources/gradient-lifetime-clean01`; consumer
+`TASK/builds/gradient-lifetime-consumer-clean01`. Backend source
+`TASK/sources/attention-adjoints-clean01`. Resident binaries
 `attention-adjoints-{standalone,python}-clean01`; core
 `placement-{cpu,npu,npu-python}-clean01`; CPUconsumer`source-values-cpu-clean01`.
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current active/queued job. Gradient-lifetime development3 and both backend
-qualification8-job groups are terminal passed. Next clean qualification uses
-`gradient-lifetime-clean01`; no original-width task is queued yet.
+All four gradient-lifetime clean jobs are terminal passed; no active/queued jobs
+from this increment. No original-width job submitted yet. Next command:
+`python TASK/launchers/freeze_run.py --name wide-add-gradient-lifetime01 --snapshot gradient-lifetime-clean01 --commit 789e1a5 --npu --npu-count 9 --max-wait 120 -- env -C {out} timeout 4300 {python} {base}/launchers/wide_add_gradient_lifetime.py --source {source} --build {base}/builds/gradient-lifetime-consumer-clean01 --output {out}/assessment`.
+Unit prefix `tide-execution-flows-`; logs/status `TASK/runs/NAME`. Inspect
+`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
+stop via `systemctl --user stop UNIT` only if needed.
 **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
