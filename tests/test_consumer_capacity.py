@@ -94,6 +94,25 @@ def test_overflow_refusal(capacity_probe):
     assert 'overflow' in cpp_plan(capacity_probe,g,Capacities(),Chunks(),[64*1024**3]*3,False)
 
 
+@pytest.mark.parametrize('memory',['add','attention'])
+def test_attention_gradient_charge_matches_materialized_model(memory,capacity_probe):
+    from tools.online_bench.fixture import build_model
+    packet,g=geometry(memory,width=16)
+    _,model,_,_=build_model(packet)
+    result=plan(g,Capacities(),Chunks(),[64*1024**3]*g.devices,True)
+    assert cpp_plan(capacity_probe,g,Capacities(),Chunks(),[64*1024**3]*g.devices,True)==result
+    actual=[0]*g.devices
+    for i,node in enumerate(model.nodes):
+        for name,value in node.extra.items():
+            if name in ('fiber_qkv','fiber_out'):
+                assert value.requires_grad
+                actual[result['state_owners'][i]]+=g.windows*value.numel()*4  # FP32 adjoints.
+    charged=[d['components']['attention_parameter_gradients'] for d in result['devices']]
+    assert charged==actual
+    assert (sum(charged)>0)==(memory=='attention')
+    assert all(d['components']['physical_and_canonical_gradients']>v for d,v in zip(result['devices'],charged))
+
+
 def test_compact_pool_charges_declared_cap_and_pack_workspace(capacity_probe):
     _,g = geometry(width=128)
     g = replace(g,sample_chunks=64)

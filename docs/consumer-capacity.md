@@ -80,6 +80,13 @@ beside phase allocator observations. CPU/mixed consumers retain their existing
 memory observations; this resident planner does not certify their peak memory.
 Full-size F6 and qualification on other CANN/CUDA environments remain separate.
 
+The `attention_parameter_gradients` component reports the QKV/output-matrix part
+of `physical_and_canonical_gradients` (it is included there, not an extra sum).
+Only the Attention consumer owns those matrices. Add retains its edge projection,
+scalar Aggregate, vector LH/state/Read and canonical gradient charges without
+fabricating attention parameters. Model-inventory tests check this distinction;
+the same per-device safety margins and allocator acceptance still apply.
+
 Optional `--auto-sample-chunks` applies the same static admission before model
 allocation to progressively smaller physical sample groups. It starts at the
 `--sample-chunk-rows` ceiling (zero starts at the logical batch), tries operator

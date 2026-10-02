@@ -195,13 +195,17 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
         construction = base+4*canonical[device]+parameters
         head = head_budget(c.outputs,w,v,p,g.training,MAX,True)
         head_work = head.fixed_bytes+chunks.head*head.row_bytes if coordinator else 0
-        retained = gradients = reverse_work = communication = roots = proposal = 0
+        retained = gradients = reverse_work = communication = roots = proposal = attention_gradients = 0
         if g.training:
             retained = projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals)
             if coordinator:
                 retained += windows*32*(trace+c.queue+c.outputs)*(10*w+64)
                 roots = 4*windows*c.outputs*w+(12 if g.sample_chunks>1 else 8)*v*w
-            gradients = windows*(4*(slots+1)*(w*w+w)+4*(4*body*w*w+body*domain)+32*b*nodes*(w+1)+24*cache)
+            # Only the Attention profile owns QKV/output matrices. Add has
+            # scalar aggregate logits and vector LH/state/Read adjoints, already
+            # covered below; its edge projection matrices remain fully charged.
+            attention_gradients = windows*16*body*w*w if g.attention else 0
+            gradients = windows*(4*(slots+1)*(w*w+w)+4*body*domain+32*b*nodes*(w+1)+24*cache)+attention_gradients
             if coordinator:
                 gradients += windows*64*(trace+c.queue+c.outputs)*(w+32)
             gradients += 4*canonical[device]
@@ -220,7 +224,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                           reverse_workspace=reverse_work,canonical_communication=communication,consumer_proposals=proposal,
                           head_workspace=head_work,continuation_snapshot_bytes=snapshot,
                           saved_contexts=saved_contexts,gradient_accumulation=accumulation,context_pack_workspace=context_pack,
-                          retained_pack_workspace=retained_pack)
+                          retained_pack_workspace=retained_pack,attention_parameter_gradients=attention_gradients)
         if max(*phases.values(),*components.values()) > MAX:
             raise ValueError('consumer memory extent overflow')
         result.append(dict(index=device,estimated_peak_bytes=max(phases.values()),phases=phases,components=components))

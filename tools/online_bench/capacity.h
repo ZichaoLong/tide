@@ -114,11 +114,14 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
     const Wide head_work=coordinator?head_fixed+chunk.at("head")*head_row:0;
-    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0;
+    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0;
     if(g.training) {
       retained=projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals);
       if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
-      gradients=windows*(4*(slots+1)*(w*w+w)+4*(4*body*w*w+body*domain)+32*b*nodes*(w+1)+24*cache);
+      // Add has no QKV/output matrices; projection, scalar aggregate and vector
+      // LH/state/Read gradients retain their separate conservative charges.
+      attention_gradients=g.attention?windows*16*body*w*w:0;
+      gradients=windows*(4*(slots+1)*(w*w+w)+4*body*domain+32*b*nodes*(w+1)+24*cache)+attention_gradients;
       if(coordinator)gradients+=windows*64*(trace+c.queue+c.outputs)*(w+32);
       gradients+=4*Wide(canonical[device]);
       reverse_work=windows*chunk.at("reverse")*(256*w*w+128*c.kv*(w+1)+128*domain+4096);
@@ -138,7 +141,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"consumer_proposals",bytes(proposal)},{"head_workspace",bytes(head_work)},
       {"continuation_snapshot_bytes",bytes(snapshot)},{"saved_contexts",bytes(saved_contexts)},
       {"gradient_accumulation",bytes(accumulation)},{"context_pack_workspace",bytes(context_pack)},
-      {"retained_pack_workspace",bytes(retained_pack)}};
+      {"retained_pack_workspace",bytes(retained_pack)},{"attention_parameter_gradients",bytes(attention_gradients)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
   }
   return result;
