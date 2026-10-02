@@ -6,9 +6,10 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
-ParameterVjp append_parameter_accumulate(CannProgram& p,const ParameterVjp& a,const ParameterVjp& b,
-    const at::Tensor& error,int64_t budget) {
+namespace {
+uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}
+ParameterVjp accumulate(CannProgram& p,const ParameterVjp& a,const ParameterVjp& b,
+    const at::Tensor& error,int64_t budget,bool consume_private) {
   if(at::GradMode::is_enabled()||a.owners.size()!=b.owners.size()||a.offsets!=b.offsets||a.offsets.size()!=a.owners.size()
       ||!a.values.defined()||a.values.dim()!=1||budget<1)
     throw std::invalid_argument("parameter accumulation requires matching no-grad owner layouts");
@@ -29,9 +30,16 @@ ParameterVjp append_parameter_accumulate(CannProgram& p,const ParameterVjp& a,co
     table.insert(table.end(),{offset,size});tiles.push_back(tiles.back()+(offset>=0?(size+255)/256:0));
   }
   if(a.values.numel()!=std::max<int64_t>(1,used))throw std::invalid_argument("parameter accumulation extent mismatch");
+  if(consume_private&&a.values.is_alias_of(b.values))
+    throw std::invalid_argument("private parameter accumulation requires disjoint source storage");
   const long double bytes=4.L*a.values.numel()+physical+8.L*(std::max<size_t>(2,table.size())+tiles.size());
   if(bytes>budget)throw std::invalid_argument("parameter accumulation tensor budget exceeded");
-  ParameterVjp out{a.owners,a.offsets,at::empty_like(a.values),at::empty_like(a.connected)};p.zero(out.values);p.zero(out.connected);
+  ParameterVjp out{a.owners,a.offsets,consume_private?a.values:at::empty_like(a.values),at::empty_like(a.connected)};
+  // Do not clear an aliased input. The kernel owns disjoint 256-element tiles
+  // and writes zero even when neither input is connected. Keep old flags live
+  // until all tiles finish; only the fresh output flags may be written here.
+  if(!consume_private||!used)p.zero(out.values); // Empty registries have one dummy element.
+  p.zero(out.connected);
   auto owners=at::tensor(table.empty()?std::vector<int64_t>{-1,0}:table,at::kLong).reshape({-1,2}).to(device);
   auto offsets=at::tensor(tiles,at::kLong).to(device);const auto tasks=tiles.back();
   p.kernel([=](void* stream){CannApi::check(ACLRT_LAUNCH_KERNEL(tide_parameter_accumulate)(32,stream,
@@ -39,4 +47,9 @@ ParameterVjp append_parameter_accumulate(CannProgram& p,const ParameterVjp& a,co
     "accumulate retained-window parameter owners");},{owners,offsets,a.values,a.connected,b.values,b.connected,out.values,out.connected,error});
   return out;
 }
+} // namespace
+ParameterVjp append_parameter_accumulate(CannProgram& p,const ParameterVjp& a,const ParameterVjp& b,
+    const at::Tensor& error,int64_t budget) {return accumulate(p,a,b,error,budget,false);}
+ParameterVjp append_private_parameter_accumulate(CannProgram& p,const ParameterVjp& a,const ParameterVjp& b,
+    const at::Tensor& error,int64_t budget) {return accumulate(p,a,b,error,budget,true);}
 } // namespace tide::device_online

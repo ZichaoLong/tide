@@ -5,6 +5,7 @@
 #include "retained_cache_fixture.h"
 #include "retained_attention_check.h"
 #include "reverse_gather_check.h"
+#include "parameter_accumulate_check.h"
 #include "full_vjp_fixture.h"
 #include "portable_torch/runtime.hpp"
 #include "../../cpp/bench/streaming.h"
@@ -197,6 +198,7 @@ int main(int argc,char** argv) {
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     test::retained_attention_check(d,args.dtype);
     test::reverse_gather_check(d,args.dtype);
+    test::private_accumulation_check(d);
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);
     int cases=0;auto run=[&](int profile,int cache,bool prefill,ResidentOptimizerKind kind,const std::string& emit) {
       try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation,contexts,compact,compact_journals);++cases;

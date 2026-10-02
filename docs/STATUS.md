@@ -199,5 +199,22 @@ cases plus existing independent accumulation/consumer tests, then clean evidence
 This alone does not solve Attention admission or B512 cost. Window-level reverse
 liveness and eager mixed multi-card placement remain follow-up work.
 
-Uncommitted: this reviewed recheck evidence/handoff; no implementation yet.
-No live project task except deliberately stopped historical-cpu-attention-01.
+Recheck evidence committed/pushed14bc89c. Private accumulation numeric reuse
+passed directed dirty-source development: two builds; native32 trajectories /
+768 windows /96 updates across FP32/FP16,2→legacy and2→2 restore; Python8.
+Each native process also passed28 numerical tile/poison cases,21 admission/
+alias/upstream-error checks and1 empty-registry case. Public exports remained
+stable across later accumulations. First accumulation copies; flags are never
+aliased. Public ABI/core/CANN/consumer estimates and max_bytes admission unchanged.
+
+Commit this implementation, then qualify a clean immutable private-accumulation-clean01
+snapshot: standalone/Python builds reuse audited matching dev host objects with
+fresh links; installed consumer reuses unchanged client objects. Directed native
+accumulation/compact-context gates, Python accumulation+training-context tests,
+actual consumer24, same-lease allocator comparison and separate FP16 profile.
+No unmodified full CPU regression or representative performance matrix rerun.
+Evidence follows separately; do not claim a whole-process memory reduction until
+measured (backward may still own the peak). No original-width rerun justified yet.
+
+Uncommitted: private accumulation implementation/tests/contract and this handoff.
+No live NPU task; preserve deliberately stopped historical-cpu-attention-01.

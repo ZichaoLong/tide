@@ -38,6 +38,7 @@ def test_accumulated_updates(target, family, schedule, kind, cards, mode, tmp_pa
         # connected zero from all-None, including momentum/decay/slot counters.
         for step, modes in enumerate((("all", "none", "all"), ("none", "zero", "none"), ("none",)*3)):
             opt.zero_grad(set_to_none=True)
+            retained_exports = []
             for group, root_mode in enumerate(modes):
                 x = values.clone().requires_grad_(True)
                 cotangents, objectives = [], []
@@ -68,9 +69,11 @@ def test_accumulated_updates(target, family, schedule, kind, cards, mode, tmp_pa
                     with pytest.raises(RuntimeError, match="accumulate"):
                         session.step()
                 old = [(s.values.clone(), s.connected.clone()) for s in (actual.parameter_shards or [actual])]
+                retained_exports.extend(zip(actual.parameter_shards or [actual], old))
                 session.accumulate()
                 assert session.accumulated_batches == group+1 and session.generation == step
-                for s, (v, c) in zip(actual.parameter_shards or [actual], old):
+                # Keep all preceding exports alive across later accumulations.
+                for s, (v, c) in retained_exports:
                     torch.testing.assert_close(s.values, v, atol=0, rtol=0)
                     assert torch.equal(s.connected, c)
                 with pytest.raises(RuntimeError, match="backward"):

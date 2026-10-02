@@ -20,4 +20,10 @@ ParameterVjp append_parameter_vjp(CannProgram&,const Graph&,const ParameterRegis
                                  const GraphVjp&,const at::Tensor& error,int64_t tensor_budget_bytes);
 ParameterVjp append_parameter_accumulate(CannProgram&,const ParameterVjp&,const ParameterVjp&,
                                         const at::Tensor& error,int64_t tensor_budget_bytes);
+// Only for a private, unexported left bank, disjoint from the right bank.
+// Each tile reads/writes its own values; connection flags use new storage so
+// block zero cannot race other blocks reading the old connection state.
+// This is a consuming update, not an idempotent replay of the original inputs.
+ParameterVjp append_private_parameter_accumulate(CannProgram&,const ParameterVjp&,const ParameterVjp&,
+                                                const at::Tensor& error,int64_t tensor_budget_bytes);
 } // namespace tide::device_online

@@ -83,8 +83,12 @@ unaccumulated final backward. Checkpoint refuses any accumulated gradients.
 Accumulation sums canonical gradients and ORs their connection flags; None and
 connected zero retain their optimizer meanings. It performs no averaging or loss
 scaling. Consumers must normalize losses for the intended complete logical batch.
-The old and replacement accumulator banks plus their tensor metadata, summed
-across devices, must fit `max_bytes` before execution. Current backward exports
+The first accumulation copies the public backward exports into private storage.
+Later accumulations reuse only that private numeric bank; old connection flags
+remain read-only until all device tiles finish, with separate new output flags.
+All owners are preflighted and built before any execution. Admission still
+conservatively charges the old and replacement banks plus their tensor metadata,
+summed across devices, against `max_bytes`. Current backward exports
 and CANN program arenas retain their separate budgets; keeping caller exports
 alive also keeps their storage alive. Capacity refusal is retryable. Nonfinite
 connected gradients are rejected by the existing all-owner optimizer transaction;

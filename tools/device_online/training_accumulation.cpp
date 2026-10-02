@@ -24,8 +24,10 @@ std::vector<ParameterVjp> accumulate_banks(const std::vector<ParameterVjp>& prev
   std::vector<ParameterVjp> result;
   std::vector<std::unique_ptr<CannProgram>> programs;
   std::vector<Tensor> errors;
-  // Preflight/build every owner before any execution. Replacement banks make
-  // capacity refusals retryable and keep already-exported backward views stable.
+  // Preflight/build every owner before any execution. The first copy isolates
+  // public backward views; later updates consume that private numeric bank.
+  // Fresh connection flags avoid cross-tile races. Keep the conservative
+  // old/replacement admission bound until the consumer is separately calibrated.
   for(size_t i=0;i<current.size();++i) {
     const auto& g=current[i];const auto device=g.values.device();
     auto error=at::zeros({1},g.values.options().dtype(at::kInt));
@@ -33,7 +35,7 @@ std::vector<ParameterVjp> accumulate_banks(const std::vector<ParameterVjp>& prev
     if(previous.empty()) {
       auto out=g;out.values=at::empty_like(g.values);out.connected=at::empty_like(g.connected);
       p->copy(out.values,g.values);p->copy(out.connected,g.connected);result.push_back(std::move(out));
-    } else result.push_back(append_parameter_accumulate(*p,previous[i],g,error,max_bytes));
+    } else result.push_back(append_private_parameter_accumulate(*p,previous[i],g,error,max_bytes));
     p->finish();errors.push_back(error);programs.push_back(std::move(p));
   }
   for(size_t i=0;i<programs.size();++i) {
