@@ -8,6 +8,7 @@ from .host import runtime_for, token_values
 from .resident_loss import head_loss, embedding_gradient, ConsumerOptimizer
 from .head_budget import head_budget
 from .memory import MemoryRecord
+from .resident_contexts import ContextPool
 from .capacity_runtime import prepare as prepare_capacity, observed as observed_capacity
 
 
@@ -48,7 +49,7 @@ def gradient_diagnostics(runtime, gradient, embedding, head, ge, gh):
 def run(packet, *, family, implementation, device, dtype, schedule, training, optimizer, steps, warmup,
         windows_per_step, native_library, diagnostics, placement, observer, parameter_budget,
         resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes, device_memory_bytes=0,
-        sample_chunk_rows=0):
+        sample_chunk_rows=0, context_memory_bytes=0):
     if implementation != "native" or torch.device(device).type != "npu":
         raise ValueError("resident consumer requires explicit native NPU execution")
     if dtype not in {"float32", "float16"}:
@@ -79,8 +80,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                             training, head_workspace_bytes, forward.chunk_policy=="aggressive")
     record_diagnostics = diagnostics or observer is not None
     forward,limits,owners,head_plan,capacity = prepare_capacity(packet,device,forward,limits,owners,head_plan,
-        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or record_diagnostics,chunk)
-    snapshot_budget = sum(d['components']['continuation_snapshot_bytes'] for d in capacity['devices'])
+        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or record_diagnostics,chunk,context_memory_bytes)
     accumulation_budget = sum(d['components']['gradient_accumulation'] for d in capacity['devices'])
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset="resident", trace=record_diagnostics, native_library=native_library,
@@ -90,7 +90,11 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                  lr=.0001, weight_decay=.001, momentum=.25, eps=1e-6)
     session = (runtime.training_session(chunk, optimizer=optimizer, groups=[group], limits=limits, placement=owners)
                if training else runtime.session(chunk, placement=owners))
-    contexts = [session.snapshot_device(max_bytes=snapshot_budget)]*chunks if chunks>1 else []
+    try:
+        contexts = ContextPool(session,chunks,list(owners.devices) or [str(device)],capacity,bool(context_memory_bytes))
+    except Exception:
+        session.close()
+        raise
     devices = session.placement["devices"]
     def sync():
         for d in devices:
@@ -109,7 +113,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 size = min(chunk, c["batch"]-first)
                 if contexts:
                     session.restore_device(contexts[index])
-                    contexts[index] = None  # Release old copy before replacing it.
+                    contexts.release(index)
                 roots = []
                 for w in range(windows_per_step):
                     cursor = position+w*c["tokens"]
@@ -168,7 +172,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                     roots.clear()
                 window = output = root = None
                 if contexts:
-                    contexts[index] = session.snapshot_device(max_bytes=snapshot_budget)
+                    contexts.save(index)
             position += windows_per_step*c["tokens"]
             if loss is not None and not torch.isfinite(loss).all().item():
                 raise RuntimeError("nonfinite consumer loss; optimizer not applied")
@@ -217,6 +221,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         batch_execution=dict(logical_batch=c["batch"],requested_sample_chunk_rows=sample_chunk_rows,
                              effective_sample_chunk_rows=chunk,physical_chunks=chunks),
         head_memory=vars(head_plan),
+        context_storage=dict(contexts.record(),requested_bytes_per_device=context_memory_bytes),
         memory_admission=capacity,
         memory=memory.record(),
         precision=dict(payload=dtype, loss="float32", adjoints="float32", optimizer_masters="float32"),

@@ -71,6 +71,11 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
   if(contexts) {
     auto initial=session->snapshot_device(512*1024*1024,compact);saved_contexts={initial,initial};
     if(compact)require(initial.tensor_bytes()<session->snapshot_device(512*1024*1024).tensor_bytes(),"empty compact context did not shrink");
+    auto budgets=initial.device_bytes();Index total=0;for(const auto& [_,n]:budgets)total+=n;
+    require(total==initial.tensor_bytes(),"snapshot per-device bytes do not sum");
+    require(session->snapshot_device(total,compact,budgets).device_bytes()==budgets,"snapshot exact per-device budget changed");
+    --budgets.begin()->second;
+    test::train_reject([&]{session->snapshot_device(total,compact,budgets);},"snapshot exceeded per-device budget");
     cpu_contexts={test::train_boundary(cpu.initial,dtype),test::train_boundary(cpu.initial,dtype)};
     test::train_reject([&]{session->snapshot_device(1,compact);},"device snapshot capacity ignored");
   }

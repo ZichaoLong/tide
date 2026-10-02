@@ -100,6 +100,9 @@ ResidentContinuation ResidentSession::snapshot_device(Index max_bytes) const {
 ResidentContinuation ResidentSession::snapshot_device(Index max_bytes,bool compact) const {
   impl_->check();return impl_->flow->snapshot_device(max_bytes,compact);
 }
+ResidentContinuation ResidentSession::snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& budgets) const {
+  impl_->check();return impl_->flow->snapshot_device(max_bytes,compact,budgets);
+}
 void ResidentSession::restore_device(const ResidentContinuation& saved) {
   impl_->check();impl_->flow->restore_device(saved);impl_->cut=saved.cut();
 }

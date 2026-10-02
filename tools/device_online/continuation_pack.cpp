@@ -4,12 +4,15 @@
 #include <stdexcept>
 
 namespace tide::device_online {
-SavedBuffers save_buffers(const std::vector<Tensor>& buffers,const std::vector<ContinuationRows>& groups,Index budget) {
+SavedBuffers save_buffers(const std::vector<Tensor>& buffers,const std::vector<ContinuationRows>& groups,Index budget,const std::map<Index,Index>& device_budgets) {
   if(budget<1)throw std::invalid_argument("device continuation tensor budget exceeded");
+  for(const auto& [device,limit]:device_budgets)if(device<0||device>127||limit<0)
+    throw std::invalid_argument("invalid device continuation per-device budget");
   SavedBuffers out;out.values.resize(buffers.size());std::map<const void*,size_t> slots;
-  long double bytes=0;std::set<size_t> packed;
+  long double bytes=0;std::map<Index,long double> by_device;std::set<size_t> packed;
   for(size_t i=0;i<buffers.size();++i) {
     slots.emplace(buffers[i].unsafeGetTensorImpl(),i);bytes+=buffers[i].nbytes();
+    by_device[buffers[i].device().index()]+=buffers[i].nbytes();
     out.shapes.push_back(buffers[i].sizes().vec());
   }
   for(const auto& group:groups) {
@@ -28,13 +31,19 @@ SavedBuffers save_buffers(const std::vector<Tensor>& buffers,const std::vector<C
       compact+=static_cast<long double>(indices.numel())*(value.nbytes()/value.size(0));
     }
     if(compact>=full)continue; // Dense caches need no additional index storage.
-    bytes+=compact-full;saved.indices=std::move(indices);
+    bytes+=compact-full;by_device[indices.device().index()]+=compact-full;saved.indices=std::move(indices);
     for(auto slot:saved.slots)packed.insert(slot);
     out.groups.push_back(std::move(saved));
   }
   // Decide capacity after device row selection, before allocating payload copies.
   if(bytes>budget)throw std::invalid_argument("device continuation tensor budget exceeded");
   out.bytes=static_cast<Index>(bytes);
+  for(const auto& [device,value]:by_device) {
+    const auto found=device_budgets.find(device);
+    if(!device_budgets.empty()&&(found==device_budgets.end()||value>found->second))
+      throw std::invalid_argument("device continuation per-device tensor budget exceeded on NPU "+std::to_string(device));
+    out.device_bytes[device]=static_cast<Index>(value);
+  }
   for(const auto& group:out.groups)for(auto slot:group.slots)
     out.values[slot]=buffers[slot].index_select(0,group.indices);
   for(size_t i=0;i<buffers.size();++i)if(!packed.count(i))out.values[i]=buffers[i].clone();

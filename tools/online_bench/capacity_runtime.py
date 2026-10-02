@@ -5,7 +5,7 @@ from .capacity import Capacities, Chunks, packet_geometry, plan
 
 
 def prepare(packet, device, forward, limits, owners, head, training, optimizer, windows, budget, payload, diagnostics,
-            sample_rows=None):
+            sample_rows=None, context_memory_bytes=0):
     if type(budget) is not int or not 0 <= budget < 2**63:
         raise ValueError('device-memory-bytes must be a nonnegative int64')
     devices = list(owners.devices) or [str(device)]
@@ -23,6 +23,7 @@ def prepare(packet, device, forward, limits, owners, head, training, optimizer, 
         devices=len(devices),locality=owners.policy=='locality')
     if sample_rows is not None:
         g = replace(g,batch=sample_rows,sample_chunks=(g.batch-1)//sample_rows+1)
+    g = replace(g,context_bytes=context_memory_bytes)
     c = Capacities(forward.queue,forward.arrivals,forward.outputs,forward.trace,forward.kv_rows,forward.kv_trace_rows,limits.program_workspace_bytes)
     chunks = Chunks(forward.full_chunk_rows,forward.emission_chunk_rows,forward.aggregate_chunk_rows,
                     forward.attention_chunk_rows,forward.attention_key_rows,limits.reverse_chunk_rows,head.rows)

@@ -68,7 +68,12 @@ python scripts/plan_execution_flow.py --packet /path/workload.json \
 ```
 
 Use the same `--resident-*`, `--head-workspace-bytes`, owner/chunk policy and
-window options as the actual consumer. The offline result is explicitly
+window options as the actual consumer. `--sample-chunk-rows` plans the physical
+sample extent while charging saved state for the full logical batch. Optional
+`--resident-context-bytes` caps simultaneous saved tensor/index storage per card
+and separately charges packing workspace; zero retains dense snapshots. Runtime
+admission also enforces the remaining pool budget on each snapshot. This does
+not shrink live KV or retained tapes. The offline result is explicitly
 `planned` or `refused`, not a device run or verified throughput. Actual clients
 repeat admission using live driver availability and record `memory_admission`
 beside phase allocator observations. CPU/mixed consumers retain their existing

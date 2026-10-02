@@ -26,7 +26,7 @@ struct ResidentMeasurements {
   std::string memory;
   double construction=0;
   Index cut=0;
-  Index sample_rows=0,sample_chunks=1,snapshot_budget=0,accumulation_budget=0;
+  Index sample_rows=0,sample_chunks=1,accumulation_budget=0;
   std::vector<double> seconds,warmup,losses;
   std::vector<Index> outputs;
   std::vector<std::map<std::string,Index>> statistics;
@@ -36,6 +36,7 @@ struct ResidentMeasurements {
   capacity::Plan capacity;
   std::vector<DeviceMemoryInfo> initial_memory;
   std::vector<Index> peak_growth;
+  std::map<Index,Index> context_peaks;
 };
 void prepare_capacity(const Packet&,const Config&,const std::vector<at::Device>&,ResidentMeasurements&);
 std::string capacity_json(const Config&,const ResidentMeasurements&);

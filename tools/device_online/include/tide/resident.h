@@ -13,6 +13,7 @@ class ResidentContinuation {
   Index cut() const;
   Index batch_size() const;
   Index tensor_bytes() const;
+  std::map<Index,Index> device_bytes() const; // Logical NPU index -> saved bytes.
  private:
   std::shared_ptr<const device_online::SavedContent> data_;
   friend class device_online::ContentFlow;
@@ -63,6 +64,7 @@ class ResidentSession {
   Continuation snapshot() const; // Explicit CPU checkpoint materialization.
   ResidentContinuation snapshot_device(Index max_bytes) const;
   ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& device_budgets) const;
   void restore_device(const ResidentContinuation&); // Clears latest-window diagnostics.
   Result result() const;         // Explicit latest-window CPU diagnostics.
   Index cut() const;

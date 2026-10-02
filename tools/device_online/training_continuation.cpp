@@ -12,9 +12,12 @@ ResidentContinuation ResidentTrainingSession::snapshot_device(Index max_bytes) c
   return snapshot_device(max_bytes,false);
 }
 ResidentContinuation ResidentTrainingSession::snapshot_device(Index max_bytes,bool compact) const {
-  auto& s=*impl_;s.check();if(s.sharded)return s.sharded->snapshot_device(max_bytes,compact);
+  return snapshot_device(max_bytes,compact,{});
+}
+ResidentContinuation ResidentTrainingSession::snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& budgets) const {
+  auto& s=*impl_;s.check();if(s.sharded)return s.sharded->snapshot_device(max_bytes,compact,budgets);
   detached(!s.saved.empty(),s.gradients_ready);
-  try{return s.flow->snapshot_device(max_bytes,compact);}
+  try{return s.flow->snapshot_device(max_bytes,compact,budgets);}
   catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
 }
 void ResidentTrainingSession::restore_device(const ResidentContinuation& saved) {
@@ -30,8 +33,11 @@ ResidentContinuation ShardedTrainingOwner::snapshot_device(Index max_bytes) cons
   return snapshot_device(max_bytes,false);
 }
 ResidentContinuation ShardedTrainingOwner::snapshot_device(Index max_bytes,bool compact) const {
+  return snapshot_device(max_bytes,compact,{});
+}
+ResidentContinuation ShardedTrainingOwner::snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& budgets) const {
   auto& s=*impl_;s.check();detached(!s.saved.empty(),s.gradients_ready);
-  try{return s.flow->snapshot_device(max_bytes,compact);}
+  try{return s.flow->snapshot_device(max_bytes,compact,budgets);}
   catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
 }
 void ShardedTrainingOwner::restore_device(const ResidentContinuation& saved) {

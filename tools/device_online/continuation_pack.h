@@ -11,8 +11,9 @@ struct SavedBuffers {
   std::vector<std::vector<Index>> shapes;
   std::vector<SavedRows> groups;
   Index bytes=0;
+  std::map<Index,Index> device_bytes;
 };
-SavedBuffers save_buffers(const std::vector<Tensor>&,const std::vector<ContinuationRows>&,Index budget);
+SavedBuffers save_buffers(const std::vector<Tensor>&,const std::vector<ContinuationRows>&,Index budget,const std::map<Index,Index>& device_budgets);
 void check_buffers(const std::vector<Tensor>&,const SavedBuffers&);
 void restore_buffers(const std::vector<Tensor>&,const SavedBuffers&);
 } // namespace tide::device_online

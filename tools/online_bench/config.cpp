@@ -27,7 +27,7 @@ Config parse(int argc,char** argv) {
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
       ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"||key=="--sample-chunk-rows"
       ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
-      ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||limit;
+      ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||key=="--resident-context-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
     if(equal==std::string::npos){if(++i==argc)throw std::invalid_argument("missing option value");value=argv[i];}
     if(key=="--packet")c.packet=value;else if(key=="--family")c.family=value;
@@ -42,6 +42,7 @@ Config parse(int argc,char** argv) {
     else if(key=="--sample-chunk-rows")c.sample_chunk_rows=integer(value);
     else if(key=="--parameter-budget")c.parameter_budget=integer(value);
     else if(key=="--head-workspace-bytes")c.head_workspace_bytes=integer(value);
+    else if(key=="--resident-context-bytes")c.context_memory_bytes=integer(value);
     else if(key=="--device-memory-bytes")c.device_memory_bytes=integer(value);
     else if(key=="--devices")c.devices=integer(value);
     else if(key=="--owner-policy")c.owner_policy=value;
@@ -58,7 +59,7 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive"))throw std::invalid_argument("invalid device/owner/chunk policy");
-  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes))
+  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes))
     throw std::invalid_argument("resident capacities and placement require resident preset");
   if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");

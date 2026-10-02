@@ -97,7 +97,7 @@ class ResidentSession:
     def snapshot(self):
         return from_continuation(self.runtime.execution_graph, self.owner.snapshot())
 
-    def snapshot_device(self, *, max_bytes, compact=False):
+    def snapshot_device(self, *, max_bytes, compact=False, device_budgets=None):
         """Save numerical continuation on its original NPU owners, within budget."""
         from .coordinates import integers
         if parameter_identity(self.runtime.execution_model) != self.parameters:
@@ -107,7 +107,8 @@ class ResidentSession:
             raise ValueError("device continuation budget must be positive")
         if type(compact) is not bool:
             raise ValueError("device continuation compact must be bool")
-        return self.owner.snapshot_device(max_bytes, compact)
+        from .resident_options import continuation_device_budgets
+        return self.owner.snapshot_device(max_bytes, compact, continuation_device_budgets(device_budgets))
 
     def restore_device(self, saved):
         """Restore an opaque snapshot from this session; parameters stay fixed."""

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Inspect resident complete-consumer memory without Torch, NPUs or model tensors."""
 import argparse
+from dataclasses import replace
 import json
 from pathlib import Path
 import sys
@@ -18,10 +19,13 @@ def main():
     parser.add_argument('--diagnostics',action='store_true')
     parser.add_argument('--optimizer',choices=('sgd','adamw'),default='sgd')
     parser.add_argument('--windows-per-step',type=int,default=2)
+    parser.add_argument('--sample-chunk-rows',type=int,default=0)
     add_arguments(parser)
     a = parser.parse_args()
     if a.device_memory_bytes < 1 or a.resident_library is not None:
         parser.error('offline planning requires positive --device-memory-bytes and no runtime library')
+    if not all(0 <= v < 2**63 for v in (a.sample_chunk_rows,a.resident_context_bytes)):
+        parser.error('sample-chunk-rows and resident-context-bytes must be nonnegative int64')
     if a.output and a.output.exists():
         parser.error('output must be new')
     packet = validate_packet(json.loads(a.packet.read_text()))
@@ -39,6 +43,9 @@ def main():
     g = packet_geometry(packet,windows=a.windows_per_step,payload=2 if a.dtype=='float16' else 4,
         training=a.training,adamw=a.optimizer=='adamw',diagnostics=a.training or a.diagnostics,
         devices=a.devices,locality=a.owner_policy=='locality')
+    sample_rows = min(a.sample_chunk_rows or g.batch,g.batch)
+    g = replace(g,batch=sample_rows,sample_chunks=(g.batch-1)//sample_rows+1,
+                context_bytes=a.resident_context_bytes)
     record = dict(workload_sha256=packet['sha256'],kind='offline capacity estimate; not execution or qualification')
     try:
         head = head_budget(caps.outputs,g.width,g.vocab,g.payload,g.training,a.head_workspace_bytes,a.chunk_policy=='aggressive')

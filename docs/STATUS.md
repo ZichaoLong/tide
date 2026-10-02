@@ -4,8 +4,8 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** User authorized continued
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest implementationf8cc052 committed/pushed; compact-continuation evidence
-and five additional performance submatrices are ready for evidence commit.
+Latest implementationf8cc052 and evidenceca54c4a committed/pushed.
+Uncommitted per-device continuation-pool increment is being prepared for directed gates.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -69,9 +69,14 @@ Single lease physical1→npu:0, queue cap120s, parent timeout5400s, child900s.
 Helper launchers/remaining_family_matrix_resume.py schedules exactly10 missing
 children: TimedDAG/Python/streaming-confirm02/03, Settle/Python/prefill and streaming
 screen01 +confirm01–03. Stops on first failure; do not edit live helper/source.
-Recipe PID124125 RESUMED after compact gates/memory; TimedDAG streaming
-confirm02/03 both PASSED. boundary-hold-compact-contexts.json is resumed.
-Remaining eight children are Settle/Python both schedules, parent deadline05:54UTC.
+TimedDAG streaming confirm02/03, Settle/Python prefill screen01/confirm01 PASSED.
+Recipe PID124125 held (start1850121793) by boundary-hold-context-pool.json;
+Settle/Python prefill-confirm02 PASSED at05:03UTC; child finished naturally. Do not
+start heavy builds until its status and matrix records pass. Then run bounded
+context-pool gates and resume the exact same recipe after checking PID/start.
+Five children remain after confirm02; parent deadline05:54UTC is not extended.
+If insufficient time remains, cancel only at completed-child boundary and launch
+only missing children in a new finite recipe. Historical hold record is resumed.
 No completed-cell reruns. Heavy builds/gates must wait for a measured-child boundary.
 
 Each submatrix20pilot+3×12confirmation processes,1continued warmup+3measured steps,
@@ -96,8 +101,23 @@ script interface failures before model execution; helper_v3 corrects them,
 production source unchanged. Dense mode and existing C++ entry points retained.
 [Evidence](evidence/compact-continuations-20261002.md).
 
-Next: integrate compact contexts with per-device simultaneous-live admission;
-then reduce dominant retained/journal costs and calibrate actual scale. Current
+Implementation ready: per-device snapshot budgets and handle byte reporting,
+plus Python/LibTorch consumer ContextPool. --resident-context-bytes0 keeps dense;
+positive enables compact and limits all simultaneous handles per card. Capacity
+charges pool plus separate metadata workspace; logical batch/update unchanged.
+Offline planner exposes the same explicit sample/pool options. Frozen dirty
+source TASK/sources/context-pool-dev01: builds context-pool-{standalone,python,
+consumer}-dev01 all PASSED; CPU17, contexts18, actual consumers34/no skips;
+four dense/compact FP32/FP16 component cells32trajectories/768windows/96updates.
+All sources/tests match the tested snapshot; only handoff docs changed afterward.
+Next: implementation commit/push, freeze context-pool-clean01 at exact commit,
+relink libraries with build_context_pool.py --reuse-host matching-dev01;
+relink installed client with build_capacity_client.py --reuse-client dev01.
+Run CPU17, NPU64 (contexts18+consumers46), four standalone cells; separate
+profile_context_pool.py and context_pool_memory.py observations. Audit with
+context_pool_evidence.py COMMIT; reviewed evidence commit/push. Reuse checked
+core/CANN; do not repeat full CPU regression. Restore held matrix promptly after
+gates/observations. After pool, reduce retained/journal costs and calibrate scale. Current
 read-only12card FP32 wide estimate(B1/chunks512,trace8192,KVtrace65536)151.6GiB:
 coordinator saved contexts44.2GiB,retained31.7GiB,gradients19.5GiB,masters16.1GiB,
 accumulation10.8GiB. Tighter declared trace2048/KVtrace4096 gives121.9GiB;

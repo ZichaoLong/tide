@@ -122,9 +122,16 @@ with an explicit gradient boundary. It does not restore parameters or advance th
 optimizer. Restoring clears latest-window diagnostics; the next forward records
 its own events. The independent stream supplies its own next input positions.
 
-Each handle reports `cut`, `batch_size` and `tensor_bytes`; its capacity check
+Each handle reports `cut`, `batch_size`, `tensor_bytes` and `device_bytes`
+(logical NPU index to saved bytes); its capacity check
 bounds that snapshot's saved tensors (including shared packed indices) across
-owner devices before copying payloads. Compact row selection uses additional
+owner devices before copying payloads. Optional `device_budgets={index: bytes}`
+(the third C++ overload argument) additionally bounds each device. A nonempty
+mapping must cover every used device; zero bytes explicitly admits no storage.
+All device limits are checked before any saved payload copy. Empty/omitted
+mapping retains the total-only API. The limits do not include other handles:
+callers subtract their simultaneously live saved bytes before saving a new one.
+Compact row selection uses additional
 metadata workspace proportional to declared queue/KV capacity; this workspace
 is outside `max_bytes`, as is vendor allocator overhead. Other
 live handles and the active flow still require storage. Handle copies share

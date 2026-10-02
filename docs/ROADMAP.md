@@ -172,7 +172,9 @@ Dense live KV and automatic sample admission remain pending. Optional compact
 saved continuations are qualified on cleanf8cc052: Python18, four standalone
 FP32/FP16 cells(768windows/96updates), separate trace0AiCPU and representative
 saved-tensor bytes -98.09% ([evidence](evidence/compact-continuations-20261002.md)).
-Consumer compact-pool admission, live/retained memory and scale remain pending.
+Per-device simultaneous-live compact pool admission is implemented with directed
+CPU17, Python18/consumer34 and four native cells; immutable qualification pending.
+Live/retained memory, automatic sample admission and scale remain pending.
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations

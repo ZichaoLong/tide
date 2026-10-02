@@ -83,7 +83,7 @@ def python_run(packet,a):
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
                workers=a.workers,packed_sources=a.packed_sources,batch_next=a.batch_next,
-               sample_chunk_rows=a.sample_chunk_rows,
+               sample_chunk_rows=a.sample_chunk_rows, context_memory_bytes=a.resident_context_bytes,
                parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None,
                **python_arguments(a,device))
     if a.diagnostics:

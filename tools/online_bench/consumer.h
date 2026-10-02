@@ -29,7 +29,7 @@ struct Config {
   bool packed_sources=false,batch_next=false;
   Index parameter_budget=1024LL*1024*1024;
   Index head_workspace_bytes=4LL*1024*1024*1024;
-  Index device_memory_bytes=0;
+  Index device_memory_bytes=0,context_memory_bytes=0;
   Index devices=1;
   std::string owner_policy="locality",chunk_policy="conservative";
   std::map<std::string,Index> resident_limits;

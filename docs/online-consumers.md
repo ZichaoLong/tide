@@ -272,10 +272,23 @@ Resident admission uses physical sample rows for the active state and tapes,
 and additionally charges all saved numerical continuations plus simultaneous
 old/replacement gradient accumulators. A restored handle is released before its
 replacement is saved. Snapshot byte checks and allocator observations verify
-those declared bounds. Persistent KV remains dense and all sample continuations
-remain on their original NPUs; this is explicit slicing, not automatic selection
-of a sample size or compact KV. Qualification for this consumer composition is
-pending; the separate context and accumulation API gates do not certify it.
+those declared bounds. Live KV remains dense and all sample continuations
+remain on their original NPUs. Explicit slicing is qualified on clean `75543a7`
+([evidence](evidence/resident-sample-chunks-20261002.md)); automatic sample-size
+selection remains pending.
+
+`--resident-context-bytes BYTES` optionally enables compact saved continuations
+and caps their combined tensor/index storage on each device. Zero keeps dense
+saving and the existing dense envelope. For a positive budget, the consumer
+subtracts all other live handles on each card before requesting the next save;
+the library checks every card before copying payloads. Exceeding the pool fails
+explicitly and does not discard messages/KV or change the logical batch. Initial
+shared empty handles are conservatively charged once per sample range. Packing
+metadata workspace is reserved separately in complete-memory admission. The
+`context_storage` record reports policy, requested bytes per device, admitted
+budgets and peak saved bytes. This is a bounded pool for an explicit sample
+size; live state, retained tapes, parameters and vendor workspace still have
+their own costs. Qualification of this pool is pending.
 
 The sample-slicing FP16 gate separates cross-dtype rounding from slicing: its
 CPU FP32 comparison uses tensor infinity-norm error bounded by

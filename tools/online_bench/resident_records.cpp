@@ -38,6 +38,14 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
   out<<",\"losses\":[";for(size_t i=0;i<r.losses.size();++i){if(i)out<<',';if(r.outputs[i])out<<r.losses[i];else out<<"null";}out<<']';
   out<<",\"statistics\":[";bool first=true;for(const auto& s:r.statistics){if(!first)out<<',';first=false;out<<'{';bool field=true;
     for(const auto& [k,v]:s){if(!field)out<<',';field=false;out<<quoted(k)<<':'<<v;}out<<'}';}out<<']';
+  out<<",\"context_storage\":{\"policy\":"<<quoted(c.context_memory_bytes?"compact":"dense")
+     <<",\"requested_bytes_per_device\":"<<c.context_memory_bytes<<",\"devices\":[";
+  for(size_t i=0;i<r.initial_memory.size();++i) {
+    if(i)out<<',';const auto d=r.initial_memory[i].device.index();
+    out<<"{\"device_index\":"<<int(d)<<",\"budget_bytes\":"<<r.capacity.cards[i].components.at("saved_contexts")
+       <<",\"peak_saved_bytes\":"<<r.context_peaks.at(d)<<'}';
+  }
+  out<<"]}";
   out<<",\"windows_per_step\":"<<c.windows<<",\"warmup_steps\":"<<c.warmup<<",\"measured_steps\":"<<c.steps
      <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<r.cut
      <<",\"batch_execution\":{\"logical_batch\":"<<p.batch<<",\"requested_sample_chunk_rows\":"<<c.sample_chunk_rows

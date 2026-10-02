@@ -50,6 +50,9 @@ ResidentContinuation ContentFlow::snapshot_device(Index max_bytes) const {
   return snapshot_device(max_bytes,false);
 }
 ResidentContinuation ContentFlow::snapshot_device(Index max_bytes,bool compact) const {
+  return snapshot_device(max_bytes,compact,{});
+}
+ResidentContinuation ContentFlow::snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& device_budgets) const {
   if(!impl_||impl_->failed)throw std::logic_error("device continuation unavailable on closed/failed flow");
   if(at::GradMode::is_enabled())throw std::invalid_argument("device continuation requires no-grad");
   auto& s=*impl_;const auto buffers=s.continuation_tensors();
@@ -70,7 +73,7 @@ ResidentContinuation ContentFlow::snapshot_device(Index max_bytes,bool compact) 
   // All row selection, payload packing and saved numerical state stay on NPU.
   try {
     synchronize(buffers);
-    saved->buffers=save_buffers(buffers,rows,max_bytes);
+    saved->buffers=save_buffers(buffers,rows,max_bytes,device_budgets);
     synchronize(saved->buffers.values);
   }catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   ResidentContinuation out;out.data_=std::move(saved);return out;
@@ -101,6 +104,9 @@ Index ResidentContinuation::cut() const {
 }
 Index ResidentContinuation::batch_size() const {
   if(!data_)throw std::logic_error("empty device continuation");return data_->boundary.batch_size;
+}
+std::map<Index,Index> ResidentContinuation::device_bytes() const {
+  if(!data_)throw std::logic_error("empty device continuation");return data_->buffers.device_bytes;
 }
 Index ResidentContinuation::tensor_bytes() const {
   if(!data_)throw std::logic_error("empty device continuation");return data_->buffers.bytes;

@@ -1,5 +1,6 @@
 #include "resident_consumer.h"
 #include "memory.h"
+#include "resident_contexts.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 namespace tide_flow {
@@ -57,9 +58,15 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
     result.placement=inference->placement();
   }
   auto sync=[&]{for(const auto& d:result.placement.devices)portable_torch::synchronize(d);};
-  std::vector<tide::ResidentContinuation> contexts;
-  if(result.sample_chunks>1)contexts.assign(result.sample_chunks,
-    training?training->snapshot_device(result.snapshot_budget):inference->snapshot_device(result.snapshot_budget));
+  ContextPool contexts(result.sample_chunks,memory_devices,result.capacity);
+  auto save_context=[&] {
+    const auto budgets=contexts.remaining();Index total=0;
+    for(const auto& [_,value]:budgets)total=capacity::bytes(capacity::Wide(total)+value);
+    if(total<1)throw std::invalid_argument("saved continuation pool budget exhausted");
+    return training?training->snapshot_device(total,c.context_memory_bytes>0,budgets)
+                   :inference->snapshot_device(total,c.context_memory_bytes>0,budgets);
+  };
+  if(!contexts.empty())contexts.initialize(save_context());
   sync();result.construction=seconds(begin);Index position=0;
   memory.capture("construction");
   for(Index step=0;step<c.steps+c.warmup;++step) {
@@ -69,7 +76,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       const auto size=std::min(result.sample_rows,p.batch-first);
       if(!contexts.empty()) {
         if(training)training->restore_device(contexts[index]);else inference->restore_device(contexts[index]);
-        contexts[index]={}; // The active owner now holds this state; free its old copy.
+        contexts.release(index);
       }
       std::vector<tide::ResidentCotangents> roots;
       for(Index window=0;window<c.windows;++window) {
@@ -113,7 +120,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
         if(!contexts.empty())training->accumulate(result.accumulation_budget);
       }
       roots.clear();
-      if(!contexts.empty())contexts[index]=training?training->snapshot_device(result.snapshot_budget):inference->snapshot_device(result.snapshot_budget);
+      if(!contexts.empty())contexts.store(index,save_context());
     }
     position+=c.windows*p.tokens;
     if(loss.defined()&&!at::isfinite(loss).all().item<bool>())throw std::runtime_error("nonfinite consumer loss; optimizer not applied");
@@ -142,6 +149,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   result.peak_growth=memory.peak_growth();
   for(size_t i=0;i<result.peak_growth.size();++i)if(result.peak_growth[i]>result.capacity.cards[i].peak)
     throw std::runtime_error("consumer memory estimate underestimated allocator peak; retain failed run and recalibrate");
+  result.context_peaks=contexts.peaks();
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();
   return resident_record(p,c,device,result);
 }

@@ -60,3 +60,12 @@ def validate_resident(config, options, device, placement):
     for node in config.graph.nodes:
         import torch
         read_dtype(node, torch.float32, placement)
+
+
+def continuation_device_budgets(values):
+    if values is None:
+        return {}
+    if (type(values) is not dict or any(type(k) is not int or not 0 <= k <= 127
+            or type(v) is not int or not 0 <= v < 2**63 for k,v in values.items())):
+        raise ValueError("invalid device continuation per-device budgets")
+    return values

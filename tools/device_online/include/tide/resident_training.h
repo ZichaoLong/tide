@@ -137,6 +137,7 @@ class ResidentTrainingSession {
   // retained windows/unconsumed backward gradients must be handled first.
   ResidentContinuation snapshot_device(Index max_bytes) const;
   ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact,const std::map<Index,Index>& device_budgets) const;
   void restore_device(const ResidentContinuation&);
   Result result() const; // Explicit diagnostics; never an input to device progression.
   Index cut() const;

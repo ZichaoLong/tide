@@ -18,6 +18,7 @@ from tools.online_bench.host import run
 def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     family, memory, schedule, optimizer, clear, delayed, training = case
     device = target()
+    pool = 64*1024**2 if memory=="attention" else 0
     p = make_continuous_packet(graph=ranked_graph(layers=3,region_width=2,fanout=2,local_span=2,delayed=delayed),
         memory=memory,width=4,batch=5,tokens=2,vocab=7,clear=clear)
     expected, actual = [], []
@@ -26,11 +27,11 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     cards = 2 if schedule == "prefill" else 1
     if implementation == "libtorch":
         got, actual = standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=cards,
-                                dtype_name=dtype_name,extra=("--sample-chunk-rows=2",))
+                                dtype_name=dtype_name,extra=("--sample-chunk-rows=2", "--resident-context-bytes="+str(pool)))
     else:
         owners = ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")) if cards==2 else None
         got = run(p,implementation="native",device=device,dtype=dtype_name,schedule=schedule,preset="resident",
-            sample_chunk_rows=2,observer=observer(actual),native_library=os.environ["TIDE_BUILD_DIR"],
+            sample_chunk_rows=2,context_memory_bytes=pool,observer=observer(actual),native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_placement=owners,**kw)
     tol = dict(atol=2e-3,rtol=2e-2) if dtype_name=="float16" else dict(atol=1e-6,rtol=1e-5)
     compare_records(actual,expected,5,**tol,tensor_norm=dtype_name=="float16")
@@ -51,8 +52,12 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     assert got['memory_admission']['allocator_within_estimate']
     for d in got['memory_admission']['devices']:
         c = d['components']
-        assert c['saved_contexts'] == 3*c['continuation_snapshot_bytes'] > 0
+        assert c['saved_contexts'] == (min(pool,3*c['continuation_snapshot_bytes']) if pool else 3*c['continuation_snapshot_bytes']) > 0
+        assert (c['context_pack_workspace']>0)==bool(pool)
         assert (c['gradient_accumulation'] > 0) == training
+    assert got['context_storage']['policy']==('compact' if pool else 'dense')
+    assert got['context_storage']['requested_bytes_per_device']==pool
+    assert all(x['peak_saved_bytes']<=x['budget_bytes'] for x in got['context_storage']['devices'])
     (tmp_path/'observed.json').write_text(json.dumps(dict(candidate=got,observations=actual)))
 
 
@@ -71,3 +76,15 @@ def test_resident_whole_batch_option_and_continued_warmup():
     torch.testing.assert_close(torch.tensor(c['losses']),torch.tensor(a['losses']))
     assert b['batch_execution']['physical_chunks']==1
     assert all(d['components']['saved_contexts']==0 for d in b['memory_admission']['devices'])
+
+
+def test_resident_saved_pool_refusal():
+    from test_online_consumer import packet
+    device=target()
+    kw=dict(family='settle',implementation='native',device=device,preset='resident',steps=1,warmup=0,
+            native_library=os.environ['TIDE_BUILD_DIR'],resident_library=os.environ['TIDE_RESIDENT_LIBRARY'])
+    with pytest.raises(ValueError,match='budget'):
+        run(packet('attention'),sample_chunk_rows=1,context_memory_bytes=1,**kw)
+    for value in [-1,True,2**63]:
+        with pytest.raises(ValueError,match='resident-context-bytes'):
+            run(packet('attention'),context_memory_bytes=value,**kw)

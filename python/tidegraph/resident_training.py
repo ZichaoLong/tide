@@ -146,7 +146,7 @@ class ResidentTrainingSession:
         from .resident_training_checkpoint import export
         return export(self.runtime, self.owner.checkpoint())
 
-    def snapshot_device(self, *, max_bytes, compact=False):
+    def snapshot_device(self, *, max_bytes, compact=False, device_budgets=None):
         """Save detached state on NPU; does not copy parameters or optimizer."""
         from .coordinates import integers
         self._check()
@@ -155,7 +155,8 @@ class ResidentTrainingSession:
             raise ValueError("device continuation budget must be positive")
         if type(compact) is not bool:
             raise ValueError("device continuation compact must be bool")
-        return self.owner.snapshot_device(max_bytes, compact)
+        from .resident_options import continuation_device_budgets
+        return self.owner.snapshot_device(max_bytes, compact, continuation_device_budgets(device_budgets))
 
     def restore_device(self, saved):
         """Switch detached state from this owner, preserving accumulated grads."""

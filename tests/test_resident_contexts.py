@@ -53,6 +53,16 @@ def test_inference_contexts(target, family, schedule, memory, cards, compact):
         dense = s.snapshot_device(max_bytes=512*1024**2)
         if compact:
             assert initial.tensor_bytes < dense.tensor_bytes
+        assert sum(initial.device_bytes.values()) == initial.tensor_bytes
+        exact = s.snapshot_device(max_bytes=initial.tensor_bytes,compact=compact,device_budgets=initial.device_bytes)
+        assert exact.device_bytes == initial.device_bytes
+        short = dict(initial.device_bytes)
+        short[next(iter(short))] -= 1
+        with pytest.raises(ValueError, match="per-device"):
+            s.snapshot_device(max_bytes=512*1024**2,compact=compact,device_budgets=short)
+        for bad in ({True:1}, {0:True}, {-1:1}, {0:-1}, {0:2**63}, []):
+            with pytest.raises(ValueError, match="per-device"):
+                s.snapshot_device(max_bytes=512*1024**2,compact=compact,device_budgets=bad)
         assert initial.cut == 0 and initial.batch_size == 2 and initial.tensor_bytes > 0
         with pytest.raises(ValueError, match="budget"):
             s.snapshot_device(compact=compact, max_bytes=initial.tensor_bytes-1)
