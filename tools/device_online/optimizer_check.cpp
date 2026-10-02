@@ -1,5 +1,6 @@
 #include "device_optimizer.h"
 #include "optimizer_layout.h"
+#include "optimizer_finite_check.h"
 #include "portable_torch/runtime.hpp"
 #include <ATen/Parallel.h>
 #include <ATen/core/grad_mode.h>
@@ -237,7 +238,8 @@ int main(int argc,char** argv) {
         try{const int accepted=trajectory(device,kind,variant,width,dtype,args.dtype);updates+=accepted;refusals_count+=accepted<8;++cases;}
         catch(...){std::cerr<<"optimizer kind="<<int(kind)<<" variant="<<variant<<" width="<<width<<" reference="<<dtype<<'\n';throw;}
       }
-    refusals(device);if(args.dtype==at::kHalf)master_boundaries(device);
+    refusals(device);if(args.dtype==at::kFloat)test::optimizer_finite_check(device);
+    if(args.dtype==at::kHalf)master_boundaries(device);
     else for(auto kind:{DeviceOptimizerKind::sgd,DeviceOptimizerKind::adamw})for(bool extra:{false,true})memory_calibration(device,kind,extra);
     std::cout<<"device-optimizer: passed trajectories="<<cases<<" updates="<<updates<<" expected_half_refusals="<<refusals_count
       <<" CPU=FP32_FP64 master_dtype=FP32 finite_transaction=true half_boundaries="<<(args.dtype==at::kHalf)

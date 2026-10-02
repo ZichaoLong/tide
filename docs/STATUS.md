@@ -5,7 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); latest evidence **9306fbe**.
+`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); latest evidence **9829e8a**.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -168,18 +168,25 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted: optimizer_vector.h now uses vector abs/ordered compare and packed
-mask checks instead of per-element scalar finite reads. optimizer_finite_check.h
-adds actual transaction probes for nine widths, mask/tile tails, signed NaN/Inf,
-finite extremes and disconnected poison; optimizer_check.cpp invokes it forFP32.
-No arithmetic/tiling/budget/ABI change. Source optimizer-finite-dev01 is frozen.
-All three development builds passed; optimizer-finite-component-dev01 submitted
-with misspelled check peer-optimizer; preserve its terminal CLI refusal and rerun
-correct peer-sharded-optimizer as dev02. No device result yet.
-Task helper launchers/build_optimizer_finite.py rebuilds only optimizer_values
-kernel/checkers, verifies unchanged host archive/core/other kernels, fresh links.
-Next: optimizer + peer-sharded-optimizer gate, then
-actual consumers. Do not qualify before these pass.
+Uncommitted: optimizer_vector.h uses vector abs/ordered compare and packed
+mask checks instead of per-element scalar finite reads. Local comparison scratch
+is rounded to64 lanes, zero-filled; only actual data is read and valid bits checked.
+optimizer_finite_check.h adds504 actual transaction probes for nine widths,
+mask/tile tails, signed NaN/Inf, finite extremes and disconnected poison.
+No arithmetic/tiling/budget/ABI change. Source optimizer-finite-dev02 is frozen.
+All three dev02 builds PASSED. optimizer-finite-component-dev03 PASSED:
+local32 trajectories/payload, peer4 trajectories/payload,504 boundary probes,
+CPUFP32/FP64, finite transaction and four1M-element allocator calibrations.
+Actual24 consumer checks PASSED optimizer-finite-consumer-dev01 on dev02 source,
+2card/queue120s/workload600s; TASK/runs/optimizer-finite-consumer-dev01.
+Retain dev01 CLI refusal (peer-optimizer misspelling), dev02 actual device failure
+(unrounded Compare primitive skipped tails), and corrected dev03 results separately.
+Task helper launchers/build_optimizer_finite.py rebuilds one CANN kernel/checkers,
+byte-verifies unchanged host archive/core/other kernels, fresh links.
+Next commit/push tested implementation; fixed-source component/consumer/2→3 restore,
+independent profile and task-local optimizer_finite_bench.py:three old/new independent
+processes on one lease,16,777,219elements, momentum/AdamW,2warmup/5measured updates,
+CPU scalar oracle outside timing. Isolated optimizer evidence, not graph throughput.
 
-Original-width Add recheck terminal passed; reviewed evidence awaiting commit.
+Original-width Add recheck terminal passed; reviewed evidence committed9829e8a.
 Preserve the stopped historical job.
