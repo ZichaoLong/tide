@@ -72,79 +72,53 @@ profile or throughput recommendation. Neither logical batch nor KV was reduced.
   Core/library/ABI/kernels unchanged. Dev01 remains FAILED for6wrong newSettle
   assertions(160encoded vs120body);corrected6dev02 andall34clean passed.
 
-## Bounded original Add training stopped for explicit reverse budget
+## Original-width Add training and profiling
 
-Unit`tide-execution-flows-wide-add-training-staged01.service`;source475d4af,
-snapshotTASK/sources/window-peaks-clean01;helper
-TASK/launchers/wide_add_training_stages.py;binary
-TASK/builds/window-peaks-consumer-clean01/consumer/tidegraph-online-bench.
-RecordsTASK/runs/wide-add-training-staged01/{status,stages,queue}.json,task.log,
-{stage512,original-width,original-wide}.log and respective result directories.
-Source/helper and failed records remain immutable.
+Reviewed [training/profile evidence](evidence/original-width-add-training-20261002.md),
+source475d4af,original11card standaloneconsumerwindow-peaks-consumer-clean01.
+Two parent stagedjobs remain FAILED:staged01 D512/B8child passed butoriginalD2048/B2
+refused2TiBreversecapability;staged02 originalD2048/B2child PASSED after8TiB
+hierarchicalcapability allowance withunchanged60GiB/card physicaladmission.
+9,468,053,696params,FP32SGD,physicalB1,two connectedwindows:
+construction249.211s,step20.2794s,48outputs,cut408,loss32.0892944,
+maxallocator42.216GiB,pending384,maxevents1177.
+PredeclaredB512cost gate5191.5s>3000s stoppedparent;no originalB512training.
+RecordsTASK/runs/wide-add-training-staged0{1,2};originalhelpersunchanged.
 
-Qualification prerequisite passed. Lease11NPUs acquired07:00:02UTC:
-physical1,2,3,4,5,6,7,8,9,11,12→logical0..10. FP32SGD,TimedDAG/prefill,
-B1physical,two connectedwindows,queue/arrivals512,outputs64,trace2048,
-KV256/KVtrace8192,4GiBhead/context,60GiB/card. Capability ceilings are separate
-from physical demand; offline original-batch minimum≈51.132GiB onmaxcard.
-Stages: D512/B8(600s),originalD2048/B2(900s),originalD2048/B512(3600s),allT12/V50304.
-Queue cap120s,dependency600s,whole6000s. Stop beforefullbatch ifpending_peak>384,
-window_events_max>1536 or original-width step×256>3000s; inspect instead of retry.
-Task FAILED/released all11NPUs07:05:03UTC. Stage512 PASSED:630,573,248params,construction15.6324s,step23.9552s,maxallocator
-6.0876GiB,pending_peak384,maxwindowevents1163,192outputs. Original-width FAILED during backward preflight with
-`emission reverse tensor budget exceeded`, not OOM. No originalB512 launched.
-The2TiB global backward ceiling is divided bywindows2,root budget2,
-sharded graph3 and componentdivisor; all-card projection gradients alone~35GiB
-exceed the resulting component allowance. Inspect actual nested budget algebra
-before a corrected finite attempt; physical admission must remain separate.
-Corrected boundedtaskwide-add-training-staged02 STOPPED_AT_COST_BOUND fromsame475d4af source,
-helperlaunchers/wide_add_training_stages_v2.py;8TiBglobal backward capability
-ceiling covers nestedall-ownerprojection allowance. Physical60GiB/card admission,
-shapes,chunks and safety margins unchanged;this is not8TiBallocated. Reusespassed
-D512stage byhash;repeatsoriginal-width thenoriginal-wide onlyifcost/margin pass.
-Unit`tide-execution-flows-wide-add-training-staged02.service`,recordsunder
-TASK/runs/wide-add-training-staged02/{status,stages,queue}.json andtask/stage.logs.
-Original-width child PASSED:construction249.211s,step20.2794s,48outputs,cut408,
-loss32.0892944,maxallocator45,329,909,248bytes(42.216GiB),pending384,maxevents1177.
-Parent FAILED intentionally atconservative B512extrapolation5191.5s>3000s;noB512
-launched.11cards released. Allrecords retained;no blind original-batch retry.
-Profile01 FAILED at its120s queue limit:eleven cards unavailable;no execution.
-Profile02 PASSED onten cards at07:31:52UTC;all leases released. Same source475d4af,
-helperTASK/launchers/profile_original_width_v2.py;records
+Profile01 FAILED120s eleven-cardqueue;Profile02 PASSEDten cards07:31:52UTC.
+Source475d4af,helperlaunchers/profile_original_width_v2.py;records
 TASK/runs/original-width-profile02/profile/{result.json,consumer/result.json,raw/}.
-OriginalD2048/B2 FP32SGD:construction201.214s,instrumented step21.8897s,
-48outputs,loss32.0892944. Trace701139operators,no observedAiCPU;includes construction,
-not a throughput recommendation. Reviewed training/profile evidence still pending.
+OriginalD2048/B2 FP32SGD:construction201.214s,instrumentedstep21.8897s,
+48outputs,loss32.0892944,maxallocator43.431GiB.701139operators/zeroobservedAiCPU;
+includes construction/cleanup,not throughputrecommendation. Allleases released.
+Canonicalstreampacket reservations total25.504GB(10cards)/31.007GB(11cards).
+Next examine reuse across globallyorderedpairs/ordinals;source/receive arenas
+must beseparate,preplan phase maxima,retain metadata/status and error/replay semantics.
+Never lower admission constants or assert speedup withoutnewallocator evidence.
 
-## Automatic sample admission in development
+## Automatic sample admission qualified
 
-Worktree adds explicit resident-only --auto-sample-chunks. Before model allocation,
-try operator row admission,then halve physical sample groups only on MemoryRefusal.
-Reaccount all logical samples and accumulation;firstfit or explicitB1refusal.
-Defaultfixed unchanged;no logicalbatch/KV/capacity/dtype/window/update changes.
-CPUauto-samples-cpu-dev01 PASSED9checks;consumerbuild-auto-samples-consumer-dev01
-PASSED. NPUdev01 FAILED8cases(queuecapacity128 too small forB17),oneCPUcase passed;
-original records kept. Corrected test capacities512,outputs128,trace/KVtrace2048;
-no runtime code/tolerance change.
-Developmentauto-samples-npu-dev02 PASSED9checks,0skips:8NPUcases+1CPUcase;
-FP32/FP16,bothclients,inference/two completeAdamW updates against independentCPU.
-SourceTASK/sources/auto-samples-dev03;recordsTASK/runs/auto-samples-npu-dev02.
-Retaineddev01 consumerbinary is valid:onlytests/docs changed thereafter.
-Commit implementation,push,freezeauto-samples-clean01;qualify CPUcapacity and
-NPUauto/fixed admission cases using rebuilt/verified consumer objects. Then
-separate reviewed evidence. No core/device kernel or ABI changed.
-HistoricalCPU remains deliberately stopped.
+Implementation3c3b4e7 committed/pushed;frozenTASK/sources/auto-samples-clean01.
+CPU9/NPU18 checks PASSED,0skips;cleaninstalledconsumerbuildpassed. Audited
+[evidence](evidence/resident-auto-samples-20261002.md),helperauto_samples_evidence.py.
+Bothclients/precisions,inference/fullupdates plusfixedpath regressions,
+16 independent complete trajectories;automatic training17→9sample rows.
+New explicit resident-only --auto-sample-chunks triesoperatoradmission then
+boundedhalving onMemoryRefusal,reaccountsalllogicalstate;firstfit orB1refusal.
+Fixeddefault,no logicalbatch/KV/capacity/dtype/window/updatechanges.
+Dev01 remainsFAILED8queuecapacity128 cases;testcapacitycorrected withsamecode/
+tolerances;dev02all9passed. Allrecords retained;no activetestjob.
+LatestNPUconsumerTASK/builds/auto-samples-consumer-clean01;core/deviceABI unchanged.
 
 ## Next work and remaining goal
 
-Audit completed bounded training/profile evidence;complete automatic sample admission. Continue actual
+Reduce proven storage/lifecycle overheads,then continue bounded original training assessment. Continue actual
 full-size complete training and finite CPU/screened-mixed/resident comparisons;
 all required other family/client/schedule flows remain separate. Attention dense
 training plan still refuses despite B1; investigate true allocation lifetimes,
 retained immutable banks/gradient buffers rather than lowering safety constants.
 Original inference context peaks≈1.53–1.58GiB/card at8cards, not a training proof.
-Automatic sample admission and eager mixed multi-device parameter/payload placement
-remain open. F7 final migration/evidence audit;CUDA execution and other environment
+Eager mixed multi-device parameter/payload placement remains open. F7 final migration/evidence audit;CUDA execution and other environment
 tuples require target machines. HistoricalCPUAttention supplementary does not block.
 
 Original packetsTASK/inputs/fullsize-{add,attention}01/workload.json are unchanged.
@@ -160,11 +134,11 @@ User-authorized /opt stack supersedes dated personalguide. Preserve module
 PYTHONPATH,prepend frozen source/python. TASK_QUEUE_ENABLE=0,
 TORCH_DEVICE_BACKEND_AUTOLOAD=0.16logical64GiBAscend910_9392;lease/remap only.
 freeze_run.py:background.slice/Nice10,2buildworkers,boundedtasks. Lastfree:
-data194GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
+data190GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
 Formal timing lockTASK/online-measurement.lock.
 
 Latest resident librariesretained-journals-{standalone,python}-clean01;core
-placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumerwindow-peaks-consumer-clean01;
+placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumerauto-samples-consumer-clean01;
 CPUsource-values-cpu-clean01. Earlier source-values-npu/context-pool consumers
 stay qualified for their evidence. Standalone/Python runtimes remain separate.
 
