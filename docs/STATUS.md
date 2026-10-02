@@ -5,7 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); latest evidence **9829e8a**.
+`graph-execution-foundation`. Latest pushed implementation: **bb40cff** (vector optimizer finite); latest evidence **9829e8a**.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -149,8 +149,8 @@ Recent qualified increments (retain cited artifacts/failures):
 - Add-specific admissionc3ed0f2: CPU10/NPU9; remove nonexistent Attention matrix
   gradients only. [Report](evidence/consumer-add-capacity-20261002.md).
 
-Latest fully qualified resident libraries: reverse-gather-{standalone,python}-clean01;
-NPUconsumer reverse-gather-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
+Latest fully qualified resident libraries: optimizer-finite-{standalone,python}-clean01;
+NPUconsumer optimizer-finite-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
 CPUconsumer source-values-cpu-clean01. Previous builds remain for cited evidence.
 Standalone LibTorch and Python-native runtimes are separate.
 
@@ -168,25 +168,25 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted: optimizer_vector.h uses vector abs/ordered compare and packed
-mask checks instead of per-element scalar finite reads. Local comparison scratch
-is rounded to64 lanes, zero-filled; only actual data is read and valid bits checked.
-optimizer_finite_check.h adds504 actual transaction probes for nine widths,
-mask/tile tails, signed NaN/Inf, finite extremes and disconnected poison.
-No arithmetic/tiling/budget/ABI change. Source optimizer-finite-dev02 is frozen.
-All three dev02 builds PASSED. optimizer-finite-component-dev03 PASSED:
-local32 trajectories/payload, peer4 trajectories/payload,504 boundary probes,
-CPUFP32/FP64, finite transaction and four1M-element allocator calibrations.
-Actual24 consumer checks PASSED optimizer-finite-consumer-dev01 on dev02 source,
-2card/queue120s/workload600s; TASK/runs/optimizer-finite-consumer-dev01.
-Retain dev01 CLI refusal (peer-optimizer misspelling), dev02 actual device failure
-(unrounded Compare primitive skipped tails), and corrected dev03 results separately.
-Task helper launchers/build_optimizer_finite.py rebuilds one CANN kernel/checkers,
-byte-verifies unchanged host archive/core/other kernels, fresh links.
-Next commit/push tested implementation; fixed-source component/consumer/2→3 restore,
-independent profile and task-local optimizer_finite_bench.py:three old/new independent
-processes on one lease,16,777,219elements, momentum/AdamW,2warmup/5measured updates,
-CPU scalar oracle outside timing. Isolated optimizer evidence, not graph throughput.
+Implementation **bb40cff** (vector optimizer finite) is fully qualified: all8
+clean jobs PASSED, including local/peerFP32/FP16,504 boundary probes,consumer24,
+2→3 restore32trajectories/512windows/128updates and separate FP16 profile
+(53,190ops,no observed AiCPU). [Report](evidence/resident-optimizer-finite-20261002.md).
+Same-card3 independent processes per variant,16,777,219elements,2warmup/5measured:
+SGDmomentum median86.635→12.782ms (6.778× throughput),AdamW121.804→17.382ms(7.007×).
+Independent CPU scalar checks/all final masters/slots passed. Isolated optimizer
+transaction timings, not whole-graph speed. Public/core/host archive and numerical
+update formulas/256-element tiling/budgets unchanged; only one CANN kernel changed.
 
-Original-width Add recheck terminal passed; reviewed evidence committed9829e8a.
-Preserve the stopped historical job.
+Source TASK/sources/optimizer-finite-clean01; builds optimizer-finite-{standalone,
+python,consumer}-clean01. Benchmark optimizer-finite-bench-clean02; retain failed
+bench-clean01 compile attempt and dev01 CLI/dev02 unrounded-tail refusals.
+Audit launchers/optimizer_finite_evidence.py; all associated resources released.
+Next: one bounded original-width Add check on qualified bb40cff to measure whole
+update impact; source/geometry/caps unchanged, explicitly use8 existing ATen CPU
+threads to limit construction overhead and record this intentional change. Keep
+old3000s B512 cost gate. Afterward inspect phase-liveness/placement for Attention
+admission; do not blindly relax estimates or change private accumulation aliases.
+
+Uncommitted: reviewed optimizer evidence and current handoff for separate evidence
+commit. No task job live except preserved stopped historical-cpu-attention-01.
