@@ -17,7 +17,31 @@ void sticky(CannProgram& p,const at::Tensor& source,const at::Tensor& target) {
   p.equal(source,zero,equal);p.cast_index(equal,branch);auto bad=p.label(),done=p.label();
   p.branch(branch,{bad,done});p.mark(bad);p.copy(target,source);p.mark(done);
 }
-
+// One preplanned send and receive arena per device per phase. A send waits for
+// the remote copy before reusing its storage; a receive is consumed on its own
+// stream before the next copy. Separate roles permit different pairs to overlap.
+struct StreamPackets {
+  std::vector<int64_t> send_capacity,receive_capacity;
+  std::vector<at::Tensor> send,receive;
+  explicit StreamPackets(size_t n):send_capacity(n),receive_capacity(n),send(n),receive(n){}
+  void need(size_t from,size_t to,int64_t capacity) {
+    send_capacity[from]=std::max(send_capacity[from],capacity);
+    if(from!=to)receive_capacity[to]=std::max(receive_capacity[to],capacity);
+  }
+  int64_t allocate(const std::vector<at::Device>& devices) {
+    int64_t bytes=0; // At most 16 cards * two capped 64MiB buffers.
+    for(size_t d=0;d<devices.size();++d) {
+      auto options=at::TensorOptions().device(devices[d]).dtype(at::kFloat);
+      if(send_capacity[d])send[d]=at::zeros({send_capacity[d]},options);
+      if(receive_capacity[d])receive[d]=at::zeros({receive_capacity[d]},options);
+      bytes+=4*(send_capacity[d]+receive_capacity[d]);
+    }
+    return bytes;
+  }
+  OwnerStreamPackets pair(size_t from,size_t to) const {
+    return {send[from],from==to?at::Tensor{}:receive[to]};
+  }
+};
 }
 struct ShardedParameterReduce::Impl {
   std::vector<at::Device> devices;
@@ -26,8 +50,9 @@ struct ShardedParameterReduce::Impl {
   std::vector<std::unique_ptr<PeerExchange>> packets;
   std::vector<std::unique_ptr<CannProgram>> programs; // Destroy before packets.
   int64_t budget,stream_bytes=0,stream_chunks=0;
-  void stream(size_t from,size_t to,const std::vector<OwnerStreamField>& fields,int64_t capacity,bool accumulate) {
-    auto plan=append_owner_stream(*programs[from],*programs[to],fields,errors[from],errors[to],capacity,accumulate);
+  void stream(size_t from,size_t to,const std::vector<OwnerStreamField>& fields,int64_t capacity,bool accumulate,
+      const StreamPackets& shared) {
+    auto plan=append_owner_stream(*programs[from],*programs[to],fields,errors[from],errors[to],capacity,accumulate,shared.pair(from,to));
     if(plan.reserved_bytes>std::numeric_limits<int64_t>::max()-stream_bytes
         ||plan.iterations>std::numeric_limits<int64_t>::max()-stream_chunks)
       throw std::invalid_argument("canonical stream statistics overflow");
@@ -90,6 +115,14 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
   if(bytes+8.L*groups.size()>budget)throw std::invalid_argument("canonical owner output/stream metadata exceed tensor budget");
   const auto allowance=groups.empty()?0:(budget-static_cast<int64_t>(bytes))/int64_t(groups.size());
   auto& s=*impl_;s.devices=std::move(devices);s.budget=budget;s.outputs.resize(n);
+  StreamPackets shared(n);
+  for(const auto& [key,owners]:groups) {
+    const auto [k,from,to]=key;int64_t total=0;
+    for(auto i:owners)total+=source.owners[i].value.numel(); // Subset of checked outputs[to].
+    const auto metadata=owner_stream_metadata_bytes(owners.size(),owners.size(),from!=to);
+    shared.need(from,to,owner_stream_capacity(total,owners.size(),owners.size(),from!=to,metadata+allowance));
+  }
+  s.stream_bytes=shared.allocate(s.devices);
   for(size_t d=0;d<n;++d) {
     auto f=at::TensorOptions().device(s.devices[d]).dtype(at::kFloat);
     s.programs.push_back(std::make_unique<CannProgram>(s.devices[d]));s.programs.back()->limit_workspace(workspace);
@@ -103,13 +136,13 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
   }
   s.programs[0]->copy(s.errors[0],upstream);
   for(size_t target=1;target<n;++target)s.transfer(0,target,{{s.errors[0],s.errors[target]}});
-  // Global order also prevents all-send/all-wait cycles. Each packet is reused
-  // by a device loop, so storage does not contain every numerical contribution.
+  // Global order also prevents all-send/all-wait cycles. Both the device loop
+  // and later groups reuse packet storage, without reordering any contribution.
   for(const auto& [key,owners]:groups) {
     const auto [k,from,to]=key;std::vector<OwnerStreamField> fields;const auto& out=s.outputs[to];
     for(auto i:owners)fields.push_back({source.contributions[i][k],
       {{out.values.narrow(0,offsets[i],source.owners[i].value.numel()),at::kFloat}},out.connected.narrow(0,slots[i],1)});
-    s.stream(from,to,fields,owner_stream_metadata_bytes(fields.size(),fields.size(),from!=to)+allowance,true);
+    s.stream(from,to,fields,owner_stream_metadata_bytes(fields.size(),fields.size(),from!=to)+allowance,true,shared);
   }
   s.consensus();
 }
@@ -175,16 +208,25 @@ void ShardedParameterReduce::append_publish(const ShardedParameterBanks& banks,c
         {optimizers[from]->values().narrow(0,offset,owner.value.numel()),yes[from]},std::move(targets[to]),{}});
     }
   }
-  std::map<Key,int64_t> metadata;long double bytes=4096.L*n;
+  std::map<Key,int64_t> metadata,writes_count;long double bytes=4096.L*n;
   for(const auto& [key,fields]:groups) {
     int64_t writes=0;for(const auto& f:fields)writes+=f.destinations.size();
+    writes_count[key]=writes;
     metadata[key]=owner_stream_metadata_bytes(fields.size(),writes,key.first!=key.second);bytes+=metadata[key];
   }
   if(bytes+8.L*groups.size()>budget)throw std::invalid_argument("sharded publication stream metadata exceeds tensor budget");
   const auto allowance=groups.empty()?0:(budget-static_cast<int64_t>(bytes))/int64_t(groups.size());
+  StreamPackets shared(n);
+  for(const auto& [key,fields]:groups) {
+    int64_t total=0;for(const auto& f:fields)total+=f.source.values.numel();
+    shared.need(key.first,key.second,owner_stream_capacity(total,fields.size(),writes_count[key],key.first!=key.second,metadata[key]+allowance));
+  }
+  const auto reserved=shared.allocate(s.devices);
+  if(reserved>std::numeric_limits<int64_t>::max()-s.stream_bytes)throw std::invalid_argument("canonical stream statistics overflow");
+  s.stream_bytes+=reserved;
   // Same global pair order; only updated masters travel, with strided local
   // aliases written directly. No complete numerical send/receive staging bank.
-  for(const auto& [key,fields]:groups)s.stream(key.first,key.second,fields,metadata[key]+allowance,false);
+  for(const auto& [key,fields]:groups)s.stream(key.first,key.second,fields,metadata[key]+allowance,false,shared);
   s.published=true;
 }
 void ShardedParameterReduce::finish(){auto& s=*impl_;if(s.finished)throw std::logic_error("owner reduction already finished");for(auto& p:s.programs)p->finish();s.finished=true;}

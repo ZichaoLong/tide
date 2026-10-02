@@ -124,6 +124,7 @@ void calibration(at::Device from,at::Device to) {
   send.close();receive.close();plan.peer->close();
 }
 }
+#include "owner_stream_shared_check.h"
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
@@ -137,6 +138,7 @@ int main(int argc,char** argv) {
       }
       ordered_reduction({d,remote});
       calibration(d,remote);
+      shared_sequence({d,remote});
       std::cout<<"owner-stream: passed cases="<<cases<<" replays=100 ordered_reduction=2 None_zero=true strided=true errors=true bounded=true\n";
     }
     runtime.close();return 0;

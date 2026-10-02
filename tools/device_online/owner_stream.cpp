@@ -29,9 +29,14 @@ int64_t owner_stream_metadata_bytes(int64_t fields,int64_t writes,bool peer) {
     throw std::invalid_argument("owner stream metadata extent overflow");
   return static_cast<int64_t>(bytes);
 }
+int64_t owner_stream_capacity(int64_t total,int64_t fields,int64_t writes,bool peer,int64_t budget) {
+  const auto metadata=owner_stream_metadata_bytes(fields,writes,peer);
+  if(total<1||budget<1||metadata>budget-(peer?8:4))throw std::invalid_argument("owner stream metadata/one element exceeds budget");
+  return std::min<int64_t>({total,16LL*1024*1024,(budget-metadata)/(peer?8:4)});
+}
 OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
     const std::vector<OwnerStreamField>& fields,const at::Tensor& source_error,const at::Tensor& destination_error,
-    int64_t budget,bool accumulate) {
+    int64_t budget,bool accumulate,const OwnerStreamPackets& shared) {
   if(at::GradMode::is_enabled()||fields.empty()||!source_error.defined()||!destination_error.defined()||budget<1)
     throw std::invalid_argument("owner stream requires bounded no-grad fields");
   const auto from=source_error.device(),to=destination_error.device();const bool peer=from!=to;
@@ -70,20 +75,30 @@ OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
   }
   // Bound BOTH endpoints plus descriptor/counter allocations before upload.
   const auto metadata=owner_stream_metadata_bytes(fields.size(),writes.size()/7,peer);
-  if(metadata>budget-(peer?8:4))throw std::invalid_argument("owner stream metadata/one element exceeds budget");
-  const auto cap=std::min<int64_t>({total,16LL*1024*1024,static_cast<int64_t>((budget-metadata)/(peer?8:4))});
+  const auto cap=owner_stream_capacity(total,fields.size(),writes.size()/7,peer,budget);
+  const bool reusable=shared.send.defined();
+  if(shared.receive.defined()!=(reusable&&peer))throw std::invalid_argument("invalid shared owner packet pair");
+  if(reusable) {
+    buffer(shared.send,from,at::kFloat,shared.send.numel());
+    if(shared.send.dim()!=1||shared.send.numel()<cap)throw std::invalid_argument("shared owner send packet is too small");
+    if(peer) {
+      buffer(shared.receive,to,at::kFloat,shared.receive.numel());
+      if(shared.receive.dim()!=1||shared.receive.numel()<cap)throw std::invalid_argument("shared owner receive packet is too small");
+    }
+  }
   auto floats=at::TensorOptions().device(from).dtype(at::kFloat),longs=floats.dtype(at::kLong);
   auto make=[](const std::vector<int64_t>& v,at::Device d){return at::tensor(v,at::kLong).to(d);};
   auto sd=make(send,from),td=make(receive,to),group=make(groups,to),write=make(writes,to);
-  auto packet=at::zeros({cap},floats),on=at::zeros({int64_t(fields.size())},floats.dtype(at::kBool));
+  auto packet=reusable?shared.send.narrow(0,0,cap):at::zeros({cap},floats);
+  auto on=at::zeros({int64_t(fields.size())},floats.dtype(at::kBool));
   auto cursor=at::zeros({1},longs),branch=at::zeros({1},source_error.options());
-  auto received=peer?at::zeros({cap},floats.device(to)):packet;
+  auto received=peer?(reusable?shared.receive.narrow(0,0,cap):at::zeros({cap},floats.device(to))):packet;
   auto flags=peer?at::zeros(on.sizes(),on.options().device(to)):on;
   auto position=peer?at::zeros({1},longs.device(to)):cursor;
   auto more=peer?at::zeros_like(destination_error):branch;
   auto status=peer?at::zeros_like(destination_error):source_error;
   OwnerStream out;out.capacity=cap;out.iterations=total/cap+(total%cap!=0);
-  out.reserved_bytes=metadata+(peer?8:4)*cap;
+  out.reserved_bytes=metadata+(reusable?0:(peer?8:4)*cap);
   if(peer)out.peer=std::make_unique<PeerExchange>(PeerExchange::Fields{{packet,received},{on,flags},
     {cursor,position},{branch,more},{source_error,status}},budget);
   source.zero(cursor);auto increment=at::full({1},cap,longs);

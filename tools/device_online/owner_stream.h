@@ -14,11 +14,17 @@ struct OwnerStream {
   std::unique_ptr<PeerExchange> peer;
   int64_t reserved_bytes=0,capacity=0,iterations=0;
 };
+struct OwnerStreamPackets {
+  at::Tensor send,receive;
+};
 // Descriptor/counter allowance excluding the float packet, at both endpoints.
 int64_t owner_stream_metadata_bytes(int64_t fields,int64_t writes,bool peer);
+int64_t owner_stream_capacity(int64_t elements,int64_t fields,int64_t writes,bool peer,int64_t tensor_budget);
 // Fixed tensor geometry only. Payload/connection flags stay on device. Packet
 // buffers are reused by a CANN loop, including the final incomplete chunk.
+// Optional packets are owned/charged by the caller. Reuse only in the same
+// ordered device programs; keep send and receive storage distinct on each card.
 OwnerStream append_owner_stream(CannProgram& source,CannProgram& destination,
     const std::vector<OwnerStreamField>&,const at::Tensor& source_error,const at::Tensor& destination_error,
-    int64_t tensor_budget,bool accumulate);
+    int64_t tensor_budget,bool accumulate,const OwnerStreamPackets& shared={});
 } // namespace tide::device_online

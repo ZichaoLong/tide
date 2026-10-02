@@ -80,6 +80,25 @@ caps can shrink to fit their tensor budget while preserving complete fibers and
 global attention normalization. These estimates exclude the separately bounded
 vendor workspace and do not certify a total model-memory budget.
 
+Canonical contribution and parameter-publication groups reuse per-device FP32
+packet arenas. Each phase plans its maximum send and receive capacities before
+allocating either buffer; endpoints remain capped at 64 MiB and shrink to the
+existing tensor budget. Send and receive storage stay separate. The existing
+device notification waits until the remote copy completes before the sender can
+overwrite a packet; the receiver consumes its packet on the same stream before
+the next receive. Global pair/ordinal order, local accumulation order, connection
+flags, partial tails and sticky errors are unchanged. No host per-packet loop or
+new numerical prepass participates in execution.
+
+Reduction and publication have independent phase arenas. Per-group descriptors,
+flags and notifications remain distinct; sharing those mutable controls would
+need a separate proof. `canonical_stream_reserved_bytes` charges unique packet
+storage plus every group's metadata for one backward reduction, while
+`canonical_stream_chunks` still counts planned packet iterations. Consumers take
+the maximum of byte reservations across sample groups and sum iteration counts.
+These are planning counters, separate from observed allocator peaks. Full
+gradients, master values and optimizer slots are not replaced by packet arenas.
+
 Forward state/KV values remain owner-local. State root cotangents may use bounded
 coordinator scratch for reverse routing; this is not a forward state replica.
 Host loops traverse static owner/module groups and retained windows, not actual

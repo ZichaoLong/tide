@@ -110,6 +110,25 @@ Dev01 remainsFAILED8queuecapacity128 cases;testcapacitycorrected withsamecode/
 tolerances;dev02all9passed. Allrecords retained;no activetestjob.
 LatestNPUconsumerTASK/builds/auto-samples-consumer-clean01;core/deviceABI unchanged.
 
+## Current implementation work
+
+Shared canonical communication packet arenas:worktree editsowner_stream.{h,cpp},
+sharded_parameter_reduce.cpp,owner_stream_check.cpp,newowner_stream_shared_check.h.
+Per-device send/receive maxima preplanned separately perreduction/publicationphase;
+no buffer growth,cumulativegradientorder preserved. Sharedstream statistics charge
+unique packet storage pluspergroupmetadata. No devicekernel/publicABIchange.
+Sourcefrozen shared-packets-dev01;standalone/Python/clientbuilds PASSED via
+TASK/launchers/build_shared_packets.py,buildclientvia build_capacity_client.py;
+Componentdev01 parent FAILED sourceguard becausevendor generatedfusion_result.json
+in sourcecwd;allfive childchecks PASSED,including36group/5replay sharedallocator
+4,720,640bytes vs4,346,630reserved plusworkspace. Preservefailedjob;futuregates
+use env -C output. Allfrozen sourcefiles hashunchanged. Consumerdev01 PASSED33checks,0skips;bothclients,FP32/FP16,allthreefamilies,
+streaming/prefill,completeSGD/AdamW plusautosample17→9updates. Leasesreleased;
+recordsTASK/runs/shared-packets-consumer-dev01. Commitimplementation then
+freeze shared-packets-clean01;cleancomponent/consumer gates mustrunfromoutputcwd.
+Immutablequalification
+and evidence separately. HistoricalCPU remainsdeliberatelystopped.
+
 ## Next work and remaining goal
 
 Reduce proven storage/lifecycle overheads,then continue bounded original training assessment. Continue actual
