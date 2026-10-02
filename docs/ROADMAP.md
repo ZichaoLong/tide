@@ -275,6 +275,13 @@ training owners. Actual forward-bank guards cover fresh grouped fiber gathers;
 dynamic KV/log-bias/journals stay per-window. Development Python16 andnative128trajectories/2,048windows/512updates passed;
 immutable qualification andallocator calibration remain pending (see STATUS). Complete-consumer admission has not been reduced.
 
+F4/F5 private numeric gradient accumulation reuse is qualified on cleanb3a6a24:
+all8 jobs passed;50 native boundary cases,32 trajectories/768windows/96updates,
+Python14/actual consumer24 and a separate FP16 profile without observed AiCPU.
+Old flags and public exports remain independent; the same-lease D512 whole-process
+allocator peaks were unchanged. No original-size/throughput claim follows.
+[Evidence](evidence/resident-private-accumulation-20261002.md).
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.
