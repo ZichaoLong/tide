@@ -217,8 +217,12 @@ execution only, preserving the logical batch, continuation and optimizer boundar
 The independent Python scheduler and resident device scheduler reject nondefault
 host controls before model construction. Resident packing remains device-owned.
 Choose bounded worker/thread counts when measuring; one-worker results do not
-establish the best available CPU throughput. Qualification and performance of
-these newly connected consumer controls must be recorded separately.
+establish the best available CPU throughput. The wiring is qualified on clean
+`2222d9d` ([CPU11/NPU10 evidence](evidence/consumer-host-execution-20261002.md));
+the [bounded representative comparison](evidence/representative-host-policy-20261002.md)
+selects CPU16 packed and mixed-a4 packed from its declared search. CPU wins
+steady inference and resident wins complete training in that submatrix; these
+choices do not establish the best policy for another workload or machine.
 
 Construction and warmup durations are separate. A measured step includes token
 preparation/upload, online graph execution, head/loss, backward, finite checks,

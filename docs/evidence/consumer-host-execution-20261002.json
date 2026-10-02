@@ -1,0 +1,325 @@
+{
+  "schema": "tide-host-execution-evidence-v1",
+  "source": "2222d9db25a234eb0c739baf11bdccfffa2c5f5e",
+  "clients": {
+    "cpu": {
+      "manifest_sha256": "e2a6827b9b3f4432b06ad3f8e53caae13eee32f9d7ac900b9a2b0921e5ce092c",
+      "binary_sha256": "c61ae85b06522655bb317ed6d0acc0118c939e739d9b60523cb6e9650076a223",
+      "loader_sha256": "d879e421385e901a5eae06c184c4fd7923cf2a0d49c46654d7f8668c4db3c1a8",
+      "source_sha256": {
+        "resident_capacity.cpp": "cd72a4c2794b0b6d369d3175b383540bff0ebcd7b438f04ae9bbec3cdbc23334",
+        "resident_run.cpp": "fad8e4a1af2b09d7eef67b5293da652a1cb74d2839c2643dc99006964df367c0",
+        "resident_loss.cpp": "85a809426e50ff118fc0de985f37dc83f735fb89a4992d04985bed807123a533",
+        "capacity_runtime.py": "96960c01196f283030399b83c3c533a91af297a806aa92413039b2aafbfad3ca",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "64c00cf68e36fe4798e5b27cb75fe6e9cc9a62452500d8bbc1c78dfeed4a6dd2",
+        "host.py": "ef5280818cd0329bef7aae1e9553adaaa9f90539acbac285d4aad49395bea4b7",
+        "records.py": "2092ff71af026e0a7b01307515a4c778572e5fa6832c7b310cf84030a95fc7e1",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "b45c076313212c645db951181814aa7e67990f56713584ffb8d6ae130afba03c",
+        "model.cpp": "cbfb9c8c4d21185df32821bfbb0cd122b5711eff7118210c839cbf527e4fd5a5",
+        "resident.py": "04d6286aeceda8d4e2509bd7070e0061f9fdc883b7ef75a9b56f367d792310ad",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "c6e32902f583f65a13ba3b03422dc87fd103cb2d1454661e9b6421802d76d84c",
+        "resident_consumer.h": "f91fea04559e57a49fa16d02b2b5c7c90e461909afd652358e4c783d26b951ef",
+        "consumer.h": "e2adcc944c21120f5ed1b15fcdc59986448581878e551ab3d4f35f8a6225ff26",
+        "capacity.h": "347303c52b28f3994db0baa9b3b69a382e1fa1bc9b869af4abef621f8c044992",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "77badc59b4081ad16fe215b8866206cd26d5775fd79f1573db7a97bd9db6224b",
+        "run.cpp": "22bf0c1759a970dedcf5dd6bf8c62cfd42c929f9de339a8b4e45f123e78e3916",
+        "capacity.py": "e194892055cf7691b2ee1d1d60985742c2a43a385116e0f37a8f079def5cf187",
+        "main.cpp": "b8c4349f0b179418ff1b67edba1e1e2b26fb7a71e4016bc3840734727712ecbc",
+        "records.cpp": "500f51568e109969ec7ea2bfc53fb915c01eaa8edaf754a32239591b6c906bd6"
+      },
+      "scope": "fresh CPU compile; NPU source/header/options-verified unchanged development objects, fresh link/loader; unchanged qualified core/backend"
+    },
+    "npu": {
+      "manifest_sha256": "5b9df71cd3004ac690636ae162aed97b6d204c35c29999268c1144e0f043c93e",
+      "binary_sha256": "be02ae91fb5dd3da1e54f086e11b9511f1699d0efd7f65e1087a1424a12ce77f",
+      "loader_sha256": "5f2a40b2ef551e6952ecfb41aa4a35e43560ade04a7210b2e2c8ce09fc4dd153",
+      "source_sha256": {
+        "resident_capacity.cpp": "cd72a4c2794b0b6d369d3175b383540bff0ebcd7b438f04ae9bbec3cdbc23334",
+        "resident_run.cpp": "fad8e4a1af2b09d7eef67b5293da652a1cb74d2839c2643dc99006964df367c0",
+        "resident_loss.cpp": "85a809426e50ff118fc0de985f37dc83f735fb89a4992d04985bed807123a533",
+        "capacity_runtime.py": "96960c01196f283030399b83c3c533a91af297a806aa92413039b2aafbfad3ca",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "64c00cf68e36fe4798e5b27cb75fe6e9cc9a62452500d8bbc1c78dfeed4a6dd2",
+        "host.py": "ef5280818cd0329bef7aae1e9553adaaa9f90539acbac285d4aad49395bea4b7",
+        "records.py": "2092ff71af026e0a7b01307515a4c778572e5fa6832c7b310cf84030a95fc7e1",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "b45c076313212c645db951181814aa7e67990f56713584ffb8d6ae130afba03c",
+        "model.cpp": "cbfb9c8c4d21185df32821bfbb0cd122b5711eff7118210c839cbf527e4fd5a5",
+        "resident.py": "04d6286aeceda8d4e2509bd7070e0061f9fdc883b7ef75a9b56f367d792310ad",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "c6e32902f583f65a13ba3b03422dc87fd103cb2d1454661e9b6421802d76d84c",
+        "resident_consumer.h": "f91fea04559e57a49fa16d02b2b5c7c90e461909afd652358e4c783d26b951ef",
+        "consumer.h": "e2adcc944c21120f5ed1b15fcdc59986448581878e551ab3d4f35f8a6225ff26",
+        "capacity.h": "347303c52b28f3994db0baa9b3b69a382e1fa1bc9b869af4abef621f8c044992",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "77badc59b4081ad16fe215b8866206cd26d5775fd79f1573db7a97bd9db6224b",
+        "run.cpp": "22bf0c1759a970dedcf5dd6bf8c62cfd42c929f9de339a8b4e45f123e78e3916",
+        "capacity.py": "e194892055cf7691b2ee1d1d60985742c2a43a385116e0f37a8f079def5cf187",
+        "main.cpp": "b8c4349f0b179418ff1b67edba1e1e2b26fb7a71e4016bc3840734727712ecbc",
+        "records.cpp": "500f51568e109969ec7ea2bfc53fb915c01eaa8edaf754a32239591b6c906bd6"
+      },
+      "scope": "fresh CPU compile; NPU source/header/options-verified unchanged development objects, fresh link/loader; unchanged qualified core/backend"
+    }
+  },
+  "jobs": [
+    {
+      "name": "build-host-execution-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1f41c6d5d0d5f8e16b41dd69b83f1953948916d5f1819065edd0849f91d4f89d",
+        "task.log": "a0285cbca5f1367b3ac8120c53e4a4697b73b7666809747acf056399ca165b3f"
+      }
+    },
+    {
+      "name": "build-host-execution-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "71c5736c9757ae5f9cbd7498439d1c28b8605e019811fdc801eb8c2580bd29fa",
+        "task.log": "e964d4fd918c91bb18b2cda870fbc1516b5422f79cd12cb2f8e187f2682c0b7d"
+      }
+    },
+    {
+      "name": "host-execution-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bb0632492ed2627a939001e85f835b0782661e442801338f5a9a2261724e9a20",
+        "task.log": "d03c5db4b69cfa2b991b92fd3e9bf4ed4288ed02643467f9dfb8ca20a79397f2"
+      }
+    },
+    {
+      "name": "host-execution-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bcb40d8f50e48440c020edc644452a90f177011ff33db4e0d1d20c2106c5816a",
+        "task.log": "c40a014db4b383d876ac22b7fff583c95740e809a34da5d4e63b84c7ce8f2b84",
+        "queue.json": "692977daa607f6e8683506208fd5a0114b54085fc8482169f2a13b94dc8e12e5"
+      }
+    }
+  ],
+  "tests": {
+    "cpu": {
+      "count": 11,
+      "skipped": 0,
+      "junit_sha256": "1a3c5e036fa3ffe0e8e8f69512bad9095ec160376c0e181f09d9f20544f99383"
+    },
+    "npu": {
+      "count": 10,
+      "skipped": 0,
+      "junit_sha256": "624f2b26ea6f403ddd6a00bda901d8e781856f8d66bbf0782387e4cfae68c77f"
+    }
+  },
+  "directed_training": [
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_libtor0",
+      "sha256": "c4bca844677e21e8d977708d0b2856d713fa47f34c06c14c19fcff7a70209fb1",
+      "policy": {
+        "workers": 2,
+        "packed_sources": false,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "pdg"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_libtor1",
+      "sha256": "31b828fa1952add38d1a1553a3e1f9c48d394661c54c2985d8019bd24bfd00e2",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": false
+      },
+      "implementation": "libtorch",
+      "family": "pdg"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_libtor2",
+      "sha256": "c7ac705f8d22fcde61295cb27e2244351a723a18920a70f25a683600aece7fde",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "timed-dag"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_libtor3",
+      "sha256": "2558bba986d5af1b7f49506b4371e8d2295ec9350daac95fb06b27dd88291920",
+      "policy": {
+        "workers": 2,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "settle"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_native0",
+      "sha256": "8ece6e109f46b8097ecbcc37c766b8ba9f923b2a1b7b1e2d4e75f8e55cf45ef8",
+      "policy": {
+        "workers": 2,
+        "packed_sources": false,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "pdg"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_native1",
+      "sha256": "a723b65a94d3f6e7650c53872924cd3e453dde51031a6a7c19cab7f48c53e207",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": false
+      },
+      "implementation": "native",
+      "family": "pdg"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_native2",
+      "sha256": "f2243913540eae78bb3acbe704735fa4ba8a47f88d3b624d191ea8776b8c249b",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "timed-dag"
+    },
+    {
+      "backend": "cpu",
+      "case": "test_cpu_host_execution_native3",
+      "sha256": "70ffffc079d99c3c078ee4d3f8ad9dd3c28c7dbd5fdb216923483f46fc5ff267",
+      "policy": {
+        "workers": 2,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "settle"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_libtor0",
+      "sha256": "516994482581068bb1d48c86cf15963d355aa89b1565fa9331e11301c999128c",
+      "policy": {
+        "workers": 2,
+        "packed_sources": false,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "pdg"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_libtor1",
+      "sha256": "0b62fd57e4b15b0399060a0f8ab304bc6d3eba406b6680660c9f93af74ac18dd",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": false
+      },
+      "implementation": "libtorch",
+      "family": "pdg"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_libtor2",
+      "sha256": "f35332586e76998a248eec12ed42bcbbc3a681fb5611546bd037370e77d508ff",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "timed-dag"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_libtor3",
+      "sha256": "3b93fcec9f44f4e060418a7b019420454ff78afb93441528e10e659271e770f7",
+      "policy": {
+        "workers": 2,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "libtorch",
+      "family": "settle"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_native0",
+      "sha256": "420e02ba425ebda2a99c9c6f4efac29c0da99e9d2a36a5740df80f2631fed0e6",
+      "policy": {
+        "workers": 2,
+        "packed_sources": false,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "pdg"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_native1",
+      "sha256": "07e0c06c5906cdf6bda3e78c0594250b56671e3be0848486dc4bf9c7dbf05e8b",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": false
+      },
+      "implementation": "native",
+      "family": "pdg"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_native2",
+      "sha256": "134e069c32fbe3a9c5064b6f7e60a7251780c1304a468335264e72d7fa2472e9",
+      "policy": {
+        "workers": 3,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "timed-dag"
+    },
+    {
+      "backend": "npu",
+      "case": "test_npu_host_execution_native3",
+      "sha256": "7a6fb54039772715ac0e463a06e814ea56b33aeda108dd625521f81ff29df30c",
+      "policy": {
+        "workers": 2,
+        "packed_sources": true,
+        "batch_next": true
+      },
+      "implementation": "native",
+      "family": "settle"
+    }
+  ],
+  "scope": "Public native workers and packed source/Next controls; complete observation/VJP/update comparisons to independent Python streaming; default resident CLI and explicit capacity refusal regressions.",
+  "limits": "No new core/device algorithm, whole-matrix rerun, performance recommendation, full-size readiness, CUDA or other CANN claim."
+}
