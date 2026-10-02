@@ -143,7 +143,10 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
         state = b*nodes*(p*w+17)
         # Forward proposals, gathered parameters and packed module scratch are
         # covered by these shape bounds (see fiber_cache/content_flow sources).
-        persistent_state = 24*cache+4*state
+        # Append-only KV proposals reuse the invisible live-cache tail. Bias
+        # remains separate because decay changes its already-visible prefix.
+        kv_proposal_saving = 2*p*(b*body*c.kv+1)*w if g.attention and body else 0
+        persistent_state = 24*cache+4*state-kv_proposal_saving
         coordinator = device == 0
         routing = (64*(c.queue+c.arrivals+c.outputs+trace)*(5*w+32)
                    +64*b*((n+2)*(w+4)+g.regions*(g.regions+4))+160*(len(g.edges)+n+4)) if coordinator else 0

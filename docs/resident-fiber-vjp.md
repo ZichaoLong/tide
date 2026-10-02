@@ -28,6 +28,17 @@ and must be masked before arithmetic. Decay follows the declared local clock,
 with a bounded repeated-tick adjoint; no gradient is fabricated for an empty old
 cache or a zero-tick subtraction that was never executed.
 
+The forward proposal stages new key/value rows in the live cache's unused tail.
+The device planner checks capacity and assigns disjoint append positions; it
+never overwrites the published prefix. Until adoption publishes a new length,
+these rows are padding, including after rejected selection. Later proposals
+overwrite them. Bias decay retains a separate proposal because it changes old
+visible rows. Selected clear publishes length zero; it does not require erasing
+unused storage. Retained windows still clone their own immutable cache values.
+This removes two full payload proposal banks without changing logical capacity,
+attention visibility, backward connectivity or window/update boundaries. Device
+execution errors still poison the owner and require checkpoint recovery.
+
 The parameter registry reduces shared uses, including sharing across Full and
 fiber projections. Device SGD/AdamW publishes into the forward owner's actual
 banks. Grouped reverse snapshots are gathered copies and are never publication

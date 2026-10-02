@@ -66,7 +66,47 @@ Report:evidence/representative-host-policy-20261002.{md,json}.
 Audits passed:
 python TASK/launchers/host_execution_evidence.py 2222d9db25a234eb0c739baf11bdccfffa2c5f5e
 python TASK/launchers/host_policy_evidence.py 2222d9db25a234eb0c739baf11bdccfffa2c5f5e
-No active build/test/profile job remains. Evidence docs grouped in next commit.
+All above evidence is committed/pushed at8695804. No repeat needed.
+Allocator diagnosis allocator-resident02 PASSED,unchanged clean2222d9d,
+one Python-owned resident Attention FP32 complete two-window AdamW step.
+TorchNPU history records4398 events,below100000 bound;all1437 allocations freed.
+Eight snapshots,total<5MiB raw,stored TASK/runs/allocator-resident02/diagnosis/.
+Allocator peak2,560,387,072bytes; useful C++ frame attribution is available.
+No timing claim. allocator-resident01 failed before construction because the
+launcher supplied plugin-file instead of build-directory; retained unchanged.
+
+Current development removes the duplicate fiber key/value proposal buffers by
+appending only beyond published cache lengths. Bias decay retains a separate
+proposal; selected/adopted length publication and owned VJP snapshots unchanged.
+Logical KV capacity,batch,queue and update boundaries unchanged. Both capacity
+planners subtract only the exact removed payload buffers. Added alternating
+accepted/rejected,changing-payload cache lifecycle comparison against CPU.
+Changes:packed_fiber_attention.cpp,fiber_cache.cpp,fiber_check.cpp,capacity.h/.py.
+PASSED builds build-fiber-append-{standalone,python}-dev01,source fiber-append-dev01,
+TASK/launchers/build_fiber_append.py;source/kernels/core checked,only affected
+host units plus selected check executables,2compiler workers per build,timeout600s.
+Units tide-execution-flows-build-fiber-append-{standalone,python}-dev01.service;
+records TASK/runs/build-fiber-append-{standalone,python}-dev01/{status.json,task.log}.
+PASSED fiber-append-capacity-dev01:CPU4,including24cross-language plans.
+PASSED fiber-append-components-dev01:one leased NPU,queue120/run600s,checks
+fiber/fiber-batch/fiber-retained(FP32+FP16),each executable timeout120s.
+PASSED build-fiber-append-consumer-dev01:installed standalone consumer update,
+source/header/options-verified reuse,timeout600s.
+PASSED fiber-append-public-dev01:2leased NPUs,queue120/run420s,CPU reference
+against both consumer runtimes,Attention FP32/FP16 three-family training/inference
+and eight forced-split complete training cases +early refusal.
+TASK/runs/fiber-append-public-dev01/{status.json,task.log,junit.xml,pytest/}.
+All six development jobs passed:two backend builds,installed consumer build,
+CPU4(static24plans),component4cells,public33(no skips). Components cover
+16anchors/192windows/6refusals/60lifecycle,96batch anchors+480windows+3saturation,
+and152retained trajectories/608windows per FP32/FP16.
+This implementation commit precedes immutable qualification. Next create
+fiber-append-clean01 at this commit;rebuild with --reuse-host from each matching
+development backend,build installed consumer with verified reuse;run same
+capacity/components/public gates,then allocator probe using the unchanged
+resident_allocation_probe.py with clean source and Python backend directories.
+Audit TASK/launchers/fiber_append_evidence.py COMMIT. No full CPU suite or
+performance retuning. No live development job remains.
 
 ## Current source, builds and inputs
 
@@ -85,11 +125,9 @@ These local ceilings are not summed HBM allocations.
 
 ## Next priority and real remaining gaps
 
-1. Commit/push audited host-controls and host-policy evidence. Then investigate
-   actual resident allocation lifetimes on a qualified small/medium shape before
-   changing KV/journal storage or total admission. TorchNPU memory.py exposes
-   _record_memory_history/_snapshot; availability and useful C++ attribution are
-   not yet tested. If used, bound the trace and run separately from throughput.
+1. Finish the affected fiber-tail development gates and exact allocator comparison;
+   commit/push implementation,qualify the immutable source,then record evidence.
+   This reduces duplicated proposal storage but does not complete full-size capacity.
 2. Complete remaining representative family/language/schedule cells and generic
    scale capacity/placement, then full-size CPU+screened mixed+resident comparisons.
 3. F7 final qualification/portable packet; CUDA and other CANN tuples still need

@@ -25,6 +25,12 @@ lifetimes have separate envelopes; their maximum is the estimate. Local
 still independent capability ceilings, **not amounts summed as actual HBM**.
 Exceeding those ceilings still fails explicitly.
 
+Fiber KV append proposals reuse unused cache tails. The Python/C++ envelopes
+subtract exactly the removed two payload buffers on each state owner:
+`2 × payload_bytes × (batch × local_attention_nodes × kv_rows + 1) × width`.
+The separate bias proposal, retained snapshots, gradients and all other
+conservative allowances remain. This layout change does not shrink KV capacity.
+
 Conservative mode leaves25% plus128MiB of the incremental budget unused;
 aggressive mode leaves10% plus128MiB. The shape formulas also reserve512MiB per
 device for backend allocations and the declared caps of simultaneously retained

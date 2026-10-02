@@ -131,10 +131,10 @@ Index refusals(at::Device device) {
 }
 Index lifecycle(at::Device device) {
   Index cases=0;
-  for(bool clear:{false,true})for(bool active:{false,true}) {
+  for(bool clear:{false,true})for(int selection:{0,1,2}) {
     auto f=one_node(7,1);auto& node=f.graph.nodes[0];node.clear=clear;node.state_clock={5,1,3};
     f.graph.regions[0].observe_all=false;
-    if(!active) {
+    if(selection!=0) {
       // Legal empty selection comes from the declared positive selector, not
       // an invalid zero region budget. Real zero messages still form a fiber.
       f.graph.regions[0].read_mode="content";f.graph.regions[0].selector="positive-v1";
@@ -146,12 +146,17 @@ Index lifecycle(at::Device device) {
     ContentFlow flow(f.graph,f.model,f.initial,device,l);auto q=f.initial;
     Index position=0;
     for(Index time:{1,3,6,8,11,13,16,18,21,23}) {
+      // Alternate rejected and accepted proposals with different payloads.
+      // An unadopted KV tail must neither become visible nor displace the old
+      // prefix when the next accepted proposal reuses its append positions.
+      const float value=selection==2&&position%2?-1.25f:.25f+float(position)*.125f;
       std::vector<External> xs{{0,0,position,time,at::zeros({7},at::kFloat)},
-        {0,1,position,time,at::full({7},.25f,at::kFloat)}};
+        {0,1,position,time,at::full({7},value,at::kFloat)}};
       auto expected=cpu.run(q,xs,time+1,time+1);auto actual=flow.advance(xs,time+1);
       tide_bench::compare(actual,expected,true,at::kFloat);q=expected.continuation;++position;++cases;
     }
-    require(q.states.at({0,0}).slots.at("key").size(0)==(clear?0:active?22:2),"clear/adoption changed cache retention");
+    require(q.states.at({0,0}).slots.at("key").size(0)==(clear?0:selection==0?22:selection==1?2:12),
+      "clear/adoption changed cache retention");
   }
   return cases;
 }

@@ -19,8 +19,15 @@ FiberStage PackedFiberAttention::propose(CannProgram& p,const StateKernelProfile
   out.values=at::zeros({rows+chunk,width},opts);
   out.events=at::zeros({rows,7},longs);out.tokens=at::zeros({rows,4},longs);out.counts=at::zeros({2},longs);
   out.query_bias=at::empty({rows,capacity},opts);
-  out.cache={at::empty_like(cache_.key),at::empty_like(cache_.value),at::empty_like(cache_.bias),at::empty_like(cache_.lengths)};
-  p.copy(out.cache.key,cache_.key);p.copy(out.cache.value,cache_.value);p.copy(out.cache.bias,cache_.bias);
+  // KV never overwrites an owner's visible prefix. The device plan assigns
+  // disjoint append positions beyond its published length, including every
+  // intermediate event in a legal node-time batch. Reuse that uncommitted tail
+  // instead of cloning all owners' KV for every stage. Rejected adoption leaves
+  // the length unchanged; a later proposal overwrites the same invisible tail.
+  // Bias decay does change the old prefix and therefore keeps separate storage.
+  // Retained windows still own independent snapshots; no saved VJP aliases here.
+  out.cache={cache_.key,cache_.value,at::empty_like(cache_.bias),at::empty_like(cache_.lengths)};
+  p.copy(out.cache.bias,cache_.bias);
   p.copy(out.cache.lengths,cache_.lengths);
   const auto mapping=mapping_,policy=profile.clock_policy,sources=profile.sources,config=config_;
   const auto live=cache_;const auto inputs=int64_t(profile.input_count);

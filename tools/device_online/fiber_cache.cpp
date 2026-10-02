@@ -19,7 +19,11 @@ std::array<long double,3> footprint(const StateKernelProfile& p,const Continuati
   const auto pool_fixed=pooled?PackedFiberPool::reserved_bytes(p,l.queue,0):0.L;
   const auto pool_row=pooled?PackedFiberPool::reserved_bytes(p,l.queue,1)-pool_fixed:0.L;
   const auto owners=q.batch_size*static_cast<long double>(parameters);
+  // Remove exactly the two payload proposal banks now staged in unused KV
+  // tails; retain all other conservative allowances and logical capacities.
+  const auto payload=p.dtype==at::kHalf?2.L:4.L;
   const long double fixed=pool_fixed+24.L*(owners*l.kv_rows+1)*(2.L*width+1)
+    -2.L*payload*(owners*l.kv_rows+1)*width
     +48.L*(parameters+1.L)*width*width+128.L*(l.queue+1.L)*(width+8.L)
     +8.L*(l.queue+1.L)*(l.kv_rows+1.L) // Per-event bias, not duplicated KV vectors.
     +(l.diagnostics?24.L*l.kv_trace_rows*(2.L*width+8):0);

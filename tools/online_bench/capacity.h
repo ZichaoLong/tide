@@ -80,7 +80,8 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide state_parameters=g.attention&&body?(body+1)*(4*w*w+4*w)*p+4*(body+1)*domain+body*p:0;
     const Wide parameters=projection+state_parameters+nodes*(2*w*p+128);
     const Wide cache=g.attention&&body?(b*body*c.kv+1)*(2*w+1):0,state=b*nodes*(p*w+17);
-    const Wide persistent_state=24*cache+4*state;const bool coordinator=device==0;
+    const Wide kv_proposal_saving=g.attention&&body?2*p*(b*body*c.kv+1)*w:0;
+    const Wide persistent_state=24*cache+4*state-kv_proposal_saving;const bool coordinator=device==0;
     const Wide routing=coordinator?64*(Wide(c.queue)+c.arrivals+c.outputs+trace)*(5*w+32)
       +64*b*((n+2)*(w+4)+Wide(g.regions)*(g.regions+4))+160*(Wide(g.edges.size())+n+4):0;
     const Wide owner_packets=g.devices>1?128*Wide(c.queue)*(6*w+64):0;
