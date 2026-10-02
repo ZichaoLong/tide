@@ -249,6 +249,11 @@ without contaminating it. Use available devices within the resource budget, neve
 stop unrelated jobs. Commit tested implementation, qualify clean source, commit
 evidence separately; push tested commits under the renewed user authorization. Do not call a failed finite capacity assessment delivery.
 
+Exact named C++ initialization is qualified on cleanbe380db:CPU25/NPU30
+consumer checks plus three independent CPU processes with full-array byte
+comparisons. Projection/QKV/head generation improves6.25–6.51×; no whole-model
+or complete-step speedup claim ([evidence](evidence/exact-initializer-20261002.md)).
+
 Valid-prefix retained journals under aggressive policy are qualified on clean0fbc1b2:
 CPU17/NPU44,64 standalone FP32/FP16 trajectories/1,024windows/256updates,
 separate two-card profile without observed AiCPU. Actual representative Attention

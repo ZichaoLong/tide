@@ -49,6 +49,8 @@ budget. It avoids full-sized int64 temporary tensors while preserving the
 `named-lcg31-v1` values bit for bit. Python retains the independent three-pass
 definition. Construction is still reported separately from complete-step timing;
 this change does not accelerate scheduling or model kernels by itself.
+[Fixed-source verification and bounded CPU timings](evidence/exact-initializer-20261002.md)
+record exact byte comparisons and the scope of the measured improvement.
 
 The wide packet remains 480 reachable body nodes, 2,208 body edges, D2048,
 B512/T12/V50304: Add9,468,053,696 and Attention17,521,117,376 learned elements.

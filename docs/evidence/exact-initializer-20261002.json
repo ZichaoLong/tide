@@ -1,0 +1,450 @@
+{
+  "schema": "tide-exact-initializer-qualification-v1",
+  "source": "be380db7451742c3fe50b57cb02263e81c64a4d6",
+  "jobs": [
+    {
+      "name": "build-source-values-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d2dcb85346dfff41eab7c189f0d6128c5e99cc7cfd9f3ec7a249c6db094f3782",
+        "task.log": "aabda846cf47442b35c295887c867c3a034c582f4817fad9310c2ee94cd6515a"
+      }
+    },
+    {
+      "name": "build-source-values-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "625926da25a438be822fb3c7487571aacbf8623f92ca486d9aebc9d76b353d91",
+        "task.log": "8d1e2b1e8873cef5e4717e8f04a18a195070e7c401cf02b4eccfbde6b516ff54"
+      }
+    },
+    {
+      "name": "source-values-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "89e335b25b1e1652079622809eec949ca6e08960cb9132445b857357c6c9441a",
+        "task.log": "faeab1b719d34632ce7ec843b843d23d2d3cc5768ce94b551a6c02c01af3f09b"
+      }
+    },
+    {
+      "name": "source-values-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0dee99464c84c3311ebad1a4d46d2d69bb017c4d21d4ebc0b60ed8938777028e",
+        "task.log": "0c9bd02643b6a368ef517136962a0b51c5202bb799edd50accebf797317339ff",
+        "queue.json": "d2b511f1ac2cb1bf7b224c2f9c71a56154fff621eee18d91623856af5e243201"
+      }
+    },
+    {
+      "name": "source-values-benchmark-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "55a31b187aee5b5144fa609648b2232bd8a3678f13c67c07036b8f586bd888a9",
+        "task.log": "0a3135152e9d820b070bcb51a396886f47504fa73735ddc029425edcac519d62"
+      }
+    }
+  ],
+  "clients": {
+    "cpu": {
+      "manifest_sha256": "46a9778893a756a504b2a0e8ad7912a6a7e8f27f22460b4c3ef3cc019a9c9d03",
+      "binary_sha256": "cc70aabb8884dce988af500e79f3e890c97f1d3e6df2a9f8cd0679910f6204d4",
+      "loader_sha256": "9f3dddff407980415c0d620d10fa9a4e04fa6f4f4c82a00d0252a7b7cfdb9643",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "reused_objects_sha256": {
+        "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "05cc65570423ae24ef54d1dec5cdae418f65a5f969cc1f87ff7050ce0bf0e459",
+        "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "e4de7b185610dd7442b3ae9c9b03d7f2ae770b1fc5e739ca97a68cb8eba6a0d8",
+        "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+        "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "fc6bbfb205ced01a5c26b58da65005efe5350947a7cf503978f62ae299e94785",
+        "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+        "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "f53727bfca7d8f57e6594caa5b103985e9d857512dc23682db5d1cf4eef77b56"
+      },
+      "consumer_sources": {
+        "resident_capacity.cpp": "5933733444916945df78d05b1ce31c70d79c80d5457fe11dea0e16fa24a0b13a",
+        "resident_run.cpp": "95c8254f74f5cf930163376611e427cabe0e8b28aff6d1fa604663695553dac4",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "4f193a6373ab6409f579da0f47fba626f1778835c25a6c66ec9fbe48f2df750d",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "2b21b6b2838f29dc8e4353891b81532ae65e845d9120f9275d8d7f98c217cbf0",
+        "host.py": "86157451b12c0abfa938af6a0105298c5e6d6cfa1e5d7f29cb23289f89afac81",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+        "resident.py": "9faca068ebb8a80f56b06a9d31085086ee49e6b4dc0231d85bb189743d8f89cd",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "b0d140563af0788565ade41b29496eb3a735f9fc9463f8d83261062e7f9986a7",
+        "resident_consumer.h": "a12778fe1dbf3d5c200472e4787f539c2ee197e3419e84710256c9f1e3cbfeb4",
+        "consumer.h": "f3ad6094cf51cc83bddc838bbb8a5cb69fb24d6814fff4ffcd2f3378b27120a1",
+        "capacity.h": "59cffe82b6a245de819395525dd5fa860f6b2b429920c0f0432ae52bc9349ddf",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "77badc59b4081ad16fe215b8866206cd26d5775fd79f1573db7a97bd9db6224b",
+        "run.cpp": "a3e4b2e1d167e5e2dc5e9bf7ff2221ddc5646a37e2103b49c71f314e18d647a5",
+        "capacity.py": "671283fa6f63fe87571285340661b8629b0fa8745def31048aa39783e990af11",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "659cb6ff07e9f38cf36ea55224f5831c42cad3404d33bcad0a96c947d6f559b2",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4"
+      }
+    },
+    "npu": {
+      "manifest_sha256": "a001d0a011d9b9b3bdd90a157b235f6b2895f4ae2ff02cb4afcc21cdf00570b4",
+      "binary_sha256": "3b1336aff879d11dd2a7ee24b6c6ce870478df4759fc6a43c8ab61d87c6454c7",
+      "loader_sha256": "fd90ca08184f63a2968609e934d66298cef3dc4b26522159f467e6e3b36ffc47",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "reused_objects_sha256": {
+        "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "e4de7b185610dd7442b3ae9c9b03d7f2ae770b1fc5e739ca97a68cb8eba6a0d8",
+        "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "05cc65570423ae24ef54d1dec5cdae418f65a5f969cc1f87ff7050ce0bf0e459",
+        "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+        "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "9ee7c1602fd9a30741d9b910821c8db93d2ddf553f19e368e34878c07f63b99a",
+        "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+        "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "1720f535ea800bcdf029990fb7ea8ea873f83050ea343ca39faa2a7965899e3a",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "041aa38952369278d68a221e6f976250240760bc23a3014c3227837122851f37",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "54f28c35a1c5119c6077abbf076d080c8a7862fa86280ee9e1dd4ec10ad79a19",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "a1bebd356e0bd3f618757cc3f82a25b4709061c69f2c0d4151047f52702333b2",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_capacity.cpp.o": "b6f756cfcb8c0b8fcd3b73fd14d67638041423e61f94bbfbb83bc49316f40314"
+      },
+      "consumer_sources": {
+        "resident_capacity.cpp": "5933733444916945df78d05b1ce31c70d79c80d5457fe11dea0e16fa24a0b13a",
+        "resident_run.cpp": "95c8254f74f5cf930163376611e427cabe0e8b28aff6d1fa604663695553dac4",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "4f193a6373ab6409f579da0f47fba626f1778835c25a6c66ec9fbe48f2df750d",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "2b21b6b2838f29dc8e4353891b81532ae65e845d9120f9275d8d7f98c217cbf0",
+        "host.py": "86157451b12c0abfa938af6a0105298c5e6d6cfa1e5d7f29cb23289f89afac81",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+        "resident.py": "9faca068ebb8a80f56b06a9d31085086ee49e6b4dc0231d85bb189743d8f89cd",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "b0d140563af0788565ade41b29496eb3a735f9fc9463f8d83261062e7f9986a7",
+        "resident_consumer.h": "a12778fe1dbf3d5c200472e4787f539c2ee197e3419e84710256c9f1e3cbfeb4",
+        "consumer.h": "f3ad6094cf51cc83bddc838bbb8a5cb69fb24d6814fff4ffcd2f3378b27120a1",
+        "capacity.h": "59cffe82b6a245de819395525dd5fa860f6b2b429920c0f0432ae52bc9349ddf",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "77badc59b4081ad16fe215b8866206cd26d5775fd79f1573db7a97bd9db6224b",
+        "run.cpp": "a3e4b2e1d167e5e2dc5e9bf7ff2221ddc5646a37e2103b49c71f314e18d647a5",
+        "capacity.py": "671283fa6f63fe87571285340661b8629b0fa8745def31048aa39783e990af11",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "659cb6ff07e9f38cf36ea55224f5831c42cad3404d33bcad0a96c947d6f559b2",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4"
+      },
+      "resident_qualification_sha256": "10cefddd3ec76188de8bcb66ebf1a37a85ae1ed2b4917662f1505842887463e1"
+    }
+  },
+  "tests": {
+    "cpu": {
+      "passed": 25,
+      "junit_sha256": "40b899b7f671da52581927af53d994319ad62eb77befdef41ba8c10eae9ee5f3"
+    },
+    "npu": {
+      "passed": 30,
+      "junit_sha256": "982c570c6fa8608cda35903166ba20298c3159effc0cc9f0df9bb302b5310234"
+    }
+  },
+  "benchmark": {
+    "state": "passed",
+    "source": "be380db7451742c3fe50b57cb02263e81c64a4d6",
+    "dirty": "",
+    "legacy_source": "fe8a08b",
+    "helper_sha256": "c942a5709751bab4d360e3cd6539a45180d4b60493d78cac6029d3b9f2883b62",
+    "probe_cpp_sha256": "ddffb07b5fbf55ca12c11762e74b854d56b4b0134ef04659e07320d433d445d1",
+    "actual_model_object_sha256": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+    "client_sha256": "cc70aabb8884dce988af500e79f3e890c97f1d3e6df2a9f8cd0679910f6204d4",
+    "commands": [
+      [
+        "/usr/bin/c++",
+        "-I/mi/data2T/zlong/tide-execution-flows/sources/source-values-clean01/tools/online_bench",
+        "-DPORTABLE_TORCH_ENABLE_CUDA=0",
+        "-DPORTABLE_TORCH_ENABLE_NPU=0",
+        "-DUSE_C10D_GLOO",
+        "-DUSE_DISTRIBUTED",
+        "-DUSE_RPC",
+        "-DUSE_TENSORPIPE",
+        "-isystem",
+        "/mi/data2T/zlong/tide-execution-flows/builds/source-values-cpu-clean01/installed/include",
+        "-isystem",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/include",
+        "-isystem",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/include/torch/csrc/api/include",
+        "-O2",
+        "-DNDEBUG",
+        "-std=gnu++17",
+        "-MD",
+        "-MT",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o",
+        "-MF",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o.d",
+        "-o",
+        "/mi/data2T/zlong/tide-execution-flows/runs/source-values-benchmark-clean02/benchmark/probe.o",
+        "-c",
+        "/mi/data2T/zlong/tide-execution-flows/runs/source-values-benchmark-clean02/benchmark/probe.cpp"
+      ],
+      [
+        "/usr/bin/c++",
+        "/mi/data2T/zlong/tide-execution-flows/runs/source-values-benchmark-clean02/benchmark/probe.o",
+        "-O2",
+        "-DNDEBUG",
+        "/mi/data2T/zlong/tide-execution-flows/builds/source-values-cpu-clean01/consumer/CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o",
+        "/mi/data2T/zlong/tide-execution-flows/builds/source-values-cpu-clean01/consumer/CMakeFiles/tidegraph-online-bench.dir/model.cpp.o",
+        "-o",
+        "/mi/data2T/zlong/tide-execution-flows/runs/source-values-benchmark-clean02/benchmark/probe",
+        "-Wl,-rpath,/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/lib",
+        "/mi/data2T/zlong/tide-execution-flows/builds/source-values-cpu-clean01/installed/lib64/libtidegraph_runtime.a",
+        "-ldl",
+        "/mi/data2T/zlong/tide-execution-flows/builds/source-values-cpu-clean01/installed/lib64/libtidegraph.a",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/lib/libtorch.so",
+        "-Wl,--no-as-needed,/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/lib/libtorch_cpu.so",
+        "-Wl,--as-needed",
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/lib/libc10.so"
+      ]
+    ],
+    "processes": [
+      {
+        "log_sha256": "796de6a4eca729ad6770d197c008d7b9a61834a3f718e3c5f23a8a7322734b4d",
+        "rows": [
+          {
+            "name": "edge/2207/projection",
+            "elements": 4194304,
+            "byte_equal": true,
+            "old_seconds": [
+              0.092005207,
+              0.091698064,
+              0.092059337
+            ],
+            "new_seconds": [
+              0.014731309,
+              0.014735459,
+              0.014754909
+            ]
+          },
+          {
+            "name": "node/479/fiber_qkv",
+            "elements": 12582912,
+            "byte_equal": true,
+            "old_seconds": [
+              0.28870075,
+              0.284943984,
+              0.287815562
+            ],
+            "new_seconds": [
+              0.044236196,
+              0.044217667,
+              0.044183656
+            ]
+          },
+          {
+            "name": "head",
+            "elements": 103022592,
+            "byte_equal": true,
+            "old_seconds": [
+              2.325529858,
+              2.295949699,
+              2.300078808
+            ],
+            "new_seconds": [
+              0.361994101,
+              0.362125062,
+              0.362392814
+            ]
+          }
+        ]
+      },
+      {
+        "log_sha256": "86878a8e9846a2ae2499a03eb4ba84e80286d6a9c7f91778574cac1b402b2755",
+        "rows": [
+          {
+            "name": "edge/2207/projection",
+            "elements": 4194304,
+            "byte_equal": true,
+            "old_seconds": [
+              0.092060457,
+              0.091376921,
+              0.092156408
+            ],
+            "new_seconds": [
+              0.014730329,
+              0.014748719,
+              0.014744919
+            ]
+          },
+          {
+            "name": "node/479/fiber_qkv",
+            "elements": 12582912,
+            "byte_equal": true,
+            "old_seconds": [
+              0.286713631,
+              0.282248319,
+              0.282077377
+            ],
+            "new_seconds": [
+              0.044176566,
+              0.044224306,
+              0.044231677
+            ]
+          },
+          {
+            "name": "head",
+            "elements": 103022592,
+            "byte_equal": true,
+            "old_seconds": [
+              2.323317618,
+              2.294255914,
+              2.287625601
+            ],
+            "new_seconds": [
+              0.362117351,
+              0.361842539,
+              0.361830159
+            ]
+          }
+        ]
+      },
+      {
+        "log_sha256": "7ab1acb1888a96230b9a55d5c85387fb35749bbef386e5e51a4fb1e6c7d25890",
+        "rows": [
+          {
+            "name": "edge/2207/projection",
+            "elements": 4194304,
+            "byte_equal": true,
+            "old_seconds": [
+              0.091954756,
+              0.092158999,
+              0.092140428
+            ],
+            "new_seconds": [
+              0.014736189,
+              0.014747009,
+              0.014725888
+            ]
+          },
+          {
+            "name": "node/479/fiber_qkv",
+            "elements": 12582912,
+            "byte_equal": true,
+            "old_seconds": [
+              0.288425497,
+              0.284392449,
+              0.287981683
+            ],
+            "new_seconds": [
+              0.044282238,
+              0.044189466,
+              0.044205226
+            ]
+          },
+          {
+            "name": "head",
+            "elements": 103022592,
+            "byte_equal": true,
+            "old_seconds": [
+              2.310347176,
+              2.399580386,
+              2.294777439
+            ],
+            "new_seconds": [
+              0.362217533,
+              0.362588326,
+              0.362137161
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Three fresh CPU-only processes, each with one shape warmup and three alternated measured old/new fills; exact memcmp outside timers. Actual consumer model.cpp object versus prior unchanged ATen definition, ATen/BLAS1. Constructor subroutine only, no full-model or NPU speedup claim.",
+    "probe_binary_sha256": "949fd12091e9f0306b22beb54767f0cae53a8444458aab9b77abf60c1fb09cc1"
+  },
+  "summary": [
+    {
+      "name": "edge/2207/projection",
+      "elements": 4194304,
+      "old_process_medians": [
+        0.092005207,
+        0.092060457,
+        0.092140428
+      ],
+      "new_process_medians": [
+        0.014735459,
+        0.014744919,
+        0.014736189
+      ],
+      "old_median_seconds": 0.092060457,
+      "new_median_seconds": 0.014736189,
+      "initializer_speedup": 6.24723644627522
+    },
+    {
+      "name": "node/479/fiber_qkv",
+      "elements": 12582912,
+      "old_process_medians": [
+        0.287815562,
+        0.282248319,
+        0.287981683
+      ],
+      "new_process_medians": [
+        0.044217667,
+        0.044224306,
+        0.044205226
+      ],
+      "old_median_seconds": 0.287815562,
+      "new_median_seconds": 0.044217667,
+      "initializer_speedup": 6.509062588037492
+    },
+    {
+      "name": "head",
+      "elements": 103022592,
+      "old_process_medians": [
+        2.300078808,
+        2.294255914,
+        2.310347176
+      ],
+      "new_process_medians": [
+        0.362125062,
+        0.361842539,
+        0.362217533
+      ],
+      "old_median_seconds": 2.300078808,
+      "new_median_seconds": 0.362125062,
+      "initializer_speedup": 6.351614536968999
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "source-values-benchmark-clean01",
+      "reason": "Auxiliary probe omitted packet.cpp object; failed at link before measurement; v2 links that unchanged dependency.",
+      "status_sha256": "5be598e5be096da8ffd070d21b09107c554114380fe8f1bf2d9c62cec28419c4",
+      "log_sha256": "4046f1d3f366dbe3b99c151e41459b7500d61e8fd61e4e46865b8b4d40c063cf"
+    },
+    {
+      "name": "wide-add-inference01",
+      "reason": "Qualification dependency stopped at failed auxiliary benchmark, before NPU allocation.",
+      "status_sha256": "1cafa031acd6fb50cea6a51608a39b08d03a3bac3dc31fe51727e8a227b1dc7c",
+      "log_sha256": "3c38ccb09849fa5c9d263fa35bb122bb38d55079e9da559d10afbbab90ba6fcf"
+    }
+  ],
+  "scope": "C++ CPU generation of exact named-lcg31-v1 initial parameters, unchanged independent Python definition and public graph/core/device libraries; full consumer gates plus actual initializer microbenchmark.",
+  "limits": [
+    "aarch64 CPU measurements, ATen/BLAS1; not full-model construction, graph scheduling, NPU kernel or complete-step speedup.",
+    "No reference model output/events/routes/gradients enter candidates. FP32 source bytes match legacy ATen before payload casts.",
+    "Original-wide performance matrix, complete training and CUDA/other-host execution remain separate work."
+  ]
+}

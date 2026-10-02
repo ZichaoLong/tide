@@ -7,7 +7,8 @@ Repository /home/zlong/llm/graph-execution-foundation resolves to
 Implementation48e44b0/evidenceca559b5 are qualified; matrix evidence270ee2e is committed/pushed.
 Implementation0fbc1b2 committed/pushed and all eight clean jobs PASSED.
 Retained-journal and original-wide Attention evidencefe8a08b committed/pushed.
-Fused CPU initializer below passed development gates and is ready for commit.
+Fused CPU initializerbe380db committed/pushed and qualified; evidence ready for
+separate commit. Original Add scale run is active below.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -119,45 +120,58 @@ or throughput recommendation; independent dev/calibration jobs overlapped.
 Audit launchers/wide_inference_evidence.py passed.
 [Report](evidence/original-wide-inference-20261002.md).
 
-## Current initializer increment / next action
+## Latest initializer qualification
 
-Generic named-lcg31-v1 C++ CPU initializer now composes the three integer affine
-steps modulo2^31-1 and fills only the final FP32 tensor,under existing ATen thread
-budget. Python definition unchanged; graph/core/runtime code unchanged. Consumer
-source_values.h/model.cpp plus exact independent integer test/probe and contract.
-All four dev jobs PASSED on frozensource-values-dev01:
-build-source-values-{cpu,npu}-dev01,source-values-{cpu,npu}-dev01.
-CPU25 checks (380 scalar modulo/seed cases plus24 actual independent CPU FP32/FP64
-consumer comparisons),NPU30 actual standalone cases (12resident training,
-12resident inference,6mixed training),no skips. Three families,Add/Attention,
-streaming/prefill,FP32/FP16 resident. NPU libs reused from qualified0fbc1b2;
-byte-checked core unchanged. New CPU helperbuild_source_consumer.py reuses only
-source/header/options-identical objects; NPU usesbuild_capacity_client.py.
-No speed claim yet. Do not infer that this accounts for all818s construction.
+Generic named-lcg31-v1 C++ CPU initializerbe380db7451742c3fe50b57cb02263e81c64a4d6
+composes three integer affine steps modulo2^31-1 and fills only final FP32 under
+existing ATen threads. Python unchanged; no graph/core/NPU changes. Frozen
+source-values-clean01. All5clean jobs PASSED:
+build-source-values-{cpu,npu}-clean01,source-values-{cpu,npu}-clean01,
+source-values-benchmark-clean02. CPU25 (380 scalar cases+24 actual FP32/FP64
+consumer comparisons);NPU30 (12resident training,12resident inference,6mixed),
+no skips. Libraries reused from qualified0fbc1b2. Audit source_values_evidence.py
+passed; [report](evidence/exact-initializer-20261002.md).
+Three fresh CPU processes,one warmup/three measured old/new fills per shape,
+full memcmp outside timer,actual model.cpp object vs priorfe8a08b ATen code:
+projection0.092060→0.014736s(6.247×),QKV0.287816→0.044218s(6.509×),
+head2.300079→0.362125s(6.352×). Only initialization speed,not complete construction
+or graph/NPU throughput. Separate reviewed evidence commit next.
 
-Next commit/push implementation; freezesource-values-clean01. Build CPU with
-build_source_consumer.py --backend cpu --name source-values-cpu-clean01
---reuse-client TASK/builds/source-values-cpu-dev01; NPU withbuild_capacity_client.py
---build TASK/builds/retained-journals-standalone-clean01 --out
-TASK/builds/source-values-npu-clean01 --reuse-client TASK/builds/source-values-npu-dev01.
-Clean CPU25/NPU30 under the same directed test commands in dev launch scripts.
-Then bounded CPU benchmark helperbenchmark_source_values.py --source SOURCE
---build CPU_BUILD --output OUT/benchmark:three fresh processes,three shapes,
-one warmup/three alternated measured fills each,actual model.cpp object versus
-priorfe8a08b ATen code,full memcmp. Helper prepared but not run; compile/link and
-runtime commands/identities retained. Time this separately from other own heavy
-work; cap600s,180s/process. Then reviewed separate qualification evidence.
+Retain FAILED source-values-benchmark-clean01 (auxiliary linker omitted packet.cpp,
+no measurements;v2 corrected),and wide-add-inference01 (dependency stopped before
+NPU allocation). No library/tolerance change was needed. Helpers for those failed
+runs remain unchanged; corrected helpers have_v2 suffixes.
 
-Next original Add capacity run can reuse the established eight-card shape and
-budgets after setup improvement qualification. Full-size training also needs
->512MiB head workspace. Pure offline4GiB-head probes still refused dense minimum
-plans: Add8/12/16cards≈106/89/82GiB maximum; Attention≈182/148/132GiB (B4,
-trace16384,KV256,pool8GiB,AdamW). These are conservative estimates,not physical
-impossibility. Dominant costs include retained tapes,physical/canonical gradients,
-routing and optimizer copies. Derive lifetimes/reduce buffers and calibrate before
-relaxing admission or running wide training. Do not blindly retry/refuse completion.
-No new long job queued;all current jobs terminal except deliberately stopped
-historical CPU below. Do not rerun completed representative matrix.
+## Active original Add execution
+
+wide-add-inference02 RUNNING;unit tide-execution-flows-wide-add-inference02.service,
+TASK/runs/wide-add-inference02/{status,stages,queue}.json,task.log,original-wide.log.
+Helperlaunchers/wide_add_inference_v2.py,frozenbe380db/source-values-clean01;
+qualifiedbinaryTASK/builds/source-values-npu-clean01/consumer/tidegraph-online-bench.
+Lease physical1,2,3,4,5,7,9,11→logical0..7 acquired06:32:02UTC. All qualification
+prerequisites passed. Original Add9,468,053,696parameters,D2048/B512/T12/V50304,
+FP32 TimedDAG/prefill,one cold step/two connected windows,128B4groups. Same
+queue2048/KV256/trace16384/output512/8GiBpool/60GiBtotal/head512MiB capability
+settings as the prior Attention run. No throughput recommendation,half batch or
+KV truncation. Inputpacketfullsize-add01 unchanged. Execution cap1800s,queue120s,
+whole dispatcher2700s;process group cleanup on timeout,no blind retry.
+Do not edit its helper/source. On terminal result audit model/input identity,
+12,288outputs/cut408,finite loss,complete statistics and allocator bounds;
+write separate execution evidence,never convert a live run into a pass.
+
+## Next work
+
+Finish active Add execution/evidence,then prioritize full-size training memory
+and actual comparisons. Offline4GiB-head dense plans still refuse minimum shapes:
+Add8/12/16cards≈106/89/82GiB maximum;Attention≈182/148/132GiB(B4,trace16384,
+KV256,pool8GiB,AdamW). These are conservative bounds,not physical impossibility.
+Current gradients/parameter communication already use bounded owner streams.
+Inspect retained parameter copies and per-card allocation lifetimes; derive and
+validate bounds before relaxing admission. A per-card bounded retained tape pool
+analogous to saved contexts may be useful, but needs explicit failure/transaction
+semantics and independent training tests; not implemented or decided yet.
+Automatic sample admission and mixed multi-device placement remain open. No new
+performance matrix queued. Do not rerun completed representative timings.
 
 ## Remaining goal work
 
@@ -185,6 +199,7 @@ freeze_run.py:detached background.slice/Nice10,2buildworkers,bounded tasks.
 Last free:data195GiB/root12GiB. Current formal timing lock TASK/online-measurement.lock.
 Atomic handoff via durable_records.replace_text. Latest qualified resident libraries
 retained-journals-{standalone,python}-clean01; consumer retained-journals-consumer-clean01.
+Latest standalone CPU/NPU consumer binaries:source-values-{cpu,npu}-clean01.
 Earlier context-pool consumer remains qualified for its original-wide evidence.
 Core placement-{cpu,npu,npu-python}-clean01; eager clients sample-chunks-{cpu,npu}-clean01.
 Standalone and Python-owned runtimes remain separate; no library mixing.
