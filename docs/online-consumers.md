@@ -258,6 +258,7 @@ Do not multiply once-per-update costs by sample count when making an estimate,
 or treat a phase-based estimate as measured larger-batch throughput. Preserve
 the measured pilot, extrapolation assumptions, original failures and safety caps;
 larger models/batches still require actual execution and memory calibration.
+Qualified on clean `26176de`: [CPU13/NPU8 timing and semantic checks](evidence/consumer-phase-timing-20261003.md).
 
 For eager native and standalone LibTorch consumers, `--workers` selects the
 existing node worker pool independently of ATen intra-op `--threads`.

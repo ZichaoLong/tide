@@ -212,8 +212,8 @@ budgets and consumer estimates unchanged. Same-lease D512 peaks decrease
 F6 original-width Add on clean4467493 passed one unchanged nine-card B4/physicalB2
 complete update20.770s,peak43,197,837,312bytes. All memory/work/loss checks pass;
 B512 projection3057.317s>3000s, not executed. Optional sample-work/optimizer timing
-is implemented in all consumer entrypoints; development CPU13/NPU8 passed,
-with clean fixed-source qualification pending.
+is qualified on clean26176de: CPU13/NPU8,40 actual CLI candidates and four terminal
+jobs; [evidence](evidence/consumer-phase-timing-20261003.md).
 It defaults off and adds one synchronized training boundary when enabled. The
 next original-width cost diagnostic must preserve original refusals and cost cap
 ([evidence](evidence/original-width-add-projection-borrow-20261003.md)).

@@ -1,0 +1,1309 @@
+{
+  "schema": "tide-consumer-phase-timing-v1",
+  "source": "26176de888013fda5eccfe039fa504e87c2e7e95",
+  "jobs": [
+    {
+      "name": "build-phase-timing-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "69d9e702db87c2bbade6e32630ea697607d218fde5d3a6046a1e77f51a486a1d",
+        "task.log": "401eab2b6ce844f6bf04f1dc1e99d7d567fc9bb12936b9c13b2aafd82790ab10"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-phase-timing-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9ff9be0b1dff13904fdd9852c86f7d3a38dd2631ea7b01ebf318e2cdedbd8cc7",
+        "task.log": "483f6fcbed310d6c030348308d42b6a2929a58d0d9d26ebb91db606846138732"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "phase-timing-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "164fce33a5f60643d9dbb478279b68eb12195b35a436cef2d70d32e9017f2a8d",
+        "task.log": "94fad84b3d7157998803ce1717effa93cfa92116bce4edf88d819ed145273b5f"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "phase-timing-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "28e73b5b083249923be767fca4ee75bfcdbcd21b15d1682e904ef6d6dd9f3b79",
+        "task.log": "36e421da1d92218a7229bf838195ce1a939343cd462ac82a451d41ad72699441",
+        "queue.json": "1ce51767891eff31ba6e110373ab8e8270fd4c03416a7190e7a2fdc56b74a7b3"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "clients": {
+    "cpu": {
+      "manifest_sha256": "20b1191ad1fce940fa7a2b0193c1f7ed6129bc9902c4b7756d2c798b7d995b29",
+      "binary_sha256": "54643ae2be3d24ff80281eec4a0e7351616992ac30eb6b6fc4ab2ee5dbadfb96",
+      "loader_sha256": "7ae8d924fa9c160b389cd946f30c2e4d28d304202697bd967696e4ca50e291ad",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "consumer_sources": {
+        "resident_capacity.cpp": "179b525434a8d62515928679cab50c747a6061baa44585cb4b9e2ede6e13982c",
+        "resident_run.cpp": "ff819ce34ab5493709f367bcfae0ec9ce73bc8b0fe3acf10b585010b53b5dbcb",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "0776d18dc4cc18eb52c51534e1e8bde06eee08847b32a6a4e5b73cd0c639708b",
+        "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+        "host.py": "e458b4104bac51f816cbea4a684b3b5b44ee532bb85cde01e775ac25970b3801",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+        "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "be63956928432db19f995d41d6161d6ef7eed5e3ce155823baa2efeec4716bc5",
+        "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+        "consumer.h": "56963db7b2f21c4400832f57c7d505d520cf65f52bb50d33c32207ad31c135b1",
+        "capacity.h": "29049e83350ac678134d274c0794736ff4502f0b5e469d2be9be01a67e4591ff",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "3c3fc7af74d055814e279c81f07fb02a46829a5ecefc4ec4f6ec5ec273423211",
+        "run.cpp": "df94e993cd1e25dfc82c269a13c5cb6db3f065d4295b8373df0393214f6a22d3",
+        "capacity.py": "c40e5f09d4fc9b31fb58bc775f28edc252db840a39fa9ea7fd3cb0288f61219f",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "cfbb69e25d919d16585e854fac9e2d18e6fac4efd9737a17e3316884be380837",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+        "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+        "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+      },
+      "reused_objects_sha256": {
+        "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "beaeae1b00914e40cd5d373a61c4b5cb7adb7e083ab3bcaf3503a02abbd89464",
+        "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "96a1926f0ab385e89c8de8cb79dd9f7d031d8f5bf768a8a5149d54c85e1fa99f",
+        "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+        "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "2fa3514fd51eb1edebe4cc51bf406ca2c3f658b3887aae956cf6771c870bad6a",
+        "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+        "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "f53727bfca7d8f57e6594caa5b103985e9d857512dc23682db5d1cf4eef77b56"
+      }
+    },
+    "consumer": {
+      "manifest_sha256": "19ac9555e1fbcb1e76aed8effb14ccb73cf4befdecc37f04557298ed391e4193",
+      "binary_sha256": "036def2cf03af3ec54dbe3c677d8b385a2a904e47cfc81f6a2103577e9ef9937",
+      "loader_sha256": "ce7b958a55cf27decddcf73e75087c3a07304c0ecd837669afd38117f7b47572",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "consumer_sources": {
+        "resident_capacity.cpp": "179b525434a8d62515928679cab50c747a6061baa44585cb4b9e2ede6e13982c",
+        "resident_run.cpp": "ff819ce34ab5493709f367bcfae0ec9ce73bc8b0fe3acf10b585010b53b5dbcb",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "0776d18dc4cc18eb52c51534e1e8bde06eee08847b32a6a4e5b73cd0c639708b",
+        "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+        "host.py": "e458b4104bac51f816cbea4a684b3b5b44ee532bb85cde01e775ac25970b3801",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+        "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+        "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+        "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+        "resident_records.cpp": "be63956928432db19f995d41d6161d6ef7eed5e3ce155823baa2efeec4716bc5",
+        "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+        "consumer.h": "56963db7b2f21c4400832f57c7d505d520cf65f52bb50d33c32207ad31c135b1",
+        "capacity.h": "29049e83350ac678134d274c0794736ff4502f0b5e469d2be9be01a67e4591ff",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+        "capacity_record.h": "3c3fc7af74d055814e279c81f07fb02a46829a5ecefc4ec4f6ec5ec273423211",
+        "run.cpp": "df94e993cd1e25dfc82c269a13c5cb6db3f065d4295b8373df0393214f6a22d3",
+        "capacity.py": "c40e5f09d4fc9b31fb58bc775f28edc252db840a39fa9ea7fd3cb0288f61219f",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "cfbb69e25d919d16585e854fac9e2d18e6fac4efd9737a17e3316884be380837",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+        "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+        "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+      },
+      "reused_objects_sha256": {
+        "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "beaeae1b00914e40cd5d373a61c4b5cb7adb7e083ab3bcaf3503a02abbd89464",
+        "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "96a1926f0ab385e89c8de8cb79dd9f7d031d8f5bf768a8a5149d54c85e1fa99f",
+        "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+        "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+        "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "7278c229f2c3f94eabd988e94dc90f2ffea5d2fa811f1aa30111b38feaa1f960",
+        "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+        "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "1720f535ea800bcdf029990fb7ea8ea873f83050ea343ca39faa2a7965899e3a",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "375b113802fe165efbcbdf14b20a3b2981ee9b11bf4c4f26b49f523945713a90",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "54f28c35a1c5119c6077abbf076d080c8a7862fa86280ee9e1dd4ec10ad79a19",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "0133f8f321c39a77eb2b8f282040b3d02147e1b27e60a16042efc9a60fafef82",
+        "CMakeFiles/tidegraph-online-bench.dir/resident_capacity.cpp.o": "54b8c93f448929e1e59ef00f130a05174231f70c0acb73c4fd6b8794166ed009"
+      }
+    }
+  },
+  "backends": {
+    "standalone": {
+      "manifest_sha256": "9cc45028dfe254d09b1aeeef55a1a635bbad9aa908f318343506ed5beac74835",
+      "source": "44674936efcc4177d4683a7e8542816aec0928eb",
+      "component_sha256": "3d3765e6b0d9852c6533c51d15105bdf21a406e18565a18c6475d0d5bbd2ae0b",
+      "binary_sha256": {
+        "libtide-resident.so": "1c01e0260873fc4236932b37defde1cc009643fcf9b1fe20ce554da35864a771",
+        "tide-resident-sharded-session-check": "ee576d3ce542beeeeac39ee9f507911bbb86ff242a4e30b417347ff3dcdab43f"
+      }
+    },
+    "python": {
+      "manifest_sha256": "d7e901ab115feb3e11dfe56fee3186ab7fd8f62fc61ba2fd9465a1f9c10c4212",
+      "source": "44674936efcc4177d4683a7e8542816aec0928eb",
+      "component_sha256": "3d3765e6b0d9852c6533c51d15105bdf21a406e18565a18c6475d0d5bbd2ae0b",
+      "binary_sha256": {
+        "libtide-resident.so": "543f6bae9bc6509c2c84049fce8a1a808507a2b73f286e043999064941a24d97",
+        "_tide_resident.so": "c2da36d71283e7a986f74e69527afd1ffd9647998f9072aea07ed79af61ef639"
+      }
+    }
+  },
+  "tests": {
+    "cpu": {
+      "passed": 13,
+      "junit_sha256": "62f04a323a82338a84bea86e62bb08d2e4de8fc8ff313432bf1c33734f70e4c9"
+    },
+    "npu": {
+      "passed": 8,
+      "junit_sha256": "77b2534492603d8be1ae6f66dcbd046323b58773e4dd35e33675baeab06203c2"
+    }
+  },
+  "cases": [
+    {
+      "kind": "cpu",
+      "implementation": "python",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.07096698880195618,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.07097937166690826,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.07796001061797142,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.07096698880195618,
+        0.07097937166690826
+      ],
+      "warmup_seconds": [
+        0.07796001061797142
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_0/default/run/result.json",
+          "result_sha256": "d6ffec840e02db4f45627d0898b4c00c1d250584b5f8e40bc9ec0ec1bd4d7608",
+          "diagnostics_sha256": "d8949caa9fdbdd45751ae51ad1461035ba02ac43e26a60b91544851e24c7a44a"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_0/enabled/run/result.json",
+          "result_sha256": "942f75f7772b7fe6b09298833860bd4c07d21172cd15e1f9b0493169cf3cc5f2",
+          "diagnostics_sha256": "d8949caa9fdbdd45751ae51ad1461035ba02ac43e26a60b91544851e24c7a44a"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "native",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.027192674577236176,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.02689051628112793,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.031395018100738525,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.027192674577236176,
+        0.02689051628112793
+      ],
+      "warmup_seconds": [
+        0.031395018100738525
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_1/default/run/result.json",
+          "result_sha256": "f6c079709cf2192335e56ba20e644c5b6dbe33335c5b071a5596812532932d6e",
+          "diagnostics_sha256": "d8949caa9fdbdd45751ae51ad1461035ba02ac43e26a60b91544851e24c7a44a"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_1/enabled/run/result.json",
+          "result_sha256": "d31074b08781b0d84761083279dbb186bef3330380e952990a5bbdd4102a214b",
+          "diagnostics_sha256": "d8949caa9fdbdd45751ae51ad1461035ba02ac43e26a60b91544851e24c7a44a"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.019769457,
+            "optimizer_seconds": 0
+          },
+          {
+            "sample_work_seconds": 0.02005297,
+            "optimizer_seconds": 0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.021186079,
+            "optimizer_seconds": 0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.019769457,
+        0.02005297
+      ],
+      "warmup_seconds": [
+        0.021186079
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_2/default/run/result.json",
+          "result_sha256": "ff95771c535a8e9eebf89a9e495b1f441b6af523b5b60f5838348449ea41c9c2",
+          "diagnostics_sha256": "b8df24d8b64d6ec442a62faf4b05cd27e86fa2f25874c32afb32fdc4ecf4de90"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_2/enabled/run/result.json",
+          "result_sha256": "c9dfdb1b553932deb861db601ad624439618b2c7265eb2d92d3d09507618fed4",
+          "diagnostics_sha256": "b8df24d8b64d6ec442a62faf4b05cd27e86fa2f25874c32afb32fdc4ecf4de90"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "python",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "greedy",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.14413900673389435,
+            "optimizer_seconds": 0.002668425440788269
+          },
+          {
+            "sample_work_seconds": 0.14503488317131996,
+            "optimizer_seconds": 0.002630520612001419
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.1581428311765194,
+            "optimizer_seconds": 0.0036562159657478333
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.14680743217468262,
+        0.14766540378332138
+      ],
+      "warmup_seconds": [
+        0.16179904714226723
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_3/default/run/result.json",
+          "result_sha256": "ef141a86cb9bde1d68784d0274a8be118593ecd8238f3b8d9b83cded0732ba4a",
+          "diagnostics_sha256": "aac4301af637c86903772e2dcfded8061da03399e0dcb649575fe9253eceb91d"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_3/enabled/run/result.json",
+          "result_sha256": "9eb27c587f24b5215a030f6490be84f4bc37b70fa9a72d0d499c88398fd530b8",
+          "diagnostics_sha256": "aac4301af637c86903772e2dcfded8061da03399e0dcb649575fe9253eceb91d"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "native",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "greedy",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.061771854758262634,
+            "optimizer_seconds": 0.0024469122290611267
+          },
+          {
+            "sample_work_seconds": 0.06151258200407028,
+            "optimizer_seconds": 0.0024237148463726044
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.06824049726128578,
+            "optimizer_seconds": 0.003407493233680725
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.06421876698732376,
+        0.06393629685044289
+      ],
+      "warmup_seconds": [
+        0.07164799049496651
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_4/default/run/result.json",
+          "result_sha256": "11bc97a216fa87221284834d6e77bcae430e4d3439911eb30ecc08a9aecd995a",
+          "diagnostics_sha256": "eb95690bde4395f5686decce3642d5e1492abe8787a451e4826373297200ed93"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_4/enabled/run/result.json",
+          "result_sha256": "76ba364e2902de7f353a6de26a922a354aeafaae4105c8332f41fd2d43dd7d9f",
+          "diagnostics_sha256": "eb95690bde4395f5686decce3642d5e1492abe8787a451e4826373297200ed93"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "libtorch",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float32",
+        "preset": "cpu",
+        "schedule": "prefill",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.053202552,
+            "optimizer_seconds": 0.0019828990000000032
+          },
+          {
+            "sample_work_seconds": 0.053652967,
+            "optimizer_seconds": 0.0019686379999999948
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.059488131,
+            "optimizer_seconds": 0.0023303019999999994
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.055185451,
+        0.055621605
+      ],
+      "warmup_seconds": [
+        0.061818433
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_5/default/run/result.json",
+          "result_sha256": "201b95fd7186ed554676c617573039ae141f872bf47ef107c200eff2332af5b5",
+          "diagnostics_sha256": "6516652dad0fbb4b374e127e25ee5bf9edb308fa52ea8ee71aa73e9f05074aa2"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float32_5/enabled/run/result.json",
+          "result_sha256": "02c669179ff5abd569391193b575cc953ee402cf1a5dce32a419c5bc817f02ae",
+          "diagnostics_sha256": "6516652dad0fbb4b374e127e25ee5bf9edb308fa52ea8ee71aa73e9f05074aa2"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "python",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.06712350249290466,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.06704288348555565,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.07321072742342949,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.06712350249290466,
+        0.06704288348555565
+      ],
+      "warmup_seconds": [
+        0.07321072742342949
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_0/default/run/result.json",
+          "result_sha256": "04da4226bfc361db42883efa99860a68ee793f59bff5c612a2070c11362c67bc",
+          "diagnostics_sha256": "91332b58791e1f635ae362469076deae90e13000523eece5fbbdbc7ebe1759fa"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_0/enabled/run/result.json",
+          "result_sha256": "36311ef23c5992f99c6ca76a34594950fbedb1dff2dfbbba953d4054be4c6e78",
+          "diagnostics_sha256": "91332b58791e1f635ae362469076deae90e13000523eece5fbbdbc7ebe1759fa"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "native",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.025593098253011703,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.025460653007030487,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.027987215667963028,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.025593098253011703,
+        0.025460653007030487
+      ],
+      "warmup_seconds": [
+        0.027987215667963028
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_1/default/run/result.json",
+          "result_sha256": "c81284528c4db33aa75478e463dc463d34366bd24d49c1906e2aed8445dc71f8",
+          "diagnostics_sha256": "91332b58791e1f635ae362469076deae90e13000523eece5fbbdbc7ebe1759fa"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_1/enabled/run/result.json",
+          "result_sha256": "6f13bfcaae3149768da3a68aee2645fc53d969e760c705d3123275c8a2c8ca40",
+          "diagnostics_sha256": "91332b58791e1f635ae362469076deae90e13000523eece5fbbdbc7ebe1759fa"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "streaming",
+        "devices": []
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.01702209,
+            "optimizer_seconds": 0
+          },
+          {
+            "sample_work_seconds": 0.017456875,
+            "optimizer_seconds": 0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.017538176,
+            "optimizer_seconds": 0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.01702209,
+        0.017456875
+      ],
+      "warmup_seconds": [
+        0.017538176
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_2/default/run/result.json",
+          "result_sha256": "f3aafd0a6e0bbf6b80b8867e36837a37def19d6be264792ab8f305559982d8a5",
+          "diagnostics_sha256": "60e06cec2c41e5226fac77787a012e11763a8e879cc21e15842d4cef612d21d6"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_2/enabled/run/result.json",
+          "result_sha256": "d0bea205fa65ac3ae49014b94269d9b9f5be959a61ec9852c659e0ea2cc44a31",
+          "diagnostics_sha256": "60e06cec2c41e5226fac77787a012e11763a8e879cc21e15842d4cef612d21d6"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "python",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "greedy",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.11786020919680595,
+            "optimizer_seconds": 0.00230509415268898
+          },
+          {
+            "sample_work_seconds": 0.11856521666049957,
+            "optimizer_seconds": 0.00225246325135231
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.13065428286790848,
+            "optimizer_seconds": 0.0031637512147426605
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.12016530334949493,
+        0.12081767991185188
+      ],
+      "warmup_seconds": [
+        0.13381803408265114
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_3/default/run/result.json",
+          "result_sha256": "060d4a2ff477822a861102e3fc66a1b025a6fc56e46b342e805b058497e08876",
+          "diagnostics_sha256": "e86defa1f2b04cdd2fc448708cff73c97f4817593f14721318dc93cc88fb0366"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_3/enabled/run/result.json",
+          "result_sha256": "a846cd7b1ab311d8b65bd76eb4fceb98da742aa811f6e89c9ee0f6b8701857cc",
+          "diagnostics_sha256": "e86defa1f2b04cdd2fc448708cff73c97f4817593f14721318dc93cc88fb0366"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "native",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "greedy",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.04857439920306206,
+            "optimizer_seconds": 0.002083428204059601
+          },
+          {
+            "sample_work_seconds": 0.04887185990810394,
+            "optimizer_seconds": 0.0020965300500392914
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.05283411592245102,
+            "optimizer_seconds": 0.003044869750738144
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.05065782740712166,
+        0.050968389958143234
+      ],
+      "warmup_seconds": [
+        0.05587898567318916
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_4/default/run/result.json",
+          "result_sha256": "6823bab46ca7bbdad26c88bc5980f005bedcf74594d51b2b85c2ef29b717ca00",
+          "diagnostics_sha256": "679586627e44bec136e3cdfc887b67a7180d213382d4d03af3584cda282ec203"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_4/enabled/run/result.json",
+          "result_sha256": "420f73ee44dfeefd86033399a7441dff310ca5ab097dae457c38fa6b61695a75",
+          "diagnostics_sha256": "679586627e44bec136e3cdfc887b67a7180d213382d4d03af3584cda282ec203"
+        }
+      }
+    },
+    {
+      "kind": "cpu",
+      "implementation": "libtorch",
+      "family": "settle",
+      "runtime": {
+        "device": "cpu",
+        "dtype": "float64",
+        "preset": "cpu",
+        "schedule": "prefill",
+        "devices": []
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.03713671,
+            "optimizer_seconds": 0.0014918239999999958
+          },
+          {
+            "sample_work_seconds": 0.037583405,
+            "optimizer_seconds": 0.0014797939999999996
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.039420822,
+            "optimizer_seconds": 0.0017096159999999971
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.038628534,
+        0.039063199
+      ],
+      "warmup_seconds": [
+        0.041130438
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_5/default/run/result.json",
+          "result_sha256": "4fe824205ea0594517c6b72026478646abfc0c422787f9fb1820019585efcff9",
+          "diagnostics_sha256": "b216cd0f2062284e4bdbd365ddb3acb82b8c3dec36f3284b94d7a4a9163c3e72"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-cpu-clean01/pytest/test_cpu_phase_timing_float64_5/enabled/run/result.json",
+          "result_sha256": "edbbad41f7225c95ea1cb0258852f6ca118bfaf3a5a7935e95f1b731633dc032",
+          "diagnostics_sha256": "b216cd0f2062284e4bdbd365ddb3acb82b8c3dec36f3284b94d7a4a9163c3e72"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "libtorch",
+      "family": "pdg",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "mixed-b",
+        "schedule": "prefill",
+        "devices": [
+          "npu:0"
+        ]
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.091892317,
+            "optimizer_seconds": 0.005105788
+          },
+          {
+            "sample_work_seconds": 0.09116799,
+            "optimizer_seconds": 0.005118797999999994
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.408170479,
+            "optimizer_seconds": 0.021528254000000024
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.096998105,
+        0.096286788
+      ],
+      "warmup_seconds": [
+        0.429698733
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch0/default/run/result.json",
+          "result_sha256": "25ae28eba0381523d5f30b4ef47577d26f6400383b9af7d9b73ecee27febd276",
+          "diagnostics_sha256": "6fb675a070f1eb354c1912d27c3afa13041ff83ee55c53e99561a3502a28823a"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch0/enabled/run/result.json",
+          "result_sha256": "6a4a357510b59cbf660d213a748faa1e3057261b9749dbe29dc371f2c1b5c21c",
+          "diagnostics_sha256": "6fb675a070f1eb354c1912d27c3afa13041ff83ee55c53e99561a3502a28823a"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "libtorch",
+      "family": "pdg",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float16",
+        "preset": "resident",
+        "schedule": "streaming",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ]
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.315323724,
+            "optimizer_seconds": 0.01271293999999995
+          },
+          {
+            "sample_work_seconds": 0.305723244,
+            "optimizer_seconds": 0.012260875000000004
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.51100773,
+            "optimizer_seconds": 0.020255390999999956
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.328036664,
+        0.317984119
+      ],
+      "warmup_seconds": [
+        0.531263121
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch1/default/run/result.json",
+          "result_sha256": "a84ec5d9b86d36d82392d319351ef2f74501ff7e49bb9c501292393509dd38b6",
+          "diagnostics_sha256": "aacf237fc6aeb081027855f500df9465ac95a472f1c96171fa530e7acb95eace"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch1/enabled/run/result.json",
+          "result_sha256": "5d27a9ffa4b67e4c665bbb805eda3d49ebdfc9d3e428d0451566ae53d5a17f7f",
+          "diagnostics_sha256": "aacf237fc6aeb081027855f500df9465ac95a472f1c96171fa530e7acb95eace"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "libtorch",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "resident",
+        "schedule": "prefill",
+        "devices": [
+          "npu:0"
+        ]
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.078765623,
+            "optimizer_seconds": 0
+          },
+          {
+            "sample_work_seconds": 0.086160332,
+            "optimizer_seconds": 0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.194685926,
+            "optimizer_seconds": 0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.078765623,
+        0.086160332
+      ],
+      "warmup_seconds": [
+        0.194685926
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch2/default/run/result.json",
+          "result_sha256": "4f8e804df4c7b90c912e4c33f993b2fee0b336217f618505abf02446f0bc3178",
+          "diagnostics_sha256": "0e16cefe631ed0c1020b2b1e615f9bf008ada70686e48f0d7140c00a0acb4909"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_libtorch2/enabled/run/result.json",
+          "result_sha256": "c116eebdc02d32be61d2317ff68551c62ea6abae3644d242cdd551b975be2c97",
+          "diagnostics_sha256": "0e16cefe631ed0c1020b2b1e615f9bf008ada70686e48f0d7140c00a0acb4909"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "native",
+      "family": "settle",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "mixed-c",
+        "schedule": "streaming",
+        "devices": [
+          "npu:0"
+        ]
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.20304791256785393,
+            "optimizer_seconds": 0.008564844727516174
+          },
+          {
+            "sample_work_seconds": 0.2004743404686451,
+            "optimizer_seconds": 0.00864947959780693
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.5839739479124546,
+            "optimizer_seconds": 0.02914135530591011
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.2116127572953701,
+        0.20912382006645203
+      ],
+      "warmup_seconds": [
+        0.6131153032183647
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_m0/default/run/result.json",
+          "result_sha256": "25a24c73dd7c2f6f9fe0e9b476a8b14d86fa900679f2b64e7b4868f1cbc25dad",
+          "diagnostics_sha256": "9c9e5741c25af8667aa61fc804e9313af5c2b0ada361e2de22e861cbdf6faa6f"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_m0/enabled/run/result.json",
+          "result_sha256": "7c620923a554d246ef01dc8e194466a4836c4d803b8f79e8c6e7ff65ffc205d3",
+          "diagnostics_sha256": "9c9e5741c25af8667aa61fc804e9313af5c2b0ada361e2de22e861cbdf6faa6f"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "native",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "resident",
+        "schedule": "greedy",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ]
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.36799030005931854,
+            "optimizer_seconds": 0.013248205184936523
+          },
+          {
+            "sample_work_seconds": 0.3685876652598381,
+            "optimizer_seconds": 0.013172455132007599
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.5633115358650684,
+            "optimizer_seconds": 0.020764276385307312
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.38123850524425507,
+        0.3817601203918457
+      ],
+      "warmup_seconds": [
+        0.5840758122503757
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_r0/default/run/result.json",
+          "result_sha256": "8367ce36ed7614dccfbfffb6d6d77a05438342b4844cec0b0cb9a259a4f3a216",
+          "diagnostics_sha256": "193c24bed2f2aaf0a7cb85dd3c5acf6c41b3a62259181778e2084e1574a34ece"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_r0/enabled/run/result.json",
+          "result_sha256": "82b0fe63cce74a7528bfa116d94876c20d0a2ee607a8f4f7e0b36345c473bd8b",
+          "diagnostics_sha256": "193c24bed2f2aaf0a7cb85dd3c5acf6c41b3a62259181778e2084e1574a34ece"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "native",
+      "family": "settle",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float16",
+        "preset": "resident",
+        "schedule": "streaming",
+        "devices": [
+          "npu:0",
+          "npu:1"
+        ]
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.1705922670662403,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.17953436821699142,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.28918715938925743,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.1705922670662403,
+        0.17953436821699142
+      ],
+      "warmup_seconds": [
+        0.28918715938925743
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_r1/default/run/result.json",
+          "result_sha256": "9ba43c9d34e9e1b11005d78cc8110f245dbbed4f76578141d08dd6aa961942f4",
+          "diagnostics_sha256": "337e93cb778be4f85a56f8edbcc335e80431b0276a1860f05fb551c57afeae80"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_native_r1/enabled/run/result.json",
+          "result_sha256": "133a3571d26c8431fdae082bf937f0dd3c59ea3a1a29875d3cf6e2932f2d659a",
+          "diagnostics_sha256": "337e93cb778be4f85a56f8edbcc335e80431b0276a1860f05fb551c57afeae80"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "python",
+      "family": "timed-dag",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "mixed-a",
+        "schedule": "greedy",
+        "devices": [
+          "npu:0"
+        ]
+      },
+      "training": true,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.32884952425956726,
+            "optimizer_seconds": 0.01238473504781723
+          },
+          {
+            "sample_work_seconds": 0.3305133767426014,
+            "optimizer_seconds": 0.009369365870952606
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.7147869244217873,
+            "optimizer_seconds": 0.03022301197052002
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.3412342593073845,
+        0.339882742613554
+      ],
+      "warmup_seconds": [
+        0.7450099363923073
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_python_m0/default/run/result.json",
+          "result_sha256": "9ae9c70e256fdc33be6310be446e2921c12ff5f6de764add1f07704abf48f3ba",
+          "diagnostics_sha256": "c255161dd68c507c06860984c43d701b20b57185bf436e1eb2dd4a94d5fea082"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_python_m0/enabled/run/result.json",
+          "result_sha256": "7dc8b4e28cf6938e0b68e3cdeaa3a0007cf51b0cec487f5d505f84b6a0f34c51",
+          "diagnostics_sha256": "c255161dd68c507c06860984c43d701b20b57185bf436e1eb2dd4a94d5fea082"
+        }
+      }
+    },
+    {
+      "kind": "npu",
+      "implementation": "python",
+      "family": "settle",
+      "runtime": {
+        "device": "npu:0",
+        "dtype": "float32",
+        "preset": "mixed-b",
+        "schedule": "streaming",
+        "devices": [
+          "npu:0"
+        ]
+      },
+      "training": false,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 0.18521494790911674,
+            "optimizer_seconds": 0.0
+          },
+          {
+            "sample_work_seconds": 0.1841300055384636,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 0.5188235528767109,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "seconds": [
+        0.18521494790911674,
+        0.1841300055384636
+      ],
+      "warmup_seconds": [
+        0.5188235528767109
+      ],
+      "receipts": {
+        "default": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_python_m1/default/run/result.json",
+          "result_sha256": "554b9dcb97adbb32b64b25d7260936394df06dbdd8b32c69f480b4f7197cb408",
+          "diagnostics_sha256": "d3327952498930f7a043b314549c97a847c7658878e6bf237d96676811362c7e"
+        },
+        "enabled": {
+          "path": "runs/phase-timing-npu-clean01/pytest/test_npu_phase_timing_python_m1/enabled/run/result.json",
+          "result_sha256": "9705372807f8acd9eb547818b03d4e608e7fca657da15ecc31b11864554d8687",
+          "diagnostics_sha256": "d3327952498930f7a043b314549c97a847c7658878e6bf237d96676811362c7e"
+        }
+      }
+    }
+  ],
+  "audit_helper_sha256": "fdca3d47b476ea8dd3eb145488a3ec17dd6ab851f41839f94fa46acf03de2d6f",
+  "retained_development_failure": {
+    "name": "phase-timing-cpu-dev01",
+    "state": "failed",
+    "exit_code": 2,
+    "status_sha256": "8fd44703ac13a1929e8cedf8ee9c82c22f9e7778da453bfbabcf2dccbf4a9734",
+    "log_sha256": "ff6f7c429568d9ec19ad34e91e83a1f337b8e9e04a6ec693298ca3851d034bcc",
+    "cause": "New test argument dtype collided with global parametrization; renamed to payload_dtype in immutable dev02, whose CPU13/NPU8 gate passed."
+  },
+  "limits": [
+    "Consumer-only optional timing. Core/resident/CANN components are byte-verified unchanged dependencies; no backend rebuild or fresh profile claim.",
+    "Default off adds no middle synchronization. Enabled training synchronizes all resolved devices once before final finite checks, update and publication; the extra synchronization is included in complete elapsed time.",
+    "CPU13/NPU8 directed tests include 40 actual default/enabled CLI candidates, FP32/FP64 CPU and FP32/FP16 NPU, one/two-card resident paths, physical sample chunks, warmup and measured continuation. Independent CPU verifies complete observables and updates; no reference events or gradients feed a candidate.",
+    "Diagnostic timings include observable export and are not throughput measurements or a cost extrapolation. Larger-batch training and performance remain separate gates."
+  ]
+}
