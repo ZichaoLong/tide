@@ -7,8 +7,7 @@ Repository /home/zlong/llm/graph-execution-foundation resolves to
 Implementation48e44b0/evidenceca559b5 are qualified; matrix evidence270ee2e is committed/pushed.
 Implementation0fbc1b2 committed/pushed and all eight clean jobs PASSED.
 Retained-journal and original-wide Attention evidencefe8a08b committed/pushed.
-Fused CPU initializerbe380db committed/pushed and qualified; evidence ready for
-separate commit. Original Add scale run is active below.
+Fused CPU initializerbe380db committed/pushed and qualified; evidence c307fde committed/pushed. Original Add scale run passed below.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -135,33 +134,29 @@ Three fresh CPU processes,one warmup/three measured old/new fills per shape,
 full memcmp outside timer,actual model.cpp object vs priorfe8a08b ATen code:
 projection0.092060→0.014736s(6.247×),QKV0.287816→0.044218s(6.509×),
 head2.300079→0.362125s(6.352×). Only initialization speed,not complete construction
-or graph/NPU throughput. Separate reviewed evidence commit next.
+or graph/NPU throughput. Separate reviewed evidence c307fde committed/pushed.
 
 Retain FAILED source-values-benchmark-clean01 (auxiliary linker omitted packet.cpp,
 no measurements;v2 corrected),and wide-add-inference01 (dependency stopped before
 NPU allocation). No library/tolerance change was needed. Helpers for those failed
 runs remain unchanged; corrected helpers have_v2 suffixes.
 
-## Active original Add execution
+## Original-wide Add execution passed
 
-wide-add-inference02 RUNNING;unit tide-execution-flows-wide-add-inference02.service,
-TASK/runs/wide-add-inference02/{status,stages,queue}.json,task.log,original-wide.log.
-Helperlaunchers/wide_add_inference_v2.py,frozenbe380db/source-values-clean01;
+wide-add-inference02 PASSED/released8NPUs06:39:49UTC;frozenbe380db/source-values-clean01,
 qualifiedbinaryTASK/builds/source-values-npu-clean01/consumer/tidegraph-online-bench.
-Lease physical1,2,3,4,5,7,9,11→logical0..7 acquired06:32:02UTC. All qualification
-prerequisites passed. Original Add9,468,053,696parameters,D2048/B512/T12/V50304,
-FP32 TimedDAG/prefill,one cold step/two connected windows,128B4groups. Same
-queue2048/KV256/trace16384/output512/8GiBpool/60GiBtotal/head512MiB capability
-settings as the prior Attention run. No throughput recommendation,half batch or
-KV truncation. Inputpacketfullsize-add01 unchanged. Execution cap1800s,queue120s,
-whole dispatcher2700s;process group cleanup on timeout,no blind retry.
-Do not edit its helper/source. On terminal result audit model/input identity,
-12,288outputs/cut408,finite loss,complete statistics and allocator bounds;
-write separate execution evidence,never convert a live run into a pass.
+Lease physical1,2,3,4,5,7,9,11→logical0..7. Original Add9,468,053,696parameters,
+D2048/B512/T12/V50304,FP32 TimedDAG/prefill,128B4groups,onecoldstep/two connected
+windows:construction182.037855s,step278.573709s,12,288outputs,1,183,429events,
+cut408,finite loss30.508380889892578. Max allocator8,387,755,008bytes(7.812GiB),
+CPUpeak100,636,151,808bytes. All allocator/pool bounds passed; unchanged packet,
+logicalB512/KV. Auditlaunchers/wide_add_evidence.py passed. No formal throughput
+recommendation/full-sizeCPUoracle/profile/repeats. No task jobs active except
+intentionally stopped historicalCPU. [Report](evidence/original-wide-add-inference-20261002.md).
 
 ## Next work
 
-Finish active Add execution/evidence,then prioritize full-size training memory
+Prioritize full-size training memory
 and actual comparisons. Offline4GiB-head dense plans still refuse minimum shapes:
 Add8/12/16cards≈106/89/82GiB maximum;Attention≈182/148/132GiB(B4,trace16384,
 KV256,pool8GiB,AdamW). These are conservative bounds,not physical impossibility.
@@ -175,7 +170,7 @@ performance matrix queued. Do not rerun completed representative timings.
 
 ## Remaining goal work
 
-Original-wide Add and other required flows,finite CPU/screened-mixed/resident comparisons;
+Original-wide other required flows,finite CPU/screened-mixed/resident comparisons;
 training retained/reverse/gradient memory and safe complete admission; automatic
 sample admission; eager mixed multi-device parameter/payload placement. F7 final
 migration/evidence audit. CUDA execution and additional tuples require target
