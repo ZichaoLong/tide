@@ -6,7 +6,8 @@ Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
 Implementation48e44b0/evidenceca559b5 are qualified; matrix evidence270ee2e is committed/pushed.
 Implementation0fbc1b2 committed/pushed and all eight clean jobs PASSED.
-Reviewed retained-journal and original-wide Attention evidence ready for commit.
+Retained-journal and original-wide Attention evidencefe8a08b committed/pushed.
+Fused CPU initializer below passed development gates and is ready for commit.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -118,25 +119,45 @@ or throughput recommendation; independent dev/calibration jobs overlapped.
 Audit launchers/wide_inference_evidence.py passed.
 [Report](evidence/original-wide-inference-20261002.md).
 
-## Next action
+## Current initializer increment / next action
 
-Commit/push reviewed evidence separately, then reduce bounded full-size setup cost
-before more full-size comparisons. Read-only inspection found CPU source_values
-initialization in tools/online_bench/model.cpp uses three LCG tensor passes with
-repeated int64 temporaries/remainders. Investigate a generic fused CPU initializer,
-prove byte-identical common parameters against independent Python and old ATen
-(including modulo boundaries/seeds), then build/gate affected consumers. No code
-for this optimization yet; do not assume it accounts for all construction time.
-Original-wide Attention construction818s versus325s execution makes this a useful
-finite question; never change packet/input values or move reference computation
-into candidates. Keep public/core graph semantics and measured step timers intact.
+Generic named-lcg31-v1 C++ CPU initializer now composes the three integer affine
+steps modulo2^31-1 and fills only the final FP32 tensor,under existing ATen thread
+budget. Python definition unchanged; graph/core/runtime code unchanged. Consumer
+source_values.h/model.cpp plus exact independent integer test/probe and contract.
+All four dev jobs PASSED on frozensource-values-dev01:
+build-source-values-{cpu,npu}-dev01,source-values-{cpu,npu}-dev01.
+CPU25 checks (380 scalar modulo/seed cases plus24 actual independent CPU FP32/FP64
+consumer comparisons),NPU30 actual standalone cases (12resident training,
+12resident inference,6mixed training),no skips. Three families,Add/Attention,
+streaming/prefill,FP32/FP16 resident. NPU libs reused from qualified0fbc1b2;
+byte-checked core unchanged. New CPU helperbuild_source_consumer.py reuses only
+source/header/options-identical objects; NPU usesbuild_capacity_client.py.
+No speed claim yet. Do not infer that this accounts for all818s construction.
+
+Next commit/push implementation; freezesource-values-clean01. Build CPU with
+build_source_consumer.py --backend cpu --name source-values-cpu-clean01
+--reuse-client TASK/builds/source-values-cpu-dev01; NPU withbuild_capacity_client.py
+--build TASK/builds/retained-journals-standalone-clean01 --out
+TASK/builds/source-values-npu-clean01 --reuse-client TASK/builds/source-values-npu-dev01.
+Clean CPU25/NPU30 under the same directed test commands in dev launch scripts.
+Then bounded CPU benchmark helperbenchmark_source_values.py --source SOURCE
+--build CPU_BUILD --output OUT/benchmark:three fresh processes,three shapes,
+one warmup/three alternated measured fills each,actual model.cpp object versus
+priorfe8a08b ATen code,full memcmp. Helper prepared but not run; compile/link and
+runtime commands/identities retained. Time this separately from other own heavy
+work; cap600s,180s/process. Then reviewed separate qualification evidence.
 
 Next original Add capacity run can reuse the established eight-card shape and
-budgets after setup improvement qualification. Full-size training also needs a
-larger head workspace than the512MiB inference setting: static probe with training
-correctly rejected one head row. Derive capacity/lifetimes,do not blindly retry.
-No new long job queued;all current jobs terminal except the deliberately stopped
-historical CPU task below. Do not rerun completed representative matrix.
+budgets after setup improvement qualification. Full-size training also needs
+>512MiB head workspace. Pure offline4GiB-head probes still refused dense minimum
+plans: Add8/12/16cards≈106/89/82GiB maximum; Attention≈182/148/132GiB (B4,
+trace16384,KV256,pool8GiB,AdamW). These are conservative estimates,not physical
+impossibility. Dominant costs include retained tapes,physical/canonical gradients,
+routing and optimizer copies. Derive lifetimes/reduce buffers and calibrate before
+relaxing admission or running wide training. Do not blindly retry/refuse completion.
+No new long job queued;all current jobs terminal except deliberately stopped
+historical CPU below. Do not rerun completed representative matrix.
 
 ## Remaining goal work
 

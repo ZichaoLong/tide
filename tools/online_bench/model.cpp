@@ -1,17 +1,20 @@
 #include "consumer.h"
+#include "source_values.h"
 #include <tide/ops.h>
 #include <tide/kernel.h>
 #include <ATen/core/grad_mode.h>
+#include <ATen/Parallel.h>
 #include <stdexcept>
 
 namespace tide_flow {
 Tensor source_values(const std::string& name,const std::vector<Index>& shape,Index seed) {
-  constexpr Index modulus=2147483647;Index key=seed%modulus,size=1;
-  for(unsigned char byte:name)key=(key*131+byte)%modulus;
-  for(auto s:shape)size*=s;
-  auto x=(at::arange(size,at::kLong)+key).remainder(modulus);
-  for(int i=0;i<3;++i)x=(x*1103515245+12345).remainder(modulus);
-  return (x.remainder(65536).to(at::kFloat)-32768).mul_(0x1p-20).reshape(shape);
+  const NamedSource source(name,seed);
+  auto result=at::empty(shape,at::TensorOptions().device(at::kCPU).dtype(at::kFloat));
+  auto* values=result.data_ptr<float>();
+  at::parallel_for(0,result.numel(),32768,[&](Index begin,Index end) {
+    for(Index i=begin;i<end;++i)values[i]=source(i);
+  });
+  return result;
 }
 Fixture fixture(const Packet& p,const Config& c,at::Device device) {
   at::NoGradGuard no_grad;Fixture f;auto g=p.body;auto& m=f.model;

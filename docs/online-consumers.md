@@ -43,6 +43,13 @@ All integer intermediates fit signed int64. Norm and pooling coefficients start
 at one. Canonical initializer names are in the matching Python/C++ builders.
 No candidate runs another implementation to get numerical inputs or routes.
 
+The C++ consumer composes the three integer affine steps modulo `2147483647`
+and fills the final CPU FP32 tensor directly, under the existing ATen thread
+budget. It avoids full-sized int64 temporary tensors while preserving the
+`named-lcg31-v1` values bit for bit. Python retains the independent three-pass
+definition. Construction is still reported separately from complete-step timing;
+this change does not accelerate scheduling or model kernels by itself.
+
 The wide packet remains 480 reachable body nodes, 2,208 body edges, D2048,
 B512/T12/V50304: Add9,468,053,696 and Attention17,521,117,376 learned elements.
 This is the reachable cross-family fixture in the execution contract, separately
