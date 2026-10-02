@@ -5,7 +5,7 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest qualified implementation **233bf01**, pushed; its reviewed evidence **d0f9485** is pushed. [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest implementation **6b9224c** pushed; latest qualified implementation **233bf01**, its reviewed evidence **d0f9485** is pushed. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -28,50 +28,47 @@ never stop other workloads to free resources.
 
 ## Latest completed qualification
 
-**233bf01** passed eight clean jobs, all terminal exit0: standalone/Python/installed
-consumer builds; native8 (176trajectories/2944windows/688updates); Python16,
-consumer32; same-lease D512 allocator comparison; independent FP16 profile.
-No skips or new failures. [Evidence](evidence/resident-window-reduction-20261003.md).
-Audit: `python TASK/launchers/window_reduction_evidence.py 233bf0144db206176f4af4b05b0bb54cb326dbe7`.
+**6b9224c** Attention parameter-adjoint reuse passed eight clean jobs: three builds,
+native6 (160trajectories/2560windows/640updates), Python16, consumer32, same-lease
+D512 calibration and independent FP16 profiling. All terminal exit0, no skips/new
+failures, leases released. [Evidence](evidence/resident-attention-adjoints-20261003.md).
+Audit: `python TASK/launchers/attention_adjoints_evidence.py 6b9224c829183e8aacefdfc5ccd416ecfeb4798d`.
 
-Aggressive sharded training reduces each window on device before advancing the
-preceding window, preserving reverse-window→registry-alias additions. Projection
-parameter adjoints, canonical outputs and numerical packet arenas are reused
-behind start/completion barriers. State/cache/message bridge adjoints remain
-independent. Conservative and legacy single-device paths are preserved.
-New counters: `streamed_parameter_windows`, `reused_projection_gradient_bytes`.
-Public ABI/core/device kernels unchanged; affected host objects rebuilt and
-clean source/header/options-verified object reuse with fresh links.
+Aggressive sharded reverse reuses event/fiber parameter adjoints only after the
+window's canonical completion; state-owner init gates reset. Guards validate
+nodes/offsets/device/dtype/shape/aliasing. KV/cache/state/message bridges remain
+independent; conservative and legacy paths stay independent. Public ABI/core/CANN
+unchanged. New counter`reused_attention_gradient_bytes`; consumer estimates are
+still conservative and unchanged in this backend revision.
 
-D512/B8/T4/V257 Attention,physicalB2×4,two connected windows,FP32 AdamW:
-whole allocator [8367995392,7520681472] → [8073745920,7226584576], reductions
-[294249472,294096896] bytes. Loss7.532631874084473, other semantic/work/retention
-statistics and effective chunks unchanged. Independent FP16 trace53176operators,
-zero observed AiCPU. This is actual allocation improvement, not a throughput or
-original-size training claim. Consumer admission remains unchanged/conservative.
+D512/B8/T4/V257 Attention,physicalB2×4,two windows,FP32 AdamW:
+[8073745920,7226584576] → [7804784128,6957622784], -268961792bytes/card.
+Loss7.532631874084473 and all prior statistics/chunks agree. Separate FP16 trace
+53176ops, zero observed AiCPU. No throughput or original-size training claim.
 
-Previous Full snapshot and training-accounting increments remain qualified on
-f360489/4dd8368; evidence1a6d9c0/f03b4d4. Do not rerun their unchanged matrices.
+Preceding **233bf01/d0f9485** window reduction/projection-gradient reuse is also
+qualified: native176trajectories/2944windows/688updates,Python16/consumer32,
+D512 peaks [8367995392,7520681472] → [8073745920,7226584576]. Combined actual
+reductions across the two increments are about537MiB/card on this fixture.
+Do not repeat unchanged Full-snapshot/accounting/representative matrices.
 
-## Current implementation: Attention parameter-adjoint reuse
+## Next WIP: physical parameter-gradient accounting
 
-Development passed on frozen dirty `attention-adjoints-dev01` (at233bf01): three
-builds, native6 (160trajectories/2560windows/640updates), Python16 and consumer32;
-no skips/failures. All current production input hashes match the tested snapshot.
-Only owner-local event/fiber parameter values and connection flags are borrowed;
-KV/cache/state/message adjoints remain independent. Node/layout/device/dtype/
-shape/alias guards precede reuse. Existing state-owner init packets gate zeroing
-after the preceding window's canonical completion. Conservative/legacy paths
-retain independent storage. New counter: `reused_attention_gradient_bytes`.
+The next uncommitted consumer change charges physical projection/Attention
+parameter gradients once only for aggressive multi-device training. Conservative
+and legacy single-device estimates retain the window factor; all state/cache/
+message/scratch charges and safety/API margins are unchanged. New included
+component `projection_parameter_gradients`; existing Attention component adopts
+the correct lifetime. Materialized model inventory tests cover both policies and
+one/three devices; C++/Python formulas remain paired.
 
-Next: commit/push implementation; freeze `attention-adjoints-clean01`, build via
-`TASK/launchers/build_attention_adjoints.py` with byte-verified host-object reuse;
-clean native6/Python16/consumer32 qualification, same-lease D512 calibration against
-`window-reduction-consumer-clean01` (`attention_adjoints_memory.py`) and separate
-FP16 profile. Audit using `attention_adjoints_evidence.py SHA`; evidence commit
-separate. Consumer estimates unchanged. No full-size retry or relaxed admission/
-cost rule is justified by this intermediate result. Once actual savings pass,
-update only storage-lifetime accounting and assess legal larger physical groups.
+Changed `tools/online_bench/capacity.{h,py}`, `tests/test_consumer_capacity.py`,
+`docs/consumer-capacity.md`. CPU23 and installed consumer build passed on frozen dirty `gradient-lifetime-dev01`
+(at6b9224c); NPU25 is active (two devices,queue120s,timeout600), against the
+byte-identical Attention backend. Unit`tide-execution-flows-gradient-lifetime-npu-dev01.service`,
+logs/status`TASK/runs/gradient-lifetime-npu-dev01`. Next clean qualification and
+D512 allocation calibration after the gate passes.
+The 6b9224c evidence commit excludes this WIP.
 
 ## Scale evidence and progress boundary
 
@@ -104,22 +101,24 @@ Long jobs: frozen source,background.slice,Nice10,two build workers,queue120s.
 Formal timing lock `TASK/online-measurement.lock`.
 Last free disk:data151GiB/root7.7GiB; check before large writes.
 
-Qualified source `TASK/sources/window-reduction-clean01`; consumer
-`TASK/builds/window-reduction-consumer-clean01`. Resident binaries
-`window-reduction-{standalone,python}-clean01`; core
+Qualified source `TASK/sources/attention-adjoints-clean01`; consumer
+`TASK/builds/attention-adjoints-consumer-clean01`. Resident binaries
+`attention-adjoints-{standalone,python}-clean01`; core
 `placement-{cpu,npu,npu-python}-clean01`; CPUconsumer`source-values-cpu-clean01`.
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current job is active/queued. Attention development6 and window-reduction
-qualification8 are terminal passed. Raw records `TASK/runs/{build-,}attention-adjoints-*-dev01`
-and `TASK/runs/{build-,}window-reduction-*-clean01`; preserve snapshots/receipts.
-Clean Attention qualification will use distinct clean01 names.
+Active: `gradient-lifetime-npu-dev01` (two NPUs,queue120s,timeout600), frozen dirty
+`gradient-lifetime-dev01` at6b9224c. CPU23 and installed-client build are terminal
+passed. Unit`tide-execution-flows-gradient-lifetime-npu-dev01.service`,
+background.slice. Inspect `systemctl --user show UNIT -p ActiveState -p Result
+-p ExecMainStatus`; stop via `systemctl --user stop UNIT` only if needed.
+Logs/status`TASK/runs/NAME`. Both prior backend qualifications are fully terminal.
 **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
 in the restricted flow, not current online evidence. Restricted archive:
 archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 Old build-reverse-gather-python-dev01 metadata inconsistency remains visible;
-not a current failure. Current qualification raw records: `TASK/runs/{build-,}window-reduction-*-clean01`;
+not a current failure. Current qualification raw records: `TASK/runs/{build-,}attention-adjoints-*-clean01`;
 source/build/helper/result hashes and allocation observations are pinned by evidence.
