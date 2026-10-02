@@ -57,14 +57,17 @@ struct ProjectionStage::Impl {
     at::Tensor mapping,command,stop,result,error;
     ProjectionGradient gradient;
     std::unique_ptr<CannProgram> program;
-    std::unique_ptr<PeerExchange> request,response;
+    std::unique_ptr<PeerExchange> init,request,response;
   };
   std::vector<Shard> shards;
   int64_t parameters,chunk,width,tensor_budget,operator_budget;
-  bool reverse,built=false;
+  bool reverse,built=false,reset=false;
 };
 ProjectionStage::ProjectionStage(std::vector<ProjectionBank> banks,int64_t parameters,int64_t chunk,
-    bool reverse,int64_t budget,int64_t workspace):impl_(std::make_unique<Impl>()) {
+    bool reverse,int64_t budget,int64_t workspace)
+    :ProjectionStage(std::move(banks),parameters,chunk,reverse,budget,workspace,{}) {}
+ProjectionStage::ProjectionStage(std::vector<ProjectionBank> banks,int64_t parameters,int64_t chunk,
+    bool reverse,int64_t budget,int64_t workspace,const std::vector<ProjectionGradient>& reuse):impl_(std::make_unique<Impl>()) {
   if(at::GradMode::is_enabled()||banks.empty()||parameters<1||chunk<1||budget<1||workspace<1)
     throw std::invalid_argument("compact projections require bounded no-grad banks");
   auto& s=*impl_;s.parameters=parameters;s.chunk=chunk;s.reverse=reverse;s.tensor_budget=budget;s.operator_budget=workspace;
@@ -91,20 +94,39 @@ ProjectionStage::ProjectionStage(std::vector<ProjectionBank> banks,int64_t param
   }
   if(std::find(seen.begin(),seen.end(),false)!=seen.end())throw std::invalid_argument("incomplete projection row partition");
   if(bytes>budget)throw std::invalid_argument("compact projection chunk exceeds tensor budget");
+  if(!reuse.empty()) {
+    if(!reverse||reuse.size()!=banks.size())throw std::invalid_argument("invalid reusable projection owner count");
+    for(size_t i=0;i<banks.size();++i) {
+      const auto& g=reuse[i];const auto& bank=banks[i];const int64_t n=bank.rows.size();
+      if(g.rows!=bank.rows)throw std::invalid_argument("reusable projection row mapping changed");
+      for(const auto& pair:std::vector<std::pair<at::Tensor,std::vector<int64_t>>>{{g.weights,{n,s.width,s.width}},
+          {g.biases,{n,s.width}},{g.connected,{n}}}) {
+        const auto& x=pair.first;
+        if(!x.defined()||x.device()!=bank.weights.device()||x.sizes()!=at::IntArrayRef(pair.second)
+            ||x.scalar_type()!=(pair.second.size()==1?at::kBool:at::kFloat)||!x.is_contiguous()||x.requires_grad()
+            ||x.is_alias_of(bank.weights)||x.is_alias_of(bank.biases))
+          throw std::invalid_argument("invalid reusable projection gradient bank");
+      }
+      if(g.weights.is_alias_of(g.biases)||g.weights.is_alias_of(g.connected)||g.biases.is_alias_of(g.connected))
+        throw std::invalid_argument("reusable projection gradient banks alias");
+    }
+  }
+  size_t ordinal=0;
   for(auto& bank:banks) {
     std::vector<int64_t> mapping(parameters,-1);for(size_t i=0;i<bank.rows.size();++i)mapping[bank.rows[i]]=i;
     Impl::Shard shard;shard.mapping=at::tensor(mapping,at::kLong).to(bank.weights.device());
     if(reverse) {
       const auto n=int64_t(bank.rows.size());const auto f=bank.weights.options().dtype(at::kFloat);
-      shard.gradient={bank.rows,at::zeros({n,s.width,s.width},f),at::zeros({n,s.width},f),at::zeros({n},f.dtype(at::kBool))};
+      shard.gradient=reuse.empty()?ProjectionGradient{bank.rows,at::empty({n,s.width,s.width},f),at::empty({n,s.width},f),at::empty({n},f.dtype(at::kBool))}:reuse[ordinal];
     }
-    shard.bank=std::move(bank);s.shards.push_back(std::move(shard));
+    shard.bank=std::move(bank);s.shards.push_back(std::move(shard));++ordinal;
   }
 }
 ProjectionStage::~ProjectionStage()=default;
 at::Tensor ProjectionStage::append(CannProgram& coordinator,const at::Tensor& rows,const at::Tensor& x,
     const at::Tensor& dy,const at::Tensor& error) {
   auto& s=*impl_;if(s.built)throw std::logic_error("compact projection call site already built");
+  if(s.reverse&&!s.reset)throw std::logic_error("projection reverse requires a device reset boundary");
   const auto d=x.device();const auto dtype=s.reverse?at::kFloat:s.shards.front().bank.weights.scalar_type();
   if(x.sizes()!=at::IntArrayRef{s.chunk,s.width}||x.scalar_type()!=dtype||rows.sizes()!=at::IntArrayRef{s.chunk}
       ||rows.scalar_type()!=at::kLong||error.sizes()!=at::IntArrayRef{1}||error.scalar_type()!=at::kInt
@@ -124,8 +146,8 @@ at::Tensor ProjectionStage::append(CannProgram& coordinator,const at::Tensor& ro
     PeerExchange::Fields fields{{t.command,command},{rows,remote_rows},{x,remote_x},{t.error,remote_error}};
     if(s.reverse)fields.emplace_back(dy,remote_dy);
     t.request=std::make_unique<PeerExchange>(fields,s.tensor_budget);
-    t.program=std::make_unique<CannProgram>(peer);auto& p=*t.program;p.limit_workspace(s.operator_budget);
-    if(s.reverse)for(const auto& v:{t.gradient.weights,t.gradient.biases,t.gradient.connected})p.zero(v);
+    if(!t.program){t.program=std::make_unique<CannProgram>(peer);t.program->limit_workspace(s.operator_budget);}
+    auto& p=*t.program;
     auto head=p.label(),body=p.label(),done=p.label();auto again=at::zeros_like(command);
     p.mark(head);t.request->append_receive(p);p.branch(command,{done,body});p.mark(body);
     auto result=compute(p,t.bank,t.mapping,s.parameters,remote_rows,remote_x,remote_dy,remote_error,t.gradient);
@@ -143,8 +165,20 @@ at::Tensor ProjectionStage::append(CannProgram& coordinator,const at::Tensor& ro
   return result;
 }
 void ProjectionStage::append_reset(CannProgram& p,at::Device coordinator) {
-  if(impl_->reverse)for(const auto& s:impl_->shards)if(s.bank.weights.device()==coordinator)
-    for(const auto& v:{s.gradient.weights,s.gradient.biases,s.gradient.connected})p.zero(v);
+  auto& s=*impl_;if(!s.reverse)return;
+  if(s.reset||s.built)throw std::logic_error("projection reverse reset boundary repeated");s.reset=true;
+  for(auto& shard:s.shards) {
+    const auto d=shard.bank.weights.device();
+    if(d!=coordinator) {
+      shard.program=std::make_unique<CannProgram>(d);shard.program->limit_workspace(s.operator_budget);
+      auto source=at::zeros({1},at::TensorOptions().device(coordinator).dtype(at::kInt));
+      auto target=at::zeros({1},source.options().device(d));
+      shard.init=std::make_unique<PeerExchange>(PeerExchange::Fields{{source,target}},64);
+      shard.init->append_send(p);shard.init->append_receive(*shard.program);
+    }
+    auto& program=shard.program?*shard.program:p;
+    for(const auto& v:{shard.gradient.weights,shard.gradient.biases,shard.gradient.connected})program.zero(v);
+  }
 }
 void ProjectionStage::append_stop(CannProgram& p) {
   for(auto& s:impl_->shards)if(s.program){p.copy(s.command,s.stop);s.request->append_send(p);}
@@ -157,11 +191,11 @@ void ProjectionStage::wait() {
   std::exception_ptr failure;for(auto& s:impl_->shards)if(s.program)try{s.program->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
-void ProjectionStage::close(){for(auto& s:impl_->shards){if(s.program)s.program->close();if(s.request)s.request->close();if(s.response)s.response->close();}}
+void ProjectionStage::close(){for(auto& s:impl_->shards){if(s.program)s.program->close();if(s.init)s.init->close();if(s.request)s.request->close();if(s.response)s.response->close();}}
 std::vector<ProjectionGradient> ProjectionStage::gradients() const {
   std::vector<ProjectionGradient> out;if(impl_->reverse)for(const auto& s:impl_->shards)out.push_back(s.gradient);return out;
 }
-int64_t ProjectionStage::packet_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.request)n+=s.request->packet_bytes()+s.response->packet_bytes();return n;}
+int64_t ProjectionStage::packet_bytes() const {int64_t n=0;for(const auto& s:impl_->shards){if(s.init)n+=s.init->packet_bytes();if(s.request)n+=s.request->packet_bytes()+s.response->packet_bytes();}return n;}
 int64_t ProjectionStage::workspace_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.program)n+=s.program->workspace_bytes();return n;}
 int64_t ProjectionStage::retained_tensor_bytes() const {int64_t n=0;for(const auto& s:impl_->shards)if(s.program)n+=s.program->retained_tensor_bytes();return n;}
 } // namespace tide::device_online

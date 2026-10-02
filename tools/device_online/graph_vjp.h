@@ -47,5 +47,8 @@ struct GraphStateVjp {
 };
 GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
     const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,const FullStageVjp&,const GraphStateVjp&,int64_t projection_workspace=0);
+GraphVjp append_graph_vjp(CannProgram&,const ReverseTape&,const GraphCotangents&,
+    const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget_bytes,const FullStageVjp&,const GraphStateVjp&,
+    int64_t projection_workspace,const std::vector<ProjectionGradient>& reuse);
 
 } // namespace tide::device_online

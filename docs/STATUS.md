@@ -1,11 +1,11 @@
 # Current handoff
 
-Updated 2026-10-02. **ACTIVE: user resumed after 7a7293a. Continue implementation,
+Updated 2026-10-03. **ACTIVE: user resumed after 7a7293a. Continue implementation,
 qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **f360489**, pushed; accounting evidence **f03b4d4**. [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest qualified implementation **f360489**, evidence **1a6d9c0**, both pushed. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -57,29 +57,32 @@ D512 allocation calibration. Shared Attention and private accumulation are charg
 by lifetime, unchanged runtime and API safety limits. Actual peaks were unchanged
 by that estimator-only correction. [Evidence](evidence/consumer-training-storage-20261002.md).
 
-## Next implementation
+## Current implementation (development passed; clean qualification next)
 
-Focus on dominant physical projection/Attention parameter gradient banks, which
-are retained separately for all reverse windows before final canonical reduction.
-Relevant files: `sharded_training_backward.cpp`, `sharded_parameter_reduce.cpp`,
-`sharded_parameter_sources.cpp`, `projection_shard.cpp`, `emission_vjp.cpp`,
-`sharded_state_vjp.cpp`, `state_owner_reverse.cpp`.
+Window-scoped canonical reduction and physical projection-gradient reuse passed
+all six development jobs on frozen dirty `window-reduction-dev01`: three builds,
+standalone8 (176trajectories/2944windows/688updates), Python16 and actual-consumer32.
+No skips or runtime failures. All jobs are terminal exit0; device leases released.
+Production input hashes match the tested snapshot. Documentation now describes
+the policy, counters and protocol in [resident-sharded-training](resident-sharded-training.md).
 
-Candidate design (not implemented): reduce each completed window's contributions
-into a common canonical bank on device before advancing to the preceding window,
-then reuse only physical parameter-gradient storage. Keep per-owner addition order
-reverse-window→registry-alias; no per-window pre-sum changing parentheses. Bridge
-state/cache/message adjoints retain their independent storage. A coordinator-side
-recorded reduction and peer start/completion protocol must finish all reads before
-any reused bank is zeroed. State reverse already starts after a coordinator init
-packet and acknowledges finish. Projection and remote Full currently zero before
-their first request and need a start dependency before aliasing. Peer ACK means
-copy consumption, not arbitrary subsequent receiver work. Preserve old independent
-retention/reverse paths and budget/refusal semantics. No new implementation yet.
+Aggressive sharded training appends each window's reduction to the ordered device
+coordinator before the preceding window. It reuses only projection parameter
+adjoints, canonical banks and stream packet arenas; state/cache/message bridges
+remain independent. Reverse-window→registry-alias addition order is preserved,
+with peer start/completion barriers before shared storage is reset. Conservative
+and legacy single-device backward keep their existing paths. New counters:
+`streamed_parameter_windows`, `reused_projection_gradient_bytes`.
 
-Do not spend another increment on tiny wide-fixture Full accounting alone.
-Original Attention B512/physicalB1 estimates still refuse; AddB512 still exceeds
-cost gate. No safety/cost relaxation or automatic original-width retry is queued.
+Next: commit/push this implementation, freeze `window-reduction-clean01`, build
+with `TASK/launchers/build_window_reduction.py` and source/header/options-verified
+host object reuse. Re-run the affected native8/Python16/consumer32 qualification;
+same-lease D512 allocator comparison (`window_reduction_memory.py`) against
+`full-snapshot-consumer-clean01`; separate FP16 profile (`profile_retained_journals.py`).
+Review with `window_reduction_evidence.py SHA` and commit evidence separately.
+No actual memory/speed benefit established yet; consumer estimates are unchanged
+and conservative. Attention parameter-adjoint reuse and scale gates remain open.
+No original-width retry or safety/cost relaxation is queued.
 
 ## Scale evidence and progress boundary
 
@@ -119,7 +122,11 @@ Source `TASK/sources/full-snapshot-clean01`; consumer
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current job is running/queued. **Preserve deliberately SIGSTOPped
+No current job is running/queued. Window-reduction development receipts are in
+`TASK/runs/{build-,}window-reduction-*-dev01`; unit prefix
+`tide-execution-flows-`. Preserve all receipts and frozen source. The next clean
+qualification will have distinct clean01 source/build/run names.
+**Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
 in the restricted flow, not current online evidence. Restricted archive:

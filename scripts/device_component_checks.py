@@ -221,3 +221,6 @@ KERNELS["peer-resident-compact-contexts"] = "tide_parameter_accumulate"
 CHECKS["peer-resident-compact-journals"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
 MARKERS["peer-resident-compact-journals"] = "compact_journals=1"
 KERNELS["peer-resident-compact-journals"] = "tide_state_reverse_"
+CHECKS["peer-resident-compact-projections"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
+MARKERS["peer-resident-compact-projections"] = "emission=1 compact_journals=1"
+KERNELS["peer-resident-compact-projections"] = "tide_owner_stream"

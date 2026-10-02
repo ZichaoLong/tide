@@ -29,6 +29,11 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
 }
 GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
     const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner,int64_t projection_workspace) {
+  return append_graph_vjp(p,t,roots,error,chunk,budget,full_stage,state_owner,projection_workspace,{});
+}
+GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotangents& roots,
+    const at::Tensor& error,int64_t chunk,int64_t budget,const FullStageVjp& full_stage,const GraphStateVjp& state_owner,
+    int64_t projection_workspace,const std::vector<ProjectionGradient>& reuse) {
   const bool sharded=bool(state_owner.stage);
   if(sharded&&(!state_owner.prepare||!state_owner.sources))throw std::invalid_argument("incomplete compact state reverse executor");
   if(!sharded&&!t.state.decay.defined())throw std::invalid_argument("compact state tape requires its reverse executor");
@@ -59,6 +64,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   for(size_t n=0;n<t.graph->nodes.size();++n)needs_emission|=!t.graph->nodes[n].identity&&t.graph->nodes[n].emission=="slot_affine"
     &&t.graph->outgoing_ports.offsets[n+1]>t.graph->outgoing_ports.offsets[n];
   if(needs_emission&&!affine)throw std::invalid_argument("slot-affine graph reverse requires its emission journal");
+  if(!reuse.empty()&&!affine)throw std::invalid_argument("reusable projection gradients require an emission journal");
   if(affine&&controlled)throw std::invalid_argument("controlled slot-affine reverse is not implemented");
   if(controlled)extra_bytes+=5.L*nodes*width;
   if(normalized)extra_bytes+=5.L*nodes*t.aggregate.slots+8;
@@ -78,7 +84,7 @@ GraphVjp append_graph_vjp(CannProgram& p,const ReverseTape& t,const GraphCotange
   auto links=append_reverse_links(p,t,error,budget/divisor);
   if(sharded)state_owner.prepare(p,links);
   EmissionReverse emission;
-  if(affine)emission=prepare_emission_reverse(p,t,links,error,budget/divisor,chunk,projection_workspace);
+  if(affine)emission=prepare_emission_reverse(p,t,links,error,budget/divisor,chunk,projection_workspace,reuse);
   auto floats=t.fiber_values.options(),longs=t.state.metadata.options(),booleans=roots.final_connected.options();
   auto messages=at::empty({total,width},floats),connected=at::empty({total},booleans);
   auto carry=at::empty_like(roots.final),carry_on=at::empty_like(roots.final_connected);

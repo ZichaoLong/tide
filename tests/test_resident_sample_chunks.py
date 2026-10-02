@@ -69,6 +69,9 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
             # state/cache storage still has its separate per-window envelope.
             shared=sum(d['components']['retained_attention_parameters'] for d in got['memory_admission']['devices'])
             assert 0<=stats['retained_attention_bytes']<=shared
+            streamed = policy == 'aggressive' and cards > 1
+            assert stats['streamed_parameter_windows'] == (stats['retained_windows'] if streamed else 0)
+            assert (stats['reused_projection_gradient_bytes'] > 0) == streamed
         windows = [r for r in actual if r['kind']=='window' and r['step']==step]
         event_sum = sum(len(r['events']) for r in windows)
         event_max = max(len(r['events']) for r in windows)

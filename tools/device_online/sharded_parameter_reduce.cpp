@@ -48,7 +48,10 @@ struct ShardedParameterReduce::Impl {
   std::vector<ParameterVjp> outputs;
   std::vector<at::Tensor> errors;
   std::vector<std::unique_ptr<PeerExchange>> packets;
-  std::vector<std::unique_ptr<CannProgram>> programs; // Destroy before packets.
+  std::vector<std::unique_ptr<CannProgram>> owned; // Destroy before packets.
+  std::vector<CannProgram*> programs;
+  std::shared_ptr<StreamPackets> stream_buffers;
+  bool embedded=false;
   int64_t budget,stream_bytes=0,stream_chunks=0;
   void stream(size_t from,size_t to,const std::vector<OwnerStreamField>& fields,int64_t capacity,bool accumulate,
       const StreamPackets& shared) {
@@ -76,7 +79,14 @@ struct ShardedParameterReduce::Impl {
   }
 };
 ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,std::vector<at::Device> devices,
-    const at::Tensor& upstream,int64_t budget,int64_t workspace):impl_(std::make_unique<Impl>()) {
+    const at::Tensor& upstream,int64_t budget,int64_t workspace)
+    :ShardedParameterReduce(std::move(source),std::move(devices),upstream,budget,workspace,nullptr,nullptr) {}
+ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,std::vector<at::Device> devices,
+    const at::Tensor& upstream,int64_t budget,int64_t workspace,CannProgram& coordinator,const ShardedParameterReduce* preceding)
+    :ShardedParameterReduce(std::move(source),std::move(devices),upstream,budget,workspace,&coordinator,preceding) {}
+ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,std::vector<at::Device> devices,
+    const at::Tensor& upstream,int64_t budget,int64_t workspace,CannProgram* coordinator,const ShardedParameterReduce* preceding)
+    :impl_(std::make_unique<Impl>()) {
   if(at::GradMode::is_enabled()||devices.empty()||devices.size()>16||budget<1||workspace<1||!upstream.defined()
       ||upstream.device()!=devices[0]||upstream.scalar_type()!=at::kInt||upstream.sizes()!=at::IntArrayRef({1})
       ||!upstream.is_contiguous()||upstream.requires_grad())
@@ -114,37 +124,59 @@ ShardedParameterReduce::ShardedParameterReduce(ShardedParameterSources source,st
   }
   if(bytes+8.L*groups.size()>budget)throw std::invalid_argument("canonical owner output/stream metadata exceed tensor budget");
   const auto allowance=groups.empty()?0:(budget-static_cast<int64_t>(bytes))/int64_t(groups.size());
-  auto& s=*impl_;s.devices=std::move(devices);s.budget=budget;s.outputs.resize(n);
-  StreamPackets shared(n);
+  auto& s=*impl_;s.devices=std::move(devices);s.budget=budget;s.outputs.resize(n);s.embedded=coordinator;
+  if(preceding&&(!coordinator||!preceding->impl_->embedded||preceding->impl_->devices!=s.devices))
+    throw std::invalid_argument("canonical reuse requires an ordered embedded reduction on the same devices");
+  auto planned=std::make_shared<StreamPackets>(n);
   for(const auto& [key,owners]:groups) {
     const auto [k,from,to]=key;int64_t total=0;
     for(auto i:owners)total+=source.owners[i].value.numel(); // Subset of checked outputs[to].
     const auto metadata=owner_stream_metadata_bytes(owners.size(),owners.size(),from!=to);
-    shared.need(from,to,owner_stream_capacity(total,owners.size(),owners.size(),from!=to,metadata+allowance));
+    planned->need(from,to,owner_stream_capacity(total,owners.size(),owners.size(),from!=to,metadata+allowance));
   }
-  s.stream_bytes=shared.allocate(s.devices);
+  if(preceding) {
+    s.stream_buffers=preceding->impl_->stream_buffers;
+    for(size_t d=0;d<n;++d)if(planned->send_capacity[d]>s.stream_buffers->send_capacity[d]
+        ||planned->receive_capacity[d]>s.stream_buffers->receive_capacity[d])
+      throw std::invalid_argument("canonical reuse packet capacity changed");
+  } else {s.stream_buffers=std::move(planned);s.stream_bytes=s.stream_buffers->allocate(s.devices);}
   for(size_t d=0;d<n;++d) {
     auto f=at::TensorOptions().device(s.devices[d]).dtype(at::kFloat);
-    s.programs.push_back(std::make_unique<CannProgram>(s.devices[d]));s.programs.back()->limit_workspace(workspace);
+    if(!d&&coordinator)s.programs.push_back(coordinator);
+    else {s.owned.push_back(std::make_unique<CannProgram>(s.devices[d]));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);}
     s.errors.push_back(at::zeros({1},f.dtype(at::kInt)));
-    auto& out=s.outputs[d];out.values=at::empty({std::max<int64_t>(1,outputs[d])},f);
-    out.connected=at::empty({std::max<int64_t>(1,counts[d])},f.dtype(at::kBool));
-    s.programs[d]->zero(out.values);s.programs[d]->zero(out.connected);
+    auto& out=s.outputs[d];
+    if(preceding) {
+      const auto& old=preceding->impl_->outputs[d];out.values=old.values;out.connected=old.connected;
+      if(out.values.numel()!=std::max<int64_t>(1,outputs[d])||out.connected.numel()!=std::max<int64_t>(1,counts[d]))
+        throw std::invalid_argument("canonical reuse extent changed");
+    } else {out.values=at::empty({std::max<int64_t>(1,outputs[d])},f);out.connected=at::empty({std::max<int64_t>(1,counts[d])},f.dtype(at::kBool));}
   }
   for(size_t i=0;i<source.owners.size();++i) {
     auto& out=s.outputs[placement[i]];out.owners.push_back(source.owners[i]);out.offsets.push_back(offsets[i]);
   }
+  if(preceding)for(size_t d=0;d<n;++d) {
+    const auto& now=s.outputs[d];const auto& old=preceding->impl_->outputs[d];
+    if(now.offsets!=old.offsets||now.owners.size()!=old.owners.size())throw std::invalid_argument("canonical reuse layout changed");
+    for(size_t i=0;i<now.owners.size();++i)if(now.owners[i].canonical!=old.owners[i].canonical
+        ||now.owners[i].aliases!=old.owners[i].aliases||!now.owners[i].value.is_same(old.owners[i].value))
+      throw std::invalid_argument("canonical reuse owner changed");
+  }
   s.programs[0]->copy(s.errors[0],upstream);
+  // This start packet precedes every peer write, including initial zeroing.
+  // Per-window canonical reductions share storage but cannot start early.
   for(size_t target=1;target<n;++target)s.transfer(0,target,{{s.errors[0],s.errors[target]}});
+  if(!preceding)for(size_t d=0;d<n;++d){s.programs[d]->zero(s.outputs[d].values);s.programs[d]->zero(s.outputs[d].connected);}
   // Global order also prevents all-send/all-wait cycles. Both the device loop
   // and later groups reuse packet storage, without reordering any contribution.
   for(const auto& [key,owners]:groups) {
     const auto [k,from,to]=key;std::vector<OwnerStreamField> fields;const auto& out=s.outputs[to];
     for(auto i:owners)fields.push_back({source.contributions[i][k],
       {{out.values.narrow(0,offsets[i],source.owners[i].value.numel()),at::kFloat}},out.connected.narrow(0,slots[i],1)});
-    s.stream(from,to,fields,owner_stream_metadata_bytes(fields.size(),fields.size(),from!=to)+allowance,true,shared);
+    s.stream(from,to,fields,owner_stream_metadata_bytes(fields.size(),fields.size(),from!=to)+allowance,true,*s.stream_buffers);
   }
   s.consensus();
+  if(coordinator)coordinator->copy(upstream,s.errors[0]);
 }
 ShardedParameterReduce::~ShardedParameterReduce()=default;
 ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradient,const at::Tensor& upstream,
@@ -167,7 +199,7 @@ ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradien
     throw std::invalid_argument("invalid canonical update upstream status");
   s.outputs=std::move(gradient);
   for(auto d:s.devices) {
-    s.programs.push_back(std::make_unique<CannProgram>(d));s.programs.back()->limit_workspace(workspace);
+    s.owned.push_back(std::make_unique<CannProgram>(d));s.programs.push_back(s.owned.back().get());s.programs.back()->limit_workspace(workspace);
     s.errors.push_back(at::zeros({1},upstream.options().device(d)));
   }
   s.programs[0]->copy(s.errors[0],upstream);
@@ -176,7 +208,7 @@ ShardedParameterReduce::ShardedParameterReduce(std::vector<ParameterVjp> gradien
 const std::vector<ParameterVjp>& ShardedParameterReduce::gradients() const{return impl_->outputs;}
 const std::vector<at::Tensor>& ShardedParameterReduce::errors() const{return impl_->errors;}
 void ShardedParameterReduce::append_step(const std::vector<DeviceOptimizer*>& optimizers) {
-  auto& s=*impl_;if(s.finished||s.updated||optimizers.size()!=s.programs.size())throw std::logic_error("invalid canonical owner update construction");
+  auto& s=*impl_;if(s.embedded||s.finished||s.updated||optimizers.size()!=s.programs.size())throw std::logic_error("invalid canonical owner update construction");
   for(auto* p:optimizers)if(!p)throw std::invalid_argument("missing canonical owner optimizer");
   validate_sharded_optimizer_owners(s.outputs);
   for(size_t d=0;d<s.programs.size();++d)optimizers[d]->append_propose(*s.programs[d],s.outputs[d],s.errors[d]);
@@ -229,15 +261,24 @@ void ShardedParameterReduce::append_publish(const ShardedParameterBanks& banks,c
   for(const auto& [key,fields]:groups)s.stream(key.first,key.second,fields,metadata[key]+allowance,false,shared);
   s.published=true;
 }
-void ShardedParameterReduce::finish(){auto& s=*impl_;if(s.finished)throw std::logic_error("owner reduction already finished");for(auto& p:s.programs)p->finish();s.finished=true;}
+void ShardedParameterReduce::finish(){auto& s=*impl_;if(s.finished)throw std::logic_error("owner reduction already finished");for(auto& p:s.owned)p->finish();s.finished=true;}
 void ShardedParameterReduce::run() {
-  auto& s=*impl_;if(!s.finished)throw std::logic_error("owner reduction not finished");
-  for(auto d:s.devices)c10::impl::VirtualGuardImpl(d.type()).synchronizeDevice(d.index());
-  for(auto& p:s.programs)p->submit();std::exception_ptr failure;
-  for(auto& p:s.programs)try{p->wait();}catch(...){if(!failure)failure=std::current_exception();}
+  if(impl_->embedded)throw std::logic_error("embedded reduction requires its coordinator submission");
+  synchronize_inputs();submit();wait();
+}
+void ShardedParameterReduce::synchronize_inputs() const {
+  for(auto d:impl_->devices)c10::impl::VirtualGuardImpl(d.type()).synchronizeDevice(d.index());
+}
+void ShardedParameterReduce::submit() {
+  if(!impl_->finished)throw std::logic_error("owner reduction not finished");
+  for(auto& p:impl_->owned)p->submit();
+}
+void ShardedParameterReduce::wait() {
+  std::exception_ptr failure;
+  for(auto& p:impl_->owned)try{p->wait();}catch(...){if(!failure)failure=std::current_exception();}
   if(failure)std::rethrow_exception(failure);
 }
-void ShardedParameterReduce::close(){for(auto& p:impl_->programs)p->close();for(auto& p:impl_->packets)p->close();}
+void ShardedParameterReduce::close(){for(auto& p:impl_->owned)p->close();for(auto& p:impl_->packets)p->close();}
 int64_t ShardedParameterReduce::stream_reserved_bytes() const{return impl_->stream_bytes;}
 int64_t ShardedParameterReduce::stream_chunks() const{return impl_->stream_chunks;}
 int64_t ShardedParameterReduce::packet_bytes() const{int64_t bytes=0;for(const auto& p:impl_->packets)bytes+=p->packet_bytes();return bytes;}

@@ -17,7 +17,12 @@ void tensor(const at::Tensor& x,at::Device d,at::ScalarType type,at::IntArrayRef
 }
 EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,
     const at::Tensor& error,int64_t budget,int64_t max_rows,int64_t workspace) {
+  return prepare_emission_reverse(p,t,links,error,budget,max_rows,workspace,{});
+}
+EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,const ReverseLinks& links,
+    const at::Tensor& error,int64_t budget,int64_t max_rows,int64_t workspace,const std::vector<ProjectionGradient>& reuse) {
   const bool sharded=!t.emission.shards.empty();
+  if(!reuse.empty()&&!sharded)throw std::invalid_argument("reusable projection gradients require compact owners");
   if(at::GradMode::is_enabled()||!t.graph||t.control.mode!=0||(!t.emission.weights.defined()&&!sharded))
     throw std::invalid_argument("slot-affine reverse requires actual HARD emission tape");
   const auto d=t.state.metadata.device();const auto dtype=t.source_scales.scalar_type();
@@ -50,7 +55,7 @@ EmissionReverse prepare_emission_reverse(CannProgram& p,const ReverseTape& t,con
     if(max_rows<1||workspace<1||fixed+row>budget||own+extra_row>budget)
       throw std::invalid_argument("one compact projection adjoint chunk exceeds budget");
     out.chunk=std::min<int64_t>({max_rows,total,int64_t((budget-fixed)/row),int64_t((budget-own)/extra_row)});
-    out.gradient.program=std::make_shared<ProjectionStage>(t.emission.shards,parameters,out.chunk,true,budget,workspace);
+    out.gradient.program=std::make_shared<ProjectionStage>(t.emission.shards,parameters,out.chunk,true,budget,workspace,reuse);
     out.gradient.program->append_reset(p,d);out.gradient.shards=out.gradient.program->gradients();
   }
   const int64_t scale_offset=t.graph->inputs.size()+t.graph->edges.size();

@@ -1,4 +1,5 @@
 #include "sharded_training_internal.h"
+#include <limits>
 #include <stdexcept>
 namespace tide::training_detail {
 using namespace device_online;
@@ -88,14 +89,32 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
   auto error=at::zeros({1},at::TensorOptions().device(s.device).dtype(at::kInt));
   CannSequence sequence(s.device,s.saved.size(),s.limits.program_workspace_bytes);
   std::vector<ShardedGraphVjp> gradients(s.saved.size());
+  const bool streamed=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
+  std::vector<std::unique_ptr<ShardedParameterReduce>> reductions(streamed?s.saved.size():1);
+  std::vector<ShardedParameterReduce*> embedded;
+  Index reused_projection_bytes=0;
   for(size_t i=s.saved.size();i>0;) {--i;auto& p=sequence.append();const auto& t=s.saved[i].tape.tape;
     auto cot=roots(input[i],t.coordinator,s.saved[i].states);
     if(i+1<s.saved.size())cot=append_window_bridge(p,t.coordinator,cot,s.saved[i+1].tape.tape.coordinator,gradients[i+1].coordinator,error,per/8);
     gradients[i]=append_sharded_graph_vjp(p,t,cot,error,s.limits.reverse_chunk_rows,per/2,s.limits.program_workspace_bytes,
-      i+1<s.saved.size()?gradients[i+1].state:nullptr,cache_inputs(input[i],t.states.size()));
+      i+1<s.saved.size()?gradients[i+1].state:nullptr,cache_inputs(input[i],t.states.size()),
+      streamed&&i+1<s.saved.size()?gradients[i+1].coordinator.emission.shards:std::vector<ProjectionGradient>{});
+    if(streamed) {
+      // Each owner receives exactly the original reverse-window -> alias
+      // sequence. Do not pre-sum aliases into per-window canonical gradients.
+      reductions[i]=std::make_unique<ShardedParameterReduce>(sharded_parameter_sources(s.graph,s.registry,{gradients[i]},s.limits.backward_bytes/16),
+        s.placement.devices,error,s.limits.backward_bytes/8,s.limits.program_workspace_bytes,p,i+1<s.saved.size()?reductions[i+1].get():nullptr);
+      embedded.push_back(reductions[i].get());
+      if(i+1<s.saved.size())for(const auto& shard:gradients[i].coordinator.emission.shards) {
+        const long double bytes=static_cast<long double>(reused_projection_bytes)+shard.weights.nbytes()+shard.biases.nbytes()+shard.connected.nbytes();
+        if(bytes>std::numeric_limits<Index>::max())throw std::invalid_argument("projection reuse byte counter overflow");
+        reused_projection_bytes=Index(bytes);
+      }
+    }
   }
-  ShardedParameterReduce reduction(sharded_parameter_sources(s.graph,s.registry,gradients,s.limits.backward_bytes/16),
+  if(!streamed)reductions[0]=std::make_unique<ShardedParameterReduce>(sharded_parameter_sources(s.graph,s.registry,gradients,s.limits.backward_bytes/16),
     s.placement.devices,error,s.limits.backward_bytes/8,s.limits.program_workspace_bytes);
+  auto& reduction=*reductions.front();
   const auto& parts=reduction.gradients();
   if(parts.size()!=s.layout.size())throw std::logic_error("canonical owner count changed after forward");
   for(size_t d=0;d<parts.size();++d) {
@@ -103,9 +122,9 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     for(size_t i=0;i<parts[d].owners.size();++i)if(parts[d].owners[i].canonical!=s.layout[d].owners[i].canonical)
       throw std::logic_error("canonical parameter order changed after forward");
   }
-  sequence.finish();reduction.finish();
+  sequence.finish();for(auto& r:reductions)r->finish();
   try {
-    run_sharded_graph_vjp(sequence,gradients);reduction.run();
+    run_sharded_graph_vjp(sequence,gradients,embedded);if(!streamed)reduction.run();
     const auto code=reduction.errors()[0].cpu().item<int>();
     if(code)throw std::runtime_error("resident sharded backward refusal code="+std::to_string(code));
     ResidentGradients out;for(const auto& p:parts)out.parameter_shards.push_back(parameter_view(p));
@@ -131,7 +150,7 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
       auto valid=g.links.valid.narrow(0,0,n)&g.links.messages.narrow(0,0,n).select(1,1).lt(0);
       out.boundaries.push_back({s.saved[i].token,at::cat({t.fiber_meta,t.pending.coordinates}),g.messages.narrow(0,0,n),valid,g.message_connected.narrow(0,0,n)&valid});
     }
-    s.gradient=parts;reduction.close();sequence.close();close_sharded_graph_vjp(gradients);
+    s.gradient=parts;sequence.close();for(auto& r:reductions)r->close();close_sharded_graph_vjp(gradients);
     out.statistics["retained_projection_bytes"]=s.projection_bytes;
     out.statistics["retained_attention_bytes"]=s.attention_bytes;
     out.statistics["retained_full_bytes"]=s.full_bytes;
@@ -140,8 +159,12 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     out.statistics["retained_bytes"]=s.saved_bytes;
     out.statistics["retained_dense_bytes"]=s.saved.size()*s.bytes_per_window+s.projection_bytes+s.attention_bytes+s.full_bytes;
     out.statistics["retained_compact_journals"]=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
-    out.statistics["canonical_stream_reserved_bytes"]=reduction.stream_reserved_bytes();
-    out.statistics["canonical_stream_chunks"]=reduction.stream_chunks();
+    for(const auto& r:reductions) {
+      out.statistics["canonical_stream_reserved_bytes"]+=r->stream_reserved_bytes();
+      out.statistics["canonical_stream_chunks"]+=r->stream_chunks();
+    }
+    out.statistics["streamed_parameter_windows"]=streamed?s.saved.size():0;
+    out.statistics["reused_projection_gradient_bytes"]=reused_projection_bytes;
     s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.attention_snapshot={};s.full_snapshot={};s.saved_bytes=0;return out;
   }catch(...){s.failed=true;throw;}
 }

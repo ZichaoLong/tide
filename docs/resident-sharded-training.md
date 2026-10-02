@@ -99,6 +99,28 @@ the maximum of byte reservations across sample groups and sum iteration counts.
 These are planning counters, separate from observed allocator peaks. Full
 gradients, master values and optimizer slots are not replaced by packet arenas.
 
+With `chunk_policy=aggressive`, each completed reverse window reduces its
+parameter contributions before the preceding window executes. The ordered device
+coordinator appends this reduction directly to the window program; peer start
+packets precede all writes, and an end-of-reduction consensus confirms that all
+owners have consumed their inputs. Only then can the preceding window reset and
+reuse physical projection-weight/bias/connection adjoints. The canonical output
+bank and numerical packet arenas are shared across these reductions as well.
+Per-owner floating additions remain reverse-window then registry-alias; aliases
+are not first combined into a window sum. Nonfinite/disconnected handling and
+sticky errors retain the same contract. Full, state, cache and message adjoints
+remain per-window, including the gradients needed by continuation bridges.
+
+`streamed_parameter_windows` counts windows reduced this way;
+`reused_projection_gradient_bytes` counts duplicate physical projection-adjoint
+storage avoided within each backward group. It is a storage accounting counter,
+not measured allocator savings. The conservative policy retains the separate
+final reduction. The legacy single-device representation does not use this
+optimization; an explicit one-device placement uses the sharded representation.
+Consumer admission estimates remain conservative and unchanged. Shared arena
+bytes are counted once plus each reduction's distinct metadata. No new public
+option, host event loop or CPU numerical prepass is introduced.
+
 Forward state/KV values remain owner-local. State root cotangents may use bounded
 coordinator scratch for reverse routing; this is not a forward state replica.
 Host loops traverse static owner/module groups and retained windows, not actual

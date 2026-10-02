@@ -128,6 +128,9 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     const auto dense=grad.statistics.at("retained_windows")*grad.statistics.at("retained_window_bytes")+
       grad.statistics.at("retained_projection_bytes")+attention+grad.statistics.at("retained_full_bytes");
     require(grad.statistics.at("retained_dense_bytes")==dense,"shared parameter snapshot counted per window");
+    const bool streamed=compact_journals&&!l.placement.devices.empty();
+    require(grad.statistics.at("streamed_parameter_windows")==int64_t(streamed?roots.size():0),"window reduction placement differs from policy");
+    require((grad.statistics.at("reused_projection_gradient_bytes")>0)==(streamed&&emission&&roots.size()>1),"projection gradient reuse differs from policy");
     require(grad.statistics.at("retained_compact_journals")==compact_journals,"retained journal policy changed");
     if(compact_journals)require(grad.statistics.at("retained_bytes")<grad.statistics.at("retained_dense_bytes"),"retained journals did not shrink");
     test::train_reject([&]{session->backward(roots);},"consumed roots reused");

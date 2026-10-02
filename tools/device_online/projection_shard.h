@@ -13,6 +13,11 @@ class ProjectionStage {
  public:
   ProjectionStage(std::vector<ProjectionBank>,int64_t parameters,int64_t chunk,
                   bool reverse,int64_t tensor_budget,int64_t operator_budget);
+  // Reuse only after an ordered device reduction has consumed the preceding
+  // window. append_reset gates peer zeroing with a coordinator start packet.
+  ProjectionStage(std::vector<ProjectionBank>,int64_t parameters,int64_t chunk,
+                  bool reverse,int64_t tensor_budget,int64_t operator_budget,
+                  const std::vector<ProjectionGradient>& reuse);
   ~ProjectionStage();
   at::Tensor append(CannProgram&,const at::Tensor& parameter_rows,
       const at::Tensor& values,const at::Tensor& cotangents,const at::Tensor& error);
