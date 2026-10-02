@@ -166,30 +166,36 @@ at964bf628c67270200dabe55b1bca026bd403cd37; TASK/restricted-flow-archive.json.
 
 Last observed matrix current: matrix-settle-libtorch-streaming-screen01; completed14of34recipe children. Re-read live records.
 
-## Current increment: resident gradient accumulation
+## Latest qualified increment: resident gradient accumulation
 
-Implementation is being committed after development tests. Public C++/Python
-`accumulate(max_bytes)` snapshots/sums canonical device gradients, explicitly
-detaches numerical continuation, leaves generation/parameters/slots unchanged,
-and requires one step after the final accumulated backward. None/zero flags,
-capacity rejection, global finite transaction and detached checkpoint semantics
-are preserved. This is explicit truncated-gradient grouping, not yet independent
-sample continuation switching or resident sample slicing. CANN kernels and public
-limits/checkpoint structures are unchanged; new class methods require a new backend.
+Implementation830904b712f458c3d268cde88811b84157a26e6e is pushed. Clean source
+TASK/sources/accumulation-clean01. All five jobs PASSED:
+build-accumulation-{standalone,python}-clean01 and
+accumulation-{components,public,profile}-clean01. Evidence is being committed:
+[evidence](evidence/resident-accumulation-20261002.md).
+Public C++/Python accumulate(max_bytes) freezes/sums canonical device gradients,
+explicitly detaches between groups, keeps parameters/generation fixed, then one
+step. None/zero, budget refusal, finite agreement and detached checkpoint gates
+pass. This does not switch independent sample continuation or implement resident
+sample slicing. Public limits/checkpoint layouts and CANN kernels unchanged.
 
-Frozen development source TASK/sources/accumulation-dev01. Both builds and
-accumulation-{components,public}-dev01 PASSED. Standalone has8trajectories per
-dtype, FP32/FP16,2owners→legacy single-owner resume, event/fiber caches, two
-optimizers, both schedules/HARD/HST/SOFTP,384windows/48updates total. Python21
-passes, no skips:8new plus13ordinary training/lifecycle regressions. No failure.
-Next: immutable clean build with exact-object reuse, repeat these affected gates,
-and one separate bounded profile. Do not rerun unrelated suites.
+Standalone8trajectories per dtype, FP32/FP16,2owners→legacy single-owner resume,
+event/fiber caches, two optimizers, both schedules/HARD/HST/SOFTP:
+384windows/48updates total. Python21pass,no skips (8new+13ordinary regressions).
+Trace18360vector/350AI_CORE/267MIX_AIV,0AiCPU. No new throughput/scale claim.
+TASK/launchers/accumulation_evidence.py audit PASSED. Do not repeat these gates.
 
-Matrix recipe PID3771316 is currently HELD (start1849248082). Its current child
-matrix-timed-dag-python-prefill-screen01 has PASSED20cells. Only recipe was
-signalled, no measurement interrupted. boundary-hold-accumulation.json records
-this hold. Resume immediately after clean gates/profile, before04:28UTC parent
-deadline. Observed external processes appeared on physical3 during hold; inspect
-before resuming. Finished LibTorch extra matrices were audited in
-TASK/libtorch-matrix-extra-audit.json; no remeasurement needed. Python audit
-helper now also checks exact package hash/options/runtime/binaries.
+Matrix recipe PID3771316 (start1849248082) is RESUMED. All three hold records
+are resumed. Current completed child: timed-dag/python/prefill pilot20cells passed;
+read live sequence.json for newer progress. Own builds/gates/profile finished.
+An external physical3 process observed during hold has exited; chip again showed
+4%baseline HBM,0%utilization. Parent's original04:28UTC deadline remains.
+Audited extra LibTorch matrices: TASK/libtorch-matrix-extra-audit.json. No reruns.
+Python audit helper now checks exact package hash/options/runtime/binaries.
+
+Next implementation priority: device-only independent continuation switching,
+then resident physical sample slicing using this shared gradient/optimizer owner.
+Still open: correct whole logical-batch loss and sample coordinates, compact live
+KV and simultaneous-lifetime admission, mixed multi-device placement, original
+wide actual execution and final F7 qualification. Never use the new explicit
+truncation API to replace retained gradients across windows of a sample slice.

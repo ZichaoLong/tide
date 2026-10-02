@@ -158,11 +158,12 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | representative TimedDAG/LibTorch/prefill five-preset screen qualified on clean0b1a5aa:72 fresh processes,FP32 exact event/output/cut checks,three repetitions and four separate Attention profiles ([evidence](evidence/representative-preset-screen-20261002.md)); bounded host-policy comparison qualified on clean2222d9d:28 pilot +36 confirmation processes and one selected-policy profile;CPU16 packed wins inference,resident wins training ([evidence](evidence/representative-host-policy-20261002.md)); PDG/LibTorch prefill+streaming qualified on clean80dae6e:40pilot+72confirmation processes ([evidence](evidence/representative-pdg-matrix-20261002.md)); other family/client/schedule cells and full-size remain pending; historical CPU Attention supplementary |
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed minimal records/profile/evidence/support claims and no live task jobs | pending |
 
-F4/F5 explicit device gradient accumulation is implemented; development single/
-sharded FP32/FP16 and Python gates pass. It detaches between backward groups and
-performs one final optimizer update; independent sample continuation switching
-is still pending. Immutable qualification is next; see STATUS and
-[training contract](resident-training.md).
+F4/F5 explicit device gradient accumulation is qualified on clean830904b:
+FP32/FP16,16trajectories/384windows/48updates,Python21,no skips; separate trace
+without observed AiCPU ([evidence](evidence/resident-accumulation-20261002.md)).
+It explicitly detaches between backward groups and performs one final optimizer
+update. Independent sample continuation switching and resident sample slicing
+remain pending; see [training contract](resident-training.md).
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations
