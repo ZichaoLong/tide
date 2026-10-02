@@ -4,8 +4,8 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** User authorized continued
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest implementationf8cc052 and evidenceca54c4a committed/pushed.
-Uncommitted per-device continuation-pool increment is being prepared for directed gates.
+Implementation48e44b0 committed/pushed and fully qualified; reviewed evidence is
+ready for its separate commit. No uncommitted production code.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -24,135 +24,106 @@ Implementation commit → immutable affected qualification → separate evidence
 commit; push each. Contract outranks run-ml-experiments; reuse minimal records.
 Do not rerun unchanged8,954 CPU checks. Own heavy timings are serial.
 
-## Latest completed increments; do not repeat
+## Latest qualified increments; do not repeat
 
-- Training VJP records separated from optional diagnostics:ca26b47/af263b5;
-  public51, four component cells,2,352windows/588updates.
-- Eager CPU/mixed physical sample chunks:e6cc52b/e05fe80; CPU60/NPU38.
-- Resident device gradient accumulation:830904b/a3c8d4b;
-  C++384windows/48updates,Python21, independent trace0AiCPU.
-- Device continuation switching:c96ebcd/d2a425d; C++768windows/96updates,
-  Python30, independent trace0AiCPU. Same-live-owner snapshots preserve complete
-  NPU numerical continuation; parameters/optimizer/accumulator shared, no tape.
-  Detached boundaries only; snapshots remain dense.
-- Resident consumer sample slicing:75543a7. Five clean jobs PASSED at
-  TASK/sources/resident-samples-clean01: build-resident-samples-consumer-clean01,
-  resident-samples-{cpu,npu,profile,memory}-clean01. CPU15/NPU45,no skips.
-  Independent two-device trace46,281Vector/1,797AI_CORE/586MIX_AIV,0AiCPU.
-  Same representative Attention D128/B8/T4/V257 one-update/two-window peak:
-  whole2.244GiB → chunk2 1.840GiB(-18.0%); loss/events/outputs64/cut agree,
-  allocator within estimates. Memory calibration only, not throughput/wide.
-  Audit launchers/resident_samples_evidence.py passed. [Evidence](evidence/resident-sample-chunks-20261002.md).
+- Training diagnostics:ca26b47/af263b5, public51/four component cells.
+- Eager sample chunks:e6cc52b/e05fe80, CPU60/NPU38.
+- Device gradient accumulation:830904b/a3c8d4b, Python21/native384windows.
+- Device continuation switching:c96ebcd/d2a425d, Python30/native768windows.
+- Resident sample slicing:75543a7/8d97736, CPU15/NPU45; actual representative
+  Attention whole→B2 allocator2.244→1.840GiB(-18.0%),0AiCPU profile.
+- Optional compact snapshots:f8cc052/ca54c4a, Python18/four native cells;
+  saved tensor storage144,506,048→2,755,300bytes,0AiCPU profile.
+- **Per-device total live context pool48e44b0**, clean source
+  TASK/sources/context-pool-clean01. All eight jobs PASSED:
+  build-context-pool-{standalone,python,consumer}-clean01,
+  context-pool-{cpu,npu,components,profile,memory}-clean01.
+  CPU17,NPU64,no skips; four dense/compact FP32/FP16 native cells,
+  32trajectories/768windows/96updates. Independent actual two-card consumer trace
+  46,432Vector/1,797AI_CORE/607MIX_AIV,0AiCPU. Same AttentionD128/B8/T4/V257,
+  fourB2 slices,oneFP32AdamW/two connected windows: dense allocator1,975,361,024→
+  compact1,868,793,344bytes(-5.39%); saved state144,506,048→2,755,300bytes.
+  Same loss5.612767696380615/3145events/64outputs/cut,within estimates.
+  Audit launchers/context_pool_evidence.py passed.
+  [Evidence](evidence/resident-context-pool-20261002.md).
 
-Sample slicing preserves logical batch/global sample IDs/loss denominator and
-one shared graph+embedding/head update. Connected windows stay in one backward;
-independent slices accumulate at detached boundaries. Absent tail capacity has
-no events. Capacity charges dense saved contexts and simultaneous accumulators.
-Explicit maximum only, no automatic sample-size choice.
-FP32 elementwise1e-6/1e-5 unchanged; FP16 independent CPU norm policy .002+.02*ref
-infinity-norm plus original whole-vs-sliced FP16 elementwise .002/.02. Initial
-8 near-zero FP16 threshold failures reproduced on whole FP16; production code
-unchanged during policy correction. Retained failures/skips are not qualification.
+Pool flag --resident-context-bytes0 keeps dense. Positive enables compact
+snapshots, caps all simultaneously saved tensor/index bytes on EACH logical NPU,
+and separately reserves packing workspace. New handle.device_bytes and optional
+snapshot_device(...,device_budgets={index:bytes}) check all cards before payload
+copies. Empty/omitted mapping keeps total-only API; older C++ overloads preserved.
+Offline plan_execution_flow.py now accepts sample and pool controls too.
+Dynamic nonzero extents synchronize at explicit detached snapshot boundaries;
+no payload/index/length-vector export, no per-event host scheduling. Samples
+retain logical batch/global IDs/loss denominator/one shared update. FP32 and
+FP16 numerical policies unchanged. Live KV and retained tapes remain dense.
+This is memory calibration, not new-source throughput or original-wide evidence.
 
-## Finite representative matrix — running only missing children
+## Finite representative matrix — five children remain
 
-Old parent tide-execution-flows-matrix-remaining01.service was CANCELLED at a
-completed-child boundary, before its04:28UTC deadline. All24 completed child
-results preserved; no measurement interrupted. The last was TimedDAG/Python/
-streaming-confirm01. resumption.json/sequence.json retain reason and successor.
-Do not resume this old recipe or modify its retained results.
-
-New parent tide-execution-flows-matrix-remaining02.service started04:24UTC;
+Old matrix-remaining01 CANCELLED at completed-child boundary; all24 completed
+children retained. Do not resume it or modify retained measurements.
+Current parent tide-execution-flows-matrix-remaining02.service started04:24UTC;
 TASK/runs/matrix-remaining02/{status,queue,sequence}.json and task.log.
 Frozen80dae6e14d41614d0cdb1056bb39b57ca10d07ed at TASK/sources/fiber-append-clean01.
-Single lease physical1→npu:0, queue cap120s, parent timeout5400s, child900s.
+Lease physical1→npu:0,queue cap120s,parent5400s deadline05:54UTC,child900s.
 Helper launchers/remaining_family_matrix_resume.py schedules exactly10 missing
-children: TimedDAG/Python/streaming-confirm02/03, Settle/Python/prefill and streaming
-screen01 +confirm01–03. Stops on first failure; do not edit live helper/source.
-TimedDAG streaming confirm02/03, Settle/Python prefill screen01/confirm01 PASSED.
-Recipe PID124125 held (start1850121793) by boundary-hold-context-pool.json;
-Settle/Python prefill-confirm02 PASSED at05:03UTC; child finished naturally. Do not
-start heavy builds until its status and matrix records pass. Then run bounded
-context-pool gates and resume the exact same recipe after checking PID/start.
-Five children remain after confirm02; parent deadline05:54UTC is not extended.
-If insufficient time remains, cancel only at completed-child boundary and launch
-only missing children in a new finite recipe. Historical hold record is resumed.
-No completed-cell reruns. Heavy builds/gates must wait for a measured-child boundary.
+children, stops on first failure, no completed-cell reruns. Five now passed:
+TimedDAG/Python streaming-confirm02/03 and Settle/Python prefill-screen01,
+confirm01/02. RecipePID124125/start1850121793 resumed05:17UTC after pool gates;
+boundary-hold-context-pool.json and old compact hold are both resumed.
+Current child: Settle/Python/prefill-confirm03. Then streaming screen01 and
+confirm01–03; expected to finish within parent deadline if no further long holds.
+Do not run heavy builds/gates during measured children. If a hold is necessary,
+STOP only the exact recipe, let current measured child finish naturally, then
+work. Check PID/start identity before CONT. Deadline is not extended by STOP.
 
 Each submatrix20pilot+3×12confirmation processes,1continued warmup+3measured steps,
 2windows/64tokens/step,FP32. LibTorchCPU16packed/mixed4packed; Python default host
-policy; ATen/BLAS1. Audits use launchers/family_matrix_evidence.py.
-Already reported: TimedDAG/LibTorch/prefill8695804, PDG/LibTorch bothaf263b5.
-Audited five additional cells: TimedDAG/LibTorch streaming,Settle/LibTorch both,
-TimedDAG/Python both. TASK/matrix-completed-extra-audit.json; reviewed report
-docs/evidence/representative-family-matrix-20261002.{md,json}. Preserve source80dae6e.
+policy; ATen/BLAS1. Eight of ten required family/client/schedule submatrices are
+already committed, including five inca54c4a. Only Settle/Python both schedules
+remain. After terminal children, use launchers/family_matrix_evidence.py with
+--prefix matrix-settle-python-prefill --prefix matrix-settle-python-streaming
+--output NEW; review and commit remaining matrix evidence. No measurement reruns.
 
 ## Next work and environment
 
-Compact snapshots f8cc052 are qualified: buildscompact-contexts-{standalone,python}-clean01,
-compact-contexts-{components,public,profile}-clean01, memory-clean03 all PASSED.
-Source TASK/sources/compact-contexts-clean01. Four component cells/dense+compact
-FP32/FP16:32trajectories/768windows/96updates; Python18/no skips. Independent
-trace26,322Vector/350AI_CORE/387MIX_AIV/0AiCPU. Four D128/B8/T4 saved contexts:
-144,506,048→2,755,300tensorbytes; allocator growth144,533,504→3,945,472bytes.
-This is saved-state storage, not total process/owner peak or training throughput.
-Audit compact_contexts_evidence.py passed. memory-clean01/02 retain observation-
-script interface failures before model execution; helper_v3 corrects them,
-production source unchanged. Dense mode and existing C++ entry points retained.
-[Evidence](evidence/compact-continuations-20261002.md).
-
-Implementation ready: per-device snapshot budgets and handle byte reporting,
-plus Python/LibTorch consumer ContextPool. --resident-context-bytes0 keeps dense;
-positive enables compact and limits all simultaneous handles per card. Capacity
-charges pool plus separate metadata workspace; logical batch/update unchanged.
-Offline planner exposes the same explicit sample/pool options. Frozen dirty
-source TASK/sources/context-pool-dev01: builds context-pool-{standalone,python,
-consumer}-dev01 all PASSED; CPU17, contexts18, actual consumers34/no skips;
-four dense/compact FP32/FP16 component cells32trajectories/768windows/96updates.
-All sources/tests match the tested snapshot; only handoff docs changed afterward.
-Next: implementation commit/push, freeze context-pool-clean01 at exact commit,
-relink libraries with build_context_pool.py --reuse-host matching-dev01;
-relink installed client with build_capacity_client.py --reuse-client dev01.
-Run CPU17, NPU64 (contexts18+consumers46), four standalone cells; separate
-profile_context_pool.py and context_pool_memory.py observations. Audit with
-context_pool_evidence.py COMMIT; reviewed evidence commit/push. Reuse checked
-core/CANN; do not repeat full CPU regression. Restore held matrix promptly after
-gates/observations. After pool, reduce retained/journal costs and calibrate scale. Current
-read-only12card FP32 wide estimate(B1/chunks512,trace8192,KVtrace65536)151.6GiB:
-coordinator saved contexts44.2GiB,retained31.7GiB,gradients19.5GiB,masters16.1GiB,
-accumulation10.8GiB. Tighter declared trace2048/KVtrace4096 gives121.9GiB;
-subtracting all saved contexts still77.7GiB. These are conservative estimates,
-not execution evidence or proof of physical impossibility. Multiple real costs
-remain; smaller snapshots alone do not close original-wide training. Mixed multi-device
-parameter/payload placement and automatic eager admission remain. Actual original
-wide execution, bounded full-size comparisons and F7 are pending. CUDA real
-hardware and other CANN tuples remain target-machine work.
+Finish evidence commit/push for48e44b0, then prioritize staged scale execution
+and retained/reverse memory. Original-wide inference now has feasible static
+plans with explicit compact pools; validate larger shapes before original-wide.
+Prepare only a bounded staged job and avoid interfering with the running matrix.
+Training still needs reductions/calibration: padded retained journals and reverse
+arenas plus parameter/gradient copies dominate, beyond saved contexts. Investigate
+valid-prefix journal retention (different windows may have different extents),
+parameter-bank lifetime sharing, and complete per-card admission. Never loosen
+estimates without an allocation/lifetime derivation and independent validation.
+Automatic sample admission, eager mixed multi-card placement and actual wide
+execution/comparisons remain open. F7 final migration/evidence audit pending.
 
 TASK=/mi/data2T/zlong/tide-execution-flows. Public module
 libtorch-npu/2.10.0-cann9.0.0; Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
 User-authorized /opt stack supersedes dated personal guide. Preserve module
-PYTHONPATH, prepend frozen source/python. TASK_QUEUE_ENABLE=0,
-TORCH_DEVICE_BACKEND_AUTOLOAD=0.16logical64GiB Ascend910_9392; lease/remap only.
+PYTHONPATH,prepend frozen source/python. TASK_QUEUE_ENABLE=0,
+TORCH_DEVICE_BACKEND_AUTOLOAD=0.16logical64GiB Ascend910_9392;lease/remap only.
 freeze_run.py uses detached background.slice/Nice10,2buildworkers,bounded tasks.
-Last disk free:data201GiB/root12GiB. Current timing lock TASK/online-measurement.lock.
+Last disk free:data200GiB/root12GiB. Current timing lock TASK/online-measurement.lock.
 Atomic handoff writes use durable_records.replace_text.
-
-Qualified eager binaries TASK/builds/sample-chunks-{cpu,npu}-clean01/consumer/tidegraph-online-bench.
-Latest resident libraries TASK/builds/compact-contexts-{standalone,python}-clean01;
-previous contexts builds remain valid for existing consumers.
-Latest consumer TASK/builds/resident-samples-consumer-clean01/consumer/tidegraph-online-bench.
-Core builds placement-{cpu,npu,npu-python}-clean01. Distinct standalone/Python
-runtime owners; source/header/options-checked reuse only.
+Qualified libraries TASK/builds/context-pool-{standalone,python}-clean01.
+Qualified installed consumer TASK/builds/context-pool-consumer-clean01/consumer/tidegraph-online-bench.
+Core builds placement-{cpu,npu,npu-python}-clean01; eager binaries
+sample-chunks-{cpu,npu}-clean01/consumer/tidegraph-online-bench. Distinct runtime
+owners; source/header/options-checked object reuse only. New builds passed loader
+closure. Do not modify any frozen source or active helper.
 
 Original wide packets TASK/inputs/fullsize-{add,attention}01/workload.json:
-480body nodes/2208edges,D2048/B512/T12/V50304,9,468,053,696 or17,521,117,376params.
-Do not reduce logicalB512 and claim wide passed. Region(budget) defaults
-observe_all=true: unselected nodes retain KV; clear only clears selected nodes.
-Read-only dense estimate still exceeds12-card Attention memory; estimate refusal
-is not physical impossibility or completion. Need implement/measure general savings.
+480body/2208edges,D2048/B512/T12/V50304,9,468,053,696 or17,521,117,376params,
+clear=true/stride17. Region(budget) defaultsobserve_all=true: unselected nodes
+retain KV; clear applies only to selected nodes. Do not change logicalB512 or
+lose KV and claim original-wide passed. Static estimate refusal is not physical
+impossibility or completion. CUDA real hardware and other CANN tuples target-pending.
 
-Historical CPU job historical-cpu-attention-01 deliberately remains SIGSTOP,
-holds old timing.lock; never resume/kill/clean it. Historical1.6438× means faster
-throughput, not current online-flow evidence. Prior restricted work preserved on
-pushed archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
+Historical historical-cpu-attention-01 intentionally remains SIGSTOP and holds old
+timing.lock; never resume/kill/clean it. Historical1.6438× means faster throughput,
+not current online-flow evidence. Prior restricted work remains on pushed
+archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.

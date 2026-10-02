@@ -288,7 +288,8 @@ metadata workspace is reserved separately in complete-memory admission. The
 `context_storage` record reports policy, requested bytes per device, admitted
 budgets and peak saved bytes. This is a bounded pool for an explicit sample
 size; live state, retained tapes, parameters and vendor workspace still have
-their own costs. Qualification of this pool is pending.
+their own costs. This pool is qualified on clean `48e44b0`
+([evidence](evidence/resident-context-pool-20261002.md)).
 
 The sample-slicing FP16 gate separates cross-dtype rounding from slicing: its
 CPU FP32 comparison uses tensor infinity-norm error bounded by
