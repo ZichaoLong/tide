@@ -2,6 +2,7 @@
 #include "content_profile.h"
 #include "device_journal.h"
 #include "event_tape.h"
+#include "continuation_pack.h"
 
 namespace tide::device_online {
 struct EventCache {at::Tensor key,value,lengths;};
@@ -45,6 +46,11 @@ class PackedEventAttention {
   at::Tensor key_work() const;
   at::Tensor chunks() const;
   at::Tensor peak() const;
+  std::vector<ContinuationRows> continuation_rows() const {
+    std::vector<ContinuationRows> out;
+    for(const auto& g:groups_)out.push_back({{g->live.key,g->live.value},g->live.lengths,g->capacity});
+    return out;
+  }
   std::vector<Tensor> continuation_tensors() const {
     std::vector<Tensor> out;
     for(const auto& g:groups_)out.insert(out.end(),{g->live.key,g->live.value,g->live.lengths});

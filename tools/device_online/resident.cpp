@@ -97,6 +97,9 @@ Continuation ResidentSession::snapshot() const {
 ResidentContinuation ResidentSession::snapshot_device(Index max_bytes) const {
   impl_->check();return impl_->flow->snapshot_device(max_bytes);
 }
+ResidentContinuation ResidentSession::snapshot_device(Index max_bytes,bool compact) const {
+  impl_->check();return impl_->flow->snapshot_device(max_bytes,compact);
+}
 void ResidentSession::restore_device(const ResidentContinuation& saved) {
   impl_->check();impl_->flow->restore_device(saved);impl_->cut=saved.cut();
 }

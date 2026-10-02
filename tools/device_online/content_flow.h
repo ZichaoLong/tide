@@ -56,6 +56,7 @@ class ContentFlow {
   ContentWindow advance_device(const std::vector<External>&,Index stop);
   Continuation snapshot() const; // Explicit complete-cut CPU materialization.
   ResidentContinuation snapshot_device(Index max_bytes) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
   void restore_device(const ResidentContinuation&);
   Result result() const; // Latest window; trace/messages require diagnostics.
   StateTape state_tape() const; // Borrowed actual device journal; diagnostics required.

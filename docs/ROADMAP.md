@@ -168,7 +168,9 @@ Python30,no skips, independent trace0AiCPU ([evidence](evidence/resident-context
 Resident consumer sample slicing is qualified on clean75543a7: CPU15/NPU45,
 no skips, same-dtype and independent-CPU checks, separate two-device trace0AiCPU
 and fixed-shape allocator peak -18.0% ([evidence](evidence/resident-sample-chunks-20261002.md)).
-Dense persistent/saved KV and automatic sample admission remain pending.
+Dense live KV and automatic sample admission remain pending. Optional compact
+saved continuations are implemented (Python18 and four standalone development
+cells); immutable qualification, consumer admission integration and scale pending.
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations

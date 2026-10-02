@@ -62,6 +62,7 @@ class ResidentSession {
   ResidentWindow advance(const std::vector<External>&, Index stop, Index sealed_until);
   Continuation snapshot() const; // Explicit CPU checkpoint materialization.
   ResidentContinuation snapshot_device(Index max_bytes) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
   void restore_device(const ResidentContinuation&); // Clears latest-window diagnostics.
   Result result() const;         // Explicit latest-window CPU diagnostics.
   Index cut() const;

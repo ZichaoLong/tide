@@ -3,6 +3,7 @@
 #include "device_journal.h"
 #include "packed_fiber_pool.h"
 #include "fiber_tape.h"
+#include "continuation_pack.h"
 
 namespace tide::device_online {
 struct FiberCache {at::Tensor key,value,bias,lengths;};
@@ -39,6 +40,7 @@ class PackedFiberAttention {
   int64_t tape_bytes() const; // Shape-only upper bound, before grouped gathers.
   std::vector<FiberAttentionTape> tape() const;
   FiberParameterBanks banks() const;
+  std::vector<ContinuationRows> continuation_rows() const {return {{{cache_.key,cache_.value,cache_.bias},cache_.lengths,capacity_}};}
   std::vector<Tensor> continuation_tensors() const {return {cache_.key,cache_.value,cache_.bias,cache_.lengths};}
  private:
   int64_t nodes_,width_,parameters_,owners_,rows_,capacity_,chunk_,key_rows_,reserved_,max_ticks_;

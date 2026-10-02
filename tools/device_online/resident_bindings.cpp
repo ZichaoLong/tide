@@ -39,7 +39,8 @@ PYBIND11_MODULE(_tide_resident,m) {
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentLimits,ResidentPlacement>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&ResidentSession::advance,py::call_guard<py::gil_scoped_release>())
     .def("snapshot",&ResidentSession::snapshot,py::call_guard<py::gil_scoped_release>())
-    .def("snapshot_device",&ResidentSession::snapshot_device,py::call_guard<py::gil_scoped_release>())
+    .def("snapshot_device",py::overload_cast<Index,bool>(&ResidentSession::snapshot_device,py::const_),
+         py::arg("max_bytes"),py::arg("compact")=false,py::call_guard<py::gil_scoped_release>())
     .def("restore_device",&ResidentSession::restore_device,py::call_guard<py::gil_scoped_release>())
     .def("result",&ResidentSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&ResidentSession::close,py::call_guard<py::gil_scoped_release>())

@@ -16,6 +16,7 @@ class ShardedTrainingOwner {
   void detach();
   ResidentTrainingCheckpoint checkpoint() const;
   ResidentContinuation snapshot_device(Index max_bytes) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
   void restore_device(const ResidentContinuation&);
   Result result() const;
   Index cut() const;

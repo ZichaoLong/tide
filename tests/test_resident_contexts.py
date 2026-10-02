@@ -40,7 +40,8 @@ def placement(target, cards):
     ("settle", "streaming", "lh-fiber-attention-all-softmax-repeat-v1", 1),
     ("settle", "greedy", "lh-fiber-attention-sum-repeat-v1", 2),
 ])
-def test_inference_contexts(target, family, schedule, memory, cards):
+@pytest.mark.parametrize("compact", [False, True])
+def test_inference_contexts(target, family, schedule, memory, cards, compact):
     r, cpu = runtime(family, target, schedule, memory), runtime(family, "cpu", schedule, memory)
     oracles = [cpu.session(2), cpu.session(2)]
     values = [torch.sin(torch.arange(32).reshape(2, 4, 4)*.37)*.1,
@@ -48,13 +49,16 @@ def test_inference_contexts(target, family, schedule, memory, cards):
     owners = placement(target, cards)
     with torch.no_grad():
         s = r.session(2, placement=owners)
-        initial = s.snapshot_device(max_bytes=512*1024**2)
+        initial = s.snapshot_device(compact=compact, max_bytes=512*1024**2)
+        dense = s.snapshot_device(max_bytes=512*1024**2)
+        if compact:
+            assert initial.tensor_bytes < dense.tensor_bytes
         assert initial.cut == 0 and initial.batch_size == 2 and initial.tensor_bytes > 0
         with pytest.raises(ValueError, match="budget"):
-            s.snapshot_device(max_bytes=initial.tensor_bytes-1)
+            s.snapshot_device(compact=compact, max_bytes=initial.tensor_bytes-1)
         for bad in (True, 0, -1, 1.0, 2**63):
             with pytest.raises(ValueError):
-                s.snapshot_device(max_bytes=bad)
+                s.snapshot_device(compact=compact, max_bytes=bad)
         contexts, positions = [initial, initial], [0, 0]
         for i in (0, 1, 1, 0):
             s.restore_device(contexts[i])
@@ -68,10 +72,21 @@ def test_inference_contexts(target, family, schedule, memory, cards):
             s.advance_device(args, **kw)
             equivalent(expected, s.result())
             positions[i] = stop
-            contexts[i] = s.snapshot_device(max_bytes=initial.tensor_bytes)
+            contexts[i] = s.snapshot_device(compact=compact, max_bytes=512*1024**2)
+            if compact:
+                dense = s.snapshot_device(max_bytes=512*1024**2)
+                assert contexts[i].tensor_bytes <= dense.tensor_bytes
+                # A failed compact admission leaves the live continuation and
+                # all previously saved handles usable, even with nonempty KV.
+                with pytest.raises(ValueError, match="budget"):
+                    s.snapshot_device(compact=True, max_bytes=contexts[i].tensor_bytes-1)
+                equivalent(expected, s.result())
+        for bad in (0, 1, None, "compact"):
+            with pytest.raises(ValueError, match="compact"):
+                s.snapshot_device(max_bytes=512*1024**2, compact=bad)
         before = s.snapshot()
         with r.session(2, placement=owners) as other:
-            foreign = other.snapshot_device(max_bytes=initial.tensor_bytes)
+            foreign = other.snapshot_device(compact=compact, max_bytes=512*1024**2)
             with pytest.raises(ValueError, match="different session"):
                 s.restore_device(foreign)
         equivalent(before, s.snapshot())
@@ -88,7 +103,8 @@ def test_inference_contexts(target, family, schedule, memory, cards):
     ("timed-dag", "streaming", "lh-add-repeat-v1", 2, "adamw"),
     ("settle", "greedy", "lh-fiber-attention-all-softmax-repeat-v1", 2, "adamw"),
 ])
-def test_training_contexts_share_update(target, family, schedule, memory, cards, kind):
+@pytest.mark.parametrize("compact", [False, True])
+def test_training_contexts_share_update(target, family, schedule, memory, cards, kind, compact):
     r, cpu = runtime(family, target, schedule, memory), runtime(family, "cpu", schedule, memory)
     names, parameters = zip(*((n,p) for n,p in cpu.execution_model.named_parameters() if p.requires_grad))
     options = dict(lr=.001, weight_decay=.01)
@@ -100,7 +116,7 @@ def test_training_contexts_share_update(target, family, schedule, memory, cards,
     limits = ResidentTrainingLimits(windows=2, backward_bytes=8*1024**3, retained_bytes=512*1024**2)
     with torch.no_grad(), r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **options)],
             limits=limits, placement=placement(target, cards)) as s:
-        initial = s.snapshot_device(max_bytes=512*1024**2)
+        initial = s.snapshot_device(compact=compact, max_bytes=512*1024**2)
         contexts = [initial, initial]
         before = s.checkpoint()
         for step, modes in enumerate((("all", "all"), ("zero", "none"), ("none", "none"))):
@@ -121,7 +137,7 @@ def test_training_contexts_share_update(target, family, schedule, memory, cards,
                     window = s.advance_device(args, **kw)
                     cotangents.append(roots(s, window, mode))
                     equivalent(expected, s.result())
-                for action in (lambda:s.snapshot_device(max_bytes=512*1024**2), lambda:s.restore_device(initial)):
+                for action in (lambda:s.snapshot_device(compact=compact, max_bytes=512*1024**2), lambda:s.restore_device(initial)):
                     with pytest.raises(RuntimeError, match="detach"):
                         action()
                 with torch.enable_grad():
@@ -136,7 +152,15 @@ def test_training_contexts_share_update(target, family, schedule, memory, cards,
                     s.restore_device(initial)
                 s.accumulate()
                 oracles[i].detach()
-                contexts[i] = s.snapshot_device(max_bytes=initial.tensor_bytes)
+                contexts[i] = s.snapshot_device(compact=compact, max_bytes=512*1024**2)
+            if compact:
+                dense = s.snapshot_device(max_bytes=512*1024**2)
+                assert contexts[i].tensor_bytes <= dense.tensor_bytes
+                # A failed compact admission leaves the live continuation and
+                # all previously saved handles usable, even with nonempty KV.
+                with pytest.raises(ValueError, match="budget"):
+                    s.snapshot_device(compact=True, max_bytes=contexts[i].tensor_bytes-1)
+                equivalent(expected, s.result())
             opt.step()
             assert s.step().applied and s.accumulated_batches == 0
             saved = s.checkpoint()

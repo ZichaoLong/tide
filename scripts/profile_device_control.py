@@ -65,6 +65,8 @@ def main():
         command.append("--cache")
     if args.check == "peer-resident-accumulation":
         command.extend(("--accumulate", "--resume-devices=0", "--explicit-owners"))
+    if args.check == "peer-resident-compact-contexts":
+        command.extend(("--compact-contexts", "--explicit-owners"))
     if args.check == "peer-resident-contexts":
         command.extend(("--contexts", "--explicit-owners"))
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,

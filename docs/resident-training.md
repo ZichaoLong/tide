@@ -101,9 +101,18 @@ the checkpoint format and default backward/step behavior are unchanged.
 NPU buffers; `restore_device(saved)` switches to it on the **same live owner**.
 The saved buffers contain values/presence/clocks, complete event/fiber KV including
 lengths/bias, selection history, pending identities/values/masks and input ledgers.
-Copying uses whole buffers on their original devices. No numerical state or
-dynamic queue payload is downloaded. Only input-ledger/cut metadata lives on the
-host, as it does at ordinary input boundaries.
+Default saving copies whole buffers on their original devices. Optional
+`snapshot_device(max_bytes=..., compact=True)` (C++ overload `(max_bytes, true)`)
+batches device row selection and gathers only valid pending rows and complete KV
+prefixes, with shared int64 physical-row indices. Numerically zero rows remain
+present. Dense groups are retained if indices would cost more than the saving.
+Restore uses unique-index bulk scatter and resets unused padding/sentinels.
+
+Compaction uses dynamic-shaped nonzero at this explicit detached boundary; its
+output extent requires synchronization. No per-event host loop or CPU numerical
+state/row-index/length-vector export is used. Input-ledger/cut metadata stays on
+the host. These save/restore calls and their synchronization must be included in
+consumer timings; online scheduling and selection remain device-owned.
 
 Save/restore refuse retained windows and an unconsumed backward. They allow an
 existing accumulator and preserve its parameter gradients, generation and
@@ -114,14 +123,19 @@ optimizer. Restoring clears latest-window diagnostics; the next forward records
 its own events. The independent stream supplies its own next input positions.
 
 Each handle reports `cut`, `batch_size` and `tensor_bytes`; its capacity check
-bounds that snapshot's new tensors across owner devices before copying. Other
+bounds that snapshot's saved tensors (including shared packed indices) across
+owner devices before copying payloads. Compact row selection uses additional
+metadata workspace proportional to declared queue/KV capacity; this workspace
+is outside `max_bytes`, as is vendor allocator overhead. Other
 live handles and the active flow still require storage. Handle copies share
 immutable buffers; destroying the last copy releases them. Foreign/empty handles
 are refused before mutation. Device-copy failure poisons the owner. Handles are
 not serializable checkpoints and cannot be transferred to a recreated session.
-The snapshot is still dense capacity storage, not compact KV or automatic sample
-slicing. Consumers must account for all live contexts and preserve the logical
-batch/loss/update boundary when composing this API with accumulation.
+Compact saving changes only the opaque handle layout. Live KV, retained tapes and
+logical capacity are unchanged. Consumers must account for every live handle,
+packing workspace and the active owner, and preserve the logical batch/loss/update
+boundary when composing this API with accumulation. No automatic capacity search
+or full-size fit follows from a smaller snapshot.
 
 Parameter gradients use canonical names, alias sets, packed offsets and separate
 connection flags. Offset -1 identifies an owner without a differentiable use in

@@ -136,6 +136,7 @@ class ResidentTrainingSession {
   // Detached boundary only. Accumulated parameter gradients survive switching;
   // retained windows/unconsumed backward gradients must be handled first.
   ResidentContinuation snapshot_device(Index max_bytes) const;
+  ResidentContinuation snapshot_device(Index max_bytes,bool compact) const;
   void restore_device(const ResidentContinuation&);
   Result result() const; // Explicit diagnostics; never an input to device progression.
   Index cut() const;

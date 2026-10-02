@@ -4,7 +4,7 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** User authorized continued
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest implementation committed/pushed75543a7; its evidence is ready to commit.
+Latest implementation75543a7 and evidence8d97736 are committed/pushed.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -68,7 +68,9 @@ Single lease physical1→npu:0, queue cap120s, parent timeout5400s, child900s.
 Helper launchers/remaining_family_matrix_resume.py schedules exactly10 missing
 children: TimedDAG/Python/streaming-confirm02/03, Settle/Python/prefill and streaming
 screen01 +confirm01–03. Stops on first failure; do not edit live helper/source.
-Current first child streaming-confirm02; inspect sequence for latest status.
+Recipe PID124125 is HELD at streaming-confirm03; confirm02 already passed.
+boundary-hold-compact-contexts.json records identity. Let confirm03 finish naturally
+before compact-context builds/gates; resume promptly afterward, parent deadline05:54UTC.
 No completed-cell reruns. Heavy builds/gates must wait for a measured-child boundary.
 
 Each submatrix20pilot+3×12confirmation processes,1continued warmup+3measured steps,
@@ -81,9 +83,18 @@ Audited, reports pending: TimedDAG/LibTorch/streaming and Settle/LibTorch both
 
 ## Next work and environment
 
-First commit/push current sample-slicing evidence, then reduce dense saved/live
-KV and retained/reverse/journal costs with general device packing, explicit
-capacity admission and small independent semantic gates. Mixed multi-device
+Current uncommitted increment: optional compact device snapshots. Batch nonzero/
+index_select packs pending and complete KV prefixes; unique index_copy restores
+physical positions, dense mode remains available. Synchronization at explicit
+snapshot boundary is documented, not hidden as online scheduling. Source files
+include continuation_pack.*, public overloads, adapters, checks and contract.
+Development at frozen compact-contexts-dev01: both runtime builds PASSED,
+Python18 passed/no skips, standalone compact+dense FP32/FP16 passed four cells
+(32trajectories/768windows/96updates). Ready implementation commit, then freeze
+compact-contexts-clean01, exact-object fresh links, repeat affected immutable
+gates and separate profile/memory. Legacy accumulation marker updated for the
+added explicit compact flag; production objects unchanged after dev gates.
+Live/retained KV and admission integration remain subsequent scale work. Mixed multi-device
 parameter/payload placement and automatic eager admission remain. Actual original
 wide execution, bounded full-size comparisons and F7 are pending. CUDA real
 hardware and other CANN tuples remain target-machine work.

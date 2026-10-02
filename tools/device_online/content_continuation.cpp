@@ -9,8 +9,7 @@ namespace tide::device_online {
 struct SavedContent {
   std::shared_ptr<const int> owner;
   Continuation boundary; // Only CPU identity, input ledger, batch size and cut.
-  std::vector<Tensor> tensors;
-  Index bytes=0;
+  SavedBuffers buffers;
 };
 namespace {
 void synchronize(const std::vector<Tensor>& tensors) {
@@ -48,20 +47,32 @@ void ContentFlow::Impl::reset_window() {
   emission->chunks().zero_();stages.zero_();
 }
 ResidentContinuation ContentFlow::snapshot_device(Index max_bytes) const {
+  return snapshot_device(max_bytes,false);
+}
+ResidentContinuation ContentFlow::snapshot_device(Index max_bytes,bool compact) const {
   if(!impl_||impl_->failed)throw std::logic_error("device continuation unavailable on closed/failed flow");
   if(at::GradMode::is_enabled())throw std::invalid_argument("device continuation requires no-grad");
-  auto& s=*impl_;const auto buffers=s.continuation_tensors();long double bytes=0;
-  for(const auto& x:buffers)bytes+=x.nbytes();
-  if(max_bytes<1||bytes>max_bytes)throw std::invalid_argument("device continuation tensor budget exceeded");
+  auto& s=*impl_;const auto buffers=s.continuation_tensors();
+  if(max_bytes<1)throw std::invalid_argument("device continuation tensor budget exceeded");
   auto saved=std::make_shared<SavedContent>();saved->owner=s.continuation_owner;
-  saved->boundary=s.boundary;saved->bytes=static_cast<Index>(bytes);
-  // Copy whole buffers/groups on their current devices. Never download state,
-  // KV, history, pending coordinates/counts or select individual messages here.
+  saved->boundary=s.boundary;
+  std::vector<ContinuationRows> rows;
+  if(compact) {
+    auto q=s.pending->atoms();rows.push_back({{q.coordinates,q.values},q.valid,0});
+    auto append=[&](std::vector<ContinuationRows> xs){rows.insert(rows.end(),xs.begin(),xs.end());};
+    if(s.sharded_state)append(s.sharded_state->continuation_rows());
+    else {
+      if(s.attention)append(s.attention->continuation_rows());
+      if(s.event_attention)append(s.event_attention->continuation_rows());
+    }
+  }
+  // A compact save synchronizes dynamic extents at this explicit boundary.
+  // All row selection, payload packing and saved numerical state stay on NPU.
   try {
     synchronize(buffers);
-    for(const auto& x:buffers)saved->tensors.push_back(x.clone());
-    synchronize(saved->tensors);
-  }catch(...){s.failed=true;throw;}
+    saved->buffers=save_buffers(buffers,rows,max_bytes);
+    synchronize(saved->buffers.values);
+  }catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   ResidentContinuation out;out.data_=std::move(saved);return out;
 }
 void ContentFlow::restore_device(const ResidentContinuation& saved) {
@@ -71,17 +82,12 @@ void ContentFlow::restore_device(const ResidentContinuation& saved) {
   if(!saved.data_||saved.data_->owner!=s.continuation_owner)
     throw std::invalid_argument("device continuation belongs to a different session");
   const auto& value=*saved.data_;const auto buffers=s.continuation_tensors();
-  if(buffers.size()!=value.tensors.size())throw std::logic_error("device continuation layout changed");
-  for(size_t i=0;i<buffers.size();++i) {
-    const auto& a=buffers[i];const auto& b=value.tensors[i];
-    if(a.device()!=b.device()||a.scalar_type()!=b.scalar_type()||a.sizes()!=b.sizes())
-      throw std::logic_error("device continuation tensor layout changed");
-  }
+  check_buffers(buffers,value.buffers);
   // A rejected ownership/layout check cannot change live state. Runtime failure
   // during copies poisons this flow, as with a failed forward submission.
   try {
     synchronize(buffers);
-    for(size_t i=0;i<buffers.size();++i)buffers[i].copy_(value.tensors[i]);
+    restore_buffers(buffers,value.buffers);
     s.reset_window();s.external.valid.zero_();s.stop.fill_(value.boundary.cut);
     synchronize(buffers);
     s.boundary=value.boundary;s.window_start=s.boundary.cut;
@@ -97,6 +103,6 @@ Index ResidentContinuation::batch_size() const {
   if(!data_)throw std::logic_error("empty device continuation");return data_->boundary.batch_size;
 }
 Index ResidentContinuation::tensor_bytes() const {
-  if(!data_)throw std::logic_error("empty device continuation");return data_->bytes;
+  if(!data_)throw std::logic_error("empty device continuation");return data_->buffers.bytes;
 }
 } // namespace tide

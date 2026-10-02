@@ -260,6 +260,9 @@ independent streams within their originating live owner. They preserve complete
 pending/KV/history/input-ledger semantics while sharing current parameters and
 any accumulated parameter gradients. Save/restore refuse retained differentiation;
 this is not a disk checkpoint or an implicit cross-stream gradient connection.
+Optional device row compaction preserves valid pending identities and complete
+cache prefixes, including zero-valued entries. Dynamic allocation synchronizes
+at the explicit detached snapshot boundary; live scheduling remains on device.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional
 [placement adapter](execution-placement.md) permits CPU Read/control/ranking
 with NPU payloads and retains autograd across those explicit transfers. Each

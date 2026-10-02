@@ -208,9 +208,12 @@ MARKERS["resident-sharded-training"] = "resident-sharded-session: passed"
 KERNELS["resident-sharded-training"] = "tide_state_reverse_"
 
 CHECKS["peer-resident-accumulation"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
-MARKERS["peer-resident-accumulation"] = "accumulation=1 contexts=0 public_api=true"
+MARKERS["peer-resident-accumulation"] = "accumulation=1 compact=0 contexts=0 public_api=true"
 KERNELS["peer-resident-accumulation"] = "tide_parameter_accumulate"
 
 CHECKS["peer-resident-contexts"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
+CHECKS["peer-resident-compact-contexts"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
 MARKERS["peer-resident-contexts"] = "contexts=1 public_api=true"
+MARKERS["peer-resident-compact-contexts"] = "compact=1 contexts=1 public_api=true"
 KERNELS["peer-resident-contexts"] = "tide_parameter_accumulate"
+KERNELS["peer-resident-compact-contexts"] = "tide_parameter_accumulate"
