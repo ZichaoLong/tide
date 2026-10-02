@@ -258,7 +258,8 @@ Persistent state for all samples and full model/optimizer storage remain live;
 this reduces activation lifetime, not those fixed costs. All work stays inside
 the complete-step timer. The resident consumer explicitly rejects this option
 until it has a corresponding VJP accumulation/state-switching implementation.
-Qualification of this increment is tracked in STATUS.
+The increment is qualified on clean `e6cc52b` (CPU60/NPU38 and separate memory
+observations; [evidence](evidence/consumer-sample-chunks-20261002.md)).
 
 Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
 pending. The deliberately paused historical CPU job is not managed by this CLI.

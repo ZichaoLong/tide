@@ -158,6 +158,11 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | representative TimedDAG/LibTorch/prefill five-preset screen qualified on clean0b1a5aa:72 fresh processes,FP32 exact event/output/cut checks,three repetitions and four separate Attention profiles ([evidence](evidence/representative-preset-screen-20261002.md)); bounded host-policy comparison qualified on clean2222d9d:28 pilot +36 confirmation processes and one selected-policy profile;CPU16 packed wins inference,resident wins training ([evidence](evidence/representative-host-policy-20261002.md)); PDG/LibTorch prefill+streaming qualified on clean80dae6e:40pilot+72confirmation processes ([evidence](evidence/representative-pdg-matrix-20261002.md)); other family/client/schedule cells and full-size remain pending; historical CPU Attention supplementary |
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed minimal records/profile/evidence/support claims and no live task jobs | pending |
 
+F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
+whole-batch loss/gradient/update equivalence and separate medium memory observations
+([evidence](evidence/consumer-sample-chunks-20261002.md)). Explicit maximum only;
+automatic eager admission, mixed multi-device and resident sample slicing remain open.
+
 F4/F5 optional training diagnostics are qualified on cleanca26b47: 51 public tests,
 four standalone cells, same-shape allocator reduction 16.26 MiB. Required VJP
 journals remain; no throughput or full-size claim
