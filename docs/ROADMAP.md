@@ -162,8 +162,9 @@ F4/F5 explicit device gradient accumulation is qualified on clean830904b:
 FP32/FP16,16trajectories/384windows/48updates,Python21,no skips; separate trace
 without observed AiCPU ([evidence](evidence/resident-accumulation-20261002.md)).
 It explicitly detaches between backward groups and performs one final optimizer
-update. Independent device continuation switching is implemented with development
-gates (standalone FP32/FP16, Python30); immutable qualification remains pending.
+update. Independent device continuation switching is qualified on cleanc96ebcd:
+FP32/FP16,32trajectories/768windows/96updates including accumulation regression,
+Python30,no skips, independent trace0AiCPU ([evidence](evidence/resident-contexts-20261002.md)).
 Resident consumer sample slicing remains pending; see [training contract](resident-training.md).
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,

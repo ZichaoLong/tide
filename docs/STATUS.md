@@ -4,7 +4,7 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** The user authorized conti
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest committed/pushed source a3c8d4b. Reference repositories and ObsidianVault are read-only.
+Latest committed/pushed source c96ebcd. Reference repositories and ObsidianVault are read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. The overall goal remains incomplete.
 
@@ -42,41 +42,34 @@ Do not rerun the unchanged 8,954 CPU checks. Own heavy timings are serial.
 - Earlier optimizer recomputation, full-consumer capacity and append-only fiber
   staging are indexed in ROADMAP. They do not establish original wide execution.
 
-## Current uncommitted increment and bounded gates
+## Latest qualified increment
 
-Opaque device continuation snapshot/restore on the same live owner, covering
-single/sharded inference and detached training. Saves complete NPU state, clocks,
-presence, event/fiber KV, selection history and pending payloads; host input
-ledger/cut metadata only. Parameters/optimizer/accumulator shared, no tape copied.
-Foreign handles and retained/unconsumed gradients refused. Dense snapshots are
-not compact KV or automatic sample slicing. See resident-training.md.
+Device continuation switching implementation c96ebcd is pushed. Five clean jobs
+PASSED at TASK/sources/contexts-clean01: build-contexts-{standalone,python}-clean01
+and contexts-{components,public,profile}-clean01. C++768windows/96updates including
+accumulation regression, Python30/no skips. Trace26159Vector/350AI_CORE/363MIX_AIV,
+0AiCPU. Audit launchers/contexts_evidence.py passed. [Evidence](evidence/resident-contexts-20261002.md).
+Development test-interface failures are retained in public-dev01; dev02 passed.
+Do not repeat these gates. Latest resident libraries contexts-{standalone,python}-clean01.
+Same-live-owner opaque snapshots preserve complete NPU numerical continuation;
+parameters/optimizer/accumulator shared, no tape copied. Detached boundaries only.
+Snapshots are dense; resident consumer slicing and compact KV remain pending.
 
-TASK=/mi/data2T/zlong/tide-execution-flows. Frozen dirty source TASK/sources/contexts-dev01
-at a3c8d4b plus recorded patch. build-contexts-{standalone,python}-dev01 PASSED.
-Development gates passed: contexts-components-dev01 (contexts+accumulation,
-FP32/FP16,768windows/96updates) and contexts-public-dev02 (30pass/no skips:
-9contexts +8accumulation +13ordinary training regressions). First public-dev01
-retains two test-fixture failures: identity node field and Settle projection
-identity; production unchanged, tolerance unchanged. Corrected dev02 passes.
-Records TASK/runs/NAME/{status.json,task.log,queue.json}; public junit.xml;
-components gate/result.json. No contexts jobs remain live.
-Build helper launchers/build_contexts.py rebuilds affected units, reuses exact
-core/CANN, fresh links. Clean qualification may --reuse-host an exact dev build.
-Next: commit tested implementation, create
-contexts-clean01 at that commit, run same finite gates plus one independent
-profile, audit and commit evidence. Then implement resident consumer slicing.
+Next: resident consumer sample slicing with full logical-batch loss/global sample
+coordinates/one optimizer update. Include all saved context buffers and gradient
+accumulators in simultaneous-live capacity estimates, then validate small tails
+and multi-window continuation before mid-scale memory calibration.
 
-## Finite representative performance matrix — RECIPE HELD
+## Finite representative performance matrix — RUNNING
 
 Parent tide-execution-flows-matrix-remaining01.service, fixed clean80dae6e14d41614d0cdb1056bb39b57ca10d07ed
 at TASK/sources/fiber-append-clean01. Started01:58:22UTC, timeout9000s, deadline
-04:28:22UTC. Leases physical3 → logicalnpu:0. Only recipe PID3771316 is SIGSTOP;
-/proc start identity1849248082. boundary-hold-contexts.json is HELD. The measured
-child matrix-timed-dag-python-prefill-confirm03 finished naturally PASSED03:39:55UTC.
-Builds/gates may run now. Resume recipe promptly after bounded gates/profile;
-verify PID identity before SIGCONT, atomically record resumed. Do not signal
-wrappers, edit running helpers/frozen source or touch others' device processes.
-Prior holds are resumed. Outer deadline continues while recipe is held.
+04:28:22UTC. Leases physical3 → logicalnpu:0. Recipe PID3771316 (start1849248082)
+is RESUMED at03:51:32UTC; all boundary-hold*.json records resumed. Measured child
+matrix-timed-dag-python-prefill-confirm03 passed naturally; next missing cells
+continue. No measured sample interrupted. Contexts builds/gates/profile finished.
+Do not signal wrappers, edit running helpers/frozen source or touch others' jobs.
+Read TASK/runs/matrix-remaining01/sequence.json and child status for current state.
 
 Finite34-child recipe launchers/remaining_family_matrix.py; do not modify it or
 family_matrix_screen.py while live. Each submatrix:20pilot +3×12confirmation
@@ -87,8 +80,10 @@ No worker search or completed-cell reruns. Audits use family_matrix_evidence.py.
 Completed: TimedDAG/LibTorch/prefill (host-policy evidence8695804); PDG/LibTorch
 both schedules (af263b5); TimedDAG/LibTorch/streaming and Settle/LibTorch both modes
 (audited TASK/libtorch-matrix-extra-audit.json, report pending); TimedDAG/Python/prefill
-all repeats (audit pending). Missing: TimedDAG/Python/streaming, Settle/Python both.
+all repeats (audited TASK/python-prefill-matrix-audit.json). Missing: TimedDAG/Python/streaming, Settle/Python both.
 If outer timeout occurs, retain completed children and resume only missing items.
+
+TASK=/mi/data2T/zlong/tide-execution-flows.
 
 ## Environment and safe resumption
 
@@ -103,13 +98,13 @@ Last free space data206GiB/root13GiB. Atomic handoff writes: durable_records.rep
 Current timing lock TASK/online-measurement.lock.
 
 Qualified eager binaries TASK/builds/sample-chunks-{cpu,npu}-clean01/consumer/tidegraph-online-bench.
-Qualified resident libraries TASK/builds/accumulation-{standalone,python}-clean01.
+Qualified resident libraries TASK/builds/contexts-{standalone,python}-clean01.
 Core builds placement-{cpu,npu,npu-python}-clean01. Separate standalone/Python
 runtime owners; never link both. Source/header/options-checked reuse only.
 
 ## Remaining scale work
 
-1. Finish device continuation qualification, then resident physical sample
+1. Implement resident physical sample
    slicing using one parameter/optimizer owner plus accumulation and independent
    contexts. Preserve full logical-batch loss/global coordinates/one update.
 2. Dense live KV, retained/reverse/journal memory; simultaneous-live accounting
