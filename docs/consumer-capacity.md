@@ -6,7 +6,8 @@ memory for every logical NPU before constructing model tensors or sessions.
 positive value caps each card at the smaller of that value and its driver free
 memory. This is an incremental run budget, not total physical HBM or an allocator
 quota. Existing allocations are excluded from the budget and recorded separately.
-The implementation is under qualification; see [STATUS](STATUS.md).
+The local small/D128 qualification is recorded in
+[consumer-capacity evidence](evidence/consumer-capacity-20261002.md).
 
 The planner uses topology and declared module shapes, never a CPU execution,
 observed reference events or a numerical prepass. Its static placement is the

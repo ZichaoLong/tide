@@ -65,45 +65,55 @@ Nested budget divisions reviewed; clean calibration passed with32GiB backward,
 trace1024 and unchanged KV128. Actual per-card training peak<400MiB demonstrates
 that local envelopes cannot simply be summed to obtain total HBM admission.
 
-## Current implementation awaiting immutable qualification
+## Latest completed qualification
 
-Resident Add/Attention complete-consumer capacity admission is implemented in
-matching Torch-free C++/Python planners. It reads per-device driver availability,
-accounts for simultaneous tensor lifetimes, reserves headroom and reduces only
-physical rows. CLI device-memory-bytes and offline plan_execution_flow.py added.
-Core/resident ABI unchanged. Current scope/limits: docs/consumer-capacity.md.
+Complete resident Add/Attention capacity admission implementation
+0b1a5aa68061f37aef1f4387cf28abb0c77a464f is committed/pushed. All8 fixed-source
+jobs PASSED: build-capacity-{consumer,cpu}-clean01; capacity-{native,libtorch,
+boundaries,inference,cpu,calibration}-clean01. CPU8/NPU19,zero skips;24 static
+C++/Python shape comparisons; eight actual FP32/FP16 Add/Attention continued
+training comparisons with forced physical splitting. Core/resident ABI unchanged.
+No new device kernels or full-suite reruns. No active task jobs except suspended
+historical CPU. Report/audit: evidence/consumer-capacity-20261002.{md,json}.
+Audit command: python TASK/launchers/capacity_evidence.py 0b1a5aa68061f37aef1f4387cf28abb0c77a464f
 
-Development source capacity-admission-dev05. Terminal passed: static-dev02(4
-checks including24 cross-language shape cases); build-capacity-cpu-dev01;
-build-capacity-consumer-dev03; capacity-cpu-dev01(8); capacity-native-dev02(5);
-capacity-calibration-dev01; capacity-libtorch-dev01(4). All current jobs terminal.
-Observed training peaks857463296/685577216 bytes fit estimates2756542808/2114316504. Builds at TASK/builds/capacity-{cpu-dev01,consumer-dev03}; consumer backend
-remains optimizer-recompute-clean01, Python backend optimizer-recompute-python-clean01.
+Source capacity-admission-clean01. Current standalone consumers:
+TASK/builds/capacity-cpu-clean01/consumer/tidegraph-online-bench and
+TASK/builds/capacity-consumer-clean01/consumer/tidegraph-online-bench.
+Backends remain optimizer-recompute-clean01 / optimizer-recompute-python-clean01.
+NPU client uses current package, source/header/options-verified object reuse,
+fresh link/loader; CPU client fresh compile. Backend/core identities unchanged.
 
-Calibration17384240 parameters,128 body nodes,D128/B2/T2,FP32 AdamW,2NPUs,4
-continued windows/2updates:3GiB incremental/card cap automatically reduces
-Full/emission/reverse rows16→1,attention rows8→1,keys128→8,head1024→64.
-Output8/cut80; loss5.662106990814209 differs4.77e-7 from independent earlierCPU
-5.662106513977051. This is capacity calibration, not formal throughput.
+CLI device-memory-bytes (0:driver free) and Torch-free plan_execution_flow.py
+cover declared complete resident consumers. Estimates include simultaneous
+lifetimes and headroom; only physical rows shrink. They are not allocator quotas
+or arbitrary module/vendor guarantees. CPU/mixed total admission and scale
+placement remain open. Do not claim full-size readiness from this calibration.
 
-Retain failures: invalid initial fanout/local-span test fixture; static-dev01
-inconsistent overflow message before checked arithmetic; consumer build-dev01
-SDK header path and dev02 direct ACL symbol link; native-dev01 Python limits
-has no diagnostics member. Fixed with matched SDK declaration plus lookup in
-already loaded runtime and diagnostics from consumer options. No OOM or semantic
-tolerance relaxation. Build-dev03 reused completed ELF objects from failed link,
-with source/header/compile-option identities verified; failed record unchanged.
+17384240-parameter Attention,D128/B2/T2,128 nodes/544 edges,FP32 AdamW,2 cards:
+3GiB incremental/card triggers four reductions: Full/emission/reverse16→1,
+attention8→1,keys128→8,head1024→64. Observed peaks857463296/685577216 bytes,
+estimates2756542808/2114316504. Same logical capacities,4continued windows/2
+updates incl warmup. Loss5.662106990814209 vs independentCPU5.662106513977051;
+outputs8/cut80. Not formal throughput. No new profile claim.
 
-Next: commit tested implementation and push; freeze exact commit, source-verified
-consumer rebuild/relink, affected CPU/NPU gates and capped calibration; evidence
-separate. Do not repeat core/backend or old full CPU matrix. No pause authorized.
+Retain failed capacity-static-dev01 (overflow diagnostic ordering),
+build-capacity-consumer-dev01 (SDK header include), dev02 (ACL direct linkage),
+and capacity-native-dev01 (Python diagnostics option adapter). Corrected without
+OOM or tolerance relaxation. NPU driver query resolves the already loaded
+runtime. Failed-link completed objects were dependency-checked for dev03 reuse;
+failed records remain failed. Initial fast-test topology fixture was also fixed.
+
+Reports/ROADMAP/status are ready for the separate evidence commit. Then continue
+representative five-preset screening and scale-enabling work; no pause requested.
 
 ## Next work
 
-Total per-device memory admission and safe physical splitting → representative
-five-preset screening → full-size F6 → F7 final qualification/target handoff.
+Representative five-preset screening and scale memory/placement work → full-size
+F6 → F7 final qualification/target handoff. Resident consumer estimated admission
+is now qualified at small/D128 scales; further shapes need calibration.
 Include parameters,state/KV,retained immutable banks/journals/roots,physical and
-canonical gradients,FP32 masters/slots/proposals,communication,embedding/head/loss,
+canonical gradients,FP32 masters/slots,communication,embedding/head/loss,
 construction transients,CANN workspace and calibrated headroom. Existing local
 ContentBudget,reverse budgets and head budget are not total admission.
 Avoid repeated trial launches for nested budget limits; inspect shape formulas

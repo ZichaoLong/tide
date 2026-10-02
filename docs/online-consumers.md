@@ -106,8 +106,9 @@ CPU observables; normal training does not export graph state.
 Explicit placement partitions physical projection banks and partial gradients on
 Full owners; no dense coordinator replica is assembled. This is qualified on
 [cleanacb84f3](evidence/resident-projection-shards-20261002.md). Complete resident
-[consumer capacity admission](consumer-capacity.md) is implemented and under
-qualification. Local reverse safe splitting is qualified below; public multi-device
+[consumer capacity admission](consumer-capacity.md) is qualified on
+[clean0b1a5aa](evidence/consumer-capacity-20261002.md) at small/D128 scales.
+Local reverse safe splitting is qualified below; public multi-device
 inference is qualified on [clean7329c71](evidence/public-sharded-inference-20261002.md).
 Actual FP16 consumers and bounded packed head rows are qualified on
 [cleand178b86](evidence/resident-consumer-head-20261002.md); full-size performance
