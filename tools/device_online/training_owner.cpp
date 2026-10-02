@@ -11,7 +11,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   training_detail::no_grad();
   if(d.type()!=c10::DeviceType::PrivateUse1||d.index()<0)
     throw std::invalid_argument("resident training requires an explicit logical NPU");
-  if(!l.forward.diagnostics||l.windows<1||l.retained_bytes<1||l.backward_bytes<1||l.optimizer_bytes<1
+  if(l.forward.trace<1||l.windows<1||l.retained_bytes<1||l.backward_bytes<1||l.optimizer_bytes<1
       ||l.program_workspace_bytes<1||l.reverse_chunk_rows<1)
     throw std::invalid_argument("resident training requires recorded journals and positive memory/window limits");
   if(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw)throw std::invalid_argument("unknown resident optimizer");
@@ -45,7 +45,7 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
     }
     optimizer->restore(checkpoint->state);generation=checkpoint->generation;next_token=checkpoint->next_token;
   }
-  flow=std::make_unique<ContentFlow>(graph,model,training_detail::freeze_continuation(q),device,l.forward);
+  flow=std::make_unique<ContentFlow>(graph,model,training_detail::freeze_continuation(q),device,l.forward,true);
   // Profile preflight happens before any input window can be executed.
   const auto tape=flow->reverse_tape();const auto state=flow->state_device();
   const long double bytes=reverse_tape_bytes(tape)+static_cast<long double>(state.first.numel())*state.first.element_size()+state.second.numel()+256;

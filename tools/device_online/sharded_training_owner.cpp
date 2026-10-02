@@ -30,7 +30,7 @@ ShardedTrainingOwner::Impl::Impl(Graph g,Model m,const Continuation& q,at::Devic
   no_grad();
   if(placement.devices.empty()||placement.devices[0]!=d||placement.devices.size()>16)
     throw std::invalid_argument("sharded training devices must start with the explicit coordinator");
-  if(!l.forward.diagnostics||l.windows<1||l.retained_bytes<1||l.backward_bytes<1||l.optimizer_bytes<1
+  if(l.forward.trace<1||l.windows<1||l.retained_bytes<1||l.backward_bytes<1||l.optimizer_bytes<1
       ||l.program_workspace_bytes<1||l.reverse_chunk_rows<1)
     throw std::invalid_argument("sharded training requires journals and positive finite limits");
   if(k!=ResidentOptimizerKind::sgd&&k!=ResidentOptimizerKind::adamw)throw std::invalid_argument("unknown resident optimizer");
@@ -57,7 +57,7 @@ ShardedTrainingOwner::Impl::Impl(Graph g,Model m,const Continuation& q,at::Devic
   }
   for(auto& group:groups)std::sort(group.parameters.begin(),group.parameters.end());
   if(checkpoint){restore_optimizer(*checkpoint);generation=checkpoint->generation;next_token=checkpoint->next_token;}
-  flow=std::make_unique<ContentFlow>(graph,model,freeze_continuation(q),d,l.forward,ModelPlacement{full,state});
+  flow=std::make_unique<ContentFlow>(graph,model,freeze_continuation(q),d,l.forward,ModelPlacement{full,state},true);
   const auto tape=flow->sharded_reverse_tape();const auto values=flow->state_shards_device();
   long double bytes=sharded_reverse_tape_bytes(tape)+256;
   for(const auto& v:values)bytes+=static_cast<long double>(v.values.nbytes())+v.present.nbytes();

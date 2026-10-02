@@ -29,9 +29,9 @@ def test_resident_python_training(target, family, schedule, kind, tmp_path):
     training_case(target, family, schedule, kind, tmp_path)
 
 
-def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, placement=None, model_device=None, training_limits=None, root_modes=("all", "zero", "none"), **read_options):
+def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggregation="sum", emit_mode="hard", zeta=1.0, placement=None, model_device=None, training_limits=None, root_modes=("all", "zero", "none"), trace=True, **read_options):
     r = runtime(family, target, schedule, full, aggregation, emit_mode, zeta, model_device=model_device,
-                resident_workspace_bytes=1024**3 if placement else 64*1024**2, **read_options)
+                resident_workspace_bytes=1024**3 if placement else 64*1024**2, trace=trace, **read_options)
     cpu = runtime(family, "cpu", full=full, aggregation=aggregation, mode=emit_mode, zeta=zeta, **read_options)
     record = r.manifest()["resident"]
     assert record["mode"] == emit_mode and record["zeta"] == zeta
@@ -63,7 +63,14 @@ def training_case(target, family, schedule, kind, tmp_path, full="tanh", aggrega
                 with torch.npu.stream(stream):
                     window = session.advance_device(args, **kw)
                     cotangents.append(roots(session, window, mode))
-                equivalent(reference, session.result())
+                observed = session.result()
+                assert bool(observed.stats["diagnostics"]) == trace
+                if trace:
+                    equivalent(reference, observed)
+                else:
+                    assert observed.trace == [] and observed.messages == []
+                    equivalent(reference.outputs, observed.outputs)
+                    equivalent(reference.continuation, observed.continuation)
             with pytest.raises(RuntimeError, match="outstanding|unconsumed|detach"):
                 session.checkpoint()
             with torch.enable_grad():

@@ -45,6 +45,10 @@ class ContentFlow {
   // Internal full + state/KV forward placement; reverse/public training uses a
   // separate capability gate until compact owner tapes are integrated.
   ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,ModelPlacement);
+  // Training keeps the VJP journals independently of optional Result trace and
+  // message exports. Public limits/ABI stay unchanged; this is an owner-only path.
+  ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,bool retain_backward);
+  ContentFlow(Graph,Model,const Continuation&,at::Device,ContentLimits,ModelPlacement,bool retain_backward);
   ~ContentFlow();
   ContentFlow(const ContentFlow&)=delete;
   ContentFlow& operator=(const ContentFlow&)=delete;

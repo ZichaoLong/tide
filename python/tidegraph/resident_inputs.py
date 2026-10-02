@@ -30,6 +30,8 @@ def forward_limits(runtime, *, training=False):
             value = getattr(runtime.engine.module.ChunkPolicy, value)
         setattr(limits, name, value)
     limits.prefill = runtime.options.prefill
-    limits.diagnostics = training or runtime.options.trace
+    # The training owner records its VJP independently. This flag requests the
+    # optional full Result trace/messages, matching inference's trace option.
+    limits.diagnostics = runtime.options.trace
     limits.mode, limits.zeta = runtime.options.mode, runtime.options.zeta
     return limits

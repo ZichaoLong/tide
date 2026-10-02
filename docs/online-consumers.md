@@ -8,6 +8,11 @@ head to core graph semantics. CPU FP32/FP64 and directed mixed NPU FP32 complete
 recorded at [clean fe2d886](evidence/online-consumers-20261002.md):120 CPU checks
 and18 NPU cases, no skips. This is small-model correctness, not full-size throughput.
 
+Resident training requests full Result trace/messages only with `--diagnostics`
+(or a Python diagnostic observer). Its backward journals remain enabled in all
+training runs. This avoids retaining export-only copies in ordinary benchmarks;
+see [the training contract](resident-training.md) and STATUS for qualification.
+
 ## Workload and parameters
 
 `prepare_execution_flow.py` now defaults to `--protocol continuous`, schema

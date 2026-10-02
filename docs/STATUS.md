@@ -1,166 +1,161 @@
 # Current handoff
 
-Updated 2026-10-02. **ACTIVE: user authorized continued execution and pushes.**
-No pause instruction. No subagents. Reference repositories and ObsidianVault are
-read-only. Repository /home/zlong/llm/graph-execution-foundation resolves to
-/var/tmp/zlong-graph-execution-foundation/repository; branch graph-execution-foundation.
-[execution-flows.md](execution-flows.md) is the contract; [ROADMAP F1–F7](ROADMAP.md)
-is the only backlog. Overall task remains incomplete.
+Updated 2026-10-02. **ACTIVE; user authorized continuing implementation, commits
+and pushes. No pause instruction. No subagents.** Reference repositories and
+ObsidianVault are read-only. Repository resolves to
+/var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
+Previous evidence9be8e52 is pushed; training-record implementation is now being committed.
+[execution-flows.md](execution-flows.md) is the contract;
+[ROADMAP F1–F7](ROADMAP.md) is the only backlog. Overall task remains incomplete.
 
 ## Contract and working policy
 
-Every candidate independently consumes common inputs/parameters/initial state;
-never CPU reference events/routes/results/gradients. General online greedy accepts
-legal topology/input including positive-delay PDG feedback, with natural streaming
-fallback. Preserve int64, stable order, parallel-edge identity, missing/zero
-messages and None/zero gradients. Performance: PDG LibTorch; TimedDAG/Settle
-LibTorch+PyTorch; CPU/NPU × streaming/prefill × inference/complete training.
-Python resident is a C++/CANN client, not an independent PyTorch scheduler.
-Five presets and fine switches remain; FP32 main, FP16 separate. Training means
-loss/VJP/optimizer/continuation/throughput, not downstream model convergence.
-Contract outranks run-ml-experiments; minimal existing records, Trackio nonblocking.
-Only affected gates, not unchanged8,954 CPU checks. Implementation commit →
-immutable qualification → evidence commit; push each. Never edit live-job inputs.
+Each candidate independently consumes shared inputs/parameters/initial state;
+never reference events/routes/results/gradients. General online greedy accepts
+legal topology/input, including positive-delay PDG feedback; natural streaming
+fallback is valid. Preserve int64, stable order, parallel-edge identity,
+missing/zero messages, None/zero gradients and complete continuation.
+Performance: PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch;
+CPU/NPU × streaming/prefill × inference/complete training, five presets and fine
+switches. Python resident is a native C++/CANN client. FP32 main, FP16 separate.
+Training means loss/VJP/optimizer/continuation/throughput, not downstream convergence.
+The contract outranks run-ml-experiments; existing minimal records suffice.
+Implementation commit → immutable affected qualification → separate evidence
+commit; push each. Do not rerun unchanged8,954 CPU checks or edit live-job inputs.
 
-## Completed; do not repeat
+## Completed evidence; do not repeat
 
-Latest implementation2222d9db25a234eb0c739baf11bdccfffa2c5f5e is committed/pushed.
-Native consumer --workers/--packed-sources/--batch-next qualified CPU11/NPU10,
-zero skips,16 complete-training comparisons plus resident CLI/budget regressions.
-Four fixed-source jobs passed:build-host-execution-{cpu,npu}-clean01 and
-host-execution-{cpu,npu}-clean01. Core/resident ABI and kernels unchanged.
-CPU fresh consumer build; NPU11 source/header/options-verified reused objects,
-fresh link/loader, byte-verified qualified dependencies. Report/audit:
-[evidence](evidence/consumer-host-execution-20261002.md).
+- Complete consumer admission, physical splitting and early refusal:
+  clean0b1a5aa, CPU8/NPU19, eight jobs;
+  [consumer capacity](evidence/consumer-capacity-20261002.md).
+- Native workers/packed-source/batch-next controls: clean2222d9d,
+  CPU11/NPU10, no skips,16 complete-training comparisons;
+  [host execution](evidence/consumer-host-execution-20261002.md).
+- TimedDAG/LibTorch/prefill five-preset screen and finite host-policy tuning:
+  CPU16packed/mixed4packed selected, ATen/BLAS1, three fresh confirmations.
+  Resident/CPU throughput: Add inference0.833×,training1.549×;
+  Attention inference0.855×,training1.126×. CPU wins short-process totals.
+  No observed AiCPU in four initial and one selected-mixed profiles;
+  host launches/synchronization dominate mixed. Not full-size.
+  [Host policy](evidence/representative-host-policy-20261002.md), committed8695804.
+- Append-only fiber KV proposal staging: clean80dae6e, seven jobs,
+  CPU4/public NPU33/four component cells. Same D128 Attention allocator peak
+  2,560,387,072→2,426,168,320bytes, reduction128.001MiB;
+  exact loss/output/cut/work counts, no throughput claim.
+  [Fiber append](evidence/resident-fiber-append-20261002.md), committed9be8e52.
+  Retained journals/live KV/reverse storage remain scale limitations.
 
-Earlier complete-consumer capacity admission0b1a5aa passed eight jobs,CPU8/NPU19,
-24 cross-language plans,eight forced-splitting FP32/FP16 training cases,D128
-calibration. See consumer-capacity.md and evidence/consumer-capacity-20261002.md.
-Shape estimates concern simultaneous lifetimes and physical chunks; they are
-not allocator quotas or arbitrary module/vendor guarantees.
-Earlier public sharded training/FP16/continuation/checkpoint/compact banks/
-canonical publication/optimizer recomputation remain qualified, indexed by F4/F5.
-
-Representative five-preset evidence78190e3 is pushed:source0b1a5aa,72 fresh
-processes +four Attention profiles,TimedDAG/LibTorch/prefill,Add/Attention,
-inference/training,five FP32 presets +separate resident FP16,CPU workers1/ATen1.
-Mixed-a wins among mixed presets. No observed AiCPU in the four traces. FP16
-changes events/loss; it is a separate precision trajectory,not FP32 parity.
-
-Bounded host-policy pilot and confirmation are finished on clean2222d9d:
-host-policy-pilot01(28cells),host-policy-confirm0{1,2,3}(36fresh processes),
-host-policy-profile01 all PASSED. No further worker search/repeats needed.
-Pilot CPU(default1,packed1/4/16) and mixed-a(default1,packed1/4) selects CPU16
-packed and mixed-a4 packed in all4groups. Packed enables both switches.
-Confirmations each1continued warmup+3measured steps,2windows/64tokens per step,
-FP32,ATen/BLAS1,one leased NPU,rotated order,own heavy measurements serial.
-Event/output/cut checks exact,loss<1e-5. Median seconds per complete step:
-- Add inference CPU0.131925,mixed1.168905,resident0.158360 (resident0.833×CPU throughput).
-- Add training CPU0.560248,mixed3.173613,resident0.361768 (1.549×).
-- Attention inference CPU0.253683,mixed2.473379,resident0.296540 (0.855×).
-- Attention training CPU1.180089,mixed5.185804,resident1.047770 (1.126×).
-All four short-process comparisons including startup favor CPU. Selected mixed
-profile:275217tasks,265753host launches,16502sync copies,no observed AiCPU;
-no trace-loss/capacity warning. Task sum is not wall time. Not full-size/F6-wide.
-Report:evidence/representative-host-policy-20261002.{md,json}.
-Audits passed:
-python TASK/launchers/host_execution_evidence.py 2222d9db25a234eb0c739baf11bdccfffa2c5f5e
-python TASK/launchers/host_policy_evidence.py 2222d9db25a234eb0c739baf11bdccfffa2c5f5e
-All above evidence is committed/pushed at8695804. No repeat needed.
-Allocator diagnosis allocator-resident02 PASSED,unchanged clean2222d9d,
-one Python-owned resident Attention FP32 complete two-window AdamW step.
-TorchNPU history records4398 events,below100000 bound;all1437 allocations freed.
-Eight snapshots,total<5MiB raw,stored TASK/runs/allocator-resident02/diagnosis/.
-Allocator peak2,560,387,072bytes; useful C++ frame attribution is available.
-No timing claim. allocator-resident01 failed before construction because the
-launcher supplied plugin-file instead of build-directory; retained unchanged.
-
-Fiber KV proposal storage improvement is implemented/committed/pushed at
-80dae6e14d41614d0cdb1056bb39b57ca10d07ed. Clean snapshot fiber-append-clean01.
-All7fixed-source jobs PASSED:build-fiber-append-{standalone,python,consumer}-clean01,
-fiber-append-{capacity,components,public,allocator}-clean01. CPU4(with24cross-language
-plans),NPU33,no skips;4component cells include FP32/FP16 retained152trajectories/
-608windows each. Development same gates passed. No CANN kernel/public ABI change;
-2private host objects source-verified reused,otherwise fresh links/loader checks.
-Same-shape allocator peak falls2,560,387,072→2,426,168,320bytes,exact134,218,752
-byte decrease. Loss/output/cut/event/training statistics identical. History is
-bounded,all allocations freed;no throughput claim. Baseline allocator-resident02;
-new TASK/runs/fiber-append-allocator-clean01. Complete live KV,retained journals/
-reverse storage still limit scale. Removed wide proposal size~480GiB is static,
-not a measured full-size peak or proof of fit.
-Audit PASSED:python TASK/launchers/fiber_append_evidence.py 80dae6e14d41614d0cdb1056bb39b57ca10d07ed
-Report docs/evidence/resident-fiber-append-20261002.{md,json}.
-No active build/correctness/allocator job remains. Commit/push this evidence,
-then begin the remaining representative matrix. No additional tuning of the
-already-completed TimedDAG/LibTorch/prefill host-policy screen.
-
-## Current source, builds and inputs
+## Finite representative matrix and temporary launch hold
 
 TASK=/mi/data2T/zlong/tide-execution-flows.
-Frozen source TASK/sources/fiber-append-clean01(clean80dae6e).
-Current standalone consumers:CPU TASK/builds/host-execution-cpu-clean01/consumer/tidegraph-online-bench
-(unchanged CPU reachable sources);NPU TASK/builds/fiber-append-consumer-clean01/consumer/tidegraph-online-bench.
-Core builds placement-{cpu,npu,npu-python}-clean01; resident backends
-fiber-append-standalone-clean01 / fiber-append-python-clean01.
-Independent standalone/Python-owned runtimes must remain separate.
-Representative packets TASK/inputs/screening-representative-{add,attention}01:
-128nodes/544edges,D128/B8/T4/V257,clear=true,8,995,632/17,384,240parameters.
-Resident queue/arrivals4096,outputs128,trace8192,KVtrace65536,forward8GiB,
-retained8GiB,backward128GiB,optimizer4GiB,head256MiB,aggressive.
-These local ceilings are not summed HBM allocations.
+Source TASK/sources/fiber-append-clean01, clean80dae6e14d41614d0cdb1056bb39b57ca10d07ed.
+Both PDG/LibTorch modes are complete: each20pilot +36confirmation processes.
+Each confirmation uses1continued warmup+3measured steps, two windows/64tokens
+per step, FP32, own heavy timings serial. CPU16packed, mixed4packed, ATen/BLAS1.
+Per-step medians CPU / screened mixed / resident, seconds:
 
-## Next priority and real remaining gaps
+| Mode/work | CPU | Mixed | Resident | Resident/CPU throughput |
+| --- | ---: | ---: | ---: | ---: |
+| prefill Add inference | .132957 | B1.226391 | .159859 | .832× |
+| prefill Add training | .548210 | B2.824072 | .362354 | 1.513× |
+| prefill Attention inference | .250326 | A2.405648 | .273881 | .914× |
+| prefill Attention training | 1.180975 | A4.173503 | 1.018009 | 1.160× |
+| streaming Add inference | .139970 | A1.119666 | .419918 | .333× |
+| streaming Add training | .629859 | B3.214827 | .718168 | .877× |
+| streaming Attention inference | .262756 | C2.713564 | .540818 | .486× |
+| streaming Attention training | 1.204491 | A5.121948 | 1.408153 | .855× |
 
-1. Commit/push audited fiber-append evidence; then run the missing representative
-   submatrices serially using the bounded helper below. All correctness/allocator
-   gates are finished; do not repeat them.
-2. Prepared TASK/launchers/family_matrix_screen.py (not executed):finite20cell
-   five-preset screen +3×12selected confirmations per missing submatrix;
-   public clients,FP32,64tokens/step,one warmup/2windows,120s/cell.
-   LibTorch CPU16packed/mixed4packed;independent Python default host policy;
-   Python resident explicitly native C++/CANN client. No new worker search.
-   Start only after correctness and separate allocator diagnosis finish.
-   Complete remaining representative family/language/schedule cells and generic
-   scale capacity/placement, then full-size CPU+screened mixed+resident comparisons.
-3. F7 final qualification/portable packet; CUDA and other CANN tuples still need
-   real target tests. No blanket rebuild or repeated full-suite loop.
+Exact events/output/cut and loss checks pass. Resident stages per step26prefill,
+80streaming. CPU wins all short-process totals. Mixed single-step selection is
+only a pilot; not proof of optimality. Matrix evidence not yet committed.
+Task-local family_matrix_evidence.py audit passed for the two PDG submatrices.
+TimedDAG/LibTorch/streaming screen and confirm01 also PASSED.
 
-Full-size input packets already exist,not executed:
-TASK/inputs/fullsize-{add,attention}01/workload.json.
-Add workload hash116b5d52db98b10a5e3a8cbe51fbc8aa0cce74aad8355ce1ea7f03dc83862a6b;
-Attention88bb4b6ff11529606ad670956bab6590761bc8ff48c49b6e87dde40fe3da813f.
-Original wide480nodes/2208edges,D2048/B512/T12/V50304,
-Add9,468,053,696 /Attention17,521,117,376parameters. Never reduce logical B512
-and claim original wide. CPU/mixed currently have one payload device;17B FP32
-cannot fit one64GiB NPU. Generic mixed multi-device placement remains open.
-Eager/mixed FP16 training explicitly rejects an unqualified master path.
+Parent unit tide-execution-flows-matrix-remaining01.service:
+TASK/runs/matrix-remaining01/{status.json,task.log,queue.json,sequence.json}.
+Started01:58:22UTC, total9000s, child900s, queue120s. Parent leases physical3.
+Only recipe PID3771316 is SIGSTOP, start identity1849248082. The current child
+matrix-timed-dag-libtorch-streaming-confirm01 finished naturally; measurement
+lock is free. boundary-hold.json records the exact process identity.
+**After finite implementation/qualification work, verify /proc identity and SIGCONT this
+recipe only.** Do not signal wrappers or historical CPU work. Parent timeout
+continues during the hold. No measured sample was interrupted/discarded.
 
-Static observations,not full-size allocation measurements:
-PackedFiberAttention preallocates batch×local_attention_nodes×kv_rows, with
-retained/VJP banks multiplying storage. Coordinator DeviceJournal allocates
-trace×(5*D+2) event payloads and additional D-wide journals under one trace
-capacity. Conservative estimates also over-reserve,so rejection alone is not
-proof that actual HBM cannot fit. Investigate compact live storage,separate
-capacities,accurate simultaneous allocation accounting and safe physical
-splitting/backpressure. Keep arbitrary legal topology/input,complete attention
-normalization,no truncation,continuation and explicit real capacity errors.
+Recipe launchers/remaining_family_matrix.py will collect the finished child and
+continue TDG/LibTorch/streaming confirm02/03; Settle/LibTorch both modes;
+TimedDAG/Python both modes; Settle/Python both modes. Every new submatrix has
+20pilot+3×12confirmations. Existing TDG/LibTorch/prefill evidence is complete.
+Do not relaunch existing run names, edit helpers, or overlap heavy measurement
+with our builds/gates. Low-impact implementation and evidence work may continue.
+
+## Current implementation and development checks
+
+Training optional diagnostic exports are separated from mandatory VJP journals.
+Owner-only ContentFlow constructors request backward retention independently;
+message/contribution/history/source-scale export copies are omitted with trace
+false. All real VJP journals remain, public limits/checkpoint ABI/CANN kernels
+unchanged. Both consumers stop forcing diagnostics for ordinary training.
+Observer requests still enable complete diagnostics and their capacity allowance.
+The admission envelope remains conservative and continues charging VJP journals.
+This is not compact live KV, sample slicing or full-size capacity closure.
+
+Changed: content_flow.{h,cpp},content_flow_internal.h,content_export.cpp,
+training_owner.cpp,sharded_training_owner.cpp,resident_inputs.py,
+resident_run.cpp,resident.py,resident_capacity.cpp; affected C++ checkers,
+Python tests/helpers and three documents. New test_resident_training_records.py:
+6 independent CPU autograd trajectories,8 diagnostic-mode consumer pairs,
+2 observer-only consumer cases. C++ checkers switch recording at restore.
+
+PASSED build-training-records-{standalone,python,consumer}-dev01,
+frozen training-records-dev01. All affected development gates PASSED, no skips:
+- training-records-components-dev01: two cards, four cells (FP16 base/cache;
+  sharded FP32/FP16),900s runtime/120s queue.
+- training-records-public-dev01: two cards,49affected cases,900s/120s.
+- training-records-observer-dev03: final two observer cases; corrected CPU oracle
+  to enable reference diagnostics. Initial dev02 failed because the reference
+  trace was disabled; preserve its record. No numerical tolerance changed.
+
+Build helper launchers/build_training_records.py verifies unchanged core/CANN
+inputs and source/header identity, compiles three archive/two owner objects plus
+changed checkers, then links and checks loaders. --reuse-host permits exact
+qualified-source object reuse. Consumer helper build_capacity_client.py reuses
+unaffected objects and rebuilds resident_run/resident_capacity.
+Next: commit/push implementation; freeze
+training-records-clean01; same affected qualification (51 public cells), plus
+separate D128 allocator comparison using resident_allocation_probe.py against
+fiber-append-allocator-clean01; commit evidence separately. Resume matrix promptly.
+
+## Remaining scale work
+
+Representative inputs screening-representative-{add,attention}01:
+128nodes/544edges,D128/B8/T4/V257, clear=true,8,995,632/17,384,240parameters.
+These are not original wide. Full-size packets already exist:
+TASK/inputs/fullsize-{add,attention}01/workload.json,480nodes/2208edges,
+D2048/B512/T12/V50304,9,468,053,696 /17,521,117,376parameters.
+Never reduce logical B512 and claim the wide target is complete.
+CPU/mixed still use one payload device;17B FP32 cannot fit one64GiB chip.
+Mixed multi-device placement, compact KV/journals and safe physical slicing
+remain real work. Dense batch×local_nodes×KV capacity and coordinator-wide
+journals dominate. More parameter shards alone do not solve these limits.
+Sample slicing must share parameter generation, accumulate gradients/None flags,
+keep global loss reduction and use one optimizer update; not implemented yet.
+F7 final qualification/migration and CUDA/other CANN target tests remain pending.
 
 ## Environment and preserved history
 
-Use public module libtorch-npu/2.10.0-cann9.0.0 and Python
+Public module libtorch-npu/2.10.0-cann9.0.0; Python
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python.
-The user-authorized /opt stack supersedes the dated personal guide. Default
-shell Python cannot run Torch tests. TASK_QUEUE_ENABLE=0,
-TORCH_DEVICE_BACKEND_AUTOLOAD=0; preserve module PYTHONPATH,prepend source/python.
-SoC Ascend910_9392,16logical chips×64GiB; leased/remapped devices only.
-freeze_run.py uses background.slice/Nice10; builds2workers; bounded queue/run.
-Runtime cwd env -C RUN. Check disk before heavy writes; last data215GiB/root14GiB.
-Atomic handoff writes use scripts.durable_records.replace_text.
-Nonblocking TASK/online-measurement.lock is distinct from historical timing.lock.
+User-authorized /opt stack supersedes dated personal guide. Default shell Python
+cannot run Torch tests. TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0;
+retain module PYTHONPATH,prepend snapshot/python. Ascend910_9392,16logical64GiB
+chips; only leased/remapped devices. Standalone and Python-owned builds separate.
+freeze_run.py uses background.slice/Nice10, builds2workers, finite queue/runtime,
+runtime cwd env -C RUN. Data212GiB/root14GiB free at02:22UTC.
+Use durable_records.replace_text for atomic handoff updates.
+Current measurement lock TASK/online-measurement.lock.
 
-historical-cpu-attention-01 remains deliberately SIGSTOP,pause.json outweighs
-running status; it holds memory/TASK/timing.lock. Do not resume/kill/clean it.
-Historical Add CPU78.793172/NPU4 47.932888ms/token is1.6438× faster throughput;
-it does not qualify new online flows. Earlier24 dirty files are preserved on
-pushed archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37,
-sha256 inventory TASK/restricted-flow-archive.json. No new approval is required.
+historical-cpu-attention-01 deliberately remains SIGSTOP, holds old timing.lock;
+pause.json overrides its running status. Never resume/kill/clean it. Historical
+Add1.6438× means faster throughput but does not qualify current online flows.
+Earlier restricted work is preserved on pushed archive/restricted-flow-20260930
+at964bf628c67270200dabe55b1bca026bd403cd37; inventory TASK/restricted-flow-archive.json.

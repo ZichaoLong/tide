@@ -53,7 +53,7 @@ Result ContentFlow::Impl::export_result() const {
   std::sort(out.outputs.begin(),out.outputs.end(),[&](const Output& a,const Output& b){return
     std::tie(a.time,a.batch,g.outputs[a.port],a.port)<std::tie(b.time,b.batch,g.outputs[b.port],b.port);});
   out.stats={{"device_stages",stages.cpu().item<Index>()},{"events",event_count.cpu().item<Index>()},
-    {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",limits.diagnostics},
+    {"pending_peak",pending->stats().cpu()[1].item<Index>()},{"prefill",limits.prefill},{"diagnostics",export_diagnostics},
     {"full_chunks",full_chunks.cpu().item<Index>()},{"full_chunk_rows",full?full->chunk_rows():0},
     {"lh_full_chunk_rows",lh_full?lh_full->chunk_rows():0},
     {"swiglu_full_chunk_rows",swiglu_full?swiglu_full->chunk_rows():0},
@@ -97,7 +97,7 @@ Result ContentFlow::Impl::export_result() const {
     out.stats[prefix+"tiled_padding_entries"]=work[2].item<Index>();
   }
   if(sharded_state)for(const auto& [name,value]:sharded_state->stats())out.stats[name]=value;
-  if(!limits.diagnostics)return out;
+  if(!export_diagnostics)return out;
   out.messages=download_atoms(messages->atoms());
   std::sort(out.messages.begin(),out.messages.end(),[&](const Atom& a,const Atom& b){return
     std::tie(a.position,a.batch,g.edges[a.source].source,a.source)<std::tie(b.position,b.batch,g.edges[b.source].source,b.source);});

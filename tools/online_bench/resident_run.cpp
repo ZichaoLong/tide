@@ -5,7 +5,7 @@
 namespace tide_flow {
 tide::ResidentTrainingLimits resident_limits(const Config& c,at::Device device) {
   tide::ResidentTrainingLimits out;auto& f=out.forward;
-  f.workspace_bytes=512LL*1024*1024;f.prefill=c.schedule=="prefill";f.diagnostics=c.training||c.diagnostics;
+  f.workspace_bytes=512LL*1024*1024;f.prefill=c.schedule=="prefill";f.diagnostics=c.diagnostics;
   f.chunk_policy=c.chunk_policy=="aggressive"?tide::ResidentChunkPolicy::aggressive:tide::ResidentChunkPolicy::conservative;
   out.windows=c.windows;out.backward_bytes=2LL*1024*1024*1024;
   std::map<std::string,Index*> fields={{"queue",&f.queue},{"arrivals",&f.arrivals},{"outputs",&f.outputs},

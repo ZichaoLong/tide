@@ -40,9 +40,9 @@ struct ContentFlow::Impl {
   std::unique_ptr<ShardedState> sharded_state;
   std::unique_ptr<CannProgram> program;
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
-  bool failed=false;
+  bool failed=false,export_diagnostics=true;
   int64_t window_start=0;
-  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device,FullPlacement={},FullPlacement={});
+  Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device,FullPlacement={},FullPlacement={},bool retain_backward=false);
   void construct();
   Continuation export_continuation() const;
   Result export_result() const;

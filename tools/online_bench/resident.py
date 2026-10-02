@@ -64,10 +64,11 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         limits = ResidentTrainingLimits(**limits)
     head_plan = head_budget(forward.outputs, c["width"], c["vocab"], 2 if dtype=="float16" else 4,
                             training, head_workspace_bytes, forward.chunk_policy=="aggressive")
+    record_diagnostics = diagnostics or observer is not None
     forward,limits,owners,head_plan,capacity = prepare_capacity(packet,device,forward,limits,owners,head_plan,
-        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or diagnostics)
+        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or record_diagnostics)
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
-        dtype=dtype, schedule=schedule, preset="resident", trace=diagnostics, native_library=native_library,
+        dtype=dtype, schedule=schedule, preset="resident", trace=record_diagnostics, native_library=native_library,
         placement=placement, resident_library=resident_library,
         resident_limits=forward)
     group = dict(parameters=[k for k,p in runtime.execution_model.named_parameters() if p.requires_grad],

@@ -18,14 +18,14 @@ def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", 
 
 
 def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", mode="hard", zeta=1.0,
-            model_device=None, resident_workspace_bytes=64*1024*1024, **read_options):
+            model_device=None, resident_workspace_bytes=64*1024*1024, trace=True, **read_options):
     cfg = configuration(family, full, aggregation, **read_options)
     if device == "cpu":
         r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True, mode=mode, zeta=zeta))
     else:
         r = GraphRuntime(cfg, device=device, model_device=model_device, native_library=os.environ["TIDE_BUILD_DIR"],
             resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],
-            options=ExecutionOptions(implementation="native", schedule=schedule, trace=True, mode=mode, zeta=zeta,
+            options=ExecutionOptions(implementation="native", schedule=schedule, trace=trace, mode=mode, zeta=zeta,
                 placement=ExecutionPlacement(preset="resident"),
                 resident_limits=ResidentLimits(queue=96, arrivals=128, outputs=128, trace=512,
                                                 workspace_bytes=resident_workspace_bytes)))

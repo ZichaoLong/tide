@@ -14,20 +14,22 @@ from tidegraph import ResidentPlacement
 from flow_protocol import native_text
 
 
-def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None,dtype_name="float32",head_budget=None,extra=()):
+def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None,dtype_name="float32",head_budget=None,extra=(),diagnostics=True):
     binary=os.environ.get("TIDE_ONLINE_BINARY")
     if not binary:pytest.skip("standalone resident consumer not explicitly selected")
     path=tmp_path/"packet.txt";path.write_text(native_text(p));out=tmp_path/"consumer"
     command=[binary,"--device="+str(device),"--dtype="+dtype_name,"--packet="+str(path),"--output-dir="+str(out),
              "--family="+family,"--preset=resident","--schedule="+schedule,"--steps=2","--warmup=0",
-             "--windows-per-step=2","--diagnostics","--optimizer="+optimizer]
+             "--windows-per-step=2","--optimizer="+optimizer]
+    if diagnostics:command.append("--diagnostics")
     if training:command.append("--training")
     command.append("--devices="+str(devices if devices is not None else (2 if training and schedule=="prefill" else 1)))
     if head_budget is not None:command.extend(["--head-workspace-bytes="+str(head_budget),"--chunk-policy=aggressive","--resident-outputs=16"])
     command.extend(extra)
     done=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=120)
     assert done.returncode==0,done.stdout
-    return json.loads((out/"result.json").read_text()),[json.loads(s) for s in (out/"diagnostics.jsonl").read_text().splitlines()]
+    rows=[json.loads(s) for s in (out/"diagnostics.jsonl").read_text().splitlines()] if diagnostics else []
+    return json.loads((out/"result.json").read_text()),rows
 
 
 @pytest.mark.parametrize("family,memory,schedule",[

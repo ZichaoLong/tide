@@ -63,6 +63,7 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
   std::vector<OptimizerGroup> groups{a,b};std::unique_ptr<NamedOptimizer> optimizer;
   if(kind==ResidentOptimizerKind::sgd)optimizer=std::make_unique<SGD>(registry,groups);else optimizer=std::make_unique<AdamW>(registry,groups);
   auto l=limits(placement,prefill,cache>=0,emit);
+  l.forward.diagnostics=prefill;
   auto session=std::make_unique<ResidentTrainingSession>(f.graph,f.model,f.initial,d,kind,groups,l);
   auto previous=session->checkpoint();updated(previous,master,*optimizer,half);
   require(session->placement().devices==placement.devices,"resolved devices changed");
@@ -83,7 +84,10 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
         require(!window.state_values.defined()&&window.cache.empty()&&window.states.size()==l.placement.devices.size(),"sharded output created a dense state replica");
         for(size_t i=0;i<window.states.size();++i)require(window.states[i].values.device()==l.placement.devices[i],"state output left owner");
       }
-      tide_bench::compare(session->result(),ref.windows[w],true,dtype,std::nullopt,half?2e-2:1e-5,half?2e-3:1e-6);
+      const auto observed=session->result();
+      require(observed.stats.at("diagnostics")==l.forward.diagnostics,"training diagnostic request changed");
+      if(!l.forward.diagnostics)require(observed.trace.empty()&&observed.messages.empty(),"disabled diagnostic records were exported");
+      tide_bench::compare(observed,ref.windows[w],l.forward.diagnostics,dtype,std::nullopt,half?2e-2:1e-5,half?2e-3:1e-6);
       roots.push_back(root);kept=window;start=stop;++w;
     }
     test::train_reject([&]{session->checkpoint();},"checkpoint accepted retained tapes");
@@ -97,7 +101,7 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     for(const auto& o:cpu.model.parameters(false).owners())o.value.copy_(registry.value(o.canonical).to(dtype));
     cpu.initial=test::train_boundary(ref.windows.back().continuation,dtype);
     if(step==1) {
-      session->close();l.forward.prefill=!prefill;l.placement.devices.clear();
+      session->close();l.forward.prefill=!prefill;l.forward.diagnostics=!l.forward.diagnostics;l.placement.devices.clear();
       l.placement.full_owners.clear();l.placement.state_owners.clear();
       for(int i=0;i<resume_count;++i)l.placement.devices.emplace_back(d.type(),d.index()+i);
       l.placement.policy=placement.policy=="memory"?"locality":"memory";

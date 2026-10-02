@@ -74,6 +74,7 @@ void trajectory(at::Device device,test::Fixture f,bool prefill,ResidentOptimizer
   if(kind==ResidentOptimizerKind::sgd)optimizer=std::make_unique<SGD>(registry,std::vector<OptimizerGroup>{group});
   else optimizer=std::make_unique<AdamW>(registry,std::vector<OptimizerGroup>{group});
   ResidentTrainingLimits l;l.forward.prefill=prefill;l.forward.trace=512;l.forward.full_chunk_rows=3;l.reverse_chunk_rows=3;
+  l.forward.diagnostics=prefill;
   l.forward.mode=mode;l.forward.zeta=options.zeta;l.forward.workspace_bytes=256*1024*1024;
   l.backward_bytes=Index(2)*1024*1024*1024;l.retained_bytes=256*1024*1024;
   if(cache){l.forward.queue=96;l.forward.arrivals=192;l.forward.outputs=192;l.forward.kv_rows=128;
@@ -98,7 +99,10 @@ void trajectory(at::Device device,test::Fixture f,bool prefill,ResidentOptimizer
         for(auto* x:{&r.cache[j].key,&r.cache[j].value})if(x->defined())x->masked_fill_(padding.unsqueeze(-1).unsqueeze(-1),std::numeric_limits<float>::quiet_NaN());
         if(r.cache[j].log_bias.defined())r.cache[j].log_bias.masked_fill_(padding,std::numeric_limits<float>::quiet_NaN());
       }
-      tide_bench::compare(session->result(),ref.windows[index],true,at::kHalf,std::nullopt,2e-2,2e-3);
+      const auto observed=session->result();
+      require(observed.stats.at("diagnostics")==l.forward.diagnostics,"training diagnostic request changed");
+      if(!l.forward.diagnostics)require(observed.trace.empty()&&observed.messages.empty(),"disabled diagnostic records were exported");
+      tide_bench::compare(observed,ref.windows[index],l.forward.diagnostics,at::kHalf,std::nullopt,2e-2,2e-3);
       roots.push_back(r);start=stop;++index;
     }
     test::train_reject([&]{session->checkpoint();},"half checkpoint accepted live windows");
@@ -126,7 +130,7 @@ void trajectory(at::Device device,test::Fixture f,bool prefill,ResidentOptimizer
       test::train_reject([&]{ResidentTrainingSession invalid(f.graph,f.model,wrong,device,l);},"checkpoint accepted wrong payload dtype");
       wrong=c;wrong.state.values=c.state.values.clone();wrong.state.values[c.offsets[i]].add_(.25f);
       test::train_reject([&]{ResidentTrainingSession invalid(f.graph,f.model,wrong,device,l);},"checkpoint accepted inconsistent master/payload");
-      session->close();l.forward.prefill=!prefill;
+      session->close();l.forward.prefill=!prefill;l.forward.diagnostics=!l.forward.diagnostics;
       session=std::make_unique<ResidentTrainingSession>(f.graph,f.model,c,device,l);
       const auto restored=session->checkpoint();equal_state(c.state,restored.state);
       for(const auto& [n,x]:c.parameters)require(at::equal(x,restored.parameters.at(n)),"half named parameter changed on resume");

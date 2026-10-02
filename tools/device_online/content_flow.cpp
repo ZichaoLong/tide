@@ -19,8 +19,13 @@ void validate_reverse_modules(const Graph& graph) {
       throw std::invalid_argument("graph reverse module contract unavailable");
 }
 }
-ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd,FullPlacement placement,FullPlacement state_placement)
+ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,at::Device fd,FullPlacement placement,FullPlacement state_placement,bool retain_backward)
     :profile(std::move(g),std::move(m),d,true),limits(l),device(d),full_device(fd),boundary(q),window_start(q.cut) {
+  export_diagnostics=l.diagnostics;
+  // Existing local state/cache builders use diagnostics to request their actual
+  // forward journals. Training always needs these, but never the export-only
+  // message queue, weighted-contribution journal or prior-history snapshot.
+  l.diagnostics=l.diagnostics||retain_backward;limits=l;
   const bool sharded=!placement.devices.empty(),state_sharded=!state_placement.devices.empty();
   if(state_sharded)validate_full_placement(state_placement,profile.graph.nodes.size(),d);
   else if(!state_placement.owners.empty())throw std::invalid_argument("state shard owners without devices");
@@ -67,10 +72,10 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   event_count=at::zeros_like(stop);
   pending=std::make_unique<QueueTransaction>(l.queue,width,nodes,samples,opts,error);
   outputs=std::make_unique<QueueTransaction>(l.outputs,width,nodes,samples,opts,error);
-  if(l.diagnostics)messages=std::make_unique<QueueTransaction>(l.trace,width,nodes,samples,opts,error);
+  if(export_diagnostics)messages=std::make_unique<QueueTransaction>(l.trace,width,nodes,samples,opts,error);
   selector=std::make_unique<FrameSelector>(profile.owners,profile.policies,samples,device,l.workspace_bytes);
   history=selector->initial();
-  if(l.diagnostics)history_before=selector->initial();
+  if(export_diagnostics)history_before=selector->initial();
   if(!state_sharded) {
   state={at::zeros({samples,nodes,width},opts),at::zeros({samples,nodes,2},opts.dtype(at::kLong)),
          at::zeros({samples,nodes},opts.dtype(at::kBool))};
@@ -90,7 +95,7 @@ ContentFlow::Impl::Impl(Graph g,Model m,const Continuation& q,at::Device d,Conte
   if(l.diagnostics) {
     events=std::make_unique<DeviceJournal>(l.trace,13,5*width+2,device);
     fibers=std::make_unique<DeviceJournal>(l.trace,6,width,device);
-    contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
+    if(export_diagnostics)contributions=std::make_unique<DeviceJournal>(l.trace,6,width,device);
     full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
     if(l.mode=="softp")raw_full_trace=std::make_unique<DeviceJournal>(l.trace,13,width,device);
     emission_trace=std::make_unique<DeviceJournal>(l.trace,6,width,device);
@@ -147,7 +152,7 @@ void ContentFlow::Impl::construct() {
   DeviceReady planner(profile.owners,g.regions.size(),profile.wires,boundary.batch_size,device,limits.prefill,profile.causal_regions);
   program=std::make_unique<CannProgram>(device);auto& p=*program;p.limit_workspace(operator_workspace_budget);
   auto zeros=at::zeros({limits.queue},error.options()),out_zeros=at::zeros({limits.outputs},error.options());
-  if(limits.diagnostics) {
+  if(export_diagnostics) {
     // Preserve the parameters that generated this window's recorded sources;
     // a later optimizer publish must not rewrite diagnostic provenance.
     source_scales_before=at::zeros_like(profile.scales);p.copy(source_scales_before,profile.scales);
@@ -189,17 +194,20 @@ void ContentFlow::Impl::construct() {
   auto pending_proposal=pending->propose_stage(p,ready.consumed,arrivals);
   auto output_proposal=outputs->propose_stage(p,out_zeros,emitted.outputs);
   if(limits.diagnostics) {
-    auto msg_zeros=at::zeros({limits.trace},error.options());
-    auto message_proposal=messages->propose_stage(p,msg_zeros,arrivals);
+    QueueProposal message_proposal;JournalProposal contribution_proposal;
+    if(export_diagnostics) {
+      auto msg_zeros=at::zeros({limits.trace},error.options());
+      message_proposal=messages->propose_stage(p,msg_zeros,arrivals);
+      contribution_proposal=contributions->propose(p,ready.atoms.coordinates,content.weighted,ready.counts.narrow(0,0,1),error);
+    }
     auto event_proposal=events->propose(p,update.event_meta,update.event_values,ready.counts.narrow(0,1,1),error);
     auto fiber_proposal=fibers->propose(p,ready.atoms.coordinates,ready.atoms.values,ready.counts.narrow(0,0,1),error);
-    auto contribution_proposal=contributions->propose(p,ready.atoms.coordinates,content.weighted,ready.counts.narrow(0,0,1),error);
     auto full_proposal=full_trace->propose(p,update.event_meta,actions.values,ready.counts.narrow(0,1,1),error);
     JournalProposal raw_proposal;
     if(raw_full_trace)raw_proposal=raw_full_trace->propose(p,update.event_meta,raw_full,ready.counts.narrow(0,1,1),error);
     auto emission_proposal=emission_trace->propose(p,emitted.meta,emitted.values,emitted.count,error);
-    messages->commit_stage(p,message_proposal);
-    events->commit(p,event_proposal,error);fibers->commit(p,fiber_proposal,error);contributions->commit(p,contribution_proposal,error);
+    if(export_diagnostics){messages->commit_stage(p,message_proposal);contributions->commit(p,contribution_proposal,error);}
+    events->commit(p,event_proposal,error);fibers->commit(p,fiber_proposal,error);
     full_trace->commit(p,full_proposal,error);
     if(raw_full_trace)raw_full_trace->commit(p,raw_proposal,error);
     emission_trace->commit(p,emission_proposal,error);
@@ -224,6 +232,10 @@ ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,Cont
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,std::move(placement))) {}
 ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,ModelPlacement placement)
     :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,std::move(placement.full),std::move(placement.state))) {}
+ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,bool retain_backward)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,FullPlacement{},FullPlacement{},retain_backward)) {}
+ContentFlow::ContentFlow(Graph g,Model m,const Continuation& q,at::Device d,ContentLimits l,ModelPlacement placement,bool retain_backward)
+    :impl_(std::make_unique<Impl>(std::move(g),std::move(m),q,d,l,d,std::move(placement.full),std::move(placement.state),retain_backward)) {}
 ContentFlow::~ContentFlow()=default;
 void ContentFlow::close() {
   if(!impl_)return;
@@ -245,7 +257,8 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
   try {
     s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
     if(s.limits.diagnostics) {
-      s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.events->count.zero_();s.fibers->count.zero_();s.contributions->count.zero_();
+      if(s.export_diagnostics){s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.contributions->count.zero_();}
+      s.events->count.zero_();s.fibers->count.zero_();
       s.full_trace->count.zero_();s.emission_trace->count.zero_();
       if(s.raw_full_trace)s.raw_full_trace->count.zero_();
     }

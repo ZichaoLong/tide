@@ -5,7 +5,7 @@ namespace tide_flow {
 void prepare_capacity(const Packet& p,const Config& c,const std::vector<at::Device>& devices,ResidentMeasurements& result) {
   const Index n=p.body.nodes.size();const auto& f=result.limits.forward;
   capacity::Geometry g{p.width,p.batch,p.vocab,c.windows,c.runtime.dtype==at::kHalf?2:4,p.memory=="attention",
-    c.training,c.optimizer=="adamw",f.diagnostics,Index(p.body.regions.size()+2),std::vector<Index>(n),std::vector<Index>(n),{},c.devices,c.owner_policy=="locality"};
+    c.training,c.optimizer=="adamw",c.training||f.diagnostics,Index(p.body.regions.size()+2),std::vector<Index>(n),std::vector<Index>(n),{},c.devices,c.owner_policy=="locality"};
   for(const auto& e:p.body.edges){++g.sources[e.target];++g.slots[e.source];g.edges.emplace_back(e.source,e.target);}
   for(auto node:p.body.inputs){++g.sources[node];g.edges.emplace_back(n,node);}
   for(auto node:p.body.outputs){++g.slots[node];g.edges.emplace_back(node,n+1);}

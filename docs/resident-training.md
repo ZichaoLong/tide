@@ -36,6 +36,16 @@ cotangents for the outputs, pending messages, final state and attention caches o
 It may use its own autograd on detached output views; it must not mutate the
 owner’s output storage. No particular head, loss or convergence task is required.
 
+`forward.diagnostics` controls optional latest-window trace/messages in `result()`.
+Python uses the runtime's `trace` option. Training records the actual VJP journals
+even when these exports are disabled; positive trace/cache journal capacities
+remain required. Disabling exports omits only the diagnostic message queue,
+weighted-contribution journal and prior-history/source-scale snapshots. Outputs,
+continuation, retained state/cache, reverse links and optimizer behavior remain
+available. Diagnostic recording can change after complete-cut checkpoint restore.
+The public C++ limits and checkpoint layouts are unchanged. Qualification of this
+separation is tracked in STATUS; existing evidence retains its source scope.
+
 1. `advance(inputs, stop, seal)` performs independent online execution and saves
    its actual device tape. Windows carry session, sequence and parameter-generation
    tokens. Outputs, pending payloads, state values/presence and grouped KV

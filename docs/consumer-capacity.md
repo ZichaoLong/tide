@@ -31,6 +31,13 @@ subtract exactly the removed two payload buffers on each state owner:
 The separate bias proposal, retained snapshots, gradients and all other
 conservative allowances remain. This layout change does not shrink KV capacity.
 
+Training can disable optional Result trace/message exports while keeping its
+required VJP journals. The current admission envelope still reserves the former
+diagnostic buffers conservatively; disabling exports does not reduce declared
+queue/journal capacity or relax the estimate. Allocator observations record the
+actual saving separately. Both clients continue charging training journals even
+when the public diagnostics flag is false.
+
 Conservative mode leaves25% plus128MiB of the incremental budget unused;
 aggressive mode leaves10% plus128MiB. The shape formulas also reserve512MiB per
 device for backend allocations and the declared caps of simultaneously retained
