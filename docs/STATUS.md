@@ -5,7 +5,8 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest qualified implementation **f360489**, evidence **1a6d9c0**, both pushed. [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest qualified implementation **233bf01**, pushed; its reviewed evidence is included
+in this separate documentation commit. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -28,61 +29,47 @@ never stop other workloads to free resources.
 
 ## Latest completed qualification
 
-**f360489** Full snapshot sharing passed eight clean jobs: standalone/Python/
-installed-consumer builds; native6 (144trajectories/2432windows/560updates),
-Python16 retention/budget checks,consumer32, same-lease D512 allocator comparison
-and separate FP16 profile. No skips. All units terminated exit0; leases released.
-[Evidence](evidence/resident-full-snapshots-20261002.md). Audit:
-`python TASK/launchers/full_snapshot_evidence.py f360489ac965abe9bc326055050ace01b348ebd5`.
+**233bf01** passed eight clean jobs, all terminal exit0: standalone/Python/installed
+consumer builds; native8 (176trajectories/2944windows/688updates); Python16,
+consumer32; same-lease D512 allocator comparison; independent FP16 profile.
+No skips or new failures. [Evidence](evidence/resident-window-reduction-20261003.md).
+Audit: `python TASK/launchers/window_reduction_evidence.py 233bf0144db206176f4af4b05b0bb54cb326dbe7`.
 
-Full parameter banks/static kind tables are copied once per backward group;
-dynamic event metadata/values/counts remain per-window. Identity/version/layout
-checks plus no-publication lifetime; backward/detach/close reset the cache.
-`retained_full_bytes` is separate from `retained_window_bytes`. Default standalone
-retention keeps independent copies. All private owner-layout users rebuilt;
-clean source/header/options-verified object reuse with fresh links, unchanged
-core/CANN hashes. Standalone dev01 checker compile failure remains retained;
-corrected dev02 and all clean builds passed.
+Aggressive sharded training reduces each window on device before advancing the
+preceding window, preserving reverse-window→registry-alias additions. Projection
+parameter adjoints, canonical outputs and numerical packet arenas are reused
+behind start/completion barriers. State/cache/message bridge adjoints remain
+independent. Conservative and legacy single-device paths are preserved.
+New counters: `streamed_parameter_windows`, `reused_projection_gradient_bytes`.
+Public ABI/core/device kernels unchanged; affected host objects rebuilt and
+clean source/header/options-verified object reuse with fresh links.
 
-D512 Attention,physicalB2×4,two connected windows,FP32 AdamW: retained storage
--542752bytes; whole allocator peaks [8368268800,7520954880] →
-[8367995392,7520681472] (-273408bytes/card). Loss7.532631874084473 and all other
-observables/chunks/admission unchanged. Separate FP16 profile53182operators,
-zero observed AiCPU. No speed claim. Wide fixtures use small LH Full banks, so
-this is not the main full-size memory solution. Consumer estimates remain
-unchanged and conservative; no original-width retry is justified by this delta.
+D512/B8/T4/V257 Attention,physicalB2×4,two connected windows,FP32 AdamW:
+whole allocator [8367995392,7520681472] → [8073745920,7226584576], reductions
+[294249472,294096896] bytes. Loss7.532631874084473, other semantic/work/retention
+statistics and effective chunks unchanged. Independent FP16 trace53176operators,
+zero observed AiCPU. This is actual allocation improvement, not a throughput or
+original-size training claim. Consumer admission remains unchanged/conservative.
 
-Previous **4dd8368/f03b4d4** accounting qualification remains passed: CPU17/NPU25,
-D512 allocation calibration. Shared Attention and private accumulation are charged
-by lifetime, unchanged runtime and API safety limits. Actual peaks were unchanged
-by that estimator-only correction. [Evidence](evidence/consumer-training-storage-20261002.md).
+Previous Full snapshot and training-accounting increments remain qualified on
+f360489/4dd8368; evidence1a6d9c0/f03b4d4. Do not rerun their unchanged matrices.
 
-## Current implementation (development passed; clean qualification next)
+## Current WIP: Attention parameter-adjoint reuse
 
-Window-scoped canonical reduction and physical projection-gradient reuse passed
-all six development jobs on frozen dirty `window-reduction-dev01`: three builds,
-standalone8 (176trajectories/2944windows/688updates), Python16 and actual-consumer32.
-No skips or runtime failures. All jobs are terminal exit0; device leases released.
-Production input hashes match the tested snapshot. Documentation now describes
-the policy, counters and protocol in [resident-sharded-training](resident-sharded-training.md).
-
-Aggressive sharded training appends each window's reduction to the ordered device
-coordinator before the preceding window. It reuses only projection parameter
-adjoints, canonical banks and stream packet arenas; state/cache/message bridges
-remain independent. Reverse-window→registry-alias addition order is preserved,
-with peer start/completion barriers before shared storage is reset. Conservative
-and legacy single-device backward keep their existing paths. New counters:
-`streamed_parameter_windows`, `reused_projection_gradient_bytes`.
-
-Next: commit/push this implementation, freeze `window-reduction-clean01`, build
-with `TASK/launchers/build_window_reduction.py` and source/header/options-verified
-host object reuse. Re-run the affected native8/Python16/consumer32 qualification;
-same-lease D512 allocator comparison (`window_reduction_memory.py`) against
-`full-snapshot-consumer-clean01`; separate FP16 profile (`profile_retained_journals.py`).
-Review with `window_reduction_evidence.py SHA` and commit evidence separately.
-No actual memory/speed benefit established yet; consumer estimates are unchanged
-and conservative. Attention parameter-adjoint reuse and scale gates remain open.
-No original-width retry or safety/cost relaxation is queued.
+Uncommitted Attention parameter-adjoint reuse extends the already-tested ordered
+window reduction. Only owner-local event/fiber parameter values and connection
+flags are borrowed; KV/cache/state/message adjoints remain independent. Parameter
+mapping/device/dtype/shape/alias guards precede reuse, and the existing state-owner
+init packet gates zeroing after the preceding window's canonical completion.
+Conservative/standalone paths keep independent storage. New statistic:
+`reused_attention_gradient_bytes`. Modified: state_owner_reverse,sharded_state_vjp,
+sharded_full_vjp,sharded/legacy backward and checker/sample-chunk assertions.
+Three development builds passed on frozen dirty `attention-adjoints-dev01`
+(at233bf01). Python16 passed; native6 and consumer32 gates are active/bounded.
+Next: inspect every gate; after passing commit implementation, clean qualification
+and same-lease calibration against `window-reduction-consumer-clean01`, separate
+FP16 profile, then evidence. Consumer estimates remain unchanged. No full-size
+retry or relaxed admission/cost rule is authorized by this intermediate result. Do not include WIP code in the separate 233bf01 evidence commit.
 
 ## Scale evidence and progress boundary
 
@@ -115,23 +102,25 @@ Long jobs: frozen source,background.slice,Nice10,two build workers,queue120s.
 Formal timing lock `TASK/online-measurement.lock`.
 Last free disk:data151GiB/root7.7GiB; check before large writes.
 
-Source `TASK/sources/full-snapshot-clean01`; consumer
-`TASK/builds/full-snapshot-consumer-clean01`. Resident binaries
-`full-snapshot-{standalone,python}-clean01`; core
+Qualified source `TASK/sources/window-reduction-clean01`; consumer
+`TASK/builds/window-reduction-consumer-clean01`. Resident binaries
+`window-reduction-{standalone,python}-clean01`; core
 `placement-{cpu,npu,npu-python}-clean01`; CPUconsumer`source-values-cpu-clean01`.
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current job is running/queued. Window-reduction development receipts are in
-`TASK/runs/{build-,}window-reduction-*-dev01`; unit prefix
-`tide-execution-flows-`. Preserve all receipts and frozen source. The next clean
-qualification will have distinct clean01 source/build/run names.
+Active development jobs: `attention-adjoints-{native,consumer}-dev01`,
+frozen dirty `attention-adjoints-dev01`; three builds passed. Two NPUs each,
+queue120s,timeout900/600 respectively. Python16 is terminal passed. Unit prefix `tide-execution-flows-`,
+background.slice. Inspect `systemctl --user show UNIT -p ActiveState -p Result
+-p ExecMainStatus`; stop via `systemctl --user stop UNIT` only if needed.
+Logs/status `TASK/runs/NAME`. Current clean233bf01 qualification is fully terminal;
+its raw records use `{build-,}window-reduction-*-clean01`. Preserve receipts.
 **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
 in the restricted flow, not current online evidence. Restricted archive:
 archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 Old build-reverse-gather-python-dev01 metadata inconsistency remains visible;
-not a current failure. Raw records: `TASK/runs/full-snapshot-{native,python,consumer,memory,profile}-clean01`
-and `TASK/runs/build-full-snapshot-{standalone,python,consumer}-clean01`; source/build/helper/result
-hashes and allocation observations are in the reviewed evidence JSON.
+not a current failure. Current qualification raw records: `TASK/runs/{build-,}window-reduction-*-clean01`;
+source/build/helper/result hashes and allocation observations are pinned by evidence.
