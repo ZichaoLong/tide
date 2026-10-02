@@ -101,3 +101,7 @@ shrink queue/journal/KV capacities, change dtype, reduce the logical batch, or
 change window connections, loss normalization or the shared update boundary.
 Explicit capacity failures still apply to actual future inputs. CPU/eager mixed
 flows reject this resident-only option; their explicit sample slicing remains.
+
+Post-run allocator underestimation preserves its complete failed diagnostic record
+([qualified reporting](evidence/consumer-failure-records-20261002.md)). The failed
+status remains authoritative even when completed update measurements are present.

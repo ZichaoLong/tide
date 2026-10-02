@@ -5,7 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **38858d0**.
+`graph-execution-foundation`. Latest pushed implementation: **3462dae**; attention evidence923c640.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -79,17 +79,22 @@ Separate FP16 two-update profile:53,274operators; no observed AiCPU.
 JUnit, trajectory, allocator and CSV identities. [Report](evidence/resident-attention-snapshots-20261002.md).
 This is not original-size training or throughput proof. No attention jobs remain live.
 
-## Active failure-reporting increment
+## Failure reporting qualified; original-width diagnostic next
 
-Snapshot `TASK/sources/failure-records-dev01` (38858d0 plus preserved patch).
-CPU18 checks PASSED (`failure-records-cpu-dev01`). Installed consumer build
-`build-failure-records-consumer-dev01` PASSED; output
-`TASK/builds/failure-records-consumer-dev01`, logs/status under matching runs/name.
-Change preserves complete results with a FAILED state when post-run memory
-calibration refuses, in both consumers and wrapper; memory caps/estimates unchanged.
-NPU integration PASSED9 cases on `failure-records-dev02`; added malformed JSON
-object test also passed in the final short CPU rerun. Commit implementation next,
-then clean CPU19/NPU9 + installed consumer build. No retry of wide Add yet.
+Implementation **3462dae** passed immutable CPU19/NPU9 plus installed C++ build.
+[Report](evidence/consumer-failure-records-20261002.md). Backend38858d0 is unchanged;
+latest consumer `TASK/builds/failure-records-consumer-clean01/consumer/tidegraph-online-bench`.
+Both APIs now preserve all measurements with FAILED state for post-run allocator
+underestimation. Safety caps/estimates unchanged. All qualification jobs terminal.
+
+Next submit `wide-add-memory-diagnostic01`, clean3462dae in
+`TASK/sources/failure-records-clean01`, helper `launchers/wide_add_memory_diagnostic.py`.
+One originalD2048/B4/physicalB2 AddFP32SGD diagnostic: same prior geometry/budgets,
+ten cards, queue120s, command900s/outer930s, no B512 continuation. Output
+`TASK/runs/wide-add-memory-diagnostic01/diagnostic`. Its job's passing status means
+diagnostic collection only; inspect `consumer_state` and original consumer result.
+Keep any calibration failure FAILED, inspect per-card/phase excess before editing
+estimator or launching another wide task. No blind retry or safety-cap relaxation.
 
 ## Completed evidence; do not repeat
 
@@ -134,7 +139,7 @@ Recent qualified increments (retain cited artifacts/failures):
   gradients only. [Report](evidence/consumer-add-capacity-20261002.md).
 
 Latest fully qualified resident libraries: attention-snapshot-{standalone,python}-clean01;
-NPUconsumer attention-snapshot-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
+NPUconsumer failure-records-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
 CPUconsumer source-values-cpu-clean01. Previous builds remain for cited evidence.
 Standalone LibTorch and Python-native runtimes are separate.
 
@@ -152,5 +157,4 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted code: failure reporting plus directed tests; CPU18 plus final9-case
-reporting rerun/build/NPU9 passed; immutable qualification pending. Evidence for38858d0 is committed separately from this increment.
+Uncommitted: reviewed evidence and current handoff for3462dae; code committed.

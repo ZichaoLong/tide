@@ -1,0 +1,1049 @@
+{
+  "schema": "tide-consumer-failure-records-v1",
+  "source": "3462dae82c8c5028d1572bc476281cb6fe79f38e",
+  "jobs": [
+    {
+      "name": "failure-records-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8ba7daf65de4637ebc8acc9dd046505025ef8f69afa8a68a8b4816d2fc4b285e",
+        "task.log": "c3a72876c0bb6ef4d3ae5d0e1e520267f5c4f1e2654959640044737f2786dd63"
+      }
+    },
+    {
+      "name": "build-failure-records-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "7b584cc2b875143b8699cf53788c3530eada56d7fe8d71bbe63471e8152848cc",
+        "task.log": "457ed7d0a5506e52c9b63089d3b9250d98c3da07f04dd4ac2f9486a37333a505"
+      }
+    },
+    {
+      "name": "failure-records-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "e1c0796b4f9d9fecd798578802b825141e47673a2f3782dcf834f224180d39a2",
+        "task.log": "82169baa6ec7835a32c8044c4b194f16bc3bd7167477199400e118fde24f4621",
+        "queue.json": "08fbef564dd43348d1342c2a78fc318c9616e7e3373ebf3161f9d7552f4a8ea8"
+      }
+    }
+  ],
+  "tests": {
+    "cpu": {
+      "passed": 19,
+      "junit_sha256": "4f9a4e94a7372c798e76cf1c9a02d25465b9ef191db0a314f342a4f0c11c8e9e"
+    },
+    "npu": {
+      "passed": 9,
+      "junit_sha256": "7eb63fab32e9ff45f76fe2c0e6949d0a3b4a3e34cf3559e073738183665272f3"
+    }
+  },
+  "build": {
+    "manifest_sha256": "21de5a68a0c00e2518e1ceae8d747d2487fae804a43533eaec2cc3b3e3c0bee2",
+    "binary_sha256": "29e25353bb82da71ebebabad9a28d82ff1fd6915b32cb519b673d4da7800af36",
+    "loader_sha256": "fc45cab2089de8b43d2120c82cb470d3f0dc7950e77a0a9f4fb3ba7453a0282a",
+    "unchanged_backend_source": "38858d02bd986e166ddaae1914b3ee1719bf34d0",
+    "component_sha256": "3418650be57b9b04bd1b7d3a17e06a729903e91b794c45f6b679b0f36f67a2f2",
+    "consumer_sources": {
+      "resident_capacity.cpp": "179b525434a8d62515928679cab50c747a6061baa44585cb4b9e2ede6e13982c",
+      "resident_run.cpp": "939af9a841b0750694c922dedf36d23779d141dbb4166f85c62b83f08ab8bc32",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "382db2a9ecdef9995b93ead8a5ac1bacb92e58569bacd6a43f1fb56bbf50b0e4",
+      "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+      "host.py": "15d6487449751df1edc18a3759d5605de32e342ec0380d391c9d540d407456ff",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+      "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+      "resident.py": "843f8a0f0eb33cd6befad2dffeee8cb2d03d2ceb4e32fef158524ea4a44c7f7d",
+      "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+      "resident_records.cpp": "2cfae676dc67fe1fde54d99cad62ed63ee21ba1b59965bf50daa982830b1803c",
+      "resident_consumer.h": "5b5ccf5175c047df3cb49e2344b0f4b09ca45c3b589e9f4b3a2627eacf00e28e",
+      "consumer.h": "3d3cdceeb2c70325d7c1b122172308b165ddd1b2beb2cd69db5294be30331fcf",
+      "capacity.h": "37c054bfc10ce04b5319d6403eea7127001b233af602401c31c21ea34b4d8c22",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+      "capacity_record.h": "edeb7431742304a7d17e048745fcf9e5c53d7bf183fd8b84d508ed2b2dff1c0f",
+      "run.cpp": "a3e4b2e1d167e5e2dc5e9bf7ff2221ddc5646a37e2103b49c71f314e18d647a5",
+      "capacity.py": "d5525d9381afbff20de787206a4463bb2b8d9f9da8fa5e383e370b4d5d66c607",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "cfbb69e25d919d16585e854fac9e2d18e6fac4efd9737a17e3316884be380837",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4"
+    }
+  },
+  "failed_records": [
+    {
+      "path": "runs/failure-records-npu-clean01/pytest/test_failed_calibration_keeps_0/observed-failure.json",
+      "sha256": "185a5bc8ac9f9f3eb51f6f5495dd829da271763940064b30aa3afe2c0a7fca2c",
+      "record": {
+        "schema": "tide-online-consumer-v1",
+        "workload_sha256": "2684608f696456c0440c745b3195e0a9999994f093cf727fe00d8962c3352ffd",
+        "implementation": "native",
+        "family": "timed-dag",
+        "training": true,
+        "optimizer": "adamw",
+        "parameters": 636,
+        "windows_per_step": 2,
+        "warmup_steps": 0,
+        "measured_steps": 2,
+        "construction_seconds": 0.919943418353796,
+        "seconds": [
+          0.4415148086845875,
+          0.21757441014051437
+        ],
+        "warmup_seconds": [],
+        "losses": [
+          1.9459259510040283,
+          1.9459222555160522
+        ],
+        "outputs": [
+          8,
+          8
+        ],
+        "statistics": [
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "window_stages_max": 5,
+            "window_events_max": 32,
+            "pending_peak": 12,
+            "window_outputs_max": 4,
+            "canonical_stream_chunks": 8,
+            "canonical_stream_reserved_bytes": 44416,
+            "retained_attention_bytes": 2680,
+            "retained_bytes": 4384480,
+            "retained_compact_journals": 0,
+            "retained_dense_bytes": 4384480,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2190340,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "head_chunks": 2
+          },
+          {
+            "stages": 10,
+            "events": 64,
+            "full_chunks": 12,
+            "emission_chunks": 6,
+            "window_stages_max": 5,
+            "window_events_max": 32,
+            "pending_peak": 12,
+            "window_outputs_max": 4,
+            "canonical_stream_chunks": 8,
+            "canonical_stream_reserved_bytes": 44416,
+            "retained_attention_bytes": 2680,
+            "retained_bytes": 4384480,
+            "retained_compact_journals": 0,
+            "retained_dense_bytes": 4384480,
+            "retained_projection_bytes": 1120,
+            "retained_window_bytes": 2190340,
+            "retained_windows": 2,
+            "reverse_fiber_budget_bytes": 44739240,
+            "reverse_fiber_groups": 4,
+            "reverse_fiber_key_rows_max": 64,
+            "reverse_fiber_key_rows_min": 64,
+            "reverse_fiber_owner_rows_max": 6,
+            "reverse_fiber_owner_rows_min": 6,
+            "reverse_fiber_query_rows_max": 16,
+            "reverse_fiber_query_rows_min": 16,
+            "reverse_fiber_requested_max": 16,
+            "reverse_fiber_tensor_bytes": 2833472,
+            "head_chunks": 2
+          }
+        ],
+        "parameter_budget": 1073741824,
+        "batch_execution": {
+          "logical_batch": 2,
+          "requested_sample_chunk_rows": 0,
+          "effective_sample_chunk_rows": 2,
+          "physical_chunks": 1
+        },
+        "head_memory": {
+          "rows": 1024,
+          "fixed_bytes": 33583440,
+          "row_bytes": 448,
+          "reserved_bytes": 34042192,
+          "budget": 4294967296,
+          "operator_allowance_bytes": 33554432
+        },
+        "context_storage": {
+          "policy": "dense",
+          "devices": [
+            {
+              "device_index": 0,
+              "budget_bytes": 0,
+              "peak_saved_bytes": 0
+            },
+            {
+              "device_index": 1,
+              "budget_bytes": 0,
+              "peak_saved_bytes": 0
+            }
+          ],
+          "requested_bytes_per_device": 0
+        },
+        "memory_admission": {
+          "schema": "tide-consumer-capacity-v1",
+          "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+          "devices": [
+            {
+              "index": 0,
+              "estimated_peak_bytes": 91844607,
+              "phases": {
+                "construction": 1195429840,
+                "forward_loss": 1273600908,
+                "backward": 1539540252,
+                "optimizer": 1463897540
+              },
+              "components": {
+                "parameters": 2540,
+                "state_and_kv": 142552,
+                "routing": 23872896,
+                "owner_packets": 11534336,
+                "journals": 1572864,
+                "forward_workspace": 406528,
+                "graph_optimizer": 3480,
+                "consumer_parameters_optimizer": 896,
+                "programs_and_vendor_allowance": 1140850688,
+                "retained": 44099584,
+                "roots_and_consumer_gradients": 32992,
+                "physical_and_canonical_gradients": 28650208,
+                "reverse_workspace": 2895872,
+                "canonical_communication": 268435456,
+                "consumer_proposals": 1792,
+                "head_workspace": 34042192,
+                "continuation_snapshot_bytes": 0,
+                "saved_contexts": 0,
+                "gradient_accumulation": 0,
+                "context_pack_workspace": 0,
+                "retained_pack_workspace": 17039360,
+                "attention_parameter_gradients": 1536
+              },
+              "budget_bytes": 65645064192,
+              "usable_bytes": 49099580416,
+              "headroom_bytes": 16545483776
+            },
+            {
+              "index": 1,
+              "estimated_peak_bytes": 1312209724,
+              "phases": {
+                "construction": 1171556048,
+                "forward_loss": 1174757468,
+                "backward": 1312209724,
+                "optimizer": 1305771236
+              },
+              "components": {
+                "parameters": 2540,
+                "state_and_kv": 142552,
+                "routing": 0,
+                "owner_packets": 11534336,
+                "journals": 1572864,
+                "forward_workspace": 406528,
+                "graph_optimizer": 3480,
+                "consumer_parameters_optimizer": 0,
+                "programs_and_vendor_allowance": 1140850688,
+                "retained": 3205120,
+                "roots_and_consumer_gradients": 0,
+                "physical_and_canonical_gradients": 338656,
+                "reverse_workspace": 2895872,
+                "canonical_communication": 134217728,
+                "consumer_proposals": 0,
+                "head_workspace": 0,
+                "continuation_snapshot_bytes": 0,
+                "saved_contexts": 0,
+                "gradient_accumulation": 0,
+                "context_pack_workspace": 0,
+                "retained_pack_workspace": 17039360,
+                "attention_parameter_gradients": 1536
+              },
+              "budget_bytes": 65645363200,
+              "usable_bytes": 49099804672,
+              "headroom_bytes": 16545558528
+            }
+          ],
+          "full_owners": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "state_owners": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "canonical_elements": [
+            290,
+            290
+          ],
+          "requested_chunks": {
+            "full": 16,
+            "emission": 16,
+            "aggregate": 8,
+            "attention": 8,
+            "keys": 128,
+            "reverse": 16,
+            "head": 1024
+          },
+          "effective_chunks": {
+            "full": 16,
+            "emission": 16,
+            "aggregate": 8,
+            "attention": 8,
+            "keys": 128,
+            "reverse": 16,
+            "head": 1024
+          },
+          "physical_reductions": 0,
+          "policy": "conservative",
+          "requested_device_memory_bytes": 0,
+          "initial_devices": [
+            {
+              "device": "npu:0",
+              "free_bytes": 65645064192,
+              "total_bytes": 65796046848,
+              "allocated_bytes": 0
+            },
+            {
+              "device": "npu:1",
+              "free_bytes": 65645363200,
+              "total_bytes": 65796046848,
+              "allocated_bytes": 0
+            }
+          ],
+          "observed_peak_growth_bytes": [
+            91844608,
+            130749440
+          ],
+          "allocator_within_estimate": false
+        },
+        "memory": {
+          "schema": "tide-consumer-memory-v1",
+          "phases": [
+            {
+              "phase": "initial",
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 0,
+                  "peak_allocated_bytes": 0,
+                  "reserved_bytes": 0,
+                  "peak_reserved_bytes": 0
+                }
+              ],
+              "cpu_peak_rss_bytes": 1730621440
+            },
+            {
+              "phase": "construction",
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 23167488,
+                  "peak_allocated_bytes": 23280640,
+                  "reserved_bytes": 27262976,
+                  "peak_reserved_bytes": 27262976
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 19039744,
+                  "peak_allocated_bytes": 19153920,
+                  "reserved_bytes": 23068672,
+                  "peak_reserved_bytes": 23068672
+                }
+              ],
+              "cpu_peak_rss_bytes": 1954983936
+            },
+            {
+              "phase": "measured",
+              "devices": [
+                {
+                  "device": "npu:0",
+                  "allocated_bytes": 23173632,
+                  "peak_allocated_bytes": 91844608,
+                  "reserved_bytes": 96468992,
+                  "peak_reserved_bytes": 96468992
+                },
+                {
+                  "device": "npu:1",
+                  "allocated_bytes": 19039744,
+                  "peak_allocated_bytes": 130749440,
+                  "reserved_bytes": 146800640,
+                  "peak_reserved_bytes": 146800640
+                }
+              ],
+              "cpu_peak_rss_bytes": 2068078592
+            }
+          ],
+          "scope": "per-process allocator per logical accelerator; excludes untracked vendor/driver memory; CPU RSS is process-lifetime peak",
+          "sampling": "phase boundaries outside step timers; allocator peaks reset after construction and warmup; initial setup included in construction"
+        },
+        "precision": {
+          "payload": "float32",
+          "loss": "float32",
+          "adjoints": "float32",
+          "optimizer_masters": "float32"
+        },
+        "input_tokens_per_step": 8,
+        "final_cut": 40,
+        "runtime": {
+          "schema": "tide-runtime-v1",
+          "package_version": "0.2.0",
+          "package_sha256": "522eefa078f08b10049d093b3742bb4fe596317020af159517fab4d76a5bbc62",
+          "model_origin": "caller",
+          "model_storage": {
+            "requested": "cpu",
+            "resolved": "cpu"
+          },
+          "configuration": {
+            "schema_version": 1,
+            "family": "timed-dag",
+            "graph": {
+              "nodes": [
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 0,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 1,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 2,
+                  "clear": false,
+                  "identity": false,
+                  "memory": "lh-fiber-attention-all-softmax-repeat-v1",
+                  "full": "lh-silu-rms-v1",
+                  "query_heads": 4,
+                  "kv_heads": 4,
+                  "window": 0,
+                  "emission": "slot_affine",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "norm-fp32-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 3,
+                  "clear": false,
+                  "identity": true,
+                  "memory": "ema",
+                  "full": "tanh",
+                  "query_heads": 1,
+                  "kv_heads": 1,
+                  "window": 0,
+                  "emission": "broadcast",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "linear-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                },
+                {
+                  "region": 4,
+                  "clear": false,
+                  "identity": true,
+                  "memory": "ema",
+                  "full": "tanh",
+                  "query_heads": 1,
+                  "kv_heads": 1,
+                  "window": 0,
+                  "emission": "broadcast",
+                  "emit_period": 1,
+                  "emit_phases": [],
+                  "aggregation": "sum",
+                  "readout": "linear-v1",
+                  "next_state": "adopt-v1",
+                  "state_clock": {
+                    "period": 1,
+                    "first": 0,
+                    "count": 1
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "source": 0,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 0,
+                  "target": 4,
+                  "delay": 2
+                },
+                {
+                  "source": 1,
+                  "target": 3,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 2,
+                  "delay": 1
+                },
+                {
+                  "source": 1,
+                  "target": 5,
+                  "delay": 2
+                },
+                {
+                  "source": 2,
+                  "target": 4,
+                  "delay": 1
+                },
+                {
+                  "source": 2,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 5,
+                  "delay": 1
+                },
+                {
+                  "source": 3,
+                  "target": 4,
+                  "delay": 1
+                },
+                {
+                  "source": 6,
+                  "target": 0,
+                  "delay": 1
+                },
+                {
+                  "source": 6,
+                  "target": 1,
+                  "delay": 1
+                },
+                {
+                  "source": 4,
+                  "target": 7,
+                  "delay": 1
+                },
+                {
+                  "source": 5,
+                  "target": 7,
+                  "delay": 1
+                }
+              ],
+              "regions": [
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                },
+                {
+                  "budget": 1,
+                  "observe_all": true,
+                  "count_priority": true,
+                  "read_mode": "proposal",
+                  "selector": "count-v1"
+                }
+              ],
+              "inputs": [
+                6
+              ],
+              "outputs": [
+                7
+              ],
+              "layout": {
+                "edge_source": [
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  2,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "input": [
+                  0
+                ],
+                "output": [
+                  0
+                ]
+              },
+              "origins": [
+                {
+                  "edge": 10,
+                  "port": 0,
+                  "stride": 5
+                },
+                {
+                  "edge": 11,
+                  "port": 1,
+                  "stride": 5
+                }
+              ],
+              "source_domain": {
+                "edge_target": [
+                  0,
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  2,
+                  2,
+                  0,
+                  0,
+                  0,
+                  1
+                ],
+                "input": [
+                  0
+                ]
+              }
+            },
+            "ranks": [],
+            "model": {
+              "width": 4,
+              "dtype": "float32",
+              "seed": 7,
+              "projection_layout": "input",
+              "scale_init": null
+            },
+            "execution": {
+              "implementation": "python",
+              "schedule": "auto",
+              "packed": true,
+              "prefill": null,
+              "trace": false,
+              "mode": "hard",
+              "zeta": 1.0,
+              "workers": 1,
+              "max_events": 1000000,
+              "full_autograd": "replay",
+              "aggregate_autograd": "replay",
+              "parallel_regions": false,
+              "compact_events": false,
+              "defer_state_release": false,
+              "packed_sources": false,
+              "batch_next": false,
+              "attention_packing": "exact",
+              "fiber_pooling": "event",
+              "fiber_cache": "cloned",
+              "attention_layout": "event",
+              "placement": null,
+              "resident_limits": null
+            }
+          },
+          "config_sha256": "45b2137e1fb501b6035d60f4a06657b93aecaa51ea03eb45714600faa1665c2e",
+          "runtime": {
+            "resolved_device": "npu:0",
+            "backend": "npu",
+            "logical_device_index": 0,
+            "resolution_reason": "explicit:npu",
+            "dtype": "float32",
+            "host_architecture": "aarch64",
+            "torch": "2.10.0+cpu",
+            "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+            "python": "3.11.15",
+            "cxx11_abi": true,
+            "torch_npu": "2.10.0",
+            "logical_device_count": 2,
+            "device_name": "Ascend910_9392",
+            "cann_version": "9.0.0",
+            "matmul_allow_hf32": false
+          },
+          "requested_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": false,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 1024,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "conservative",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "resolved_options": {
+            "implementation": "native",
+            "schedule": "greedy",
+            "packed": true,
+            "prefill": true,
+            "trace": false,
+            "mode": "hard",
+            "zeta": 1.0,
+            "workers": 1,
+            "max_events": 1000000,
+            "full_autograd": "replay",
+            "aggregate_autograd": "replay",
+            "parallel_regions": false,
+            "compact_events": false,
+            "defer_state_release": false,
+            "packed_sources": false,
+            "batch_next": false,
+            "attention_packing": "exact",
+            "fiber_pooling": "event",
+            "fiber_cache": "cloned",
+            "attention_layout": "event",
+            "placement": {
+              "preset": "resident",
+              "read": "auto",
+              "control": "auto",
+              "selection": "auto",
+              "events": "auto",
+              "scoring_dtype": "profile"
+            },
+            "resident_limits": {
+              "queue": 1024,
+              "arrivals": 1024,
+              "outputs": 1024,
+              "trace": 4096,
+              "stages": 4096,
+              "workspace_bytes": 536870912,
+              "chunk_policy": "conservative",
+              "full_chunk_rows": 16,
+              "emission_chunk_rows": 16,
+              "aggregate_chunk_rows": 8,
+              "attention_chunk_rows": 8,
+              "attention_key_rows": 128,
+              "kv_rows": 128,
+              "kv_trace_rows": 4096,
+              "max_repeat_ticks": 65536
+            }
+          },
+          "placement": {
+            "payload": "npu:0",
+            "read": "npu:0",
+            "control": "npu:0",
+            "selection": "npu:0",
+            "events": "npu:0",
+            "scoring_dtype": "profile"
+          },
+          "graph_identity": "e80ec1ebe5a79a32eb900dd7589bb09c2b2d0e3c7b15683a9cb7e605b1899bb9",
+          "execution_graph_identity": "e80ec1ebe5a79a32eb900dd7589bb09c2b2d0e3c7b15683a9cb7e605b1899bb9",
+          "native_sha256": "65a1d9edd2c713fe77bd8cfe8104f2a4d5a11610899f59959ad97a4809b6d564",
+          "resident": {
+            "runtime_owner": "python",
+            "dtype": "float32",
+            "mode": "hard",
+            "zeta": 1.0,
+            "autograd": false,
+            "devices": 2,
+            "scoring_dtype": "float32",
+            "exported_control_dtype": "float32",
+            "binaries": {
+              "libtide-resident.so": "20dde4adfd1bc093297d5c010be2a4adeac30d1c67615d90b1bfd50a2a3f77dc",
+              "_tide_resident.so": "25d46e2d0401038aa341b51a92efeb1573f6400c65d4f5bcc9e33ff18ac1c848"
+            },
+            "core_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+            "training": true,
+            "requested_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "state_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            "resolved_training_placement": {
+              "devices": [
+                "npu:0",
+                "npu:1"
+              ],
+              "policy": "locality",
+              "full_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "state_owners": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ]
+            },
+            "training_limits": {
+              "windows": 2,
+              "retained_bytes": 134217728,
+              "backward_bytes": 2147483648,
+              "optimizer_bytes": 134217728,
+              "program_workspace_bytes": 67108864,
+              "reverse_chunk_rows": 16
+            }
+          }
+        },
+        "diagnostics": false,
+        "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+        "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+        "projection_placement": "compact banks on Full owners",
+        "failure_phase": "post_run_memory_calibration",
+        "state": "failed",
+        "error": "consumer memory estimate underestimated allocator peak; retain failed run and recalibrate"
+      }
+    }
+  ],
+  "scope": "Only reporting and post-run observation collection changed; admission envelopes, caps, kernels and graph semantics unchanged.",
+  "limits": [
+    "CPU tests exercise native process failure propagation using a fake failing child; no accelerator claim from that fixture.",
+    "The NPU test injects a planner underestimate only after safely admitted real two-card training; it verifies preserved full records and subsequent owner reuse.",
+    "Real LibTorch success/early-refusal paths and Python/native/mixed phase records covered. Natural large-scale underestimation diagnosis is separate."
+  ]
+}
