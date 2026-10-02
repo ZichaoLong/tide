@@ -44,6 +44,9 @@ RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget,Retain
   return retain_reverse_tape(source,budget,projection,false);
 }
 RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention) {
+  return retain_reverse_tape(input,budget,projection,compact_journals,attention,nullptr);
+}
+RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention,RetainedFull* full) {
   auto source=input;if(compact_journals)compact_retained_journals(source);
   if(!source.emission.shards.empty())throw std::invalid_argument("compact projection retention requires the sharded tape owner");
   if(at::GradMode::is_enabled()||!source.graph||!source.fiber_values.defined()||budget<1
@@ -55,6 +58,7 @@ RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,Retaine
   std::map<const void*,at::Tensor> copies;long double bytes=0;
   if(projection)projection->reuse(copies,source.emission.weights,source.emission.biases);
   if(attention)attention->reuse(copies,source.attention,source.fiber);
+  if(full)full->reuse(copies,source.full);
   for(auto* x:buffers)if(x->defined()) {
     if(x->device()!=source.fiber_values.device()||x->requires_grad())throw std::invalid_argument("invalid retained tape ownership");
     const auto key=x->unsafeGetTensorImpl();
@@ -62,6 +66,7 @@ RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,Retaine
   }
   if(bytes>budget)throw std::invalid_argument("retained tape tensor budget exceeded");
   out.tensor_bytes=static_cast<int64_t>(bytes);
+  if(full){full->capture(source.full);full->seed(copies);}
   if(projection) {
     projection->capture(source.emission.weights,source.emission.biases);
     projection->seed(copies);

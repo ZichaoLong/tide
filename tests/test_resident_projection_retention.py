@@ -23,9 +23,9 @@ def test_projection_snapshot_budget_and_update_lifetime(target, family, cards, s
     first = training_case(target, family, schedule, "adamw", broad, **options)
     peak = first[0]["retained_bytes"]
     for s in first:
-        assert s["retained_windows"] == 2 and s["retained_projection_bytes"] > 0
-        assert s["retained_bytes"] == 2*s["retained_window_bytes"]+s["retained_projection_bytes"] == peak
-        assert peak < 2*(s["retained_window_bytes"]+s["retained_projection_bytes"])
+        assert s["retained_windows"] == 2 and s["retained_projection_bytes"] > 0 and s["retained_full_bytes"] > 0
+        assert s["retained_bytes"] == 2*s["retained_window_bytes"]+s["retained_projection_bytes"]+s["retained_full_bytes"] == peak
+        assert peak < 2*(s["retained_window_bytes"]+s["retained_projection_bytes"]+s["retained_full_bytes"])
     limits = ResidentTrainingLimits(retained_bytes=peak, backward_bytes=8*1024**3 if placement else 512*1024**2)
     second = training_case(target, family, schedule, "adamw", bounded, training_limits=limits, **options)
     assert first == second

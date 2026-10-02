@@ -4,6 +4,7 @@
 #include "precision_graph_profiles.h"
 #include "retained_cache_fixture.h"
 #include "retained_attention_check.h"
+#include "retained_full_check.h"
 #include "reverse_gather_check.h"
 #include "parameter_accumulate_check.h"
 #include "full_vjp_fixture.h"
@@ -125,7 +126,7 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     const auto attention=grad.statistics.at("retained_attention_bytes");
     require((attention>0)==(cache>=0),"attention snapshot scope differs from model");
     const auto dense=grad.statistics.at("retained_windows")*grad.statistics.at("retained_window_bytes")+
-      grad.statistics.at("retained_projection_bytes")+attention;
+      grad.statistics.at("retained_projection_bytes")+attention+grad.statistics.at("retained_full_bytes");
     require(grad.statistics.at("retained_dense_bytes")==dense,"shared parameter snapshot counted per window");
     require(grad.statistics.at("retained_compact_journals")==compact_journals,"retained journal policy changed");
     if(compact_journals)require(grad.statistics.at("retained_bytes")<grad.statistics.at("retained_dense_bytes"),"retained journals did not shrink");
@@ -197,6 +198,7 @@ int main(int argc,char** argv) {
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     test::retained_attention_check(d,args.dtype);
+    test::retained_full_check(d,args.dtype);
     test::reverse_gather_check(d,args.dtype);
     test::private_accumulation_check(d);
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);

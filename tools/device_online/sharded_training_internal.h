@@ -27,9 +27,10 @@ struct ShardedTrainingOwner::Impl {
   std::vector<Saved> saved;
   std::vector<Tensor> initial_present;
   uint64_t session;
-  Index cut,generation=0,next_token=0,bytes_per_window=0,saved_bytes=0,projection_bytes=0, attention_bytes=0;
+  Index cut,generation=0,next_token=0,bytes_per_window=0,saved_bytes=0,projection_bytes=0, attention_bytes=0, full_bytes=0;
   device_online::RetainedProjection projection_snapshot;
   device_online::RetainedAttention attention_snapshot;
+  device_online::RetainedFull full_snapshot;
   bool gradients_ready=false,failed=false;
   Index accumulated_batches=0;
   Impl(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,

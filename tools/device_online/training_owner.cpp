@@ -52,7 +52,8 @@ ResidentTrainingSession::Impl::Impl(Graph g,Model m,const Continuation& q,at::De
   if(bytes>l.retained_bytes)throw std::invalid_argument("resident training cannot retain one window within budget");
   projection_bytes=RetainedProjection::bytes(tape.emission.weights,tape.emission.biases);
   attention_bytes=RetainedAttention::bytes(tape.attention,tape.fiber);
-  bytes_per_window=static_cast<Index>(bytes)-projection_bytes-attention_bytes;initial_present=state.second.clone();
+  full_bytes=RetainedFull::bytes(tape.full);
+  bytes_per_window=static_cast<Index>(bytes)-projection_bytes-attention_bytes-full_bytes;initial_present=state.second.clone();
 }
 void ResidentTrainingSession::Impl::check() const {
   if(sharded){sharded->check();return;}
@@ -63,7 +64,7 @@ void ResidentTrainingSession::Impl::check() const {
     throw std::logic_error("caller parameters changed after resident training construction");
 }
 void ResidentTrainingSession::Impl::discard() {
-  saved.clear();projection_snapshot={};attention_snapshot={};saved_bytes=0;gradient={};gradients_ready=false;
+  saved.clear();projection_snapshot={};attention_snapshot={};full_snapshot={};saved_bytes=0;gradient={};gradients_ready=false;
   accumulated={};accumulated_batches=0;
   initial_present=flow->state_device().second.clone();
 }
@@ -78,20 +79,21 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
   if(s.sharded)return s.sharded->advance(input,stop,seal);
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
-  const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes+s.attention_bytes:0);
-  if((s.saved.size()+1.L)*s.bytes_per_window+s.projection_bytes+s.attention_bytes>std::numeric_limits<Index>::max())
+  const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes+s.attention_bytes+s.full_bytes:0);
+  if((s.saved.size()+1.L)*s.bytes_per_window+s.projection_bytes+s.attention_bytes+s.full_bytes>std::numeric_limits<Index>::max())
     throw std::invalid_argument("retained dense envelope extent overflow");
   if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
   const auto banks=s.flow->parameter_banks();s.attention_snapshot.bind(banks.attention,banks.fiber);
+  s.full_snapshot.validate(s.flow->full_tape());
   ContentWindow window;
   try {window=s.flow->advance_device(input,stop);}
   catch(const std::invalid_argument&){throw;} // Complete input preflight is retryable.
   catch(...){s.failed=true;throw;}
   try {
     const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
-    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact,&s.attention_snapshot);
+    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact,&s.attention_snapshot,&s.full_snapshot);
     const auto state=s.flow->state_device();auto final=state.first.clone(),present=state.second.clone();
     ResidentToken token{s.session,s.next_token++,s.generation};
     auto outputs=ResidentWindow{tape.tape.outputs.coordinates,tape.tape.outputs.values,tape.tape.outputs.valid,
@@ -144,6 +146,6 @@ ResidentPlacement ResidentTrainingSession::placement() const {
 }
 void ResidentTrainingSession::close() {
   if(impl_->sharded){impl_->sharded->close();return;}
-  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->projection_snapshot={};impl_->attention_snapshot={};impl_->optimizer.reset();impl_->gradient={};impl_->accumulated={};}
+  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->projection_snapshot={};impl_->attention_snapshot={};impl_->full_snapshot={};impl_->optimizer.reset();impl_->gradient={};impl_->accumulated={};}
 }
 } // namespace tide

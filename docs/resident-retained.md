@@ -9,7 +9,7 @@ Construction admits the complete declared tensor footprint before copying;
 the caller must also budget all retained windows, reverse buffers and CANN workspace.
 
 The standalone retention functions copy parameter banks for each tape. Guarded
-public training owners additionally share immutable emission and attention
+public training owners additionally share immutable Full, emission and attention
 parameter snapshots within one backward group. Attention snapshots include QKV,
 output projections, parameter biases, decay and pool weights. They never include
 KV, cache log-bias, lengths or journals; those still describe each actual window.
@@ -19,6 +19,10 @@ It clones the first group's values rather than borrowing writable forward banks.
 CANN publication need not increment ATen versions; the owner's prohibition on
 publication with outstanding windows is essential. Backward, explicit detach
 and close discard the cache, and a later update captures the new values.
+Full snapshots include tanh/LH/SwiGLU parameter banks and their static kind/mapping
+tables, with identity, version, shape, stride, dtype and device checks. Actual Full
+values, counts and event metadata remain independent for each window. The standalone
+retention overloads retain their independent-copy behavior.
 The dense pre-advance budget charges these shared parameters once and dynamic
 records per window. Complete-consumer memory admission remains conservative
 until separate allocator calibration justifies any change to its estimate.

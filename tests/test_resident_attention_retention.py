@@ -27,7 +27,7 @@ def test_attention_snapshot_budget_and_versions(target, family, schedule, memory
     for s in records:
         assert s["retained_attention_bytes"] > 0 and s["retained_windows"] == 2
         assert s["retained_bytes"] == s["retained_dense_bytes"] == peak
-        assert peak == 2*s["retained_window_bytes"]+s["retained_projection_bytes"]+s["retained_attention_bytes"]
+        assert peak == 2*s["retained_window_bytes"]+s["retained_projection_bytes"]+s["retained_attention_bytes"]+s["retained_full_bytes"]
     limits = ResidentTrainingLimits(retained_bytes=peak)
     assert training_case(target, family, schedule, "adamw", bounded, training_limits=limits, **options) == records
     (tmp_path/"retention.json").write_text(json.dumps(dict(memory=memory, family=family, statistics=records)))

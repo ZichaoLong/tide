@@ -45,22 +45,40 @@ chunks exactly match prior records. No actual-memory or speed gain is claimed.
 No redundant profile was run. Audit:
 `python TASK/launchers/training_storage_evidence.py 4dd8368159ff74e8b45c052cfe85ecbca1e294f2`.
 
-## Next implementation
+## Current implementation and immediate next action
 
-Inspect actual retained/reverse allocations before another large run.
-`full_shard_tape.cpp` still clones immutable Full banks for every retained window.
-Investigate update-scoped immutable copies analogous to RetainedProjection and
-RetainedAttention, preserving default standalone snapshots, byte admission,
-guards and lifecycle. Analysis only at this checkpoint; not implemented yet.
+Full snapshot sharing now copies immutable tanh/LH/SwiGLU banks and static
+kind/mapping tables once per backward group, for single-device and sharded owners.
+Each window retains its own dynamic events/values/counts. Source identity/version/
+shape/stride/device/dtype guards and no-publication lifetime apply; backward,
+detach and close clear the cache. `retained_full_bytes` records the shared copy.
+Standalone retention overloads keep independent snapshots. Consumer estimates
+are unchanged and conservative. No full-size fit or speed claim follows.
 
-Cross-window gradient reuse is separate: preserve reverse-window→registry-alias
-addition order and device completion. Remote Full initializes totals before its
-first request; simply aliasing these buffers is unsafe. Do not borrow live forward
-banks without a proven contract.
+Development: Python build and16 retention/budget tests passed on frozen
+`full-snapshot-dev01`. Standalone dev01 failed only in the new checker at ambiguous
+Tensor assignment; preserved. Corrected frozen `full-snapshot-dev02` passed
+standalone/installed consumer builds, all6 native cells (144trajectories,
+2432windows,560updates; FP32/FP16,CPU FP32/FP64 references), and8 actual sliced
+consumer tests without skips. Python dev01 production inputs match dev02 exactly;
+only the standalone checker header differs. No development job remains running.
 
-Original Attention B512/physicalB1 minimum estimates still refuse: ~68.031GiB
-on12cards/~57.097GiB on16cards versus53.875GiB usable. No new original-width pilot
-or automatic B512 retry is queued; do not relax bounds.
+Next: commit this implementation and push; freeze clean `full-snapshot-clean01`.
+Qualify affected standalone/Python libraries and installed consumer; run native6,
+Python16,consumer32, a same-lease D512 allocator comparison and separate FP16 trace.
+Names: `build-full-snapshot-{standalone,python,consumer}-clean01` and
+`full-snapshot-{native,python,consumer,memory,profile}-clean01`. Reuse verified
+objects with fresh links; build2,queue120s,child480–900s. Logs/status under
+`TASK/runs/<name>`. Do not start a new original-width pilot from this small change.
+
+Both wide model fixtures use LH Full, whose parameter storage is small; this
+is a general retention improvement, not the main scale-memory solution. Next
+investigate the dominant physical projection/attention reverse gradients and
+scratch lifetimes. Preserve reverse-window→registry-alias addition order and
+explicit device completion; remote Full zeros totals before its first request.
+Simply aliasing cross-window buffers or borrowing live banks is unsafe.
+Original Attention B512/physicalB1 estimates still refuse; no cost/safety gate
+is relaxed and no automatic B512 retry is queued.
 
 ## Scale evidence and progress boundary
 
@@ -100,7 +118,7 @@ Source `TASK/sources/training-storage-clean01`; consumer
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current job running/queued. **Preserve deliberately SIGSTOPped
+No current job is running/queued before clean qualification. **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
 in the restricted flow, not current online evidence. Restricted archive:
