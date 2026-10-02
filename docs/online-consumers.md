@@ -174,6 +174,12 @@ per-card incremental memory budget (default0: live driver free memory). A shape
 planner accounts for simultaneous lifetimes and reduces physical row maxima
 without changing logical capacities. See [capacity admission](consumer-capacity.md)
 for scope, headroom, estimates and the Torch-free offline command.
+Aggressive planning halves the single operator maximum that most reduces the
+sum of per-card peak excess, keeping nonlimiting batches larger. Equal-peak
+plateaus use joint halving; conservative planning always retains joint halving.
+This deterministic shape-only heuristic does not execute the model or promise
+optimal throughput. `memory_admission.row_selection` records the selected rule;
+the memory envelope, safety margin and logical queue/KV capacities are unchanged.
 
 The resident consumer head also accepts `--head-workspace-bytes` (default4GiB).
 Before model construction, a tensor planner reserves output cotangents, head

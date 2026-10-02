@@ -176,6 +176,27 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
       if(card.peak>card.usable){fits=false;why+="device "+std::to_string(i)+": estimated "+std::to_string(card.peak)+" > usable "+std::to_string(card.usable)+"; ";}
     }
     if(fits)return out;
+    if(aggressive) {
+      auto excess=[&](const std::vector<Card>& cards) {
+        Wide score=0;
+        for(size_t i=0;i<cards.size();++i)
+          score+=std::max<Wide>(0,Wide(cards[i].peak)-out.cards[i].usable);
+        return score;
+      };
+      Wide best=excess(out.cards);std::string selected;
+      // Same stable tie order as Python Chunks. Numerical values, events and
+      // routes play no part in this static scratch-capacity decision.
+      for(const auto* key:{"full","emission","aggregate","attention","keys","reverse","head"}) {
+        const I value=out.effective.at(key);if(value==1)continue;
+        auto trial=out.effective;trial[key]=std::max<I>(1,value/2);
+        const Wide score=excess(envelope(g,c,trial,out.owners,out.canonical));
+        if(score<best){best=score;selected=key;}
+      }
+      if(!selected.empty()) {
+        out.effective[selected]=std::max<I>(1,out.effective.at(selected)/2);++out.reductions;continue;
+      }
+    }
+    // Joint halving crosses equal-peak plateaus; conservative mode retains it.
     bool changed=false;for(auto& [_,value]:out.effective)if(value>1){value=std::max<I>(1,value/2);changed=true;}
     if(!changed)throw MemoryRefusal("complete-consumer memory admission refused at minimum physical rows; "+why);
     ++out.reductions;

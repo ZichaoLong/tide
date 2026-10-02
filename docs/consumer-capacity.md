@@ -47,11 +47,18 @@ processes. The coefficients must be checked against allocator peaks on a new
 stack. A post-run peak above the estimate fails calibration and preserves the
 failed run; shared-resource changes can still cause a real allocation failure.
 
-If a requested physical configuration does not fit, the planner halves the
-Full/emission/aggregation/attention-query/key/reverse/head row maxima until it
-finds a fit or reaches one row. This bounded search performs no device workload
-and deliberately does not search by OOM. It records requested/effective maxima
-and the number of reductions. The backend may further reduce physical rows to
+If a requested physical configuration does not fit, aggressive mode considers
+halving each Full/emission/aggregation/attention-query/key/reverse/head maximum
+separately. It chooses the greatest reduction in the summed positive peak excess
+over all cards, breaking ties in that field order. This keeps nonlimiting batches
+larger. If equal peak phases hide every individual improvement, it halves all
+fields together; conservative mode always uses that joint halving. Every accepted
+plan still fits the original per-card envelope and safety margin. This heuristic
+does not promise optimal throughput or the fewest reductions.
+
+The finite search performs no device workload and does not search by OOM. It
+records requested/effective maxima, reduction iterations and `row_selection`
+(`greedy_peak_excess` or `joint_halving`). The backend may further reduce rows to
 meet local budgets. Logical batch, queue/output/journal capacity, retained window
 count, KV capacity, visibility, loss denominator and update boundary do not
 change. A one-row refusal reports the offending logical card and estimated versus

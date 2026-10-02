@@ -23,6 +23,7 @@ inline void record(std::ostream& out,const Plan& p) {
   out<<",\"canonical_elements\":";array(out,p.canonical);out<<",\"requested_chunks\":";fields(out,p.requested);
   out<<",\"effective_chunks\":";fields(out,p.effective);
   out<<",\"physical_reductions\":"<<p.reductions<<",\"policy\":\""<<(p.aggressive?"aggressive":"conservative")<<'"';
+  out<<",\"row_selection\":\""<<(p.aggressive?"greedy_peak_excess":"joint_halving")<<'"';
   if(!p.sample_attempts.empty()) {
     out<<",\"sample_admission\":{\"logical_batch\":"<<p.logical_batch<<",\"effective_sample_rows\":"<<p.sample_rows
       <<",\"physical_chunks\":"<<(p.logical_batch-1)/p.sample_rows+1<<",\"attempted_sample_rows\":";

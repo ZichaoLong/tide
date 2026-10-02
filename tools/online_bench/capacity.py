@@ -256,12 +256,30 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
         if max(values.values()) == 1:
             details = ', '.join(f"device {i}: estimated {d['estimated_peak_bytes']} > usable {usable[i]}" for i,d in enumerate(cards) if d['estimated_peak_bytes'] > usable[i])
             raise MemoryRefusal('complete-consumer memory admission refused at minimum physical rows; '+details)
-        chunks = Chunks(**{k:max(1,x//2) for k,x in values.items()}); reductions += 1
+        selected = None
+        if aggressive:
+            # Prefer the single halving that most reduces aggregate excess on
+            # the constrained cards. Small/nonlimiting operators keep their
+            # batching. Static shape envelopes only, never a numerical prepass.
+            excess = lambda rows: sum(max(0,d['estimated_peak_bytes']-cap) for d,cap in zip(rows,usable))
+            best = excess(cards)
+            for key,value in values.items():  # Stable Chunks field order.
+                if value == 1:
+                    continue
+                trial = Chunks(**{**values,key:max(1,value//2)})
+                score = excess(envelope(g,c,trial,owners,canonical,state_owners))
+                if score < best:
+                    selected,best = trial,score
+        # Equal peak phases can mask every individual gain. Joint halving
+        # crosses that plateau and is also the unchanged conservative policy.
+        chunks = selected or Chunks(**{k:max(1,x//2) for k,x in values.items()})
+        reductions += 1
     for card, budget, cap in zip(cards,budgets,usable):
         card.update(budget_bytes=budget,usable_bytes=cap,headroom_bytes=budget-cap)
     return dict(schema='tide-consumer-capacity-v1', scope='resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee',
                 devices=cards,full_owners=owners,state_owners=state_owners,canonical_elements=canonical,
                 requested_chunks=asdict(requested),effective_chunks=asdict(chunks),physical_reductions=reductions,
+                row_selection='greedy_peak_excess' if aggressive else 'joint_halving',
                 policy='aggressive' if aggressive else 'conservative')
 
 

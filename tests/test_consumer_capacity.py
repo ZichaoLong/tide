@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'scripts'))
 from flow_topology import ranked_graph
 from flow_protocol import make_continuous_packet
-from tools.online_bench.capacity import Capacities, Chunks, MIB, packet_geometry, plan
+from tools.online_bench.capacity import Capacities, Chunks, MIB, packet_geometry, plan, envelope
 
 
 
@@ -69,6 +69,54 @@ def test_weakest_card_and_fixed_state_refusal(capacity_probe):
     with pytest.raises(ValueError,match='minimum physical rows'):
         plan(g,caps,chunks,budgets,True)
     assert 'minimum physical rows' in cpp_plan(capacity_probe,g,caps,chunks,budgets,True)
+
+
+def test_aggressive_preserves_nonlimiting_operator_batches(capacity_probe):
+    _,g = geometry(memory='add',width=512)
+    caps = Capacities(trace=128,kv_trace=256)
+    requested = Chunks(head=4)
+    full = plan(g,caps,requested,[64*1024**3]*g.devices,True)
+    small = plan(g,caps,replace(requested,reverse=2),[64*1024**3]*g.devices,True)
+    weak = 1
+    target = (full['devices'][weak]['estimated_peak_bytes']+small['devices'][weak]['estimated_peak_bytes'])//2
+    budgets = [64*1024**3]*g.devices;budgets[weak]=(target+128*MIB)*10//9+1
+    got = plan(g,caps,requested,budgets,True)
+    assert cpp_plan(capacity_probe,g,caps,requested,budgets,True)==got
+    assert got['row_selection']=='greedy_peak_excess' and got['effective_chunks']['reverse']<requested.reverse
+    # Tiny Full/aggregate work and inactive Attention do not need to shrink
+    # when the reverse scratch alone can resolve this card's memory excess.
+    for key in ('full','aggregate','attention','keys','head'):
+        assert got['effective_chunks'][key]==asdict(requested)[key]
+    assert all(d['estimated_peak_bytes']<=d['usable_bytes'] for d in got['devices'])
+
+
+def test_constrained_plans_keep_original_envelope_and_language_parity(capacity_probe):
+    rng=random.Random(109)
+    for i in range(16):
+        _,g=geometry('add' if i%2 else 'attention',rng.choice([16,128,512]),rng.choice([2,3]))
+        g=replace(g,payload=2 if i%3 else 4,windows=1+i%3,sample_chunks=1+i%4)
+        caps=Capacities(trace=128,kv_trace=256)
+        requested=Chunks(full=11,emission=9,aggregate=7,attention=5,keys=33,reverse=13,head=17)
+        full=plan(g,caps,requested,[64*1024**3]*g.devices,True)
+        minimum=plan(g,caps,Chunks(1,1,1,1,1,1,1),[64*1024**3]*g.devices,True)
+        weak=i%g.devices
+        target=(minimum['devices'][weak]['estimated_peak_bytes']+full['devices'][weak]['estimated_peak_bytes'])//2
+        for aggressive in (False,True):
+            denominator=10 if aggressive else 4
+            budgets=[64*1024**3]*g.devices
+            budgets[weak]=(target+128*MIB)*denominator//(denominator-1)+1
+            got=plan(g,caps,requested,budgets,aggressive)
+            assert cpp_plan(capacity_probe,g,caps,requested,budgets,aggressive)==got
+            assert got['physical_reductions']>0
+            assert got['full_owners']==full['full_owners'] and got['canonical_elements']==full['canonical_elements']
+            assert all(1<=value<=asdict(requested)[key] for key,value in got['effective_chunks'].items())
+            exact=envelope(g,caps,Chunks(**got['effective_chunks']),got['full_owners'],got['canonical_elements'])
+            for card,original in zip(got['devices'],exact):
+                assert card['estimated_peak_bytes']==original['estimated_peak_bytes']<=card['usable_bytes']
+                assert card['phases']==original['phases'] and card['components']==original['components']
+            if not aggressive:
+                assert got['row_selection']=='joint_halving'
+                assert got['effective_chunks']=={k:max(1,v//2**got['physical_reductions']) for k,v in asdict(requested).items()}
 
 
 def test_continuation_retention_and_precision_costs():

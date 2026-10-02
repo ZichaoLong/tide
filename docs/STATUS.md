@@ -5,7 +5,7 @@ commits and pushes. No subagents. Overall goal incomplete.** Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Latest pushed implementation **b3a6a24**;
-private-accumulation evidence prepared below. Re-entry:
+latest evidence committed/pushed7e98eef. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. References and ObsidianVault stay read-only.
@@ -59,8 +59,7 @@ objects reused after source/compile-command verification; fresh clean links.
 Other host/core/CANN and client objects reused by hash; no from-scratch claim.
 Core placement-{cpu,npu,npu-python}-clean01; CPUconsumer source-values-cpu-clean01.
 
-Next: commit/push prepared evidence, then improve **aggressive physical chunk
-selection**. Current planner halves all fields together, needlessly shrinking
+Now developing **aggressive physical chunk selection**. Current planner halves all fields together, needlessly shrinking
 low-memory work. Investigate deterministic one-field greedy reduction of actual
 per-card peak excess, with safe plateau fallback. Keep the same envelope,
 headroom,logical capacities and general topology/input behavior. Validate Python/
@@ -121,5 +120,21 @@ Required full-size CPU/screened mixed/resident comparisons and three independent
 process recommendations remain, followed by F7 migration/support/evidence audit.
 CUDA and other environment tuples require target-machine validation.
 
-Uncommitted: reviewed private-accumulation evidence,ROADMAP and this handoff.
-No active NPU jobs. Next command after review: git diff --check; commit/push evidence.
+Aggressive one-field selection passed dirty-source development:
+chunk-planner-cpu-dev01 CPU13 (including Python/C++ constrained-shape parity),
+build-chunk-planner-consumer-dev01 installed consumer build/loader,
+chunk-planner-npu-dev01 NPU17 actual split/automatic-sample cases with CPU oracle,
+FP32/FP16 and native/LibTorch. Every observed allocation passed the same envelope.
+No core/resident backend/CANN changes. New row_selection records the rule.
+
+Commit implementation, then clean chunk-planner-clean01 snapshot: CPU13,installed
+consumer build with source/header/options-verified object reuse,NPU17,and separate
+forced-splitting FP16 profile. Profile task helper profile_chunk_planner.py,
+2cards,device-memory-bytes1839217549,queue120s/workload480s. After qualification,
+one bounded ten-card original-width AddB4/physicalB2 pilot using the plan selected
+for unchanged B512. No automatic full-batch stage; retain3000s gate.
+Static new plan with default head4GiB:Full16/emission4/aggregate8/attention8/
+keys128/reverse1/head64,coordinator53.142GiB<53.875GiB usable. This is a plan only,
+not verified original-width performance. No estimated component/margin changed.
+
+Uncommitted: planner,tests,consumer docs and handoff. No live NPU jobs.
