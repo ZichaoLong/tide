@@ -14,6 +14,11 @@ int main() {
     for(const auto* key:{"full","emission","aggregate","attention","keys","reverse","head"})std::cin>>chunks[key];
     std::vector<I> budgets(g.devices);for(auto& x:budgets)std::cin>>x;
     if(!std::cin)throw std::invalid_argument("probe input");
-    record(std::cout,plan(g,c,chunks,budgets,aggressive));return 0;
+    I logical_batch;bool automatic;
+    if(std::cin>>logical_batch) {
+      if(!(std::cin>>automatic))throw std::invalid_argument("probe sample input");
+      record(std::cout,plan_samples(g,c,chunks,budgets,aggressive,logical_batch,automatic));
+    }else record(std::cout,plan(g,c,chunks,budgets,aggressive));
+    return 0;
   }catch(const std::exception& e){std::cerr<<e.what();return 2;}
 }

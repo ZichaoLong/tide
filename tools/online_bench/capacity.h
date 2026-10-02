@@ -30,7 +30,11 @@ struct Geometry {
 struct Capacities {I queue=1024,arrivals=1024,outputs=1024,trace=4096,kv=128,kv_trace=4096,program=64*MiB;};
 using Chunks=std::map<std::string,I>;
 struct Card {I index,peak,budget=0,usable=0,headroom=0;std::map<std::string,I> phases,components;};
-struct Plan {std::vector<Card> cards;std::vector<I> owners,canonical;Chunks requested,effective;I reductions=0;bool aggressive;};
+struct MemoryRefusal:std::invalid_argument {using std::invalid_argument::invalid_argument;};
+struct Plan {
+  std::vector<Card> cards;std::vector<I> owners,canonical;Chunks requested,effective;I reductions=0;bool aggressive;
+  I logical_batch=0,sample_rows=0;std::vector<I> sample_attempts;
+};
 
 inline std::vector<I> placement(const Geometry& g) {
   const I n=g.sources.size(),d=g.devices;const Wide w=g.width;
@@ -161,8 +165,25 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
     }
     if(fits)return out;
     bool changed=false;for(auto& [_,value]:out.effective)if(value>1){value=std::max<I>(1,value/2);changed=true;}
-    if(!changed)throw std::invalid_argument("complete-consumer memory admission refused at minimum physical rows; "+why);
+    if(!changed)throw MemoryRefusal("complete-consumer memory admission refused at minimum physical rows; "+why);
     ++out.reductions;
+  }
+}
+inline Plan plan_samples(Geometry g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,
+    bool aggressive,I logical_batch,bool automatic) {
+  if(!automatic)return plan(g,c,requested,budgets,aggressive);
+  if(logical_batch<1||g.batch<1||g.batch>logical_batch)
+    throw std::invalid_argument("invalid automatic sample admission geometry");
+  std::vector<I> attempted;
+  for(;;) {
+    g.sample_chunks=(logical_batch-1)/g.batch+1;attempted.push_back(g.batch);
+    try {
+      auto out=plan(g,c,requested,budgets,aggressive);
+      out.logical_batch=logical_batch;out.sample_rows=g.batch;out.sample_attempts=std::move(attempted);return out;
+    }catch(const MemoryRefusal&) {
+      if(g.batch==1)throw;
+      g.batch=(g.batch-1)/2+1;
+    }
   }
 }
 } // namespace tide_flow::capacity

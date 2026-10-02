@@ -79,3 +79,18 @@ repeat admission using live driver availability and record `memory_admission`
 beside phase allocator observations. CPU/mixed consumers retain their existing
 memory observations; this resident planner does not certify their peak memory.
 Full-size F6 and qualification on other CANN/CUDA environments remain separate.
+
+Optional `--auto-sample-chunks` applies the same static admission before model
+allocation to progressively smaller physical sample groups. It starts at the
+`--sample-chunk-rows` ceiling (zero starts at the logical batch), tries operator
+row reductions first, then halves samples with upward rounding after a memory
+refusal. It recharges saved continuations and gradient accumulation for the new
+group count on every attempt. The search stops at the first fit or an explicit
+one-sample refusal; invalid geometry and overflow errors are not retried.
+`memory_admission.sample_admission` records attempted/selected rows and groups.
+Fixed sample selection remains the default. This is a finite conservative
+heuristic, not an optimal-throughput search or a numerical prepass. It does not
+shrink queue/journal/KV capacities, change dtype, reduce the logical batch, or
+change window connections, loss normalization or the shared update boundary.
+Explicit capacity failures still apply to actual future inputs. CPU/eager mixed
+flows reject this resident-only option; their explicit sample slicing remains.

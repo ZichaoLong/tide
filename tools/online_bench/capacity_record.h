@@ -17,6 +17,12 @@ inline void record(std::ostream& out,const Plan& p) {
   out<<"],\"full_owners\":";array(out,p.owners);out<<",\"state_owners\":";array(out,p.owners);
   out<<",\"canonical_elements\":";array(out,p.canonical);out<<",\"requested_chunks\":";fields(out,p.requested);
   out<<",\"effective_chunks\":";fields(out,p.effective);
-  out<<",\"physical_reductions\":"<<p.reductions<<",\"policy\":\""<<(p.aggressive?"aggressive":"conservative")<<"\"}";
+  out<<",\"physical_reductions\":"<<p.reductions<<",\"policy\":\""<<(p.aggressive?"aggressive":"conservative")<<'"';
+  if(!p.sample_attempts.empty()) {
+    out<<",\"sample_admission\":{\"logical_batch\":"<<p.logical_batch<<",\"effective_sample_rows\":"<<p.sample_rows
+      <<",\"physical_chunks\":"<<(p.logical_batch-1)/p.sample_rows+1<<",\"attempted_sample_rows\":";
+    array(out,p.sample_attempts);out<<",\"policy\":\"halve_on_memory_refusal\"}";
+  }
+  out<<'}';
 }
 } // namespace tide_flow::capacity

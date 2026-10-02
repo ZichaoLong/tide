@@ -1,11 +1,11 @@
 """NPU runtime boundary for the complete consumer's static capacity plan."""
 from dataclasses import replace
 import torch
-from .capacity import Capacities, Chunks, packet_geometry, plan
+from .capacity import Capacities, Chunks, packet_geometry, plan_samples
 
 
 def prepare(packet, device, forward, limits, owners, head, training, optimizer, windows, budget, payload, diagnostics,
-            sample_rows=None, context_memory_bytes=0):
+            sample_rows=None, context_memory_bytes=0, auto_sample_chunks=False):
     if type(budget) is not int or not 0 <= budget < 2**63:
         raise ValueError('device-memory-bytes must be a nonnegative int64')
     devices = list(owners.devices) or [str(device)]
@@ -27,8 +27,8 @@ def prepare(packet, device, forward, limits, owners, head, training, optimizer, 
     c = Capacities(forward.queue,forward.arrivals,forward.outputs,forward.trace,forward.kv_rows,forward.kv_trace_rows,limits.program_workspace_bytes)
     chunks = Chunks(forward.full_chunk_rows,forward.emission_chunk_rows,forward.aggregate_chunk_rows,
                     forward.attention_chunk_rows,forward.attention_key_rows,limits.reverse_chunk_rows,head.rows)
-    record = plan(g,c,chunks,[min(s['free_bytes'],budget) if budget else s['free_bytes'] for s in samples],
-                  forward.chunk_policy=='aggressive',owners.full_owners,owners.state_owners)
+    record = plan_samples(g,c,chunks,[min(s['free_bytes'],budget) if budget else s['free_bytes'] for s in samples],
+                  forward.chunk_policy=='aggressive',packet['workload']['batch'],auto_sample_chunks,owners.full_owners,owners.state_owners)
     record['requested_device_memory_bytes'] = budget
     record['initial_devices'] = samples
     selected = record['effective_chunks']

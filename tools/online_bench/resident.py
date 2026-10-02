@@ -49,7 +49,7 @@ def gradient_diagnostics(runtime, gradient, embedding, head, ge, gh):
 def run(packet, *, family, implementation, device, dtype, schedule, training, optimizer, steps, warmup,
         windows_per_step, native_library, diagnostics, placement, observer, parameter_budget,
         resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes, device_memory_bytes=0,
-        sample_chunk_rows=0, context_memory_bytes=0):
+        sample_chunk_rows=0, context_memory_bytes=0, auto_sample_chunks=False):
     if implementation != "native" or torch.device(device).type != "npu":
         raise ValueError("resident consumer requires explicit native NPU execution")
     if dtype not in {"float32", "float16"}:
@@ -80,7 +80,11 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                             training, head_workspace_bytes, forward.chunk_policy=="aggressive")
     record_diagnostics = diagnostics or observer is not None
     forward,limits,owners,head_plan,capacity = prepare_capacity(packet,device,forward,limits,owners,head_plan,
-        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or record_diagnostics,chunk,context_memory_bytes)
+        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or record_diagnostics,chunk,context_memory_bytes,
+        auto_sample_chunks)
+    if auto_sample_chunks:
+        chunk = capacity['sample_admission']['effective_sample_rows']
+        chunks = (c['batch']-1)//chunk+1
     accumulation_budget = sum(d['components']['gradient_accumulation'] for d in capacity['devices'])
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset="resident", trace=record_diagnostics, native_library=native_library,

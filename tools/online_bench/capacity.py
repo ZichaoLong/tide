@@ -4,11 +4,15 @@ These estimates are intentionally conservative, not vendor allocation proofs.
 Local workspace budgets are ceilings, not allocations, and are never summed as
 HBM demand. Only physical row maxima may shrink; logical capacities stay fixed.
 """
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, replace
 from .head_budget import head_budget
 
 MIB = 1024**2
 MAX = 2**63-1
+
+
+class MemoryRefusal(ValueError):
+    """Valid geometry cannot fit even at the minimum operator row counts."""
 
 
 def checked(value):
@@ -247,7 +251,7 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
         values = asdict(chunks)
         if max(values.values()) == 1:
             details = ', '.join(f"device {i}: estimated {d['estimated_peak_bytes']} > usable {usable[i]}" for i,d in enumerate(cards) if d['estimated_peak_bytes'] > usable[i])
-            raise ValueError('complete-consumer memory admission refused at minimum physical rows; '+details)
+            raise MemoryRefusal('complete-consumer memory admission refused at minimum physical rows; '+details)
         chunks = Chunks(**{k:max(1,x//2) for k,x in values.items()}); reductions += 1
     for card, budget, cap in zip(cards,budgets,usable):
         card.update(budget_bytes=budget,usable_bytes=cap,headroom_bytes=budget-cap)
@@ -255,6 +259,31 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
                 devices=cards,full_owners=owners,state_owners=state_owners,canonical_elements=canonical,
                 requested_chunks=asdict(requested),effective_chunks=asdict(chunks),physical_reductions=reductions,
                 policy='aggressive' if aggressive else 'conservative')
+
+
+def plan_samples(g, c, requested, budgets, aggressive, logical_batch, automatic,
+                 full_owners=None, state_owners=None):
+    if type(automatic) is not bool:
+        raise ValueError('auto-sample-chunks must be boolean')
+    if automatic and (type(logical_batch) is not int or not 1 <= g.batch <= logical_batch <= MAX):
+        raise ValueError('invalid automatic sample admission geometry')
+    attempted = []
+    while True:
+        if automatic:
+            g = replace(g,sample_chunks=(logical_batch-1)//g.batch+1)
+            attempted.append(g.batch)
+        try:
+            result = plan(g,c,requested,budgets,aggressive,full_owners,state_owners)
+        except MemoryRefusal:
+            if not automatic or g.batch == 1:
+                raise
+            g = replace(g,batch=(g.batch-1)//2+1)
+            continue
+        if automatic:
+            result['sample_admission'] = dict(logical_batch=logical_batch,
+                effective_sample_rows=g.batch,physical_chunks=g.sample_chunks,
+                attempted_sample_rows=attempted,policy='halve_on_memory_refusal')
+        return result
 
 
 def packet_geometry(packet, *, windows, payload, training, adamw, diagnostics, devices, locality=True):

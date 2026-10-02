@@ -16,7 +16,10 @@ void prepare_capacity(const Packet& p,const Config& c,const std::vector<at::Devi
     {"attention",f.attention_chunk_rows},{"keys",f.attention_key_rows},{"reverse",result.limits.reverse_chunk_rows},{"head",result.head.rows}};
   std::vector<Index> budgets;
   for(auto d:devices){auto value=device_memory_info(d);result.initial_memory.push_back(value);budgets.push_back(c.device_memory_bytes?std::min(value.free,c.device_memory_bytes):value.free);}
-  result.capacity=capacity::plan(g,caps,chunks,budgets,c.chunk_policy=="aggressive");
+  result.capacity=capacity::plan_samples(g,caps,chunks,budgets,c.chunk_policy=="aggressive",p.batch,c.auto_sample_chunks);
+  if(c.auto_sample_chunks) {
+    result.sample_rows=result.capacity.sample_rows;result.sample_chunks=(p.batch-1)/result.sample_rows+1;
+  }
   capacity::Wide accumulation=0;
   for(const auto& card:result.capacity.cards) {
     accumulation+=card.components.at("gradient_accumulation");

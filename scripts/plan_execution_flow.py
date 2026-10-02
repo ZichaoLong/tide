@@ -32,7 +32,7 @@ def main():
     if packet['schema'] != 'tide-complete-flow-workload-v2':
         parser.error('continuous consumer requires v2')
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-    from tools.online_bench.capacity import Capacities, Chunks, packet_geometry, plan
+    from tools.online_bench.capacity import Capacities, Chunks, packet_geometry, plan_samples
     from tools.online_bench.head_budget import head_budget
     def option(key,default):
         value = getattr(a,'resident_'+key)
@@ -52,7 +52,8 @@ def main():
         chunks = Chunks(**{k:option(name,default) for k,name,default in (
             ('full','full_chunk_rows',16),('emission','emission_chunk_rows',16),('aggregate','aggregate_chunk_rows',8),
             ('attention','attention_chunk_rows',8),('keys','attention_key_rows',128),('reverse','reverse_chunk_rows',16))},head=head.rows)
-        record.update(state='planned',memory_admission=plan(g,caps,chunks,[a.device_memory_bytes]*a.devices,a.chunk_policy=='aggressive'))
+        record.update(state='planned',memory_admission=plan_samples(g,caps,chunks,[a.device_memory_bytes]*a.devices,
+            a.chunk_policy=='aggressive',packet['workload']['batch'],a.auto_sample_chunks))
     except ValueError as error:
         record.update(state='refused',error=str(error))
     if a.output:

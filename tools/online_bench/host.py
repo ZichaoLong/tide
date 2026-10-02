@@ -80,7 +80,10 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         training=False, optimizer="sgd", steps=3, warmup=1, windows_per_step=2,
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
-        device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0):
+        device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0,
+        auto_sample_chunks=False):
+    if type(auto_sample_chunks) is not bool:
+        raise ValueError("auto-sample-chunks must be boolean")
     if type(context_memory_bytes) is not int or not 0 <= context_memory_bytes < 2**63:
         raise ValueError("resident-context-bytes must be a nonnegative int64")
     if type(sample_chunk_rows) is not int or not 0 <= sample_chunk_rows < 2**63:
@@ -97,8 +100,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             placement=placement, observer=observer, parameter_budget=parameter_budget,
             resident_library=resident_library, resident_limits=resident_limits, training_limits=training_limits,
             resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes, device_memory_bytes=device_memory_bytes,
-            sample_chunk_rows=sample_chunk_rows, context_memory_bytes=context_memory_bytes)
-    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3 or device_memory_bytes or context_memory_bytes:
+            sample_chunk_rows=sample_chunk_rows, context_memory_bytes=context_memory_bytes,auto_sample_chunks=auto_sample_chunks)
+    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3 or device_memory_bytes or context_memory_bytes or auto_sample_chunks:
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
         raise ValueError("invalid bounded run/optimizer configuration")

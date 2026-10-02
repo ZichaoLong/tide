@@ -22,6 +22,7 @@ Config parse(int argc,char** argv) {
     if(arg=="--diagnostics"){c.diagnostics=true;continue;}
     if(arg=="--packed-sources"){c.packed_sources=true;continue;}
     if(arg=="--batch-next"){c.batch_next=true;continue;}
+    if(arg=="--auto-sample-chunks"){c.auto_sample_chunks=true;continue;}
     const auto capacity=key.rfind("--resident-",0)==0?key.substr(11):std::string();
     const bool limit=std::find(limits.begin(),limits.end(),capacity)!=limits.end();
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
@@ -59,7 +60,7 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive"))throw std::invalid_argument("invalid device/owner/chunk policy");
-  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes))
+  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes||c.auto_sample_chunks))
     throw std::invalid_argument("resident capacities and placement require resident preset");
   if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");

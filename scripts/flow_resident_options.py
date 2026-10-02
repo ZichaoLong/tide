@@ -16,6 +16,8 @@ def add_arguments(parser):
                         help="resident per-device incremental HBM cap; 0 uses current driver free memory")
     parser.add_argument("--resident-context-bytes", type=int, default=0,
                         help="Per-device saved continuation pool; positive enables compact rows, 0 keeps dense storage")
+    parser.add_argument("--auto-sample-chunks", action="store_true",
+                        help="halve physical samples on static resident memory refusal before model allocation")
     for field in FORWARD+TRAINING:
         parser.add_argument("--resident-"+field.replace("_", "-"), type=int)
 
@@ -25,7 +27,7 @@ def validate(args):
         raise ValueError("devices must be in 1..16")
     changed = (args.resident_library is not None or args.devices != 1 or args.owner_policy != "locality"
                or args.chunk_policy != "conservative" or args.head_workspace_bytes != 4*1024**3 or args.device_memory_bytes != 0 or args.resident_context_bytes != 0
-               or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
+               or args.auto_sample_chunks or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
     if args.preset != "resident" and changed:
         raise ValueError("resident capacities and placement require resident preset")
     if args.implementation == "libtorch" and args.resident_library is not None:
@@ -41,6 +43,8 @@ def native_arguments(args):
               "--head-workspace-bytes="+str(args.head_workspace_bytes),"--device-memory-bytes="+str(args.device_memory_bytes)]
     if args.resident_context_bytes:
         values.append("--resident-context-bytes="+str(args.resident_context_bytes))
+    if args.auto_sample_chunks:
+        values.append("--auto-sample-chunks")
     for field in FORWARD+TRAINING:
         value = getattr(args,"resident_"+field)
         if value is not None:
@@ -61,6 +65,7 @@ def python_arguments(args, device):
                 values[field]=value
     devices = tuple(f"npu:{device.index+i}" for i in range(args.devices)) if args.devices>1 else ()
     return dict(resident_library=args.resident_library, resident_limits=ResidentLimits(**forward),
+                auto_sample_chunks=args.auto_sample_chunks,
                 head_workspace_bytes=args.head_workspace_bytes,
                 device_memory_bytes=args.device_memory_bytes,
                 training_limits=ResidentTrainingLimits(**training),

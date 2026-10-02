@@ -26,7 +26,7 @@ struct Config {
   bool training=false,diagnostics=false;
   Index steps=3,warmup=1,windows=2,threads=1,workers=1;
   Index sample_chunk_rows=0;
-  bool packed_sources=false,batch_next=false;
+  bool packed_sources=false,batch_next=false,auto_sample_chunks=false;
   Index parameter_budget=1024LL*1024*1024;
   Index head_workspace_bytes=4LL*1024*1024*1024;
   Index device_memory_bytes=0,context_memory_bytes=0;

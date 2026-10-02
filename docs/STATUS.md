@@ -65,14 +65,14 @@ profile or throughput recommendation. Neither logical batch nor KV was reduced.
   window-peaks-npu-clean01 PASSED;34checks,no skips,bothclients/precisions,
   sample slicing,whole/warmup,complete independentCPU updates and pool refusal.
   Auditlaunchers/window_peaks_evidence.py passed;
-  [report](evidence/resident-window-peaks-20261002.md). Evidence commit next.
+  [report](evidence/resident-window-peaks-20261002.md). Evidence9f305ab committed/pushed.
   New window_events_max/window_stages_max/window_outputs_max/pending_peak use
   int64 device counters,one transfer after timing. Pending history follows
   contexts;Settle encoded counts include boundary nodes omitted by body diagnostics.
   Core/library/ABI/kernels unchanged. Dev01 remains FAILED for6wrong newSettle
   assertions(160encoded vs120body);corrected6dev02 andall34clean passed.
 
-## Active bounded original Add training
+## Bounded original Add training stopped for explicit reverse budget
 
 Unit`tide-execution-flows-wide-add-training-staged01.service`;source475d4af,
 snapshotTASK/sources/window-peaks-clean01;helper
@@ -80,7 +80,7 @@ TASK/launchers/wide_add_training_stages.py;binary
 TASK/builds/window-peaks-consumer-clean01/consumer/tidegraph-online-bench.
 RecordsTASK/runs/wide-add-training-staged01/{status,stages,queue}.json,task.log,
 {stage512,original-width,original-wide}.log and respective result directories.
-Do not edit frozen source/helper while live.
+Source/helper and failed records remain immutable.
 
 Qualification prerequisite passed. Lease11NPUs acquired07:00:02UTC:
 physical1,2,3,4,5,6,7,8,9,11,12→logical0..10. FP32SGD,TimedDAG/prefill,
@@ -90,15 +90,54 @@ from physical demand; offline original-batch minimum≈51.132GiB onmaxcard.
 Stages: D512/B8(600s),originalD2048/B2(900s),originalD2048/B512(3600s),allT12/V50304.
 Queue cap120s,dependency600s,whole6000s. Stop beforefullbatch ifpending_peak>384,
 window_events_max>1536 or original-width step×256>3000s; inspect instead of retry.
-Stage512 PASSED:630,573,248params,construction15.6324s,step23.9552s,maxallocator
-6.0876GiB,pending_peak384,maxwindowevents1163,192outputs. Original-width active at
-07:02:59UTC. Full original batch has no result yet. Audit terminal stages before
-claiming full training. If bounded extrapolation refuses,profile/optimize the
-sample/backward/communication path; do not mechanically queue another long run.
+Task FAILED/released all11NPUs07:05:03UTC. Stage512 PASSED:630,573,248params,construction15.6324s,step23.9552s,maxallocator
+6.0876GiB,pending_peak384,maxwindowevents1163,192outputs. Original-width FAILED during backward preflight with
+`emission reverse tensor budget exceeded`, not OOM. No originalB512 launched.
+The2TiB global backward ceiling is divided bywindows2,root budget2,
+sharded graph3 and componentdivisor; all-card projection gradients alone~35GiB
+exceed the resulting component allowance. Inspect actual nested budget algebra
+before a corrected finite attempt; physical admission must remain separate.
+Corrected boundedtaskwide-add-training-staged02 STOPPED_AT_COST_BOUND fromsame475d4af source,
+helperlaunchers/wide_add_training_stages_v2.py;8TiBglobal backward capability
+ceiling covers nestedall-ownerprojection allowance. Physical60GiB/card admission,
+shapes,chunks and safety margins unchanged;this is not8TiBallocated. Reusespassed
+D512stage byhash;repeatsoriginal-width thenoriginal-wide onlyifcost/margin pass.
+Unit`tide-execution-flows-wide-add-training-staged02.service`,recordsunder
+TASK/runs/wide-add-training-staged02/{status,stages,queue}.json andtask/stage.logs.
+Original-width child PASSED:construction249.211s,step20.2794s,48outputs,cut408,
+loss32.0892944,maxallocator45,329,909,248bytes(42.216GiB),pending384,maxevents1177.
+Parent FAILED intentionally atconservative B512extrapolation5191.5s>3000s;noB512
+launched.11cards released. Allrecords retained;no blind original-batch retry.
+Profile01 FAILED at its120s queue limit:eleven cards unavailable;no execution.
+Profile02 PASSED onten cards at07:31:52UTC;all leases released. Same source475d4af,
+helperTASK/launchers/profile_original_width_v2.py;records
+TASK/runs/original-width-profile02/profile/{result.json,consumer/result.json,raw/}.
+OriginalD2048/B2 FP32SGD:construction201.214s,instrumented step21.8897s,
+48outputs,loss32.0892944. Trace701139operators,no observedAiCPU;includes construction,
+not a throughput recommendation. Reviewed training/profile evidence still pending.
+
+## Automatic sample admission in development
+
+Worktree adds explicit resident-only --auto-sample-chunks. Before model allocation,
+try operator row admission,then halve physical sample groups only on MemoryRefusal.
+Reaccount all logical samples and accumulation;firstfit or explicitB1refusal.
+Defaultfixed unchanged;no logicalbatch/KV/capacity/dtype/window/update changes.
+CPUauto-samples-cpu-dev01 PASSED9checks;consumerbuild-auto-samples-consumer-dev01
+PASSED. NPUdev01 FAILED8cases(queuecapacity128 too small forB17),oneCPUcase passed;
+original records kept. Corrected test capacities512,outputs128,trace/KVtrace2048;
+no runtime code/tolerance change.
+Developmentauto-samples-npu-dev02 PASSED9checks,0skips:8NPUcases+1CPUcase;
+FP32/FP16,bothclients,inference/two completeAdamW updates against independentCPU.
+SourceTASK/sources/auto-samples-dev03;recordsTASK/runs/auto-samples-npu-dev02.
+Retaineddev01 consumerbinary is valid:onlytests/docs changed thereafter.
+Commit implementation,push,freezeauto-samples-clean01;qualify CPUcapacity and
+NPUauto/fixed admission cases using rebuilt/verified consumer objects. Then
+separate reviewed evidence. No core/device kernel or ABI changed.
+HistoricalCPU remains deliberately stopped.
 
 ## Next work and remaining goal
 
-Finish active training assessment and separate reviewed evidence. Continue actual
+Audit completed bounded training/profile evidence;complete automatic sample admission. Continue actual
 full-size complete training and finite CPU/screened-mixed/resident comparisons;
 all required other family/client/schedule flows remain separate. Attention dense
 training plan still refuses despite B1; investigate true allocation lifetimes,

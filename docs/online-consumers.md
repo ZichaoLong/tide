@@ -260,7 +260,7 @@ Resident fiber KV proposal duplication is removed on clean80dae6e;
 show128MiB lower peak at the representative Attention shape, without reducing
 logical KV capacity. This is a storage improvement, not full-size admission.
 Eager and resident Python/native/LibTorch consumers accept `--sample-chunk-rows N`.
-Zero preserves the whole logical batch; a positive value limits samples in one
+By default zero preserves the whole logical batch; a positive value limits samples in one
 physical forward/backward group. Each group keeps all requested windows connected
 and carries its own state/history/pending/KV into the next step. The final group
 may be smaller. Parameters and the optimizer are shared; gradients accumulate
@@ -293,8 +293,12 @@ old/replacement gradient accumulators. A restored handle is released before its
 replacement is saved. Snapshot byte checks and allocator observations verify
 those declared bounds. Live KV remains dense and all sample continuations
 remain on their original NPUs. Explicit slicing is qualified on clean `75543a7`
-([evidence](evidence/resident-sample-chunks-20261002.md)); automatic sample-size
-selection remains pending.
+([evidence](evidence/resident-sample-chunks-20261002.md)). Optional
+`--auto-sample-chunks` uses [static memory admission](consumer-capacity.md) to
+halve physical sample rows only after a memory refusal, before model allocation.
+It records every attempted size, keeps the full logical batch and recharges
+all saved state and gradient accumulators. It does not search by running the
+graph or OOM, and fixed sample selection remains the default.
 
 `--resident-context-bytes BYTES` optionally enables compact saved continuations
 and caps their combined tensor/index storage on each device. Zero keeps dense
