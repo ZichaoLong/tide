@@ -8,7 +8,7 @@ from test_online_consumer import make_continuous_packet, ranked_graph
 from test_online_consumer_npu import target
 from test_online_resident_consumer import standalone
 from online_consumer_support import observer, same
-from tidegraph import ResidentPlacement
+from tidegraph import ResidentLimits, ResidentPlacement
 from tools.online_bench.host import run
 
 
@@ -19,6 +19,8 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     family, memory, schedule, optimizer, clear, delayed, training = case
     device = target()
     pool = 64*1024**2 if memory=="attention" else 0
+    policy = 'aggressive' if memory=='attention' else 'conservative'
+    forward = ResidentLimits(workspace_bytes=512*1024**2,chunk_policy=policy)
     p = make_continuous_packet(graph=ranked_graph(layers=3,region_width=2,fanout=2,local_span=2,delayed=delayed),
         memory=memory,width=4,batch=5,tokens=2,vocab=7,clear=clear)
     expected, actual = [], []
@@ -27,12 +29,12 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     cards = 2 if schedule == "prefill" else 1
     if implementation == "libtorch":
         got, actual = standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=cards,
-                                dtype_name=dtype_name,extra=("--sample-chunk-rows=2", "--resident-context-bytes="+str(pool)))
+                                dtype_name=dtype_name,extra=("--sample-chunk-rows=2", "--resident-context-bytes="+str(pool), "--chunk-policy="+policy))
     else:
         owners = ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")) if cards==2 else None
         got = run(p,implementation="native",device=device,dtype=dtype_name,schedule=schedule,preset="resident",
             sample_chunk_rows=2,context_memory_bytes=pool,observer=observer(actual),native_library=os.environ["TIDE_BUILD_DIR"],
-            resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_placement=owners,**kw)
+            resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_limits=forward,resident_placement=owners,**kw)
     tol = dict(atol=2e-3,rtol=2e-2) if dtype_name=="float16" else dict(atol=1e-6,rtol=1e-5)
     compare_records(actual,expected,5,**tol,tensor_norm=dtype_name=="float16")
     if dtype_name=="float16":
@@ -42,7 +44,7 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
         owners = ResidentPlacement(devices=(str(device),f"npu:{device.index+1}")) if cards==2 else None
         run(p,implementation="native",device=device,dtype=dtype_name,schedule=schedule,preset="resident",
             observer=observer(whole),native_library=os.environ["TIDE_BUILD_DIR"],
-            resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_placement=owners,**kw)
+            resident_library=os.environ["TIDE_RESIDENT_LIBRARY"],resident_limits=forward,resident_placement=owners,**kw)
         compare_records(actual,whole,5,**tol)
     for key in ("outputs","parameters","final_cut","input_tokens_per_step"):
         assert got[key] == ref[key]

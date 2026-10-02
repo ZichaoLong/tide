@@ -47,6 +47,7 @@ def test_cross_language_shapes_and_parameter_inventory(capacity_probe):
         python = plan(g,caps,chunks,budgets,bool(i%2))
         assert cpp_plan(capacity_probe,g,caps,chunks,budgets,bool(i%2)) == python
         assert sum(python['canonical_elements'])+2*g.vocab*g.width == p['counts']['parameters']
+        assert all((c['components']['retained_pack_workspace']>0)==g.training for c in python['devices'])
 
 
 def test_weakest_card_and_fixed_state_refusal(capacity_probe):

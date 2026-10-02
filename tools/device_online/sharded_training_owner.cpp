@@ -87,19 +87,25 @@ ResidentTrainingWindow ShardedTrainingOwner::advance(const std::vector<External>
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
   const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes:0);
+  if((s.saved.size()+1.L)*s.bytes_per_window+s.projection_bytes>std::numeric_limits<Index>::max())
+    throw std::invalid_argument("retained dense envelope extent overflow");
   if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
   ContentWindow w;
   try{w=s.flow->advance_device(input,stop);}catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   try {
-    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot);
+    const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
+    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact);
     auto states=state_windows(s.flow->state_shards_device(),tape.tape);const auto& t=tape.tape.coordinator;
     ResidentToken token{s.session,s.next_token++,s.generation};
     ResidentTrainingWindow out{token,s.cut,stop,{t.outputs.coordinates,t.outputs.values,t.outputs.valid,
       w.output_stats.clone(),w.pending_stats.clone(),w.stages.clone(),w.events.clone(),w.full_chunks.clone(),w.emission_chunks.clone()},
       t.pending.coordinates,t.pending.values,t.pending.valid};
-    out.states=states;s.saved.push_back({token,std::move(tape),std::move(states)});s.saved_bytes+=required;s.cut=stop;return out;
+    Index retained=tape.tensor_bytes+256;
+    for(const auto& state:states)retained+=state.values.nbytes()+state.present.nbytes();
+    if(retained>required)throw std::logic_error("retained journal packing exceeded dense admission");
+    out.states=states;s.saved.push_back({token,std::move(tape),std::move(states)});s.saved_bytes+=retained;s.cut=stop;return out;
   }catch(...){s.failed=true;throw;}
 }
 ResidentStep ShardedTrainingOwner::step() {

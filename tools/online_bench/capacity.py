@@ -183,7 +183,11 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                 if coordinator:
                     context_pack += 32*c.queue
             accumulation = 8*canonical[device]+16*MIB if g.training else 0
-        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack
+        # Completed-window prefix extents allocate masks/indices one journal at
+        # a time. Charge their scratch even when the conservative policy keeps
+        # dense copies; retained payloads below still use the dense envelope.
+        retained_pack = (32*(trace+(c.kv_trace if g.attention and body else 0))+16*MIB) if g.training else 0
+        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack+retained_pack
         construction = base+4*canonical[device]+parameters
         head = head_budget(c.outputs,w,v,p,g.training,MAX,True)
         head_work = head.fixed_bytes+chunks.head*head.row_bytes if coordinator else 0
@@ -211,7 +215,8 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                           retained=retained,roots_and_consumer_gradients=roots,physical_and_canonical_gradients=gradients,
                           reverse_workspace=reverse_work,canonical_communication=communication,consumer_proposals=proposal,
                           head_workspace=head_work,continuation_snapshot_bytes=snapshot,
-                          saved_contexts=saved_contexts,gradient_accumulation=accumulation,context_pack_workspace=context_pack)
+                          saved_contexts=saved_contexts,gradient_accumulation=accumulation,context_pack_workspace=context_pack,
+                          retained_pack_workspace=retained_pack)
         if max(*phases.values(),*components.values()) > MAX:
             raise ValueError('consumer memory extent overflow')
         result.append(dict(index=device,estimated_peak_bytes=max(phases.values()),phases=phases,components=components))

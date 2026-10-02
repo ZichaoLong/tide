@@ -104,7 +104,8 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       }
       accumulation=g.training?8*Wide(canonical[device])+16*MiB:0;
     }
-    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack;
+    const Wide retained_pack=g.training?32*(trace+(g.attention&&body?Wide(c.kv_trace):0))+16*MiB:0;
+    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack+retained_pack;
     const Wide construction=base+4*Wide(canonical[device])+parameters;
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
@@ -132,7 +133,8 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"reverse_workspace",bytes(reverse_work)},{"canonical_communication",bytes(communication)},
       {"consumer_proposals",bytes(proposal)},{"head_workspace",bytes(head_work)},
       {"continuation_snapshot_bytes",bytes(snapshot)},{"saved_contexts",bytes(saved_contexts)},
-      {"gradient_accumulation",bytes(accumulation)},{"context_pack_workspace",bytes(context_pack)}};
+      {"gradient_accumulation",bytes(accumulation)},{"context_pack_workspace",bytes(context_pack)},
+      {"retained_pack_workspace",bytes(retained_pack)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
   }
   return result;

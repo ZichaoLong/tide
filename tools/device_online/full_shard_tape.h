@@ -19,4 +19,5 @@ struct RetainedShardedTape {
 int64_t sharded_reverse_tape_bytes(const ShardedReverseTape&);
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape&,int64_t budget);
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape&,int64_t budget,RetainedProjection*);
+RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape&,int64_t budget,RetainedProjection*,bool compact_journals);
 } // namespace tide::device_online

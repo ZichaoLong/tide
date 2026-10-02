@@ -69,6 +69,8 @@ def main():
         command.extend(("--compact-contexts", "--explicit-owners"))
     if args.check == "peer-resident-contexts":
         command.extend(("--contexts", "--explicit-owners"))
+    if args.check == "peer-resident-compact-journals":
+        command.extend(("--compact-journals", "--resume-devices=0", "--explicit-owners"))
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

@@ -78,6 +78,8 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
   if(s.gradients_ready)throw std::logic_error("consume gradients with step or detach before advance");
   if(seal<stop)throw std::invalid_argument("resident training window is unsealed");
   const auto required=s.bytes_per_window+(s.saved.empty()?s.projection_bytes:0);
+  if((s.saved.size()+1.L)*s.bytes_per_window+s.projection_bytes>std::numeric_limits<Index>::max())
+    throw std::invalid_argument("retained dense envelope extent overflow");
   if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
@@ -86,7 +88,8 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
   catch(const std::invalid_argument&){throw;} // Complete input preflight is retryable.
   catch(...){s.failed=true;throw;}
   try {
-    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot);
+    const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
+    auto tape=retain_reverse_tape(s.flow->reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact);
     const auto state=s.flow->state_device();auto final=state.first.clone(),present=state.second.clone();
     ResidentToken token{s.session,s.next_token++,s.generation};
     auto outputs=ResidentWindow{tape.tape.outputs.coordinates,tape.tape.outputs.values,tape.tape.outputs.valid,
@@ -102,7 +105,9 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
       const auto& a=f.cache;auto ids=at::tensor(a.nodes,at::kLong).to(s.device);
       result.cache.push_back({a.nodes,a.key,a.value,a.lengths,present.index_select(1,ids).reshape({-1}),f.bias});
     }
-    s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=required;s.cut=stop;return result;
+    const Index retained=tape.tensor_bytes+Index(final.nbytes())+Index(present.nbytes())+256;
+    if(retained>required)throw std::logic_error("retained journal packing exceeded dense admission");
+    s.saved.push_back({token,std::move(tape),final,present});s.saved_bytes+=retained;s.cut=stop;return result;
   }catch(...){s.failed=true;throw;}
 }
 ResidentStep ResidentTrainingSession::step() {

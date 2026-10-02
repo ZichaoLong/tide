@@ -1,4 +1,5 @@
 #include "full_shard_tape.h"
+#include "retained_journals.h"
 #include <map>
 #include <limits>
 #include <stdexcept>
@@ -23,6 +24,14 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source
   return retain_sharded_reverse_tape(source,budget,nullptr);
 }
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source,int64_t budget,RetainedProjection* projection) {
+  return retain_sharded_reverse_tape(source,budget,projection,false);
+}
+RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals) {
+  auto source=input;
+  if(compact_journals) {
+    compact_retained_journals(source.coordinator);
+    for(auto& s:source.states)compact_retained_journals(s);
+  }
   auto bytes=sharded_reverse_tape_bytes(source)-(projection?
     projection->reusable_bytes(source.coordinator.emission.weights,source.coordinator.emission.biases):0);
   const auto& emissions=source.coordinator.emission.shards;

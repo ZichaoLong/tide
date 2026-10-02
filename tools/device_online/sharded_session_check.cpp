@@ -46,7 +46,7 @@ ResidentTrainingLimits limits(ResidentPlacement placement,bool prefill,bool cach
   return l;
 }
 void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtype,int profile,int cache,bool prefill,
-                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners,bool emission,bool accumulation=false,bool contexts=false,bool compact=false) {
+                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners,bool emission,bool accumulation=false,bool contexts=false,bool compact=false,bool compact_journals=false) {
   at::NoGradGuard guard;const auto d=placement.devices[0];const bool half=dtype==at::kHalf;
   auto f=cache<0?test::precision_graph_profile(profile%2?0:3,profile%2,4,profile):test::retained_cache_fixture(0,1,4,cache);
   if(emission)test::emission_training_fixture(f,profile%3);
@@ -63,6 +63,7 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
   std::vector<OptimizerGroup> groups{a,b};std::unique_ptr<NamedOptimizer> optimizer;
   if(kind==ResidentOptimizerKind::sgd)optimizer=std::make_unique<SGD>(registry,groups);else optimizer=std::make_unique<AdamW>(registry,groups);
   auto l=limits(placement,prefill,cache>=0,emit);
+  if(compact_journals)l.forward.chunk_policy=ResidentChunkPolicy::aggressive;
   l.forward.diagnostics=prefill;
   auto session=std::make_unique<ResidentTrainingSession>(f.graph,f.model,f.initial,d,kind,groups,l);
   auto previous=session->checkpoint();updated(previous,master,*optimizer,half);
@@ -118,6 +119,8 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     auto wrong=roots;std::swap(wrong[0],wrong[1]);test::train_reject([&]{session->backward(wrong);},"stale root order accepted");
     wrong=roots;wrong[0].token.session++;test::train_reject([&]{session->backward(wrong);},"foreign token accepted");
     auto grad=session->backward(roots);test::train_gradients(grad,ref,cpu);test::train_gradients(grad,wide,cpu);kept_gradient=grad;
+    require(grad.statistics.at("retained_compact_journals")==compact_journals,"retained journal policy changed");
+    if(compact_journals)require(grad.statistics.at("retained_bytes")<grad.statistics.at("retained_dense_bytes"),"retained journals did not shrink");
     test::train_reject([&]{session->backward(roots);},"consumed roots reused");
     for(const auto& o:registry.owners()) {
       auto g=ref.gradients.at(o.canonical);g=g.defined()?g.to(at::kFloat):Tensor{};
@@ -172,10 +175,11 @@ void refusal(ResidentPlacement placement,at::ScalarType dtype,bool accumulation=
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    int count=2,resume=2;bool smoke=false,explicit_owners=false,emission=false,accumulation=false,contexts=false,compact=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
+    int count=2,resume=2;bool smoke=false,explicit_owners=false,emission=false,accumulation=false,contexts=false,compact=false,compact_journals=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
     for(int i=1;i<argc;++i){std::string a=argv[i];if(a.rfind("--devices=",0)==0)count=std::stoi(a.substr(10));
       else if(a.rfind("--resume-devices=",0)==0)resume=std::stoi(a.substr(17));else if(a.rfind("--placement=",0)==0)policy=a.substr(12);
       else if(a=="--accumulate")accumulation=true;
+      else if(a=="--compact-journals")compact_journals=true;
       else if(a=="--compact-contexts"){compact=true;contexts=true;accumulation=true;}
       else if(a=="--contexts"){contexts=true;accumulation=true;}
       else if(a=="--profile-smoke")smoke=true;else if(a=="--explicit-owners")explicit_owners=true;else if(a=="--emission")emission=true;else forwarded.push_back(argv[i]);}
@@ -186,7 +190,7 @@ int main(int argc,char** argv) {
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);
     int cases=0;auto run=[&](int profile,int cache,bool prefill,ResidentOptimizerKind kind,const std::string& emit) {
-      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation,contexts,compact);++cases;
+      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation,contexts,compact,compact_journals);++cases;
         std::cout<<"public-sharded trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<std::endl;}
       catch(...){std::cerr<<"public-sharded failed profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<'\n';throw;}
     };
@@ -213,7 +217,7 @@ int main(int argc,char** argv) {
     }
     std::cout<<"resident-sharded-session: passed trajectories="<<cases<<" windows="<<cases*(accumulation?24:16)<<" updates="<<cases*(accumulation?3:4)
       <<" devices="<<count<<" resume_devices="<<resume<<" CPU=FP32_FP64 payload="<<args.dtype<<" emission="<<emission
-      <<" accumulation="<<accumulation<<" compact="<<compact<<" contexts="<<contexts<<" public_api=true\n";
+      <<" compact_journals="<<compact_journals<<" accumulation="<<accumulation<<" compact="<<compact<<" contexts="<<contexts<<" public_api=true\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

@@ -97,6 +97,26 @@ Resident physical sample slicing still requires that separate capability. Both
 the single-device and compact multi-device owners expose this optional method;
 the checkpoint format and default backward/step behavior are unchanged.
 
+With the aggressive physical chunk policy, training retains only the valid
+prefixes of event, source, emission and attention journals. Compaction runs at
+the completed-window boundary; dynamic output extents synchronize there without
+exporting numerical records. One unused row remains for an empty journal. Row
+positions, aliases, stable order and cross-window links stay unchanged. Pending,
+output and KV buffers keep their complete layouts, including disconnected roots.
+This is retention of the candidate's own forward, not a reference execution or
+offline scheduling prepass. Conservative policy keeps dense journal copies.
+
+Before advancing, the owner still reserves the next window's dense bound. After
+retention it charges the actual retained bytes, so subsequent windows can reuse
+the released allowance. `retained_window_bytes` remains the dense per-window
+bound excluding shared projections; `retained_dense_bytes` reports the entire
+dense envelope and `retained_bytes` the stored total. `retained_compact_journals`
+records the policy. Temporary masks/indices need metadata workspace proportional
+to declared journal capacities, outside the retained tape/state budget. The
+complete consumer planner charges this separately and still uses dense bounds;
+this optimization alone does not admit a previously refused full-size run.
+Qualification of compact retained journals is pending.
+
 `snapshot_device(max_bytes=...)` saves a detached numerical continuation in opaque
 NPU buffers; `restore_device(saved)` switches to it on the **same live owner**.
 The saved buffers contain values/presence/clocks, complete event/fiber KV including

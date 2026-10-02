@@ -18,7 +18,7 @@ def configuration(family, full="tanh", aggregation="sum", read_mode="proposal", 
 
 
 def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", mode="hard", zeta=1.0,
-            model_device=None, resident_workspace_bytes=64*1024*1024, trace=True, **read_options):
+            model_device=None, resident_workspace_bytes=64*1024*1024, trace=True, chunk_policy="conservative", **read_options):
     cfg = configuration(family, full, aggregation, **read_options)
     if device == "cpu":
         r = GraphRuntime(cfg, device=device, options=ExecutionOptions(schedule="reference", packed=False, trace=True, mode=mode, zeta=zeta))
@@ -28,7 +28,7 @@ def runtime(family, device, schedule="greedy", full="tanh", aggregation="sum", m
             options=ExecutionOptions(implementation="native", schedule=schedule, trace=trace, mode=mode, zeta=zeta,
                 placement=ExecutionPlacement(preset="resident"),
                 resident_limits=ResidentLimits(queue=96, arrivals=128, outputs=128, trace=512,
-                                                workspace_bytes=resident_workspace_bytes)))
+                                                workspace_bytes=resident_workspace_bytes,chunk_policy=chunk_policy)))
     r.model.nodes[2].weight = r.model.nodes[0].weight
     r.model.nodes[3].read = r.model.nodes[0].bias
     r.model.input_scale[1] = r.model.agg_scale[0]

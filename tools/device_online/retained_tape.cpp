@@ -1,4 +1,5 @@
 #include "retained_tape.h"
+#include "retained_journals.h"
 #include <ATen/core/grad_mode.h>
 #include <map>
 #include <set>
@@ -40,6 +41,10 @@ RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget) {
   return retain_reverse_tape(source,budget,nullptr);
 }
 RetainedTape retain_reverse_tape(const ReverseTape& source,int64_t budget,RetainedProjection* projection) {
+  return retain_reverse_tape(source,budget,projection,false);
+}
+RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals) {
+  auto source=input;if(compact_journals)compact_retained_journals(source);
   if(!source.emission.shards.empty())throw std::invalid_argument("compact projection retention requires the sharded tape owner");
   if(at::GradMode::is_enabled()||!source.graph||!source.fiber_values.defined()||budget<1
       ||source.fiber_values.device().type()!=c10::DeviceType::PrivateUse1)
