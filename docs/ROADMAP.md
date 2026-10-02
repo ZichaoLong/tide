@@ -222,6 +222,10 @@ F4 bounded device-loop canonical contribution/publication streaming is qualified
 on clean7e375f5 ([evidence](evidence/resident-owner-stream-20261002.md)). It preserves reverse-window/alias
 addition order, bounds both packet endpoints, and releases obsolete optimizer gradient
 storage. This does not replace total per-device memory admission or F6.
+Per-phase per-device packet reuse is qualified on cleana72868f: seven native
+component cells,33 consumer checks,explicit2→3restore32trajectories,representative
+allocator -256MiB/card and separate FP16profile
+([evidence](evidence/resident-shared-packets-20261002.md)).
 
 F4/F5 local reverse owner/query/key budget splitting is qualified on clean106cbeb
 ([evidence](evidence/resident-reverse-budget-20261002.md)): CPU1,public cache83,

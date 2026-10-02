@@ -110,24 +110,37 @@ Dev01 remainsFAILED8queuecapacity128 cases;testcapacitycorrected withsamecode/
 tolerances;dev02all9passed. Allrecords retained;no activetestjob.
 LatestNPUconsumerTASK/builds/auto-samples-consumer-clean01;core/deviceABI unchanged.
 
-## Current implementation work
+## Shared canonical packet arenas qualified
 
-Shared canonical communication packet arenas:worktree editsowner_stream.{h,cpp},
-sharded_parameter_reduce.cpp,owner_stream_check.cpp,newowner_stream_shared_check.h.
-Per-device send/receive maxima preplanned separately perreduction/publicationphase;
-no buffer growth,cumulativegradientorder preserved. Sharedstream statistics charge
-unique packet storage pluspergroupmetadata. No devicekernel/publicABIchange.
-Sourcefrozen shared-packets-dev01;standalone/Python/clientbuilds PASSED via
-TASK/launchers/build_shared_packets.py,buildclientvia build_capacity_client.py;
-Componentdev01 parent FAILED sourceguard becausevendor generatedfusion_result.json
-in sourcecwd;allfive childchecks PASSED,including36group/5replay sharedallocator
-4,720,640bytes vs4,346,630reserved plusworkspace. Preservefailedjob;futuregates
-use env -C output. Allfrozen sourcefiles hashunchanged. Consumerdev01 PASSED33checks,0skips;bothclients,FP32/FP16,allthreefamilies,
-streaming/prefill,completeSGD/AdamW plusautosample17→9updates. Leasesreleased;
-recordsTASK/runs/shared-packets-consumer-dev01. Commitimplementation then
-freeze shared-packets-clean01;cleancomponent/consumer gates mustrunfromoutputcwd.
-Immutablequalification
-and evidence separately. HistoricalCPU remainsdeliberatelystopped.
+Implementationa72868f committed/pushed;frozenTASK/sources/shared-packets-clean01.
+Alleightqualificationjobs PASSED;reviewed[evidence](evidence/resident-shared-packets-20261002.md).
+Standalone/Python/clientbuilds,7componentcells,33consumerchecks,explicitFP32/FP16
+2→3restore32trajectories,independentprofile. Per-phase unique send/receive arenas
+preserve contributionorder anderrors;no devicekernel/publicABIchange.
+D512/B8Attention two-card old/newallocator comparison:eachcard -268,437,504bytes;
+packetreservation805,629,352→268,758,440bytes,allothercounters/loss identical.
+New36group/5replaycheck peak4,720,640bytes. FP16trace53,274operators/zeroobservedAiCPU.
+Retaincomponentdev01 failure(vendorfusion_result.json in sourcecwd;allchildrenpassed,
+frozenfilesunchanged) andmemoryclean01capabilityrefusal. Successfulclean gates
+useoutputcwd;memoryclean02usedsame60GiB/card physicalcap withlargerhierarchicalceilings.
+No live shared-packet jobs;leasesreleased. Latestlibraries shared-packets-{standalone,python}-clean01,
+client shared-packets-consumer-clean01. Original-width orB512memorybenefitnotyetmeasured.
+
+## Current work: Add-specific gradient admission
+
+Worktreecapacity.{h,py} removes fictitiousAttentionQKV/O gradientcharge fromAdd;
+newattention_parameter_gradients subtotal includedinexisting physicalgradientcomponent.
+ScalarAggregate,vectorLH/state/Read,projections,canonicalbanks andsafetymargins unchanged.
+Actualmaterializedmodelinventorytest plus C++/Pythonplans pass10CPUchecks;
+NPUdev9checksPASSED(two clients,FP32/FP16,fullupdates),buildpassed.
+SnapshotTASK/sources/add-capacity-dev01;clientbuilds/add-capacity-consumer-dev01.
+Commitimplementation,push,freezeadd-capacity-clean01;cleanCPU/NPUaffected qualification,
+thenboundedoriginalD2048trainingvalidation. StaticoriginalB512 withphysicalB2:
+10cardsqueue896/arrivals896/outputs64/trace3072,KV256/KVtrace8192,4GiBcontext,
+60GiB/card admits52.0119GiBmax. Thisisnotexecutionproof. Earlier512queue/B1observed
+pending384/maxwindowevents1177;largerbatchrequires explicitcapacities andchecks.
+UsefiniteoriginalwidthB4 pilotbeforeB512;stoponcapacity/costbound,noOOMsearch.
+HistoricalCPU remainsdeliberatelystopped.
 
 ## Next work and remaining goal
 
@@ -157,7 +170,7 @@ data190GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
 Formal timing lockTASK/online-measurement.lock.
 
 Latest resident librariesretained-journals-{standalone,python}-clean01;core
-placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumerauto-samples-consumer-clean01;
+placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumershared-packets-consumer-clean01;
 CPUsource-values-cpu-clean01. Earlier source-values-npu/context-pool consumers
 stay qualified for their evidence. Standalone/Python runtimes remain separate.
 
