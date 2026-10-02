@@ -4,7 +4,8 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** User authorized continued
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest implementation75543a7 and evidence8d97736 are committed/pushed.
+Latest implementationf8cc052 committed/pushed; compact-continuation evidence
+and five additional performance submatrices are ready for evidence commit.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -68,33 +69,41 @@ Single lease physical1→npu:0, queue cap120s, parent timeout5400s, child900s.
 Helper launchers/remaining_family_matrix_resume.py schedules exactly10 missing
 children: TimedDAG/Python/streaming-confirm02/03, Settle/Python/prefill and streaming
 screen01 +confirm01–03. Stops on first failure; do not edit live helper/source.
-Recipe PID124125 is HELD at streaming-confirm03; confirm02 already passed.
-boundary-hold-compact-contexts.json records identity. Let confirm03 finish naturally
-before compact-context builds/gates; resume promptly afterward, parent deadline05:54UTC.
+Recipe PID124125 RESUMED after compact gates/memory; TimedDAG streaming
+confirm02/03 both PASSED. boundary-hold-compact-contexts.json is resumed.
+Remaining eight children are Settle/Python both schedules, parent deadline05:54UTC.
 No completed-cell reruns. Heavy builds/gates must wait for a measured-child boundary.
 
 Each submatrix20pilot+3×12confirmation processes,1continued warmup+3measured steps,
 2windows/64tokens/step,FP32. LibTorchCPU16packed/mixed4packed; Python default host
 policy; ATen/BLAS1. Audits use launchers/family_matrix_evidence.py.
 Already reported: TimedDAG/LibTorch/prefill8695804, PDG/LibTorch bothaf263b5.
-Audited, reports pending: TimedDAG/LibTorch/streaming and Settle/LibTorch both
-(TASK/libtorch-matrix-extra-audit.json), TimedDAG/Python/prefill
-(TASK/python-prefill-matrix-audit.json). Preserve measurement source80dae6e.
+Audited five additional cells: TimedDAG/LibTorch streaming,Settle/LibTorch both,
+TimedDAG/Python both. TASK/matrix-completed-extra-audit.json; reviewed report
+docs/evidence/representative-family-matrix-20261002.{md,json}. Preserve source80dae6e.
 
 ## Next work and environment
 
-Current uncommitted increment: optional compact device snapshots. Batch nonzero/
-index_select packs pending and complete KV prefixes; unique index_copy restores
-physical positions, dense mode remains available. Synchronization at explicit
-snapshot boundary is documented, not hidden as online scheduling. Source files
-include continuation_pack.*, public overloads, adapters, checks and contract.
-Development at frozen compact-contexts-dev01: both runtime builds PASSED,
-Python18 passed/no skips, standalone compact+dense FP32/FP16 passed four cells
-(32trajectories/768windows/96updates). Ready implementation commit, then freeze
-compact-contexts-clean01, exact-object fresh links, repeat affected immutable
-gates and separate profile/memory. Legacy accumulation marker updated for the
-added explicit compact flag; production objects unchanged after dev gates.
-Live/retained KV and admission integration remain subsequent scale work. Mixed multi-device
+Compact snapshots f8cc052 are qualified: buildscompact-contexts-{standalone,python}-clean01,
+compact-contexts-{components,public,profile}-clean01, memory-clean03 all PASSED.
+Source TASK/sources/compact-contexts-clean01. Four component cells/dense+compact
+FP32/FP16:32trajectories/768windows/96updates; Python18/no skips. Independent
+trace26,322Vector/350AI_CORE/387MIX_AIV/0AiCPU. Four D128/B8/T4 saved contexts:
+144,506,048→2,755,300tensorbytes; allocator growth144,533,504→3,945,472bytes.
+This is saved-state storage, not total process/owner peak or training throughput.
+Audit compact_contexts_evidence.py passed. memory-clean01/02 retain observation-
+script interface failures before model execution; helper_v3 corrects them,
+production source unchanged. Dense mode and existing C++ entry points retained.
+[Evidence](evidence/compact-continuations-20261002.md).
+
+Next: integrate compact contexts with per-device simultaneous-live admission;
+then reduce dominant retained/journal costs and calibrate actual scale. Current
+read-only12card FP32 wide estimate(B1/chunks512,trace8192,KVtrace65536)151.6GiB:
+coordinator saved contexts44.2GiB,retained31.7GiB,gradients19.5GiB,masters16.1GiB,
+accumulation10.8GiB. Tighter declared trace2048/KVtrace4096 gives121.9GiB;
+subtracting all saved contexts still77.7GiB. These are conservative estimates,
+not execution evidence or proof of physical impossibility. Multiple real costs
+remain; smaller snapshots alone do not close original-wide training. Mixed multi-device
 parameter/payload placement and automatic eager admission remain. Actual original
 wide execution, bounded full-size comparisons and F7 are pending. CUDA real
 hardware and other CANN tuples remain target-machine work.
@@ -110,7 +119,8 @@ Last disk free:data201GiB/root12GiB. Current timing lock TASK/online-measurement
 Atomic handoff writes use durable_records.replace_text.
 
 Qualified eager binaries TASK/builds/sample-chunks-{cpu,npu}-clean01/consumer/tidegraph-online-bench.
-Resident libraries TASK/builds/contexts-{standalone,python}-clean01.
+Latest resident libraries TASK/builds/compact-contexts-{standalone,python}-clean01;
+previous contexts builds remain valid for existing consumers.
 Latest consumer TASK/builds/resident-samples-consumer-clean01/consumer/tidegraph-online-bench.
 Core builds placement-{cpu,npu,npu-python}-clean01. Distinct standalone/Python
 runtime owners; source/header/options-checked reuse only.
