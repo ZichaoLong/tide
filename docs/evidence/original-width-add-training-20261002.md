@@ -77,3 +77,15 @@ This motivates removing duplicated coordinator reverse-gather storage before
 another original-width check. It does not justify reducing safety margins or
 running B512: the same pilot's conservative cost projection still exceeds the
 existing3,000 s gate. Failure at this post-run check does not roll back updates.
+
+The phase-scoped gather implementation1757b90 then passed one unchanged ten-card
+B4/physical B2 recheck ([audited record](original-width-add-reverse-gather-20261002.json)).
+Coordinator allocation fell from55,211,536,896 to49,339,172,864 bytes
+(**51.420→45.950 GiB**, saving5,872,364,032 bytes), below the unchanged
+53,768,286,884-byte estimate. All ten cards passed calibration. Loss,
+work counters, retained-storage counters, requested/effective operator chunks,
+and estimates matched the failed diagnostic exactly. Construction254.961 s,
+update27.757 s; different leased cards and one cold process prevent a causal
+throughput recommendation. The conservative B512 projection4085.875 s still
+exceeded3000 s, so the recheck contained no B512 execution. The previous
+consumer failure remains failed; this is a separately identified passing run.

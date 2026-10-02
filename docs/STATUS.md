@@ -5,7 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); prior evidence **fddf079**.
+`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); latest evidence **9306fbe**.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -98,13 +98,14 @@ work/retained-storage counters exact.53,190profile operators, zero observed AiCP
 consumer estimates/caps unchanged. Development module-name startup failure remains
 preserved; corrected/clean jobs use established LibTorch-NPU2.10/CANN9.0 stack.
 
-Next one bounded original-width Add recheck, same geometry/budgets as diagnostic,
-via launchers/wide_add_reverse_gather_recheck.py --source
-TASK/sources/reverse-gather-clean01 --output {out}/recheck; freeze_run name
-wide-add-reverse-gather-recheck01,10cards,queue120s,workload960s,env -C {out}.
-Require passed consumer calibration, baseline-exact loss/work/retained counters.
-No B512 stage is part of this recheck; retain cost projection and do not expand
-its old3000s bound without a demonstrated execution change.
+Original-width Add `wide-add-reverse-gather-recheck01` PASSED on1757b90; ten cards
+released. Same B4/physicalB2 geometry/caps/chunks/FP32SGD/two windows as failed
+3462dae diagnostic. Coordinator55211536896→49339172864B (-5872364032B), below
+unchanged53768286884B estimate. All cards calibrated; loss/work/retained counters
+exact. Construction254.961s, update27.757s,96outputs/cut408. Cold descriptive timing,
+not causal speed recommendation. B512 cost projection4085.875s>3000; B512 not run.
+Raw TASK/runs/wide-add-reverse-gather-recheck01/{status.json,task.log,recheck/result.json};
+reviewed evidence prepared in original-width-add-reverse-gather-20261002.json and report.
 
 ## Completed evidence; do not repeat
 
@@ -167,5 +168,18 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted: reviewed qualification/natural-failure evidence and current handoff,
-ready for separate evidence commit. No task job live except preserved stopped history.
+Uncommitted: optimizer_vector.h now uses vector abs/ordered compare and packed
+mask checks instead of per-element scalar finite reads. optimizer_finite_check.h
+adds actual transaction probes for nine widths, mask/tile tails, signed NaN/Inf,
+finite extremes and disconnected poison; optimizer_check.cpp invokes it forFP32.
+No arithmetic/tiling/budget/ABI change. Source optimizer-finite-dev01 is frozen.
+All three development builds passed; optimizer-finite-component-dev01 submitted
+with misspelled check peer-optimizer; preserve its terminal CLI refusal and rerun
+correct peer-sharded-optimizer as dev02. No device result yet.
+Task helper launchers/build_optimizer_finite.py rebuilds only optimizer_values
+kernel/checkers, verifies unchanged host archive/core/other kernels, fresh links.
+Next: optimizer + peer-sharded-optimizer gate, then
+actual consumers. Do not qualify before these pass.
+
+Original-width Add recheck terminal passed; reviewed evidence awaiting commit.
+Preserve the stopped historical job.
