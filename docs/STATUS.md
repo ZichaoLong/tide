@@ -5,7 +5,7 @@ and pushes. No pause instruction. No subagents.** Reference repositories and
 ObsidianVault are read-only. Repository resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
 Implementationca26b47 is committed/pushed; all six immutable qualification jobs passed.
-Training-record and PDG matrix evidence are being committed separately.
+Training-record and PDG matrix evidence committed/pushed ataf263b5.
 [execution-flows.md](execution-flows.md) is the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the only backlog. Overall task remains incomplete.
 
@@ -125,7 +125,7 @@ public51 (no skips) and allocator. Peak2,426,168,320→2,409,123,840bytes,
 16.26MiB (0.70%) reduction; exact semantic work/loss/output/cut checks.
 Audit launchers/training_records_evidence.py passed. Report/audit:
 docs/evidence/resident-training-records-20261002.{md,json}.
-Next implementation: physical sample slices for eager CPU/mixed consumers,
+Working-tree implementation: physical sample slices for eager CPU/mixed consumers,
 keeping global sample IDs, whole-batch loss, accumulated gradients/None flags,
 one optimizer update and per-slice continuation. Resident sample slicing and
 multi-device mixed placement remain separate follow-up. Implement in the working
@@ -166,3 +166,34 @@ pause.json overrides its running status. Never resume/kill/clean it. Historical
 Add1.6438× means faster throughput but does not qualify current online flows.
 Earlier restricted work is preserved on pushed archive/restricted-flow-20260930
 at964bf628c67270200dabe55b1bca026bd403cd37; inventory TASK/restricted-flow-archive.json.
+
+## Sample-slicing development boundary
+
+Sample slicing implementation passed affected development gates in both eager consumers. New
+sample-chunk-rows CLI, global input/label indices, per-slice continuation, gradient
+accumulation and one optimizer step; diagnostic ranges explicit. Added directed
+CPU FP32/FP64 and mixed tests with B5/chunk2, clear/carry, delayed arrivals,
+three families, two schedules, Add/Attention and SGD/AdamW; resident rejects it.
+Changed only tools/online_bench/{host.py,records.py,consumer.h,config.cpp,main.cpp,
+records.cpp,run.cpp},scripts/{run_execution_flow.py,run_flow_native.py},
+tests/test_consumer_sample_chunks.py and docs/online-consumers.md.
+Only recipe PID3771316 is again SIGSTOP, exact identity1849248082; current child
+matrix-settle-libtorch-prefill-confirm01 continues naturally. boundary-hold-sample-chunks.json
+records the hold. Check child terminal and measurement lock free before builds.
+Parent timeout still applies. Resume exact recipe after finite checks.
+
+Builds/gates use frozen sample-chunks-dev01 (dirtyaf263b5). Both consumer builds
+PASSED (2workers,600s). All four development gates PASSED: python34+cpu26 =60CPU
+checks; mixed-python16+npu22 =38NPU checks. No skips. No backend/core/kernel code
+changed. The final test source removes only an unused import from the snapshot.
+Next: commit implementation; freeze sample-chunks-clean01; use
+launchers/build_sample_consumer.py --backend cpu --name sample-chunks-cpu-clean01
+--reuse-client TASK/builds/sample-chunks-cpu-dev01, and build_capacity_client.py
+with training-records-standalone-clean01/reuse sample-chunks-npu-dev01. Fresh links,
+verified exact source/header/options reuse. Run CPU60/NPU38 affected qualification.
+Then launchers/sample_chunk_memory.py runs only four fresh LibTorch processes
+(CPU/mixed-a × wholeB16/chunk4) on D128/T8 Attention, one two-window FP32 AdamW
+step,180s/cell. It measures peak memory, not recommended throughput; semantic work
+and global loss must agree. All jobs bounded; no whole-core rebuild/test repeat.
+Resume exact matrix recipe after qualification/calibration; parent timeout still
+runs. Never resume the historical CPU job.

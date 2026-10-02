@@ -25,30 +25,32 @@ void tensor_json(std::ostream& out,const Tensor& value) {
   out<<"],\"values\":[";const auto* x=cpu.data_ptr<double>();
   for(Index i=0;i<cpu.numel();++i){if(i)out<<',';out<<std::setprecision(17)<<x[i];}out<<"]}";
 }
-void window_json(std::ostream& out,Index step,const tide::Result& r) {
-  out<<"{\"kind\":\"window\",\"step\":"<<step<<",\"cut\":"<<r.continuation.cut<<",\"outputs\":[";
+void window_json(std::ostream& out,Index step,const tide::Result& r,Index sample_begin,Index logical_batch) {
+  out<<"{\"kind\":\"window\",\"step\":"<<step<<",\"cut\":"<<r.continuation.cut;
+  if(logical_batch)out<<",\"sample_range\":["<<sample_begin<<','<<sample_begin+r.continuation.batch_size<<','<<logical_batch<<']';
+  out<<",\"outputs\":[";
   bool first=true;for(const auto& x:r.outputs){if(!first)out<<',';first=false;
-    out<<"["<<x.batch<<','<<x.time<<','<<x.port<<',';tensor_json(out,x.value);out<<']';}
+    out<<"["<<x.batch+sample_begin<<','<<x.time<<','<<x.port<<',';tensor_json(out,x.value);out<<']';}
   out<<"],\"states\":[";first=true;
   for(const auto& [key,s]:r.continuation.states) {
     if(!first)out<<',';first=false;
-    out<<'['<<key.first<<','<<key.second<<','<<s.last_time<<','<<s.observations<<',';tensor_json(out,s.value);out<<",{";
+    out<<'['<<key.first+sample_begin<<','<<key.second<<','<<s.last_time<<','<<s.observations<<',';tensor_json(out,s.value);out<<",{";
     bool slot=true;for(const auto& [name,value]:s.slots){if(!slot)out<<',';slot=false;out<<quoted(name)<<':';tensor_json(out,value);}out<<"}]";
   }
   out<<"],\"history\":[";first=true;
   for(const auto& [key,h]:r.continuation.history) {
-    if(!first)out<<',';first=false;out<<'['<<key.first<<','<<key.second<<','<<h.last_time<<",{";
+    if(!first)out<<',';first=false;out<<'['<<key.first+sample_begin<<','<<key.second<<','<<h.last_time<<",{";
     bool table=true;for(const auto& [name,counts]:h.node_maps) {
       if(!table)out<<',';table=false;out<<quoted(name)<<": [";bool cell=true;
       for(const auto& [node,count]:counts){if(!cell)out<<',';cell=false;out<<'['<<node<<','<<count<<']';}out<<']';
     }out<<"}]";
   }
   out<<"],\"pending\":[";first=true;for(const auto& a:r.continuation.pending){if(!first)out<<',';first=false;
-    out<<'['<<a.batch<<','<<a.node<<','<<a.time<<','<<a.kind<<','<<a.source<<','<<a.position<<',';tensor_json(out,a.value);out<<']';}
+    out<<'['<<a.batch+sample_begin<<','<<a.node<<','<<a.time<<','<<a.kind<<','<<a.source<<','<<a.position<<',';tensor_json(out,a.value);out<<']';}
   out<<"],\"events\":[";first=true;for(const auto& x:r.trace){if(!first)out<<',';first=false;
-    out<<'['<<x.batch<<','<<x.node<<','<<x.time<<','<<(x.active?"true":"false")<<']';}
+    out<<'['<<x.batch+sample_begin<<','<<x.node<<','<<x.time<<','<<(x.active?"true":"false")<<']';}
   out<<"],\"ledger\":[";first=true;for(const auto& [key,v]:r.continuation.ledger){if(!first)out<<',';first=false;
-    out<<'['<<key.first<<','<<key.second<<','<<v.first<<','<<v.second<<']';}
+    out<<'['<<key.first+sample_begin<<','<<key.second<<','<<v.first<<','<<v.second<<']';}
   out<<"]}\n";
 }
 void parameters_json(std::ostream& out,Index step,const tide::ParameterRegistry& registry,bool gradients) {

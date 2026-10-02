@@ -25,7 +25,7 @@ Config parse(int argc,char** argv) {
     const auto capacity=key.rfind("--resident-",0)==0?key.substr(11):std::string();
     const bool limit=std::find(limits.begin(),limits.end(),capacity)!=limits.end();
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
-      ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"
+      ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"||key=="--sample-chunk-rows"
       ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
       ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
@@ -39,6 +39,7 @@ Config parse(int argc,char** argv) {
     else if(key=="--steps")c.steps=integer(value);else if(key=="--warmup")c.warmup=integer(value);
     else if(key=="--windows-per-step")c.windows=integer(value);else if(key=="--threads")c.threads=integer(value);
     else if(key=="--workers")c.workers=integer(value);
+    else if(key=="--sample-chunk-rows")c.sample_chunk_rows=integer(value);
     else if(key=="--parameter-budget")c.parameter_budget=integer(value);
     else if(key=="--head-workspace-bytes")c.head_workspace_bytes=integer(value);
     else if(key=="--device-memory-bytes")c.device_memory_bytes=integer(value);
@@ -63,6 +64,8 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");
   if(c.placement.preset=="resident"&&(c.workers!=1||c.packed_sources||c.batch_next))
     throw std::invalid_argument("host workers/packed-sources/batch-next require an eager native consumer");
+  if(c.placement.preset=="resident"&&c.sample_chunk_rows)
+    throw std::invalid_argument("sample chunking is not yet supported by the resident consumer");
   if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
       ||(c.training&&c.runtime.dtype==at::kHalf&&c.placement.preset!="resident"))
     throw std::invalid_argument("eager consumer FP16 training requires a qualified master optimizer");

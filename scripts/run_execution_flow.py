@@ -28,6 +28,8 @@ def main():
     p.add_argument("--workers", type=int, default=1, help="native node workers, separate from ATen --threads")
     p.add_argument("--packed-sources", action="store_true", help="use native packed source transport")
     p.add_argument("--batch-next", action="store_true", help="use native batched Next/reset")
+    p.add_argument("--sample-chunk-rows", type=int, default=0,
+                   help="eager physical sample maximum; 0 keeps the whole logical batch")
     p.add_argument("--parameter-budget", type=int, default=1024**3)
     p.add_argument("--native-library", type=Path)
     p.add_argument("--native-binary", type=Path)
@@ -81,6 +83,7 @@ def python_run(packet,a):
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
                workers=a.workers,packed_sources=a.packed_sources,batch_next=a.batch_next,
+               sample_chunk_rows=a.sample_chunk_rows,
                parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None,
                **python_arguments(a,device))
     if a.diagnostics:

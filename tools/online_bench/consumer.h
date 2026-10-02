@@ -25,6 +25,7 @@ struct Config {
   tide::ExecutionPlacement placement;
   bool training=false,diagnostics=false;
   Index steps=3,warmup=1,windows=2,threads=1,workers=1;
+  Index sample_chunk_rows=0;
   bool packed_sources=false,batch_next=false;
   Index parameter_budget=1024LL*1024*1024;
   Index head_workspace_bytes=4LL*1024*1024*1024;
@@ -48,7 +49,7 @@ std::string run(const Packet&,const Config&,at::Device,std::ostream* diagnostics
 std::string run_resident(const Packet&,const Config&,at::Device,std::ostream* diagnostics);
 std::string quoted(const std::string&);
 void tensor_json(std::ostream&,const Tensor&);
-void window_json(std::ostream&,Index,const tide::Result&);
+void window_json(std::ostream&,Index,const tide::Result&,Index sample_begin=0,Index logical_batch=0);
 void parameters_json(std::ostream&,Index,const tide::ParameterRegistry&,bool gradients);
 void atomic_text(const std::string&,const std::string&);
 } // namespace tide_flow

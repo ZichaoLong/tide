@@ -27,6 +27,7 @@ def run(packet, args):
                "--steps="+str(args.steps), "--warmup="+str(args.warmup),
                "--windows-per-step="+str(args.windows_per_step), "--threads="+str(args.threads),
                "--workers="+str(args.workers),
+               "--sample-chunk-rows="+str(args.sample_chunk_rows),
                "--parameter-budget="+str(args.parameter_budget)]
     if args.packed_sources: command.append("--packed-sources")
     if args.batch_next: command.append("--batch-next")

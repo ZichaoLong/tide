@@ -240,6 +240,26 @@ Resident fiber KV proposal duplication is removed on clean80dae6e;
 [affected qualification and allocator comparison](evidence/resident-fiber-append-20261002.md)
 show128MiB lower peak at the representative Attention shape, without reducing
 logical KV capacity. This is a storage improvement, not full-size admission.
+Eager Python/native/LibTorch consumers also accept `--sample-chunk-rows N`.
+Zero preserves the whole logical batch; a positive value limits samples in one
+physical forward/backward group. Each group keeps all requested windows connected
+and carries its own state/history/pending/KV into the next step. The final group
+may be smaller. Parameters and the optimizer are shared; gradients accumulate
+across groups with None/connected-zero behavior preserved. One finite-gradient
+check and one optimizer update follow the entire logical batch. Loss reduction
+uses the original logical batch, and input/target generation uses global sample
+IDs. This is an explicit physical maximum, not yet automatic memory admission.
+
+`batch_execution` records requested/effective rows and group count. Diagnostic
+window records for split runs contain `sample_range: [begin,end,logical_batch]`
+and global sample IDs; each is a partial batch, so the ranges must be combined
+when comparing a whole window. Graph scheduling within each sample is unchanged.
+Persistent state for all samples and full model/optimizer storage remain live;
+this reduces activation lifetime, not those fixed costs. All work stays inside
+the complete-step timer. The resident consumer explicitly rejects this option
+until it has a corresponding VJP accumulation/state-switching implementation.
+Qualification of this increment is tracked in STATUS.
+
 Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
 pending. The deliberately paused historical CPU job is not managed by this CLI.
 

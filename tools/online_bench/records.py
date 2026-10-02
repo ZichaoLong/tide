@@ -10,6 +10,12 @@ def tensor(value):
 
 def observer(records):
     def observe(kind, step, value):
+        sample_begin = 0
+        sample_range = None
+        if kind == "sample_window":
+            sample_begin, logical_batch, value = value
+            sample_range = [sample_begin, sample_begin+value.continuation.batch_size, logical_batch]
+            kind = "window"
         row = dict(kind=kind, step=step)
         if kind != "window":
             row["parameters"] = {k: tensor(v.grad if kind == "gradients" else v) for k, v in value.items()}
@@ -23,6 +29,12 @@ def observer(records):
                 pending=[[a.batch,a.node,a.time,a.kind,a.source,a.position,tensor(a.value)] for a in q.pending],
                 events=[[e["batch"],e["node"],e["time"],e["active"]] for e in value.trace],
                 ledger=[[b,p,pos,t] for (b,p),(pos,t) in sorted(q.ledger.items())])
+            if sample_range is not None:
+                # Each record is a complete window for this explicit sample
+                # range, not a complete logical-batch continuation by itself.
+                row["sample_range"] = sample_range
+                for name in ("outputs", "states", "history", "pending", "events", "ledger"):
+                    for item in row[name]:
+                        item[0] += sample_begin
         records.append(row)
     return observe
-

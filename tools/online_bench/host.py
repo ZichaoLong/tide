@@ -37,11 +37,12 @@ def runtime_for(packet, *, family, implementation, device, dtype, schedule, pres
     return runtime, embedding, head
 
 
-def token_values(embedding, packet, position):
+def token_values(embedding, packet, position, sample_begin=0, batch_size=None):
     c = packet["workload"]
     # CPU token preparation and the required upload belong inside the timer.
     positions = torch.arange(position, position+c["tokens"], dtype=torch.int64)
-    samples = torch.arange(c["batch"], dtype=torch.int64)[:, None]
+    size = c["batch"] if batch_size is None else batch_size
+    samples = torch.arange(sample_begin, sample_begin+size, dtype=torch.int64)[:, None]
     ids = (7*positions[None, :] + 3*samples) % c["vocab"]
     return torch.nn.functional.embedding(ids.to(embedding.device), embedding)
 
@@ -51,17 +52,17 @@ def advance(session, values, packet, position):
     if session.runtime.spec:
         return session.advance(values)
     external = [External(b, 0, position+t, (position+t)*c["stride"], values[b, t])
-                for b in range(c["batch"]) for t in range(c["tokens"])]
+                for b in range(values.shape[0]) for t in range(c["tokens"])]
     stop = (position+c["tokens"])*c["stride"]
     return session.advance(external, stop=stop, sealed_until=stop)
 
 
-def output_loss(result, head, packet, denominator):
+def output_loss(result, head, packet, denominator, sample_begin=0):
     if not result.outputs:
         return None
     c = packet["workload"]
     rows = torch.stack([x[3] for x in result.outputs])
-    targets = torch.tensor([((t//c["stride"]+1)*7+b*3) % c["vocab"]
+    targets = torch.tensor([((t//c["stride"]+1)*7+(b+sample_begin)*3) % c["vocab"]
                             for b, t, _, _ in result.outputs], dtype=torch.int64, device=head.device)
     logits = rows @ head.t()
     # FP16 has a FP32 loss and an explicitly separate master optimizer policy.
@@ -79,12 +80,16 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         training=False, optimizer="sgd", steps=3, warmup=1, windows_per_step=2,
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
-        device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False):
+        device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0):
+    if type(sample_chunk_rows) is not int or not 0 <= sample_chunk_rows < 2**63:
+        raise ValueError("sample-chunk-rows must be a nonnegative int64")
     if type(workers) is not int or not 1 <= workers <= 1024 or type(packed_sources) is not bool or type(batch_next) is not bool:
         raise ValueError("invalid host workers/packed-sources/batch-next options")
     if (workers != 1 or packed_sources or batch_next) and (implementation == "python" or preset == "resident"):
         raise ValueError("host workers/packed-sources/batch-next require an eager native consumer")
     if preset == "resident":
+        if sample_chunk_rows:
+            raise ValueError("sample chunking is not yet supported by the resident consumer")
         from .resident import run as run_resident
         return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
             schedule=schedule, training=training, optimizer=optimizer, steps=steps, warmup=warmup,
@@ -109,7 +114,10 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement,
         workers=workers, packed_sources=packed_sources, batch_next=batch_next)
-    c = packet["workload"]; session = runtime.session(c["batch"])
+    c = packet["workload"]
+    chunk = min(sample_chunk_rows or c["batch"], c["batch"])
+    sessions = [(first, min(chunk, c["batch"]-first), runtime.session(min(chunk, c["batch"]-first)))
+                for first in range(0, c["batch"], chunk)]
     named = parameters(runtime, embedding, head)
     options = dict(lr=.0001, weight_decay=.001, foreach=False)
     opt = ((torch.optim.SGD(named.values(), momentum=.25, **options) if optimizer == "sgd" else
@@ -125,22 +133,38 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             opt.zero_grad(set_to_none=True)
         loss = None; outputs = 0; stats = {}
         with torch.set_grad_enabled(training):
-            for _ in range(windows_per_step):
-                values = token_values(embedding, packet, position)
-                result = advance(session, values, packet, position)
-                position += c["tokens"]; outputs += len(result.outputs)
-                item = output_loss(result, head, packet, c["batch"]*c["tokens"]*windows_per_step)
-                if item is not None:
-                    loss = item if loss is None else loss + item
-                for key, value in result.stats.items():
-                    stats[key] = max(stats.get(key, 0), value) if key.startswith("max_") else stats.get(key, 0)+value
-                if observer:
-                    observer("window", step, result)
-            if loss is not None:
-                if not torch.isfinite(loss).all():
-                    raise RuntimeError("nonfinite consumer loss")
+            # Samples have independent graph state. Keep all windows of one
+            # physical slice connected, then release its graph before the next
+            # slice. All slices use the same parameter generation and optimizer.
+            for first, size, session in sessions:
+                partial = None
+                for window in range(windows_per_step):
+                    cursor = position+window*c["tokens"]
+                    values = token_values(embedding, packet, cursor, first, size)
+                    result = advance(session, values, packet, cursor)
+                    outputs += len(result.outputs)
+                    item = output_loss(result, head, packet, c["batch"]*c["tokens"]*windows_per_step, first)
+                    if item is not None:
+                        partial = item if partial is None else partial+item
+                    for key, value in result.stats.items():
+                        stats[key] = max(stats.get(key, 0), value) if key.startswith("max_") else stats.get(key, 0)+value
+                    if observer:
+                        if chunk == c["batch"]:
+                            observer("window", step, result)
+                        else:
+                            observer("sample_window", step, (first, c["batch"], result))
+                if partial is not None:
+                    if not torch.isfinite(partial).all():
+                        raise RuntimeError("nonfinite consumer loss")
+                    if opt:
+                        partial.backward()
+                    loss = partial.detach() if loss is None else loss+partial.detach()
                 if opt:
-                    loss.backward()
+                    session.detach()
+                # Diagnostics serialize observations; do not keep an accidental
+                # graph root while allocating the next physical slice.
+                result = values = item = partial = None
+            position += windows_per_step*c["tokens"]
             if opt:
                 # One finite agreement before any parameter/optimizer update.
                 flags = [torch.isfinite(p.grad).all() for p in named.values() if p.grad is not None]
@@ -148,7 +172,6 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                     raise RuntimeError("nonfinite gradient; optimizer not applied")
                 if observer:
                     observer("gradients", step, named)
-                session.detach()
                 opt.step()
         synchronize(runtime.device); elapsed = time.perf_counter() - begin
         if observer:
@@ -169,7 +192,9 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 construction_seconds=construction, seconds=durations, warmup_seconds=warmup_times,
                 losses=losses, outputs=output_counts, statistics=statistics, parameter_budget=parameter_budget,
                 input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step,
-                final_cut=session.continuation.cut, parameters=sum(p.numel() for p in named.values()),
+                final_cut=sessions[0][2].continuation.cut, parameters=sum(p.numel() for p in named.values()),
+                batch_execution=dict(logical_batch=c["batch"], requested_sample_chunk_rows=sample_chunk_rows,
+                                     effective_sample_chunk_rows=chunk, physical_chunks=len(sessions)),
                 runtime=runtime.manifest(), diagnostics=diagnostics or observer is not None,
                 memory=memory.record(),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")

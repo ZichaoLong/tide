@@ -15,10 +15,10 @@ void detach(tide::Continuation& q) {
   for(auto& [_,h]:q.history)for(auto& [__,v]:h.tensors)v=v.detach();
   for(auto& a:q.pending)a.value=a.value.detach();
 }
-Tensor objective(const tide::Result& r,const Fixture& f,const Packet& p,Index windows) {
+Tensor objective(const tide::Result& r,const Fixture& f,const Packet& p,Index windows,Index sample_begin) {
   if(r.outputs.empty())return {};
   std::vector<Tensor> rows;std::vector<Index> labels;
-  for(const auto& x:r.outputs){rows.push_back(x.value);labels.push_back(((x.time/p.stride+1)*7+x.batch*3)%p.vocab);}
+  for(const auto& x:r.outputs){rows.push_back(x.value);labels.push_back(((x.time/p.stride+1)*7+(x.batch+sample_begin)*3)%p.vocab);}
   auto logits=at::matmul(at::stack(rows),f.head.t());
   if(logits.scalar_type()==at::kHalf)logits=logits.to(at::kFloat);
   return at::cross_entropy_loss(logits,at::tensor(labels,at::kLong).to(f.head.device()),{},at::Reduction::Sum)
@@ -53,7 +53,10 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     if(c.optimizer=="sgd")optimizer=std::make_unique<tide::SGD>(f.parameters,std::vector<tide::OptimizerGroup>{group});
     else optimizer=std::make_unique<tide::AdamW>(f.parameters,std::vector<tide::OptimizerGroup>{group});
   }
-  tide::Continuation q;q.identity=f.graph.identity;q.batch_size=p.batch;
+  const auto chunk=std::min(c.sample_chunk_rows?c.sample_chunk_rows:p.batch,p.batch);
+  std::vector<tide::Continuation> continuations;
+  for(Index first=0;first<p.batch;first+=chunk){tide::Continuation q;q.identity=f.graph.identity;
+    q.batch_size=std::min(chunk,p.batch-first);continuations.push_back(std::move(q));}
   portable_torch::synchronize(device);const auto construction=seconds(start);
   memory.capture("construction");
   std::vector<double> durations,losses,warmup_times;std::vector<Index> outputs;std::vector<std::map<std::string,Index>> statistics;
@@ -61,30 +64,39 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   for(Index step=0;step<c.steps+c.warmup;++step) {
     portable_torch::synchronize(device);start=Clock::now();if(optimizer)optimizer->zero_grad();
     Tensor loss;Index count=0;std::map<std::string,Index> stats;
-    for(Index window=0;window<c.windows;++window) {
-      auto positions=at::arange(position,position+p.tokens,at::kLong).reshape({1,-1});
-      auto samples=at::arange(p.batch,at::kLong).reshape({-1,1});
-      auto ids=(positions*7+samples*3).remainder(p.vocab).to(device);
-      auto values=at::embedding(f.embedding,ids);std::vector<tide::External> external;
-      for(Index b=0;b<p.batch;++b)for(Index t=0;t<p.tokens;++t)external.push_back({b,0,position+t,(position+t)*p.stride,values[b][t]});
-      const auto stop=(position+p.tokens)*p.stride;
-      auto result=greedy?greedy->run(q,external,stop,stop):streaming->run(q,external,stop,stop);
-      q=result.continuation;position+=p.tokens;
-      if(c.family=="settle")result=f.settle->project(result);
-      count+=result.outputs.size();auto value=objective(result,f,p,c.windows);
-      if(value.defined())loss=loss.defined()?loss+value:value;
-      for(const auto& [name,x]:result.stats)stats[name]=name.rfind("max_",0)==0?std::max(stats[name],x):stats[name]+x;
-      if(diagnostics)window_json(*diagnostics,step,result);
+    for(size_t part=0;part<continuations.size();++part) {
+      const auto first=Index(part)*chunk;auto& q=continuations[part];Tensor partial;
+      // Each physical slice retains all of its connected windows. Parameters
+      // and optimizer are shared; no update occurs until every slice is done.
+      for(Index window=0;window<c.windows;++window) {
+        const auto cursor=position+window*p.tokens;
+        auto positions=at::arange(cursor,cursor+p.tokens,at::kLong).reshape({1,-1});
+        auto samples=at::arange(first,first+q.batch_size,at::kLong).reshape({-1,1});
+        auto ids=(positions*7+samples*3).remainder(p.vocab).to(device);
+        auto values=at::embedding(f.embedding,ids);std::vector<tide::External> external;
+        for(Index b=0;b<q.batch_size;++b)for(Index t=0;t<p.tokens;++t)external.push_back({b,0,cursor+t,(cursor+t)*p.stride,values[b][t]});
+        const auto stop=(cursor+p.tokens)*p.stride;
+        auto result=greedy?greedy->run(q,external,stop,stop):streaming->run(q,external,stop,stop);
+        q=result.continuation;
+        if(c.family=="settle")result=f.settle->project(result);
+        count+=result.outputs.size();auto value=objective(result,f,p,c.windows,first);
+        if(value.defined())partial=partial.defined()?partial+value:value;
+        for(const auto& [name,x]:result.stats)stats[name]=name.rfind("max_",0)==0?std::max(stats[name],x):stats[name]+x;
+        if(diagnostics)window_json(*diagnostics,step,result,first,chunk<p.batch?p.batch:0);
+      }
+      if(partial.defined()){
+        if(!at::isfinite(partial).all().item<bool>())throw std::runtime_error("nonfinite consumer loss");
+        if(optimizer)partial.backward();
+        loss=loss.defined()?loss+partial.detach():partial.detach();
+      }
+      if(optimizer)detach(q);
     }
-    if(loss.defined()){
-      if(!at::isfinite(loss).all().item<bool>())throw std::runtime_error("nonfinite consumer loss");
-      if(optimizer)loss.backward();
-    }
+    position+=c.windows*p.tokens;
     if(optimizer) {
       std::vector<Tensor> flags;for(const auto& owner:f.parameters.owners())if(owner.value.grad().defined())flags.push_back(at::isfinite(owner.value.grad()).all());
       if(!flags.empty()&&!at::stack(flags).all().item<bool>())throw std::runtime_error("nonfinite gradient; optimizer not applied");
       if(diagnostics)parameters_json(*diagnostics,step,f.parameters,true);
-      detach(q);optimizer->step();
+      optimizer->step();
     }
     portable_torch::synchronize(device);const auto elapsed=seconds(start);
     if(diagnostics)parameters_json(*diagnostics,step,f.parameters,false);
@@ -105,10 +117,12 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   out<<"],\"statistics\":[";for(size_t i=0;i<statistics.size();++i){if(i)out<<',';out<<'{';bool first=true;
     for(const auto& [name,value]:statistics[i]){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<value;}out<<'}';}
   out<<"],\"windows_per_step\":"<<c.windows<<",\"warmup_steps\":"<<c.warmup<<",\"measured_steps\":"<<c.steps
-     <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<q.cut
+     <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<continuations.front().cut
      <<",\"threads\":"<<c.threads<<",\"parameter_budget\":"<<c.parameter_budget<<",\"diagnostics\":"<<(c.diagnostics?"true":"false")
      <<",\"host_execution\":{\"workers\":"<<c.workers<<",\"packed_sources\":"<<(c.packed_sources?"true":"false")
      <<",\"batch_next\":"<<(c.batch_next?"true":"false")<<'}'
+     <<",\"batch_execution\":{\"logical_batch\":"<<p.batch<<",\"requested_sample_chunk_rows\":"<<c.sample_chunk_rows
+     <<",\"effective_sample_chunk_rows\":"<<chunk<<",\"physical_chunks\":"<<continuations.size()<<'}'
      <<",\"runtime\":{\"device\":"<<quoted(device.str())<<",\"dtype\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";
