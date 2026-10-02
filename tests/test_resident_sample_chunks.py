@@ -57,10 +57,18 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
         assert c['saved_contexts'] == (min(pool,3*c['continuation_snapshot_bytes']) if pool else 3*c['continuation_snapshot_bytes']) > 0
         assert (c['context_pack_workspace']>0)==bool(pool)
         assert (c['gradient_accumulation'] > 0) == training
+        assert (c['gradient_accumulation_live'] > 0) == training
+        if training:
+            assert c['gradient_accumulation_live']<c['gradient_accumulation']
     assert got['context_storage']['policy']==('compact' if pool else 'dense')
     assert got['context_storage']['requested_bytes_per_device']==pool
     assert all(x['peak_saved_bytes']<=x['budget_bytes'] for x in got['context_storage']['devices'])
     for step, stats in enumerate(got['statistics']):
+        if training:
+            # Measured retained parameter copies are shared by windows; dynamic
+            # state/cache storage still has its separate per-window envelope.
+            shared=sum(d['components']['retained_attention_parameters'] for d in got['memory_admission']['devices'])
+            assert 0<=stats['retained_attention_bytes']<=shared
         windows = [r for r in actual if r['kind']=='window' and r['step']==step]
         event_sum = sum(len(r['events']) for r in windows)
         event_max = max(len(r['events']) for r in windows)

@@ -25,6 +25,30 @@ lifetimes have separate envelopes; their maximum is the estimate. Local
 still independent capability ceilings, **not amounts summed as actual HBM**.
 Exceeding those ceilings still fails explicitly.
 
+The training envelope follows two qualified storage lifetimes. Immutable
+Attention QKV/output matrices, their parameter biases, decay and pooling weights
+have one retained copy per backward group, shared by all its windows
+(`RetainedAttention`). State, dynamic KV/log-bias, lengths and journals retain
+their per-window charges. `retained_attention_parameters` reports the shared
+part already included in `retained`, not an additional allocation.
+
+For physical sample splitting, the first accumulation copies the completed
+canonical gradients into a private FP32 bank; subsequent accumulations reuse
+that private numeric bank with separate connection flags. The consumers release
+each public gradient export before the next sample group. Accordingly,
+`gradient_accumulation_live` charges one extra FP32 bank plus the existing
+16MiB flag/metadata allowance. The current canonical output is separately
+charged in the backward/optimizer envelope. `gradient_accumulation` remains
+the unchanged, conservative two-input **API admission limit**, passed to
+`accumulate(max_bytes=...)`; it is not summed again as live memory. This does
+not authorize reuse of public exports or alter the runtime's budget checks.
+
+These corrections depend on the shared-snapshot and private-accumulation
+implementations in the matching resident build. They do not change actual
+allocations, dtype, gradient order, logical capacities or safety margins.
+Newly admitted plans still require observed allocator calibration; a smaller
+estimate by itself is neither a memory saving nor a full-size acceptance result.
+
 Fiber KV append proposals reuse unused cache tails. The Python/C++ envelopes
 subtract exactly the removed two payload buffers on each state owner:
 `2 × payload_bytes × (batch × local_attention_nodes × kv_rows + 1) × width`.

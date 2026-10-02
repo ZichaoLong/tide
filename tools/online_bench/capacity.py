@@ -167,7 +167,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
         # peer programs can coexist. Reserve their caps plus 512MiB for backend
         # allocations outside the tensor formulas; calibrate on each platform.
         programs = (1+(4*windows if g.training else 2))*c.program+512*MIB
-        snapshot = saved_contexts = accumulation = context_pack = 0
+        snapshot = saved_contexts = accumulation = accumulation_live = context_pack = 0
         if g.sample_chunks > 1:
             # Dense continuation handles retain only numerical state, not the
             # active owner's parameters, proposals, journals or operator arenas.
@@ -187,17 +187,26 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                 if coordinator:
                     context_pack += 32*c.queue
             accumulation = 8*canonical[device]+16*MIB if g.training else 0
+            # The public accumulation API still admits both input banks. Its
+            # private numeric destination is now reused: one extra FP32 bank
+            # coexists with the current canonical gradients charged below.
+            # First-copy and subsequent in-place accumulation have the same
+            # two-bank bound; flags/metadata retain the full 16MiB allowance.
+            accumulation_live = 4*canonical[device]+16*MIB if g.training else 0
         # Completed-window prefix extents allocate masks/indices one journal at
         # a time. Charge their scratch even when the conservative policy keeps
         # dense copies; retained payloads below still use the dense envelope.
         retained_pack = (32*(trace+(c.kv_trace if g.attention and body else 0))+16*MIB) if g.training else 0
-        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack+retained_pack
+        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation_live+context_pack+retained_pack
         construction = base+4*canonical[device]+parameters
         head = head_budget(c.outputs,w,v,p,g.training,MAX,True)
         head_work = head.fixed_bytes+chunks.head*head.row_bytes if coordinator else 0
         retained = gradients = reverse_work = communication = roots = proposal = attention_gradients = 0
         if g.training:
-            retained = projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals)
+            # RetainedAttention shares immutable QKV/O, parameter biases,
+            # decay and pool weights across one backward group's windows.
+            # State, KV/log-bias, lengths and journals remain per-window.
+            retained = projection+state_parameters+windows*(2*nodes*w*p+state+p*cache+journals)
             if coordinator:
                 retained += windows*32*(trace+c.queue+c.outputs)*(10*w+64)
                 roots = 4*windows*c.outputs*w+(12 if g.sample_chunks>1 else 8)*v*w
@@ -224,7 +233,9 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                           reverse_workspace=reverse_work,canonical_communication=communication,consumer_proposals=proposal,
                           head_workspace=head_work,continuation_snapshot_bytes=snapshot,
                           saved_contexts=saved_contexts,gradient_accumulation=accumulation,context_pack_workspace=context_pack,
-                          retained_pack_workspace=retained_pack,attention_parameter_gradients=attention_gradients)
+                          retained_pack_workspace=retained_pack,attention_parameter_gradients=attention_gradients,
+                          gradient_accumulation_live=accumulation_live,
+                          retained_attention_parameters=state_parameters if g.training else 0)
         if max(*phases.values(),*components.values()) > MAX:
             raise ValueError('consumer memory extent overflow')
         result.append(dict(index=device,estimated_peak_bytes=max(phases.values()),phases=phases,components=components))

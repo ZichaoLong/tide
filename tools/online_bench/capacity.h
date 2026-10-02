@@ -105,7 +105,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide masters=g.training?4*Wide(g.adamw?3:2)*canonical[device]:0;
     const Wide consumer=coordinator?2*p*v*w+(g.training?4*(g.adamw?3:2)*2*v*w:0):0;
     const Wide programs=(1+(g.training?4*windows:2))*c.program+512*MiB;
-    Wide snapshot=0,saved_contexts=0,accumulation=0,context_pack=0;
+    Wide snapshot=0,saved_contexts=0,accumulation=0,accumulation_live=0,context_pack=0;
     if(g.sample_chunks>1) {
       snapshot=state+4096;
       if(g.attention&&body)snapshot+=(b*body*c.kv+1)*p*(2*w+1)+8*b*body;
@@ -116,16 +116,21 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
         context_pack=32*(g.attention?b*body*c.kv:0)+16*MiB+(coordinator?32*Wide(c.queue):0);
       }
       accumulation=g.training?8*Wide(canonical[device])+16*MiB:0;
+      // Keep the two-input API admission; only one extra private FP32 bank
+      // coexists with the separately charged current canonical gradients.
+      accumulation_live=g.training?4*Wide(canonical[device])+16*MiB:0;
     }
     const Wide retained_pack=g.training?32*(trace+(g.attention&&body?Wide(c.kv_trace):0))+16*MiB:0;
-    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation+context_pack+retained_pack;
+    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation_live+context_pack+retained_pack;
     const Wide construction=base+4*Wide(canonical[device])+parameters;
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
     const Wide head_work=coordinator?head_fixed+chunk.at("head")*head_row:0;
     Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0;
     if(g.training) {
-      retained=projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals);
+      // Immutable attention parameters share one retained snapshot per group;
+      // numerical state, KV/log-bias, lengths and journals still scale by windows.
+      retained=projection+state_parameters+windows*(2*nodes*w*p+state+p*cache+journals);
       if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
       // Add has no QKV/output matrices; projection, scalar aggregate and vector
       // LH/state/Read gradients retain their separate conservative charges.
@@ -150,7 +155,9 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"consumer_proposals",bytes(proposal)},{"head_workspace",bytes(head_work)},
       {"continuation_snapshot_bytes",bytes(snapshot)},{"saved_contexts",bytes(saved_contexts)},
       {"gradient_accumulation",bytes(accumulation)},{"context_pack_workspace",bytes(context_pack)},
-      {"retained_pack_workspace",bytes(retained_pack)},{"attention_parameter_gradients",bytes(attention_gradients)}};
+      {"retained_pack_workspace",bytes(retained_pack)},{"attention_parameter_gradients",bytes(attention_gradients)},
+      {"gradient_accumulation_live",bytes(accumulation_live)},
+      {"retained_attention_parameters",bytes(g.training?state_parameters:0)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
   }
   return result;

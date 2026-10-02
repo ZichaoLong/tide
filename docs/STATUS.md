@@ -1,8 +1,8 @@
 # Current handoff
 
-Updated 2026-10-02. **PAUSED at the user's explicit request after this round's
-commit/push and progress report. Do not resume implementation or experiments
-until the user confirms. Overall goal remains incomplete. No subagents.**
+Updated 2026-10-02. **ACTIVE: user confirmed resume after checkpoint7a7293a. Continue authorized
+implementation, qualification, commits and pushes. Overall goal remains incomplete.
+No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Latest implementation e82f971; prior pushed evidence
@@ -25,8 +25,8 @@ training. Five presets plus fine switches. FP32 main, FP16 separate; training
 means forward/loss/backward/optimizer/continuation, with no convergence requirement.
 
 Implementation commit → clean fixed-source affected qualification → separate
-evidence commit; push each under the standing authorization. Latest user request
-adds a pause after this checkpoint. User contract outranks run-ml-experiments;
+evidence commit; push each under the standing authorization. The user has now resumed
+execution after the requested checkpoint pause. User contract outranks run-ml-experiments;
 minimal useful records only. No unchanged full CPU/representative reruns, unbounded
 queue, OOM search, blind retries or relaxed safety/cost limits. Formal heavy timing
 is serial; never stop other workloads to free resources.
@@ -92,7 +92,7 @@ cost gate. Queue availability caused one bounded refusal, not the principal
 implementation gap. Snapshot accounting and reverse-window gradient lifetimes
 are promising analysis directions, not implemented solutions or a guarantee.
 
-## Resume only after user confirmation
+## Current next action after confirmed resume
 
 Read ROADMAP F4–F7 and the reviewed pilot first. Investigate the dominant retained
 training allocations before any new large run:
@@ -138,5 +138,20 @@ full performance matrix. Representative entry:
 [evidence](evidence/representative-settle-python-20261002.md).
 CUDA true-device execution and new host/CANN tuples require target-machine gates;
 older eager four-stack acceptance does not certify the new resident backend there.
-At this checkpoint only reviewed evidence, ROADMAP corrections and this handoff
-are changed; no uncommitted implementation is intended to remain after the commit.
+Re-entry was clean at7a7293a. Current implementation: consumer capacity now
+charges one shared immutable Attention snapshot and one extra live private FP32
+accumulation bank; the original two-input accumulation API limit and safety
+margins remain unchanged. Development frozen source TASK/sources/training-storage-dev01
+passed CPU16, installed consumer build and NPU17 (16 independent CPU comparisons
+plus one preallocation refusal), without skips. No active current jobs.
+
+Next: commit this planner/docs/test increment; qualify that exact clean commit
+as TASK/sources/training-storage-clean01. Planned bounded jobs: CPU17, installed
+consumer build, NPU25 including automatic sample admission and actual sliced
+updates, and one D512 allocator calibration using the matching qualified backend.
+Reuse unchanged core/CANN binaries with verified hashes; no redundant profiler or
+whole CPU/representative matrix. Task helper training_storage_calibration.py keeps
+prior measurements and verifies the smaller estimate against actual allocation.
+Large original Attention admission still refuses (about68GiB on12cards/57GiB
+on16cards with B1 capacities); this correction does not complete scale acceptance.
+No new original-width pilot is queued or planned without another concrete gain.

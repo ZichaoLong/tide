@@ -161,6 +161,44 @@ def test_attention_gradient_charge_matches_materialized_model(memory,capacity_pr
     assert all(d['components']['physical_and_canonical_gradients']>v for d,v in zip(result['devices'],charged))
 
 
+@pytest.mark.parametrize('memory',['add','attention'])
+@pytest.mark.parametrize('payload',[2,4])
+def test_shared_training_storage_covers_materialized_inventory(memory,payload,capacity_probe):
+    from tools.online_bench.fixture import build_model
+    import torch
+    packet,g=geometry(memory,width=16)
+    g=replace(g,payload=payload,sample_chunks=3)
+    _,model,_,_=build_model(packet,dtype=torch.float16 if payload==2 else torch.float32)
+    shared_names={'fiber_qkv','fiber_out','fiber_qkv_bias','fiber_out_bias','fiber_decay','fiber_pool'}
+    inventory=[0]*g.devices
+    previous=None
+    for windows in (1,2,3):
+        current=plan(replace(g,windows=windows),Capacities(),Chunks(),[64*1024**3]*g.devices,True)
+        assert cpp_plan(capacity_probe,replace(g,windows=windows),Capacities(),Chunks(),[64*1024**3]*g.devices,True)==current
+        if windows==1:
+            for i,node in enumerate(model.nodes):
+                for name,value in node.extra.items():
+                    if name in shared_names:
+                        # Fiber pooling banks retain FP32 even for FP16 payload.
+                        inventory[current['state_owners'][i]]+=value.numel()*(4 if name=='fiber_pool' else payload)
+        for card,actual in zip(current['devices'],inventory):
+            c=card['components']
+            assert c['retained_attention_parameters']>=actual
+            assert (c['retained_attention_parameters']>0)==(memory=='attention')
+            assert 0<c['gradient_accumulation_live']<c['gradient_accumulation']
+            if previous:
+                old=previous['devices'][card['index']]['components']
+                for name in ('retained_attention_parameters','gradient_accumulation','gradient_accumulation_live'):
+                    assert c[name]==old[name]
+                assert c['retained']>old['retained']  # State/KV/journals still grow.
+        previous=current
+    for variant in (replace(g,training=False),replace(g,sample_chunks=1)):
+        result=plan(variant,Capacities(),Chunks(),[64*1024**3]*g.devices,True)
+        assert all(d['components']['gradient_accumulation_live']==0 for d in result['devices'])
+        if not variant.training:
+            assert all(d['components']['retained_attention_parameters']==0 for d in result['devices'])
+
+
 def test_compact_pool_charges_declared_cap_and_pack_workspace(capacity_probe):
     _,g = geometry(width=128)
     g = replace(g,sample_chunks=64)
