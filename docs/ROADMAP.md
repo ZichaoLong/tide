@@ -201,6 +201,14 @@ loss match prior B4. All allocator/context checks pass. Unchanged B512 projectio
 3117.612s>3000s prevents B512 execution; no formal speed claim
 ([evidence](evidence/original-width-add-gradient-lifetime-20261003.md)).
 
+F4/F5 private frozen projection banks are qualified on clean4467493: eight terminal
+jobs,native160trajectories/2560windows/640updates,Python16,consumer32; aggressive
+sharded training borrows only its private banks under the existing publication
+barrier. Default/conservative/legacy snapshots remain independent; retained API
+budgets and consumer estimates unchanged. Same-lease D512 peaks decrease
+296,274,432bytes/card; separate FP16 trace53176ops/zero observed AiCPU
+([evidence](evidence/resident-projection-borrow-20261003.md)). Original-size remains open.
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU

@@ -5,9 +5,11 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **789e1a5** is pushed and qualified; its reviewed evidence **0760300** is pushed. Previous backend evidence **9b8151a** is pushed. [execution-flows](execution-flows.md)
-owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
-Reference repositories and ObsidianVault are read-only.
+`python scripts/status.py`. Latest implementation **4467493** pushed and qualified;
+its reviewed evidence is ready for the separate evidence commit.
+[execution-flows](execution-flows.md) owns the contract;
+[ROADMAP F1–F7](ROADMAP.md) is the sole backlog. Reference repositories and
+ObsidianVault are read-only.
 
 ## Contract and operating bounds
 
@@ -28,94 +30,62 @@ never stop other workloads to free resources.
 
 ## Latest completed qualification
 
-**6b9224c** Attention parameter-adjoint reuse passed eight clean jobs: three builds,
-native6 (160trajectories/2560windows/640updates), Python16, consumer32, same-lease
-D512 calibration and independent FP16 profiling. All terminal exit0, no skips/new
-failures, leases released. [Evidence](evidence/resident-attention-adjoints-20261003.md).
-Audit: `python TASK/launchers/attention_adjoints_evidence.py 6b9224c829183e8aacefdfc5ccd416ecfeb4798d`.
+**4467493** private projection-bank borrowing passed eight clean jobs: three builds,
+native6 (160trajectories/2560windows/640updates),Python16,consumer32,same-lease D512
+calibration and separate FP16 profiling; no skips/failures. All terminal, leases
+released. [Evidence](evidence/resident-projection-borrow-20261003.md).
+Audit: `python TASK/launchers/projection_borrow_evidence.py 44674936efcc4177d4683a7e8542816aec0928eb`.
 
-Aggressive sharded reverse reuses event/fiber parameter adjoints only after the
-window's canonical completion; state-owner init gates reset. Guards validate
-nodes/offsets/device/dtype/shape/aliasing. KV/cache/state/message bridges remain
-independent; conservative and legacy paths stay independent. Public ABI/core/CANN
-unchanged. New counter`reused_attention_gradient_bytes`; consumer estimates are
-still conservative and unchanged in this backend revision.
+Only aggressive sharded training borrows private frozen forward projection banks.
+The owner forbids publication with live windows and closes reverse programs before
+step. Default retention, conservative/legacy paths keep independent copies.
+Attention/Full snapshots, state/KV/message bridges, all retained API budgets and
+consumer estimates stay unchanged. No public ABI/class-layout/core/CANN change.
+New included counter `borrowed_projection_bytes` is not an allocator measurement.
 
-D512/B8/T4/V257 Attention,physicalB2×4,two windows,FP32 AdamW:
-[8073745920,7226584576] → [7804784128,6957622784], -268961792bytes/card.
-Loss7.532631874084473 and all prior statistics/chunks agree. Separate FP16 trace
-53176ops, zero observed AiCPU. No throughput or original-size training claim.
+D512/B8/T4/V257 Attention,physicalB2×4,two windows,FP32 AdamW, same lease:
+[7804784128,6957622784] → [7508509696,6661348352], -296274432bytes/card (282.5MiB).
+Loss7.532631874084473 and prior statistics/chunks/continuation unchanged. Separate
+FP16 profile53176ops, zero observed AiCPU. No throughput/original-size claim.
 
-Preceding **233bf01/d0f9485** window reduction/projection-gradient reuse is also
-qualified: native176trajectories/2944windows/688updates,Python16/consumer32,
-D512 peaks [8367995392,7520681472] → [8073745920,7226584576]. Combined actual
-reductions across the two increments are about537MiB/card on this fixture.
-Do not repeat unchanged Full-snapshot/accounting/representative matrices.
+Preceding qualified changes: 233bf01 window reduction/projection-adjoint reuse
+([evidence](evidence/resident-window-reduction-20261003.md));6b9224c Attention
+adjoint reuse ([evidence](evidence/resident-attention-adjoints-20261003.md));789e1a5
+physical-gradient lifetime accounting,CPU23/NPU25, unchanged actual peaks
+([evidence](evidence/consumer-gradient-lifetime-20261003.md), evidence0760300).
+Do not repeat unchanged CPU/representative matrices.
 
-## Current implementation: physical parameter-gradient accounting
+## Next bounded action and remaining scale
 
-Development passed on frozen dirty `gradient-lifetime-dev01` (at6b9224c): CPU23,
-installed-consumer build and NPU25 (24 executed independent CPU comparisons plus
-one pre-construction refusal), no skips. Production/test hashes match that source.
-`capacity.{h,py}` charges physical projection/Attention parameter gradients once
-only for aggressive multi-device training; conservative/legacy-single retain the
-window factor. All state/cache/message/scratch charges and safety/API margins stay.
-New included component`projection_parameter_gradients`; the Attention component
-now follows actual lifetime. Materialized inventory and paired C++/Python plans
-cover both policies and one/three devices. Runtime backend bytes are unchanged.
+After evidence commit/push, reassess one original-width Add nine-card B4/physicalB2
+update using clean4467493. Prepared `TASK/launchers/wide_add_projection_borrow.py`
+checks all clean runtime jobs, uses original B512 shape-only plan, and retains
+queue/arrivals896,trace3072,outputs64,KV256,KV-trace8192,60GiB/card,head/context4GiB.
+Only enters one cold B512 update if allocator/semantic checks pass and unchanged
+measured-seconds×128×1.15<=3000. Queue120s,pilot900s,B5123180s,outer4300s,
+`online-measurement.lock`. Not yet submitted; no retry or gate relaxation.
+Command: `python TASK/launchers/freeze_run.py --name wide-add-projection-borrow01 --snapshot projection-borrow-clean01 --commit 4467493 --npu --npu-count 9 --max-wait 120 -- env -C {out} timeout 4300 {python} {base}/launchers/wide_add_projection_borrow.py --source {source} --build {base}/builds/projection-borrow-consumer-clean01 --output {out}/assessment`.
 
-Implementation **789e1a5** is committed/pushed and qualified: all four clean jobs
-passed, CPU23, installed-consumer build, NPU25 and D512 calibration; no skips.
-[Evidence](evidence/consumer-gradient-lifetime-20261003.md).
-Audit: `python TASK/launchers/gradient_lifetime_evidence.py 789e1a56a8e9f72e20814dd863f614a7cf366df2`.
-Estimates [25138936228,17266531620] → [24575275428,16702870820]; observed peaks remain
-[7804784128,6957622784]. Loss/statistics/chunks/continuation unchanged. No new
-profile needed: qualified backend bytes are unchanged. No active qualification jobs.
+Previous789e1a5 original-width Add nine-card B4/physicalB2 pilot passed:
+21.179427721s,construction84.305374079s,peak47394238464bytes,loss31.58603858947754,
+outputs96/events9265/cut408. Projection3117.611761s>3000s, so B512 was not executed.
+[Evidence](evidence/original-width-add-gradient-lifetime-20261003.md),commit749f7c5.
+Earlier B1 pilot27.300s/projection4018.543s and ten-card queue failure remain scoped.
 
-Nine-card original-width Add assessment `wide-add-gradient-lifetime01` is terminal
-passed, all leases released. B4/physicalB2, FP32 SGD, two windows, one cold update:
-21.179427721s; construction84.305374079s; peak47394238464bytes. Loss31.58603858947754,
-outputs96/events9265/cut408 match the old B4 reference within existing FP32 policy.
-All cards/context pools pass memory calibration. B512 cost projection3117.611761s
-still exceeds3000s; no B512 execution. [Evidence](evidence/original-width-add-gradient-lifetime-20261003.md).
-Audit: `python TASK/launchers/wide_add_gradient_lifetime_evidence.py 789e1a56a8e9f72e20814dd863f614a7cf366df2`.
-No formal speed/throughput claim. Original Attention still refuses current static
-full-size admission. Next investigate avoiding duplicate private frozen projection
-banks during an aggressive sharded backward group, preserving default independent
-snapshots, publication barriers, retained-budget accounting and returned state/KV.
-Mixed multi-device remains a separate core gap: eager runtime/validation currently
-require one payload device, so a CLI-only change cannot implement it.
+All ten required representative submatrices complete. OriginalB512 TimedDAG/
+LibTorch/resident/prefill FP32 inference passed:Attention17.521B325.278s,
+Add9.468B278.574s. Full-size complete training/formal comparisons remain open.
+Attention's current static estimate still refuses: diagnostic B1/12cards minimum
+rows gives coordinator62.623GiB>53.875GiB usable; no Attention scale run is queued.
+Mixed multi-device is a separate core gap: eager runtime/validation require one
+payload device; CLI-only changes cannot implement parameter/state/message placement.
 
-Private projection borrowing development passed on frozen `projection-borrow-dev01`
-(at749f7c5): three builds, native6 (160trajectories/2560windows/640updates),Python16,
-consumer32; no failures/skips. Production/test hashes match the snapshot.
-Only aggressive sharded training borrows private frozen forward projection banks;
-default retain functions, conservative/legacy paths keep copies. Old overloads,
-class layouts, public ABI, core and CANN stay unchanged. Retained API budgets and
-consumer estimates remain conservative and unchanged. Ownership/mutation/alias
-checks and `borrowed_projection_bytes` assertions are included.
-Next: implementation commit/push, freeze `projection-borrow-clean01`, rebuild/link
-using verified development objects, then the same affected correctness gates,
-same-lease D512 allocation and separate FP16 profiling. Helpers:
-`build_projection_borrow.py`, `projection_borrow_memory.py`,
-`projection_borrow_evidence.py SHA`. No original-width retry before qualification.
-
-## Scale evidence and progress boundary
-
-All ten representative family/client/schedule submatrices complete. OriginalB512
-TimedDAG/LibTorch/resident/prefill FP32 inference passed: Attention17.521B325.278s,
-Add9.468B278.574s. This is not the full matrix.
-Latest original-width Add B4/physicalB2 nine-card pilot is above. Previous B1
-pilot27.300s, peak41.097GiB and projection4018.543s remain separately scoped;
-preceding ten-card queue failure is retained. Original B512 complete training is open.
-
-Planning estimate remains about **80% (75–85%)** of local F1–F7 delivery:
-functionality85–95%, correctness85–95%, performance/profiling45–55%,
-packaging/provenance/migration75–85%. Scope estimates, not pass rates or time
-predictions. Accounting alone does not justify a higher total. Main remaining:
-originalB512 complete training (especially Attention), eager mixed multi-card,
-full-size finite CPU/mixed/resident comparisons with three-process recommendations,
-F7 final audit. CUDA/new stack tuples need target-machine gates. Backlog: ROADMAP.
+Planning estimate remains **80% (75–85%)** of local F1–F7 delivery:
+functionality85–95%,correctness85–95%,performance/profiling45–55%,
+packaging/provenance/migration75–85%. Scope estimates, not pass rates or elapsed-time
+predictions. Main remaining: originalB512 complete training (especially Attention),
+eager mixed multi-card, finite full-size CPU/mixed/resident comparisons with three-
+process recommendations, F7 audit. CUDA/new stack tuples need target-machine gates.
 
 ## Environment and protected state
 
@@ -125,29 +95,23 @@ F7 final audit. CUDA/new stack tuples need target-machine gates. Backlog: ROADMA
 User-authorized /opt stack supersedes old private guide.
 `TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`; preserve module PYTHONPATH,
 prepend frozen source/python. Lease/remap devices; runtime `env -C {out}`.
-Long jobs: frozen source,background.slice,Nice10,two build workers,queue120s.
-Formal timing lock `TASK/online-measurement.lock`.
+Long jobs:frozen source,background.slice,Nice10,two build workers,queue120s.
 Last free disk:data149GiB/root7.7GiB; check before large writes.
 
-Qualified consumer source `TASK/sources/gradient-lifetime-clean01`; consumer
-`TASK/builds/gradient-lifetime-consumer-clean01`. Backend source
-`TASK/sources/attention-adjoints-clean01`. Resident binaries
-`attention-adjoints-{standalone,python}-clean01`; core
-`placement-{cpu,npu,npu-python}-clean01`; CPUconsumer`source-values-cpu-clean01`.
-Consumer object reuse source/header/options-verified with fresh link;
-unchanged dependencies hash-verified. No full rebuild claim.
+Qualified source `TASK/sources/projection-borrow-clean01`; binaries
+`TASK/builds/projection-borrow-{standalone,python,consumer}-clean01`.
+Core `placement-{cpu,npu,npu-python}-clean01`; CPUconsumer `source-values-cpu-clean01`.
+Old/new memory baseline consumer `gradient-lifetime-consumer-clean01` is retained.
+Objects/dependencies reused only with source/header/options/hash verification;
+consumer freshly linked. No full rebuild claim.
 
-All gradient-lifetime qualification, `wide-add-gradient-lifetime01` and six
-projection-borrow development jobs are terminal passed. No task job is active.
- Unit prefix
-`tide-execution-flows-`; logs/status `TASK/runs/NAME`. Inspect
-`systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
+All projection-borrow development6/qualification8 jobs terminal passed. No current
+active/queued task job. Units `tide-execution-flows-NAME.service`, logs/status
+`TASK/runs/NAME`; inspect `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
 stop via `systemctl --user stop UNIT` only if needed.
-**Preserve deliberately SIGSTOPped
-historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
-running and it holds old timing.lock. Historical1.6438× meant faster throughput
-in the restricted flow, not current online evidence. Restricted archive:
-archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
+**Preserve deliberately SIGSTOPped historical-cpu-attention-01**: never resume,
+stop or clean it. Its old record says running and it holds old timing.lock.
+Historical1.6438× meant faster throughput in a restricted flow, not current online
+evidence. Archive:archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 Old build-reverse-gather-python-dev01 metadata inconsistency remains visible;
-not a current failure. Current qualification raw records: `TASK/runs/{build-,}attention-adjoints-*-clean01`;
-source/build/helper/result hashes and allocation observations are pinned by evidence.
+not a current failure. Audit helpers pin source/build/helper/result/profile hashes.
