@@ -5,7 +5,7 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **789e1a5** is pushed and qualified; its reviewed evidence is ready for the separate evidence commit. Previous backend evidence **9b8151a** is pushed. [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest implementation **789e1a5** is pushed and qualified; its reviewed evidence **0760300** is pushed. Previous backend evidence **9b8151a** is pushed. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -72,25 +72,28 @@ Estimates [25138936228,17266531620] → [24575275428,16702870820]; observed peak
 [7804784128,6957622784]. Loss/statistics/chunks/continuation unchanged. No new
 profile needed: qualified backend bytes are unchanged. No active qualification jobs.
 
-Then one bounded original-width Add nine-card B4/physicalB2 pilot using the new
-static B512 plan and previously exercised B2 capacities (queue/arrivals896,
-trace3072,outputs64). Prepared `TASK/launchers/wide_add_gradient_lifetime.py`:
-only enters one cold B512 update if allocator/semantic checks pass and the
-unchanged measured-seconds×128×1.15<=3000 cost gate admits it. Queue120s, pilot900s,
-B5123180s child bound; online-measurement.lock; no blind retry/gate relaxation.
-This run is not yet submitted. Original Attention still refuses its current static
-full-size admission and is not queued. No formal throughput recommendation follows.
+Nine-card original-width Add assessment `wide-add-gradient-lifetime01` is terminal
+passed, all leases released. B4/physicalB2, FP32 SGD, two windows, one cold update:
+21.179427721s; construction84.305374079s; peak47394238464bytes. Loss31.58603858947754,
+outputs96/events9265/cut408 match the old B4 reference within existing FP32 policy.
+All cards/context pools pass memory calibration. B512 cost projection3117.611761s
+still exceeds3000s; no B512 execution. [Evidence](evidence/original-width-add-gradient-lifetime-20261003.md).
+Audit: `python TASK/launchers/wide_add_gradient_lifetime_evidence.py 789e1a56a8e9f72e20814dd863f614a7cf366df2`.
+No formal speed/throughput claim. Original Attention still refuses current static
+full-size admission. Next investigate avoiding duplicate private frozen projection
+banks during an aggressive sharded backward group, preserving default independent
+snapshots, publication barriers, retained-budget accounting and returned state/KV.
+Mixed multi-device remains a separate core gap: eager runtime/validation currently
+require one payload device, so a CLI-only change cannot implement it.
 
 ## Scale evidence and progress boundary
 
 All ten representative family/client/schedule submatrices complete. OriginalB512
 TimedDAG/LibTorch/resident/prefill FP32 inference passed: Attention17.521B325.278s,
 Add9.468B278.574s. This is not the full matrix.
-Latest original-width AddB4/physicalB1×4 nine-card pilot (cleane82f971):
-construction65.793s, complete update27.300s, peak41.097GiB, loss31.586036682128906;
-outputs96/cut408/events9265 match priorB4. B512 projection4018.543s exceeds3000s,
-so B512 was not started. Preceding ten-card queue timeout remains failed.
-[Report](evidence/original-width-add-chunk-selection-20261002.md).
+Latest original-width Add B4/physicalB2 nine-card pilot is above. Previous B1
+pilot27.300s, peak41.097GiB and projection4018.543s remain separately scoped;
+preceding ten-card queue failure is retained. Original B512 complete training is open.
 
 Planning estimate remains about **80% (75–85%)** of local F1–F7 delivery:
 functionality85–95%, correctness85–95%, performance/profiling45–55%,
@@ -120,10 +123,9 @@ Qualified consumer source `TASK/sources/gradient-lifetime-clean01`; consumer
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-All four gradient-lifetime clean jobs are terminal passed; no active/queued jobs
-from this increment. No original-width job submitted yet. Next command:
-`python TASK/launchers/freeze_run.py --name wide-add-gradient-lifetime01 --snapshot gradient-lifetime-clean01 --commit 789e1a5 --npu --npu-count 9 --max-wait 120 -- env -C {out} timeout 4300 {python} {base}/launchers/wide_add_gradient_lifetime.py --source {source} --build {base}/builds/gradient-lifetime-consumer-clean01 --output {out}/assessment`.
-Unit prefix `tide-execution-flows-`; logs/status `TASK/runs/NAME`. Inspect
+All gradient-lifetime qualification and `wide-add-gradient-lifetime01` jobs are
+terminal passed. No current active/queued task job. Unit prefix
+`tide-execution-flows-`; logs/status `TASK/runs/NAME`. Inspect
 `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
 stop via `systemctl --user stop UNIT` only if needed.
 **Preserve deliberately SIGSTOPped

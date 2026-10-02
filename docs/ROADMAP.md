@@ -195,6 +195,12 @@ reused projection/Attention adjoints once, conservative/legacy paths stay per-wi
 All safety/API budgets stay unchanged. Actual peaks and results are unchanged;
 no new runtime/profile or scale claim ([evidence](evidence/consumer-gradient-lifetime-20261003.md)).
 
+F6 original-width Add on clean789e1a5 passed one nine-card B4/physicalB2 complete
+FP32 SGD update:21.179s, peak47,394,238,464bytes; events/outputs/cut and tolerant
+loss match prior B4. All allocator/context checks pass. Unchanged B512 projection
+3117.612s>3000s prevents B512 execution; no formal speed claim
+([evidence](evidence/original-width-add-gradient-lifetime-20261003.md)).
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU

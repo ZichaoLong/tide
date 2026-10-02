@@ -1,0 +1,212 @@
+{
+  "schema": "tide-reviewed-evidence-v1",
+  "source": "789e1a56a8e9f72e20814dd863f614a7cf366df2",
+  "qualification": "consumer-gradient-lifetime-20261003.json",
+  "jobs": [
+    {
+      "name": "wide-add-gradient-lifetime01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d6eb5b2ee700bf149794514c85ab8bc222fe8a46f66facb2e57c298769d2e023",
+        "task.log": "b5c8574ea5e2e0220623ac12f8d12dd83631ff83107058df328163ccd32f5945",
+        "queue.json": "c8748064d3c7745dd9cfdc4ca6e70dd71c75be3e0e5e1abb7c5df9a296e7f0f4"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "passed": {
+    "parameters": 9468053696,
+    "batch_execution": {
+      "logical_batch": 4,
+      "requested_sample_chunk_rows": 2,
+      "effective_sample_chunk_rows": 2,
+      "physical_chunks": 2
+    },
+    "construction_seconds": 84.305374079,
+    "seconds": [
+      21.179427721
+    ],
+    "losses": [
+      31.58603858947754
+    ],
+    "outputs": [
+      96
+    ],
+    "final_cut": 408,
+    "statistics": [
+      {
+        "canonical_stream_chunks": 2384,
+        "canonical_stream_reserved_bytes": 1209982622,
+        "emission_chunks": 880,
+        "events": 9265,
+        "full_chunks": 402,
+        "head_chunks": 4,
+        "pending_peak": 768,
+        "retained_attention_bytes": 0,
+        "retained_bytes": 38116429664,
+        "retained_compact_journals": 2,
+        "retained_dense_bytes": 38210643568,
+        "retained_full_bytes": 8052256,
+        "retained_projection_bytes": 37750382592,
+        "retained_window_bytes": 226104360,
+        "retained_windows": 4,
+        "reused_attention_gradient_bytes": 0,
+        "reused_projection_gradient_bytes": 37599316160,
+        "stages": 112,
+        "streamed_parameter_windows": 4,
+        "window_events_max": 2335,
+        "window_outputs_max": 24,
+        "window_stages_max": 28
+      }
+    ],
+    "context_storage": {
+      "policy": "compact",
+      "requested_bytes_per_device": 4294967296,
+      "devices": [
+        {
+          "device_index": 0,
+          "budget_bytes": 16600040,
+          "peak_saved_bytes": 1825768
+        },
+        {
+          "device_index": 1,
+          "budget_bytes": 1847008,
+          "peak_saved_bytes": 1838816
+        },
+        {
+          "device_index": 2,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 3,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 4,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 5,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 6,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 7,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        },
+        {
+          "device_index": 8,
+          "budget_bytes": 1748500,
+          "peak_saved_bytes": 1740308
+        }
+      ]
+    },
+    "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+    "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+    "cards": 9,
+    "peak_growth_bytes": [
+      47394238464,
+      31167157760,
+      31114887680,
+      31100868608,
+      31100868608,
+      31100867584,
+      31100870656,
+      31100871680,
+      31100869632
+    ],
+    "estimated_peaks_bytes": [
+      54195445332,
+      39655858672,
+      39604173720,
+      39590048504,
+      39590048504,
+      39590048488,
+      39590048488,
+      39590048488,
+      39590048488
+    ],
+    "original_b512_estimated_peaks_bytes": [
+      56303650412,
+      39890428688,
+      39826233220,
+      39812108004,
+      39812108004,
+      39812107988,
+      39812107988,
+      39812107988,
+      39812107988
+    ],
+    "usable_bytes_per_device": 57847840768,
+    "effective_chunks": {
+      "full": 16,
+      "emission": 8,
+      "aggregate": 8,
+      "attention": 8,
+      "keys": 128,
+      "reverse": 2,
+      "head": 64
+    },
+    "conservative_b512_step_seconds": 3117.6117605311997,
+    "b512_cost_gate_seconds": 3000,
+    "b512_executed": false
+  },
+  "comparison": {
+    "baseline": "wide-add-chunk-planner-nine01",
+    "exact": [
+      "parameters",
+      "outputs",
+      "cut",
+      "logical events"
+    ],
+    "loss_atol": 1e-06,
+    "loss_rtol": 1e-05,
+    "baseline_loss": 31.586036682128906,
+    "loss_absolute_difference": 1.9073486328125e-06,
+    "changes": [
+      "physical B1 to B2",
+      "window parameter reduction and projection/Attention adjoint reuse",
+      "matching gradient lifetime estimate",
+      "previously exercised B2 capacities",
+      "greedy chunks",
+      "different lease"
+    ],
+    "limitation": "One cold B4 update; no full-size CPU gradient/update oracle, profile, causal speed/memory claim or formal throughput recommendation"
+  },
+  "artifacts": {
+    "runs/wide-add-gradient-lifetime01/status.json": "d6eb5b2ee700bf149794514c85ab8bc222fe8a46f66facb2e57c298769d2e023",
+    "runs/wide-add-gradient-lifetime01/task.log": "b5c8574ea5e2e0220623ac12f8d12dd83631ff83107058df328163ccd32f5945",
+    "runs/wide-add-gradient-lifetime01/queue.json": "c8748064d3c7745dd9cfdc4ca6e70dd71c75be3e0e5e1abb7c5df9a296e7f0f4",
+    "runs/wide-add-gradient-lifetime01/assessment/result.json": "13c0c3973d7a0d05b1bbbf5cb65a76e59edd5b7337dcf4e39899fa8f482b0c3f",
+    "runs/wide-add-gradient-lifetime01/assessment/original-plan.json": "734c7490a3a24bf8cdd6a5ac9aaf129217c9f6648a212f8c07c13335628691d9",
+    "runs/wide-add-gradient-lifetime01/assessment/launcher.py": "71e5354e181d624b5fefc5eb9fffd8630a292b7d8b75d411cae0027ec137913b",
+    "runs/wide-add-gradient-lifetime01/assessment/pilot.log": "1b223c15bd840ccdbcacfcf1f9984f4f94398c99b0fd6b66415e80f8b6f727fc",
+    "runs/wide-add-gradient-lifetime01/assessment/devices-before.log": "be5736b70abaf100c5622f97580ff8ea481418d74eacd78b32360988e119e0e8",
+    "runs/wide-add-gradient-lifetime01/assessment/devices-after.log": "fed0488815ff7d1a2a243285183ee5f00806da44fce050196d73299f3fc44413",
+    "runs/wide-add-gradient-lifetime01/assessment/pilot/result.json": "a7d37af2d62a064fb231e3bf5a065c8ad34bdaa6b431b9d84c9a3cbf49b0575c",
+    "runs/wide-add-gradient-lifetime01/assessment/pilot/consumer.log": "18f6e1d9f7ff1316b1cb5a9f26e3c037e3866d6602201672d92b318e9426dbb5",
+    "builds/gradient-lifetime-consumer-clean01/result.json": "4611d24448aa42cb0bfa5f86f93869bcf23f1044a4dff49b566486d351bca8e7",
+    "builds/gradient-lifetime-consumer-clean01/loader.txt": "c718dbf9f75b12837618853ad355411b07331f053d524d6b72afdab722f65f9e",
+    "inputs/fullsize-add01/workload.json": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "runs/wide-add-training-b2-01/training/pilot.json": "d02180ede74b6f75fa4e0cce1effc46d22400ce49ca6221dcae4244e81a6aedc",
+    "runs/wide-add-chunk-planner-nine01/pilot/consumer-run/result.json": "a78370a155ae14d1028a1e8be387e24a0c19f428a67145a8b2b4e63e2db7b78c",
+    "launchers/wide_add_gradient_lifetime_evidence.py": "36bf6caaf71e759338d99dd4f96eef89678a4fa9f9880c02a06e5eb5128b7f13"
+  }
+}
