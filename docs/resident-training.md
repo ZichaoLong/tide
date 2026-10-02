@@ -115,9 +115,9 @@ retention it charges the actual retained bytes, so subsequent windows can reuse
 the released allowance. `retained_window_bytes` remains the dense per-window
 bound excluding shared Full/emission/attention banks; `retained_full_bytes`,
 `retained_projection_bytes` and `retained_attention_bytes` report their
-once-per-backward-group snapshots. Full sharing is currently an implementation
-increment awaiting fixed-source qualification; the complete-consumer estimate
-still conservatively charges Full banks per window.
+once-per-backward-group snapshots. Full sharing is
+[qualified on cleanf360489](evidence/resident-full-snapshots-20261002.md);
+the complete-consumer estimate still conservatively charges Full banks per window.
 `retained_dense_bytes` reports the entire
 dense envelope and `retained_bytes` the stored total. `retained_compact_journals`
 records the policy. Temporary masks/indices need metadata workspace proportional

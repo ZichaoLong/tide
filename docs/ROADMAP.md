@@ -189,6 +189,13 @@ API limits/margins. Actual peaks are unchanged; no allocation or throughput gain
 claimed ([evidence](evidence/consumer-training-storage-20261002.md)). Original-width
 training still needs a real storage/compute improvement.
 
+F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
+trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
+-273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU
+([evidence](evidence/resident-full-snapshots-20261002.md)). This is a small real
+storage improvement; wide fixtures have small LH Full banks. Consumer admission
+is unchanged; dominant projection/Attention reverse storage and scale remain open.
+
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations
 ([evidence](evidence/consumer-sample-chunks-20261002.md)). Explicit maximum only;

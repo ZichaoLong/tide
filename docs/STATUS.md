@@ -5,8 +5,7 @@ qualification, commits and pushes. Overall goal incomplete. No subagents.**
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **4dd8368**; this evidence
-checkpoint follows it (use `git log -1`). [execution-flows](execution-flows.md)
+`python scripts/status.py`. Latest implementation **f360489**, pushed; accounting evidence **f03b4d4**. [execution-flows](execution-flows.md)
 owns the contract; [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 Reference repositories and ObsidianVault are read-only.
 
@@ -29,56 +28,58 @@ never stop other workloads to free resources.
 
 ## Latest completed qualification
 
-All four `training-storage-*-clean01` jobs passed on clean
-**4dd8368159ff74e8b45c052cfe85ecbca1e294f2**: CPU17, installed consumer build,
-NPU25 (24 independent-CPU comparisons plus one preallocation refusal), and
-D512/B8 Attention allocation calibration. No skips. All units inactive/dead,
-exit0, empty control groups; leases released.
-[Reviewed evidence](evidence/consumer-training-storage-20261002.md).
+**f360489** Full snapshot sharing passed eight clean jobs: standalone/Python/
+installed-consumer builds; native6 (144trajectories/2432windows/560updates),
+Python16 retention/budget checks,consumer32, same-lease D512 allocator comparison
+and separate FP16 profile. No skips. All units terminated exit0; leases released.
+[Evidence](evidence/resident-full-snapshots-20261002.md). Audit:
+`python TASK/launchers/full_snapshot_evidence.py f360489ac965abe9bc326055050ace01b348ebd5`.
 
-Only static estimates changed: shared Attention snapshots charged once, private
-accumulation charged one extra live bank. Two-input API capacity, device margins,
-runtime resident/core/CANN bytes unchanged. Estimates decreased from
-[25965880344,18093475736] to [25138936228,17266531620] bytes; actual peaks remain
-[8368268800,7520954880]. Loss7.532631874084473, outputs/statistics/continuation and
-chunks exactly match prior records. No actual-memory or speed gain is claimed.
-No redundant profile was run. Audit:
-`python TASK/launchers/training_storage_evidence.py 4dd8368159ff74e8b45c052cfe85ecbca1e294f2`.
+Full parameter banks/static kind tables are copied once per backward group;
+dynamic event metadata/values/counts remain per-window. Identity/version/layout
+checks plus no-publication lifetime; backward/detach/close reset the cache.
+`retained_full_bytes` is separate from `retained_window_bytes`. Default standalone
+retention keeps independent copies. All private owner-layout users rebuilt;
+clean source/header/options-verified object reuse with fresh links, unchanged
+core/CANN hashes. Standalone dev01 checker compile failure remains retained;
+corrected dev02 and all clean builds passed.
 
-## Current implementation and immediate next action
+D512 Attention,physicalB2×4,two connected windows,FP32 AdamW: retained storage
+-542752bytes; whole allocator peaks [8368268800,7520954880] →
+[8367995392,7520681472] (-273408bytes/card). Loss7.532631874084473 and all other
+observables/chunks/admission unchanged. Separate FP16 profile53182operators,
+zero observed AiCPU. No speed claim. Wide fixtures use small LH Full banks, so
+this is not the main full-size memory solution. Consumer estimates remain
+unchanged and conservative; no original-width retry is justified by this delta.
 
-Full snapshot sharing now copies immutable tanh/LH/SwiGLU banks and static
-kind/mapping tables once per backward group, for single-device and sharded owners.
-Each window retains its own dynamic events/values/counts. Source identity/version/
-shape/stride/device/dtype guards and no-publication lifetime apply; backward,
-detach and close clear the cache. `retained_full_bytes` records the shared copy.
-Standalone retention overloads keep independent snapshots. Consumer estimates
-are unchanged and conservative. No full-size fit or speed claim follows.
+Previous **4dd8368/f03b4d4** accounting qualification remains passed: CPU17/NPU25,
+D512 allocation calibration. Shared Attention and private accumulation are charged
+by lifetime, unchanged runtime and API safety limits. Actual peaks were unchanged
+by that estimator-only correction. [Evidence](evidence/consumer-training-storage-20261002.md).
 
-Development: Python build and16 retention/budget tests passed on frozen
-`full-snapshot-dev01`. Standalone dev01 failed only in the new checker at ambiguous
-Tensor assignment; preserved. Corrected frozen `full-snapshot-dev02` passed
-standalone/installed consumer builds, all6 native cells (144trajectories,
-2432windows,560updates; FP32/FP16,CPU FP32/FP64 references), and8 actual sliced
-consumer tests without skips. Python dev01 production inputs match dev02 exactly;
-only the standalone checker header differs. No development job remains running.
+## Next implementation
 
-Next: commit this implementation and push; freeze clean `full-snapshot-clean01`.
-Qualify affected standalone/Python libraries and installed consumer; run native6,
-Python16,consumer32, a same-lease D512 allocator comparison and separate FP16 trace.
-Names: `build-full-snapshot-{standalone,python,consumer}-clean01` and
-`full-snapshot-{native,python,consumer,memory,profile}-clean01`. Reuse verified
-objects with fresh links; build2,queue120s,child480–900s. Logs/status under
-`TASK/runs/<name>`. Do not start a new original-width pilot from this small change.
+Focus on dominant physical projection/Attention parameter gradient banks, which
+are retained separately for all reverse windows before final canonical reduction.
+Relevant files: `sharded_training_backward.cpp`, `sharded_parameter_reduce.cpp`,
+`sharded_parameter_sources.cpp`, `projection_shard.cpp`, `emission_vjp.cpp`,
+`sharded_state_vjp.cpp`, `state_owner_reverse.cpp`.
 
-Both wide model fixtures use LH Full, whose parameter storage is small; this
-is a general retention improvement, not the main scale-memory solution. Next
-investigate the dominant physical projection/attention reverse gradients and
-scratch lifetimes. Preserve reverse-window→registry-alias addition order and
-explicit device completion; remote Full zeros totals before its first request.
-Simply aliasing cross-window buffers or borrowing live banks is unsafe.
-Original Attention B512/physicalB1 estimates still refuse; no cost/safety gate
-is relaxed and no automatic B512 retry is queued.
+Candidate design (not implemented): reduce each completed window's contributions
+into a common canonical bank on device before advancing to the preceding window,
+then reuse only physical parameter-gradient storage. Keep per-owner addition order
+reverse-window→registry-alias; no per-window pre-sum changing parentheses. Bridge
+state/cache/message adjoints retain their independent storage. A coordinator-side
+recorded reduction and peer start/completion protocol must finish all reads before
+any reused bank is zeroed. State reverse already starts after a coordinator init
+packet and acknowledges finish. Projection and remote Full currently zero before
+their first request and need a start dependency before aliasing. Peer ACK means
+copy consumption, not arbitrary subsequent receiver work. Preserve old independent
+retention/reverse paths and budget/refusal semantics. No new implementation yet.
+
+Do not spend another increment on tiny wide-fixture Full accounting alone.
+Original Attention B512/physicalB1 estimates still refuse; AddB512 still exceeds
+cost gate. No safety/cost relaxation or automatic original-width retry is queued.
 
 ## Scale evidence and progress boundary
 
@@ -111,19 +112,19 @@ Long jobs: frozen source,background.slice,Nice10,two build workers,queue120s.
 Formal timing lock `TASK/online-measurement.lock`.
 Last free disk:data151GiB/root7.7GiB; check before large writes.
 
-Source `TASK/sources/training-storage-clean01`; consumer
-`TASK/builds/training-storage-consumer-clean01`. Resident binaries
-`private-accumulation-{standalone,python}-clean01`; core
+Source `TASK/sources/full-snapshot-clean01`; consumer
+`TASK/builds/full-snapshot-consumer-clean01`. Resident binaries
+`full-snapshot-{standalone,python}-clean01`; core
 `placement-{cpu,npu,npu-python}-clean01`; CPUconsumer`source-values-cpu-clean01`.
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-No current job is running/queued before clean qualification. **Preserve deliberately SIGSTOPped
+No current job is running/queued. **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput
 in the restricted flow, not current online evidence. Restricted archive:
 archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 Old build-reverse-gather-python-dev01 metadata inconsistency remains visible;
-not a current failure. Raw records: `TASK/runs/training-storage-{cpu,npu,calibration}-clean01`
-and `TASK/runs/build-training-storage-consumer-clean01`; source/build/helper/result
+not a current failure. Raw records: `TASK/runs/full-snapshot-{native,python,consumer,memory,profile}-clean01`
+and `TASK/runs/build-full-snapshot-{standalone,python,consumer}-clean01`; source/build/helper/result
 hashes and allocation observations are in the reviewed evidence JSON.
