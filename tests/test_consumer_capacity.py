@@ -29,7 +29,7 @@ def geometry(memory='attention',width=64,devices=3,training=True):
 
 def cpp_plan(binary,g,c,chunks,budgets,aggressive):
     values = [g.width,g.batch,g.vocab,g.windows,g.payload,int(g.attention),int(g.training),int(g.adamw),int(g.diagnostics),
-              g.regions,g.devices,int(g.locality),len(g.sources),len(g.edges),int(aggressive),*g.sources,*g.slots,
+              g.regions,g.devices,int(g.locality),g.sample_chunks,len(g.sources),len(g.edges),int(aggressive),*g.sources,*g.slots,
               *(x for e in g.edges for x in e),*asdict(c).values(),*asdict(chunks).values(),*budgets]
     done = subprocess.run([str(binary)],input=' '.join(map(str,values)),text=True,capture_output=True,timeout=10)
     return json.loads(done.stdout) if done.returncode==0 else done.stderr
@@ -39,7 +39,8 @@ def test_cross_language_shapes_and_parameter_inventory(capacity_probe):
     rng = random.Random(42)
     for i in range(24):
         p,g = geometry('attention' if i%2 else 'add',rng.choice([4,16,128,2048]),rng.choice([1,2,3,8]),bool(i%3))
-        g = replace(g,payload=2 if i%4 else 4,windows=1+i%3,locality=bool(i%2),diagnostics=g.training or i%3==0)
+        g = replace(g,payload=2 if i%4 else 4,windows=1+i%3,locality=bool(i%2),diagnostics=g.training or i%3==0,
+                    sample_chunks=3 if i%5 else 1)
         caps = Capacities(trace=512,kv_trace=1024)
         chunks = Chunks(head=256)
         budgets = [(64-j)*1024**3 for j in range(g.devices)]

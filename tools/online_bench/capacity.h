@@ -25,6 +25,7 @@ struct Geometry {
   std::vector<std::pair<I,I>> edges;
   I devices;
   bool locality=true;
+  I sample_chunks=1;
 };
 struct Capacities {I queue=1024,arrivals=1024,outputs=1024,trace=4096,kv=128,kv_trace=4096,program=64*MiB;};
 using Chunks=std::map<std::string,I>;
@@ -91,7 +92,15 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide masters=g.training?4*Wide(g.adamw?3:2)*canonical[device]:0;
     const Wide consumer=coordinator?2*p*v*w+(g.training?4*(g.adamw?3:2)*2*v*w:0):0;
     const Wide programs=(1+(g.training?4*windows:2))*c.program+512*MiB;
-    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs;
+    Wide snapshot=0,saved_contexts=0,accumulation=0;
+    if(g.sample_chunks>1) {
+      snapshot=state+4096;
+      if(g.attention&&body)snapshot+=(b*body*c.kv+1)*p*(2*w+1)+8*b*body;
+      if(coordinator)snapshot+=9*b*(n+2+g.regions)+Wide(c.queue)*(p*w+49)+16;
+      saved_contexts=g.sample_chunks*snapshot;
+      accumulation=g.training?8*Wide(canonical[device])+16*MiB:0;
+    }
+    const Wide base=parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation;
     const Wide construction=base+4*Wide(canonical[device])+parameters;
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
@@ -99,7 +108,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0;
     if(g.training) {
       retained=projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals);
-      if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+8*v*w;}
+      if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
       gradients=windows*(4*(slots+1)*(w*w+w)+4*(4*body*w*w+body*domain)+32*b*nodes*(w+1)+24*cache);
       if(coordinator)gradients+=windows*64*(trace+c.queue+c.outputs)*(w+32);
       gradients+=4*Wide(canonical[device]);
@@ -117,14 +126,16 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"programs_and_vendor_allowance",bytes(programs)},{"retained",bytes(retained)},
       {"roots_and_consumer_gradients",bytes(roots)},{"physical_and_canonical_gradients",bytes(gradients)},
       {"reverse_workspace",bytes(reverse_work)},{"canonical_communication",bytes(communication)},
-      {"consumer_proposals",bytes(proposal)},{"head_workspace",bytes(head_work)}};
+      {"consumer_proposals",bytes(proposal)},{"head_workspace",bytes(head_work)},
+      {"continuation_snapshot_bytes",bytes(snapshot)},{"saved_contexts",bytes(saved_contexts)},
+      {"gradient_accumulation",bytes(accumulation)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
   }
   return result;
 }
 inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,bool aggressive) {
   const I n=g.sources.size();
-  if(g.width<1||g.batch<1||g.vocab<1||g.windows<1||g.regions<1||(g.payload!=2&&g.payload!=4)
+  if(g.width<1||g.batch<1||g.vocab<1||g.windows<1||g.regions<1||g.sample_chunks<1||(g.payload!=2&&g.payload!=4)
       ||g.devices<1||g.devices>16||g.devices>n+2||g.slots.size()!=size_t(n)||budgets.size()!=size_t(g.devices)
       ||c.queue<1||c.arrivals<1||c.outputs<1||c.trace<0||c.kv<1||c.kv_trace<0||c.program<1)
     throw std::invalid_argument("invalid complete-consumer memory geometry/budget");

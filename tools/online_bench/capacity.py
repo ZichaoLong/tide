@@ -34,6 +34,7 @@ class Geometry:
     edges: list
     devices: int
     locality: bool = True
+    sample_chunks: int = 1
 
 
 @dataclass
@@ -161,7 +162,20 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
         # peer programs can coexist. Reserve their caps plus 512MiB for backend
         # allocations outside the tensor formulas; calibrate on each platform.
         programs = (1+(4*windows if g.training else 2))*c.program+512*MIB
-        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs
+        snapshot = saved_contexts = accumulation = 0
+        if g.sample_chunks > 1:
+            # Dense continuation handles retain only numerical state, not the
+            # active owner's parameters, proposals, journals or operator arenas.
+            snapshot = state+4096
+            if g.attention and body:
+                snapshot += (b*body*c.kv+1)*p*(2*w+1)+8*b*body
+            if coordinator:
+                snapshot += 9*b*(n+2+g.regions)+c.queue*(p*w+49)+16
+            # Drop the restored handle before executing its replacement. At
+            # most K saved copies coexist with the separately charged owner.
+            saved_contexts = g.sample_chunks*snapshot
+            accumulation = 8*canonical[device]+16*MIB if g.training else 0
+        base = parameters+persistent_state+routing+owner_packets+journals+forward_work+masters+consumer+programs+saved_contexts+accumulation
         construction = base+4*canonical[device]+parameters
         head = head_budget(c.outputs,w,v,p,g.training,MAX,True)
         head_work = head.fixed_bytes+chunks.head*head.row_bytes if coordinator else 0
@@ -170,7 +184,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
             retained = projection+windows*(state_parameters+2*nodes*w*p+state+p*cache+journals)
             if coordinator:
                 retained += windows*32*(trace+c.queue+c.outputs)*(10*w+64)
-                roots = 4*windows*c.outputs*w+8*v*w
+                roots = 4*windows*c.outputs*w+(12 if g.sample_chunks>1 else 8)*v*w
             gradients = windows*(4*(slots+1)*(w*w+w)+4*(4*body*w*w+body*domain)+32*b*nodes*(w+1)+24*cache)
             if coordinator:
                 gradients += windows*64*(trace+c.queue+c.outputs)*(w+32)
@@ -188,7 +202,8 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                           consumer_parameters_optimizer=consumer,programs_and_vendor_allowance=programs,
                           retained=retained,roots_and_consumer_gradients=roots,physical_and_canonical_gradients=gradients,
                           reverse_workspace=reverse_work,canonical_communication=communication,consumer_proposals=proposal,
-                          head_workspace=head_work)
+                          head_workspace=head_work,continuation_snapshot_bytes=snapshot,
+                          saved_contexts=saved_contexts,gradient_accumulation=accumulation)
         if max(*phases.values(),*components.values()) > MAX:
             raise ValueError('consumer memory extent overflow')
         result.append(dict(index=device,estimated_peak_bytes=max(phases.values()),phases=phases,components=components))
@@ -197,9 +212,9 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
 
 def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_owners=None):
     ints = [g.width,g.batch,g.vocab,g.windows,g.payload,g.regions,g.devices,*g.sources,*g.slots,
-            *asdict(c).values(),*asdict(requested).values(),*budgets]
+            g.sample_chunks,*asdict(c).values(),*asdict(requested).values(),*budgets]
     if (any(type(x) is not int or x < 0 or x > MAX for x in ints)
-            or min(g.width,g.batch,g.vocab,g.windows,g.regions,c.queue,c.arrivals,c.outputs,c.kv,c.program) < 1
+            or min(g.width,g.batch,g.vocab,g.windows,g.regions,g.sample_chunks,c.queue,c.arrivals,c.outputs,c.kv,c.program) < 1
             or g.payload not in (2,4) or not 1 <= g.devices <= min(16,len(g.sources)+2)
             or len(g.slots) != len(g.sources) or len(budgets) != g.devices
             or min(*asdict(requested).values(),*budgets) < 1

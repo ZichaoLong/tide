@@ -7,8 +7,8 @@
 #include <array>
 namespace tide_flow {
 struct ConsumerLoss {Tensor value,root,head_gradient;Index count=0,chunks=0;};
-ConsumerLoss head_loss(const tide::ResidentWindow&,const Tensor&,const Packet&,Index denominator,bool backward,const HeadBudget&);
-Tensor embedding_gradient(const tide::ResidentGradients&,const Tensor&);
+ConsumerLoss head_loss(const tide::ResidentWindow&,const Tensor&,const Packet&,Index denominator,bool backward,const HeadBudget&,Index sample_begin=0);
+Tensor embedding_gradient(const tide::ResidentGradients&,const Tensor&,Index sample_begin=0);
 class ConsumerOptimizer {
  public:
   ConsumerOptimizer(Tensor embedding,Tensor head,std::string kind);
@@ -26,6 +26,7 @@ struct ResidentMeasurements {
   std::string memory;
   double construction=0;
   Index cut=0;
+  Index sample_rows=0,sample_chunks=1,snapshot_budget=0,accumulation_budget=0;
   std::vector<double> seconds,warmup,losses;
   std::vector<Index> outputs;
   std::vector<std::map<std::string,Index>> statistics;
@@ -40,6 +41,7 @@ void prepare_capacity(const Packet&,const Config&,const std::vector<at::Device>&
 std::string capacity_json(const Config&,const ResidentMeasurements&);
 tide::ResidentTrainingLimits resident_limits(const Config&,at::Device);
 std::string resident_record(const Packet&,const Config&,at::Device,const ResidentMeasurements&);
-void resident_gradients_json(std::ostream&,Index,const Fixture&,const tide::ResidentGradients&,const Tensor&,const Tensor&);
+void resident_gradient_add(std::map<std::string,Tensor>&,const Fixture&,const tide::ResidentGradients&);
+void resident_gradients_json(std::ostream&,Index,std::map<std::string,Tensor>,const Tensor&,const Tensor&);
 void resident_updated_json(std::ostream&,Index,const Fixture&,const tide::ResidentTrainingCheckpoint*,const Tensor&,const Tensor&);
 } // namespace tide_flow

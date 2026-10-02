@@ -165,12 +165,15 @@ It explicitly detaches between backward groups and performs one final optimizer
 update. Independent device continuation switching is qualified on cleanc96ebcd:
 FP32/FP16,32trajectories/768windows/96updates including accumulation regression,
 Python30,no skips, independent trace0AiCPU ([evidence](evidence/resident-contexts-20261002.md)).
-Resident consumer sample slicing remains pending; see [training contract](resident-training.md).
+Resident consumer sample slicing is implemented with CPU15 and all45 affected
+NPU development cases covered (including the declared FP16 norm policy and
+same-dtype whole-batch checks); immutable qualification remains pending.
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations
 ([evidence](evidence/consumer-sample-chunks-20261002.md)). Explicit maximum only;
-automatic eager admission, mixed multi-device and resident sample slicing remain open.
+automatic eager admission and mixed multi-device remain open. Resident sample
+slicing implementation is awaiting its independent fixed-source qualification.
 
 F4/F5 optional training diagnostics are qualified on cleanca26b47: 51 public tests,
 four standalone cells, same-shape allocator reduction 16.26 MiB. Required VJP

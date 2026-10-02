@@ -42,7 +42,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   for(auto& w:f.model.nodes){w.kernel.reset();w.read_kernel.reset();w.next_kernel.reset();w.aggregate_kernel.reset();w.full_kernel.reset();}
   for(auto& w:f.model.regions)w.kernel.reset();
   auto embedding=f.embedding.detach().to(device),head=f.head.detach().to(device);
-  tide::Continuation q;q.identity=f.graph.identity;q.batch_size=p.batch;
+  tide::Continuation q;q.identity=f.graph.identity;q.batch_size=result.sample_rows;
   std::unique_ptr<tide::ResidentTrainingSession> training;
   std::unique_ptr<tide::ResidentSession> inference;
   std::unique_ptr<ConsumerOptimizer> optimizer;
@@ -57,42 +57,69 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
     result.placement=inference->placement();
   }
   auto sync=[&]{for(const auto& d:result.placement.devices)portable_torch::synchronize(d);};
+  std::vector<tide::ResidentContinuation> contexts;
+  if(result.sample_chunks>1)contexts.assign(result.sample_chunks,
+    training?training->snapshot_device(result.snapshot_budget):inference->snapshot_device(result.snapshot_budget));
   sync();result.construction=seconds(begin);Index position=0;
   memory.capture("construction");
   for(Index step=0;step<c.steps+c.warmup;++step) {
-    sync();begin=Clock::now();Tensor loss,gh;Index count=0,head_chunks=0;std::vector<Tensor> counters;
-    std::vector<tide::ResidentCotangents> roots;std::map<std::string,Index> reverse_statistics;
-    for(Index window=0;window<c.windows;++window) {
-      auto positions=at::arange(position,position+p.tokens,at::kLong).reshape({1,-1});
-      auto samples=at::arange(p.batch,at::kLong).reshape({-1,1});
-      auto ids=(positions*7+samples*3).remainder(p.vocab).to(device);
-      auto values=at::embedding(embedding,ids);std::vector<tide::External> external;
-      for(Index b=0;b<p.batch;++b)for(Index t=0;t<p.tokens;++t)
-        external.push_back({b,0,position+t,(position+t)*p.stride,values[b][t]});
-      const auto stop=(position+p.tokens)*p.stride;tide::ResidentTrainingWindow retained;
-      tide::ResidentWindow output;
-      if(training){retained=training->advance(external,stop,stop);output=retained.outputs;}
-      else output=inference->advance(external,stop,stop);
-      auto item=head_loss(output,head,p,p.batch*p.tokens*c.windows,c.training,result.head);head_chunks+=item.chunks;
-      if(item.value.defined())loss=loss.defined()?loss+item.value:item.value;
-      if(item.head_gradient.defined()){if(gh.defined())gh.add_(item.head_gradient);else gh=item.head_gradient;}
+    sync();begin=Clock::now();Tensor loss,ge,gh;Index count=0,head_chunks=0;std::vector<Tensor> counters;
+    std::map<std::string,Index> reverse_statistics;std::map<std::string,Tensor> diagnostic_gradients;
+    for(Index index=0,first=0;first<p.batch;++index,first+=result.sample_rows) {
+      const auto size=std::min(result.sample_rows,p.batch-first);
+      if(!contexts.empty()) {
+        if(training)training->restore_device(contexts[index]);else inference->restore_device(contexts[index]);
+        contexts[index]={}; // The active owner now holds this state; free its old copy.
+      }
+      std::vector<tide::ResidentCotangents> roots;
+      for(Index window=0;window<c.windows;++window) {
+        const auto cursor=position+window*p.tokens;
+        auto positions=at::arange(cursor,cursor+p.tokens,at::kLong).reshape({1,-1});
+        auto samples=at::arange(first,first+size,at::kLong).reshape({-1,1});
+        auto ids=(positions*7+samples*3).remainder(p.vocab).to(device);
+        auto values=at::embedding(embedding,ids);std::vector<tide::External> external;
+        // Unused tail capacity receives no inputs, not zero-valued messages.
+        for(Index b=0;b<size;++b)for(Index t=0;t<p.tokens;++t)
+          external.push_back({b,0,cursor+t,(cursor+t)*p.stride,values[b][t]});
+        const auto stop=(cursor+p.tokens)*p.stride;tide::ResidentTrainingWindow retained;
+        tide::ResidentWindow output;
+        if(training){retained=training->advance(external,stop,stop);output=retained.outputs;}
+        else output=inference->advance(external,stop,stop);
+        auto item=head_loss(output,head,p,p.batch*p.tokens*c.windows,c.training,result.head,first);head_chunks+=item.chunks;
+        if(item.value.defined())loss=loss.defined()?loss+item.value:item.value;
+        if(item.head_gradient.defined()){if(gh.defined())gh.add_(item.head_gradient);else gh=item.head_gradient;}
+        if(training) {
+          tide::ResidentCotangents root;root.token=retained.token;root.outputs=item.root;
+          if(item.root.defined())root.outputs_connected=output.valid;roots.push_back(root);
+        }
+        count+=item.count;
+        counters.push_back(at::stack({output.stages.reshape({}),output.events.reshape({}),
+                                     output.full_chunks.reshape({}),output.emission_chunks.reshape({})}).clone());
+        if(diagnostics) {
+          auto value=training?training->result():inference->result();if(c.family=="settle")value=f.settle->project(value);
+          value.continuation.batch_size=size;
+          window_json(*diagnostics,step,value,first,contexts.empty()?0:p.batch);
+        }
+      }
       if(training) {
-        tide::ResidentCotangents root;root.token=retained.token;root.outputs=item.root;
-        if(item.root.defined())root.outputs_connected=output.valid;roots.push_back(root);
+        const auto gradient=training->backward(roots);
+        for(const auto& [key,value]:gradient.statistics) {
+          auto& total=reverse_statistics[key];
+          total=key.size()>=5&&key.substr(key.size()-5)=="bytes"?std::max(total,value):total+value;
+        }
+        auto partial=embedding_gradient(gradient,embedding,first);
+        if(partial.defined()){if(ge.defined())ge.add_(partial);else ge=partial;}
+        if(diagnostics)resident_gradient_add(diagnostic_gradients,f,gradient);
+        if(!contexts.empty())training->accumulate(result.accumulation_budget);
       }
-      count+=item.count;position+=p.tokens;
-      counters.push_back(at::stack({output.stages.reshape({}),output.events.reshape({}),
-                                   output.full_chunks.reshape({}),output.emission_chunks.reshape({})}).clone());
-      if(diagnostics) {
-        auto value=training?training->result():inference->result();if(c.family=="settle")value=f.settle->project(value);
-        window_json(*diagnostics,step,value);
-      }
+      roots.clear();
+      if(!contexts.empty())contexts[index]=training?training->snapshot_device(result.snapshot_budget):inference->snapshot_device(result.snapshot_budget);
     }
+    position+=c.windows*p.tokens;
     if(loss.defined()&&!at::isfinite(loss).all().item<bool>())throw std::runtime_error("nonfinite consumer loss; optimizer not applied");
     if(training) {
-      const auto gradient=training->backward(roots);reverse_statistics=gradient.statistics;auto ge=embedding_gradient(gradient,embedding);
       optimizer->prepare(ge,gh);
-      if(diagnostics)resident_gradients_json(*diagnostics,step,f,gradient,ge,gh);
+      if(diagnostics)resident_gradients_json(*diagnostics,step,std::move(diagnostic_gradients),ge,gh);
       const auto accepted=training->step();
       if(!accepted.applied)throw std::runtime_error("graph optimizer refused; consumer parameters unchanged, code="+std::to_string(accepted.refusal_code));
       optimizer->commit();

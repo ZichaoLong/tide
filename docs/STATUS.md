@@ -4,7 +4,7 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** The user authorized conti
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Latest committed/pushed source c96ebcd. Reference repositories and ObsidianVault are read-only.
+Latest committed/pushed source d2a425d. Reference repositories and ObsidianVault are read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. The overall goal remains incomplete.
 
@@ -60,16 +60,33 @@ coordinates/one optimizer update. Include all saved context buffers and gradient
 accumulators in simultaneous-live capacity estimates, then validate small tails
 and multi-window continuation before mid-scale memory calibration.
 
-## Finite representative performance matrix — RUNNING
+## Finite representative performance matrix — RECIPE HELD
 
 Parent tide-execution-flows-matrix-remaining01.service, fixed clean80dae6e14d41614d0cdb1056bb39b57ca10d07ed
 at TASK/sources/fiber-append-clean01. Started01:58:22UTC, timeout9000s, deadline
 04:28:22UTC. Leases physical3 → logicalnpu:0. Recipe PID3771316 (start1849248082)
-is RESUMED at03:51:32UTC; all boundary-hold*.json records resumed. Measured child
-matrix-timed-dag-python-prefill-confirm03 passed naturally; next missing cells
-continue. No measured sample interrupted. Contexts builds/gates/profile finished.
+is now HELD for the resident sample-slicing gate. boundary-hold-resident-samples.json
+records the hold; current measured child matrix-timed-dag-python-streaming-confirm01
+must finish naturally before heavy builds/gates. Previous holds are resumed.
 Do not signal wrappers, edit running helpers/frozen source or touch others' jobs.
-Read TASK/runs/matrix-remaining01/sequence.json and child status for current state.
+Outer deadline04:28UTC continues. Resume promptly after bounded qualification.
+
+Current consumer implementation: Python/C++ resident sample slicing using
+opaque device contexts and accumulation, global sample IDs/full-batch loss,
+absent tail inputs, shared optimizer. Capacity charges all context handles and
+old/replacement accumulators. Build resident-samples-consumer-dev01 PASSED.
+CPU dev01 passed15. Native dev02 passed19/failed4 and LibTorch dev01 passed18/failed4;
+all eight failures were FP16 near-zero cross-dtype thresholds, reproduced on
+whole FP16 (rounding-dev01 PASSED). New explicit tensor-norm FP16 policy plus
+same-dtype whole-batch comparison passed all16 half-dev01 cases. FP32 strict
+independent CPU checks remain unchanged. Native-dev01 was23skipped due to missing
+TIDE_ONLINE_DEVICE and is excluded. Raw failures/skips retained, not relabeled.
+All45 affected NPU cases are now covered; no production change during precision
+policy correction. Core/resident libraries unchanged. Ready to commit implementation,
+then freeze resident-samples-clean01, fresh-link consumer with exact dev objects,
+run CPU15/NPU45, separate profile and two fixed-shape memory observations. Use
+TIDE_ONLINE_DEVICE=npu:0 (not TIDE_RESIDENT_DEVICE) for consumer gates.
+Resume held matrix promptly after bounded gates/profile/observations.
 
 Finite34-child recipe launchers/remaining_family_matrix.py; do not modify it or
 family_matrix_screen.py while live. Each submatrix:20pilot +3×12confirmation

@@ -64,8 +64,6 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");
   if(c.placement.preset=="resident"&&(c.workers!=1||c.packed_sources||c.batch_next))
     throw std::invalid_argument("host workers/packed-sources/batch-next require an eager native consumer");
-  if(c.placement.preset=="resident"&&c.sample_chunk_rows)
-    throw std::invalid_argument("sample chunking is not yet supported by the resident consumer");
   if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
       ||(c.training&&c.runtime.dtype==at::kHalf&&c.placement.preset!="resident"))
     throw std::invalid_argument("eager consumer FP16 training requires a qualified master optimizer");

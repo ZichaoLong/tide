@@ -7,16 +7,19 @@ void parameters(std::ostream& out,Index step,const std::map<std::string,Tensor>&
   bool first=true;for(const auto& [name,value]:values){if(!first)out<<',';first=false;out<<quoted(name)<<':';tensor_json(out,value);}out<<"}}\n";
 }
 }
-void resident_gradients_json(std::ostream& out,Index step,const Fixture& f,const tide::ResidentGradients& g,const Tensor& ge,const Tensor& gh) {
-  std::map<std::string,Tensor> values;for(const auto& owner:f.parameters.owners())values.emplace(owner.canonical,Tensor());
+void resident_gradient_add(std::map<std::string,Tensor>& values,const Fixture& f,const tide::ResidentGradients& g) {
+  for(const auto& owner:f.parameters.owners())values.emplace(owner.canonical,Tensor());
   auto append=[&](const auto& shard) {
     auto flags=shard.connected.cpu(),data=shard.values.cpu();
     for(size_t i=0;i<shard.names.size();++i)if(flags[i].template item<bool>()) {
       const auto shape=f.parameters.value(shard.names[i]);
-      values[shard.names[i]]=data.narrow(0,shard.offsets[i],shape.numel()).reshape(shape.sizes());
+      const auto part=data.narrow(0,shard.offsets[i],shape.numel()).reshape(shape.sizes());
+      auto& target=values[shard.names[i]];target=target.defined()?target+part:part;
     }
   };
   if(g.parameter_shards.empty())append(g);else for(const auto& s:g.parameter_shards)append(s);
+}
+void resident_gradients_json(std::ostream& out,Index step,std::map<std::string,Tensor> values,const Tensor& ge,const Tensor& gh) {
   values["embedding"]=ge;values["head"]=gh;parameters(out,step,values,true);
 }
 void resident_updated_json(std::ostream& out,Index step,const Fixture& f,const tide::ResidentTrainingCheckpoint* saved,const Tensor& embedding,const Tensor& head) {
@@ -37,6 +40,8 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
     for(const auto& [k,v]:s){if(!field)out<<',';field=false;out<<quoted(k)<<':'<<v;}out<<'}';}out<<']';
   out<<",\"windows_per_step\":"<<c.windows<<",\"warmup_steps\":"<<c.warmup<<",\"measured_steps\":"<<c.steps
      <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<r.cut
+     <<",\"batch_execution\":{\"logical_batch\":"<<p.batch<<",\"requested_sample_chunk_rows\":"<<c.sample_chunk_rows
+     <<",\"effective_sample_chunk_rows\":"<<r.sample_rows<<",\"physical_chunks\":"<<r.sample_chunks<<'}'
      <<",\"threads\":"<<c.threads<<",\"parameter_budget\":"<<c.parameter_budget<<",\"diagnostics\":"<<(c.diagnostics?"true":"false")
      <<",\"precision\":{\"payload\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
      <<",\"loss\":\"float32\",\"adjoints\":\"float32\",\"optimizer_masters\":\"float32\"}"

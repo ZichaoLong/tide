@@ -88,15 +88,14 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     if (workers != 1 or packed_sources or batch_next) and (implementation == "python" or preset == "resident"):
         raise ValueError("host workers/packed-sources/batch-next require an eager native consumer")
     if preset == "resident":
-        if sample_chunk_rows:
-            raise ValueError("sample chunking is not yet supported by the resident consumer")
         from .resident import run as run_resident
         return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
             schedule=schedule, training=training, optimizer=optimizer, steps=steps, warmup=warmup,
             windows_per_step=windows_per_step, native_library=native_library, diagnostics=diagnostics,
             placement=placement, observer=observer, parameter_budget=parameter_budget,
             resident_library=resident_library, resident_limits=resident_limits, training_limits=training_limits,
-            resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes, device_memory_bytes=device_memory_bytes)
+            resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes, device_memory_bytes=device_memory_bytes,
+            sample_chunk_rows=sample_chunk_rows)
     if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3 or device_memory_bytes:
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):

@@ -24,7 +24,7 @@ CASES = [
 ]
 
 
-def compare_records(actual, expected, batch):
+def compare_records(actual, expected, batch, **tolerance):
     wanted = {(r["step"], r["cut"]): r for r in expected if r["kind"] == "window"}
     covered = {key: [] for key in wanted}
     for row in actual:
@@ -39,13 +39,13 @@ def compare_records(actual, expected, batch):
             reference[name] = [x for x in reference[name] if first <= x[0] < stop]
         # Preserve each range's original stable order, including duplicate edge
         # and pending identities. Do not sort away an ordering error.
-        same(row, reference)
+        same(row, reference, **tolerance)
         covered[key].extend(range(first, stop))
     assert all(sorted(samples) == list(range(batch)) for samples in covered.values())
     # All parameter gradients (including None) and every parameter generation
     # are checked after one whole-batch update, with both SGD and AdamW.
     same([r for r in actual if r["kind"] != "window"],
-         [r for r in expected if r["kind"] != "window"])
+         [r for r in expected if r["kind"] != "window"], **tolerance)
 
 
 def compare(case, implementation, device, dtype, preset, tmp_path):
@@ -108,7 +108,7 @@ def test_sample_chunk_refusals_and_whole_batch():
     for value in (-1, True, 2**63):
         with pytest.raises(ValueError, match="sample-chunk-rows"):
             run(p, sample_chunk_rows=value, **args)
-    with pytest.raises(ValueError, match="sample chunking"):
+    with pytest.raises(ValueError, match="native NPU"):
         run(p, sample_chunk_rows=1, preset="resident", **args)
     baseline = run(p, **args)
     larger = run(p, sample_chunk_rows=2**63-1, **args)

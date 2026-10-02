@@ -2,7 +2,7 @@
 #include <cmath>
 #include <stdexcept>
 namespace tide_flow {
-ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,const Packet& p,Index denominator,bool backward,const HeadBudget& plan) {
+ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,const Packet& p,Index denominator,bool backward,const HeadBudget& plan,Index sample_begin) {
   auto indices=at::nonzero(window.valid).reshape({-1});ConsumerLoss out;out.count=indices.numel();
   if(!out.count)return out;
   Tensor master;
@@ -13,7 +13,7 @@ ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,con
   for(Index begin=0;begin<out.count;begin+=plan.rows) {
     auto selected=indices.narrow(0,begin,std::min(plan.rows,out.count-begin));
     auto coordinates=window.coordinates.index_select(0,selected),rows=window.values.index_select(0,selected);
-    auto labels=((at::floor_divide(coordinates.select(1,2),p.stride)+1)*7+coordinates.select(1,0)*3).remainder(p.vocab);
+    auto labels=((at::floor_divide(coordinates.select(1,2),p.stride)+1)*7+(coordinates.select(1,0)+sample_begin)*3).remainder(p.vocab);
     auto logp=at::log_softmax(at::matmul(rows,head.t()).to(at::kFloat),1);
     auto value=-logp.gather(1,labels.unsqueeze(1)).sum()/double(denominator);
     out.value=out.value.defined()?out.value+value:value;++out.chunks;
@@ -24,13 +24,13 @@ ConsumerLoss head_loss(const tide::ResidentWindow& window,const Tensor& head,con
   }
   return out;
 }
-Tensor embedding_gradient(const tide::ResidentGradients& gradient,const Tensor& embedding) {
+Tensor embedding_gradient(const tide::ResidentGradients& gradient,const Tensor& embedding,Index sample_begin) {
   Tensor output;
   for(const auto& b:gradient.boundaries) {
     auto index=at::nonzero(b.valid&b.connected&(b.coordinates.select(1,3)==0)).reshape({-1});
     if(!index.numel())continue;
     auto coord=b.coordinates.index_select(0,index);
-    auto ids=(coord.select(1,5)*7+coord.select(1,0)*3).remainder(embedding.size(0));
+    auto ids=(coord.select(1,5)*7+(coord.select(1,0)+sample_begin)*3).remainder(embedding.size(0));
     if(!output.defined())output=at::zeros_like(embedding,embedding.options().dtype(at::kFloat));
     output.index_add_(0,ids,b.values.index_select(0,index));
   }

@@ -7,7 +7,7 @@ import torch
 from .head_budget import head_budget
 
 
-def head_loss(window, head, *, stride, denominator, backward, plan=None):
+def head_loss(window, head, *, stride, denominator, backward, plan=None, sample_begin=0):
     plan = plan or head_budget(len(window.valid), head.shape[1], head.shape[0], head.element_size(), backward, 4*1024**3)
     indices = window.valid.nonzero().flatten()
     if not indices.numel():
@@ -19,7 +19,7 @@ def head_loss(window, head, *, stride, denominator, backward, plan=None):
     for selected in indices.split(plan.rows):
         coordinates = window.coordinates.index_select(0, selected)
         rows = window.values.index_select(0, selected)
-        targets = ((coordinates[:, 2] // stride + 1)*7 + coordinates[:, 0]*3) % head.shape[0]
+        targets = ((coordinates[:, 2] // stride + 1)*7 + (coordinates[:, 0]+sample_begin)*3) % head.shape[0]
         logits = rows @ head.t()
         logp = logits.float().log_softmax(1)
         value = -logp.gather(1, targets[:, None]).sum() / denominator
@@ -33,7 +33,7 @@ def head_loss(window, head, *, stride, denominator, backward, plan=None):
     return loss, root, dh, indices.numel()
 
 
-def embedding_gradient(boundaries, embedding):
+def embedding_gradient(boundaries, embedding, sample_begin=0):
     gradient = None
     for boundary in boundaries:
         # External inputs are kind 0; previous-cut pending messages are detached
@@ -42,7 +42,7 @@ def embedding_gradient(boundaries, embedding):
         if not index.numel():
             continue
         coord = boundary.coordinates.index_select(0, index)
-        ids = (coord[:, 5]*7 + coord[:, 0]*3) % embedding.shape[0]
+        ids = (coord[:, 5]*7 + (coord[:, 0]+sample_begin)*3) % embedding.shape[0]
         if gradient is None:
             gradient = torch.zeros_like(embedding, dtype=torch.float32)
         gradient.index_add_(0, ids, boundary.values.index_select(0, index))

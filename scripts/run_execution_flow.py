@@ -29,7 +29,7 @@ def main():
     p.add_argument("--packed-sources", action="store_true", help="use native packed source transport")
     p.add_argument("--batch-next", action="store_true", help="use native batched Next/reset")
     p.add_argument("--sample-chunk-rows", type=int, default=0,
-                   help="eager physical sample maximum; 0 keeps the whole logical batch")
+                   help="physical sample maximum; 0 keeps the whole logical batch")
     p.add_argument("--parameter-budget", type=int, default=1024**3)
     p.add_argument("--native-library", type=Path)
     p.add_argument("--native-binary", type=Path)

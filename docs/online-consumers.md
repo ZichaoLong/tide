@@ -240,7 +240,7 @@ Resident fiber KV proposal duplication is removed on clean80dae6e;
 [affected qualification and allocator comparison](evidence/resident-fiber-append-20261002.md)
 show128MiB lower peak at the representative Attention shape, without reducing
 logical KV capacity. This is a storage improvement, not full-size admission.
-Eager Python/native/LibTorch consumers also accept `--sample-chunk-rows N`.
+Eager and resident Python/native/LibTorch consumers accept `--sample-chunk-rows N`.
 Zero preserves the whole logical batch; a positive value limits samples in one
 physical forward/backward group. Each group keeps all requested windows connected
 and carries its own state/history/pending/KV into the next step. The final group
@@ -256,10 +256,34 @@ and global sample IDs; each is a partial batch, so the ranges must be combined
 when comparing a whole window. Graph scheduling within each sample is unchanged.
 Persistent state for all samples and full model/optimizer storage remain live;
 this reduces activation lifetime, not those fixed costs. All work stays inside
-the complete-step timer. The resident consumer explicitly rejects this option
-until it has a corresponding VJP accumulation/state-switching implementation.
-The increment is qualified on clean `e6cc52b` (CPU60/NPU38 and separate memory
+the complete-step timer. The eager increment is qualified on clean `e6cc52b` (CPU60/NPU38 and separate memory
 observations; [evidence](evidence/consumer-sample-chunks-20261002.md)).
+
+The resident consumer uses one live parameter/optimizer owner and opaque NPU
+continuations for independent sample ranges. Each range's windows form one
+connected backward group; explicit device accumulation separates ranges, then
+one graph update and one embedding/head update complete the logical step. Saved
+state from every range continues under the next shared parameter generation.
+The fixed-size tail capacity receives only real input rows: absent samples do
+not create events. Input IDs, output labels and embedding VJPs add the global
+sample offset; loss retains the full logical-batch denominator.
+
+Resident admission uses physical sample rows for the active state and tapes,
+and additionally charges all saved numerical continuations plus simultaneous
+old/replacement gradient accumulators. A restored handle is released before its
+replacement is saved. Snapshot byte checks and allocator observations verify
+those declared bounds. Persistent KV remains dense and all sample continuations
+remain on their original NPUs; this is explicit slicing, not automatic selection
+of a sample size or compact KV. Qualification for this consumer composition is
+pending; the separate context and accumulation API gates do not certify it.
+
+The sample-slicing FP16 gate separates cross-dtype rounding from slicing: its
+CPU FP32 comparison uses tensor infinity-norm error bounded by
+`0.002 + 0.02 * max(abs(reference))`, with exact discrete/None checks. A second,
+independently executed whole-batch FP16 comparison uses the existing elementwise
+`atol=0.002, rtol=0.02`. FP32 retains elementwise `atol=1e-6, rtol=1e-5` against
+independent CPU execution. This avoids interpreting cancellation near zero as a
+slicing defect; it does not relax event identities or gradient connectivity.
 
 Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
 pending. The deliberately paused historical CPU job is not managed by this CLI.

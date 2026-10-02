@@ -4,8 +4,10 @@
 namespace tide_flow {
 void prepare_capacity(const Packet& p,const Config& c,const std::vector<at::Device>& devices,ResidentMeasurements& result) {
   const Index n=p.body.nodes.size();const auto& f=result.limits.forward;
-  capacity::Geometry g{p.width,p.batch,p.vocab,c.windows,c.runtime.dtype==at::kHalf?2:4,p.memory=="attention",
-    c.training,c.optimizer=="adamw",c.training||f.diagnostics,Index(p.body.regions.size()+2),std::vector<Index>(n),std::vector<Index>(n),{},c.devices,c.owner_policy=="locality"};
+  result.sample_rows=std::min(c.sample_chunk_rows?c.sample_chunk_rows:p.batch,p.batch);
+  result.sample_chunks=(p.batch-1)/result.sample_rows+1;
+  capacity::Geometry g{p.width,result.sample_rows,p.vocab,c.windows,c.runtime.dtype==at::kHalf?2:4,p.memory=="attention",
+    c.training,c.optimizer=="adamw",c.training||f.diagnostics,Index(p.body.regions.size()+2),std::vector<Index>(n),std::vector<Index>(n),{},c.devices,c.owner_policy=="locality",result.sample_chunks};
   for(const auto& e:p.body.edges){++g.sources[e.target];++g.slots[e.source];g.edges.emplace_back(e.source,e.target);}
   for(auto node:p.body.inputs){++g.sources[node];g.edges.emplace_back(n,node);}
   for(auto node:p.body.outputs){++g.slots[node];g.edges.emplace_back(node,n+1);}
@@ -15,6 +17,12 @@ void prepare_capacity(const Packet& p,const Config& c,const std::vector<at::Devi
   std::vector<Index> budgets;
   for(auto d:devices){auto value=device_memory_info(d);result.initial_memory.push_back(value);budgets.push_back(c.device_memory_bytes?std::min(value.free,c.device_memory_bytes):value.free);}
   result.capacity=capacity::plan(g,caps,chunks,budgets,c.chunk_policy=="aggressive");
+  capacity::Wide snapshot=0,accumulation=0;
+  for(const auto& card:result.capacity.cards) {
+    snapshot+=card.components.at("continuation_snapshot_bytes");
+    accumulation+=card.components.at("gradient_accumulation");
+  }
+  result.snapshot_budget=capacity::bytes(snapshot);result.accumulation_budget=capacity::bytes(accumulation);
   auto& forward=result.limits.forward;const auto& selected=result.capacity.effective;
   forward.full_chunk_rows=selected.at("full");forward.emission_chunk_rows=selected.at("emission");forward.aggregate_chunk_rows=selected.at("aggregate");
   forward.attention_chunk_rows=selected.at("attention");forward.attention_key_rows=selected.at("keys");result.limits.reverse_chunk_rows=selected.at("reverse");
