@@ -4,8 +4,8 @@ Updated 2026-10-02. **ACTIVE; continue autonomously.** User authorized continued
 implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Implementation48e44b0 committed/pushed and fully qualified; reviewed evidence is
-ready for its separate commit. No uncommitted production code.
+Implementation 48e44b0 and evidence ca559b5 are committed/pushed and qualified.
+Uncommitted valid-prefix retained journal increment below is not built/tested.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -59,39 +59,49 @@ retain logical batch/global IDs/loss denominator/one shared update. FP32 and
 FP16 numerical policies unchanged. Live KV and retained tapes remain dense.
 This is memory calibration, not new-source throughput or original-wide evidence.
 
-## Finite representative matrix — five children remain
+## Finite representative matrix — complete
 
-Old matrix-remaining01 CANCELLED at completed-child boundary; all24 completed
-children retained. Do not resume it or modify retained measurements.
-Current parent tide-execution-flows-matrix-remaining02.service started04:24UTC;
-TASK/runs/matrix-remaining02/{status,queue,sequence}.json and task.log.
-Frozen80dae6e14d41614d0cdb1056bb39b57ca10d07ed at TASK/sources/fiber-append-clean01.
-Lease physical1→npu:0,queue cap120s,parent5400s deadline05:54UTC,child900s.
-Helper launchers/remaining_family_matrix_resume.py schedules exactly10 missing
-children, stops on first failure, no completed-cell reruns. Five now passed:
-TimedDAG/Python streaming-confirm02/03 and Settle/Python prefill-screen01,
-confirm01/02. RecipePID124125/start1850121793 resumed05:17UTC after pool gates;
-boundary-hold-context-pool.json and old compact hold are both resumed.
-Current child: Settle/Python/prefill-confirm03. Then streaming screen01 and
-confirm01–03; expected to finish within parent deadline if no further long holds.
-Do not run heavy builds/gates during measured children. If a hold is necessary,
-STOP only the exact recipe, let current measured child finish naturally, then
-work. Check PID/start identity before CONT. Deadline is not extended by STOP.
-
-Each submatrix20pilot+3×12confirmation processes,1continued warmup+3measured steps,
-2windows/64tokens/step,FP32. LibTorchCPU16packed/mixed4packed; Python default host
-policy; ATen/BLAS1. Eight of ten required family/client/schedule submatrices are
-already committed, including five inca54c4a. Only Settle/Python both schedules
-remain. After terminal children, use launchers/family_matrix_evidence.py with
---prefix matrix-settle-python-prefill --prefix matrix-settle-python-streaming
---output NEW; review and commit remaining matrix evidence. No measurement reruns.
+All ten required family/client/schedule submatrices have completed and passed
+source/binary/input/raw-record audit. Last parent matrix-remaining02 PASSED at
+05:45:32UTC and released its one-device lease. Old matrix-remaining01 remains
+CANCELLED at a completed-child boundary; its completed children are retained.
+Settle/Python prefill+streaming add40pilot+72confirmation processes at frozen
+80dae6e14d41614d0cdb1056bb39b57ca10d07ed. Reviewed report:
+[evidence/representative-settle-python-20261002.md](evidence/representative-settle-python-20261002.md).
+Each submatrix uses five-preset pilot then CPU/selected mixed/resident,three
+fresh processes,one continued warmup/three measured two-window steps,FP32.
+Settle/Python resident warm ratios2.698–8.848× versus default Python CPU;
+cold Add inference remains slower. These are not ratios against tuned LibTorch
+CPU, not later sliced/compact-source timings and not original-wide evidence.
+No measured processes need rerunning. Parent boundary hold records are resumed;
+there is no live matrix recipe to signal.
 
 ## Next work and environment
 
-Finish evidence commit/push for48e44b0, then prioritize staged scale execution
-and retained/reverse memory. Original-wide inference now has feasible static
+Prioritize staged scale execution and retained/reverse memory. Original-wide inference now has feasible static
 plans with explicit compact pools; validate larger shapes before original-wide.
 Prepare only a bounded staged job and avoid interfering with the running matrix.
+
+Staged scale job RUNNING/original-wide at TASK/runs/wide-inference-staged01;
+unit tide-execution-flows-wide-inference-staged01.service,dispatcherPID369638.
+Lease physical1,2,3,4,5,7,9,11→logical0..7. Source/helper frozen for its lifetime.
+D512/B32 stage PASSED (44.877s outer process,11.432s complete step); original-wide
+is running. These are capacity/execution observations, not throughput recommendations.
+Frozen48e44b0/qualified consumer; helper launchers/wide_inference_stages.py.
+It waits at most2400s for matrix-remaining02 to PASS before requesting8NPUs,
+queue cap120s. Then D512/B32 stage (600s) followed only on success by original
+D2048/B51217.5B Attention inference (1800s). Both FP32 resident TimedDAG/prefill,
+one cold complete step/two connected windows; sample4,KV256,queue/arrivals2048,
+8GiB compact pool/card,60GiB total/card,head512MiB,workspace capability512GiB,
+locality. Logical original batch is unchanged. No throughput recommendation.
+Driver/whole-run admission rechecks live memory. Each timed child has its own
+process group killed on timeout; no blind retry. Entire dispatcher cap6000s.
+Stage packet TASK/inputs/wide-inference-stage512-b32-01; original packet unchanged.
+Static wide estimate53.798GiB maximum/8cards is planned, NOT execution evidence.
+Exact command/environment are retained in
+TASK/launchers/wide-inference-staged01.sh and TASK/runs/wide-inference-staged01/status.json.
+Inspect status.json/stages.json/queue.json/task.log; no devices while dependency waits.
+
 Training still needs reductions/calibration: padded retained journals and reverse
 arenas plus parameter/gradient copies dominate, beyond saved contexts. Investigate
 valid-prefix journal retention (different windows may have different extents),
@@ -99,6 +109,36 @@ parameter-bank lifetime sharing, and complete per-card admission. Never loosen
 estimates without an allocation/lifetime derivation and independent validation.
 Automatic sample admission, eager mixed multi-card placement and actual wide
 execution/comparisons remain open. F7 final migration/evidence audit pending.
+
+Uncommitted retained-journal increment (development builds RUNNING; no runtime validation yet):
+- New tools/device_online/retained_journals.{h,cpp} creates device-derived valid
+  prefix views once per count; preserves tensor aliases and prefix row IDs.
+  Empty journals keep one unused sentinel row. Pending/outputs/KV unchanged.
+- Retained tape/sharded tape overloads optionally pack those views before cloning.
+  Public training owners enable it under existing aggressive chunk policy;
+  conservative remains dense. Admission reserves the next dense window BEFORE
+  advance; after copying, charge actual tape+state bytes instead of dense padding.
+  Backward adds retained_dense_bytes/retained_compact_journals stats.
+  Python/C++ consumer planners separately charge prefix metadata workspace;
+  dense retained envelopes remain. CPU capacity parity test covers this field.
+- CMake source list, native sharded-session check flag --compact-journals and
+  registered peer-resident-compact-journals FP32/FP16 check/profile updated.
+- New tests/test_resident_retained_journals.py: six independent CPU VJP/update
+  cases plus empty windows; helper accepts chunk_policy. Sample-slice Attention
+  tests select aggressive for both clients/FP32/FP16. Contract updated.
+- Diff whitespace and Python AST only. Build helper launchers/build_retained_journals.py
+  running as build-retained-journals-{standalone,python}-dev01 on frozen
+  TASK/sources/retained-journals-dev01; reuses qualified context-pool runtime core/CANN and
+  unchanged host units, rebuilds three archive/four owner units plus native check.
+  No public struct-layout change. Review before freezing retained-journals-dev01.
+- Do not compile/test during measured matrix children. Staged inference will
+  launch automatically afterward; coordinate new heavy work with that job rather
+  than silently contaminating it. New dev gates: seven new public cases, dense
+  projection-retention3, CPU capacity17, actual sample-slice34, compact native FP32/FP16 broad
+  trajectories/CPU references. Consumer CMake can reuse unchanged public-header
+  objects. Then implementation commit, clean gates/profile/memory and evidence.
+  Complete consumer capacity still charges dense tapes; do not loosen its
+  estimate just to admit a wide run. New compaction is not wide qualification.
 
 TASK=/mi/data2T/zlong/tide-execution-flows. Public module
 libtorch-npu/2.10.0-cann9.0.0; Python
