@@ -231,6 +231,10 @@ Actual output counts and available scheduler counters accompany each sample.
 `--diagnostics` adds bounded states/routes/gradients/updates JSONL and is not a
 formal timing mode. Profiler runs and three fresh-process recommendation repeats
 remain separate requirements; one process's step timings do not satisfy them.
+Resident fiber KV proposal duplication is removed on clean80dae6e;
+[affected qualification and allocator comparison](evidence/resident-fiber-append-20261002.md)
+show128MiB lower peak at the representative Attention shape, without reducing
+logical KV capacity. This is a storage improvement, not full-size admission.
 Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
 pending. The deliberately paused historical CPU job is not managed by this CLI.
 

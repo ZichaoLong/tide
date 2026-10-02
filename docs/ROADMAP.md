@@ -158,6 +158,11 @@ state. The contract owns definitions, matrices, presets, batching/memory and tes
 | F6 | Representative then full-size inference/training, aggressive-safe chunking preferred; CPU + screened mixed + resident, both schedules, three fresh repeats for recommendations and separate profiling | representative TimedDAG/LibTorch/prefill five-preset screen qualified on clean0b1a5aa:72 fresh processes,FP32 exact event/output/cut checks,three repetitions and four separate Attention profiles ([evidence](evidence/representative-preset-screen-20261002.md)); bounded host-policy comparison qualified on clean2222d9d:28 pilot +36 confirmation processes and one selected-policy profile;CPU16 packed wins inference,resident wins training ([evidence](evidence/representative-host-policy-20261002.md)); other family/client/schedule cells and full-size remain pending; historical CPU Attention supplementary |
 | F7 | Clean immutable builds/gates, portable packet/commands, recorded target-pending CUDA/version cells, reviewed minimal records/profile/evidence/support claims and no live task jobs | pending |
 
+F4/F6 append-only fiber KV staging is qualified on clean80dae6e (CPU4,public NPU33,
+four standalone component cells,128MiB lower actual representative training peak;
+[evidence](evidence/resident-fiber-append-20261002.md)). Logical capacities and
+retained semantics remain unchanged; full-size storage/placement still pending.
+
 F4 compact state/Read/KV forward is verified at62935e9; [evidence](evidence/device-state-owners-20261001.md).
 Compact retained state/cache reverse and canonical publication into these banks
 are qualified at49541be; [evidence](evidence/device-state-reverse-20261002.md).
