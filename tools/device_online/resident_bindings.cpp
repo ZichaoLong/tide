@@ -15,6 +15,10 @@ PYBIND11_MODULE(_tide_resident,m) {
     FIELD(ResidentPlacement,devices) FIELD(ResidentPlacement,policy)
     FIELD(ResidentPlacement,full_owners) FIELD(ResidentPlacement,state_owners);
   m.attr("TrainingPlacement")=m.attr("Placement"); // Preserve existing clients.
+  py::class_<ResidentContinuation>(m,"DeviceContinuation")
+    .def_property_readonly("cut",&ResidentContinuation::cut)
+    .def_property_readonly("batch_size",&ResidentContinuation::batch_size)
+    .def_property_readonly("tensor_bytes",&ResidentContinuation::tensor_bytes);
   py::class_<ResidentLimits>(m,"Limits").def(py::init<>())
     FIELD(ResidentLimits,queue) FIELD(ResidentLimits,arrivals) FIELD(ResidentLimits,outputs)
     FIELD(ResidentLimits,trace) FIELD(ResidentLimits,stages) FIELD(ResidentLimits,workspace_bytes)
@@ -35,6 +39,8 @@ PYBIND11_MODULE(_tide_resident,m) {
     .def(py::init<Graph,Model,const Continuation&,at::Device,ResidentLimits,ResidentPlacement>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&ResidentSession::advance,py::call_guard<py::gil_scoped_release>())
     .def("snapshot",&ResidentSession::snapshot,py::call_guard<py::gil_scoped_release>())
+    .def("snapshot_device",&ResidentSession::snapshot_device,py::call_guard<py::gil_scoped_release>())
+    .def("restore_device",&ResidentSession::restore_device,py::call_guard<py::gil_scoped_release>())
     .def("result",&ResidentSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&ResidentSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&ResidentSession::cut)

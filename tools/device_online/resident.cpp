@@ -94,6 +94,12 @@ Continuation ResidentSession::snapshot() const {
   if(!impl_->flow)throw std::logic_error("resident session is closed");
   return impl_->flow->snapshot();
 }
+ResidentContinuation ResidentSession::snapshot_device(Index max_bytes) const {
+  impl_->check();return impl_->flow->snapshot_device(max_bytes);
+}
+void ResidentSession::restore_device(const ResidentContinuation& saved) {
+  impl_->check();impl_->flow->restore_device(saved);impl_->cut=saved.cut();
+}
 Result ResidentSession::result() const {
   if(!impl_->flow)throw std::logic_error("resident session is closed");
   return impl_->flow->result();

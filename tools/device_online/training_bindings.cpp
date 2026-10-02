@@ -76,6 +76,8 @@ void bind_resident_training(py::module_& m) {
     .def("step",&ResidentTrainingSession::step,py::call_guard<py::gil_scoped_release>())
     .def("detach",&ResidentTrainingSession::detach,py::call_guard<py::gil_scoped_release>())
     .def("checkpoint",&ResidentTrainingSession::checkpoint,py::call_guard<py::gil_scoped_release>())
+    .def("snapshot_device",&ResidentTrainingSession::snapshot_device,py::call_guard<py::gil_scoped_release>())
+    .def("restore_device",&ResidentTrainingSession::restore_device,py::call_guard<py::gil_scoped_release>())
     .def("result",&ResidentTrainingSession::result,py::call_guard<py::gil_scoped_release>())
     .def("close",&ResidentTrainingSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&ResidentTrainingSession::cut)

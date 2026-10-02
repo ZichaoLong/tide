@@ -33,6 +33,12 @@ class StateOwner {
   int64_t reverse_parameter_bytes() const;
   StateOwnerTape reverse_parameters(int64_t tensor_budget) const;
   StateOwnerBanks parameter_banks() const;
+  std::vector<Tensor> continuation_tensors() const {
+    std::vector<Tensor> out{state_.values,state_.clocks,state_.present};
+    if(fiber_){auto xs=fiber_->continuation_tensors();out.insert(out.end(),xs.begin(),xs.end());}
+    if(event_){auto xs=event_->continuation_tensors();out.insert(out.end(),xs.begin(),xs.end());}
+    return out;
+  }
  private:
   std::vector<int64_t> global_nodes_;
   StateKernelProfile profile_;

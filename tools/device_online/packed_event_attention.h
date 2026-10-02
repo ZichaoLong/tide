@@ -45,6 +45,11 @@ class PackedEventAttention {
   at::Tensor key_work() const;
   at::Tensor chunks() const;
   at::Tensor peak() const;
+  std::vector<Tensor> continuation_tensors() const {
+    std::vector<Tensor> out;
+    for(const auto& g:groups_)out.insert(out.end(),{g->live.key,g->live.value,g->live.lengths});
+    return out;
+  }
  private:
   int64_t rows_,width_,chunk_,key_rows_,reserved_;
   std::vector<std::unique_ptr<EventAttentionGroup>> groups_;

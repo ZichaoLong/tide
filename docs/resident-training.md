@@ -97,6 +97,32 @@ Resident physical sample slicing still requires that separate capability. Both
 the single-device and compact multi-device owners expose this optional method;
 the checkpoint format and default backward/step behavior are unchanged.
 
+`snapshot_device(max_bytes=...)` saves a detached numerical continuation in opaque
+NPU buffers; `restore_device(saved)` switches to it on the **same live owner**.
+The saved buffers contain values/presence/clocks, complete event/fiber KV including
+lengths/bias, selection history, pending identities/values/masks and input ledgers.
+Copying uses whole buffers on their original devices. No numerical state or
+dynamic queue payload is downloaded. Only input-ledger/cut metadata lives on the
+host, as it does at ordinary input boundaries.
+
+Save/restore refuse retained windows and an unconsumed backward. They allow an
+existing accumulator and preserve its parameter gradients, generation and
+optimizer. Handles saved before an update may be restored afterward: this
+retains that stream's numerical state while using the current shared parameters,
+with an explicit gradient boundary. It does not restore parameters or advance the
+optimizer. Restoring clears latest-window diagnostics; the next forward records
+its own events. The independent stream supplies its own next input positions.
+
+Each handle reports `cut`, `batch_size` and `tensor_bytes`; its capacity check
+bounds that snapshot's new tensors across owner devices before copying. Other
+live handles and the active flow still require storage. Handle copies share
+immutable buffers; destroying the last copy releases them. Foreign/empty handles
+are refused before mutation. Device-copy failure poisons the owner. Handles are
+not serializable checkpoints and cannot be transferred to a recreated session.
+The snapshot is still dense capacity storage, not compact KV or automatic sample
+slicing. Consumers must account for all live contexts and preserve the logical
+batch/loss/update boundary when composing this API with accumulation.
+
 Parameter gradients use canonical names, alias sets, packed offsets and separate
 connection flags. Offset -1 identifies an owner without a differentiable use in
 this profile. Boundary gradients retain all six physical coordinates and flags

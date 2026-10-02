@@ -255,20 +255,7 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
   if(at::GradMode::is_enabled())throw std::invalid_argument("content flow has no autograd contract");
   auto validated=prepare_external(s.profile.graph,s.profile.model,s.boundary,input,until,s.device,s.external);
   try {
-    s.outputs->atoms().valid.zero_();s.outputs->stats().zero_();
-    if(s.limits.diagnostics) {
-      if(s.export_diagnostics){s.messages->atoms().valid.zero_();s.messages->stats().zero_();s.contributions->count.zero_();}
-      s.events->count.zero_();s.fibers->count.zero_();
-      s.full_trace->count.zero_();s.emission_trace->count.zero_();
-      if(s.raw_full_trace)s.raw_full_trace->count.zero_();
-    }
-    if(s.attention)s.attention->reset_window();
-    if(s.event_attention)s.event_attention->reset_window();
-    if(s.aggregate)s.aggregate->chunks().zero_();
-    s.event_count.zero_();if(s.full)s.full->chunks().zero_();if(s.remote_full)s.full_chunks.zero_();
-    if(s.sharded_full)s.sharded_full->reset_window();
-    if(s.sharded_state)s.sharded_state->reset_window();
-    s.emission->chunks().zero_();s.stages.zero_();s.stop.fill_(until);
+    s.reset_window();s.stop.fill_(until);
     // Dispatch through the process's registered owner. This works with either
     // the standalone SDK or the Python wheel, never linking both together.
     c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());

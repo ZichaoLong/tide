@@ -23,6 +23,7 @@ class ShardedState {
   std::vector<StateOwnerTape> reverse_parameters(int64_t tensor_budget) const;
   std::vector<StateOwnerBanks> parameter_banks() const;
   std::vector<StateOwnerValues> state_values() const;
+  std::vector<Tensor> continuation_tensors() const;
  private:
   struct Impl;std::unique_ptr<Impl> impl_;
 };

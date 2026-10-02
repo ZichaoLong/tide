@@ -46,7 +46,7 @@ ResidentTrainingLimits limits(ResidentPlacement placement,bool prefill,bool cach
   return l;
 }
 void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtype,int profile,int cache,bool prefill,
-                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners,bool emission,bool accumulation=false) {
+                ResidentOptimizerKind kind,const std::string& emit,bool explicit_owners,bool emission,bool accumulation=false,bool contexts=false) {
   at::NoGradGuard guard;const auto d=placement.devices[0];const bool half=dtype==at::kHalf;
   auto f=cache<0?test::precision_graph_profile(profile%2?0:3,profile%2,4,profile):test::retained_cache_fixture(0,1,4,cache);
   if(emission)test::emission_training_fixture(f,profile%3);
@@ -66,14 +66,27 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
   l.forward.diagnostics=prefill;
   auto session=std::make_unique<ResidentTrainingSession>(f.graph,f.model,f.initial,d,kind,groups,l);
   auto previous=session->checkpoint();updated(previous,master,*optimizer,half);
+  std::vector<ResidentContinuation> saved_contexts;
+  std::vector<Continuation> cpu_contexts;
+  if(contexts) {
+    auto initial=session->snapshot_device(512*1024*1024);saved_contexts={initial,initial};
+    cpu_contexts={test::train_boundary(cpu.initial,dtype),test::train_boundary(cpu.initial,dtype)};
+    test::train_reject([&]{session->snapshot_device(1);},"device snapshot capacity ignored");
+  }
   require(session->placement().devices==placement.devices,"resolved devices changed");
   Options options;options.mode=emit;options.zeta=.75;
   std::map<std::pair<Index,Index>,Index> positions;for(const auto& x:f.input)++positions[{x.batch,x.port}];
   ResidentTrainingWindow kept;ResidentGradients kept_gradient;
   for(int step=0;step<(accumulation?6:4);++step) {
+    if(contexts) {
+      session->restore_device(saved_contexts[step%2]);cpu.initial=cpu_contexts[step%2];
+      const auto cleared=session->result();
+      require(cleared.trace.empty()&&cleared.messages.empty()&&cleared.outputs.empty(),"restore retained another context's diagnostics");
+    }
     const int mode=accumulation?(step<2?(cache>=0?9:4):step==2?(cache>=0?8:5):0):
       step==1?(cache>=0?8:5):step==2?0:cache>=0?9:4;
-    auto input=f.input;for(auto& x:input){x.time+=step*11;x.position+=step*positions.at({x.batch,x.port});}cpu.input=input;
+    auto input=f.input;for(auto& x:input){x.time+=(contexts?step/2:step)*11;x.position+=(contexts?step/2:step)*positions.at({x.batch,x.port});
+      if(contexts&&step%2)x.value=x.value*1.125;}cpu.input=input;
     const auto ref=test::retained_reference_precision(cpu,mode,at::kFloat,half,options);
     const auto wide=test::retained_reference_precision(cpu,mode,at::kDouble,half,options);
     std::vector<ResidentCotangents> roots;auto start=session->cut();size_t w=0;
@@ -92,6 +105,10 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
       roots.push_back(root);kept=window;start=stop;++w;
     }
     test::train_reject([&]{session->checkpoint();},"checkpoint accepted retained tapes");
+    if(contexts) {
+      test::train_reject([&]{session->snapshot_device(512*1024*1024);},"device snapshot accepted live tapes");
+      test::train_reject([&]{session->restore_device(saved_contexts[0]);},"device restore dropped live tapes");
+    }
     auto wrong=roots;std::swap(wrong[0],wrong[1]);test::train_reject([&]{session->backward(wrong);},"stale root order accepted");
     wrong=roots;wrong[0].token.session++;test::train_reject([&]{session->backward(wrong);},"foreign token accepted");
     auto grad=session->backward(roots);test::train_gradients(grad,ref,cpu);test::train_gradients(grad,wide,cpu);kept_gradient=grad;
@@ -109,6 +126,10 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
       require(session->accumulated_batches()==step%2+1&&session->generation()==step/2,"accumulation changed generation/count");
       test::train_reject([&]{session->accumulate();},"backward was accumulated twice");
       test::train_reject([&]{session->checkpoint();},"checkpoint dropped accumulated gradients");
+      if(contexts) {
+        saved_contexts[step%2]=session->snapshot_device(512*1024*1024);
+        cpu_contexts[step%2]=test::train_boundary(ref.windows.back().continuation,dtype);
+      }
       if(step%2==0){cpu.initial=test::train_boundary(ref.windows.back().continuation,dtype);continue;}
     }
     optimizer->step();require(session->step().applied,"public sharded step refused");
@@ -116,7 +137,7 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     auto c=session->checkpoint();updated(c,master,*optimizer,half);if(step==(accumulation?5:2))exact(previous.state,c.state);previous=c;
     for(const auto& o:cpu.model.parameters(false).owners())o.value.copy_(registry.value(o.canonical).to(dtype));
     cpu.initial=test::train_boundary(ref.windows.back().continuation,dtype);
-    if(step==1) {
+    if(step==1&&!contexts) {
       session->close();l.forward.prefill=!prefill;l.forward.diagnostics=!l.forward.diagnostics;l.placement.devices.clear();
       l.placement.full_owners.clear();l.placement.state_owners.clear();
       for(int i=0;i<resume_count;++i)l.placement.devices.emplace_back(d.type(),d.index()+i);
@@ -145,10 +166,11 @@ void refusal(ResidentPlacement placement,at::ScalarType dtype,bool accumulation=
 int main(int argc,char** argv) {
   portable_torch::RuntimeSession runtime;
   try {
-    int count=2,resume=2;bool smoke=false,explicit_owners=false,emission=false,accumulation=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
+    int count=2,resume=2;bool smoke=false,explicit_owners=false,emission=false,accumulation=false,contexts=false;std::string policy="locality";std::vector<char*> forwarded{argv[0]};
     for(int i=1;i<argc;++i){std::string a=argv[i];if(a.rfind("--devices=",0)==0)count=std::stoi(a.substr(10));
       else if(a.rfind("--resume-devices=",0)==0)resume=std::stoi(a.substr(17));else if(a.rfind("--placement=",0)==0)policy=a.substr(12);
       else if(a=="--accumulate")accumulation=true;
+      else if(a=="--contexts"){contexts=true;accumulation=true;}
       else if(a=="--profile-smoke")smoke=true;else if(a=="--explicit-owners")explicit_owners=true;else if(a=="--emission")emission=true;else forwarded.push_back(argv[i]);}
     auto args=portable_torch::parse_cli(forwarded.size(),forwarded.data(),true);
     if(args.help){portable_torch::print_usage(std::cout,argv[0]);return 0;}
@@ -157,7 +179,7 @@ int main(int argc,char** argv) {
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);
     int cases=0;auto run=[&](int profile,int cache,bool prefill,ResidentOptimizerKind kind,const std::string& emit) {
-      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation);++cases;
+      try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation,contexts);++cases;
         std::cout<<"public-sharded trajectory="<<cases<<" profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<std::endl;}
       catch(...){std::cerr<<"public-sharded failed profile="<<profile<<" cache="<<cache<<" prefill="<<prefill<<" emit="<<emit<<'\n';throw;}
     };
@@ -184,7 +206,7 @@ int main(int argc,char** argv) {
     }
     std::cout<<"resident-sharded-session: passed trajectories="<<cases<<" windows="<<cases*(accumulation?24:16)<<" updates="<<cases*(accumulation?3:4)
       <<" devices="<<count<<" resume_devices="<<resume<<" CPU=FP32_FP64 payload="<<args.dtype<<" emission="<<emission
-      <<" accumulation="<<accumulation<<" public_api=true\n";
+      <<" accumulation="<<accumulation<<" contexts="<<contexts<<" public_api=true\n";
     runtime.close();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 2;}
 }

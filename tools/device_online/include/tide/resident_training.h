@@ -133,6 +133,10 @@ class ResidentTrainingSession {
   ResidentStep step(); // Consume gradients; explicit detach at the update boundary.
   void detach(); // Discard outstanding tapes/gradients, preserve numerical continuation.
   ResidentTrainingCheckpoint checkpoint() const; // Refuses outstanding tapes/gradients.
+  // Detached boundary only. Accumulated parameter gradients survive switching;
+  // retained windows/unconsumed backward gradients must be handled first.
+  ResidentContinuation snapshot_device(Index max_bytes) const;
+  void restore_device(const ResidentContinuation&);
   Result result() const; // Explicit diagnostics; never an input to device progression.
   Index cut() const;
   Index generation() const;

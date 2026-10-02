@@ -42,8 +42,11 @@ struct ContentFlow::Impl {
   int64_t planned_buffer_bytes=0,operator_workspace_budget=0,usable_memory_budget=0;
   bool failed=false,export_diagnostics=true;
   int64_t window_start=0;
+  std::shared_ptr<const int> continuation_owner=std::make_shared<const int>(0);
   Impl(Graph,Model,const Continuation&,at::Device,ContentLimits,at::Device,FullPlacement={},FullPlacement={},bool retain_backward=false);
   void construct();
+  void reset_window();
+  std::vector<Tensor> continuation_tensors() const;
   Continuation export_continuation() const;
   Result export_result() const;
   ReverseTape reverse_view(const StateTape&,const FullTape&) const;

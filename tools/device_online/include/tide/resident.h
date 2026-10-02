@@ -3,6 +3,20 @@
 #include <memory>
 
 namespace tide {
+namespace device_online {class ContentFlow;struct SavedContent;}
+// Opaque, detached numerical continuation on its original NPU owners. Only the
+// originating live session can restore it; parameters/optimizer are not copied.
+// Copies of this handle share immutable saved buffers. Not a disk checkpoint.
+class ResidentContinuation {
+ public:
+  ResidentContinuation()=default;
+  Index cut() const;
+  Index batch_size() const;
+  Index tensor_bytes() const;
+ private:
+  std::shared_ptr<const device_online::SavedContent> data_;
+  friend class device_online::ContentFlow;
+};
 enum class ResidentChunkPolicy { conservative, aggressive };
 struct ResidentLimits {
   int64_t queue=1024, arrivals=1024, outputs=1024, trace=4096, stages=4096;
@@ -24,7 +38,7 @@ struct ResidentPlacement {
   std::string policy="locality";
   std::vector<Index> full_owners,state_owners;
 };
-// Read-only borrowed device buffers. A view expires on advance/close/destruction;
+// Read-only borrowed buffers. A view expires on advance/restore/close/destruction;
 // clone the tensors to retain them. valid distinguishes absent and zero outputs.
 // coordinates: [sample,node,time,kind,output-port,position]. No state export.
 struct ResidentWindow {
@@ -47,6 +61,8 @@ class ResidentSession {
   // input coordinates/seals live on the host; payloads are transferred in bulk.
   ResidentWindow advance(const std::vector<External>&, Index stop, Index sealed_until);
   Continuation snapshot() const; // Explicit CPU checkpoint materialization.
+  ResidentContinuation snapshot_device(Index max_bytes) const;
+  void restore_device(const ResidentContinuation&); // Clears latest-window diagnostics.
   Result result() const;         // Explicit latest-window CPU diagnostics.
   Index cut() const;
   ResidentPlacement placement() const; // Resolved static placement; no device read.

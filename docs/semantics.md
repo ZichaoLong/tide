@@ -255,6 +255,11 @@ backward groups under one parameter generation, then performs one optimizer step
 Its detach is explicit; it cannot replace a retained cross-window VJP. The
 [training contract](resident-training.md) defines capacity, connection flags and
 checkpoint refusal; graph identities and checkpoint schemas are unchanged.
+Opaque resident device continuations save detached numerical state and can switch
+independent streams within their originating live owner. They preserve complete
+pending/KV/history/input-ledger semantics while sharing current parameters and
+any accumulated parameter gradients. Save/restore refuse retained differentiation;
+this is not a disk checkpoint or an implicit cross-stream gradient connection.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional
 [placement adapter](execution-placement.md) permits CPU Read/control/ranking
 with NPU payloads and retains autograd across those explicit transfers. Each

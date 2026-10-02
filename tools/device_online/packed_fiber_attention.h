@@ -39,6 +39,7 @@ class PackedFiberAttention {
   int64_t tape_bytes() const; // Shape-only upper bound, before grouped gathers.
   std::vector<FiberAttentionTape> tape() const;
   FiberParameterBanks banks() const;
+  std::vector<Tensor> continuation_tensors() const {return {cache_.key,cache_.value,cache_.bias,cache_.lengths};}
  private:
   int64_t nodes_,width_,parameters_,owners_,rows_,capacity_,chunk_,key_rows_,reserved_,max_ticks_;
   std::vector<int64_t> node_map_,node_heads_,head_groups_,source_lengths_;
