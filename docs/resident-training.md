@@ -44,7 +44,8 @@ weighted-contribution journal and prior-history/source-scale snapshots. Outputs,
 continuation, retained state/cache, reverse links and optimizer behavior remain
 available. Diagnostic recording can change after complete-cut checkpoint restore.
 The public C++ limits and checkpoint layouts are unchanged. Qualification of this
-separation is tracked in STATUS; existing evidence retains its source scope.
+separation is recorded in [training-record evidence](evidence/resident-training-records-20261002.md);
+existing evidence retains its source scope.
 
 1. `advance(inputs, stop, seal)` performs independent online execution and saves
    its actual device tape. Windows carry session, sequence and parameter-generation

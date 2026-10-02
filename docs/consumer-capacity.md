@@ -35,7 +35,7 @@ Training can disable optional Result trace/message exports while keeping its
 required VJP journals. The current admission envelope still reserves the former
 diagnostic buffers conservatively; disabling exports does not reduce declared
 queue/journal capacity or relax the estimate. Allocator observations record the
-actual saving separately. Both clients continue charging training journals even
+actual saving separately ([qualified comparison](evidence/resident-training-records-20261002.md)). Both clients continue charging training journals even
 when the public diagnostics flag is false.
 
 Conservative mode leaves25% plus128MiB of the incremental budget unused;

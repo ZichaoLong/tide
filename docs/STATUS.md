@@ -4,7 +4,8 @@ Updated 2026-10-02. **ACTIVE; user authorized continuing implementation, commits
 and pushes. No pause instruction. No subagents.** Reference repositories and
 ObsidianVault are read-only. Repository resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Previous evidence9be8e52 is pushed; training-record implementation is now being committed.
+Implementationca26b47 is committed/pushed; all six immutable qualification jobs passed.
+Training-record and PDG matrix evidence are being committed separately.
 [execution-flows.md](execution-flows.md) is the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the only backlog. Overall task remains incomplete.
 
@@ -45,7 +46,7 @@ commit; push each. Do not rerun unchanged8,954 CPU checks or edit live-job input
   [Fiber append](evidence/resident-fiber-append-20261002.md), committed9be8e52.
   Retained journals/live KV/reverse storage remain scale limitations.
 
-## Finite representative matrix and temporary launch hold
+## Active finite representative matrix
 
 TASK=/mi/data2T/zlong/tide-execution-flows.
 Source TASK/sources/fiber-append-clean01, clean80dae6e14d41614d0cdb1056bb39b57ca10d07ed.
@@ -67,19 +68,18 @@ Per-step medians CPU / screened mixed / resident, seconds:
 
 Exact events/output/cut and loss checks pass. Resident stages per step26prefill,
 80streaming. CPU wins all short-process totals. Mixed single-step selection is
-only a pilot; not proof of optimality. Matrix evidence not yet committed.
+only a pilot; not proof of optimality. PDG matrix report/audit are prepared in docs/evidence, not yet committed.
 Task-local family_matrix_evidence.py audit passed for the two PDG submatrices.
 TimedDAG/LibTorch/streaming screen and confirm01 also PASSED.
 
 Parent unit tide-execution-flows-matrix-remaining01.service:
 TASK/runs/matrix-remaining01/{status.json,task.log,queue.json,sequence.json}.
 Started01:58:22UTC, total9000s, child900s, queue120s. Parent leases physical3.
-Only recipe PID3771316 is SIGSTOP, start identity1849248082. The current child
-matrix-timed-dag-libtorch-streaming-confirm01 finished naturally; measurement
-lock is free. boundary-hold.json records the exact process identity.
-**After finite implementation/qualification work, verify /proc identity and SIGCONT this
-recipe only.** Do not signal wrappers or historical CPU work. Parent timeout
-continues during the hold. No measured sample was interrupted/discarded.
+The measurement boundary hold is finished. Exact recipe PID3771316 (start identity
+1849248082) was SIGCONT at02:34UTC after all development/qualification gates passed.
+boundary-hold.json records the transition. No sample was interrupted/discarded.
+Current child at resume: matrix-timed-dag-libtorch-streaming-confirm02.
+Use sequence.json for later progress. Parent total9000s timeout remains in force.
 
 Recipe launchers/remaining_family_matrix.py will collect the finished child and
 continue TDG/LibTorch/streaming confirm02/03; Settle/LibTorch both modes;
@@ -120,10 +120,17 @@ inputs and source/header identity, compiles three archive/two owner objects plus
 changed checkers, then links and checks loaders. --reuse-host permits exact
 qualified-source object reuse. Consumer helper build_capacity_client.py reuses
 unaffected objects and rebuilds resident_run/resident_capacity.
-Next: commit/push implementation; freeze
-training-records-clean01; same affected qualification (51 public cells), plus
-separate D128 allocator comparison using resident_allocation_probe.py against
-fiber-append-allocator-clean01; commit evidence separately. Resume matrix promptly.
+PASSED clean training-records-clean01 atca26b47: all three builds, components4,
+public51 (no skips) and allocator. Peak2,426,168,320→2,409,123,840bytes,
+16.26MiB (0.70%) reduction; exact semantic work/loss/output/cut checks.
+Audit launchers/training_records_evidence.py passed. Report/audit:
+docs/evidence/resident-training-records-20261002.{md,json}.
+Next implementation: physical sample slices for eager CPU/mixed consumers,
+keeping global sample IDs, whole-batch loss, accumulated gradients/None flags,
+one optimizer update and per-slice continuation. Resident sample slicing and
+multi-device mixed placement remain separate follow-up. Implement in the working
+tree while fixed-source matrix runs; perform heavy builds/gates only at a verified
+measurement boundary. Do not alter frozen source or helpers.
 
 ## Remaining scale work
 
