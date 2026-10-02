@@ -154,6 +154,27 @@ logicalB512/KV. Auditlaunchers/wide_add_evidence.py passed. No formal throughput
 recommendation/full-sizeCPUoracle/profile/repeats. No task jobs active except
 intentionally stopped historicalCPU. [Report](evidence/original-wide-add-inference-20261002.md).
 
+## Latest increment: resident capacity observations
+
+Resident C++/Python consumers now export window_events_max/window_stages_max,
+window_outputs_max and pending_peak from int64 device counters at existing
+boundaries; one combined transfer after timing. Pending high-water history
+continues with snapshots. Settle counts encoded boundary nodes,while projected
+body diagnostics omit them. No graph/library/ABI/schedule/parameter change.
+Development build-window-peaks-consumer-dev01 PASSED;window-peaks-npu-dev01
+retained FAILED solely for six new Settle count assertions(160encoded vs120body).
+Eleven other cases passed;corrected Settle six passedwindow-peaks-npu-dev02,
+without library/numerical changes. Binary sources identical between dev snapshots.
+Next: commit/push implementation,freeze window-peaks-clean01,build installed
+consumer from qualifiedretained-journals-standalone and source-values-npu objects,
+then run all34 affected sample-slicing/continuation/pool cases across FP32/FP16.
+Next scale task planned: AddSGD11cards,B1,queue/arrivals512,outputs64,trace2048,
+KV256/KVtrace8192,4GiBhead/context,60GiB/card. Offline conservative minimum≈51.132GiB.
+Three bounded stages:D512/B8 then D2048/B2 then unchanged originalD2048/B512,
+allT12/V50304/two connectedwindows. Stage inputs prepared underTASK/inputs/
+wide-training-stage{512-b8,2048-b2}-add01. Not launched yet;qualification first.
+No project jobs active except deliberately stopped historicalCPU.
+
 ## Next work
 
 Prioritize full-size training memory

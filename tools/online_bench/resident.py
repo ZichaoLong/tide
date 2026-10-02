@@ -136,7 +136,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                     count += n
                     head_chunks += (n+head_plan.rows-1)//head_plan.rows
                     counters.append(torch.stack([output.stages.reshape(()), output.events.reshape(()),
-                                                 output.full_chunks.reshape(()), output.emission_chunks.reshape(())]).clone())
+                                                 output.full_chunks.reshape(()), output.emission_chunks.reshape(()),
+                                                 output.pending_stats[1], output.output_stats[1]]).clone())
                     if observer:
                         observed = session.result()
                         if contexts:
@@ -197,8 +198,12 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 observer("updated", step, dict(values, embedding=embedding, head=head))
             if step >= warmup:
                 durations.append(elapsed); losses.append(None if loss is None else float(loss.cpu())); counts.append(count)
-                statistics.append(dict(zip(("stages", "events", "full_chunks", "emission_chunks"),
-                                           torch.stack(counters).sum(0).cpu().tolist())))
+                rows = torch.stack(counters)
+                # One boundary transfer; no per-window scalar read for metrics.
+                totals_peaks = torch.cat((rows.sum(0)[:4], rows.max(0).values)).cpu().tolist()
+                statistics.append(dict(zip(("stages", "events", "full_chunks", "emission_chunks"), totals_peaks[:4]),
+                    window_stages_max=totals_peaks[4], window_events_max=totals_peaks[5],
+                    pending_peak=totals_peaks[8], window_outputs_max=totals_peaks[9]))
                 if training:
                     statistics[-1].update(reverse_statistics)
                 statistics[-1]["head_chunks"] = head_chunks

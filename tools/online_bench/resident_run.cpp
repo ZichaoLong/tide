@@ -101,7 +101,8 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
         }
         count+=item.count;
         counters.push_back(at::stack({output.stages.reshape({}),output.events.reshape({}),
-                                     output.full_chunks.reshape({}),output.emission_chunks.reshape({})}).clone());
+                                     output.full_chunks.reshape({}),output.emission_chunks.reshape({}),
+                                     output.pending_stats[1],output.output_stats[1]}).clone());
         if(diagnostics) {
           auto value=training?training->result():inference->result();if(c.family=="settle")value=f.settle->project(value);
           value.continuation.batch_size=size;
@@ -138,8 +139,12 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
     }
     if(step>=c.warmup) {
       result.seconds.push_back(elapsed);result.losses.push_back(loss.defined()?loss.cpu().item<double>():0.);result.outputs.push_back(count);
-      auto counts=at::stack(counters).sum(0).cpu().contiguous();auto values=counts.data_ptr<Index>();
-      result.statistics.push_back({{"stages",values[0]},{"events",values[1]},{"full_chunks",values[2]},{"emission_chunks",values[3]}});
+      const auto rows=at::stack(counters);
+      // Preserve int64 counters; one boundary transfer for totals and peaks.
+      auto counts=at::cat({rows.sum(0).narrow(0,0,4),std::get<0>(rows.max(0))}).cpu().contiguous();
+      auto values=counts.data_ptr<Index>();
+      result.statistics.push_back({{"stages",values[0]},{"events",values[1]},{"full_chunks",values[2]},{"emission_chunks",values[3]},
+        {"window_stages_max",values[4]},{"window_events_max",values[5]},{"pending_peak",values[8]},{"window_outputs_max",values[9]}});
       result.statistics.back().insert(reverse_statistics.begin(),reverse_statistics.end());
       result.statistics.back()["head_chunks"]=head_chunks;
     }else result.warmup.push_back(elapsed);

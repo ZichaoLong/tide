@@ -60,6 +60,19 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
     assert got['context_storage']['policy']==('compact' if pool else 'dense')
     assert got['context_storage']['requested_bytes_per_device']==pool
     assert all(x['peak_saved_bytes']<=x['budget_bytes'] for x in got['context_storage']['devices'])
+    for step, stats in enumerate(got['statistics']):
+        windows = [r for r in actual if r['kind']=='window' and r['step']==step]
+        event_sum = sum(len(r['events']) for r in windows)
+        event_max = max(len(r['events']) for r in windows)
+        if family=='settle':
+            # Settle diagnostics project away the adapter's identity nodes;
+            # capacity counters cover the actually executed encoded graph.
+            assert stats['events']>=event_sum and stats['window_events_max']>=event_max
+        else:
+            assert stats['events']==event_sum and stats['window_events_max']==event_max
+        assert stats['window_outputs_max']==max(len(r['outputs']) for r in windows)
+        assert max(len(r['pending']) for r in windows)<=stats['pending_peak']<=forward.queue
+        assert 0<stats['window_stages_max']<=stats['stages']
     (tmp_path/'observed.json').write_text(json.dumps(dict(candidate=got,observations=actual)))
 
 

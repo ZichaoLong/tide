@@ -242,6 +242,16 @@ Construction and warmup durations are separate. A measured step includes token
 preparation/upload, online graph execution, head/loss, backward, finite checks,
 detach/optimizer and final synchronization. No independent reference is timed.
 Actual output counts and available scheduler counters accompany each sample.
+Resident step statistics also record `window_events_max`, `window_stages_max`
+and `window_outputs_max` across physical sample groups and windows, plus the
+largest observed pending-queue high-water mark `pending_peak`. Pending history
+travels with restored continuations, so this mark can include prior windows.
+These int64 device counters are cloned at existing window boundaries, reduced
+on device and downloaded together after step timing. They need no numerical
+Result export or per-event host read. Use them to diagnose declared queue/trace
+capacities; an observed peak does not prove a bound for future inputs/updates.
+Counts cover the execution graph, including Settle's identity boundary nodes
+that its projected body diagnostics omit.
 `--diagnostics` adds bounded states/routes/gradients/updates JSONL and is not a
 formal timing mode. Profiler runs and three fresh-process recommendation repeats
 remain separate requirements; one process's step timings do not satisfy them.
