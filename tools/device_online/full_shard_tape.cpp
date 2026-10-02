@@ -26,7 +26,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& source,int64_t budget,RetainedProjection* projection) {
   return retain_sharded_reverse_tape(source,budget,projection,false);
 }
-RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals) {
+RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention) {
   auto source=input;
   if(compact_journals) {
     compact_retained_journals(source.coordinator);
@@ -34,6 +34,12 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
   }
   auto bytes=sharded_reverse_tape_bytes(source)-(projection?
     projection->reusable_bytes(source.coordinator.emission.weights,source.coordinator.emission.biases):0);
+  if(attention) {
+    bytes-=attention->reusable_bytes(source.coordinator.attention,source.coordinator.fiber);
+    for(size_t i=0;i<source.states.size();++i) {
+      const auto& s=source.states[i];bytes-=attention->shard(i,source.states.size()).reusable_bytes(s.attention,s.fiber);
+    }
+  }
   const auto& emissions=source.coordinator.emission.shards;
   for(size_t i=0;i<emissions.size();++i) {
     const auto& s=emissions[i];
@@ -52,14 +58,15 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
       throw std::invalid_argument("invalid Full shard retained ownership");
   }
   auto coordinator=source.coordinator;coordinator.emission.shards.clear();
-  auto base=retain_reverse_tape(coordinator,budget,projection);
+  auto base=retain_reverse_tape(coordinator,budget,projection,false,attention);
   RetainedShardedTape out{base.graph,{base.tape,std::move(shards)},bytes};
   out.tape.coordinator.emission.shards=emissions;
   std::map<const void*,at::Tensor> copies;
   for(auto& s:out.tape.shards)for(auto* x:banks(s.full))if(x->defined()) {
     auto& copy=copies[x->unsafeGetTensorImpl()];if(!copy.defined())copy=x->clone();*x=copy;
   }
-  for(const auto& s:source.states)out.tape.states.push_back(retain_state_owner_tape(s,budget).tape);
+  for(size_t i=0;i<source.states.size();++i)
+    out.tape.states.push_back(retain_state_owner_tape(source.states[i],budget,attention?&attention->shard(i,source.states.size()):nullptr).tape);
   for(size_t i=0;i<emissions.size();++i) {
     auto& bank=out.tape.coordinator.emission.shards[i];
     if(projection) {

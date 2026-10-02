@@ -109,7 +109,9 @@ offline scheduling prepass. Conservative policy keeps dense journal copies.
 Before advancing, the owner still reserves the next window's dense bound. After
 retention it charges the actual retained bytes, so subsequent windows can reuse
 the released allowance. `retained_window_bytes` remains the dense per-window
-bound excluding shared projections; `retained_dense_bytes` reports the entire
+bound excluding shared emission/attention parameters; `retained_projection_bytes`
+and `retained_attention_bytes` report their once-per-backward-group snapshots.
+`retained_dense_bytes` reports the entire
 dense envelope and `retained_bytes` the stored total. `retained_compact_journals`
 records the policy. Temporary masks/indices need metadata workspace proportional
 to declared journal capacities, outside the retained tape/state budget. The
@@ -117,6 +119,9 @@ complete consumer planner charges this separately and still uses dense bounds;
 this optimization alone does not admit a previously refused full-size run.
 Compact retained journals are [qualified on fixed source](evidence/resident-retained-journals-20261002.md),
 including independent VJPs, multi-update/continuation checks and allocator calibration.
+Attention snapshot reuse requires separate immutable qualification and allocator
+calibration (pending; see STATUS). Its implementation/lifetime contract is in [retained windows](resident-retained.md). A retained-byte decrease
+alone does not establish a complete allocator-peak decrease or a throughput gain.
 
 `snapshot_device(max_bytes=...)` saves a detached numerical continuation in opaque
 NPU buffers; `restore_device(saved)` switches to it on the **same live owner**.

@@ -133,14 +133,15 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     }
     s.gradient=parts;reduction.close();sequence.close();close_sharded_graph_vjp(gradients);
     out.statistics["retained_projection_bytes"]=s.projection_bytes;
+    out.statistics["retained_attention_bytes"]=s.attention_bytes;
     out.statistics["retained_window_bytes"]=s.bytes_per_window;
     out.statistics["retained_windows"]=s.saved.size();
     out.statistics["retained_bytes"]=s.saved_bytes;
-    out.statistics["retained_dense_bytes"]=s.saved.size()*s.bytes_per_window+s.projection_bytes;
+    out.statistics["retained_dense_bytes"]=s.saved.size()*s.bytes_per_window+s.projection_bytes+s.attention_bytes;
     out.statistics["retained_compact_journals"]=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
     out.statistics["canonical_stream_reserved_bytes"]=reduction.stream_reserved_bytes();
     out.statistics["canonical_stream_chunks"]=reduction.stream_chunks();
-    s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.saved_bytes=0;return out;
+    s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.attention_snapshot={};s.saved_bytes=0;return out;
   }catch(...){s.failed=true;throw;}
 }
 } // namespace tide::training_detail

@@ -8,8 +8,20 @@ overwriting the original forward owner does not invalidate this saved tape.
 Construction admits the complete declared tensor footprint before copying;
 the caller must also budget all retained windows, reverse buffers and CANN workspace.
 
-This first implementation copies parameter banks for each tape. A public owner
-can later share an immutable parameter generation after proving its lifetime.
+The standalone retention functions copy parameter banks for each tape. Guarded
+public training owners additionally share immutable emission and attention
+parameter snapshots within one backward group. Attention snapshots include QKV,
+output projections, parameter biases, decay and pool weights. They never include
+KV, cache log-bias, lengths or journals; those still describe each actual window.
+Fiber groups can contain fresh gathers, so the cache checks the underlying live
+forward banks' identity/version/layout, plus group geometry and alias structure.
+It clones the first group's values rather than borrowing writable forward banks.
+CANN publication need not increment ATen versions; the owner's prohibition on
+publication with outstanding windows is essential. Backward, explicit detach
+and close discard the cache, and a later update captures the new values.
+The dense pre-advance budget charges these shared parameters once and dynamic
+records per window. Complete-consumer memory admission remains conservative
+until separate allocator calibration justifies any change to its estimate.
 The component does not silently detach state or pending messages. Its first-order
 parameter accumulation assumes that retained forwards belong to one parameter
 generation; it does not differentiate through intervening optimizer updates.

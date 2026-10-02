@@ -5,7 +5,8 @@ from tidegraph.compare import equivalent
 from resident_training_cases import inputs, compare_parameters, compare_gradients, tree_equal
 
 
-def training_case(target, family, schedule, kind, tmp_path, *, runtime, roots, terms, mode="hard", clear=False):
+def training_case(target, family, schedule, kind, tmp_path, *, runtime, roots, terms, mode="hard", clear=False,
+                  training_limits=None, root_modes=("all", "zero", "none")):
     r, cpu = runtime(family, target, schedule, mode, clear), runtime(family, "cpu", mode=mode, clear=clear)
     names, parameters = zip(*((n, p) for n, p in cpu.execution_model.named_parameters() if p.requires_grad))
     settings = dict(lr=.001, weight_decay=.01)
@@ -14,9 +15,10 @@ def training_case(target, family, schedule, kind, tmp_path, *, runtime, roots, t
     values = torch.sin(torch.arange(48, dtype=torch.float32).reshape(2, 6, 4) * .37) * .1
     values[0, 1].zero_()
     oracle = cpu.session(2)
+    statistics = []
     with torch.no_grad():
-        session = r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **settings)])
-        for step, root_mode in enumerate(("all", "zero", "none")):
+        session = r.training_session(2, optimizer=kind, groups=[dict(parameters=list(names), **settings)], limits=training_limits)
+        for step, root_mode in enumerate(root_modes):
             x = values.clone().requires_grad_(True)
             cotangents, objectives = [], []
             for start, stop in ((step*2, step*2+1), (step*2+1, step*2+2)):
@@ -34,6 +36,7 @@ def training_case(target, family, schedule, kind, tmp_path, *, runtime, roots, t
                 expected = (torch.autograd.grad(torch.stack(objectives).sum(), (*parameters, x), allow_unused=True)
                             if objectives else (None,) * (len(parameters)+1))
             gradient = session.backward(cotangents)
+            statistics.append(dict(gradient.statistics))
             compare_gradients(gradient, cpu.execution_model, {id(p): g for p, g in zip(parameters, expected)}, x, expected[-1])
             if step == 0:
                 # No initial state was supplied, even though later caches exist.
@@ -50,7 +53,8 @@ def training_case(target, family, schedule, kind, tmp_path, *, runtime, roots, t
                 session.save(path)
                 checkpoint = session.checkpoint()
                 session.close()
-                session = r.training_session(2, checkpoint=path)
+                session = r.training_session(2, checkpoint=path, limits=training_limits)
                 tree_equal(checkpoint, session.checkpoint())
             oracle.detach()
         session.close()
+    return statistics

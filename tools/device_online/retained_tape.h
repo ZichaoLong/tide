@@ -1,6 +1,7 @@
 #pragma once
 #include "graph_vjp.h"
 #include "retained_projection.h"
+#include "retained_attention.h"
 #include <memory>
 
 namespace tide::device_online {
@@ -15,7 +16,7 @@ RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes)
 // Only public training owners use this overload within one guarded update.
 // tensor_bytes counts newly allocated buffers; the cache owns earlier copies.
 RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*);
-RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*,bool compact_journals);
+RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*,bool compact_journals,RetainedAttention* = nullptr);
 int64_t reverse_tape_bytes(const ReverseTape&); // Shape-only admission before advance/copy.
 // Add a later window's boundary adjoints to the earlier window's own roots.
 // The actual pending-message match and every connection decision are device work.

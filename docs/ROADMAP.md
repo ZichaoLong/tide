@@ -270,6 +270,11 @@ allocator peak1.740→1.356GiB(-22.10%),identical loss/events/output/cut; full c
 admission still charges dense retained envelopes
 ([evidence](evidence/resident-retained-journals-20261002.md)).
 
+Update-scoped immutable attention snapshots are implemented for single/sharded
+training owners. Actual forward-bank guards cover fresh grouped fiber gathers;
+dynamic KV/log-bias/journals stay per-window. Development Python16 andnative128trajectories/2,048windows/512updates passed;
+immutable qualification andallocator calibration remain pending (see STATUS). Complete-consumer admission has not been reduced.
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

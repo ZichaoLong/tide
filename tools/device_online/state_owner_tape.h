@@ -2,6 +2,7 @@
 #include "state_reverse_view.h"
 
 namespace tide::device_online {
+class RetainedAttention;
 struct StateOwnerValues {std::vector<int64_t> nodes;at::Tensor values,present;};
 // Local parameter/cache records, with a static inverse node map. Actual event
 // and source journals are packed from the candidate's coordinator tape later;
@@ -17,6 +18,7 @@ struct StateOwnerTape {
 struct RetainedStateOwnerTape {StateOwnerTape tape;int64_t tensor_bytes;};
 int64_t state_owner_tape_bytes(const StateOwnerTape&);
 RetainedStateOwnerTape retain_state_owner_tape(const StateOwnerTape&,int64_t tensor_budget);
+RetainedStateOwnerTape retain_state_owner_tape(const StateOwnerTape&,int64_t tensor_budget,RetainedAttention*);
 // Publication targets actual forward storage, never grouped fiber tape gathers.
 struct StateOwnerBanks {
   std::vector<int64_t> global_nodes;

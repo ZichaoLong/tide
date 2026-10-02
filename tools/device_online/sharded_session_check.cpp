@@ -3,6 +3,7 @@
 #include "precision_graph_fixture.h"
 #include "precision_graph_profiles.h"
 #include "retained_cache_fixture.h"
+#include "retained_attention_check.h"
 #include "full_vjp_fixture.h"
 #include "portable_torch/runtime.hpp"
 #include "../../cpp/bench/streaming.h"
@@ -119,6 +120,11 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     auto wrong=roots;std::swap(wrong[0],wrong[1]);test::train_reject([&]{session->backward(wrong);},"stale root order accepted");
     wrong=roots;wrong[0].token.session++;test::train_reject([&]{session->backward(wrong);},"foreign token accepted");
     auto grad=session->backward(roots);test::train_gradients(grad,ref,cpu);test::train_gradients(grad,wide,cpu);kept_gradient=grad;
+    const auto attention=grad.statistics.at("retained_attention_bytes");
+    require((attention>0)==(cache>=0),"attention snapshot scope differs from model");
+    const auto dense=grad.statistics.at("retained_windows")*grad.statistics.at("retained_window_bytes")+
+      grad.statistics.at("retained_projection_bytes")+attention;
+    require(grad.statistics.at("retained_dense_bytes")==dense,"shared parameter snapshot counted per window");
     require(grad.statistics.at("retained_compact_journals")==compact_journals,"retained journal policy changed");
     if(compact_journals)require(grad.statistics.at("retained_bytes")<grad.statistics.at("retained_dense_bytes"),"retained journals did not shrink");
     test::train_reject([&]{session->backward(roots);},"consumed roots reused");
@@ -188,6 +194,7 @@ int main(int argc,char** argv) {
     if(args.device_spec=="auto"||(args.dtype!=at::kFloat&&args.dtype!=at::kHalf)||count<1||count>4||resume<0||resume>4)throw std::invalid_argument("explicit NPU FP32/FP16 and 1..4 owners required; resume=0 tests legacy single owner");
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
+    test::retained_attention_check(d,args.dtype);
     for(int i=0;i<count;++i)placement.devices.emplace_back(d.type(),d.index()+i);
     int cases=0;auto run=[&](int profile,int cache,bool prefill,ResidentOptimizerKind kind,const std::string& emit) {
       try{trajectory(placement,resume,args.dtype,profile,cache,prefill,kind,emit,explicit_owners,emission,accumulation,contexts,compact,compact_journals);++cases;

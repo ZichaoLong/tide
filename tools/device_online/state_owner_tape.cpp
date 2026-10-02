@@ -1,4 +1,5 @@
 #include "state_owner_tape.h"
+#include "retained_attention.h"
 #include <ATen/core/grad_mode.h>
 #include <limits>
 #include <map>
@@ -35,13 +36,21 @@ int64_t state_owner_tape_bytes(const StateOwnerTape& source) {
   return int64_t(bytes);
 }
 RetainedStateOwnerTape retain_state_owner_tape(const StateOwnerTape& source,int64_t budget) {
+  return retain_state_owner_tape(source,budget,nullptr);
+}
+RetainedStateOwnerTape retain_state_owner_tape(const StateOwnerTape& source,int64_t budget,RetainedAttention* attention) {
   if(at::GradMode::is_enabled()||budget<1)throw std::invalid_argument("state owner retention requires bounded no-grad context");
-  const auto bytes=state_owner_tape_bytes(source);
+  const auto bytes=state_owner_tape_bytes(source)-(attention?attention->reusable_bytes(source.attention,source.fiber):0);
   if(bytes>budget)throw std::invalid_argument("retained state owner tape exceeds tensor budget");
   RetainedStateOwnerTape out{source,bytes};auto buffers=tensors(out.tape);std::map<const void*,at::Tensor> copies;
+  if(attention)attention->reuse(copies,source.attention,source.fiber);
   for(auto* x:buffers)if(x->defined()) {
     if(x->device()!=source.state.decay.device()||x->requires_grad())throw std::invalid_argument("state owner tape crosses devices or autograd ownership");
     copies.emplace(x->unsafeGetTensorImpl(),at::Tensor());
+  }
+  if(attention) {
+    attention->capture(source.attention,source.fiber);
+    attention->seed(copies,source.attention,source.fiber);
   }
   for(auto* x:buffers)if(x->defined()) {
     auto& clone=copies.at(x->unsafeGetTensorImpl());if(!clone.defined())clone=x->clone();*x=clone;

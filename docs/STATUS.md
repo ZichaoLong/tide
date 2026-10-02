@@ -1,7 +1,9 @@
 # Current handoff
 
-Updated 2026-10-02. **ACTIVE; continue autonomously.** Implementation, commits and
-pushes authorized. No pause instruction; no subagents. Repository
+Updated 2026-10-02. **PAUSED at the user's requested next-commit boundary.**
+The current attention snapshot increment is committed/pushed; do not start
+qualification, builds, benchmarks or another implementation until the user
+confirms resumption. No subagents. Repository
 /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
 Reference repositories and ObsidianVault remain read-only. Re-entry:
@@ -150,7 +152,55 @@ Next independentlyinspectAttention retained state parameter/KVlifetimes;do not
 blindly lower its admission constants or wait idle forcards.
 HistoricalCPU remainsdeliberatelystopped.
 
-## Next work and remaining goal
+## Attention parameter snapshots: implementation checkpoint, qualification pending
+
+This commit implements update-scoped immutable attention parameter snapshots in
+single/sharded training owners. Actual forward banks guard identity/version,
+including fresh grouped fiber gathers. QKV/output matrices, parameter biases,
+decay and pool weights share an immutable clone; dynamic KV/log-bias/lengths/
+journals remain independent per-window. CANN publication cannot rely on ATen
+versions alone: public owners forbid updates while tapes remain outstanding.
+Backward/detach/close reset the snapshot. Dense pre-advance admission charges
+attention snapshots once; `retained_attention_bytes` reports that storage.
+Complete-consumer memory admission has NOT been reduced.
+
+All five frozen development jobs passed on snapshotTASK/sources/attention-snapshot-dev01
+(based on c0c54da with preserved dirty-source inventory):
+- build-attention-snapshot-{standalone,python,consumer}-dev01.
+- attention-snapshot-python-dev01:16checks,0skips,including6new event/fiber
+  mixed-head independentCPU-autograd,3nonzero updates,checkpoint suffix,exact
+  retained-byte budget,one-byte-short pre-advance refusal anddetach/retry.
+- attention-snapshot-native-dev01:4cells,128trajectories/2,048windows/512updates,
+  FP32/FP16 against independentCPUFP32/FP64;dense/compact journals,2→2 and2→legacy
+  single-owner restore,all/None/zero roots,metadata guards andsnapshot poisoning.
+  Direct synthetic checks prove fresh-gather sharing,clone ownership,version/
+  replacement rejection andpost-release tape survival. Allleases released.
+
+The current implementation/test sources were hash-compared to the frozen dev
+snapshot before commit. Only handoff/docs differ. **Not yet clean immutable
+qualification,allocator calibration,new profiling,or original-size training.**
+No active new taskjobs;historicalCPU remains deliberatelySIGSTOP and untouched.
+Public core/CANN kernels/ABI unchanged;all8private training-Impl users and3retention
+objects rebuilt. Existing clean dependencies remain below;do not call dev builds
+qualified. Task-local helpersprepared,notlaunched:
+`launchers/build_attention_snapshot.py`, `launchers/attention_snapshot_memory.py`.
+After user confirmation,create attention-snapshot-clean01 at THIS implementation
+commit;reuse byte-verified dev objects via --reuse-host,then independently run
+clean native/Python/client gates,memory comparison,profile,and evidence commit.
+Planned buildshape:
+`freeze_run.py --name build-attention-snapshot-standalone-clean01 --snapshot
+attention-snapshot-clean01 --commit IMPLEMENTATION_COMMIT -- {python}
+TASK/launchers/build_attention_snapshot.py attention-snapshot-standalone-clean01
+--reuse-host attention-snapshot-standalone-dev01`
+Repeat with --runtime python andcorresponding Python names;clientbuildhelper
+`build_capacity_client.py --build TASK/builds/attention-snapshot-standalone-clean01
+--out TASK/builds/attention-snapshot-consumer-clean01 --reuse-client
+TASK/builds/attention-snapshot-consumer-dev01`.
+Existing preparedten-card Add task above remains unsubmitted;do notqueue while
+paused. Full AttentionFP32 trainingstill exceeds theconservative admission even
+atminimalphysicalrows;sharingattention snapshots alone doesnotclose thatgap.
+
+## Next work after user confirmation and remaining goal
 
 Reduce proven storage/lifecycle overheads,then continue bounded original training assessment. Continue actual
 full-size complete training and finite CPU/screened-mixed/resident comparisons;
@@ -177,7 +227,7 @@ freeze_run.py:background.slice/Nice10,2buildworkers,boundedtasks. Lastfree:
 data190GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
 Formal timing lockTASK/online-measurement.lock.
 
-Latest resident librariesretained-journals-{standalone,python}-clean01;core
+Latest resident librariesshared-packets-{standalone,python}-clean01;core
 placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumeradd-capacity-consumer-clean01;
 CPUsource-values-cpu-clean01. Earlier source-values-npu/context-pool consumers
 stay qualified for their evidence. Standalone/Python runtimes remain separate.
