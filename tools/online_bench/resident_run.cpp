@@ -34,7 +34,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   std::vector<at::Device> memory_devices;
   for(Index i=0;i<c.devices;++i)memory_devices.emplace_back(device.type(),device.index()+i);
   MemoryRecord memory(memory_devices);
-  ResidentMeasurements result;result.limits=resident_limits(c,device);
+  ResidentMeasurements result;result.limits=resident_limits(c,device);result.phases.enabled=c.phase_timing;
   result.head=head_budget(result.limits.forward.outputs,p.width,p.vocab,c.runtime.dtype==at::kHalf?2:4,
     c.training,c.head_workspace_bytes,c.chunk_policy=="aggressive");
   prepare_capacity(p,c,memory_devices,result);
@@ -125,6 +125,8 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       if(!contexts.empty())contexts.store(index,save_context());
     }
     position+=c.windows*p.tokens;
+    double sample_seconds=-1;
+    if(c.phase_timing&&training){sync();sample_seconds=seconds(begin);}
     if(loss.defined()&&!at::isfinite(loss).all().item<bool>())throw std::runtime_error("nonfinite consumer loss; optimizer not applied");
     if(training) {
       optimizer->prepare(ge,gh);
@@ -134,6 +136,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
       optimizer->commit();
     }
     sync();const auto elapsed=seconds(begin);
+    result.phases.add(elapsed,sample_seconds,step<c.warmup);
     if(diagnostics) {
       auto checkpoint=training?training->checkpoint():tide::ResidentTrainingCheckpoint{};
       resident_updated_json(*diagnostics,step,f,training?&checkpoint:nullptr,embedding,head);

@@ -5,6 +5,7 @@ from tidegraph import GraphConfig, GraphRuntime, ExecutionOptions, ExecutionPlac
 from tidegraph.runtime import synchronize
 from .fixture import build_model, encode
 from .memory import MemoryRecord
+from .phase_timing import PhaseTiming
 
 
 def runtime_for(packet, *, family, implementation, device, dtype, schedule, preset, trace=False,
@@ -81,7 +82,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
         device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0,
-        auto_sample_chunks=False):
+        auto_sample_chunks=False, phase_timing=False):
+    phases = PhaseTiming(phase_timing)
     if type(auto_sample_chunks) is not bool:
         raise ValueError("auto-sample-chunks must be boolean")
     if type(context_memory_bytes) is not int or not 0 <= context_memory_bytes < 2**63:
@@ -100,7 +102,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             placement=placement, observer=observer, parameter_budget=parameter_budget,
             resident_library=resident_library, resident_limits=resident_limits, training_limits=training_limits,
             resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes, device_memory_bytes=device_memory_bytes,
-            sample_chunk_rows=sample_chunk_rows, context_memory_bytes=context_memory_bytes,auto_sample_chunks=auto_sample_chunks)
+            sample_chunk_rows=sample_chunk_rows, context_memory_bytes=context_memory_bytes,auto_sample_chunks=auto_sample_chunks,
+            phase_timing=phase_timing)
     if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3 or device_memory_bytes or context_memory_bytes or auto_sample_chunks:
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
@@ -169,6 +172,9 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 # graph root while allocating the next physical slice.
                 result = values = item = partial = None
             position += windows_per_step*c["tokens"]
+            sample_seconds = None
+            if phase_timing and opt:
+                synchronize(runtime.device); sample_seconds = time.perf_counter()-begin
             if opt:
                 # One finite agreement before any parameter/optimizer update.
                 flags = [torch.isfinite(p.grad).all() for p in named.values() if p.grad is not None]
@@ -178,6 +184,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                     observer("gradients", step, named)
                 opt.step()
         synchronize(runtime.device); elapsed = time.perf_counter() - begin
+        phases.add(elapsed, sample_seconds, step < warmup)
         if observer:
             observer("updated", step, named)
         if step >= warmup:
@@ -200,5 +207,5 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 batch_execution=dict(logical_batch=c["batch"], requested_sample_chunk_rows=sample_chunk_rows,
                                      effective_sample_chunk_rows=chunk, physical_chunks=len(sessions)),
                 runtime=runtime.manifest(), diagnostics=diagnostics or observer is not None,
-                memory=memory.record(),
+                memory=memory.record(), phase_timing=phases.record(),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")

@@ -36,6 +36,7 @@ def run(packet, args):
         command.append("--"+name.replace("_", "-")+"="+getattr(args,name))
     if args.training: command.append("--training")
     if args.diagnostics: command.append("--diagnostics")
+    if getattr(args,"phase_timing",False): command.append("--phase-timing")
     command.extend(native_arguments(args))
     start = time.perf_counter()
     with (args.output_dir/"consumer.log").open("w") as stream:

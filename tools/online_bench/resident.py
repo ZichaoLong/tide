@@ -1,5 +1,6 @@
 """Whole-model consumer of the public C++/CANN device-window interfaces."""
 import time
+from .phase_timing import PhaseTiming
 from dataclasses import replace
 import torch
 from tidegraph import External, ResidentLimits, ResidentTrainingLimits, ResidentPlacement
@@ -49,7 +50,8 @@ def gradient_diagnostics(runtime, gradient, embedding, head, ge, gh):
 def run(packet, *, family, implementation, device, dtype, schedule, training, optimizer, steps, warmup,
         windows_per_step, native_library, diagnostics, placement, observer, parameter_budget,
         resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes, device_memory_bytes=0,
-        sample_chunk_rows=0, context_memory_bytes=0, auto_sample_chunks=False):
+        sample_chunk_rows=0, context_memory_bytes=0, auto_sample_chunks=False, phase_timing=False):
+    phases = PhaseTiming(phase_timing)
     if implementation != "native" or torch.device(device).type != "npu":
         raise ValueError("resident consumer requires explicit native NPU execution")
     if dtype not in {"float32", "float16"}:
@@ -179,6 +181,9 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 if contexts:
                     contexts.save(index)
             position += windows_per_step*c["tokens"]
+            sample_seconds = None
+            if phase_timing and training:
+                sync(); sample_seconds = time.perf_counter()-begin
             if loss is not None and not torch.isfinite(loss).all().item():
                 raise RuntimeError("nonfinite consumer loss; optimizer not applied")
             if training:
@@ -193,6 +198,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 optimizer_owner.commit()
             window = output = None
             sync(); elapsed = time.perf_counter()-begin
+            phases.add(elapsed, sample_seconds, step < warmup)
             if observer:
                 if training:
                     checkpoint = session.checkpoint()
@@ -232,7 +238,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         head_memory=vars(head_plan),
         context_storage=dict(contexts.record(),requested_bytes_per_device=context_memory_bytes),
         memory_admission=capacity,
-        memory=memory.record(),
+        memory=memory.record(), phase_timing=phases.record(),
         precision=dict(payload=dtype, loss="float32", adjoints="float32", optimizer_masters="float32"),
         input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step, final_cut=cut,
         runtime=manifest, diagnostics=diagnostics or observer is not None,

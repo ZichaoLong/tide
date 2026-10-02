@@ -1,4 +1,5 @@
 #include "consumer.h"
+#include "phase_timing.h"
 #include "memory.h"
 #include <tide/greedy.h>
 #include <tide/stream.h>
@@ -60,6 +61,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   portable_torch::synchronize(device);const auto construction=seconds(start);
   memory.capture("construction");
   std::vector<double> durations,losses,warmup_times;std::vector<Index> outputs;std::vector<std::map<std::string,Index>> statistics;
+  PhaseTiming phases{c.phase_timing};
   Index position=0;at::AutoGradMode mode(c.training);
   for(Index step=0;step<c.steps+c.warmup;++step) {
     portable_torch::synchronize(device);start=Clock::now();if(optimizer)optimizer->zero_grad();
@@ -92,6 +94,8 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
       if(optimizer)detach(q);
     }
     position+=c.windows*p.tokens;
+    double sample_seconds=-1;
+    if(c.phase_timing&&optimizer){portable_torch::synchronize(device);sample_seconds=seconds(start);}
     if(optimizer) {
       std::vector<Tensor> flags;for(const auto& owner:f.parameters.owners())if(owner.value.grad().defined())flags.push_back(at::isfinite(owner.value.grad()).all());
       if(!flags.empty()&&!at::stack(flags).all().item<bool>())throw std::runtime_error("nonfinite gradient; optimizer not applied");
@@ -99,6 +103,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
       optimizer->step();
     }
     portable_torch::synchronize(device);const auto elapsed=seconds(start);
+    phases.add(elapsed,sample_seconds,step<c.warmup);
     if(diagnostics)parameters_json(*diagnostics,step,f.parameters,false);
     if(step>=c.warmup){durations.push_back(elapsed);losses.push_back(loss.defined()?loss.detach().cpu().item<double>():0.);outputs.push_back(count);statistics.push_back(stats);}
     else warmup_times.push_back(elapsed);
@@ -127,7 +132,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";
   bool first=true;for(const auto& [name,value]:placement.record()){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<quoted(value);}out<<"}}"
-     <<",\"memory\":"<<memory.json()
+     <<",\"memory\":"<<memory.json()<<",\"phase_timing\":"<<phases.json()
      <<",\"timing\":\"input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference\"}\n";
   return out.str();
 }

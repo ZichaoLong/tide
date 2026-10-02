@@ -6,7 +6,7 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
 `python scripts/status.py`. Latest implementation **4467493** pushed and qualified;
-its reviewed evidence **f30e83f** is pushed.
+its reviewed evidence **f30e83f** and the bounded Add audit **811196f** are pushed.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. Reference repositories and
 ObsidianVault are read-only.
@@ -63,11 +63,34 @@ peak43197837312bytes, outputs96/events9265/cut408, prior loss matches. All memor
 checks pass. Projection3057.316969s>3000s, so B512 was not started.
 [Evidence](evidence/original-width-add-projection-borrow-20261003.md).
 Audit: `python TASK/launchers/wide_add_projection_borrow_evidence.py 44674936efcc4177d4683a7e8542816aec0928eb`.
-Next implement optional synchronized consumer phase timing: separate sample work
-from once-per-update optimizer work (including finite checks/publication). Disabled
-by default; no per-event timing. Validate all consumer entrypoints, then one bounded
-cost diagnostic only. Keep3000s cap, safety factor and original refusals; no blind
-same-pilot retry or full-size execution based solely on a revised assumption.
+Consumer-only phase timing passed development checks; this commit implements it.
+Clean fixed-source qualification is next, not yet passed.
+`--phase-timing` defaults off. Training synchronizes all resolved devices after
+sample work and before final finite checks/update/publication; both measured and
+warmup phases sum to complete time. Inference adds no middle synchronization.
+No core/backend/kernel or numerical/update-boundary changes. New directed tests
+exercise actual CLI on/off, independent CPU states/gradients/updates/continuation,
+physical sample chunks, FP32/FP64 CPU and FP32/FP16 single/two-card NPU.
+
+Development builds `build-phase-timing-{cpu,consumer}-dev01` and corrected tests
+`phase-timing-{cpu,npu}-dev02` are terminal passed: CPU13/NPU8,40 actual CLI
+candidates, no skips. Two-card lease3,9 released. Source phase-timing-dev02 has
+consumer hashes matching dev01 binaries. Original CPU dev01 collection failure
+(test dtype parameter-name collision) remains failed; only the test name changed.
+
+Next commit/push this implementation, freeze `phase-timing-clean01` at its exact
+SHA; build `phase-timing-{cpu,consumer}-clean01` via build_source_consumer.py and
+build_capacity_client.py using source/header/options-verified dev01 objects with
+fresh links. Use unchanged projection-borrow-standalone-clean01 resident backend.
+Then run `phase-timing-{cpu,npu}-clean01` with the same test selection as dev02:
+CPU13 (not test_npu), NPU8 (test_npu_phase_timing), NPU2/queue120s, timeout600;
+all jobs use frozen source,background.slice,Nice10,build2. Logs/status TASK/runs;
+units tide-execution-flows-NAME.service. Inspect every terminal record and run
+`TASK/launchers/phase_timing_evidence.py <full implementation SHA>`; evidence is
+committed separately after passing. No active or queued current job now.
+Only after qualification consider one bounded cost diagnostic; keep3000s cap,
+1.15 safety factor and original refusals. No full-size execution based solely on
+a revised assumption. Pause/report after this reviewable increment per user.
 
 Previous789e1a5 original-width Add nine-card B4/physicalB2 pilot passed:
 21.179427721s,construction84.305374079s,peak47394238464bytes,loss31.58603858947754,
@@ -108,8 +131,8 @@ Old/new memory baseline consumer `gradient-lifetime-consumer-clean01` is retaine
 Objects/dependencies reused only with source/header/options/hash verification;
 consumer freshly linked. No full rebuild claim.
 
-All projection-borrow development6/qualification8 and latest wide Add jobs are
-terminal passed. No active or queued task job. Units `tide-execution-flows-NAME.service`, logs/status
+All current development, projection-borrow qualification and latest wide Add jobs
+are terminal passed except the preserved CPU dev01 collection failure. No active or queued task job. Units `tide-execution-flows-NAME.service`, logs/status
 `TASK/runs/NAME`; inspect `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
 stop via `systemctl --user stop UNIT` only if needed.
 **Preserve deliberately SIGSTOPped historical-cpu-attention-01**: never resume,

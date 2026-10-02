@@ -20,6 +20,7 @@ Config parse(int argc,char** argv) {
     const auto key=arg.substr(0,equal);auto value=equal==std::string::npos?std::string():arg.substr(equal+1);
     if(arg=="--training"){c.training=true;continue;}
     if(arg=="--diagnostics"){c.diagnostics=true;continue;}
+    if(arg=="--phase-timing"){c.phase_timing=true;continue;}
     if(arg=="--packed-sources"){c.packed_sources=true;continue;}
     if(arg=="--batch-next"){c.batch_next=true;continue;}
     if(arg=="--auto-sample-chunks"){c.auto_sample_chunks=true;continue;}

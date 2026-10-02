@@ -3,6 +3,7 @@
 #include "head_budget.h"
 #include "capacity.h"
 #include "memory.h"
+#include "phase_timing.h"
 #include <tide/resident_training.h>
 #include <array>
 namespace tide_flow {
@@ -28,6 +29,7 @@ struct ResidentMeasurements {
   Index cut=0;
   Index sample_rows=0,sample_chunks=1,accumulation_budget=0;
   std::vector<double> seconds,warmup,losses;
+  PhaseTiming phases;
   std::vector<Index> outputs;
   std::vector<std::map<std::string,Index>> statistics;
   tide::ResidentTrainingLimits limits;

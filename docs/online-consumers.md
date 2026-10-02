@@ -235,6 +235,30 @@ may already have completed, and the record does not imply rollback or a certifie
 benchmark. The LibTorch wrapper carries forward a failed child record only when
 its workload identity matches; malformed or mismatched records remain failures.
 
+`--phase-timing` optionally separates synchronized wall time within each complete
+step. It works through the shared launcher and direct C++/Python consumers,
+including multi-device resident training. The default is off, with empty phase
+arrays and no added synchronization. When enabled, `phase_timing.measured` and
+`phase_timing.warmup` align with `seconds` and `warmup_seconds`:
+
+- `sample_work_seconds` covers all physical sample chunks and connected windows:
+  input preparation/upload, forward/loss, backward, accumulation and continuation.
+  Existing per-chunk checks and eager gradient zeroing remain in this phase.
+- `optimizer_seconds` starts after **all resolved devices** have synchronized,
+  before final finite checks, the single logical update and parameter publication;
+  it ends at the existing final synchronization. Inference records its entire
+  elapsed time as sample work and zero optimizer time, without an extra boundary.
+
+The two values sum to the existing complete-step elapsed time. The extra training
+synchronization is included in sample work; this is an instrumented diagnostic,
+not an uninstrumented throughput result. Diagnostic observables remain timed
+where they were already collected. Neither phase is pure kernel time. The split
+does not move any numerical work, update boundary or scheduling decision.
+Do not multiply once-per-update costs by sample count when making an estimate,
+or treat a phase-based estimate as measured larger-batch throughput. Preserve
+the measured pilot, extrapolation assumptions, original failures and safety caps;
+larger models/batches still require actual execution and memory calibration.
+
 For eager native and standalone LibTorch consumers, `--workers` selects the
 existing node worker pool independently of ATen intra-op `--threads`.
 `--packed-sources` and `--batch-next` expose the existing packed source transport

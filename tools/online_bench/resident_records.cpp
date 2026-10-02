@@ -37,6 +37,7 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
      <<",\"parameters\":"<<p.parameters()<<",\"construction_seconds\":"<<r.construction;
   auto array=[&](const std::string& name,const auto& values){out<<','<<quoted(name)<<":[";bool first=true;for(const auto v:values){if(!first)out<<',';first=false;out<<v;}out<<']';};
   array("seconds",r.seconds);array("warmup_seconds",r.warmup);array("outputs",r.outputs);
+  out<<",\"phase_timing\":"<<r.phases.json();
   out<<",\"losses\":[";for(size_t i=0;i<r.losses.size();++i){if(i)out<<',';if(r.outputs[i])out<<r.losses[i];else out<<"null";}out<<']';
   out<<",\"statistics\":[";bool first=true;for(const auto& s:r.statistics){if(!first)out<<',';first=false;out<<'{';bool field=true;
     for(const auto& [k,v]:s){if(!field)out<<',';field=false;out<<quoted(k)<<':'<<v;}out<<'}';}out<<']';

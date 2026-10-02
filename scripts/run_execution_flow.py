@@ -35,6 +35,8 @@ def main():
     p.add_argument("--native-library", type=Path)
     p.add_argument("--native-binary", type=Path)
     p.add_argument("--diagnostics", action="store_true")
+    p.add_argument("--phase-timing", action="store_true",
+                   help="synchronize before optimizer and record sample-work/update wall times; instrumentation cost is included")
     add_arguments(p)
     for name in ("read", "control", "selection", "events"):
         p.add_argument("--"+name, default="auto")
@@ -87,6 +89,7 @@ def python_run(packet,a):
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
                workers=a.workers,packed_sources=a.packed_sources,batch_next=a.batch_next,
+               phase_timing=a.phase_timing,
                sample_chunk_rows=a.sample_chunk_rows, context_memory_bytes=a.resident_context_bytes,
                parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None,
                **python_arguments(a,device))
