@@ -30,6 +30,10 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
   return retain_sharded_reverse_tape(input,budget,projection,compact_journals,attention,nullptr);
 }
 RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention,RetainedFull* full) {
+  return retain_sharded_reverse_tape(input,budget,projection,compact_journals,attention,full,false);
+}
+RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention,RetainedFull* full,bool borrow_private_projection) {
+  if(borrow_private_projection&&!projection)throw std::invalid_argument("private projection borrowing requires a lifetime owner");
   auto source=input;
   if(compact_journals) {
     compact_retained_journals(source.coordinator);
@@ -66,7 +70,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
       throw std::invalid_argument("invalid Full shard retained ownership");
   }
   auto coordinator=source.coordinator;coordinator.emission.shards.clear();
-  auto base=retain_reverse_tape(coordinator,budget,projection,false,attention,full);
+  auto base=retain_reverse_tape(coordinator,budget,projection,false,attention,full,borrow_private_projection);
   RetainedShardedTape out{base.graph,{base.tape,std::move(shards)},bytes};
   out.tape.coordinator.emission.shards=emissions;
   std::map<const void*,at::Tensor> copies;
@@ -82,7 +86,7 @@ RetainedShardedTape retain_sharded_reverse_tape(const ShardedReverseTape& input,
   for(size_t i=0;i<emissions.size();++i) {
     auto& bank=out.tape.coordinator.emission.shards[i];
     if(projection) {
-      auto& snapshot=projection->shard(i,emissions.size());snapshot.capture(bank.weights,bank.biases);
+      auto& snapshot=projection->shard(i,emissions.size());snapshot.capture(bank.weights,bank.biases,borrow_private_projection);
       bank.weights=snapshot.retained()[0];bank.biases=snapshot.retained()[1];
     } else {bank.weights=bank.weights.clone();bank.biases=bank.biases.clone();}
   }

@@ -19,6 +19,8 @@ RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes)
 RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*);
 RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*,bool compact_journals,RetainedAttention* = nullptr);
 RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*,bool compact_journals,RetainedAttention*,RetainedFull*);
+// Internal training owner only: banks stay frozen until every reverse program closes.
+RetainedTape retain_reverse_tape(const ReverseTape&,int64_t tensor_budget_bytes,RetainedProjection*,bool compact_journals,RetainedAttention*,RetainedFull*,bool borrow_private_projection);
 int64_t reverse_tape_bytes(const ReverseTape&); // Shape-only admission before advance/copy.
 // Add a later window's boundary adjoints to the earlier window's own roots.
 // The actual pending-message match and every connection decision are device work.

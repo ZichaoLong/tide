@@ -23,6 +23,21 @@ Full snapshots include tanh/LH/SwiGLU parameter banks and their static kind/mapp
 tables, with identity, version, shape, stride, dtype and device checks. Actual Full
 values, counts and event metadata remain independent for each window. The standalone
 retention overloads retain their independent-copy behavior.
+
+Aggressive sharded training may instead borrow its private frozen emission
+projection banks. The public session never exports these banks and prohibits
+step/publication with outstanding windows; backward closes every reverse program
+and releases the tapes before step can mutate them. This applies only to the
+explicit private-owner overload, including explicitly placed one-device sessions.
+Default standalone retention, conservative training and legacy single-device
+training keep independent copies. Attention/Full snapshots and dynamic
+state/KV/message records are unchanged. Identity/version checks reject a replaced
+or mutated source and changing ownership mode within a backward group.
+`borrowed_projection_bytes` reports this included storage; the retained API budget
+and `retained_projection_bytes` still charge the same conservative footprint.
+It is not an additional allocation or an allocator-peak measurement. Consumer
+admission estimates remain unchanged until separate calibration.
+
 The dense pre-advance budget charges these shared parameters once and dynamic
 records per window. Complete-consumer memory admission remains conservative
 until separate allocator calibration justifies any change to its estimate.

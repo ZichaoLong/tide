@@ -86,6 +86,20 @@ snapshots, publication barriers, retained-budget accounting and returned state/K
 Mixed multi-device remains a separate core gap: eager runtime/validation currently
 require one payload device, so a CLI-only change cannot implement it.
 
+Private projection borrowing development passed on frozen `projection-borrow-dev01`
+(at749f7c5): three builds, native6 (160trajectories/2560windows/640updates),Python16,
+consumer32; no failures/skips. Production/test hashes match the snapshot.
+Only aggressive sharded training borrows private frozen forward projection banks;
+default retain functions, conservative/legacy paths keep copies. Old overloads,
+class layouts, public ABI, core and CANN stay unchanged. Retained API budgets and
+consumer estimates remain conservative and unchanged. Ownership/mutation/alias
+checks and `borrowed_projection_bytes` assertions are included.
+Next: implementation commit/push, freeze `projection-borrow-clean01`, rebuild/link
+using verified development objects, then the same affected correctness gates,
+same-lease D512 allocation and separate FP16 profiling. Helpers:
+`build_projection_borrow.py`, `projection_borrow_memory.py`,
+`projection_borrow_evidence.py SHA`. No original-width retry before qualification.
+
 ## Scale evidence and progress boundary
 
 All ten representative family/client/schedule submatrices complete. OriginalB512
@@ -123,8 +137,9 @@ Qualified consumer source `TASK/sources/gradient-lifetime-clean01`; consumer
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-All gradient-lifetime qualification and `wide-add-gradient-lifetime01` jobs are
-terminal passed. No current active/queued task job. Unit prefix
+All gradient-lifetime qualification, `wide-add-gradient-lifetime01` and six
+projection-borrow development jobs are terminal passed. No task job is active.
+ Unit prefix
 `tide-execution-flows-`; logs/status `TASK/runs/NAME`. Inspect
 `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
 stop via `systemctl --user stop UNIT` only if needed.

@@ -115,7 +115,11 @@ retention it charges the actual retained bytes, so subsequent windows can reuse
 the released allowance. `retained_window_bytes` remains the dense per-window
 bound excluding shared Full/emission/attention banks; `retained_full_bytes`,
 `retained_projection_bytes` and `retained_attention_bytes` report their
-once-per-backward-group snapshots. Full sharing is
+once-per-backward-group parameter footprint. Aggressive sharded training borrows
+its private frozen projection banks under the publication barrier;
+`borrowed_projection_bytes` is the included borrowed portion. API retained budgets
+stay conservative and still include it. Other paths keep independent snapshots;
+see the [ownership contract](resident-retained.md). Full sharing is
 [qualified on cleanf360489](evidence/resident-full-snapshots-20261002.md);
 the complete-consumer estimate still conservatively charges Full banks per window.
 `retained_dense_bytes` reports the entire

@@ -4,6 +4,7 @@
 #include "precision_graph_profiles.h"
 #include "retained_cache_fixture.h"
 #include "retained_attention_check.h"
+#include "retained_projection_check.h"
 #include "retained_full_check.h"
 #include "reverse_gather_check.h"
 #include "parameter_accumulate_check.h"
@@ -124,6 +125,8 @@ void trajectory(ResidentPlacement placement,int resume_count,at::ScalarType dtyp
     wrong=roots;wrong[0].token.session++;test::train_reject([&]{session->backward(wrong);},"foreign token accepted");
     auto grad=session->backward(roots);test::train_gradients(grad,ref,cpu);test::train_gradients(grad,wide,cpu);kept_gradient=grad;
     const auto attention=grad.statistics.at("retained_attention_bytes");
+    require(grad.statistics.at("borrowed_projection_bytes")==
+      (compact_journals?grad.statistics.at("retained_projection_bytes"):0),"private projection lifetime differs from policy");
     require((attention>0)==(cache>=0),"attention snapshot scope differs from model");
     const auto dense=grad.statistics.at("retained_windows")*grad.statistics.at("retained_window_bytes")+
       grad.statistics.at("retained_projection_bytes")+attention+grad.statistics.at("retained_full_bytes");
@@ -202,6 +205,7 @@ int main(int argc,char** argv) {
     args.allow_npu_float16=true;auto d=portable_torch::resolve_device(args);if(d.type()!=c10::DeviceType::PrivateUse1)throw std::invalid_argument("NPU required");
     at::set_num_threads(1);at::set_num_interop_threads(1);ResidentPlacement placement;placement.policy=policy;
     test::retained_attention_check(d,args.dtype);
+    test::retained_projection_check(d,args.dtype);
     test::retained_full_check(d,args.dtype);
     test::reverse_gather_check(d,args.dtype);
     test::private_accumulation_check(d);

@@ -100,6 +100,7 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
         valid,g.message_connected.narrow(0,0,n)&valid});
     }
     out.statistics["retained_projection_bytes"]=s.projection_bytes;
+    out.statistics["borrowed_projection_bytes"]=0;
     out.statistics["retained_attention_bytes"]=s.attention_bytes;
     out.statistics["retained_full_bytes"]=s.full_bytes;
     out.statistics["retained_window_bytes"]=s.bytes_per_window;

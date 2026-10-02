@@ -7,10 +7,10 @@
 #include <vector>
 
 namespace tide::device_online {
-// Internal update-scoped immutable copies, never borrowed forward banks. Public
-// training owners prohibit parameter publication while windows are live and
-// discard this cache after backward/detach/close. CANN writes do not necessarily
-// increment ATen versions: this lifecycle, not _version alone, is essential.
+// Independent immutable copies by default. Only a private training owner may
+// borrow its frozen banks: it prohibits publication while windows are live and
+// discards every tape/program before step/detach/close. CANN writes do not
+// necessarily increment ATen versions: that lifecycle is essential.
 class RetainedProjection {
  public:
   static int64_t bytes(const at::Tensor& weights,const at::Tensor& biases) {
@@ -31,12 +31,21 @@ class RetainedProjection {
     for(size_t i=0;i<2;++i)copies.emplace(source_[i].unsafeGetTensorImpl(),copies_[i]);
   }
   void capture(const at::Tensor& weights,const at::Tensor& biases) {
-    if(ready_){check(weights,biases);return;}
+    capture(weights,biases,false);
+  }
+  void capture(const at::Tensor& weights,const at::Tensor& biases,bool borrow_private_banks) {
+    if(ready_){
+      check(weights,biases);
+      if(copies_[0].is_same(source_[0])!=borrow_private_banks)
+        throw std::logic_error("retained projection ownership changed within an update");
+      return;
+    }
     bytes_=bytes(weights,biases);if(!bytes_)return;
     source_={weights,biases};
     for(size_t i=0;i<2;++i) {
       versions_[i]=source_[i]._version();data_[i]=source_[i].const_data_ptr();
-      copies_[i]=i&&source_[i].unsafeGetTensorImpl()==source_[0].unsafeGetTensorImpl()?copies_[0]:source_[i].clone();
+      copies_[i]=borrow_private_banks?source_[i]:
+        (i&&source_[i].unsafeGetTensorImpl()==source_[0].unsafeGetTensorImpl()?copies_[0]:source_[i].clone());
     }
     ready_=true;
   }

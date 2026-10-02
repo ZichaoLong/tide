@@ -47,6 +47,10 @@ RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,Retaine
   return retain_reverse_tape(input,budget,projection,compact_journals,attention,nullptr);
 }
 RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention,RetainedFull* full) {
+  return retain_reverse_tape(input,budget,projection,compact_journals,attention,full,false);
+}
+RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,RetainedProjection* projection,bool compact_journals,RetainedAttention* attention,RetainedFull* full,bool borrow_private_projection) {
+  if(borrow_private_projection&&!projection)throw std::invalid_argument("private projection borrowing requires a lifetime owner");
   auto source=input;if(compact_journals)compact_retained_journals(source);
   if(!source.emission.shards.empty())throw std::invalid_argument("compact projection retention requires the sharded tape owner");
   if(at::GradMode::is_enabled()||!source.graph||!source.fiber_values.defined()||budget<1
@@ -68,7 +72,7 @@ RetainedTape retain_reverse_tape(const ReverseTape& input,int64_t budget,Retaine
   out.tensor_bytes=static_cast<int64_t>(bytes);
   if(full){full->capture(source.full);full->seed(copies);}
   if(projection) {
-    projection->capture(source.emission.weights,source.emission.biases);
+    projection->capture(source.emission.weights,source.emission.biases,borrow_private_projection);
     projection->seed(copies);
   }
   if(attention) {

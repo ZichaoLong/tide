@@ -106,7 +106,10 @@ ResidentTrainingWindow ShardedTrainingOwner::advance(const std::vector<External>
   try{w=s.flow->advance_device(input,stop);}catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   try {
     const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
-    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact,&s.attention_snapshot,&s.full_snapshot);
+    // These private banks cannot be published until saved windows and every
+    // reverse program are consumed. Public windows expose state/KV, never them.
+    // Keep retained admission unchanged: it remains a conservative envelope.
+    auto tape=retain_sharded_reverse_tape(s.flow->sharded_reverse_tape(),s.limits.retained_bytes-s.saved_bytes,&s.projection_snapshot,compact,&s.attention_snapshot,&s.full_snapshot,compact);
     auto states=state_windows(s.flow->state_shards_device(),tape.tape);const auto& t=tape.tape.coordinator;
     ResidentToken token{s.session,s.next_token++,s.generation};
     ResidentTrainingWindow out{token,s.cut,stop,{t.outputs.coordinates,t.outputs.values,t.outputs.valid,
