@@ -531,3 +531,8 @@ F4/F5 compact projection banks/adjoints are qualified on cleanacb84f3
 training trace. Actual resident consumer FP16 and budgeted packed head/loss are qualified on
 cleand178b86 ([evidence](evidence/resident-consumer-head-20261002.md)):10 CPU,59 NPU
 checks,D2048/V50304 head calibration and a separate FP16 training trace. Total per-device admission and F6 remain pending.
+
+Resident window capacity observations are qualified on clean475d4af,34 NPU
+consumer cases across both clients/precisions; existing queue peaks and per-window
+event/stage/output maxima are recorded without numerical Result exports
+([evidence](evidence/resident-window-peaks-20261002.md)). Full-size training remains open.
