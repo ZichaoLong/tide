@@ -1,6 +1,8 @@
 #pragma once
 #include "consumer.h"
 #include "head_budget.h"
+#include "capacity.h"
+#include "memory.h"
 #include <tide/resident_training.h>
 #include <array>
 namespace tide_flow {
@@ -30,7 +32,12 @@ struct ResidentMeasurements {
   tide::ResidentTrainingLimits limits;
   tide::ResidentPlacement placement;
   HeadBudget head;
+  capacity::Plan capacity;
+  std::vector<DeviceMemoryInfo> initial_memory;
+  std::vector<Index> peak_growth;
 };
+void prepare_capacity(const Packet&,const Config&,const std::vector<at::Device>&,ResidentMeasurements&);
+std::string capacity_json(const Config&,const ResidentMeasurements&);
 tide::ResidentTrainingLimits resident_limits(const Config&,at::Device);
 std::string resident_record(const Packet&,const Config&,at::Device,const ResidentMeasurements&);
 void resident_gradients_json(std::ostream&,Index,const Fixture&,const tide::ResidentGradients&,const Tensor&,const Tensor&);

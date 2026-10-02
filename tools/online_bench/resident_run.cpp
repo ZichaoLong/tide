@@ -35,6 +35,7 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   ResidentMeasurements result;result.limits=resident_limits(c,device);
   result.head=head_budget(result.limits.forward.outputs,p.width,p.vocab,c.runtime.dtype==at::kHalf?2:4,
     c.training,c.head_workspace_bytes,c.chunk_policy=="aggressive");
+  prepare_capacity(p,c,memory_devices,result);
   auto f=fixture(p,c,at::Device(at::kCPU));
   // The fixture installs eager built-in handles during validation/embedding.
   // Resident reconstructs these same declared modules from graph metadata.
@@ -111,6 +112,9 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
     if(step+1==c.warmup)memory.capture("warmup");
   }
   memory.capture("measured",false);result.memory=memory.json();
+  result.peak_growth=memory.peak_growth();
+  for(size_t i=0;i<result.peak_growth.size();++i)if(result.peak_growth[i]>result.capacity.cards[i].peak)
+    throw std::runtime_error("consumer memory estimate underestimated allocator peak; retain failed run and recalibrate");
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();
   return resident_record(p,c,device,result);
 }

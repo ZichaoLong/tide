@@ -105,8 +105,9 @@ CPU observables; normal training does not export graph state.
 
 Explicit placement partitions physical projection banks and partial gradients on
 Full owners; no dense coordinator replica is assembled. This is qualified on
-[cleanacb84f3](evidence/resident-projection-shards-20261002.md). Total-memory admission
-remains pending. Local reverse safe splitting is qualified below; public multi-device
+[cleanacb84f3](evidence/resident-projection-shards-20261002.md). Complete resident
+[consumer capacity admission](consumer-capacity.md) is implemented and under
+qualification. Local reverse safe splitting is qualified below; public multi-device
 inference is qualified on [clean7329c71](evidence/public-sharded-inference-20261002.md).
 Actual FP16 consumers and bounded packed head rows are qualified on
 [cleand178b86](evidence/resident-consumer-head-20261002.md); full-size performance
@@ -152,6 +153,12 @@ these allow vendor workspace and nested reverse reservations at the default jour
 capacity. They are limits,not a total peak-memory estimate or a guarantee of scale
 admission. Exhaustion is explicit; increasing only one limit may leave another
 unsatisfied. Requested and effective placement/limits are recorded.
+
+`--device-memory-bytes` additionally controls the complete resident consumer's
+per-card incremental memory budget (default0: live driver free memory). A shape
+planner accounts for simultaneous lifetimes and reduces physical row maxima
+without changing logical capacities. See [capacity admission](consumer-capacity.md)
+for scope, headroom, estimates and the Torch-free offline command.
 
 The resident consumer head also accepts `--head-workspace-bytes` (default4GiB).
 Before model construction, a tensor planner reserves output cotangents, head

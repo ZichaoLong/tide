@@ -14,7 +14,7 @@ from tidegraph import ResidentPlacement
 from flow_protocol import native_text
 
 
-def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None,dtype_name="float32",head_budget=None):
+def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None,dtype_name="float32",head_budget=None,extra=()):
     binary=os.environ.get("TIDE_ONLINE_BINARY")
     if not binary:pytest.skip("standalone resident consumer not explicitly selected")
     path=tmp_path/"packet.txt";path.write_text(native_text(p));out=tmp_path/"consumer"
@@ -24,6 +24,7 @@ def standalone(p,device,family,schedule,training,optimizer,tmp_path,devices=None
     if training:command.append("--training")
     command.append("--devices="+str(devices if devices is not None else (2 if training and schedule=="prefill" else 1)))
     if head_budget is not None:command.extend(["--head-workspace-bytes="+str(head_budget),"--chunk-policy=aggressive","--resident-outputs=16"])
+    command.extend(extra)
     done=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=120)
     assert done.returncode==0,done.stdout
     return json.loads((out/"result.json").read_text()),[json.loads(s) for s in (out/"diagnostics.jsonl").read_text().splitlines()]

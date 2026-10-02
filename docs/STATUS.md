@@ -65,6 +65,39 @@ Nested budget divisions reviewed; clean calibration passed with32GiB backward,
 trace1024 and unchanged KV128. Actual per-card training peak<400MiB demonstrates
 that local envelopes cannot simply be summed to obtain total HBM admission.
 
+## Current implementation awaiting immutable qualification
+
+Resident Add/Attention complete-consumer capacity admission is implemented in
+matching Torch-free C++/Python planners. It reads per-device driver availability,
+accounts for simultaneous tensor lifetimes, reserves headroom and reduces only
+physical rows. CLI device-memory-bytes and offline plan_execution_flow.py added.
+Core/resident ABI unchanged. Current scope/limits: docs/consumer-capacity.md.
+
+Development source capacity-admission-dev05. Terminal passed: static-dev02(4
+checks including24 cross-language shape cases); build-capacity-cpu-dev01;
+build-capacity-consumer-dev03; capacity-cpu-dev01(8); capacity-native-dev02(5);
+capacity-calibration-dev01; capacity-libtorch-dev01(4). All current jobs terminal.
+Observed training peaks857463296/685577216 bytes fit estimates2756542808/2114316504. Builds at TASK/builds/capacity-{cpu-dev01,consumer-dev03}; consumer backend
+remains optimizer-recompute-clean01, Python backend optimizer-recompute-python-clean01.
+
+Calibration17384240 parameters,128 body nodes,D128/B2/T2,FP32 AdamW,2NPUs,4
+continued windows/2updates:3GiB incremental/card cap automatically reduces
+Full/emission/reverse rows16→1,attention rows8→1,keys128→8,head1024→64.
+Output8/cut80; loss5.662106990814209 differs4.77e-7 from independent earlierCPU
+5.662106513977051. This is capacity calibration, not formal throughput.
+
+Retain failures: invalid initial fanout/local-span test fixture; static-dev01
+inconsistent overflow message before checked arithmetic; consumer build-dev01
+SDK header path and dev02 direct ACL symbol link; native-dev01 Python limits
+has no diagnostics member. Fixed with matched SDK declaration plus lookup in
+already loaded runtime and diagnostics from consumer options. No OOM or semantic
+tolerance relaxation. Build-dev03 reused completed ELF objects from failed link,
+with source/header/compile-option identities verified; failed record unchanged.
+
+Next: commit tested implementation and push; freeze exact commit, source-verified
+consumer rebuild/relink, affected CPU/NPU gates and capped calibration; evidence
+separate. Do not repeat core/backend or old full CPU matrix. No pause authorized.
+
 ## Next work
 
 Total per-device memory admission and safe physical splitting → representative
@@ -116,7 +149,7 @@ throughput conclusion. Input optimizer-recompute-calibration01. Retain component
 dev01 test failure: empty named group correctly selected no parameters; corrected
 explicit weight group. No production semantic failure or tolerance relaxation.
 
-Optimizer evidence report/JSON,ROADMAP and this status ready for evidence commit.
+Optimizer evidence f1876c1 is committed and pushed; no pending qualification.
 Continue total per-device memory planning and safe chunk selection,then F6.
 No new pause or user approval is required.
 

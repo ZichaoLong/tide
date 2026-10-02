@@ -44,6 +44,7 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
      <<",\"row_bytes\":"<<r.head.row_bytes<<",\"reserved_bytes\":"<<r.head.reserved_bytes<<",\"budget\":"<<r.head.budget
      <<",\"operator_allowance_bytes\":"<<r.head.operator_allowance_bytes<<'}'
      <<",\"memory\":"<<r.memory
+     <<",\"memory_admission\":"<<capacity_json(c,r)
      <<",\"runtime\":{\"device\":"<<quoted(device.str())<<",\"dtype\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":\"resident\",\"placement\":{";

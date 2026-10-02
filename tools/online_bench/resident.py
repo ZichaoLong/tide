@@ -7,6 +7,7 @@ from .host import runtime_for, token_values
 from .resident_loss import head_loss, embedding_gradient, ConsumerOptimizer
 from .head_budget import head_budget
 from .memory import MemoryRecord
+from .capacity_runtime import prepare as prepare_capacity, observed as observed_capacity
 
 
 def advance(session, values, packet, position):
@@ -36,7 +37,7 @@ def gradient_diagnostics(runtime, gradient, embedding, head, ge, gh):
 @torch.no_grad()
 def run(packet, *, family, implementation, device, dtype, schedule, training, optimizer, steps, warmup,
         windows_per_step, native_library, diagnostics, placement, observer, parameter_budget,
-        resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes):
+        resident_library, resident_limits, training_limits, resident_placement, head_workspace_bytes, device_memory_bytes=0):
     if implementation != "native" or torch.device(device).type != "npu":
         raise ValueError("resident consumer requires explicit native NPU execution")
     if dtype not in {"float32", "float16"}:
@@ -58,15 +59,17 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
     forward = resident_limits or ResidentLimits(workspace_bytes=512*1024*1024)
     if not isinstance(forward, ResidentLimits):
         forward = ResidentLimits(**forward)
+    limits = training_limits or ResidentTrainingLimits(windows=windows_per_step, backward_bytes=2*1024**3)
+    if not isinstance(limits, ResidentTrainingLimits):
+        limits = ResidentTrainingLimits(**limits)
     head_plan = head_budget(forward.outputs, c["width"], c["vocab"], 2 if dtype=="float16" else 4,
                             training, head_workspace_bytes, forward.chunk_policy=="aggressive")
+    forward,limits,owners,head_plan,capacity = prepare_capacity(packet,device,forward,limits,owners,head_plan,
+        training,optimizer,windows_per_step,device_memory_bytes,2 if dtype=='float16' else 4,training or diagnostics)
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset="resident", trace=diagnostics, native_library=native_library,
         placement=placement, resident_library=resident_library,
         resident_limits=forward)
-    limits = training_limits or ResidentTrainingLimits(windows=windows_per_step, backward_bytes=2*1024**3)
-    if not isinstance(limits, ResidentTrainingLimits):
-        limits = ResidentTrainingLimits(**limits)
     group = dict(parameters=[k for k,p in runtime.execution_model.named_parameters() if p.requires_grad],
                  lr=.0001, weight_decay=.001, momentum=.25, eps=1e-6)
     session = (runtime.training_session(c["batch"], optimizer=optimizer, groups=[group], limits=limits, placement=owners)
@@ -144,6 +147,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
             if step+1 == warmup:
                 memory.capture("warmup")
         memory.capture("measured", reset_peak=False)
+        observed_capacity(capacity,memory.record())
         cut = session.cut
         manifest = session.manifest()
     finally:
@@ -154,6 +158,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
         construction_seconds=construction, seconds=durations, warmup_seconds=warmup_times, losses=losses,
         outputs=counts, statistics=statistics, parameter_budget=parameter_budget,
         head_memory=vars(head_plan),
+        memory_admission=capacity,
         memory=memory.record(),
         precision=dict(payload=dtype, loss="float32", adjoints="float32", optimizer_masters="float32"),
         input_tokens_per_step=c["batch"]*c["tokens"]*windows_per_step, final_cut=cut,
