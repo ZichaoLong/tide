@@ -72,6 +72,7 @@ void bind_resident_training(py::module_& m) {
     .def(py::init<Graph,Model,const ResidentTrainingCheckpoint&,at::Device,ResidentTrainingLimits>(),py::call_guard<py::gil_scoped_release>())
     .def("advance",&ResidentTrainingSession::advance,py::call_guard<py::gil_scoped_release>())
     .def("backward",&ResidentTrainingSession::backward,py::call_guard<py::gil_scoped_release>())
+    .def("accumulate",&ResidentTrainingSession::accumulate,py::arg("max_bytes")=128*1024*1024,py::call_guard<py::gil_scoped_release>())
     .def("step",&ResidentTrainingSession::step,py::call_guard<py::gil_scoped_release>())
     .def("detach",&ResidentTrainingSession::detach,py::call_guard<py::gil_scoped_release>())
     .def("checkpoint",&ResidentTrainingSession::checkpoint,py::call_guard<py::gil_scoped_release>())
@@ -79,6 +80,7 @@ void bind_resident_training(py::module_& m) {
     .def("close",&ResidentTrainingSession::close,py::call_guard<py::gil_scoped_release>())
     .def_property_readonly("cut",&ResidentTrainingSession::cut)
     .def_property_readonly("generation",&ResidentTrainingSession::generation)
+    .def_property_readonly("accumulated_batches",&ResidentTrainingSession::accumulated_batches)
     .def_property_readonly("placement",&ResidentTrainingSession::placement)
     .def_property_readonly("retained_windows",&ResidentTrainingSession::retained_windows);
 }

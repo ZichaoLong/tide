@@ -20,7 +20,7 @@ struct ShardedTrainingOwner::Impl {
   std::vector<Version> versions;
   ParameterRegistry registry;
   device_online::ParameterPlan global_layout;
-  std::vector<device_online::ParameterVjp> layout,gradient;
+  std::vector<device_online::ParameterVjp> layout,gradient,accumulated;
   std::vector<std::unique_ptr<device_online::DeviceOptimizer>> optimizers;
   std::vector<OptimizerGroup> groups;
   std::unique_ptr<device_online::ContentFlow> flow;
@@ -30,6 +30,7 @@ struct ShardedTrainingOwner::Impl {
   Index cut,generation=0,next_token=0,bytes_per_window=0,saved_bytes=0,projection_bytes=0;
   device_online::RetainedProjection projection_snapshot;
   bool gradients_ready=false,failed=false;
+  Index accumulated_batches=0;
   Impl(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,
       std::vector<OptimizerGroup>,ResidentTrainingLimits,const ResidentTrainingCheckpoint*);
   void check() const;

@@ -61,10 +61,12 @@ def main():
                     command.append("--" + check.split("-")[0] + "-cache")
                 if check == "half-cache-training":
                     command.append("--cache")
+                if check == "peer-resident-accumulation":
+                    command.extend(("--accumulate", "--resume-devices=0", "--explicit-owners"))
                 log_path = out / (check+"-"+dtype+".log")
                 with log_path.open("w") as log:
                     result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT,
-                                            timeout=360 if check in ("resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
+                                            timeout=360 if check in ("peer-resident-accumulation", "resident-sharded-training", "peer-sharded-vjp", "peer-sharded-training", "peer-state-flow", "peer-state-control-flow", "peer-state-vjp", "peer-state-training") else 120)
                 text = log_path.read_text()
                 passed = result.returncode == 0 and MARKERS[check] in text
                 if "fall back to run on the CPU" in text or "npu_cpu_fallback" in text:

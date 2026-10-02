@@ -86,7 +86,7 @@ void ShardedTrainingOwner::Impl::restore_optimizer(const ResidentTrainingCheckpo
 }
 ResidentTrainingCheckpoint ShardedTrainingOwner::checkpoint() const {
   const auto& s=*impl_;s.check();
-  if(!s.saved.empty()||s.gradients_ready)throw std::logic_error("checkpoint requires detach or a completed optimizer step");
+  if(!s.saved.empty()||s.gradients_ready||s.accumulated_batches)throw std::logic_error("checkpoint requires detach or a completed optimizer step");
   ResidentTrainingCheckpoint out;
   out.generation=s.generation;out.next_token=s.next_token;out.continuation=s.flow->snapshot();
   out.aliases=s.model.parameters(false).alias_partitions();out.trainable=s.registry.names();

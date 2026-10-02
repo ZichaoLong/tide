@@ -90,6 +90,12 @@ remain explicit boundaries and must be counted appropriately in performance.
 
 ## Updates, continuation and portable checkpoints
 
+The optional [gradient accumulation API](resident-training.md) keeps one FP32
+bank per canonical owner device. Alias reductions precede accumulation; summation
+and connection OR remain on those devices. Only `step()` runs the common finite
+agreement and optimizer/publication transaction, once for the accumulated update.
+This explicitly detaches between backward groups and does not switch sample state.
+
 All owners propose an update, reach device-wide finite/error agreement, then
 commit masters/slots/counters and publish aliases to the actual forward banks.
 A finite/overflow refusal returns `applied=False` and does not partially commit.

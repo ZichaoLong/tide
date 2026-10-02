@@ -206,3 +206,7 @@ MARKERS["sequence"] = "device-sequence: passed"
 CHECKS["resident-sharded-training"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
 MARKERS["resident-sharded-training"] = "resident-sharded-session: passed"
 KERNELS["resident-sharded-training"] = "tide_state_reverse_"
+
+CHECKS["peer-resident-accumulation"] = ("tide-resident-sharded-session-check", ("float32", "float16"))
+MARKERS["peer-resident-accumulation"] = "accumulation=1 public_api=true"
+KERNELS["peer-resident-accumulation"] = "tide_parameter_accumulate"

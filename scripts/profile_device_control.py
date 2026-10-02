@@ -63,6 +63,8 @@ def main():
         command.append("--" + args.check.split("-")[0] + "-cache")
     if args.check == "half-cache-training":
         command.append("--cache")
+    if args.check == "peer-resident-accumulation":
+        command.extend(("--accumulate", "--resume-devices=0", "--explicit-owners"))
     report = dict(schema="tide-device-component-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
                   scope="component placement; includes construction, inputs and CPU assertions; not throughput")

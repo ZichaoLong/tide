@@ -250,6 +250,11 @@ containing updated graph parameters, optimizer state and complete continuation;
 it does not change the eager checkpoint schemas or restore retained tapes.
 Cross-device checkpoint handoff is tested separately from same-device new-process
 continuation; no cross-vendor RNG or bitwise optimizer trajectory is promised.
+The optional resident `accumulate()` policy sums multiple independently detached
+backward groups under one parameter generation, then performs one optimizer step.
+Its detach is explicit; it cannot replace a retained cross-window VJP. The
+[training contract](resident-training.md) defines capacity, connection flags and
+checkpoint refusal; graph identities and checkpoint schemas are unchanged.
 The explicitly FP64 `norm-fp64-v1` Read cannot compute on NPU. The optional
 [placement adapter](execution-placement.md) permits CPU Read/control/ranking
 with NPU payloads and retains autograd across those explicit transfers. Each

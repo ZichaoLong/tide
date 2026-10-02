@@ -69,7 +69,33 @@ existing evidence retains its source scope.
 Advancing with unapplied gradients and repeated backward of consumed windows
 are refused. Step establishes the explicit truncation boundary; differentiation
 through optimizer updates and higher-order gradients are outside this profile.
-Repeated retained backward within one generation is not offered by this owner.
+Repeated backward of the same retained windows is not offered by this owner.
+
+An optional `accumulate(max_bytes=128*1024*1024)` consumes the latest backward
+into a separate FP32 device bank without updating parameters or optimizer slots.
+It explicitly detaches state/history/pending/KV at that boundary and allows the
+next forward at the same parameter generation. Call it after **every** backward
+of an accumulated update, including the last one, then call `step()` once.
+`accumulated_batches` counts these consumed backward groups; successful step or
+explicit `detach()` resets the count. Step refuses outstanding tapes and an
+unaccumulated final backward. Checkpoint refuses any accumulated gradients.
+
+Accumulation sums canonical gradients and ORs their connection flags; None and
+connected zero retain their optimizer meanings. It performs no averaging or loss
+scaling. Consumers must normalize losses for the intended complete logical batch.
+The old and replacement accumulator banks plus their tensor metadata, summed
+across devices, must fit `max_bytes` before execution. Current backward exports
+and CANN program arenas retain their separate budgets; keeping caller exports
+alive also keeps their storage alive. Capacity refusal is retryable. Nonfinite
+connected gradients are rejected by the existing all-owner optimizer transaction;
+`detach()` explicitly discards a rejected accumulation.
+
+This is an explicit truncated-gradient policy, **not** a substitute for retaining
+cross-window gradients: leave connected windows within one `backward()` group.
+It does not change batch size or switch independent sample continuations.
+Resident physical sample slicing still requires that separate capability. Both
+the single-device and compact multi-device owners expose this optional method;
+the checkpoint format and default backward/step behavior are unchanged.
 
 Parameter gradients use canonical names, alias sets, packed offsets and separate
 connection flags. Offset -1 identifies an owner without a differentiable use in

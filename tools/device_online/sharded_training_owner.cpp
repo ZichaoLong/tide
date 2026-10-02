@@ -74,6 +74,7 @@ void ShardedTrainingOwner::Impl::check() const {
 }
 void ShardedTrainingOwner::Impl::discard() {
   saved.clear();projection_snapshot={};gradient.clear();saved_bytes=0;gradients_ready=false;initial_present.clear();
+  accumulated.clear();accumulated_batches=0;
   for(const auto& s:flow->state_shards_device())initial_present.push_back(s.present.clone());
 }
 ShardedTrainingOwner::ShardedTrainingOwner(Graph g,Model m,const Continuation& q,at::Device d,ResidentOptimizerKind k,
@@ -102,11 +103,13 @@ ResidentTrainingWindow ShardedTrainingOwner::advance(const std::vector<External>
   }catch(...){s.failed=true;throw;}
 }
 ResidentStep ShardedTrainingOwner::step() {
-  auto& s=*impl_;s.check();if(!s.gradients_ready)throw std::logic_error("resident step requires completed backward");
+  auto& s=*impl_;s.check();
+  if(!s.saved.empty()||(!s.gradients_ready&&!s.accumulated_batches))throw std::logic_error("resident step requires completed backward and no outstanding windows");
+  if(s.gradients_ready&&s.accumulated_batches)throw std::logic_error("accumulate the final backward before step");
   if(s.generation==std::numeric_limits<Index>::max())throw std::overflow_error("resident parameter generation exhausted");
   try {
     auto error=at::zeros({1},at::TensorOptions().device(s.device).dtype(at::kInt));
-    ShardedParameterReduce update(s.gradient,error,s.limits.optimizer_bytes/4,s.limits.program_workspace_bytes);
+    ShardedParameterReduce update(s.accumulated_batches?s.accumulated:s.gradient,error,s.limits.optimizer_bytes/4,s.limits.program_workspace_bytes);
     std::vector<DeviceOptimizer*> owners;for(const auto& p:s.optimizers)owners.push_back(p.get());
     update.append_step(owners);update.append_publish(s.flow->sharded_parameter_banks(),owners,s.limits.optimizer_bytes/4);
     update.finish();update.run();const auto code=update.errors()[0].cpu().item<int>();update.close();
@@ -120,9 +123,10 @@ Result ShardedTrainingOwner::result() const {impl_->check();return impl_->flow->
 Index ShardedTrainingOwner::cut() const {impl_->check();return impl_->cut;}
 Index ShardedTrainingOwner::generation() const {impl_->check();return impl_->generation;}
 Index ShardedTrainingOwner::retained_windows() const {impl_->check();return impl_->saved.size();}
+Index ShardedTrainingOwner::accumulated_batches() const {impl_->check();return impl_->accumulated_batches;}
 ResidentPlacement ShardedTrainingOwner::placement() const {impl_->check();return impl_->placement;}
 void ShardedTrainingOwner::close() {
   auto& s=*impl_;
-  if(s.flow){s.flow->close();s.flow.reset();s.saved.clear();s.projection_snapshot={};s.optimizers.clear();s.gradient.clear();s.layout.clear();}
+  if(s.flow){s.flow->close();s.flow.reset();s.saved.clear();s.projection_snapshot={};s.optimizers.clear();s.gradient.clear();s.accumulated.clear();s.layout.clear();}
 }
 } // namespace tide::training_detail

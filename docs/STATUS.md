@@ -5,7 +5,7 @@ implementation, commits and pushes. No pause instruction and no subagents.
 Reference repositories and ObsidianVault are read-only. Repository
 /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
-Implementatione6cc52b is committed/pushed; sample-chunk evidence is being committed.
+Implementation e6cc52b and evidence e05fe80 are committed and pushed.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the only backlog. Overall goal is incomplete.
 
@@ -165,3 +165,31 @@ Old restricted changes are preserved on pushed archive/restricted-flow-20260930
 at964bf628c67270200dabe55b1bca026bd403cd37; TASK/restricted-flow-archive.json.
 
 Last observed matrix current: matrix-settle-libtorch-streaming-screen01; completed14of34recipe children. Re-read live records.
+
+## Current increment: resident gradient accumulation
+
+Implementation is being committed after development tests. Public C++/Python
+`accumulate(max_bytes)` snapshots/sums canonical device gradients, explicitly
+detaches numerical continuation, leaves generation/parameters/slots unchanged,
+and requires one step after the final accumulated backward. None/zero flags,
+capacity rejection, global finite transaction and detached checkpoint semantics
+are preserved. This is explicit truncated-gradient grouping, not yet independent
+sample continuation switching or resident sample slicing. CANN kernels and public
+limits/checkpoint structures are unchanged; new class methods require a new backend.
+
+Frozen development source TASK/sources/accumulation-dev01. Both builds and
+accumulation-{components,public}-dev01 PASSED. Standalone has8trajectories per
+dtype, FP32/FP16,2owners→legacy single-owner resume, event/fiber caches, two
+optimizers, both schedules/HARD/HST/SOFTP,384windows/48updates total. Python21
+passes, no skips:8new plus13ordinary training/lifecycle regressions. No failure.
+Next: immutable clean build with exact-object reuse, repeat these affected gates,
+and one separate bounded profile. Do not rerun unrelated suites.
+
+Matrix recipe PID3771316 is currently HELD (start1849248082). Its current child
+matrix-timed-dag-python-prefill-screen01 has PASSED20cells. Only recipe was
+signalled, no measurement interrupted. boundary-hold-accumulation.json records
+this hold. Resume immediately after clean gates/profile, before04:28UTC parent
+deadline. Observed external processes appeared on physical3 during hold; inspect
+before resuming. Finished LibTorch extra matrices were audited in
+TASK/libtorch-matrix-extra-audit.json; no remeasurement needed. Python audit
+helper now also checks exact package hash/options/runtime/binaries.

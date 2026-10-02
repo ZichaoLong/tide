@@ -124,6 +124,12 @@ class ResidentTrainingSession {
   ResidentTrainingSession& operator=(const ResidentTrainingSession&)=delete;
   ResidentTrainingWindow advance(const std::vector<External>&,Index stop,Index sealed_until);
   ResidentGradients backward(const std::vector<ResidentCotangents>&); // All live windows, in forward order.
+  // Snapshot the latest parameter gradients into a device accumulator and
+  // detach the current continuation. No update or normalization. Call after
+  // every backward in an accumulated update, including the last one.
+  // Bounds old + replacement accumulator tensor storage across all owners;
+  // current backward tensors and program arenas have their separate limits.
+  void accumulate(Index max_bytes=128*1024*1024);
   ResidentStep step(); // Consume gradients; explicit detach at the update boundary.
   void detach(); // Discard outstanding tapes/gradients, preserve numerical continuation.
   ResidentTrainingCheckpoint checkpoint() const; // Refuses outstanding tapes/gradients.
@@ -131,6 +137,7 @@ class ResidentTrainingSession {
   Index cut() const;
   Index generation() const;
   Index retained_windows() const;
+  Index accumulated_batches() const;
   ResidentPlacement placement() const; // Resolved static placement.
   void close();
  private:

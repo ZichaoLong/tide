@@ -21,7 +21,7 @@ struct ResidentTrainingSession::Impl {
   ResidentOptimizerKind kind;
   std::vector<training_detail::Version> versions;
   ParameterRegistry registry;
-  device_online::ParameterVjp layout, gradient;
+  device_online::ParameterVjp layout, gradient, accumulated;
   std::unique_ptr<device_online::DeviceOptimizer> optimizer;
   std::unique_ptr<device_online::ContentFlow> flow;
   std::vector<Saved> saved;
@@ -30,6 +30,7 @@ struct ResidentTrainingSession::Impl {
   Index cut, generation=0, next_token=0, saved_bytes=0, bytes_per_window=0, projection_bytes=0;
   device_online::RetainedProjection projection_snapshot;
   bool gradients_ready=false, failed=false;
+  Index accumulated_batches=0;
   Impl(Graph,Model,const Continuation&,at::Device,ResidentOptimizerKind,
        std::vector<OptimizerGroup>,ResidentTrainingLimits,const ResidentTrainingCheckpoint* = nullptr);
   void check() const;

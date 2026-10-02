@@ -63,6 +63,7 @@ void ResidentTrainingSession::Impl::check() const {
 }
 void ResidentTrainingSession::Impl::discard() {
   saved.clear();projection_snapshot={};saved_bytes=0;gradient={};gradients_ready=false;
+  accumulated={};accumulated_batches=0;
   initial_present=flow->state_device().second.clone();
 }
 ResidentTrainingSession::ResidentTrainingSession(Graph g,Model m,const Continuation& q,at::Device d,
@@ -107,12 +108,13 @@ ResidentTrainingWindow ResidentTrainingSession::advance(const std::vector<Extern
 ResidentStep ResidentTrainingSession::step() {
   auto& s=*impl_;s.check();
   if(s.sharded)return s.sharded->step();
-  if(!s.gradients_ready)throw std::logic_error("resident step requires completed backward");
+  if(!s.saved.empty()||(!s.gradients_ready&&!s.accumulated_batches))throw std::logic_error("resident step requires completed backward and no outstanding windows");
+  if(s.gradients_ready&&s.accumulated_batches)throw std::logic_error("accumulate the final backward before step");
   if(s.generation==std::numeric_limits<Index>::max())throw std::overflow_error("resident parameter generation exhausted");
   try {
     auto error=at::zeros({1},s.layout.values.options().dtype(at::kInt));
     CannProgram p(s.device);p.limit_workspace(s.limits.program_workspace_bytes);
-    s.optimizer->append_step(p,s.gradient,error);
+    s.optimizer->append_step(p,s.accumulated_batches?s.accumulated:s.gradient,error);
     append_parameter_publish(p,s.flow->parameter_banks(),s.layout,s.optimizer->values(),error,s.limits.optimizer_bytes/4);
     p.finish();
     c10::impl::VirtualGuardImpl(s.device.type()).synchronizeDevice(s.device.index());p.run();
@@ -128,12 +130,13 @@ Result ResidentTrainingSession::result() const {impl_->check();return impl_->sha
 Index ResidentTrainingSession::cut() const {impl_->check();return impl_->sharded?impl_->sharded->cut():impl_->cut;}
 Index ResidentTrainingSession::generation() const {impl_->check();return impl_->sharded?impl_->sharded->generation():impl_->generation;}
 Index ResidentTrainingSession::retained_windows() const {impl_->check();return impl_->sharded?impl_->sharded->retained_windows():impl_->saved.size();}
+Index ResidentTrainingSession::accumulated_batches() const {impl_->check();return impl_->sharded?impl_->sharded->accumulated_batches():impl_->accumulated_batches;}
 ResidentPlacement ResidentTrainingSession::placement() const {
   impl_->check();if(impl_->sharded)return impl_->sharded->placement();
   return {{impl_->device},"locality",std::vector<Index>(impl_->graph.nodes.size(),0),std::vector<Index>(impl_->graph.nodes.size(),0)};
 }
 void ResidentTrainingSession::close() {
   if(impl_->sharded){impl_->sharded->close();return;}
-  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->projection_snapshot={};impl_->optimizer.reset();impl_->gradient={};}
+  if(impl_->flow){impl_->flow->close();impl_->flow.reset();impl_->saved.clear();impl_->projection_snapshot={};impl_->optimizer.reset();impl_->gradient={};impl_->accumulated={};}
 }
 } // namespace tide

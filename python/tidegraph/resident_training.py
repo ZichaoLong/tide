@@ -82,6 +82,10 @@ class ResidentTrainingSession:
     def retained_windows(self):
         return self.owner.retained_windows
 
+    @property
+    def accumulated_batches(self):
+        return self.owner.accumulated_batches
+
     def advance_device(self, inputs, *, stop=None, sealed_until=None):
         self._check()
         external, stop, sealed_until = external_window(self.runtime, self.batch_size, self.cut, inputs, stop, sealed_until)
@@ -118,6 +122,20 @@ class ResidentTrainingSession:
     def step(self):
         self._check()
         return self.owner.step()
+
+    def accumulate(self, *, max_bytes=128*1024**2):
+        """Sum this backward into a device bank and explicitly detach state.
+
+        Parameters/generation stay fixed. Normalize consumer losses against the
+        complete logical batch; this operation only sums. Accumulate the final
+        backward too, then call step once. This does not switch sample state.
+        """
+        from .coordinates import integers
+        self._check()
+        integers("gradient accumulation budget", max_bytes)
+        if max_bytes < 1:
+            raise ValueError("gradient accumulation budget must be positive")
+        self.owner.accumulate(max_bytes)
 
     def detach(self):
         self._check()

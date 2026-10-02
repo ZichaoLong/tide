@@ -11,6 +11,7 @@ class ShardedTrainingOwner {
   void check() const;
   ResidentTrainingWindow advance(const std::vector<External>&,Index,Index);
   ResidentGradients backward(const std::vector<ResidentCotangents>&);
+  void accumulate(Index max_bytes);
   ResidentStep step();
   void detach();
   ResidentTrainingCheckpoint checkpoint() const;
@@ -18,6 +19,7 @@ class ShardedTrainingOwner {
   Index cut() const;
   Index generation() const;
   Index retained_windows() const;
+  Index accumulated_batches() const;
   ResidentPlacement placement() const;
   void close();
  private:

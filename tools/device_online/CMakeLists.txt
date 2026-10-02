@@ -284,7 +284,7 @@ if(TIDE_DEVICE_ASCENDC)
 endif()
 
 if(TIDE_DEVICE_ASCENDC)
-  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp
+  add_library(tide-resident SHARED resident.cpp training_owner.cpp training_parameters.cpp training_backward.cpp training_checkpoint.cpp training_accumulation.cpp
     sharded_training_owner.cpp sharded_training_backward.cpp sharded_training_checkpoint.cpp)
   target_link_libraries(tide-resident PRIVATE tide-content-flow)
   target_link_options(tide-resident PRIVATE -Wl,-z,defs)
