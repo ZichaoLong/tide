@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 from durable_records import write_json
 from flow_protocol import validate_packet
+from flow_failure import RecordedFailure
 from flow_resident_options import add_arguments, validate as validate_resident_options
 
 
@@ -57,6 +58,9 @@ def main():
             result = run_native(packet,a)
         else:
             result = python_run(packet,a)
+    except RecordedFailure as error:
+        write_json(a.output_dir/"result.json", dict(error.record, state="failed", workload_sha256=packet["sha256"]))
+        raise
     except Exception as error:
         write_json(a.output_dir/"result.json", dict(state="failed",workload_sha256=packet["sha256"],error=str(error)))
         raise

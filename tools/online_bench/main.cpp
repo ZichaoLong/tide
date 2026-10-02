@@ -1,4 +1,5 @@
 #include "consumer.h"
+#include "failure.h"
 #include <ATen/Parallel.h>
 #include <filesystem>
 #include <iostream>
@@ -24,6 +25,9 @@ int main(int argc,char** argv) {
     runtime.close();
     if(c.diagnostics)tide_flow::atomic_text(output+"/diagnostics.jsonl",diagnostics.str());
     tide_flow::atomic_text(output+"/result.json",result);std::cout<<result;return 0;
+  }catch(const tide_flow::RecordedFailure& error){
+    if(!output.empty())try{tide_flow::atomic_text(output+"/result.json",error.record);}catch(...){}
+    std::cerr<<error.what()<<'\n';return 2;
   }catch(const std::exception& error){
     if(!output.empty())try{tide_flow::atomic_text(output+"/result.json","{\"state\":\"failed\",\"error\":"+tide_flow::quoted(error.what())+"}\n");}catch(...){}
     std::cerr<<error.what()<<'\n';return 2;

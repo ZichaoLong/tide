@@ -222,7 +222,7 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
     finally:
         session.close()
         contexts.clear()
-    return dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"], implementation="native",
+    result = dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"], implementation="native",
         family=family, training=training, optimizer=optimizer if training else None, parameters=packet["counts"]["parameters"],
         windows_per_step=windows_per_step, warmup_steps=warmup, measured_steps=steps,
         construction_seconds=construction, seconds=durations, warmup_seconds=warmup_times, losses=losses,
@@ -241,3 +241,8 @@ def run(packet, *, family, implementation, device, dtype, schedule, training, op
                 + "synchronization; no reference"),
         boundary_policy="dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
         projection_placement="compact banks on Full owners" if owners.devices else "coordinator dense")
+    if not capacity['allocator_within_estimate']:
+        from flow_failure import RecordedFailure
+        raise RecordedFailure('consumer memory estimate underestimated allocator peak; retain failed run and recalibrate',
+            dict(result, failure_phase='post_run_memory_calibration'))
+    return result

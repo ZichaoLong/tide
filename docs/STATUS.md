@@ -87,7 +87,9 @@ CPU18 checks PASSED (`failure-records-cpu-dev01`). Installed consumer build
 `TASK/builds/failure-records-consumer-dev01`, logs/status under matching runs/name.
 Change preserves complete results with a FAILED state when post-run memory
 calibration refuses, in both consumers and wrapper; memory caps/estimates unchanged.
-NPU integration and fixed clean qualification remain. No retry of wide Add yet.
+NPU integration PASSED9 cases on `failure-records-dev02`; added malformed JSON
+object test also passed in the final short CPU rerun. Commit implementation next,
+then clean CPU19/NPU9 + installed consumer build. No retry of wide Add yet.
 
 ## Completed evidence; do not repeat
 
@@ -150,5 +152,5 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted code: failure reporting plus directed tests; CPU18/build passed, NPU
-checks pending. Evidence for38858d0 is committed separately from this increment.
+Uncommitted code: failure reporting plus directed tests; CPU18 plus final9-case
+reporting rerun/build/NPU9 passed; immutable qualification pending. Evidence for38858d0 is committed separately from this increment.

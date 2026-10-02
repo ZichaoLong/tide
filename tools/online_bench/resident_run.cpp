@@ -1,6 +1,7 @@
 #include "resident_consumer.h"
 #include "memory.h"
 #include "resident_contexts.h"
+#include "failure.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
 namespace tide_flow {
@@ -152,10 +153,12 @@ std::string run_resident(const Packet& p,const Config& c,at::Device device,std::
   }
   memory.capture("measured",false);result.memory=memory.json();
   result.peak_growth=memory.peak_growth();
-  for(size_t i=0;i<result.peak_growth.size();++i)if(result.peak_growth[i]>result.capacity.cards[i].peak)
-    throw std::runtime_error("consumer memory estimate underestimated allocator peak; retain failed run and recalibrate");
   result.context_peaks=contexts.peaks();
   result.cut=training?training->cut():inference->cut();if(training)training->close();else inference->close();
+  if(!capacity::within_estimate(result.capacity,result.peak_growth)) {
+    const std::string error="consumer memory estimate underestimated allocator peak; retain failed run and recalibrate";
+    throw RecordedFailure(error,resident_record(p,c,device,result,error));
+  }
   return resident_record(p,c,device,result);
 }
 } // namespace tide_flow

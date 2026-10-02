@@ -42,11 +42,13 @@ def prepare(packet, device, forward, limits, owners, head, training, optimizer, 
 
 
 def observed(record, memory):
+    if len(record['devices']) != len(record['initial_devices']):
+        raise ValueError('consumer memory observation device mismatch')
     observed = []
     for card,initial in zip(record['devices'],record['initial_devices']):
         peak = max(d['peak_allocated_bytes'] for phase in memory['phases'] for d in phase['devices'] if d['device']==initial['device'])
         observed.append(max(0,peak-initial['allocated_bytes']))
-        if observed[-1] > card['estimated_peak_bytes']:
-            raise RuntimeError('consumer memory estimate underestimated allocator peak; retain failed run and recalibrate')
     record['observed_peak_growth_bytes'] = observed
-    record['allocator_within_estimate'] = True
+    record['allocator_within_estimate'] = all(value <= card['estimated_peak_bytes']
+        for value,card in zip(observed,record['devices']))
+    return record['allocator_within_estimate']

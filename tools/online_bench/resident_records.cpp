@@ -27,9 +27,11 @@ void resident_updated_json(std::ostream& out,Index step,const Fixture& f,const t
   for(const auto& owner:f.model.parameters(true).owners())values[owner.canonical]=saved?saved->parameters.at(owner.canonical):owner.value;
   values["embedding"]=embedding;values["head"]=head;parameters(out,step,values,false);
 }
-std::string resident_record(const Packet& p,const Config& c,at::Device device,const ResidentMeasurements& r) {
+std::string resident_record(const Packet& p,const Config& c,at::Device device,const ResidentMeasurements& r,const std::string& error) {
   std::ostringstream out;out<<std::setprecision(17);
-  out<<"{\"schema\":\"tide-online-consumer-v1\",\"state\":\"passed\",\"workload_sha256\":"<<quoted(p.sha)
+  out<<"{\"schema\":\"tide-online-consumer-v1\",\"state\":"<<quoted(error.empty()?"passed":"failed");
+  if(!error.empty())out<<",\"error\":"<<quoted(error)<<",\"failure_phase\":\"post_run_memory_calibration\"";
+  out<<",\"workload_sha256\":"<<quoted(p.sha)
      <<",\"packet_identity\":\"declared; launcher must verify v2 text against hashed JSON\",\"implementation\":\"libtorch\",\"family\":"<<quoted(c.family)
      <<",\"training\":"<<(c.training?"true":"false")<<",\"optimizer\":"<<(c.training?quoted(c.optimizer):"null")
      <<",\"parameters\":"<<p.parameters()<<",\"construction_seconds\":"<<r.construction;

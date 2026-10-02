@@ -36,6 +36,6 @@ std::string capacity_json(const Config& c,const ResidentMeasurements& r) {
   std::ostringstream out;out<<value<<",\"requested_device_memory_bytes\":"<<c.device_memory_bytes<<",\"initial_devices\":[";
   for(size_t i=0;i<r.initial_memory.size();++i){if(i)out<<',';const auto& d=r.initial_memory[i];
     out<<"{\"device\":"<<quoted(d.device.str())<<",\"free_bytes\":"<<d.free<<",\"total_bytes\":"<<d.total<<",\"allocated_bytes\":"<<d.allocated<<'}';}
-  out<<"],\"observed_peak_growth_bytes\":";capacity::array(out,r.peak_growth);out<<",\"allocator_within_estimate\":true}";return out.str();
+  out<<"],";capacity::observation_fields(out,r.capacity,r.peak_growth);out<<'}';return out.str();
 }
 } // namespace tide_flow

@@ -41,7 +41,7 @@ struct ResidentMeasurements {
 void prepare_capacity(const Packet&,const Config&,const std::vector<at::Device>&,ResidentMeasurements&);
 std::string capacity_json(const Config&,const ResidentMeasurements&);
 tide::ResidentTrainingLimits resident_limits(const Config&,at::Device);
-std::string resident_record(const Packet&,const Config&,at::Device,const ResidentMeasurements&);
+std::string resident_record(const Packet&,const Config&,at::Device,const ResidentMeasurements&,const std::string& error="");
 void resident_gradient_add(std::map<std::string,Tensor>&,const Fixture&,const tide::ResidentGradients&);
 void resident_gradients_json(std::ostream&,Index,std::map<std::string,Tensor>,const Tensor&,const Tensor&);
 void resident_updated_json(std::ostream&,Index,const Fixture&,const tide::ResidentTrainingCheckpoint*,const Tensor&,const Tensor&);

@@ -35,6 +35,15 @@ struct Plan {
   std::vector<Card> cards;std::vector<I> owners,canonical;Chunks requested,effective;I reductions=0;bool aggressive;
   I logical_batch=0,sample_rows=0;std::vector<I> sample_attempts;
 };
+inline bool within_estimate(const Plan& plan,const std::vector<I>& peaks) {
+  if(peaks.size()!=plan.cards.size())throw std::invalid_argument("consumer memory observation device mismatch");
+  bool fits=true;
+  for(size_t i=0;i<peaks.size();++i) {
+    if(peaks[i]<0)throw std::invalid_argument("invalid consumer memory observation");
+    if(peaks[i]>plan.cards[i].peak)fits=false;
+  }
+  return fits;
+}
 
 inline std::vector<I> placement(const Geometry& g) {
   const I n=g.sources.size(),d=g.devices;const Wide w=g.width;

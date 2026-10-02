@@ -221,6 +221,13 @@ are explicit. `--parameter-budget` defaults to1GiB of learned payload storage,
 checked before allocation; it is not a total peak-memory estimate. Raising it
 alone does not certify safe full-size execution. Native and Python runs preserve
 failures in `result.json`; the standalone log remains in `consumer.log`.
+Post-run allocator underestimation remains a nonzero failure. Its result retains
+all measured devices, phase peaks, admission estimates, timings, losses, counters
+and final cut, with `failure_phase=post_run_memory_calibration` and
+`allocator_within_estimate=false`. This check happens after execution: updates
+may already have completed, and the record does not imply rollback or a certified
+benchmark. The LibTorch wrapper carries forward a failed child record only when
+its workload identity matches; malformed or mismatched records remain failures.
 
 For eager native and standalone LibTorch consumers, `--workers` selects the
 existing node worker pool independently of ATen intra-op `--threads`.

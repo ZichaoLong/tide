@@ -6,6 +6,11 @@ inline void array(std::ostream& out,const std::vector<I>& x){out<<'[';for(size_t
 inline void fields(std::ostream& out,const std::map<std::string,I>& values) {
   out<<'{';bool first=true;for(const auto& [k,v]:values){if(!first)out<<',';first=false;out<<'"'<<k<<"\":"<<v;}out<<'}';
 }
+inline void observation_fields(std::ostream& out,const Plan& p,const std::vector<I>& peaks) {
+  const bool fits=within_estimate(p,peaks);
+  out<<"\"observed_peak_growth_bytes\":";array(out,peaks);
+  out<<",\"allocator_within_estimate\":"<<(fits?"true":"false");
+}
 inline void record(std::ostream& out,const Plan& p) {
   out<<"{\"schema\":\"tide-consumer-capacity-v1\",\"scope\":\"resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee\",\"devices\":[";
   bool first=true;for(const auto& card:p.cards) {

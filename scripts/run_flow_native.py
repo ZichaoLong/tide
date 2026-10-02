@@ -7,6 +7,7 @@ import time
 from durable_records import replace_text
 from flow_protocol import native_text
 from flow_resident_options import native_arguments
+from flow_failure import RecordedFailure
 
 
 def run(packet, args):
@@ -40,15 +41,24 @@ def run(packet, args):
     with (args.output_dir/"consumer.log").open("w") as stream:
         process = subprocess.run(command, cwd=args.output_dir, stdout=stream, stderr=subprocess.STDOUT)
     elapsed = time.perf_counter()-start
+    identity = dict(packet_identity="hash-validated JSON; exact derived v2 text",
+                    binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
+                    native_input_sha256=hashlib.sha256(text.encode()).hexdigest(),
+                    command=command, process_wall_seconds=elapsed)
+    if path.read_text() != text:
+        raise ValueError("native input packet changed during execution")
     if process.returncode:
-        raise RuntimeError(f"standalone consumer failed ({process.returncode}); see consumer.log")
+        message = f"standalone consumer failed ({process.returncode}); see consumer.log"
+        try:
+            failed = json.loads((args.output_dir/"consumer/result.json").read_text())
+        except (OSError, ValueError):
+            failed = {}
+        if isinstance(failed,dict) and failed.get('state') == 'failed' and failed.get('workload_sha256') == packet['sha256']:
+            raise RecordedFailure(failed.get('error', message),
+                dict(failed, **identity, native_exit_code=process.returncode))
+        raise RuntimeError(message)
     result = json.loads((args.output_dir/"consumer/result.json").read_text())
     if result.get("state") != "passed" or result.get("workload_sha256") != packet["sha256"]:
         raise ValueError("standalone result identity/state mismatch")
-    if path.read_text() != text:
-        raise ValueError("native input packet changed during execution")
-    result.update(packet_identity="hash-validated JSON; exact derived v2 text",
-                  binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
-                  native_input_sha256=hashlib.sha256(text.encode()).hexdigest(),
-                  command=command, process_wall_seconds=elapsed)
+    result.update(identity)
     return result
