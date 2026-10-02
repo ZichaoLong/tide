@@ -6,7 +6,7 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
 `python scripts/status.py`. Latest implementation **4467493** pushed and qualified;
-its reviewed evidence is ready for the separate evidence commit.
+its reviewed evidence **f30e83f** is pushed.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. Reference repositories and
 ObsidianVault are read-only.
@@ -57,14 +57,17 @@ Do not repeat unchanged CPU/representative matrices.
 
 ## Next bounded action and remaining scale
 
-After evidence commit/push, reassess one original-width Add nine-card B4/physicalB2
-update using clean4467493. Prepared `TASK/launchers/wide_add_projection_borrow.py`
-checks all clean runtime jobs, uses original B512 shape-only plan, and retains
-queue/arrivals896,trace3072,outputs64,KV256,KV-trace8192,60GiB/card,head/context4GiB.
-Only enters one cold B512 update if allocator/semantic checks pass and unchanged
-measured-seconds×128×1.15<=3000. Queue120s,pilot900s,B5123180s,outer4300s,
-`online-measurement.lock`. Not yet submitted; no retry or gate relaxation.
-Command: `python TASK/launchers/freeze_run.py --name wide-add-projection-borrow01 --snapshot projection-borrow-clean01 --commit 4467493 --npu --npu-count 9 --max-wait 120 -- env -C {out} timeout 4300 {python} {base}/launchers/wide_add_projection_borrow.py --source {source} --build {base}/builds/projection-borrow-consumer-clean01 --output {out}/assessment`.
+New `wide-add-projection-borrow01` is terminal passed on clean4467493, all leases
+released: B4/physicalB2,9cards,complete update20.769816367s,construction72.962783193s,
+peak43197837312bytes, outputs96/events9265/cut408, prior loss matches. All memory
+checks pass. Projection3057.316969s>3000s, so B512 was not started.
+[Evidence](evidence/original-width-add-projection-borrow-20261003.md).
+Audit: `python TASK/launchers/wide_add_projection_borrow_evidence.py 44674936efcc4177d4683a7e8542816aec0928eb`.
+Next implement optional synchronized consumer phase timing: separate sample work
+from once-per-update optimizer work (including finite checks/publication). Disabled
+by default; no per-event timing. Validate all consumer entrypoints, then one bounded
+cost diagnostic only. Keep3000s cap, safety factor and original refusals; no blind
+same-pilot retry or full-size execution based solely on a revised assumption.
 
 Previous789e1a5 original-width Add nine-card B4/physicalB2 pilot passed:
 21.179427721s,construction84.305374079s,peak47394238464bytes,loss31.58603858947754,
@@ -105,8 +108,8 @@ Old/new memory baseline consumer `gradient-lifetime-consumer-clean01` is retaine
 Objects/dependencies reused only with source/header/options/hash verification;
 consumer freshly linked. No full rebuild claim.
 
-All projection-borrow development6/qualification8 jobs terminal passed. No current
-active/queued task job. Units `tide-execution-flows-NAME.service`, logs/status
+All projection-borrow development6/qualification8 and latest wide Add jobs are
+terminal passed. No active or queued task job. Units `tide-execution-flows-NAME.service`, logs/status
 `TASK/runs/NAME`; inspect `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`;
 stop via `systemctl --user stop UNIT` only if needed.
 **Preserve deliberately SIGSTOPped historical-cpu-attention-01**: never resume,

@@ -209,6 +209,12 @@ budgets and consumer estimates unchanged. Same-lease D512 peaks decrease
 296,274,432bytes/card; separate FP16 trace53176ops/zero observed AiCPU
 ([evidence](evidence/resident-projection-borrow-20261003.md)). Original-size remains open.
 
+F6 original-width Add on clean4467493 passed one unchanged nine-card B4/physicalB2
+complete update20.770s,peak43,197,837,312bytes. All memory/work/loss checks pass;
+B512 projection3057.317s>3000s, not executed. Optional sample-work/optimizer timing
+is the next cost diagnostic; original refusals and cost cap remain
+([evidence](evidence/original-width-add-projection-borrow-20261003.md)).
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU
