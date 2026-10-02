@@ -5,8 +5,8 @@ implementation, commits and pushes. No pause instruction; no subagents.
 Repository /home/zlong/llm/graph-execution-foundation resolves to
 /var/tmp/zlong-graph-execution-foundation/repository, branch graph-execution-foundation.
 Implementation48e44b0/evidenceca559b5 are qualified; matrix evidence270ee2e is committed/pushed.
-Valid-prefix retained journals passed all development gates; implementation ready
-for commit. Immutable qualification and separate evidence remain next.
+Implementation0fbc1b2 committed/pushed and all eight clean jobs PASSED.
+Reviewed retained-journal and original-wide Attention evidence ready for commit.
 Reference repositories and ObsidianVault remain read-only.
 [execution-flows.md](execution-flows.md) is authoritative; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. Overall goal incomplete.
@@ -77,64 +77,70 @@ CPU, not later sliced/compact-source timings and not original-wide evidence.
 No measured processes need rerunning. Parent boundary hold records are resumed;
 there is no live matrix recipe to signal.
 
-## Current increment and next action
+## Latest closed increment
 
-Valid-prefix retained journal implementation is ready to commit after all
-relevant development gates PASSED. No clean-source qualification yet.
-- Aggressive policy saves only valid prefixes of event/source/emission/cache
-  journals at completed-window boundaries. Empty journals keep one unused row;
-  preserve prefix IDs/aliases and complete pending/output/KV layouts. Dynamic
-  nonzero extents synchronize at this boundary, never per-event scheduling.
-- Admission reserves the next dense window before advance, then charges actual
-  retained tape/state bytes. New retained_dense_bytes/retained_compact_journals
-  statistics; conservative mode unchanged. Consumer planning still charges dense
-  retained envelopes and separately reserves metadata packing workspace.
-- All three builds PASSED: build-retained-journals-{standalone,python,consumer}-dev01,
-  frozenretained-journals-dev01. Changed host units only, byte-checked unchanged
-  core/CANN/public-header dependencies, fresh links/loader closure.
-- Frozenretained-journals-dev02 corrects only test configuration (source code
-  unchanged). Public-dev02:10 passed (new7+dense projection3). CPU-dev01:17passed.
-  Samples-dev01:34passed. Components-dev01:FP32/FP16 each32trajectories,
-  512windows/128updates,independent CPU FP32/FP64,SGD/AdamW,cache/control profiles,
-  explicit owner maps and two-device to legacy single-device resume.
-- Preserve public-dev01 FAILED:four unsupported controlled slot-affine test
-  combinations and one missing explicit seal. Corrected tests use supported
-  broadcast for HST/SOFTP and declare the empty-window seal. No tolerance change.
+Valid-prefix journals0fbc1b24ca8d8b178f83dfce32279ba23ce7e51f qualified at
+TASK/sources/retained-journals-clean01. All8clean jobs PASSED:
+build-retained-journals-{standalone,python,consumer}-clean01 and
+retained-journals-{cpu,npu,components,profile,memory}-clean01. Audit
+launchers/retained_journals_evidence.py passed. CPU17,NPU44,no skips; native
+FP32/FP16 total64trajectories/1,024windows/256updates,independent CPU FP32/FP64.
+Separate actual two-card consumer trace46,612Vector/1,797AI_CORE/667MIX_AIV,0AiCPU.
+Same representative Attention/fourB2slices/oneFP32AdamW/two connected windows:
+allocator1,868,793,344→1,455,752,704bytes(-22.10%);retained388,563,192→184,628,448
+(-52.48%),identical loss5.612767696380615/3145events/64outputs/cut. Total admission
+still charges dense tapes plus explicit prefix scratch; live KV remains dense.
+[Report](evidence/resident-retained-journals-20261002.md).
 
-Next: commit/push implementation, then freeze retained-journals-clean01 at that
-exact commit. Build both runtimes with launchers/build_retained_journals.py
-NAME --runtime standalone|python --reuse-host retained-journals-RUNTIME-dev01.
-Consumer uses build_capacity_client.py --reuse-client retained-journals-consumer-dev01.
-Clean gates:CPU17,combinedNPU44,components2; separate actual-consumer two-card
-profile via profile_retained_journals.py and one-card allocator comparison via
-retained_journals_memory.py. Use freeze_run.py, bounded jobs/no blind retries.
-Allocator calibration can overlap separately leased capacity/correctness jobs;
-no timing recommendation from these runs. Matrix has terminated. Evidence must
-be a separate reviewed commit. Do not relax full-size memory admission based on
-journal compaction alone; complete planner retains dense bounds.
+Aggressive policy compacts candidate-owned event/source/emission/cache journal
+prefixes at completed-window retention boundaries. Dynamic nonzero shapes sync
+there,never per event. Preserve row IDs/aliases/empty sentinel,complete pending,
+outputs/KV and VJP links. Conservative remains dense; old C++ overloads unchanged.
+Retained statistics distinguish dense bounds and actual bytes. Capacity is checked
+before advance. Do not relax full-size training admission from this result alone.
+Dev public01 remains FAILED (four unsupported controlled slot-affine fixtures and
+one omitted seal); corrected public02 and all clean cases passed without tolerance
+changes. Source/runtime contracts unchanged. Other completed dev/build logs retained.
 
-## Active eight-device scale execution
+## Original-wide Attention execution passed
 
-Unit tide-execution-flows-wide-inference-staged01.service;
+wide-inference-staged01 PASSED/released8NPUs06:05:57UTC;
 TASK/runs/wide-inference-staged01/{status,stages,queue}.json and task.log.
-Helper launchers/wide_inference_stages.py, source48e44b0 at context-pool-clean01,
-qualified installed consumer context-pool-consumer-clean01. Never edit live helper.
-Lease physical1,2,3,4,5,7,9,11→logical0..7. D512/B32 stage PASSED:
-1,133,889,728parameters,44.877s construction,11.432s complete step. Original
-17.5B D2048/B512/T12/V50304 Attention is still RUNNING (construction last observed).
-One cold complete inference step/two connected windows,FP32,TimedDAG/prefill,
-locality/sample4/KV256/queue-arrivals2048/outputs512/trace16384/kv-trace65536,
-8GiB compact pool/card,60GiB total/card,head512MiB,forward capability512GiB.
-Original packet/logical batch unchanged. Static max53.798GiB/8cards is NOT a pass.
-Original-wide cap1800s from about05:46:40UTC; child process group cleanup on failure,
-no blind retry. This is capacity/execution evidence, not throughput; dev builds
-and gates on other devices overlap. Inspect terminal outputs, model/input/cut,
-allocator estimate, complete output counts and finite loss before recording pass.
-Do not reuse the historical old timing.lock.
+Qualifiedsource48e44b0/context-pool-clean01;installed consumercontext-pool-consumer-clean01.
+Lease physical1,2,3,4,5,7,9,11→logical0..7. Prerequisite D512/B32 passed.
+Original17,521,117,376parameters,D2048/B512/T12/V50304,FP32 TimedDAG/prefill,
+128physicalB4groups,one complete step/two connected windows PASSED:12,288outputs,
+1,184,430events,cut408,finite loss21.380956649780273. Construction817.996s,
+step325.278s. Per-card allocator11.777–14.562GiB(max15,635,636,736bytes),within
+conservative max53.798GiB plan. CPUpeak208.770GiB;compact pools<8GiB/card.
+No logical batch or KV reduction. No full-size CPU oracle,profile,warmup/repeats
+or throughput recommendation; independent dev/calibration jobs overlapped.
+Audit launchers/wide_inference_evidence.py passed.
+[Report](evidence/original-wide-inference-20261002.md).
+
+## Next action
+
+Commit/push reviewed evidence separately, then reduce bounded full-size setup cost
+before more full-size comparisons. Read-only inspection found CPU source_values
+initialization in tools/online_bench/model.cpp uses three LCG tensor passes with
+repeated int64 temporaries/remainders. Investigate a generic fused CPU initializer,
+prove byte-identical common parameters against independent Python and old ATen
+(including modulo boundaries/seeds), then build/gate affected consumers. No code
+for this optimization yet; do not assume it accounts for all construction time.
+Original-wide Attention construction818s versus325s execution makes this a useful
+finite question; never change packet/input values or move reference computation
+into candidates. Keep public/core graph semantics and measured step timers intact.
+
+Next original Add capacity run can reuse the established eight-card shape and
+budgets after setup improvement qualification. Full-size training also needs a
+larger head workspace than the512MiB inference setting: static probe with training
+correctly rejected one head row. Derive capacity/lifetimes,do not blindly retry.
+No new long job queued;all current jobs terminal except the deliberately stopped
+historical CPU task below. Do not rerun completed representative matrix.
 
 ## Remaining goal work
 
-Original-wide real execution and finite CPU/screened-mixed/resident comparisons;
+Original-wide Add and other required flows,finite CPU/screened-mixed/resident comparisons;
 training retained/reverse/gradient memory and safe complete admission; automatic
 sample admission; eager mixed multi-device parameter/payload placement. F7 final
 migration/evidence audit. CUDA execution and additional tuples require target
@@ -156,8 +162,9 @@ PYTHONPATH,prepend frozen source/python. TASK_QUEUE_ENABLE=0,
 TORCH_DEVICE_BACKEND_AUTOLOAD=0.16logical64GiB Ascend910_9392;lease/remap only.
 freeze_run.py:detached background.slice/Nice10,2buildworkers,bounded tasks.
 Last free:data195GiB/root12GiB. Current formal timing lock TASK/online-measurement.lock.
-Atomic handoff via durable_records.replace_text. Qualified resident libraries
-context-pool-{standalone,python}-clean01; consumer context-pool-consumer-clean01.
+Atomic handoff via durable_records.replace_text. Latest qualified resident libraries
+retained-journals-{standalone,python}-clean01; consumer retained-journals-consumer-clean01.
+Earlier context-pool consumer remains qualified for its original-wide evidence.
 Core placement-{cpu,npu,npu-python}-clean01; eager clients sample-chunks-{cpu,npu}-clean01.
 Standalone and Python-owned runtimes remain separate; no library mixing.
 

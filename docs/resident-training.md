@@ -115,7 +115,8 @@ records the policy. Temporary masks/indices need metadata workspace proportional
 to declared journal capacities, outside the retained tape/state budget. The
 complete consumer planner charges this separately and still uses dense bounds;
 this optimization alone does not admit a previously refused full-size run.
-Qualification of compact retained journals is pending.
+Compact retained journals are [qualified on fixed source](evidence/resident-retained-journals-20261002.md),
+including independent VJPs, multi-update/continuation checks and allocator calibration.
 
 `snapshot_device(max_bytes=...)` saves a detached numerical continuation in opaque
 NPU buffers; `restore_device(saved)` switches to it on the **same live owner**.
