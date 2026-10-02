@@ -12,6 +12,10 @@ StateReverseView view(const StateOwnerTape& t,const StateReversePacket& p) {
 }
 StateOwnerReverse::StateOwnerReverse(CannProgram& p,const StateOwnerTape& t,const StateReversePacket& packet,
     const std::vector<CacheCotangents>& roots,const std::vector<CacheGradient>& next,const at::Tensor& error,int64_t chunk,int64_t budget)
+    :StateOwnerReverse(p,t,packet,roots,next,error,chunk,budget,nullptr) {}
+StateOwnerReverse::StateOwnerReverse(CannProgram& p,const StateOwnerTape& t,const StateReversePacket& packet,
+    const std::vector<CacheCotangents>& roots,const std::vector<CacheGradient>& next,const at::Tensor& error,int64_t chunk,int64_t budget,
+    const StateShardGradient* reuse)
     :owner_(t),view_(view(t,packet)),links_(packet.links),total_{t.global_nodes,t.layout},chunk_(chunk),budget_(budget) {
   const auto groups=t.attention.size()+t.fiber.size();const auto n=t.layout.nodes,w=t.layout.width,b=t.state.samples;
   if((!roots.empty()&&roots.size()!=groups)||(!next.empty()&&next.size()!=groups)||chunk<1||budget<1
@@ -23,8 +27,41 @@ StateOwnerReverse::StateOwnerReverse(CannProgram& p,const StateOwnerTape& t,cons
   total_.read=zeros({n,w});total_.read_connected=zeros({n},true);
   decay_=zeros({b,n,w});retention_=zeros({b,n,w});decay_on_=zeros({b,n},true);retention_on_=zeros({b,n},true);
   messages_=zeros(packet.fiber_values.sizes());connected_=zeros({packet.fiber_values.size(0)},true);partials_=zeros(packet.fiber_values.sizes());
-  if(!t.attention.empty()) {total_.attention=zeros({t.layout.event_offsets.back()});total_.attention_connected=zeros({n,4},true);}
-  if(!t.fiber.empty()){total_.fiber=zeros({t.layout.fiber_offsets.back()});total_.fiber_connected=zeros({n,6},true);}
+  if(reuse) {
+    const auto& l=reuse->layout;
+    if(reuse->nodes!=t.global_nodes||l.nodes!=n||l.width!=w||l.source_counts!=t.layout.source_counts
+        ||l.event_offsets!=t.layout.event_offsets||l.fiber_offsets!=t.layout.fiber_offsets)
+      throw std::invalid_argument("reusable attention adjoint layout changed");
+    std::vector<at::Tensor> protected_storage{t.state.decay,t.state.retention,t.read};
+    for(const auto& a:t.attention)for(const auto& x:{a.qkv,a.projection,a.key,a.value})protected_storage.push_back(x);
+    for(const auto& a:t.fiber)for(const auto& x:{a.cache.qkv,a.cache.projection,a.qkv_bias,a.projection_bias,a.decay,a.pool_weights,
+        a.cache.key,a.cache.value,a.bias})protected_storage.push_back(x);
+    std::vector<at::Tensor> checked;
+    auto validate=[&](const at::Tensor& x,bool required,at::IntArrayRef shape,bool flag=false) {
+      if(x.defined()!=required)throw std::invalid_argument("reusable attention adjoint profile changed");
+      if(!required)return;
+      if(x.device()!=packet.event_values.device()||x.scalar_type()!=(flag?at::kBool:at::kFloat)
+          ||x.sizes()!=shape||!x.is_contiguous()||x.requires_grad())throw std::invalid_argument("invalid reusable attention adjoint bank");
+      for(const auto& other:protected_storage)if(other.defined()&&x.is_alias_of(other))
+        throw std::invalid_argument("reusable attention adjoint aliases retained values");
+      for(const auto& other:checked)if(x.is_alias_of(other))throw std::invalid_argument("reusable attention adjoint banks alias");
+      checked.push_back(x);
+    };
+    validate(reuse->attention,!t.attention.empty(),{t.layout.event_offsets.back()});
+    validate(reuse->attention_connected,!t.attention.empty(),{n,4},true);
+    validate(reuse->fiber,!t.fiber.empty(),{t.layout.fiber_offsets.back()});
+    validate(reuse->fiber_connected,!t.fiber.empty(),{n,6},true);
+  }
+  if(!t.attention.empty()) {
+    total_.attention=reuse?reuse->attention:at::empty({t.layout.event_offsets.back()},f);
+    total_.attention_connected=reuse?reuse->attention_connected:at::empty({n,4},bits);
+    p.zero(total_.attention);p.zero(total_.attention_connected);
+  }
+  if(!t.fiber.empty()) {
+    total_.fiber=reuse?reuse->fiber:at::empty({t.layout.fiber_offsets.back()},f);
+    total_.fiber_connected=reuse?reuse->fiber_connected:at::empty({n,6},bits);
+    p.zero(total_.fiber);p.zero(total_.fiber_connected);
+  }
   const int64_t per=budget/8/std::max<size_t>(1,groups);
   for(size_t i=0;i<t.attention.size();++i) {
     auto seed=roots.empty()?CacheCotangents{}:roots[i];

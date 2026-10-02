@@ -2,6 +2,7 @@
 #include "state_reverse_merge.h"
 #include "peer_exchange.h"
 #include <c10/core/impl/VirtualGuardImpl.h>
+#include <optional>
 #include <set>
 #include <stdexcept>
 namespace tide::device_online {
@@ -15,6 +16,7 @@ struct ShardedStateVjp::Impl {
     at::Tensor mapping,ids,error,remote_error,command,stop;
     std::vector<CacheCotangents> roots;
     std::vector<CacheGradient> next;
+    std::optional<StateShardGradient> reuse;
     std::unique_ptr<StateOwnerReverse> reverse;
     std::unique_ptr<CannProgram> program;
     std::unique_ptr<PeerExchange> init,request,response,finish;
@@ -59,6 +61,18 @@ ShardedStateVjp::ShardedStateVjp(const ShardedReverseTape& t,const at::Tensor& e
   if(seen.size()!=size_t(nodes))throw std::invalid_argument("incomplete compact state reverse ownership");
 }
 ShardedStateVjp::~ShardedStateVjp()=default;
+void ShardedStateVjp::reuse_attention_parameters(const ShardedStateVjp& next) {
+  auto& s=*impl_;const auto& later=*next.impl_;
+  if(s.prepared||s.built||later.global.cut!=s.global.stop||later.global.graph->identity!=s.global.graph->identity
+      ||s.shards.size()!=later.shards.size())throw std::logic_error("attention adjoint reuse requires a following window before preparation");
+  const auto gradients=next.gradients();
+  for(size_t i=0;i<s.shards.size();++i) {
+    auto& owner=s.shards[i];
+    if(owner.reuse||owner.tape.global_nodes!=gradients[i].nodes||owner.tape.state.decay.device()!=later.shards[i].tape.state.decay.device())
+      throw std::invalid_argument("attention adjoint reuse owner changed");
+    owner.reuse=gradients[i];
+  }
+}
 void ShardedStateVjp::prepare(CannProgram& p,const ReverseLinks& links) {
   auto& s=*impl_;if(s.prepared)throw std::logic_error("compact reverse preparation repeated");s.prepared=true;
   ReverseGatherInput events(p,s.global.state.values),fibers(p,s.global.fiber_values),scales(p,links.scales);
@@ -74,7 +88,7 @@ void ShardedStateVjp::prepare(CannProgram& p,const ReverseLinks& links) {
       copy(local_error);owner.init=std::make_unique<PeerExchange>(std::move(fields),s.budget/4);
       owner.init->append_send(p);owner.init->append_receive(program);
     }
-    owner.reverse=std::make_unique<StateOwnerReverse>(program,owner.tape,owner.local,owner.roots,owner.next,local_error,s.chunk,s.budget/2);
+    owner.reverse=std::make_unique<StateOwnerReverse>(program,owner.tape,owner.local,owner.roots,owner.next,local_error,s.chunk,s.budget/2,owner.reuse?&*owner.reuse:nullptr);
     // The preparation status lives on the owner and is included in the first
     // stage request/response. No host inspection controls the stage loop.
     owner.remote_error=local_error;

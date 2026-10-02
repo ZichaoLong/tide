@@ -106,6 +106,11 @@ packets precede all writes, and an end-of-reduction consensus confirms that all
 owners have consumed their inputs. Only then can the preceding window reset and
 reuse physical projection-weight/bias/connection adjoints. The canonical output
 bank and numerical packet arenas are shared across these reductions as well.
+Event/fiber Attention parameter adjoints use the same completion boundary and
+state-owner init packet to reuse their numeric banks and connection masks.
+Their node mapping, parameter offsets, device, dtype, shape and storage aliases
+are validated before reuse. Cache key/value/log-bias boundary gradients, state
+and message cotangents remain independent; they are needed to bridge windows.
 Per-owner floating additions remain reverse-window then registry-alias; aliases
 are not first combined into a window sum. Nonfinite/disconnected handling and
 sticky errors retain the same contract. Full, state, cache and message adjoints
@@ -113,8 +118,9 @@ remain per-window, including the gradients needed by continuation bridges.
 
 `streamed_parameter_windows` counts windows reduced this way;
 `reused_projection_gradient_bytes` counts duplicate physical projection-adjoint
-storage avoided within each backward group. It is a storage accounting counter,
-not measured allocator savings. The conservative policy retains the separate
+storage avoided within each backward group. `reused_attention_gradient_bytes`
+reports the corresponding event/fiber parameter-adjoint reuse. Both are storage
+accounting counters, not measured allocator savings. The conservative policy retains the separate
 final reduction. The legacy single-device representation does not use this
 optimization; an explicit one-device placement uses the sharded representation.
 Consumer admission estimates remain conservative and unchanged. Shared arena

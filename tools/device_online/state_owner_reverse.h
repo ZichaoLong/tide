@@ -21,6 +21,11 @@ class StateOwnerReverse {
   StateOwnerReverse(CannProgram&,const StateOwnerTape&,const StateReversePacket&,
       const std::vector<CacheCotangents>&,const std::vector<CacheGradient>& next_cache,
       const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget);
+  // Parameter-only reuse after a completed canonical reduction. Cache, state
+  // and message cotangents remain window-owned for continuation bridges.
+  StateOwnerReverse(CannProgram&,const StateOwnerTape&,const StateReversePacket&,
+      const std::vector<CacheCotangents>&,const std::vector<CacheGradient>& next_cache,
+      const at::Tensor& error,int64_t chunk_rows,int64_t tensor_budget,const StateShardGradient* reuse);
   StateOwnerVjp append_stage(CannProgram&,const StateReverseStage&,const at::Tensor& error);
   void append_finish(CannProgram&,const at::Tensor& error);
   StateShardGradient gradient() const {return total_;}

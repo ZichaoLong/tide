@@ -160,11 +160,18 @@ ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape
     const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
     const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots,
     const std::vector<ProjectionGradient>& reuse) {
+  return append_sharded_graph_vjp(p,t,roots,error,chunk,budget,workspace,next,state_roots,reuse,false);
+}
+ShardedGraphVjp append_sharded_graph_vjp(CannProgram& p,const ShardedReverseTape& t,const GraphCotangents& roots,
+    const at::Tensor& error,int64_t chunk,int64_t budget,int64_t workspace,
+    const std::shared_ptr<ShardedStateVjp>& next,const std::vector<std::vector<CacheCotangents>>& state_roots,
+    const std::vector<ProjectionGradient>& reuse,bool reuse_attention) {
   const int split=t.states.empty()?2:3;
   auto full=std::make_shared<ShardedFullVjp>(p,t,chunk,budget/split,workspace);
   std::shared_ptr<ShardedStateVjp> state;GraphStateVjp hooks;
   if(!t.states.empty()) {
     state=std::make_shared<ShardedStateVjp>(t,error,chunk,budget/3,workspace,next,state_roots);
+    if(reuse_attention&&next)state->reuse_attention_parameters(*next);
     hooks.prepare=[state](CannProgram& p,const ReverseLinks& links){state->prepare(p,links);};
     hooks.stage=[state](CannProgram& p,const at::Tensor& range,const StateCotangents& cot,const ControlScores& scores){return state->append_stage(p,range,cot,scores);};
     hooks.sources=[state](CannProgram& p,const at::Tensor& messages,const at::Tensor& on,const at::Tensor& partials){state->append_sources(p,messages,on,partials);};

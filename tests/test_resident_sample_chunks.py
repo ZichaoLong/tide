@@ -72,6 +72,7 @@ def test_resident_sample_chunks(case, implementation, dtype_name, tmp_path):
             streamed = policy == 'aggressive' and cards > 1
             assert stats['streamed_parameter_windows'] == (stats['retained_windows'] if streamed else 0)
             assert (stats['reused_projection_gradient_bytes'] > 0) == streamed
+            assert (stats['reused_attention_gradient_bytes'] > 0) == (streamed and memory == 'attention')
         windows = [r for r in actual if r['kind']=='window' and r['step']==step]
         event_sum = sum(len(r['events']) for r in windows)
         event_max = max(len(r['events']) for r in windows)

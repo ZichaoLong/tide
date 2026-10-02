@@ -92,13 +92,13 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
   const bool streamed=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
   std::vector<std::unique_ptr<ShardedParameterReduce>> reductions(streamed?s.saved.size():1);
   std::vector<ShardedParameterReduce*> embedded;
-  Index reused_projection_bytes=0;
+  Index reused_projection_bytes=0,reused_attention_bytes=0;
   for(size_t i=s.saved.size();i>0;) {--i;auto& p=sequence.append();const auto& t=s.saved[i].tape.tape;
     auto cot=roots(input[i],t.coordinator,s.saved[i].states);
     if(i+1<s.saved.size())cot=append_window_bridge(p,t.coordinator,cot,s.saved[i+1].tape.tape.coordinator,gradients[i+1].coordinator,error,per/8);
     gradients[i]=append_sharded_graph_vjp(p,t,cot,error,s.limits.reverse_chunk_rows,per/2,s.limits.program_workspace_bytes,
       i+1<s.saved.size()?gradients[i+1].state:nullptr,cache_inputs(input[i],t.states.size()),
-      streamed&&i+1<s.saved.size()?gradients[i+1].coordinator.emission.shards:std::vector<ProjectionGradient>{});
+      streamed&&i+1<s.saved.size()?gradients[i+1].coordinator.emission.shards:std::vector<ProjectionGradient>{},streamed);
     if(streamed) {
       // Each owner receives exactly the original reverse-window -> alias
       // sequence. Do not pre-sum aliases into per-window canonical gradients.
@@ -110,6 +110,12 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
         if(bytes>std::numeric_limits<Index>::max())throw std::invalid_argument("projection reuse byte counter overflow");
         reused_projection_bytes=Index(bytes);
       }
+      if(i+1<s.saved.size()&&gradients[i].state)for(const auto& shard:gradients[i].state->gradients())
+        for(const auto& tensor:{shard.attention,shard.attention_connected,shard.fiber,shard.fiber_connected})if(tensor.defined()) {
+          if(tensor.nbytes()>uint64_t(std::numeric_limits<Index>::max()-reused_attention_bytes))
+            throw std::invalid_argument("attention adjoint reuse byte counter overflow");
+          reused_attention_bytes+=Index(tensor.nbytes());
+        }
     }
   }
   if(!streamed)reductions[0]=std::make_unique<ShardedParameterReduce>(sharded_parameter_sources(s.graph,s.registry,gradients,s.limits.backward_bytes/16),
@@ -165,6 +171,7 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     }
     out.statistics["streamed_parameter_windows"]=streamed?s.saved.size():0;
     out.statistics["reused_projection_gradient_bytes"]=reused_projection_bytes;
+    out.statistics["reused_attention_gradient_bytes"]=reused_attention_bytes;
     s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.attention_snapshot={};s.full_snapshot={};s.saved_bytes=0;return out;
   }catch(...){s.failed=true;throw;}
 }

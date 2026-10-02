@@ -109,6 +109,7 @@ ResidentGradients ResidentTrainingSession::Impl::reverse(const std::vector<Resid
     out.statistics["retained_compact_journals"]=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
     out.statistics["streamed_parameter_windows"]=0;
     out.statistics["reused_projection_gradient_bytes"]=0;
+    out.statistics["reused_attention_gradient_bytes"]=0;
     s.gradient=std::move(total);s.gradients_ready=true;s.saved.clear();s.projection_snapshot={};s.attention_snapshot={};s.full_snapshot={};s.saved_bytes=0;return out;
   }catch(...){s.failed=true;throw;}
 }

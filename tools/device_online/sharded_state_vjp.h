@@ -8,6 +8,9 @@ class ShardedStateVjp {
       const std::shared_ptr<ShardedStateVjp>& next={},
       const std::vector<std::vector<CacheCotangents>>& roots={});
   ~ShardedStateVjp();
+  // Before prepare: borrow only parameter adjoints from the following window.
+  // Caller must insert a completed canonical reduction between the windows.
+  void reuse_attention_parameters(const ShardedStateVjp& next);
   void prepare(CannProgram&,const ReverseLinks&);
   StateVjp append_stage(CannProgram&,const at::Tensor& range,const StateCotangents&,const ControlScores&);
   void append_sources(CannProgram&,const at::Tensor& messages,const at::Tensor& connected,const at::Tensor& partials);
