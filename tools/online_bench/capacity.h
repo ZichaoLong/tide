@@ -84,7 +84,7 @@ inline std::vector<I> canonical_loads(const Geometry& g) {
   return load;
 }
 inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Chunks& chunk,
-    const std::vector<I>& owners,const std::vector<I>& canonical) {
+    const std::vector<I>& owners,const std::vector<I>& canonical,bool reuse_parameter_gradients=false) {
   const Wide w=g.width,b=g.batch,v=g.vocab,p=g.payload,windows=g.windows,n=g.sources.size();
   const Wide trace=g.diagnostics?c.trace:0;std::vector<Card> result;
   for(I device=0;device<g.devices;++device) {
@@ -126,7 +126,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
     const Wide head_work=coordinator?head_fixed+chunk.at("head")*head_row:0;
-    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0;
+    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0,projection_gradients=0;
     if(g.training) {
       // Immutable attention parameters share one retained snapshot per group;
       // numerical state, KV/log-bias, lengths and journals still scale by windows.
@@ -134,8 +134,12 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
       // Add has no QKV/output matrices; projection, scalar aggregate and vector
       // LH/state/Read gradients retain their separate conservative charges.
-      attention_gradients=g.attention?windows*16*body*w*w:0;
-      gradients=windows*(4*(slots+1)*(w*w+w)+4*body*domain+32*b*nodes*(w+1)+24*cache)+attention_gradients;
+      // Ordered aggressive sharded reduction allows parameter-only reuse;
+      // state/cache/message bridges and other scratch remain window-owned.
+      const Wide copies=reuse_parameter_gradients&&g.devices>1?1:windows;
+      projection_gradients=copies*4*(slots+1)*(w*w+w);
+      attention_gradients=g.attention?copies*16*body*w*w:0;
+      gradients=projection_gradients+attention_gradients+windows*(4*body*domain+32*b*nodes*(w+1)+24*cache);
       if(coordinator)gradients+=windows*64*(trace+c.queue+c.outputs)*(w+32);
       gradients+=4*Wide(canonical[device]);
       reverse_work=windows*chunk.at("reverse")*(256*w*w+128*c.kv*(w+1)+128*domain+4096);
@@ -156,6 +160,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"continuation_snapshot_bytes",bytes(snapshot)},{"saved_contexts",bytes(saved_contexts)},
       {"gradient_accumulation",bytes(accumulation)},{"context_pack_workspace",bytes(context_pack)},
       {"retained_pack_workspace",bytes(retained_pack)},{"attention_parameter_gradients",bytes(attention_gradients)},
+      {"projection_parameter_gradients",bytes(projection_gradients)},
       {"gradient_accumulation_live",bytes(accumulation_live)},
       {"retained_attention_parameters",bytes(g.training?state_parameters:0)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
@@ -176,7 +181,7 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
   for(auto [a,b]:g.edges)if(a<0||b<0||a>=n+2||b>=n+2)throw std::invalid_argument("invalid consumer edge");
   Plan out;out.owners=placement(g);out.canonical=canonical_loads(g);out.requested=out.effective=requested;out.aggressive=aggressive;
   for(;;) {
-    out.cards=envelope(g,c,out.effective,out.owners,out.canonical);bool fits=true;std::string why;
+    out.cards=envelope(g,c,out.effective,out.owners,out.canonical,aggressive);bool fits=true;std::string why;
     for(size_t i=0;i<out.cards.size();++i) {
       auto& card=out.cards[i];card.budget=budgets[i];card.usable=budgets[i]-budgets[i]/(aggressive?10:4)-128*MiB;
       card.headroom=card.budget-card.usable;
@@ -196,7 +201,7 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
       for(const auto* key:{"full","emission","aggregate","attention","keys","reverse","head"}) {
         const I value=out.effective.at(key);if(value==1)continue;
         auto trial=out.effective;trial[key]=std::max<I>(1,value/2);
-        const Wide score=excess(envelope(g,c,trial,out.owners,out.canonical));
+        const Wide score=excess(envelope(g,c,trial,out.owners,out.canonical,aggressive));
         if(score<best){best=score;selected=key;}
       }
       if(!selected.empty()) {

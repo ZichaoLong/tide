@@ -97,11 +97,11 @@ def test_constrained_plans_keep_original_envelope_and_language_parity(capacity_p
         g=replace(g,payload=2 if i%3 else 4,windows=1+i%3,sample_chunks=1+i%4)
         caps=Capacities(trace=128,kv_trace=256)
         requested=Chunks(full=11,emission=9,aggregate=7,attention=5,keys=33,reverse=13,head=17)
-        full=plan(g,caps,requested,[64*1024**3]*g.devices,True)
-        minimum=plan(g,caps,Chunks(1,1,1,1,1,1,1),[64*1024**3]*g.devices,True)
         weak=i%g.devices
-        target=(minimum['devices'][weak]['estimated_peak_bytes']+full['devices'][weak]['estimated_peak_bytes'])//2
         for aggressive in (False,True):
+            full=plan(g,caps,requested,[64*1024**3]*g.devices,aggressive)
+            minimum=plan(g,caps,Chunks(1,1,1,1,1,1,1),[64*1024**3]*g.devices,aggressive)
+            target=(minimum['devices'][weak]['estimated_peak_bytes']+full['devices'][weak]['estimated_peak_bytes'])//2
             denominator=10 if aggressive else 4
             budgets=[64*1024**3]*g.devices
             budgets[weak]=(target+128*MIB)*denominator//(denominator-1)+1
@@ -110,7 +110,7 @@ def test_constrained_plans_keep_original_envelope_and_language_parity(capacity_p
             assert got['physical_reductions']>0
             assert got['full_owners']==full['full_owners'] and got['canonical_elements']==full['canonical_elements']
             assert all(1<=value<=asdict(requested)[key] for key,value in got['effective_chunks'].items())
-            exact=envelope(g,caps,Chunks(**got['effective_chunks']),got['full_owners'],got['canonical_elements'])
+            exact=envelope(g,caps,Chunks(**got['effective_chunks']),got['full_owners'],got['canonical_elements'],reuse_parameter_gradients=aggressive)
             for card,original in zip(got['devices'],exact):
                 assert card['estimated_peak_bytes']==original['estimated_peak_bytes']<=card['usable_bytes']
                 assert card['phases']==original['phases'] and card['components']==original['components']
@@ -143,20 +143,27 @@ def test_overflow_refusal(capacity_probe):
 
 
 @pytest.mark.parametrize('memory',['add','attention'])
-def test_attention_gradient_charge_matches_materialized_model(memory,capacity_probe):
+@pytest.mark.parametrize('aggressive',[False,True])
+@pytest.mark.parametrize('devices',[1,3])
+def test_attention_gradient_charge_matches_materialized_model(memory,aggressive,devices,capacity_probe):
     from tools.online_bench.fixture import build_model
-    packet,g=geometry(memory,width=16)
+    packet,g=geometry(memory,width=16,devices=devices)
     _,model,_,_=build_model(packet)
-    result=plan(g,Capacities(),Chunks(),[64*1024**3]*g.devices,True)
-    assert cpp_plan(capacity_probe,g,Capacities(),Chunks(),[64*1024**3]*g.devices,True)==result
+    result=plan(g,Capacities(),Chunks(),[64*1024**3]*g.devices,aggressive)
+    assert cpp_plan(capacity_probe,g,Capacities(),Chunks(),[64*1024**3]*g.devices,aggressive)==result
+    copies=1 if aggressive and devices>1 else g.windows
     actual=[0]*g.devices
+    projections=[0]*g.devices
     for i,node in enumerate(model.nodes):
         for name,value in node.extra.items():
             if name in ('fiber_qkv','fiber_out'):
                 assert value.requires_grad
-                actual[result['state_owners'][i]]+=g.windows*value.numel()*4  # FP32 adjoints.
+                actual[result['state_owners'][i]]+=copies*value.numel()*4  # FP32 adjoints.
+            if name.startswith(('emit_w_','emit_b_')):
+                projections[result['full_owners'][i]]+=copies*value.numel()*4
     charged=[d['components']['attention_parameter_gradients'] for d in result['devices']]
     assert charged==actual
+    assert all(d['components']['projection_parameter_gradients']>=v for d,v in zip(result['devices'],projections))
     assert (sum(charged)>0)==(memory=='attention')
     assert all(d['components']['physical_and_canonical_gradients']>v for d,v in zip(result['devices'],charged))
 
@@ -188,7 +195,8 @@ def test_shared_training_storage_covers_materialized_inventory(memory,payload,ca
             assert 0<c['gradient_accumulation_live']<c['gradient_accumulation']
             if previous:
                 old=previous['devices'][card['index']]['components']
-                for name in ('retained_attention_parameters','gradient_accumulation','gradient_accumulation_live'):
+                for name in ('retained_attention_parameters','gradient_accumulation','gradient_accumulation_live',
+                             'attention_parameter_gradients','projection_parameter_gradients'):
                     assert c[name]==old[name]
                 assert c['retained']>old['retained']  # State/KV/journals still grow.
         previous=current

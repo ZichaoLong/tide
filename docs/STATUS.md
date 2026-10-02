@@ -52,23 +52,31 @@ D512 peaks [8367995392,7520681472] → [8073745920,7226584576]. Combined actual
 reductions across the two increments are about537MiB/card on this fixture.
 Do not repeat unchanged Full-snapshot/accounting/representative matrices.
 
-## Next WIP: physical parameter-gradient accounting
+## Current implementation: physical parameter-gradient accounting
 
-The next uncommitted consumer change charges physical projection/Attention
-parameter gradients once only for aggressive multi-device training. Conservative
-and legacy single-device estimates retain the window factor; all state/cache/
-message/scratch charges and safety/API margins are unchanged. New included
-component `projection_parameter_gradients`; existing Attention component adopts
-the correct lifetime. Materialized model inventory tests cover both policies and
-one/three devices; C++/Python formulas remain paired.
+Development passed on frozen dirty `gradient-lifetime-dev01` (at6b9224c): CPU23,
+installed-consumer build and NPU25 (24 executed independent CPU comparisons plus
+one pre-construction refusal), no skips. Production/test hashes match that source.
+`capacity.{h,py}` charges physical projection/Attention parameter gradients once
+only for aggressive multi-device training; conservative/legacy-single retain the
+window factor. All state/cache/message/scratch charges and safety/API margins stay.
+New included component`projection_parameter_gradients`; the Attention component
+now follows actual lifetime. Materialized inventory and paired C++/Python plans
+cover both policies and one/three devices. Runtime backend bytes are unchanged.
 
-Changed `tools/online_bench/capacity.{h,py}`, `tests/test_consumer_capacity.py`,
-`docs/consumer-capacity.md`. CPU23 and installed consumer build passed on frozen dirty `gradient-lifetime-dev01`
-(at6b9224c); NPU25 is active (two devices,queue120s,timeout600), against the
-byte-identical Attention backend. Unit`tide-execution-flows-gradient-lifetime-npu-dev01.service`,
-logs/status`TASK/runs/gradient-lifetime-npu-dev01`. Next clean qualification and
-D512 allocation calibration after the gate passes.
-The 6b9224c evidence commit excludes this WIP.
+Next: commit/push, freeze `gradient-lifetime-clean01`, CPU23 + installed-consumer
+build against qualified6b9224c, NPU25 and D512 calibration. Helpers
+`gradient_lifetime_calibration.py` and `gradient_lifetime_evidence.py SHA` compare
+unchanged allocator observations and corrected estimates. Commit evidence separately.
+
+Then one bounded original-width Add nine-card B4/physicalB2 pilot using the new
+static B512 plan and previously exercised B2 capacities (queue/arrivals896,
+trace3072,outputs64). Prepared `TASK/launchers/wide_add_gradient_lifetime.py`:
+only enters one cold B512 update if allocator/semantic checks pass and the
+unchanged measured-seconds×128×1.15<=3000 cost gate admits it. Queue120s, pilot900s,
+B5123180s child bound; online-measurement.lock; no blind retry/gate relaxation.
+This run is not yet submitted. Original Attention still refuses its current static
+full-size admission and is not queued. No formal throughput recommendation follows.
 
 ## Scale evidence and progress boundary
 
@@ -108,12 +116,9 @@ Qualified source `TASK/sources/attention-adjoints-clean01`; consumer
 Consumer object reuse source/header/options-verified with fresh link;
 unchanged dependencies hash-verified. No full rebuild claim.
 
-Active: `gradient-lifetime-npu-dev01` (two NPUs,queue120s,timeout600), frozen dirty
-`gradient-lifetime-dev01` at6b9224c. CPU23 and installed-client build are terminal
-passed. Unit`tide-execution-flows-gradient-lifetime-npu-dev01.service`,
-background.slice. Inspect `systemctl --user show UNIT -p ActiveState -p Result
--p ExecMainStatus`; stop via `systemctl --user stop UNIT` only if needed.
-Logs/status`TASK/runs/NAME`. Both prior backend qualifications are fully terminal.
+No current active/queued job. Gradient-lifetime development3 and both backend
+qualification8-job groups are terminal passed. Next clean qualification uses
+`gradient-lifetime-clean01`; no original-width task is queued yet.
 **Preserve deliberately SIGSTOPped
 historical-cpu-attention-01**: never resume, stop or clean it. Its old record says
 running and it holds old timing.lock. Historical1.6438× meant faster throughput

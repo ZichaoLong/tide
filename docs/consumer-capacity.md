@@ -25,12 +25,23 @@ lifetimes have separate envelopes; their maximum is the estimate. Local
 still independent capability ceilings, **not amounts summed as actual HBM**.
 Exceeding those ceilings still fails explicitly.
 
-The training envelope follows two qualified storage lifetimes. Immutable
+The training envelope follows qualified storage lifetimes. Immutable
 Attention QKV/output matrices, their parameter biases, decay and pooling weights
 have one retained copy per backward group, shared by all its windows
 (`RetainedAttention`). State, dynamic KV/log-bias, lengths and journals retain
 their per-window charges. `retained_attention_parameters` reports the shared
 part already included in `retained`, not an additional allocation.
+
+With aggressive multi-device training, ordered per-window canonical reduction
+allows the physical projection and event/fiber Attention parameter-adjoint banks
+to be reused within a backward group. The planner charges their numerical storage
+once. Conservative training and the consumer's legacy single-device path still
+charge each window. State, cache/message bridges, other parameter adjoints and
+reverse workspace keep their existing per-window bounds; no logical capacity or
+margin is reduced. `projection_parameter_gradients` and
+`attention_parameter_gradients` are included components of
+`physical_and_canonical_gradients`, not additional allocations. This accounting
+requires the matching backend's ordered reduction and Attention-adjoint reuse.
 
 For physical sample splitting, the first accumulation copies the completed
 canonical gradients into a private FP32 bank; subsequent accumulations reuse

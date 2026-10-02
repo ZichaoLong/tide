@@ -131,7 +131,7 @@ def canonical_loads(g):
     return loads
 
 
-def envelope(g, c, chunks, owners, canonical, state_owners=None):
+def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter_gradients=False):
     """Per-card simultaneous-liveness envelopes; bytes, not user budget sums."""
     w, b, v, p, windows = g.width, g.batch, g.vocab, g.payload, g.windows
     n = len(g.sources); trace = c.trace if g.diagnostics else 0
@@ -201,7 +201,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
         construction = base+4*canonical[device]+parameters
         head = head_budget(c.outputs,w,v,p,g.training,MAX,True)
         head_work = head.fixed_bytes+chunks.head*head.row_bytes if coordinator else 0
-        retained = gradients = reverse_work = communication = roots = proposal = attention_gradients = 0
+        retained = gradients = reverse_work = communication = roots = proposal = attention_gradients = projection_gradients = 0
         if g.training:
             # RetainedAttention shares immutable QKV/O, parameter biases,
             # decay and pool weights across one backward group's windows.
@@ -213,8 +213,14 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
             # Only the Attention profile owns QKV/output matrices. Add has
             # scalar aggregate logits and vector LH/state/Read adjoints, already
             # covered below; its edge projection matrices remain fully charged.
-            attention_gradients = windows*16*body*w*w if g.attention else 0
-            gradients = windows*(4*(slots+1)*(w*w+w)+4*body*domain+32*b*nodes*(w+1)+24*cache)+attention_gradients
+            # Aggressive sharded reverse consumes each window before reusing
+            # physical projection and Attention parameter adjoints. Canonical
+            # outputs are already charged once below. All dynamic bridges and
+            # remaining parameter/scratch envelopes keep their window factor.
+            copies = 1 if reuse_parameter_gradients and g.devices > 1 else windows
+            projection_gradients = copies*4*(slots+1)*(w*w+w)
+            attention_gradients = copies*16*body*w*w if g.attention else 0
+            gradients = projection_gradients+attention_gradients+windows*(4*body*domain+32*b*nodes*(w+1)+24*cache)
             if coordinator:
                 gradients += windows*64*(trace+c.queue+c.outputs)*(w+32)
             gradients += 4*canonical[device]
@@ -234,6 +240,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None):
                           head_workspace=head_work,continuation_snapshot_bytes=snapshot,
                           saved_contexts=saved_contexts,gradient_accumulation=accumulation,context_pack_workspace=context_pack,
                           retained_pack_workspace=retained_pack,attention_parameter_gradients=attention_gradients,
+                          projection_parameter_gradients=projection_gradients,
                           gradient_accumulation_live=accumulation_live,
                           retained_attention_parameters=state_parameters if g.training else 0)
         if max(*phases.values(),*components.values()) > MAX:
@@ -260,7 +267,7 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
     usable = [x-x//(10 if aggressive else 4)-128*MIB for x in budgets]
     chunks = Chunks(**asdict(requested)); reductions = 0
     while True:
-        cards = envelope(g,c,chunks,owners,canonical,state_owners)
+        cards = envelope(g,c,chunks,owners,canonical,state_owners,aggressive)
         if all(card['estimated_peak_bytes'] <= cap for card,cap in zip(cards,usable)):
             break
         values = asdict(chunks)
@@ -278,7 +285,7 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
                 if value == 1:
                     continue
                 trial = Chunks(**{**values,key:max(1,value//2)})
-                score = excess(envelope(g,c,trial,owners,canonical,state_owners))
+                score = excess(envelope(g,c,trial,owners,canonical,state_owners,aggressive))
                 if score < best:
                     selected,best = trial,score
         # Equal peak phases can mask every individual gain. Joint halving
