@@ -1,0 +1,450 @@
+{
+  "schema": "tide-original-width-add-memory-diagnostic-v1",
+  "source": "3462dae82c8c5028d1572bc476281cb6fe79f38e",
+  "dirty": "",
+  "job": "wide-add-memory-diagnostic01",
+  "diagnostic_state": "passed",
+  "consumer_state": "failed",
+  "consumer_exit_code": 1,
+  "failure_phase": "post_run_memory_calibration",
+  "files_sha256": {
+    "status.json": "a528da61cec4ebadb6c88cf79827be39226c198f6bde3c492a642fc2ceb13165",
+    "task.log": "d216b68555885135dc117412cffa802ebc11968370dfcddc724d8332968d3a6b",
+    "queue.json": "48e10cb0b6883a048f87bab4801318111a3c6936a4478206c3910ab6ccf48017",
+    "diagnostic/result.json": "9d363835550f0c10e854a33630f2fb7901c790237682fc880438e6abf541805c",
+    "diagnostic/consumer-run/result.json": "d2f3915a3d3b7c9b4c1a132f00e4e819822c64f794d236d2ae56ad6e1f39b8a3",
+    "diagnostic/consumer-run/consumer.log": "99c32c4938e383bb62d40825a4cc6796d93cd7534a82df52b0cbcff46260157b",
+    "diagnostic/host-stack01.txt": "5f640ac85c022330444af52a5800c53f6c9ba08d543ac49fa2ca06fe38dc7168"
+  },
+  "helper_sha256": "746ea40cf9f376ec2aa00ab9dc23a8f59de3f3b60f09f004fdfdab6ae9ab97d7",
+  "binary_sha256": "29e25353bb82da71ebebabad9a28d82ff1fd6915b32cb519b673d4da7800af36",
+  "packet_sha256": "d02180ede74b6f75fa4e0cce1effc46d22400ce49ca6221dcae4244e81a6aedc",
+  "command": [
+    "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+    "/mi/data2T/zlong/tide-execution-flows/sources/failure-records-clean01/scripts/run_execution_flow.py",
+    "--packet",
+    "/mi/data2T/zlong/tide-execution-flows/runs/wide-add-training-b2-01/training/pilot.json",
+    "--output-dir",
+    "/mi/data2T/zlong/tide-execution-flows/runs/wide-add-memory-diagnostic01/diagnostic/consumer-run",
+    "--device",
+    "npu:0",
+    "--dtype",
+    "float32",
+    "--family",
+    "timed-dag",
+    "--implementation",
+    "libtorch",
+    "--native-binary",
+    "/mi/data2T/zlong/tide-execution-flows/builds/failure-records-consumer-clean01/consumer/tidegraph-online-bench",
+    "--preset",
+    "resident",
+    "--schedule",
+    "prefill",
+    "--steps",
+    "1",
+    "--warmup",
+    "0",
+    "--parameter-budget",
+    "103079215104",
+    "--resident-workspace-bytes",
+    "549755813888",
+    "--resident-retained-bytes",
+    "549755813888",
+    "--resident-backward-bytes",
+    "8796093022208",
+    "--resident-optimizer-bytes",
+    "1099511627776",
+    "--sample-chunk-rows",
+    "2",
+    "--resident-context-bytes",
+    "4294967296",
+    "--devices",
+    "10",
+    "--owner-policy",
+    "locality",
+    "--chunk-policy",
+    "aggressive",
+    "--device-memory-bytes",
+    "64424509440",
+    "--head-workspace-bytes",
+    "1418805618",
+    "--resident-queue",
+    "896",
+    "--resident-arrivals",
+    "896",
+    "--resident-outputs",
+    "64",
+    "--resident-trace",
+    "3072",
+    "--resident-kv-rows",
+    "256",
+    "--resident-kv-trace-rows",
+    "8192",
+    "--training",
+    "--optimizer",
+    "sgd",
+    "--windows-per-step",
+    "2",
+    "--resident-full-chunk-rows",
+    "1",
+    "--resident-emission-chunk-rows",
+    "1",
+    "--resident-aggregate-chunk-rows",
+    "1",
+    "--resident-attention-chunk-rows",
+    "1",
+    "--resident-attention-key-rows",
+    "8",
+    "--resident-reverse-chunk-rows",
+    "1"
+  ],
+  "parameters": 9468053696,
+  "losses": [
+    31.586021423339844
+  ],
+  "outputs": [
+    96
+  ],
+  "final_cut": 408,
+  "construction_seconds": 243.789065839,
+  "seconds": [
+    39.389778366
+  ],
+  "cards": [
+    {
+      "device": 0,
+      "estimated": 53768286884,
+      "observed": 55211536896,
+      "excess": 1443250012,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:0",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:0",
+          "allocated_bytes": 14937456640,
+          "peak_allocated_bytes": 14937456640,
+          "reserved_bytes": 15978201088,
+          "peak_reserved_bytes": 15978201088
+        },
+        "measured": {
+          "device": "npu:0",
+          "allocated_bytes": 15762447360,
+          "peak_allocated_bytes": 55211536896,
+          "reserved_bytes": 58737033216,
+          "peak_reserved_bytes": 58737033216
+        }
+      }
+    },
+    {
+      "device": 1,
+      "estimated": 39093596744,
+      "observed": 31741469696,
+      "excess": -7352127048,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:1",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:1",
+          "allocated_bytes": 11566555648,
+          "peak_allocated_bytes": 11566555648,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:1",
+          "allocated_bytes": 11567328256,
+          "peak_allocated_bytes": 31741469696,
+          "reserved_bytes": 33944502272,
+          "peak_reserved_bytes": 33944502272
+        }
+      }
+    },
+    {
+      "device": 2,
+      "estimated": 39093596744,
+      "observed": 31741469696,
+      "excess": -7352127048,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:2",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:2",
+          "allocated_bytes": 11566555648,
+          "peak_allocated_bytes": 11566555648,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:2",
+          "allocated_bytes": 11567328256,
+          "peak_allocated_bytes": 31741469696,
+          "reserved_bytes": 33944502272,
+          "peak_reserved_bytes": 33944502272
+        }
+      }
+    },
+    {
+      "device": 3,
+      "estimated": 39093596744,
+      "observed": 31741469696,
+      "excess": -7352127048,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:3",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:3",
+          "allocated_bytes": 11566555648,
+          "peak_allocated_bytes": 11566555648,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:3",
+          "allocated_bytes": 11567328256,
+          "peak_allocated_bytes": 31741469696,
+          "reserved_bytes": 33944502272,
+          "peak_reserved_bytes": 33944502272
+        }
+      }
+    },
+    {
+      "device": 4,
+      "estimated": 39094925552,
+      "observed": 31743462400,
+      "excess": -7351463152,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:4",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:4",
+          "allocated_bytes": 11566828032,
+          "peak_allocated_bytes": 11566828032,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:4",
+          "allocated_bytes": 11567650304,
+          "peak_allocated_bytes": 31743462400,
+          "reserved_bytes": 33946599424,
+          "peak_reserved_bytes": 33946599424
+        }
+      }
+    },
+    {
+      "device": 5,
+      "estimated": 39094925552,
+      "observed": 31743463424,
+      "excess": -7351462128,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:5",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:5",
+          "allocated_bytes": 11566828032,
+          "peak_allocated_bytes": 11566828032,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:5",
+          "allocated_bytes": 11567650304,
+          "peak_allocated_bytes": 31743463424,
+          "reserved_bytes": 33946599424,
+          "peak_reserved_bytes": 33946599424
+        }
+      }
+    },
+    {
+      "device": 6,
+      "estimated": 39094482576,
+      "observed": 31742799872,
+      "excess": -7351682704,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:6",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:6",
+          "allocated_bytes": 11566737920,
+          "peak_allocated_bytes": 11566737920,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:6",
+          "allocated_bytes": 11567543808,
+          "peak_allocated_bytes": 31742799872,
+          "reserved_bytes": 33944502272,
+          "peak_reserved_bytes": 33944502272
+        }
+      }
+    },
+    {
+      "device": 7,
+      "estimated": 39094039680,
+      "observed": 31742136320,
+      "excess": -7351903360,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:7",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:7",
+          "allocated_bytes": 11566647808,
+          "peak_allocated_bytes": 11566647808,
+          "reserved_bytes": 15145631744,
+          "peak_reserved_bytes": 15145631744
+        },
+        "measured": {
+          "device": "npu:7",
+          "allocated_bytes": 11567437312,
+          "peak_allocated_bytes": 31742136320,
+          "reserved_bytes": 33944502272,
+          "peak_reserved_bytes": 33944502272
+        }
+      }
+    },
+    {
+      "device": 8,
+      "estimated": 39020006400,
+      "observed": 31681576448,
+      "excess": -7338429952,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:8",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:8",
+          "allocated_bytes": 11535288832,
+          "peak_allocated_bytes": 11535288832,
+          "reserved_bytes": 15095300096,
+          "peak_reserved_bytes": 15095300096
+        },
+        "measured": {
+          "device": "npu:8",
+          "allocated_bytes": 11536078336,
+          "peak_allocated_bytes": 31681576448,
+          "reserved_bytes": 33877393408,
+          "peak_reserved_bytes": 33877393408
+        }
+      }
+    },
+    {
+      "device": 9,
+      "estimated": 39020006400,
+      "observed": 31681575424,
+      "excess": -7338430976,
+      "usable": 57847840768,
+      "phases": {
+        "initial": {
+          "device": "npu:9",
+          "allocated_bytes": 0,
+          "peak_allocated_bytes": 0,
+          "reserved_bytes": 0,
+          "peak_reserved_bytes": 0
+        },
+        "construction": {
+          "device": "npu:9",
+          "allocated_bytes": 11535288832,
+          "peak_allocated_bytes": 11535288832,
+          "reserved_bytes": 15095300096,
+          "peak_reserved_bytes": 15095300096
+        },
+        "measured": {
+          "device": "npu:9",
+          "allocated_bytes": 11536078336,
+          "peak_allocated_bytes": 31681575424,
+          "reserved_bytes": 33877393408,
+          "peak_reserved_bytes": 33877393408
+        }
+      }
+    }
+  ],
+  "statistics": [
+    {
+      "canonical_stream_chunks": 2384,
+      "canonical_stream_reserved_bytes": 1344356076,
+      "emission_chunks": 6720,
+      "events": 9265,
+      "full_chunks": 1440,
+      "head_chunks": 24,
+      "pending_peak": 768,
+      "retained_attention_bytes": 0,
+      "retained_bytes": 38141372832,
+      "retained_compact_journals": 2,
+      "retained_dense_bytes": 38235586736,
+      "retained_projection_bytes": 37767168000,
+      "retained_window_bytes": 234209368,
+      "retained_windows": 4,
+      "stages": 112,
+      "window_events_max": 2335,
+      "window_outputs_max": 24,
+      "window_stages_max": 28
+    }
+  ],
+  "effective_chunks": {
+    "aggregate": 1,
+    "attention": 1,
+    "emission": 1,
+    "full": 1,
+    "head": 4,
+    "keys": 8,
+    "reverse": 1
+  },
+  "limits": {
+    "command_seconds": 900
+  },
+  "scope": "One original-width Add B4/physicalB2 FP32 SGD diagnostic on ten cards; unchanged prior geometry/physical cap/operator limits, two connected windows and one update. No B512 stage, no new throughput claim. A diagnosed failed consumer stays failed."
+}

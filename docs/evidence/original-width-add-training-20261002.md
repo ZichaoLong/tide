@@ -60,3 +60,20 @@ pins its source, command, planner and logs. It reported neither OOM nor timeout;
 the original B512 stage was never entered. That version's error writer discarded
 the collected peak and timing details, so they cannot be inferred from this
 failed run. Reporting and estimation require diagnosis before another large run.
+
+After the reporting fix, one unchanged ten-card diagnostic on clean `3462dae`
+retained the missing measurements ([audited record](original-width-add-memory-diagnostic-20261002.json)).
+The diagnostic collector passed; **the consumer still failed** post-run calibration.
+D2048/B4/physical B2, 9,468,053,696 parameters, FP32 SGD and the same two windows
+completed before that check: 96 outputs, cut408, finite loss31.586021423339844.
+Coordinator peak was **51.4198 GiB**, above its **50.0756 GiB** estimate by
+1.3441 GiB. Other cards peaked at29.50–29.56 GiB against36.34–36.41 GiB estimates.
+The physical cap60 GiB and usable53.875 GiB were unchanged; no OOM occurred.
+Construction243.789 s and update39.390 s are diagnostic timings. One host stack
+sample during construction caught CPU model finite-value validation; it does
+not measure the fraction of time there or indicate an AiCPU fallback.
+
+This motivates removing duplicated coordinator reverse-gather storage before
+another original-width check. It does not justify reducing safety margins or
+running B512: the same pilot's conservative cost projection still exceeds the
+existing3,000 s gate. Failure at this post-run check does not roll back updates.

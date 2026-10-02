@@ -5,8 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **3462dae**; evidence **fddf079**.
-Shared reverse gather implementation has passed development gates; next commit then clean qualification.
+`graph-execution-foundation`. Latest pushed implementation: **1757b90** (shared reverse gather); prior evidence **fddf079**.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -83,30 +82,29 @@ unchanged. One GDB sample caught CPUvalidate_model finite reduction during
 construction; timings are diagnostic, not a throughput recommendation.
 Do not raise estimates/caps blindly or repeat the full run without a code cause.
 
-Uncommitted next implementation shares read-only padded gather inputs within
+Implementation1757b90 shares read-only padded gather inputs within
 one reverse program phase across owners (Full values/gradients, state journals
 and scales, stage cotangents/flags). Per-owner indices/results/flags remain
 independent; each device-loop iteration refreshes the shared source. Helper
 allocates only after existing owner preflight, and storage stays owned by program.
 No core/public ABI/device kernel change or estimator reduction.
-Development frozen source `TASK/sources/reverse-gather-dev01` (fddf079 + recorded patch):
-- build-reverse-gather-standalone-dev01, build-reverse-gather-python-dev02,
-  build-reverse-gather-consumer-dev01 PASSED.
-- reverse-gather-native-dev01 PASSED: ordinary/compact FP32/FP16,128 trajectories,
-  2048 windows/512 updates; direct shared-source replay/sentinel/storage/lifetime check.
-- reverse-gather-consumer-dev01 PASSED:24 complete-training cases, both clients,
-  three families, FP32/FP16 and independent CPU.
-- build-reverse-gather-python-dev01 failed before job writer: nonexistent module.
-  Original failure preserved, corrected dev02 uses libtorch-npu/2.10.0-cann9.0.0.
+Qualified clean source `TASK/sources/reverse-gather-clean01` at1757b90; all nine
+jobs PASSED: three builds, native128trajectories/2048windows/512updates, Python16,
+consumer24, explicit2→3 restore32trajectories/512windows/128updates, same-lease
+memory comparison and independent FP16 two-update profile. Coordinator peak
+8396636672→8368268800B (-28367872B), other card7520954880B unchanged; loss and all
+work/retained-storage counters exact.53,190profile operators, zero observed AiCPU.
+[Report](evidence/resident-reverse-gathers-20261002.md). Public ABI/core/kernels and
+consumer estimates/caps unchanged. Development module-name startup failure remains
+preserved; corrected/clean jobs use established LibTorch-NPU2.10/CANN9.0 stack.
 
-Next: commit/push implementation, freeze reverse-gather-clean01, clean standalone/
-Python builds (verified unchanged objects may be reused), fresh consumer link.
-Then native/consumer/retention, explicit2→3-card restore, same-lease allocator
-comparison via launchers/reverse_gather_memory.py and independent profile.
-Old/new loss, all work and retained-storage counters must match. Coordinator peak
-must decrease; don't assume every card's peak changes. Qualify before one bounded
-original-width Add revisit. Source fixture/budgets remain unchanged. No B512 launch
-unless measured capacity AND existing cost gate pass.
+Next one bounded original-width Add recheck, same geometry/budgets as diagnostic,
+via launchers/wide_add_reverse_gather_recheck.py --source
+TASK/sources/reverse-gather-clean01 --output {out}/recheck; freeze_run name
+wide-add-reverse-gather-recheck01,10cards,queue120s,workload960s,env -C {out}.
+Require passed consumer calibration, baseline-exact loss/work/retained counters.
+No B512 stage is part of this recheck; retain cost projection and do not expand
+its old3000s bound without a demonstrated execution change.
 
 ## Completed evidence; do not repeat
 
@@ -150,8 +148,8 @@ Recent qualified increments (retain cited artifacts/failures):
 - Add-specific admissionc3ed0f2: CPU10/NPU9; remove nonexistent Attention matrix
   gradients only. [Report](evidence/consumer-add-capacity-20261002.md).
 
-Latest fully qualified resident libraries: attention-snapshot-{standalone,python}-clean01;
-NPUconsumer failure-records-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
+Latest fully qualified resident libraries: reverse-gather-{standalone,python}-clean01;
+NPUconsumer reverse-gather-consumer-clean01. Core placement-{cpu,npu,npu-python}-clean01;
 CPUconsumer source-values-cpu-clean01. Previous builds remain for cited evidence.
 Standalone LibTorch and Python-native runtimes are separate.
 
@@ -169,5 +167,5 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted: shared reverse gather implementation/test headers and current handoff;
-development gates passed as above. No task job remains live except preserved stopped history.
+Uncommitted: reviewed qualification/natural-failure evidence and current handoff,
+ready for separate evidence commit. No task job live except preserved stopped history.
