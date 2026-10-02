@@ -178,6 +178,9 @@ CPU17,NPU64,four native cells768windows/96updates,independent0AiCPU trace; same-
 whole training allocator peak -5.39% ([evidence](evidence/resident-context-pool-20261002.md)).
 Live/retained memory and scale remain pending; automatic sample admission
 has the separate qualification above.
+Add/Attention gradient admission is qualified on cleanc3ed0f2 (CPU10/NPU9):
+model inventory removes fictitious Add QKV/O charges, unchanged margins
+([evidence](evidence/consumer-add-capacity-20261002.md)).
 
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations

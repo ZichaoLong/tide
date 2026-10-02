@@ -1,0 +1,223 @@
+{
+  "schema": "tide-consumer-add-capacity-v1",
+  "source": "c3ed0f26dfc59f3e4ae3b8c032a53fe52cc8bca2",
+  "jobs": [
+    {
+      "name": "build-add-capacity-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "1f0afdabc2fa5dab1d089e7196b1c0a687b2812296b94c0e7136216863a5d285",
+        "task.log": "11cab62d3723a75fb5f5172f52761000404ed9d16b21d6accd0558fad02a1086"
+      }
+    },
+    {
+      "name": "add-capacity-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6dcb32b43ea3cc9c14e51c6819cc3789afcc36c2f5737f579d26f3857b07f3e8",
+        "task.log": "f9d8812f175a2518cfb9ea7fd620fdd44ad6fc72ae29915a8cc772fd2bf5ab7d"
+      }
+    },
+    {
+      "name": "add-capacity-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "23beb6d1b307a7cce75db03747e41fa9a3ab608b392e07019af2fd295290c73f",
+        "task.log": "bc70c76fd5b8d2e133a2369bfa194cf0a6518c27c0698c92e011eb62a17056df",
+        "queue.json": "be3e176c44e5f91a3f64f8f21b8b90e07b2987c4cd7f7616d7e649de03b2873c"
+      }
+    }
+  ],
+  "client": {
+    "manifest_sha256": "481de0523983ddf88eb3adae44bd11a538fd6a0e587077d0690ec006f38df2e1",
+    "binary_sha256": "4f2de79df35df9eba5490c19f703c6063ed0c900e627d038994ba6f2eb7bcfa6",
+    "loader_sha256": "14d0163aa3a111c018f39ef05674c828a7e4e20824b4ce4d1a0b79156157cf4f",
+    "consumer_sources": {
+      "resident_capacity.cpp": "3e27cf02ec42889535a6bb120c4f3ccb0353e7540660cfe2c8cca53852d61146",
+      "resident_run.cpp": "16dc358c682af4ed83ad4bb35d44de2488277f4617d00b097c44bacf8681529e",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "1e8e1d83aecdc001aef84836eb37d0019f43a7d93ee70fa56afaab7bc3a4bf41",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "382db2a9ecdef9995b93ead8a5ac1bacb92e58569bacd6a43f1fb56bbf50b0e4",
+      "host.py": "15d6487449751df1edc18a3759d5605de32e342ec0380d391c9d540d407456ff",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+      "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+      "resident.py": "e423430b16ed97fc65237d159deec4841dcd934505a52e466234667a907a2c2d",
+      "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+      "resident_records.cpp": "b0d140563af0788565ade41b29496eb3a735f9fc9463f8d83261062e7f9986a7",
+      "resident_consumer.h": "a12778fe1dbf3d5c200472e4787f539c2ee197e3419e84710256c9f1e3cbfeb4",
+      "consumer.h": "3d3cdceeb2c70325d7c1b122172308b165ddd1b2beb2cd69db5294be30331fcf",
+      "capacity.h": "c79dceba21b0c765d395e6eb954daf7fdb146ed55c43333ab1088e8eea954cce",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+      "capacity_record.h": "0f3b9f77410de0687c3dfcee600fc5f18b0972045d9b637041082bd0a7365972",
+      "run.cpp": "a3e4b2e1d167e5e2dc5e9bf7ff2221ddc5646a37e2103b49c71f314e18d647a5",
+      "capacity.py": "d5525d9381afbff20de787206a4463bb2b8d9f9da8fa5e383e370b4d5d66c607",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "659cb6ff07e9f38cf36ea55224f5831c42cad3404d33bcad0a96c947d6f559b2",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4"
+    },
+    "reused_objects_sha256": {
+      "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "05cc65570423ae24ef54d1dec5cdae418f65a5f969cc1f87ff7050ce0bf0e459",
+      "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "8b6ac3dcab48a6a98da5cff3d482bd189e6712892f3505ff7e82e1a9f119d538",
+      "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+      "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+      "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "9ee7c1602fd9a30741d9b910821c8db93d2ddf553f19e368e34878c07f63b99a",
+      "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+      "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "1720f535ea800bcdf029990fb7ea8ea873f83050ea343ca39faa2a7965899e3a",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "0058f4bc36d2337d5257ce152155cc5530aa04b0d9563c11770ba38766112985",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "54f28c35a1c5119c6077abbf076d080c8a7862fa86280ee9e1dd4ec10ad79a19",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "f9cc98fc73b68cf62766a654fe88fd6cb2448c8b5a6e953e85a69bebdabd14b3",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_capacity.cpp.o": "1770dfb4b5c780681784f933a6950b3be00bf95edd979501c12e08de10c2e0bf"
+    }
+  },
+  "resident_qualification_sha256": "8082c766ef27f659bde4fd9c3e6856d18138359390d14016ed1813f6a10abc74",
+  "tests": {
+    "cpu": {
+      "passed": 10,
+      "junit_sha256": "e1d7f6758978417446961b5fc882f06ecde5137bac4da2ab40c48056ed0eba67"
+    },
+    "npu": {
+      "passed": 9,
+      "junit_sha256": "4fb10fefd55b43721979d3a510b98f7c738a5ad306523bd31359abe173b74a7e"
+    }
+  },
+  "observations": [
+    {
+      "path": "pytest/test_complete_training_with_au0/capacity-result.json",
+      "sha256": "2e14bc890737b9970aea7921ad7d21113584c1c43993e9a395e167613c5c93c7",
+      "training": true,
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au1/capacity-result.json",
+      "sha256": "108615bd707165799f91730e83bf59508c331933ecf9dac1ec40ed014eaf4d42",
+      "training": true,
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au2/capacity-result.json",
+      "sha256": "3b1eac552694b8be900d6de0faa5464c2c4c3d393fa4ceb9b5f92cf65e801dc0",
+      "training": true,
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        1536,
+        1536
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au3/capacity-result.json",
+      "sha256": "1832f6c12a36082f0c74bad6d11d9d531341b68d473035c50bc124f972dce008",
+      "training": true,
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        1536,
+        1536
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au4/capacity-result.json",
+      "sha256": "6baa597fd261116161a3d3b1d5584e3b85cb6507bedca1bfe443dffe0c268220",
+      "training": true,
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au5/capacity-result.json",
+      "sha256": "dfe134f1e37a48b73fa19bb16c45611ae3e900f7a58fcc820586187dc8786483",
+      "training": true,
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au6/capacity-result.json",
+      "sha256": "738400adfe121a2bfbf61556cb3f8310114f51b9fe10d5231ee6574d497c3c78",
+      "training": true,
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        1536,
+        1536
+      ]
+    },
+    {
+      "path": "pytest/test_complete_training_with_au7/capacity-result.json",
+      "sha256": "9de012305228dd29509c5ff5e6aea4c7fd99fc10972cc8eca4a84bd0f0fc6d6a",
+      "training": true,
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "gradient_subtotals": [
+        1536,
+        1536
+      ]
+    }
+  ],
+  "scope": "Consumer Add has no QKV/O matrices. Capacity now charges them only for Attention and reports their subtotal. Actual Python model inventory, C++/Python plans and both complete NPU consumers checked.",
+  "limits": [
+    "All real projections, scalar/vector/canonical gradients and original safety margins remain charged. Runtime library and kernels unchanged.",
+    "Small allocator/update gates do not establish full-size fit; original-width/batch runtime validation remains separate."
+  ]
+}

@@ -126,20 +126,28 @@ useoutputcwd;memoryclean02usedsame60GiB/card physicalcap withlargerhierarchicalc
 No live shared-packet jobs;leasesreleased. Latestlibraries shared-packets-{standalone,python}-clean01,
 client shared-packets-consumer-clean01. Original-width orB512memorybenefitnotyetmeasured.
 
-## Current work: Add-specific gradient admission
+## Add-specific gradient admission qualified
 
-Worktreecapacity.{h,py} removes fictitiousAttentionQKV/O gradientcharge fromAdd;
+Implementationc3ed0f2 committed/pushed;capacity.{h,py} removes fictitiousAttentionQKV/O gradientcharge fromAdd;
 newattention_parameter_gradients subtotal includedinexisting physicalgradientcomponent.
 ScalarAggregate,vectorLH/state/Read,projections,canonicalbanks andsafetymargins unchanged.
-Actualmaterializedmodelinventorytest plus C++/Pythonplans pass10CPUchecks;
-NPUdev9checksPASSED(two clients,FP32/FP16,fullupdates),buildpassed.
-SnapshotTASK/sources/add-capacity-dev01;clientbuilds/add-capacity-consumer-dev01.
-Commitimplementation,push,freezeadd-capacity-clean01;cleanCPU/NPUaffected qualification,
-thenboundedoriginalD2048trainingvalidation. StaticoriginalB512 withphysicalB2:
+Cleanactualmodelinventory/C++Python10CPUchecks and9NPUchecks PASSED,0skips;
+standaloneclientbuildpassed. [Evidence](evidence/consumer-add-capacity-20261002.md).
+SnapshotTASK/sources/add-capacity-clean01;clientbuilds/add-capacity-consumer-clean01.
+No live taskjobs. OriginalD2048trainingruntime validation remainspending. StaticoriginalB512 withphysicalB2:
 10cardsqueue896/arrivals896/outputs64/trace3072,KV256/KVtrace8192,4GiBcontext,
 60GiB/card admits52.0119GiBmax. Thisisnotexecutionproof. Earlier512queue/B1observed
 pending384/maxwindowevents1177;largerbatchrequires explicitcapacities andchecks.
-UsefiniteoriginalwidthB4 pilotbeforeB512;stoponcapacity/costbound,noOOMsearch.
+Prepared immutableTASK/launchers/wide_add_training_b2.py:originalwidthB4 pilot
+(900s),thenunchangedoriginalB512(3600s) onlyifstep*128*1.15<=3000s and
+pending<=768/windowevents<=2560. SamephysicalB2andoriginal-selectedoperator/head
+maxima inbothstages. Requires10leasedcards/120squeue;whole4600s. Do notsubmit
+whileobviouslyshort:08:20UTC inspectiononly6free(1,2,3,5,11,12);no newqueuejob.
+When10free:freeze_run.py --name wide-add-training-b2-01 --snapshot add-capacity-clean01
+--commit c3ed0f2 --npu --npu-count10 --max-wait120 -- env -C {out} timeout4600
+{python} TASK/launchers/wide_add_training_b2.py --source {source} --output {out}/training.
+Next independentlyinspectAttention retained state parameter/KVlifetimes;do not
+blindly lower its admission constants or wait idle forcards.
 HistoricalCPU remainsdeliberatelystopped.
 
 ## Next work and remaining goal
@@ -170,7 +178,7 @@ data190GiB/root11GiB. Atomic handoff usesdurable_records.replace_text.
 Formal timing lockTASK/online-measurement.lock.
 
 Latest resident librariesretained-journals-{standalone,python}-clean01;core
-placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumershared-packets-consumer-clean01;
+placement-{cpu,npu,npu-python}-clean01. LatestNPUconsumeradd-capacity-consumer-clean01;
 CPUsource-values-cpu-clean01. Earlier source-values-npu/context-pool consumers
 stay qualified for their evidence. Standalone/Python runtimes remain separate.
 
