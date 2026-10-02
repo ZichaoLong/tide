@@ -115,11 +115,13 @@ def test_standalone_unified_cli_and_delayed_packet(memory,tmp_path):
     p=packet(memory,delayed=True);path=tmp_path/"packet.json";path.write_text(json.dumps(p));out=tmp_path/"run"
     command=[sys.executable,str(ROOT/"scripts/run_execution_flow.py"),"--packet",str(path),"--output-dir",str(out),
              "--device","cpu","--dtype","float32","--family","timed-dag","--preset","cpu","--schedule","prefill",
-             "--implementation","libtorch","--native-binary",binary,"--training","--steps","2","--warmup","0","--diagnostics"]
+             "--implementation","libtorch","--native-binary",binary,"--training","--steps","2","--warmup","0","--diagnostics",
+             "--workers","2","--packed-sources","--batch-next"]
     done=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=90)
     assert done.returncode==0,done.stdout
     record=json.loads((out/"result.json").read_text())
     assert record["packet_identity"]=="hash-validated JSON; exact derived v2 text"
+    assert record["host_execution"]==dict(workers=2,packed_sources=True,batch_next=True)
     got=[json.loads(x) for x in (out/"consumer/diagnostics.jsonl").read_text().splitlines()];wanted=[]
     run(p,family="timed-dag",implementation="python",device="cpu",schedule="streaming",training=True,
         steps=2,warmup=0,diagnostics=True,observer=observer(wanted))

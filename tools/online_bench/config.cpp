@@ -20,10 +20,12 @@ Config parse(int argc,char** argv) {
     const auto key=arg.substr(0,equal);auto value=equal==std::string::npos?std::string():arg.substr(equal+1);
     if(arg=="--training"){c.training=true;continue;}
     if(arg=="--diagnostics"){c.diagnostics=true;continue;}
+    if(arg=="--packed-sources"){c.packed_sources=true;continue;}
+    if(arg=="--batch-next"){c.batch_next=true;continue;}
     const auto capacity=key.rfind("--resident-",0)==0?key.substr(11):std::string();
     const bool limit=std::find(limits.begin(),limits.end(),capacity)!=limits.end();
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
-      ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--parameter-budget"
+      ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"
       ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
       ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
@@ -36,6 +38,7 @@ Config parse(int argc,char** argv) {
     else if(key=="--scoring-dtype")c.placement.scoring_dtype=value;
     else if(key=="--steps")c.steps=integer(value);else if(key=="--warmup")c.warmup=integer(value);
     else if(key=="--windows-per-step")c.windows=integer(value);else if(key=="--threads")c.threads=integer(value);
+    else if(key=="--workers")c.workers=integer(value);
     else if(key=="--parameter-budget")c.parameter_budget=integer(value);
     else if(key=="--head-workspace-bytes")c.head_workspace_bytes=integer(value);
     else if(key=="--device-memory-bytes")c.device_memory_bytes=integer(value);
@@ -49,7 +52,7 @@ Config parse(int argc,char** argv) {
   if(c.packet.empty()||c.runtime.output_dir.empty()||!preset
       ||(c.family!="pdg"&&c.family!="timed-dag"&&c.family!="settle")
       ||(c.schedule!="streaming"&&c.schedule!="prefill")
-      ||(c.optimizer!="sgd"&&c.optimizer!="adamw")||c.steps<1||c.windows<1||c.threads<1||c.threads>1024
+      ||(c.optimizer!="sgd"&&c.optimizer!="adamw")||c.steps<1||c.windows<1||c.threads<1||c.threads>1024||c.workers<1||c.workers>1024
       ||c.steps>1000000||c.warmup>1000000||c.windows>1000000||c.parameter_budget<1||c.head_workspace_bytes<1)
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
@@ -58,6 +61,8 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("resident capacities and placement require resident preset");
   if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");
+  if(c.placement.preset=="resident"&&(c.workers!=1||c.packed_sources||c.batch_next))
+    throw std::invalid_argument("host workers/packed-sources/batch-next require an eager native consumer");
   if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
       ||(c.training&&c.runtime.dtype==at::kHalf&&c.placement.preset!="resident"))
     throw std::invalid_argument("eager consumer FP16 training requires a qualified master optimizer");

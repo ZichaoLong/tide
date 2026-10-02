@@ -25,6 +25,9 @@ def main():
     p.add_argument("--warmup", type=int, default=1)
     p.add_argument("--windows-per-step", type=int, default=2)
     p.add_argument("--threads", type=int, default=1)
+    p.add_argument("--workers", type=int, default=1, help="native node workers, separate from ATen --threads")
+    p.add_argument("--packed-sources", action="store_true", help="use native packed source transport")
+    p.add_argument("--batch-next", action="store_true", help="use native batched Next/reset")
     p.add_argument("--parameter-budget", type=int, default=1024**3)
     p.add_argument("--native-library", type=Path)
     p.add_argument("--native-binary", type=Path)
@@ -34,8 +37,10 @@ def main():
         p.add_argument("--"+name, default="auto")
     p.add_argument("--scoring-dtype", choices=("profile", "payload", "float32", "float64"), default="profile")
     a = p.parse_args()
-    if a.threads < 1:
-        p.error("threads must be positive")
+    if not 1 <= a.threads <= 1024 or not 1 <= a.workers <= 1024:
+        p.error("threads and workers must be in [1,1024]")
+    if (a.workers != 1 or a.packed_sources or a.batch_next) and (a.implementation == "python" or a.preset == "resident"):
+        p.error("host workers/packed-sources/batch-next require an eager native consumer")
     packet = validate_packet(json.loads(a.packet.read_text()))
     if packet["schema"] != "tide-complete-flow-workload-v2":
         p.error("continuous consumer requires v2; legacy v1 declares reset windows")
@@ -75,6 +80,7 @@ def python_run(packet,a):
                schedule=a.schedule,preset=a.preset,training=a.training,optimizer=a.optimizer,
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
+               workers=a.workers,packed_sources=a.packed_sources,batch_next=a.batch_next,
                parameter_budget=a.parameter_budget,observer=observer(rows) if a.diagnostics else None,
                **python_arguments(a,device))
     if a.diagnostics:

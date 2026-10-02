@@ -10,6 +10,7 @@ int main(int argc,char** argv) {
     if(c.runtime.help){portable_torch::print_usage(std::cout,argv[0]);
       std::cout<<"--packet PATH --family pdg|timed-dag|settle --preset cpu|mixed-a|mixed-b|mixed-c|resident --schedule streaming|prefill\n"
         "--training --optimizer sgd|adamw --steps N --warmup N --windows-per-step N --threads N --parameter-budget BYTES --diagnostics\n"
+        "--workers N --packed-sources --batch-next (eager native only; threads sets ATen intra-op parallelism)\n"
         "--devices N --owner-policy memory|locality --chunk-policy conservative|aggressive\n"
         "--device-memory-bytes BYTES (resident incremental per-device cap; 0 uses driver free memory) --head-workspace-bytes BYTES\n"
         "--resident-{queue,arrivals,outputs,trace,stages,workspace-bytes,full-chunk-rows,emission-chunk-rows,aggregate-chunk-rows,attention-chunk-rows,attention-key-rows,kv-rows,kv-trace-rows,max-repeat-ticks,retained-bytes,backward-bytes,optimizer-bytes,program-workspace-bytes,reverse-chunk-rows} N\n";return 0;}

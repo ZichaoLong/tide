@@ -26,8 +26,9 @@ immutable qualification → evidence commit; push each. Never edit live-job inpu
 
 ## Current source and qualified scale enablers
 
-HEAD46ff66c is pushed. Uncommitted host worker/packed-source/Next consumer wiring and directed tests
-are in progress alongside this handoff; not yet built or qualified. Core unchanged.
+Representative evidence78190e3 is committed/pushed. Host worker/packed-source/Next
+consumer wiring passed development CPU11/NPU8 tests; implementation is ready to
+commit, then qualify from its immutable revision. Core/resident ABI unchanged.
 Latest implementation0b1a5aa68061f37aef1f4387cf28abb0c77a464f, frozen source
 TASK/sources/capacity-admission-clean01. All eight capacity jobs PASSED;
 CPU8/NPU19, no skips, 24 cross-language shape plans, eight forced-splitting
@@ -83,16 +84,17 @@ Device task sums are not wall time. Exact raw CSVs/hashes are retained.
 Audit PASSED:
 python TASK/launchers/screen_evidence.py 0b1a5aa68061f37aef1f4387cf28abb0c77a464f --profiles representative-profile-mixed-train01 representative-profile-resident-train01 representative-profile-mixed-infer01 representative-profile-resident-infer01 --output docs/evidence/representative-preset-screen-20261002.json
 Report/evidence:docs/evidence/representative-preset-screen-20261002.{md,json}.
-Audit passed; evidence is ready for its separate commit. Do not rerun these jobs.
+Audit passed; evidence78190e3 is pushed. Do not rerun these jobs.
 Nonblocking TASK/online-measurement.lock differs from historical timing.lock.
 
-Current uncommitted implementation: expose existing native node workers and
+Current implementation: expose existing native node workers and
 packed_sources/batch_next through actual consumer API/CLI; default behavior is
 unchanged. Independent Python/resident reject unsupported host switches before
 model construction. New tests compare full observations/gradients/updates against
 independent Python streaming (directed CPU8/NPU8, plus refusal/CLI cases). No core/
-CANN/ABI change. Need builds and directed gates, then implementation commit and
-immutable qualification. Do not re-run the CPU full suite.
+CANN/ABI change. Development builds and CPU11/NPU8 gates all PASSED; no skips.
+Next commit implementation and run immutable qualification, including two resident
+CLI default regressions. Do not re-run the CPU full suite.
 
 PASSED development builds (no NPU lease needed for compilation):
 TASK/sources/host-execution-dev01 dirty frozen snapshot;2workers per build,
@@ -101,11 +103,15 @@ TASK/sources/host-execution-dev01 dirty frozen snapshot;2workers per build,
 TASK/runs/NAME/{status.json,task.log};builds host-execution-{cpu,npu}-dev01.
 CPU build_online_consumer.py;NPU build_capacity_client.py reuses qualified
 optimizer-recompute-clean01 backend and only unchanged verified client objects.
-Next/starting directed development gates:host-execution-cpu-dev01 (11 selected
+PASSED directed development gates:host-execution-cpu-dev01 (11 selected
 cases) and host-execution-npu-dev01 (8 cases,one leased NPU),same frozen dirty
 source. Units tide-execution-flows-host-execution-{cpu,npu}-dev01.service;
 TASK/runs/NAME/{status.json,task.log,junit.xml,pytest};NPU queue.json.
-Timeout180s/queue120s. Stop and inspect failures,not a full-suite rerun.
+Both exited0,CPU11/NPU8,no skips. No host-policy development failure.
+Next frozen host-execution-clean01 from the implementation commit,builds
+host-execution-{cpu,npu}-clean01 (source/header/options-verified dev object reuse
+for NPU, fresh CPU consumer compile),then CPU11/NPU10 (8host +2resident CLI,2cards).
+Use900s build,180s CPU/300s NPU,queue120s. No other new task remains live.
 No profiling or throughput job remains active; historical suspended task untouched.
 
 ## Remaining priority work

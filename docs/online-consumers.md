@@ -208,6 +208,18 @@ checked before allocation; it is not a total peak-memory estimate. Raising it
 alone does not certify safe full-size execution. Native and Python runs preserve
 failures in `result.json`; the standalone log remains in `consumer.log`.
 
+For eager native and standalone LibTorch consumers, `--workers` selects the
+existing node worker pool independently of ATen intra-op `--threads`.
+`--packed-sources` and `--batch-next` expose the existing packed source transport
+and batched Next/reset policies. Defaults remain one worker with both policies
+off; `host_execution` records the effective choices. These options change physical
+execution only, preserving the logical batch, continuation and optimizer boundary.
+The independent Python scheduler and resident device scheduler reject nondefault
+host controls before model construction. Resident packing remains device-owned.
+Choose bounded worker/thread counts when measuring; one-worker results do not
+establish the best available CPU throughput. Qualification and performance of
+these newly connected consumer controls must be recorded separately.
+
 Construction and warmup durations are separate. A measured step includes token
 preparation/upload, online graph execution, head/loss, backward, finite checks,
 detach/optimizer and final synchronization. No independent reference is timed.

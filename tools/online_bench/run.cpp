@@ -41,6 +41,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   auto start=Clock::now();MemoryRecord memory({device});auto f=fixture(p,c,device);
   auto placement=tide::resolve_placement(c.placement,device);auto placed=tide::place_model(f.graph,f.model,c.placement);
   tide::Options options;options.packed=true;options.prefill=c.schedule=="prefill";options.trace=c.diagnostics;
+  options.workers=c.workers;options.packed_sources=c.packed_sources;options.batch_next=c.batch_next;
   options.full_autograd="batched";options.aggregate_autograd="batched";
   std::unique_ptr<tide::Streaming> streaming;std::unique_ptr<tide::Greedy> greedy;
   if(c.schedule=="prefill")greedy=std::make_unique<tide::Greedy>(f.graph,placed,options);
@@ -106,6 +107,8 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   out<<"],\"windows_per_step\":"<<c.windows<<",\"warmup_steps\":"<<c.warmup<<",\"measured_steps\":"<<c.steps
      <<",\"input_tokens_per_step\":"<<p.batch*p.tokens*c.windows<<",\"final_cut\":"<<q.cut
      <<",\"threads\":"<<c.threads<<",\"parameter_budget\":"<<c.parameter_budget<<",\"diagnostics\":"<<(c.diagnostics?"true":"false")
+     <<",\"host_execution\":{\"workers\":"<<c.workers<<",\"packed_sources\":"<<(c.packed_sources?"true":"false")
+     <<",\"batch_next\":"<<(c.batch_next?"true":"false")<<'}'
      <<",\"runtime\":{\"device\":"<<quoted(device.str())<<",\"dtype\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";

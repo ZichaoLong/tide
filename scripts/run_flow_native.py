@@ -26,7 +26,10 @@ def run(packet, args):
                "--preset="+args.preset, "--schedule="+args.schedule, "--optimizer="+args.optimizer,
                "--steps="+str(args.steps), "--warmup="+str(args.warmup),
                "--windows-per-step="+str(args.windows_per_step), "--threads="+str(args.threads),
+               "--workers="+str(args.workers),
                "--parameter-budget="+str(args.parameter_budget)]
+    if args.packed_sources: command.append("--packed-sources")
+    if args.batch_next: command.append("--batch-next")
     for name in ("read", "control", "selection", "events", "scoring_dtype"):
         command.append("--"+name.replace("_", "-")+"="+getattr(args,name))
     if args.training: command.append("--training")

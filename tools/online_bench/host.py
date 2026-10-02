@@ -8,7 +8,8 @@ from .memory import MemoryRecord
 
 
 def runtime_for(packet, *, family, implementation, device, dtype, schedule, preset, trace=False,
-                native_library=None, placement=None, resident_library=None, resident_limits=None):
+                native_library=None, placement=None, resident_library=None, resident_limits=None,
+                workers=1, packed_sources=False, batch_next=False):
     if family not in packet["families"]:
         raise ValueError("workload is not equivalent in the requested family")
     if schedule not in ("streaming", "prefill"):
@@ -27,6 +28,7 @@ def runtime_for(packet, *, family, implementation, device, dtype, schedule, pres
                          seed=packet["workload"]["seed"])
     options = ExecutionOptions(implementation=implementation, schedule="greedy" if schedule == "prefill" else "streaming",
                                prefill=schedule == "prefill", packed=True, trace=trace,
+                               workers=workers, packed_sources=packed_sources, batch_next=batch_next,
                                full_autograd="replay" if resident else "batched", aggregate_autograd="replay" if resident else "batched",
                                resident_limits=resident_limits,
                                placement=placement or ExecutionPlacement(preset=preset))
@@ -77,7 +79,11 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         training=False, optimizer="sgd", steps=3, warmup=1, windows_per_step=2,
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
-        device_memory_bytes=0):
+        device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False):
+    if type(workers) is not int or not 1 <= workers <= 1024 or type(packed_sources) is not bool or type(batch_next) is not bool:
+        raise ValueError("invalid host workers/packed-sources/batch-next options")
+    if (workers != 1 or packed_sources or batch_next) and (implementation == "python" or preset == "resident"):
+        raise ValueError("host workers/packed-sources/batch-next require an eager native consumer")
     if preset == "resident":
         from .resident import run as run_resident
         return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
@@ -101,7 +107,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     start = time.perf_counter()
     memory = MemoryRecord([device])
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
-        dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement)
+        dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement,
+        workers=workers, packed_sources=packed_sources, batch_next=batch_next)
     c = packet["workload"]; session = runtime.session(c["batch"])
     named = parameters(runtime, embedding, head)
     options = dict(lr=.0001, weight_decay=.001, foreach=False)
@@ -156,6 +163,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             memory.capture("warmup")
     memory.capture("measured", reset_peak=False)
     return dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"],
+                host_execution=dict(workers=workers,packed_sources=packed_sources,batch_next=batch_next),
                 implementation=implementation, family=family, training=training, optimizer=optimizer if training else None,
                 windows_per_step=windows_per_step, warmup_steps=warmup, measured_steps=steps,
                 construction_seconds=construction, seconds=durations, warmup_seconds=warmup_times,
