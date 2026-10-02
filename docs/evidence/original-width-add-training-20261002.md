@@ -89,3 +89,21 @@ update27.757 s; different leased cards and one cold process prevent a causal
 throughput recommendation. The conservative B512 projection4085.875 s still
 exceeded3000 s, so the recheck contained no B512 execution. The previous
 consumer failure remains failed; this is a separately identified passing run.
+
+After vector optimizer finite checksbb40cff, the first ten-card recheck failed
+with **NPU OOM** during canonical-gradient allocation; its external collector
+then raised `KeyError(parameters)`. Both failures remain recorded. The device
+reported26.11GiB allocated and28.16GiB reserved by this process,1.79GiB free of
+61.27GiB, against a3.46GiB request. No contemporaneous process inventory identifies
+the other occupancy; do not attribute it conclusively to another job.
+
+One bounded resource recheck with the corrected collector then **passed**
+([audited record](original-width-add-optimizer-finite-20261002.json)). It retained
+the same model, B4/physicalB2, ten cards, FP32 SGD, two windows and capacity limits;
+both attempts explicitly used8 ATen CPU threads instead of the earlier1. Loss,
+all work/retained counters, estimates and measured allocation peaks match1757b90
+exactly. Construction66.567s and update25.073s are cold observations. The changed
+thread count and separate leases prevent a causal whole-graph speed claim, despite
+the independently measured isolated optimizer improvement. The conservative B512
+projection is3690.815s, still above3000s; **B512 was not executed**. Further
+implementation work is required before another full-batch admission.

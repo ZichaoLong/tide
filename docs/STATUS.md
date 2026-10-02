@@ -5,7 +5,7 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **bb40cff** (vector optimizer finite); latest evidence **9829e8a**.
+`graph-execution-foundation`. Latest pushed implementation: **bb40cff** (vector optimizer finite); latest evidence **fdb02af**.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -156,8 +156,8 @@ Standalone LibTorch and Python-native runtimes are separate.
 
 ## Next implementation and remaining delivery
 
-Qualify shared reverse gather, then use measured allocation savings to decide
-one bounded original-width Add revisit. Full originalB512 training/formal comparisons remain.
+Shared gather and vector optimizer finite are qualified; one bounded Add update
+check measures the combined change, then address Attention admission and full-batch cost. Full originalB512 training/formal comparisons remain.
 AttentionFP32 still statically refuses at minimal rows: inspect real lifetime of
 physical/canonical gradients and optimizer/accumulation storage, not arbitrary
 safety reductions. Read-only inspection found accumulation keeps independent
@@ -182,11 +182,22 @@ Source TASK/sources/optimizer-finite-clean01; builds optimizer-finite-{standalon
 python,consumer}-clean01. Benchmark optimizer-finite-bench-clean02; retain failed
 bench-clean01 compile attempt and dev01 CLI/dev02 unrounded-tail refusals.
 Audit launchers/optimizer_finite_evidence.py; all associated resources released.
-Next: one bounded original-width Add check on qualified bb40cff to measure whole
-update impact; source/geometry/caps unchanged, explicitly use8 existing ATen CPU
-threads to limit construction overhead and record this intentional change. Keep
-old3000s B512 cost gate. Afterward inspect phase-liveness/placement for Attention
-admission; do not blindly relax estimates or change private accumulation aliases.
+Original-width recheck01 FAILED (NPU OOM then collector KeyError); preserve it.
+One bounded resource recheck02 on cleanbb40cff PASSED with corrected collector;
+ten cards released. Same caps, B4/physicalB2, FP32SGD, two windows, threads8.
+Loss/work/retained counts, estimates and allocation peaks exactly match1757b90.
+Construction66.567s, update25.073s; different leases/threads prevent causal speed
+claims. B512 projection3690.815s>3000, so B512 not run. Reviewed report:
+evidence/original-width-add-optimizer-finite-20261002.json. No further resource retries.
 
-Uncommitted: reviewed optimizer evidence and current handoff for separate evidence
-commit. No task job live except preserved stopped historical-cpu-attention-01.
+Next implementation: reuse the private accumulation numeric bank while keeping
+connection flags separate. First accumulation must copy public backward exports;
+subsequent in-place numeric tiles must preserve stable flags, disconnected poison,
+all-owner preflight/refusal, old exports and original per-contribution arithmetic.
+No kernel/consumer estimator/safety reduction is proposed. Verify native boundary
+cases plus existing independent accumulation/consumer tests, then clean evidence.
+This alone does not solve Attention admission or B512 cost. Window-level reverse
+liveness and eager mixed multi-card placement remain follow-up work.
+
+Uncommitted: this reviewed recheck evidence/handoff; no implementation yet.
+No live project task except deliberately stopped historical-cpu-attention-01.

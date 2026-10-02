@@ -1,0 +1,94 @@
+{
+  "schema": "tide-reviewed-evidence-v1",
+  "source": "bb40cffe33c4da9d6ce173305ac8556d494dcffc",
+  "qualification": "resident-optimizer-finite-20261002.json",
+  "scope": "One cold original-width Add B4/physicalB2 complete update on ten NPUs; not original B512 or formal throughput",
+  "failed": {
+    "run": "wide-add-optimizer-finite-recheck01",
+    "state": "failed",
+    "consumer_exit_code": 2,
+    "cause": "NPU OOM allocating canonical gradients; parent then raised KeyError(parameters)",
+    "request_gib": 3.46,
+    "allocated_gib": 26.11,
+    "reserved_gib": 28.16,
+    "free_gib": 1.79,
+    "total_gib": 61.27,
+    "occupancy_owner": "unknown; no contemporaneous process inventory"
+  },
+  "passed": {
+    "run": "wide-add-optimizer-finite-recheck02",
+    "state": "passed",
+    "parameters": 9468053696,
+    "batch_execution": {
+      "logical_batch": 4,
+      "requested_sample_chunk_rows": 2,
+      "effective_sample_chunk_rows": 2,
+      "physical_chunks": 2
+    },
+    "losses": [
+      31.586021423339844
+    ],
+    "outputs": [
+      96
+    ],
+    "final_cut": 408,
+    "construction_seconds": 66.567227464,
+    "seconds": [
+      25.073474066
+    ],
+    "peak_growth_bytes": [
+      49339172864,
+      31741469696,
+      31741469696,
+      31741469696,
+      31743462400,
+      31743463424,
+      31742799872,
+      31742136320,
+      31681576448,
+      31681575424
+    ],
+    "conservative_b512_step_seconds": 3690.8153825151994,
+    "b512_cost_gate_seconds": 3000,
+    "b512_executed": false
+  },
+  "comparison": {
+    "baseline": "wide-add-reverse-gather-recheck01",
+    "exact": [
+      "losses",
+      "work and retained statistics",
+      "batch execution",
+      "outputs",
+      "cut",
+      "parameter count",
+      "device estimates",
+      "effective chunks",
+      "observed allocation peaks"
+    ],
+    "intentional_changes": [
+      "vector optimizer finite checks",
+      "ATen CPU threads1 to8"
+    ],
+    "limitation": "Different leases, one cold process each; no causal whole-graph speed conclusion"
+  },
+  "artifacts": {
+    "runs/wide-add-optimizer-finite-recheck02/status.json": "db0c923fb959bad377956d6bbe253132012f6f16ecfd047ca2776ba74453c7b5",
+    "runs/wide-add-optimizer-finite-recheck02/task.log": "9dc0cb8916a172a885f405b9b348cae143cd3dd794448d429cfe81edd1d8d5af",
+    "runs/wide-add-optimizer-finite-recheck02/queue.json": "d295ced592e8f6a4fb3d133651c7e45fe61aaca2cf130f0122f2bb6f5cec1f26",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/result.json": "a7a2033338066da8257b692e9d1325ede2223aeef89bf870b69ba37be8e09bdb",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/consumer-run/result.json": "3682f466ff4a7e1a4e7b21961d7c2915358be2c8d06a3cec8af8c73ed0f4c5d0",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/consumer-run/consumer.log": "5239ea499bdce58c0811eb457e976549854c0d936767ea053d99c5ee4898a082",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/devices-before.log": "8a018c289a77b2c2489b9353aaa7e8f653fa847797b25164726b4e253cf8a3f9",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/devices-after.log": "4e93357ef918ddc7120fa986970f36ddb3929892b29fbab46f25dacb45acfa1f",
+    "runs/wide-add-optimizer-finite-recheck02/recheck/launcher.py": "aaf3d15b2d370b2e0e03b4e1819da1fb34ff920a5b69f3213a4ed16dd68691e2",
+    "runs/wide-add-reverse-gather-recheck01/recheck/consumer-run/result.json": "0182155e69ce61e71896bafa8447badee37f5383b6e22fa2b949f7188a68b7f6",
+    "runs/wide-add-optimizer-finite-recheck01/status.json": "5a42a34601fdd6fd663e823ff3d95d7286c5aa57f8ceaf774f07e27f86cabaa3",
+    "runs/wide-add-optimizer-finite-recheck01/task.log": "a028ec864fe395026704ecea24a5a8d757902b7634db7221cf44fcb124ae2874",
+    "runs/wide-add-optimizer-finite-recheck01/recheck/result.json": "0078f6435751881b90e2ce889ea24b3e278f743f7f8aef2826f5e923e7a34af2",
+    "runs/wide-add-optimizer-finite-recheck01/recheck/consumer-run/result.json": "8bcc1e0abc181d5360889c6776f50992403437eb8e1c6df01208fa73326cab4b",
+    "runs/wide-add-optimizer-finite-recheck01/recheck/consumer-run/consumer.log": "951640eee10493886c036ece55f180dd4e6becdb2a1b090d501ce3c49346eadc",
+    "builds/optimizer-finite-consumer-clean01/result.json": "302bb057ba987abc21cc2fd6ba75d552078ec4311f16c3a43c3b8b45d84b31d5",
+    "inputs/fullsize-add01/workload.json": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "runs/wide-add-training-b2-01/training/pilot.json": "d02180ede74b6f75fa4e0cce1effc46d22400ce49ca6221dcae4244e81a6aedc"
+  }
+}
