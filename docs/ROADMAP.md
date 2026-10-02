@@ -282,6 +282,12 @@ Old flags and public exports remain independent; the same-lease D512 whole-proce
 allocator peaks were unchanged. No original-size/throughput claim follows.
 [Evidence](evidence/resident-private-accumulation-20261002.md).
 
+F5/F6 aggressive operator chunk selection is qualified on cleane82f971:CPU13,
+NPU17 independent comparisons/refusal and forced-splitting FP16 profile; unchanged
+memory envelopes/margins and conservative policy. Nonlimiting operator maxima can
+remain larger; original-size throughput remains to be measured.
+[Evidence](evidence/consumer-chunk-selection-20261002.md).
+
 ## Six implementation classes
 
 All required cells target CPU FP64/FP32, inference and first-order training.

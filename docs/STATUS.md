@@ -4,8 +4,8 @@ Updated2026-10-02. **ACTIVE: user authorized continued implementation, qualifica
 commits and pushes. No subagents. Overall goal incomplete.** Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest pushed implementation **b3a6a24**;
-latest evidence committed/pushed7e98eef. Re-entry:
+`graph-execution-foundation`. Latest pushed implementation **e82f971**;
+chunk-selection evidence prepared; prior evidence7e98eef. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract; [ROADMAP F1–F7](ROADMAP.md)
 is the sole backlog. References and ObsidianVault stay read-only.
@@ -120,21 +120,22 @@ Required full-size CPU/screened mixed/resident comparisons and three independent
 process recommendations remain, followed by F7 migration/support/evidence audit.
 CUDA and other environment tuples require target-machine validation.
 
-Aggressive one-field selection passed dirty-source development:
-chunk-planner-cpu-dev01 CPU13 (including Python/C++ constrained-shape parity),
-build-chunk-planner-consumer-dev01 installed consumer build/loader,
-chunk-planner-npu-dev01 NPU17 actual split/automatic-sample cases with CPU oracle,
-FP32/FP16 and native/LibTorch. Every observed allocation passed the same envelope.
-No core/resident backend/CANN changes. New row_selection records the rule.
+Aggressive one-field selection **e82f971** is fully qualified:CPU13,installed
+consumer build,NPU17 and separate forced-splitting FP16 profile all PASSED.
+65,727operators,zero observed AiCPU. [Report](evidence/consumer-chunk-selection-20261002.md).
+Source TASK/sources/chunk-planner-clean01; consumer chunk-planner-consumer-clean01;
+resident/core/CANN still byte-identical to qualifiedb3a6a24. All leases released.
 
-Commit implementation, then clean chunk-planner-clean01 snapshot: CPU13,installed
-consumer build with source/header/options-verified object reuse,NPU17,and separate
-forced-splitting FP16 profile. Profile task helper profile_chunk_planner.py,
-2cards,device-memory-bytes1839217549,queue120s/workload480s. After qualification,
-one bounded ten-card original-width AddB4/physicalB2 pilot using the plan selected
-for unchanged B512. No automatic full-batch stage; retain3000s gate.
-Static new plan with default head4GiB:Full16/emission4/aggregate8/attention8/
-keys128/reverse1/head64,coordinator53.142GiB<53.875GiB usable. This is a plan only,
-not verified original-width performance. No estimated component/margin changed.
+Next after evidence commit: launch one bounded original-width Add pilot,
+wide-add-chunk-planner-pilot01, source e82f971. Helper
+TASK/launchers/wide_add_chunk_planner_pilot.py;10cards,queue120s,outer960s,child900s.
+Use same original9.468B model,B4/physicalB2,FP32SGD,two connected windows,threads8,
+60GiB/card cap and unchanged safety margin. Operator maxima are selected from
+unchanged B512 geometry before any numerical execution. Default head4GiB enables
+head64; selectedFull16/emission4/aggregate8/attention8/keys128/reverse1.
+Compare loss within existingFP32 tolerance and every non-operator counter exactly;
+verify all peaks and saved contexts. Preserve failure; no blind retry or automatic
+B512 stage. Retain3000s projected-cost gate and inspect the pilot before proceeding.
 
-Uncommitted: planner,tests,consumer docs and handoff. No live NPU jobs.
+Uncommitted: reviewed chunk-selection evidence,ROADMAP and handoff.
+No active NPU jobs; preserve deliberately stopped historical CPU process.
