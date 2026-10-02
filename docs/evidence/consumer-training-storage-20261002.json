@@ -1,0 +1,4232 @@
+{
+  "schema": "tide-consumer-training-storage-v1",
+  "source": "4dd8368159ff74e8b45c052cfe85ecbca1e294f2",
+  "jobs": [
+    {
+      "name": "training-storage-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "c699b0a4cf3ffba6b4341fa61389c248b0fab3b471d74593e63cfc395be6aceb",
+        "task.log": "29f7e569d60437cfcefbdb2384e1c8cf39f93ce0647dd2d6a5f5a07db1275e96"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-training-storage-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4e6e3d5b6ecb9e2514966d646e2ab8629f368a4f07ad5be7909bd7aaa25caba5",
+        "task.log": "5d49f7ca07df2b741a684f1e6292b8f90655201d9aa038ab0f22b1b0897e8be2"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "training-storage-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9d85dce8504058b91b57e465aa55762e27ed00ddb8aba0562e7acf1959fda099",
+        "task.log": "c712fc5904406bdea9e995a99a4fe69c26a6d95016f38cb640b54b014f3e61be",
+        "queue.json": "2d3db88c08561e631e6d85779ceb179d1b290f3542771e80d012055ded9e0783"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "training-storage-calibration-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6e32d669022ee697db763ecf27fc58e6b2ae2725751a653f510db9721c17504e",
+        "task.log": "3102b3e6dfd93eacd795a9fb75cc5c1568effc66a1625bb78852a41d709388a8",
+        "queue.json": "69c7ed16c506dbcd5b2bba9b21ec37e3ae2411f795155f2d35f8f720e496a880"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "tests": {
+    "cpu": {
+      "passed": 17,
+      "junit_sha256": "8292f09b563fd76243ab184af6ba73a58920aca7ffe310191dda18fa008b554d"
+    },
+    "npu": {
+      "passed": 25,
+      "junit_sha256": "b23d20ba4911ab14066f57976c2f7ad8c26e012ddaf7f9fe63ea0023b2fd3b9e"
+    }
+  },
+  "client": {
+    "manifest_sha256": "ee5b46a15359697fe3322afd9ed6b49843ea3def10971c8a0e0f4e215b6a318d",
+    "binary_sha256": "97f448f729cc524d18ec1dceef2bc442bf78e6f7af298d6301eb6210629bce40",
+    "loader_sha256": "baf761f7111d777b447501be3529ad9940a05e77382c3f48975e96a74fc857f8",
+    "backend_source": "b3a6a24870b365905ffdfb24a16abedfa5373815",
+    "component_sha256": "11d1614c087c9637b52aaf88ccb09420c7c838b5f17aa82233f73971d6ff58b9",
+    "consumer_sources": {
+      "resident_capacity.cpp": "179b525434a8d62515928679cab50c747a6061baa44585cb4b9e2ede6e13982c",
+      "resident_run.cpp": "939af9a841b0750694c922dedf36d23779d141dbb4166f85c62b83f08ab8bc32",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "382db2a9ecdef9995b93ead8a5ac1bacb92e58569bacd6a43f1fb56bbf50b0e4",
+      "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+      "host.py": "15d6487449751df1edc18a3759d5605de32e342ec0380d391c9d540d407456ff",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+      "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+      "resident.py": "843f8a0f0eb33cd6befad2dffeee8cb2d03d2ceb4e32fef158524ea4a44c7f7d",
+      "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+      "resident_records.cpp": "2cfae676dc67fe1fde54d99cad62ed63ee21ba1b59965bf50daa982830b1803c",
+      "resident_consumer.h": "5b5ccf5175c047df3cb49e2344b0f4b09ca45c3b589e9f4b3a2627eacf00e28e",
+      "consumer.h": "3d3cdceeb2c70325d7c1b122172308b165ddd1b2beb2cd69db5294be30331fcf",
+      "capacity.h": "6203f74f9a28ed2d20f8836f935b7f51f14de39f2a5bd194bb3b341feca61588",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+      "capacity_record.h": "3c3fc7af74d055814e279c81f07fb02a46829a5ecefc4ec4f6ec5ec273423211",
+      "run.cpp": "a3e4b2e1d167e5e2dc5e9bf7ff2221ddc5646a37e2103b49c71f314e18d647a5",
+      "capacity.py": "e1353fd6db6a023e109cdf3f71e2d1aed43309db1345a75a95c5ae3f8bcc9862",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "cfbb69e25d919d16585e854fac9e2d18e6fac4efd9737a17e3316884be380837",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4"
+    },
+    "reused_objects_sha256": {
+      "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "8b6ac3dcab48a6a98da5cff3d482bd189e6712892f3505ff7e82e1a9f119d538",
+      "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "beaeae1b00914e40cd5d373a61c4b5cb7adb7e083ab3bcaf3503a02abbd89464",
+      "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+      "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+      "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "9ee7c1602fd9a30741d9b910821c8db93d2ddf553f19e368e34878c07f63b99a",
+      "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+      "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "1720f535ea800bcdf029990fb7ea8ea873f83050ea343ca39faa2a7965899e3a",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "c035beb48421450f48c7fd0d0d32b74acec85994b9eb27b971de6c588af3120d",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "54f28c35a1c5119c6077abbf076d080c8a7862fa86280ee9e1dd4ec10ad79a19",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "2e9bd54d3309a0a5db7275a1a9e444001bad5d956ae8f115b10a28e7ece5b69a",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_capacity.cpp.o": "56ac734c3bad94f7b92028ee341d5d2ae05f313c14b51d9330b294151d0820f3"
+    }
+  },
+  "observations": [
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au0/capacity-result.json",
+      "sha256": "fa1faa548aa1e88b98171719b1eaf380f29ccb4d05be6aa000fa7e6c51ab0702",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1465190480,
+            "phases": {
+              "construction": 1177820728,
+              "forward_loss": 1221717744,
+              "backward": 1465190480,
+              "optimizer": 1446257288
+            },
+            "components": {
+              "parameters": 1200,
+              "state_and_kv": 1056,
+              "routing": 8590720,
+              "owner_packets": 11534336,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 784,
+              "consumer_parameters_optimizer": 672,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10331456,
+              "roots_and_consumer_gradients": 736,
+              "physical_and_canonical_gradients": 7155760,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1568,
+              "head_workspace": 33566416,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16793600,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1777197031,
+            "usable_bytes": 1465259600,
+            "headroom_bytes": 311937431
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1304898896,
+            "phases": {
+              "construction": 1169229336,
+              "forward_loss": 1169229088,
+              "backward": 1304898896,
+              "optimizer": 1303445864
+            },
+            "components": {
+              "parameters": 1200,
+              "state_and_kv": 1056,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 784,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 1344,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 4144,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16793600,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1777197031,
+            "usable_bytes": 1465259600,
+            "headroom_bytes": 311937431
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          98,
+          98
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 16
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "physical_reductions": 1,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 1777197031,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65645891584,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65645608960,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          54894080,
+          85274112
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au1/capacity-result.json",
+      "sha256": "01c6f6e3195002dbf59f647b96a6392726bc4e5f4b993d9f2e8837c2adcfa8d1",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1465190480,
+            "budget_bytes": 1777197031,
+            "usable_bytes": 1465259600,
+            "headroom_bytes": 311937431,
+            "phases": {
+              "backward": 1465190480,
+              "construction": 1177820728,
+              "forward_loss": 1221717744,
+              "optimizer": 1446257288
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 672,
+              "consumer_proposals": 1568,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 784,
+              "head_workspace": 33566416,
+              "journals": 0,
+              "owner_packets": 11534336,
+              "parameters": 1200,
+              "physical_and_canonical_gradients": 7155760,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10331456,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16793600,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 736,
+              "routing": 8590720,
+              "saved_contexts": 0,
+              "state_and_kv": 1056
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1304898896,
+            "budget_bytes": 1777197031,
+            "usable_bytes": 1465259600,
+            "headroom_bytes": 311937431,
+            "phases": {
+              "backward": 1304898896,
+              "construction": 1169229336,
+              "forward_loss": 1169229088,
+              "optimizer": 1303445864
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 784,
+              "head_workspace": 0,
+              "journals": 0,
+              "owner_packets": 11534336,
+              "parameters": 1200,
+              "physical_and_canonical_gradients": 4144,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 1344,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16793600,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 0,
+              "state_and_kv": 1056
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          98,
+          98
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "physical_reductions": 1,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 1777197031,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65489301504,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65479274496,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          54889472,
+          85274112
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au2/capacity-result.json",
+      "sha256": "ff6b3c0e673f1c024a5ec50032b34d254a7d910f0d020d896e23c8a17b75dfc5",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1466513888,
+            "phases": {
+              "construction": 1178361808,
+              "forward_loss": 1222706640,
+              "backward": 1466513888,
+              "optimizer": 1446797252
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 142552,
+              "routing": 8590720,
+              "owner_packets": 11534336,
+              "journals": 196608,
+              "forward_workspace": 226304,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 896,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10781380,
+              "roots_and_consumer_gradients": 736,
+              "physical_and_canonical_gradients": 7490272,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1792,
+              "head_workspace": 33566416,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16809984,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 1778669937,
+            "usable_bytes": 1466585216,
+            "headroom_bytes": 312084721
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1306222080,
+            "phases": {
+              "construction": 1169770192,
+              "forward_loss": 1170217760,
+              "backward": 1306222080,
+              "optimizer": 1303985380
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 142552,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 196608,
+              "forward_workspace": 226304,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 451268,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 338656,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16809984,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 1778669937,
+            "usable_bytes": 1466585216,
+            "headroom_bytes": 312084721
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 16
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "physical_reductions": 2,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 1778669937,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65542082560,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65532051456,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56557568,
+          120429568
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au3/capacity-result.json",
+      "sha256": "339370edf95e3df0e5c1296f8397e48ba91503bc096becf993f337efd7483009",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1466513888,
+            "budget_bytes": 1778669937,
+            "usable_bytes": 1466585216,
+            "headroom_bytes": 312084721,
+            "phases": {
+              "backward": 1466513888,
+              "construction": 1178361808,
+              "forward_loss": 1222706640,
+              "optimizer": 1446797252
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 896,
+              "consumer_proposals": 1792,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 226304,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 3480,
+              "head_workspace": 33566416,
+              "journals": 196608,
+              "owner_packets": 11534336,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 7490272,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10781380,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 16809984,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 736,
+              "routing": 8590720,
+              "saved_contexts": 0,
+              "state_and_kv": 142552
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1306222080,
+            "budget_bytes": 1778669937,
+            "usable_bytes": 1466585216,
+            "headroom_bytes": 312084721,
+            "phases": {
+              "backward": 1306222080,
+              "construction": 1169770192,
+              "forward_loss": 1170217760,
+              "optimizer": 1303985380
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 226304,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 196608,
+              "owner_packets": 11534336,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 338656,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 451268,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 16809984,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 0,
+              "state_and_kv": 142552
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "physical_reductions": 2,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 1778669937,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65476173824,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65417560064,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56552960,
+          120429568
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au4/capacity-result.json",
+      "sha256": "b7a50a891ef88ba0ebd0349d7372a65dbe0a56f5860f0e31cca93d5dcd1914a0",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1465189232,
+            "phases": {
+              "construction": 1177819672,
+              "forward_loss": 1221716480,
+              "backward": 1465189232,
+              "optimizer": 1446256464
+            },
+            "components": {
+              "parameters": 856,
+              "state_and_kv": 800,
+              "routing": 8590720,
+              "owner_packets": 11534336,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 784,
+              "consumer_parameters_optimizer": 560,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10330920,
+              "roots_and_consumer_gradients": 736,
+              "physical_and_canonical_gradients": 7155760,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1456,
+              "head_workspace": 33566400,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16793600,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1777195644,
+            "usable_bytes": 1465258352,
+            "headroom_bytes": 311937292
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1304897760,
+            "phases": {
+              "construction": 1169228392,
+              "forward_loss": 1169227952,
+              "backward": 1304897760,
+              "optimizer": 1303445264
+            },
+            "components": {
+              "parameters": 856,
+              "state_and_kv": 800,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 784,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 808,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 4144,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16793600,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1777195644,
+            "usable_bytes": 1465258352,
+            "headroom_bytes": 311937292
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          98,
+          98
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 16
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "physical_reductions": 1,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 1777195644,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65529724928,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65471148032,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          54545920,
+          85205504
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au5/capacity-result.json",
+      "sha256": "53af88716d82e069455faecd9dac7d6799d0596d852e975229e751cd72cbab19",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1465189232,
+            "budget_bytes": 1777195644,
+            "usable_bytes": 1465258352,
+            "headroom_bytes": 311937292,
+            "phases": {
+              "backward": 1465189232,
+              "construction": 1177819672,
+              "forward_loss": 1221716480,
+              "optimizer": 1446256464
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 560,
+              "consumer_proposals": 1456,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 784,
+              "head_workspace": 33566400,
+              "journals": 0,
+              "owner_packets": 11534336,
+              "parameters": 856,
+              "physical_and_canonical_gradients": 7155760,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10330920,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16793600,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 736,
+              "routing": 8590720,
+              "saved_contexts": 0,
+              "state_and_kv": 800
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1304897760,
+            "budget_bytes": 1777195644,
+            "usable_bytes": 1465258352,
+            "headroom_bytes": 311937292,
+            "phases": {
+              "backward": 1304897760,
+              "construction": 1169228392,
+              "forward_loss": 1169227952,
+              "optimizer": 1303445264
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 784,
+              "head_workspace": 0,
+              "journals": 0,
+              "owner_packets": 11534336,
+              "parameters": 856,
+              "physical_and_canonical_gradients": 4144,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 808,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16793600,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 0,
+              "state_and_kv": 800
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          98,
+          98
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "physical_reductions": 1,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 1777195644,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65467752448,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65413951488,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          54541312,
+          85205504
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au6/capacity-result.json",
+      "sha256": "7fa28ddc2beadc16dce634649a874c38ba07a7e4a0570140e433bcf871ccc157",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1466495968,
+            "phases": {
+              "construction": 1178371764,
+              "forward_loss": 1222688704,
+              "backward": 1466495968,
+              "optimizer": 1446808086
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 154600,
+              "routing": 8590720,
+              "owner_packets": 11534336,
+              "journals": 196608,
+              "forward_workspace": 226304,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 784,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10752514,
+              "roots_and_consumer_gradients": 736,
+              "physical_and_canonical_gradients": 7490272,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1680,
+              "head_workspace": 33566400,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16809984,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 1778650026,
+            "usable_bytes": 1466567296,
+            "headroom_bytes": 312082730
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1306204272,
+            "phases": {
+              "construction": 1169780260,
+              "forward_loss": 1170199952,
+              "backward": 1306204272,
+              "optimizer": 1303996438
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 154600,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 196608,
+              "forward_workspace": 226304,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 422402,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 338656,
+              "reverse_workspace": 1447936,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16809984,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 1778650026,
+            "usable_bytes": 1466567296,
+            "headroom_bytes": 312082730
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 16
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "physical_reductions": 2,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 1778650026,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65520545792,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65467486208,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56415744,
+          120567296
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_complete_training_with_au7/capacity-result.json",
+      "sha256": "a47abf4ec5482079644a86d49bc0432747576a43861531ea5eaead8a7c3686a4",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1466495968,
+            "budget_bytes": 1778650026,
+            "usable_bytes": 1466567296,
+            "headroom_bytes": 312082730,
+            "phases": {
+              "backward": 1466495968,
+              "construction": 1178371764,
+              "forward_loss": 1222688704,
+              "optimizer": 1446808086
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 784,
+              "consumer_proposals": 1680,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 226304,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 3480,
+              "head_workspace": 33566400,
+              "journals": 196608,
+              "owner_packets": 11534336,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 7490272,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 10752514,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 16809984,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 736,
+              "routing": 8590720,
+              "saved_contexts": 0,
+              "state_and_kv": 154600
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1306204272,
+            "budget_bytes": 1778650026,
+            "usable_bytes": 1466567296,
+            "headroom_bytes": 312082730,
+            "phases": {
+              "backward": 1306204272,
+              "construction": 1169780260,
+              "forward_loss": 1170199952,
+              "optimizer": 1303996438
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 226304,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 196608,
+              "owner_packets": 11534336,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 338656,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 422402,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 16809984,
+              "reverse_workspace": 1447936,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 0,
+              "state_and_kv": 154600
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "physical_reductions": 2,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 1778650026,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65465458688,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65409830912,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56411136,
+          120567296
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co0/observed.json",
+      "sha256": "7a6573cdfa5c3dc9c3fa2107799ce36ce5cb9551721c48eb661b67ab0fbf46c0",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 866413780,
+            "phases": {
+              "construction": 832819016,
+              "forward_loss": 866413780
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 76882888,
+              "routing": 10772032,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 0,
+              "consumer_parameters_optimizer": 224,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 0,
+              "reverse_workspace": 0,
+              "canonical_communication": 0,
+              "consumer_proposals": 0,
+              "head_workspace": 33598464,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 0,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1113349352,
+            "usable_bytes": 867796689,
+            "headroom_bytes": 245552663
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 822046760,
+            "phases": {
+              "construction": 822046760,
+              "forward_loss": 822043060
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 76882888,
+              "routing": 0,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 0,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 0,
+              "reverse_workspace": 0,
+              "canonical_communication": 0,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "saved_contexts": 0,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 0,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1113349352,
+            "usable_bytes": 867796689,
+            "headroom_bytes": 245552663
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "physical_reductions": 0,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 17,
+          "physical_chunks": 1,
+          "attempted_sample_rows": [
+            17
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 1113349352,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65519128576,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65462759424,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          87275008,
+          51761152
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co1/observed.json",
+      "sha256": "1aeda5f5b6c50c30de0e10e908b409c9b760cc89333e8a7993d0d95c1a4869d0",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 866413780,
+            "budget_bytes": 1113349352,
+            "usable_bytes": 867796689,
+            "headroom_bytes": 245552663,
+            "phases": {
+              "construction": 832819016,
+              "forward_loss": 866413780
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 224,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 0,
+              "head_workspace": 33598464,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 0,
+              "reverse_workspace": 0,
+              "roots_and_consumer_gradients": 0,
+              "routing": 10772032,
+              "saved_contexts": 0,
+              "state_and_kv": 76882888
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 822046760,
+            "budget_bytes": 1113349352,
+            "usable_bytes": 867796689,
+            "headroom_bytes": 245552663,
+            "phases": {
+              "construction": 822046760,
+              "forward_loss": 822043060
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 0,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 0,
+              "head_workspace": 0,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 0,
+              "reverse_workspace": 0,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 0,
+              "state_and_kv": 76882888
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 17,
+          "physical_chunks": 1,
+          "attempted_sample_rows": [
+            17
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 1113349352,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65427099648,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65410093056,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          87699968,
+          51761152
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co2/observed.json",
+      "sha256": "b508aab617bc2b289bf6cae7bccea02189724bf18eb833b84ac0ac1397d96f64",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 865618636,
+            "phases": {
+              "construction": 832023906,
+              "forward_loss": 865618636
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 44240600,
+              "routing": 10716224,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 0,
+              "consumer_parameters_optimizer": 112,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 0,
+              "reverse_workspace": 0,
+              "canonical_communication": 0,
+              "consumer_proposals": 0,
+              "head_workspace": 33597440,
+              "continuation_snapshot_bytes": 4016795,
+              "saved_contexts": 8033590,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 23871488,
+              "retained_pack_workspace": 0,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1114597503,
+            "usable_bytes": 868920025,
+            "headroom_bytes": 245677478
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 821230680,
+            "phases": {
+              "construction": 821230680,
+              "forward_loss": 821227970
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 44240600,
+              "routing": 0,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 0,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 0,
+              "reverse_workspace": 0,
+              "canonical_communication": 0,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 3986542,
+              "saved_contexts": 7973084,
+              "gradient_accumulation": 0,
+              "context_pack_workspace": 23855104,
+              "retained_pack_workspace": 0,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 0,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 1114597503,
+            "usable_bytes": 868920025,
+            "headroom_bytes": 245677478
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "physical_reductions": 0,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 1114597503,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65481027584,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65463017472,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          87045120,
+          52687872
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459176063537598
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co3/observed.json",
+      "sha256": "6c3e4556f4c813db228cdaf968e006b96e7abb385700c7fc504bee9c22ef047e",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 865618636,
+            "budget_bytes": 1114597503,
+            "usable_bytes": 868920025,
+            "headroom_bytes": 245677478,
+            "phases": {
+              "construction": 832023906,
+              "forward_loss": 865618636
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 112,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 23871488,
+              "continuation_snapshot_bytes": 4016795,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 0,
+              "head_workspace": 33597440,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 0,
+              "reverse_workspace": 0,
+              "roots_and_consumer_gradients": 0,
+              "routing": 10716224,
+              "saved_contexts": 8033590,
+              "state_and_kv": 44240600
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 821230680,
+            "budget_bytes": 1114597503,
+            "usable_bytes": 868920025,
+            "headroom_bytes": 245677478,
+            "phases": {
+              "construction": 821230680,
+              "forward_loss": 821227970
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 23855104,
+              "continuation_snapshot_bytes": 3986542,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 0,
+              "gradient_accumulation_live": 0,
+              "graph_optimizer": 0,
+              "head_workspace": 0,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 0,
+              "programs_and_vendor_allowance": 738197504,
+              "retained": 0,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 0,
+              "reverse_workspace": 0,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 7973084,
+              "state_and_kv": 44240600
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 1114597503,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65428451328,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65409212416,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          87370752,
+          52687872
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459176063537598
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co4/observed.json",
+      "sha256": "be7956f36214cabe1050f0f383572b0ff05fdebbc38d94082ce785b9cc10d7e2",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1726599130,
+            "phases": {
+              "construction": 1272803618,
+              "forward_loss": 1341817674,
+              "backward": 1726599130,
+              "optimizer": 1541242758
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 40702792,
+              "routing": 10716224,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 896,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 35394044,
+              "roots_and_consumer_gradients": 4432,
+              "physical_and_canonical_gradients": 107953632,
+              "reverse_workspace": 42011648,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1792,
+              "head_workspace": 33619280,
+              "continuation_snapshot_bytes": 8002509,
+              "saved_contexts": 16005018,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 23871488,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 2075834650,
+            "usable_bytes": 1734033457,
+            "headroom_bytes": 341801193
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1551297136,
+            "phases": {
+              "construction": 1262001416,
+              "forward_loss": 1279500432,
+              "backward": 1551297136,
+              "optimizer": 1396216604
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 40702792,
+              "routing": 0,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 17502716,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 95567328,
+              "reverse_workspace": 42011648,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 7968160,
+              "saved_contexts": 15936320,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 23855104,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 2075834650,
+            "usable_bytes": 1734033457,
+            "headroom_bytes": 341801193
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "physical_reductions": 2,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 2075834650,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65481523200,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65463418880,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          151476224,
+          215462912
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459223747253418,
+        1.9459154605865479
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co5/observed.json",
+      "sha256": "245465e2ea9c45a37e901b9245a3371b2f9976b98ac57d2b6b078357d9eb7dd7",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1726599130,
+            "budget_bytes": 2075834650,
+            "usable_bytes": 1734033457,
+            "headroom_bytes": 341801193,
+            "phases": {
+              "backward": 1726599130,
+              "construction": 1272803618,
+              "forward_loss": 1341817674,
+              "optimizer": 1541242758
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 896,
+              "consumer_proposals": 1792,
+              "context_pack_workspace": 23871488,
+              "continuation_snapshot_bytes": 8002509,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 33619280,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 107953632,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 35394044,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 42011648,
+              "roots_and_consumer_gradients": 4432,
+              "routing": 10716224,
+              "saved_contexts": 16005018,
+              "state_and_kv": 40702792
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1551297136,
+            "budget_bytes": 2075834650,
+            "usable_bytes": 1734033457,
+            "headroom_bytes": 341801193,
+            "phases": {
+              "backward": 1551297136,
+              "construction": 1262001416,
+              "forward_loss": 1279500432,
+              "optimizer": 1396216604
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 23855104,
+              "continuation_snapshot_bytes": 7968160,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 95567328,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 17502716,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 42011648,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 15936320,
+              "state_and_kv": 40702792
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "physical_reductions": 2,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 2075834650,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65348079616,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65289674752,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          151472640,
+          216117248
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9459223747253418,
+        1.9459154605865479
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co6/observed.json",
+      "sha256": "99e199cb0d140e2be4ae7b876073a3df632ccf3afeae92bfee8e07f95115d91e",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1714200118,
+            "phases": {
+              "construction": 1268367906,
+              "forward_loss": 1329417750,
+              "backward": 1714200118,
+              "optimizer": 1536807924
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 44240600,
+              "routing": 10716224,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 784,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 27429754,
+              "roots_and_consumer_gradients": 4432,
+              "physical_and_canonical_gradients": 107953632,
+              "reverse_workspace": 42011648,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1680,
+              "head_workspace": 33618368,
+              "continuation_snapshot_bytes": 4016795,
+              "saved_contexts": 8033590,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 23871488,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 2064301154,
+            "usable_bytes": 1723653311,
+            "headroom_bytes": 340647843
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1538906428,
+            "phases": {
+              "construction": 1257574008,
+              "forward_loss": 1267109724,
+              "backward": 1538906428,
+              "optimizer": 1391790186
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 44240600,
+              "routing": 0,
+              "owner_packets": 5767168,
+              "journals": 786432,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 9538426,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 95567328,
+              "reverse_workspace": 42011648,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 3986542,
+              "saved_contexts": 7973084,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 23855104,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 2064301154,
+            "usable_bytes": 1723653311,
+            "headroom_bytes": 340647843
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "physical_reductions": 2,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 2064301154,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65401782272,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65343725568,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          147188224,
+          211295232
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459154605865479
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_automatic_samples_keep_co7/observed.json",
+      "sha256": "ed7fbc376ee66657cefb9e265a02a1d72f1fe8747afdd92b8807d818f1334188",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1714200118,
+            "budget_bytes": 2064301154,
+            "usable_bytes": 1723653311,
+            "headroom_bytes": 340647843,
+            "phases": {
+              "backward": 1714200118,
+              "construction": 1268367906,
+              "forward_loss": 1329417750,
+              "optimizer": 1536807924
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 784,
+              "consumer_proposals": 1680,
+              "context_pack_workspace": 23871488,
+              "continuation_snapshot_bytes": 4016795,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 33618368,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 107953632,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 27429754,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 42011648,
+              "roots_and_consumer_gradients": 4432,
+              "routing": 10716224,
+              "saved_contexts": 8033590,
+              "state_and_kv": 44240600
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1538906428,
+            "budget_bytes": 2064301154,
+            "usable_bytes": 1723653311,
+            "headroom_bytes": 340647843,
+            "phases": {
+              "backward": 1538906428,
+              "construction": 1257574008,
+              "forward_loss": 1267109724,
+              "optimizer": 1391790186
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 23855104,
+              "continuation_snapshot_bytes": 3986542,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 786432,
+              "owner_packets": 5767168,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 95567328,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 9538426,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 42011648,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 7973084,
+              "state_and_kv": 44240600
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "physical_reductions": 2,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "sample_admission": {
+          "logical_batch": 17,
+          "effective_sample_rows": 9,
+          "physical_chunks": 2,
+          "attempted_sample_rows": [
+            17,
+            9
+          ],
+          "policy": "halve_on_memory_refusal"
+        },
+        "requested_device_memory_bytes": 2064301154,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65348079616,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65289764864,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          147325952,
+          212795904
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459154605865479
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl0/observed.json",
+      "sha256": "c21008b0332f7e3cd233f0e877fcd592fd5f36447500d7bd88a7243e54483e3b",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1273649294,
+            "phases": {
+              "construction": 1198680030,
+              "forward_loss": 1273649294,
+              "backward": 1270822654,
+              "optimizer": 1198712382
+            },
+            "components": {
+              "parameters": 2320,
+              "state_and_kv": 2112,
+              "routing": 23872896,
+              "owner_packets": 0,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 1568,
+              "consumer_parameters_optimizer": 672,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 40897072,
+              "roots_and_consumer_gradients": 33104,
+              "physical_and_canonical_gradients": 28319680,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 0,
+              "consumer_proposals": 1568,
+              "head_workspace": 34042192,
+              "continuation_snapshot_bytes": 71434,
+              "saved_contexts": 214302,
+              "gradient_accumulation": 16778784,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 16778000,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 65401270272,
+            "usable_bytes": 48916734976,
+            "headroom_bytes": 16484535296
+          }
+        ],
+        "full_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "canonical_elements": [
+          196
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "physical_reductions": 0,
+        "row_selection": "joint_halving",
+        "policy": "conservative",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65401270272,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56339968
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl1/observed.json",
+      "sha256": "78ed65da11324881d7f1abc59acffd3fcb89d90df67c996de71931db3988425a",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1573448666,
+            "phases": {
+              "construction": 1229339482,
+              "forward_loss": 1307509322,
+              "backward": 1573448666,
+              "optimizer": 1497807294
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 142552,
+              "routing": 23872896,
+              "owner_packets": 11534336,
+              "journals": 1572864,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 896,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 44098244,
+              "roots_and_consumer_gradients": 33104,
+              "physical_and_canonical_gradients": 28650208,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1792,
+              "head_workspace": 34042192,
+              "continuation_snapshot_bytes": 98902,
+              "saved_contexts": 296706,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 16834560,
+              "retained_pack_workspace": 17039360,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 65401544704,
+            "usable_bytes": 58727172506,
+            "headroom_bytes": 6674372198
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1345884828,
+            "phases": {
+              "construction": 1205232492,
+              "forward_loss": 1208432572,
+              "backward": 1345884828,
+              "optimizer": 1339447680
+            },
+            "components": {
+              "parameters": 2540,
+              "state_and_kv": 142552,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 1572864,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 3203780,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 338656,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 32092,
+              "saved_contexts": 96276,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 16801792,
+              "retained_pack_workspace": 17039360,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 1340
+            },
+            "budget_bytes": 65343815680,
+            "usable_bytes": 58675216384,
+            "headroom_bytes": 6668599296
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "physical_reductions": 0,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65401544704,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65343815680,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          60702720,
+          121454080
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl2/observed.json",
+      "sha256": "1c7219b1377a216d4341c181593ef954d890be787fa0fd9ad256341a0edfd821",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1273649294,
+            "budget_bytes": 65347567616,
+            "usable_bytes": 48876457984,
+            "headroom_bytes": 16471109632,
+            "phases": {
+              "backward": 1270822654,
+              "construction": 1198680030,
+              "forward_loss": 1273649294,
+              "optimizer": 1198712382
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 672,
+              "consumer_proposals": 1568,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 71434,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 16778784,
+              "gradient_accumulation_live": 16778000,
+              "graph_optimizer": 1568,
+              "head_workspace": 34042192,
+              "journals": 0,
+              "owner_packets": 0,
+              "parameters": 2320,
+              "physical_and_canonical_gradients": 28319680,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 40897072,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 33104,
+              "routing": 23872896,
+              "saved_contexts": 214302,
+              "state_and_kv": 2112
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "canonical_elements": [
+          196
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65347567616,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56336384
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl3/observed.json",
+      "sha256": "a02868497633f1f2f94db795346031330a68dd211ed3adc71122411eb9bfa7f1",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1573448666,
+            "budget_bytes": 65348763648,
+            "usable_bytes": 58679669556,
+            "headroom_bytes": 6669094092,
+            "phases": {
+              "backward": 1573448666,
+              "construction": 1229339482,
+              "forward_loss": 1307509322,
+              "optimizer": 1497807294
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 896,
+              "consumer_proposals": 1792,
+              "context_pack_workspace": 16834560,
+              "continuation_snapshot_bytes": 98902,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 34042192,
+              "journals": 1572864,
+              "owner_packets": 11534336,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 28650208,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 44098244,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 17039360,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 33104,
+              "routing": 23872896,
+              "saved_contexts": 296706,
+              "state_and_kv": 142552
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1345884828,
+            "budget_bytes": 65289732096,
+            "usable_bytes": 58626541159,
+            "headroom_bytes": 6663190937,
+            "phases": {
+              "backward": 1345884828,
+              "construction": 1205232492,
+              "forward_loss": 1208432572,
+              "optimizer": 1339447680
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 16801792,
+              "continuation_snapshot_bytes": 32092,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 1572864,
+              "owner_packets": 11534336,
+              "parameters": 2540,
+              "physical_and_canonical_gradients": 338656,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 3203780,
+              "retained_attention_parameters": 1340,
+              "retained_pack_workspace": 17039360,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 96276,
+              "state_and_kv": 142552
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65348763648,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65289732096,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          60698112,
+          121454080
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl4/observed.json",
+      "sha256": "7dab383dbcb23c67c327a3c9170a33e6666d2a804a2fbde5eab548b2b5cecf63",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1273613950,
+            "phases": {
+              "construction": 1198653150,
+              "forward_loss": 1273613950,
+              "backward": 1270795390,
+              "optimizer": 1198686038
+            },
+            "components": {
+              "parameters": 1672,
+              "state_and_kv": 1600,
+              "routing": 23872896,
+              "owner_packets": 0,
+              "journals": 0,
+              "forward_workspace": 46080,
+              "graph_optimizer": 1568,
+              "consumer_parameters_optimizer": 560,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 40896040,
+              "roots_and_consumer_gradients": 33104,
+              "physical_and_canonical_gradients": 28319680,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 0,
+              "consumer_proposals": 1456,
+              "head_workspace": 34034112,
+              "continuation_snapshot_bytes": 63114,
+              "saved_contexts": 189342,
+              "gradient_accumulation": 16778784,
+              "context_pack_workspace": 0,
+              "retained_pack_workspace": 16908288,
+              "attention_parameter_gradients": 0,
+              "gradient_accumulation_live": 16778000,
+              "retained_attention_parameters": 0
+            },
+            "budget_bytes": 65401581568,
+            "usable_bytes": 48916968448,
+            "headroom_bytes": 16484613120
+          }
+        ],
+        "full_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "canonical_elements": [
+          196
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "physical_reductions": 0,
+        "row_selection": "joint_halving",
+        "policy": "conservative",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65401581568,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56123392
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl5/observed.json",
+      "sha256": "34af3169351957a78b1b1f8bd84307b0ee2f847c9d359543dd424e82f05d49c5",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1573364452,
+            "phases": {
+              "construction": 1229283144,
+              "forward_loss": 1307417028,
+              "backward": 1573364452,
+              "optimizer": 1497751834
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 154600,
+              "routing": 23872896,
+              "owner_packets": 11534336,
+              "journals": 1572864,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 784,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 44069378,
+              "roots_and_consumer_gradients": 33104,
+              "physical_and_canonical_gradients": 28650208,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 268435456,
+              "consumer_proposals": 1680,
+              "head_workspace": 34034112,
+              "continuation_snapshot_bytes": 76804,
+              "saved_contexts": 230412,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 16834560,
+              "retained_pack_workspace": 17039360,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 65401790464,
+            "usable_bytes": 58727393690,
+            "headroom_bytes": 6674396774
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1345825302,
+            "phases": {
+              "construction": 1205200842,
+              "forward_loss": 1208373046,
+              "backward": 1345825302,
+              "optimizer": 1339417020
+            },
+            "components": {
+              "parameters": 1550,
+              "state_and_kv": 154600,
+              "routing": 0,
+              "owner_packets": 11534336,
+              "journals": 1572864,
+              "forward_workspace": 406528,
+              "graph_optimizer": 3480,
+              "consumer_parameters_optimizer": 0,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 3174914,
+              "roots_and_consumer_gradients": 0,
+              "physical_and_canonical_gradients": 338656,
+              "reverse_workspace": 2895872,
+              "canonical_communication": 134217728,
+              "consumer_proposals": 0,
+              "head_workspace": 0,
+              "continuation_snapshot_bytes": 18186,
+              "saved_contexts": 54558,
+              "gradient_accumulation": 16779536,
+              "context_pack_workspace": 16801792,
+              "retained_pack_workspace": 17039360,
+              "attention_parameter_gradients": 1536,
+              "gradient_accumulation_live": 16778376,
+              "retained_attention_parameters": 694
+            },
+            "budget_bytes": 65343860736,
+            "usable_bytes": 58675256935,
+            "headroom_bytes": 6668603801
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "physical_reductions": 0,
+        "row_selection": "greedy_peak_excess",
+        "policy": "aggressive",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65401790464,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65343860736,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          60498432,
+          121636864
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl6/observed.json",
+      "sha256": "b9595f49dc9caf34abee2932b5e02785db33c3d9da31de41d86870d02b725ed2",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1273613950,
+            "budget_bytes": 65348960256,
+            "usable_bytes": 48877502464,
+            "headroom_bytes": 16471457792,
+            "phases": {
+              "backward": 1270795390,
+              "construction": 1198653150,
+              "forward_loss": 1273613950,
+              "optimizer": 1198686038
+            },
+            "components": {
+              "attention_parameter_gradients": 0,
+              "canonical_communication": 0,
+              "consumer_parameters_optimizer": 560,
+              "consumer_proposals": 1456,
+              "context_pack_workspace": 0,
+              "continuation_snapshot_bytes": 63114,
+              "forward_workspace": 46080,
+              "gradient_accumulation": 16778784,
+              "gradient_accumulation_live": 16778000,
+              "graph_optimizer": 1568,
+              "head_workspace": 34034112,
+              "journals": 0,
+              "owner_packets": 0,
+              "parameters": 1672,
+              "physical_and_canonical_gradients": 28319680,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 40896040,
+              "retained_attention_parameters": 0,
+              "retained_pack_workspace": 16908288,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 33104,
+              "routing": 23872896,
+              "saved_contexts": 189342,
+              "state_and_kv": 1600
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_owners": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "canonical_elements": [
+          196
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65348960256,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          56119808
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ]
+    },
+    {
+      "path": "runs/training-storage-npu-clean01/pytest/test_resident_sample_chunks_fl7/observed.json",
+      "sha256": "f248722f45236a3f0b6190a719aacfade21f10d94843e440f476274d4a48df18",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "memory_admission": {
+        "schema": "tide-consumer-capacity-v1",
+        "scope": "resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee",
+        "devices": [
+          {
+            "index": 0,
+            "estimated_peak_bytes": 1573364452,
+            "budget_bytes": 65348050944,
+            "usable_bytes": 58679028122,
+            "headroom_bytes": 6669022822,
+            "phases": {
+              "backward": 1573364452,
+              "construction": 1229283144,
+              "forward_loss": 1307417028,
+              "optimizer": 1497751834
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 268435456,
+              "consumer_parameters_optimizer": 784,
+              "consumer_proposals": 1680,
+              "context_pack_workspace": 16834560,
+              "continuation_snapshot_bytes": 76804,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 34034112,
+              "journals": 1572864,
+              "owner_packets": 11534336,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 28650208,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 44069378,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 17039360,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 33104,
+              "routing": 23872896,
+              "saved_contexts": 230412,
+              "state_and_kv": 154600
+            }
+          },
+          {
+            "index": 1,
+            "estimated_peak_bytes": 1345825302,
+            "budget_bytes": 65289682944,
+            "usable_bytes": 58626496922,
+            "headroom_bytes": 6663186022,
+            "phases": {
+              "backward": 1345825302,
+              "construction": 1205200842,
+              "forward_loss": 1208373046,
+              "optimizer": 1339417020
+            },
+            "components": {
+              "attention_parameter_gradients": 1536,
+              "canonical_communication": 134217728,
+              "consumer_parameters_optimizer": 0,
+              "consumer_proposals": 0,
+              "context_pack_workspace": 16801792,
+              "continuation_snapshot_bytes": 18186,
+              "forward_workspace": 406528,
+              "gradient_accumulation": 16779536,
+              "gradient_accumulation_live": 16778376,
+              "graph_optimizer": 3480,
+              "head_workspace": 0,
+              "journals": 1572864,
+              "owner_packets": 11534336,
+              "parameters": 1550,
+              "physical_and_canonical_gradients": 338656,
+              "programs_and_vendor_allowance": 1140850688,
+              "retained": 3174914,
+              "retained_attention_parameters": 694,
+              "retained_pack_workspace": 17039360,
+              "reverse_workspace": 2895872,
+              "roots_and_consumer_gradients": 0,
+              "routing": 0,
+              "saved_contexts": 54558,
+              "state_and_kv": 154600
+            }
+          }
+        ],
+        "full_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "state_owners": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "canonical_elements": [
+          290,
+          290
+        ],
+        "requested_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "physical_reductions": 0,
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "requested_device_memory_bytes": 0,
+        "initial_devices": [
+          {
+            "device": "npu:0",
+            "free_bytes": 65348050944,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          },
+          {
+            "device": "npu:1",
+            "free_bytes": 65289682944,
+            "total_bytes": 65796046848,
+            "allocated_bytes": 0
+          }
+        ],
+        "observed_peak_growth_bytes": [
+          60493824,
+          121636864
+        ],
+        "allocator_within_estimate": true
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ]
+    }
+  ],
+  "calibration": {
+    "state": "passed",
+    "source": "4dd8368159ff74e8b45c052cfe85ecbca1e294f2",
+    "dirty": "",
+    "command": [
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+      "/mi/data2T/zlong/tide-execution-flows/sources/training-storage-clean01/scripts/run_execution_flow.py",
+      "--packet",
+      "/mi/data2T/zlong/tide-execution-flows/runs/private-accumulation-memory-clean01/memory/workload.json",
+      "--output-dir",
+      "/mi/data2T/zlong/tide-execution-flows/runs/training-storage-calibration-clean01/calibration/consumer-run",
+      "--device",
+      "npu:0",
+      "--family",
+      "timed-dag",
+      "--implementation",
+      "libtorch",
+      "--native-binary",
+      "/mi/data2T/zlong/tide-execution-flows/builds/training-storage-consumer-clean01/consumer/tidegraph-online-bench",
+      "--preset",
+      "resident",
+      "--schedule",
+      "prefill",
+      "--dtype",
+      "float32",
+      "--training",
+      "--optimizer",
+      "adamw",
+      "--steps",
+      "1",
+      "--warmup",
+      "0",
+      "--windows-per-step",
+      "2",
+      "--devices",
+      "2",
+      "--chunk-policy",
+      "aggressive",
+      "--sample-chunk-rows",
+      "2",
+      "--resident-context-bytes",
+      "67108864",
+      "--resident-queue",
+      "4096",
+      "--resident-arrivals",
+      "4096",
+      "--resident-outputs",
+      "128",
+      "--resident-trace",
+      "8192",
+      "--resident-kv-trace-rows",
+      "65536",
+      "--resident-workspace-bytes",
+      "137438953472",
+      "--resident-retained-bytes",
+      "34359738368",
+      "--resident-backward-bytes",
+      "2199023255552",
+      "--resident-optimizer-bytes",
+      "34359738368",
+      "--head-workspace-bytes",
+      "268435456",
+      "--parameter-budget",
+      "8589934592",
+      "--device-memory-bytes",
+      "64424509440"
+    ],
+    "helper_sha256": "3864765cd79a57a6b1e9addcee3220d12aedf9bf7ffcb8573dd6c22646b9cc71",
+    "build_sha256": "ee5b46a15359697fe3322afd9ed6b49843ea3def10971c8a0e0f4e215b6a318d",
+    "binary_sha256": "97f448f729cc524d18ec1dceef2bc442bf78e6f7af298d6301eb6210629bce40",
+    "baseline_result_sha256": "0deffa656d8921ee32d549a229fde31c48ecd55825ef9d84a1e01ec64d84f099",
+    "scope": "New immutable consumer estimate, identical qualified backend bytes and D512/B8 Attention workload: four physical B2 groups, two retained windows, one FP32 AdamW update. Compare existing observations; not a same-lease throughput experiment. Original API capacity and margins unchanged.",
+    "consumer_exit_code": 0,
+    "consumer_state": "passed",
+    "result_sha256": "6b228ab10668e02c7b1aa79137d1bd09b5a14f9199bd5fffa44868655a6b65eb",
+    "losses": [
+      7.532631874084473
+    ],
+    "statistics": [
+      {
+        "canonical_stream_chunks": 144,
+        "canonical_stream_reserved_bytes": 268758440,
+        "emission_chunks": 184,
+        "events": 3163,
+        "full_chunks": 171,
+        "head_chunks": 8,
+        "pending_peak": 128,
+        "retained_attention_bytes": 546327592,
+        "retained_bytes": 1451692776,
+        "retained_compact_journals": 4,
+        "retained_dense_bytes": 2783626120,
+        "retained_projection_bytes": 590450688,
+        "retained_window_bytes": 823423920,
+        "retained_windows": 8,
+        "reverse_fiber_budget_bytes": 45812984488,
+        "reverse_fiber_groups": 16,
+        "reverse_fiber_key_rows_max": 256,
+        "reverse_fiber_key_rows_min": 256,
+        "reverse_fiber_owner_rows_max": 64,
+        "reverse_fiber_owner_rows_min": 64,
+        "reverse_fiber_query_rows_max": 64,
+        "reverse_fiber_query_rows_min": 64,
+        "reverse_fiber_requested_max": 64,
+        "reverse_fiber_tensor_bytes": 1925475360,
+        "stages": 104,
+        "window_events_max": 400,
+        "window_outputs_max": 8,
+        "window_stages_max": 13
+      }
+    ],
+    "previous_estimated_peaks": [
+      25965880344,
+      18093475736
+    ],
+    "new_estimated_peaks": [
+      25138936228,
+      17266531620
+    ],
+    "previous_observed_peaks": [
+      8368268800,
+      7520954880
+    ],
+    "observed_peaks": [
+      8368268800,
+      7520954880
+    ],
+    "receipt_sha256": "e9aeb685ad5e37a8b1cc7268324d07232861e8ba35c251a19682b9cb00e0514f"
+  },
+  "limits": [
+    "Only static consumer admission changed; actual resident/core/CANN execution bytes are unchanged.",
+    "Shared immutable Attention parameter snapshots are charged once. Per-window KV, dynamic bias, lengths, journals and state are still charged per window.",
+    "The extra private FP32 accumulation bank is charged by live storage. The separate two-input accumulation API budget, per-device margins and safety limits are unchanged.",
+    "CPU17 and NPU25 passed without skips; 24 executed candidates retain independent CPU checks and one case refuses before allocation.",
+    "D512/B8/T4/V257 Attention calibration: physicalB2 x4, two connected windows, one FP32 AdamW update. Identical observed allocation, loss/statistics/continuation; not a same-lease speed experiment.",
+    "No additional profile: runtime component hashes match already qualified binaries. No original-width training or full-size performance claim follows."
+  ]
+}
