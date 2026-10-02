@@ -107,3 +107,13 @@ thread count and separate leases prevent a causal whole-graph speed claim, despi
 the independently measured isolated optimizer improvement. The conservative B512
 projection is3690.815s, still above3000s; **B512 was not executed**. Further
 implementation work is required before another full-batch admission.
+
+The subsequent generic greedy chunk planner was independently qualified on
+cleane82f971. Its ten-card pilot request timed out before execution; one
+nine-card B4/physicalB1 adaptation then passed with previously validated B1
+capacities ([audited report](original-width-add-chunk-selection-20261002.md)).
+Construction65.793s, complete update27.300s, maximum allocator41.097GiB;
+loss matches the prior B4 result within the existing FP32 tolerance and logical
+events/outputs/cut match exactly. Physical grouping and placement differ, so
+these measurements do not establish a causal speed or memory improvement.
+The B512 cost projection4018.543s again exceeds3000s; **B512 was not launched**.

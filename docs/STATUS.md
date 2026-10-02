@@ -1,141 +1,142 @@
 # Current handoff
 
-Updated2026-10-02. **ACTIVE: user authorized continued implementation, qualification,
-commits and pushes. No subagents. Overall goal incomplete.** Repository
-`/home/zlong/llm/graph-execution-foundation` resolves to
+Updated 2026-10-02. **PAUSED at the user's explicit request after this round's
+commit/push and progress report. Do not resume implementation or experiments
+until the user confirms. Overall goal remains incomplete. No subagents.**
+Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest pushed implementation **e82f971**;
-chunk-selection evidence prepared; prior evidence7e98eef. Re-entry:
+`graph-execution-foundation`. Latest implementation e82f971; prior pushed evidence
+4e67d57. This checkpoint adds the audited nine-card pilot and pause handoff;
+use `git log -1` for its evidence commit. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
-[execution-flows](execution-flows.md) owns the contract; [ROADMAP F1–F7](ROADMAP.md)
-is the sole backlog. References and ObsidianVault stay read-only.
+[execution-flows](execution-flows.md) owns the contract;
+[ROADMAP F1–F7](ROADMAP.md) is the sole backlog. Reference repos and ObsidianVault
+remain read-only. The following is a handoff, not another backlog.
 
 ## Contract and operating bounds
 
-Each candidate independently consumes common inputs/parameters/initial state;
-CPU reference events/routes/gradients never become candidate execution inputs.
+Every candidate independently consumes common inputs, parameters and initial
+state. CPU reference events, routes and gradients never supply candidate work.
 General online greedy supports legal family topology/input, including positive-
 delay PDG feedback. Preserve int64, stable order, duplicate edges, missing/zero
-messages, None/zero gradients and complete continuation. Performance: PDG LibTorch;
-TimedDAG/Settle LibTorch+PyTorch; CPU/NPU×streaming/prefill×inference/complete training.
-Five presets plus fine switches. FP32 main, FP16 separate; no convergence requirement.
+messages, None/zero gradients and full continuation. Performance: PDG LibTorch;
+TimedDAG/Settle LibTorch+PyTorch; CPU/NPU × streaming/prefill × inference/complete
+training. Five presets plus fine switches. FP32 main, FP16 separate; training
+means forward/loss/backward/optimizer/continuation, with no convergence requirement.
 
-Implementation commit → fixed clean affected qualification → separate evidence
-commit; push each. Current user contract outranks run-ml-experiments; minimal
-records only. No repeated unchanged8,954 CPU checks or completed representative
-timings. Formal heavy timings serial; no unbounded queue, OOM search or blind retry.
+Implementation commit → clean fixed-source affected qualification → separate
+evidence commit; push each under the standing authorization. Latest user request
+adds a pause after this checkpoint. User contract outranks run-ml-experiments;
+minimal useful records only. No unchanged full CPU/representative reruns, unbounded
+queue, OOM search, blind retries or relaxed safety/cost limits. Formal heavy timing
+is serial; never stop other workloads to free resources.
 
-`TASK=/mi/data2T/zlong/tide-execution-flows`. Module `libtorch-npu/2.10.0-cann9.0.0`;
+## Completed checkpoint
+
+Audited `wide-add-chunk-planner-nine01` PASSED on clean
+`e82f97199c63dc8505137595adaae9a9c2d12221`. Unit
+`tide-execution-flows-wide-add-chunk-planner-nine01` is inactive/dead, successful
+exit0 and empty control group. Nine-card lease released. Source/build/helper/
+packet/result hashes, static plan recomputation and all allocator/context bounds
+passed `TASK/launchers/wide_add_chunk_planner_evidence.py <full SHA>`.
+[Reviewed report](evidence/original-width-add-chunk-selection-20261002.md).
+
+Original-width Add9.468B,D2048/T12/V50304, logicalB4/physicalB1 ×4,FP32SGD,
+two connected windows,threads8: construction65.793s, complete update27.300s,
+maximum allocator41.097GiB. Outputs96/cut408/events9265 match priorB4;
+loss31.586036682128906 passes existingFP32 tolerance. Larger operator maxima
+Full16/emission4/aggregate8/attention8/keys128/reverse1/head64 came from the
+originalB512 shape-only plan. That plan estimates53.012GiB<53.875GiB usable.
+The unchanged cost projection is4018.543s>3000s, so **B512 was not launched**.
+One cold run with changed placement/physical batch is not a speed recommendation.
+
+The preceding ten-card `wide-add-chunk-planner-pilot01` remains FAILED exit3:
+configured queue120s, observed136.61s including polling/probes; consumer never
+started. Nine cards used previously validatedB1 queue512/trace2048 capacities.
+No automatic B512 stage or further resource retry remains queued.
+Raw records: `TASK/runs/wide-add-chunk-planner-nine01/{status.json,task.log,queue.json}`
+and `pilot/{result.json,original-plan.json,consumer-run/result.json}`.
+
+Other qualified increments in this round:
+- Optimizer finite-check recheck02 passed; recheck01 NPU OOM and collector failure
+  remain retained. B4/physicalB2 ten-card25.073s update; B512 projection3690.815s
+  still refused. Evidence14bc89c, [report](evidence/original-width-add-training-20261002.md).
+- Private numeric accumulation b3a6a24/evidence7e98eef: eight clean jobs;
+  50 distinct native boundary cases,32 trajectories/768windows/96updates,
+  Python14/actual consumer24, separate FP16 profile53,182ops/zero observed AiCPU.
+  Same-lease D512 allocator peaks unchanged; no whole-process speed/peak claim.
+- General aggressive chunk selection e82f971/evidence4e67d57: four clean jobs,
+  CPU13/NPU17, separate forced-splitting FP16 profile65,727ops/zero observed AiCPU.
+  Python/C++ agree; envelope, margin, logical capacities and conservative policy
+  unchanged. Only consumer planner/recording changed, resident/core/CANN bytes reused.
+
+## Progress estimate for the requested alignment
+
+Current F1–F7 local delivery is approximately **80% (roughly75–85%)**. This is a
+planning estimate, not test pass rate, proof for arbitrary inputs or remaining-time
+prediction. Weights: functionality35%, correctness30%, performance25%, delivery10%.
+Midpoints90/90/50/80 yield about79%; rounded to80%. External GPU hardware work is
+listed separately and is not counted as locally verified.
+
+| Dimension | Estimated completion | Evidence and remaining boundary |
+| --- | --- | --- |
+| Functional implementation | 85–95% | General online scheduling, public CPU/mixed/resident flows, resident multi-card inference/training, FP32/FP16 and continuation implemented/qualified for declared profiles; eager mixed multi-card placement and full-size memory/cost remain open |
+| Correctness qualification | 85–95% | Independent CPU references, full observables, VJPs, updates/restores and affected clean device gates exist; new scale changes and final integrated acceptance still required |
+| Performance and profiling | 45–55% | All10 representative family/client/schedule submatrices complete; originalB512 inference passed for both models in LibTorch resident TimedDAG/prefill only; originalB512 complete training and full-size CPU/mixed/resident three-process comparisons remain open |
+| Packaging, provenance and migration delivery | 75–85% | Installed clients, clean source/build identities, versioned packets and per-change evidence exist; F7 final support/migration/evidence audit remains open |
+
+The main residual risk is scaling the complete training memory/compute lifecycle,
+not basic operator availability. Attention original-width minimum-row estimates
+still refuse admission (~90/80GiB on10/12cards); AddB512 fails the current projected
+cost gate. Queue availability caused one bounded refusal, not the principal
+implementation gap. Snapshot accounting and reverse-window gradient lifetimes
+are promising analysis directions, not implemented solutions or a guarantee.
+
+## Resume only after user confirmation
+
+Read ROADMAP F4–F7 and the reviewed pilot first. Investigate the dominant retained
+training allocations before any new large run:
+`rg -n 'snapshot|retained|gradient' tools/online_bench/capacity.py tools/online_bench/capacity.h tools/device_online/retained_attention.h`.
+Immutable attention parameters are already shared at38858d0; estimator reductions
+need exact component/lifetime proof. Dynamic KV/bias/journals stay per-window.
+Any reverse-window workspace reuse must preserve reverse-window→registry-alias
+addition order and device completion dependencies; never alias remote Full zeroing
+before a prior use finishes. No such new change exists in this checkpoint.
+Other remaining acceptance is listed only under ROADMAP F1–F7.
+
+## Environment and protected state
+
+`TASK=/mi/data2T/zlong/tide-execution-flows`;
+module `libtorch-npu/2.10.0-cann9.0.0`;
 Python `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-User-authorized /opt stack supersedes older account guide. Preserve module
-PYTHONPATH and prepend frozen source/python. `TASK_QUEUE_ENABLE=0`,
-`TORCH_DEVICE_BACKEND_AUTOLOAD=0`.16 logical64GiB Ascend910_9392; lease/remap only.
-`launchers/freeze_run.py`: immutable snapshot,background.slice,Nice10,2 build workers.
-Runtime commands use `env -C {out}` to avoid CANN writes in frozen source.
-Queue120s; formal timing lock `TASK/online-measurement.lock`.
-Last disk check:data171GiB/root13GiB free.
+User-authorized public /opt stack supersedes the old private account guide.
+Preserve module PYTHONPATH; prepend frozen source/python.
+`TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`; lease/remap devices.
+Long jobs use frozen source,background.slice,Nice10,two build workers;
+runtime `env -C {out}` avoids writes into snapshots. Queue120s, formal timing
+lock `TASK/online-measurement.lock`. Last free disk:data156GiB/root13GiB.
 
-**Preserve historical-cpu-attention-01:** deliberately SIGSTOP; holds old timing.lock.
-Its durable record says running. Never resume, kill or clean it. Historical1.6438×
-was faster throughput, not current general-online evidence. Restricted archive:
+Latest source `TASK/sources/chunk-planner-clean01`; consumer
+`TASK/builds/chunk-planner-consumer-clean01`. Resident libraries are
+`private-accumulation-{standalone,python}-clean01`; core
+`placement-{cpu,npu,npu-python}-clean01`; CPUconsumer `source-values-cpu-clean01`.
+Private accumulation reused source/compile-command-matched objects with fresh
+links; unchanged core/CANN were hash-verified. No all-dependencies-rebuilt claim.
+
+No current experiment remains running or queued. **Preserve deliberately SIGSTOPped
+historical-cpu-attention-01**, whose old durable record says running and which
+holds old timing.lock: never resume, kill or clean it without a new instruction.
+Historical1.6438× refers to faster throughput in the restricted historical flow,
+not current general-online evidence. Restricted archive remains
 archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
+The old build-reverse-gather-python-dev01 metadata inconsistency remains visible
+in status.py; do not relabel it or confuse it with a new failure.
 
-## Current result and next implementation
-
-Private numeric accumulation **b3a6a24** passed all8 clean jobs; no live task jobs
-except the deliberately stopped historical CPU process. Evidence:
-[report](evidence/resident-private-accumulation-20261002.md), audited by
-TASK/launchers/private_accumulation_evidence.py.50 distinct native boundary cases,
-32 trajectories/768windows/96updates,Python14,actual consumer24. Separate FP16
-profile53,182ops,zero observed AiCPU. First accumulation copies exports; later
-updates reuse private values while old/new flags remain separate. Public ABI/core,
-CANN,consumer estimator,max_bytes admission and safety margins unchanged.
-Same-lease D512/B8 Attention peak8,368,268,800/7,520,954,880B unchanged; exact loss
-and work/retention counters. This is not a whole-process memory or speed gain.
-
-Source TASK/sources/private-accumulation-clean01. Latest qualified builds
-private-accumulation-{standalone,python,consumer}-clean01. Two matching dev host
-objects reused after source/compile-command verification; fresh clean links.
-Other host/core/CANN and client objects reused by hash; no from-scratch claim.
-Core placement-{cpu,npu,npu-python}-clean01; CPUconsumer source-values-cpu-clean01.
-
-Now developing **aggressive physical chunk selection**. Current planner halves all fields together, needlessly shrinking
-low-memory work. Investigate deterministic one-field greedy reduction of actual
-per-card peak excess, with safe plateau fallback. Keep the same envelope,
-headroom,logical capacities and general topology/input behavior. Validate Python/
-C++ planner parity and directed consumer/profile cases before another bounded
-original-width pilot. No arbitrary estimator or3000s cost-limit relaxation.
-
-## Retained full-width results and failures
-
-All ten required representative family/client/schedule submatrices are complete
-on80dae6e; [entry report](evidence/representative-settle-python-20261002.md).
-Do not rerun them unchanged. Warm resident2.698–8.848× versus default PythonCPU
-is not versus tuned LibTorchCPU or original-wide throughput.
-
-Original FP32 LibTorch resident TimedDAG/prefill inference passed, two windows:
-480body/2208edges,D2048/B512/T12/V50304,128 physicalB4 groups,12,288outputs/cut408.
-- Attention17.521B:325.278s,14.562GiB/card peak,source48e44b0;
-  [report](evidence/original-wide-inference-20261002.md).
-- Add9.468B:278.574s,7.812GiB/card peak,sourcebe380db;
-  [report](evidence/original-wide-add-inference-20261002.md).
-Cold capacity evidence, not full-matrix formal CPU comparison. Original packets
-remain unchanged. Region budget observe_all=true retains KV for unselected nodes.
-
-[Original-width training history](evidence/original-width-add-training-20261002.md):
-- AddB2/physicalB1 on11cards passed source475d4af:20.279s update,42.216GiB peak.
-  B512 projection5191.5s>3000 stopped parent. Ten-card profile701,139ops,zero AiCPU.
-- B4/physicalB2 on10cards,c3ed0f2 failed post-run calibration and lost peak details.
-  Reporting3462dae fixed failure recording, qualified CPU19/NPU9.
-- Same3462dae diagnostic preserved failure:coordinator51.4198GiB>50.0756GiB estimate.
-  Other cards29.5GiB. No OOM/timeout. construction243.789s/update39.390s.
-- Shared reverse gather1757b90 passed identicalB4 geometry:coordinator45.950GiB,
-  loss/counters exact,update27.757s. B512 projection4085.875s>3000.
-- Vector optimizerbb40cff recheck01 failed NPU OOM then collectorKeyError; records
-  remain FAILED. Allocation requested3.46GiB;26.11allocated/28.16reserved/1.79free
-  of61.27GiB; no contemporaneous inventory identifies the other occupancy.
-- One bounded recheck02 PASSED with corrected collector and before/after snapshots.
-  Same caps/model/B4/physicalB2/two windows; explicit ATen threads8 instead of1.
-  Peaks/loss/all counters exactly match1757b90; construction66.567s/update25.073s.
-  B512 projection3690.815s>3000; B512 never ran. No further resource retries.
-  [audited record](evidence/original-width-add-optimizer-finite-20261002.json),
-  evidence commit14bc89c. Separate leases/thread changes prevent causal speed claims.
-
-Recent qualified generic improvements: immutable attention snapshots38858d0,
-shared reverse gathers1757b90,vector optimizer finitebb40cff. The latter has three
-independent same-card isolated phase timings:SGD6.778×/AdamW7.007× throughput,
-not whole-graph speed; [report](evidence/resident-optimizer-finite-20261002.md).
-All cited raw sources/builds/runs and failures remain retained.
-
-## Remaining delivery
-
-OriginalB512 complete training and Attention original-width admission are open;
-minimum-row old envelopes estimate about90/80GiB on10/12cards. Do not equate a
-failed capacity estimate with completion. Consider reverse-window gradient
-lifetime, exact retained snapshot accounting and general memory-aware placement.
-Maintain reverse-window→registry-alias floating addition order; per-window sums
-then addition would change grouping. Current private flags must never be aliased.
-Eager mixed multi-device parameter/payload placement remains unimplemented.
-Required full-size CPU/screened mixed/resident comparisons and three independent
-process recommendations remain, followed by F7 migration/support/evidence audit.
-CUDA and other environment tuples require target-machine validation.
-
-Aggressive one-field selection **e82f971** is fully qualified:CPU13,installed
-consumer build,NPU17 and separate forced-splitting FP16 profile all PASSED.
-65,727operators,zero observed AiCPU. [Report](evidence/consumer-chunk-selection-20261002.md).
-Source TASK/sources/chunk-planner-clean01; consumer chunk-planner-consumer-clean01;
-resident/core/CANN still byte-identical to qualifiedb3a6a24. All leases released.
-
-Next after evidence commit: launch one bounded original-width Add pilot,
-wide-add-chunk-planner-pilot01, source e82f971. Helper
-TASK/launchers/wide_add_chunk_planner_pilot.py;10cards,queue120s,outer960s,child900s.
-Use same original9.468B model,B4/physicalB2,FP32SGD,two connected windows,threads8,
-60GiB/card cap and unchanged safety margin. Operator maxima are selected from
-unchanged B512 geometry before any numerical execution. Default head4GiB enables
-head64; selectedFull16/emission4/aggregate8/attention8/keys128/reverse1.
-Compare loss within existingFP32 tolerance and every non-operator counter exactly;
-verify all peaks and saved contexts. Preserve failure; no blind retry or automatic
-B512 stage. Retain3000s projected-cost gate and inspect the pilot before proceeding.
-
-Uncommitted: reviewed chunk-selection evidence,ROADMAP and handoff.
-No active NPU jobs; preserve deliberately stopped historical CPU process.
+OriginalB512 inference evidence: Attention17.521B325.278s/14.562GiB per card;
+Add9.468B278.574s/7.812GiB per card. These are cold capacity observations, not the
+full performance matrix. Representative entry:
+[evidence](evidence/representative-settle-python-20261002.md).
+CUDA true-device execution and new host/CANN tuples require target-machine gates;
+older eager four-stack acceptance does not certify the new resident backend there.
+At this checkpoint only reviewed evidence, ROADMAP corrections and this handoff
+are changed; no uncommitted implementation is intended to remain after the commit.
