@@ -1,5 +1,6 @@
 #pragma once
 #include "state_reverse_view.h"
+#include "reverse_gather.h"
 
 namespace tide::device_online {
 struct StateReversePacket {
@@ -11,5 +12,6 @@ struct StateReversePacket {
 };
 StateReversePacket append_state_reverse_pack(CannProgram&,const ReverseTape&,const ReverseLinks&,
     const at::Tensor& node_mapping,int64_t local_nodes,int64_t event_capacity,int64_t fiber_capacity,
-    const at::Tensor& error,int64_t tensor_budget);
+    const at::Tensor& error,int64_t tensor_budget,
+    const ReverseGatherInput& events,const ReverseGatherInput& fibers,const ReverseGatherInput& scales);
 } // namespace tide::device_online

@@ -7,7 +7,8 @@
 namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
 StateReversePacket append_state_reverse_pack(CannProgram& p,const ReverseTape& tape,const ReverseLinks& links,
-    const at::Tensor& mapping,int64_t nodes,int64_t events,int64_t fibers,const at::Tensor& error,int64_t budget) {
+    const at::Tensor& mapping,int64_t nodes,int64_t events,int64_t fibers,const at::Tensor& error,int64_t budget,
+    const ReverseGatherInput& event_input,const ReverseGatherInput& fiber_input,const ReverseGatherInput& scale_input) {
   if(at::GradMode::is_enabled()||!tape.graph||!tape.state.metadata.defined()||tape.state.metadata.dim()!=2
       ||!tape.fiber_meta.defined()||tape.fiber_meta.dim()!=2||!mapping.defined()||mapping.dim()!=1)
     throw std::invalid_argument("compact reverse pack requires no-grad actual journals and node map");
@@ -47,11 +48,7 @@ StateReversePacket append_state_reverse_pack(CannProgram& p,const ReverseTape& t
     {tape.state.metadata,tape.state.count,tape.fiber_meta,tape.fiber_count,links.messages,mapping,out.event_meta,out.event_count,
      out.fiber_meta,out.fiber_count,out.event_rows,out.fiber_rows,inverse,out.links.messages,out.links.valid,out.links.consumer_head,
      out.links.consumer_next,tail,scale_rows,error});
-  auto gather=[&](const at::Tensor& input,const at::Tensor& indices,const at::Tensor& output) {
-    auto shape=input.sizes().vec();++shape[0];auto padded=at::zeros(shape,input.options());
-    p.copy(padded.narrow(0,0,input.size(0)),input);p.index_select(padded,0,indices,output);
-  };
-  gather(tape.state.values,out.event_rows,out.event_values);gather(tape.fiber_values,out.fiber_rows,out.fiber_values);
-  gather(links.scales,scale_rows,out.links.scales);return out;
+  event_input.select(p,out.event_rows,out.event_values);fiber_input.select(p,out.fiber_rows,out.fiber_values);
+  scale_input.select(p,scale_rows,out.links.scales);return out;
 }
 } // namespace tide::device_online

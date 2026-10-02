@@ -61,9 +61,10 @@ ShardedStateVjp::ShardedStateVjp(const ShardedReverseTape& t,const at::Tensor& e
 ShardedStateVjp::~ShardedStateVjp()=default;
 void ShardedStateVjp::prepare(CannProgram& p,const ReverseLinks& links) {
   auto& s=*impl_;if(s.prepared)throw std::logic_error("compact reverse preparation repeated");s.prepared=true;
+  ReverseGatherInput events(p,s.global.state.values),fibers(p,s.global.fiber_values),scales(p,links.scales);
   for(auto& owner:s.shards) {
     owner.packed=append_state_reverse_pack(p,s.global,links,owner.mapping,owner.ids.numel(),s.global.state.metadata.size(0),
-      s.global.fiber_values.size(0),s.error,s.budget/8);owner.local=owner.packed;p.copy(owner.error,s.error);
+      s.global.fiber_values.size(0),s.error,s.budget/8,events,fibers,scales);owner.local=owner.packed;p.copy(owner.error,s.error);
     auto& program=owner.program?*owner.program:p;auto local_error=owner.program?owner.error:s.error;
     if(owner.program) {
       const auto d=owner.tape.state.decay.device();PeerExchange::Fields fields;
@@ -85,8 +86,9 @@ StateVjp ShardedStateVjp::append_stage(CannProgram& p,const at::Tensor& range,co
   auto zero=[&](at::IntArrayRef shape,bool flag=false){auto x=at::empty(shape,flag?b:f);p.zero(x);return x;};
   StateVjp out{zero({capacity,width}),zero({capacity},true),zero(cot.final.sizes()),zero(cot.final_connected.sizes(),true),
     zero(cot.final.sizes()),zero(cot.final_connected.sizes(),true),zero(cot.final.sizes()),zero(cot.final_connected.sizes(),true)};
+  ReverseGatherInput events(p,cot.events),connections(p,cot.connected);
   for(auto& owner:s.shards) {
-    owner.stage=append_state_reverse_stage(p,owner.packed,owner.tape.state,range,cot,owner.ids,scores.scores,scores.read_connected,s.error,s.budget/8);
+    owner.stage=append_state_reverse_stage(p,owner.packed,owner.tape.state,range,cot,owner.ids,scores.scores,scores.read_connected,s.error,s.budget/8,events,connections);
     if(!owner.program){owner.result=owner.reverse->append_stage(p,owner.stage,s.error);continue;}
     auto& remote=*owner.program;const auto d=owner.tape.state.decay.device();auto stage=owner.stage;
     PeerExchange::Fields fields;auto copy=[&](at::Tensor& t){auto x=at::zeros(t.sizes(),t.options().device(d));fields.emplace_back(t,x);t=x;};

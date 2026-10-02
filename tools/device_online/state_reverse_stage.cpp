@@ -7,7 +7,8 @@ namespace tide::device_online {
 namespace {uint8_t* ptr(const at::Tensor& x){return static_cast<uint8_t*>(x.data_ptr());}}
 StateReverseStage append_state_reverse_stage(CannProgram& p,const StateReversePacket& packet,
     const StateTape& parameters,const at::Tensor& global_range,const StateCotangents& roots,
-    const at::Tensor& ids,const at::Tensor& scores,const at::Tensor& read_on,const at::Tensor& error,int64_t budget) {
+    const at::Tensor& ids,const at::Tensor& scores,const at::Tensor& read_on,const at::Tensor& error,int64_t budget,
+    const ReverseGatherInput& events,const ReverseGatherInput& connections) {
   const int64_t capacity=packet.event_meta.size(0),global=roots.events.size(0),nodes=ids.numel(),width=roots.events.size(2),samples=roots.final.size(0);
   const bool controlled=scores.defined();
   if(nodes<1||capacity<1||global<capacity||controlled!=read_on.defined()||budget<1
@@ -28,7 +29,7 @@ StateReverseStage append_state_reverse_stage(CannProgram& p,const StateReversePa
     auto shape=input.sizes().vec();++shape[0];auto padded=at::zeros(shape,input.options());
     p.copy(padded.narrow(0,0,input.size(0)),input);p.index_select(padded,0,indices,output);
   };
-  gather(packet.event_values,rows,out.tape.values);gather(roots.events,source,out.cot.events);gather(roots.connected,source,out.cot.connected);
+  gather(packet.event_values,rows,out.tape.values);events.select(p,source,out.cot.events);connections.select(p,source,out.cot.connected);
   p.index_select(roots.final,1,ids,out.cot.final);p.index_select(roots.final_connected,1,ids,out.cot.final_connected);
   if(controlled){out.score_gradient=at::empty({capacity},floats);out.read_connected=at::empty({capacity},bits);
     gather(scores,source,out.score_gradient);gather(read_on,source,out.read_connected);}

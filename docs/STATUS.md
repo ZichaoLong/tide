@@ -5,7 +5,8 @@ qualification, commits and pushes under [execution-flows.md](execution-flows.md)
 No subagents. Overall goal incomplete. Repository
 `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Latest pushed implementation: **3462dae**; attention evidence923c640.
+`graph-execution-foundation`. Latest pushed implementation: **3462dae**; evidence **fddf079**.
+Shared reverse gather implementation has passed development gates; next commit then clean qualification.
 Reference repositories and ObsidianVault are read-only. Re-entry:
 `git status --short --branch`; `python scripts/status.py`.
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. This file owns current jobs/next actions.
@@ -32,7 +33,7 @@ User-authorized public /opt stack supersedes the older account guide. Preserve
 module PYTHONPATH, prepend frozen source/python. `TASK_QUEUE_ENABLE=0`,
 `TORCH_DEVICE_BACKEND_AUTOLOAD=0`. Sixteen logical64GiB Ascend910_9392; lease/remap
 only. `launchers/freeze_run.py`: immutable snapshot, background.slice, Nice10,
-two build workers. Last disk check: data180GiB/root13GiB free.
+two build workers. Last disk check: data174GiB/root13GiB free.
 Formal timing lock: `TASK/online-measurement.lock`.
 
 **Preserve historical-cpu-attention-01:** deliberately SIGSTOP, holds old timing.lock.
@@ -40,24 +41,13 @@ Its durable record says running; never resume, kill or clean it. Historical1.643
 was faster throughput, not evidence for current general-online flows. Restricted
 history remains on pushed archive/restricted-flow-20260930 at964bf628c67270200dabe55b1bca026bd403cd37.
 
-## Original-width Add failure: investigate before retry
+## Original-width Add failures: preserved
 
-`wide-add-training-b2-01` FAILED at09:09:48UTC on clean **c3ed0f2** after
-B4/physicalB2 pilot. Exact reason: `consumer memory estimate underestimated
-allocator peak; retain failed run and recalibrate`. It did not time out and
-reported no OOM. B512 never ran. The consumer overwrote details with a minimal
-error result, so actual peak/phase values are not retained; inspect estimator
-and failure-report path before any bounded diagnostic. Preserve original records.
-
-Snapshot `TASK/sources/add-capacity-clean01`; unit
-`tide-execution-flows-wide-add-training-b2-01`; helper `launchers/wide_add_training_b2.py`.
-Released ten-card lease physical[1,2,3,5,6,7,8,9,11,12]. Records:
-`runs/wide-add-training-b2-01/{status.json,task.log,training/stages.json}` and
-`training/original-width/{result.json,consumer.log,consumer/result.json}`.
-Original9,468,053,696parameters,D2048/T12/V50304,FP32SGD,TimedDAG/prefill,
-two connected windows/one update; B4 pilot then unchanged originalB512 planned.
-60GiB/card physicalcap,context4GiB/card; static maximum52.0119GiB/card was
-an estimate, disproved at pilot. Keep margins; no blind retry/budget relaxation.
+`wide-add-training-b2-01` failed calibration on clean c3ed0f2; its old writer lost
+per-card measurements. No OOM/timeout, B512 did not run. Raw records and refusal
+are preserved in [report](evidence/original-width-add-training-20261002.md).
+Reporting3462dae now preserves complete measurements even on post-run calibration
+failure; independently qualified CPU19/NPU9, evidencefddf079. No estimate was relaxed.
 
 ## Attention snapshots: fully qualified
 
@@ -79,22 +69,44 @@ Separate FP16 two-update profile:53,274operators; no observed AiCPU.
 JUnit, trajectory, allocator and CSV identities. [Report](evidence/resident-attention-snapshots-20261002.md).
 This is not original-size training or throughput proof. No attention jobs remain live.
 
-## Failure reporting qualified; original-width diagnostic next
+## Original-width diagnostic finished; shared reverse gather development
 
-Implementation **3462dae** passed immutable CPU19/NPU9 plus installed C++ build.
-[Report](evidence/consumer-failure-records-20261002.md). Backend38858d0 is unchanged;
-latest consumer `TASK/builds/failure-records-consumer-clean01/consumer/tidegraph-online-bench`.
-Both APIs now preserve all measurements with FAILED state for post-run allocator
-underestimation. Safety caps/estimates unchanged. All qualification jobs terminal.
+Reporting3462dae / evidencefddf079 are committed/pushed, CPU19/NPU9 qualified.
+`wide-add-memory-diagnostic01` completed diagnostic collection; its actual
+consumer **FAILED** post-run calibration, and original B512 never ran.
+Clean3462dae source `TASK/sources/failure-records-clean01`, ten-card lease released.
+Raw `runs/wide-add-memory-diagnostic01/diagnostic/{result.json,consumer-run/result.json}`.
+OriginalD2048/B4/physicalB2 AddFP32SGD,2windows/1update: construction243.789s,
+step39.390s,96outputs/cut408,pending768/maxevents2335. Coordinator actual51.4198GiB
+versus estimated50.0756GiB; other cards29.5GiB<36.4GiB. 60GiB cap/53.875GiB usable
+unchanged. One GDB sample caught CPUvalidate_model finite reduction during
+construction; timings are diagnostic, not a throughput recommendation.
+Do not raise estimates/caps blindly or repeat the full run without a code cause.
 
-Next submit `wide-add-memory-diagnostic01`, clean3462dae in
-`TASK/sources/failure-records-clean01`, helper `launchers/wide_add_memory_diagnostic.py`.
-One originalD2048/B4/physicalB2 AddFP32SGD diagnostic: same prior geometry/budgets,
-ten cards, queue120s, command900s/outer930s, no B512 continuation. Output
-`TASK/runs/wide-add-memory-diagnostic01/diagnostic`. Its job's passing status means
-diagnostic collection only; inspect `consumer_state` and original consumer result.
-Keep any calibration failure FAILED, inspect per-card/phase excess before editing
-estimator or launching another wide task. No blind retry or safety-cap relaxation.
+Uncommitted next implementation shares read-only padded gather inputs within
+one reverse program phase across owners (Full values/gradients, state journals
+and scales, stage cotangents/flags). Per-owner indices/results/flags remain
+independent; each device-loop iteration refreshes the shared source. Helper
+allocates only after existing owner preflight, and storage stays owned by program.
+No core/public ABI/device kernel change or estimator reduction.
+Development frozen source `TASK/sources/reverse-gather-dev01` (fddf079 + recorded patch):
+- build-reverse-gather-standalone-dev01, build-reverse-gather-python-dev02,
+  build-reverse-gather-consumer-dev01 PASSED.
+- reverse-gather-native-dev01 PASSED: ordinary/compact FP32/FP16,128 trajectories,
+  2048 windows/512 updates; direct shared-source replay/sentinel/storage/lifetime check.
+- reverse-gather-consumer-dev01 PASSED:24 complete-training cases, both clients,
+  three families, FP32/FP16 and independent CPU.
+- build-reverse-gather-python-dev01 failed before job writer: nonexistent module.
+  Original failure preserved, corrected dev02 uses libtorch-npu/2.10.0-cann9.0.0.
+
+Next: commit/push implementation, freeze reverse-gather-clean01, clean standalone/
+Python builds (verified unchanged objects may be reused), fresh consumer link.
+Then native/consumer/retention, explicit2→3-card restore, same-lease allocator
+comparison via launchers/reverse_gather_memory.py and independent profile.
+Old/new loss, all work and retained-storage counters must match. Coordinator peak
+must decrease; don't assume every card's peak changes. Qualify before one bounded
+original-width Add revisit. Source fixture/budgets remain unchanged. No B512 launch
+unless measured capacity AND existing cost gate pass.
 
 ## Completed evidence; do not repeat
 
@@ -145,8 +157,8 @@ Standalone LibTorch and Python-native runtimes are separate.
 
 ## Next implementation and remaining delivery
 
-Finish and qualify failed-memory-report retention, then diagnose Add underestimation
-from a bounded diagnostic; preserve the original failure. Full originalB512 training/formal comparisons remain.
+Qualify shared reverse gather, then use measured allocation savings to decide
+one bounded original-width Add revisit. Full originalB512 training/formal comparisons remain.
 AttentionFP32 still statically refuses at minimal rows: inspect real lifetime of
 physical/canonical gradients and optimizer/accumulation storage, not arbitrary
 safety reductions. Read-only inspection found accumulation keeps independent
@@ -157,4 +169,5 @@ full-size family/client/schedule comparisons and three-process recommendations,
 then F7 migration/evidence/support audit. CUDA and other environment tuples require
 target-machine execution. Historical CPU Attention is supplementary, not blocking.
 
-Uncommitted: reviewed evidence and current handoff for3462dae; code committed.
+Uncommitted: shared reverse gather implementation/test headers and current handoff;
+development gates passed as above. No task job remains live except preserved stopped history.

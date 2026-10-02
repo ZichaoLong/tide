@@ -89,8 +89,10 @@ FullVjp ShardedFullVjp::append_stage(CannProgram& p,const FullTape& stage,const 
     at::empty({s.nodes},connected.options()),at::empty({1},stage.count.options()),0};
   for(const auto& x:{content,comparison,con,comp,out.parameter_connected,out.chunks})p.zero(x);
   struct Stage {FullReverseBatch packed;at::Tensor error;FullVjp result;};std::vector<Stage> stages;
+  // All owner packs read the same stage before any reverse result is merged.
+  ReverseGatherInput values(p,stage.values),gradients(p,gradient);
   for(auto& owner:s.shards) {
-    auto batch=append_full_reverse_pack(p,stage,gradient,connected,owner.mapping,owner.tape.nodes.size(),owner.work,error);
+    auto batch=append_full_reverse_pack(p,stage,gradient,connected,owner.mapping,owner.tape.nodes.size(),owner.work,error,values,gradients);
     auto local_error=at::zeros_like(error);p.copy(local_error,error);
     auto tape=owner.tape.full;tape.metadata=batch.tape.metadata;tape.values=batch.tape.values;tape.count=batch.tape.count;batch.tape=tape;
     stages.push_back({batch,local_error,{}});
