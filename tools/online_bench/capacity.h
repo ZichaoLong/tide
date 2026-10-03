@@ -36,6 +36,7 @@ struct MemoryRefusal:std::invalid_argument {using std::invalid_argument::invalid
 struct Plan {
   std::vector<Card> cards;std::vector<I> owners,canonical;Chunks requested,effective;I reductions=0;bool aggressive;
   I logical_batch=0,sample_rows=0,owner_moves=0,owner_evaluations=0;std::vector<I> sample_attempts;
+  bool explicit_owners=false;
 };
 inline bool within_estimate(const Plan& plan,const std::vector<I>& peaks) {
   if(peaks.size()!=plan.cards.size())throw std::invalid_argument("consumer memory observation device mismatch");
@@ -211,7 +212,8 @@ inline OwnerBalance rebalance(const Geometry& g,const Capacities& c,const Chunks
   }
   return out;
 }
-inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,bool aggressive) {
+inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,bool aggressive,
+    const std::vector<I>& fixed_owners={}) {
   const I n=g.sources.size();
   if(g.width<1||g.batch<1||g.vocab<1||g.windows<1||g.regions<1||g.sample_chunks<1||g.context_bytes<0||(g.payload!=2&&g.payload!=4)
       ||g.devices<1||g.devices>16||g.devices>n+2||g.slots.size()!=size_t(n)||budgets.size()!=size_t(g.devices)
@@ -223,7 +225,12 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
   for(const auto* key:{"full","emission","aggregate","attention","keys","reverse","head"})
     if(!requested.count(key)||requested.at(key)<1)throw std::invalid_argument("invalid physical memory chunk");
   for(auto [a,b]:g.edges)if(a<0||b<0||a>=n+2||b>=n+2)throw std::invalid_argument("invalid consumer edge");
-  Plan out;out.owners=placement(g);out.canonical=canonical_loads(g);out.requested=out.effective=requested;out.aggressive=aggressive;bool balanced=false;
+  Plan out;out.explicit_owners=!fixed_owners.empty();out.owners=out.explicit_owners?fixed_owners:placement(g);
+  if(out.owners.size()!=size_t(n+2))throw std::invalid_argument("invalid consumer owner map");
+  std::vector<bool> used(g.devices);
+  for(auto d:out.owners){if(d<0||d>=g.devices)throw std::invalid_argument("invalid consumer owner map");used[d]=true;}
+  if(std::find(used.begin(),used.end(),false)!=used.end())throw std::invalid_argument("invalid consumer owner map");
+  out.canonical=canonical_loads(g);out.requested=out.effective=requested;out.aggressive=aggressive;bool balanced=false;
   for(;;) {
     out.cards=envelope(g,c,out.effective,out.owners,out.canonical,aggressive);bool fits=true;std::string why;
     for(size_t i=0;i<out.cards.size();++i) {
@@ -255,7 +262,7 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
     // Joint halving crosses equal-peak plateaus; conservative mode retains it.
     bool changed=false;for(auto& [_,value]:out.effective)if(value>1){value=std::max<I>(1,value/2);changed=true;}
     if(!changed) {
-      if(aggressive&&g.devices>1&&!balanced) {
+      if(aggressive&&g.devices>1&&!out.explicit_owners&&!balanced) {
         balanced=true;std::vector<I> usable;for(const auto& card:out.cards)usable.push_back(card.usable);
         auto next=rebalance(g,c,out.effective,out.owners,out.canonical,usable);
         out.owner_moves=next.moves;out.owner_evaluations=next.evaluations;
@@ -267,15 +274,15 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
   }
 }
 inline Plan plan_samples(Geometry g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,
-    bool aggressive,I logical_batch,bool automatic) {
-  if(!automatic)return plan(g,c,requested,budgets,aggressive);
+    bool aggressive,I logical_batch,bool automatic,const std::vector<I>& fixed_owners={}) {
+  if(!automatic)return plan(g,c,requested,budgets,aggressive,fixed_owners);
   if(logical_batch<1||g.batch<1||g.batch>logical_batch)
     throw std::invalid_argument("invalid automatic sample admission geometry");
   std::vector<I> attempted;
   for(;;) {
     g.sample_chunks=(logical_batch-1)/g.batch+1;attempted.push_back(g.batch);
     try {
-      auto out=plan(g,c,requested,budgets,aggressive);
+      auto out=plan(g,c,requested,budgets,aggressive,fixed_owners);
       out.logical_batch=logical_batch;out.sample_rows=g.batch;out.sample_attempts=std::move(attempted);return out;
     }catch(const MemoryRefusal&) {
       if(g.batch==1)throw;

@@ -29,7 +29,7 @@ Config parse(int argc,char** argv) {
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
       ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"||key=="--sample-chunk-rows"
       ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
-      ||key=="--devices"||key=="--owner-policy"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||key=="--resident-context-bytes"||limit;
+      ||key=="--devices"||key=="--owner-policy"||key=="--owner-map"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||key=="--resident-context-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
     if(equal==std::string::npos){if(++i==argc)throw std::invalid_argument("missing option value");value=argv[i];}
     if(key=="--packet")c.packet=value;else if(key=="--family")c.family=value;
@@ -48,6 +48,15 @@ Config parse(int argc,char** argv) {
     else if(key=="--device-memory-bytes")c.device_memory_bytes=integer(value);
     else if(key=="--devices")c.devices=integer(value);
     else if(key=="--owner-policy")c.owner_policy=value;
+    else if(key=="--owner-map") {
+      if(value.empty()||value.back()==',')throw std::invalid_argument("invalid consumer owner map");
+      c.owner_map.clear();std::istringstream in(value);std::string part;
+      while(std::getline(in,part,',')) {
+        if(part.empty()||part.size()>2||part.find_first_not_of("0123456789")!=std::string::npos)
+          throw std::invalid_argument("invalid consumer owner map");
+        auto d=integer(part);if(d>15)throw std::invalid_argument("invalid consumer owner map");c.owner_map.push_back(d);
+      }
+    }
     else if(key=="--chunk-policy")c.chunk_policy=value;
     else if(limit)c.resident_limits.emplace(capacity,integer(value));
   }
@@ -61,7 +70,7 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive"))throw std::invalid_argument("invalid device/owner/chunk policy");
-  if(c.placement.preset!="resident"&&(c.devices!=1||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes||c.auto_sample_chunks))
+  if(c.placement.preset!="resident"&&(c.devices!=1||!c.owner_map.empty()||!c.resident_limits.empty()||c.owner_policy!="locality"||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes||c.auto_sample_chunks))
     throw std::invalid_argument("resident capacities and placement require resident preset");
   if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");

@@ -130,6 +130,17 @@ change. A one-row refusal reports the offending logical card and estimated versu
 usable bytes. It does not establish that every possible implementation is
 physically impossible; conservative estimates may require further calibration.
 
+`--owner-map 0,1,...` replays one static joint Full/state map in encoded-node
+order,including the two boundary nodes. All declared logical devices must own
+at least one node; shape/index errors fail before parameter construction. The
+same option is accepted by the offline planner and Python/standalone consumer
+CLIs. A fixed map bypasses placement search,not memory accounting: operator
+cuts and optional sample halving still apply,with the map unchanged on every
+attempt. `owner_selection` records automatic versus explicit selection; actual
+maps remain in `full_owners`/`state_owners`. This lets pilot and logical-batch
+runs use the same placement despite different saved-continuation demand.
+The new CLI extension is implemented pending qualification.
+
 An offline plan needs neither Torch nor model allocations:
 
 ```bash

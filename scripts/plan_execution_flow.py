@@ -53,7 +53,7 @@ def main():
             ('full','full_chunk_rows',16),('emission','emission_chunk_rows',16),('aggregate','aggregate_chunk_rows',8),
             ('attention','attention_chunk_rows',8),('keys','attention_key_rows',128),('reverse','reverse_chunk_rows',16))},head=head.rows)
         record.update(state='planned',memory_admission=plan_samples(g,caps,chunks,[a.device_memory_bytes]*a.devices,
-            a.chunk_policy=='aggressive',packet['workload']['batch'],a.auto_sample_chunks))
+            a.chunk_policy=='aggressive',packet['workload']['batch'],a.auto_sample_chunks,a.owner_map,a.owner_map))
     except ValueError as error:
         record.update(state='refused',error=str(error))
     if a.output:

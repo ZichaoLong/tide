@@ -147,18 +147,22 @@ Static original Attention B512 probes with current caps:12cards/physicalB2 fits
 B1 fits53.649GiB (29 moves/1740 trials). These are shape plans,NOT actual training.
 Next original-width pilot must keep its owner map/operator geometry comparable
 to B512; automatic placement depends on logical-batch continuation storage.
-The public Python API accepts explicit owner maps,but standalone consumer/offline
-CLI currently cannot replay a chosen joint map. Add this bounded configuration
-entry and qualify it before relying on pilot-to-B512 cost extrapolation.
+Explicit joint-map replay is implemented in the offline planner and both
+consumer CLIs; development checks passed below. Qualify its exact implementation
+commit before relying on pilot-to-B512 cost extrapolation.
 
 ## Next implementation and validation
 
-1. Commit/push the reviewed c38b72e evidence,then implement explicit joint owner
-   map replay in the offline planner and Python/standalone consumer CLI. Preserve
-   alias/owner validation and per-card admission; explicit maps never rebalance.
-   Relevant:flow_resident_options.py,plan_execution_flow.py,capacity.h,
-   capacity_record.h,resident_capacity.cpp,consumer.h/config.cpp. Focused static
-   and independent CPU-referenced two-card tests; implementation→clean→evidence.
+1. Commit/push the tested explicit joint owner-map CLI increment. Freeze that
+   exact commit as owner-map-clean01. Build consumer-clean01 with
+   launchers/build_capacity_client.py,qualified memory-balance-standalone-clean02
+   and byte-compatible owner-map-consumer-dev02 objects. Then CPU45:
+   tests/test_consumer_capacity.py + tests/test_consumer_owner_map.py with the
+   clean binary; NPU22: tests/test_consumer_owner_map_npu.py +
+   tests/test_consumer_capacity_npu.py -k "owner or unused_device". Lease120s,
+   timeout600s. Run TASK/launchers/owner_map_evidence.py EXACT_COMMIT; inspect
+   source/build/terminal records,write MD,update contract/backlog and commit
+   evidence separately. No backend/kernel changes or repeated profile needed.
 2. Run a bounded original-width Attention pilot at a currently available card
    count with the same explicit map/chunks as its B512 plan. Keep current caps,
    3000s and1.15; measure sample/optimizer phases,allocator and continuation.
@@ -171,9 +175,18 @@ entry and qualify it before relying on pilot-to-B512 cost extrapolation.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-No current project development job is live; the protected historical task is
-separately stopped. No original full-size Attention job queued. Evidence audit
-verified all seven clean terminal jobs and their output/binary/profile hashes.
+Explicit joint-map consumer/offline CLI remains uncommitted; it fixes Full/state
+owners across changed logical-batch geometry without bypassing envelope/cuts.
+Dev01 CPU:43 passed,one failed,one deselected. The failed metadata test used an
+unregistered npu device without vendor autoload; corrected index-only metadata
+test passed in dev02. Keep the original failure. Consumer dev01/dev02 builds
+passed. owner-map-npu-dev03 passed/exit0 at2026-10-03T02:39:19.995764Z:
+23 passed,9 deselected,no skips (12 complete explicit-map CLI candidates,
+2 invalid-map refusals,8 automatic-owner regressions,one CPU parser check).
+Two-device lease physical1,3 released;unit inactive/empty cgroup. Frozen
+owner-map-dev03 used consumer-dev02 with identical consumer bytes; only
+tests/status differed. No current mainline live job or Attention job queued.
+The historical task remains deliberately stopped and protected.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent
 logs/status under `TASK/runs/NAME`. Confirm terminal records,workload exit,result
@@ -187,7 +200,7 @@ hashes and empty cgroups; a collected unit's default success is insufficient.
 User-authorized /opt stack supersedes the old private guide.
 `TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`; preserve module PYTHONPATH,
 prepend frozen source/python; lease/remap devices; runtime `env -C {out}`.
-Last free disk:data172GiB/root13GiB; recheck before large writes.
+Last free disk:data157GiB/root11GiB; recheck before large writes.
 Core dependencies:placement-{cpu,npu,npu-python}-clean01. Preserve cited consumers,
 failed reproducers and immutable qualification artifacts.
 

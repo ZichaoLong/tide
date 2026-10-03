@@ -21,7 +21,7 @@ tide::ResidentTrainingLimits resident_limits(const Config& c,at::Device device) 
     if(value<1&&name!="trace")throw std::invalid_argument("resident limits must be positive");
     *fields.at(name)=value;
   }
-  if(c.devices>1)for(Index i=0;i<c.devices;++i)out.placement.devices.emplace_back(device.type(),device.index()+i);
+  if(c.devices>1||!c.owner_map.empty())for(Index i=0;i<c.devices;++i)out.placement.devices.emplace_back(device.type(),device.index()+i);
   out.placement.policy=c.owner_policy;return out;
 }
 std::string run_resident(const Packet& p,const Config& c,at::Device device,std::ostream* diagnostics) {

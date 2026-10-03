@@ -27,12 +27,15 @@ def geometry(memory='attention',width=64,devices=3,training=True):
     return p,packet_geometry(p,windows=2,payload=4,training=training,adamw=True,diagnostics=True,devices=devices)
 
 
-def cpp_plan(binary,g,c,chunks,budgets,aggressive,logical_batch=None,automatic=False):
+def cpp_plan(binary,g,c,chunks,budgets,aggressive,logical_batch=None,automatic=False,owners=None):
     values = [g.width,g.batch,g.vocab,g.windows,g.payload,int(g.attention),int(g.training),int(g.adamw),int(g.diagnostics),
               g.regions,g.devices,int(g.locality),g.sample_chunks,g.context_bytes,len(g.sources),len(g.edges),int(aggressive),*g.sources,*g.slots,
               *(x for e in g.edges for x in e),*asdict(c).values(),*asdict(chunks).values(),*budgets]
-    if logical_batch is not None:
+    if logical_batch is not None or owners is not None:
+        logical_batch=g.batch if logical_batch is None else logical_batch
         values.extend((logical_batch,int(automatic)))
+        if owners is not None:
+            values.extend((len(owners),*owners))
     done = subprocess.run([str(binary)],input=' '.join(map(str,values)),text=True,capture_output=True,timeout=10)
     return json.loads(done.stdout) if done.returncode==0 else done.stderr
 

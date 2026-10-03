@@ -24,6 +24,7 @@ inline void record(std::ostream& out,const Plan& p) {
   out<<",\"effective_chunks\":";fields(out,p.effective);
   out<<",\"physical_reductions\":"<<p.reductions<<",\"policy\":\""<<(p.aggressive?"aggressive":"conservative")<<'"';
   out<<",\"owner_moves\":"<<p.owner_moves<<",\"owner_evaluations\":"<<p.owner_evaluations;
+  out<<",\"owner_selection\":\""<<(p.explicit_owners?"explicit":"automatic")<<'"';
   out<<",\"row_selection\":\""<<(p.aggressive?"greedy_peak_excess":"joint_halving")<<'"';
   if(!p.sample_attempts.empty()) {
     out<<",\"sample_admission\":{\"logical_batch\":"<<p.logical_batch<<",\"effective_sample_rows\":"<<p.sample_rows

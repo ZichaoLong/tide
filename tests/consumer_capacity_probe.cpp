@@ -17,7 +17,12 @@ int main() {
     I logical_batch;bool automatic;
     if(std::cin>>logical_batch) {
       if(!(std::cin>>automatic))throw std::invalid_argument("probe sample input");
-      record(std::cout,plan_samples(g,c,chunks,budgets,aggressive,logical_batch,automatic));
+      std::vector<I> owners;I owner_count;
+      if(std::cin>>owner_count) {
+        if(owner_count<0||owner_count>10002)throw std::invalid_argument("probe owner input");
+        owners.resize(owner_count);for(auto& d:owners)if(!(std::cin>>d))throw std::invalid_argument("probe owner input");
+      }
+      record(std::cout,plan_samples(g,c,chunks,budgets,aggressive,logical_batch,automatic,owners));
     }else record(std::cout,plan(g,c,chunks,budgets,aggressive));
     return 0;
   }catch(const std::exception& e){std::cerr<<e.what();return 2;}

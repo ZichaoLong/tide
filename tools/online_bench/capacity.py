@@ -271,8 +271,10 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
     owners, canonical = full_owners or placement(g), canonical_loads(g)
     state_owners = state_owners or owners
     for layout in (owners,state_owners):
-        if len(layout) != len(g.sources)+2 or set(layout) != set(range(g.devices)):
+        if (len(layout) != len(g.sources)+2 or any(type(d) is not int for d in layout)
+                or set(layout) != set(range(g.devices))):
             raise ValueError('invalid consumer owner map')
+    owners,state_owners=list(owners),list(state_owners)
     usable = [x-x//(10 if aggressive else 4)-128*MIB for x in budgets]
     chunks = Chunks(**asdict(requested)); reductions = moves = trials = 0
     balanced = False
@@ -316,6 +318,7 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
                 devices=cards,full_owners=owners,state_owners=state_owners,canonical_elements=canonical,
                 requested_chunks=asdict(requested),effective_chunks=asdict(chunks),physical_reductions=reductions,
                 owner_moves=moves,owner_evaluations=trials,
+                owner_selection='automatic' if automatic_owners else 'explicit',
                 row_selection='greedy_peak_excess' if aggressive else 'joint_halving',
                 policy='aggressive' if aggressive else 'conservative')
 

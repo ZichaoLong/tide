@@ -69,6 +69,7 @@ std::string resident_record(const Packet& p,const Config& c,at::Device device,co
      <<",\"requested_owner_policy\":"<<quoted(c.owner_policy)<<",\"devices\":[";
   first=true;for(const auto& d:r.placement.devices){if(!first)out<<',';first=false;out<<quoted(d.str());}out<<']';
   array("full_owners",r.placement.full_owners);array("state_owners",r.placement.state_owners);
+  array("requested_owner_map",c.owner_map);
   const auto& f=r.limits.forward;
   const std::map<std::string,Index> limits={{"queue",f.queue},{"arrivals",f.arrivals},{"outputs",f.outputs},{"trace",f.trace},{"stages",f.stages},
     {"workspace_bytes",f.workspace_bytes},{"full_chunk_rows",f.full_chunk_rows},{"emission_chunk_rows",f.emission_chunk_rows},

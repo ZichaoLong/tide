@@ -5,11 +5,21 @@ FORWARD = ("queue", "arrivals", "outputs", "trace", "stages", "workspace_bytes",
 TRAINING = ("retained_bytes", "backward_bytes", "optimizer_bytes", "program_workspace_bytes", "reverse_chunk_rows")
 
 
+def owner_map(value):
+    import argparse
+    parts=value.split(',')
+    if any(not x or any(c not in '0123456789' for c in x) or len(x)>2 or int(x)>15 for x in parts):
+        raise argparse.ArgumentTypeError('owner-map needs comma-separated logical device indices 0..15')
+    return tuple(int(x) for x in parts)
+
+
 def add_arguments(parser):
     from pathlib import Path
     parser.add_argument("--resident-library", type=Path)
     parser.add_argument("--devices", type=int, default=1)
     parser.add_argument("--owner-policy", choices=("locality", "memory"), default="locality")
+    parser.add_argument("--owner-map", type=owner_map, default=(),
+                        help="fixed joint Full/state logical owners, in encoded-node order including both boundaries")
     parser.add_argument("--chunk-policy", choices=("conservative", "aggressive"), default="conservative")
     parser.add_argument("--head-workspace-bytes", type=int, default=4*1024**3)
     parser.add_argument("--device-memory-bytes", type=int, default=0,
@@ -25,7 +35,7 @@ def add_arguments(parser):
 def validate(args):
     if not 1 <= args.devices <= 16:
         raise ValueError("devices must be in 1..16")
-    changed = (args.resident_library is not None or args.devices != 1 or args.owner_policy != "locality"
+    changed = (args.resident_library is not None or args.devices != 1 or args.owner_policy != "locality" or bool(args.owner_map)
                or args.chunk_policy != "conservative" or args.head_workspace_bytes != 4*1024**3 or args.device_memory_bytes != 0 or args.resident_context_bytes != 0
                or args.auto_sample_chunks or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
     if args.preset != "resident" and changed:
@@ -45,6 +55,8 @@ def native_arguments(args):
         values.append("--resident-context-bytes="+str(args.resident_context_bytes))
     if args.auto_sample_chunks:
         values.append("--auto-sample-chunks")
+    if args.owner_map:
+        values.append('--owner-map='+','.join(map(str,args.owner_map)))
     for field in FORWARD+TRAINING:
         value = getattr(args,"resident_"+field)
         if value is not None:
@@ -63,10 +75,11 @@ def python_arguments(args, device):
             value=getattr(args,"resident_"+field)
             if value is not None:
                 values[field]=value
-    devices = tuple(f"npu:{device.index+i}" for i in range(args.devices)) if args.devices>1 else ()
+    devices = tuple(f"npu:{device.index+i}" for i in range(args.devices)) if args.devices>1 or args.owner_map else ()
     return dict(resident_library=args.resident_library, resident_limits=ResidentLimits(**forward),
                 auto_sample_chunks=args.auto_sample_chunks,
                 head_workspace_bytes=args.head_workspace_bytes,
                 device_memory_bytes=args.device_memory_bytes,
                 training_limits=ResidentTrainingLimits(**training),
-                resident_placement=ResidentPlacement(devices=devices,policy=args.owner_policy))
+                resident_placement=ResidentPlacement(devices=devices,policy=args.owner_policy,
+                    full_owners=args.owner_map,state_owners=args.owner_map))

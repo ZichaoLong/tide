@@ -32,6 +32,7 @@ struct Config {
   Index device_memory_bytes=0,context_memory_bytes=0;
   Index devices=1;
   std::string owner_policy="locality",chunk_policy="conservative";
+  std::vector<Index> owner_map;
   std::map<std::string,Index> resident_limits;
 };
 struct Fixture {
