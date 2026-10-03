@@ -275,6 +275,20 @@
           "test_command": "python scripts/verify.py --device cpu --dtype both --build-dir MATCHING_BUILD --output-dir NEW; separate immutable boundary gate in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "c68609603c310f7121cb6f887afcadd019973209",
+          "scope": "Eager finite-run memory admission and CPU RSS allowance. CPU FP64/FP32 70 affected checks; original-width 480-node Add/Attention B4 complete-update RSS calibration with a fresh installed C++ client.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "workload"
+          ],
+          "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
         }
       ]
     },
@@ -345,6 +359,21 @@
           "test_command": "python scripts/qualify_accelerator.py --device npu --dtype float16 --implementation python --output-dir NEW",
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "c68609603c310f7121cb6f887afcadd019973209",
+          "scope": "Eager finite-run memory admission and CPU RSS allowance. Two-device NPU FP32 12 capacity and40 actual-consumer checks; seven fresh-process memory calibrations and a separate actual trace. Explicit ACL_OP_INIT_MODE=0 for standalone compiler lifecycle.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
         }
       ],
       "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
@@ -568,6 +597,20 @@
           "test_command": "python scripts/benchmark_accelerator_scale.py --device cpu --dtype float32 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; exact per-cell argv, warmup, affinity and phase thread settings in the adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "c68609603c310f7121cb6f887afcadd019973209",
+          "scope": "Eager finite-run memory admission and CPU RSS allowance. CPU FP64/FP32 70 affected checks; original-width 480-node Add/Attention B4 complete-update RSS calibration with a fresh installed C++ client.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "workload"
+          ],
+          "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
         }
       ],
       "attempts": [
@@ -802,6 +845,21 @@
           "test_command": "python scripts/benchmark_accelerator_scale.py --device npu --dtype float32 --build-dir MATCHING_BUILD --topology WIDE_TOPOLOGY --output-dir NEW; all exact per-cell argv, scoped profile/export/recovery commands and hashes in the adjacent JSON",
           "result": "passed",
           "environment_manifest": "docs/evidence/accelerator-cpu-npu-comparison-20260929.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "c68609603c310f7121cb6f887afcadd019973209",
+          "scope": "Eager finite-run memory admission and CPU RSS allowance. Two-device NPU FP32 12 capacity and40 actual-consumer checks; seven fresh-process memory calibrations and a separate actual trace. Explicit ACL_OP_INIT_MODE=0 for standalone compiler lifecycle.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
         }
       ]
     },

@@ -68,103 +68,73 @@ serial and separate from profiles. Update this file atomically with
   [Evidence](evidence/eager-cuda-host-20261003.md), committed/pushedaac8c46.
   GPU execution remains unverified; [target commands](eager-target-validation.md).
 
-## Packed-transfer qualification (a785d43)
+## Newly closed qualifications
 
-Exact source `TASK/sources/packed-transfer-clean01`,
-`a785d43cfd9662c7d7262c0fdd8c59ec44729f6f`. Completed-message copies only,
-8MiB caps, retained missing/zero/frozen/alias VJPs; eager metadata stays host work.
-Five clean builds passed: `build-packed-transfer-{cpu,npu-python,npu-standalone}-clean01`
-and `build-packed-consumer-{cpu,npu}-clean01`. Source/hash-verified reused cores,
-changed objects rebuilt and outputs freshly linked.
-CPU352,standalone CPU12 configs per FP64/FP32,actual-consumer64/deselected8 passed.
-NPU Python/native `packed-transfer-npu-clean01` passed119/no skips/exit0.
+Packed-transfer `a785d43cfd9662c7d7262c0fdd8c59ec44729f6f` is qualified:
+CPU352+64,NPU119+40,standalone CPU24/NPU36 configurations and separate actual
+Attention profile. Twelve accepted jobs audited; evidence committed/pushed e654164.
+[Report](evidence/eager-packed-transfer-20261003.md). Original standalone
+`packed-transfer-cpp-npu-clean01` remains failed/exit124 at900s. The same binary
+passed with explicit `ACL_OP_INIT_MODE=0`; CANN compiler lazy Python initialization
+caused a cleanup wait. Use init0 for standalone NPU qualification/profiles;
+do not disable operators or bypass finalization. All its jobs are terminal.
 
-**Standalone runtime finding:** `packed-transfer-cpp-npu-clean01` terminated
-failed/exit124 at its900s timeout; lease released,cgroup empty. It hung in CANN compiler cleanup. Saved
-`hang-backtrace.log` shows `te::fusion::HandleManager::Finalize` → `Py_FinalizeEx`
-→ threading lock; autograd workers idle. Installed header documents
-ACL_OP_INIT_MODE0=eager,1=lazy,2=disabled. Retained older vendor source explains
-A2/A3 default1. Same binary with explicit `ACL_OP_INIT_MODE=0` in new bounded
-`packed-transfer-cpp-npu-init01` **passed36 configurations/72 updates/144 connected
-windows/exit0 in31s**, completed lease. This changes compiler initialization,
-not operators/semantics. Preserve the original failure; do not bypass finalize.
-Use explicit eager init for subsequent standalone NPU qualification/profiles.
+Eager admission implementation2c04005 plus CPU RSS/test preflight correction
+**c68609603c310f7121cb6f887afcadd019973209** now qualified on clean
+`TASK/sources/eager-rss-clean01`. Fresh installed CPU/NPU clients use matching
+hash-verified packed-transfer cores. Eight jobs audited:
+`build-eager-rss-{cpu,npu}-clean01`, `eager-rss-{cpu,npu}-clean01`,
+`eager-rss-consumer-npu-clean01`, `wide-eager-cpu-rss-clean01`,
+`eager-rss-calibration-npu-clean01`, `eager-rss-profile-clean01`.
+All passed/exit0, inactive/empty cgroups and completed leases.
+[New evidence](evidence/eager-consumer-capacity-20261003.md) ready to commit.
 
-`packed-consumer-npu-clean01` passed40/deselected9/no skips/exit0, completed lease.
-Exacta785d43, two-card lease120s,
-900s bound, ACL_OP_INIT_MODE=0, tests/test_online_eager_owners.py --dtype float32
--k 'per_owner_constants or actual_two_device or unified_cli_owner'; expected40.
-NPU Python core `packed-transfer-npu-python-clean01`, installed client
-`packed-consumer-npu-clean01/consumer/tidegraph-online-bench`.
-`packed-consumer-profile-clean01` passed/exit0 with completed lease; used
-`profile_eager_consumer.py --source SOURCE --build TASK/builds/packed-consumer-npu-clean01
---out OUT/profile`, separate profile, two cards/120s queue/600s command, env init0.
-Terminal audit passed for all12 accepted jobs/source/archive/loaders/profile,
-retaining original timeout. [Reviewed packed evidence](evidence/eager-packed-transfer-20261003.md)
-records the result and compiler initialization requirement; committed/pushed e654164.
-No phase is a pause.
+- CPU70/47 deselected; NPU capacity12/22 deselected; actual consumer40/9 deselected;
+  all0 skips. Independent full records/gradients/updates and forced splitting.
+- Original480-node/D2048/T12/V50304 CPU B4/physicalB2,one complete SGD update/two
+  windows: Add50.543220376s,Attention254.676481222s. RSS growth97.503/213.050GiB
+  <= estimates116.059/216.041GiB; construction also passes its own estimate.
+  CPU RSS now charges6.25% learned storage; accelerator envelopes,all budgets and
+ 10%/25%+128MiB margins unchanged. These are calibration, not formal timings.
+- Seven two-card calibrations pass: D256 Python/C++ Add/Attention and D2048/six-node
+  C++ Add/Attention plus Python Attention. Two updates/two windows,16GiB/card.
+- Separate trace:14,104 operators,128 AiCPU (80 BOOL/INT64 ScatterElements,
+  48 INT64 Sort),both devices; no observed host tensor-compute fallback.
 
-## Eager admission and CPU recalibration
+Retain failed originals: `wide-eager-cpu-pilot01` on2c04005 underestimated
+Attention228749291520 >227592210112bytes after completing update; its
+[report](evidence/original-width-eager-cpu-calibration-20261003.md) is unchanged.
+`eager-capacity-npu-clean01` failed6/passed6 on2c04005 because CPU autograd first
+use preceded explicit NPU plugin registration. Test preflight fixes initialization
+order; independent CPU reference and candidate inputs are unchanged. Retain
+other dev failures and all raw results; no relabelling or capacity relaxation.
+Re-audit: `python TASK/launchers/eager_capacity_evidence.py c68609603c310f7121cb6f887afcadd019973209`.
 
-Committed/pushed implementation2c04005255b3d0b674cef302894bb9a5d0f0378e:
-finite DAG static traffic bounds, complete-run memory envelope, preallocation
-admission, bounded sample halving and post-run rejection records. Generic online
-feedback support is unchanged. [Contract](eager-consumer-capacity.md).
-Frozen `TASK/sources/eager-capacity-clean01`. Fresh installed CPU/NPU builds
-`eager-capacity-{cpu,npu}-clean01` passed using byte-verified packed-transfer cores.
-Clean CPU68/deselected47/no skips passed. Four fresh D256/B8/T4/V4096 CPU
-calibrations passed (Add/Attention × Python/LibTorch,two SGD updates/two windows).
-`calibrate_eager_capacity.py`, records `runs/eager-capacity-calibration-cpu-clean01`.
-These calibrate RSS, not formal throughput. Preserve dev01 JSON-array and dev02
-packet-hash failures; dev03 fixed both without weakening identity validation.
+## Next finite scale increment
 
-`wide-eager-cpu-pilot01` is terminal **failed/exit1**, empty cgroup:
-original480-node/D2048/T12/V50304 parameters,B4/physicalB2,two connected windows,
-one SGD update,16 ATen threads/one worker;512GiB host/80GiB parameter/4GiB head caps,
-900s per child/1850s outer. Add59.403475322s,RSS growth104698310656bytes passed.
-Attention256.699170879s,outputs96/cut408/finite loss20.078292847, but observed
-228749291520bytes > estimate227592210112bytes. Both construction RSS observations
-also exceed their individual phase estimates. [Retained failure](evidence/original-width-eager-cpu-calibration-20261003.md),
-committed2c38a24/compact report0a2bd28; full raw results retained. Do not rerun B512 CPU
-until calibrated. No OOM or budget relaxation occurred.
+Commit/push the reviewed capacity evidence, then launch **one** heavy pilot at a
+time, using already-qualified clean c686096 and `wide_eager_chunk_pilot.py`.
+This new helper is prepared, not executed yet; immutable original CPU calibration
+helper/output stay unchanged. It validates full original parameter counts,
+output/cut/finite loss, all observed memory bounds, two physical chunks/two
+connected windows/one SGD update, and records sample-work/optimizer timing.
 
-**Current implementation increment:** CPU-only RSS retained-allocation allowance,
-6.25% of learned bytes at each phase (observed construction residual up to4.3%);
-accelerator allocated-byte envelope and all budgets/margins remain unchanged.
-Python/C++ plans record observation_counter and resolve it from actual backend,
-including CPU auto resolution; offline preset follows same rule. Added fixed
-observed-phase anchors and expanded no-hardware static backend parity.
-Build `build-eager-rss-cpu-dev01` passed/exit0; gate `eager-rss-cpu-dev01`
-passed70/deselected47/no skips/exit0, frozen dirty snapshot
-`eager-rss-dev01`, via
-`build_eager_consumer_core.py --backend cpu --name eager-rss-cpu-dev01
---core TASK/builds/packed-transfer-cpu-clean01`; gate test_eager_capacity.py,
-test_consumer_traffic_bounds.py,test_online_consumer_memory.py,test_online_eager_owners.py
-with the existing CPU selection. CPU70 and affected NPU12 development checks pass. Commit this increment, then
-freeze `eager-rss-clean01` at the implementation commit; build fresh installed
-clients with jobs `build-eager-rss-{cpu,npu}-clean01` and the same verified cores.
-Qualify and rerun original-width fresh CPU calibration with a **new helper/output**.
-Original audited helper/output must remain unchanged. Formal timing is separate.
+CPU first: `wide-eager-cpu-chunk01`, build `eager-rss-cpu-clean01`,device cpu,
+Add/Attention B64/physicalB32,16 ATen threads/one worker,512GiB host/80GiB learned/
+4GiB head. Each child3000s,outer6050s,first failure stops. Command shape:
+`freeze_run.py --name wide-eager-cpu-chunk01 --snapshot eager-rss-clean01 --commit
+c68609603c310f7121cb6f887afcadd019973209 -- timeout --signal=TERM --kill-after=10s
+6050s env -C {out} {python} {base}/launchers/wide_eager_chunk_pilot.py --source
+{source} --build {base}/builds/eager-rss-cpu-clean01 --device cpu --out {out}/assessment`.
+Helper takes nonblocking `online-measurement.lock`; no indefinite lock wait.
 
-Packed runtime/profile jobs passed with retained lazy-init timeout; audit passed.
-`eager-capacity-npu-clean01` failed6/passed6/deselected20 on exact2c04005:
-Python/native three training cases initialized CPU autograd before explicit NPU
-plugin registration; engine device-ready-queue assertion. Standalone and
-inference cases passed. Preserve raw log/terminal failure. Updated test now
-preflights its explicitly selected backend before independent CPU backward.
-Development build`build-eager-rss-npu-dev02` and gate`eager-rss-npu-dev02`
-passed/exit0 from frozen`eager-rss-dev02`:12 passed/22 deselected/no skips,
-completed two-card lease. The preflight fix preserves independent CPU references.
-CPU70 passed before this preflight-only test correction. Then finish
-actual-consumer40, finite calibration7 (D256 Python/C++ both memories; D2048/six-node
-C++ both and Python Attention), separate actual profile. `calibrate_eager_capacity.py`
-uses480s/child,7 cases/3600s outer,16GiB/card/4GiB head,two cards, first failure stop.
-Use existing packed-transfer NPU Python core and new matching installed NPU client,
-ACL_OP_INIT_MODE=0. Qualify the final corrected implementation after commit, rather
-than rerunning the superseded2c04005 test harness. Prepared `eager_capacity_evidence.py`
-needs final source/job names and retained failure update; original-width fresh CPU
-recalibration replaces redundant small CPU calibration. Do not claim original
-NPU full-scale calibration from the seven smaller cases.
+Then mixed: same helper/device npu:0/build `eager-rss-npu-clean01`,11-card120s
+lease,60GiB/card,2 ATen threads/four workers,mixed-A (representative screen choice),
+Add B64/physicalB32,Attention B16/physicalB8, same3000s child/6050s outer/init0.
+No NPU job is submitted yet. If cards unavailable, retain queue refusal and move
+to independent implementation (eager FP16 master consumer remains open),not an
+unbounded wait. Use measured cost and unchanged1.15 to set explicit B512 budget;
+keep old3000s refusal and do not infer B512 completion from a forecast.
 
 ## Remaining acceptance and environment
 
@@ -172,8 +142,12 @@ Static original B512 plans retained at `TASK/plans/eager-wide-capacity-2c04005.j
 no Torch/model execution. Old CPU512GiB plan admitted Add/Attention physicalB32;
 11×60GiB mixed admitted AddB32/AttentionB8 for one update. Three measured+one warmup
 Attention steps refuse atB1 under11-card locality (54.06GiB >53.875GiB usable).
-This is a planning refusal, not completion. Revisit measured capacity/placement/
-finite horizon with explicit reasons; no route prepass or relaxed protection.
+This is a planning refusal, not completion. New static c686096 plans are
+`TASK/plans/eager-wide-capacity-c686096.json`: one-update CPU B32,mixed11-card
+AddB32/AttentionB8 remain admitted. With one continued warmup+one measured step,
+CPU AttentionB16/mixed AttentionB4 fit. No execution result is inferred. Revisit
+measured capacity/placement/finite horizon with reasons; no route prepass or
+relaxed protection.
 
 Still required: actual full-size mixed/CPU, original-scale formal CPU/screened
 mixed/resident comparisons across required matrix,3 fresh processes/recommendation,

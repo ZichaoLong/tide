@@ -106,3 +106,8 @@ graphs, compare Python/C++ static plans, force sample splitting and compare full
 continued records/None-aware gradients/two updates against independent CPU
 execution, and check preallocation and post-run failure records. Accelerator
 calibration and full-size completion remain separate evidence.
+
+Clean CPU70/NPU12+40 gates, original-width CPU Add/Attention RSS recalibration,
+seven two-device calibrations and a separate actual profile are
+[qualified on c686096](evidence/eager-consumer-capacity-20261003.md).
+B512 CPU/mixed capacity and formal performance require their own execution.
