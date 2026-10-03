@@ -1,7 +1,9 @@
 # Eager target-machine qualification
 
 CUDA hardware is unavailable on the current NPU server. The commands below are
-portable build/validation recipes, not evidence of a CUDA build or device pass.
+portable build/validation recipes. A fresh aarch64 CUDA-linked build and187 CPU
+checks are [qualified](evidence/eager-cuda-host-20261003.md); no GPU execution is
+qualified by that host-only evidence.
 Run on a clean exact commit using a matching CUDA-enabled PyTorch/LibTorch,
 compiler, driver and toolkit. Keep the independent CPU FP64/FP32 reference in
 that environment and retain the target's source/build/test manifests. Host

@@ -815,7 +815,7 @@
       "required_tiers": [
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending.",
+      "reason": "Eager source paths include single/multi-device owners, packed copies and consumer capacity admission. CUDA-linked aarch64 builds and CPU gates passed; NVIDIA hardware unavailable locally. Real GPU operation/parity, GPU dtype, driver/architecture combinations and scale calibration remain unverified.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -843,6 +843,20 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md",
           "reason": "Compiled and host-tested; real GPU operation/parity remains unverified."
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "2c04005255b3d0b674cef302894bb9a5d0f0378e",
+          "scope": "Fresh CUDA-linked core, bindings, standalone and external installed consumer;187 CPU FP64/FP32 checks. Seven separate relocated-entry checks reuse matching CPU binaries. No NVIDIA hardware execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir NEW --jobs 2; exact affected CPU and relocation commands in retained job records",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-cuda-host-20261003.md",
+          "reason": "Torch2.10.0+cu128/CUDA Toolkit12.8.1 aarch64 build and CPU execution only; GPU target gates pending."
         }
       ]
     },
@@ -857,7 +871,7 @@
         "build",
         "backend-smoke"
       ],
-      "reason": "Single-device eager FP32/FP64 source paths implemented. NVIDIA hardware unavailable locally; real GPU operation/parity, GPU dtype and target-driver/architecture combinations remain unverified. Explicit FP16 source paths are implemented; GPU FP16 gates remain pending.",
+      "reason": "Eager source paths include single/multi-device owners, packed copies and consumer capacity admission. CUDA-linked aarch64 builds and CPU gates passed; NVIDIA hardware unavailable locally. Real GPU operation/parity, GPU dtype, driver/architecture combinations and scale calibration remain unverified.",
       "attempts": [
         {
           "date": "2026-09-28",
@@ -886,6 +900,20 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/fp16-qualification-20260929.md",
           "reason": "Compiled and host-tested; real GPU operation/parity remains unverified."
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "2c04005255b3d0b674cef302894bb9a5d0f0378e",
+          "scope": "Fresh CUDA-linked core, bindings, standalone and external installed consumer;187 CPU FP64/FP32 checks. Seven separate relocated-entry checks reuse matching CPU binaries. No NVIDIA hardware execution.",
+          "tiers": [
+            "build",
+            "static-cli",
+            "cpu-semantic"
+          ],
+          "test_command": "python scripts/build.py --backend cuda --build-dir NEW --jobs 2; exact affected CPU and relocation commands in retained job records",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-cuda-host-20261003.md",
+          "reason": "Torch2.10.0+cu128/CUDA Toolkit12.8.1 aarch64 build and CPU execution only; GPU target gates pending."
         }
       ]
     }

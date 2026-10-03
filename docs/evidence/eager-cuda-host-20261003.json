@@ -1,0 +1,200 @@
+{
+  "schema": "tide-eager-cuda-host-v1",
+  "source": "2c04005255b3d0b674cef302894bb9a5d0f0378e",
+  "source_inventory_sha256": "a0bb9e7121778bfbf335c82b8c643c00d5845eaa548e7758e7dbf41b0f2eb26b",
+  "source_file_count": 1522,
+  "jobs": [
+    {
+      "name": "build-eager-cuda-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "eb1340f081bc8906a77dc7d8ee3d10bddac9b2978b9ec22f94d9db5a89dda4bc",
+        "task.log": "0a4f150be48bc71563393c14d470ace897aa201a9e8240b7536d9abacbc84328"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-eager-cuda-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0f5a7d79fda032a5d4b98f579313b0246ee7ae8319d7cdfdd57ebe15dbafa6fc",
+        "task.log": "f9ed144761248d801368dc32ff8a41f97f3ea3c837018fe103fe07872ca07dde"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-cuda-host-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d01138939247a649c93b40750cd9369caf1b7cab6320553d805f799c7c205e05",
+        "task.log": "6a83c389262348b3233cbb9a7123468696ec13e96f7edebd9174f3835e10ac48"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-relocated-entry-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "7162750ed529e7005c7e760f7e531ebb879444fde8522a9a6d6fabe83829b13d",
+        "task.log": "03b879186d93e3fc4dc68182d80fe0d69441278b867368fe87ab7ff5a5d2528a"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "core": {
+    "source": "2c04005255b3d0b674cef302894bb9a5d0f0378e",
+    "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+    "torch": "2.10.0+cu128",
+    "environment": {
+      "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+      "compiler": "c++ (GCC) 10.3.1",
+      "cxx_standard": 17,
+      "build_type": "Release",
+      "torch_prefix": "CUDA_ENV/lib/python3.11/site-packages/torch/share/cmake/Torch",
+      "cann_version": null
+    },
+    "backend": "cuda",
+    "npu_runtime": null,
+    "torch_npu": null,
+    "cuda": "12.8",
+    "architecture": "aarch64",
+    "python": "3.11.15",
+    "cxx11_abi": true,
+    "binary_sha256": {
+      "libtidegraph.a": "47a86a849df4023095c4eeaef07b402d53a24b69fe3f592437246a424d0f3295",
+      "libtidegraph_runtime.a": "23923ffd059b38c2e2aa37348cf411effa36876dc2b3a94cc02dc9d3cab76014",
+      "_tide_native.so": "c4569c17d935576febf768b1849b0fd8940828a48f95f106a5269a338aecdd9f",
+      "tidegraph-smoke": "cb03fac29fb560b8ec1974c25069fefc3bfca5a73b6bbee95f76077f68cacab5",
+      "tidegraph-kernel-check": "096857ad2273af45f506899cf94febec128fe6882671a5dda31567f73be3ef5f",
+      "tidegraph-full-check": "57f3cae73ec88c9296b87028586de6cb32954eb7a6ad213488fcbc59b422d4f7",
+      "tidegraph-aggregate-check": "34f0b181e340769a9b28cc75e74153e12ea33e55d6cc1ae72353868b02ef451c",
+      "tidegraph-optimizer-check": "14678f6e459df95218d069b13611349e6fb1d15b713bf0d882f922f7b50bfcb0",
+      "tidegraph-checkpoint-check": "acbb4ce1961b61d8a609e08146f3d3d6769c9da64a9663d9aa49d13eada09b88",
+      "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+      "tidegraph-streaming-bench": "11f8e662c706ac0f2bb836c60eac86400cb7ddaffa26fb9e17663ad88ecc7827",
+      "tidegraph-scale-bench": "da6f441440c9e8290601be5c90ea4b1e52e1aa3323ba2565be44f54cfd66d308",
+      "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+      "tidegraph-settle-check": "25fc1c6550e4a47ac993ae118ae4dbff1f75cf22ef13d0e7aac311e95db25581",
+      "tidegraph-greedy-check": "155ebffa261b7b03ebce17ca866bcad6ccf9dcc500a0477c78d8f17ef360e59c",
+      "tidegraph-accelerator-check": "fe000b8556efafbc1393dabdb164e766c9806b374209b4383dd8b487755dafc8",
+      "tidegraph-runtime-check": "97efc5b8a28f548cf50e28b50f07353490f9c7c013574e36da2f241f7cb83161",
+      "tidegraph-read-precision-check": "a6238e9427f9b2fa0bc9c6c24aded827a795be62a6a2fd97d5ec6f5f69aba2cd",
+      "tidegraph-placement-check": "15215f7beb250f4e16aa65beaf5e760c6428959aff616720898bf60629e603ae",
+      "tidegraph-payload-ownership-check": "cae45b849e3f5b63f3591776ceb608651aa7794d212463ee6534565b0c4ae36b"
+    }
+  },
+  "core_manifest_sha256": "78af90e13cc3b5b24b78f346736f2f5cfa9a2528aa0dc80376d82969beca1960",
+  "consumer": {
+    "manifest_sha256": "9b082ffa387c976cce8ff2e5d58824feef9f0ae98c6c6eb0c0288ba36438a3a0",
+    "binary_sha256": "7c098977a88a95b71d83b91e9340c50678b1c88002d535f49584a16163ecd498",
+    "probe_sha256": "ef5905bbd8743ae25528cef028ff45b6834dc6035da17ca2ec34b53ecd6ce2d2",
+    "loader_sha256": "ef2cc6460cbbe3ea1008881d99206ad3f3101c4378acf7575f3845b4f8b2a8f7",
+    "consumer_sources": {
+      "resident_capacity.cpp": "bc073dc12e81c4e41329dadfa4c3b286f55c2f35a0930b029f83b662436714a2",
+      "resident_run.cpp": "7d60de8ebffc1e7cdd8005aa2c84f047585c4835870aeeea4799f6ba9a2d71a4",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+      "traffic_bounds.py": "8455af37a494ef4a90839a199f64c72e0b13dd95a5f9c6919adacf59f5efd823",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "cf7f022d4986eb0c7c04a5747e7be90720b9a9b134caf539b9edef923369990a",
+      "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+      "host.py": "fadba58042138d7a83264d780b5675cd25efd037f9f9687edeb293db7efd1de9",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "7b99aad5c2b9c1fdeb29121ccee071f70b187f49059336acc0e7743252a97a19",
+      "eager_capacity_runtime.h": "8a2b6cd0b3ea4dbe7ac712a903d357d4e89a0eb8c4737e199e7b0a4b3a91d9c4",
+      "memory.cpp": "a723cdcec444d825e904e30bfc8d4895f12a0658800ee5f90563088f4a0e3cf9",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "eager_capacity_runtime.py": "5cd28f47ddd1e3c10d3ffa11ed503cde2fa5f48ab9527b92ac45da6afb1d4c6b",
+      "model.cpp": "b9ee072c907068ab4ec7a7b2000ba16931cdd89b3082289b2798f18da9de9982",
+      "traffic_bounds.h": "b7e3793660ddaf0bdefc8b95efa63365c889fda62826ed7bc53bae735c20b0d1",
+      "capacity_balance.py": "0fb2a55190ed29e215bbe9ee8b4768a0009399182dc726d729629b3114cef985",
+      "eager_placement.py": "757acba4ef0bb424920a95c6edd8c934f1ba587ee18a4a50a72a7fec5670e7ac",
+      "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+      "fixture.py": "9e907d5180b1bc0344462e62a3ff776f517973522258fb9cb93617bf5734f09c",
+      "resident_records.cpp": "22b6c67027898cd2dd0454620c611e8a20fa0b813d6500e67eb12f8958f46564",
+      "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+      "consumer.h": "876a876c55c46b8a963d3a1985982ea939c2506d6832ca7312836058079a4b66",
+      "capacity.h": "b057dc320e32ca85442bf1d0cc6b5f1da305f35fe2f06a9c02b60056f3d731d9",
+      "eager_capacity.h": "be755e02e0d6427658340293abfe07a510931b325490a4fa9b4c9c460b3f6bb9",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "eager_capacity.py": "c58c1bac4dd6795b458d84acc9e9d529e545268ed0c5d5a986a9b4c1b9cd6006",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "b7826967fa47ae3c50287526ae6c2ac0c228aea6947957c096bb96110e1bebde",
+      "capacity_record.h": "c9f16de9b70ef17993822bc483f1241c3ca50149aa227b6bb766a67884df0185",
+      "run.cpp": "5080fec5bb6f5e46a42b4e018880188ca84ee099ad5cb98ce8c707ccc9d8c04e",
+      "capacity.py": "db97689440b9ca97f254f1eb76ad719050c2b6c6e85867669ec0af44adf8c387",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "9108fe97b6164a25b42149910ec7e823b1a4b33716c228db4d90879efb9c2047",
+      "eager_placement.h": "162a20e86a07391dc5f3607d9e16cd437e60c156331fc1f101c7af64ec2898e4",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+      "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+      "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+    },
+    "scope": "current installed package and fresh external eager client; byte-verified source-matching selected core; its qualification is separately audited; device execution separate"
+  },
+  "tests": {
+    "eager-cuda-host-clean01": {
+      "passed": 187,
+      "deselected": 47,
+      "skipped": 0,
+      "log_sha256": "6a83c389262348b3233cbb9a7123468696ec13e96f7edebd9174f3835e10ac48"
+    },
+    "eager-relocated-entry-clean01": {
+      "passed": 7,
+      "deselected": 25,
+      "skipped": 0,
+      "log_sha256": "03b879186d93e3fc4dc68182d80fe0d69441278b867368fe87ab7ff5a5d2528a"
+    }
+  },
+  "source_export": {
+    "path": "TASK/exports/eager-execution-2c04005",
+    "manifest_sha256": "e69df87cdbf741fc62d2d6ef81a1c8ffc7d137f589cea95b216ef85cb46f58d8",
+    "files": 1522,
+    "git_required": false
+  },
+  "audit_helper_sha256": "b36831df4e775a10ae57b15516778cc1638d4f530ec9b40dba2ba83d1236432b",
+  "gpu_device_execution": false,
+  "limits": [
+    "Fresh CUDA-linked aarch64 core/bindings/standalone build and installed eager consumer, matching Torch2.10.0+cu128/CUDA Toolkit12.8.1.",
+    "CPU FP64/FP32 actual owner/copy/consumer/capacity/CLI/checkpoint checks only; unavailable explicit CUDA is rejected, never CPU fallback.",
+    "Seven relocated exported-source entry checks reuse explicitly recorded source-matching CPU core/client binaries; not a fresh relocated core rebuild.",
+    "No NVIDIA device execution, GPU FP32/FP64 parity, CUDA profiling or CUDA performance claim. GPU and x86_64 target gates remain pending.",
+    "CPU/NPU capacity calibration and original-scale performance acceptance are separate. This report does not close F1-F7."
+  ]
+}

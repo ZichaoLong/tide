@@ -208,7 +208,8 @@ consumer40, standalone ownership36 and a separate actual consumer profile. Use
 and `packed-consumer-npu-clean01` builds. Audit source/archive/binary/job/lease/profile
 records, then commit the evidence separately. No stage implies a pause.
 
-Current capacity implementation is ready for its implementation commit:
+Current capacity implementation is committed/pushed as
+2c04005255b3d0b674cef302894bb9a5d0f0378e:
 Python/native/independent C++ eager preallocation admission, finite static DAG
 traffic bounds, complete-run state/KV/optimizer/head envelopes, bounded automatic
 sample halving and retained pre/post-run refusals. CPU uses at most half available
@@ -226,10 +227,16 @@ empty cgroups. Preserve dev01 (35 passed/23 failures: missing C++ JSON array
 closure) and dev02 (66 passed/1 failure: missing packet hash in refusal) plus their
 snapshots/builds. The final fixes retain strict wrapper identity checking.
 
-Next freeze the committed implementation as `TASK/sources/eager-capacity-clean01`,
-fresh-build CPU/NPU consumers using `build_eager_consumer_core.py` and byte-verified
-`packed-transfer-{cpu,npu-standalone}-clean01` cores, run the same clean CPU68 gate,
-then bounded fresh-process CPU calibration via `calibrate_eager_capacity.py`.
+Clean source is frozen at `TASK/sources/eager-capacity-clean01`. Fresh builds
+`build-eager-capacity-{cpu,npu}-clean01` passed/exit0 using `build_eager_consumer_core.py` and byte-verified
+`packed-transfer-{cpu,npu-standalone}-clean01` cores. `eager-capacity-cpu-clean01` passed68/deselected47/no skips.
+`eager-capacity-calibration-cpu-clean01` passed four fresh CPU processes
+(Add/Attention × Python/LibTorch), D256/B8/T4/V4096, two threads, two SGD updates
+and two connected windows per update, per-child480s/outer2100s. Helper
+`calibrate_eager_capacity.py`; records `TASK/runs/NAME/calibration/result.json`.
+Observed incremental RSS bytes: Add Python224952320/C++128286720, Attention
+Python348594176/C++254287872; all below the unchanged estimates. These are
+process-lifetime RSS proxies, not accelerator allocation measurements.
 That calibration is for memory admission, not throughput; no formal timing claim
 may include concurrent B512 work. After B512 is terminal, finish packed-transfer
 NPU qualification/profile above, then capacity two-device forced-split gate,
@@ -237,6 +244,22 @@ actual-consumer40, finite calibration and separate trace. Planned helper bounds:
 480s per fresh calibration child, CPU4 cases/NPU7 cases, no blind retry. Commit
 reviewed evidence separately only after its audit. Source compilation and CPU
 correctness do not yet certify the memory coefficients for original NPU scale.
+
+Independent F7 host-only CUDA build/CPU/export qualification passed and audited:
+[CUDA-host evidence](evidence/eager-cuda-host-20261003.md) records exact2c04005,
+fresh core/installed client, CPU187/deselected47/no skips and seven no-Git relocated
+entry checks. Four terminal jobs passed/exit0 with empty cgroups:
+`build-eager-cuda-clean01`, `build-eager-cuda-consumer-clean01`,
+`eager-cuda-host-clean01`, `eager-relocated-entry-clean01`.
+Existing isolated `torch-cuda/2.10.0-cu128` module, Python
+`/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python`;
+Torch2.10.0+cu128/CUDA Toolkit12.8.1/aarch64, explicit SM80 headless configure.
+No environment was changed and no GPU execution is claimed. Audit helper
+`eager_cuda_host_evidence.py 2c04005255b3d0b674cef302894bb9a5d0f0378e` passed.
+The no-Git export `TASK/exports/eager-execution-2c04005` matches all1522 hashes;
+relocated entries explicitly reuse matching CPU core/client binaries, not a fresh
+core rebuild. CUDA support remains implemented/device-unverified; real GPU and
+x86_64 target commands are in `docs/eager-target-validation.md`.
 
 Keep the CPU reference independent.
 Use affected gates, commit implementation first, then clean qualification and
