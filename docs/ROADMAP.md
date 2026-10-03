@@ -196,6 +196,14 @@ long forecasts retain3000s refusals with separately declared budgets
 ([audit](evidence/original-width-python-calibration-20261004.md)). These are
 reduced-batch pilots;actualB512 and recommendation repeats remain open.
 
+F6 two more actual unprofiled originalB512 processes passed/audited on e69b3bd:
+CPU Add complete training970.259169s (12.664657input tokens/s),resident11 Attention
+inference402.400685s (30.536727input tokens/s),one fresh process each. Exact source/
+owner/capacity/runtime checks passed;actual work and cold costs remain separate
+([audit](evidence/formal-b512-cpu-training-resident-inference-20261004.md)). These
+are different workloads,not a CPU/NPU ratio. First-process coverage is5/120;
+recommendation repeats and the rest of F6 remain open.
+
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
 identity across the complete build and consumer is audited;the old120-failure

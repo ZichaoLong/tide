@@ -135,46 +135,41 @@ certifies full-update or resident placement. No automatic rerun or larger timeou
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`;unit names
 `tide-execution-flows-NAME`,background.slice,Nice10. Current own heavy work is
-**formal-short-next01**,same frozen e69b3bd. The dependency wait ended after
-Python calibration passed/empty;**cell8 resident Attention inference passed its child checks**
-(measured402.400685s);cell3 CPU Add training is running. Parent audit is pending. Repeat1,strictly serial,fresh11-card lease
-only for cell8;no lease during CPU work. One continued warmup and one measured
-step,two connected windows,SGD for training;no instrumentation/profiling.
+**formal-python-short01**,same frozen e69b3bd. Its finite dependency wait ended
+when formal-short-next01 passed/empty. **Cell74 Python-owned native resident Add
+inference is running**,then80 native resident Attention inference,then72 pure
+Python CPU Add inference. Repeat1,one continued warmup and one measured step,
+two windows each. Strictly serial;fresh11-card lease per NPU cell,no lease for CPU.
 
-- Cell8:900s/update,2200s child. Cell3:3000s/update,6300s child.
-- Formal group9100s;whole29620s including the already-ended≤20400s dependency
-  wait. Queue≤120s. First failure stops;no automatic retry.
-- Records:TASK/runs/formal-short-next01/{status.json,task.log,dispatch/result.json,
+- Resident cells74/80:900s/update,2200s child;CPU72:1800s/update,4000s child.
+- Formal group9240s;whole15960s including the ended≤6600s dependency wait.
+  Queue≤120s. First failure stops;no automatic retry.
+- Records:TASK/runs/formal-python-short01/{status.json,task.log,dispatch/result.json,
   assessment/result.json,assessment/cell-N-repeat-1/consumer/result.json}.
-- Immutable while live:defer_formal_group.py,dispatch_formal_blas_group.py,
-  fullsize_formal_cell_blas.py,fullsize_configs.py,plan02,budgets8/3 and both
-  first-CPU/Add-comparison audit JSONs. Never start competing heavy work.
-- Inspect:`systemctl --user show tide-execution-flows-formal-short-next01`.
-  Cancellation,only if justified:`systemctl --user stop tide-execution-flows-formal-short-next01`.
-- After terminal/empty,run the exercised schema-aware audit:
-  `python TASK/launchers/audit_formal_blas_group_v2.py --name formal-short-next01 --output NEW_AUDIT_JSON`.
-  Create its output parent first. Preserve partial failures and unstarted cells.
+- Verified transient/background.slice. Inspect:
+  `systemctl --user show tide-execution-flows-formal-python-short01`.
+  Cancel only if justified:`systemctl --user stop tide-execution-flows-formal-python-short01`.
+- Immutable while live:defer_python_formal_group.py,dispatch_formal_blas_group.py,
+  fullsize_formal_cell_blas.py,fullsize_configs.py,plan02,budgets74/80/72,and
+  docs/evidence/{formal-b512-first-cpu,original-width-python-calibration}-20261004.json.
+  Never start competing heavy work.
+- After terminal/empty:
+  `python TASK/launchers/audit_formal_blas_group_v2.py --name formal-python-short01 --output NEW_AUDIT_JSON`.
+  Create output parent first;preserve partial failures/unstarted cells.
 
-Old audit_formal_blas_group.py remains unchanged for the published Add report.
-The v2 audit also rechecked that pair into
-TASK/audits/formal-add-runtime-schema-v2.json. Its first output-directory
+formal-short-next01 is now passed/exit0 at2026-10-03T23:31:02.569252Z,empty,lease
+released,**both cells8/3 audited**. [Actual measurements](evidence/formal-b512-cpu-training-resident-inference-20261004.md):
+CPU Add training970.259169s,warmup893.228409s,12.664657input tokens/s,
+1188205candidate events,32×16groups,128.458973GiB RSS growth;resident11 Attention
+inference402.400685s,warmup401.514133s,30.536727input tokens/s,1190499events,
+4×128groups,13.528270GiB max allocator growth. Both originalB512,two windows,
+outputs12288/cut816. Different models/modes;not a CPU/NPU ratio. One process each.
+
+Old formal audit remains unchanged for the first Add report. V2 also rechecked
+that pair into TASK/audits/formal-add-runtime-schema-v2.json. Its first output-dir
 creation failure is retained under formal-add-runtime-schema-v2-attempt-01;
 unchanged assertions passed after directory creation. It was an audit-output
-error,not a consumer failure. Runtime-schema checks now include actual native
-inference and training records,not only standalone or pure Python manifests.
-
-A dependent stage `formal-python-short01` is submitted and verified waiting for cells74,80,72/repeat1:
-Python-owned native resident Add/Attention inference,then pure-Python CPU Add
-inference. Its audited Python calibration is committed/pushed as af1289b.
-It waits without a lease/heavy work for formal-short-next01 to pass with an
-empty cgroup;otherwise stops. Wait≤6600s,formal group9240s,whole15960s;
-per-device queue≤120s. Resident900s/update and2200s child;CPU1800s/update and
-4000s child. No repeated processes/retries or overlapping timings. New helper
-TASK/launchers/defer_python_formal_group.py and its cited calibration JSON,
-budgets74/80/72 and common helpers become immutable when submitted. Inspect
-`systemctl --user show tide-execution-flows-formal-python-short01`;records under
-TASK/runs/formal-python-short01. Verified background.slice/transient/running;only dependency wait is active,
-no assessment or NPU lease yet.
+error,not a consumer failure. V2 checks actual Python/native runtime identities.
 
 ## Next actions and full-size scope
 
@@ -187,9 +182,9 @@ pilots do not qualify the120 full-size family/client/schedule/model/mode cells.
 
 CPU Attention trainingphysical16,mixed4,resident1;CPU/mixed Add32,resident Add
 training2/inference4. Resident Attention training uses the qualified explicit
-11-owner map. No unqualified48-row limit. Formal cells0–2/repeat1 are complete;
-117 other first processes and recommendation repeats remain open. Cell8 passed its child checks but still needs terminal-parent audit;cell3 is
-still running. Started/waiting jobs are not qualified results.
+11-owner map. No unqualified48-row limit. Formal cells0,1,2,3,8/repeat1 are audited;
+115 other first processes and recommendation repeats remain open. Live/waiting
+cells74/80/72 are not passed merely because they started or are queued.
 
 Budget02 files now exist for all120 cells. The prior26 files are unchanged;
 94 new finite allowances transfer matching original-width model/client/mode
@@ -200,8 +195,8 @@ a faster representative result. `prepare_transferred_budgets.py` and
 TASK/plans/transferred-budget02-receipt.json preserve their derivation. First
 failure stops each submitted group;no automatic retry or larger bounds.
 Each budget hashes its measured basis;all old3000s/1.15 refusals remain.
-The ten new Python budgets are now backed by the terminal-parent audit;none has
-been executed. Original3000s/1.15 refusals stay separate from longer bounds:
+The ten Python budgets have the terminal-parent audit basis;cell74 is now
+executing,80/72 follow in the same bounded stage. Others are unexecuted. Original3000s/1.15 refusals stay separate from longer bounds:
 
 | Cells | Separately declared step/child seconds |
 | --- | --- |
@@ -219,7 +214,7 @@ been executed. Original3000s/1.15 refusals stay separate from longer bounds:
 | 82,94 Python mixed Attention training | 16500/33400 |
 
 The120 initial-process phase forecasts sum to207.2h before construction and
-repeats;after cells0/1/2/8 and the active3 they total about205.9h. This is a
+repeats;after the five completed cells0/1/2/3/8 they total about205.9h. This is a
 rough planning sum with cross-family transfer uncertainty,not measured remaining
 time. It makes the matrix a multi-day workload under the serial timing contract.
 These are operating limits,not B512 timings. In particular the Python CPU
@@ -227,16 +222,27 @@ Attention training forecasts10340.528306/12475.200981s imply hours of actual
 measurement;prioritize shorter cells before the longest CPU Attention work.
 Do not assume one family/schedule or a C++ run certifies a Python counterpart.
 
-1. After each group is terminal/empty,
-   audit formal cells8/3 and then74/80/72,write their actual work/throughput/memory
-   report and commit/push. Continue after commits;no approval/pause needed.
+1. Commit/push the completed cells8/3 audit and handoff;then after the Python
+   group is terminal/empty,audit cells74/80/72,write their actual work/throughput/
+   memory report and commit/push. Continue after commits;no approval/pause needed.
 2. Run the remaining actual full-size matrix,using the measured budget basis and
    explicit transfer limits where a different family/schedule/preset is involved.
    Three fresh processes before formal recommendations. Keep strict failures
    and differing actual work visible;do not infer all discrepancies from one witness.
-3. Separate full-size resident/FP16 profiling and comparisons remain open;do not
-   repeat the completed ten representative submatrices or unrelated passed gates.
-4. Finish support/portability/evidence audit and terminal task-job closure. NVIDIA/
+3. Separate full-size resident/FP16 profiling and comparisons remain open.
+   TASK/launchers/profile_formal_resident.py has an inspection-only Add recipe
+   at TASK/plans/profile-formal-resident-add01-inspection.json:actual passed cell2
+   binary/config/owners,one cold inference step/two windows,delay120s/duration5s,
+   1200s execution/2760s whole,24GiB free disk prerequisite. **Not launched or
+   qualified.** Cell8 is now eligible for its separate inspection.
+   No automatic retry or mixed-profile timeout increase. Run independently of
+   formal timings. Do not repeat representative submatrices/unrelated gates.
+4. TASK/launchers/summarize_formal_matrix.py was exercised on the first three
+   actual audited cells;TASK/audits/formal-matrix-review01 keeps the result.
+   The subsequent formal-matrix-review02 includes all five audited cells.
+   It refuses repeated cell/repeat entries and keeps missing/failed attempts
+   separate;three-process evidence is necessary,not sufficient for a recommendation.
+5. Finish support/portability/evidence audit and terminal task-job closure. NVIDIA/
    x86_64 execution stays target-pending. Keep the protected historical task below
    untouched. No production code changed during this continuation.
 
@@ -269,7 +275,8 @@ remain unqualified drafts. Prior navigation/schema audit passed834 links and
 
 Evidence commits:1d32008 CPU pilots,f6e49f0 retained profile failure/slice,
 d416e3c ten accelerator pilots,b45c2b8 first formal CPU,8ef3229 first three-path
-formal comparison,af1289b Python calibration;all pushed. This checkpoint records the public consumer numerical
-limitation,the current CPU training/dependent Python stage and the declared
-transferred budgets. No production code changed or unrelated edits remain. Task-local helpers/budgets remain outside the repository;
+formal comparison,af1289b Python calibration,f52bbec public numerical limitation;
+all pushed. This checkpoint adds the terminal cells8/3 evidence,ROADMAP link
+and current Python-stage/profile-preparation handoff. No production code changed
+or unrelated edits remain. Task-local helpers/budgets stay outside the repository;
 active versions above are immutable. Continue after commits.
