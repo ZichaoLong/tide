@@ -120,18 +120,18 @@ behavior. Never call the parent passed or infer timing from its snapshot.
 TASK/runs/NAME/{status.json,task.log,assessment/result.json}. Inspect with
 `systemctl --user show tide-execution-flows-NAME`;no unbounded NPU waits.
 
-1. **remaining-accelerator-calibration02 running**. Eight cells2,5,8,11,1,7,76,82 passed;
-   cell88/Python streaming Add training now running;94 follows. Ten serial
-   processes;11-card fresh leases,queue≤120s,child900s except Python Add1800s,
-   whole28200s,first failure stops. Python Add usesB32/one physical32 chunk after
-   retainedB64 timeout;others use two physical chunks. Helpers
-   remaining_accelerator_calibration.py,fullsize_calibration_cell_blas.py,
-   fullsize_configs.py and plan02 **immutable while live**. No competing heavy
-   work. Record each cell-N/result.json and queue-cell-N.json. Reported parent
-   requesting-devices can remain stale while the cell itself is running.
-2. **formal-first-cpu-blas01 waiting-for-calibration**,no device lease. Helper
-   dispatch_first_formal_blas.py waits≤10000s for current calibration/profile
-   terminal/empty,then exactly cell0 repeat1:originalB512 CPU Add inference,
+1. **remaining-accelerator-calibration02 passed/exit0**,all ten cases,terminal
+   2026-10-03T20:45:55.803368Z,empty cgroup and released11-card leases. Audited:
+   [original-width accelerator calibration](evidence/original-width-accelerator-calibration-20261004.md).
+   Raw cell-N/result.json and queue-cell-N.json retained. Audit helper
+   audit_accelerator_calibration02.py initially used the wrong owner field for
+   resident records;failed audit-only copy retained in audit-attempt-01. Corrected
+   audit strictly checks resident Full/state owners and eager node owners;no
+   runtime record or production code changed. Old PythonB64 timeout stays failed.
+
+2. **formal-first-cpu-blas01 running**,no device lease. Helper
+   dispatch_first_formal_blas.py finished its bounded dependency wait;all preceding
+   calibration/profile groups are empty. Now exactly cell0 repeat1:originalB512 CPU Add inference,
    continued warmup1+measured1,two windows each,no phase instrumentation.
    Forecast248.392/262.237s supports600s/update,1500s child+50s wrapper,
    whole11800s. Exclusive online-measurement.lock. Stop after this one cell for
@@ -139,7 +139,7 @@ TASK/runs/NAME/{status.json,task.log,assessment/result.json}. Inspect with
    dispatch_first_formal_blas.py,fullsize_formal_cell_blas.py,fullsize_configs.py,
    plan02 and formal-cell-0-budget02.json. Results in assessment/cell-0-repeat-1.
 
-Completed accelerator pilots (not yet terminal-parent audited):
+Completed accelerator pilots (all terminal-parent audited):
 
 | Cell | Case | Batch/physical | Warmup/measured s | B512 forecast warmup/measured s,including1.15 |
 | --- | --- | --- | --- | --- |
@@ -152,12 +152,16 @@ Completed accelerator pilots (not yet terminal-parent audited):
 | 76 | Python mixed-a Add training | 32/32 | 279.218476/336.290254 | 5101.002177/6167.096223 |
 | 82 | Python mixed-b Attention training | 8/4 | 147.516218/181.253649 | 10706.075535/13258.712427 |
 
+Python streaming Add/cell88 also passed:B32/physical32,warmup292.447311s,
+measured347.113487s;B512 forecasts5345.784679/6365.153116s. Budget02 separately
+permits7500s/update,15400s process,retaining the original3000s refusal.
+
 Forecasts are not actualB512 timing. Audit helper
-TASK/launchers/audit_accelerator_calibration02.py is prepared;run only after the
-parent is terminal,retaining any failed/unstarted cells. First formal audit helper
+TASK/launchers/audit_accelerator_calibration02.py passed on the terminal parent.
+Final cell94 also passed:measured176.356590s,B512 forecasts10350.964783/12894.607619s.
+Its budget02 separately declares16500s/update,33400s process,retaining3000s refusal. First formal audit helper
 TASK/launchers/audit_formal_first_cpu.py is prepared,unexecuted;inspect the actual
-record and only certify it after terminal success. Both helpers parse;no runtime
-qualification is claimed before they actually audit completed records. Unsubmitted
+record and only certify it after terminal success. The first formal audit is still pending its actual result. Unsubmitted
 dispatch_formal_blas_group.py prepares finite serial cells after the first formal
 audit;requires that actual reviewed report and immutable budgets. Review the
 first result before launching it;derive its outer timeout from declared budgets.
@@ -184,8 +188,8 @@ its5101.002177/6167.096223s forecasts refused3000s. Each file hashes its actual
 pilot basis;none certifiesB512 runtime. Python cell82 has16500s/update,33400s
 process after10706.075535/13258.712427s forecasts refused3000s.
 
-1. Finish active accelerator calibration;run its audit,publish reviewed evidence.
-   Inspect failures once,retain them;do not blind retry or skip required cells.
+1. Accelerator calibration completed and audited10/10;do not repeat it.
+   Publish the reviewed evidence with this handoff,then continue first formal result.
 2. Inspect/audit the first actual formalB512 cell before extending the dispatcher.
    Prioritize shorter cells;do not let longest CPU Attention block all other results.
 3. Finish remaining necessary Python original-width calibration:CPU four model/
@@ -226,7 +230,7 @@ rewrite history. finite_ranked_horizon.py and wide_attention_horizon_pilot.py
 remain unqualified drafts. Prior navigation/schema audit passed834 links and
 10-target support schema;not new hardware verification.
 
-Latest pushed commits:1d32008 CPU pilot evidence,f6e49f0 retained profile failure
-and audited slice. No production code changed in this continuation. Current
-uncommitted work is this handoff only. Task-local audit/budget helpers are outside
+Latest evidence commits:1d32008 CPU pilot evidence,f6e49f0 retained profile failure
+and audited slice;59f3f06 consolidates the handoff. No production code changed in
+this continuation. Current uncommitted work is this handoff only. Task-local audit/budget helpers are outside
 the source repository;live versions above are immutable. Continue after commits.

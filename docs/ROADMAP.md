@@ -167,6 +167,13 @@ remain open. The full-size mixed Add profiling process timed out4500s without
 a complete update;the [audited five-second trace](evidence/fullsize-mixed-profile-slice-20261004.md)
 covers all11cards but is not complete-training profiling.
 
+F6 remaining original-width accelerator calibration passed ten serial cells on
+e69b3bd:four LibTorch resident model/mode envelopes,two LibTorch mixed inference
+and four Python mixed training cases. Exact source/owner/allocator/continuation
+checks passed;all leases released ([audit](evidence/original-width-accelerator-calibration-20261004.md)).
+Longer originalB512 forecasts retain the3000s refusals;the old PythonB64 timeout
+stays failed. These are reduced-batch pilots,not full-size formal results.
+
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
 identity across the complete build and consumer is audited;the old120-failure
