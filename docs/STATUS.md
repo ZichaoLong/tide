@@ -1,11 +1,12 @@
 # Current handoff
 
-Updated 2026-10-03. **PAUSED after this implementation commit/push, by the user's
-explicit request.** Do not start clean qualification, another increment or a new
-goal. The user will cancel the old paused goal and then authorize creation and
-execution of its replacement. Repository next-action text never overrides a user
-pause; commits, evidence and context compression do not themselves resume work.
-Overall F1–F7 remains incomplete. No current-increment job is live.
+Updated 2026-10-03. **ACTIVE: the user cancelled the old goal and explicitly
+authorized creation/execution of its replacement.** The new goal is active.
+The previous post-commit pause is superseded. Repository next-action text never
+overrides a later user pause; commits/evidence/context compression do not stop
+or resume work by themselves. Overall F1–F7 remains incomplete.
+Eager owner implementation 55c396073afa2a78376ab84d3b29e5e192850f7e is now
+qualified below. No current mainline job is live; actual consumer integration is next.
 No subagents; reference repositories and ObsidianVault remain read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -18,7 +19,7 @@ Re-entry: `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 
-## Contract and priorities for the replacement goal
+## Contract and current priorities
 
 Deliver the 20-tide public execution/equivalence foundation, including independent
 CPU, mixed and resident execution, complete training and continuation, correctness
@@ -44,7 +45,7 @@ longer full-size feasibility run can have a separately declared budget while
 preserving the original 3000s refusal. No speedup threshold was specified.
 
 Implementation commit → clean fixed-source affected qualification → separate
-reviewed evidence commit. Commit/push is authorized when execution resumes.
+reviewed evidence commit. Commit/push is authorized for the active goal.
 Minimal useful experiment records; user contract outranks experiment skill.
 No unrelated passed-test reruns, unlimited queues, blind retries or OOM search.
 Formal heavy timing is serial and separate from profiling. Never stop other work
@@ -70,50 +71,39 @@ Message copies are currently individual. Large-model consumer integration,
 per-device fixed-constant caches, memory/locality planning, packed cross-device
 transport and FP16 owner qualification remain open. This is not F5/F6 closure.
 
-### Development verification only
+### Clean qualification completed
 
-All jobs below are terminal; successful jobs exited 0, the retained failure exited
-1. Systemd cgroups are empty and NPU lease records are completed. No clean-source
-qualification or separate evidence commit has been performed for this increment.
-All frozen development snapshots derive from dirty dd78b80, not a clean source claim.
+[Reviewed evidence](evidence/eager-payload-owners-20261003.md) qualifies exact clean
+55c3960. Eight accepted jobs passed/exit0 with empty cgroups and completed leases:
+three builds, CPU310/NPU87 (no skips), standalone CPU12 configurations per FP64/
+FP32 and NPU36 configurations, and the separate two-device profile. Each standalone
+configuration has two updates/four connected windows. Python additionally tests
+checkpoint remapping and schedule changes. NPU workers inherit both nondefault
+streams. This is an affected gate, not the complete historical regression suite.
 
-| Job | Observed result |
-| --- | --- |
-| `mixed-owners-cpu-dev01` | Retained failure: 304 passed / 4 failed; bool/float checkpoint owners were rejected, but error text lacked the required int64 label |
-| `mixed-owners-cpu-fix-dev01` | 6 passed: four repaired rejection cases plus two custom Region.initial FP64/FP32 anchors |
-| `mixed-owners-cpp-cpu-dev01` | FP64 and FP32 each passed 12 configurations / 24 updates / 48 connected windows |
-| `mixed-owners-cpp-npu-dev01` | 36 configurations / 72 updates / 144 connected windows; two NPUs, all mixed presets, nondefault streams |
-| `mixed-owners-npu-final-dev01` | 87 Python/native FP32 cases passed, no skips; two NPUs, both schedules, three families, Add/Attention, remapped checkpoint suffix |
-| `mixed-owners-preflight-{cpu,npu}-dev01` | One directed case passed on each backend; real two-NPU availability/default-device success and failure paths |
-| `mixed-owners-profile-dev01` | Separate bounded two-NPU CANN trace passed; one mixed-C Attention/greedy case, 2 updates / 4 connected windows |
+The profile reports 6786 device operators, including31 AiCPU operations (23
+BOOL/INT64 ScatterElements,8 INT64 Sort), without an observed host fallback. It
+includes reference/construction/assertions and is not throughput. Both leased
+physical devices appear in raw traces. Do not replace exact integers with float
+for speed. No new formal performance result is claimed.
 
-Full CPU/NPU-Python/NPU-standalone builds `build-mixed-owners-*-dev01` passed.
-Their source-verified rebuilds/fresh links `build-mixed-owners-*-dev02` also passed;
-source/header/options/binary hashes and loader closure are recorded. Earlier Python
-CPU 28, Python NPU 42 and native NPU 43 directed cases passed. These overlapping
-runs must not be added into a synthetic qualification total.
+Source `TASK/sources/mixed-owners-clean01`; fresh-linked/source-verified builds
+`TASK/builds/mixed-owners-{cpu,npu-python,npu-standalone}-clean01`. Jobs:
+`build-mixed-owners-{cpu,npu-python,npu-standalone}-clean01`,
+`mixed-owners-{cpu,cpp-cpu,npu,cpp-npu}-clean01`, `mixed-owners-profile-clean02`.
+Raw records `TASK/runs/NAME/{status.json,task.log}`, queue/profile records where
+applicable; units `tide-execution-flows-NAME`. Audit passed:
+`python TASK/launchers/mixed_owners_evidence.py 55c396073afa2a78376ab84d3b29e5e192850f7e`.
 
-Snapshots: `TASK/sources/mixed-owners-dev04` retains the CPU failure; dev05 has
-repaired error text/initial reference and final owner gates; dev06 adds the profile
-checker mode; dev07 adds the final preflight correction. Main-tree implementation,
-test and build bytes were compared with frozen dev07 before this commit.
-Builds: `TASK/builds/mixed-owners-{cpu,npu-python,npu-standalone}-dev01` (full),
-corresponding dev02 (repaired core and fresh links), and `mixed-owners-profile-dev01`
-(latest checker mode). Preserve these sources/builds and reuse receipts.
-
-Profile `TASK/runs/mixed-owners-profile-dev01/profile/result.json` records 6,786
-operators: 5,174 AI_VECTOR_CORE, 1,017 MIX_AIV, 564 AI_CORE, 31 AI_CPU (23 BOOL/INT64
-ScatterElements and 8 INT64 Sort). The diagnostic observed no host CPU fallback;
-AiCPU remains accelerator execution. Exact int64 ranking cannot be changed to
-float to remove those tasks. The trace includes independent CPU reference,
-initialization and assertions: its 2,184 aclrtMemcpy / 8,072 aclrtSetDevice calls
-and summed task durations are not pure candidate cost or throughput. No new formal
-performance conclusion is claimed. Physical leases were 3,9 for C++/profile/final
-preflight and 1,11 for the final Python/native matrix, remapped to logical 0,1.
-
-Raw status/log/commands: `TASK/runs/NAME/{status.json,task.log}` and
-`TASK/launchers/NAME.sh`; units `tide-execution-flows-NAME`. Snapshots have adjacent
-`.snapshot.json` inventories. Failed runs and old snapshots were not rewritten.
+Retain development `mixed-owners-cpu-dev01` as failed (304 passed/4 error-text
+assertion failures); clean310 covers the repaired cases and custom Region.initial
+anchor. The first profile `mixed-owners-profile-clean01` passed operationally but
+recorded dirty solely from generated fusion_result.json. All1499 frozen source
+hashes were unchanged. After all jobs ended, that inspected output was preserved
+under its run with `source-artifact-audit.json`. Replacement clean02 ran with
+runtime cwd `{out}` and qualified. Initial audit rejection/helper and all old
+records remain intact. Future NPU children use `env -C {out}` and absolute entry
+paths to keep vendor artifacts outside immutable sources.
 
 ## Established scale results and remaining overall gaps
 
@@ -138,7 +128,7 @@ are unqualified drafts. Review their claimed 48-row bound and physical B4 propos
 before use; never generalize a fixture-specific bound into the online scheduler.
 Do not modify audited `wide_attention_owner_pilot.py`; use a new helper/config.
 
-After new authorization, priorities are: qualify this owner increment; integrate
+Current authorized priorities are: integrate
 actual mixed consumers with per-device constant caches and complete head/loss/
 synchronization; add capacity/locality and packed transfers with independent gates;
 advance Attention B512 as a separate bounded item; finish original-scale CPU /
@@ -148,47 +138,21 @@ F7 must then audit integration, evidence, support and portable commands. CUDA ha
 no local hardware: deliver portable source/build/test commands and retain explicit
 target-machine-pending status, never claim local execution.
 
-## Exact next entry, only after the user starts the replacement goal
+## Next implementation and validation
 
-Read this handoff and the execution contract first. The first required action is
-clean qualification of this implementation, not another performance diagnosis.
-Use a new frozen source and distinct outputs; the existing reuse helper validates
-all original production source/header/options inventories before fresh linking.
+Integrate eager multi-device into the actual Python/native/standalone consumers.
+Their current fixed constants are globally shared and runtime synchronization,
+loss gathering and finite-gradient stacking assume one payload device. Construct
+constants once per owner while preserving named trainable initialization; expose
+and record common owner configuration, synchronize/measure every device, and
+compare complete two-update/two-window runs to the independent CPU consumer.
+Cover actual Add/Attention, all three families, both schedules, mixed A/B/C and
+physical sample splitting; explicit invalid placement fails before allocation.
+Keep capacity and packed-transfer claims separate until implemented and tested.
 
-```bash
-TASK=/mi/data2T/zlong/tide-execution-flows
-OWNER_COMMIT=$(git log -1 --format=%H -- python/tidegraph/ownership.py)
-for variant in cpu npu-python npu-standalone; do
-  python "$TASK/launchers/freeze_run.py" \
-    --name "build-mixed-owners-$variant-clean01" --snapshot mixed-owners-clean01 \
-    --commit "$OWNER_COMMIT" -- timeout --signal=TERM --kill-after=10s 180s \
-    '{python}' "$TASK/launchers/mixed_owner_build.py" '{source}' \
-    "$TASK/builds/mixed-owners-$variant-dev01" "$TASK/builds/mixed-owners-$variant-clean01"
-done
-```
-
-Inspect all three terminal builds before submitting dependent gates. If source
-verification rejects reuse, investigate the precise mismatch; do not bypass it.
-Use the same `freeze_run.py --snapshot mixed-owners-clean01 --commit "$OWNER_COMMIT"`
-for all gate commands. Prefix NPU jobs with `--npu --npu-count 2 --max-wait 120`.
-Set `TIDE_BUILD_DIR` to the corresponding clean build, with one ATen/BLAS thread:
-
-- CPU (900s): matching Python `-m pytest -q tests/test_payload_ownership.py
-  tests/test_placement.py tests/test_library.py tests/test_library_cases.py
-  tests/test_checkpoint.py tests/test_checkpoint_ownership.py
-  tests/test_coordinate_checkpoints.py tests/test_checkpoint_process.py
-  tests/test_region_continuation.py tests/test_fp16_library.py --dtype both`.
-- Python/native NPU (600s): `TIDE_PAYLOAD_BACKEND=npu`, matching Python `-m pytest
-  -q tests/test_payload_ownership.py --dtype float32`, NPU-Python clean build.
-- Standalone (180s CPU / 300s NPU): `tidegraph-payload-ownership-check --device=cpu
-  --dtype=float64`, then CPU float32; NPU `--device=npu:0 --dtype=float32`.
-- Separate profile (600s): matching Python `scripts/profile_execution_placement.py
-  --build-dir "$TASK/builds/mixed-owners-npu-standalone-clean01"
-  --output-dir '{out}/profile' --device npu:0 --workload owners`.
-
-Inspect exact source/binary identities, exit codes, expected counts, empty cgroups
-and released leases before the separate reviewed evidence commit. These commands
-are a future handoff, not authorization to run them during the current pause.
+Use a new frozen development snapshot and new build/run names for this increment.
+Preserve qualified owner builds and existing installed consumer dependencies.
+No new modification is validated by the preceding owner-only evidence.
 
 ## Environment and protected state
 

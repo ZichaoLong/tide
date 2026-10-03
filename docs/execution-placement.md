@@ -136,3 +136,6 @@ step placement follows the optimizer's own policy. Serialization does not preser
 the preceding autograd segment. Standalone C++ in-memory continuation and optimizer
 ownership are checked separately; its existing named-weight checkpoint is not a
 serialization of the graph continuation.
+
+The directed eager-owner scope is qualified on clean55c3960; see the
+[exact source and gate evidence](evidence/eager-payload-owners-20261003.md).

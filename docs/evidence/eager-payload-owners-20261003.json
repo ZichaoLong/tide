@@ -1,0 +1,487 @@
+{
+  "schema": "tide-eager-payload-owners-v1",
+  "source": "55c396073afa2a78376ab84d3b29e5e192850f7e",
+  "jobs": [
+    {
+      "name": "build-mixed-owners-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "640872466bd2c2c3e20a1231b4b1a4f1bddf4ab21ffc8614379897021e1001aa",
+        "task.log": "4dfd4c3924f220ea2d58e57e671be282dd1006b7ee49c8b03719b40558671d55"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-mixed-owners-npu-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "18e79fa6a5bfdebc0375b9a09b8558bb7f3be60c3ffcf1db20386bffe4155e97",
+        "task.log": "4dfd4c3924f220ea2d58e57e671be282dd1006b7ee49c8b03719b40558671d55"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-mixed-owners-npu-standalone-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "4060a3d931bae374d379322c15a7231ab0458b7c3ffba196e7491ec8257e8285",
+        "task.log": "4dfd4c3924f220ea2d58e57e671be282dd1006b7ee49c8b03719b40558671d55"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "mixed-owners-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d40e7c63da9ca67a854413e688540f08ffcf15cf089f2fc2f170b7daf601dc80",
+        "task.log": "a013567af7dab01dacc680f31038c72b8ada8cfd92f9f9eb418ae2c469b5b704"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "mixed-owners-cpp-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "f18229653b561c44908a609ee808cf099e451b4379a52fa98c0699a68952ace0",
+        "task.log": "de8534a1aca1220966b52c0dbfaf90978fe96def6411bb39201ca6213906a20d"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "mixed-owners-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "93038864992794a3e865b15e87d042cc14d9b867622a82164d6edf1f7d3b4b86",
+        "task.log": "b5ae777ddf26501be49a5108db336df40ba7e6d0a0de6d1f672cc92c547097a3",
+        "queue.json": "54c970e27bf931698b63fc3e6a5146a8886be0837d95cc6f1efe368c3db80ffd"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        3,
+        9
+      ]
+    },
+    {
+      "name": "mixed-owners-cpp-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "2aa30f1ff95252635ded5e2e5612569e4e59e5cbbc3fcaab8efd591d5e640132",
+        "task.log": "5f8fd38e630e680073c5461f1cddf5549e6c2624915dd1f484db964f384d5bab",
+        "queue.json": "d66d0339938fc19c64407a3fa92b1f31fea52bc6c23b194c0c865341ccdb3465"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        1,
+        11
+      ]
+    },
+    {
+      "name": "mixed-owners-profile-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d2fa4cad0cf418257b8638a9f590f33571c68c1dbc30259ad2e0162b4a400f43",
+        "task.log": "a99a777a4deb0c447d10b160bef7b52e597e53a1a97a8b856542f3f25dd88327",
+        "queue.json": "f24d390365eecbde1de1f80a7b93aef9cf2f72398e4be129048373f306194d3d",
+        "profile/result.json": "c72a603902a628ee8974ef5d7fa6820ab02aa6208c83b76f4d66802919e4b0df",
+        "profile/profile.log": "f817d801bd17049c078215c1eb152bdebfc299f581fa717f6167fbf9ff2e3314"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        3,
+        9
+      ]
+    }
+  ],
+  "builds": {
+    "cpu": {
+      "manifest_sha256": "025f0aa2416e1fb06200a3c2d3d2c0ec1b0d4ed0937b509bc938f70890ee6168",
+      "reuse_sha256": "3444ddc3118ff7e325a1685f18d4d72f15a708b1bf2955943a56e60441edf17b",
+      "cpp_source_sha256": "7598d4db2aa3ec5d83ff687590e367f96825058853eda7515c6477c44e41c209",
+      "binary_sha256": {
+        "libtidegraph.a": "5c525fe65bef1a08bbfa3021bbbe90df08ef4b368bfba666f65894f363224b7a",
+        "libtidegraph_runtime.a": "ffe6d20db7d954b93076c040479b26b5b8a2702c4bfd9129dd2c8051cce7ff1d",
+        "tidegraph-payload-ownership-check": "cb24fd484d391f21a55c5c2988a7e566cf2d4023f2a626d3d4968606ba7970b4",
+        "_tide_native.so": "75dc46b16233072b050d62df7c379d171260c06f28a63da1d2e97d38cff4a7f0"
+      },
+      "changed_production": [
+        "cpp/src/region_evaluate.cpp"
+      ],
+      "previous_manifest_sha256": "32c1aa44514876dca3e3da9c38b7a7f6c5310f19ad1f4316e352f5ecc755f87b"
+    },
+    "npu-python": {
+      "manifest_sha256": "5046864a394e430af0115c726d52c37fa4657cd5f951f9cee5f5b7b6740ff3a3",
+      "reuse_sha256": "16154177945e04a21d91e4aae61395b4a60754a077b32dc4077a5c8010f07035",
+      "cpp_source_sha256": "7598d4db2aa3ec5d83ff687590e367f96825058853eda7515c6477c44e41c209",
+      "binary_sha256": {
+        "libtidegraph.a": "27a6587dd7f3def196d5e50984c1e0c80ee5ad396912b1aef8cc3eb6bedff6f7",
+        "libtidegraph_runtime.a": "374bca5df36734702757cd136c3d419f883a42c3bfb180b38b639f3bd74754c9",
+        "_tide_native.so": "1c8f4685ad66b0e43283aeb529371f3208ee42d46e71f0b2104258dd81e55514"
+      },
+      "changed_production": [
+        "cpp/src/region_evaluate.cpp"
+      ],
+      "previous_manifest_sha256": "669ce1a55216d18d457e5b534f7bfa18a1968f01bfca31a0dbc3b44444c262ee"
+    },
+    "npu-standalone": {
+      "manifest_sha256": "3b763638870050643379be3fd89343ea276ae1bce69853216d00f4d2dd898489",
+      "reuse_sha256": "36f23ebd46663256da0ca665698eb620a444171cab48a9d84584aba88c95fb76",
+      "cpp_source_sha256": "7598d4db2aa3ec5d83ff687590e367f96825058853eda7515c6477c44e41c209",
+      "binary_sha256": {
+        "libtidegraph.a": "d90f689eaef7f5471f167f6a1bbf3093ab5e9d80aa249a2d39f6e398c1d443a4",
+        "libtidegraph_runtime.a": "08ae0b3b38cfda18f620b8846d2bb6b4c2a0f6b770c35988890fdfaa080da069",
+        "tidegraph-payload-ownership-check": "daf6fd84640227fae0e5a45d7029369cd3c904058039da16988d75f14c20d4e5"
+      },
+      "changed_production": [
+        "cpp/src/region_evaluate.cpp"
+      ],
+      "previous_manifest_sha256": "84178aa7fde594c4e025dbb8673801b7ca21ff9b46fd7994dd0a27cf65c7569e"
+    }
+  },
+  "tests": {
+    "cpu": {
+      "passed": 310,
+      "skipped": 0,
+      "log_sha256": "a013567af7dab01dacc680f31038c72b8ada8cfd92f9f9eb418ae2c469b5b704"
+    },
+    "npu": {
+      "passed": 87,
+      "skipped": 0,
+      "log_sha256": "b5ae777ddf26501be49a5108db336df40ba7e6d0a0de6d1f672cc92c547097a3"
+    },
+    "cpp-cpu": {
+      "configurations_per_dtype": 12,
+      "updates_per_dtype": 24,
+      "windows_per_dtype": 48,
+      "dtypes": [
+        "float64",
+        "float32"
+      ]
+    },
+    "cpp-npu": {
+      "configurations_per_dtype": 36,
+      "updates_per_dtype": 72,
+      "windows_per_dtype": 144,
+      "dtypes": [
+        "float32"
+      ]
+    }
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 5174,
+      "MIX_AIV": 1017,
+      "AI_CORE": 564,
+      "AI_CPU": 31
+    },
+    "physical_devices": [
+      3,
+      9
+    ],
+    "operator_counts_by_device": {
+      "3": {
+        "IsFinite": 232,
+        "ReduceAll": 200,
+        "Pack": 144,
+        "Mul": 829,
+        "ZerosLike": 151,
+        "MatMulV2": 225,
+        "Slice": 24,
+        "Range": 24,
+        "ConcatD": 124,
+        "Less": 32,
+        "Sub": 52,
+        "Transpose": 8,
+        "BatchMatMulV2": 46,
+        "Add": 511,
+        "LogicalNot": 8,
+        "MaskedFill": 8,
+        "SoftmaxV2": 40,
+        "ReduceSum": 336,
+        "GatherV3": 40,
+        "Sort": 16,
+        "Cast": 16,
+        "ScatterElements": 16,
+        "Tanh": 24,
+        "Fill": 32,
+        "BroadcastTo": 144,
+        "SoftmaxGrad": 68,
+        "InplaceScatterAdd": 12,
+        "Pows": 52,
+        "Pow": 74,
+        "TanhGrad": 28,
+        "Neg": 18
+      },
+      "9": {
+        "IsFinite": 193,
+        "ReduceAll": 163,
+        "Pack": 200,
+        "Mul": 745,
+        "ZerosLike": 83,
+        "MatMulV2": 244,
+        "Slice": 48,
+        "Range": 18,
+        "ConcatD": 111,
+        "Less": 22,
+        "Sub": 52,
+        "Transpose": 36,
+        "BatchMatMulV2": 49,
+        "Add": 457,
+        "LogicalNot": 11,
+        "MaskedFill": 11,
+        "SoftmaxV2": 33,
+        "ReduceSum": 310,
+        "Tanh": 26,
+        "Fill": 14,
+        "GatherV3": 14,
+        "ScatterElements": 7,
+        "BroadcastTo": 166,
+        "SoftmaxGrad": 42,
+        "Pows": 59,
+        "Cast": 12,
+        "Pow": 84,
+        "TanhGrad": 27,
+        "Neg": 15
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 5174,
+      "MIX_AIV": 1017,
+      "MEMCPY_ASYNC": 726,
+      "AI_CORE": 564,
+      "AI_CPU": 31,
+      "EVENT_RECORD": 176,
+      "REMOTE_EVENT_WAIT": 75,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 142,
+      "BatchMatMulV2_Tiling": 95,
+      "BroadcastTo_Tiling": 44,
+      "Cast_Tiling": 21,
+      "ConcatD_Tiling": 151,
+      "Fill_Tiling": 31,
+      "GatherV3_Tiling": 8,
+      "InplaceScatterAdd_Tiling": 24,
+      "IsFinite_Tiling": 78,
+      "Less_Tiling": 32,
+      "LogicalNot_Tiling": 19,
+      "MaskedFill_Tiling": 19,
+      "MatMulV2_Tiling": 91,
+      "Mul_Tiling": 133,
+      "Neg_Tiling": 20,
+      "Pack_Tiling": 80,
+      "Pow_Tiling": 24,
+      "Pows_Tiling": 50,
+      "Range_Tiling": 20,
+      "ReduceAll_Tiling": 50,
+      "ReduceSum_Tiling": 194,
+      "Slice_Tiling": 43,
+      "SoftmaxGrad_Tiling": 25,
+      "SoftmaxV2_Tiling": 106,
+      "Sort_Tiling": 2,
+      "Sub_Tiling": 35,
+      "TanhGrad_Tiling": 2,
+      "Tanh_Tiling": 8,
+      "Transpose_Tiling": 62,
+      "ZerosLike_Tiling": 20,
+      "aclnnAdd": 354,
+      "aclnnAddGetWorkspaceSize": 142,
+      "aclnnAddmm": 100,
+      "aclnnAddmmGetWorkspaceSize": 23,
+      "aclnnAll": 363,
+      "aclnnAllGetWorkspaceSize": 25,
+      "aclnnArange": 42,
+      "aclnnArangeGetWorkspaceSize": 20,
+      "aclnnBitwiseNot": 19,
+      "aclnnBitwiseNotGetWorkspaceSize": 19,
+      "aclnnCat": 292,
+      "aclnnCatGetWorkspaceSize": 208,
+      "aclnnIndexAdd": 12,
+      "aclnnIndexAddGetWorkspaceSize": 12,
+      "aclnnIndexSelect": 54,
+      "aclnnIndexSelectGetWorkspaceSize": 4,
+      "aclnnInplaceAdd": 614,
+      "aclnnInplaceCopy": 520,
+      "aclnnInplaceCopyGetWorkspaceSize": 507,
+      "aclnnInplaceFillScalar": 16,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 1,
+      "aclnnInplaceMaskedFillScalar": 19,
+      "aclnnInplaceMaskedFillScalarGetWorkspaceSize": 19,
+      "aclnnInplaceZero": 265,
+      "aclnnInplaceZeroGetWorkspaceSize": 28,
+      "aclnnIsFinite": 425,
+      "aclnnIsFiniteGetWorkspaceSize": 39,
+      "aclnnLtScalar": 54,
+      "aclnnLtScalarGetWorkspaceSize": 32,
+      "aclnnMatmul": 492,
+      "aclnnMatmulGetWorkspaceSize": 180,
+      "aclnnMm": 214,
+      "aclnnMmGetWorkspaceSize": 10,
+      "aclnnMul": 990,
+      "aclnnMulGetWorkspaceSize": 61,
+      "aclnnMuls": 342,
+      "aclnnMulsGetWorkspaceSize": 45,
+      "aclnnNeg": 33,
+      "aclnnNegGetWorkspaceSize": 20,
+      "aclnnPowTensorScalar": 269,
+      "aclnnPowTensorScalarGetWorkspaceSize": 49,
+      "aclnnReduceSum": 666,
+      "aclnnReduceSumGetWorkspaceSize": 117,
+      "aclnnScatter": 23,
+      "aclnnScatterGetWorkspaceSize": 23,
+      "aclnnSoftmax": 73,
+      "aclnnSoftmaxBackward": 110,
+      "aclnnSoftmaxBackwardGetWorkspaceSize": 25,
+      "aclnnSoftmaxGetWorkspaceSize": 53,
+      "aclnnSort": 46,
+      "aclnnSortGetWorkspaceSize": 39,
+      "aclnnStack": 344,
+      "aclnnStackGetWorkspaceSize": 80,
+      "aclnnSub": 104,
+      "aclnnSubGetWorkspaceSize": 35,
+      "aclnnTanh": 50,
+      "aclnnTanhBackward": 55,
+      "aclnnTanhBackwardGetWorkspaceSize": 2,
+      "aclnnTanhGetWorkspaceSize": 8,
+      "aclrtBinaryLoadFromData": 82,
+      "aclrtBinaryLoadFromFile": 1,
+      "aclrtCreateEventExWithFlag": 91,
+      "aclrtCreateStreamWithConfig": 68,
+      "aclrtCtxGetSysParamOpt": 863,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyEvent": 88,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 2,
+      "aclrtDeviceEnablePeerAccess": 2,
+      "aclrtFree": 6,
+      "aclrtGetCurrentContext": 90,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 1017,
+      "aclrtGetResInCurrentThread": 3652,
+      "aclrtGetStreamAttribute": 6960,
+      "aclrtLaunchKernelWithHostArgs": 6786,
+      "aclrtMemcpy": 2184,
+      "aclrtMemcpyAsync": 726,
+      "aclrtQueryEventStatus": 87,
+      "aclrtRecordEvent": 176,
+      "aclrtResetDevice": 2,
+      "aclrtSetCurrentContext": 176,
+      "aclrtSetDevice": 8072,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 68,
+      "aclrtStreamWaitEvent": 88,
+      "aclrtSynchronizeDeviceWithTimeout": 5,
+      "aclrtSynchronizeEvent": 1,
+      "aclrtSynchronizeStream": 1759,
+      "aclrtSynchronizeStreamWithTimeout": 699
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261003132422946_00417466FFIREDRB/mindstudio_profiler_output/task_time_20261003132434.csv": "d1747d21d0a0adc2bc38d3ce41b759d63ca0bbecc5a6ab568491b4e1cc189d97",
+      "raw/PROF_000001_20261003132422946_00417466FFIREDRB/mindstudio_profiler_output/op_summary_20261003132434.csv": "1bf3b90aceba53340b2162390cb93356e89cffd8b36aaf36e6365d4feafce7a5",
+      "raw/PROF_000001_20261003132422946_00417466FFIREDRB/mindstudio_profiler_output/api_statistic_20261003132434.csv": "74b7e3521c370d7c108056d4f7382a1a3b8a0c9b8ab9ef75de58cfa406cb6f7c"
+    },
+    "scope": "two-device eager Attention/HST, mixed-C greedy, two updates/four connected windows; nondefault streams; includes CPU reference/assertions; not throughput",
+    "aicpu_types": [
+      {
+        "operator": "Sort",
+        "input_dtypes": "INT64",
+        "count": 8
+      },
+      {
+        "operator": "ScatterElements",
+        "input_dtypes": "BOOL;INT64;BOOL",
+        "count": 23
+      }
+    ]
+  },
+  "audit_helper_sha256": "8b04b654e23c4c146a4aa4326e31c76b3fce1d263ebc93d6b73c56490263ce13",
+  "environment": {
+    "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+    "compiler": "c++ (GCC) 10.3.1",
+    "cxx_standard": 17,
+    "build_type": "Release",
+    "torch_prefix": "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/lib/python3.11/site-packages/torch/share/cmake/Torch",
+    "cann_version": "9.0.0",
+    "npu_sdk": {
+      "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+      "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+      "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+    }
+  },
+  "retained_profile_artifact_audit_sha256": "8c8863d842a79b6d4c1905425f09edfd3585368b01558a61c3a1b9171357ae1e",
+  "limits": [
+    "Directed owner qualification, not the entire historical regression or performance matrix.",
+    "CPU FP64/FP32; actual two-device NPU FP32 HST, Add/Attention, three families, streaming/greedy, mixed A/B/C.",
+    "Python checkpoint remaps owners; standalone checks connected in-memory continuation and optimizer slots, not disk graph continuation.",
+    "Independent CPU reference is comparison only. Profiling includes reference, construction and assertions; never throughput.",
+    "Cross-device message copies are individual. Consumer scale, packed transfer, FP16 owners, CUDA hardware and formal performance remain pending.",
+    "Retain mixed-owners-cpu-dev01 as failed (304 passed/4 error-text assertion failures); repaired cases are covered here."
+  ]
+}
