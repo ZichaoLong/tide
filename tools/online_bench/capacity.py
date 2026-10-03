@@ -158,6 +158,16 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter
                    +64*b*((n+2)*(w+4)+g.regions*(g.regions+4))+160*(len(g.edges)+n+4)) if coordinator else 0
         owner_packets = 128*c.queue*(6*w+64) if g.devices > 1 else 0
         journals = 24*c.kv_trace*(2*w+8) if g.attention and g.diagnostics and body else 0
+        # The declared sharded fiber consumer has one FP32 DeviceJournal and
+        # one equally sized proposal bank. Retention clones one journal per
+        # window, not either live bank. Five int64 metadata columns, 2W+1 FP32
+        # values, plus count/alignment allowance; payload FP16 stays FP32 here.
+        # Compaction/index scratch retains its independent bound below.
+        journal_bank = (c.kv_trace*(5*8+(2*w+1)*4)+4096
+                        if journals and g.training and g.devices>1 and reuse_parameter_gradients else 0)
+        retained_journal = journal_bank or journals
+        if journal_bank:
+            journals = 2*journal_bank
         forward_work = (96*chunks.emission*w*w+128*(chunks.full+chunks.aggregate)*(w+domain))
         if g.attention and body:
             forward_work += 96*chunks.attention*w*w+chunks.attention*chunks.keys*(32*w+192)+512*chunks.attention*(w+1)
@@ -210,7 +220,7 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter
             # Aggressive sharded owners borrow these frozen banks; they are
             # already charged in forward parameters. Other paths keep copies.
             parameter_copies = 0 if reuse_parameter_gradients and g.devices > 1 else projection+state_parameters
-            retained = parameter_copies+windows*(2*nodes*w*p+state+p*cache+journals)
+            retained = parameter_copies+windows*(2*nodes*w*p+state+p*cache+retained_journal)
             if coordinator:
                 retained += windows*32*(trace+c.queue+c.outputs)*(10*w+64)
                 roots = 4*windows*c.outputs*w+(12 if g.sample_chunks>1 else 8)*v*w
@@ -238,6 +248,8 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter
             phases = {k: phases[k] for k in ('construction','forward_loss')}
         components = dict(parameters=parameters,state_and_kv=persistent_state,routing=routing,owner_packets=owner_packets,
                           journals=journals,forward_workspace=forward_work,graph_optimizer=masters,
+                          kv_journal_bank_bytes=journal_bank,
+                          retained_kv_journal_bytes=windows*retained_journal if g.training else 0,
                           consumer_parameters_optimizer=consumer,programs_and_vendor_allowance=programs,
                           retained=retained,roots_and_consumer_gradients=roots,physical_and_canonical_gradients=gradients,
                           reverse_workspace=reverse_work,canonical_communication=communication,consumer_proposals=proposal,

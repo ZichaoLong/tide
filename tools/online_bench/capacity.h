@@ -102,7 +102,14 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide routing=coordinator?64*(Wide(c.queue)+c.arrivals+c.outputs+trace)*(5*w+32)
       +64*b*((n+2)*(w+4)+Wide(g.regions)*(g.regions+4))+160*(Wide(g.edges.size())+n+4):0;
     const Wide owner_packets=g.devices>1?128*Wide(c.queue)*(6*w+64):0;
-    const Wide journals=g.attention&&g.diagnostics&&body?24*Wide(c.kv_trace)*(2*w+8):0;
+    Wide journals=g.attention&&g.diagnostics&&body?24*Wide(c.kv_trace)*(2*w+8):0;
+    // Declared sharded fiber training: live journal + same-size proposal, then
+    // one immutable journal/window. All journal values are FP32, also for half
+    // payloads. Count/alignment and separately charged prefix scratch remain.
+    const Wide journal_bank=journals&&g.training&&g.devices>1&&reuse_parameter_gradients?
+      Wide(c.kv_trace)*(5*8+(2*w+1)*4)+4096:0;
+    const Wide retained_journal=journal_bank?journal_bank:journals;
+    if(journal_bank)journals=2*journal_bank;
     Wide forward_work=96*chunk.at("emission")*w*w+128*(Wide(chunk.at("full"))+chunk.at("aggregate"))*(w+domain);
     if(g.attention&&body)forward_work+=96*chunk.at("attention")*w*w+Wide(chunk.at("attention"))*chunk.at("keys")*(32*w+192)+512*chunk.at("attention")*(w+1);
     const Wide masters=g.training?4*Wide(g.adamw?3:2)*canonical[device]:0;
@@ -137,7 +144,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       // Aggressive sharded retention borrows banks already charged above;
       // default/conservative/legacy single-device paths retain independent copies.
       parameter_copies=reuse_parameter_gradients&&g.devices>1?0:projection+state_parameters;
-      retained=parameter_copies+windows*(2*nodes*w*p+state+p*cache+journals);
+      retained=parameter_copies+windows*(2*nodes*w*p+state+p*cache+retained_journal);
       if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
       // Add has no QKV/output matrices; projection, scalar aggregate and vector
       // LH/state/Read gradients retain their separate conservative charges.
@@ -159,6 +166,7 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       card.phases["optimizer"]=bytes(base+4*Wide(canonical[device])+roots+proposal+communication);}
     card.components={{"parameters",bytes(parameters)},{"state_and_kv",bytes(persistent_state)},{"routing",bytes(routing)},
       {"owner_packets",bytes(owner_packets)},{"journals",bytes(journals)},{"forward_workspace",bytes(forward_work)},
+      {"kv_journal_bank_bytes",bytes(journal_bank)},{"retained_kv_journal_bytes",bytes(g.training?windows*retained_journal:0)},
       {"graph_optimizer",bytes(masters)},{"consumer_parameters_optimizer",bytes(consumer)},
       {"programs_and_vendor_allowance",bytes(programs)},{"retained",bytes(retained)},
       {"roots_and_consumer_gradients",bytes(roots)},{"physical_and_canonical_gradients",bytes(gradients)},

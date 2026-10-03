@@ -1,8 +1,10 @@
 # Current handoff
 
-Updated 2026-10-03. **ACTIVE under continuous user authorization.** Continue to
-F1–F7 acceptance; the user revoked per-increment pauses. Commits/pushes, validation
-and context compression are not stopping conditions. Overall goal incomplete.
+Updated 2026-10-03. **ACTIVE for the current KV-journal accounting increment.**
+Latest user steering permits pausing after this round is committed. Finish its
+directed development checks, implementation commit, clean-source qualification
+and separate evidence commit; then pause with a progress summary. Overall F1–F7
+goal remains incomplete; no new B512 or mixed-multi-card work in this round.
 No subagents. Reference repositories and ObsidianVault are read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -28,7 +30,7 @@ switches; FP32 main and FP16 separate. Training includes forward/loss/backward/
 update/continuation; model convergence is a later experiment.
 
 Implementation commit → clean fixed-source affected qualification → separate
-evidence commit; push each and continue. User contract outranks experiment skill;
+evidence commit; push each. Pause after this round under the latest user instruction. User contract outranks experiment skill;
 minimal useful records only. No unrelated passed-test reruns, unlimited queues,
 blind retries, OOM search or relaxed safety gates. Formal heavy timing is serial;
 profiling separate. Never stop another workload to free resources. Keep3000s,
@@ -154,20 +156,36 @@ commit before relying on pilot-to-B512 cost extrapolation.
 
 ## Next implementation and validation
 
-1. Owner-map evidence140d698 is pushed. Attention pilot passed,but the measured
-   B512 forecast is refused below. Commit its audited evidence,then improve
-   physical-batch admission from verified liveness/static bounds;no blind retry.
-2. Run a bounded original-width Attention pilot at a currently available card
-   count with the same explicit map/chunks as its B512 plan. Keep current caps,
-   3000s and1.15; measure sample/optimizer phases,allocator and continuation.
-   Actually execute B512 after valid admission; optimize from evidence if refused.
-3. Implement eager mixed multi-card in the common library and both consumers,
-   preserving independent CPU references, aliases, gradients and continuation;
-   validate public Python/native and standalone paths with focused tests/profile.
-4. Finish full-size CPU/screened-mixed/resident streaming/prefill comparisons,
-   three fresh processes per recommendation and separate profiles, then F7
-   integration/evidence/portable-command audit. CUDA/new stack cells require
-   explicit target-machine validation; never claim local execution without hardware.
+1. Current implementation (committing after directed development checks): `tools/online_bench/capacity.py/.h`,
+   `tests/test_consumer_capacity.py`, new `tests/test_consumer_journal_capacity.py`,
+   and `docs/consumer-capacity.md`. The declared aggressive multi-device Attention
+   training envelope charges two live FP32 KV journal banks and one retained bank
+   per window. Other policies, runtime, capacities and margins are unchanged.
+   Lifecycle source review confirms one compiled forward proposal per state owner,
+   live-journal references and deduplicated retained clones. CPU dev01 passed38
+   tests/exit0 without skips; consumer build dev01 and NPU dev01 passed/exit0. NPU17 has no skips:
+   sixteen independent CPU-referenced two-update/two-window candidates plus one
+   pre-allocation refusal. All three units inactive with empty control groups;
+   the two-card lease completed and was released. Clean qualification is pending.
+2. Frozen development source `TASK/sources/journal-capacity-dev01` at dirty3ef8ec8.
+   Passed jobs `journal-capacity-cpu-dev01`, `build-journal-capacity-consumer-dev01`,
+   `journal-capacity-npu-dev01`; logs/status `TASK/runs/NAME/{task.log,status.json}`.
+   The client reuses source/header/options-compatible objects from
+   `owner-map-consumer-clean01`; unchanged qualified resident backend is
+   `memory-balance-standalone-clean02` / `memory-balance-python-clean01`.
+   CPU gate38 checks; NPU gate17 uses `tests/test_consumer_capacity_npu.py`.
+
+3. Commit/push implementation; freeze exact commit as `journal-capacity-clean01`.
+   Repeat affected CPU/build/NPU gates, then a fixed-map/fixed-chunk D512/B8
+   calibration against `memory-balance-calibration-clean01`. Keep API capacities,
+   budget and workload identical. Audit terminal status, hashes, empty cgroups
+   and lease release; commit evidence separately and pause.
+4. After resumption: prove the original two-window rank-aligned packet's finite
+   KV bound before any128-row configuration; consider physicalB4/logicalB8 pilot
+   with the same B512 owner map/chunks. Preserve3000s/1.15 and all old refusals.
+   Original Attention B512, eager mixed multi-card, full-size formal performance
+   matrix and F7 integration/portable-command audit remain open. CUDA/new stacks
+   stay target-machine-pending without hardware evidence.
 
 **29effaed064d59b9da930ec3acec810be58b2e1a** fixed joint-map CLI is qualified:
 [CPU45/NPU22 and build evidence](evidence/consumer-owner-map-20261003.md).
@@ -189,12 +207,11 @@ chunks,original capacities. Phase forecast7036.453031774s>3000s at1.15;
 B512 not executed. Job passed/exit0,unit inactive/empty cgroup,lease released.
 [Evidence](evidence/original-width-attention-owner-diagnostic-20261003.md).
 Audit passed:`python TASK/launchers/wide_attention_owner_evidence.py
-29effaed064d59b9da930ec3acec810be58b2e1a`. No current mainline live jobs.
+29effaed064d59b9da930ec3acec810be58b2e1a`. No current mainline live jobs; development checks above are terminal.
 
-Next investigation: exact KV journal liveness in capacity.py/.h. The current
-24*rows*(2W+8) reserve is charged live and per retained window; inspect the two
-actual live DeviceJournal banks plus one immutable journal per window,including
-packing scratch and all metadata,before narrowing aggressive accounting.
+Current accounting implementation is under directed validation as listed above.
+It replaces the legacy24*rows*(2W+8) charge only for the declared aggressive
+sharded training mode; it does not change the actual backend allocations.
 Also verify the rank-aligned packet's finite two-window KV bound:24 input
 positions×max incoming degree5=120. A separately configured128-row horizon
 can retain every possible row; do not infer this for arbitrary protocols or

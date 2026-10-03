@@ -237,10 +237,12 @@ def test_private_bank_liveness_covers_model_and_keeps_legacy_copies(memory,paylo
             records.append(r)
         for old,new in zip(records[0]['devices'],records[1]['devices']):
             saving=new['components']['borrowed_parameter_banks']
-            assert old['phases']['forward_loss']-new['phases']['forward_loss']==saving
-            assert old['phases']['construction']==new['phases']['construction']
-            assert old['phases']['optimizer']==new['phases']['optimizer']
-            for name in ('state_and_kv','journals','roots_and_consumer_gradients','physical_and_canonical_gradients','reverse_workspace'):
+            live=old['components']['journals']-new['components']['journals']
+            retained=old['components']['retained_kv_journal_bytes']-new['components']['retained_kv_journal_bytes']
+            assert old['phases']['forward_loss']-new['phases']['forward_loss']==saving+live+retained
+            assert old['phases']['construction']-new['phases']['construction']==live
+            assert old['phases']['optimizer']-new['phases']['optimizer']==live
+            for name in ('state_and_kv','roots_and_consumer_gradients','physical_and_canonical_gradients','reverse_workspace'):
                 assert old['components'][name]==new['components'][name]
 
 

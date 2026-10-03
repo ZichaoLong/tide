@@ -40,12 +40,33 @@ that arbitrary mixed-head/subset library tapes can borrow their gathers.
 `borrowed_parameter_banks` reports the footprint already included in forward
 parameters. `retained_attention_parameters` remains the included logical shared
 Attention footprint, whether copied or borrowed. None is an extra sum. State,
-dynamic KV/log-bias, lengths, journals and all Full/state/message snapshots retain
-their previous charges. API admission limits and safety margins are unchanged.
+dynamic KV/log-bias, lengths and all Full/state/message snapshots retain
+their previous charges. Journal lifetimes are accounted separately below.
+API admission limits and safety margins are unchanged.
 [Private projection](evidence/resident-projection-borrow-20261003.md) and
 [Attention](evidence/resident-attention-borrow-20261003.md) allocator measurements
 establish the backend storage change; [separate accounting qualification](evidence/consumer-private-bank-capacity-20261003.md)
 keeps actual allocator peaks unchanged and validates the revised envelope.
+
+For the declared aggressive multi-device Attention training consumer, each state
+owner has one FP32 KV journal and one equally sized proposal bank. The compiled
+forward loop reuses that proposal on every stage and window: `ContentFlow`
+constructs once, and `RemoteState` rejects duplicate program construction.
+The journal has `R × 5` int64 metadata, `R × (2W+1)` FP32 values and an int64
+count, including when the model payload is FP16. With `R=kv_trace_rows`, the
+bank allowance is `J = R × (5×8 + (2W+1)×4) + 4096` bytes. The live `journals`
+component charges `2J`; retained storage charges `J` per connected window.
+`fiber_tape.cpp` references the live journal, while `state_owner_tape.cpp` clones
+each aliased tensor once. Optional prefix compaction cannot enlarge the journal;
+its mask/index workspace keeps its separate conservative charge. The proposal
+is not part of a retained tape. No journal or KV capacity is reduced.
+
+`kv_journal_bank_bytes` reports `J` only in this declared mode, otherwise zero;
+`retained_kv_journal_bytes` reports the journal part already included in
+`retained`, not another allocation. Conservative, single-device and inference
+paths keep their previous bound. Backend/program allowances and the per-card
+safety deduction remain unchanged. This is an accounting correction, with
+unchanged runtime allocation; allocator calibration is still required.
 
 With aggressive multi-device training, ordered per-window canonical reduction
 allows the physical projection and event/fiber Attention parameter-adjoint banks
