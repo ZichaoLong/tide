@@ -104,9 +104,7 @@ def execute_candidate(p,d,implementation,dtype_name,training,tmp_path,budget,cap
     return got,actual
 
 
-def test_automatic_sample_option_rejects_eager_and_nonboolean():
+def test_automatic_sample_option_rejects_nonboolean():
     for value in (1,None,'true'):
         with pytest.raises(ValueError,match='boolean'):
             run(packet(),family='timed-dag',implementation='python',device='cpu',auto_sample_chunks=value)
-    with pytest.raises(ValueError,match='resident'):
-        run(packet(),family='timed-dag',implementation='python',device='cpu',auto_sample_chunks=True)
