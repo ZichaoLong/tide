@@ -21,8 +21,9 @@ def encode_model(core, graph, model):
     from .region import validate_program as validate_region
     if len(model.regions) != len(graph.regions):
         raise ValueError("region program count mismatch")
-    for p, layout in zip(model.regions, graph.region_layouts):
-        validate_region(p, layout, model.nodes[0].bias, native=True)
+    from .ownership import region_reference
+    for r, (p, layout) in enumerate(zip(model.regions, graph.region_layouts)):
+        validate_region(p, layout, region_reference(graph, model, r), native=True)
     g = core.Graph()
     nodes = []
     for n in graph.nodes:

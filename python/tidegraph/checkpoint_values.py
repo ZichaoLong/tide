@@ -19,15 +19,25 @@ def encode(continuation):
     }
 
 
-def decode(record, device=None):
-    def place(value):
-        return value.to(device) if device is not None else value
+def decode(record, device=None, *, graph=None, model=None):
+    if model is not None and (graph is None or device is not None):
+        raise ValueError("owner-aware decode requires graph/model and no global device")
+    from .ownership import region_reference
+    def place(value, owner, region=False):
+        target = device
+        if model is not None:
+            if type(owner) is not int:
+                raise ValueError("checkpoint tensor owner must be int64")
+            if not 0 <= owner < (len(model.regions) if region else len(model.nodes)):
+                raise ValueError("invalid checkpoint tensor owner")
+            target = (region_reference(graph, model, owner) if region else model.nodes[owner].bias).device
+        return value.to(target) if target is not None else value
     return Continuation(record["identity"], record["batch_size"], record["cut"],
-                        {k: State(place(s[0]), s[1], s[2], {n: place(v) for n, v in s[3].items()})
+                        {k: State(place(s[0], k[1]), s[1], s[2], {n: place(v, k[1]) for n, v in s[3].items()})
                          for k, s in record["states"].items()},
-                        {k: History(h[0], h[1], h[2], {n: place(v) for n, v in h[3].items()})
+                        {k: History(h[0], h[1], h[2], {n: place(v, k[1], True) for n, v in h[3].items()})
                          for k, h in record["history"].items()},
-                        [Atom(a[0], a[1], a[2], a[3], a[4], a[5], place(a[6])) for a in record["pending"]],
+                        [Atom(a[0], a[1], a[2], a[3], a[4], a[5], place(a[6], a[1])) for a in record["pending"]],
                         record["ledger"])
 
 

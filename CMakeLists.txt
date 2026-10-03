@@ -37,7 +37,7 @@ add_library(tidegraph STATIC
   cpp/src/graph.cpp cpp/src/ports.cpp cpp/src/ops.cpp cpp/src/full_kernel.cpp cpp/src/full_evaluate.cpp cpp/src/isolated_linear.cpp cpp/src/full_rows.cpp cpp/src/row_emit.cpp cpp/src/pool.cpp cpp/src/dense.cpp
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
-  cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp
+  cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp cpp/src/ownership.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp
@@ -84,6 +84,8 @@ add_executable(tidegraph-read-precision-check cpp/test/read_precision.cpp cpp/be
 target_link_libraries(tidegraph-read-precision-check PRIVATE tidegraph_runtime)
 add_executable(tidegraph-placement-check cpp/test/placement.cpp cpp/bench/compare.cpp)
 target_link_libraries(tidegraph-placement-check PRIVATE tidegraph_runtime)
+add_executable(tidegraph-payload-ownership-check cpp/test/payload_ownership.cpp cpp/bench/compare.cpp)
+target_link_libraries(tidegraph-payload-ownership-check PRIVATE tidegraph_runtime)
 if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
   foreach(dtype float32 float64)
     add_test(NAME runtime-${dtype} COMMAND tidegraph-runtime-check --device=cpu --dtype=${dtype})
@@ -91,6 +93,7 @@ if(BUILD_TESTING AND TIDE_BACKEND STREQUAL "CPU")
     add_test(NAME settle-${dtype} COMMAND tidegraph-settle-check --device=cpu --dtype=${dtype})
     add_test(NAME read-precision-${dtype} COMMAND tidegraph-read-precision-check --device=cpu --dtype=${dtype})
     add_test(NAME placement-${dtype} COMMAND tidegraph-placement-check --device=cpu --dtype=${dtype})
+    add_test(NAME payload-ownership-${dtype} COMMAND tidegraph-payload-ownership-check --device=cpu --dtype=${dtype})
   endforeach()
 endif()
 add_executable(tidegraph-kernel-check cpp/test/custom_kernel.cpp cpp/test/content_programs.cpp cpp/test/read_programs.cpp cpp/test/next_programs.cpp cpp/test/region_programs.cpp cpp/test/fiber_policy.cpp cpp/test/state_clocks.cpp)

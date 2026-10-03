@@ -1,4 +1,5 @@
 #include "tide/region.h"
+#include "tide/ownership.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -29,7 +30,7 @@ Selection evaluate_selection(const Graph& g, const Model& m, const History* prev
   const Owner owner{first.batch, g.nodes[first.node].region};
   const auto layout = region_layout(g, owner.second);
   const auto& w = m.regions[owner.second];
-  const auto& ref = m.nodes[0].bias;
+  const auto& ref = region_reference(g, m, owner.second);
   std::vector<Candidate> candidates;
   std::set<Index> nodes;
   Index previous = -1;
@@ -41,7 +42,7 @@ Selection evaluate_selection(const Graph& g, const Model& m, const History* prev
   }
   History initial;
   if (!previous_history) {
-    initial = w.kernel->initial(w, layout, ref);
+    initial = w.kernel->initial(w, layout, m.nodes[0].bias.to(ref.device()));
     validate_history(initial, layout, ref, first.time-1); w.kernel->validate_history(initial, layout);
   }
   const auto& old = previous_history ? *previous_history : initial;
@@ -55,6 +56,7 @@ Selection evaluate_selection(const Graph& g, const Model& m, const History* prev
     check_tensor(control, ref, "region selector returned incompatible or nonfinite control");
   }
   validate_history(result.history, layout, ref, first.time); w.kernel->validate_history(result.history, layout);
+  for (auto& [node, control] : result.controls) control = control.to(m.nodes[node].bias.device());
   return result;
 }
 void commit_selection(Continuation& q, Owner owner, Selection result, std::vector<Event>& events,

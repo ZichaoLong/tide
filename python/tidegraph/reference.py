@@ -65,13 +65,16 @@ def run(graph, model, continuation, external, stop, *, sealed_until,
                     arrival = time + edge.delay
                     if arrival >= 2**63:
                         raise ValueError("logical time overflow")
-                    message = Atom(batch, edge.target, arrival, 1, e, time, result.emitted[slot] * model.edge_scale[e])
+                    value = result.emitted[slot]
+                    payload = (value * model.edge_scale[e].to(value.device)).to(model.nodes[edge.target].bias.device)
+                    message = Atom(batch, edge.target, arrival, 1, e, time, payload)
                     available.append(message)
                     messages.append(message)
                 for port, source in enumerate(graph.outputs):
                     slot = graph.ports.output[port]
                     if source == node and slot in result.emitted:
-                        outputs.append((batch, time, port, result.emitted[slot] * model.output_scale[port]))
+                        value = result.emitted[slot]
+                        outputs.append((batch, time, port, value * model.output_scale[port].to(value.device)))
             event.pop("_comparison_state")
             event.pop("_content")
             if trace:

@@ -72,7 +72,7 @@ class Session:
         if not {"weights", "aliases", "optimizer", "optimizer_layout"} <= record.keys():
             raise ValueError("malformed checkpoint ownership")
         try:
-            candidate = decode(record, device=self.runtime.device)
+            candidate = decode(record, graph=self.runtime.execution_graph, model=self.runtime.execution_model)
         except (KeyError, TypeError, IndexError, AttributeError) as error:
             raise ValueError("malformed checkpoint continuation") from error
         if candidate.batch_size != self.continuation.batch_size:

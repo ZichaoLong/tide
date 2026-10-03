@@ -26,7 +26,8 @@ ValidatedInput validate_external(const Graph& g, const Model& m, const Continuat
       throw std::invalid_argument("noncontiguous/nonmonotonic port history");
     if (x.time <= last.second) throw std::invalid_argument("noncontiguous/nonmonotonic port history");
     const auto& value = x.value;
-    if (!value.defined() || value.device() != m.nodes[0].bias.device() || value.scalar_type() != m.nodes[0].bias.scalar_type()
+    const auto& ref = m.nodes[g.inputs[x.port]].bias;
+    if (!value.defined() || value.device() != ref.device() || value.scalar_type() != ref.scalar_type()
         || value.sizes() != at::IntArrayRef({m.width()})) throw std::invalid_argument("incompatible tensor dtype/device/shape");
     if (!at::isfinite(value).all().item<bool>()) throw std::invalid_argument("nonfinite tensor");
     result.ledger_updates[owner] = {x.position, x.time};

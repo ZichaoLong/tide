@@ -6,11 +6,13 @@ from .validation import validate_window
 from .checkpoint_ownership import parameter_aliases, optimizer_record, preflight_optimizer
 
 
-def _place_optimizer_state(optimizer, device):
-    for state in optimizer.state.values():
+def _place_optimizer_state(optimizer):
+    for parameter, state in optimizer.state.items():
         for name, value in list(state.items()):
-            if isinstance(value, torch.Tensor) and value.device != device:
-                state[name] = value.to(device)
+            # load_state_dict owns scalar step placement (CPU for ordinary
+            # AdamW, device for capturable/fused modes). Slots follow their leaf.
+            if name != "step" and isinstance(value, torch.Tensor) and value.device != parameter.device:
+                state[name] = value.to(parameter.device)
 
 
 def save(path, graph, model, continuation, optimizer=None):
@@ -32,11 +34,11 @@ def load(path, graph, model, optimizer=None):
         raise ValueError("checkpoint schema/graph mismatch")
     actual = record["weights"]
     validate_weights(model, actual, record["aliases"])
-    q = decode(record, device=model.nodes[0].bias.device)
+    q = decode(record, graph=graph, model=model)
     validate_window(graph, model, q, [], q.cut, q.cut)
     preflight_optimizer(model, optimizer, record["optimizer_layout"], record["optimizer"], actual)
     model.load_state_dict(actual)
     if optimizer is not None:
         optimizer.load_state_dict(record["optimizer"])
-        _place_optimizer_state(optimizer, model.nodes[0].bias.device)
+        _place_optimizer_state(optimizer)
     return q

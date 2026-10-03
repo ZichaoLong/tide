@@ -274,6 +274,15 @@ NPU CSR fiber pooling is outside the supported execution policies;
 callers select `event` explicitly. No implicit CSR conversion or host execution
 is used to make an unsupported request pass.
 
+The [eager payload-owner extension](execution-placement.md#eager-payload-owners)
+keeps node state/KV and delivered messages on their declared owners, gathers each
+complete region frame for selection, and preserves differentiable per-message
+copies and canonical parameter aliases. Ownership and schedule do not change
+graph identity, message identity or checkpoint v5. Checkpoint loading may remap
+owners; it remains an explicit autograd boundary. This extension is separate from
+device-resident progression and from packed multi-device performance acceptance.
+
+
 ## Configurable low precision
 
 The explicitly selected FP16 extension retains the same graph, delay, scheduling,

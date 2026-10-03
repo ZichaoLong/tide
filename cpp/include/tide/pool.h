@@ -18,9 +18,10 @@ class NodePool {
   NodePool(const NodePool&) = delete;
   NodePool& operator=(const NodePool&) = delete;
   void run(std::vector<std::function<void()>> jobs);
-  void set_device(c10::Device device) { device_ = device; }
+  void set_device(c10::Device device) { devices_ = {device}; }
+  void set_devices(std::vector<c10::Device> devices) { devices_ = std::move(devices); }
  private:
-  std::optional<c10::Device> device_;
+  std::vector<c10::Device> devices_;
   std::vector<std::thread> workers_;
   std::queue<std::packaged_task<void()>> queue_;
   std::mutex mutex_;

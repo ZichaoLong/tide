@@ -24,7 +24,7 @@ class PlacedRegion final : public RegionKernel {
     const bool lh = spec_.selector == "lh-count-affect-v1";
     const bool memory = spec_.selector == "tensor-history-v1";
     for (const auto& c : r.candidates) {
-      values.push_back(c.descriptor);
+      values.push_back(c.descriptor.to(placement_.control));
       selected.push_back(r.layout.spec.count_priority ? count(r.history, "selected", c.node) : 0);
       if (lh) affected.push_back(count(r.history, "affected", c.node));
       if (memory) slots.push_back(r.layout.slot(c.node));

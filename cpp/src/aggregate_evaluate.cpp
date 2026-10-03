@@ -22,7 +22,7 @@ AggregateInput request(const Graph& g, const Model& m, const Event& event) {
     const auto slot = atom.kind == 0 ? g.source_domain->input[atom.source] : g.source_domain->edge_target[atom.source];
     if (!present.insert(slot).second) throw std::invalid_argument("duplicate logical source in complete fiber");
     result.sources.push_back({slot, visible,
-                              atom.kind == 0 ? m.input_scale[atom.source] : m.agg_scale[atom.source]});
+                              (atom.kind == 0 ? m.input_scale[atom.source] : m.agg_scale[atom.source]).to(atom.value.device())});
   }
   if (result.sources.empty()) throw std::invalid_argument("Aggregate requires a nonempty fiber");
   if (!g.origins.empty())

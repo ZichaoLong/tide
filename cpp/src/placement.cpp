@@ -2,6 +2,7 @@
 #include "tide/device.h"
 #include "tide/kernel.h"
 #include "tide/ops.h"
+#include "tide/ownership.h"
 #include <stdexcept>
 
 namespace tide {
@@ -50,9 +51,11 @@ Model place_model(const Graph& graph, const Model& model, const ExecutionPlaceme
   Model result = model;
   if (result.regions.empty()) result.regions.resize(graph.regions.size());
   for (size_t i = 0; i < result.nodes.size(); ++i)
-    result.nodes[i].read_kernel = placement_detail::read_kernel(graph.nodes[i], model.nodes[i], placement);
+    result.nodes[i].read_kernel = placement_detail::read_kernel(graph.nodes[i], model.nodes[i],
+      resolve_placement(request, model.nodes[i].bias.device()));
   for (size_t i = 0; i < result.regions.size(); ++i)
-    result.regions[i].kernel = placement_detail::region_kernel(graph.regions[i], result.regions[i], placement);
+    result.regions[i].kernel = placement_detail::region_kernel(graph.regions[i], result.regions[i],
+      resolve_placement(request, region_reference(graph, result, i).device()));
   configure_model(graph, result);
   validate_model(graph, result);
   return result;

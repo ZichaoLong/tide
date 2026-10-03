@@ -60,5 +60,6 @@ manifest = {"source": revision(root), "cpp_source_sha256": before, "torch": torc
                                         target / "tidegraph-scale-bench", target / "tidegraph-profile-check",
                                         target / "tidegraph-settle-check", target / "tidegraph-greedy-check",
                                         target / "tidegraph-accelerator-check", target / "tidegraph-runtime-check",
-                                        target / "tidegraph-read-precision-check", target / "tidegraph-placement-check") if p.is_file()}}
+                                        target / "tidegraph-read-precision-check", target / "tidegraph-placement-check",
+                                        target / "tidegraph-payload-ownership-check") if p.is_file()}}
 write_json(target / "build-manifest.json", manifest)

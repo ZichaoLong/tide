@@ -16,12 +16,13 @@ def main():
     parser.add_argument("--build-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", required=True)
+    parser.add_argument("--workload", choices=("placement", "owners"), default="placement")
     args = parser.parse_args()
     if args.device != "npu" and not args.device.startswith("npu:"):
         parser.error("CANN placement profiling requires explicit NPU")
     root = Path(__file__).resolve().parents[1]
     build = args.build_dir.resolve()
-    binary = build / "tidegraph-placement-check"
+    binary = build / ("tidegraph-payload-ownership-check" if args.workload == "owners" else "tidegraph-placement-check")
     normal = build / "build-manifest.json"
     if normal.exists():
         manifest = json.loads(normal.read_text())
@@ -29,6 +30,8 @@ def main():
             parser.error("profile source differs from the native build")
         expected = manifest["binary_sha256"][binary.name]
     else:
+        if args.workload == "owners":
+            parser.error("owner profile requires a source-verified build-manifest.json")
         # Development-only isolated relinks retain exact core source and binary
         # identities. Formal qualification uses the clean full build above.
         manifest = json.loads((build / "checker-build.json").read_text())
@@ -54,13 +57,17 @@ def main():
                "--dtype=float32", "--profile-smoke"]
     report = dict(schema="tide-execution-placement-profile-v1", state="running", source=source,
                   dirty=dirty, build=manifest, command=command,
-                  scope="mixed-C ranking/control plus CPU-FP64-Read anchor; host event dispatch; includes assertions; not throughput")
+                  workload=args.workload,
+                  scope=("two-device eager Attention/HST, mixed-C greedy, two updates/four connected windows; nondefault streams; includes CPU reference/assertions; not throughput"
+                         if args.workload == "owners" else
+                         "mixed-C ranking/control plus CPU-FP64-Read anchor; host event dispatch; includes assertions; not throughput"))
     write_json(out / "result.json", report)
     try:
         with (out / "profile.log").open("w") as log:
             subprocess.run(command, cwd=out, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=180)
         log = (out / "profile.log").read_text()
-        if "standalone-placement: passed" not in log or "scope=profile-smoke" not in log:
+        marker = "payload-ownership: passed cases=1 updates=2 connected_windows=4" if args.workload == "owners" else "standalone-placement: passed"
+        if marker not in log or "scope=profile-smoke" not in log:
             raise RuntimeError("profiled checker did not pass its bounded assertions")
         if "An exception has occurred in process App" in log:
             raise RuntimeError("msprof reported failed application termination")

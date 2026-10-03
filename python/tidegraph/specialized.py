@@ -51,13 +51,14 @@ def _execute(graph, model, initial, external, stop, seal, layers, cyclic, mode, 
             for slot, payload in e["emitted"].items():
                 kind, source = ports.bindings[ports.offsets[node] + slot]
                 if kind == 0:
-                    outputs.append((batch, time, source, payload * model.output_scale[source]))
+                    outputs.append((batch, time, source, payload * model.output_scale[source].to(payload.device)))
                     continue
                 edge = graph.edges[source]
                 arrival = time + edge.delay
                 if arrival >= 2**63:
                     raise ValueError("logical time overflow")
-                a = Atom(batch, edge.target, arrival, 1, source, time, payload * model.edge_scale[source])
+                value = (payload * model.edge_scale[source].to(payload.device)).to(model.nodes[edge.target].bias.device)
+                a = Atom(batch, edge.target, arrival, 1, source, time, value)
                 inbox[edge.target, batch, arrival].append(a); messages.append(a)
         events.extend(block)
     if cyclic:

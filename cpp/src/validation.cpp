@@ -6,6 +6,7 @@
 #include "tide/next.h"
 #include "tide/region.h"
 #include "tide/device.h"
+#include "tide/ownership.h"
 #include <algorithm>
 #include <set>
 #include <stdexcept>
@@ -28,19 +29,21 @@ void validate_model(const Graph& g, const Model& m) {
   const Index d = ref.numel();
   for (size_t node = 0; node < m.nodes.size(); ++node) {
     const auto& w = m.nodes[node];
-    check_tensor(w.decay, ref, {d}); check_tensor(w.weight, ref, {d, d});
-    check_tensor(w.bias, ref, {d}); check_tensor(w.read, ref, {d});
+    const auto& local = w.bias;
+    require(supported_kernel_payload(local) && local.scalar_type() == ref.scalar_type(), "incompatible node payload dtype/device");
+    check_tensor(w.decay, local, {d}); check_tensor(w.weight, local, {d, d});
+    check_tensor(w.bias, local, {d}); check_tensor(w.read, local, {d});
     require(static_cast<bool>(w.kernel), "state kernel is not configured");
     w.kernel->validate_policy(g.nodes[node], g.source_counts[node]);
     w.kernel->validate_weights(w);
     require(static_cast<bool>(w.read_kernel), "Read kernel is not configured");
-    require(w.read_kernel->descriptor_device(ref.device()).type() != c10::DeviceType::PrivateUse1 ||
-            w.read_kernel->descriptor_dtype(ref.scalar_type()) != at::kDouble,
+    require(w.read_kernel->descriptor_device(local.device()).type() != c10::DeviceType::PrivateUse1 ||
+            w.read_kernel->descriptor_dtype(local.scalar_type()) != at::kDouble,
             "NPU does not support the declared norm-fp64-v1 Read precision");
     w.read_kernel->validate_weights(w);
     require(static_cast<bool>(w.next_kernel), "Next kernel is not configured");
     w.next_kernel->validate_weights(w);
-    for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
+    for (const auto& [name, value] : w.extra) check_tensor(value, local, value.sizes());
     require(static_cast<bool>(w.full_kernel), "Full kernel is not configured");
     w.full_kernel->validate_weights(w, g.outgoing_ports.offsets[node+1] - g.outgoing_ports.offsets[node]);
     require(static_cast<bool>(w.aggregate_kernel), "Aggregate kernel is not configured");
@@ -50,20 +53,24 @@ void validate_model(const Graph& g, const Model& m) {
   for (size_t r = 0; r < m.regions.size(); ++r) {
     const auto& w = m.regions[r];
     require(static_cast<bool>(w.kernel), "region kernel is not configured");
-    for (const auto& [name, value] : w.extra) check_tensor(value, ref, value.sizes());
+    const auto& local = region_reference(g, m, r);
+    require(supported_kernel_payload(local) && local.scalar_type() == ref.scalar_type(), "incompatible region payload dtype/device");
+    for (const auto& [name, value] : w.extra) check_tensor(value, local, value.sizes());
     w.kernel->validate_weights(w, region_layout(g, r));
   }
   require(m.input_scale.size() == g.inputs.size() && m.agg_scale.size() == g.edges.size()
           && m.edge_scale.size() == g.edges.size() && m.output_scale.size() == g.outputs.size(),
           "source scale count mismatch");
   for (const auto* group : {&m.input_scale, &m.agg_scale, &m.edge_scale, &m.output_scale})
-    for (const auto& w : *group) check_tensor(w, ref, {});
+    for (const auto& w : *group) {
+      require(supported_kernel_payload(w) && w.scalar_type() == ref.scalar_type(), "incompatible scale dtype/device");
+      check_tensor(w, w, {});
+    }
 }
 std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& q,
                                  const std::vector<External>& external, Index stop, Index seal) {
   require(q.identity == g.identity && q.batch_size > 0, "continuation identity/batch mismatch");
   require(q.cut >= 0 && q.cut <= stop && stop <= seal, "window is unsealed or precedes cut");
-  const auto& ref = m.nodes[0].bias;
   const auto n = static_cast<Index>(g.nodes.size());
   const auto r = static_cast<Index>(g.regions.size());
   const auto p = static_cast<Index>(g.inputs.size());
@@ -71,6 +78,7 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
   for (const auto& [owner, state] : q.states) {
     require(batch(owner.first) && owner.second >= 0 && owner.second < n, "invalid state owner");
     require(state.last_time < q.cut && state.last_time >= -1 && state.observations >= 0, "invalid state clock");
+    const auto& ref = m.nodes[owner.second].bias;
     check_tensor(state.value, ref, {m.width()});
     m.nodes[owner.second].kernel->validate_state(m.nodes[owner.second], state);
     for (const auto& [name, value] : state.slots) check_tensor(value, ref, value.sizes());
@@ -78,7 +86,7 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
   for (const auto& [owner, history] : q.history) {
     require(batch(owner.first) && owner.second >= 0 && owner.second < r, "invalid history owner");
     auto layout = region_layout(g, owner.second);
-    validate_history(history, layout, ref, q.cut-1);
+    validate_history(history, layout, region_reference(g, m, owner.second), q.cut-1);
     m.regions[owner.second].kernel->validate_history(history, layout);
   }
   for (const auto& [owner, last] : q.ledger)
@@ -93,7 +101,7 @@ std::vector<Atom> validate_window(const Graph& g, const Model& m, Continuation& 
             && a.time >= q.cut && a.time >= a.position && a.time - a.position == e.delay,
             "invalid pending coordinate");
     require(seen.insert({a.batch, a.source, a.position}).second, "duplicate pending message");
-    check_tensor(a.value, ref, {m.width()});
+    check_tensor(a.value, m.nodes[a.node].bias, {m.width()});
   }
   for (const auto& [owner, last] : input.ledger_updates) q.ledger[owner] = last;
   return input.atoms;

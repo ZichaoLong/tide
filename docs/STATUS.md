@@ -1,163 +1,210 @@
 # Current handoff
 
-Updated 2026-10-03. **PAUSED after this round under the latest user authorization
-to pause after committing and receive a progress summary.** Overall F1–F7 is
-incomplete. All current development and qualification jobs are terminal; no new
-B512 pilot or mixed-multi-card work was launched in this round. Resume on user
-instruction. No subagents; reference repositories and ObsidianVault are read-only.
+Updated 2026-10-03. **PAUSED after this implementation commit/push, by the user's
+explicit request.** Do not start clean qualification, another increment or a new
+goal. The user will cancel the old paused goal and then authorize creation and
+execution of its replacement. Repository next-action text never overrides a user
+pause; commits, evidence and context compression do not themselves resume work.
+Overall F1–F7 remains incomplete. No current-increment job is live.
+No subagents; reference repositories and ObsidianVault remain read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
-`/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest implementation
-**af137df13198b4e0bbd5713249369c691204e8e2** is pushed and qualified below.
-This documentation increment contains its separate reviewed evidence.
+`/var/tmp/zlong-graph-execution-foundation/repository`; authorized branch
+`graph-execution-foundation`. This implementation follows qualified implementation
+`af137df13198b4e0bbd5713249369c691204e8e2` and evidence parent
+`dd78b80860a6c9a016ce6a23394238e4c661bb1d`. Resolve this owner implementation with
+`git log -1 --format=%H -- python/tidegraph/ownership.py`.
 Re-entry: `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
 
-## Contract and operation
+## Contract and priorities for the replacement goal
 
-Each candidate independently consumes common inputs, parameters and initial
-state; CPU events/routes/gradients never drive it. General online greedy accepts
-legal topology/input, including positive-delay PDG feedback, and may naturally
-degenerate to streaming. Preserve int64/stable order/duplicate edge identities,
-missing versus zero messages, None versus zero gradients and complete continuation.
-Performance matrix: PDG LibTorch; TimedDAG/Settle LibTorch+PyTorch;
+Deliver the 20-tide public execution/equivalence foundation, including independent
+CPU, mixed and resident execution, complete training and continuation, correctness
+and formal performance comparisons. Model convergence belongs to later experiments.
+Candidates independently consume common inputs/parameters/initial state; CPU events,
+routes and gradients never drive them. General online greedy accepts legal inputs
+and topologies, including positive-delay PDG feedback, and may become streaming.
+Preserve int64/stable order, duplicate edges, missing/zero messages, None/zero
+connections and complete window continuation.
+
+Performance scope: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
 CPU/mixed/resident × streaming/prefill × inference/complete training. Five presets
-plus fine switches; FP32 main and FP16 separate. Training includes forward/loss/
-backward/update/continuation; model convergence belongs to later experiments.
+and fine switches; FP32 main, FP16 separate. Prefer calibrated aggressive-safe
+splitting. Keep 3000s, 1.15 and current capacities comparable unless measurements
+justify changes; never remove protection or rewrite old refusals to pass a gate.
+
+The user accepted bounded performance diagnosis: normally at most two measured
+improvement rounds and about 90 minutes of active diagnosis/tuning per issue;
+already launched jobs retain their declared timeout. Correctness/functionality,
+full-size completion and formal measurement remain required. Optional further
+speed tuning must not indefinitely block independent mainline work. A justified
+longer full-size feasibility run can have a separately declared budget while
+preserving the original 3000s refusal. No speedup threshold was specified.
 
 Implementation commit → clean fixed-source affected qualification → separate
-evidence commit. Commit/push is authorized. User contract outranks experiment
-skill; minimal useful records only. No unrelated passed-test reruns, unlimited
-queues, blind retries, OOM search or relaxed safety gates. Formal heavy timing
-is serial; profiling separate. Never stop another workload to free resources.
-Keep3000s,1.15 and current capacities comparable unless evidence justifies a change.
+reviewed evidence commit. Commit/push is authorized when execution resumes.
+Minimal useful experiment records; user contract outranks experiment skill.
+No unrelated passed-test reruns, unlimited queues, blind retries or OOM search.
+Formal heavy timing is serial and separate from profiling. Never stop other work
+for resources. Temporary card shortages should leave independent work moving.
 
-## This round: journal accounting qualified
+## Current increment: eager payload owners
 
-**af137df** updates Python/C++ consumer admission only: aggressive multi-device
-Attention training charges two live FP32 KV journal banks and one retained bank
-per connected window. Each bank is `rows*(5*8+(2W+1)*4)+4096` bytes. Source review
-confirms one compiled reusable proposal per state owner and deduplicated retained
-journal clones. Conservative/single-device/inference bounds, capacities, other
-storage allowances and margins remain. Runtime/core/CANN bytes are unchanged.
-[Evidence](evidence/consumer-journal-capacity-20261003.md).
+Implemented in public Python, native and independent C++ paths:
 
-Four clean jobs passed/exit0 with empty cgroups and released device leases:
+- Construction-time node ownership with canonical parameter aliases and
+  preallocation rejection of conflicting shared-node placement.
+- Owner-local parameters/state/KV, destination-owned messages/pending, complete
+  region selection and differentiable cross-device controls/scales/messages.
+- Both schedules, complete updates and connected windows; Python checkpoint v5
+  restores continuation and optimizer slots under a changed owner map.
+- Public `node_devices`, actual manifest placement, all-owner synchronization
+  and worker inheritance of nondefault streams on both devices.
+- Owner availability preflight restores the runtime's default device on success
+  and rejection. Custom Region.initial retains node-zero vector/value/VJP.
 
-- `journal-capacity-cpu-clean01`:38 passed,no skips; static inventory/lifetime,
-  C++/Python parity, FP32/FP16 and one/two/four windows, legacy policies.
-- `build-journal-capacity-consumer-clean01`:installed standalone client; compatible
-  objects reused after source/header/options checks, fresh link and loader audit.
-- `journal-capacity-npu-clean01`:17 passed,no skips; sixteen native/standalone,
-  Add/Attention, FP32/FP16, operator/owner-pressure candidates independently compare
-  two complete updates/two connected windows against CPU; one allocation refusal.
-- `journal-capacity-calibration-clean01`:D512/B8/T4/V257,128 body nodes, two devices,
-  physicalB2×4,two connected windows,one FP32 AdamW update. Replay the prior actual
-  owner map/chunks/capacities/budget. Estimates21159582340/13365092892 →
-  17375287940/9580798492bytes; actual peaks6347777024/5545201152 unchanged.
-  Loss7.532632350921631,outputs64,cut80,events3163,stages104,all statistics and
-  continuation-pool records match. This is allocation calibration,not throughput
-  or a runtime-memory saving. No new profile for unchanged execution bytes.
+[Owner contract](execution-placement.md#eager-payload-owners) records the limits.
+Message copies are currently individual. Large-model consumer integration,
+per-device fixed-constant caches, memory/locality planning, packed cross-device
+transport and FP16 owner qualification remain open. This is not F5/F6 closure.
 
-Development `journal-capacity-{cpu,npu}-dev01` and
-`build-journal-capacity-consumer-dev01` also passed before implementation commit.
-Clean source `TASK/sources/journal-capacity-clean01`; client
-`TASK/builds/journal-capacity-consumer-clean01`; unchanged qualified backend
-`memory-balance-standalone-clean02` / `memory-balance-python-clean01` at c38b72e.
-Core dependencies `placement-{cpu,npu,npu-python}-clean01` remain byte-verified.
-Raw logs/status/results: `TASK/runs/NAME`; unit prefix `tide-execution-flows-`.
-Audit passed:
-`python TASK/launchers/journal_capacity_evidence.py af137df13198b4e0bbd5713249369c691204e8e2`.
-Initial calibration-helper static preflight used invalid `owners` keyword and
-failed before device work. Original helper/receipt retained under
-`TASK/launchers/journal_capacity_calibration_preflight_*`; corrected full/state
-map helper is copied and hashed in the successful run. No failed run rewritten.
+### Development verification only
 
-## Established scale results and preceding work
+All jobs below are terminal; successful jobs exited 0, the retained failure exited
+1. Systemd cgroups are empty and NPU lease records are completed. No clean-source
+qualification or separate evidence commit has been performed for this increment.
+All frozen development snapshots derive from dirty dd78b80, not a clean source claim.
 
-**Original Add B512 complete training passed on clean26176de.** Nine devices,
-D2048/B512/T12/V50304,9,468,053,696 parameters,physicalB2×256,two connected windows,
-one FP32 SGD update. Construction69.389676023s; sample2168.898689171s +optimizer
-1.651173068s =2170.549862239s <=3000. Loss30.50836181640625,outputs12288,
-events1183429,cut408; maximum allocator growth43432802304bytes; all memory/context
-checks pass. This is cold feasibility evidence,not formal throughput or a full-
-size CPU gradient oracle. [Evidence](evidence/original-b512-add-training-20261003.md).
-Job `wide-add-b512-phase-admitted01`, source/client `phase-timing-clean01` /
-`phase-timing-consumer-clean01`; evidence f27a4dc. Old whole-step projection
-3041.4433348544s>3000 remains a refusal; phase admission2814.0674665565s retained
-1.15 and all guards. No gate was removed.
+| Job | Observed result |
+| --- | --- |
+| `mixed-owners-cpu-dev01` | Retained failure: 304 passed / 4 failed; bool/float checkpoint owners were rejected, but error text lacked the required int64 label |
+| `mixed-owners-cpu-fix-dev01` | 6 passed: four repaired rejection cases plus two custom Region.initial FP64/FP32 anchors |
+| `mixed-owners-cpp-cpu-dev01` | FP64 and FP32 each passed 12 configurations / 24 updates / 48 connected windows |
+| `mixed-owners-cpp-npu-dev01` | 36 configurations / 72 updates / 144 connected windows; two NPUs, all mixed presets, nondefault streams |
+| `mixed-owners-npu-final-dev01` | 87 Python/native FP32 cases passed, no skips; two NPUs, both schedules, three families, Add/Attention, remapped checkpoint suffix |
+| `mixed-owners-preflight-{cpu,npu}-dev01` | One directed case passed on each backend; real two-NPU availability/default-device success and failure paths |
+| `mixed-owners-profile-dev01` | Separate bounded two-NPU CANN trace passed; one mixed-C Attention/greedy case, 2 updates / 4 connected windows |
 
-All ten required representative submatrices are qualified under ROADMAP F6.
-Original B512 TimedDAG/LibTorch/resident/prefill FP32 inference passed for
-Attention17.521B and Add9.468B. Those qualifications were not repeated here.
+Full CPU/NPU-Python/NPU-standalone builds `build-mixed-owners-*-dev01` passed.
+Their source-verified rebuilds/fresh links `build-mixed-owners-*-dev02` also passed;
+source/header/options/binary hashes and loader closure are recorded. Earlier Python
+CPU 28, Python NPU 42 and native NPU 43 directed cases passed. These overlapping
+runs must not be added into a synthetic qualification total.
 
-**Original-width Attention B4 completed; B512 was refused by measured cost.**
-Fixed joint-map CLI/offline replay is qualified on clean29effae,CPU45/NPU22/build
-([evidence](evidence/consumer-owner-map-20261003.md),140d698). Job
-`wide-attention-owner-pilot01` uses that clean source/client,11devices,
-D2048/T12/V50304,17,521,117,376 parameters,B4/physicalB1×4,two windows,one FP32 SGD
-update,original capacities and the same owner map/chunks as B512. Construction
-282.182195511s; sample47.781389243s +optimizer2.636987134s=50.418376377s.
-Loss20.07830810546875,outputs96,events9256,stages224,cut408; observed allocator
-peaks42.839–43.996GB covered by estimates. Phase forecast7036.453031774s>3000
-at1.15; B512 NOT executed. Terminal/lease/hash audit passed; evidence3ef8ec8
-([report](evidence/original-width-attention-owner-diagnostic-20261003.md)).
-Do not modify audited `TASK/launchers/wide_attention_owner_pilot.py`; new configs
-need a new helper. `wide_attention_b512_admitted.py` remains an unexecuted helper.
+Snapshots: `TASK/sources/mixed-owners-dev04` retains the CPU failure; dev05 has
+repaired error text/initial reference and final owner gates; dev06 adds the profile
+checker mode; dev07 adds the final preflight correction. Main-tree implementation,
+test and build bytes were compared with frozen dev07 before this commit.
+Builds: `TASK/builds/mixed-owners-{cpu,npu-python,npu-standalone}-dev01` (full),
+corresponding dev02 (repaired core and fresh links), and `mixed-owners-profile-dev01`
+(latest checker mode). Preserve these sources/builds and reuse receipts.
 
-Prior private-bank/runtime/storage and placement qualifications remain indexed
-in ROADMAP: b5e6345,219719d,c38b72e and29effae. Preserve their cited sources/builds,
-profiles and failure reproducers. Accounting changes alone do not complete F6.
+Profile `TASK/runs/mixed-owners-profile-dev01/profile/result.json` records 6,786
+operators: 5,174 AI_VECTOR_CORE, 1,017 MIX_AIV, 564 AI_CORE, 31 AI_CPU (23 BOOL/INT64
+ScatterElements and 8 INT64 Sort). The diagnostic observed no host CPU fallback;
+AiCPU remains accelerator execution. Exact int64 ranking cannot be changed to
+float to remove those tasks. The trace includes independent CPU reference,
+initialization and assertions: its 2,184 aclrtMemcpy / 8,072 aclrtSetDevice calls
+and summed task durations are not pure candidate cost or throughput. No new formal
+performance conclusion is claimed. Physical leases were 3,9 for C++/profile/final
+preflight and 1,11 for the final Python/native matrix, remapped to logical 0,1.
 
-## Next work after resumption
+Raw status/log/commands: `TASK/runs/NAME/{status.json,task.log}` and
+`TASK/launchers/NAME.sh`; units `tide-execution-flows-NAME`. Snapshots have adjacent
+`.snapshot.json` inventories. Failed runs and old snapshots were not rewritten.
 
-1. Prove the original rank-aligned packet's finite KV upper bound before changing
-   its experiment capacity: node rank is `ranks[node_regions[v]]`; every delay
-   equals target rank minus source rank. Empty initial state,no warmup,two windows
-   means24 input positions and at most5 incoming atoms per position:120 rows/node.
-   A128-row cap can be safe for that finite horizon if verified; this is not a
-   bound for arbitrary topology,initial KV or unlimited continuation. Do not
-   truncate KV or generalize the finite argument into the scheduler.
-2. Replan with qualified af137df. Old29effae/11-card/KV128 static probes admitted
-   physicalB2 but refused B4; the new B4 plan has not been evaluated. If admitted,
-   use logicalB8/physicalB4×2 pilot with the same B512 map/chunks and complete SGD;
-   two sample groups exercise accumulation. Keep3000s/1.15 and record all phases,
-   allocator/context checks. A single-group B4 pilot is insufficient for the same
-   extrapolation. Full B512 follows only valid admission. Keep old B1 cost refusal.
-   Construction282s informs a separate process timeout; it does not relax the
-   3000s complete-update threshold. No new wide runtime was started this round.
-3. Implement eager mixed multi-card in common Python/native/standalone paths:
-   real parameter/state/message ownership, autograd copies, aliases, region
-   control and owner-aware checkpoint restoration. Existing library/validation
-   assume one payload device. Packed cross-card training must preserve None/zero
-   under isolated roots; naive cat/stack can create connected-zero gradients.
-   Historical accelerator-scale transfer code is reference only,not a substitute
-   for the general public scheduler. No mixed-multi-card code has been changed.
-4. Finish original-scale CPU/screened-mixed/resident inference/complete-training,
-   both schedules and required graph/language cells,three fresh processes per
-   recommendation and separate profiling. Then F7 integration,evidence/support
-   audit and portable build/validation commands. CUDA and other hardware/stacks
-   remain target-machine-pending without real evidence.
+## Established scale results and remaining overall gaps
+
+Original **Add B512 complete training passed** on clean26176de: D2048/B512/T12/
+V50304, 9.468B parameters, nine devices, physical B2×256, two connected windows,
+one FP32 SGD update in 2170.549862239s. This is cold feasibility, not formal
+throughput or a full-size CPU gradient oracle. [Evidence](evidence/original-b512-add-training-20261003.md).
+All ten representative performance submatrices and original Add/Attention B512
+resident/prefill FP32 inference are already qualified under F6; do not rerun them
+without an affected change or unresolved concern.
+
+**Attention B512 complete training remains pending.** The fixed-map original-width
+B4/physical B1×4 pilot on clean29effae completed one update in 50.418376377s;
+its 1.15 phase forecast was 7036.453031774s > 3000s, so B512 was not entered.
+[Retained diagnosis/refusal](evidence/original-width-attention-owner-diagnostic-20261003.md).
+The latest qualified KV-journal admission correction is af137df
+([evidence](evidence/consumer-journal-capacity-20261003.md)); accounting alone did
+not execute B512. Keep these failures and memory/calibration guards intact.
+
+Unexecuted task-local `finite_ranked_horizon.py` and `wide_attention_horizon_pilot.py`
+are unqualified drafts. Review their claimed 48-row bound and physical B4 proposal
+before use; never generalize a fixture-specific bound into the online scheduler.
+Do not modify audited `wide_attention_owner_pilot.py`; use a new helper/config.
+
+After new authorization, priorities are: qualify this owner increment; integrate
+actual mixed consumers with per-device constant caches and complete head/loss/
+synchronization; add capacity/locality and packed transfers with independent gates;
+advance Attention B512 as a separate bounded item; finish original-scale CPU /
+screened-mixed / resident comparisons for both schedules and required languages/
+families, three fresh processes per recommendation, with separate profiles.
+F7 must then audit integration, evidence, support and portable commands. CUDA has
+no local hardware: deliver portable source/build/test commands and retain explicit
+target-machine-pending status, never claim local execution.
+
+## Exact next entry, only after the user starts the replacement goal
+
+Read this handoff and the execution contract first. The first required action is
+clean qualification of this implementation, not another performance diagnosis.
+Use a new frozen source and distinct outputs; the existing reuse helper validates
+all original production source/header/options inventories before fresh linking.
+
+```bash
+TASK=/mi/data2T/zlong/tide-execution-flows
+OWNER_COMMIT=$(git log -1 --format=%H -- python/tidegraph/ownership.py)
+for variant in cpu npu-python npu-standalone; do
+  python "$TASK/launchers/freeze_run.py" \
+    --name "build-mixed-owners-$variant-clean01" --snapshot mixed-owners-clean01 \
+    --commit "$OWNER_COMMIT" -- timeout --signal=TERM --kill-after=10s 180s \
+    '{python}' "$TASK/launchers/mixed_owner_build.py" '{source}' \
+    "$TASK/builds/mixed-owners-$variant-dev01" "$TASK/builds/mixed-owners-$variant-clean01"
+done
+```
+
+Inspect all three terminal builds before submitting dependent gates. If source
+verification rejects reuse, investigate the precise mismatch; do not bypass it.
+Use the same `freeze_run.py --snapshot mixed-owners-clean01 --commit "$OWNER_COMMIT"`
+for all gate commands. Prefix NPU jobs with `--npu --npu-count 2 --max-wait 120`.
+Set `TIDE_BUILD_DIR` to the corresponding clean build, with one ATen/BLAS thread:
+
+- CPU (900s): matching Python `-m pytest -q tests/test_payload_ownership.py
+  tests/test_placement.py tests/test_library.py tests/test_library_cases.py
+  tests/test_checkpoint.py tests/test_checkpoint_ownership.py
+  tests/test_coordinate_checkpoints.py tests/test_checkpoint_process.py
+  tests/test_region_continuation.py tests/test_fp16_library.py --dtype both`.
+- Python/native NPU (600s): `TIDE_PAYLOAD_BACKEND=npu`, matching Python `-m pytest
+  -q tests/test_payload_ownership.py --dtype float32`, NPU-Python clean build.
+- Standalone (180s CPU / 300s NPU): `tidegraph-payload-ownership-check --device=cpu
+  --dtype=float64`, then CPU float32; NPU `--device=npu:0 --dtype=float32`.
+- Separate profile (600s): matching Python `scripts/profile_execution_placement.py
+  --build-dir "$TASK/builds/mixed-owners-npu-standalone-clean01"
+  --output-dir '{out}/profile' --device npu:0 --workload owners`.
+
+Inspect exact source/binary identities, exit codes, expected counts, empty cgroups
+and released leases before the separate reviewed evidence commit. These commands
+are a future handoff, not authorization to run them during the current pause.
 
 ## Environment and protected state
 
-`TASK=/mi/data2T/zlong/tide-execution-flows`; public module
+`TASK=/mi/data2T/zlong/tide-execution-flows`; user-authorized public module
 `libtorch-npu/2.10.0-cann9.0.0`; Python
 `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-User-authorized /opt stack supersedes the old private guide.
-`TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`; preserve module PYTHONPATH,
-prepend frozen source/python; lease/remap devices; runtime `env -C {out}`.
-Last free disk:data157GiB/root11GiB; recheck before major writes. Long jobs use
-`TASK/launchers/freeze_run.py`,frozen source,background.slice,Nice10,two build
-workers,explicit timeout and120s device lease wait. Never call a live job passed.
+The authorized /opt stack supersedes the old private guide. Preserve module
+PYTHONPATH and prepend frozen source/python; use logical devices after leases.
+`TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`. Long jobs use background.slice,
+Nice10, two build workers, explicit timeouts and 120s device lease waits.
+Last free disk: data157GiB/root11GiB; recheck before large writes.
 
 **Protect deliberately SIGSTOPped historical-cpu-attention-01**: never resume,
 stop or clean it. Its historical running record and held old `timing.lock` do
-not block current work,which uses `online-measurement.lock`. The latest read-only
-inspection leaves its service and cgroup intact. Historical1.6438× was a restricted
-flow result,not general-online evidence. Archive:
+not block current work, which uses `online-measurement.lock`. No signal or cleanup
+was issued to it. Historical 1.6438× was a restricted-flow result; archive
 `archive/restricted-flow-20260930` at964bf628c67270200dabe55b1bca026bd403cd37.
-Historical `build-reverse-gather-python-dev01` metadata inconsistency remains
-visible; `status.py` exits1 for that record,not a current failure. Do not rewrite it.
+Historical `build-reverse-gather-python-dev01` metadata inconsistency remains:
+`status.py` exits1 for that record, not a current-increment failure. Do not rewrite it.

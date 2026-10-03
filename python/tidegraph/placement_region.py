@@ -34,7 +34,7 @@ class PlacedRegion(RegionProgram):
         if not nodes:
             raise ValueError("empty placed region input")
         p = self.placement
-        descriptors = torch.stack([value for _, value in r.candidates]).to(p["control"])
+        descriptors = torch.stack([value.to(p["control"]) for _, value in r.candidates])
         scores = descriptors
         if self.profile == "tensor-history-v1":
             ids = torch.tensor([r.layout.slots[node] for node in nodes], device=self.bias.device, dtype=torch.int64)

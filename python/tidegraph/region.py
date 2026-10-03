@@ -155,13 +155,16 @@ def validate_program(program, layout, reference, *, native=False):
 def evaluate(graph, model, q, batch, region, time, candidates):
     """Only called for a complete, canonical nonempty candidate set."""
     layout, p = graph.region_layouts[region], model.regions[region]
-    reference = model.nodes[0].bias
+    from .ownership import region_reference
+    reference = region_reference(graph, model, region)
     nodes = [v for v, _ in candidates]
     if not nodes or nodes != sorted(set(nodes)) or any(v not in layout.slots for v in nodes):
         raise ValueError("invalid region candidate domain/order")
     old = q.history.get((batch, region))
     if old is None:
-        old = p.initial(layout, reference)
+        # Keep the established initial() reference (node zero's vector and VJP)
+        # while placing its history on this region's owner.
+        old = p.initial(layout, model.nodes[0].bias.to(reference.device))
         validate_history(old, layout, reference, time-1)
         p.validate_history(old, layout)
     result = p.step(RegionInput(old, time, tuple(candidates), layout, reference.dtype, reference.device))
@@ -180,4 +183,5 @@ def evaluate(graph, model, q, batch, region, time, candidates):
     validate_history(result.history, layout, reference, time)
     p.validate_history(result.history, layout)
     q.history[batch, region] = result.history
+    result.controls = {node: value.to(model.nodes[node].bias.device) for node, value in result.controls.items()}
     return result.active, result.controls, result.history

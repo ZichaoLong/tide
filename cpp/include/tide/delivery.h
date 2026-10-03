@@ -14,8 +14,9 @@ void deliver(const Graph& g, const Model& m, const Event& e, Message&& message, 
     if (binding.kind == 1) {
       const auto& edge = g.edges[id];
       if (e.time > std::numeric_limits<Index>::max() - edge.delay) throw std::overflow_error("logical time overflow");
-      message(Atom{e.batch, edge.target, e.time + edge.delay, 1, id, e.time, emission.value * m.edge_scale[id]});
-    } else output(Output{e.batch, e.time, id, emission.value * m.output_scale[id]});
+      auto value = (emission.value * m.edge_scale[id].to(emission.value.device())).to(m.nodes[edge.target].bias.device());
+      message(Atom{e.batch, edge.target, e.time + edge.delay, 1, id, e.time, value});
+    } else output(Output{e.batch, e.time, id, emission.value * m.output_scale[id].to(emission.value.device())});
   }
 }
 }  // namespace tide

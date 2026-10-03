@@ -1,4 +1,5 @@
 #include "tide/placement.h"
+#include "tide/ownership.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
 
@@ -15,4 +16,5 @@ void bind_placement(py::module_& m) {
   m.def("resolve_placement",[](const ExecutionPlacement& p,at::Device payload){return resolve_placement(p,payload).record();},
         py::arg("placement"),py::arg("payload_device"));
   m.def("place_model",&place_model,py::arg("graph"),py::arg("model"),py::arg("placement"));
+  m.def("place_payloads",&place_payloads,py::arg("graph"),py::arg("model"),py::arg("node_devices"));
 }

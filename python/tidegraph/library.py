@@ -23,7 +23,7 @@ class GraphRuntime:
     in this object. Several sessions may share its parameters.
     """
     def __init__(self, config, *, device, options=None, native_library=None, resident_library=None, model=None,
-                 model_device=None):
+                 model_device=None, node_devices=None):
         self.config = config if isinstance(config, GraphConfig) else GraphConfig.from_dict(config)
         c = self.config
         requested = c.execution if options is None else options
@@ -39,6 +39,25 @@ class GraphRuntime:
         from .placement import request as placement_request, validate as validate_placement
         self.placement = placement_request(requested.placement).resolve(self.device)
         self.resident = self.placement["events"].type != "cpu"
+        from .ownership import place_payloads, payload_devices
+        self.requested_node_devices = None if node_devices is None else tuple(str(d) for d in node_devices)
+        owners = None if node_devices is None else tuple(torch.device(d) for d in self.requested_node_devices)
+        if owners is not None:
+            if self.resident:
+                raise ValueError("eager node_devices cannot replace resident session placement")
+            if len(owners) != len(c.graph.nodes) or not owners or owners[0] != self.device:
+                raise ValueError("node_devices must cover every node and start with the runtime device")
+            if any(d.type != self.device.type or (d.type != "cpu" and d.index is None) for d in owners):
+                raise ValueError("runtime payload owners require indexed devices of one backend")
+            for owner in dict.fromkeys(owners):
+                validate_placement(c.graph, getattr(torch, c.dtype), placement_request(requested.placement).resolve(owner))
+            try:
+                for owner in dict.fromkeys(owners):
+                    resolve_device(str(owner))
+            finally:
+                # Availability checks select devices; keep the runtime's default
+                # even when a later owner is unavailable.
+                resolve_device(str(self.device))
         self.requested_model_device = None if model_device is None else str(model_device)
         self.model_device = self.device if model_device is None else torch.device(model_device)
         if self.model_device != self.device and not (self.resident and self.model_device == torch.device("cpu")):
@@ -57,23 +76,33 @@ class GraphRuntime:
             from .settle import SettleGraph
             self.spec = SettleGraph(c.graph, c.ranks)
         self.model = model if model is not None else Model(c.graph, c.width, c.seed, getattr(torch, c.dtype),
-                                                         projection_layout=c.projection_layout).to(self.model_device)
+                                                         projection_layout=c.projection_layout)
+        if model is None:
+            if owners is None:
+                self.model.to(self.model_device)
+            else:
+                place_payloads(c.graph, self.model, owners)
         if model is None and c.scale_init is not None:
             with torch.no_grad():
                 for name in ("input_scale", "output_scale", "agg_scale", "edge_scale"):
                     for parameter in getattr(self.model, name):
                         parameter.fill_(c.scale_init)
         if (self.model.width != c.width or self.model.graph_identity != c.graph.identity
-                or any(p.device != self.model_device or p.dtype != getattr(torch, c.dtype)
+                or any((owners is None and p.device != self.model_device) or p.dtype != getattr(torch, c.dtype)
                        for p in self.model.state_dict().values())):
             raise ValueError("supplied model does not match configured width/nodes/device/dtype")
+        if owners is not None:
+            for node, device in zip(self.model.nodes, owners):
+                if any(p.device != device for p in (*node.parameters(), *node.buffers())):
+                    raise ValueError("supplied node tensors do not match node_devices")
+        self.payload_devices = (self.device,) if self.resident else payload_devices(self.model)
         if self.spec:
             self.execution_graph, self.execution_model = self.spec.embed(self.model)
-            # The identity boundary buffers belong on the selected device too.
-            self.execution_model.to(self.model_device)
         else:
             self.execution_graph, self.execution_model = c.graph, self.model
         self.options = requested.resolve(c.family, self.execution_graph)
+        if len(self.payload_devices) > 1 and self.options.placement is None:
+            self.options = replace(self.options, placement=placement_request(None))
         self.engine = None
         if self.resident:
             from .resident_options import ResidentLimits, validate_resident
@@ -149,7 +178,8 @@ class GraphRuntime:
         self.execution_model.load_state_dict(record["weights"])
 
     def synchronize(self):
-        synchronize(self.device)
+        for device in self.payload_devices:
+            synchronize(device)
 
     def manifest(self):
         from .version import __version__
@@ -159,7 +189,9 @@ class GraphRuntime:
             digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
         record = dict(schema="tide-runtime-v1", package_version=__version__, package_sha256=digest.hexdigest(),
                       model_origin=self.model_origin,
-                      model_storage=dict(requested=self.requested_model_device, resolved=str(self.model_device)),
+                      model_storage=dict(requested=self.requested_model_device, resolved=str(self.model_device),
+                                         requested_node_devices=self.requested_node_devices,
+                                         node_devices=[str(w.bias.device) for w in self.model.nodes]),
                       configuration=self.config.to_dict(), config_sha256=self.config.identity,
                       runtime=manifest(self.device, self.resolution_reason, getattr(torch, self.config.dtype)),
                       requested_options=self.requested_options.to_dict(), resolved_options=self.options.to_dict(),
@@ -174,4 +206,13 @@ class GraphRuntime:
                                       exported_control_dtype=self.config.dtype,
                                       binaries=self.engine.record["binary_sha256"],
                                       core_sha256=self.engine.record["core"]["cpp_source_sha256"])
+        else:
+            from .ownership import region_reference
+            from .placement import request
+            config = request(self.options.placement)
+            record["eager_owners"] = dict(
+                devices=[str(d) for d in self.payload_devices],
+                nodes=[{k:str(v) for k,v in config.resolve(w.bias.device).items()} for w in self.execution_model.nodes],
+                regions=[{k:str(v) for k,v in config.resolve(region_reference(
+                    self.execution_graph,self.execution_model,r).device).items()} for r in range(len(self.execution_model.regions))])
         return record

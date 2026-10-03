@@ -145,10 +145,11 @@ def deliver(graph, model, events, fibers, messages, outputs):
                 arrival = time + edge.delay
                 if arrival >= 2**63:
                     raise ValueError("logical time overflow")
-                a = Atom(batch, edge.target, arrival, 1, source, time, value * model.edge_scale[source])
+                payload = (value * model.edge_scale[source].to(value.device)).to(model.nodes[edge.target].bias.device)
+                a = Atom(batch, edge.target, arrival, 1, source, time, payload)
                 fibers[batch, edge.target, arrival].append(a); messages.append(a)
             else:
-                outputs.append((batch, time, source, value * model.output_scale[source]))
+                outputs.append((batch, time, source, value * model.output_scale[source].to(value.device)))
 
 
 def canonicalize(graph, result):

@@ -98,16 +98,20 @@ def place_model(graph, model, placement):
     """
     from .placement_read import PlacedRead
     from .placement_region import PlacedRegion
-    p = request(placement).resolve(model.nodes[0].bias.device)
-    validate(graph, model.nodes[0].bias.dtype, p)
+    from .ownership import region_reference
+    config = request(placement)
     if len(model.nodes) != len(graph.nodes) or len(model.regions) != len(graph.regions):
         raise ValueError("placement model/graph size mismatch")
     result = _shallow_module(model)
     nodes = []
     for spec, weights in zip(graph.nodes, model.nodes):
+        p = config.resolve(weights.bias.device)
+        if p["events"].type != "cpu":
+            raise ValueError("host model placement cannot provide device-resident event progression")
         node = _shallow_module(weights)
         node.read_program = PlacedRead(spec, weights.read_program, read_dtype(spec, weights.bias.dtype, p), p["read"])
         nodes.append(node)
     result.nodes = torch.nn.ModuleList(nodes)
-    result.regions = torch.nn.ModuleList(PlacedRegion(spec, program, p) for spec, program in zip(graph.regions, model.regions))
+    result.regions = torch.nn.ModuleList(PlacedRegion(spec, program, config.resolve(
+        region_reference(graph, model, r).device)) for r, (spec, program) in enumerate(zip(graph.regions, model.regions)))
     return result

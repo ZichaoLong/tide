@@ -46,4 +46,4 @@ def objective(result, root="all"):
         terms += [square(m.value) * 0.2 for m in result.continuation.pending]
     if not terms:
         raise ValueError("objective has no tensor roots")
-    return sum(terms)
+    return sum(term.to(terms[0].device) for term in terms)

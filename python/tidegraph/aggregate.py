@@ -103,7 +103,8 @@ def request(graph, model, fiber):
         raise ValueError("Aggregate requires a nonempty fiber")
     node, time = fiber[0].node, fiber[0].time
     sources = [SourceInput(graph.domain.input[a.source] if a.kind == 0 else graph.domain.edge_target[a.source],
-                           view(graph, a), model.input_scale[a.source] if a.kind == 0 else model.agg_scale[a.source]) for a in fiber]
+                           view(graph, a), (model.input_scale[a.source] if a.kind == 0 else
+                                           model.agg_scale[a.source]).to(a.value.device)) for a in fiber]
     if len({s.slot for s in sources}) != len(sources):
         raise ValueError("duplicate logical source in complete fiber")
     if graph.origins:
