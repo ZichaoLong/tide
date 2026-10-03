@@ -61,7 +61,7 @@ Dev02 three builds and native/Python/consumer gates passed. Original
 attention-borrow-native-dev01 stays FAILED/exit1: new whole-bank ownership
 assertion detected field-order mismatch before trajectories; immutable failure
 and corrected dev02 source retained. This evidence commit is documentation only;
-no uncommitted implementation remains.
+Current uncommitted consumer accounting work is listed below.
 
 ## Original scale result and remaining gaps
 
@@ -95,6 +95,31 @@ Eager mixed multi-card remains a library gap: current model/validation assume
 one payload device; real parameter/state/message placement, autograd copies,
 alias ownership and continuation must be implemented in Python and native paths.
 
+## Current implementation awaiting immutable qualification
+
+Consumer private-bank liveness accounting is IMPLEMENTED and DEVELOPMENT-VERIFIED:
+private-bank-capacity-cpu-dev01 CPU26,private-bank-capacity-npu-dev01 NPU25,
+consumer build passed; all terminal exit0,no skips. Code:capacity.py/.h and
+materialized-inventory/legacy-copy tests; contract consumer-capacity.md.
+Aggressive multi-device declared consumers charge frozen projection/Attention
+banks once in forward parameters; conservative/legacy copies stay charged.
+Dynamic records,limits,safety margins and qualified b5e6345 runtime unchanged.
+
+Commit this implementation, then freeze exact REV as private-bank-capacity-clean01.
+Commands use TASK/launchers/freeze_run.py with --commit REV:
+CPU: --name private-bank-capacity-cpu-clean01 -- timeout300 {python} -m pytest
+-q {source}/tests/test_consumer_capacity.py --junitxml={out}/junit.xml --basetemp={out}/pytest.
+Build: build-private-bank-capacity-consumer-clean01, build_capacity_client.py,
+qualified attention-borrow-standalone-clean01 and source/header/options-verified
+private-bank-capacity-consumer-dev01 object reuse. Then NPU25 via the same three
+directed test entries and selector recorded in the dev01 launcher (resident
+library attention-borrow-python-clean01). Queue120s; child600s. Finally
+private-bank-capacity-calibration-clean01 via private_bank_capacity_calibration.py,
+D512/B8/physicalB2,two windows,FP32 AdamW,unchanged backend; queue120s/child420s.
+Audit private_bank_capacity_evidence.py REV; independent evidence commit next.
+No new Attention full-size execution or scale pass yet. Its current coordinator
+still exceeds the static envelope; generic memory-aware placement is next.
+
 ## Next implementation and validation
 
 1. Correct consumer liveness accounting for the now-qualified private projection
@@ -116,7 +141,8 @@ alias ownership and continuation must be implemented in Python and native paths.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-No current compute job remains live except the protected historical task below.
+Current dev jobs are terminal; immutable qualification is the next active work.
+The protected historical task remains separately stopped.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent
 logs/status under `TASK/runs/NAME`. Confirm terminal records,workload exit,result

@@ -207,6 +207,40 @@ def test_shared_training_storage_covers_materialized_inventory(memory,payload,ca
             assert all(d['components']['retained_attention_parameters']==0 for d in result['devices'])
 
 
+@pytest.mark.parametrize('memory',['add','attention'])
+@pytest.mark.parametrize('payload',[2,4])
+def test_private_bank_liveness_covers_model_and_keeps_legacy_copies(memory,payload,capacity_probe):
+    from tools.online_bench.fixture import build_model
+    import torch
+    packet,g=geometry(memory,width=16)
+    _,model,_,_=build_model(packet,dtype=torch.float16 if payload==2 else torch.float32)
+    # Independent inventory: actual forward-bank parameter fields, before padding.
+    total=0
+    for node in model.nodes:
+        for name,value in node.extra.items():
+            if name.startswith(('emit_w_','emit_b_','fiber_')):
+                total+=value.numel()*(4 if name=='fiber_pool' else payload)
+    for devices in (1,3):
+        current=replace(g,payload=payload,devices=devices,windows=1)
+        records=[]
+        for aggressive in (False,True):
+            r=plan(current,Capacities(),Chunks(1,1,1,1,1,1,1),[64*1024**3]*devices,aggressive)
+            assert cpp_plan(capacity_probe,current,Capacities(),Chunks(1,1,1,1,1,1,1),[64*1024**3]*devices,aggressive)==r
+            copies=sum(d['components']['retained_parameter_copies'] for d in r['devices'])
+            borrowed=sum(d['components']['borrowed_parameter_banks'] for d in r['devices'])
+            assert copies+borrowed>=total>0
+            assert (copies==0)==(aggressive and devices>1)
+            assert (borrowed>0)==(aggressive and devices>1)
+            records.append(r)
+        for old,new in zip(records[0]['devices'],records[1]['devices']):
+            saving=new['components']['borrowed_parameter_banks']
+            assert old['phases']['forward_loss']-new['phases']['forward_loss']==saving
+            assert old['phases']['construction']==new['phases']['construction']
+            assert old['phases']['optimizer']==new['phases']['optimizer']
+            for name in ('state_and_kv','journals','roots_and_consumer_gradients','physical_and_canonical_gradients','reverse_workspace'):
+                assert old['components'][name]==new['components'][name]
+
+
 def test_compact_pool_charges_declared_cap_and_pack_workspace(capacity_probe):
     _,g = geometry(width=128)
     g = replace(g,sample_chunks=64)

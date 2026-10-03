@@ -206,7 +206,11 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter
             # RetainedAttention shares immutable QKV/O, parameter biases,
             # decay and pool weights across one backward group's windows.
             # State, KV/log-bias, lengths and journals remain per-window.
-            retained = projection+state_parameters+windows*(2*nodes*w*p+state+p*cache+journals)
+            # The declared consumer has one ordered fiber head group per owner.
+            # Aggressive sharded owners borrow these frozen banks; they are
+            # already charged in forward parameters. Other paths keep copies.
+            parameter_copies = 0 if reuse_parameter_gradients and g.devices > 1 else projection+state_parameters
+            retained = parameter_copies+windows*(2*nodes*w*p+state+p*cache+journals)
             if coordinator:
                 retained += windows*32*(trace+c.queue+c.outputs)*(10*w+64)
                 roots = 4*windows*c.outputs*w+(12 if g.sample_chunks>1 else 8)*v*w
@@ -242,7 +246,9 @@ def envelope(g, c, chunks, owners, canonical, state_owners=None, reuse_parameter
                           retained_pack_workspace=retained_pack,attention_parameter_gradients=attention_gradients,
                           projection_parameter_gradients=projection_gradients,
                           gradient_accumulation_live=accumulation_live,
-                          retained_attention_parameters=state_parameters if g.training else 0)
+                          retained_attention_parameters=state_parameters if g.training else 0,
+                          retained_parameter_copies=parameter_copies if g.training else 0,
+                          borrowed_parameter_banks=projection+state_parameters-parameter_copies if g.training else 0)
         if max(*phases.values(),*components.values()) > MAX:
             raise ValueError('consumer memory extent overflow')
         result.append(dict(index=device,estimated_peak_bytes=max(phases.values()),phases=phases,components=components))

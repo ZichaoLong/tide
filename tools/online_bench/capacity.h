@@ -126,11 +126,15 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
     const Wide head_fixed=32*MiB+4096+8*Wide(c.outputs)+(g.training?4*Wide(c.outputs)*w+4*(3+(p==2))*v*w:0);
     const Wide head_row=(g.training?32:16)*v+(p+(g.training?12:4))*w+160;
     const Wide head_work=coordinator?head_fixed+chunk.at("head")*head_row:0;
-    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0,projection_gradients=0;
+    Wide retained=0,gradients=0,reverse_work=0,communication=0,roots=0,proposal=0,attention_gradients=0,projection_gradients=0,parameter_copies=0;
     if(g.training) {
       // Immutable attention parameters share one retained snapshot per group;
       // numerical state, KV/log-bias, lengths and journals still scale by windows.
-      retained=projection+state_parameters+windows*(2*nodes*w*p+state+p*cache+journals);
+      // Declared consumer: one ordered fiber head group per private owner.
+      // Aggressive sharded retention borrows banks already charged above;
+      // default/conservative/legacy single-device paths retain independent copies.
+      parameter_copies=reuse_parameter_gradients&&g.devices>1?0:projection+state_parameters;
+      retained=parameter_copies+windows*(2*nodes*w*p+state+p*cache+journals);
       if(coordinator){retained+=windows*32*(trace+c.queue+c.outputs)*(10*w+64);roots=4*windows*c.outputs*w+(g.sample_chunks>1?12:8)*v*w;}
       // Add has no QKV/output matrices; projection, scalar aggregate and vector
       // LH/state/Read gradients retain their separate conservative charges.
@@ -162,7 +166,9 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
       {"retained_pack_workspace",bytes(retained_pack)},{"attention_parameter_gradients",bytes(attention_gradients)},
       {"projection_parameter_gradients",bytes(projection_gradients)},
       {"gradient_accumulation_live",bytes(accumulation_live)},
-      {"retained_attention_parameters",bytes(g.training?state_parameters:0)}};
+      {"retained_attention_parameters",bytes(g.training?state_parameters:0)},
+      {"retained_parameter_copies",bytes(parameter_copies)},
+      {"borrowed_parameter_banks",bytes(g.training?projection+state_parameters-parameter_copies:0)}};
     for(const auto& [_,value]:card.phases)card.peak=std::max(card.peak,value);result.push_back(std::move(card));
   }
   return result;

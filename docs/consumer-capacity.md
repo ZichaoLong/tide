@@ -25,12 +25,25 @@ lifetimes have separate envelopes; their maximum is the estimate. Local
 still independent capability ceilings, **not amounts summed as actual HBM**.
 Exceeding those ceilings still fails explicitly.
 
-The training envelope follows qualified storage lifetimes. Immutable
-Attention QKV/output matrices, their parameter biases, decay and pooling weights
-have one retained copy per backward group, shared by all its windows
-(`RetainedAttention`). State, dynamic KV/log-bias, lengths and journals retain
-their per-window charges. `retained_attention_parameters` reports the shared
-part already included in `retained`, not an additional allocation.
+The training envelope follows qualified storage lifetimes. Attention QKV/output
+matrices, parameter biases, decay and pooling weights are shared across each
+backward group's windows. With aggressive sharded execution, the declared
+consumer has one complete ordered fiber head group per owner and borrows its
+private frozen projection/Attention banks. These banks are already charged in
+forward `parameters`; `retained` no longer charges a second copy. Conservative
+and legacy single-device consumers still charge the independent snapshots.
+This requires the matching qualified private-bank backend; it does not assume
+that arbitrary mixed-head/subset library tapes can borrow their gathers.
+
+`retained_parameter_copies` reports actual independent-copy allowance;
+`borrowed_parameter_banks` reports the footprint already included in forward
+parameters. `retained_attention_parameters` remains the included logical shared
+Attention footprint, whether copied or borrowed. None is an extra sum. State,
+dynamic KV/log-bias, lengths, journals and all Full/state/message snapshots retain
+their previous charges. API admission limits and safety margins are unchanged.
+[Private projection](evidence/resident-projection-borrow-20261003.md) and
+[Attention](evidence/resident-attention-borrow-20261003.md) allocator measurements
+establish the backend storage change; the accounting qualification is separate.
 
 With aggressive multi-device training, ordered per-window canonical reduction
 allows the physical projection and event/fiber Attention parameter-adjoint banks

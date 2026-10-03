@@ -210,6 +210,13 @@ loss/statistics unchanged; separate FP16 profile53176ops,zero observed AiCPU.
 Original dev01 ownership failure retained. No full-size Attention training or
 formal throughput claim ([evidence](evidence/resident-attention-borrow-20261003.md)).
 
+F5 consumer private-bank liveness accounting is implemented/development-verified
+(CPU26,NPU25,no skips; clean qualification pending,see STATUS). Only aggressive
+multi-device declared consumers avoid duplicate retained-copy charges for the
+qualified private projection/Attention banks; conservative/legacy copies,all
+dynamic storage/API budgets/margins remain unchanged. No allocation reduction
+or original Attention training result is inferred from accounting alone.
+
 F4/F5 private frozen projection banks are qualified on clean4467493: eight terminal
 jobs,native160trajectories/2560windows/640updates,Python16,consumer32; aggressive
 sharded training borrows only its private banks under the existing publication
