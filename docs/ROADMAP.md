@@ -164,6 +164,11 @@ fresh-process memory calibrations and a separate actual consumer trace
 and FP32 loss/masters/slots are distinct from resident FP32 adjoints. Full-size
 formal comparisons remain open under F6.
 
+F6 original-width CPU/mixed chunk calibration on clean c686096 passed all four
+complete updates, with all measured peaks inside admission
+([evidence](evidence/original-width-eager-chunks-20261003.md)). These are B64 CPU
+and B64/B16 mixed calibrations, not formal timing or B512 completion.
+
 F6 original Attention B512 complete training is now qualified on clean29effae:
 17.521B parameters,11 cards,physicalB1×512,two connected windows,one complete
 FP32 SGD update5695.490452595s;outputs12288,cut408,finite loss,all allocator/context

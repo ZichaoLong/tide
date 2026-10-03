@@ -122,13 +122,44 @@ parameter counts, outputs, continuation and memory checks pass. Raw assessment:
 still matches its manifest. Concurrent bounded CPU development builds/tests
 make this diagnostic feasibility/calibration, not formal throughput.
 
-Next scale question: mixed-A original-width chunks with `wide_eager_chunk_pilot.py`,
-qualified `eager-rss-npu-clean01`,11-card120s lease,60GiB/card,2 ATen threads/four
-workers, AddB64/physicalB32 and AttentionB16/physicalB8. Preserve3000s per child,
-6050s outer and ACL_OP_INIT_MODE=0. Not submitted yet: close the current FP16
-increment first. A queue refusal ends this attempt; no unlimited waiting. Use
-measured phases and unchanged1.15 for explicitly declared originalB512 budgets.
-Do not rerun the completed CPU pilot or infer B512 success from its forecast.
+Mixed chunk pilot `wide-eager-mixed-chunk01` is terminal passed/exit0.
+Add B64/physicalB32:188.765083486s; AttentionB16/physicalB8:77.788109866s.
+Both complete updates pass all capacity checks. Same physical B512 phase
+forecasts with1.15: Add1727.9504790471s,Attention2820.9879602833s; both<=3000s.
+Raw `TASK/runs/wide-eager-mixed-chunk01/assessment/result.json`. These are
+calibration observations, not formal performance; CPU B512 launch overlaps.
+
+Running `wide-eager-mixed-b512-01`, same clean c686096/source/client,
+11-card120s lease. Two original B512 fresh processes sequentially, physical
+Add32/Attention8, two windows/one FP32 SGD update. Same mixed-A/2 ATen threads/
+four workers,60GiB/card,80GiB parameter/4GiB head caps. Keep3000s actual step,
+3240s child/6530s outer,1.15 forecast factor. First failure stops. No result yet.
+
+```bash
+python TASK/launchers/freeze_run.py --name wide-eager-mixed-b512-01 --snapshot eager-rss-clean01 --commit c68609603c310f7121cb6f887afcadd019973209 --npu --npu-count 11 --max-wait 120 -- timeout --signal=TERM --kill-after=10s 6530s env -C '{out}' ACL_OP_INIT_MODE=0 '{python}' '{base}/launchers/wide_eager_mixed_b512.py' --source '{source}' --out '{out}/assessment'
+```
+Unit `tide-execution-flows-wide-eager-mixed-b512-01`; status/log/queue under
+`TASK/runs/wide-eager-mixed-b512-01`. May overlap CPU feasibility, never formal
+throughput. Preserve terminal source/build/packet/admission hashes for audit.
+
+## Parallel CPU Add B512 feasibility
+
+Running `wide-eager-cpu-add-b512-01`, clean c686096/eager-rss-clean01,
+using `wide_eager_cpu_add_b512.py` and the qualified eager-rss CPU client.
+The completed B64/physicalB32 pilot forecasts1502.145802685s with coefficient1.15.
+Run original B512/physicalB32×16, two connected windows, one FP32 SGD update,
+TimedDAG/LibTorch/prefill,16 ATen threads/one worker. Preserve3000s step guard,
+3240s child/3300s outer,512GiB CPU cap; check aggregate half-resource budget
+including192GiB reservation for historical RSS and concurrent mixed host work.
+This overlaps mixed calibration deliberately; neither is formal throughput.
+No result yet. First failure stops; no blind retry.
+
+```bash
+python TASK/launchers/freeze_run.py --name wide-eager-cpu-add-b512-01 --snapshot eager-rss-clean01 --commit c68609603c310f7121cb6f887afcadd019973209 -- timeout --signal=TERM --kill-after=10s 3300s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_add_b512.py' --source '{source}' --out '{out}/assessment'
+```
+Unit `tide-execution-flows-wide-eager-cpu-add-b512-01`, records at
+`TASK/runs/wide-eager-cpu-add-b512-01/{status.json,task.log,assessment/result.json}`.
+Do not overlap formal timing with either diagnostic.
 
 ## Qualified eager FP16 consumers
 
@@ -144,7 +175,7 @@ D2048/six-node, two updates/two windows, scale1,16GiB/device. Actual separate
 Attention mixed-C profile has15180ops,128 AiCPU:80 BOOL/INT64 ScatterElements
 and48 INT64 Sort; no observed host tensor-compute fallback. Not throughput.
 [Reviewed evidence](evidence/eager-fp16-consumers-20261003.md) and its JSON audit
-are ready for their separate evidence commit/push. No mainline job is live.
+committed as db7a284; push completed. The scale jobs below have subsequently started.
 
 Python public FP32MasterOptimizer and independent C++ consumer masters preserve
 FP16 payload autograd gradients,FP32 loss/masters/slots,explicit static scale,
@@ -152,8 +183,50 @@ aliases/None/zero and update boundaries. Master memory charged; FP32 envelopes
 unchanged. No C++ public checkpoint schema extension. Retained dev01 duplicate
 parametrization failure is unchanged. Re-audit:
 `python TASK/launchers/eager_half_evidence.py 7b1fae504ec779143655b9221c82d8c14a69b410`.
-Next: commit/push this evidence, then submit the bounded mixed chunk pilot above.
+Next: finish/audit the scale jobs above; follow with bounded CPU Attention
+policy measurement and continued formal comparisons.
 Continue toward F6/F7 without a per-commit pause; do not rerun unaffected gates.
+
+## Bounded CPU Attention policy diagnosis
+
+Running `wide-eager-cpu-policy01`, clean c686096/eager-rss-clean01,
+qualified CPU client. Exactly two original-width Attention B8/physicalB4×2
+complete updates: (ATen16,workers1) and (ATen1,workers16), packed in both.
+D2048/T12/V50304/480body/17.521B, two connected windows, one FP32 SGD update.
+Each child900s, outer1850s; first failure stops, no further worker sweep. Same
+loss/discrete counts checked after independent executions. Resource discovery
+charges its peak estimate plus387GiB for live CPU Add,historical RSS,mixed host
+work and integration. Shared diagnostic interference is explicit; no formal
+speed recommendation. B512 projections remain forecasts,3000s/1.15 unchanged.
+
+```bash
+python TASK/launchers/freeze_run.py --name wide-eager-cpu-policy01 --snapshot eager-rss-clean01 --commit c68609603c310f7121cb6f887afcadd019973209 -- timeout --signal=TERM --kill-after=10s 1850s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_policy.py' --source '{source}' --out '{out}/assessment'
+```
+Unit `tide-execution-flows-wide-eager-cpu-policy01`; records at
+`TASK/runs/wide-eager-cpu-policy01/{status.json,task.log,assessment/result.json}`.
+No result yet. Do not confuse these policies with the earlier D128 screen.
+
+## Integration CPU gate
+
+Running `integration-cpu-clean01`, clean7b1fae5/eager-half-clean01.
+Run public `scripts/verify.py --device cpu --dtype both` against hash-matching
+`packed-transfer-cpu-clean01`, with installed `eager-half-cpu-clean01` selected
+for standalone checks. One ATen/BLAS thread,1800s outer. This single full CPU
+integration pass checks interactions of the qualified owner/packing/admission/
+FP16 increments; it is not another development sweep. Optional device gates
+remain separate. Running; early failures identified: eight CLI cells require four executables
+absent from the reused component-only CPU build, and one old sample-admission
+test still expects eager automatic chunking to be rejected. Keep this run and
+let remaining tests collect; prepare a complete CPU build and correct only the
+obsolete test expectation. It may overlap the diagnostic scale jobs;
+formal timings wait until all such jobs terminate.
+
+```bash
+python TASK/launchers/freeze_run.py --name integration-cpu-clean01 --snapshot eager-half-clean01 --commit 7b1fae504ec779143655b9221c82d8c14a69b410 -- timeout --signal=TERM --kill-after=10s 1800s env TIDE_ONLINE_BINARY='{base}/builds/eager-half-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/packed-transfer-cpu-clean01' --output-dir '{out}/verification'
+```
+Unit `tide-execution-flows-integration-cpu-clean01`; records
+`TASK/runs/integration-cpu-clean01/{status.json,task.log,verification/result.json}`.
+Retain any failure; fix the affected problem before repeating an appropriate gate.
 
 ## Remaining acceptance and environment
 
