@@ -118,13 +118,16 @@ All ten representative performance submatrices and original Add/Attention B512
 resident/prefill FP32 inference are already qualified under F6; do not rerun them
 without an affected change or unresolved concern.
 
-**Attention B512 complete training remains pending.** The fixed-map original-width
-B4/physical B1×4 pilot on clean29effae completed one update in 50.418376377s;
-its 1.15 phase forecast was 7036.453031774s > 3000s, so B512 was not entered.
-[Retained diagnosis/refusal](evidence/original-width-attention-owner-diagnostic-20261003.md).
-The latest qualified KV-journal admission correction is af137df
-([evidence](evidence/consumer-journal-capacity-20261003.md)); accounting alone did
-not execute B512. Keep these failures and memory/calibration guards intact.
+**Attention B512 complete training passed** on exact29effae, with terminal audit:
+D2048/B512/T12/V50304,17,521,117,376 parameters,11 cards,physicalB1×512,
+two connected windows,one complete FP32 SGD update in5695.490452595s.
+Construction164.822193006s; sample work5692.808817143s; optimizer2.681635452s;
+outputs12288,cut408,finite loss21.380962371826172. All allocator and saved-context
+peaks pass unchanged capacity guards. The separate9000s budget passes; the original
+3000s forecast refusal and1.15 coefficient remain unchanged. This is cold feasibility,
+not formal throughput or a full-size CPU gradient oracle. [Reviewed evidence](evidence/original-b512-attention-training-20261003.md) records
+the complete audit and limitations.
+The B4 forecast was7036.453031774s; measured/forecast=0.8094263441.
 
 Unexecuted task-local `finite_ranked_horizon.py` and `wide_attention_horizon_pilot.py`
 are unqualified drafts. Review their claimed 48-row bound and physical B4 proposal
@@ -134,7 +137,7 @@ Do not modify audited `wide_attention_owner_pilot.py`; use a new helper/config.
 Current authorized priorities are: integrate
 actual mixed consumers with per-device constant caches and complete head/loss/
 synchronization; add capacity/locality and packed transfers with independent gates;
-advance Attention B512 as a separate bounded item; finish original-scale CPU /
+retain the completed Attention B512 evidence; finish original-scale CPU /
 screened-mixed / resident comparisons for both schedules and required languages/
 families, three fresh processes per recommendation, with separate profiles.
 F7 must then audit integration, evidence, support and portable commands. CUDA has
@@ -261,25 +264,47 @@ relocated entries explicitly reuse matching CPU core/client binaries, not a fres
 core rebuild. CUDA support remains implemented/device-unverified; real GPU and
 x86_64 target commands are in `docs/eager-target-validation.md`.
 
+Static original-scale eager planning is retained at
+`TASK/plans/eager-wide-capacity-2c04005.json` (no Torch/model execution).
+For B512 one complete update, 512GiB CPU cap admits Add/Attention with physicalB32;
+11×60GiB mixed cap admits AddB32/AttentionB8. At3 measured+1 warmup connected
+updates,11-card Attention refuses evenB1 under current locality (estimated54.06GiB,
+usable53.875GiB); preserve that refusal, calibrate before deciding placement/budget.
+This is an estimate, not measured capacity or completion.
+
+Independent CPU scale pilot is authorized/prepared as `wide-eager-cpu-pilot01`,
+source `TASK/sources/eager-capacity-clean01`, build `TASK/builds/eager-capacity-cpu-clean01`,
+helper `wide_eager_cpu_pilot.py --source SOURCE --build BUILD --out OUT/assessment`.
+Two fresh processes: original D2048/T12/V50304/480-node Add/Attention parameters,
+B4/physicalB2, two connected windows, one complete FP32 SGD update each;16 ATen
+threads/one node worker,512GiB CPU cap/80GiB parameter cap/4GiB head cap,
+900s per child/1850s outer. First failure stops this finite pilot. This is CPU
+feasibility/RSS calibration concurrent with NPU feasibility, never formal timing
+or a full-size CPU oracle. Record terminal status and complete peaks/phase/loss/
+output/update checks before claiming a pass. Do not signal the historical task.
+
 Keep the CPU reference independent.
 Use affected gates, commit implementation first, then clean qualification and
 separate evidence; no unrelated core-owner reruns. Formal heavy timing is serial.
 
-Independent feasibility item is running (11-card lease acquired):
-`wide-attention-b512-extended01` uses the already-qualified clean29effae
-`TASK/sources/owner-map-clean01`, exact original pilot binary
-`TASK/builds/owner-map-consumer-clean01`, and
-`TASK/launchers/wide_attention_b512_extended.py --source SOURCE --build BUILD
---pilot TASK/runs/wide-attention-owner-pilot01/assessment --out OUT/assessment`.
-This is a new helper; the original3000s refusal/helper are unchanged. Measured
-fixed-layout phase forecast7036.453s with1.15 justifies a separately declared
-9000s complete-update budget,9480s child including measured282s construction,
-9600s enclosing timeout,11-card lease120s. Preserve physicalB1,owner map,chunks,
-60GiB/card,4GiB context pool,all queue/KV/journal capacities and post-run allocator
-checks. The consumer qualification/profile has ended successfully; take
-`online-measurement.lock`. On failure retain the exact result and advance
-independent implementation without a blind retry. This is cold full-size
-feasibility, not formal throughput or a full-size CPU gradient oracle.
+Independent feasibility `wide-attention-b512-extended01` passed/exit0 at
+2026-10-03T07:48:06Z; service inactive/dead,empty cgroup,11-card lease completed.
+Frozen `TASK/sources/owner-map-clean01`,exact source29effae; build
+`TASK/builds/owner-map-consumer-clean01`,original owner-pilot binary. Raw records
+`TASK/runs/wide-attention-b512-extended01/assessment/{result.json,original/result.json}`.
+Terminal audit passed:
+`python TASK/launchers/wide_attention_b512_evidence.py 29effaed064d59b9da930ec3acec810be58b2e1a`.
+No other current-task NPU qualification/profile overlapped. Finite CPU build/gate/
+calibration overlapped, so do not claim isolated throughput. Release of its lease
+unblocks sequential packed-transfer/consumer NPU qualification and profiles.
+
+Next NPU job `packed-transfer-npu-clean01`: exacta785d43 frozen
+`TASK/sources/packed-transfer-clean01`,build`packed-transfer-npu-python-clean01`,
+`tests/test_transfer.py tests/test_payload_ownership.py --dtype float32`,
+`TIDE_TRANSFER_BACKEND=npu TIDE_PAYLOAD_BACKEND=npu`; two-device lease120s,
+900s command bound. Expected119 cases; confirm actual terminal count.
+Then standalone36,actual-consumer40 and separate profile; do not claim passage
+from submission or compilation.
 
 All task outputs are `TASK/runs/NAME/{status.json,task.log}`, units
 `tide-execution-flows-NAME`. Historical failures and the protected paused task

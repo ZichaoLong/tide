@@ -1,0 +1,242 @@
+{
+  "schema": "tide-reviewed-evidence-v1",
+  "source": "29effaed064d59b9da930ec3acec810be58b2e1a",
+  "qualification": "original-width-attention-owner-diagnostic-20261003.json",
+  "jobs": [
+    {
+      "name": "wide-attention-b512-extended01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "cc7ab1208bd46fb5de1805cf54b23671826508f5d99d2d876f88cd084d643b6b",
+        "task.log": "1e7206227379e31d68c5e2182e354d4ccda43a55be6469d2b2003044ca5e5d06",
+        "queue.json": "6974244824fd382a41297259c931393f1349d0613135773ecc9fe07ba8127ef0"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "passed": {
+    "parameters": 17521117376,
+    "batch_execution": {
+      "logical_batch": 512,
+      "requested_sample_chunk_rows": 1,
+      "effective_sample_chunk_rows": 1,
+      "physical_chunks": 512
+    },
+    "construction_seconds": 164.822193006,
+    "seconds": [
+      5695.490452595
+    ],
+    "losses": [
+      21.380962371826172
+    ],
+    "outputs": [
+      12288
+    ],
+    "final_cut": 408,
+    "statistics": [
+      {
+        "borrowed_attention_bytes": 32966553052,
+        "borrowed_projection_bytes": 37783953408,
+        "canonical_stream_chunks": 1123328,
+        "canonical_stream_reserved_bytes": 1478524850,
+        "emission_chunks": 860160,
+        "events": 1184430,
+        "full_chunks": 127766,
+        "head_chunks": 1024,
+        "pending_peak": 384,
+        "retained_attention_bytes": 32966553052,
+        "retained_bytes": 75285812696,
+        "retained_compact_journals": 512,
+        "retained_dense_bytes": 78191301640,
+        "retained_full_bytes": 8085024,
+        "retained_projection_bytes": 37783953408,
+        "retained_window_bytes": 3716355078,
+        "retained_windows": 1024,
+        "reused_attention_gradient_bytes": 32227997132,
+        "reused_projection_gradient_bytes": 37599316160,
+        "reverse_fiber_budget_bytes": 183251937946,
+        "reverse_fiber_groups": 11264,
+        "reverse_fiber_key_rows_max": 32768,
+        "reverse_fiber_key_rows_min": 32768,
+        "reverse_fiber_owner_rows_max": 512,
+        "reverse_fiber_owner_rows_min": 512,
+        "reverse_fiber_query_rows_max": 512,
+        "reverse_fiber_query_rows_min": 512,
+        "reverse_fiber_requested_max": 512,
+        "reverse_fiber_tensor_bytes": 9613366016,
+        "stages": 28672,
+        "streamed_parameter_windows": 1024,
+        "window_events_max": 1182,
+        "window_outputs_max": 12,
+        "window_stages_max": 28
+      }
+    ],
+    "context_storage": {
+      "policy": "compact",
+      "requested_bytes_per_device": 4294967296,
+      "devices": [
+        {
+          "device_index": 0,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 704083100
+        },
+        {
+          "device_index": 1,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1187501492
+        },
+        {
+          "device_index": 2,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1112784920
+        },
+        {
+          "device_index": 3,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1484318280
+        },
+        {
+          "device_index": 4,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 985496104
+        },
+        {
+          "device_index": 5,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 971025104
+        },
+        {
+          "device_index": 6,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 971368384
+        },
+        {
+          "device_index": 7,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1296593808
+        },
+        {
+          "device_index": 8,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1061344000
+        },
+        {
+          "device_index": 9,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1826873240
+        },
+        {
+          "device_index": 10,
+          "budget_bytes": 4294967296,
+          "peak_saved_bytes": 1735744272
+        }
+      ]
+    },
+    "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+    "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+    "phase_timing": {
+      "enabled": true,
+      "measured": [
+        {
+          "sample_work_seconds": 5692.808817143,
+          "optimizer_seconds": 2.681635451999682
+        }
+      ],
+      "warmup": [],
+      "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+      "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+    },
+    "cards": 11,
+    "physical_devices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12
+    ],
+    "peak_growth_bytes": [
+      44727556096,
+      44182386688,
+      44105508352,
+      44438009856,
+      44205197824,
+      43890479616,
+      43857589248,
+      44201283584,
+      43951117312,
+      45131019776,
+      44878287872
+    ],
+    "estimated_peaks_bytes": [
+      57604873694,
+      55100040120,
+      55100040120,
+      55034901816,
+      55383385758,
+      55034901816,
+      55047907268,
+      55047677598,
+      55047677598,
+      55416956574,
+      55249102494
+    ],
+    "usable_bytes_per_device": 57847840768,
+    "effective_chunks": {
+      "full": 16,
+      "emission": 1,
+      "aggregate": 8,
+      "attention": 1,
+      "keys": 128,
+      "reverse": 1,
+      "head": 64
+    },
+    "phase_forecast_seconds": 7036.4530317737,
+    "forecast_ratio": 0.8094263440509771,
+    "b512_executed": true,
+    "complete_step_seconds": 9000,
+    "retained_original_step_seconds": 3000,
+    "retained_original_gate_passed": false
+  },
+  "source_inventory_sha256": "0ebad0bbfd9618097b54f6810bca25dba5cfec180ba5a785aa999932ed46372e",
+  "source_file_count": 1487,
+  "scope": "One independently initialized original D2048/B512/T12/V50304 eleven-card FP32 SGD complete update with two connected windows and physical B1 x512. Actual output/work/cut/loss, finite-update, allocator/context and separately declared cost checks passed. Full-size CPU gradient/update oracle is not claimed; independent reference qualification is at smaller dimensions.",
+  "timing_limitations": [
+    "Cold single update with synchronized phase timing, no warmup, profile or formal throughput recommendation.",
+    "Finite CPU development/qualification/calibration overlapped. Other current-task NPU qualification/profiling was deferred until this terminal run. Not isolated comparative performance.",
+    "Original3000s forecast refusal,1.15 coefficient and all capacity/owner/chunk protections retained. Separate9000s complete-step budget was declared before this run.",
+    "Formal CPU/mixed/resident and remaining family/schedule comparisons stay open."
+  ],
+  "artifacts": {
+    "runs/wide-attention-b512-extended01/status.json": "cc7ab1208bd46fb5de1805cf54b23671826508f5d99d2d876f88cd084d643b6b",
+    "runs/wide-attention-b512-extended01/task.log": "1e7206227379e31d68c5e2182e354d4ccda43a55be6469d2b2003044ca5e5d06",
+    "runs/wide-attention-b512-extended01/queue.json": "6974244824fd382a41297259c931393f1349d0613135773ecc9fe07ba8127ef0",
+    "runs/wide-attention-b512-extended01/assessment/result.json": "ab4164f536574347a1c7108231daeecb1b68e8bdf58733f6f113734d80679d70",
+    "runs/wide-attention-b512-extended01/assessment/launcher.py": "0e39166a614fc8a4f314bbb1b3373d7557e7e6e8321e4ddc809fcee39be7b98f",
+    "runs/wide-attention-b512-extended01/assessment/original.log": "aa2f29c8401e5d2f80b11852f1a7f02b1ee096c212eff3e62809d9d647223181",
+    "runs/wide-attention-b512-extended01/assessment/devices-before.log": "46b882760eac3a16a4cbc6d392186b379ca91217cae5533a576c695021ba337c",
+    "runs/wide-attention-b512-extended01/assessment/devices-after.log": "58fc2b7d059f98a5505581e0971af2e95b1f40028a400dde5b7434d8fd6a99d6",
+    "runs/wide-attention-b512-extended01/assessment/original/result.json": "647aed6d4d768db2a4e4fb8a1928312acb80760e058e0317d3abcee028a911d9",
+    "runs/wide-attention-b512-extended01/assessment/original/consumer/result.json": "a37cb97a1224d94e1ca4dffcf2d07b8121203baf9442fa85f97dcc8168f766ed",
+    "runs/wide-attention-b512-extended01/assessment/original/consumer.log": "de77c256546f560176c6653a1d532a25dce9516632b3728dad995a0e8bc641e5",
+    "builds/owner-map-consumer-clean01/result.json": "a5b7c4465e7898165eaf1a1de25aa0baf352bf1a408bb3c47eaf787a617c6104",
+    "builds/owner-map-consumer-clean01/loader.txt": "3e430f2f81c938cf0049acb8ff926608ef34f4c37b719eb5bd836a5f278e8534",
+    "inputs/fullsize-attention01/workload.json": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a",
+    "runs/wide-attention-owner-pilot01/assessment/result.json": "844aeb026c809e21a1fc37461d7208f27eaa13f3a456fc16a80584cdaaef5da2",
+    "runs/wide-attention-owner-pilot01/assessment/original-plan.json": "393704bb7f06fbdccf7e0aaa97f382e893497e04324e7a1911696e80a1fa46b7",
+    "launchers/wide_attention_b512_evidence.py": "4857fe98e9acad4353cd53fcc84b259b6469cde25084a3867d273735e7cdb7c3"
+  }
+}
