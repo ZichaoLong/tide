@@ -186,8 +186,10 @@ ATen16 did not change BLAS1. Two finite policy probes (three micro shapes and
 six fresh complete-training reduced-topology processes) confirmed3.432×
 descriptive graph throughput with BLAS16;all recorded losses/work counters match.
 The supplemental unfinished BLAS1 CPU Attention cold run was deliberately
-cancelled,not certified;original-width/fullB512 BLAS16 evidence remains required
-([audit](evidence/cpu-blas-policy-20261004.md)). No further node-worker sweep.
+cancelled,not certified. Four original-width continued BLAS16 pilots subsequently
+passed ([width audit](evidence/original-width-cpu-blas16-20261004.md));actual fullB512
+formal evidence remains required ([diagnosis](evidence/cpu-blas-policy-20261004.md)).
+No further node-worker sweep.
 
 F7 matching-core NPU integration on cleane69b3bd passed49 eager and93 resident
 checks,no skips. Fresh resident C++/Ascend C backends for both runtime owners and
@@ -225,8 +227,10 @@ formal comparisons remain open under F6.
 F6 original Add B512 CPU training on clean c686096 passed one complete update:
 1458.897225208s,physicalB32×16,two connected windows,all memory checks within
 admission ([evidence](evidence/original-b512-eager-cpu-add-20261003.md)). Cold
-feasibility only; prior resident event/loss discrepancy remains under diagnosis.
-This does not close the formal full-size comparison matrix.
+feasibility only; the located prior resident near-tie route discrepancy remains
+a strict failure and an accepted numerical limitation,with actual work counts
+disclosed. It is not a new correctness pass or an explanation of all future
+discrepancies. This does not close the formal full-size comparison matrix.
 
 F6 original-width CPU/mixed chunk calibration on clean c686096 passed all four
 complete updates, with all measured peaks inside admission
