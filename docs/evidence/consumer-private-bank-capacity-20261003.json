@@ -1,0 +1,1587 @@
+{
+  "schema": "tide-consumer-private-bank-capacity-v1",
+  "source": "219719dfb15cf9e2c30f7e7facac5feb1a5c19cb",
+  "jobs": [
+    {
+      "name": "private-bank-capacity-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "63ea4f9fbba3ca212245294ddaed61cbadd7a11de9377e44a8c074ce82415671",
+        "task.log": "f8234cd1d53c383d23a0b45c4d24a0f6d9e57ee83292b96ff82c7da15ebc9882"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-private-bank-capacity-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "9e90e386d6318d0a9eda96efc85d7c023ad70bec275d364db48eaeea16c45e1d",
+        "task.log": "877385de11666a97567bad49b7a17ef46564d28da90440422ba2eda63f157a85"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "private-bank-capacity-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "06329cc096fbfb4f197a92fa42a4a2a7a0d90b7b80f318ec6a86b8c31a170260",
+        "task.log": "604c2feffe806beaf2bf2577f0f2c7e72dca240e9b82cee9fa26d9923965f9d7",
+        "queue.json": "c1817ae8633d4e8262b3815b2aeecc9fe8a4defdd0fb199270473125d5bf7ad3"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "private-bank-capacity-calibration-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "6b99d3f1969129dff36739c60547b21cbb78e644b3e5626234c183504b2699d2",
+        "task.log": "eda0f0f5ee1e9f0ad733eca0af276e72ff9e43fc93b811a76e0a54937750ddc7",
+        "queue.json": "61af7858da9759983e54adf2d28ff89d142f2e73ec8844fcf5d56dc886fd1ca5"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "tests": {
+    "cpu": {
+      "passed": 26,
+      "junit_sha256": "11243d9bf4224bfe28dd1412fda361ff1365c164bd6422807f58467043458e01"
+    },
+    "npu": {
+      "passed": 25,
+      "junit_sha256": "b5ca7cc21027180fa227f76500974cc7de60f9a9e72af99738dd4d52601fda2d"
+    }
+  },
+  "audit_helper_sha256": "41da40db9239d245b2a81fc93ec443f86c0f4f74170b20495b33c53c7fec8429",
+  "client": {
+    "manifest_sha256": "8fad6511b3f7a8047f94f20d717b901959a098ca70f305022811f82fd7e697cb",
+    "binary_sha256": "82d1da525631bcebf5e82500002e129c72b0cf282a7e305a182fdd863f202393",
+    "loader_sha256": "fe8876b1b179397372e6ca7fd4b612b3a81f7be4fdebf9d282c7fdd465a247d3",
+    "backend_source": "b5e634588405c47320ff03692bbf6cdb5af1d356",
+    "component_sha256": "23b3b59afe30db3a4136180a01b0cb019d8fc9f300fb6e4737a05c8103469fbe",
+    "consumer_sources": {
+      "resident_capacity.cpp": "179b525434a8d62515928679cab50c747a6061baa44585cb4b9e2ede6e13982c",
+      "resident_run.cpp": "ff819ce34ab5493709f367bcfae0ec9ce73bc8b0fe3acf10b585010b53b5dbcb",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "0776d18dc4cc18eb52c51534e1e8bde06eee08847b32a6a4e5b73cd0c639708b",
+      "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+      "host.py": "e458b4104bac51f816cbea4a684b3b5b44ee532bb85cde01e775ac25970b3801",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "a04c71fe0ed21cf8eab466e1c7c93052d98c64f515a73e2c7698320182a18e50",
+      "memory.cpp": "375a5e1022e48d41b9188a0858e9e1723dede1aa50b935ea0acfa437e56b6216",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "model.cpp": "1304801014388d2c05bf93482e64f1a597de7fbd1fa92989ac0e7619b1ce171b",
+      "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+      "fixture.py": "b2dc9008528d01189be3d7094a4d0e6280b9101a20bc746f93dc884f7a1e625f",
+      "resident_records.cpp": "be63956928432db19f995d41d6161d6ef7eed5e3ce155823baa2efeec4716bc5",
+      "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+      "consumer.h": "56963db7b2f21c4400832f57c7d505d520cf65f52bb50d33c32207ad31c135b1",
+      "capacity.h": "dfde22c28275dd71150864dc2f2164aafd636a4baf654d095f3a5103ae19477b",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "d3f7e75250fd2a3a9a3d8eb0b83a2a642d30863534b6b1520a3d61c1599bafea",
+      "capacity_record.h": "3c3fc7af74d055814e279c81f07fb02a46829a5ecefc4ec4f6ec5ec273423211",
+      "run.cpp": "df94e993cd1e25dfc82c269a13c5cb6db3f065d4295b8373df0393214f6a22d3",
+      "capacity.py": "c8cef0985a191b5621afa98b92f325e8187e09726dd621e7a2f0c86b4b4b29ff",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "cfbb69e25d919d16585e854fac9e2d18e6fac4efd9737a17e3316884be380837",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+      "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+      "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+    },
+    "reused_objects_sha256": {
+      "CMakeFiles/tidegraph-online-bench.dir/main.cpp.o": "beaeae1b00914e40cd5d373a61c4b5cb7adb7e083ab3bcaf3503a02abbd89464",
+      "CMakeFiles/tidegraph-online-bench.dir/config.cpp.o": "96a1926f0ab385e89c8de8cb79dd9f7d031d8f5bf768a8a5149d54c85e1fa99f",
+      "CMakeFiles/tidegraph-online-bench.dir/packet.cpp.o": "4a728f3c97e7e0043b11d5975ef6e8d579012d772821f0804db5b9a22a94f654",
+      "CMakeFiles/tidegraph-online-bench.dir/model.cpp.o": "a57f14d4c37f2cfe7817aa1f1c159eb16f082db21ddedac0e8a3fb9d43ae9477",
+      "CMakeFiles/tidegraph-online-bench.dir/run.cpp.o": "7278c229f2c3f94eabd988e94dc90f2ffea5d2fa811f1aa30111b38feaa1f960",
+      "CMakeFiles/tidegraph-online-bench.dir/records.cpp.o": "006910882d24e0eb64b5c3ebe2f4622d99e740e68a1d3672bc1772b0e2fa6bef",
+      "CMakeFiles/tidegraph-online-bench.dir/memory.cpp.o": "1720f535ea800bcdf029990fb7ea8ea873f83050ea343ca39faa2a7965899e3a",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_run.cpp.o": "375b113802fe165efbcbdf14b20a3b2981ee9b11bf4c4f26b49f523945713a90",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_loss.cpp.o": "54f28c35a1c5119c6077abbf076d080c8a7862fa86280ee9e1dd4ec10ad79a19",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_records.cpp.o": "0133f8f321c39a77eb2b8f282040b3d02147e1b27e60a16042efc9a60fafef82",
+      "CMakeFiles/tidegraph-online-bench.dir/resident_capacity.cpp.o": "eb4ea1007a9f4213fb5ca8e0015b8120b0b608eed25e4f683a44b0087be68756"
+    }
+  },
+  "observations": [
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au0/capacity-result.json",
+      "sha256": "f12b6c8299b04db1a5a4eb03e9c9ab1e9e1c308c8d1afa94d8c17671add6c21e",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "observed_peak_growth_bytes": [
+          54816256,
+          85348864
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1465189360,
+        1304897776
+      ],
+      "usable_bytes": [
+        1465258480,
+        1465258480
+      ],
+      "borrowed_banks": [
+        560,
+        560
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au1/capacity-result.json",
+      "sha256": "f4d75e9834f19d74634c8782d2e2c675aa5e8fef1be5adfebf59c1f16af5a34e",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "observed_peak_growth_bytes": [
+          54811648,
+          85348864
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1465189360,
+        1304897776
+      ],
+      "usable_bytes": [
+        1465258480,
+        1465258480
+      ],
+      "borrowed_banks": [
+        560,
+        560
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au2/capacity-result.json",
+      "sha256": "8d208cc95275c0937550d062b2982f1651ed25d6bc1e5023de59490bce367e73",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "observed_peak_growth_bytes": [
+          56474112,
+          120498688
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1466510660,
+        1306218852
+      ],
+      "usable_bytes": [
+        1466581988,
+        1466581988
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au3/capacity-result.json",
+      "sha256": "713ce1edc89d5de5481d5f52c857f13570a6e03f591b167bb86e8374d457918e",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "observed_peak_growth_bytes": [
+          56469504,
+          120498688
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1466510660,
+        1306218852
+      ],
+      "usable_bytes": [
+        1466581988,
+        1466581988
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au4/capacity-result.json",
+      "sha256": "b3c51521f5c2a2729f06ceaaf7b9dce294f5babdeacb2553dcb2168d2a407272",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "observed_peak_growth_bytes": [
+          54468096,
+          85280256
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1465188392,
+        1304896920
+      ],
+      "usable_bytes": [
+        1465257512,
+        1465257512
+      ],
+      "borrowed_banks": [
+        280,
+        280
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au5/capacity-result.json",
+      "sha256": "147ac6e53b45c7d26b86c4bc2b0983c162d3013c5d907f745721d739f407880a",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "observed_peak_growth_bytes": [
+          54463488,
+          85280256
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1465188392,
+        1304896920
+      ],
+      "usable_bytes": [
+        1465257512,
+        1465257512
+      ],
+      "borrowed_banks": [
+        280,
+        280
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au6/capacity-result.json",
+      "sha256": "9a31c411f3e54f0137f0bba82af5ed1e105571eaf8a84a8f9ba2e434e5ce22ba",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "observed_peak_growth_bytes": [
+          56332800,
+          120636928
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1466493666,
+        1306201970
+      ],
+      "usable_bytes": [
+        1466564994,
+        1466564994
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_complete_training_with_au7/capacity-result.json",
+      "sha256": "1ebf4922129e13c9a3de37cba1e7631b282a37b2621b00015f6b2323cfa193d0",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "observed_peak_growth_bytes": [
+          56328192,
+          120636928
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1466493666,
+        1306201970
+      ],
+      "usable_bytes": [
+        1466564994,
+        1466564994
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co0/observed.json",
+      "sha256": "2d0469b5dc5f113d3b45f9dfd3e35d4eecc56d70c4c90b48fb62f24fcd56d8a8",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "observed_peak_growth_bytes": [
+          87275008,
+          51761152
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        866413780,
+        822046760
+      ],
+      "usable_bytes": [
+        867796689,
+        867796689
+      ],
+      "borrowed_banks": [
+        0,
+        0
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co1/observed.json",
+      "sha256": "2db97714bdb459b19b88485dae9a5abcb09af987b294ad5fe442da9d0f36e2c6",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          87699968,
+          51761152
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        866413780,
+        822046760
+      ],
+      "usable_bytes": [
+        867796689,
+        867796689
+      ],
+      "borrowed_banks": [
+        0,
+        0
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co2/observed.json",
+      "sha256": "b0f442e9678e5ae003e0730edac3617bb08eb48ead0e83eb56e7998d9d6fd174",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459176063537598
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "observed_peak_growth_bytes": [
+          87045120,
+          52687872
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        865618636,
+        821230680
+      ],
+      "usable_bytes": [
+        868920025,
+        868920025
+      ],
+      "borrowed_banks": [
+        0,
+        0
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co3/observed.json",
+      "sha256": "751c3dcdb220ed2afb0c906a1a5afb75aa30cc525c823080d1686b8d7a720672",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459176063537598
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          87370752,
+          52687872
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        865618636,
+        821230680
+      ],
+      "usable_bytes": [
+        868920025,
+        868920025
+      ],
+      "borrowed_banks": [
+        0,
+        0
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co4/observed.json",
+      "sha256": "680a70c01bbc09c844843b7895158642fb8141cc5692c232e151a348c08ceb27",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.9459223747253418,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "observed_peak_growth_bytes": [
+          151392768,
+          215532032
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1726595902,
+        1551293908
+      ],
+      "usable_bytes": [
+        1734030229,
+        1734030229
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co5/observed.json",
+      "sha256": "f8021e7fa18d2b92daface7fdb544830863b1a912e07b64f7a5615a945547c05",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.9459223747253418,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "observed_peak_growth_bytes": [
+          151389184,
+          216186368
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1726595902,
+        1551293908
+      ],
+      "usable_bytes": [
+        1734030229,
+        1734030229
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co6/observed.json",
+      "sha256": "1924dc9451bae1249dcf3a646adb27db7984e370aa6274f82816053b8085d367",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "observed_peak_growth_bytes": [
+          147105280,
+          211364864
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1714197816,
+        1538904126
+      ],
+      "usable_bytes": [
+        1723651009,
+        1723651009
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_automatic_samples_keep_co7/observed.json",
+      "sha256": "293a48c393ee0adf96973f99fe4ec6f6d00f5ff9bbfb43361d89bddf79fa474f",
+      "family": "timed-dag",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 9,
+        "physical_chunks": 2
+      },
+      "losses": [
+        1.945921778678894,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "observed_peak_growth_bytes": [
+          147243008,
+          212865536
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1714197816,
+        1538904126
+      ],
+      "usable_bytes": [
+        1723651009,
+        1723651009
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl0/observed.json",
+      "sha256": "fb2c3fb752ac497f94d3e7cba54e9f4ead53ecefd01da0ad4d497fd5631f889a",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "observed_peak_growth_bytes": [
+          56339968
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1273649294
+      ],
+      "usable_bytes": [
+        48917800960
+      ],
+      "borrowed_banks": [
+        0
+      ],
+      "retained_parameter_copies": [
+        1040
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl1/observed.json",
+      "sha256": "95ffaf5cb081b827fe5f970f78dca622dfc2184a760aa29525199964f92fb72f",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "observed_peak_growth_bytes": [
+          60619264,
+          121523200
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1573445438,
+        1345881600
+      ],
+      "usable_bytes": [
+        58728392704,
+        58675098420
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl2/observed.json",
+      "sha256": "b7a0b90929b937e3e9d24ee4d5852e3b6fdc2561c6fcf767c18187cde9da9a0f",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          56336384
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1273649294
+      ],
+      "usable_bytes": [
+        48877265920
+      ],
+      "borrowed_banks": [
+        0
+      ],
+      "retained_parameter_copies": [
+        1040
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl3/observed.json",
+      "sha256": "abfda820a9472dad6ef9134969a01067d4625696c0ca68d473fd5d60449518ca",
+      "family": "pdg",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          60614656,
+          121523200
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1573445438,
+        1345881600
+      ],
+      "usable_bytes": [
+        58679300916,
+        58626511668
+      ],
+      "borrowed_banks": [
+        1900,
+        1900
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl4/observed.json",
+      "sha256": "f57b609693b216ba10c8647e3d690ff003a6f64267a9d31ebbe85ccfb460539a",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "observed_peak_growth_bytes": [
+          56123392
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1273613950
+      ],
+      "usable_bytes": [
+        48917524480
+      ],
+      "borrowed_banks": [
+        0
+      ],
+      "retained_parameter_copies": [
+        520
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl5/observed.json",
+      "sha256": "a13d632903359aed80d50be74d586ff0642356ad454681ba22bb081654146c0f",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "observed_peak_growth_bytes": [
+          60415488,
+          121706496
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1573362150,
+        1345823000
+      ],
+      "usable_bytes": [
+        58728164148,
+        58675186893
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl6/observed.json",
+      "sha256": "6cf83f529388ab2ae2da302433e1bfaef0d7b9dcabad7c37ea234724daef7e46",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "row_selection": "joint_halving",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          56119808
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1273613950
+      ],
+      "usable_bytes": [
+        48877576192
+      ],
+      "borrowed_banks": [
+        0
+      ],
+      "retained_parameter_copies": [
+        520
+      ]
+    },
+    {
+      "path": "runs/private-bank-capacity-npu-clean01/pytest/test_resident_sample_chunks_fl7/observed.json",
+      "sha256": "0623e6d1e918114b5cb19e87bf37298f9b36f63d7bfa078121075a737bac694a",
+      "family": "pdg",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "row_selection": "greedy_peak_excess",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "observed_peak_growth_bytes": [
+          60410880,
+          121706496
+        ],
+        "allocator_within_estimate": true
+      },
+      "estimated_peaks": [
+        1573362150,
+        1345823000
+      ],
+      "usable_bytes": [
+        58679544218,
+        58627149415
+      ],
+      "borrowed_banks": [
+        974,
+        974
+      ],
+      "retained_parameter_copies": [
+        0,
+        0
+      ]
+    }
+  ],
+  "calibration": {
+    "state": "passed",
+    "source": "219719dfb15cf9e2c30f7e7facac5feb1a5c19cb",
+    "dirty": "",
+    "command": [
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+      "/mi/data2T/zlong/tide-execution-flows/sources/private-bank-capacity-clean01/scripts/run_execution_flow.py",
+      "--packet",
+      "/mi/data2T/zlong/tide-execution-flows/runs/attention-borrow-memory-clean01/memory/workload.json",
+      "--output-dir",
+      "/mi/data2T/zlong/tide-execution-flows/runs/private-bank-capacity-calibration-clean01/calibration/consumer-run",
+      "--device",
+      "npu:0",
+      "--family",
+      "timed-dag",
+      "--implementation",
+      "libtorch",
+      "--native-binary",
+      "/mi/data2T/zlong/tide-execution-flows/builds/private-bank-capacity-consumer-clean01/consumer/tidegraph-online-bench",
+      "--preset",
+      "resident",
+      "--schedule",
+      "prefill",
+      "--dtype",
+      "float32",
+      "--training",
+      "--optimizer",
+      "adamw",
+      "--steps",
+      "1",
+      "--warmup",
+      "0",
+      "--windows-per-step",
+      "2",
+      "--devices",
+      "2",
+      "--chunk-policy",
+      "aggressive",
+      "--sample-chunk-rows",
+      "2",
+      "--resident-context-bytes",
+      "67108864",
+      "--resident-queue",
+      "4096",
+      "--resident-arrivals",
+      "4096",
+      "--resident-outputs",
+      "128",
+      "--resident-trace",
+      "8192",
+      "--resident-kv-trace-rows",
+      "65536",
+      "--resident-workspace-bytes",
+      "137438953472",
+      "--resident-retained-bytes",
+      "34359738368",
+      "--resident-backward-bytes",
+      "2199023255552",
+      "--resident-optimizer-bytes",
+      "34359738368",
+      "--head-workspace-bytes",
+      "268435456",
+      "--parameter-budget",
+      "8589934592",
+      "--device-memory-bytes",
+      "64424509440"
+    ],
+    "helper_sha256": "4190057a35a7cc1c172e3ff08fba62da48777da018401cb59e2b4a5da2c13788",
+    "build_sha256": "8fad6511b3f7a8047f94f20d717b901959a098ca70f305022811f82fd7e697cb",
+    "binary_sha256": "82d1da525631bcebf5e82500002e129c72b0cf282a7e305a182fdd863f202393",
+    "baseline_result_sha256": "4229a9c0828460f1e66339ecde3442489b28974533ae27f9dadae6c276e62f6d",
+    "scope": "New private-bank lifetime estimate, identical qualified backend bytes and D512/B8 Attention workload: four physical B2 groups, two retained windows, one FP32 AdamW update. Compare existing observations; not a same-lease throughput experiment. Original API capacity and margins unchanged.",
+    "consumer_exit_code": 0,
+    "consumer_state": "passed",
+    "result_sha256": "95b869ef98be388cf3a0beb3e3e04dd99c225e9e4aae2116f37952f518b22f5f",
+    "losses": [
+      7.532631874084473
+    ],
+    "statistics": [
+      {
+        "borrowed_attention_bytes": 546327592,
+        "borrowed_projection_bytes": 590450688,
+        "canonical_stream_chunks": 144,
+        "canonical_stream_reserved_bytes": 268758440,
+        "emission_chunks": 184,
+        "events": 3163,
+        "full_chunks": 171,
+        "head_chunks": 8,
+        "pending_peak": 128,
+        "retained_attention_bytes": 546327592,
+        "retained_bytes": 1451150024,
+        "retained_compact_journals": 4,
+        "retained_dense_bytes": 2783083368,
+        "retained_full_bytes": 542752,
+        "retained_projection_bytes": 590450688,
+        "retained_window_bytes": 822881168,
+        "retained_windows": 8,
+        "reused_attention_gradient_bytes": 537923020,
+        "reused_projection_gradient_bytes": 588350000,
+        "reverse_fiber_budget_bytes": 45812984488,
+        "reverse_fiber_groups": 16,
+        "reverse_fiber_key_rows_max": 256,
+        "reverse_fiber_key_rows_min": 256,
+        "reverse_fiber_owner_rows_max": 64,
+        "reverse_fiber_owner_rows_min": 64,
+        "reverse_fiber_query_rows_max": 64,
+        "reverse_fiber_query_rows_min": 64,
+        "reverse_fiber_requested_max": 64,
+        "reverse_fiber_tensor_bytes": 1925475360,
+        "stages": 104,
+        "streamed_parameter_windows": 8,
+        "window_events_max": 400,
+        "window_outputs_max": 8,
+        "window_stages_max": 13
+      }
+    ],
+    "previous_estimated_peaks": [
+      24575275428,
+      16702870820
+    ],
+    "new_estimated_peaks": [
+      24006886288,
+      16134481680
+    ],
+    "previous_observed_peaks": [
+      7233247232,
+      6386085888
+    ],
+    "observed_peaks": [
+      7233247232,
+      6386085888
+    ],
+    "receipt_sha256": "aca4ed72846e3ff03804a09556a80ad7879b3cf4f1d82fbc86f9c1d13838bff1"
+  },
+  "limits": [
+    "Only static consumer admission changed; resident/core/CANN execution bytes are unchanged and pinned to qualified b5e6345.",
+    "Aggressive multi-device declared consumers have complete ordered fiber banks and borrow private projection/Attention parameters already charged in forward storage. Conservative and legacy single-device consumers keep independent-copy allowances. Arbitrary subset/mixed-head library tapes are outside this deduction.",
+    "Dynamic state/KV/message/journal/Full snapshots, gradient/optimizer/accumulation charges, per-device margins and API budgets are unchanged.",
+    "CPU26 and NPU25 passed without skips; 24 actual candidates retain independent CPU checks and one refuses before allocation.",
+    "D512/B8/T4/V257 Attention calibration: physicalB2 x4,two connected windows,one FP32 AdamW update. Identical allocator growth,loss/statistics/continuation with smaller estimates; not a speed experiment.",
+    "No additional profile: runtime component hashes match already qualified b5e6345 binaries. No full-size Attention training or formal performance claim follows."
+  ]
+}

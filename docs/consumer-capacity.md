@@ -43,7 +43,8 @@ dynamic KV/log-bias, lengths, journals and all Full/state/message snapshots reta
 their previous charges. API admission limits and safety margins are unchanged.
 [Private projection](evidence/resident-projection-borrow-20261003.md) and
 [Attention](evidence/resident-attention-borrow-20261003.md) allocator measurements
-establish the backend storage change; the accounting qualification is separate.
+establish the backend storage change; [separate accounting qualification](evidence/consumer-private-bank-capacity-20261003.md)
+keeps actual allocator peaks unchanged and validates the revised envelope.
 
 With aggressive multi-device training, ordered per-window canonical reduction
 allows the physical projection and event/fiber Attention parameter-adjoint banks

@@ -41,7 +41,8 @@ or mutated source and changing ownership mode within a backward group.
 `borrowed_projection_bytes` reports this included storage; the retained API budget
 and `retained_projection_bytes` still charge the same conservative footprint.
 It is not an additional allocation or an allocator-peak measurement. Consumer
-admission estimates remain unchanged until separate calibration.
+admission now has separately qualified [private-bank liveness accounting](evidence/consumer-private-bank-capacity-20261003.md)
+for declared aggressive multi-device consumers; retained API budgets stay unchanged.
 `borrowed_attention_bytes` separately reports the included private event/full-fiber
 bank footprint, summed over owners. It does not report allocator savings; retained
 API admission remains unchanged. Fixed-source qualification and allocator/profile

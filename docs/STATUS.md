@@ -7,8 +7,8 @@ No subagents. Reference repositories and ObsidianVault are read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest implementation **b5e6345** is pushed and
-qualified below. Latest prior evidence **f27a4dc** records actual Add B512 training.
+`graph-execution-foundation`. Latest implementation **219719d** is pushed and qualified below. Prior evidence
+ce3206d qualifies b5e6345 private Attention banks; f27a4dc records actual Add B512 training.
 Re-entry: `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog.
@@ -32,7 +32,7 @@ blind retries, OOM search or relaxed safety gates. Formal heavy timing is serial
 profiling separate. Never stop another workload to free resources. Keep3000s,
 1.15 and current capacities comparable unless evidence justifies a change.
 
-## Latest completed implementation
+## Qualified private-bank backend
 
 **b5e634588405c47320ff03692bbf6cdb5af1d356** qualifies private event/full-fiber
 Attention-bank borrowing during aggressive sharded training. Complete ordered
@@ -95,44 +95,46 @@ Eager mixed multi-card remains a library gap: current model/validation assume
 one payload device; real parameter/state/message placement, autograd copies,
 alias ownership and continuation must be implemented in Python and native paths.
 
-## Current implementation awaiting immutable qualification
+## Latest qualified accounting and current prototype
 
-Consumer private-bank liveness accounting is IMPLEMENTED and DEVELOPMENT-VERIFIED:
-private-bank-capacity-cpu-dev01 CPU26,private-bank-capacity-npu-dev01 NPU25,
-consumer build passed; all terminal exit0,no skips. Code:capacity.py/.h and
-materialized-inventory/legacy-copy tests; contract consumer-capacity.md.
-Aggressive multi-device declared consumers charge frozen projection/Attention
-banks once in forward parameters; conservative/legacy copies stay charged.
-Dynamic records,limits,safety margins and qualified b5e6345 runtime unchanged.
+**219719dfb15cf9e2c30f7e7facac5feb1a5c19cb** qualifies consumer private-bank
+liveness accounting:aggressive multi-device declared consumers charge frozen
+projection/Attention banks once in forward parameters; conservative/legacy
+copies,dynamic records,API limits and safety margins unchanged. Qualified b5e6345
+runtime bytes are unchanged. [Evidence](evidence/consumer-private-bank-capacity-20261003.md).
+Four clean jobs passed/exit0,no skips,empty cgroups,released leases:
+private-bank-capacity-{cpu,npu,calibration}-clean01 and
+build-private-bank-capacity-consumer-clean01. CPU26,NPU25 (24 actual independent
+CPU-referenced candidates plus one pre-allocation refusal). D512/B8/physicalB2,
+two windows,FP32 AdamW:estimates24575275428/16702870820 →24006886288/16134481680;
+actual peaks7233247232/6386085888,loss/statistics/continuation unchanged.
+No allocation or throughput gain follows from accounting. Initial audit helper
+had a stale dependency path; identity check rejected it; corrected helper passed,
+original retained. Audit:
+`python TASK/launchers/private_bank_capacity_evidence.py 219719dfb15cf9e2c30f7e7facac5feb1a5c19cb`.
 
-Commit this implementation, then freeze exact REV as private-bank-capacity-clean01.
-Commands use TASK/launchers/freeze_run.py with --commit REV:
-CPU: --name private-bank-capacity-cpu-clean01 -- timeout300 {python} -m pytest
--q {source}/tests/test_consumer_capacity.py --junitxml={out}/junit.xml --basetemp={out}/pytest.
-Build: build-private-bank-capacity-consumer-clean01, build_capacity_client.py,
-qualified attention-borrow-standalone-clean01 and source/header/options-verified
-private-bank-capacity-consumer-dev01 object reuse. Then NPU25 via the same three
-directed test entries and selector recorded in the dev01 launcher (resident
-library attention-borrow-python-clean01). Queue120s; child600s. Finally
-private-bank-capacity-calibration-clean01 via private_bank_capacity_calibration.py,
-D512/B8/physicalB2,two windows,FP32 AdamW,unchanged backend; queue120s/child420s.
-Audit private_bank_capacity_evidence.py REV; independent evidence commit next.
-No new Attention full-size execution or scale pass yet. Its current coordinator
-still exceeds the static envelope; generic memory-aware placement is next.
+Uncommitted next-work **capacity_balance.py** is an unintegrated Python prototype:
+bounded static owner moves from complete-envelope costs; at most2×nodes moves,
+4096 envelope trials,strict memory-score improvement and physical-edge locality
+for ties. Shape-equivalent donor nodes share a trial; integer budgets only, no
+model values/events/routes. A draft static original-Attention12-card/B2 probe
+moves24 owners in946 trials,63.923→53.598GiB maximum estimate; this is NOT a
+runtime/admission/support result. C++ counterpart,planner integration,tests and
+actual allocator/trajectory validation still required. No full-size Attention job queued.
+This evidence commit contains docs only; prototype remains uncommitted.
 
 ## Next implementation and validation
 
-1. Correct consumer liveness accounting for the now-qualified private projection
-   and Attention bank borrowing, scoped to aggressive sharded consumers; leave
-   default/conservative/legacy copies, dynamic records, API limits and safety
-   margins intact. Validate Python/C++ static parity against materialized model
-   inventory, then actual allocator admission with unchanged qualified backend.
-   Read consumer-capacity.md and capacity.py/.h; existing directed entry is
-   tests/test_consumer_capacity.py. Static estimates alone are not runtime proof.
-2. Improve generic memory-aware placement/cutting as needed for original Attention,
-   including coordinator costs. Static exploratory balance is only a hypothesis;
-   no full-size Attention job queued. Calibrate bounded original-width pilot
-   under unchanged comparable capacities/cost limit, then actually execute B512.
+1. Finish generic bounded memory-aware placement using the prototype: independently
+   implement C++ equivalent and integrate only after the existing aggressive
+   initial placement/operator cuts cannot fit. Preserve explicit Python owner
+   maps; static integer cost improvements and finite search,all safety margins.
+   Start from capacity.py/.h,capacity_record.h and tests/test_consumer_capacity.py;
+   keep Python/C++ plan parity and actual independent CPU comparisons. Do not
+   claim prototype execution or weaken admission to obtain a pass.
+2. Calibrate the new placement on a bounded actual consumer,then original-width
+   Attention under comparable capacities/3000s/1.15; actually execute B512 after
+   valid memory/cost admission. No full-size training claim from static fitting.
 3. Implement eager mixed multi-card in the common library and both consumers,
    preserving independent CPU references, aliases, gradients and continuation;
    validate public Python/native and standalone paths with focused tests/profile.
@@ -141,8 +143,8 @@ still exceeds the static envelope; generic memory-aware placement is next.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-Current dev jobs are terminal; immutable qualification is the next active work.
-The protected historical task remains separately stopped.
+All current compute jobs are terminal. Next implementation is the uncommitted
+placement prototype above; the protected historical task stays separately stopped.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent
 logs/status under `TASK/runs/NAME`. Confirm terminal records,workload exit,result
