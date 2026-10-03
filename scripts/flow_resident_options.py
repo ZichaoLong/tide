@@ -1,4 +1,4 @@
-"""Common CLI spelling for optional public resident consumer limits."""
+"""Common ownership options and optional public resident consumer limits."""
 FORWARD = ("queue", "arrivals", "outputs", "trace", "stages", "workspace_bytes", "full_chunk_rows",
            "emission_chunk_rows", "aggregate_chunk_rows", "attention_chunk_rows", "attention_key_rows",
            "kv_rows", "kv_trace_rows", "max_repeat_ticks")
@@ -19,7 +19,7 @@ def add_arguments(parser):
     parser.add_argument("--devices", type=int, default=1)
     parser.add_argument("--owner-policy", choices=("locality", "memory"), default="locality")
     parser.add_argument("--owner-map", type=owner_map, default=(),
-                        help="fixed joint Full/state logical owners, in encoded-node order including both boundaries")
+                        help="fixed node Full/state owners in encoded order including boundaries; eager boundaries and node zero use owner zero")
     parser.add_argument("--chunk-policy", choices=("conservative", "aggressive"), default="conservative")
     parser.add_argument("--head-workspace-bytes", type=int, default=4*1024**3)
     parser.add_argument("--device-memory-bytes", type=int, default=0,
@@ -35,11 +35,11 @@ def add_arguments(parser):
 def validate(args):
     if not 1 <= args.devices <= 16:
         raise ValueError("devices must be in 1..16")
-    changed = (args.resident_library is not None or args.devices != 1 or args.owner_policy != "locality" or bool(args.owner_map)
+    changed = (args.resident_library is not None
                or args.chunk_policy != "conservative" or args.head_workspace_bytes != 4*1024**3 or args.device_memory_bytes != 0 or args.resident_context_bytes != 0
                or args.auto_sample_chunks or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
     if args.preset != "resident" and changed:
-        raise ValueError("resident capacities and placement require resident preset")
+        raise ValueError("resident capacities require resident preset")
     if args.implementation == "libtorch" and args.resident_library is not None:
         raise ValueError("standalone LibTorch uses its linked TideResident package")
     if not 0 <= args.resident_context_bytes < 2**63:
@@ -66,7 +66,7 @@ def native_arguments(args):
 
 def python_arguments(args, device):
     if args.preset != "resident":
-        return {}
+        return dict(devices=args.devices, owner_policy=args.owner_policy, owner_map=args.owner_map)
     from tidegraph import ResidentLimits, ResidentTrainingLimits, ResidentPlacement
     forward = dict(workspace_bytes=512*1024**2, chunk_policy=args.chunk_policy)
     training = dict(windows=args.windows_per_step, backward_bytes=2*1024**3)

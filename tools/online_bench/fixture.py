@@ -37,44 +37,48 @@ def body_graph(packet):
                  tuple(g["inputs"]), tuple(g["outputs"]))
 
 
-def build_model(packet, *, dtype=torch.float32, device="cpu"):
+def build_model(packet, *, dtype=torch.float32, device="cpu", node_devices=None):
     graph = body_graph(packet)
     c = packet["workload"]; d = c["width"]
+    owners = [torch.device(device)]*len(graph.nodes) if node_devices is None else [torch.device(v) for v in node_devices]
+    if len(owners) != len(graph.nodes):
+        raise ValueError("consumer node_devices must cover every body node")
     # Construct only shape/program metadata. Replacing every tensor below avoids
     # allocating an unused D×D backbone for every LH node at full scale.
     with torch.device("meta"):
         model = Model(graph, d, dtype=dtype)
     constants = {}
-    def constant(shape, kind="zero"):
-        key = (tuple(shape), kind)
+    def constant(shape, kind="zero", *, owner=device):
+        key = (tuple(shape), kind, str(owner))
         if key not in constants:
             value = (torch.eye(d) if kind == "identity" else
                      torch.full(shape, {"zero": 0., "one": 1., "retention": .99, "decay": .01}[kind]))
-            constants[key] = torch.nn.Parameter(value.to(device=device, dtype=dtype), requires_grad=False)
+            constants[key] = torch.nn.Parameter(value.to(device=owner, dtype=dtype), requires_grad=False)
         return constants[key]
-    def parameter(name, shape, ones=False):
+    def parameter(name, shape, ones=False, *, owner=device):
         value = torch.ones(shape) if ones else source_values(name, shape, c["seed"])
-        return torch.nn.Parameter(value.to(device=device, dtype=dtype))
+        return torch.nn.Parameter(value.to(device=owner, dtype=dtype))
     for v, w in enumerate(model.nodes):
-        w.decay = w.bias = w.read = constant((d,))
-        w.weight = constant((d, d))
+        owner = owners[v]
+        w.decay = w.bias = w.read = constant((d,), owner=owner)
+        w.weight = constant((d, d), owner=owner)
         for name, value in list(w.extra.items()):
             if name == "lh_norm_weight":
-                w.extra[name] = parameter(f"node/{v}/norm", (d,), True)
+                w.extra[name] = parameter(f"node/{v}/norm", (d,), True, owner=owner)
             elif name in ("fiber_qkv", "fiber_out"):
-                w.extra[name] = parameter(f"node/{v}/{name}", value.shape)
+                w.extra[name] = parameter(f"node/{v}/{name}", value.shape, owner=owner)
             elif name == "add_retention":
-                w.extra[name] = constant((), "retention")
+                w.extra[name] = constant((), "retention", owner=owner)
             elif name == "fiber_decay":
-                w.extra[name] = constant((), "decay")
+                w.extra[name] = constant((), "decay", owner=owner)
             elif name == "fiber_pool" or name.startswith("agg_logit_"):
-                w.extra[name] = parameter(f"node/{v}/{name}", value.shape, True)
+                w.extra[name] = parameter(f"node/{v}/{name}", value.shape, True, owner=owner)
             else:
-                w.extra[name] = constant(value.shape)
+                w.extra[name] = constant(value.shape, owner=owner)
         for slot, binding in enumerate(graph.port_indexes[1].row(v)):
             kind, index = binding
-            w.extra[f"emit_w_{slot}"] = (parameter(f"edge/{index}/projection", (d, d))
-                                         if kind else constant((d, d), "identity"))
+            w.extra[f"emit_w_{slot}"] = (parameter(f"edge/{index}/projection", (d, d), owner=owner)
+                                         if kind else constant((d, d), "identity", owner=owner))
     for name in ("input_scale", "agg_scale", "edge_scale", "output_scale"):
         setattr(model, name, torch.nn.ParameterList(constant((), "one") for _ in getattr(model, name)))
     embedding = parameter("embedding", (c["vocab"], d))

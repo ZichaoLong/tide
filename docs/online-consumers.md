@@ -89,7 +89,8 @@ it does not claim to serialize an application bundle with head/data cursor.
 
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
 switches `--read`, `--control`, `--selection`, `--events`, `--scoring-dtype` retained.
-CPU/mixed consumers currently use one payload device. `--preset resident` now
+Eager multi-device consumer integration is implemented below; its qualification
+is separate from the previously verified single-device consumers. `--preset resident` now
 has a separate public C++/CANN consumer: FP32/FP16 single/multi-device inference and
 single/multi-device complete training. Python uses `--implementation native` as
 a client of that same backend, not an independent PyTorch resident scheduler.
@@ -99,6 +100,41 @@ tolerance changes. A separate actual two-card Attention training trace observed
 no AiCPU; this is not a full-size performance conclusion.
 [HARD slot-affine reverse/publication](resident-emission-vjp.md)
 is independently qualified; broadcast evidence is not used for this model.
+
+### Eager consumer payload placement
+
+Python, native and standalone eager consumers accept `--devices N`,
+`--owner-policy memory|locality` and optional `--owner-map 0,1,...` through the
+same CLI. Devices are consecutive logical indices starting at `--device`.
+The explicit map covers all encoded nodes, including both identity boundaries;
+node zero, boundaries, embedding and head stay on owner zero. Every requested
+device must be used, and CPU permits only one device. Unavailable or conflicting
+owners fail before model construction.
+
+Automatic placement counts each node's actual learned matrices, normalization
+and source coefficients, plus embedding/head on owner zero. It places heavier
+nodes first. The locality policy minimizes the projected maximum load, then
+prefers adjacent owners and lower load; the memory policy selects the least loaded owner.
+Only static topology and parameter sizes enter this planning. It runs no graph
+and makes no claim of optimal placement or total peak-memory admission.
+`payload_placement` records the chosen map, policy and per-card learned elements.
+The latter sum to the packet's exact parameter count.
+
+Builders initialize each learned tensor independently by its canonical name on
+its destination. Immutable scaffold constants are cached once per device and
+shape/kind; their physical aliases may differ from the single-device cache.
+They are excluded from the optimizer. Shared scalar port constants keep a canonical
+value and use the library's differentiable device-copy boundary. This does not
+silently repartition an arbitrary caller-owned model with tied trainable leaves.
+
+All devices participate in timing-boundary synchronization and allocator
+observations. Finite-gradient checks reduce locally, then agree on owner zero
+before any update. Output rows gather to the declared head owner. Physical sample
+splitting retains all connected windows per slice and applies one update after
+all slices. Current eager message copies are individual; packed cross-card
+transport and calibrated total-memory admission remain F5/F6 work. Eager FP16
+training still rejects the unqualified master path. STATUS separates development
+checks from clean immutable qualification and formal throughput.
 
 The resident graph supplies actual packed output coordinates,values and presence.
 Only present rows enter head/loss arithmetic. Output cotangents are scattered back

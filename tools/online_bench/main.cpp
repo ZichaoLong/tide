@@ -14,6 +14,7 @@ int main(int argc,char** argv) {
         "--workers N --packed-sources --batch-next (eager native only; threads sets ATen intra-op parallelism)\n"
         "--sample-chunk-rows N (physical sample maximum; 0 keeps the whole logical batch)\n"
         "--devices N --owner-policy memory|locality --owner-map 0,1,... --chunk-policy conservative|aggressive\n"
+        "Eager owner maps use encoded-node order; node zero and both boundaries stay on owner zero.\n"
         "--resident-context-bytes BYTES (per-device saved-state pool; positive enables compact rows, 0 retains dense storage)\n"
         "--device-memory-bytes BYTES (resident incremental per-device cap; 0 uses driver free memory) --head-workspace-bytes BYTES\n"
         "--resident-{queue,arrivals,outputs,trace,stages,workspace-bytes,full-chunk-rows,emission-chunk-rows,aggregate-chunk-rows,attention-chunk-rows,attention-key-rows,kv-rows,kv-trace-rows,max-repeat-ticks,retained-bytes,backward-bytes,optimizer-bytes,program-workspace-bytes,reverse-chunk-rows} N\n";return 0;}

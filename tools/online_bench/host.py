@@ -2,7 +2,6 @@
 import time
 import torch
 from tidegraph import GraphConfig, GraphRuntime, ExecutionOptions, ExecutionPlacement, External
-from tidegraph.runtime import synchronize
 from .fixture import build_model, encode
 from .memory import MemoryRecord
 from .phase_timing import PhaseTiming
@@ -10,7 +9,8 @@ from .phase_timing import PhaseTiming
 
 def runtime_for(packet, *, family, implementation, device, dtype, schedule, preset, trace=False,
                 native_library=None, placement=None, resident_library=None, resident_limits=None,
-                workers=1, packed_sources=False, batch_next=False):
+                workers=1, packed_sources=False, batch_next=False,
+                devices=1, owner_policy="locality", owner_map=()):
     if family not in packet["families"]:
         raise ValueError("workload is not equivalent in the requested family")
     if schedule not in ("streaming", "prefill"):
@@ -18,13 +18,27 @@ def runtime_for(packet, *, family, implementation, device, dtype, schedule, pres
     if packet["schema"] != "tide-complete-flow-workload-v2":
         raise ValueError("continuous consumer requires v2; legacy v1 declares reset windows")
     resident = preset == "resident"
-    graph, model, embedding, head = build_model(packet, dtype=getattr(torch, dtype), device="cpu" if resident else device)
+    node_devices = None
+    if not resident:
+        from .eager_placement import resolve
+        from .fixture import body_graph
+        from tidegraph.placement import validate
+        logical, plan = resolve(packet, device, devices, owner_policy, owner_map)
+        device = logical[0]
+        node_devices = [logical[d] for d in plan["node_owners"][:-2]]
+        for owner in logical:
+            validate(body_graph(packet), getattr(torch, dtype),
+                     (placement or ExecutionPlacement(preset=preset)).resolve(owner))
+    graph, model, embedding, head = build_model(packet, dtype=getattr(torch, dtype),
+                                               device="cpu" if resident else device, node_devices=node_devices)
     if resident:
         embedding = embedding.detach().to(device)
         head = head.detach().to(device)
     ranks = tuple(packet["graph"]["ranks"]) if family == "settle" else ()
     if family != "settle":
         graph, model = encode(packet, graph, model)
+        if node_devices is not None:
+            node_devices += [device, device]
     config = GraphConfig(family, graph, width=packet["workload"]["width"], dtype=dtype, ranks=ranks,
                          seed=packet["workload"]["seed"])
     options = ExecutionOptions(implementation=implementation, schedule="greedy" if schedule == "prefill" else "streaming",
@@ -34,7 +48,8 @@ def runtime_for(packet, *, family, implementation, device, dtype, schedule, pres
                                resident_limits=resident_limits,
                                placement=placement or ExecutionPlacement(preset=preset))
     runtime = GraphRuntime(config, device=str(device), model=model, options=options, native_library=native_library,
-                           resident_library=resident_library, model_device="cpu" if resident else None)
+                           resident_library=resident_library, model_device="cpu" if resident else None,
+                           node_devices=node_devices)
     return runtime, embedding, head
 
 
@@ -62,7 +77,7 @@ def output_loss(result, head, packet, denominator, sample_begin=0):
     if not result.outputs:
         return None
     c = packet["workload"]
-    rows = torch.stack([x[3] for x in result.outputs])
+    rows = torch.stack([x[3].to(head.device) for x in result.outputs])
     targets = torch.tensor([((t//c["stride"]+1)*7+(b+sample_begin)*3) % c["vocab"]
                             for b, t, _, _ in result.outputs], dtype=torch.int64, device=head.device)
     logits = rows @ head.t()
@@ -82,7 +97,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
         device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0,
-        auto_sample_chunks=False, phase_timing=False):
+        auto_sample_chunks=False, phase_timing=False, devices=1, owner_policy="locality", owner_map=()):
     phases = PhaseTiming(phase_timing)
     if type(auto_sample_chunks) is not bool:
         raise ValueError("auto-sample-chunks must be boolean")
@@ -95,6 +110,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     if (workers != 1 or packed_sources or batch_next) and (implementation == "python" or preset == "resident"):
         raise ValueError("host workers/packed-sources/batch-next require an eager native consumer")
     if preset == "resident":
+        if devices != 1 or owner_policy != "locality" or owner_map:
+            raise ValueError("use resident_placement for resident ownership")
         from .resident import run as run_resident
         return run_resident(packet, family=family, implementation=implementation, device=device, dtype=dtype,
             schedule=schedule, training=training, optimizer=optimizer, steps=steps, warmup=warmup,
@@ -117,10 +134,14 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     if (steps+warmup)*windows_per_step*packet["workload"]["tokens"]*packet["workload"]["stride"] > (2**63-1)//8:
         raise ValueError("requested continuation would overflow coordinates/token formula")
     start = time.perf_counter()
-    memory = MemoryRecord([device])
+    from .eager_placement import resolve
+    logical, payload_placement = resolve(packet, device, devices, owner_policy, owner_map)
+    device = logical[0]
+    memory = MemoryRecord(logical)
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement,
-        workers=workers, packed_sources=packed_sources, batch_next=batch_next)
+        workers=workers, packed_sources=packed_sources, batch_next=batch_next,
+        devices=devices, owner_policy=owner_policy, owner_map=owner_map)
     c = packet["workload"]
     chunk = min(sample_chunk_rows or c["batch"], c["batch"])
     sessions = [(first, min(chunk, c["batch"]-first), runtime.session(min(chunk, c["batch"]-first)))
@@ -129,13 +150,13 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     options = dict(lr=.0001, weight_decay=.001, foreach=False)
     opt = ((torch.optim.SGD(named.values(), momentum=.25, **options) if optimizer == "sgd" else
             torch.optim.AdamW(named.values(), eps=1e-6, **options)) if training else None)
-    synchronize(runtime.device)
+    runtime.synchronize()
     construction = time.perf_counter() - start
     memory.capture("construction")
     durations, losses, output_counts, statistics, warmup_times = [], [], [], [], []
     position = 0
     for step in range(warmup+steps):
-        synchronize(runtime.device); begin = time.perf_counter()
+        runtime.synchronize(); begin = time.perf_counter()
         if opt:
             opt.zero_grad(set_to_none=True)
         loss = None; outputs = 0; stats = {}
@@ -174,16 +195,20 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             position += windows_per_step*c["tokens"]
             sample_seconds = None
             if phase_timing and opt:
-                synchronize(runtime.device); sample_seconds = time.perf_counter()-begin
+                runtime.synchronize(); sample_seconds = time.perf_counter()-begin
             if opt:
                 # One finite agreement before any parameter/optimizer update.
-                flags = [torch.isfinite(p.grad).all() for p in named.values() if p.grad is not None]
+                groups = {}
+                for p in named.values():
+                    if p.grad is not None:
+                        groups.setdefault(p.device, []).append(torch.isfinite(p.grad).all())
+                flags = [torch.stack(values).all().to(runtime.device) for values in groups.values()]
                 if flags and not torch.stack(flags).all():
                     raise RuntimeError("nonfinite gradient; optimizer not applied")
                 if observer:
                     observer("gradients", step, named)
                 opt.step()
-        synchronize(runtime.device); elapsed = time.perf_counter() - begin
+        runtime.synchronize(); elapsed = time.perf_counter() - begin
         phases.add(elapsed, sample_seconds, step < warmup)
         if observer:
             observer("updated", step, named)
@@ -206,6 +231,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 final_cut=sessions[0][2].continuation.cut, parameters=sum(p.numel() for p in named.values()),
                 batch_execution=dict(logical_batch=c["batch"], requested_sample_chunk_rows=sample_chunk_rows,
                                      effective_sample_chunk_rows=chunk, physical_chunks=len(sessions)),
-                runtime=runtime.manifest(), diagnostics=diagnostics or observer is not None,
+                runtime=runtime.manifest(), payload_placement=payload_placement,
+                diagnostics=diagnostics or observer is not None,
                 memory=memory.record(), phase_timing=phases.record(),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")

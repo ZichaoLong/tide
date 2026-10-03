@@ -6,7 +6,8 @@ The previous post-commit pause is superseded. Repository next-action text never
 overrides a later user pause; commits/evidence/context compression do not stop
 or resume work by themselves. Overall F1–F7 remains incomplete.
 Eager owner implementation 55c396073afa2a78376ab84d3b29e5e192850f7e is now
-qualified below. No current mainline job is live; actual consumer integration is next.
+qualified below. Actual multi-device consumer integration has passed development checks and is
+being committed for clean qualification; bounded jobs are recorded below.
 No subagents; reference repositories and ObsidianVault remain read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -67,9 +68,10 @@ Implemented in public Python, native and independent C++ paths:
   and rejection. Custom Region.initial retains node-zero vector/value/VJP.
 
 [Owner contract](execution-placement.md#eager-payload-owners) records the limits.
-Message copies are currently individual. Large-model consumer integration,
-per-device fixed-constant caches, memory/locality planning, packed cross-device
-transport and FP16 owner qualification remain open. This is not F5/F6 closure.
+Message copies are currently individual. Actual consumer integration, per-device
+fixed-constant caches and static learned-parameter/locality planning are implemented
+below. Total-memory admission, packed transport, scale performance and FP16 owner
+qualification remain open. This is not F5/F6 closure.
 
 ### Clean qualification completed
 
@@ -138,21 +140,51 @@ F7 must then audit integration, evidence, support and portable commands. CUDA ha
 no local hardware: deliver portable source/build/test commands and retain explicit
 target-machine-pending status, never claim local execution.
 
-## Next implementation and validation
+## Current consumer increment and next qualification
 
-Integrate eager multi-device into the actual Python/native/standalone consumers.
-Their current fixed constants are globally shared and runtime synchronization,
-loss gathering and finite-gradient stacking assume one payload device. Construct
-constants once per owner while preserving named trainable initialization; expose
-and record common owner configuration, synchronize/measure every device, and
-compare complete two-update/two-window runs to the independent CPU consumer.
-Cover actual Add/Attention, all three families, both schedules, mixed A/B/C and
-physical sample splitting; explicit invalid placement fails before allocation.
-Keep capacity and packed-transfer claims separate until implemented and tested.
+Actual consumer ownership is implemented and development-tested, awaiting its
+own clean qualification. Python/native/standalone independently initialize the
+same named leaves, use per-device fixed-constant caches, gather outputs to the
+head owner, synchronize and observe every device, and agree on finite gradients
+before updating. Static learned-parameter/locality planning or explicit maps keep
+node zero/boundaries/head/embedding on owner zero. Total peak admission and packed
+cross-device transfer remain separate work; resident aliases are preserved.
+Resolve this implementation after commit with
+`git log -1 --format=%H -- tools/online_bench/eager_placement.py`.
 
-Use a new frozen development snapshot and new build/run names for this increment.
-Preserve qualified owner builds and existing installed consumer dependencies.
-No new modification is validated by the preceding owner-only evidence.
+Terminal development jobs, no skips (deselection is explicit):
+`mixed-consumer-python-cpu-dev01`9 planning/rejection tests;
+`mixed-consumer-cpu-dev01`64 affected CPU tests;
+`mixed-consumer-python-npu-dev01`13 Python/native training/constant cases;
+`mixed-consumer-cpp-npu-dev01`6 standalone training cases;
+`mixed-consumer-options-npu-dev01`27 inference/CLI/native transport interactions.
+Final C++ resident-alias preservation uses snapshot`mixed-consumer-dev03`:
+`build-mixed-consumer-{cpu,npu}-dev02`both passed/exit0;
+`mixed-consumer-cpp-cpu-dev02`24 FP64/FP32 standalone comparisons and
+`mixed-consumer-cpp-npu-dev02`6 two-device full-training comparisons passed/exit0.
+Their service cgroups are empty, leases complete and all1504 frozen hashes match.
+The separate earlier development profile`mixed-consumer-profile-dev01`passed
+(14090 operators,128 AiCPU,no observed host fallback); it is not the final binary
+or a throughput measurement. No new modification is qualified by owner-only evidence.
+
+After this implementation commit, freeze that exact clean revision as
+`TASK/sources/mixed-consumer-clean01`. Launch two600s builds with
+`TASK/launchers/build_eager_consumer.py --backend cpu|npu --name mixed-consumer-{cpu,npu}-clean01`.
+This installs byte-verified qualified55c3960 core into a fresh package, builds the
+current public-header-only consumer and checks standalone loader closure.
+Then run the affected CPU73 (existing consumer/host controls plus9 static-owner
+checks) and NPU40 actual-owner tests using those fresh binaries; use at most900s
+per gate, two-card lease120s. Separately run
+`TASK/launchers/profile_eager_consumer.py --source SOURCE --build NPU_BUILD --out OUT/profile`
+with a300s child bound. Every NPU child runs from `{out}` with absolute source paths.
+Audit fixed source/binary hashes, counts, terminal units/leases and trace placement,
+then commit evidence separately and push. Continue with calibrated eager capacity/
+packed transfers and a separately budgeted Attention B512 feasibility run; do not
+pause after this increment. Formal heavy timing remains serial.
+
+All task outputs are `TASK/runs/NAME/{status.json,task.log}`, units
+`tide-execution-flows-NAME`. Historical failures and the protected paused task
+remain unchanged.
 
 ## Environment and protected state
 

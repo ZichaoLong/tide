@@ -1,6 +1,7 @@
 #include "consumer.h"
 #include "phase_timing.h"
 #include "memory.h"
+#include "eager_placement.h"
 #include <tide/greedy.h>
 #include <tide/stream.h>
 #include <ATen/core/grad_mode.h>
@@ -19,7 +20,7 @@ void detach(tide::Continuation& q) {
 Tensor objective(const tide::Result& r,const Fixture& f,const Packet& p,Index windows,Index sample_begin) {
   if(r.outputs.empty())return {};
   std::vector<Tensor> rows;std::vector<Index> labels;
-  for(const auto& x:r.outputs){rows.push_back(x.value);labels.push_back(((x.time/p.stride+1)*7+(x.batch+sample_begin)*3)%p.vocab);}
+  for(const auto& x:r.outputs){rows.push_back(x.value.to(f.head.device()));labels.push_back(((x.time/p.stride+1)*7+(x.batch+sample_begin)*3)%p.vocab);}
   auto logits=at::matmul(at::stack(rows),f.head.t());
   if(logits.scalar_type()==at::kHalf)logits=logits.to(at::kFloat);
   return at::cross_entropy_loss(logits,at::tensor(labels,at::kLong).to(f.head.device()),{},at::Reduction::Sum)
@@ -39,7 +40,11 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     throw std::invalid_argument("resident consumer requires a build with TIDE_ONLINE_RESIDENT=ON");
 #endif
   }
-  auto start=Clock::now();MemoryRecord memory({device});auto f=fixture(p,c,device);
+  auto start=Clock::now();const auto owner_plan=eager_placement(p,c);const auto devices=eager_devices(device,c.devices);
+  for(auto owner:devices)if(!tide::resolve_placement(c.placement,owner).events.is_cpu())
+    throw std::invalid_argument("host model placement cannot provide device-resident event progression");
+  auto sync=[&]{for(auto owner:devices)portable_torch::synchronize(owner);};
+  MemoryRecord memory(devices);auto f=fixture(p,c,device);
   auto placement=tide::resolve_placement(c.placement,device);auto placed=tide::place_model(f.graph,f.model,c.placement);
   tide::Options options;options.packed=true;options.prefill=c.schedule=="prefill";options.trace=c.diagnostics;
   options.workers=c.workers;options.packed_sources=c.packed_sources;options.batch_next=c.batch_next;
@@ -58,13 +63,13 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   std::vector<tide::Continuation> continuations;
   for(Index first=0;first<p.batch;first+=chunk){tide::Continuation q;q.identity=f.graph.identity;
     q.batch_size=std::min(chunk,p.batch-first);continuations.push_back(std::move(q));}
-  portable_torch::synchronize(device);const auto construction=seconds(start);
+  sync();const auto construction=seconds(start);
   memory.capture("construction");
   std::vector<double> durations,losses,warmup_times;std::vector<Index> outputs;std::vector<std::map<std::string,Index>> statistics;
   PhaseTiming phases{c.phase_timing};
   Index position=0;at::AutoGradMode mode(c.training);
   for(Index step=0;step<c.steps+c.warmup;++step) {
-    portable_torch::synchronize(device);start=Clock::now();if(optimizer)optimizer->zero_grad();
+    sync();start=Clock::now();if(optimizer)optimizer->zero_grad();
     Tensor loss;Index count=0;std::map<std::string,Index> stats;
     for(size_t part=0;part<continuations.size();++part) {
       const auto first=Index(part)*chunk;auto& q=continuations[part];Tensor partial;
@@ -95,14 +100,17 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     }
     position+=c.windows*p.tokens;
     double sample_seconds=-1;
-    if(c.phase_timing&&optimizer){portable_torch::synchronize(device);sample_seconds=seconds(start);}
+    if(c.phase_timing&&optimizer){sync();sample_seconds=seconds(start);}
     if(optimizer) {
-      std::vector<Tensor> flags;for(const auto& owner:f.parameters.owners())if(owner.value.grad().defined())flags.push_back(at::isfinite(owner.value.grad()).all());
+      std::map<std::string,std::vector<Tensor>> groups;
+      for(const auto& owner:f.parameters.owners())if(owner.value.grad().defined())
+        groups[owner.value.device().str()].push_back(at::isfinite(owner.value.grad()).all());
+      std::vector<Tensor> flags;for(const auto& [_,values]:groups)flags.push_back(at::stack(values).all().to(device));
       if(!flags.empty()&&!at::stack(flags).all().item<bool>())throw std::runtime_error("nonfinite gradient; optimizer not applied");
       if(diagnostics)parameters_json(*diagnostics,step,f.parameters,true);
       optimizer->step();
     }
-    portable_torch::synchronize(device);const auto elapsed=seconds(start);
+    sync();const auto elapsed=seconds(start);
     phases.add(elapsed,sample_seconds,step<c.warmup);
     if(diagnostics)parameters_json(*diagnostics,step,f.parameters,false);
     if(step>=c.warmup){durations.push_back(elapsed);losses.push_back(loss.defined()?loss.detach().cpu().item<double>():0.);outputs.push_back(count);statistics.push_back(stats);}
@@ -132,6 +140,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
      <<",\"backend\":"<<quoted(portable_torch::compiled_backend())<<",\"resolution_reason\":"<<quoted(portable_torch::resolution_reason(c.runtime,device))
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";
   bool first=true;for(const auto& [name,value]:placement.record()){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<quoted(value);}out<<"}}"
+     <<",\"payload_placement\":"<<eager_placement_json(c,owner_plan,devices)
      <<",\"memory\":"<<memory.json()<<",\"phase_timing\":"<<phases.json()
      <<",\"timing\":\"input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference\"}\n";
   return out.str();
