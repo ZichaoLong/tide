@@ -283,6 +283,37 @@ feasibility/RSS calibration concurrent with NPU feasibility, never formal timing
 or a full-size CPU oracle. Record terminal status and complete peaks/phase/loss/
 output/update checks before claiming a pass. Do not signal the historical task.
 
+Latest bounded diagnostics (retain these failures):
+`wide-eager-cpu-pilot01` is terminal failed/exit1. Add completed59.403475322s,
+RSS growth104698310656bytes within estimate; Attention completed256.699170879s,
+outputs96/cut408/finite loss20.078292847, but post-run memory calibration refused:
+observed228749291520bytes > estimated227592210112bytes (about0.51% low).
+Raw `assessment/attention/consumer/result.json` retains the complete result.
+[Reviewed CPU failure](evidence/original-width-eager-cpu-calibration-20261003.md)
+audits exact source,build,job and both result identities.
+Recalibrate the CPU memory model from this evidence before original B512 CPU;
+do not relax the guard or relabel this run passed.
+
+`packed-transfer-cpp-npu-clean01` currently hangs in shutdown, not admitted as passed.
+Backtrace saved at its `hang-backtrace.log`: main thread in CANN
+`te::fusion::HandleManager::Finalize` → `Py_FinalizeEx` → Python threading lock.
+Torch autograd threads are idle. CANN lazy ACL-op initialization can initialize
+its embedded Python from an autograd thread. Installed SDK header documents
+ACL_OP_INIT_MODE0=eager init,1=lazy,2=disabled; older retained vendor source shows
+A2/A3 default1. Test this hypothesis with same binary/new bounded
+`packed-transfer-cpp-npu-init01`,explicit ACL_OP_INIT_MODE=0,two-card lease120s,
+180s command. This changes vendor initialization order, not execution semantics.
+Keep the original job and its900s timeout/record; do not force successful exit.
+
+`packed-transfer-cpp-npu-init01` passed36 configurations/72 updates/144 connected
+windows/exit0 in31s with samea785d43 binary and explicit ACL_OP_INIT_MODE=0.
+This supports eager compiler initialization as the shutdown remedy; original
+lazy-init job stays live until its declared timeout, never relabelled.
+Next `packed-consumer-npu-clean01` uses that vendor setting, exacta785d43,
+NPU Python core plus installed NPU consumer, owner tests selected by
+`per_owner_constants or actual_two_device or unified_cli_owner`; two-card lease120s,
+900s command. Expected40 cases. Then separate actual consumer profile.
+
 Keep the CPU reference independent.
 Use affected gates, commit implementation first, then clean qualification and
 separate evidence; no unrelated core-owner reruns. Formal heavy timing is serial.
@@ -298,13 +329,15 @@ No other current-task NPU qualification/profile overlapped. Finite CPU build/gat
 calibration overlapped, so do not claim isolated throughput. Release of its lease
 unblocks sequential packed-transfer/consumer NPU qualification and profiles.
 
-Next NPU job `packed-transfer-npu-clean01`: exacta785d43 frozen
+NPU job `packed-transfer-npu-clean01` passed119/no skips/exit0; two-card lease
+completed. Exacta785d43 frozen
 `TASK/sources/packed-transfer-clean01`,build`packed-transfer-npu-python-clean01`,
 `tests/test_transfer.py tests/test_payload_ownership.py --dtype float32`,
 `TIDE_TRANSFER_BACKEND=npu TIDE_PAYLOAD_BACKEND=npu`; two-device lease120s,
-900s command bound. Expected119 cases; confirm actual terminal count.
-Then standalone36,actual-consumer40 and separate profile; do not claim passage
-from submission or compilation.
+900s command bound. Next `packed-transfer-cpp-npu-clean01`: standalone payload
+ownership checker from `packed-transfer-npu-standalone-clean01`,device npu:0,
+FP32,two cards,900s command/120s queue; expected36 configurations. Then actual
+consumer40 and separate profile. All use runtime cwd OUT and exacta785d43.
 
 All task outputs are `TASK/runs/NAME/{status.json,task.log}`, units
 `tide-execution-flows-NAME`. Historical failures and the protected paused task
