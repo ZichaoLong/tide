@@ -3,7 +3,8 @@
 CUDA hardware is unavailable on the current NPU server. The commands below are
 portable build/validation recipes. A fresh aarch64 CUDA-linked build and187 CPU
 checks are [qualified](evidence/eager-cuda-host-20261003.md); no GPU execution is
-qualified by that host-only evidence.
+qualified by that host-only evidence. The newer eager FP16/master and CPU RSS
+consumer also passed [108 affected CPU checks](evidence/eager-fp16-cuda-host-20261004.md).
 Run on a clean exact commit using a matching CUDA-enabled PyTorch/LibTorch,
 compiler, driver and toolkit. Keep the independent CPU FP64/FP32 reference in
 that environment and retain the target's source/build/test manifests. Host

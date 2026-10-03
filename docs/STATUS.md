@@ -110,7 +110,7 @@ It does not alter the older qualified narrow build. Failed selection recheck
 integration-cpu-recheck-clean02 **passed120 in272.99s,exit0**, clean78e9df6,
 integration-tests-clean01. Unit inactive,empty cgroup. Original failure retained.
 
-**Next submission:** full integration-cpu-clean02 **passed9458,654 optional-device skips,2022.25s,exit0**,same clean78e9df6 snapshot,
+Full integration-cpu-clean02 **passed9458,654 optional-device skips,2022.25s,exit0**,same clean78e9df6 snapshot,
 complete CPU core plus qualified c6ef224 consumer. Core/consumer bytes match
 these sources; differing test/document commits are explicit. Declared2400s outer:
 prior incomplete gate1783s plus restored real clients273s justifies this bound.
@@ -128,7 +128,7 @@ This is the missing complete standalone CTest gate; no NPU qualification is
 implied. Unit tide-execution-flows-integration-ctest-cpu-clean02;result in task.log
 and build Testing/Temporary/LastTest.log:12/12 passed in12.61s.
 
-After source/build/test receipts are audited,commit evidence separately.
+Source/build/test receipts audited and evidence committed in b5de3b4.
 Scale diagnostics may overlap this correctness gate; formal heavy timing waits
 until these finish. No unrelated passed gate needs repetition.
 
@@ -150,7 +150,7 @@ within corrected254061046480 estimate. The second ATen1/workers16 case hit its
 worker sweep. Original failure remains failed. First-case calibration and108
 clean checks qualify the stricter allowance; first-case evidence audit passed; [report](evidence/cpu-training-rss-20261004.md).
 
-**Next submit wide-eager-cpu-attention-b512-extended01**, clean c6ef224 and clean
+**Running wide-eager-cpu-attention-b512-extended01**, clean c6ef224 and clean
 eager-rss-training-cpu-clean01 client,ATen16/workers1,physicalB32×16. Reuse the
 actual original-width B64/B32 chunk policy with measured phase forecast
 23391.025824722s including1.15. Original3000s refusal remains intact. Declare a
@@ -193,55 +193,36 @@ probe02 restored historical512GiB whole-program ceiling,retaining60GiB/card
 admission and all queue/trace limits. Task-local probes/builds/helpers01 and02
 must remain for provenance. [Reviewed diagnosis](evidence/original-add-route-witness-20261004.md) audited;strict parity stays failed.
 
-## Next bounded FP16 original-width calibration
+## FP16 scale continuation and updated CUDA host gate
 
-Submit wide-eager-half-chunk01 on clean7b1fae5/eager-half-clean01 and qualified
-TASK/builds/eager-half-npu-clean01. Eight-card lease,max-wait120s;two sequential
-fresh processes,900s each/1850s outer. AddB64/physicalB32 andAttentionB8/physicalB4,
-unchanged D2048/T12/V50304/480body and9.468B/17.521B parameters. Mixed-A,LibTorch,
-TimedDAG/prefill,FP16 payload and autograd gradients,FP32 masters/loss,static
-scale128,one SGD update/two connected windows. ATen2/workers4,60GiB/card and
-unchanged aggressive margins. No warmup/profile/formal speed claim;may overlap
-CPU feasibility. Check aggregate CPU/memory resources before submission. First
-failure stops; derive a512-batch phase forecast only after actual memory/update
-pass. FP32/FP16 exact routes are not assumed. No B512 FP16 result yet.
+Both original-width FP16 pilots are terminal passed/exit0; audited sources,
+binaries, result hashes and eight-card lease release. [Reviewed pilot report](evidence/original-width-eager-fp16-20261004.md).
+Add B64/physicalB32:195.599333427s, forecast B512×1.15=1778.033584300s.
+Attention B8/physicalB4:50.268560833s, forecast3418.386618841s still refuses3000s.
+Additional Attention B16/physicalB8:71.174303463s, forecast2488.157225114s.
+Original rows16 static capacity refusal63.887GiB/card remains; rows8 admits51.312GiB.
+
+**Submitted wide-eager-half-b512-01:** clean7b1fae5/eager-half-clean01,
+qualified eager-half-npu-clean01. Eight NPUs,Add physicalB32 andAttentionB8,
+original B512 packets,FP16 payload/FP32 masters and loss,static scale128,
+Mixed-A/LibTorch/TimedDAG/prefill,one complete SGD update/two connected windows,
+ATen2/workers4. New helper wide_eager_half_b512.py; never edit it while live.
+Both forecasts satisfy retained3000s/1.15; child3240s each/outer6530s,queue120s.
+Cold feasibility may overlap CPU Attention; not formal timing. First failure
+stops; no blind retry. Aggregate admission reserves430GiB CPU feasibility,
+128GiB protected historical worker,64GiB NPU host and8GiB small work. No result yet.
 
 ```bash
-python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-half-chunk01 --snapshot eager-half-clean01 --commit 7b1fae5 --npu --npu-count 8 --max-wait 120 -- timeout --signal=TERM --kill-after=10s 1850s env -C '{out}' '{python}' '{base}/launchers/wide_eager_half_chunk_pilot.py' --source '{source}' --build '{base}/builds/eager-half-npu-clean01' --out '{out}/assessment' --device npu:0
+python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-half-b512-01 --snapshot eager-half-clean01 --commit 7b1fae5 --npu --npu-count 8 --max-wait 120 -- timeout --signal=TERM --kill-after=10s 6530s env -C '{out}' '{python}' '{base}/launchers/wide_eager_half_b512.py' --source '{source}' --out '{out}/assessment'
 ```
 
-Unit tide-execution-flows-wide-eager-half-chunk01;results under TASK/runs/NAME.
-Do not edit its helper after launch. No result yet.
-
-FP16 pilot wide-eager-half-chunk01 now **passed/exit0**:AddB64/physicalB32
-195.599333427s,AttentionB8/physicalB4 50.268560833s;all8-card peaks pass.
-Phase B512 forecasts1778.03358430015s and3418.386618841s (latter refuses3000s).
-Before B512 Attention,static aggressive check shows rows16 refuse at63.887GiB,
-rows8 admit at51.312GiB<53.875GiB usable. Therefore take one finite rows8
-calibration (not another thread/card sweep),preserving earlier rows4 evidence.
-
-Submit wide-eager-half-attention-rows8-01,same7b1fae5 source/client,8cards,
-120s queue/900s child/950s outer. Only Attention B16/physicalB8×2;all other
-settings as prior FP16 pilot. Helper wide_eager_half_attention_rows8.py records
-both original-size static plans. After pass,choose actual B512 rows8;derive cost
-from this measured pilot,keep old3000s refusal and1.15. No B512 FP16 result yet.
-
-## CUDA-linked consumer update,host qualification only
-
-Next build-eager-half-cuda-clean01 uses clean c6ef224/eager-rss-training-clean01,
-public task-local build_eager_cuda_consumer.py,source-matching already qualified
-CUDA core eager-cuda-clean01. Exact core C++ hash unchanged; fresh external
-consumer compiles the new FP16 masters and CPU RSS correction. Module
-`torch-cuda/2.10.0-cu128`,Python
-`/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python`,
-headless arch8.0,two workers,900s. No NVIDIA GPU exists; this is build/loader
-plus follow-up affected CPU checks under CUDA-linked Torch,not CUDA execution.
-Result TASK/builds/eager-half-cuda-clean01/result.json; unit
-`tide-execution-flows-build-eager-half-cuda-clean01`. No result yet.
-
-After build passes,run only affected eager precision/capacity CPU tests with
-TIDE_ONLINE_BINARY pointing to the new consumer,TIDE_BUILD_DIR=eager-cuda-clean01,
-explicit CUDA environment,one thread,300s. Keep real GPU/x86_64 target-pending.
+**CUDA-linked update qualified**,c6ef224/eager-rss-training-clean01.
+Fresh external eager-half-cuda-clean01 consumer reuses exact source-matching
+CUDA core eager-cuda-clean01. Build/loader passed; eager-half-cuda-host-clean01
+passed108 affected CPU checks in80.50s,no skips/deselections. Both jobs terminal,
+[reviewed audit](evidence/eager-fp16-cuda-host-20261004.md). GPU/x86_64 target-pending.
+Module torch-cuda/2.10.0-cu128; Python
+/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python.
 
 ## Remaining acceptance and environment
 
@@ -251,7 +232,7 @@ record has1183429 events/loss30.5083618164 at physicalB2,versus currentB32.
 Do not claim full-size discrete/numerical parity from the feasibility passes;
 this difference needs explanation before a matched formal comparison.
 
-Still open: actual original B512 CPU Attention and pending mixed Attention results;
+Still open: actual original B512 CPU Attention and FP16 Add/Attention results;
 full original-scale CPU/screened mixed/resident performance matrix across required
 families/clients/schedules/inference/training,appropriate continuous warmup and
 measurement,three-process recommendations,separate profiles,FP16 comparisons,

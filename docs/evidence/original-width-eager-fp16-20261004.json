@@ -1,0 +1,696 @@
+{
+  "state": "passed",
+  "source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+  "source_inventory": {
+    "files": 1535,
+    "sha256": "1e9f864582d90758a7003b4097e2e32acd46ede478a85a2ac5d3ef012640f56c"
+  },
+  "jobs": [
+    {
+      "name": "wide-eager-half-chunk01",
+      "finished": "2026-10-03T16:28:54.397088+00:00",
+      "state": "passed",
+      "exit_code": 0,
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "18df66999160548c7a4eebefbaa26a86481a2ef48d971844cf272b2a0b4400e9",
+      "log_sha256": "ad6ace38353362fdac749be8e42e69918f6ed6a83f5cb8de3bc2a62d44e6247f",
+      "command": [
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-wide-eager-half-chunk01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "8",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/wide-eager-half-chunk01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "1850s",
+        "env",
+        "-C",
+        "TASK/runs/wide-eager-half-chunk01",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/wide_eager_half_chunk_pilot.py",
+        "--source",
+        "TASK/sources/eager-half-clean01",
+        "--build",
+        "TASK/builds/eager-half-npu-clean01",
+        "--out",
+        "TASK/runs/wide-eager-half-chunk01/assessment",
+        "--device",
+        "npu:0"
+      ],
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11
+      ],
+      "queue_sha256": "d8531ec9e1adf17479e0dcc3b4a0fb4178c7aaa283a6dae5daf160c204e4ad72",
+      "assessment_sha256": "22d13ab13129cba8a06cf24caf38a8add3613a9a47dbab5bf4421a469d313420",
+      "helper_sha256": "ea172547035b25a073c95633ec87326b91a35069c3989ec8ff3b5179d29a2171"
+    },
+    {
+      "name": "wide-eager-half-attention-rows8-01",
+      "finished": "2026-10-03T16:35:21.350379+00:00",
+      "state": "passed",
+      "exit_code": 0,
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "a1250bfb80e8657a29491dd0d1f3ae9f05d900fe0140cdb2dc509aad4848f09a",
+      "log_sha256": "57c536e1aedba92f0dce569e1ac36d54ac916fa2392cf633477bea921c427a43",
+      "command": [
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-wide-eager-half-attention-rows8-01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "8",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/wide-eager-half-attention-rows8-01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "950s",
+        "env",
+        "-C",
+        "TASK/runs/wide-eager-half-attention-rows8-01",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/wide_eager_half_attention_rows8.py",
+        "--source",
+        "TASK/sources/eager-half-clean01",
+        "--build",
+        "TASK/builds/eager-half-npu-clean01",
+        "--out",
+        "TASK/runs/wide-eager-half-attention-rows8-01/assessment",
+        "--device",
+        "npu:0"
+      ],
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11
+      ],
+      "queue_sha256": "1ad17a6907eb40114765b9dad635bed29112a6626df260fedffcbff3a8d3c10a",
+      "assessment_sha256": "8e2aec0dcc88ce3f0925699241c2258e03d0a93b9871afed9bd5c453f711241e",
+      "helper_sha256": "4da738e6797b77ebbc998bd3fcb5484319ec68d55131b3ad833a56b45091627a"
+    }
+  ],
+  "cases": [
+    {
+      "job": "wide-eager-half-chunk01",
+      "memory": "add",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/eager-half-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/wide-eager-half-chunk01/assessment/add/packet.json",
+        "--output-dir",
+        "TASK/runs/wide-eager-half-chunk01/assessment/add/consumer",
+        "--native-binary",
+        "TASK/builds/eager-half-npu-clean01/consumer/tidegraph-online-bench",
+        "--implementation",
+        "libtorch",
+        "--device",
+        "npu:0",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--family",
+        "timed-dag",
+        "--preset",
+        "mixed-a",
+        "--schedule",
+        "prefill",
+        "--training",
+        "--loss-scale",
+        "128",
+        "--optimizer",
+        "sgd",
+        "--steps",
+        "1",
+        "--warmup",
+        "0",
+        "--windows-per-step",
+        "2",
+        "--threads",
+        "2",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--sample-chunk-rows",
+        "32",
+        "--auto-sample-chunks",
+        "--chunk-policy",
+        "aggressive",
+        "--phase-timing",
+        "--parameter-budget",
+        "85899345920",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296"
+      ],
+      "batch_execution": {
+        "logical_batch": 64,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 2
+      },
+      "seconds": [
+        195.599333427
+      ],
+      "losses": [
+        30.060218811035156
+      ],
+      "construction_seconds": 44.443166032,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 192.930975262,
+            "optimizer_seconds": 2.668358165000001
+          }
+        ],
+        "warmup": [],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "memory_admission": {
+        "state": "admitted",
+        "requested_sample_rows": 32,
+        "effective_sample_rows": 32,
+        "logical_batch": 64,
+        "physical_chunks": 2,
+        "sample_reductions": 0,
+        "observation_counter": "framework_allocator",
+        "observed_peak_growth_bytes": [
+          18222643200,
+          15490724352,
+          16792869888,
+          18689698816,
+          16077998592,
+          17212363264,
+          16639304704,
+          18353624576
+        ],
+        "allocator_within_estimate": true,
+        "chunk_policy": "aggressive",
+        "devices": [
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 38020989200
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 40109339216
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 40424473248
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 40060956928
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 40423912048
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 39165059616
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 39544496240
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 40060956928
+          }
+        ]
+      },
+      "b512_forecast_seconds": 1778.0335843001499,
+      "forecast_under_3000": true,
+      "result_sha256": "0550d2a37abfa8b15a5bf53dabb28423c37e2b7cf00210e0315052de24a3f8c7",
+      "packet_sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9",
+      "original_packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a"
+    },
+    {
+      "job": "wide-eager-half-chunk01",
+      "memory": "attention",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/eager-half-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/wide-eager-half-chunk01/assessment/attention/packet.json",
+        "--output-dir",
+        "TASK/runs/wide-eager-half-chunk01/assessment/attention/consumer",
+        "--native-binary",
+        "TASK/builds/eager-half-npu-clean01/consumer/tidegraph-online-bench",
+        "--implementation",
+        "libtorch",
+        "--device",
+        "npu:0",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--family",
+        "timed-dag",
+        "--preset",
+        "mixed-a",
+        "--schedule",
+        "prefill",
+        "--training",
+        "--loss-scale",
+        "128",
+        "--optimizer",
+        "sgd",
+        "--steps",
+        "1",
+        "--warmup",
+        "0",
+        "--windows-per-step",
+        "2",
+        "--threads",
+        "2",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--sample-chunk-rows",
+        "4",
+        "--auto-sample-chunks",
+        "--chunk-policy",
+        "aggressive",
+        "--phase-timing",
+        "--parameter-budget",
+        "85899345920",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296"
+      ],
+      "batch_execution": {
+        "logical_batch": 8,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 2
+      },
+      "seconds": [
+        50.268560833
+      ],
+      "losses": [
+        20.079925537109375
+      ],
+      "construction_seconds": 76.624089123,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 46.384786389,
+            "optimizer_seconds": 3.8837744440000037
+          }
+        ],
+        "warmup": [],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "memory_admission": {
+        "state": "admitted",
+        "requested_sample_rows": 4,
+        "effective_sample_rows": 4,
+        "logical_batch": 8,
+        "physical_chunks": 2,
+        "sample_reductions": 0,
+        "observation_counter": "framework_allocator",
+        "observed_peak_growth_bytes": [
+          34948208128,
+          34620092416,
+          34334551040,
+          34670035456,
+          34209818112,
+          34997459968,
+          34293001728,
+          34504456704
+        ],
+        "allocator_within_estimate": true,
+        "chunk_policy": "aggressive",
+        "devices": [
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 42757644576
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 41450308272
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 41248879136
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 41371980272
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 41125982960
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 41942302896
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 42232868368
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 43339856240
+          }
+        ]
+      },
+      "b512_forecast_seconds": 3418.3866188409997,
+      "forecast_under_3000": false,
+      "result_sha256": "0abc088e6cd1e70a59bca6492c474324e8f7bfd83279ec90572beb04b962daab",
+      "packet_sha256": "f61b53cf932711c6fc67c4663279d0c63e909d09d9849a26c3ae8c89ccaf56dd",
+      "original_packet_sha256": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a"
+    },
+    {
+      "job": "wide-eager-half-attention-rows8-01",
+      "memory": "attention",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/eager-half-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/wide-eager-half-attention-rows8-01/assessment/attention/packet.json",
+        "--output-dir",
+        "TASK/runs/wide-eager-half-attention-rows8-01/assessment/attention/consumer",
+        "--native-binary",
+        "TASK/builds/eager-half-npu-clean01/consumer/tidegraph-online-bench",
+        "--implementation",
+        "libtorch",
+        "--device",
+        "npu:0",
+        "--devices",
+        "8",
+        "--dtype",
+        "float16",
+        "--family",
+        "timed-dag",
+        "--preset",
+        "mixed-a",
+        "--schedule",
+        "prefill",
+        "--training",
+        "--loss-scale",
+        "128",
+        "--optimizer",
+        "sgd",
+        "--steps",
+        "1",
+        "--warmup",
+        "0",
+        "--windows-per-step",
+        "2",
+        "--threads",
+        "2",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--sample-chunk-rows",
+        "8",
+        "--auto-sample-chunks",
+        "--chunk-policy",
+        "aggressive",
+        "--phase-timing",
+        "--parameter-budget",
+        "85899345920",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296"
+      ],
+      "batch_execution": {
+        "logical_batch": 16,
+        "requested_sample_chunk_rows": 8,
+        "effective_sample_chunk_rows": 8,
+        "physical_chunks": 2
+      },
+      "seconds": [
+        71.174303463
+      ],
+      "losses": [
+        20.758995056152344
+      ],
+      "construction_seconds": 77.399367901,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 67.498086287,
+            "optimizer_seconds": 3.6762171759999944
+          }
+        ],
+        "warmup": [],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "memory_admission": {
+        "state": "admitted",
+        "requested_sample_rows": 8,
+        "effective_sample_rows": 8,
+        "logical_batch": 16,
+        "physical_chunks": 2,
+        "sample_reductions": 0,
+        "observation_counter": "framework_allocator",
+        "observed_peak_growth_bytes": [
+          35380830208,
+          35137065984,
+          35019279872,
+          35061506048,
+          35020260864,
+          35220349952,
+          34977477120,
+          35022643712
+        ],
+        "allocator_within_estimate": true,
+        "chunk_policy": "aggressive",
+        "devices": [
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 47387456032
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 46189749040
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 45988254368
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 46234419696
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 45742425072
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 47173738288
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 47956232848
+          },
+          {
+            "budget_bytes": 64424509440,
+            "usable_bytes": 57847840768,
+            "estimated_peak_bytes": 50170208624
+          }
+        ]
+      },
+      "b512_forecast_seconds": 2488.157225114,
+      "forecast_under_3000": true,
+      "result_sha256": "1078e3abf22dc1619f48f0eefdad652c53914d254a63a3443560084f55a12ebb",
+      "packet_sha256": "c5901cfb3f5f39aef647fdaaa051c2fc5a4509964f0fb82febf4e2a8dbb251a1",
+      "original_packet_sha256": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a"
+    }
+  ],
+  "static_original_attention_plans": {
+    "16": {
+      "state": "refused",
+      "requested_sample_rows": 16,
+      "effective_sample_rows": 16,
+      "logical_batch": 512,
+      "physical_chunks": 32,
+      "sample_reductions": 0,
+      "observation_counter": "framework_allocator",
+      "chunk_policy": "aggressive",
+      "devices": [
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 59706990624
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 58834733616
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 58629175712
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 59219796464
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 58047017456
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 61180291632
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 63320291728
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 68597797232
+        }
+      ],
+      "raw_sha256": "45f4c06dccf0cd64927b38b3c73dfa69e382c86866ece7ec027f185194fc01ab"
+    },
+    "8": {
+      "state": "admitted",
+      "requested_sample_rows": 8,
+      "effective_sample_rows": 8,
+      "logical_batch": 512,
+      "physical_chunks": 64,
+      "sample_reductions": 0,
+      "observation_counter": "framework_allocator",
+      "chunk_policy": "aggressive",
+      "devices": [
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 50549364768
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 49461388848
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 49255830944
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 49603600880
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 48916523504
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 50835543600
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 52004140432
+        },
+        {
+          "budget_bytes": 64424509440,
+          "usable_bytes": 57847840768,
+          "estimated_peak_bytes": 55095988592
+        }
+      ],
+      "raw_sha256": "391f62e5dfc1ef17dd97ba8ab60e8707ed77dea008f78cf7ed5eece4256766e1"
+    }
+  },
+  "binary_sha256": "b7ef27c79d41f8c14b727194c1b6e4b9059c2029d9326c7631495be9b11a6775",
+  "build_manifest_sha256": "334424b99eaeb87519cd5133868e107dd10380aaf6f255892667562cb09d1d01",
+  "audit_helper_sha256": "c5039e972d23f894bf3d7cdcdcf8eb8dc24002cde820ae06b3fb03bf0cc1fe0c",
+  "scope": "Original-width FP16 calibration, not original B512 execution or formal throughput. CPU feasibility overlapped. FP16/FP32 route equivalence not assumed. All terminal leases released. Retain Attention rows4 cost refusal and rows16 capacity refusal."
+}

@@ -1029,6 +1029,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-cuda-host-20261003.md",
           "reason": "Torch2.10.0+cu128/CUDA Toolkit12.8.1 aarch64 build and CPU execution only; GPU target gates pending."
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "c6ef22474f658ecb12dd11310c710781023932ab",
+          "scope": "Fresh external CUDA-linked eager FP16/master and CPU RSS consumer,exact source-matching existing core;108 affected CPU checks,no skips. No GPU execution.",
+          "tiers": [
+            "build",
+            "cpu-semantic"
+          ],
+          "test_command": "Audited build-eager-half-cuda-clean01 and eager-half-cuda-host-clean01 commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-cuda-host-20261004.md",
+          "reason": "aarch64 host-only update;NVIDIA and x86_64 target gates pending."
         }
       ]
     },
@@ -1086,6 +1099,19 @@
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-cuda-host-20261003.md",
           "reason": "Torch2.10.0+cu128/CUDA Toolkit12.8.1 aarch64 build and CPU execution only; GPU target gates pending."
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "c6ef22474f658ecb12dd11310c710781023932ab",
+          "scope": "Fresh external CUDA-linked eager FP16/master and CPU RSS consumer,exact source-matching existing core;108 affected CPU checks,no skips. No GPU execution.",
+          "tiers": [
+            "build",
+            "cpu-semantic"
+          ],
+          "test_command": "Audited build-eager-half-cuda-clean01 and eager-half-cuda-host-clean01 commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-cuda-host-20261004.md",
+          "reason": "aarch64 host-only update;NVIDIA and x86_64 target gates pending."
         }
       ]
     }
