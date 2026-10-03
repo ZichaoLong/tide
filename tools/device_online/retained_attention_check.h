@@ -5,7 +5,7 @@
 namespace tide::device_online::test {
 inline void retained_attention_check(at::Device device,at::ScalarType dtype) {
   at::NoGradGuard guard;
-  auto require=[](bool yes){if(!yes)throw std::runtime_error("immutable attention snapshot check failed");};
+  auto require=[](bool yes,const char* why="default snapshot"){if(!yes)throw std::runtime_error(std::string("immutable attention snapshot check failed: ")+why);};
   auto reject=[&](auto action){bool failed=false;try{action();}catch(const std::logic_error&){failed=true;}require(failed);};
   auto opts=at::TensorOptions().device(device).dtype(dtype);
   FiberParameterBanks live;live.qkv=at::ones({3,4,12},opts);live.projection=at::ones({3,4,4},opts)*2;
@@ -38,6 +38,40 @@ inline void retained_attention_check(at::Device device,at::ScalarType dtype) {
   cache={};cache.bind({},live);auto third=grouped();cache.capture({},third);RetainedAttention::Copies c;cache.reuse(c,{},third);
   require(c.at(third[0].cache.qkv.unsafeGetTensorImpl()).cpu().eq(9).all().item<bool>());
   require(a.at(first[0].cache.qkv.unsafeGetTensorImpl()).cpu().eq(1).all().item<bool>());
-  cache={};live={};require(b.at(second[0].cache.qkv.unsafeGetTensorImpl()).cpu().eq(1).all().item<bool>());
+  cache={};require(b.at(second[0].cache.qkv.unsafeGetTensorImpl()).cpu().eq(1).all().item<bool>());
+  // A complete ordered group may use the private bank, while subset/mixed-head
+  // gathers retain independent copies. Dynamic KV/bias never enters the cache.
+  live.nodes={1,3};live.qkv=at::arange(144,opts).reshape({3,4,12});
+  auto whole=grouped();whole[0].cache.qkv=live.qkv.clone();
+  whole[0].cache.projection=live.projection.clone();whole[0].qkv_bias=live.qkv_bias.clone();
+  whole[0].projection_bias=live.projection_bias.clone();whole[0].decay=live.decay.clone();whole[0].pool_weights=live.pool.clone();
+  RetainedAttention borrowed;borrowed.bind({},live,true);borrowed.capture({},whole);
+  RetainedAttention::Copies shared;borrowed.reuse(shared,{},whole);
+  require(shared.at(whole[0].cache.qkv.unsafeGetTensorImpl()).is_same(live.qkv),"whole-bank QKV identity");
+  require(borrowed.borrowed_bytes()==RetainedAttention::bytes({},whole),"whole-bank borrowed footprint");
+  require(!shared.count(whole[0].cache.key.unsafeGetTensorImpl())&&!shared.count(whole[0].bias.unsafeGetTensorImpl()));
+  reject([&]{borrowed.bind({},live);});
+  auto changed_nodes=live;changed_nodes.nodes={3,1};reject([&]{borrowed.bind({},changed_nodes,true);});
+  live.qkv.add_(1);reject([&]{borrowed.reuse(shared,{},whole);});
+  borrowed={};borrowed.bind({},live,true);whole[0].cache.qkv=live.qkv.clone();
+  borrowed.capture({},whole);RetainedAttention::Copies fresh;borrowed.reuse(fresh,{},whole);
+  require(fresh.at(whole[0].cache.qkv.unsafeGetTensorImpl()).is_same(live.qkv));
+  // Declare an actual subset so bank geometry/order cannot be substituted.
+  borrowed={};auto subset=whole;subset[0].cache.nodes={3};
+  auto subset_rows=at::tensor({1,2},at::kLong).to(device);
+  subset[0].cache.qkv=live.qkv.index_select(0,subset_rows);subset[0].cache.projection=live.projection.index_select(0,subset_rows);
+  subset[0].qkv_bias=live.qkv_bias.index_select(0,subset_rows);subset[0].projection_bias=live.projection_bias.index_select(0,subset_rows);
+  subset[0].decay=live.decay.narrow(0,1,1).clone();subset[0].pool_weights=live.pool.index_select(0,subset_rows);
+  borrowed.bind({},live,true);borrowed.capture({},subset);
+  fresh.clear();borrowed.reuse(fresh,{},subset);
+  require(!fresh.at(subset[0].cache.qkv.unsafeGetTensorImpl()).is_same(live.qkv)&&borrowed.borrowed_bytes()==0);
+  subset[0].cache.qkv.zero_();require(fresh.at(subset[0].cache.qkv.unsafeGetTensorImpl()).cpu().ne(0).any().item<bool>());
+  // Event matrices are already the frozen bank tensors; preserve their aliases.
+  EventAttentionTape event;event.qkv=live.qkv;event.projection=live.projection;
+  RetainedAttention event_borrow;event_borrow.bind({event},{},true);event_borrow.capture({event},{});
+  fresh.clear();event_borrow.reuse(fresh,{event},{});
+  require(fresh.at(event.qkv.unsafeGetTensorImpl()).is_same(live.qkv));
+  require(event_borrow.borrowed_bytes()==RetainedAttention::bytes({event},{}));
+  borrowed={};event_borrow={};shared.clear();fresh.clear();live={};
 }
 } // namespace tide::device_online::test

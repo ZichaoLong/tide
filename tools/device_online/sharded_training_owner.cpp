@@ -96,16 +96,16 @@ ResidentTrainingWindow ShardedTrainingOwner::advance(const std::vector<External>
   if(s.saved.size()>=size_t(s.limits.windows)||required>s.limits.retained_bytes-s.saved_bytes)
     throw std::invalid_argument("resident retained-window capacity exceeded; backward or explicitly detach first");
   if(s.next_token==std::numeric_limits<Index>::max())throw std::overflow_error("resident window token exhausted");
+  const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
   const auto banks=s.flow->sharded_parameter_banks();
   for(size_t i=0;i<banks.full.size();++i)
     s.full_snapshot.shard(i,banks.full.size()).validate(banks.full[i].full);
-  s.attention_snapshot.bind(banks.coordinator.attention,banks.coordinator.fiber);
+  s.attention_snapshot.bind(banks.coordinator.attention,banks.coordinator.fiber,compact);
   for(size_t i=0;i<banks.states.size();++i)
-    s.attention_snapshot.shard(i,banks.states.size()).bind(banks.states[i].attention,banks.states[i].fiber);
+    s.attention_snapshot.shard(i,banks.states.size()).bind(banks.states[i].attention,banks.states[i].fiber,compact);
   ContentWindow w;
   try{w=s.flow->advance_device(input,stop);}catch(const std::invalid_argument&){throw;}catch(...){s.failed=true;throw;}
   try {
-    const bool compact=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive;
     // These private banks cannot be published until saved windows and every
     // reverse program are consumed. Public windows expose state/KV, never them.
     // Keep retained admission unchanged: it remains a conservative envelope.

@@ -201,6 +201,14 @@ loss match prior B4. All allocator/context checks pass. Unchanged B512 projectio
 3117.612s>3000s prevents B512 execution; no formal speed claim
 ([evidence](evidence/original-width-add-gradient-lifetime-20261003.md)).
 
+F4/F5 private event/full-fiber Attention bank borrowing is implemented and
+development-verified (native160trajectories/2560windows,Python16,consumer32;
+no skips; see STATUS); clean immutable qualification remains pending: no change to retained API budgets or
+consumer admission. Default/subset snapshots and dynamic records remain owned;
+owner publication barriers and source/mode/mapping guards are required. Pending
+directed independent correctness, fixed-source qualification, allocator and
+separate profile evidence before a support or scale claim.
+
 F4/F5 private frozen projection banks are qualified on clean4467493: eight terminal
 jobs,native160trajectories/2560windows/640updates,Python16,consumer32; aggressive
 sharded training borrows only its private banks under the existing publication

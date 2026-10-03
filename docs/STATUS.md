@@ -30,6 +30,35 @@ records only. No unchanged CPU/representative reruns, unbounded queues, blind
 retries, OOM searches or relaxed safety/cost gates. Formal heavy timing is serial;
 never stop other workloads to free resources.
 
+## Current implementation and next qualification
+
+Private Attention-bank reuse is IMPLEMENTED and DEVELOPMENT-VERIFIED; immutable
+qualification pending. Only aggressive private sharded owners borrow event
+matrices and complete ordered fiber banks; subset/mixed-head gathers,
+default/conservative/legacy retention and dynamic KV/state/message records stay
+owned. API budgets and consumer admission are unchanged. Contract:
+[resident-retained](resident-retained.md). Internal owner layout changed; all
+eight owner users and three retention archive members were rebuilt. Public
+ABI/core/CANN kernels unchanged.
+
+Frozen attention-borrow-dev02: standalone/Python/consumer builds passed;
+native six FP32/FP16 cells160trajectories/2560windows,Python16,actualconsumer32,
+no skips. All six durable jobs terminal exit0 and empty control groups; leased
+physical8,12 released. Original attention-borrow-native-dev01 remains FAILED
+(exit1): its new ownership check detected tape/forward-bank field-order mismatch;
+explicit mapping fixed in dev02, frozen failure retained.
+
+Commit this implementation, then freeze its exact commit as attention-borrow-clean01:
+`python TASK/launchers/freeze_run.py --name build-attention-borrow-standalone-clean01 --snapshot attention-borrow-clean01 --commit REV -- timeout 900 {python} {base}/launchers/build_attention_borrow.py attention-borrow-standalone-clean01 --reuse-host attention-borrow-standalone-dev02`.
+Repeat Python build with --runtime python and matching Python --reuse-host;
+consumer build uses build_capacity_client.py and verified phase-timing consumer
+object reuse. Then repeat only the affected native/Python/consumer gates.
+Jobs/units follow tide-execution-flows-NAME.service and TASK/runs/NAME.
+Separate same-lease D512 memory calibration via attention_borrow_memory.py and
+FP16 profile via profile_retained_journals.py wait until the B512 cost run ends.
+Audit via attention_borrow_evidence.py REV, then a separate evidence commit.
+Continue scale/mixed/performance work after qualification; no renewed permission.
+
 ## Latest completed increment
 
 **26176de888013fda5eccfe039fa504e87c2e7e95** adds optional `--phase-timing` across
@@ -54,7 +83,8 @@ Raw source `TASK/sources/phase-timing-clean01`; consumers
 Development builds dev01 and corrected tests dev02 passed. Original
 `phase-timing-cpu-dev01` remains failed (exit2, collection-only test dtype parameter
 collision). Renamed only that NPU test argument; retained immutable reproducer.
-No uncommitted implementation remains. This evidence commit contains docs only.
+Those phase-timing implementation/evidence commits are complete; the current
+Attention working-tree increment is listed above.
 
 Since the prior alignment at7a7293a, qualified memory changes also include shared
 training lifetime accounting4dd8368, immutable Full snapshotsf360489, ordered
@@ -90,7 +120,9 @@ queue completed/lease released. Sample19.105143379s + optimizer1.556835798s =
 20.661979177s; unchanged old projection3041.4433348544s refuses, measured phase
 projection2814.0674665565s passes3000s with1.15 margin and all memory/context gates.
 [Evidence](evidence/original-width-add-phase-diagnostic-20261003.md).
-B512 has not yet executed. Prepared next task `wide-add-b512-phase-admitted01`:
+RUNNING `wide-add-b512-phase-admitted01`, launched after evidence commit636d004
+(pushed). Frozen source26176de; physical1,2,3,4,5,6,7,9,11 remapped tological0–8.
+Service verified active in background.slice; no completed B512 result yet.
 `TASK/launchers/wide-add-b512-phase-admitted01.sh` runs frozen26176de source and
 `TASK/builds/phase-timing-consumer-clean01`. Exact launcher command:
 `python TASK/launchers/wide_add_b512_phase_admitted.py --source TASK/sources/phase-timing-clean01 --build TASK/builds/phase-timing-consumer-clean01 --output TASK/runs/wide-add-b512-phase-admitted01/assessment`.
@@ -99,8 +131,8 @@ child3180s, outer3300s; original B512, physicalB2×256, 9cards, two connected
 windows, one complete independently initialized FP32 SGD update. Retain phase
 timing for forecast validation, all current capacities/3000s actual-step gate;
 no warmup/profile/formal throughput claim. Status/log under matching TASK/runs.
-Next: launch after this evidence checkpoint, inspect complete work/loss/cut/memory
-and actual costs. Continue Attention memory and eager mixed multi-card work;
+Next: inspect terminal complete work/loss/cut/memory and actual costs; audit
+with fixed source/build/input identities before declaring any B512 pass. Continue Attention memory and eager mixed multi-card work;
 this diagnostic and the next scale run are not overall acceptance.
 
 All ten required representative submatrices are complete. OriginalB512 TimedDAG/

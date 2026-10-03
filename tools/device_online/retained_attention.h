@@ -10,7 +10,9 @@ namespace tide::device_online {
 // gathers, so their identity is NOT a parameter-version guard: bind() checks
 // the actual forward banks before each advance. The training owner also forbids
 // publication while tapes are live (CANN writes need not increment _version).
-// KV, lengths, log-bias and journals never enter this cache.
+// KV, lengths, log-bias and journals never enter this cache. A guarded private
+// owner may borrow event banks and complete ordered fiber banks; mixed-head
+// subsets still own gathered copies. Default retention always owns copies.
 class RetainedAttention {
  public:
   using Copies=std::map<const void*,at::Tensor>;
@@ -20,16 +22,16 @@ class RetainedAttention {
     if(n>std::numeric_limits<int64_t>::max())throw std::invalid_argument("retained attention extent overflow");
     return int64_t(n);
   }
-  void bind(const std::vector<EventAttentionTape>& event,const FiberParameterBanks& fiber) {
+  void bind(const std::vector<EventAttentionTape>& event,const FiberParameterBanks& fiber,bool borrow_private_banks=false) {
     std::vector<at::Tensor> source;
     for(const auto& a:event){source.push_back(a.qkv);source.push_back(a.projection);}
     for(const auto& x:{fiber.qkv,fiber.qkv_bias,fiber.projection,fiber.projection_bias,fiber.decay,fiber.pool})source.push_back(x);
     if(bound_) {
-      if(source.size()!=sources_.size())changed();
+      if(source.size()!=sources_.size()||private_banks_!=borrow_private_banks||fiber.nodes!=fiber_nodes_)changed();
       for(size_t i=0;i<source.size();++i)if(!sources_[i].matches(source[i]))changed();
     } else {
       for(const auto& x:source)sources_.emplace_back(x);
-      bound_=true;
+      private_banks_=borrow_private_banks;fiber_nodes_=fiber.nodes;bound_=true;
     }
   }
   int64_t reusable_bytes(const std::vector<EventAttentionTape>& event,const std::vector<FiberAttentionTape>& fiber) const {
@@ -45,17 +47,32 @@ class RetainedAttention {
   void capture(const std::vector<EventAttentionTape>& event,const std::vector<FiberAttentionTape>& fiber) {
     if(ready_){check(event,fiber);return;}
     if(!bound_)throw std::logic_error("retained attention requires forward-bank binding");
-    check_sources();const auto current=values(event,fiber);Copies unique;
+    check_sources();const auto current=values(event,fiber);const auto banks=borrowable(event,fiber);Copies unique;
     std::vector<at::Tensor> next;
-    for(const auto& x:current) {
-      if(!x.defined()){next.emplace_back();continue;}
-      auto& copy=unique[x.unsafeGetTensorImpl()];if(!copy.defined())copy=x.clone();next.push_back(copy);
+    for(size_t i=0;i<current.size();++i) {
+      const auto& x=current[i];if(!x.defined()){next.emplace_back();continue;}
+      auto& copy=unique[x.unsafeGetTensorImpl()];
+      if(!copy.defined()) {
+        if(banks[i].defined()){
+          if(static_cast<long double>(borrowed_bytes_)+x.nbytes()>std::numeric_limits<int64_t>::max())
+            throw std::invalid_argument("borrowed attention extent overflow");
+          copy=banks[i];borrowed_bytes_+=x.nbytes();
+        }
+        else copy=x.clone();
+      }
+      next.push_back(copy);
     }
     copies_=std::move(next);geometry_=geometry(event,fiber);aliases_=aliases(current);ready_=true;
   }
   void seed(Copies& copies,const std::vector<EventAttentionTape>& event,const std::vector<FiberAttentionTape>& fiber) const {
     check(event,fiber);const auto current=values(event,fiber);
     for(size_t i=0;i<current.size();++i)if(current[i].defined())copies.at(current[i].unsafeGetTensorImpl())=copies_[i];
+  }
+  int64_t borrowed_bytes() const {
+    long double total=borrowed_bytes_;
+    for(const auto& shard:shards_)total+=shard.borrowed_bytes();
+    if(total>std::numeric_limits<int64_t>::max())throw std::invalid_argument("borrowed attention extent overflow");
+    return int64_t(total);
   }
   RetainedAttention& shard(size_t index,size_t count) {
     if(shards_.empty())shards_.resize(count);
@@ -76,6 +93,29 @@ class RetainedAttention {
           &&x.sizes()==at::IntArrayRef(sizes)&&x.strides()==at::IntArrayRef(strides)&&x.scalar_type()==dtype&&x.device()==device));
     }
   };
+  std::vector<at::Tensor> borrowable(const std::vector<EventAttentionTape>& event,const std::vector<FiberAttentionTape>& fiber) const {
+    const auto current=values(event,fiber);std::vector<at::Tensor> out(current.size());
+    if(!private_banks_)return out;
+    const size_t offset=event.size()*2;
+    if(sources_.size()!=offset+6)changed();
+    for(size_t i=0;i<offset;++i)if(current[i].defined()&&current[i].is_same(sources_[i].tensor))out[i]=sources_[i].tensor;
+    for(size_t group=0;group<fiber.size();++group) {
+      // banks().nodes and tape().cache.nodes both enumerate enabled nodes in
+      // increasing order. Only a group covering that whole bank has identical
+      // row order, including the final parameter sentinel. Subsets keep copies.
+      if(fiber_nodes_.empty()||fiber[group].cache.nodes!=fiber_nodes_)continue;
+      for(size_t field=0;field<6;++field) {
+        // values() orders QKV, projection, QKV-bias; bind() follows
+        // FiberParameterBanks' QKV, QKV-bias, projection field order.
+        constexpr size_t bank_field[]={0,2,1,3,4,5};
+        const size_t i=offset+group*6+field;const auto& bank=sources_[offset+bank_field[field]].tensor;
+        const auto& value=current[i];
+        if(bank.defined()&&value.defined()&&bank.sizes()==value.sizes()&&bank.scalar_type()==value.scalar_type()
+            &&bank.device()==value.device()&&bank.is_contiguous()&&value.is_contiguous())out[i]=bank;
+      }
+    }
+    return out;
+  }
   static std::vector<at::Tensor> values(const std::vector<EventAttentionTape>& event,const std::vector<FiberAttentionTape>& fiber) {
     std::vector<at::Tensor> out;
     for(const auto& a:event){out.push_back(a.qkv);out.push_back(a.projection);}
@@ -105,7 +145,9 @@ class RetainedAttention {
         (current[i].defined()&&(current[i].sizes()!=copies_[i].sizes()||current[i].scalar_type()!=copies_[i].scalar_type()
           ||current[i].device()!=copies_[i].device())))changed();
   }
-  bool bound_=false,ready_=false;
+  bool bound_=false,ready_=false,private_banks_=false;
+  int64_t borrowed_bytes_=0;
+  std::vector<int64_t> fiber_nodes_;
   std::vector<Source> sources_;
   std::vector<at::Tensor> copies_;
   std::vector<int64_t> aliases_;

@@ -15,7 +15,7 @@ output projections, parameter biases, decay and pool weights. They never include
 KV, cache log-bias, lengths or journals; those still describe each actual window.
 Fiber groups can contain fresh gathers, so the cache checks the underlying live
 forward banks' identity/version/layout, plus group geometry and alias structure.
-It clones the first group's values rather than borrowing writable forward banks.
+The default captures independent copies of the first group's values.
 CANN publication need not increment ATen versions; the owner's prohibition on
 publication with outstanding windows is essential. Backward, explicit detach
 and close discard the cache, and a later update captures the new values.
@@ -30,13 +30,22 @@ step/publication with outstanding windows; backward closes every reverse program
 and releases the tapes before step can mutate them. This applies only to the
 explicit private-owner overload, including explicitly placed one-device sessions.
 Default standalone retention, conservative training and legacy single-device
-training keep independent copies. Attention/Full snapshots and dynamic
-state/KV/message records are unchanged. Identity/version checks reject a replaced
+training keep independent copies. The same private sharded owner may borrow
+frozen event-attention matrices and complete ordered fiber parameter banks.
+`banks().nodes` and the complete group's nodes enumerate the same parameter rows;
+shape, dtype, device and contiguity must match, including the sentinel row.
+Mixed-head/subset gathers retain independent copies. The mode and node mapping
+cannot change within a backward group; underlying bank mutation/replacement is
+rejected. Full snapshots and all dynamic state/KV/message records remain owned. Identity/version checks reject a replaced
 or mutated source and changing ownership mode within a backward group.
 `borrowed_projection_bytes` reports this included storage; the retained API budget
 and `retained_projection_bytes` still charge the same conservative footprint.
 It is not an additional allocation or an allocator-peak measurement. Consumer
 admission estimates remain unchanged until separate calibration.
+`borrowed_attention_bytes` separately reports the included private event/full-fiber
+bank footprint, summed over owners. It does not report allocator savings; retained
+API admission remains unchanged. This extension is implemented pending the
+fixed-source qualification recorded in STATUS/ROADMAP.
 
 The dense pre-advance budget charges these shared parameters once and dynamic
 records per window. Complete-consumer memory admission remains conservative

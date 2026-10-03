@@ -160,6 +160,7 @@ ResidentGradients ShardedTrainingOwner::Impl::reverse(const std::vector<Resident
     out.statistics["retained_projection_bytes"]=s.projection_bytes;
     out.statistics["borrowed_projection_bytes"]=s.limits.forward.chunk_policy==ResidentChunkPolicy::aggressive?s.projection_bytes:0;
     out.statistics["retained_attention_bytes"]=s.attention_bytes;
+    out.statistics["borrowed_attention_bytes"]=s.attention_snapshot.borrowed_bytes();
     out.statistics["retained_full_bytes"]=s.full_bytes;
     out.statistics["retained_window_bytes"]=s.bytes_per_window;
     out.statistics["retained_windows"]=s.saved.size();
