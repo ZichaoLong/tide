@@ -92,7 +92,10 @@ nonunit scales require eager FP16 training and are recorded with the precision
 policy. No automatic scaling, skipped updates or implicit retries occur.
 Nonfinite gradients fail before updating; cast overflow fails and requires a new
 run or an explicitly restored application checkpoint. This eager half-backward
-policy is distinct from the resident FP32-adjoint policy. Qualification is pending.
+policy is distinct from the resident FP32-adjoint policy. Clean7b1fae5 passed
+CPU61 plus55 FP32/FP64 regression checks,NPU49 checks,eleven memory calibrations
+and a separate actual consumer trace
+([qualification](evidence/eager-fp16-consumers-20261003.md)).
 The consumer is a bounded benchmark runner;
 it does not claim to serialize an application bundle with head/data cursor.
 

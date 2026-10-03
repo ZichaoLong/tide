@@ -56,7 +56,9 @@ arrays. A phase maximum is recorded for construction, forward, backward and
 optimizer. Operator workspace declarations are limits, not allocations.
 FP16 training additionally charges FP32 master parameters at construction and
 throughout the run, plus FP32 master gradients/optimizer slots alongside payload
-gradients. Its shape estimate is implemented; device calibration is pending.
+gradients. [Clean7b1fae5 calibration](evidence/eager-fp16-consumers-20261003.md)
+passed four CPU and seven two-NPU fresh processes at D256 and D2048/six-node
+scales. These observations do not certify original480-node/B512 capacity.
 
 CPU RSS additionally charges6.25% of learned and explicit master storage for host allocations and
 retained buffers at each phase. The original-width B4 fresh-process

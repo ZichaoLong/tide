@@ -130,40 +130,30 @@ increment first. A queue refusal ends this attempt; no unlimited waiting. Use
 measured phases and unchanged1.15 for explicitly declared originalB512 budgets.
 Do not rerun the completed CPU pilot or infer B512 success from its forecast.
 
-## Current increment: eager FP16 consumer closeout
+## Qualified eager FP16 consumers
 
-Uncommitted implementation: Python public FP32MasterOptimizer and independent
-standalone C++ consumer-owned FP32 masters/SGD/AdamW. FP16 payload gradients,
-FP32 loss/masters/slots, explicit static --loss-scale(default1), no implicit skip
-or retry. Aliases/None/zero and physical-chunk/update boundaries are preserved.
-Admission charges master parameters/gradients/slots and CPU RSS; FP32 estimates
-are unchanged. No public C++ checkpoint schema extension is claimed.
+Implementation **7b1fae504ec779143655b9221c82d8c14a69b410** committed/pushed.
+Clean source `TASK/sources/eager-half-clean01` retains all1535 source hashes.
+Eight accepted jobs are terminal passed/exit0, inactive/empty cgroups, completed
+leases: `build-eager-half-{cpu,npu}-clean01`, `eager-half-cpu-clean01`,
+`eager-half-npu-clean01`, `eager-half-cpu-regression-clean01`,
+`eager-half-calibration-{cpu,npu}-clean01`, `eager-half-profile-clean01`.
+CPU61/22 deselected,NPU49/no skips,CPU FP32/FP64 regression55 passed.
+Four CPU/seven two-NPU fresh-process memory calibrations passed at D256 and
+D2048/six-node, two updates/two windows, scale1,16GiB/device. Actual separate
+Attention mixed-C profile has15180ops,128 AiCPU:80 BOOL/INT64 ScatterElements
+and48 INT64 Sort; no observed host tensor-compute fallback. Not throughput.
+[Reviewed evidence](evidence/eager-fp16-consumers-20261003.md) and its JSON audit
+are ready for their separate evidence commit/push. No mainline job is live.
 
-Completed development from frozen `eager-half-dev02`, with dev01 installed clients:
-CPU61 passed/22 deselected, two-card NPU49 passed/no skips, FP32/FP64 CPU consumer
-regression55 passed. Both CPU/NPU builds passed. The original dev01 duplicate
-parametrization('dtype') collection failure remains retained. Implementation
-bytes and both binary hashes still match the tested snapshots/manifests.
-The only later test change is `standalone_binary()`: skip a standalone test when
-no standalone binary was selected; fail if an explicitly selected binary is absent.
-Documentation also changed. These later bytes need an affected test before commit.
-
-Affected final entry check `eager-half-entry-cpu-dev03` passed/exit0:15 passed,
-34 deselected,14.53s. All frozen dev03 source hashes remain intact. Its transient
-unit ended. Static portability scan reports0 errors; adapter-specific warnings
-are not evidence of new defects. CPU/NPU runtime and consumer gates below own
-actual support. No current mainline task is live.
-
-Commit this reviewed implementation, then use its exact commit for clean
-`eager-half-clean01`: fresh installed CPU/NPU clients
-`build-eager-half-{cpu,npu}-clean01` (two workers,900s each), full affected
-`eager-half-cpu-clean01`(FP16 plus static admission,900s),
-`eager-half-npu-clean01`(49 directed checks,2-card120s lease,900s), and
-`eager-half-cpu-regression-clean01`(FP32/FP64 consumer,900s).
-Then separate FP16 memory calibration and actual-consumer profiling, using new
-helpers/outputs; never modify prior audited helpers. Runtime cwd OUT, init0 for
-standalone NPU. All qualification jobs must match this implementation, finish,
-and preserve exact source hashes before evidence is committed separately.
+Python public FP32MasterOptimizer and independent C++ consumer masters preserve
+FP16 payload autograd gradients,FP32 loss/masters/slots,explicit static scale,
+aliases/None/zero and update boundaries. Master memory charged; FP32 envelopes
+unchanged. No C++ public checkpoint schema extension. Retained dev01 duplicate
+parametrization failure is unchanged. Re-audit:
+`python TASK/launchers/eager_half_evidence.py 7b1fae504ec779143655b9221c82d8c14a69b410`.
+Next: commit/push this evidence, then submit the bounded mixed chunk pilot above.
+Continue toward F6/F7 without a per-commit pause; do not rerun unaffected gates.
 
 ## Remaining acceptance and environment
 
@@ -181,7 +171,7 @@ relaxed protection.
 Still required: actual full-size mixed/CPU, original-scale formal CPU/screened
 mixed/resident comparisons across required matrix,3 fresh processes/recommendation,
 independent profiles, final integrated evidence/support audit and current jobs
-terminal. Eager FP16 training and real CUDA/x86_64 hardware stay separately open;
+terminal. Real CUDA/x86_64 hardware stays target-pending;
 no available local item may be declared complete from refusal/compilation alone.
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`; public authorized

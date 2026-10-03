@@ -1,0 +1,1559 @@
+{
+  "schema": "tide-eager-half-evidence-v1",
+  "source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+  "source_file_count": 1535,
+  "source_inventory_sha256": "1e9f864582d90758a7003b4097e2e32acd46ede478a85a2ac5d3ef012640f56c",
+  "jobs": [
+    {
+      "name": "build-eager-half-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "bac097a3c860ab4c5f666858d6d3c866247d8d8d065bbcb10df0b9ca887a387c",
+        "task.log": "052bd28e19d8e27156e32e25da5cf5f34a152061bca9594c9a3a9d708ac31fdd"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-eager-half-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fb16f47f8b115a48752b85a71c583c0a57249e81abe43d9244b0cf45d7ee706a",
+        "task.log": "ce0fad54a42322023a0388d2e0bdb66aed281c57b811536b89820ed19773bbe8"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-half-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "3a939515338925fb5bf8d929bf762383bdecef1cc41a5aa498104bc7852a637c",
+        "task.log": "e36ef9236f89817994efac379a0b958f52fa60df821a573829ab14c0378b0107"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-half-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "8ff34f95f2e536698680adacc36d07302ec6fb7602acf9f947257a1d0d9a22ed",
+        "task.log": "b66c79be09748a18351645989e16266de94ede3d67fdbddea15f52448e862290",
+        "queue.json": "791e81ccdff42035a0ded8922f4d820faf440d4b4d0d319f5312a5e96e726853"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        3,
+        9
+      ]
+    },
+    {
+      "name": "eager-half-cpu-regression-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fb43be7b635de7b38291441f5417815d9b51f8c0bfcb9fef6cf7be94434fec01",
+        "task.log": "d50d73c02ecbe8da974f57cba0300579d988fb642dd3cc4cfb67d8fce36853ec"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-half-calibration-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "13c419e2e7908faec3d2d6902ee2489ef59b112bafb065f39f47de4a0c39604c",
+        "task.log": "99a711207215e57c71338138b96549dcfcf32ba142998f916e22952e4a90c593"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "eager-half-calibration-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "de6640bc2767015c547c41a8809be6b0d560af08a99fa74994e6bd4a1a87ffd6",
+        "task.log": "da707fc4239e151672806f5f8bd9dc05a83f3a1aeb5ef1210858f62f50ac5243",
+        "queue.json": "e9d8fbd1705f60f32f5fef943d1b69d23b63f6449cf1566f2d395a3b6405bbc7"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        3,
+        9
+      ]
+    },
+    {
+      "name": "eager-half-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "123ccddbf127ffa2d9f7b511301bf26d4cb67be5c64e92459ae281068b888928",
+        "task.log": "b891c569703b547cc176b6c409b0c7477551bdf4da6515558dfb0dace43cf40a",
+        "queue.json": "1340ae905f44de8120c874d102b70899739f5eb1f5000288f8ce9eae90df4557",
+        "profile/result.json": "d67e7a191786bbfbdb9799d21bf4a10c6db9f8ab727427ce2db48215603be7bb",
+        "profile/profile.log": "c017df0b3e75aa356aa6c734b45393e116f3b6d7ff319bd5bb7851d195fdd374"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      },
+      "physical_devices": [
+        1,
+        11
+      ]
+    }
+  ],
+  "builds": {
+    "cpu": {
+      "manifest_sha256": "bf6d3d257bf9d629d5b1a2a4a94cba03585d7c0277ebb1913e8bbd5ba10c6cdd",
+      "binary_sha256": "efb1ef32be389333fbf622e9b24a0210843bcf39b857733157383317753fc43a",
+      "loader_sha256": "5eebeb5c18c725b7d0685e9d5af77017fcbb6127a9c3fa528f70d9ee10c870a6",
+      "master_probe_sha256": "e661463c1f2b41047d6c104cfc6ec8b019d2a2246e3fecf654270f089865e432",
+      "capacity_probe_sha256": "bacb9c8f753b3ae49d36a0ac977d8eb0f31738f163b9e64bfdd3c35ee91feda1",
+      "core_manifest_sha256": "9e72012d90d463d52fd8cd12e3cb013b7f794b2393df3de5d84bfd0fc831ec3f",
+      "consumer_sources": {
+        "resident_capacity.cpp": "bc073dc12e81c4e41329dadfa4c3b286f55c2f35a0930b029f83b662436714a2",
+        "resident_run.cpp": "7d60de8ebffc1e7cdd8005aa2c84f047585c4835870aeeea4799f6ba9a2d71a4",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+        "traffic_bounds.py": "8455af37a494ef4a90839a199f64c72e0b13dd95a5f9c6919adacf59f5efd823",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "1a071c84df44efeba02cdf5cfae6289e355f403d64217bca8535513bfbba2328",
+        "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+        "host.py": "eb3cb7ca1d6863fa4b1a9948a109be1c815f8c6ca3486ca53c75f809636fbb07",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "7b99aad5c2b9c1fdeb29121ccee071f70b187f49059336acc0e7743252a97a19",
+        "eager_optimizer.h": "d422defaa3f63e65a1100947918076103c01e39926ce70af871d9adcc82bc4e8",
+        "eager_capacity_runtime.h": "c9de7ce203a7a06fe52267dc30de137381ce9465786f79e78e9eb28b5ac7f1c0",
+        "memory.cpp": "a723cdcec444d825e904e30bfc8d4895f12a0658800ee5f90563088f4a0e3cf9",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "eager_capacity_runtime.py": "faedf455352caddfb2a1e9aa70868943b125af3a22476dee03f31d2e772f3e67",
+        "model.cpp": "b9ee072c907068ab4ec7a7b2000ba16931cdd89b3082289b2798f18da9de9982",
+        "traffic_bounds.h": "b7e3793660ddaf0bdefc8b95efa63365c889fda62826ed7bc53bae735c20b0d1",
+        "capacity_balance.py": "0fb2a55190ed29e215bbe9ee8b4768a0009399182dc726d729629b3114cef985",
+        "eager_placement.py": "757acba4ef0bb424920a95c6edd8c934f1ba587ee18a4a50a72a7fec5670e7ac",
+        "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+        "fixture.py": "9e907d5180b1bc0344462e62a3ff776f517973522258fb9cb93617bf5734f09c",
+        "resident_records.cpp": "22b6c67027898cd2dd0454620c611e8a20fa0b813d6500e67eb12f8958f46564",
+        "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+        "consumer.h": "66df60dc809794238463d5a400a2c97ad3231c32a05689e5cd524e8e6bb921e4",
+        "capacity.h": "b057dc320e32ca85442bf1d0cc6b5f1da305f35fe2f06a9c02b60056f3d731d9",
+        "eager_capacity.h": "229345c7a3ad11ef12504783d90cbda9a1bc0ffa9eefa61841aa2623ee8ee359",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "eager_capacity.py": "a82c98c3fed0c3f21e48d9f9b5d0743b8aae96e721e2d6b4a8964874dbbc3bf7",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "0cb5022890fe8dfd5f1fd762582a8f4dec4c916f97f6ea3bb4cc8c0eb869878e",
+        "capacity_record.h": "c9f16de9b70ef17993822bc483f1241c3ca50149aa227b6bb766a67884df0185",
+        "run.cpp": "8cb2e28d7b39c193ba04121d28a918b87e2d528261cd108bc43cc27eefba2d3e",
+        "capacity.py": "db97689440b9ca97f254f1eb76ad719050c2b6c6e85867669ec0af44adf8c387",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "af4d10f064ed89f76673f08786744a2104bae2ecdacc327673ee9f3f8bc3e76a",
+        "eager_placement.h": "162a20e86a07391dc5f3607d9e16cd437e60c156331fc1f101c7af64ec2898e4",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+        "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+        "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+      }
+    },
+    "npu": {
+      "manifest_sha256": "334424b99eaeb87519cd5133868e107dd10380aaf6f255892667562cb09d1d01",
+      "binary_sha256": "b7ef27c79d41f8c14b727194c1b6e4b9059c2029d9326c7631495be9b11a6775",
+      "loader_sha256": "873eb3f42cf24c49aefc84df7cbd963df776f9961dc4297ce396d7458895dc7b",
+      "master_probe_sha256": "ebcb6d5e96c078d263c0d6970dadd5edad0983156c4965dc260a7e14d7630a8f",
+      "capacity_probe_sha256": "ea9c1591627eba1763d3772c33ccd48ce06afe0318685d16f95e85346fa8b5fa",
+      "core_manifest_sha256": "12b1ecc9fe12b29507eda875781029d7d2b5e93391f1b18689e39a0f538309d3",
+      "consumer_sources": {
+        "resident_capacity.cpp": "bc073dc12e81c4e41329dadfa4c3b286f55c2f35a0930b029f83b662436714a2",
+        "resident_run.cpp": "7d60de8ebffc1e7cdd8005aa2c84f047585c4835870aeeea4799f6ba9a2d71a4",
+        "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+        "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+        "traffic_bounds.py": "8455af37a494ef4a90839a199f64c72e0b13dd95a5f9c6919adacf59f5efd823",
+        "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+        "config.cpp": "1a071c84df44efeba02cdf5cfae6289e355f403d64217bca8535513bfbba2328",
+        "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+        "host.py": "eb3cb7ca1d6863fa4b1a9948a109be1c815f8c6ca3486ca53c75f809636fbb07",
+        "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+        "memory.h": "7b99aad5c2b9c1fdeb29121ccee071f70b187f49059336acc0e7743252a97a19",
+        "eager_optimizer.h": "d422defaa3f63e65a1100947918076103c01e39926ce70af871d9adcc82bc4e8",
+        "eager_capacity_runtime.h": "c9de7ce203a7a06fe52267dc30de137381ce9465786f79e78e9eb28b5ac7f1c0",
+        "memory.cpp": "a723cdcec444d825e904e30bfc8d4895f12a0658800ee5f90563088f4a0e3cf9",
+        "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+        "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+        "eager_capacity_runtime.py": "faedf455352caddfb2a1e9aa70868943b125af3a22476dee03f31d2e772f3e67",
+        "model.cpp": "b9ee072c907068ab4ec7a7b2000ba16931cdd89b3082289b2798f18da9de9982",
+        "traffic_bounds.h": "b7e3793660ddaf0bdefc8b95efa63365c889fda62826ed7bc53bae735c20b0d1",
+        "capacity_balance.py": "0fb2a55190ed29e215bbe9ee8b4768a0009399182dc726d729629b3114cef985",
+        "eager_placement.py": "757acba4ef0bb424920a95c6edd8c934f1ba587ee18a4a50a72a7fec5670e7ac",
+        "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+        "fixture.py": "9e907d5180b1bc0344462e62a3ff776f517973522258fb9cb93617bf5734f09c",
+        "resident_records.cpp": "22b6c67027898cd2dd0454620c611e8a20fa0b813d6500e67eb12f8958f46564",
+        "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+        "consumer.h": "66df60dc809794238463d5a400a2c97ad3231c32a05689e5cd524e8e6bb921e4",
+        "capacity.h": "b057dc320e32ca85442bf1d0cc6b5f1da305f35fe2f06a9c02b60056f3d731d9",
+        "eager_capacity.h": "229345c7a3ad11ef12504783d90cbda9a1bc0ffa9eefa61841aa2623ee8ee359",
+        "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+        "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+        "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+        "eager_capacity.py": "a82c98c3fed0c3f21e48d9f9b5d0743b8aae96e721e2d6b4a8964874dbbc3bf7",
+        "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+        "CMakeLists.txt": "0cb5022890fe8dfd5f1fd762582a8f4dec4c916f97f6ea3bb4cc8c0eb869878e",
+        "capacity_record.h": "c9f16de9b70ef17993822bc483f1241c3ca50149aa227b6bb766a67884df0185",
+        "run.cpp": "8cb2e28d7b39c193ba04121d28a918b87e2d528261cd108bc43cc27eefba2d3e",
+        "capacity.py": "db97689440b9ca97f254f1eb76ad719050c2b6c6e85867669ec0af44adf8c387",
+        "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+        "main.cpp": "af4d10f064ed89f76673f08786744a2104bae2ecdacc327673ee9f3f8bc3e76a",
+        "eager_placement.h": "162a20e86a07391dc5f3607d9e16cd437e60c156331fc1f101c7af64ec2898e4",
+        "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+        "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+        "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+        "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+      }
+    }
+  },
+  "tests": {
+    "eager-half-cpu-clean01": {
+      "passed": 61,
+      "deselected": 22,
+      "skipped": 0,
+      "log_sha256": "e36ef9236f89817994efac379a0b958f52fa60df821a573829ab14c0378b0107"
+    },
+    "eager-half-npu-clean01": {
+      "passed": 49,
+      "deselected": 0,
+      "skipped": 0,
+      "log_sha256": "b66c79be09748a18351645989e16266de94ede3d67fdbddea15f52448e862290"
+    },
+    "eager-half-cpu-regression-clean01": {
+      "passed": 55,
+      "deselected": 0,
+      "skipped": 0,
+      "log_sha256": "d50d73c02ecbe8da974f57cba0300579d988fb642dd3cc4cfb67d8fce36853ec"
+    }
+  },
+  "calibration": {
+    "cpu": {
+      "result_sha256": "086d4711fd1c9f2f7f9997afaffd9e11a8241926b7e8af13c7dc0f3882276df1",
+      "cases": [
+        {
+          "name": "0-add-python-d256",
+          "workload_sha256": "23077f6908c86447d78f3783aaad304d2ded4bc7b1ec222e9eda79afea31b3d2",
+          "result_sha256": "ba966bf536e1b81edf86b0e0cdfce7978fc75b54b5e58a43f2baa0d03e96269a",
+          "parameters": 4198436,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            9.286252975463867,
+            8.861979484558105
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1.0
+          },
+          "memory_admission": {
+            "observation_counter": "host_rss",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              243187712
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "components": {
+                  "learned": 8396872,
+                  "master_parameters": 16793744,
+                  "constants": 335904,
+                  "persistent_state_and_kv": 663552,
+                  "gradients_and_optimizer_slots": 41984360,
+                  "vector_work": 62914560,
+                  "cache_work": 0,
+                  "attention_scores": 0,
+                  "operator_work": 76546048,
+                  "head_work": 77856768,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 1574414
+                },
+                "phases": {
+                  "construction": 597526278,
+                  "forward": 840714350,
+                  "backward": 840714350,
+                  "optimizer": 683165806
+                },
+                "estimated_peak_bytes": 840714350,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              }
+            ]
+          }
+        },
+        {
+          "name": "1-add-libtorch-d256",
+          "workload_sha256": "23077f6908c86447d78f3783aaad304d2ded4bc7b1ec222e9eda79afea31b3d2",
+          "result_sha256": "5986b11205d1c89cd578852519689886e1c2e5be9a2ed26b8765f2a4ef7ad139",
+          "parameters": 4198436,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            9.286252975463867,
+            8.861982345581055
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "host_rss",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              139075584
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 841762926,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 0,
+                  "backend_allowance": 536870912,
+                  "cache_work": 0,
+                  "constants": 335904,
+                  "gradients_and_optimizer_slots": 41984360,
+                  "head_work": 77856768,
+                  "host_rss_allowance": 1574414,
+                  "learned": 8396872,
+                  "master_parameters": 16793744,
+                  "operator_work": 77594624,
+                  "persistent_state_and_kv": 663552,
+                  "transport": 16777216,
+                  "vector_work": 62914560
+                },
+                "phases": {
+                  "backward": 841762926,
+                  "construction": 597526278,
+                  "forward": 841762926,
+                  "optimizer": 684214382
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "2-attention-python-d256",
+          "workload_sha256": "0b1c0c91568de7b3fbdd348c6f96f661a1def4e530dd0e2807abbf665b8b7888",
+          "result_sha256": "213521754a8d4e62ef44ec3e7b67d0ebacb41b48b8b87540a85ab9b007893838",
+          "parameters": 8392740,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            8.330733299255371,
+            9.030689239501953
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1.0
+          },
+          "memory_admission": {
+            "observation_counter": "host_rss",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              366514176
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "components": {
+                  "learned": 16785480,
+                  "master_parameters": 33570960,
+                  "constants": 335904,
+                  "persistent_state_and_kv": 2239488,
+                  "gradients_and_optimizer_slots": 83927400,
+                  "vector_work": 62914560,
+                  "cache_work": 63037440,
+                  "attention_scores": 1572864,
+                  "operator_work": 78643200,
+                  "head_work": 77856768,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 3147278
+                },
+                "phases": {
+                  "construction": 624264966,
+                  "forward": 977679470,
+                  "backward": 977679470,
+                  "optimizer": 755520622
+                },
+                "estimated_peak_bytes": 977679470,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              }
+            ]
+          }
+        },
+        {
+          "name": "3-attention-libtorch-d256",
+          "workload_sha256": "0b1c0c91568de7b3fbdd348c6f96f661a1def4e530dd0e2807abbf665b8b7888",
+          "result_sha256": "0443fdc099cfb0b9c41f64f8a9607b3142c4a76e5421ed777b28892c7f61ebfc",
+          "parameters": 8392740,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            8.330556869506836,
+            9.030956268310547
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "host_rss",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              272621568
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 980825198,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 1572864,
+                  "backend_allowance": 536870912,
+                  "cache_work": 63037440,
+                  "constants": 335904,
+                  "gradients_and_optimizer_slots": 83927400,
+                  "head_work": 77856768,
+                  "host_rss_allowance": 3147278,
+                  "learned": 16785480,
+                  "master_parameters": 33570960,
+                  "operator_work": 81788928,
+                  "persistent_state_and_kv": 2239488,
+                  "transport": 16777216,
+                  "vector_work": 62914560
+                },
+                "phases": {
+                  "backward": 980825198,
+                  "construction": 624264966,
+                  "forward": 980825198,
+                  "optimizer": 758666350
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "limits": {
+        "child_timeout_seconds": 480,
+        "threads": 2,
+        "devices": 1,
+        "dtype": "float16",
+        "device_budget_bytes": 17179869184,
+        "head_budget_bytes": 4294967296,
+        "failure_action": "retain and stop this finite calibration; no retry or capacity relaxation"
+      },
+      "scope": "fresh-process complete FP16 payload/FP32-master consumer allocator/RSS calibration, two connected windows and two SGD updates; no CPU numerical reference, no profiler; timings are incidental, not formal throughput"
+    },
+    "npu": {
+      "result_sha256": "723a6f1a91eb7a44544fa2e9bd45dac1bfbc61cad0ef669db30e2fcde5df31ac",
+      "cases": [
+        {
+          "name": "0-add-python-d256",
+          "workload_sha256": "23077f6908c86447d78f3783aaad304d2ded4bc7b1ec222e9eda79afea31b3d2",
+          "result_sha256": "66e974a4533f2ae4b661c722bf516434a0a9bfd0fcd4273a6b6f33dfe5c20843",
+          "parameters": 4198436,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            9.286120414733887,
+            8.862100601196289
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1.0
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              72812032,
+              64752128
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "components": {
+                  "learned": 4588034,
+                  "master_parameters": 9176068,
+                  "constants": 274464,
+                  "persistent_state_and_kv": 110592,
+                  "gradients_and_optimizer_slots": 22940170,
+                  "vector_work": 8912896,
+                  "cache_work": 0,
+                  "attention_scores": 0,
+                  "operator_work": 76546048,
+                  "head_work": 77856768,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 584463910,
+                  "forward": 754053168,
+                  "backward": 754053168,
+                  "optimizer": 650506288
+                },
+                "estimated_peak_bytes": 754053168,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              },
+              {
+                "logical_device": 1,
+                "components": {
+                  "learned": 3808838,
+                  "master_parameters": 7617676,
+                  "constants": 331808,
+                  "persistent_state_and_kv": 552960,
+                  "gradients_and_optimizer_slots": 19044190,
+                  "vector_work": 58720256,
+                  "cache_work": 0,
+                  "attention_scores": 0,
+                  "operator_work": 68681728,
+                  "head_work": 0,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 550726386,
+                  "forward": 712405584,
+                  "backward": 712405584,
+                  "optimizer": 636908112
+                },
+                "estimated_peak_bytes": 712405584,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              }
+            ]
+          }
+        },
+        {
+          "name": "1-add-libtorch-d256",
+          "workload_sha256": "23077f6908c86447d78f3783aaad304d2ded4bc7b1ec222e9eda79afea31b3d2",
+          "result_sha256": "3bb7b57cdf1f199d1c6252c846062f91c8ed3f47ea6038c3fd98bbba8ee3e195",
+          "parameters": 4198436,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            9.286121368408203,
+            8.862031936645508
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              72813568,
+              89320448
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 755101744,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 0,
+                  "backend_allowance": 536870912,
+                  "cache_work": 0,
+                  "constants": 274464,
+                  "gradients_and_optimizer_slots": 22940170,
+                  "head_work": 77856768,
+                  "host_rss_allowance": 0,
+                  "learned": 4588034,
+                  "master_parameters": 9176068,
+                  "operator_work": 77594624,
+                  "persistent_state_and_kv": 110592,
+                  "transport": 16777216,
+                  "vector_work": 8912896
+                },
+                "phases": {
+                  "backward": 755101744,
+                  "construction": 584463910,
+                  "forward": 755101744,
+                  "optimizer": 651554864
+                }
+              },
+              {
+                "logical_device": 1,
+                "estimated_peak_bytes": 713454160,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 0,
+                  "backend_allowance": 536870912,
+                  "cache_work": 0,
+                  "constants": 331808,
+                  "gradients_and_optimizer_slots": 19044190,
+                  "head_work": 0,
+                  "host_rss_allowance": 0,
+                  "learned": 3808838,
+                  "master_parameters": 7617676,
+                  "operator_work": 69730304,
+                  "persistent_state_and_kv": 552960,
+                  "transport": 16777216,
+                  "vector_work": 58720256
+                },
+                "phases": {
+                  "backward": 713454160,
+                  "construction": 550726386,
+                  "forward": 713454160,
+                  "optimizer": 637956688
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "2-attention-python-d256",
+          "workload_sha256": "0b1c0c91568de7b3fbdd348c6f96f661a1def4e530dd0e2807abbf665b8b7888",
+          "result_sha256": "493e1e54bad0b3b6cbc4787c15c0c04345b8a9b22c9c0ee7d78a0a93c89c2228",
+          "parameters": 8392740,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            8.331104278564453,
+            9.030952453613281
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1.0
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              106212864,
+              100547584
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "components": {
+                  "learned": 8653850,
+                  "master_parameters": 17307700,
+                  "constants": 294944,
+                  "persistent_state_and_kv": 1214208,
+                  "gradients_and_optimizer_slots": 43269250,
+                  "vector_work": 40370176,
+                  "cache_work": 36771840,
+                  "attention_scores": 917504,
+                  "operator_work": 78643200,
+                  "head_work": 77856768,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 596681838,
+                  "forward": 858947568,
+                  "backward": 858947568,
+                  "optimizer": 686254064
+                },
+                "estimated_peak_bytes": 858947568,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              },
+              {
+                "logical_device": 1,
+                "components": {
+                  "learned": 8131630,
+                  "master_parameters": 16263260,
+                  "constants": 311328,
+                  "persistent_state_and_kv": 1681920,
+                  "gradients_and_optimizer_slots": 40658150,
+                  "vector_work": 54525952,
+                  "cache_work": 52531200,
+                  "attention_scores": 1310720,
+                  "operator_work": 71827456,
+                  "head_work": 0,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 567868586,
+                  "forward": 800889744,
+                  "backward": 800889744,
+                  "optimizer": 675744656
+                },
+                "estimated_peak_bytes": 800889744,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              }
+            ]
+          }
+        },
+        {
+          "name": "3-attention-libtorch-d256",
+          "workload_sha256": "0b1c0c91568de7b3fbdd348c6f96f661a1def4e530dd0e2807abbf665b8b7888",
+          "result_sha256": "2ae567a767efa157b58f25106a10c6c932e5f672b1e706be129fd3a8a44a6b2a",
+          "parameters": 8392740,
+          "outputs": [
+            64,
+            64
+          ],
+          "final_cut": 96,
+          "losses": [
+            8.33110523223877,
+            9.03036880493164
+          ],
+          "batch_execution": {
+            "logical_batch": 8,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 8,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 8,
+            "effective_sample_rows": 8,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              106199552,
+              100548608
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 862093296,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 917504,
+                  "backend_allowance": 536870912,
+                  "cache_work": 36771840,
+                  "constants": 294944,
+                  "gradients_and_optimizer_slots": 43269250,
+                  "head_work": 77856768,
+                  "host_rss_allowance": 0,
+                  "learned": 8653850,
+                  "master_parameters": 17307700,
+                  "operator_work": 81788928,
+                  "persistent_state_and_kv": 1214208,
+                  "transport": 16777216,
+                  "vector_work": 40370176
+                },
+                "phases": {
+                  "backward": 862093296,
+                  "construction": 596681838,
+                  "forward": 862093296,
+                  "optimizer": 689399792
+                }
+              },
+              {
+                "logical_device": 1,
+                "estimated_peak_bytes": 804035472,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 1310720,
+                  "backend_allowance": 536870912,
+                  "cache_work": 52531200,
+                  "constants": 311328,
+                  "gradients_and_optimizer_slots": 40658150,
+                  "head_work": 0,
+                  "host_rss_allowance": 0,
+                  "learned": 8131630,
+                  "master_parameters": 16263260,
+                  "operator_work": 74973184,
+                  "persistent_state_and_kv": 1681920,
+                  "transport": 16777216,
+                  "vector_work": 54525952
+                },
+                "phases": {
+                  "backward": 804035472,
+                  "construction": 567868586,
+                  "forward": 804035472,
+                  "optimizer": 678890384
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "4-add-libtorch-d2048",
+          "workload_sha256": "ad105af5f8ed6fd899997ebd2008f1cd61cb93ff8285ba5ac9146faf6e59bfc3",
+          "result_sha256": "1f1317e550b26d5bf501b2f2b7a8ef9e1c2f3d72ac11de3cb05f1ba8f8751adb",
+          "parameters": 248000524,
+          "outputs": [
+            16,
+            16
+          ],
+          "final_cut": 40,
+          "losses": [
+            29.36388397216797,
+            34.63992691040039
+          ],
+          "batch_execution": {
+            "logical_batch": 4,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 4,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 4,
+            "effective_sample_rows": 4,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              3942791168,
+              524628992
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 5806067760,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 0,
+                  "backend_allowance": 536870912,
+                  "cache_work": 0,
+                  "constants": 16846880,
+                  "gradients_and_optimizer_slots": 2186301450,
+                  "head_work": 698646528,
+                  "host_rss_allowance": 0,
+                  "learned": 437260290,
+                  "master_parameters": 874520580,
+                  "operator_work": 1025507328,
+                  "persistent_state_and_kv": 98304,
+                  "transport": 16777216,
+                  "vector_work": 13238272
+                },
+                "phases": {
+                  "backward": 5806067760,
+                  "construction": 5162221606,
+                  "forward": 5806067760,
+                  "optimizer": 5077405744
+                }
+              },
+              {
+                "logical_device": 1,
+                "estimated_peak_bytes": 1323716816,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 0,
+                  "backend_allowance": 536870912,
+                  "cache_work": 0,
+                  "constants": 16863264,
+                  "gradients_and_optimizer_slots": 293703790,
+                  "head_work": 0,
+                  "host_rss_allowance": 0,
+                  "learned": 58740758,
+                  "master_parameters": 117481516,
+                  "operator_work": 234881024,
+                  "persistent_state_and_kv": 163840,
+                  "transport": 16777216,
+                  "vector_work": 48234496
+                },
+                "phases": {
+                  "backward": 1323716816,
+                  "construction": 864174178,
+                  "forward": 1323716816,
+                  "optimizer": 1258705104
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "5-attention-libtorch-d2048",
+          "workload_sha256": "bcf78a25a4993efe41a21acb63f0e1d3b4cf421c0f4f259c1459dce8fc6ff8f9",
+          "result_sha256": "59a1b3fe6afdfd034b84164c9551e3e9aca8e04b5a97331abe9b2870c17758e6",
+          "parameters": 348663820,
+          "outputs": [
+            16,
+            16
+          ],
+          "final_cut": 40,
+          "losses": [
+            22.14836883544922,
+            28.148710250854492
+          ],
+          "batch_execution": {
+            "logical_batch": 4,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 4,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 4,
+            "effective_sample_rows": 4,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              4212561408,
+              1881014272
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "estimated_peak_bytes": 6349502064,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 8192,
+                  "backend_allowance": 536870912,
+                  "cache_work": 6292992,
+                  "constants": 16846880,
+                  "gradients_and_optimizer_slots": 2354073610,
+                  "head_work": 698646528,
+                  "host_rss_allowance": 0,
+                  "learned": 470814722,
+                  "master_parameters": 941629444,
+                  "operator_work": 1293942784,
+                  "persistent_state_and_kv": 360512,
+                  "transport": 16777216,
+                  "vector_work": 13238272
+                },
+                "phases": {
+                  "backward": 6349502064,
+                  "construction": 5262884902,
+                  "forward": 6349502064,
+                  "optimizer": 5614538864
+                }
+              },
+              {
+                "logical_device": 1,
+                "estimated_peak_bytes": 3040867920,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538,
+                "components": {
+                  "attention_scores": 98304,
+                  "backend_allowance": 536870912,
+                  "cache_work": 37757952,
+                  "constants": 16863264,
+                  "gradients_and_optimizer_slots": 1132564590,
+                  "head_work": 0,
+                  "host_rss_allowance": 0,
+                  "learned": 226512918,
+                  "master_parameters": 453025836,
+                  "operator_work": 570425344,
+                  "persistent_state_and_kv": 1737088,
+                  "transport": 16777216,
+                  "vector_work": 48234496
+                },
+                "phases": {
+                  "backward": 3040867920,
+                  "construction": 1635926114,
+                  "forward": 3040867920,
+                  "optimizer": 2937999952
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "6-attention-python-d2048",
+          "workload_sha256": "bcf78a25a4993efe41a21acb63f0e1d3b4cf421c0f4f259c1459dce8fc6ff8f9",
+          "result_sha256": "afb7fb747ac54e14f46a6e16e099f59bcb79e77b519d218e9a6a069b1466677a",
+          "parameters": 348663820,
+          "outputs": [
+            16,
+            16
+          ],
+          "final_cut": 40,
+          "losses": [
+            22.14836883544922,
+            28.177845001220703
+          ],
+          "batch_execution": {
+            "logical_batch": 4,
+            "requested_sample_chunk_rows": 0,
+            "effective_sample_chunk_rows": 4,
+            "physical_chunks": 1
+          },
+          "precision": {
+            "payload": "float16",
+            "loss": "float32",
+            "optimizer_masters": "float32",
+            "gradient_accumulation": "payload",
+            "loss_scale": 1.0
+          },
+          "memory_admission": {
+            "observation_counter": "framework_allocator",
+            "logical_batch": 4,
+            "effective_sample_rows": 4,
+            "physical_chunks": 1,
+            "observed_peak_growth_bytes": [
+              4211518464,
+              1881024000
+            ],
+            "devices": [
+              {
+                "logical_device": 0,
+                "components": {
+                  "learned": 470814722,
+                  "master_parameters": 941629444,
+                  "constants": 16846880,
+                  "persistent_state_and_kv": 360512,
+                  "gradients_and_optimizer_slots": 2354073610,
+                  "vector_work": 13238272,
+                  "cache_work": 6292992,
+                  "attention_scores": 8192,
+                  "operator_work": 1092616192,
+                  "head_work": 698646528,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 5262884902,
+                  "forward": 6148175472,
+                  "backward": 6148175472,
+                  "optimizer": 5413212272
+                },
+                "estimated_peak_bytes": 6148175472,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              },
+              {
+                "logical_device": 1,
+                "components": {
+                  "learned": 226512918,
+                  "master_parameters": 453025836,
+                  "constants": 16863264,
+                  "persistent_state_and_kv": 1737088,
+                  "gradients_and_optimizer_slots": 1132564590,
+                  "vector_work": 48234496,
+                  "cache_work": 37757952,
+                  "attention_scores": 98304,
+                  "operator_work": 369098752,
+                  "head_work": 0,
+                  "transport": 16777216,
+                  "backend_allowance": 536870912,
+                  "host_rss_allowance": 0
+                },
+                "phases": {
+                  "construction": 1635926114,
+                  "forward": 2839541328,
+                  "backward": 2839541328,
+                  "optimizer": 2736673360
+                },
+                "estimated_peak_bytes": 2839541328,
+                "budget_bytes": 17179869184,
+                "usable_bytes": 15327664538
+              }
+            ]
+          }
+        }
+      ],
+      "limits": {
+        "child_timeout_seconds": 480,
+        "threads": 2,
+        "devices": 2,
+        "dtype": "float16",
+        "device_budget_bytes": 17179869184,
+        "head_budget_bytes": 4294967296,
+        "failure_action": "retain and stop this finite calibration; no retry or capacity relaxation"
+      },
+      "scope": "fresh-process complete FP16 payload/FP32-master consumer allocator/RSS calibration, two connected windows and two SGD updates; no CPU numerical reference, no profiler; timings are incidental, not formal throughput"
+    }
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 12298,
+      "MIX_AIV": 1774,
+      "AI_CPU": 128,
+      "AI_CORE": 980
+    },
+    "physical_devices": [
+      1,
+      11
+    ],
+    "operator_counts_by_device": {
+      "1": {
+        "IsFinite": 1051,
+        "ReduceAll": 899,
+        "ZerosLike": 392,
+        "OnesLike": 22,
+        "Cast": 519,
+        "GatherV2": 8,
+        "Pack": 942,
+        "Mul": 1356,
+        "Fill": 95,
+        "GatherV3": 390,
+        "Range": 128,
+        "Less": 128,
+        "ScatterElements": 80,
+        "SoftmaxV2": 272,
+        "MatMulV2": 422,
+        "Add": 438,
+        "LogicalNot": 48,
+        "MaskedFill": 48,
+        "LpNormV2": 96,
+        "Sort": 96,
+        "Swish": 24,
+        "Pows": 48,
+        "ReduceMean": 24,
+        "Rsqrt": 24,
+        "ConcatD": 160,
+        "Sub": 200,
+        "Transpose": 256,
+        "BatchMatMulV2": 78,
+        "Slice": 84,
+        "BroadcastTo": 40,
+        "LogSoftmaxV2": 8,
+        "MemSet": 16,
+        "NLLLoss": 8,
+        "RealDiv": 116,
+        "NLLLossGrad": 8,
+        "LogSoftmaxGrad": 8,
+        "ReduceSum": 48,
+        "Pow": 24,
+        "SiluGrad": 24,
+        "InplaceIndexAdd": 24,
+        "SoftmaxGrad": 48,
+        "EmbeddingDenseGradV2": 8,
+        "Axpy": 38,
+        "Addcmul": 38,
+        "Sqrt": 38,
+        "Addcdiv": 38
+      },
+      "11": {
+        "IsFinite": 573,
+        "ReduceAll": 483,
+        "Cast": 317,
+        "Pack": 710,
+        "Mul": 1176,
+        "ZerosLike": 204,
+        "GatherV3": 178,
+        "MatMulV2": 398,
+        "Range": 48,
+        "Less": 48,
+        "Add": 392,
+        "LogicalNot": 48,
+        "MaskedFill": 48,
+        "SoftmaxV2": 192,
+        "LpNormV2": 96,
+        "ConcatD": 176,
+        "Sub": 220,
+        "Transpose": 246,
+        "BatchMatMulV2": 82,
+        "Swish": 24,
+        "Pows": 48,
+        "ReduceMean": 24,
+        "Rsqrt": 24,
+        "Slice": 102,
+        "BroadcastTo": 40,
+        "Fill": 27,
+        "ReduceSum": 48,
+        "RealDiv": 92,
+        "Pow": 24,
+        "SiluGrad": 24,
+        "InplaceIndexAdd": 24,
+        "SoftmaxGrad": 48,
+        "Axpy": 34,
+        "Addcmul": 34,
+        "Sqrt": 34,
+        "Addcdiv": 34
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 12298,
+      "MIX_AIV": 1774,
+      "MEMCPY_ASYNC": 1922,
+      "AI_CPU": 128,
+      "AI_CORE": 980,
+      "EVENT_RECORD": 94,
+      "REMOTE_EVENT_WAIT": 32,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 93,
+      "Addcdiv_Tiling": 26,
+      "Addcmul_Tiling": 13,
+      "Axpy_Tiling": 13,
+      "BatchMatMulV2_Tiling": 42,
+      "BroadcastTo_Tiling": 14,
+      "Cast_Tiling": 109,
+      "ConcatD_Tiling": 57,
+      "EmbeddingDenseGradV2_Tiling": 2,
+      "Fill_Tiling": 69,
+      "GatherV2_Tiling": 1,
+      "GatherV3_Tiling": 70,
+      "InplaceIndexAdd_Tiling": 96,
+      "IsFinite_Tiling": 82,
+      "Less_Tiling": 14,
+      "LogSoftmaxGrad_Tiling": 1,
+      "LogSoftmaxV2_Tiling": 2,
+      "LogicalNot_Tiling": 17,
+      "LpNormV2_Tiling": 16,
+      "MaskedFill_Tiling": 17,
+      "MatMulV2_Tiling": 82,
+      "Mul_Tiling": 212,
+      "NLLLossGrad_Tiling": 1,
+      "NLLLoss_Tiling": 1,
+      "OnesLike_Tiling": 3,
+      "Pack_Tiling": 95,
+      "Pow_Tiling": 2,
+      "Pows_Tiling": 12,
+      "Range_Tiling": 14,
+      "RealDiv_Tiling": 43,
+      "ReduceAll_Tiling": 42,
+      "ReduceMean_Tiling": 8,
+      "ReduceSum_Tiling": 12,
+      "Rsqrt_Tiling": 4,
+      "SiluGrad_Tiling": 2,
+      "Slice_Tiling": 40,
+      "SoftmaxGrad_Tiling": 16,
+      "SoftmaxV2_Tiling": 96,
+      "Sort_Tiling": 2,
+      "Sqrt_Tiling": 13,
+      "Sub_Tiling": 7,
+      "Swish_Tiling": 4,
+      "Transpose_Tiling": 238,
+      "ZerosLike_Tiling": 43,
+      "aclnnAdd": 422,
+      "aclnnAddGetWorkspaceSize": 89,
+      "aclnnAddcdivGetWorkspaceSize": 26,
+      "aclnnAddcmulGetWorkspaceSize": 13,
+      "aclnnAddmm": 384,
+      "aclnnAddmmGetWorkspaceSize": 12,
+      "aclnnAddsGetWorkspaceSize": 17,
+      "aclnnAll": 1436,
+      "aclnnAllGetWorkspaceSize": 25,
+      "aclnnArange": 176,
+      "aclnnArangeGetWorkspaceSize": 14,
+      "aclnnBitwiseNot": 96,
+      "aclnnBitwiseNotGetWorkspaceSize": 17,
+      "aclnnCat": 948,
+      "aclnnCatGetWorkspaceSize": 645,
+      "aclnnDivs": 136,
+      "aclnnDivsGetWorkspaceSize": 43,
+      "aclnnEmbedding": 8,
+      "aclnnEmbeddingDenseBackward": 8,
+      "aclnnEmbeddingDenseBackwardGetWorkspaceSize": 1,
+      "aclnnEmbeddingGetWorkspaceSize": 1,
+      "aclnnIndexAdd": 48,
+      "aclnnIndexAddGetWorkspaceSize": 48,
+      "aclnnIndexSelect": 568,
+      "aclnnIndexSelectGetWorkspaceSize": 35,
+      "aclnnInplaceAdd": 360,
+      "aclnnInplaceAddcdiv": 72,
+      "aclnnInplaceAddcmul": 72,
+      "aclnnInplaceAdds": 120,
+      "aclnnInplaceCopy": 1688,
+      "aclnnInplaceCopyGetWorkspaceSize": 1041,
+      "aclnnInplaceDivs": 72,
+      "aclnnInplaceFillScalar": 4,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 1,
+      "aclnnInplaceMaskedFillScalar": 96,
+      "aclnnInplaceMaskedFillScalarGetWorkspaceSize": 17,
+      "aclnnInplaceMuls": 216,
+      "aclnnInplaceMulsGetWorkspaceSize": 39,
+      "aclnnInplaceOne": 22,
+      "aclnnInplaceOneGetWorkspaceSize": 3,
+      "aclnnInplaceZero": 728,
+      "aclnnInplaceZeroGetWorkspaceSize": 51,
+      "aclnnIsFinite": 1678,
+      "aclnnIsFiniteGetWorkspaceSize": 45,
+      "aclnnLogSoftmax": 8,
+      "aclnnLogSoftmaxBackward": 8,
+      "aclnnLogSoftmaxBackwardGetWorkspaceSize": 1,
+      "aclnnLogSoftmaxGetWorkspaceSize": 1,
+      "aclnnLtScalar": 176,
+      "aclnnLtScalarGetWorkspaceSize": 14,
+      "aclnnMatmul": 1144,
+      "aclnnMatmulGetWorkspaceSize": 139,
+      "aclnnMean": 48,
+      "aclnnMeanGetWorkspaceSize": 4,
+      "aclnnMm": 264,
+      "aclnnMmGetWorkspaceSize": 12,
+      "aclnnMul": 1064,
+      "aclnnMulGetWorkspaceSize": 59,
+      "aclnnMuls": 440,
+      "aclnnMulsGetWorkspaceSize": 34,
+      "aclnnNLLLoss": 8,
+      "aclnnNLLLossBackward": 8,
+      "aclnnNLLLossBackwardGetWorkspaceSize": 1,
+      "aclnnNLLLossGetWorkspaceSize": 1,
+      "aclnnNorm": 192,
+      "aclnnNormGetWorkspaceSize": 8,
+      "aclnnPowTensorScalar": 144,
+      "aclnnPowTensorScalarGetWorkspaceSize": 8,
+      "aclnnReduceSum": 96,
+      "aclnnReduceSumGetWorkspaceSize": 6,
+      "aclnnRsqrt": 48,
+      "aclnnRsqrtGetWorkspaceSize": 4,
+      "aclnnScatter": 80,
+      "aclnnScatterGetWorkspaceSize": 80,
+      "aclnnSilu": 48,
+      "aclnnSiluBackward": 48,
+      "aclnnSiluBackwardGetWorkspaceSize": 2,
+      "aclnnSiluGetWorkspaceSize": 4,
+      "aclnnSoftmax": 464,
+      "aclnnSoftmaxBackward": 96,
+      "aclnnSoftmaxBackwardGetWorkspaceSize": 16,
+      "aclnnSoftmaxGetWorkspaceSize": 48,
+      "aclnnSort": 160,
+      "aclnnSortGetWorkspaceSize": 113,
+      "aclnnSqrt": 72,
+      "aclnnSqrtGetWorkspaceSize": 13,
+      "aclnnStack": 1652,
+      "aclnnStackGetWorkspaceSize": 95,
+      "aclnnSub": 420,
+      "aclnnSubGetWorkspaceSize": 7,
+      "aclrtBinaryLoadFromData": 132,
+      "aclrtBinaryLoadFromFile": 1,
+      "aclrtCreateEventExWithFlag": 53,
+      "aclrtCreateStreamWithConfig": 4,
+      "aclrtCtxGetSysParamOpt": 1205,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyEvent": 50,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 2,
+      "aclrtDeviceEnablePeerAccess": 2,
+      "aclrtFree": 4,
+      "aclrtGetCurrentContext": 46,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 1774,
+      "aclrtGetMemInfo": 4,
+      "aclrtGetResInCurrentThread": 5706,
+      "aclrtGetStreamAttribute": 16046,
+      "aclrtLaunchKernelWithHostArgs": 15180,
+      "aclrtMemcpy": 2081,
+      "aclrtMemcpyAsync": 1922,
+      "aclrtQueryEventStatus": 44,
+      "aclrtRecordEvent": 94,
+      "aclrtResetDevice": 2,
+      "aclrtSetCurrentContext": 88,
+      "aclrtSetDevice": 21074,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtStreamWaitEvent": 50,
+      "aclrtSynchronizeDeviceWithTimeout": 13,
+      "aclrtSynchronizeStream": 609,
+      "aclrtSynchronizeStreamWithTimeout": 2060
+    },
+    "csv_sha256": {
+      "raw/PROF_000001_20261003223611684_02574162MBPQLIQQ/mindstudio_profiler_output/task_time_20261003223627.csv": "1d8d79d287da03f4d77092dce6b8e75dd3cd9d8659764b24948439a0f96c0b03",
+      "raw/PROF_000001_20261003223611684_02574162MBPQLIQQ/mindstudio_profiler_output/op_summary_20261003223627.csv": "0c2cbeff48235b7933a06f598a878a847731c2fe3da625b00fbabf9fda74797e",
+      "raw/PROF_000001_20261003223611684_02574162MBPQLIQQ/mindstudio_profiler_output/api_statistic_20261003223627.csv": "894782aae9aad55135204262a7527d7c88c0a2b358cc8294bd2bbf035d0f7065"
+    },
+    "scope": "actual two-device FP16 payload/FP32-master Attention mixed-C greedy consumer; two complete AdamW updates, two connected windows, two physical samples; includes construction/head/loss/optimizer, no CPU reference or value diagnostics; not throughput",
+    "aicpu_types": [
+      {
+        "operator": "ScatterElements",
+        "input_dtypes": "BOOL;INT64;BOOL",
+        "count": 80
+      },
+      {
+        "operator": "Sort",
+        "input_dtypes": "INT64",
+        "count": 48
+      }
+    ],
+    "consumer_result_sha256": "8d2f18da8e7457ed9e8becae2f3fe5a82c51e5a8adbbb530f6f08fed2d26ead7"
+  },
+  "retained_collection_failure": {
+    "name": "eager-half-cpu-dev01",
+    "status_sha256": "264e2e401cfe0317f9e9f248ad1148c1d50a5a3216c7b9e90e5c470f0c6c5d7e",
+    "log_sha256": "090c89657bdf035a36a620c1a91f93fba02100a5ccf29daca1f1d36c0aea822b"
+  },
+  "audit_helper_sha256": "81657faa0c87e638eead6ba3e01e004ce1f9252776600bf6be9d447ff0138038",
+  "limits": [
+    "Affected gate, not a complete historical regression rerun.",
+    "Eager half payload gradients with FP32 loss/masters/slots; resident FP32 adjoints are a separate policy.",
+    "Explicit static loss scale, no implicit retry or skipped optimizer step; None/zero/aliases preserved.",
+    "Fresh-process D256 and D2048/six-node memory calibration, not original B512 or formal throughput.",
+    "Trace includes actual consumer construction and two updates; no independent reference in profile.",
+    "Standalone consumer masters are process-local; no new C++ checkpoint format.",
+    "GPU/x86_64 device execution and untested vendor tuples remain target-pending."
+  ]
+}
