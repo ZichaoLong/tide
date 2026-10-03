@@ -3,6 +3,8 @@
 #include <set>
 #include <stdexcept>
 #include <sys/resource.h>
+#include <fstream>
+#include <unistd.h>
 #include <c10/core/DeviceGuard.h>
 #if PORTABLE_TORCH_ENABLE_NPU
 #include <torch_npu/csrc/core/npu/NPUCachingAllocator.h>
@@ -14,6 +16,15 @@
 #endif
 namespace tide_flow {
 namespace {
+int64_t peak_rss() {
+  struct rusage usage{};
+  if(getrusage(RUSAGE_SELF,&usage))throw std::runtime_error("cannot read consumer peak RSS");
+#ifdef __APPLE__
+  return usage.ru_maxrss;
+#else
+  return int64_t(usage.ru_maxrss)*1024;
+#endif
+}
 void reset(at::Device d) {
 #if PORTABLE_TORCH_ENABLE_NPU
   if(d.type()==c10::DeviceType::PrivateUse1){c10_npu::NPUCachingAllocator::resetPeakStats(d.index());return;}
@@ -40,6 +51,22 @@ int64_t device_fields(std::ostream& out,at::Device d) {
 }
 }
 DeviceMemoryInfo device_memory_info(at::Device d) {
+  if(d.is_cpu()) {
+    int64_t available=0,total=0;std::ifstream input("/proc/meminfo");std::string line;
+    while(std::getline(input,line)) {
+      std::istringstream row(line);std::string name,unit;int64_t value=0;row>>name>>value>>unit;
+      if(name=="MemAvailable:")available=value*1024;
+      if(name=="MemTotal:")total=value*1024;
+    }
+#ifdef _SC_AVPHYS_PAGES
+    if(!available)available=sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE);
+#endif
+#ifdef _SC_PHYS_PAGES
+    if(!total)total=sysconf(_SC_PHYS_PAGES)*sysconf(_SC_PAGESIZE);
+#endif
+    if(available<=0||total<=0)throw std::runtime_error("cannot query CPU available memory");
+    return {d,available,total,peak_rss()};
+  }
   if(d.index()<0)throw std::invalid_argument("memory admission needs explicit logical device");
   c10::DeviceGuard guard(d);size_t free=0,total=0;int64_t allocated=0;
 #if PORTABLE_TORCH_ENABLE_NPU
@@ -62,6 +89,7 @@ DeviceMemoryInfo device_memory_info(at::Device d) {
   throw std::invalid_argument("driver memory admission unavailable for device");
 }
 MemoryRecord::MemoryRecord(std::vector<at::Device> devices) {
+  cpu_initial_=peak_rss();
   std::set<std::string> seen;
   for(auto d:devices)if(!d.is_cpu()) {
     if(d.index()<0||!seen.insert(d.str()).second)throw std::invalid_argument("memory record needs distinct logical devices");
@@ -71,13 +99,7 @@ MemoryRecord::MemoryRecord(std::vector<at::Device> devices) {
   capture("initial",false);
 }
 void MemoryRecord::capture(const std::string& phase,bool reset_peak) {
-  struct rusage usage{};
-  if(getrusage(RUSAGE_SELF,&usage))throw std::runtime_error("cannot read consumer peak RSS");
-#ifdef __APPLE__
-  const int64_t rss=usage.ru_maxrss;
-#else
-  const int64_t rss=int64_t(usage.ru_maxrss)*1024;
-#endif
+  const auto rss=peak_rss();cpu_peak_growth_=std::max(cpu_peak_growth_,rss-cpu_initial_);
   std::ostringstream out;out<<"{\"phase\":"<<quoted(phase)<<",\"cpu_peak_rss_bytes\":"<<rss<<",\"devices\":[";
   bool first=true;for(size_t i=0;i<devices_.size();++i) {
     auto d=devices_[i];if(!first)out<<',';first=false;out<<"{\"device\":"<<quoted(d.str());

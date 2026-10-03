@@ -69,10 +69,10 @@ Implemented in public Python, native and independent C++ paths:
   and rejection. Custom Region.initial retains node-zero vector/value/VJP.
 
 [Owner contract](execution-placement.md#eager-payload-owners) records the limits.
-Message copies are currently individual. Actual consumer integration, per-device
-fixed-constant caches and static learned-parameter/locality planning are implemented
-below. Total-memory admission, packed transport, scale performance and FP16 owner
-qualification remain open. This is not F5/F6 closure.
+Actual consumer integration, per-device fixed-constant caches and static
+learned-parameter/locality planning are qualified below. Packed copies are
+implemented with clean CPU gates complete; NPU execution is pending. Total-memory
+admission, scale performance and FP16 owner qualification remain open. This is not F5/F6 closure.
 
 ### Clean qualification completed
 
@@ -171,8 +171,9 @@ clean qualification covers the final C++ resident-alias preservation correction.
 
 ## Next implementation and independent feasibility
 
-Eager packed cross-card transport is implemented and CPU development-tested,
-not yet NPU-executed or clean-qualified. Python/independent C++ multi-output copy
+Eager packed cross-card transport is committed/pushed as
+a785d43cfd9662c7d7262c0fdd8c59ec44729f6f. Its clean CPU gates passed;
+NPU execution and complete evidence audit remain pending. Python/independent C++ multi-output copy
 preserve missing/zero cotangents, frozen outputs and aliases, grouping only
 completed messages by source/target/dtype/shape in at most8MiB packs. Unpacked
 execution keeps individual copies; host metadata/scaling remains eager work.
@@ -193,18 +194,49 @@ new transfer/delivery objects, binding and standalone check are compiled; core
 archive reuse is source/hash verified and outputs freshly linked. No NPU runtime
 pass is inferred from compilation.
 
-Commit this CPU-tested increment, then freeze exact commit as
-`TASK/sources/packed-transfer-clean01`. Next build names use corresponding
-`*-clean01` suffixes and the same helpers:
-`TASK/launchers/packed_transfer_build.py SOURCE QUALIFIED_CORE NEW_BUILD`(1200s);
-`TASK/launchers/build_eager_consumer_core.py --backend cpu|npu --name NAME --core CORE`(600s).
-Gate clean CPU352+64 and standalone FP64/FP32. Defer real two-device gates and
-profile until the B512 feasibility item is terminal, to avoid device timing
-interference. Then run transfer/payload-owner/actual-consumer checks on new
-source/binaries, standalone ownership and a separate actual consumer trace,
-audit complete evidence and commit it separately. No stage implies a pause.
-Advance independent calibrated eager capacity/head workspace/sample splitting
-and portable final-integration work while the long item runs.
+Exact committed source is frozen at `TASK/sources/packed-transfer-clean01`.
+Five clean builds passed/exit0: `build-packed-transfer-{cpu,npu-python,npu-standalone}-clean01`
+and `build-packed-consumer-{cpu,npu}-clean01`. Clean gates passed/exit0:
+`packed-transfer-cpu-clean01`352 cases, `packed-transfer-cpp-cpu-clean01`
+12 configurations per FP64/FP32 plus copy anchors, and
+`packed-consumer-cpu-clean01`64 cases/8 accelerator cases deselected.
+No NPU runtime pass is inferred from compilation.
+After B512 is terminal, run two-device `test_transfer.py` + `test_payload_ownership.py`
+with `TIDE_TRANSFER_BACKEND=npu TIDE_PAYLOAD_BACKEND=npu` (119 cases), actual
+consumer40, standalone ownership36 and a separate actual consumer profile. Use
+`packed-transfer-npu-python-clean01`, `packed-transfer-npu-standalone-clean01`
+and `packed-consumer-npu-clean01` builds. Audit source/archive/binary/job/lease/profile
+records, then commit the evidence separately. No stage implies a pause.
+
+Current capacity implementation is ready for its implementation commit:
+Python/native/independent C++ eager preallocation admission, finite static DAG
+traffic bounds, complete-run state/KV/optimizer/head envelopes, bounded automatic
+sample halving and retained pre/post-run refusals. CPU uses at most half available
+host memory and reports incremental lifetime-RSS proxy; accelerators use driver
+free memory and allocator peaks. CLI/offline planning and target-pending CUDA
+commands are documented in [capacity](eager-consumer-capacity.md) and
+[target validation](eager-target-validation.md). Generic online feedback support
+is unchanged; no numerical prepass or CPU-driven route is introduced.
+
+Frozen `TASK/sources/eager-capacity-dev03`: 68 CPU FP64/FP32 affected tests passed,
+47 explicitly deselected, no skips; both fresh installed CPU/NPU consumers and
+static planning probes built. All source inventory hashes match. Jobs
+`build-eager-capacity-{cpu,npu}-dev03`, `eager-capacity-cpu-dev03` passed/exit0 with
+empty cgroups. Preserve dev01 (35 passed/23 failures: missing C++ JSON array
+closure) and dev02 (66 passed/1 failure: missing packet hash in refusal) plus their
+snapshots/builds. The final fixes retain strict wrapper identity checking.
+
+Next freeze the committed implementation as `TASK/sources/eager-capacity-clean01`,
+fresh-build CPU/NPU consumers using `build_eager_consumer_core.py` and byte-verified
+`packed-transfer-{cpu,npu-standalone}-clean01` cores, run the same clean CPU68 gate,
+then bounded fresh-process CPU calibration via `calibrate_eager_capacity.py`.
+That calibration is for memory admission, not throughput; no formal timing claim
+may include concurrent B512 work. After B512 is terminal, finish packed-transfer
+NPU qualification/profile above, then capacity two-device forced-split gate,
+actual-consumer40, finite calibration and separate trace. Planned helper bounds:
+480s per fresh calibration child, CPU4 cases/NPU7 cases, no blind retry. Commit
+reviewed evidence separately only after its audit. Source compilation and CPU
+correctness do not yet certify the memory coefficients for original NPU scale.
 
 Keep the CPU reference independent.
 Use affected gates, commit implementation first, then clean qualification and

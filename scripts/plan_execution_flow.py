@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect resident complete-consumer memory without Torch, NPUs or model tensors."""
+"""Inspect eager/resident consumer memory without Torch, devices or model tensors."""
 import argparse
 from dataclasses import replace
 import json
@@ -14,7 +14,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--packet',type=Path,required=True)
     parser.add_argument('--output',type=Path)
-    parser.add_argument('--dtype',choices=('float32','float16'),default='float32')
+    parser.add_argument('--dtype',choices=('float32','float16','float64'),default='float32')
+    parser.add_argument('--preset',choices=('cpu','mixed-a','mixed-b','mixed-c','resident'),default='resident')
+    parser.add_argument('--steps',type=int,default=3,help='eager run horizon: measured steps')
+    parser.add_argument('--warmup',type=int,default=1,help='eager run horizon: warmup steps')
+    parser.add_argument('--workers',type=int,default=1,help='eager concurrent node workers')
     parser.add_argument('--training',action='store_true')
     parser.add_argument('--diagnostics',action='store_true')
     parser.add_argument('--optimizer',choices=('sgd','adamw'),default='sgd')
@@ -24,6 +28,8 @@ def main():
     a = parser.parse_args()
     if a.device_memory_bytes < 1 or a.resident_library is not None:
         parser.error('offline planning requires positive --device-memory-bytes and no runtime library')
+    if not 1 <= a.devices <= 16:
+        parser.error('devices must be in 1..16')
     if not all(0 <= v < 2**63 for v in (a.sample_chunk_rows,a.resident_context_bytes)):
         parser.error('sample-chunk-rows and resident-context-bytes must be nonnegative int64')
     if a.output and a.output.exists():
@@ -32,6 +38,26 @@ def main():
     if packet['schema'] != 'tide-complete-flow-workload-v2':
         parser.error('continuous consumer requires v2')
     sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+    if a.preset!='resident':
+        from flow_resident_options import FORWARD, TRAINING
+        if a.resident_context_bytes or any(getattr(a,'resident_'+k) is not None for k in FORWARD+TRAINING):
+            parser.error('resident capacities require resident preset')
+        if a.preset=='cpu' and a.devices!=1:
+            parser.error('multiple eager devices require an accelerator preset')
+        from tools.online_bench.eager_capacity import plan
+        record=dict(workload_sha256=packet['sha256'],kind='offline capacity estimate; not execution or qualification')
+        try:
+            capacity=plan(packet,budgets=[a.device_memory_bytes]*a.devices,dtype=a.dtype,training=a.training,
+                optimizer=a.optimizer,steps=a.steps,warmup=a.warmup,windows=a.windows_per_step,workers=a.workers,
+                sample_rows=a.sample_chunk_rows,auto_sample_chunks=a.auto_sample_chunks,policy=a.chunk_policy,
+                owner_policy=a.owner_policy,owner_map=a.owner_map,head_workspace_bytes=a.head_workspace_bytes)
+            record.update(state='planned' if capacity['state']=='admitted' else 'refused',memory_admission=capacity)
+        except ValueError as error:
+            record.update(state='refused',error=str(error))
+        if a.output:write_json(a.output,record)
+        print(json.dumps(record))
+        return 0 if record['state']=='planned' else 2
+    if a.dtype=='float64':parser.error('resident consumer requires FP32/FP16 payload')
     from tools.online_bench.capacity import Capacities, Chunks, packet_geometry, plan_samples
     from tools.online_bench.head_budget import head_budget
     def option(key,default):

@@ -137,6 +137,10 @@ these recipes for another machine. Rebuild there and retain its manifests and
 suite results; x86_64 evidence is separate from aarch64. Current exact support
 claims live in `.torch-portability/contract.json` and the cited evidence.
 
+Portable two-device eager owner/copy/actual-consumer and automatic-capacity
+commands are in [eager target validation](eager-target-validation.md). Local NPU
+evidence remains distinct from CUDA target-machine-pending status.
+
 
 Additional [standalone TorchNPU2.9 qualification](evidence/standalone-sdk29-20260928.md)
 passed on local CANN8.5.0/8.5.1/8.5.2 using one matched SDK/Torch build. It covers

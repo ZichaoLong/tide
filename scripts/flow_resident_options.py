@@ -23,11 +23,11 @@ def add_arguments(parser):
     parser.add_argument("--chunk-policy", choices=("conservative", "aggressive"), default="conservative")
     parser.add_argument("--head-workspace-bytes", type=int, default=4*1024**3)
     parser.add_argument("--device-memory-bytes", type=int, default=0,
-                        help="resident per-device incremental HBM cap; 0 uses current driver free memory")
+                        help="per-device incremental memory cap; 0 uses driver free memory or half available CPU RAM")
     parser.add_argument("--resident-context-bytes", type=int, default=0,
                         help="Per-device saved continuation pool; positive enables compact rows, 0 keeps dense storage")
     parser.add_argument("--auto-sample-chunks", action="store_true",
-                        help="halve physical samples on static resident memory refusal before model allocation")
+                        help="halve physical samples on static memory refusal before model allocation")
     for field in FORWARD+TRAINING:
         parser.add_argument("--resident-"+field.replace("_", "-"), type=int)
 
@@ -36,8 +36,8 @@ def validate(args):
     if not 1 <= args.devices <= 16:
         raise ValueError("devices must be in 1..16")
     changed = (args.resident_library is not None
-               or args.chunk_policy != "conservative" or args.head_workspace_bytes != 4*1024**3 or args.device_memory_bytes != 0 or args.resident_context_bytes != 0
-               or args.auto_sample_chunks or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
+               or args.resident_context_bytes != 0
+               or any(getattr(args,"resident_"+k) is not None for k in FORWARD+TRAINING))
     if args.preset != "resident" and changed:
         raise ValueError("resident capacities require resident preset")
     if args.implementation == "libtorch" and args.resident_library is not None:
@@ -46,6 +46,8 @@ def validate(args):
         raise ValueError("resident-context-bytes must be a nonnegative int64")
     if not 0 <= args.device_memory_bytes < 2**63:
         raise ValueError("device-memory-bytes must be a nonnegative int64")
+    if not 0 < args.head_workspace_bytes < 2**63:
+        raise ValueError("head-workspace-bytes must be a positive int64")
 
 
 def native_arguments(args):
@@ -66,7 +68,9 @@ def native_arguments(args):
 
 def python_arguments(args, device):
     if args.preset != "resident":
-        return dict(devices=args.devices, owner_policy=args.owner_policy, owner_map=args.owner_map)
+        return dict(devices=args.devices, owner_policy=args.owner_policy, owner_map=args.owner_map,
+                    chunk_policy=args.chunk_policy, auto_sample_chunks=args.auto_sample_chunks,
+                    device_memory_bytes=args.device_memory_bytes, head_workspace_bytes=args.head_workspace_bytes)
     from tidegraph import ResidentLimits, ResidentTrainingLimits, ResidentPlacement
     forward = dict(workspace_bytes=512*1024**2, chunk_policy=args.chunk_policy)
     training = dict(windows=args.windows_per_step, backward_bytes=2*1024**3)

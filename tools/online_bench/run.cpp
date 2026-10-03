@@ -2,6 +2,7 @@
 #include "phase_timing.h"
 #include "memory.h"
 #include "eager_placement.h"
+#include "eager_capacity_runtime.h"
 #include <tide/greedy.h>
 #include <tide/stream.h>
 #include <ATen/core/grad_mode.h>
@@ -44,6 +45,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   for(auto owner:devices)if(!tide::resolve_placement(c.placement,owner).events.is_cpu())
     throw std::invalid_argument("host model placement cannot provide device-resident event progression");
   auto sync=[&]{for(auto owner:devices)portable_torch::synchronize(owner);};
+  eager_capacity::Admission admission(p,c,devices);
   MemoryRecord memory(devices);auto f=fixture(p,c,device);
   auto placement=tide::resolve_placement(c.placement,device);auto placed=tide::place_model(f.graph,f.model,c.placement);
   tide::Options options;options.packed=true;options.prefill=c.schedule=="prefill";options.trace=c.diagnostics;
@@ -59,7 +61,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     if(c.optimizer=="sgd")optimizer=std::make_unique<tide::SGD>(f.parameters,std::vector<tide::OptimizerGroup>{group});
     else optimizer=std::make_unique<tide::AdamW>(f.parameters,std::vector<tide::OptimizerGroup>{group});
   }
-  const auto chunk=std::min(c.sample_chunk_rows?c.sample_chunk_rows:p.batch,p.batch);
+  const auto chunk=admission.rows();
   std::vector<tide::Continuation> continuations;
   for(Index first=0;first<p.batch;first+=chunk){tide::Continuation q;q.identity=f.graph.identity;
     q.batch_size=std::min(chunk,p.batch-first);continuations.push_back(std::move(q));}
@@ -118,8 +120,12 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
     if(step+1==c.warmup)memory.capture("warmup");
   }
   memory.capture("measured",false);
+  const bool within=admission.observe(memory);
+  const std::string error="consumer memory estimate underestimated observed peak; retain failed run and recalibrate";
   std::ostringstream out;out<<std::setprecision(17);
-  out<<"{\"schema\":\"tide-online-consumer-v1\",\"state\":\"passed\",\"workload_sha256\":"<<quoted(p.sha)
+  out<<"{\"schema\":\"tide-online-consumer-v1\",\"state\":"<<quoted(within?"passed":"failed");
+  if(!within)out<<",\"failure_phase\":\"post_run_memory_calibration\",\"error\":"<<quoted(error);
+  out<<",\"workload_sha256\":"<<quoted(p.sha)
      <<",\"packet_identity\":\"declared; launcher must verify v2 text against hashed JSON\",\"implementation\":\"libtorch\",\"family\":"<<quoted(c.family)
      <<",\"training\":"<<(c.training?"true":"false")<<",\"optimizer\":"<<(c.training?quoted(c.optimizer):"null")
      <<",\"parameters\":"<<p.parameters()<<",\"construction_seconds\":"<<construction<<",\"seconds\":[";
@@ -141,8 +147,9 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
      <<",\"schedule\":"<<quoted(c.schedule)<<",\"preset\":"<<quoted(c.placement.preset)<<",\"placement\":{";
   bool first=true;for(const auto& [name,value]:placement.record()){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<quoted(value);}out<<"}}"
      <<",\"payload_placement\":"<<eager_placement_json(c,owner_plan,devices)
-     <<",\"memory\":"<<memory.json()<<",\"phase_timing\":"<<phases.json()
+     <<",\"memory\":"<<memory.json()<<",\"memory_admission\":"<<admission.json()<<",\"phase_timing\":"<<phases.json()
      <<",\"timing\":\"input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference\"}\n";
+  if(!within)throw RecordedFailure(error,out.str());
   return out.str();
 }
 } // namespace tide_flow

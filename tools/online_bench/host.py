@@ -97,7 +97,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         native_library=None, diagnostics=False, placement=None, observer=None, parameter_budget=1024**3,
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
         device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0,
-        auto_sample_chunks=False, phase_timing=False, devices=1, owner_policy="locality", owner_map=()):
+        auto_sample_chunks=False, phase_timing=False, devices=1, owner_policy="locality", owner_map=(),
+        chunk_policy="conservative"):
     phases = PhaseTiming(phase_timing)
     if type(auto_sample_chunks) is not bool:
         raise ValueError("auto-sample-chunks must be boolean")
@@ -121,7 +122,7 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
             resident_placement=resident_placement, head_workspace_bytes=head_workspace_bytes, device_memory_bytes=device_memory_bytes,
             sample_chunk_rows=sample_chunk_rows, context_memory_bytes=context_memory_bytes,auto_sample_chunks=auto_sample_chunks,
             phase_timing=phase_timing)
-    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or head_workspace_bytes!=4*1024**3 or device_memory_bytes or context_memory_bytes or auto_sample_chunks:
+    if any(x is not None for x in (resident_library, resident_limits, training_limits, resident_placement)) or context_memory_bytes:
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
         raise ValueError("invalid bounded run/optimizer configuration")
@@ -137,13 +138,18 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
     from .eager_placement import resolve
     logical, payload_placement = resolve(packet, device, devices, owner_policy, owner_map)
     device = logical[0]
+    from .eager_capacity_runtime import prepare, observed
+    admission = prepare(packet, logical, budget=device_memory_bytes, dtype=dtype, training=training,
+        optimizer=optimizer, steps=steps, warmup=warmup, windows=windows_per_step, workers=workers,
+        sample_rows=sample_chunk_rows, auto_sample_chunks=auto_sample_chunks, policy=chunk_policy,
+        owner_policy=owner_policy, owner_map=owner_map, head_workspace_bytes=head_workspace_bytes)
     memory = MemoryRecord(logical)
     runtime, embedding, head = runtime_for(packet, family=family, implementation=implementation, device=device,
         dtype=dtype, schedule=schedule, preset=preset, trace=diagnostics, native_library=native_library, placement=placement,
         workers=workers, packed_sources=packed_sources, batch_next=batch_next,
         devices=devices, owner_policy=owner_policy, owner_map=owner_map)
     c = packet["workload"]
-    chunk = min(sample_chunk_rows or c["batch"], c["batch"])
+    chunk = admission["effective_sample_rows"]
     sessions = [(first, min(chunk, c["batch"]-first), runtime.session(min(chunk, c["batch"]-first)))
                 for first in range(0, c["batch"], chunk)]
     named = parameters(runtime, embedding, head)
@@ -221,7 +227,8 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         if step+1 == warmup:
             memory.capture("warmup")
     memory.capture("measured", reset_peak=False)
-    return dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"],
+    observed(admission, memory.record())
+    result = dict(schema="tide-online-consumer-v1", workload_sha256=packet["sha256"],
                 host_execution=dict(workers=workers,packed_sources=packed_sources,batch_next=batch_next),
                 implementation=implementation, family=family, training=training, optimizer=optimizer if training else None,
                 windows_per_step=windows_per_step, warmup_steps=warmup, measured_steps=steps,
@@ -233,5 +240,10 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                                      effective_sample_chunk_rows=chunk, physical_chunks=len(sessions)),
                 runtime=runtime.manifest(), payload_placement=payload_placement,
                 diagnostics=diagnostics or observer is not None,
-                memory=memory.record(), phase_timing=phases.record(),
+                memory=memory.record(), memory_admission=admission, phase_timing=phases.record(),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")
+    if not admission["allocator_within_estimate"]:
+        from flow_failure import RecordedFailure
+        raise RecordedFailure("consumer memory estimate underestimated observed peak; retain failed run and recalibrate",
+            dict(result, failure_phase="post_run_memory_calibration"))
+    return result

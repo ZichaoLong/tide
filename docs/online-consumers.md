@@ -344,7 +344,10 @@ may be smaller. Parameters and the optimizer are shared; gradients accumulate
 across groups with None/connected-zero behavior preserved. One finite-gradient
 check and one optimizer update follow the entire logical batch. Loss reduction
 uses the original logical batch, and input/target generation uses global sample
-IDs. This is an explicit physical maximum, not yet automatic memory admission.
+IDs. This is an explicit physical maximum. Optional
+[eager admission](eager-consumer-capacity.md) now applies a full-run shape envelope
+before allocation and can automatically reduce this maximum. Its static traffic
+bounds do not drive actual routes or narrow the generic scheduler.
 
 `batch_execution` records requested/effective rows and group count. Diagnostic
 window records for split runs contain `sample_range: [begin,end,logical_batch]`

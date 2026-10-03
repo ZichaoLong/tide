@@ -16,7 +16,8 @@ int main(int argc,char** argv) {
         "--devices N --owner-policy memory|locality --owner-map 0,1,... --chunk-policy conservative|aggressive\n"
         "Eager owner maps use encoded-node order; node zero and both boundaries stay on owner zero.\n"
         "--resident-context-bytes BYTES (per-device saved-state pool; positive enables compact rows, 0 retains dense storage)\n"
-        "--device-memory-bytes BYTES (resident incremental per-device cap; 0 uses driver free memory) --head-workspace-bytes BYTES\n"
+        "--device-memory-bytes BYTES (incremental per-device cap; 0 uses driver free or half available CPU memory) --head-workspace-bytes BYTES\n"
+        "--auto-sample-chunks (bounded preallocation halving of independent physical samples)\n"
         "--resident-{queue,arrivals,outputs,trace,stages,workspace-bytes,full-chunk-rows,emission-chunk-rows,aggregate-chunk-rows,attention-chunk-rows,attention-key-rows,kv-rows,kv-trace-rows,max-repeat-ticks,retained-bytes,backward-bytes,optimizer-bytes,program-workspace-bytes,reverse-chunk-rows} N\n";return 0;}
     auto p=tide_flow::read_packet(c.packet);auto device=portable_torch::resolve_device(c.runtime);
     at::set_num_threads(c.threads);at::set_num_interop_threads(1);

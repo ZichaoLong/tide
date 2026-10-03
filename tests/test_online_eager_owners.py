@@ -15,7 +15,17 @@ from tools.online_bench.host import run, runtime_for
 from flow_protocol import native_text
 from online_consumer_support import observer, same
 from test_online_consumer import packet
-from test_online_consumer_npu import CASES, target
+from test_online_consumer_npu import CASES
+
+
+def target():
+    spec=os.environ.get("TIDE_ONLINE_DEVICE")
+    if not spec:pytest.skip("two-device eager consumer target not explicitly selected")
+    from tidegraph.runtime import resolve_device
+    device,_=resolve_device(spec)
+    assert device.type in {"cuda","npu"},"explicit accelerator target required"
+    assert device.index is not None and getattr(torch,device.type).device_count()>=device.index+2
+    return device
 
 
 @pytest.mark.parametrize("memory", ["add", "attention"])
@@ -112,7 +122,7 @@ def test_actual_two_device_run(case, implementation, training, tmp_path):
     assert measured["payload_placement"]["node_owners"]==owners
     assert measured["payload_placement"]["parameter_elements"]==elements
     for phase in measured["memory"]["phases"]:
-        assert [r["device"] for r in phase["devices"]]==[str(device),f"npu:{device.index+1}"]
+        assert [r["device"] for r in phase["devices"]]==[str(device),f"{device.type}:{device.index+1}"]
     assert all(r["allocated_bytes"]>0 for r in measured["memory"]["phases"][1]["devices"])
 
 

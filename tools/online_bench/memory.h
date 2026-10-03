@@ -13,9 +13,11 @@ class MemoryRecord {
   void capture(const std::string& phase,bool reset_peak=true);
   std::string json() const;
   const std::vector<int64_t>& peak_growth() const {return peak_growth_;}
+  int64_t cpu_peak_growth() const {return cpu_peak_growth_;}
  private:
   std::vector<at::Device> devices_;
   std::vector<std::string> phases_;
   std::vector<int64_t> initial_,peak_growth_;
+  int64_t cpu_initial_=0,cpu_peak_growth_=0;
 };
 }

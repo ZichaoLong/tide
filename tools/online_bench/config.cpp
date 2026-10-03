@@ -70,7 +70,7 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("explicit packet/output-dir/family/preset/schedule and positive bounded run limits required");
   if(c.devices<1||c.devices>16||(c.owner_policy!="memory"&&c.owner_policy!="locality")
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive"))throw std::invalid_argument("invalid device/owner/chunk policy");
-  if(c.placement.preset!="resident"&&(!c.resident_limits.empty()||c.chunk_policy!="conservative"||c.head_workspace_bytes!=4LL*1024*1024*1024||c.device_memory_bytes||c.context_memory_bytes||c.auto_sample_chunks))
+  if(c.placement.preset!="resident"&&(!c.resident_limits.empty()||c.context_memory_bytes))
     throw std::invalid_argument("resident capacities require resident preset");
   if(c.placement.preset=="resident"&&c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kHalf)
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");

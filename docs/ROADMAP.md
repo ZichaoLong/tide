@@ -299,8 +299,13 @@ is unchanged; dominant projection/Attention reverse storage and scale remain ope
 F5 eager physical sample chunks are qualified on cleane6cc52b: CPU60/NPU38,
 whole-batch loss/gradient/update equivalence and separate medium memory observations
 ([evidence](evidence/consumer-sample-chunks-20261002.md)). Explicit maximum only;
-automatic eager admission and mixed multi-device remain open. Resident slicing
-uses one parameter/optimizer owner and a single whole-batch update.
+mixed multi-device subsequently qualified on cleane5d91d7. Automatic
+[eager admission](eager-consumer-capacity.md) is implemented and has passed68
+directed CPU development checks and CPU/NPU installed-client builds; clean
+qualification, allocator calibration and original-scale mixed completion remain
+pending. Resident slicing uses one parameter/optimizer owner and a single
+whole-batch update. [Portable eager CUDA commands](eager-target-validation.md)
+remain target-machine-pending.
 
 F4/F5 optional training diagnostics are qualified on cleanca26b47: 51 public tests,
 four standalone cells, same-shape allocator reduction 16.26 MiB. Required VJP
