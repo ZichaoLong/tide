@@ -432,8 +432,19 @@ independently executed whole-batch FP16 comparison uses the existing elementwise
 independent CPU execution. This avoids interpreting cancellation near zero as a
 slicing defect; it does not relax event identities or gradient connectivity.
 
-Full-size peak memory, aggressive-safe chunking and complete F6 comparisons remain
-pending. The deliberately paused historical CPU job is not managed by this CLI.
+A known original-width FP32 limitation is a strict CPU/resident route mismatch
+when rounded scores approach a tie. The [retained witness](evidence/original-add-route-witness-20261004.md)
+shows CPU scores separated by one FP32 ULP while the resident scores tie;
+subsequent event counts differ. Exact discrete checks,stable tie rules and
+fixtures remain unchanged. The user accepts this separately listed numerical
+limitation without blocking independent execution or performance measurement;
+a failing pair is never labelled strictly equivalent. Report each run's actual
+work counts. This witness does not explain every future discrepancy.
+
+Original-width/full-size memory observations and aggressive-safe chunking are
+qualified for the finite cases in [STATUS](STATUS.md);the complete F6 comparison
+matrix remains pending. The deliberately paused historical CPU job is not
+managed by this CLI.
 
 Consumer results also include `memory` phase records. Each logical accelerator
 reports process allocator current/peak allocated and reserved bytes before model

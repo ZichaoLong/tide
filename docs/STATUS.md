@@ -136,8 +136,8 @@ certifies full-update or resident placement. No automatic rerun or larger timeou
 `TASK=/mi/data2T/zlong/tide-execution-flows`;unit names
 `tide-execution-flows-NAME`,background.slice,Nice10. Current own heavy work is
 **formal-short-next01**,same frozen e69b3bd. The dependency wait ended after
-Python calibration passed/empty;**cell8 resident Attention inference is running**,
-then cell3 CPU Add training follows. Repeat1,strictly serial,fresh11-card lease
+Python calibration passed/empty;**cell8 resident Attention inference passed its child checks**
+(measured402.400685s);cell3 CPU Add training is running. Parent audit is pending. Repeat1,strictly serial,fresh11-card lease
 only for cell8;no lease during CPU work. One continued warmup and one measured
 step,two connected windows,SGD for training;no instrumentation/profiling.
 
@@ -163,6 +163,19 @@ unchanged assertions passed after directory creation. It was an audit-output
 error,not a consumer failure. Runtime-schema checks now include actual native
 inference and training records,not only standalone or pure Python manifests.
 
+A dependent stage `formal-python-short01` is submitted and verified waiting for cells74,80,72/repeat1:
+Python-owned native resident Add/Attention inference,then pure-Python CPU Add
+inference. Its audited Python calibration is committed/pushed as af1289b.
+It waits without a lease/heavy work for formal-short-next01 to pass with an
+empty cgroup;otherwise stops. Wait≤6600s,formal group9240s,whole15960s;
+per-device queue≤120s. Resident900s/update and2200s child;CPU1800s/update and
+4000s child. No repeated processes/retries or overlapping timings. New helper
+TASK/launchers/defer_python_formal_group.py and its cited calibration JSON,
+budgets74/80/72 and common helpers become immutable when submitted. Inspect
+`systemctl --user show tide-execution-flows-formal-python-short01`;records under
+TASK/runs/formal-python-short01. Verified background.slice/transient/running;only dependency wait is active,
+no assessment or NPU lease yet.
+
 ## Next actions and full-size scope
 
 Active plan:TASK/plans/fullsize-continuous-e69b3bd-blas16-02.json,
@@ -175,10 +188,18 @@ pilots do not qualify the120 full-size family/client/schedule/model/mode cells.
 CPU Attention trainingphysical16,mixed4,resident1;CPU/mixed Add32,resident Add
 training2/inference4. Resident Attention training uses the qualified explicit
 11-owner map. No unqualified48-row limit. Formal cells0–2/repeat1 are complete;
-117 other first processes and recommendation repeats remain open. Live cells8/3
-are not passed merely because they started.
+117 other first processes and recommendation repeats remain open. Cell8 passed its child checks but still needs terminal-parent audit;cell3 is
+still running. Started/waiting jobs are not qualified results.
 
-Budget02 files exist for cells0–11,72–83,88,94. Each hashes actual pilot basis.
+Budget02 files now exist for all120 cells. The prior26 files are unchanged;
+94 new finite allowances transfer matching original-width model/client/mode
+pilot budgets using max(1,representative target/source median ratio),rounding
+up to300s. This does not transfer full-size qualification. Different source,
+thread/shape/family/schedule/preset limits are explicit;no lower allowance from
+a faster representative result. `prepare_transferred_budgets.py` and
+TASK/plans/transferred-budget02-receipt.json preserve their derivation. First
+failure stops each submitted group;no automatic retry or larger bounds.
+Each budget hashes its measured basis;all old3000s/1.15 refusals remain.
 The ten new Python budgets are now backed by the terminal-parent audit;none has
 been executed. Original3000s/1.15 refusals stay separate from longer bounds:
 
@@ -197,13 +218,17 @@ been executed. Original3000s/1.15 refusals stay separate from longer bounds:
 | 76,88 Python mixed Add training | 7500/15400 |
 | 82,94 Python mixed Attention training | 16500/33400 |
 
+The120 initial-process phase forecasts sum to207.2h before construction and
+repeats;after cells0/1/2/8 and the active3 they total about205.9h. This is a
+rough planning sum with cross-family transfer uncertainty,not measured remaining
+time. It makes the matrix a multi-day workload under the serial timing contract.
 These are operating limits,not B512 timings. In particular the Python CPU
 Attention training forecasts10340.528306/12475.200981s imply hours of actual
 measurement;prioritize shorter cells before the longest CPU Attention work.
 Do not assume one family/schedule or a C++ run certifies a Python counterpart.
 
-1. Commit/push the completed Python calibration evidence,then audit the terminal
-   formal cells8/3,write their actual work/throughput/memory
+1. After each group is terminal/empty,
+   audit formal cells8/3 and then74/80/72,write their actual work/throughput/memory
    report and commit/push. Continue after commits;no approval/pause needed.
 2. Run the remaining actual full-size matrix,using the measured budget basis and
    explicit transfer limits where a different family/schedule/preset is involved.
@@ -244,7 +269,7 @@ remain unqualified drafts. Prior navigation/schema audit passed834 links and
 
 Evidence commits:1d32008 CPU pilots,f6e49f0 retained profile failure/slice,
 d416e3c ten accelerator pilots,b45c2b8 first formal CPU,8ef3229 first three-path
-formal comparison;all pushed. This checkpoint adds the audited Python calibration
-(JSON/Markdown),its ROADMAP link and this consolidated handoff. No unrelated
-uncommitted work. Task-local helpers/budgets remain outside the repository;
+formal comparison,af1289b Python calibration;all pushed. This checkpoint records the public consumer numerical
+limitation,the current CPU training/dependent Python stage and the declared
+transferred budgets. No production code changed or unrelated edits remain. Task-local helpers/budgets remain outside the repository;
 active versions above are immutable. Continue after commits.
