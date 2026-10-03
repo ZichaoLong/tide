@@ -180,6 +180,14 @@ continued warmup207.571919s;physical32×16,two windows and complete work/memory
 records ([audit](evidence/formal-b512-first-cpu-20261004.md)). One fresh process;
 remaining cells and three-process recommendations are still open.
 
+F6 first unprofiled originalB512 Add inference CPU/mixed/resident comparison
+is now complete on e69b3bd:226.376559s/624.907705s/327.613456s,one fresh process
+each. All continuation/memory/budget checks passed;actual event counts differ
+1188500/1188498/1188494 and strict equivalence is not certified.
+[Audited comparison](evidence/formal-b512-add-inference-npu-20261004.md).
+This closes three first processes;117primary cells and recommendation repeats
+remain open. Python envelope calibration is running separately.
+
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
 identity across the complete build and consumer is audited;the old120-failure

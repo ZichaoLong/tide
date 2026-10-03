@@ -133,20 +133,38 @@ TASK/runs/NAME/{status.json,task.log,assessment/result.json}. Inspect with
    CPU/Add inference,LibTorch/TimedDAG/prefill,BLAS16/ATen16/workers1,
    physical32×16,continued warmup207.571919s,measured226.376559s,
    construction46.319800s,54.281238input tokens/s. Outputs12288,cut816,
-   candidate events1188500,body candidates1163924;RSS42.767GiB inside estimate.
+   candidate events1188500,body candidates1163924;RSS42.769GiB inside estimate.
    [First formal audit](evidence/formal-b512-first-cpu-20261004.md) passed exact
    source/binary/packet/budget/owner/phase/cgroup checks. One process only;
    no recommendation or CPU/NPU ratio. Its actual result has now been reviewed.
-3. Submit **formal-add-inference-npu01**,same frozen e69b3bd:exact cells1,2,
-   repeat1,mixed-A then resident on11NPUs,serial,fresh lease per cell,queue120s.
-   Helper dispatch_formal_blas_group.py requires the first audited result.
-   OriginalB512,continued warmup1+measured1,two windows,no phase instrumentation.
-   Budgets:cell1=1200s/update+2800s child;cell2=900s/update+2200s child;
-   whole5600s. First failure stops;no automatic retry. Lease-free CPU gaps.
-   Helpers dispatch_formal_blas_group.py,fullsize_formal_cell_blas.py,
-   fullsize_configs.py,plan02,budgets1/2 and the first formal JSON report are
-   immutable while this group is live. Review both actual outputs,then complete
-   missing Python calibration;long CPU Attention remains deferred.
+3. **formal-add-inference-npu01 passed/exit0**,both cells,terminal
+   2026-10-03T21:30:38.378910Z,empty cgroup and released11-card leases.
+   [First actual three-path comparison](evidence/formal-b512-add-inference-npu-20261004.md):
+   mixed-A warmup497.381831s/measured624.907705s,19.663704input tokens/s;
+   resident warmup327.117733s/measured327.613456s,37.507617input tokens/s.
+   CPU measured226.376559s;resident/mixed time ratios1.447/2.760 relative to CPU.
+   Actual event counts CPU1188500,mixed1188498,resident1188494;strict equivalence
+   is not certified. Physical rows32/32/4;one process each,not recommendations.
+   All output/continuation/owner/allocator/budget checks passed. The prepared
+   audit_formal_blas_group.py was exercised successfully on the terminal group.
+4. **remaining-python-calibration01 running-calibration**,cell72 CPU Add
+   inference first. Dependency passed/empty and the wait ended automatically;
+   no NPU lease during CPU pilots. Helper remaining_python_calibration.py runs
+   ten serial original-width pilots:CPU72,75,78,81;Python-owned resident74,77,80,83;
+   mixed inference73,79. CPU/resident two physical chunks;mixed inference one.
+   All unchanged admitted geometry. CPU child1800s(Add)/3600s(Attention);
+   resident900s;mixed1800s. Queue120s/NPU case;whole26700s including prior wait
+   and20400s calibration child. First failure stops;no retry.
+   Records:TASK/runs/remaining-python-calibration01/dispatch/result.json,
+   assessment/result.json and assessment/cell-N. Helpers defer_python_calibration.py,
+   remaining_python_calibration.py,fullsize_calibration_cell_blas.py,
+   fullsize_configs.py,plan02 and first CPU audit JSON stay immutable.
+   Do not start competing heavy work. In particular the old formal helper does
+   not automatically exclude this new CPU calibration;honor the serial handoff.
+   Draft audit_python_calibration.py is syntax-checked only;after the parent is
+   terminal/empty,run with --output docs/evidence/original-width-python-calibration-20261004.json.
+   Inspect actual schemas/provenance before certifying;native and pure Python
+   are distinguished. Do not certify live results.
 
 Completed accelerator pilots (all terminal-parent audited):
 
@@ -170,7 +188,9 @@ TASK/launchers/audit_accelerator_calibration02.py passed on the terminal parent.
 Final cell94 also passed:measured176.356590s,B512 forecasts10350.964783/12894.607619s.
 Its budget02 separately declares16500s/update,33400s process,retaining3000s refusal. First formal audit helper
 TASK/launchers/audit_formal_first_cpu.py passed on the terminal first actual result.
-The serial group helper now has the required reviewed prerequisite.
+The serial group helper and its terminal audit have now both been exercised.
+The first CPU audit JSON is a hashed prerequisite still read by Python calibration;
+do not modify it while that batch runs.
 
 ## Next actions and full-size scope
 
@@ -183,10 +203,10 @@ unchanged;plan02 adds explicit CPU BLAS startup16.
 CPU Attention trainingphysical16,mixed4,resident1;CPU/mixed Add32,resident Add
 training2/inference4. Resident Attention uses the qualified explicit11-owner map.
 No unqualified48-row limit. One continued warmup+one measured step,two windows,
-SGD training. Formal cell0/repeat1 is complete;all other full-size matrix
+SGD training. Formal cells0,1,2/repeat1 are complete;the other117 full-size matrix
 cells and recommendation repeats remain pending.
 
-Budget02 files exist for cells0–11 (unsubmitted except cell0). Original3000s
+Budget02 files exist for cells0–11 (executed cells0–2). Original3000s
 forecast refusals remain:resident Add training3117.543s→separate4500s/update;
 resident Attention training7398.533s→9000s/update;CPU Attention training9692.312s
 →12000s/update,24400s process. Smaller inference cells use tighter limits.
@@ -197,15 +217,14 @@ process after10706.075535/13258.712427s forecasts refused3000s.
 
 1. Accelerator calibration completed and audited10/10;do not repeat it.
    Evidence commit d416e3c is pushed. First formal cell0 is also audited.
-2. Execute/audit the short Add inference NPU pair (cells1,2). Keep original
-   work counts and strict-equivalence limitation beside the CPU comparison.
+2. First Add inference CPU/mixed/resident processes are all audited. Keep their
+   actual work counts and strict-equivalence limitation beside the comparison.
    No recommendation before three fresh processes. Defer longest CPU Attention.
 3. Finish remaining necessary Python original-width calibration:CPU four model/
    mode envelopes,mixed inference and Python-owned resident paths have no new
-   original-width continued pilot yet. Do not assume representative/small gates
-   or a C++ timing certify these Python timings. Unsubmitted helper
-   remaining_python_calibration.py prepares these10 serial cases after the first
-   actual formal audit;whole20300s,first failure stops. It is parsed,not qualified.
+   original-width continued pilot yet;the running batch above will establish them.
+   Do not assume representative/small gates or a C++ timing certify these timings. Helpers are parsed,not runtime
+   qualification;inspect actual completed results before formal budgets.
 4. Execute remaining full-size family/client/schedule/model/mode flows,three fresh
    processes before formal recommendations,separate full-size resident/FP16
    profiling/comparisons,then final support/portability/evidence audit and task-job
@@ -239,6 +258,8 @@ remain unqualified drafts. Prior navigation/schema audit passed834 links and
 10-target support schema;not new hardware verification.
 
 Evidence commits:1d32008 CPU pilots,f6e49f0 retained profile failure/slice,
-d416e3c ten accelerator pilots;first formal CPU evidence is being committed with
-this handoff. No production code changed in this continuation. Task-local audit/budget helpers are outside
-the source repository;live versions above are immutable. Continue after commits.
+d416e3c ten accelerator pilots;b45c2b8 first actual formal CPU result.
+This checkpoint commits the audited Add inference comparison (JSON/Markdown),
+its ROADMAP link and this active handoff. No production code changed;no unrelated
+uncommitted work. Task-local audit/budget helpers are outside the repository;
+live versions above are immutable. Continue after commits.

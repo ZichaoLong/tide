@@ -1,0 +1,456 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "cases": [
+    {
+      "cell": 1,
+      "repeat": 1,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "mixed-a",
+        "configuration": "libtorch-add-False-mixed",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "implementation": "libtorch",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/inputs/fullsize-add01/workload.json",
+        "--output-dir",
+        "TASK/runs/formal-add-inference-npu01/assessment/cell-1-repeat-1/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--dtype",
+        "float32",
+        "--preset",
+        "mixed-a",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "11",
+        "--threads",
+        "2",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--native-binary",
+        "TASK/builds/integration-online-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "seconds": [
+        624.907704802
+      ],
+      "warmup_seconds": [
+        497.381830696
+      ],
+      "construction_seconds": 42.950041327,
+      "wall_seconds": 1181.0572540648282,
+      "token_rate": 19.663703784694754,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 16
+      },
+      "statistics": [
+        {
+          "aggregate_calls": 9890,
+          "attention_score_elements": 0,
+          "body_candidate_events": 1163922,
+          "body_selected_events": 184320,
+          "candidate_events": 1188498,
+          "cross_device_bytes": 7870636032,
+          "cross_device_copy_groups": 20524,
+          "cross_device_rows": 960771,
+          "full_blocks": 8126,
+          "full_calls": 8126,
+          "greedy_relaxed_edges": 245760,
+          "greedy_stages": 544,
+          "max_cross_device_batch": 1024,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 68806,
+          "next_reset_scalar_steps": 184320,
+          "next_steps": 1188498,
+          "packed_source_batches": 9890,
+          "read_calls": 68102,
+          "region_blocks": 544,
+          "region_steps": 208896,
+          "selected_events": 208896,
+          "source_rows": 1265664,
+          "state_blocks": 2048,
+          "state_prefill_fallback_events": 1163922,
+          "state_prefill_selected_clear": 1163922,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 2048,
+          "state_step_batch_calls": 68038,
+          "state_step_calls": 68038,
+          "state_steps": 1163922,
+          "visited_edges": 1253376
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "losses": [
+        30.302227020263672
+      ],
+      "peak_growth_bytes": [
+        3899948032,
+        3733953536,
+        3733328384,
+        3697321984,
+        3732224000,
+        3734997504,
+        3738643456,
+        3694881792,
+        3690150912,
+        3689967104,
+        3748001792
+      ],
+      "estimated_peak_bytes": [
+        32671667024,
+        37818590028,
+        37818590028,
+        43319456648,
+        39676715948,
+        37197857668,
+        40293278636,
+        39613776756,
+        37757784928,
+        38374347616,
+        37818590016
+      ],
+      "binary_sha256": "b331c48ce5ee1f829fe63a6b0b762fc9ee9c9b34761def310d6f5f464cb5b7d8",
+      "build_sha256": "eb6e16e2d9ccc3f561e924ce7200c0fa808a71441a3148aefed3e062718d5adf",
+      "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+      "consumer_sha256": "e850ef740c70c31140b324e61c760bf997d62517564e75a01d8445887f8bcecd",
+      "budget": {
+        "cell": 1,
+        "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+        "coefficient": 1.15,
+        "original_step_seconds": 3000,
+        "step_seconds": 1200,
+        "child_seconds": 2800,
+        "construction_allowance_seconds": 400,
+        "phase_forecasts_seconds": {
+          "warmup": 473.18498649519995,
+          "measured": 570.9130135464
+        },
+        "basis": [
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-1/result.json",
+            "sha256": "4ce686e90ed666754097a708819037614235b72bac00165c30e998c07aa67060"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-1/consumer/result.json",
+            "sha256": "22c55be6093988cfde46611f143c38bf7224b34f88839969d06ae1bc2b70db92"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-1/packet.json",
+            "sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-1/original-plan.json",
+            "sha256": "2d23f747f7ee77a3af6346d91ae226eab8e1214e06dce3fc7667b19da7ce6a0b"
+          }
+        ],
+        "reason": "Actual passed original-width model/mode/preset continuation pilot at the same physical rows,owner map,source and binary;one continued warmup and measured step,two windows each. Forecasts retain1.15. Original3000s refusals are preserved when forecast exceeds3000s;the separately declared step budget is supported by these measured phases. Still requires an actual unprofiledB512 run. No capacity/dtype change."
+      }
+    },
+    {
+      "cell": 2,
+      "repeat": 1,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "resident",
+        "configuration": "libtorch-add-False-resident",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "implementation": "libtorch",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/inputs/fullsize-add01/workload.json",
+        "--output-dir",
+        "TASK/runs/formal-add-inference-npu01/assessment/cell-2-repeat-1/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "4",
+        "--resident-context-bytes",
+        "8589934592",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "2048",
+        "--resident-arrivals",
+        "2048",
+        "--resident-outputs",
+        "512",
+        "--resident-trace",
+        "16384",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "65536",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "16",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-binary",
+        "TASK/builds/integration-online-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "seconds": [
+        327.613456123
+      ],
+      "warmup_seconds": [
+        327.117732583
+      ],
+      "construction_seconds": 62.390691015,
+      "wall_seconds": 727.6516444757581,
+      "token_rate": 37.50761688917492,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 128
+      },
+      "statistics": [
+        {
+          "emission_chunks": 56320,
+          "events": 1188494,
+          "full_chunks": 36157,
+          "head_chunks": 256,
+          "pending_peak": 1536,
+          "stages": 7168,
+          "window_events_max": 4685,
+          "window_outputs_max": 48,
+          "window_stages_max": 28
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "losses": [
+        30.30591583251953
+      ],
+      "peak_growth_bytes": [
+        7817851392,
+        4072471552,
+        4072471552,
+        4072471552,
+        4055694336,
+        4072471552,
+        4067613696,
+        4066204672,
+        4066204672,
+        4072471552,
+        4082678784
+      ],
+      "estimated_peak_bytes": [
+        27158606912,
+        20884294320,
+        20884294320,
+        20884294320,
+        20850723504,
+        20884294320,
+        20863825632,
+        20859458256,
+        20843994748,
+        20868830812,
+        20873198184
+      ],
+      "binary_sha256": "b331c48ce5ee1f829fe63a6b0b762fc9ee9c9b34761def310d6f5f464cb5b7d8",
+      "build_sha256": "eb6e16e2d9ccc3f561e924ce7200c0fa808a71441a3148aefed3e062718d5adf",
+      "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+      "consumer_sha256": "2a887a66f7e29077bcbcedd0ff7688acd519bf85d475944ebd107dacdc1443fe",
+      "budget": {
+        "cell": 2,
+        "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+        "coefficient": 1.15,
+        "original_step_seconds": 3000,
+        "step_seconds": 900,
+        "child_seconds": 2200,
+        "construction_allowance_seconds": 400,
+        "phase_forecasts_seconds": {
+          "warmup": 387.5309907392,
+          "measured": 378.85602347839995
+        },
+        "basis": [
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-2/result.json",
+            "sha256": "873645c71ad0eddc697d0bf5fb658c27db78ca3ed61c43258932fc866e9208b5"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-2/consumer/result.json",
+            "sha256": "2c96d69ec664215b48397e4aca5e27e7a93a980be2bff86bda2a0bc9ff1548da"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-2/packet.json",
+            "sha256": "035ac2fca26fe6312e276bbcafd9bc30961a5b36a47a0b0c42d714e9cc268725"
+          },
+          {
+            "path": "TASK/runs/remaining-accelerator-calibration02/assessment/cell-2/original-plan.json",
+            "sha256": "a56b373296ffc0fdabf527aca599885956db58a39c72f6bc4efc342207db7953"
+          }
+        ],
+        "reason": "Actual passed original-width model/mode/preset continuation pilot at the same physical rows,owner map,source and binary;one continued warmup and measured step,two windows each. Forecasts retain1.15. Original3000s refusals are preserved when forecast exceeds3000s;the separately declared step budget is supported by these measured phases. Still requires an actual unprofiledB512 run. No capacity/dtype change."
+      }
+    }
+  ],
+  "not_started": [],
+  "source_inventory_sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc",
+  "audit_helper_sha256": "799aab8705054a572908b62dd3bcb08e41fe45aaea26834c025c2524b60e0ae1",
+  "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+  "job": {
+    "name": "formal-add-inference-npu01",
+    "state": "passed",
+    "exit_code": 0,
+    "started": "2026-10-03T20:58:34.818464+00:00",
+    "finished": "2026-10-03T21:30:38.378910+00:00",
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "receipt_sha256": "1c42d198a5a6220f83b2eb2bfedebcb87817445f007998619ee1dd7ac9d07de0",
+    "assessment_sha256": "ec671cbdff505613d2deb1a6de64a9215abe0dd9c26f8747870fb95d7740e5b3"
+  },
+  "scope": "Independent unprofiled B512 formal processes,strictly serial and fresh per cell. CPU and NPU timings cannot overlap. NPU lease acquired per cell,not held across CPU cells. One continued warmup and one measured step,two windows each. First failure stops;no retry. Three fresh processes required before a configuration recommendation.",
+  "limitations": [
+    "One process per recorded cell/repeat;three independent processes required before a recommendation.",
+    "Actual work counts must accompany any CPU/NPU comparison;strict original-scale equivalence is not established.",
+    "Own heavy timings are serial;external shared-server load is uncontrolled.",
+    "Original3000s forecast refusals remain separate from longer explicitly declared execution budgets."
+  ]
+}
