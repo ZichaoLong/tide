@@ -165,7 +165,8 @@ No current task requests an unbounded NPU wait.
 
 ## Full-size timing plan and remaining acceptance
 
-TASK/plans/fullsize-continuous-e69b3bd-01.json fixes120 FP32 cells:
+Active TASK/plans/fullsize-continuous-e69b3bd-blas16-02.json fixes120 FP32 cells
+(old plan01 is retained history):
 ten family/client/schedule submatrices ×2 models ×2 modes ×3 flows.
 All24 unique static geometry/client envelopes admit at11 NPUs or one CPU,
 60GiB/card or512GiB CPU with unchanged margins. One continued warmup+one measured
@@ -181,8 +182,8 @@ cold jobs and exclusive online-measurement.lock. Two measured-budget files now e
 formal-cell-10-budget01.json,hashing the completed per-case pilot records.
 Review the first admitted actual cell before multiplying cases.
 
-Remaining:finish active CPU result and failed/unstarted Python calibration;qualify necessary continuous
-resident/CPU original-width memory/cost;execute full-size matrix,repeat formal
+Remaining:audit passed CPU BLAS16 calibration and finish failed/unstarted Python calibration;qualify necessary continuous
+resident original-width memory/cost;execute full-size matrix,repeat formal
 recommendations,separate full-size profiles/FP16 comparisons,then final support/
 portability/evidence audit and terminal job closure. Current functionality and
 integrated semantics do not close F6. No speedup threshold;no failure-only or
@@ -191,13 +192,19 @@ numerical failure is separately accepted,not a blocker to these actions.
 
 ## Full-size profiles and revised CPU calibration priority
 
-profile-fullsize-mixed01 is running on11 NPUs1,2,3,4,5,6,7,8,9,11,12.
+profile-fullsize-mixed01 failed/exit1 at2026-10-03T19:43:32Z. Add reached its
+4500s child timeout without a complete consumer result;Attention never started.
+Unit/cgroup empty;11-card lease1,2,3,4,5,6,7,8,9,11,12 released.
 Two serial B512/FP32/mixed-A/LibTorch/TimedDAG/prefill cold complete updates,
 Add then Attention,msprof delay180s/duration5s,1GiB trace cap. Child4500s,
 export180s/session≤12,total6900s/case,whole13860s. First failure stops.
 Helpers profile_fullsize_mixed{,_pair}.py are immutable while active.
 Records TASK/runs/profile-fullsize-mixed01/assessment/{result.json,add,attention}.
 These instrumented,overlapping-CPU results are not formal throughput.
+profile-slice-inspect01 passed/exit0,unit inactive/empty cgroup:immutable copy of the already closed five-second
+Add trace window,then one bounded180s export,whole360s. Read-only hashes
+prove the copy;never writes live profile files. Intermediate analysis only,not
+fullB512 completion. Helper inspect_profile_slice.py and assessment/result.json.
 
 formal-mixed-prefill-01,formal-mixed-prefill-02 and
 remaining-continuous-calibration01 were deliberately cancelled while waiting,
@@ -235,7 +242,7 @@ BLAS16=1.800303/1.752266/1.804052s;ratio3.431921×. Three losses and event
 counts384/step match exactly across all six processes. This is reduced topology,
 not full9.468B/17.521B qualification.
 
-cpu-blas-continued01 is running on e69b3bd,helper cpu_blas_continued.py and new
+cpu-blas-continued01 passed/exit0 on e69b3bd;unit inactive/empty cgroup. Helper cpu_blas_continued.py and new
 fullsize_calibration_cell_blas.py. New plan
 TASK/plans/fullsize-continuous-e69b3bd-blas16-02.json keeps all120 cells and
 all geometry/capacity;adds explicit CPU BLAS16/OMP16,MKL1,thread-limit32.
@@ -246,7 +253,17 @@ CPU peak+208GiB reservation must fit half-memory;may overlap only current mixed
 profile. Uses separate calibration-cpu-blas.lock;no formal jobs are queued.
 Cell3/Add training passed:construction48.238962s,warmup105.561763s,
 measured115.645236s,B512 phase forecasts939.407377/1039.361385s (×1.15),
-peak115.290GiB. Cell9/Attention training now running;inference follows.
+peak115.290GiB. All four cases passed,including continuation/admission checks:
+
+| Cell | CPU FP32 case | Pilot batch/physical | Warmup s | Measured s | B512 forecast warmup/measured s,including1.15 |
+| --- | --- | --- | ---: | ---: | --- |
+| 3 | Add training | 64/32 | 105.561763 | 115.645236 | 939.407377/1039.361385 |
+| 9 | Attention training | 32/16 | 536.410864 | 535.885729 | 9544.565449/9692.312292 |
+| 0 | Add inference | 64/32 | 26.999169 | 28.504013 | 248.392358/262.236922 |
+| 6 | Attention inference | 64/32 | 163.179488 | 210.936170 | 1501.251293/1940.612768 |
+
+These are reduced-batch,original-width phase diagnostics;no actual B512 timing.
+[All four terminal records audited](evidence/original-width-cpu-blas16-20261004.md).
 Exact records TASK/runs/cpu-blas-continued01/assessment/cell-N.
 Do not edit new helper/plan/settings while live. Inspect actual results before
 creating fullB512 budgets;no full-size speedup extrapolation. CPU/resident continued calibration and
@@ -255,6 +272,33 @@ and dispatch_remaining_calibration.py were never exercised;they reference the
 cancelled formal02 dependency and must be versioned/reviewed before new use.
 fullsize_formal_cell.py is also unexecuted;review its first actual result before
 multiplying cells. Retain source/plan/budget hashes for all future runs.
+
+## Deferred accelerator calibration and formal budgets
+
+remaining-accelerator-calibration02 is running on e69b3bd,helper
+remaining_accelerator_calibration.py. Wait≤15000s for profile-fullsize-mixed01,
+cpu-blas-continued01 and profile-slice-inspect01 terminal/empty,without devices.
+Then11-card leases per serial cell,queue≤120s,first failure stops:
+2,5,8,11 resident LibTorch/prefill Add/Attention inference/training;
+1,7 mixed LibTorch/prefill inference;76,82,88,94 Python mixed training gaps.
+All use two physical chunks except Python Add:one logicalB32 chunk at unchanged
+physicalB32 after the retainedB64 timeout. Child900s except Python Add1800s;
+whole28200s. Reuses fullsize_calibration_cell_blas.py and immutable plan02.
+Records TASK/runs/remaining-accelerator-calibration02/assessment/cell-N.
+Cell2/resident Add inference passed (B8/physical4,warmup5.265367s,
+measured5.147500s);cell5/resident Add training is running.
+This is calibration,not full-size performance;do not start competing heavy jobs.
+
+Unsubmitted fullsize_formal_cell_blas.py adds explicit CPU BLAS16 environment
+and requires current diagnostic jobs terminal/empty. Budget02 files exist for
+cells3,4,9,10. CPU Add and mixed Add/Attention retain3000s/update+6300s child.
+CPU Attention actualB32 warmup536.410864/measured535.885729s forecasts
+9544.565449/9692.312292s with1.15:original3000s is refused;separately declared
+12000s/update and24400s child (400s construction allowance). Not executed.
+After necessary calibration,prioritize shorter formal cells;defer the longest
+CPU Attention timing so it does not block every other matrix result. No formal
+recommendation without three fresh processes. These helpers/budgets are not
+runtime qualification;review first actual formal result before expansion.
 
 ## Environment and protected history
 

@@ -1,0 +1,657 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "source_inventory_sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc",
+  "source_file_count": 1554,
+  "audit_helper_sha256": "88221ff3e83de3cf338585865bfbceb4062c40a18d0b72ea2264d5fd950f9ea9",
+  "binary_sha256": "6d16e7c7d8b0c1c135506256a8bc85cd74cfef59eb82737bfb48bcfb8c734147",
+  "build_sha256": "980b1a7c50347d17760156e9af63c621aa48b2d55aa73eaa3500788181eec25a",
+  "matrix_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+  "job": {
+    "name": "cpu-blas-continued01",
+    "state": "passed",
+    "exit_code": 0,
+    "finished": "2026-10-03T19:28:51.566825+00:00",
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "receipt_sha256": "acc9a07075d2495635347e849469b93ecf087dc5b7b92f96ef4f6acbf8ac05ee",
+    "assessment_sha256": "e9c1116309fee77281c1deecf892effefb3d857c33cf8c61edba9e19bf7f96b7"
+  },
+  "cases": [
+    {
+      "cell": 3,
+      "state": "passed",
+      "model": "add",
+      "training": true,
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "parameters": 9468053696,
+      "seconds": [
+        115.645235613
+      ],
+      "warmup_seconds": [
+        105.56176253
+      ],
+      "construction_seconds": 48.238962342,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 112.592467638,
+            "optimizer_seconds": 3.0527679749999947
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 101.616316804,
+            "optimizer_seconds": 3.9454457260000027
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "aggregate_calls": 1212,
+          "attention_score_elements": 0,
+          "batched_aggregate_events": 148674,
+          "batched_full_events": 26112,
+          "body_candidate_events": 145602,
+          "body_selected_events": 23040,
+          "candidate_events": 148674,
+          "full_blocks": 1030,
+          "full_calls": 1030,
+          "greedy_relaxed_edges": 30720,
+          "greedy_stages": 68,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 8614,
+          "next_reset_scalar_steps": 23040,
+          "next_steps": 148674,
+          "packed_source_batches": 1212,
+          "read_calls": 8526,
+          "region_blocks": 68,
+          "region_steps": 26112,
+          "selected_events": 26112,
+          "semantic_next_replays": 148674,
+          "semantic_read_replays": 148674,
+          "semantic_state_replays": 148674,
+          "source_rows": 158208,
+          "state_blocks": 256,
+          "state_prefill_fallback_events": 145602,
+          "state_prefill_selected_clear": 145602,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 256,
+          "state_step_batch_calls": 8518,
+          "state_step_calls": 8518,
+          "state_steps": 145602,
+          "visited_edges": 156672
+        }
+      ],
+      "losses": [
+        31.425811767578125
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 939.4073771816999,
+        "measured": 1039.36138544085
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        123792211968
+      ],
+      "estimated_peak_bytes": [
+        202724192208
+      ],
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-3/packet.json",
+        "--output-dir",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-3/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "32",
+        "--workers",
+        "1",
+        "--packed-sources",
+        "--batch-next",
+        "--native-binary",
+        "TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "packet_sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9",
+      "plan_sha256": "07fc63a102aefe87bd9764bc6050b3fd942af590ea70c05f94d3696f7170783c",
+      "result_sha256": "8420cce91d55d0ab45d54266405e10d8b88835da2355f4bb6f452164a63139b5"
+    },
+    {
+      "cell": 9,
+      "state": "passed",
+      "model": "attention",
+      "training": true,
+      "logical_batch": 32,
+      "physical_rows": 16,
+      "parameters": 17521117376,
+      "seconds": [
+        535.885728527
+      ],
+      "warmup_seconds": [
+        536.410864225
+      ],
+      "construction_seconds": 102.742773735,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 526.147461108,
+            "optimizer_seconds": 9.738267418999953
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 517.547417695,
+            "optimizer_seconds": 18.86344652999992
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "aggregate_calls": 1928,
+          "attention_score_elements": 0,
+          "batched_aggregate_events": 74184,
+          "batched_full_events": 13056,
+          "body_candidate_events": 72648,
+          "body_selected_events": 11520,
+          "candidate_events": 74184,
+          "full_blocks": 1914,
+          "full_calls": 1914,
+          "greedy_relaxed_edges": 15360,
+          "greedy_stages": 68,
+          "max_full_batch": 192,
+          "max_greedy_frames": 192,
+          "max_live_fibers": 6144,
+          "max_next_batch": 16,
+          "max_state_batch": 16,
+          "max_state_sequence": 12,
+          "next_batches": 21223,
+          "next_reset_batches": 9172,
+          "next_reset_scalar_steps": 0,
+          "next_steps": 74184,
+          "packed_source_batches": 1928,
+          "read_calls": 21135,
+          "region_blocks": 68,
+          "region_steps": 13056,
+          "selected_events": 13056,
+          "semantic_next_replays": 74184,
+          "semantic_read_replays": 74184,
+          "semantic_state_replays": 74184,
+          "source_rows": 79104,
+          "state_blocks": 128,
+          "state_prefill_fallback_events": 72648,
+          "state_prefill_selected_clear": 72648,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 128,
+          "state_step_batch_calls": 21127,
+          "state_step_calls": 21127,
+          "state_steps": 72648,
+          "visited_edges": 78336
+        }
+      ],
+      "losses": [
+        33.81072235107422
+      ],
+      "outputs": [
+        768
+      ],
+      "forecasts_seconds": {
+        "warmup": 9544.5654490975,
+        "measured": 9692.312291919048
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        334840270848
+      ],
+      "estimated_peak_bytes": [
+        401520953296
+      ],
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-9/packet.json",
+        "--output-dir",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-9/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "16",
+        "--workers",
+        "1",
+        "--packed-sources",
+        "--batch-next",
+        "--native-binary",
+        "TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "packet_sha256": "d07e024f82742f49661260c9aedb6d83c905dccaab0705db3e80088953f818fe",
+      "plan_sha256": "ba92222042f14d645519773cceecb9af6060a167535dd2ced89c67e42e940b45",
+      "result_sha256": "7968ce9607f0733295f86f7be41ceba725623db2561870b49aa0994711487c59"
+    },
+    {
+      "cell": 0,
+      "state": "passed",
+      "model": "add",
+      "training": false,
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "parameters": 9468053696,
+      "seconds": [
+        28.504013212
+      ],
+      "warmup_seconds": [
+        26.999169311
+      ],
+      "construction_seconds": 47.061652413,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 28.504013212,
+            "optimizer_seconds": 0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 26.999169311,
+            "optimizer_seconds": 0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "aggregate_calls": 1208,
+          "attention_score_elements": 0,
+          "body_candidate_events": 145514,
+          "body_selected_events": 23040,
+          "candidate_events": 148586,
+          "full_blocks": 1015,
+          "full_calls": 1015,
+          "greedy_relaxed_edges": 30720,
+          "greedy_stages": 68,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 8692,
+          "next_reset_scalar_steps": 23040,
+          "next_steps": 148586,
+          "packed_source_batches": 1208,
+          "read_calls": 8604,
+          "region_blocks": 68,
+          "region_steps": 26112,
+          "selected_events": 26112,
+          "source_rows": 158208,
+          "state_blocks": 256,
+          "state_prefill_fallback_events": 145514,
+          "state_prefill_selected_clear": 145514,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 256,
+          "state_step_batch_calls": 8596,
+          "state_step_calls": 8596,
+          "state_steps": 145514,
+          "visited_edges": 156672
+        }
+      ],
+      "losses": [
+        30.708131790161133
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 248.39235766119998,
+        "measured": 262.2369215504
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        43951562752
+      ],
+      "estimated_peak_bytes": [
+        120353580400
+      ],
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-0/packet.json",
+        "--output-dir",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-0/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32",
+        "--workers",
+        "1",
+        "--packed-sources",
+        "--batch-next",
+        "--native-binary",
+        "TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "packet_sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9",
+      "plan_sha256": "01b4ed987e0b9bad40b5acb42dc6956d2f54b4c24c0a567c8c014f9c456cce7e",
+      "result_sha256": "695df701de45c6a1fffc7210f1222f4489501e9e62365bcc760f95f8536e28a2"
+    },
+    {
+      "cell": 6,
+      "state": "passed",
+      "model": "attention",
+      "training": false,
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "parameters": 17521117376,
+      "seconds": [
+        210.936170469
+      ],
+      "warmup_seconds": [
+        163.179488377
+      ],
+      "construction_seconds": 107.433271422,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 210.936170469,
+            "optimizer_seconds": 0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 163.179488377,
+            "optimizer_seconds": 0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "aggregate_calls": 1928,
+          "attention_score_elements": 0,
+          "body_candidate_events": 145612,
+          "body_selected_events": 23040,
+          "candidate_events": 148684,
+          "full_blocks": 1928,
+          "full_calls": 1928,
+          "greedy_relaxed_edges": 30720,
+          "greedy_stages": 68,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 22842,
+          "next_reset_batches": 14434,
+          "next_reset_scalar_steps": 0,
+          "next_steps": 148684,
+          "packed_source_batches": 1928,
+          "read_calls": 22754,
+          "region_blocks": 68,
+          "region_steps": 26112,
+          "selected_events": 26112,
+          "source_rows": 158208,
+          "state_blocks": 256,
+          "state_prefill_fallback_events": 145612,
+          "state_prefill_selected_clear": 145612,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 256,
+          "state_step_batch_calls": 22746,
+          "state_step_calls": 22746,
+          "state_steps": 145612,
+          "visited_edges": 156672
+        }
+      ],
+      "losses": [
+        20.452312469482422
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 1501.2512930684,
+        "measured": 1940.6127683147997
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        85292716032
+      ],
+      "estimated_peak_bytes": [
+        170578326896
+      ],
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-6/packet.json",
+        "--output-dir",
+        "TASK/runs/cpu-blas-continued01/assessment/cell-6/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "libtorch",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32",
+        "--workers",
+        "1",
+        "--packed-sources",
+        "--batch-next",
+        "--native-binary",
+        "TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "packet_sha256": "81fffe755a41c172f1570999049e8c4d33e66b317c537fde48006ae477ca764b",
+      "plan_sha256": "f7579f8738c52dce60da1b0f3378664458c88f2beb7dbf0998279617828e7a7d",
+      "result_sha256": "0a51376b1fd81eca0589dc8424066f90b1ce23f72d410f4f3b1dc60d857afb70"
+    }
+  ],
+  "limits": {
+    "whole_seconds": 9400,
+    "children": [
+      [
+        3,
+        1800
+      ],
+      [
+        9,
+        3600
+      ],
+      [
+        0,
+        1800
+      ],
+      [
+        6,
+        1800
+      ]
+    ]
+  },
+  "scope": "Original width and parameter counts,LibTorch/TimedDAG/prefill CPU,ATen16/workers1 and explicit BLAS16 startup. AddB64/physicalB32,Attention trainingB32/physicalB16 or inferenceB64/physicalB32,two chunks. One continued warmup+one measured complete step,two windows each. May overlap declared mixed profiling;cost/memory calibration only. First failure stops.",
+  "limitations": [
+    "Reduced logical batches; original width and parameters. Forecasts are not measured B512 performance.",
+    "Phase instrumentation and overlapping NPU profiling; not formal throughput or a CPU/NPU speed ratio.",
+    "One process per cell. Three independent formal processes are required before recommending a configuration.",
+    "Attention training fails the original 3000s forecast guard; any longer bound must be separately declared.",
+    "CPU memory observation is process peak RSS growth, not allocator accounting."
+  ]
+}
