@@ -69,6 +69,19 @@ gates. Update this handoff atomically with scripts.durable_records.replace_text.
   2c04005 ([evidence](evidence/eager-cuda-host-20261003.md)). Real CUDA/x86_64
   execution remains target-pending; [portable commands](eager-target-validation.md).
 
+## Exact discrete tensor comparator correction
+
+Re-entry audit reproduced a validation defect: equivalent() applied payload
+float tolerances to int64/bool tensors, accepting2**53 versus2**53+1 and explicit
+atol100 integer/mask differences. Fix only integer/bool comparisons to atol=rtol=0;
+floating tolerance,discrete route rules and candidate computations are unchanged.
+New regression includes int64 limits,nested records,dtype/shape/None checks.
+Development48 checks passed; initial test collection failed on reserved fixture
+name dtype,corrected to storage_dtype before tests ran. Historical route failure
+is independent and remains failed. Next commit implementation,then affected clean
+CPU qualification using source-matching integration-cpu-clean02 core;no full gate
+repeat. All prior evidence keeps its exact source scope.
+
 ## Active jobs and next actions
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`. Every unit is

@@ -7,9 +7,16 @@ def equivalent(a, b, path="root", *, atol=None, rtol=None, check_device=True):
     if isinstance(a, torch.Tensor):
         if not isinstance(b, torch.Tensor):
             raise AssertionError(f"{path}: missing tensor")
-        tol = (1e-10, 1e-8) if a.dtype == torch.float64 else (1e-3, 2e-2) if a.dtype == torch.float16 else (1e-6, 1e-5)
-        torch.testing.assert_close(a, b, atol=tol[0] if atol is None else atol,
-                                   rtol=tol[1] if rtol is None else rtol, check_device=check_device,
+        if a.is_floating_point() or a.is_complex():
+            tol = (1e-10, 1e-8) if a.dtype == torch.float64 else (1e-3, 2e-2) if a.dtype == torch.float16 else (1e-6, 1e-5)
+            tensor_atol, tensor_rtol = tol[0] if atol is None else atol, tol[1] if rtol is None else rtol
+        else:
+            # Integer time/count/identity and bool masks are exact, even when
+            # the caller relaxes payload tolerances. Zero tolerances also avoid
+            # converting large int64 values to floating point for comparison.
+            tensor_atol = tensor_rtol = 0
+        torch.testing.assert_close(a, b, atol=tensor_atol,
+                                   rtol=tensor_rtol, check_device=check_device,
                                    msg=lambda msg: f"{path}: {msg}")
     elif is_dataclass(a):
         if type(a) is not type(b):

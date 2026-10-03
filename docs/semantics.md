@@ -128,7 +128,8 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
 
 - Exact comparison: graph/atom/edge identities, time, positions, candidates,
   routes, history, validity and pending-message membership.
-- Tensor comparison: FP64 atol=1e-10 rtol=1e-8; FP32 atol=1e-6 rtol=1e-5.
+- Integer and boolean tensors compare exactly, independently of payload tolerances.
+- Floating tensor comparison: FP64 atol=1e-10 rtol=1e-8; FP32 atol=1e-6 rtol=1e-5.
   A route mismatch fails; report score margins rather than hiding it by replay.
 - Trace: fibers, content, proposal, descriptor, control, active, comparison,
   next, histories, Full values, emitted messages and external outputs.
