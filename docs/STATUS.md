@@ -154,8 +154,9 @@ commit before relying on pilot-to-B512 cost extrapolation.
 
 ## Next implementation and validation
 
-1. Commit/push the reviewed owner-map evidence after its successful audit.
-   No implementation edits remain. Continue to the Attention pilot below.
+1. Owner-map evidence140d698 is pushed. Attention pilot passed,but the measured
+   B512 forecast is refused below. Commit its audited evidence,then improve
+   physical-batch admission from verified liveness/static bounds;no blind retry.
 2. Run a bounded original-width Attention pilot at a currently available card
    count with the same explicit map/chunks as its B512 plan. Keep current caps,
    3000s and1.15; measure sample/optimizer phases,allocator and continuation.
@@ -179,17 +180,28 @@ memory-balance-standalone-clean02 backend. Audit passed:
 Retain owner-map-cpu-dev01 failure:metadata test used unregistered npu device;
 corrected resolved-index fixture and actual device CLI gates passed.
 
-Next task `wide-attention-owner-pilot01` uses clean29effae/owner-map-clean01 and
-owner-map-consumer-clean01,11devices/physicalB1,B4,two windows,one FP32 SGD
-update. Helper TASK/launchers/wide_attention_owner_pilot.py --source SOURCE
---build BUILD --out TASK/runs/wide-attention-owner-pilot01/assessment
---devices 11 --sample-rows 1. B512-fixed map/operator maxima also fit B4;
-static estimated peaks49.896/53.649GiB within53.875GiB usable. This is not a
-runtime result. Wait120s,child900s,8threads,online-measurement.lock; preserve
-3000s/1.15/current caps. If measured phase forecast passes,run a separate
-bounded B512 via wide_attention_b512_admitted.py; otherwise inspect the actual
-cost and optimize. Eleven cards currently available after qualification; the
-lease helper rechecks inventory. No current mainline job live yet.
+`wide-attention-owner-pilot01` completed on clean29effae/owner-map-clean01 and
+owner-map-consumer-clean01:11devices,B4/physicalB1×4,two windows,one complete
+FP32 SGD update. Construction282.182195511s,sample47.781389243s +optimizer
+2.636987134s=50.418376377s;loss20.07830810546875,outputs96,events9256,cut408.
+All memory/context checks passed;peaks42.839–43.996GB. Same fixed B512 map and
+chunks,original capacities. Phase forecast7036.453031774s>3000s at1.15;
+B512 not executed. Job passed/exit0,unit inactive/empty cgroup,lease released.
+[Evidence](evidence/original-width-attention-owner-diagnostic-20261003.md).
+Audit passed:`python TASK/launchers/wide_attention_owner_evidence.py
+29effaed064d59b9da930ec3acec810be58b2e1a`. No current mainline live jobs.
+
+Next investigation: exact KV journal liveness in capacity.py/.h. The current
+24*rows*(2W+8) reserve is charged live and per retained window; inspect the two
+actual live DeviceJournal banks plus one immutable journal per window,including
+packing scratch and all metadata,before narrowing aggressive accounting.
+Also verify the rank-aligned packet's finite two-window KV bound:24 input
+positions×max incoming degree5=120. A separately configured128-row horizon
+can retain every possible row; do not infer this for arbitrary protocols or
+unbounded continuation. Initial read-only B2/11card/KV128 plan fits53.648GiB;
+B4 still refuses around54.8–54.9GiB. These are plans,not runtime evidence.
+An initial scratch bound probe indexed region ranks as node ranks and failed;
+corrected lookup uses ranks[node_regions[v]]. No runtime was started by either.
 The historical task remains deliberately stopped and protected.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent

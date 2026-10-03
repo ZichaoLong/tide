@@ -1,0 +1,248 @@
+{
+  "schema": "tide-reviewed-evidence-v1",
+  "source": "29effaed064d59b9da930ec3acec810be58b2e1a",
+  "qualification": "consumer-owner-map-20261003.json",
+  "jobs": [
+    {
+      "name": "wide-attention-owner-pilot01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "58233a825d164d0b5b8ebe5dde54466c60b68a41fb0809e1c6c2f6174f421142",
+        "task.log": "e13dc981a35e4c83ab99abef3444ca1d48127b01542a2081e66b8f761986b2bc",
+        "queue.json": "b4ff28aa4d02b65aeab5918a78e4c1576a791d7a0ad6887e25b8be0458161a96"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "passed_pilot": {
+    "parameters": 17521117376,
+    "batch_execution": {
+      "logical_batch": 4,
+      "requested_sample_chunk_rows": 1,
+      "effective_sample_chunk_rows": 1,
+      "physical_chunks": 4
+    },
+    "construction_seconds": 282.182195511,
+    "seconds": [
+      50.418376377
+    ],
+    "losses": [
+      20.07830810546875
+    ],
+    "outputs": [
+      96
+    ],
+    "final_cut": 408,
+    "statistics": [
+      {
+        "borrowed_attention_bytes": 32966553052,
+        "borrowed_projection_bytes": 37783953408,
+        "canonical_stream_chunks": 8776,
+        "canonical_stream_reserved_bytes": 1478524850,
+        "emission_chunks": 6720,
+        "events": 9256,
+        "full_chunks": 978,
+        "head_chunks": 8,
+        "pending_peak": 384,
+        "retained_attention_bytes": 32966553052,
+        "retained_bytes": 75280720456,
+        "retained_compact_journals": 4,
+        "retained_dense_bytes": 78191301640,
+        "retained_full_bytes": 8085024,
+        "retained_projection_bytes": 37783953408,
+        "retained_window_bytes": 3716355078,
+        "retained_windows": 8,
+        "reused_attention_gradient_bytes": 32227997132,
+        "reused_projection_gradient_bytes": 37599316160,
+        "reverse_fiber_budget_bytes": 183251937946,
+        "reverse_fiber_groups": 88,
+        "reverse_fiber_key_rows_max": 256,
+        "reverse_fiber_key_rows_min": 256,
+        "reverse_fiber_owner_rows_max": 4,
+        "reverse_fiber_owner_rows_min": 4,
+        "reverse_fiber_query_rows_max": 4,
+        "reverse_fiber_query_rows_min": 4,
+        "reverse_fiber_requested_max": 4,
+        "reverse_fiber_tensor_bytes": 9613366016,
+        "stages": 224,
+        "streamed_parameter_windows": 8,
+        "window_events_max": 1164,
+        "window_outputs_max": 12,
+        "window_stages_max": 28
+      }
+    ],
+    "context_storage": {
+      "policy": "compact",
+      "requested_bytes_per_device": 4294967296,
+      "devices": [
+        {
+          "device_index": 0,
+          "budget_bytes": 265067064,
+          "peak_saved_bytes": 5138272
+        },
+        {
+          "device_index": 1,
+          "budget_bytes": 773534216,
+          "peak_saved_bytes": 9414800
+        },
+        {
+          "device_index": 2,
+          "budget_bytes": 773534216,
+          "peak_saved_bytes": 8152308
+        },
+        {
+          "device_index": 3,
+          "budget_bytes": 773534216,
+          "peak_saved_bytes": 11857804
+        },
+        {
+          "device_index": 4,
+          "budget_bytes": 790348396,
+          "peak_saved_bytes": 7791672
+        },
+        {
+          "device_index": 5,
+          "budget_bytes": 773534216,
+          "peak_saved_bytes": 7693220
+        },
+        {
+          "device_index": 6,
+          "budget_bytes": 790381232,
+          "peak_saved_bytes": 7758924
+        },
+        {
+          "device_index": 7,
+          "budget_bytes": 790348396,
+          "peak_saved_bytes": 10365844
+        },
+        {
+          "device_index": 8,
+          "budget_bytes": 790348396,
+          "peak_saved_bytes": 8693452
+        },
+        {
+          "device_index": 9,
+          "budget_bytes": 790348396,
+          "peak_saved_bytes": 14382864
+        },
+        {
+          "device_index": 10,
+          "budget_bytes": 790348396,
+          "peak_saved_bytes": 14022152
+        }
+      ]
+    },
+    "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+    "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+    "phase_timing": {
+      "enabled": true,
+      "measured": [
+        {
+          "sample_work_seconds": 47.781389243,
+          "optimizer_seconds": 2.6369871340000017
+        }
+      ],
+      "warmup": [],
+      "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+      "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+    },
+    "cards": 11,
+    "peak_growth_bytes": [
+      43996483584,
+      42959316480,
+      42950775808,
+      42907629056,
+      43174969856,
+      42872157696,
+      42838530048,
+      42862260224,
+      42847823360,
+      43270023680,
+      43101272064
+    ],
+    "estimated_peaks_bytes": [
+      53574973462,
+      51578607040,
+      51578607040,
+      51513468736,
+      51878766858,
+      51513468736,
+      51543321204,
+      51543058698,
+      51543058698,
+      51912337674,
+      51744483594
+    ],
+    "original_b512_estimated_peaks_bytes": [
+      57604873694,
+      55100040120,
+      55100040120,
+      55034901816,
+      55383385758,
+      55034901816,
+      55047907268,
+      55047677598,
+      55047677598,
+      55416956574,
+      55249102494
+    ],
+    "usable_bytes_per_device": 57847840768,
+    "effective_chunks": {
+      "full": 16,
+      "emission": 1,
+      "aggregate": 8,
+      "attention": 1,
+      "keys": 128,
+      "reverse": 1,
+      "head": 64
+    },
+    "conservative_b512_step_seconds": 7421.5850026944,
+    "phase_b512_step_seconds": 7036.4530317737,
+    "scaling_assumptions": [
+      "128 times B4 sample work at identical physical rows,owners,chunks,two retained windows and numerical type",
+      "one same-shape canonical graph/head/embedding SGD update",
+      "1.15 safety factor; input-dependent events and B512 saved contexts can still alter runtime; actual B512 execution is a separate required gate"
+    ],
+    "b512_cost_gate_seconds": 3000,
+    "b512_executed": false
+  },
+  "refusal": {
+    "reason": "Measured phase forecast exceeds unchanged 3000-second complete-update gate",
+    "forecast_seconds": 7036.4530317737,
+    "coefficient": 1.15,
+    "b512_executed": false
+  },
+  "limits": [
+    "One cold B4/physicalB1 complete update and continuation,not formal throughput or full-size CPU parity.",
+    "Original capacities and model unchanged; no CPU events/routes/gradients drive the candidate.",
+    "The pilot passed allocator/context/workload checks,but original B512 training remains required."
+  ],
+  "artifacts": {
+    "runs/wide-attention-owner-pilot01/status.json": "58233a825d164d0b5b8ebe5dde54466c60b68a41fb0809e1c6c2f6174f421142",
+    "runs/wide-attention-owner-pilot01/task.log": "e13dc981a35e4c83ab99abef3444ca1d48127b01542a2081e66b8f761986b2bc",
+    "runs/wide-attention-owner-pilot01/queue.json": "b4ff28aa4d02b65aeab5918a78e4c1576a791d7a0ad6887e25b8be0458161a96",
+    "runs/wide-attention-owner-pilot01/assessment/result.json": "844aeb026c809e21a1fc37461d7208f27eaa13f3a456fc16a80584cdaaef5da2",
+    "runs/wide-attention-owner-pilot01/assessment/original-plan.json": "393704bb7f06fbdccf7e0aaa97f382e893497e04324e7a1911696e80a1fa46b7",
+    "runs/wide-attention-owner-pilot01/assessment/automatic-original-plan.json": "be085b7f0ebd18e6c8b56130a3f8e9437c085dacebe6d61f2f08f0be1aa5c829",
+    "runs/wide-attention-owner-pilot01/assessment/pilot-plan.json": "fd58a8df757a168fdd1461165c179a67d8adb5dfcda95ab795aeff942fd82353",
+    "runs/wide-attention-owner-pilot01/assessment/launcher.py": "d6940218d934c3835cb4e7a585845a3e51ef9979919e81db878928a97744ee3a",
+    "runs/wide-attention-owner-pilot01/assessment/pilot.log": "eeda1da403e0a56739000b9d29872056c7dc0ffc1648d4da799fbe8b1280d52b",
+    "runs/wide-attention-owner-pilot01/assessment/devices-before.log": "070aa4b2cc7049de35a3a0ee802f960c13939b9496a8b7cc879c0ef7c7ea73f6",
+    "runs/wide-attention-owner-pilot01/assessment/devices-after.log": "22ae665b151b7b5858933440c984dc80989f044dc8e35d980c94d3fd0cc1ce9e",
+    "runs/wide-attention-owner-pilot01/assessment/pilot/result.json": "a1942726abb5009f49546fa02687eee47d6d57add16d3d8d8731194544e09ded",
+    "runs/wide-attention-owner-pilot01/assessment/pilot/consumer.log": "3914b9e087fdc7249d1a636b2514a7127d9fb80fe08bd7a3f1f36c7e12456969",
+    "builds/owner-map-consumer-clean01/result.json": "a5b7c4465e7898165eaf1a1de25aa0baf352bf1a408bb3c47eaf787a617c6104",
+    "builds/owner-map-consumer-clean01/loader.txt": "3e430f2f81c938cf0049acb8ff926608ef34f4c37b719eb5bd836a5f278e8534",
+    "inputs/fullsize-attention01/workload.json": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a",
+    "runs/wide-attention-owner-pilot01/assessment/pilot-packet.json": "29fd9df45cb923697e6f7f21139b7bdff7cfafc167f2f7e93117a83689f190a5",
+    "launchers/wide_attention_owner_evidence.py": "372a5559c62af6d44a110cf13e773bc2ae1347a8234a0909696ab95f6974526f"
+  }
+}

@@ -272,6 +272,13 @@ cards; not formal throughput or full-size CPU parity. Attention B512 training,
 eager mixed multi-card and full comparison/repeats/profiles remain pending
 ([evidence](evidence/original-b512-add-training-20261003.md)).
 
+F6 original-width Attention fixed-map B4/physicalB1 on clean29effae completed
+one11-card FP32 SGD update:50.418376377s,two windows,17.521B parameters,
+outputs96/events9256/cut408,all allocator/context gates passed. Phase forecast
+7036.453031774s>3000s with unchanged1.15 and original capacities;B512 was not
+executed. Preserve the refusal and optimize;not formal throughput or F6 closure
+([evidence](evidence/original-width-attention-owner-diagnostic-20261003.md)).
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU
