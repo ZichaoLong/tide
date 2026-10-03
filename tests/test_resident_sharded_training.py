@@ -39,7 +39,8 @@ def test_cpu_safe_sharded_options():
     valid = ResidentPlacement(devices=["npu:0", "npu:1"], full_owners=[0, 1])
     assert ResidentPlacement(**valid.to_dict()) == valid
     r = GraphRuntime(configuration("pdg"), device="cpu", model_device="cpu")
-    assert r.manifest()["model_storage"] == dict(requested="cpu", resolved="cpu")
+    assert r.manifest()["model_storage"] == dict(requested="cpu", resolved="cpu",
+        requested_node_devices=None, node_devices=["cpu"]*len(r.config.graph.nodes))
     with pytest.raises(ValueError, match="model_device"):
         GraphRuntime(configuration("pdg"), device="cpu", model_device="meta")
 

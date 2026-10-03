@@ -83,7 +83,7 @@ Frozen source under TASK/sources, installed clients/core builds under TASK/build
 | wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; audit pending |
 | wide-eager-mixed-b512-01 | Running Attention; Add child passed1287.28431384s,construction43.420013183s | 3000s/update,3240s/child,6530s outer; do not mark entire job passed |
 | wide-eager-cpu-policy01 | **failed/exit1** at first policy; second never entered | Completed finite update599.905596491s,then CPU peak estimate refused |
-| integration-cpu-clean01 | 7b1fae5; complete CPU FP64/FP32 integration tests against reused packed-transfer CPU core | 1800s; verification/result.json and verification/tests.log; known failures below |
+| integration-cpu-clean01 | **failed/exit1**;9337 passed,120 failed,654 skipped,1783.33s | verification/result.json/tests.log; preserved incomplete build and old-assertion failures |
 | build-integration-cpu-clean02 | **passed/exit0**; fresh full CPU core,module and CLI/check clients | TASK/builds/integration-cpu-clean02/build-manifest.json; exact C++ hash unchanged |
 
 The mixed lease acquired physical1,2,3,4,5,6,7,8,9,11,12 (logical0..10).
@@ -106,8 +106,12 @@ protected work below. Follow declared timeouts,retain first failure,no blind ret
 requires eager automatic sample chunking to fail,contradicting the qualified
 admission feature. Removed that obsolete assertion only; nonboolean rejection
 still tested. Affected check passed1,10 deselected on the current CPU core.
-Production code unchanged. Let the original full gate finish to collect all
-issues; preserve it as failed. The new complete build addresses the missing
+Production code unchanged. The original full gate finished failed:9337 passed,120 failed,654 skipped.
+Additional failure is stale test_cpu_safe_sharded_options: model_storage now
+correctly also records requested_node_devices/node_devices. Updated its exact
+expected metadata; targeted check passed1 in0.19s. Remaining failed CLI groups
+require the omitted executables,now provided by the complete build. Recheck
+the failed selection before the next full gate; do not erase the failed run. The new complete build addresses the missing
 executables without changing any prior build.
 
 Test-only correction committed/pushed as530ae8553a184c3f20135f2e7899e371cf01bfab.
@@ -148,8 +152,13 @@ Development `eager-rss-training-cpu-dev01` passed/exit0:108 checks in75.32s,
 no skips, on the exact frozen modified source and fresh client. Includes static
 Python/C++ CPU/CUDA/NPU geometry parity,FP32/FP64 forced splitting,FP16 masters
 and the corrected nonboolean test; full integration-cpu-clean02 core.
-Implementation ready to commit; then build and rerun this affected gate on
+Implementation committed/pushed asc6ef22474f658ecb12dd11310c710781023932ab; build and rerun the affected gate on
 clean eager-rss-training-clean01 plus the failed B8/physicalB4 calibration.
+Passed `build-eager-rss-training-cpu-clean01`,900s/two workers,using the existing
+build_eager_consumer_core.py with backend cpu and packed-transfer-cpu-clean01.
+Next affected gate eager-rss-training-cpu-clean01,108 checks,900s; clean c6ef224
+source/client. Full gate follows the extra metadata assertion correction.
+Do not use the development binary for clean qualification.
 The correction estimates254061046480bytes versus retained248721317888bytes;
 this arithmetic alone is not a fresh calibration pass. Commit implementation after affected tests; qualify clean
 source and rerun the failed original-width B8 calibration with the same budgets.
