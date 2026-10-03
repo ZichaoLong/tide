@@ -75,19 +75,22 @@ def test_logical_kv_survives_physical_split_and_grows_with_continuation():
                for a,b in zip(longer['devices'],full['devices']))
 
 
-@pytest.mark.parametrize('memory,construction,complete',[
-    ('add',42757300224-119390208,104698310656),
-    ('attention',77057699840-121577472,228749291520)])
-def test_original_width_cpu_observations_fit_every_recorded_phase(memory,construction,complete):
+@pytest.mark.parametrize('memory,batch,rows,construction,complete',[
+    ('add',4,2,42757300224-119390208,104698310656),
+    ('attention',4,2,77057699840-121577472,228749291520),
+    ('attention',8,4,76940025856-119857152,248721317888)])
+def test_original_width_cpu_observations_fit_every_recorded_phase(memory,batch,rows,construction,complete):
     # External calibration anchors from original-width-eager-cpu-calibration-
     # 20261003, not values computed from the estimator. The old Attention total
     # and both construction estimates failed these fresh-process observations.
+    # The B8/physicalB4 policy diagnostic subsequently exceeded the allowance
+    # that covered only learned/master storage, after a complete finite update.
     p=make_continuous_packet(graph=ranked_graph(layers=15,region_width=32,fanout=4,
-        skip=1,local_span=8,cross_every=8),memory=memory,width=2048,batch=4,tokens=12,vocab=50304)
+        skip=1,local_span=8,cross_every=8),memory=memory,width=2048,batch=batch,tokens=12,vocab=50304)
     kwargs=dict(budgets=[512*1024**3],training=True,steps=1,warmup=0,windows=2,
-                workers=1,sample_rows=2,auto_sample_chunks=True,policy='aggressive')
+                workers=1,sample_rows=rows,auto_sample_chunks=True,policy='aggressive')
     cpu=plan(p,backend='cpu',**kwargs);accelerator=plan(p,backend='npu',**kwargs)
-    assert cpu['state']=='admitted' and cpu['effective_sample_rows']==2
+    assert cpu['state']=='admitted' and cpu['effective_sample_rows']==rows
     assert cpu['observation_counter']=='host_rss'
     phases=cpu['devices'][0]['phases']
     assert construction<=phases['construction'] and complete<=max(phases.values())

@@ -80,11 +80,11 @@ Frozen source under TASK/sources, installed clients/core builds under TASK/build
 
 | Job NAME | Source / outcome sought | Declared bound and records |
 | --- | --- | --- |
-| wide-eager-cpu-add-b512-01 | c686096; actual Add B512 CPU update,physicalB32×16,two windows,ATen16/workers1 | 3000s update,3240s child,3300s outer; assessment/result.json |
-| wide-eager-mixed-b512-01 | c686096; Add then Attention B512,11 cards,mixed-A,physical32/8,ATen2/workers4 | 3000s/update,3240s/child,6530s outer,120s lease; assessment/result.json and queue.json |
-| wide-eager-cpu-policy01 | c686096; exactly two Attention B8/physicalB4×2 policies: ATen16/workers1 and ATen1/workers16 | 900s/child,1850s outer; assessment/result.json; first failure stops |
+| wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; audit pending |
+| wide-eager-mixed-b512-01 | Running Attention; Add child passed1287.28431384s,construction43.420013183s | 3000s/update,3240s/child,6530s outer; do not mark entire job passed |
+| wide-eager-cpu-policy01 | **failed/exit1** at first policy; second never entered | Completed finite update599.905596491s,then CPU peak estimate refused |
 | integration-cpu-clean01 | 7b1fae5; complete CPU FP64/FP32 integration tests against reused packed-transfer CPU core | 1800s; verification/result.json and verification/tests.log; known failures below |
-| build-integration-cpu-clean02 | 7b1fae5; fresh complete CPU core,Python module and CLI/check clients | 2400s,two build workers; TASK/builds/integration-cpu-clean02/build-manifest.json |
+| build-integration-cpu-clean02 | **passed/exit0**; fresh full CPU core,module and CLI/check clients | TASK/builds/integration-cpu-clean02/build-manifest.json; exact C++ hash unchanged |
 
 The mixed lease acquired physical1,2,3,4,5,6,7,8,9,11,12 (logical0..10).
 CPU Add uses512GiB cap; mixed uses60GiB/card,80GiB parameter and4GiB head caps.
@@ -110,11 +110,12 @@ Production code unchanged. Let the original full gate finish to collect all
 issues; preserve it as failed. The new complete build addresses the missing
 executables without changing any prior build.
 
-Next: commit/push the tested test correction,then freeze that exact commit as
-`integration-tests-clean01`. Once the complete build passes,use the public gate:
+Test-only correction committed/pushed as530ae8553a184c3f20135f2e7899e371cf01bfab.
+The later CPU allowance fix below now also needs qualification before the next
+complete integration gate; do not launch the pending retry on the older test-only source. Once the complete build passes,use the public gate:
 
 ```bash
-python TASK/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit TEST_FIX_COMMIT -- timeout --signal=TERM --kill-after=10s 1800s env TIDE_ONLINE_BINARY='{base}/builds/eager-half-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
+python TASK/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit NEXT_QUALIFIED_IMPLEMENTATION_COMMIT -- timeout --signal=TERM --kill-after=10s 1800s env TIDE_ONLINE_BINARY='{base}/builds/eager-half-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
 ```
 
 All production C++/consumer bytes match7b1fae5; test-only source differences must
@@ -124,9 +125,45 @@ In parallel,finish scale jobs and use measured CPU policy results for the next
 bounded CPU Attention step. Formal comparisons wait until diagnostics/build/gates
 finish; no extra performance sweep has been authorized beyond the contract.
 
+## Current correction: CPU training allocation allowance
+
+Retain `wide-eager-cpu-policy01` failure: original-width AttentionB8/physicalB4
+update completed with finite loss20.681140899658203,output192,cut408; measured
+RSS growth248721317888bytes exceeded245300487792 estimate (about1.39%). No OOM
+or numerical failure; post-run calibration correctly failed and the second
+worker policy did not start. The old recorded gate remains failed.
+
+Working change in eager_capacity.{py,h}: apply the same6.25% CPU allocation
+allowance to learned+masters+gradient/optimizer storage in training phases,
+with construction still learned+masters only. Accelerator estimates,budgets,
+safety margins,mathematical execution and physical update semantics unchanged.
+Regression adds the measured B8/physicalB4 peak alongside earlier B4 anchors.
+Docs describe the measured limitation; fresh qualification remains pending.
+
+Passed/exit0 development build `build-eager-rss-training-cpu-dev01`, frozen dirty
+`eager-rss-training-dev01` from530ae85 plus this correction,900s,two workers,
+using `build_eager_consumer_core.py --backend cpu --name eager-rss-training-cpu-dev01
+--core TASK/builds/packed-transfer-cpu-clean01`. Exact core bytes unchanged.
+Development `eager-rss-training-cpu-dev01` passed/exit0:108 checks in75.32s,
+no skips, on the exact frozen modified source and fresh client. Includes static
+Python/C++ CPU/CUDA/NPU geometry parity,FP32/FP64 forced splitting,FP16 masters
+and the corrected nonboolean test; full integration-cpu-clean02 core.
+Implementation ready to commit; then build and rerun this affected gate on
+clean eager-rss-training-clean01 plus the failed B8/physicalB4 calibration.
+The correction estimates254061046480bytes versus retained248721317888bytes;
+this arithmetic alone is not a fresh calibration pass. Commit implementation after affected tests; qualify clean
+source and rerun the failed original-width B8 calibration with the same budgets.
+Do not mechanically retry the unchanged old source or alter an active helper.
+
 ## Remaining acceptance and environment
 
-Still open: actual original B512 CPU Attention and pending CPU Add/mixed results;
+CPU/mixed Add B512 share exactly1183427 candidate events,208896 selected events,
+12288 outputs/cut408; losses30.5003700256/30.5003738403. The earlier resident B512
+record has1183429 events/loss30.5083618164 at physicalB2,versus currentB32.
+Do not claim full-size discrete/numerical parity from the feasibility passes;
+this difference needs explanation before a matched formal comparison.
+
+Still open: actual original B512 CPU Attention and pending mixed Attention results;
 full original-scale CPU/screened mixed/resident performance matrix across required
 families/clients/schedules/inference/training,appropriate continuous warmup and
 measurement,three-process recommendations,separate profiles,FP16 comparisons,

@@ -47,14 +47,16 @@ inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& pl
       persistent=sum({persistent,product({batch,payload,width,2}),product({batch,8192})});
     }
     const Index transport=16*MIB,backend=512*MIB;
-    // CPU lifetime RSS includes retained allocation buffers. Calibrated from
-    // original-width construction/complete-update observations, not HBM usage.
+    // CPU buffers also cover gradients/slots once training starts. Construction
+    // has only learned/master storage; accelerator allocated bytes are separate.
     const auto host_storage=sum({learned,masters});
-    const auto rss_allowance=plan.host_rss?host_storage/16+(host_storage%16!=0):0;
+    const auto construction_rss=plan.host_rss?host_storage/16+(host_storage%16!=0):0;
+    const auto training_storage=sum({host_storage,optimizer});
+    const auto rss_allowance=plan.host_rss?training_storage/16+(training_storage%16!=0):0;
     const auto base=sum({learned,masters,constants,persistent,backend,rss_allowance});
     const auto forward=sum({base,optimizer,vector_work,cache_work,score_work,operator_work,head_work,transport});
     Card card;card.device=device;
-    card.phases={{"construction",sum({learned,masters,constants,backend,rss_allowance,product({std::max<Index>(32,8*payload),largest})})},
+    card.phases={{"construction",sum({learned,masters,constants,backend,construction_rss,product({std::max<Index>(32,8*payload),largest})})},
                  {"forward",forward},{"backward",c.training?forward:0},{"optimizer",c.training?sum({base,optimizer,operator_work}):0}};
     card.components={{"learned",learned},{"master_parameters",masters},{"constants",constants},{"persistent_state_and_kv",persistent},
         {"gradients_and_optimizer_slots",optimizer},{"vector_work",vector_work},{"cache_work",cache_work},

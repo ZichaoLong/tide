@@ -55,16 +55,18 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
             persistent+=batch*payload*width*2+batch*8192
         transport=16*MIB  # one bounded source/destination pack; payload charged above
         backend=512*MIB
-        # Fresh original-width CPU observations include retained allocation
-        # buffers beyond live tensor bytes (up to 4.3% of learned storage at
-        # construction). Charge 6.25% at every phase; accelerator allocated-byte
+        # CPU allocation buffers cover every parameter-related allocation,
+        # including gradients/slots during training. Charging only learned
+        # storage underestimated the original-width B8/physicalB4 CPU update.
+        # Construction has no gradients/slots yet. Accelerator allocated-byte
         # accounting is separate and does not inherit this RSS-only allowance.
-        rss_allowance=(learned+masters+15)//16 if host_rss else 0
+        construction_rss=(learned+masters+15)//16 if host_rss else 0
+        rss_allowance=(learned+masters+optimizer+15)//16 if host_rss else 0
         base=learned+masters+constants+persistent+backend+rss_allowance
         # The named CPU initializer can hold three int64 intermediates before
         # conversion. Eight payload rows cover that peak for supported training
         # precisions, as well as the final tensor/conversion transient.
-        phases=dict(construction=learned+masters+constants+backend+rss_allowance+max(32,8*payload)*largest,
+        phases=dict(construction=learned+masters+constants+backend+construction_rss+max(32,8*payload)*largest,
             forward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport,
             backward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport if training else 0,
             optimizer=base+optimizer+operator_work if training else 0)

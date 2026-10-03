@@ -60,12 +60,17 @@ gradients. [Clean7b1fae5 calibration](evidence/eager-fp16-consumers-20261003.md)
 passed four CPU and seven two-NPU fresh processes at D256 and D2048/six-node
 scales. These observations do not certify original480-node/B512 capacity.
 
-CPU RSS additionally charges6.25% of learned and explicit master storage for host allocations and
-retained buffers at each phase. The original-width B4 fresh-process
+CPU RSS additionally charges6.25% of learned and explicit master storage at
+construction, and also of gradient/optimizer storage during training, for host
+allocations and retained buffers. The original-width B4 fresh-process
 [calibration](evidence/original-width-eager-cpu-calibration-20261003.md) found up
 to4.3% unmodelled learned-storage bytes at construction, and an Attention total
-peak0.51% above the previous maximum. This explicit CPU allowance covers both
-observations with margin; a new scale run must still validate it. Accelerator
+peak0.51% above the previous maximum. A later B8/physicalB4 Attention update
+used248721317888bytes against245300487792 estimated bytes; charging the CPU
+allowance only on learned/master storage was insufficient. The training-phase
+correction covers that retained observation; fresh qualification is tracked in
+[STATUS](STATUS.md). Construction estimates,accelerator estimates and the
+safety margins below are unchanged. A new scale run must still validate it. Accelerator
 allocated-byte estimates do not inherit CPU RSS overhead. Offline `--preset cpu`
 and actual CPU resolution (including `--device auto`) select the RSS counter.
 
