@@ -210,6 +210,15 @@ loss/statistics unchanged; separate FP16 profile53176ops,zero observed AiCPU.
 Original dev01 ownership failure retained. No full-size Attention training or
 formal throughput claim ([evidence](evidence/resident-attention-borrow-20261003.md)).
 
+F5 bounded static memory-aware Full/state placement is qualified on cleanc38b72e:
+CPU29,NPU36 (32 actual independent CPU-referenced complete candidates,three
+capacity refusals,one interface check),D512 forced-owner calibration and separate
+FP16 profile88089ops without observed AiCPU. At most2N moves/4096 trials;
+nonempty explicit maps,conservative mode,canonical owners,all logical capacities
+and margins remain. Old empty-tuple/underprovisioned-journal failures and one
+build-helper failure are retained. Original Attention training and F6 remain
+pending ([evidence](evidence/consumer-memory-balance-20261003.md)).
+
 F5 consumer private-bank liveness accounting is qualified on clean219719d:
 four terminal jobs,CPU26,NPU25(no skips),24 actual CPU-referenced candidates and
 pre-allocation refusal; unchanged b5e6345 backend. Aggressive multi-device declared

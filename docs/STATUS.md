@@ -7,7 +7,8 @@ No subagents. Reference repositories and ObsidianVault are read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest implementation **219719d** is pushed and qualified below. Prior evidence
+`graph-execution-foundation`. Latest implementation **c38b72e** is pushed and qualified below.
+The prior **219719d** accounting implementation is qualified below. Prior evidence
 ce3206d qualifies b5e6345 private Attention banks; f27a4dc records actual Add B512 training.
 Re-entry: `git status --short --branch`; `python scripts/status.py`.
 [execution-flows](execution-flows.md) owns the contract;
@@ -95,7 +96,7 @@ Eager mixed multi-card remains a library gap: current model/validation assume
 one payload device; real parameter/state/message placement, autograd copies,
 alias ownership and continuation must be implemented in Python and native paths.
 
-## Latest qualified accounting and current prototype
+## Latest qualified capacity changes
 
 **219719dfb15cf9e2c30f7e7facac5feb1a5c19cb** qualifies consumer private-bank
 liveness accounting:aggressive multi-device declared consumers charge frozen
@@ -113,50 +114,55 @@ had a stale dependency path; identity check rejected it; corrected helper passed
 original retained. Audit:
 `python TASK/launchers/private_bank_capacity_evidence.py 219719dfb15cf9e2c30f7e7facac5feb1a5c19cb`.
 
-Bounded memory-aware placement and failure diagnostics are IMPLEMENTED with
-PASSED directed development gates; immutable qualification is next. Python/C++
-independently move joint Full/state owners only after aggressive initial placement
-and all operator reductions fail. Nonempty explicit Python maps/conservative maps
-stay fixed; empty tuples/lists mean automatic placement. At most2×nodes moves and
-4096 trials,strict integer memory improvement,physical-edge locality ties,no empty
-owner set. Changed maps retry requested chunks; every admission retains the full
-envelope and original margins. Static original-Attention12-card/B2:24 moves/946
-trials,63.923→53.598GiB<53.875usable; this is NOT runtime proof.
+**c38b72ebf1e66804e09dcf72f083ee4e6c1e5850** qualifies bounded static
+memory-aware joint Full/state owner placement and failure-only completed-program
+queue/KV-journal diagnostics. Automatic aggressive maps only,after all operator
+cuts fail; at most2N moves/4096 trials,no empty owner set,strict integer memory
+improvement. Nonempty explicit Python maps/conservative policies stay fixed;
+empty tuples/lists mean automatic. Canonical owners,API capacities and margins
+unchanged. [Evidence](evidence/consumer-memory-balance-20261003.md).
 
-Directed development: CPU27 on dev02,16-shape comparison test on dev03,and changed
-empty-map regression on dev04 passed. Dev03 NPU23 passed/10 failed retained:
-four native failures were the empty-tuple bug (corrected owner-pressure dev04 all4
-passed); others exposed B17 local KV-journal capacity or old sample expectations.
-Dev04 and dev05 one-case diagnostics remain FAILED/exit1 with completed-program
-counts. B17 reached stage4/events170,pending102/512,general journals170–238/2048,
-KV journals952/2048 before an over-capacity append. New failure-only queue/KV
-accessors have no object-layout/kernel change or successful-path host reads.
+Seven clean jobs passed/exit0,no skips,empty cgroups,released leases: CPU29,
+NPU36 (32 actual independent CPU-referenced candidates,three capacity refusals,
+one repeated CPU interface check),three builds,D512 calibration,separate FP16
+profile. D512/B8/physicalB2×4,two windows,one FP32 AdamW:one owner move/six
+trials; peaks6347777024/5545201152 below estimates21159582340/13365092892.
+Loss7.532632350921631 matches prior within existing FP32 tolerance;events3163,
+stages104,outputs/cut/continuation match. Profile88089ops,zero observed AiCPU;
+not formal throughput. Raw source memory-balance-clean01; builds
+memory-balance-standalone-clean02 / memory-balance-{python,consumer}-clean01.
+Audit: `python TASK/launchers/memory_balance_evidence.py c38b72ebf1e66804e09dcf72f083ee4e6c1e5850`.
 
-Dev06 all3 builds and automatic-sample NPU10 passed (8 independent CPU-referenced
-complete cases +2 expected old2048-row KV refusals). Complete tiny B17 tests use
-5712 KV-journal rows: static all-body-node bound17×12×(8²−6²),independent of
-placement/selection,for last window[6,8). Original wide capacities are unchanged.
-Original failures stay immutable. Source memory-balance-dev06; builds
-flow-diagnostics-{standalone,python}-dev06 and memory-balance-consumer-dev06.
-No full-size Attention job queued; no current development job is live.
+Retain CPU dev01,NPU dev03 and diagnostic dev04/dev05 failures. Empty-map bug
+fixed; larger B17 exposed the tiny test's2048-row KV journal. Complete tiny tests
+use static all-body5712 rows,independent of events/placement; two tests still
+refuse under the old cap. Original wide capacities unchanged. Standalone-clean01
+build helper failed recursive object-reuse provenance; clean02 uses original
+source/header/options-compatible dev05 objects. Initial audit helper expected an
+absent profiler marker; actual hashed serialized success marker corrected,original
+helper retained. No failed result rewritten.
 
-Next immutable jobs on the implementation commit: memory-balance-cpu-clean01
-(CPU capacity28 +automatic-option contract),build-memory-balance-{standalone,
-python,consumer}-clean01,and memory-balance-npu-clean01 (35 affected cases incl
-explicit refusals). Backend rebuild helper build_flow_journal_diagnostics.py,
-client build_capacity_client.py; frozen launch via freeze_run.py. Calibrate
-D512/B8,physicalB2×4,two windows,one FP32 AdamW with forced owner move via
-memory_balance_calibration.py; independent FP16 moved-owner trace via
-profile_memory_balance.py. Each has bounded child timeout/lease120s.
+Static original Attention B512 probes with current caps:12cards/physicalB2 fits
+53.598GiB<53.875usable (24 moves/946 trials). With11cards,B2 remains refused;
+B1 fits53.649GiB (29 moves/1740 trials). These are shape plans,NOT actual training.
+Next original-width pilot must keep its owner map/operator geometry comparable
+to B512; automatic placement depends on logical-batch continuation storage.
+The public Python API accepts explicit owner maps,but standalone consumer/offline
+CLI currently cannot replay a chosen joint map. Add this bounded configuration
+entry and qualify it before relying on pilot-to-B512 cost extrapolation.
 
 ## Next implementation and validation
 
-1. Commit this tested implementation,then qualify exact clean source with the
-   affected jobs above. Audit terminal results and counters,commit evidence
-   separately,and push. No full-size proof follows from static fitting.
-2. Calibrate the new placement on a bounded actual consumer,then original-width
-   Attention under comparable capacities/3000s/1.15; actually execute B512 after
-   valid memory/cost admission. No full-size training claim from static fitting.
+1. Commit/push the reviewed c38b72e evidence,then implement explicit joint owner
+   map replay in the offline planner and Python/standalone consumer CLI. Preserve
+   alias/owner validation and per-card admission; explicit maps never rebalance.
+   Relevant:flow_resident_options.py,plan_execution_flow.py,capacity.h,
+   capacity_record.h,resident_capacity.cpp,consumer.h/config.cpp. Focused static
+   and independent CPU-referenced two-card tests; implementation→clean→evidence.
+2. Run a bounded original-width Attention pilot at a currently available card
+   count with the same explicit map/chunks as its B512 plan. Keep current caps,
+   3000s and1.15; measure sample/optimizer phases,allocator and continuation.
+   Actually execute B512 after valid admission; optimize from evidence if refused.
 3. Implement eager mixed multi-card in the common library and both consumers,
    preserving independent CPU references, aliases, gradients and continuation;
    validate public Python/native and standalone paths with focused tests/profile.
@@ -165,7 +171,9 @@ profile_memory_balance.py. Each has bounded child timeout/lease120s.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-Current directed development jobs are terminal; clean qualification is next.
+No current project development job is live; the protected historical task is
+separately stopped. No original full-size Attention job queued. Evidence audit
+verified all seven clean terminal jobs and their output/binary/profile hashes.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent
 logs/status under `TASK/runs/NAME`. Confirm terminal records,workload exit,result

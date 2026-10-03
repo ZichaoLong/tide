@@ -1,0 +1,2233 @@
+{
+  "schema": "tide-consumer-memory-balance-v1",
+  "source": "c38b72ebf1e66804e09dcf72f083ee4e6c1e5850",
+  "jobs": [
+    {
+      "name": "memory-balance-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "025f0ca440873580eb2e10ff7c9286cb786e271be83baabb54c25a33b6ec88b1",
+        "task.log": "3d7b3de5cc503a9ce06d420a57ae28b602475f4b38b18adac0ce29a921b252b9"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-memory-balance-standalone-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "979321a1f1f91cd16c3c381e700c4d147c471489d0b534eea2f7a86198821531",
+        "task.log": "2af76f2bd149955002c5cf5cbc443249594f17623d0fa6442112e488924ff0d6"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-memory-balance-python-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "235263448e421a472ab4b0db51601ed0065d659d3bdf29b84e94f3d25fdeb68b",
+        "task.log": "644d4bf71361b6a6a658c8c7573fb26ea74296217158d379c6335800ea6d4745"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "build-memory-balance-consumer-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "abfeb874f62e5b3ce86e5d4c9e52b3ad12a884046459c4a8f9d350c9a70f1520",
+        "task.log": "d23392db48f69ef7aaca595af2789a76c8efa119ebfc6ba34f6a471ed42c610c"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "memory-balance-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "fd2fd2d3d21b0b7a4b8798a802f366e478067141d580f591619e2179bc530301",
+        "task.log": "aa53941d2ad433fca672df02079791b665a2786be057dc068e20582984cf264c",
+        "queue.json": "36be328fd170be998e7d767672f8b27c04e9cc39154ea58a60b225af9979dae4"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "memory-balance-calibration-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "d09853608ce194e626b87317f1da5ae2e7269f1a0155fbed970472f4829b9766",
+        "task.log": "cacd318316932f57439bf85c700d5f75b90110a73590ac86b9ca3671cefe3c4a",
+        "queue.json": "f7db1d332b415705ee3ea32b2be783664f120d2d2a9e58af6c3663b4fdb85273"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    {
+      "name": "memory-balance-profile-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "7c6202b1a1aff09908c89c357abc89607967b7318e5b83ce5381c2f22811b90d",
+        "task.log": "8b122fed69101d530a6fb8ea66a63ae12326cd391f2c3ae41b1bca25ec49f8bc",
+        "queue.json": "fef6494ad7b2fad961e141ed1d6dd9c8b76a51e246aeaa6d18e01a3a2a824ede",
+        "profile/result.json": "50a00130eac373d72f1039fb24ee541e8cbc6e2b47be40dab5bcc107d8defeaa",
+        "profile/profile.log": "3e40f0f2e4a21c3c88881fb60ef2cba257fba63d4c70327a477ecc0c0849a732"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "builds": {
+    "standalone": {
+      "name": "memory-balance-standalone-clean02",
+      "manifest_sha256": "5e8880e416a3d64e804fd6624f83574d54f05e07366ff610483003710fe736b0",
+      "reuse_sha256": "dedc6bc3c0f9bc8a8132a93be7713c036581ac464101efd37390a5e75422872d",
+      "component_sha256": "f5db4dc8f16739194525b52c1c82adaf78054bce2cef118c07c16facb04f9244",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "1ce44369cf32ec167697852e8d490098dbc8545ff8e046a86e60cda63738bfe4",
+        "tide-resident-sharded-session-check": "2e02ffed5d9fb459cdb74da8051a412252178254772a32178862c09fd0dca5a2"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "4cb2b0f3e993d196593730243768d27cd2379afaed785d1e1284dcba3cdbb4d6",
+        "tide-resident-sharded-session-check": "54acc98d16d30450e896073619dd9877d1855e389808648f98fc1388a571d531"
+      },
+      "kernel_sha256": {
+        "libtide_optimizer_values_kernel.a": "48d0853dd70cce162425871384c9f7544bcd1ffb33abc8a144c8c9ba95c6c0cf",
+        "libtide_optimizer_commit_kernel.a": "9ba3fc00dca1b271e893b026a8f49ddf29392d01a51ecbfbc70f6cf42707c725",
+        "libtide_owner_stream_kernel.a": "9ba1fecd7eb84d1e83a4233cdddd1cfda42c3b48905f6b96c61fc82eab403012",
+        "libtide_projection_shard_plan_kernel.a": "495b2250cba3f847ba43fd523c79ec4adb2caf788ed3adb5f11f796ac07dccde",
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "d584e3861851bcd2fad7d4645f1238597f7ded0234c6e0d1324daa0758c80d7f",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "9b4d8bdf671f76a4121c3dee7a1ebc9804f4919d52a67e52b6afce8c524f538e",
+        "sharded_state.cpp.o": "47d7deef7c4bc2c3f40ff5b97f2e115f8bad3c76f1954a5fc00b4f7ad2ff4db3"
+      },
+      "scope": "Two changed host archive members, source/header/options-verified original development object reuse, fresh link; unchanged core/CANN and all other archive members byte-verified."
+    },
+    "python": {
+      "name": "memory-balance-python-clean01",
+      "manifest_sha256": "4b22b0e3355812be901ae1bf4c52c92c18d07c05814a49a2a4fa2826bb76f343",
+      "reuse_sha256": "a6590ae1f7523573c3e835d3931dc93547988adab61205d4e9c6f38436032b08",
+      "component_sha256": "f5db4dc8f16739194525b52c1c82adaf78054bce2cef118c07c16facb04f9244",
+      "core_cpp_sha256": "cfff674cf8ce06f40b0e808918c8baea6fa028731ce3b4c6dbc86ceb1cf39c4e",
+      "binary_sha256": {
+        "libtide-resident.so": "8f2fa098a2166a9307c506ded648d9417868f906f020984103e9490b0657b8c0",
+        "_tide_resident.so": "4e34a8965b4575ef08840885dc0fd94bcd1a818d56fa4fb00285baccace75bef"
+      },
+      "loader_sha256": {
+        "libtide-resident.so": "3c7c5b1966c698535877193a43c2113a8b726b6c35fcb0ceb48f601896257534",
+        "_tide_resident.so": "c5f68c130c65cc381f3107809e8f218ff3ebe306cfa4314fd1287b1810628352"
+      },
+      "kernel_sha256": {
+        "libtide_optimizer_values_kernel.a": "48d0853dd70cce162425871384c9f7544bcd1ffb33abc8a144c8c9ba95c6c0cf",
+        "libtide_optimizer_commit_kernel.a": "9ba3fc00dca1b271e893b026a8f49ddf29392d01a51ecbfbc70f6cf42707c725",
+        "libtide_owner_stream_kernel.a": "9ba1fecd7eb84d1e83a4233cdddd1cfda42c3b48905f6b96c61fc82eab403012",
+        "libtide_projection_shard_plan_kernel.a": "b0b322b3abcd33301b13ec78a6e8c848ff63e06794d88dc902645ec7410a6c35",
+        "libtide_emission_reverse_links_kernel.a": "514011507633d8391051710a1dc37a62524ae7aa3b882bf965dbf9b2e6f71de9",
+        "libtide_emission_vjp_plan_kernel.a": "d7a90877a3c6f279b103f3d3a97da7d2e7d1b95c7081f18a6cdd82048b762da1",
+        "libtide_emission_vjp_payload_kernel.a": "0f4eea296748125e1a5a675d0af41fa422d186c99a8cb51509e6f792421ee71d",
+        "libtide_state_reverse_pack_kernel.a": "1797df51c44f2b92f55441ece1c0c819c830b76962d0a691942a12047b819b47",
+        "libtide_state_reverse_stage_kernel.a": "6aa562235f0d6509ec41791b9575f18bba7be7ff613fcecbe67ab0392a49da81",
+        "libtide_state_reverse_merge_kernel.a": "013d31e84f6567bf8407ce69a9a1bc8d52a638d671d25041d084e98d2818d68c",
+        "libtide_state_reverse_flags_kernel.a": "57e7542b7d48789cf087c6b63659c3b167fb221fea89e9e79d3ca4f43754f32f",
+        "libtide_state_read_plan_kernel.a": "dcb8e460b57c6a342e7aa258772bd223dee1a129fbae1fc85a4d8405c0aa381e",
+        "libtide_state_shard_pack_kernel.a": "2dc269e3c7535241b4d42c57ce137e1785cc820029d76a1ee848e9d265e49fed",
+        "libtide_state_shard_selection_kernel.a": "a0a7627a424f8ea9df5d609dcd60f83bc2a1bdf99e746c4ba6f1276af3eb05fc",
+        "libtide_state_shard_merge_kernel.a": "510d95cda8fdd3d79b3d61e871faa4f97975aa0f135d9503c05f057b530ce04b",
+        "libtide_owner_gradient_pack_kernel.a": "36806cd6dce1ad128fb36d7e3b89b766f532093667f49e763888051095e5b587",
+        "libtide_owner_gradient_reduce_kernel.a": "adfe7bbc4b9354ccc3a12c66d0619cc15799bbe0cddc05e601cfec465ce93063",
+        "libtide_owner_parameter_publish_kernel.a": "478bac396150401cfede4d7be954c0462a7f434181aaf5c76fdfc7cfe415cb99",
+        "libtide_full_reverse_merge_kernel.a": "aeca69d42db43e70d66be9844b07ed7ac379ca318be7cc516494e2774dabc25e",
+        "libtide_full_reverse_pack_kernel.a": "866b5c600f681cf03043c9d1b3bc59f7d4df71a83c72c7befa88074c1301dfc6",
+        "libtide_full_shard_kernel.a": "43990664bbd06a049027bb27a092cf9af828dd5eb21fe94c980f3d1259148063",
+        "libtide_state_vjp_kernel.a": "471fbc9518ab5ccc291226bf8cc979783f75390f114134cb5bd80a0df24d079a",
+        "libtide_event_reverse_pack_kernel.a": "bb637f199cefb17d6d07ae4a178dc6fb4fda2be15c6aec2d55d9b8f594d6795a",
+        "libtide_event_publish_kernel.a": "5ec4bd46ee5021c6e3d8eaf96551475120ce42a06812192066638031c8ce6d9c",
+        "libtide_attention_reverse_pack_kernel.a": "125bddc77e931b28b1bd694a670ad678103c35da0cd3a6da243759581e705ede",
+        "libtide_fiber_reverse_pack_kernel.a": "3e43e0a588d15c8a74002692ba1a8b5c6759c33788b7c254b53a5ca96562f90c",
+        "libtide_fiber_vjp_pool_kernel.a": "48234059d219b858b208d550c008a9f9775153a69ca9b95acec35cc5fb570edc",
+        "libtide_fiber_vjp_pack_kernel.a": "e6899736bda75797ee79cd63d6839247b3d3aa56168b350c8dd87f02989c0c2e",
+        "libtide_fiber_vjp_state_kernel.a": "52992750c2f623bbeec9799cab44a6227e894062cc3077d0e128c94e1afc7b40",
+        "libtide_fiber_vjp_queries_kernel.a": "6a02006e109363a05fcc991acc0c67a8a768d960637784b696e3e424f94d796f",
+        "libtide_aggregate_vjp_payload_kernel.a": "024e77525105179621b7f9c59231ec40d899342d78ddcdb3818a386b075add93",
+        "libtide_emit_mix_kernel.a": "d8435aa12c647f87a31c18ff41241439d7e4df99b6c8c10cf38ba7f0f00a9d19",
+        "libtide_control_payload_kernel.a": "b193599e159da5d52e07079451cbe5bc6d3957535828738e288784f74f8af22a",
+        "libtide_graph_reverse_scales_kernel.a": "b2e2131f75f16955218402769b3c424a7d289262dab94260395bf7a51bd42a34",
+        "libtide_parameter_vjp_kernel.a": "6d0481756376b6f63dc6353f0d7e52d20e3ddbb98548d6a746ed562f76a68fdc",
+        "libtide_optimizer_plan_kernel.a": "d6077d3e669cd487a514ce0621ee5455c9b5632cd506b054c70a072de2b6c33e",
+        "libtide_parameter_publish_kernel.a": "acadc913e377dac87dfc338ad2e2fbf2083971297222b7ccbe2cca610338b675"
+      },
+      "content_archive_sha256": "f3ffe89a2c7ed65bba8bb024d8c080c664dd3372c2cb1f2d0e6970de1bb08d36",
+      "rebuilt_object_sha256": {
+        "content_flow.cpp.o": "9b4d8bdf671f76a4121c3dee7a1ebc9804f4919d52a67e52b6afce8c524f538e",
+        "sharded_state.cpp.o": "47d7deef7c4bc2c3f40ff5b97f2e115f8bad3c76f1954a5fc00b4f7ad2ff4db3"
+      },
+      "scope": "Two changed host archive members, source/header/options-verified original development object reuse, fresh link; unchanged core/CANN and all other archive members byte-verified."
+    },
+    "consumer": {
+      "manifest_sha256": "54b2bb0b6d7268b3f80a6abe314bc6a666fbe173d3d5d671af7e70fb5ef126ad",
+      "binary_sha256": "6459c85054f2eac2d6ff373e7f8bf902373af8de2323550fdaebe6709d475e13",
+      "loader_sha256": "e67e02fef3d9f760d49c705faef9340a131323520da8854f2ee466d574e07ecb"
+    }
+  },
+  "tests": {
+    "cpu": {
+      "passed": 29,
+      "junit_sha256": "863d237adb5e5790cf9eb42f7df9ab3bb6fa168082ebe5766af47ed5d4411813"
+    },
+    "npu": {
+      "passed": 36,
+      "junit_sha256": "13591e851ba02d89d6add0f10f2057f4a7129f37f61478fd7dd86220f5bfa8ac"
+    }
+  },
+  "audit_helper_sha256": "81fea5e9bf2178e1f7d3b84b9d5f27d0aa456eab0730ed822219c261e3435018",
+  "observations": [
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au0/capacity-result.json",
+      "sha256": "4da33852589bafd7c6510508074acf32d24573b50308672a333419e1c695a343",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          54816256,
+          85348864
+        ]
+      },
+      "estimated_peaks": [
+        1465189360,
+        1304897776
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au1/capacity-result.json",
+      "sha256": "9f53b33c7441e4fb7fe8369b424ef7da0222d5e2f834eb4fcc4441dcd186580f",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 2,
+          "emission": 1,
+          "aggregate": 2,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 1,
+          "head": 16
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          54777344,
+          51976704
+        ]
+      },
+      "estimated_peaks": [
+        1463879228,
+        1303591316
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au10/capacity-result.json",
+      "sha256": "93e84a75da7b9d649b693e14a0e74dd187f095a3e20c3e2908e5f49b45f2aaab",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          54463488,
+          85280256
+        ]
+      },
+      "estimated_peaks": [
+        1465188392,
+        1304896920
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au11/capacity-result.json",
+      "sha256": "3a4c2d671e638f24dbd3d7db69c2544f088cf294316a6f6d6cfcb18151a4bc0a",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 2,
+          "attention": 8,
+          "emission": 1,
+          "full": 2,
+          "head": 16,
+          "keys": 128,
+          "reverse": 1
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          54426112,
+          51908608
+        ]
+      },
+      "estimated_peaks": [
+        1463878444,
+        1303590276
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au12/capacity-result.json",
+      "sha256": "9e18e8678e4fec28fa657e5403a1d5e6d7d9e4e46d8b2ccb5256c9db004a4a8d",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56332800,
+          120636928
+        ]
+      },
+      "estimated_peaks": [
+        1466493666,
+        1306201970
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au13/capacity-result.json",
+      "sha256": "fe27ef9897b9b23207ffd5ce2fcf01f7a5a62f02a3f3145ed53d8080875ae6c9",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 2,
+          "keys": 128,
+          "reverse": 1,
+          "head": 16
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          55745024,
+          53364736
+        ]
+      },
+      "estimated_peaks": [
+        1464960556,
+        1305017612
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au14/capacity-result.json",
+      "sha256": "0ab6012cbe66859a503ff40bae6de3df6aae1d28dc1fd389b0941c0e897e272e",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56328192,
+          120636928
+        ]
+      },
+      "estimated_peaks": [
+        1466493666,
+        1306201970
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au15/capacity-result.json",
+      "sha256": "3ca1ca10263664deb7c78977fd814ce0f93f56f0198d0fcfbf2435c3ea9ef26d",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459254741668701,
+        1.9459216594696045
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 2,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 1
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          55740416,
+          53364736
+        ]
+      },
+      "estimated_peaks": [
+        1464960556,
+        1305017612
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au2/capacity-result.json",
+      "sha256": "be9e1f28fda8b195b4465c8a869647ac539944fcaf7c98cc3b230c58a8b632d2",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          54811648,
+          85348864
+        ]
+      },
+      "estimated_peaks": [
+        1465189360,
+        1304897776
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au3/capacity-result.json",
+      "sha256": "5cec7707202dcc426c2f422d84f9aee441b5dd8cb17daee5925f5135e0869ee5",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.936681866645813,
+        1.9439501762390137
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 2,
+          "attention": 8,
+          "emission": 1,
+          "full": 2,
+          "head": 16,
+          "keys": 128,
+          "reverse": 1
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          54772736,
+          51976704
+        ]
+      },
+      "estimated_peaks": [
+        1463879228,
+        1303591316
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au4/capacity-result.json",
+      "sha256": "565aabbaefb75a6c91ad65e7feb0b5d6662842997124dc8fa90e7830a7851358",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 4,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56474112,
+          120498688
+        ]
+      },
+      "estimated_peaks": [
+        1466510660,
+        1306218852
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au5/capacity-result.json",
+      "sha256": "3f744f13e6be38b3126d7662cc1f12fe75acf0c317171a6bc1acc488b5d4a3a0",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 2,
+          "keys": 128,
+          "reverse": 1,
+          "head": 16
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          55888896,
+          53258240
+        ]
+      },
+      "estimated_peaks": [
+        1464972084,
+        1305039960
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au6/capacity-result.json",
+      "sha256": "105f687627f84151d2488d7dd363ef8799f34a77988646ca4ca8f33a8d7be881",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 4,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 8
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56469504,
+          120498688
+        ]
+      },
+      "estimated_peaks": [
+        1466510660,
+        1306218852
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au7/capacity-result.json",
+      "sha256": "c2b021d04304509e1dc4724334c3b5b9c0d02fc1b67b3170302631fb39bcff97",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459259510040283,
+        1.9459222555160522
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 2,
+          "emission": 16,
+          "full": 16,
+          "head": 16,
+          "keys": 128,
+          "reverse": 1
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          55884288,
+          53258240
+        ]
+      },
+      "estimated_peaks": [
+        1464972084,
+        1305039960
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au8/capacity-result.json",
+      "sha256": "c4a420c1c4011e539695e5930b452b51e745b4e56b75b15a3f48d5836d37d41a",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 8,
+          "head": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          54468096,
+          85280256
+        ]
+      },
+      "estimated_peaks": [
+        1465188392,
+        1304896920
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_complete_training_with_au9/capacity-result.json",
+      "sha256": "074188844d6c561306724ea8adca0b7fef4de2f57aedaf0a3c7dc3c1dfe1f76d",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 2,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9367038011550903,
+        1.9439232349395752
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 2,
+          "emission": 1,
+          "aggregate": 2,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 1,
+          "head": 16
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          54430720,
+          51908608
+        ]
+      },
+      "estimated_peaks": [
+        1463878444,
+        1303590276
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co0/observed.json",
+      "sha256": "e6800de4f3498e72445a75da863144c887f049b7d6ca7b316976fbd0ae60fc11",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          87831040,
+          52317184
+        ]
+      },
+      "estimated_peaks": [
+        867820756,
+        823453736
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co1/observed.json",
+      "sha256": "fb976ab154e99ec459a6c2ee0ba401b73c47de55eef77d1f816fa9fdb3979650",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459185600280762
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          88256000,
+          52317184
+        ]
+      },
+      "estimated_peaks": [
+        867820756,
+        823453736
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co2/observed.json",
+      "sha256": "ea675baf298949a6e6419cb409dbf7348444c06bf7fc8cd4404c2daf7dc7cb23",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459218978881836,
+        1.9459176063537598
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 128
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          84852736,
+          56090624
+        ]
+      },
+      "estimated_peaks": [
+        846643200,
+        857989484
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co3/observed.json",
+      "sha256": "52c9a89a8dd72d065bb55890db4fcf1d5ccee2d9811ff65cdae60ebbb77b3c0f",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459218978881836,
+        1.9459176063537598
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          84852224,
+          54651904
+        ]
+      },
+      "estimated_peaks": [
+        846643200,
+        857989484
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co4/observed.json",
+      "sha256": "98ef1567e3247f47f5aefe7a03bf59917be93894d60b3d802f00b023c2587c7d",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459155797958374
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          172384768,
+          320012288
+        ]
+      },
+      "estimated_peaks": [
+        1713790210,
+        1730168602
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co5/observed.json",
+      "sha256": "0081ecc4c897c776da789ff497715f6adc72f1d486ac316accf69165c52d03aa",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459222555160522,
+        1.9459155797958374
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          173166592,
+          319749120
+        ]
+      },
+      "estimated_peaks": [
+        1713790210,
+        1730168602
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co6/observed.json",
+      "sha256": "e5329671656f57394709312bebd6a28fec0d514d72a89d42eb32badde261f501",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459218978881836,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 4,
+          "head": 128
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          162220032,
+          296512000
+        ]
+      },
+      "estimated_peaks": [
+        1708216202,
+        1719022014
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_automatic_samples_keep_co7/observed.json",
+      "sha256": "876f22395f2d3e42ae0bb2921a84c67fd4735f4b169fec2c694352952d3da4f3",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 17,
+        "requested_sample_chunk_rows": 0,
+        "effective_sample_chunk_rows": 17,
+        "physical_chunks": 1
+      },
+      "losses": [
+        1.9459218978881836,
+        1.9459154605865479
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 128,
+          "keys": 128,
+          "reverse": 4
+        },
+        "owner_moves": 1,
+        "owner_evaluations": 4,
+        "observed_peak_growth_bytes": [
+          164045824,
+          295728640
+        ]
+      },
+      "estimated_peaks": [
+        1708216202,
+        1719022014
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl0/observed.json",
+      "sha256": "c76edf13c0c514e9c85f4b5581bcb68893b752d5c21ab04e19b1640834fe598e",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56339968
+        ]
+      },
+      "estimated_peaks": [
+        1273649294
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl1/observed.json",
+      "sha256": "64f42d47d9c0f2e22d0154f30aede11ea429775c5bcd2cc738bc6a9f04080f2c",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          60619264,
+          121523200
+        ]
+      },
+      "estimated_peaks": [
+        1573445438,
+        1345881600
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl2/observed.json",
+      "sha256": "ce42c7a9ec46f635fd97c4cbae86116a45daa1fc436c1d3df6f369b6def3707e",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547903537750244,
+        1.9572856426239014
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56336384
+        ]
+      },
+      "estimated_peaks": [
+        1273649294
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl3/observed.json",
+      "sha256": "bde724acc22246b18303cd5fb7fb6f03175d0171a643dfb0e85096f79319f347",
+      "precision": {
+        "payload": "float32",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.405377149581909,
+        3.4053657054901123
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          60614656,
+          121523200
+        ]
+      },
+      "estimated_peaks": [
+        1573445438,
+        1345881600
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl4/observed.json",
+      "sha256": "a59cdf727a1763df5d09fcabc843895b409dd8936cf6d9b7420c52ab39118114",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56123392
+        ]
+      },
+      "estimated_peaks": [
+        1273613950
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl5/observed.json",
+      "sha256": "f0a641e38f300a04f4ae41bbf3278b0a1366a1cd6e19b1cfab13e945374f192a",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "full": 16,
+          "emission": 16,
+          "aggregate": 8,
+          "attention": 8,
+          "keys": 128,
+          "reverse": 16,
+          "head": 1024
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          60415488,
+          121706496
+        ]
+      },
+      "estimated_peaks": [
+        1573362150,
+        1345823000
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl6/observed.json",
+      "sha256": "5c1a7551fc1e02a651b979f83c9f0d3046c2ac3dc1094ce41e125b1a9c476f7e",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        1.9547953605651855,
+        1.9572865962982178
+      ],
+      "memory_admission": {
+        "policy": "conservative",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          56119808
+        ]
+      },
+      "estimated_peaks": [
+        1273613950
+      ]
+    },
+    {
+      "path": "runs/memory-balance-npu-clean01/pytest/test_resident_sample_chunks_fl7/observed.json",
+      "sha256": "8abeb97ecc2272de5e7193376315c350b8587c450cd291f05dfbc8c100068ab7",
+      "precision": {
+        "payload": "float16",
+        "loss": "float32",
+        "adjoints": "float32",
+        "optimizer_masters": "float32"
+      },
+      "batch_execution": {
+        "logical_batch": 5,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 3
+      },
+      "losses": [
+        3.4053781032562256,
+        3.405367136001587
+      ],
+      "memory_admission": {
+        "policy": "aggressive",
+        "effective_chunks": {
+          "aggregate": 8,
+          "attention": 8,
+          "emission": 16,
+          "full": 16,
+          "head": 1024,
+          "keys": 128,
+          "reverse": 16
+        },
+        "owner_moves": 0,
+        "owner_evaluations": 0,
+        "observed_peak_growth_bytes": [
+          60410880,
+          121706496
+        ]
+      },
+      "estimated_peaks": [
+        1573362150,
+        1345823000
+      ]
+    }
+  ],
+  "calibration": {
+    "state": "passed",
+    "source": "c38b72ebf1e66804e09dcf72f083ee4e6c1e5850",
+    "dirty": "",
+    "command": [
+      "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+      "/mi/data2T/zlong/tide-execution-flows/sources/memory-balance-clean01/scripts/run_execution_flow.py",
+      "--packet",
+      "/mi/data2T/zlong/tide-execution-flows/runs/attention-borrow-memory-clean01/memory/workload.json",
+      "--output-dir",
+      "/mi/data2T/zlong/tide-execution-flows/runs/memory-balance-calibration-clean01/calibration/consumer",
+      "--device",
+      "npu:0",
+      "--family",
+      "timed-dag",
+      "--implementation",
+      "libtorch",
+      "--native-binary",
+      "/mi/data2T/zlong/tide-execution-flows/builds/memory-balance-consumer-clean01/consumer/tidegraph-online-bench",
+      "--preset",
+      "resident",
+      "--schedule",
+      "prefill",
+      "--dtype",
+      "float32",
+      "--training",
+      "--optimizer",
+      "adamw",
+      "--steps",
+      "1",
+      "--warmup",
+      "0",
+      "--windows-per-step",
+      "2",
+      "--devices",
+      "2",
+      "--chunk-policy",
+      "aggressive",
+      "--sample-chunk-rows",
+      "2",
+      "--resident-context-bytes",
+      "67108864",
+      "--resident-queue",
+      "4096",
+      "--resident-arrivals",
+      "4096",
+      "--resident-outputs",
+      "128",
+      "--resident-trace",
+      "8192",
+      "--resident-kv-trace-rows",
+      "65536",
+      "--resident-workspace-bytes",
+      "137438953472",
+      "--resident-retained-bytes",
+      "34359738368",
+      "--resident-backward-bytes",
+      "2199023255552",
+      "--resident-optimizer-bytes",
+      "34359738368",
+      "--head-workspace-bytes",
+      "268435456",
+      "--parameter-budget",
+      "8589934592",
+      "--device-memory-bytes",
+      "23668495875"
+    ],
+    "helper_sha256": "4e566c9abb9b813248cc5f07c850cdb61a97b5088021033fb9c2923579593124",
+    "build_sha256": "54b2bb0b6d7268b3f80a6abe314bc6a666fbe173d3d5d671af7e70fb5ef126ad",
+    "baseline_sha256": "4229a9c0828460f1e66339ecde3442489b28974533ae27f9dadae6c276e62f6d",
+    "packet_sha256": "79e113441f97f717899c6c08683f75eec3f36aaf9c04705585eae72ce5628ee9",
+    "plan_sha256": "8603ca633c03d974bb76c633ba708e74a9d0ac592d7ff502f21d033fc3e883a3",
+    "scope": "D512/B8/T4/V257,128 body nodes,two devices,physicalB2 x4,two retained windows,one FP32 AdamW update. Static memory pressure forces an owner move and operator cuts. Independent initialized consumer; compare prior same-model output/loss/work with explicit tolerance. Allocation calibration only, no timing comparison.",
+    "exit_code": 0,
+    "consumer_state": "passed",
+    "result_sha256": "1ceed9149d9ef10e8a02fc6c68e42e73c68cb55c6534a4b3a96382c84d0e476a",
+    "owner_moves": 1,
+    "owner_evaluations": 6,
+    "estimated_peaks": [
+      21159582340,
+      13365092892
+    ],
+    "observed_peaks": [
+      6347777024,
+      5545201152
+    ],
+    "losses": [
+      7.532632350921631
+    ],
+    "statistics": [
+      {
+        "borrowed_attention_bytes": 546327592,
+        "borrowed_projection_bytes": 590450688,
+        "canonical_stream_chunks": 144,
+        "canonical_stream_reserved_bytes": 268758446,
+        "emission_chunks": 2240,
+        "events": 3163,
+        "full_chunks": 171,
+        "head_chunks": 8,
+        "pending_peak": 128,
+        "retained_attention_bytes": 546327592,
+        "retained_bytes": 1451150024,
+        "retained_compact_journals": 4,
+        "retained_dense_bytes": 2783083368,
+        "retained_full_bytes": 542752,
+        "retained_projection_bytes": 590450688,
+        "retained_window_bytes": 822881168,
+        "retained_windows": 8,
+        "reused_attention_gradient_bytes": 537923020,
+        "reused_projection_gradient_bytes": 588350000,
+        "reverse_fiber_budget_bytes": 45812984488,
+        "reverse_fiber_groups": 16,
+        "reverse_fiber_key_rows_max": 256,
+        "reverse_fiber_key_rows_min": 256,
+        "reverse_fiber_owner_rows_max": 4,
+        "reverse_fiber_owner_rows_min": 4,
+        "reverse_fiber_query_rows_max": 4,
+        "reverse_fiber_query_rows_min": 4,
+        "reverse_fiber_requested_max": 4,
+        "reverse_fiber_tensor_bytes": 120378720,
+        "stages": 104,
+        "streamed_parameter_windows": 8,
+        "window_events_max": 400,
+        "window_outputs_max": 8,
+        "window_stages_max": 13
+      }
+    ],
+    "effective_chunks": {
+      "aggregate": 8,
+      "attention": 2,
+      "emission": 1,
+      "full": 16,
+      "head": 128,
+      "keys": 128,
+      "reverse": 1
+    }
+  },
+  "profile": {
+    "engines": {
+      "AI_VECTOR_CORE": 83500,
+      "MIX_AIV": 1049,
+      "AI_CORE": 3540
+    },
+    "physical_devices": [
+      3,
+      9
+    ],
+    "operator_counts_by_device": {
+      "3": {
+        "ZerosLike": 9618,
+        "Fill": 139,
+        "OnesLike": 77,
+        "Range": 68,
+        "Mul": 2357,
+        "Add": 2562,
+        "GatherV3": 10142,
+        "Cast": 4501,
+        "MemSet": 86,
+        "NonZero": 86,
+        "Less": 127,
+        "GatherV2": 12,
+        "Pack": 28,
+        "IsFinite": 38,
+        "ReduceAll": 40,
+        "tide_queue_propose": 132,
+        "Equal": 1468,
+        "tide_closure": 72,
+        "tide_ready_pack": 72,
+        "tide_sum_plan": 60,
+        "tide_vector_sum": 60,
+        "tide_state_shard_pack": 120,
+        "Sigmoid": 120,
+        "tide_fiber_plan": 60,
+        "tide_fiber_payload": 190,
+        "tide_fiber_chunk": 562,
+        "tide_fiber_pool": 182,
+        "tide_fiber_trace": 60,
+        "tide_journal": 600,
+        "tide_state_read": 60,
+        "tide_vector_read": 60,
+        "tide_read_reduce": 60,
+        "ScatterUpdate": 1559,
+        "tide_frame_select": 60,
+        "SoftmaxV2": 388,
+        "tide_state_shard_selection": 120,
+        "tide_content_state": 60,
+        "tide_vector_state": 60,
+        "tide_state_shard_merge": 180,
+        "tide_full_shard_pack": 120,
+        "tide_full_plan": 94,
+        "tide_emission_plan": 60,
+        "tide_emission_chunk": 164,
+        "tide_fiber_commit": 60,
+        "BatchMatMulV2": 1478,
+        "tide_fiber_indices": 70,
+        "Transpose": 1165,
+        "Swish": 110,
+        "RmsNorm": 110,
+        "tide_projection_shard_plan": 414,
+        "FloorDiv": 60,
+        "BroadcastTo": 72,
+        "FloorMod": 72,
+        "MatMulV2": 120,
+        "LogSoftmaxV2": 60,
+        "GatherElementsV2": 60,
+        "ReduceSum": 434,
+        "Neg": 120,
+        "RealDiv": 128,
+        "Exp": 60,
+        "LinearIndex": 60,
+        "ScatterElementsV2": 60,
+        "LogicalNot": 12,
+        "LogicalAnd": 84,
+        "ReduceAny": 12,
+        "tide_reverse_links": 12,
+        "tide_state_reverse_pack": 24,
+        "tide_cache_merge": 36,
+        "tide_cache_bias_merge": 36,
+        "tide_fiber_reverse_links": 12,
+        "tide_emission_reverse_links": 12,
+        "tide_graph_reverse_meta": 216,
+        "tide_graph_reverse_payload": 192,
+        "tide_emission_vjp_payload": 120,
+        "tide_emission_vjp_plan": 370,
+        "tide_full_reverse_pack": 120,
+        "tide_full_vjp_plan": 60,
+        "tide_full_vjp_payload": 60,
+        "tide_extra_full_plan": 136,
+        "tide_control_merge": 180,
+        "tide_full_reverse_merge": 94,
+        "tide_state_reverse_stage": 120,
+        "tide_state_vjp_plan": 60,
+        "tide_state_vjp": 60,
+        "tide_fiber_reverse_plan": 257,
+        "tide_state_reverse_merge": 492,
+        "tide_full_vjp_reduce": 117,
+        "tide_extra_full_payload": 76,
+        "tide_extra_full_reduce": 76,
+        "SiluGrad": 76,
+        "tide_fiber_reverse_pack": 394,
+        "tide_fiber_vjp_plan": 1075,
+        "tide_fiber_vjp_state": 394,
+        "tide_fiber_vjp_pool": 591,
+        "tide_fiber_reverse_fold": 394,
+        "tide_fiber_vjp_pack": 393,
+        "tide_attention_reverse_plan": 636,
+        "tide_attention_reverse_pack": 318,
+        "tide_attention_softmax": 106,
+        "tide_attention_merge": 212,
+        "tide_attention_reverse_weights": 106,
+        "tide_attention_reverse_reduce": 106,
+        "tide_fiber_vjp_queries": 106,
+        "tide_fiber_vjp_sources": 181,
+        "tide_graph_reverse_scales": 12,
+        "tide_state_reverse_flags": 12,
+        "tide_owner_stream": 56,
+        "tide_window_bridge_meta": 6,
+        "tide_window_bridge_values": 6,
+        "SelectV2": 24,
+        "Slice": 48,
+        "ConcatD": 14,
+        "InplaceScatterAdd": 12,
+        "tide_parameter_accumulate": 4,
+        "Pows": 4,
+        "Sqrt": 4,
+        "Sub": 4,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 4,
+        "tide_optimizer_commit": 2,
+        "ArgMaxWithValue": 2
+      },
+      "9": {
+        "ZerosLike": 8741,
+        "OnesLike": 17,
+        "Range": 32,
+        "Mul": 2680,
+        "Add": 1254,
+        "GatherV3": 5956,
+        "Less": 19,
+        "MemSet": 19,
+        "NonZero": 19,
+        "Sigmoid": 120,
+        "tide_fiber_plan": 60,
+        "tide_fiber_payload": 215,
+        "tide_fiber_chunk": 660,
+        "Cast": 3416,
+        "tide_fiber_pool": 230,
+        "tide_fiber_trace": 60,
+        "tide_journal": 120,
+        "tide_state_read": 60,
+        "tide_vector_read": 60,
+        "tide_read_reduce": 60,
+        "tide_content_state": 60,
+        "tide_vector_state": 60,
+        "Equal": 88,
+        "tide_fiber_commit": 60,
+        "BatchMatMulV2": 1942,
+        "tide_fiber_indices": 95,
+        "Transpose": 1551,
+        "SoftmaxV2": 464,
+        "ScatterUpdate": 604,
+        "tide_full_plan": 84,
+        "Swish": 140,
+        "RmsNorm": 140,
+        "tide_projection_shard_plan": 414,
+        "Fill": 52,
+        "tide_cache_merge": 36,
+        "tide_cache_bias_merge": 36,
+        "tide_fiber_reverse_links": 12,
+        "tide_full_vjp_plan": 48,
+        "tide_full_vjp_payload": 48,
+        "tide_extra_full_plan": 152,
+        "tide_control_merge": 168,
+        "tide_state_reverse_merge": 60,
+        "tide_state_vjp_plan": 60,
+        "tide_state_vjp": 60,
+        "tide_fiber_reverse_plan": 344,
+        "tide_full_vjp_reduce": 193,
+        "tide_extra_full_payload": 104,
+        "ReduceSum": 398,
+        "tide_extra_full_reduce": 104,
+        "SiluGrad": 104,
+        "tide_fiber_reverse_pack": 568,
+        "tide_fiber_vjp_plan": 1504,
+        "tide_fiber_vjp_state": 568,
+        "tide_fiber_vjp_pool": 852,
+        "tide_fiber_vjp_pack": 497,
+        "tide_attention_reverse_plan": 774,
+        "tide_attention_reverse_pack": 387,
+        "tide_attention_softmax": 129,
+        "tide_attention_merge": 258,
+        "tide_attention_reverse_weights": 129,
+        "tide_attention_reverse_reduce": 129,
+        "tide_fiber_vjp_queries": 129,
+        "tide_fiber_vjp_sources": 239,
+        "tide_fiber_reverse_fold": 568,
+        "tide_state_reverse_flags": 12,
+        "tide_owner_stream": 56,
+        "SelectV2": 24,
+        "LogicalAnd": 24,
+        "tide_parameter_accumulate": 4,
+        "tide_optimizer_plan": 4,
+        "tide_optimizer_values": 4,
+        "tide_optimizer_commit": 2
+      }
+    },
+    "device_task_counts": {
+      "PROFILING_ENABLE": 2,
+      "TASK_TIMEOUT_SET": 2,
+      "AI_VECTOR_CORE": 83500,
+      "MODEL_MAINTAINCE": 240,
+      "MEMCPY_ASYNC": 17800,
+      "MIX_AIV": 1049,
+      "MODEL_EXECUTE": 124,
+      "NOTIFY_WAIT": 3486,
+      "STREAM_LABEL_SWITCH_BY_INDEX": 13128,
+      "LABEL_SET": 17172,
+      "NOTIFY_RECORD": 3486,
+      "AI_CORE": 3540,
+      "PLACE_HOLDER_SQE": 1,
+      "PROFILING_DISABLE": 1
+    },
+    "acl_api_counts": {
+      "Add_Tiling": 63,
+      "ArgMaxWithValue_Tiling": 1,
+      "BatchMatMulV2_Tiling": 33,
+      "BroadcastTo_Tiling": 3,
+      "Cast_Tiling": 94,
+      "ConcatD_Tiling": 3,
+      "Equal_Tiling": 16,
+      "Exp_Tiling": 1,
+      "Fill_Tiling": 24,
+      "FloorDiv_Tiling": 1,
+      "FloorMod_Tiling": 3,
+      "GatherElementsV2_Tiling": 2,
+      "GatherV2_Tiling": 2,
+      "GatherV3_Tiling": 510,
+      "InplaceScatterAdd_Tiling": 24,
+      "IsFinite_Tiling": 10,
+      "Less_Tiling": 8,
+      "LinearIndex_Tiling": 120,
+      "LogSoftmaxV2_Tiling": 2,
+      "LogicalAnd_Tiling": 9,
+      "LogicalNot_Tiling": 1,
+      "MatMulV2_Tiling": 3,
+      "Mul_Tiling": 55,
+      "Neg_Tiling": 2,
+      "NonZero_Tiling": 210,
+      "OnesLike_Tiling": 7,
+      "Pack_Tiling": 5,
+      "Pows_Tiling": 2,
+      "Range_Tiling": 7,
+      "RealDiv_Tiling": 5,
+      "ReduceAll_Tiling": 10,
+      "ReduceAny_Tiling": 2,
+      "ReduceSum_Tiling": 56,
+      "ScatterElementsV2_Tiling": 120,
+      "ScatterUpdate_Tiling": 203,
+      "SelectV2_Tiling": 6,
+      "Sigmoid_Tiling": 2,
+      "SiluGrad_Tiling": 1,
+      "Slice_Tiling": 9,
+      "SoftmaxV2_Tiling": 16,
+      "Sqrt_Tiling": 1,
+      "Sub_Tiling": 1,
+      "Swish_Tiling": 2,
+      "Transpose_Tiling": 54,
+      "ZerosLike_Tiling": 570,
+      "aclmdlRIBindStream": 80,
+      "aclmdlRIBuildBegin": 80,
+      "aclmdlRIBuildEnd": 80,
+      "aclmdlRIDestroy": 80,
+      "aclmdlRIEndTask": 80,
+      "aclmdlRIExecuteAsync": 124,
+      "aclmdlRIUnbindStream": 80,
+      "aclnnAdd": 160,
+      "aclnnAddGetWorkspaceSize": 365,
+      "aclnnAdds": 136,
+      "aclnnAddsGetWorkspaceSize": 8,
+      "aclnnAll": 40,
+      "aclnnAllGetWorkspaceSize": 5,
+      "aclnnAny": 12,
+      "aclnnAnyGetWorkspaceSize": 1,
+      "aclnnArange": 100,
+      "aclnnArangeGetWorkspaceSize": 7,
+      "aclnnBatchMatMul": 346,
+      "aclnnBatchMatMulGetWorkspaceSize": 346,
+      "aclnnBitwiseAndTensor": 108,
+      "aclnnBitwiseAndTensorGetWorkspaceSize": 9,
+      "aclnnCast": 648,
+      "aclnnCastGetWorkspaceSize": 648,
+      "aclnnCat": 14,
+      "aclnnCatGetWorkspaceSize": 3,
+      "aclnnDiv": 4,
+      "aclnnDivGetWorkspaceSize": 1,
+      "aclnnDivs": 64,
+      "aclnnDivsGetWorkspaceSize": 4,
+      "aclnnEmbedding": 12,
+      "aclnnEmbeddingGetWorkspaceSize": 2,
+      "aclnnEqScalar": 12,
+      "aclnnEqScalarGetWorkspaceSize": 2,
+      "aclnnEqTensor": 108,
+      "aclnnEqTensorGetWorkspaceSize": 108,
+      "aclnnExp": 60,
+      "aclnnExpGetWorkspaceSize": 1,
+      "aclnnFloorDivides": 60,
+      "aclnnFloorDividesGetWorkspaceSize": 1,
+      "aclnnGather": 60,
+      "aclnnGatherGetWorkspaceSize": 1,
+      "aclnnIndexAdd": 12,
+      "aclnnIndexAddGetWorkspaceSize": 12,
+      "aclnnIndexSelect": 1525,
+      "aclnnIndexSelectGetWorkspaceSize": 1023,
+      "aclnnInplaceAdd": 431,
+      "aclnnInplaceCopy": 2161,
+      "aclnnInplaceCopyGetWorkspaceSize": 2016,
+      "aclnnInplaceDivs": 60,
+      "aclnnInplaceFillScalar": 191,
+      "aclnnInplaceFillScalarGetWorkspaceSize": 24,
+      "aclnnInplaceIndexCopy": 203,
+      "aclnnInplaceIndexCopyGetWorkspaceSize": 203,
+      "aclnnInplaceOne": 94,
+      "aclnnInplaceOneGetWorkspaceSize": 7,
+      "aclnnInplaceZero": 5313,
+      "aclnnInplaceZeroGetWorkspaceSize": 2505,
+      "aclnnIsFinite": 38,
+      "aclnnIsFiniteGetWorkspaceSize": 5,
+      "aclnnLogSoftmax": 60,
+      "aclnnLogSoftmaxGetWorkspaceSize": 1,
+      "aclnnLogicalNot": 12,
+      "aclnnLogicalNotGetWorkspaceSize": 1,
+      "aclnnLtScalar": 12,
+      "aclnnLtScalarGetWorkspaceSize": 2,
+      "aclnnLtTensor": 75,
+      "aclnnLtTensorGetWorkspaceSize": 6,
+      "aclnnMatmul": 180,
+      "aclnnMatmulGetWorkspaceSize": 3,
+      "aclnnMaxDim": 2,
+      "aclnnMaxDimGetWorkspaceSize": 1,
+      "aclnnMul": 316,
+      "aclnnMulGetWorkspaceSize": 316,
+      "aclnnMuls": 190,
+      "aclnnMulsGetWorkspaceSize": 15,
+      "aclnnNeg": 120,
+      "aclnnNegGetWorkspaceSize": 2,
+      "aclnnNonzero": 105,
+      "aclnnNonzeroGetWorkspaceSize": 105,
+      "aclnnPermute": 196,
+      "aclnnPermuteGetWorkspaceSize": 196,
+      "aclnnPowTensorScalar": 4,
+      "aclnnPowTensorScalarGetWorkspaceSize": 1,
+      "aclnnReduceSum": 254,
+      "aclnnReduceSumGetWorkspaceSize": 194,
+      "aclnnRemainderTensorScalar": 72,
+      "aclnnRemainderTensorScalarGetWorkspaceSize": 3,
+      "aclnnRmsNorm": 26,
+      "aclnnRmsNormGetWorkspaceSize": 26,
+      "aclnnRmsNormTiling": 3,
+      "aclnnSWhere": 48,
+      "aclnnSWhereGetWorkspaceSize": 6,
+      "aclnnScatterAdd": 60,
+      "aclnnScatterAddGetWorkspaceSize": 60,
+      "aclnnSigmoid": 26,
+      "aclnnSigmoidGetWorkspaceSize": 26,
+      "aclnnSilu": 26,
+      "aclnnSiluBackward": 24,
+      "aclnnSiluBackwardGetWorkspaceSize": 24,
+      "aclnnSiluGetWorkspaceSize": 26,
+      "aclnnSoftmax": 31,
+      "aclnnSoftmaxGetWorkspaceSize": 31,
+      "aclnnSqrt": 4,
+      "aclnnSqrtGetWorkspaceSize": 1,
+      "aclnnStack": 28,
+      "aclnnStackGetWorkspaceSize": 5,
+      "aclnnSub": 4,
+      "aclnnSubGetWorkspaceSize": 1,
+      "aclrtBinaryLoadFromData": 118,
+      "aclrtCreateEventExWithFlag": 1,
+      "aclrtCreateLabel": 1248,
+      "aclrtCreateLabelList": 68,
+      "aclrtCreateNotify": 382,
+      "aclrtCreateStreamWithConfig": 164,
+      "aclrtCtxGetFloatOverflowAddr": 1,
+      "aclrtCtxGetSysParamOpt": 1316,
+      "aclrtCtxSetSysParamOpt": 2,
+      "aclrtDestroyLabel": 1248,
+      "aclrtDestroyLabelList": 68,
+      "aclrtDestroyNotify": 758,
+      "aclrtDestroyStream": 160,
+      "aclrtDestroyStreamForce": 2,
+      "aclrtDeviceCanAccessPeer": 378,
+      "aclrtDeviceEnablePeerAccess": 4,
+      "aclrtFree": 1867,
+      "aclrtGetCurrentContext": 2,
+      "aclrtGetDeviceCount": 3,
+      "aclrtGetHardwareSyncAddr": 471,
+      "aclrtGetMemInfo": 4,
+      "aclrtGetResInCurrentThread": 16720,
+      "aclrtGetStreamAttribute": 13847,
+      "aclrtLaunchKernelWithHostArgs": 12199,
+      "aclrtMalloc": 1851,
+      "aclrtMemcpy": 1691,
+      "aclrtMemcpyAsync": 2851,
+      "aclrtNotifyGetExportKey": 376,
+      "aclrtNotifyImportByKey": 376,
+      "aclrtNotifySetImportPid": 376,
+      "aclrtRecordNotify": 421,
+      "aclrtResetDevice": 2,
+      "aclrtSetDevice": 28538,
+      "aclrtSetLabel": 1248,
+      "aclrtSetOpExecuteTimeOutV2": 1,
+      "aclrtSetStreamFailureMode": 4,
+      "aclrtSwitchLabelByIndex": 763,
+      "aclrtSynchronizeDeviceWithTimeout": 261,
+      "aclrtSynchronizeStream": 1663,
+      "aclrtSynchronizeStreamWithTimeout": 281,
+      "aclrtWaitAndResetNotify": 421
+    },
+    "aicpu_rows": [],
+    "csv_sha256": {
+      "raw/PROF_000001_20261003101927631_03952189BMERNAPQ/mindstudio_profiler_output/task_time_20261003101949.csv": "089e31c76eb4c3b09620dc33d9b9900e10ec6b9a6f4b3f27dc59815f42e273f0",
+      "raw/PROF_000001_20261003101927631_03952189BMERNAPQ/mindstudio_profiler_output/op_summary_20261003101949.csv": "4d47e33fbe364e845fc3303f20928af119352fc573b1f5ba63ea2a16928ac401",
+      "raw/PROF_000001_20261003101927631_03952189BMERNAPQ/mindstudio_profiler_output/api_statistic_20261003101949.csv": "8ddec457230bec48e235796c6a59043eb7de325b4ad5a4eaf7c4d80ee899f5a9"
+    },
+    "scope": "Bounded memory pressure forces a static Full/state owner move; static all-node KV trace cap for twelve positions. Three physical sample groups, valid-prefix retained journals, compact per-device continuation pool, one shared optimizer; per-edge-affine attention with embedding/head, public standalone online greedy resident; two complete AdamW updates/four continued windows, construction included, diagnostics off; instrumented, not throughput",
+    "owner_moves": 1,
+    "effective_chunks": {
+      "aggregate": 8,
+      "attention": 4,
+      "emission": 4,
+      "full": 16,
+      "head": 1,
+      "keys": 128,
+      "reverse": 1
+    }
+  },
+  "retained_failures": [
+    {
+      "name": "memory-balance-cpu-dev01",
+      "state": "failed",
+      "source": "1fe1bd21f5d115daf4bb556d6ac35ff6c3029183",
+      "dirty": "M docs/STATUS.md\n M docs/consumer-capacity.md\n M tools/online_bench/capacity.h\n M tools/online_bench/capacity.py\n M tools/online_bench/capacity_record.h\n?? tools/online_bench/capacity_balance.py",
+      "status_sha256": "bb2d7e92313c8143bcdbce70636c772912cb8c273af90d2f9a10a166ec78de14",
+      "log_sha256": "7f4779038111f2fca1f03a5909f11573166b1b1a4c2de6a02cf84171621f8ad6"
+    },
+    {
+      "name": "memory-balance-npu-dev03",
+      "state": "failed",
+      "source": "1fe1bd21f5d115daf4bb556d6ac35ff6c3029183",
+      "dirty": "M docs/STATUS.md\n M docs/consumer-capacity.md\n M tests/test_consumer_auto_samples.py\n M tests/test_consumer_capacity.py\n M tests/test_consumer_capacity_npu.py\n M tools/online_bench/capacity.h\n M tools/online_bench/capacity.py\n M tools/online_bench/capacity_record.h\n?? tools/online_bench/capacity_balance.py",
+      "status_sha256": "961a9a73a6474bb5b4cf0bfd4f4e1650e1f1d98c7e21d9854e9df3eba0da6638",
+      "log_sha256": "e63bcea3e5b554d4a377cd2d372878b9d5e017967630e26a365585f9739e808f"
+    },
+    {
+      "name": "memory-balance-refusal-dev04",
+      "state": "failed",
+      "source": "1fe1bd21f5d115daf4bb556d6ac35ff6c3029183",
+      "dirty": "M docs/STATUS.md\n M docs/consumer-capacity.md\n M tests/test_consumer_auto_samples.py\n M tests/test_consumer_capacity.py\n M tests/test_consumer_capacity_npu.py\n M tools/device_online/content_flow.cpp\n M tools/online_bench/capacity.h\n M tools/online_bench/capacity.py\n M tools/online_bench/capacity_record.h\n?? tools/online_bench/capacity_balance.py",
+      "status_sha256": "d46ce694f235be51bbc3f482e79e9bff0ec769eab2dac602788912635cfaab7d",
+      "log_sha256": "03d81057de03bcc95638dc5d09670bc366dac322a5d61b6b747f83371dcd6579"
+    },
+    {
+      "name": "memory-balance-refusal-dev05",
+      "state": "failed",
+      "source": "1fe1bd21f5d115daf4bb556d6ac35ff6c3029183",
+      "dirty": "M docs/STATUS.md\n M docs/consumer-capacity.md\n M tests/test_consumer_auto_samples.py\n M tests/test_consumer_capacity.py\n M tests/test_consumer_capacity_npu.py\n M tools/device_online/content_flow.cpp\n M tools/device_online/packed_event_attention.h\n M tools/device_online/packed_fiber_attention.h\n M tools/device_online/sharded_state.cpp\n M tools/device_online/sharded_state.h\n M tools/device_online/state_owner.h\n M tools/online_bench/capacity.h\n M tools/online_bench/capacity.py\n M tools/online_bench/capacity_record.h\n?? tools/online_bench/capacity_balance.py",
+      "status_sha256": "641f6603e9512c919360c43a3aa1a9ee6242a6b508e3920064983d52a2ef9a73",
+      "log_sha256": "47aad420f084cc712fe49f75816c36ae81b03ad6dca12e0d01de27387278295f"
+    },
+    {
+      "name": "build-memory-balance-standalone-clean01",
+      "state": "failed",
+      "source": "c38b72ebf1e66804e09dcf72f083ee4e6c1e5850",
+      "dirty": "",
+      "status_sha256": "0f6b144151113071309efe59a6f80122b35c9a187960c1d765c7778657d69745",
+      "log_sha256": "6a41d06a74db5f5c9ef02e78f0f2fa8743ba63e1adbf042d672284c9b9707298"
+    }
+  ],
+  "limits": [
+    "Static shapes/topology and budgets only, bounded2N moves/4096 trials. Full/state owners move jointly; canonical optimizer owners, semantic inputs,all API capacities and safety margins remain.",
+    "CPU29; NPU36 comprises32 independently CPU-referenced complete candidates,1 pre-allocation refusal,2 underprovisioned KV-journal refusals and1 repeated CPU boolean-interface check. No skips.",
+    "Empty owner tuples/lists mean automatic placement. Nonempty explicit Python maps and conservative placement remain fixed.",
+    "HBM admission is not a proof of future per-window journal capacity. Original B17/2048-KV-journal failures remain failed; complete tiny tests use a static all-node5712-row bound,independent of actual events.",
+    "Failure diagnostics read counters only after programs finish and report committed extents; they are not a replacement successful continuation or exact failed-operation trace.",
+    "D512 forced-move complete update calibrates allocator against unchanged conservative envelopes. Independent FP16 profile is instrumented and not throughput evidence.",
+    "No original full-size Attention training or formal performance claim follows. CUDA remains target-machine pending."
+  ]
+}

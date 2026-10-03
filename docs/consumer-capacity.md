@@ -118,7 +118,8 @@ No owner is emptied. Search stops on a fit,no improving move,2×node-count moves
 or4096 envelope trials. It then retries requested operator maxima on the new map;
 all original budgets/margins and runtime allocator checks still apply. Records
 include `owner_moves` and `owner_evaluations`; this heuristic need not find every
-feasible partition. The new fallback is implemented pending qualification.
+feasible partition. The fallback and failure diagnostics have separate
+[clean-source qualification](evidence/consumer-memory-balance-20261003.md).
 
 The finite search performs no device workload and does not search by OOM. It
 records requested/effective maxima, reduction iterations and `row_selection`
