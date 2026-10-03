@@ -50,7 +50,8 @@ def main():
             capacity=plan(packet,budgets=[a.device_memory_bytes]*a.devices,dtype=a.dtype,training=a.training,
                 optimizer=a.optimizer,steps=a.steps,warmup=a.warmup,windows=a.windows_per_step,workers=a.workers,
                 sample_rows=a.sample_chunk_rows,auto_sample_chunks=a.auto_sample_chunks,policy=a.chunk_policy,
-                owner_policy=a.owner_policy,owner_map=a.owner_map,head_workspace_bytes=a.head_workspace_bytes)
+                owner_policy=a.owner_policy,owner_map=a.owner_map,head_workspace_bytes=a.head_workspace_bytes,
+                backend='cpu' if a.preset=='cpu' else 'npu')
             record.update(state='planned' if capacity['state']=='admitted' else 'refused',memory_admission=capacity)
         except ValueError as error:
             record.update(state='refused',error=str(error))

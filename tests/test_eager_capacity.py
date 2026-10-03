@@ -26,7 +26,7 @@ def packet(memory='attention',batch=5,width=4,delayed=False):
 def probe(p, options, budgets, tmp_path):
     binary=Path(os.environ['TIDE_ONLINE_BINARY']).with_name('tidegraph-eager-capacity-probe')
     source=tmp_path/'packet.txt';source.write_text(native_text(p))
-    cmd=[str(binary),'--device=cpu','--packet='+str(source),'--output-dir='+str(tmp_path/'unused'),
+    cmd=[str(binary),'--device='+options.get('backend','cpu'),'--packet='+str(source),'--output-dir='+str(tmp_path/'unused'),
          '--family=timed-dag','--preset=cpu','--schedule=prefill','--devices='+str(len(budgets))]
     rename=dict(dtype='dtype',optimizer='optimizer',steps='steps',warmup='warmup',windows='windows-per-step',
         workers='workers',sample_rows='sample-chunk-rows',policy='chunk-policy',
@@ -47,7 +47,8 @@ def test_static_language_parity(i,tmp_path):
     devices=1+i%3
     options=dict(dtype='float64' if i%4==0 else 'float32',training=bool(i%3),optimizer='adamw' if i%2 else 'sgd',
         steps=1+i%3,warmup=i%2,windows=1+i%3,workers=1+i%2,auto_sample_chunks=True,
-        policy='aggressive' if i%2 else 'conservative',owner_policy='memory' if i%3 else 'locality')
+        policy='aggressive' if i%2 else 'conservative',owner_policy='memory' if i%3 else 'locality',
+        backend=['cpu','npu','cuda'][i%3])
     if i==11:options.update(dtype='float16',training=False)
     if i==7:options['owner_map']=[0,1,0,1,0,1,0,0]
     budgets=[(64-j)*1024**3 for j in range(devices)]
@@ -73,6 +74,28 @@ def test_logical_kv_survives_physical_split_and_grows_with_continuation():
                for a,b in zip(longer['devices'],full['devices']))
 
 
+@pytest.mark.parametrize('memory,construction,complete',[
+    ('add',42757300224-119390208,104698310656),
+    ('attention',77057699840-121577472,228749291520)])
+def test_original_width_cpu_observations_fit_every_recorded_phase(memory,construction,complete):
+    # External calibration anchors from original-width-eager-cpu-calibration-
+    # 20261003, not values computed from the estimator. The old Attention total
+    # and both construction estimates failed these fresh-process observations.
+    p=make_continuous_packet(graph=ranked_graph(layers=15,region_width=32,fanout=4,
+        skip=1,local_span=8,cross_every=8),memory=memory,width=2048,batch=4,tokens=12,vocab=50304)
+    kwargs=dict(budgets=[512*1024**3],training=True,steps=1,warmup=0,windows=2,
+                workers=1,sample_rows=2,auto_sample_chunks=True,policy='aggressive')
+    cpu=plan(p,backend='cpu',**kwargs);accelerator=plan(p,backend='npu',**kwargs)
+    assert cpu['state']=='admitted' and cpu['effective_sample_rows']==2
+    assert cpu['observation_counter']=='host_rss'
+    phases=cpu['devices'][0]['phases']
+    assert construction<=phases['construction'] and complete<=max(phases.values())
+    a=cpu['devices'][0]['components'];b=accelerator['devices'][0]['components']
+    assert b['host_rss_allowance']==0<a['host_rss_allowance']
+    assert {k:v for k,v in a.items() if k!='host_rss_allowance'}=={
+        k:v for k,v in b.items() if k!='host_rss_allowance'}
+
+
 def head_budget(p,dtype,training):
     kwargs=dict(budgets=[64*1024**3],dtype=dtype,training=training,optimizer='adamw',steps=2,warmup=0,policy='aggressive')
     one=plan(p,sample_rows=1,**kwargs)['devices'][0]['components']['head_work']
@@ -92,6 +115,11 @@ def test_forced_automatic_chunks_preserve_complete_records(family,memory,schedul
     # An explicitly selected unavailable backend fails; CPU is the independent
     # numerical reference in every run. Physical IDs belong to the launcher.
     device=os.environ.get('TIDE_EAGER_CAPACITY_DEVICE','cpu')
+    # Register an explicitly requested vendor before the first CPU backward:
+    # Torch2.10 fixes its autograd device queues on first engine use. This is
+    # environment preflight only; the reference still executes independently.
+    from tidegraph.runtime import resolve_device
+    resolve_device(device)
     count=1 if device=='cpu' else 2
     preset='cpu' if device=='cpu' else {'pdg':'mixed-a','timed-dag':'mixed-b','settle':'mixed-c'}[family]
     expected=[];actual=[];budget=head_budget(p,name,training)
@@ -170,7 +198,7 @@ def test_offline_eager_cli_needs_no_torch_or_hardware(tmp_path):
     cmd=[sys.executable,'-S',str(ROOT/'scripts/plan_execution_flow.py'),'--packet',str(path),
         '--preset','mixed-c','--devices','2','--device-memory-bytes',str(64*1024**3),
         '--auto-sample-chunks','--training','--chunk-policy','aggressive','--steps','2','--warmup','0']
-    expected=plan(p,budgets=[64*1024**3]*2,training=True,policy='aggressive',steps=2,warmup=0,auto_sample_chunks=True)
+    expected=plan(p,budgets=[64*1024**3]*2,training=True,policy='aggressive',steps=2,warmup=0,auto_sample_chunks=True,backend='npu')
     done=subprocess.run(cmd,text=True,capture_output=True,timeout=30)
     assert done.returncode==0,done.stderr
     assert json.loads(done.stdout)['memory_admission']==expected

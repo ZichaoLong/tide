@@ -101,7 +101,8 @@ NPU Python core `packed-transfer-npu-python-clean01`, installed client
 --out OUT/profile`, separate profile, two cards/120s queue/600s command, env init0.
 Terminal audit passed for all12 accepted jobs/source/archive/loaders/profile,
 retaining original timeout. [Reviewed packed evidence](evidence/eager-packed-transfer-20261003.md)
-records the result and compiler initialization requirement. No phase is a pause.
+records the result and compiler initialization requirement; committed/pushed e654164.
+No phase is a pause.
 
 ## Eager admission and CPU recalibration
 
@@ -127,7 +128,7 @@ also exceed their individual phase estimates. [Retained failure](evidence/origin
 committed2c38a24/compact report0a2bd28; full raw results retained. Do not rerun B512 CPU
 until calibrated. No OOM or budget relaxation occurred.
 
-**Uncommitted next implementation:** CPU-only RSS retained-allocation allowance,
+**Current implementation increment:** CPU-only RSS retained-allocation allowance,
 6.25% of learned bytes at each phase (observed construction residual up to4.3%);
 accelerator allocated-byte envelope and all budgets/margins remain unchanged.
 Python/C++ plans record observation_counter and resolve it from actual backend,
@@ -139,8 +140,10 @@ passed70/deselected47/no skips/exit0, frozen dirty snapshot
 `build_eager_consumer_core.py --backend cpu --name eager-rss-cpu-dev01
 --core TASK/builds/packed-transfer-cpu-clean01`; gate test_eager_capacity.py,
 test_consumer_traffic_bounds.py,test_online_consumer_memory.py,test_online_eager_owners.py
-with the existing CPU selection. Commit after affected tests; then freeze/build/
-qualify and rerun original-width fresh CPU calibration with a **new helper/output**.
+with the existing CPU selection. CPU70 and affected NPU12 development checks pass. Commit this increment, then
+freeze `eager-rss-clean01` at the implementation commit; build fresh installed
+clients with jobs `build-eager-rss-{cpu,npu}-clean01` and the same verified cores.
+Qualify and rerun original-width fresh CPU calibration with a **new helper/output**.
 Original audited helper/output must remain unchanged. Formal timing is separate.
 
 Packed runtime/profile jobs passed with retained lazy-init timeout; audit passed.
@@ -149,10 +152,10 @@ Python/native three training cases initialized CPU autograd before explicit NPU
 plugin registration; engine device-ready-queue assertion. Standalone and
 inference cases passed. Preserve raw log/terminal failure. Updated test now
 preflights its explicitly selected backend before independent CPU backward.
-Development build`build-eager-rss-npu-dev02` passed/exit0 from frozen
-`eager-rss-dev02`; launching `eager-rss-npu-dev02` for its12 affected device cases,
-22 deselected expected,900s bound/two-card120s queue,explicit ACL_OP_INIT_MODE=0.
-CPU70 already passed prior preflight-only test correction. Then finish
+Development build`build-eager-rss-npu-dev02` and gate`eager-rss-npu-dev02`
+passed/exit0 from frozen`eager-rss-dev02`:12 passed/22 deselected/no skips,
+completed two-card lease. The preflight fix preserves independent CPU references.
+CPU70 passed before this preflight-only test correction. Then finish
 actual-consumer40, finite calibration7 (D256 Python/C++ both memories; D2048/six-node
 C++ both and Python Attention), separate actual profile. `calibrate_eager_capacity.py`
 uses480s/child,7 cases/3600s outer,16GiB/card/4GiB head,two cards, first failure stop.

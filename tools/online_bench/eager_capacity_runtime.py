@@ -38,7 +38,7 @@ def prepare(packet, devices, *, budget=0, **options):
                          allocated_bytes=backend.memory_allocated(d),counter="framework allocator")
                 limit=free
         samples.append(row);budgets.append(min(limit,budget) if budget else limit)
-    result=plan(packet,budgets=budgets,**options)
+    result=plan(packet,budgets=budgets,backend=torch.device(devices[0]).type,**options)
     result.update(initial_devices=samples,requested_device_memory_bytes=budget,
                   cpu_budget_policy="at most half currently available host memory")
     if result["state"]!="admitted":

@@ -11,7 +11,7 @@ MIB=1024**2
 
 
 def envelope(packet, owners, elements, traffic, *, physical_rows, payload, positions,
-             connected_positions, training, adamw, workers):
+             connected_positions, training, adamw, workers, host_rss=False):
     g,c=packet["graph"],packet["workload"]
     width,vocab,batch=c["width"],c["vocab"],c["batch"]
     attention=c["memory"]=="attention"
@@ -53,18 +53,23 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
             persistent+=batch*payload*width*2+batch*8192
         transport=16*MIB  # one bounded source/destination pack; payload charged above
         backend=512*MIB
-        base=learned+constants+persistent+backend
+        # Fresh original-width CPU observations include retained allocation
+        # buffers beyond live tensor bytes (up to 4.3% of learned storage at
+        # construction). Charge 6.25% at every phase; accelerator allocated-byte
+        # accounting is separate and does not inherit this RSS-only allowance.
+        rss_allowance=(learned+15)//16 if host_rss else 0
+        base=learned+constants+persistent+backend+rss_allowance
         # The named CPU initializer can hold three int64 intermediates before
         # conversion. Eight payload rows cover that peak for supported training
         # precisions, as well as the final tensor/conversion transient.
-        phases=dict(construction=learned+constants+backend+max(32,8*payload)*largest,
+        phases=dict(construction=learned+constants+backend+rss_allowance+max(32,8*payload)*largest,
             forward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport,
             backward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport if training else 0,
             optimizer=base+optimizer+operator_work if training else 0)
         components=dict(learned=learned,constants=constants,persistent_state_and_kv=persistent,
             gradients_and_optimizer_slots=optimizer,vector_work=vector_work,cache_work=cache_work,
             attention_scores=score_work,operator_work=operator_work,head_work=head_work,
-            transport=transport,backend_allowance=backend)
+            transport=transport,backend_allowance=backend,host_rss_allowance=rss_allowance)
         for value in [*components.values(),*phases.values()]:checked(value)
         records.append(dict(logical_device=device,components=components,phases=phases,
                             estimated_peak_bytes=max(phases.values())))
@@ -73,7 +78,7 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
 
 def plan(packet, *, budgets, dtype="float32", training=False, optimizer="sgd", steps=3, warmup=1,
          windows=2, workers=1, sample_rows=0, auto_sample_chunks=False, policy="conservative",
-         owner_policy="locality", owner_map=(), head_workspace_bytes=4*1024**3):
+         owner_policy="locality", owner_map=(), head_workspace_bytes=4*1024**3, backend="cpu"):
     if dtype not in ("float16","float32","float64") or (dtype=="float16" and training):
         raise ValueError("eager capacity requires a supported inference dtype or FP32/FP64 training")
     if (not budgets or any(type(x) is not int or not 0<x<2**63 for x in budgets)
@@ -81,7 +86,8 @@ def plan(packet, *, budgets, dtype="float32", training=False, optimizer="sgd", s
             or type(warmup) is not int or not 0<=warmup<2**63
             or type(sample_rows) is not int or not 0<=sample_rows<2**63
             or type(auto_sample_chunks) is not bool or type(training) is not bool
-            or optimizer not in ("sgd","adamw") or policy not in ("conservative","aggressive")):
+            or optimizer not in ("sgd","adamw") or policy not in ("conservative","aggressive")
+            or backend not in ("cpu","cuda","npu")):
         raise ValueError("invalid eager capacity geometry/budget")
     owners,elements=owner_indices(packet,len(budgets),owner_policy,owner_map)
     traffic=traffic_bounds(packet,owners)
@@ -93,7 +99,8 @@ def plan(packet, *, budgets, dtype="float32", training=False, optimizer="sgd", s
     while True:
         devices=envelope(packet,owners,elements,traffic,physical_rows=rows,
             payload={"float16":2,"float32":4,"float64":8}[dtype],positions=positions,
-            connected_positions=connected,training=training,adamw=optimizer=="adamw",workers=workers)
+            connected_positions=connected,training=training,adamw=optimizer=="adamw",workers=workers,
+            host_rss=backend=="cpu")
         head=devices[0]["components"]["head_work"]
         accepted=all(d["estimated_peak_bytes"]<=limit for d,limit in zip(devices,usable)) and head<=head_usable
         attempts.append(dict(physical_rows=rows,estimated_peak_bytes=[d["estimated_peak_bytes"] for d in devices],head_bytes=head,accepted=accepted))
@@ -104,6 +111,7 @@ def plan(packet, *, budgets, dtype="float32", training=False, optimizer="sgd", s
         d.update(budget_bytes=budget,usable_bytes=limit)
     return dict(schema="tide-eager-capacity-v1",state="admitted" if accepted else "refused",
         scope="static finite-run envelope for declared eager consumers; allocator calibration required",
+        observation_counter="host_rss" if backend=="cpu" else "framework_allocator",
         requested_sample_rows=requested,effective_sample_rows=rows,logical_batch=c["batch"],
         physical_chunks=(c["batch"]+rows-1)//rows,sample_reductions=len(attempts)-1,
         attempts=attempts,devices=devices,head_workspace_bytes=head_workspace_bytes,

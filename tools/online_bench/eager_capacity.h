@@ -10,7 +10,7 @@ struct Card {
 };
 struct Attempt {Index rows,head;std::vector<Index> peaks;bool accepted;};
 struct Plan {
-  bool accepted=false;Index requested=0,rows=0,positions=0,connected=0,head_usable=0;
+  bool accepted=false,host_rss=false;Index requested=0,rows=0,positions=0,connected=0,head_usable=0;
   EagerPlacement placement;Traffic traffic;std::vector<Card> cards;std::vector<Attempt> attempts;
 };
 inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& plan,Index rows) {
@@ -46,27 +46,30 @@ inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& pl
       persistent=sum({persistent,product({batch,payload,width,2}),product({batch,8192})});
     }
     const Index transport=16*MIB,backend=512*MIB;
-    const auto base=sum({learned,constants,persistent,backend});
+    // CPU lifetime RSS includes retained allocation buffers. Calibrated from
+    // original-width construction/complete-update observations, not HBM usage.
+    const auto rss_allowance=plan.host_rss?learned/16+(learned%16!=0):0;
+    const auto base=sum({learned,constants,persistent,backend,rss_allowance});
     const auto forward=sum({base,optimizer,vector_work,cache_work,score_work,operator_work,head_work,transport});
     Card card;card.device=device;
-    card.phases={{"construction",sum({learned,constants,backend,product({std::max<Index>(32,8*payload),largest})})},
+    card.phases={{"construction",sum({learned,constants,backend,rss_allowance,product({std::max<Index>(32,8*payload),largest})})},
                  {"forward",forward},{"backward",c.training?forward:0},{"optimizer",c.training?sum({base,optimizer,operator_work}):0}};
     card.components={{"learned",learned},{"constants",constants},{"persistent_state_and_kv",persistent},
         {"gradients_and_optimizer_slots",optimizer},{"vector_work",vector_work},{"cache_work",cache_work},
         {"attention_scores",score_work},{"operator_work",operator_work},{"head_work",head_work},
-        {"transport",transport},{"backend_allowance",backend}};
+        {"transport",transport},{"backend_allowance",backend},{"host_rss_allowance",rss_allowance}};
     for(const auto& [_,v]:card.phases)card.peak=std::max(card.peak,v);
     cards.push_back(std::move(card));
   }return cards;
 }
-inline Plan plan(const Packet& p,const Config& c,const std::vector<Index>& budgets) {
+inline Plan plan(const Packet& p,const Config& c,const std::vector<Index>& budgets,bool host_rss=false) {
   if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)||(c.runtime.dtype==at::kHalf&&c.training))
     throw std::invalid_argument("eager capacity requires a supported inference dtype or FP32/FP64 training");
   if(Index(budgets.size())!=c.devices||budgets.empty()||*std::min_element(budgets.begin(),budgets.end())<1
       ||c.head_workspace_bytes<1||c.steps<1||c.warmup<0||c.windows<1||c.workers<1||c.sample_chunk_rows<0
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive")||(c.optimizer!="sgd"&&c.optimizer!="adamw"))
     throw std::invalid_argument("invalid eager capacity geometry/budget");
-  Plan result;result.placement=eager_placement(p,c);result.traffic=traffic_bounds(p,result.placement.owners);
+  Plan result;result.host_rss=host_rss;result.placement=eager_placement(p,c);result.traffic=traffic_bounds(p,result.placement.owners);
   result.positions=product({sum({c.steps,c.warmup}),c.windows,p.tokens});result.connected=product({c.windows,p.tokens});
   result.requested=result.rows=std::min(c.sample_chunk_rows?c.sample_chunk_rows:p.batch,p.batch);
   const auto divisor=c.chunk_policy=="aggressive"?10:4;
@@ -85,6 +88,7 @@ inline Plan plan(const Packet& p,const Config& c,const std::vector<Index>& budge
 }
 inline void record(std::ostream& out,const Packet& p,const Config& c,const Plan& plan) {
   out<<"{\"schema\":\"tide-eager-capacity-v1\",\"state\":"<<quoted(plan.accepted?"admitted":"refused")
+      <<",\"observation_counter\":"<<quoted(plan.host_rss?"host_rss":"framework_allocator")
       <<",\"scope\":\"static finite-run envelope for declared eager consumers; allocator calibration required\",\"requested_sample_rows\":"<<plan.requested
       <<",\"effective_sample_rows\":"<<plan.rows<<",\"logical_batch\":"<<p.batch<<",\"physical_chunks\":"<<(p.batch-1)/plan.rows+1
       <<",\"sample_reductions\":"<<plan.attempts.size()-1<<",\"head_workspace_bytes\":"<<c.head_workspace_bytes

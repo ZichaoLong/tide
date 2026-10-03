@@ -55,6 +55,15 @@ allowance. Construction also charges the named integer initializer's transient
 arrays. A phase maximum is recorded for construction, forward, backward and
 optimizer. Operator workspace declarations are limits, not allocations.
 
+CPU RSS additionally charges6.25% of learned storage for host allocations and
+retained buffers at each phase. The original-width B4 fresh-process
+[calibration](evidence/original-width-eager-cpu-calibration-20261003.md) found up
+to4.3% unmodelled learned-storage bytes at construction, and an Attention total
+peak0.51% above the previous maximum. This explicit CPU allowance covers both
+observations with margin; a new scale run must still validate it. Accelerator
+allocated-byte estimates do not inherit CPU RSS overhead. Offline `--preset cpu`
+and actual CPU resolution (including `--device auto`) select the RSS counter.
+
 The shape coefficients are an explicit estimate requiring peak calibration;
 they are not a proof about vendor/driver allocations. Current policy reserves
 10% plus 128 MiB of each card budget for aggressive splitting, or 25% plus

@@ -14,7 +14,7 @@ class Admission {
       const auto limit=d.is_cpu()?info.free/2:info.free;
       budgets.push_back(c.device_memory_bytes?std::min(c.device_memory_bytes,limit):limit);
     }
-    plan_=plan(p,c,budgets);
+    plan_=plan(p,c,budgets,devices.front().is_cpu());
     if(!plan_.accepted) {
       const std::string error="eager physical sample/head memory envelope exceeds budget before model allocation";
       throw RecordedFailure(error,"{\"schema\":\"tide-online-consumer-v1\",\"state\":\"failed\",\"workload_sha256\":"+quoted(p.sha)+",\"error\":"+quoted(error)+
