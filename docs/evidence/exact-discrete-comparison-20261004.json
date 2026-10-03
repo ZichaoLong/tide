@@ -1,0 +1,140 @@
+{
+  "state": "passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "source_inventory": {
+    "count": 1554,
+    "sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc"
+  },
+  "jobs": [
+    {
+      "name": "compare-discrete-cpu-clean01",
+      "passed": 121,
+      "seconds": 118.18,
+      "skipped": 0,
+      "state": "passed",
+      "exit_code": 0,
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "600s",
+        "env",
+        "-C",
+        "TASK/runs/compare-discrete-cpu-clean01",
+        "TIDE_BUILD_DIR=TASK/builds/integration-cpu-clean02",
+        "TIDE_ONLINE_BINARY=TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench",
+        "NPU_ENV/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-x",
+        "TASK/sources/compare-discrete-clean01/tests/test_compare_discrete.py",
+        "TASK/sources/compare-discrete-clean01/tests/test_library_qualification.py",
+        "TASK/sources/compare-discrete-clean01/tests/test_accelerator_boundary.py",
+        "TASK/sources/compare-discrete-clean01/tests/test_flow_semantics.py",
+        "--dtype",
+        "both"
+      ],
+      "finished": "2026-10-03T16:57:09.757879+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "72003f4ce6e1dea5d620c28be6f7a4d66933d3606c39c0c0c006277a05f9b204",
+      "log_sha256": "19f8e750b267991faa00e8fc8ec26f14d4b2269c8f99405ceaa49fb235201955"
+    },
+    {
+      "name": "compare-discrete-npu-clean01",
+      "passed": 49,
+      "seconds": 213.85,
+      "skipped": 0,
+      "state": "passed",
+      "exit_code": 0,
+      "command": [
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-compare-discrete-npu-clean01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "2",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/compare-discrete-npu-clean01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "900s",
+        "env",
+        "-C",
+        "TASK/runs/compare-discrete-npu-clean01",
+        "ACL_OP_INIT_MODE=0",
+        "TIDE_BUILD_DIR=TASK/builds/packed-transfer-npu-python-clean01",
+        "TIDE_ONLINE_BINARY=TASK/builds/eager-half-npu-clean01/consumer/tidegraph-online-bench",
+        "TIDE_EAGER_PRECISION_DEVICE=npu:0",
+        "NPU_ENV/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-x",
+        "TASK/sources/compare-discrete-clean01/tests/test_online_eager_precision.py",
+        "--dtype",
+        "float32"
+      ],
+      "finished": "2026-10-03T16:58:58.903364+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "7fb6473aa59d404a0a2ac9cb22e4ea8258660f1ba9be07dced927ac96dcd09bb",
+      "log_sha256": "76cdccc1960943413935df6d43631fcc7852e2cf3ff0898154d288bfc2c1baf7",
+      "physical_ids": [
+        6,
+        8
+      ],
+      "queue_sha256": "5aa8a82977cfbd398205d267b871d55143cbc550012912c87e02ba71ba4340a9"
+    }
+  ],
+  "cores": [
+    {
+      "name": "integration-cpu-clean02",
+      "built_source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+      "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+      "backend": "cpu",
+      "manifest_sha256": "99427c603866e1f94fb9e9353c8d7c0d062300d903d3bb85fb095cc618b91b3b"
+    },
+    {
+      "name": "packed-transfer-npu-python-clean01",
+      "built_source": "a785d43cfd9662c7d7262c0fdd8c59ec44729f6f",
+      "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+      "backend": "npu",
+      "manifest_sha256": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916"
+    }
+  ],
+  "consumer": {
+    "source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+    "binary_sha256": "b7ef27c79d41f8c14b727194c1b6e4b9059c2029d9326c7631495be9b11a6775",
+    "manifest_sha256": "334424b99eaeb87519cd5133868e107dd10380aaf6f255892667562cb09d1d01"
+  },
+  "audit_helper_sha256": "d96e5d1c5572367b150cd2f3f347a31e98fd8c82ab583db2d770a354089d1ade",
+  "scope": "Integer/bool tensor comparisons always exact; floating tolerances and all candidate computation unchanged. CPU121 and existing NPU49 directed regressions. No new full-size or CUDA execution claim.",
+  "limitations": [
+    "Historical strict near-tie route failure remains failed.",
+    "NPU gate uses the explicitly recorded unchanged prior consumer; not a new backend build.",
+    "Initial development collection failed due to reserved dtype fixture name; corrected to storage_dtype before execution."
+  ],
+  "warnings": [
+    "NPU shared-installation owner warnings",
+    "TorchScript deprecation",
+    "TorchNPU base-format allocation notice"
+  ]
+}

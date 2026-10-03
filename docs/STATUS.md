@@ -78,9 +78,15 @@ floating tolerance,discrete route rules and candidate computations are unchanged
 New regression includes int64 limits,nested records,dtype/shape/None checks.
 Development48 checks passed; initial test collection failed on reserved fixture
 name dtype,corrected to storage_dtype before tests ran. Historical route failure
-is independent and remains failed. Next commit implementation,then affected clean
-CPU qualification using source-matching integration-cpu-clean02 core;no full gate
-repeat. All prior evidence keeps its exact source scope.
+is independent and remains failed. Implementation e69b3bd committed/pushed. Running frozen compare-discrete-clean01:
+compare-discrete-cpu-clean01 (600s): new comparator tests,library qualification,
+accelerator boundary and flow semantics,CPU FP64/FP32,using source-matching
+integration-cpu-clean02 core. compare-discrete-npu-clean01 (900s,queue120s,two NPUs):
+49 eager FP16 precision checks using unchanged qualified7b1fae5 consumer and
+matching packed-transfer-npu-python-clean01 core. Only Python comparator changes;
+no C++ rebuild or unrelated full gate. Each unit is tide-execution-flows-NAME,
+logs TASK/runs/NAME/{status.json,task.log}. Both clean gates passed:CPU121/118.18s,NPU49/213.85s,no skips.
+Source/core/client hashes and terminal units/lease audited; [report](evidence/exact-discrete-comparison-20261004.md). All prior evidence keeps its exact source scope.
 
 ## Active jobs and next actions
 
@@ -166,7 +172,7 @@ clean checks qualify the stricter allowance; first-case evidence audit passed; [
 **Running wide-eager-cpu-attention-b512-extended01**, clean c6ef224 and clean
 eager-rss-training-cpu-clean01 client,ATen16/workers1,physicalB32×16. Reuse the
 actual original-width B64/B32 chunk policy with measured phase forecast
-23391.025824722s including1.15. Original3000s refusal remains intact. Declare a
+23391.025824722s including1.15. Original3000s refusal remains intact. Declared a
 separate27000s actual-update guard,27500s child and27600s outer; first failure
 stops,no automatic retry. One original17.521B/B512 complete FP32 SGD update,two
 connected windows,no warmup/profiler. Cold feasibility may overlap small
@@ -243,7 +249,11 @@ CPU/mixed Add B512 share exactly1183427 candidate events,208896 selected events,
 12288 outputs/cut408; losses30.5003700256/30.5003738403. The earlier resident B512
 record has1183429 events/loss30.5083618164 at physicalB2,versus currentB32.
 Do not claim full-size discrete/numerical parity from the feasibility passes;
-this difference needs explanation before a matched formal comparison.
+the near-tie witness above gives a concrete cause but does not qualify the pair.
+User explicitly accepted on2026-10-04: retain the strict failure and list it as a
+numerical-sensitivity limitation; it no longer blocks overall delivery. Complete
+independent performance and audit,without claiming this pair strictly equivalent.
+Existing exact comparisons,tie rules,fixtures and dtype policies remain unchanged.
 
 Still open: actual original B512 CPU Attention and FP16 Add/Attention results;
 full original-scale CPU/screened mixed/resident performance matrix across required
@@ -274,3 +284,17 @@ status.py exits1 for retained malformed build-reverse-gather-python-dev01 metada
 this is not a current job failure. Do not rewrite that receipt.
 Unexecuted finite_ranked_horizon.py and wide_attention_horizon_pilot.py remain
 unqualified drafts; no48-row bound or changed original capacity is accepted.
+
+## Next integrated resident build on current core
+
+Prior resident backend embeds d412541 core; eager/public core advanced to a785d43.
+For final integration,build resident C++ and Python libraries against the current
+source-matching cores instead of composing archives from different core revisions.
+No production algorithm change. Frozen e69b3bd/compare-discrete-clean01;new builds
+integration-resident-{standalone,python}-clean01. Each bounded2700s,two workers,
+Ascend910_9392;standalone builds the resident-sharded-training selected client,
+Python builds its native module/shared library. Independent builds may overlap
+cold feasibility,not formal timing. Never modify older qualified builds.
+After pass,build installed combined eager/resident C++ consumer against this
+same core and run only affected public multi-owner/continued consumer gates.
+Full-size matrix follows; do not rerun all historical component suites.
