@@ -58,6 +58,10 @@ and `npu:0`. CPU correctness runs use the CPU core; native accelerator tensors
 must use the corresponding accelerator core. The owner gates cover independent
 CPU full records, two complete updates, connected windows, physical sample
 splitting, missing/zero gradients and actual destination devices.
+For the tested standalone TorchNPU2.10/CANN9.0 stack, export
+`ACL_OP_INIT_MODE=0` before these NPU commands; see the
+[compiler lifecycle requirement](accelerators.md). This initializes the vendor
+compiler before autograd workers use it and preserves normal runtime cleanup.
 
 Before scale use, calibrate [eager memory admission](eager-consumer-capacity.md)
 on that target with bounded fresh processes. Inspect actual device operators and

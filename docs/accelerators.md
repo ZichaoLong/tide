@@ -59,13 +59,21 @@ cmake -S . -B build/npu-sdk -G Ninja -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_PREFIX_PATH="/path/to/libtorch;/path/to/libtorch-npu-sdk" \
   -DTIDE_BACKEND=NPU -DTIDE_NPU_RUNTIME=standalone -DTIDE_PYTHON_BINDINGS=OFF
 cmake --build build/npu-sdk --parallel 2
-build/npu-sdk/tidegraph-accelerator-check --device npu:0 --dtype float32 \
+ACL_OP_INIT_MODE=0 build/npu-sdk/tidegraph-accelerator-check --device npu:0 --dtype float32 \
   --output-dir artifacts/cpp-npu-001
 ```
 
 Alternatively `scripts/build.py --backend npu --npu-runtime standalone` uses
 the selected interpreter only to discover its matching Torch and orchestrate
-CMake. The resulting executable has no Python runtime dependency. CMake's
+CMake. The resulting executable does not link CPython or `libtorch_python`;
+the CANN operator compiler may dynamically initialize its own Python runtime.
+For the tested standalone TorchNPU2.10/CANN9.0 stack, set `ACL_OP_INIT_MODE=0`
+before starting the process. Eager compiler initialization avoids a reproduced
+shutdown wait in embedded Python when lazy initialization first occurs on an
+autograd worker. It does not disable operators or skip finalization. Keep this
+launch setting in environment records; other vendor versions need their own
+lifecycle check. The retained failure and same-binary successful full gate are
+in [packed-transfer evidence](evidence/eager-packed-transfer-20261003.md). CMake's
 `TideGraph::NpuSDK` adapter consumes the SDK's public headers and library variables;
 `tide::runtime` performs public initialization, seeding and synchronization.
 The exported `tide::tidegraph` core contains device-neutral graph execution.
