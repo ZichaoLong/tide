@@ -1,0 +1,197 @@
+{
+  "state": "audited-passed-single-process",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "configuration": {
+    "family": "timed-dag",
+    "client": "libtorch",
+    "schedule": "prefill",
+    "memory": "add",
+    "training": false,
+    "preset": "cpu",
+    "configuration": "libtorch-add-False-cpu",
+    "selection_evidence": "representative-preset-screen-20261002.json",
+    "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+  },
+  "source_inventory_sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc",
+  "audit_helper_sha256": "e5c8d62f5502d76bdac3fee212fe6858545fea17c6c5b20bc653e21efc3ae575",
+  "job": {
+    "name": "formal-first-cpu-blas01",
+    "state": "passed",
+    "exit_code": 0,
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "started": "2026-10-03T19:54:41.676232+00:00",
+    "finished": "2026-10-03T20:53:59.303447+00:00",
+    "receipt_sha256": "093d53a8fab85303cc786f6af85835008eeac790744238de427838bce914e80d"
+  },
+  "cell": 0,
+  "repeat": 1,
+  "seconds": [
+    226.376559223
+  ],
+  "warmup_seconds": [
+    207.571918786
+  ],
+  "construction_seconds": 46.319799626,
+  "wall_seconds": 481.4124913774431,
+  "token_rate": 54.28123849119592,
+  "batch_execution": {
+    "logical_batch": 512,
+    "requested_sample_chunk_rows": 32,
+    "effective_sample_chunk_rows": 32,
+    "physical_chunks": 16
+  },
+  "statistics": [
+    {
+      "aggregate_calls": 9890,
+      "attention_score_elements": 0,
+      "body_candidate_events": 1163924,
+      "body_selected_events": 184320,
+      "candidate_events": 1188500,
+      "full_blocks": 8126,
+      "full_calls": 8126,
+      "greedy_relaxed_edges": 245760,
+      "greedy_stages": 544,
+      "max_full_batch": 384,
+      "max_greedy_frames": 384,
+      "max_live_fibers": 12288,
+      "max_next_batch": 32,
+      "max_state_batch": 32,
+      "max_state_sequence": 12,
+      "next_batches": 68806,
+      "next_reset_scalar_steps": 184320,
+      "next_steps": 1188500,
+      "packed_source_batches": 9890,
+      "read_calls": 68102,
+      "region_blocks": 544,
+      "region_steps": 208896,
+      "selected_events": 208896,
+      "source_rows": 1265664,
+      "state_blocks": 2048,
+      "state_prefill_fallback_events": 1163924,
+      "state_prefill_selected_clear": 1163924,
+      "state_scalar_sequence_steps": 0,
+      "state_sequence_calls": 2048,
+      "state_step_batch_calls": 68038,
+      "state_step_calls": 68038,
+      "state_steps": 1163924,
+      "visited_edges": 1253376
+    }
+  ],
+  "losses": [
+    30.302034378051758
+  ],
+  "outputs": [
+    12288
+  ],
+  "peak_growth_bytes": [
+    45923278848
+  ],
+  "estimated_peak_bytes": [
+    123007001968
+  ],
+  "binary_sha256": "6d16e7c7d8b0c1c135506256a8bc85cd74cfef59eb82737bfb48bcfb8c734147",
+  "build_sha256": "980b1a7c50347d17760156e9af63c621aa48b2d55aa73eaa3500788181eec25a",
+  "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+  "consumer_sha256": "29c9286afac73553a268cdebee70b0c34d20a9ba38caf2d49cf396070c9c972a",
+  "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+  "budget": {
+    "cell": 0,
+    "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+    "coefficient": 1.15,
+    "original_step_seconds": 3000,
+    "step_seconds": 600,
+    "child_seconds": 1500,
+    "construction_allowance_seconds": 300,
+    "phase_forecasts_seconds": {
+      "warmup": 248.39235766119998,
+      "measured": 262.2369215504
+    },
+    "basis": [
+      {
+        "path": "TASK/runs/cpu-blas-continued01/assessment/cell-0/result.json",
+        "sha256": "5ebe57a4ea75e2fb4c2156551f323cf219c9552b1c204d3cdcf683ec911e1605"
+      },
+      {
+        "path": "TASK/runs/cpu-blas-continued01/assessment/cell-0/consumer/result.json",
+        "sha256": "695df701de45c6a1fffc7210f1222f4489501e9e62365bcc760f95f8536e28a2"
+      },
+      {
+        "path": "TASK/runs/cpu-blas-continued01/assessment/cell-0/packet.json",
+        "sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9"
+      },
+      {
+        "path": "TASK/runs/cpu-blas-continued01/assessment/cell-0/original-plan.json",
+        "sha256": "01b4ed987e0b9bad40b5acb42dc6956d2f54b4c24c0a567c8c014f9c456cce7e"
+      }
+    ],
+    "reason": "Audited actual original-width CPU inference with explicit ATen16/BLAS16/workers1;continued warmup plus measured step,two connected windows at unchanged physical rows. Forecasts include1.15. No phase instrumentation in the actual originalB512 formal process. Cell0 uses a tighter600s per-step execution budget;original3000s guard retained. No speed recommendation without three fresh processes."
+  },
+  "environment": {
+    "OMP_NUM_THREADS": "16",
+    "OPENBLAS_NUM_THREADS": "16",
+    "MKL_NUM_THREADS": "1",
+    "OMP_THREAD_LIMIT": "32"
+  },
+  "command": [
+    "NPU_ENV/bin/python",
+    "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+    "--packet",
+    "TASK/inputs/fullsize-add01/workload.json",
+    "--output-dir",
+    "TASK/runs/formal-first-cpu-blas01/assessment/cell-0-repeat-1/consumer",
+    "--family",
+    "timed-dag",
+    "--schedule",
+    "prefill",
+    "--dtype",
+    "float32",
+    "--preset",
+    "cpu",
+    "--device",
+    "cpu",
+    "--implementation",
+    "libtorch",
+    "--devices",
+    "1",
+    "--threads",
+    "16",
+    "--steps",
+    "1",
+    "--warmup",
+    "1",
+    "--windows-per-step",
+    "2",
+    "--optimizer",
+    "sgd",
+    "--parameter-budget",
+    "103079215104",
+    "--device-memory-bytes",
+    "549755813888",
+    "--head-workspace-bytes",
+    "4294967296",
+    "--owner-policy",
+    "locality",
+    "--chunk-policy",
+    "aggressive",
+    "--sample-chunk-rows",
+    "32",
+    "--workers",
+    "1",
+    "--packed-sources",
+    "--batch-next",
+    "--native-binary",
+    "TASK/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench"
+  ],
+  "scope": "Unprofiled full originalB512 process;one numerical continued warmup and one measured complete step,two connected windows each. Independent candidate,no reference execution or supplied routes. Own formal timings serial;external shared-server load remains uncontrolled. Three fresh processes required before recommending a configuration.",
+  "limitations": [
+    "First actual B512 formal process,not a three-process configuration recommendation.",
+    "CPU Add inference only;no CPU/NPU speed ratio,training result or other matrix cell is implied.",
+    "Own heavy jobs are serial;external shared-server load remains uncontrolled.",
+    "Original-scale strict cross-backend route failure remains separately disclosed."
+  ]
+}

@@ -174,6 +174,12 @@ checks passed;all leases released ([audit](evidence/original-width-accelerator-c
 Longer originalB512 forecasts retain the3000s refusals;the old PythonB64 timeout
 stays failed. These are reduced-batch pilots,not full-size formal results.
 
+F6 first unprofiled originalB512 formal process passed on e69b3bd:
+LibTorch/TimedDAG/prefill/CPU/Add inference226.376559s,54.281238input tokens/s,
+continued warmup207.571919s;physical32×16,two windows and complete work/memory
+records ([audit](evidence/formal-b512-first-cpu-20261004.md)). One fresh process;
+remaining cells and three-process recommendations are still open.
+
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
 identity across the complete build and consumer is audited;the old120-failure

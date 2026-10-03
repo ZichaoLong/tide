@@ -129,15 +129,24 @@ TASK/runs/NAME/{status.json,task.log,assessment/result.json}. Inspect with
    audit strictly checks resident Full/state owners and eager node owners;no
    runtime record or production code changed. Old PythonB64 timeout stays failed.
 
-2. **formal-first-cpu-blas01 running**,no device lease. Helper
-   dispatch_first_formal_blas.py finished its bounded dependency wait;all preceding
-   calibration/profile groups are empty. Now exactly cell0 repeat1:originalB512 CPU Add inference,
-   continued warmup1+measured1,two windows each,no phase instrumentation.
-   Forecast248.392/262.237s supports600s/update,1500s child+50s wrapper,
-   whole11800s. Exclusive online-measurement.lock. Stop after this one cell for
-   result review before expanding;**not a user pause**. Immutable helpers:
-   dispatch_first_formal_blas.py,fullsize_formal_cell_blas.py,fullsize_configs.py,
-   plan02 and formal-cell-0-budget02.json. Results in assessment/cell-0-repeat-1.
+2. **formal-first-cpu-blas01 passed/exit0**,empty cgroup. Actual originalB512
+   CPU/Add inference,LibTorch/TimedDAG/prefill,BLAS16/ATen16/workers1,
+   physical32×16,continued warmup207.571919s,measured226.376559s,
+   construction46.319800s,54.281238input tokens/s. Outputs12288,cut816,
+   candidate events1188500,body candidates1163924;RSS42.767GiB inside estimate.
+   [First formal audit](evidence/formal-b512-first-cpu-20261004.md) passed exact
+   source/binary/packet/budget/owner/phase/cgroup checks. One process only;
+   no recommendation or CPU/NPU ratio. Its actual result has now been reviewed.
+3. Submit **formal-add-inference-npu01**,same frozen e69b3bd:exact cells1,2,
+   repeat1,mixed-A then resident on11NPUs,serial,fresh lease per cell,queue120s.
+   Helper dispatch_formal_blas_group.py requires the first audited result.
+   OriginalB512,continued warmup1+measured1,two windows,no phase instrumentation.
+   Budgets:cell1=1200s/update+2800s child;cell2=900s/update+2200s child;
+   whole5600s. First failure stops;no automatic retry. Lease-free CPU gaps.
+   Helpers dispatch_formal_blas_group.py,fullsize_formal_cell_blas.py,
+   fullsize_configs.py,plan02,budgets1/2 and the first formal JSON report are
+   immutable while this group is live. Review both actual outputs,then complete
+   missing Python calibration;long CPU Attention remains deferred.
 
 Completed accelerator pilots (all terminal-parent audited):
 
@@ -160,11 +169,8 @@ Forecasts are not actualB512 timing. Audit helper
 TASK/launchers/audit_accelerator_calibration02.py passed on the terminal parent.
 Final cell94 also passed:measured176.356590s,B512 forecasts10350.964783/12894.607619s.
 Its budget02 separately declares16500s/update,33400s process,retaining3000s refusal. First formal audit helper
-TASK/launchers/audit_formal_first_cpu.py is prepared,unexecuted;inspect the actual
-record and only certify it after terminal success. The first formal audit is still pending its actual result. Unsubmitted
-dispatch_formal_blas_group.py prepares finite serial cells after the first formal
-audit;requires that actual reviewed report and immutable budgets. Review the
-first result before launching it;derive its outer timeout from declared budgets.
+TASK/launchers/audit_formal_first_cpu.py passed on the terminal first actual result.
+The serial group helper now has the required reviewed prerequisite.
 
 ## Next actions and full-size scope
 
@@ -177,7 +183,8 @@ unchanged;plan02 adds explicit CPU BLAS startup16.
 CPU Attention trainingphysical16,mixed4,resident1;CPU/mixed Add32,resident Add
 training2/inference4. Resident Attention uses the qualified explicit11-owner map.
 No unqualified48-row limit. One continued warmup+one measured step,two windows,
-SGD training. No actual formal process has completed yet.
+SGD training. Formal cell0/repeat1 is complete;all other full-size matrix
+cells and recommendation repeats remain pending.
 
 Budget02 files exist for cells0–11 (unsubmitted except cell0). Original3000s
 forecast refusals remain:resident Add training3117.543s→separate4500s/update;
@@ -189,9 +196,10 @@ pilot basis;none certifiesB512 runtime. Python cell82 has16500s/update,33400s
 process after10706.075535/13258.712427s forecasts refused3000s.
 
 1. Accelerator calibration completed and audited10/10;do not repeat it.
-   Publish the reviewed evidence with this handoff,then continue first formal result.
-2. Inspect/audit the first actual formalB512 cell before extending the dispatcher.
-   Prioritize shorter cells;do not let longest CPU Attention block all other results.
+   Evidence commit d416e3c is pushed. First formal cell0 is also audited.
+2. Execute/audit the short Add inference NPU pair (cells1,2). Keep original
+   work counts and strict-equivalence limitation beside the CPU comparison.
+   No recommendation before three fresh processes. Defer longest CPU Attention.
 3. Finish remaining necessary Python original-width calibration:CPU four model/
    mode envelopes,mixed inference and Python-owned resident paths have no new
    original-width continued pilot yet. Do not assume representative/small gates
@@ -230,7 +238,7 @@ rewrite history. finite_ranked_horizon.py and wide_attention_horizon_pilot.py
 remain unqualified drafts. Prior navigation/schema audit passed834 links and
 10-target support schema;not new hardware verification.
 
-Latest evidence commits:1d32008 CPU pilot evidence,f6e49f0 retained profile failure
-and audited slice;59f3f06 consolidates the handoff. No production code changed in
-this continuation. Current uncommitted work is this handoff only. Task-local audit/budget helpers are outside
+Evidence commits:1d32008 CPU pilots,f6e49f0 retained profile failure/slice,
+d416e3c ten accelerator pilots;first formal CPU evidence is being committed with
+this handoff. No production code changed in this continuation. Task-local audit/budget helpers are outside
 the source repository;live versions above are immutable. Continue after commits.
