@@ -172,6 +172,14 @@ measured phases under fullB512 forecasts. The first Python case timed out900s;
 its failed parent and three unstarted cells are retained separately. This is
 calibration, not fullB512 performance ([audit](evidence/original-width-continued-mixed-20261004.md)).
 
+F6 CPU startup diagnosis on clean e69b3bd found a separate OpenBLAS pool:
+ATen16 did not change BLAS1. Two finite policy probes (three micro shapes and
+six fresh complete-training reduced-topology processes) confirmed3.432×
+descriptive graph throughput with BLAS16;all recorded losses/work counters match.
+The supplemental unfinished BLAS1 CPU Attention cold run was deliberately
+cancelled,not certified;original-width/fullB512 BLAS16 evidence remains required
+([audit](evidence/cpu-blas-policy-20261004.md)). No further node-worker sweep.
+
 F7 matching-core NPU integration on cleane69b3bd passed49 eager and93 resident
 checks,no skips. Fresh resident C++/Ascend C backends for both runtime owners and
 a fresh installed combined eager/resident consumer use the byte-verified current

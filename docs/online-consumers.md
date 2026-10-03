@@ -322,6 +322,15 @@ Qualified on clean `26176de`: [CPU13/NPU8 timing and semantic checks](evidence/c
 
 For eager native and standalone LibTorch consumers, `--workers` selects the
 existing node worker pool independently of ATen intra-op `--threads`.
+
+`--threads` controls ATen intra-op execution. Vendor BLAS libraries may retain a
+separate startup thread setting; record both for CPU comparisons. In the tested
+aarch64 OpenBLAS build, ATen16 left BLAS1 unchanged; an explicit OpenMP/BLAS16
+startup improved a bounded graph diagnostic ([evidence](evidence/cpu-blas-policy-20261004.md)).
+Set the declared environment before starting the consumer and verify the actual
+library/thread configuration on each target. Do not reinterpret earlier
+ATen16/BLAS1 measurements as measurements of the new policy.
+
 `--packed-sources` and `--batch-next` expose the existing packed source transport
 and batched Next/reset policies. Defaults remain one worker with both policies
 off; `host_execution` records the effective choices. These options change physical

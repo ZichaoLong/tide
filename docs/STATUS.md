@@ -135,14 +135,16 @@ remains failed;do not conflate forensic completion with equivalence.
 `TASK/runs/NAME/{status.json,task.log}`,plus assessment/result.json. Frozen sources
 TASK/sources,builds TASK/builds. Do not edit live helpers or frozen source.
 
-1. **wide-eager-cpu-attention-b512-extended01 running** since2026-10-03T16:03:04Z.
+1. **wide-eager-cpu-attention-b512-extended01 cancelled/exit143** after the BLAS diagnosis;started2026-10-03T16:03:04Z.
    Sourcec6ef224/eager-rss-training-clean01;current CPU client,ATen16/workers1,
    original FP32 B512/physicalB32×16. Measured phase forecast×1.15=23391.025825s;
    separate27000s update,27500s child,27600s outer bound.429.436GiB estimate under
    512GiB cap. Original3000s refusal retained. Helper
-   wide_eager_cpu_attention_b512_extended.py immutable. Audit actual terminal
-   result/failure;no blind retry. It does not hold online-measurement.lock,so
-   every formal runner must explicitly verify this job terminal/empty first.
+   wide_eager_cpu_attention_b512_extended.py immutable. No completeB512 result was produced. cancellation.json records the measured
+   reason and terminal status. Worker2801147 is gone;unit/cgroup empty. This
+   supersedes supplemental slow-cost work,not a passed timing or a failed update.
+   Original3000s refusal and all partial artifacts remain;protected historical
+   PID2686919 remains stopped and untouched.
 2. **wide-mixed-continued-pilots01 failed/exit1**,frozen e69b3bd/compare-discrete-clean01.
    Acquired11 NPUs1,2,3,4,5,6,7,8,9,11,12 (logical0..10). Eight planned original-width
    TimedDAG training pilots:LibTorch/Python × prefill/streaming × Add/Attention;
@@ -187,44 +189,72 @@ integrated semantics do not close F6. No speedup threshold;no failure-only or
 compile-only substitute for locally available complete runs. Existing strict
 numerical failure is separately accepted,not a blocker to these actions.
 
-## Bounded deferred formal pair and separate profiles
+## Full-size profiles and revised CPU calibration priority
 
-Replaced the waiting-only formal-mixed-prefill-01 with formal-mixed-prefill-02
-on frozen e69b3bd using dispatch_mixed_formal_prefill_v2.py;the old dispatcher
-is cancelled/exit143 before any lease or measurement,empty cgroup. The new dispatcher is waiting-for-diagnostics,without an NPU lease. Added dependency
-profile-fullsize-mixed01 (running on11 NPUs1,2,3,4,5,6,7,8,9,11,12):two serial fullB512 mixed-A/LibTorch/prefill/FP32
-complete updates,Add then Attention,with msprof delay180s/duration5s and1GiB
-trace cap. These instrumented cold results are not formal timing. Child4500s
-execution plus bounded exports6900s total,whole13860s,first failure stops.
-The profile job holds11 cards;aggregate CPU/NPU host reservation630GiB and
-half-memory gate are checked. Helpers profile_fullsize_mixed{,_pair}.py.
-No resident/CPU calibration overlaps this profile or the formal pair.
-The replacement formal dispatcher waits at most21600s for the four declared
-diagnostic jobs (including terminal FP16) to be terminal with empty cgroups.
-It leases **no devices during that dependency wait**. Then it requests11 cards
-for cell4 (Add) and cell10 (Attention),sequentially,queue≤120s each. Each is one
-originalB512/FP32/mixed-A/LibTorch/TimedDAG/prefill process with one continued
-warmup+one unprofiled measured complete SGD update,two windows each.
+profile-fullsize-mixed01 is running on11 NPUs1,2,3,4,5,6,7,8,9,11,12.
+Two serial B512/FP32/mixed-A/LibTorch/TimedDAG/prefill cold complete updates,
+Add then Attention,msprof delay180s/duration5s,1GiB trace cap. Child4500s,
+export180s/session≤12,total6900s/case,whole13860s. First failure stops.
+Helpers profile_fullsize_mixed{,_pair}.py are immutable while active.
+Records TASK/runs/profile-fullsize-mixed01/assessment/{result.json,add,attention}.
+These instrumented,overlapping-CPU results are not formal throughput.
 
-Both phase forecasts from actual warm pilots fit unchanged3000s per update,
-with1.15;child6300s plus300s construction/teardown allowance inside that bound,
-wrapper6360s,outer34800s including bounded dependency wait. First failure stops;
-no blind retry,no three-process recommendation yet. Source/client hashes and
-exclusive online-measurement.lock are checked before each actual process.
-Do not edit dispatcher,fullsize_formal_cell.py,fullsize_configs.py,plan or budget
-files while live. All exact commands are in the service receipt and helper.
+formal-mixed-prefill-01,formal-mixed-prefill-02 and
+remaining-continuous-calibration01 were deliberately cancelled while waiting,
+before any child measurement or NPU lease. All have cancelled/exit143 receipts
+and empty cgroups. The first replacement inserted separate full-size profiles;
+the second change follows concrete evidence of a CPU BLAS startup bottleneck.
+Do not resume those old helpers:their dependency names are now superseded.
+No formal process has run;do not count cancelled dispatchers as timing results.
 
-Unit tide-execution-flows-formal-mixed-prefill-02;records
-TASK/runs/formal-mixed-prefill-02/assessment/result.json;per-cell
-cell-{4,10}-repeat1/result.json,queue-cell-{4,10}.json and consumer/result.json.
-Do not start competing heavy work when this pair becomes runnable. CPU/resident
-continued pilots still need bounded launches after this pair. New task-local
-fullsize_calibration_cell.py is syntax-checked only,not runtime-qualified or
-submitted;supports fixed matrix cells,one/two physical chunks and declared
-900/1800/3600/5400s bounds. It refuses execution until cold CPU/formal pair closure;caller owns dependency
-waiting. Python Add follow-up
-should keep physicalB32 but use one logical chunk for cost calibration,retaining
-the earlierB64/two-chunk timeout. No extra CPU worker sweep. A waiting dispatcher is not a timing result.
+## Bounded CPU BLAS diagnosis
+
+cpu-blas-scope-probe01 passed,terminal/exit0. Matching Torch/OpenBLAS reports
+ATen16 but BLAS1 after torch.set_num_threads(16). OpenBLAS0.3.30 USE_OPENMP needs
+its startup environment independently set. One read-only1s sample of active
+CPU worker2801147 observed1.45 CPU-core equivalents;no process setting changed.
+Exactly two fresh microprocesses compared BLAS1/16 with unchanged ATen16.
+FP32 projection/QKV/head forward+backward medians improve8.25×/9.22×/13.50×
+for shapes32×2048×2048,32×2048×6144,384×2048×50304. Not graph throughput.
+Raw TASK/runs/cpu-blas-scope-probe01/assessment;helper cpu_blas_scope_probe.py.
+[Audited thread diagnosis](evidence/cpu-blas-policy-20261004.md).
+
+cpu-blas-graph-probe01 passed/exit0:
+six fresh processes,three per policy,alternating order,ATen16/workers1 fixed,
+BLAS1 versus16. Four-node Attention,D2048/B8/T4/V257,two physical chunks,
+one continued warmup plus3 measured complete SGD updates,two windows each.
+Child240s/whole1500s,8GiB CPU cap,combined638GiB/half-memory and90-CPU gate.
+OMP_THREAD_LIMIT32. Helpers cpu_blas_graph_probe.py;first failure stops.
+This reduced-topology diagnostic may overlap only existing non-formal CPU/profile
+jobs;no queued formal launch remains. No new node-worker sweep. The supplemental slowB512 CPU task was deliberately cancelled after this
+confirmation to free its memory for required calibration;old results remain scoped
+as ATen16/BLAS1. No whole-graph or full-size speedup claim from microbenchmarks.
+
+Graph diagnostic:three process medians BLAS1=6.178496/6.737636/6.178125s,
+BLAS16=1.800303/1.752266/1.804052s;ratio3.431921×. Three losses and event
+counts384/step match exactly across all six processes. This is reduced topology,
+not full9.468B/17.521B qualification.
+
+cpu-blas-continued01 is running on e69b3bd,helper cpu_blas_continued.py and new
+fullsize_calibration_cell_blas.py. New plan
+TASK/plans/fullsize-continuous-e69b3bd-blas16-02.json keeps all120 cells and
+all geometry/capacity;adds explicit CPU BLAS16/OMP16,MKL1,thread-limit32.
+Four serial LibTorch/TimedDAG/prefill original-width cases3,9,0,6:Add/Attention
+training then inference. Two physical chunks,continued warmup+measured step.
+Child1800s except Attention training3600s,whole9400s;first failure stops.
+CPU peak+208GiB reservation must fit half-memory;may overlap only current mixed
+profile. Uses separate calibration-cpu-blas.lock;no formal jobs are queued.
+Cell3/Add training passed:construction48.238962s,warmup105.561763s,
+measured115.645236s,B512 phase forecasts939.407377/1039.361385s (×1.15),
+peak115.290GiB. Cell9/Attention training now running;inference follows.
+Exact records TASK/runs/cpu-blas-continued01/assessment/cell-N.
+Do not edit new helper/plan/settings while live. Inspect actual results before
+creating fullB512 budgets;no full-size speedup extrapolation. CPU/resident continued calibration and
+originalB512 formal cells still need actual runs. Draft fullsize_calibration_cell.py
+and dispatch_remaining_calibration.py were never exercised;they reference the
+cancelled formal02 dependency and must be versioned/reviewed before new use.
+fullsize_formal_cell.py is also unexecuted;review its first actual result before
+multiplying cells. Retain source/plan/budget hashes for all future runs.
 
 ## Environment and protected history
 
