@@ -44,8 +44,8 @@ It is not an additional allocation or an allocator-peak measurement. Consumer
 admission estimates remain unchanged until separate calibration.
 `borrowed_attention_bytes` separately reports the included private event/full-fiber
 bank footprint, summed over owners. It does not report allocator savings; retained
-API admission remains unchanged. This extension is implemented pending the
-fixed-source qualification recorded in STATUS/ROADMAP.
+API admission remains unchanged. Fixed-source qualification and allocator/profile
+scope: [private Attention banks](evidence/resident-attention-borrow-20261003.md).
 
 The dense pre-advance budget charges these shared parameters once and dynamic
 records per window. Complete-consumer memory admission remains conservative
