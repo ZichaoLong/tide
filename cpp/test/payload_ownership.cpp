@@ -3,6 +3,7 @@
 #include "tide/placement.h"
 #include "tide/settle.h"
 #include "tide/optimizer.h"
+#include "tide/transfer.h"
 #include "../bench/streaming.h"
 #include <ATen/Parallel.h>
 #include <torch/csrc/autograd/autograd.h>
@@ -19,6 +20,25 @@ void close(const Tensor& a,const Tensor& b) {
   require(a.scalar_type()==b.scalar_type()&&a.sizes()==b.sizes(),"owner tensor metadata mismatch");
   const bool fp64=a.scalar_type()==at::kDouble;
   require(at::allclose(a.detach().cpu(),b.detach().cpu(),fp64?1e-8:1e-5,fp64?1e-10:1e-6),"owner tensor value mismatch");
+}
+void check_transfer(at::Device first,at::Device target,at::ScalarType dtype) {
+  const auto opts=at::TensorOptions().device(first).dtype(dtype);
+  for(double factor:{0.,1.}) {
+    auto a=at::arange(8,opts).set_requires_grad(true);
+    auto b=(at::arange(8,opts)*.2).set_requires_grad(true);
+    auto rows=std::vector<Tensor>{a.slice(0,0,8,2).sin(),b.slice(0,0,8,2).sin(),a.slice(0,0,8,2).detach()};
+    auto expected=rows[0].to(target);auto actual=copy_rows(rows,target);
+    require(actual[0].requires_grad()&&!actual[2].requires_grad(),"copy changed frozen row");
+    close(expected,actual[0]);
+    auto ag=torch::autograd::grad({expected.square().sum()*factor},{a,b},{},true,false,true);
+    auto bg=torch::autograd::grad({actual[0].square().sum()*factor},{a,b},{},true,false,true);
+    close(ag[0],bg[0]);close(ag[1],bg[1]);require(!bg[1].defined(),"copy connected unused row");
+    for(Index budget:{Index(1),Index(32),Index(64)}) {
+      auto aliases=copy_rows({a,a,a.detach()},target,budget);
+      auto gradient=torch::autograd::grad({aliases[0].sum()+aliases[1].sum()},{a})[0];
+      close(gradient,at::full_like(a,2));
+    }
+  }
 }
 Graph graph_for(const std::string& family,const std::string& memory) {
   Graph g;g.nodes={{0},{0},{1},{2}};
@@ -119,6 +139,7 @@ void check(at::Device first,at::Device peer,at::ScalarType dtype,const std::stri
       auto expected=reference.run(a,xs,stop,stop);
       auto actual=greedy?candidate.run(b,ys,stop,stop):stream.run(b,ys,stop,stop);
       tide_bench::compare(actual,expected,true,dtype);owners(g,target,actual,placement);
+      if(!first.is_cpu())require(actual.stats.at("cross_device_copy_groups")<actual.stats.at("cross_device_rows"),"cross-owner messages were not packed");
       if(window==0) {
         size_t i=0;while(expected.trace.at(i).node!=0)++i;
         for(double factor:{1.,0.})for(bool control:{false,true}) {
@@ -179,6 +200,7 @@ int main(int argc,char** argv) {
       pool.run({inherited,inherited});
     }
     Index count=0;
+    if(!profile_smoke)check_transfer(first,peer,args.dtype);
     for(const std::string preset:first.is_cpu()?std::vector<std::string>{"cpu"}:std::vector<std::string>{"mixed-a","mixed-b","mixed-c"})
     for(const std::string family:{"pdg","timed-dag","settle"})
     for(const std::string memory:{"lh-add-repeat-v1","lh-fiber-attention-sum-repeat-v1"})for(bool greedy:{false,true}) {

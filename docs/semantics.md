@@ -150,6 +150,10 @@ norm-only Full profiles; it does not alter logical edge delays or input seals.
   do not silently normalize away a missing parameter gradient. For a single
   packed input tensor, zero entries are the ordinary tensor VJP contract.
 - Shared parameter ownership must survive packing, parallelism and checkpoints.
+- Eager [packed transport](execution-placement.md#packed-eager-transport) groups
+  only already-produced messages. It preserves each public row's undefined or
+  connected-zero cotangent, physical edge identity and order; numerical zeros
+  do not determine whether a row is present or differentiably connected.
 - Isolated public roots must preserve structural gradient absence. Packed
   execution currently uses local semantic autograd replay with an explicit
   training cost; see `packed-autograd.md`. Numeric zeros cannot identify absence.

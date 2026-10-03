@@ -38,6 +38,7 @@ add_library(tidegraph STATIC
   cpp/src/aggregate_kernel.cpp cpp/src/aggregate_evaluate.cpp cpp/src/isolated_aggregate.cpp cpp/src/source_domain.cpp cpp/src/read.cpp cpp/src/next.cpp
   cpp/src/region.cpp cpp/src/region_evaluate.cpp cpp/src/lh_selector.cpp cpp/src/lazy_add.cpp cpp/src/lh_full.cpp
   cpp/src/placement.cpp cpp/src/placement_read.cpp cpp/src/placement_region.cpp cpp/src/ownership.cpp
+  cpp/src/transfer.cpp cpp/src/delivery.cpp
   cpp/src/fiber_attention.cpp cpp/src/fiber_packing.cpp cpp/src/fiber_single.cpp cpp/src/fiber_rows.cpp
   cpp/src/fiber_pool.cpp cpp/src/fiber_pool_csr.cpp cpp/src/token_window.cpp
   cpp/src/validation.cpp cpp/src/input_validation.cpp cpp/src/stream.cpp cpp/src/stream_support.cpp cpp/src/cursor.cpp cpp/src/planner.cpp

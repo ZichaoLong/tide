@@ -139,7 +139,7 @@ def run(spec, model, q, values, *, mode="hard", zeta=1.0, prefill=True, packed=T
             continue
         block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode, zeta=zeta,
                                           prefill=prefill, **policy)
-        deliver(graph, model, block, fibers, messages, raw_outputs)
+        deliver(graph, model, block, fibers, messages, raw_outputs, packed=packed, stats=stats)
         events.extend(block); stats["region_blocks"] += 1
         for key, value in counters.items():
             stats[key] = max(stats.get(key, 0), value) if key.startswith("max_") else stats.get(key, 0) + value

@@ -120,11 +120,10 @@ selection sees the entire region-time frame and each control returns to its node
 Worker threads inherit the caller's stream for every model device. Host metadata,
 queue progression and frame construction remain host work.
 
-The initial owner implementation copies message tensors individually, preserving
-the independent autograd edge of each message and canonical parameter leaf. It
-does not yet claim packed cross-device transport or large-model admission. Those
-performance/consumer obligations remain open under F5/F6. Existing legal local
-time batching is unchanged. There is no implicit detach at a device or window
+The original qualified owner implementation copies message tensors individually,
+preserving each independent autograd edge and canonical leaf. The newer packed
+transport below has separate qualification. Large-model memory admission and
+performance remain open under F5/F6. Existing legal local time batching is unchanged. There is no implicit detach at a device or window
 boundary. Inference/FP16/more policies and performance require their own evidence;
 the directed owner gate covers FP32 (plus CPU FP64), HST Add/Attention, all three
 families, streaming/greedy and complete updates.
@@ -139,3 +138,31 @@ serialization of the graph continuation.
 
 The directed eager-owner scope is qualified on clean55c3960; see the
 [exact source and gate evidence](evidence/eager-payload-owners-20261003.md).
+
+### Packed eager transport
+
+Packed Python/native/standalone execution groups only the remote messages of the
+current completed tick or region block. Source/destination, dtype and shape form
+transport groups; original atom identity/order and output order remain unchanged.
+No future route, readiness decision or batch boundary is predicted. Same-device
+messages retain their tensor path. `packed=False` keeps individual remote copies.
+The independent Python scalar reference keeps its own delivery implementation.
+
+Each contiguous tensor pack is bounded by 8 MiB on source and destination. A
+single larger row uses an indivisible ordinary copy; this limit bounds packing
+scratch, not total graph activation or pending memory. No numerical payload is
+filled through per-message host assignments: tensor stack/copy/unbind does the
+movement. Host metadata enumeration and per-message scale multiplication remain
+in this eager path; this is not a claim of fully device-resident routing.
+
+A multi-output autograd copy disables gradient materialization. Only defined
+output cotangents return to their matching inputs; zero cotangents stay connected,
+frozen rows remain non-differentiable, and repeated input aliases accumulate into
+their original owner. Linear copy also retains higher-order connectivity, without
+changing the first-order-only contracts of HST or other local VJP modules.
+
+`cross_device_copy_groups`, `cross_device_rows`, `cross_device_bytes` and
+`max_cross_device_batch` count logical forward transfers (before vendor lowering).
+They add no synchronization and do not claim hardware kernel counts or measured
+communication time. Independent profiling supplies actual device/runtime evidence.
+This extension is implemented; STATUS records its separate qualification.

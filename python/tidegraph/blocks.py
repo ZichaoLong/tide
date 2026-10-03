@@ -132,8 +132,10 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
     return events, stats
 
 
-def deliver(graph, model, events, fibers, messages, outputs):
+def deliver(graph, model, events, fibers, messages, outputs, *, packed=True, stats=None):
+    from .transfer import deliver_remote
     index = graph.port_indexes[1]
+    atoms, destinations = [], []
     for e in events:
         if not e["active"]:
             continue
@@ -145,11 +147,14 @@ def deliver(graph, model, events, fibers, messages, outputs):
                 arrival = time + edge.delay
                 if arrival >= 2**63:
                     raise ValueError("logical time overflow")
-                payload = (value * model.edge_scale[source].to(value.device)).to(model.nodes[edge.target].bias.device)
+                payload = value * model.edge_scale[source].to(value.device)
                 a = Atom(batch, edge.target, arrival, 1, source, time, payload)
-                fibers[batch, edge.target, arrival].append(a); messages.append(a)
+                atoms.append(a); destinations.append(model.nodes[edge.target].bias.device)
             else:
                 outputs.append((batch, time, source, value * model.output_scale[source].to(value.device)))
+    deliver_remote(atoms, destinations, packed, stats if stats is not None else {})
+    for atom in atoms:
+        fibers[atom.batch, atom.node, atom.time].append(atom); messages.append(atom)
 
 
 def canonicalize(graph, result):

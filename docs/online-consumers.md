@@ -131,8 +131,11 @@ All devices participate in timing-boundary synchronization and allocator
 observations. Finite-gradient checks reduce locally, then agree on owner zero
 before any update. Output rows gather to the declared head owner. Physical sample
 splitting retains all connected windows per slice and applies one update after
-all slices. Current eager message copies are individual; packed cross-card
-transport and calibrated total-memory admission remain F5/F6 work. Eager FP16
+all slices. Packed eager execution now groups completed remote messages by
+source/destination, dtype and shape with bounded 8 MiB tensor packs and isolated
+output VJPs; see [transport](execution-placement.md#packed-eager-transport).
+This increment's qualification and calibrated total-memory admission remain
+F5/F6 work. Eager FP16
 training still rejects the unqualified master path. STATUS separates development
 checks from clean immutable qualification and formal throughput.
 

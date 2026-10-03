@@ -171,13 +171,46 @@ clean qualification covers the final C++ resident-alias preservation correction.
 
 ## Next implementation and independent feasibility
 
-Continue with eager packed cross-card message transfers that preserve isolated
-None/zero VJPs and actual message identities, followed by calibrated total eager
-capacity/head workspace/sample splitting. Keep the CPU reference independent.
+Eager packed cross-card transport is implemented and CPU development-tested,
+not yet NPU-executed or clean-qualified. Python/independent C++ multi-output copy
+preserve missing/zero cotangents, frozen outputs and aliases, grouping only
+completed messages by source/target/dtype/shape in at most8MiB packs. Unpacked
+execution keeps individual copies; host metadata/scaling remains eager work.
+New independent copy tests include isolated/upstream/optimizer roots, packing
+boundaries and second-order linear-copy anchors. Standalone checks also exercise
+copy roots and actual grouped-message counters. All1511 frozen hashes in
+`TASK/sources/packed-transfer-dev01` match; source changes after its snapshot are
+handoff/contract text only.
+
+Development passed/exit0: `packed-transfer-python-cpu-dev01`30 directed Python
+cases, `packed-transfer-cpu-dev01`352 affected FP64/FP32 cases with no skips,
+`packed-transfer-cpp-cpu-dev01`12 standalone configurations per FP64/FP32 plus
+copy anchors (two updates/four windows each), `packed-consumer-cpu-dev01`64
+actual-consumer/host-control checks with8 accelerator cases explicitly deselected.
+Five builds passed: `build-packed-transfer-{cpu,npu-python,npu-standalone}-dev01`
+and `build-packed-consumer-{cpu,npu}-dev01`. All affected scheduler objects,
+new transfer/delivery objects, binding and standalone check are compiled; core
+archive reuse is source/hash verified and outputs freshly linked. No NPU runtime
+pass is inferred from compilation.
+
+Commit this CPU-tested increment, then freeze exact commit as
+`TASK/sources/packed-transfer-clean01`. Next build names use corresponding
+`*-clean01` suffixes and the same helpers:
+`TASK/launchers/packed_transfer_build.py SOURCE QUALIFIED_CORE NEW_BUILD`(1200s);
+`TASK/launchers/build_eager_consumer_core.py --backend cpu|npu --name NAME --core CORE`(600s).
+Gate clean CPU352+64 and standalone FP64/FP32. Defer real two-device gates and
+profile until the B512 feasibility item is terminal, to avoid device timing
+interference. Then run transfer/payload-owner/actual-consumer checks on new
+source/binaries, standalone ownership and a separate actual consumer trace,
+audit complete evidence and commit it separately. No stage implies a pause.
+Advance independent calibrated eager capacity/head workspace/sample splitting
+and portable final-integration work while the long item runs.
+
+Keep the CPU reference independent.
 Use affected gates, commit implementation first, then clean qualification and
 separate evidence; no unrelated core-owner reruns. Formal heavy timing is serial.
 
-Prepared next independent feasibility item (not launched yet):
+Independent feasibility item is running (11-card lease acquired):
 `wide-attention-b512-extended01` uses the already-qualified clean29effae
 `TASK/sources/owner-map-clean01`, exact original pilot binary
 `TASK/builds/owner-map-consumer-clean01`, and
@@ -188,7 +221,7 @@ fixed-layout phase forecast7036.453s with1.15 justifies a separately declared
 9000s complete-update budget,9480s child including measured282s construction,
 9600s enclosing timeout,11-card lease120s. Preserve physicalB1,owner map,chunks,
 60GiB/card,4GiB context pool,all queue/KV/journal capacities and post-run allocator
-checks. Launch only after current device qualification/profile ends; take
+checks. The consumer qualification/profile has ended successfully; take
 `online-measurement.lock`. On failure retain the exact result and advance
 independent implementation without a blind retry. This is cold full-size
 feasibility, not formal throughput or a full-size CPU gradient oracle.

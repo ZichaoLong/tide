@@ -78,7 +78,7 @@ def run(graph, model, continuation, external, stop, *, sealed_until, mode="hard"
             ready = [(b, r, t, frames[b, r, t]) for b, r, t in sorted(keys, key=lambda k: (k[2], k[0]))]
             block_events, block_stats = evaluate_block(graph, model, q, ready, fibers, mode=mode, zeta=zeta,
                                                        prefill=prefill, **policy)
-            deliver(graph, model, block_events, fibers, messages, outputs)
+            deliver(graph, model, block_events, fibers, messages, outputs, packed=packed, stats=stats)
             events.extend(block_events)
             for name, count in block_stats.items():
                 stats[name] = max(stats.get(name, 0), count) if name.startswith("max_") else stats.get(name, 0) + count

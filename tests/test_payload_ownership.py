@@ -107,6 +107,10 @@ def test_complete_updates_and_remapped_checkpoint(dtype, backend, implementation
             a = advance(session,x,step*4,step*4+2)
             b = advance(session,x,step*4+2,(step+1)*4)
             assert_owners(r,a);assert_owners(r,b)
+            if r is candidate and backend != "cpu":
+                assert a.stats["cross_device_rows"] > 0
+                assert a.stats["cross_device_copy_groups"] < a.stats["cross_device_rows"]
+                assert a.stats["max_cross_device_batch"] > 1
             # A later-window root must reach earlier inputs through the carried
             # state/KV/pending graph, without a replayed CPU route.
             gradient = torch.autograd.grad(objective(b),x,retain_graph=True)[0]

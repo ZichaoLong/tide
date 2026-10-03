@@ -60,14 +60,12 @@ Result Frontier::run(const Continuation& initial, const std::vector<External>& e
       for (auto i : ids) ready.push_back(frames[i]);
       auto events = evaluate_block(graph_, model_, q, ready, fibers, options_, pool_, stats);
       ++stats["region_blocks"]; stats["candidate_events"] += events.size();
-      for (auto& e : events) {
-        if (e.active) {
-          deliver(graph_, model_, e, [&](const Atom& a) {
+      deliver_batch(graph_, model_, events, options_.packed, stats, [&](const Atom& a) {
             ++stats["visited_edges"];
             fibers[{a.batch, a.node, a.time}].push_back(a);
             if (options_.trace) result.messages.push_back(a);
           }, [&](const Output& output) { result.outputs.push_back(output); });
-        }
+      for (auto& e : events) {
         if (options_.trace) result.trace.push_back(std::move(e));
       }
       if (options_.compact_events && !options_.trace) release_stream_events(events, pool_, options_.workers);

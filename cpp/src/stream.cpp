@@ -179,6 +179,11 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
     }
     pool_.run(std::move(jobs));
     profile.phase("profile_commit_ns");
+    deliver_batch(graph_, model_, events, options_.packed, stats, [&](const Atom& a) {
+      queue[a.time].push_back(a);
+      if (options_.trace) result.messages.push_back(a);
+      ++stats["visited_edges"];
+    }, [&](const Output& output) { result.outputs.push_back(output); });
     for (auto& event : events) {
       if (options_.compact_events && !options_.trace) {
         auto& state = q.states[{event.batch, event.node}];
@@ -186,13 +191,6 @@ Result Streaming::execute(Continuation& q, EventQueue& queue, Index stop) {
         else state = std::move(event.next_state);
       }
       else q.states[{event.batch, event.node}] = event.next_state;
-      if (event.active) {
-        deliver(graph_, model_, event, [&](const Atom& a) {
-          queue[a.time].push_back(a);
-          if (options_.trace) result.messages.push_back(a);
-          ++stats["visited_edges"];
-        }, [&](const Output& output) { result.outputs.push_back(output); });
-      }
       if (options_.trace) result.trace.push_back(std::move(event));
     }
     profile.phase("profile_cleanup_ns");

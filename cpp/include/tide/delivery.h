@@ -4,6 +4,16 @@
 #include <stdexcept>
 
 namespace tide {
+struct Delivery {std::vector<Atom> messages;std::vector<Output> outputs;};
+Delivery prepare_delivery(const Graph& g,const Model& m,const std::vector<Event>& events,
+                          bool packed,std::map<std::string,Index>& stats);
+template<class Message,class OutputFn>
+void deliver_batch(const Graph& g,const Model& m,const std::vector<Event>& events,
+                   bool packed,std::map<std::string,Index>& stats,Message&& message,OutputFn&& output) {
+  auto batch=prepare_delivery(g,m,events,packed,stats);
+  for(const auto& atom:batch.messages)message(atom);
+  for(const auto& value:batch.outputs)output(value);
+}
 // Resolve only present slots; a numerical zero still creates a real record.
 template<class Message, class OutputFn>
 void deliver(const Graph& g, const Model& m, const Event& e, Message&& message, OutputFn&& output) {

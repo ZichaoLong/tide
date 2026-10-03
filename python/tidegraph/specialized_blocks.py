@@ -32,7 +32,7 @@ def _run(graph, model, initial, external, stop, seal, layers, mode, zeta, prefil
         frames = [(b, region, t, nodes) for (t, b), nodes in sorted(coordinates.items())]
         block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode, zeta=zeta,
                                           prefill=prefill, **policy)
-        deliver(graph, model, block, fibers, messages, outputs)
+        deliver(graph, model, block, fibers, messages, outputs, packed=policy["packed"], stats=stats)
         events.extend(block)
         for name, value in counters.items():
             stats[name] = max(stats.get(name, 0), value) if name.startswith("max_") else stats.get(name, 0)+value

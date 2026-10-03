@@ -64,12 +64,12 @@ Result Specialized::run(const Continuation& initial, const std::vector<External>
     // Local region-block formulas are shared; the fixed topology owns scheduling
     // and propagation and never invokes Streaming, Frontier or their planner.
     auto events = evaluate_block(graph_, model_, q, frames, inbox, options_, pool_, result.stats);
-    for (auto& e : events) {
-      deliver(graph_, model_, e, [&](const Atom& a) {
+    deliver_batch(graph_, model_, events, options_.packed, result.stats, [&](const Atom& a) {
         ++result.stats["visited_edges"];
         inbox[{a.batch, a.node, a.time}].push_back(a);
         if (options_.trace) result.messages.push_back(a);
       }, [&](const Output& output) { result.outputs.push_back(output); });
+    for (auto& e : events) {
       ++result.stats["candidate_events"];
       if (options_.trace) result.trace.push_back(std::move(e));
     }

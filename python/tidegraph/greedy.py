@@ -47,7 +47,7 @@ def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zet
                 for node in nodes:
                     del fibers[batch, node, time]
             sent = []
-            deliver(graph, model, block, fibers, sent, outputs)
+            deliver(graph, model, block, fibers, sent, outputs, packed=packed, stats=stats)
             stats["visited_edges"] += len(sent)
             stats["region_blocks"] += 1
             stats["max_greedy_frames"] = max(stats.get("max_greedy_frames", 0), len(frames))

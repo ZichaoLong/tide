@@ -48,11 +48,11 @@ Result Greedy::run(const Continuation& initial, const std::vector<External>& ext
         for (auto node : frame.nodes) fibers.erase({frame.batch, node, frame.time});
       ++stats["region_blocks"]; stats["candidate_events"] += events.size();
       stats["max_greedy_frames"] = std::max<Index>(stats["max_greedy_frames"], frames.size());
-      for (auto& event : events) {
-        if (event.active) deliver(graph_, model_, event, [&](const Atom& atom) {
+      deliver_batch(graph_, model_, events, options_.packed, stats, [&](const Atom& atom) {
           ++stats["visited_edges"]; fibers[{atom.batch, atom.node, atom.time}].push_back(atom);
           if (options_.trace) result.messages.push_back(atom);
         }, [&](const Output& output) { result.outputs.push_back(output); });
+      for (auto& event : events) {
         if (options_.trace) result.trace.push_back(std::move(event));
       }
       if (options_.compact_events && !options_.trace) release_stream_events(events, pool_, options_.workers);

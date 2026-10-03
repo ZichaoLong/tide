@@ -38,7 +38,7 @@ def run(graph, model, initial, external, stop, *, sealed_until, mode="hard", zet
             block, counters = evaluate_block(graph, model, q, frames, fibers, mode=mode, zeta=zeta,
                                               prefill=False, **policy)
             sent = []
-            deliver(graph, model, block, fibers, sent, outputs)
+            deliver(graph, model, block, fibers, sent, outputs, packed=packed, stats=stats)
             for atom in sent:
                 schedule(atom)
             if trace:
