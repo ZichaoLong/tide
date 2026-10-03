@@ -166,6 +166,12 @@ correction c6ef224 passed108 directed checks and the first original-width RSS
 recheck;the second worker policy timed out and its job stays failed
 ([evidence](evidence/cpu-training-rss-20261004.md)).
 
+F6 original-width continued mixed calibration on clean e69b3bd has four
+LibTorch passes (Add/Attention × prefill/streaming), with actual warmup and
+measured phases under fullB512 forecasts. The first Python case timed out900s;
+its failed parent and three unstarted cells are retained separately. This is
+calibration, not fullB512 performance ([audit](evidence/original-width-continued-mixed-20261004.md)).
+
 F7 matching-core NPU integration on cleane69b3bd passed49 eager and93 resident
 checks,no skips. Fresh resident C++/Ascend C backends for both runtime owners and
 a fresh installed combined eager/resident consumer use the byte-verified current

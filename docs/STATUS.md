@@ -143,17 +143,18 @@ TASK/sources,builds TASK/builds. Do not edit live helpers or frozen source.
    wide_eager_cpu_attention_b512_extended.py immutable. Audit actual terminal
    result/failure;no blind retry. It does not hold online-measurement.lock,so
    every formal runner must explicitly verify this job terminal/empty first.
-2. **wide-mixed-continued-pilots01 running**,frozen e69b3bd/compare-discrete-clean01.
-   Acquired11 NPUs1,2,3,4,5,6,7,8,9,11,12 (logical0..10). Eight original-width
+2. **wide-mixed-continued-pilots01 failed/exit1**,frozen e69b3bd/compare-discrete-clean01.
+   Acquired11 NPUs1,2,3,4,5,6,7,8,9,11,12 (logical0..10). Eight planned original-width
    TimedDAG training pilots:LibTorch/Python × prefill/streaming × Add/Attention;
    mixed presets reused from representative screen. AddB64/physicalB32,
    AttentionB8/physicalB4,one continued warmup+one measured FP32 SGD step,two
    windows each. Purpose:continuous cost/peak calibration,not formal throughput.
-   May overlap CPU feasibility. First case LibTorch/prefill/Add started;no result
-   yet. Helpers wide_mixed_continued.py and fullsize_configs.py **immutable**.
+   May overlap CPU feasibility. All four LibTorch cases passed;Python/prefill/Add hit its900s child bound and the parent stopped. Three later Python cases were not started;11-card lease released.
+   Measured pilot steps199.759662928/40.552868151s;originalB512 measured
+   phase forecasts×1.15=1834.738454671/2954.875761252s,each below3000s. Helpers wide_mixed_continued.py and fullsize_configs.py **immutable**.
    queue120s,child900s/case,outer7320s,first failure stops. Aggregate reservation
    430+128+64+8GiB passed dynamic half-memory. Preserve each case and failure.
-   Inspect assessment/result.json and case/consumer/result.json. Forecasts do not
+   [Audited4 passes/1 timeout/3 not started](evidence/original-width-continued-mixed-20261004.md). Inspect assessment/result.json and case/consumer/result.json. Forecasts do not
    substitute for actual originalB512 timing.
 
 Inspect known jobs with `systemctl --user show tide-execution-flows-NAME` and
@@ -174,16 +175,56 @@ explicit11-owner Attention map and unchanged queue/trace/KV capacities.
 Resident AddB2,inferenceB4;CPU/mixed AddB32. Actual continuous peak/cost calibration
 is still required. Task-local fullsize_formal_cell.py is an **unexecuted draft**:
 requires hashed per-cell measured budgets,passed integrated gates,terminal old
-cold jobs and exclusive online-measurement.lock. No formal job submitted yet.
+cold jobs and exclusive online-measurement.lock. Two measured-budget files now exist:formal-cell-4-budget01.json and
+formal-cell-10-budget01.json,hashing the completed per-case pilot records.
 Review the first admitted actual cell before multiplying cases.
 
-Remaining:finish active CPU/continued mixed results;qualify necessary continuous
+Remaining:finish active CPU result and failed/unstarted Python calibration;qualify necessary continuous
 resident/CPU original-width memory/cost;execute full-size matrix,repeat formal
 recommendations,separate full-size profiles/FP16 comparisons,then final support/
 portability/evidence audit and terminal job closure. Current functionality and
 integrated semantics do not close F6. No speedup threshold;no failure-only or
 compile-only substitute for locally available complete runs. Existing strict
 numerical failure is separately accepted,not a blocker to these actions.
+
+## Bounded deferred formal pair and separate profiles
+
+Replaced the waiting-only formal-mixed-prefill-01 with formal-mixed-prefill-02
+on frozen e69b3bd using dispatch_mixed_formal_prefill_v2.py;the old dispatcher
+is cancelled/exit143 before any lease or measurement,empty cgroup. The new dispatcher is waiting-for-diagnostics,without an NPU lease. Added dependency
+profile-fullsize-mixed01 (running on11 NPUs1,2,3,4,5,6,7,8,9,11,12):two serial fullB512 mixed-A/LibTorch/prefill/FP32
+complete updates,Add then Attention,with msprof delay180s/duration5s and1GiB
+trace cap. These instrumented cold results are not formal timing. Child4500s
+execution plus bounded exports6900s total,whole13860s,first failure stops.
+The profile job holds11 cards;aggregate CPU/NPU host reservation630GiB and
+half-memory gate are checked. Helpers profile_fullsize_mixed{,_pair}.py.
+No resident/CPU calibration overlaps this profile or the formal pair.
+The replacement formal dispatcher waits at most21600s for the four declared
+diagnostic jobs (including terminal FP16) to be terminal with empty cgroups.
+It leases **no devices during that dependency wait**. Then it requests11 cards
+for cell4 (Add) and cell10 (Attention),sequentially,queue≤120s each. Each is one
+originalB512/FP32/mixed-A/LibTorch/TimedDAG/prefill process with one continued
+warmup+one unprofiled measured complete SGD update,two windows each.
+
+Both phase forecasts from actual warm pilots fit unchanged3000s per update,
+with1.15;child6300s plus300s construction/teardown allowance inside that bound,
+wrapper6360s,outer34800s including bounded dependency wait. First failure stops;
+no blind retry,no three-process recommendation yet. Source/client hashes and
+exclusive online-measurement.lock are checked before each actual process.
+Do not edit dispatcher,fullsize_formal_cell.py,fullsize_configs.py,plan or budget
+files while live. All exact commands are in the service receipt and helper.
+
+Unit tide-execution-flows-formal-mixed-prefill-02;records
+TASK/runs/formal-mixed-prefill-02/assessment/result.json;per-cell
+cell-{4,10}-repeat1/result.json,queue-cell-{4,10}.json and consumer/result.json.
+Do not start competing heavy work when this pair becomes runnable. CPU/resident
+continued pilots still need bounded launches after this pair. New task-local
+fullsize_calibration_cell.py is syntax-checked only,not runtime-qualified or
+submitted;supports fixed matrix cells,one/two physical chunks and declared
+900/1800/3600/5400s bounds. It refuses execution until cold CPU/formal pair closure;caller owns dependency
+waiting. Python Add follow-up
+should keep physicalB32 but use one logical chunk for cost calibration,retaining
+the earlierB64/two-chunk timeout. No extra CPU worker sweep. A waiting dispatcher is not a timing result.
 
 ## Environment and protected history
 

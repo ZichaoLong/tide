@@ -212,6 +212,14 @@ outside this portable command. Multi-device inference uses its own public forwar
 session without retained training tapes; all resolved devices are synchronized
 at timing boundaries. Requested and effective ownership are recorded.
 
+The [current-core integrated qualification](evidence/integrated-npu-consumers-20261004.md)
+passed49 eager and93 resident checks with a newly built combined standalone
+consumer and separate Python-owned backend. Build both packages against the same
+core source and intended runtime owner; successful linking alone does not qualify
+an older resident library combined with a newer core. Reusing a verified static
+archive also requires valid CMake install metadata. Fresh `scripts/build.py`
+directories provide that metadata; an incremental artifact directory may not.
+
 `--chunk-policy conservative|aggressive` and `--resident-...` options expose the
 public queue,arrival,output,journal,stage,KV,physical-chunk and workspace capacities,
 plus retained/backward/optimizer/program budgets. See `--help` for exact names.
