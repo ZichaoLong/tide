@@ -228,6 +228,16 @@ backend bytes unchanged. This enables comparable batch-geometry pilots; it is
 not original Attention training or throughput evidence
 ([evidence](evidence/consumer-owner-map-20261003.md)).
 
+F5 aggressive sharded Attention KV-journal lifetime accounting is qualified on
+cleanaf137df: four terminal jobs, CPU38/NPU17, no skips; sixteen actual two-card
+CPU-referenced complete-training candidates and one pre-allocation refusal.
+Two live FP32 journal banks plus one retained bank/window replace the repeated
+legacy allowance; runtime bytes, capacities, other storage bounds and margins
+remain. Fixed-map/chunk D512 estimates decrease3784294400bytes/card while actual
+peaks6347777024/5545201152,loss,statistics and continuation match the prior run.
+No allocation or speed gain, original B512 Attention training or CUDA claim
+([evidence](evidence/consumer-journal-capacity-20261003.md)).
+
 F5 consumer private-bank liveness accounting is qualified on clean219719d:
 four terminal jobs,CPU26,NPU25(no skips),24 actual CPU-referenced candidates and
 pre-allocation refusal; unchanged b5e6345 backend. Aggressive multi-device declared

@@ -67,6 +67,9 @@ is not part of a retained tape. No journal or KV capacity is reduced.
 paths keep their previous bound. Backend/program allowances and the per-card
 safety deduction remain unchanged. This is an accounting correction, with
 unchanged runtime allocation; allocator calibration is still required.
+Clean af137df passed CPU38/NPU17 and a fixed-layout D512 complete-update
+calibration, with unchanged observed peaks and continuation:
+[journal accounting evidence](evidence/consumer-journal-capacity-20261003.md).
 
 With aggressive multi-device training, ordered per-window canonical reduction
 allows the physical projection and event/fiber Attention parameter-adjoint banks
