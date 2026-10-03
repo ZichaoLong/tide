@@ -46,6 +46,11 @@ Same-stack continuation and CPU handoff need their own qualification. C++ native
 execution through Python uses this same Python checkpoint boundary. The separate
 standalone C++ owner checkpoint/NamedOptimizer interface remains FP32/FP64; the
 full-size consumer supplies its own FP32 masters and does not import checkpoints.
+The continuous eager benchmark consumer now implements the same explicit
+payload-gradient/FP32-master policy in Python and independently in C++, with
+`--loss-scale` default1. Its state is process-local; it does not extend the named
+C++ checkpoint format. The [consumer contract](online-consumers.md) separates
+this implementation from pending CPU/NPU qualification and resident FP32 adjoints.
 
 `qualify(..., dtype="float16", atol=..., rtol=...)` runs the ordinary independent
 CPU schedule, complete observables, isolated gradients, chunking, optimizer

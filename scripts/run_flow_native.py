@@ -30,6 +30,8 @@ def run(packet, args):
                "--workers="+str(args.workers),
                "--sample-chunk-rows="+str(args.sample_chunk_rows),
                "--parameter-budget="+str(args.parameter_budget)]
+    if getattr(args,"loss_scale",1.) != 1:
+        command.append("--loss-scale="+str(args.loss_scale))
     if args.packed_sources: command.append("--packed-sources")
     if args.batch_next: command.append("--batch-next")
     for name in ("read", "control", "selection", "events", "scoring_dtype"):

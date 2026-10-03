@@ -24,6 +24,7 @@ struct Config {
   std::string packet,family="",schedule="",optimizer="sgd";
   tide::ExecutionPlacement placement;
   bool training=false,diagnostics=false,phase_timing=false;
+  double loss_scale=1;
   Index steps=3,warmup=1,windows=2,threads=1,workers=1;
   Index sample_chunk_rows=0;
   bool packed_sources=false,batch_next=false,auto_sample_chunks=false;

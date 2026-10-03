@@ -45,6 +45,10 @@ python -m pytest -q tests/test_eager_capacity.py --dtype float32 \
   -k forced_automatic_chunks
 
 build/cuda/tidegraph-payload-ownership-check --device=cuda:0 --dtype=float32
+
+TIDE_BUILD_DIR="$PWD/build/cuda" TIDE_EAGER_PRECISION_DEVICE=cuda:0 \
+TIDE_ONLINE_BINARY="$PWD/build/online-cuda/tidegraph-online-bench" \
+python -m pytest -q tests/test_online_eager_precision.py --dtype float32
 ```
 
 Use a detached bounded job for long builds/gates, inspect all test counts and
@@ -66,5 +70,7 @@ compiler before autograd workers use it and preserves normal runtime cleanup.
 Before scale use, calibrate [eager memory admission](eager-consumer-capacity.md)
 on that target with bounded fresh processes. Inspect actual device operators and
 copies in a separate profiler run, then perform formal synchronized timing
-without reference/profiler work. These commands do not qualify resident CUDA,
-eager FP16 training, target-version combinations or full-size throughput.
+without reference/profiler work. The FP16 gate covers explicit payload gradients,
+FP32 masters/slots and static loss scaling; its CUDA execution remains pending.
+These recipes alone do not qualify resident CUDA, target-version combinations
+or full-size throughput.

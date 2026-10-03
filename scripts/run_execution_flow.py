@@ -22,6 +22,7 @@ def main():
     p.add_argument("--dtype", choices=("float32", "float64", "float16"), default="float32")
     p.add_argument("--training", action="store_true")
     p.add_argument("--optimizer", choices=("sgd", "adamw"), default="sgd")
+    p.add_argument("--loss-scale", type=float, default=1., help="static scale for eager FP16 training; default1")
     p.add_argument("--steps", type=int, default=3)
     p.add_argument("--warmup", type=int, default=1)
     p.add_argument("--windows-per-step", type=int, default=2)
@@ -86,6 +87,7 @@ def python_run(packet,a):
     rows=[]
     result=run(packet,family=a.family,implementation=a.implementation,device=device,dtype=a.dtype,
                schedule=a.schedule,preset=a.preset,training=a.training,optimizer=a.optimizer,
+               loss_scale=a.loss_scale,
                steps=a.steps,warmup=a.warmup,windows_per_step=a.windows_per_step,
                native_library=a.native_library,diagnostics=a.diagnostics,placement=placement,
                workers=a.workers,packed_sources=a.packed_sources,batch_next=a.batch_next,

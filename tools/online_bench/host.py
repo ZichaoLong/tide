@@ -1,5 +1,6 @@
 """Public eager consumer: whole training steps and continuous inference windows."""
 import time
+import math
 import torch
 from tidegraph import GraphConfig, GraphRuntime, ExecutionOptions, ExecutionPlacement, External
 from .fixture import build_model, encode
@@ -98,8 +99,12 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         resident_library=None, resident_limits=None, training_limits=None, resident_placement=None, head_workspace_bytes=4*1024**3,
         device_memory_bytes=0, workers=1, packed_sources=False, batch_next=False, sample_chunk_rows=0, context_memory_bytes=0,
         auto_sample_chunks=False, phase_timing=False, devices=1, owner_policy="locality", owner_map=(),
-        chunk_policy="conservative"):
+        chunk_policy="conservative", loss_scale=1.):
     phases = PhaseTiming(phase_timing)
+    if type(loss_scale) not in (int, float) or not math.isfinite(loss_scale) or loss_scale <= 0:
+        raise ValueError("loss-scale must be positive and finite")
+    if loss_scale != 1 and (not training or dtype != "float16" or preset == "resident"):
+        raise ValueError("nonunit loss-scale requires eager FP16 training")
     if type(auto_sample_chunks) is not bool:
         raise ValueError("auto-sample-chunks must be boolean")
     if type(context_memory_bytes) is not int or not 0 <= context_memory_bytes < 2**63:
@@ -126,8 +131,6 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
         raise ValueError("resident options require the resident preset")
     if steps < 1 or warmup < 0 or windows_per_step < 1 or optimizer not in ("sgd", "adamw"):
         raise ValueError("invalid bounded run/optimizer configuration")
-    if dtype == "float16" and training:
-        raise ValueError("consumer FP16 master/head updates pending; explicit FP32 training required")
     if packet["counts"]["parameters"] * {"float16": 2, "float32": 4, "float64": 8}[dtype] > parameter_budget:
         raise ValueError("learned parameter storage exceeds parameter-budget (not a total peak-memory estimate)")
     if (diagnostics or observer is not None) and packet["counts"]["parameters"] > 100000:
@@ -154,8 +157,14 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 for first in range(0, c["batch"], chunk)]
     named = parameters(runtime, embedding, head)
     options = dict(lr=.0001, weight_decay=.001, foreach=False)
-    opt = ((torch.optim.SGD(named.values(), momentum=.25, **options) if optimizer == "sgd" else
-            torch.optim.AdamW(named.values(), eps=1e-6, **options)) if training else None)
+    opt = None
+    if training and dtype == "float16":
+        from tidegraph.precision import FP32MasterOptimizer
+        opt = FP32MasterOptimizer(named.values(), optimizer=optimizer, loss_scale=loss_scale,
+            **options, **(dict(momentum=.25) if optimizer == "sgd" else dict(eps=1e-6)))
+    elif training:
+        opt = (torch.optim.SGD(named.values(), momentum=.25, **options) if optimizer == "sgd" else
+               torch.optim.AdamW(named.values(), eps=1e-6, **options))
     runtime.synchronize()
     construction = time.perf_counter() - start
     memory.capture("construction")
@@ -191,7 +200,10 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                     if not torch.isfinite(partial).all():
                         raise RuntimeError("nonfinite consumer loss")
                     if opt:
-                        partial.backward()
+                        if dtype == "float16":
+                            opt.backward(partial)
+                        else:
+                            partial.backward()
                     loss = partial.detach() if loss is None else loss+partial.detach()
                 if opt:
                     session.detach()
@@ -241,6 +253,9 @@ def run(packet, *, family, implementation, device, dtype="float32", schedule="pr
                 runtime=runtime.manifest(), payload_placement=payload_placement,
                 diagnostics=diagnostics or observer is not None,
                 memory=memory.record(), memory_admission=admission, phase_timing=phases.record(),
+                precision=dict(payload=dtype, loss="float32" if dtype=="float16" else dtype,
+                    optimizer_masters=("float32" if dtype=="float16" else dtype) if training else None,
+                    gradient_accumulation="payload", loss_scale=float(loss_scale)),
                 timing="input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference")
     if not admission["allocator_within_estimate"]:
         from flow_failure import RecordedFailure

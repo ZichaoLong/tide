@@ -1,9 +1,9 @@
 # Current handoff
 
-Updated 2026-10-03. **ACTIVE**: the user cancelled the old goal and explicitly
-authorized its replacement; that goal is active. Commit/push, evidence and context
-compression do not stop execution. A later explicit user pause overrides these
-next actions; repository text never authorizes resuming after a pause.
+Updated 2026-10-03. **ACTIVE**: following a read-only handoff audit, the user
+explicitly authorized this thread to resume under the existing execution contract
+and finish the overall goal. Commit/push remains authorized; no per-commit pause.
+A later explicit user pause overrides these next actions. No subagents.
 
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
@@ -87,7 +87,7 @@ hash-verified packed-transfer cores. Eight jobs audited:
 `eager-rss-consumer-npu-clean01`, `wide-eager-cpu-rss-clean01`,
 `eager-rss-calibration-npu-clean01`, `eager-rss-profile-clean01`.
 All passed/exit0, inactive/empty cgroups and completed leases.
-[New evidence](evidence/eager-consumer-capacity-20261003.md) ready to commit.
+[Evidence](evidence/eager-consumer-capacity-20261003.md) committed/pushed8e6d960.
 
 - CPU70/47 deselected; NPU capacity12/22 deselected; actual consumer40/9 deselected;
   all0 skips. Independent full records/gradients/updates and forced splitting.
@@ -110,31 +110,60 @@ order; independent CPU reference and candidate inputs are unchanged. Retain
 other dev failures and all raw results; no relabelling or capacity relaxation.
 Re-audit: `python TASK/launchers/eager_capacity_evidence.py c68609603c310f7121cb6f887afcadd019973209`.
 
-## Next finite scale increment
+## Completed CPU chunk pilot and next scale work
 
-Commit/push the reviewed capacity evidence, then launch **one** heavy pilot at a
-time, using already-qualified clean c686096 and `wide_eager_chunk_pilot.py`.
-This new helper is prepared, not executed yet; immutable original CPU calibration
-helper/output stay unchanged. It validates full original parameter counts,
-output/cut/finite loss, all observed memory bounds, two physical chunks/two
-connected windows/one SGD update, and records sample-work/optimizer timing.
+`wide-eager-cpu-chunk01` is now terminal passed/exit0 (09:27:52 UTC), not running.
+Clean c686096, `TASK/sources/eager-rss-clean01`, installed `eager-rss-cpu-clean01`:
+original D2048/T12/V50304, B64/physicalB32, two connected windows, one FP32 SGD
+update, TimedDAG/LibTorch/prefill. Add166.401850828s and Attention2559.648031075s;
+RSS growth110.683/232.169GiB <= estimates184.393/402.231GiB. Both full original
+parameter counts, outputs, continuation and memory checks pass. Raw assessment:
+`TASK/runs/wide-eager-cpu-chunk01/assessment/result.json`. The build binary hash
+still matches its manifest. Concurrent bounded CPU development builds/tests
+make this diagnostic feasibility/calibration, not formal throughput.
 
-CPU first: `wide-eager-cpu-chunk01`, build `eager-rss-cpu-clean01`,device cpu,
-Add/Attention B64/physicalB32,16 ATen threads/one worker,512GiB host/80GiB learned/
-4GiB head. Each child3000s,outer6050s,first failure stops. Command shape:
-`freeze_run.py --name wide-eager-cpu-chunk01 --snapshot eager-rss-clean01 --commit
-c68609603c310f7121cb6f887afcadd019973209 -- timeout --signal=TERM --kill-after=10s
-6050s env -C {out} {python} {base}/launchers/wide_eager_chunk_pilot.py --source
-{source} --build {base}/builds/eager-rss-cpu-clean01 --device cpu --out {out}/assessment`.
-Helper takes nonblocking `online-measurement.lock`; no indefinite lock wait.
+Next scale question: mixed-A original-width chunks with `wide_eager_chunk_pilot.py`,
+qualified `eager-rss-npu-clean01`,11-card120s lease,60GiB/card,2 ATen threads/four
+workers, AddB64/physicalB32 and AttentionB16/physicalB8. Preserve3000s per child,
+6050s outer and ACL_OP_INIT_MODE=0. Not submitted yet: close the current FP16
+increment first. A queue refusal ends this attempt; no unlimited waiting. Use
+measured phases and unchanged1.15 for explicitly declared originalB512 budgets.
+Do not rerun the completed CPU pilot or infer B512 success from its forecast.
 
-Then mixed: same helper/device npu:0/build `eager-rss-npu-clean01`,11-card120s
-lease,60GiB/card,2 ATen threads/four workers,mixed-A (representative screen choice),
-Add B64/physicalB32,Attention B16/physicalB8, same3000s child/6050s outer/init0.
-No NPU job is submitted yet. If cards unavailable, retain queue refusal and move
-to independent implementation (eager FP16 master consumer remains open),not an
-unbounded wait. Use measured cost and unchanged1.15 to set explicit B512 budget;
-keep old3000s refusal and do not infer B512 completion from a forecast.
+## Current increment: eager FP16 consumer closeout
+
+Uncommitted implementation: Python public FP32MasterOptimizer and independent
+standalone C++ consumer-owned FP32 masters/SGD/AdamW. FP16 payload gradients,
+FP32 loss/masters/slots, explicit static --loss-scale(default1), no implicit skip
+or retry. Aliases/None/zero and physical-chunk/update boundaries are preserved.
+Admission charges master parameters/gradients/slots and CPU RSS; FP32 estimates
+are unchanged. No public C++ checkpoint schema extension is claimed.
+
+Completed development from frozen `eager-half-dev02`, with dev01 installed clients:
+CPU61 passed/22 deselected, two-card NPU49 passed/no skips, FP32/FP64 CPU consumer
+regression55 passed. Both CPU/NPU builds passed. The original dev01 duplicate
+parametrization('dtype') collection failure remains retained. Implementation
+bytes and both binary hashes still match the tested snapshots/manifests.
+The only later test change is `standalone_binary()`: skip a standalone test when
+no standalone binary was selected; fail if an explicitly selected binary is absent.
+Documentation also changed. These later bytes need an affected test before commit.
+
+Affected final entry check `eager-half-entry-cpu-dev03` passed/exit0:15 passed,
+34 deselected,14.53s. All frozen dev03 source hashes remain intact. Its transient
+unit ended. Static portability scan reports0 errors; adapter-specific warnings
+are not evidence of new defects. CPU/NPU runtime and consumer gates below own
+actual support. No current mainline task is live.
+
+Commit this reviewed implementation, then use its exact commit for clean
+`eager-half-clean01`: fresh installed CPU/NPU clients
+`build-eager-half-{cpu,npu}-clean01` (two workers,900s each), full affected
+`eager-half-cpu-clean01`(FP16 plus static admission,900s),
+`eager-half-npu-clean01`(49 directed checks,2-card120s lease,900s), and
+`eager-half-cpu-regression-clean01`(FP32/FP64 consumer,900s).
+Then separate FP16 memory calibration and actual-consumer profiling, using new
+helpers/outputs; never modify prior audited helpers. Runtime cwd OUT, init0 for
+standalone NPU. All qualification jobs must match this implementation, finish,
+and preserve exact source hashes before evidence is committed separately.
 
 ## Remaining acceptance and environment
 
@@ -162,7 +191,7 @@ This authorized public stack supersedes old private guide paths. Preserve module
 PYTHONPATH; prepend frozen source/python. TASK_QUEUE_ENABLE=0,
 TORCH_DEVICE_BACKEND_AUTOLOAD=0. NPU children use `env -C OUT` and absolute source
 paths to avoid fusion_result.json in read-only snapshots. background.slice,Nice10,
-two build workers,explicit timeouts,120s device waits. Last disk:data155GiB/root11GiB;
+two build workers,explicit timeouts,120s device waits. Last disk:data170GiB/root11GiB;
 recheck before large writes. Raw job records `TASK/runs/NAME/{status.json,task.log}`,
 units `tide-execution-flows-NAME`; queue/profile records where applicable.
 

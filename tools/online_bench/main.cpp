@@ -10,7 +10,7 @@ int main(int argc,char** argv) {
     auto c=tide_flow::parse(argc,argv);
     if(c.runtime.help){portable_torch::print_usage(std::cout,argv[0]);
       std::cout<<"--packet PATH --family pdg|timed-dag|settle --preset cpu|mixed-a|mixed-b|mixed-c|resident --schedule streaming|prefill\n"
-        "--training --optimizer sgd|adamw --steps N --warmup N --windows-per-step N --threads N --parameter-budget BYTES --diagnostics\n"
+        "--training --optimizer sgd|adamw --loss-scale SCALE --steps N --warmup N --windows-per-step N --threads N --parameter-budget BYTES --diagnostics\n"
         "--workers N --packed-sources --batch-next (eager native only; threads sets ATen intra-op parallelism)\n"
         "--sample-chunk-rows N (physical sample maximum; 0 keeps the whole logical batch)\n"
         "--devices N --owner-policy memory|locality --owner-map 0,1,... --chunk-policy conservative|aggressive\n"

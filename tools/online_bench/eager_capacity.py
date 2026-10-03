@@ -30,7 +30,9 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
         persistent=batch*(len(nodes)*(payload*width+4096))
         cache=atoms*positions*(2*width+1)*payload if attention else 0
         persistent+=batch*cache
-        optimizer=(3 if adamw else 2)*learned if training else 0  # grads + slots
+        masters=2*learned if training and payload==2 else 0
+        # Half leaves retain payload gradients plus FP32 master gradients/slots.
+        optimizer=((7 if adamw else 5) if payload==2 else (3 if adamw else 2))*learned if training else 0
         vector_work=physical_rows*connected_positions*(
             payload*width*(64*atoms+32*events+32*emissions)+8192*(atoms+events+emissions))
         cache_work=score_work=0
@@ -57,16 +59,16 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
         # buffers beyond live tensor bytes (up to 4.3% of learned storage at
         # construction). Charge 6.25% at every phase; accelerator allocated-byte
         # accounting is separate and does not inherit this RSS-only allowance.
-        rss_allowance=(learned+15)//16 if host_rss else 0
-        base=learned+constants+persistent+backend+rss_allowance
+        rss_allowance=(learned+masters+15)//16 if host_rss else 0
+        base=learned+masters+constants+persistent+backend+rss_allowance
         # The named CPU initializer can hold three int64 intermediates before
         # conversion. Eight payload rows cover that peak for supported training
         # precisions, as well as the final tensor/conversion transient.
-        phases=dict(construction=learned+constants+backend+rss_allowance+max(32,8*payload)*largest,
+        phases=dict(construction=learned+masters+constants+backend+rss_allowance+max(32,8*payload)*largest,
             forward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport,
             backward=base+optimizer+vector_work+cache_work+score_work+operator_work+head_work+transport if training else 0,
             optimizer=base+optimizer+operator_work if training else 0)
-        components=dict(learned=learned,constants=constants,persistent_state_and_kv=persistent,
+        components=dict(learned=learned,master_parameters=masters,constants=constants,persistent_state_and_kv=persistent,
             gradients_and_optimizer_slots=optimizer,vector_work=vector_work,cache_work=cache_work,
             attention_scores=score_work,operator_work=operator_work,head_work=head_work,
             transport=transport,backend_allowance=backend,host_rss_allowance=rss_allowance)
@@ -79,8 +81,8 @@ def envelope(packet, owners, elements, traffic, *, physical_rows, payload, posit
 def plan(packet, *, budgets, dtype="float32", training=False, optimizer="sgd", steps=3, warmup=1,
          windows=2, workers=1, sample_rows=0, auto_sample_chunks=False, policy="conservative",
          owner_policy="locality", owner_map=(), head_workspace_bytes=4*1024**3, backend="cpu"):
-    if dtype not in ("float16","float32","float64") or (dtype=="float16" and training):
-        raise ValueError("eager capacity requires a supported inference dtype or FP32/FP64 training")
+    if dtype not in ("float16","float32","float64"):
+        raise ValueError("eager capacity requires FP16/FP32/FP64 payload")
     if (not budgets or any(type(x) is not int or not 0<x<2**63 for x in budgets)
             or any(type(x) is not int or not 1<=x<2**63 for x in (steps,windows,workers,head_workspace_bytes))
             or type(warmup) is not int or not 0<=warmup<2**63

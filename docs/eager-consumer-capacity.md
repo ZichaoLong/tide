@@ -54,8 +54,11 @@ proposals/scores, worker workspaces, head/loss, bounded transport and a backend
 allowance. Construction also charges the named integer initializer's transient
 arrays. A phase maximum is recorded for construction, forward, backward and
 optimizer. Operator workspace declarations are limits, not allocations.
+FP16 training additionally charges FP32 master parameters at construction and
+throughout the run, plus FP32 master gradients/optimizer slots alongside payload
+gradients. Its shape estimate is implemented; device calibration is pending.
 
-CPU RSS additionally charges6.25% of learned storage for host allocations and
+CPU RSS additionally charges6.25% of learned and explicit master storage for host allocations and
 retained buffers at each phase. The original-width B4 fresh-process
 [calibration](evidence/original-width-eager-cpu-calibration-20261003.md) found up
 to4.3% unmodelled learned-storage bytes at construction, and an Attention total

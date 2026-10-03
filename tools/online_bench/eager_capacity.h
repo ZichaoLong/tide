@@ -28,7 +28,8 @@ inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& pl
     Index persistent=product({batch,nodes,sum({product({payload,width}),4096})});
     const auto cache=attention?product({atoms,plan.positions,sum({product({2,width}),1}),payload}):0;
     persistent=sum({persistent,product({batch,cache})});
-    const auto optimizer=c.training?product({c.optimizer=="adamw"?3:2,learned}):0;
+    const auto masters=c.training&&payload==2?product({2,learned}):0;
+    const auto optimizer=c.training?product({payload==2?(c.optimizer=="adamw"?7:5):(c.optimizer=="adamw"?3:2),learned}):0;
     const auto vector_work=product({rows,plan.connected,sum({
         product({payload,width,sum({product({64,atoms}),product({32,events}),product({32,emissions})})}),
         product({8192,sum({atoms,events,emissions})})})});
@@ -48,13 +49,14 @@ inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& pl
     const Index transport=16*MIB,backend=512*MIB;
     // CPU lifetime RSS includes retained allocation buffers. Calibrated from
     // original-width construction/complete-update observations, not HBM usage.
-    const auto rss_allowance=plan.host_rss?learned/16+(learned%16!=0):0;
-    const auto base=sum({learned,constants,persistent,backend,rss_allowance});
+    const auto host_storage=sum({learned,masters});
+    const auto rss_allowance=plan.host_rss?host_storage/16+(host_storage%16!=0):0;
+    const auto base=sum({learned,masters,constants,persistent,backend,rss_allowance});
     const auto forward=sum({base,optimizer,vector_work,cache_work,score_work,operator_work,head_work,transport});
     Card card;card.device=device;
-    card.phases={{"construction",sum({learned,constants,backend,rss_allowance,product({std::max<Index>(32,8*payload),largest})})},
+    card.phases={{"construction",sum({learned,masters,constants,backend,rss_allowance,product({std::max<Index>(32,8*payload),largest})})},
                  {"forward",forward},{"backward",c.training?forward:0},{"optimizer",c.training?sum({base,optimizer,operator_work}):0}};
-    card.components={{"learned",learned},{"constants",constants},{"persistent_state_and_kv",persistent},
+    card.components={{"learned",learned},{"master_parameters",masters},{"constants",constants},{"persistent_state_and_kv",persistent},
         {"gradients_and_optimizer_slots",optimizer},{"vector_work",vector_work},{"cache_work",cache_work},
         {"attention_scores",score_work},{"operator_work",operator_work},{"head_work",head_work},
         {"transport",transport},{"backend_allowance",backend},{"host_rss_allowance",rss_allowance}};
@@ -63,8 +65,8 @@ inline std::vector<Card> envelope(const Packet& p,const Config& c,const Plan& pl
   }return cards;
 }
 inline Plan plan(const Packet& p,const Config& c,const std::vector<Index>& budgets,bool host_rss=false) {
-  if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)||(c.runtime.dtype==at::kHalf&&c.training))
-    throw std::invalid_argument("eager capacity requires a supported inference dtype or FP32/FP64 training");
+  if(c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
+    throw std::invalid_argument("eager capacity requires FP16/FP32/FP64 payload");
   if(Index(budgets.size())!=c.devices||budgets.empty()||*std::min_element(budgets.begin(),budgets.end())<1
       ||c.head_workspace_bytes<1||c.steps<1||c.warmup<0||c.windows<1||c.workers<1||c.sample_chunk_rows<0
       ||(c.chunk_policy!="conservative"&&c.chunk_policy!="aggressive")||(c.optimizer!="sgd"&&c.optimizer!="adamw"))

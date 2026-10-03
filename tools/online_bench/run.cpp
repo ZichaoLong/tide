@@ -3,6 +3,7 @@
 #include "memory.h"
 #include "eager_placement.h"
 #include "eager_capacity_runtime.h"
+#include "eager_optimizer.h"
 #include <tide/greedy.h>
 #include <tide/stream.h>
 #include <ATen/core/grad_mode.h>
@@ -54,12 +55,11 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   std::unique_ptr<tide::Streaming> streaming;std::unique_ptr<tide::Greedy> greedy;
   if(c.schedule=="prefill")greedy=std::make_unique<tide::Greedy>(f.graph,placed,options);
   else streaming=std::make_unique<tide::Streaming>(f.graph,placed,options);
-  std::unique_ptr<tide::NamedOptimizer> optimizer;
+  std::unique_ptr<EagerOptimizer> optimizer;
   tide::OptimizerGroup group;group.lr=.0001;group.weight_decay=.001;group.momentum=.25;group.eps=1e-6;
   for(const auto& owner:f.parameters.owners())group.parameters.push_back(owner.canonical);
   if(c.training) {
-    if(c.optimizer=="sgd")optimizer=std::make_unique<tide::SGD>(f.parameters,std::vector<tide::OptimizerGroup>{group});
-    else optimizer=std::make_unique<tide::AdamW>(f.parameters,std::vector<tide::OptimizerGroup>{group});
+    optimizer=std::make_unique<EagerOptimizer>(f.parameters,c.optimizer,c.runtime.dtype==at::kHalf,c.loss_scale,group);
   }
   const auto chunk=admission.rows();
   std::vector<tide::Continuation> continuations;
@@ -95,7 +95,7 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
       }
       if(partial.defined()){
         if(!at::isfinite(partial).all().item<bool>())throw std::runtime_error("nonfinite consumer loss");
-        if(optimizer)partial.backward();
+        if(optimizer)optimizer->backward(partial);
         loss=loss.defined()?loss+partial.detach():partial.detach();
       }
       if(optimizer)detach(q);
@@ -148,6 +148,10 @@ std::string run(const Packet& p,const Config& c,at::Device device,std::ostream* 
   bool first=true;for(const auto& [name,value]:placement.record()){if(!first)out<<',';first=false;out<<quoted(name)<<':'<<quoted(value);}out<<"}}"
      <<",\"payload_placement\":"<<eager_placement_json(c,owner_plan,devices)
      <<",\"memory\":"<<memory.json()<<",\"memory_admission\":"<<admission.json()<<",\"phase_timing\":"<<phases.json()
+     <<",\"precision\":{\"payload\":"<<quoted(portable_torch::dtype_name(c.runtime.dtype))
+     <<",\"loss\":"<<quoted(c.runtime.dtype==at::kHalf?"float32":portable_torch::dtype_name(c.runtime.dtype))
+     <<",\"optimizer_masters\":"<<(c.training?quoted(c.runtime.dtype==at::kHalf?"float32":portable_torch::dtype_name(c.runtime.dtype)):"null")
+     <<",\"gradient_accumulation\":\"payload\",\"loss_scale\":"<<c.loss_scale<<'}'
      <<",\"timing\":\"input preparation/upload + online forward + head/loss + backward + finite checks + detach/optimizer + synchronization; no reference\"}\n";
   if(!within)throw RecordedFailure(error,out.str());
   return out.str();

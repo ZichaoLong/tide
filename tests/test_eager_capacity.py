@@ -50,6 +50,7 @@ def test_static_language_parity(i,tmp_path):
         policy='aggressive' if i%2 else 'conservative',owner_policy='memory' if i%3 else 'locality',
         backend=['cpu','npu','cuda'][i%3])
     if i==11:options.update(dtype='float16',training=False)
+    if i in (2,7,9):options.update(dtype='float16',training=True)
     if i==7:options['owner_map']=[0,1,0,1,0,1,0,0]
     budgets=[(64-j)*1024**3 for j in range(devices)]
     full=plan(p,budgets=budgets,**options)

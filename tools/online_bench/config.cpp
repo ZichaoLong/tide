@@ -1,5 +1,6 @@
 #include "consumer.h"
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <stdexcept>
 
@@ -28,13 +29,18 @@ Config parse(int argc,char** argv) {
     const bool limit=std::find(limits.begin(),limits.end(),capacity)!=limits.end();
     const bool known=key=="--packet"||key=="--family"||key=="--schedule"||key=="--preset"||key=="--optimizer"
       ||key=="--steps"||key=="--warmup"||key=="--windows-per-step"||key=="--threads"||key=="--workers"||key=="--parameter-budget"||key=="--sample-chunk-rows"
-      ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"
+      ||key=="--read"||key=="--control"||key=="--selection"||key=="--events"||key=="--scoring-dtype"||key=="--loss-scale"
       ||key=="--devices"||key=="--owner-policy"||key=="--owner-map"||key=="--chunk-policy"||key=="--head-workspace-bytes"||key=="--device-memory-bytes"||key=="--resident-context-bytes"||limit;
     if(!known){forwarded.push_back(argv[i]);continue;}
     if(equal==std::string::npos){if(++i==argc)throw std::invalid_argument("missing option value");value=argv[i];}
     if(key=="--packet")c.packet=value;else if(key=="--family")c.family=value;
     else if(key=="--schedule")c.schedule=value;else if(key=="--preset"){c.placement.preset=value;preset=true;}
     else if(key=="--optimizer")c.optimizer=value;
+    else if(key=="--loss-scale") {
+      size_t used=0;c.loss_scale=std::stod(value,&used);
+      if(used!=value.size()||!std::isfinite(c.loss_scale)||c.loss_scale<=0)
+        throw std::invalid_argument("loss-scale must be positive and finite");
+    }
     else if(key=="--read")c.placement.read=value;else if(key=="--control")c.placement.control=value;
     else if(key=="--selection")c.placement.selection=value;else if(key=="--events")c.placement.events=value;
     else if(key=="--scoring-dtype")c.placement.scoring_dtype=value;
@@ -76,10 +82,11 @@ Config parse(int argc,char** argv) {
     throw std::invalid_argument("resident consumer requires FP32/FP16 payload");
   if(c.placement.preset=="resident"&&(c.workers!=1||c.packed_sources||c.batch_next))
     throw std::invalid_argument("host workers/packed-sources/batch-next require an eager native consumer");
-  if((c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
-      ||(c.training&&c.runtime.dtype==at::kHalf&&c.placement.preset!="resident"))
-    throw std::invalid_argument("eager consumer FP16 training requires a qualified master optimizer");
-  c.runtime.allow_npu_float16=!c.training||c.placement.preset=="resident";
+  if(c.runtime.dtype!=at::kFloat&&c.runtime.dtype!=at::kDouble&&c.runtime.dtype!=at::kHalf)
+    throw std::invalid_argument("consumer requires FP16/FP32/FP64 payload");
+  if(c.loss_scale!=1&&(!c.training||c.runtime.dtype!=at::kHalf||c.placement.preset=="resident"))
+    throw std::invalid_argument("nonunit loss-scale requires eager FP16 training");
+  c.runtime.allow_npu_float16=true;
   return c;
 }
 } // namespace tide_flow

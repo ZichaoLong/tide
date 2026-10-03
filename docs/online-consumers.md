@@ -84,7 +84,16 @@ checks the training mechanism, not downstream convergence or model quality.
 FP32/FP64 eager training is implemented. The resident consumer also implements
 FP16 payloads with FP32 loss, explicit adjoints and optimizer masters; its whole
 consumer qualification is separate from the public resident FP16 library gates.
-Eager FP16 consumer training still explicitly refuses its unqualified master path. The consumer is a bounded benchmark runner;
+Eager FP16 consumer training implements FP32 optimizer masters and slots, FP32
+loss, and ordinary payload-dtype autograd accumulation. Each canonical leaf has
+one master, including embedding/head; physical chunks share masters and one
+update boundary. `--loss-scale` is a positive finite static scale, default1;
+nonunit scales require eager FP16 training and are recorded with the precision
+policy. No automatic scaling, skipped updates or implicit retries occur.
+Nonfinite gradients fail before updating; cast overflow fails and requires a new
+run or an explicitly restored application checkpoint. This eager half-backward
+policy is distinct from the resident FP32-adjoint policy. Qualification is pending.
+The consumer is a bounded benchmark runner;
 it does not claim to serialize an application bundle with head/data cursor.
 
 CPU and mixed A/B/C use public Read/control/selection placement, with the fine
@@ -134,9 +143,10 @@ splitting retains all connected windows per slice and applies one update after
 all slices. Packed eager execution now groups completed remote messages by
 source/destination, dtype and shape with bounded 8 MiB tensor packs and isolated
 output VJPs; see [transport](execution-placement.md#packed-eager-transport).
-This increment's qualification and calibrated total-memory admission remain
-F5/F6 work. Eager FP16
-training still rejects the unqualified master path. STATUS separates development
+Packed transport and FP32 total-memory admission have separate qualifications
+([transport](evidence/eager-packed-transfer-20261003.md),
+[capacity](evidence/eager-consumer-capacity-20261003.md)). Eager FP16
+training uses the explicit master policy above. STATUS separates development
 checks from clean immutable qualification and formal throughput.
 
 The resident graph supplies actual packed output coordinates,values and presence.
