@@ -1,0 +1,2044 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "cases": [
+    {
+      "cell": 72,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "python-add-False-cpu",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-72/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-72/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "python",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32"
+      ],
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "physical_ids": [],
+      "parameters": 9468053696,
+      "seconds": [
+        86.41661871224642
+      ],
+      "warmup_seconds": [
+        75.27812406420708
+      ],
+      "construction_seconds": 27.268978264182806,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 86.41661871224642,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 75.27812406420708,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 68,
+          "greedy_relaxed_edges": 30720,
+          "region_blocks": 68,
+          "candidate_events": 148586,
+          "visited_edges": 156672,
+          "max_live_fibers": 12288,
+          "max_greedy_frames": 384,
+          "state_blocks": 256,
+          "state_steps": 145514,
+          "full_blocks": 1015,
+          "state_sequence_calls": 256,
+          "semantic_state_replays": 0,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 1208,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "read_calls": 8604,
+          "region_steps": 26112,
+          "next_steps": 148586,
+          "max_full_batch": 384,
+          "full_calls": 1015,
+          "selected_events": 26112,
+          "source_rows": 158208,
+          "state_prefill_selected_clear": 145514,
+          "state_prefill_fallback_events": 145514,
+          "state_step_batch_calls": 145514,
+          "state_scalar_batch_steps": 145514
+        }
+      ],
+      "losses": [
+        30.708131790161133
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 692.5587413907051,
+        "measured": 795.0328921526669
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        77713559552
+      ],
+      "packet_sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9",
+      "plan_sha256": "01b4ed987e0b9bad40b5acb42dc6956d2f54b4c24c0a567c8c014f9c456cce7e",
+      "result_sha256": "e0d104381c34e81c0d8463426c3e8f597afb8a0b23e2be84638265cf6f666ca3",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "cpu",
+        "backend": "cpu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "logical_device_count": 1
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "queue_sha256": null
+    },
+    {
+      "cell": 75,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": true,
+        "preset": "cpu",
+        "configuration": "python-add-True-cpu",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-75/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-75/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "python",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "32"
+      ],
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "physical_ids": [],
+      "parameters": 9468053696,
+      "seconds": [
+        183.94267832487822
+      ],
+      "warmup_seconds": [
+        173.92841659486294
+      ],
+      "construction_seconds": 26.83244774490595,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 179.81684886291623,
+            "optimizer_seconds": 4.125829461961985
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 167.2533113323152,
+            "optimizer_seconds": 6.675105262547731
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 68,
+          "greedy_relaxed_edges": 30720,
+          "region_blocks": 68,
+          "candidate_events": 148674,
+          "visited_edges": 156672,
+          "max_live_fibers": 12288,
+          "max_greedy_frames": 384,
+          "state_blocks": 256,
+          "state_steps": 145602,
+          "full_blocks": 1030,
+          "state_sequence_calls": 256,
+          "semantic_state_replays": 148674,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 1212,
+          "batched_aggregate_events": 148674,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "read_calls": 8526,
+          "semantic_read_replays": 148674,
+          "region_steps": 26112,
+          "next_steps": 148674,
+          "max_full_batch": 384,
+          "full_calls": 1030,
+          "batched_full_events": 26112,
+          "selected_events": 26112,
+          "source_rows": 158208,
+          "state_prefill_selected_clear": 145602,
+          "state_prefill_fallback_events": 145602,
+          "state_step_batch_calls": 145602,
+          "state_scalar_batch_steps": 145602
+        }
+      ],
+      "losses": [
+        31.425811767578125
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 1546.4068353092296,
+        "measured": 1659.0597134200855
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        156478038016
+      ],
+      "packet_sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9",
+      "plan_sha256": "07fc63a102aefe87bd9764bc6050b3fd942af590ea70c05f94d3696f7170783c",
+      "result_sha256": "da59f45af0a93ead497ee4f290759c0e096b180eb0caf7c3745e4d1aae32b032",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "cpu",
+        "backend": "cpu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "logical_device_count": 1
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "queue_sha256": null
+    },
+    {
+      "cell": 78,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "python-attention-False-cpu",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-78/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-78/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "python",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32"
+      ],
+      "logical_batch": 64,
+      "physical_rows": 32,
+      "physical_ids": [],
+      "parameters": 17521117376,
+      "seconds": [
+        334.78251876682043
+      ],
+      "warmup_seconds": [
+        245.49300760403275
+      ],
+      "construction_seconds": 51.902013283222914,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 334.78251876682043,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 245.49300760403275,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 68,
+          "greedy_relaxed_edges": 30720,
+          "region_blocks": 68,
+          "candidate_events": 148684,
+          "visited_edges": 156672,
+          "max_live_fibers": 12288,
+          "max_greedy_frames": 384,
+          "state_blocks": 256,
+          "state_steps": 145612,
+          "full_blocks": 1928,
+          "state_sequence_calls": 256,
+          "semantic_state_replays": 0,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 1928,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "read_calls": 22754,
+          "region_steps": 26112,
+          "next_steps": 148684,
+          "max_full_batch": 384,
+          "full_calls": 1928,
+          "selected_events": 26112,
+          "source_rows": 158208,
+          "state_prefill_selected_clear": 145612,
+          "state_prefill_fallback_events": 145612,
+          "state_step_batch_calls": 101584
+        }
+      ],
+      "losses": [
+        20.452312469482422
+      ],
+      "outputs": [
+        1536
+      ],
+      "forecasts_seconds": {
+        "warmup": 2258.535669957101,
+        "measured": 3079.999172654748
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        131440820224
+      ],
+      "packet_sha256": "81fffe755a41c172f1570999049e8c4d33e66b317c537fde48006ae477ca764b",
+      "plan_sha256": "f7579f8738c52dce60da1b0f3378664458c88f2beb7dbf0998279617828e7a7d",
+      "result_sha256": "e897688675a4df88482dbff5c590a064aa2762b7f2fc760cbc0fe6e651a2dd7b",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "cpu",
+        "backend": "cpu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "logical_device_count": 1
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "queue_sha256": null
+    },
+    {
+      "cell": 81,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": true,
+        "preset": "cpu",
+        "configuration": "python-attention-True-cpu",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-81/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-81/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "python",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "16"
+      ],
+      "logical_batch": 32,
+      "physical_rows": 16,
+      "physical_ids": [],
+      "parameters": 17521117376,
+      "seconds": [
+        686.6706355139613
+      ],
+      "warmup_seconds": [
+        577.4129438623786
+      ],
+      "construction_seconds": 54.0539738163352,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 677.4220145307481,
+            "optimizer_seconds": 9.248620983213186
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 560.9567200243473,
+            "optimizer_seconds": 16.456223838031292
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 68,
+          "greedy_relaxed_edges": 15360,
+          "region_blocks": 68,
+          "candidate_events": 74184,
+          "visited_edges": 78336,
+          "max_live_fibers": 6144,
+          "max_greedy_frames": 192,
+          "state_blocks": 128,
+          "state_steps": 72648,
+          "full_blocks": 1914,
+          "state_sequence_calls": 128,
+          "semantic_state_replays": 74184,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 1928,
+          "batched_aggregate_events": 74184,
+          "max_state_batch": 16,
+          "max_state_sequence": 12,
+          "read_calls": 21135,
+          "semantic_read_replays": 74184,
+          "region_steps": 13056,
+          "next_steps": 74184,
+          "max_full_batch": 192,
+          "full_calls": 1914,
+          "batched_full_events": 13056,
+          "selected_events": 13056,
+          "source_rows": 79104,
+          "state_prefill_selected_clear": 72648,
+          "state_prefill_fallback_events": 72648,
+          "state_step_batch_calls": 60859
+        }
+      ],
+      "losses": [
+        33.810829162597656
+      ],
+      "outputs": [
+        768
+      ],
+      "forecasts_seconds": {
+        "warmup": 10340.528305861726,
+        "measured": 12475.20098149646
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        372727824384
+      ],
+      "packet_sha256": "d07e024f82742f49661260c9aedb6d83c905dccaab0705db3e80088953f818fe",
+      "plan_sha256": "ba92222042f14d645519773cceecb9af6060a167535dd2ced89c67e42e940b45",
+      "result_sha256": "3ce59d2961e13932aa01764b20558c3573bc9c5c10b97671b1dd6d03fd1490db",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "cpu",
+        "backend": "cpu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "logical_device_count": 1
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "queue_sha256": null
+    },
+    {
+      "cell": 74,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "resident",
+        "configuration": "python-add-False-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-74/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-74/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "4",
+        "--resident-context-bytes",
+        "8589934592",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "2048",
+        "--resident-arrivals",
+        "2048",
+        "--resident-outputs",
+        "512",
+        "--resident-trace",
+        "16384",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "65536",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "16",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "logical_batch": 8,
+      "physical_rows": 4,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 9468053696,
+      "seconds": [
+        5.349334143102169
+      ],
+      "warmup_seconds": [
+        5.471506267786026
+      ],
+      "construction_seconds": 49.83310165256262,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 5.349334143102169,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 5.471506267786026,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "stages": 112,
+          "events": 18554,
+          "full_chunks": 575,
+          "emission_chunks": 880,
+          "window_stages_max": 28,
+          "window_events_max": 4658,
+          "pending_peak": 1536,
+          "window_outputs_max": 48,
+          "head_chunks": 4
+        }
+      ],
+      "losses": [
+        29.258771896362305
+      ],
+      "outputs": [
+        192
+      ],
+      "forecasts_seconds": {
+        "warmup": 402.70286130905146,
+        "measured": 393.7109929323196
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        7550035968,
+        3889608704,
+        3889608704,
+        3889608704,
+        3872831488,
+        3889608704,
+        3873052672,
+        3872978944,
+        3872978944,
+        3889608704,
+        3889682432
+      ],
+      "packet_sha256": "035ac2fca26fe6312e276bbcafd9bc30961a5b36a47a0b0c42d714e9cc268725",
+      "plan_sha256": "a56b373296ffc0fdabf527aca599885956db58a39c72f6bc4efc342207db7953",
+      "result_sha256": "2a1caa5cc2a6084b0a6975f3334e89a7cce9f22c3043b61b52afae1e2896073e",
+      "backend_receipts": {
+        "build-manifest.json": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916",
+        "control-build.json": "405d2d6546cdf090625e0c0fa347c32e6927d2dd80291f53fa8d9def97e4c1b5"
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "bc2ec3270c152d31a3333074764c62d215a143e8957a5aa6a39ec44863a67aa6"
+    },
+    {
+      "cell": 77,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": true,
+        "preset": "resident",
+        "configuration": "python-add-True-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-77/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-77/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "2",
+        "--resident-context-bytes",
+        "4294967296",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "896",
+        "--resident-arrivals",
+        "896",
+        "--resident-outputs",
+        "64",
+        "--resident-trace",
+        "3072",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "8192",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "4",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "logical_batch": 4,
+      "physical_rows": 2,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 9468053696,
+      "seconds": [
+        20.011076509952545
+      ],
+      "warmup_seconds": [
+        22.834645364433527
+      ],
+      "construction_seconds": 53.176761511713266,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 18.509274549782276,
+            "optimizer_seconds": 1.501801960170269
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 21.281163800507784,
+            "optimizer_seconds": 1.553481563925743
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "stages": 112,
+          "events": 9279,
+          "full_chunks": 464,
+          "emission_chunks": 468,
+          "window_stages_max": 28,
+          "window_events_max": 2349,
+          "pending_peak": 768,
+          "window_outputs_max": 24,
+          "borrowed_attention_bytes": 0,
+          "borrowed_projection_bytes": 37783953408,
+          "canonical_stream_chunks": 2428,
+          "canonical_stream_reserved_bytes": 1478745890,
+          "retained_attention_bytes": 0,
+          "retained_bytes": 38152198544,
+          "retained_compact_journals": 2,
+          "retained_dense_bytes": 38244392624,
+          "retained_full_bytes": 8085024,
+          "retained_projection_bytes": 37783953408,
+          "retained_window_bytes": 226177096,
+          "retained_windows": 4,
+          "reused_attention_gradient_bytes": 0,
+          "reused_projection_gradient_bytes": 37599316160,
+          "streamed_parameter_windows": 4,
+          "head_chunks": 4
+        }
+      ],
+      "losses": [
+        33.549232482910156
+      ],
+      "outputs": [
+        96
+      ],
+      "forecasts_seconds": {
+        "warmup": 3134.3738152332603,
+        "measured": 2726.2922859821465
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        42590959104,
+        22732202496,
+        22732199424,
+        22732201472,
+        22698642944,
+        22732200448,
+        22700585472,
+        22699943424,
+        22638597632,
+        22670854656,
+        22671499776
+      ],
+      "packet_sha256": "d02180ede74b6f75fa4e0cce1effc46d22400ce49ca6221dcae4244e81a6aedc",
+      "plan_sha256": "86dd04e28ab906602aba16978635369f11d8a9c2fae6da81f74b7db15dbfccd2",
+      "result_sha256": "bf3581be3cfa7c1cc519fdabf51597ebe50ff0cfdf04fec7ca67e4b2f8e8988c",
+      "backend_receipts": {
+        "build-manifest.json": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916",
+        "control-build.json": "405d2d6546cdf090625e0c0fa347c32e6927d2dd80291f53fa8d9def97e4c1b5"
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "08e35d4c92c488bb97c8e79334858ab190e0df86d0c1021de4f83c46a9789d25"
+    },
+    {
+      "cell": 80,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": false,
+        "preset": "resident",
+        "configuration": "python-attention-False-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-80/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-80/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "4",
+        "--resident-context-bytes",
+        "8589934592",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "2048",
+        "--resident-arrivals",
+        "2048",
+        "--resident-outputs",
+        "512",
+        "--resident-trace",
+        "16384",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "65536",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "16",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "logical_batch": 8,
+      "physical_rows": 4,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 17521117376,
+      "seconds": [
+        6.530238848179579
+      ],
+      "warmup_seconds": [
+        6.685854639858007
+      ],
+      "construction_seconds": 180.25381007790565,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 6.530238848179579,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 6.685854639858007,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "stages": 112,
+          "events": 18603,
+          "full_chunks": 864,
+          "emission_chunks": 880,
+          "window_stages_max": 28,
+          "window_events_max": 4669,
+          "pending_peak": 1536,
+          "window_outputs_max": 48,
+          "head_chunks": 4
+        }
+      ],
+      "losses": [
+        21.100543975830078
+      ],
+      "outputs": [
+        192
+      ],
+      "forecasts_seconds": {
+        "warmup": 492.0789014935493,
+        "measured": 480.62557922601695
+      },
+      "within_original_3000s_guard": true,
+      "peak_growth_bytes": [
+        11912544768,
+        8233348096,
+        8232084992,
+        8245772288,
+        8217273856,
+        8232903168,
+        8383671296,
+        8391995904,
+        8385193472,
+        8249246208,
+        8332599808
+      ],
+      "packet_sha256": "f61b53cf932711c6fc67c4663279d0c63e909d09d9849a26c3ae8c89ccaf56dd",
+      "plan_sha256": "a2d08475b0e382dd6e3b48e0f96e4462c9a0690df2987c2626b98dc94f10647d",
+      "result_sha256": "6352b703968f574420b1111329b42e1c8c5511542a56cfac095c65f37f0a1d34",
+      "backend_receipts": {
+        "build-manifest.json": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916",
+        "control-build.json": "405d2d6546cdf090625e0c0fa347c32e6927d2dd80291f53fa8d9def97e4c1b5"
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "50f5a9a00f1f4ebc5398045bc92b025a5a7b824400eb287bb14992c40d768856"
+    },
+    {
+      "cell": 83,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": true,
+        "preset": "resident",
+        "configuration": "python-attention-True-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-83/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-83/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--training",
+        "--sample-chunk-rows",
+        "1",
+        "--resident-context-bytes",
+        "4294967296",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "896",
+        "--resident-arrivals",
+        "896",
+        "--resident-outputs",
+        "64",
+        "--resident-trace",
+        "3072",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "8192",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "2",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "4",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "1",
+        "--owner-map",
+        "10,10,10,10,10,2,10,10,9,9,1,0,0,0,0,9,9,7,7,7,9,9,9,9,10,3,3,3,3,8,3,1,10,10,10,10,10,10,10,10,9,9,9,10,0,0,0,9,9,7,7,7,7,7,9,9,6,3,3,3,3,3,3,3,10,10,10,10,10,8,8,10,9,9,9,9,9,10,0,0,9,7,7,7,7,7,7,9,7,3,3,3,3,3,3,1,8,10,10,10,10,8,8,8,7,9,9,9,9,9,9,2,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,3,8,8,10,10,10,8,8,8,2,5,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,5,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,4,5,4,4,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,3,8,6,4,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "logical_batch": 2,
+      "physical_rows": 1,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 17521117376,
+      "seconds": [
+        25.587430089712143
+      ],
+      "warmup_seconds": [
+        28.448047026991844
+      ],
+      "construction_seconds": 212.08180309459567,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 22.976247396320105,
+            "optimizer_seconds": 2.6111826933920383
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 25.852628342807293,
+            "optimizer_seconds": 2.5954186841845512
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "stages": 112,
+          "events": 4683,
+          "full_chunks": 494,
+          "emission_chunks": 1708,
+          "window_stages_max": 28,
+          "window_events_max": 1175,
+          "pending_peak": 384,
+          "window_outputs_max": 12,
+          "borrowed_attention_bytes": 32966553052,
+          "borrowed_projection_bytes": 37783953408,
+          "canonical_stream_chunks": 4388,
+          "canonical_stream_reserved_bytes": 1478524850,
+          "retained_attention_bytes": 32966553052,
+          "retained_bytes": 75569425848,
+          "retained_compact_journals": 2,
+          "retained_dense_bytes": 78191301640,
+          "retained_full_bytes": 8085024,
+          "retained_projection_bytes": 37783953408,
+          "retained_window_bytes": 3716355078,
+          "retained_windows": 4,
+          "reused_attention_gradient_bytes": 32227997132,
+          "reused_projection_gradient_bytes": 37599316160,
+          "reverse_fiber_budget_bytes": 183251937946,
+          "reverse_fiber_groups": 44,
+          "reverse_fiber_key_rows_max": 128,
+          "reverse_fiber_key_rows_min": 128,
+          "reverse_fiber_owner_rows_max": 2,
+          "reverse_fiber_owner_rows_min": 2,
+          "reverse_fiber_query_rows_max": 2,
+          "reverse_fiber_query_rows_min": 2,
+          "reverse_fiber_requested_max": 2,
+          "reverse_fiber_tensor_bytes": 9613366016,
+          "streamed_parameter_windows": 4,
+          "head_chunks": 4
+        }
+      ],
+      "losses": [
+        34.53604507446289
+      ],
+      "outputs": [
+        48
+      ],
+      "forecasts_seconds": {
+        "warmup": 7613.998515609279,
+        "measured": 6767.210093574039
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        45086620672,
+        43204121600,
+        43180348928,
+        43193611264,
+        43409801216,
+        43101587456,
+        43076839424,
+        43132700160,
+        43082506240,
+        43548552704,
+        43402226688
+      ],
+      "packet_sha256": "74337322f1d46cc071aa950ca2d975d5ada134f4a3b5f189e4002994c1de5863",
+      "plan_sha256": "26bdccd9ad1e871d21b1d100d4f4c59703ae11b75d17b699b42f5571ed3f8948",
+      "result_sha256": "2b5d180883a61d8cfd215bb24921054c728eef38518a615500e86e08307c127c",
+      "backend_receipts": {
+        "build-manifest.json": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916",
+        "control-build.json": "405d2d6546cdf090625e0c0fa347c32e6927d2dd80291f53fa8d9def97e4c1b5"
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "70b2aae79849b3fd9ea444e51b781fa8d1e36d37bd78c88f85cf08c0250e9fdd"
+    },
+    {
+      "cell": 73,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "mixed-b",
+        "configuration": "python-add-False-mixed",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-73/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-73/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "mixed-b",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--devices",
+        "11",
+        "--threads",
+        "2",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32"
+      ],
+      "logical_batch": 32,
+      "physical_rows": 32,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 9468053696,
+      "seconds": [
+        191.7038578875363
+      ],
+      "warmup_seconds": [
+        159.7132490463555
+      ],
+      "construction_seconds": 115.300825946033,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 191.7038578875363,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 159.7132490463555,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 34,
+          "greedy_relaxed_edges": 15360,
+          "region_blocks": 34,
+          "candidate_events": 74269,
+          "visited_edges": 78336,
+          "max_live_fibers": 12288,
+          "cross_device_copy_groups": 1291,
+          "cross_device_rows": 60072,
+          "cross_device_bytes": 492109824,
+          "max_cross_device_batch": 1024,
+          "max_greedy_frames": 384,
+          "state_blocks": 128,
+          "state_steps": 72733,
+          "full_blocks": 513,
+          "state_sequence_calls": 128,
+          "semantic_state_replays": 0,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 606,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "read_calls": 4334,
+          "region_steps": 13056,
+          "next_steps": 74269,
+          "max_full_batch": 384,
+          "full_calls": 513,
+          "selected_events": 13056,
+          "source_rows": 79104,
+          "state_prefill_selected_clear": 72733,
+          "state_prefill_fallback_events": 72733,
+          "state_step_batch_calls": 72733,
+          "state_scalar_batch_steps": 72733
+        }
+      ],
+      "losses": [
+        30.73147201538086
+      ],
+      "outputs": [
+        768
+      ],
+      "forecasts_seconds": {
+        "warmup": 2938.7237824529407,
+        "measured": 3527.3509851306676
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        3715083776,
+        3574729216,
+        3572956672,
+        3525736960,
+        3563218432,
+        3559462912,
+        3567945728,
+        3527158784,
+        3525874688,
+        3526907392,
+        3580816384
+      ],
+      "packet_sha256": "0687749f6b775cdaeac269e6620b99cce6b97d16f7d5eaf9dd58fc802b80affe",
+      "plan_sha256": "b63e66eef3d2934bb878c16c0d35338dc129bd67088a2ccb287939d5d6703350",
+      "result_sha256": "dcc3dd5bcc2f08d2063c776588944477b87e19a380ea464f648def59acfa0e3d",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "mixed-b",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "08c41204c6c6d9c3353072c784df3c2fb66130abfb375d1df5360a465cb7dbf4"
+    },
+    {
+      "cell": 79,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": false,
+        "preset": "mixed-a",
+        "configuration": "python-attention-False-mixed",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-79/packet.json",
+        "--output-dir",
+        "TASK/runs/remaining-python-calibration01/assessment/cell-79/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--phase-timing",
+        "--dtype",
+        "float32",
+        "--preset",
+        "mixed-a",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "python",
+        "--devices",
+        "11",
+        "--threads",
+        "2",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "16"
+      ],
+      "logical_batch": 16,
+      "physical_rows": 16,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "parameters": 17521117376,
+      "seconds": [
+        177.7829614393413
+      ],
+      "warmup_seconds": [
+        137.92740439623594
+      ],
+      "construction_seconds": 210.87466455250978,
+      "phase_timing": {
+        "enabled": true,
+        "measured": [
+          {
+            "sample_work_seconds": 177.7829614393413,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "warmup": [
+          {
+            "sample_work_seconds": 137.92740439623594,
+            "optimizer_seconds": 0.0
+          }
+        ],
+        "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+        "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+      },
+      "statistics": [
+        {
+          "greedy_stages": 34,
+          "greedy_relaxed_edges": 7680,
+          "region_blocks": 34,
+          "candidate_events": 37137,
+          "visited_edges": 39168,
+          "max_live_fibers": 6144,
+          "cross_device_copy_groups": 2008,
+          "cross_device_rows": 30654,
+          "cross_device_bytes": 251117568,
+          "max_cross_device_batch": 768,
+          "max_greedy_frames": 192,
+          "state_blocks": 64,
+          "state_steps": 36369,
+          "full_blocks": 961,
+          "state_sequence_calls": 64,
+          "semantic_state_replays": 0,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 964,
+          "max_state_batch": 16,
+          "max_state_sequence": 12,
+          "read_calls": 10508,
+          "region_steps": 6528,
+          "next_steps": 37137,
+          "max_full_batch": 192,
+          "full_calls": 961,
+          "selected_events": 6528,
+          "source_rows": 39552,
+          "state_prefill_selected_clear": 36369,
+          "state_prefill_fallback_events": 36369,
+          "state_step_batch_calls": 30541
+        }
+      ],
+      "losses": [
+        21.13198471069336
+      ],
+      "outputs": [
+        384
+      ],
+      "forecasts_seconds": {
+        "warmup": 5075.7284817814825,
+        "measured": 6542.41298096776
+      },
+      "within_original_3000s_guard": false,
+      "peak_growth_bytes": [
+        6768252928,
+        6770923520,
+        6565229568,
+        6696836608,
+        6648806912,
+        6569125376,
+        6597915648,
+        6715111424,
+        6695968768,
+        6745511424,
+        6686054400
+      ],
+      "packet_sha256": "c5901cfb3f5f39aef647fdaaa051c2fc5a4509964f0fb82febf4e2a8dbb251a1",
+      "plan_sha256": "bbfdbb6f839f888e7d17c292551df04fe2910962a27c8eab498b99ce3c850443",
+      "result_sha256": "e080f844eac5363179e8813b1e8595deb6488c81764d4cfabb8d1c0475a9dfbd",
+      "backend_receipts": {},
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "mixed-a",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        }
+      },
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "queue_sha256": "2378e9e8e1dd3c4d444caff5d3864889bf6faa56850cca4d26deb95a448f5683"
+    }
+  ],
+  "not_started": [],
+  "job": {
+    "name": "remaining-python-calibration01",
+    "state": "passed",
+    "exit_code": 0,
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "finished": "2026-10-03T22:42:51.857555+00:00",
+    "receipt_sha256": "d6b880d19308d19ce6711b3b3bfae4bae19cdd70d61a16a5f3b59012b4eaf425",
+    "assessment_sha256": "0a38e8fd167a37f220c8943caa429bdb619e6030c2433e4e8c250a4728037f6a"
+  },
+  "source_inventory_sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc",
+  "audit_helper_sha256": "87ec909d7b262eaba9f6d4e5e20c1798f12d2ecc2120708fbde88ae36cfc76e1",
+  "matrix_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+  "runtime_audit_sha256": "80caa9e1912db9d0b05736a88c7294586a13ff0ac5b10b1b3b35af754a45baf4",
+  "scope": "Remaining ten original-width Python model/mode/flow envelopes at unchanged admitted physical rows. Phase-instrumented continued warmup and measured step,two windows each. All own heavy work serial. CPU explicit BLAS16/ATen16/workers1. Each accelerator case freshly leases11NPUs;no lease during CPU cases. First failure stops,no automatic retry. Calibration only;not originalB512 timing or a formal recommendation.",
+  "limits": {
+    "whole_seconds": 20300,
+    "queue_seconds": 120
+  },
+  "limitations": [
+    "Original width and parameters,reduced batch;no actual B512 timing or formal speed comparison.",
+    "Pure Python host cells use frozen Python source;resident cells use Python-owned native libraries whose actual binary identities are checked separately. The standalone binary is a provenance prerequisite,not the executed Python implementation.",
+    "Single process per cell with phase instrumentation. Formal recommendations require three fresh processes.",
+    "Forecasts include1.15;retain original3000s refusals and separately declare any larger budget.",
+    "Completed work counts are reported;equal shapes do not certify strict CPU/NPU discrete-route equivalence."
+  ]
+}

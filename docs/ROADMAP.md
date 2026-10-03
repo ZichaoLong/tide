@@ -186,7 +186,15 @@ each. All continuation/memory/budget checks passed;actual event counts differ
 1188500/1188498/1188494 and strict equivalence is not certified.
 [Audited comparison](evidence/formal-b512-add-inference-npu-20261004.md).
 This closes three first processes;117primary cells and recommendation repeats
-remain open. Python envelope calibration is running separately.
+remain open. Python envelope calibration is now audited below.
+
+F6 original-width Python continuation calibration now passed10/10 on e69b3bd:
+four CPU model/mode cases,four Python-owned native resident cases and two mixed
+inference cases. Actual package/native-library/placement/owner identities,
+continuation and memory observations are audited. All processes/leases closed;
+long forecasts retain3000s refusals with separately declared budgets
+([audit](evidence/original-width-python-calibration-20261004.md)). These are
+reduced-batch pilots;actualB512 and recommendation repeats remain open.
 
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
