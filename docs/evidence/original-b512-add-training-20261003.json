@@ -1,0 +1,199 @@
+{
+  "schema": "tide-reviewed-evidence-v1",
+  "source": "26176de888013fda5eccfe039fa504e87c2e7e95",
+  "qualification": "consumer-phase-timing-20261003.json",
+  "jobs": [
+    {
+      "name": "wide-add-b512-phase-admitted01",
+      "state": "passed",
+      "exit_code": 0,
+      "files_sha256": {
+        "status.json": "0eef180f6bd012f972520fb20a1be2c9c4797bf1337df68aba809bfb4daea90d",
+        "task.log": "c005e29378e3eb6da4e1e7ab9d5e1a648b129638230dd7e7b466e8f8cb61a599",
+        "queue.json": "5db6e382b37cb32f59f7240409e41d10cef6100b50fd93a6ae45d5f6bc0850ad"
+      },
+      "unit_terminal": {
+        "MainPID": "0",
+        "Result": "success",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    }
+  ],
+  "passed": {
+    "parameters": 9468053696,
+    "batch_execution": {
+      "logical_batch": 512,
+      "requested_sample_chunk_rows": 2,
+      "effective_sample_chunk_rows": 2,
+      "physical_chunks": 256
+    },
+    "construction_seconds": 69.389676023,
+    "seconds": [
+      2170.549862239
+    ],
+    "losses": [
+      30.50836181640625
+    ],
+    "outputs": [
+      12288
+    ],
+    "final_cut": 408,
+    "statistics": [
+      {
+        "borrowed_projection_bytes": 37750382592,
+        "canonical_stream_chunks": 305152,
+        "canonical_stream_reserved_bytes": 1209982622,
+        "emission_chunks": 112640,
+        "events": 1183429,
+        "full_chunks": 50377,
+        "head_chunks": 512,
+        "pending_peak": 768,
+        "retained_attention_bytes": 0,
+        "retained_bytes": 38118449488,
+        "retained_compact_journals": 256,
+        "retained_dense_bytes": 38210643568,
+        "retained_full_bytes": 8052256,
+        "retained_projection_bytes": 37750382592,
+        "retained_window_bytes": 226104360,
+        "retained_windows": 512,
+        "reused_attention_gradient_bytes": 0,
+        "reused_projection_gradient_bytes": 37599316160,
+        "stages": 14336,
+        "streamed_parameter_windows": 512,
+        "window_events_max": 2353,
+        "window_outputs_max": 24,
+        "window_stages_max": 28
+      }
+    ],
+    "context_storage": {
+      "policy": "compact",
+      "requested_bytes_per_device": 4294967296,
+      "devices": [
+        {
+          "device_index": 0,
+          "budget_bytes": 2124805120,
+          "peak_saved_bytes": 233698304
+        },
+        {
+          "device_index": 1,
+          "budget_bytes": 236417024,
+          "peak_saved_bytes": 235368448
+        },
+        {
+          "device_index": 2,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 3,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 4,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 5,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 6,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 7,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        },
+        {
+          "device_index": 8,
+          "budget_bytes": 223808000,
+          "peak_saved_bytes": 222759424
+        }
+      ]
+    },
+    "timing": "input preparation/upload + online resident graph + packed output head/loss + graph/input/embedding VJP + finite staged optimizer + synchronization; no reference",
+    "boundary_policy": "dynamic output compaction at window boundary; scheduling remains device-owned; external input metadata prepared on host",
+    "phase_timing": {
+      "enabled": true,
+      "measured": [
+        {
+          "sample_work_seconds": 2168.898689171,
+          "optimizer_seconds": 1.6511730679999346
+        }
+      ],
+      "warmup": [],
+      "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+      "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+    },
+    "cards": 9,
+    "peak_growth_bytes": [
+      43432802304,
+      27204512768,
+      27156633600,
+      27125837312,
+      27125837312,
+      27125836288,
+      27125839360,
+      27125840384,
+      27125838336
+    ],
+    "estimated_peaks_bytes": [
+      56303650412,
+      39890428688,
+      39826233220,
+      39812108004,
+      39812108004,
+      39812107988,
+      39812107988,
+      39812107988,
+      39812107988
+    ],
+    "usable_bytes_per_device": 57847840768,
+    "effective_chunks": {
+      "full": 16,
+      "emission": 8,
+      "aggregate": 8,
+      "attention": 8,
+      "keys": 128,
+      "reverse": 2,
+      "head": 64
+    },
+    "admission_phase_step_seconds": 2814.0674665565,
+    "old_admission_step_seconds": 3041.4433348544,
+    "forecast_ratio": 0.771321188292278,
+    "b512_executed": true,
+    "b512_cost_gate_seconds": 3000
+  },
+  "scope": "One independently initialized original D2048/B512/T12/V50304 nine-card FP32 SGD complete update with two connected windows and physical B2 x256. Actual output/work/cut/loss, finite-update, allocator/context and cost checks passed. Full-size CPU gradient/update oracle is not claimed; independent reference qualification is at smaller dimensions.",
+  "timing_limitations": [
+    "Cold single update with synchronized phase timing, no warmup, no profile and no formal throughput recommendation.",
+    "Limited concurrent Attention development builds and two-device directed correctness work on disjoint cards; no device-memory calibration or profiling overlapped. This execution diagnoses feasibility and cost, not isolated comparative performance.",
+    "Input-dependent sample work and external load limit cost extrapolation. Earlier total-scaling and memory refusals remain unchanged."
+  ],
+  "artifacts": {
+    "runs/wide-add-b512-phase-admitted01/status.json": "0eef180f6bd012f972520fb20a1be2c9c4797bf1337df68aba809bfb4daea90d",
+    "runs/wide-add-b512-phase-admitted01/task.log": "c005e29378e3eb6da4e1e7ab9d5e1a648b129638230dd7e7b466e8f8cb61a599",
+    "runs/wide-add-b512-phase-admitted01/queue.json": "5db6e382b37cb32f59f7240409e41d10cef6100b50fd93a6ae45d5f6bc0850ad",
+    "runs/wide-add-b512-phase-admitted01/assessment/result.json": "01a5b63c491730b7d4cb689c83bc4304e6fa17a8dae94d88b8e712fcfa924711",
+    "runs/wide-add-b512-phase-admitted01/assessment/original-plan.json": "734c7490a3a24bf8cdd6a5ac9aaf129217c9f6648a212f8c07c13335628691d9",
+    "runs/wide-add-b512-phase-admitted01/assessment/launcher.py": "a5835dcb5360154f4a46b2143d34367671f57c61c7fa3e24a8cfc4421845dfa8",
+    "runs/wide-add-b512-phase-admitted01/assessment/original.log": "47ca1c5b06699cda918384f4b30f4bf60663f3f21fa1d699199cc5d0f2d34369",
+    "runs/wide-add-b512-phase-admitted01/assessment/devices-before.log": "61acd6d922742d707e21441b1ab86e3e206c96a222c9a7d265ad0930707f29f3",
+    "runs/wide-add-b512-phase-admitted01/assessment/devices-after.log": "566276c75c9c880ed1781c5f181ca9ae1106d00d5d6dd7683f49db2e5527989b",
+    "runs/wide-add-b512-phase-admitted01/assessment/original/result.json": "c7c282d5c8fe560b09ce463905c092663abf5a13c5067f1471ccb93296231d2a",
+    "runs/wide-add-b512-phase-admitted01/assessment/original/consumer.log": "ab9ed005c24dd5d92dbe8e3a148c4c58db6af00e5f6b50e711ef47d8b33c4f6a",
+    "builds/phase-timing-consumer-clean01/result.json": "19ac9555e1fbcb1e76aed8effb14ccb73cf4befdecc37f04557298ed391e4193",
+    "builds/phase-timing-consumer-clean01/loader.txt": "ce7b958a55cf27decddcf73e75087c3a07304c0ecd837669afd38117f7b47572",
+    "inputs/fullsize-add01/workload.json": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "runs/wide-add-phase-diagnostic01/assessment/result.json": "4a952e384fd0a7f546698888925bb594870f3dd07776daf6eaa65959971bfe37",
+    "launchers/wide_add_b512_evidence.py": "1634fdd3ee556f258cf30dd4128a65cacf1b06257593518cfa55c9329be920a0"
+  }
+}

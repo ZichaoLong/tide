@@ -7,8 +7,8 @@ incomplete. No subagents; protected historical CPU task remains stopped.
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
-`python scripts/status.py`. Latest implementation **26176de** is pushed and
-qualified; this evidence commit records its reviewed clean results.
+`python scripts/status.py`. Latest implementation **b5e6345** is pushed; clean affected qualification is
+running. Prior implementation26176de remains qualified.
 [execution-flows](execution-flows.md) owns the contract;
 [ROADMAP F1–F7](ROADMAP.md) is the sole backlog. Reference repositories and
 ObsidianVault are read-only.
@@ -48,11 +48,15 @@ physical8,12 released. Original attention-borrow-native-dev01 remains FAILED
 (exit1): its new ownership check detected tape/forward-bank field-order mismatch;
 explicit mapping fixed in dev02, frozen failure retained.
 
-Commit this implementation, then freeze its exact commit as attention-borrow-clean01:
-`python TASK/launchers/freeze_run.py --name build-attention-borrow-standalone-clean01 --snapshot attention-borrow-clean01 --commit REV -- timeout 900 {python} {base}/launchers/build_attention_borrow.py attention-borrow-standalone-clean01 --reuse-host attention-borrow-standalone-dev02`.
-Repeat Python build with --runtime python and matching Python --reuse-host;
-consumer build uses build_capacity_client.py and verified phase-timing consumer
-object reuse. Then repeat only the affected native/Python/consumer gates.
+Implementation b5e634588405c47320ff03692bbf6cdb5af1d356 is committed/pushed.
+Clean snapshot attention-borrow-clean01 is frozen at it. Standalone/Python clean
+builds passed via byte-verified source/header/options-compatible object reuse
+and fresh linking; core/CANN untouched. Exact standalone command:
+`python TASK/launchers/freeze_run.py --name build-attention-borrow-standalone-clean01 --snapshot attention-borrow-clean01 --commit b5e634588405c47320ff03692bbf6cdb5af1d356 -- timeout 900 {python} {base}/launchers/build_attention_borrow.py attention-borrow-standalone-clean01 --reuse-host attention-borrow-standalone-dev02`.
+RUNNING attention-borrow-native-clean01 (same six affected cells, two devices,
+queue120s/timeout900s); build-attention-borrow-consumer-clean01 uses
+build_capacity_client.py and verified dev02 consumer object reuse. Next Python16
+and actual consumer32 on that exact source. No unrelated CPU matrix rerun.
 Jobs/units follow tide-execution-flows-NAME.service and TASK/runs/NAME.
 Separate same-lease D512 memory calibration via attention_borrow_memory.py and
 FP16 profile via profile_retained_journals.py wait until the B512 cost run ends.
@@ -120,24 +124,27 @@ queue completed/lease released. Sample19.105143379s + optimizer1.556835798s =
 20.661979177s; unchanged old projection3041.4433348544s refuses, measured phase
 projection2814.0674665565s passes3000s with1.15 margin and all memory/context gates.
 [Evidence](evidence/original-width-add-phase-diagnostic-20261003.md).
-RUNNING `wide-add-b512-phase-admitted01`, launched after evidence commit636d004
-(pushed). Frozen source26176de; physical1,2,3,4,5,6,7,9,11 remapped tological0–8.
-Service verified active in background.slice; no completed B512 result yet.
-`TASK/launchers/wide-add-b512-phase-admitted01.sh` runs frozen26176de source and
-`TASK/builds/phase-timing-consumer-clean01`. Exact launcher command:
-`python TASK/launchers/wide_add_b512_phase_admitted.py --source TASK/sources/phase-timing-clean01 --build TASK/builds/phase-timing-consumer-clean01 --output TASK/runs/wide-add-b512-phase-admitted01/assessment`.
-Service `tide-execution-flows-wide-add-b512-phase-admitted01.service`, queue120s,
-child3180s, outer3300s; original B512, physicalB2×256, 9cards, two connected
-windows, one complete independently initialized FP32 SGD update. Retain phase
-timing for forecast validation, all current capacities/3000s actual-step gate;
-no warmup/profile/formal throughput claim. Status/log under matching TASK/runs.
-Next: inspect terminal complete work/loss/cut/memory and actual costs; audit
-with fixed source/build/input identities before declaring any B512 pass. Continue Attention memory and eager mixed multi-card work;
-this diagnostic and the next scale run are not overall acceptance.
+PASSED and AUDITED `wide-add-b512-phase-admitted01` on clean26176de, terminal
+exit0 at2026-10-03T00:59:36Z; unit inactive/empty control group, nine-card lease
+released. Original AddD2048/B512/T12/V50304,9.468B parameters, physicalB2×256,
+two connected windows, one complete independently initialized FP32 SGD update.
+Construction69.389676023s; sample2168.898689171s + optimizer1.651173068s =
+2170.549862239s <=3000. Outputs12288,events1183429,loss30.50836181640625,cut408;
+max allocator growth43432802304bytes; all memory/context checks passed.
+[Evidence](evidence/original-b512-add-training-20261003.md).
+Raw source/consumer remain phase-timing-clean01 / phase-timing-consumer-clean01;
+run records TASK/runs/wide-add-b512-phase-admitted01/assessment. Audit command:
+`python TASK/launchers/wide_add_b512_evidence.py 26176de888013fda5eccfe039fa504e87c2e7e95`.
+This is a cold phase-instrumented feasibility result, not formal throughput:
+limited concurrent builds and two-device correctness work on disjoint cards;
+no allocator comparison/profile overlapped. Existing historical refusals remain.
+Attention memory calibration/profile can now run after the remaining clean
+correctness gates. This Add case does not complete the overall matrix.
 
 All ten required representative submatrices are complete. OriginalB512 TimedDAG/
 LibTorch/resident/prefill FP32 inference passed:Attention17.521B325.278s,
-Add9.468B278.574s. OriginalB512 complete training and formal comparisons remain open.
+Add9.468B278.574s. OriginalB512 Add complete training now has the passed case above; Attention
+training and formal comparisons remain open.
 Attention static diagnostic B1/12cards/minimum operator rows still gives coordinator
 62.623GiB>53.875GiB usable. Projection borrowing alone is insufficient; no full-size
 Attention training run is queued. Eager mixed multi-card is a separate core gap:
@@ -145,7 +152,7 @@ current runtime/validation require one payload device; CLI-only changes cannot
 implement parameter/state/message placement, transfers, aliases and continuation.
 
 Acceptance follows concrete F1–F7 gates, not a percentage. Remaining: original
-B512 Add/Attention complete training, eager mixed multi-card, finite full-size
+B512 Attention complete training, eager mixed multi-card, finite full-size
 CPU/mixed/resident comparisons and separate profiling, then F7 audit. CUDA/new
 stack tuples require explicit target-machine gates.
 
