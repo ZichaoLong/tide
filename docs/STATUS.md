@@ -7,7 +7,8 @@ No subagents. Reference repositories and ObsidianVault are read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Latest implementation **c38b72e** is pushed and qualified below.
+`graph-execution-foundation`. Latest implementation **29effaed064d59b9da930ec3acec810be58b2e1a** is pushed and qualified;
+fixed-source CPU45/NPU22 and standalone build passed below. Prior **c38b72e** is qualified.
 The prior **219719d** accounting implementation is qualified below. Prior evidence
 ce3206d qualifies b5e6345 private Attention banks; f27a4dc records actual Add B512 training.
 Re-entry: `git status --short --branch`; `python scripts/status.py`.
@@ -153,16 +154,8 @@ commit before relying on pilot-to-B512 cost extrapolation.
 
 ## Next implementation and validation
 
-1. Commit/push the tested explicit joint owner-map CLI increment. Freeze that
-   exact commit as owner-map-clean01. Build consumer-clean01 with
-   launchers/build_capacity_client.py,qualified memory-balance-standalone-clean02
-   and byte-compatible owner-map-consumer-dev02 objects. Then CPU45:
-   tests/test_consumer_capacity.py + tests/test_consumer_owner_map.py with the
-   clean binary; NPU22: tests/test_consumer_owner_map_npu.py +
-   tests/test_consumer_capacity_npu.py -k "owner or unused_device". Lease120s,
-   timeout600s. Run TASK/launchers/owner_map_evidence.py EXACT_COMMIT; inspect
-   source/build/terminal records,write MD,update contract/backlog and commit
-   evidence separately. No backend/kernel changes or repeated profile needed.
+1. Commit/push the reviewed owner-map evidence after its successful audit.
+   No implementation edits remain. Continue to the Attention pilot below.
 2. Run a bounded original-width Attention pilot at a currently available card
    count with the same explicit map/chunks as its B512 plan. Keep current caps,
    3000s and1.15; measure sample/optimizer phases,allocator and continuation.
@@ -175,17 +168,28 @@ commit before relying on pilot-to-B512 cost extrapolation.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-Explicit joint-map consumer/offline CLI remains uncommitted; it fixes Full/state
-owners across changed logical-batch geometry without bypassing envelope/cuts.
-Dev01 CPU:43 passed,one failed,one deselected. The failed metadata test used an
-unregistered npu device without vendor autoload; corrected index-only metadata
-test passed in dev02. Keep the original failure. Consumer dev01/dev02 builds
-passed. owner-map-npu-dev03 passed/exit0 at2026-10-03T02:39:19.995764Z:
-23 passed,9 deselected,no skips (12 complete explicit-map CLI candidates,
-2 invalid-map refusals,8 automatic-owner regressions,one CPU parser check).
-Two-device lease physical1,3 released;unit inactive/empty cgroup. Frozen
-owner-map-dev03 used consumer-dev02 with identical consumer bytes; only
-tests/status differed. No current mainline live job or Attention job queued.
+**29effaed064d59b9da930ec3acec810be58b2e1a** fixed joint-map CLI is qualified:
+[CPU45/NPU22 and build evidence](evidence/consumer-owner-map-20261003.md).
+All three clean jobs passed/exit0,no skips,empty cgroups,released leases;
+NPU finished02:49:25Z. Twenty complete independent CPU-referenced candidates,
+twelve explicit/eight automatic,plus two invalid-map refusals. Source
+owner-map-clean01;build owner-map-consumer-clean01;unchanged qualified
+memory-balance-standalone-clean02 backend. Audit passed:
+`python TASK/launchers/owner_map_evidence.py 29effaed064d59b9da930ec3acec810be58b2e1a`.
+Retain owner-map-cpu-dev01 failure:metadata test used unregistered npu device;
+corrected resolved-index fixture and actual device CLI gates passed.
+
+Next task `wide-attention-owner-pilot01` uses clean29effae/owner-map-clean01 and
+owner-map-consumer-clean01,11devices/physicalB1,B4,two windows,one FP32 SGD
+update. Helper TASK/launchers/wide_attention_owner_pilot.py --source SOURCE
+--build BUILD --out TASK/runs/wide-attention-owner-pilot01/assessment
+--devices 11 --sample-rows 1. B512-fixed map/operator maxima also fit B4;
+static estimated peaks49.896/53.649GiB within53.875GiB usable. This is not a
+runtime result. Wait120s,child900s,8threads,online-measurement.lock; preserve
+3000s/1.15/current caps. If measured phase forecast passes,run a separate
+bounded B512 via wide_attention_b512_admitted.py; otherwise inspect the actual
+cost and optimize. Eleven cards currently available after qualification; the
+lease helper rechecks inventory. No current mainline job live yet.
 The historical task remains deliberately stopped and protected.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent

@@ -139,7 +139,8 @@ cuts and optional sample halving still apply,with the map unchanged on every
 attempt. `owner_selection` records automatic versus explicit selection; actual
 maps remain in `full_owners`/`state_owners`. This lets pilot and logical-batch
 runs use the same placement despite different saved-continuation demand.
-The new CLI extension is implemented pending qualification.
+The CLI extension is qualified on clean29effae:
+[CPU45/NPU22 evidence](evidence/consumer-owner-map-20261003.md).
 
 An offline plan needs neither Torch nor model allocations:
 

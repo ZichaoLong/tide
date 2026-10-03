@@ -219,6 +219,15 @@ and margins remain. Old empty-tuple/underprovisioned-journal failures and one
 build-helper failure are retained. Original Attention training and F6 remain
 pending ([evidence](evidence/consumer-memory-balance-20261003.md)).
 
+F5 fixed joint owner-map CLI replay is qualified on clean29effae: three terminal
+jobs,CPU45/NPU22,no skips;twenty actual independent CPU-referenced candidates
+(twelve explicit maps,eight automatic regressions) plus two invalid-map refusals.
+Offline/Python/standalone parity,one/two devices,three families,both schedules,
+FP32/FP16,complete updates/continuation. Existing envelopes,cuts,margins and
+backend bytes unchanged. This enables comparable batch-geometry pilots; it is
+not original Attention training or throughput evidence
+([evidence](evidence/consumer-owner-map-20261003.md)).
+
 F5 consumer private-bank liveness accounting is qualified on clean219719d:
 four terminal jobs,CPU26,NPU25(no skips),24 actual CPU-referenced candidates and
 pre-allocation refusal; unchanged b5e6345 backend. Aggressive multi-device declared
