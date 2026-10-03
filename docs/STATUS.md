@@ -203,8 +203,10 @@ Records TASK/runs/profile-fullsize-mixed01/assessment/{result.json,add,attention
 These instrumented,overlapping-CPU results are not formal throughput.
 profile-slice-inspect01 passed/exit0,unit inactive/empty cgroup:immutable copy of the already closed five-second
 Add trace window,then one bounded180s export,whole360s. Read-only hashes
-prove the copy;never writes live profile files. Intermediate analysis only,not
-fullB512 completion. Helper inspect_profile_slice.py and assessment/result.json.
+prove the copy;never writes live profile files. [Audited slice and retained timeout](evidence/fullsize-mixed-profile-slice-20261004.md):
+137841tasks/all11cards,5.029450s,no AiCPU observed in this slice.
+Not fullB512 completion or whole-run attribution. Helpers inspect_profile_slice.py,
+audit_fullsize_profile_slice.py;assessment/result.json retains the copied inventory.
 
 formal-mixed-prefill-01,formal-mixed-prefill-02 and
 remaining-continuous-calibration01 were deliberately cancelled while waiting,
@@ -285,8 +287,10 @@ All use two physical chunks except Python Add:one logicalB32 chunk at unchanged
 physicalB32 after the retainedB64 timeout. Child900s except Python Add1800s;
 whole28200s. Reuses fullsize_calibration_cell_blas.py and immutable plan02.
 Records TASK/runs/remaining-accelerator-calibration02/assessment/cell-N.
-Cell2/resident Add inference passed (B8/physical4,warmup5.265367s,
-measured5.147500s);cell5/resident Add training is running.
+Cells2,5,8 passed:resident Add inference5.147500s,Add training19.825407s,
+Attention inference6.310399s. Cell11/resident Attention training is running.
+Cell5 warmup B512 forecast3117.543127s exceeds3000s;measured forecast2701.048755s.
+This refusal remains;declare a separate measured budget before a full-size run.
 This is calibration,not full-size performance;do not start competing heavy jobs.
 
 Unsubmitted fullsize_formal_cell_blas.py adds explicit CPU BLAS16 environment
@@ -299,6 +303,22 @@ After necessary calibration,prioritize shorter formal cells;defer the longest
 CPU Attention timing so it does not block every other matrix result. No formal
 recommendation without three fresh processes. These helpers/budgets are not
 runtime qualification;review first actual formal result before expansion.
+
+## First formal process after calibration
+
+Submit formal-first-cpu-blas01 on frozen e69b3bd/compare-discrete-clean01.
+Helper dispatch_first_formal_blas.py waits≤10000s for current calibration/profile
+units terminal/empty;no device lease while waiting. Then runs exactly cell0
+(LibTorch/TimedDAG/prefill/CPU/Add inference),repeat1,originalB512/two windows,
+continued warmup1+measured1,BLAS16/ATen16/workers1,no phase instrumentation.
+Measured forecast248.392358/262.236922s supports an explicit600s/update budget,
+1500s child+50s wrapper;whole11800s. Lock excludes all other formal workloads.
+Budget formal-cell-0-budget02.json hashes the audited CPU pilot;original3000s
+threshold unchanged. Stop after this one cell for result inspection before any
+matrix expansion;this is not a user pause. Report fields/helper assertions were
+reviewed against the completed CPU pilot. Helpers/budget/plan immutable when live.
+Records TASK/runs/formal-first-cpu-blas01/assessment/{result.json,cell-0-repeat-1}.
+CPU Attention inference cell6 budget02 is prepared but unsubmitted (3000s/update).
 
 ## Environment and protected history
 

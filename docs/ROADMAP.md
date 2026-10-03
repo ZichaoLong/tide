@@ -164,7 +164,8 @@ on e69b3bd with unchanged ATen16/workers1 and source-matching consumer.
 Attention training3000s forecast refusal and separately declared longer budget.
 These are reduced-batch phase diagnostics;actualB512 formal timings/repeats
 remain open. The full-size mixed Add profiling process timed out4500s without
-a complete update;the closed five-second trace survives for separate analysis.
+a complete update;the [audited five-second trace](evidence/fullsize-mixed-profile-slice-20261004.md)
+covers all11cards but is not complete-training profiling.
 
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
