@@ -218,6 +218,13 @@ It defaults off and adds one synchronized training boundary when enabled. The
 next original-width cost diagnostic must preserve original refusals and cost cap
 ([evidence](evidence/original-width-add-projection-borrow-20261003.md)).
 
+F6 synchronized original-width Add cost diagnostic on clean26176de passed:
+B4/physicalB2,9cards,two connected windows,one complete SGD update20.661979177s;
+sample19.105143379s + optimizer1.556835798s. Old total projection3041.443335s
+remains refused; phase projection2814.067467s admits a separate bounded B512
+execution under unchanged3000s/1.15/memory checks. B512 not executed in this
+pilot; [evidence](evidence/original-width-add-phase-diagnostic-20261003.md).
+
 F4/F5/F6 immutable Full snapshots are qualified on cleanf360489: native144
 trajectories/2432windows/560updates,Python16/consumer32, same-lease D512 allocator
 -273408bytes/card and a separate FP16 trace with53182ops/zero observed AiCPU

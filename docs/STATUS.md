@@ -1,8 +1,9 @@
 # Current handoff
 
-Updated 2026-10-03. **PAUSED after this implementation/qualification/evidence
-increment, per the user's requested commit checkpoint. Await confirmation before
-new work. Overall goal incomplete. No subagents.**
+Updated 2026-10-03. **ACTIVE under renewed continuous authorization (2026-10-03).** The user
+explicitly revoked earlier per-increment pauses: continue through F1–F7 acceptance,
+including tested commits/pushes, without asking to resume again. Overall goal
+incomplete. No subagents; protected historical CPU task remains stopped.
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`; branch
 `graph-execution-foundation`. Re-entry: `git status --short --branch`;
@@ -73,7 +74,7 @@ Loss7.532631874084473/statistics/continuation unchanged. Separate FP16 profile53
 ops, zero observed AiCPU; not a universal performance claim.
 [Evidence](evidence/resident-projection-borrow-20261003.md), evidence commitf30e83f.
 
-## Remaining scale and next bounded action after confirmation
+## Remaining scale and active next action
 
 Latest original-width Add pilot on clean4467493 is passed:9cards,B4/physicalB2,
 9,468,053,696 parameters,two connected windows,FP32 SGD,one cold complete update.
@@ -84,16 +85,23 @@ Old projection20.769816367×128×1.15=3057.316969s>3000s; **B512 not started**.
 Earlier21.179427721s/3117.611761s and B1 27.300s/4018.543s refusals remain scoped;
 ten-card queue failure remains retained. No pilot has become a B512 success.
 
-After confirmation, use the qualified phase timer for ONE original-width cost
-diagnostic. Reuse original B4/physicalB2 capacities and parameter/input rules;
-9cards,queue120s,pilot timeout900s,formal measurement lock. Prepare a new task-local
-launcher from wide_add_projection_borrow.py, using phase-timing-clean01 and its
-consumer. Record synchronized sample/optimizer costs and the old total-based
-projection. Any revised `(sample*128+optimizer)*1.15` estimate must retain3000s cap,
-all capacity/memory checks and explicit scaling assumptions. Do not silently
-modify old runs or declare B512 passed. Only after measured admission may a
-separately initialized bounded B512 run be considered. No cost diagnostic or
-scale task is currently active/queued.
+Completed `wide-add-phase-diagnostic01` on clean26176de: terminal exit0,
+queue completed/lease released. Sample19.105143379s + optimizer1.556835798s =
+20.661979177s; unchanged old projection3041.4433348544s refuses, measured phase
+projection2814.0674665565s passes3000s with1.15 margin and all memory/context gates.
+[Evidence](evidence/original-width-add-phase-diagnostic-20261003.md).
+B512 has not yet executed. Prepared next task `wide-add-b512-phase-admitted01`:
+`TASK/launchers/wide-add-b512-phase-admitted01.sh` runs frozen26176de source and
+`TASK/builds/phase-timing-consumer-clean01`. Exact launcher command:
+`python TASK/launchers/wide_add_b512_phase_admitted.py --source TASK/sources/phase-timing-clean01 --build TASK/builds/phase-timing-consumer-clean01 --output TASK/runs/wide-add-b512-phase-admitted01/assessment`.
+Service `tide-execution-flows-wide-add-b512-phase-admitted01.service`, queue120s,
+child3180s, outer3300s; original B512, physicalB2×256, 9cards, two connected
+windows, one complete independently initialized FP32 SGD update. Retain phase
+timing for forecast validation, all current capacities/3000s actual-step gate;
+no warmup/profile/formal throughput claim. Status/log under matching TASK/runs.
+Next: launch after this evidence checkpoint, inspect complete work/loss/cut/memory
+and actual costs. Continue Attention memory and eager mixed multi-card work;
+this diagnostic and the next scale run are not overall acceptance.
 
 All ten required representative submatrices are complete. OriginalB512 TimedDAG/
 LibTorch/resident/prefill FP32 inference passed:Attention17.521B325.278s,
@@ -104,12 +112,10 @@ Attention training run is queued. Eager mixed multi-card is a separate core gap:
 current runtime/validation require one payload device; CLI-only changes cannot
 implement parameter/state/message placement, transfers, aliases and continuation.
 
-Planning estimate remains **80% (75–85%)** of local F1–F7 delivery:
-functionality85–95%,correctness85–95%,performance/profiling45–55%,
-packaging/provenance/migration75–85%. Scope estimates, not pass rates or elapsed-time
-predictions. Main remaining: originalB512 complete training (especially Attention),
-eager mixed multi-card, finite full-size CPU/mixed/resident comparisons with three-
-process recommendations, F7 audit. CUDA/new stack tuples need target-machine gates.
+Acceptance follows concrete F1–F7 gates, not a percentage. Remaining: original
+B512 Add/Attention complete training, eager mixed multi-card, finite full-size
+CPU/mixed/resident comparisons and separate profiling, then F7 audit. CUDA/new
+stack tuples require explicit target-machine gates.
 
 ## Environment and protected state
 
@@ -120,11 +126,11 @@ User-authorized /opt stack supersedes old private guide.
 `TASK_QUEUE_ENABLE=0 TORCH_DEVICE_BACKEND_AUTOLOAD=0`; preserve module PYTHONPATH,
 prepend frozen source/python. Lease/remap devices; runtime `env -C {out}`.
 Long jobs:frozen source,background.slice,Nice10,two build workers,queue120s.
-Last free disk:data173GiB/root13GiB; recheck before large writes.
+Last free disk:data172GiB/root13GiB; recheck before large writes.
 Core `placement-{cpu,npu,npu-python}-clean01`; qualified resident backend/bindings
 `projection-borrow-{standalone,python}-clean01`. Preserve cited prior consumers.
 
-No active or queued task job. Units `tide-execution-flows-NAME.service`, logs/status
+Current prepared/live task is recorded above. Units `tide-execution-flows-NAME.service`, logs/status
 `TASK/runs/NAME`; inspect `systemctl --user show UNIT -p ActiveState -p Result -p ExecMainStatus`.
 **Preserve deliberately SIGSTOPped historical-cpu-attention-01**: never resume,
 stop or clean it. Its old record says running and it holds old timing.lock.
