@@ -80,7 +80,7 @@ Frozen source under TASK/sources, installed clients/core builds under TASK/build
 
 | Job NAME | Source / outcome sought | Declared bound and records |
 | --- | --- | --- |
-| wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; audit pending |
+| wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; [audit passed](evidence/original-b512-eager-cpu-add-20261003.md) |
 | wide-eager-mixed-b512-01 | Running Attention; Add child passed1287.28431384s,construction43.420013183s | 3000s/update,3240s/child,6530s outer; do not mark entire job passed |
 | wide-eager-cpu-policy01 | **failed/exit1** at first policy; second never entered | Completed finite update599.905596491s,then CPU peak estimate refused |
 | integration-cpu-clean01 | **failed/exit1**;9337 passed,120 failed,654 skipped,1783.33s | verification/result.json/tests.log; preserved incomplete build and old-assertion failures |
@@ -100,34 +100,31 @@ Each run archives helper bytes and result hashes. Original c686096 clients:
 with `systemctl --user show|stop tide-execution-flows-NAME`; never touch historical
 protected work below. Follow declared timeouts,retain first failure,no blind retry.
 
-**Integration finding:** the reused narrow packed-transfer CPU build lacks
-`tidegraph-smoke`, `tidegraph-kernel-check`, `tidegraph-full-check` and
-`tidegraph-aggregate-check`, causing eight CLI failures. One old test still
-requires eager automatic sample chunking to fail,contradicting the qualified
-admission feature. Removed that obsolete assertion only; nonboolean rejection
-still tested. Affected check passed1,10 deselected on the current CPU core.
-Production code unchanged. The original full gate finished failed:9337 passed,120 failed,654 skipped.
-Additional failure is stale test_cpu_safe_sharded_options: model_storage now
-correctly also records requested_node_devices/node_devices. Updated its exact
-expected metadata; targeted check passed1 in0.19s. Remaining failed CLI groups
-require the omitted executables,now provided by the complete build. Recheck
-the failed selection before the next full gate; do not erase the failed run. The new complete build addresses the missing
-executables without changing any prior build.
+**Integration repair:** retained integration-cpu-clean01 failed with9337 passed,
+120 failed,654 skipped. The narrow build omitted CLI/check binaries; two assertions
+were obsolete (eager automatic chunks and resolved owner metadata). Test-only
+corrections530ae85/78e9df6 preserve valid rejection checks. Fresh complete CPU core
+build-integration-cpu-clean02 passed all130 build actions; core C++ hash
+ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c.
+It does not alter the older qualified narrow build. Failed selection recheck
+integration-cpu-recheck-clean02 **passed120 in272.99s,exit0**, clean78e9df6,
+integration-tests-clean01. Unit inactive,empty cgroup. Original failure retained.
 
-Test-only correction committed/pushed as530ae8553a184c3f20135f2e7899e371cf01bfab.
-The later CPU allowance fix below now also needs qualification before the next
-complete integration gate; do not launch the pending retry on the older test-only source. Once the complete build passes,use the public gate:
+**Next submission:** full integration-cpu-clean02, same clean78e9df6 snapshot,
+complete CPU core plus qualified c6ef224 consumer. Core/consumer bytes match
+these sources; differing test/document commits are explicit. Declared2400s outer:
+prior incomplete gate1783s plus restored real clients273s justifies this bound.
+No result available yet. One ATen/BLAS thread; inspect
+TASK/runs/integration-cpu-clean02/verification/{result.json,tests.log} and
+systemctl --user show tide-execution-flows-integration-cpu-clean02.
 
 ```bash
-python TASK/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit NEXT_QUALIFIED_IMPLEMENTATION_COMMIT -- timeout --signal=TERM --kill-after=10s 1800s env TIDE_ONLINE_BINARY='{base}/builds/eager-half-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
+python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit 78e9df6 -- timeout --signal=TERM --kill-after=10s 2400s env TIDE_ONLINE_BINARY='{base}/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
 ```
 
-All production C++/consumer bytes match7b1fae5; test-only source differences must
-be explicitly recorded. Check full original failure details before this retry.
 After source/build/test receipts are audited,commit evidence separately.
-In parallel,finish scale jobs and use measured CPU policy results for the next
-bounded CPU Attention step. Formal comparisons wait until diagnostics/build/gates
-finish; no extra performance sweep has been authorized beyond the contract.
+Scale diagnostics may overlap this correctness gate; formal heavy timing waits
+until these finish. No unrelated passed gate needs repetition.
 
 ## Current correction: CPU training allocation allowance
 
@@ -156,13 +153,50 @@ Implementation committed/pushed asc6ef22474f658ecb12dd11310c710781023932ab; buil
 clean eager-rss-training-clean01 plus the failed B8/physicalB4 calibration.
 Passed `build-eager-rss-training-cpu-clean01`,900s/two workers,using the existing
 build_eager_consumer_core.py with backend cpu and packed-transfer-cpu-clean01.
-Next affected gate eager-rss-training-cpu-clean01,108 checks,900s; clean c6ef224
-source/client. Full gate follows the extra metadata assertion correction.
+Clean eager-rss-training-cpu-clean01 passed/exit0:108 checks in75.79s,no skips;
+clean c6ef224 source/client. The build and gate are terminal. Full gate follows the extra metadata assertion correction.
 Do not use the development binary for clean qualification.
 The correction estimates254061046480bytes versus retained248721317888bytes;
 this arithmetic alone is not a fresh calibration pass. Commit implementation after affected tests; qualify clean
 source and rerun the failed original-width B8 calibration with the same budgets.
 Do not mechanically retry the unchanged old source or alter an active helper.
+
+## Original-width CPU recheck active
+
+Running `wide-eager-cpu-policy-recheck01`, clean c6ef224/eager-rss-training-clean01,
+using the qualified eager-rss-training-cpu-clean01 client. New helper
+wide_eager_cpu_policy_recheck.py retains/checks original failed record and exact
+248721317888byte observation, then executes the same first B8/physicalB4
+Attention policy under corrected stricter admission; only after it passes does
+ATen1/workers16 run. Each child900s,outer1850s,512GiB cap,all earlier margins/
+shape/update boundaries unchanged. First failure stops; original failure stays.
+May overlap mixed/full CPU qualification; not formal throughput. No result yet.
+
+```bash
+python TASK/launchers/freeze_run.py --name wide-eager-cpu-policy-recheck01 --snapshot eager-rss-training-clean01 --commit c6ef224 -- timeout --signal=TERM --kill-after=10s 1850s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_policy_recheck.py' --source '{source}' --out '{out}/assessment'
+```
+Unit tide-execution-flows-wide-eager-cpu-policy-recheck01; raw assessment under
+TASK/runs/wide-eager-cpu-policy-recheck01. Finish this calibration before marking
+the CPU training allowance qualified or selecting a CPU Attention B512 policy.
+
+## Bounded route discrepancy diagnosis
+
+Passed/exit0 build-route-witness01 compiled TASK/probes/route-witness01 against the exact
+26176de source and phase-timing-consumer-clean01 installed public package that
+produced the earlier resident Add result. No production/source mutation. Two
+build workers,900s. The task-local forensic client runs both public sessions
+independently on shared declared initialization/input,matched physicalB2 and two
+connected windows; CPU observations never feed the NPU. It stops at the first
+discrete mismatch and records that region's scores/counts/proposals. No update
+or formal timing claim. All512 input samples are the maximum,not a promise of
+completion. Diagnose cause before implementing any fix or changing tolerances.
+Build result TASK/builds/route-witness01/result.json; unit
+`tide-execution-flows-build-route-witness01`. Runtime submission is separate,
+planned3cards after static admission,120s queue,1800s bound and a real smoke.
+No runtime result yet. Ready helper TASK/launchers/run_route_witness.py runs a tiny
+matched case before original scale in the same3-card lease. Submit only when
+the live mixed run releases its cards; max-wait120s,outer1950s. Historical
+capacities and failures stay unchanged.
 
 ## Remaining acceptance and environment
 

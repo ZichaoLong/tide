@@ -164,6 +164,12 @@ fresh-process memory calibrations and a separate actual consumer trace
 and FP32 loss/masters/slots are distinct from resident FP32 adjoints. Full-size
 formal comparisons remain open under F6.
 
+F6 original Add B512 CPU training on clean c686096 passed one complete update:
+1458.897225208s,physicalB32×16,two connected windows,all memory checks within
+admission ([evidence](evidence/original-b512-eager-cpu-add-20261003.md)). Cold
+feasibility only; prior resident event/loss discrepancy remains under diagnosis.
+This does not close the formal full-size comparison matrix.
+
 F6 original-width CPU/mixed chunk calibration on clean c686096 passed all four
 complete updates, with all measured peaks inside admission
 ([evidence](evidence/original-width-eager-chunks-20261003.md)). These are B64 CPU

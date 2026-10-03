@@ -289,6 +289,21 @@
           "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "7b1fae504ec779143655b9221c82d8c14a69b410",
+          "scope": "Actual eager FP16 consumers with payload autograd gradients and FP32 loss/masters/optimizer slots, explicit static scale. 61 FP16/admission and55 FP32/FP64 regression checks, four fresh-process memory calibrations. Finite scope; standalone master state process-local, resident FP32 adjoints separate, no full-size performance or GPU claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
         }
       ]
     },
@@ -374,6 +389,21 @@
           "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "7b1fae504ec779143655b9221c82d8c14a69b410",
+          "scope": "Actual eager FP16 consumers with payload autograd gradients and FP32 loss/masters/optimizer slots, explicit static scale. 49 two-device checks, seven fresh-process D256/D2048-six-node memory calibrations and separate actual trace. Finite scope; standalone master state process-local, resident FP32 adjoints separate, no full-size performance or GPU claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
         }
       ],
       "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
@@ -611,6 +641,21 @@
           "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "7b1fae504ec779143655b9221c82d8c14a69b410",
+          "scope": "Actual eager FP16 consumers with payload autograd gradients and FP32 loss/masters/optimizer slots, explicit static scale. 61 FP16/admission and55 FP32/FP64 regression checks, four fresh-process memory calibrations. Finite scope; standalone master state process-local, resident FP32 adjoints separate, no full-size performance or GPU claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
         }
       ],
       "attempts": [
@@ -860,6 +905,21 @@
           "test_command": "Affected test_eager_capacity.py/test_online_eager_owners.py selections and bounded calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-consumer-capacity-20261003.md"
+        },
+        {
+          "date": "2026-10-03",
+          "commit": "7b1fae504ec779143655b9221c82d8c14a69b410",
+          "scope": "Actual eager FP16 consumers with payload autograd gradients and FP32 loss/masters/optimizer slots, explicit static scale. 49 two-device checks, seven fresh-process D256/D2048-six-node memory calibrations and separate actual trace. Finite scope; standalone master state process-local, resident FP32 adjoints separate, no full-size performance or GPU claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
         }
       ]
     },
