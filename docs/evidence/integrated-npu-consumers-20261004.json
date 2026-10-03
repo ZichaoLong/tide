@@ -1,0 +1,538 @@
+{
+  "state": "passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "source_inventory": {
+    "files": 1554,
+    "sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc"
+  },
+  "jobs": [
+    {
+      "name": "build-integration-resident-standalone-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "finished": "2026-10-03T17:31:55.748013+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "a382329f25c1587db65da30448eebe2b40632c81d7b5f16a93a32844b44fc7ef",
+      "log_sha256": "efd65e1db339818133f987ff09d5a5536e9fd4c28b22fc49139ae41eeef168cd",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "3600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/build_integrated_resident.py",
+        "--runtime",
+        "standalone",
+        "--name",
+        "integration-resident-standalone-clean02"
+      ]
+    },
+    {
+      "name": "build-integration-resident-python-clean03",
+      "state": "passed",
+      "exit_code": 0,
+      "finished": "2026-10-03T17:36:40.544237+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "c3a8014f13000f5d57c00e2902edec8f338a7bb02c57ce80e0af28391c7c1181",
+      "log_sha256": "592b4695c22a686db9ba491ca0e6e434901c73e3abbcb24ea677341700ca90bf",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "3600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/build_integrated_resident_python.py",
+        "--runtime",
+        "python",
+        "--name",
+        "integration-resident-python-clean03"
+      ]
+    },
+    {
+      "name": "build-integration-online-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "finished": "2026-10-03T17:35:10.938082+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "20b8f8100a869fd5b7a6fa59ed1a9c1116f68e66e0e1328448febf27eafbe827",
+      "log_sha256": "689bc8f6868b87ca395b68056d0d6e46b39e62fc25cc9ea8af2af95865d78252",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/build_online_integrated.py",
+        "--core",
+        "TASK/builds/integration-core-standalone-clean02",
+        "--build",
+        "TASK/builds/integration-resident-standalone-clean02",
+        "--out",
+        "TASK/builds/integration-online-clean01"
+      ]
+    },
+    {
+      "name": "integration-eager-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "finished": "2026-10-03T17:40:02.743802+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "414c855a8f833a273eaa77c78fcf06423103dfdeb9151b6c15fcc5bf44acac49",
+      "log_sha256": "2a004c8c86b3fbe4573fe248c43cff27b47acf1545098c3e9c0de34afd54eb14",
+      "command": [
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-integration-eager-npu-clean01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "2",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/integration-eager-npu-clean01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "900s",
+        "env",
+        "-C",
+        "TASK/runs/integration-eager-npu-clean01",
+        "ACL_OP_INIT_MODE=0",
+        "TIDE_BUILD_DIR=TASK/builds/integration-core-python-clean03",
+        "TIDE_ONLINE_BINARY=TASK/builds/integration-online-clean01/consumer/tidegraph-online-bench",
+        "TIDE_EAGER_PRECISION_DEVICE=npu:0",
+        "NPU_ENV/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-x",
+        "TASK/sources/compare-discrete-clean01/tests/test_online_eager_precision.py",
+        "--dtype",
+        "float32",
+        "--basetemp",
+        "TASK/runs/integration-eager-npu-clean01/test-tmp"
+      ],
+      "passed": 49,
+      "skipped": 0,
+      "seconds": 212.35,
+      "physical_ids": [
+        6,
+        8
+      ],
+      "queue_sha256": "76fd8de7678fdd03d8075ce78fbf96a8fe7c63f561cf0fbb81e72559ae694d60"
+    },
+    {
+      "name": "integration-resident-npu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "finished": "2026-10-03T17:48:24.372522+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "receipt_sha256": "bd24a40a9ac2d90f32768683fc4e8d470aab8703f47afb4c9b3f7806f5ab6d1d",
+      "log_sha256": "912f0e47d2d86073981b5dbb28633194117577f4cd2d49b01a499149643b7e6c",
+      "command": [
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-integration-resident-npu-clean01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "3",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/integration-resident-npu-clean01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "1500s",
+        "env",
+        "-C",
+        "TASK/runs/integration-resident-npu-clean01",
+        "ACL_OP_INIT_MODE=0",
+        "TIDE_BUILD_DIR=TASK/builds/integration-core-python-clean03",
+        "TIDE_RESIDENT_LIBRARY=TASK/builds/integration-resident-python-clean03",
+        "TIDE_ONLINE_BINARY=TASK/builds/integration-online-clean01/consumer/tidegraph-online-bench",
+        "TIDE_RESIDENT_DEVICE=npu:0",
+        "TIDE_ONLINE_DEVICE=npu:0",
+        "NPU_ENV/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-x",
+        "TASK/sources/compare-discrete-clean01/tests/test_resident_sharded_training.py",
+        "TASK/sources/compare-discrete-clean01/tests/test_online_resident_consumer.py",
+        "--dtype",
+        "float32",
+        "--basetemp",
+        "TASK/runs/integration-resident-npu-clean01/test-tmp"
+      ],
+      "passed": 93,
+      "skipped": 0,
+      "seconds": 423.79,
+      "physical_ids": [
+        6,
+        8,
+        12
+      ],
+      "queue_sha256": "9b2e7910cdf6a35136d639d5c28d19b0b8eae9bf378885f6ddd6ac055152962e"
+    }
+  ],
+  "retained_failures": [
+    {
+      "name": "build-integration-resident-standalone-clean01",
+      "state": "failed",
+      "exit_code": 1,
+      "finished": "2026-10-03T17:10:08.233007+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "receipt_sha256": "a22bf47cdfd32c42295e56859009149bb46828904bcfa8d5f43d3bdea292e159",
+      "log_sha256": "64a3bedbfea32745c8f58581dd5e12d74aa4ab7cb15469de760081724d47bf57",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2700s",
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/build_device_control.py",
+        "--core-build",
+        "TASK/builds/packed-transfer-npu-standalone-clean01",
+        "--build-dir",
+        "TASK/builds/integration-resident-standalone-clean01",
+        "--ascendc-soc",
+        "Ascend910_9392",
+        "--jobs",
+        "2",
+        "--checks",
+        "resident-sharded-training"
+      ]
+    },
+    {
+      "name": "build-integration-resident-python-clean01",
+      "state": "failed",
+      "exit_code": 1,
+      "finished": "2026-10-03T17:10:08.296374+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "receipt_sha256": "94e4fea78efb222fd7e53bbe7f28d5ef9359100d2057b1975b3b4839c4c8da21",
+      "log_sha256": "46802124a9011ae7bb396e55072394a07aafcbe18e8a539ddc2cdc0216afa736",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2700s",
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/build_device_control.py",
+        "--core-build",
+        "TASK/builds/packed-transfer-npu-python-clean01",
+        "--build-dir",
+        "TASK/builds/integration-resident-python-clean01",
+        "--ascendc-soc",
+        "Ascend910_9392",
+        "--jobs",
+        "2"
+      ]
+    },
+    {
+      "name": "build-integration-resident-python-clean02",
+      "state": "failed",
+      "exit_code": 1,
+      "finished": "2026-10-03T17:13:37.717581+00:00",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "receipt_sha256": "d2194a40b184fef681db9798acb8ec134e82791be290cfc141d76f02a8b6ab99",
+      "log_sha256": "8dbc64c2029328ab0a0f7668a4aa0f99484e50232ed15757d15af8cd99e82fae",
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "3600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/build_integrated_resident.py",
+        "--runtime",
+        "python",
+        "--name",
+        "integration-resident-python-clean02"
+      ]
+    }
+  ],
+  "backends": [
+    {
+      "runtime": "standalone",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "core_built_source": "a785d43cfd9662c7d7262c0fdd8c59ec44729f6f",
+      "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+      "core_packaging_sha256": "391fed06578936ce457c5a46e68fc41acb9465a438910cd4310fdaf647da3d81",
+      "core_manifest_sha256": "12b1ecc9fe12b29507eda875781029d7d2b5e93391f1b18689e39a0f538309d3",
+      "resident_manifest_sha256": "352bbdffeaf6ca2b0978a031137ba6da5c23dacea39657d918fe18fe12afebcf",
+      "resident_library_sha256": "a274eb2de17b8e7a954208832f2cfa1ac7500368098f962376fe3566747a425a",
+      "component_sha256": "f5db4dc8f16739194525b52c1c82adaf78054bce2cef118c07c16facb04f9244",
+      "binary_sha256": {
+        "tide-resident-sharded-session-check": "117cfbadffd3b1c7da2714041e3d2f780895900df19cf94ff67e534e3a83163d"
+      }
+    },
+    {
+      "runtime": "python",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "core_built_source": "a785d43cfd9662c7d7262c0fdd8c59ec44729f6f",
+      "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+      "core_packaging_sha256": "98c897750ea61b2732395ed183200c78a6e46ef745042037a7714b57ea6554b4",
+      "core_manifest_sha256": "82a1529597d58757946149c7f9ca6c7c6443ab676ec11d1a336a88c4c4d46916",
+      "resident_manifest_sha256": "405d2d6546cdf090625e0c0fa347c32e6927d2dd80291f53fa8d9def97e4c1b5",
+      "resident_library_sha256": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b",
+      "component_sha256": "f5db4dc8f16739194525b52c1c82adaf78054bce2cef118c07c16facb04f9244",
+      "binary_sha256": {
+        "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+        "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+      }
+    }
+  ],
+  "consumer": {
+    "state": "passed",
+    "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+    "dirty": "",
+    "commands": [
+      [
+        "cmake",
+        "--install",
+        "TASK/builds/integration-core-standalone-clean02",
+        "--prefix",
+        "TASK/builds/integration-online-clean01/installed prefix"
+      ],
+      [
+        "cmake",
+        "-S",
+        "TASK/sources/compare-discrete-clean01/tools/device_online",
+        "-B",
+        "TASK/builds/integration-online-clean01/package",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DTIDE_DEVICE_RUNTIME=standalone",
+        "-DTIDE_DEVICE_ASCENDC=ON",
+        "-DSOC_VERSION=Ascend910_9392",
+        "-DTideGraph_DIR=TASK/builds/integration-online-clean01/installed prefix/lib64/cmake/TideGraph",
+        "-DTorch_DIR=NPU_ENV/lib/python3.11/site-packages/torch/share/cmake/Torch",
+        "-DCMAKE_SKIP_RPATH=ON"
+      ],
+      [
+        "cmake",
+        "-DCMAKE_INSTALL_PREFIX=TASK/builds/integration-online-clean01/installed prefix",
+        "-DCMAKE_INSTALL_LOCAL_ONLY=TRUE",
+        "-P",
+        "TASK/builds/integration-online-clean01/package/cmake_install.cmake"
+      ],
+      [
+        "cmake",
+        "-S",
+        "TASK/sources/compare-discrete-clean01/tools/online_bench",
+        "-B",
+        "TASK/builds/integration-online-clean01/consumer",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DTIDE_ONLINE_RESIDENT=ON",
+        "-DTideResident_DIR=TASK/builds/integration-online-clean01/installed prefix/lib64/cmake/TideResident",
+        "-DCMAKE_PREFIX_PATH=TASK/builds/integration-online-clean01/installed prefix",
+        "-DTorch_DIR=NPU_ENV/lib/python3.11/site-packages/torch/share/cmake/Torch"
+      ],
+      [
+        "cmake",
+        "--build",
+        "TASK/builds/integration-online-clean01/consumer",
+        "--parallel",
+        "2"
+      ]
+    ],
+    "build": {
+      "schema": "tide-device-control-build-v1",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "dirty": "",
+      "component_sha256": "f5db4dc8f16739194525b52c1c82adaf78054bce2cef118c07c16facb04f9244",
+      "core": {
+        "source": "a785d43cfd9662c7d7262c0fdd8c59ec44729f6f",
+        "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+        "torch": "2.10.0+cpu",
+        "environment": {
+          "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+          "compiler": "c++ (GCC) 10.3.1",
+          "cxx_standard": 17,
+          "build_type": "Release",
+          "torch_prefix": "NPU_ENV/lib/python3.11/site-packages/torch/share/cmake/Torch",
+          "cann_version": "9.0.0",
+          "npu_sdk": {
+            "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+            "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+            "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+          }
+        },
+        "backend": "npu",
+        "npu_runtime": "standalone",
+        "torch_npu": null,
+        "cuda": null,
+        "architecture": "aarch64",
+        "python": "3.11.15",
+        "cxx11_abi": true,
+        "binary_sha256": {
+          "libtidegraph.a": "4023d382bc546c1214668b0e1afd90e2029ed5879e958fd26e13c0188cc0b214",
+          "libtidegraph_runtime.a": "08ae0b3b38cfda18f620b8846d2bb6b4c2a0f6b770c35988890fdfaa080da069",
+          "tidegraph-payload-ownership-check": "66a4c6a42f20626ecf74f21c69b11901df56b55f9883dbf45aed76ac48c512aa"
+        },
+        "source_verified_reuse_sha256": "3a501b2e1cf5121247869ce956856f169beacd0efc7a83b63b67c337fad74da8"
+      },
+      "npu_runtime": "standalone",
+      "ascendc_soc": "Ascend910_9392",
+      "binary_sha256": {
+        "tide-resident-sharded-session-check": "117cfbadffd3b1c7da2714041e3d2f780895900df19cf94ff67e534e3a83163d"
+      },
+      "loader_sha256": {
+        "tide-resident-sharded-session-check": "5b727eb052f6eb601f3675baf88f6283c98efc9d9b70d38add150a764b2af23e"
+      },
+      "requested_checks": [
+        "resident-sharded-training"
+      ],
+      "scope": "build/loader/help only; device control check required separately"
+    },
+    "core": {
+      "source": "a785d43cfd9662c7d7262c0fdd8c59ec44729f6f",
+      "cpp_source_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+      "torch": "2.10.0+cpu",
+      "environment": {
+        "os": "Linux-5.10.0-182.0.0.95.r1941_123.hce2.aarch64-aarch64-with-glibc2.34",
+        "compiler": "c++ (GCC) 10.3.1",
+        "cxx_standard": 17,
+        "build_type": "Release",
+        "torch_prefix": "NPU_ENV/lib/python3.11/site-packages/torch/share/cmake/Torch",
+        "cann_version": "9.0.0",
+        "npu_sdk": {
+          "config": "/opt/software/libtorch-npu/2.10.0-cann9.0.0-aarch64-abi1/sdk/share/cmake/Torch_npu/Torch_npuConfig.cmake",
+          "config_sha256": "1711480e47f9dbb19ed01209f073e5526218efeb583cbbbc9ab101c373cc62dd",
+          "library_sha256": "cc7e0828ed12ee690c88857cd96821d54325e0a216f8d76f747c9932537a38b5"
+        }
+      },
+      "backend": "npu",
+      "npu_runtime": "standalone",
+      "torch_npu": null,
+      "cuda": null,
+      "architecture": "aarch64",
+      "python": "3.11.15",
+      "cxx11_abi": true,
+      "binary_sha256": {
+        "libtidegraph.a": "4023d382bc546c1214668b0e1afd90e2029ed5879e958fd26e13c0188cc0b214",
+        "libtidegraph_runtime.a": "08ae0b3b38cfda18f620b8846d2bb6b4c2a0f6b770c35988890fdfaa080da069",
+        "tidegraph-payload-ownership-check": "66a4c6a42f20626ecf74f21c69b11901df56b55f9883dbf45aed76ac48c512aa"
+      },
+      "source_verified_reuse_sha256": "3a501b2e1cf5121247869ce956856f169beacd0efc7a83b63b67c337fad74da8"
+    },
+    "core_packaging_sha256": "391fed06578936ce457c5a46e68fc41acb9465a438910cd4310fdaf647da3d81",
+    "binary_sha256": "b331c48ce5ee1f829fe63a6b0b762fc9ee9c9b34761def310d6f5f464cb5b7d8",
+    "installed_library_sha256": "a274eb2de17b8e7a954208832f2cfa1ac7500368098f962376fe3566747a425a",
+    "loader_sha256": "3941c0d2821e2540c5ff249d6d89dd0276e1dd784388d4a92dd351612207cfd4",
+    "link_sha256": {
+      "tide-resident": "8b15062e64f8c1c59d8f6fd96c62ddcb3fbabbf0c6371eb0bf0ba9c5f21b289b",
+      "tide-resident-sharded-session-check": "a4171564886ea0c3a5939a30ae8264c14d5024e1d6ca3c3ea66aed3a10627de8"
+    },
+    "consumer_sources": {
+      "resident_capacity.cpp": "bc073dc12e81c4e41329dadfa4c3b286f55c2f35a0930b029f83b662436714a2",
+      "resident_run.cpp": "7d60de8ebffc1e7cdd8005aa2c84f047585c4835870aeeea4799f6ba9a2d71a4",
+      "resident_loss.cpp": "854a69e89bda47ae3269701793e06721cb99689b59789cd4d1b8b1963ce64985",
+      "capacity_runtime.py": "8578217db74ad9019d5ccb3a0fe5b461ea2b79f8f11bb9c0fb29258f8cf8aeb8",
+      "traffic_bounds.py": "8455af37a494ef4a90839a199f64c72e0b13dd95a5f9c6919adacf59f5efd823",
+      "memory.py": "c3418b00ea240876fab52b1ab1fb369d765ac279dc6b62ba774b7e1427ec9839",
+      "config.cpp": "1a071c84df44efeba02cdf5cfae6289e355f403d64217bca8535513bfbba2328",
+      "failure.h": "874a815e23fe23735c6039192d8c92533b56120abbe460b7d9cc13f4ff1bd40a",
+      "host.py": "eb3cb7ca1d6863fa4b1a9948a109be1c815f8c6ca3486ca53c75f809636fbb07",
+      "records.py": "e4ea65e00db1c5f02cbdcb1a3f084b6a1d7ccbcbb202f8c4fb90f85edd2fc964",
+      "memory.h": "7b99aad5c2b9c1fdeb29121ccee071f70b187f49059336acc0e7743252a97a19",
+      "eager_optimizer.h": "d422defaa3f63e65a1100947918076103c01e39926ce70af871d9adcc82bc4e8",
+      "eager_capacity_runtime.h": "c9de7ce203a7a06fe52267dc30de137381ce9465786f79e78e9eb28b5ac7f1c0",
+      "memory.cpp": "a723cdcec444d825e904e30bfc8d4895f12a0658800ee5f90563088f4a0e3cf9",
+      "head_budget.py": "d383acb657c3bcd8cb5e0f1f601acb949dfd7031fd905a117ba2ab95230eea29",
+      "resident_loss.py": "adc57301c12f64b042f4800ada17cd6a6664776439ca49bcce51c1764b76f19a",
+      "eager_capacity_runtime.py": "faedf455352caddfb2a1e9aa70868943b125af3a22476dee03f31d2e772f3e67",
+      "model.cpp": "b9ee072c907068ab4ec7a7b2000ba16931cdd89b3082289b2798f18da9de9982",
+      "traffic_bounds.h": "b7e3793660ddaf0bdefc8b95efa63365c889fda62826ed7bc53bae735c20b0d1",
+      "capacity_balance.py": "0fb2a55190ed29e215bbe9ee8b4768a0009399182dc726d729629b3114cef985",
+      "eager_placement.py": "757acba4ef0bb424920a95c6edd8c934f1ba587ee18a4a50a72a7fec5670e7ac",
+      "resident.py": "e37dcd8272963f7b7031d97f1703ddb2cfce04d0fd0fb031e9d30061112193e2",
+      "fixture.py": "9e907d5180b1bc0344462e62a3ff776f517973522258fb9cb93617bf5734f09c",
+      "resident_records.cpp": "22b6c67027898cd2dd0454620c611e8a20fa0b813d6500e67eb12f8958f46564",
+      "resident_consumer.h": "663382b8ee4303cf6316e3bbb63eab655fef132c6734982bea3d174a0ac12883",
+      "consumer.h": "66df60dc809794238463d5a400a2c97ad3231c32a05689e5cd524e8e6bb921e4",
+      "capacity.h": "b057dc320e32ca85442bf1d0cc6b5f1da305f35fe2f06a9c02b60056f3d731d9",
+      "eager_capacity.h": "e9e1bd3c8652d3c0d76408701927ae5e78e29c3d3bbd33e4c81b90c2d537b8d7",
+      "__init__.py": "574f002d2e3c79a28408efce70ca8090de7548f8286b3b6e9065bed4c418c7b5",
+      "head_budget.h": "7604da95923faf61529e756a1ddfe23583db099da2b6ce59c5848da7c0b8571a",
+      "source_values.h": "27448ff5d62fb2a638b3980ccdd9a80cd91ac62a9ecc712d0fa001feb181b956",
+      "eager_capacity.py": "95ac4eafd5d681a08043da646ee3f24add740406639245cdf17a63c591f0ae09",
+      "packet.cpp": "0521d84d7ca85997b974961980f177d86d32a78e5d22b3ddce072bacb2d10aea",
+      "CMakeLists.txt": "0cb5022890fe8dfd5f1fd762582a8f4dec4c916f97f6ea3bb4cc8c0eb869878e",
+      "capacity_record.h": "c9f16de9b70ef17993822bc483f1241c3ca50149aa227b6bb766a67884df0185",
+      "run.cpp": "8cb2e28d7b39c193ba04121d28a918b87e2d528261cd108bc43cc27eefba2d3e",
+      "capacity.py": "db97689440b9ca97f254f1eb76ad719050c2b6c6e85867669ec0af44adf8c387",
+      "resident_contexts.py": "3eaf1fe7df850641507c63709715ffd3d522d621da622d9bcbca01d7e4901492",
+      "main.cpp": "af4d10f064ed89f76673f08786744a2104bae2ecdacc327673ee9f3f8bc3e76a",
+      "eager_placement.h": "162a20e86a07391dc5f3607d9e16cd437e60c156331fc1f101c7af64ec2898e4",
+      "resident_contexts.h": "0db7ee78078dcda7a5faacf72f312ea07b31d4f48e9e48d2115eaab4c2f9cab2",
+      "records.cpp": "6bb8c82448dd5eb09e38c7a6ca0e56217cbf1e75b147b5d7b340cd03732e44f4",
+      "phase_timing.py": "17e8a3aa729978f7c469365f8742ce1feed67a577de4d972f4542a91e41be80b",
+      "phase_timing.h": "ef4517952eb4d9f464cd018f4836e0c11ebcc8f6ca4ff767486feea8098f0eb6"
+    },
+    "scope": "current CMake package generation and install of byte-verified backend, new public-header-only standalone client compile/link/loader; device gate separate"
+  },
+  "audit_helper_sha256": "cea823dccbe7d6210b5d6f746c8230a75199ad5693e57692cbb27476c00c7781",
+  "scope": "Current matching core plus fresh C++/Ascend C resident backends, both runtime owners; fresh installed eager+resident standalone consumer. Eager49 and public resident93 directed checks, no skips. Core libraries were verified reused binaries with freshly generated install metadata, not newly recompiled.",
+  "limitations": [
+    "Original-scale strict near-tie CPU/NPU route failure stays failed and separately accepted as a delivery limitation.",
+    "These are small semantic/integration tests, not full-size formal throughput or GPU execution.",
+    "No unrelated historical primitive suite or full CPU gate was repeated."
+  ],
+  "warnings": [
+    "CANN shared-installation owner warnings",
+    "TorchScript deprecation",
+    "TorchNPU base-format allocation notice"
+  ]
+}

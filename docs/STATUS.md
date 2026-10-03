@@ -1,300 +1,210 @@
 # Current handoff
 
-Updated 2026-10-04 (Asia/Shanghai). **ACTIVE**: user explicitly authorized continuing under the
-execution contract until the overall goal is complete. Commit/push authorized;
-no per-commit pause, no subagents. A later explicit user pause takes precedence.
+Updated 2026-10-04 (Asia/Shanghai). **ACTIVE**: user authorizes continuing under
+[execution-flows](execution-flows.md) until the overall goal is complete,including
+commits/pushes. No per-commit pause. No subagents. A later explicit pause overrides.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
-`/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Re-entry: `git status --short --branch` and
-`python scripts/status.py`. Reference repos and ObsidianVault stay read-only.
+`/var/tmp/zlong-graph-execution-foundation/repository`,branch
+`graph-execution-foundation`. Re-entry:`git status --short --branch`,
+`python scripts/status.py`,this file,and relevant [ROADMAP F1–F7](ROADMAP.md).
+Reference repos and ObsidianVault remain read-only.
 
-## Contract and priorities
+## Contract and acceptance
 
-[execution-flows](execution-flows.md) is the user-approved contract;
-[ROADMAP F1–F7](ROADMAP.md) is the backlog. Deliver the 20-tide public execution/
-equivalence foundation: independent CPU,mixed and device-resident online flows,
-streaming/general greedy prefill, complete training and continuation. No CPU
-trace/route/gradient prepass feeds candidates. Preserve int64 ordering,edge
-identity,missing/zero and None/zero semantics. General PDG includes positive-delay
-feedback. Packed execution,explicit bounded capacity and calibrated safe splitting.
+Independent CPU,mixed and NPU-resident online flows;streaming/general greedy
+prefill,PDG positive-delay feedback,packed computation/transport,bounded capacity,
+complete training and continuation. No CPU precomputed routes/events/gradients
+feed candidates. Preserve int64/stable ordering,edge identities,missing/zero,
+None/zero and declared VJPs. Five presets/fine switches stay configurable.
+Performance:PDG LibTorch;TimedDAG/Settle LibTorch and Python;both schedules,
+inference/training,CPU/screened mixed/resident. FP32 primary,FP16 separate.
+Three fresh processes per formal recommendation;independent profiling.
 
-Required performance: PDG LibTorch; TimedDAG/Settle LibTorch and PyTorch;
-CPU/screened mixed/resident,both schedules,inference/complete training. FP32 main,
-FP16 separate; five presets/fine controls. Three fresh processes per formal
-recommendation and independent profiles. Model convergence is later work.
-Preserve3000s/1.15 and historical capacities/refusals. Evidence may justify a
-separately declared longer budget; never remove protection to pass. Normally
-at most two measured improvement rounds/about90min active diagnosis per issue.
-No unlimited device waits. Formal heavy timing serial; current overlapping
-scale jobs are explicitly feasibility/diagnosis,not formal throughput.
+Latest user decision **“接受，保留严格失败并单列限制，不阻塞”** accepts the
+located original-scale numerical near-tie route failure as a separately listed
+limitation,without blocking delivery. Exact comparisons,tie rules,fixtures and
+dtype contracts stay unchanged. Never call that pair strictly equivalent;
+disclose differing actual work counts in performance reports. Do not ask again.
 
-Implementation commit → affected clean immutable qualification → separate
-reviewed evidence commit/push. User contract outranks experiment skill; minimal
-existing records,no new tracking infrastructure. Do not rerun unrelated passed
-gates. Update this handoff atomically with scripts.durable_records.replace_text.
+Keep3000s/1.15 and all historical capacity/time refusals. Measurements may justify
+a separately declared longer budget. Normally≤2 measured improvement rounds/~90min
+active diagnosis per issue;no indefinite queues or blind retries. Formal heavy
+timings serial;current overlapping jobs are feasibility/calibration only.
+Implementation commit→affected immutable clean qualification→separate evidence
+commit/push. Do not repeat unrelated passed gates. User contract outranks the
+experiment skill;reuse minimal records,no new tracking infrastructure. Update
+this handoff atomically with scripts.durable_records.replace_text.
 
-## Qualified baseline and newest evidence
+## Qualified baseline
 
-- All ten representative family/client/schedule submatrices complete; F6 full-size
-  matrix remains open. Do not mechanically repeat representative scans.
-- Original resident/prefill TimedDAG/LibTorch FP32 inference passed for both models.
-  B512 complete training: Add9.468B/nine cards/physicalB2×256,2170.549862239s
-  ([evidence](evidence/original-b512-add-training-20261003.md));
-  Attention17.521B/11 cards/physicalB1×512,5695.490452595s
-  ([evidence](evidence/original-b512-attention-training-20261003.md)). Cold feasibility,
-  two connected windows/one SGD update,not formal throughput. Attention's separately
-  declared9000s budget preserves the old3000s refusal.
-- Eager multi-device owners/complete consumers,packed transfer and admission
-  qualified on their fixed sources. [Packed evidence](evidence/eager-packed-transfer-20261003.md),
-  [admission/RSS evidence](evidence/eager-consumer-capacity-20261003.md).
-  c686096 corrects CPU6.25% learned-storage RSS allowance and explicit NPU test
-  preflight; safety margins/accelerator estimates unchanged. All historical
-  underestimates/compiler-cleanup/test failures remain failed with raw records.
-- **Eager FP16 implementation7b1fae5 qualified**: CPU61+55,NPU49,eleven fresh-process
-  memory calibrations and separate actual trace. All1535 source hashes intact,
-  eight accepted jobs terminal. Evidence committed/pushed **db7a284**
-  ([report](evidence/eager-fp16-consumers-20261003.md)). FP16 payload autograd;
-  FP32 loss/masters/slots,explicit static scale,no hidden retry/skip. Standalone
-  master state process-local; resident FP32-adjoint policy remains distinct.
-  Trace15180ops,128 AiCPU (80 BOOL/INT64 ScatterElements,48 INT64 Sort),no observed
-  host tensor-compute fallback. Calibration/trace are not full-size timing.
-- **CPU/mixed original-width chunk calibration c686096 passed**; evidence
-  committed/pushed **2c9d34c** ([report](evidence/original-width-eager-chunks-20261003.md)).
-  CPU B64/physicalB32: Add166.401850828s,Attention2559.648031075s. Mixed-A11 cards:
-  AddB64/physicalB32=188.765083486s;AttentionB16/physicalB8=77.788109866s.
-  All complete updates and memory checks pass. B512 phase forecasts×1.15:
-  CPU Add1502.145802685s,CPU Attention23391.025824722s;
-  mixed Add1727.950479047s,mixed Attention2820.987960283s. Forecasts are not results.
-- CUDA-linked aarch64 build/installed client,CPU187 and relocated7 qualified on
-  2c04005 ([evidence](evidence/eager-cuda-host-20261003.md)). Real CUDA/x86_64
-  execution remains target-pending; [portable commands](eager-target-validation.md).
+- All ten representative family/client/schedule submatrices complete. **Do not
+  repeat these screens.** Their selected mixed presets feed the full-size plan.
+- Full CPU integration on78e9df6:9458 passed,654 scoped optional skips;12/12
+  CTests. [CPU integration](evidence/integrated-cpu-20261004.md). Original120-failure
+  incomplete-build gate and test-assertion failures remain retained.
+- Current core C++ hash
+  `ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c`.
+  Eager owners,packed transport,admission,FP16 masters and public resident
+  sharded training/continuation are qualified on their cited fixed sources.
+- e69b3bd corrects equivalent() integer/bool tensor comparisons to exact zero
+  tolerance,including int64>2**53. CPU121/NPU49 clean gates passed;floating
+  tolerance/algorithms unchanged. [Comparator](evidence/exact-discrete-comparison-20261004.md).
+- c6ef224 extends6.25% CPU allocation allowance to learned+master+gradient/slots
+  during training. CPU108 passed;first original-width recheck passed425.6376s
+  within estimate. Second workers16 policy hit900s and remains failed;no further
+  worker sweep. [RSS correction](evidence/cpu-training-rss-20261004.md).
+- Fresh aarch64 CUDA-linked client passed187 CPU plus7 relocation checks,and
+  updated eager FP16/master/RSS client passed108 CPU checks. Real NVIDIA/x86_64
+  remains target-pending. [Target recipes](eager-target-validation.md).
 
-## Exact discrete tensor comparator correction
+## New integrated NPU qualification
 
-Re-entry audit reproduced a validation defect: equivalent() applied payload
-float tolerances to int64/bool tensors, accepting2**53 versus2**53+1 and explicit
-atol100 integer/mask differences. Fix only integer/bool comparisons to atol=rtol=0;
-floating tolerance,discrete route rules and candidate computations are unchanged.
-New regression includes int64 limits,nested records,dtype/shape/None checks.
-Development48 checks passed; initial test collection failed on reserved fixture
-name dtype,corrected to storage_dtype before tests ran. Historical route failure
-is independent and remains failed. Implementation e69b3bd committed/pushed. Running frozen compare-discrete-clean01:
-compare-discrete-cpu-clean01 (600s): new comparator tests,library qualification,
-accelerator boundary and flow semantics,CPU FP64/FP32,using source-matching
-integration-cpu-clean02 core. compare-discrete-npu-clean01 (900s,queue120s,two NPUs):
-49 eager FP16 precision checks using unchanged qualified7b1fae5 consumer and
-matching packed-transfer-npu-python-clean01 core. Only Python comparator changes;
-no C++ rebuild or unrelated full gate. Each unit is tide-execution-flows-NAME,
-logs TASK/runs/NAME/{status.json,task.log}. Both clean gates passed:CPU121/118.18s,NPU49/213.85s,no skips.
-Source/core/client hashes and terminal units/lease audited; [report](evidence/exact-discrete-comparison-20261004.md). All prior evidence keeps its exact source scope.
+Clean e69b3bd/compare-discrete-clean01. Old resident embedded d412541 core;
+new backends use verified matching a785d43 core bytes and fresh install metadata.
+This is core package assembly,not core recompilation. Resident C++/Ascend C and
+installed combined eager+resident C++ consumer were freshly built.
 
-## Active jobs and next actions
+| Job | Terminal result |
+| --- | --- |
+| build-integration-resident-standalone-clean02 | passed/exit0;current core+fresh resident,sharded-session check build |
+| build-integration-resident-python-clean03 | passed/exit0;current Python core+fresh resident binding/shared library |
+| build-integration-online-clean01 | passed/exit0;installed public-header-only combined consumer,verified loader |
+| integration-eager-npu-clean01 | passed49/212.35s,no skips;two NPUs6,8,released |
+| integration-resident-npu-clean01 | passed93/423.79s,no skips;three NPUs6,8,12,released |
 
-`TASK=/mi/data2T/zlong/tide-execution-flows`. Every unit is
-`tide-execution-flows-NAME` in background.slice,Nice10. Status/log are
-`TASK/runs/NAME/{status.json,task.log}`. No live job is passed.
-`eager-rss-clean01` is clean **c68609603c310f7121cb6f887afcadd019973209**;
-`eager-half-clean01` is clean **7b1fae504ec779143655b9221c82d8c14a69b410**.
-Frozen source under TASK/sources, installed clients/core builds under TASK/builds.
+All units inactive/empty cgroups;source/binary/installed/library hashes audited.
+Resident gate covers all families/both schedules,FP32/FP16,SGD/AdamW,head splitting,
+int64 boundaries,complete continued inference/training and fresh-process2→3-owner
+checkpoint restore. [Integrated report](evidence/integrated-npu-consumers-20261004.md).
+First standalone/Python clean01 failed before compile:incremental core lacked
+cmake_install.cmake. Python clean02 failed before compile:bindings must be ON.
+All three failures remain retained. Helpers build_integrated_resident.py,
+build_integrated_resident_python.py,build_online_integrated.py and
+ audit_integrated_resident.py under TASK/launchers contain exact commands/audits.
 
-| Job NAME | Source / outcome sought | Declared bound and records |
-| --- | --- | --- |
-| wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; [audit passed](evidence/original-b512-eager-cpu-add-20261003.md) |
-| wide-eager-mixed-b512-01 | **passed/exit0**,both actual B512 updates: Add1287.28431384s,Attention2655.242050484s | all memory checks pass,under3000s/update; [audit passed](evidence/original-b512-eager-mixed-20261004.md) |
-| wide-eager-cpu-policy01 | **failed/exit1** at first policy; second never entered | Completed finite update599.905596491s,then CPU peak estimate refused |
-| integration-cpu-clean01 | **failed/exit1**;9337 passed,120 failed,654 skipped,1783.33s | verification/result.json/tests.log; preserved incomplete build and old-assertion failures |
-| build-integration-cpu-clean02 | **passed/exit0**; fresh full CPU core,module and CLI/check clients | TASK/builds/integration-cpu-clean02/build-manifest.json; exact C++ hash unchanged |
+Current builds under TASK/builds:
+`integration-core-standalone-clean02`,`integration-core-python-clean03`,
+`integration-resident-standalone-clean02`,`integration-resident-python-clean03`,
+`integration-online-clean01/consumer/tidegraph-online-bench`.
+Python core artifacts are byte-verified copies of packed-transfer-npu-python-clean01.
+CPU consumer `eager-rss-training-cpu-clean01` is c6ef224,source-matching current
+consumer code. CUDA host consumer `eager-half-cuda-clean01` is c6ef224.
 
-The mixed lease acquired physical1,2,3,4,5,6,7,8,9,11,12 (logical0..10).
-CPU Add uses512GiB cap; mixed uses60GiB/card,80GiB parameter and4GiB head caps.
-CPU policy probe checks its envelope plus387GiB reserved for other task memory
-against the dynamic half-memory rule; total thread budget remains below half
-available CPUs. Intentionally overlapping diagnostic timings carry interference;
-none is a formal recommendation. No profiling/reference is inside these timers.
+## Original-scale results and numerical limit
 
-Launch helpers (immutable while active): `wide_eager_cpu_add_b512.py`,
-`wide_eager_mixed_b512.py`, `wide_eager_cpu_policy.py` in TASK/launchers.
-Each run archives helper bytes and result hashes. Original c686096 clients:
-`TASK/builds/eager-rss-{cpu,npu}-clean01`. Inspect/stop only a known current task
-with `systemctl --user show|stop tide-execution-flows-NAME`; never touch historical
-protected work below. Follow declared timeouts,retain first failure,no blind retry.
+All below are cold feasibility/phase diagnostics,not formal recommendations.
+Original packets:D2048/B512/T12/V50304,480 body nodes/2208 edges,
+Add9,468,053,696 and Attention17,521,117,376 learned parameters.
+Two connected windows/one complete SGD update unless stated otherwise.
 
-**Integration repair:** retained integration-cpu-clean01 failed with9337 passed,
-120 failed,654 skipped. The narrow build omitted CLI/check binaries; two assertions
-were obsolete (eager automatic chunks and resolved owner metadata). Test-only
-corrections530ae85/78e9df6 preserve valid rejection checks. Fresh complete CPU core
-build-integration-cpu-clean02 passed all130 build actions; core C++ hash
-ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c.
-It does not alter the older qualified narrow build. Failed selection recheck
-integration-cpu-recheck-clean02 **passed120 in272.99s,exit0**, clean78e9df6,
-integration-tests-clean01. Unit inactive,empty cgroup. Original failure retained.
+| Model/flow | Cards;physical samples | Actual update seconds |
+| --- | --- | ---: |
+| Add CPU FP32 | CPU;32×16 | 1458.897225208 |
+| Add mixed-A FP32 | 11;32×16 | 1287.284313840 |
+| Attention mixed-A FP32 | 11;8×64 | 2655.242050484 |
+| Add resident FP32 | 9;2×256 | 2170.549862239 |
+| Attention resident FP32 | 11;1×512 | 5695.490452595 |
+| Add mixed-A FP16 | 8;32×16 | 1254.205146587 |
+| Attention mixed-A FP16 | 8;8×64 | 2334.246752751 |
 
-Full integration-cpu-clean02 **passed9458,654 optional-device skips,2022.25s,exit0**,same clean78e9df6 snapshot,
-complete CPU core plus qualified c6ef224 consumer. Core/consumer bytes match
-these sources; differing test/document commits are explicit. Declared2400s outer:
-prior incomplete gate1783s plus restored real clients273s justifies this bound.
-Terminal result and [reviewed audit](evidence/integrated-cpu-20261004.md) passed. One ATen/BLAS thread; inspect
-TASK/runs/integration-cpu-clean02/verification/{result.json,tests.log} and
-systemctl --user show tide-execution-flows-integration-cpu-clean02.
+Resident original FP32 inference also passed both models. Resident Attention
+training used a separately measured9000s allowance;old3000s refusal remains.
+FP16 source7b1fae5,eager-half-clean01,qualified eager-half-npu-clean01 consumer;
+payload autograd gradients,FP32 loss/masters/slots,static scale128. Actual B512
+job wide-eager-half-b512-01 passed/exit0,both updates and memory checks under3000s;
+eight-card lease released. [FP16 B512 audit](evidence/original-b512-eager-fp16-20261004.md).
+Prior FP16 pilots:Attention rows4 cost forecast3418s refused3000s;rows16 memory
+63.887GiB refused;rows8 admitted51.312GiB with2488s forecast. These refusals remain.
 
-```bash
-python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit 78e9df6 -- timeout --signal=TERM --kill-after=10s 2400s env TIDE_ONLINE_BINARY='{base}/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
-```
+FP32 eager Add CPU/mixed share1,183,427 events. Earlier resident Add has1,183,429;
+FP16 eager Add/Attention have1,183,449/1,184,548 versus FP32 mixed Attention1,184,436.
+Full-size strict parity is not established by feasibility success. Historical
+route-witness02 diagnostic passed,but strict CPU/resident comparison failed:
+sample17/window1/time280/region7,CPU246 beats245 by one FP32 ULP;resident rounds
+both scores to the same FP32 value and correctly chooses lower-ID245. FP64 norms
+of resident proposals still round to that same FP32 score. Window events2325/2327,
+max pre-split proposal error7.703900337219238e-6. No altered tie policy or tolerance.
+[Witness](evidence/original-add-route-witness-20261004.md);user accepts this listed
+limitation without blocking other delivery. route-witness01 capacity-copy error
+remains failed;do not conflate forensic completion with equivalence.
 
-Passed/exit0 integration-ctest-cpu-clean02 on the complete CPU build,clean78e9df6
-snapshot: all12 registered FP32/FP64 CTests,serial,240s bound,explicit CPU.
-This is the missing complete standalone CTest gate; no NPU qualification is
-implied. Unit tide-execution-flows-integration-ctest-cpu-clean02;result in task.log
-and build Testing/Temporary/LastTest.log:12/12 passed in12.61s.
+## Active jobs and exact next actions
 
-Source/build/test receipts audited and evidence committed in b5de3b4.
-Scale diagnostics may overlap this correctness gate; formal heavy timing waits
-until these finish. No unrelated passed gate needs repetition.
+`TASK=/mi/data2T/zlong/tide-execution-flows`;all units are
+`tide-execution-flows-NAME` in background.slice,Nice10. Durable records:
+`TASK/runs/NAME/{status.json,task.log}`,plus assessment/result.json. Frozen sources
+TASK/sources,builds TASK/builds. Do not edit live helpers or frozen source.
 
-## CPU training allocation correction and scale continuation
+1. **wide-eager-cpu-attention-b512-extended01 running** since2026-10-03T16:03:04Z.
+   Sourcec6ef224/eager-rss-training-clean01;current CPU client,ATen16/workers1,
+   original FP32 B512/physicalB32×16. Measured phase forecast×1.15=23391.025825s;
+   separate27000s update,27500s child,27600s outer bound.429.436GiB estimate under
+   512GiB cap. Original3000s refusal retained. Helper
+   wide_eager_cpu_attention_b512_extended.py immutable. Audit actual terminal
+   result/failure;no blind retry. It does not hold online-measurement.lock,so
+   every formal runner must explicitly verify this job terminal/empty first.
+2. **wide-mixed-continued-pilots01 running**,frozen e69b3bd/compare-discrete-clean01.
+   Acquired11 NPUs1,2,3,4,5,6,7,8,9,11,12 (logical0..10). Eight original-width
+   TimedDAG training pilots:LibTorch/Python × prefill/streaming × Add/Attention;
+   mixed presets reused from representative screen. AddB64/physicalB32,
+   AttentionB8/physicalB4,one continued warmup+one measured FP32 SGD step,two
+   windows each. Purpose:continuous cost/peak calibration,not formal throughput.
+   May overlap CPU feasibility. First case LibTorch/prefill/Add started;no result
+   yet. Helpers wide_mixed_continued.py and fullsize_configs.py **immutable**.
+   queue120s,child900s/case,outer7320s,first failure stops. Aggregate reservation
+   430+128+64+8GiB passed dynamic half-memory. Preserve each case and failure.
+   Inspect assessment/result.json and case/consumer/result.json. Forecasts do not
+   substitute for actual originalB512 timing.
 
-Implementation c6ef224 applies the same6.25% CPU allocation allowance to
-learned+masters+gradient/optimizer storage during training,construction still
-learned+masters only. Accelerator estimates,budgets,margins and mathematics
-unchanged. Both development and clean builds/gates passed108 checks,no skips.
-Raw build/gate names `build-eager-rss-training-cpu-{dev,clean}01` and
-`eager-rss-training-cpu-{dev,clean}01`; clean snapshot eager-rss-training-clean01.
+Inspect known jobs with `systemctl --user show tide-execution-flows-NAME` and
+its task.log;stop only an identified current task if a real failure demands it.
+No current task requests an unbounded NPU wait.
 
-Retain original wide-eager-cpu-policy01 failure: B8/physicalB4 update completed
-599.905596491s,then RSS248721317888bytes exceeded245300487792 estimate. Not OOM
-or numerical failure. `wide-eager-cpu-policy-recheck01` is now **failed/exit1**:
-first ATen16/workers1 case **passed425.637614531s**,observed246219792384bytes
-within corrected254061046480 estimate. The second ATen1/workers16 case hit its
-900s child timeout and was terminated; no result,not a speedup and no further
-worker sweep. Original failure remains failed. First-case calibration and108
-clean checks qualify the stricter allowance; first-case evidence audit passed; [report](evidence/cpu-training-rss-20261004.md).
+## Full-size timing plan and remaining acceptance
 
-**Running wide-eager-cpu-attention-b512-extended01**, clean c6ef224 and clean
-eager-rss-training-cpu-clean01 client,ATen16/workers1,physicalB32×16. Reuse the
-actual original-width B64/B32 chunk policy with measured phase forecast
-23391.025824722s including1.15. Original3000s refusal remains intact. Declared a
-separate27000s actual-update guard,27500s child and27600s outer; first failure
-stops,no automatic retry. One original17.521B/B512 complete FP32 SGD update,two
-connected windows,no warmup/profiler. Cold feasibility may overlap small
-integration/forensic diagnostics,not formal throughput. Admitted429.436GiB CPU
-peak below512GiB cap; aggregate forecast+protected historical/mixed/probe/gate
-memory must fit half available memory at launch. No result yet.
+TASK/plans/fullsize-continuous-e69b3bd-01.json fixes120 FP32 cells:
+ten family/client/schedule submatrices ×2 models ×2 modes ×3 flows.
+All24 unique static geometry/client envelopes admit at11 NPUs or one CPU,
+60GiB/card or512GiB CPU with unchanged margins. One continued warmup+one measured
+SGD step,two windows each;every recommended configuration needs three independent
+processes. FP16 separate. This plan is not execution evidence.
 
-```bash
-python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-cpu-attention-b512-extended01 --snapshot eager-rss-training-clean01 --commit c6ef224 -- timeout --signal=TERM --kill-after=10s 27600s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_attention_b512_extended.py' --source '{source}' --out '{out}/assessment'
-```
+CPU Attention trainingB16,mixedB4,residentB1. Resident retains the qualified
+explicit11-owner Attention map and unchanged queue/trace/KV capacities.
+Resident AddB2,inferenceB4;CPU/mixed AddB32. Actual continuous peak/cost calibration
+is still required. Task-local fullsize_formal_cell.py is an **unexecuted draft**:
+requires hashed per-cell measured budgets,passed integrated gates,terminal old
+cold jobs and exclusive online-measurement.lock. No formal job submitted yet.
+Review the first admitted actual cell before multiplying cases.
 
-Inspect `TASK/runs/wide-eager-cpu-attention-b512-extended01/assessment/result.json`
-and unit tide-execution-flows-wide-eager-cpu-attention-b512-extended01. Its long
-budget is justified by measurement; it does not replace the old refusal or
-certify formal performance. Keep its helper immutable once submitted.
+Remaining:finish active CPU/continued mixed results;qualify necessary continuous
+resident/CPU original-width memory/cost;execute full-size matrix,repeat formal
+recommendations,separate full-size profiles/FP16 comparisons,then final support/
+portability/evidence audit and terminal job closure. Current functionality and
+integrated semantics do not close F6. No speedup threshold;no failure-only or
+compile-only substitute for locally available complete runs. Existing strict
+numerical failure is separately accepted,not a blocker to these actions.
 
-## Route discrepancy located; strict full-size parity remains failed
+## Environment and protected history
 
-`route-witness02` terminal passed/exit0 means forensic collection completed,
-not equivalence. Tiny matched pair passed4windows; original matched physicalB2
-CPU/resident comparisons first differ at sample17,window1,time280,region7.
-CPU chooses246 (score4.005112648010254) over245 (4.005112171173096),one FP32 ULP.
-Resident scores both4.005106449127197 and correctly breaks that rounded tie in
-favor of245. FP64 norms of the exported FP32 proposals still rank246 above245
-on both sides; resident values round to the same FP32 score. Maximum proposal
-absolute difference before divergence7.703900337219238e-6. This window has
-CPU2325/resident2327 events. It demonstrates a floating near-tie path split;
-not proof that no other full-batch differences exist. Do not weaken exact
-route checks or change stable tie policy/model/fixture to hide it.
-
-Raw TASK/runs/route-witness02/assessment/original/observation/{witness.json,windows.jsonl}.
-Forensic public pair uses exact historical26176de;three cards and CPU matchedB2,
-not the later CPU physicalB32 experiment. No CPU prepass feeds resident.
-All3-card leases released. `route-witness01` remains failed:tiny passed,original
-setup refused an incorrectly copied512MiB default workspace ceiling. Separate
-probe02 restored historical512GiB whole-program ceiling,retaining60GiB/card
-admission and all queue/trace limits. Task-local probes/builds/helpers01 and02
-must remain for provenance. [Reviewed diagnosis](evidence/original-add-route-witness-20261004.md) audited;strict parity stays failed.
-
-## FP16 scale continuation and updated CUDA host gate
-
-Both original-width FP16 pilots are terminal passed/exit0; audited sources,
-binaries, result hashes and eight-card lease release. [Reviewed pilot report](evidence/original-width-eager-fp16-20261004.md).
-Add B64/physicalB32:195.599333427s, forecast B512×1.15=1778.033584300s.
-Attention B8/physicalB4:50.268560833s, forecast3418.386618841s still refuses3000s.
-Additional Attention B16/physicalB8:71.174303463s, forecast2488.157225114s.
-Original rows16 static capacity refusal63.887GiB/card remains; rows8 admits51.312GiB.
-
-**Submitted wide-eager-half-b512-01:** clean7b1fae5/eager-half-clean01,
-qualified eager-half-npu-clean01. Eight NPUs,Add physicalB32 andAttentionB8,
-original B512 packets,FP16 payload/FP32 masters and loss,static scale128,
-Mixed-A/LibTorch/TimedDAG/prefill,one complete SGD update/two connected windows,
-ATen2/workers4. New helper wide_eager_half_b512.py; never edit it while live.
-Both forecasts satisfy retained3000s/1.15; child3240s each/outer6530s,queue120s.
-Cold feasibility may overlap CPU Attention; not formal timing. First failure
-stops; no blind retry. Aggregate admission reserves430GiB CPU feasibility,
-128GiB protected historical worker,64GiB NPU host and8GiB small work. No result yet.
-
-```bash
-python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-half-b512-01 --snapshot eager-half-clean01 --commit 7b1fae5 --npu --npu-count 8 --max-wait 120 -- timeout --signal=TERM --kill-after=10s 6530s env -C '{out}' '{python}' '{base}/launchers/wide_eager_half_b512.py' --source '{source}' --out '{out}/assessment'
-```
-
-**CUDA-linked update qualified**,c6ef224/eager-rss-training-clean01.
-Fresh external eager-half-cuda-clean01 consumer reuses exact source-matching
-CUDA core eager-cuda-clean01. Build/loader passed; eager-half-cuda-host-clean01
-passed108 affected CPU checks in80.50s,no skips/deselections. Both jobs terminal,
-[reviewed audit](evidence/eager-fp16-cuda-host-20261004.md). GPU/x86_64 target-pending.
-Module torch-cuda/2.10.0-cu128; Python
-/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python.
-
-## Remaining acceptance and environment
-
-CPU/mixed Add B512 share exactly1183427 candidate events,208896 selected events,
-12288 outputs/cut408; losses30.5003700256/30.5003738403. The earlier resident B512
-record has1183429 events/loss30.5083618164 at physicalB2,versus currentB32.
-Do not claim full-size discrete/numerical parity from the feasibility passes;
-the near-tie witness above gives a concrete cause but does not qualify the pair.
-User explicitly accepted on2026-10-04: retain the strict failure and list it as a
-numerical-sensitivity limitation; it no longer blocks overall delivery. Complete
-independent performance and audit,without claiming this pair strictly equivalent.
-Existing exact comparisons,tie rules,fixtures and dtype policies remain unchanged.
-
-Still open: actual original B512 CPU Attention and FP16 Add/Attention results;
-full original-scale CPU/screened mixed/resident performance matrix across required
-families/clients/schedules/inference/training,appropriate continuous warmup and
-measurement,three-process recommendations,separate profiles,FP16 comparisons,
-final integrated support/portability audit and terminal jobs. Compilation and
-refusal alone cannot close locally available work. No speedup threshold required.
-
-Current static c686096 planning: one-update CPU B32 and mixed11 AddB32/AttentionB8
-fit. One continued warmup plus one measured step admits CPU AttentionB16 and
-mixed AttentionB4. These are static estimates,not observations. Three measured
-plus one warmup Attention steps refuse at B1 under11-card locality; preserve
-that refusal. Plans live at TASK/plans/eager-wide-capacity-{2c04005,c686096}.json.
-
-Authorized public module `libtorch-npu/2.10.0-cann9.0.0`; Python
+Authorized public module `libtorch-npu/2.10.0-cann9.0.0`,Python
 `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-User authorization supersedes old private guide paths; public /usr/local driver
-untouched. Preserve module PYTHONPATH,prepend frozen source/python;
+Public stack authorization overrides stale private-stack guide paths;/usr/local
+shared driver untouched. Preserve module PYTHONPATH and prepend source/python;
 TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0,PYTHONDONTWRITEBYTECODE=1.
-Standalone NPU uses ACL_OP_INIT_MODE=0. NPU runtime cwd OUT avoids writing vendor
-fusion_result.json into frozen sources. CPU build two workers,tests one ATen/
-BLAS thread. Last disk:data170GiB/root11GiB; recheck before large writes.
+Standalone NPU uses ACL_OP_INIT_MODE=0. NPU cwd must be output dir to avoid vendor
+fusion_result.json in frozen source. CPU correctness one ATen/BLAS thread;build2.
+Latest free disk:data167GiB/root11GiB;recheck before large writes.
 
-**Never resume,stop,signal or clean historical-cpu-attention-01.** Worker2686919
-is deliberately SIGSTOPped,about123.47GiB RSS; status saying running does not
-mean computation. Its old timing.lock does not block current online-measurement.lock.
+**Never resume,stop,signal or clean historical-cpu-attention-01.** Deliberately
+SIGSTOPped worker2686919 (~123.47GiB RSS) is protected. Its stale running receipt
+is not active computation;its old timing.lock is distinct from current lock.
 status.py exits1 for retained malformed build-reverse-gather-python-dev01 metadata;
-this is not a current job failure. Do not rewrite that receipt.
-Unexecuted finite_ranked_horizon.py and wide_attention_horizon_pilot.py remain
-unqualified drafts; no48-row bound or changed original capacity is accepted.
+do not rewrite it. finite_ranked_horizon.py and wide_attention_horizon_pilot.py
+remain unqualified drafts;no48-row bound or changed original capacity is accepted.
 
-## Next integrated resident build on current core
-
-Prior resident backend embeds d412541 core; eager/public core advanced to a785d43.
-For final integration,build resident C++ and Python libraries against the current
-source-matching cores instead of composing archives from different core revisions.
-No production algorithm change. Frozen e69b3bd/compare-discrete-clean01;new builds
-integration-resident-{standalone,python}-clean01. Each bounded2700s,two workers,
-Ascend910_9392;standalone builds the resident-sharded-training selected client,
-Python builds its native module/shared library. Independent builds may overlap
-cold feasibility,not formal timing. Never modify older qualified builds.
-After pass,build installed combined eager/resident C++ consumer against this
-same core and run only affected public multi-owner/continued consumer gates.
-Full-size matrix follows; do not rerun all historical component suites.
+Read-only navigation/schema audit checked834 local links with no missing targets;
+portability schema is valid (10 targets,4 verified/6 implemented),not new hardware
+qualification. This checkpoint records reviewed integration/FP16 evidence and current plans;
+there is no uncommitted production code. Continue active jobs after commit/push,
+without pausing.

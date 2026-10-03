@@ -166,6 +166,23 @@ correction c6ef224 passed108 directed checks and the first original-width RSS
 recheck;the second worker policy timed out and its job stays failed
 ([evidence](evidence/cpu-training-rss-20261004.md)).
 
+F7 matching-core NPU integration on cleane69b3bd passed49 eager and93 resident
+checks,no skips. Fresh resident C++/Ascend C backends for both runtime owners and
+a fresh installed combined eager/resident consumer use the byte-verified current
+core. Includes FP32/FP16 complete training and fresh-process2→3-owner continuation;
+three failed packaging attempts remain retained
+([audit](evidence/integrated-npu-consumers-20261004.md)). Full-size performance and
+terminal-job closure remain open;the accepted strict near-tie limitation stays
+explicit and does not block independent delivery.
+
+F6 original B512 eager FP16 mixed-A/LibTorch/TimedDAG/prefill training on8 NPUs
+passed Add1254.205146587s and Attention2334.246752751s,physicalB32/B8,two connected
+windows,FP32 masters/loss,static scale128. Memory and unchanged3000s guards pass
+([audit](evidence/original-b512-eager-fp16-20261004.md)). These are cold phase
+diagnostics with different actual event counts,not formal throughput or isolated
+dtype speedups. Full-size warm continuation and the other family/client/schedule
+cells remain required.
+
 F6 original B512 mixed-A training on11 NPUs now passed for Add1287.28431384s
 and Attention2655.242050484s,with unchanged3000s/1.15 and memory checks
 ([evidence](evidence/original-b512-eager-mixed-20261004.md)). These remain cold

@@ -418,6 +418,22 @@
           "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "scope": "Matching current core, fresh resident C++/Ascend C libraries for standalone and Python registration, fresh installed combined eager/resident consumer. Eager49 and public resident93 checks,no skips; FP32/FP16,three graph families,both schedules,complete training/inference and fresh-process2-to-3-owner restore. Small semantic/integration scope; original-scale strict near-tie failure retained separately.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py,test_resident_sharded_training.py,test_online_resident_consumer.py; exact source/build/commands and terminal records in audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/integrated-npu-consumers-20261004.md"
         }
       ],
       "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
@@ -974,6 +990,35 @@
           "test_command": "Audited wide-eager-mixed-b512-01 argv and3000s update bounds in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/original-b512-eager-mixed-20261004.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "scope": "Matching current core, fresh resident C++/Ascend C libraries for standalone and Python registration, fresh installed combined eager/resident consumer. Eager49 and public resident93 checks,no skips; FP32/FP16,three graph families,both schedules,complete training/inference and fresh-process2-to-3-owner restore. Small semantic/integration scope; original-scale strict near-tie failure retained separately.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "Directed test_online_eager_precision.py,test_resident_sharded_training.py,test_online_resident_consumer.py; exact source/build/commands and terminal records in audit.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/integrated-npu-consumers-20261004.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "7b1fae504ec779143655b9221c82d8c14a69b410",
+          "scope": "Original9.468B Add/17.521B Attention B512 mixed-A/LibTorch/TimedDAG/prefill FP16 SGD on8 NPUs,physicalB32/B8,two connected windows,FP32 masters/loss and static scale128. Both complete updates and memory checks passed within3000s. Cold phase diagnostics; no formal throughput,equal-work or cross-dtype route-equivalence claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "workload"
+          ],
+          "test_command": "Audited wide-eager-half-b512-01 exact commands,binary/pilot identities and unchanged guards in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/original-b512-eager-fp16-20261004.md"
         }
       ]
     },
