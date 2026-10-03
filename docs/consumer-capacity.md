@@ -11,7 +11,8 @@ The local small/D128 qualification is recorded in
 
 The planner uses topology and declared module shapes, never a CPU execution,
 observed reference events or a numerical prepass. Its static placement is the
-same stable memory/locality heuristic used by the resident backend. Physical
+same stable memory/locality heuristic used by the resident backend initially.
+The bounded aggressive fallback below can refine automatic physical owners. Physical
 projection/state owners and canonical optimizer owners are accounted separately;
 Python's explicit owner maps remain supported. Core/resident ABI is unchanged.
 
@@ -105,6 +106,20 @@ fields together; conservative mode always uses that joint halving. Every accepte
 plan still fits the original per-card envelope and safety margin. This heuristic
 does not promise optimal throughput or the fewest reductions.
 
+If all operator maxima have reached one and automatic placement still fails,
+aggressive multi-device admission may jointly move a node's Full/state ownership.
+It preserves nonempty caller-supplied Python owner maps and conservative placement.
+Empty owner tuples/lists select automatic placement, as does an omitted map. The
+fallback uses the complete per-card envelope at one-row maxima, including
+coordinator costs. Each move strictly improves the tuple of summed positive
+excess,maximum excess and descending card peaks. Shape-equivalent donor nodes
+share a cost trial; physical-edge locality,then node/device index,resolve ties.
+No owner is emptied. Search stops on a fit,no improving move,2×node-count moves
+or4096 envelope trials. It then retries requested operator maxima on the new map;
+all original budgets/margins and runtime allocator checks still apply. Records
+include `owner_moves` and `owner_evaluations`; this heuristic need not find every
+feasible partition. The new fallback is implemented pending qualification.
+
 The finite search performs no device workload and does not search by OOM. It
 records requested/effective maxima, reduction iterations and `row_selection`
 (`greedy_peak_excess` or `joint_halving`). The backend may further reduce rows to
@@ -155,6 +170,11 @@ Fixed sample selection remains the default. This is a finite conservative
 heuristic, not an optimal-throughput search or a numerical prepass. It does not
 shrink queue/journal/KV capacities, change dtype, reduce the logical batch, or
 change window connections, loss normalization or the shared update boundary.
+Memory admission does not certify that a particular queue or per-window KV
+journal can represent all future work. A larger admitted sample group or a changed
+owner map can expose a previously unfilled journal limit. Failed owners remain
+failed; completed-program error messages report committed queue/journal counts
+and per-shard KV journal capacities, without adding successful-path reads.
 Explicit capacity failures still apply to actual future inputs. CPU/eager mixed
 flows reject this resident-only option; their explicit sample slicing remains.
 

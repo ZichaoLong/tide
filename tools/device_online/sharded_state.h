@@ -20,6 +20,8 @@ class ShardedState {
   void export_states(Continuation&) const;void export_trace(std::vector<Event>&) const;
   int64_t reserved_bytes() const;int64_t program_count() const;int64_t workspace_bytes() const;int64_t packet_bytes() const;
   std::map<std::string,int64_t> stats() const;
+  // After all programs complete; synchronization belongs only to error reporting.
+  std::map<std::string,int64_t> failure_stats() const;
   std::vector<StateOwnerTape> reverse_parameters(int64_t tensor_budget) const;
   std::vector<StateOwnerBanks> parameter_banks() const;
   std::vector<StateOwnerValues> state_values() const;

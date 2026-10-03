@@ -46,6 +46,11 @@ class PackedEventAttention {
   at::Tensor key_work() const;
   at::Tensor chunks() const;
   at::Tensor peak() const;
+  std::vector<const DeviceJournal*> journals() const {
+    std::vector<const DeviceJournal*> out;
+    for(const auto& g:groups_)if(g->journal)out.push_back(g->journal.get());
+    return out;
+  }
   std::vector<ContinuationRows> continuation_rows() const {
     std::vector<ContinuationRows> out;
     for(const auto& g:groups_)out.push_back({{g->live.key,g->live.value},g->live.lengths,g->capacity});

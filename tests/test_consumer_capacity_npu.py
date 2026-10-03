@@ -14,10 +14,11 @@ from tools.online_bench.head_budget import head_budget
 from tools.online_bench.capacity import Capacities,Chunks,MIB,packet_geometry,plan
 
 
+@pytest.mark.parametrize('capacity_pressure',['operators','owners'])
 @pytest.mark.parametrize('implementation',['native','libtorch'])
 @pytest.mark.parametrize('memory',['add','attention'])
 @pytest.mark.parametrize('payload_dtype',['float32','float16'])
-def test_complete_training_with_automatic_splitting(implementation,memory,payload_dtype,tmp_path):
+def test_complete_training_with_automatic_splitting(implementation,memory,payload_dtype,capacity_pressure,tmp_path):
     d=target();p=packet(memory);half=payload_dtype=='float16';opt='adamw' if memory=='attention' else 'sgd'
     schedule='prefill' if memory=='attention' else 'streaming'
     caps=Capacities(outputs=16,trace=512,kv_trace=512)
@@ -27,9 +28,14 @@ def test_complete_training_with_automatic_splitting(implementation,memory,payloa
     original=plan(g,caps,chunks,[64*1024**3]*2,True)
     minimum=plan(g,caps,Chunks(1,1,1,1,1,1,1),[64*1024**3]*2,True)
     target_peak=(max(c['estimated_peak_bytes'] for c in original['devices'])+max(c['estimated_peak_bytes'] for c in minimum['devices']))//2
+    if capacity_pressure=='owners':
+        target_peak=max(c['estimated_peak_bytes'] for c in minimum['devices'])-128
     budget=(target_peak+128*MIB)*10//9
     expected_plan=plan(g,caps,chunks,[budget]*2,True)
-    assert expected_plan['physical_reductions']>0
+    if capacity_pressure=='owners':
+        assert expected_plan['owner_moves']>0 and expected_plan['full_owners']!=minimum['full_owners']
+    else:
+        assert expected_plan['physical_reductions']>0 and expected_plan['owner_moves']==0
     expected=[];actual=[]
     kw=dict(family='timed-dag',training=True,optimizer=opt,steps=2,warmup=0,windows_per_step=2,diagnostics=True)
     reference=run(p,implementation='python',device='cpu',schedule='streaming',observer=observer(expected),**kw)

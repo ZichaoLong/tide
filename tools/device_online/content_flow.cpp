@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 
 namespace tide::device_online {
@@ -273,7 +274,35 @@ ContentWindow ContentFlow::advance_device(const std::vector<External>& input,Ind
       if(failure)std::rethrow_exception(failure);
     } else s.program->run();
     const auto error=s.error.cpu().item<int>();
-    if(error)throw std::runtime_error("content flow device refusal code="+std::to_string(error));
+    if(error) {
+      // All device programs have completed. Read only small diagnostic counters
+      // on this failure path; successful progression has no added host reads.
+      std::ostringstream detail;
+      detail<<"content flow device refusal code="<<error;
+      try {
+        detail<<" stages="<<s.stages.cpu().item<int64_t>()
+              <<" events="<<s.event_count.cpu().item<int64_t>();
+        auto queue=[&](const char* name,const auto& q) {
+          if(!q)return;
+          auto stats=q->stats().cpu();
+          detail<<" "<<name<<"="<<stats[0].template item<int64_t>()
+                <<"/"<<q->atoms().valid.numel()<<"(peak="
+                <<stats[1].template item<int64_t>()<<")";
+        };
+        queue("pending",s.pending);queue("outputs",s.outputs);queue("messages",s.messages);
+        auto journal=[&](const char* name,const auto& j) {
+          if(j)detail<<" "<<name<<"="<<j->count.cpu().template item<int64_t>()<<"/"<<j->meta.size(0);
+        };
+        journal("event_journal",s.events);journal("fiber_journal",s.fibers);
+        journal("contribution_journal",s.contributions);journal("full_journal",s.full_trace);
+        journal("raw_full_journal",s.raw_full_trace);journal("emission_journal",s.emission_trace);
+        if(s.attention)journal("kv_journal",s.attention->journal());
+        if(s.event_attention)for(const auto* j:s.event_attention->journals())journal("event_kv_journal",j);
+        if(s.sharded_state)for(const auto& [name,value]:s.sharded_state->failure_stats())
+          detail<<" "<<name<<"="<<value;
+      } catch(const std::exception& e) {detail<<" diagnostics_unavailable="<<e.what();}
+      throw std::runtime_error(detail.str());
+    }
     s.window_start=s.boundary.cut;s.boundary.cut=until;for(const auto& [owner,last]:validated.ledger_updates)s.boundary.ledger[owner]=last;
     return {s.outputs->atoms(),s.outputs->stats(),s.pending->stats(),s.stages,s.event_count,s.full_chunks,s.emission->chunks()};
   } catch(...) {s.failed=true;throw;}

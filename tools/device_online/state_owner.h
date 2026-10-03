@@ -30,6 +30,11 @@ class StateOwner {
   const std::vector<int64_t>& global_nodes() const {return global_nodes_;}
   int64_t reserved_bytes() const {return reserved_;}
   std::map<std::string,int64_t> stats() const;
+  std::vector<const DeviceJournal*> journals() const {
+    auto out=event_?event_->journals():std::vector<const DeviceJournal*>{};
+    if(fiber_&&fiber_->journal())out.push_back(fiber_->journal());
+    return out;
+  }
   int64_t reverse_parameter_bytes() const;
   StateOwnerTape reverse_parameters(int64_t tensor_budget) const;
   StateOwnerBanks parameter_banks() const;

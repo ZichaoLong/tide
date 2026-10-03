@@ -1,11 +1,13 @@
 #pragma once
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <limits>
 #include <map>
 #include <numeric>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace tide_flow::capacity {
@@ -33,7 +35,7 @@ struct Card {I index,peak,budget=0,usable=0,headroom=0;std::map<std::string,I> p
 struct MemoryRefusal:std::invalid_argument {using std::invalid_argument::invalid_argument;};
 struct Plan {
   std::vector<Card> cards;std::vector<I> owners,canonical;Chunks requested,effective;I reductions=0;bool aggressive;
-  I logical_batch=0,sample_rows=0;std::vector<I> sample_attempts;
+  I logical_batch=0,sample_rows=0,owner_moves=0,owner_evaluations=0;std::vector<I> sample_attempts;
 };
 inline bool within_estimate(const Plan& plan,const std::vector<I>& peaks) {
   if(peaks.size()!=plan.cards.size())throw std::invalid_argument("consumer memory observation device mismatch");
@@ -173,6 +175,42 @@ inline std::vector<Card> envelope(const Geometry& g,const Capacities& c,const Ch
   }
   return result;
 }
+struct OwnerBalance {std::vector<I> owners;I moves=0,evaluations=0;};
+inline OwnerBalance rebalance(const Geometry& g,const Capacities& c,const Chunks& minimum,
+    const std::vector<I>& initial,const std::vector<I>& canonical,const std::vector<I>& usable) {
+  OwnerBalance out{initial};const I n=g.sources.size();
+  std::vector<std::vector<I>> adjacent(initial.size());
+  for(auto [a,b]:g.edges)if(a!=b){adjacent[a].push_back(b);adjacent[b].push_back(a);}
+  using Score=std::tuple<Wide,Wide,std::vector<I>>;
+  auto evaluate=[&](const std::vector<I>& owners) {
+    auto cards=envelope(g,c,minimum,owners,canonical,true);std::vector<I> peaks;std::vector<Wide> excess;
+    Wide total=0,maximum=0;
+    for(size_t d=0;d<cards.size();++d){peaks.push_back(cards[d].peak);
+      Wide x=std::max<Wide>(0,Wide(cards[d].peak)-usable[d]);excess.push_back(x);total+=x;maximum=std::max(maximum,x);}
+    std::sort(peaks.begin(),peaks.end(),std::greater<I>());
+    return std::make_pair(Score{total,maximum,peaks},excess);
+  };
+  auto [current,excess]=evaluate(out.owners);
+  for(size_t pass=0;pass<2*initial.size()&&std::get<0>(current)>0&&out.evaluations<4096;++pass) {
+    const I donor=std::max_element(excess.begin(),excess.end())-excess.begin();
+    if(std::count(out.owners.begin(),out.owners.end(),donor)<=1)break;
+    std::map<std::tuple<I,I,I>,std::vector<I>> groups;
+    for(I i=0;i<I(out.owners.size());++i)if(out.owners[i]==donor)
+      groups[{i<n?1:0,i<n?g.sources[i]:0,i<n?g.slots[i]:0}].push_back(i);
+    bool found=false;std::tuple<Score,I,I,I> best;std::vector<I> selected;std::vector<Wide> next_excess;
+    for(const auto& [signature,nodes]:groups)for(I target=0;target<g.devices;++target) {
+      if(target==donor||out.evaluations>=4096)continue;
+      auto delta=[&](I i){I value=0;for(auto j:adjacent[i])value+=I(out.owners[j]!=target)-I(out.owners[j]!=donor);return value;};
+      I node=nodes.front();for(auto i:nodes)if(std::make_pair(delta(i),i)<std::make_pair(delta(node),node))node=i;
+      auto trial=out.owners;trial[node]=target;auto [value,trial_excess]=evaluate(trial);++out.evaluations;
+      auto key=std::make_tuple(value,delta(node),node,target);
+      if(value<current&&(!found||key<best)){found=true;best=key;selected=std::move(trial);next_excess=std::move(trial_excess);}
+    }
+    if(!found)break;
+    current=std::get<0>(best);out.owners=std::move(selected);excess=std::move(next_excess);++out.moves;
+  }
+  return out;
+}
 inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,const std::vector<I>& budgets,bool aggressive) {
   const I n=g.sources.size();
   if(g.width<1||g.batch<1||g.vocab<1||g.windows<1||g.regions<1||g.sample_chunks<1||g.context_bytes<0||(g.payload!=2&&g.payload!=4)
@@ -185,7 +223,7 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
   for(const auto* key:{"full","emission","aggregate","attention","keys","reverse","head"})
     if(!requested.count(key)||requested.at(key)<1)throw std::invalid_argument("invalid physical memory chunk");
   for(auto [a,b]:g.edges)if(a<0||b<0||a>=n+2||b>=n+2)throw std::invalid_argument("invalid consumer edge");
-  Plan out;out.owners=placement(g);out.canonical=canonical_loads(g);out.requested=out.effective=requested;out.aggressive=aggressive;
+  Plan out;out.owners=placement(g);out.canonical=canonical_loads(g);out.requested=out.effective=requested;out.aggressive=aggressive;bool balanced=false;
   for(;;) {
     out.cards=envelope(g,c,out.effective,out.owners,out.canonical,aggressive);bool fits=true;std::string why;
     for(size_t i=0;i<out.cards.size();++i) {
@@ -216,7 +254,15 @@ inline Plan plan(const Geometry& g,const Capacities& c,const Chunks& requested,c
     }
     // Joint halving crosses equal-peak plateaus; conservative mode retains it.
     bool changed=false;for(auto& [_,value]:out.effective)if(value>1){value=std::max<I>(1,value/2);changed=true;}
-    if(!changed)throw MemoryRefusal("complete-consumer memory admission refused at minimum physical rows; "+why);
+    if(!changed) {
+      if(aggressive&&g.devices>1&&!balanced) {
+        balanced=true;std::vector<I> usable;for(const auto& card:out.cards)usable.push_back(card.usable);
+        auto next=rebalance(g,c,out.effective,out.owners,out.canonical,usable);
+        out.owner_moves=next.moves;out.owner_evaluations=next.evaluations;
+        if(next.owners!=out.owners){out.owners=std::move(next.owners);out.effective=requested;out.reductions=0;continue;}
+      }
+      throw MemoryRefusal("complete-consumer memory admission refused at minimum physical rows; "+why);
+    }
     ++out.reductions;
   }
 }

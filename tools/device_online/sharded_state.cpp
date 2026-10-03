@@ -152,6 +152,19 @@ std::map<std::string,int64_t> ShardedState::stats() const {
   }
   out["state_peer_packet_bytes"]=packet_bytes();return out;
 }
+std::map<std::string,int64_t> ShardedState::failure_stats() const {
+  std::map<std::string,int64_t> out;
+  for(size_t i=0;i<impl_->shards.size();++i) {
+    const auto& s=impl_->shards[i];const auto prefix="state_shard_"+std::to_string(i);
+    out[prefix+"_error"]=s.error.cpu().item<int>();
+    size_t index=0;
+    for(const auto* j:s.owner->journals()) {
+      const auto name=prefix+"_kv_journal_"+std::to_string(index++);
+      out[name+"_count"]=j->count.cpu().item<int64_t>();out[name+"_capacity"]=j->meta.size(0);
+    }
+  }
+  return out;
+}
 std::vector<StateOwnerTape> ShardedState::reverse_parameters(int64_t budget) const {
   long double bytes=0;for(const auto& s:impl_->shards)bytes+=s.owner->reverse_parameter_bytes();
   if(budget<1||2.L*bytes>budget)throw std::invalid_argument("compact owner tape gather/retention exceeds total tensor budget");

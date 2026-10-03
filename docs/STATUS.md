@@ -113,25 +113,47 @@ had a stale dependency path; identity check rejected it; corrected helper passed
 original retained. Audit:
 `python TASK/launchers/private_bank_capacity_evidence.py 219719dfb15cf9e2c30f7e7facac5feb1a5c19cb`.
 
-Uncommitted next-work **capacity_balance.py** is an unintegrated Python prototype:
-bounded static owner moves from complete-envelope costs; at most2×nodes moves,
-4096 envelope trials,strict memory-score improvement and physical-edge locality
-for ties. Shape-equivalent donor nodes share a trial; integer budgets only, no
-model values/events/routes. A draft static original-Attention12-card/B2 probe
-moves24 owners in946 trials,63.923→53.598GiB maximum estimate; this is NOT a
-runtime/admission/support result. C++ counterpart,planner integration,tests and
-actual allocator/trajectory validation still required. No full-size Attention job queued.
-This evidence commit contains docs only; prototype remains uncommitted.
+Bounded memory-aware placement and failure diagnostics are IMPLEMENTED with
+PASSED directed development gates; immutable qualification is next. Python/C++
+independently move joint Full/state owners only after aggressive initial placement
+and all operator reductions fail. Nonempty explicit Python maps/conservative maps
+stay fixed; empty tuples/lists mean automatic placement. At most2×nodes moves and
+4096 trials,strict integer memory improvement,physical-edge locality ties,no empty
+owner set. Changed maps retry requested chunks; every admission retains the full
+envelope and original margins. Static original-Attention12-card/B2:24 moves/946
+trials,63.923→53.598GiB<53.875usable; this is NOT runtime proof.
+
+Directed development: CPU27 on dev02,16-shape comparison test on dev03,and changed
+empty-map regression on dev04 passed. Dev03 NPU23 passed/10 failed retained:
+four native failures were the empty-tuple bug (corrected owner-pressure dev04 all4
+passed); others exposed B17 local KV-journal capacity or old sample expectations.
+Dev04 and dev05 one-case diagnostics remain FAILED/exit1 with completed-program
+counts. B17 reached stage4/events170,pending102/512,general journals170–238/2048,
+KV journals952/2048 before an over-capacity append. New failure-only queue/KV
+accessors have no object-layout/kernel change or successful-path host reads.
+
+Dev06 all3 builds and automatic-sample NPU10 passed (8 independent CPU-referenced
+complete cases +2 expected old2048-row KV refusals). Complete tiny B17 tests use
+5712 KV-journal rows: static all-body-node bound17×12×(8²−6²),independent of
+placement/selection,for last window[6,8). Original wide capacities are unchanged.
+Original failures stay immutable. Source memory-balance-dev06; builds
+flow-diagnostics-{standalone,python}-dev06 and memory-balance-consumer-dev06.
+No full-size Attention job queued; no current development job is live.
+
+Next immutable jobs on the implementation commit: memory-balance-cpu-clean01
+(CPU capacity28 +automatic-option contract),build-memory-balance-{standalone,
+python,consumer}-clean01,and memory-balance-npu-clean01 (35 affected cases incl
+explicit refusals). Backend rebuild helper build_flow_journal_diagnostics.py,
+client build_capacity_client.py; frozen launch via freeze_run.py. Calibrate
+D512/B8,physicalB2×4,two windows,one FP32 AdamW with forced owner move via
+memory_balance_calibration.py; independent FP16 moved-owner trace via
+profile_memory_balance.py. Each has bounded child timeout/lease120s.
 
 ## Next implementation and validation
 
-1. Finish generic bounded memory-aware placement using the prototype: independently
-   implement C++ equivalent and integrate only after the existing aggressive
-   initial placement/operator cuts cannot fit. Preserve explicit Python owner
-   maps; static integer cost improvements and finite search,all safety margins.
-   Start from capacity.py/.h,capacity_record.h and tests/test_consumer_capacity.py;
-   keep Python/C++ plan parity and actual independent CPU comparisons. Do not
-   claim prototype execution or weaken admission to obtain a pass.
+1. Commit this tested implementation,then qualify exact clean source with the
+   affected jobs above. Audit terminal results and counters,commit evidence
+   separately,and push. No full-size proof follows from static fitting.
 2. Calibrate the new placement on a bounded actual consumer,then original-width
    Attention under comparable capacities/3000s/1.15; actually execute B512 after
    valid memory/cost admission. No full-size training claim from static fitting.
@@ -143,8 +165,7 @@ This evidence commit contains docs only; prototype remains uncommitted.
    integration/evidence/portable-command audit. CUDA/new stack cells require
    explicit target-machine validation; never claim local execution without hardware.
 
-All current compute jobs are terminal. Next implementation is the uncommitted
-placement prototype above; the protected historical task stays separately stopped.
+Current directed development jobs are terminal; clean qualification is next.
 New long jobs: frozen source,background.slice,Nice10,two build workers,explicit
 child timeout,lease wait120s; unit `tide-execution-flows-NAME.service`,persistent
 logs/status under `TASK/runs/NAME`. Confirm terminal records,workload exit,result

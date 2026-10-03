@@ -2,7 +2,7 @@
 
 These estimates are intentionally conservative, not vendor allocation proofs.
 Local workspace budgets are ceilings, not allocations, and are never summed as
-HBM demand. Only physical row maxima may shrink; logical capacities stay fixed.
+HBM demand. Physical rows and automatic owners may adapt; logical capacities stay fixed.
 """
 from dataclasses import dataclass, asdict, replace
 from .head_budget import head_budget
@@ -265,19 +265,31 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
             or min(*asdict(requested).values(),*budgets) < 1
             or any(a < 0 or b < 0 or a >= len(g.sources)+2 or b >= len(g.sources)+2 for a,b in g.edges)):
         raise ValueError('invalid complete-consumer memory geometry/budget')
+    # ResidentPlacement uses empty tuples for automatic placement, just like
+    # the default None accepted by this static planning interface.
+    automatic_owners = not full_owners and not state_owners
     owners, canonical = full_owners or placement(g), canonical_loads(g)
     state_owners = state_owners or owners
     for layout in (owners,state_owners):
         if len(layout) != len(g.sources)+2 or set(layout) != set(range(g.devices)):
             raise ValueError('invalid consumer owner map')
     usable = [x-x//(10 if aggressive else 4)-128*MIB for x in budgets]
-    chunks = Chunks(**asdict(requested)); reductions = 0
+    chunks = Chunks(**asdict(requested)); reductions = moves = trials = 0
+    balanced = False
     while True:
         cards = envelope(g,c,chunks,owners,canonical,state_owners,aggressive)
         if all(card['estimated_peak_bytes'] <= cap for card,cap in zip(cards,usable)):
             break
         values = asdict(chunks)
         if max(values.values()) == 1:
+            if aggressive and g.devices>1 and automatic_owners and not balanced:
+                from .capacity_balance import rebalance
+                balanced=True
+                candidate,moves,trials=rebalance(g,owners,usable,
+                    lambda layout:envelope(g,c,chunks,layout,canonical,reuse_parameter_gradients=True))
+                if candidate!=owners:
+                    owners=state_owners=candidate;chunks=Chunks(**asdict(requested));reductions=0
+                    continue
             details = ', '.join(f"device {i}: estimated {d['estimated_peak_bytes']} > usable {usable[i]}" for i,d in enumerate(cards) if d['estimated_peak_bytes'] > usable[i])
             raise MemoryRefusal('complete-consumer memory admission refused at minimum physical rows; '+details)
         selected = None
@@ -303,6 +315,7 @@ def plan(g, c, requested, budgets, aggressive=False, full_owners=None, state_own
     return dict(schema='tide-consumer-capacity-v1', scope='resident Add/Attention complete consumer; conservative shape estimate, not a vendor allocation guarantee',
                 devices=cards,full_owners=owners,state_owners=state_owners,canonical_elements=canonical,
                 requested_chunks=asdict(requested),effective_chunks=asdict(chunks),physical_reductions=reductions,
+                owner_moves=moves,owner_evaluations=trials,
                 row_selection='greedy_peak_excess' if aggressive else 'joint_halving',
                 policy='aggressive' if aggressive else 'conservative')
 

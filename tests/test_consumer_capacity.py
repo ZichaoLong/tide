@@ -280,7 +280,10 @@ def test_automatic_samples_preserve_logical_storage_and_refuse_at_one(capacity_p
     weak=1
     a,b=(x['devices'][weak]['estimated_peak_bytes'] for x in (larger,smaller))
     assert b<a
-    budgets=[64*1024**3]*3;budgets[weak]=((a+b)//2+128*MIB)*10//9
+    # Every card is constrained: moving owners cannot create the missing total
+    # KV/state capacity. A separately tested weak-card-only case can rebalance.
+    budgets=[((x['estimated_peak_bytes']+y['estimated_peak_bytes'])//2+128*MIB)*10//9
+             for x,y in zip(larger['devices'],smaller['devices'])]
     with pytest.raises(MemoryRefusal):
         plan_samples(g,caps,one,budgets,True,17,False)
     result=plan_samples(g,caps,Chunks(),budgets,True,17,True)
@@ -308,3 +311,47 @@ def test_automatic_sample_cli_and_boolean_contract(tmp_path):
     for value in (1,None,'true'):
         with pytest.raises(ValueError,match='boolean'):
             plan_samples(g,Capacities(),Chunks(),[64*1024**3]*3,True,g.batch,value)
+
+
+def test_bounded_owner_moves_resolve_weak_card_and_preserve_explicit_maps(capacity_probe):
+    from tools.online_bench.capacity import MemoryRefusal
+    _,g=geometry(width=16)
+    g=replace(g,batch=17,context_bytes=64*MIB)
+    caps=Capacities(kv=8192,trace=512,kv_trace=512);one=Chunks(1,1,1,1,1,1,1)
+    initial=plan(g,caps,one,[64*1024**3]*3,True)
+    smaller=plan(replace(g,batch=9,sample_chunks=2),caps,one,[64*1024**3]*3,True)
+    a,b=(p['devices'][1]['estimated_peak_bytes'] for p in (initial,smaller))
+    budgets=[64*1024**3]*3;budgets[1]=((a+b)//2+128*MIB)*10//9
+    with pytest.raises(MemoryRefusal):
+        plan(g,caps,one,budgets,True,initial['full_owners'],initial['state_owners'])
+    result=plan(g,caps,one,budgets,True)
+    assert cpp_plan(capacity_probe,g,caps,one,budgets,True)==result
+    assert plan(g,caps,one,budgets,True,(),())==result
+    assert plan(g,caps,one,budgets,True,[],[])==result
+    assert 0<result['owner_moves']<=2*len(result['full_owners'])
+    assert 0<result['owner_evaluations']<=4096
+    assert result['full_owners']==result['state_owners']!=initial['full_owners']
+    assert set(result['full_owners'])==set(range(g.devices))
+    assert result['canonical_elements']==initial['canonical_elements']
+    assert all(d['estimated_peak_bytes']<=d['usable_bytes'] for d in result['devices'])
+    assert result['effective_chunks']==asdict(one) and result['physical_reductions']==0
+    # Explicitly providing the accepted map remains a valid non-searching call.
+    fixed=plan(g,caps,one,budgets,True,result['full_owners'],result['state_owners'])
+    assert fixed['devices']==result['devices'] and fixed['owner_moves']==fixed['owner_evaluations']==0
+
+
+def test_owner_balance_language_parity_across_shapes(capacity_probe):
+    rng=random.Random(20261003)
+    for i in range(16):
+        _,g=geometry('attention' if i%2 else 'add',rng.choice([4,16,128]),rng.choice([2,3]))
+        g=replace(g,payload=2 if i%3 else 4,windows=1+i%3,locality=bool(i%2))
+        caps=Capacities(queue=128,arrivals=128,outputs=64,trace=128,kv_trace=256)
+        one=Chunks(1,1,1,1,1,1,1)
+        initial=plan(g,caps,one,[64*1024**3]*g.devices,True)
+        target=max(d['estimated_peak_bytes'] for d in initial['devices'])-128
+        budgets=[(target+128*MIB)*10//9]*g.devices
+        current=plan(g,caps,one,budgets,True)
+        assert cpp_plan(capacity_probe,g,caps,one,budgets,True)==current
+        assert 0<current['owner_moves']<=2*len(g.sources)+4
+        assert 0<current['owner_evaluations']<=4096
+        assert all(d['estimated_peak_bytes']<=d['usable_bytes'] for d in current['devices'])
