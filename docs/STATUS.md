@@ -7,7 +7,8 @@ overrides a later user pause; commits/evidence/context compression do not stop
 or resume work by themselves. Overall F1–F7 remains incomplete.
 Eager owner implementation 55c396073afa2a78376ab84d3b29e5e192850f7e is now
 qualified below. Actual multi-device consumer integration has passed development checks and is
-being committed for clean qualification; bounded jobs are recorded below.
+committed as e5d91d7a20321822fc69f8516331d1da371c0719 and pushed.
+Clean affected qualification and its audit passed; evidence is recorded below.
 No subagents; reference repositories and ObsidianVault remain read-only.
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -140,47 +141,57 @@ F7 must then audit integration, evidence, support and portable commands. CUDA ha
 no local hardware: deliver portable source/build/test commands and retain explicit
 target-machine-pending status, never claim local execution.
 
-## Current consumer increment and next qualification
+## Actual eager consumer qualification completed
 
-Actual consumer ownership is implemented and development-tested, awaiting its
-own clean qualification. Python/native/standalone independently initialize the
-same named leaves, use per-device fixed-constant caches, gather outputs to the
-head owner, synchronize and observe every device, and agree on finite gradients
-before updating. Static learned-parameter/locality planning or explicit maps keep
-node zero/boundaries/head/embedding on owner zero. Total peak admission and packed
-cross-device transfer remain separate work; resident aliases are preserved.
-Resolve this implementation after commit with
-`git log -1 --format=%H -- tools/online_bench/eager_placement.py`.
+Clean implementation e5d91d7a20321822fc69f8516331d1da371c0719 is qualified by
+[actual-consumer evidence](evidence/eager-consumer-owners-20261003.md).
+Python/native/standalone independently initialize named learned leaves on owners,
+use per-device fixed-constant caches, gather head rows, synchronize/observe all
+cards and agree on finite gradients before updating. Static learned-parameter/
+locality planning or explicit maps retain node zero/boundaries/head/embedding on
+owner zero. Total peak admission and packed transfer remain separate work.
 
-Terminal development jobs, no skips (deselection is explicit):
-`mixed-consumer-python-cpu-dev01`9 planning/rejection tests;
-`mixed-consumer-cpu-dev01`64 affected CPU tests;
-`mixed-consumer-python-npu-dev01`13 Python/native training/constant cases;
-`mixed-consumer-cpp-npu-dev01`6 standalone training cases;
-`mixed-consumer-options-npu-dev01`27 inference/CLI/native transport interactions.
-Final C++ resident-alias preservation uses snapshot`mixed-consumer-dev03`:
-`build-mixed-consumer-{cpu,npu}-dev02`both passed/exit0;
-`mixed-consumer-cpp-cpu-dev02`24 FP64/FP32 standalone comparisons and
-`mixed-consumer-cpp-npu-dev02`6 two-device full-training comparisons passed/exit0.
-Their service cgroups are empty, leases complete and all1504 frozen hashes match.
-The separate earlier development profile`mixed-consumer-profile-dev01`passed
-(14090 operators,128 AiCPU,no observed host fallback); it is not the final binary
-or a throughput measurement. No new modification is qualified by owner-only evidence.
+Five clean terminal jobs passed/exit0, empty cgroups, completed leases:
+`build-mixed-consumer-{cpu,npu}-clean01`, `mixed-consumer-{cpu,npu}-clean01`,
+`mixed-consumer-profile-clean01`. CPU73/NPU40, no skips; explicit deselection48/9.
+Each actual training comparison has two AdamW updates/two connected windows,
+physicalB1×2, independent CPU full-record/gradient/update checks. Inference,
+three clients/families, both schedules, mixedA/B/C, CLI owner replay, native
+workers/packed-sources/batch-next are represented. Fresh installed consumers
+reuse byte-verified qualified55c3960 core/adapters. All1504 source hashes match.
+The separate actual Attention two-device profile includes construction/head/loss/
+backward/optimizer without CPU reference or diagnostics; no observed host fallback,
+not throughput. Audit:
+`python TASK/launchers/mixed_consumer_evidence.py e5d91d7a20321822fc69f8516331d1da371c0719`.
+Frozen source `TASK/sources/mixed-consumer-clean01`; builds
+`TASK/builds/mixed-consumer-{cpu,npu}-clean01`. Raw records remain under
+`TASK/runs/NAME/{status.json,task.log}` with queue/profile records where applicable.
+Development dev01–dev03 snapshots/builds/tests and the earlier profile are retained;
+clean qualification covers the final C++ resident-alias preservation correction.
 
-After this implementation commit, freeze that exact clean revision as
-`TASK/sources/mixed-consumer-clean01`. Launch two600s builds with
-`TASK/launchers/build_eager_consumer.py --backend cpu|npu --name mixed-consumer-{cpu,npu}-clean01`.
-This installs byte-verified qualified55c3960 core into a fresh package, builds the
-current public-header-only consumer and checks standalone loader closure.
-Then run the affected CPU73 (existing consumer/host controls plus9 static-owner
-checks) and NPU40 actual-owner tests using those fresh binaries; use at most900s
-per gate, two-card lease120s. Separately run
-`TASK/launchers/profile_eager_consumer.py --source SOURCE --build NPU_BUILD --out OUT/profile`
-with a300s child bound. Every NPU child runs from `{out}` with absolute source paths.
-Audit fixed source/binary hashes, counts, terminal units/leases and trace placement,
-then commit evidence separately and push. Continue with calibrated eager capacity/
-packed transfers and a separately budgeted Attention B512 feasibility run; do not
-pause after this increment. Formal heavy timing remains serial.
+## Next implementation and independent feasibility
+
+Continue with eager packed cross-card message transfers that preserve isolated
+None/zero VJPs and actual message identities, followed by calibrated total eager
+capacity/head workspace/sample splitting. Keep the CPU reference independent.
+Use affected gates, commit implementation first, then clean qualification and
+separate evidence; no unrelated core-owner reruns. Formal heavy timing is serial.
+
+Prepared next independent feasibility item (not launched yet):
+`wide-attention-b512-extended01` uses the already-qualified clean29effae
+`TASK/sources/owner-map-clean01`, exact original pilot binary
+`TASK/builds/owner-map-consumer-clean01`, and
+`TASK/launchers/wide_attention_b512_extended.py --source SOURCE --build BUILD
+--pilot TASK/runs/wide-attention-owner-pilot01/assessment --out OUT/assessment`.
+This is a new helper; the original3000s refusal/helper are unchanged. Measured
+fixed-layout phase forecast7036.453s with1.15 justifies a separately declared
+9000s complete-update budget,9480s child including measured282s construction,
+9600s enclosing timeout,11-card lease120s. Preserve physicalB1,owner map,chunks,
+60GiB/card,4GiB context pool,all queue/KV/journal capacities and post-run allocator
+checks. Launch only after current device qualification/profile ends; take
+`online-measurement.lock`. On failure retain the exact result and advance
+independent implementation without a blind retry. This is cold full-size
+feasibility, not formal throughput or a full-size CPU gradient oracle.
 
 All task outputs are `TASK/runs/NAME/{status.json,task.log}`, units
 `tide-execution-flows-NAME`. Historical failures and the protected paused task
