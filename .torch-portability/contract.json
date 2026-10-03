@@ -304,6 +304,20 @@
           "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+          "scope": "Complete CPU FP64/FP32 integration:9458 passed,654 optional-device/feature skips,all12 standalone CTests. Fresh complete core and consumer with exact source/binary byte audit across recorded build revisions. No accelerator or full-size performance claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature"
+          ],
+          "test_command": "scripts/verify.py --device cpu --dtype both with complete core;all12 registered CTests;exact commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/integrated-cpu-20261004.md"
         }
       ]
     },
@@ -656,6 +670,20 @@
           "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+          "scope": "Complete CPU FP64/FP32 integration:9458 passed,654 optional-device/feature skips,all12 standalone CTests. Fresh complete core and consumer with exact source/binary byte audit across recorded build revisions. No accelerator or full-size performance claim.",
+          "tiers": [
+            "build",
+            "cpu-semantic",
+            "parity",
+            "feature"
+          ],
+          "test_command": "scripts/verify.py --device cpu --dtype both with complete core;all12 registered CTests;exact commands in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/integrated-cpu-20261004.md"
         }
       ],
       "attempts": [
@@ -723,6 +751,19 @@
           "test_command": "Exact native wrapper commands, frozen plans and skipped inventory in docs/evidence/bounded-scheduler-capacity-20260929.json",
           "result": "failed",
           "reason": "Two-device CANN Notify resources exhausted; eight-device replay reached declared16384-channel capacity. Attention inference and Add training OOM in both dtypes on8 chips. The12-device FP16 inference OOM occurred on a device with another process; uncontended12-device fit remains unknown."
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "26176de888013fda5eccfe039fa504e87c2e7e95",
+          "scope": "Original9.468B Add independent CPU/resident FP32 physicalB2 inference,three NPUs,two connected windows. Forensic pair stopped at first strict discrete mismatch at sample17/time280/region7.",
+          "tiers": [
+            "parity",
+            "workload"
+          ],
+          "test_command": "Task-local forensic public-client commands and witness hashes retained in report.",
+          "result": "failed",
+          "reason": "One-ULP CPU score gap becomes a valid FP32 tie on resident proposals;stable tie selects another node. Exact route comparison remains failed;no tolerance/model/packet change converts it to a pass.",
+          "environment_manifest": "docs/evidence/original-add-route-witness-20261004.md"
         }
       ],
       "evidence": [
@@ -920,6 +961,19 @@
           "test_command": "Directed test_online_eager_precision.py/test_eager_capacity.py gates and calibration commands are retained in the cited eight-job audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/eager-fp16-consumers-20261003.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "c68609603c310f7121cb6f887afcadd019973209",
+          "scope": "Original9.468B Add and17.521B Attention B512 mixed-A/LibTorch/TimedDAG/prefill FP32 SGD complete updates on11 NPUs,two connected windows,physicalB32/B8. Cold feasibility and memory checks passed;no formal throughput or full-size strict CPU/resident equivalence claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "workload"
+          ],
+          "test_command": "Audited wide-eager-mixed-b512-01 argv and3000s update bounds in report.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/original-b512-eager-mixed-20261004.md"
         }
       ]
     },

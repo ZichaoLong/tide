@@ -1,0 +1,140 @@
+{
+  "source": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+  "source_file_count": 1539,
+  "source_inventory_sha256": "0cef764e72cae37903236abe29d8f85b2320bc5e6795f7c01b3bbbcf9f9349b9",
+  "jobs": [
+    {
+      "name": "build-integration-cpu-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "integration-cpu-recheck-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "integration-cpu-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "integration-ctest-cpu-clean02",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "78e9df6206f5cb95d17f433fafc440cb6ab41651",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "integration-cpu-clean01",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      }
+    }
+  ],
+  "core_build_source": "7b1fae504ec779143655b9221c82d8c14a69b410",
+  "core_cpp_sha256": "ca3597e96eb7a09dc68542b7b1c0904ec39f93375fe358524bf9b6273508868c",
+  "binary_sha256": {
+    "libtidegraph.a": "9c6032db974575952191befa8b3d191f0dc3a398a4ad73629f2844581c0616fc",
+    "libtidegraph_runtime.a": "e3e0f6293929fb2dd7f06913f93f4a074d474ea8dd0253a69c32be134f865995",
+    "_tide_native.so": "46bfff137ff0dc859c53bf277a335b01e5df3da760113730a79ef0e55ad9bc9d",
+    "tidegraph-smoke": "df85128c5c395207fd8fe322e9d00d97973d2ef42ded8608fa680a4c52760cfe",
+    "tidegraph-kernel-check": "3569f68f9c554493118c3a865608ff573de826c798860158a435486497f10427",
+    "tidegraph-full-check": "bb40ef05164765c8ca60b5361f7823a2a86570fd78c4a5983a82b0baaefbaf98",
+    "tidegraph-aggregate-check": "9874973075ffecf53b7bb5e329c0eb8ad3ae44b0cc1e7fe99b48828773c8d801",
+    "tidegraph-optimizer-check": "2046984c57e9669d58541e3dbbf25715e85d4787ef2c86ab8aa929afd9c32e20",
+    "tidegraph-checkpoint-check": "85031b81c7104476194e268ba5909e7797b02cdd007eafdca25c81de99a7f7d3",
+    "tidegraph-lh-scope-check": "746aedf44726838f1a9159a03747053ee5ec4d9de2e930ad3258aed8a2492e0d",
+    "tidegraph-streaming-bench": "1b0a8eb2d64a2e0bc1d5f81129818d7abbca68c1d77f6562a5df37e1fa8470fc",
+    "tidegraph-scale-bench": "60533853a30fe0a6320f5939ab9f1e1c11740bb2f93d4c99f4b044950cc81e14",
+    "tidegraph-profile-check": "7623a82555ec3760307399fd923a39107265dc5d3699cdefd1e6ca70995cdc86",
+    "tidegraph-settle-check": "6f142c7445505d001874649d9f6d4fd68cc0bb19535250bd542dab2a6774098e",
+    "tidegraph-greedy-check": "b873d0476e64d63911068fff2b5d03729967b2fa89e92d15b5f7f79e6ce81b91",
+    "tidegraph-accelerator-check": "73a63261a464b0ac533fb6ff07fa2a0bbafcb98e601bbc80a1ed6870caeab7c9",
+    "tidegraph-runtime-check": "2a88b83579fd09a52f1d2d3fc45de24fb028600f23f0c555f598cdc7858b7fe0",
+    "tidegraph-read-precision-check": "8d0ab8a82079c5ac4ab76731f9f0dda1d20ab8796f77f80d599f3abee5118098",
+    "tidegraph-placement-check": "5f3d69b9a58cad546570de2b2be584c116b5fdb67627d199e2f820f003935297",
+    "tidegraph-payload-ownership-check": "60e65372ae2a033f2f231f01b6a923860ab2db88acf10ac4c70486114c1c60ca"
+  },
+  "consumer_build_source": "c6ef22474f658ecb12dd11310c710781023932ab",
+  "consumer_binary_sha256": "6d16e7c7d8b0c1c135506256a8bc85cd74cfef59eb82737bfb48bcfb8c734147",
+  "environment": {
+    "architecture": "aarch64",
+    "python": "3.11.15",
+    "torch": "2.10.0+cpu",
+    "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+    "cxx11_abi": true,
+    "threads": 1
+  },
+  "dtype": "both",
+  "passed": 9458,
+  "skipped": 654,
+  "pytest_seconds": 2022.25,
+  "ctest": {
+    "passed": 12,
+    "failed": 0,
+    "seconds": 12.61
+  },
+  "rechecked_previous_failures": 120,
+  "retained_failure": {
+    "name": "integration-cpu-clean01",
+    "passed": 9337,
+    "failed": 120,
+    "skipped": 654
+  },
+  "scope": "Complete CPU FP32/FP64 pytest plus all12 standalone CTests on a fresh full core. Exact core/consumer bytes verified across test/document-only commit differences. 654 optional device/feature tests remain skipped,not NPU/CUDA passes. No full-size throughput or resolution of the separately observed resident FP32 near-tie route mismatch.",
+  "artifacts": {
+    "runs/build-integration-cpu-clean02/status.json": "3bb0601e923ce00c8b02d665d45ac5be1129d1b3a41f0c9f375ca6d03d36f835",
+    "runs/build-integration-cpu-clean02/task.log": "a5bc0b6a99f906c337eb1a9f43080e443b43e02f5cff4fb2bc02c4bc230d2291",
+    "runs/integration-cpu-recheck-clean02/status.json": "65e71c27104080e025e320b669a2962a2ced82ddc9a0140f991ef680a8afb27d",
+    "runs/integration-cpu-recheck-clean02/task.log": "4c952300bdabc38ff018eeeb67eee2e260a8725654433d0de2c7bad2a0492092",
+    "runs/integration-cpu-clean02/status.json": "28f660b2707c3184b7d01c5c2532b7e01b813f85a7f34866f59d768cebbd73d0",
+    "runs/integration-cpu-clean02/task.log": "63da5fc40645ec9b9168a003884cd0306bcb49fcd41ff601fc528b22592a975b",
+    "runs/integration-ctest-cpu-clean02/status.json": "41bd25f8d6ccb179fdf2edcc0ffafb2bf663b03c584f971fd1e30692ada493aa",
+    "runs/integration-ctest-cpu-clean02/task.log": "cc1f1775b673204112730c5e12d328c372d0e1d9aa335cf43b8b74db0d6af9e2",
+    "runs/integration-cpu-clean01/status.json": "d98c8e03c13478dc3d9f8f24d468733db646ae8adc4a5ed3735876772e5c420b",
+    "runs/integration-cpu-clean01/task.log": "106fa4c33ec9e13dd8e885b07c0fececc62784346d52ee1be8f9a20515d26761",
+    "builds/integration-cpu-clean02/build-manifest.json": "99427c603866e1f94fb9e9353c8d7c0d062300d903d3bb85fb095cc618b91b3b",
+    "builds/integration-cpu-clean02/Testing/Temporary/LastTest.log": "ee4785b12c16214abd73adc13eca26af50305a4ecdd72e933a3f3adc0381cfc6",
+    "builds/eager-rss-training-cpu-clean01/result.json": "980b1a7c50347d17760156e9af63c621aa48b2d55aa73eaa3500788181eec25a",
+    "runs/integration-cpu-clean02/verification/result.json": "48eba63f9a2fafa855bbe77879c47bfc7fc1b1133b660a0703b3a3422b76a4e9",
+    "runs/integration-cpu-clean02/verification/tests.log": "b564e370d263762743c7ffbfddb6d29ac608d6fbf13b1b76f805feeb6ac59d75",
+    "runs/integration-cpu-recheck-clean02/selection/result.json": "6842e74190f5c6f5757592975e196cd0a1be7218d50299ded48bb49e9e649f03",
+    "runs/integration-cpu-recheck-clean02/selection/tests.log": "d74ea5e5c38526a3840ac224d7f732ab4b0d0947ce26f46f72a4b8f04442e76f",
+    "runs/integration-cpu-clean01/verification/result.json": "ee46f5c2e99dab5ced74bde45217f2ea1ae35125a5eda35a037f4dccd9ccc7a4",
+    "runs/integration-cpu-clean01/verification/tests.log": "e401f4ef88c28f3f524ff7e38e46dca829f75e9076c58352cba36b22bb00dfdd",
+    "launchers/integration_cpu_evidence.py": "53996497950d3bc838084604108d332ba068376f2232baa396bd54bb0858cd0d"
+  }
+}

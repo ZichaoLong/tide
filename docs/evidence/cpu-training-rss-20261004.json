@@ -1,0 +1,145 @@
+{
+  "source": "c6ef22474f658ecb12dd11310c710781023932ab",
+  "qualification": "108 clean affected checks and completed first original-width calibration",
+  "jobs": [
+    {
+      "name": "build-eager-rss-training-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "c6ef22474f658ecb12dd11310c710781023932ab",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "eager-rss-training-cpu-clean01",
+      "state": "passed",
+      "exit_code": 0,
+      "source": "c6ef22474f658ecb12dd11310c710781023932ab",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      }
+    },
+    {
+      "name": "wide-eager-cpu-policy-recheck01",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "c6ef22474f658ecb12dd11310c710781023932ab",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      }
+    },
+    {
+      "name": "wide-eager-cpu-policy01",
+      "state": "failed",
+      "exit_code": 1,
+      "source": "c68609603c310f7121cb6f887afcadd019973209",
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      }
+    }
+  ],
+  "source_file_count": 1539,
+  "source_inventory_sha256": "79f20352d04b334191d2cff505adff44ade642f6b2ec48c454f84df54af2775a",
+  "first_case": {
+    "parameters": 17521117376,
+    "seconds": [
+      425.637614531
+    ],
+    "construction_seconds": 95.012750902,
+    "losses": [
+      20.681140899658203
+    ],
+    "outputs": [
+      192
+    ],
+    "final_cut": 408,
+    "batch_execution": {
+      "logical_batch": 8,
+      "requested_sample_chunk_rows": 4,
+      "effective_sample_chunk_rows": 4,
+      "physical_chunks": 2
+    },
+    "phase_timing": {
+      "enabled": true,
+      "measured": [
+        {
+          "sample_work_seconds": 412.78584438,
+          "optimizer_seconds": 12.851770150999982
+        }
+      ],
+      "warmup": [],
+      "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+      "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+    }
+  },
+  "memory": {
+    "previous_estimate": 245300487792,
+    "previous_observed": 248721317888,
+    "corrected_estimate": 254061046480,
+    "new_observed": 246219792384
+  },
+  "policy_second": {
+    "state": "failed",
+    "reason": "900s child timeout",
+    "exit_code": -15,
+    "result_available": false
+  },
+  "limits": {
+    "child_seconds": 900,
+    "outer_seconds": 1850,
+    "batch": 8,
+    "physical_rows": 4,
+    "windows": 2,
+    "updates": 1,
+    "cpu_policies": [
+      {
+        "threads": 16,
+        "workers": 1
+      },
+      {
+        "threads": 1,
+        "workers": 16
+      }
+    ],
+    "coefficient": 1.15,
+    "old_b512_step_seconds": 3000,
+    "reserved_other_task_bytes": 415538085888
+  },
+  "scope": "CPU training allocation allowance only. Same6.25% now covers learned/master/gradient/optimizer storage; budgets,margins,accelerator estimates and graph mathematics unchanged. Second worker policy failed and entire diagnostic job stays failed. No full-size/formal throughput claim.",
+  "artifacts": {
+    "runs/build-eager-rss-training-cpu-clean01/status.json": "7a8b8208b37c16ac708cff96717b6754d4e59c9632b101e916a4676110af5763",
+    "runs/build-eager-rss-training-cpu-clean01/task.log": "342932fb273bddc596590ab70fa1461d981ce79e626e82f888de61c5c9cbf6bb",
+    "runs/eager-rss-training-cpu-clean01/status.json": "2ebb6e579748a39316c78149edfae691e1fbb15f747934770015d4d9a21e850b",
+    "runs/eager-rss-training-cpu-clean01/task.log": "57bd1bedd29e713cb1617a5fd1b895a433259d83214f3483f6b5c6aae2772d79",
+    "runs/wide-eager-cpu-policy-recheck01/status.json": "b6298eccc4d7d68506e0a14ebce42832b2f36cb079267a7585658bce2442ab41",
+    "runs/wide-eager-cpu-policy-recheck01/task.log": "87eba2b769f54ca6fe5341c001421dcda19fe60793e75f80bd5d994c2527bd90",
+    "runs/wide-eager-cpu-policy01/status.json": "6acc60a69b96622b0958bf953153b55ee76164aa96103904a3ec3599c2d0501a",
+    "runs/wide-eager-cpu-policy01/task.log": "42daa15953e731547985309e1f24908f8e7911c413b4c316937c9f7f1496f543",
+    "builds/eager-rss-training-cpu-clean01/result.json": "980b1a7c50347d17760156e9af63c621aa48b2d55aa73eaa3500788181eec25a",
+    "builds/eager-rss-training-cpu-clean01/loader.txt": "8a37905bf658f184ebd087aab1b6d860e115bba0e2893451cde5142a1f7dc56f",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/result.json": "41e2b5b010b44ed4f3439eee641dca43c3bf75ea774aefe4328d8e0f8b6367b1",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/launcher.py": "22869fbed7964793c3e97c929499f41ae54a5d855a6fc390562305a1ed9a6d54",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/packet.json": "f61b53cf932711c6fc67c4663279d0c63e909d09d9849a26c3ae8c89ccaf56dd",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/aten16-workers1/consumer/result.json": "5bc0ad4296057e7037bf22c3026ea78bac00e4817df4c2d841a8a5152d01c1d5",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/aten16-workers1/consumer/consumer.log": "86813194400b579cee96f52222b032ce3de150df6d77f3f5359bbfdf08b20cbb",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/aten16-workers1/process.log": "b164c369596681dfc4c851d9a69485c7efb3e03fd6b16cf22c317bbfbdde3d35",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/aten16-workers1/offline-plan.json": "a55b77b4a839590fd320221f728ec93b0b50dd0a29a3ca2feca458e74689ad00",
+    "runs/wide-eager-cpu-policy-recheck01/assessment/aten1-workers16/process.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runs/wide-eager-cpu-policy01/assessment/result.json": "3700bc253f460b917295a482ea372e5f79ee504cf2bad71ca3309a500eca4cc5",
+    "runs/wide-eager-cpu-policy01/assessment/aten16-workers1/consumer/result.json": "3d9b96113fa6855afdc97a89868afc8e844cb0840501e2a2f1c35b8938ae7a20",
+    "launchers/cpu_training_rss_evidence.py": "6dea7adc97662b9bbb7e39a1f99a687ea57262e74dc5bee92855c274eae0d71e"
+  }
+}

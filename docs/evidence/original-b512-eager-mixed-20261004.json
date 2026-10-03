@@ -1,0 +1,989 @@
+{
+  "source": "c68609603c310f7121cb6f887afcadd019973209",
+  "source_file_count": 1530,
+  "source_inventory_sha256": "5b999a1a4a543f798d72025823e17c79b4b2d18ce731c15dd6e591bb0e6ffb6f",
+  "job": "wide-eager-mixed-b512-01",
+  "state": "passed",
+  "exit_code": 0,
+  "finished": "2026-10-03T16:04:49.612858+00:00",
+  "unit": {
+    "MainPID": "0",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "ActiveState": "inactive"
+  },
+  "physical_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12
+  ],
+  "cases": [
+    {
+      "memory": "add",
+      "command": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/mi/data2T/zlong/tide-execution-flows/sources/eager-rss-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "/mi/data2T/zlong/tide-execution-flows/inputs/fullsize-add01/workload.json",
+        "--output-dir",
+        "/mi/data2T/zlong/tide-execution-flows/runs/wide-eager-mixed-b512-01/assessment/add/consumer",
+        "--native-binary",
+        "/mi/data2T/zlong/tide-execution-flows/builds/eager-rss-npu-clean01/consumer/tidegraph-online-bench",
+        "--implementation",
+        "libtorch",
+        "--device",
+        "npu:0",
+        "--devices",
+        "11",
+        "--dtype",
+        "float32",
+        "--family",
+        "timed-dag",
+        "--preset",
+        "mixed-a",
+        "--schedule",
+        "prefill",
+        "--training",
+        "--optimizer",
+        "sgd",
+        "--steps",
+        "1",
+        "--warmup",
+        "0",
+        "--windows-per-step",
+        "2",
+        "--threads",
+        "2",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--sample-chunk-rows",
+        "32",
+        "--auto-sample-chunks",
+        "--chunk-policy",
+        "aggressive",
+        "--phase-timing",
+        "--parameter-budget",
+        "85899345920",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296"
+      ],
+      "result": {
+        "parameters": 9468053696,
+        "construction_seconds": 43.420013183,
+        "seconds": [
+          1287.28431384
+        ],
+        "losses": [
+          30.50037384033203
+        ],
+        "outputs": [
+          12288
+        ],
+        "statistics": [
+          {
+            "aggregate_calls": 11187,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 1183427,
+            "batched_full_events": 208896,
+            "body_candidate_events": 1158851,
+            "body_selected_events": 184320,
+            "candidate_events": 1183427,
+            "cross_device_bytes": 7783964672,
+            "cross_device_copy_groups": 22719,
+            "cross_device_rows": 950191,
+            "full_blocks": 9223,
+            "full_calls": 9223,
+            "greedy_relaxed_edges": 245760,
+            "greedy_stages": 544,
+            "max_cross_device_batch": 1024,
+            "max_full_batch": 384,
+            "max_greedy_frames": 384,
+            "max_live_fibers": 12288,
+            "max_next_batch": 32,
+            "max_state_batch": 32,
+            "max_state_sequence": 12,
+            "next_batches": 71437,
+            "next_reset_scalar_steps": 184320,
+            "next_steps": 1183427,
+            "packed_source_batches": 11187,
+            "read_calls": 70733,
+            "region_blocks": 544,
+            "region_steps": 208896,
+            "selected_events": 208896,
+            "semantic_next_replays": 1183427,
+            "semantic_read_replays": 1183427,
+            "semantic_state_replays": 1183427,
+            "source_rows": 1265664,
+            "state_blocks": 2048,
+            "state_prefill_fallback_events": 1158851,
+            "state_prefill_selected_clear": 1158851,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 2048,
+            "state_step_batch_calls": 70669,
+            "state_step_calls": 70669,
+            "state_steps": 1158851,
+            "visited_edges": 1253376
+          }
+        ],
+        "final_cut": 408,
+        "batch_execution": {
+          "logical_batch": 512,
+          "requested_sample_chunk_rows": 32,
+          "effective_sample_chunk_rows": 32,
+          "physical_chunks": 16
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float32",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "mixed-a",
+          "placement": {
+            "control": "cpu",
+            "events": "cpu",
+            "payload": "npu:0",
+            "read": "cpu",
+            "scoring_dtype": "profile",
+            "selection": "cpu"
+          }
+        },
+        "phase_timing": {
+          "enabled": true,
+          "measured": [
+            {
+              "sample_work_seconds": 1286.152847477,
+              "optimizer_seconds": 1.1314663630000723
+            }
+          ],
+          "warmup": [],
+          "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+          "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+        },
+        "host_execution": {
+          "workers": 4,
+          "packed_sources": true,
+          "batch_next": true
+        },
+        "memory": {
+          "observed_peak_growth_bytes": [
+            10043080704,
+            9816960000,
+            9636870144,
+            9947573760,
+            10491477504,
+            9396990976,
+            9465580032,
+            8940595200,
+            9732375552,
+            9945048064,
+            10266956288
+          ],
+          "devices": [
+            {
+              "logical_device": 0,
+              "estimated_peak_bytes": 41480935792,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33861696,
+                "gradients_and_optimizer_slots": 6917113376,
+                "head_work": 2589982720,
+                "host_rss_allowance": 0,
+                "learned": 3458556688,
+                "operator_work": 2252341248,
+                "persistent_state_and_kv": 283115520,
+                "transport": 16777216,
+                "vector_work": 25392316416
+              },
+              "phases": {
+                "backward": 41480935792,
+                "construction": 7326012240,
+                "forward": 41480935792,
+                "optimizer": 13481859440
+              }
+            },
+            {
+              "logical_device": 1,
+              "estimated_peak_bytes": 44765047140,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33857600,
+                "gradients_and_optimizer_slots": 6946457112,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3473228556,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 264241152,
+                "transport": 16777216,
+                "vector_work": 32822525952
+              },
+              "phases": {
+                "backward": 44765047140,
+                "construction": 4178174796,
+                "forward": 44765047140,
+                "optimizer": 11925743972
+              }
+            },
+            {
+              "logical_device": 2,
+              "estimated_peak_bytes": 44765047140,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33857600,
+                "gradients_and_optimizer_slots": 6946457112,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3473228556,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 264241152,
+                "transport": 16777216,
+                "vector_work": 32822525952
+              },
+              "phases": {
+                "backward": 44765047140,
+                "construction": 4178174796,
+                "forward": 44765047140,
+                "optimizer": 11925743972
+              }
+            },
+            {
+              "logical_device": 3,
+              "estimated_peak_bytes": 50131745304,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33869888,
+                "gradients_and_optimizer_slots": 6812288656,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3406144328,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 283115520,
+                "transport": 16777216,
+                "vector_work": 38371590144
+              },
+              "phases": {
+                "backward": 50131745304,
+                "construction": 4111102856,
+                "forward": 50131745304,
+                "optimizer": 11743377944
+              }
+            },
+            {
+              "logical_device": 4,
+              "estimated_peak_bytes": 46589684356,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33873984,
+                "gradients_and_optimizer_slots": 6912968408,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3456484204,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 289406976,
+                "transport": 16777216,
+                "vector_work": 34672214016
+              },
+              "phases": {
+                "backward": 46589684356,
+                "construction": 4161446828,
+                "forward": 46589684356,
+                "optimizer": 11900693124
+              }
+            },
+            {
+              "logical_device": 5,
+              "estimated_peak_bytes": 44110793228,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 6912935560,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3456467780,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 276824064,
+                "transport": 16777216,
+                "vector_work": 32205963264
+              },
+              "phases": {
+                "backward": 44110793228,
+                "construction": 4161422212,
+                "forward": 44110793228,
+                "optimizer": 11888052748
+              }
+            },
+            {
+              "logical_device": 6,
+              "estimated_peak_bytes": 47206247044,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33873984,
+                "gradients_and_optimizer_slots": 6912968408,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3456484204,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 289406976,
+                "transport": 16777216,
+                "vector_work": 35288776704
+              },
+              "phases": {
+                "backward": 47206247044,
+                "construction": 4161446828,
+                "forward": 47206247044,
+                "optimizer": 11900693124
+              }
+            },
+            {
+              "logical_device": 7,
+              "estimated_peak_bytes": 46426048988,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 6812272232,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3406136116,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 276824064,
+                "transport": 16777216,
+                "vector_work": 34672214016
+              },
+              "phases": {
+                "backward": 46426048988,
+                "construction": 4111090548,
+                "forward": 46426048988,
+                "optimizer": 11737057756
+              }
+            },
+            {
+              "logical_device": 8,
+              "estimated_peak_bytes": 44570040736,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33861696,
+                "gradients_and_optimizer_slots": 6812255808,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3406127904,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 270532608,
+                "transport": 16777216,
+                "vector_work": 32822525952
+              },
+              "phases": {
+                "backward": 44570040736,
+                "construction": 4111078240,
+                "forward": 44570040736,
+                "optimizer": 11730737568
+              }
+            },
+            {
+              "logical_device": 9,
+              "estimated_peak_bytes": 45186603424,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33861696,
+                "gradients_and_optimizer_slots": 6812255808,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3406127904,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 270532608,
+                "transport": 16777216,
+                "vector_work": 33439088640
+              },
+              "phases": {
+                "backward": 45186603424,
+                "construction": 4111078240,
+                "forward": 45186603424,
+                "optimizer": 11730737568
+              }
+            },
+            {
+              "logical_device": 10,
+              "estimated_peak_bytes": 44765047104,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 0,
+                "backend_allowance": 536870912,
+                "cache_work": 0,
+                "constants": 33857600,
+                "gradients_and_optimizer_slots": 6946457088,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 3473228544,
+                "operator_work": 671088640,
+                "persistent_state_and_kv": 264241152,
+                "transport": 16777216,
+                "vector_work": 32822525952
+              },
+              "phases": {
+                "backward": 44765047104,
+                "construction": 4178174784,
+                "forward": 44765047104,
+                "optimizer": 11925743936
+              }
+            }
+          ],
+          "allocator_within_estimate": true,
+          "raw_result_sha256": "9f534c376ac7643fbe05e15f8f23cde2432105cd5f367c309dd8e2e7422eeed4"
+        }
+      },
+      "phase_forecast_seconds": 1727.9504790470999,
+      "forecast_ratio": 0.7449775496748549
+    },
+    {
+      "memory": "attention",
+      "command": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/mi/data2T/zlong/tide-execution-flows/sources/eager-rss-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "/mi/data2T/zlong/tide-execution-flows/inputs/fullsize-attention01/workload.json",
+        "--output-dir",
+        "/mi/data2T/zlong/tide-execution-flows/runs/wide-eager-mixed-b512-01/assessment/attention/consumer",
+        "--native-binary",
+        "/mi/data2T/zlong/tide-execution-flows/builds/eager-rss-npu-clean01/consumer/tidegraph-online-bench",
+        "--implementation",
+        "libtorch",
+        "--device",
+        "npu:0",
+        "--devices",
+        "11",
+        "--dtype",
+        "float32",
+        "--family",
+        "timed-dag",
+        "--preset",
+        "mixed-a",
+        "--schedule",
+        "prefill",
+        "--training",
+        "--optimizer",
+        "sgd",
+        "--steps",
+        "1",
+        "--warmup",
+        "0",
+        "--windows-per-step",
+        "2",
+        "--threads",
+        "2",
+        "--workers",
+        "4",
+        "--packed-sources",
+        "--batch-next",
+        "--sample-chunk-rows",
+        "8",
+        "--auto-sample-chunks",
+        "--chunk-policy",
+        "aggressive",
+        "--phase-timing",
+        "--parameter-budget",
+        "85899345920",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296"
+      ],
+      "result": {
+        "parameters": 17521117376,
+        "construction_seconds": 73.952902959,
+        "seconds": [
+          2655.242050484
+        ],
+        "losses": [
+          21.38123893737793
+        ],
+        "outputs": [
+          12288
+        ],
+        "statistics": [
+          {
+            "aggregate_calls": 61696,
+            "attention_score_elements": 0,
+            "batched_aggregate_events": 1184436,
+            "batched_full_events": 208896,
+            "body_candidate_events": 1159860,
+            "body_selected_events": 184320,
+            "candidate_events": 1184436,
+            "cross_device_bytes": 8026734592,
+            "cross_device_copy_groups": 126292,
+            "cross_device_rows": 979826,
+            "full_blocks": 59798,
+            "full_calls": 59798,
+            "greedy_relaxed_edges": 245760,
+            "greedy_stages": 2176,
+            "max_cross_device_batch": 384,
+            "max_full_batch": 96,
+            "max_greedy_frames": 96,
+            "max_live_fibers": 3072,
+            "max_next_batch": 8,
+            "max_state_batch": 8,
+            "max_state_sequence": 12,
+            "next_batches": 531673,
+            "next_reset_batches": 165192,
+            "next_reset_scalar_steps": 0,
+            "next_steps": 1184436,
+            "packed_source_batches": 61696,
+            "read_calls": 528857,
+            "region_blocks": 2176,
+            "region_steps": 208896,
+            "selected_events": 208896,
+            "semantic_next_replays": 1184436,
+            "semantic_read_replays": 1184436,
+            "semantic_state_replays": 1184436,
+            "source_rows": 1265664,
+            "state_blocks": 2048,
+            "state_prefill_fallback_events": 1159860,
+            "state_prefill_selected_clear": 1159860,
+            "state_scalar_sequence_steps": 0,
+            "state_sequence_calls": 2048,
+            "state_step_batch_calls": 528601,
+            "state_step_calls": 528601,
+            "state_steps": 1159860,
+            "visited_edges": 1253376
+          }
+        ],
+        "final_cut": 408,
+        "batch_execution": {
+          "logical_batch": 512,
+          "requested_sample_chunk_rows": 8,
+          "effective_sample_chunk_rows": 8,
+          "physical_chunks": 64
+        },
+        "runtime": {
+          "device": "npu:0",
+          "dtype": "float32",
+          "backend": "npu",
+          "resolution_reason": "explicit:npu",
+          "schedule": "prefill",
+          "preset": "mixed-a",
+          "placement": {
+            "control": "cpu",
+            "events": "cpu",
+            "payload": "npu:0",
+            "read": "cpu",
+            "scoring_dtype": "profile",
+            "selection": "cpu"
+          }
+        },
+        "phase_timing": {
+          "enabled": true,
+          "measured": [
+            {
+              "sample_work_seconds": 2654.442531823,
+              "optimizer_seconds": 0.7995186610000928
+            }
+          ],
+          "warmup": [],
+          "boundary": "training: all resolved devices synchronized before optimizer; extra synchronization included in total",
+          "scope": "sample work includes input/forward/loss/backward/accumulation/continuation; optimizer includes final finite checks and publication; inference has zero optimizer time"
+        },
+        "host_execution": {
+          "workers": 4,
+          "packed_sources": true,
+          "batch_next": true
+        },
+        "memory": {
+          "observed_peak_growth_bytes": [
+            20431656448,
+            20514713088,
+            20290050048,
+            20494549504,
+            20480436224,
+            20265890304,
+            20274998784,
+            20560993792,
+            20558263296,
+            20533402112,
+            20570653696
+          ],
+          "devices": [
+            {
+              "logical_device": 0,
+              "estimated_peak_bytes": 41552054340,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 11796480,
+                "backend_allowance": 536870912,
+                "cache_work": 6544711680,
+                "constants": 33841216,
+                "gradients_and_optimizer_slots": 12688393560,
+                "head_work": 1625030656,
+                "host_rss_allowance": 0,
+                "learned": 6344196780,
+                "operator_work": 3326083072,
+                "persistent_state_and_kv": 4279173120,
+                "transport": 16777216,
+                "vector_work": 6145179648
+              },
+              "phases": {
+                "backward": 41552054340,
+                "construction": 10211631852,
+                "forward": 41552054340,
+                "optimizer": 27208558660
+              }
+            },
+            {
+              "logical_device": 1,
+              "estimated_peak_bytes": 50685223352,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 21823488,
+                "backend_allowance": 536870912,
+                "cache_work": 12107716608,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12717852240,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6358926120,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 7727726592,
+                "transport": 16777216,
+                "vector_work": 9284616192
+              },
+              "phases": {
+                "backward": 50685223352,
+                "construction": 7332316008,
+                "forward": 50685223352,
+                "optimizer": 29254289848
+              }
+            },
+            {
+              "logical_device": 2,
+              "estimated_peak_bytes": 47218182668,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 18874368,
+                "backend_allowance": 536870912,
+                "cache_work": 10471538688,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12684297864,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6342148932,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6720847872,
+                "transport": 16777216,
+                "vector_work": 8513912832
+              },
+              "phases": {
+                "backward": 47218182668,
+                "construction": 7315538820,
+                "forward": 47218182668,
+                "optimizer": 28197079564
+              }
+            },
+            {
+              "logical_device": 3,
+              "estimated_peak_bytes": 46059145788,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 17694720,
+                "backend_allowance": 536870912,
+                "cache_work": 9817067520,
+                "constants": 33869888,
+                "gradients_and_optimizer_slots": 12818532008,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6409266004,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6324387840,
+                "transport": 16777216,
+                "vector_work": 8205631488
+              },
+              "phases": {
+                "backward": 46059145788,
+                "construction": 7382659988,
+                "forward": 46059145788,
+                "optimizer": 28001974844
+              }
+            },
+            {
+              "logical_device": 4,
+              "estimated_peak_bytes": 46742487612,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 18284544,
+                "backend_allowance": 536870912,
+                "cache_work": 10144303104,
+                "constants": 33869888,
+                "gradients_and_optimizer_slots": 12818532008,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6409266004,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6525763584,
+                "transport": 16777216,
+                "vector_work": 8359772160
+              },
+              "phases": {
+                "backward": 46742487612,
+                "construction": 7382659988,
+                "forward": 46742487612,
+                "optimizer": 28203350588
+              }
+            },
+            {
+              "logical_device": 5,
+              "estimated_peak_bytes": 49951549952,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 21233664,
+                "backend_allowance": 536870912,
+                "cache_work": 11780481024,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12684297856,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6342148928,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 7526350848,
+                "transport": 16777216,
+                "vector_work": 9130475520
+              },
+              "phases": {
+                "backward": 49951549952,
+                "construction": 7315538816,
+                "forward": 49951549952,
+                "optimizer": 29002582528
+              }
+            },
+            {
+              "logical_device": 6,
+              "estimated_peak_bytes": 45851499008,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 17694720,
+                "backend_allowance": 536870912,
+                "cache_work": 9817067520,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12684297856,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6342148928,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6318096384,
+                "transport": 16777216,
+                "vector_work": 8205631488
+              },
+              "phases": {
+                "backward": 45851499008,
+                "construction": 7315538816,
+                "forward": 45851499008,
+                "optimizer": 27794328064
+              }
+            },
+            {
+              "logical_device": 7,
+              "estimated_peak_bytes": 46736167400,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 18284544,
+                "backend_allowance": 536870912,
+                "cache_work": 10144303104,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12818515568,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6409257784,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6519472128,
+                "transport": 16777216,
+                "vector_work": 8359772160
+              },
+              "phases": {
+                "backward": 46736167400,
+                "construction": 7382647672,
+                "forward": 46736167400,
+                "optimizer": 28197030376
+              }
+            },
+            {
+              "logical_device": 8,
+              "estimated_peak_bytes": 45369483752,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 17104896,
+                "backend_allowance": 536870912,
+                "cache_work": 9489831936,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12818515568,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6409257784,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6116720640,
+                "transport": 16777216,
+                "vector_work": 8051490816
+              },
+              "phases": {
+                "backward": 45369483752,
+                "construction": 7382647672,
+                "forward": 45369483752,
+                "optimizer": 27794278888
+              }
+            },
+            {
+              "logical_device": 9,
+              "estimated_peak_bytes": 46585172408,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 18284544,
+                "backend_allowance": 536870912,
+                "cache_work": 10144303104,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12717852240,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6358926120,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6519472128,
+                "transport": 16777216,
+                "vector_work": 8359772160
+              },
+              "phases": {
+                "backward": 46585172408,
+                "construction": 7332316008,
+                "forward": 46585172408,
+                "optimizer": 28046035384
+              }
+            },
+            {
+              "logical_device": 10,
+              "estimated_peak_bytes": 46585172408,
+              "budget_bytes": 64424509440,
+              "usable_bytes": 57847840768,
+              "components": {
+                "attention_scores": 18284544,
+                "backend_allowance": 536870912,
+                "cache_work": 10144303104,
+                "constants": 33865792,
+                "gradients_and_optimizer_slots": 12717852240,
+                "head_work": 0,
+                "host_rss_allowance": 0,
+                "learned": 6358926120,
+                "operator_work": 1879048192,
+                "persistent_state_and_kv": 6519472128,
+                "transport": 16777216,
+                "vector_work": 8359772160
+              },
+              "phases": {
+                "backward": 46585172408,
+                "construction": 7332316008,
+                "forward": 46585172408,
+                "optimizer": 28046035384
+              }
+            }
+          ],
+          "allocator_within_estimate": true,
+          "raw_result_sha256": "344cb2469e85178de356a98b2385cb53cc4ec88168f48591232a9f66abbe27f6"
+        }
+      },
+      "phase_forecast_seconds": 2820.9879602833,
+      "forecast_ratio": 0.94124543878498
+    }
+  ],
+  "limits": {
+    "step_seconds": 3000,
+    "child_seconds": 3240,
+    "outer_seconds": 6530,
+    "coefficient": 1.15,
+    "devices": 11,
+    "device_budget_bytes": 64424509440,
+    "threads": 2,
+    "workers": 4,
+    "queue_seconds": 120
+  },
+  "scope": "Original B512 Add/Attention, two connected windows, one FP32 SGD update per fresh process; mixed-a/LibTorch/TimedDAG/prefill. Physical rows and owners match successful chunk pilot; original 3000s and 1.15 guards. CPU Add B512 feasibility may overlap: not formal throughput. First failure stops; no CPU event/route/gradient prepass.",
+  "cpu_add_comparison": "Same original packet,outputs,cut,and four discrete work counters;loss within1e-6+1e-5 relative. No full gradient or trajectory oracle.",
+  "limitations": [
+    "Cold feasibility with overlapping diagnostics/correctness work; not formal throughput or a three-process recommendation.",
+    "Earlier resident Add has different event count/loss; diagnostic pending. CPU Attention original batch still running.",
+    "Full matrix,repeats,profiles,FP16 full size and final support audit remain open."
+  ],
+  "artifacts": {
+    "runs/wide-eager-mixed-b512-01/status.json": "318f28b03214fa8b433b15d2904d9ea87aca2dac5269adb2750454f0c1b323a5",
+    "runs/wide-eager-mixed-b512-01/task.log": "b94ab7004528dcd92982610a3f24144c790f1ef3d1f023a9c1c8b3ccd4365707",
+    "runs/wide-eager-mixed-b512-01/queue.json": "ff7266b61cc5130848cd8ae306e9657a2e451d78837fdbf855c1468f169b6078",
+    "runs/wide-eager-mixed-b512-01/assessment/result.json": "52ada57a35d1cbb949b77f105b431d05d98c3164305f3edcb3af93f82db12996",
+    "runs/wide-eager-mixed-b512-01/assessment/launcher.py": "7e95221a5c2fc07305438561f327f828506a6b4af650d7bbd075087ee4ec9c06",
+    "builds/eager-rss-npu-clean01/result.json": "ed050822b777adffe4e1c22a811a5f53f995f756df9ec4dee9e5d9ec72ece2a4",
+    "builds/eager-rss-npu-clean01/loader.txt": "4764259579503f3fe99967afbf61dbdbdca92fc90ac71d5ca9d3d0757c2236ae",
+    "launchers/wide_eager_mixed_b512_evidence.py": "218579c89a01b9a0368cbdb41b5d094091d61b9e50afc7b41c797f8972ccc8e3",
+    "inputs/fullsize-add01/workload.json": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "runs/wide-eager-mixed-b512-01/assessment/add/consumer/result.json": "9f534c376ac7643fbe05e15f8f23cde2432105cd5f367c309dd8e2e7422eeed4",
+    "runs/wide-eager-mixed-b512-01/assessment/add/consumer/consumer.log": "99c10222f336aa57135f8aae7a0849ce90fdc1d200e9148a3481183d5ea1fc9b",
+    "runs/wide-eager-mixed-b512-01/assessment/add/process.log": "e67a22fcab22720114eb4c1b03bf4d7c9fd15c758e79b94a904062ecc13ffacf",
+    "runs/wide-eager-mixed-b512-01/assessment/add/offline-plan.json": "46c8c302df5f471ccd27f30d48dbf4b097cc6e23f644b41004387aa664184afb",
+    "inputs/fullsize-attention01/workload.json": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a",
+    "runs/wide-eager-mixed-b512-01/assessment/attention/consumer/result.json": "344cb2469e85178de356a98b2385cb53cc4ec88168f48591232a9f66abbe27f6",
+    "runs/wide-eager-mixed-b512-01/assessment/attention/consumer/consumer.log": "623358339075c19d6ab26921cc8870a09eaf47dccad836851d160b7ee4e16c75",
+    "runs/wide-eager-mixed-b512-01/assessment/attention/process.log": "9aa4f95ca2312133646fda287a702dd7b2851c7b0803fafd0707f75af2c9d1b4",
+    "runs/wide-eager-mixed-b512-01/assessment/attention/offline-plan.json": "3b38221950ebf02a029c709b1e826d56b863f942f5ece06413c6e22e9d73fd69"
+  }
+}

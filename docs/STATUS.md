@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-03. **ACTIVE**: user explicitly authorized continuing under the
+Updated 2026-10-04 (Asia/Shanghai). **ACTIVE**: user explicitly authorized continuing under the
 execution contract until the overall goal is complete. Commit/push authorized;
 no per-commit pause, no subagents. A later explicit user pause takes precedence.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
@@ -81,7 +81,7 @@ Frozen source under TASK/sources, installed clients/core builds under TASK/build
 | Job NAME | Source / outcome sought | Declared bound and records |
 | --- | --- | --- |
 | wide-eager-cpu-add-b512-01 | **passed/exit0**; Add B512 CPU complete update1458.897225208s | construction50.482667954s; all memory checks pass; [audit passed](evidence/original-b512-eager-cpu-add-20261003.md) |
-| wide-eager-mixed-b512-01 | Running Attention; Add child passed1287.28431384s,construction43.420013183s | 3000s/update,3240s/child,6530s outer; do not mark entire job passed |
+| wide-eager-mixed-b512-01 | **passed/exit0**,both actual B512 updates: Add1287.28431384s,Attention2655.242050484s | all memory checks pass,under3000s/update; [audit passed](evidence/original-b512-eager-mixed-20261004.md) |
 | wide-eager-cpu-policy01 | **failed/exit1** at first policy; second never entered | Completed finite update599.905596491s,then CPU peak estimate refused |
 | integration-cpu-clean01 | **failed/exit1**;9337 passed,120 failed,654 skipped,1783.33s | verification/result.json/tests.log; preserved incomplete build and old-assertion failures |
 | build-integration-cpu-clean02 | **passed/exit0**; fresh full CPU core,module and CLI/check clients | TASK/builds/integration-cpu-clean02/build-manifest.json; exact C++ hash unchanged |
@@ -110,11 +110,11 @@ It does not alter the older qualified narrow build. Failed selection recheck
 integration-cpu-recheck-clean02 **passed120 in272.99s,exit0**, clean78e9df6,
 integration-tests-clean01. Unit inactive,empty cgroup. Original failure retained.
 
-**Next submission:** full integration-cpu-clean02, same clean78e9df6 snapshot,
+**Next submission:** full integration-cpu-clean02 **passed9458,654 optional-device skips,2022.25s,exit0**,same clean78e9df6 snapshot,
 complete CPU core plus qualified c6ef224 consumer. Core/consumer bytes match
 these sources; differing test/document commits are explicit. Declared2400s outer:
 prior incomplete gate1783s plus restored real clients273s justifies this bound.
-No result available yet. One ATen/BLAS thread; inspect
+Terminal result and [reviewed audit](evidence/integrated-cpu-20261004.md) passed. One ATen/BLAS thread; inspect
 TASK/runs/integration-cpu-clean02/verification/{result.json,tests.log} and
 systemctl --user show tide-execution-flows-integration-cpu-clean02.
 
@@ -122,81 +122,126 @@ systemctl --user show tide-execution-flows-integration-cpu-clean02.
 python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name integration-cpu-clean02 --snapshot integration-tests-clean01 --commit 78e9df6 -- timeout --signal=TERM --kill-after=10s 2400s env TIDE_ONLINE_BINARY='{base}/builds/eager-rss-training-cpu-clean01/consumer/tidegraph-online-bench' '{python}' '{source}/scripts/verify.py' --device cpu --dtype both --build-dir '{base}/builds/integration-cpu-clean02' --output-dir '{out}/verification'
 ```
 
+Passed/exit0 integration-ctest-cpu-clean02 on the complete CPU build,clean78e9df6
+snapshot: all12 registered FP32/FP64 CTests,serial,240s bound,explicit CPU.
+This is the missing complete standalone CTest gate; no NPU qualification is
+implied. Unit tide-execution-flows-integration-ctest-cpu-clean02;result in task.log
+and build Testing/Temporary/LastTest.log:12/12 passed in12.61s.
+
 After source/build/test receipts are audited,commit evidence separately.
 Scale diagnostics may overlap this correctness gate; formal heavy timing waits
 until these finish. No unrelated passed gate needs repetition.
 
-## Current correction: CPU training allocation allowance
+## CPU training allocation correction and scale continuation
 
-Retain `wide-eager-cpu-policy01` failure: original-width AttentionB8/physicalB4
-update completed with finite loss20.681140899658203,output192,cut408; measured
-RSS growth248721317888bytes exceeded245300487792 estimate (about1.39%). No OOM
-or numerical failure; post-run calibration correctly failed and the second
-worker policy did not start. The old recorded gate remains failed.
+Implementation c6ef224 applies the same6.25% CPU allocation allowance to
+learned+masters+gradient/optimizer storage during training,construction still
+learned+masters only. Accelerator estimates,budgets,margins and mathematics
+unchanged. Both development and clean builds/gates passed108 checks,no skips.
+Raw build/gate names `build-eager-rss-training-cpu-{dev,clean}01` and
+`eager-rss-training-cpu-{dev,clean}01`; clean snapshot eager-rss-training-clean01.
 
-Working change in eager_capacity.{py,h}: apply the same6.25% CPU allocation
-allowance to learned+masters+gradient/optimizer storage in training phases,
-with construction still learned+masters only. Accelerator estimates,budgets,
-safety margins,mathematical execution and physical update semantics unchanged.
-Regression adds the measured B8/physicalB4 peak alongside earlier B4 anchors.
-Docs describe the measured limitation; fresh qualification remains pending.
+Retain original wide-eager-cpu-policy01 failure: B8/physicalB4 update completed
+599.905596491s,then RSS248721317888bytes exceeded245300487792 estimate. Not OOM
+or numerical failure. `wide-eager-cpu-policy-recheck01` is now **failed/exit1**:
+first ATen16/workers1 case **passed425.637614531s**,observed246219792384bytes
+within corrected254061046480 estimate. The second ATen1/workers16 case hit its
+900s child timeout and was terminated; no result,not a speedup and no further
+worker sweep. Original failure remains failed. First-case calibration and108
+clean checks qualify the stricter allowance; first-case evidence audit passed; [report](evidence/cpu-training-rss-20261004.md).
 
-Passed/exit0 development build `build-eager-rss-training-cpu-dev01`, frozen dirty
-`eager-rss-training-dev01` from530ae85 plus this correction,900s,two workers,
-using `build_eager_consumer_core.py --backend cpu --name eager-rss-training-cpu-dev01
---core TASK/builds/packed-transfer-cpu-clean01`. Exact core bytes unchanged.
-Development `eager-rss-training-cpu-dev01` passed/exit0:108 checks in75.32s,
-no skips, on the exact frozen modified source and fresh client. Includes static
-Python/C++ CPU/CUDA/NPU geometry parity,FP32/FP64 forced splitting,FP16 masters
-and the corrected nonboolean test; full integration-cpu-clean02 core.
-Implementation committed/pushed asc6ef22474f658ecb12dd11310c710781023932ab; build and rerun the affected gate on
-clean eager-rss-training-clean01 plus the failed B8/physicalB4 calibration.
-Passed `build-eager-rss-training-cpu-clean01`,900s/two workers,using the existing
-build_eager_consumer_core.py with backend cpu and packed-transfer-cpu-clean01.
-Clean eager-rss-training-cpu-clean01 passed/exit0:108 checks in75.79s,no skips;
-clean c6ef224 source/client. The build and gate are terminal. Full gate follows the extra metadata assertion correction.
-Do not use the development binary for clean qualification.
-The correction estimates254061046480bytes versus retained248721317888bytes;
-this arithmetic alone is not a fresh calibration pass. Commit implementation after affected tests; qualify clean
-source and rerun the failed original-width B8 calibration with the same budgets.
-Do not mechanically retry the unchanged old source or alter an active helper.
-
-## Original-width CPU recheck active
-
-Running `wide-eager-cpu-policy-recheck01`, clean c6ef224/eager-rss-training-clean01,
-using the qualified eager-rss-training-cpu-clean01 client. New helper
-wide_eager_cpu_policy_recheck.py retains/checks original failed record and exact
-248721317888byte observation, then executes the same first B8/physicalB4
-Attention policy under corrected stricter admission; only after it passes does
-ATen1/workers16 run. Each child900s,outer1850s,512GiB cap,all earlier margins/
-shape/update boundaries unchanged. First failure stops; original failure stays.
-May overlap mixed/full CPU qualification; not formal throughput. No result yet.
+**Next submit wide-eager-cpu-attention-b512-extended01**, clean c6ef224 and clean
+eager-rss-training-cpu-clean01 client,ATen16/workers1,physicalB32×16. Reuse the
+actual original-width B64/B32 chunk policy with measured phase forecast
+23391.025824722s including1.15. Original3000s refusal remains intact. Declare a
+separate27000s actual-update guard,27500s child and27600s outer; first failure
+stops,no automatic retry. One original17.521B/B512 complete FP32 SGD update,two
+connected windows,no warmup/profiler. Cold feasibility may overlap small
+integration/forensic diagnostics,not formal throughput. Admitted429.436GiB CPU
+peak below512GiB cap; aggregate forecast+protected historical/mixed/probe/gate
+memory must fit half available memory at launch. No result yet.
 
 ```bash
-python TASK/launchers/freeze_run.py --name wide-eager-cpu-policy-recheck01 --snapshot eager-rss-training-clean01 --commit c6ef224 -- timeout --signal=TERM --kill-after=10s 1850s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_policy_recheck.py' --source '{source}' --out '{out}/assessment'
+python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-cpu-attention-b512-extended01 --snapshot eager-rss-training-clean01 --commit c6ef224 -- timeout --signal=TERM --kill-after=10s 27600s env -C '{out}' '{python}' '{base}/launchers/wide_eager_cpu_attention_b512_extended.py' --source '{source}' --out '{out}/assessment'
 ```
-Unit tide-execution-flows-wide-eager-cpu-policy-recheck01; raw assessment under
-TASK/runs/wide-eager-cpu-policy-recheck01. Finish this calibration before marking
-the CPU training allowance qualified or selecting a CPU Attention B512 policy.
 
-## Bounded route discrepancy diagnosis
+Inspect `TASK/runs/wide-eager-cpu-attention-b512-extended01/assessment/result.json`
+and unit tide-execution-flows-wide-eager-cpu-attention-b512-extended01. Its long
+budget is justified by measurement; it does not replace the old refusal or
+certify formal performance. Keep its helper immutable once submitted.
 
-Passed/exit0 build-route-witness01 compiled TASK/probes/route-witness01 against the exact
-26176de source and phase-timing-consumer-clean01 installed public package that
-produced the earlier resident Add result. No production/source mutation. Two
-build workers,900s. The task-local forensic client runs both public sessions
-independently on shared declared initialization/input,matched physicalB2 and two
-connected windows; CPU observations never feed the NPU. It stops at the first
-discrete mismatch and records that region's scores/counts/proposals. No update
-or formal timing claim. All512 input samples are the maximum,not a promise of
-completion. Diagnose cause before implementing any fix or changing tolerances.
-Build result TASK/builds/route-witness01/result.json; unit
-`tide-execution-flows-build-route-witness01`. Runtime submission is separate,
-planned3cards after static admission,120s queue,1800s bound and a real smoke.
-No runtime result yet. Ready helper TASK/launchers/run_route_witness.py runs a tiny
-matched case before original scale in the same3-card lease. Submit only when
-the live mixed run releases its cards; max-wait120s,outer1950s. Historical
-capacities and failures stay unchanged.
+## Route discrepancy located; strict full-size parity remains failed
+
+`route-witness02` terminal passed/exit0 means forensic collection completed,
+not equivalence. Tiny matched pair passed4windows; original matched physicalB2
+CPU/resident comparisons first differ at sample17,window1,time280,region7.
+CPU chooses246 (score4.005112648010254) over245 (4.005112171173096),one FP32 ULP.
+Resident scores both4.005106449127197 and correctly breaks that rounded tie in
+favor of245. FP64 norms of the exported FP32 proposals still rank246 above245
+on both sides; resident values round to the same FP32 score. Maximum proposal
+absolute difference before divergence7.703900337219238e-6. This window has
+CPU2325/resident2327 events. It demonstrates a floating near-tie path split;
+not proof that no other full-batch differences exist. Do not weaken exact
+route checks or change stable tie policy/model/fixture to hide it.
+
+Raw TASK/runs/route-witness02/assessment/original/observation/{witness.json,windows.jsonl}.
+Forensic public pair uses exact historical26176de;three cards and CPU matchedB2,
+not the later CPU physicalB32 experiment. No CPU prepass feeds resident.
+All3-card leases released. `route-witness01` remains failed:tiny passed,original
+setup refused an incorrectly copied512MiB default workspace ceiling. Separate
+probe02 restored historical512GiB whole-program ceiling,retaining60GiB/card
+admission and all queue/trace limits. Task-local probes/builds/helpers01 and02
+must remain for provenance. [Reviewed diagnosis](evidence/original-add-route-witness-20261004.md) audited;strict parity stays failed.
+
+## Next bounded FP16 original-width calibration
+
+Submit wide-eager-half-chunk01 on clean7b1fae5/eager-half-clean01 and qualified
+TASK/builds/eager-half-npu-clean01. Eight-card lease,max-wait120s;two sequential
+fresh processes,900s each/1850s outer. AddB64/physicalB32 andAttentionB8/physicalB4,
+unchanged D2048/T12/V50304/480body and9.468B/17.521B parameters. Mixed-A,LibTorch,
+TimedDAG/prefill,FP16 payload and autograd gradients,FP32 masters/loss,static
+scale128,one SGD update/two connected windows. ATen2/workers4,60GiB/card and
+unchanged aggressive margins. No warmup/profile/formal speed claim;may overlap
+CPU feasibility. Check aggregate CPU/memory resources before submission. First
+failure stops; derive a512-batch phase forecast only after actual memory/update
+pass. FP32/FP16 exact routes are not assumed. No B512 FP16 result yet.
+
+```bash
+python /mi/data2T/zlong/tide-execution-flows/launchers/freeze_run.py --name wide-eager-half-chunk01 --snapshot eager-half-clean01 --commit 7b1fae5 --npu --npu-count 8 --max-wait 120 -- timeout --signal=TERM --kill-after=10s 1850s env -C '{out}' '{python}' '{base}/launchers/wide_eager_half_chunk_pilot.py' --source '{source}' --build '{base}/builds/eager-half-npu-clean01' --out '{out}/assessment' --device npu:0
+```
+
+Unit tide-execution-flows-wide-eager-half-chunk01;results under TASK/runs/NAME.
+Do not edit its helper after launch. No result yet.
+
+FP16 pilot wide-eager-half-chunk01 now **passed/exit0**:AddB64/physicalB32
+195.599333427s,AttentionB8/physicalB4 50.268560833s;all8-card peaks pass.
+Phase B512 forecasts1778.03358430015s and3418.386618841s (latter refuses3000s).
+Before B512 Attention,static aggressive check shows rows16 refuse at63.887GiB,
+rows8 admit at51.312GiB<53.875GiB usable. Therefore take one finite rows8
+calibration (not another thread/card sweep),preserving earlier rows4 evidence.
+
+Submit wide-eager-half-attention-rows8-01,same7b1fae5 source/client,8cards,
+120s queue/900s child/950s outer. Only Attention B16/physicalB8×2;all other
+settings as prior FP16 pilot. Helper wide_eager_half_attention_rows8.py records
+both original-size static plans. After pass,choose actual B512 rows8;derive cost
+from this measured pilot,keep old3000s refusal and1.15. No B512 FP16 result yet.
+
+## CUDA-linked consumer update,host qualification only
+
+Next build-eager-half-cuda-clean01 uses clean c6ef224/eager-rss-training-clean01,
+public task-local build_eager_cuda_consumer.py,source-matching already qualified
+CUDA core eager-cuda-clean01. Exact core C++ hash unchanged; fresh external
+consumer compiles the new FP16 masters and CPU RSS correction. Module
+`torch-cuda/2.10.0-cu128`,Python
+`/mi/data2T/zlong/gpu-toolchains/envs/torch2.10.0-cu128-py311/bin/python`,
+headless arch8.0,two workers,900s. No NVIDIA GPU exists; this is build/loader
+plus follow-up affected CPU checks under CUDA-linked Torch,not CUDA execution.
+Result TASK/builds/eager-half-cuda-clean01/result.json; unit
+`tide-execution-flows-build-eager-half-cuda-clean01`. No result yet.
+
+After build passes,run only affected eager precision/capacity CPU tests with
+TIDE_ONLINE_BINARY pointing to the new consumer,TIDE_BUILD_DIR=eager-cuda-clean01,
+explicit CUDA environment,one thread,300s. Keep real GPU/x86_64 target-pending.
 
 ## Remaining acceptance and environment
 

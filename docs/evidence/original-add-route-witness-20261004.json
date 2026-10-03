@@ -1,0 +1,934 @@
+{
+  "source": "26176de888013fda5eccfe039fa504e87c2e7e95",
+  "job": "route-witness02",
+  "forensic_collection": "passed",
+  "strict_discrete_equivalence": "failed",
+  "unit": {
+    "MainPID": "0",
+    "ExecMainStatus": "0",
+    "ControlGroup": "",
+    "ActiveState": "inactive"
+  },
+  "physical_ids": [
+    1,
+    3,
+    9
+  ],
+  "location": {
+    "sample": 17,
+    "window": 1,
+    "time": 280,
+    "region": 7
+  },
+  "candidates": {
+    "cpu": [
+      {
+        "node": 242,
+        "active": false,
+        "score": 2.4651877880096436,
+        "proposal_norm_fp64": 2.4651880670116713,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            246,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 244,
+        "active": false,
+        "score": 4.004519939422607,
+        "proposal_norm_fp64": 4.004520446731298,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            246,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 245,
+        "active": false,
+        "score": 4.005112171173096,
+        "proposal_norm_fp64": 4.0051123072765185,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            246,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 246,
+        "active": true,
+        "score": 4.005112648010254,
+        "proposal_norm_fp64": 4.005112581248761,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            246,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 247,
+        "active": false,
+        "score": 2.5077195167541504,
+        "proposal_norm_fp64": 2.5077195644186183,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            246,
+            1
+          ]
+        ]
+      }
+    ],
+    "resident": [
+      {
+        "node": 242,
+        "active": false,
+        "score": 2.4651877880096436,
+        "proposal_norm_fp64": 2.4651878253422588,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            245,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 244,
+        "active": false,
+        "score": 4.004514694213867,
+        "proposal_norm_fp64": 4.004514418078353,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            245,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 245,
+        "active": true,
+        "score": 4.005106449127197,
+        "proposal_norm_fp64": 4.005106345184017,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            245,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 246,
+        "active": false,
+        "score": 4.005106449127197,
+        "proposal_norm_fp64": 4.005106571542164,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            245,
+            1
+          ]
+        ]
+      },
+      {
+        "node": 247,
+        "active": false,
+        "score": 2.50770902633667,
+        "proposal_norm_fp64": 2.5077090748971878,
+        "selected_counts": [
+          [
+            224,
+            1
+          ],
+          [
+            225,
+            1
+          ],
+          [
+            226,
+            1
+          ],
+          [
+            227,
+            1
+          ],
+          [
+            229,
+            1
+          ],
+          [
+            231,
+            1
+          ],
+          [
+            232,
+            1
+          ],
+          [
+            233,
+            2
+          ],
+          [
+            234,
+            1
+          ],
+          [
+            235,
+            1
+          ],
+          [
+            236,
+            1
+          ],
+          [
+            237,
+            1
+          ],
+          [
+            238,
+            1
+          ],
+          [
+            239,
+            1
+          ],
+          [
+            243,
+            1
+          ],
+          [
+            245,
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "windows": [
+    {
+      "sample_begin": 0,
+      "window": 0,
+      "cpu_events": 2335,
+      "resident_events": 2335,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 4.6193599700927734e-06
+    },
+    {
+      "sample_begin": 0,
+      "window": 1,
+      "cpu_events": 2297,
+      "resident_events": 2297,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 2,
+      "window": 0,
+      "cpu_events": 2302,
+      "resident_events": 2302,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 2,
+      "window": 1,
+      "cpu_events": 2331,
+      "resident_events": 2331,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 4,
+      "window": 0,
+      "cpu_events": 2302,
+      "resident_events": 2302,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 4,
+      "window": 1,
+      "cpu_events": 2322,
+      "resident_events": 2322,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 6,
+      "window": 0,
+      "cpu_events": 2333,
+      "resident_events": 2333,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 6,
+      "window": 1,
+      "cpu_events": 2310,
+      "resident_events": 2310,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 8,
+      "window": 0,
+      "cpu_events": 2315,
+      "resident_events": 2315,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.3462724685668945e-06
+    },
+    {
+      "sample_begin": 8,
+      "window": 1,
+      "cpu_events": 2295,
+      "resident_events": 2295,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.621943950653076e-06
+    },
+    {
+      "sample_begin": 10,
+      "window": 0,
+      "cpu_events": 2275,
+      "resident_events": 2275,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.621943950653076e-06
+    },
+    {
+      "sample_begin": 10,
+      "window": 1,
+      "cpu_events": 2324,
+      "resident_events": 2324,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.621943950653076e-06
+    },
+    {
+      "sample_begin": 12,
+      "window": 0,
+      "cpu_events": 2304,
+      "resident_events": 2304,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    },
+    {
+      "sample_begin": 12,
+      "window": 1,
+      "cpu_events": 2317,
+      "resident_events": 2317,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    },
+    {
+      "sample_begin": 14,
+      "window": 0,
+      "cpu_events": 2304,
+      "resident_events": 2304,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    },
+    {
+      "sample_begin": 14,
+      "window": 1,
+      "cpu_events": 2305,
+      "resident_events": 2305,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    },
+    {
+      "sample_begin": 16,
+      "window": 0,
+      "cpu_events": 2322,
+      "resident_events": 2322,
+      "discrete_equal": true,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    },
+    {
+      "sample_begin": 16,
+      "window": 1,
+      "cpu_events": 2325,
+      "resident_events": 2327,
+      "discrete_equal": false,
+      "max_proposal_abs_error_before_divergence": 7.703900337219238e-06
+    }
+  ],
+  "limits": {
+    "devices": 3,
+    "threads": 8,
+    "queue_seconds": 120,
+    "smoke_seconds": 120,
+    "wide_seconds": 1800,
+    "outer_seconds": 1950,
+    "maximum_samples": 512
+  },
+  "conclusions": [
+    "Independent public CPU/resident executions split at a floating near tie; candidate receives no CPU trace.",
+    "CPU scores differ by one FP32 ULP. Both resident norms round to the same FP32 score,so its stable smaller-ID tie break is correct for its own descriptors.",
+    "The mismatch occurs at matched physicalB2; different physical sample sizes are not necessary to trigger it.",
+    "Three-card earlier-source forensic pair does not prove all differences in later-source B512 comparisons or full gradients.",
+    "Strict route comparison remains failed. No quantization/tolerance/tie rule/packet change is used to declare a pass."
+  ],
+  "retained_failure": "route-witness01: tiny check passed; original session refused mistaken512MiB workspace ceiling. Separate02 restored historical512GiB whole-program ceiling,unchanged60GiB/card admission.",
+  "artifacts": {
+    "runs/route-witness02/status.json": "c430c2231732ab8021c4d4ce21d30d7c32103ff3384990b684a4d0b166f455e9",
+    "runs/route-witness02/task.log": "aba4f6d9431016b803d4711af547b37e1a052fea3afb7fd83f3d48138f73634a",
+    "runs/route-witness02/queue.json": "4dc208078998c1f3beb72d6cc330440ea7973b6cafdeaa8e293c75432d789e11",
+    "runs/route-witness02/assessment/result.json": "8e280183e66d84e01448d6f0fbdae1435448d3e23d9a94a3f9b7b696d91d21e0",
+    "runs/route-witness02/assessment/launcher.py": "3b2e4f8a60ff15ec86fe48c334c90212d23cef72dc46823f26975a092c845507",
+    "builds/route-witness02/result.json": "501130f82b03e0b8558635add6851033bc41bb4b7dc1650b027f48596c543b19",
+    "builds/route-witness02/loader.txt": "4ccdd879c1777356887aeb1537be03a72ef4aeea148cf0c442a93ed6b9e5f590",
+    "runs/route-witness01/assessment/result.json": "f23612443172ce8ed40d8fd7a78c3bbe33f2824d072f6f79ea70b1b1de11a1a9",
+    "launchers/route_witness_evidence.py": "f3194e710e12ebb91f155ca456234f0728d1dcb79034e7325e3390ab66b9d058",
+    "runs/route-witness02/assessment/smoke/packet.json": "b3d896e32aea3a6834ccff23bd28218abe263645a164a2fa03a33b2fc5c32a5b",
+    "runs/route-witness02/assessment/smoke/plan.json": "bb3bb13a82369f2feb808e2b10398ed1039a1833067ea716916a4f8a3bdec612",
+    "runs/route-witness02/assessment/smoke/process.log": "65ec049c5912ec0aea90e039d6fa2a71fcaa7489c99995dcc25e7038e934ec74",
+    "runs/route-witness02/assessment/smoke/observation/result.json": "f561e53ae15fb269a6d33961b2be86ad24fa5de29356cb217376be9a849c4dd9",
+    "runs/route-witness02/assessment/smoke/observation/windows.jsonl": "8b77b5b017a8c4da587c00869bb3a747f1e91d4add744e7edde5b8a2638b4fd7",
+    "runs/route-witness02/assessment/original/packet.json": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "runs/route-witness02/assessment/original/plan.json": "4cc0739ee6c957419605a9673f2e276e57989b1b08e9a59e96504c71cc5b0d25",
+    "runs/route-witness02/assessment/original/process.log": "a335daa7c8771b13aeb7f2d711a1475daaa19df3e248c81b9195a0377cfb2f30",
+    "runs/route-witness02/assessment/original/observation/result.json": "be1d5ae1b5c49794040570c4603c15b2fe7150da2bb6da55b176acb7026712e2",
+    "runs/route-witness02/assessment/original/observation/windows.jsonl": "96f54382541f7507b450e14e8bcb0008dc86c636f5c1a34dd247705b0f2588e9",
+    "runs/route-witness02/assessment/original/observation/witness.json": "dda58477b58a80f906d6ee01ba8ff96161f395d8e893c0d3fe94f28c4de0bc8e"
+  }
+}
