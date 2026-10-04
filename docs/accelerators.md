@@ -128,6 +128,15 @@ retain host transfer/scalar events. Graph metadata and discrete decisions may
 run on the host; comparisons and checkpoint copies are separate from profiling.
 Review operator-placement traces and launch diagnostics for the exact stack.
 
+On the tested TorchNPU2.10/CANN9.0 resident path,original-width FP16 construction
+exposed a cached `TensorMove` function-handle lookup failure. Explicit process-local
+`ACLNN_CACHE_LIMIT=0` completed the same reduced-batch reproduction and passed
+[93 affected resident correctness checks](evidence/resident-cann-cache-policy-20261004.md),
+including independent CPU oracles and full training/continuation. Record this
+setting and preserve it in paired profiling. Shared modules and graph semantics
+are unchanged;the default-cache failures remain retained. Other runtime versions
+and original-size FP16 performance require their own evidence.
+
 Installed dependency checks:
 
 ```sh

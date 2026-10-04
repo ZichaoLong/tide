@@ -434,6 +434,21 @@
           "test_command": "Directed test_online_eager_precision.py,test_resident_sharded_training.py,test_online_resident_consumer.py; exact source/build/commands and terminal records in audit.",
           "result": "passed",
           "environment_manifest": "docs/evidence/integrated-npu-consumers-20261004.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "scope": "Same-source resident correctness with explicit process-local ACLNN_CACHE_LIMIT=0:93 checks,no skips,FP32/FP16,independent CPU oracles,standalone/Python-owned native consumers,complete training/continuation and fresh2-to3-owner restore. Default-cache original-width FP16 TensorMove failure retained;cache-off original-width B4 completed. No B512 throughput or other-CANN-version claim.",
+          "tiers": [
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "ACLNN_CACHE_LIMIT=0 TIDE_RESIDENT_DEVICE=npu:0 TIDE_ONLINE_DEVICE=npu:0 python -m pytest -q -x tests/test_resident_sharded_training.py tests/test_online_resident_consumer.py --dtype float32; exact build/environment handles in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-cann-cache-policy-20261004.md"
         }
       ],
       "reason": "Finite single-device eager FP32 public library gates on Ascend910_9392; four exact CANN/Torch combinations. No FP64, arbitrary-scale or performance claim. Explicit FP16 is additionally qualified on2.10/CANN9.0 only; see20260929 finite-scope evidence. CPU FP16 CSR and NPU CSR remain explicit rejections."
@@ -1019,6 +1034,22 @@
           "test_command": "Audited wide-eager-half-b512-01 exact commands,binary/pilot identities and unchanged guards in report.",
           "result": "passed",
           "environment_manifest": "docs/evidence/original-b512-eager-fp16-20261004.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "scope": "Same-source resident correctness with explicit process-local ACLNN_CACHE_LIMIT=0:93 checks,no skips,FP32/FP16,independent CPU oracles,standalone/Python-owned native consumers,complete training/continuation and fresh2-to3-owner restore. Default-cache original-width FP16 TensorMove failure retained;cache-off original-width B4 completed. No B512 throughput or other-CANN-version claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "parity",
+            "feature",
+            "checkpoint-handoff",
+            "short-train"
+          ],
+          "test_command": "ACLNN_CACHE_LIMIT=0 TIDE_RESIDENT_DEVICE=npu:0 TIDE_ONLINE_DEVICE=npu:0 python -m pytest -q -x tests/test_resident_sharded_training.py tests/test_online_resident_consumer.py --dtype float32; exact build/environment handles in report",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/resident-cann-cache-policy-20261004.md"
         }
       ]
     },

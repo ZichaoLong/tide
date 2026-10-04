@@ -12,14 +12,23 @@ Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 file,and [ROADMAP F1–F7](ROADMAP.md). `TASK=/mi/data2T/zlong/tide-execution-flows`.
 All handoff writes use scripts.durable_records.replace_text atomically.
 
-**No current heavy measurement.** FP16 Add8-card attempt02 failed before a
-complete step:aclnnInplaceCopy returned361001. Native PID577834's CANN log says
-TensorMove kernel lookup failed;installed binary hash and exported symbol match
-its metadata. No memory/capacity/numerical failure is established. Do not retry
-full size or change the shared SDK. A small frozen-library copy reproducer is
-prepared under TASK/sources/cann-copy-repro01;build-cann-copy-repro01 passed17s,empty cgroup. probe-cann-copy01 is running(MainPID605105 at launch,background.slice/Nice10)
-(2-card lease120s,one/two-context checks each120s,whole420s),then inspect
-TASK/runs/probe-cann-copy01/{status.json,task.log,queue.json,assessment/result.json}. Diagnose within the contract's bound.
+**Only current heavy job:formal-resident-fp16-add-inference03**,running.
+Verified transient/background.slice/Nice10,MainPID664033 at launch;started
+2026-10-04T05:16:04.383475Z,physical1,3,4,5,7,9,11,13 as logical0–7.
+Affected cache-off resident gate passed93 checks,no skips,in419.52s and is
+terminal audited at TASK/audits/qualify-resident-cacheoff01.json;
+[reviewed cache policy](evidence/resident-cann-cache-policy-20261004.md). It covers
+FP32/FP16,independent CPU oracles,standalone/native complete training and fresh
+2→3-owner restore. Default-cache originalB512 and B4 copy failures remain.
+Process-local ACLNN_CACHE_LIMIT=0 fixed the reduced B4 reproduction;shared SDK,
+graph implementation and buffers remain unchanged. OriginalB512 follow-up03
+uses8cards,same owners/chunks/900s step/2200s child,queue120s/whole2440s.
+Task-local v3 helpers require the audited gate and record cache policy;original
+v2 helpers/failed records stay unchanged. Full-size success is not known yet.
+Exact plan/launcher:TASK/{plans,launchers}/formal-resident-fp16-add-inference03.{json,sh};
+records:TASK/runs/formal-resident-fp16-add-inference03. Terminal auditor:
+audit_resident_fp16_companion_v3.py --name formal-resident-fp16-add-inference03
+--output NEW_AUDIT_JSON. No competing heavy measurement. Continue after commits.
 The historical stopped worker is separate and protected below.
 
 ## Contract and acceptance
@@ -87,8 +96,8 @@ TASK/plans/fp16-companions-v2-prepare02/result.json verifies four command/memory
 preparations and rejects wrong dtype/sample rows/device count,without executing
 or leasing devices. First preparation failed solely on the inspection's wrong
 'npu' spelling expectation(actual normalized'npu:0');retain prepare01.
-FP16 profile helpers now read8/11 device count from the audited reference;syntax
-checked only. They require a successful unprofiled companion before submission.
+FP16 profile helpers now read8/11 device count and require the audited reference
+cache policy;syntax checked only. They require a successful unprofiled companion before submission.
 
 ## Terminal bound group and dependency failures
 
@@ -249,7 +258,7 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next independent work
 
-1. Diagnose the retained FP16 copy failure using a bounded small reproducer.
+1. Monitor/audit the active originalB512 FP16 Add follow-up03 above.
    Independent Attention inference/Add training use plan02 with fresh names;
    Attention training remains11cards. Do not chain unrelated work to a passing
    prerequisite merely for serialization;inspect terminal evidence between jobs.
@@ -261,7 +270,7 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
    minimum24GiB free disk. Use a fresh numbered name and audit_resident_profile_v2.py.
    Add FP32 profile is already audited;do not repeat it.
 4. FP16 profile_resident_fp16.py/audit_resident_fp16_profile.py accept the actual
-   audited8/11-card inference configuration. --inspect derives a finite trace
+   audited8/11-card inference configuration and require matching ACLNN_CACHE_LIMIT. --inspect derives a finite trace
    interval/budget from --reference-name COMPLETED_JOB --reference-audit AUDIT;
    retain packet,owners,chunks,dtype and exclude profiling from formal timings.
 5. Complete same-series fresh repetitions before recommending configurations;
