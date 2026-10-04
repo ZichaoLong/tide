@@ -1,0 +1,332 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "job": {
+    "name": "formal-resident-fp16-attention-inference02",
+    "receipt": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2440s",
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-formal-resident-fp16-attention-inference02",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "8",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/formal-resident-fp16-attention-inference02/queue.json",
+        "--",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/run_resident_fp16_companion_v3.py",
+        "--controller-source",
+        "TASK/sources/control-isolation-clean02",
+        "--out",
+        "TASK/runs/formal-resident-fp16-attention-inference02/assessment",
+        "--cell",
+        "8"
+      ],
+      "cwd": "TASK/sources/control-isolation-clean02",
+      "state": "passed",
+      "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+      "dirty": "",
+      "started": "2026-10-04T05:25:26.019893+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-04T05:35:24.082425+00:00"
+    },
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "queue": {
+      "elapsed_seconds": 597.3998773619533,
+      "job_id": "tide-formal-resident-fp16-attention-inference02",
+      "logical_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "npu:4",
+        "npu:5",
+        "npu:6",
+        "npu:7"
+      ],
+      "npu_count": 8,
+      "physical_ids": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "priority": 0,
+      "project": "tide-execution-flows",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-10-04T05:35:24.066578+00:00"
+    }
+  },
+  "parent": {
+    "state": "passed",
+    "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+    "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+    "cache_gate_sha256": "61067d3b7d780850cc4a6fd619884387c12b67b106cd9464f0365b6a4786757f",
+    "runtime_environment": {
+      "ACLNN_CACHE_LIMIT": "0"
+    },
+    "fp32_cell": 8,
+    "series": "numa-bound-resident-fp16-cacheoff-v1-8devices",
+    "plan_sha256": "1fb48d4a2d5546192cf82f17a69218c2afa120c018289473b5f554945f5f975e",
+    "helper_sha256": "d5a7ac97665ddca2f21591f496c76169a1deae424e53f06fe547e3b8be2620ac",
+    "budget_basis": "Finite FP32 envelope transferred as initial FP16 operating allowance,not a measured FP16 forecast or qualification",
+    "numerical_policy": "FP16 payloads;resident FP32 adjoints/loss/master/optimizer policy unchanged;discrete routes may differ",
+    "scope": "Four original-size resident FP16 companions:8-device Add/Attention inference and Add complete training,11-device Attention complete training. Same source,packets,logicalB512,requested sample rows,capacities and step/child bounds. Generic static locality placement;not a second Cartesian matrix. Separate from11-device FP32 timing series.",
+    "limits": "No automatic retry,increased timeout or reduced logical B512. Separate profiler after a successful unprofiled process. Not a broad second Cartesian performance matrix.",
+    "case_sha256": "e47d795c2b9e29000b67c46641bc88df2537439db7c85b5462a80640927ce825",
+    "consumer_sha256": "1384ce406854362c29559002481224151fb9fb8e4856deba7932817e4f0e4cb4",
+    "seconds": [
+      222.541188209
+    ],
+    "warmup_seconds": [
+      222.400112901
+    ],
+    "statistics": [
+      {
+        "emission_chunks": 56320,
+        "events": 1190764,
+        "full_chunks": 47470,
+        "head_chunks": 256,
+        "pending_peak": 1536,
+        "stages": 7168,
+        "window_events_max": 4694,
+        "window_outputs_max": 48,
+        "window_stages_max": 28
+      }
+    ],
+    "losses": [
+      20.625003814697266
+    ],
+    "token_rate": 55.21674481426647,
+    "peak_growth_bytes": [
+      8159554560,
+      6653392896,
+      6634016768,
+      6683902976,
+      6707070976,
+      6690290176,
+      6686537728,
+      6664721408
+    ]
+  },
+  "case": {
+    "cell": 8,
+    "configuration": {
+      "family": "timed-dag",
+      "client": "libtorch",
+      "schedule": "prefill",
+      "memory": "attention",
+      "training": false,
+      "preset": "resident",
+      "configuration": "libtorch-attention-False-resident",
+      "selection_evidence": "representative-preset-screen-20261002.json",
+      "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+    },
+    "series": "numa-bound-resident-fp16-cacheoff-v1-8devices",
+    "repeat": 1,
+    "runtime_identity": {
+      "implementation": "libtorch",
+      "preset": "resident",
+      "backend": "npu",
+      "dtype": "float16",
+      "schedule": "prefill",
+      "schema": "standalone-consumer"
+    },
+    "consumer_sha256": "1384ce406854362c29559002481224151fb9fb8e4856deba7932817e4f0e4cb4",
+    "seconds": [
+      222.541188209
+    ],
+    "warmup_seconds": [
+      222.400112901
+    ],
+    "construction_seconds": 133.807347373,
+    "losses": [
+      20.625003814697266
+    ],
+    "statistics": [
+      {
+        "emission_chunks": 56320,
+        "events": 1190764,
+        "full_chunks": 47470,
+        "head_chunks": 256,
+        "pending_peak": 1536,
+        "stages": 7168,
+        "window_events_max": 4694,
+        "window_outputs_max": 48,
+        "window_stages_max": 28
+      }
+    ],
+    "outputs": [
+      12288
+    ],
+    "token_rate": 55.21674481426647,
+    "batch_execution": {
+      "logical_batch": 512,
+      "requested_sample_chunk_rows": 4,
+      "effective_sample_chunk_rows": 4,
+      "physical_chunks": 128
+    },
+    "peak_growth_bytes": [
+      8159554560,
+      6653392896,
+      6634016768,
+      6683902976,
+      6707070976,
+      6690290176,
+      6686537728,
+      6664721408
+    ],
+    "physical_ids": [
+      1,
+      3,
+      4,
+      5,
+      7,
+      9,
+      11,
+      13
+    ],
+    "lane": {
+      "name": "npu",
+      "cpus": [
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297
+      ],
+      "memory_nodes": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "memory_bytes": 300647710720
+    },
+    "numerical_policy": "FP16 payloads;resident FP32 adjoints/loss/master/optimizer policy unchanged;discrete routes may differ",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_THREAD_LIMIT": null,
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+      "ACLNN_CACHE_LIMIT": "0"
+    }
+  },
+  "raw_inventory": {
+    "assessment/case/case.json": "e47d795c2b9e29000b67c46641bc88df2537439db7c85b5462a80640927ce825",
+    "assessment/case/consumer/consumer/result.json": "c5c15f729aa545ee652f6cc94bcf2441354efddd87025813669bb051b6831c74",
+    "assessment/case/consumer/consumer.log": "e3b9d2bcc9c8e3ad937687641aae372b406e41de87e934680b7dadd68224a067",
+    "assessment/case/consumer/result.json": "1384ce406854362c29559002481224151fb9fb8e4856deba7932817e4f0e4cb4",
+    "assessment/monitor/npu.log": "a787b5407d5081ca9e03f4b1088fc8c3f3182f19ea7816b96b6ae5fc10ba09ad",
+    "assessment/monitor/result.json": "ae4be5a074ebee01902a06702e10b57abe9776e64ce4df1d36670eb66ae296f0",
+    "assessment/result.json": "4913f775e52cf7660bbf6b70b32f17ec265e2c0c986db3370be78e1067ec7979",
+    "queue.json": "ab19eb3bc7e0b0a4c0f37f1e45a2c24fce4721d48fd1b0c38d0c78ed6b002607",
+    "status.json": "fcece2779097a2d19f7dab3762fd5845af0c25d6d37141cb3e279494f795508f",
+    "task.log": "60a90b35724e47f5ecf72821d60d243fcd75be086c80d41de67cc61d40fe710d"
+  },
+  "audit_helper_sha256": "d975285ac2385a4770ca1450625d0560fdeb57aa5bf166239d416591c810ea1f",
+  "limitations": [
+    "FP16 companion,not a cell or repetition of the FP32 matrix.",
+    "Independent online execution;discrete routes and actual work may differ by dtype.",
+    "One fresh process;no stable speed recommendation or numerical equivalence claim.",
+    "Different card counts/owner maps from FP32 prevent an isolated dtype speedup claim.",
+    "Sampled affinity and private anonymous NUMA pages do not control external load."
+  ]
+}

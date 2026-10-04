@@ -1,0 +1,11 @@
+# Original-B512 resident FP16 Attention inference
+
+The original-size LibTorch/TimedDAG/prefill resident FP16 Attention process passed terminal audit on eight NPUs: **222.541188s per measured step,55.216745 input tokens/s**. This is one process in `numa-bound-resident-fp16-cacheoff-v1-8devices`,separate from the FP32 matrix. [Reviewed audit](formal-b512-resident-fp16-attention-20261004.json).
+
+Workload/source remain `e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8`,D2048/B512/T12/V50304,480 body nodes/2208 body edges and17,521,117,376 parameters. Physical sample rows4 produce128 physical groups. One continued warmup(222.400113s) precedes one measured step;each has two connected windows. Construction133.807347s is separate. The consumer produced12288 measured output tokens,final cut816 and1190764 actual events. No CPU precomputed events/routes/gradients or profiler feeds the candidate.
+
+Explicit FP16 payloads retain the declared FP32 loss/adjoint/master policy and int64 timing/counts. `ACLNN_CACHE_LIMIT=0` is process-local and was qualified by [93 affected correctness checks](resident-cann-cache-policy-20261004.md). The prior default-cache failures remain failed. The v4 terminal auditor checks the inactive inference optimizer asNone;all source,build,configuration,workload,runtime,continuation,capacity and terminal checks remain strict. The original900s step/2200s child allowances were unchanged.
+
+The static envelope peaked at45.6709GiB/card;observed allocator growth peaked at8159554560 bytes(7.599177GiB) and stayed within every per-device estimate. The monitor verified the declared host RSS/NUMA lane and terminal cleanup. `formal-resident-fp16-attention-inference02` ended exit0 at2026-10-04T05:35:24.082425Z,with an empty cgroup and released lease.
+
+Together with [FP16 Add inference](formal-b512-resident-fp16-add-20261004.md),this completes the two initial original-size resident FP16 inference companions. Complete training and independent profiling companions remain open. These are execution/performance observations under a scoped numerical policy,not strict wide FP16-versus-FP32 trajectory equivalence. Card count,owner map,dtype and cache policy differ from the eleven-device FP32 configuration;do not attribute a time ratio solely to dtype. Three fresh processes in one series remain necessary before a recommendation.

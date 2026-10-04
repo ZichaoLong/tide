@@ -12,24 +12,32 @@ Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 file,and [ROADMAP F1–F7](ROADMAP.md). `TASK=/mi/data2T/zlong/tide-execution-flows`.
 All handoff writes use scripts.durable_records.replace_text atomically.
 
-**Only current heavy job:formal-resident-fp16-add-inference03**,running.
-Verified transient/background.slice/Nice10,MainPID664033 at launch;started
-2026-10-04T05:16:04.383475Z,physical1,3,4,5,7,9,11,13 as logical0–7.
-Affected cache-off resident gate passed93 checks,no skips,in419.52s and is
-terminal audited at TASK/audits/qualify-resident-cacheoff01.json;
-[reviewed cache policy](evidence/resident-cann-cache-policy-20261004.md). It covers
-FP32/FP16,independent CPU oracles,standalone/native complete training and fresh
-2→3-owner restore. Default-cache originalB512 and B4 copy failures remain.
-Process-local ACLNN_CACHE_LIMIT=0 fixed the reduced B4 reproduction;shared SDK,
-graph implementation and buffers remain unchanged. OriginalB512 follow-up03
-uses8cards,same owners/chunks/900s step/2200s child,queue120s/whole2440s.
-Task-local v3 helpers require the audited gate and record cache policy;original
-v2 helpers/failed records stay unchanged. Full-size success is not known yet.
-Exact plan/launcher:TASK/{plans,launchers}/formal-resident-fp16-add-inference03.{json,sh};
-records:TASK/runs/formal-resident-fp16-add-inference03. Terminal auditor:
-audit_resident_fp16_companion_v3.py --name formal-resident-fp16-add-inference03
---output NEW_AUDIT_JSON. No competing heavy measurement. Continue after commits.
-The historical stopped worker is separate and protected below.
+**Only current heavy job:formal-resident-fp16-add-training01**,running.
+Verified transient/background.slice/Nice10,MainPID717698 at launch;physical cards
+1,3,4,5,7,9,11,13 map to logical0–7. Started2026-10-04T05:40:31.375630Z.
+Its input hashes and clean workload e69b3bd/controller103f5b6 were rechecked.
+Eight cards,originalB512,physical sample rows2,FP16 payload/FP32 adjoints/loss/masters,
+explicit ACLNN_CACHE_LIMIT=0 and the passed93-check gate. Bounds remain4500s step,
+9400s child,120s queue,9640s whole. No competing heavy measurement.
+Launcher/plan:TASK/{launchers,plans}/formal-resident-fp16-add-training01.{sh,json};
+records:TASK/runs/formal-resident-fp16-add-training01. Terminal auditor:
+audit_resident_fp16_companion_v4.py --name JOB --output NEW_AUDIT_JSON.
+
+Both originalB512 FP16 inference companions passed v4 terminal audit:
+Add inference03 measured194.098069530s,warmup194.477604910s,construction60.926761025s;
+Attention inference02 measured222.541188209s,warmup222.400112901s,
+construction133.807347373s. Each used8cards/physical sample rows4,with12288 outputs
+and cut816;actual events1188301(Add)/1190764(Attention). Both exit0/empty/released.
+[Add evidence](evidence/formal-b512-resident-fp16-add-20261004.md) and
+[Attention evidence](evidence/formal-b512-resident-fp16-attention-20261004.md) retain
+their single-process observations,separate from120 FP32 cells;no recommendation.
+Add's first v3 audit rejected an incorrect inference optimizer expectation;retain
+that attempt and original helper. Separate v4 requiresNone for inference and the
+configured optimizer for training,with all other checks unchanged.
+Audits:TASK/audits/formal-resident-fp16-{add-inference03,attention-inference02}.json.
+Protect v3 execution helpers,gate audit,plan02 and frozen sources/builds. The
+original default-cache failures remain failed. The historical stopped worker is
+separate and protected below.
 
 ## Contract and acceptance
 
@@ -258,10 +266,10 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next independent work
 
-1. Monitor/audit the active originalB512 FP16 Add follow-up03 above.
-   Independent Attention inference/Add training use plan02 with fresh names;
-   Attention training remains11cards. Do not chain unrelated work to a passing
-   prerequisite merely for serialization;inspect terminal evidence between jobs.
+1. Monitor/audit live Add training01 with v4;both inference companions
+   are audited-passed. Uses plan02,v3 helpers,ACLNN_CACHE_LIMIT=0 and unchanged9640s
+   whole budget. Attention training remains11cards. Inspect terminal evidence
+   between heavy jobs;do not chain unrelated work to a passing prerequisite.
 2. Continue untouched FP32 cells with existing11-owner maps/capacities and finite
    allowances when devices are available. CPU60/84/108 are still unstarted.
    Keep cell36's completed-but-over-bound result separate;do not retry blindly.
@@ -301,9 +309,8 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;workload e69b3bd. This increment records terminal CPU
-streaming and the [FP16 copy failure](evidence/resident-fp16-copy-failure-20261004.md). No
-graph/model/core change or uncommitted implementation. This increment contains
-reviewed documentation/evidence only. Task-local helpers are
+Latest implementation103f5b6;workload e69b3bd. This increment records two audited
+original-size FP16 inference companions and the active complete-training job.
+No graph/model/core change or uncommitted implementation;reviewed evidence only. Task-local helpers are
 retained by hashes. A goal is active for autonomous completion;check get_goal on
 re-entry. Continue after commits/pushes.
