@@ -59,8 +59,9 @@ Controller103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f at
 TASK/sources/control-isolation-clean02;workload remains frozen
 **e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8** at TASK/sources/compare-discrete-clean01.
 Six fresh repeat1 cells12,14,48,50,96,98:PDG/LibTorch,Settle/LibTorch,Settle/Python;
-CPU and resident11 per submatrix. Cell12 CPU PDG is running;later cells are not
-accepted yet. New series `numa-bound-solo-v1`,separate from prior unbound results.
+CPU and resident11 per submatrix. Cells12,14,48,50 returned internally passed;
+cell96 is running. No new cell is accepted until terminal-parent audit. New series
+`numa-bound-solo-v1`,separate from prior unbound results.
 
 - CPU lane80 cores across NUMA0–3;NPU-host lane78 across4–7;two controller slots.
   Sample every live thread mask/private anonymous NUMA pages every5s,RSS/time every1s.
@@ -86,6 +87,33 @@ accepted yet. New series `numa-bound-solo-v1`,separate from prior unbound result
   An earlier read-only preparation refused NPU-node memory while the old screen
   was live;plans/formal-bound-next01-inspection-attempt01.json preserves it.
   No workload started during those preparations.
+
+## Active dependent successors — FP16 inference
+
+Two finite dependent services are submitted and waiting,not yet passing results:
+formal-resident-fp16-add-inference01 (MainPID334686 at launch),then
+formal-resident-fp16-attention-inference01 (MainPID336777). Both verified transient,
+background.slice,Nice10 and clean103f5b6 job receipts.
+Each uses controller103f5b6,workload e69b3bd,11 cards and the existing four-companion
+plan. The Add service requires formal-bound-next01 to finish and pass its terminal
+audit;Attention requires the Add companion terminal audit. Only one heavy process
+runs at a time. No earlier process,repeat,capacity or budget is changed.
+
+Both retain step900s/child2200s. Each successor command allows2640s including
+queue120s,monitor/controller overhead. Dependency waits are17760/20520s and outer
+bounds20520/23280s,respectively;these are dependency bounds,not longer model budgets.
+First failure stops its chain;no retries. Scripts/plans under TASK/launchers and
+TASK/plans share each job name. Inspect with systemctl --user show
+`tide-execution-flows-JOB`;records are TASK/runs/JOB/{status.json,task.log,queue.json,
+dispatch/result.json,assessment/result.json}. Stop only the exact justified unit.
+
+run_after_audited_dependency.py performs the finite wait and existing terminal
+audit;run_resident_fp16_companion.py runs the unchanged consumer through the
+qualified measurement monitor. audit_resident_fp16_companion.py verifies separate
+FP16 dtype,source/binary,online runtime,continuation,memory/placement,cleanup and
+terminal records. The new helper/auditor passed syntax inspection only;actual
+terminal evidence remains pending. Do not edit these or their hashed dependencies
+while a successor is live. No additional tracking service or dashboard.
 
 ## Qualified implementation — reuse these gates/builds
 
@@ -214,6 +242,22 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next independent work
 
+formal-bound-streaming-add01 is submitted and dependency-waiting after the two
+FP16 inference companions (MainPID365532 at launch;verified transient,background.slice,
+Nice10 and clean103f5b6 receipt). Ten fresh repeat1 cells24,26,36,38,60,62,84,86,108,110 cover
+streaming Add CPU/resident across all five required family/client submatrices.
+It uses the same103f5b6 controller/e69 workload and numa-bound-solo-v1 series.
+Original per-cell child1600/4600/5200s bounds stay;group whole42520s,dependency
+wait23280s,outer65920s. The first failure stops;no retry or larger model timeout.
+
+Its first inspect-only preparation was refused while resident memory occupied
+NUMA4–7:plans/formal-bound-streaming-add01-inspection01.json. After cell50 exited,
+inspection02 passed;no workload ran during either preparation. Preserve both.
+Plans/scripts share the job name;TASK/runs/JOB/{status.json,task.log,dispatch/result.json,
+assessment/result.json} and assessment/group-N retain observations. Existing
+inspect/stop/terminal-audit commands for formal-bound-next01 also apply by name.
+Do not edit the submitted plan,shell,helper,inspection or their hashed dependencies.
+
 1. Monitor/audit the live six-cell group. After terminal audit,commit/push its
    actual results and update separate series coverage;continue remaining FP32
    cells with existing finite budgets. Prefer uncovered/shorter cases before the
@@ -230,8 +274,9 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
    same original packets/11-owner maps/physical rows/capacities. Peak estimates
    20.616/39.769/48.812/52.822GiB/card. Step/child allowances900/2200,900/2200,
    4500/9400,9000/18400s,transferred as operating limits from FP32,not FP16 forecasts.
-   run_resident_fp16_companion.py is syntax-checked,**not launched**. Actual
-   execution,terminal audit and separate FP16 profile remain. This is a limited
+   The inference successors above are submitted and dependency-waiting;training
+   is not yet submitted.
+   Actual execution,terminal audit and separate FP16 profile remain. This is a limited
    companion set,not a second Cartesian matrix or a qualification claim.
 5. Finish support/portability/evidence audit and close all current goal jobs once
    actual remaining work is complete. NVIDIA/x86_64 device execution remains
@@ -261,7 +306,8 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest pushed implementation103f5b6 and evidence2920f24. This checkpoint records
-the rejected isolation screen and ongoing matrix dispatch;no graph/model/core
-change. Continue after commits/pushes. Uncommitted work is documentation/evidence
-until the next stated implementation change;task-local helpers are retained by hashes.
+Latest implementation103f5b6;previous evidence checkpoint5403b28. This checkpoint
+records the ongoing matrix and submitted finite FP16/streaming successors. No
+graph/model/core change or uncommitted implementation. Task-local helpers are
+retained by hashes. A goal is active for autonomous completion;check get_goal on
+re-entry. Continue after commits/pushes.
