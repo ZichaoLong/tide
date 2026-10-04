@@ -1,8 +1,12 @@
 # Current handoff
 
-Updated 2026-10-04 (Asia/Shanghai). **ACTIVE**: user authorizes continuing under
-[execution-flows](execution-flows.md) until the overall goal is complete,including
-commits/pushes. No per-commit pause. No subagents. A later explicit pause overrides.
+Updated 2026-10-04 (Asia/Shanghai). **PAUSED at the user's request for this
+commit/push checkpoint.** The current formal group is closed and audited.
+After publishing this evidence round,report and wait for new user authorization
+before any further implementation,benchmark or profile.
+This overrides the earlier continue-after-commit instruction. Resource isolation
+was inspected only; no parallel experiment or affinity change was made.
+Follow [execution-flows](execution-flows.md). No subagents.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`,branch
 `graph-execution-foundation`. Re-entry:`git status --short --branch`,
@@ -33,7 +37,9 @@ This witness does not explain every future discrepancy.
 Keep3000s/1.15 and all historical capacity/time refusals. Measurements may justify
 a separately declared longer budget. Normally≤2 measured improvement rounds/~90min
 active diagnosis per issue;no indefinite queues or blind retries. Formal heavy
-timings serial. Implementation commit→affected immutable clean qualification→
+timings remain serial;the proposed resource-isolated overlap below is not yet
+implemented or authorized as a replacement policy. Implementation commit→
+affected immutable clean qualification→
 separate evidence commit/push. Do not repeat unrelated passed gates. User contract
 outranks experiment-skill overhead;reuse minimal records. Update this handoff
 atomically with scripts.durable_records.replace_text.
@@ -121,8 +127,8 @@ processes. **Not strict equal-work comparisons or three-process recommendations.
 [CPU audit](evidence/formal-b512-first-cpu-20261004.md),
 [three-path audit](evidence/formal-b512-add-inference-npu-20261004.md).
 formal-first-cpu-blas01 and formal-add-inference-npu01 are terminal/empty.
-Evidence commit8ef3229 is pushed. Do not rewrite either audit JSON while the
-following formal dispatcher reads their hashes.
+Evidence commit8ef3229 is pushed. Preserve the audit JSONs and their hashes as
+recorded inputs to the completed dispatchers.
 
 [Full-size mixed profile failure/slice](evidence/fullsize-mixed-profile-slice-20261004.md):
 profile-fullsize-mixed01 failed Add at4500s without a complete consumer result;
@@ -131,31 +137,40 @@ Attention unstarted. Parent empty,leases released. profile-slice-inspect01 passe
 operations;no AiCPU observed in that slice. It neither explains the timeout nor
 certifies full-update or resident placement. No automatic rerun or larger timeout.
 
-## Active job and immutable inputs
+## Closed current group and evidence
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`;unit names
-`tide-execution-flows-NAME`,background.slice,Nice10. Current own heavy work is
-**formal-python-short01**,same frozen e69b3bd. Its finite dependency wait ended
-when formal-short-next01 passed/empty. **Cell74 Python-owned native resident Add
-inference is running**,then80 native resident Attention inference,then72 pure
-Python CPU Add inference. Repeat1,one continued warmup and one measured step,
-two windows each. Strictly serial;fresh11-card lease per NPU cell,no lease for CPU.
+`tide-execution-flows-NAME`,background.slice,Nice10. **No current heavy job or
+queued successor.** The protected historical stopped process below is separate.
+`formal-python-short01` passed all3 cells/exit0 at2026-10-04T00:20:12.114767Z;
+MainPID0,inactive,empty cgroup,both NPU leases completed/released. Its dependency
+wait for formal-short-next01 ended before measurement. Same frozen e69b3bd.
+[Terminal-parent audit](evidence/formal-b512-python-inference-20261004.md):
 
-- Resident cells74/80:900s/update,2200s child;CPU72:1800s/update,4000s child.
-- Formal group9240s;whole15960s including the ended≤6600s dependency wait.
-  Queue≤120s. First failure stops;no automatic retry.
+| Cell | Python-owned inference flow | Measured s | Input tokens/s | Actual events | Physical rows×groups |
+| --- | --- | ---: | ---: | ---: | --- |
+| 72 | pure Python CPU Add | 625.406563 | 19.648019 | 1188500 | 32×16 |
+| 74 | native resident Add,11 NPUs | 342.512730 | 35.876039 | 1188494 | 4×128 |
+| 80 | native resident Attention,11 NPUs | 421.433023 | 29.157658 | 1190499 | 4×128 |
+
+Each:repeat1,originalB512,one continued warmup and one measured step,two windows
+per step,outputs12288/cut816. Source/package/native binding/resident binary,
+placement/owner/capacity/work/timeout checks passed. CPU RSS growth72.635326GiB;
+max NPU allocator growth7.282186/13.528637GiB. No strict equivalence or binding
+cost claim follows from matching resident event counts. Own timings stayed serial.
+CPU live environment also confirmed OpenMP/OpenBLAS16,MKL1,thread limit32,
+autoload0;affinity remained all320CPUs/all8memory nodes.
+
+- Bounds unchanged:74/80 900s/update,2200s child;72 1800s/update,4000s child.
+  Group9240s;whole15960s including≤6600s dependency wait;NPU queue≤120s.
 - Records:TASK/runs/formal-python-short01/{status.json,task.log,dispatch/result.json,
   assessment/result.json,assessment/cell-N-repeat-1/consumer/result.json}.
-- Verified transient/background.slice. Inspect:
-  `systemctl --user show tide-execution-flows-formal-python-short01`.
-  Cancel only if justified:`systemctl --user stop tide-execution-flows-formal-python-short01`.
-- Immutable while live:defer_python_formal_group.py,dispatch_formal_blas_group.py,
-  fullsize_formal_cell_blas.py,fullsize_configs.py,plan02,budgets74/80/72,and
-  docs/evidence/{formal-b512-first-cpu,original-width-python-calibration}-20261004.json.
-  Never start competing heavy work.
-- After terminal/empty:
+- Preserve source,launchers,plan02,budgets74/80/72 and hashed calibration inputs.
+  Re-audit into a new output whose parent exists:
   `python TASK/launchers/audit_formal_blas_group_v2.py --name formal-python-short01 --output NEW_AUDIT_JSON`.
-  Create output parent first;preserve partial failures/unstarted cells.
+- TASK/audits/formal-matrix-review03 summarizes **8/120** actual first processes,
+  cells0,1,2,3,8,72,74,80;**0** cells have three fresh processes. Earlier reviews
+  remain historical. No representative submatrix or passed gate was rerun.
 
 formal-short-next01 is now passed/exit0 at2026-10-03T23:31:02.569252Z,empty,lease
 released,**both cells8/3 audited**. [Actual measurements](evidence/formal-b512-cpu-training-resident-inference-20261004.md):
@@ -182,9 +197,10 @@ pilots do not qualify the120 full-size family/client/schedule/model/mode cells.
 
 CPU Attention trainingphysical16,mixed4,resident1;CPU/mixed Add32,resident Add
 training2/inference4. Resident Attention training uses the qualified explicit
-11-owner map. No unqualified48-row limit. Formal cells0,1,2,3,8/repeat1 are audited;
-115 other first processes and recommendation repeats remain open. Live/waiting
-cells74/80/72 are not passed merely because they started or are queued.
+11-owner map. No unqualified48-row limit. Formal cells0,1,2,3,8,72,74,80/repeat1
+are audited;
+112 other first processes and recommendation repeats remain open. Static plans
+and reduced-batch pilots never substitute for these actual full-size processes.
 
 Budget02 files now exist for all120 cells. The prior26 files are unchanged;
 94 new finite allowances transfer matching original-width model/client/mode
@@ -195,8 +211,9 @@ a faster representative result. `prepare_transferred_budgets.py` and
 TASK/plans/transferred-budget02-receipt.json preserve their derivation. First
 failure stops each submitted group;no automatic retry or larger bounds.
 Each budget hashes its measured basis;all old3000s/1.15 refusals remain.
-The ten Python budgets have the terminal-parent audit basis;cell74 is now
-executing,80/72 follow in the same bounded stage. Others are unexecuted. Original3000s/1.15 refusals stay separate from longer bounds:
+The ten Python budgets have the terminal-parent calibration audit basis;
+74/80/72 now have audited formal results. Remaining cells are unexecuted.
+Original3000s/1.15 refusals stay separate from longer bounds:
 
 | Cells | Separately declared step/child seconds |
 | --- | --- |
@@ -213,38 +230,52 @@ executing,80/72 follow in the same bounded stage. Others are unexecuted. Origina
 | 76,88 Python mixed Add training | 7500/15400 |
 | 82,94 Python mixed Attention training | 16500/33400 |
 
-The120 initial-process phase forecasts sum to207.2h before construction and
-repeats;after the five completed cells0/1/2/3/8 they total about205.9h. This is a
+The120 initial-process nominal phase estimates sum to207.2h before construction
+and repeats (budget phase_forecasts_seconds divided by their1.15 guard). After
+the eight audited cells,the remaining sum is205.2h:CPU68.0h/NPU137.2h. This is a
 rough planning sum with cross-family transfer uncertainty,not measured remaining
 time. It makes the matrix a multi-day workload under the serial timing contract.
-These are operating limits,not B512 timings. In particular the Python CPU
-Attention training forecasts10340.528306/12475.200981s imply hours of actual
-measurement;prioritize shorter cells before the longest CPU Attention work.
+Budgets are operating limits;forecasts are not B512 timings. The Python CPU
+Attention training forecasts10340.528306/12475.200981s indicate potentially
+hours-long measurements;prioritize shorter cells before the longest CPU work.
 Do not assume one family/schedule or a C++ run certifies a Python counterpart.
 
-1. Commit/push the completed cells8/3 audit and handoff;then after the Python
-   group is terminal/empty,audit cells74/80/72,write their actual work/throughput/
-   memory report and commit/push. Continue after commits;no approval/pause needed.
-2. Run the remaining actual full-size matrix,using the measured budget basis and
-   explicit transfer limits where a different family/schedule/preset is involved.
-   Three fresh processes before formal recommendations. Keep strict failures
-   and differing actual work visible;do not infer all discrepancies from one witness.
+**All next actions are deferred until new user authorization.** Prepared scripts
+and recorded commands do not authorize resumption.
+
+1. Align on [parallel resource review](evidence/parallel-resource-review-20261004.md).
+   Suggested first overlap:one CPU lane plus one11-NPU lane,disjoint CPU masks/
+   memory nodes,combined resource reservation and a finite solo/overlap control
+   under identical binding. Installed numactl/taskset and320cores/8NUMA/2.01TiB
+   make this plausible,but NPU PCI NUMA=-1 leaves locality unverified. Two11-card
+   cases cannot fit16cards. Current global lock/admission is serial-only;do not
+   bypass it without implementing and qualifying the aggregate policy. Existing
+   conservative estimates permit some pairs,not CPU Attention training+resident
+   under the observed half-memory budget. No concurrent speedup is measured.
+2. Complete remaining actual full-size FP32 cells and recommendation repeats,
+   using declared finite bounds and actual work disclosure. Do not repeat the
+   ten completed representative submatrices or unrelated correctness gates.
+   TASK/launchers/formal-attention-inference-next01.sh (cells6/7) is prepared,
+   bash-n valid,group13300s/outer13360s,**never submitted**. It complements
+   measured resident cell8. Strict failures remain separate;one near-tie witness
+   does not explain every future difference. No further CPU worker sweep.
 3. Separate full-size resident/FP16 profiling and comparisons remain open.
-   TASK/launchers/profile_formal_resident.py has an inspection-only Add recipe
-   at TASK/plans/profile-formal-resident-add01-inspection.json:actual passed cell2
-   binary/config/owners,one cold inference step/two windows,delay120s/duration5s,
-   1200s execution/2760s whole,24GiB free disk prerequisite. **Not launched or
-   qualified.** Cell8 is now eligible for its separate inspection.
-   No automatic retry or mixed-profile timeout increase. Run independently of
-   formal timings. Do not repeat representative submatrices/unrelated gates.
-4. TASK/launchers/summarize_formal_matrix.py was exercised on the first three
-   actual audited cells;TASK/audits/formal-matrix-review01 keeps the result.
-   The subsequent formal-matrix-review02 includes all five audited cells.
-   It refuses repeated cell/repeat entries and keeps missing/failed attempts
-   separate;three-process evidence is necessary,not sufficient for a recommendation.
-5. Finish support/portability/evidence audit and terminal task-job closure. NVIDIA/
-   x86_64 execution stays target-pending. Keep the protected historical task below
-   untouched. No production code changed during this continuation.
+   TASK/launchers/profile_formal_resident.py is inspection-only:passed cell2/8
+   binary/config/owners,one cold inference step/two windows,five-second trace,
+   24GiB free disk prerequisite. Add delay120s/execution1200s/whole2760s;
+   Attention delay220s/execution1800s/whole3360s. Inspection records are
+   TASK/plans/profile-formal-resident-{add,attention}01-inspection.json.
+   TASK/launchers/profile-formal-resident-add01.sh passes bash-n,outer2940s,
+   queue120s,11NPUs,**never submitted**. No profile audit helper qualified yet.
+   No automatic retry or increase of the retained mixed-profile timeout.
+4. TASK/launchers/summarize_formal_matrix.py has been exercised through review03.
+   It checks unique cell/repeat identity and preserves unmeasured/failed cells.
+   Three-process evidence is necessary,not automatically sufficient,for a
+   recommendation. Binding/overlap qualification must be a separately recorded
+   series rather than silently merged with these unbound serial measurements.
+5. Finish support/portability/evidence audit and final job closure after the
+   remaining matrix. NVIDIA/x86_64 execution stays target-pending. Historical
+   stopped work below remains untouched. No production code changed this round.
 
 ## Environment and protected history
 
@@ -273,10 +304,10 @@ rewrite history. finite_ranked_horizon.py and wide_attention_horizon_pilot.py
 remain unqualified drafts. Prior navigation/schema audit passed834 links and
 10-target support schema;not new hardware verification.
 
-Evidence commits:1d32008 CPU pilots,f6e49f0 retained profile failure/slice,
-d416e3c ten accelerator pilots,b45c2b8 first formal CPU,8ef3229 first three-path
-formal comparison,af1289b Python calibration,f52bbec public numerical limitation;
-all pushed. This checkpoint adds the terminal cells8/3 evidence,ROADMAP link
-and current Python-stage/profile-preparation handoff. No production code changed
-or unrelated edits remain. Task-local helpers/budgets stay outside the repository;
-active versions above are immutable. Continue after commits.
+Recent pushed evidence:af1289b Python calibration,f52bbec public numerical
+limitation,2485d39 CPU training/resident Attention inference. This checkpoint
+adds the three audited Python formal cells,resource-isolation inspection/proposal,
+ROADMAP coverage and this paused handoff. All changes are documentation/evidence;
+there are no production changes or unrelated edits. Task-local helpers/budgets
+stay outside the repository and remain retained by the evidence. After this
+checkpoint's commit/push,report and wait;do not start the prepared successors.

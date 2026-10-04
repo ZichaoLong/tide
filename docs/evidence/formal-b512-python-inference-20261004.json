@@ -1,0 +1,712 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "cases": [
+    {
+      "cell": 74,
+      "repeat": 1,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "resident",
+        "configuration": "python-add-False-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/inputs/fullsize-add01/workload.json",
+        "--output-dir",
+        "TASK/runs/formal-python-short01/assessment/cell-74-repeat-1/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "4",
+        "--resident-context-bytes",
+        "8589934592",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "2048",
+        "--resident-arrivals",
+        "2048",
+        "--resident-outputs",
+        "512",
+        "--resident-trace",
+        "16384",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "65536",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "16",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "seconds": [
+        342.51272969320416
+      ],
+      "warmup_seconds": [
+        341.8474869839847
+      ],
+      "construction_seconds": 48.282122030854225,
+      "wall_seconds": 752.0532187856734,
+      "token_rate": 35.87603885848745,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 128
+      },
+      "statistics": [
+        {
+          "stages": 7168,
+          "events": 1188494,
+          "full_chunks": 36157,
+          "emission_chunks": 56320,
+          "window_stages_max": 28,
+          "window_events_max": 4685,
+          "pending_peak": 1536,
+          "window_outputs_max": 48,
+          "head_chunks": 256
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "losses": [
+        30.30591583251953
+      ],
+      "peak_growth_bytes": [
+        7819187200,
+        4072471552,
+        4072471552,
+        4072471552,
+        4055694336,
+        4072471552,
+        4067613696,
+        4066204672,
+        4066204672,
+        4072471552,
+        4082678784
+      ],
+      "estimated_peak_bytes": [
+        27158606912,
+        20884294320,
+        20884294320,
+        20884294320,
+        20850723504,
+        20884294320,
+        20863825632,
+        20859458256,
+        20843994748,
+        20868830812,
+        20873198184
+      ],
+      "binary_sha256": null,
+      "build_sha256": "eb6e16e2d9ccc3f561e924ce7200c0fa808a71441a3148aefed3e062718d5adf",
+      "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+      "consumer_sha256": "994d022e4cf847799693c4fe1a8735ecc4d545813130d8919d2e85a17942606d",
+      "budget": {
+        "cell": 74,
+        "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+        "coefficient": 1.15,
+        "original_step_seconds": 3000,
+        "step_seconds": 900,
+        "child_seconds": 2200,
+        "construction_allowance_seconds": 400,
+        "phase_forecasts_seconds": {
+          "warmup": 402.70286130905146,
+          "measured": 393.7109929323196
+        },
+        "basis": [
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-74/result.json",
+            "sha256": "3cd3b11441219f16e3a268c4df86eb1307bb7c961ad71bbf2a9cfe2b24e4836e"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-74/consumer/result.json",
+            "sha256": "2a1caa5cc2a6084b0a6975f3334e89a7cce9f22c3043b61b52afae1e2896073e"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-74/packet.json",
+            "sha256": "035ac2fca26fe6312e276bbcafd9bc30961a5b36a47a0b0c42d714e9cc268725"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-74/original-plan.json",
+            "sha256": "a56b373296ffc0fdabf527aca599885956db58a39c72f6bc4efc342207db7953"
+          }
+        ],
+        "reason": "Actual passed original-width Python-owned resident child with verified package,core and resident library identities;two physical groups and continued warmup/measured steps,two windows each. Forecasts retain1.15 and any original3000s refusal. Same physical rows,owner map and memory capacities;explicit budget remains separate from forecast. Complete terminal-parent Python audit required before launching;this is not B512 timing or a C++ proxy timing."
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      }
+    },
+    {
+      "cell": 80,
+      "repeat": 1,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "attention",
+        "training": false,
+        "preset": "resident",
+        "configuration": "python-attention-False-resident",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "native",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/inputs/fullsize-attention01/workload.json",
+        "--output-dir",
+        "TASK/runs/formal-python-short01/assessment/cell-80-repeat-1/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--dtype",
+        "float32",
+        "--preset",
+        "resident",
+        "--device",
+        "npu:0",
+        "--implementation",
+        "native",
+        "--devices",
+        "11",
+        "--threads",
+        "8",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "64424509440",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "4",
+        "--resident-context-bytes",
+        "8589934592",
+        "--resident-workspace-bytes",
+        "549755813888",
+        "--resident-retained-bytes",
+        "549755813888",
+        "--resident-backward-bytes",
+        "8796093022208",
+        "--resident-optimizer-bytes",
+        "1099511627776",
+        "--resident-queue",
+        "2048",
+        "--resident-arrivals",
+        "2048",
+        "--resident-outputs",
+        "512",
+        "--resident-trace",
+        "16384",
+        "--resident-kv-rows",
+        "256",
+        "--resident-kv-trace-rows",
+        "65536",
+        "--resident-full-chunk-rows",
+        "16",
+        "--resident-emission-chunk-rows",
+        "16",
+        "--resident-aggregate-chunk-rows",
+        "8",
+        "--resident-attention-chunk-rows",
+        "8",
+        "--resident-attention-key-rows",
+        "128",
+        "--resident-reverse-chunk-rows",
+        "16",
+        "--owner-map",
+        "10,10,10,10,10,0,10,10,9,9,0,0,0,0,0,9,9,7,7,7,9,9,9,9,0,3,3,3,3,0,3,0,10,10,10,10,10,10,10,10,9,9,9,0,0,0,0,0,9,7,7,7,7,7,9,9,0,3,3,3,3,3,3,0,10,10,10,10,10,8,8,10,0,9,9,9,9,0,0,0,9,7,7,7,7,7,7,9,0,3,3,3,3,3,3,0,8,10,10,10,10,8,8,8,0,0,9,9,9,9,0,0,9,7,7,7,7,7,7,7,3,1,1,1,3,3,3,0,8,8,10,10,10,8,8,8,0,0,9,9,9,9,9,9,7,7,7,7,7,7,7,7,3,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,9,9,9,9,7,7,7,2,7,7,7,7,1,1,1,1,1,1,1,1,8,8,8,10,10,10,8,8,5,5,5,5,5,5,5,5,7,7,2,2,2,2,2,2,6,1,1,1,1,1,1,1,8,8,8,6,10,10,10,8,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,1,1,1,1,1,1,3,3,8,6,6,6,6,3,5,5,5,5,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,1,1,1,1,1,3,3,3,6,6,6,6,6,5,5,5,4,5,5,5,5,2,2,2,2,2,2,2,2,6,6,6,4,8,8,1,1,6,3,3,6,6,6,6,6,5,0,5,4,4,4,4,5,2,2,2,4,2,2,4,2,3,4,6,4,4,8,8,8,6,6,3,3,6,6,6,6,4,0,0,0,0,4,4,4,4,4,2,4,9,4,4,4,8,4,3,4,4,8,8,8,6,6,6,3,3,6,6,6,4,4,0,0,0,0,4,4,4,4,4,4,4,9,4,9,8,8,3,4,4,3,4,8,6,6,3,3,7,10,10,10,4,4,9,1,0,0,10,0,1,4,9,4,5,7,1,9,8,8,2,2,2,3,5,5,10,6,6,8,3,6,7,10,8,4,7,6,6,0,10,0,1,1,9,4,5,9,7,7,8,8,8,2,2,3,7,5,0,6",
+        "--native-library",
+        "TASK/builds/integration-core-python-clean03",
+        "--resident-library",
+        "TASK/builds/integration-resident-python-clean03"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "seconds": [
+        421.4330228641629
+      ],
+      "warmup_seconds": [
+        419.78345300629735
+      ],
+      "construction_seconds": 112.17934946715832,
+      "wall_seconds": 975.7122808583081,
+      "token_rate": 29.15765811726788,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 128
+      },
+      "statistics": [
+        {
+          "stages": 7168,
+          "events": 1190499,
+          "full_chunks": 54715,
+          "emission_chunks": 56320,
+          "window_stages_max": 28,
+          "window_events_max": 4691,
+          "pending_peak": 1536,
+          "window_outputs_max": 48,
+          "head_chunks": 256
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "losses": [
+        20.897994995117188
+      ],
+      "peak_growth_bytes": [
+        14526263808,
+        9475670016,
+        9465112576,
+        10242862080,
+        9454987776,
+        9487503360,
+        9690886144,
+        10110714368,
+        9687973376,
+        10589680128,
+        10548544512
+      ],
+      "estimated_peak_bytes": [
+        49151506064,
+        45044026624,
+        45044026624,
+        45027742048,
+        44994171232,
+        45027742048,
+        45431117808,
+        45430953440,
+        45430953440,
+        45027742048,
+        45246133152
+      ],
+      "binary_sha256": null,
+      "build_sha256": "eb6e16e2d9ccc3f561e924ce7200c0fa808a71441a3148aefed3e062718d5adf",
+      "packet_sha256": "11165d4d77751b008f90608a9ee6a44cd9acedc3da786407b58470a9d1ccaf9a",
+      "consumer_sha256": "f2139c62b7e1e41483422465ce690aaf25c720b9028e287f7b39cb79f897bc2e",
+      "budget": {
+        "cell": 80,
+        "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+        "coefficient": 1.15,
+        "original_step_seconds": 3000,
+        "step_seconds": 900,
+        "child_seconds": 2200,
+        "construction_allowance_seconds": 400,
+        "phase_forecasts_seconds": {
+          "warmup": 492.0789014935493,
+          "measured": 480.62557922601695
+        },
+        "basis": [
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-80/result.json",
+            "sha256": "ba53ce8d03624e069419cd59237d1451057ddffc4de98b1d0bcc44c2f8d3bb7b"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-80/consumer/result.json",
+            "sha256": "6352b703968f574420b1111329b42e1c8c5511542a56cfac095c65f37f0a1d34"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-80/packet.json",
+            "sha256": "f61b53cf932711c6fc67c4663279d0c63e909d09d9849a26c3ae8c89ccaf56dd"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-80/original-plan.json",
+            "sha256": "a2d08475b0e382dd6e3b48e0f96e4462c9a0690df2987c2626b98dc94f10647d"
+          }
+        ],
+        "reason": "Actual passed original-width Python-owned resident child with verified package,core and resident library identities;two physical groups and continued warmup/measured steps,two windows each. Forecasts retain1.15 and any original3000s refusal. Same physical rows,owner map and memory capacities;explicit budget remains separate from forecast. Complete terminal-parent Python audit required before launching;this is not B512 timing or a C++ proxy timing."
+      },
+      "runtime_identity": {
+        "implementation": "native",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "npu:0",
+          "backend": "npu",
+          "logical_device_index": 0,
+          "resolution_reason": "explicit:npu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "torch_npu": "2.10.0",
+          "logical_device_count": 11,
+          "device_name": "Ascend910_9392",
+          "cann_version": "9.0.0",
+          "matmul_allow_hf32": false
+        },
+        "native_sha256": "f6544b099c482719a6044510b2ea7186956942bd9b33b57fd928ef6183c20e18",
+        "binaries": {
+          "_tide_resident.so": "3d68d165298b7c1edb2bce36dd445efb4c739dce3354daebb3cd992a301db7f8",
+          "libtide-resident.so": "28f4dee19664552061f8fd717a2767763a9690ef994af7beb18bf72278726c0b"
+        }
+      }
+    },
+    {
+      "cell": 72,
+      "repeat": 1,
+      "state": "passed",
+      "configuration": {
+        "family": "timed-dag",
+        "client": "python",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "python-add-False-cpu",
+        "selection_evidence": "representative-family-matrix-20261002.json",
+        "selection_sha256": "2f2d3a6a9647c0492abac923b927f556a8763f250eec2a4172a937a5c9c595b8"
+      },
+      "implementation": "python",
+      "command": [
+        "NPU_ENV/bin/python",
+        "TASK/sources/compare-discrete-clean01/scripts/run_execution_flow.py",
+        "--packet",
+        "TASK/inputs/fullsize-add01/workload.json",
+        "--output-dir",
+        "TASK/runs/formal-python-short01/assessment/cell-72-repeat-1/consumer",
+        "--family",
+        "timed-dag",
+        "--schedule",
+        "prefill",
+        "--dtype",
+        "float32",
+        "--preset",
+        "cpu",
+        "--device",
+        "cpu",
+        "--implementation",
+        "python",
+        "--devices",
+        "1",
+        "--threads",
+        "16",
+        "--steps",
+        "1",
+        "--warmup",
+        "1",
+        "--windows-per-step",
+        "2",
+        "--optimizer",
+        "sgd",
+        "--parameter-budget",
+        "103079215104",
+        "--device-memory-bytes",
+        "549755813888",
+        "--head-workspace-bytes",
+        "4294967296",
+        "--owner-policy",
+        "locality",
+        "--chunk-policy",
+        "aggressive",
+        "--sample-chunk-rows",
+        "32"
+      ],
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32"
+      },
+      "physical_ids": [],
+      "seconds": [
+        625.4065632633865
+      ],
+      "warmup_seconds": [
+        546.5045119561255
+      ],
+      "construction_seconds": 29.474405076354742,
+      "wall_seconds": 1204.325202036649,
+      "token_rate": 19.648018939681286,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 16
+      },
+      "statistics": [
+        {
+          "greedy_stages": 544,
+          "greedy_relaxed_edges": 245760,
+          "region_blocks": 544,
+          "candidate_events": 1188500,
+          "visited_edges": 1253376,
+          "max_live_fibers": 12288,
+          "max_greedy_frames": 384,
+          "state_blocks": 2048,
+          "state_steps": 1163924,
+          "full_blocks": 8126,
+          "state_sequence_calls": 2048,
+          "semantic_state_replays": 0,
+          "semantic_full_replays": 0,
+          "full_scalar_fallback_steps": 0,
+          "aggregate_calls": 9890,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "read_calls": 68102,
+          "region_steps": 208896,
+          "next_steps": 1188500,
+          "max_full_batch": 384,
+          "full_calls": 8126,
+          "selected_events": 208896,
+          "source_rows": 1265664,
+          "state_prefill_selected_clear": 1163924,
+          "state_prefill_fallback_events": 1163924,
+          "state_step_batch_calls": 1163924,
+          "state_scalar_batch_steps": 1163924
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "losses": [
+        30.302034378051758
+      ],
+      "peak_growth_bytes": [
+        77991587840
+      ],
+      "estimated_peak_bytes": [
+        123007001968
+      ],
+      "binary_sha256": null,
+      "build_sha256": "980b1a7c50347d17760156e9af63c621aa48b2d55aa73eaa3500788181eec25a",
+      "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+      "consumer_sha256": "1f7837a1b46e25ba5b5874137f19ffe94edd26fe17875514453791993cb4b4b6",
+      "budget": {
+        "cell": 72,
+        "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+        "coefficient": 1.15,
+        "original_step_seconds": 3000,
+        "step_seconds": 1800,
+        "child_seconds": 4000,
+        "construction_allowance_seconds": 400,
+        "phase_forecasts_seconds": {
+          "warmup": 692.5587413907051,
+          "measured": 795.0328921526669
+        },
+        "basis": [
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-72/result.json",
+            "sha256": "c82d3f6aa40a63aaa424157f21e7cc45bf2cbb74cbc93dd12f6c1d90f7319c45"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-72/consumer/result.json",
+            "sha256": "e0d104381c34e81c0d8463426c3e8f597afb8a0b23e2be84638265cf6f666ca3"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-72/packet.json",
+            "sha256": "2c96d46427caeefa55d1fb772b5941c2ee330281b7550de315cb391c6ce01af9"
+          },
+          {
+            "path": "TASK/runs/remaining-python-calibration01/assessment/cell-72/original-plan.json",
+            "sha256": "01b4ed987e0b9bad40b5acb42dc6956d2f54b4c24c0a567c8c014f9c456cce7e"
+          }
+        ],
+        "reason": "Actual passed original-width Python CPU child,with two physical groups and continued warmup/measured steps,two windows each. Same source,physical rows,owner map and static capacity plan. Forecasts retain1.15 and do not certify B512 performance. Complete parent audit is required before launching this Python formal cell;the calibration parent is still active when this budget is prepared."
+      },
+      "runtime_identity": {
+        "implementation": "python",
+        "preset": "cpu",
+        "backend": "cpu",
+        "dtype": "float32",
+        "schedule": "prefill",
+        "schema": "tide-runtime-v1",
+        "package_sha256": "b0de8836f742d5666e67c1511e003fb077ac240fa6c1d55f86f50e76f7ea6d03",
+        "runtime": {
+          "resolved_device": "cpu",
+          "backend": "cpu",
+          "logical_device_index": null,
+          "resolution_reason": "explicit:cpu",
+          "dtype": "float32",
+          "host_architecture": "aarch64",
+          "torch": "2.10.0+cpu",
+          "torch_git": "449b1768410104d3ed79d3bcfe4ba1d65c7f22c0",
+          "python": "3.11.15",
+          "cxx11_abi": true,
+          "logical_device_count": 1
+        }
+      }
+    }
+  ],
+  "not_started": [],
+  "source_inventory_sha256": "fa3bd6cd2b0f9bbaffa1772c8b95647f476e8b5957d829696e3fa7d0b2c3c7cc",
+  "audit_helper_sha256": "f615a52b80af61f5f6fb4cb4280fafed49bf771ce30958230d1cedc954c9b78b",
+  "runtime_audit_sha256": "80caa9e1912db9d0b05736a88c7294586a13ff0ac5b10b1b3b35af754a45baf4",
+  "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+  "job": {
+    "name": "formal-python-short01",
+    "state": "passed",
+    "exit_code": 0,
+    "started": "2026-10-03T23:01:24.644194+00:00",
+    "finished": "2026-10-04T00:20:12.114767+00:00",
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "receipt_sha256": "7c5e30aa4ec3e92ed842b651d897a723a2333b56ad3b81867d6c5f25bef0617a",
+    "assessment_sha256": "d36aacf27a60636aae6e6b187f0d0f2bbce6fc64cbbee234bbd0b9b1bcdeb1fa"
+  },
+  "scope": "Independent unprofiled B512 formal processes,strictly serial and fresh per cell. CPU and NPU timings cannot overlap. NPU lease acquired per cell,not held across CPU cells. One continued warmup and one measured step,two windows each. First failure stops;no retry. Three fresh processes required before a configuration recommendation.",
+  "limitations": [
+    "One process per recorded cell/repeat;three independent processes required before a recommendation.",
+    "Actual work counts must accompany any CPU/NPU comparison;strict original-scale equivalence is not established.",
+    "Own heavy timings are serial;external shared-server load is uncontrolled.",
+    "Original3000s forecast refusals remain separate from longer explicitly declared execution budgets."
+  ]
+}

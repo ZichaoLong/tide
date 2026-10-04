@@ -1,0 +1,319 @@
+{
+  "schema": "tide-resource-isolation-readonly-review-v1",
+  "observed_utc": "2026-10-04T00:14:30.959743+00:00",
+  "state": "inspection-only-not-parallel-qualified",
+  "host": {
+    "effective_cpu_count": 320,
+    "physical_cores": 320,
+    "cpu_budget": 160,
+    "host_total_bytes": 2158682243072,
+    "host_available_bytes": 1553145180160,
+    "effective_memory_bytes": 1553145180160,
+    "memory_budget_bytes": 776572590080,
+    "basis": "half min(affinity intersect cpuset, ancestor CPU quotas); half min(host total, MemAvailable, ancestor memory limits and remaining)",
+    "scope": "combined task budget; cgroup memory may include other account workloads"
+  },
+  "nodes": [
+    {
+      "node": 0,
+      "cpulist": "0-39",
+      "distance": [
+        10,
+        15,
+        20,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 270442717184,
+        "MemFree": 54583910400,
+        "Active": 76723703808,
+        "Inactive": 123678416896
+      }
+    },
+    {
+      "node": 1,
+      "cpulist": "40-79",
+      "distance": [
+        15,
+        10,
+        20,
+        20,
+        20,
+        20,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 269145055232,
+        "MemFree": 107100356608,
+        "Active": 49298513920,
+        "Inactive": 103260590080
+      }
+    },
+    {
+      "node": 2,
+      "cpulist": "80-119",
+      "distance": [
+        20,
+        20,
+        10,
+        15,
+        20,
+        20,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 270576934912,
+        "MemFree": 47689895936,
+        "Active": 86752571392,
+        "Inactive": 128258605056
+      }
+    },
+    {
+      "node": 3,
+      "cpulist": "120-159",
+      "distance": [
+        20,
+        20,
+        15,
+        10,
+        20,
+        20,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 270534680576,
+        "MemFree": 93251334144,
+        "Active": 66978729984,
+        "Inactive": 100028612608
+      }
+    },
+    {
+      "node": 4,
+      "cpulist": "160-199",
+      "distance": [
+        20,
+        20,
+        20,
+        20,
+        10,
+        15,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 270576934912,
+        "MemFree": 36450238464,
+        "Active": 78911389696,
+        "Inactive": 146411094016
+      }
+    },
+    {
+      "node": 5,
+      "cpulist": "200-239",
+      "distance": [
+        20,
+        20,
+        20,
+        20,
+        15,
+        10,
+        20,
+        20
+      ],
+      "memory_bytes": {
+        "MemTotal": 270576930816,
+        "MemFree": 75746779136,
+        "Active": 103497273344,
+        "Inactive": 78226980864
+      }
+    },
+    {
+      "node": 6,
+      "cpulist": "240-279",
+      "distance": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20,
+        10,
+        15
+      ],
+      "memory_bytes": {
+        "MemTotal": 266252058624,
+        "MemFree": 43738947584,
+        "Active": 88286978048,
+        "Inactive": 121139953664
+      }
+    },
+    {
+      "node": 7,
+      "cpulist": "280-319",
+      "distance": [
+        20,
+        20,
+        20,
+        20,
+        20,
+        20,
+        15,
+        10
+      ],
+      "memory_bytes": {
+        "MemTotal": 270576930816,
+        "MemFree": 22958313472,
+        "Active": 114785271808,
+        "Inactive": 118561865728
+      }
+    }
+  ],
+  "accelerator_pci_devices": [
+    {
+      "bdf": "0000:81:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:83:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:85:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:87:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:89:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:8b:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:8d:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:8f:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:91:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:93:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:95:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:97:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:99:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:9b:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:9d:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    },
+    {
+      "bdf": "0000:9f:00.0",
+      "numa_node": -1,
+      "local_cpulist": "0-319"
+    }
+  ],
+  "npu_topology": {
+    "physical_devices": 16,
+    "paired_sio": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        10,
+        11
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        14,
+        15
+      ]
+    ],
+    "other_pairs": "HCCS_SW",
+    "output_sha256": "9735d3a45f899c718c03df39962939d27cf2b986377f1fe7b5900236b0bc5bf7"
+  },
+  "existing_host_admission_bytes": {
+    "libtorch-add-True-cpu": 205377613776,
+    "libtorch-attention-True-cpu": 442499436496,
+    "resident_host_allowance": 300647710720,
+    "mixed_host_allowance": 68719476736,
+    "retained_and_service_reserve": 146028888064
+  },
+  "inputs_sha256": {
+    "launchers/fullsize_formal_cell_blas.py": "88a29410e448b2a691fcc0c1e48782dbd94e290db063b6a76ea8a6d0d2f6439b",
+    "plans/fullsize-continuous-e69b3bd-blas16-02.json": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e"
+  },
+  "resource_helper_sha256": "01e721c3f4622b225a12e0474eef4bdefc4b079412bf334b37217c97998f3398",
+  "limits": [
+    "No new workload, affinity change or NUMA allocation test was performed.",
+    "NPU PCI sysfs reports NUMA -1; host locality unverified.",
+    "MemAvailable is global; node MemFree is not node reclaimable capacity.",
+    "Current full-size launcher is globally locked and has no aggregate multi-lane reservation.",
+    "Proposal requires authorization after this round pause."
+  ],
+  "raw_snapshot_sha256": "96f8bb62e8e63fec20bdb3e9e77e14858978a8a48e531c81550cdcfa6cae7f61"
+}

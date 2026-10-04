@@ -174,19 +174,11 @@ checks passed;all leases released ([audit](evidence/original-width-accelerator-c
 Longer originalB512 forecasts retain the3000s refusals;the old PythonB64 timeout
 stays failed. These are reduced-batch pilots,not full-size formal results.
 
-F6 first unprofiled originalB512 formal process passed on e69b3bd:
-LibTorch/TimedDAG/prefill/CPU/Add inference226.376559s,54.281238input tokens/s,
-continued warmup207.571919s;physical32×16,two windows and complete work/memory
-records ([audit](evidence/formal-b512-first-cpu-20261004.md)). One fresh process;
-remaining cells and three-process recommendations are still open.
-
-F6 first unprofiled originalB512 Add inference CPU/mixed/resident comparison
-is now complete on e69b3bd:226.376559s/624.907705s/327.613456s,one fresh process
-each. All continuation/memory/budget checks passed;actual event counts differ
-1188500/1188498/1188494 and strict equivalence is not certified.
+F6 first unprofiled originalB512 LibTorch Add inference CPU/mixed/resident
+comparison passed/audited on e69b3bd:226.376559s/624.907705s/327.613456s,one fresh
+process each. All continuation/memory/budget checks passed;actual event counts
+differ1188500/1188498/1188494 and strict equivalence is not certified.
 [Audited comparison](evidence/formal-b512-add-inference-npu-20261004.md).
-This closes three first processes;117primary cells and recommendation repeats
-remain open. Python envelope calibration is now audited below.
 
 F6 original-width Python continuation calibration now passed10/10 on e69b3bd:
 four CPU model/mode cases,four Python-owned native resident cases and two mixed
@@ -201,8 +193,17 @@ CPU Add complete training970.259169s (12.664657input tokens/s),resident11 Attent
 inference402.400685s (30.536727input tokens/s),one fresh process each. Exact source/
 owner/capacity/runtime checks passed;actual work and cold costs remain separate
 ([audit](evidence/formal-b512-cpu-training-resident-inference-20261004.md)). These
-are different workloads,not a CPU/NPU ratio. First-process coverage is5/120;
-recommendation repeats and the rest of F6 remain open.
+are different workloads,not a CPU/NPU ratio.
+
+F6 Python-owned originalB512 inference now has three more audited first
+processes:independent pure Python CPU Add625.406563s,native resident11 Add
+342.512730s and Attention421.433023s. Source/package/binary/runtime/placement,
+continuation and memory checks passed;actual events1188500/1188494/1190499 remain
+visible ([audit](evidence/formal-b512-python-inference-20261004.md)). Coverage is
+now8/120 first processes,0 three-process cells;112 first processes and formal
+recommendation repeats remain open. The [parallel resource inspection](evidence/parallel-resource-review-20261004.md)
+proposes CPU+11-NPU overlap with separate affinity/NUMA and aggregate admission;
+it is not implemented or performance-qualified. Resume policy is in STATUS.
 
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary
