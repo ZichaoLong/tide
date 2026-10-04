@@ -1,0 +1,564 @@
+{
+  "state": "audited-passed",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "job": {
+    "name": "qualify-flow-isolation02",
+    "receipt": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "6600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/qualify_flow_isolation_v2.py",
+        "--controller-source",
+        "TASK/sources/control-isolation-clean02",
+        "--out",
+        "TASK/runs/qualify-flow-isolation02/assessment"
+      ],
+      "cwd": "TASK/sources/control-isolation-clean02",
+      "state": "passed",
+      "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+      "dirty": "",
+      "started": "2026-10-04T02:09:16.626613+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-04T02:42:16.833543+00:00"
+    },
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    }
+  },
+  "controller_inventory_sha256": "32a40fae97b3dfc7521e79f3f39354e9e035bd39374200d9958fd1cdd04ac9b1",
+  "parent_sha256": "0d8dcfd800da2da65ac901b707584f71edd6b55bdd8e3439caee7d92d534a5d0",
+  "queue_sha256": "1057b0ba956e05525874001ee742ebf73ef5f096313c2157811f9e7b064f1fe4",
+  "audit_helper_sha256": "d778e8dbcd8b177f40f8dfda4563574876176027b8d57031a9a70eb6b24ee4ae",
+  "limitations": [
+    "One solo and one overlapping process per implementation;not three-process performance evidence.",
+    "The two workloads have different durations;process overlap is not proof of uniform measured-phase overlap.",
+    "Scope is original Add inference under this binding;other workload classes remain unqualified by this screen.",
+    "Bound series must stay separate from historical unbound serial measurements.",
+    "Anonymous NUMA pages and thread masks were sampled;shared files/vendor mappings/external load remain outside that assertion.",
+    "Same-backend counters and losses are checked;no strict cross-backend full-state equivalence is inferred."
+  ],
+  "process_overlap_seconds": 557.8352036103606,
+  "audit_path": "TASK/audits/qualify-flow-isolation02.json",
+  "audit_sha256": "f3a690d5a35f262d54c064afd10b4eceee3bbc5817780e1c709bf14ce6ecf1f2",
+  "qualification": "screen-rejected",
+  "limits": {
+    "cpu_process": 1500,
+    "npu_process": 2200,
+    "npu_queue": 120,
+    "whole": 6600,
+    "max_overlap_slowdown": 1.05,
+    "shared_reserve_bytes": 146028888064
+  },
+  "overlap_to_solo_time": {
+    "cpu": 1.2018829693286597,
+    "npu": 1.0113718203319249
+  },
+  "comparison": {
+    "cpu": {
+      "solo_seconds": 194.385205446,
+      "overlap_seconds": 233.628267915,
+      "solo_case_sha256": "3f20d37909a6007a9053505cda49cd0f302f62dd0ceaf577b017d9cbd840bef2",
+      "overlap_case_sha256": "0ab2f9f47cb9f3990cf3752064e7891bad60e5737f19a0f9a943c8a40e591d73"
+    },
+    "npu": {
+      "solo_seconds": 325.315243472,
+      "overlap_seconds": 329.014669972,
+      "solo_case_sha256": "53d3a7a66c759b0db12922a41edcd737be1cfa9f719af9345762de8f56489c11",
+      "overlap_case_sha256": "4199548d761546123f84c82c5c454c3e0411852c24df0f4a75e6311d0b9fe6bf"
+    }
+  },
+  "cases": [
+    {
+      "name": "cpu-solo",
+      "cell": 0,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "libtorch-add-False-cpu",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "case_sha256": "3f20d37909a6007a9053505cda49cd0f302f62dd0ceaf577b017d9cbd840bef2",
+      "consumer_sha256": "86b209894ef7b629bdd603cad16b1c417e81dd57585e269edef19e94861a7fd6",
+      "seconds": [
+        194.385205446
+      ],
+      "warmup_seconds": [
+        245.199256218
+      ],
+      "construction_seconds": 45.534829026,
+      "losses": [
+        30.302034378051758
+      ],
+      "statistics": [
+        {
+          "aggregate_calls": 9890,
+          "attention_score_elements": 0,
+          "body_candidate_events": 1163924,
+          "body_selected_events": 184320,
+          "candidate_events": 1188500,
+          "full_blocks": 8126,
+          "full_calls": 8126,
+          "greedy_relaxed_edges": 245760,
+          "greedy_stages": 544,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 68806,
+          "next_reset_scalar_steps": 184320,
+          "next_steps": 1188500,
+          "packed_source_batches": 9890,
+          "read_calls": 68102,
+          "region_blocks": 544,
+          "region_steps": 208896,
+          "selected_events": 208896,
+          "source_rows": 1265664,
+          "state_blocks": 2048,
+          "state_prefill_fallback_events": 1163924,
+          "state_prefill_selected_clear": 1163924,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 2048,
+          "state_step_batch_calls": 68038,
+          "state_step_calls": 68038,
+          "state_steps": 1163924,
+          "visited_edges": 1253376
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 16
+      },
+      "series": "numa-bound-isolation-qualification",
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32",
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+      },
+      "physical_ids": []
+    },
+    {
+      "name": "npu-solo",
+      "cell": 2,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "resident",
+        "configuration": "libtorch-add-False-resident",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "case_sha256": "53d3a7a66c759b0db12922a41edcd737be1cfa9f719af9345762de8f56489c11",
+      "consumer_sha256": "ffadfab54db0ef88fe4418da0e20f2f41a8f3602d1d195a21965777e513531bb",
+      "seconds": [
+        325.315243472
+      ],
+      "warmup_seconds": [
+        324.879932662
+      ],
+      "construction_seconds": 85.419058301,
+      "losses": [
+        30.30591583251953
+      ],
+      "statistics": [
+        {
+          "emission_chunks": 56320,
+          "events": 1188494,
+          "full_chunks": 36157,
+          "head_chunks": 256,
+          "pending_peak": 1536,
+          "stages": 7168,
+          "window_events_max": 4685,
+          "window_outputs_max": 48,
+          "window_stages_max": 28
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 128
+      },
+      "series": "numa-bound-isolation-qualification",
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null,
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "name": "overlap-cpu",
+      "cell": 0,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "libtorch-add-False-cpu",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "case_sha256": "0ab2f9f47cb9f3990cf3752064e7891bad60e5737f19a0f9a943c8a40e591d73",
+      "consumer_sha256": "0e3ac49a8e8fadac3af0e8adb7392a321bd9299e178c55935645293ebdef8aff",
+      "seconds": [
+        233.628267915
+      ],
+      "warmup_seconds": [
+        275.404937559
+      ],
+      "construction_seconds": 47.399889039,
+      "losses": [
+        30.302034378051758
+      ],
+      "statistics": [
+        {
+          "aggregate_calls": 9890,
+          "attention_score_elements": 0,
+          "body_candidate_events": 1163924,
+          "body_selected_events": 184320,
+          "candidate_events": 1188500,
+          "full_blocks": 8126,
+          "full_calls": 8126,
+          "greedy_relaxed_edges": 245760,
+          "greedy_stages": 544,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 68806,
+          "next_reset_scalar_steps": 184320,
+          "next_steps": 1188500,
+          "packed_source_batches": 9890,
+          "read_calls": 68102,
+          "region_blocks": 544,
+          "region_steps": 208896,
+          "selected_events": 208896,
+          "source_rows": 1265664,
+          "state_blocks": 2048,
+          "state_prefill_fallback_events": 1163924,
+          "state_prefill_selected_clear": 1163924,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 2048,
+          "state_step_batch_calls": 68038,
+          "state_step_calls": 68038,
+          "state_steps": 1163924,
+          "visited_edges": 1253376
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 16
+      },
+      "series": "numa-bound-isolation-qualification",
+      "environment": {
+        "OMP_NUM_THREADS": "16",
+        "OPENBLAS_NUM_THREADS": "16",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": "32",
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+      },
+      "physical_ids": []
+    },
+    {
+      "name": "overlap-npu",
+      "cell": 2,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "resident",
+        "configuration": "libtorch-add-False-resident",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "case_sha256": "4199548d761546123f84c82c5c454c3e0411852c24df0f4a75e6311d0b9fe6bf",
+      "consumer_sha256": "45cfaf1f0dcc8f8bf8e388bbb3a8259aef958daf36751b885da2f9794921386b",
+      "seconds": [
+        329.014669972
+      ],
+      "warmup_seconds": [
+        327.513912298
+      ],
+      "construction_seconds": 71.671168839,
+      "losses": [
+        30.30591583251953
+      ],
+      "statistics": [
+        {
+          "emission_chunks": 56320,
+          "events": 1188494,
+          "full_chunks": 36157,
+          "head_chunks": 256,
+          "pending_peak": 1536,
+          "stages": 7168,
+          "window_events_max": 4685,
+          "window_outputs_max": 48,
+          "window_stages_max": 28
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 4,
+        "effective_sample_chunk_rows": 4,
+        "physical_chunks": 128
+      },
+      "series": "numa-bound-isolation-qualification",
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null,
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0"
+      },
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ]
+    }
+  ],
+  "monitors": [
+    {
+      "name": "cpu-solo",
+      "state": "passed",
+      "record_sha256": "fa53a88510564184667bc8e688a40e6c4554ef64c0b3d4e0264a3226b81b1d19",
+      "peak_combined_rss_bytes": 46061936640,
+      "wall_seconds": 486.75091126561165,
+      "placement_observations": 190,
+      "observed_breaches": [],
+      "error": null,
+      "reserved_cpu_count": 82,
+      "reserved_memory_bytes": 277625824624,
+      "shared_reserve_bytes": 146028888064,
+      "host_memory_budget_bytes": 815962636288,
+      "node_estimate_policy": "MemFree + 0.75 * clean Inactive(file) - 2GiB/node",
+      "lanes": [
+        {
+          "name": "cpu",
+          "cpu_count": 80,
+          "memory_nodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "memory_bytes": 131596936560
+        }
+      ],
+      "cases": [
+        {
+          "name": "cpu",
+          "pid": 111544,
+          "timeout_seconds": 1500,
+          "state": "passed",
+          "started_elapsed_seconds": 0.001424163579940796,
+          "peak_rss_bytes": 46035832832,
+          "reaped_descendants": [],
+          "exit_code": 0,
+          "process_finished_elapsed_seconds": 486.7346328124404,
+          "process_peak_rss_bytes": 46041337856,
+          "finished_elapsed_seconds": 486.7346328124404,
+          "natural_teardown_elapsed_seconds": 0.0,
+          "remaining_group_pids": []
+        }
+      ]
+    },
+    {
+      "name": "npu-solo",
+      "state": "passed",
+      "record_sha256": "9ab7377bb89a1acfd28c1ca2a3ff816f6a6db81bf23507b79b23f7fd5ee2c997",
+      "peak_combined_rss_bytes": 107894599680,
+      "wall_seconds": 746.2639761567116,
+      "placement_observations": 3018,
+      "observed_breaches": [],
+      "error": null,
+      "reserved_cpu_count": 80,
+      "reserved_memory_bytes": 446676598784,
+      "shared_reserve_bytes": 146028888064,
+      "host_memory_budget_bytes": 814491439104,
+      "node_estimate_policy": "MemFree + 0.75 * clean Inactive(file) - 2GiB/node",
+      "lanes": [
+        {
+          "name": "npu",
+          "cpu_count": 78,
+          "memory_nodes": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "memory_bytes": 300647710720
+        }
+      ],
+      "cases": [
+        {
+          "name": "npu",
+          "pid": 136840,
+          "timeout_seconds": 2200,
+          "state": "passed",
+          "started_elapsed_seconds": 0.0015069842338562012,
+          "peak_rss_bytes": 107858579456,
+          "reaped_descendants": [
+            {
+              "pid": 136991,
+              "exit_code": 0
+            },
+            {
+              "pid": 136992,
+              "exit_code": 0
+            }
+          ],
+          "exit_code": 0,
+          "process_finished_elapsed_seconds": 746.0795071870089,
+          "process_peak_rss_bytes": 100052127744,
+          "finished_elapsed_seconds": 746.0795071870089,
+          "natural_teardown_elapsed_seconds": 0.0,
+          "remaining_group_pids": []
+        }
+      ]
+    },
+    {
+      "name": "overlap",
+      "state": "passed",
+      "record_sha256": "a5880f22dd1f29e9f64ca6f8fab064441912e4f33c451d7dfdfe63421d766922",
+      "peak_combined_rss_bytes": 153937387520,
+      "wall_seconds": 738.9818645566702,
+      "placement_observations": 3132,
+      "observed_breaches": [],
+      "error": null,
+      "reserved_cpu_count": 160,
+      "reserved_memory_bytes": 578273535344,
+      "shared_reserve_bytes": 146028888064,
+      "host_memory_budget_bytes": 813618819072,
+      "node_estimate_policy": "MemFree + 0.75 * clean Inactive(file) - 2GiB/node",
+      "lanes": [
+        {
+          "name": "cpu",
+          "cpu_count": 80,
+          "memory_nodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "memory_bytes": 131596936560
+        },
+        {
+          "name": "npu",
+          "cpu_count": 78,
+          "memory_nodes": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "memory_bytes": 300647710720
+        }
+      ],
+      "cases": [
+        {
+          "name": "cpu",
+          "pid": 177751,
+          "timeout_seconds": 1500,
+          "state": "passed",
+          "started_elapsed_seconds": 0.0015966333448886871,
+          "peak_rss_bytes": 46044368896,
+          "reaped_descendants": [],
+          "exit_code": 0,
+          "process_finished_elapsed_seconds": 557.8380199037492,
+          "process_peak_rss_bytes": 46039433216,
+          "finished_elapsed_seconds": 557.8380199037492,
+          "natural_teardown_elapsed_seconds": 0.0,
+          "remaining_group_pids": []
+        },
+        {
+          "name": "npu",
+          "pid": 177752,
+          "timeout_seconds": 2200,
+          "state": "passed",
+          "started_elapsed_seconds": 0.002816293388605118,
+          "peak_rss_bytes": 107855196160,
+          "reaped_descendants": [
+            {
+              "pid": 177979,
+              "exit_code": 0
+            },
+            {
+              "pid": 177980,
+              "exit_code": 0
+            }
+          ],
+          "exit_code": 0,
+          "process_finished_elapsed_seconds": 738.7896333187819,
+          "process_peak_rss_bytes": 100046213120,
+          "finished_elapsed_seconds": 738.7896333187819,
+          "natural_teardown_elapsed_seconds": 0.0,
+          "remaining_group_pids": []
+        }
+      ]
+    }
+  ]
+}

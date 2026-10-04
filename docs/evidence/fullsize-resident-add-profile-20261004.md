@@ -35,6 +35,12 @@ plus 1360 SetDevice calls. ACL/runtime layers can nest. These counts do not
 identify each call's source location or establish per-event host scheduling.
 Physical sample-group boundaries and input/output reporting remain host work.
 
+The unprofiled CPU baseline used 32 physical rows and 16 groups for logical
+B512;resident used four rows and 128 groups. More physical groups introduce
+more group-boundary work and smaller matrix batches. That documented difference
+is relevant to performance, but does not quantify how much of the time gap it
+causes;there was no matched-chunk ablation in this trace.
+
 This observation supports investigating vector gather/scatter, selection,
 packing and boundary synchronization costs; it does **not** establish a single
 cause for CPU/NPU performance differences. No AiCPU was observed in this slice,

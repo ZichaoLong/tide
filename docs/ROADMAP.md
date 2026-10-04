@@ -206,8 +206,10 @@ proposes CPU+11-NPU overlap with separate affinity/NUMA and aggregate admission.
 The bounded controller is implemented;the first full-size screen failed its
 post-exit descendant check before overlap began ([retained failure](evidence/measurement-isolation-20261004.md)).
 Lifecycle handling now reaps exited descendants and bounds natural teardown,
-with17 checks also passed on immutable103f5b6 ([control gate](evidence/measurement-lifecycle-20261004.md));the fixed full-size screen remains running. No parallel
-performance is qualified. Resume policy is in STATUS.
+with17 checks also passed on immutable103f5b6 ([control gate](evidence/measurement-lifecycle-20261004.md));the fixed full-size execution/lifecycle screen passed,but
+its≤5% performance criterion was rejected (CPU+20.2%,NPU+1.1%;
+[audit](evidence/measurement-isolation-result-20261004.md)). Formal timings remain
+solo;no concurrent recommendation is qualified. Resume policy is in STATUS.
 
 F6 original B512 FP32 resident Add inference now has an independently audited
 partial device trace:168322 tasks,all11cards,5.72370525s span,no observed AiCPU;
