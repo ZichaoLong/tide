@@ -56,6 +56,8 @@ at TASK/sources/control-isolation-clean02. Workload remains frozen
 **e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8** at TASK/sources/compare-discrete-clean01.
 Five fresh repeat1 streaming Add CPU cells24,36,60,84,108 cover all required
 family/client submatrices. Series numa-bound-solo-v1;no earlier process is repeated.
+Cell24 returned internally passed,measured570.014357s;cell36 is running. These
+new cases remain outside the audited count until the parent terminal audit.
 
 - Same80-core NUMA0–3 lane,static CPU estimate+8GiB RSS allowance,reserve136GiB;
   admission/placement/time/RSS monitor is unchanged. No competing heavy work.
@@ -246,10 +248,12 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 4. The FP32 Attention profile helper profile_formal_resident.py --cell8 is ready;
    its dependent service failed before starting. Delay220s,duration5s,execution1800s,
    profile/export3360s,queue120s,11cards,24GiB free-disk prerequisite. Add profile
-   is already audited;do not repeat it. Use audit_resident_profile.py at terminal.
+   is already audited;do not repeat it. Use audit_resident_profile_v2.py for the new attempt name at terminal;the
+   original auditor and old audited Add profile remain unchanged.
 5. New profile_resident_fp16.py / audit_resident_fp16_profile.py are syntax-checked
-   only,not submitted. The runner requires --memory add|attention --reference-audit
-   AUDIT --out NEW;--inspect derives a finite trace interval/budget from a passed
+   only,not submitted. The runner requires --memory add|attention --reference-name
+   COMPLETED_JOB --reference-audit AUDIT --out NEW;--inspect derives a finite
+   trace interval/budget from a passed
    unprofiled FP16 companion. Preserve original packet/owners/chunks/dtype.
 6. Complete same-series fresh repetitions before recommending configurations;
    finish support/portability/evidence audit and close all current goal jobs.
@@ -280,7 +284,7 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;previous handoff checkpoint8fe7e74. This checkpoint
+Latest implementation103f5b6;latest reviewed full-size evidence9558cb6. This checkpoint
 records the terminal partial matrix and independent CPU continuation. No
 graph/model/core change or uncommitted implementation. This increment contains
 reviewed documentation/evidence only. Task-local helpers are
