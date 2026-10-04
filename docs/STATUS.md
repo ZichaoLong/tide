@@ -5,8 +5,11 @@ and authorized completing the overall goal,including the proposed bounded
 CPU/NPU resource-isolation qualification. Continue autonomous implementation,
 measurement,audit,commit and push;no automatic per-commit pause. A later user
 pause overrides. Follow [execution-flows](execution-flows.md). No subagents.
-The next action is to implement aggregate lane admission and qualify one finite
-same-binding solo/overlap Add pair before permitting concurrent formal timings.
+qualify-flow-isolation01 is terminal/failed and audited:the NPU consumer completed,
+but its monitor rejected remaining group processes at immediate exit. No overlap
+started. Correct/retest lifecycle handling;no concurrent formal timings are qualified.
+Next independent heavy job is profile-formal-resident-add01 on frozen e69b3bd.
+No competing heavy work during this profile.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`,branch
 `graph-execution-foundation`. Re-entry:`git status --short --branch`,
@@ -138,25 +141,59 @@ Attention unstarted. Parent empty,leases released. profile-slice-inspect01 passe
 operations;no AiCPU observed in that slice. It neither explains the timeout nor
 certifies full-update or resident placement. No automatic rerun or larger timeout.
 
-## Resource-isolation implementation in progress
+## Current work and active-job boundary
 
-The user resumed after517c48f. scripts/measurement_lanes.py and
-scripts/measurement_group.py implement aggregate admission,disjoint CPU/NUMA
-masks,per-lane and combined RSS/time bounds,actual placement observations and
-owned-process cleanup. [Control contract](measurement-isolation.md). Thirteen
-dependency-free directed checks passed,including real overlapping NUMA children,
-placement observation,timeout/grandchild cleanup,companion failure and RSS refusal.
-No graph/model code changed. No full-size isolation job has started yet.
-Next:commit this controller,freeze it separately from the unchanged e69b3bd
-workload,and run one bounded original Add inference qualification:CPU solo,
-resident11 solo,then overlap. Same masks/pools/packet/chunks per solo/paired case;
-new series,not another unbound formal repeat. No automatic retry or timeout increase.
+**TERMINAL FAILED** `qualify-flow-isolation01` / unit
+`tide-execution-flows-qualify-flow-isolation01`, exit1, MainPID0, empty cgroup,
+all leases released. CPU solo passed;NPU consumer passed but its monitor failed
+`child exited with remaining group processes: npu`;overlap never started.
+[Failure audit](evidence/measurement-isolation-20261004.md),raw audit
+TASK/audits/qualify-flow-isolation01.json. Preserve all raw records and frozen
+controller a3e7270/workload e69b3bd. No parallel timing has been approved.
+
+Lifecycle fix implemented:reap exited adopted grandchildren before classifying
+a leak;allow≤2s natural teardown inside the original lane bound,record remaining
+states,still fail/clean live leaks and nonzero adopted exits. Directed17 checks
+passed in8.050s. The original controller reproduced the exited-zombie failure
+using a real fork,retained at TASK/audits/measurement-zombie-reproducer-a3e7270.
+This does not identify the exact old NPU helper. Commit the tested fix,create a
+frozen controller,rerun its directed checks,then qualify after the profile ends.
+No graph/model change,process/step/queue/whole budget increase or blind retry.
+
+**RUNNING** `profile-formal-resident-add01`,unit
+`tide-execution-flows-profile-formal-resident-add01`,source e69b3bd at
+TASK/sources/compare-discrete-clean01. One cold Add inference update/two windows,
+11NPUs,unchanged full B512 physical4/128groups;five-second msprof slice only.
+Verified transient/background.slice/Nice10,MainPID84252 at launch,started
+2026-10-04T01:56:52.733403Z;lease physical1–9,11,12 remapped logically0–10.
+Execution1200s,export≤120s/session,whole2760s,outer2940s,queue120s;24GiB free
+storage prerequisite. It cannot certify whole-update profiling or formal speed.
+
+- Launch shell:TASK/launchers/profile-formal-resident-add01.sh.
+- Records:TASK/runs/profile-formal-resident-add01/{status.json,task.log,queue.json,
+  assessment/result.json,assessment/consumer/result.json,assessment/raw/}.
+- Inspect:`systemctl --user show tide-execution-flows-profile-formal-resident-add01`.
+  Stop only if justified:`systemctl --user stop tide-execution-flows-profile-formal-resident-add01`.
+- Terminal audit prepared:TASK/launchers/audit_resident_profile.py --name
+  profile-formal-resident-add01 --output NEW_AUDIT_JSON. Not yet exercised.
+- Frozen while active:profile_formal_resident.py,source/build/input dependencies,
+  and its shell. Do not launch the old serial matrix scripts beside it.
+
+Bounded remaining-matrix dispatcher is prepared externally as
+TASK/launchers/dispatch_bound_matrix.py;syntax checked,not yet qualified. It is
+solo by default and permits only exact audited screen pairs for overlap,with
+matching source/configuration/binding/environment/cards. It keeps new bound
+series separate from historical unbound results. A read-only preparation while
+the failed qualification was still live refused the local NPU-node memory
+estimate;no matrix process started. Receipt:plans/formal-bound-next01-inspection-attempt01.json.
+Update its controller revision after the lifecycle fix;then prepare a new finite
+first-process group for PDG/Settle rather than repeating unrelated passed gates.
 
 ## Closed current group and evidence
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`;unit names
-`tide-execution-flows-NAME`,background.slice,Nice10. **No current heavy job or
-queued successor.** The protected historical stopped process below is separate.
+`tide-execution-flows-NAME`,background.slice,Nice10. **The previous formal group is closed.** The new isolation group above is the
+only authorized current heavy stage. The historical stopped process is separate.
 `formal-python-short01` passed all3 cells/exit0 at2026-10-04T00:20:12.114767Z;
 MainPID0,inactive,empty cgroup,both NPU leases completed/released. Its dependency
 wait for formal-short-next01 ended before measurement. Same frozen e69b3bd.
@@ -328,4 +365,4 @@ there were no production changes or unrelated edits at517c48f,pushed. Task-local
 helpers/budgets remain retained by the evidence. The user has now resumed work.
 This implementation checkpoint includes the active handoff,measurement-control
 modules,13 directed checks and the authorized isolation contract. Full-size
-qualification is next. Continue after commits/pushes.
+isolation qualification is being launched as above. Continue after commits/pushes.

@@ -139,6 +139,57 @@ class ProcessTests(unittest.TestCase):
         self.assertEqual(result['state'], 'failed')
         self.assertEqual(result['cases'][0]['remaining_group_pids'], [])
 
+    def test_exited_adopted_grandchild_is_reaped_before_leak_check(self):
+        code = ('import os,time\n'
+                'if os.fork()==0: os._exit(0)\n'
+                'time.sleep(.2)\n'
+                'os._exit(0)\n')
+        result = run_group([self.case(self.lanes[0], code)],
+            output=self.root/'zombie', reserve_bytes=1024**2, interval=.1)
+        row = result['cases'][0]
+        self.assertEqual(result['state'], 'passed')
+        self.assertEqual([v['exit_code'] for v in row['reaped_descendants']], [0])
+        self.assertEqual(row['remaining_group_pids'], [])
+
+    def test_natural_helper_exit_has_a_bounded_unsignalled_grace(self):
+        code = ('import os,time\n'
+                'if os.fork()==0:\n'
+                ' time.sleep(.5)\n'
+                ' os._exit(0)\n'
+                'os._exit(0)\n')
+        result = run_group([self.case(self.lanes[0], code)],
+            output=self.root/'teardown', reserve_bytes=1024**2, interval=.1)
+        row = result['cases'][0]
+        self.assertEqual(result['state'], 'passed')
+        self.assertGreater(row['natural_teardown_elapsed_seconds'], .1)
+        self.assertLessEqual(row['natural_teardown_elapsed_seconds'], 2.)
+        self.assertEqual([v['exit_code'] for v in row['reaped_descendants']], [0])
+
+    def test_live_helper_leak_still_fails_and_is_cleaned(self):
+        code = ('import os,time\n'
+                'if os.fork()==0: time.sleep(60)\n'
+                'os._exit(0)\n')
+        with self.assertRaisesRegex(RuntimeError, 'remaining live group'):
+            run_group([self.case(self.lanes[0], code)], output=self.root/'leak',
+                      reserve_bytes=1024**2, interval=.1, teardown_seconds=.2)
+        result = json.loads((self.root/'leak/result.json').read_text())
+        self.assertEqual(result['state'], 'failed')
+        self.assertTrue(result['cases'][0]['remaining_after_parent_exit'])
+        self.assertEqual(result['cases'][0]['remaining_group_pids'], [])
+
+    def test_failed_adopted_descendant_is_not_hidden_by_parent_success(self):
+        code = ('import os,time\n'
+                'if os.fork()==0: os._exit(7)\n'
+                'time.sleep(.2)\n'
+                'os._exit(0)\n')
+        with self.assertRaisesRegex(RuntimeError, 'adopted descendant failed'):
+            run_group([self.case(self.lanes[0], code)], output=self.root/'orphan-failure',
+                      reserve_bytes=1024**2, interval=.1)
+        result = json.loads((self.root/'orphan-failure/result.json').read_text())
+        self.assertEqual(result['state'], 'failed')
+        self.assertEqual([v['exit_code'] for v in result['cases'][0]['reaped_descendants']], [7])
+        self.assertEqual(result['cases'][0]['remaining_group_pids'], [])
+
     def test_failed_companion_cancels_other_owned_group(self):
         if len(self.lanes) < 2:
             self.skipTest('two NUMA nodes required')

@@ -202,8 +202,12 @@ continuation and memory checks passed;actual events1188500/1188494/1190499 remai
 visible ([audit](evidence/formal-b512-python-inference-20261004.md)). Coverage is
 now8/120 first processes,0 three-process cells;112 first processes and formal
 recommendation repeats remain open. The [parallel resource inspection](evidence/parallel-resource-review-20261004.md)
-proposes CPU+11-NPU overlap with separate affinity/NUMA and aggregate admission;
-it is not implemented or performance-qualified. Resume policy is in STATUS.
+proposes CPU+11-NPU overlap with separate affinity/NUMA and aggregate admission.
+The bounded controller is implemented;the first full-size screen failed its
+post-exit descendant check before overlap began ([retained failure](evidence/measurement-isolation-20261004.md)).
+Lifecycle handling now reaps exited descendants and bounds natural teardown,
+with17 directed checks;immutable qualification remains pending. No parallel
+performance is qualified. Resume policy is in STATUS.
 
 F7 complete CPU integration on clean78e9df6 passed9458 checks with654 scoped
 optional-device/feature skips and all12 standalone CTests. Exact source/binary

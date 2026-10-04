@@ -41,6 +41,24 @@ def group_pids(group):
     return result
 
 
+def reap_exited_group(group):
+    """Reap adopted group descendants after the direct child was collected.
+
+    WNOHANG never waits for a live helper. The caller owns this process group;
+    this must not be used to collect an unrelated or still-awaited direct child.
+    """
+    reaped = []
+    while True:
+        try:
+            pid, status = os.waitpid(-group, os.WNOHANG)
+        except ChildProcessError:
+            break
+        if not pid:
+            break
+        reaped.append(dict(pid=pid, exit_code=os.waitstatus_to_exitcode(status)))
+    return reaped
+
+
 def storage_bytes(directory):
     total = 0
     for parent, _, files in os.walk(directory, followlinks=False):

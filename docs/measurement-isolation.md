@@ -32,6 +32,14 @@ The controller samples aggregate and per-lane RSS, enforces finite time/RSS
 bounds and records commands, admission observations, placement and raw samples.
 Sampling is host-side and adds declared overhead; it never synchronizes device
 tensors. Both solo and overlap controls must use the same monitor policy.
+After the direct child exits successfully, the subreaper first collects exited
+adopted grandchildren and checks their exit codes. Live helpers may finish
+naturally for at most two seconds by default, within the existing lane timeout;
+this allowance is recorded and bounded to ten seconds by the API. A nonzero
+helper exit, exceeded grace or surviving process still fails the group. This
+separates zombie reaping from a live leak; it does not silently terminate live
+helpers and call their workload passed.
+
 On any failure or cancellation, it terminates and reaps only its owned process
 groups, including adopted grandchildren. Failed/partial records remain failed;
 the caller must not count cancelled companions as completed measurements.

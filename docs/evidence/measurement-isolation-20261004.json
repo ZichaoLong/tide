@@ -1,0 +1,248 @@
+{
+  "state": "audited-failed",
+  "controller_source": "a3e7270ec66ed043ca6ef8171e854b0d00929b1d",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "job": {
+    "name": "qualify-flow-isolation01",
+    "receipt": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "6600s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/qualify_flow_isolation.py",
+        "--controller-source",
+        "TASK/sources/control-isolation-clean01",
+        "--out",
+        "TASK/runs/qualify-flow-isolation01/assessment"
+      ],
+      "cwd": "TASK/sources/control-isolation-clean01",
+      "state": "failed",
+      "source": "a3e7270ec66ed043ca6ef8171e854b0d00929b1d",
+      "dirty": "",
+      "started": "2026-10-04T01:32:45.146066+00:00",
+      "exit_code": 1,
+      "finished": "2026-10-04T01:53:25.107734+00:00"
+    },
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "1",
+      "ControlGroup": "",
+      "ActiveState": "failed"
+    }
+  },
+  "controller_inventory_sha256": "9aa428c551947bf4cd994b655054a760aa6b4b6960b6bd8a988d8f5417439125",
+  "parent_sha256": "17822b4cee389ca5bd558239adf00e9ad5bf05b7aad39d5735c1a20e8b771aa2",
+  "partial": [
+    {
+      "name": "npu-solo",
+      "state": "prepared",
+      "consumer_exists": true,
+      "consumer_state": "passed",
+      "consumer_sha256": "ca696a5d5194f39a40d66a26a331d0605f6f5ce575c5b8b3635d96ac169c735f",
+      "seconds": [
+        328.715673623
+      ],
+      "warmup_seconds": [
+        328.190306567
+      ],
+      "classification": "Consumer output retained;group failed;not an accepted timing or isolation result."
+    },
+    {
+      "name": "overlap-cpu",
+      "state": "not-started"
+    },
+    {
+      "name": "overlap-npu",
+      "state": "not-started"
+    }
+  ],
+  "queue_sha256": "77717d0c4b1ca853f69a5ea1ebea0ec6a3eb31fce6ae73429f54634918979038",
+  "audit_helper_sha256": "80faae6be96a40b6d6da92fd872173d541cd4ae65cf5f5a27505d30cabbd9d07",
+  "limitations": [
+    "One solo and one overlapping process per implementation;not three-process performance evidence.",
+    "The two workloads have different durations;process overlap is not proof of uniform measured-phase overlap.",
+    "Scope is original Add inference under this binding;other workload classes remain unqualified by this screen.",
+    "Bound series must stay separate from historical unbound serial measurements.",
+    "Anonymous NUMA pages and thread masks were sampled;shared files/vendor mappings/external load remain outside that assertion.",
+    "Same-backend counters and losses are checked;no strict cross-backend full-state equivalence is inferred."
+  ],
+  "audit_path": "TASK/audits/qualify-flow-isolation01.json",
+  "audit_sha256": "458371462a3c9d859251aba41d143f7ef2ec2e0fa1b9b43bea31df8500d4865f",
+  "original_limits": {
+    "cpu_process": 1500,
+    "npu_process": 2200,
+    "npu_queue": 120,
+    "whole": 6600,
+    "max_overlap_slowdown": 1.05,
+    "shared_reserve_bytes": 146028888064
+  },
+  "case_helper_sha256": "ef3431e775d9cbbc2fc21e99f18ccd005974ef7f7ca798760ed97cd98d2d103f",
+  "parent_helper_sha256": "bea7cbdbcc40cb0d88c75eac1f7c2492613668fc7f559f599aabe91f4e6e063f",
+  "parent_error": "AssertionError(1)",
+  "qualification": "not-established",
+  "process_overlap_seconds": null,
+  "cases": [
+    {
+      "name": "cpu-solo",
+      "cell": 0,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": false,
+        "preset": "cpu",
+        "configuration": "libtorch-add-False-cpu",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "case_sha256": "0089e2d2d56ce894899d3072d7c76453ee3fc5d803f2dcd9b99e91634299fc99",
+      "consumer_sha256": "a321f3a5143ec17741c3611cd9a05e8a5415027d8d12d9ea49df29e440c9fde0",
+      "seconds": [
+        225.642710685
+      ],
+      "warmup_seconds": [
+        213.536892738
+      ],
+      "construction_seconds": 52.33488046,
+      "losses": [
+        30.302034378051758
+      ],
+      "statistics": [
+        {
+          "aggregate_calls": 9890,
+          "attention_score_elements": 0,
+          "body_candidate_events": 1163924,
+          "body_selected_events": 184320,
+          "candidate_events": 1188500,
+          "full_blocks": 8126,
+          "full_calls": 8126,
+          "greedy_relaxed_edges": 245760,
+          "greedy_stages": 544,
+          "max_full_batch": 384,
+          "max_greedy_frames": 384,
+          "max_live_fibers": 12288,
+          "max_next_batch": 32,
+          "max_state_batch": 32,
+          "max_state_sequence": 12,
+          "next_batches": 68806,
+          "next_reset_scalar_steps": 184320,
+          "next_steps": 1188500,
+          "packed_source_batches": 9890,
+          "read_calls": 68102,
+          "region_blocks": 544,
+          "region_steps": 208896,
+          "selected_events": 208896,
+          "source_rows": 1265664,
+          "state_blocks": 2048,
+          "state_prefill_fallback_events": 1163924,
+          "state_prefill_selected_clear": 1163924,
+          "state_scalar_sequence_steps": 0,
+          "state_sequence_calls": 2048,
+          "state_step_batch_calls": 68038,
+          "state_step_calls": 68038,
+          "state_steps": 1163924,
+          "visited_edges": 1253376
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 32,
+        "effective_sample_chunk_rows": 32,
+        "physical_chunks": 16
+      },
+      "series": "numa-bound-isolation-qualification"
+    }
+  ],
+  "monitors": [
+    {
+      "name": "cpu-solo",
+      "state": "passed",
+      "record_sha256": "9a306d1ce3e6b0c28027049dc20266b88819805b97f864cc21355ba042ee8635",
+      "peak_combined_rss_bytes": 46055514112,
+      "wall_seconds": 492.6594010479748,
+      "placement_observations": 192,
+      "observed_breaches": [],
+      "error": null,
+      "reserved_cpu_count": 82,
+      "reserved_memory_bytes": 277625824624,
+      "shared_reserve_bytes": 146028888064,
+      "host_memory_budget_bytes": 815912140800,
+      "node_estimate_policy": "MemFree + 0.75 * clean Inactive(file) - 2GiB/node",
+      "lanes": [
+        {
+          "name": "cpu",
+          "cpu_count": 80,
+          "memory_nodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "memory_bytes": 131596936560
+        }
+      ],
+      "cases": [
+        {
+          "name": "cpu",
+          "pid": 33350,
+          "timeout_seconds": 1500,
+          "state": "passed",
+          "started_elapsed_seconds": 0.0013406500220298767,
+          "peak_rss_bytes": 46029950976,
+          "exit_code": 0,
+          "finished_elapsed_seconds": 492.64204655215144,
+          "process_peak_rss_bytes": 46044835840,
+          "remaining_group_pids": []
+        }
+      ]
+    },
+    {
+      "name": "npu-solo",
+      "state": "failed",
+      "record_sha256": "7b9c9333117d9fc8ff87e3cf1ddbaffef58089720610db3590935fe624b50447",
+      "peak_combined_rss_bytes": 107928121344,
+      "wall_seconds": 739.4664769880474,
+      "placement_observations": 2930,
+      "observed_breaches": [],
+      "error": "RuntimeError('child exited with remaining group processes: npu')",
+      "reserved_cpu_count": 80,
+      "reserved_memory_bytes": 446676598784,
+      "shared_reserve_bytes": 146028888064,
+      "host_memory_budget_bytes": 816095168512,
+      "node_estimate_policy": "MemFree + 0.75 * clean Inactive(file) - 2GiB/node",
+      "lanes": [
+        {
+          "name": "npu",
+          "cpu_count": 78,
+          "memory_nodes": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "memory_bytes": 300647710720
+        }
+      ],
+      "cases": [
+        {
+          "name": "npu",
+          "pid": 50623,
+          "timeout_seconds": 2200,
+          "state": "passed",
+          "started_elapsed_seconds": 0.0013403594493865967,
+          "peak_rss_bytes": 107891638272,
+          "exit_code": 0,
+          "finished_elapsed_seconds": 739.4654551409185,
+          "process_peak_rss_bytes": 100046245888,
+          "remaining_group_pids": []
+        }
+      ]
+    }
+  ]
+}
