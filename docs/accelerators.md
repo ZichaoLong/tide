@@ -141,8 +141,12 @@ exposed a cached `TensorMove` function-handle lookup failure. Explicit process-l
 [93 affected resident correctness checks](evidence/resident-cann-cache-policy-20261004.md),
 including independent CPU oracles and full training/continuation. Record this
 setting and preserve it in paired profiling. Shared modules and graph semantics
-are unchanged;the default-cache failures remain retained. Other runtime versions
-and original-size FP16 performance require their own evidence.
+are unchanged;the default-cache failures remain retained. Under this explicit
+policy,the original-B512 [Add](evidence/formal-b512-resident-fp16-add-20261004.md)
+and [Attention](evidence/formal-b512-resident-fp16-attention-20261004.md) inference
+companions passed on8 NPUs,one process each. Complete-training measurements,
+repetitions and separate profiles remain in progress;other runtime versions still
+need their own evidence.
 
 Installed dependency checks:
 

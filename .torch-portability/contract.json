@@ -1050,6 +1050,19 @@
           "test_command": "ACLNN_CACHE_LIMIT=0 TIDE_RESIDENT_DEVICE=npu:0 TIDE_ONLINE_DEVICE=npu:0 python -m pytest -q -x tests/test_resident_sharded_training.py tests/test_online_resident_consumer.py --dtype float32; exact build/environment handles in report",
           "result": "passed",
           "environment_manifest": "docs/evidence/resident-cann-cache-policy-20261004.md"
+        },
+        {
+          "date": "2026-10-04",
+          "commit": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "scope": "Byte-verified reuse of the qualified current-core/resident installed C++ build. Original D2048/B512/T12/V50304 LibTorch TimedDAG/prefill resident Add9.468B and Attention17.521B FP16 inference on8 NPUs,physical sample rows4,one continued warmup and measured step,two windows each. Explicit process-local ACLNN_CACHE_LIMIT=0;FP32 loss/adjoints/masters. Both complete executions,capacity and terminal checks passed. One process each;no recommendation,strict wide trajectory equivalence,isolated dtype speedup or other-CANN-version claim.",
+          "tiers": [
+            "build",
+            "backend-smoke",
+            "workload"
+          ],
+          "test_command": "Audited formal-resident-fp16-add-inference03 and formal-resident-fp16-attention-inference02 exact commands/source/binary/runtime identities in linked reports; unchanged900s step/2200s child bounds.",
+          "result": "passed",
+          "environment_manifest": "docs/evidence/formal-b512-resident-fp16-add-20261004.md"
         }
       ]
     },

@@ -292,9 +292,15 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 2. Continue untouched FP32 cells with existing11-owner maps/capacities and finite
    allowances when devices are available. CPU60/84/108 are prepared in the serial continuation and still unstarted.
    Keep cell36's completed-but-over-bound result separate;do not retry blindly.
-3. FP32 Attention profile profile_formal_resident.py --cell8 remains unstarted:
-   delay220s,duration5s,execution1800s,profile/export3360s,queue120s,11cards,
-   minimum24GiB free disk. Use a fresh numbered name and audit_resident_profile_v2.py.
+3. FP32 Attention profile remains unsubmitted;prepared shell/plan:
+   TASK/{launchers,plans}/profile-formal-resident-attention02.{sh,json},with
+   delay220s,duration5s,execution1800s,profile/export3360s,queue120s,whole3540s,
+   11cards,minimum24GiB disk. Use audit_resident_profile_v2.py.
+   Prospective resident group cells98/26/38/62/86/110 was not prepared/submitted:
+   current training consumes selected-NUMA-node memory;diagnostic inspection
+   rejected'npu' lane admission. Retain plans/formal-bound-resident-streaming02-
+   inspection01/02.json(the first lost captured diagnostic;second preserves
+   MemoryError). Recheck only after the live resource condition changes.
    Add FP32 profile is already audited;do not repeat it.
 4. FP16 profile_resident_fp16.py/audit_resident_fp16_profile.py accept the actual
    audited8/11-card inference configuration and require matching ACLNN_CACHE_LIMIT. --inspect derives a finite trace
@@ -333,6 +339,7 @@ original-size FP16 inference companions and the active complete-training job.
 README and accelerator/consumer navigation now distinguish current online
 qualification from historical captured/finite benchmarks. No graph/model/core
 change or uncommitted production implementation;documentation plus external
-finite task orchestration only. Task-local helpers are
+finite task orchestration only. Working support evidence adds the audited FP16
+inference pair with byte-verified build reuse;10-target schema passes. Task-local helpers are
 retained by hashes. A goal is active for autonomous completion;check get_goal on
 re-entry. Continue after commits/pushes.
