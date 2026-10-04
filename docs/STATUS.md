@@ -265,10 +265,16 @@ Do not edit the submitted plan,shell,helper,inspection or their hashed dependenc
 2. Complete required fresh repetitions before recommending configurations.
    Bound/unbound and overlapping/solo conditions stay distinct. Do not treat the
    rejected screen as authorization for concurrent formal timings.
-3. Resident Attention FP32 partial profile is prepared via profile_formal_resident.py
-   --cell8:delay220s,duration5s,execution1800s,whole3360s,queue120s,11NPUs,24GiB
-   free-data-disk prerequisite. Never launched. Existing Add profile is complete;
-   do not rerun it. A profile is not formal timing or full-training coverage.
+3. profile-formal-resident-attention01 is submitted and dependency-waiting after
+   the streaming Add group and its terminal audit (MainPID382364 at launch;
+   verified transient,background.slice,Nice10 and clean e69 receipt). Unchanged helper --cell8:delay220s,
+   duration5s,execution1800s,profile/export whole3360s,queue120s,11NPUs,24GiB disk
+   prerequisite. Dependency wait65920s,following command3540s,outer69580s. The
+   job receipt source is e69b3bd;the dependency controller is103f5b6. Scripts,
+   plan/inspection and TASK/runs/JOB records use the job name;terminal auditor
+   audit_resident_profile.py --name JOB --output NEW. First failure stops,no retry.
+   Existing Add profile is complete;do not rerun it. Profiling is excluded from
+   formal timing and is not full-training coverage.
 4. FP16 preparation:plans/resident-fp16-companions01.json statically admits four
    LibTorch/TimedDAG/prefill resident companions,Add/Attention inference/training,
    same original packets/11-owner maps/physical rows/capacities. Peak estimates
