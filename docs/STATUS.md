@@ -1,12 +1,12 @@
 # Current handoff
 
-Updated 2026-10-04 (Asia/Shanghai). **PAUSED at the user's request for this
-commit/push checkpoint.** The current formal group is closed and audited.
-After publishing this evidence round,report and wait for new user authorization
-before any further implementation,benchmark or profile.
-This overrides the earlier continue-after-commit instruction. Resource isolation
-was inspected only; no parallel experiment or affinity change was made.
-Follow [execution-flows](execution-flows.md). No subagents.
+Updated 2026-10-04 (Asia/Shanghai). **ACTIVE.** The user explicitly resumed work
+and authorized completing the overall goal,including the proposed bounded
+CPU/NPU resource-isolation qualification. Continue autonomous implementation,
+measurement,audit,commit and push;no automatic per-commit pause. A later user
+pause overrides. Follow [execution-flows](execution-flows.md). No subagents.
+The next action is to implement aggregate lane admission and qualify one finite
+same-binding solo/overlap Add pair before permitting concurrent formal timings.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`,branch
 `graph-execution-foundation`. Re-entry:`git status --short --branch`,
@@ -37,8 +37,9 @@ This witness does not explain every future discrepancy.
 Keep3000s/1.15 and all historical capacity/time refusals. Measurements may justify
 a separately declared longer budget. Normally≤2 measured improvement rounds/~90min
 active diagnosis per issue;no indefinite queues or blind retries. Formal heavy
-timings remain serial;the proposed resource-isolated overlap below is not yet
-implemented or authorized as a replacement policy. Implementation commit→
+timings remain serial until the newly authorized resource-isolated overlap
+is implemented and qualified. No silent mixing of bound/concurrent and old
+unbound/serial measurement series. Implementation commit→
 affected immutable clean qualification→
 separate evidence commit/push. Do not repeat unrelated passed gates. User contract
 outranks experiment-skill overhead;reuse minimal records. Update this handoff
@@ -136,6 +137,20 @@ Attention unstarted. Parent empty,leases released. profile-slice-inspect01 passe
 441 copied files hash-verified,5.029450s/all11cards/137841tasks,mostly small vector
 operations;no AiCPU observed in that slice. It neither explains the timeout nor
 certifies full-update or resident placement. No automatic rerun or larger timeout.
+
+## Resource-isolation implementation in progress
+
+The user resumed after517c48f. scripts/measurement_lanes.py and
+scripts/measurement_group.py implement aggregate admission,disjoint CPU/NUMA
+masks,per-lane and combined RSS/time bounds,actual placement observations and
+owned-process cleanup. [Control contract](measurement-isolation.md). Thirteen
+dependency-free directed checks passed,including real overlapping NUMA children,
+placement observation,timeout/grandchild cleanup,companion failure and RSS refusal.
+No graph/model code changed. No full-size isolation job has started yet.
+Next:commit this controller,freeze it separately from the unchanged e69b3bd
+workload,and run one bounded original Add inference qualification:CPU solo,
+resident11 solo,then overlap. Same masks/pools/packet/chunks per solo/paired case;
+new series,not another unbound formal repeat. No automatic retry or timeout increase.
 
 ## Closed current group and evidence
 
@@ -240,10 +255,11 @@ Attention training forecasts10340.528306/12475.200981s indicate potentially
 hours-long measurements;prioritize shorter cells before the longest CPU work.
 Do not assume one family/schedule or a C++ run certifies a Python counterpart.
 
-**All next actions are deferred until new user authorization.** Prepared scripts
-and recorded commands do not authorize resumption.
+**User has authorized resumption and overall completion.** Do not launch old
+prepared serial scripts beside the new isolation qualification. Next implement
+and qualify bounded aggregate resource admission;then advance the matrix.
 
-1. Align on [parallel resource review](evidence/parallel-resource-review-20261004.md).
+1. Implement and qualify [parallel resource review](evidence/parallel-resource-review-20261004.md).
    Suggested first overlap:one CPU lane plus one11-NPU lane,disjoint CPU masks/
    memory nodes,combined resource reservation and a finite solo/overlap control
    under identical binding. Installed numactl/taskset and320cores/8NUMA/2.01TiB
@@ -308,6 +324,8 @@ Recent pushed evidence:af1289b Python calibration,f52bbec public numerical
 limitation,2485d39 CPU training/resident Attention inference. This checkpoint
 adds the three audited Python formal cells,resource-isolation inspection/proposal,
 ROADMAP coverage and this paused handoff. All changes are documentation/evidence;
-there are no production changes or unrelated edits. Task-local helpers/budgets
-stay outside the repository and remain retained by the evidence. After this
-checkpoint's commit/push,report and wait;do not start the prepared successors.
+there were no production changes or unrelated edits at517c48f,pushed. Task-local
+helpers/budgets remain retained by the evidence. The user has now resumed work.
+This implementation checkpoint includes the active handoff,measurement-control
+modules,13 directed checks and the authorized isolation contract. Full-size
+qualification is next. Continue after commits/pushes.
