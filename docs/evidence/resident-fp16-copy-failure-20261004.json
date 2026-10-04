@@ -1,0 +1,218 @@
+{
+  "state": "audited-failed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "audit": {
+    "state": "audited-failed",
+    "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+    "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+    "job": {
+      "name": "formal-resident-fp16-add-inference02",
+      "receipt": {
+        "command": [
+          "timeout",
+          "--signal=TERM",
+          "--kill-after=10s",
+          "2440s",
+          "NPU_ENV/bin/python",
+          "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "--job-id",
+          "tide-formal-resident-fp16-add-inference02",
+          "--project",
+          "tide-execution-flows",
+          "--priority",
+          "0",
+          "--npu-count",
+          "8",
+          "--max-wait-seconds",
+          "120",
+          "--state-file",
+          "TASK/runs/formal-resident-fp16-add-inference02/queue.json",
+          "--",
+          "NPU_ENV/bin/python",
+          "TASK/launchers/run_resident_fp16_companion_v2.py",
+          "--controller-source",
+          "TASK/sources/control-isolation-clean02",
+          "--out",
+          "TASK/runs/formal-resident-fp16-add-inference02/assessment",
+          "--cell",
+          "2"
+        ],
+        "cwd": "TASK/sources/control-isolation-clean02",
+        "state": "failed",
+        "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+        "dirty": "",
+        "started": "2026-10-04T04:43:39.917700+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-04T04:45:15.487923+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      },
+      "queue": {
+        "elapsed_seconds": 94.9076276011765,
+        "job_id": "tide-formal-resident-fp16-add-inference02",
+        "logical_devices": [
+          "npu:0",
+          "npu:1",
+          "npu:2",
+          "npu:3",
+          "npu:4",
+          "npu:5",
+          "npu:6",
+          "npu:7"
+        ],
+        "npu_count": 8,
+        "physical_ids": [
+          1,
+          3,
+          4,
+          5,
+          7,
+          9,
+          11,
+          13
+        ],
+        "priority": 0,
+        "project": "tide-execution-flows",
+        "return_code": 1,
+        "schema_version": 1,
+        "status": "failed",
+        "timestamp": "2026-10-04T04:45:15.471405+00:00"
+      }
+    },
+    "parent": {
+      "state": "failed",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+      "fp32_cell": 2,
+      "series": "numa-bound-resident-fp16-companion-v2-8devices",
+      "plan_sha256": "1fb48d4a2d5546192cf82f17a69218c2afa120c018289473b5f554945f5f975e",
+      "helper_sha256": "86c7ae20e919b7f033d054540b70b156b4996a1975ce46222a4a0266a55816ed",
+      "budget_basis": "Finite FP32 envelope transferred as initial FP16 operating allowance,not a measured FP16 forecast or qualification",
+      "numerical_policy": "FP16 payloads;resident FP32 adjoints/loss/master/optimizer policy unchanged;discrete routes may differ",
+      "scope": "Four original-size resident FP16 companions:8-device Add/Attention inference and Add complete training,11-device Attention complete training. Same source,packets,logicalB512,requested sample rows,capacities and step/child bounds. Generic static locality placement;not a second Cartesian matrix. Separate from11-device FP32 timing series.",
+      "limits": "No automatic retry,increased timeout or reduced logical B512. Separate profiler after a successful unprofiled process. Not a broad second Cartesian performance matrix.",
+      "error": "RuntimeError('child failed: npu')"
+    },
+    "case": null,
+    "raw_inventory": {
+      "assessment/case/case.json": "8b4325b9fe7e3c0b31a81e960600286b1bf50552607479272c81d040bd24335a",
+      "assessment/case/consumer/consumer/result.json": "e945013aece3b96ecdbf71d384413e39f544517ad4a89ecaaa780c10219e8dac",
+      "assessment/case/consumer/consumer.log": "7fc177fd3b3538a3cbb70424d46b2cdf684bfaccd4370e993000d2eafaa19580",
+      "assessment/case/consumer/result.json": "897511101a233ce9f68293ddb48581d61865288ac588bcb67a9fba8f1f012c64",
+      "assessment/monitor/npu.log": "68a4b3dbf7b6d7e69653165d513d251c96db8841e8b27368cee065c837ac5230",
+      "assessment/monitor/result.json": "cff1997ea2bde4dac6d7d1eb3f7fef65dd8b3954a92dff54142af369c7c5e06d",
+      "assessment/result.json": "d4f257510149f207ec6b9ed39bb93c53c756f6715f8c6782e11d0c0c84aca62f",
+      "queue.json": "502b36563816b65a8437aad87641fd77ef6a34636800899c6deb839047172238",
+      "status.json": "776c118d63a7a905e39adf0ef258d85db11c699c7a8836534a4fda8b94a66f48",
+      "task.log": "ccf310ba6e2a0a173d4a1d4eb717bb450f4d404cc93ddec63c450ffd0bfb64a6"
+    },
+    "audit_helper_sha256": "99ca716254a6a1765b70f04f568b0dcc134bcc1f2c8a955d9afbecf13744ff8d",
+    "limitations": [
+      "FP16 companion,not a cell or repetition of the FP32 matrix.",
+      "Independent online execution;discrete routes and actual work may differ by dtype.",
+      "One fresh process;no stable speed recommendation or numerical equivalence claim.",
+      "Different card counts/owner maps from FP32 prevent an isolated dtype speedup claim.",
+      "Sampled affinity and private anonymous NUMA pages do not control external load."
+    ]
+  },
+  "diagnostic": {
+    "native_pid": 577834,
+    "error": "aclnnInplaceCopy failed with CANN status 361001",
+    "vendor_error": "TensorMove_5c5e58e043224cccf51a06108010ae13_high_performance__kernel0 lookup failed when launching cached operator.",
+    "error_log_sha256": "4d53b1f3a30765e7a6b25dc3f8b49437e5dca370a13e5d08944390742eecf266",
+    "installed_tensor_move_kernels": [
+      {
+        "file": "TensorMove_1d2fd313763487259859439d7e9b41cf_high_performance.json",
+        "dtype": "int64",
+        "kernel": "TensorMove_1d2fd313763487259859439d7e9b41cf_high_performance__kernel0",
+        "binary_sha256": "725facaa255c6bf2b470c2049c29c48bc1983da906b67a6617baaa8687678820",
+        "metadata_sha256": "fa270721f556bfc6baad27087c4a30f8c09bb5fdd82b5bd7319887aeb0665fdc",
+        "metadata_declared_binary_sha256": "725facaa255c6bf2b470c2049c29c48bc1983da906b67a6617baaa8687678820"
+      },
+      {
+        "file": "TensorMove_2060cf8d69781f9a7462e2f67555909f_high_performance.json",
+        "dtype": "int8",
+        "kernel": "TensorMove_2060cf8d69781f9a7462e2f67555909f_high_performance__kernel0",
+        "binary_sha256": "cca33c4d6553844be12b8f3009800493592fca210fc0e81659ec13b3f1960366",
+        "metadata_sha256": "3ab9369a1529d9d35bec29bdeb9aade8cdac6ad642c206559cd22ab20aba21ef",
+        "metadata_declared_binary_sha256": "cca33c4d6553844be12b8f3009800493592fca210fc0e81659ec13b3f1960366"
+      },
+      {
+        "file": "TensorMove_5c5e58e043224cccf51a06108010ae13_high_performance.json",
+        "dtype": "float32",
+        "kernel": "TensorMove_5c5e58e043224cccf51a06108010ae13_high_performance__kernel0",
+        "binary_sha256": "d6192e707cebde0a633118eba193d6f41b242041ba17195d48ba77d4ca7fddc9",
+        "metadata_sha256": "bb4b38414e540e21674dfc14f2a9a8aeb212ef4af52a34b9d864e826d496a330",
+        "metadata_declared_binary_sha256": "d6192e707cebde0a633118eba193d6f41b242041ba17195d48ba77d4ca7fddc9"
+      },
+      {
+        "file": "TensorMove_d2db1a80c523e7e59a032c95969880af_high_performance.json",
+        "dtype": "float16",
+        "kernel": "TensorMove_d2db1a80c523e7e59a032c95969880af_high_performance__kernel0",
+        "binary_sha256": "048f62cc9ef2e7883abba2922dfddc693f258c1ace6ff63e64074733562aa677",
+        "metadata_sha256": "05b3ea3bc1044382f92b2c2651b52805ebf894f9a31ee21987b5ed3b0699ab9c",
+        "metadata_declared_binary_sha256": "048f62cc9ef2e7883abba2922dfddc693f258c1ace6ff63e64074733562aa677"
+      }
+    ],
+    "inference": "All four installed kernel binaries match their metadata SHA256 and export the declared symbol;the cause of runtime lookup failure remains under diagnosis. No out-of-memory or parity failure was observed in this log."
+  },
+  "preparation": {
+    "plan": "TASK/plans/resident-fp16-companions02.json",
+    "plan_sha256": "1fb48d4a2d5546192cf82f17a69218c2afa120c018289473b5f554945f5f975e",
+    "validation": {
+      "state": "preparation-passed-no-execution",
+      "scope": "Only command/admission/override validation; synthetic visible IDs are placeholders,no device initialized or leased.",
+      "cases": [
+        {
+          "cell": 2,
+          "devices": 8,
+          "case_sha256": "a591cf8dfac3fe135fd08c7091c72ca5b6ea8681d3ed5f931f5045499efcbb4a",
+          "peak_gib": 23.01071111857891,
+          "host_reserved_gib": 416.0
+        },
+        {
+          "cell": 8,
+          "devices": 8,
+          "case_sha256": "7f3c341cedd2a224058c586f2c23e55acb0fcbfe9edf962203e0aff59689d636",
+          "peak_gib": 45.67088323831558,
+          "host_reserved_gib": 416.0
+        },
+        {
+          "cell": 5,
+          "devices": 8,
+          "case_sha256": "caf7b3c2caa2e58cf32fe4877d4a5eeb6a240009b7c819ed5063082409d86687",
+          "peak_gib": 51.947176333516836,
+          "host_reserved_gib": 416.0
+        },
+        {
+          "cell": 11,
+          "devices": 11,
+          "case_sha256": "fdb793f3aad509f3c76bab3fc82b46a86d04d183beddd977802b3e33ef32daf8",
+          "peak_gib": 52.82232183031738,
+          "host_reserved_gib": 416.0
+        }
+      ],
+      "rejected_overrides": [
+        "dtype",
+        "sample_rows",
+        "devices"
+      ],
+      "plan_sha256": "1fb48d4a2d5546192cf82f17a69218c2afa120c018289473b5f554945f5f975e",
+      "helper_sha256": {
+        "isolated_flow_case_v2.py": "869cb5c217c95fae8f6c8763137aa90c8943704fb3fca0bba0965d6c0b199310",
+        "audit_resident_fp16_companion_v2.py": "99ca716254a6a1765b70f04f568b0dcc134bcc1f2c8a955d9afbecf13744ff8d",
+        "run_resident_fp16_companion_v2.py": "86c7ae20e919b7f033d054540b70b156b4996a1975ce46222a4a0266a55816ed"
+      }
+    }
+  },
+  "limitations": [
+    "No completed inference step or FP16 throughput sample.",
+    "Eight devices and changed generic owner map differ from the eleven-device FP32 series.",
+    "Preparation/admission do not prove runtime success.",
+    "Small library FP16 gates remain scoped;they did not cover this failing original-width operation sequence."
+  ]
+}

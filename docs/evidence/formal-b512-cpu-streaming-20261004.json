@@ -1,0 +1,372 @@
+{
+  "state": "audited-failed-with-one-accepted-case",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "bound_audit": {
+    "state": "audited-failed",
+    "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+    "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+    "plan_sha256": "58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e",
+    "series": "numa-bound-solo-v1",
+    "job": {
+      "name": "formal-bound-cpu-streaming01",
+      "receipt": {
+        "command": [
+          "timeout",
+          "--signal=TERM",
+          "--kill-after=10s",
+          "15320s",
+          "NPU_ENV/bin/python",
+          "TASK/launchers/dispatch_bound_matrix.py",
+          "--controller-source",
+          "TASK/sources/control-isolation-clean02",
+          "--out",
+          "TASK/runs/formal-bound-cpu-streaming01/assessment",
+          "--cells",
+          "24,36,60,84,108",
+          "--repeat",
+          "1"
+        ],
+        "cwd": "TASK/sources/control-isolation-clean02",
+        "state": "failed",
+        "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+        "dirty": "",
+        "started": "2026-10-04T03:58:45.049971+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-04T04:38:31.304689+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      }
+    },
+    "parent_sha256": "a22efea82a026b12ab3db51facbb94208387bfdc23dabf11821a87af91e567ee",
+    "cases": [
+      {
+        "state": "passed",
+        "cell": 24,
+        "configuration": {
+          "family": "pdg",
+          "client": "libtorch",
+          "schedule": "streaming",
+          "memory": "add",
+          "training": false,
+          "preset": "cpu",
+          "configuration": "libtorch-add-False-cpu",
+          "selection_evidence": "representative-pdg-matrix-20261002.json",
+          "selection_sha256": "a1a579e952e6d38dbb1bd45423137038e04d1d09a67d1925a11d8ee76e5418d1"
+        },
+        "repeat": 1,
+        "series": "numa-bound-solo-v1",
+        "consumer_sha256": "0e8dd9fe892bc49acf2b91556eb23ab78cdb9bd0e13b9ca741d54f2aed1d16a6",
+        "seconds": [
+          570.01435714
+        ],
+        "warmup_seconds": [
+          492.411855832
+        ],
+        "construction_seconds": 45.751610236,
+        "losses": [
+          30.301984786987305
+        ],
+        "statistics": [
+          {
+            "aggregate_calls": 68806,
+            "body_candidate_events": 1163924,
+            "body_selected_events": 184320,
+            "candidate_events": 1188500,
+            "full_calls": 42189,
+            "full_scalar_fallback_steps": 0,
+            "logical_times": 6528,
+            "max_full_batch": 32,
+            "max_node_batch": 32,
+            "max_state_batch": 32,
+            "next_batches": 68806,
+            "next_reset_scalar_steps": 184320,
+            "next_steps": 1188500,
+            "packed_source_batches": 68806,
+            "read_calls": 68806,
+            "region_steps": 208896,
+            "selected_events": 208896,
+            "semantic_full_replays": 0,
+            "semantic_state_replays": 0,
+            "source_rows": 1265664,
+            "state_step_batch_calls": 68806,
+            "update_calls": 68806,
+            "visited_edges": 1253376
+          }
+        ],
+        "outputs": [
+          12288
+        ],
+        "token_rate": 21.557351751022598,
+        "batch_execution": {
+          "logical_batch": 512,
+          "requested_sample_chunk_rows": 32,
+          "effective_sample_chunk_rows": 32,
+          "physical_chunks": 16
+        },
+        "peak_growth_bytes": [
+          45486108672
+        ],
+        "lane": {
+          "name": "cpu",
+          "cpus": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139
+          ],
+          "memory_nodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "memory_bytes": 131596936560
+        },
+        "runtime_identity": {
+          "implementation": "libtorch",
+          "preset": "cpu",
+          "backend": "cpu",
+          "dtype": "float32",
+          "schedule": "streaming",
+          "schema": "standalone-consumer"
+        },
+        "physical_ids": [],
+        "case_sha256": "61dd5edc3408dce3b13e2355219f59b70a4eeccc93feaa3d3b9fc925d965055c"
+      }
+    ],
+    "partial": [
+      {
+        "group": 1,
+        "cells": [
+          36
+        ],
+        "state": "failed",
+        "execution_started": true,
+        "queue_status": null,
+        "result_sha256": "c36ad5fcdd4938cbf4113c6a3cc2a2903c2431d4d6d692f2418ea9b61e320255"
+      },
+      {
+        "group": 2,
+        "cells": [
+          60
+        ],
+        "state": "not-started",
+        "execution_started": false,
+        "queue_status": null,
+        "result_sha256": null
+      },
+      {
+        "group": 3,
+        "cells": [
+          84
+        ],
+        "state": "not-started",
+        "execution_started": false,
+        "queue_status": null,
+        "result_sha256": null
+      },
+      {
+        "group": 4,
+        "cells": [
+          108
+        ],
+        "state": "not-started",
+        "execution_started": false,
+        "queue_status": null,
+        "result_sha256": null
+      }
+    ],
+    "monitors": [
+      {
+        "group": 0,
+        "record_sha256": "9148e30e32d1e9087d52a0835af7201e3eb82513b4734bc0ab41f0f569f01f58",
+        "wall_seconds": 1109.5673660710454,
+        "peak_combined_rss_bytes": 45651021824,
+        "reserved_memory_bytes": 277625824624,
+        "reserved_cpu_count": 82,
+        "cases": [
+          {
+            "name": "cpu",
+            "pid": 473755,
+            "timeout_seconds": 1600,
+            "state": "passed",
+            "started_elapsed_seconds": 0.0014923028647899628,
+            "peak_rss_bytes": 45620645888,
+            "reaped_descendants": [],
+            "exit_code": 0,
+            "process_finished_elapsed_seconds": 1109.5331099890172,
+            "process_peak_rss_bytes": 45605515264,
+            "finished_elapsed_seconds": 1109.5331099890172,
+            "natural_teardown_elapsed_seconds": 0.0,
+            "remaining_group_pids": []
+          }
+        ]
+      }
+    ],
+    "queues": [],
+    "audit_helper_sha256": "6a9e8777ef2d2c90f376106f99f9eb28c7e932860e978f95b510f0f6baaabfed",
+    "limitations": [
+      "Bound series are distinct from unbound serial evidence and from one another.",
+      "No strict cross-backend equal-work claim;actual event counts remain visible.",
+      "Three independent processes within the same series are required before a recommendation.",
+      "Thread masks/private anonymous NUMA pages are sampled;shared files and external load remain uncontrolled."
+    ]
+  },
+  "retained_completed_overrun": {
+    "cell": 36,
+    "state": "completed-consumer-over-step-bound",
+    "accepted_formal_case": false,
+    "step_seconds": 600,
+    "observed_max_phase_seconds": 699.995796604,
+    "runtime_identity": {
+      "implementation": "libtorch",
+      "preset": "cpu",
+      "backend": "cpu",
+      "dtype": "float32",
+      "schedule": "streaming",
+      "schema": "standalone-consumer"
+    },
+    "seconds": [
+      699.995796604
+    ],
+    "warmup_seconds": [
+      529.082825666
+    ],
+    "construction_seconds": 45.259417591,
+    "losses": [
+      30.301984786987305
+    ],
+    "statistics": [
+      {
+        "aggregate_calls": 68806,
+        "body_candidate_events": 1163924,
+        "body_selected_events": 184320,
+        "candidate_events": 1188500,
+        "full_calls": 42189,
+        "full_scalar_fallback_steps": 0,
+        "logical_times": 6528,
+        "max_full_batch": 32,
+        "max_node_batch": 32,
+        "max_state_batch": 32,
+        "next_batches": 68806,
+        "next_reset_scalar_steps": 184320,
+        "next_steps": 1188500,
+        "packed_source_batches": 68806,
+        "read_calls": 68806,
+        "region_steps": 208896,
+        "selected_events": 208896,
+        "semantic_full_replays": 0,
+        "semantic_state_replays": 0,
+        "source_rows": 1265664,
+        "state_step_batch_calls": 68806,
+        "update_calls": 68806,
+        "visited_edges": 1253376
+      }
+    ],
+    "outputs": [
+      12288
+    ],
+    "final_cut": 816,
+    "batch_execution": {
+      "logical_batch": 512,
+      "requested_sample_chunk_rows": 32,
+      "effective_sample_chunk_rows": 32,
+      "physical_chunks": 16
+    },
+    "peak_growth_bytes": [
+      45485846528
+    ],
+    "consumer_sha256": "73b975c7eb8c77b822561bdef247e7dc43055281f3f0b150de536c6739adef22",
+    "case_sha256": "1a1411a8056120faffda6bb9aaac58e7705d36625cda087094b568e35ad22119",
+    "monitor_sha256": "687cf3114122ae95f448ddebb98c400365f03f19284dbdb928a059204dcf3df2",
+    "check_scope": "Source/runtime/packet/precision/finite values/output counts/continuation/memory/placement/terminal cleanup inspected;declared600s per-step allowance remains failed. No independent wide parity claim."
+  },
+  "aggregate": {
+    "path": "TASK/audits/formal-series-review03",
+    "sha256": "573c1f1c2e4a6767fe7b4f13880dff53a670fe3ce0c40717059e53e3b802862d",
+    "accepted_cells": 14,
+    "total_cells": 120,
+    "three_process_cells": 0
+  }
+}
