@@ -12,11 +12,11 @@ Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 file,and [ROADMAP F1–F7](ROADMAP.md). `TASK=/mi/data2T/zlong/tide-execution-flows`.
 All handoff writes use scripts.durable_records.replace_text atomically.
 
-**Only current heavy job:formal-bound-next01**,running six new solo FP32 B512
-Add inference cells. The corrected CPU/NPU isolation screen completed its
-execution/cleanup checks,but rejected concurrent performance qualification:
-CPU measured time+20.2%,NPU+1.1%. Keep formal heavy measurements solo. No competing
-heavy work. The deliberately stopped historical worker below is separate.
+**Only current heavy job:formal-bound-cpu-streaming01**,running.
+The previous six-cell group ended failed only because cell98 could not lease11
+NPUs within its queue allowance. Five completed consumers passed terminal audit.
+Its four dependent successor services stopped before starting any consumer.
+The historical stopped worker is separate and protected below.
 
 ## Contract and acceptance
 
@@ -48,72 +48,51 @@ are allowed;no automatic retry,increased timeout or indefinite queue. Normally
 worker sweep. Implementation commit→affected clean immutable gate→separate evidence
 commit/push. Do not rerun unrelated passed gates. No new tracking infrastructure.
 
-## Active group:formal-bound-next01
+## Current CPU-only group:formal-bound-cpu-streaming01
 
-Unit `tide-execution-flows-formal-bound-next01`,verified transient/background.slice/
-Nice10,MainPID158470 at launch,started2026-10-04T02:23:31.244486Z. Its finite
-isolation dependency wait has ended and dispatch/isolation-audit.json passed.
-The slowdown screen was rejected,so this group correctly stayed **solo**.
-
-Controller103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f at
-TASK/sources/control-isolation-clean02;workload remains frozen
+Submitted and verified transient/background.slice/Nice10,MainPID473708 at launch,
+from controller103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f
+at TASK/sources/control-isolation-clean02. Workload remains frozen
 **e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8** at TASK/sources/compare-discrete-clean01.
-Six fresh repeat1 cells12,14,48,50,96,98:PDG/LibTorch,Settle/LibTorch,Settle/Python;
-CPU and resident11 per submatrix. Cells12,14,48,50 returned internally passed;
-cell96 is running. No new cell is accepted until terminal-parent audit. New series
-`numa-bound-solo-v1`,separate from prior unbound results.
+Five fresh repeat1 streaming Add CPU cells24,36,60,84,108 cover all required
+family/client submatrices. Series numa-bound-solo-v1;no earlier process is repeated.
 
-- CPU lane80 cores across NUMA0–3;NPU-host lane78 across4–7;two controller slots.
-  Sample every live thread mask/private anonymous NUMA pages every5s,RSS/time every1s.
-  CPU RSS cap=static estimate+8GiB;NPU resident280GiB,mixed64GiB;shared reserve136GiB.
-  Admission is repeated per actual group;external load/shared pages remain uncontrolled.
-- Original budget02 step/child limits unchanged. Group bounds1840,3040,1840,
-  3040,4840,3040s include queue/controller allowance. NPU queue120s per cell;
-  group whole17760s,outer24420s including≤6600s dependency wait. First failure stops.
-- Records:TASK/runs/formal-bound-next01/{status.json,task.log,dispatch/result.json,
-  dispatch/isolation-audit.json,assessment/result.json}. assessment/group-N holds
-  monitor/result.json and cell-I-repeat-1/{case.json,consumer/result.json}.
-- Inspect:`systemctl --user show tide-execution-flows-formal-bound-next01`.
-  Stop only if justified:`systemctl --user stop tide-execution-flows-formal-bound-next01`.
-- Launch:TASK/launchers/formal-bound-next01.sh. **Do not edit live inputs:**
-  after_isolation_bound_matrix.py,dispatch_bound_matrix.py,audit_bound_matrix.py,
-  audit_flow_isolation_v2.py,isolated_flow_case.py,fullsize_configs.py,audit_flow_runtime.py,
-  plans/formal-bound-next01-inspection02.json,plan02,budgets,controller/workload source,
-  existing builds and hashed dependencies.
-- Terminal audit:TASK/launchers/audit_bound_matrix.py --name formal-bound-next01
-  --output NEW_AUDIT_JSON (parent must exist;no overwrite). It is prepared,not yet
-  exercised on this actual group. Never call a running parent passed.
-- Six negative dispatcher checks passed:audits/formal-bound-dispatch-rejections01.
-  An earlier read-only preparation refused NPU-node memory while the old screen
-  was live;plans/formal-bound-next01-inspection-attempt01.json preserves it.
-  No workload started during those preparations.
+- Same80-core NUMA0–3 lane,static CPU estimate+8GiB RSS allowance,reserve136GiB;
+  admission/placement/time/RSS monitor is unchanged. No competing heavy work.
+- Existing child1600s for LibTorch and4600s for Python;group limits1840,1840,1840,
+  4840,4840s and whole15320s. First failure stops;no retries or larger budgets.
+- Shell:TASK/launchers/formal-bound-cpu-streaming01.sh;static/runtime preparation:
+  TASK/plans/formal-bound-cpu-streaming01-inspection01.json.
+- Records:TASK/runs/formal-bound-cpu-streaming01/{status.json,task.log,assessment/result.json};
+  assessment/group-N/{result.json,monitor/result.json,cell-I-repeat-1/case.json}.
+- Inspect:systemctl --user show tide-execution-flows-formal-bound-cpu-streaming01.
+  Stop only if justified:systemctl --user stop that exact unit.
+- Terminal auditor:audit_bound_matrix_v2.py --name formal-bound-cpu-streaming01
+  --output NEW_AUDIT_JSON. Parent directory must exist;no overwrite.
+- Do not edit active dispatch_bound_matrix.py,isolated_flow_case.py,fullsize_configs.py,
+  audit_flow_runtime.py,plan02,budgets,inspection,shell,frozen sources or hashed builds.
 
-## Active dependent successors — FP16 inference
+## Terminal bound group and dependency failures
 
-Two finite dependent services are submitted and waiting,not yet passing results:
-formal-resident-fp16-add-inference01 (MainPID334686 at launch),then
-formal-resident-fp16-attention-inference01 (MainPID336777). Both verified transient,
-background.slice,Nice10 and clean103f5b6 job receipts.
-Each uses controller103f5b6,workload e69b3bd,11 cards and the existing four-companion
-plan. The Add service requires formal-bound-next01 to finish and pass its terminal
-audit;Attention requires the Add companion terminal audit. Only one heavy process
-runs at a time. No earlier process,repeat,capacity or budget is changed.
+formal-bound-next01 ended exit1 at the final queue stage. Cells12,14,48,50,96
+passed all consumer,monitor,source/runtime/placement/memory and terminal checks.
+Cell98 **never started**:queue-5 timed_out with insufficient_free_devices,9 free
+reported against11 required. Configured wait120s;actual final observation137.089s
+reflects queue polling. No model timeout or device execution failure occurred.
+TASK/audits/formal-bound-next01.json is **audited-failed with five accepted cases**,
+not a passed parent. The original auditor omitted timed_out from terminal queue
+states;its rejected attempt is retained in formal-bound-next01-attempt01.json.
+Separate audit_bound_matrix_v2.py handles an unstarted timeout without relaxing
+any completed-consumer checks. Original auditor and raw run records are unchanged.
 
-Both retain step900s/child2200s. Each successor command allows2640s including
-queue120s,monitor/controller overhead. Dependency waits are17760/20520s and outer
-bounds20520/23280s,respectively;these are dependency bounds,not longer model budgets.
-First failure stops its chain;no retries. Scripts/plans under TASK/launchers and
-TASK/plans share each job name. Inspect with systemctl --user show
-`tide-execution-flows-JOB`;records are TASK/runs/JOB/{status.json,task.log,queue.json,
-dispatch/result.json,assessment/result.json}. Stop only the exact justified unit.
-
-run_after_audited_dependency.py performs the finite wait and existing terminal
-audit;run_resident_fp16_companion.py runs the unchanged consumer through the
-qualified measurement monitor. audit_resident_fp16_companion.py verifies separate
-FP16 dtype,source/binary,online runtime,continuation,memory/placement,cleanup and
-terminal records. The new helper/auditor passed syntax inspection only;actual
-terminal evidence remains pending. Do not edit these or their hashed dependencies
-while a successor is live. No additional tracking service or dashboard.
+Four services ended exit1 with AssertionError('failed') on their dependency,
+all empty cgroups,without an assessment/queue/consumer being created:
+formal-resident-fp16-add-inference01,formal-resident-fp16-attention-inference01,
+formal-bound-streaming-add01,profile-formal-resident-attention01. Preserve every
+receipt/dispatch record/plan/helper. Do not resume these old services. The first
+streaming inspection's live-memory refusal and later passed inspection also stay.
+Future NPU work requires changed availability and a new finite submission;do not
+increase queue waits or repeat already accepted CPU/NPU processes mechanically.
 
 ## Qualified implementation — reuse these gates/builds
 
@@ -148,8 +127,9 @@ CUDA host client:eager-half-cuda-clean01. Keep these hashed inputs unchanged.
 Packets:D2048/B512/T12/V50304,480 body nodes/2208 edges;Add9,468,053,696 parameters,
 Attention17,521,117,376. Logical input tokens12288 per step. All table entries are
 original B512,one continued warmup and one measured step,two windows each,
-outputs12288/cut816,no diagnostics/profiler. **8/120 audited first processes;
-0 cells have three-process evidence.** All eight are TimedDAG/prefill/unbound serial.
+outputs12288/cut816,no diagnostics/profiler. **13/120 audited first processes;
+0 cells have three-process evidence.** The first eight below are TimedDAG/prefill/
+unbound serial;the five newly audited bound cases are a separate series.
 
 | Cell | Client/model/mode/flow | Measured seconds | Actual candidate/resident events |
 | --- | --- | ---: | ---: |
@@ -166,6 +146,11 @@ outputs12288/cut816,no diagnostics/profiler. **8/120 audited first processes;
 [Add NPU flows](evidence/formal-b512-add-inference-npu-20261004.md),
 [CPU training/Attention resident](evidence/formal-b512-cpu-training-resident-inference-20261004.md),
 [Python inference](evidence/formal-b512-python-inference-20261004.md).
+New numa-bound-solo-v1 cases (all Add inference/prefill):cell12 PDG/LibTorch CPU
+260.290475s;14 resident329.307822s;48 Settle/LibTorch CPU214.649084s;50 resident
+331.282152s;96 Settle/pure Python CPU834.559428s. Counts remain1188500 forCPU and
+1188494 forresident. No cross-series pooling;cell98 is still unmeasured.
+
 Different events and single processes prohibit strict equal-work/recommendation claims.
 Historical unbound parents are terminal/empty with released leases.
 
@@ -174,9 +159,10 @@ SHA58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e.
 120 FP32 cells,24 envelopes,11 NPUs primary,60GiB/card or512GiB CPU. All120 budget02
 files exist;94 transfer original-width measured envelopes with explicit limitations.
 No transfer itself qualifies another family/client/schedule/full-size process.
-112 first processes (including six in the live group) plus recommendation repeats
-remain. Remaining nominal phase forecasts sum≈205.2h before construction/repeats,
-CPU68.0h/NPU137.2h;cross-family transfer makes this uncertain,not promised completion.
+107 first processes plus recommendation repeats remain. Remaining nominal phase
+forecasts sum≈204.2h before construction/repeats;budget forecasts with1.15 included
+sum234.8h (CPU77.5h/NPU157.3h). These are unchanged transferred forecasts,not
+actual remaining wall time or a promised completion date.
 
 CPU/mixed Add physical32,resident Add inference4/training2. Attention training:
 CPU16,mixed4,resident1 with qualified explicit11-owner map. No unqualified48-row policy.
@@ -188,8 +174,9 @@ Original3000s refusals remain separate. No automatic retry/increase on a failure
 Use TASK/launchers/summarize_flow_series.py --audit AUDIT ... --output-dir NEW
 for upcoming bound results. It preserves unbound/solo-bound/overlap-bound series,
 rejects duplicate consumer artifacts and dtype mixing,and does not recommend a
-configuration. It reproduced all eight old cases in audits/formal-series-review01
-and passed five synthetic guard checks in formal-series-guards01.json. Its first
+configuration. It aggregates13 cases in audits/formal-series-review02;review01
+reproduced the eight old cases. Five synthetic guard checks passed in
+formal-series-guards01.json. Its first
 wrong-cwd preparation failure is retained;no measurement was affected. The older
 formal-matrix-review03/summarize_formal_matrix.py cover only the unbound series.
 Do not mix bound measurements or qualification screens into old repeat groups.
@@ -242,51 +229,32 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next independent work
 
-formal-bound-streaming-add01 is submitted and dependency-waiting after the two
-FP16 inference companions (MainPID365532 at launch;verified transient,background.slice,
-Nice10 and clean103f5b6 receipt). Ten fresh repeat1 cells24,26,36,38,60,62,84,86,108,110 cover
-streaming Add CPU/resident across all five required family/client submatrices.
-It uses the same103f5b6 controller/e69 workload and numa-bound-solo-v1 series.
-Original per-cell child1600/4600/5200s bounds stay;group whole42520s,dependency
-wait23280s,outer65920s. The first failure stops;no retry or larger model timeout.
-
-Its first inspect-only preparation was refused while resident memory occupied
-NUMA4–7:plans/formal-bound-streaming-add01-inspection01.json. After cell50 exited,
-inspection02 passed;no workload ran during either preparation. Preserve both.
-Plans/scripts share the job name;TASK/runs/JOB/{status.json,task.log,dispatch/result.json,
-assessment/result.json} and assessment/group-N retain observations. Existing
-inspect/stop/terminal-audit commands for formal-bound-next01 also apply by name.
-Do not edit the submitted plan,shell,helper,inspection or their hashed dependencies.
-
-1. Monitor/audit the live six-cell group. After terminal audit,commit/push its
-   actual results and update separate series coverage;continue remaining FP32
-   cells with existing finite budgets. Prefer uncovered/shorter cases before the
-   longest Python CPU Attention training. Do not launch old serial scripts beside it.
-2. Complete required fresh repetitions before recommending configurations.
-   Bound/unbound and overlapping/solo conditions stay distinct. Do not treat the
-   rejected screen as authorization for concurrent formal timings.
-3. profile-formal-resident-attention01 is submitted and dependency-waiting after
-   the streaming Add group and its terminal audit (MainPID382364 at launch;
-   verified transient,background.slice,Nice10 and clean e69 receipt). Unchanged helper --cell8:delay220s,
-   duration5s,execution1800s,profile/export whole3360s,queue120s,11NPUs,24GiB disk
-   prerequisite. Dependency wait65920s,following command3540s,outer69580s. The
-   job receipt source is e69b3bd;the dependency controller is103f5b6. Scripts,
-   plan/inspection and TASK/runs/JOB records use the job name;terminal auditor
-   audit_resident_profile.py --name JOB --output NEW. First failure stops,no retry.
-   Existing Add profile is complete;do not rerun it. Profiling is excluded from
-   formal timing and is not full-training coverage.
-4. FP16 preparation:plans/resident-fp16-companions01.json statically admits four
-   LibTorch/TimedDAG/prefill resident companions,Add/Attention inference/training,
-   same original packets/11-owner maps/physical rows/capacities. Peak estimates
-   20.616/39.769/48.812/52.822GiB/card. Step/child allowances900/2200,900/2200,
-   4500/9400,9000/18400s,transferred as operating limits from FP32,not FP16 forecasts.
-   The inference successors above are submitted and dependency-waiting;training
-   is not yet submitted.
-   Actual execution,terminal audit and separate FP16 profile remain. This is a limited
-   companion set,not a second Cartesian matrix or a qualification claim.
-5. Finish support/portability/evidence audit and close all current goal jobs once
-   actual remaining work is complete. NVIDIA/x86_64 device execution remains
-   explicitly target-pending under the user's cross-machine validation plan.
+1. Monitor/audit the active CPU-only group. The five newly accepted bound cases
+   and dependency failures are audited in
+   [the current report](evidence/formal-b512-bound-add-prefill-20261004.md).
+   Series coverage is TASK/audits/formal-series-review02. Continue independent CPU work while11 NPUs are unavailable;do not
+   leave CPU cases behind an unavailable-NPU dependency chain again.
+2. At changed NPU availability,continue unstarted cell98 and other untouched FP32
+   cells using the existing11-owner maps/capacities/finite budgets. Preserve
+   failed receipt names and allocate fresh directories. No heavy measurement overlap.
+3. FP16 companion plan resident-fp16-companions01.json covers four LibTorch/
+   TimedDAG/prefill resident cases:2/8 inference and5/11 complete training. No
+   companion has actually run. Step/child budgets900/2200,900/2200,4500/9400,
+   9000/18400s stay;transferred FP32 allowances are not FP16 forecasts. Reuse
+   run_resident_fp16_companion.py and audit_resident_fp16_companion.py (latter
+   syntax-checked,not yet exercised on a terminal consumer). No broad second matrix.
+4. The FP32 Attention profile helper profile_formal_resident.py --cell8 is ready;
+   its dependent service failed before starting. Delay220s,duration5s,execution1800s,
+   profile/export3360s,queue120s,11cards,24GiB free-disk prerequisite. Add profile
+   is already audited;do not repeat it. Use audit_resident_profile.py at terminal.
+5. New profile_resident_fp16.py / audit_resident_fp16_profile.py are syntax-checked
+   only,not submitted. The runner requires --memory add|attention --reference-audit
+   AUDIT --out NEW;--inspect derives a finite trace interval/budget from a passed
+   unprofiled FP16 companion. Preserve original packet/owners/chunks/dtype.
+6. Complete same-series fresh repetitions before recommending configurations;
+   finish support/portability/evidence audit and close all current goal jobs.
+   Profiling,FP16 and qualification screens remain separate. Actual NVIDIA/x86_64
+   execution stays target-pending under the user's cross-machine validation plan.
 
 ## Environment and protected history
 
@@ -312,8 +280,9 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;previous evidence checkpoint5403b28. This checkpoint
-records the ongoing matrix and submitted finite FP16/streaming successors. No
-graph/model/core change or uncommitted implementation. Task-local helpers are
+Latest implementation103f5b6;previous handoff checkpoint8fe7e74. This checkpoint
+records the terminal partial matrix and independent CPU continuation. No
+graph/model/core change or uncommitted implementation. This increment contains
+reviewed documentation/evidence only. Task-local helpers are
 retained by hashes. A goal is active for autonomous completion;check get_goal on
 re-entry. Continue after commits/pushes.
