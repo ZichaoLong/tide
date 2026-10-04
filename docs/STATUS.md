@@ -8,8 +8,9 @@ pause overrides. Follow [execution-flows](execution-flows.md). No subagents.
 qualify-flow-isolation01 is terminal/failed and audited:the NPU consumer completed,
 but its monitor rejected remaining group processes at immediate exit. No overlap
 started. Correct/retest lifecycle handling;no concurrent formal timings are qualified.
-Next independent heavy job is profile-formal-resident-add01 on frozen e69b3bd.
-No competing heavy work during this profile.
+The resident Add profile is now terminal/passed/audited. Next current heavy job
+is qualify-flow-isolation02 on fixed controller103f5b6/workload e69b3bd;the
+changed controller passed17 checks on its immutable checkout. No competing heavy work.
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`,branch
 `graph-execution-foundation`. Re-entry:`git status --short --branch`,
@@ -156,11 +157,11 @@ a leak;allow≤2s natural teardown inside the original lane bound,record remaini
 states,still fail/clean live leaks and nonzero adopted exits. Directed17 checks
 passed in8.050s. The original controller reproduced the exited-zombie failure
 using a real fork,retained at TASK/audits/measurement-zombie-reproducer-a3e7270.
-This does not identify the exact old NPU helper. Commit the tested fix,create a
-frozen controller,rerun its directed checks,then qualify after the profile ends.
+This does not identify the exact old NPU helper. Fix103f5b6 is pushed. Frozen controller TASK/sources/control-isolation-clean02
+also passed17 checks in8.048s ([immutable control gate](evidence/measurement-lifecycle-20261004.md)). The profile has ended;qualify this fixed controller next.
 No graph/model change,process/step/queue/whole budget increase or blind retry.
 
-**RUNNING** `profile-formal-resident-add01`,unit
+**TERMINAL PASSED/AUDITED** `profile-formal-resident-add01`,unit
 `tide-execution-flows-profile-formal-resident-add01`,source e69b3bd at
 TASK/sources/compare-discrete-clean01. One cold Add inference update/two windows,
 11NPUs,unchanged full B512 physical4/128groups;five-second msprof slice only.
@@ -175,9 +176,30 @@ storage prerequisite. It cannot certify whole-update profiling or formal speed.
 - Inspect:`systemctl --user show tide-execution-flows-profile-formal-resident-add01`.
   Stop only if justified:`systemctl --user stop tide-execution-flows-profile-formal-resident-add01`.
 - Terminal audit prepared:TASK/launchers/audit_resident_profile.py --name
-  profile-formal-resident-add01 --output NEW_AUDIT_JSON. Not yet exercised.
+  profile-formal-resident-add01 --output NEW_AUDIT_JSON. Exercised successfully;
+  TASK/audits/profile-formal-resident-add01.json records168322 tasks/all11cards,
+  5.72370525s device span,no observed AiCPU. [Profile audit](evidence/fullsize-resident-add-profile-20261004.md).
+  This is a partial slice,not full-update timing.
 - Frozen while active:profile_formal_resident.py,source/build/input dependencies,
   and its shell. Do not launch the old serial matrix scripts beside it.
+
+**RUNNING** `qualify-flow-isolation02`,unit
+`tide-execution-flows-qualify-flow-isolation02`,controller103f5b6 at
+TASK/sources/control-isolation-clean02;workload e69b3bd unchanged. Whole6600s,
+CPU1500s,NPU2200s,queue120s;CPU80/NPU-host78+coordinator2 cores,NUMA0–3/4–7,
+RSS122.559/280GiB+136GiB reserve. Aggregate538.559GiB,current half-memory759.955GiB.
+The≤2s natural teardown stays within existing lane limits. CPU solo,NPU solo,
+then overlap;NPU stages share a lease. One failure stops;no retry or increase.
+Plan:TASK/plans/isolation-qualification02.json. Launch:
+TASK/launchers/qualify-flow-isolation02.sh. Frozen live helpers:
+qualify_flow_isolation_v2.py,isolated_flow_case.py,fullsize_configs.py,audit_flow_runtime.py,
+plan02,budgets0/2,controller/workload checkouts and hashed binary dependencies.
+Records:TASK/runs/qualify-flow-isolation02/{status.json,task.log,assessment/result.json};
+assessment/monitor-* and assessment/{cpu-solo,npu-solo,overlap-cpu,overlap-npu}/case.json.
+Inspect:`systemctl --user show tide-execution-flows-qualify-flow-isolation02`.
+Stop only if justified:`systemctl --user stop tide-execution-flows-qualify-flow-isolation02`.
+Audit after terminal:TASK/launchers/audit_flow_isolation_v2.py --name
+qualify-flow-isolation02 --output NEW_AUDIT_JSON. No concurrent heavy timings.
 
 Bounded remaining-matrix dispatcher is prepared externally as
 TASK/launchers/dispatch_bound_matrix.py;syntax checked,not yet qualified. It is
@@ -186,7 +208,7 @@ matching source/configuration/binding/environment/cards. It keeps new bound
 series separate from historical unbound results. A read-only preparation while
 the failed qualification was still live refused the local NPU-node memory
 estimate;no matrix process started. Receipt:plans/formal-bound-next01-inspection-attempt01.json.
-Update its controller revision after the lifecycle fix;then prepare a new finite
+It now targets103f5b6;prepare a new finite
 first-process group for PDG/Settle rather than repeating unrelated passed gates.
 
 ## Closed current group and evidence
@@ -312,14 +334,15 @@ and qualify bounded aggregate resource admission;then advance the matrix.
    bash-n valid,group13300s/outer13360s,**never submitted**. It complements
    measured resident cell8. Strict failures remain separate;one near-tie witness
    does not explain every future difference. No further CPU worker sweep.
-3. Separate full-size resident/FP16 profiling and comparisons remain open.
-   TASK/launchers/profile_formal_resident.py is inspection-only:passed cell2/8
+3. Full-size FP32 resident Add partial profiling is passed/audited above.
+   Resident Attention and FP16 profiles/comparisons remain open.
+   TASK/launchers/profile_formal_resident.py uses:passed cell2/8
    binary/config/owners,one cold inference step/two windows,five-second trace,
    24GiB free disk prerequisite. Add delay120s/execution1200s/whole2760s;
    Attention delay220s/execution1800s/whole3360s. Inspection records are
    TASK/plans/profile-formal-resident-{add,attention}01-inspection.json.
-   TASK/launchers/profile-formal-resident-add01.sh passes bash-n,outer2940s,
-   queue120s,11NPUs,**never submitted**. No profile audit helper qualified yet.
+   TASK/launchers/profile-formal-resident-add01.sh is terminal/passed,outer2940s,
+   queue120s,11NPUs. audit_resident_profile.py has been exercised on this result.
    No automatic retry or increase of the retained mixed-profile timeout.
 4. TASK/launchers/summarize_formal_matrix.py has been exercised through review03.
    It checks unique cell/repeat identity and preserves unmeasured/failed cells.
@@ -357,12 +380,8 @@ rewrite history. finite_ranked_horizon.py and wide_attention_horizon_pilot.py
 remain unqualified drafts. Prior navigation/schema audit passed834 links and
 10-target support schema;not new hardware verification.
 
-Recent pushed evidence:af1289b Python calibration,f52bbec public numerical
-limitation,2485d39 CPU training/resident Attention inference. This checkpoint
-adds the three audited Python formal cells,resource-isolation inspection/proposal,
-ROADMAP coverage and this paused handoff. All changes are documentation/evidence;
-there were no production changes or unrelated edits at517c48f,pushed. Task-local
-helpers/budgets remain retained by the evidence. The user has now resumed work.
-This implementation checkpoint includes the active handoff,measurement-control
-modules,13 directed checks and the authorized isolation contract. Full-size
-isolation qualification is being launched as above. Continue after commits/pushes.
+Latest implementation103f5b6 is pushed;its17 directed control checks also passed
+on the exact frozen checkout. This evidence checkpoint records that gate and
+the passed original-size resident Add slice. No graph/model/core changes.
+External bound-matrix dispatch/audit helpers are prepared,not execution-qualified;
+freeze their hashes before use. Continue after commits/pushes,without a pause.

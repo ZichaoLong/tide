@@ -1,0 +1,1009 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "job": {
+    "name": "profile-formal-resident-add01",
+    "receipt": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2940s",
+        "NPU_ENV/bin/python",
+        "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+        "--job-id",
+        "tide-profile-formal-resident-add01",
+        "--project",
+        "tide-execution-flows",
+        "--priority",
+        "0",
+        "--npu-count",
+        "11",
+        "--max-wait-seconds",
+        "120",
+        "--state-file",
+        "TASK/runs/profile-formal-resident-add01/queue.json",
+        "--",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2760s",
+        "env",
+        "-C",
+        "TASK/runs/profile-formal-resident-add01",
+        "ACL_OP_INIT_MODE=0",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/profile_formal_resident.py",
+        "--cell",
+        "2",
+        "--out",
+        "TASK/runs/profile-formal-resident-add01/assessment"
+      ],
+      "cwd": "TASK/sources/compare-discrete-clean01",
+      "state": "passed",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "dirty": "",
+      "started": "2026-10-04T01:56:52.733403+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-04T02:04:27.114218+00:00"
+    },
+    "unit": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive"
+    },
+    "queue": {
+      "elapsed_seconds": 453.73345244303346,
+      "job_id": "tide-profile-formal-resident-add01",
+      "logical_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "npu:4",
+        "npu:5",
+        "npu:6",
+        "npu:7",
+        "npu:8",
+        "npu:9",
+        "npu:10"
+      ],
+      "npu_count": 11,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12
+      ],
+      "priority": 0,
+      "project": "tide-execution-flows",
+      "return_code": 0,
+      "schema_version": 1,
+      "status": "completed",
+      "timestamp": "2026-10-04T02:04:27.098260+00:00"
+    }
+  },
+  "parent_sha256": "94c75858d02a52a70f0874f0e3782db841b9363aa6181fc92071cb8341a19c79",
+  "queue_sha256": "1e093a5bb9df3be4d0f5e8040c3a7d5247ae158705f55f3f8828715c637213c1",
+  "observed": {
+    "physical_device_task_counts": {
+      "1": 100920,
+      "11": 7637,
+      "12": 6902,
+      "2": 5950,
+      "3": 6826,
+      "4": 5935,
+      "5": 6970,
+      "6": 7098,
+      "7": 6558,
+      "8": 7105,
+      "9": 6421
+    },
+    "engine_task_counts": {
+      "AI_VECTOR_CORE": 166118,
+      "MIX_AIV": 14,
+      "AI_CORE": 2190
+    },
+    "per_device_summed_task_us": {
+      "1": 3722434.6639999766,
+      "11": 191707.5599999996,
+      "12": 148560.34400000173,
+      "2": 63680.80000000012,
+      "3": 149344.85999999917,
+      "4": 78354.13599999988,
+      "5": 149324.5999999996,
+      "6": 160234.28800000032,
+      "7": 118916.66399999995,
+      "8": 157201.10399999982,
+      "9": 113616.45999999908
+    },
+    "top_operator_shapes": [
+      {
+        "operator": "GatherV3_7beee77dd8bc124a96bc6f1da51c82cc_optional_10330",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 42621
+      },
+      {
+        "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_10330",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 14399
+      },
+      {
+        "operator": "Cast_a9b7af94359fc7c19da07ad0790f065c_high_performance_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 14394
+      },
+      {
+        "operator": "Equal_db689a08d53f9c09c59c06b9caeb956b_high_performance_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 14282
+      },
+      {
+        "operator": "TensorMove_5c5e58e043224cccf51a06108010ae13_high_performance__kernel0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 11971
+      },
+      {
+        "operator": "Add_ee98c6628030785f610b924ab1557b31_high_performance_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 11866
+      },
+      {
+        "operator": "ZerosLike_5c5e58e043224cccf51a06108010ae13_high_performance_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 10672
+      },
+      {
+        "operator": "tide_projection_shard_plan_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 9680
+      },
+      {
+        "operator": "tide_aggregate_plan_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 5064
+      },
+      {
+        "operator": "ScatterUpdate_607d745d2186adbc31b8ff0a9c9a4eae_high_precision_880015000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 3255
+      },
+      {
+        "operator": "SoftmaxV2_291664ae3e88b38b8b46c2efbbea27c9_high_precision_400400000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 2308
+      },
+      {
+        "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_10430",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 2186
+      },
+      {
+        "operator": "BatchMatMulV2_ND_ND_FP32_FP32_false_false_all_65747",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 2186
+      },
+      {
+        "operator": "ScatterUpdate_607d745d2186adbc31b8ff0a9c9a4eae_high_precision_880013000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 2186
+      },
+      {
+        "operator": "Add_41dadce325b0f810d03359af2a38990b_high_performance_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1344
+      },
+      {
+        "operator": "tide_state_shard_merge_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1332
+      },
+      {
+        "operator": "Sigmoid_5c5e58e043224cccf51a06108010ae13_high_precision_210000000",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1232
+      },
+      {
+        "operator": "tide_state_read_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1232
+      },
+      {
+        "operator": "tide_vector_read_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1232
+      },
+      {
+        "operator": "tide_read_reduce_0",
+        "shape": "N/A",
+        "dtype": "N/A",
+        "count": 1232
+      }
+    ],
+    "device_span_seconds": 5.72370525,
+    "start_utc": "2026-10-04T01:59:01.531384+00:00",
+    "end_utc": "2026-10-04T01:59:07.255090+00:00"
+  },
+  "summaries": [
+    {
+      "path": "raw/PROF_000001_20261004095701774_00084655QPINKKFH/mindstudio_profiler_output",
+      "schema": "tide-cann-csv-summary-v1",
+      "operators": 168322,
+      "summed_task_us": 5053375.480000039,
+      "engines": {
+        "AI_VECTOR_CORE": {
+          "count": 166118,
+          "summed_task_us": 4405507.14000004,
+          "summed_task_fraction": 0.8717949333937097
+        },
+        "MIX_AIV": {
+          "count": 14,
+          "summed_task_us": 162.92799999999997,
+          "summed_task_fraction": 3.224141974900284e-05
+        },
+        "AI_CORE": {
+          "count": 2190,
+          "summed_task_us": 647705.411999999,
+          "summed_task_fraction": 0.12817282518654124
+        }
+      },
+      "operators_by_type": [
+        {
+          "engine": "AI_CORE",
+          "operator": "BatchMatMulV2_ND_ND_FP32_FP32_false_false_all_65747",
+          "input_dtypes": "N/A",
+          "count": 2186,
+          "summed_task_us": 646318.7719999991
+        },
+        {
+          "engine": "AI_CORE",
+          "operator": "MatMulV2",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 1386.64
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 5.916
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add",
+          "input_dtypes": "INT64;INT64",
+          "count": 12,
+          "summed_task_us": 31.136000000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add_41dadce325b0f810d03359af2a38990b_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 1344,
+          "summed_task_us": 2974.419999999977
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Add_ee98c6628030785f610b924ab1557b31_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 11866,
+          "summed_task_us": 31502.439999999926
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "BroadcastTo",
+          "input_dtypes": "INT64;INT64",
+          "count": 4,
+          "summed_task_us": 8.2
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Cast",
+          "input_dtypes": "INT64",
+          "count": 4,
+          "summed_task_us": 7.055999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Cast_a9b7af94359fc7c19da07ad0790f065c_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 14394,
+          "summed_task_us": 16416.58400000057
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ConcatD",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 68.956
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Equal_db689a08d53f9c09c59c06b9caeb956b_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 14282,
+          "summed_task_us": 21898.311999999816
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;BOOL",
+          "count": 4,
+          "summed_task_us": 6.8
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Fill",
+          "input_dtypes": "INT64;INT64",
+          "count": 6,
+          "summed_task_us": 8.68
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "FloorDiv",
+          "input_dtypes": "INT64;INT64",
+          "count": 4,
+          "summed_task_us": 13.94
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "FloorMod",
+          "input_dtypes": "INT64;INT64",
+          "count": 4,
+          "summed_task_us": 11.564
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherElementsV2",
+          "input_dtypes": "FLOAT;INT32",
+          "count": 4,
+          "summed_task_us": 54.599999999999994
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV2",
+          "input_dtypes": "FLOAT;INT64;INT64",
+          "count": 4,
+          "summed_task_us": 39.816
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "FLOAT;INT64;INT64",
+          "count": 4,
+          "summed_task_us": 46.004
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3",
+          "input_dtypes": "INT64;INT64;INT64",
+          "count": 4,
+          "summed_task_us": 43.492000000000004
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3_7beee77dd8bc124a96bc6f1da51c82cc_optional_10330",
+          "input_dtypes": "N/A",
+          "count": 42621,
+          "summed_task_us": 88860.639999998
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_10330",
+          "input_dtypes": "N/A",
+          "count": 14399,
+          "summed_task_us": 718355.7559999983
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_10430",
+          "input_dtypes": "N/A",
+          "count": 2186,
+          "summed_task_us": 523906.46399999986
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_70131",
+          "input_dtypes": "N/A",
+          "count": 224,
+          "summed_task_us": 2536.0199999999973
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "GatherV3_9e31943a1a48bf81ddff1fc6379e0be3_optional_80330",
+          "input_dtypes": "N/A",
+          "count": 111,
+          "summed_task_us": 7453.892000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "IsFinite",
+          "input_dtypes": "FLOAT",
+          "count": 4,
+          "summed_task_us": 40.844
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Less_1ea4da630f56dc1c2d6e7c9a9dd17b11_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 320.2040000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "LogSoftmaxV2",
+          "input_dtypes": "FLOAT",
+          "count": 4,
+          "summed_task_us": 129.76
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "MemSet",
+          "input_dtypes": "N/A",
+          "count": 6,
+          "summed_task_us": 90.268
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Mul",
+          "input_dtypes": "INT64;INT64",
+          "count": 8,
+          "summed_task_us": 16.744
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Mul_ee98c6628030785f610b924ab1557b31_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 567,
+          "summed_task_us": 3469.2200000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Mul_ee98c6628030785f610b924ab1557b31_high_performance_212000001",
+          "input_dtypes": "N/A",
+          "count": 224,
+          "summed_task_us": 3744.0160000000037
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Neg",
+          "input_dtypes": "FLOAT",
+          "count": 4,
+          "summed_task_us": 5.635999999999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Pack",
+          "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 88.524
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Pack",
+          "input_dtypes": "FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 121.18
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Pack",
+          "input_dtypes": "INT64;INT64;INT64;INT64;INT64;INT64",
+          "count": 4,
+          "summed_task_us": 28.24
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "RealDiv",
+          "input_dtypes": "FLOAT;FLOAT",
+          "count": 4,
+          "summed_task_us": 6.0440000000000005
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "RmsNorm_normal_all_fp32_high_performance_0",
+          "input_dtypes": "N/A",
+          "count": 567,
+          "summed_task_us": 3797.2879999999955
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ScatterUpdate_607d745d2186adbc31b8ff0a9c9a4eae_high_precision_880013000",
+          "input_dtypes": "N/A",
+          "count": 2186,
+          "summed_task_us": 17564.111999999954
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ScatterUpdate_607d745d2186adbc31b8ff0a9c9a4eae_high_precision_880014000",
+          "input_dtypes": "N/A",
+          "count": 1221,
+          "summed_task_us": 86622.40399999995
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ScatterUpdate_607d745d2186adbc31b8ff0a9c9a4eae_high_precision_880015000",
+          "input_dtypes": "N/A",
+          "count": 3255,
+          "summed_task_us": 1174611.2960000008
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Sigmoid_5c5e58e043224cccf51a06108010ae13_high_precision_210000000",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 9595.079999999974
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Slice",
+          "input_dtypes": "INT64;INT64;INT64",
+          "count": 8,
+          "summed_task_us": 30.520000000000003
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "SoftmaxV2_291664ae3e88b38b8b46c2efbbea27c9_high_precision_400000",
+          "input_dtypes": "N/A",
+          "count": 111,
+          "summed_task_us": 2618.2280000000005
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "SoftmaxV2_291664ae3e88b38b8b46c2efbbea27c9_high_precision_400400000",
+          "input_dtypes": "N/A",
+          "count": 2308,
+          "summed_task_us": 15042.552000000014
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "Swish_291664ae3e88b38b8b46c2efbbea27c9_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 567,
+          "summed_task_us": 2976.616000000004
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "TensorMove",
+          "input_dtypes": "FLOAT",
+          "count": 44,
+          "summed_task_us": 362.68799999999993
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "TensorMove_5c5e58e043224cccf51a06108010ae13_high_performance__kernel0",
+          "input_dtypes": "N/A",
+          "count": 11971,
+          "summed_task_us": 243767.6480000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "BOOL",
+          "count": 12,
+          "summed_task_us": 17.132
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "FLOAT",
+          "count": 2,
+          "summed_task_us": 23.056
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike",
+          "input_dtypes": "INT64",
+          "count": 302,
+          "summed_task_us": 474.5840000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike_1d2fd313763487259859439d7e9b41cf_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 207.84799999999993
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "ZerosLike_5c5e58e043224cccf51a06108010ae13_high_performance_210000000",
+          "input_dtypes": "N/A",
+          "count": 10672,
+          "summed_task_us": 35068.06399999958
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_aggregate_apply_0",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 3444.8720000000008
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_aggregate_plan_0",
+          "input_dtypes": "N/A",
+          "count": 5064,
+          "summed_task_us": 21747.27999999997
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_closure_0",
+          "input_dtypes": "N/A",
+          "count": 116,
+          "summed_task_us": 15672.779999999993
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_content_state_0",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 10453.432000000017
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_emission_chunk_0",
+          "input_dtypes": "N/A",
+          "count": 992,
+          "summed_task_us": 3837.6080000000047
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_emission_plan_0",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 27612.992000000013
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_frame_select_0",
+          "input_dtypes": "N/A",
+          "count": 111,
+          "summed_task_us": 615491.3039999999
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_full_plan_0",
+          "input_dtypes": "N/A",
+          "count": 1200,
+          "summed_task_us": 11636.224000000013
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_full_shard_pack_0",
+          "input_dtypes": "N/A",
+          "count": 1221,
+          "summed_task_us": 174158.59600000022
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_projection_shard_plan_0",
+          "input_dtypes": "N/A",
+          "count": 9680,
+          "summed_task_us": 28419.136000000086
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_queue_propose_0",
+          "input_dtypes": "N/A",
+          "count": 228,
+          "summed_task_us": 42543.52000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_read_reduce_0",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 5208.5240000000085
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_ready_pack_0",
+          "input_dtypes": "N/A",
+          "count": 116,
+          "summed_task_us": 47329.47600000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_state_read_0",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 7092.9959999999965
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_state_shard_merge_0",
+          "input_dtypes": "N/A",
+          "count": 1332,
+          "summed_task_us": 4203.6240000000635
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_state_shard_pack_0",
+          "input_dtypes": "N/A",
+          "count": 1225,
+          "summed_task_us": 291907.94399999955
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_state_shard_selection_0",
+          "input_dtypes": "N/A",
+          "count": 1221,
+          "summed_task_us": 32810.467999999964
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_sum_plan_0",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 4999.424000000001
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_vector_read_0",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 19585.02000000002
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_vector_state_0",
+          "input_dtypes": "N/A",
+          "count": 1232,
+          "summed_task_us": 19093.86399999998
+        },
+        {
+          "engine": "AI_VECTOR_CORE",
+          "operator": "tide_vector_sum_0",
+          "input_dtypes": "N/A",
+          "count": 112,
+          "summed_task_us": 3167.5720000000006
+        },
+        {
+          "engine": "MIX_AIV",
+          "operator": "NonZero",
+          "input_dtypes": "BOOL",
+          "count": 6,
+          "summed_task_us": 94.46
+        },
+        {
+          "engine": "MIX_AIV",
+          "operator": "ReduceAll",
+          "input_dtypes": "BOOL;INT64",
+          "count": 4,
+          "summed_task_us": 53.044
+        },
+        {
+          "engine": "MIX_AIV",
+          "operator": "ReduceSum",
+          "input_dtypes": "FLOAT;INT64",
+          "count": 4,
+          "summed_task_us": 15.424
+        }
+      ],
+      "top_host_apis": [
+        {
+          "level": "runtime",
+          "name": "StreamSynchronize",
+          "summed_us": 3859132.53,
+          "count": 151
+        },
+        {
+          "level": "acl",
+          "name": "aclrtSynchronizeStreamWithTimeout",
+          "summed_us": 3859018.92,
+          "count": 133
+        },
+        {
+          "level": "acl",
+          "name": "aclrtSetDevice",
+          "summed_us": 466633.16,
+          "count": 1360
+        },
+        {
+          "level": "runtime",
+          "name": "SetDevice",
+          "summed_us": 464852.66,
+          "count": 1360
+        },
+        {
+          "level": "node",
+          "name": "launch",
+          "summed_us": 4085.81,
+          "count": 490
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceZero",
+          "summed_us": 3679.58,
+          "count": 316
+        },
+        {
+          "level": "acl",
+          "name": "aclrtLaunchKernelWithHostArgs",
+          "summed_us": 3214.16,
+          "count": 490
+        },
+        {
+          "level": "runtime",
+          "name": "LaunchKernelV2",
+          "summed_us": 2303.64,
+          "count": 490
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceCopy",
+          "summed_us": 1743.73,
+          "count": 164
+        },
+        {
+          "level": "acl",
+          "name": "aclrtSynchronizeDeviceWithTimeout",
+          "summed_us": 1153.87,
+          "count": 224
+        },
+        {
+          "level": "acl",
+          "name": "aclnnNonzero",
+          "summed_us": 948.22,
+          "count": 6
+        },
+        {
+          "level": "runtime",
+          "name": "DeviceSynchronize",
+          "summed_us": 931.34,
+          "count": 224
+        },
+        {
+          "level": "acl",
+          "name": "aclrtMemcpyAsync",
+          "summed_us": 818.62,
+          "count": 120
+        },
+        {
+          "level": "acl",
+          "name": "aclnnInplaceCopyGetWorkspaceSize",
+          "summed_us": 738.13,
+          "count": 120
+        },
+        {
+          "level": "acl",
+          "name": "aclmdlRIExecuteAsync",
+          "summed_us": 717.93,
+          "count": 124
+        },
+        {
+          "level": "acl",
+          "name": "aclrtMemcpy",
+          "summed_us": 545.64,
+          "count": 22
+        },
+        {
+          "level": "runtime",
+          "name": "ModelExecute",
+          "summed_us": 522.96,
+          "count": 124
+        },
+        {
+          "level": "runtime",
+          "name": "MemCopySync",
+          "summed_us": 508.24,
+          "count": 22
+        },
+        {
+          "level": "runtime",
+          "name": "MemcpyAsync",
+          "summed_us": 391.65,
+          "count": 112
+        },
+        {
+          "level": "acl",
+          "name": "aclnnNonzeroGetWorkspaceSize",
+          "summed_us": 390.19,
+          "count": 6
+        }
+      ],
+      "inputs": {
+        "op_summary_20261004100421.csv": "3e75db80e8d0b14c56127004d4ec245f8a810f14f4311bcadf1630e0b2895a04",
+        "api_statistic_20261004100421.csv": "dfa0ee96df8593d76aea909adc2a009a4fb0bca6a7ae1b9c51186c7e73e98435"
+      },
+      "limits": [
+        "Task durations may overlap across streams/devices; the sum is not wall time.",
+        "Host API levels can nest; never add them into an end-to-end total.",
+        "Scope/warmup must come from the launch record; no full-size extrapolation.",
+        "AiCPU is on the accelerator, distinct from host CPU and AiCore."
+      ]
+    }
+  ],
+  "audit_helper_sha256": "0168317fdfe70dcae4935ca132fb4fe3d948a8f9f50fc6f98c1a4144459224db",
+  "limitations": [
+    "Five-second slice of cold original B512 resident inference; not full-update or training profiling.",
+    "Instrumented duration is not a formal throughput sample and cannot be mixed with unprofiled results.",
+    "No AiCPU in a sampled interval would not exclude AiCPU elsewhere or on another flow.",
+    "Task durations overlap across cards and streams; sums are not wall time or utilization.",
+    "Host API levels may nest; their durations cannot be added into an end-to-end total.",
+    "Graph scheduling is device-controlled, while construction and input/output/reporting remain host boundaries."
+  ],
+  "raw_inventory_files": 444,
+  "audit_path": "TASK/audits/profile-formal-resident-add01.json",
+  "audit_sha256": "08e30cb5a7f6ff970223b553a977411d04df7391295bbceebe37314d2f7d1471",
+  "case": {
+    "memory": "add",
+    "scope": "Original D2048/B512/T12/V50304,11-device FP32 LibTorch TimedDAG/prefill resident inference,one cold step with two connected windows. Same capacities,physical rows and owner map as the passed formal process. Five-second time slice only;not complete-window profiling or formal throughput. No CPU reference execution or supplied event trajectory.",
+    "limits": {
+      "profile_delay_seconds": 120,
+      "profile_duration_seconds": 5,
+      "profile_storage": "1024MB",
+      "execution_seconds": 1200,
+      "export_seconds_per_session": 120,
+      "whole_seconds": 2760,
+      "minimum_free_disk_gib": 24,
+      "queue_seconds": 120
+    },
+    "helper_sha256": "bfe8b9c23ad094c360668d5f584ea6a736878a0d836f5832954470a0a79756ad",
+    "build_sha256": "eb6e16e2d9ccc3f561e924ce7200c0fa808a71441a3148aefed3e062718d5adf",
+    "binary_sha256": "b331c48ce5ee1f829fe63a6b0b762fc9ee9c9b34761def310d6f5f464cb5b7d8",
+    "packet_sha256": "0346d2139f402ee078c3b62395a67dafdba29a929b89ba15956a87c47243959a",
+    "native_packet_sha256": "49e1f8d41c73e65fb826046719041f2f1486838440a1e95414d880e4e63f4778",
+    "reference_sha256": "2a887a66f7e29077bcbcedd0ff7688acd519bf85d475944ebd107dacdc1443fe",
+    "reference_receipt_sha256": "1a0ba7da1748dfdb9be25f3023d3595d5f966655e5aa8fe6b32cafef90f3ca3f",
+    "consumer_sha256": "e470f50c98f9cceb73cdd4a8fa8919387df8cbc0a389c312664adc523d7a3714",
+    "seconds": [
+      340.721409365
+    ],
+    "construction_seconds": 58.77063672,
+    "statistics": [
+      {
+        "emission_chunks": 56320,
+        "events": 1183429,
+        "full_chunks": 35927,
+        "head_chunks": 256,
+        "pending_peak": 1536,
+        "stages": 7168,
+        "window_events_max": 4675,
+        "window_outputs_max": 48,
+        "window_stages_max": 28
+      }
+    ],
+    "peak_growth_bytes": [
+      7817851392,
+      4072471552,
+      4072471552,
+      4072471552,
+      4055694336,
+      4072471552,
+      4067613696,
+      4066204672,
+      4066204672,
+      4072471552,
+      4082678784
+    ]
+  }
+}

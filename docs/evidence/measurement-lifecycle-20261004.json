@@ -1,0 +1,18 @@
+{
+  "state": "audited-passed-directed-control-tests",
+  "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "checks": 17,
+  "seconds": 8.048,
+  "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -p test_measurement_lanes.py -v",
+  "source_inventory_sha256": "32a40fae97b3dfc7521e79f3f39354e9e035bd39374200d9958fd1cdd04ac9b1",
+  "source_inventory_files": 1588,
+  "log": "TASK/audits/control-isolation-clean02-tests.log",
+  "log_sha256": "c1733b1994e6b045c3158406c2cd92035940290c713f344589dff4b3e32c2962",
+  "prior_reproducer_sha256": "691c290bebb8656b252ce88564c344bd038067c29627c0a355ef8345186dab00",
+  "scope": "Dependency-free measurement control;real NUMA-bound processes,zombie reaping,natural teardown,failed adopted exit,leak/timeout/companion cancellation and RSS refusal. No graph or numerical change.",
+  "limitations": [
+    "Full-size fixed-controller isolation qualification is still running.",
+    "The original full-size failure did not identify its remaining process;the synthetic reproducer proves the control bug,not that process identity.",
+    "Lane process bounds are unchanged;default2s natural teardown is inside that bound;nonzero helper exits and live leaks still fail."
+  ]
+}
