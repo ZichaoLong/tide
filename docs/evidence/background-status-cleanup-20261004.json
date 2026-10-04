@@ -1,0 +1,131 @@
+{
+  "observed_at": "2026-10-04T16:29:30+08:00",
+  "cleanup": {
+    "result": {
+      "state": "passed",
+      "dry_run_sha256": "7f326dd5b1e1f96ad9de4bf9c842370f6179ba3200ef37edbe28517a6a6d5f08",
+      "removed_files": 64568,
+      "removed_allocated_bytes": 929161216,
+      "data_free_before": 173598003200,
+      "root_free_before": 12158980096,
+      "queue_inputs_verified": 644,
+      "data_free_after": 174527111168,
+      "root_free_after": 12158955520
+    },
+    "dry_run_sha256": "7f326dd5b1e1f96ad9de4bf9c842370f6179ba3200ef37edbe28517a6a6d5f08",
+    "raw_directory": "TASK/plans/storage-cleanup-20261004-01",
+    "helper_sha256": "55d8c3cf676e57fb48283a14d906d9a15c7da0b67bac9c78e52650259d2d0066",
+    "roots": [
+      "event-training-dev01",
+      "event-training-python-dev01",
+      "full-training-dev02",
+      "control-training-python-dev01",
+      "aggregate-training-python-dev02",
+      "full-training-python-dev01",
+      "public-training-python-dev01",
+      "resident-public-standalone-dev01"
+    ],
+    "policy": "Remove only generated CMake dependency/build-rule intermediates. Keep every object,archive,library,binary,source,configuration,manifest,result,log,profile and all qualified/live/future/historical task dependencies.",
+    "rebuild_note": "Old affected development trees require CMake regeneration before a future rebuild;current qualified builds are untouched."
+  },
+  "streaming": {
+    "audit_sha256": "eb6bfe877e8c00761c936a668cc0f5b90746181f4b01c529ff8557efba2a79d8",
+    "audit_path": "TASK/runs/unattended-matrix01/dispatch/audits/formal-bound-cpu-streaming02.json",
+    "state": "audited-failed",
+    "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+    "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+    "job": {
+      "name": "formal-bound-cpu-streaming02",
+      "receipt": {
+        "command": [
+          "timeout",
+          "--signal=TERM",
+          "--kill-after=10s",
+          "26534s",
+          "NPU_ENV/bin/python",
+          "TASK/launchers/run_after_terminal_dependency.py",
+          "--plan",
+          "TASK/plans/formal-bound-cpu-streaming02-serial01.json",
+          "--out",
+          "TASK/runs/formal-bound-cpu-streaming02/dispatch"
+        ],
+        "cwd": "TASK/sources/control-isolation-clean02",
+        "state": "failed",
+        "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+        "dirty": "",
+        "started": "2026-10-04T05:54:41.231691+00:00",
+        "exit_code": 1,
+        "finished": "2026-10-04T07:25:39.705740+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "1",
+        "ControlGroup": "",
+        "ActiveState": "failed"
+      }
+    },
+    "partial": [
+      {
+        "group": 0,
+        "cells": [
+          60
+        ],
+        "state": "failed",
+        "execution_started": true,
+        "queue_status": null,
+        "result_sha256": "d3991a0919441d100601fe3febdd0428da351f2d3d17de5d9e39c8ff463de1f7"
+      },
+      {
+        "group": 1,
+        "cells": [
+          84
+        ],
+        "state": "not-started",
+        "execution_started": false,
+        "queue_status": null,
+        "result_sha256": null
+      },
+      {
+        "group": 2,
+        "cells": [
+          108
+        ],
+        "state": "not-started",
+        "execution_started": false,
+        "queue_status": null,
+        "result_sha256": null
+      }
+    ],
+    "cell60": {
+      "consumer_sha256": "2dbe0d615284e6e830527db17b75a36f1c52adbad8acca9e23d38411bd3f8d99",
+      "consumer_state": "passed",
+      "seconds": [
+        773.663847125
+      ],
+      "warmup_seconds": [
+        533.699052067
+      ],
+      "construction_seconds": 45.450141814,
+      "outputs": [
+        12288
+      ],
+      "final_cut": 816,
+      "candidate_events": 1188500,
+      "step_allowance_seconds": 600,
+      "accepted": false,
+      "reason": "Measured complete step exceeded the unchanged allowance."
+    }
+  },
+  "live": {
+    "manager": "tide-execution-flows-unattended-matrix01.service",
+    "manager_pid": 958799,
+    "state": "waiting-existing-chain",
+    "child": "formal-resident-fp16-attention-training01",
+    "child_service_pid": 749302,
+    "consumer_pid": 974870,
+    "consumer_elapsed_seconds": 3821,
+    "consumer_state": "running",
+    "devices": 11,
+    "result_pending": true
+  }
+}

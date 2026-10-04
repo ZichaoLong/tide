@@ -20,19 +20,26 @@ x86_64 execution remains target-pending. Preserve the strict near-tie limitation
 
 The new finite manager `tide-execution-flows-unattended-matrix01.service` is
 submitted and verified transient/background.slice/Nice10,MainPID958799,started
-2026-10-04T07:18:12.346503Z. It has audited both preceding FP16 profiles and is
-waiting on formal-bound-cpu-streaming02;no new heavy child or lease. Manifest:
+2026-10-04T07:18:12.346503Z. Rechecked16:29+08:00:both profile predecessors passed
+and the CPU streaming predecessor was audited-failed. The manager now waits on
+formal-resident-fp16-attention-training01;no new manager-owned heavy child/lease.
+Manifest:
 `TASK/plans/unattended-matrix01.json`;manager:
 `TASK/launchers/run_unattended_measurements.py`. Exact scope,bounds,source hashes,
 commands,inspection/stop instructions and13+3lifecycle guards are in
 [unattended-measurements](unattended-measurements.md). Do not launch a second
 manager or any of its conditional children manually.
 
-Existing serial chain observed at preparation:both FP16 inference profiles have
-passed terminal audit;formal-bound-cpu-streaming02(cells60/84/108) is executing;
-formal-resident-fp16-attention-training01(11cards) waits behind it. All existing
-limits and source identities remain fixed. New manager waits for all four
-pre-existing services to be terminal/clean;it acquires no lease while waiting.
+Current heavy job:formal-resident-fp16-attention-training01,eleven physical
+cards1,2,3,4,5,6,7,9,11,12,13 remapped to logical0–10. Service749302/consumer974870
+remain live;actual model execution began around07:25:49Z and has run64minutes at
+the latest observation,with CPU activity. No terminal training result exists.
+formal-bound-cpu-streaming02 ended failed07:25:39.705740Z,empty cgroup:cell60
+Settle/LibTorch/CPU Add streaming completed773.663847s against the unchanged600s
+step limit(warmup533.699052s);cells84/108 never started. Its strict audit accepts
+zero cases. The manager preserves this failure,skips attempted60 and retains84/108
+for first independent execution. All original budgets and source identities stay.
+[Status and cleanup evidence](evidence/background-status-cleanup-20261004.md).
 The protected historical stopped worker is excluded and must remain untouched.
 
 Original-B512 FP16 Add complete training passed terminal audit on8cards:
@@ -297,7 +304,13 @@ TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0,PYTHONDONTWRITEBYTECODE=1,
 standalone ACL_OP_INIT_MODE=0 and output cwd. CPU correctness1 thread,build2.
 CPU timings OpenMP/OpenBLAS16,MKL1,OMP_THREAD_LIMIT32;NPU startup BLAS1,ATen8 resident.
 Host320 physical cores,8 NUMA nodes,16 NPUs;NPU PCI NUMA=-1,actual locality unknown.
-Latest free disk data165GiB/root11GiB;recheck before large writes/profiles.
+Latest observed free disk data162.54GiB/root11.32GiB at16:29+08:00;recheck before
+large writes/profiles. Authorized cleanup removed only64,568regenerable CMake
+dependency/build-rule files in8obsolete unreferenced development builds,freeing
+0.865349GiB. Binary/source/metadata/log/profile/qualified/active/future/historical
+inputs remain;all644queue hashes were reverified. Dry-run and receipt:
+TASK/plans/storage-cleanup-20261004-01. Regenerate CMake before rebuilding those
+old development trees. No environment or reference-repository cleanup.
 
 **Never resume,stop,signal or clean historical-cpu-attention-01.** Worker2686919
 (~123.47GiB RSS) is deliberately stopped;its running receipt is not active
