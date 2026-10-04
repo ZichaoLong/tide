@@ -23,6 +23,23 @@ Launcher/plan:TASK/{launchers,plans}/formal-resident-fp16-add-training01.{sh,jso
 records:TASK/runs/formal-resident-fp16-add-training01. Terminal auditor:
 audit_resident_fp16_companion_v4.py --name JOB --output NEW_AUDIT_JSON.
 
+Four finite serial continuation services are submitted and verified
+transient/background.slice/Nice10. They wait without device leases until their
+predecessor is terminal/audited. MainPIDs at launch749224/749251/749278/749302:
+profile-resident-fp16-add01 → profile-resident-fp16-attention01 →
+formal-bound-cpu-streaming02(cells60/84/108 only) →
+formal-resident-fp16-attention-training01(11cards,original owner map).
+TASK/plans/finite-serial-continuation01.json gives exact source cwd,launchers and
+fixed bounds;each plan/shell ends-serial01.{json,sh}. Execution bounds are
+2640/2940/11640/18640s,queue120s where applicable. Dependency waits are separately
+finite(8924/11714/14804/26594s);no indefinite wait or resource overlap.
+New task-local run_after_terminal_dependency.py passed8 synthetic lifecycle
+checks with real bounded child processes:TASK/plans/terminal-serialization-guards01.
+It requires the matching terminal audit and empty predecessor cgroup;an audited
+failed predecessor may permit this independent work,without retrying that failure.
+Identity,cleanup,audit errors or cancellation stop before subsequent execution.
+Original passing-dependency helper/plans and all their failures remain unchanged.
+
 Both originalB512 FP16 inference companions passed v4 terminal audit:
 Add inference03 measured194.098069530s,warmup194.477604910s,construction60.926761025s;
 Attention inference02 measured222.541188209s,warmup222.400112901s,
@@ -266,12 +283,14 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next independent work
 
-1. Monitor/audit live Add training01 with v4;both inference companions
-   are audited-passed. Uses plan02,v3 helpers,ACLNN_CACHE_LIMIT=0 and unchanged9640s
-   whole budget. Attention training remains11cards. Inspect terminal evidence
-   between heavy jobs;do not chain unrelated work to a passing prerequisite.
+1. Monitor/audit live Add training01 with v4;both inference companions are
+   audited-passed. Its finite serial continuation is listed above. Verify all
+   submitted units and dispatch records;never launch the prepared nonserial
+   shell for a name already submitted. Each successor audits terminal evidence
+   before starting;retain and review any failing stage. All existing execution
+   budgets,cache policies,FP32 series and owner maps remain unchanged.
 2. Continue untouched FP32 cells with existing11-owner maps/capacities and finite
-   allowances when devices are available. CPU60/84/108 are still unstarted.
+   allowances when devices are available. CPU60/84/108 are prepared in the serial continuation and still unstarted.
    Keep cell36's completed-but-over-bound result separate;do not retry blindly.
 3. FP32 Attention profile profile_formal_resident.py --cell8 remains unstarted:
    delay220s,duration5s,execution1800s,profile/export3360s,queue120s,11cards,
@@ -311,6 +330,9 @@ artifacts and reproducers. Do not clean reference repositories.
 
 Latest implementation103f5b6;workload e69b3bd. This increment records two audited
 original-size FP16 inference companions and the active complete-training job.
-No graph/model/core change or uncommitted implementation;reviewed evidence only. Task-local helpers are
+README and accelerator/consumer navigation now distinguish current online
+qualification from historical captured/finite benchmarks. No graph/model/core
+change or uncommitted production implementation;documentation plus external
+finite task orchestration only. Task-local helpers are
 retained by hashes. A goal is active for autonomous completion;check get_goal on
 re-entry. Continue after commits/pushes.

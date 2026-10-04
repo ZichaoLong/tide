@@ -7,6 +7,11 @@ the public library. They do not add a scheduler, a loss requirement or a model
 head to core graph semantics. CPU FP32/FP64 and directed mixed NPU FP32 complete-training qualification is
 recorded at [clean fe2d886](evidence/online-consumers-20261002.md):120 CPU checks
 and18 NPU cases, no skips. This is small-model correctness, not full-size throughput.
+The current integrated CPU/NPU qualification and full-size measurement coverage
+are listed in [STATUS](STATUS.md). The [current NPU consumer gate](evidence/integrated-npu-consumers-20261004.md)
+adds all declared families/schedules,FP32/FP16,standalone/Python-owned native
+resident training and fresh-process repartition. Keep these integration checks
+separate from full-size timing and target-version qualification.
 
 Resident training requests full Result trace/messages only with `--diagnostics`
 (or a Python diagnostic observer). Its backward journals remain enabled in all

@@ -10,28 +10,33 @@ Tide 0.2 的 [依赖调用指南](docs/library.md)、[独立 Python 示例](exam
 安装后的 `python -m tidegraph qualify` 针对具体配置检查完整可观测量、梯度、
 分块、训练更新及新进程恢复；缩维验证保留原拓扑并记录实际触达节点数。
 
-CPU FP32/FP64 是基线。既有[六阶段验收](docs/evidence/foundation-final.md)与
-[跨家族验证](docs/evidence/cross-family-qualification.md)已完成；此次
-[公共库扩展验收](docs/evidence/library-foundation.md)也已完成：8621 项完整回归、
-22 个复杂配置单元和独立安装调用通过；随后验证器补强另经 18 项定向测试验证。
-Python 与 LibTorch 的 CUDA/NPU 路径已实现。NPU 在 CANN 8.5.0、8.5.1、8.5.2、
-9.0.0 上完成共 328 个有限配置验证，独立 C++ NPU 也通过训练/检查点与安装调用检查；
-此次完整 CPU 回归通过 8636 项测试、22 个复杂配置单元及安装调用检查。
-CUDA 已完成构建和 CPU 侧检查，GPU 实测留待目标机。见
-[加速器指南](docs/accelerators.md)与[精确验收范围](docs/evidence/accelerators-20260928.md)。
-显式 FP16 配置、FP32 master 优化器与检查点边界见[精度约定](docs/precision.md)；
-[本机 FP16 验证](docs/evidence/fp16-qualification-20260929.md)记录新的 8645 项 CPU 回归、
-公共 NPU 用例及 124 个消费者验证单元。[全尺寸 FP32/FP16 推理与训练对照](docs/evidence/accelerator-fp16-performance-20260929.md)
-记录八个已完成用例、显存及共享负载限制；低精度性能与数值稳定性按具体工作负载验证。
-可选的[有界设备调度消费者](docs/bounded-scheduler.md)已通过
-[84 个 CPU/NPU 验证单元](docs/evidence/bounded-scheduler-qualification-20260929.md)，
-覆盖小规模 FP32/FP16、单卡/多卡 replay 与完整训练。该能力限定于固定拓扑的有限窗口；
-[全尺寸容量评估](docs/evidence/bounded-scheduler-capacity-20260929.md)记录 Add 推理成功、
-通知数量上限、显存失败及 12 卡共享负载补测；全尺寸 captured replay 尚未通过。
-[同源码 CPU/NPU 对照与全尺寸 profiling](docs/evidence/accelerator-cpu-npu-comparison-20260929.md)
-记录三次进程重复：NPU 的 Add/Attention 推理耗时约为 CPU 的 2.42/2.87 倍，
-Add 完整训练吞吐约为 CPU 的 1.64 倍；CPU Attention 训练超时，缺少有效速度比。
-四份全尺寸采集窗口的设备覆盖已核对；这些结果受共享负载限制。
+CPU FP32/FP64 是独立参考。当前主线按[完整执行流程契约](docs/execution-flows.md)
+提供 CPU、混合 A/B/C 和 NPU 常驻流程；streaming 与节点级时间批 prefill 都在线
+处理输入，不消费 CPU 预先算好的路由、事件或梯度。三图类别的支持与必测矩阵、
+常用组合及细开关见该契约。[公共连续消费者](docs/online-consumers.md)覆盖推理、
+完整训练与跨窗口状态续接；训练效果和超参数实验由后续实验仓库负责。
+
+当前 aarch64 [CPU 集成资格](docs/evidence/integrated-cpu-20261004.md)通过
+9458 项检查及 12 项 CTests；[NPU 集成资格](docs/evidence/integrated-npu-consumers-20261004.md)
+通过 49 项 eager 和 93 项 resident 检查，覆盖三图类别、两种调度、FP32/FP16、
+多卡、SGD/AdamW 与新进程重新分卡恢复。在线 NPU 常驻后端在设备上决定就绪、
+选择、合批与事件推进，主机仍负责构造和输入/输出边界；Python 调用 native 与
+独立 PyTorch 调度分别记录。该能力使用有界可复用缓冲，容量不足明确失败。
+当前常驻资格来自 CANN 9.0.0，不能自动推广到其他工具链版本。
+
+全尺寸性能矩阵、同系列重复和 profiling 仍在补齐，最新结果及剩余事项统一见
+[当前进度](docs/STATUS.md)。已定位的[原尺寸近似平票严格对照失败](docs/evidence/original-add-route-witness-20261004.md)
+保持失败与原有检查；独立执行结果须注明不同的实际工作量。FP16 按独立精度
+契约验证，不承诺与 FP32 相同的离散轨迹。有关显式 CANN 缓存设置、设备及构建
+限制，见[加速器指南](docs/accelerators.md)和[精度约定](docs/precision.md)。
+
+CUDA 路径已有构建及 aarch64 CPU 侧验证，真实 NVIDIA 和 x86_64 执行仍待目标机。
+[目标机命令](docs/eager-target-validation.md)保留同源码构建、实际设备验证和证据边界。
+历史[公共库验收](docs/evidence/library-foundation.md)、
+[多 CANN 版本有限 eager 验证](docs/evidence/accelerators-20260928.md)、
+[有限捕获调度](docs/bounded-scheduler.md)及
+[旧版 CPU/NPU 性能对照](docs/evidence/accelerator-cpu-npu-comparison-20260929.md)
+仍按各自源码、协议和限制保留，不能替代当前在线完整流程的验证与性能结论。
 开发与中断接续从 [AGENTS.md](AGENTS.md)、[当前进度](docs/STATUS.md) 开始；
 [路线图](docs/ROADMAP.md) 保留完整任务，[架构导航](docs/architecture.md) 定位代码，
 [本地语义约定](docs/semantics.md) 和 [上游锁定](docs/upstream.json) 界定能力。

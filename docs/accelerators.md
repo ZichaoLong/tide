@@ -2,8 +2,15 @@
 
 The same `GraphConfig → GraphRuntime → Session` contract accepts explicit
 `cpu`, `cuda:N` and `npu:N`. CPU FP32/FP64 remains the independent reference.
-Accelerators initially support single-device eager FP32. CUDA FP64 requires its
-own target-machine gate. NPU FP64 and the explicitly FP64 `norm-fp64-v1` Read
+The initial single-device eager FP32 path now also has explicit multi-device
+consumer placement and FP16 policies; see [continuous consumers](online-consumers.md)
+and [precision](precision.md). The optional [resident NPU backend](resident-training.md)
+performs online scheduling and complete sharded training with a separate C++/CANN
+implementation. Its current [integration gate](evidence/integrated-npu-consumers-20261004.md)
+is for CANN9.0.0; older eager version checks do not qualify resident execution.
+Python-owned native resident execution is distinct from independent PyTorch eager
+scheduling. Full-size comparisons remain tracked in [STATUS](STATUS.md).
+CUDA FP64 requires its own target-machine gate. NPU FP64 and the explicitly FP64 `norm-fp64-v1` Read
 profile fail before execution; they are never silently reduced to FP32.
 NPU's optional `fiber_pooling=csr` is unsupported by the tested TorchNPU sparse
 matrix multiply backend. The public adapter rejects it; explicitly select the
