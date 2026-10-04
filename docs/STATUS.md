@@ -1,10 +1,11 @@
 # Current handoff
 
-Updated 2026-10-04 (Asia/Shanghai). **ACTIVE.** The user explicitly authorized
-resuming and completing the overall goal. Continue implementation,measurement,
-audit,commit and push;no automatic per-commit pause. No subagents. Follow
-[execution-flows](execution-flows.md);current user alignment outranks experiment
-skill overhead. Reference repositories and ObsidianVault stay read-only.
+Updated 2026-10-04 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent pauses active monitoring until the user's
+next wake-up.**
+The latest user explicitly requested unattended remaining experiments and a later
+status/result review. Commit/push remain authorized. No subagents. Follow
+[execution-flows](execution-flows.md);current alignment outranks experiment skill
+overhead. Reference repositories and ObsidianVault stay read-only.
 
 Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`,branch
@@ -12,49 +13,37 @@ Repo `/home/zlong/llm/graph-execution-foundation` resolves to
 file,and [ROADMAP F1–F7](ROADMAP.md). `TASK=/mi/data2T/zlong/tide-execution-flows`.
 All handoff writes use scripts.durable_records.replace_text atomically.
 
-**Only current heavy job:formal-resident-fp16-add-training01**,running.
-Verified transient/background.slice/Nice10,MainPID717698 at launch;physical cards
-1,3,4,5,7,9,11,13 map to logical0–7. Started2026-10-04T05:40:31.375630Z.
-Its input hashes and clean workload e69b3bd/controller103f5b6 were rechecked.
-Eight cards,originalB512,physical sample rows2,FP16 payload/FP32 adjoints/loss/masters,
-explicit ACLNN_CACHE_LIMIT=0 and the passed93-check gate. Bounds remain4500s step,
-9400s child,120s queue,9640s whole. No competing heavy measurement.
-Launcher/plan:TASK/{launchers,plans}/formal-resident-fp16-add-training01.{sh,json};
-records:TASK/runs/formal-resident-fp16-add-training01. Terminal auditor:
-audit_resident_fp16_companion_v4.py --name JOB --output NEW_AUDIT_JSON.
+**Implementation and current local correctness gates are complete within the
+declared CPU/NPU profiles(F1–F5). F6/F7 remain open for full-size measurements,
+repetitions,profiling reconciliation and final evidence review.** Actual NVIDIA/
+x86_64 execution remains target-pending. Preserve the strict near-tie limitation.
 
-Four finite serial continuation services are submitted and verified
-transient/background.slice/Nice10. They wait without device leases until their
-predecessor is terminal/audited. MainPIDs at launch749224/749251/749278/749302:
-profile-resident-fp16-add01 → profile-resident-fp16-attention01 →
-formal-bound-cpu-streaming02(cells60/84/108 only) →
-formal-resident-fp16-attention-training01(11cards,original owner map).
-TASK/plans/finite-serial-continuation01.json gives exact source cwd,launchers and
-fixed bounds;each plan/shell ends-serial01.{json,sh}. Execution bounds are
-2640/2940/11640/18640s,queue120s where applicable. Dependency waits are separately
-finite(8924/11714/14804/26594s);no indefinite wait or resource overlap.
-New task-local run_after_terminal_dependency.py passed8 synthetic lifecycle
-checks with real bounded child processes:TASK/plans/terminal-serialization-guards01.
-It requires the matching terminal audit and empty predecessor cgroup;an audited
-failed predecessor may permit this independent work,without retrying that failure.
-Identity,cleanup,audit errors or cancellation stop before subsequent execution.
-Original passing-dependency helper/plans and all their failures remain unchanged.
+The new finite manager `tide-execution-flows-unattended-matrix01.service` is
+submitted and verified transient/background.slice/Nice10,MainPID958799,started
+2026-10-04T07:18:12.346503Z. It has audited both preceding FP16 profiles and is
+waiting on formal-bound-cpu-streaming02;no new heavy child or lease. Manifest:
+`TASK/plans/unattended-matrix01.json`;manager:
+`TASK/launchers/run_unattended_measurements.py`. Exact scope,bounds,source hashes,
+commands,inspection/stop instructions and13+3lifecycle guards are in
+[unattended-measurements](unattended-measurements.md). Do not launch a second
+manager or any of its conditional children manually.
 
-Both originalB512 FP16 inference companions passed v4 terminal audit:
-Add inference03 measured194.098069530s,warmup194.477604910s,construction60.926761025s;
-Attention inference02 measured222.541188209s,warmup222.400112901s,
-construction133.807347373s. Each used8cards/physical sample rows4,with12288 outputs
-and cut816;actual events1188301(Add)/1190764(Attention). Both exit0/empty/released.
-[Add evidence](evidence/formal-b512-resident-fp16-add-20261004.md) and
-[Attention evidence](evidence/formal-b512-resident-fp16-attention-20261004.md) retain
-their single-process observations,separate from120 FP32 cells;no recommendation.
-Add's first v3 audit rejected an incorrect inference optimizer expectation;retain
-that attempt and original helper. Separate v4 requiresNone for inference and the
-configured optimizer for training,with all other checks unchanged.
-Audits:TASK/audits/formal-resident-fp16-{add-inference03,attention-inference02}.json.
-Protect v3 execution helpers,gate audit,plan02 and frozen sources/builds. The
-original default-cache failures remain failed. The historical stopped worker is
-separate and protected below.
+Existing serial chain observed at preparation:both FP16 inference profiles have
+passed terminal audit;formal-bound-cpu-streaming02(cells60/84/108) is executing;
+formal-resident-fp16-attention-training01(11cards) waits behind it. All existing
+limits and source identities remain fixed. New manager waits for all four
+pre-existing services to be terminal/clean;it acquires no lease while waiting.
+The protected historical stopped worker is excluded and must remain untouched.
+
+Original-B512 FP16 Add complete training passed terminal audit on8cards:
+measured2027.354117s,warmup2035.162127s,construction83.335077s,6.061102input tokens/s,
+12288outputs/cut816/1187990events. It ended exit0 at06:49:59.658769Z,empty/released.
+Both FP16 inference traces passed on all8cards;their five-second sampled intervals
+showed no AiCPU tasks,without claiming that unsampled phases contain none.
+[Training/profile evidence](evidence/formal-b512-fp16-training-profiles-20261004.md).
+Earlier inference samples remain Add194.098070s and Attention222.541188s,
+one process each in numa-bound-resident-fp16-cacheoff-v1-8devices. Their raw
+failures,audits,cache policy and independent-series limitations remain unchanged.
 
 ## Contract and acceptance
 
@@ -213,7 +202,8 @@ SHA58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e.
 120 FP32 cells,24 envelopes,11 NPUs primary,60GiB/card or512GiB CPU. All120 budget02
 files exist;94 transfer original-width measured envelopes with explicit limitations.
 No transfer itself qualifies another family/client/schedule/full-size process.
-106 accepted first processes plus recommendation repeats remain;cell36 has a completed consumer retained as a bound failure. Remaining nominal phase
+106 cells still lack accepted first-process evidence;cell36 has a completed
+consumer retained as a bound failure. Candidate recommendation repeats remain. Remaining nominal phase
 forecasts sum≈204.0h before construction/repeats;budget forecasts with1.15 included
 sum234.6h (CPU77.4h/NPU157.3h). These are unchanged transferred forecasts,not
 actual remaining wall time or a promised completion date.
@@ -281,34 +271,21 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
   cause or certify resident/full-update behavior. No blind retry.
   [Retained profile](evidence/fullsize-mixed-profile-slice-20261004.md).
 
-## Next independent work
+## Next wake-up
 
-1. Monitor/audit live Add training01 with v4;both inference companions are
-   audited-passed. Its finite serial continuation is listed above. Verify all
-   submitted units and dispatch records;never launch the prepared nonserial
-   shell for a name already submitted. Each successor audits terminal evidence
-   before starting;retain and review any failing stage. All existing execution
-   budgets,cache policies,FP32 series and owner maps remain unchanged.
-2. Continue untouched FP32 cells with existing11-owner maps/capacities and finite
-   allowances when devices are available. CPU60/84/108 are prepared in the serial continuation and still unstarted.
-   Keep cell36's completed-but-over-bound result separate;do not retry blindly.
-3. FP32 Attention profile remains unsubmitted;prepared shell/plan:
-   TASK/{launchers,plans}/profile-formal-resident-attention02.{sh,json},with
-   delay220s,duration5s,execution1800s,profile/export3360s,queue120s,whole3540s,
-   11cards,minimum24GiB disk. Use audit_resident_profile_v2.py.
-   Prospective resident group cells98/26/38/62/86/110 was not prepared/submitted:
-   current training consumes selected-NUMA-node memory;diagnostic inspection
-   rejected'npu' lane admission. Retain plans/formal-bound-resident-streaming02-
-   inspection01/02.json(the first lost captured diagnostic;second preserves
-   MemoryError). Recheck only after the live resource condition changes.
-   Add FP32 profile is already audited;do not repeat it.
-4. FP16 profile_resident_fp16.py/audit_resident_fp16_profile.py accept the actual
-   audited8/11-card inference configuration and require matching ACLNN_CACHE_LIMIT. --inspect derives a finite trace
-   interval/budget from --reference-name COMPLETED_JOB --reference-audit AUDIT;
-   retain packet,owners,chunks,dtype and exclude profiling from formal timings.
-5. Complete same-series fresh repetitions before recommending configurations;
-   finish support/portability/evidence audit and close all current goal jobs.
-   Actual NVIDIA/x86_64 execution stays target-pending under the user's plan.
+1. Read the manager's unit,`TASK/runs/unattended-matrix01/status.json`,
+   `dispatch/result.json`,current child receipt and completed phase summaries.
+   Report passed,failed,skipped,unstarted and waiting separately. Do not infer
+   success from an inactive/missing unit or manager exit0 alone.
+2. Do not restart failed jobs,raise limits or duplicate live work. The frozen
+   plan already contains conditional first-process coverage,repetitions and
+   remaining FP32 Attention profiling. Any global stop retains the reason.
+3. Review exact same-series distributions,FP16 companions,actual events and
+   trace limitations before issuing recommendations or changing support claims.
+   Missing/failed competitors prevent a universal fastest-flow conclusion.
+4. Final F6/F7 evidence reconciliation and support/target-machine handoff happen
+   after results exist;the queued plan does not complete those deliverables.
+   The agent should not poll continuously or generate an automatic callback.
 
 ## Environment and protected history
 
@@ -334,12 +311,8 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;workload e69b3bd. This increment records two audited
-original-size FP16 inference companions and the active complete-training job.
-README and accelerator/consumer navigation now distinguish current online
-qualification from historical captured/finite benchmarks. No graph/model/core
-change or uncommitted production implementation;documentation plus external
-finite task orchestration only. Working support evidence adds the audited FP16
-inference pair with byte-verified build reuse;10-target schema passes. Task-local helpers are
-retained by hashes. A goal is active for autonomous completion;check get_goal on
-re-entry. Continue after commits/pushes.
+Latest implementation103f5b6;workload e69b3bd. This increment adds audited FP16
+Add training/inference traces and task-local finite unattended orchestration.
+No graph/model/core change. New helper/manifest inputs are frozen and must remain
+unchanged while the manager runs. Submission is verified;the agent pauses under
+the user's explicit wake-up workflow while background services continue. Final evidence review is pending.

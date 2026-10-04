@@ -1,0 +1,744 @@
+{
+  "state": "audited-passed",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "training": {
+    "audit_path": "TASK/audits/formal-resident-fp16-add-training01.json",
+    "audit_sha256": "56db34c4e010cf0959095b29bbaa3d2bfa28cae3c756bf29c7f7409de5460230",
+    "job": {
+      "name": "formal-resident-fp16-add-training01",
+      "receipt": {
+        "command": [
+          "timeout",
+          "--signal=TERM",
+          "--kill-after=10s",
+          "9640s",
+          "NPU_ENV/bin/python",
+          "/home/zlong/.agents/skills/use-local-ascend/scripts/run_on_free_npu.py",
+          "--job-id",
+          "tide-formal-resident-fp16-add-training01",
+          "--project",
+          "tide-execution-flows",
+          "--priority",
+          "0",
+          "--npu-count",
+          "8",
+          "--max-wait-seconds",
+          "120",
+          "--state-file",
+          "TASK/runs/formal-resident-fp16-add-training01/queue.json",
+          "--",
+          "NPU_ENV/bin/python",
+          "TASK/launchers/run_resident_fp16_companion_v3.py",
+          "--controller-source",
+          "TASK/sources/control-isolation-clean02",
+          "--out",
+          "TASK/runs/formal-resident-fp16-add-training01/assessment",
+          "--cell",
+          "5"
+        ],
+        "cwd": "TASK/sources/control-isolation-clean02",
+        "state": "passed",
+        "source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+        "dirty": "",
+        "started": "2026-10-04T05:40:31.375630+00:00",
+        "exit_code": 0,
+        "finished": "2026-10-04T06:49:59.658769+00:00"
+      },
+      "unit": {
+        "MainPID": "0",
+        "ExecMainStatus": "0",
+        "ControlGroup": "",
+        "ActiveState": "inactive"
+      },
+      "queue": {
+        "elapsed_seconds": 4167.6301279477775,
+        "job_id": "tide-formal-resident-fp16-add-training01",
+        "logical_devices": [
+          "npu:0",
+          "npu:1",
+          "npu:2",
+          "npu:3",
+          "npu:4",
+          "npu:5",
+          "npu:6",
+          "npu:7"
+        ],
+        "npu_count": 8,
+        "physical_ids": [
+          1,
+          3,
+          4,
+          5,
+          7,
+          9,
+          11,
+          13
+        ],
+        "priority": 0,
+        "project": "tide-execution-flows",
+        "return_code": 0,
+        "schema_version": 1,
+        "status": "completed",
+        "timestamp": "2026-10-04T06:49:59.642251+00:00"
+      }
+    },
+    "case": {
+      "cell": 5,
+      "configuration": {
+        "family": "timed-dag",
+        "client": "libtorch",
+        "schedule": "prefill",
+        "memory": "add",
+        "training": true,
+        "preset": "resident",
+        "configuration": "libtorch-add-True-resident",
+        "selection_evidence": "representative-preset-screen-20261002.json",
+        "selection_sha256": "4268ece0f197463b43d8bc21cc584da9c16d2264746d5ea07dba0a1fe37a019a"
+      },
+      "series": "numa-bound-resident-fp16-cacheoff-v1-8devices",
+      "repeat": 1,
+      "runtime_identity": {
+        "implementation": "libtorch",
+        "preset": "resident",
+        "backend": "npu",
+        "dtype": "float16",
+        "schedule": "prefill",
+        "schema": "standalone-consumer"
+      },
+      "consumer_sha256": "b0c6134ecf1aad1e1354e346db64d0d6f85ab237e5f3024a7fa78d2e0c14fcbe",
+      "seconds": [
+        2027.354117172
+      ],
+      "warmup_seconds": [
+        2035.16212659
+      ],
+      "construction_seconds": 83.335076521,
+      "losses": [
+        30.18340492248535
+      ],
+      "statistics": [
+        {
+          "borrowed_attention_bytes": 0,
+          "borrowed_projection_bytes": 18866798592,
+          "canonical_stream_chunks": 304640,
+          "canonical_stream_reserved_bytes": 1075624982,
+          "emission_chunks": 112640,
+          "events": 1187990,
+          "full_chunks": 75483,
+          "head_chunks": 512,
+          "pending_peak": 768,
+          "retained_attention_bytes": 0,
+          "retained_bytes": 19207576316,
+          "retained_compact_journals": 256,
+          "retained_dense_bytes": 19299277756,
+          "retained_full_bytes": 4021792,
+          "retained_projection_bytes": 18866798592,
+          "retained_window_bytes": 214228686,
+          "retained_windows": 512,
+          "reused_attention_gradient_bytes": 0,
+          "reused_projection_gradient_bytes": 37599316160,
+          "stages": 14336,
+          "streamed_parameter_windows": 512,
+          "window_events_max": 2348,
+          "window_outputs_max": 24,
+          "window_stages_max": 28
+        }
+      ],
+      "outputs": [
+        12288
+      ],
+      "token_rate": 6.061101953486447,
+      "batch_execution": {
+        "logical_batch": 512,
+        "requested_sample_chunk_rows": 2,
+        "effective_sample_chunk_rows": 2,
+        "physical_chunks": 256
+      },
+      "peak_growth_bytes": [
+        42936012800,
+        28005339136,
+        28002703360,
+        28002702336,
+        28002702336,
+        28002703360,
+        28002702336,
+        28002702336
+      ],
+      "physical_ids": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        13
+      ],
+      "lane": {
+        "name": "npu",
+        "cpus": [
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          216,
+          217,
+          218,
+          219,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251,
+          252,
+          253,
+          254,
+          255,
+          256,
+          257,
+          258,
+          259,
+          280,
+          281,
+          282,
+          283,
+          284,
+          285,
+          286,
+          287,
+          288,
+          289,
+          290,
+          291,
+          292,
+          293,
+          294,
+          295,
+          296,
+          297
+        ],
+        "memory_nodes": [
+          4,
+          5,
+          6,
+          7
+        ],
+        "memory_bytes": 300647710720
+      },
+      "numerical_policy": "FP16 payloads;resident FP32 adjoints/loss/master/optimizer policy unchanged;discrete routes may differ",
+      "environment": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_THREAD_LIMIT": null,
+        "TORCH_DEVICE_BACKEND_AUTOLOAD": "0",
+        "ACLNN_CACHE_LIMIT": "0"
+      }
+    },
+    "limitations": [
+      "FP16 companion,not a cell or repetition of the FP32 matrix.",
+      "Independent online execution;discrete routes and actual work may differ by dtype.",
+      "One fresh process;no stable speed recommendation or numerical equivalence claim.",
+      "Different card counts/owner maps from FP32 prevent an isolated dtype speedup claim.",
+      "Sampled affinity and private anonymous NUMA pages do not control external load."
+    ]
+  },
+  "profiles": [
+    {
+      "memory": "add",
+      "state": "audited-passed",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "audit_path": "TASK/audits/profile-resident-fp16-add01.json",
+      "audit_sha256": "23277756518f878ac64f371659407397e4c345692335b62c6fe1cffadafe8034",
+      "job": {
+        "name": "profile-resident-fp16-add01",
+        "receipt": {
+          "command": [
+            "timeout",
+            "--signal=TERM",
+            "--kill-after=10s",
+            "11654s",
+            "NPU_ENV/bin/python",
+            "TASK/launchers/run_after_terminal_dependency.py",
+            "--plan",
+            "TASK/plans/profile-resident-fp16-add01-serial01.json",
+            "--out",
+            "TASK/runs/profile-resident-fp16-add01/dispatch"
+          ],
+          "cwd": "TASK/sources/compare-discrete-clean01",
+          "state": "passed",
+          "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "dirty": "",
+          "started": "2026-10-04T05:54:40.701543+00:00",
+          "exit_code": 0,
+          "finished": "2026-10-04T06:55:29.006817+00:00"
+        },
+        "unit": {
+          "MainPID": "0",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive"
+        },
+        "queue": {
+          "elapsed_seconds": 326.8673767633736,
+          "job_id": "tide-profile-resident-fp16-add01",
+          "logical_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "npu_count": 8,
+          "physical_ids": [
+            1,
+            3,
+            4,
+            5,
+            7,
+            9,
+            11,
+            13
+          ],
+          "priority": 0,
+          "project": "tide-execution-flows",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-04T06:55:28.949964+00:00"
+        }
+      },
+      "observed": {
+        "physical_device_task_counts": {
+          "1": 137783,
+          "11": 13985,
+          "13": 14284,
+          "3": 14286,
+          "4": 14287,
+          "5": 14128,
+          "7": 14184,
+          "9": 14227
+        },
+        "engine_task_counts": {
+          "AI_VECTOR_CORE": 232203,
+          "AI_CORE": 4936,
+          "MIX_AIV": 25
+        },
+        "per_device_summed_task_us": {
+          "1": 4018516.7160001844,
+          "11": 146674.75999999972,
+          "13": 149857.04000000056,
+          "3": 151045.36800000013,
+          "4": 149226.57600000015,
+          "5": 150081.0640000008,
+          "7": 147936.93999999933,
+          "9": 149584.41999999975
+        },
+        "top_operator_shapes": [
+          {
+            "operator": "GatherV3_7beee77dd8bc124a96bc6f1da51c82cc_optional_10330",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 56213
+          },
+          {
+            "operator": "GatherV3_7869a97190b9b4d296d9414a005b954b_optional_10330",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 23749
+          },
+          {
+            "operator": "Cast_a9b7af94359fc7c19da07ad0790f065c_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 18067
+          },
+          {
+            "operator": "Equal_db689a08d53f9c09c59c06b9caeb956b_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 17881
+          },
+          {
+            "operator": "Add_93b3f8e9594b4018902b635fff3a83c5_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 16550
+          },
+          {
+            "operator": "TensorMove_d2db1a80c523e7e59a032c95969880af_high_performance__kernel0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 15857
+          },
+          {
+            "operator": "ZerosLike_d2db1a80c523e7e59a032c95969880af_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 13665
+          },
+          {
+            "operator": "tide_projection_shard_plan_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 12212
+          },
+          {
+            "operator": "tide_aggregate_plan_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 8472
+          },
+          {
+            "operator": "ScatterUpdate_4601a2b8a5e698c54cd01f61be6fd71d_high_precision_880015000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 5279
+          },
+          {
+            "operator": "GatherV3_7869a97190b9b4d296d9414a005b954b_optional_10430",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4929
+          },
+          {
+            "operator": "BatchMatMulV2_ND_ND_FP16_FP16_false_false_all_98371",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4929
+          },
+          {
+            "operator": "ScatterUpdate_4601a2b8a5e698c54cd01f61be6fd71d_high_precision_880013000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4929
+          },
+          {
+            "operator": "SoftmaxV2_291664ae3e88b38b8b46c2efbbea27c9_high_precision_400400000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 3864
+          },
+          {
+            "operator": "tide_full_plan_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 2422
+          },
+          {
+            "operator": "tide_state_shard_merge_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 1683
+          },
+          {
+            "operator": "Add_41dadce325b0f810d03359af2a38990b_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 1682
+          },
+          {
+            "operator": "tide_emission_chunk_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 1639
+          },
+          {
+            "operator": "tide_content_state_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 1553
+          },
+          {
+            "operator": "tide_vector_state_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 1553
+          }
+        ],
+        "device_span_seconds": 5.85012625,
+        "start_utc": "2026-10-04T06:51:59.860424+00:00",
+        "end_utc": "2026-10-04T06:52:05.710550+00:00"
+      },
+      "limitations": [
+        "Five-second slice of cold original B512 FP16 resident inference; not full-update or training profiling.",
+        "Instrumented duration is not a formal throughput sample and cannot be mixed with unprofiled results.",
+        "No AiCPU in a sampled interval would not exclude AiCPU elsewhere or on another flow.",
+        "Task durations overlap across cards and streams; sums are not wall time or utilization.",
+        "Host API levels may nest; their durations cannot be added into an end-to-end total.",
+        "Graph scheduling is device-controlled, while construction and input/output/reporting remain host boundaries."
+      ]
+    },
+    {
+      "memory": "attention",
+      "state": "audited-passed",
+      "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+      "audit_path": "TASK/audits/profile-resident-fp16-attention01.json",
+      "audit_sha256": "61f3f93adeaeb4daf0b06dea10ae9e664bc69330cc5ce2f71a42667f1b5fcb76",
+      "job": {
+        "name": "profile-resident-fp16-attention01",
+        "receipt": {
+          "command": [
+            "timeout",
+            "--signal=TERM",
+            "--kill-after=10s",
+            "14744s",
+            "NPU_ENV/bin/python",
+            "TASK/launchers/run_after_terminal_dependency.py",
+            "--plan",
+            "TASK/plans/profile-resident-fp16-attention01-serial01.json",
+            "--out",
+            "TASK/runs/profile-resident-fp16-attention01/dispatch"
+          ],
+          "cwd": "TASK/sources/compare-discrete-clean01",
+          "state": "passed",
+          "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+          "dirty": "",
+          "started": "2026-10-04T05:54:40.967617+00:00",
+          "exit_code": 0,
+          "finished": "2026-10-04T07:02:56.216907+00:00"
+        },
+        "unit": {
+          "MainPID": "0",
+          "ExecMainStatus": "0",
+          "ControlGroup": "",
+          "ActiveState": "inactive"
+        },
+        "queue": {
+          "elapsed_seconds": 438.99733340740204,
+          "job_id": "tide-profile-resident-fp16-attention01",
+          "logical_devices": [
+            "npu:0",
+            "npu:1",
+            "npu:2",
+            "npu:3",
+            "npu:4",
+            "npu:5",
+            "npu:6",
+            "npu:7"
+          ],
+          "npu_count": 8,
+          "physical_ids": [
+            1,
+            3,
+            4,
+            5,
+            7,
+            9,
+            11,
+            13
+          ],
+          "priority": 0,
+          "project": "tide-execution-flows",
+          "return_code": 0,
+          "schema_version": 1,
+          "status": "completed",
+          "timestamp": "2026-10-04T07:02:56.153661+00:00"
+        }
+      },
+      "observed": {
+        "physical_device_task_counts": {
+          "1": 135623,
+          "11": 36578,
+          "13": 36785,
+          "3": 37512,
+          "4": 37682,
+          "5": 37916,
+          "7": 37238,
+          "9": 36946
+        },
+        "engine_task_counts": {
+          "AI_VECTOR_CORE": 375205,
+          "AI_CORE": 21030,
+          "MIX_AIV": 45
+        },
+        "per_device_summed_task_us": {
+          "1": 4195272.008000032,
+          "11": 713440.8000000026,
+          "13": 721231.420000001,
+          "3": 738539.1200000027,
+          "4": 729108.471999998,
+          "5": 744766.0800000052,
+          "7": 728019.5600000006,
+          "9": 728775.5440000014
+        },
+        "top_operator_shapes": [
+          {
+            "operator": "GatherV3_7beee77dd8bc124a96bc6f1da51c82cc_optional_10330",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 78052
+          },
+          {
+            "operator": "GatherV3_7869a97190b9b4d296d9414a005b954b_optional_10330",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 50592
+          },
+          {
+            "operator": "Add_93b3f8e9594b4018902b635fff3a83c5_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 23340
+          },
+          {
+            "operator": "tide_fiber_chunk_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 23165
+          },
+          {
+            "operator": "BatchMatMulV2_ND_ND_FP16_FP16_false_false_all_98371",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 16825
+          },
+          {
+            "operator": "Cast_a9b7af94359fc7c19da07ad0790f065c_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 16614
+          },
+          {
+            "operator": "Equal_db689a08d53f9c09c59c06b9caeb956b_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 16445
+          },
+          {
+            "operator": "TensorMove_d2db1a80c523e7e59a032c95969880af_high_performance__kernel0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 15747
+          },
+          {
+            "operator": "ScatterUpdate_4601a2b8a5e698c54cd01f61be6fd71d_high_precision_880015000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 13134
+          },
+          {
+            "operator": "GatherV3_7869a97190b9b4d296d9414a005b954b_optional_10430",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 12626
+          },
+          {
+            "operator": "ZerosLike_d2db1a80c523e7e59a032c95969880af_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 12000
+          },
+          {
+            "operator": "tide_projection_shard_plan_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 10660
+          },
+          {
+            "operator": "tide_fiber_pool_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 9299
+          },
+          {
+            "operator": "tide_attention_tile_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 8398
+          },
+          {
+            "operator": "tide_attention_merge_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 8398
+          },
+          {
+            "operator": "tide_fiber_payload_0",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 6933
+          },
+          {
+            "operator": "Cast_1fb1c1a33856de01862630399320fff3_high_performance_210000000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 5566
+          },
+          {
+            "operator": "ScatterUpdate_4601a2b8a5e698c54cd01f61be6fd71d_high_precision_880013000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4461
+          },
+          {
+            "operator": "Transpose_be837fe498fad076d01c0ce8dfd3d014_high_performance_13",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4199
+          },
+          {
+            "operator": "Cast_1fb1c1a33856de01862630399320fff3_high_performance_210010000",
+            "shape": "N/A",
+            "dtype": "N/A",
+            "count": 4199
+          }
+        ],
+        "device_span_seconds": 5.73508175,
+        "start_utc": "2026-10-04T06:58:54.778946+00:00",
+        "end_utc": "2026-10-04T06:59:00.514028+00:00"
+      },
+      "limitations": [
+        "Five-second slice of cold original B512 FP16 resident inference; not full-update or training profiling.",
+        "Instrumented duration is not a formal throughput sample and cannot be mixed with unprofiled results.",
+        "No AiCPU in a sampled interval would not exclude AiCPU elsewhere or on another flow.",
+        "Task durations overlap across cards and streams; sums are not wall time or utilization.",
+        "Host API levels may nest; their durations cannot be added into an end-to-end total.",
+        "Graph scheduling is device-controlled, while construction and input/output/reporting remain host boundaries."
+      ]
+    }
+  ]
+}
