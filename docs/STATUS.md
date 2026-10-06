@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-04 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent pauses active monitoring until the user's
+Updated 2026-10-06 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent pauses active monitoring until the user's
 next wake-up.**
 The latest user explicitly requested unattended remaining experiments and a later
 status/result review. Commit/push remain authorized. No subagents. Follow
@@ -18,29 +18,33 @@ declared CPU/NPU profiles(F1–F5). F6/F7 remain open for full-size measurements
 repetitions,profiling reconciliation and final evidence review.** Actual NVIDIA/
 x86_64 execution remains target-pending. Preserve the strict near-tie limitation.
 
-The new finite manager `tide-execution-flows-unattended-matrix01.service` is
-submitted and verified transient/background.slice/Nice10,MainPID958799,started
-2026-10-04T07:18:12.346503Z. Rechecked16:29+08:00:both profile predecessors passed
-and the CPU streaming predecessor was audited-failed. The manager now waits on
-formal-resident-fp16-attention-training01;no new manager-owned heavy child/lease.
-Manifest:
-`TASK/plans/unattended-matrix01.json`;manager:
-`TASK/launchers/run_unattended_measurements.py`. Exact scope,bounds,source hashes,
-commands,inspection/stop instructions and13+3lifecycle guards are in
-[unattended-measurements](unattended-measurements.md). Do not launch a second
-manager or any of its conditional children manually.
+The finite manager`tide-execution-flows-unattended-matrix01.service` remains
+active in background.slice,MainPID958799. Rechecked2026-10-06T12:44:11.890261+08:00:the prior FP16
+Attention complete-training job passed,and the queue has moved through the
+remaining first-process matrix. Current child:`formal-bound-auto01-cell097-r1`
+(settle/python/prefill/add/inference/mixed-a),also active in
+background.slice. No duplicate manager or manual child submission is needed.
+Manifest:`TASK/plans/unattended-matrix01.json`;manager:
+`TASK/launchers/run_unattended_measurements.py`. Frozen inputs and finite policy:
+[unattended-measurements](unattended-measurements.md).
 
-Current heavy job:formal-resident-fp16-attention-training01,eleven physical
-cards1,2,3,4,5,6,7,9,11,12,13 remapped to logical0–10. Service749302/consumer974870
-remain live;actual model execution began around07:25:49Z and has run64minutes at
-the latest observation,with CPU activity. No terminal training result exists.
-formal-bound-cpu-streaming02 ended failed07:25:39.705740Z,empty cgroup:cell60
-Settle/LibTorch/CPU Add streaming completed773.663847s against the unchanged600s
-step limit(warmup533.699052s);cells84/108 never started. Its strict audit accepts
-zero cases. The manager preserves this failure,skips attempted60 and retains84/108
-for first independent execution. All original budgets and source identities stay.
-[Status and cleanup evidence](evidence/background-status-cleanup-20261004.md).
-The protected historical stopped worker is excluded and must remain untouched.
+This queue has41accepted FP32 first processes,27failed,one policy skip(cell60),
+one running and43not yet started. Together with six earlier bound cases,
+47/120have an accepted numa-bound-solo-v1 first process;old unbound observations
+stay separate. Repetitions have not begun. The FP32 Attention inference trace
+passed. Of27new failures,19are admission waits with no model execution;3execution
+timeouts;2completed-over3000s allowances(cells22/34);2ProcessLookupError(cells2/56,
+root cause unestablished);1NPU OOM(cell70,optimizer clone). Preserve every failure;
+no automatic retry,larger allowance or policy change. Prior cells36/60 stay failed.
+[Queue and storage evidence](evidence/storage-maintenance-20261006.md).
+
+Original-B512 FP16 Attention complete training passed on11cards,terminal exit0
+at2026-10-04T10:52:49.692924Z:measured6190.644420s,warmup5804.552517s,
+construction393.357138s,1.984931input tokens/s. Audit:
+`TASK/runs/unattended-matrix01/dispatch/audits/formal-resident-fp16-attention-training01.json`.
+This completes first-process evidence for all four separate FP16 companions;
+three-process repetition evidence remains pending. The protected historical
+stopped worker is excluded and remains untouched.
 
 Original-B512 FP16 Add complete training passed terminal audit on8cards:
 measured2027.354117s,warmup2035.162127s,construction83.335077s,6.061102input tokens/s,
@@ -175,9 +179,9 @@ CUDA host client:eager-half-cuda-clean01. Keep these hashed inputs unchanged.
 Packets:D2048/B512/T12/V50304,480 body nodes/2208 edges;Add9,468,053,696 parameters,
 Attention17,521,117,376. Logical input tokens12288 per step. All table entries are
 original B512,one continued warmup and one measured step,two windows each,
-outputs12288/cut816,no diagnostics/profiler. **14/120 audited first processes;
-0 cells have three-process evidence.** The first eight below are TimedDAG/prefill/
-unbound serial;six accepted bound cases are a separate series.
+outputs12288/cut816,no diagnostics/profiler. **47/120 accepted bound first processes;
+0 cells have three-process evidence.** The eight historical table rows below are
+TimedDAG/prefill/unbound serial;they are not pooled with the current bound series.
 
 | Cell | Client/model/mode/flow | Measured seconds | Actual candidate/resident events |
 | --- | --- | ---: | ---: |
@@ -194,10 +198,10 @@ unbound serial;six accepted bound cases are a separate series.
 [Add NPU flows](evidence/formal-b512-add-inference-npu-20261004.md),
 [CPU training/Attention resident](evidence/formal-b512-cpu-training-resident-inference-20261004.md),
 [Python inference](evidence/formal-b512-python-inference-20261004.md).
-New numa-bound-solo-v1 cases (all Add inference/prefill):cell12 PDG/LibTorch CPU
+The initial numa-bound-solo-v1 cases (all Add inference/prefill):cell12 PDG/LibTorch CPU
 260.290475s;14 resident329.307822s;48 Settle/LibTorch CPU214.649084s;50 resident
-331.282152s;96 Settle/pure Python CPU834.559428s. Counts remain1188500 forCPU and
-1188494 forresident. No cross-series pooling;cell98 is still unmeasured. Cell24 PDG/CPU streaming adds570.014357s;
+331.282152s;96 Settle/pure Python CPU834.559428s. Counts in these cases are1188500 forCPU and
+1188494 forresident. No cross-series pooling. Cell24 PDG/CPU streaming adds570.014357s;
 [streaming evidence](evidence/formal-b512-cpu-streaming-20261004.md) also preserves
 cell36 completed-over-bound699.995797s outside accepted cases.
 
@@ -209,11 +213,11 @@ SHA58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e.
 120 FP32 cells,24 envelopes,11 NPUs primary,60GiB/card or512GiB CPU. All120 budget02
 files exist;94 transfer original-width measured envelopes with explicit limitations.
 No transfer itself qualifies another family/client/schedule/full-size process.
-106 cells still lack accepted first-process evidence;cell36 has a completed
-consumer retained as a bound failure. Candidate recommendation repeats remain. Remaining nominal phase
-forecasts sum≈204.0h before construction/repeats;budget forecasts with1.15 included
-sum234.6h (CPU77.4h/NPU157.3h). These are unchanged transferred forecasts,not
-actual remaining wall time or a promised completion date.
+73bound cells lack accepted first-process evidence:29failed(including the two
+prior CPU streaming cases),one running,and43not started at the latest observation.
+Candidate recommendation repeats remain. The frozen per-cell forecasts transfer
+calibration assumptions and are not promises of actual remaining wall time.
+Current counts and failures are in the linked queue/storage record above.
 
 CPU/mixed Add physical32,resident Add inference4/training2. Attention training:
 CPU16,mixed4,resident1 with qualified explicit11-owner map. No unqualified48-row policy.
@@ -304,13 +308,22 @@ TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0,PYTHONDONTWRITEBYTECODE=1,
 standalone ACL_OP_INIT_MODE=0 and output cwd. CPU correctness1 thread,build2.
 CPU timings OpenMP/OpenBLAS16,MKL1,OMP_THREAD_LIMIT32;NPU startup BLAS1,ATen8 resident.
 Host320 physical cores,8 NUMA nodes,16 NPUs;NPU PCI NUMA=-1,actual locality unknown.
-Latest observed free disk data162.54GiB/root11.32GiB at16:29+08:00;recheck before
-large writes/profiles. Authorized cleanup removed only64,568regenerable CMake
-dependency/build-rule files in8obsolete unreferenced development builds,freeing
-0.865349GiB. Binary/source/metadata/log/profile/qualified/active/future/historical
-inputs remain;all644queue hashes were reverified. Dry-run and receipt:
-TASK/plans/storage-cleanup-20261004-01. Regenerate CMake before rebuilding those
-old development trees. No environment or reference-repository cleanup.
+Latest observed free disk data166.25GiB/root12.57GiB at2026-10-06T12:44:11.890261+08:00;
+recheck before large writes/profiles. Authorized2026-10-06maintenance freed
+32.337883GiB by removing6416reviewed old profile/SQLite/object files and
+hash-deduplicating5774raw pairs.32separately dated zero-byte markers remain.
+40inactive root artifact/qualification directories(2.714954GiB)now live under
+TASK/retired-root-artifacts-20261006,with atomic original-path symlinks and verified
+content.644frozen queue inputs and109retained records still match. Dry runs,
+logs,receipts and postcheck:TASK/plans/storage-cleanup-20261006-01.
+[Maintenance details](evidence/storage-maintenance-20261006.md). The prior0.865349GiB
+CMake-rule cleanup remains separately recorded under storage-cleanup-20261004-01.
+Retired objects require recompilation;removed profiler SQLite databases require
+re-export from preserved raw data when needed. Deduplicated raw paths are hardlinks:
+keep them immutable and copy to a fresh output before any raw-writing operation.
+Current/qualified builds,formal/failure records,protected history,SDKs,environments
+and reference repositories remain. Maintenance services are terminal;the
+measurement manager continues independently.
 
 **Never resume,stop,signal or clean historical-cpu-attention-01.** Worker2686919
 (~123.47GiB RSS) is deliberately stopped;its running receipt is not active
@@ -324,8 +337,8 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;workload e69b3bd. This increment adds audited FP16
-Add training/inference traces and task-local finite unattended orchestration.
-No graph/model/core change. New helper/manifest inputs are frozen and must remain
-unchanged while the manager runs. Submission is verified;the agent pauses under
-the user's explicit wake-up workflow while background services continue. Final evidence review is pending.
+Latest implementation103f5b6;workload e69b3bd. This increment records authorized
+storage maintenance and observed queue progress;no graph/model/core or experiment
+policy change. Frozen helper/manifest inputs remain unchanged. The agent returns
+to the user-directed wake-up workflow while background services continue.
+Final F6/F7 evidence reconciliation remains pending.

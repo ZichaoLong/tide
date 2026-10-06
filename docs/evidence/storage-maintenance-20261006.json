@@ -1,0 +1,255 @@
+{
+  "schema": "tide-storage-maintenance-v1",
+  "state": "passed",
+  "checked": "2026-10-06T12:44:11.890261+08:00",
+  "repository_head_before": "af6de4ba2173cccb6f9ac02232381379ac067c43",
+  "workload_source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "queue_manifest_sha256": "4635b10838ebbfda35a9484986003fbe4428d67d6b7c88eb450ec281e5a19242",
+  "authorization": "User approved the reviewed larger cleanup,deduplication after verification,and inactive root-artifact relocation.",
+  "cleanup": {
+    "files": 6416,
+    "allocated_bytes": 28911243264,
+    "categories": {
+      "obsolete-development-profile": 10891960320,
+      "regenerable-profiler-sqlite": 14766796800,
+      "retired-build-object": 3252486144
+    },
+    "deduplicated_pairs": 5774,
+    "deduplicated_allocated_bytes": 5811294208,
+    "preserved_empty_markers": 32,
+    "total_reclaimed_allocated_bytes": 34722537472,
+    "relocated_trees": 40,
+    "relocated_allocated_bytes": 2915160064,
+    "root_destination": "TASK/retired-root-artifacts-20261006",
+    "directory_swaps": "renameat2(RENAME_EXCHANGE);original paths now symlinks;copied content checked before and after exchange"
+  },
+  "verification": {
+    "queue_inputs": 644,
+    "retained_record_hashes": 109,
+    "relocated_links": 40,
+    "dedup_pairs": 5774,
+    "zero_markers": 32,
+    "protected_worker": "PID STAT     ELAPSED   RSS COMMAND\n2686919 TNsl  6-04:06:55 129467712 tide-accelerato",
+    "free_bytes": {
+      "/": 13492842496,
+      "/mi/data2T": 178509529088
+    }
+  },
+  "records": {
+    "dry-run.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/dry-run.json",
+      "sha256": "64ebb4674282ecca9ff0738923c8344fa9b07ae39532bfa9ae568fd6c8bb8117"
+    },
+    "result.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/result.json",
+      "sha256": "313d22a1ad1b0bfdabcce69e93ae9377097293b5e622f004e24bd834ec136e47"
+    },
+    "dedup-v2-dry-run.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/dedup-v2-dry-run.json",
+      "sha256": "62b111501f9f5dbac7353b5711931a717fe5ffa0e205f0c874b3ab42350443b0"
+    },
+    "dedup-v2-result.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/dedup-v2-result.json",
+      "sha256": "774968031ebb48195100be87b251078bcf59620af3421ff56419381c7b5cea80"
+    },
+    "relocation-dry-run.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/relocation-dry-run.json",
+      "sha256": "bd00abacb10dbb1c1783f00127f21f592713e8cc4de47ee42d24d092369a666e"
+    },
+    "relocation-result.json": {
+      "path": "TASK/plans/storage-cleanup-20261006-01/relocation-result.json",
+      "sha256": "2656aa6d39a7abfa429e48a1cf78c36b46174993e84ff61c3b293b752e2aacdb"
+    }
+  },
+  "postcheck": {
+    "path": "TASK/plans/storage-cleanup-20261006-01/verification.json",
+    "sha256": "34cd0872ac6f1b3b99986ee32ad8426f6ea98697976dabdae1a217dd79a2ca99"
+  },
+  "maintenance_services": {
+    "gef-storage-cleanup-20261006-01": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "gef-storage-dedup-plan-20261006-01": {
+      "MainPID": "0",
+      "ExecMainStatus": "1",
+      "ControlGroup": "",
+      "ActiveState": "failed",
+      "SubState": "failed"
+    },
+    "gef-root-relocation-plan-20261006-01": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "gef-root-relocation-20261006-01": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "gef-storage-dedup-plan-20261006-02": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "gef-storage-dedup-20261006-02": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "resource_policy": "background.slice;Nice19;one host CPU318;idle IO;finite900/1200s services. Maintenance overlapped ongoing measurements;no host/hardware exclusivity claim.",
+  "preserved_failed_precheck": "gef-storage-dedup-plan-20261006-01 exited1 before mutation because32zero-byte completion markers had distinct collection/export mtimes. v2 retained those markers and only deduplicated equal-metadata,equal-hash files.",
+  "queue": {
+    "state": "running",
+    "snapshot_sha256": "82d5bfc4e72d1f17ca3c6a64d5b218704d39ddc2c6aea9e13dcec76858120dd1",
+    "current_job": "formal-bound-auto01-cell097-r1",
+    "current_configuration": {
+      "family": "settle",
+      "client": "python",
+      "schedule": "prefill",
+      "memory": "add",
+      "training": false,
+      "preset": "mixed-a",
+      "configuration": "python-add-False-mixed",
+      "selection_evidence": "representative-settle-python-20261002.json",
+      "selection_sha256": "3a69eb292f1580c25a3e200da9a07ccc4aa3e840878c69286ada9aba778f4f0e"
+    },
+    "fp32_counts": {
+      "audited-passed": 41,
+      "skipped-policy": 1,
+      "audited-failed": 27,
+      "running": 1
+    },
+    "accepted_bound_cells": [
+      0,
+      1,
+      3,
+      5,
+      6,
+      8,
+      12,
+      13,
+      14,
+      15,
+      17,
+      18,
+      19,
+      20,
+      24,
+      25,
+      27,
+      28,
+      30,
+      31,
+      37,
+      39,
+      40,
+      43,
+      48,
+      49,
+      50,
+      51,
+      53,
+      54,
+      61,
+      63,
+      72,
+      73,
+      74,
+      75,
+      77,
+      78,
+      80,
+      84,
+      87,
+      96,
+      98,
+      99,
+      104,
+      108,
+      111
+    ],
+    "prior_bound_failures": [
+      36,
+      60
+    ],
+    "new_failures": {
+      "2": "ProcessLookupError;root cause not established",
+      "56": "ProcessLookupError;root cause not established",
+      "32": "child execution allowance exceeded",
+      "44": "11-device admission wait expired;workload not started",
+      "68": "11-device admission wait expired;workload not started",
+      "92": "11-device admission wait expired;workload not started",
+      "116": "11-device admission wait expired;workload not started",
+      "26": "11-device admission wait expired;workload not started",
+      "38": "11-device admission wait expired;workload not started",
+      "62": "11-device admission wait expired;workload not started",
+      "86": "11-device admission wait expired;workload not started",
+      "110": "11-device admission wait expired;workload not started",
+      "4": "11-device admission wait expired;workload not started",
+      "10": "11-device admission wait expired;workload not started",
+      "7": "11-device admission wait expired;workload not started",
+      "16": "11-device admission wait expired;workload not started",
+      "22": "consumer completed;measured step exceeded unchanged3000s allowance",
+      "34": "consumer completed;measured step exceeded unchanged3000s allowance",
+      "42": "child execution allowance exceeded",
+      "46": "11-device admission wait expired;workload not started",
+      "52": "11-device admission wait expired;workload not started",
+      "55": "11-device admission wait expired;workload not started",
+      "58": "11-device admission wait expired;workload not started",
+      "64": "11-device admission wait expired;workload not started",
+      "66": "child execution allowance exceeded",
+      "67": "11-device admission wait expired;workload not started",
+      "70": "NPU out of memory during optimizer clone;root cause not established"
+    },
+    "not_started_first_slots": 43,
+    "three_process_cells": 0,
+    "active_units": {
+      "unattended-matrix01": {
+        "MainPID": "958799",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-unattended-matrix01.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      },
+      "formal-bound-auto01-cell097-r1": {
+        "MainPID": "437454",
+        "Slice": "background.slice",
+        "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-formal-bound-auto01-cell097-r1.service",
+        "ActiveState": "active",
+        "SubState": "running"
+      }
+    }
+  },
+  "fp16_attention_training": {
+    "audit": "TASK/runs/unattended-matrix01/dispatch/audits/formal-resident-fp16-attention-training01.json",
+    "audit_sha256": "e3cec8d621fccd3d8de4e492da5312fe750d9b49c8df167ca3a3d023ee4cef38",
+    "state": "audited-passed",
+    "series": "numa-bound-resident-fp16-cacheoff-v1-11devices",
+    "measured_seconds": 6190.644419724,
+    "warmup_seconds": 5804.552517025,
+    "construction_seconds": 393.357138093,
+    "input_tokens_per_second": 1.9849306739132404,
+    "independent_processes": 1
+  },
+  "limits": [
+    "No running experiment,queue policy,source,SDK or environment changed.",
+    "Historical failures remain failed. Old unbound observations are not pooled into the bound series.",
+    "Raw duplicate paths are now hardlinks:keep them immutable;copy to a fresh tree before any operation that writes original data.",
+    "Removed profiler SQLite databases can be regenerated from retained raw data;report CSVs and analyses remain.",
+    "Retired build objects require recompilation;finished binaries,archives,libraries,source and build metadata remain."
+  ]
+}

@@ -34,8 +34,9 @@ strict auditors,per-cell budgets and public module libtorch-npu/2.10.0-cann9.0.0
    globally fastest. Failed or missing competitors remain explicit;the slower
    unselected NPU flow retains its first process. A failed repeat2 suppresses3.
 5. Independently repeat each accepted FP16 companion to three processes,
-   at most8new jobs. Attention training requires its pending first process to
-   pass. New v4execution/v5audit wrappers change repetition metadata only;the
+   at most8new jobs. Attention training requires its first process to
+   pass; this prerequisite is now audited in [STATUS](STATUS.md). New
+   v4execution/v5audit wrappers change repetition metadata only;the
    old helpers and raw records stay immutable. FP16 series never enter FP32
    aggregates. Final recommendations and support/evidence review await the user.
 
