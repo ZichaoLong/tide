@@ -1,0 +1,267 @@
+{
+  "schema": "tide-single-process-queue-amendment-v1",
+  "observed": "2026-10-08T13:05:13.883955+00:00",
+  "state": "verified-draining-current-child",
+  "workload_source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "manifest_sha256": "02b49ea6ef694077ca0c576b248c52ab24221013938e8a68bdf53958204dd669",
+  "immutable_inputs": 826,
+  "policy": {
+    "fresh_processes_per_configuration": 1,
+    "automatic_repetitions": false,
+    "warmup_and_measured_steps": "unchanged:one warmup and one measured step,two connected windows each",
+    "external_contention": "shared-server;not excluded or systematically monitored",
+    "contention_triggers_retry": false,
+    "statistical_stability_claim": false,
+    "targeted_followups": {
+      "automatic": false,
+      "maximum_cases": 4,
+      "currently_scheduled": 0,
+      "condition": "Only a concrete anomaly or unresolved execution-flow decision"
+    }
+  },
+  "counts": {
+    "accepted_bound_fp32_first": 58,
+    "failed_bound_fp32_first": 30,
+    "running_first": 1,
+    "unstarted_first": 31,
+    "accepted_separate_fp16_first": 4,
+    "new_heavy_executions": 31,
+    "automatic_repeat_executions": 0,
+    "removed_conditional_slots": 248,
+    "removed_maximum_executions": 168
+  },
+  "preserved": {
+    "all_819_parent_inputs": true,
+    "source_and_child_budgets": true,
+    "warmup_and_measured_steps": true,
+    "strict_auditors": true,
+    "prior_raw_and_failed_records": true,
+    "no_protected_historical_worker_action": true
+  },
+  "unit": {
+    "MainPID": "2559079",
+    "ExecMainStatus": "0",
+    "Slice": "background.slice",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-unattended-matrix03.service",
+    "ActiveState": "active",
+    "SubState": "running",
+    "Transient": "yes"
+  },
+  "handoff": {
+    "state": "draining-current-child",
+    "manifest_sha256": "02b49ea6ef694077ca0c576b248c52ab24221013938e8a68bdf53958204dd669",
+    "started": "2026-10-08T13:00:55.978938+00:00",
+    "worker": {
+      "pid": 2262346,
+      "start_ticks": 1904757909,
+      "argv": [
+        "/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python",
+        "/mi/data2T/zlong/tide-execution-flows/launchers/run_unattended_measurements.py",
+        "--plan",
+        "/mi/data2T/zlong/tide-execution-flows/plans/unattended-matrix02.json",
+        "--out",
+        "/mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix02/dispatch"
+      ],
+      "systemd_cgroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-unattended-matrix02.service"
+    },
+    "current_child": "formal-bound-auto01-cell113-r1",
+    "coordinator_stopped": true
+  },
+  "child_unit": {
+    "MainPID": "2262372",
+    "ExecMainStatus": "0",
+    "Slice": "background.slice",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-formal-bound-auto01-cell113-r1.service",
+    "ActiveState": "active",
+    "SubState": "running",
+    "Transient": "yes"
+  },
+  "child_processes": [
+    {
+      "pid": 2262372,
+      "state": "S"
+    },
+    {
+      "pid": 2262400,
+      "state": "S"
+    },
+    {
+      "pid": 2262401,
+      "state": "S"
+    },
+    {
+      "pid": 2262418,
+      "state": "S"
+    },
+    {
+      "pid": 2263048,
+      "state": "S"
+    },
+    {
+      "pid": 2263083,
+      "state": "R"
+    },
+    {
+      "pid": 2264601,
+      "state": "S"
+    },
+    {
+      "pid": 2264664,
+      "state": "S"
+    },
+    {
+      "pid": 2264665,
+      "state": "S"
+    },
+    {
+      "pid": 2264682,
+      "state": "S"
+    },
+    {
+      "pid": 2264683,
+      "state": "S"
+    },
+    {
+      "pid": 2264684,
+      "state": "S"
+    },
+    {
+      "pid": 2264687,
+      "state": "S"
+    },
+    {
+      "pid": 2264688,
+      "state": "S"
+    },
+    {
+      "pid": 2264689,
+      "state": "S"
+    },
+    {
+      "pid": 2264692,
+      "state": "S"
+    },
+    {
+      "pid": 2264693,
+      "state": "S"
+    },
+    {
+      "pid": 2264694,
+      "state": "S"
+    },
+    {
+      "pid": 2264726,
+      "state": "S"
+    },
+    {
+      "pid": 2264727,
+      "state": "S"
+    },
+    {
+      "pid": 2264728,
+      "state": "S"
+    },
+    {
+      "pid": 2264729,
+      "state": "S"
+    },
+    {
+      "pid": 2264730,
+      "state": "S"
+    },
+    {
+      "pid": 2264731,
+      "state": "S"
+    },
+    {
+      "pid": 2264732,
+      "state": "S"
+    },
+    {
+      "pid": 2264733,
+      "state": "S"
+    }
+  ],
+  "queue_mapping": {
+    "status": "running",
+    "physical_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      12,
+      13
+    ],
+    "logical_devices": [
+      "npu:0",
+      "npu:1",
+      "npu:2",
+      "npu:3",
+      "npu:4",
+      "npu:5",
+      "npu:6",
+      "npu:7",
+      "npu:8",
+      "npu:9",
+      "npu:10"
+    ],
+    "npu_count": 11
+  },
+  "limits": {
+    "barrier_seconds": 15705,
+    "whole_seconds": 807265,
+    "first_slots": 31,
+    "max_fp32_repeat_executions": 0,
+    "max_fp16_repeat_executions": 0,
+    "max_new_heavy_executions": 31,
+    "command_slots": 31,
+    "queue_seconds_per_npu_job": 120,
+    "minimum_data_free_gib": 24,
+    "minimum_root_free_gib": 8,
+    "first_with_lifecycle_allowance_seconds": 788260,
+    "repeats_with_lifecycle_allowance_seconds": 0,
+    "fp16_with_lifecycle_allowance_seconds": 0,
+    "interpretation": "Conservative finite sum of allowances,not a predicted completion time."
+  },
+  "validation": {
+    "real_service_guards": "natural drain and cancellation cleanup passed",
+    "summary_preservation": {
+      "state": "passed",
+      "preserved_accepted_processes": 66,
+      "preserved_failures": 0,
+      "preserved_all_case_metrics": true,
+      "rejected_repeat_inputs": [
+        "repeat-job",
+        "repeat-limit"
+      ],
+      "automatic_heavy_work_started": false,
+      "preserved_partial_groups": 36,
+      "preserved_all_partial_group_records": true
+    },
+    "remaining_child_shell_syntax": 31
+  },
+  "artifacts": {
+    "plans/unattended-matrix03.json": "02b49ea6ef694077ca0c576b248c52ab24221013938e8a68bdf53958204dd669",
+    "plans/unattended-matrix03-validation.json": "90d9ed8e1fe8f06a5f4fb36e7a1b70707afe578de3d966fbed6c7c29b95122d0",
+    "plans/unattended-matrix03-submission.json": "90aa50a74cb60cd5f418afc0c9a346a102c3edd1d2b75e42270e45e83a12936c",
+    "plans/unattended-once03-guards/result.json": "a0aab95e4dbde6740ba5a813617011ba92f16ef8f4171a2247dcdb2486f18c06",
+    "plans/unattended-once03-summary-check/result.json": "a05b1954bfc3bcd692c755f1c22bcdf34f67d3f88d8b91e88fe9773ba6c2fe84",
+    "launchers/handoff_unattended_once03.py": "735148ce741380eb1a5445fe69e3adb88f0b5bef78436fe4b036a6a488c66121",
+    "launchers/run_unattended_measurements_once03.py": "3f6e43ff9074f4f737ed696337d5adc3e2341c645806be79b5750187813a0001",
+    "launchers/summarize_flow_series_once03.py": "d73f055a84130ffceac196187deaf50d82a737c8287313392f0d48d4138f9bac",
+    "launchers/prepare_unattended_once03.py": "45bfba7a4d430a1e557c80621aa460f030b5d49343ad0a745b59188278969642",
+    "launchers/test_unattended_once03.py": "9c005d2de185be22a1e9415b18f2ef0552a6c3eb98977faad3d752c6041dd6cf"
+  },
+  "limitations": [
+    "Current child is running,not passed.",
+    "Successor dispatch begins only after natural terminal/empty receipt.",
+    "Single shared-server observation does not establish statistical stability or universal fastest flow.",
+    "The queue does not automatically finish F6/F7 or retry retained failures."
+  ]
+}

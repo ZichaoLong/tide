@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-08 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent returns to the user-directed wake-up workflow.**
+Updated 2026-10-08 (Asia/Shanghai). **FIRST-PROCESS-ONLY HANDOFF RUNNING; return to the user-directed wake-up workflow.**
 The latest user explicitly requested unattended remaining experiments and a later
 status/result review. Commit/push remain authorized. No subagents. Follow
 [execution-flows](execution-flows.md);current alignment outranks experiment skill
@@ -14,41 +14,48 @@ All handoff writes use scripts.durable_records.replace_text atomically.
 
 **Implementation and current local correctness gates are complete within the
 declared CPU/NPU profiles(F1–F5). F6/F7 remain open for full-size measurements,
-repetitions,profiling reconciliation and final evidence review.** Actual NVIDIA/
+profiling reconciliation and final evidence review. Automatic repetitions are cancelled by the latest user alignment.** Actual NVIDIA/
 x86_64 execution remains target-pending. Preserve the strict near-tie limitation.
 
-The user explicitly authorized direct continuation after the disk stop,without
-investigating storage growth. Selector/new-semantics work is deferred until the
-user updates upstream documents. Preserve the agreed execution contract.
+The user authorized simplifying the remaining experiments on 2026-10-08:
+retain first-process coverage; cancel all automatic FP32/FP16 repetitions;
+accept shared-server observations without contention-triggered retries. Keep
+warmup, measured work, strict correctness/acceptance, admission and finite limits.
+At most four justified targeted follow-ups may be considered during review;
+none are automatically scheduled. Selector/new-semantics work stays deferred.
 
-Previous manager`tide-execution-flows-unattended-matrix01.service` stopped-error,
-exit1 at2026-10-07T08:47:16.271693Z,empty cgroup. Its next-child disk admission
-observed root8353996800bytes(7.78GiB),below the unchanged8GiB reserve;
-data had107805757440bytes. This is not a session-disconnection failure.
-The old manifest,receipt,result,audits and failures remain immutable.
+Running `unattended-matrix03` replaces matrix02 after its current child drains.
+Manifest: `TASK/plans/unattended-matrix03.json`; preflight:
+`TASK/plans/unattended-matrix03-validation.json`. It retains the existing active
+cell113 as a barrier and only31 new first-process jobs. All248 conditional repeat
+slots are removed (up to160 FP32 and8 FP16 executions). Source/builds, child
+launchers, warmup/measurement,120s device admission, single-heavy-job timing and
+24GiB data/8GiB root reserves are unchanged. Whole allowance807265s is a protective
+upper bound, not an ETA; first-process work was estimated at about160h before
+this handoff. No failed or completed slot is retried.
 
-Running continuation`tide-execution-flows-unattended-matrix02.service`,MainPID2262337,reuses
-workload e69b3bd,controller103f5b6 and the unchanged manager/child executors.
-Manifest:`TASK/plans/unattended-matrix02.json`;preflight:
-`TASK/plans/unattended-matrix02-validation.json`. All819 frozen inputs matched;
-85 imported terminal records have verified hashes/empty cgroups. At preflight all
-remaining run directories were absent;280unchanged child launchers passed shell syntax checks.
-The plan contains32unstarted first-process FP32 cells,240conditional FP32 repeat
-slots(at most160executions),and8conditional FP16 repeat slots. No failed or
-previously attempted slot is retried;completed profiling is not repeated.
-Prior active time is charged against the original aggregate allowance;
-remaining conservative ceiling3077240s is not an ETA. Per-child budgets,
-120s NPU admission,solo timing,and24GiB data/8GiB root reserves are unchanged.
-Verified2026-10-08T12:13:34.780607+00:00:manager and child are active/transient in
-background.slice,outside focus.service. Current child`formal-bound-auto01-cell113-r1`
-is Settle/Python/streaming/Add complete training,resident FP32,on11NPUs.
-It is running,not passed;31first-process cells remain unstarted. Manager cwd:
-`TASK/sources/control-isolation-clean02`;receipt/log/result:
-`TASK/runs/unattended-matrix02/{status.json,task.log,dispatch/result.json}`.
-Submission:`TASK/plans/unattended-matrix02-submission.json`.
-[Continuation evidence](evidence/unattended-resume-20261008.md).
+The handoff has suspended only matrix02's identified Python coordinator(PID2262346); the
+current Settle/Python/streaming/Add resident FP32 complete-training child keeps
+running on its11 leased devices. Once its terminal receipt and empty cgroup are
+verified, the handoff retires matrix02 and starts the successor. Parent
+cancellation then means authorized queue replacement, not a failed measurement.
+Original manifests, workload code, completed raw results and audits stay unchanged.
+Two resource-free real-service guards passed natural drain and cancellation
+cleanup. The single-process summarizer preserves every existing case metric;
+repeat jobs/limits are rejected before any execution. No model/NPU gate was rerun.
 
-At the parent stop:58/120accepted bound FP32 first processes(52from that queue
+New unit: `tide-execution-flows-unattended-matrix03.service`; cwd:
+`TASK/sources/control-isolation-clean02`; workload e69b3bd,controller103f5b6.
+Records: `TASK/runs/unattended-matrix03/{status.json,task.log,handoff.json,dispatch/result.json}`.
+During drain, `handoff.json` is current; dispatch starts after the child finishes.
+Verified2026-10-08: matrix03 MainPID2559079 is active/transient in background.slice;
+handoff state `draining-current-child`, current child MainPID2262372 remains active.
+The coordinator is stopped(T); the child is not stopped. No result is claimed yet.
+Submission: `TASK/plans/unattended-matrix03-submission.json`.
+[Single-process policy and handoff evidence](evidence/unattended-single-process-20261008.md).
+[Queue operation and exact commands](unattended-measurements.md).
+
+At the matrix01 disk stop:58/120accepted bound FP32 first processes(52from that queue
 plus6earlier);30failed(28queue plus2earlier);32unstarted;no repeats yet.
 The queue added11passes and1failure after the October6handoff. Nineteen failed
 cells never obtained devices and did not execute the model. Other failures
@@ -60,7 +67,7 @@ at2026-10-04T10:52:49.692924Z:measured6190.644420s,warmup5804.552517s,
 construction393.357138s,1.984931input tokens/s. Audit:
 `TASK/runs/unattended-matrix01/dispatch/audits/formal-resident-fp16-attention-training01.json`.
 This completes first-process evidence for all four separate FP16 companions;
-three-process repetition evidence remains pending. The protected historical
+automatic repetition is no longer required under the latest single-process policy. The protected historical
 stopped worker is excluded and remains untouched.
 
 Original-B512 FP16 Add complete training passed terminal audit on8cards:
@@ -84,8 +91,9 @@ VJPs. Five presets and fine switches remain configurable.
 
 Performance scope:PDG LibTorch;TimedDAG/Settle LibTorch and Python;both schedules,
 Add/Attention,inference/training,CPU/screened mixed/resident. FP32 primary,FP16
-separate. At least three fresh processes within one measurement series before a
-formal recommendation;profiling and independent references are separate.
+separate. One first-process attempt per full-size configuration; no automatic
+repetitions. Recommendations must retain the uncertainty of single shared-server
+observations; profiling and independent references are separate.
 Python-owned native is distinct from pure Python and standalone LibTorch.
 Training quality/convergence/recipes belong to later experiments,not this base.
 
@@ -196,8 +204,8 @@ CUDA host client:eager-half-cuda-clean01. Keep these hashed inputs unchanged.
 Packets:D2048/B512/T12/V50304,480 body nodes/2208 edges;Add9,468,053,696 parameters,
 Attention17,521,117,376. Logical input tokens12288 per step. All table entries are
 original B512,one continued warmup and one measured step,two windows each,
-outputs12288/cut816,no diagnostics/profiler. **47/120 accepted bound first processes;
-0 cells have three-process evidence.** The eight historical table rows below are
+outputs12288/cut816,no diagnostics/profiler. **58/120 accepted bound first processes;
+automatic repetitions are cancelled.** The eight historical table rows below are
 TimedDAG/prefill/unbound serial;they are not pooled with the current bound series.
 
 | Cell | Client/model/mode/flow | Measured seconds | Actual candidate/resident events |
@@ -222,7 +230,7 @@ The initial numa-bound-solo-v1 cases (all Add inference/prefill):cell12 PDG/LibT
 [streaming evidence](evidence/formal-b512-cpu-streaming-20261004.md) also preserves
 cell36 completed-over-bound699.995797s outside accepted cases.
 
-Different events and single processes prohibit strict equal-work/recommendation claims.
+Different events prevent strict equal-work claims; single-process engineering choices retain shared-server uncertainty.
 Historical unbound parents are terminal/empty with released leases.
 
 Plan:TASK/plans/fullsize-continuous-e69b3bd-blas16-02.json,
@@ -230,9 +238,9 @@ SHA58e0bbab0a891b3645b3d64d35d788e405837ce5bbbb5a624e7a6a4b23aedc2e.
 120 FP32 cells,24 envelopes,11 NPUs primary,60GiB/card or512GiB CPU. All120 budget02
 files exist;94 transfer original-width measured envelopes with explicit limitations.
 No transfer itself qualifies another family/client/schedule/full-size process.
-73bound cells lack accepted first-process evidence:29failed(including the two
-prior CPU streaming cases),one running,and43not started at the latest observation.
-Candidate recommendation repeats remain. The frozen per-cell forecasts transfer
+62bound cells lack accepted first-process evidence:30failed(including the two
+prior CPU streaming cases),one running,and31not started at the policy change.
+Automatic recommendation repeats are cancelled. The frozen per-cell forecasts transfer
 calibration assumptions and are not promises of actual remaining wall time.
 Current counts and failures are in the linked queue/storage record above.
 
@@ -301,19 +309,21 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next wake-up
 
-1. Read the manager's unit,`TASK/runs/unattended-matrix02/status.json`,
-   `dispatch/result.json`,current child receipt and completed phase summaries.
-   Report passed,failed,skipped,unstarted and waiting separately. Do not infer
-   success from an inactive/missing unit or manager exit0 alone.
-2. Do not restart failed jobs,raise limits or duplicate live work. The frozen
-   plan already contains conditional first-process coverage,repetitions and
-   remaining FP32 Attention profiling. Any global stop retains the reason.
-3. Review exact same-series distributions,FP16 companions,actual events and
-   trace limitations before issuing recommendations or changing support claims.
-   Missing/failed competitors prevent a universal fastest-flow conclusion.
-4. Final F6/F7 evidence reconciliation and support/target-machine handoff happen
-   after results exist;the queued plan does not complete those deliverables.
-   The agent should not poll continuously or generate an automatic callback.
+1. Read matrix03's unit, `TASK/runs/unattended-matrix03/status.json` and
+   `handoff.json`. During `draining-current-child`, inspect cell113's own receipt;
+   matrix02's coordinator is deliberately stopped and must not be resumed.
+   After `successor-running`, inspect `dispatch/result.json` and phase summaries.
+   Report passed, failed, skipped, unstarted and waiting separately.
+2. Do not restart failed jobs, raise limits or duplicate live work. The new frozen
+   plan has31 first-process jobs and zero repeats; the already-running child is
+   audited as a barrier. All profiling and FP16 first processes already exist.
+   A global stop retains its reason. Manager exit0 does not certify all cells.
+3. Review single-process same-series timings, FP16 companions, actual events,
+   shared-server uncertainty and trace limitations. Missing/failed competitors
+   and small timing differences prevent a universal fastest-flow conclusion.
+   Only a concrete unresolved decision/anomaly justifies a bounded targeted rerun.
+4. Final F6/F7 reconciliation and support/target-machine handoff follow the results.
+   No continuous agent polling or automatic callback is required.
 
 ## Environment and protected history
 
@@ -354,8 +364,10 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;workload e69b3bd. This increment records the authorized running continuation after the disk stop;
-no graph/model/core or per-child experiment policy changes. Frozen original
-helpers/manifests remain unchanged. Service isolation,first-child admission and
-imported summary are verified;return to the wake-up workflow.
+Latest core/controller implementation103f5b6;workload e69b3bd. This increment
+implements the authorized single-process-only queue with a verified durable drain
+and handoff. Graph/model code, measurement workloads and per-child limits are
+unchanged; new task-local control/report helpers have frozen hashes. Automatic
+repetitions are cancelled, shared-server uncertainty is explicit, and current
+cell113 continues. Return to the wake-up workflow after commit/push.
 Final F6/F7 evidence reconciliation remains pending.
