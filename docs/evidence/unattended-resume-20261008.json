@@ -1,0 +1,108 @@
+{
+  "state": "verified-running-not-complete",
+  "observed": "2026-10-08T12:13:34.780607+00:00",
+  "source": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8",
+  "controller_source": "103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f",
+  "parent": {
+    "name": "unattended-matrix01",
+    "state": "stopped-error",
+    "finished": "2026-10-07T08:47:16.271693Z",
+    "exit_code": 1,
+    "reason": "Root free space below unchanged 8GiB reserve",
+    "root_free_bytes": 8353996800,
+    "result_sha256": "86afeeeaa426acd5167a219aeec4b92ab34815b67bad5eeb829d36c0d2638c4d"
+  },
+  "continuation": {
+    "name": "unattended-matrix02",
+    "manifest_sha256": "8f4750d8775d37c58e7451a711fd0cb36c45100fbec0ecc35003973aa29f9a9d",
+    "preflight_sha256": "6102449af142e4990761a24118322a969f174856f17a9e3fcc1185081c7ec2b1",
+    "submission_sha256": "d5361c813efe42eae34431cb0314300f2cd5321c5b3cec4ed030bc5c810ddc2e",
+    "immutable_inputs": 819,
+    "imported_terminal_records": 85,
+    "accepted_fp32_first": 58,
+    "failed_fp32_first": 30,
+    "unstarted_fp32_at_parent_stop": 32,
+    "accepted_fp16_first": 4,
+    "repeat_processes_started": 0,
+    "command_slots": 280,
+    "max_new_heavy_executions": 200,
+    "whole_seconds": 3077240
+  },
+  "manager": {
+    "MainPID": "2262337",
+    "ExecMainStatus": "0",
+    "Slice": "background.slice",
+    "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-unattended-matrix02.service",
+    "ActiveState": "active",
+    "SubState": "running",
+    "Transient": "yes"
+  },
+  "current_child": {
+    "name": "formal-bound-auto01-cell113-r1",
+    "unit": {
+      "MainPID": "2262372",
+      "ExecMainStatus": "0",
+      "Slice": "background.slice",
+      "ControlGroup": "/user.slice/user-1003.slice/user@1003.service/background.slice/tide-execution-flows-formal-bound-auto01-cell113-r1.service",
+      "ActiveState": "active",
+      "SubState": "running",
+      "Transient": "yes"
+    },
+    "queue": {
+      "elapsed_seconds": 6.573976822197437,
+      "job_id": "tide-formal-bound-auto01-cell113-r1-0",
+      "logical_devices": [
+        "npu:0",
+        "npu:1",
+        "npu:2",
+        "npu:3",
+        "npu:4",
+        "npu:5",
+        "npu:6",
+        "npu:7",
+        "npu:8",
+        "npu:9",
+        "npu:10"
+      ],
+      "npu_count": 11,
+      "physical_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13
+      ],
+      "priority": 0,
+      "project": "tide-execution-flows",
+      "schema_version": 1,
+      "status": "running",
+      "timestamp": "2026-10-08T12:10:16.256238+00:00"
+    },
+    "configuration": {
+      "family": "settle",
+      "client": "python",
+      "schedule": "streaming",
+      "memory": "add",
+      "training": true,
+      "preset": "resident",
+      "configuration": "python-add-True-resident",
+      "selection_evidence": "representative-settle-python-20261002.json",
+      "selection_sha256": "3a69eb292f1580c25a3e200da9a07ccc4aa3e840878c69286ada9aba778f4f0e"
+    }
+  },
+  "reconstructed_summary_sha256": "bdb398ff4af095a89fc44b7a0b151caba56ec11ea888231e2c51750c55d83198",
+  "limits": [
+    "No failed or previously attempted slot retry;no model/device/runtime probe was added.",
+    "Existing workload/controller/child commands and per-child budgets unchanged;old evidence remains immutable.",
+    "Prior active time charged against original aggregate allowance;remaining ceiling is not an ETA.",
+    "One heavy workload;queue wait120s;data/root free reserves24/8GiB;no storage growth investigation or cleanup.",
+    "Live execution is not a passing experiment or a completed performance matrix.",
+    "Selector/upstream semantic extensions deferred;historical stopped CPU worker untouched."
+  ]
+}

@@ -6,6 +6,18 @@ this queue only fills performance evidence. It creates no recommendation or
 production-model change. Actual NVIDIA/x86_64 execution remains target-pending.
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`.
+
+The current service is`unattended-matrix02`,authorized2026-10-08after matrix01
+stopped at the unchanged root-disk reserve. Its [continuation evidence](evidence/unattended-resume-20261008.md)
+records58accepted/30failed/32unstarted FP32 first processes at the stop,and four
+FP16 first processes. The new manifest`TASK/plans/unattended-matrix02.json`
+imports terminal evidence and contains only the32unstarted first slots plus the
+original conditional repeats. No failed slot or completed profile is rerun.
+819inputs are frozen;the remaining3077240s aggregate ceiling charges prior
+active time and is not an ETA. Per-child limits and all resource/failure policies
+below remain unchanged. The original plan and its terminal records stay immutable.
+The following original-plan counts describe provenance,not the current backlog.
+
 Manifest:`TASK/plans/unattended-matrix01.json`,SHA256
 `4635b10838ebbfda35a9484986003fbe4428d67d6b7c88eb450ec281e5a19242`.
 Manager:`TASK/launchers/run_unattended_measurements.py`,with policy/runtime helpers
@@ -74,38 +86,36 @@ the current agent/SSH session while the user manager remains alive.
 
 ## Inspection and stop commands
 
-Unit:`tide-execution-flows-unattended-matrix01.service`. Verified active/transient,
-background.slice/Nice10,MainPID958799 at2026-10-04T07:18:12.346503Z. Initial state
-waits for the existing CPU streaming chain;the two FP16 profile dependency audits
-already passed. Submission receipt:`TASK/plans/unattended-matrix01-submission.json`.
-Working directory:`TASK/sources/control-isolation-clean02`.
-Resolved manager command (inside the persistent scripts/job.py receipt):
+Current unit:`tide-execution-flows-unattended-matrix02.service`,verified active
+in background.slice on2026-10-08. Submission receipt:
+`TASK/plans/unattended-matrix02-submission.json`;working directory:
+`TASK/sources/control-isolation-clean02`. Workload/controller source identities
+are unchanged. Resolved command inside the durable scripts/job.py receipt:
 
 ```bash
 /opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python \
   /mi/data2T/zlong/tide-execution-flows/launchers/run_unattended_measurements.py \
-  --plan /mi/data2T/zlong/tide-execution-flows/plans/unattended-matrix01.json \
-  --out /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix01/dispatch
+  --plan /mi/data2T/zlong/tide-execution-flows/plans/unattended-matrix02.json \
+  --out /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix02/dispatch
 ```
 
 Inspect without importing Torch or reserving hardware:
 
 ```bash
-systemctl --user show tide-execution-flows-unattended-matrix01 \
+systemctl --user show tide-execution-flows-unattended-matrix02 \
   -p ActiveState -p SubState -p MainPID -p Result -p ExecMainStatus
-cat /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix01/dispatch/result.json
-systemctl --user stop tide-execution-flows-unattended-matrix01
+cat /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix02/dispatch/result.json
+systemctl --user stop tide-execution-flows-unattended-matrix02
 ```
 
-`TASK/runs/unattended-matrix01/status.json` and `task.log` retain manager lifecycle
-and exit status. `dispatch/result.json` distinguishes waiting,running,failed,
-skipped and finished-awaiting-review;it lists every submitted child,audit and
-current item. Each child has its own `TASK/runs/NAME/status.json`,`task.log`,queue,
-assessment and consumer artifacts. `dispatch/audits/` contains strict audits or
-retained refusal logs. Each completed phase writes `summary-PHASE/summary.json`
-and a separate `fp16-summary.json`;`repeat-selection.json` fixes the candidates
-before repetitions. A passed manager receipt means the finite plan ended,not
-that all experiments passed or that the overall project is complete.
+`TASK/runs/unattended-matrix02/status.json` and`task.log` retain lifecycle and exit
+status. `dispatch/result.json` lists newly submitted children,audits and the current
+item. Imported results remain in their original paths,frozen in the new manifest.
+Each child keeps its original unused name and owns`TASK/runs/NAME/` with receipt,
+log,queue,assessment and consumer artifacts. Phase summaries include imported
+accepted processes and failures;FP16 has its own summary. `repeat-selection.json`
+fixes candidates before repetitions. A passed manager means only that the finite
+plan ended,not that all experiments passed or the project is complete.
 
 ## Validation of the queue itself
 

@@ -1,7 +1,6 @@
 # Current handoff
 
-Updated 2026-10-06 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent pauses active monitoring until the user's
-next wake-up.**
+Updated 2026-10-08 (Asia/Shanghai). **BACKGROUND QUEUE RUNNING;agent returns to the user-directed wake-up workflow.**
 The latest user explicitly requested unattended remaining experiments and a later
 status/result review. Commit/push remain authorized. No subagents. Follow
 [execution-flows](execution-flows.md);current alignment outranks experiment skill
@@ -18,25 +17,43 @@ declared CPU/NPU profiles(F1–F5). F6/F7 remain open for full-size measurements
 repetitions,profiling reconciliation and final evidence review.** Actual NVIDIA/
 x86_64 execution remains target-pending. Preserve the strict near-tie limitation.
 
-The finite manager`tide-execution-flows-unattended-matrix01.service` remains
-active in background.slice,MainPID958799. Rechecked2026-10-06T12:44:11.890261+08:00:the prior FP16
-Attention complete-training job passed,and the queue has moved through the
-remaining first-process matrix. Current child:`formal-bound-auto01-cell097-r1`
-(settle/python/prefill/add/inference/mixed-a),also active in
-background.slice. No duplicate manager or manual child submission is needed.
-Manifest:`TASK/plans/unattended-matrix01.json`;manager:
-`TASK/launchers/run_unattended_measurements.py`. Frozen inputs and finite policy:
-[unattended-measurements](unattended-measurements.md).
+The user explicitly authorized direct continuation after the disk stop,without
+investigating storage growth. Selector/new-semantics work is deferred until the
+user updates upstream documents. Preserve the agreed execution contract.
 
-This queue has41accepted FP32 first processes,27failed,one policy skip(cell60),
-one running and43not yet started. Together with six earlier bound cases,
-47/120have an accepted numa-bound-solo-v1 first process;old unbound observations
-stay separate. Repetitions have not begun. The FP32 Attention inference trace
-passed. Of27new failures,19are admission waits with no model execution;3execution
-timeouts;2completed-over3000s allowances(cells22/34);2ProcessLookupError(cells2/56,
-root cause unestablished);1NPU OOM(cell70,optimizer clone). Preserve every failure;
-no automatic retry,larger allowance or policy change. Prior cells36/60 stay failed.
-[Queue and storage evidence](evidence/storage-maintenance-20261006.md).
+Previous manager`tide-execution-flows-unattended-matrix01.service` stopped-error,
+exit1 at2026-10-07T08:47:16.271693Z,empty cgroup. Its next-child disk admission
+observed root8353996800bytes(7.78GiB),below the unchanged8GiB reserve;
+data had107805757440bytes. This is not a session-disconnection failure.
+The old manifest,receipt,result,audits and failures remain immutable.
+
+Running continuation`tide-execution-flows-unattended-matrix02.service`,MainPID2262337,reuses
+workload e69b3bd,controller103f5b6 and the unchanged manager/child executors.
+Manifest:`TASK/plans/unattended-matrix02.json`;preflight:
+`TASK/plans/unattended-matrix02-validation.json`. All819 frozen inputs matched;
+85 imported terminal records have verified hashes/empty cgroups. At preflight all
+remaining run directories were absent;280unchanged child launchers passed shell syntax checks.
+The plan contains32unstarted first-process FP32 cells,240conditional FP32 repeat
+slots(at most160executions),and8conditional FP16 repeat slots. No failed or
+previously attempted slot is retried;completed profiling is not repeated.
+Prior active time is charged against the original aggregate allowance;
+remaining conservative ceiling3077240s is not an ETA. Per-child budgets,
+120s NPU admission,solo timing,and24GiB data/8GiB root reserves are unchanged.
+Verified2026-10-08T12:13:34.780607+00:00:manager and child are active/transient in
+background.slice,outside focus.service. Current child`formal-bound-auto01-cell113-r1`
+is Settle/Python/streaming/Add complete training,resident FP32,on11NPUs.
+It is running,not passed;31first-process cells remain unstarted. Manager cwd:
+`TASK/sources/control-isolation-clean02`;receipt/log/result:
+`TASK/runs/unattended-matrix02/{status.json,task.log,dispatch/result.json}`.
+Submission:`TASK/plans/unattended-matrix02-submission.json`.
+[Continuation evidence](evidence/unattended-resume-20261008.md).
+
+At the parent stop:58/120accepted bound FP32 first processes(52from that queue
+plus6earlier);30failed(28queue plus2earlier);32unstarted;no repeats yet.
+The queue added11passes and1failure after the October6handoff. Nineteen failed
+cells never obtained devices and did not execute the model. Other failures
+remain explicit. FP32 Attention inference profiling passed;all four FP16
+companions have first-process evidence. No formal recommendation is available.
 
 Original-B512 FP16 Attention complete training passed on11cards,terminal exit0
 at2026-10-04T10:52:49.692924Z:measured6190.644420s,warmup5804.552517s,
@@ -284,7 +301,7 @@ had left OpenBLAS1;formal CPU explicitly starts OpenMP/OpenBLAS16,MKL1,limit32.
 
 ## Next wake-up
 
-1. Read the manager's unit,`TASK/runs/unattended-matrix01/status.json`,
+1. Read the manager's unit,`TASK/runs/unattended-matrix02/status.json`,
    `dispatch/result.json`,current child receipt and completed phase summaries.
    Report passed,failed,skipped,unstarted and waiting separately. Do not infer
    success from an inactive/missing unit or manager exit0 alone.
@@ -308,7 +325,7 @@ TASK_QUEUE_ENABLE=0,TORCH_DEVICE_BACKEND_AUTOLOAD=0,PYTHONDONTWRITEBYTECODE=1,
 standalone ACL_OP_INIT_MODE=0 and output cwd. CPU correctness1 thread,build2.
 CPU timings OpenMP/OpenBLAS16,MKL1,OMP_THREAD_LIMIT32;NPU startup BLAS1,ATen8 resident.
 Host320 physical cores,8 NUMA nodes,16 NPUs;NPU PCI NUMA=-1,actual locality unknown.
-Latest observed free disk data166.25GiB/root12.57GiB at2026-10-06T12:44:11.890261+08:00;
+At continuation submission2026-10-08T12:10:08Z,free disk data134.76GiB/root13.22GiB;
 recheck before large writes/profiles. Authorized2026-10-06maintenance freed
 32.337883GiB by removing6416reviewed old profile/SQLite/object files and
 hash-deduplicating5774raw pairs.32separately dated zero-byte markers remain.
@@ -337,8 +354,8 @@ do not rewrite that history. Prior navigation/schema audit passed834 links and
 10-target schema;this is not new hardware verification. Retain active/cited
 artifacts and reproducers. Do not clean reference repositories.
 
-Latest implementation103f5b6;workload e69b3bd. This increment records authorized
-storage maintenance and observed queue progress;no graph/model/core or experiment
-policy change. Frozen helper/manifest inputs remain unchanged. The agent returns
-to the user-directed wake-up workflow while background services continue.
+Latest implementation103f5b6;workload e69b3bd. This increment records the authorized running continuation after the disk stop;
+no graph/model/core or per-child experiment policy changes. Frozen original
+helpers/manifests remain unchanged. Service isolation,first-child admission and
+imported summary are verified;return to the wake-up workflow.
 Final F6/F7 evidence reconciliation remains pending.
