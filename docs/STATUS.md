@@ -37,27 +37,57 @@ CPU pre-admission failures; its accepted metrics stay unchanged, while a new
 reconciliation will merge terminal receipts as well as audits.
 All4 FP16 companions have first-process evidence; automatic repetition is cancelled.
 
-## Authorized work now
+## Current follow-up plan
 
-1. Fix only the monitor ENOENT/ESRCH race, retaining all unrelated errors and
-   placement/resource/cleanup guards. Add focused regression checks.
-2. Reconcile failure records, including failed children without a domain audit.
-   Recheck five complete-over-bound observations read-only, retain old failures,
-   budgets and case records. Do not count those observations among61 accepted.
-3. Prepare at most4 one-attempt follow-ups, ordered by decision value:
-   cell21 CPU PDG Attention prefill training;cell56 resident Settle Attention
-   prefill inference;cell16 mixed-B PDG Add prefill training;cell59 resident
-   Settle Attention prefill training. Do not restart the120-cell queue.
-   CPU21 may use NUMA0..7 memory with the original80-core CPU mask/BLAS16;
-   keep all memory guards, and label it a separate measurement series.
-4. Review CPU/mixed/resident selection by workload, profiling and support limits.
-   Leave resource-unavailable cells explicit. No indefinite wait/retry.
+Implementation commit `d773fe294994711420480f6d679970e3feacf65f` fixes the monitor
+ENOENT/ESRCH race and adds terminal-failure reconciliation. Clean immutable
+`TASK/sources/control-selection-clean01` passed27 affected checks (20 resource/
+process lifecycle+7 summary);no model code or broad Torch gate changed.
+Checks: `TASK/plans/selection-monitor-check01/{result.json,tests.log}`.
+Read-only reconciliation passed: `TASK/plans/selection-reconciliation01.json`;
+all61 bound/8 unbound accepted metrics unchanged;all59 missing bound cases now
+classified;five over-bound observations rechecked without changing old cases.
 
-No new heavy jobs have been submitted at this implementation checkpoint.
-Commit the fix, qualify that clean immutable controller with affected checks,
-then freeze versioned task-local follow-up launchers/auditors and record the
-service/command/limits here before launching. Evidence is a separate commit.
-Workload/binaries remain e69b3bd; no model change or broad Torch gate is required.
+Only **two** of the authorized maximum4 follow-ups are selected, each once:
+cell21 CPU PDG Attention prefill complete training, then cell56 LibTorch resident
+Settle Attention prefill inference. Cells16/59 are deliberately not queued;their
+remaining timing gaps do not block provisional Add/Attention guidance.
+CPU21 uses NUMA0..7 memory with the original80-core CPU mask/BLAS16 and all memory
+guards, in separate `numa-bound-solo-wide-memory-v1`. NPU56 retains11cards and
+`numa-bound-solo-v1`;only the monitor fix differs. Workload/binaries stay e69b3bd.
+
+Plan: `TASK/plans/selection-followups01.json`; preflight:
+`TASK/plans/selection-preflight01/result.json` (two command/lane/admission
+preparations,three invalid requests rejected;no device/model execution).
+The task-local `*selection01.py` helpers and launchers are frozen by the manifest;
+do not modify them while submitted. Old controllers/launchers/results unchanged.
+
+Service submitted2026-10-09T09:48:58Z, **verified running**;CPU21 is running,
+NPU56 is pending serial dependency. No follow-up result is claimed:
+`tide-execution-flows-selection-followups01.service`;
+cwd `TASK/sources/control-selection-clean01`;
+entry `/bin/bash --noprofile --norc TASK/launchers/selection-followups01.sh`.
+This runs `/usr/bin/python3 scripts/job.py --output-dir TASK/runs/selection-followups01`
+with the frozen `run_selection01.py --plan TASK/plans/selection-followups01.json
+--out TASK/runs/selection-followups01/dispatch` under timeout27920s.
+Cell21 step12000s/child24400s/outer24760s;cell56 step900s/child2200s/outer2560s.
+Whole protective bound27920s (~7h46m),not an ETA. CPU lane420.1097GiB plus136GiB
+reserve;host half-memory budget checked again at dispatch. NPU admission120s.
+Serial detached child services have PartOf propagation to this manager;no retries.
+Receipts/logs: `TASK/runs/selection-followups01/{status.json,task.log,dispatch/result.json}`;
+children: `TASK/runs/formal-bound-selection01-cell{021,056}`.
+
+Inspect: `systemctl --user show tide-execution-flows-selection-followups01.service
+-p ActiveState -p MainPID -p ControlGroup`;read its status and dispatch JSON.
+Stop only this new queue if requested:
+`systemctl --user stop tide-execution-flows-selection-followups01.service`.
+On wake-up, verify terminal receipts,empty cgroups and strict domain audits;
+merge accepted follow-up evidence by series,retain failed/admission outcomes,
+then close F6/F7 local report reconciliation. No new job is automatically added.
+
+Selection conclusions and complete reviewed scalar evidence:
+[evidence/selection-review-20261009.md](evidence/selection-review-20261009.md).
+Submission identity: `TASK/plans/selection-followups01-submission.json`.
 
 ## Contract and limitations
 

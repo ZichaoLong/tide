@@ -1,132 +1,79 @@
-# Finite unattended measurements
+# Finite selection follow-ups
 
-The user authorized single-process coverage on 2026-10-08: retain first attempts,
-cancel automatic FP32/FP16 repetitions, and accept shared-server observations.
-Implementation and correctness gates remain those in [STATUS](STATUS.md).
-This queue fills performance evidence; final F6/F7 review remains separate.
-Selector/new semantics are deferred. Actual NVIDIA/x86_64 execution is target-pending.
+On2026-10-09 the user authorized decision-sufficient evidence;all120 cells need
+not execute. The previous matrix03 finished at13:26 Beijing with61/120 accepted
+bound FP32 cells and59 explicitly classified outcomes. All4 FP16 first processes
+exist. Repetitions remain cancelled. Old manifests,receipts,audits and failures
+stay unchanged. Queue exit0 means the finite queue ended,not every model passed.
+[Current handoff](STATUS.md) owns live state;[contract](execution-flows.md) owns scope.
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`.
 
-## Current scope and policy
+## New finite scope
 
-The frozen `TASK/plans/unattended-matrix03.json` contains31 new FP32 first-process
-jobs and one barrier for the already-running `formal-bound-auto01-cell113-r1`.
-At handoff:58/120 bound FP32 cells accepted,30failed,one running and31unstarted.
-Four separate FP16 companions and the required inference profiles already have
-first-process evidence. All248 conditional repeat slots are removed (at most160
-FP32 and8 FP16 executions). No completed or failed first attempt is repeated.
-One warmup and one measured step, each with two connected windows, stay unchanged.
+`TASK/plans/selection-followups01.json` freezes exactly2 serial jobs:
 
-Single-process results are engineering observations. Preserve actual work counts,
-measurement series, dtype/card/cache differences and the strict near-tie limitation.
-Do not claim statistical stability or a universal fastest flow. Small differences
-may remain inconclusive. Existing multiprocess evidence remains valid in its scope.
-The summary retains the factual three-process count but adds first-process coverage;
-three processes are no longer a mandatory recommendation gate.
+| Order/cell | Question | Preserved step/child bound |
+| --- | --- | --- |
+| 1/21 | PDG LibTorch CPU Attention prefill complete-training baseline | 12000s/24400s |
+| 2/56 | Settle LibTorch resident Attention prefill inference after monitor fix | 900s/2200s |
 
-External contention is not excluded or systematically monitored. Reuse existing
-configuration, device mapping, timestamps and raw records; an observed contention
-may receive a short note. Contention does not trigger retries. During final review,
-only a concrete anomaly or unresolved flow choice may justify a targeted follow-up,
-initially capped at four configurations; none is automatically scheduled.
+Cells16/59 from the maximum4 candidate list are omitted for limited decision value.
+No full-matrix restart,retry,statistical repetition,model resizing or budget growth.
+External contention remains possible and does not trigger automatic reruns.
+One warmup and one measured step,each2 connected windows,remain unchanged.
 
-## Drain and switch
+CPU21 retains80 allowed cores,OMP/OpenBLAS16,MKL1 and the original memory estimate.
+Its memory mask becomes NUMA0..7;the old0..3 mask repeatedly refused the412GiB
+estimated model peak. Lane420.1097GiB plus shared reserve136GiB must fit the
+half-host budget and conservative selected-node availability estimate. This is
+separate `numa-bound-solo-wide-memory-v1`;do not pool it with old NUMA timings.
 
-The original matrix02 manifest and its running source remain unchanged. New service
-`tide-execution-flows-unattended-matrix03.service` has verified the old coordinator's
-PID/start identity, command, unit/cgroup, manifest and current child. It suspends
-only that Python coordinator, preventing new submissions. Cell113's separate
-service and11-card workload continue normally.
+NPU56 keeps the eleven-device qualified placement and120s admission through the
+account helper. Insufficient cards ends that attempt without model execution.
+NPU timings retain `numa-bound-solo-v1`;the controller patch handles process
+exit during monitoring without changing workload code or unrelated error checks.
 
-The handoff waits for the current child to finish naturally with a consistent
-terminal receipt and empty cgroup. It then retires matrix02 and starts the new
-single-process manager. Matrix02's resulting cancellation means authorized queue
-replacement; the child is independently checked by the unchanged strict auditor.
-The new manager acquires the existing serialization lock and runs remaining jobs.
-No active workload source, child launcher or old manifest is rewritten.
+## Identity and launch
 
-`TASK/runs/unattended-matrix03/handoff.json` owns transition state. During
-`draining-current-child`, do not resume the stopped matrix02 coordinator or start
-another queue. `dispatch/result.json` is created after drain/retirement.
-An error or cancellation stops the owned predecessor; ExecStopPost also handles
-interruption during drain, so the coordinator is not intentionally left paused.
-Stopping matrix03 during drain cancels the old manager/current child; after the
-switch, PartOf propagation cancels the new current child. Protected historical
-CPU work and unrelated services are never signalled.
+Workload `e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8` and existing hashed binaries.
+Controller `d773fe294994711420480f6d679970e3feacf65f`,clean worktree
+`TASK/sources/control-selection-clean01`. Public module
+`libtorch-npu/2.10.0-cann9.0.0`;Python
+`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
+Task-local manager/dispatcher/case/auditor are versioned `*selection01.py`.
+Manifest hashes helpers,launchers,inputs and the controller snapshot inventory.
+Trackio is off under the user contract;existing durable project records are used.
 
-## Identity, resources and limits
+Unit `tide-execution-flows-selection-followups01.service`,cwd the clean controller,
+command `/bin/bash --noprofile --norc TASK/launchers/selection-followups01.sh`.
+The wrapper records status via scripts/job.py and invokes run_selection01.py
+with the frozen plan and output `TASK/runs/selection-followups01/dispatch`.
+Each job runs in a distinct child service;PartOf propagates queue cancellation.
+Services use background.slice,Nice10,KillMode=control-group,finite RuntimeMax,
+and an environment independent of focus.service. They survive session/SSH
+loss while the user manager lives,without automatic host-reboot recovery.
 
-Workload: `e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8`.
-Controller: `103f5b6c8e9b2e6e46a7f2733185433de2cb5f3f`.
-Working directory: `TASK/sources/control-isolation-clean02`.
-Public module: `libtorch-npu/2.10.0-cann9.0.0`.
-Manifest SHA256: `02b49ea6ef694077ca0c576b248c52ab24221013938e8a68bdf53958204dd669`.
-Task-local manager, handoff and summarizer are versioned `*once03.py`; their hashes,
-unchanged prior inputs and launchers are frozen in the new manifest.
+Only one project heavy job runs. Existing manager/timing locks remain. Require
+24GiB data/8GiB root free space before each child. Whole queue protective bound
+27920s (~7h46m) includes finite execution/lifecycle allowances;it is not an ETA.
+No continuous agent polling or automatic callback is required.
 
-Only one project heavy workload runs at a time. NPU jobs still lease11 devices
-through the cooperative helper, with120s maximum admission wait. Memory/NUMA,
-CPU thread limits, per-child timeouts, runtime checks and strict auditors are
-unchanged. Device availability checks remain required; no forced allocation onto
-busy cards. Before each new child, require24GiB data and8GiB root free space.
-No automatic retry, budget increase, model resizing, cleanup or switch expansion.
+## Review on wake-up
 
-The new aggregate protective ceiling is807265s (about224.24h), including drain,
-child bounds and lifecycle allowance. It is **not an ETA**. The first-process work
-was estimated at about160h before handoff (roughly6–7days), with interruptions and
-failed-case review additional. Queue completion does not imply all120 cells pass.
-
-Services use background.slice, Nice10 and KillMode=control-group, outside
-focus.service. They survive agent/SSH disconnection while the user manager lives;
-there is no automatic reboot recovery. No continuous agent monitoring is required.
-Tracking uses project-owned records; Trackio is off under the execution contract.
-
-## Commands and records
-
-Submission: `TASK/plans/unattended-matrix03-submission.json`.
-Preflight: `TASK/plans/unattended-matrix03-validation.json`.
-Lifecycle/log: `TASK/runs/unattended-matrix03/{status.json,task.log}`.
-Transition: `TASK/runs/unattended-matrix03/handoff.json`.
-Results after drain: `TASK/runs/unattended-matrix03/dispatch/result.json`.
-Phase summary: `dispatch/summary-breadth/{summary.json,fp16-summary.json}`.
-Each existing child name retains its own `TASK/runs/NAME/` receipt, log and artifacts.
-
-Resolved handoff command, inside the durable job wrapper and bounded timeout:
+Read `TASK/runs/selection-followups01/{status.json,task.log,dispatch/result.json}`
+and `dispatch/audits/`. Children are
+`formal-bound-selection01-cell021` and `formal-bound-selection01-cell056`.
+Read each child receipt/domain audit and verify no remaining cgroup. Domain
+acceptance is required;successful submission or manager exit0 is insufficient.
+Failures before an assessment exists are retained with their receipt/log and
+classification. Keep the new CPU series separate from old timings.
 
 ```bash
-/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python \
-  /mi/data2T/zlong/tide-execution-flows/launchers/handoff_unattended_once03.py \
-  --plan /mi/data2T/zlong/tide-execution-flows/plans/unattended-matrix03.json \
-  --state /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix03/handoff.json \
-  --out /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix03/dispatch
+systemctl --user show tide-execution-flows-selection-followups01.service -p ActiveState -p MainPID -p ControlGroup
+# Only when cancellation is requested:
+systemctl --user stop tide-execution-flows-selection-followups01.service
 ```
 
-Inspect or stop the exact owned service:
-
-```bash
-systemctl --user show tide-execution-flows-unattended-matrix03 \
-  -p ActiveState -p SubState -p MainPID -p Result -p ExecMainStatus
-cat /mi/data2T/zlong/tide-execution-flows/runs/unattended-matrix03/handoff.json
-systemctl --user stop tide-execution-flows-unattended-matrix03
-```
-
-After drain, the wrapper invokes the same interpreter with
-`TASK/launchers/run_unattended_measurements_once03.py --plan TASK/plans/unattended-matrix03.json --out TASK/runs/unattended-matrix03/dispatch`.
-The submission receipt retains the complete argv, including timeouts and service
-properties. See [policy-change evidence](evidence/unattended-single-process-20261008.md).
-
-## Validation and retained history
-
-Two real transient-service guards passed natural child drain and cancellation
-cleanup; the child advanced while its coordinator was stopped, no next slot was
-submitted, and all guard cgroups ended empty. These used no model or NPU.
-Summary validation preserved all old metrics and failures; repeat jobs and nonzero
-repeat limits were rejected before execution. Child launchers passed shell syntax.
-
-Records: `TASK/plans/unattended-once03-guards/result.json` and
-`TASK/plans/unattended-once03-summary-check/result.json`.
-Original queue guards, failed attempts, matrix01/matrix02 manifests and terminal
-records remain unchanged in their original paths. The prior
-[continuation evidence](evidence/unattended-resume-20261008.md) records matrix02's
-original scope; it is historical and does not restore its cancelled repeat policy.
+Never resume/stop/signal/clean `historical-cpu-attention-01` (worker2686919).
+It is unrelated protected history. Source/build/trace/failed-run artifacts remain.

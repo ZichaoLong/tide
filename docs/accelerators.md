@@ -144,9 +144,12 @@ setting and preserve it in paired profiling. Shared modules and graph semantics
 are unchanged;the default-cache failures remain retained. Under this explicit
 policy,the original-B512 [Add](evidence/formal-b512-resident-fp16-add-20261004.md)
 and [Attention](evidence/formal-b512-resident-fp16-attention-20261004.md) inference
-companions passed on8 NPUs,one process each. Complete-training measurements,
-repetitions and separate profiles remain in progress;other runtime versions still
-need their own evidence.
+companions passed on8 NPUs,one process each. Complete-training companions also
+passed:Add on8cards,Attention on11cards;separate inference slices are available.
+Automatic repetitions are cancelled under the current user contract. The
+[selection review](evidence/selection-review-20261009.md) separates dtype/card/cache
+effects,records current profiling and retains all failures. Other runtime versions
+still need their own evidence.
 
 Installed dependency checks:
 
