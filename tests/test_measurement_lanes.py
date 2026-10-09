@@ -7,6 +7,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from measurement_lanes import admit, check_placement, node_memory, process_placement
@@ -88,6 +89,46 @@ class AdmissionTests(unittest.TestCase):
             self.assertEqual(observed['anonymous_pages_by_node'], {0: 4, 1: 2})
             with self.assertRaises(RuntimeError):
                 check_placement(observed, self.lanes[0])
+
+
+class ProcExitTests(unittest.TestCase):
+    def setUp(self):
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        self.root = Path(folder.name)
+        self.task = self.root / '42/task/42'
+        self.task.mkdir(parents=True)
+        (self.task / 'status').write_text('Cpus_allowed_list:\t0-2\n')
+        (self.root / '42/numa_maps').write_text('200 bind:0 heap anon=4 N0=4\n')
+
+    def test_disappearing_process_during_task_enumeration(self):
+        for error in (FileNotFoundError, ProcessLookupError):
+            with self.subTest(error=error), patch.object(Path, 'iterdir', side_effect=error):
+                self.assertIsNone(process_placement(42, self.root))
+
+    def test_disappearing_thread_or_process_during_read(self):
+        original = Path.read_text
+        for name in ('status', 'numa_maps'):
+            for error in (FileNotFoundError, ProcessLookupError):
+                def read(path, *args, **kwargs):
+                    if path.name == name:
+                        raise error()
+                    return original(path, *args, **kwargs)
+                with self.subTest(name=name, error=error), patch.object(Path, 'read_text', read):
+                    observed = process_placement(42, self.root)
+                    if name == 'numa_maps':
+                        self.assertIsNone(observed)
+                    else:
+                        self.assertEqual(observed['thread_cpu_masks'], [])
+                        self.assertEqual(observed['anonymous_pages_by_node'], {0: 4})
+
+    def test_unrelated_proc_errors_are_not_hidden(self):
+        for method in ('iterdir', 'read_text'):
+            for error in (PermissionError, OSError):
+                with self.subTest(method=method, error=error), \
+                        patch.object(Path, method, side_effect=error):
+                    with self.assertRaises(error):
+                        process_placement(42, self.root)
 
 
 @unittest.skipUnless(shutil.which('numactl') and Path('/proc/self/numa_maps').exists(),

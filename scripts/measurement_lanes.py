@@ -100,18 +100,19 @@ def process_placement(pid, proc=Path('/proc')):
     """Observe every live thread mask and private anonymous NUMA mappings.
 
     Shared file-backed pages are explicitly excluded: mbind does not relocate
-    an existing shared library/page-cache page. Exited threads can disappear.
+    an existing shared library/page-cache page. Procfs can report either ENOENT
+    or ESRCH when a process/thread exits during a read. Other errors propagate.
     """
     path = proc / str(pid)
     masks = []
     try:
         tasks = list((path / 'task').iterdir())
-    except FileNotFoundError:
+    except (FileNotFoundError, ProcessLookupError):
         return None
     for task in tasks:
         try:
             status = (task / 'status').read_text()
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
             continue
         value = next(line.split(':', 1)[1] for line in status.splitlines()
                      if line.startswith('Cpus_allowed_list:'))
@@ -119,7 +120,7 @@ def process_placement(pid, proc=Path('/proc')):
     pages, policies = {}, set()
     try:
         maps = (path / 'numa_maps').read_text()
-    except FileNotFoundError:
+    except (FileNotFoundError, ProcessLookupError):
         return None
     for line in maps.splitlines():
         fields = line.split()
