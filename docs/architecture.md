@@ -18,7 +18,7 @@
 | `docs/ROADMAP.md` | Full implementation backlog and milestone gates |
 | `docs/STATUS.md` | Only current handoff, next action and active jobs |
 | `docs/evidence/` | Small immutable-source qualification reports |
-| `docs/evidence/selection-review-20261009.md` | Current original-size CPU/mixed/resident selection guidance,retained failures,FP16/profiling and support limits |
+| `docs/evidence/selection-review-20261009.md`, `docs/evidence/selection-terminal-20261010.md` | Original-size CPU/mixed/resident selection guidance,FP16/profiling,support limits and final local disposition |
 | `docs/module-extension-plan.md` | Local program catalog and extension contracts |
 | `docs/attention.md` | Event GQA/window semantics, ragged cache and packed sequences |
 | `docs/pdg-scale-benchmark.md` | Graph-only LH-scale Attention workload, fresh parameters, native cursor and row Emit timing |

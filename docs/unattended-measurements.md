@@ -1,4 +1,4 @@
-# Finite selection follow-ups
+# Completed finite selection follow-ups
 
 On2026-10-09 the user authorized decision-sufficient evidence;all120 cells need
 not execute. The previous matrix03 finished at13:26 Beijing with61/120 accepted
@@ -9,7 +9,16 @@ stay unchanged. Queue exit0 means the finite queue ended,not every model passed.
 
 `TASK=/mi/data2T/zlong/tide-execution-flows`.
 
-## New finite scope
+## Terminal review,2026-10-10
+
+The queue finished at2026-10-10 00:38:25 Beijing. Manager and both child cgroups
+are empty. CPU21 reached24400s execution bound without a complete result;NPU56
+failed11-card admission without running the model. Both are audited-failed;
+no accepted timing was added and no retry is scheduled. Manager exit0 does not
+convert those failures to success. [Reviewed terminal evidence](evidence/selection-terminal-20261010.md).
+The scope/commands below identify the retained past submission,not an active queue.
+
+## Retained finite scope
 
 `TASK/plans/selection-followups01.json` freezes exactly2 serial jobs:
 
@@ -54,12 +63,12 @@ Services use background.slice,Nice10,KillMode=control-group,finite RuntimeMax,
 and an environment independent of focus.service. They survive session/SSH
 loss while the user manager lives,without automatic host-reboot recovery.
 
-Only one project heavy job runs. Existing manager/timing locks remain. Require
+The submission serialized project heavy jobs using existing manager/timing locks. It required
 24GiB data/8GiB root free space before each child. Whole queue protective bound
 27920s (~7h46m) includes finite execution/lifecycle allowances;it is not an ETA.
 No continuous agent polling or automatic callback is required.
 
-## Review on wake-up
+## Inspect retained records
 
 Read `TASK/runs/selection-followups01/{status.json,task.log,dispatch/result.json}`
 and `dispatch/audits/`. Children are
@@ -71,8 +80,6 @@ classification. Keep the new CPU series separate from old timings.
 
 ```bash
 systemctl --user show tide-execution-flows-selection-followups01.service -p ActiveState -p MainPID -p ControlGroup
-# Only when cancellation is requested:
-systemctl --user stop tide-execution-flows-selection-followups01.service
 ```
 
 Never resume/stop/signal/clean `historical-cpu-attention-01` (worker2686919).

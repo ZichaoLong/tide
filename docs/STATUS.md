@@ -1,6 +1,6 @@
 # Current handoff
 
-Updated 2026-10-09 (Asia/Shanghai). **Selection-focused closure in progress.**
+Updated 2026-10-10 (Asia/Shanghai). **Local selection-focused delivery closed;no current task jobs.**
 The user authorized execution sufficient to answer engineering flow-selection
 questions; all120 performance cells need not execute. Commit/push authorized.
 No subagents. [execution-flows](execution-flows.md) outranks experiment-skill
@@ -17,8 +17,9 @@ Use scripts.durable_records for atomic/fsynced handoff writes.
 ## Current scope and terminal queue
 
 F1–F5 implementation/current local correctness gates are complete in their
-qualified CPU/NPU profiles. F6/F7 require selection/report reconciliation and
-terminal review of any targeted follow-ups, not all-matrix success.
+qualified CPU/NPU profiles. F6/F7 local selection/report/terminal review is now
+closed under the decision-sufficient criterion,with explicit missing timings.
+This is not all-matrix success or unconditional strict wide-trajectory equivalence.
 Actual NVIDIA/x86_64 execution and other environment versions stay target-pending.
 
 `unattended-matrix03` finished at2026-10-09T05:26:52.428668Z (13:26 Beijing),
@@ -32,12 +33,13 @@ remain historical; no old manager should be resumed.
 Bound FP32:61/120 accepted. The59 unaccepted cells comprise37 NPU admission
 timeouts,10 CPU NUMA admission refusals,5 complete-over-time-bound observations,
 4 execution timeouts,2 monitor process-exit races and1 NPU OOM. Eight accepted
-historical unbound observations stay separate. The old audit-only summary omits
-CPU pre-admission failures; its accepted metrics stay unchanged, while a new
-reconciliation will merge terminal receipts as well as audits.
+historical unbound observations stay separate. The old audit-only summary omitted
+CPU pre-admission failures; the separate read-only reconciliation merged terminal
+receipts and audits without changing accepted metrics. These counts describe
+the original matrix;the two later failed attempts are recorded separately below.
 All4 FP16 companions have first-process evidence; automatic repetition is cancelled.
 
-## Current follow-up plan
+## Completed follow-up review
 
 Implementation commit `d773fe294994711420480f6d679970e3feacf65f` fixes the monitor
 ENOENT/ESRCH race and adds terminal-failure reconciliation. Clean immutable
@@ -48,46 +50,45 @@ Read-only reconciliation passed: `TASK/plans/selection-reconciliation01.json`;
 all61 bound/8 unbound accepted metrics unchanged;all59 missing bound cases now
 classified;five over-bound observations rechecked without changing old cases.
 
-Only **two** of the authorized maximum4 follow-ups are selected, each once:
-cell21 CPU PDG Attention prefill complete training, then cell56 LibTorch resident
-Settle Attention prefill inference. Cells16/59 are deliberately not queued;their
-remaining timing gaps do not block provisional Add/Attention guidance.
-CPU21 uses NUMA0..7 memory with the original80-core CPU mask/BLAS16 and all memory
-guards, in separate `numa-bound-solo-wide-memory-v1`. NPU56 retains11cards and
-`numa-bound-solo-v1`;only the monitor fix differs. Workload/binaries stay e69b3bd.
+Exactly two one-attempt follow-ups were submitted. Both are terminal failed and
+strictly audited;neither produced an accepted timing. The manager finished
+2026-10-09T16:38:25.565851Z (**2026-10-10 00:38:25 Beijing**),exit0;this means
+queue completion,not measurement success. Manager and both child cgroups are
+empty/MainPID0. No follow-up remains running,queued or automatically scheduled.
 
-Plan: `TASK/plans/selection-followups01.json`; preflight:
-`TASK/plans/selection-preflight01/result.json` (two command/lane/admission
-preparations,three invalid requests rejected;no device/model execution).
-The task-local `*selection01.py` helpers and launchers are frozen by the manifest;
-do not modify them while submitted. Old controllers/launchers/results unchanged.
+- Cell21 CPU PDG/LibTorch Attention prefill complete training ran to its24400s
+  execution bound (monitor24410.407s including cleanup). No complete consumer
+  result. Peak group RSS393.451GiB was below420.110GiB lane allowance;failure was
+  timeout,not an observed RSS breach. NUMA0..7 memory/original80-core CPU mask/
+  BLAS16 is separate `numa-bound-solo-wide-memory-v1`. CPU full-size Attention
+  training comparison remains unresolved;total elapsed time is not a step metric.
+- Cell56 Settle/LibTorch resident Attention prefill inference failed11-card
+  admission (configured120s,last poll136.013s). Model never started;there is no
+  new NPU failure or full-size monitor-fix qualification. The27 regression checks
+  remain valid. Old process-exit-race failure is not relabelled passed.
+- Cells16/59 were deliberately omitted. No retry,budget increase or new matrix.
 
-Service submitted2026-10-09T09:48:58Z, **verified running**;CPU21 is running,
-NPU56 is pending serial dependency. No follow-up result is claimed:
-`tide-execution-flows-selection-followups01.service`;
-cwd `TASK/sources/control-selection-clean01`;
-entry `/bin/bash --noprofile --norc TASK/launchers/selection-followups01.sh`.
-This runs `/usr/bin/python3 scripts/job.py --output-dir TASK/runs/selection-followups01`
-with the frozen `run_selection01.py --plan TASK/plans/selection-followups01.json
---out TASK/runs/selection-followups01/dispatch` under timeout27920s.
-Cell21 step12000s/child24400s/outer24760s;cell56 step900s/child2200s/outer2560s.
-Whole protective bound27920s (~7h46m),not an ETA. CPU lane420.1097GiB plus136GiB
-reserve;host half-memory budget checked again at dispatch. NPU admission120s.
-Serial detached child services have PartOf propagation to this manager;no retries.
-Receipts/logs: `TASK/runs/selection-followups01/{status.json,task.log,dispatch/result.json}`;
-children: `TASK/runs/formal-bound-selection01-cell{021,056}`.
+[Final disposition/support limits](evidence/selection-terminal-20261010.md);
+[scenario selection and scalars](evidence/selection-review-20261009.md).
+Add/LibTorch prefill favors CPU in measured cases;Attention prefill inference
+favors resident;Attention training retains a useful mixed-A observation but lacks
+a complete full-size CPU baseline. Python caller identity changes some choices.
+Single shared-server observations do not establish a universal fastest flow.
 
-Inspect: `systemctl --user show tide-execution-flows-selection-followups01.service
--p ActiveState -p MainPID -p ControlGroup`;read its status and dispatch JSON.
-Stop only this new queue if requested:
-`systemctl --user stop tide-execution-flows-selection-followups01.service`.
-On wake-up, verify terminal receipts,empty cgroups and strict domain audits;
-merge accepted follow-up evidence by series,retain failed/admission outcomes,
-then close F6/F7 local report reconciliation. No new job is automatically added.
+Records remain under TASK:
+`plans/selection-followups01.json`,`plans/selection-terminal-review01.json`,
+`runs/selection-followups01/{status.json,task.log,dispatch/result.json,dispatch/audits/}`,
+`runs/formal-bound-selection01-cell{021,056}`. Original manifests,helpers,
+snapshots,binaries,audits and failed receipts remain unchanged;18 manifest inputs,
+source identities and both audit hashes were rechecked. Terminal unit names:
+`tide-execution-flows-selection-followups01.service` and
+`tide-execution-flows-formal-bound-selection01-cell{021,056}.service`.
 
-Selection conclusions and complete reviewed scalar evidence:
-[evidence/selection-review-20261009.md](evidence/selection-review-20261009.md).
-Submission identity: `TASK/plans/selection-followups01-submission.json`.
+No pending local execution command. A later status request should read these
+terminal records,not restart their services. Future GPU/x86/version work,extra
+measurements or new selector/canon semantics require their own concrete scope.
+The existing [target validation commands](eager-target-validation.md) remain ready.
+Protected historical stopped CPU work remains unrelated and untouched.
 
 ## Contract and limitations
 

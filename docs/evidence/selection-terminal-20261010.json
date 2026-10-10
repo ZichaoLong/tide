@@ -1,0 +1,192 @@
+{
+  "schema": "tide-selection-terminal-review-v1",
+  "observed": "2026-10-10T06:15:39.488040+00:00",
+  "state": "reviewed-terminal-no-new-accepted-results",
+  "local_scope": "Selection-sufficient local delivery complete;not all-matrix or target-machine completion.",
+  "sources": {
+    "control-selection-clean01": "d773fe294994711420480f6d679970e3feacf65f",
+    "compare-discrete-clean01": "e69b3bde3d53b0d6a019e89e82d1a78c3a91a7b8"
+  },
+  "inputs_sha256": {
+    "TASK/plans/selection-followups01.json": "63a74e68872b51b2141a0c0058b804f8d5b1ceeba67b2de4440a54e359d1f337",
+    "TASK/runs/selection-followups01/dispatch/result.json": "97d6febec8e8976d939ea14e6de81c6e5f6c90d0e66310a7def7002d4f674e96",
+    "TASK/runs/selection-followups01/status.json": "c13dd2b0bb8f31050e4414b6f72780b1c3a1b3b68189002e1f3d296d27b9ae90",
+    "TASK/runs/formal-bound-selection01-cell021/status.json": "b17c2ccfff5650f330faae41285ff29a418cf79ca7651f4298e484b2d9d7172d",
+    "TASK/runs/formal-bound-selection01-cell056/status.json": "1cab11929856a2621e2f0bfc9a50aff9b600b529b7591a1d9e29c64172a8c19e",
+    "TASK/runs/selection-followups01/dispatch/audits/formal-bound-selection01-cell021.json": "40882555b754b316747f3cc2b3a8284417644e830b5ac7d9e55ee5247e811df6",
+    "TASK/runs/selection-followups01/dispatch/audits/formal-bound-selection01-cell056.json": "cf4a4ab55e444cbef0fec2af32b3d9191ff2d0a454270648924cf16bd5956355",
+    "TASK/runs/formal-bound-selection01-cell021/assessment/group-0/monitor/result.json": "3e6060d18dc21da54f4f1db72430752445f00ca65e07af67aea8780ec374648c",
+    "TASK/runs/formal-bound-selection01-cell056/assessment/queue-0.json": "842202d9a3a4e6164b590fdb462feb2c39be5fafb6f29f0e7595c4f2a70d28a0"
+  },
+  "frozen_manifest_inputs_verified": 18,
+  "units": {
+    "selection-followups01": {
+      "MainPID": "0",
+      "ExecMainStatus": "0",
+      "ControlGroup": "",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "formal-bound-selection01-cell021": {
+      "MainPID": "0",
+      "ExecMainStatus": "1",
+      "ControlGroup": "",
+      "ActiveState": "failed",
+      "SubState": "failed"
+    },
+    "formal-bound-selection01-cell056": {
+      "MainPID": "0",
+      "ExecMainStatus": "1",
+      "ControlGroup": "",
+      "ActiveState": "failed",
+      "SubState": "failed"
+    }
+  },
+  "receipts": {
+    "selection-followups01": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "27920s",
+        "/usr/bin/python3",
+        "TASK/launchers/run_selection01.py",
+        "--plan",
+        "TASK/plans/selection-followups01.json",
+        "--out",
+        "TASK/runs/selection-followups01/dispatch"
+      ],
+      "cwd": "TASK/sources/control-selection-clean01",
+      "state": "passed",
+      "source": "d773fe294994711420480f6d679970e3feacf65f",
+      "dirty": "",
+      "started": "2026-10-09T09:48:58.640945+00:00",
+      "exit_code": 0,
+      "finished": "2026-10-09T16:38:25.565851+00:00"
+    },
+    "formal-bound-selection01-cell021": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "24760s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/dispatch_selection01.py",
+        "--controller-source",
+        "TASK/sources/control-selection-clean01",
+        "--out",
+        "TASK/runs/formal-bound-selection01-cell021/assessment",
+        "--cells",
+        "21",
+        "--repeat",
+        "1"
+      ],
+      "cwd": "TASK/sources/control-selection-clean01",
+      "state": "failed",
+      "source": "d773fe294994711420480f6d679970e3feacf65f",
+      "dirty": "",
+      "started": "2026-10-09T09:48:58.854777+00:00",
+      "exit_code": 1,
+      "finished": "2026-10-09T16:35:50.174964+00:00"
+    },
+    "formal-bound-selection01-cell056": {
+      "command": [
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "2560s",
+        "NPU_ENV/bin/python",
+        "TASK/launchers/dispatch_selection01.py",
+        "--controller-source",
+        "TASK/sources/control-selection-clean01",
+        "--out",
+        "TASK/runs/formal-bound-selection01-cell056/assessment",
+        "--cells",
+        "56",
+        "--repeat",
+        "1"
+      ],
+      "cwd": "TASK/sources/control-selection-clean01",
+      "state": "failed",
+      "source": "d773fe294994711420480f6d679970e3feacf65f",
+      "dirty": "",
+      "started": "2026-10-09T16:35:54.532681+00:00",
+      "exit_code": 1,
+      "finished": "2026-10-09T16:38:11.405234+00:00"
+    }
+  },
+  "audits": {
+    "formal-bound-selection01-cell021": {
+      "state": "audited-failed",
+      "partial": [
+        {
+          "group": 0,
+          "cells": [
+            21
+          ],
+          "state": "failed",
+          "execution_started": true,
+          "queue_status": null,
+          "result_sha256": "8d9f92621d657ececd49b149d63c30860e57dc2038838822fed045f5d838c502"
+        }
+      ],
+      "artifact": "TASK/runs/selection-followups01/dispatch/audits/formal-bound-selection01-cell021.json"
+    },
+    "formal-bound-selection01-cell056": {
+      "state": "audited-failed",
+      "partial": [
+        {
+          "group": 0,
+          "cells": [
+            56
+          ],
+          "state": "failed",
+          "execution_started": false,
+          "queue_status": "timed_out",
+          "result_sha256": null
+        }
+      ],
+      "artifact": "TASK/runs/selection-followups01/dispatch/audits/formal-bound-selection01-cell056.json"
+    }
+  },
+  "results": [
+    {
+      "cell": 21,
+      "configuration": "PDG/LibTorch/CPU/Attention/prefill/complete-training",
+      "state": "failed",
+      "reason": "execution-timeout",
+      "series": "numa-bound-solo-wide-memory-v1",
+      "model_executed": true,
+      "execution_bound_seconds": 24400,
+      "monitor_wall_seconds": 24410.407062016428,
+      "peak_group_rss_bytes": 422464823296,
+      "lane_memory_bytes": 451089371088,
+      "complete_result": false
+    },
+    {
+      "cell": 56,
+      "configuration": "Settle/LibTorch/resident/Attention/prefill/inference",
+      "state": "failed",
+      "reason": "npu-admission-timeout",
+      "model_executed": false,
+      "required_devices": 11,
+      "configured_queue_seconds": 120,
+      "observed_queue_seconds": 136.01326655596495,
+      "complete_result": false
+    }
+  ],
+  "bound_accepted_unchanged": 61,
+  "total_original_matrix_cells": 120,
+  "completed_over_bound_observations_unchanged": 5,
+  "fp16_first_processes_unchanged": 4,
+  "historical_unbound_observations_unchanged": 8,
+  "limits": [
+    "No new accepted timing or numerical-equivalence evidence.",
+    "CPU elapsed bound covers startup,warmup and measurement;it is not a measured step or a CPU/NPU throughput ratio.",
+    "CPU actual RSS was within its declared lane bound;timeout cause beyond the time bound is not attributed.",
+    "NPU model did not run;this attempt cannot qualify the monitor fix on this full-size NPU case.",
+    "Original missing-cell classification remains historical;new failed attempts do not overwrite it.",
+    "CPU Attention training and Settle native resident Attention inference remain performance gaps.",
+    "Actual GPU/x86_64/other-version validation and proposed new semantics remain separately pending;no automatic new jobs."
+  ]
+}
