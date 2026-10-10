@@ -1,4 +1,5 @@
 #include "tide/isolated_read.h"
+#include "tide/operator_work.h"
 #include <torch/csrc/autograd/custom_function.h>
 #include <stdexcept>
 
@@ -61,6 +62,7 @@ class IsolatedRead final : public torch::autograd::Function<IsolatedRead> {
 std::vector<Tensor> isolated_read(const std::vector<Tensor>& rows,const Tensor& weight,
                                   bool norm,at::ScalarType dtype,at::Device device) {
   if (rows.empty()) return {};
+  work::StateReplayTimer timer(work::ReadBatchVjpNs);
   return IsolatedRead::apply(at::TensorList(rows),weight,norm,int64_t(dtype),device);
 }
 }

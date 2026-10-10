@@ -33,7 +33,7 @@ void check_state_clocks(const at::TensorOptions& options) {
   PackedSequence sequence{at::stack({h, h, h}), {0, 2, 3}, {{0, 0}, {1, 0}}, {3, 11, 7},
                           {{h, {}, {}}, {h, {}, {}}, {h, {}, {}}}};
   auto packed = w.kernel->packed_sequence(w, {old, old}, sequence);
-  if (packed.calls != 2 || packed.scalar_steps != 3 || packed.states.size() != 3
+  if (packed.calls != 2 || packed.scalar_steps != 0 || packed.max_batch != 2 || packed.max_length != 2 || packed.states.size() != 3
       || packed.states[1].last_time != 11 || packed.states[2].last_time != 7)
     throw std::runtime_error("clock wrapper changed packed capabilities or metadata");
   check(packed.states[0].value, .7); check(packed.states[1].value, .375); check(packed.states[2].value, .45);

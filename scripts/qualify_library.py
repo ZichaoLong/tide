@@ -32,6 +32,7 @@ def main():
     if not args.reuse_build:
         commands.append(("build", [sys.executable, "scripts/build.py", "--jobs", "2", "--build-dir", str(build)]))
     commands += [
+        ("online-build", [sys.executable,"scripts/build_online_consumer.py","--core-build",str(build),"--output-dir",str(out/"online-build")]),
         ("cpu", [sys.executable,"scripts/verify.py","--device","cpu","--dtype","both","--build-dir",str(build),"--output-dir",str(out/"cpu")]),
         ("complex", [sys.executable,"scripts/library_complex.py","--build-dir",str(build),"--output-dir",str(out/"complex")]),
         ("consumer", [sys.executable,"scripts/library_consumer.py","--build-dir",str(build),"--output-dir",str(out/"consumer")])]
@@ -45,6 +46,8 @@ def main():
                     raise ValueError("reused binary changed: " + name)
             record["reused_build"] = manifest
         for name, command in commands:
+            if name == "cpu":
+                env["TIDE_ONLINE_BINARY"] = str(out/"online-build/consumer/tidegraph-online-bench")
             print(name + ": " + json.dumps(command), flush=True)
             result = subprocess.run(command, cwd=root, env=env)
             record["stages"].append(dict(name=name, command=command, exit_code=result.returncode))

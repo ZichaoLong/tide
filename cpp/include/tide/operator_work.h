@@ -17,7 +17,8 @@ enum Field { QkvCalls, QkvRows, QkvFlops, OutCalls, OutRows, OutFlops,
   ValidScores, ExecutedScores, ValidAttentionFlops, ExecutedAttentionFlops,
   AttentionCalls, EmitEdgeRows, PendingEdgeRows, BodyCandidates, BodySelected,
   AggregateScaleElements, AggregateAddElements, FiberScaleElements, FiberReusedElements,
-  StateCalls, StateRows, StateFlops, FullCalls, FullRows, FullFlops, StateReplayNs, AggregateReplayNs, ReadReplayNs, FullReplayNs, NextReplayNs, Fields };
+  StateCalls, StateRows, StateFlops, FullCalls, FullRows, FullFlops, StateReplayNs, AggregateReplayNs, ReadReplayNs, FullReplayNs, NextReplayNs,
+  StateBatchGraphNs, ReadBatchVjpNs, Fields };
 inline constexpr std::array<const char*, Fields> names{
   "qkv_calls", "qkv_rows", "qkv_flops", "out_calls", "out_rows", "out_flops",
   "emit_calls", "emit_rows", "emit_flops", "head_calls", "head_rows", "head_flops",
@@ -26,7 +27,8 @@ inline constexpr std::array<const char*, Fields> names{
   "body_candidates", "body_selected", "aggregate_scale_elements", "aggregate_add_elements",
   "fiber_scale_elements", "fiber_reused_elements", "state_matmul_calls", "state_matmul_rows",
   "state_matmul_flops", "full_matmul_calls", "full_matmul_rows", "full_matmul_flops", "state_replay_worker_ns",
-  "aggregate_replay_worker_ns", "read_replay_worker_ns", "full_replay_worker_ns", "next_replay_worker_ns"};
+  "aggregate_replay_worker_ns", "read_replay_worker_ns", "full_replay_worker_ns", "next_replay_worker_ns",
+  "state_batch_graph_worker_ns", "read_batch_vjp_worker_ns"};
 inline std::atomic<bool> active{false};
 inline std::array<std::atomic<Count>, Fields> counts{};
 inline bool enabled() { return active.load(std::memory_order_relaxed); }

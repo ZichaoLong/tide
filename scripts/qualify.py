@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build then verify a frozen source checkout; suitable for scripts/job.py."""
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -12,6 +13,10 @@ parser.add_argument("--lh-snapshot", help="also qualify original C++ LH componen
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(root / "scripts/build.py"), "--jobs", str(args.jobs)], check=True)
+online = Path(args.output_dir).resolve() / "online-build"
+subprocess.run([sys.executable, str(root / "scripts/build_online_consumer.py"), "--core-build", str(root / "build"),
+                "--output-dir", str(online), "--jobs", str(min(args.jobs, 8))], check=True)
+os.environ["TIDE_ONLINE_BINARY"] = str(online / "consumer/tidegraph-online-bench")
 subprocess.run([sys.executable, str(root / "scripts/verify.py"), "--device", "cpu", "--dtype", "both",
                 "--output-dir", str(Path(args.output_dir).resolve() / "verification")], check=True)
 if args.lh_snapshot:

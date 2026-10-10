@@ -1,90 +1,109 @@
 # Current handoff
 
-Updated 2026-10-10 (Asia/Shanghai). **New batched execution / CUDA resident stage
-active (G1–G5); State/Read development gates passed; implementation commit and clean qualification next.** The current prompt supersedes
-the previous local-delivery closure and any historical pause-after-commit note.
-Read [execution-flows §11](execution-flows.md) and [ROADMAP G1–G5](ROADMAP.md).
-Authorized: repository changes, necessary builds/tests, bounded experiments,
-commit and push. Continue until the locally achievable stage is closed. No subagents.
-Selector/new upstream semantics remain deferred. Reference repositories are read-only.
+Updated 2026-10-10 (Asia/Shanghai). The new G1–G5 stage is active. Continue all
+locally achievable implementation, correctness, finite selection evidence and
+CUDA target handoff; commits do not pause the task. No subagents. Authorization
+and execution contracts: [execution-flows §11](execution-flows.md); sole backlog:
+[ROADMAP G1–G5](ROADMAP.md). Selector/new upstream semantics remain deferred.
 
-## Recovered source and environment
+## Source and next actions
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
-`/var/tmp/zlong-graph-execution-foundation/repository`; branch
-`graph-execution-foundation`. Initial HEAD exactly matches handoff
-`c0ce4ee5d1ac92465e57734de533c33dba7a9445`, initially clean and in sync with origin.
-`TASK=/mi/data2T/zlong/tide-execution-flows` owns large new artifacts.
-Initial disk check: root ~6.8GiB available (below old 8GiB experiment reserve),
-data ~130GiB. Recheck before large writes; do not weaken old admission records.
+`/var/tmp/zlong-graph-execution-foundation/repository`, branch
+`graph-execution-foundation`. Initial clean HEAD was c0ce4ee5. Stage contract
+05af8f8 and State/Read implementation132cada7b21081d7f611326e1e0971e057201b4c
+are committed/pushed. Current uncommitted work: G1 metric/test/qualification
+entry corrections, G2 component profiler, and G3 CUDA resident backend.
+Keep coherent commits and use clean immutable qualification after implementation.
+Do not edit a snapshot while its job runs. `TASK=/mi/data2T/zlong/tide-execution-flows`.
 
-Public NPU entry required by this prompt: `libtorch-npu/2.10.0-cann9.0.0`;
-Python `/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311/bin/python`.
-This explicitly supersedes older private-stack guide paths; actual toolchain must
-be checked before use. GPU tools: `/mi/data2T/zlong/gpu-toolchains`, private module
-`~/privatemodules/torch-cuda/2.10.0-cu128`; no actual GPU expected. Drivers unchanged.
-Long work: fixed-source detached background.slice service, Nice10, bounded threads,
-KillMode=control-group, durable job/log/status. Use scripts.durable_records for handoff.
+1. Inspect the full G1 CPU gate and directed correction gate below. Close all
+   failures; commit G1 correction separately from unfinished CUDA code.
+2. Finish CUDA standalone/Python/consumer compile and backend-neutral public
+   target tests. Rebuild NPU shared backend after abstraction changes.
+3. Profile NPU mixed/resident only with a current safe device allocation and
+   fresh bounded budget; do not automatically retry the timed-out lease. Finish
+   related CPU/NPU qualification and only justified selection measurements.
+4. Commit evidence separately; update support/selection and exact CUDA target
+   commands. Real GPU correctness/residency/multicard/performance remain pending.
 
-## Next work and live records
+## Current jobs and development evidence
 
-Stage-start documents committed/pushed as `05af8f8`. G1 native/Python State
-batch VJP, Read VJP/grouped finite checks, ordered Add sample batching and counters
-are ready for the G1 implementation commit. Frozen `g1-state-dev02` built and passed **1538** directed CPU
-FP64/FP32 tests; unit terminal success, MainPID0, empty cgroup. Its predecessor
-`g1-state-dev01` failed compilation; records retained. Earlier Read gate passed193.
-Read input mutation/version checking was then added; final development gate
-`g1-state-dev03` uses only the G1 changes, isolated from unfinished CUDA work.
+All paths below are `TASK/{sources,builds,runs,plans}/NAME` unless specified.
+Inspect with `systemctl --user show tide-NAME.service -p ActiveState -p Result
+-p MainPID -p ControlGroup`; read run `status.json`, `task.log` and gate report.
+Current services use background.slice, KillMode=control-group, Nice10, fixed
+read-only sources, OMP/BLAS1 and bounded resources. Stop commands, if newly
+requested: `systemctl --user stop tide-NAME.service` (current jobs only).
 
-Prepared job `tide-g1-state-dev03.service`, source `TASK/sources/g1-state-dev03`,
-build `TASK/builds/g1-state-dev03`, records `TASK/runs/g1-state-dev03`.
-Command: `scripts/job.py --output-dir RUN -- python scripts/develop.py
---output-dir RUN --build-dir BUILD --jobs 8 tests/test_read_batched_vjp.py
- tests/test_state_batched_vjp.py tests/test_isolated_gradients.py`.
-Budget45min, CPUQuota1000%, MemoryMax16G, TasksMax192, OMP/BLAS1; no accelerator.
-Terminal result: native build and324 directed checks passed, including final Read
-input version checks. Service exit0/MainPID0/empty cgroup confirmed. Commit G1,
-then run full CPU and related NPU qualification from that clean fixed commit;
-commit evidence separately. G1 does not contain the in-progress resident changes.
+- `g1-cpu-qualification01`: clean132cada full CPU FP64/FP32 gate still running,
+  last observed81%.90min,8 build jobs,CPUQuota1000%,16GiB,192 tasks. Command
+  `scripts/job.py --output-dir RUN -- python scripts/qualify.py --output-dir RUN
+  --jobs 8`. `verification/result.json` and `verification/tests.log` own result.
+  Known failures: old State/Read replay/clock counter assertions, omitted online
+  consumer build, and lean process tests inheriting Torch parent's ru_maxrss.
+  These are being corrected; this gate is not passed.
+- `g1-regression-dev04`: terminal exit0/MainPID0,173 tests passed. Matching core
+  build and online consumer (`builds/g1-online-dev04`) validated metric/clock and
+  qualification plumbing. Earlier State/Read development passed193,1538 and324
+  checks; each scoped report retained. G1 custom/nondefault replay remains.
+- `g1-regression-dev05`: terminal exit0/MainPID0,36 tests passed. Frozen directed test correction. Reuses dev04
+  core by source/binary digest; runs grad-profile and measurement-lane tests.
+  The latter now run from lean supervisors, preserving64MiB lane budgets and
+  terminal wait4 checks. Reproducer: Torch-loaded parent/exec child both inherit
+  ~232MiB ru_maxrss; lean child ~11MiB. Budget15min,CPUQuota400%,4GiB,128 tasks.
+- `g3-cuda-dev04`: running frozen G3 build, reuses matching132cada CUDA core
+  `builds/g3-cuda-core-dev01`. Plan `plans/g3-cuda-dev04.sh`; build
+  `builds/g3-cuda-resident-dev04`.60min,4 jobs,CPUQuota800%,16GiB,192 tasks.
+  dev03 compiled all102 shared semantic CUDA kernels and failed later on an old
+  state reverse boundary test missing the reusable gather arguments; fixed here.
+  dev01/dev02 compile failures retained. CPU source contracts dev02 compiled all
+  102 kernels and passed1 CTest; no actual CUDA device claim.
+- `g1-npu-build01`: clean132cada Python and standalone cores plus scale consumer
+  built,5 CTests passed; terminal exit0/MainPID0/empty cgroup. Builds
+  `g1-npu-python01`, `g1-npu-standalone01`, `g1-npu-scale01`.
+- `g1-npu-qualification01`: terminal queue timeout after120.53s, no free device;
+  **no candidate device code executed**. Planned64 module and8 training checks
+  did not run. `runs/g1-npu-qualification01/queue.json` preserves receipt.
+  Do not call it a correctness failure or silently repeat the unchanged job.
+- `g2-component-smoke02`:6 small CPU processes (Read/Add/Attention × replay/batch),
+  rows2,width8,parity+trace passed. Smoke timings are not selection evidence.
+  New profiling script still needs device-kernel trace acceptance. G2/G5 actual
+  medium/resident/selection experiments remain unexecuted.
 
-Independent uncommitted CUDA work under `tools/device_online`: shared backend
-interfaces and launch facades, CUDA conditional graph control, numerical and peer
-adapters, build/loader/target contracts. It is incomplete and uncompiled. Do not
-include it in the G1 commit or claim any CUDA execution on this host.
+## Environment and evidence limits
 
-## Preserved previous-stage disposition
+Public NPU module `libtorch-npu/2.10.0-cann9.0.0`, Python under
+`/opt/miniconda/envs/ascend900-train-full-torch-npu-2.10.0-py311`. Standalone SDK
+is separate from wheel runtime. This explicit user stack supersedes old guide
+paths. Private CUDA module `~/privatemodules/torch-cuda/2.10.0-cu128`, toolkit
+12.8.1 under `/mi/data2T/zlong/gpu-toolchains`; explicit80/90/100 architectures.
+No GPU here; drivers unchanged. Last disk check root64GiB/data84GiB available;
+external use fluctuates, recheck before large writes. Last inventory all16 NPUs
+had external processes; no process was touched. New experiments use existing
+project records, Trackio off, heavy timing serial, no automatic retries.
 
-F1–F5 implemented/qualified only for their declared prior CPU/NPU source profiles.
-F6/F7 local selection review closed at c0ce4ee5; this does not qualify new changes.
-Original matrix: 61/120 bound FP32 accepted; 8 historical unbound observations;
-59 missing bound cases and two later failed follow-ups preserved unchanged.
-CPU Attention full-size training follow-up reached24400s without a complete result;
-Settle resident Attention inference follow-up failed11-card admission before execution.
-Neither produced an accepted timing; no automatic retry or old manager restart.
-All old current-task services terminal/empty. Detailed paths and terminal review:
-[evidence/selection-terminal-20261010.md](evidence/selection-terminal-20261010.md),
-[selection advice](evidence/selection-review-20261009.md). The old pending-measurement
-notes are historical, not an execution queue for this stage.
+CUDA work shares graph/kernel semantic sources with independent CUDA conditional
+control and P2P backend. Initial semantic adapter is scalar per logical worker;
+compilation is not proof of correctness, residency, fusion or performance.
+State/Read batch graph composition likewise is not a fused-kernel claim.
 
-Prior qualified sources: CPU78e9df6 (9458 tests,654 scoped skips,12 CTests),
-exact comparator e69b3bd (121 CPU/49 NPU), NPU e69 (49 eager+93 resident),
-CUDA-linked aarch64 host187+7 relocation and updated108 consumer checks.
-Actual NVIDIA/x86/other versions remain target-pending. Keep cited hashed builds,
-raw profiles, packets and immutable worktrees. Current target commands:
-[eager-target-validation](eager-target-validation.md).
+## Preserved previous stage and protected history
 
-Preserve the original-scale strict near-tie failure: CPU246 ahead by one FP32 ULP,
-resident245/246 tie and choose245; proposal error7.7039e-6,events2325/2327.
-Do not relax discrete comparison or claim universal strict cross-device equivalence.
-[Retained witness](evidence/original-add-route-witness-20261004.md).
-Full/Aggregate batched VJPs already have active consumers; resident reverse already
-uses explicit device VJPs. Python, Python-owned native and standalone LibTorch
-identities, CPU FP64/FP32 and accelerator FP32/FP16 contracts stay separate.
+F1–F7 earlier qualification/selection remain valid only for cited old sources.
+Old matrix61/120 bound FP32 timings,59 missing cases and later failed follow-ups
+are not a new execution queue. [Terminal record](evidence/selection-terminal-20261010.md),
+[selection advice](evidence/selection-review-20261009.md). CPU78e9df6 full gate,
+exact-comparator/eager/resident e69b3bd and old CUDA host-build results are not
+qualification for current modifications.
 
-## Protected history
+Preserve original strict near-tie witness: CPU246 one FP32 ULP ahead; resident
+245/246 tie selects245; proposal error7.7039e-6,events2325/2327.
+[Witness](evidence/original-add-route-witness-20261004.md). Do not weaken discrete
+comparison. Full/Aggregate batched VJPs and explicit resident device VJPs were
+already enabled; retain independent candidates and Python/native/standalone IDs.
 
 **Never resume, stop, signal or clean historical-cpu-attention-01 / worker2686919.**
-Its historical running record is unrelated to this stage and is left untouched.
-`scripts/status.py` currently exits1 for the known malformed historical
-build-reverse-gather-python-dev01 metadata. Preserve it; it is not a current blocker.
-Do not write project files in ObsidianVault or change reference repositories.
+The malformed historical build-reverse-gather-python-dev01 status makes
+scripts/status.py exit1; preserve it, not a current task blocker. No project
+writes to ObsidianVault; lh/fractal-latcarf and other references stay read-only.

@@ -34,7 +34,9 @@ def test_grad_forward_profile_preserves_values_and_roots(dtype, memory, policy, 
                 assert off[key] == on[key], key
         assert (on['op/aggregate_replay_worker_ns'] > 0) == (aggregate == 'replay')
         for part in ('state', 'read'):
-            assert on[f'op/{part}_replay_worker_ns'] > 0
+            assert on[f'op/{part}_replay_worker_ns'] == 0
+        assert on['op/state_batch_graph_worker_ns'] > 0
+        assert on['op/read_batch_vjp_worker_ns'] > 0
         assert (on['op/full_replay_worker_ns'] > 0) == (policy == 'replay')
         assert on['detail/aggregate_worker_seconds'] > 0
         assert on['detail/read_worker_seconds'] > 0

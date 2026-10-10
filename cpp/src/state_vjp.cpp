@@ -1,4 +1,5 @@
 #include "tide/state_vjp.h"
+#include "tide/operator_work.h"
 #include <torch/csrc/autograd/autograd.h>
 #include <torch/csrc/autograd/functions/utils.h>
 #include <torch/csrc/autograd/saved_variable.h>
@@ -148,6 +149,7 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
 }
 std::vector<State> state_batch_vjp(const NodeWeights& w,const std::vector<State>& old,
     const ContentViews& views,const std::vector<Index>& times,const std::vector<State>& numeric) {
+  work::StateReplayTimer timer(work::StateBatchGraphNs);
   std::map<std::string,std::vector<size_t>> groups;
   std::vector<Request> requests;
   for (size_t i=0;i<old.size();++i) {

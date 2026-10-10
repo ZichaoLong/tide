@@ -60,7 +60,8 @@ def test_actual_training_phases_and_instrumentation(dtype,family,variant,modes):
     changed=any(not torch.equal(p,initial[k]) for k,p in a.model.named_parameters())
     assert changed==update
     assert measured['work']=={}
-    assert profile['work']['op/state_replay_worker_ns']>0
+    assert profile['work']['op/state_replay_worker_ns']==0
+    assert profile['work']['op/state_batch_graph_worker_ns']>0
     assert all(v==0 for v in core.work_metrics().values())
 
 
