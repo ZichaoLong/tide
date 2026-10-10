@@ -3,26 +3,66 @@
 Updated 2026-10-10 (Asia/Shanghai). The G1–G5 stage is active and **not globally
 closed**: CPU correctness, local CUDA/NPU builds, CPU selection evidence and GPU
 handoff are ready; new NPU device qualification/profiling is resource-blocked.
-All current-stage submitted jobs are terminal; nothing is queued or automatically
-scheduled. This is not a user pause. Continue authorized work when resources
+The user has authorized the follow-up implementation and two-stage experiment plan.
+Current work: reduce Add internal batch assembly/storage overhead with CPU regressions;
+prepare complete standalone mixed/resident profiling and dependency-ordered finite
+submission entries. Performance execution may wait for resources. GPU hotspot
+parallelization follows real-device qualification/profiling.
+Submitted jobs are terminal. The Add assembly development gate passed; clean CPU
+qualification and backend builds are the next launches. No device experiment is queued. This is not a user pause. Continue authorized work when resources
 permit; commits never impose a pause. No subagents. Selector/new upstream
 semantics remain deferred. Contracts: [execution-flows §11](execution-flows.md).
 Sole backlog: [ROADMAP G1–G5](ROADMAP.md).
+
+## Current follow-up implementation and next qualification
+
+Add batch assembly now reuses whole content batches and omits private graph row
+clones while preserving owned public states and first-order/version/None rules.
+`g1-add-assembly-dev01` passed477 directed CPU FP64/FP32 Add/storage/clock/State/Read
+tests from a frozen dirty snapshot of8523353. Its development tree digest is
+`17ecec8fc01ecccd00af2855d1ccd734de29a31fdba51978505989e9cdbb8555`;
+archive/log/status/development records are in `runs/g1-add-assembly-dev01`.
+The source-exact new core digest is
+`0e2d0baa8fb2e3db1aed807c20c4ef78e53838922295dd4f60fb7578313266f0`.
+Profile identity/result/CSV checks passed28 tests; CLI/failure checks passed22
+with2 optional binary skips, followed by both standalone CLI cases passing with
+the historical byte-fixed CPU consumer (launcher compatibility only).
+
+Commit this implementation, create read-only `sources/g-stage-followup-clean01`,
+then launch `plans/g1-cpu-qualification04.sh`, `plans/g3-npu-clean02.sh`, and
+`plans/g3-cuda-clean02.sh` in distinct background.slice services through job.py.
+CPU qualification reuses only the byte-matched `builds/g1-add-assembly-dev01`;
+its dirty build provenance stays visible. CUDA/NPU build fresh artifacts with
+new core ABI and clients. Each uses two build workers; no timing runs overlap.
+CPU service:90min,6CPUs,12GiB,256tasks. Each backend build:3h,4CPUs,16GiB,512tasks.
+Output is `runs/NAME/{status.json,task.log}`; qualify output is `runs/NAME/gate`.
+
+Complete profiling entry and contract: [execution-flows §11.3](execution-flows.md).
+Four prepared D64/B8/T4/V257 packets/cases (Add/Attention × mixed-c/resident,
+2NPUs,32 body nodes/112 edges) pass offline8GiB/card admission. Estimated
+per-card peaks0.68–2.27GB do not substitute for observed memory calibration.
+The new device batch uses `plans/g-stage-device-batch01.py` and a sealed JSON
+manifest, prepared after this implementation is committed. It checks clean
+qualification/build predecessors and executes five separate user services in
+order, stopping on the first failure without retry: modules02,training02,
+resident02,components02,complete-profiles02. Its `--check-only` submits nothing.
+Old unsubmitted01 plans remain superseded, not queued or retried. Second-tranche
+kernel/selection work is conditional on these new profiles; no full matrix.
 
 ## Source and reviewed delivery
 
 Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `/var/tmp/zlong-graph-execution-foundation/repository`, branch
-`graph-execution-foundation`. Initial clean HEAD matched c0ce4ee5. Latest
-implementation is afbc07556c693e9809bb005154a4b9b806d16c51, committed/pushed;
-this boundary adds reviewed evidence, support scope and handoff only.
+`graph-execution-foundation`. Initial clean HEAD matched c0ce4ee5. Previous implementation
+afbc07556c693e9809bb005154a4b9b806d16c51 and reviewed delivery8523353 are committed/pushed.
+The follow-up above changes source; old qualification/build evidence below stays
+tied to its original identities until the new gates complete.
 
 G1 State/Read132cada, accounting fixes8a4d60f and exact Norm VJP fixa02c18c;
 G3 CUDA/shared boundary bda25de; component profiler d1df03c; target capacity/
 control-policy ecafdf4, logical0 peer entry5018133, compiled-consumer identity
-afbc075. Core digest
-`dbc370539ed261846524c427b7b9a37a38f6857ba6a6ccb78ad365168140a150` is unchanged
-through the latest entry/doc follow-ups. Frozen qualification sources remain intact.
+afbc075. Previous core digest
+`dbc370539ed261846524c427b7b9a37a38f6857ba6a6ccb78ad365168140a150` belongs to those receipts. Frozen qualification sources remain intact.
 
 | Area | Delivered / exact evidence boundary |
 | --- | --- |
@@ -76,8 +116,10 @@ retained preflight refusal. Earlier failed development attempts remain retained.
 
 ## Resource blocker and exact next commands
 
-Last retained read-only inventory: 2026-10-10T10:54:31.504388+00:00, all16 chips had external
-processes. `runs/g4-npu-resource-inspection02.{json,txt}` retains the observation.
+Latest retained read-only inspection: 2026-10-10T11:41:18.704642+00:00; all16 chips
+were unavailable and no free physical IDs were returned.
+`runs/g4-npu-resource-inspection03.json` retains the observation. Public module
+libtorch-npu/2.10.0-cann9.0.0 and msprof were rechecked; no device workload ran.
 No process was touched. Recheck healthy/no-process/HBM/utilization before a
 new allocation; use the helper's two-snapshot and advisory-lock checks. Do not
 mechanically retry an unchanged timed-out lease. The resource-information

@@ -41,6 +41,10 @@ class ClockedKernel final : public StateKernel {
                             const std::vector<Index>& ts, const ContentViews& views) const override {
     return global(program_->batch(w, local(old), h, times(ts), views));
   }
+  std::vector<State> batch_graph(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
+      const std::vector<Index>& ts, const ContentViews& views) const override {
+    return global(program_->batch_graph(w, local(old), h, times(ts), views));
+  }
   std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
                                const std::vector<Index>& ts, const ContentViews& views) const override {
     return global(program_->sequence(w, local_state(clock_, old), h, times(ts), views));

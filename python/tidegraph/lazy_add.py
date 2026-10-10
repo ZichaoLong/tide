@@ -13,6 +13,13 @@ def repeat(value, retention, ticks):
     return value
 
 
+def _contents(values, ids):
+    # Static row positions only, never input values or an oracle trajectory.
+    if len(ids) == len(values) and ids == list(range(len(values))):
+        return values
+    return torch.stack([values[i] for i in ids])
+
+
 class LazyAdd(StateProgram):
     profile = "lh-add-repeat-v1"
     sequence_contract = True
@@ -39,24 +46,30 @@ class LazyAdd(StateProgram):
             raise ValueError("packed initial-state count mismatch")
         current, states, depth, calls = list(old), [None]*len(batch.times), 0, 0
         while True:
-            groups = {}
-            for i, start in enumerate(batch.offsets[:-1]):
-                j = start+depth
-                if j < batch.offsets[i+1]:
-                    time, last = batch.times[j], current[i].last_time
-                    if not int64(last) or not -1 <= last < time:
-                        raise ValueError("Add requires strictly increasing nonnegative tick times")
-                    groups.setdefault(time-last, []).append((i, j))
-            if not groups:
+            pairs = [(i, start+depth) for i, start in enumerate(batch.offsets[:-1])
+                     if start+depth < batch.offsets[i+1]]
+            if not pairs:
                 return states, calls
-            for ticks, pairs in groups.items():
-                previous = torch.stack([current[i].value for i, j in pairs])
-                h = torch.stack([batch.contents[j] for i, j in pairs])
-                values = h + repeat(previous, weights.extra["add_retention"], ticks)
-                for (i, j), value in zip(pairs, values.unbind()):
-                    current[i] = states[j] = State(value.clone(), batch.times[j], increment(current[i].observations))
-                calls += 1
+            values, count = self._batch_rows(weights, [current[i] for i, j in pairs],
+                _contents(batch.contents, [j for i, j in pairs]), [batch.times[j] for i, j in pairs], independent=True)
+            for (i, j), value in zip(pairs, values):
+                current[i] = states[j] = value
+            calls += count
             depth += 1
+
+    def _batch_rows(self, weights, old, contents, times, *, independent):
+        """Internal structural VJP graphs may use views; published states own storage."""
+        groups, states = {}, [None]*len(old)
+        for i, (state, time) in enumerate(zip(old, times)):
+            if not int64(time) or not int64(state.last_time) or not -1 <= state.last_time < time:
+                raise ValueError("Add requires strictly increasing nonnegative tick times")
+            groups.setdefault(time-state.last_time, []).append(i)
+        for ticks, ids in groups.items():
+            previous = torch.stack([old[i].value for i in ids])
+            values = _contents(contents, ids) + repeat(previous, weights.extra["add_retention"], ticks)
+            for i, value in zip(ids, values.unbind()):
+                states[i] = State(value.clone() if independent else value, times[i], increment(old[i].observations))
+        return states, len(groups)
 
     def validate(self, weights, state):
         if state.slots:

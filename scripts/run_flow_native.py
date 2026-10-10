@@ -10,7 +10,7 @@ from flow_resident_options import native_arguments
 from flow_failure import RecordedFailure
 
 
-def run(packet, args):
+def prepare(packet, args):
     binary = args.native_binary.resolve()
     if not binary.is_file():
         raise ValueError("explicit standalone binary is unavailable")
@@ -40,6 +40,11 @@ def run(packet, args):
     if args.diagnostics: command.append("--diagnostics")
     if getattr(args,"phase_timing",False): command.append("--phase-timing")
     command.extend(native_arguments(args))
+    return binary, path, text, command
+
+
+def run(packet, args):
+    binary, path, text, command = prepare(packet, args)
     start = time.perf_counter()
     with (args.output_dir/"consumer.log").open("w") as stream:
         process = subprocess.run(command, cwd=args.output_dir, stdout=stream, stderr=subprocess.STDOUT)

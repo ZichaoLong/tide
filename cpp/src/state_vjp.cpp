@@ -118,7 +118,7 @@ std::vector<State> bind_group(const NodeWeights& weights,std::vector<Request> ro
   std::vector<State> semantic;
   {
     at::AutoGradMode enable(true);
-    semantic=w.kernel->batch(w,old,at::stack(content),times,views);
+    semantic=w.kernel->batch_graph(w,old,at::stack(content),times,views);
   }
   if (semantic.size()!=numeric.size()) throw std::invalid_argument("State VJP changed batch length");
   auto result=numeric;

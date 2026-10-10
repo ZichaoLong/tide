@@ -10,13 +10,14 @@ from flow_failure import RecordedFailure
 from flow_resident_options import add_arguments, validate as validate_resident_options
 
 
-def main():
+def make_parser(*, standalone=False):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--packet", type=Path, required=True)
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--device", required=True)
     p.add_argument("--family", choices=("pdg", "timed-dag", "settle"), required=True)
-    p.add_argument("--implementation", choices=("python", "native", "libtorch"), required=True)
+    p.add_argument("--implementation", choices=("libtorch",) if standalone else ("python", "native", "libtorch"),
+                   required=not standalone, default="libtorch" if standalone else None)
     p.add_argument("--preset", choices=("cpu", "mixed-a", "mixed-b", "mixed-c", "resident"), required=True)
     p.add_argument("--schedule", choices=("streaming", "prefill"), required=True)
     p.add_argument("--dtype", choices=("float32", "float64", "float16"), default="float32")
@@ -42,7 +43,10 @@ def main():
     for name in ("read", "control", "selection", "events"):
         p.add_argument("--"+name, default="auto")
     p.add_argument("--scoring-dtype", choices=("profile", "payload", "float32", "float64"), default="profile")
-    a = p.parse_args()
+    return p
+
+
+def validate_arguments(p, a):
     if not 1 <= a.threads <= 1024 or not 1 <= a.workers <= 1024:
         p.error("threads and workers must be in [1,1024]")
     if (a.workers != 1 or a.packed_sources or a.batch_next) and (a.implementation == "python" or a.preset == "resident"):
@@ -52,6 +56,13 @@ def main():
         p.error("continuous consumer requires v2; legacy v1 declares reset windows")
     if (a.native_binary is not None) != (a.implementation == "libtorch"):
         p.error("--native-binary is required exactly for --implementation libtorch")
+    return packet
+
+
+def main():
+    p = make_parser()
+    a = p.parse_args()
+    packet = validate_arguments(p, a)
     a.output_dir = a.output_dir.resolve()
     a.output_dir.mkdir(parents=True, exist_ok=False)
     try:

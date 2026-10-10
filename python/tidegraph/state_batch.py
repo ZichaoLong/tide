@@ -7,12 +7,15 @@ from .history import increment
 def step(kernel, weights, old, views, times):
     from .clocked_state import ClockedState
     from .matrix_memory import MatrixMemory
+    from .lazy_add import LazyAdd
     from .packing import PackedSequence
     if type(kernel) is ClockedState:
         values = step(kernel.program, weights, [kernel.clock.local_state(s) for s in old],
                       views, [kernel.event(t) for t in times])
         return [kernel.clock.global_state(s) for s in values]
     h = torch.stack([v.value for v in views])
+    if type(kernel) is LazyAdd:
+        return kernel._batch_rows(weights, old, h, times, independent=False)[0]
     if type(kernel) is MatrixMemory:
         q, k, v = kernel.project(weights, h)
         matrix = torch.stack([s.slots["matrix"] for s in old])

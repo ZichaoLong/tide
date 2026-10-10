@@ -21,7 +21,7 @@ current handoff. Old evidence below remains tied to its original source.
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
 | G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented and CPU-qualified: built-in State/Read batching, grouped finite checks and exact Norm VJP order;9595 CPU tests,22 topology cells,10 installed checks and12 CTests. Custom/nondefault replay and structural/small-tensor costs remain. New NPU device qualification is resource-blocked |
-| G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | CPU component profiling completed; Read/Attention host stages improve, Add attachment still has clone/view overhead. Complete native Add shows no observed speed gain. NPU mixed/resident profiling and any evidence-driven further optimization await devices; no fusion claim or old-queue restart |
+| G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | CPU component profiling completed; Read/Attention host stages improve, Add attachment follow-up removes internal row clones/content restacking;477 directed CPU cases passed, clean qualification pending. Complete native Add shows no observed speed gain. Complete standalone mixed/resident profile entry implemented and directed checks passed; device collection and evidence-driven further optimization await devices; no fusion claim or old-queue restart |
 | G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | local source/build/host deliverable complete: independent CUDA conditional/P2P backend,102 semantic sources, standalone/Python/installed consumers, strict full target entry, compile/CPU/import gates passed. All GPU correctness/residency/multicard/memory/performance remain target-pending |
 | G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | CPU clean-source correctness closed; dual-runtime NPU builds/host imports passed, actual current-source NPU modules/full training/resident/multicard await allocation. Historical passing gates remain tied to old sources |
 | G5 | Limited decision-changing performance evidence, updated selection advice, CUDA target commands and reviewed handoff | finite CPU tranche reviewed:8 measurements,1 preallocation refusal,1 unstarted case; no retry/full-size expansion. Selection advice and GPU target handoff ready. Current NPU route selection evidence remains resource-blocked |
@@ -32,6 +32,17 @@ record exact source scopes. This stage is not globally closed: remaining NPU
 work depends on a safe allocation, and actual CUDA execution needs a GPU host.
 Prepared commands and current resource state are in STATUS; no automatic retry
 or historical matrix restart is scheduled.
+
+Implementation follow-up authorized: remove demonstrated Add internal batch
+assembly costs while preserving public storage isolation, versions, undefined
+gradients and tick rounding; run related CPU regressions before committing.
+First device tranche: current-source correctness, components and bounded complete
+standalone mixed/resident profiling with memory calibration. The existing six
+PyTorch component cases do not cover complete native/resident bottlenecks.
+Second tranche: implement profile-selected changes, requalify their fixed source,
+then limited comparison/selection cases. Heavy measurements remain serial and
+finite; new source/build identities supersede unsubmitted plans only, never old
+results. CUDA kernel tuning awaits target evidence; no universal speedup claim.
 
 ## Authorized extension: reusable experiment library
 

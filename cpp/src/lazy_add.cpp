@@ -26,6 +26,15 @@ class AddRepeat final : public StateKernel {
   }
   std::vector<State> batch(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
                            const std::vector<Index>& times, const ContentViews&) const override {
+    return batch_rows(w,old,h,times,true);
+  }
+  std::vector<State> batch_graph(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
+                           const std::vector<Index>& times, const ContentViews&) const override {
+    return batch_rows(w,old,h,times,false);
+  }
+ private:
+  std::vector<State> batch_rows(const NodeWeights& w, const std::vector<State>& old, const Tensor& h,
+                              const std::vector<Index>& times, bool independent) const {
     if (old.empty() || h.dim() != 2 || h.size(0) != static_cast<Index>(old.size()) || times.size() != old.size())
       throw std::invalid_argument("invalid Add batch metadata");
     // Bucket actual samples by elapsed ticks. No padded observations or masked
@@ -38,16 +47,26 @@ class AddRepeat final : public StateKernel {
     }
     std::vector<State> result(old.size());
     for (const auto& [ticks, ids] : groups) {
-      std::vector<Tensor> previous, content;
-      for (auto i : ids) { previous.push_back(old[i].value); content.push_back(h[i]); }
-      auto values = at::stack(content) + repeat(at::stack(previous), w.extra.at("add_retention"), ticks);
+      std::vector<Tensor> previous;
+      for (auto i : ids) previous.push_back(old[i].value);
+      // A single gap group already occupies the complete input batch. Avoid
+      // select/stack round trips; other groups retain their physical row order.
+      Tensor content=h;
+      if (ids.size()!=old.size()) {
+        std::vector<Tensor> parts;
+        for (auto i:ids) parts.push_back(h[i]);
+        content=at::stack(parts);
+      }
+      auto values = content + repeat(at::stack(previous), w.extra.at("add_retention"), ticks);
+      auto rows=values.unbind(0);
       for (size_t row = 0; row < ids.size(); ++row) {
         auto i = ids[row];
-        result[i] = {values[row].clone(), times[i], increment(old[i].observations)};
+        result[i] = {independent?rows[row].clone():rows[row], times[i], increment(old[i].observations)};
       }
     }
     return result;
   }
+ public:
   bool joint_batch() const override { return true; }
   bool batched_autograd() const override { return true; }
   bool exact_sequence() const override { return true; }

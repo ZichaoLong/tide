@@ -13,6 +13,12 @@ class StateKernel {
   virtual State step(const NodeWeights&, const State&, const ContentView&, Index time) const = 0;
   virtual std::vector<State> batch(const NodeWeights&, const std::vector<State>&, const Tensor&,
                                   const std::vector<Index>&, const ContentViews&) const;
+  // Private-to-VJP structural graph: returned rows may share storage. It is
+  // never published as numeric state; dependencies and metadata match batch().
+  virtual std::vector<State> batch_graph(const NodeWeights& w, const std::vector<State>& old,
+      const Tensor& h, const std::vector<Index>& times, const ContentViews& views) const {
+    return batch(w, old, h, times, views);
+  }
   virtual std::vector<State> sequence(const NodeWeights&, const State&, const Tensor&,
                                      const std::vector<Index>&, const ContentViews&) const;
   virtual PackedStates packed_sequence(const NodeWeights&, const std::vector<State>&,

@@ -302,6 +302,13 @@ native fiber policy 保留标明的语义 replay；结构不同的行和同一�
 深度仍限制批宽。容器、视图／小 Tensor 和按输出槽连接模式的反向工作仍存在。
 Full/Aggregate 已有批量反向继续由实际消费者启用。
 
+Add 的内部结构求导图可使用批量结果的行视图；公共 numeric 状态和 VJP
+绑定输出仍各自拥有独立存储。完整 tick-gap 分组直接复用已堆叠的 content，
+不再逐行拆分后重新堆叠；每个 tick 的乘法、因果深度、版本检查和 None/零
+连接分组保持。C++ `batch_graph` 默认调用原 batch，仅内建 Add 提供该内部
+存储优化；状态时钟包装转发同一契约。此改动不声明内核融合或性能收益。
+
+
 ### 11.2 CUDA 常驻后端与资格边界
 
 公共 DeviceProgram/DeviceSequence 接口由 CANN 和 CUDA 独立实现。CUDA 将静态
@@ -331,3 +338,36 @@ Python/独立 runtime 构建、安装消费者、逻辑0协调卡和至少3个�
 有限选择证据见 [CPU 批量化复验](evidence/batched-selection-cpu-20261010.md)。
 组件加速不自动外推到完整消费者；显式物理切分被准入拒绝时保留失败与未运行格，
 不得扩大预算或补写不存在的性能结果。当前资源状态与后续命令仍只由 STATUS 交接。
+
+后续实现与实验分两批衔接：先做可本机验证的内部组织优化及 CPU 回归，
+设备资源具备后完成新源码资格、组件与中等规模独立 LibTorch 混合／常驻
+profiling 和内存校准；依据证据选择第二批实现与有限选型比较。预备计划的
+源码、构建和消费者身份必须随实现更新，旧证据与失败记录不变。性能执行
+可以等待资源；不以等待阻止可推进的源码与入口准备。
+
+### 11.3 完整消费者的有界 CANN profiling
+
+`scripts/profile_execution_flow.py` 复用连续窗口独立 LibTorch 消费者和其公共
+放置／chunk 参数，支持 mixed-a/b/c 与 resident。入口要求干净固定源码、
+匹配的 core／resident／已编译消费者身份及无 Python 的动态库闭包。
+`--prepare-only` 只输出已核验命令，不能记为执行通过。
+
+每个案例只启动一次候选进程；CANN 采集覆盖构建、可选一次 warmup 和一次
+完整工作步，含窗口续接、训练反向／更新及内存观测，属于诊断而非吞吐证据。
+原始 trace、按算子耗时／调用次数及主机 API 统计一并保留，设备任务总耗时
+不等于 wall time。要求原生结果完整通过、实际设备算子非空和每卡内存校准
+通过；resident 另要求设备 queue 任务。内核存在仍不能单独证明常驻性，
+须结合原始时间线／主机 API 判断窗口边界与动态调度。
+
+示例（目标机加载相符工具链并完成相应正确性门禁后，使用新输出目录）：
+
+```bash
+python scripts/profile_execution_flow.py --packet WORKLOAD.json --build-dir ONLINE_BUILD \
+  --output-dir NEW_PROFILE --device npu:0 --family timed-dag --preset mixed-c \
+  --schedule prefill --training --optimizer sgd --steps 1 --warmup 1 \
+  --windows-per-step 2 --devices 2 --device-memory-bytes 8589934592 \
+  --auto-sample-chunks --chunk-policy aggressive --timeout-seconds 600
+```
+
+采集和导出共用总超时，进程组 RSS 与全部输出大小均受限；首次失败保留记录
+并停止，不重试、不扩大预算。计时比较使用单独的不带 profiler 进程。
