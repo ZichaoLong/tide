@@ -108,7 +108,7 @@ def test_sample_chunk_refusals_and_whole_batch():
     for value in (-1, True, 2**63):
         with pytest.raises(ValueError, match="sample-chunk-rows"):
             run(p, sample_chunk_rows=value, **args)
-    with pytest.raises(ValueError, match="native NPU"):
+    with pytest.raises(ValueError, match="requires explicit native CUDA/NPU execution"):
         run(p, sample_chunk_rows=1, preset="resident", **args)
     baseline = run(p, **args)
     larger = run(p, sample_chunk_rows=2**63-1, **args)

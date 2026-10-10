@@ -37,7 +37,7 @@ def main():
     if (a.steps != 1 or not 0 <= a.warmup <= 1 or not 1 <= a.windows_per_step <= 4
             or not 1 <= a.devices <= 3 or not 1 <= a.threads*a.workers <= 8
             or not 30 <= a.timeout_seconds <= 1800 or not 1 <= a.host_memory_gib <= 32
-            or not 64 <= a.storage_limit_mb <= a.storage_budget_mb <= 4096
+            or not 200 <= a.storage_limit_mb <= a.storage_budget_mb <= 4096
             or a.device_memory_bytes <= 0 or a.diagnostics):
         p.error('invalid bounded profile configuration; require explicit memory cap and no tensor diagnostics')
     root, build = Path(__file__).resolve().parents[1], a.build_dir.resolve()

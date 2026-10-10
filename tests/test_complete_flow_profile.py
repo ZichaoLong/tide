@@ -112,6 +112,20 @@ def test_profile_cli_keeps_standalone_identity_and_explicit_device():
         p.parse_args(base+['--device','npu:0','--implementation','native'])
 
 
+@pytest.mark.parametrize('limit', ['64', '199'])
+def test_profile_refuses_storage_below_cann_minimum(tmp_path, monkeypatch, limit):
+    import profile_execution_flow as entry
+    monkeypatch.setattr(sys, 'argv', ['profile_execution_flow', '--prepare-only',
+        '--packet', str(tmp_path/'unused.json'), '--output-dir', str(tmp_path/'output'),
+        '--build-dir', str(tmp_path/'build'), '--device', 'npu:0', '--family', 'pdg',
+        '--preset', 'mixed-c', '--schedule', 'prefill', '--device-memory-bytes', '1073741824',
+        '--storage-limit-mb', limit])
+    with pytest.raises(SystemExit) as error:
+        entry.main()
+    assert error.value.code == 2
+    assert not (tmp_path/'output').exists()
+
+
 @pytest.mark.parametrize('mode', ['prepare', 'collected', 'missing-trace'])
 def test_complete_entry_lifecycle_with_synthetic_collector(tmp_path, monkeypatch, mode):
     # This tests orchestration/record acceptance only, never vendor execution.
@@ -143,7 +157,7 @@ def test_complete_entry_lifecycle_with_synthetic_collector(tmp_path, monkeypatch
     argv = ['profile_execution_flow', '--packet', str(source), '--output-dir', str(out),
             '--build-dir', str(tmp_path/'build'), '--device', 'npu:0', '--family', 'pdg',
             '--preset', 'mixed-c', '--schedule', 'prefill', '--training', '--optimizer', 'adamw',
-            '--device-memory-bytes', '1073741824']
+            '--device-memory-bytes', '1073741824', '--storage-limit-mb', '200']
     if mode == 'prepare':argv.append('--prepare-only')
     monkeypatch.setattr(sys, 'argv', argv)
     if mode == 'missing-trace':

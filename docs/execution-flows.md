@@ -369,5 +369,6 @@ python scripts/profile_execution_flow.py --packet WORKLOAD.json --build-dir ONLI
   --auto-sample-chunks --chunk-policy aggressive --timeout-seconds 600
 ```
 
-采集和导出共用总超时，进程组 RSS 与全部输出大小均受限；首次失败保留记录
+CANN 采集容量下限为200MB；采集和导出共用总超时，进程组 RSS 与全部输出
+大小均受限；首次失败保留记录
 并停止，不重试、不扩大预算。计时比较使用单独的不带 profiler 进程。
