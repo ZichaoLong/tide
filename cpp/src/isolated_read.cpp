@@ -46,7 +46,8 @@ class IsolatedRead final : public torch::autograd::Function<IsolatedRead> {
       Tensor dx;
       if (norm) {
         auto length=saved[2].index_select(0,ids).unsqueeze(-1);
-        dx=(x*(dy/length.masked_fill(length==0,1))).masked_fill(length==0,0);
+        // Preserve vector_norm VJP rounding before conversion to payload dtype.
+        dx=dy*(x/length).masked_fill(length==0,0);
       } else dx=dy*saved[1];
       dx=dx.to(ctx->saved_data["input_device"].toDevice(),
                static_cast<at::ScalarType>(ctx->saved_data["input_dtype"].toInt()));

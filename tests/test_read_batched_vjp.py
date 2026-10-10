@@ -68,3 +68,21 @@ def test_read_saved_row_version_check(implementation):
         row.add_(1)
     with pytest.raises(RuntimeError, match="modified by an inplace operation"):
         score.backward()
+
+
+@pytest.mark.parametrize("implementation", ["python", "native"])
+def test_norm32_vjp_rounding_before_float64_payload_conversion(implementation):
+    row = torch.tensor([.507269561290741, .33471184968948364, .9694220423698425],
+                       dtype=torch.float64, requires_grad=True)
+    weight = torch.ones(3, dtype=torch.float64, requires_grad=True)
+    if implementation == "native":
+        import _tide_native
+        value = _tide_native.read_vjp_probe([row], weight, True, torch.empty((), dtype=torch.float32))[0]
+    else:
+        value = _Read.apply(True, torch.float32, row.device, weight, row)[0]
+    cotangent = torch.tensor(.8499224781990051, dtype=torch.float32)
+    expected = torch.linalg.vector_norm(row.float())
+    actual_gradient, unused = torch.autograd.grad(value, (row, weight), cotangent, allow_unused=True)
+    expected_gradient, = torch.autograd.grad(expected, row, cotangent)
+    assert unused is None
+    assert torch.equal(actual_gradient, expected_gradient)

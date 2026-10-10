@@ -31,7 +31,10 @@ class _Read(torch.autograd.Function):
         if any(ctx.needs_input_grad[4+i] for i in used):
             if ctx.norm:
                 length = y.index_select(0, ids).unsqueeze(-1)
-                dx = (x * (dy / length.masked_fill(length == 0, 1))).masked_fill(length == 0, 0)
+                # Match vector_norm's VJP order before casting back to payload.
+                # Reassociating x*(dy/length) changes FP32 rounding observable
+                # by FP64 payload gradients (including unit-width proposals).
+                dx = dy * (x / length).masked_fill(length == 0, 0)
             else:
                 dx = dy*w
             dx = dx.to(device=ctx.input_device, dtype=ctx.input_dtype)
