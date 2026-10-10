@@ -50,6 +50,11 @@ and rejects any skipped public test. Single-card component invocations through
 `verify_device_control.py` are useful development steps, with explicitly partial
 scope. The full gate preserves strict discrete checks and default strict control
 comparison; it cannot convert a numerical near-tie witness into equivalence.
+The optional `--full-training-control-check conditioned` explicitly selects the
+existing [score-conditioned softmax comparison](resident-full-vjp.md) only for
+the standalone full-training checker. The result records that narrower policy;
+it never selects it automatically or changes discrete comparisons, and it does
+not certify the original strict control tolerance. Retain raw strict failures.
 
 Actual residency requires a separate target trace. For a finite initial trace,
 use Nsight Systems node-level CUDA Graph tracing on the warmed control/peer

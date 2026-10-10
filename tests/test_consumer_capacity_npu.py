@@ -6,6 +6,7 @@ import pytest
 import torch
 from test_online_consumer import packet
 from test_online_consumer_npu import target
+from resident_test_target import owner_devices
 from test_online_resident_consumer import standalone
 from online_consumer_support import observer,same
 from tidegraph import ResidentLimits,ResidentPlacement
@@ -47,7 +48,7 @@ def test_complete_training_with_automatic_splitting(implementation,memory,payloa
         candidate=run(p,implementation='native',device=d,schedule=schedule,preset='resident',dtype=payload_dtype,
             observer=observer(actual),native_library=os.environ['TIDE_BUILD_DIR'],resident_library=os.environ['TIDE_RESIDENT_LIBRARY'],
             resident_limits=ResidentLimits(outputs=16,trace=512,kv_trace_rows=512,workspace_bytes=512*MIB,chunk_policy='aggressive'),
-            resident_placement=ResidentPlacement(devices=(str(d),f'npu:{d.index+1}')),device_memory_bytes=budget,**kw)
+            resident_placement=ResidentPlacement(devices=owner_devices(d, 2)),device_memory_bytes=budget,**kw)
     tol=dict(atol=2e-3,rtol=2e-2) if half else dict(atol=1e-6,rtol=1e-5)
     same(actual,expected,**tol)
     torch.testing.assert_close(torch.tensor(candidate['losses']),torch.tensor(reference['losses']),**tol)

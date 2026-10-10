@@ -13,17 +13,18 @@ Repository `/home/zlong/llm/graph-execution-foundation` resolves to
 `graph-execution-foundation`. Initial clean HEAD was c0ce4ee5. Stage contract
 05af8f8 and State/Read implementation132cada7b21081d7f611326e1e0971e057201b4c
 and correction8a4d60f plus Norm VJP rounding fixa02c18c are committed/pushed. G3 CUDA resident implementation committed/pushed as bda25de.
-G2 component profiler and accurate State/Read policy metadata are ready for
-commit after6 passed CPU entry smokes; no actual selection timing yet.
+G2 component profiler and accurate State/Read policy metadata are committed/pushed
+as d1df03c after6 passed CPU entry smokes; no actual selection timing yet.
+Uncommitted follow-up: target gate includes automatic capacity tests, backend-neutral
+owner devices, and an explicit existing strict/conditioned full-training option.
 G1 metric/gate fixes and exact Norm VJP rounding are committed.
 Keep coherent commits and use clean immutable qualification after implementation.
 Do not edit a snapshot while its job runs. `TASK=/mi/data2T/zlong/tide-execution-flows`.
 
 1. Inspect clean a02c18c full G1 CPU qualification03. Corrections passed directed
    gates and are committed. Preserve failed01 and cancelled02 records.
-2. Commit the reviewed G3 source/backend-neutral target entry after completed
-   standalone CUDA/CPU development gates. Then compile Python CUDA and installed
-   consumers plus both NPU runtimes from that clean fixed source. Complete the
+2. Inspect the running clean bda25de CUDA/NPU builds, including Python/standalone
+   plugins and installed consumers. Review the small target-gate follow-up. Complete the
    source-related CPU host gate and retain actual GPU execution as target-pending.
 3. Profile NPU mixed/resident only with a current safe device allocation and
    fresh bounded budget; do not automatically retry the timed-out lease. Finish
@@ -59,7 +60,7 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
   exact matching immutable `builds/g1-norm-dev06` is reused by digest through
   `qualify_library.py --reuse-build`. Plan `plans/g1-cpu-qualification03.sh`,
   results `runs/g1-cpu-qualification03/gate`,90min,8 CPUs,16GiB,192 tasks.
-- `g3-cuda-clean01` / `g3-npu-clean01`: prepared clean bda25de qualification
+- `g3-cuda-clean01` / `g3-npu-clean01`: running clean bda25de qualification
   builds from `sources/g3-backends-clean01`, plans of matching names. Each
   builds fresh core, standalone/Python resident and installed combined consumers;
   CUDA adds all102 CPU source contracts and directed host regressions.
@@ -91,7 +92,7 @@ requested: `systemctl --user stop tide-NAME.service` (current jobs only).
   20min,4 CPUs,6GiB,128 tasks; optional real device cases skip and are not
   target qualification. The new complete target entry requires3 real devices
   and fails if any selected public case skips.
-- `g1-npu-build02`: prepared same three core/scale builds from clean8a4d60f
+- `g1-npu-build02`: terminal exit0/MainPID0/empty cgroup,5 CTests passed; three core/scale builds from clean8a4d60f
   source `sources/g1-cpu-qualification02`, plan `plans/g1-npu-build02.sh`.
   45min,4 build workers,CPUQuota600%,12GiB,192 tasks; no device execution.
 - `g1-npu-build01`: clean132cada Python and standalone cores plus scale consumer
@@ -122,7 +123,7 @@ Public NPU module `libtorch-npu/2.10.0-cann9.0.0`, Python under
 is separate from wheel runtime. This explicit user stack supersedes old guide
 paths. Private CUDA module `~/privatemodules/torch-cuda/2.10.0-cu128`, toolkit
 12.8.1 under `/mi/data2T/zlong/gpu-toolchains`; explicit80/90/100 architectures.
-No GPU here; drivers unchanged. Last disk check root64GiB/data84GiB available;
+No GPU here; drivers unchanged. Last disk check root64GiB/data80GiB available;
 external use fluctuates, recheck before large writes. Last inventory all16 NPUs
 had external processes; no process was touched. New experiments use existing
 project records, Trackio off, heavy timing serial, no automatic retries.

@@ -43,6 +43,8 @@ def main():
                    help='build_online_consumer.py output, with resident enabled')
     p.add_argument('--installed-consumer-build', type=Path, required=True,
                    help='build_resident_consumer.py output')
+    p.add_argument('--full-training-control-check', choices=('strict', 'conditioned'),
+                   default='strict', help='explicit existing softmax comparison policy; discrete checks remain exact')
     p.add_argument('--output-dir', type=Path, required=True)
     a = p.parse_args()
     if not re.fullmatch(r'(?:cuda|npu):(0|[1-9][0-9]*)', a.device):
@@ -79,6 +81,7 @@ def main():
     out = a.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
     report = dict(schema='tide-resident-target-v1', source=source, dirty=dirty,
                   device=a.device, state='running', stages=[],
+                  full_training_control_check=a.full_training_control_check,
                   python_build=py_record, standalone_build=cpp_record,
                   scope='complete declared resident correctness; independent CPU oracles, FP32/FP16, three families, both schedules, VJPs, optimizers, windows, checkpoints, capacity, 1/2/3 owners; no performance or profiling claim')
     write_json(out/'result.json', report)
@@ -110,12 +113,13 @@ def main():
         run('preflight', [sys.executable, '-c', preflight], 60)
         run('components', [sys.executable, root/'scripts/verify_device_control.py',
             '--device', a.device, '--build-dir', standalone, '--output-dir', out/'components',
+            '--full-training-control-check', a.full_training_control_check,
             '--checks', *CHECKS], 7200)
         run('installed-client', [client, '--device='+a.device, '--dtype=float32',
                                  '--training-devices=2'], 180)
         tests = sorted(str(f.relative_to(root)) for f in (root/'tests').glob('test_resident_*.py'))
         tests += ['tests/test_online_resident_consumer.py', 'tests/test_online_resident_chunking.py',
-                  'tests/test_online_consumer_memory.py']
+                  'tests/test_online_consumer_memory.py', 'tests/test_consumer_capacity_npu.py']
         run('public-consumers', [sys.executable, '-m', 'pytest', *tests, '-q', '--dtype', 'both',
             '--junitxml', out/'public.xml', '--basetemp', out/'test-tmp'], 7200)
         cases = ET.parse(out/'public.xml').findall('.//testcase')
