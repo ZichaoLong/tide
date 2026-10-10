@@ -40,7 +40,7 @@ void advance_block_events(const Graph& g, const Model& m, Continuation& q,
         if (!w.kernel->joint_batch()) stats["state_scalar_batch_steps"] += batch.size();
         if (!w.read_kernel->joint_batch()) stats["read_scalar_batch_steps"] += batch.size();
       }
-      if (replay) { stats["semantic_state_replays"] += batch.size(); stats["semantic_read_replays"] += batch.size(); }
+      if (replay) { stats[w.kernel->batched_autograd() ? "batched_state_events" : "semantic_state_replays"] += batch.size(); stats[w.read_kernel->batched_autograd() ? "batched_read_events" : "semantic_read_replays"] += batch.size(); }
       if (w.kernel->scalar_policy_fallback()) {
         if (!options.packed) stats["fiber_policy_scalar_events"] += batch.size();
         else if (replay) stats["fiber_policy_semantic_replays"] += batch.size();

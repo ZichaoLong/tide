@@ -53,6 +53,7 @@ class ClockedKernel final : public StateKernel {
   }
   bool exact_sequence() const override { return program_->exact_sequence(); }
   bool joint_batch() const override { return program_->joint_batch(); }
+  bool batched_autograd() const override { return program_->batched_autograd(); }
   bool joint_sequence() const override { return program_->joint_sequence(); }
   bool scalar_policy_fallback() const override { return program_->scalar_policy_fallback(); }
   State reset(const State& state) const override { return global_state(clock_, program_->reset(local_state(clock_, state))); }

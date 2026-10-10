@@ -1,7 +1,7 @@
 # Current handoff
 
 Updated 2026-10-10 (Asia/Shanghai). **New batched execution / CUDA resident stage
-active (G1–G5); no new task service submitted yet.** The current prompt supersedes
+active (G1–G5); State/Read development gates passed; implementation commit and clean qualification next.** The current prompt supersedes
 the previous local-delivery closure and any historical pause-after-commit note.
 Read [execution-flows §11](execution-flows.md) and [ROADMAP G1–G5](ROADMAP.md).
 Authorized: repository changes, necessary builds/tests, bounded experiments,
@@ -28,15 +28,29 @@ KillMode=control-group, durable job/log/status. Use scripts.durable_records for 
 
 ## Next work and live records
 
-First inspect State/Read and resident backend boundaries, declared module contracts,
-current tests/build helpers and installed SDKs. Commands run explicitly in repository:
-`rg -n "evaluate_state|evaluate_read|StateReplayTimer" cpp/src`,
-`cat tools/device_online/CMakeLists.txt`, `cat docs/resident-library.md`.
-Then implement G1 with directed development checks; start G3 without waiting for
-maximum NPU tuning. Add finite G2/G5 plans only for concrete profiling questions.
-Implementation commits precede clean-source qualification and evidence commits.
-Current uncommitted work: stage-start updates to the three main documents.
-No new live unit, queue or experimental result. Update this section before launch.
+Stage-start documents committed/pushed as `05af8f8`. G1 native/Python State
+batch VJP, Read VJP/grouped finite checks, ordered Add sample batching and counters
+are ready for the G1 implementation commit. Frozen `g1-state-dev02` built and passed **1538** directed CPU
+FP64/FP32 tests; unit terminal success, MainPID0, empty cgroup. Its predecessor
+`g1-state-dev01` failed compilation; records retained. Earlier Read gate passed193.
+Read input mutation/version checking was then added; final development gate
+`g1-state-dev03` uses only the G1 changes, isolated from unfinished CUDA work.
+
+Prepared job `tide-g1-state-dev03.service`, source `TASK/sources/g1-state-dev03`,
+build `TASK/builds/g1-state-dev03`, records `TASK/runs/g1-state-dev03`.
+Command: `scripts/job.py --output-dir RUN -- python scripts/develop.py
+--output-dir RUN --build-dir BUILD --jobs 8 tests/test_read_batched_vjp.py
+ tests/test_state_batched_vjp.py tests/test_isolated_gradients.py`.
+Budget45min, CPUQuota1000%, MemoryMax16G, TasksMax192, OMP/BLAS1; no accelerator.
+Terminal result: native build and324 directed checks passed, including final Read
+input version checks. Service exit0/MainPID0/empty cgroup confirmed. Commit G1,
+then run full CPU and related NPU qualification from that clean fixed commit;
+commit evidence separately. G1 does not contain the in-progress resident changes.
+
+Independent uncommitted CUDA work under `tools/device_online`: shared backend
+interfaces and launch facades, CUDA conditional graph control, numerical and peer
+adapters, build/loader/target contracts. It is incomplete and uncompiled. Do not
+include it in the G1 commit or claim any CUDA execution on this host.
 
 ## Preserved previous-stage disposition
 

@@ -53,7 +53,8 @@ def test_separate_public_roots_preserve_connectivity(dtype, kind, mode, implemen
     else:
         assert actual.stats.get("semantic_full_replays", 0) > 0
     if implementation not in {"python-step", "native-step", "native-unpacked"}:
-        assert actual.stats["semantic_state_replays"] == len(actual.trace)
+        assert actual.stats.get("semantic_state_replays", 0) == 0
+        assert actual.stats["batched_state_events"] == len(actual.trace)
 
 
 @pytest.mark.parametrize("implementation", IMPLEMENTATIONS)

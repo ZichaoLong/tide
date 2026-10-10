@@ -1,5 +1,6 @@
 #include "tide/block.h"
 #include "tide/autograd.h"
+#include "tide/state_vjp.h"
 #include "tide/read.h"
 #include "tide/next.h"
 #include "tide/operator_work.h"
@@ -51,13 +52,16 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
       if (states.size() != task.ids.size()) throw std::invalid_argument("packed kernel returned incorrect state count");
     }
     auto& states = task.result.states;
+    const bool batched=replay && w.kernel->batched_autograd();
+    std::vector<State> previous_states;
+    if (batched) state_sequence_vjp(w,task.old,batch,states,previous_states);
     for (size_t s = 0; s < task.old.size(); ++s) {
       auto previous = task.old[s];
       for (Index j = batch.offsets[s]; j < batch.offsets[s + 1]; ++j) {
         auto& e = events[task.ids[j]];
-        e.old = previous;
+        e.old = batched ? previous_states[j] : previous;
         e.proposed_state = states[j];
-        if (replay) {
+        if (replay && !batched) {
           work::StateReplayTimer replay_timer;
           auto reference = w.kernel->step(w, previous, e.local_content(), e.time);
           e.proposed_state = semantic_state(e.proposed_state, reference);
@@ -71,9 +75,9 @@ void prefill_states(const Graph& g, const Model& m, const Continuation& q, const
   pool.run(std::move(jobs));
   for (const auto& task : tasks) {
     if (replay) {
-      stats["semantic_state_replays"] += task.ids.size();
+      stats[m.nodes[task.node].kernel->batched_autograd() ? "batched_state_events" : "semantic_state_replays"] += task.ids.size();
       if (m.nodes[task.node].kernel->scalar_policy_fallback()) stats["fiber_policy_semantic_replays"] += task.ids.size();
-      stats["semantic_read_replays"] += task.ids.size();
+      stats[m.nodes[task.node].read_kernel->batched_autograd() ? "batched_read_events" : "semantic_read_replays"] += task.ids.size();
     }
     ++stats["read_calls"];
     if (!m.nodes[task.node].read_kernel->joint_batch()) stats["read_scalar_batch_steps"] += task.ids.size();

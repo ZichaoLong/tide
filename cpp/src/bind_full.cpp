@@ -1,6 +1,7 @@
 // Diagnostic client adapter. Core Full/row projection has no Python dependency.
 #include "tide/row_emit.h"
 #include "tide/isolated_linear.h"
+#include "tide/isolated_read.h"
 #include "tide/transfer.h"
 #include <torch/csrc/utils/pybind.h>
 #include <pybind11/stl.h>
@@ -9,6 +10,9 @@ namespace py = pybind11;
 using namespace tide;
 void bind_full(py::module_& m) {
   m.def("isolated_linear", &isolated_linear, py::call_guard<py::gil_scoped_release>());
+  m.def("read_vjp_probe", [](const std::vector<Tensor>& rows,const Tensor& weight,bool norm,const Tensor& scoring) {
+    return isolated_read(rows,weight,norm,scoring.scalar_type(),scoring.device());
+  },py::call_guard<py::gil_scoped_release>());
   m.def("copy_rows", [](const std::vector<Tensor>& rows,const std::string& device,Index budget) {
     return copy_rows(rows,at::Device(device),budget);
   },py::arg("rows"),py::arg("device"),py::arg("budget")=transfer_pack_bytes,

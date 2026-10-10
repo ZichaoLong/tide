@@ -1,6 +1,8 @@
 """Batch one causal tick across independent samples; never crosses Next."""
 from collections import defaultdict
 import torch
+from .state_vjp import supported as batched_state
+from .read_vjp import supported as batched_read
 from .packing import prepare_sequences
 
 
@@ -22,8 +24,10 @@ def prepare_tick(graph, model, q, events, stats):
         stats["state_steps"] += len(es)
         stats["read_calls"] = stats.get("read_calls", 0) + 1
         if torch.is_grad_enabled():
-            stats["semantic_state_replays"] += len(es)
-            stats["semantic_read_replays"] = stats.get("semantic_read_replays", 0) + len(es)
+            key = "batched_state_events" if batched_state(kernel) else "semantic_state_replays"
+            stats[key] = stats.get(key, 0) + len(es)
+            key = "batched_read_events" if batched_read(weights.read_program) else "semantic_read_replays"
+            stats[key] = stats.get(key, 0) + len(es)
         if not getattr(kernel, "joint_sequence", False):
             stats["state_scalar_batch_steps"] = stats.get("state_scalar_batch_steps", 0) + len(es)
 

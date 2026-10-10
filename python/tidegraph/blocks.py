@@ -1,6 +1,8 @@
 """Exact region blocks: causal state/selection followed by packed Full."""
 from collections import defaultdict
 import torch
+from .state_vjp import supported as batched_state
+from .read_vjp import supported as batched_read
 from .region import evaluate as select
 from .records import Atom, State
 from .packing import prepare_sequences
@@ -58,7 +60,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
             sequences = [(owner, es) for owner, es in by_sequence.items() if owner[1] == node]
             stats["state_blocks"] += len(sequences)
             if torch.is_grad_enabled():
-                stats["semantic_state_replays"] += sum(len(es) for _, es in sequences)
+                key = "batched_state_events" if batched_state(getattr(model.nodes[node], "kernel", None)) else "semantic_state_replays"
+                stats[key] = stats.get(key, 0) + sum(len(es) for _, es in sequences)
             groups = [sequences] if packed else [[s] for s in sequences]
             for group in groups:
                 stats["state_sequence_calls"] += prepare_sequences(model.nodes[node], group, q, region.read_mode)
@@ -66,7 +69,8 @@ def evaluate_block(graph, model, q, frames, fibers, *, mode, zeta, prefill=True,
             stats["max_state_sequence"] = max(stats.get("max_state_sequence", 0), max(len(es) for _, es in sequences))
             stats["read_calls"] = stats.get("read_calls", 0) + 1
             if torch.is_grad_enabled():
-                stats["semantic_read_replays"] = stats.get("semantic_read_replays", 0) + len(es)
+                key = "batched_read_events" if batched_read(model.nodes[node].read_program) else "semantic_read_replays"
+                stats[key] = stats.get(key, 0) + len(es)
             if not model.nodes[node].read_program.joint_batch:
                 stats["read_scalar_batch_steps"] = stats.get("read_scalar_batch_steps", 0) + len(es)
             if not getattr(getattr(model.nodes[node], "kernel", None), "joint_sequence", True):

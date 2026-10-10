@@ -30,7 +30,8 @@ def test_add_schedule_public_roots(dtype, policy, implementation):
     # Never-observed samples retain encoded state, even though decoded hidden decays.
     assert actual.continuation.states[2, 0].last_time == -1
     if implementation.endswith("frontier") and policy in {"all", "old"}:
-        assert actual.stats["state_scalar_sequence_steps"] > 0
+        assert actual.stats.get("state_scalar_sequence_steps", 0) == 0
+        assert actual.stats["batched_state_events"] > 0
 
 
 @pytest.mark.parametrize("workers,packed", [(1, False), (1, True), (3, True)])

@@ -2,6 +2,7 @@
 #include "tide/operator_profile.h"
 #include "tide/read.h"
 #include "tide/autograd.h"
+#include "tide/isolated_read.h"
 #include "placement_internal.h"
 #include <ATen/core/grad_mode.h>
 #include <stdexcept>
@@ -16,6 +17,9 @@ std::vector<Tensor> ReadKernel::batch(const NodeWeights& w, const std::vector<Re
   std::vector<Tensor> result;
   for (const auto& r : requests) result.push_back(step(w, r));
   return result;
+}
+std::vector<Tensor> ReadKernel::batch_grad(const NodeWeights&, const std::vector<ReadInput>&) const {
+  throw std::invalid_argument("Read program has no batched VJP");
 }
 namespace {
 class LinearRead final : public ReadKernel {
@@ -34,6 +38,13 @@ class LinearRead final : public ReadKernel {
   bool joint_batch() const override { return true; }
   void validate_weights(const NodeWeights&) const override {}
   bool identity() const { return identity_; }
+  bool batched_autograd() const override { return true; }
+  std::vector<Tensor> batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    if (identity_) return batch(w,requests);
+    std::vector<Tensor> rows;
+    for (const auto& r:requests) rows.push_back(r.state?r.state->value:r.content.value);
+    return isolated_read(rows,w.read,false,rows.front().scalar_type(),rows.front().device());
+  }
  private:
   bool identity_;
 };
@@ -53,6 +64,12 @@ class NormRead final : public ReadKernel {
     return at::norm(batch, 2, {-1}, false, dtype_).unbind();
   }
   at::ScalarType descriptor_dtype(at::ScalarType) const override { return dtype_; }
+  bool batched_autograd() const override { return true; }
+  std::vector<Tensor> batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    std::vector<Tensor> rows;
+    for (const auto& r:requests) rows.push_back(r.state?r.state->value:r.content.value);
+    return isolated_read(rows,w.read,true,dtype_,rows.front().device());
+  }
   bool joint_batch() const override { return true; }
   void validate_weights(const NodeWeights&) const override {}
  private:
@@ -61,7 +78,14 @@ class NormRead final : public ReadKernel {
 void validate(const Tensor& value, at::Device device, at::ScalarType dtype) {
   if (!value.defined() || value.dim() != 0 || value.device() != device
       || value.scalar_type() != dtype) throw std::invalid_argument("Read returned incompatible scalar metadata");
-  if (!at::isfinite(value).item<bool>()) throw std::invalid_argument("nonfinite selector score from Read");
+}
+void finite(const std::vector<Tensor>& values) {
+  std::map<std::tuple<int,int,int>,std::vector<Tensor>> groups;
+  for (const auto& value:values)
+    groups[{int(value.device().type()),value.device().index(),int(value.scalar_type())}].push_back(value);
+  for (const auto& [key,rows]:groups)
+    if (!at::isfinite(at::stack(rows)).all().item<bool>())
+      throw std::invalid_argument("nonfinite selector score from Read");
 }
 }  // namespace
 bool placement_detail::builtin_read(const ReadKernel& kernel, const Node& n) {
@@ -89,7 +113,9 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
     requests.push_back(read_input(mode, e.old, e.proposed_state, e.time, e.local_content()));
   }
   std::vector<Tensor> values;
-  if (packed) { at::NoGradGuard guard; values = w.read_kernel->batch(w, requests); }
+  const bool batched=packed && at::GradMode::is_enabled() && w.read_kernel->batched_autograd();
+  if (batched) values=w.read_kernel->batch_grad(w,requests);
+  else if (packed) { at::NoGradGuard guard; values = w.read_kernel->batch(w, requests); }
   else for (const auto& r : requests) values.push_back(w.read_kernel->step(w, r));
   if (values.size() != ids.size()) throw std::invalid_argument("Read batch changed event count");
   for (size_t j = 0; j < ids.size(); ++j) {
@@ -98,13 +124,19 @@ void evaluate_read(const Graph& g, const Model& m, std::vector<Event>& events, c
     if (dtype != requests[j].content.value.scalar_type() && dtype != at::kDouble && dtype != at::kFloat)
       throw std::invalid_argument("invalid Read precision policy");
     validate(values[j], device, dtype);
-    if (packed && at::GradMode::is_enabled()) {
+  }
+  finite(values);
+  if (packed && at::GradMode::is_enabled() && !batched) {
+    std::vector<Tensor> references;
+    for (size_t j=0;j<ids.size();++j) {
         work::StateReplayTimer replay_timer(work::ReadReplayNs);
       auto semantic = w.read_kernel->step(w, requests[j]);
-      validate(semantic, device, dtype);
+      validate(semantic, values[j].device(), values[j].scalar_type());
+      references.push_back(semantic);
       values[j] = semantic_value(values[j], semantic);
     }
-    events[ids[j]].descriptor = values[j];
+    finite(references);
   }
+  for (size_t j=0;j<ids.size();++j) events[ids[j]].descriptor = values[j];
 }
 }  // namespace tide

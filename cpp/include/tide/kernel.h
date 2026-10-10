@@ -19,6 +19,8 @@ class StateKernel {
                                        const PackedSequence&) const;
   virtual bool exact_sequence() const { return false; }
   virtual bool joint_batch() const { return false; }
+  // Builtins declare row-independent tensor dependencies for batched first-order VJP.
+  virtual bool batched_autograd() const { return false; }
   virtual bool joint_sequence() const { return false; }
   // A configured nondefault packed policy uses the scalar oracle on causal
   // fallback/replay. Executors report that path instead of silently ignoring it.

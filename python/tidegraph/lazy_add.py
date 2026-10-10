@@ -16,7 +16,7 @@ def repeat(value, retention, ticks):
 class LazyAdd(StateProgram):
     profile = "lh-add-repeat-v1"
     sequence_contract = True
-    joint_sequence = False  # Ordered time loop; Full/Read can still batch.
+    joint_sequence = True  # Ordered time recurrence, independent sample batches.
 
     def step(self, weights, old, content, time):
         if not int64(time) or not int64(old.last_time) or not -1 <= old.last_time < time:
@@ -32,6 +32,31 @@ class LazyAdd(StateProgram):
                 or (rho.dtype, rho.device) != (weights.bias.dtype, weights.bias.device)
                 or not torch.isfinite(rho)):
             raise ValueError("Add requires a finite payload-dtype scalar retention")
+
+    def packed_sequence(self, weights, old, batch):
+        batch.validate()
+        if len(old) != len(batch.owners):
+            raise ValueError("packed initial-state count mismatch")
+        current, states, depth, calls = list(old), [None]*len(batch.times), 0, 0
+        while True:
+            groups = {}
+            for i, start in enumerate(batch.offsets[:-1]):
+                j = start+depth
+                if j < batch.offsets[i+1]:
+                    time, last = batch.times[j], current[i].last_time
+                    if not int64(last) or not -1 <= last < time:
+                        raise ValueError("Add requires strictly increasing nonnegative tick times")
+                    groups.setdefault(time-last, []).append((i, j))
+            if not groups:
+                return states, calls
+            for ticks, pairs in groups.items():
+                previous = torch.stack([current[i].value for i, j in pairs])
+                h = torch.stack([batch.contents[j] for i, j in pairs])
+                values = h + repeat(previous, weights.extra["add_retention"], ticks)
+                for (i, j), value in zip(pairs, values.unbind()):
+                    current[i] = states[j] = State(value.clone(), batch.times[j], increment(current[i].observations))
+                calls += 1
+            depth += 1
 
     def validate(self, weights, state):
         if state.slots:

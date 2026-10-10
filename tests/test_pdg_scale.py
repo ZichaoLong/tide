@@ -57,7 +57,8 @@ def test_scale_full_state_and_schedule_parity(dtype, grad, profile, optimized, m
         assert 1 <= m['work/max_node_batch'] <= 4
         assert e['context']['full_autograd'] == ('batched' if optimized else 'replay')
         assert m.get('work/batched_full_events', 0) == (m['work/selected_events'] if optimized and grad else 0)
-        assert m['work/semantic_state_replays'] > 0 if grad else m['work/semantic_state_replays'] == 0
+        assert m['work/semantic_state_replays'] == 0
+        assert m.get('work/batched_state_events', 0) > 0 if grad else m.get('work/batched_state_events', 0) == 0
         assert m['perf/ms_per_sample_token'] == pytest.approx(m['perf/token_seconds']*1000/4)
         phases = ['events', 'update', 'select', 'full', 'commit', 'cleanup']
         if profile:

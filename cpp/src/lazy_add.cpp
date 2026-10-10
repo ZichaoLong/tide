@@ -49,9 +49,32 @@ class AddRepeat final : public StateKernel {
     return result;
   }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
   bool exact_sequence() const override { return true; }
-  // The base sequence/packed_sequence loops preserve multiplication order and
-  // report scalar_steps. This is not an associative time scan.
+  bool joint_sequence() const override { return true; }
+  // Keep the time recurrence ordered, batching independent samples at each
+  // depth. batch() buckets actual tick gaps and preserves every multiplication.
+  PackedStates packed_sequence(const NodeWeights& w,const std::vector<State>& old,
+                                const PackedSequence& p) const override {
+    p.validate();
+    if (old.size()!=p.owners.size()) throw std::invalid_argument("packed initial-state count mismatch");
+    PackedStates result;result.states.resize(p.times.size());auto current=old;
+    for (Index depth=0;;++depth) {
+      std::vector<Index> owners,ids,times;std::vector<State> initial;
+      std::vector<Tensor> content;ContentViews views;
+      for (size_t i=0;i<old.size();++i) if (p.offsets[i]+depth<p.offsets[i+1]) {
+        const auto j=p.offsets[i]+depth;owners.push_back(i);ids.push_back(j);
+        initial.push_back(current[i]);content.push_back(p.contents[j]);
+        views.push_back(p.views[j]);times.push_back(p.times[j]);
+      }
+      if (ids.empty()) break;
+      auto states=batch(w,initial,at::stack(content),times,views);
+      for (size_t i=0;i<ids.size();++i) current[owners[i]]=result.states[ids[i]]=std::move(states[i]);
+      ++result.calls;result.max_length=depth+1;
+      result.max_batch=std::max<Index>(result.max_batch,ids.size());
+    }
+    return result;
+  }
   void validate_weights(const NodeWeights& w) const override {
     auto it = w.extra.find("add_retention");
     if (it == w.extra.end() || !it->second.defined() || it->second.dim() != 0

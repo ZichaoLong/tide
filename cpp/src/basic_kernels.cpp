@@ -44,6 +44,7 @@ class BasicKernel final : public StateKernel {
   }
   bool exact_sequence() const override { return true; }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
   bool joint_sequence() const override { return true; }
   std::vector<State> sequence(const NodeWeights& w, const State& old, const Tensor& h,
                               const std::vector<Index>& times, const ContentViews&) const override {

@@ -20,7 +20,7 @@ current handoff. Old evidence below remains tied to its original source.
 
 | Unit | Delivery and acceptance | Status |
 | --- | --- | --- |
-| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | active: inspect declared modules and consumers; Full/Aggregate batched VJPs already exist and are enabled |
+| G1 | Audit and improve reusable State/Read batching and first-order VJPs; retain independent references, None/zero and replay fallback; reduce per-score synchronization and small-tensor overhead | implemented: native/Python builtins use batched first-order State graphs and explicit Read VJP; grouped finite checks and ordered Add batching. Development1538+324 passed; clean-source CPU/NPU qualification pending. Custom/nondefault policy replay and structural batch limits retained |
 | G2 | Bounded component/medium profiling and general NPU mixed/resident optimization; distinguish host autograd overhead from explicit resident VJPs | planned; new finite questions/budgets, no old queue restart |
 | G3 | Full CUDA resident backend matching declared CPU/NPU families, schedules, modules, forward/backward, optimizer/checkpoint, continuation, capacity, multi-device/locality | planned locally: source, compile and CPU contracts; all real CUDA execution remains target-machine pending |
 | G4 | Related CPU/NPU correctness gates from clean fixed implementation commits; exact discrete and near-tie witness retained; separate evidence commits | planned for new implementation; old passing gates are not new-source qualification |

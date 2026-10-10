@@ -1,5 +1,6 @@
 #include "tide/state_evaluate.h"
 #include "tide/kernel.h"
+#include "tide/state_vjp.h"
 #include "tide/autograd.h"
 #include "tide/operator_work.h"
 #include <ATen/core/grad_mode.h>
@@ -24,9 +25,11 @@ void evaluate_state(const Model& model, std::vector<Event>& events, const std::v
       states = w.kernel->batch(w, old, contents.defined() ? contents : at::stack(values), times, views);
       if (states.size() != ids.size()) throw std::invalid_argument("state batch changed event count");
     }
+    const bool batched=at::GradMode::is_enabled() && w.kernel->batched_autograd();
+    if (batched) states=state_batch_vjp(w,old,views,times,states);
     for (size_t j = 0; j < ids.size(); ++j) {
       auto& e = events[ids[j]]; e.proposed_state = std::move(states[j]);
-      if (at::GradMode::is_enabled()) {
+      if (at::GradMode::is_enabled() && !batched) {
         work::StateReplayTimer replay_timer;
         auto reference = w.kernel->step(w, e.old, e.local_content(), e.time);
         e.proposed_state = semantic_state(e.proposed_state, reference);

@@ -1,4 +1,5 @@
 #include "placement_internal.h"
+#include "tide/isolated_read.h"
 #include <stdexcept>
 
 namespace tide::placement_detail {
@@ -20,6 +21,13 @@ class PlacedRead final : public ReadKernel {
     return calculate(w, at::stack(values)).unbind();
   }
   bool joint_batch() const override { return true; }
+  bool batched_autograd() const override { return true; }
+  std::vector<Tensor> batch_grad(const NodeWeights& w,const std::vector<ReadInput>& requests) const override {
+    if (node_.identity) return batch(w,requests);
+    std::vector<Tensor> rows;
+    for (const auto& r:requests) rows.push_back(r.state?r.state->value:r.content.value);
+    return isolated_read(rows,w.read,node_.readout!="linear-v1",dtype_,device_);
+  }
   at::ScalarType descriptor_dtype(at::ScalarType) const override { return dtype_; }
   at::Device descriptor_device(at::Device) const override { return device_; }
   void validate_weights(const NodeWeights& w) const override { make_read_kernel(node_)->validate_weights(w); }

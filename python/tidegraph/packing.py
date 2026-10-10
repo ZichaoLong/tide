@@ -52,16 +52,20 @@ def prepare_sequences(weights, sequences, q, read_mode="proposal"):
             calls = len(old)
         if len(states) != len(flat):
             raise ValueError("packed state program changed event count")
-    previous = []
-    for i, state in enumerate(old):
-        a, b = offsets[i:i+2]
-        for j in range(a, b):
-            previous.append(state)
-            if replay:
-                event = flat[j]
-                proposed = weights.propose(state, event["_content"], event["time"])
-                states[j] = autograd.state(states[j], proposed)
-            state = states[j]
+    from . import state_vjp
+    if replay and state_vjp.supported(getattr(weights, "kernel", None)):
+        previous = state_vjp.bind_sequence(weights, old, batch, states)
+    else:
+        previous = []
+        for i, state in enumerate(old):
+            a, b = offsets[i:i+2]
+            for j in range(a, b):
+                previous.append(state)
+                if replay:
+                    event = flat[j]
+                    proposed = weights.propose(state, event["_content"], event["time"])
+                    states[j] = autograd.state(states[j], proposed)
+                state = states[j]
     descriptors = weights.describe_batch(previous, states, batch, read_mode)
     for e, state, descriptor in zip(flat, states, descriptors):
         e.update(proposal_state=state, proposal=state.value, descriptor=descriptor)
