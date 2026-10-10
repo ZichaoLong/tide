@@ -33,6 +33,18 @@ def check_build(root, build, *, backend, owner):
     return record
 
 
+def check_consumer_sources(root, record, directory):
+    # These two CMake consumers compile local C++/headers. Python files in the
+    # online directory are interpreted from the fixed qualification checkout;
+    # they do not contribute to the installed executable.
+    current = {p.name: digest(p) for p in (root/'tools'/directory).iterdir()
+               if p.is_file() and p.suffix != '.py'}
+    recorded = {name: value for name, value in record.get('consumer_sources', {}).items()
+                if Path(name).suffix != '.py'}
+    if not current or current != recorded:
+        raise ValueError(directory + ' compiled sources differ; rebuild the consumer')
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--device', required=True, help='remapped coordinator cuda:0 or npu:0; expose at least three devices')
@@ -69,6 +81,7 @@ def main():
     online_record = json.loads((online/'result.json').read_text())
     if online_record.get('state') != 'passed' or online_record.get('resident') != cpp_record:
         p.error('online consumer requires the exact standalone resident build')
+    check_consumer_sources(root, online_record, 'online_bench')
     binary = online/'consumer/tidegraph-online-bench'
     if digest(binary) != online_record['binary_sha256'].get(binary.name):
         p.error('online consumer binary changed')
@@ -78,6 +91,7 @@ def main():
     if (installed_record.get('state') != 'passed' or installed_record.get('backend') != cpp_record
             or digest(client) != installed_record['binary_sha256']):
         p.error('installed consumer differs from its resident build')
+    check_consumer_sources(root, installed_record, 'resident_consumer')
     out = a.output_dir.resolve();out.mkdir(parents=True, exist_ok=False)
     report = dict(schema='tide-resident-target-v1', source=source, dirty=dirty,
                   device=a.device, state='running', stages=[],
